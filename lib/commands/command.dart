@@ -11,13 +11,22 @@ class Command {
 
 class CommandException implements Exception {
   String message;
-  StackTrace stackTrace;
+  StackTraceImpl stackTrace;
 
   CommandException(this.message) {
-    stackTrace = StackTraceImpl(skipFrames: 1);
+    stackTrace = StackTraceImpl(skipFrames: 2);
+  }
+
+  CommandException.rebuild(CommandException e, StackTraceImpl stackTrace) {
+    message = e.message;
+    this.stackTrace = stackTrace;
   }
 
   String toString() {
-    return "An Exception was thrown: ${message} \n {stackTrace.toString()}";
+    return "An Exception was thrown: ${message}";
+  }
+
+  void printStackTrace() {
+    print(stackTrace.formatStackTrace());
   }
 }

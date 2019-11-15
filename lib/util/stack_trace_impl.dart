@@ -45,6 +45,11 @@ class StackTraceImpl implements core.StackTrace {
     return frames[0].lineNo;
   }
 
+  @override
+  String toString() {
+    return formatStackTrace();
+  }
+
   /// Outputs a formatted string of the current stack_trace_nj
   /// showing upto [methodCount] methods in the trace.
   /// [methodCount] defaults to 10.
@@ -89,10 +94,6 @@ class StackTraceImpl implements core.StackTrace {
       _frames = _extractFrames();
     }
     return _frames;
-  }
-
-  String toString() {
-    return formatStackTrace();
   }
 
   List<Stackframe> _extractFrames() {
