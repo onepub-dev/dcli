@@ -16,3 +16,4 @@ export 'commands/sleep.dart' show sleep;
 export 'commands/settings.dart' show Settings;
 export 'commands/sudo.dart';
 export 'commands/touch.dart' show touch;
+export 'util/string_as_process.dart';
