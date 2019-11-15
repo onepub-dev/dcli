@@ -27,6 +27,6 @@ class Is extends Command {
 
   /// checks if the given [path] exists.
   bool exists(String path) {
-    return File(path).existsSync();
+    return FileSystemEntity.typeSync(path) != FileSystemEntityType.notFound;
   }
 }
