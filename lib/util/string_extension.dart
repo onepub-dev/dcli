@@ -3,7 +3,8 @@ import 'dart:io';
 import 'dart:convert';
 
 extension on String {
-  Future<Stream<String>> get run async {
+  void hi() {}
+  Future<Stream<String>> run() async {
     StreamController<String> _controller = StreamController<String>();
 
     List<String> parts = this.split(" ");
@@ -29,7 +30,7 @@ extension on String {
         _controller.add(data);
       });
 
-      process.exitCode.then((exitCode) {
+      await process.exitCode.then((exitCode) {
         done.complete(true);
       });
       // process.stdin.writeln('Hello, world!');
@@ -42,22 +43,22 @@ extension on String {
     return Future.value(_controller.stream);
   }
 
-  Future<Stream<String>> operator |(IOSink next) {
-    this.run.then((stream) {
-      next.addStream(stream);
-      // next.then<Stream<String>>((nextStream) {
-      //   stream.pipe(nextStream.asStream());
-      // });
-    });
-  }
-}
+//   Future<Stream<String>> operator |(IOSink next) async {
+//     return this.run.then((stream) {
+//       //  next.addStream(stream);
+//       // next.then<Stream<String>>((nextStream) {
+//       //   stream.pipe(nextStream.asStream());
+//       // });
+//     });
+//   }
+// }
 
-void main() {
-  'cat pubspec.lock'.run.then((stream) {
-    stream.listen((data) {
-      print("listner $data");
-    });
+// void main() {
+//   'cat pubspec.lock'.run.then((stream) {
+//     stream.listen((data) {
+//       print("listner $data");
+//     });
 
-    ///'cat pubspec.lock' | 'head'.run;
-  });
+//     ///'cat pubspec.lock' | 'head'.run;
+//   });
 }

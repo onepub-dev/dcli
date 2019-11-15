@@ -1,18 +1,21 @@
-import 'package:dartcli/scripts/shell.dart';
+import 'package:dshell/dshell.dart';
+// import 'package:dshell/util/string_extension.dart';
 
 void main() {
-  set_debug_on = true;
+  Settings().debug_on = true;
+
+  // 'fred'.hi();
 
   print("PWD: ${pwd}");
 
-  mkdir("test/data/shell/main", createPath: true);
+  makeDir("test/data/shell/main", createParent: true);
   push("test/data/shell");
   cd("main");
 
-  mkdir("fred/tom", createPath: true);
+  makeDir("fred/tom", createParent: true);
 
   touch("good.jpg");
-  mkdir("subdir", createPath: true);
+  makeDir("subdir", createParent: true);
   touch("subdir/goody.jpg");
 
   echo("Find file matching *.jpg");
@@ -29,18 +32,18 @@ void main() {
     print(file);
   }
 
-  mv("good.jpg", "bad.jpg");
+  move("good.jpg", "bad.jpg");
 
   if (exists("bad.jpg")) {
     print("bad.jpg exists");
   }
 
-  rm("bad.jpg", ask: false);
+  delete("bad.jpg", ask: false);
 
   pop();
   echo(pwd);
 
-  'echo hi'.run;
+  // 'echo hi'.run;
 }
 // File x;
 // x << "Append some text";

@@ -1,5 +1,5 @@
 echo Compiling
-echo /usr/lib/dart/bin/dart2native bin/main.dart -o bin/dshell
+/usr/lib/dart/bin/dart2native bin/main.dart -o bin/dshell
 echo Installing
 
 # update this line to point to the root of your flutter install.

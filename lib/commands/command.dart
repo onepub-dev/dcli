@@ -1,0 +1,23 @@
+import 'package:dshell/util/stack_trace_impl.dart';
+import 'package:path/path.dart' as p;
+
+class Command {
+  /// Returns the absolute path of [path]
+  /// If [path] does not start with a /
+  /// then it is treated as a relative path
+  /// to the current working directory.
+  String absolute(String path) => p.absolute(path);
+}
+
+class CommandException implements Exception {
+  String message;
+  StackTrace stackTrace;
+
+  CommandException(this.message) {
+    stackTrace = StackTraceImpl(skipFrames: 1);
+  }
+
+  String toString() {
+    return "An Exception was thrown: ${message} \n {stackTrace.toString()}";
+  }
+}
