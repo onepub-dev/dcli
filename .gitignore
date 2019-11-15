@@ -13,3 +13,4 @@ doc/api/
 .vscode/
 test/data/shell/main/bad.jpg
 test/data/shell/main/subdir/goody.jpg
+test/tools/images/bad.jpg
