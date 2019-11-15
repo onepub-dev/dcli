@@ -44,8 +44,9 @@ extension StringAsProcess on String {
     print("cmd $cmd args: $args");
 
     Completer<bool> done = Completer<bool>();
-    await Process.start(cmd, args, runInShell: false)
-        .then((Process process) async {
+    Process process = waitFor<Process>(
+        Process.start(cmd, args, runInShell: true)
+            .then((Process process) async {
       process.stdout
           .transform(utf8.decoder)
           .transform(const LineSplitter())
@@ -67,7 +68,7 @@ extension StringAsProcess on String {
       // process.stdin.writeln('Hello, world!');
       // process.stdin.writeln('Hello, galaxy!');
       // process.stdin.writeln('Hello, universe!');
-    });
+    }));
 
     RunException exception;
     try {
