@@ -44,9 +44,8 @@ extension StringAsProcess on String {
     print("cmd $cmd args: $args");
 
     Completer<bool> done = Completer<bool>();
-    Process process = waitFor<Process>(
-        Process.start(cmd, args, runInShell: true)
-            .then((Process process) async {
+    waitFor<void>(
+        Process.start(cmd, args, runInShell: false).then((process) async {
       process.stdout
           .transform(utf8.decoder)
           .transform(const LineSplitter())
@@ -55,6 +54,7 @@ extension StringAsProcess on String {
           lineAction(data);
         }
         _controller.add(data);
+        return process;
       });
 
       await process.exitCode.then((exitCode) {

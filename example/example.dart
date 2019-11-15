@@ -66,7 +66,7 @@ void main() {
 
     pop();
     push("..");
-    print(pwd);
+
     'grep version pubspec.yaml'.run((line) => print(line));
     pop();
   } catch (e) {
