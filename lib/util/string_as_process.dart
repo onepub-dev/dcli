@@ -1,121 +1,66 @@
-import 'dart:async';
-import 'dart:cli';
 import 'dart:io';
-import 'dart:convert';
 
-import 'package:dshell/commands/command.dart';
-import 'package:dshell/util/stack_trace_impl.dart';
-
-typedef void LineAction(String line);
+import 'package:dshell/commands/pipe.dart';
+import 'package:dshell/commands/run.dart' as cmd;
 
 ///
 /// A set of String extensions that lets you
 /// execute the contents of a string as a command line application.
 ///
 extension StringAsProcess on String {
+  /// run
   ///
-  /// Takes the contents of a string an executes it as a
+  /// Allows you to execute the contents of a dart string as a
   /// command line appliation.
   ///
   /// ```dart
-  /// 'grep alabama regions.txt'.run
+  /// 'zip regions.txt regions.zip'.run
   /// ```
-  /// Runs the command grep, but you won't see any output.
+  ///
+  Process get run => cmd.run(this);
+
+  /// forEach
+  /// Like run it allows you to execute a string as a command line
+  /// application and then calls the supplied LineAction
+  /// for each line output by the cli command.
   ///
   /// ```dart
-  /// 'grep alabama regions.txt'.run.forEach((line) => print(line));
+  /// 'grep alabama regions.txt'.forEach((line) => print(line));
   /// ```
   ///
-  /// Runs grep and then uses the dart [forEach]  to print each line returned.
-  ///
-  Future<Stream<String>> run([LineAction lineAction]) async {
-    StreamController<String> _controller = StreamController<String>();
+  Process forEach(cmd.LineAction action) => cmd.run(this, action);
 
-    List<String> parts = this.split(" ");
-    String cmd = parts[0];
-    List<String> args = List();
+  List<String> get lines {
+    List<String> lines = List();
+    cmd.run(this, (line) => lines.add(line));
 
-    if (parts.length > 1) {
-      args = parts.sublist(1);
-    }
-
-    print("${Directory.current}");
-
-    print("cmd $cmd args: $args");
-
-    Completer<bool> done = Completer<bool>();
-    waitFor<void>(
-        Process.start(cmd, args, runInShell: false).then((process) async {
-      process.stdout
-          .transform(utf8.decoder)
-          .transform(const LineSplitter())
-          .listen((data) {
-        if (lineAction != null) {
-          lineAction(data);
-        }
-        _controller.add(data);
-        return process;
-      });
-
-      await process.exitCode.then((exitCode) {
-        if (exitCode != 0) {
-          done.completeError(RunException(
-              "The command [${this}] failed with exitCode: ${exitCode}"));
-        } else {
-          done.complete(true);
-        }
-      });
-      // process.stdin.writeln('Hello, world!');
-      // process.stdin.writeln('Hello, galaxy!');
-      // process.stdin.writeln('Hello, universe!');
-    }));
-
-    RunException exception;
-    try {
-      waitFor<bool>(done.future);
-    } on AsyncError catch (e) {
-      if (e.error is RunException) {
-        exception = e.error as RunException;
-      } else {
-        rethrow;
-      }
-    }
-
-    if (exception != null) {
-      // recreate the exception so we have a full
-      // stacktrace rather than the microtask
-      // stacktrace the future leaves us with.
-      StackTraceImpl stackTrace = StackTraceImpl();
-
-      throw RunException.rebuild(exception, stackTrace);
-    }
-
-    return Future.value(_controller.stream);
+    return lines;
   }
 
-//   Future<Stream<String>> operator |(IOSink next) async {
-//     return this.run.then((stream) {
-//       //  next.addStream(stream);
-//       // next.then<Stream<String>>((nextStream) {
-//       //   stream.pipe(nextStream.asStream());
-//       // });
-//     });
-//   }
-// }
+  /// operator |
+  ///
+  /// The classic bash style pipe operator.
+  ///
+  /// Allows you to chain mulitple processes by piping the output
+  /// of the left hand process to the input of the right hand process.
+  ///
+  /// The following command calls:
+  ///  - tail on syslog
+  ///  - we pipe the result to head
+  ///  - head returns the top 5 lines
+  ///  - we pipe the 5 lines to tail
+  ///  - tail returns the last 2 of those 5 line
+  ///  - We are then back in dart world with the forEach where we print the 2 lines.
+  ///
+  /// ``` dart
+  /// 'tail /var/log/syslog' | 'head -n 5' | 'tail -n 2'.forEach((line) => print(line));
+  /// ```
 
-// void main() {
-//   'cat pubspec.lock'.run.then((stream) {
-//     stream.listen((data) {
-//       print("listner $data");
-//     });
+  Pipe operator |(String rhs) {
+    Future<Process> rhsProcess = cmd.Run.start(rhs);
 
-//     ///'cat pubspec.lock' | 'head'.run;
-//   });
-}
+    Future<Process> self = cmd.Run.start(this);
 
-class RunException extends CommandException {
-  RunException(String reason) : super(reason);
-
-  RunException.rebuild(RunException e, StackTraceImpl stackTrace)
-      : super.rebuild(e, stackTrace);
+    return Pipe(self, rhsProcess);
+  }
 }
