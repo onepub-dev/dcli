@@ -11,7 +11,7 @@ import 'package:dshell/commands/command.dart';
 void echo(String text, {bool newline = false}) => Echo().echo(text);
 
 class Echo extends Command {
-  void echo(String text, {bool newline = false}) {
+  void echo(String text, {bool newline = true}) {
     if (newline) {
       stdout.writeln(text);
     } else {
