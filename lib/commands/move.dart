@@ -34,7 +34,8 @@ class Move extends Command {
     try {
       File(from).renameSync(dest);
     } catch (e) {
-      throw MoveException("The Move of ${from} to ${dest} failed. Error ${e}");
+      throw MoveException(
+          "The Move of ${absolute(from)} to ${absolute(dest)} failed. Error ${e}");
     }
 
     if (Settings().debug_on) {
