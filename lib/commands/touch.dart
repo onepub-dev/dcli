@@ -26,7 +26,8 @@ class Touch extends Command {
     }
 
     if (create == false && !exists(path)) {
-      throw TouchException("The file ${absolute(path)} does not exist.");
+      throw TouchException(
+          "The file ${absolute(path)} does not exist. Did you mean to use touch(path, create: true) ?");
     }
 
     try {
