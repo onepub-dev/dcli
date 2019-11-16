@@ -1,7 +1,7 @@
-import 'dart:io';
-
-import 'package:dshell/commands/pipe.dart';
 import 'package:dshell/commands/run.dart' as cmd;
+import 'package:dshell/util/runnable_process.dart';
+
+import 'pipe.dart';
 
 ///
 /// A set of String extensions that lets you
@@ -17,7 +17,7 @@ extension StringAsProcess on String {
   /// 'zip regions.txt regions.zip'.run
   /// ```
   ///
-  Process get run => cmd.run(this);
+  void get run => cmd.run(this);
 
   /// forEach
   /// Like run it allows you to execute a string as a command line
@@ -28,7 +28,7 @@ extension StringAsProcess on String {
   /// 'grep alabama regions.txt'.forEach((line) => print(line));
   /// ```
   ///
-  Process forEach(cmd.LineAction action) => cmd.run(this, action);
+  void forEach(LineAction action) => cmd.run(this, action);
 
   List<String> get lines {
     List<String> lines = List();
@@ -57,10 +57,12 @@ extension StringAsProcess on String {
   /// ```
 
   Pipe operator |(String rhs) {
-    Future<Process> rhsProcess = cmd.Run.start(rhs);
+    RunnableProcess rhsRunnable = RunnableProcess(rhs);
+    rhsRunnable.start();
 
-    Future<Process> self = cmd.Run.start(this);
+    RunnableProcess lhsRunnable = RunnableProcess(this);
+    lhsRunnable.start();
 
-    return Pipe(self, rhsProcess);
+    return Pipe(lhsRunnable, rhsRunnable);
   }
 }
