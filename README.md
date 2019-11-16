@@ -1,39 +1,77 @@
-DShell is intended to provide a replacement for bash and similar shell scripting language with Dart.
 
-Bash has been the go to tool for scripting file system operations for decades and it provides a wealth 
-of really useful tools.
+# DShell - a bash replacement using dart
+
+DShell is intended to provide a replacement for bash and similar shell scripting languages with Dart.
+
+Bash has been the 'go to tool' for scripting file system operations for decades and it provides a wealth 
+of really useful features.
+
+Bash exemplifies the unix philosophy of Lego. The building of small, simple, re-usable blocks (applications) that can be coupled together to solve complex problems.
 
 Bashes power lies in its ability to chain multiple commands together to provide a quick (and often dirty) solution.
 
 Bash has an elegant set of commands for common file operations such as mv, cp, rm etc.
 
-So why DShell?
+## So why DShell?
 
-Whilst Bash is a powerful tool it has a grammar that would make your Grandma blush.
+Whilst Bash is a powerful tool, it has a grammar that would make your Grandma blush.
 
-It useage of quotes can only be described as..., oh wait, it so complex its indescribable.
+**It useage of quotes can only be described as..., oh wait, it so complex it's indescribable.**
 
-For a long time I've wanted to build a replacement tool that has the elegance of a modern language with the power of bash.
+For a long time I've wanted to build a replacement tool that has the elegance of a modern language, with the power of bash.
 
 DShell is hopefully that.
 
-DShell uses the elegant and simple dart language with a set of functions (commands) that mimick bashes operations.
+## What does Dshell do?
 
-Like bash it provides an extensive set of commands to assist with the manipulation of the file system as well as the abilty 
-to call any existing cli application.
+* Uses the elegant and simple dart language
+* Provides a set of functions (commands) that mimick common bash operations.
+* Allow for simple manipulation of files and directories
+  * move(from, to), makeDir(path), cd(path)...
+* Allows you to call any cli application in a single line
 
-DShell also lets you chain multiple operations using pipes, just like bash.
+  * 'grep error /var/lib/syslog'.run
+* Process the output of a cli command.
+  * 'grep error /var/lib/syslog'.proccess((line) => print(line));
+* Chain multiple cli commands using pipes
+  * 'grep error /var/lib/syslog' |'head 5'.proccess((line) => print(line));
+* Write and execute single file scripts
+  * cli> tryme.dart
+* executes commands synchronously, so no need to worry about futures.
 
-Finally, like Bash, DShell allows you to write and execute simple scripts without the need to build a dev environment but also 
-delivers the power of the Dart native compiler for more taxing scripts.
+## What commands that Dshell support
 
-DShell relies on DScript to provide instance execution of DShell scripts, but more on that later.
+DShell ships with a number of built in commands and the abilty to call any cli application and easily process the output.
 
-DScript: https://pub.dev/packages/dscript
+These are some of the built-in commands:
+* move( from, to)
+* copy(from, to)
+* delete(path)
+* cd(path)
+* push(path)
+* pop()
+* echo(text)
+* sleep(duration)
+* cat(file)
+* find(pattern)
+* makeDir(path)
+* pwd
+* read({String prompt})
+* touch(path)
+* basename(path)
+* filename(path)
+* extension(path)
 
-Lets start by looking at the some of the built in commands that DShell supports:
+
+Lets start by looking at the some of the built in commands that DShell supports. 
+
+The built-in commands are dart global functions providing a very bash like feel to writing dshell scripts.
+The commands make strong use of named arguments with intelligent defaults so mostly you can use the minimal form of the command.
+
+Take note, there are no Futures here. Each command runs synchronously.
 
 ```dart
+#! /usr/bin/env dshell
 
 import 'package:dshell/dshell.dart';
 
@@ -78,7 +116,6 @@ void main() {
         print(file);
     }
 
-
     // Move/rename a file
     move("good.jpg", "bad.jpg");
 
@@ -100,6 +137,34 @@ void main() {
 ```
 
 As you can see we have achieved much of the power of Bash without any of the ulgy grammar and whats more we only used one type of quote!
+
+DScript is the kind of friend that you actually introduce Grandma to.
+
+# running a script
+Once dshell is installed you can run a dshell script just as you do with bash.
+
+Add the shebang at the top of the script:
+Note: it must be the very first line!
+
+```dart 
+#! /usr/bin/env dshell
+```
+
+Save the file to something like: tryme.dart
+
+Mark the file as executable
+
+```bash
+chmod +x  tryme.dart
+```
+
+Now run the script from the cli:
+
+```bash
+> tryme.dart
+```
+
+Your now offically in the land of dshell magic.
 
 # Calling cli applications
 
@@ -138,4 +203,151 @@ The above command launches 'grep' and 'head' to find all import lines in any dar
 What we have now is the power of Bash and the elegance of Dart.
 
 
+# Installing
 
+To install dshell run:
+
+```shell
+pub global activate dshell
+```
+
+
+# Running scripts
+
+Dshell provides a number of methods to run our bash like commands.
+
+The most bash like method lets you directly run a single file script.
+
+
+To run the following script save the file to tryme.dart.
+
+```dart
+#! /usr/bin/env dscript
+
+import 'package:dshell/dshell.dart';
+
+main()
+{
+    echo("Hello World");
+    echo("Where are we: $(pwd}?");
+
+    makeDir("test");
+    push("test");
+    touch("icon.png");
+    touch("logo.png");
+    touch("dog.png");
+
+    // print all the file names in the current directory.
+    fileList.forEach((file) => print("Found: ${file}"));
+
+    touch("subdir/monkey.png");
+
+    // do a recursive find
+    find("*.png", (file) => print("$file"));
+
+
+    // now cleanup
+    delete("icon.png");
+    delete("logo.png");
+    delete("dog.png");
+
+    pop();
+
+    'grep touch tryme.dart'.run((line) => print("Grepo: $line"));
+}
+
+```
+
+## External packages
+
+When writing dart programs we regularly want to use external packages. Dshell scripts are no different.
+
+But where do we place our pubspec.yaml?
+
+The whole point of dshell is to allow you to create a single file with everything you need, to that end
+dshell allows you to specify your pubspec.yaml directly within the script using the @pubspec annotation.
+
+
+```dart
+#! /usr/bin/env dscript
+
+/*
+@pubspec.yaml
+name: tryme
+dependencies:
+  money2: ^1.0.3
+*/
+
+import 'package:dshell/dshell.dart';
+import 'package:money2/money2.dart';
+
+main()
+{
+    Currency aud = Currency.create("AUD", 2);
+    Money notMuch = Money.parse("\$2.50", aud);
+
+    echo("Hello World");
+    echo("All I have is ${notMuch}");
+}
+```
+
+## Multi-file scripts
+
+As with a little projects they have a habit of getting larger than expected.
+At some point you are going to want to spread you script over multiple dart libraries.
+
+Well dshell supports this as well.
+
+If you have additional libraries you need to place in a subdirectory called 'lib', which shouldn't be too much of a surprise.
+
+
+```dart
+
+#! /usr/bin/env dscript
+
+/*
+@pubspec.yaml
+name: tryme
+dependencies:
+  money2: ^1.0.3
+*/
+
+import 'package:dshell/dshell.dart';
+import 'package:money2/money2.dart';
+
+// import a local library
+// tax.dart must be in a subdirectory called 'lib'.
+import 'package:tryme/tax.dart';
+
+main()
+{
+    Currency aud = Currency.create("AUD", 2);
+    Money notMuch = Money.parse("\$2.50", aud);
+
+    echo("Hello World");
+    echo("All I have is ${notMuch}");
+
+    echo("And the taxman takes: ${tax(notMuch)});
+}
+
+```
+
+
+```dart
+
+    Money tax(Money amount)
+    {
+        return amount * 0.1;
+    }
+}
+
+```
+
+
+# References
+
+Projects I referenced when making this package:
+
+https://pub.dev/packages/dscript_exec
+
+https://pub.dev/packages/dartx
