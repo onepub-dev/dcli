@@ -1,18 +1,25 @@
 import 'package:test/test.dart';
 import "package:dshell/dshell.dart";
 
+import '../test_settings.dart';
+
 void main() {
-  group("RunCommand", () {
-    List<String> lines = List();
-    test("Run", () {
-      var testFile = "test.text";
+  Settings().debug_on = true;
+  push(TEST_ROOT);
+  try {
+    group("RunCommand", () {
+      test("Run", () {
+        var testFile = "test.text";
 
-      if (exists(testFile)) {
-        delete(testFile);
-      }
+        if (exists(testFile)) {
+          delete(testFile);
+        }
 
-      'touch test.text'.run;
-      expect(exists(testFile), equals(true));
+        'touch test.text'.run;
+        expect(exists(testFile), equals(true));
+      });
     });
-  });
+  } finally {
+    pop();
+  }
 }

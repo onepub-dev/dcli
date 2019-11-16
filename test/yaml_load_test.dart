@@ -1,9 +1,22 @@
 import 'dart:io';
 
+import 'package:dshell/dshell.dart';
+import 'package:test/test.dart';
 import 'package:yaml/yaml.dart';
 
+import 'test_settings.dart';
+
 void main() async {
-  await getProjectName();
+  Settings().debug_on = true;
+  push(TEST_ROOT);
+
+  try {
+    test("Project Name", () async {
+      await getProjectName();
+    });
+  } finally {
+    pop();
+  }
 }
 
 /// reads the project name from the yaml file
