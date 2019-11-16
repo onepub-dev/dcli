@@ -1,4 +1,3 @@
-import 'package:dshell/commands/command.dart';
 import 'package:dshell/dshell.dart';
 
 void main() {
@@ -62,12 +61,15 @@ void main() {
     // Print out our current working directory.
     echo(pwd);
 
-    // execute grep and print each matching line
-
     pop();
     push("..");
 
-    'grep version pubspec.yaml'.run((line) => print(line));
+    // execute grep and print each matching line
+    'grep version pubspec.yaml'.forEach((line) => print(line));
+
+    // lets do some pipeing.
+    ('tail /var/log/syslog' | 'head -n 5' | 'tail -n 2')
+        .forEach((line) => print(line));
     pop();
   } catch (e) {
     print("An error occured: ${e.toString()}");
