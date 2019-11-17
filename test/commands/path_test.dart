@@ -6,14 +6,15 @@ import '../test_settings.dart';
 void main() {
   Settings().debug_on = true;
   String cwd = pwd;
+  String TEST_DIR = "path_test";
 
   try {
     t.group("Directory Path manipulation testing", () {
       String home = env("HOME");
-      String pathTestDir = join(TEST_ROOT, "pathTestDir");
-      String testExtension = "jpg";
+      String pathTestDir = join(TEST_ROOT, TEST_DIR, "pathTestDir");
+      String testExtension = ".jpg";
       String testBaseName = "fred";
-      String testFile = "$testBaseName.$testExtension";
+      String testFile = "$testBaseName$testExtension";
 
       t.test("absolute", () {
         String cwd = pwd;
@@ -22,7 +23,7 @@ void main() {
       });
 
       t.test("parent", () {
-        t.expect(dirname(pathTestDir), t.equals(absolute(TEST_ROOT)));
+        t.expect(dirname(pathTestDir), t.equals(join(TEST_ROOT, TEST_DIR)));
       });
 
       t.test("extension", () {
@@ -57,7 +58,7 @@ void main() {
         pop();
         t.expect(pwd, t.equals(start));
 
-        removeDir(TEST_ROOT, recursive: true);
+        removeDir(pathTestDir, recursive: true);
       });
 
       t.test("Too many pops", () {
