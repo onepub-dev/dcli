@@ -14,3 +14,4 @@ doc/api/
 test/data/shell/main/bad.jpg
 test/data/shell/main/subdir/goody.jpg
 test/tools/images/bad.jpg
+tmp/lines.txt
