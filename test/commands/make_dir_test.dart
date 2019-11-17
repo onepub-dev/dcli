@@ -1,4 +1,4 @@
-import 'package:test/test.dart';
+import 'package:test/test.dart' as t;
 import "package:dshell/dshell.dart";
 
 import '../test_settings.dart';
@@ -8,42 +8,42 @@ void main() {
 
   push(".");
   try {
-    group("Directory Creation", () {
+    t.group("Directory Creation", () {
       String testDirectory = join(TEST_ROOT, "tmp_test");
       String testPath = join(TEST_ROOT, "tmp_test/longer/and/longer");
 
-      test("Makedir", () {
+      t.test("Makedir", () {
         makeDir(testDirectory, createParent: true);
 
-        expect(exists(testDirectory), equals(true));
+        t.expect(exists(testDirectory), t.equals(true));
       });
 
-      test("Makedir with createParent", () {
+      t.test("Makedir with createParent", () {
         makeDir(testPath, createParent: true);
 
-        expect(exists(testPath), equals(true));
+        t.expect(exists(testPath), t.equals(true));
       });
 
-      test("removeDir", () {
+      t.test("removeDir", () {
         removeDir(testPath);
 
-        expect(!exists(testPath), equals(true));
-        expect(exists(parent(testPath)), equals(true));
+        t.expect(!exists(testPath), t.equals(true));
+        t.expect(exists(dirname(testPath)), t.equals(true));
       });
 
-      test("Remove Dir recursive", () {
+      t.test("Remove Dir recursive", () {
         removeDir(TEST_ROOT, recursive: true);
-        expect(!exists(testDirectory), equals(true));
+        t.expect(!exists(testDirectory), t.equals(true));
       });
 
-      test("removeDir failure", () {
-        expect(() => removeDir(testDirectory),
-            throwsA(TypeMatcher<RemoveDirException>()));
+      t.test("removeDir failure", () {
+        t.expect(() => removeDir(testDirectory),
+            t.throwsA(t.TypeMatcher<RemoveDirException>()));
       });
 
-      test("makeDir createPath failure", () {
-        expect(() => makeDir(testPath, createParent: false),
-            throwsA(TypeMatcher<MakeDirException>()));
+      t.test("makeDir createPath failure", () {
+        t.expect(() => makeDir(testPath, createParent: false),
+            t.throwsA(t.TypeMatcher<MakeDirException>()));
       });
     });
   } finally {

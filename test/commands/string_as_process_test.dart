@@ -1,4 +1,4 @@
-import 'package:test/test.dart';
+import 'package:test/test.dart' as t;
 import "package:dshell/dshell.dart";
 
 import '../test_settings.dart';
@@ -8,8 +8,8 @@ void main() {
   push(TEST_ROOT);
 
   try {
-    group("StringAsProcess", () {
-      test("Run", () {
+    t.group("StringAsProcess", () {
+      t.test("Run", () {
         var testFile = "test.text";
 
         if (exists(testFile)) {
@@ -17,28 +17,28 @@ void main() {
         }
 
         'touch test.text'.run;
-        expect(exists(testFile), equals(true));
+        t.expect(exists(testFile), t.equals(true));
       });
 
-      test("forEach", () {
+      t.test("forEach", () {
         List<String> lines = List();
 
         print("pwd" + pwd);
 
         'tail -n 5 ../data/lines.txt'.forEach((line) => lines.add(line));
 
-        expect(lines.length, equals(5));
+        t.expect(lines.length, t.equals(5));
       });
 /*
-    test("Pipe operator", () {
+    t.test("Pipe operator", () {
       'head -n 5 ../data/lines.txt' | 'tail -n 1'.run;
-      expect(lines.length, equals(1));
+      t.expect(lines.length, t.equals(1));
     });
     */
 
-      test("Lines", () {
+      t.test("Lines", () {
         List<String> lines = 'head -n 5 /var/log/syslog'.lines;
-        expect(lines.length, equals(5));
+        t.expect(lines.length, t.equals(5));
       });
     });
   } finally {

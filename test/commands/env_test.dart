@@ -1,12 +1,12 @@
-import 'package:test/test.dart';
+import 'package:test/test.dart' as t;
 import "package:dshell/dshell.dart";
 
 void main() {
   Settings().debug_on = true;
 
-  group("Environment", () {
-    test("PATH", () {
-      expect(env("PATH").length, greaterThan(0));
+  t.group("Environment", () {
+    t.test("PATH", () {
+      t.expect(env("PATH").length, t.greaterThan(0));
     });
   });
 }

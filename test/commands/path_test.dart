@@ -1,4 +1,4 @@
-import 'package:test/test.dart';
+import 'package:test/test.dart' as t;
 import "package:dshell/dshell.dart";
 
 import '../test_settings.dart';
@@ -8,63 +8,60 @@ void main() {
   String cwd = pwd;
 
   try {
-    group("Directory Path manipulation testing", () {
+    t.group("Directory Path manipulation testing", () {
       String home = env("HOME");
       String pathTestDir = join(TEST_ROOT, "pathTestDir");
       String testExtension = "jpg";
       String testBaseName = "fred";
       String testFile = "$testBaseName.$testExtension";
 
-      test("absolute", () {
+      t.test("absolute", () {
         String cwd = pwd;
 
-        expect(absolute(pathTestDir), equals(join(cwd, pathTestDir)));
+        t.expect(absolute(pathTestDir), t.equals(join(cwd, pathTestDir)));
       });
 
-      test("parent", () {
-        expect(parent(pathTestDir), equals(absolute(TEST_ROOT)));
+      t.test("parent", () {
+        t.expect(dirname(pathTestDir), t.equals(absolute(TEST_ROOT)));
       });
 
-      test("filename", () {
-        expect(filename(join(pathTestDir, testFile)), equals(testFile));
+      t.test("extension", () {
+        t.expect(
+            extension(join(pathTestDir, testFile)), t.equals(testExtension));
       });
 
-      test("extension", () {
-        expect(extension(join(pathTestDir, testFile)), equals(testExtension));
+      t.test("basename", () {
+        t.expect(basename(join(pathTestDir, testFile)), t.equals(testBaseName));
       });
 
-      test("basename", () {
-        expect(basename(join(pathTestDir, testFile)), equals(testBaseName));
+      t.test("PWD", () {
+        t.expect(pwd, t.startsWith(home));
       });
 
-      test("PWD", () {
-        expect(pwd, startsWith(home));
-      });
-
-      test("CD", () {
+      t.test("CD", () {
         cd("..");
-        expect(pwd, equals(parent(cwd)));
+        t.expect(pwd, t.equals(dirname(cwd)));
 
         cd(cwd);
-        expect(pwd, equals(cwd));
+        t.expect(pwd, t.equals(cwd));
       });
 
-      test("Push/Pop", () {
+      t.test("Push/Pop", () {
         String start = pwd;
         makeDir(pathTestDir, createParent: true);
 
         String expectedPath = absolute(pathTestDir);
         push(pathTestDir);
-        expect(pwd, equals(expectedPath));
+        t.expect(pwd, t.equals(expectedPath));
 
         pop();
-        expect(pwd, equals(start));
+        t.expect(pwd, t.equals(start));
 
         removeDir(TEST_ROOT, recursive: true);
       });
 
-      test("Too many pops", () {
-        expect(() => pop(), throwsA(TypeMatcher<PopException>()));
+      t.test("Too many pops", () {
+        t.expect(() => pop(), t.throwsA(t.TypeMatcher<PopException>()));
       });
     });
   } finally {

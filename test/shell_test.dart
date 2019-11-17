@@ -1,4 +1,4 @@
-import 'package:test/test.dart';
+import 'package:test/test.dart' as t;
 import 'package:dshell/dshell.dart';
 
 import 'test_settings.dart';
@@ -8,7 +8,7 @@ void main() {
   makeDir(TEST_ROOT);
   push(TEST_ROOT);
   try {
-    test("Try everything", () {
+    t.test("Try everything", () {
       // Settings().debug_on = true;
 
       print("PWD: ${pwd}");

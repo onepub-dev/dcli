@@ -1,7 +1,7 @@
 import 'dart:io';
 
 import 'package:dshell/dshell.dart';
-import 'package:test/test.dart';
+import 'package:test/test.dart' as t;
 import 'package:yaml/yaml.dart';
 
 import 'test_settings.dart';
@@ -11,7 +11,7 @@ void main() async {
   push(TEST_ROOT);
 
   try {
-    test("Project Name", () async {
+    t.test("Project Name", () async {
       await getProjectName();
     });
   } finally {
