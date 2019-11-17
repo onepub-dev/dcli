@@ -7,9 +7,9 @@ import 'package:dshell/commands/run.dart';
 
 import '../dshell.dart';
 import 'log.dart';
-import 'stack_trace_impl.dart';
 
 typedef void LineAction(String line);
+typedef bool CancelableLineAction(String line);
 
 class RunnableProcess {
   Future<Process> fProcess;
@@ -60,38 +60,7 @@ class RunnableProcess {
         }
       });
     });
-    smartWaitFor<bool>(done.future);
-  }
-
-  /// Wraps the standard cli waitFor
-  /// but rethrows any exceptions with
-  /// a stack that is cohernt.
-  /// Exceptions would normally have a microtask
-  /// stack which is useless.
-  /// This version replaces the exceptions stack
-  /// with a full stack.
-  static T smartWaitFor<T>(Future<T> future) {
-    RunException exception;
-    T value;
-    try {
-      value = waitFor<T>(future);
-    } on AsyncError catch (e) {
-      if (e.error is RunException) {
-        exception = e.error as RunException;
-      } else {
-        rethrow;
-      }
-    }
-
-    if (exception != null) {
-      // recreate the exception so we have a full
-      // stacktrace rather than the microtask
-      // stacktrace the future leaves us with.
-      StackTraceImpl stackTrace = StackTraceImpl(skipFrames: 2);
-
-      throw RunException.rebuild(exception, stackTrace);
-    }
-    return value;
+    waitFor<bool>(done.future);
   }
 }
 
