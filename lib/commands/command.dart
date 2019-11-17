@@ -1,4 +1,4 @@
-import 'package:dshell/util/stack_trace_impl.dart';
+import 'package:dshell/util/dshell_exception.dart';
 import 'package:path/path.dart' as p;
 
 class Command {
@@ -9,24 +9,6 @@ class Command {
   String absolute(String path) => p.absolute(path);
 }
 
-class CommandException implements Exception {
-  String message;
-  StackTraceImpl stackTrace;
-
-  CommandException(this.message) {
-    stackTrace = StackTraceImpl(skipFrames: 2);
-  }
-
-  CommandException.rebuild(CommandException e, StackTraceImpl stackTrace) {
-    message = e.message;
-    this.stackTrace = stackTrace;
-  }
-
-  String toString() {
-    return "An Exception was thrown: ${message}";
-  }
-
-  void printStackTrace() {
-    print(stackTrace.formatStackTrace());
-  }
+class CommandException extends DShellException {
+  CommandException(String message) : super(message);
 }
