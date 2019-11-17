@@ -1,6 +1,5 @@
 import 'package:dshell/util/runnable_process.dart';
 
-import '../util/stack_trace_impl.dart';
 import 'command.dart';
 
 ///
@@ -30,7 +29,4 @@ class Run extends Command {
 
 class RunException extends CommandException {
   RunException(String reason) : super(reason);
-
-  RunException.rebuild(RunException e, StackTraceImpl stackTrace)
-      : super.rebuild(e, stackTrace);
 }
