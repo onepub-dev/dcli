@@ -1,5 +1,8 @@
+import 'dart:io';
+
 import 'package:dshell/commands/run.dart' as cmd;
 import 'package:dshell/util/runnable_process.dart';
+import 'package:dshell/util/waitFor.dart';
 
 import 'pipe.dart';
 
@@ -64,5 +67,25 @@ extension StringAsProcess on String {
     lhsRunnable.start();
 
     return Pipe(lhsRunnable, rhsRunnable);
+  }
+
+  void write(String line, {bool newline = true}) {
+    var sink = File(this).openWrite();
+    if (newline) {
+      line += '\n';
+    }
+    sink.write(line);
+    waitFor<void>(sink.flush());
+    waitFor<void>(sink.close());
+  }
+
+  void append(String line, {bool newline = true}) {
+    var sink = File(this).openWrite(mode: FileMode.writeOnlyAppend);
+    if (newline) {
+      line += '\n';
+    }
+    sink.write(line);
+    waitFor<void>(sink.flush());
+    waitFor<void>(sink.close());
   }
 }
