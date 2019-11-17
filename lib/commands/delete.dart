@@ -40,14 +40,14 @@ class Delete extends Command {
       if (yes == "y") {
         remove = true;
       }
+    }
 
-      if (remove == true) {
-        try {
-          File(path).delete();
-        } catch (e) {
-          throw DeleteException(
-              "An error occured deleteing ${absolute(path)}. Error: $e");
-        }
+    if (remove == true) {
+      try {
+        File(path).delete();
+      } catch (e) {
+        throw DeleteException(
+            "An error occured deleteing ${absolute(path)}. Error: $e");
       }
     }
   }
