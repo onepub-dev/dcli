@@ -25,6 +25,10 @@ void move(String from, String to) => Move().move(from, to);
 
 class Move extends Command {
   void move(String from, String to) {
+    if (Settings().debug_on) {
+      Log.d("mv ${absolute(from)} -> ${absolute(to)}");
+    }
+
     String dest = to;
 
     if (isDirectory(to)) {
@@ -36,10 +40,6 @@ class Move extends Command {
     } catch (e) {
       throw MoveException(
           "The Move of ${absolute(from)} to ${absolute(dest)} failed. Error ${e}");
-    }
-
-    if (Settings().debug_on) {
-      Log.d("mv ${absolute(from)} -> ${absolute(to)}");
     }
   }
 }
