@@ -1,6 +1,5 @@
 import 'dart:io';
 
-import 'package:dshell/util/file_sync.dart';
 import 'package:test/test.dart' as t;
 import "package:dshell/dshell.dart";
 
