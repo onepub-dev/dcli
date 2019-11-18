@@ -36,7 +36,6 @@ class Move extends Command {
     }
 
     try {
-      print("Move pwd: $pwd");
       File(from).renameSync(dest);
     } catch (e) {
       throw MoveException(
