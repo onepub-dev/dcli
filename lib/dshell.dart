@@ -1,3 +1,4 @@
+export 'commands/ask.dart' show ask;
 export 'commands/cat.dart' show cat, CatException;
 export 'commands/cd.dart' show cd, CDException;
 export 'commands/copy.dart' show copy, CopyException;
@@ -5,18 +6,17 @@ export 'commands/delete.dart' show delete, DeleteException;
 export 'commands/echo.dart' show echo;
 export 'commands/env.dart' show env;
 export 'commands/fileList.dart' show fileList;
+export 'util/file_sync.dart';
 export 'commands/find.dart' show find;
 export 'commands/head.dart' show head;
 export 'commands/is.dart' show isFile, isDirectory, exists;
 export 'commands/make_dir.dart' show makeDir, MakeDirException;
 export 'commands/move.dart' show move, MoveException;
-// export 'commands/path.dart'
-//     show basename, absolute, canonicalize, extension, filename, parent, join;
 export 'package:path/path.dart';
 export 'commands/pop.dart' show pop, PopException;
 export 'commands/push.dart' show push, PushException;
 export 'commands/pwd.dart' show pwd;
-export 'commands/read.dart' show read;
+
 export 'commands/remove_dir.dart' show removeDir, RemoveDirException;
 export 'commands/run.dart' show RunException;
 export 'commands/sleep.dart' show sleep;
