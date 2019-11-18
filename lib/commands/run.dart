@@ -14,16 +14,16 @@ import 'command.dart';
 /// If the command fails or returns a non-zero exitCode
 /// Then a [RunCommand] exception will be thrown.
 ///
-void run(String command, [LineAction lineAction]) =>
-    Run().run(command, lineAction);
+void run(String command, {LineAction stdout, LineAction stderr}) =>
+    Run().run(command, stdout: stdout, stderr: stderr);
 
 class Run extends Command {
   RunnableProcess runnable;
 
-  void run(String command, [LineAction lineAction]) {
+  void run(String command, {LineAction stdout, LineAction stderr}) {
     runnable = RunnableProcess(command);
     runnable.start();
-    runnable.processUntilExit(lineAction);
+    runnable.processUntilExit(stdout, stderr);
   }
 }
 

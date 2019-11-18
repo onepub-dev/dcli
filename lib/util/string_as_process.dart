@@ -31,11 +31,12 @@ extension StringAsProcess on String {
   /// 'grep alabama regions.txt'.forEach((line) => print(line));
   /// ```
   ///
-  void forEach(LineAction action) => cmd.run(this, action);
+  void forEach(LineAction stdout, {LineAction stderr}) =>
+      cmd.run(this, stdout: stdout, stderr: stderr);
 
   List<String> get lines {
     List<String> lines = List();
-    cmd.run(this, (line) => lines.add(line));
+    cmd.run(this, stdout: (line) => lines.add(line));
 
     return lines;
   }

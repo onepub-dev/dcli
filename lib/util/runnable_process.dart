@@ -53,8 +53,8 @@ class RunnableProcess {
           .transform(utf8.decoder)
           .transform(const LineSplitter())
           .listen((line) {
-        if (stdoutAction != null) {
-          stdoutAction(line);
+        if (stderrAction != null) {
+          stderrAction(line);
         } else {
           print(line);
         }
