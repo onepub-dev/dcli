@@ -40,8 +40,13 @@ void main() {
       });
 
       t.test("CD", () {
+        String testdir = pwd;
+
+        makeDir("cd_test");
+        cd("cd_test");
+        t.expect(pwd, t.equals(absolute(join(testdir, "cd_test"))));
         cd("..");
-        t.expect(pwd, t.equals(dirname(cwd)));
+        t.expect(pwd, t.equals(absolute(cwd)));
 
         cd(cwd);
         t.expect(pwd, t.equals(cwd));
