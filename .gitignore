@@ -18,3 +18,12 @@ tmp/lines.txt
 test.text
 shell/main/good.jpg
 shell/main/subdir/goody.jpg
+tmp/top/one.jpg
+tmp/top/one.txt
+tmp/top/two.txt
+tmp/top/middle/four.txt
+tmp/top/middle/three.txt
+tmp/top/middle/two.jpg
+tmp/top/middle/bottom/five.txt
+tmp/top/middle/bottom/six.txt
+tmp/top/middle/bottom/three.jpg
