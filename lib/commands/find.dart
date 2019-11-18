@@ -65,7 +65,8 @@ class Find extends Command {
     util.FileList(Directory(root), pattern, caseSensitive: caseSensitive,
         notify: (path) {
       FileSystemEntityType type = FileSystemEntity.typeSync(path);
-      if (types.contains(type)) {
+      if (types.contains(type) ||
+          (recursive && type == FileSystemEntityType.directory)) {
         files.add(path);
       }
     });
@@ -91,6 +92,15 @@ class Find extends Command {
         }
       });
       files.addAll(foundList);
+    }
+
+    // Remove directories unless explicity requested.
+    // When recursing we need to artificually add the directories
+    // to the list so we can visit each one.
+
+    if (!types.contains(FileSystemEntityType.directory)) {
+      files.retainWhere(
+          (file) => types.contains(FileSystemEntity.typeSync(file)));
     }
     return files;
   }

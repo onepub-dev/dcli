@@ -38,11 +38,11 @@ void main() {
     String verse2 = """
     Do not listen to the gardener, they are not your friend.
     The will speak with venom of the Aphids that suck the sap
-    and praise the lady beattle that attack the poor Aphid.
+    and praise the lady beetle that attack the poor Aphid.
     But know the truth, the Aphid is your friend, and the
-    beattle your mortal enemy.
+    beetle your mortal enemy.
     The Aphid would bring down the fearful rose but that
-    garish beattle will consume with glee the poor Aphid.
+    garish bettle will consume with glee the poor Aphid. 
     """;
 
     String restingPlace = join(poetryForReviews, poem);
