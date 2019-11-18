@@ -16,3 +16,5 @@ test/data/shell/main/subdir/goody.jpg
 test/tools/images/bad.jpg
 tmp/lines.txt
 test.text
+shell/main/good.jpg
+shell/main/subdir/goody.jpg
