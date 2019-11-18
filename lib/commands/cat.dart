@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'dart:io';
 
 import 'package:dshell/util/dshell_exception.dart';
+import 'package:dshell/util/runnable_process.dart';
 
 import 'package:dshell/util/stack_trace_impl.dart';
 import 'package:dshell/util/waitForEx.dart';
@@ -15,10 +16,10 @@ import '../util/log.dart';
 ///
 /// If the file does not exists then a CatException is thrown.
 ///
-void cat(String path) => Cat().cat(path);
+void cat(String path, {LineAction stdout}) => Cat().cat(path, stdout: stdout);
 
 class Cat extends Command {
-  void cat(String path) {
+  void cat(String path, {LineAction stdout}) {
     File sourceFile = File(path);
 
     if (Settings().debug_on) {
@@ -32,7 +33,13 @@ class Cat extends Command {
         .openRead()
         .transform(utf8.decoder)
         .transform(LineSplitter())
-        .forEach((line) => print(line)));
+        .forEach((line) {
+      if (stdout == null) {
+        print(line);
+      } else {
+        stdout(line);
+      }
+    }));
   }
 }
 
