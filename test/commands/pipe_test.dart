@@ -1,20 +1,15 @@
-import 'package:dshell/util/file_sync.dart';
 import 'package:test/test.dart' as t;
 import "package:dshell/dshell.dart";
 
 import '../test_settings.dart';
+import '../util.dart';
 
 void main() {
   Settings().debug_on = true;
 
   String linesFile = join(TEST_ROOT, TEST_LINES_FILE);
 
-  if (!exists(linesFile)) {
-    FileSync file = FileSync(linesFile);
-    for (int i = 0; i < 10; i++) {
-      file.append("Line $i");
-    }
-  }
+  createLineFile(linesFile, 10);
 
   t.group("Piping", () {
     List<String> lines = List();
