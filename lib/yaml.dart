@@ -1,6 +1,6 @@
 import 'dart:io';
 
-import 'package:dshell/util/waitFor.dart';
+import 'package:dshell/util/waitForEx.dart';
 import 'package:yaml/yaml.dart';
 
 class Yaml {
@@ -19,7 +19,7 @@ class Yaml {
   /// reads the project name from the yaml file
   ///
   String getValue(String key) {
-    waitFor(load());
+    waitForEx(load());
     return document.contents.value[key] as String;
   }
 }

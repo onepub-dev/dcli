@@ -1,4 +1,4 @@
-import 'dart:cli';
+import 'package:dshell/util/waitForEx.dart';
 
 import '../util/log.dart';
 
@@ -33,6 +33,6 @@ class Sleep extends Command {
         break;
     }
 
-    waitFor<void>(Future.delayed(_duration));
+    waitForEx<void>(Future.delayed(_duration));
   }
 }

@@ -3,7 +3,7 @@ import 'dart:convert';
 import 'dart:io';
 
 import 'package:dshell/commands/run.dart';
-import 'package:dshell/util/waitFor.dart';
+import 'package:dshell/util/waitForEx.dart';
 
 import '../dshell.dart';
 import 'log.dart';
@@ -70,7 +70,7 @@ class RunnableProcess {
         }
       });
     });
-    waitFor<bool>(done.future);
+    waitForEx<bool>(done.future);
   }
 }
 

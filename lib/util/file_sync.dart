@@ -2,7 +2,7 @@ import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
 
-import 'package:dshell/util/waitFor.dart';
+import 'package:dshell/util/waitForEx.dart';
 
 import 'dshell_exception.dart';
 import 'log.dart';
@@ -76,7 +76,7 @@ class FileSync {
       Log.e("exception $e");
     }
 
-    waitFor(done.future);
+    waitForEx(done.future);
 
     if (exception != null) {
       if (exception is DShellException) {

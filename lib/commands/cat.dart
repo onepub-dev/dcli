@@ -1,10 +1,10 @@
-import 'dart:cli';
 import 'dart:convert';
 import 'dart:io';
 
 import 'package:dshell/util/dshell_exception.dart';
 
 import 'package:dshell/util/stack_trace_impl.dart';
+import 'package:dshell/util/waitForEx.dart';
 
 import 'command.dart';
 import 'is.dart';
@@ -28,7 +28,7 @@ class Cat extends Command {
     if (!exists(path)) {
       throw CatException("The file at ${absolute(path)} does not exists");
     }
-    waitFor<void>(sourceFile
+    waitForEx<void>(sourceFile
         .openRead()
         .transform(utf8.decoder)
         .transform(LineSplitter())

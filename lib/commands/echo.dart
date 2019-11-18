@@ -1,7 +1,7 @@
-import 'dart:cli';
 import 'dart:io';
 
 import 'package:dshell/commands/command.dart';
+import 'package:dshell/util/waitForEx.dart';
 
 /// Writes [text] to stdout including a newline.
 ///
@@ -18,6 +18,6 @@ class Echo extends Command {
       stdout.write(text);
     }
     var future = stdout.flush();
-    waitFor<dynamic>(future);
+    waitForEx<dynamic>(future);
   }
 }

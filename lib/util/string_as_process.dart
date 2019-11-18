@@ -2,7 +2,7 @@ import 'dart:io';
 
 import 'package:dshell/commands/run.dart' as cmd;
 import 'package:dshell/util/runnable_process.dart';
-import 'package:dshell/util/waitFor.dart';
+import 'package:dshell/util/waitForEx.dart';
 
 import 'pipe.dart';
 
@@ -75,8 +75,8 @@ extension StringAsProcess on String {
       line += '\n';
     }
     sink.write(line);
-    waitFor<void>(sink.flush());
-    waitFor<void>(sink.close());
+    waitForEx<void>(sink.flush());
+    waitForEx<void>(sink.close());
   }
 
   void append(String line, {bool newline = true}) {
@@ -85,7 +85,7 @@ extension StringAsProcess on String {
       line += '\n';
     }
     sink.write(line);
-    waitFor<void>(sink.flush());
-    waitFor<void>(sink.close());
+    waitForEx<void>(sink.flush());
+    waitForEx<void>(sink.close());
   }
 }
