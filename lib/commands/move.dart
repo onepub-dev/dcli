@@ -26,7 +26,7 @@ void move(String from, String to) => Move().move(from, to);
 class Move extends Command {
   void move(String from, String to) {
     if (Settings().debug_on) {
-      Log.d("mv ${absolute(from)} -> ${absolute(to)}");
+      Log.d("move ${absolute(from)} -> ${absolute(to)}");
     }
 
     String dest = to;
@@ -36,6 +36,7 @@ class Move extends Command {
     }
 
     try {
+      print("Move pwd: $pwd");
       File(from).renameSync(dest);
     } catch (e) {
       throw MoveException(

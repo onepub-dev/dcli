@@ -1,5 +1,3 @@
-import 'dart:io';
-
 import 'package:test/test.dart' as t;
 import "package:dshell/dshell.dart";
 

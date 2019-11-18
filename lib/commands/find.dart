@@ -1,12 +1,10 @@
 import 'dart:io';
 
 import 'package:dshell/commands/command.dart';
-import 'package:file_utils/file_utils.dart';
+import 'package:file_utils/file_utils.dart' as util;
 
+import '../dshell.dart';
 import 'settings.dart';
-import 'fileList.dart';
-import 'pop.dart';
-import 'push.dart';
 
 import '../util/log.dart';
 
@@ -60,42 +58,39 @@ class Find extends Command {
 
     if (Settings().debug_on) {
       Log.d(
-          "find: ${absolute(root)} pattern: ${pattern} caseSensitive: ${caseSensitive} recursive: ${recursive} types: ${types} ");
+          "find: pwd: ${pwd} ${absolute(root)} pattern: ${pattern} caseSensitive: ${caseSensitive} recursive: ${recursive} types: ${types} ");
     }
 
-    try {
-      push(root);
+    // scan current directory for files
+    util.FileList(Directory(root), pattern, caseSensitive: caseSensitive,
+        notify: (path) {
+      FileSystemEntityType type = FileSystemEntity.typeSync(path);
+      if (types.contains(type)) {
+        files.add(path);
+      }
+    });
 
-      // scan current directory for files
-      FileUtils.glob(pattern, caseSensitive: caseSensitive, notify: (path) {
-        FileSystemEntityType type = FileSystemEntity.typeSync(path);
-        if (types.contains(type)) {
-          files.add(path);
+    if (recursive) {
+      List<String> foundList = List();
+      files.forEach((found) {
+        FileSystemEntityType type = FileSystemEntity.typeSync(found);
+
+        if (type == FileSystemEntityType.directory) {
+          // recursive call to find.
+          List<String> subDirList = find(pattern,
+              caseSensitive: caseSensitive,
+              recursive: recursive,
+              root: join(root, found),
+              types: types);
+
+          foundList.addAll(subDirList);
+
+          if (Settings().debug_on) {
+            Log.d("find: found ${foundList.length}");
+          }
         }
       });
-
-      if (recursive) {
-        fileList.forEach((path) {
-          FileSystemEntityType type = FileSystemEntity.typeSync(path);
-
-          if (type == FileSystemEntityType.directory) {
-            // recursive call to find.
-            List<String> found = find(pattern,
-                caseSensitive: caseSensitive,
-                recursive: recursive,
-                root: path,
-                types: types);
-
-            files.addAll(found);
-
-            if (Settings().debug_on) {
-              Log.d("find: found ${found.length}");
-            }
-          }
-        });
-      }
-    } finally {
-      pop;
+      files.addAll(foundList);
     }
     return files;
   }

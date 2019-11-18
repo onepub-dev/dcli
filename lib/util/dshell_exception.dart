@@ -8,8 +8,12 @@ class DShellException implements Exception {
       : this.stackTrace = stackTrace ?? StackTraceImpl(skipFrames: 2);
 
   DShellException copyWith(StackTraceImpl stackTrace) {
-    return DShellException(this.message, stackTrace);
+    return DShellException(message, stackTrace);
   }
+
+  //  {
+  //   return DShellException(this.message, stackTrace);
+  // }
 
   String toString() {
     return "An Exception was thrown: ${message}";

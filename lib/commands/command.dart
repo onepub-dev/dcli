@@ -1,4 +1,5 @@
 import 'package:dshell/util/dshell_exception.dart';
+import 'package:dshell/util/stack_trace_impl.dart';
 import 'package:path/path.dart' as p;
 
 class Command {
@@ -10,5 +11,11 @@ class Command {
 }
 
 class CommandException extends DShellException {
-  CommandException(String message) : super(message);
+  CommandException(String message, [StackTraceImpl stackTrace])
+      : super(message, stackTrace);
+
+  @override
+  DShellException copyWith(StackTraceImpl stackTrace) {
+    return CommandException(message, stackTrace);
+  }
 }

@@ -6,9 +6,10 @@ import 'test_settings.dart';
 void main() {
   Settings().debug_on = true;
   makeDir(TEST_ROOT);
-  push(TEST_ROOT);
-  try {
-    t.test("Try everything", () {
+
+  t.test("Try everything", () {
+    try {
+      push(TEST_ROOT);
       // Settings().debug_on = true;
 
       print("PWD: ${pwd}");
@@ -49,10 +50,11 @@ void main() {
 
       pop();
       echo(pwd);
-    }, skip: true);
-  } finally {
-    pop();
-  }
+    } finally {
+      print("In finally");
+      pop();
+    }
+  });
 }
 
 // File x;

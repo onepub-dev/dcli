@@ -1,30 +1,15 @@
-import 'dart:io';
-
 import 'package:dshell/dshell.dart';
+import 'package:dshell/yaml.dart';
 import 'package:test/test.dart' as t;
-import 'package:yaml/yaml.dart';
-
-import 'test_settings.dart';
 
 void main() async {
   Settings().debug_on = true;
-  push(TEST_ROOT);
 
-  try {
-    t.test("Project Name", () async {
-      await getProjectName();
-    });
-  } finally {
-    pop();
-  }
-}
+  t.test("Project Name", () async {
+    print("$pwd");
+    Yaml yaml = Yaml("pubspec.yaml");
+    String projectName = yaml.getValue("name");
 
-/// reads the project name from the yaml file
-///
-Future<String> getProjectName() async {
-  String contents = await File("pubspec.yaml").readAsString();
-
-  YamlDocument pubSpec = loadYamlDocument(contents);
-  print(pubSpec.contents.value["name"]);
-  return pubSpec.contents.value["name"] as String;
+    t.expect(projectName, t.equals("dshell"));
+  });
 }

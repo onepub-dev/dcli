@@ -9,10 +9,12 @@ class Pipe {
   }
 
   Pipe operator |(String next) {
-    return Pipe(rhs, RunnableProcess(next));
+    RunnableProcess pNext = RunnableProcess(next);
+    pNext.start();
+    return Pipe(rhs, pNext);
   }
 
   void forEach(LineAction lineAction) {
-    rhs.processUntilExit();
+    rhs.processUntilExit(lineAction);
   }
 }

@@ -32,7 +32,7 @@ void main() {
       });
 
       t.test("basename", () {
-        t.expect(basename(join(pathTestDir, testFile)), t.equals(testBaseName));
+        t.expect(basename(join(pathTestDir, testFile)), t.equals(testFile));
       });
 
       t.test("PWD", () {

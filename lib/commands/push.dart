@@ -28,6 +28,10 @@ class Push extends Command {
   /// Push the pwd onto the stack and change the
   /// current directory to [path].
   void push(String path) {
+    if (Settings().debug_on) {
+      Log.d("push: path: $path new -> ${p.absolute(path)}");
+    }
+
     if (!exists(path)) {
       throw PushException("The path ${absolute(path)} does not exist.");
     }
@@ -35,9 +39,7 @@ class Push extends Command {
     if (!isDirectory(path)) {
       throw PushException("The path ${absolute(path)} is not a directory.");
     }
-    if (Settings().debug_on) {
-      Log.d("push: new -> ${p.absolute(path)}");
-    }
+
     InternalSettings().push(Directory.current);
 
     try {

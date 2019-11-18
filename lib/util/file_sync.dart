@@ -13,7 +13,7 @@ class FileSync {
   File _file;
   RandomAccessFile _raf;
 
-  FileSync(String path, {FileMode fileMode = FileMode.read}) {
+  FileSync(String path, {FileMode fileMode = FileMode.writeOnlyAppend}) {
     _file = File(path);
     _open(fileMode: fileMode);
   }
@@ -79,7 +79,7 @@ class FileSync {
     waitFor(done.future);
 
     if (exception != null) {
-      if (exception is _CancelReadException) {
+      if (exception is DShellException) {
         // not an exception, the user just doesn't want to continue.
       } else {
         throw DShellException.from(exception, stackTrace);
@@ -106,5 +106,3 @@ class FileSync {
     _raf.writeStringSync(line);
   }
 }
-
-class _CancelReadException implements Exception {}

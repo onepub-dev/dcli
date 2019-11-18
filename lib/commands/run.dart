@@ -21,9 +21,9 @@ class Run extends Command {
   RunnableProcess runnable;
 
   void run(String command, [LineAction lineAction]) {
-    runnable = RunnableProcess(command, lineAction);
+    runnable = RunnableProcess(command);
     runnable.start();
-    runnable.processUntilExit();
+    runnable.processUntilExit(lineAction);
   }
 }
 

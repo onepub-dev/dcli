@@ -2,6 +2,10 @@ import 'dart:cli';
 import 'dart:convert';
 import 'dart:io';
 
+import 'package:dshell/util/dshell_exception.dart';
+
+import 'package:dshell/util/stack_trace_impl.dart';
+
 import 'command.dart';
 import 'is.dart';
 import 'settings.dart';
@@ -33,5 +37,11 @@ class Cat extends Command {
 }
 
 class CatException extends CommandException {
-  CatException(String reason) : super(reason);
+  CatException(String reason, [StackTraceImpl stacktrace])
+      : super(reason, stacktrace);
+
+  @override
+  DShellException copyWith(StackTraceImpl stackTrace) {
+    return CatException(message, stackTrace);
+  }
 }

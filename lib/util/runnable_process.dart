@@ -1,9 +1,9 @@
 import 'dart:async';
-import 'dart:cli';
 import 'dart:convert';
 import 'dart:io';
 
 import 'package:dshell/commands/run.dart';
+import 'package:dshell/util/waitFor.dart';
 
 import '../dshell.dart';
 import 'log.dart';
@@ -15,11 +15,10 @@ class RunnableProcess {
   Future<Process> fProcess;
   // The command line used to start the process.
   final String cmdLine;
-  final LineAction lineAction;
 
   ParsedCliCommand parsed;
 
-  RunnableProcess(this.cmdLine, [this.lineAction]) {
+  RunnableProcess(this.cmdLine) {
     parsed = ParsedCliCommand(cmdLine);
   }
 
@@ -37,7 +36,7 @@ class RunnableProcess {
   // Monitors the process until it exists.
   // If a LineAction exists we call
   // line action each time the process emmits a line.
-  void processUntilExit() {
+  void processUntilExit(LineAction stdoutAction, [LineAction stderrAction]) {
     Completer<bool> done = Completer<bool>();
 
     fProcess.then((process) {
@@ -45,8 +44,19 @@ class RunnableProcess {
           .transform(utf8.decoder)
           .transform(const LineSplitter())
           .listen((line) {
-        if (lineAction != null) {
-          lineAction(line);
+        if (stdoutAction != null) {
+          stdoutAction(line);
+        }
+      });
+
+      process.stderr
+          .transform(utf8.decoder)
+          .transform(const LineSplitter())
+          .listen((line) {
+        if (stdoutAction != null) {
+          stdoutAction(line);
+        } else {
+          print(line);
         }
       });
 
@@ -84,7 +94,7 @@ class ParsedCliCommand {
 
     if (Settings().debug_on) {
       Log.d("${Directory.current}");
-      Log.d("cmd $cmd args: $args");
+      Log.d("cmd: $cmd args: $args");
     }
   }
 }

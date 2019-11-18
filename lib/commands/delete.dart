@@ -21,7 +21,7 @@ void delete(String path, {bool ask = false}) => Delete().delete(path, ask: ask);
 class Delete extends Command {
   void delete(String path, {bool ask}) {
     if (Settings().debug_on) {
-      Log.d("rm:  ${absolute(path)} ask: $ask");
+      Log.d("delete:  ${absolute(path)} ask: $ask");
     }
 
     if (!exists(path)) {
@@ -36,7 +36,7 @@ class Delete extends Command {
     if (ask) {
       remove = false;
       var yes = Read().read(
-          prompt: "delete: delete the regular file '${absolute(path)}'? y/N");
+          prompt: "delete: Delete the regular file '${absolute(path)}'? y/N");
       if (yes == "y") {
         remove = true;
       }
@@ -44,10 +44,10 @@ class Delete extends Command {
 
     if (remove == true) {
       try {
-        File(path).delete();
+        File(path).deleteSync();
       } catch (e) {
         throw DeleteException(
-            "An error occured deleteing ${absolute(path)}. Error: $e");
+            "An error occured deleting ${absolute(path)}. Error: $e");
       }
     }
   }
