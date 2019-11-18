@@ -47,28 +47,31 @@ class FileSync {
     Object exception;
 
     Completer<bool> done = Completer();
-    bool stop = false;
+    // bool stop = false;
 
     try {
-      utf8.decoder.bind(inputStream).transform(const LineSplitter()).listen(
-          (line) {
-            if (lineAction != null && stop == false) {
-              bool cont = lineAction(line);
-              if (cont == false) {
-                stop = true;
-                // subscription.cancel();
-                //     throw _CancelReadException();
-              }
-            }
-          },
-          cancelOnError: true,
-          onError: (Object error) {
-            exception = error;
-            done.complete(false);
-          },
-          onDone: () {
-            done.complete(true);
-          });
+      StreamSubscription<String> subscription;
+
+      subscription =
+          utf8.decoder.bind(inputStream).transform(const LineSplitter()).listen(
+              (line) {
+                if (lineAction != null) {
+                  bool cont = lineAction(line);
+                  if (cont == false) {
+                    subscription
+                        .cancel()
+                        .then((dynamic finished) => done.complete(true));
+                  }
+                }
+              },
+              cancelOnError: true,
+              onError: (Object error) {
+                exception = error;
+                done.complete(false);
+              },
+              onDone: () {
+                done.complete(true);
+              });
     } catch (e) {
       Log.e("exception $e");
     }
