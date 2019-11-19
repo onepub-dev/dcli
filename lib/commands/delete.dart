@@ -35,7 +35,7 @@ class Delete extends Command {
     bool remove = true;
     if (ask) {
       remove = false;
-      var yes = Read().read(
+      String yes = Ask().ask(
           prompt: "delete: Delete the regular file '${absolute(path)}'? y/N");
       if (yes == "y") {
         remove = true;

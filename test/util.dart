@@ -7,7 +7,7 @@ void createLineFile(String testFile, int lines) {
     delete(testFile);
   }
 
-  makeDir(dirname(testFile));
+  createDir(dirname(testFile));
 
   FileSync file = FileSync(testFile);
   for (int i = 0; i < 10; i++) {

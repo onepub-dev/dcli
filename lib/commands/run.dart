@@ -1,3 +1,4 @@
+import 'package:dshell/util/for_each.dart';
 import 'package:dshell/util/runnable_process.dart';
 
 import 'command.dart';
@@ -14,16 +15,20 @@ import 'command.dart';
 /// If the command fails or returns a non-zero exitCode
 /// Then a [RunCommand] exception will be thrown.
 ///
-void run(String command, {LineAction stdout, LineAction stderr}) =>
-    Run().run(command, stdout: stdout, stderr: stderr);
+ForEach run(String command) => Run().run(command);
 
 class Run extends Command {
   RunnableProcess runnable;
 
-  void run(String command, {LineAction stdout, LineAction stderr}) {
+  ForEach run(String command) {
+    ForEach forEach = ForEach();
     runnable = RunnableProcess(command);
     runnable.start();
-    runnable.processUntilExit(stdout, stderr);
+    runnable.processUntilExit((line) => forEach.addToStdout(line),
+        (line) => forEach.addToStderr(line));
+
+    forEach.close();
+    return forEach;
   }
 }
 

@@ -2,7 +2,6 @@ import 'package:test/test.dart' as t;
 import "package:dshell/dshell.dart";
 
 import '../test_settings.dart';
-import '../util.dart';
 
 void main() {
   Settings().debug_on = true;
@@ -17,7 +16,7 @@ void main() {
     String bottom = join(middle, "bottom");
 
     // Create some the test dirs.
-    makeDir(bottom, createParent: true);
+    createDir(bottom, createParent: true);
 
     // Create test files
 
@@ -34,7 +33,7 @@ void main() {
     touch(join(bottom, "three.jpg"), create: true);
 
     t.test("Search for *.txt files in top directory ", () {
-      List<String> found = find("*.txt", root: top, recursive: false);
+      List<String> found = find("*.txt", root: top, recursive: false).toList();
       found.sort();
       List<String> expected = [join(top, "one.txt"), join(top, "two.txt")];
       expected.sort();
@@ -42,7 +41,7 @@ void main() {
     });
 
     t.test("Search recursive for *.jpg ", () {
-      List<String> found = find("*.jpg", root: top);
+      List<String> found = find("*.jpg", root: top).toList();
 
       found.sort();
       List<String> expected = [
@@ -55,7 +54,7 @@ void main() {
     });
 
     t.test("Search recursive for *.txt ", () {
-      List<String> found = find("*.txt", root: top);
+      List<String> found = find("*.txt", root: top).toList();
 
       found.sort();
       List<String> expected = [

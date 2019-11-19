@@ -15,7 +15,7 @@ import 'settings.dart';
 /// If [createParent] is false then any parent paths
 /// don't exist then a [MakeDireExcepption] will be thrown
 ///
-void makeDir(String path, {bool createParent = false}) =>
+void createDir(String path, {bool createParent = false}) =>
     MakeDir().mkdir(path, createParent: createParent);
 
 class MakeDir extends Command {

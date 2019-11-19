@@ -5,7 +5,7 @@ void main() {
   echo("Hello World");
   echo("Where are we: ${pwd}?");
 
-  makeDir("test");
+  createDir("test");
   push("test");
   touch("icon.png");
   touch("logo.png");

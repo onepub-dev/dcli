@@ -18,8 +18,6 @@ class FileSync {
     _open(fileMode: fileMode);
   }
 
-  FileSync.fromStdIn(Stdin stdIn);
-
   void _open({FileMode fileMode = FileMode.read}) {
     _raf = _file.openSync(mode: fileMode);
   }
@@ -91,13 +89,22 @@ class FileSync {
     return _file.statSync();
   }
 
+  /// Truncates the file to zero bytes and
+  /// then writes the given text to the file.
   void write(String line, {bool newline = true}) {
     if (newline) {
       line += '\n';
     }
+    _raf.truncateSync(0);
+
+    _raf.setPositionSync(0);
+    _raf.flushSync();
+
     _raf.writeStringSync(line);
   }
 
+  /// Appends the [line] to the file
+  /// If [newLine] is true then append a newline after the line.
   void append(String line, {bool newline = true}) {
     if (newline) {
       line += '\n';

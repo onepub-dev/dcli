@@ -1,9 +1,7 @@
-import 'dart:io';
-
 import 'package:dshell/commands/run.dart' as cmd;
 import 'package:dshell/util/runnable_process.dart';
-import 'package:dshell/util/waitForEx.dart';
 
+import 'file_sync.dart';
 import 'pipe.dart';
 
 ///
@@ -15,30 +13,40 @@ extension StringAsProcess on String {
   ///
   /// Allows you to execute the contents of a dart string as a
   /// command line appliation.
+  /// Any output from the command is displayed on the console.
   ///
   /// ```dart
   /// 'zip regions.txt regions.zip'.run
   /// ```
-  ///
+  /// See [forEach] to capture output to stdout and stderr
+  ///     [toList] to capture stdout to [List<String>]
   void get run => cmd.run(this);
 
-  /// forEach
-  /// Like run it allows you to execute a string as a command line
-  /// application and then calls the supplied LineAction
-  /// for each line output by the cli command.
+  /// forEach runs the String [this] as a command line
+  /// application.
+  /// Output from the command can be captured by
+  /// providing handlers for stdout and stderr.
   ///
   /// ```dart
+  /// // Capture output to stdout and print it.
   /// 'grep alabama regions.txt'.forEach((line) => print(line));
+  ///
+  /// // capture output to stdout and stderr and print them.
+  /// 'grep alabama regions.txt'.forEach((line) => print(line)
+  ///     , stderr: (line) => print(line));
   /// ```
   ///
+  /// See [run] if you don't care about capturing output
+  ///     [list] to capture stdout as a String list.
+  ///
   void forEach(LineAction stdout, {LineAction stderr}) =>
-      cmd.run(this, stdout: stdout, stderr: stderr);
+      cmd.run(this).forEach(stdout, stderr: stderr);
 
-  List<String> get lines {
-    List<String> lines = List();
-    cmd.run(this, stdout: (line) => lines.add(line));
-
-    return lines;
+  /// [toList] runs [this] as a cli process and
+  /// returns any output written to stdout as
+  /// a [List<String>].
+  List<String> toList() {
+    return cmd.run(this).toList();
   }
 
   /// operator |
@@ -71,22 +79,24 @@ extension StringAsProcess on String {
   }
 
   void write(String line, {bool newline = true}) {
-    var sink = File(this).openWrite();
+    FileSync sink = FileSync(this);
+
     if (newline) {
       line += '\n';
     }
     sink.write(line);
-    waitForEx<void>(sink.flush());
-    waitForEx<void>(sink.close());
+    sink.close();
   }
 
+  // Treat the [this]  as the name of a file
+  // and append the [line] to it.
+  // If [newline] is true add a newline after the line.
   void append(String line, {bool newline = true}) {
-    var sink = File(this).openWrite(mode: FileMode.writeOnlyAppend);
+    FileSync sink = FileSync(this);
     if (newline) {
       line += '\n';
     }
-    sink.write(line);
-    waitForEx<void>(sink.flush());
-    waitForEx<void>(sink.close());
+    sink.append(line);
+    sink.close();
   }
 }

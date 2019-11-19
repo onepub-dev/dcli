@@ -1,6 +1,6 @@
 import 'package:dshell/commands/command.dart';
 import 'package:dshell/util/file_sync.dart';
-import 'package:dshell/util/runnable_process.dart';
+import 'package:dshell/util/for_each.dart';
 
 import '../util/log.dart';
 
@@ -12,11 +12,10 @@ import 'settings.dart';
 ///
 /// Throws a [HeadException] exception if [path] is not a file.
 ///
-void head(String path, int lines, LineAction lineAction) =>
-    Head().head(path, lines, lineAction);
+ForEach head(String path, int lines) => Head().head(path, lines);
 
 class Head extends Command {
-  void head(String path, int lines, LineAction lineAction) {
+  ForEach head(String path, int lines) {
     if (Settings().debug_on) {
       Log.d("head ${absolute(path)} lines: ${lines}");
     }
@@ -29,11 +28,13 @@ class Head extends Command {
       throw HeadException("The path ${absolute(path)} is not a file.");
     }
 
+    ForEach forEach = ForEach();
+
     try {
       int count = 0;
       FileSync file = FileSync(path);
       file.read((line) {
-        lineAction(line);
+        forEach.addToStdout(line);
         count++;
         if (count >= lines) {
           return false;
@@ -44,6 +45,9 @@ class Head extends Command {
       throw HeadException(
           "An error occured reading ${absolute(path)}. Error: $e");
     }
+    forEach.close();
+
+    return forEach;
   }
 }
 

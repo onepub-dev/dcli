@@ -10,14 +10,14 @@ export 'util/file_sync.dart';
 export 'commands/find.dart' show find;
 export 'commands/head.dart' show head;
 export 'commands/is.dart' show isFile, isDirectory, exists;
-export 'commands/make_dir.dart' show makeDir, MakeDirException;
+export 'commands/make_dir.dart' show createDir, MakeDirException;
 export 'commands/move.dart' show move, MoveException;
 export 'package:path/path.dart';
 export 'commands/pop.dart' show pop, PopException;
 export 'commands/push.dart' show push, PushException;
 export 'commands/pwd.dart' show pwd;
-
-export 'commands/remove_dir.dart' show removeDir, RemoveDirException;
+export 'commands/read.dart' show read, readStdin, ReadException;
+export 'commands/remove_dir.dart' show deleteDir, RemoveDirException;
 export 'commands/run.dart' show RunException;
 export 'commands/sleep.dart' show sleep;
 export 'commands/settings.dart' show Settings;

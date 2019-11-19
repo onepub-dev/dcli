@@ -18,14 +18,14 @@ import 'settings.dart';
 ///
 /// If [prompt] set then the prompt will be printed
 /// to the console and the cursor placed immediately after the prompt.
-String ask({String prompt}) => Read().read(prompt: prompt);
+String ask({String prompt}) => Ask().ask(prompt: prompt);
 
-class Read extends Command {
+class Ask extends Command {
   ///
   /// Reads user input from stdin and returns it as a string.
-  String read({String prompt}) {
+  String ask({String prompt}) {
     if (Settings().debug_on) {
-      Log.d("read:  ${prompt}");
+      Log.d("ask:  ${prompt}");
     }
     if (prompt != null) {
       print(prompt);
@@ -38,7 +38,7 @@ class Read extends Command {
     }
 
     if (Settings().debug_on) {
-      Log.d("read:  result ${line}");
+      Log.d("ask:  result ${line}");
     }
 
     return line;

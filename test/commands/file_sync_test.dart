@@ -26,5 +26,22 @@ void main() {
 
       t.expect(stat.size, t.equals(150));
     });
+
+    t.test("Write", () {
+      if (exists(testFile)) {
+        delete(testFile);
+      }
+      FileSync file = FileSync(testFile, fileMode: FileMode.writeOnlyAppend);
+      for (int i = 0; i < 10; i++) {
+        file.append("Line ${i} is here");
+      }
+      String replacement = "This is all that should be left";
+      file.write(replacement, newline: false);
+      file.close();
+
+      FileStat stat = file.stat();
+
+      t.expect(stat.size, t.equals(replacement.length));
+    });
   });
 }

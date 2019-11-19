@@ -23,8 +23,7 @@ void main() {
       }
       file.close();
 
-      List<String> lines = List();
-      head(testFile, 5, (line) => lines.add(line));
+      List<String> lines = head(testFile, 5).toList();
 
       t.expect(lines.length, t.equals(5));
     });

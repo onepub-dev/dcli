@@ -5,7 +5,7 @@ import 'test_settings.dart';
 
 void main() {
   Settings().debug_on = true;
-  makeDir(TEST_ROOT);
+  createDir(TEST_ROOT);
 
   t.test("Try everything", () {
     try {
@@ -14,21 +14,21 @@ void main() {
 
       print("PWD: ${pwd}");
 
-      makeDir("shell/main", createParent: true);
+      createDir("shell/main", createParent: true);
       push("shell");
       cd("main");
 
-      makeDir("fred/tom", createParent: true);
-      removeDir("fred/tom");
+      createDir("fred/tom", createParent: true);
+      deleteDir("fred/tom");
 
       touch("good.jpg", create: true);
-      makeDir("subdir", createParent: true);
+      createDir("subdir", createParent: true);
       touch("subdir/goody.jpg", create: true);
 
       echo("Find file matching *.jpg");
       for (var file in find(
         "*.jpg",
-      )) {
+      ).toList()) {
         print("Found jpg: $file");
       }
 

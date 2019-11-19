@@ -1,4 +1,7 @@
 #! /usr/bin/env dshell
+import 'dart:io';
+
+import 'package:dshell/commands/read.dart';
 import 'package:dshell/dshell.dart';
 
 void main() {
@@ -18,11 +21,11 @@ void main() {
 
     // Create a directory to hold poems for review
     // creating  any needed parents.
-    makeDir(poetryForReviews, createParent: true);
+    createDir(poetryForReviews, createParent: true);
 
     // Creating a directory to hold our published work.
     String poetryPublished = join(baseDir, "published");
-    makeDir(poetryPublished, createParent: true);
+    createDir(poetryPublished, createParent: true);
 
     // Create a self edifying poem.
     String poem = 'poem.txt';
@@ -47,26 +50,33 @@ void main() {
 
     String restingPlace = join(poetryForReviews, poem);
 
-    // open a file for writing (the default)
-    // and save our poem in the review directory.
-    FileSync syncFile = FileSync(restingPlace);
+    // Write the verses to poem.txt
+    // in the review directory.
 
-    syncFile.append(verse1);
-    // a blank line between the verses.
-    syncFile.append("");
-    syncFile.append(verse2);
-    syncFile.close();
+    // write vs, truncating the file if required.
+    restingPlace.write(verse1);
+    restingPlace.append("");
+    restingPlace.append(verse2);
+
+    // 'asdfasdf'.append('/tmp');
+    // 'asdfasdf'.appendTo('/tmp');
+    // 'asdfasdf' >> '/tmp';
 
     // take a moments beauty sleep to bask in our own
     // glory for a couple of seconds because we are worth it.
     sleep(2);
 
-    echo("Find file matching *.txt");
+    echo("Find files matching *.txt");
     // Find all files that end with .jpg
     // in the current directory and any subdirectories
-    for (var file in find("*.txt")) {
+    for (var file in find("*.txt").toList()) {
       print(file);
     }
+
+    // or use the forEach method which will
+    // print each match as its found.
+    echo("Print matches as we go");
+    find("*.txt").forEach((line) => print(line));
 
     print("");
     print("Please review this most gloreous work.");
@@ -74,6 +84,8 @@ void main() {
 
     // Review our good woork.
     cat(restingPlace);
+
+    read(restingPlace, delim: "\r\n").forEach((line) => print(line));
 
     // ask the user if we are ready to publish.
     // But we can't do this in a vscode debug session
@@ -98,12 +110,16 @@ void main() {
     }
 
     // Lets get a word count
-    'wc $restingPlace'.forEach((line) => print("WC: $line"));
+    'wc $restingPlace'
+        .forEach((line) => print("WC: $line"), stderr: (line) => print(line));
 
     print("");
 
     // Find each line in our poem that contains the word rose.
-    'grep rose $restingPlace'.forEach((line) => print("Grep: $line"));
+    'grep rose $restingPlace'.forEach((line) => print("Grep: $line"),
+        stderr: (line) => [print(line)]);
+    // 'grep rose $restingPlace'.stdout((line) => print("Grep: $line"))
+    //   ..stderr((line) => print("Grep: $line"));
 
     // lets do some pipeing and see the 3-5 lines
     ('head  -5 $restingPlace' | 'tail -n 3').forEach((line) => print(line));

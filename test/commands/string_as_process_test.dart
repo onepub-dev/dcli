@@ -10,7 +10,7 @@ void main() {
   String linesFile = join(TEST_ROOT, TEST_LINES_FILE);
 
   if (!exists(TEST_ROOT)) {
-    makeDir(TEST_ROOT);
+    createDir(TEST_ROOT);
   }
 
   if (!exists(linesFile)) {
@@ -50,7 +50,7 @@ void main() {
     */
 
     t.test("Lines", () {
-      List<String> lines = 'head -n 5 /var/log/syslog'.lines;
+      List<String> lines = 'head -n 5 /var/log/syslog'.toList();
       t.expect(lines.length, t.equals(5));
     });
   });

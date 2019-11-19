@@ -11,36 +11,36 @@ void main() {
     String testPath = join(TEST_ROOT, "tmp_test/longer/and/longer");
 
     t.test("Makedir", () {
-      makeDir(testDirectory, createParent: true);
+      createDir(testDirectory, createParent: true);
 
       t.expect(exists(testDirectory), t.equals(true));
     });
 
     t.test("Makedir with createParent", () {
-      makeDir(testPath, createParent: true);
+      createDir(testPath, createParent: true);
 
       t.expect(exists(testPath), t.equals(true));
     });
 
     t.test("removeDir", () {
-      removeDir(testPath);
+      deleteDir(testPath);
 
       t.expect(!exists(testPath), t.equals(true));
       t.expect(exists(dirname(testPath)), t.equals(true));
     });
 
     t.test("Remove Dir recursive", () {
-      removeDir(TEST_ROOT, recursive: true);
+      deleteDir(TEST_ROOT, recursive: true);
       t.expect(!exists(testDirectory), t.equals(true));
     });
 
     t.test("removeDir failure", () {
-      t.expect(() => removeDir(testDirectory),
+      t.expect(() => deleteDir(testDirectory),
           t.throwsA(t.TypeMatcher<RemoveDirException>()));
     });
 
     t.test("makeDir createPath failure", () {
-      t.expect(() => makeDir(testPath, createParent: false),
+      t.expect(() => createDir(testPath, createParent: false),
           t.throwsA(t.TypeMatcher<MakeDirException>()));
     });
   });

@@ -19,7 +19,7 @@ import 'settings.dart';
 /// If the directory cannot be delete (e.g. permissions) a [RemoveDirException] is thrown.
 ///
 /// If recursive is false the directory must be empty otherwise a [RemoveDirException] is thrown.
-void removeDir(String path, {bool recursive}) =>
+void deleteDir(String path, {bool recursive}) =>
     RemoveDir().removeDir(path, recursive: recursive);
 
 class RemoveDir extends Command {
