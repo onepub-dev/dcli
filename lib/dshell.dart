@@ -17,7 +17,7 @@ export 'commands/pop.dart' show pop, PopException;
 export 'commands/push.dart' show push, PushException;
 export 'commands/pwd.dart' show pwd;
 export 'commands/read.dart' show read, readStdin, ReadException;
-export 'commands/remove_dir.dart' show deleteDir, RemoveDirException;
+export 'commands/delete_dir.dart' show deleteDir, DeleteDirException;
 export 'commands/run.dart' show RunException;
 export 'commands/sleep.dart' show sleep;
 export 'commands/settings.dart' show Settings;

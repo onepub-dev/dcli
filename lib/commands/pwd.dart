@@ -5,6 +5,10 @@ import 'command.dart';
 ///
 /// Returns the current working directory.
 ///
+/// ```dart
+/// print(pwd);
+/// ```
+///
 /// See [cd]
 ///     [push]
 ///     [pop]

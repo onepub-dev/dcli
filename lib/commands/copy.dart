@@ -10,6 +10,10 @@ import 'settings.dart';
 ///
 /// Copies the file [from] to the file [to].
 ///
+/// ```dart
+/// copy("/tmp/fred.text", "/tmp/fred2.text", overwrite=true);
+/// ```
+///
 /// The to file must not exists unless [overwrite] is set to true.
 ///
 /// The default for [overwrite] is false.

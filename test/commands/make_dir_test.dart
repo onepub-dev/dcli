@@ -22,24 +22,24 @@ void main() {
       t.expect(exists(testPath), t.equals(true));
     });
 
-    t.test("removeDir", () {
+    t.test("deleteDir", () {
       deleteDir(testPath);
 
       t.expect(!exists(testPath), t.equals(true));
       t.expect(exists(dirname(testPath)), t.equals(true));
     });
 
-    t.test("Remove Dir recursive", () {
+    t.test("Delete Dir recursive", () {
       deleteDir(TEST_ROOT, recursive: true);
       t.expect(!exists(testDirectory), t.equals(true));
     });
 
-    t.test("removeDir failure", () {
+    t.test("deleteDir failure", () {
       t.expect(() => deleteDir(testDirectory),
-          t.throwsA(t.TypeMatcher<RemoveDirException>()));
+          t.throwsA(t.TypeMatcher<DeleteDirException>()));
     });
 
-    t.test("makeDir createPath failure", () {
+    t.test("createDir createPath failure", () {
       t.expect(() => createDir(testPath, createParent: false),
           t.throwsA(t.TypeMatcher<MakeDirException>()));
     });

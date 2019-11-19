@@ -9,6 +9,12 @@ import '../util/log.dart';
 
 /// Updates the last modified time stamp of a file.
 ///
+/// ```dart
+/// touch("fred.txt");
+/// touch("fred.txt, create=true");
+/// ```
+///
+///
 /// If [create] is true and the file doesn't exist
 /// it will be created.
 ///

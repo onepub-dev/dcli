@@ -13,6 +13,9 @@ import 'settings.dart';
 import '../util/log.dart';
 
 /// Reads lines from the file at [path].
+/// ```dart
+/// read("/var/log/syslog").forEach((line) => print(line));
+/// ```
 ///
 /// [delim] sets the line delimiter which defaults to newline
 ///

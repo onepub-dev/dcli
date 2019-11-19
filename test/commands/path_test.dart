@@ -58,7 +58,7 @@ void main() {
           cd(cwd);
           t.expect(pwd, t.equals(cwd));
         },
-            createDirectory: (path) => dirOverride.makeDir(path),
+            createDirectory: (path) => dirOverride.createDir(path),
             setCurrentDirectory: (path) =>
                 dirOverride.current = TestDirectory(path),
             getCurrentDirectory: () => dirOverride.current);
@@ -79,7 +79,7 @@ void main() {
 
           deleteDir(pathTestDir, recursive: true);
         },
-            createDirectory: (path) => dirOverride.makeDir(path),
+            createDirectory: (path) => dirOverride.createDir(path),
             setCurrentDirectory: (path) =>
                 dirOverride.current = TestDirectory(path),
             getCurrentDirectory: () => dirOverride.current);
@@ -107,7 +107,7 @@ class TestDirectoryOverride {
     Log.d("DirectoryOverride current=" + current.path);
   }
 
-  Directory makeDir(String path) {
+  Directory createDir(String path) {
     paths.add(path);
 
     return TestDirectory(path);
@@ -124,70 +124,56 @@ class TestDirectory implements Directory {
 
   @override
   Future<Directory> create({bool recursive = false}) {
-    // TODO: implement create
     return null;
   }
 
   @override
-  void createSync({bool recursive = false}) {
-    // TODO: implement createSync
-  }
+  void createSync({bool recursive = false}) {}
 
   @override
   Future<Directory> createTemp([String prefix]) {
-    // TODO: implement createTemp
     return null;
   }
 
   @override
   Directory createTempSync([String prefix]) {
-    // TODO: implement createTempSync
     return null;
   }
 
   @override
   Future<FileSystemEntity> delete({bool recursive = false}) {
-    // TODO: implement delete
     return null;
   }
 
   @override
-  void deleteSync({bool recursive = false}) {
-    // TODO: implement deleteSync
-  }
+  void deleteSync({bool recursive = false}) {}
 
   @override
   Future<bool> exists() {
-    // TODO: implement exists
     return null;
   }
 
   @override
   bool existsSync() {
-    // TODO: implement existsSync
     return null;
   }
 
   @override
-  // TODO: implement isAbsolute
   bool get isAbsolute => null;
 
   @override
   Stream<FileSystemEntity> list(
       {bool recursive = false, bool followLinks = true}) {
-    // TODO: implement list
     return null;
   }
 
   @override
   List<FileSystemEntity> listSync(
       {bool recursive = false, bool followLinks = true}) {
-    // TODO: implement listSync
     return null;
   }
 
   @override
-  // TODO: implement parent
   Directory get parent => null;
 
   @override
@@ -195,48 +181,40 @@ class TestDirectory implements Directory {
 
   @override
   Future<Directory> rename(String newPath) {
-    // TODO: implement rename
     return null;
   }
 
   @override
   Directory renameSync(String newPath) {
-    // TODO: implement renameSync
     return null;
   }
 
   @override
   Future<String> resolveSymbolicLinks() {
-    // TODO: implement resolveSymbolicLinks
     return null;
   }
 
   @override
   String resolveSymbolicLinksSync() {
-    // TODO: implement resolveSymbolicLinksSync
     return null;
   }
 
   @override
   Future<FileStat> stat() {
-    // TODO: implement stat
     return null;
   }
 
   @override
   FileStat statSync() {
-    // TODO: implement statSync
     return null;
   }
 
   @override
-  // TODO: implement uri
   Uri get uri => null;
 
   @override
   Stream<FileSystemEvent> watch(
       {int events = FileSystemEvent.all, bool recursive = false}) {
-    // TODO: implement watch
     return null;
   }
 }

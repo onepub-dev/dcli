@@ -10,16 +10,26 @@ class Settings {
 
   /// returns the state of the debug options
   /// True if debugging is on.
+  /// ```dart
+  /// Settings().debug_on
+  /// ```
   bool get debug_on => _settings.debug_on;
 
   /// Returns true if the directory stack
   /// maintained by [push] and [pop] has
   /// is currently empty.
+  /// ```dart
+  /// Settings().isStackEmpty
+  /// ```
   bool get isStackEmpty => _settings.isStackEmpty;
 
   /// Set [debug_on] to true to have the system log additional information
   /// about each command that executes.
   /// [debug_on] defaults to false.
+  ///
+  /// ```dart
+  /// Settings().debug_on = true;
+  /// ```
   set debug_on(bool on) => _settings.debug_on = on;
 
   Settings._internal();

@@ -9,6 +9,10 @@ import 'settings.dart';
 /// Path may be a single path segment (e.g. bin)
 /// or a full or partial tree (e.g. /usr/bin)
 ///
+/// ```dart
+/// createDir("/tmp/fred/tools", createParent=true);
+/// ```
+///
 /// If [createParent] is true then any parent
 /// paths that don't exist will be created.
 ///

@@ -12,6 +12,10 @@ import 'settings.dart';
 /// Pushes the given [path] onto the stack
 /// and changes the current directory to [path]
 ///
+/// ```dart
+/// push("/tmp");
+/// ```
+///
 /// If [path] is not a valid directory a
 /// [PushException] is thrown.
 ///

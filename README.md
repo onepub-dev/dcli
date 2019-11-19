@@ -1,7 +1,7 @@
 
 # DShell - a bash replacement using dart
 
-DShell is intended to provide a replacement for bash and similar shell scripting languages with Dart.
+DShell is intended to provide a replacement for bash and similar shell scripting languages with a Dart based scripting tool.
 
 Bash has been the 'go to tool' for scripting file system operations for decades and it provides a wealth 
 of really useful features.
@@ -25,18 +25,19 @@ DShell is hopefully that.
 ## What does Dshell do?
 
 * Uses the elegant and simple dart language
+* Write and execute single file scripts
+  * cli> ./tryme.dart
 * Provides a set of functions (commands) that mimick common bash operations.
-* Allow for simple manipulation of files and directories
-  * move(from, to), makeDir(path), cd(path)...
+* Allows for simple manipulation of files and directories
+  * move(from, to), createDir(path), cd(path)...
 * Allows you to call any cli application in a single line
 
   * 'grep error /var/lib/syslog'.run
 * Process the output of a cli command.
-  * 'grep error /var/lib/syslog'.proccess((line) => print(line));
+  * 'grep error /var/lib/syslog'.forEach((line) => print(line));
 * Chain multiple cli commands using pipes
-  * 'grep error /var/lib/syslog' |'head 5'.proccess((line) => print(line));
-* Write and execute single file scripts
-  * cli> tryme.dart
+  * 'grep error /var/lib/syslog' |'head 5'.forEach((line) => print(line));
+
 * executes commands synchronously, so no need to worry about futures.
 
 ## What commands that Dshell support
@@ -53,10 +54,12 @@ These are some of the built-in commands:
 * echo(text)
 * sleep(duration)
 * cat(file)
-* find(pattern)
-* makeDir(path)
+* find(pattern, {bool recursive})
+* createDir(path)
+* deleteDir(path)
 * pwd
-* read({String prompt})
+* ask({String prompt})
+* read
 * touch(path)
 * basename(path)
 * filename(path)
@@ -70,6 +73,8 @@ The commands make strong use of named arguments with intelligent defaults so mos
 
 Take note, there are no Futures here. Each command runs synchronously.
 
+Note: the file starts with a shebang which allows this script to be 
+run directly from the cli (no precompilation required.)
 ```dart
 #! /usr/bin/env dshell
 
@@ -85,7 +90,7 @@ void main() {
     cd("main");
 
     // Create a directory with any needed parents.
-    makeDir("tools/images", createParent: true);
+    createDir("tools/images", createParent: true);
 
     // Push the current directory onto the stack
     // and change directory.
@@ -101,10 +106,7 @@ void main() {
     echo("All files");
 
     // print out all files in the current directory.
-    // fileList is a DShell property.
-    for (var file in fileList) {
-        print(file);
-    }
+    find("*.*", recursive=false).forEach((line) => print(line));
 
     // take a nap for a couple of seconds.
     sleep(2);
@@ -112,7 +114,7 @@ void main() {
     echo("Find file matching *.jpg");
     // Find all files that end with .jpg
     // in the current directory and any subdirectories
-    for (var file in find("*.jpg")) {
+    for (var file in find("*.jpg").toList()) {
         print(file);
     }
 
@@ -161,32 +163,43 @@ chmod +x  tryme.dart
 Now run the script from the cli:
 
 ```bash
-> tryme.dart
+> ./tryme.dart
 ```
 
 Your now offically in the land of dshell magic.
 
 # Calling cli applications
 
-DShell can also call any console application.
+DShell can call any console application.
 
-Note: This feature is still a work in progress and these examples may not be the final syntax.
-
-DShell does the nasty with the String class using the latest Dart 2.6 'extension' feature.
+DShell does the nasty with the String class using Dart's (2.6+) 'extension' feature.
 The aim of this somewhat unorthodox approach is to deliver the elegance that Bash achieves when
 calling cli applications.
 
-To achieve this we add a 'run' method to the String class as well as overloading the '|' operator.
+To achieve this we add a number of methods and operator overlaods to the String class.
+
+These include:
+* run
+* forEach(LineAction stdout, {LineAction stdout})
+* List<String> toList()
+* | operator
 
 This is the resulting syntax:
 
 ```dart
+    // run wc on a file
+    // all wc output goes directly to the console
+    'wc fred.text'.run
 
-    'grep import *.dart'.run.forEach((line) => echo(line)) ;
+    // run grep, printing out each line but suppressing stderr
+    'grep import *.dart'.forEach((line) => echo(line)) ;
+
+    // run tail printing out stdout and stderr
+    'tail fred.txt'.forEach((line) => echo(line)
+        , stderr: (line) => print(line)) ;
 
 ```
 
-The above command runs the command line 'grep' tool and then prints each matching line to the console.
 
 # Piping
 
@@ -194,7 +207,7 @@ Now lets pipe the output of one cli command to another.
 
 ```dart
 
-    'grep import *.dart' | 'head 5'.run.forEach((line) => echo(line)) ;
+    'grep import *.dart' | 'head 5'.forEach((line) => print(line)) ;
 
 ```
 
@@ -231,19 +244,20 @@ main()
     echo("Hello World");
     echo("Where are we: $(pwd}?");
 
-    makeDir("test");
+    createDir("test");
     push("test");
     touch("icon.png");
     touch("logo.png");
     touch("dog.png");
 
     // print all the file names in the current directory.
-    fileList.forEach((file) => print("Found: ${file}"));
+    find("*.*", recursive: false).forEach((file) 
+        => print("Found: ${file}"));
 
     touch("subdir/monkey.png");
 
-    // do a recursive find
-    find("*.png", (file) => print("$file"));
+    // do a recursive find for .png files.
+    find("*.png").forEach((file) => print("$file"));
 
 
     // now cleanup
@@ -253,7 +267,8 @@ main()
 
     pop();
 
-    'grep touch tryme.dart'.run((line) => print("Grepo: $line"));
+    'grep touch tryme.dart'.forEach((line) 
+        => print("Grepo: $line"));
 }
 
 ```
@@ -293,13 +308,17 @@ main()
 
 ## Multi-file scripts
 
-As with a little projects they have a habit of getting larger than expected.
+As with all little projects they have a habit of getting larger than expected.
 At some point you are going to want to spread you script over multiple dart libraries.
 
 Well dshell supports this as well.
 
-If you have additional libraries you need to place in a subdirectory called 'lib', which shouldn't be too much of a surprise.
+If you need to create additional libraries (.dart files) create a subdirectory called 'lib', which shouldn't be too much of a surprise.
 
+
+Place the following file in:
+    
+    ~/myproject/tryme.dart
 
 ```dart
 
@@ -332,7 +351,9 @@ main()
 
 ```
 
+Place the library file in:
 
+    ~/myproject/lib/tax.dart
 ```dart
 
     Money tax(Money amount)
@@ -343,6 +364,12 @@ main()
 
 ```
 
+Run you script the same way as usual:
+
+    ./tryme.dart
+
+
+## TODO document compiling to native
 
 # References
 

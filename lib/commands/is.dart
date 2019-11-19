@@ -4,13 +4,24 @@ import 'package:dshell/commands/command.dart';
 
 ///
 /// Returns true if the given path points to a file.
+///
+/// ```dart
+/// isFile("~/fred.jpg");
+/// ```
 bool isFile(String path) => Is().isFile(path);
 
 /// Returns try if the given path is a directory.
+/// ```dart
+/// isDirectory("/tmp");
+///
+/// ```
 bool isDirectory(String path) => Is().isDirectory(path);
 
-// returns true if the given path exists.
-// It may be a file or a directory.
+/// returns true if the given path exists.
+/// It may be a file or a directory.
+/// ```dart
+/// if (exists("/fred.txt"))
+/// ```
 bool exists(String path) => Is().exists(path);
 
 class Is extends Command {

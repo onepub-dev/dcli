@@ -9,6 +9,10 @@ import 'command.dart';
 /// [lineAction] is called as the command runs rather than waiting
 /// for the command to complete.
 ///
+/// ```dart
+/// run("wc fred.txt").forEach((line) => print(line));
+/// ```
+///
 /// The run function is syncronous and a such will not return
 /// until the command completes.
 ///

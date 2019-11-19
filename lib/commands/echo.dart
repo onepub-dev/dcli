@@ -5,6 +5,10 @@ import 'package:dshell/util/waitForEx.dart';
 
 /// Writes [text] to stdout including a newline.
 ///
+/// ```dart
+/// echo("Hello world", newline=false);
+/// ```
+///
 /// If [newline] is false then a newline will not be output.
 ///
 /// [newline] defaults to false.

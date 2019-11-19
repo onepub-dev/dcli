@@ -10,6 +10,10 @@ import 'settings.dart';
 ///
 /// Returns count [lines] from the file at [path].
 ///
+/// ```dart
+/// head("/var/log/syslog", 10).forEach((line) => print(line));
+/// ```
+///
 /// Throws a [HeadException] exception if [path] is not a file.
 ///
 ForEach head(String path, int lines) => Head().head(path, lines);

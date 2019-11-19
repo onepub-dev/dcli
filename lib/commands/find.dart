@@ -2,7 +2,6 @@ import 'dart:io';
 
 import 'package:dshell/commands/command.dart';
 import 'package:dshell/util/for_each.dart';
-import 'package:file_utils/file_utils.dart' as util;
 
 import '../dshell.dart';
 import 'settings.dart';
@@ -12,6 +11,16 @@ import '../util/log.dart';
 ///
 /// Returns the list of files in the current
 /// directory that match the passed glob pattern.
+///
+/// ```dart
+/// find("*.jpg", recursive=true).forEach((file) => print(file));
+///
+/// String<List> results = find("[a-z]*.jpg", caseSensitive=true).toList();
+///
+/// find("*.jpg"
+///   , types=[FileSystemEntityType.directory, FileSystemEntityType.file])
+///     .forEach((file) => print(file));
+/// ```
 ///
 /// Valid patterns are:
 ///

@@ -6,8 +6,6 @@ import '../test_settings.dart';
 void main() {
   Settings().debug_on = true;
 
-  String testFile = join(TEST_ROOT, "lines.txt");
-
   t.group("Find", () {
     print("PWD $pwd");
 

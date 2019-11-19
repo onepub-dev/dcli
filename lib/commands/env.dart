@@ -6,6 +6,10 @@ import '../util/log.dart';
 
 /// Gets an environment variable
 ///
+///```dart
+///String path = env("PATH");
+///```
+///
 String env(String name) => Env().env(name);
 
 class Env extends Command {
