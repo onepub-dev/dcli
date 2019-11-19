@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:dshell/commands/command.dart';
+import 'package:path/path.dart' as p;
 
 import '../util/log.dart';
 import 'is.dart';
@@ -22,13 +23,13 @@ void cd(String path) => CD().cd(path);
 class CD extends Command {
   void cd(String path) {
     if (Settings().debug_on) {
-      Log.d("cd $path -> ${absolute(path)}");
+      Log.d("cd $path -> ${p.canonicalize(path)}");
     }
 
     if (!exists(path)) {
-      throw CDException("The path ${absolute(path)} does not exists.");
+      throw CDException("The path ${p.canonicalize(path)} does not exists.");
     }
-    Directory.current = path;
+    Directory.current = p.join(Directory.current.path, path);
   }
 }
 

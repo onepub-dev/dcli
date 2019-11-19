@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:dshell/util/log.dart';
 import 'package:test/test.dart' as t;
 import "package:dshell/dshell.dart";
 import 'package:path/path.dart' as p;
@@ -87,21 +88,24 @@ void main() {
       t.test("Too many pops", () {
         t.expect(() => pop(), t.throwsA(t.TypeMatcher<PopException>()));
       });
-    }, skip: true);
+    });
   } finally {
     cd(cwd);
   }
 }
 
 class TestDirectoryOverride {
-  Directory _current = TestDirectory(absolute(TEST_ROOT));
+  Directory _current = TestDirectory(canonicalize("."));
 
   Set<String> paths = Set();
   TestDirectoryOverride();
 
   Directory get current => _current;
 
-  set current(Directory current) => _current = current;
+  set current(Directory current) {
+    _current = current;
+    Log.d("DirectoryOverride current=" + current.path);
+  }
 
   Directory makeDir(String path) {
     paths.add(path);
@@ -113,10 +117,10 @@ class TestDirectoryOverride {
 class TestDirectory implements Directory {
   String _path;
 
-  TestDirectory(this._path);
+  TestDirectory(String path) : _path = p.canonicalize(path);
 
   @override
-  Directory get absolute => TestDirectory(p.absolute(_path));
+  Directory get absolute => this;
 
   @override
   Future<Directory> create({bool recursive = false}) {
@@ -187,8 +191,7 @@ class TestDirectory implements Directory {
   Directory get parent => null;
 
   @override
-  // TODO: implement path
-  String get path => null;
+  String get path => _path;
 
   @override
   Future<Directory> rename(String newPath) {
