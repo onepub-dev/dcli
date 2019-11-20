@@ -70,7 +70,8 @@ class StackTraceImpl implements core.StackTrace {
       } else {
         sourceFile = basename(stackFrame.sourceFile.path);
       }
-      var newLine = ("${sourceFile}:${stackFrame.lineNo}");
+      var newLine =
+          ("${sourceFile} : ${stackFrame.details} : ${stackFrame.lineNo}");
 
       if (workingDirectory != null) {
         formatted.add("file:///" + workingDirectory + newLine);
