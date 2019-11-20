@@ -1,3 +1,7 @@
+## 1.0.6
+Added some missing examples.
+Fixed bugs in echo and ask.
+
 ## 1.0.5
 Refactored apis so that we now consistently use forEach with a stream
 for handling both stdout and stderr.

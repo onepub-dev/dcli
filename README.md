@@ -220,6 +220,11 @@ What we have now is the power of Bash and the elegance of Dart.
 
 To install dshell run:
 
+Note: i had a problem with my installation where the flutter internal verion of the dart-sdk was
+on my path before the os version. I don't believe the flutter dart-sdk should be on your path.
+Removing it from my path allowed me to developed cli apps as well as flutter.
+
+
 ```shell
 pub global activate dshell
 ```
