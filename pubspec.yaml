@@ -26,4 +26,4 @@ dev_dependencies:
   ## To compile
   ## pub global activate --source path .
 executables:
-  dshell: main
+  dshell: dshell
