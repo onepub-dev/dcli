@@ -4,14 +4,19 @@ import 'dart:io';
 import '../util/log.dart';
 
 import 'command.dart';
+import 'echo.dart';
 import 'settings.dart';
 
 ///
-/// Reads a line of text from stdin.
+/// Reads a line of text from stdin with an optional prompt.
 ///
 /// If the user immediately enters newline without
 /// entering any text then an empty string will
 /// be returned.
+///
+/// ```dart
+/// String response = ask(prompt="Do you like me?");
+/// ```
 ///
 /// In most cases stdin is attached to the console
 /// allow you to ask the user to input a value.
@@ -28,7 +33,7 @@ class Ask extends Command {
       Log.d("ask:  ${prompt}");
     }
     if (prompt != null) {
-      print(prompt);
+      echo(prompt, newline: false);
     }
     var line = stdin.readLineSync(
         encoding: Encoding.getByName('utf-8'), retainNewlines: false);
