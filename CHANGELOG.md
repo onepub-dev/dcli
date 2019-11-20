@@ -1,4 +1,4 @@
-## 1.0.6
+## 1.0.7
 Added some missing examples.
 Fixed bugs in echo and ask.
 
