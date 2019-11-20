@@ -1,278 +1,136 @@
-import "dart:async";
 import "dart:io";
+import 'package:dscript/dscript.dart';
+import 'dart:collection';
 
-Future<int> main(List<String> args) async {
-  var scriptrunner = ScriptRunner();
-  var exitCode = await scriptrunner.run(args);
-  exit(exitCode);
-  return exitCode;
+void main(List<String> arguments) {
+  DShell().run(arguments);
 }
 
-class ScriptRunner {
-  List<String> _arguments;
+class DShell {
+  String _appName = "dshell";
+  String _packageName = "dshell";
+  String _version = "1.0.7";
 
-  String _dartSdk;
+/*
+  void loadPackageInfo() async {
+    PackageInfo packageInfo = await PackageInfo.fromPlatform();
 
-  int _exitCode;
-
-  String _pubspec;
-
-  String _script;
-
-  String _temporaryDirectory;
-
-  bool _verbose;
-
-  String _workingDirectory;
-
-  Future<int> run(List<String> arguments) {
-    return _run(arguments);
+    appName = packageInfo.appName;
+    packageName = packageInfo.packageName;
+    version = packageInfo.version;
+    buildNumber = packageInfo.buildNumber;
   }
+  */
 
-  void _createLinkToLibDirectory() {
-    var directory = Directory("lib");
-    if (directory.existsSync()) {
-      var link = Link(_temporaryDirectory + "/lib");
+  void run(List<String> arguments) async {
+    // loadPackageInfo();
 
-      if (_verbose) {
-        print("Create link to ${directory.absolute.path}");
+    if (probeSubCommands(arguments)) {
+      exit(-1);
+    }
+
+    try {
+      Args options = Args.parse(arguments);
+
+      final DetectedDartSdk sdk = DartSdk.detect() as DetectedDartSdk;
+
+      if (options.verbose) {
+        stderr.writeln(
+            'dshell: Dart SDK found at ${sdk.sdkPath} with version ${await sdk.version}');
       }
 
-      link.createSync(directory.absolute.path);
-    }
-  }
+      UnmodifiableListView<String> pubspec =
+          await extractPubspec(options.script);
 
-  void _createPubspecFile() {
-    var file = File(_temporaryDirectory + "/pubspec.yaml");
-
-    if (_verbose) {
-      print("Creating pubspec: ${file.path}");
-    }
-    file.writeAsStringSync(_pubspec);
-  }
-
-  void _createTemporaryDirectory() {
-    _temporaryDirectory = Directory.systemTemp.createTempSync().path;
-
-    if (_verbose) {
-      print("Created tmp directory: ${_temporaryDirectory}");
-    }
-  }
-
-  void _deleteTemporaryDirectory() {
-    return;
-    if (_verbose) {
-      print("deleting tmp directory: ${_temporaryDirectory}");
-    }
-
-    var directory = Directory(_temporaryDirectory);
-    for (var file in directory.listSync(recursive: true, followLinks: false)) {
-      if (file is Link) {
-        try {
-          file.deleteSync();
-        } catch (s) {
-          // Do nothing - we risk leaving temporary directories lying about.
+      if (pubspec == null || pubspec.isEmpty) {
+        if (options.verbose) {
+          stderr.writeln(
+              'dshell: Embedded pubspec not found in script. Providing defualt pubspec');
         }
-      }
-    }
-
-    directory.deleteSync(recursive: true);
-  }
-
-  void _findDartSdk() {
-    var executable = Platform.executable;
-    var s = Platform.pathSeparator;
-    if (!executable.contains(s)) {
-      if (Platform.isLinux) {
-        executable = Link("/proc/$pid/exe").resolveSymbolicLinksSync();
-      }
-    }
-
-    var file = File(executable);
-    if (file.existsSync()) {
-      var parent = file.absolute.parent;
-      parent = parent.parent;
-      var path = parent.path;
-      var dartAPI = "$path${s}include${s}dart_api.h";
-      if (File(dartAPI).existsSync()) {
-        _dartSdk = path;
-        if (_verbose) {
-          print("Found  dart sdk: ${_dartSdk}");
-        }
-        return;
-      }
-    }
-
-    if (_dartSdk == null) {
-      print("Dart SDK not found.");
-      _exitCode = -1;
-      return;
-    }
-  }
-
-  void _parseArguments(List<String> arguments) {
-    for (var argument in arguments) {
-      if (_arguments != null) {
-        _arguments.add(argument);
+        pubspec = UnmodifiableListView<String>(<String>['name: a_dart_script']);
       } else {
-        if (argument.startsWith("--")) {
-          switch (argument) {
-            case "--verbose":
-              _verbose = true;
-              break;
-            default:
-              _printUsage();
-              _exitCode = -1;
-              break;
-          }
-        } else {
-          _script = argument;
-          _arguments = List<String>();
+        if (options.verbose) {
+          stderr.writeln('dshell: Embedded pubspec found in script');
         }
       }
-    }
 
-    if (_script == null) {
-      _printUsage();
-      _exitCode = -1;
-      return;
-    }
-  }
+      final ScriptRunner runner =
+          await ScriptRunner.make(options, sdk, pubspec);
 
-  void _parseScript() {
-    var file = File(_script);
-    if (!file.existsSync()) {
-      print("File not found: $_script");
-      _exitCode = -1;
-      return;
-    }
+      if (options.verbose) {
+        stderr.writeln(
+            'dshell: Temporary project path at ${runner.tempProjectDir}');
+      }
 
-    var lines = file.readAsLinesSync();
-    var length = lines.length;
-    var result = <String>[];
-    for (var i = 0; i < length && _pubspec == null; i++) {
-      var line = lines[i];
-      if (line.trimRight() == "/*") {
-        if (i + 1 < length) {
-          line = lines[++i];
-          if (line.trimRight() == "@pubspec.yaml") {
-            for (i++; i < length; i++) {
-              var line = lines[i];
-              if (line.trimRight() == r"*/") {
-                _pubspec = result.join("\n");
-                break;
-              } else {
-                result.add(line);
-              }
-            }
-          }
+      try {
+        await runner.createProject();
+      } on PubGetException catch (e) {
+        stderr.writeln(
+            'dshell: Running "pub get" failed with exit code ${e.exitCode}!');
+        if (options.verbose) {
+          stderr.writeln(e.stderr);
         }
+        exit(1);
       }
-    }
 
-    if (_pubspec == null) {
-      print("pubspec.yaml not found in: $_script");
-      _exitCode = -1;
-    } else {
-      if (_verbose) {
-        print("Pubspec read from: ${_script}");
-        print("Contents: ");
-        print(_pubspec);
+      final int exitCode = await runner.exec();
+
+      if (options.deleteProject) {
+        if (options.verbose) {
+          stderr.writeln('dshell: Deleting project');
+        }
+        try {
+          await Directory(runner.tempProjectDir).delete(recursive: true);
+        } finally {}
       }
-    }
-  }
 
-  void _printUsage() {
-    print("dshell [options] <script.dart> [arguments]");
-    print("Options:");
-    print("  --verbose: Verbose pub output.");
-  }
-
-  ProcessResult _pubGet() {
-    var arguments = <String>["get"];
-    return _runPub(arguments, workingDirectory: _temporaryDirectory);
-  }
-
-  void _reset() {
-    _arguments = null;
-    _exitCode = 0;
-    _pubspec = null;
-    _script = null;
-    _temporaryDirectory = null;
-    _verbose = false;
-    _workingDirectory = Directory.current.path;
-  }
-
-  Future<int> _run(List<String> arguments) async {
-    if (arguments.isEmpty) {
-      _printUsage();
-      return 0;
-    }
-
-    _reset();
-    _parseArguments(arguments);
-    if (_exitCode != 0) {
-      return _exitCode;
-    }
-
-    _findDartSdk();
-    if (_exitCode != 0) {
-      return _exitCode;
-    }
-
-    _parseScript();
-    if (_exitCode != 0) {
-      return _exitCode;
-    }
-
-    _createTemporaryDirectory();
-    _createLinkToLibDirectory();
-    _createPubspecFile();
-    var result = _pubGet();
-    if (_verbose || result.exitCode != 0) {
-      print(result.stderr);
-      print(result.stdout);
-      if (result.exitCode != 0) {
-        _exitCode = -1;
-        return _exitCode;
+      if (options.verbose) {
+        stderr.writeln('dshell: Exiting with code $exitCode');
       }
-    }
 
-    var exitCode = await _runScript();
-    _deleteTemporaryDirectory();
-    _exitCode = exitCode;
-    return _exitCode;
+      await stderr.flush();
+
+      exit(exitCode);
+    } catch (e) {
+      stderr.writeln((e.toString()));
+      exit(-1);
+    }
   }
 
-  ProcessResult _runPub(List<String> arguments, {String workingDirectory}) {
-    var executable = _dartSdk + "/bin/pub";
-
-    print("Running pubget: ${executable}");
-    return Process.runSync(executable, arguments,
-        runInShell: true, workingDirectory: workingDirectory);
+  void printHelp() {
+    print(
+        'dshell: A bash replacement allowing you to write bash like scripts using dart and run them directly from the cli.');
+    print('');
+    print('Usage: dshell [-v] [-k] [script-filename] [arguments...]');
+    print('Example: calc.dart 20 + 5');
+    print('');
+    print('Options:');
+    print('-v: Verbose');
+    print('-k: Keep temporary project files');
+    print('');
+    print('');
+    print('Sub-commands:');
+    print('help: Prints help text');
+    print('version: Prints version');
   }
 
-  Future<int> _runScript() async {
-    var vmArguments = <String>[];
-    vmArguments.add("--enable-asserts");
-    //vmArguments.addAll(["--package-root=$_temporaryDirectory/packages"]);
-    vmArguments.addAll(["--packages=$_temporaryDirectory/.packages"]);
-    vmArguments.add(_script);
-    vmArguments.addAll(_arguments);
-
-    if (_verbose) {
-      print("Running script: ${Platform.executable} args: ${vmArguments}");
+  bool probeSubCommands(List<String> args) {
+    if (args.isEmpty) {
+      print('Version: $_version');
+      print('');
+      printHelp();
+      return true;
     }
-    var process = await Process.start(Platform.executable, vmArguments,
-        workingDirectory: _workingDirectory);
-    await process.stderr.pipe(stderr);
-    await process.stdout.pipe(stdout);
-    await stdin.pipe(process.stdin);
-    var exitCode = process.exitCode;
 
-    if (_verbose) {
-      print("Script finished");
+    switch (args[0]) {
+      case 'version':
+        print(_version);
+        return true;
+      case 'help':
+        printHelp();
+        return true;
     }
-    return exitCode;
+
+    return false;
   }
 }
