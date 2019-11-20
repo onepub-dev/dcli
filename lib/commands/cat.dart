@@ -13,6 +13,10 @@ import '../util/log.dart';
 
 /// Prints the contents of the file located at [path] to stdout.
 ///
+/// ```dart
+/// cat("/var/log/syslog");
+/// ```
+///
 /// If the file does not exists then a CatException is thrown.
 ///
 void cat(String path) => Cat().cat(path);
