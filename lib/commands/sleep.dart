@@ -7,6 +7,12 @@ import 'settings.dart';
 
 /// sleeps for the provided [duration] of the given [interval].
 ///
+/// ```dart
+/// sleep(2);
+///
+/// sleep(2, interval=Interval.minutes);
+/// ```
+///
 /// The [interval] defaults to seconds.
 ///
 /// If the duration is 0 or less sleep returns immediately.
