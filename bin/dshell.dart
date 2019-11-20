@@ -33,20 +33,38 @@ class ScriptRunner {
     var directory = Directory("lib");
     if (directory.existsSync()) {
       var link = Link(_temporaryDirectory + "/lib");
+
+      if (_verbose) {
+        print("Create link to ${directory.absolute.path}");
+      }
+
       link.createSync(directory.absolute.path);
     }
   }
 
   void _createPubspecFile() {
     var file = File(_temporaryDirectory + "/pubspec.yaml");
+
+    if (_verbose) {
+      print("Creating pubspec: ${file.path}");
+    }
     file.writeAsStringSync(_pubspec);
   }
 
   void _createTemporaryDirectory() {
     _temporaryDirectory = Directory.systemTemp.createTempSync().path;
+
+    if (_verbose) {
+      print("Created tmp directory: ${_temporaryDirectory}");
+    }
   }
 
   void _deleteTemporaryDirectory() {
+    return;
+    if (_verbose) {
+      print("deleting tmp directory: ${_temporaryDirectory}");
+    }
+
     var directory = Directory(_temporaryDirectory);
     for (var file in directory.listSync(recursive: true, followLinks: false)) {
       if (file is Link) {
@@ -78,6 +96,9 @@ class ScriptRunner {
       var dartAPI = "$path${s}include${s}dart_api.h";
       if (File(dartAPI).existsSync()) {
         _dartSdk = path;
+        if (_verbose) {
+          print("Found  dart sdk: ${_dartSdk}");
+        }
         return;
       }
     }
@@ -152,11 +173,17 @@ class ScriptRunner {
     if (_pubspec == null) {
       print("pubspec.yaml not found in: $_script");
       _exitCode = -1;
+    } else {
+      if (_verbose) {
+        print("Pubspec read from: ${_script}");
+        print("Contents: ");
+        print(_pubspec);
+      }
     }
   }
 
   void _printUsage() {
-    print("dartx [options] script.dart [arguments]");
+    print("dshell [options] <script.dart> [arguments]");
     print("Options:");
     print("  --verbose: Verbose pub output.");
   }
@@ -219,6 +246,8 @@ class ScriptRunner {
 
   ProcessResult _runPub(List<String> arguments, {String workingDirectory}) {
     var executable = _dartSdk + "/bin/pub";
+
+    print("Running pubget: ${executable}");
     return Process.runSync(executable, arguments,
         runInShell: true, workingDirectory: workingDirectory);
   }
@@ -230,12 +259,20 @@ class ScriptRunner {
     vmArguments.addAll(["--packages=$_temporaryDirectory/.packages"]);
     vmArguments.add(_script);
     vmArguments.addAll(_arguments);
+
+    if (_verbose) {
+      print("Running script: ${Platform.executable} args: ${vmArguments}");
+    }
     var process = await Process.start(Platform.executable, vmArguments,
         workingDirectory: _workingDirectory);
     await process.stderr.pipe(stderr);
     await process.stdout.pipe(stdout);
     await stdin.pipe(process.stdin);
     var exitCode = process.exitCode;
+
+    if (_verbose) {
+      print("Script finished");
+    }
     return exitCode;
   }
 }
