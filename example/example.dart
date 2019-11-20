@@ -3,6 +3,7 @@
 @pubspec.yaml
 name: tryme
 dependencies:
+  dshell: ^1.0.7
   money2: ^1.0.3
 */
 
