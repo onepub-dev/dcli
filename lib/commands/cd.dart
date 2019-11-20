@@ -11,12 +11,21 @@ import 'settings.dart';
 ///
 /// If [path] does not exists an exception is thrown
 ///
-/// Note: changing the directory changes the directory
+/// ```dart
+/// cd("/tmp");
+/// ```
+///
+/// NOTE: changing the directory changes the directory
 /// for all isolates.
+///
+/// Using push/pop/cd is considered bad form.
+///
+/// Instead use absolute paths.
 ///
 /// See [push]
 ///     [pop]
 ///     [pwd]
+///     [join] us join in prefrence to cd/push/pop
 
 void cd(String path) => CD().cd(path);
 
