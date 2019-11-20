@@ -1,12 +1,26 @@
 #! /usr/bin/env dshell
+/*
+@pubspec.yaml
+name: tryme
+dependencies:
+  money2: ^1.0.3
+*/
+
 import 'dart:io';
 
 import 'package:dshell/commands/read.dart';
 import 'package:dshell/dshell.dart';
+import 'package:money2/money2.dart';
 
 void main() {
   try {
     Settings().debug_on = false;
+
+    // use external package that is included
+    // by inline pubspec.yaml above.
+    Currency aud = Currency.create("AUD", 2);
+    Money tax = Money.fromInt(1000, aud);
+    print(tax.toString());
 
     // Print the current working directory
     print("PWD: ${pwd}");
@@ -91,9 +105,9 @@ void main() {
     // But we can't do this in a vscode debug session
     // so commenting it out for now.
     // a patch is comming for vscode.
-    // String publish = ask(prompt: "Publish (y/n)");
+    String publish = ask(prompt: "Publish (y/n): ");
 
-    String publish = 'y';
+    //String publish = 'y';
     if (publish.toLowerCase() == 'y') {
       // move to the published directory.
       move(restingPlace, poetryPublished);
@@ -118,15 +132,13 @@ void main() {
     // Find each line in our poem that contains the word rose.
     'grep rose $restingPlace'.forEach((line) => print("Grep: $line"),
         stderr: (line) => [print(line)]);
-    // 'grep rose $restingPlace'.stdout((line) => print("Grep: $line"))
-    //   ..stderr((line) => print("Grep: $line"));
 
     // lets do some pipeing and see the 3-5 lines
     ('head  -5 $restingPlace' | 'tail -n 3').forEach((line) => print(line));
 
     // but the world doesn't deserve our work
     // so burn it all to hell.
-    delete(join(poetryPublished, poem), ask: false);
+    delete(restingPlace, ask: false);
   } catch (e) {
     // All errors are thrown as exceptions.
     print("An error occured: ${e.toString()}");
