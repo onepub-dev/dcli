@@ -33,7 +33,7 @@ class Ask extends Command {
       Log.d("ask:  ${prompt}");
     }
     if (prompt != null) {
-      echo(prompt, newline: false);
+      echo(prompt + " ", newline: false);
     }
     var line = stdin.readLineSync(
         encoding: Encoding.getByName('utf-8'), retainNewlines: false);

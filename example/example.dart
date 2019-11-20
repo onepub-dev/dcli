@@ -72,10 +72,6 @@ void main() {
     restingPlace.append("");
     restingPlace.append(verse2);
 
-    // 'asdfasdf'.append('/tmp');
-    // 'asdfasdf'.appendTo('/tmp');
-    // 'asdfasdf' >> '/tmp';
-
     // take a moments beauty sleep to bask in our own
     // glory for a couple of seconds because we are worth it.
     sleep(2);
@@ -105,7 +101,7 @@ void main() {
     // But we can't do this in a vscode debug session
     // so commenting it out for now.
     // a patch is comming for vscode.
-    String publish = ask(prompt: "Publish (y/n): ");
+    String publish = ask(prompt: "Publish (y/n):");
 
     //String publish = 'y';
     if (publish.toLowerCase() == 'y') {
