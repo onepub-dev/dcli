@@ -11,6 +11,10 @@ import 'settings.dart';
 ///
 /// Moves the file [from] to the location [to].
 ///
+/// ```dart
+/// createDir("/tmp/folder");
+/// move("/tmp/fred.txt", "/tmp/folder/tom.txt");
+/// ```
 /// [from] must be a file.
 ///
 /// [to] may be a file or a path.
