@@ -12,10 +12,10 @@ import 'package:dshell/util/waitForEx.dart';
 /// If [newline] is false then a newline will not be output.
 ///
 /// [newline] defaults to false.
-void echo(String text, {bool newline = false}) => Echo().echo(text);
+void echo(String text, {bool newline = false}) => Echo().echo(text, newline);
 
 class Echo extends Command {
-  void echo(String text, {bool newline = true}) {
+  void echo(String text, bool newline) {
     if (newline) {
       stdout.writeln(text);
     } else {
