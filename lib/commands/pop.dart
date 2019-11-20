@@ -10,6 +10,11 @@ import 'settings.dart';
 ///
 /// Push and Pop work together to track a series
 /// of current directory changes.
+///
+/// ```dart
+/// pop();
+/// ```
+///
 /// These operators are useful when peformaning a series
 /// of operations on different directories and you need
 /// a simple method to get back to an earlier directory.
