@@ -1,6 +1,6 @@
 import 'dart:io';
 
-import 'package:dshell/commands/command.dart';
+import 'package:dshell/functions/function.dart';
 import 'package:dshell/dshell.dart';
 
 import '../util/log.dart';
@@ -27,7 +27,7 @@ import 'settings.dart';
 ///
 void move(String from, String to) => Move().move(from, to);
 
-class Move extends Command {
+class Move extends DShellFunction {
   void move(String from, String to) {
     if (Settings().debug_on) {
       Log.d("move ${absolute(from)} -> ${absolute(to)}");
@@ -48,6 +48,6 @@ class Move extends Command {
   }
 }
 
-class MoveException extends CommandException {
+class MoveException extends FunctionException {
   MoveException(String reason) : super(reason);
 }

@@ -1,6 +1,6 @@
 import 'dart:io';
 
-import 'package:dshell/commands/command.dart';
+import 'package:dshell/functions/function.dart';
 import 'package:dshell/util/for_each.dart';
 
 import '../dshell.dart';
@@ -112,7 +112,7 @@ ForEach find(String pattern,
         root: root,
         types: types);
 
-class Find extends Command {
+class Find extends DShellFunction {
   ForEach find(String pattern,
       {bool caseSensitive = false,
       bool recursive = true,

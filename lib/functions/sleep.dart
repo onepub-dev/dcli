@@ -2,7 +2,7 @@ import 'package:dshell/util/waitForEx.dart';
 
 import '../util/log.dart';
 
-import 'command.dart';
+import 'dshell_function.dart';
 import 'settings.dart';
 
 /// sleeps for the provided [duration] of the given [interval].
@@ -21,7 +21,7 @@ void sleep(int duration, {Interval interval = Interval.seconds}) =>
 
 enum Interval { seconds, millseconds, minutes }
 
-class Sleep extends Command {
+class Sleep extends DShellFunction {
   void sleep(int duration, {Interval interval = Interval.seconds}) {
     if (Settings().debug_on) {
       Log.d("sleep: duration: ${duration} interval: $interval");

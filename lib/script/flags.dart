@@ -1,5 +1,7 @@
 class Flags {
-  static List<Flag> applicationFlags = [HelpFlag(), VerboseFlag()];
+  static List<Flag> applicationFlags = [VerboseFlag()];
+
+  static bool get isVerbose => null;
 
   static Flag findFlag(String flagSwitch, List<Flag> flags) {
     Flag found;
@@ -18,6 +20,10 @@ class Flags {
   static bool isFlag(String argument) {
     return (argument.startsWith('-') || argument.startsWith('--'));
   }
+
+  static bool isSet(Flag flag, Map<String, Flag> selectedFlags) {
+    return selectedFlags.containsValue(flag);
+  }
 }
 
 abstract class Flag {
@@ -32,16 +38,6 @@ abstract class Flag {
   String usage(String appname) => "--$_name | -$abbreviation";
 
   String description(String appname);
-}
-
-class HelpFlag extends Flag {
-  static const NAME = "help";
-
-  HelpFlag() : super(NAME);
-
-  String get abbreviation => "h";
-
-  String description(String appname) => "Displays the usage message.";
 }
 
 class VerboseFlag extends Flag {

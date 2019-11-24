@@ -1,6 +1,4 @@
-import 'dart:cli';
-
-import '../args.dart';
+import '../command_line_runner.dart';
 import '../dart_sdk.dart';
 import '../flags.dart';
 import '../project.dart';
@@ -9,6 +7,7 @@ import '../runner.dart';
 import '../script.dart';
 import 'commands.dart';
 
+/// Runs a dart script.
 class RunCommand extends Command {
   static const String NAME = "run";
 
@@ -19,7 +18,8 @@ class RunCommand extends Command {
   /// Returns the [exitcode];
   @override
   int run(List<Flag> selectedFlags, List<String> arguments) {
-    if (arguments.isEmpty) {
+    var arguments2 = arguments;
+    if (arguments2.isEmpty) {
       throw InvalidArguments("The run command requires a script name to run");
     }
 
@@ -27,7 +27,7 @@ class RunCommand extends Command {
 
     Script script = Script.fromArg(selectedFlags, arguments[0]);
 
-    Project project = ProjectCache().createProject(script);
+    VirtualProject project = ProjectCache().createProject(script);
     List<String> scriptArguments = List();
 
     if (arguments.length > 1) {
@@ -37,7 +37,7 @@ class RunCommand extends Command {
     final DartSdk sdk = DartSdk();
     final ScriptRunner runner = ScriptRunner(sdk, project, scriptArguments);
 
-    final int exitCode = waitFor<int>(runner.exec());
+    final int exitCode = runner.exec();
 
     return exitCode;
   }

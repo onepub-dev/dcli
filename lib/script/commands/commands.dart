@@ -7,6 +7,7 @@ import 'package:dshell/script/commands/run.dart';
 import 'package:dshell/script/commands/split.dart';
 
 import '../flags.dart';
+import 'help.dart';
 
 class Commands {
   static List<Command> get applicationCommands => [
@@ -16,13 +17,21 @@ class Commands {
         CreateCommand(),
         MergeCommand(),
         RunCommand(),
-        SplitCommand()
+        SplitCommand(),
+        HelpCommand()
       ];
 
   static Command findCommand(String argument, Map<String, Command> commands) {
     Command command = commands[argument.toLowerCase()];
 
     return command;
+  }
+
+  static Map<String, Command> asMap(List<Command> availableCommands) {
+    Map<String, Command> mapCommands = Map();
+    availableCommands.forEach((command) => mapCommands[command.name] = command);
+
+    return mapCommands;
   }
 }
 

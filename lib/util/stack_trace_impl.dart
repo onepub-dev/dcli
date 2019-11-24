@@ -22,8 +22,9 @@ class StackTraceImpl implements core.StackTrace {
         _skipFrames = skipFrames + 1; // always skip ourselves.
 
   StackTraceImpl.fromStackTrace(core.StackTrace stackTrace,
-      {this.workingDirectory})
-      : this.stackTrace = stackTrace;
+      {this.workingDirectory, int skipFrames = 0})
+      : this.stackTrace = stackTrace,
+        _skipFrames = skipFrames;
 
   ///
   /// Returns a File instance for the current stackframe

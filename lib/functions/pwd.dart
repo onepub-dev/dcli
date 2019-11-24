@@ -1,6 +1,6 @@
 import 'dart:io';
 
-import 'command.dart';
+import 'dshell_function.dart';
 
 ///
 /// Returns the current working directory.
@@ -15,7 +15,7 @@ import 'command.dart';
 ///
 String get pwd => PWD().pwd;
 
-class PWD extends Command {
+class PWD extends DShellFunction {
   String get pwd {
     return Directory.current.path;
   }

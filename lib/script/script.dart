@@ -5,7 +5,7 @@ import 'package:dshell/script/flags.dart';
 import 'package:dshell/util/file_helper.dart';
 import 'package:path/path.dart' as p;
 
-import 'args.dart';
+import 'command_line_runner.dart';
 
 class Script {
   /// The directory where the script file lives
@@ -38,7 +38,7 @@ class Script {
   String get scriptDirectory => _scriptDirectory;
 
   /// the absolute path of the script file.
-  String get scriptPath => p.join(scriptDirectory, scriptname);
+  String get path => p.join(scriptDirectory, scriptname);
 
   /// the name of the script without its extension.
   /// this is used for the 'name' key in the pubspec.
@@ -66,7 +66,7 @@ class Script {
   /// Generates the default scriptfile contents
   ///
   void createDefaultFile(String appname, String defaultBody) {
-    writeToFile(scriptPath, defaultBody);
+    writeToFile(path, defaultBody);
   }
 
   String generateDefaultBody(String appname) {
@@ -82,7 +82,9 @@ dependencies:
 
 import 'dart:io';
 import 'package:dshell/dshell.dart';
+import 'package:path/path.dart' as p;
 import 'package:money2/money2.dart';
+
 
 void main() {
   print("${PithyGreetings.random()});
@@ -108,10 +110,11 @@ void main() {
     }
 
     if (!File(scriptArg).existsSync()) {
-      throw InvalidScript("The script ${scriptArg} does not exist.");
+      throw InvalidScript(
+          "The script ${p.absolute(scriptArg)} does not exist.");
     }
     if (!FileSystemEntity.isFileSync(scriptArg)) {
-      throw InvalidScript("The script ${scriptArg} is not a file.");
+      throw InvalidScript("The script ${p.absolute(scriptArg)} is not a file.");
     }
   }
 

@@ -1,41 +1,64 @@
 import "dart:io";
-import 'package:dshell/script/project_cache.dart';
 import 'package:dshell/script/pub_get.dart';
 import 'package:path/path.dart' as p;
 
 import 'dart_sdk.dart';
 import 'hashes_yaml.dart';
-import 'log.dart';
+import 'std_log.dart';
 import 'pubspec.dart';
 import 'script.dart';
 import 'package:dshell/util/file_helper.dart';
 
 /// Creates project directory structure
-class Project {
+/// All projects live under the dshell cache
+/// directory are form a virtual copy of the
+/// user's Script with the additional files
+/// required by dart.
+class VirtualProject {
+  static const String PROJECT_DIR = ".project";
   final Script script;
 
-  // A temporary directory where create
-  // the virtual project.
-  final String projectCacheDir;
+  // The  absolute path to our
+  // virtual project.
+  // The path name is of th
+  String _projectRootPath;
 
-  HashesYaml hashes;
+  // The absolute path to the scripts lib directory.
+  // The script may not have a lib in which
+  // case this directory wont' exist.
+  String _scriptLibPath;
+
+  // The absolute path to the projects lib directory.
+  // If the script lib exists then this will
+  // be a link to that directory.
+  // If the script lib doesn't exist then
+  // on will be created under the virtual project directory.
+  String _projectLibPath;
+
+  // A path to the 'Link' file in the project directory
+  // that links to the actual script file.
+  String _projectScriptLinkPath;
+
+  // String _projectPubSpecPath;
 
   /// Returns a [project] instance for the given
   /// script.
-  Project(this.projectCacheDir, this.script);
+  VirtualProject(String cacheRootPath, this.script) {
+    // /home/bsutton/.dshell/cache/home/bsutton/git/dshell/test/test_scripts/hello_world.project
+    _projectRootPath = p.join(cacheRootPath,
+        script.scriptDirectory.substring(1), script.basename + PROJECT_DIR);
 
-  String get scriptLib => p.join(script.scriptDirectory, "lib");
-  String get projectCacheLib => p.join(projectCacheDir, "lib");
+    _projectLibPath = p.join(_projectRootPath, "lib");
+    _projectScriptLinkPath = p.join(_projectRootPath, script.scriptname);
+    // _projectPubSpecPath = p.join(_projectRootPath, "pubspec.yaml");
 
-  /// The project cachePath REALTIVE to the project cache directory.
-  /// The projects caches location is:
-  ///  <cache-path>/<path to real script><script-name>.dir
-  String get relativeCachePath =>
-      p.join(script.scriptDirectory.substring(1), "${script.scriptname}.dir");
+    _scriptLibPath = p.join(script.scriptDirectory, "lib");
+  }
 
-  /// The absolute version of the projects cache path
-  String absoluteCachePath(String rootCacheDir) =>
-      p.join(rootCacheDir, relativeCachePath);
+  String get scriptLib => _scriptLibPath;
+  String get projectCacheLib => _projectLibPath;
+
+  String get path => _projectRootPath;
 
   /// Creates the projects cache directory under the
   ///  root directory of our global cache directory - [cacheRootDir]
@@ -49,40 +72,42 @@ class Project {
   ///  or
   /// Link to scripts own pubspec.yaml file.
   /// hashes.yaml file.
-  void createCache(String rootCacheDir) {
-    String projectCache = absoluteCachePath(rootCacheDir);
-
-    if (!createDir(projectCache, "project cache")) {
-      Log.error(
-          'Created roject cache path at ${projectCacheDir}', LogLevel.verbose);
+  void createProject() {
+    if (!createDir(_projectRootPath, "project cache")) {
+      StdLog.stdout('Created project cache path at ${_projectRootPath}');
     }
 
-    hashes = HashesYaml(projectCacheDir);
+    HashesYaml.create(_projectRootPath);
 
     _createScriptLink(script);
     _createLib();
-    _createPubSpec(script);
+    bool pubgetRequired = _createPubSpec(script);
+    if (pubgetRequired) {
+      pubget();
+    }
   }
 
   /// We need to create a link to the script
   /// from the project cache.
   void _createScriptLink(Script script) {
-    Link link = Link(script.scriptPath);
-    link.createSync(projectCacheDir);
+    if (!exists(_projectScriptLinkPath)) {
+      Link link = Link(_projectScriptLinkPath);
+      link.createSync(script.path);
+    }
   }
 
-  void _createPubSpec(Script script) {
+  bool _createPubSpec(Script script) {
     PubSpec pubspec = PubSpec(script);
-    pubspec.saveToFile(this.absoluteCachePath(projectCacheDir));
+
+    return pubspec.saveToFile(_projectRootPath);
   }
 
   ///
   /// deletes the project cache directory and recreates it.
   void clean() {
-    String rootCacheDir = ProjectCache().cachePath;
-    File(absoluteCachePath(rootCacheDir)).deleteSync(recursive: true);
+    File(_projectRootPath).deleteSync(recursive: true);
 
-    createCache(rootCacheDir);
+    createProject();
   }
 
   /// Causes a pub get to be run against the project.

@@ -3,7 +3,7 @@ import 'dart:io';
 
 import '../util/log.dart';
 
-import 'command.dart';
+import 'dshell_function.dart';
 import 'echo.dart';
 import 'settings.dart';
 
@@ -25,7 +25,7 @@ import 'settings.dart';
 /// to the console and the cursor placed immediately after the prompt.
 String ask({String prompt}) => Ask().ask(prompt: prompt);
 
-class Ask extends Command {
+class Ask extends DShellFunction {
   ///
   /// Reads user input from stdin and returns it as a string.
   String ask({String prompt}) {

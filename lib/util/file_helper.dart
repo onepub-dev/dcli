@@ -18,6 +18,14 @@ bool exists(String path) {
   return FileSystemEntity.typeSync(path) != FileSystemEntityType.notFound;
 }
 
+DateTime lastModified(String path) {
+  return File(path).lastModifiedSync();
+}
+
+void setLastModifed(String path, DateTime lastModified) {
+  File(path).setLastModifiedSync(lastModified);
+}
+
 void writeToFile(String path, String content) {
   File _file;
   RandomAccessFile _raf;

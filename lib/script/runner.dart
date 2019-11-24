@@ -1,29 +1,33 @@
-import "dart:async";
+import 'dart:async';
+import 'dart:cli';
 import "dart:io";
+
+import 'package:dshell/util/waitForEx.dart';
 
 import 'dart_sdk.dart';
 import 'project.dart';
 
 /// Runs a Dart dscript
 class ScriptRunner {
-  Project project;
+  VirtualProject project;
   DartSdk sdk;
   List<String> scriptArguments;
 
   ScriptRunner(this.sdk, this.project, this.scriptArguments);
 
   /// Executes the script
-  Future<int> exec() async {
+  int exec() {
     // Prepare VM arguments
     final vmArgs = <String>[];
     vmArgs.add("--enable-asserts");
-    vmArgs.addAll(["--packages=${project.projectCacheDir}/.packages"]);
+    vmArgs.addAll(["--packages=${project.path}/.packages"]);
     vmArgs.add(project.script.scriptname);
     vmArgs.addAll(scriptArguments);
 
     // Execute the script
-    final Process process = await Process.start(Platform.executable, vmArgs,
-        workingDirectory: project.projectCacheDir);
+    final Process process = waitFor<Process>(Process.start(
+        Platform.executable, vmArgs,
+        workingDirectory: project.path));
 
     // Pipe std out and in
     final StreamSubscription stderrSub =
@@ -33,7 +37,7 @@ class ScriptRunner {
     final StreamSubscription stdinSub =
         stdin.listen((List<int> d) => process.stdin.add(d));
 
-    final int exitCode = await process.exitCode;
+    final int exitCode = waitForEx<int>(process.exitCode);
 
     final List<Future<void>> futures = List();
 
@@ -41,7 +45,7 @@ class ScriptRunner {
     futures.add(stdoutSub.cancel());
     futures.add(stdinSub.cancel());
 
-    await Future.wait(futures);
+    waitFor<void>(Future.wait(futures));
 
     return exitCode;
   }

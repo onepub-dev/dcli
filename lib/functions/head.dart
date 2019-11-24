@@ -1,4 +1,4 @@
-import 'package:dshell/commands/command.dart';
+import 'package:dshell/functions/function.dart';
 import 'package:dshell/util/file_sync.dart';
 import 'package:dshell/util/for_each.dart';
 
@@ -18,7 +18,7 @@ import 'settings.dart';
 ///
 ForEach head(String path, int lines) => Head().head(path, lines);
 
-class Head extends Command {
+class Head extends DShellFunction {
   ForEach head(String path, int lines) {
     if (Settings().debug_on) {
       Log.d("head ${absolute(path)} lines: ${lines}");
@@ -55,6 +55,6 @@ class Head extends Command {
   }
 }
 
-class HeadException extends CommandException {
+class HeadException extends FunctionException {
   HeadException(String reason) : super(reason);
 }

@@ -1,6 +1,6 @@
 import 'dart:io';
 
-import 'command.dart';
+import 'dshell_function.dart';
 import 'settings.dart';
 import '../util/log.dart';
 
@@ -12,7 +12,7 @@ import '../util/log.dart';
 ///
 String env(String name) => Env().env(name);
 
-class Env extends Command {
+class Env extends DShellFunction {
   static Env _self = Env._internal();
   Map<String, String> envVars;
 

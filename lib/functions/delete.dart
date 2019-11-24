@@ -2,7 +2,7 @@ import 'dart:io';
 
 import '../util/log.dart';
 
-import 'command.dart';
+import 'dshell_function.dart';
 import 'is.dart';
 import 'ask.dart';
 import 'settings.dart';
@@ -22,7 +22,7 @@ import 'settings.dart';
 /// If the [path] is a directory a DeleteException is thrown.
 void delete(String path, {bool ask = false}) => Delete().delete(path, ask: ask);
 
-class Delete extends Command {
+class Delete extends DShellFunction {
   void delete(String path, {bool ask}) {
     if (Settings().debug_on) {
       Log.d("delete:  ${absolute(path)} ask: $ask");
@@ -57,6 +57,6 @@ class Delete extends Command {
   }
 }
 
-class DeleteException extends CommandException {
+class DeleteException extends DShellFunctionException {
   DeleteException(String reason) : super(reason);
 }

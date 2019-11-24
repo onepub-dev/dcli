@@ -1,4 +1,4 @@
-import '../args.dart';
+import '../command_line_runner.dart';
 import '../flags.dart';
 import '../script.dart';
 import 'commands.dart';

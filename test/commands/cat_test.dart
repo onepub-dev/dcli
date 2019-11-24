@@ -18,9 +18,9 @@ void main() {
     t.test("Cat good ", () {
       List<String> lines = List();
 
-      cat(testFile);
+      cat(testFile, stdout: (line) => lines.add(line));
       t.expect(lines.length, t.equals(10));
-    }, skip: true);
+    });
 
     t.test("cat non-existing ", () {
       t.expect(

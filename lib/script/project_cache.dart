@@ -1,10 +1,11 @@
-import 'dart:cli';
 import 'dart:io';
 
 import 'package:dshell/util/file_helper.dart';
+import 'package:dshell/util/waitForEx.dart';
 import 'package:path/path.dart' as p;
 
-import 'log.dart';
+import '../settings.dart';
+import 'std_log.dart';
 import 'project.dart';
 import 'script.dart';
 
@@ -43,15 +44,20 @@ import 'script.dart';
 ///  the project folder.
 class ProjectCache {
   // Name of the cache directory which is normally
-  // located under the users home directory.
-  static const String cacheDir = ".dscript-cache";
+  // located dshell settings directory
+  // which is normally .dshell
+
+  static const String CACHE_DIR = "cache";
   static ProjectCache _self;
 
-  // absolute path to the cache.
-  String _cachePath;
+  // absolute path to the root of the cache.
+  String _cacheRootPath;
 
   ProjectCache._internal() {
     _self = this;
+
+    // set the absolute path of the cache root.
+    _cacheRootPath = p.join(Settings().configRootPath, CACHE_DIR);
   }
 
   factory ProjectCache() {
@@ -63,11 +69,15 @@ class ProjectCache {
     return _self;
   }
 
+  String get path => _cacheRootPath;
+
   // Creates a project ready to run for
-  // the given script
-  Project createProject(Script script) {
-    Project project = Project(cachePath, script);
-    project.createCache(cachePath);
+  // the given script.
+  // If the project already exists then it will
+  // be refreshed if required.
+  VirtualProject createProject(Script script) {
+    VirtualProject project = VirtualProject(_cacheRootPath, script);
+    project.createProject();
     return project;
   }
 
@@ -75,39 +85,17 @@ class ProjectCache {
   /// Checks if the dscript cache exists
   /// and if not creates it.
   void initCache() {
-    createDir(cachePath, "cache");
-  }
-
-  /// returns the absolute cache path which is located at:
-  /// ~.dscript-cache
-  String get cachePath {
-    if (_cachePath == null) {
-      Map<String, String> env = Platform.environment;
-      String home = env["HOME"];
-      _cachePath = p.canonicalize(p.join(home, cacheDir));
-    }
-
-    return _cachePath;
+    createDir(_cacheRootPath, "cache");
   }
 
   /// If the [cleanall] command issued
   /// we will clean out the project cache
   /// for all scripts.
   void cleanAll() {
-    Log.error('Cleaning project cache ${cachePath}', LogLevel.verbose);
+    StdLog.stdout('Cleaning project cache ${_cacheRootPath}',
+        level: LogLevel.verbose);
     try {
-      waitFor(Directory(cachePath).delete(recursive: true));
+      waitForEx(Directory(_cacheRootPath).delete(recursive: true));
     } finally {}
-  }
-
-  /// Returns the [project]s absolute path in the cache.
-  ///
-  /// Note: we need to include the script name as a directory
-  /// may have several scripts each with their own pubspec.
-  /// ~.dscript-cache
-  String cacheLocation(Project project) {
-    // we remove the leading slash of the absolute scriptDirectory
-    // so it becomes a subdirectory under [cachePath]
-    return p.join(cachePath, project.relativeCachePath);
   }
 }

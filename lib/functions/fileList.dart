@@ -1,6 +1,6 @@
 import 'dart:io';
 
-import 'package:dshell/commands/command.dart';
+import 'package:dshell/functions/function.dart';
 
 import '../util/log.dart';
 
@@ -14,7 +14,7 @@ import 'settings.dart';
 /// See [find] for more advanced options when obtain a file list.
 List<String> get fileList => FileList().fileList;
 
-class FileList extends Command {
+class FileList extends DShellFunction {
   List<String> get fileList {
     List<String> files = List();
 

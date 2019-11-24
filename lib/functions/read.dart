@@ -7,7 +7,7 @@ import 'package:dshell/util/for_each.dart';
 import 'package:dshell/util/stack_trace_impl.dart';
 import 'package:dshell/util/waitForEx.dart';
 
-import 'command.dart';
+import 'dshell_function.dart';
 import 'is.dart';
 import 'settings.dart';
 import '../util/log.dart';
@@ -27,7 +27,7 @@ ForEach read(String path, {String delim = "\n"}) =>
 /// Read lines from stdin
 ForEach readStdin() => Read().readStdin();
 
-class Read extends Command {
+class Read extends DShellFunction {
   ForEach read(String path, {String delim}) {
     File sourceFile = File(path);
 
@@ -72,7 +72,7 @@ class Read extends Command {
   }
 }
 
-class ReadException extends CommandException {
+class ReadException extends DShellFunctionException {
   ReadException(String reason, [StackTraceImpl stacktrace])
       : super(reason, stacktrace);
 

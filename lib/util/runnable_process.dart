@@ -2,10 +2,10 @@ import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
 
-import 'package:dshell/commands/run.dart';
 import 'package:dshell/util/waitForEx.dart';
 
 import '../dshell.dart';
+import 'dshell_exception.dart';
 import 'log.dart';
 
 typedef void LineAction(String line);
@@ -13,21 +13,19 @@ typedef bool CancelableLineAction(String line);
 
 class RunnableProcess {
   Future<Process> fProcess;
-  // The command line used to start the process.
-  final List<String> cmdAndArgs;
 
   final String workingDirectory;
 
   ParsedCliCommand parsed;
 
   RunnableProcess(String cmdLine, {this.workingDirectory})
-      : cmdAndArgs = ParsedCliCommand(cmdLine).args;
+      : parsed = ParsedCliCommand(cmdLine);
 
   RunnableProcess.fromList(String command, List<String> args,
       {this.workingDirectory})
-      : cmdAndArgs = [command, ...args];
+      : parsed = ParsedCliCommand.fromParsed(command, args);
 
-  String get cmdLine => cmdAndArgs.join(" ");
+  String get cmdLine => parsed.cmd + " " + parsed.args.join(" ");
 
   void start() {
     String workdir = workingDirectory;
@@ -75,7 +73,7 @@ class RunnableProcess {
       // trap the process finishing
       process.exitCode.then((exitCode) {
         if (exitCode != 0) {
-          done.completeError(RunException(
+          done.completeError(RunException(exitCode,
               "The command [$cmdLine] failed with exitCode: ${exitCode}"));
         } else {
           done.complete(true);
@@ -94,6 +92,8 @@ class ParsedCliCommand {
     parse(command);
   }
 
+  ParsedCliCommand.fromParsed(this.cmd, this.args);
+
   void parse(String command) {
     List<String> parts = command.split(" ");
 
@@ -109,4 +109,10 @@ class ParsedCliCommand {
       Log.d("cmd: $cmd args: $args");
     }
   }
+}
+
+class RunException extends DShellException {
+  int exitCode;
+  String reason;
+  RunException(this.exitCode, this.reason) : super(reason);
 }

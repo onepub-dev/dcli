@@ -1,6 +1,6 @@
 import 'dart:io';
 
-import 'package:dshell/commands/command.dart';
+import 'package:dshell/functions/function.dart';
 import 'package:path/path.dart' as p;
 
 import '../util/log.dart';
@@ -29,7 +29,7 @@ import 'settings.dart';
 
 void cd(String path) => CD().cd(path);
 
-class CD extends Command {
+class CD extends DShellFunction {
   void cd(String path) {
     if (Settings().debug_on) {
       Log.d("cd $path -> ${p.canonicalize(path)}");
@@ -42,6 +42,6 @@ class CD extends Command {
   }
 }
 
-class CDException extends CommandException {
+class CDException extends FunctionException {
   CDException(String reason) : super(reason);
 }

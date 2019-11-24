@@ -1,6 +1,6 @@
 import 'package:dshell/script/project_cache.dart';
 
-import '../args.dart';
+import '../command_line_runner.dart';
 import '../flags.dart';
 import '../project.dart';
 import '../script.dart';
@@ -23,7 +23,7 @@ class CleanCommand extends Command {
 
     Script script = Script.fromArg(selectedFlags, arguments[0]);
 
-    Project project = Project(ProjectCache().cachePath, script);
+    VirtualProject project = VirtualProject(ProjectCache().path, script);
 
     project.clean();
 

@@ -1,3 +1,4 @@
+import 'dart:cli';
 import 'dart:io';
 
 import 'package:yaml/yaml.dart';
@@ -8,8 +9,8 @@ class Yaml {
 
   Yaml(this.file);
 
-  void load() async {
-    String contents = await File(file).readAsString();
+  void load() {
+    String contents = waitFor<String>(File(file).readAsString());
     document = loadYamlDocument(contents);
   }
 

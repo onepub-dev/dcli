@@ -1,5 +1,5 @@
 import 'dart:io';
-import 'package:dshell/commands/command.dart';
+import 'package:dshell/functions/function.dart';
 
 import '../util/log.dart';
 
@@ -20,12 +20,12 @@ import 'settings.dart';
 /// don't exist then a [MakeDireExcepption] will be thrown
 ///
 void createDir(String path, {bool createParent = false}) =>
-    MakeDir().mkdir(path, createParent: createParent);
+    CreateDir().createDir(path, createParent: createParent);
 
-class MakeDir extends Command {
-  void mkdir(String path, {bool createParent}) {
+class CreateDir extends DShellFunction {
+  void createDir(String path, {bool createParent}) {
     if (Settings().debug_on) {
-      Log.d("mkdir:  ${absolute(path)} createPath: $createParent");
+      Log.d("createDir:  ${absolute(path)} createPath: $createParent");
     }
 
     try {
@@ -37,6 +37,6 @@ class MakeDir extends Command {
   }
 }
 
-class MakeDirException extends CommandException {
+class MakeDirException extends FunctionException {
   MakeDirException(String reason) : super(reason);
 }

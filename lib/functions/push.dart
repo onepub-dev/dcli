@@ -4,7 +4,7 @@ import 'package:path/path.dart' as p;
 
 import '../util/log.dart';
 
-import 'command.dart';
+import 'dshell_function.dart';
 import 'is.dart';
 import 'settings.dart';
 
@@ -28,7 +28,7 @@ import 'settings.dart';
 
 void push(String path) => Push().push(path);
 
-class Push extends Command {
+class Push extends DShellFunction {
   /// Push the pwd onto the stack and change the
   /// current directory to [path].
   void push(String path) {
@@ -55,6 +55,6 @@ class Push extends Command {
   }
 }
 
-class PushException extends CommandException {
+class PushException extends DShellFunctionException {
   PushException(String reason) : super(reason);
 }

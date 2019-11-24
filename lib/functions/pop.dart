@@ -1,6 +1,6 @@
 import 'dart:io';
 
-import 'package:dshell/commands/command.dart';
+import 'package:dshell/functions/function.dart';
 
 import '../util/log.dart';
 import 'package:path/path.dart' as p;
@@ -44,7 +44,7 @@ import 'settings.dart';
 ///
 void pop() => Pop().pop();
 
-class Pop extends Command {
+class Pop extends DShellFunction {
   ///
   /// Change the working directory back
   /// to its location before [push] was called.
@@ -71,6 +71,6 @@ class Pop extends Command {
   }
 }
 
-class PopException extends CommandException {
+class PopException extends FunctionException {
   PopException(String reason) : super(reason);
 }

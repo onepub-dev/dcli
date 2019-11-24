@@ -1,4 +1,4 @@
-import 'package:dshell/commands/command.dart';
+import 'package:dshell/functions/function.dart';
 
 import 'package:path/path.dart' as p;
 
@@ -69,7 +69,7 @@ String join(String part1,
         String part8]) =>
     Path().join(part1, part2, part3, part4, part5, part6, part7, part8);
 
-class Path extends Command {
+class Path extends DShellFunction {
   String filename(String path) => p.basename(path);
   String canonicalize(String path) => p.canonicalize(path);
 

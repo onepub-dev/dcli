@@ -1,19 +1,32 @@
-import 'args.dart';
+import 'package:dshell/util/dshell_exception.dart';
+
 import 'commands/commands.dart';
 import 'commands/run.dart';
 import 'flags.dart';
 
 class CommandLineRunner {
-  String appname;
+  static CommandLineRunner _self;
   List<Flag> availableFlags;
   Map<String, Command> availableCommands;
 
   // the list of flags selected via the cli.
   Map<String, Flag> selectedFlags = Map();
 
-  CommandLineRunner(
-      this.appname, this.availableFlags, List<Command> availableCommands)
-      : this.availableCommands = buildCommandMap(availableCommands);
+  factory CommandLineRunner() {
+    if (_self == null) {
+      throw Exception("The CommandLineRunner has not been intialised");
+    }
+    return _self;
+  }
+
+  bool get isVerbose => Flags.isSet(VerboseFlag(), selectedFlags);
+
+  static void init(List<Flag> availableFlags, List<Command> availableCommands) {
+    _self = CommandLineRunner.internal(
+        availableFlags, Commands.asMap(availableCommands));
+  }
+
+  CommandLineRunner.internal(this.availableFlags, this.availableCommands);
 
   int process(List<String> arguments) {
     int exitCode;
@@ -22,7 +35,6 @@ class CommandLineRunner {
 
     // Find the command and run it.
     Command command;
-    List<String> subarguments = List();
 
     int i = 0;
     for (; i < arguments.length; i++) {
@@ -56,12 +68,14 @@ class CommandLineRunner {
     }
 
     if (success) {
-      // get the remaning args as the are arguments for the command to process.
+// get the script name and remaning args as they are the arguments for the command to process.
+      List<String> cmdArguments = List();
+
       if (i + 1 < arguments.length) {
-        subarguments = arguments.sublist(i + 1);
+        cmdArguments = arguments.sublist(i);
       }
 
-      exitCode = command.run(selectedFlags.values.toList(), subarguments);
+      exitCode = command.run(selectedFlags.values.toList(), cmdArguments);
     } else {
       usage();
 
@@ -71,11 +85,52 @@ class CommandLineRunner {
   }
 
   void usage() {}
+}
 
-  static Map<String, Command> buildCommandMap(List<Command> availableCommands) {
-    Map<String, Command> mapCommands = Map();
-    availableCommands.forEach((command) => mapCommands[command.name] = command);
+class CommandLineException extends DShellException {
+  CommandLineException(String message) : super(message);
+}
 
-    return mapCommands;
-  }
+class OptionsException extends CommandLineException {
+  OptionsException(String message) : super(message);
+}
+
+class DuplicateOptionsException extends OptionsException {
+  final String optionName;
+
+  DuplicateOptionsException(this.optionName)
+      : super('Option ${optionName} used twice!');
+  String toString() => message;
+}
+
+class UnknownOption extends OptionsException {
+  final String optionName;
+
+  UnknownOption(this.optionName) : super('The option $optionName is unknown!');
+
+  String toString() => message;
+}
+
+class InvalidScript extends CommandLineException {
+  InvalidScript(String message) : super(message);
+}
+
+class UnknownCommand extends CommandLineException {
+  final String command;
+
+  UnknownCommand(this.command)
+      : super(
+            "The command ${command} was not recognised. Scripts must end with .dart!");
+}
+
+class UnknownFlag extends CommandLineException {
+  final String flag;
+
+  UnknownFlag(this.flag) : super("The flag ${flag} was not recognised!");
+
+  String toString() => message;
+}
+
+class InvalidArguments extends CommandLineException {
+  InvalidArguments(String message) : super(message);
 }

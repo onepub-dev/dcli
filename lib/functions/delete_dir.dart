@@ -1,5 +1,5 @@
 import 'dart:io';
-import 'package:dshell/commands/command.dart';
+import 'package:dshell/functions/function.dart';
 
 import '../util/log.dart';
 
@@ -26,7 +26,7 @@ import 'settings.dart';
 void deleteDir(String path, {bool recursive}) =>
     DeleteDir().deleteDir(path, recursive: recursive);
 
-class DeleteDir extends Command {
+class DeleteDir extends DShellFunction {
   void deleteDir(String path, {bool recursive}) {
     if (Settings().debug_on) {
       Log.d("deleteDir:  ${absolute(path)} recursive: $recursive");
@@ -50,6 +50,6 @@ class DeleteDir extends Command {
   }
 }
 
-class DeleteDirException extends CommandException {
+class DeleteDirException extends FunctionException {
   DeleteDirException(String reason) : super(reason);
 }

@@ -1,8 +1,7 @@
-import 'dart:async';
-import 'dart:convert';
-
 import 'dart_sdk.dart';
+import 'dependency.dart';
 import 'project.dart';
+import '../util/runnable_process.dart';
 
 ///
 /// runs and retrives the results of calling
@@ -14,59 +13,56 @@ import 'project.dart';
 
 class PubGet {
   final DartSdk dartSdk;
-  final Project project;
+  final VirtualProject project;
 
   PubGet(this.dartSdk, this.project);
 
   /// Runs the pub get command against
   /// the project working dir.
-  Future<PubGetResult> run() async {
+  PubGetResult run() {
+    PubGetResult result = PubGetResult();
     try {
-      String result = DartSdk().runPubGet(project.projectCacheDir);
+      DartSdk().runPubGet(project.path).forEach(
+          (line) => result.processLine(line),
+          stderr: (line) => print(line));
 
-      return PubGetResult(result);
-    } on DartRunException catch (e) {
-      throw PubGetException(e.exitCode, e.stdout, e.stderr);
+      return result;
+    } on RunException catch (e) {
+      throw PubGetException(e.exitCode);
     }
   }
 }
 
-class DepInfo {
-  final String name;
-
-  final String version;
-
-  const DepInfo(this.name, this.version);
-}
-
 class PubGetResult {
-  final String outlog;
+  List<Dependency> _added = List();
+  List<Dependency> _removed = List();
 
-  PubGetResult(this.outlog);
+  PubGetResult();
 
-  List<DepInfo> get added => LineSplitter()
-      .convert(outlog)
-      .where((String line) => line.startsWith('+ '))
-      .map((String line) => line.split(' '))
-      .where((List<String> parts) => parts.length == 3)
-      .map((List<String> parts) => DepInfo(parts[1], parts[2]))
-      .toList();
+  void processLine(String line) {
+    print(line);
+    if (line.startsWith('+ ')) {
+      Dependency dep = Dependency.fromLine(line);
+      if (dep != null) {
+        _added.add(dep);
+      }
+    }
 
-  List<DepInfo> get removed => LineSplitter()
-      .convert(outlog)
-      .where((String line) => line.startsWith('- '))
-      .map((String line) => line.split(' '))
-      .where((List<String> parts) => parts.length == 3)
-      .map((List<String> parts) => DepInfo(parts[1], parts[2]))
-      .toList();
+    if (line.startsWith('- ')) {
+      Dependency dep = Dependency.fromLine(line);
+      if (dep != null) {
+        _removed.add(dep);
+      }
+    }
+  }
+
+  List<Dependency> get added => _added;
+
+  List<Dependency> get removed => _removed;
 }
 
 class PubGetException {
   final int exitCode;
 
-  final String stdout;
-
-  final String stderr;
-
-  PubGetException(this.exitCode, this.stdout, this.stderr);
+  PubGetException(this.exitCode);
 }

@@ -1,10 +1,11 @@
-import 'dart:async';
-import 'dart:cli';
 import 'dart:convert';
 import 'dart:io';
 
+import 'package:collection/collection.dart';
+import 'package:dshell/util/waitForEx.dart';
+import 'package:dshell/util/file_helper.dart';
 import 'package:path/path.dart' as p;
-import 'log.dart';
+import 'std_log.dart';
 import 'script.dart';
 
 enum _State {
@@ -25,14 +26,59 @@ class PubSpec {
 
   PubSpec(this.script);
 
-  /// Extract the pubspec annotation from a script file
-  /// and saves it to [path] as a try pubspec.yaml file.
+  /// If necessary, extract the pubspec annotation from a script file
+  /// and saves it to [path] as a pubspec.yaml file.
   ///
-  Future<void> saveToFile(String path) async {
-    List<String> _sourceLines = _parse(script);
-    final String filePath = p.join(path, "pubspec.yaml");
-    final file = File(filePath);
-    await file.writeAsString(_sourceLines.join('\n'));
+  /// Returns true if if the pubspec.yaml has changed
+  /// indicating that a 'pub get' needs to be run.
+  ///
+  bool saveToFile(String path) {
+    final String pubSpecPath = p.join(path, "pubspec.yaml");
+
+    final file = File(pubSpecPath);
+
+    bool pubExists = exists(pubSpecPath);
+    DateTime scriptModified = lastModified(script.path);
+    // If the script hasn't changed since we last
+    // updated the pubspec then we don't need to run pub get.
+    if (pubExists) {
+      DateTime pubSpecModified = lastModified(pubSpecPath);
+      if (scriptModified == pubSpecModified) {
+        return false;
+      }
+    }
+
+    // read the pubspec from the script
+    List<String> _scriptPubSpecLines = _parse(script);
+
+    if (pubExists) {
+      // The lastModified dates don't match so we need
+      // to check the actual contents.
+      // If the lines in the pubspec are identical we also
+      // don't need to run pub get
+      List<String> pubSpecLines = _read(file);
+
+      if (ListEquality<String>().equals(pubSpecLines, _scriptPubSpecLines)) {
+        return false;
+      }
+    }
+
+    waitForEx<void>(file.writeAsString(_scriptPubSpecLines.join('\n')));
+    // set the last modified on the pubspec to match the script
+    // so we can detect future changes.
+    setLastModifed(pubSpecPath, scriptModified);
+
+    // pub get required.
+    return true;
+  }
+
+  /// reads the contents of the pubsec and
+  /// returns a list of lines.
+  List<String> _read(File filePubSpec) {
+    String source = waitForEx<String>(filePubSpec.readAsString());
+
+    List<String> lines = source.split("\n");
+    return lines;
   }
 
   ///
@@ -43,10 +89,10 @@ class PubSpec {
   /// The returned lines are suitable for writting to a
   /// file based pubspec.
   List<String> _parse(Script script) {
-    final file = File(script.scriptPath);
+    final file = File(script.path);
 
     if (!file.existsSync()) {
-      throw Exception('Script file ${script.scriptPath} not found!');
+      throw Exception('Script file ${script.path} not found!');
     }
 
     List<String> sourceLines = List();
@@ -56,7 +102,7 @@ class PubSpec {
 
     _State state = _State.notFound;
 
-    List<String> lines = waitFor(stream.toList());
+    List<String> lines = waitForEx(stream.toList());
 
     for (String line in lines) {
       switch (state) {
@@ -95,14 +141,15 @@ class PubSpec {
 
     // Create a default pubspec as the script didn't include one.
     if (sourceLines.isEmpty) {
-      Log.error(
+      StdLog.stderr(
           'dscript: Embedded pubspec not found in script. Providing default pubspec',
           LogLevel.verbose);
       sourceLines = [
         'name: ${p.basename(p.withoutExtension(script.scriptname))}'
       ];
     } else {
-      Log.error('dscript: Embedded pubspec found in script', LogLevel.verbose);
+      StdLog.stderr(
+          'dscript: Embedded pubspec found in script', LogLevel.verbose);
     }
     return sourceLines;
   }

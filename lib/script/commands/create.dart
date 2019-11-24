@@ -1,6 +1,6 @@
 import 'package:dshell/script/project_cache.dart';
 
-import '../args.dart';
+import '../command_line_runner.dart';
 import '../flags.dart';
 import '../script.dart';
 import 'commands.dart';
@@ -24,9 +24,8 @@ class CreateCommand extends Command {
   }
 
   Script validateArguments(List<Flag> selectedFlags, List<String> arguments) {
-    if (arguments.length != 1) {
-      throw InvalidArguments(
-          "The create command takes only have one argument.");
+    if (arguments.length != 2) {
+      throw InvalidArguments("The create command takes only one argument.");
     }
 
     return Script.fromArg(selectedFlags, arguments[0]);

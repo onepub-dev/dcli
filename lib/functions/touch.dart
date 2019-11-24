@@ -2,7 +2,7 @@ import 'package:file_utils/file_utils.dart';
 
 import 'package:path/path.dart' as p;
 
-import 'command.dart';
+import 'dshell_function.dart';
 import 'is.dart';
 import 'settings.dart';
 import '../util/log.dart';
@@ -25,7 +25,7 @@ import '../util/log.dart';
 void touch(String path, {bool create = false}) =>
     Touch().touch(path, create: create);
 
-class Touch extends Command {
+class Touch extends DShellFunction {
   void touch(String path, {bool create = false}) {
     if (Settings().debug_on) {
       Log.d("touch: ${p.absolute(path)} create: $create");
@@ -44,6 +44,6 @@ class Touch extends Command {
   }
 }
 
-class TouchException extends CommandException {
+class TouchException extends DShellFunctionException {
   TouchException(String reason) : super(reason);
 }

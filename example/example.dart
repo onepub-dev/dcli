@@ -9,7 +9,7 @@ dependencies:
 
 import 'dart:io';
 
-import 'package:dshell/commands/read.dart';
+import 'package:dshell/functions/read.dart';
 import 'package:dshell/dshell.dart';
 import 'package:money2/money2.dart';
 

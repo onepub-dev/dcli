@@ -1,7 +1,7 @@
 import 'package:dshell/util/for_each.dart';
 import 'package:dshell/util/runnable_process.dart';
 
-import 'command.dart';
+import 'dshell_function.dart';
 
 ///
 /// Runs the given cli command calling [lineAction]
@@ -21,7 +21,7 @@ import 'command.dart';
 ///
 ForEach run(String command) => Run().run(command);
 
-class Run extends Command {
+class Run extends DShellFunction {
   RunnableProcess runnable;
 
   ForEach run(String command) {
@@ -32,10 +32,7 @@ class Run extends Command {
         (line) => forEach.addToStderr(line));
 
     forEach.close();
+
     return forEach;
   }
-}
-
-class RunException extends CommandException {
-  RunException(String reason) : super(reason);
 }

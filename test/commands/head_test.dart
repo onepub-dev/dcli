@@ -16,8 +16,8 @@ void main() {
       if (exists(testFile)) {
         delete(testFile);
       }
-      touch(testFile, create: true);
-      FileSync file = FileSync(testFile, fileMode: FileMode.writeOnlyAppend);
+      createDir(TEST_ROOT, createParent: true);
+      FileSync file = FileSync(testFile, fileMode: FileMode.write);
       for (int i = 0; i < 10; i++) {
         file.append("Line ${i} is here");
       }

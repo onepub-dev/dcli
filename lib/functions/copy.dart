@@ -1,6 +1,6 @@
 import 'dart:io';
 
-import 'package:dshell/commands/command.dart';
+import 'package:dshell/functions/function.dart';
 
 import '../util/log.dart';
 
@@ -22,7 +22,7 @@ import 'settings.dart';
 void copy(String from, String to, {bool overwrite = false}) =>
     Copy().copy(from, to);
 
-class Copy extends Command {
+class Copy extends DShellFunction {
   void copy(String from, String to, {bool overwrite = false}) {
     if (overwrite == false && exists(to)) {
       throw CopyException("The target file ${absolute(to)} already exists");
@@ -45,6 +45,6 @@ class Copy extends Command {
   }
 }
 
-class CopyException extends CommandException {
+class CopyException extends FunctionException {
   CopyException(String reason) : super(reason);
 }

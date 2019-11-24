@@ -1,6 +1,6 @@
 import 'dart:io';
 
-import 'package:dshell/commands/command.dart';
+import 'package:dshell/functions/function.dart';
 import 'package:dshell/util/waitForEx.dart';
 
 /// Writes [text] to stdout including a newline.
@@ -14,7 +14,7 @@ import 'package:dshell/util/waitForEx.dart';
 /// [newline] defaults to false.
 void echo(String text, {bool newline = false}) => Echo().echo(text, newline);
 
-class Echo extends Command {
+class Echo extends DShellFunction {
   void echo(String text, bool newline) {
     if (newline) {
       stdout.writeln(text);

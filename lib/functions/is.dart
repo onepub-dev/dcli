@@ -1,6 +1,6 @@
 import 'dart:io';
 
-import 'package:dshell/commands/command.dart';
+import 'package:dshell/functions/function.dart';
 
 ///
 /// Returns true if the given path points to a file.
@@ -24,7 +24,7 @@ bool isDirectory(String path) => Is().isDirectory(path);
 /// ```
 bool exists(String path) => Is().exists(path);
 
-class Is extends Command {
+class Is extends DShellFunction {
   bool isFile(String path) {
     FileSystemEntityType fromType = FileSystemEntity.typeSync(path);
     return (fromType == FileSystemEntityType.file);

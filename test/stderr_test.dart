@@ -2,10 +2,10 @@ import 'package:dshell/dshell.dart';
 import 'package:dshell/util/dshell_exception.dart';
 import 'package:test/test.dart' as t;
 
-void main() async {
+void main() {
   Settings().debug_on = true;
 
-  t.test("Stderr", () async {
+  t.test("Stderr", () {
     print("$pwd");
 
     ;
