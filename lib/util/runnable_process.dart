@@ -14,16 +14,28 @@ typedef bool CancelableLineAction(String line);
 class RunnableProcess {
   Future<Process> fProcess;
   // The command line used to start the process.
-  final String cmdLine;
+  final List<String> cmdAndArgs;
+
+  final String workingDirectory;
 
   ParsedCliCommand parsed;
 
-  RunnableProcess(this.cmdLine) {
-    parsed = ParsedCliCommand(cmdLine);
-  }
+  RunnableProcess(String cmdLine, {this.workingDirectory})
+      : cmdAndArgs = ParsedCliCommand(cmdLine).args;
+
+  RunnableProcess.fromList(String command, List<String> args,
+      {this.workingDirectory})
+      : cmdAndArgs = [command, ...args];
+
+  String get cmdLine => cmdAndArgs.join(" ");
 
   void start() {
-    fProcess = Process.start(parsed.cmd, parsed.args, runInShell: false);
+    String workdir = workingDirectory;
+    if (workdir == null) {
+      workdir = Directory.current.path;
+    }
+    fProcess = Process.start(parsed.cmd, parsed.args,
+        runInShell: false, workingDirectory: workdir);
   }
 
   void pipeTo(RunnableProcess stdin) {

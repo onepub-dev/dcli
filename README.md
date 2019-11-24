@@ -378,8 +378,10 @@ Run you script the same way as usual:
 
 # References
 
-Projects I referenced when making this package:
+Projects I referenced (stole stuff from) when making this package:
 
 https://pub.dev/packages/dscript_exec
 
 https://pub.dev/packages/dartx
+
+https://pub.dev/packages/completion

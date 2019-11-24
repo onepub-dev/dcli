@@ -18,6 +18,8 @@ dependencies:
   logger: ^0.7.0+2
   recase: ^2.0.1
   money2: ^1.0.5
+  dscript:  #2.0.2
+    path: ../dscript
 
 dev_dependencies:
   test: ^1.6.0
