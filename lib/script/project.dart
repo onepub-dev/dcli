@@ -4,7 +4,6 @@ import 'package:path/path.dart' as p;
 
 import 'dart_sdk.dart';
 import 'hashes_yaml.dart';
-import 'std_log.dart';
 import 'pubspec.dart';
 import 'script.dart';
 import 'package:dshell/util/file_helper.dart';
@@ -74,7 +73,7 @@ class VirtualProject {
   /// hashes.yaml file.
   void createProject() {
     if (!createDir(_projectRootPath, "project cache")) {
-      StdLog.stdout('Created project cache path at ${_projectRootPath}');
+      print('Created project, cache path at ${_projectRootPath}');
     }
 
     HashesYaml.create(_projectRootPath);
@@ -83,6 +82,8 @@ class VirtualProject {
     _createLib();
     bool pubgetRequired = _createPubSpec(script);
     if (pubgetRequired) {
+      print("Running pub get...");
+      print("");
       pubget();
     }
   }

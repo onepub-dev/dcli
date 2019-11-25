@@ -1,12 +1,6 @@
-import 'dart:io';
-
-import 'package:dshell/util/log.dart';
-import 'package:file/file.dart';
-import 'package:file/local.dart';
 import 'package:file/memory.dart';
 import 'package:test/test.dart' as t;
 import "package:dshell/dshell.dart";
-import 'package:path/path.dart' as p;
 
 import '../test_settings.dart';
 import '../util/directory_override.dart';

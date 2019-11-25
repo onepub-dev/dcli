@@ -18,18 +18,22 @@ class CreateCommand extends Command {
     String body = _script.generateDefaultBody("dshell");
     _script.createDefaultFile("dshell", body);
 
+    print("Creating project.");
     ProjectCache().createProject(_script);
+
+    print("Project creation complete.");
+    print("To run your script:\n   dshell ${_script.scriptname}");
 
     return 0;
   }
 
   Script validateArguments(List<Flag> selectedFlags, List<String> arguments) {
-    if (arguments.length != 2) {
+    if (arguments.length != 1) {
       throw InvalidArguments(
           "The create command takes only one argument. Found: ${arguments.join(",")}");
     }
 
-    return Script.fromArg(selectedFlags, arguments[1]);
+    return Script.fromArg(selectedFlags, arguments[0]);
   }
 
   @override

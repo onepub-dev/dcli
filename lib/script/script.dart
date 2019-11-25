@@ -87,7 +87,7 @@ import 'package:money2/money2.dart';
 
 
 void main() {
-  print("${PithyGreetings.random()});
+  print("${PithyGreetings.random()}");
     }
 """;
   }

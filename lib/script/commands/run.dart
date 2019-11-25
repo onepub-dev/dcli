@@ -1,4 +1,3 @@
-import '../command_line_runner.dart';
 import '../dart_sdk.dart';
 import '../flags.dart';
 import '../project.dart';
@@ -18,11 +17,6 @@ class RunCommand extends Command {
   /// Returns the [exitcode];
   @override
   int run(List<Flag> selectedFlags, List<String> arguments) {
-    var arguments2 = arguments;
-    if (arguments2.isEmpty) {
-      throw InvalidArguments("The run command requires a script name to run");
-    }
-
     Script.validate(arguments);
 
     Script script = Script.fromArg(selectedFlags, arguments[0]);

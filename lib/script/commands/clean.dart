@@ -16,7 +16,7 @@ class CleanCommand extends Command {
   int run(List<Flag> selectedFlags, List<String> arguments) {
     if (arguments.length != 1) {
       throw InvalidArguments(
-          "The 'clean' command expects only a single script as its sole argument. Found ${arguments.length} arguments.");
+          "The 'clean' command expects only a single script as its sole argument. Found ${arguments.join(",")} arguments.");
     }
 
     Script.validate(arguments);
@@ -26,10 +26,6 @@ class CleanCommand extends Command {
     VirtualProject project = VirtualProject(ProjectCache().path, script);
 
     project.clean();
-
-    // TODO if the pubspec only references packages we supply (e.g. dscript)
-    // then we don't need to run pubget ever.
-    project.pubget();
 
     return 0;
   }

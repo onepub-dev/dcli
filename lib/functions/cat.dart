@@ -2,7 +2,6 @@ import 'dart:convert';
 import 'dart:io';
 
 import 'package:dshell/util/dshell_exception.dart';
-import 'package:dshell/util/for_each.dart';
 import 'package:dshell/util/runnable_process.dart';
 
 import 'package:dshell/util/stack_trace_impl.dart';

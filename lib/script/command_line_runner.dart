@@ -35,6 +35,7 @@ class CommandLineRunner {
 
     // Find the command and run it.
     Command command;
+    List<String> cmdArguments = List();
 
     int i = 0;
     for (; i < arguments.length; i++) {
@@ -57,24 +58,22 @@ class CommandLineRunner {
       // there may only be one command on the cli.
       command = Commands.findCommand(argument, availableCommands);
       if (command != null) {
+        if (i + 1 < arguments.length) {
+          cmdArguments = arguments.sublist(i + 1);
+        }
         success = true;
         break;
       }
 
       // its not a flag, its not a command, so it must be a script.
       command = RunCommand();
+      cmdArguments = arguments.sublist(i);
       success = true;
       break;
     }
 
     if (success) {
-// get the script name and remaning args as they are the arguments for the command to process.
-      List<String> cmdArguments = List();
-
-      if (i + 1 < arguments.length) {
-        cmdArguments = arguments.sublist(i);
-      }
-
+      // get the script name and remaning args as they are the arguments for the command to process.
       exitCode = command.run(selectedFlags.values.toList(), cmdArguments);
     } else {
       usage();
