@@ -63,7 +63,7 @@ class PubSpec {
       }
     }
 
-    waitForEx<void>(file.writeAsString(_scriptPubSpecLines.join('\n')));
+    waitForEx<void>(file.writeAsString(_scriptPubSpecLines.join('\n') + "\n"));
     // set the last modified on the pubspec to match the script
     // so we can detect future changes.
     setLastModifed(pubSpecPath, scriptModified);
