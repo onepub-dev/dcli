@@ -25,10 +25,11 @@ class CreateCommand extends Command {
 
   Script validateArguments(List<Flag> selectedFlags, List<String> arguments) {
     if (arguments.length != 2) {
-      throw InvalidArguments("The create command takes only one argument.");
+      throw InvalidArguments(
+          "The create command takes only one argument. Found: ${arguments.join(",")}");
     }
 
-    return Script.fromArg(selectedFlags, arguments[0]);
+    return Script.fromArg(selectedFlags, arguments[1]);
   }
 
   @override
