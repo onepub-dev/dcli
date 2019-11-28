@@ -41,7 +41,7 @@ void main() {
     t.test("Search recursive for *.jpg ", () {
       List<String> found = find("*.jpg", root: top).toList();
 
-      find("*.jpg", root: top).forEach((line) => print(line))
+      find("*.jpg", root: top).forEach((line) => print(line));
 
       find('*.jpg', forEach: ForEach((line) => print(line)));
       find('*.jpg', progressive: ForEach((line) => print(line)));

@@ -68,13 +68,11 @@ void checkProjectStructure() {
   // pubspec.lock
   // pubspec.yaml
   // .packages
-  List<String> files = List();
-  find('*.*', (line) => files.add(p.basename(line)),
-      recursive: false,
-      root: projectPath,
-      types: [
-        FileSystemEntityType.file,
-      ]);
+
+  List<String> files;
+  find('*.*', recursive: false, root: projectPath, types: [
+    FileSystemEntityType.file,
+  ]).forEach((line) => files.add(p.basename(line)));
   expect(
       files,
       unorderedEquals((<String>[
@@ -86,9 +84,10 @@ void checkProjectStructure() {
 
   List<String> directories = List();
 
-  find('*.*', (line) => directories.add(p.basename(line)),
-      recursive: false,
-      root: projectPath,
-      types: [FileSystemEntityType.directory]);
+  find('*.*',
+          recursive: false,
+          root: projectPath,
+          types: [FileSystemEntityType.directory])
+      .forEach((line) => directories.add(p.basename(line)));
   expect(directories, unorderedEquals(<String>["lib", ".dart_tool"]));
 }

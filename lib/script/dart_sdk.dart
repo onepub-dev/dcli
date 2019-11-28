@@ -69,6 +69,7 @@ class DartSdk {
     } finally {
       forEach.close();
     }
+    return forEach;
   }
 
   static String _detect() {

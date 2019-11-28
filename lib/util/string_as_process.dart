@@ -1,5 +1,4 @@
 import 'package:dshell/functions/run.dart' as cmd;
-import 'package:dshell/util/for_each.dart';
 import 'package:dshell/util/runnable_process.dart';
 
 import 'file_sync.dart';

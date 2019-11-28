@@ -1,4 +1,3 @@
-import 'for_each.dart';
 import 'runnable_process.dart';
 
 class Pipe {
@@ -15,7 +14,7 @@ class Pipe {
     return Pipe(rhs, pNext);
   }
 
-  void forEach(LineAction lineAction) {
-    rhs.processUntilExit(lineAction);
+  void forEach(LineAction stdout, {LineAction stderr}) {
+    rhs.processUntilExit(stdout, stderr);
   }
 }
