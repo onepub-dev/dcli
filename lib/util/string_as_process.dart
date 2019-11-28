@@ -2,7 +2,7 @@ import 'package:dshell/functions/run.dart' as cmd;
 import 'package:dshell/util/runnable_process.dart';
 
 import 'file_sync.dart';
-import 'for_each.dart';
+import 'progress.dart';
 import 'pipe.dart';
 
 ///

@@ -10,13 +10,13 @@ void main() {
     String testDirectory = join(TEST_ROOT, "tmp_test");
     String testPath = join(TEST_ROOT, "tmp_test/longer/and/longer");
 
-    t.test("Makedir", () {
+    t.test("createDir", () {
       createDir(testDirectory, recursive: true);
 
       t.expect(exists(testDirectory), t.equals(true));
     });
 
-    t.test("Makedir with createParent", () {
+    t.test("createDir with recursive", () {
       createDir(testPath, recursive: true);
 
       t.expect(exists(testPath), t.equals(true));
