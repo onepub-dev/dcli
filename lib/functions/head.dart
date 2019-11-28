@@ -1,6 +1,6 @@
 import 'package:dshell/functions/function.dart';
 import 'package:dshell/util/file_sync.dart';
-import 'package:dshell/util/for_each.dart';
+import 'package:dshell/util/progress.dart';
 
 import '../util/log.dart';
 
@@ -19,7 +19,7 @@ import 'settings.dart';
 Progress head(String path, int lines) => Head().head(path, lines);
 
 class Head extends DShellFunction {
-  Progress head(String path, int lines, { Progress progress} ) {
+  Progress head(String path, int lines, {Progress progress}) {
     if (Settings().debug_on) {
       Log.d("head ${absolute(path)} lines: ${lines}");
     }

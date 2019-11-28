@@ -1,7 +1,7 @@
 import 'dart:cli';
 import "dart:io";
 import 'package:dshell/script/script.dart';
-import 'package:dshell/util/for_each.dart';
+import 'package:dshell/util/progress.dart';
 import 'package:dshell/util/runnable_process.dart';
 import 'package:path/path.dart' as p;
 

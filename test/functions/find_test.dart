@@ -1,4 +1,4 @@
-import 'package:dshell/util/for_each.dart';
+import 'package:dshell/util/progress.dart';
 import 'package:test/test.dart' as t;
 import "package:dshell/dshell.dart";
 

@@ -1,7 +1,7 @@
 import 'dart:io';
 
 import 'package:dshell/functions/function.dart';
-import 'package:dshell/util/for_each.dart';
+import 'package:dshell/util/progress.dart';
 
 import '../dshell.dart';
 import 'settings.dart';
