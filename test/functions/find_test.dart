@@ -15,7 +15,7 @@ void main() {
     String bottom = join(middle, "bottom");
 
     // Create some the test dirs.
-    createDir(bottom, createParent: true);
+    createDir(bottom, recursive: true);
 
     // Create test files
 

@@ -55,7 +55,7 @@ void main() {
           // lfs.path;
           // FileSystem();
           // Directory().createTempSync()
-          createDir("cd_test", createParent: true);
+          createDir("cd_test", recursive: true);
           cd("cd_test");
           t.expect(pwd, t.equals(absolute(join(testdir, "cd_test"))));
           cd("..");
@@ -69,7 +69,7 @@ void main() {
       t.test("Push/Pop", () {
         TestZone().run(() {
           String start = pwd;
-          createDir(pathTestDir, createParent: true);
+          createDir(pathTestDir, recursive: true);
 
           String expectedPath = absolute(pathTestDir);
           push(pathTestDir);

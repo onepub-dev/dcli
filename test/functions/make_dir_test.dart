@@ -11,13 +11,13 @@ void main() {
     String testPath = join(TEST_ROOT, "tmp_test/longer/and/longer");
 
     t.test("Makedir", () {
-      createDir(testDirectory, createParent: true);
+      createDir(testDirectory, recursive: true);
 
       t.expect(exists(testDirectory), t.equals(true));
     });
 
     t.test("Makedir with createParent", () {
-      createDir(testPath, createParent: true);
+      createDir(testPath, recursive: true);
 
       t.expect(exists(testPath), t.equals(true));
     });
@@ -40,8 +40,8 @@ void main() {
     });
 
     t.test("createDir createPath failure", () {
-      t.expect(() => createDir(testPath, createParent: false),
-          t.throwsA(t.TypeMatcher<MakeDirException>()));
+      t.expect(() => createDir(testPath, recursive: false),
+          t.throwsA(t.TypeMatcher<CreateDirException>()));
     });
   });
 }

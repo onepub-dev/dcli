@@ -14,15 +14,15 @@ void main() {
 
       print("PWD: ${pwd}");
 
-      createDir("shell/main", createParent: true);
+      createDir("shell/main", recursive: true);
       push("shell");
       cd("main");
 
-      createDir("fred/tom", createParent: true);
+      createDir("fred/tom", recursive: true);
       deleteDir("fred/tom");
 
       touch("good.jpg", create: true);
-      createDir("subdir", createParent: true);
+      createDir("subdir", recursive: true);
       touch("subdir/goody.jpg", create: true);
 
       echo("Find file matching *.jpg");

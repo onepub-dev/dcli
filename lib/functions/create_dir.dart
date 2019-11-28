@@ -10,33 +10,33 @@ import 'settings.dart';
 /// or a full or partial tree (e.g. /usr/bin)
 ///
 /// ```dart
-/// createDir("/tmp/fred/tools", createParent=true);
+/// createDir("/tmp/fred/tools", recursive=true);
 /// ```
 ///
-/// If [createParent] is true then any parent
+/// If [recursive] is true then any parent
 /// paths that don't exist will be created.
 ///
-/// If [createParent] is false then any parent paths
-/// don't exist then a [MakeDireExcepption] will be thrown
+/// If [recursive] is false then any parent paths
+/// don't exist then a [CreateDirExcepption] will be thrown
 ///
-void createDir(String path, {bool createParent = false}) =>
-    CreateDir().createDir(path, createParent: createParent);
+void createDir(String path, {bool recursive = false}) =>
+    CreateDir().createDir(path, recursive: recursive);
 
 class CreateDir extends DShellFunction {
-  void createDir(String path, {bool createParent}) {
+  void createDir(String path, {bool recursive}) {
     if (Settings().debug_on) {
-      Log.d("createDir:  ${absolute(path)} createPath: $createParent");
+      Log.d("createDir:  ${absolute(path)} recursive: $recursive");
     }
 
     try {
-      Directory(path).createSync(recursive: createParent);
+      Directory(path).createSync(recursive: recursive);
     } catch (e) {
-      throw MakeDirException(
+      throw CreateDirException(
           "Unable to create the directory ${absolute(path)}. Error: ${e}");
     }
   }
 }
 
-class MakeDirException extends FunctionException {
-  MakeDirException(String reason) : super(reason);
+class CreateDirException extends FunctionException {
+  CreateDirException(String reason) : super(reason);
 }

@@ -10,7 +10,7 @@ export 'util/file_sync.dart';
 export 'functions/find.dart' show find;
 export 'functions/head.dart' show head;
 export 'functions/is.dart' show isFile, isDirectory, exists;
-export 'functions/create_dir.dart' show createDir, MakeDirException;
+export 'functions/create_dir.dart' show createDir, CreateDirException;
 export 'functions/move.dart' show move, MoveException;
 export 'package:path/path.dart';
 export 'functions/pop.dart' show pop, PopException;

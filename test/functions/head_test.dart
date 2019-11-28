@@ -16,7 +16,7 @@ void main() {
       if (exists(testFile)) {
         delete(testFile);
       }
-      createDir(TEST_ROOT, createParent: true);
+      createDir(TEST_ROOT, recursive: true);
       FileSync file = FileSync(testFile, fileMode: FileMode.write);
       for (int i = 0; i < 10; i++) {
         file.append("Line ${i} is here");

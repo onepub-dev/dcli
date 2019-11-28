@@ -36,11 +36,11 @@ void main() {
 
     // Create a directory to hold poems for review
     // creating  any needed parents.
-    createDir(poetryForReviews, createParent: true);
+    createDir(poetryForReviews, recursive: true);
 
     // Creating a directory to hold our published work.
     String poetryPublished = join(baseDir, "published");
-    createDir(poetryPublished, createParent: true);
+    createDir(poetryPublished, recursive: true);
 
     // Create a self edifying poem.
     String poem = 'poem.txt';

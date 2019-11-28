@@ -49,7 +49,7 @@ class CreateCommand extends Command {
     String templatePath = p.join(ProjectCache().path, "templates");
 
     if (!exists(templatePath)) {
-      createDir(templatePath, createParent: true);
+      createDir(templatePath, recursive: true);
     }
   }
 
