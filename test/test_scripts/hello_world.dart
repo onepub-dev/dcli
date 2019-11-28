@@ -14,5 +14,5 @@ import 'package:money2/money2.dart';
 
 
 void main() {
-  print("Helwo vorld");
+  print("Hurry up, says Mr Blackboard");
     }
