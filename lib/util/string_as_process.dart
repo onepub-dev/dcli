@@ -2,6 +2,7 @@ import 'package:dshell/functions/run.dart' as cmd;
 import 'package:dshell/util/runnable_process.dart';
 
 import 'file_sync.dart';
+import 'for_each.dart';
 import 'pipe.dart';
 
 ///
@@ -41,7 +42,7 @@ extension StringAsProcess on String {
   ///     [list] to capture stdout as a String list.
   ///
   void forEach(LineAction stdout, {LineAction stderr}) =>
-      cmd.run(this).forEach(stdout, stderr: stderr);
+      cmd.run(this, progress: Progress(stdout, stderr: stderr));
 
   /// [toList] runs [this] as a cli process and
   /// returns any output written to stdout as
