@@ -1,33 +1,34 @@
 /// Returns a string wrapped with the selected ansi
 /// fg color codes.
-String red(String content, {int bgcolor = AnsiColor.none}) =>
-    AnsiColor._color(AnsiColor.Red, content, bgcolor: bgcolor);
+String red(String text, {AnsiColor bgcolor = AnsiColor.none}) =>
+    AnsiColor._apply(AnsiColor.Red, text, bgcolor: bgcolor);
 
-String black(String content, {int bgcolor = AnsiColor.White}) =>
-    AnsiColor._color(AnsiColor.Black, content, bgcolor: bgcolor);
+String black(String text, {AnsiColor bgcolor = AnsiColor.White}) =>
+    AnsiColor._apply(AnsiColor.Black, text, bgcolor: bgcolor);
 
-String green(String content, {int bgcolor = AnsiColor.none}) =>
-    AnsiColor._color(AnsiColor.Green, content, bgcolor: bgcolor);
+String green(String text, {AnsiColor bgcolor = AnsiColor.none}) =>
+    AnsiColor._apply(AnsiColor.Green, text, bgcolor: bgcolor);
 
-String blue(String content, {int bgcolor = AnsiColor.none}) =>
-    AnsiColor._color(AnsiColor.Blue, content, bgcolor: bgcolor);
+String blue(String text, {AnsiColor bgcolor = AnsiColor.none}) =>
+    AnsiColor._apply(AnsiColor.Blue, text, bgcolor: bgcolor);
 
-String yellow(String content, {int bgcolor = AnsiColor.none}) =>
-    AnsiColor._color(AnsiColor.Yellow, content, bgcolor: bgcolor);
+String yellow(String text, {AnsiColor bgcolor = AnsiColor.none}) =>
+    AnsiColor._apply(AnsiColor.Yellow, text, bgcolor: bgcolor);
 
-String magenta(String content, {int bgcolor = AnsiColor.none}) =>
-    AnsiColor._color(AnsiColor.Magenta, content, bgcolor: bgcolor);
-String cyan(String content, {int bgcolor = AnsiColor.none}) =>
-    AnsiColor._color(AnsiColor.Cyan, content, bgcolor: bgcolor);
+String magenta(String text, {AnsiColor bgcolor = AnsiColor.none}) =>
+    AnsiColor._apply(AnsiColor.Magenta, text, bgcolor: bgcolor);
 
-String white(String content, {int bgcolor = AnsiColor.none}) =>
-    AnsiColor._color(AnsiColor.White, content, bgcolor: bgcolor);
+String cyan(String text, {AnsiColor bgcolor = AnsiColor.none}) =>
+    AnsiColor._apply(AnsiColor.Cyan, text, bgcolor: bgcolor);
 
-String orange(String content, {int bgcolor = AnsiColor.none}) =>
-    AnsiColor._color(AnsiColor.Orange, content, bgcolor: bgcolor);
-String grey(String content,
-        {double level = 0.5, int bgcolor = AnsiColor.none}) =>
-    AnsiColor._color(AnsiColor.Grey(level: level), content, bgcolor: bgcolor);
+String white(String text, {AnsiColor bgcolor = AnsiColor.none}) =>
+    AnsiColor._apply(AnsiColor.White, text, bgcolor: bgcolor);
+
+String orange(String text, {AnsiColor bgcolor = AnsiColor.none}) =>
+    AnsiColor._apply(AnsiColor.Orange, text, bgcolor: bgcolor);
+String grey(String text,
+        {double level = 0.5, AnsiColor bgcolor = AnsiColor.none}) =>
+    AnsiColor._apply(AnsiColor.Grey(level: level), text, bgcolor: bgcolor);
 
 class AnsiColor {
   static String reset() => _emmit(Reset);
@@ -35,10 +36,19 @@ class AnsiColor {
   static String fgReset() => _emmit(FgReset);
   static String bgReset() => _emmit(BgReset);
 
-  static String _color(int color, String content, {int bgcolor = none}) {
+  final int _code;
+  const AnsiColor(int code) : this._code = code;
+
+  int get code => _code;
+
+  String apply(String text, {AnsiColor bgcolor = none}) =>
+      _apply(this, text, bgcolor: bgcolor);
+
+  static String _apply(AnsiColor color, String text,
+      {AnsiColor bgcolor = none}) {
     String output;
 
-    output = "${_fg(color)}${_bg(bgcolor)}${content}${_reset}";
+    output = "${_fg(color.code)}${_bg(bgcolor?.code)}${text}${_reset}";
     return output;
   }
 
@@ -46,29 +56,29 @@ class AnsiColor {
     return "${esc}${Reset}m";
   }
 
-  static String _fg(int color) {
+  static String _fg(int code) {
     String output;
 
-    if (color == none) {
+    if (code == none.code) {
       output = "";
-    } else if (color > 39) {
-      output = "${esc}${FgColor}${color}m";
+    } else if (code > 39) {
+      output = "${esc}${FgColor}${code}m";
     } else {
-      output = "${esc}${color}m";
+      output = "${esc}${code}m";
     }
     return output;
   }
 
   // background colors are fg color + 10
-  static String _bg(int color) {
+  static String _bg(int code) {
     String output;
 
-    if (color == none) {
+    if (code == none.code) {
       output = "";
-    } else if (color > 49) {
-      output = "${esc}${BgColor}${color + 10}m";
+    } else if (code > 49) {
+      output = "${esc}${BgColor}${code + 10}m";
     } else {
-      output = "${esc}${color + 10}m";
+      output = "${esc}${code + 10}m";
     }
     return output;
   }
@@ -88,30 +98,30 @@ class AnsiColor {
   /// Defaults the terminal's fg color without altering the bg.
   static const String FgReset = "39";
 
+  /// Defaults the terminal's bg color without altering the fg.
+  static const String BgReset = "49";
+
   // emmit this code followed by a color code to set the fg color
   static const String FgColor = "38;5;";
 
 // emmit this code followed by a color code to set the fg color
   static const String BgColor = "48;5;";
 
-  /// Defaults the terminal's bg color without altering the fg.
-  static const String BgReset = "49";
-
   /// Colors
-  static const int Black = 30;
-  static const int Red = 31;
-  static const int Green = 32;
-  static const int Yellow = 33;
-  static const int Blue = 34;
-  static const int Magenta = 35;
-  static const int Cyan = 36;
-  static const int White = 37;
-  static const int Orange = 208;
-  static int Grey({double level = 0.5}) =>
-      232 + (level.clamp(0.0, 1.0) * 23).round();
+  static const AnsiColor Black = AnsiColor(30);
+  static const AnsiColor Red = AnsiColor(31);
+  static const AnsiColor Green = AnsiColor(32);
+  static const AnsiColor Yellow = AnsiColor(33);
+  static const AnsiColor Blue = AnsiColor(34);
+  static const AnsiColor Magenta = AnsiColor(35);
+  static const AnsiColor Cyan = AnsiColor(36);
+  static const AnsiColor White = AnsiColor(37);
+  static const AnsiColor Orange = AnsiColor(208);
+  static AnsiColor Grey({double level = 0.5}) =>
+      AnsiColor(232 + (level.clamp(0.0, 1.0) * 23).round());
 
 // passing this as the background color will cause
 // the background code to be suppressed resulting
 // in the default background color.
-  static const int none = -1;
+  static const AnsiColor none = AnsiColor(-1);
 }
