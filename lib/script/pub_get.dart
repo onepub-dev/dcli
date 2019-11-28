@@ -1,3 +1,4 @@
+import 'package:dshell/util/for_each.dart';
 
 import 'dart_sdk.dart';
 import 'dependency.dart';
@@ -23,9 +24,9 @@ class PubGet {
   PubGetResult run() {
     PubGetResult result = PubGetResult();
     try {
-      DartSdk().runPubGet(project.path).forEach(
-          (line) => result.processLine(line),
-          stderr: (line) => print(line));
+      DartSdk().runPubGet(project.path,
+          progress: Progress((line) => result.processLine(line),
+              stderr: (line) => print(line)));
 
       return result;
     } on RunException catch (e) {

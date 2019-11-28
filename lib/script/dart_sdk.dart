@@ -38,7 +38,7 @@ class DartSdk {
 
   String get dart2NativePath => p.join(_sdkPath, 'bin', 'dart2native');
 
-  ForEach runDart2Native(
+  Progress runDart2Native(
       Script script, String outputDir, String workingDirectory) {
     List<String> runArgs = List();
     runArgs.add(script.scriptname);
@@ -47,19 +47,20 @@ class DartSdk {
     return run(dart2NativePath, runArgs, workingDirectory);
   }
 
-  ForEach runPubGet(String workingDirectory) {
-    return run(pubGetPath, ['get'], workingDirectory);
+  Progress runPubGet(String workingDirectory, {Progress progress}) {
+    return run(pubGetPath, ['get'], workingDirectory, progress: progress);
   }
 
   /// Runs a dart application returning all the accumulated
   /// stdout as a single string.
   /// Throws a RunException on failure
   /// the project working dir.
-  ForEach run(String processPath, List<String> args, String workingDirectory) {
-    ForEach forEach;
+  Progress run(String processPath, List<String> args, String workingDirectory,
+      {Progress progress}) {
+    Progress forEach;
 
     try {
-      forEach = ForEach();
+      forEach = progress ?? Progress.forEach();
 
       RunnableProcess runnable = RunnableProcess.fromList(processPath, args,
           workingDirectory: workingDirectory);

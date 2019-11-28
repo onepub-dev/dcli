@@ -18,20 +18,24 @@ import 'dshell_function.dart';
 ///
 /// If the command fails or returns a non-zero exitCode
 /// Then a [RunCommand] exception will be thrown.
-ForEach run(String command) => Run().run(command);
+Progress run(String command) => Run().run(command);
 
 class Run extends DShellFunction {
   RunnableProcess runnable;
 
   /// returns the exitCode of the process that or command that was run.
-  ForEach run(String command) {
-    ForEach forEach = ForEach();
-    runnable = RunnableProcess(command);
-    runnable.start();
-    runnable.processUntilExit((line) => forEach.addToStdout(line),
-        (line) => forEach.addToStderr(line));
+  Progress run(String command, { Progress progress}) {
+    Progress forEach;
 
-    forEach.close();
+    try {
+      forEach = progress ?? Progress.forEach();
+      runnable = RunnableProcess(command);
+      runnable.start();
+      runnable.processUntilExit((line) => forEach.addToStdout(line),
+          (line) => forEach.addToStderr(line));
+    } finally {
+      forEach.close();
+    }
 
     return forEach;
   }

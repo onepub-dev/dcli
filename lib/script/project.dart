@@ -107,7 +107,9 @@ class VirtualProject {
   ///
   /// deletes the project cache directory and recreates it.
   void clean() {
-    File(_projectRootPath).deleteSync(recursive: true);
+    if (exists(_projectRootPath)) {
+      File(_projectRootPath).deleteSync(recursive: true);
+    }
 
     createProject();
   }

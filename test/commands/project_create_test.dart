@@ -69,7 +69,7 @@ void checkProjectStructure() {
   // pubspec.yaml
   // .packages
 
-  List<String> files;
+  List<String> files = List();
   find('*.*', recursive: false, root: projectPath, types: [
     FileSystemEntityType.file,
   ]).forEach((line) => files.add(p.basename(line)));

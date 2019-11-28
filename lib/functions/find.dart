@@ -99,10 +99,11 @@ class PatternMatcher {
   }
 }
 
-ForEach find(String pattern,
+Progress find(String pattern,
         {bool caseSensitive = false,
         bool recursive = true,
         String root = ".",
+        Progress progress,
         List<FileSystemEntityType> types = const [
           FileSystemEntityType.file
         ]}) =>
@@ -110,37 +111,44 @@ ForEach find(String pattern,
         caseSensitive: caseSensitive,
         recursive: recursive,
         root: root,
+        progress: progress,
         types: types);
 
 class Find extends DShellFunction {
-  ForEach find(String pattern,
+  Progress find(String pattern,
       {bool caseSensitive = false,
       bool recursive = true,
       String root = ".",
+      Progress progress,
       List<FileSystemEntityType> types = const [FileSystemEntityType.file]}) {
     PatternMatcher matcher = PatternMatcher(pattern, caseSensitive);
 
-    ForEach forEach = ForEach();
+    Progress forEach;
 
-    if (Settings().debug_on) {
-      Log.d(
-          "find: pwd: ${pwd} ${absolute(root)} pattern: ${pattern} caseSensitive: ${caseSensitive} recursive: ${recursive} types: ${types} ");
-    }
+    try {
+      forEach = progress ?? Progress.forEach();
 
-    // get all files for consideration
-    // this could be problematic for a large tree.
-    // would be better if we process the files as we went.
-    List<FileSystemEntity> all = Directory(root).listSync(recursive: recursive);
-
-    // TODO: consider doing a directory at a time so we don't blow all memory.
-    for (var entity in all) {
-      FileSystemEntityType type = FileSystemEntity.typeSync(entity.path);
-      if (types.contains(type) && matcher.match(entity.path)) {
-        forEach.addToStdout(entity.path);
+      if (Settings().debug_on) {
+        Log.d(
+            "find: pwd: ${pwd} ${absolute(root)} pattern: ${pattern} caseSensitive: ${caseSensitive} recursive: ${recursive} types: ${types} ");
       }
-    }
 
-    forEach.close();
+      // get all files for consideration
+      // this could be problematic for a large tree.
+      // would be better if we process the files as we went.
+      List<FileSystemEntity> all =
+          Directory(root).listSync(recursive: recursive);
+
+      // TODO: consider doing a directory at a time so we don't blow all memory.
+      for (var entity in all) {
+        FileSystemEntityType type = FileSystemEntity.typeSync(entity.path);
+        if (types.contains(type) && matcher.match(entity.path)) {
+          forEach.addToStdout(entity.path);
+        }
+      }
+    } finally {
+      forEach.close();
+    }
 
     return forEach;
   }

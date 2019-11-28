@@ -21,14 +21,14 @@ import '../util/log.dart';
 ///
 /// If the file does not exists then a ReadException is thrown.
 ///
-ForEach read(String path, {String delim = "\n"}) =>
+Progress read(String path, {String delim = "\n"}) =>
     Read().read(path, delim: delim);
 
 /// Read lines from stdin
-ForEach readStdin() => Read().readStdin();
+Progress readStdin() => Read().readStdin();
 
 class Read extends DShellFunction {
-  ForEach read(String path, {String delim}) {
+  Progress read(String path, {String delim, Progress progress}) {
     File sourceFile = File(path);
 
     if (Settings().debug_on) {
@@ -39,7 +39,7 @@ class Read extends DShellFunction {
       throw ReadException("The file at ${absolute(path)} does not exists");
     }
 
-    ForEach forEach = ForEach();
+    Progress forEach = Progress.forEach();
 
     waitForEx<void>(sourceFile
         .openRead()
@@ -54,19 +54,23 @@ class Read extends DShellFunction {
     return forEach;
   }
 
-  ForEach readStdin() {
+  Progress readStdin({Progress progress}) {
     if (Settings().debug_on) {
       Log.d("readStdin");
     }
 
-    ForEach forEach = ForEach();
-    String line;
+    Progress forEach;
 
-    while ((line = stdin.readLineSync()) != null) {
-      forEach.addToStdout(line);
+    try {
+      forEach = progress ?? Progress.forEach();
+      String line;
+
+      while ((line = stdin.readLineSync()) != null) {
+        forEach.addToStdout(line);
+      }
+    } finally {
+      forEach.close();
     }
-
-    forEach.close();
 
     return forEach;
   }

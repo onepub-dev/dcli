@@ -1,3 +1,4 @@
+import 'package:dshell/util/for_each.dart';
 import 'package:test/test.dart' as t;
 import "package:dshell/dshell.dart";
 
@@ -43,9 +44,7 @@ void main() {
 
       find("*.jpg", root: top).forEach((line) => print(line));
 
-      find('*.jpg', forEach: ForEach((line) => print(line)));
-      find('*.jpg', progressive: ForEach((line) => print(line)));
-      find('*.jpg', progress: ForEach((line) => print(line)));
+      find('*.jpg', progress: Progress((line) => print(line)));
 
       found.sort();
       List<String> expected = [

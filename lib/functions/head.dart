@@ -16,10 +16,10 @@ import 'settings.dart';
 ///
 /// Throws a [HeadException] exception if [path] is not a file.
 ///
-ForEach head(String path, int lines) => Head().head(path, lines);
+Progress head(String path, int lines) => Head().head(path, lines);
 
 class Head extends DShellFunction {
-  ForEach head(String path, int lines) {
+  Progress head(String path, int lines, { Progress progress} ) {
     if (Settings().debug_on) {
       Log.d("head ${absolute(path)} lines: ${lines}");
     }
@@ -32,10 +32,10 @@ class Head extends DShellFunction {
       throw HeadException("The path ${absolute(path)} is not a file.");
     }
 
-    ForEach forEach;
+    Progress forEach;
 
     try {
-      forEach = ForEach();
+      forEach = progress ?? Progress.forEach();
       int count = 0;
       FileSync file = FileSync(path);
       file.read((line) {
