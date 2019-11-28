@@ -1,4 +1,3 @@
-import 'dart:io';
 
 import 'package:dshell/dshell.dart';
 import 'package:dshell/util/runnable_process.dart';

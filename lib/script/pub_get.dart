@@ -1,4 +1,3 @@
-import 'package:dshell/script/std_log.dart';
 
 import 'dart_sdk.dart';
 import 'dependency.dart';
