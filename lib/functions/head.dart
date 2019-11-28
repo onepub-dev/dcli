@@ -1,6 +1,7 @@
 import 'package:dshell/functions/function.dart';
 import 'package:dshell/util/file_sync.dart';
 import 'package:dshell/util/for_each.dart';
+import 'package:dshell/util/runnable_process.dart';
 
 import '../util/log.dart';
 
@@ -32,9 +33,10 @@ class Head extends DShellFunction {
       throw HeadException("The path ${absolute(path)} is not a file.");
     }
 
-    ForEach forEach = ForEach();
+    ForEach forEach;
 
     try {
+      forEach = ForEach();
       int count = 0;
       FileSync file = FileSync(path);
       file.read((line) {
@@ -48,8 +50,9 @@ class Head extends DShellFunction {
     } catch (e) {
       throw HeadException(
           "An error occured reading ${absolute(path)}. Error: $e");
+    } finally {
+      forEach.close();
     }
-    forEach.close();
 
     return forEach;
   }

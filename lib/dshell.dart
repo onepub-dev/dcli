@@ -23,3 +23,4 @@ export 'functions/settings.dart' show Settings;
 export 'functions/sudo.dart';
 export 'functions/touch.dart' show touch, TouchException;
 export 'util/string_as_process.dart';
+export 'util/ansi_color.dart';

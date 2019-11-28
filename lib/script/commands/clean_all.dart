@@ -13,8 +13,8 @@ class CleanAllCommand extends Command {
     return 0;
   }
 
-  String usage(String appname) => "$appname cleanall <script path.dart>";
+  String usage() => "cleanall";
 
-  String description(String appname) =>
-      "Cleans the project caches for all scripts. The project caches for each scripts will be rebuilt at their next run.";
+  String description() =>
+      "Delete the project cache for all scripts. The script's project cache will be rebuilt when the script is next run.";
 }

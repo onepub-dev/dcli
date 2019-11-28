@@ -1,4 +1,17 @@
 
+# WARNING WARNING
+
+dshell is not ready to use as yet!!!
+
+There is a real chance that if you install dshell it will DELETE YOUR ENTIRE FILE SYSTEM.
+
+While in reality this isn't very likely until I have completed writing the necessary unit tests please
+use this package with caution.
+
+The two dangerous commands are clean and cleanall.
+
+
+
 # DShell - a bash replacement using dart
 
 DShell is intended to provide a replacement for bash and similar shell scripting languages with a Dart based scripting tool.

@@ -2,8 +2,8 @@ import 'dart:convert';
 import 'dart:io';
 
 import 'package:collection/collection.dart';
+import 'package:dshell/functions/is.dart';
 import 'package:dshell/util/waitForEx.dart';
-import 'package:dshell/util/file_helper.dart';
 import 'package:path/path.dart' as p;
 import 'std_log.dart';
 import 'script.dart';

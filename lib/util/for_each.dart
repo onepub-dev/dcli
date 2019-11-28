@@ -5,6 +5,11 @@ import 'package:dshell/util/waitForEx.dart';
 import 'runnable_process.dart';
 
 class ForEach {
+  int _exitCode;
+
+  set exitCode(int exitCode) => _exitCode = exitCode;
+  int get exitCode => _exitCode;
+
   StreamController<String> stdoutController = StreamController();
   StreamController<String> stderrController = StreamController();
 

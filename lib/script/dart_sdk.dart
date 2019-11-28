@@ -56,16 +56,19 @@ class DartSdk {
   /// Throws a RunException on failure
   /// the project working dir.
   ForEach run(String processPath, List<String> args, String workingDirectory) {
-    ForEach forEach = ForEach();
+    ForEach forEach;
 
-    RunnableProcess runnable = RunnableProcess.fromList(processPath, args,
-        workingDirectory: workingDirectory);
-    runnable.start();
-    runnable.processUntilExit((line) => forEach.addToStdout(line),
-        (line) => forEach.addToStderr(line));
+    try {
+      forEach = ForEach();
 
-    forEach.close();
-    return forEach;
+      RunnableProcess runnable = RunnableProcess.fromList(processPath, args,
+          workingDirectory: workingDirectory);
+      runnable.start();
+      runnable.processUntilExit((line) => forEach.addToStdout(line),
+          (line) => forEach.addToStderr(line));
+    } finally {
+      forEach.close();
+    }
   }
 
   static String _detect() {

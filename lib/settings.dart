@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:dshell/script/flags.dart';
 import 'package:dshell/util/dshell_exception.dart';
 import 'package:path/path.dart' as p;
 
@@ -14,6 +15,13 @@ class Settings {
   final String appname;
 
   final String version;
+
+  // the list of flags selected via the cli.
+  Map<String, Flag> _selectedFlags = Map();
+
+  List<Flag> get selectedFlags => _selectedFlags.values.toList();
+
+  bool get isVerbose => isFlagSet(VerboseFlag());
 
   // absolute path to the root of the dshell configuration directory
   // ~.dshell
@@ -49,5 +57,13 @@ class Settings {
           "Unable to find the 'HOME' enviroment variable. Please ensure it is set and try again.");
     }
     return home;
+  }
+
+  bool isFlagSet(Flag flag) {
+    return _selectedFlags.containsValue(flag);
+  }
+
+  void setFlag(Flag flag) {
+    _selectedFlags[flag.name] = flag;
   }
 }

@@ -1,4 +1,5 @@
 import 'package:dshell/functions/run.dart' as cmd;
+import 'package:dshell/util/for_each.dart';
 import 'package:dshell/util/runnable_process.dart';
 
 import 'file_sync.dart';
@@ -18,6 +19,7 @@ extension StringAsProcess on String {
   /// ```dart
   /// 'zip regions.txt regions.zip'.run
   /// ```
+  ///
   /// See [forEach] to capture output to stdout and stderr
   ///     [toList] to capture stdout to [List<String>]
   void get run => cmd.run(this);

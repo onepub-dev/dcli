@@ -1,3 +1,4 @@
+import '../../settings.dart';
 import '../dart_sdk.dart';
 import '../flags.dart';
 import '../project.dart';
@@ -19,7 +20,7 @@ class RunCommand extends Command {
   int run(List<Flag> selectedFlags, List<String> arguments) {
     Script.validate(arguments);
 
-    Script script = Script.fromArg(selectedFlags, arguments[0]);
+    Script script = Script.fromArg(arguments[0]);
 
     VirtualProject project = ProjectCache().createProject(script);
     List<String> scriptArguments = List();
@@ -36,10 +37,11 @@ class RunCommand extends Command {
     return exitCode;
   }
 
-  String usage(String appname) => "$appname run <script path.dart>";
+  String usage() => "run <script path.dart>";
 
-  String description(String appname) =>
-      "Runs the given script. This command is provided for the sake of symetry. The recommended method is is to use the simplier form $appname <script path.dart>";
+  String description() =>
+      '''Runs the given script. This command is provided for the sake of symmetry. 
+ The recommended method is to use the simplier form ${Settings().appname} <script path.dart>''';
 
   // CommandRun.fromScriptArg(String argument) {
   //   Script.validate(argument);

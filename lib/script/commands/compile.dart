@@ -15,12 +15,10 @@ class CompileCommand extends Command {
   int run(List<Flag> selectedFlags, List<String> subarguments) {
     int exitCode = 0;
     Script.validate(subarguments);
-    Script script = Script.fromArg(selectedFlags, subarguments[0]);
+    Script script = Script.fromArg(subarguments[0]);
     try {
       VirtualProject project = VirtualProject(ProjectCache().path, script);
 
-      // TODO: need an option to allow the user to place the native
-      // file as they may not have write access to the script dir.
       DartSdk()
           .runDart2Native(script, script.scriptDirectory, project.path)
           .forEach((line) => print(line), stderr: (line) => print(line));
@@ -32,9 +30,9 @@ class CompileCommand extends Command {
   }
 
   @override
-  String description(String appname) =>
-      "Compiles the script using darts native compiler. Only required if you want super fast execute";
+  String description() =>
+      "Compiles the script using dart's native compiler. Only required if you want super fast execution.";
 
   @override
-  String usage(String appname) => "$appname compile";
+  String usage() => "compile <script path.dart>";
 }

@@ -10,7 +10,7 @@ import 'dshell_function.dart';
 /// for the command to complete.
 ///
 /// ```dart
-/// run("wc fred.txt").forEach((line) => print(line));
+/// "wc fred.txt".forEach((line) => print(line));
 /// ```
 ///
 /// The run function is syncronous and a such will not return
@@ -18,12 +18,12 @@ import 'dshell_function.dart';
 ///
 /// If the command fails or returns a non-zero exitCode
 /// Then a [RunCommand] exception will be thrown.
-///
 ForEach run(String command) => Run().run(command);
 
 class Run extends DShellFunction {
   RunnableProcess runnable;
 
+  /// returns the exitCode of the process that or command that was run.
   ForEach run(String command) {
     ForEach forEach = ForEach();
     runnable = RunnableProcess(command);

@@ -1,3 +1,5 @@
+import '../settings.dart';
+
 class Flags {
   static List<Flag> applicationFlags = [VerboseFlag()];
 
@@ -21,8 +23,12 @@ class Flags {
     return (argument.startsWith('-') || argument.startsWith('--'));
   }
 
-  static bool isSet(Flag flag, Map<String, Flag> selectedFlags) {
-    return selectedFlags.containsValue(flag);
+  static bool isSet(Flag flag) {
+    return Settings().isFlagSet(flag);
+  }
+
+  static void set(Flag flag) {
+    Settings().setFlag(flag);
   }
 }
 
@@ -35,9 +41,9 @@ abstract class Flag {
 
   String get abbreviation;
 
-  String usage(String appname) => "--$_name | -$abbreviation";
+  String usage() => "--$_name | -$abbreviation";
 
-  String description(String appname);
+  String description();
 }
 
 class VerboseFlag extends Flag {
@@ -47,5 +53,5 @@ class VerboseFlag extends Flag {
 
   String get abbreviation => "v";
 
-  String description(String appname) => "If set, turns on verbose logging.";
+  String description() => "If set, turns on verbose logging.";
 }

@@ -1,3 +1,10 @@
+## 1.0.9
+NOTE THIS PACKAGE IS CURRENTLY CONSIDERED DANGEROUS TO RUN.
+Initial implementation of command line actions
+create
+clean
+cleanall
+
 ## 1.0.7
 Added some missing examples.
 Fixed bugs in echo and ask.

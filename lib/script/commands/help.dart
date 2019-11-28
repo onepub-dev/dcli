@@ -1,6 +1,9 @@
+import 'package:dshell/script/command_line_runner.dart';
+
 import '../../settings.dart';
 import '../flags.dart';
 import 'commands.dart';
+import '../../util/ansi_color.dart';
 
 class HelpCommand extends Command {
   static const String NAME = "help";
@@ -10,52 +13,48 @@ class HelpCommand extends Command {
   @override
   int run(List<Flag> selectedFlags, List<String> subarguments) {
     if (subarguments.isNotEmpty) {
-      Commands.findCommand(
+      Command command = Commands.findCommand(
           subarguments[0], Commands.asMap(Commands.applicationCommands));
+      if (command == null) {
+        throw InvalidArguments(
+            "help expected a command name. Found ${subarguments}");
+      }
+      command.usage();
     }
-    printHelp();
+    printUsage();
     return 0;
   }
 
   @override
-  String description(String appname) => "Displays the usage message.";
+  String description() =>
+      "Displays the usage message | Display the commands usage message.";
 
   @override
-  String usage(String appname) => "$appname help | $appname help <command>";
+  String usage() => "help | help <command>";
 
-  void printHelp() {
-    print('${Settings().appname}: Executes standalone Dart shell scripts.');
-    print('');
-    print('Usage: dscript [-v] [-k] [script-filename] [arguments...]');
-    print('Example: -v calc.dart 20 + 5');
-    print('');
-    print('Options:');
-    print('-v: Verbose');
-    print('-k: Keep temporary project files');
-    print('');
-    print('');
-    print('Sub-commands:');
-    print('help: Prints help text');
-    print('version: Prints version');
-  }
-
-  bool probeSubCommands(List<String> args) {
-    if (args.isEmpty) {
-      print('Version: ${Settings().version}');
-      print('');
-      printHelp();
-      return true;
+  void printUsage() {
+    String appname = Settings().appname;
+    print(green("$appname: Executes Dart scripts"));
+    print("");
+    print(yellow("Example: "));
+    print(yellow("   dshell hello_world.dart"));
+    print("");
+    print(green("Usage:"));
+    print(
+        "  dshell [${orange('flag, flag...')}] [${blue('command')}] [arguments...]");
+    print("");
+    print(orange("Flags:"));
+    for (Flag flag in Flags.applicationFlags) {
+      print("  " + orange(flag.usage()));
+      print("    " + flag.description());
     }
 
-    switch (args[0]) {
-      case 'version':
-        print("${Settings().version}");
-        return true;
-      case 'help':
-        printHelp();
-        return true;
+    print("");
+    print(blue("Commands:"));
+    for (Command command in Commands.applicationCommands) {
+      print("");
+      print("  " + blue(command.usage()));
+      print("   " + command.description());
     }
-
-    return false;
   }
 }

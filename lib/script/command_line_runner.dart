@@ -1,16 +1,16 @@
+import 'package:dshell/script/commands/help.dart';
 import 'package:dshell/util/dshell_exception.dart';
 
+import '../settings.dart';
 import 'commands/commands.dart';
 import 'commands/run.dart';
 import 'flags.dart';
 
 class CommandLineRunner {
   static CommandLineRunner _self;
+
   List<Flag> availableFlags;
   Map<String, Command> availableCommands;
-
-  // the list of flags selected via the cli.
-  Map<String, Flag> selectedFlags = Map();
 
   factory CommandLineRunner() {
     if (_self == null) {
@@ -18,8 +18,6 @@ class CommandLineRunner {
     }
     return _self;
   }
-
-  bool get isVerbose => Flags.isSet(VerboseFlag(), selectedFlags);
 
   static void init(List<Flag> availableFlags, List<Command> availableCommands) {
     _self = CommandLineRunner.internal(
@@ -45,10 +43,10 @@ class CommandLineRunner {
         Flag flag = Flags.findFlag(argument, availableFlags);
 
         if (flag != null) {
-          if (selectedFlags.containsKey(flag.name)) {
+          if (Flags.isSet(flag)) {
             throw DuplicateOptionsException(argument);
           }
-          selectedFlags[flag.name] = flag;
+          Flags.set(flag);
           continue;
         } else {
           throw UnknownFlag(argument);
@@ -74,16 +72,14 @@ class CommandLineRunner {
 
     if (success) {
       // get the script name and remaning args as they are the arguments for the command to process.
-      exitCode = command.run(selectedFlags.values.toList(), cmdArguments);
+      exitCode = command.run(Settings().selectedFlags, cmdArguments);
     } else {
-      usage();
+      HelpCommand().printUsage();
 
       throw InvalidArguments("Invalid arguments passed.");
     }
     return exitCode;
   }
-
-  void usage() {}
 }
 
 class CommandLineException extends DShellException {

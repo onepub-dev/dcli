@@ -1,6 +1,8 @@
 import 'dart:io';
 
 import 'package:dshell/functions/function.dart';
+import 'package:dshell/util/dshell_exception.dart';
+import 'package:dshell/util/stack_trace_impl.dart';
 
 ///
 /// Returns true if the given path points to a file.
@@ -24,6 +26,37 @@ bool isDirectory(String path) => Is().isDirectory(path);
 /// ```
 bool exists(String path) => Is().exists(path);
 
+/// Returns the datetime the path was last modified
+///
+/// [path[ can be either a file or a directory.
+///
+/// Throws a [DShellException] with a nested
+/// [FileSystemException] if the file does not
+/// exist or the operation fails.
+DateTime lastModified(String path) {
+  try {
+    return File(path).lastModifiedSync();
+  } on FileSystemException catch (e) {
+    throw DShellException.from(e, StackTraceImpl());
+  }
+}
+
+/// Sets the last modified datetime on the given the path.
+///
+/// [path] can be either a file or a directory.
+///
+/// Throws a [DShellException] with a nested
+/// [FileSystemException] if the file does not
+/// exist or the operation fails.
+
+void setLastModifed(String path, DateTime lastModified) {
+  try {
+    File(path).setLastModifiedSync(lastModified);
+  } on FileSystemException catch (e) {
+    throw DShellException.from(e, StackTraceImpl());
+  }
+}
+
 class Is extends DShellFunction {
   bool isFile(String path) {
     FileSystemEntityType fromType = FileSystemEntity.typeSync(path);
@@ -39,5 +72,13 @@ class Is extends DShellFunction {
   /// checks if the given [path] exists.
   bool exists(String path) {
     return FileSystemEntity.typeSync(path) != FileSystemEntityType.notFound;
+  }
+
+  DateTime lastModified(String path) {
+    return File(path).lastModifiedSync();
+  }
+
+  void setLastModifed(String path, DateTime lastModified) {
+    File(path).setLastModifiedSync(lastModified);
   }
 }

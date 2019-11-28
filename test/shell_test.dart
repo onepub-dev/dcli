@@ -26,12 +26,12 @@ void main() {
       touch("subdir/goody.jpg", create: true);
 
       echo("Find file matching *.jpg");
+
       for (var file in find(
         "*.jpg",
       ).toList()) {
         print("Found jpg: $file");
       }
-
       echo("sleeping for 2 seconds");
       sleep(2);
 

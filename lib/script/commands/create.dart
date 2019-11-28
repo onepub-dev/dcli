@@ -1,4 +1,8 @@
+import 'package:dshell/dshell.dart';
+import 'package:dshell/functions/is.dart';
 import 'package:dshell/script/project_cache.dart';
+
+import 'package:path/path.dart' as p;
 
 import '../command_line_runner.dart';
 import '../flags.dart';
@@ -14,9 +18,12 @@ class CreateCommand extends Command {
 
   @override
   int run(List<Flag> selectedFlags, List<String> arguments) {
+    _initTemplates();
+
     _script = validateArguments(selectedFlags, arguments);
-    String body = _script.generateDefaultBody("dshell");
-    _script.createDefaultFile("dshell", body);
+
+    String body = _script.generateDefaultBody();
+    _script.createDefaultFile(body);
 
     print("Creating project.");
     ProjectCache().createProject(_script);
@@ -33,13 +40,23 @@ class CreateCommand extends Command {
           "The create command takes only one argument. Found: ${arguments.join(",")}");
     }
 
-    return Script.fromArg(selectedFlags, arguments[0]);
+    return Script.fromArg(arguments[0]);
+  }
+
+  /// Checks if the templates directory exists and .dshell and if not creates
+  /// the directory and copies the default scripts in.
+  void _initTemplates() {
+    String templatePath = p.join(ProjectCache().path, "templates");
+
+    if (!exists(templatePath)) {
+      createDir(templatePath, createParent: true);
+    }
   }
 
   @override
-  String description(String appname) =>
+  String description() =>
       "Creates a script file with a default pubspec annotation and a main entry point.";
 
   @override
-  String usage(String appname) => "$appname create <script path.dart>";
+  String usage() => "create <script path.dart>";
 }

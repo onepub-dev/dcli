@@ -41,7 +41,11 @@ void main() {
     t.test("Search recursive for *.jpg ", () {
       List<String> found = find("*.jpg", root: top).toList();
 
+      find("*.jpg", root: top).forEach((line) => print(line))
+
       find('*.jpg', forEach: ForEach((line) => print(line)));
+      find('*.jpg', progressive: ForEach((line) => print(line)));
+      find('*.jpg', progress: ForEach((line) => print(line)));
 
       found.sort();
       List<String> expected = [
@@ -54,7 +58,7 @@ void main() {
     });
 
     t.test("Search recursive for *.txt ", () {
-      List<String> found = findAsList("*.txt", root: top);
+      List<String> found = find("*.txt", root: top).toList();
 
       found.sort();
       List<String> expected = [

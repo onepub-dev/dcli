@@ -21,7 +21,7 @@ class CleanCommand extends Command {
 
     Script.validate(arguments);
 
-    Script script = Script.fromArg(selectedFlags, arguments[0]);
+    Script script = Script.fromArg(arguments[0]);
 
     VirtualProject project = VirtualProject(ProjectCache().path, script);
 
@@ -30,8 +30,8 @@ class CleanCommand extends Command {
     return 0;
   }
 
-  String usage(String appname) => "$appname clean <script path.dart>";
+  String usage() => "clean <script path.dart>";
 
-  String description(String appname) =>
-      "Cleans the project cache for <scriptname.dart>, forcing a rebuild of the scripts cache.";
+  String description() =>
+      "Deletes the project cache for <scriptname.dart> and forces a rebuild of the script's cache.";
 }

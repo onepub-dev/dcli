@@ -1,3 +1,4 @@
+import 'for_each.dart';
 import 'runnable_process.dart';
 
 class Pipe {

@@ -3,10 +3,12 @@ import 'dart:convert';
 import 'dart:io';
 
 import 'package:dshell/util/waitForEx.dart';
-
 import '../dshell.dart';
 import 'dshell_exception.dart';
 import 'log.dart';
+
+// Use to print to the console
+void console(String line) => print(line);
 
 typedef void LineAction(String line);
 typedef bool CancelableLineAction(String line);
@@ -69,9 +71,9 @@ class RunnableProcess {
           print(line);
         }
       });
-
       // trap the process finishing
       process.exitCode.then((exitCode) {
+        // TODO: do we pass the exitCode to ForEach or just throw?
         if (exitCode != 0) {
           done.completeError(RunException(exitCode,
               "The command [$cmdLine] failed with exitCode: ${exitCode}"));

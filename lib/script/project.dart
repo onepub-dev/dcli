@@ -1,4 +1,5 @@
 import "dart:io";
+import 'package:dshell/functions/is.dart';
 import 'package:dshell/script/pub_get.dart';
 import 'package:path/path.dart' as p;
 

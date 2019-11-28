@@ -16,7 +16,7 @@ class DShellException implements Exception {
   // }
 
   String toString() {
-    return "An Exception was thrown: ${message}";
+    return "${message}";
   }
 
   void printStackTrace() {

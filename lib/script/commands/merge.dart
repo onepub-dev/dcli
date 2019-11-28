@@ -13,9 +13,9 @@ class MergeCommand extends Command {
   }
 
   @override
-  String description(String appname) =>
+  String description() =>
       "Deletes your pubspec.yaml and creates an inline annoation version in your scriptfile. Use this to reduce a project to a single script file.";
 
   @override
-  String usage(String appname) => "$appname merge";
+  String usage() => "merge <script path.dart>";
 }

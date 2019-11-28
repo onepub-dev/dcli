@@ -5,6 +5,7 @@ import 'package:dshell/script/flags.dart';
 import 'package:dshell/util/file_helper.dart';
 import 'package:path/path.dart' as p;
 
+import '../settings.dart';
 import 'command_line_runner.dart';
 
 class Script {
@@ -15,18 +16,16 @@ class Script {
   /// Name of the dart script
   final String _scriptname;
 
-  List<Flag> flags;
-
   /// Creates a script object from a scriptArg
   /// passed to a command.
   ///
-  /// The scriptArg may be a filename or
+  /// The [scriptArg] may be a filename or
   /// a filename with a path prefix (relative or absolute)
   /// If the path is realtive then it will be joined
   /// with the current working directory to form
   /// a absolute path.
+  ///
   Script.fromArg(
-    this.flags,
     String scriptArg,
   )   : _scriptname = _extractScriptname(scriptArg),
         _scriptDirectory = _extractScriptDirectory(scriptArg);
@@ -65,13 +64,13 @@ class Script {
 
   /// Generates the default scriptfile contents
   ///
-  void createDefaultFile(String appname, String defaultBody) {
+  void createDefaultFile(String defaultBody) {
     writeToFile(path, defaultBody);
   }
 
-  String generateDefaultBody(String appname) {
+  String generateDefaultBody() {
     /// The default body of the script we generate.
-    return """#! /usr/bin/env $appname
+    return """#! /usr/bin/env ${Settings().appname}
 /*
 @pubspec.yaml
 name: $scriptname

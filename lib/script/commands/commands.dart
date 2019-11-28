@@ -47,7 +47,7 @@ abstract class Command {
 
   String get name => _name;
 
-  String usage(String appname);
+  String usage();
 
-  String description(String appname);
+  String description();
 }
