@@ -1,3 +1,15 @@
+## 1.0.11
+Oh lots of changes.
+Usage now outputs useful information if you get a command wrong.
+Added an ansi-color library to allow output to have colors and use it in usage.
+Added an option to allow progressive output when running a command.
+Implemented additional commands.
+dshell compile <script> now works.
+A chunk of restructuring.
+More unit tests.
+Fairly confident that create, clean and clean all are safe but will leave the warning for the moment.
+
+
 ## 1.0.9
 NOTE THIS PACKAGE IS CURRENTLY CONSIDERED DANGEROUS TO RUN.
 Initial implementation of command line actions
