@@ -1,0 +1,63 @@
+#! /usr/bin/env dshell
+/*
+@pubspec.yaml
+name: find.dart
+dependencies:
+  dshell: ^1.0.0
+  args: ^1.5.2
+  path: ^1.6.4
+*/
+
+import 'dart:io';
+import 'package:dshell/dshell.dart';
+import 'package:path/path.dart' as p;
+import 'package:args/args.dart';
+
+///
+/// Call this program using:
+/// dshell find.dart -v --root . ---recursive --pattern *.*
+///
+/// to see the usage run:
+///
+/// dshell find.dart
+///
+/// Find all files that match the given pattern.
+/// Starts from the current directory unless [--root]
+/// is provided.
+void main(List<String> args) {
+  ArgParser parser = ArgParser();
+
+  parser
+    ..addFlag('verbose', abbr: 'v', defaultsTo: false)
+    ..addFlag('recursive', abbr: 'r', defaultsTo: true)
+    ..addOption('root',
+        defaultsTo: ".",
+        help: "Specifies the directory to start searching from")
+    ..addOption('pattern',
+        abbr: 'p',
+        help:
+            "The search pattern to apply. e.g. *.txt. You need to quote the pattern to stop bash expanding it into a file list.");
+
+  ArgResults results = parser.parse(args);
+
+  String pattern = results['pattern'];
+  String root = results['root'];
+  bool verbose = results['verbose'];
+  bool recursive = results['recursive'];
+
+  if (pattern == null) {
+    parser.usage;
+    exit(-1);
+  }
+
+  if (verbose) {
+    print("Verbose is on, starting find");
+  }
+
+  find(pattern, root: root, recursive: recursive)
+      .forEach((entry) => print(entry));
+
+  if (verbose) {
+    print("Verbose is on, completed find");
+  }
+}
