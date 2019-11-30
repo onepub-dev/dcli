@@ -8,7 +8,7 @@ of really useful features.
 
 Bash exemplifies the unix philosophy of Lego. The building of small, simple, re-usable blocks (applications) that can be coupled together to solve complex problems.
 
-Bashes power lies in its ability to chain multiple commands together to provide a quick (and often dirty) solution.
+Bash's power lies in its ability to chain multiple commands together to provide a quick (and often dirty) solution.
 
 Bash has an elegant set of commands for common file operations such as mv, cp, rm etc.
 
@@ -16,13 +16,13 @@ Bash has an elegant set of commands for common file operations such as mv, cp, r
 
 Whilst Bash is a powerful tool, it has a grammar that would make your Grandma blush.
 
-**It useage of quotes can only be described as..., oh wait, it so complex it's indescribable.**
+**Its usage of quotes can only be described as..., oh wait, it so complex it's indescribable.**
 
 For a long time I've wanted to build a replacement tool that has the elegance of a modern language, with the power of bash.
 
 DShell is hopefully that.
 
-## What does Dshell do?
+## What does DShell do?
 
 * Uses the elegant and simple dart language
 * Write and execute single file scripts
@@ -40,12 +40,12 @@ DShell is hopefully that.
 
 * executes commands synchronously, so no need to worry about futures.
 
-## What commands that Dshell support
+## What commands that DShell support
 
 DShell ships with a number of built in commands and the abilty to call any cli application and easily process the output.
 
 These are some of the built-in commands:
-* move( from, to)
+* move(from, to)
 * copy(from, to)
 * delete(path)
 * cd(path)
@@ -66,15 +66,15 @@ These are some of the built-in commands:
 * extension(path)
 
 
-Lets start by looking at the some of the built in commands that DShell supports. 
+Let's start by looking at the some of the built in commands that DShell supports. 
 
-The built-in commands are dart global functions providing a very bash like feel to writing dshell scripts.
+The built-in commands are dart global functions providing a very bash like feel to writing DShell scripts.
 The commands make strong use of named arguments with intelligent defaults so mostly you can use the minimal form of the command.
 
 Take note, there are no Futures here. Each command runs synchronously.
 
 Note: the file starts with a shebang which allows this script to be 
-run directly from the cli (no precompilation required.)
+run directly from the cli (no precompilation required).
 ```dart
 #! /usr/bin/env dshell
 
@@ -138,15 +138,16 @@ void main() {
 }
 ```
 
-As you can see we have achieved much of the power of Bash without any of the ulgy grammar and whats more we only used one type of quote!
+As you can see we have achieved much of the power of Bash without any of the ugly grammar, and what's more we only used one type of quote!
 
 DScript is the kind of friend that you actually introduce Grandma to.
 
-# running a script
-Once dshell is installed you can run a dshell script just as you do with bash.
+# Running a script
+Once DShell is installed, you can run a DShell script just as you do with bash.
 
 Add the shebang at the top of the script:
-Note: it must be the very first line!
+
+(Note: it must be the very first line!)
 
 ```dart 
 #! /usr/bin/env dshell
@@ -154,7 +155,7 @@ Note: it must be the very first line!
 
 Save the file to something like: tryme.dart
 
-Mark the file as executable
+Mark the file as executable:
 
 ```bash
 chmod +x  tryme.dart
@@ -166,7 +167,7 @@ Now run the script from the cli:
 > ./tryme.dart
 ```
 
-Your now offically in the land of dshell magic.
+You're now offically in the land of DShell magic.
 
 # Calling cli applications
 
@@ -203,7 +204,7 @@ This is the resulting syntax:
 
 # Piping
 
-Now lets pipe the output of one cli command to another.
+Now let's pipe the output of one cli command to another.
 
 ```dart
 
@@ -218,23 +219,21 @@ What we have now is the power of Bash and the elegance of Dart.
 
 # Installing
 
-To install dshell run:
-
-Note: i had a problem with my installation where the flutter internal verion of the dart-sdk was
-on my path before the os version. I don't believe the flutter dart-sdk should be on your path.
-Removing it from my path allowed me to developed cli apps as well as flutter.
-
+To install DShell run:
 
 ```shell
 pub global activate dshell
 ```
 
+Note: I had a problem with my installation where the flutter internal verion of the dart-sdk was
+on my path before the os version. I don't believe the flutter dart-sdk should be on your path.
+Removing it from my path allowed me to developed cli apps as well as flutter.
 
 # Running scripts
 
-Dshell provides a number of methods to run our bash like commands.
+DShell provides a number of methods to run our bash like commands.
 
-The most bash like method lets you directly run a single file script.
+The most bash-like method lets you directly run a single file script.
 
 
 To run the following script save the file to tryme.dart.
@@ -280,12 +279,12 @@ main()
 
 ## External packages
 
-When writing dart programs we regularly want to use external packages. Dshell scripts are no different.
+When writing dart programs we regularly want to use external packages. DShell scripts are no different.
 
 But where do we place our pubspec.yaml?
 
 The whole point of dshell is to allow you to create a single file with everything you need, to that end
-dshell allows you to specify your pubspec.yaml directly within the script using the @pubspec annotation.
+DShell allows you to specify your pubspec.yaml directly within the script using the @pubspec annotation.
 
 
 ```dart
@@ -316,7 +315,7 @@ main()
 As with all little projects they have a habit of getting larger than expected.
 At some point you are going to want to spread you script over multiple dart libraries.
 
-Well dshell supports this as well.
+Well, DShell supports this as well.
 
 If you need to create additional libraries (.dart files) create a subdirectory called 'lib', which shouldn't be too much of a surprise.
 
