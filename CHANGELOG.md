@@ -1,3 +1,6 @@
+## 1.0.13
+And now actually removed the do not use warning.
+
 ## 1.0.12
 Removed the do not use warnings and cleaned up some lint warnings.
 
