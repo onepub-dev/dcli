@@ -1,3 +1,6 @@
+## 1.0.12
+Removed the do not use warnings and cleaned up some lint warnings.
+
 ## 1.0.11
 Oh lots of changes.
 Usage now outputs useful information if you get a command wrong.
