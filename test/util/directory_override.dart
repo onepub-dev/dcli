@@ -62,7 +62,9 @@ class VirtualFileSystem {
     return VirtualDirectory(path);
   }
 
-  FileSystemEntityType getTypeSync(String path, bool followLinks) {}
+  FileSystemEntityType getTypeSync(String path, bool followLinks) {
+    return FileSystemEntityType.file;
+  }
 }
 
 class VirtualDirectory implements Directory {

@@ -1,4 +1,6 @@
 #! /usr/bin/env dshell
+// remove the next line
+// ignore_for_file: unused_import
 /*
 @pubspec.yaml
 name: find.dart
@@ -40,10 +42,10 @@ void main(List<String> args) {
 
   ArgResults results = parser.parse(args);
 
-  String pattern = results['pattern'];
-  String root = results['root'];
-  bool verbose = results['verbose'];
-  bool recursive = results['recursive'];
+  String pattern = results['pattern'] as String;
+  String root = results['root'] as String;
+  bool verbose = results['verbose'] as bool;
+  bool recursive = results['recursive'] as bool;
 
   if (pattern == null) {
     parser.usage;

@@ -1,4 +1,8 @@
 #! /usr/bin/env dshell
+
+/// remove the next line
+/// ignore_for_file: unused_import
+
 /*
 @pubspec.yaml
 name: hello_world.dart

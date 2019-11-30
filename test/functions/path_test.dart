@@ -47,7 +47,7 @@ void main() {
 
         final MemoryFileSystem fs = MemoryFileSystem();
 
-        // fs.file(path)
+        fs.file('.');
 
         TestZone().run(() {
           // var lfs = LocalFileSystem();

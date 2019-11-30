@@ -1,6 +1,9 @@
 # Defines a default set of lint rules enforced for
 # projects at Google. For details and rationale,
 # see https://github.com/dart-lang/pedantic#enabled-lints.
+
+---
+
 include: package:pedantic/analysis_options.yaml
 
 # For lint rules and documentation, see http://dart-lang.github.io/linter/lints.
@@ -8,11 +11,10 @@ include: package:pedantic/analysis_options.yaml
 linter:
   rules:
     - camel_case_types
-    #- always_declare_return_types
+    # - always_declare_return_types
 
 analyzer:
- strong-mode:
+  exclude: lib/templates/*.dart
+  strong-mode:
     implicit-casts: false
     implicit-dynamic: false
-#   exclude:
-#     - path/to/excluded/files/**
