@@ -242,6 +242,28 @@ You are now officially a DShell guru.
 Go forth you man (or gal) and create.
 
 
+# DShell clean
+If you change the structue of your DShell script project then you need to run `dshell clean` so that DShell sees the changes you have made.
+
+What constitutes a structural changes?
+* adding an `@pubspec` annotation to your DShell script
+* creating a `pubspec.yaml` file in your scripts directory.
+* creating a `lib` directory in your scripts directory.
+* editing an existing `pubspec.yaml`
+* editing an existing `@pubspec` annotation
+
+What doesn't constitue a structural change?
+* editing your DShell script
+
+If you make a structure change simply call
+
+```
+dshell clean <scriptname>
+```
+
+Your script is now ready to run.
+
+
 ## DShell and futures
 You will note in all of the above examples that there are no calls to `await` nor any usage of `Futures`.
 
@@ -505,6 +527,8 @@ provide a number of ways of creating and managing your pubspec.yaml.
 
 By default you do NOT need a pubspec.yaml when using DShell.
 
+NOTE: if you change the structure of your DShell script you need to run a `dshell clean`. Simple edits to you DShell script do not require a `clean` to be run.
+
 ## Default pubsec
 
 If DShell doesn't find a pubspec then it will automatically create a default pubspec for you.
@@ -738,6 +762,109 @@ Run you script the same way as usual:
 
 ```
     dshell tryme.dart
+```
+
+# DShell commands
+DShell provides a number of command line tools to help you manage your DShell scripts.
+All of the tools are commands passed to the `dshell` application.
+
+You can see a full list of `dshell` commands an arguments by running:
+```
+dshell 
+dshell help
+dshell help <command>
+```
+
+
+The syntax of `dshell` is: 
+
+```
+dshell [flag, flag...] [command] [arguments...]
+```
+
+## flags
+DShell supports a `--verbose | -v`
+
+When passed to a command it will result in additional logging being written to the cli (stdout).
+
+
+## cleanall
+The clean all command will delete all of the Virtual Projects under `~/.dshell/cache and rebuild each of them.
+
+Usage: `dshell cleanall`
+
+Example:
+
+```
+dshell cleanall
+```
+
+## clean
+The clean command will rebuild the Virtual Project for a single directory.
+
+Usage: `dshell clean <script path.dart>`
+
+Example: 
+
+```
+dshell clean hello_world.dart
+```
+
+## compile
+The compile command will compile your DShell script into a native executuable.
+
+The resulting native application can be copied to any binary compatible OS and run without requiring dart to be installed.
+
+Dart complied appliations are also super fast.
+
+Usage: `dshell compile <script path.dart>`
+
+Example: 
+
+```
+dshell compile hello_world.dart
+```
+
+## create
+The create command create a sample DShell script using the given script file name and initialise your project by running `dshell clean`.
+
+Usage: `dshell create <script path.dart>`
+
+Example: 
+
+```
+dshell create my_script.dart
+```
+
+
+## run
+Runs the given DShell script.
+
+This command is NOT required. 
+
+The recommended way to run a dshell script is via one of the documented [run methods](#Running-a-script).
+
+The `dshell run` command is provided for symmetry and the possiblity that someone, someday, may try to auto generate calls to dshell and having a consistent command structure can make this easier.
+
+Usage: `dshell run <script path.dart>`
+
+Example: 
+
+```
+dshell run my_script.dart
+```
+
+## split
+The split command extracts a `@pubspec` annotation from a DShell script and writes it to a `pubslec.yaml` file in the same directory as the script.
+
+This is a convenience method as you can perform the same process manually.
+
+Usage: `dshell split <script path.dart>`
+
+Example: 
+
+```
+dshell split my_script.dart
 ```
 
 
