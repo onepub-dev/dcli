@@ -3,9 +3,9 @@
 # Contents
 * [Overview](#Overview)
 * [So why DShell](#So-why-DShell?)
-* [What does Dshell do?](#What-does-Dshell-do?)
-* [What commands does Dshell support?](#What-commands-does-Dshell-support?)
-* [Using Dshell functions](#Using-Dshell-functions)
+* [What does DShell do?](#What-does-DShell-do?)
+* [What commands does DShell support?](#What-commands-does-DShell-support?)
+* [Using DShell functions](#Using-DShell-functions)
 * [Running a script](#running-a-script)
 * [Calling cli applications](#Calling-cli-applications)
 * [Piping](#Piping)
@@ -85,9 +85,23 @@ These are some of the built-in commands:
 
 
 # Getting Started
-See the section below on [installing](#Installing) dshell.
+## Installing
 
-Let's start with the simpliest of scripts, hello_world.dart
+To install DShell run:
+
+```shell
+pub global activate dshell
+
+```
+
+Note: I had a problem with my installation where the flutter internal verion of the dart-sdk was
+on my path before the os version. I don't believe the flutter dart-sdk should be on your path.
+Removing it from my path allowed me to developed cli apps as well as flutter.
+
+## Writing your first script
+
+
+Let's start with the classic hello_world.dart
 
 Create a file called `hello_world.dart`.
 
@@ -99,23 +113,52 @@ void main() {
 }
 ```
 
-Now lets run the script.
+Now run the script.
 
 ```
-dshell hello_world.dart
-
-cli> hello world
+cli> dshell hello_world.dart
+Resolving dependancies....
+hello world
+cli>
 ```
 
-So far this is just a normal dart library and in fact you don't really need dshell to run the above script as the dart cli command can do the same thing. 
-So lets do some dshell magic.
+The first time you run a given DShell script DShell needs to resolve any dependancies by running a  `pub get` command and doing some other house keeping.
+
+If you run the same script a second time DShell as already resolved the dependancies and so it can run the script immediately.
+
+
+```
+cli>dshell hello_world.dart
+hello world
+cli>
+```
+
+
+So far this is just a normal dart library that you can run directly from the command line.
+
+The point here is that DShell isn't magic. You can just write normal dart code using all of darts features and any libraries that work with a cli application. (i.e. flutter and web specific libraries are not going to work here.)
+
+## Using dshell create
+DShell likes to make life easier so if you can't remember the syntax of of main you can use:
+
+```
+dshell create hello_world.dart'
+```
+DShell will create the hello_world.dart script and peform the initial house keeping.
+Your script is now ready to run.
+
+NOTE: DShell will shortly introduce templates that will provide a collection of common scripts that you can use as a starting point.
+
+## Our first real script
+
+So let's do something that DShell was designed for, file management.
 
 Create a new script `first.dart`
 
 Copy the following contents to the script:
 
 ```dart
-
+/// import DShell's global functions 
 import 'package:dshell/dshell.dart';
 
 void main() {
@@ -125,11 +168,14 @@ void main() {
     createDir('tmp');
     
     // Lets write some text to a file.
-    // We use dart 2.6 extensions so we can 
-    // can treat a string that contains a file name
-    // as a file and write or append to that file.
+    // DShell uses dart 2.6 extensions.
+    // Ths allows us to extend [String] with
+    // functions like [write] and [append]
+    // [write] and [append] treat the contents
+    // of the [String] as a filename.
     
-    // Truncate any existing file content and write
+    // Truncate any existing content
+    // of the file 'tmp/text.txt' and write
     // 'Hello world' to the file.
     'tmp/text.txt'.write('Hello world');
 
@@ -145,29 +191,37 @@ void main() {
     // lets dump the file we just created to the console
     cat('tmp/second.txt').forEach((line) => print(line));
 
-    // lets prove that both files exit by running
+    // lets prove that both files exist by running
     // a recusive find.
     find('*.txt').forEach((file) => print('Found $file'));
 
     // Now lets tail the file using the OS tail command.
-    // Again with the 2.6 extensions we treat a string
-    // as OS command and run that command.
+    // Again using dart 2.6 extensions we treat a string
+    // as an OS command and run that command as 
+    // a child process
     // Any stdout and stderr output is written
     // directly to the console
     'tail tmp/text.txt'.run
 
-    // Lets do a word count but capture sdtout
+    // Lets do a word count but capture stdout
+    // stderr will still be written to the console
     'wc tmp.second.txt'.forEach((line) => print('Captured $line'));
 
-    // lets tail a non existent file and see stderr
+    // lets tail a non existent file and see stderr.
+    // The forEach method signagure is
+    // forEach(LineAction stdout, {LineAction stderr})
     'tail tmp/nonexistant.txt'
             .forEach((line) => print('stdout: $line')
                 , stderr: (line) => print('stderr: $line'));
 
-    // Now lets clean up
-    delete('tmp/text.txt');
-    delete('tmp/second.txt');
-    deleteDir('tmp');
+    String result = ask(prompt: "Should I delete 'tmp'? (y/n):");
+
+    if (result == 'y') {
+        // Now lets clean up
+        delete('tmp/text.txt');
+        delete('tmp/second.txt');
+        deleteDir('tmp');
+    }
 
 }
 
@@ -176,24 +230,45 @@ void main() {
 Now run our first script.
 
 ```
-dshell first.dart
+cli> dshell first.dart
+Hello world
+My second line'
+My third line
+Should I delete 'tmp'? (y/n):
 
-cli> 
-'tmp/text.txt'.write('Hello world');
-    'tmp/text.txt'.append('My second line');
-    'tmp/text.txt'.append('My third line')
 ```
+You are now officially a DShell guru. 
+
+Go forth you man (or gal) and create.
+
+
+## DShell and futures
+You will note in all of the above examples that there are no calls to `await` nor any usage of `Futures`.
+
+This is very intentional.
+
+DShell does not stop you using `await`, `Futures`, `Isolates` or any other dart functionallity. Its all yours to use and abuse as you will.
+
+DShells global functions however intentially avoid `Futures`.
+
+They aim of DShell is to create a bash like simplicity to system maintenance.  `Futures` are great and all but the do make the code more complex and harder to read.
+
+Futures also can make you scripts a little dangerous. If you copy a file and then want to append to the copy, you had better be certain that the copy command has completed before you start the append.  DShell's global functions remove those complications.
+
+If you are interested in how we avoid using `Futures` read up on `waitFor` and check out DShell's own `waitForEx` function that does stacktrace repair when an exception is thrown.
 
 
 
-
-# Using Dshell functions
+# Using DShell functions
 Lets start by looking at the some of the built in functions that DShell supports. 
 
-The built-in functions are dart global functions providing a very bash like feel to writing dshell scripts.
-The functions make strong use of named arguments with intelligent defaults so mostly you can use the minimal form of the function.
+DShell exposes a range of built-in functions which are dart global functions.
 
-Take note, there are no Futures here. Each function runs synchronously.
+These functions are the core of how DShell provides a very bash like feel to writing DShell scripts.
+
+These functions make strong use of named arguments with intelligent defaults so mostly you can use the minimal form of the function.
+
+Take note, there are no `Futures` or `await`s here. Each function runs synchronously.
 
 Note: the file starts with a shebang which allows this script to be 
 run directly from the cli (no precompilation required).
@@ -208,14 +283,17 @@ void main() {
     // Print the current working directory
     print("PWD: ${pwd}");
 
-    // Change to the directory 'main'
+    // Change to the directory 'main' 
+    // NOTE: this is NOT best pratice use paths 
+    // to each file instead.
     cd("main");
 
-    // Create a directory with any needed parents.
-    createDir("tools/images", createParent: true);
+    // Create a directory and if necessary
+    // its parent directories.
+    createDir("tools/images", recursive: true);
 
     // Push the current directory onto the stack
-    // and change directory.
+    // and change directory to 'main/tools/images'
     push("tools/images");
 
     // create a file (its empty)
@@ -225,10 +303,12 @@ void main() {
     touch("good.jpg");
 
     // I think you know this one.
+    // print works just as well.
     echo("All files");
 
     // print out all files in the current directory.
-    find("*.*", recursive=false).forEach((line) => print(line));
+    // [file] is just a [String]
+    find("*.*", recursive=false).forEach((file) => print(file));
 
     // take a nap for a couple of seconds.
     sleep(2);
@@ -249,33 +329,79 @@ void main() {
     }
 
     // Delete a file asking the user first.
-    delete("bad.jpg", ask: false);
+    delete("bad.jpg", ask: true);
 
     // return to the directory we were in
     // before we called push above.
     pop();
   
     // Print out our current working directory.
+    // should be main.
     echo(pwd);
 }
 ```
 
 As you can see we have achieved much of the power of Bash without any of the ugly grammar, and what's more we only used one type of quote!
 
-DScript is the kind of friend that you actually introduce Grandma to.
+DShell is the kind of friend that you actually introduce Grandma to.
 
 # Running a script
-Once DShell is installed, you can run a DShell script just as you do with bash.
 
-Add the shebang at the top of the script:
+DShell is intended to start as fast as bash and run faster than bash. 
+
+When you first run your new DShell script, DShell has some house keeping todo including running a `pub get`. After the first run DShell will only run `pub get` when a dependancy changes.
+
+The result is that dshell has similar start times to bash and when running larger scripts is faster than bash.
+
+If you absolutely need to make your script perform to the max, you will want to use the DShell `compile` command to compile your script to native code.
+
+DShell provide three ways of running a script.
+
+* use 'dshell' directly
+* add a shebang
+* compile to native.
+
+The first time you run your DShell script using either of the first two options it needs to fetch any dependancies using `pub get`. This happens automatically. 
+
+DShell can also detect if you make any changes to your pubspec. Read the section of [Pubspec Management](#Pubspec-Management). 
+When it detects a change it will automatically run `pub get` again.
+
+## Use DShell directly
+The simplest way to run your DShell script is to directly use the `dshell` app.
+
+Copy the following contents to a script and save it as `hello.dart`.
+
+```dart
+void main() {
+    print('hello world');
+}
+```
+Now run it.
+
+```
+dshell hello.dart
+```
+
+Running the script using `dshell` means you can create your script using your favorite editor and then immediately run it with `dshell`.
+
+There is no need to fuss around with permissions.
+
+## Use a shebang
+
+Once DShell is [installed](#Installing), you can run a DShell script just as you do with any bash script.
+
+To do this add a shebang at the top of the script:
 
 (Note: it must be the very first line!)
 
 ```dart 
 #! /usr/bin/env dshell
+void main() {
+    print('hello world');
+}
 ```
 
-Save the file to something like: tryme.dart
+Save the file to something like: `tryme.dart`
 
 Mark the file as executable:
 
@@ -286,10 +412,44 @@ chmod +x  tryme.dart
 Now run the script from the cli:
 
 ```bash
-> ./tryme.dart
+cli> ./tryme.dart
+hello world
+cli>
 ```
 
 You're now offically in the land of DShell magic.
+
+If you add your script directory to your path then you can run the script from anywhere.
+
+```
+cli>export PATH=~/scriptdir:${PATH}
+cli>tryme.dart
+hello world
+cli>
+```
+
+## Compiling to Native
+(Note this feature is not yet implemented)
+
+DShell also allows you to compile your script to a native executable.
+
+```
+dshell compile <scriptname.dart> -o exename
+```
+
+The `-o` option is optional. If not specified the exec will be called `<scriptname>` without the dart extension.
+
+The `-o` option also allows a path to be specified so you can install the exe directly into a directory such as `/usr/bin`.
+
+Once you have compiled your script you can execute it by running:
+```
+./scriptname
+```
+
+As this is fully compiled changes to your local script file will not affect it (until you recompile) and when the exe runs it will never need to do a pub get as all dependencies are built in.
+
+You can also copy the exe to another machine (that is binary compatible) and run the exe without having to install dart.
+
 
 # Calling cli applications
 
@@ -299,18 +459,18 @@ DShell does the nasty with the String class using Dart's (2.6+) 'extension' feat
 The aim of this somewhat unorthodox approach is to deliver the elegance that Bash achieves when
 calling cli applications.
 
-To achieve this we add a number of methods and operator overlaods to the String class.
+To achieve this we add a number of methods and operator overloads to the String class.
 
 These include:
 * run
 * forEach(LineAction stdout, {LineAction stdout})
-* List<String> toList()
+* toList()
 * | operator
 
 This is the resulting syntax:
 
 ```dart
-    // run wc on a file
+    // run wc (word count) on a file
     // all wc output goes directly to the console
     'wc fred.text'.run
 
@@ -339,129 +499,153 @@ The above command launches 'grep' and 'head' to find all import lines in any dar
 What we have now is the power of Bash and the elegance of Dart.
 
 
-# Installing
-
-To install DShell run:
-
-```shell
-pub global activate dshell
-```
-
-Note: I had a problem with my installation where the flutter internal verion of the dart-sdk was
-on my path before the os version. I don't believe the flutter dart-sdk should be on your path.
-Removing it from my path allowed me to developed cli apps as well as flutter.
-
-# Running scripts
-
-DShell provides a number of methods to run our bash like commands.
-
-The most bash-like method lets you directly run a single file script.
-
-
-To run the following script save the file to tryme.dart.
-
-```dart
-#! /usr/bin/env dscript
-
-import 'package:dshell/dshell.dart';
-
-main()
-{
-    echo("Hello World");
-    echo("Where are we: $(pwd}?");
-
-    createDir("test");
-    push("test");
-    touch("icon.png");
-    touch("logo.png");
-    touch("dog.png");
-
-    // print all the file names in the current directory.
-    find("*.*", recursive: false).forEach((file) 
-        => print("Found: ${file}"));
-
-    touch("subdir/monkey.png");
-
-    // do a recursive find for .png files.
-    find("*.png").forEach((file) => print("$file"));
-
-
-    // now cleanup
-    delete("icon.png");
-    delete("logo.png");
-    delete("dog.png");
-
-    pop();
-
-    'grep touch tryme.dart'.forEach((line) 
-        => print("Grepo: $line"));
-}
-
-```
 # Pubspec Management
-dshell aims to make creating a script as simple as possible and with that in mind we 
+DShell aims to make creating a script as simple as possible and with that in mind we 
 provide a number of ways of creating and managing your pubspec.yaml.
 
-By default you do NOT need a pubspec.yaml when using dshell.
+By default you do NOT need a pubspec.yaml when using DShell.
 
-If dshell doesn't find a pubspec then it will automatically create a default pubspec for you.
-The default pubspec is stored in the script's Virtual Project cache (under ~/.dshell/cache).
+## Default pubsec
 
-We refer to this as your 'virtual pubspec'.
+If DShell doesn't find a pubspec then it will automatically create a default pubspec for you.
+The default pubspec is stored in the script's Virtual Project cache (under `~/.dshell/cache/<path to script>.project)`.
 
-Each time you run a dshell script, dshell checks that your virtual pubspec is
-up to date and if necessary will recreate it to reflect your current script.
+We refer to this as a 'virtual pubspec'.
+
+Each time you run a DShell script, DShell checks that your virtual pubspec is up to date and if necessary will recreate it to reflect your current script.
+
+Whether you use a virtual pubspec or create your own, DShell performs dependancy injection ([see dependancy injection](#Pubspec-dependancy-injection)) providing a common set of packages that together create a 'swiss army knife' of useful tools to use when developing DShell scripts.
+
+## Explicitly defining a pubspec
+
+If you find that you need additional dependencies or other controls that an explict pubspec provides, then you may
+need to create your own pubspec.
+
+DShell provides two ways to do this.
+
+* an inline pubspec using DShell's `@pubspec` annotation.
+* a classic dart pubspec.yaml with all the normal features.
+
+The DShell `@pubspec` annotation allows you to retain the concept of a single script so you can copy your DShell script
+anywhere and it will just work. 
+
+Using the `@pubspec` annotation also means that you can have many DShell scripts living in the same directory each with their
+own pubspec. If you use a classic pubspec.yaml then all your scripts will be sharing the same pubspec (which isn't necessarily a bad thing).
+
+See the section on [PubSpec Precedence](#Pubspec-Precendence) for details on how DShell works if you mix pubspec annotations and a pubspec.yaml in the same directory.
 
 
-## Pubspec dependancy inject
-Each time dshell recreates your virtual pubspec it will (if needed) inject a default set of dependancies.
+For simple scripts you will normally use the `@pubspec` annotation but as your script grows you may want to migrate
+to a separate `pubspec.yaml`. 
+
+DShell has a tool to make this easier.
+
+Run:
+```
+dshell split <scriptname.dart>
+```
+
+If your script `<scriptname.dart>` contains a `@pubspec` annotation then DShell will remove it from your script and create a classic `pubspec.yaml` file in the directory along side your script.
+
+
+## Pubspec dependancy injection
+Each time DShell runs it will, if needed, inject a default set of dependancies into your pubspec.
+
+It doesn't matter if you have relied on a virtual pubspec, used an `@pubspec` annotation or created a classic `pubspec.yaml` DShell always injects the following dependencies.
 
 The default dependancies are:
 
 * dshell
-* path
-* args
+* [path](https://pub.dev/packages/path)
+* [args](https://pub.dev/packages/args)
+
+The above packages provides your script with a swiss army collection of tools that we think will make your life easier when writing DShell scripts.
+The 'path' package provide tooling for building and manipulating directory paths as strings.
+The 'args' package makes it easy to process command line arguments including adding flags and options to your DShell script.
+
+To ensure that you still have complete control over your dependencies, DShell allows you to override the
+default dependencies.
+
+If you have declared any of the above packages in the dependancies section of you `@pubspec` annotation or your classic `pubspec.yaml` then the version you declare will be used and the dependency injection will be suppressed.
+
+## Customising dependancy injection
+
+NOTE: THIS FEATURE IS NOT YET IMPLEMENTED
+
+DShell provides a nice set of basic tools (packages) for your DShell scripts and you can add more in your script's pubspec. 
+
+You may however find a really nice package that you use time and again in your DShell scripts which means you have to create a pubsec for every script.
+
+DShell allows you to define your own set of package dependancies that DShell will then inject into every DShell script.
+
+If you create a `dependancies.yaml` file in the `~/.dshell` directory then DShell will inject any custom dependancies into your DShell scripts.
 
 
-When we create a default pubspec definition additional rules are applied.
+The syntax of `dependancies.yaml` is identially to the standard `pubspec.yaml` dependancies section.
 
-dshell aims to make creating a script as simple as possible and with that in mind we 
-inject a number of common dependancies into 
+Example:
+```yaml
 
+dependencies:
+  collection: ^1.14.12
+  file_utils: ^0.1.3
+  money2: ^1.8.0
 
-inject a number of common dependancies into 
+```
+
+You don't need to specify the packages that DShell normally injects unless you want to override the version of the package that DShell injects.
+
+NOTE: you must run 'dshell cleanall' if you modify your 'dependancies.yaml' as DShell doesn't check this file for changes.
+
 
 
 ## Pubspec Precendence
-dshell allows you to define your pubspec  either via a  pubspec annotation within your script or a traditional
-pubspec.yaml which lives in the same directory as you script.
+DShell allows you to define your pubspec either via a `@pubspec` annotation within your script or a classic
+`pubspec.yaml` which lives in the same directory as your script.
 
-dshell also support the concept of allowing multiple single file dshell scripts to exist
+DShell also support the concept of allowing multiple single file DShell scripts to exist
 in the same directory.
 
 This has the potential to create ambiguities as to which pubspec definition is to be used.
 
-To remove the ambiguities the pubspec rules are used and applied in the following order:
-1) If the script contains a pubspec annotation use it.
-2) If the scripts directory contains a pubspec.yaml use it.
-3) If 1) and 2) fail then create a default pubspec definition.
+To remove the ambiguities these pubspec rules are used and applied in the following order:
+1) If the script contains an `@pubspec` annotation use it.
+2) If the scripts directory contains a `pubspec.yaml` use it.
+3) If 1) and 2) fail then create a default virtual pubspec definition.
+
+So what happens if you have multiple DShell scripts in a single directory and a classic pubspec.yaml file?
+```
+cli> ls
+hello_world.art
+find_me.dart
+pubsec.yaml
+cli>
+```
+
+Well according to the rules if a DShell script has an `@pubspec` annotation that that will be used and the classic `pubspec.yaml` file will be ignored.
+
+If your DShell script doesn't have an `@pubspec` annotation then the `pubspec.yaml` file will be used.
+
+This means that multiple DShell scripts can share the same `pubspec.yaml` which could be convenient at times.
+
+So a word of caution.
+
+If you have an existing DShell script which relies on DShell's 'virtual pubpsec' (i.e. it doesn't have an `@pubspec` annotation) and you copy the script into a directory that has an existing `pubspec.yaml` then the next time you run your script from its new home it will use the adjacent `pubspec.yaml`.
 
 
+## @pubspec Annotation
 
+The `@pubspec` annotation allows you to specify your pubspec defintion right inside your DShell script.
 
+Using an `@pubspec` annotation allows you to retain the concept of a single independant script file.
+This has the advanage that you can copy your DShell script file anywhere and just run it (provided DShell is installed).
 
-## External packages
-
-When writing dart programs we regularly want to use external packages. DShell scripts are no different.
-
-But where do we place our pubspec.yaml?
-
-The whole point of dshell is to allow you to create a single file with everything you need, to that end
-DShell allows you to specify your pubspec.yaml directly within the script using the @pubspec annotation.
+To add a `@pubspec` annotation to your file add the `@pubspec` within a `/*  */` comment and follow the standard
+rules for formatting a `pubspec.yaml` file.
 
 
 ```dart
-#! /usr/bin/env dscript
+#! /usr/bin/env dshell
 
 /*
 @pubspec.yaml
@@ -473,7 +657,7 @@ dependencies:
 import 'package:dshell/dshell.dart';
 import 'package:money2/money2.dart';
 
-main()
+void main()
 {
     Currency aud = Currency.create("AUD", 2);
     Money notMuch = Money.parse("\$2.50", aud);
@@ -482,6 +666,15 @@ main()
     echo("All I have is ${notMuch}");
 }
 ```
+
+If your `@pubspec` annotation gets too large at some point you might want to split the annotation out to a classic `pubspec.yaml` file.
+To do this you can use the DShell split command.
+
+```
+dshell split <script filename>
+```
+
+Once the `split` command completes you will have a newly created `pubspec.yaml` file and you `@pubspec` annotation will have been removed from your script.
 
 ## Multi-file scripts
 
@@ -499,7 +692,7 @@ Place the following file in:
 
 ```dart
 
-#! /usr/bin/env dscript
+#! /usr/bin/env dshell
 
 /*
 @pubspec.yaml
@@ -543,14 +736,98 @@ Place the library file in:
 
 Run you script the same way as usual:
 
-    ./tryme.dart
+```
+    dshell tryme.dart
+```
 
 
-# Compiling to Native Executable
-## TODO document compiling to native
+# Internal workings
+For those of interest this section covers off how the internals of DShell function.
+
+## Virtual Projects
+A normal Dart program requires a certain directory structure to work:
+```
+hello_world.dart
+pubspec.yaml
+lib/util.dart
+```
+
+The aim of DShell is to remove the normal requirements so we can run a single dart script while still allowing you to gracefully grow your little project to a full blow application without having to start over.
+
+Virtual Projects is where this magic happens.
+
+DShell creates a configuration directory in you home directory:
+```
+~/.dshell
+~/.dshell/templates
+~/.dshell/dependancies.yaml
+~/.dshell/cache
+```
+
+When you run a DShell script, DShell creates a Virtual Project under the `cache` directory using the fully qualified path to you script.
+
+So if you have a script:
+```
+/home/fred/myscripts/hello_world.dart
+```
+
+then DShell will create a Virtual Project under the path
+
+```
+~/.dshell/cache/home/fred/myscripts/hello_world.project
+```
+
+Using the fully qualified path allows multiple scripts to exist in the same directory and we can still run a Virtual Project for each script.
+
+Within the Virtual Project directory DShell creates all the necessary files and directories need to make dart happy
+
+So a typical Virtual Project will contain:
+
+```
+symlink -> hello_world.dart
+pubspec.yaml
+```
+
+The pubspec.yaml is referred to as your `virtual pubspec` and is created as per the [pubspec precendence](#Pubspec-Precendence) rules and the [dependency injection](#Pubspec-dependancy-injection) rules.
+
+If you script directory contains a `lib` folder then we create:
+
+```
+symlink -> /home/fred/myscripts/hello_world.dart
+pubspec.yaml
+symlink -> /home/fred/myscripts/lib
+```
+
+Each time you run a DShell script DShell checks the last modified time on your DShell script and (if it exists) your pubspec.yaml and then if needed rebuilds your Virtual Project and re-runs `pub get`.
+
+DShell tries to be clever about this process to avoid unnessecary calls to `pub get` which is particularly time consuming.
+
+## waitFoEx
+DShell goes to great lengths to remove the need to use `Futures` and `await` there are two key tools we use for this.
+
+`waitFor` and `streams`.
+
+`waitFor` is a fairly new dart function which ONLY works for dart cli applications and can be found in the `dart:cli` package.
+
+`waitFor` allows a dart cli application to turn what would normally be an async method into a normal synchronious method by effectively abosrbing a future.
+Normally in dart as soon as you have one async function its async all of the way up.
+DShell simply wouldn't have been possible without `waitFor`.
+
+`waitFor` does however have a problem. If an exception gets thrown whilst in a `waitFor` call, then the stacktrace generated will be a microtask based stack trace. These stacktraces are useless as they don't show you where the original call came from.
+
+This is why `waitForEx` was born. `waitForEx` is my own little creation that does three things. 
+1. capture the current stack using StackTraceImpl
+2. calls `waitFor` and catches any exceptions
+3. If an exception is thrown it patches the stack trace captured in 1 and merges it with the interesting bits of the microtask exception.
+
+The result is that you get a clean stacktrace that points to exactly the line that cause the problem and has a stacktrace that actually shows where it was called from.
+
+
+
+
 
 # Contributing
-Read the wiki on contributing to dshell
+Read the wiki on contributing to DShell
 
 https://github.com/bsutton/dshell/wiki
 
