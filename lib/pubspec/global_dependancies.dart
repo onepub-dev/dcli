@@ -1,6 +1,11 @@
-import 'package:dshell/script/dependency.dart';
+import 'package:dshell/functions/env.dart';
+import 'package:dshell/functions/is.dart';
+import 'package:dshell/functions/touch.dart';
 import 'package:dshell/script/my_yaml.dart';
 
+import 'package:path/path.dart' as p;
+
+import '../settings.dart';
 import 'dependencies_mixin.dart';
 
 ///
@@ -13,11 +18,16 @@ import 'dependencies_mixin.dart';
 ///
 
 class GlobalDependancies with DependenciesMixin {
-  List<Dependency> dependancies = List();
+  static const String filename = "dependancies.yaml";
   MyYaml _yaml;
 
   GlobalDependancies() {
-    _yaml = MyYaml.loadFromFile("~/.dshell/dependancies.yaml");
+    String path = p.join(Settings().configRootPath, filename);
+
+    if (!exists(path)) {
+      touch(path, create: true);
+    }
+    _yaml = MyYaml.loadFromFile(path);
   }
 
   /// Use this ctor for unit testing.

@@ -2,8 +2,10 @@ import "dart:io";
 import 'package:dshell/functions/is.dart';
 import 'package:dshell/pubspec/pubspec_manager.dart';
 import 'package:dshell/script/pub_get.dart';
+import 'package:dshell/util/log.dart';
 import 'package:path/path.dart' as p;
 
+import '../settings.dart';
 import 'dart_sdk.dart';
 import 'hashes_yaml.dart';
 import 'script.dart';
@@ -100,6 +102,9 @@ class VirtualProject {
   /// deletes the project cache directory and recreates it.
   void clean() {
     if (exists(_virtualProjectPath)) {
+      if (Settings().isVerbose) {
+        Log().d("Deleting project path: $_virtualProjectPath");
+      }
       File(_virtualProjectPath).deleteSync(recursive: true);
     }
 

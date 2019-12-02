@@ -10,6 +10,8 @@ class MyYaml {
     document = _load(content);
   }
 
+  String get content => document.toString();
+
   MyYaml.loadFromFile(String path) {
     String contents = waitFor<String>(File(path).readAsString());
     document = _load(contents);
@@ -22,14 +24,26 @@ class MyYaml {
   /// reads the project name from the yaml file
   ///
   String getValue(String key) {
-    return document.contents.value[key] as String;
+    if (document.contents.value == null) {
+      return null;
+    } else {
+      return document.contents.value[key] as String;
+    }
   }
 
   y.YamlList getList(String key) {
-    return document.contents.value[key] as y.YamlList;
+    if (document.contents.value == null) {
+      return null;
+    } else {
+      return document.contents.value[key] as y.YamlList;
+    }
   }
 
   y.YamlMap getMap(String key) {
-    return document.contents.value[key] as y.YamlMap;
+    if (document.contents.value == null) {
+      return null;
+    } else {
+      return document.contents.value[key] as y.YamlMap;
+    }
   }
 }

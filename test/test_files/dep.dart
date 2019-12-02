@@ -1,7 +1,7 @@
 #! /usr/bin/env dshell
 /*
 @pubspec.yaml
-name: hello_world.dart
+name: dep.dart
 dependencies:
   dshell: ^1.0.0
   money2: ^1.0.0
@@ -14,5 +14,5 @@ import 'package:money2/money2.dart';
 
 
 void main() {
-  print("I'm a little tea pot.");
+  print("Hurry up, says Mr Blackboard");
     }

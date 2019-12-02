@@ -135,7 +135,7 @@ class PubSpecManager {
 
   List<Dependency> _getGlobalDependancies() {
     GlobalDependancies gd = GlobalDependancies();
-    return gd.dependancies;
+    return gd.dependencies;
   }
 
   List<Dependency> resolve(List<Dependency> preferred, List<Dependency> base) {

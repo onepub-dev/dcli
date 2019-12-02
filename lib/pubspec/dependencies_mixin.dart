@@ -17,17 +17,19 @@ mixin DependenciesMixin {
     return _dependencies;
   }
 
-  set dependencies(List<Dependency> dependencies) =>
-      this.dependencies = dependencies;
+  set dependencies(List<Dependency> lDependencies) =>
+      this._dependencies = lDependencies;
 
   List<Dependency> _extractDependancies(MyYaml yaml) {
     List<Dependency> dependancies = List();
     YamlMap map = yaml.getMap("dependencies");
 
-    for (MapEntry entry in map.entries) {
-      Dependency dependency =
-          Dependency(entry.key as String, entry.value as String);
-      dependancies.add(dependency);
+    if (map != null) {
+      for (MapEntry entry in map.entries) {
+        Dependency dependency =
+            Dependency(entry.key as String, entry.value as String);
+        dependancies.add(dependency);
+      }
     }
     return dependancies;
   }

@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:dshell/util/file_helper.dart';
+import 'package:dshell/util/log.dart';
 import 'package:dshell/util/waitForEx.dart';
 import 'package:path/path.dart' as p;
 
@@ -92,8 +93,9 @@ class ProjectCache {
   /// we will clean out the project cache
   /// for all scripts.
   void cleanAll() {
-    StdLog.stdout('Cleaning project cache ${_cacheRootPath}',
-        level: LogLevel.verbose);
+    Log().d(
+      'Cleaning project cache ${_cacheRootPath}',
+    );
     try {
       waitForEx(Directory(_cacheRootPath).delete(recursive: true));
     } finally {}

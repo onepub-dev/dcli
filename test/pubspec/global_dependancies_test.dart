@@ -20,6 +20,6 @@ dependencies:
     ];
 
     GlobalDependancies gd = GlobalDependancies.fromString(content);
-    expect(gd.dependancies, equals(expected));
+    expect(gd.dependencies, equals(expected));
   });
 }

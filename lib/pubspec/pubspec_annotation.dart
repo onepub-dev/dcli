@@ -60,6 +60,9 @@ class PubSpecAnnotation extends PubSpec with DependenciesMixin {
     ///   dependencies:
     ///      dshell: ^1.0.0
     /// */
+    ///
+
+    List<String> dataLines = List();
     for (String line in lines) {
       switch (state) {
         case _State.notFound:
@@ -83,7 +86,7 @@ class PubSpecAnnotation extends PubSpec with DependenciesMixin {
           if (trimmed == r'*/') {
             state = _State.found;
           } else {
-            sourceLines.add(line);
+            dataLines.add(line);
           }
           break;
         case _State.found:
@@ -99,7 +102,7 @@ class PubSpecAnnotation extends PubSpec with DependenciesMixin {
       throw PubSpecAnnotationException(
           "@pubspec annotation found but the closing '*/' was not seen");
     }
-    return sourceLines;
+    return dataLines;
   }
 
   ///

@@ -23,21 +23,21 @@ class PubSpecDefault extends PubSpec with DependenciesMixin {
 
   /// Creates default content for a virtual pubspec
   String _default() {
-    List<Dependency> dependancies = _getDefaultDepencies();
+    List<Dependency> dependancies = defaultDepencies;
 
     List<String> yamlLines = dependancies
         .map((dependancy) => "${dependancy.name}: ${dependancy.version}")
         .toList();
 
     return '''
-    name: ${_script.basename}
-    version: $version
-    dependencies: 
-      ${yamlLines.join("\n")}
+name: ${_script.basename}
+version: $version
+dependencies: 
+  ${yamlLines.join("\n  ")}
     ''';
   }
 
-  List<Dependency> _getDefaultDepencies() {
+  static List<Dependency> get defaultDepencies {
     return [
       Dependency("dshell", "^1.0.0"),
       Dependency("args", "^1.5.2"),
