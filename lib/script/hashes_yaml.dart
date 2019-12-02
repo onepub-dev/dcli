@@ -1,12 +1,12 @@
 import 'dart:io';
 import 'package:path/path.dart' as p;
 
-import 'yaml.dart';
+import 'my_yaml.dart';
 
 class HashesYaml {
   String fileName = 'hashes.yaml';
 
-  Yaml hashes;
+  MyYaml hashes;
 
   HashesYaml(String scriptCachePath) {
     Directory cachePathDirectory = Directory(scriptCachePath);
@@ -15,8 +15,7 @@ class HashesYaml {
       cachePathDirectory.createSync();
     }
 
-    hashes = Yaml(p.join(scriptCachePath, fileName));
-    hashes.load();
+    hashes = MyYaml.loadFromFile(p.join(scriptCachePath, fileName));
   }
 
   static void create(String projectRootPath) {}

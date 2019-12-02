@@ -1,11 +1,11 @@
 import "dart:io";
 import 'package:dshell/functions/is.dart';
+import 'package:dshell/pubspec/pubspec_manager.dart';
 import 'package:dshell/script/pub_get.dart';
 import 'package:path/path.dart' as p;
 
 import 'dart_sdk.dart';
 import 'hashes_yaml.dart';
-import 'pubspec.dart';
 import 'script.dart';
 import 'package:dshell/util/file_helper.dart';
 
@@ -21,7 +21,7 @@ class VirtualProject {
   // The  absolute path to our
   // virtual project.
   // The path name is of th
-  String _projectRootPath;
+  String _virtualProjectPath;
 
   // The absolute path to the scripts lib directory.
   // The script may not have a lib in which
@@ -45,20 +45,20 @@ class VirtualProject {
   /// script.
   VirtualProject(String cacheRootPath, this.script) {
     // /home/bsutton/.dshell/cache/home/bsutton/git/dshell/test/test_scripts/hello_world.project
-    _projectRootPath = p.join(cacheRootPath,
+    _virtualProjectPath = p.join(cacheRootPath,
         script.scriptDirectory.substring(1), script.basename + PROJECT_DIR);
 
-    _projectLibPath = p.join(_projectRootPath, "lib");
-    _projectScriptLinkPath = p.join(_projectRootPath, script.scriptname);
-    // _projectPubSpecPath = p.join(_projectRootPath, "pubspec.yaml");
-
+    _projectLibPath = p.join(_virtualProjectPath, "lib");
+    _projectScriptLinkPath = p.join(_virtualProjectPath, script.scriptname);
     _scriptLibPath = p.join(script.scriptDirectory, "lib");
   }
 
   String get scriptLib => _scriptLibPath;
   String get projectCacheLib => _projectLibPath;
 
-  String get path => _projectRootPath;
+  String get path => _virtualProjectPath;
+
+  String get pubSpecPath => p.join(_virtualProjectPath, "pubspec.yaml");
 
   /// Creates the projects cache directory under the
   ///  root directory of our global cache directory - [cacheRootDir]
@@ -73,20 +73,18 @@ class VirtualProject {
   /// Link to scripts own pubspec.yaml file.
   /// hashes.yaml file.
   void createProject() {
-    if (!createDir(_projectRootPath, "project cache")) {
-      print('Created project, cache path at ${_projectRootPath}');
+    if (!createDir(_virtualProjectPath, "project cache")) {
+      print('Created project, cache path at ${_virtualProjectPath}');
     }
 
-    HashesYaml.create(_projectRootPath);
+    HashesYaml.create(_virtualProjectPath);
 
     _createScriptLink(script);
     _createLib();
-    bool pubgetRequired = _createPubSpec(script);
-    if (pubgetRequired) {
-      print("Running pub get...");
-      print("");
-      pubget();
-    }
+    PubSpecManager(this).createVirtualPubSpec();
+    print("Running pub get...");
+    print("");
+    pubget();
   }
 
   /// We need to create a link to the script
@@ -98,17 +96,11 @@ class VirtualProject {
     }
   }
 
-  bool _createPubSpec(Script script) {
-    PubSpec pubspec = PubSpec(script);
-
-    return pubspec.saveToFile(_projectRootPath);
-  }
-
   ///
   /// deletes the project cache directory and recreates it.
   void clean() {
-    if (exists(_projectRootPath)) {
-      File(_projectRootPath).deleteSync(recursive: true);
+    if (exists(_virtualProjectPath)) {
+      File(_virtualProjectPath).deleteSync(recursive: true);
     }
 
     createProject();

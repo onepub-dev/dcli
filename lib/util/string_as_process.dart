@@ -90,6 +90,12 @@ extension StringAsProcess on String {
     sink.close();
   }
 
+  /// Truncates a file by setting its length to zero.
+  void truncate() {
+    FileSync sink = FileSync(this);
+    sink.truncate();
+  }
+
   // Treat the [this]  as the name of a file
   // and append the [line] to it.
   // If [newline] is true add a newline after the line.

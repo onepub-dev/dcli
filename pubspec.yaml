@@ -20,6 +20,7 @@ dependencies:
   recase: ^2.0.1
   money2: ^1.0.5
   file: ^5.1.0
+  equatable: ^0.6.0
 
 dev_dependencies:
   test: ^1.6.0

@@ -112,4 +112,8 @@ class FileSync {
     _raf.setPositionSync(_raf.lengthSync());
     _raf.writeStringSync(line);
   }
+
+  void truncate() {
+    _raf.truncateSync(0);
+  }
 }

@@ -1,5 +1,5 @@
 import 'package:dshell/dshell.dart';
-import 'package:dshell/script/yaml.dart';
+import 'package:dshell/script/my_yaml.dart';
 import 'package:test/test.dart' as t;
 
 void main() {
@@ -7,8 +7,7 @@ void main() {
 
   t.test("Project Name", () {
     print("$pwd");
-    Yaml yaml = Yaml("pubspec.yaml");
-    yaml.load();
+    MyYaml yaml = MyYaml.loadFromFile("pubspec.yaml");
     String projectName = yaml.getValue("name");
 
     t.expect(projectName, t.equals("dshell"));

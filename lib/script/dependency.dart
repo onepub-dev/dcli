@@ -1,4 +1,7 @@
-class Dependency {
+import 'package:equatable/equatable.dart';
+import 'package:yaml/src/yaml_node.dart';
+
+class Dependency extends Equatable{
   final String name;
 
   final String version;
@@ -14,4 +17,19 @@ class Dependency {
     }
     return dep;
   }
+
+  Dependency.fromYaml(YamlNode node)
+      : name = extractName(node),
+        version = extractVersion(node);
+
+  static String extractVersion(YamlNode node) {
+    print(node);
+  }
+
+  static String extractName(YamlNode node) {
+    print(node);
+  }
+
+  @override
+ List<Object> get props => [name, version];
 }

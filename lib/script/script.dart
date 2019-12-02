@@ -1,6 +1,7 @@
 import 'dart:io';
 import 'dart:math';
 
+import 'package:dshell/functions/is.dart';
 import 'package:dshell/script/flags.dart';
 import 'package:dshell/util/file_helper.dart';
 import 'package:path/path.dart' as p;
@@ -41,10 +42,12 @@ class Script {
 
   /// the name of the script without its extension.
   /// this is used for the 'name' key in the pubspec.
-  String get pubsecName => p.basenameWithoutExtension(scriptname);
+  String get pubsecNameKey => p.basenameWithoutExtension(scriptname);
 
   /// The scriptname without its '.dart' extension.
   String get basename => p.basenameWithoutExtension(scriptname);
+
+  String get pubSpecPath => p.join(_scriptDirectory, "pubspec.yaml");
 
   // the scriptnameArg may contain a relative path: fred/home.dart
   // we need to get the actually name and full path to the script file.
@@ -118,6 +121,13 @@ void main() {
   }
 
   void run(Map<String, Flag> selectedFlags, List<String> subarguments) {}
+
+  /// Returns true if the script has a pubspec.yaml in its directory.
+  bool hasPubSpecYaml() {
+    // The virtual project pubspec.yaml file.
+    final String pubSpecPath = p.join(path, "pubspec.yaml");
+    return exists(pubSpecPath);
+  }
 }
 
 class PithyGreetings {
