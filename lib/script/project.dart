@@ -85,7 +85,6 @@ class VirtualProject {
     _createLib();
     PubSpecManager(this).createVirtualPubSpec();
     print("Running pub get...");
-    print("");
     pubget();
   }
 
