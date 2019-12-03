@@ -51,8 +51,7 @@ class DartSdk {
     return run(pubGetPath, ['get'], workingDirectory, progress: progress);
   }
 
-  /// Runs a dart application returning all the accumulated
-  /// stdout as a single string.
+  /// Runs a dart application.
   /// Throws a RunException on failure
   /// the project working dir.
   Progress run(String processPath, List<String> args, String workingDirectory,
