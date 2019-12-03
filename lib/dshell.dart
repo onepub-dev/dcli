@@ -1,6 +1,7 @@
 export 'functions/ask.dart' show ask;
 export 'functions/cat.dart' show cat, CatException;
 export 'functions/cd.dart' show cd, CDException;
+export 'functions/chmod.dart' show chmod, ChModException;
 export 'functions/copy.dart' show copy, CopyException;
 export 'functions/delete.dart' show delete, DeleteException;
 export 'functions/echo.dart' show echo;
