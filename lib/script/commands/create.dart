@@ -28,7 +28,11 @@ class CreateCommand extends Command {
     print("Creating project.");
     ProjectCache().createProject(_script);
 
+    print("Making script executable");
+    chmod(755, p.join(_script.scriptDirectory, _script.scriptname));
+
     print("Project creation complete.");
+
     print("To run your script:\n   dshell ${_script.scriptname}");
 
     return 0;
