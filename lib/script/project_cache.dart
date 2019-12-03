@@ -6,7 +6,6 @@ import 'package:dshell/util/waitForEx.dart';
 import 'package:path/path.dart' as p;
 
 import '../settings.dart';
-import 'std_log.dart';
 import 'project.dart';
 import 'script.dart';
 
@@ -71,6 +70,10 @@ class ProjectCache {
   }
 
   String get path => _cacheRootPath;
+
+  VirtualProject loadProject(Script script) {
+    return VirtualProject(_cacheRootPath, script);
+  }
 
   // Creates a project ready to run for
   // the given script.
