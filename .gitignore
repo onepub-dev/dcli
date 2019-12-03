@@ -27,3 +27,6 @@ tmp/top/middle/two.jpg
 tmp/top/middle/bottom/five.txt
 tmp/top/middle/bottom/six.txt
 tmp/top/middle/bottom/three.jpg
+test/test_scripts/burp.dart
+test/test_scripts/hello_world.dart
+test/test_scripts/new_world.dart
