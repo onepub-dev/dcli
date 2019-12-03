@@ -1,4 +1,3 @@
-import 'package:dshell/functions/env.dart';
 import 'package:dshell/functions/is.dart';
 import 'package:dshell/functions/touch.dart';
 import 'package:dshell/script/my_yaml.dart';
