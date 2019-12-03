@@ -74,8 +74,6 @@ class CommandLineRunner {
       // get the script name and remaning args as they are the arguments for the command to process.
       exitCode = command.run(Settings().selectedFlags, cmdArguments);
     } else {
-      HelpCommand().printUsage();
-
       throw InvalidArguments("Invalid arguments passed.");
     }
     return exitCode;
