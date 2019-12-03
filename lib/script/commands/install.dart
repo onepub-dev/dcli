@@ -18,7 +18,7 @@ class InstallCommand extends Command {
   int run(List<Flag> selectedFlags, List<String> subarguments) {
     int exitCode = 0;
 
-    if (subarguments.length != 0) {
+    if (subarguments.isNotEmpty) {
       throw CommandLineException(
           "'dshell install' does not take any arguments. Found $subarguments");
     }
