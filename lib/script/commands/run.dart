@@ -1,3 +1,5 @@
+import 'package:dshell/pubspec/pubspec_manager.dart';
+
 import '../../settings.dart';
 import '../dart_sdk.dart';
 import '../flags.dart';
@@ -22,7 +24,12 @@ class RunCommand extends Command {
 
     Script script = Script.fromArg(arguments[0]);
 
-    VirtualProject project = ProjectCache().createProject(script);
+    VirtualProject project = ProjectCache().loadProject(script);
+
+    if (PubSpecManager(project).isCleanRequired()) {
+      project.clean();
+    }
+
     List<String> scriptArguments = List();
 
     if (arguments.length > 1) {
