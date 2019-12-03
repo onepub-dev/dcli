@@ -1,3 +1,9 @@
+## 1.0.16
+Update the getting started instructions to include install and create commands.
+
+## 1.0.15
+Tweeks to keep dart packager happy
+
 ## 1.0.14
 Fixes for dshell create - now sets execute permissions.
 Implemented basic dshell install.

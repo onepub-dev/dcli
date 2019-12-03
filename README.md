@@ -87,10 +87,14 @@ These are some of the built-in commands:
 # Getting Started
 ## Installing
 
-To install DShell run:
+To install DShell, create and run your first script:
 
 ```shell
 pub global activate dshell
+dshell install
+dshell create test.dart
+./test.dart
+cli>Hello World
 
 ```
 
