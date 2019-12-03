@@ -20,14 +20,14 @@ class ScriptRunner {
     // Prepare VM arguments
     final vmArgs = <String>[];
     vmArgs.add("--enable-asserts");
-    vmArgs.addAll(["--packages=${project.path}/.packages"]);
+    vmArgs.addAll(["--package-root=${project.path}/.packages"]);
     vmArgs.add(project.script.scriptname);
     vmArgs.addAll(scriptArguments);
 
     // Execute the script
     final Process process = waitFor<Process>(Process.start(
         Platform.executable, vmArgs,
-        workingDirectory: project.path));
+        workingDirectory: project.script.scriptDirectory));
 
     // Pipe std out and in
     final StreamSubscription stderrSub =
