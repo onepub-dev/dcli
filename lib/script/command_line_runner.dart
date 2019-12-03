@@ -1,4 +1,3 @@
-import 'package:dshell/script/commands/help.dart';
 import 'package:dshell/util/dshell_exception.dart';
 
 import '../settings.dart';

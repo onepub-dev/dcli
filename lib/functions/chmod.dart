@@ -21,11 +21,12 @@ class ChMod extends DShellFunction {
 
   //  String chmod({int user, int group, int other, this.path}) {}
 
-  String buildPermission(int permission) {
+/*  String buildPermission(int permission) {
     bool read = ((permission & 4) >> 2) == 1;
     bool write = ((permission & 2) >> 1) == 1;
     bool execute = ((permission & 1)) == 1;
   }
+  */
 }
 
 class ChModException extends DShellFunctionException {
