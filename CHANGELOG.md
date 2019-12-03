@@ -1,3 +1,10 @@
+## 1.0.14
+Fixes for dshell create - now sets execute permissions.
+Implemented basic dshell install.
+Improvements to dependancy injection. Additional testing required.
+We need (in theory) support dependency.yaml in the .dshell directory.
+Documenation improvements.
+
 ## 1.0.13
 And now actually removed the do not use warning.
 
