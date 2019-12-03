@@ -8,6 +8,7 @@ import 'package:dshell/script/commands/split.dart';
 
 import '../flags.dart';
 import 'help.dart';
+import 'install.dart';
 
 class Commands {
   static List<Command> get applicationCommands => [
@@ -15,10 +16,11 @@ class Commands {
         CleanCommand(),
         CompileCommand(),
         CreateCommand(),
+        InstallCommand(),
         MergeCommand(),
         RunCommand(),
         SplitCommand(),
-        HelpCommand()
+        HelpCommand(),
       ];
 
   static Command findCommand(String argument, Map<String, Command> commands) {
