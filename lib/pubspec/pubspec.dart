@@ -19,7 +19,7 @@ abstract class PubSpec {
   void writeToFile(String path) {
     path.truncate;
 
-    path.write(yaml.toString());
+    path.write(yaml.content);
   }
 
   void replaceDependancies(List<Dependency> resolved) {
