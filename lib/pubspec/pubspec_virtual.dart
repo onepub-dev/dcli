@@ -25,5 +25,4 @@ class PubSpecVirtual extends PubSpec with DependenciesMixin {
 
     yaml = MyYaml.loadFromFile(pubSpecPath);
   }
-
 }
