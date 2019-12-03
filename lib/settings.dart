@@ -8,9 +8,13 @@ import 'package:path/path.dart' as p;
 class Settings {
   static Settings _self;
 
+  static const templateDir = "templates";
+
   /// The directory where we store all of dshell's
   /// configuration files such as the cache.
   String _configRootPath;
+
+  String get templatePath => p.join(_configRootPath, templateDir);
 
   final String appname;
 
