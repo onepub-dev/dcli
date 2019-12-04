@@ -43,7 +43,7 @@ class GlobalDependancies with DependenciesMixin {
       path.write("dependencies:");
 
       for (Dependency dep in defaultDependencies) {
-        path.append("  ${dep.name}:${dep.version}");
+        path.append("  ${dep.name}: ${dep.version}");
       }
     }
   }
