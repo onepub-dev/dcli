@@ -29,6 +29,15 @@ void main() {
   group("Create Project", () {
     setup();
 
+    test('Install with success', () {
+      try {
+        EntryPoint().process(["install"]);
+      } on DShellException catch (e) {
+        print(e);
+      }
+
+      checkProjectStructure();
+    });
     test('Install with error', () {
       try {
         EntryPoint().process(["install", "a"]);
