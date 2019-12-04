@@ -1,10 +1,10 @@
-import 'package:dshell/functions/is.dart';
+import 'package:dshell/dshell.dart';
 import 'package:dshell/functions/touch.dart';
+import 'package:dshell/script/dependency.dart';
 import 'package:dshell/script/my_yaml.dart';
 
 import 'package:path/path.dart' as p;
 
-import '../settings.dart';
 import 'dependencies_mixin.dart';
 
 ///
@@ -21,8 +21,6 @@ class GlobalDependancies with DependenciesMixin {
   MyYaml _yaml;
 
   GlobalDependancies() {
-    String path = p.join(Settings().configRootPath, filename);
-
     if (!exists(path)) {
       touch(path, create: true);
     }
@@ -34,6 +32,27 @@ class GlobalDependancies with DependenciesMixin {
     _yaml = MyYaml.fromString(yaml);
   }
 
+  static String get path => p.join(Settings().configRootPath, filename);
+
   @override
   MyYaml get yaml => _yaml;
+
+  /// Creates the default global dependancies
+  static void createDefault() {
+    if (!exists(path)) {
+      path.write("dependencies:");
+
+      for (Dependency dep in defaultDependencies) {
+        path.append("  ${dep.name}:${dep.version}");
+      }
+    }
+  }
+
+  static List<Dependency> get defaultDependencies {
+    return [
+      Dependency("dshell", "^1.0.0"),
+      Dependency("args", "^1.5.2"),
+      Dependency("path", "^1.6.4"),
+    ];
+  }
 }
