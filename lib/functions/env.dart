@@ -1,7 +1,7 @@
 import 'dart:io';
 
+import '../settings.dart';
 import 'dshell_function.dart';
-import 'settings.dart';
 import '../util/log.dart';
 
 /// Gets an environment variable

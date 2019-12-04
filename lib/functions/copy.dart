@@ -1,11 +1,11 @@
 import 'dart:io';
 
 import 'package:dshell/functions/function.dart';
+import 'package:dshell/settings.dart';
 
 import '../util/log.dart';
 
 import 'is.dart';
-import 'settings.dart';
 
 ///
 /// Copies the file [from] to the file [to].

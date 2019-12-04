@@ -2,9 +2,9 @@ import 'package:file_utils/file_utils.dart';
 
 import 'package:path/path.dart' as p;
 
+import '../settings.dart';
 import 'dshell_function.dart';
 import 'is.dart';
-import 'settings.dart';
 import '../util/log.dart';
 
 /// Updates the last modified time stamp of a file.

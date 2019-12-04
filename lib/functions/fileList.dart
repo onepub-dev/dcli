@@ -2,10 +2,10 @@ import 'dart:io';
 
 import 'package:dshell/functions/function.dart';
 
+import '../settings.dart';
 import '../util/log.dart';
 
 import 'pwd.dart';
-import 'settings.dart';
 
 ///
 /// returns the list of files and directories

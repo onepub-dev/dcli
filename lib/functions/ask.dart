@@ -1,11 +1,12 @@
 import 'dart:convert';
 import 'dart:io';
 
+import 'package:dshell/settings.dart';
+
 import '../util/log.dart';
 
 import 'dshell_function.dart';
 import 'echo.dart';
-import 'settings.dart';
 
 ///
 /// Reads a line of text from stdin with an optional prompt.

@@ -1,11 +1,11 @@
 import 'dart:io';
 
 import 'package:dshell/functions/function.dart';
+import 'package:dshell/settings.dart';
 import 'package:path/path.dart' as p;
 
 import '../util/log.dart';
 import 'is.dart';
-import 'settings.dart';
 
 /// Change Directories to the relative or absolute path.
 ///

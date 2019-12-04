@@ -1,9 +1,9 @@
 import 'package:dshell/util/waitForEx.dart';
 
+import '../settings.dart';
 import '../util/log.dart';
 
 import 'dshell_function.dart';
-import 'settings.dart';
 
 /// sleeps for the provided [duration] of the given [interval].
 ///

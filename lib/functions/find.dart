@@ -4,7 +4,6 @@ import 'package:dshell/functions/function.dart';
 import 'package:dshell/util/progress.dart';
 
 import '../dshell.dart';
-import 'settings.dart';
 
 import '../util/log.dart';
 
@@ -48,56 +47,6 @@ import '../util/log.dart';
 /// [types] allows you to specify the file types you want the find to return.
 /// By default [types] limits the results to files.
 ///
-
-class PatternMatcher {
-  String pattern;
-  RegExp regEx;
-  bool caseSensitive;
-
-  PatternMatcher(this.pattern, this.caseSensitive) {
-    regEx = buildRegEx();
-  }
-
-  bool match(String value) {
-    return regEx.stringMatch(value) == value;
-  }
-
-  RegExp buildRegEx() {
-    String regEx = "";
-
-    for (int i = 0; i < pattern.length; i++) {
-      String char = pattern[i];
-
-      switch (char) {
-        case '[':
-          regEx += "[";
-          break;
-        case ']':
-          regEx += "]";
-          break;
-        case '*':
-          regEx += '.*';
-          break;
-        case '?':
-          regEx += ".";
-          break;
-        case '-':
-          regEx += "-";
-          break;
-        case '!':
-          regEx += "^";
-          break;
-        case ".":
-          regEx += "\\.";
-          break;
-        default:
-          regEx += char;
-          break;
-      }
-    }
-    return RegExp(regEx, caseSensitive: caseSensitive);
-  }
-}
 
 Progress find(String pattern,
         {bool caseSensitive = false,
@@ -151,5 +100,55 @@ class Find extends DShellFunction {
     }
 
     return forEach;
+  }
+}
+
+class PatternMatcher {
+  String pattern;
+  RegExp regEx;
+  bool caseSensitive;
+
+  PatternMatcher(this.pattern, this.caseSensitive) {
+    regEx = buildRegEx();
+  }
+
+  bool match(String value) {
+    return regEx.stringMatch(value) == value;
+  }
+
+  RegExp buildRegEx() {
+    String regEx = "";
+
+    for (int i = 0; i < pattern.length; i++) {
+      String char = pattern[i];
+
+      switch (char) {
+        case '[':
+          regEx += "[";
+          break;
+        case ']':
+          regEx += "]";
+          break;
+        case '*':
+          regEx += '.*';
+          break;
+        case '?':
+          regEx += ".";
+          break;
+        case '-':
+          regEx += "-";
+          break;
+        case '!':
+          regEx += "^";
+          break;
+        case ".":
+          regEx += "\\.";
+          break;
+        default:
+          regEx += char;
+          break;
+      }
+    }
+    return RegExp(regEx, caseSensitive: caseSensitive);
   }
 }

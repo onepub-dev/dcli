@@ -1,11 +1,11 @@
 import 'dart:io';
 
+import '../settings.dart';
 import '../util/log.dart';
 
 import 'dshell_function.dart';
 import 'is.dart';
 import 'ask.dart';
-import 'settings.dart';
 
 ///
 /// Deletes the file at [path].

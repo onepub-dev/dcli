@@ -2,10 +2,10 @@ import 'package:dshell/functions/function.dart';
 import 'package:dshell/util/file_sync.dart';
 import 'package:dshell/util/progress.dart';
 
+import '../settings.dart';
 import '../util/log.dart';
 
 import 'is.dart';
-import 'settings.dart';
 
 ///
 /// Returns count [lines] from the file at [path].

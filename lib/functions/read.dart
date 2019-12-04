@@ -7,9 +7,9 @@ import 'package:dshell/util/progress.dart';
 import 'package:dshell/util/stack_trace_impl.dart';
 import 'package:dshell/util/waitForEx.dart';
 
+import '../settings.dart';
 import 'dshell_function.dart';
 import 'is.dart';
-import 'settings.dart';
 import '../util/log.dart';
 
 /// Reads lines from the file at [path].

@@ -2,11 +2,11 @@ import 'dart:io';
 
 import 'package:path/path.dart' as p;
 
+import '../settings.dart';
 import '../util/log.dart';
 
 import 'dshell_function.dart';
 import 'is.dart';
-import 'settings.dart';
 
 ///
 /// Pushes the given [path] onto the stack

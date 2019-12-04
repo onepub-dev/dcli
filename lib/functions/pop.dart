@@ -2,10 +2,10 @@ import 'dart:io';
 
 import 'package:dshell/functions/function.dart';
 
+import '../settings.dart';
 import '../util/log.dart';
 import 'package:path/path.dart' as p;
 
-import 'settings.dart';
 
 ///
 /// Push and Pop work together to track a series

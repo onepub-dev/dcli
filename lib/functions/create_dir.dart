@@ -1,9 +1,9 @@
 import 'dart:io';
 import 'package:dshell/functions/function.dart';
+import 'package:dshell/settings.dart';
 
 import '../util/log.dart';
 
-import 'settings.dart';
 
 /// Creates a directory as described by [path]
 /// Path may be a single path segment (e.g. bin)

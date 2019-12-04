@@ -6,8 +6,6 @@ import 'package:dshell/dshell.dart';
 import '../util/log.dart';
 import 'package:path/path.dart' as p;
 
-import 'settings.dart';
-
 ///
 /// Moves the file [from] to the location [to].
 ///

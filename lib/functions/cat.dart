@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'dart:io';
 
+import 'package:dshell/settings.dart';
 import 'package:dshell/util/dshell_exception.dart';
 import 'package:dshell/util/runnable_process.dart';
 
@@ -9,7 +10,6 @@ import 'package:dshell/util/waitForEx.dart';
 
 import 'dshell_function.dart';
 import 'is.dart';
-import 'settings.dart';
 import '../util/log.dart';
 
 /// Prints the contents of the file located at [path] to stdout.

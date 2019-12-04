@@ -1,10 +1,10 @@
 import 'dart:io';
 import 'package:dshell/functions/function.dart';
 
+import '../settings.dart';
 import '../util/log.dart';
 
 import 'is.dart';
-import 'settings.dart';
 
 ///
 /// Deletes the directory at [path]
