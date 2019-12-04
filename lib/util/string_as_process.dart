@@ -101,10 +101,7 @@ extension StringAsProcess on String {
   // If [newline] is true add a newline after the line.
   void append(String line, {bool newline = true}) {
     FileSync sink = FileSync(this);
-    if (newline) {
-      line += '\n';
-    }
-    sink.append(line);
+    sink.append(line, newline: newline);
     sink.close();
   }
 }
