@@ -18,6 +18,8 @@ class StackList<T> {
     }
   }
 
+  bool get isEmpty => stack.isEmpty;
+
   void push(T item) {
     stack.addFirst(item);
   }

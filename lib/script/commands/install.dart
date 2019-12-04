@@ -4,8 +4,8 @@ import 'package:dshell/functions/copy.dart';
 import 'package:dshell/functions/create_dir.dart';
 import 'package:dshell/functions/is.dart';
 import 'package:dshell/script/command_line_runner.dart';
+import 'package:dshell/settings.dart';
 
-import '../../settings.dart';
 import '../flags.dart';
 import 'commands.dart';
 
