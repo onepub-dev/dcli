@@ -521,6 +521,47 @@ The above command launches 'grep' and 'head' to find all import lines in any dar
 
 What we have now is the power of Bash and the elegance of Dart.
 
+# CD/Push/Pop are evil
+The cd, push and pop commands of bash seem like fun but they are actually harbingers of evil.
+
+I know that they they are used every and they seem such an elegant solution but in a script the just shouldn't be used.
+
+Instead use relative or absolute paths.
+
+DShell automatically injects the rather excelent package ('path')[https://pub.dev/packages/path]. `path` includes an array of global functions that allow you to build and manipulate file paths.
+
+Such as: 
+```dart
+join('directory', 'file.txt');
+```
+
+With the `path` package at your disposal there is really no need to use cd, push or pop.
+
+## Why is cd dangerous?
+
+There are several reasons.
+
+1) dart is multi-threaded
+Dart and consequently DShell allow you to run multiple threads of execute via Isolates.
+
+The problem is that all of these Isolates running in your Dart process share a single common working directory.
+
+This means that if you use CD in one isolate then all other isolates have their working directory changed under their feet.
+
+Imagine if you are about to do a recusive delete in one isolate and some other Isolate changes the working directory to `/`. 
+
+Oops you just deleted your entire file system.
+
+2) A function forgets to pop
+
+What happens if you call a function that happens to change the working directory?
+
+Again you can end up deleting your entire file system if the function changes to `/`.
+
+The correct answer is simply don't use CD/PUSH/POP.
+
+Use relative or absolute paths.
+
 
 # Pubspec Management
 DShell aims to make creating a script as simple as possible and with that in mind we 
