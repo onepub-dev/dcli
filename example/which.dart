@@ -28,14 +28,10 @@ void main(List<String> args) {
   }
 
   String command = results.rest[0];
-  String home = env("HOME");
 
   List<String> paths = env("PATH").split(":");
 
   for (String path in paths) {
-    if (path.startsWith("~")) {
-      path = path.replaceAll("~", home);
-    }
     if (verbose) {
       print("Searching: ${p.canonicalize(path)}");
     }
