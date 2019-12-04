@@ -14,7 +14,9 @@ class Settings {
 
   /// The directory where we store all of dshell's
   /// configuration files such as the cache.
-  String configRootPath;
+  String _configRootPath;
+
+  String get configRootPath => _configRootPath;
 
   String get templatePath => p.join(configRootPath, templateDir);
 
@@ -44,7 +46,7 @@ class Settings {
     _self = this;
 
     String home = userHomePath;
-    configRootPath = p.absolute(p.join(home, configRootPath));
+    _configRootPath = p.absolute(p.join(home, configRootPath));
   }
 
   ///
