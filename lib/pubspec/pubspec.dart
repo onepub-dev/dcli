@@ -14,7 +14,9 @@ abstract class PubSpec {
   String get name;
   String get version;
 
-  void writeToFile(String path);
+  /// Saves the pubspec.yaml into the
+  /// given directory
+  void writeToFile(String directory);
 
   set dependencies(List<Dependency> newDependencies);
   List<Dependency> get dependencies;
@@ -58,8 +60,10 @@ class PubSpecImpl implements PubSpec {
 
   PubSpecImpl._internal();
 
-  void writeToFile(String path) {
-    waitForEx<dynamic>(pubspec.save(Directory(dirname(path))));
+  /// Saves the pubspec.yaml into the
+  /// given directory
+  void writeToFile(String directory) {
+    waitForEx<dynamic>(pubspec.save(Directory(dirname(directory))));
   }
 
   static PubSpec loadFromFile(String path) {
