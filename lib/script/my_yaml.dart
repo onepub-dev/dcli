@@ -1,6 +1,7 @@
 import 'dart:cli';
 import 'dart:io';
 
+import 'package:dshell/script/dependency.dart';
 import 'package:yaml/yaml.dart' as y;
 
 class MyYaml {
@@ -45,5 +46,9 @@ class MyYaml {
     } else {
       return document.contents.value[key] as y.YamlMap;
     }
+  }
+
+  void setList(String key, List<Dependency> list) {
+    document.contents.value[key] = list;
   }
 }
