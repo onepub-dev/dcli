@@ -19,6 +19,7 @@ dependencies:
   logger: ^0.7.0+2
   recase: ^2.0.1
   money2: ^1.0.5
+  pubspec: ^0.1.2
   file: ^5.1.0
   equatable: ^1.0.1
 
