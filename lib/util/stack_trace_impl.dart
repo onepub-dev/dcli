@@ -148,6 +148,20 @@ class StackTraceImpl implements core.StackTrace {
     }
     return stackFrames;
   }
+
+
+  StackTraceImpl merge(core.StackTrace microTask)
+  {
+    StackTraceImpl _microImpl = StackTraceImpl.fromStackTrace(microTask, skipFrames: 2) ;
+
+   StackTraceImpl merged = StackTraceImpl.fromStackTrace(this);
+
+    for (Stackframe frame : _microImpl)
+    {
+      merged._frames.add(frame);
+    }
+  return merged;
+  }
 }
 
 ///

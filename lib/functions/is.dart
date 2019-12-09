@@ -20,11 +20,19 @@ bool isFile(String path) => Is().isFile(path);
 bool isDirectory(String path) => Is().isDirectory(path);
 
 /// returns true if the given path exists.
-/// It may be a file or a directory.
+/// It may be a file, directory or link.
+///
+/// If [followLinks] is true (the default) then exists
+/// will return true if the resolved path exists.
+///
+/// If [followLinks] is false then [exists] will return
+/// true if path exist, whether its a link or not.
+///
 /// ```dart
 /// if (exists("/fred.txt"))
 /// ```
-bool exists(String path) => Is().exists(path);
+bool exists(String path, {bool followLinks = true}) =>
+    Is().exists(path, followLinks);
 
 /// Returns the datetime the path was last modified
 ///
@@ -70,8 +78,9 @@ class Is extends DShellFunction {
   }
 
   /// checks if the given [path] exists.
-  bool exists(String path) {
-    return FileSystemEntity.typeSync(path) != FileSystemEntityType.notFound;
+  bool exists(String path, bool followLinks) {
+    return FileSystemEntity.typeSync(path, followLinks: followLinks) !=
+        FileSystemEntityType.notFound;
   }
 
   DateTime lastModified(String path) {
