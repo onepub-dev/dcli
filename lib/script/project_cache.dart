@@ -1,12 +1,12 @@
 import 'dart:io';
 
+import 'package:dshell/script/virtual_project.dart';
 import 'package:dshell/util/file_helper.dart';
 import 'package:dshell/util/log.dart';
 import 'package:dshell/util/waitForEx.dart';
 import 'package:path/path.dart' as p;
 
 import '../settings.dart';
-import 'project.dart';
 import 'script.dart';
 
 ///
@@ -79,9 +79,9 @@ class ProjectCache {
   // the given script.
   // If the project already exists then it will
   // be refreshed if required.
-  VirtualProject createProject(Script script) {
+  VirtualProject createProject(Script script, {bool skipPubGet}) {
     VirtualProject project = VirtualProject(_cacheRootPath, script);
-    project.createProject();
+    project.createProject(skipPubGet: skipPubGet);
     return project;
   }
 

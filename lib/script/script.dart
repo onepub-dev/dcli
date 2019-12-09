@@ -26,7 +26,7 @@ class Script {
   /// with the current working directory to form
   /// a absolute path.
   ///
-  Script.fromArg(
+  Script.fromFile(
     String scriptArg,
   )   : _scriptname = _extractScriptname(scriptArg),
         _scriptDirectory = _extractScriptDirectory(scriptArg);
@@ -125,7 +125,7 @@ void main() {
   /// Returns true if the script has a pubspec.yaml in its directory.
   bool hasPubSpecYaml() {
     // The virtual project pubspec.yaml file.
-    final String pubSpecPath = p.join(path, "pubspec.yaml");
+    final String pubSpecPath = p.join(_scriptDirectory, "pubspec.yaml");
     return exists(pubSpecPath);
   }
 }

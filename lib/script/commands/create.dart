@@ -44,7 +44,7 @@ class CreateCommand extends Command {
           "The create command takes only one argument. Found: ${arguments.join(",")}");
     }
 
-    return Script.fromArg(arguments[0]);
+    return Script.fromFile(arguments[0]);
   }
 
   /// Checks if the templates directory exists and .dshell and if not creates

@@ -14,7 +14,7 @@ class SplitCommand extends Command {
       throw InvalidArguments("Split requires a argument <script file.dart>");
     }
     Script.validate(subarguments);
-    Script.fromArg(subarguments[0]);
+    Script.fromFile(subarguments[0]);
 
     return 0;
   }
