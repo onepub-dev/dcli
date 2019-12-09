@@ -28,11 +28,14 @@ class FileSync {
     _raf.flushSync();
   }
 
+  /// Returns the length of the file in bytes
+  /// The file does NOT have to be open
+  /// to determine its length.
   int get length {
-    return _raf.lengthSync();
+    return _file.lengthSync();
   }
 
-  // close also flushes a file.
+  // close and flushes a file.
   void close() {
     _raf.closeSync();
   }
