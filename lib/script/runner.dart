@@ -2,10 +2,10 @@ import 'dart:async';
 import 'dart:cli';
 import "dart:io";
 
+import 'package:dshell/script/virtual_project.dart';
 import 'package:dshell/util/waitForEx.dart';
 
 import 'dart_sdk.dart';
-import 'project.dart';
 
 /// Runs a Dart dscript
 class ScriptRunner {

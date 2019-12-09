@@ -1,8 +1,8 @@
 import '../dart_sdk.dart';
 import '../flags.dart';
-import '../project.dart';
 import '../project_cache.dart';
 import '../script.dart';
+import '../virtual_project.dart';
 import 'commands.dart';
 import '../../util/runnable_process.dart';
 
@@ -15,7 +15,7 @@ class CompileCommand extends Command {
   int run(List<Flag> selectedFlags, List<String> subarguments) {
     int exitCode = 0;
     Script.validate(subarguments);
-    Script script = Script.fromArg(subarguments[0]);
+    Script script = Script.fromFile(subarguments[0]);
     try {
       VirtualProject project = VirtualProject(ProjectCache().path, script);
 

@@ -3,10 +3,10 @@ import 'package:dshell/pubspec/pubspec_manager.dart';
 import '../../settings.dart';
 import '../dart_sdk.dart';
 import '../flags.dart';
-import '../project.dart';
 import '../project_cache.dart';
 import '../runner.dart';
 import '../script.dart';
+import '../virtual_project.dart';
 import 'commands.dart';
 
 /// Runs a dart script.
@@ -22,7 +22,7 @@ class RunCommand extends Command {
   int run(List<Flag> selectedFlags, List<String> arguments) {
     Script.validate(arguments);
 
-    Script script = Script.fromArg(arguments[0]);
+    Script script = Script.fromFile(arguments[0]);
 
     VirtualProject project = ProjectCache().loadProject(script);
 

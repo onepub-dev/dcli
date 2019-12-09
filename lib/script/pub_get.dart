@@ -1,8 +1,8 @@
+import 'package:dshell/script/virtual_project.dart';
 import 'package:dshell/util/progress.dart';
 
 import 'dart_sdk.dart';
 import 'dependency.dart';
-import 'project.dart';
 import '../util/runnable_process.dart';
 
 ///
