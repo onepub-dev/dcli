@@ -24,7 +24,11 @@ class StackTraceImpl implements core.StackTrace {
   StackTraceImpl.fromStackTrace(core.StackTrace stackTrace,
       {this.workingDirectory, int skipFrames = 0})
       : this.stackTrace = stackTrace,
-        _skipFrames = skipFrames;
+        _skipFrames = skipFrames {
+    if (stackTrace is StackTraceImpl) {
+      _frames = stackTrace.frames;
+    }
+  }
 
   ///
   /// Returns a File instance for the current stackframe
@@ -59,16 +63,16 @@ class StackTraceImpl implements core.StackTrace {
   /// showing upto [methodCount] methods in the trace.
   /// [methodCount] defaults to 10.
 
-  String formatStackTrace({bool showPath = false, int methodCount = 10}) {
+  String formatStackTrace(
+      {bool showPath = false, int methodCount = 10, int skipFrames = 0}) {
     var formatted = <String>[];
     var count = 0;
 
     for (Stackframe stackFrame in frames) {
-      // if (stackFrame.sourceFile.contains('log.dart') ||
-      //     stackFrame.sourceFile.contains('package:logger')) {
-      //   continue;
-      // }
-
+      if (skipFrames > 0) {
+        skipFrames--;
+        continue;
+      }
       String sourceFile;
       if (showPath) {
         sourceFile = stackFrame.sourceFile.path;
@@ -149,19 +153,35 @@ class StackTraceImpl implements core.StackTrace {
     return stackFrames;
   }
 
+  StackTraceImpl merge(core.StackTrace microTask) {
+    StackTraceImpl _microImpl = StackTraceImpl.fromStackTrace(microTask);
 
-  StackTraceImpl merge(core.StackTrace microTask)
-  {
-    StackTraceImpl _microImpl = StackTraceImpl.fromStackTrace(microTask, skipFrames: 2) ;
+    StackTraceImpl merged = StackTraceImpl.fromStackTrace(this);
 
-   StackTraceImpl merged = StackTraceImpl.fromStackTrace(this);
-
-    for (Stackframe frame : _microImpl)
-    {
-      merged._frames.add(frame);
+    int index = 0;
+    for (Stackframe frame in _microImpl.frames) {
+      // best we can do is exclude any files that are in the flutter src tree.
+      if (isExcludedSource(frame)) {
+        continue;
+      }
+      merged.frames.insert(index++, frame);
     }
-  return merged;
+    return merged;
   }
+}
+
+List<String> excludedSource = ["/flutter", "/ui", "/async", "isolate"];
+bool isExcludedSource(Stackframe frame) {
+  bool excludeSource = false;
+
+  String path = frame.sourceFile.absolute.path;
+  for (String exclude in excludedSource) {
+    if (path.startsWith(exclude)) {
+      excludeSource = true;
+      break;
+    }
+  }
+  return excludeSource;
 }
 
 ///
