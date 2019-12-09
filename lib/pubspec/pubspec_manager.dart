@@ -6,8 +6,8 @@ import 'package:dshell/pubspec/pubspec_default.dart';
 import 'package:dshell/pubspec/pubspec_file.dart';
 import 'package:dshell/pubspec/pubspec_virtual.dart';
 import 'package:dshell/script/dependency.dart';
-import 'package:dshell/script/project.dart';
 import 'package:dshell/script/script.dart';
+import 'package:dshell/script/virtual_project.dart';
 
 class PubSpecManager {
   VirtualProject project;
@@ -24,9 +24,8 @@ class PubSpecManager {
 
   PubSpecManager(this.project);
 
-  /// Extract the pubspec annotation form the [_script]
+  /// Extract the pubspec annotation from the [project.script]
   ///
-
   /// If necessary, extract the pubspec annotation from a script file
   /// and saves it to [path] as a pubspec.yaml file.
   ///
@@ -51,7 +50,7 @@ class PubSpecManager {
 
     List<Dependency> resolved = resolveDependancies(pubSpec, defaultPubspec);
 
-    pubSpec.replaceDependancies(resolved);
+    pubSpec.dependencies = resolved;
 
     pubSpec.writeToFile(project.pubSpecPath);
   }
@@ -114,6 +113,8 @@ class PubSpecManager {
     List<Dependency> resolved = List();
 
     // Start form least important to most imporant
+    // Note: the defaultPubSpec no longer contains dependencies
+    // but I've left this here incase it changes again.
     List<Dependency> defaultDependancies = defaultPubSpec.dependencies;
     List<Dependency> globalDependencies = _getGlobalDependancies();
 

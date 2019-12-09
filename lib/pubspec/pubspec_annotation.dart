@@ -2,12 +2,10 @@ import 'dart:convert';
 import 'dart:io';
 
 import 'package:dshell/pubspec/pubspec.dart';
-import 'package:dshell/script/my_yaml.dart';
+import 'package:dshell/script/dependency.dart';
 import 'package:dshell/script/script.dart';
 import 'package:dshell/util/dshell_exception.dart';
 import 'package:dshell/util/waitForEx.dart';
-
-import 'dependencies_mixin.dart';
 
 enum _State {
   notFound,
@@ -19,30 +17,31 @@ enum _State {
 ///
 /// Able to load and hold a representation of the @pubsec
 /// annotation from a script.
-class PubSpecAnnotation extends PubSpec with DependenciesMixin {
-  _State state = _State.notFound;
+class PubSpecAnnotation implements PubSpec // with DependenciesMixin
+{
+  PubSpecImpl pubspec;
   Script script;
-  List<String> sourceLines;
-
-  /// The pubspec loaded into a yaml representation
-  MyYaml yaml;
 
   PubSpecAnnotation.fromScript(this.script) {
     // Read script file as lines
     List<String> lines = _readLines(File(script.path));
 
-    sourceLines = _extractAnnotation(lines);
+    List<String> sourceLines = _extractAnnotation(lines);
 
-    yaml = MyYaml.fromString(sourceLines.join("\n"));
+    if (sourceLines.isNotEmpty) {
+      pubspec = PubSpecImpl.fromString(sourceLines.join("\n"));
+    }
   }
 
   PubSpecAnnotation.fromString(String annotation) {
-    sourceLines = _extractAnnotation(annotation.split("\n"));
+    List<String> sourceLines = _extractAnnotation(annotation.split("\n"));
+
+    pubspec = PubSpecImpl.fromString(sourceLines.join("\n"));
   }
 
   /// returns true if a @pubspec annotation was found.
   bool exists() {
-    return state == _State.found;
+    return pubspec != null;
   }
 
   ///
@@ -52,7 +51,9 @@ class PubSpecAnnotation extends PubSpec with DependenciesMixin {
   ///
   /// The returned lines are suitable for writting to a
   /// file based pubspec.
-  List<String> _extractAnnotation(List<String> lines) {
+  static List<String> _extractAnnotation(List<String> lines) {
+    _State state = _State.notFound;
+
     /// Look for and load the contents of the annotated pubspec.
     /// It is of the form:
     /// /*
@@ -116,6 +117,25 @@ class PubSpecAnnotation extends PubSpec with DependenciesMixin {
 
     List<String> lines = waitForEx(stream.toList());
     return lines;
+  }
+
+  @override
+  set dependencies(List<Dependency> newDependencies) {
+    pubspec.dependencies = newDependencies;
+  }
+
+  @override
+  List<Dependency> get dependencies => pubspec.dependencies;
+
+  @override
+  String get name => pubspec.name;
+
+  @override
+  String get version => pubspec.version;
+
+  @override
+  void writeToFile(String path) {
+    pubspec.writeToFile(path);
   }
 }
 
