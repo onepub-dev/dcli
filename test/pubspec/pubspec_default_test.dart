@@ -11,8 +11,9 @@ import 'package:test/test.dart' as t;
 
 import '../test_settings.dart';
 
-String parent = p.join(TEST_ROOT, "local");
-String path = p.join(parent, "test.dart");
+String scriptDirectory = p.join(TEST_ROOT, "local");
+String scriptPath = p.join(scriptDirectory, "test.dart");
+String pubSpecScriptPath = p.join(scriptDirectory, "pubspec.yaml");
 
 void main() {
   String main = """
@@ -41,6 +42,9 @@ dependencies:
 """;
 
   t.test("No PubSpec - No Dependancies", () {
+    if (exists(pubSpecScriptPath)) {
+      delete(pubSpecScriptPath);
+    }
     runTest(null, main, GlobalDependancies.defaultDependencies);
   }, skip: false);
 
@@ -51,6 +55,9 @@ ${basic}
   """;
 
   t.test("Annotation - No Overrides", () {
+    if (exists(pubSpecScriptPath)) {
+      delete(pubSpecScriptPath);
+    }
     List<Dependency> dependencies = GlobalDependancies.defaultDependencies;
     dependencies.add(Dependency("collection", "^1.14.12"));
     dependencies.add(Dependency("file_utils", "^0.1.3"));
@@ -64,6 +71,9 @@ $overrides
   """;
 
   t.test("Annotaion With Overrides", () {
+    if (exists(pubSpecScriptPath)) {
+      delete(pubSpecScriptPath);
+    }
     List<Dependency> dependencies = List();
     dependencies.add(Dependency("dshell", "^2.0.0"));
     dependencies.add(Dependency("args", "^2.0.1"));
@@ -74,8 +84,11 @@ $overrides
   }, skip: false);
 
   t.test("File - basic", () {
+    if (exists(pubSpecScriptPath)) {
+      delete(pubSpecScriptPath);
+    }
     PubSpec file = PubSpecImpl.fromString(basic);
-    file.writeToFile(path);
+    file.writeToFile(scriptPath);
 
     List<Dependency> dependencies = GlobalDependancies.defaultDependencies;
     dependencies.add(Dependency("collection", "^1.14.12"));
@@ -84,8 +97,11 @@ $overrides
   }, skip: false);
 
   t.test("File - override", () {
+    if (exists(pubSpecScriptPath)) {
+      delete(pubSpecScriptPath);
+    }
     PubSpec file = PubSpecImpl.fromString(overrides);
-    file.writeToFile(path);
+    file.writeToFile(scriptPath);
 
     List<Dependency> dependencies = List();
     dependencies.add(Dependency("dshell", "^2.0.0"));
@@ -98,20 +114,26 @@ $overrides
 }
 
 void runTest(String annotation, String main, List<Dependency> expected) {
-  ProjectCache().initCache();
+  Script script = Script.fromFile(scriptPath);
 
-  createDir(parent, recursive: true);
-  path.truncate();
-  if (annotation != null) {
-    path.append(annotation);
+  // reset everything
+  if (exists(scriptPath)) {
+    delete(scriptPath);
   }
-  path.append(main);
 
-  Script script = Script.fromFile(path);
   if (exists(VirtualProject(ProjectCache().path, script).path)) {
     deleteDir(VirtualProject(ProjectCache().path, script).path,
         recursive: true);
   }
+
+  ProjectCache().initCache();
+
+  createDir(scriptDirectory, recursive: true);
+  if (annotation != null) {
+    scriptPath.append(annotation);
+  }
+  scriptPath.append(main);
+
   VirtualProject project =
       ProjectCache().createProject(script, skipPubGet: true);
 
