@@ -31,4 +31,8 @@ class Dependency extends Equatable {
 */
   @override
   List<Object> get props => [name, version];
+
+  String toString() {
+    return "$name : $version";
+  }
 }
