@@ -2,13 +2,11 @@
 
 import 'dart:io';
 
-import 'package:dshell/functions/find.dart';
+import 'package:dshell/functions/delete_dir.dart';
+import 'package:dshell/functions/env.dart';
 import 'package:dshell/functions/is.dart';
-import 'package:dshell/script/command_line_runner.dart';
-import 'package:dshell/script/commands/commands.dart';
 import 'package:dshell/script/entry_point.dart';
-import 'package:dshell/script/flags.dart';
-import 'package:dshell/script/project_cache.dart';
+import 'package:dshell/settings.dart';
 import 'package:dshell/util/dshell_exception.dart';
 import 'package:test/test.dart';
 
@@ -17,16 +15,17 @@ import 'package:path/path.dart' as p;
 String script = "test/test_scripts/hello_world.dart";
 
 String cwd = Directory.current.path;
-String cachePath = ProjectCache().path;
 
 String scriptDir = p.join(cwd, script);
 String scriptPath = p.dirname(scriptDir);
 String scriptName = p.basenameWithoutExtension(scriptDir);
-String projectPath =
-    p.join(cachePath, scriptPath.substring(1), scriptName + ".project");
+String projectPath = p.join(
+    Settings().cachePath, scriptPath.substring(1), scriptName + ".project");
+
+String home;
 
 void main() {
-  group("Create Project", () {
+  group("Install DShell", () {
     setup();
 
     test('Install with success', () {
@@ -36,16 +35,17 @@ void main() {
         print(e);
       }
 
-      checkProjectStructure();
+      checkInstallStructure();
     });
     test('Install with error', () {
       try {
+        setup();
         EntryPoint().process(["install", "a"]);
       } on DShellException catch (e) {
         print(e);
       }
 
-      checkProjectStructure();
+      expect(exists("$home/.dshell"), equals(false));
     });
 
     test('With Lib', () {});
@@ -53,45 +53,18 @@ void main() {
 }
 
 void setup() {
-  CommandLineRunner.init(Flags.applicationFlags, Commands.applicationCommands);
-  ProjectCache().cleanAll();
+  home = env("HOME");
+  if (exists("$home/.dshell")) {
+    deleteDir("$home/.dshell", recursive: true);
+  }
 }
 
-void checkProjectStructure() {
-  expect(exists(projectPath), equals(true));
+void checkInstallStructure() {
+  expect(exists("$home/.dshell"), equals(true));
 
-  String pubspecPath = p.join(projectPath, "pubspec.yaml");
-  expect(exists(pubspecPath), equals(true));
+  expect(exists("$home/.dshell/cache"), equals(true));
 
-  String libPath = p.join(projectPath, "lib");
-  expect(exists(libPath), equals(true));
+  expect(exists("$home/.dshell/templates"), equals(true));
 
-  // There should be three files/directories in the project.
-  // script link
-  // lib or lib link
-  // pubspec.lock
-  // pubspec.yaml
-  // .packages
-
-  List<String> files = List();
-  find('*.*', recursive: false, root: projectPath, types: [
-    FileSystemEntityType.file,
-  ]).forEach((line) => files.add(p.basename(line)));
-  expect(
-      files,
-      unorderedEquals((<String>[
-        "hello_world.dart",
-        "pubspec.yaml",
-        "pubspec.lock",
-        ".packages"
-      ])));
-
-  List<String> directories = List();
-
-  find('*.*',
-          recursive: false,
-          root: projectPath,
-          types: [FileSystemEntityType.directory])
-      .forEach((line) => directories.add(p.basename(line)));
-  expect(directories, unorderedEquals(<String>["lib", ".dart_tool"]));
+  expect(exists("$home/.dshell/dependancies.yaml"), equals(true));
 }
