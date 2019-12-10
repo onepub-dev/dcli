@@ -9,7 +9,6 @@ import 'package:path/path.dart' as p;
 
 import '../settings.dart';
 import 'dart_sdk.dart';
-import 'hashes_yaml.dart';
 import 'script.dart';
 import 'package:dshell/util/file_helper.dart';
 
