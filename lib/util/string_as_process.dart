@@ -82,11 +82,7 @@ extension StringAsProcess on String {
 
   void write(String line, {bool newline = true}) {
     FileSync sink = FileSync(this);
-
-    if (newline) {
-      line += '\n';
-    }
-    sink.write(line);
+    sink.write(line, newline: newline);
     sink.close();
   }
 
