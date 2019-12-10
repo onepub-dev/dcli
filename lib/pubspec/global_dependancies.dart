@@ -32,7 +32,7 @@ class GlobalDependancies with DependenciesMixin {
     _yaml = MyYaml.fromString(yaml);
   }
 
-  static String get path => p.join(Settings().configRootPath, filename);
+  static String get path => p.join(Settings().dshellPath, filename);
 
   @override
   MyYaml get yaml => _yaml;

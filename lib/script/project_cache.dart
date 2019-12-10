@@ -4,7 +4,6 @@ import 'package:dshell/script/virtual_project.dart';
 import 'package:dshell/util/file_helper.dart';
 import 'package:dshell/util/log.dart';
 import 'package:dshell/util/waitForEx.dart';
-import 'package:path/path.dart' as p;
 
 import '../settings.dart';
 import 'script.dart';
@@ -47,17 +46,10 @@ class ProjectCache {
   // located dshell settings directory
   // which is normally .dshell
 
-  static const String CACHE_DIR = "cache";
   static ProjectCache _self;
-
-  // absolute path to the root of the cache.
-  String _cacheRootPath;
 
   ProjectCache._internal() {
     _self = this;
-
-    // set the absolute path of the cache root.
-    _cacheRootPath = p.join(Settings().configRootPath, CACHE_DIR);
   }
 
   factory ProjectCache() {
@@ -69,18 +61,16 @@ class ProjectCache {
     return _self;
   }
 
-  String get path => _cacheRootPath;
-
   VirtualProject loadProject(Script script) {
-    return VirtualProject(_cacheRootPath, script);
+    return VirtualProject(Settings().cachePath, script);
   }
 
   // Creates a project ready to run for
   // the given script.
   // If the project already exists then it will
   // be refreshed if required.
-  VirtualProject createProject(Script script, {bool skipPubGet}) {
-    VirtualProject project = VirtualProject(_cacheRootPath, script);
+  VirtualProject createProject(Script script, {bool skipPubGet = false}) {
+    VirtualProject project = VirtualProject(Settings().cachePath, script);
     project.createProject(skipPubGet: skipPubGet);
     return project;
   }
@@ -89,7 +79,7 @@ class ProjectCache {
   /// Checks if the dscript cache exists
   /// and if not creates it.
   void initCache() {
-    createDir(_cacheRootPath, "cache");
+    createDir(Settings().cachePath, "cache");
   }
 
   /// If the [cleanall] command issued
@@ -97,10 +87,10 @@ class ProjectCache {
   /// for all scripts.
   void cleanAll() {
     Log().d(
-      'Cleaning project cache ${_cacheRootPath}',
+      'Cleaning project cache ${Settings().cachePath}',
     );
     try {
-      waitForEx(Directory(_cacheRootPath).delete(recursive: true));
+      waitForEx(Directory(Settings().cachePath).delete(recursive: true));
     } finally {}
   }
 }

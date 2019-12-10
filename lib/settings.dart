@@ -9,16 +9,19 @@ import 'package:path/path.dart' as p;
 class Settings {
   static Settings _self;
   static const templateDir = "templates";
+  static const cacheDir = "cache";
 
   InternalSettings _settings = InternalSettings();
 
   /// The directory where we store all of dshell's
   /// configuration files such as the cache.
-  String _configRootPath;
+  String _dshellPath;
 
-  String get configRootPath => _configRootPath;
+  String get dshellPath => _dshellPath;
 
-  String get templatePath => p.join(configRootPath, templateDir);
+  String get templatePath => p.join(dshellPath, templateDir);
+
+  String get cachePath => p.join(dshellPath, cacheDir);
 
   final String appname;
 
@@ -41,12 +44,12 @@ class Settings {
 
   Settings.init(
       {this.appname = "dshell",
-      String configRootPath = ".dshell",
+      String dshellDir = ".dshell",
       this.version = "1.0.10"}) {
     _self = this;
 
     String home = userHomePath;
-    _configRootPath = p.absolute(p.join(home, configRootPath));
+    _dshellPath = p.absolute(p.join(home, dshellDir));
   }
 
   ///

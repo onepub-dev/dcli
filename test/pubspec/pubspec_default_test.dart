@@ -21,7 +21,6 @@ void main()
 {
   print ("hello world");
 }
-
 """;
 
   String basic = """name: test
@@ -121,10 +120,12 @@ void runTest(String annotation, String main, List<Dependency> expected) {
     delete(scriptPath);
   }
 
-  if (exists(VirtualProject(ProjectCache().path, script).path)) {
-    deleteDir(VirtualProject(ProjectCache().path, script).path,
-        recursive: true);
+  if (exists(Settings().dshellPath)) {
+    deleteDir(Settings().dshellPath, recursive: true);
   }
+
+  createDir(Settings().dshellPath);
+  GlobalDependancies.createDefault();
 
   ProjectCache().initCache();
 
@@ -138,5 +139,5 @@ void runTest(String annotation, String main, List<Dependency> expected) {
       ProjectCache().createProject(script, skipPubGet: true);
 
   PubSpec pubspec = project.pubSpec();
-  t.expect(pubspec.dependencies, t.equals(expected));
+  t.expect(pubspec.dependencies, t.unorderedMatches(expected));
 }

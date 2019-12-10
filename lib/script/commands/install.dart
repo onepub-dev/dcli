@@ -30,17 +30,17 @@ class InstallCommand extends Command {
     print(red("Hang on a tick whilst we install dshell."));
     print("");
     // Create the ~/.dshell root.
-    if (!exists(Settings().configRootPath)) {
-      print(blue("Creating ${Settings().configRootPath}"));
-      createDir(Settings().configRootPath);
+    if (!exists(Settings().dshellPath)) {
+      print(blue("Creating ${Settings().dshellPath}"));
+      createDir(Settings().dshellPath);
     } else {
-      print("Found existing install at: ${Settings().configRootPath}");
+      print("Found existing install at: ${Settings().dshellPath}");
     }
     print("");
 
     // Create dependencies.yaml
     print(blue(
-        "Creating ${Settings().configRootPath}/dependencies.yaml with default packages."));
+        "Creating ${Settings().dshellPath}/dependencies.yaml with default packages."));
     GlobalDependancies.createDefault();
 
     print("Default packages are:");
@@ -57,6 +57,13 @@ class InstallCommand extends Command {
       print(
           blue("Creating Template directory in: ${Settings().templatePath}."));
       createDir(Settings().templatePath);
+    }
+
+    /// create the cache directory.
+    if (!exists(Settings().cachePath)) {
+      print("");
+      print(blue("Creating Cache directory in: ${Settings().cachePath}."));
+      createDir(Settings().cachePath);
     }
 
     print("");

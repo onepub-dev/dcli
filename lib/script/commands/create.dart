@@ -50,10 +50,8 @@ class CreateCommand extends Command {
   /// Checks if the templates directory exists and .dshell and if not creates
   /// the directory and copies the default scripts in.
   void _initTemplates() {
-    String templatePath = p.join(ProjectCache().path, "templates");
-
-    if (!exists(templatePath)) {
-      createDir(templatePath, recursive: true);
+    if (!exists(Settings().templatePath)) {
+      createDir(Settings().templatePath, recursive: true);
     }
   }
 
