@@ -5,7 +5,7 @@ void main() {
   test("parse", () {
     String annotation = """
     /*
-      @pubspec.yaml
+      @pubspec
       name: find.dart
       dependencies:
         dshell: ^1.0.0

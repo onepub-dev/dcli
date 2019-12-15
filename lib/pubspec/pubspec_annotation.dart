@@ -70,13 +70,13 @@ class PubSpecAnnotation implements PubSpec // with DependenciesMixin
           final String trimmed = line.trim();
           if (trimmed == r'/*') {
             state = _State.findHeader;
-          } else if (trimmed == r'/* @pubspec.yaml') {
+          } else if (isStart(trimmed)) {
             state = _State.data;
           }
           break;
         case _State.findHeader:
           final String trimmed = line.trim();
-          if (trimmed == r'@pubspec.yaml') {
+          if (isAtPubSpec(trimmed)) {
             state = _State.data;
           } else {
             state = _State.notFound;
@@ -136,6 +136,16 @@ class PubSpecAnnotation implements PubSpec // with DependenciesMixin
   @override
   void writeToFile(String path) {
     pubspec.writeToFile(path);
+  }
+
+  static bool isStart(String line) {
+    String compressed = line.replaceAll(RegExp(r'\w'), '');
+
+    return (compressed == r'/*@pubspec' || compressed == r'/*@pubspec.yaml');
+  }
+
+  static bool isAtPubSpec(String trimmed) {
+    return (trimmed == r'@pubspec' || trimmed == r'@pubspec.yaml');
   }
 }
 

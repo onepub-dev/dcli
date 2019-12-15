@@ -75,7 +75,7 @@ class Script {
     /// The default body of the script we generate.
     return """#! /usr/bin/env ${Settings().appname}
 /*
-@pubspec.yaml
+@pubspec
 name: $scriptname
 dependencies:
   dshell: ^1.0.0

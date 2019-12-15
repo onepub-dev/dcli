@@ -1,6 +1,6 @@
 #! /usr/bin/env dshell
 /*
-@pubspec.yaml
+@pubspec
 name: which.dart
 dependencies:
   dshell: ^1.0.0

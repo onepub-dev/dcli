@@ -2,7 +2,7 @@
 // remove the next line
 // ignore_for_file: unused_import
 /*
-@pubspec.yaml
+@pubspec
 name: find.dart
 dependencies:
   dshell: ^1.0.0
