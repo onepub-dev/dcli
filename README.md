@@ -126,9 +126,9 @@ hello world
 cli>
 ```
 
-The first time you run a given DShell script DShell needs to resolve any dependancies by running a  `pub get` command and doing some other house keeping.
+The first time you run a given DShell script, DShell needs to resolve any dependancies by running a  `pub get` command and doing some other house keeping.
 
-If you run the same script a second time DShell as already resolved the dependancies and so it can run the script immediately.
+If you run the same script a second time DShell has already resolved the dependancies and so it can run the script immediately.
 
 
 ```
@@ -143,7 +143,7 @@ So far this is just a normal dart library that you can run directly from the com
 The point here is that DShell isn't magic. You can just write normal dart code using all of darts features and any libraries that work with a cli application. (i.e. flutter and web specific libraries are not going to work here.)
 
 ## Using dshell create
-DShell likes to make life easier so if you can't remember the syntax of of main you can use:
+DShell likes to make life easier so if you can't remember the syntax of of 'main' you can use:
 
 ```
 dshell create hello_world.dart'
@@ -231,7 +231,7 @@ void main() {
 
 ```
 
-Now run our first script.
+Now run our script.
 
 ```
 cli> dshell first.dart
@@ -243,7 +243,7 @@ Should I delete 'tmp'? (y/n):
 ```
 You are now officially a DShell guru. 
 
-Go forth you man (or gal) and create.
+Go forth young man (or gal) and create.
 
 
 # DShell clean
