@@ -23,7 +23,7 @@ import 'is.dart';
 /// If the directory cannot be delete (e.g. permissions) a [DeleteDirException] is thrown.
 ///
 /// If recursive is false the directory must be empty otherwise a [DeleteDirException] is thrown.
-void deleteDir(String path, {bool recursive}) =>
+void deleteDir(String path, {bool recursive = true}) =>
     DeleteDir().deleteDir(path, recursive: recursive);
 
 class DeleteDir extends DShellFunction {
