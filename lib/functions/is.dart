@@ -79,6 +79,7 @@ class Is extends DShellFunction {
 
   /// checks if the given [path] exists.
   bool exists(String path, bool followLinks) {
+    //return FileSystemEntity.existsSync(path);
     return FileSystemEntity.typeSync(path, followLinks: followLinks) !=
         FileSystemEntityType.notFound;
   }
