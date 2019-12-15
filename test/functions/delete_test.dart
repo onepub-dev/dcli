@@ -2,26 +2,32 @@ import 'package:test/test.dart' as t;
 import "package:dshell/dshell.dart";
 
 import '../test_settings.dart';
+import '../util/test_fs_zone.dart';
 
 void main() {
   Settings().debug_on = true;
 
-  String testFile = join(TEST_ROOT, "lines.txt");
-
   t.group("Delete", () {
     t.test("delete ", () {
-      touch(testFile, create: true);
+      TestZone().run(() {
+        String testFile = join(TEST_ROOT, "lines.txt");
 
-      delete(testFile);
-      t.expect(!exists(testFile), t.equals(true));
+        touch(testFile, create: true);
+
+        delete(testFile);
+        t.expect(!exists(testFile), t.equals(true));
+      });
     });
 
     t.test("delete non-existing ", () {
-      touch(testFile, create: true);
-      delete(testFile);
+      TestZone().run(() {
+        String testFile = join(TEST_ROOT, "lines.txt");
+        touch(testFile, create: true);
+        delete(testFile);
 
-      t.expect(
-          () => delete(testFile), t.throwsA(t.TypeMatcher<DeleteException>()));
+        t.expect(() => delete(testFile),
+            t.throwsA(t.TypeMatcher<DeleteException>()));
+      });
     });
   });
 }

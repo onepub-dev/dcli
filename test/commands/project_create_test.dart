@@ -2,64 +2,65 @@
 
 import 'dart:io';
 
-import 'package:dshell/functions/find.dart';
-import 'package:dshell/functions/is.dart';
+import 'package:dshell/dshell.dart' hide equals;
 import 'package:dshell/script/command_line_runner.dart';
 import 'package:dshell/script/commands/commands.dart';
 import 'package:dshell/script/entry_point.dart';
 import 'package:dshell/script/flags.dart';
 import 'package:dshell/script/project_cache.dart';
-import 'package:dshell/settings.dart';
 import 'package:test/test.dart';
 
 import 'package:path/path.dart' as p;
 
+import '../util/test_fs_zone.dart';
+import '../util/test_paths.dart';
+
 String script = "test/test_scripts/hello_world.dart";
-
-String cwd = Directory.current.path;
-
-String scriptDir = p.join(cwd, script);
-String scriptPath = p.dirname(scriptDir);
-String scriptName = p.basenameWithoutExtension(scriptDir);
-String projectPath = p.join(
-    Settings().cachePath, scriptPath.substring(1), scriptName + ".project");
 
 void main() {
   group("Create Project", () {
-    setup();
-
     test('Create hello world', () {
-      EntryPoint().process(["create", script]);
+      TestZone().run(() {
+        var paths = TestPaths(script);
+        setup(paths);
+        EntryPoint().process(["create", script]);
 
-      checkProjectStructure();
+        checkProjectStructure(paths);
+      });
     });
 
     test('Clean hello world', () {
-      EntryPoint().process(["clean", script]);
+      TestZone().run(() {
+        var paths = TestPaths(script);
+        setup(paths);
+        EntryPoint().process(["clean", script]);
 
-      checkProjectStructure();
+        checkProjectStructure(paths);
+      });
     });
 
     test('Run hello world', () {
-      EntryPoint().process([script]);
+      TestZone().run(() {
+        EntryPoint().process([script]);
+      });
     });
 
     test('With Lib', () {});
   });
 }
 
-void setup() {
+void setup(TestPaths paths) {
   CommandLineRunner.init(Flags.applicationFlags, Commands.applicationCommands);
   ProjectCache().cleanAll();
 }
 
-void checkProjectStructure() {
-  expect(exists(projectPath), equals(true));
+void checkProjectStructure(TestPaths paths) {
+  expect(exists(paths.projectPath), equals(true));
 
-  String pubspecPath = p.join(projectPath, "pubspec.yaml");
+  String pubspecPath = p.join(paths.projectPath, "pubspec.yaml");
   expect(exists(pubspecPath), equals(true));
 
-  String libPath = p.join(projectPath, "lib");
+  String libPath = p.join(paths.projectPath, "lib");
   expect(exists(libPath), equals(true));
 
   // There should be three files/directories in the project.
@@ -70,7 +71,7 @@ void checkProjectStructure() {
   // .packages
 
   List<String> files = List();
-  find('*.*', recursive: false, root: projectPath, types: [
+  find('*.*', recursive: false, root: paths.projectPath, types: [
     FileSystemEntityType.file,
   ]).forEach((line) => files.add(p.basename(line)));
   expect(
@@ -86,7 +87,7 @@ void checkProjectStructure() {
 
   find('*.*',
           recursive: false,
-          root: projectPath,
+          root: paths.projectPath,
           types: [FileSystemEntityType.directory])
       .forEach((line) => directories.add(p.basename(line)));
   expect(directories, unorderedEquals(<String>["lib", ".dart_tool"]));

@@ -10,6 +10,7 @@ import 'package:path/path.dart' as p;
 import 'package:test/test.dart' as t;
 
 import '../test_settings.dart';
+import '../util/test_fs_zone.dart';
 
 String scriptDirectory = p.join(TEST_ROOT, "local");
 String scriptPath = p.join(scriptDirectory, "test.dart");
@@ -41,74 +42,84 @@ dependencies:
 """;
 
   t.test("No PubSpec - No Dependancies", () {
-    if (exists(pubSpecScriptPath)) {
-      delete(pubSpecScriptPath);
-    }
-    runTest(null, main, GlobalDependancies.defaultDependencies);
+    TestZone().run(() {
+      if (exists(pubSpecScriptPath)) {
+        delete(pubSpecScriptPath);
+      }
+      runTest(null, main, GlobalDependancies.defaultDependencies);
+    });
   }, skip: false);
 
   String annotationNoOverrides = """
-    /* @pubspec.yaml
+    /* @pubspec
 ${basic}
 */
   """;
 
   t.test("Annotation - No Overrides", () {
-    if (exists(pubSpecScriptPath)) {
-      delete(pubSpecScriptPath);
-    }
-    List<Dependency> dependencies = GlobalDependancies.defaultDependencies;
-    dependencies.add(Dependency("collection", "^1.14.12"));
-    dependencies.add(Dependency("file_utils", "^0.1.3"));
-    runTest(annotationNoOverrides, main, dependencies);
+    TestZone().run(() {
+      if (exists(pubSpecScriptPath)) {
+        delete(pubSpecScriptPath);
+      }
+      List<Dependency> dependencies = GlobalDependancies.defaultDependencies;
+      dependencies.add(Dependency("collection", "^1.14.12"));
+      dependencies.add(Dependency("file_utils", "^0.1.3"));
+      runTest(annotationNoOverrides, main, dependencies);
+    });
   }, skip: false);
 
   String annotationWithOverrides = """
-    /* @pubspec.yaml
+    /* @pubspec
 $overrides
 */
   """;
 
   t.test("Annotaion With Overrides", () {
-    if (exists(pubSpecScriptPath)) {
-      delete(pubSpecScriptPath);
-    }
-    List<Dependency> dependencies = List();
-    dependencies.add(Dependency("dshell", "^2.0.0"));
-    dependencies.add(Dependency("args", "^2.0.1"));
-    dependencies.add(Dependency("path", "^2.0.2"));
-    dependencies.add(Dependency("collection", "^1.14.12"));
-    dependencies.add(Dependency("file_utils", "^0.1.3"));
-    runTest(annotationWithOverrides, main, dependencies);
+    TestZone().run(() {
+      if (exists(pubSpecScriptPath)) {
+        delete(pubSpecScriptPath);
+      }
+      List<Dependency> dependencies = List();
+      dependencies.add(Dependency("dshell", "^2.0.0"));
+      dependencies.add(Dependency("args", "^2.0.1"));
+      dependencies.add(Dependency("path", "^2.0.2"));
+      dependencies.add(Dependency("collection", "^1.14.12"));
+      dependencies.add(Dependency("file_utils", "^0.1.3"));
+      runTest(annotationWithOverrides, main, dependencies);
+    });
   }, skip: false);
 
   t.test("File - basic", () {
-    if (exists(pubSpecScriptPath)) {
-      delete(pubSpecScriptPath);
-    }
-    PubSpec file = PubSpecImpl.fromString(basic);
-    file.writeToFile(scriptPath);
+    TestZone().run(() {
+      if (exists(pubSpecScriptPath)) {
+        delete(pubSpecScriptPath);
+      }
+      PubSpec file = PubSpecImpl.fromString(basic);
+      file.writeToFile(scriptPath);
 
-    List<Dependency> dependencies = GlobalDependancies.defaultDependencies;
-    dependencies.add(Dependency("collection", "^1.14.12"));
-    dependencies.add(Dependency("file_utils", "^0.1.3"));
-    runTest(null, main, dependencies);
+      List<Dependency> dependencies = GlobalDependancies.defaultDependencies;
+      dependencies.add(Dependency("collection", "^1.14.12"));
+      dependencies.add(Dependency("file_utils", "^0.1.3"));
+      runTest(null, main, dependencies);
+    });
   }, skip: false);
 
   t.test("File - override", () {
-    if (exists(pubSpecScriptPath)) {
-      delete(pubSpecScriptPath);
-    }
-    PubSpec file = PubSpecImpl.fromString(overrides);
-    file.writeToFile(scriptPath);
+    TestZone().run(() {
+      if (exists(pubSpecScriptPath)) {
+        delete(pubSpecScriptPath);
+      }
+      PubSpec file = PubSpecImpl.fromString(overrides);
+      file.writeToFile(scriptPath);
 
-    List<Dependency> dependencies = List();
-    dependencies.add(Dependency("dshell", "^2.0.0"));
-    dependencies.add(Dependency("args", "^2.0.1"));
-    dependencies.add(Dependency("path", "^2.0.2"));
-    dependencies.add(Dependency("collection", "^1.14.12"));
-    dependencies.add(Dependency("file_utils", "^0.1.3"));
-    runTest(null, main, dependencies);
+      List<Dependency> dependencies = List();
+      dependencies.add(Dependency("dshell", "^2.0.0"));
+      dependencies.add(Dependency("args", "^2.0.1"));
+      dependencies.add(Dependency("path", "^2.0.2"));
+      dependencies.add(Dependency("collection", "^1.14.12"));
+      dependencies.add(Dependency("file_utils", "^0.1.3"));
+      runTest(null, main, dependencies);
+    });
   }, skip: false);
 }
 

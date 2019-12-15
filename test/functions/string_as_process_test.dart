@@ -3,44 +3,39 @@ import 'package:test/test.dart' as t;
 import "package:dshell/dshell.dart";
 
 import '../test_settings.dart';
+import '../util/test_fs_zone.dart';
 
 void main() {
   Settings().debug_on = true;
 
-  String linesFile = join(TEST_ROOT, TEST_LINES_FILE);
-
-  if (!exists(TEST_ROOT)) {
-    createDir(TEST_ROOT);
-  }
-
-  if (!exists(linesFile)) {
-    FileSync file = FileSync(linesFile);
-    for (int i = 0; i < 10; i++) {
-      file.append("Line $i");
-    }
-  }
   t.group("StringAsProcess", () {
     t.test("Run", () {
-      var testFile = "test.text";
+      TestZone().run(() {
+        var testFile = "test.text";
 
-      if (exists(testFile)) {
-        delete(testFile);
-      }
+        if (exists(testFile)) {
+          delete(testFile);
+        }
 
-      'touch test.text'.run;
-      t.expect(exists(testFile), t.equals(true));
+        'touch test.text'.run;
+        t.expect(exists(testFile), t.equals(true));
+      });
     });
 
     t.test("forEach", () {
-      List<String> lines = List();
+      TestZone().run(() {
+        List<String> lines = List();
 
-      print("pwd" + pwd);
+        String linesFile = setup();
 
-      assert(exists(linesFile));
+        print("pwd: " + pwd);
 
-      'tail -n 5 $linesFile'.forEach((line) => lines.add(line));
+        assert(exists(linesFile));
 
-      t.expect(lines.length, t.equals(5));
+        'tail -n 5 $linesFile'.forEach((line) => lines.add(line));
+
+        t.expect(lines.length, t.equals(5));
+      });
     });
 /*
     t.test("Pipe operator", () {
@@ -50,8 +45,39 @@ void main() {
     */
 
     t.test("Lines", () {
-      List<String> lines = 'head -n 5 /var/log/syslog'.toList();
-      t.expect(lines.length, t.equals(5));
+      TestZone().run(() {
+        String path = "/tmp/log/syslog";
+
+        if (exists(path)) {
+          deleteDir(dirname(path), recursive: true);
+        }
+        createDir(dirname(path), recursive: true);
+        touch(path, create: true);
+
+        path.truncate();
+
+        for (int i = 0; i < 10; i++) {
+          path.append("head $i");
+        }
+        List<String> lines = 'head -n 5 $path'.toList();
+        t.expect(lines.length, t.equals(5));
+      });
     });
   });
+}
+
+String setup() {
+  String linesFile = join(TEST_ROOT, TEST_LINES_FILE);
+
+  if (exists(TEST_ROOT)) {
+    deleteDir(TEST_ROOT, recursive: true);
+  }
+
+  createDir(TEST_ROOT);
+
+  FileSync file = FileSync(linesFile);
+  for (int i = 0; i < 10; i++) {
+    file.append("Line $i");
+  }
+  return linesFile;
 }

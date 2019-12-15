@@ -2,58 +2,62 @@ import 'package:test/test.dart' as t;
 import 'package:dshell/dshell.dart';
 
 import 'test_settings.dart';
+import 'util/test_fs_zone.dart';
 
 void main() {
   Settings().debug_on = true;
-  createDir(TEST_ROOT);
 
   t.test("Try everything", () {
-    try {
-      push(TEST_ROOT);
-      // Settings().debug_on = true;
+    TestZone().run(() {
+      createDir(TEST_ROOT, recursive: true);
 
-      print("PWD: ${pwd}");
+      try {
+        push(TEST_ROOT);
+        // Settings().debug_on = true;
 
-      createDir("shell/main", recursive: true);
-      push("shell");
-      cd("main");
+        print("PWD: ${pwd}");
 
-      createDir("fred/tom", recursive: true);
-      deleteDir("fred/tom");
+        createDir("shell/main", recursive: true);
+        push("shell");
+        cd("main");
 
-      touch("good.jpg", create: true);
-      createDir("subdir", recursive: true);
-      touch("subdir/goody.jpg", create: true);
+        createDir("fred/tom", recursive: true);
+        deleteDir("fred/tom");
 
-      echo("Find file matching *.jpg");
+        touch("good.jpg", create: true);
+        createDir("subdir", recursive: true);
+        touch("subdir/goody.jpg", create: true);
 
-      for (var file in find(
-        "*.jpg",
-      ).toList()) {
-        print("Found jpg: $file");
+        echo("Find file matching *.jpg");
+
+        for (var file in find(
+          "*.jpg",
+        ).toList()) {
+          print("Found jpg: $file");
+        }
+        echo("sleeping for 2 seconds");
+        sleep(2);
+
+        echo("All files");
+        for (var file in fileList) {
+          print(file);
+        }
+
+        move("good.jpg", "bad.jpg");
+
+        if (exists("bad.jpg")) {
+          print("bad.jpg exists");
+        }
+
+        delete("bad.jpg", ask: false);
+
+        pop();
+        echo(pwd);
+      } finally {
+        print("In finally");
+        pop();
       }
-      echo("sleeping for 2 seconds");
-      sleep(2);
-
-      echo("All files");
-      for (var file in fileList) {
-        print(file);
-      }
-
-      move("good.jpg", "bad.jpg");
-
-      if (exists("bad.jpg")) {
-        print("bad.jpg exists");
-      }
-
-      delete("bad.jpg", ask: false);
-
-      pop();
-      echo(pwd);
-    } finally {
-      print("In finally");
-      pop();
-    }
+    });
   });
 }
 
