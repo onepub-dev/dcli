@@ -1,21 +1,21 @@
 # DShell - a bash replacement using dart
 
 # Contents
-* [Overview](#Overview)
-* [So why DShell](#So-why-DShell?)
-* [What does DShell do?](#What-does-DShell-do?)
-* [What commands does DShell support?](#What-commands-does-DShell-support?)
-* [Using DShell functions](#Using-DShell-functions)
+* [Overview](#overview)
+* [So why DShell](#so-why-dshell)
+* [What does DShell do?](#what-does-dshell-do)
+* [What commands does DShell support?](#what-commands-does-dshell-support)
+* [Using DShell functions](#using-dshell-functions)
 * [Running a script](#running-a-script)
-* [Calling cli applications](#Calling-cli-applications)
-* [Piping](#Piping)
-* [Installing](#Installing)
-* [Running scripts](#Running-scripts)
-* [External packages](##External-packages)
-* [Multi-file scripts](#Multi-file-scripts)
-* [Compiling to Native Executable](#Compiling-to-Native-Executable)
-* [Contributing](#Contributing)
-* [References](#References)
+* [Calling cli applications](#calling-cli-applications)
+* [Piping](#piping)
+* [Installing](#installing)
+* [Running scripts](#running-scripts)
+* [External packages](##external-packages)
+* [Multi-file scripts](#multi-file-scripts)
+* [Compiling to Native Executable](#compiling-to-native-executable)
+* [Contributing](#contributing)
+* [References](#references)
 
 # Overview
 
