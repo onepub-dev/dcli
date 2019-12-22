@@ -12,7 +12,7 @@ class TestPaths {
 
   TestPaths(String relativeScriptPath) {
     var cwd = Directory.current.path;
-    home = env('home');
+    home = env('HOME');
     scriptDir = join(cwd, relativeScriptPath);
     scriptPath = dirname(scriptDir);
     scriptName = basenameWithoutExtension(scriptDir);
