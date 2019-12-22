@@ -1,4 +1,7 @@
-## 1.0.16
+## 1.0.18
+Fixed some formatting issues and upgraded to logger 0.8.0
+
+## 1.0.17
 Update the getting started instructions to include install and create commands.
 
 ## 1.0.15
