@@ -103,9 +103,14 @@ class InstallCommand extends Command {
   }
 
   @override
-  String description() =>
-      "Installs the script using dart's native Installer. Only required if you want super fast execution.";
+  String description() => """There are two forms of dshell isntall:
+      Running 'dshell install' completes the installation of dshell.
+      
+      EXPERIMENTAL:
+      Running 'dshell install <script> compiles the given script to a native executable and installs
+         the script to your path. Only required if you want super fast execution.
+         """;
 
   @override
-  String usage() => 'Install <script path.dart>';
+  String usage() => 'Install | install <script path.dart>';
 }
