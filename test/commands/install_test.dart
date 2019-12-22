@@ -1,5 +1,4 @@
 import 'package:dshell/dshell.dart' hide equals;
-import 'package:dshell/functions/env.dart';
 import 'package:dshell/functions/is.dart';
 import 'package:dshell/script/entry_point.dart';
 import 'package:dshell/util/dshell_exception.dart';

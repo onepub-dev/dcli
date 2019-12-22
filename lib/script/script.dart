@@ -125,7 +125,7 @@ void main() {
   /// Returns true if the script has a pubspec.yaml in its directory.
   bool hasPubSpecYaml() {
     // The virtual project pubspec.yaml file.
-    final  pubSpecPath = p.join(_scriptDirectory, 'pubspec.yaml');
+    final pubSpecPath = p.join(_scriptDirectory, 'pubspec.yaml');
     return exists(pubSpecPath);
   }
 }

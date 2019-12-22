@@ -37,7 +37,6 @@ class Run extends DShellFunction {
     } finally {
       forEach.close();
     }
-
     return forEach;
   }
 }

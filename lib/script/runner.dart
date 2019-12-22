@@ -25,8 +25,7 @@ class ScriptRunner {
     vmArgs.addAll(scriptArguments);
 
     // Execute the script
-    final process = waitFor<Process>(Process.start(
-        Platform.executable, vmArgs,
+    final process = waitFor<Process>(Process.start(Platform.executable, vmArgs,
         workingDirectory: project.script.scriptDirectory));
 
     // Pipe std out and in
@@ -37,7 +36,7 @@ class ScriptRunner {
     final StreamSubscription stdinSub =
         stdin.listen((List<int> d) => process.stdin.add(d));
 
-    final  exitCode = waitForEx<int>(process.exitCode);
+    final exitCode = waitForEx<int>(process.exitCode);
 
     final futures = <Future<void>>[];
 

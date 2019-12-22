@@ -72,7 +72,7 @@ class DartSdk {
 
   static String _detect() {
     var executable = Platform.executable;
-    final  s = Platform.pathSeparator;
+    final s = Platform.pathSeparator;
 
     if (!executable.contains(s)) {
       if (Platform.isLinux) {
@@ -88,8 +88,8 @@ class DartSdk {
     var parent = file.absolute.parent;
     parent = parent.parent; // TODO What if this does not exist?
 
-    final  sdkPath = parent.path;
-    final  dartApi = '$sdkPath${s}include${s}dart_api.h';
+    final sdkPath = parent.path;
+    final dartApi = '$sdkPath${s}include${s}dart_api.h';
     if (!File(dartApi).existsSync()) {
       throw Exception('Cannot find Dart SDK!');
     }
@@ -99,7 +99,7 @@ class DartSdk {
 
   String get version {
     if (_version == null) {
-      final  res =
+      final res =
           waitFor<ProcessResult>(Process.run(dartPath, <String>['--version']));
       if (res.exitCode != 0) {
         throw Exception('Failed!');

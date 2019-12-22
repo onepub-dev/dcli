@@ -25,7 +25,7 @@ import 'is.dart';
 /// See [push]
 ///     [pop]
 ///     [pwd]
-///     [join] 
+///     [join]
 ///
 ///     use join in prefrence to cd/push/pop
 

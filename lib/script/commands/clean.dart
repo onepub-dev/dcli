@@ -1,4 +1,3 @@
-
 import '../../settings.dart';
 import '../command_line_runner.dart';
 import '../flags.dart';

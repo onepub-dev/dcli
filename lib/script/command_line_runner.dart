@@ -35,7 +35,7 @@ class CommandLineRunner {
     var cmdArguments = <String>[];
 
     for (var i = 0; i < arguments.length; i++) {
-      final  argument = arguments[i];
+      final argument = arguments[i];
 
       if (Flags.isFlag(argument)) {
         var flag = Flags.findFlag(argument, availableFlags);

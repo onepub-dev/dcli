@@ -19,7 +19,7 @@ class PubSpecVirtual implements PubSpec //with DependenciesMixin {
 
   /// Load the pubspec.yaml from the virtual project directory.
   PubSpecVirtual.loadFromProject(VirtualProject project) {
-    final  pubSpecPath = p.join(project.path, 'pubspec.yaml');
+    final pubSpecPath = p.join(project.path, 'pubspec.yaml');
 
     pubspec = PubSpecImpl.loadFromFile(pubSpecPath);
   }

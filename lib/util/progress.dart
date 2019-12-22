@@ -60,7 +60,7 @@ class Progress {
 
   // Returns stdout lines as a list.
   List<String> toList() {
-    List<String> lines = List();
+    var lines = <String>[];
 
     forEach((line) => lines.add(line));
     return lines;

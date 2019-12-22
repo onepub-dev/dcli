@@ -96,11 +96,11 @@ class MyLogPrinter extends LogPrinter {
   MyLogPrinter(this.currentWorkingDirectory);
 
   @override
-  void log(LogEvent event) {
+  List<String> log(LogEvent event) {
     if (EnumHelper.getIndexOf(Level.values, Log._loggingLevel) >
         EnumHelper.getIndexOf(Level.values, event.level)) {
       // don't log events where the log level is set higher
-      return;
+      return [];
     }
     var formatter = DateFormat('yyyy-MM-dd HH:mm:ss.');
     var now = DateTime.now();
@@ -134,6 +134,9 @@ class MyLogPrinter extends LogPrinter {
         print(color('${event.stackTrace}'));
       }
     }
+
+    // we log directly so never return a result.
+    return [];
   }
 
   AnsiColor _getLevelColor(Level level) {

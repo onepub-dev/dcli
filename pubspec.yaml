@@ -1,6 +1,6 @@
 name: dshell
 description: A bash replacement allowing you to write bash like scripts using dart and run them directly from the cli.
-version: 1.0.16
+version: 1.0.17
 homepage: https://github.com/bsutton/dshell
 authors: 
   - bsutton <bsutton@noojee.com.au>
@@ -15,7 +15,7 @@ dependencies:
   path: ^1.6.4
   yaml: ^2.2.0
   intl: ^0.16.0
-  logger: ^0.7.0+2
+  logger: ^0.8.0
   recase: ^2.0.1
   money2: ^1.0.5
   pubspec: ^0.1.2

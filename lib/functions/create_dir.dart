@@ -4,7 +4,6 @@ import 'package:dshell/settings.dart';
 
 import '../util/log.dart';
 
-
 /// Creates a directory as described by [path]
 /// Path may be a single path segment (e.g. bin)
 /// or a full or partial tree (e.g. /usr/bin)

@@ -18,13 +18,12 @@ mixin DependenciesMixin {
       _dependencies = lDependencies;
 
   List<Dependency> _extractDependancies(MyYaml yaml) {
-    var dependancies = <Dependency> [];
+    var dependancies = <Dependency>[];
     var map = yaml.getMap('dependencies');
 
     if (map != null) {
       for (var entry in map.entries) {
-        var dependency =
-            Dependency(entry.key as String, entry.value as String);
+        var dependency = Dependency(entry.key as String, entry.value as String);
         dependancies.add(dependency);
       }
     }

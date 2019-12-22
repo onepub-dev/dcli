@@ -6,7 +6,6 @@ import '../settings.dart';
 import '../util/log.dart';
 import 'package:path/path.dart' as p;
 
-
 ///
 /// Push and Pop work together to track a series
 /// of current directory changes.
