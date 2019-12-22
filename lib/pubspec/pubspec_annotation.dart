@@ -139,7 +139,7 @@ class PubSpecAnnotation implements PubSpec // with DependenciesMixin
   }
 
   static bool isStart(String line) {
-    var compressed = line.replaceAll(RegExp(r'\w'), '');
+    var compressed = line.replaceAll(RegExp(r'\s'), '');
 
     return (compressed == r'/*@pubspec' || compressed == r'/*@pubspec.yaml');
   }
