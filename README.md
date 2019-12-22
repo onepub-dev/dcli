@@ -43,7 +43,7 @@
   * [split](#split)
 * [Internal workings](#Internal-workings)
   * [Virtual Projects](#virtual-projects)
-  * [waitFoEx](#waitFoEx)
+  * [waitForEx](#waitForEx)
 * [Contributing](#contributing)
 * [References](#references)
 
@@ -1142,7 +1142,7 @@ symlink -> /home/fred/myscripts/lib
 
 The first  time you run a DShell script and when you perform a `dshell clean` DShell recreates your pubspec.yaml, rebuilds your Virtual Project and runs `pub get`.
 
-## waitFoEx
+## waitForEx
 DShell goes to great lengths to remove the need to use `Futures` and `await` there are two key tools we use for this.
 
 `waitFor` and `streams`.
