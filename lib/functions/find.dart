@@ -85,8 +85,7 @@ class Find extends DShellFunction {
       // get all files for consideration
       // this could be problematic for a large tree.
       // would be better if we process the files as we went.
-      var all =
-          Directory(root).listSync(recursive: recursive);
+      var all = Directory(root).listSync(recursive: recursive);
 
       // TODO: consider doing a directory at a time so we don't blow all memory.
       for (var entity in all) {
