@@ -5,6 +5,8 @@ import 'package:dshell/util/dshell_exception.dart';
 import 'package:dshell/util/stack_list.dart';
 import 'package:path/path.dart' as p;
 
+import 'functions/env.dart';
+
 /// Holds all of the global settings for dshell
 class Settings {
   static Settings _self;
@@ -56,8 +58,7 @@ class Settings {
   /// Gets the path to the users home directory
   /// using the enviornment var HOME
   String get userHomePath {
-    var env = Platform.environment;
-    var home = env['HOME'];
+    var home = env('HOME');
 
     if (home == null) {
       throw DShellException(
