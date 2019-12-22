@@ -899,7 +899,7 @@ At some point you are going to want to spread you script over multiple dart libr
 
 Well, DShell supports this as well.
 
-If you need to create additional libraries (.dart files) create a subdirectory called 'lib', which shouldn't be too much of a surprise.
+If you need to create additional libraries (.dart files) create a subdirectory called 'lib', which shouldn't be too much of a surprise for Dart programmers.
 
 
 Place the following file in:
@@ -932,21 +932,25 @@ main()
     echo("Hello World");
     echo("All I have is ${notMuch}");
 
+    // Call the 'tax' function which is in 
+    // lib/tax.dart
     echo("And the taxman takes: ${tax(notMuch)});
 }
 
 ```
 
-Place the library file in:
+Now create the library file as:
 
     ~/myproject/lib/tax.dart
+
+And copy the following contents into tax.dart.
+
 ```dart
 
     Money tax(Money amount)
     {
         return amount * 0.1;
     }
-}
 
 ```
 
