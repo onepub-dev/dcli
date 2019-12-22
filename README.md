@@ -355,7 +355,7 @@ To do this add a shebang at the top of the script:
 
 ```dart 
 #! /usr/bin/env dshell
-```dart
+
 /// import DShell's global functions 
 import 'package:dshell/dshell.dart';
 
