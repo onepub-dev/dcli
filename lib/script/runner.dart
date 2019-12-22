@@ -1,6 +1,6 @@
 import 'dart:async';
 import 'dart:cli';
-import "dart:io";
+import 'dart:io';
 
 import 'package:dshell/script/virtual_project.dart';
 import 'package:dshell/util/waitForEx.dart';
@@ -19,13 +19,13 @@ class ScriptRunner {
   int exec() {
     // Prepare VM arguments
     final vmArgs = <String>[];
-    vmArgs.add("--enable-asserts");
-    vmArgs.addAll(["--package-root=${project.path}/.packages"]);
+    vmArgs.add('--enable-asserts');
+    vmArgs.addAll(['--package-root=${project.path}/.packages']);
     vmArgs.add(project.script.scriptname);
     vmArgs.addAll(scriptArguments);
 
     // Execute the script
-    final Process process = waitFor<Process>(Process.start(
+    final process = waitFor<Process>(Process.start(
         Platform.executable, vmArgs,
         workingDirectory: project.script.scriptDirectory));
 
@@ -37,9 +37,9 @@ class ScriptRunner {
     final StreamSubscription stdinSub =
         stdin.listen((List<int> d) => process.stdin.add(d));
 
-    final int exitCode = waitForEx<int>(process.exitCode);
+    final  exitCode = waitForEx<int>(process.exitCode);
 
-    final List<Future<void>> futures = List();
+    final futures = <Future<void>>[];
 
     futures.add(stderrSub.cancel());
     futures.add(stdoutSub.cancel());

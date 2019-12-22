@@ -5,13 +5,13 @@ import 'package:test/test.dart';
 
 import '../util/test_fs_zone.dart';
 
-String script = "test/test_scripts/hello_world.dart";
+String script = 'test/test_scripts/hello_world.dart';
 
 void main() {
-  group("Show Help", () {
+  group('Show Help', () {
     test('Help', () {
       TestZone().run(() {
-        EntryPoint().process(["help"]);
+        EntryPoint().process(['help']);
       });
     });
   });

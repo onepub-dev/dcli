@@ -8,10 +8,10 @@ import 'package:path/path.dart' as p;
 /// Holds all of the global settings for dshell
 class Settings {
   static Settings _self;
-  static const templateDir = "templates";
-  static const cacheDir = "cache";
+  static const templateDir = 'templates';
+  static const cacheDir = 'cache';
 
-  InternalSettings _settings = InternalSettings();
+  final InternalSettings _settings = InternalSettings();
 
   /// The directory where we store all of dshell's
   /// configuration files such as the cache.
@@ -28,7 +28,7 @@ class Settings {
   final String version;
 
   // the list of flags selected via the cli.
-  Map<String, Flag> _selectedFlags = Map();
+  final _selectedFlags = <String, Flag>{};
 
   List<Flag> get selectedFlags => _selectedFlags.values.toList();
 
@@ -43,12 +43,12 @@ class Settings {
   }
 
   Settings.init(
-      {this.appname = "dshell",
-      String dshellDir = ".dshell",
-      this.version = "1.0.10"}) {
+      {this.appname = 'dshell',
+      String dshellDir = '.dshell',
+      this.version = '1.0.10'}) {
     _self = this;
 
-    String home = userHomePath;
+    var home = userHomePath;
     _dshellPath = p.absolute(p.join(home, dshellDir));
   }
 
@@ -56,8 +56,8 @@ class Settings {
   /// Gets the path to the users home directory
   /// using the enviornment var HOME
   String get userHomePath {
-    Map<String, String> env = Platform.environment;
-    String home = env["HOME"];
+    var env = Platform.environment;
+    var home = env['HOME'];
 
     if (home == null) {
       throw DShellException(
@@ -104,7 +104,7 @@ class Settings {
 /// control the behaviour of the package.
 ///
 class InternalSettings {
-  static InternalSettings _self = InternalSettings._internal();
+  static final InternalSettings _self = InternalSettings._internal();
 
   StackList<Directory> directoryStack = StackList();
 

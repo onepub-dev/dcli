@@ -1,5 +1,5 @@
 import 'package:test/test.dart' as t;
-import "package:dshell/dshell.dart";
+import 'package:dshell/dshell.dart';
 
 import '../test_settings.dart';
 import '../util/test_fs_zone.dart';
@@ -7,10 +7,10 @@ import '../util/test_fs_zone.dart';
 void main() {
   Settings().debug_on = true;
 
-  t.group("Delete", () {
-    t.test("delete ", () {
+  t.group('Delete', () {
+    t.test('delete ', () {
       TestZone().run(() {
-        String testFile = join(TEST_ROOT, "lines.txt");
+        var testFile = join(TEST_ROOT, 'lines.txt');
 
         touch(testFile, create: true);
 
@@ -19,9 +19,9 @@ void main() {
       });
     });
 
-    t.test("delete non-existing ", () {
+    t.test('delete non-existing ', () {
       TestZone().run(() {
-        String testFile = join(TEST_ROOT, "lines.txt");
+        var testFile = join(TEST_ROOT, 'lines.txt');
         touch(testFile, create: true);
         delete(testFile);
 

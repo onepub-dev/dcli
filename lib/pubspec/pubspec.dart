@@ -25,26 +25,30 @@ abstract class PubSpec {
 class PubSpecImpl implements PubSpec {
   pub.PubSpec pubspec;
 
+  @override
   String get name => pubspec.name;
+  @override
   String get version => pubspec.version.toString();
 
+  @override
   set dependencies(List<Dependency> dependencies) {
-    Map<String, pub.HostedReference> ref = Map();
+    var ref = <String, pub.HostedReference>{};
 
-    for (Dependency dependency in dependencies) {
+    for (var dependency in dependencies) {
       ref[dependency.name] = pub.HostedReference.fromJson(dependency.version);
     }
 
     pubspec = pubspec.copy(dependencies: ref);
   }
 
+  @override
   List<Dependency> get dependencies {
-    List<Dependency> depends = List();
+    var depends = <Dependency>[];
 
-    Map<String, pub.DependencyReference> map = pubspec.dependencies;
+    var map = pubspec.dependencies;
 
-    for (String name in map.keys) {
-      pub.HostedReference package = map[name] as pub.HostedReference;
+    for (var name in map.keys) {
+      var package = map[name] as pub.HostedReference;
 
       depends.add(Dependency(name, package.versionConstraint.toString()));
     }
@@ -53,7 +57,7 @@ class PubSpecImpl implements PubSpec {
   }
 
   factory PubSpecImpl.fromString(String yamlString) {
-    PubSpecImpl impl = PubSpecImpl._internal();
+    var impl = PubSpecImpl._internal();
     impl.pubspec = pub.PubSpec.fromYamlString(yamlString);
     return impl;
   }
@@ -62,12 +66,13 @@ class PubSpecImpl implements PubSpec {
 
   /// Saves the pubspec.yaml into the
   /// given directory
+  @override
   void writeToFile(String directory) {
     waitForEx<dynamic>(pubspec.save(Directory(dirname(directory))));
   }
 
   static PubSpec loadFromFile(String path) {
-    List<String> lines = read(path).toList();
-    return PubSpecImpl.fromString(lines.join("\n"));
+    var lines = read(path).toList();
+    return PubSpecImpl.fromString(lines.join('\n'));
   }
 }

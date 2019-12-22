@@ -13,7 +13,7 @@ import '../util/log.dart';
 String env(String name) => Env().env(name);
 
 class Env extends DShellFunction {
-  static Env _self = Env._internal();
+  static final Env _self = Env._internal();
   Map<String, String> envVars;
 
   factory Env() {
@@ -26,7 +26,7 @@ class Env extends DShellFunction {
 
   String env(String name) {
     if (Settings().debug_on) {
-      Log.d("name:  ${name}");
+      Log.d('name:  ${name}');
     }
     return envVars[name];
   }

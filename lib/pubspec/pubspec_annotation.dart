@@ -24,19 +24,19 @@ class PubSpecAnnotation implements PubSpec // with DependenciesMixin
 
   PubSpecAnnotation.fromScript(this.script) {
     // Read script file as lines
-    List<String> lines = _readLines(File(script.path));
+    var lines = _readLines(File(script.path));
 
-    List<String> sourceLines = _extractAnnotation(lines);
+    var sourceLines = _extractAnnotation(lines);
 
     if (sourceLines.isNotEmpty) {
-      pubspec = PubSpecImpl.fromString(sourceLines.join("\n"));
+      pubspec = PubSpecImpl.fromString(sourceLines.join('\n'));
     }
   }
 
   PubSpecAnnotation.fromString(String annotation) {
-    List<String> sourceLines = _extractAnnotation(annotation.split("\n"));
+    var sourceLines = _extractAnnotation(annotation.split('\n'));
 
-    pubspec = PubSpecImpl.fromString(sourceLines.join("\n"));
+    pubspec = PubSpecImpl.fromString(sourceLines.join('\n'));
   }
 
   /// returns true if a @pubspec annotation was found.
@@ -52,7 +52,7 @@ class PubSpecAnnotation implements PubSpec // with DependenciesMixin
   /// The returned lines are suitable for writting to a
   /// file based pubspec.
   static List<String> _extractAnnotation(List<String> lines) {
-    _State state = _State.notFound;
+    var state = _State.notFound;
 
     /// Look for and load the contents of the annotated pubspec.
     /// It is of the form:
@@ -63,11 +63,11 @@ class PubSpecAnnotation implements PubSpec // with DependenciesMixin
     /// */
     ///
 
-    List<String> dataLines = List();
-    for (String line in lines) {
+    var dataLines = <String>[];
+    for (var line in lines) {
       switch (state) {
         case _State.notFound:
-          final String trimmed = line.trim();
+          final trimmed = line.trim();
           if (trimmed == r'/*') {
             state = _State.findHeader;
           } else if (isStart(trimmed)) {
@@ -75,7 +75,7 @@ class PubSpecAnnotation implements PubSpec // with DependenciesMixin
           }
           break;
         case _State.findHeader:
-          final String trimmed = line.trim();
+          final trimmed = line.trim();
           if (isAtPubSpec(trimmed)) {
             state = _State.data;
           } else {
@@ -83,7 +83,7 @@ class PubSpecAnnotation implements PubSpec // with DependenciesMixin
           }
           break;
         case _State.data:
-          final String trimmed = line.trim();
+          final trimmed = line.trim();
           if (trimmed == r'*/') {
             state = _State.found;
           } else {
@@ -112,10 +112,10 @@ class PubSpecAnnotation implements PubSpec // with DependenciesMixin
   ///
   List<String> _readLines(File file) {
     // Read script file as lines
-    final Stream<String> stream =
+    final stream =
         file.openRead().transform(utf8.decoder).transform(LineSplitter());
 
-    List<String> lines = waitForEx(stream.toList());
+    var lines = waitForEx(stream.toList());
     return lines;
   }
 
@@ -139,7 +139,7 @@ class PubSpecAnnotation implements PubSpec // with DependenciesMixin
   }
 
   static bool isStart(String line) {
-    String compressed = line.replaceAll(RegExp(r'\w'), '');
+    var compressed = line.replaceAll(RegExp(r'\w'), '');
 
     return (compressed == r'/*@pubspec' || compressed == r'/*@pubspec.yaml');
   }

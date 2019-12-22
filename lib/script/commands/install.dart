@@ -7,12 +7,11 @@ import 'package:dshell/script/command_line_runner.dart';
 import 'package:dshell/settings.dart';
 import 'package:dshell/util/ansi_color.dart';
 
-import '../dependency.dart';
 import '../flags.dart';
 import 'commands.dart';
 
 class InstallCommand extends Command {
-  static const String NAME = "install";
+  static const String NAME = 'install';
 
   static const String pubCache = '.pub-cache/bin';
 
@@ -20,84 +19,85 @@ class InstallCommand extends Command {
 
   @override
   int run(List<Flag> selectedFlags, List<String> subarguments) {
-    int exitCode = 0;
+    var exitCode = 0;
 
     if (subarguments.isNotEmpty) {
       throw CommandLineException(
           "'dshell install' does not take any arguments. Found $subarguments");
     }
 
-    print(red("Hang on a tick whilst we install dshell."));
-    print("");
+    print(red('Hang on a tick whilst we install dshell.'));
+    print('');
     // Create the ~/.dshell root.
     if (!exists(Settings().dshellPath)) {
-      print(blue("Creating ${Settings().dshellPath}"));
+      print(blue('Creating ${Settings().dshellPath}'));
       createDir(Settings().dshellPath);
     } else {
-      print("Found existing install at: ${Settings().dshellPath}");
+      print('Found existing install at: ${Settings().dshellPath}');
     }
-    print("");
+    print('');
 
     // Create dependencies.yaml
-    print(blue(
-        "Creating ${Settings().dshellPath}/dependencies.yaml with default packages."));
+    var blue2 = blue(
+        'Creating ${Settings().dshellPath}/dependencies.yaml with default packages.');
+    print(blue2);
     GlobalDependancies.createDefault();
 
-    print("Default packages are:");
-    for (Dependency dep in GlobalDependancies.defaultDependencies) {
-      print("  ${dep.name}:${dep.version}");
+    print('Default packages are:');
+    for (var dep in GlobalDependancies.defaultDependencies) {
+      print('  ${dep.name}:${dep.version}');
     }
-    print("");
+    print('');
     print(red(
-        "Edit dependencies.yaml to add/remove/update your default dependencies."));
+        'Edit dependencies.yaml to add/remove/update your default dependencies.'));
 
     /// create the template directory.
     if (!exists(Settings().templatePath)) {
-      print("");
+      print('');
       print(
-          blue("Creating Template directory in: ${Settings().templatePath}."));
+          blue('Creating Template directory in: ${Settings().templatePath}.'));
       createDir(Settings().templatePath);
     }
 
     /// create the cache directory.
     if (!exists(Settings().cachePath)) {
-      print("");
-      print(blue("Creating Cache directory in: ${Settings().cachePath}."));
+      print('');
+      print(blue('Creating Cache directory in: ${Settings().cachePath}.'));
       createDir(Settings().cachePath);
     }
 
-    print("");
+    print('');
 
     // print OS version.
-    // print("Platform.version ${Platform.version}");
+    // print('Platform.version ${Platform.version}');
 
-    List<String> dshellLocation = which("dshell").toList();
+    var dshellLocation = which('dshell').toList();
     // check if dshell is on the path
     if (dshellLocation.isEmpty) {
-      print("");
-      print(red("ERROR: dshell was not found on your path!"));
-      print("Try to resolve the problem and then run dshell install again.");
-      print("dshell is normally located in ~/$pubCache");
+      print('');
+      print(red('ERROR: dshell was not found on your path!'));
+      print('Try to resolve the problem and then run dshell install again.');
+      print('dshell is normally located in ~/$pubCache');
 
-      if (!env("path").contains(join(env('home'), pubCache))) {
-        print("Your path does not contain ~/$pubCache");
+      if (!env('path').contains(join(env('home'), pubCache))) {
+        print('Your path does not contain ~/$pubCache');
       }
       exit(1);
     } else {
-      print("dshell found in : ${dshellLocation[0]}");
+      print('dshell found in : ${dshellLocation[0]}');
     }
-    print("");
+    print('');
 
-    // print("Copying dshell (${Platform.executable}) to /usr/bin/dshell");
-    // copy(Platform.executable, "/usr/bin/dshell");
+    // print('Copying dshell (${Platform.executable}) to /usr/bin/dshell');
+    // copy(Platform.executable, '/usr/bin/dshell');
 
-    print(red("dshell installation complete."));
-    print("");
-    print(red("Create your first dshell script using:"));
-    print(blue("  dshell create <scriptname>.dart"));
-    print("");
-    print(blue("  Run your script by typing:"));
-    print(blue("  ./<scriptname>.dart"));
+    print(red('dshell installation complete.'));
+    print('');
+    print(red('Create your first dshell script using:'));
+    print(blue('  dshell create <scriptname>.dart'));
+    print('');
+    print(blue('  Run your script by typing:'));
+    print(blue('  ./<scriptname>.dart'));
 
     return exitCode;
   }
@@ -107,5 +107,5 @@ class InstallCommand extends Command {
       "Installs the script using dart's native Installer. Only required if you want super fast execution.";
 
   @override
-  String usage() => "Install <script path.dart>";
+  String usage() => 'Install <script path.dart>';
 }

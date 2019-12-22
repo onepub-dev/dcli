@@ -47,20 +47,20 @@ class Script {
   /// The scriptname without its '.dart' extension.
   String get basename => p.basenameWithoutExtension(scriptname);
 
-  String get pubSpecPath => p.join(_scriptDirectory, "pubspec.yaml");
+  String get pubSpecPath => p.join(_scriptDirectory, 'pubspec.yaml');
 
   // the scriptnameArg may contain a relative path: fred/home.dart
   // we need to get the actually name and full path to the script file.
   static String _extractScriptname(String scriptArg) {
-    String cwd = Directory.current.path;
+    var cwd = Directory.current.path;
 
     return p.basename(p.join(cwd, scriptArg));
   }
 
   static String _extractScriptDirectory(String scriptArg) {
-    String cwd = Directory.current.path;
+    var cwd = Directory.current.path;
 
-    String scriptDirectory = p.canonicalize(p.dirname(p.join(cwd, scriptArg)));
+    var scriptDirectory = p.canonicalize(p.dirname(p.join(cwd, scriptArg)));
 
     return scriptDirectory;
   }
@@ -102,21 +102,21 @@ void main() {
   static void validate(List<String> arguments) {
     if (arguments.isEmpty) {
       throw InvalidArguments(
-          "Expected a script or command. No arguments were found");
+          'Expected a script or command. No arguments were found');
     }
 
-    String scriptArg = arguments[0];
-    if (!scriptArg.endsWith(".dart")) {
+    var scriptArg = arguments[0];
+    if (!scriptArg.endsWith('.dart')) {
       throw InvalidArguments(
-          "Expected a script name instead found: ${scriptArg}");
+          'Expected a script name instead found: ${scriptArg}');
     }
 
     if (!File(scriptArg).existsSync()) {
       throw InvalidScript(
-          "The script ${p.absolute(scriptArg)} does not exist.");
+          'The script ${p.absolute(scriptArg)} does not exist.');
     }
     if (!FileSystemEntity.isFileSync(scriptArg)) {
-      throw InvalidScript("The script ${p.absolute(scriptArg)} is not a file.");
+      throw InvalidScript('The script ${p.absolute(scriptArg)} is not a file.');
     }
   }
 
@@ -125,27 +125,27 @@ void main() {
   /// Returns true if the script has a pubspec.yaml in its directory.
   bool hasPubSpecYaml() {
     // The virtual project pubspec.yaml file.
-    final String pubSpecPath = p.join(_scriptDirectory, "pubspec.yaml");
+    final  pubSpecPath = p.join(_scriptDirectory, 'pubspec.yaml');
     return exists(pubSpecPath);
   }
 }
 
 class PithyGreetings {
   static List<String> greeting = [
-    "Hello World",
-    "Helwo vorld",
-    "Build and Ben flower pot men. Weeeeeeeed.",
+    'Hello World',
+    'Helwo vorld',
+    'Build and Ben flower pot men. Weeeeeeeed.',
     "I'm a little tea pot.",
-    "Are we there yet.",
-    "Hurry up, says Mr Blackboard",
+    'Are we there yet.',
+    'Hurry up, says Mr Blackboard',
     "Damed if you do, Damed if you don't, so just get the hell on with it.",
-    "Yep, this is all of it.",
+    'Yep, this is all of it.',
     "I don't like your curtains"
   ];
 
   /// returns a random pithy greeting.
   static String random() {
-    int selected = Random().nextInt(greeting.length - 1);
+    var selected = Random().nextInt(greeting.length - 1);
 
     return greeting[selected];
   }

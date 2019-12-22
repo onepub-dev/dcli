@@ -14,7 +14,7 @@ class MyYaml {
   String get content => document.toString();
 
   MyYaml.loadFromFile(String path) {
-    String contents = waitFor<String>(File(path).readAsString());
+    var contents = waitFor<String>(File(path).readAsString());
     document = _load(contents);
   }
 

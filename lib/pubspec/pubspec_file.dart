@@ -25,6 +25,7 @@ class PubSpecFile implements PubSpec // with DependenciesMixin
 
   PubSpecFile._internal();
 
+  @override
   void writeToFile(String path) {
     pubspec.writeToFile(path);
   }

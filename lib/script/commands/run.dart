@@ -6,12 +6,11 @@ import '../flags.dart';
 import '../project_cache.dart';
 import '../runner.dart';
 import '../script.dart';
-import '../virtual_project.dart';
 import 'commands.dart';
 
 /// Runs a dart script.
 class RunCommand extends Command {
-  static const String NAME = "run";
+  static const String NAME = 'run';
 
   RunCommand() : super(NAME);
 
@@ -22,30 +21,32 @@ class RunCommand extends Command {
   int run(List<Flag> selectedFlags, List<String> arguments) {
     Script.validate(arguments);
 
-    Script script = Script.fromFile(arguments[0]);
+    var script = Script.fromFile(arguments[0]);
 
-    VirtualProject project = ProjectCache().loadProject(script);
+    var project = ProjectCache().loadProject(script);
 
     if (PubSpecManager(project).isCleanRequired()) {
       project.clean();
     }
 
-    List<String> scriptArguments = List();
+    var scriptArguments = <String>[];
 
     if (arguments.length > 1) {
       scriptArguments = arguments.sublist(1);
     }
 
-    final DartSdk sdk = DartSdk();
-    final ScriptRunner runner = ScriptRunner(sdk, project, scriptArguments);
+    final  sdk = DartSdk();
+    final  runner = ScriptRunner(sdk, project, scriptArguments);
 
-    final int exitCode = runner.exec();
+    final  exitCode = runner.exec();
 
     return exitCode;
   }
 
-  String usage() => "run <script path.dart>";
+  @override
+  String usage() => 'run <script path.dart>';
 
+  @override
   String description() =>
       '''Runs the given script. This command is provided for the sake of symmetry. 
  The recommended method is to use the simplier form ${Settings().appname} <script path.dart>''';

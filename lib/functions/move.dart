@@ -10,8 +10,8 @@ import 'package:path/path.dart' as p;
 /// Moves the file [from] to the location [to].
 ///
 /// ```dart
-/// createDir("/tmp/folder");
-/// move("/tmp/fred.txt", "/tmp/folder/tom.txt");
+/// createDir('/tmp/folder');
+/// move('/tmp/fred.txt', '/tmp/folder/tom.txt');
 /// ```
 /// [from] must be a file.
 ///
@@ -28,10 +28,10 @@ void move(String from, String to) => Move().move(from, to);
 class Move extends DShellFunction {
   void move(String from, String to) {
     if (Settings().debug_on) {
-      Log.d("move ${absolute(from)} -> ${absolute(to)}");
+      Log.d('move ${absolute(from)} -> ${absolute(to)}');
     }
 
-    String dest = to;
+    var dest = to;
 
     if (isDirectory(to)) {
       dest = p.join(to, p.basename(from));
@@ -41,7 +41,7 @@ class Move extends DShellFunction {
       File(from).renameSync(dest);
     } catch (e) {
       throw MoveException(
-          "The Move of ${absolute(from)} to ${absolute(dest)} failed. Error ${e}");
+          'The Move of ${absolute(from)} to ${absolute(dest)} failed. Error ${e}');
     }
   }
 }

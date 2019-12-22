@@ -8,5 +8,5 @@ dependencies:
 */
 
 void main() {
-  print("Hurry up, says Mr Blackboard");
+  print('Hurry up, says Mr Blackboard');
 }

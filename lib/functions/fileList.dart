@@ -16,10 +16,10 @@ List<String> get fileList => FileList().fileList;
 
 class FileList extends DShellFunction {
   List<String> get fileList {
-    List<String> files = List();
+    var files = <String>[];
 
     if (Settings().debug_on) {
-      Log.d("fileList pwd: ${absolute(pwd)}");
+      Log.d('fileList pwd: ${absolute(pwd)}');
     }
 
     Directory.current.listSync().forEach((file) => files.add(file.path));

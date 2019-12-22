@@ -10,8 +10,8 @@ import 'log.dart';
 // Use to print to the console
 void console(String line) => print(line);
 
-typedef void LineAction(String line);
-typedef bool CancelableLineAction(String line);
+typedef LineAction = void Function(String line);
+typedef CancelableLineAction = bool Function(String line);
 
 class RunnableProcess {
   Future<Process> fProcess;
@@ -27,13 +27,11 @@ class RunnableProcess {
       {this.workingDirectory})
       : parsed = ParsedCliCommand.fromParsed(command, args);
 
-  String get cmdLine => parsed.cmd + " " + parsed.args.join(" ");
+  String get cmdLine => parsed.cmd + ' ' + parsed.args.join(' ');
 
   void start() {
-    String workdir = workingDirectory;
-    if (workdir == null) {
-      workdir = Directory.current.path;
-    }
+    var workdir = workingDirectory;
+    workdir ??= Directory.current.path;
     fProcess = Process.start(parsed.cmd, parsed.args,
         runInShell: false, workingDirectory: workdir);
   }
@@ -49,7 +47,7 @@ class RunnableProcess {
   // If a LineAction exists we call
   // line action each time the process emmits a line.
   void processUntilExit(LineAction stdoutAction, [LineAction stderrAction]) {
-    Completer<bool> done = Completer<bool>();
+    var done = Completer<bool>();
 
     fProcess.then((process) {
       process.stdout
@@ -76,7 +74,7 @@ class RunnableProcess {
         // TODO: do we pass the exitCode to ForEach or just throw?
         if (exitCode != 0) {
           done.completeError(RunException(exitCode,
-              "The command [$cmdLine] failed with exitCode: ${exitCode}"));
+              'The command [$cmdLine] failed with exitCode: ${exitCode}'));
         } else {
           done.complete(true);
         }
@@ -97,18 +95,18 @@ class ParsedCliCommand {
   ParsedCliCommand.fromParsed(this.cmd, this.args);
 
   void parse(String command) {
-    List<String> parts = command.split(" ");
+    var parts = command.split(' ');
 
     cmd = parts[0];
-    args = List();
+    args = [];
 
     if (parts.length > 1) {
       args = parts.sublist(1);
     }
 
     if (Settings().debug_on) {
-      Log.d("${Directory.current}");
-      Log.d("cmd: $cmd args: $args");
+      Log.d('${Directory.current}');
+      Log.d('cmd: $cmd args: $args');
     }
   }
 }

@@ -13,7 +13,7 @@ class CommandLineRunner {
 
   factory CommandLineRunner() {
     if (_self == null) {
-      throw Exception("The CommandLineRunner has not been intialised");
+      throw Exception('The CommandLineRunner has not been intialised');
     }
     return _self;
   }
@@ -28,18 +28,17 @@ class CommandLineRunner {
   int process(List<String> arguments) {
     int exitCode;
 
-    bool success = false;
+    var success = false;
 
     // Find the command and run it.
     Command command;
-    List<String> cmdArguments = List();
+    var cmdArguments = <String>[];
 
-    int i = 0;
-    for (; i < arguments.length; i++) {
-      final String argument = arguments[i];
+    for (var i = 0; i < arguments.length; i++) {
+      final  argument = arguments[i];
 
       if (Flags.isFlag(argument)) {
-        Flag flag = Flags.findFlag(argument, availableFlags);
+        var flag = Flags.findFlag(argument, availableFlags);
 
         if (flag != null) {
           if (Flags.isSet(flag)) {
@@ -73,7 +72,7 @@ class CommandLineRunner {
       // get the script name and remaning args as they are the arguments for the command to process.
       exitCode = command.run(Settings().selectedFlags, cmdArguments);
     } else {
-      throw InvalidArguments("Invalid arguments passed.");
+      throw InvalidArguments('Invalid arguments passed.');
     }
     return exitCode;
   }
@@ -92,6 +91,7 @@ class DuplicateOptionsException extends OptionsException {
 
   DuplicateOptionsException(this.optionName)
       : super('Option ${optionName} used twice!');
+  @override
   String toString() => message;
 }
 
@@ -100,6 +100,7 @@ class UnknownOption extends OptionsException {
 
   UnknownOption(this.optionName) : super('The option $optionName is unknown!');
 
+  @override
   String toString() => message;
 }
 
@@ -112,14 +113,15 @@ class UnknownCommand extends CommandLineException {
 
   UnknownCommand(this.command)
       : super(
-            "The command ${command} was not recognised. Scripts must end with .dart!");
+            'The command ${command} was not recognised. Scripts must end with .dart!');
 }
 
 class UnknownFlag extends CommandLineException {
   final String flag;
 
-  UnknownFlag(this.flag) : super("The flag ${flag} was not recognised!");
+  UnknownFlag(this.flag) : super('The flag ${flag} was not recognised!');
 
+  @override
   String toString() => message;
 }
 

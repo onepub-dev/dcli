@@ -22,7 +22,7 @@ class PubGet {
   /// Runs the pub get command against
   /// the project working dir.
   PubGetResult run() {
-    PubGetResult result = PubGetResult();
+    var result = PubGetResult();
     try {
       DartSdk().runPubGet(project.path,
           progress: Progress((line) => result.processLine(line),
@@ -36,22 +36,22 @@ class PubGet {
 }
 
 class PubGetResult {
-  List<Dependency> _added = List();
-  List<Dependency> _removed = List();
+  final List<Dependency> _added = <Dependency>[];
+  final List<Dependency> _removed = <Dependency>[];
 
   PubGetResult();
 
   void processLine(String line) {
     print(line);
     if (line.startsWith('+ ')) {
-      Dependency dep = Dependency.fromLine(line);
+      var dep = Dependency.fromLine(line);
       if (dep != null) {
         _added.add(dep);
       }
     }
 
     if (line.startsWith('- ')) {
-      Dependency dep = Dependency.fromLine(line);
+      var dep = Dependency.fromLine(line);
       if (dep != null) {
         _removed.add(dep);
       }

@@ -7,17 +7,17 @@ import 'commands.dart';
 import '../../util/runnable_process.dart';
 
 class CompileCommand extends Command {
-  static const String NAME = "compile";
+  static const String NAME = 'compile';
 
   CompileCommand() : super(NAME);
 
   @override
   int run(List<Flag> selectedFlags, List<String> subarguments) {
-    int exitCode = 0;
+    var exitCode = 0;
     Script.validate(subarguments);
-    Script script = Script.fromFile(subarguments[0]);
+    var script = Script.fromFile(subarguments[0]);
     try {
-      VirtualProject project = VirtualProject(Settings().cachePath, script);
+      var project = VirtualProject(Settings().cachePath, script);
 
       DartSdk()
           .runDart2Native(script, script.scriptDirectory, project.path)
@@ -34,5 +34,5 @@ class CompileCommand extends Command {
       "Compiles the script using dart's native compiler. Only required if you want super fast execution.";
 
   @override
-  String usage() => "compile <script path.dart>";
+  String usage() => 'compile <script path.dart>';
 }

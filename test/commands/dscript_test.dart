@@ -8,8 +8,8 @@ import '../util/test_fs_zone.dart';
 void main() {
   test('Run hello world', () {
     TestZone().run(() {
-      int exitCode =
-          EntryPoint().process(["test/test_scripts/hello_world.dart", "world"]);
+      var exitCode =
+          EntryPoint().process(['test/test_scripts/hello_world.dart', 'world']);
 
       expect(exitCode, equals(0));
     });

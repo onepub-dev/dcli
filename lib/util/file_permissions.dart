@@ -14,7 +14,7 @@ enum FilePermissionRole { WORLD, GROUP, USER }
 /// If the path doesn't exist then false is returned.
 bool hasPermission(String path, FilePermission permission,
     {FilePermissionRole role = FilePermissionRole.WORLD}) {
-  FileStat stat = FileStat.statSync(path);
+  var stat = FileStat.statSync(path);
 
   // if (stat.type == FileSystemEntityType.notFound)
 

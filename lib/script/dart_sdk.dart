@@ -1,5 +1,5 @@
 import 'dart:cli';
-import "dart:io";
+import 'dart:io';
 import 'package:dshell/script/script.dart';
 import 'package:dshell/util/progress.dart';
 import 'package:dshell/util/runnable_process.dart';
@@ -17,9 +17,7 @@ class DartSdk {
   String _version;
 
   factory DartSdk() {
-    if (_self == null) {
-      _self = DartSdk._internal(_detect());
-    }
+    _self ??= DartSdk._internal(_detect());
 
     return _self;
   }
@@ -40,9 +38,9 @@ class DartSdk {
 
   Progress runDart2Native(
       Script script, String outputDir, String workingDirectory) {
-    List<String> runArgs = List();
+    var runArgs = <String>[];
     runArgs.add(script.scriptname);
-    runArgs.add("--output=${outputDir}/${script.basename}");
+    runArgs.add('--output=${outputDir}/${script.basename}');
 
     return run(dart2NativePath, runArgs, workingDirectory);
   }
@@ -61,7 +59,7 @@ class DartSdk {
     try {
       forEach = progress ?? Progress.forEach();
 
-      RunnableProcess runnable = RunnableProcess.fromList(processPath, args,
+      var runnable = RunnableProcess.fromList(processPath, args,
           workingDirectory: workingDirectory);
       runnable.start();
       runnable.processUntilExit((line) => forEach.addToStdout(line),
@@ -73,12 +71,12 @@ class DartSdk {
   }
 
   static String _detect() {
-    String executable = Platform.executable;
-    final String s = Platform.pathSeparator;
+    var executable = Platform.executable;
+    final  s = Platform.pathSeparator;
 
     if (!executable.contains(s)) {
       if (Platform.isLinux) {
-        executable = Link("/proc/$pid/exe").resolveSymbolicLinksSync();
+        executable = Link('/proc/$pid/exe').resolveSymbolicLinksSync();
       }
     }
 
@@ -87,11 +85,11 @@ class DartSdk {
       throw dartSdkNotFound;
     }
 
-    Directory parent = file.absolute.parent;
+    var parent = file.absolute.parent;
     parent = parent.parent; // TODO What if this does not exist?
 
-    final String sdkPath = parent.path;
-    final String dartApi = "$sdkPath${s}include${s}dart_api.h";
+    final  sdkPath = parent.path;
+    final  dartApi = '$sdkPath${s}include${s}dart_api.h';
     if (!File(dartApi).existsSync()) {
       throw Exception('Cannot find Dart SDK!');
     }
@@ -101,13 +99,13 @@ class DartSdk {
 
   String get version {
     if (_version == null) {
-      final ProcessResult res =
+      final  res =
           waitFor<ProcessResult>(Process.run(dartPath, <String>['--version']));
       if (res.exitCode != 0) {
         throw Exception('Failed!');
       }
 
-      String resultString = res.stderr as String;
+      var resultString = res.stderr as String;
 
       _version =
           resultString.substring('Dart VM version: '.length).split(' ').first;

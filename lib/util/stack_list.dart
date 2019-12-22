@@ -13,7 +13,7 @@ class StackList<T> {
   /// by pushing each element of the list
   /// onto the stack from first to last.
   StackList.fromList(List<T> initialStack) {
-    for (T item in initialStack) {
+    for (var item in initialStack) {
       push(item);
     }
   }

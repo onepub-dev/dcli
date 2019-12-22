@@ -11,12 +11,12 @@ class TestPaths {
   String projectPath;
 
   TestPaths(String relativeScriptPath) {
-    String cwd = Directory.current.path;
-    home = env("home");
+    var cwd = Directory.current.path;
+    home = env('home');
     scriptDir = join(cwd, relativeScriptPath);
     scriptPath = dirname(scriptDir);
     scriptName = basenameWithoutExtension(scriptDir);
     projectPath = join(
-        Settings().cachePath, scriptPath.substring(1), scriptName + ".project");
+        Settings().cachePath, scriptPath.substring(1), scriptName + '.project');
   }
 }

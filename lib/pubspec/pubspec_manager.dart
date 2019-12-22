@@ -6,7 +6,6 @@ import 'package:dshell/pubspec/pubspec_default.dart';
 import 'package:dshell/pubspec/pubspec_file.dart';
 import 'package:dshell/pubspec/pubspec_virtual.dart';
 import 'package:dshell/script/dependency.dart';
-import 'package:dshell/script/script.dart';
 import 'package:dshell/script/virtual_project.dart';
 
 class PubSpecManager {
@@ -30,11 +29,11 @@ class PubSpecManager {
   /// and saves it to [path] as a pubspec.yaml file.
   ///
   void createVirtualPubSpec() {
-    Script script = project.script;
+    var script = project.script;
     PubSpec sourcePubSpec;
 
     PubSpec defaultPubspec = PubSpecDefault(script);
-    PubSpecAnnotation annotation = PubSpecAnnotation.fromScript(script);
+    var annotation = PubSpecAnnotation.fromScript(script);
 
     if (!annotation.exists()) {
       if (script.hasPubSpecYaml()) {
@@ -48,7 +47,7 @@ class PubSpecManager {
 
     PubSpec pubSpec = PubSpecVirtual.fromPubSpec(sourcePubSpec);
 
-    List<Dependency> resolved = resolveDependancies(pubSpec, defaultPubspec);
+    var resolved = resolveDependancies(pubSpec, defaultPubspec);
 
     pubSpec.dependencies = resolved;
 
@@ -56,11 +55,11 @@ class PubSpecManager {
   }
 
   bool wasModified(String pubSpecPath, DateTime scriptModified) {
-    bool wasModified = true;
+    var wasModified = true;
 
     // If the script hasn't changed since we last
     // updated the pubspec then we don't need to run pub get.
-    DateTime pubSpecModified = lastModified(pubSpecPath);
+    var pubSpecModified = lastModified(pubSpecPath);
     if (scriptModified == pubSpecModified) {
       // no changes so signal that we don't need to run pub get.
       wasModified = false;
@@ -110,18 +109,18 @@ class PubSpecManager {
   ///
   List<Dependency> resolveDependancies(
       PubSpec selected, PubSpec defaultPubSpec) {
-    List<Dependency> resolved = List();
+    var resolved = <Dependency>[];
 
     // Start form least important to most imporant
     // Note: the defaultPubSpec no longer contains dependencies
     // but I've left this here incase it changes again.
-    List<Dependency> defaultDependancies = defaultPubSpec.dependencies;
-    List<Dependency> globalDependencies = _getGlobalDependancies();
+    var defaultDependancies = defaultPubSpec.dependencies;
+    var globalDependencies = _getGlobalDependancies();
 
     // take the preferred ones from global and default
     resolved = resolve(globalDependencies, defaultDependancies);
 
-    List<Dependency> pubspecDependancies = selected.dependencies;
+    var pubspecDependancies = selected.dependencies;
 
     // If the default pubspec is also the selected one then
     // we MUST NOT re-resolve otherwise the defaults will take
@@ -135,15 +134,15 @@ class PubSpecManager {
   }
 
   List<Dependency> _getGlobalDependancies() {
-    GlobalDependancies gd = GlobalDependancies();
+    var gd = GlobalDependancies();
     return gd.dependencies;
   }
 
   List<Dependency> resolve(List<Dependency> preferred, List<Dependency> base) {
-    List<Dependency> resolved = List();
-    for (Dependency basic in base) {
+    var resolved = <Dependency>[];
+    for (var basic in base) {
       // if there is a matching preferred item then use that.
-      Dependency add = preferred.firstWhere(
+      var add = preferred.firstWhere(
           (preference) => preference.name == basic.name,
           orElse: () => basic);
 
@@ -151,9 +150,9 @@ class PubSpecManager {
     }
 
     // add any preferred items that simply arn't in the base
-    for (Dependency preference in preferred) {
+    for (var preference in preferred) {
       // check inf the preference is already in the list.
-      Dependency found = resolved.firstWhere(
+      var found = resolved.firstWhere(
           (element) => element.name == preference.name,
           orElse: () => null);
       if (found == null) resolved.add(preference);

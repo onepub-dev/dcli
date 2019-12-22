@@ -7,7 +7,7 @@ import '../virtual_project.dart';
 import 'commands.dart';
 
 class CleanCommand extends Command {
-  static const String NAME = "clean";
+  static const String NAME = 'clean';
 
   CleanCommand() : super(NAME);
 
@@ -21,17 +21,19 @@ class CleanCommand extends Command {
 
     Script.validate(arguments);
 
-    Script script = Script.fromFile(arguments[0]);
+    var script = Script.fromFile(arguments[0]);
 
-    VirtualProject project = VirtualProject(Settings().cachePath, script);
+    var project = VirtualProject(Settings().cachePath, script);
 
     project.clean();
 
     return 0;
   }
 
-  String usage() => "clean <script path.dart>";
+  @override
+  String usage() => 'clean <script path.dart>';
 
+  @override
   String description() =>
       "Deletes the project cache for <scriptname.dart> and forces a rebuild of the script's cache.";
 }

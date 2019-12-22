@@ -6,7 +6,7 @@ import 'package:path/path.dart' as p;
 /// just the filename sans the extension.
 ///
 /// '''dart
-/// basename("/fred/john.jpg")
+/// basename('/fred/john.jpg')
 ///   > john
 /// ```
 String basename(String path) => Path().basename(path);
@@ -14,7 +14,7 @@ String basename(String path) => Path().basename(path);
 /// Returns the filename component of [path] by
 /// removing the directory component.
 /// ''' dart
-/// filename("/fred/john.jpg")
+/// filename('/fred/john.jpg')
 ///   > john.jpg
 /// ```
 String filename(String path) => Path().filename(path);
@@ -26,7 +26,7 @@ String parent(String path) => Path().parent(path);
 /// Returns the filename extension without the dot.
 ///
 /// ''' dart
-/// filename("/fred/john.jpg")
+/// filename('/fred/john.jpg')
 ///   > jpg
 /// ```
 String extension(String path) => Path().extension(path);
@@ -35,7 +35,7 @@ String extension(String path) => Path().extension(path);
 /// Returns the fully qualified path of [path].
 ///
 /// '''dart
-/// absolute("fred");
+/// absolute('fred');
 ///   > /home/fred
 String absolute(String path) => Path().absolute(path);
 
@@ -44,7 +44,7 @@ String absolute(String path) => Path().absolute(path);
 /// absolute path.
 ///
 /// ```dart
-/// canonicalize("../../fred");
+/// canonicalize('../../fred');
 ///  > /home/fred
 ///
 String canonicalize(String path) => Path().canonicalize(path);
@@ -74,9 +74,9 @@ class Path extends DShellFunction {
   String canonicalize(String path) => p.canonicalize(path);
 
   String basename(String path) {
-    String extension = this.extension(path);
-    String filename = this.filename(path);
-    String basename =
+    var extension = this.extension(path);
+    var filename = this.filename(path);
+    var basename =
         filename.substring(0, filename.length - (extension.length + 1));
 
     return basename;
@@ -84,7 +84,7 @@ class Path extends DShellFunction {
 
   /// Returns the parent directory of path.
   String parent(String path) {
-    String canon = p.canonicalize(path);
+    var canon = p.canonicalize(path);
     return p.dirname(canon);
   }
 
@@ -100,9 +100,9 @@ class Path extends DShellFunction {
   }
 
   String extension(String path) {
-    String extension = "";
+    var extension = '';
 
-    int index = path.lastIndexOf(".");
+    var index = path.lastIndexOf('.');
     if (index != -1) {
       extension = path.substring(index + 1);
     }

@@ -9,10 +9,12 @@ import 'package:dshell/script/script.dart';
 class PubSpecDefault implements PubSpec // with DependenciesMixin
 {
   PubSpecImpl pubspec;
-  Script _script;
+  final Script _script;
 
+  @override
   String get name => _script.basename;
-  String get version => "1.0.0";
+  @override
+  String get version => '1.0.0';
 
   PubSpecDefault(this._script) {
     pubspec = PubSpecImpl.fromString(_default());

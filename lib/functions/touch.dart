@@ -10,8 +10,8 @@ import '../util/log.dart';
 /// Updates the last modified time stamp of a file.
 ///
 /// ```dart
-/// touch("fred.txt");
-/// touch("fred.txt, create=true");
+/// touch('fred.txt');
+/// touch('fred.txt, create=true');
 /// ```
 ///
 ///
@@ -27,28 +27,28 @@ void touch(String path, {bool create = false}) =>
 
 class Touch extends DShellFunction {
   void touch(String path, {bool create = false}) {
-    String absolute = p.absolute(path);
+    var absolute = p.absolute(path);
 
     if (Settings().debug_on) {
-      Log.d("touch: ${absolute} create: $create");
+      Log.d('touch: ${absolute} create: $create');
     }
 
     if (!exists(p.dirname(absolute))) {
       throw TouchException(
-          "The directory tree above ${absolute} does not exist. Create the tree and try again.");
+          'The directory tree above ${absolute} does not exist. Create the tree and try again.');
     }
     if (create == false && !exists(path)) {
       throw TouchException(
-          "The file ${absolute} does not exist. Did you mean to use touch(path, create: true) ?");
+          'The file ${absolute} does not exist. Did you mean to use touch(path, create: true) ?');
     }
 
     try {
       if (!FileUtils.touch([path], create: true)) {
         throw TouchException(
-            "Unable to touch file ${absolute}: check permissions");
+            'Unable to touch file ${absolute}: check permissions');
       }
     } catch (e) {
-      throw TouchException("An error occured touching ${absolute}: $e");
+      throw TouchException('An error occured touching ${absolute}: $e');
     }
   }
 }

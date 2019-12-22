@@ -2,8 +2,8 @@ import 'package:dshell/pubspec/pubspec_annotation.dart';
 import 'package:test/test.dart';
 
 void main() {
-  test("parse", () {
-    String annotation = """
+  test('parse', () {
+    var annotation = '''
     /*
       @pubspec
       name: find.dart
@@ -12,7 +12,7 @@ void main() {
         args: ^1.5.2
         path: ^1.6.4
     */
-    """;
+    ''';
 
     PubSpecAnnotation.fromString(annotation);
   });

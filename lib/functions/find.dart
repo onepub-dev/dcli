@@ -12,11 +12,11 @@ import '../util/log.dart';
 /// directory that match the passed glob pattern.
 ///
 /// ```dart
-/// find("*.jpg", recursive=true).forEach((file) => print(file));
+/// find('*.jpg', recursive=true).forEach((file) => print(file));
 ///
-/// String<List> results = find("[a-z]*.jpg", caseSensitive=true).toList();
+/// String<List> results = find('[a-z]*.jpg', caseSensitive=true).toList();
 ///
-/// find("*.jpg"
+/// find('*.jpg'
 ///   , types=[FileSystemEntityType.directory, FileSystemEntityType.file])
 ///     .forEach((file) => print(file));
 /// ```
@@ -51,7 +51,7 @@ import '../util/log.dart';
 Progress find(String pattern,
         {bool caseSensitive = false,
         bool recursive = true,
-        String root = ".",
+        String root = '.',
         Progress progress,
         List<FileSystemEntityType> types = const [
           FileSystemEntityType.file
@@ -67,10 +67,10 @@ class Find extends DShellFunction {
   Progress find(String pattern,
       {bool caseSensitive = false,
       bool recursive = true,
-      String root = ".",
+      String root = '.',
       Progress progress,
       List<FileSystemEntityType> types = const [FileSystemEntityType.file]}) {
-    PatternMatcher matcher = PatternMatcher(pattern, caseSensitive);
+    var matcher = PatternMatcher(pattern, caseSensitive);
 
     Progress forEach;
 
@@ -79,18 +79,18 @@ class Find extends DShellFunction {
 
       if (Settings().debug_on) {
         Log.d(
-            "find: pwd: ${pwd} ${absolute(root)} pattern: ${pattern} caseSensitive: ${caseSensitive} recursive: ${recursive} types: ${types} ");
+            'find: pwd: ${pwd} ${absolute(root)} pattern: ${pattern} caseSensitive: ${caseSensitive} recursive: ${recursive} types: ${types} ');
       }
 
       // get all files for consideration
       // this could be problematic for a large tree.
       // would be better if we process the files as we went.
-      List<FileSystemEntity> all =
+      var all =
           Directory(root).listSync(recursive: recursive);
 
       // TODO: consider doing a directory at a time so we don't blow all memory.
       for (var entity in all) {
-        FileSystemEntityType type = FileSystemEntity.typeSync(entity.path);
+        var type = FileSystemEntity.typeSync(entity.path);
         if (types.contains(type) && matcher.match(entity.path)) {
           forEach.addToStdout(entity.path);
         }
@@ -117,32 +117,32 @@ class PatternMatcher {
   }
 
   RegExp buildRegEx() {
-    String regEx = "";
+    var regEx = '';
 
-    for (int i = 0; i < pattern.length; i++) {
-      String char = pattern[i];
+    for (var i = 0; i < pattern.length; i++) {
+      var char = pattern[i];
 
       switch (char) {
         case '[':
-          regEx += "[";
+          regEx += '[';
           break;
         case ']':
-          regEx += "]";
+          regEx += ']';
           break;
         case '*':
           regEx += '.*';
           break;
         case '?':
-          regEx += ".";
+          regEx += '.';
           break;
         case '-':
-          regEx += "-";
+          regEx += '-';
           break;
         case '!':
-          regEx += "^";
+          regEx += '^';
           break;
-        case ".":
-          regEx += "\\.";
+        case '.':
+          regEx += '\\.';
           break;
         default:
           regEx += char;

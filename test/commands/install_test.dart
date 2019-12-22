@@ -8,14 +8,14 @@ import 'package:test/test.dart';
 import '../util/test_fs_zone.dart';
 import '../util/test_paths.dart';
 
-String script = "test/test_scripts/hello_world.dart";
+String script = 'test/test_scripts/hello_world.dart';
 
 void main() {
-  group("Install DShell", () {
+  group('Install DShell', () {
     test('Install with success', () {
       TestZone().run(() {
         try {
-          EntryPoint().process(["install"]);
+          EntryPoint().process(['install']);
         } on DShellException catch (e) {
           print(e);
         }
@@ -27,11 +27,11 @@ void main() {
       TestZone().run(() {
         var paths = TestPaths(script);
         try {
-          EntryPoint().process(["install", "a"]);
+          EntryPoint().process(['install', 'a']);
         } on DShellException catch (e) {
           print(e);
         }
-        expect(exists("${paths.home}/.dshell"), equals(false));
+        expect(exists('${paths.home}/.dshell'), equals(false));
       });
     });
 
@@ -40,11 +40,11 @@ void main() {
 }
 
 void checkInstallStructure(TestPaths testPaths) {
-  expect(exists("${testPaths.home}/.dshell"), equals(true));
+  expect(exists('${testPaths.home}/.dshell'), equals(true));
 
-  expect(exists("${testPaths.home}/.dshell/cache"), equals(true));
+  expect(exists('${testPaths.home}/.dshell/cache'), equals(true));
 
-  expect(exists("${testPaths.home}/.dshell/templates"), equals(true));
+  expect(exists('${testPaths.home}/.dshell/templates'), equals(true));
 
-  expect(exists("${testPaths.home}/.dshell/dependancies.yaml"), equals(true));
+  expect(exists('${testPaths.home}/.dshell/dependancies.yaml'), equals(true));
 }

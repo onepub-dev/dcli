@@ -5,7 +5,7 @@ class DShellException implements Exception {
   final StackTraceImpl stackTrace;
 
   DShellException(this.message, [StackTraceImpl stackTrace])
-      : this.stackTrace = stackTrace ?? StackTraceImpl(skipFrames: 2);
+      : stackTrace = stackTrace ?? StackTraceImpl(skipFrames: 2);
 
   DShellException copyWith(StackTraceImpl stackTrace) {
     return DShellException(message, stackTrace);
@@ -15,8 +15,9 @@ class DShellException implements Exception {
   //   return DShellException(this.message, stackTrace);
   // }
 
+  @override
   String toString() {
-    return "${message}";
+    return '${message}';
   }
 
   void printStackTrace() {

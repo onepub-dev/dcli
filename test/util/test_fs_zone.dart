@@ -1,6 +1,4 @@
-import 'dart:convert';
 import 'dart:io';
-import 'dart:typed_data';
 import 'package:file/memory.dart';
 
 class TestZone {
@@ -17,7 +15,7 @@ class TestZone {
     }
   }
 
-  void run<R>(R body()) {
+  void run<R>(R Function() body) {
     IOOverrides.runZoned(body,
         createDirectory: (String path) => _fs.directory(path),
         createFile: (String path) => _fs.file(path),
@@ -44,14 +42,4 @@ class TestZone {
     return _fs.typeSync(path, followLinks: followLinks);
   }
 
-  static String _toStringFromUtf8Array(Uint8List l) {
-    if (l == null) {
-      return '';
-    }
-    Uint8List nonNullTerminated = l;
-    if (l.last == 0) {
-      nonNullTerminated = new Uint8List.view(l.buffer, 0, l.length - 1);
-    }
-    return utf8.decode(nonNullTerminated, allowMalformed: true);
-  }
 }

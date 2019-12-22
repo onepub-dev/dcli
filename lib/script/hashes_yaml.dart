@@ -9,7 +9,7 @@ class HashesYaml {
   MyYaml hashes;
 
   HashesYaml(String scriptCachePath) {
-    Directory cachePathDirectory = Directory(scriptCachePath);
+    var cachePathDirectory = Directory(scriptCachePath);
 
     if (!cachePathDirectory.existsSync()) {
       cachePathDirectory.createSync();

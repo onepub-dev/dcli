@@ -15,15 +15,15 @@ import 'package:path/path.dart' as p;
 import '../util/test_fs_zone.dart';
 import '../util/test_paths.dart';
 
-String script = "test/test_scripts/hello_world.dart";
+String script = 'test/test_scripts/hello_world.dart';
 
 void main() {
-  group("Create Project", () {
+  group('Create Project', () {
     test('Create hello world', () {
       TestZone().run(() {
         var paths = TestPaths(script);
         setup(paths);
-        EntryPoint().process(["create", script]);
+        EntryPoint().process(['create', script]);
 
         checkProjectStructure(paths);
       });
@@ -33,7 +33,7 @@ void main() {
       TestZone().run(() {
         var paths = TestPaths(script);
         setup(paths);
-        EntryPoint().process(["clean", script]);
+        EntryPoint().process(['clean', script]);
 
         checkProjectStructure(paths);
       });
@@ -57,10 +57,10 @@ void setup(TestPaths paths) {
 void checkProjectStructure(TestPaths paths) {
   expect(exists(paths.projectPath), equals(true));
 
-  String pubspecPath = p.join(paths.projectPath, "pubspec.yaml");
+  var pubspecPath = p.join(paths.projectPath, 'pubspec.yaml');
   expect(exists(pubspecPath), equals(true));
 
-  String libPath = p.join(paths.projectPath, "lib");
+  var libPath = p.join(paths.projectPath, 'lib');
   expect(exists(libPath), equals(true));
 
   // There should be three files/directories in the project.
@@ -70,25 +70,25 @@ void checkProjectStructure(TestPaths paths) {
   // pubspec.yaml
   // .packages
 
-  List<String> files = List();
+  var files = <String>[];
   find('*.*', recursive: false, root: paths.projectPath, types: [
     FileSystemEntityType.file,
   ]).forEach((line) => files.add(p.basename(line)));
   expect(
       files,
       unorderedEquals((<String>[
-        "hello_world.dart",
-        "pubspec.yaml",
-        "pubspec.lock",
-        ".packages"
+        'hello_world.dart',
+        'pubspec.yaml',
+        'pubspec.lock',
+        '.packages'
       ])));
 
-  List<String> directories = List();
+  var directories = <String>[];
 
   find('*.*',
           recursive: false,
           root: paths.projectPath,
           types: [FileSystemEntityType.directory])
       .forEach((line) => directories.add(p.basename(line)));
-  expect(directories, unorderedEquals(<String>["lib", ".dart_tool"]));
+  expect(directories, unorderedEquals(<String>['lib', '.dart_tool']));
 }

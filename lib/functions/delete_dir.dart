@@ -29,23 +29,23 @@ void deleteDir(String path, {bool recursive = true}) =>
 class DeleteDir extends DShellFunction {
   void deleteDir(String path, {bool recursive}) {
     if (Settings().debug_on) {
-      Log.d("deleteDir:  ${absolute(path)} recursive: $recursive");
+      Log.d('deleteDir:  ${absolute(path)} recursive: $recursive');
     }
 
     if (!exists(path)) {
-      throw DeleteDirException("The path ${absolute(path)} does not exist.");
+      throw DeleteDirException('The path ${absolute(path)} does not exist.');
     }
 
     if (!isDirectory(path)) {
       throw DeleteDirException(
-          "The path ${absolute(path)} is not a directory.");
+          'The path ${absolute(path)} is not a directory.');
     }
 
     try {
       Directory(path).deleteSync(recursive: recursive);
     } catch (e) {
       throw DeleteDirException(
-          "Unable to delete the directory ${absolute(path)}. Error: $e");
+          'Unable to delete the directory ${absolute(path)}. Error: $e');
     }
   }
 }

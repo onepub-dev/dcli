@@ -9,7 +9,7 @@ class Pipe {
   }
 
   Pipe operator |(String next) {
-    RunnableProcess pNext = RunnableProcess(next);
+    var pNext = RunnableProcess(next);
     pNext.start();
     return Pipe(rhs, pNext);
   }

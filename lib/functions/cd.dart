@@ -32,11 +32,11 @@ void cd(String path) => CD().cd(path);
 class CD extends DShellFunction {
   void cd(String path) {
     if (Settings().debug_on) {
-      Log.d("cd $path -> ${p.canonicalize(path)}");
+      Log.d('cd $path -> ${p.canonicalize(path)}');
     }
 
     if (!exists(path)) {
-      throw CDException("The path ${p.canonicalize(path)} does not exists.");
+      throw CDException('The path ${p.canonicalize(path)} does not exists.');
     }
     Directory.current = p.join(Directory.current.path, path);
   }

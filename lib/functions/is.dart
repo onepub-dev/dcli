@@ -67,13 +67,13 @@ void setLastModifed(String path, DateTime lastModified) {
 
 class Is extends DShellFunction {
   bool isFile(String path) {
-    FileSystemEntityType fromType = FileSystemEntity.typeSync(path);
+    var fromType = FileSystemEntity.typeSync(path);
     return (fromType == FileSystemEntityType.file);
   }
 
   /// true if the given path is a directory.
   bool isDirectory(String path) {
-    FileSystemEntityType fromType = FileSystemEntity.typeSync(path);
+    var fromType = FileSystemEntity.typeSync(path);
     return (fromType == FileSystemEntityType.directory);
   }
 

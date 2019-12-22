@@ -28,13 +28,13 @@ T waitForEx<T>(Future<T> future) {
     // recreate the exception so we have a full
     // stacktrace rather than the microtask
     // stacktrace the future leaves us with.
-    StackTraceImpl stackTrace = StackTraceImpl(skipFrames: 2);
+    var stackTrace = StackTraceImpl(skipFrames: 2);
 
     if (exception is DShellException) {
       throw exception.copyWith(stackTrace);
     } else {
       Log.w(
-          "Rethrowing a non DShellException ${exception}- should we wrap this?");
+          'Rethrowing a non DShellException ${exception}- should we wrap this?');
       throw DShellException.from(exception, stackTrace);
     }
   }

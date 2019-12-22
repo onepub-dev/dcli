@@ -53,9 +53,7 @@ class ProjectCache {
   }
 
   factory ProjectCache() {
-    if (_self == null) {
-      _self = ProjectCache._internal();
-    }
+    _self ??= ProjectCache._internal();
     _self.initCache();
 
     return _self;
@@ -70,7 +68,7 @@ class ProjectCache {
   // If the project already exists then it will
   // be refreshed if required.
   VirtualProject createProject(Script script, {bool skipPubGet = false}) {
-    VirtualProject project = VirtualProject(Settings().cachePath, script);
+    var project = VirtualProject(Settings().cachePath, script);
     project.createProject(skipPubGet: skipPubGet);
     return project;
   }
@@ -79,7 +77,7 @@ class ProjectCache {
   /// Checks if the dscript cache exists
   /// and if not creates it.
   void initCache() {
-    createDir(Settings().cachePath, "cache");
+    createDir(Settings().cachePath, 'cache');
   }
 
   /// If the [cleanall] command issued

@@ -25,14 +25,14 @@ void createDir(String path, {bool recursive = false}) =>
 class CreateDir extends DShellFunction {
   void createDir(String path, {bool recursive}) {
     if (Settings().debug_on) {
-      Log.d("createDir:  ${absolute(path)} recursive: $recursive");
+      Log.d('createDir:  ${absolute(path)} recursive: $recursive');
     }
 
     try {
       Directory(path).createSync(recursive: recursive);
     } catch (e) {
       throw CreateDirException(
-          "Unable to create the directory ${absolute(path)}. Error: ${e}");
+          'Unable to create the directory ${absolute(path)}. Error: ${e}');
     }
   }
 }

@@ -10,7 +10,7 @@ import '../script.dart';
 import 'commands.dart';
 
 class CreateCommand extends Command {
-  static const String NAME = "create";
+  static const String NAME = 'create';
 
   Script _script;
 
@@ -22,18 +22,18 @@ class CreateCommand extends Command {
 
     _script = validateArguments(selectedFlags, arguments);
 
-    String body = _script.generateDefaultBody();
+    var body = _script.generateDefaultBody();
     _script.createDefaultFile(body);
 
-    print("Creating project.");
+    print('Creating project.');
     ProjectCache().createProject(_script);
 
-    print("Making script executable");
+    print('Making script executable');
     chmod(755, p.join(_script.scriptDirectory, _script.scriptname));
 
-    print("Project creation complete.");
+    print('Project creation complete.');
 
-    print("To run your script:\n   dshell ${_script.scriptname}");
+    print('To run your script:\n   dshell ${_script.scriptname}');
 
     return 0;
   }
@@ -41,7 +41,7 @@ class CreateCommand extends Command {
   Script validateArguments(List<Flag> selectedFlags, List<String> arguments) {
     if (arguments.length != 1) {
       throw InvalidArguments(
-          "The create command takes only one argument. Found: ${arguments.join(",")}");
+          'The create command takes only one argument. Found: ${arguments.join(',')}');
     }
 
     return Script.fromFile(arguments[0]);
@@ -57,8 +57,8 @@ class CreateCommand extends Command {
 
   @override
   String description() =>
-      "Creates a script file with a default pubspec annotation and a main entry point.";
+      'Creates a script file with a default pubspec annotation and a main entry point.';
 
   @override
-  String usage() => "create <script path.dart>";
+  String usage() => 'create <script path.dart>';
 }

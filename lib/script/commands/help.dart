@@ -6,18 +6,18 @@ import 'commands.dart';
 import '../../util/ansi_color.dart';
 
 class HelpCommand extends Command {
-  static const String NAME = "help";
+  static const String NAME = 'help';
 
   HelpCommand() : super(NAME);
 
   @override
   int run(List<Flag> selectedFlags, List<String> subarguments) {
     if (subarguments.isNotEmpty) {
-      Command command = Commands.findCommand(
+      var command = Commands.findCommand(
           subarguments[0], Commands.asMap(Commands.applicationCommands));
       if (command == null) {
         throw InvalidArguments(
-            "help expected a command name. Found ${subarguments}");
+            'help expected a command name. Found ${subarguments}');
       }
       command.usage();
     }
@@ -27,34 +27,34 @@ class HelpCommand extends Command {
 
   @override
   String description() =>
-      "Displays the usage message | Display the commands usage message.";
+      'Displays the usage message | Display the commands usage message.';
 
   @override
-  String usage() => "help | help <command>";
+  String usage() => 'help | help <command>';
 
   void printUsage() {
-    String appname = Settings().appname;
-    print(green("$appname: Executes Dart scripts"));
-    print("");
-    print(yellow("Example: "));
-    print(yellow("   dshell hello_world.dart"));
-    print("");
-    print(green("Usage:"));
+    var appname = Settings().appname;
+    print(green('$appname: Executes Dart scripts'));
+    print('');
+    print(yellow('Example: '));
+    print(yellow('   dshell hello_world.dart'));
+    print('');
+    print(green('Usage:'));
     print(
-        "  dshell [${orange('flag, flag...')}] [${blue('command')}] [arguments...]");
-    print("");
-    print(orange("Flags:"));
-    for (Flag flag in Flags.applicationFlags) {
-      print("  " + orange(flag.usage()));
-      print("    " + flag.description());
+        '  dshell [${orange('flag, flag...')}] [${blue('command')}] [arguments...]');
+    print('');
+    print(orange('Flags:'));
+    for (var flag in Flags.applicationFlags) {
+      print('  ' + orange(flag.usage()));
+      print('    ' + flag.description());
     }
 
-    print("");
-    print(blue("Commands:"));
-    for (Command command in Commands.applicationCommands) {
-      print("");
-      print("  " + blue(command.usage()));
-      print("   " + command.description());
+    print('');
+    print(blue('Commands:'));
+    for (var command in Commands.applicationCommands) {
+      print('');
+      print('  ' + blue(command.usage()));
+      print('   ' + command.description());
     }
   }
 }

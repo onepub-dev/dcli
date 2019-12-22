@@ -2,7 +2,7 @@ import '../flags.dart';
 import 'commands.dart';
 
 class MergeCommand extends Command {
-  static const String NAME = "merge";
+  static const String NAME = 'merge';
 
   MergeCommand() : super(NAME);
 
@@ -14,8 +14,8 @@ class MergeCommand extends Command {
 
   @override
   String description() =>
-      "Deletes your pubspec.yaml and creates an inline annoation version in your scriptfile. Use this to reduce a project to a single script file.";
+      'Deletes your pubspec.yaml and creates an inline annoation version in your scriptfile. Use this to reduce a project to a single script file.';
 
   @override
-  String usage() => "merge <script path.dart>";
+  String usage() => 'merge <script path.dart>';
 }

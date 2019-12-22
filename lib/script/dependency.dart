@@ -10,7 +10,7 @@ class Dependency extends Equatable {
   static Dependency fromLine(String line) {
     Dependency dep;
 
-    List<String> parts = line.split(' ');
+    var parts = line.split(' ');
     if (parts.length == 3) {
       dep = Dependency(parts[1], parts[2]);
     }
@@ -32,7 +32,8 @@ class Dependency extends Equatable {
   @override
   List<Object> get props => [name, version];
 
+  @override
   String toString() {
-    return "$name : $version";
+    return '$name : $version';
   }
 }

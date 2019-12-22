@@ -17,7 +17,7 @@ import 'dependencies_mixin.dart';
 ///
 
 class GlobalDependancies with DependenciesMixin {
-  static const String filename = "dependancies.yaml";
+  static const String filename = 'dependancies.yaml';
   MyYaml _yaml;
 
   GlobalDependancies() {
@@ -40,19 +40,19 @@ class GlobalDependancies with DependenciesMixin {
   /// Creates the default global dependancies
   static void createDefault() {
     if (!exists(path)) {
-      path.write("dependencies:");
+      path.write('dependencies:');
 
-      for (Dependency dep in defaultDependencies) {
-        path.append("  ${dep.name}: ${dep.version}");
+      for (var dep in defaultDependencies) {
+        path.append('  ${dep.name}: ${dep.version}');
       }
     }
   }
 
   static List<Dependency> get defaultDependencies {
     return [
-      Dependency("dshell", "^1.0.0"),
-      Dependency("args", "^1.5.2"),
-      Dependency("path", "^1.6.4"),
+      Dependency('dshell', '^1.0.0'),
+      Dependency('args', '^1.5.2'),
+      Dependency('path', '^1.6.4'),
     ];
   }
 }

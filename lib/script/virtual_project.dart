@@ -1,4 +1,4 @@
-import "dart:io";
+import 'dart:io';
 import 'package:dshell/functions/is.dart';
 import 'package:dshell/pubspec/pubspec.dart';
 import 'package:dshell/pubspec/pubspec_file.dart';
@@ -18,7 +18,7 @@ import 'package:dshell/util/file_helper.dart';
 /// user's Script with the additional files
 /// required by dart.
 class VirtualProject {
-  static const String PROJECT_DIR = ".project";
+  static const String PROJECT_DIR = '.project';
   final Script script;
 
   // The  absolute path to our
@@ -51,9 +51,9 @@ class VirtualProject {
     _virtualProjectPath = p.join(cacheRootPath,
         script.scriptDirectory.substring(1), script.basename + PROJECT_DIR);
 
-    _projectLibPath = p.join(_virtualProjectPath, "lib");
+    _projectLibPath = p.join(_virtualProjectPath, 'lib');
     _projectScriptLinkPath = p.join(_virtualProjectPath, script.scriptname);
-    _scriptLibPath = p.join(script.scriptDirectory, "lib");
+    _scriptLibPath = p.join(script.scriptDirectory, 'lib');
   }
 
   String get scriptLib => _scriptLibPath;
@@ -61,7 +61,7 @@ class VirtualProject {
 
   String get path => _virtualProjectPath;
 
-  String get pubSpecPath => p.join(_virtualProjectPath, "pubspec.yaml");
+  String get pubSpecPath => p.join(_virtualProjectPath, 'pubspec.yaml');
 
   /// Creates the projects cache directory under the
   ///  root directory of our global cache directory - [cacheRootDir]
@@ -76,7 +76,7 @@ class VirtualProject {
   /// Link to scripts own pubspec.yaml file.
   /// hashes.yaml file.
   void createProject({bool skipPubGet = false}) {
-    if (!createDir(_virtualProjectPath, "project cache")) {
+    if (!createDir(_virtualProjectPath, 'project cache')) {
       print('Created project, cache path at ${_virtualProjectPath}');
     }
 
@@ -86,9 +86,9 @@ class VirtualProject {
     _createLib();
     PubSpecManager(this).createVirtualPubSpec();
     if (skipPubGet) {
-      print("Skipping pub get.");
+      print('Skipping pub get.');
     } else {
-      print("Running pub get...");
+      print('Running pub get...');
       pubget();
     }
   }
@@ -97,7 +97,7 @@ class VirtualProject {
   /// from the project cache.
   void _createScriptLink(Script script) {
     if (!exists(_projectScriptLinkPath, followLinks: false)) {
-      Link link = Link(_projectScriptLinkPath);
+      var link = Link(_projectScriptLinkPath);
       link.createSync(script.path);
     }
   }
@@ -107,7 +107,7 @@ class VirtualProject {
   void clean() {
     if (exists(_virtualProjectPath)) {
       if (Settings().isVerbose) {
-        Log().d("Deleting project path: $_virtualProjectPath");
+        Log().d('Deleting project path: $_virtualProjectPath');
       }
       File(_virtualProjectPath).deleteSync(recursive: true);
     }
@@ -123,7 +123,7 @@ class VirtualProject {
   /// This is normally done when the project cache is first
   /// created and when a script's pubspec changes.
   void pubget() {
-    PubGet pubGet = PubGet(DartSdk(), this);
+    var pubGet = PubGet(DartSdk(), this);
     pubGet.run();
   }
 
@@ -142,11 +142,11 @@ class VirtualProject {
           // the script directory structure may have changed since
           // the last run.
           Directory(projectCacheLib).deleteSync();
-          Link link = Link(projectCacheLib);
+          var link = Link(projectCacheLib);
           link.createSync(scriptLib);
         }
       } else {
-        Link link = Link(projectCacheLib);
+        var link = Link(projectCacheLib);
         link.createSync(scriptLib);
       }
     } else {

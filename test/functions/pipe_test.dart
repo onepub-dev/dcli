@@ -1,5 +1,5 @@
 import 'package:test/test.dart' as t;
-import "package:dshell/dshell.dart";
+import 'package:dshell/dshell.dart';
 
 import '../test_settings.dart';
 import '../util.dart';
@@ -8,12 +8,12 @@ import '../util/test_fs_zone.dart';
 void main() {
   Settings().debug_on = true;
 
-  t.group("Piping", () {
-    List<String> lines = List();
+  t.group('Piping', () {
+    var lines = <String>[];
 
-    t.test("Run", () {
+    t.test('Run', () {
       TestZone().run(() {
-        String linesFile = join(TEST_ROOT, TEST_LINES_FILE);
+        var linesFile = join(TEST_ROOT, TEST_LINES_FILE);
         createLineFile(linesFile, 10);
 
         'tail -n 100 $linesFile'.forEach((line) => lines.add(line));
@@ -21,9 +21,9 @@ void main() {
       });
     });
 
-    t.test("Single Pipe", () {
+    t.test('Single Pipe', () {
       TestZone().run(() {
-        String linesFile = join(TEST_ROOT, TEST_LINES_FILE);
+        var linesFile = join(TEST_ROOT, TEST_LINES_FILE);
         createLineFile(linesFile, 10);
 
         lines.clear();
@@ -34,9 +34,9 @@ void main() {
       });
     });
 
-    t.test("Double Pipe", () {
+    t.test('Double Pipe', () {
       TestZone().run(() {
-        String linesFile = join(TEST_ROOT, TEST_LINES_FILE);
+        var linesFile = join(TEST_ROOT, TEST_LINES_FILE);
         createLineFile(linesFile, 10);
 
         lines.clear();
@@ -46,9 +46,9 @@ void main() {
       });
     });
 
-    t.test("Triple Pipe", () {
+    t.test('Triple Pipe', () {
       TestZone().run(() {
-        String linesFile = join(TEST_ROOT, TEST_LINES_FILE);
+        var linesFile = join(TEST_ROOT, TEST_LINES_FILE);
         createLineFile(linesFile, 10);
 
         lines.clear();

@@ -17,15 +17,15 @@ void writeToFile(String path, String content) {
 /// Returns true if the directory already
 /// existed.
 bool createDir(String dir, String description) {
-  bool created = false;
-  Directory directory = Directory(dir);
+  var created = false;
+  var directory = Directory(dir);
   if (!directory.existsSync()) {
     try {
       directory.createSync(recursive: true);
       created = true;
     } catch (e) {
       Log().error(
-          "Unable to create the $description ${dir}. Error: ${e.toString()}");
+          'Unable to create the $description ${dir}. Error: ${e.toString()}');
       rethrow;
     }
   }

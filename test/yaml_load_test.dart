@@ -7,13 +7,13 @@ import 'util/test_fs_zone.dart';
 void main() {
   Settings().debug_on = true;
 
-  t.test("Project Name", () {
+  t.test('Project Name', () {
     TestZone().run(() {
-      print("$pwd");
-      MyYaml yaml = MyYaml.loadFromFile("pubspec.yaml");
-      String projectName = yaml.getValue("name");
+      print('$pwd');
+      var yaml = MyYaml.loadFromFile('pubspec.yaml');
+      var projectName = yaml.getValue('name');
 
-      t.expect(projectName, t.equals("dshell"));
+      t.expect(projectName, t.equals('dshell'));
     });
   });
 }

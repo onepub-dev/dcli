@@ -41,13 +41,13 @@ class FileSync {
   }
 
   void read(CancelableLineAction lineAction) {
-    Stream<List<int>> inputStream = _file.openRead();
+    var inputStream = _file.openRead();
 
-    StackTraceImpl stackTrace = StackTraceImpl();
+    var stackTrace = StackTraceImpl();
 
     Object exception;
 
-    Completer<bool> done = Completer();
+    var done = Completer<bool>();
     // bool stop = false;
 
     try {
@@ -57,7 +57,7 @@ class FileSync {
           utf8.decoder.bind(inputStream).transform(const LineSplitter()).listen(
               (line) {
                 if (lineAction != null) {
-                  bool cont = lineAction(line);
+                  var cont = lineAction(line);
                   if (cont == false) {
                     subscription
                         .cancel()
@@ -74,7 +74,7 @@ class FileSync {
                 done.complete(true);
               });
     } catch (e) {
-      Log.e("exception $e");
+      Log.e('exception $e');
     }
 
     waitForEx(done.future);

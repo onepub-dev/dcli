@@ -41,14 +41,16 @@ extension StringAsProcess on String {
   /// See [run] if you don't care about capturing output
   ///     [list] to capture stdout as a String list.
   ///
-  void forEach(LineAction stdout, {LineAction stderr}) =>
-      cmd.run(this, progress: Progress(stdout, stderr: stderr));
+  void forEach(LineAction stdout,
+          {LineAction stderr, Pattern lineDelimiter = '\n'}) =>
+      cmd.run(this,
+          progress: Progress(stdout, stderr: stderr, lineDelimiter: lineDelimiter));
 
   /// [toList] runs [this] as a cli process and
   /// returns any output written to stdout as
   /// a [List<String>].
-  List<String> toList() {
-    return cmd.run(this).toList();
+  List<String> toList({Pattern lineDelimiter = '\n'}) {
+    return cmd.run(this).toList(lineDelimiter: lineDelimiter);
   }
 
   /// operator |
@@ -71,24 +73,24 @@ extension StringAsProcess on String {
   /// ```
 
   Pipe operator |(String rhs) {
-    RunnableProcess rhsRunnable = RunnableProcess(rhs);
+    var rhsRunnable = RunnableProcess(rhs);
     rhsRunnable.start();
 
-    RunnableProcess lhsRunnable = RunnableProcess(this);
+    var lhsRunnable = RunnableProcess(this);
     lhsRunnable.start();
 
     return Pipe(lhsRunnable, rhsRunnable);
   }
 
   void write(String line, {bool newline = true}) {
-    FileSync sink = FileSync(this);
+    var sink = FileSync(this);
     sink.write(line, newline: newline);
     sink.close();
   }
 
   /// Truncates a file by setting its length to zero.
   void truncate() {
-    FileSync sink = FileSync(this);
+    var sink = FileSync(this);
     sink.truncate();
   }
 
@@ -96,7 +98,7 @@ extension StringAsProcess on String {
   // and append the [line] to it.
   // If [newline] is true add a newline after the line.
   void append(String line, {bool newline = true}) {
-    FileSync sink = FileSync(this);
+    var sink = FileSync(this);
     sink.append(line, newline: newline);
     sink.close();
   }

@@ -25,14 +25,14 @@ void cat(String path, {LineAction stdout}) => Cat().cat(path, stdout: stdout);
 
 class Cat extends DShellFunction {
   void cat(String path, {LineAction stdout}) {
-    File sourceFile = File(path);
+    var sourceFile = File(path);
 
     if (Settings().debug_on) {
-      Log.d("cat:  ${absolute(path)}");
+      Log.d('cat:  ${absolute(path)}');
     }
 
     if (!exists(path)) {
-      throw CatException("The file at ${absolute(path)} does not exists");
+      throw CatException('The file at ${absolute(path)} does not exists');
     }
 
     waitForEx<void>(sourceFile

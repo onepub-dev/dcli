@@ -27,25 +27,25 @@ import 'package:args/args.dart';
 /// Starts from the current directory unless [--root]
 /// is provided.
 void main(List<String> args) {
-  ArgParser parser = ArgParser();
+  var parser = ArgParser();
 
   parser
     ..addFlag('verbose', abbr: 'v', defaultsTo: false)
     ..addFlag('recursive', abbr: 'r', defaultsTo: true)
     ..addOption('root',
-        defaultsTo: ".",
-        help: "Specifies the directory to start searching from")
+        defaultsTo: '.',
+        help: 'Specifies the directory to start searching from')
     ..addOption('pattern',
         abbr: 'p',
         help:
-            "The search pattern to apply. e.g. *.txt. You need to quote the pattern to stop bash expanding it into a file list.");
+            'The search pattern to apply. e.g. *.txt. You need to quote the pattern to stop bash expanding it into a file list.');
 
-  ArgResults results = parser.parse(args);
+  var results = parser.parse(args);
 
-  String pattern = results['pattern'] as String;
-  String root = results['root'] as String;
-  bool verbose = results['verbose'] as bool;
-  bool recursive = results['recursive'] as bool;
+  var pattern = results['pattern'] as String;
+  var root = results['root'] as String;
+  var verbose = results['verbose'] as bool;
+  var recursive = results['recursive'] as bool;
 
   if (pattern == null) {
     parser.usage;
@@ -53,13 +53,13 @@ void main(List<String> args) {
   }
 
   if (verbose) {
-    print("Verbose is on, starting find");
+    print('Verbose is on, starting find');
   }
 
   find(pattern, root: root, recursive: recursive)
       .forEach((entry) => print(entry));
 
   if (verbose) {
-    print("Verbose is on, completed find");
+    print('Verbose is on, completed find');
   }
 }

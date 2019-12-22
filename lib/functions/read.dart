@@ -14,14 +14,14 @@ import '../util/log.dart';
 
 /// Reads lines from the file at [path].
 /// ```dart
-/// read("/var/log/syslog").forEach((line) => print(line));
+/// read('/var/log/syslog').forEach((line) => print(line));
 /// ```
 ///
 /// [delim] sets the line delimiter which defaults to newline
 ///
 /// If the file does not exists then a ReadException is thrown.
 ///
-Progress read(String path, {String delim = "\n"}) =>
+Progress read(String path, {String delim = '\n'}) =>
     Read().read(path, delim: delim);
 
 /// Read lines from stdin
@@ -29,17 +29,17 @@ Progress readStdin() => Read().readStdin();
 
 class Read extends DShellFunction {
   Progress read(String path, {String delim, Progress progress}) {
-    File sourceFile = File(path);
+    var sourceFile = File(path);
 
     if (Settings().debug_on) {
-      Log.d("read: ${absolute(path)}, delim: ${delim}");
+      Log.d('read: ${absolute(path)}, delim: ${delim}');
     }
 
     if (!exists(path)) {
-      throw ReadException("The file at ${absolute(path)} does not exists");
+      throw ReadException('The file at ${absolute(path)} does not exists');
     }
 
-    Progress forEach = Progress.forEach();
+    var forEach = Progress.forEach();
 
     waitForEx<void>(sourceFile
         .openRead()
@@ -56,7 +56,7 @@ class Read extends DShellFunction {
 
   Progress readStdin({Progress progress}) {
     if (Settings().debug_on) {
-      Log.d("readStdin");
+      Log.d('readStdin');
     }
 
     Progress forEach;

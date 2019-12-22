@@ -7,7 +7,7 @@ class Flags {
 
   static Flag findFlag(String flagSwitch, List<Flag> flags) {
     Flag found;
-    for (Flag flag in flags) {
+    for (var flag in flags) {
       if (nameSwitch(flag) == flagSwitch || abbrSwitch(flag) == flagSwitch) {
         found = flag;
         break;
@@ -16,8 +16,8 @@ class Flags {
     return found;
   }
 
-  static String nameSwitch(Flag flag) => "--${flag._name}";
-  static String abbrSwitch(Flag flag) => "-${flag.abbreviation}";
+  static String nameSwitch(Flag flag) => '--${flag._name}';
+  static String abbrSwitch(Flag flag) => '-${flag.abbreviation}';
 
   static bool isFlag(String argument) {
     return (argument.startsWith('-') || argument.startsWith('--'));
@@ -33,7 +33,7 @@ class Flags {
 }
 
 abstract class Flag {
-  String _name;
+  final String _name;
 
   Flag(this._name);
 
@@ -41,17 +41,19 @@ abstract class Flag {
 
   String get abbreviation;
 
-  String usage() => "--$_name | -$abbreviation";
+  String usage() => '--$_name | -$abbreviation';
 
   String description();
 }
 
 class VerboseFlag extends Flag {
-  static const NAME = "verbose";
+  static const NAME = 'verbose';
 
   VerboseFlag() : super(NAME);
 
-  String get abbreviation => "v";
+  @override
+  String get abbreviation => 'v';
 
-  String description() => "If set, turns on verbose logging.";
+  @override
+  String description() => 'If set, turns on verbose logging.';
 }

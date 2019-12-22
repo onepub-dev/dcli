@@ -25,23 +25,24 @@ void delete(String path, {bool ask = false}) => Delete().delete(path, ask: ask);
 class Delete extends DShellFunction {
   void delete(String path, {bool ask}) {
     if (Settings().debug_on) {
-      Log.d("delete:  ${absolute(path)} ask: $ask");
+      Log.d('delete:  ${absolute(path)} ask: $ask');
     }
 
     if (!exists(path)) {
-      throw DeleteException("The path ${absolute(path)} does not exists.");
+      throw DeleteException('The path ${absolute(path)} does not exists.');
     }
 
     if (isDirectory(path)) {
-      throw DeleteException("The path ${absolute(path)} is a directory.");
+      throw DeleteException('The path ${absolute(path)} is a directory.');
     }
 
-    bool remove = true;
+    var remove = true;
     if (ask) {
       remove = false;
-      String yes = Ask().ask(
-          prompt: "delete: Delete the regular file '${absolute(path)}'? y/N");
-      if (yes == "y") {
+      var ask = Ask().ask(
+                prompt: "delete: Delete the regular file '${absolute(path)}'? y/N");
+            var yes = ask;
+      if (yes == 'y') {
         remove = true;
       }
     }
@@ -51,7 +52,7 @@ class Delete extends DShellFunction {
         File(path).deleteSync();
       } catch (e) {
         throw DeleteException(
-            "An error occured deleting ${absolute(path)}. Error: $e");
+            'An error occured deleting ${absolute(path)}. Error: $e');
       }
     }
   }

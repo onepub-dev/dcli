@@ -11,7 +11,7 @@ import 'is.dart';
 /// Returns count [lines] from the file at [path].
 ///
 /// ```dart
-/// head("/var/log/syslog", 10).forEach((line) => print(line));
+/// head('/var/log/syslog', 10).forEach((line) => print(line));
 /// ```
 ///
 /// Throws a [HeadException] exception if [path] is not a file.
@@ -21,23 +21,23 @@ Progress head(String path, int lines) => Head().head(path, lines);
 class Head extends DShellFunction {
   Progress head(String path, int lines, {Progress progress}) {
     if (Settings().debug_on) {
-      Log.d("head ${absolute(path)} lines: ${lines}");
+      Log.d('head ${absolute(path)} lines: ${lines}');
     }
 
     if (!exists(path)) {
-      throw HeadException("The path ${absolute(path)} does not exist.");
+      throw HeadException('The path ${absolute(path)} does not exist.');
     }
 
     if (!isFile(path)) {
-      throw HeadException("The path ${absolute(path)} is not a file.");
+      throw HeadException('The path ${absolute(path)} is not a file.');
     }
 
     Progress forEach;
 
     try {
       forEach = progress ?? Progress.forEach();
-      int count = 0;
-      FileSync file = FileSync(path);
+      var count = 0;
+      var file = FileSync(path);
       file.read((line) {
         forEach.addToStdout(line);
         count++;
@@ -48,7 +48,7 @@ class Head extends DShellFunction {
       });
     } catch (e) {
       throw HeadException(
-          "An error occured reading ${absolute(path)}. Error: $e");
+          'An error occured reading ${absolute(path)}. Error: $e');
     } finally {
       forEach.close();
     }

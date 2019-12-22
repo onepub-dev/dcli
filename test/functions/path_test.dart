@@ -1,25 +1,25 @@
 import 'package:test/test.dart' as t;
-import "package:dshell/dshell.dart";
+import 'package:dshell/dshell.dart';
 
 import '../test_settings.dart';
 import '../util/test_fs_zone.dart';
 
-String TEST_DIR = "path_test";
+String TEST_DIR = 'path_test';
 void main() {
   Settings().debug_on = true;
-  String cwd = pwd;
+  var cwd = pwd;
 
-  t.group("Directory Path manipulation testing", () {
-    t.test("absolute", () {
+  t.group('Directory Path manipulation testing', () {
+    t.test('absolute', () {
       TestZone().run(() {
         var paths = setup();
-        String cwd = pwd;
+        var cwd = pwd;
         t.expect(absolute(paths.pathTestDir),
             t.equals(join(cwd, paths.pathTestDir)));
       });
     });
 
-    t.test("parent", () {
+    t.test('parent', () {
       TestZone().run(() {
         var paths = setup();
         t.expect(
@@ -27,7 +27,7 @@ void main() {
       });
     });
 
-    t.test("extension", () {
+    t.test('extension', () {
       TestZone().run(() {
         var paths = setup();
         t.expect(extension(join(paths.pathTestDir, paths.testFile)),
@@ -35,7 +35,7 @@ void main() {
       });
     });
 
-    t.test("basename", () {
+    t.test('basename', () {
       TestZone().run(() {
         var paths = setup();
         t.expect(basename(join(paths.pathTestDir, paths.testFile)),
@@ -43,21 +43,21 @@ void main() {
       });
     });
 
-    t.test("PWD", () {
+    t.test('PWD', () {
       TestZone().run(() {
         var paths = setup();
         t.expect(pwd, t.startsWith(paths.home));
       });
     });
 
-    t.test("CD", () {
+    t.test('CD', () {
       TestZone().run(() {
-        String testdir = pwd;
-        print("mfs cwd: ${pwd}");
-        createDir("cd_test", recursive: true);
-        cd("cd_test");
-        t.expect(pwd, t.equals(absolute(join(testdir, "cd_test"))));
-        cd("..");
+        var testdir = pwd;
+        print('mfs cwd: ${pwd}');
+        createDir('cd_test', recursive: true);
+        cd('cd_test');
+        t.expect(pwd, t.equals(absolute(join(testdir, 'cd_test'))));
+        cd('..');
         t.expect(pwd, t.equals(absolute(cwd)));
 
         cd(cwd);
@@ -65,14 +65,14 @@ void main() {
       });
     }, skip: false);
 
-    t.test("Push/Pop", () {
+    t.test('Push/Pop', () {
       TestZone().run(() {
         var paths = setup();
         TestZone().run(() {
-          String start = pwd;
+          var start = pwd;
           createDir(paths.pathTestDir, recursive: true);
 
-          String expectedPath = absolute(paths.pathTestDir);
+          var expectedPath = absolute(paths.pathTestDir);
           push(paths.pathTestDir);
           t.expect(pwd, t.equals(expectedPath));
 
@@ -84,9 +84,8 @@ void main() {
       });
     }, skip: false);
 
-    t.test("Too many pops", () {
+    t.test('Too many pops', () {
       TestZone().run(() {
-        var paths = setup();
         t.expect(() => pop(), t.throwsA(t.TypeMatcher<PopException>()));
       });
     }, skip: false);
@@ -102,11 +101,11 @@ class Paths {
   String testFile;
 
   Paths() {
-    home = env("HOME");
-    pathTestDir = join(TEST_ROOT, TEST_DIR, "pathTestDir");
-    testExtension = ".jpg";
-    testBaseName = "fred";
-    testFile = "$testBaseName$testExtension";
+    home = env('HOME');
+    pathTestDir = join(TEST_ROOT, TEST_DIR, 'pathTestDir');
+    testExtension = '.jpg';
+    testBaseName = 'fred';
+    testFile = '$testBaseName$testExtension';
   }
 }
 

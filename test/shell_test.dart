@@ -7,7 +7,7 @@ import 'util/test_fs_zone.dart';
 void main() {
   Settings().debug_on = true;
 
-  t.test("Try everything", () {
+  t.test('Try everything', () {
     TestZone().run(() {
       createDir(TEST_ROOT, recursive: true);
 
@@ -15,46 +15,46 @@ void main() {
         push(TEST_ROOT);
         // Settings().debug_on = true;
 
-        print("PWD: ${pwd}");
+        print('PWD: ${pwd}');
 
-        createDir("shell/main", recursive: true);
-        push("shell");
-        cd("main");
+        createDir('shell/main', recursive: true);
+        push('shell');
+        cd('main');
 
-        createDir("fred/tom", recursive: true);
-        deleteDir("fred/tom");
+        createDir('fred/tom', recursive: true);
+        deleteDir('fred/tom');
 
-        touch("good.jpg", create: true);
-        createDir("subdir", recursive: true);
-        touch("subdir/goody.jpg", create: true);
+        touch('good.jpg', create: true);
+        createDir('subdir', recursive: true);
+        touch('subdir/goody.jpg', create: true);
 
-        echo("Find file matching *.jpg");
+        echo('Find file matching *.jpg');
 
         for (var file in find(
-          "*.jpg",
+          '*.jpg',
         ).toList()) {
-          print("Found jpg: $file");
+          print('Found jpg: $file');
         }
-        echo("sleeping for 2 seconds");
+        echo('sleeping for 2 seconds');
         sleep(2);
 
-        echo("All files");
+        echo('All files');
         for (var file in fileList) {
           print(file);
         }
 
-        move("good.jpg", "bad.jpg");
+        move('good.jpg', 'bad.jpg');
 
-        if (exists("bad.jpg")) {
-          print("bad.jpg exists");
+        if (exists('bad.jpg')) {
+          print('bad.jpg exists');
         }
 
-        delete("bad.jpg", ask: false);
+        delete('bad.jpg', ask: false);
 
         pop();
         echo(pwd);
       } finally {
-        print("In finally");
+        print('In finally');
         pop();
       }
     });
@@ -62,17 +62,17 @@ void main() {
 }
 
 // File x;
-// x << "Append some text";
-// x < "Overright file";
+// x << 'Append some text';
+// x < 'Overright file';
 
-// sh.echo("hi") >> x;
+// sh.echo('hi') >> x;
 
 // file |
 
-// var filename = read(prompt: "Filename");
-// echo("read $filename");
+// var filename = read(prompt: 'Filename');
+// echo('read $filename');
 
-//cmd("git commit") | cmd("echo");
+//cmd('git commit') | cmd('echo');
 
 // var file = open(filename);
 // while (file.isNotEmpty())

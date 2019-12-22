@@ -14,9 +14,7 @@ class EntryPoint {
   static EntryPoint _self;
 
   factory EntryPoint() {
-    if (_self == null) {
-      _self = EntryPoint._internal();
-    }
+    _self ??= EntryPoint._internal();
     return _self;
   }
 
@@ -46,11 +44,11 @@ class EntryPoint {
       return exitCode;
     } on CommandLineException catch (e) {
       StdLog.stderr(red(e.toString()));
-      print("");
+      print('');
       HelpCommand().printUsage();
       return 1;
     } catch (e, stackTrace) {
-      StackTraceImpl impl = StackTraceImpl.fromStackTrace(stackTrace);
+      var impl = StackTraceImpl.fromStackTrace(stackTrace);
       StdLog.stderr('Exception occured: ${e}');
       StdLog.stderr('Stacktrace: ${impl.formatStackTrace()}');
     }

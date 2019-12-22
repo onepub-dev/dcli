@@ -24,13 +24,13 @@ class Commands {
       ];
 
   static Command findCommand(String argument, Map<String, Command> commands) {
-    Command command = commands[argument.toLowerCase()];
+    var command = commands[argument.toLowerCase()];
 
     return command;
   }
 
   static Map<String, Command> asMap(List<Command> availableCommands) {
-    Map<String, Command> mapCommands = Map();
+    var mapCommands = <String, Command>{};
     availableCommands.forEach((command) => mapCommands[command.name] = command);
 
     return mapCommands;
@@ -38,7 +38,7 @@ class Commands {
 }
 
 abstract class Command {
-  String _name;
+  final String _name;
 
   Command(this._name);
 

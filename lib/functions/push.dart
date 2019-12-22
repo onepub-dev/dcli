@@ -13,7 +13,7 @@ import 'is.dart';
 /// and changes the current directory to [path]
 ///
 /// ```dart
-/// push("/tmp");
+/// push('/tmp');
 /// ```
 ///
 /// If [path] is not a valid directory a
@@ -33,15 +33,15 @@ class Push extends DShellFunction {
   /// current directory to [path].
   void push(String path) {
     if (Settings().debug_on) {
-      Log.d("push: path: $path new -> ${p.absolute(path)}");
+      Log.d('push: path: $path new -> ${p.absolute(path)}');
     }
 
     if (!exists(path)) {
-      throw PushException("The path ${absolute(path)} does not exist.");
+      throw PushException('The path ${absolute(path)} does not exist.');
     }
 
     if (!isDirectory(path)) {
-      throw PushException("The path ${absolute(path)} is not a directory.");
+      throw PushException('The path ${absolute(path)} is not a directory.');
     }
 
     InternalSettings().push(Directory.current);
@@ -50,7 +50,7 @@ class Push extends DShellFunction {
       Directory.current = path;
     } catch (e) {
       throw PushException(
-          "An error occured pushing to ${absolute(path)}. Error $e");
+          'An error occured pushing to ${absolute(path)}. Error $e');
     }
   }
 }

@@ -1,6 +1,6 @@
 import 'package:dshell/util/file_sync.dart';
 import 'package:test/test.dart' as t;
-import "package:dshell/dshell.dart";
+import 'package:dshell/dshell.dart';
 
 import '../test_settings.dart';
 import '../util/test_fs_zone.dart';
@@ -8,10 +8,10 @@ import '../util/test_fs_zone.dart';
 void main() {
   Settings().debug_on = true;
 
-  t.group("StringAsProcess", () {
-    t.test("Run", () {
+  t.group('StringAsProcess', () {
+    t.test('Run', () {
       TestZone().run(() {
-        var testFile = "test.text";
+        var testFile = 'test.text';
 
         if (exists(testFile)) {
           delete(testFile);
@@ -22,13 +22,13 @@ void main() {
       });
     });
 
-    t.test("forEach", () {
+    t.test('forEach', () {
       TestZone().run(() {
-        List<String> lines = List();
+        var lines = <String>[];
 
-        String linesFile = setup();
+        var linesFile = setup();
 
-        print("pwd: " + pwd);
+        print('pwd: ' + pwd);
 
         assert(exists(linesFile));
 
@@ -38,15 +38,15 @@ void main() {
       });
     });
 /*
-    t.test("Pipe operator", () {
+    t.test('Pipe operator', () {
       'head -n 5 ../data/lines.txt' | 'tail -n 1'.run;
       t.expect(lines.length, t.equals(1));
     });
     */
 
-    t.test("Lines", () {
+    t.test('Lines', () {
       TestZone().run(() {
-        String path = "/tmp/log/syslog";
+        var path = '/tmp/log/syslog';
 
         if (exists(path)) {
           deleteDir(dirname(path), recursive: true);
@@ -56,10 +56,10 @@ void main() {
 
         path.truncate();
 
-        for (int i = 0; i < 10; i++) {
-          path.append("head $i");
+        for (var i = 0; i < 10; i++) {
+          path.append('head $i');
         }
-        List<String> lines = 'head -n 5 $path'.toList();
+        var lines = 'head -n 5 $path'.toList();
         t.expect(lines.length, t.equals(5));
       });
     });
@@ -67,7 +67,7 @@ void main() {
 }
 
 String setup() {
-  String linesFile = join(TEST_ROOT, TEST_LINES_FILE);
+  var linesFile = join(TEST_ROOT, TEST_LINES_FILE);
 
   if (exists(TEST_ROOT)) {
     deleteDir(TEST_ROOT, recursive: true);
@@ -75,9 +75,9 @@ String setup() {
 
   createDir(TEST_ROOT);
 
-  FileSync file = FileSync(linesFile);
-  for (int i = 0; i < 10; i++) {
-    file.append("Line $i");
+  var file = FileSync(linesFile);
+  for (var i = 0; i < 10; i++) {
+    file.append('Line $i');
   }
   return linesFile;
 }

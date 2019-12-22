@@ -30,7 +30,7 @@ import 'dshell_function.dart';
 /// [first] is true by default.
 ///
 /// ```dart
-/// which("ls", first: false, verbose: true);
+/// which('ls', first: false, verbose: true);
 /// ```
 ///
 /// In most cases stdin is attached to the console
@@ -52,14 +52,14 @@ class Which extends DShellFunction {
     try {
       forEach = progress ?? Progress.forEach();
 
-      List<String> paths = env("PATH").split(":");
+      var paths = env('PATH').split(':');
 
-      for (String path in paths) {
+      for (var path in paths) {
         if (verbose) {
-          forEach.addToStdout("Searching: ${p.canonicalize(path)}");
+          forEach.addToStdout('Searching: ${p.canonicalize(path)}');
         }
         if (exists(p.join(path, appname))) {
-          forEach.addToStdout("${p.canonicalize(p.join(path, appname))}");
+          forEach.addToStdout('${p.canonicalize(p.join(path, appname))}');
           if (first) {
             break;
           }

@@ -25,22 +25,22 @@ void copy(String from, String to, {bool overwrite = false}) =>
 class Copy extends DShellFunction {
   void copy(String from, String to, {bool overwrite = false}) {
     if (overwrite == false && exists(to)) {
-      throw CopyException("The target file ${absolute(to)} already exists");
+      throw CopyException('The target file ${absolute(to)} already exists');
     }
 
     if (isDirectory(to)) {
-      throw CopyException("The path ${absolute(to)} is a directory.");
+      throw CopyException('The path ${absolute(to)} is a directory.');
     }
 
     try {
       File(from).copySync(to);
     } catch (e) {
       throw CopyException(
-          "An error occured copying ${absolute(from)} to ${absolute(to)}. Error: $e");
+          'An error occured copying ${absolute(from)} to ${absolute(to)}. Error: $e');
     }
 
     if (Settings().debug_on) {
-      Log.d("mv ${absolute(from)} -> ${absolute(to)}");
+      Log.d('mv ${absolute(from)} -> ${absolute(to)}');
     }
   }
 }

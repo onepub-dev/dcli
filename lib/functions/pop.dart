@@ -23,7 +23,7 @@ import 'package:path/path.dart' as p;
 ///  print(pwd);
 ///    > /home
 ///
-///  push("tools");
+///  push('tools');
 ///  print(pwd);
 ///    > /home/tools
 ///
@@ -54,19 +54,19 @@ class Pop extends DShellFunction {
   void pop() {
     if (Settings().isStackEmpty) {
       throw PopException(
-          "Pop failed. You are already at the top of the stack. You need to be more pushy.");
+          'Pop failed. You are already at the top of the stack. You need to be more pushy.');
     }
-    String path = InternalSettings().pop().path;
+    var path = InternalSettings().pop().path;
 
     if (Settings().debug_on) {
-      Log.d("pop:  new -> ${p.absolute(path)}");
+      Log.d('pop:  new -> ${p.absolute(path)}');
     }
 
     try {
       Directory.current = path;
     } catch (e) {
       throw PopException(
-          "An error occured popping to ${absolute(path)}. Error $e");
+          'An error occured popping to ${absolute(path)}. Error $e');
     }
   }
 }
