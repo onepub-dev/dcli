@@ -12,16 +12,26 @@ import '../util/log.dart';
 ///
 String env(String name) => Env().env(name);
 
+///
+/// Internally sets an environment varaible.
+/// NOTE: this does NOT affect the parent
+/// processes environment.
+void setEnv(String name, String value) => Env().setEnv(name, value);
+
 class Env extends DShellFunction {
   static final Env _self = Env._internal();
-  Map<String, String> envVars;
+  Map<String, String> envVars = {};
 
   factory Env() {
     return _self;
   }
 
   Env._internal() {
-    envVars = Platform.environment;
+    var platformVars = Platform.environment;
+
+    for (var entry in platformVars.entries) {
+      envVars.putIfAbsent(entry.key, () => entry.value);
+    }
   }
 
   String env(String name) {
@@ -30,4 +40,6 @@ class Env extends DShellFunction {
     }
     return envVars[name];
   }
+
+  void setEnv(String name, String value) => envVars[name] = value;
 }
