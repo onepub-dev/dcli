@@ -41,16 +41,14 @@ extension StringAsProcess on String {
   /// See [run] if you don't care about capturing output
   ///     [list] to capture stdout as a String list.
   ///
-  void forEach(LineAction stdout,
-          {LineAction stderr, Pattern lineDelimiter = '\n'}) =>
-      cmd.run(this,
-          progress: Progress(stdout, stderr: stderr, lineDelimiter: lineDelimiter));
+  void forEach(LineAction stdout, {LineAction stderr}) =>
+      cmd.run(this, progress: Progress(stdout, stderr: stderr));
 
   /// [toList] runs [this] as a cli process and
   /// returns any output written to stdout as
   /// a [List<String>].
   List<String> toList({Pattern lineDelimiter = '\n'}) {
-    return cmd.run(this).toList(lineDelimiter: lineDelimiter);
+    return cmd.run(this).toList();
   }
 
   /// operator |
