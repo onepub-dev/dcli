@@ -7,7 +7,7 @@
 * [What commands does DShell support?](#what-commands-does-dshell-support)
 * [Getting Started](#getting-started)
 * [Installing](#installing)
-  * [Writing your first script](#writing-your-first-script)
+* [Writing your first script](#writing-your-first-script)
   * [Using dshell create](#using-dshell-create)
   * [Our first real script](#our-first-real-script)
   * [Use a shebang](#use-a-shebang)
@@ -29,7 +29,7 @@
   * [Explicitly defining a pubspec](#Explicitly-defining-a-pubspec)
   * [Pubspec dependancy injection](#pubspec-dependancy-injection)
   * [Customising dependancy injection](#customising-dependancy-injection)
-  * [Pubspec Precendence](#pubspec-precendence)
+  * [Pubspec precendence](#pubspec-precendence)
   * [@pubspec Annotation](#@pubspec-annotation)
 * [Multi-file scripts](#multi-file-scripts)
 * [DShell commands](#dshell-commands)
@@ -748,7 +748,7 @@ anywhere and it will just work.
 Using the `@pubspec` annotation also means that you can have many DShell scripts living in the same directory each with their
 own pubspec. If you use a classic pubspec.yaml then all your scripts will be sharing the same pubspec (which isn't necessarily a bad thing).
 
-See the section on [PubSpec Precedence](#Pubspec-Precendence) for details on how DShell works if you mix pubspec annotations and a pubspec.yaml in the same directory.
+See the section on [PubSpec precedence](#Pubspec-Precendence) for details on how DShell works if you mix pubspec annotations and a pubspec.yaml in the same directory.
 
 
 For simple scripts you will normally use the `@pubspec` annotation but as your script grows you may want to migrate
@@ -813,7 +813,7 @@ NOTE: you must run 'dshell cleanall' if you modify your 'dependancies.yaml' as D
 
 
 
-## Pubspec Precendence
+## Pubspec precendence
 DShell allows you to define your pubspec either via a `@pubspec` annotation within your script or a classic
 `pubspec.yaml` which lives in the same directory as your script.
 
