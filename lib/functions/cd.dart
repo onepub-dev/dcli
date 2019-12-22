@@ -20,12 +20,14 @@ import 'is.dart';
 ///
 /// Using push/pop/cd is considered bad form.
 ///
-/// Instead use absolute paths.
+/// Instead use absolute or relative paths.
 ///
 /// See [push]
 ///     [pop]
 ///     [pwd]
-///     [join] us join in prefrence to cd/push/pop
+///     [join] 
+///
+///     use join in prefrence to cd/push/pop
 
 void cd(String path) => CD().cd(path);
 
