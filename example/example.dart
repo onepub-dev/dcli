@@ -1,9 +1,8 @@
 #! /usr/bin/env dshell
 /*
 @pubspec
-name: tryme
+name: example
 dependencies:
-  dshell: ^1.0.7
   money2: ^1.0.3
 */
 
