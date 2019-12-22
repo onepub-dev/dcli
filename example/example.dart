@@ -1,26 +1,12 @@
 #! /usr/bin/env dshell
-/*
-@pubspec
-name: example
-dependencies:
-  money2: ^1.0.3
-*/
-
 import 'dart:io';
 
 import 'package:dshell/functions/read.dart';
 import 'package:dshell/dshell.dart';
-import 'package:money2/money2.dart';
 
 void main() {
   try {
     Settings().debug_on = false;
-
-    // use external package that is included
-    // by inline pubspec.yaml above.
-    var aud = Currency.create('AUD', 2);
-    var tax = Money.fromInt(1000, aud);
-    print(tax.toString());
 
     // Print the current working directory
     print('PWD: ${pwd}');
