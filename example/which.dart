@@ -1,14 +1,6 @@
 #! /usr/bin/env dshell
-/*
-@pubspec
-name: which.dart
-dependencies:
-  dshell: ^1.0.0
-*/
-
 import 'dart:io';
 import 'package:dshell/dshell.dart';
-import 'package:path/path.dart' as p;
 import 'package:args/args.dart';
 
 /// which appname
@@ -33,10 +25,10 @@ void main(List<String> args) {
 
   for (var path in paths) {
     if (verbose) {
-      print('Searching: ${p.canonicalize(path)}');
+      print('Searching: ${canonicalize(path)}');
     }
-    if (exists(p.join(path, command))) {
-      print(red('Found at: ${p.canonicalize(p.join(path, command))}'));
+    if (exists(join(path, command))) {
+      print(red('Found at: ${canonicalize(join(path, command))}'));
     }
   }
 }
