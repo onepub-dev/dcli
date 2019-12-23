@@ -64,25 +64,25 @@ Bash has an elegant set of commands for common file operations such as mv, cp, r
 
 Bash is probably the most commonly used scripting tool for system maintenance.
 
-Bash wasn't so much designed as evolved.
+Bash has been around for a long time and wasn't so much designed as evolved.
 
 The problem now is that its old, has an archaic syntax and doesn't scale well.
 
 So why is dshell different?
 
-DShell is based on the relatively new programming language Dart.
+DShell is based on the relatively new programming language; Dart.
 
 Dart has had a fairly controversially entree onto the world stage of programming languages but that is about to change.
 If you don't know what Flutter is then its time that you stopped and had a look. Flutter is about to change the way we build applications and Flutter is based on Dart. 
 
 The short version is that Dart is here to stay and the important element for DShell is that its easy to learn.
 
-If you have used many languages you well know how the learning curve goes. Its usually doesn't take long to the get to the point where you love or hate a language. 
+If you have used multiple languages you well know how the learning curve goes. Its usually doesn't take long to the get to the point where you love or hate a language. 
 As you begin to discover the little nooks and crannies of a language you either despise the designer's solutions or fall in love with it.
 
 For me at least, it was love at first sight.
 
-Dart is a simple language to learn using an all to familiar 'C' style syntax.
+Dart is a simple to learn, and uses the all too familiar 'C' style syntax.
 
 It provides elgant solutions for common problems and from a scripting perspective hits all of the high notes.
 
@@ -92,7 +92,7 @@ DShell is easy to install, makes it a breeze to create simple scripts and provid
 
 Dart is fast and if you need even more speed can be compiled to a single file executable that is portable between binary compatible machines.
 
-You can use your favorite editor to create DShell scripts, Vi or VIM work fine but Visual Code is recommended. 
+You can use your favorite editor to create DShell scripts. Vi or VIM work fine but Visual Code is recommended. 
 
 DShell and Dart also make it harder to make common mistakes that Bash invites.
 
