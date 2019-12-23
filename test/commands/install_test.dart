@@ -1,7 +1,7 @@
 import 'package:dshell/dshell.dart' hide equals;
-import 'package:dshell/functions/is.dart';
-import 'package:dshell/script/entry_point.dart';
-import 'package:dshell/util/dshell_exception.dart';
+import 'package:dshell/src/functions/is.dart';
+import 'package:dshell/src/script/entry_point.dart';
+import 'package:dshell/src/util/dshell_exception.dart';
 import 'package:test/test.dart';
 
 import '../util/test_fs_zone.dart';

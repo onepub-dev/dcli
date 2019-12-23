@@ -1,3 +1,6 @@
+## 1.0.19
+refactored directories to move most libraries into lib/src to remove them from the public api.
+
 ## 1.0.18
 Fixed some formatting issues and upgraded to logger 0.8.0
 

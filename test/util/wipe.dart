@@ -1,5 +1,5 @@
-import 'package:dshell/functions/delete_dir.dart';
-import 'package:dshell/functions/env.dart';
+import 'package:dshell/src/functions/delete_dir.dart';
+import 'package:dshell/src/functions/env.dart';
 import 'package:path/path.dart';
 
 /// Wipes the entire HOME.dshell directory tree.

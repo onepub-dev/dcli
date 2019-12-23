@@ -1,5 +1,5 @@
-import 'package:dshell/pubspec/global_dependancies.dart';
-import 'package:dshell/script/dependency.dart';
+import 'package:dshell/src/pubspec/global_dependancies.dart';
+import 'package:dshell/src/script/dependency.dart';
 import 'package:test/test.dart';
 
 void main() {

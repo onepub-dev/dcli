@@ -1,9 +1,9 @@
 
-import 'package:dshell/script/dart_sdk.dart';
-import 'package:dshell/script/pub_get.dart';
-import 'package:dshell/script/script.dart';
-import 'package:dshell/script/virtual_project.dart';
-import 'package:dshell/settings.dart';
+import 'package:dshell/src/script/dart_sdk.dart';
+import 'package:dshell/src/script/pub_get.dart';
+import 'package:dshell/src/script/script.dart';
+import 'package:dshell/src/script/virtual_project.dart';
+import 'package:dshell/src/settings.dart';
 import 'package:test/test.dart';
 
 import '../util/test_fs_zone.dart';

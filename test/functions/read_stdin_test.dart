@@ -1,4 +1,4 @@
-import 'package:dshell/util/runnable_process.dart';
+import 'package:dshell/src/util/runnable_process.dart';
 import 'package:test/test.dart' as t;
 import 'package:dshell/dshell.dart';
 

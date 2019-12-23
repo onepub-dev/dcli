@@ -1,4 +1,4 @@
-import 'package:dshell/script/entry_point.dart';
+import 'package:dshell/src/script/entry_point.dart';
 
 void main(List<String> arguments) {
   DShell().run(arguments);

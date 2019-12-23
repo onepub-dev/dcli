@@ -1,5 +1,5 @@
 import 'package:dshell/dshell.dart';
-import 'package:dshell/script/my_yaml.dart';
+import 'package:dshell/src/script/my_yaml.dart';
 import 'package:test/test.dart' as t;
 
 import 'util/test_fs_zone.dart';

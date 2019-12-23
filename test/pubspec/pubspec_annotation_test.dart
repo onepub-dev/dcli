@@ -1,4 +1,4 @@
-import 'package:dshell/pubspec/pubspec_annotation.dart';
+import 'package:dshell/src/pubspec/pubspec_annotation.dart';
 import 'package:test/test.dart';
 
 void main() {

@@ -1,10 +1,10 @@
 @t.Timeout(Duration(seconds: 600))
 import 'package:dshell/dshell.dart';
-import 'package:dshell/pubspec/global_dependancies.dart';
-import 'package:dshell/pubspec/pubspec.dart';
-import 'package:dshell/script/dependency.dart';
-import 'package:dshell/script/project_cache.dart';
-import 'package:dshell/script/script.dart';
+import 'package:dshell/src/pubspec/global_dependancies.dart';
+import 'package:dshell/src/pubspec/pubspec.dart';
+import 'package:dshell/src/script/dependency.dart';
+import 'package:dshell/src/script/project_cache.dart';
+import 'package:dshell/src/script/script.dart';
 import 'package:path/path.dart' as p;
 import 'package:test/test.dart' as t;
 

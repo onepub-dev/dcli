@@ -3,11 +3,11 @@
 import 'dart:io';
 
 import 'package:dshell/dshell.dart' hide equals;
-import 'package:dshell/script/command_line_runner.dart';
-import 'package:dshell/script/commands/commands.dart';
-import 'package:dshell/script/entry_point.dart';
-import 'package:dshell/script/flags.dart';
-import 'package:dshell/script/project_cache.dart';
+import 'package:dshell/src/script/command_line_runner.dart';
+import 'package:dshell/src/script/commands/commands.dart';
+import 'package:dshell/src/script/entry_point.dart';
+import 'package:dshell/src/script/flags.dart';
+import 'package:dshell/src/script/project_cache.dart';
 import 'package:test/test.dart';
 
 import 'package:path/path.dart' as p;
