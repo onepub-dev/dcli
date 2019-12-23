@@ -1,3 +1,9 @@
+## 1.0.21
+Fixed links in toc. Cleanup of examples to bring them in line with public api.
+
+## 1.0.20
+Reduced the current api to what is actually supported.
+
 ## 1.0.19
 refactored directories to move most libraries into lib/src to remove them from the public api.
 
