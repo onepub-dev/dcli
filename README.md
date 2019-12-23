@@ -20,7 +20,7 @@
 * [Compiling to Native](#compiling-to-native)
 * [Calling cli applications](#calling-cli-applications)
 * [Piping](#piping)
-* [CD/Push/Pop are evil](#cd/push/pop-are-evil)
+* [CD/Push/Pop are evil](#cd%2fpush%2fpop-are-evil)
   * [Why is cd dangerous?](#why-is-cd-dangerous)
 * [Dependency Management](#dependency-management)
   * [Sharing packages](#sharing-packages)
