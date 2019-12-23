@@ -26,7 +26,9 @@ export 'package:path/path.dart'
         windows,
         hash,
         prettyUri,
-        toUri;
+        toUri,
+        fromUri,
+        current;
 export 'src/functions/pop.dart' show pop, PopException;
 export 'src/functions/push.dart' show push, PushException;
 export 'src/functions/pwd.dart' show pwd;
