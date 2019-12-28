@@ -78,19 +78,18 @@ class Script {
 @pubspec
 name: $scriptname
 dependencies:
-  dshell: ^1.0.0
   money2: ^1.0.0
 */
 
 import 'dart:io';
-import '../../dshell.dart';
+import 'package:dshell/dshell.dart';
 import 'package:path/path.dart' as p;
 import 'package:money2/money2.dart';
 
 
 void main() {
   print("${PithyGreetings.random()}");
-    }
+}
 """;
   }
 
