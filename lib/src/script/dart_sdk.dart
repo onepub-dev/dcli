@@ -6,8 +6,6 @@ import '../util/progress.dart';
 import '../util/runnable_process.dart';
 import 'package:path/path.dart' as p;
 
-import 'std_log.dart';
-
 /// The [DartSdk] implementation where the Dart sdk directory is detected.
 class DartSdk {
   static DartSdk _self;
@@ -84,7 +82,7 @@ class DartSdk {
     }
 
     var parent = file.absolute.parent;
-    parent = parent.parent; // TODO What if this does not exist?
+    parent = parent.parent;
 
     final sdkPath = parent.path;
     final dartApi = '$sdkPath${s}include${s}dart_api.h';
