@@ -46,6 +46,9 @@ class CommandLineRunner {
           }
           Flags.set(flag);
           Settings().verbose('Setting flag: ${flag.name}');
+          if (flag == VerboseFlag()) {
+            Settings().verbose('DShell Version: ${Settings().version}');
+          }
           continue;
         } else {
           throw UnknownFlag(argument);
