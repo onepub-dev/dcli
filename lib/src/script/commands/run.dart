@@ -22,11 +22,14 @@ class RunCommand extends Command {
     Script.validate(arguments);
 
     var script = Script.fromFile(arguments[0]);
+    Settings().verbose('Running script ${script.path}');
 
     var project = ProjectCache().loadProject(script);
+    Settings().verbose('Virtual Project directory ${project.path}');
 
     if (PubSpecManager(project).isCleanRequired()) {
       project.clean();
+      Settings().verbose('Cleaning Virtual Project');
     }
 
     var scriptArguments = <String>[];
@@ -35,7 +38,10 @@ class RunCommand extends Command {
       scriptArguments = arguments.sublist(1);
     }
 
+    Settings().verbose('Script Arguments: ${scriptArguments.join(", ")}');
+
     final sdk = DartSdk();
+
     final runner = ScriptRunner(sdk, project, scriptArguments);
 
     final exitCode = runner.exec();

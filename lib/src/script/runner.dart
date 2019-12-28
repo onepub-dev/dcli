@@ -2,6 +2,8 @@ import 'dart:async';
 import 'dart:cli';
 import 'dart:io';
 
+import 'package:dshell/dshell.dart';
+
 import 'virtual_project.dart';
 import '../util/waitForEx.dart';
 
@@ -23,6 +25,9 @@ class ScriptRunner {
     vmArgs.addAll(['--package-root=${project.path}/.packages']);
     vmArgs.add(project.script.scriptname);
     vmArgs.addAll(scriptArguments);
+
+    Settings().verbose(
+        'Executing: ${Platform.executable} $vmArgs, in: ${project.script.scriptDirectory}');
 
     // Execute the script
     final process = waitFor<Process>(Process.start(Platform.executable, vmArgs,

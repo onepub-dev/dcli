@@ -45,6 +45,7 @@ class CommandLineRunner {
             throw DuplicateOptionsException(argument);
           }
           Flags.set(flag);
+          Settings().verbose('Setting flag: ${flag.name}');
           continue;
         } else {
           throw UnknownFlag(argument);
@@ -57,12 +58,14 @@ class CommandLineRunner {
         if (i + 1 < arguments.length) {
           cmdArguments = arguments.sublist(i + 1);
         }
+        Settings().verbose('Found command $command');
         success = true;
         break;
       }
 
       // its not a flag, its not a command, so it must be a script.
       command = RunCommand();
+      Settings().verbose('Found Script $argument');
       cmdArguments = arguments.sublist(i);
       success = true;
       break;

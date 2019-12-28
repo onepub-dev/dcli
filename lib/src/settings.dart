@@ -98,6 +98,12 @@ class Settings {
   /// Settings().debug_on = true;
   /// ```
   set debug_on(bool on) => _settings.debug_on = on;
+
+  void verbose(String string) {
+    if (isVerbose) {
+      print(string);
+    }
+  }
 }
 
 ///

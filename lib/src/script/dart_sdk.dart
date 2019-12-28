@@ -1,5 +1,6 @@
 import 'dart:cli';
 import 'dart:io';
+import '../../dshell.dart';
 import 'script.dart';
 import '../util/progress.dart';
 import '../util/runnable_process.dart';
@@ -24,10 +25,7 @@ class DartSdk {
 
   DartSdk._internal(String sdkPath) {
     _sdkPath = sdkPath;
-
-    StdLog.stderr(
-        'dscript: Dart SDK found at ${_sdkPath} with version ${version}',
-        LogLevel.verbose);
+    Settings().verbose('Dart SDK Version  ${version}, path: ${_sdkPath}');
   }
 
   String get dartPath => p.join(_sdkPath, 'bin', 'dart');
