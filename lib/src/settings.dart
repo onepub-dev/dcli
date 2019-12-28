@@ -52,10 +52,18 @@ class Settings {
     this.appname = 'dshell',
     String dshellDir = '.dshell',
   }) {
-    var dshellYaml = MyYaml.loadFromFile(
-        join(dirname(Platform.script.toFilePath()), '../pubspec.yaml'));
+    var script = Platform.script;
 
-    version = dshellYaml.getValue('version');
+    if (script.isScheme('file')) {
+      var dshellYaml = MyYaml.loadFromFile(
+          join(dirname(Platform.script.toFilePath()), '../pubspec.yaml'));
+
+      version = dshellYaml.getValue('version');
+    } else {
+      // we can't get Platform.script when we are in a unit test
+      // so set the version to a default that makes it clear its bogus
+      version = '1.x.x-unit-test';
+    }
 
     _self = this;
 
