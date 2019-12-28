@@ -1,3 +1,8 @@
+## 1.0.24
+Updated notes on creating your first script and modify dshell create to facilitate the doco.
+More advanced examples will be introduced via templates.
+
+
 ## 1.0.23
 Fixed a couple of major bugs in the create and run commands.
 The create use an incorrect relative path to dshell.
