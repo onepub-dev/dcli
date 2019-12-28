@@ -1,5 +1,9 @@
 import 'dart:io';
 
+import 'package:args/args.dart';
+import 'package:dshell/dshell.dart';
+import 'package:dshell/src/script/my_yaml.dart';
+
 import 'script/flags.dart';
 import 'util/dshell_exception.dart';
 import 'util/stack_list.dart';
@@ -27,7 +31,7 @@ class Settings {
 
   final String appname;
 
-  final String version;
+  String version;
 
   // the list of flags selected via the cli.
   final _selectedFlags = <String, Flag>{};
@@ -44,10 +48,15 @@ class Settings {
     return _self;
   }
 
-  Settings.init(
-      {this.appname = 'dshell',
-      String dshellDir = '.dshell',
-      this.version = '1.0.10'}) {
+  Settings.init({
+    this.appname = 'dshell',
+    String dshellDir = '.dshell',
+  }) {
+    var dshellYaml = MyYaml.loadFromFile(
+        join(dirname(Platform.script.toFilePath()), '../pubspec.yaml'));
+
+    version = dshellYaml.getValue('version');
+
     _self = this;
 
     var home = userHomePath;
