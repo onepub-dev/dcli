@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import '../settings.dart';
 
 class Flags {
@@ -42,6 +44,11 @@ abstract class Flag {
   String get abbreviation;
 
   String usage() => '--$_name | -$abbreviation';
+
+  @override
+  bool operator ==(covariant Flag flag) {
+    return flag.name == _name;
+  }
 
   String description();
 }
