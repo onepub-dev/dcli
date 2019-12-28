@@ -74,18 +74,7 @@ class Script {
   String generateDefaultBody() {
     /// The default body of the script we generate.
     return """#! /usr/bin/env ${Settings().appname}
-/*
-@pubspec
-name: $scriptname
-dependencies:
-  money2: ^1.0.0
-*/
-
-import 'dart:io';
 import 'package:dshell/dshell.dart';
-import 'package:path/path.dart' as p;
-import 'package:money2/money2.dart';
-
 
 void main() {
   print("${PithyGreetings.random()}");

@@ -77,7 +77,7 @@ class VirtualProject {
   /// hashes.yaml file.
   void createProject({bool skipPubGet = false}) {
     if (!createDir(_virtualProjectPath, 'project cache')) {
-      print('Created project, cache path at ${_virtualProjectPath}');
+      print('Created Virtual Project at ${_virtualProjectPath}');
     }
 
     // HashesYaml.create(_virtualProjectPath);

@@ -8,7 +8,6 @@
 * [Getting Started](#getting-started)
 * [Installing](#installing)
 * [Writing your first script](#writing-your-first-script)
-  * [Using dshell create](#using-dshell-create)
   * [Our first real script](#our-first-real-script)
   * [Use a shebang](#use-a-shebang)
   * [DShell clean](#dShell-clean)
@@ -148,42 +147,102 @@ These are some of the built-in commands:
 # Getting Started
 ## Installing
 
-To install DShell, create and run your first script:
+Lets install DShell, create and run your first script:
 
 Start by installing dart as per:
 
 https://dart.dev/get-dart
 
 
-Once dart is installed we can install DShell.
+Once Dart is installed we can install DShell.
 
 ```shell
 pub global activate dshell
 dshell install
 ```
 
-Now lets create and run our first DShell script:
+Now lets create and run our first DShell script.
 
-```
-mkdir dtest
-cd dtest
+To create a script we can use the `dshell create` command.
+
+e.g. 
+```bash
 dshell create test.dart
-./test.dart
-Resolving dependancies....
-
-cli>Hello World
 ```
 
-The dshell create command creates a default hello world script.
+As part of the creation process we need to fetch the set of dependencies for your script.
+The step 'Resolving dependencies...' can take 20 or 30 seconds to run.
 
-If you view the contents of test.dart you will see a very simple script:
+This is a once off process for each script.
 
-```dart
+```
+cli> mkdir dtest
+cli> cd dtest
+
+cli> dshell create test.dart
+Creating project.
+Created Virtual Project at /home/bsutton/.dshell/cache/tmp/test.project
+Running pub get...
+Resolving dependencies...
++ args 1.5.2
++ charcode 1.1.2
++ collection 1.14.12
++ dshell 1.0.23
++ equatable 1.0.1
++ file 5.1.0
++ file_utils 0.1.3
++ globbing 0.3.0
++ intl 0.16.0
++ logger 0.8.1
++ matcher 0.12.6
++ meta 1.1.8
++ money2 1.3.0
++ path 1.6.4
++ pub_semver 1.4.2
++ pubspec 0.1.2
++ quiver 2.1.2+1
++ recase 2.0.1
++ source_span 1.5.5
++ stack_trace 1.9.3
++ string_scanner 1.0.5
++ stuff 0.1.0
++ term_glyph 1.1.0
++ uri 0.11.3+1
++ utf 0.9.0+5
++ yaml 2.2.0
+Downloading dshell 1.0.23...
+Changed 26 dependencies!
+Precompiling executables...
+Precompiled dshell:dshell.
+Making script executable
+Project creation complete.
+
+To run your script:
+  dshell test.dart
+cli>
+```
+
+The `dshell create test.dart` command creates a basic hello world script.
+
+If you `cat`/`type` the contents you should see:
+
+```
+#! /usr/bin/env dshell
+import 'package:dshell/dshell.dart';
+
 void main() {
-    print('hello world');
+  print("Hello World");
 }
 ```
 
+Note: the 'Hello World' text may differ ;)
+
+You can now run you script:
+
+```bash
+cli>dshell test.dart
+Hello World
+```
 
 Note for Flutter users:
 
@@ -213,11 +272,12 @@ void main() {
 ```
 
 Now run the script.
-You may see a few extra lines after 'Resolving dependancies...' as DShell downloads and cache any required libraries.
+You may see a few extra lines after 'Resolving dependancies...' as DShell downloads and caches any required libraries.
 
 ```
 cli> dshell hello_world.dart
-Resolving dependancies....
+Resolving dependancies...
+...
 hello world
 cli>
 ```
@@ -225,7 +285,7 @@ cli>
 So that was simple.
 
 
-The first time you run a given DShell script, DShell needs to resolve any dependancies by running a  `pub get` command and doing some other house keeping.
+The first time you run a given DShell script, DShell needs to resolve any dependancies by running a Dart `pub get` command and doing some other house keeping.
 
 If you run the same script a second time DShell has already resolved the dependancies and so it can run the script immediately.
 
@@ -237,22 +297,11 @@ cli>
 ```
 
 
-> In the Dart world a `.dart` file is referred to as a 'library'. As you will see a Dart library can contain global functions and Dart classes.
+> In the Dart world a `.dart` file is referred to as a 'library'. As you will see a Dart library can contain global functions and multiple Dart classes.
 
 So far this is just a normal dart library that you can run directly from the command line.
 
-The point here is that DShell isn't magic. You can just write normal Dart code using all of darts features and any libraries that work with a cli application. (i.e. flutter and web specific libraries are not going to work here.)
-
-## Using dshell create
-DShell likes to make life easier so if you can't remember the syntax of of 'main' you can use:
-
-```
-dshell create hello_world.dart'
-```
-DShell will create the hello_world.dart script and peform the initial house keeping.
-Your script is now ready to run.
-
-NOTE: DShell will shortly introduce templates that will provide a collection of common scripts that you can use as a starting point.
+The point here is that DShell isn't magic. You can just write normal Dart code using all of Dart's features and any libraries that work with a cli application. (i.e. flutter and web specific libraries are NOT going to work here.)
 
 ## Our first real script
 
