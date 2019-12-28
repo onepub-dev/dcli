@@ -34,7 +34,8 @@ class HelpCommand extends Command {
 
   void printUsage() {
     var appname = Settings().appname;
-    print(green('$appname: Executes Dart scripts'));
+    print(green(
+        '$appname: Executes Dart scripts.  Version: ${Settings().version}'));
     print('');
     print(yellow('Example: '));
     print(yellow('   dshell hello_world.dart'));
