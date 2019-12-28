@@ -28,7 +28,7 @@
   * [Default pubsec](#default-pubsec)
   * [Explicitly defining a pubspec](#Explicitly-defining-a-pubspec)
   * [Pubspec dependancy injection](#pubspec-dependancy-injection)
-  * [Customising dependancy injection](#customising-dependancy-injection)
+  * [Overriding default dependancy](#overriding-default-dependancy)
   * [Pubspec precendence](#pubspec-precendence)
   * [@pubspec Annotation](#@pubspec-annotation)
 * [Multi-file scripts](#multi-file-scripts)
@@ -72,10 +72,7 @@ So why is dshell different?
 
 DShell is based on the relatively new programming language; Dart.
 
-Dart has had a fairly controversially entree onto the world stage of programming languages but that is about to change.
-If you don't know what Flutter is then its time that you stopped and had a look. Flutter is about to change the way we build applications and Flutter is based on Dart. 
-
-The short version is that Dart is here to stay and the important element for DShell is that its easy to learn.
+Dart is currently the fastest growing language on github and is the basis on which Flutter is built. If have not heard of flutter then you should have a look, but I digress.
 
 If you have used multiple languages you well know how the learning curve goes. Its usually doesn't take long to the get to the point where you love or hate a language. 
 As you begin to discover the little nooks and crannies of a language you either despise the designer's solutions or fall in love with it.
@@ -94,7 +91,7 @@ Dart is fast and if you need even more speed can be compiled to a single file ex
 
 You can use your favorite editor to create DShell scripts. Vi or VIM work fine but Visual Code is recommended. 
 
-DShell and Dart also make it harder to make common mistakes that Bash invites.
+DShell and Dart also make it harder to make some of the common mistakes that Bash invites.
 
 DShell throws exceptions when something goes wrong so your script doesn't silently ignore critical errors.
 
@@ -163,8 +160,6 @@ Once dart is installed we can install DShell.
 ```shell
 pub global activate dshell
 dshell install
-
-
 ```
 
 Now lets create and run our first DShell script:
@@ -174,8 +169,21 @@ mkdir dtest
 cd dtest
 dshell create test.dart
 ./test.dart
+Resolving dependancies....
+
 cli>Hello World
 ```
+
+The dshell create command creates a default hello world script.
+
+If you view the contents of test.dart you will see a very simple script:
+
+```dart
+void main() {
+    print('hello world');
+}
+```
+
 
 Note for Flutter users:
 
@@ -767,7 +775,28 @@ If your script `<scriptname.dart>` contains a `@pubspec` annotation then DShell 
 ## Pubspec dependancy injection
 When DShell creates your virtual pubspec, on first run or after a clean,it will inject a default set of dependancies into your pubspec.
 
-It doesn't matter if you have relied on a virtual pubspec, used an `@pubspec` annotation or created a classic `pubspec.yaml` DShell always injects the following dependencies.
+It doesn't matter if you have relied on a virtual pubspec, used an `@pubspec` annotation or created a classic `pubspec.yaml` DShell always injects the default dependencies.
+
+DShell stores the default dependencies in:
+
+`~/.dshell/dependencies.yaml`
+
+
+The syntax of `dependancies.yaml` is idential to the standard `pubspec.yaml` dependancies section.
+
+Example:
+```yaml
+
+dependencies:
+  dshell: ^1.0.0
+  args: ^1.5.2
+  path: ^1.6.4
+```
+
+
+If you find a really nice package that you use time and again then its easier to add it to the set of default dependencies than having to add it to every script.
+
+Feel free to modify the set of dependencies that DShell ships with. The only one you really need is the Dshell package (but you can even remove that if you don't like the standard DShell library). 
 
 The default dependancies are:
 
@@ -776,41 +805,23 @@ The default dependancies are:
 * [args](https://pub.dev/packages/args)
 
 The above packages provide your script with a swiss army collection of tools that we think will make your life easier when writing DShell scripts.
+
 The 'path' package provide tooling for building and manipulating directory paths as strings.
+
 The 'args' package makes it easy to process command line arguments including adding flags and options to your DShell script.
 
-To ensure that you still have complete control over your dependencies, DShell allows you to override the
-default dependencies.
 
-If you have declared any of the above packages in the dependancies section of you `@pubspec` annotation or your classic `pubspec.yaml` then the version you declare will be used and the dependency injection for that package will be suppressed.
-
-## Customising dependancy injection
+## Overriding default dependancy
 
 DShell provides a nice set of basic tools (packages) for your DShell scripts and you can add more in your script's pubspec. 
 
-You may however find a really nice package that you use time and again in your DShell scripts which means you have to create a pubsec for every script.
-
-DShell allows you to define your own set of global package dependancies that DShell will then inject into every DShell script.
-
-If you create a `dependancies.yaml` file in the `~/.dshell` directory then DShell will inject any custom dependancies into your DShell scripts.
+Some times you may find that a script needs a specific version of a default dependency. DShell allows you override a default dependencies version on a per script basis.
 
 
-The syntax of `dependancies.yaml` is identially to the standard `pubspec.yaml` dependancies section.
+If you have declared any of the default packages in the dependancies section of you `@pubspec` annotation or your classic `pubspec.yaml` then the version you declare will be used instead of the default version.
 
-Example:
-```yaml
-
-dependencies:
-  collection: ^1.14.12
-  file_utils: ^0.1.3
-  money2: ^1.8.0
-
-```
-
-You don't need to specify the packages that DShell normally injects unless you want to override the version of the package that DShell injects.
 
 NOTE: you must run 'dshell cleanall' if you modify your 'dependancies.yaml' as DShell doesn't check this file for changes.
-
 
 
 ## Pubspec precendence

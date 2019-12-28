@@ -1,3 +1,12 @@
+## 1.0.23
+Fixed a couple of major bugs in the create and run commands.
+The create use an incorrect relative path to dshell.
+The run command was using an incorrect package-root path. I think this was an misunderstanding of the 2.7 changes.
+Updates to readme on how dependencies are managed.
+
+## 1.0.22
+Hide some additional path functions, tweak the why dshell readme.
+
 ## 1.0.21
 Fixed links in toc. Cleanup of examples to bring them in line with public api.
 
