@@ -1,6 +1,8 @@
 import 'dart:cli';
 import 'dart:io';
 
+import 'package:dshell/dshell.dart';
+
 import 'commands/help.dart';
 import 'flags.dart';
 import '../util/ansi_color.dart';
@@ -27,11 +29,11 @@ class EntryPoint {
   }
 
   int process(List<String> arguments) {
-    return parseCmdLine(
+    return _parseCmdLine(
         arguments, Flags.applicationFlags, Commands.applicationCommands);
   }
 
-  int parseCmdLine(List<String> arguments, List<Flag> availableFlags,
+  int _parseCmdLine(List<String> arguments, List<Flag> availableFlags,
       List<Command> availableCommands) {
     try {
       CommandLineRunner.init(availableFlags, availableCommands);
