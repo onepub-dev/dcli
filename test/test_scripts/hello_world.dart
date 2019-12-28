@@ -6,11 +6,8 @@ dependencies:
   money2: ^1.0.0
 */
 
-import 'dart:io';
 import 'package:dshell/dshell.dart';
-import 'package:path/path.dart' as p;
-import 'package:money2/money2.dart';
 
 void main() {
-  print("Helwo vorld");
+  print('Hello world');
 }

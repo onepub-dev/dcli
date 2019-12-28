@@ -1,6 +1,6 @@
 @Timeout(Duration(seconds: 600))
 
-import 'package:dshell/src/script/entry_point.dart';
+import 'package:dshell/dshell.dart' hide equals;
 import 'package:test/test.dart';
 
 import '../util/test_fs_zone.dart';
@@ -11,10 +11,15 @@ import '../util/test_fs_zone.dart';
 void main() {
   test('Run hello world', () {
     TestZone().run(() {
-      var exitCode =
-          EntryPoint().process(['test/test_scripts/hello_world.dart', 'world']);
+      var results = <String>[];
 
-      expect(exitCode, equals(0));
+      'test/test_scripts/hello_world.dart'.forEach((line) => results.add(line));
+
+      expect(results, equals(getExpected()));
     });
   });
+}
+
+List<String> getExpected() {
+  return ['Hello world'];
 }
