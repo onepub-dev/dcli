@@ -1,5 +1,3 @@
-import 'dart:io';
-
 import '../settings.dart';
 
 class Flags {

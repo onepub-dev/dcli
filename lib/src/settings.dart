@@ -1,6 +1,5 @@
 import 'dart:io';
 
-import 'package:args/args.dart';
 import 'package:dshell/dshell.dart';
 import 'package:dshell/src/script/my_yaml.dart';
 
