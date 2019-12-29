@@ -1,4 +1,4 @@
-# DShell - a bash replacement using dart
+# DShell - a bash replacement using the Dart programming language
 
 # Contents
 * [Overview](#overview)
@@ -9,6 +9,8 @@
 * [Installing](#installing)
 * [Writing your first script](#writing-your-first-script)
   * [Our first real script](#our-first-real-script)
+  * [Dart lambda functions](#dart-lambda-functions)
+  * [Named Arguments](#named-arguments)
   * [Use a shebang](#use-a-shebang)
   * [DShell clean](#dShell-clean)
 * [DShell and futures](#dshell-and-futures)
@@ -86,13 +88,11 @@ DShell excels in all of the functionality that you expect from Bash and then tak
 
 DShell is easy to install, makes it a breeze to create simple scripts and provides the tools to manage a script that started out as 100 lines but somehow grew to 10,000 lines. There is also a large collection of third party libraries that you can included in your script with no more than an import statment and a dependancy declaration. 
 
-Dart is fast and if you need even more speed can be compiled to a single file executable that is portable between binary compatible machines.
+Dart is fast and if you need even more speed it can be compiled to a single file executable that is portable between binary compatible machines.
 
 You can use your favorite editor to create DShell scripts. Vi or VIM work fine but Visual Code is recommended. 
 
 DShell and Dart also make it harder to make some of the common mistakes that Bash invites.
-
-DShell throws exceptions when something goes wrong so your script doesn't silently ignore critical errors.
 
 With Dart and DShell you have the option to Type your variables. This is a bit of a controversial issues so DShell doesn't force you to Type your scripts but I ALWAYS use types and you should too.
 
@@ -102,20 +102,19 @@ DShell is hopefully that.
 
 ## What does DShell do?
 
+* Makes it easy to write maintenance scripts as you do with Bash. 
 * Uses the elegant and simple Dart language
-* Write and execute single file scripts
-  * cli> ./tryme.dart
 * Provides a set of functions (commands) that mimick common bash operations.
 * Allows for simple manipulation of files and directories
   * move(from, to), createDir(path), cd(path)...
 * Allows you to call any cli application in a single line
-
   * 'grep error /var/lib/syslog'.run
+* Write and execute single file scripts
+  * cli> ./tryme.dart
 * Process the output of a cli command.
   * 'grep error /var/lib/syslog'.forEach((line) => print(line));
 * Chain multiple cli commands using pipes
   * 'grep error /var/lib/syslog' |'head 5'.forEach((line) => print(line));
-
 * executes commands synchronously, so no need to worry about futures.
 
 ## What commands does DShell support?
@@ -147,9 +146,9 @@ These are some of the built-in commands:
 # Getting Started
 ## Installing
 
-Lets install DShell, create and run your first script:
+Lets install DShell, create and run our first script:
 
-Start by installing dart as per:
+Start by installing Dart as per:
 
 https://dart.dev/get-dart
 
@@ -305,7 +304,7 @@ The point here is that DShell isn't magic. You can just write normal Dart code u
 
 ## Our first real script
 
-So let's do something that DShell was designed for, file management.
+So let's do something that DShell was designed for; file management.
 
 Create a new script `first.dart`
 
@@ -346,7 +345,7 @@ void main() {
     cat('tmp/second.txt').forEach((line) => print(line));
 
     // lets prove that both files exist by running
-    // a recusive find.
+    // a recursive find.
     find('*.txt').forEach((file) => print('Found $file'));
 
     // Now lets tail the file using the OS tail command.
@@ -358,7 +357,7 @@ void main() {
     'tail tmp/text.txt'.run
 
     // Lets do a word count capturing stdout,
-    // stderr will still be written to the console
+    // stderr will will be swallowed.
     'wc tmp.second.txt'.forEach((line) => print('Captured $line'));
 
     // lets tail a non existent file and see stderr.
@@ -388,7 +387,7 @@ Now run our script.
 ```
 cli> dshell first.dart
 Hello world
-My second line'
+My second line
 My third line
 Should I delete 'tmp'? (y/n):
 
@@ -396,6 +395,148 @@ Should I delete 'tmp'? (y/n):
 You are now officially a DShell guru. 
 
 Go forth young man (or gal) and create.
+
+# Dart lambda functions
+This section provides details on the Dart language:
+
+To learn more about Dart's syntax read the Dart language tour.
+https://dart.dev/guides/language/language-tour
+
+
+DShell makes extensive use of Dart's lambdas.  
+
+Lambdas are essentially annonymous functions which DShell uses for callbacks.
+
+The most common use of lambdas in DShell are in the forEach method.
+
+In prior examples you have already seen the forEach method in action.
+
+```dart
+'tail tmp/nonexistant.txt'.forEach((line) => print(line));
+```
+
+The signature of the forEach method is:
+
+```dart
+void forEach(LineAction stdout, {LineAction stderr});
+```
+
+The first argument `stdout` of the forEach method is a 'positional' argument, the second argument `stderr` is a named argument.
+The `stdout` argument is required whilst the `stderr` argument is optional.
+
+`LineAction` is a Dart `typedef` that declares that LineAction is a function that takes a single String.
+
+`typedef LineAction = void Function(String line);`
+
+Essentially this means that forEach expects you to pass a function to the first positional argument `stdout` and optionally the second argument `stderr`.
+
+The functions that you pass are unnamed functions known as a Lambda.
+
+The following code uses the [stdout] positional argument to print each line returned by the call to the Linux 'tail' command.
+
+```dart
+'tail tmp/nonexistant.txt'.forEach(
+    (line) => print(line)
+    );
+```
+
+The 2nd line is the Lambda function that you provide.
+
+Lets break this down.
+
+The line consists of three components
+
+`(line) => print(line)`
+
+Which can be abstracted to:
+
+`(<args>) => <expression>`
+
+In our example the `stdout` positional argument is of type `LineAction`.  The `LineAction` function takes a String as its only argument.
+So in this case `(<args>)` is a single argument of type String.
+
+What this means is that the `forEach` method will call the Lambda function each time the `tail` command outputs a line. The value of that line will be contained in the `line` argument passed to your Lambda.
+
+The second component is the `=>` operator, sometimes refered to as a 'fat arrow'. Essentially the `=>` operator passes the `line` argument to the `<expression>`;
+
+The third and final component is the `<expression>`.
+
+The `<expression>` can be any valid Dart expression. In the above example the expression is `print(line)` which prints the contents of `line` to the console.
+
+One limitation of the `<expression>` is that it must be a single line expression. Our `LineAction` is declared as returning a void so in our case the value of the expression is ignored.
+
+Dart's Lambdas actually take two forms the above 'fat arrow' form and a 'block form'.
+
+The block form allows you to execute multiple statements and requires you to use a `return` statement if you want to return something from the Lambda.
+
+The syntax of the Lambda block form is:
+
+`(args) { <statements> }`
+
+Look carefully and note that the block form doesn't have the 'fat arrow'. I've often been caught when converting a 'fat arrow' form to the block form leaving the 'fat arrow' in place and that just doesn't work.
+
+Block form example of a Lambda:
+
+```dart
+'tail tmp/nonexistant.txt'.forEach(
+    (line) {
+         String trimmed = line.trim();
+         print(trimmed);
+
+         // If LineAction took a non-void return type then we could use 
+         // a return statement here
+         // return 'some value';
+    }
+);
+```
+
+Have a look a the next section of named arguments to understand how to process `stderr` when interacting with the `forEach` method.
+
+# Named Arguments
+
+This section provides details on the Dart language:
+
+To learn more about Dart's syntax read the Dart language tour.
+https://dart.dev/guides/language/language-tour
+
+Dart allows three types of arguments to be passed to a method or function.
+
+Positional, optional and named.
+
+Positional arguments are traditional 'C' style arguments that everyone is familiar with.
+
+Optional arguments are positional arguments that are (you guessed it) optional.
+
+Named arguments are a little tricker but depending on your current language experience you may already be familiar with them.
+
+Named arguments allow you to pass an argument by name rather than position and they are optional.
+
+To declare a positional argument you use curly braces `{}`.
+
+```dart
+testMethod(String arg1, [String arg2], {String arg3, String arg4});
+```
+
+In the above example `arg1` is a positional argument, `arg2` is an optional argument with `arg3` and `arg4` being named arguments.
+
+To call the test method passing values to all of the above arguments you would use:
+
+```dart
+testMethod('value1', 'value2' , arg4: 'value4', arg3: 'value3');
+```
+
+Note that I've reversed the order of `arg3` and `arg4`. As they are named arguments you can place them in an position AFTER the named and optional arguments.
+
+Lets finish with an example using the forEach method:
+
+```dart
+
+'tail /var/log/syslog'.forEach((line) => print(line), stderr:(line) => print(line));
+```
+
+The above example will print any output sent to stdout or stderr from the 'tail' command.
+
+
 
 ## Use a shebang
 
@@ -427,7 +568,7 @@ Now mark the file as executable:
 chmod +x  first.dart
 ```
 
-Note: if you used the `dshell create <script>` command then DShell will have already set the execute permission on your script.
+Note: if you used the `dshell create <script>` command then DShell will have already set the execute permission on your script and added the shebang!
 
 Now run the script from the cli:
 
@@ -456,7 +597,7 @@ cli>
 
 Faster you say? 
 
-Read the section on [compiling](##compiling-to-native) your script to make it run even faster.
+Read the section on [compiling](#compiling-to-native) your script to make it run even faster.
 
 
 ## DShell clean
@@ -499,7 +640,7 @@ Until then you can just skip this section.
 
 ## How DShell manages futures
 
-DShell does not stop you using `await`, `Futures`, `Isolates` or any other dart functionallity. Its all yours to use and abuse as you will.
+DShell does not stop you using `await`, `Futures`, `Isolates` or any other Dart functionallity. Its all yours to use and abuse as you will.
 
 DShells global functions however intentially avoid `Futures`.
 
@@ -677,7 +818,7 @@ Now let's pipe the output of one cli command to another.
 
 ```
 
-The above command launches 'grep' and 'head' to find all import lines in any dart file and then trim the list (via head) to the first five lines and finally print those lines.
+The above command launches 'grep' and 'head' to find all import lines in any Dart file and then trim the list (via head) to the first five lines and finally print those lines.
 
 What we have now is the power of Bash and the elegance of Dart.
 
@@ -1069,7 +1210,7 @@ dshell clean hello_world.dart
 ## compile
 The compile command will compile your DShell script into a native executuable.
 
-The resulting native application can be copied to any binary compatible OS and run without requiring dart to be installed.
+The resulting native application can be copied to any binary compatible OS and run without requiring Dart to be installed.
 
 Dart complied appliations are also super fast.
 
@@ -1158,7 +1299,7 @@ pubspec.yaml
 lib/util.dart
 ```
 
-The aim of DShell is to remove the normal requirements so we can run a single dart script while still allowing you to gracefully grow your little project to a full blow application without having to start over.
+The aim of DShell is to remove the normal requirements so we can run a single Dart script while still allowing you to gracefully grow your little project to a full blow application without having to start over.
 
 Virtual Projects are where this magic happens.
 
@@ -1185,7 +1326,7 @@ then DShell will create a Virtual Project under the path
 
 Using the fully qualified path allows multiple scripts to exist in the same directory and we can still run a Virtual Project for each script.
 
-Within the Virtual Project directory DShell creates all the necessary files and directories need to make dart happy
+Within the Virtual Project directory DShell creates all the necessary files and directories need to make Dart happy
 
 So a typical Virtual Project will contain:
 
@@ -1211,10 +1352,10 @@ DShell goes to great lengths to remove the need to use `Futures` and `await` the
 
 `waitFor` and `streams`.
 
-`waitFor` is a fairly new dart function which ONLY works for dart cli applications and can be found in the `dart:cli` package.
+`waitFor` is a fairly new Dart function which ONLY works for Dart cli applications and can be found in the `dart:cli` package.
 
-`waitFor` allows a dart cli application to turn what would normally be an async method into a normal synchronious method by effectively absorbing a future.
-Normally in dart, as soon as you have one async function, its async all of the way up.
+`waitFor` allows a Dart cli application to turn what would normally be an async method into a normal synchronious method by effectively absorbing a future.
+Normally in Dart, as soon as you have one async function, its async all of the way up.
 DShell simply wouldn't have been possible without `waitFor`.
 
 `waitFor` does however have a problem. If an exception gets thrown whilst in a `waitFor` call, then the stacktrace generated will be a microtask based stack trace. These stacktraces are useless as they don't show you where the original call came from.
