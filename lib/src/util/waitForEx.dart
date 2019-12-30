@@ -12,14 +12,15 @@ import 'stack_trace_impl.dart';
 /// This version replaces the exceptions stack
 /// with a full stack.
 T waitForEx<T>(Future<T> future) {
-  DShellException exception;
+  Exception exception;
   T value;
   try {
     value = cli.waitFor<T>(future);
   } on AsyncError catch (e) {
-    if (e.error is DShellException) {
-      exception = e.error as DShellException;
+    if (e.error is Exception) {
+      exception = e.error as Exception;
     } else {
+      Log.e('Rethrowing a non DShellException ${e}', stackTrace: e.stackTrace);
       rethrow;
     }
   }
