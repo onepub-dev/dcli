@@ -80,7 +80,7 @@ extension StringAsProcess on String {
     return Pipe(lhsRunnable, rhsRunnable);
   }
 
-  void write(String line, {bool newline = true}) {
+  void write(String line, {String newline = '\n'}) {
     var sink = FileSync(this);
     sink.write(line, newline: newline);
     sink.close();
@@ -95,7 +95,7 @@ extension StringAsProcess on String {
   // Treat the [this]  as the name of a file
   // and append the [line] to it.
   // If [newline] is true add a newline after the line.
-  void append(String line, {bool newline = true}) {
+  void append(String line, {String newline = '\n'}) {
     var sink = FileSync(this);
     sink.append(line, newline: newline);
     sink.close();

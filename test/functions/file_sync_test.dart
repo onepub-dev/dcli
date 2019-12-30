@@ -41,7 +41,7 @@ void main() {
           file.append('Line ${i} is here');
         }
         var replacement = 'This is all that should be left';
-        file.write(replacement, newline: false);
+        file.write(replacement, newline: null);
         file.close();
 
         var stat = file.stat();

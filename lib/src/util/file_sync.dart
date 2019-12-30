@@ -94,10 +94,10 @@ class FileSync {
 
   /// Truncates the file to zero bytes and
   /// then writes the given text to the file.
-  void write(String line, {bool newline = true}) {
-    if (newline) {
-      line += '\n';
-    }
+  /// If [newline] is null then no line terminator will
+  /// be added.
+  void write(String line, {String newline = '\n'}) {
+    line += (newline ?? '');
     _raf.truncateSync(0);
 
     _raf.setPositionSync(0);
@@ -108,10 +108,9 @@ class FileSync {
 
   /// Appends the [line] to the file
   /// If [newLine] is true then append a newline after the line.
-  void append(String line, {bool newline = true}) {
-    if (newline) {
-      line += '\n';
-    }
+  void append(String line, {String newline = '\n'}) {
+    line += (newline ?? '');
+
     _raf.setPositionSync(_raf.lengthSync());
     _raf.writeStringSync(line);
   }
