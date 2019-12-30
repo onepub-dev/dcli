@@ -1,4 +1,6 @@
 import 'dart:io';
+import 'package:dshell/dshell.dart';
+
 import 'function.dart';
 import '../settings.dart';
 
@@ -16,7 +18,9 @@ import '../util/log.dart';
 /// paths that don't exist will be created.
 ///
 /// If [recursive] is false then any parent paths
-/// don't exist then a [CreateDirExcepption] will be thrown
+/// don't exist then a [CreateDirException] will be thrown.
+///
+/// If the [path] already exists an exception is thrown.
 ///
 void createDir(String path, {bool recursive = false}) =>
     CreateDir().createDir(path, recursive: recursive);
@@ -28,6 +32,10 @@ class CreateDir extends DShellFunction {
     }
 
     try {
+      if (exists(path)) {
+        throw CreateDirException('The path ${absolute(path)} already exists');
+      }
+
       Directory(path).createSync(recursive: recursive);
     } catch (e) {
       throw CreateDirException(
