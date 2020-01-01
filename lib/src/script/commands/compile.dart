@@ -19,6 +19,9 @@ class CompileCommand extends Command {
     try {
       var project = VirtualProject(Settings().cachePath, script);
 
+      // make certain the project is upto date.
+      project.clean();
+
       DartSdk()
           .runDart2Native(script, script.scriptDirectory, project.path)
           .forEach((line) => print(line), stderr: (line) => print(line));
