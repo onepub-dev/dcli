@@ -8,7 +8,10 @@ import 'flags.dart';
 class CommandLineRunner {
   static CommandLineRunner _self;
 
-  List<Flag> availableFlags;
+  static List<Flag> availableFlags = [VerboseFlag()];
+
+  // Tracks the set of flags the users set on the command line.
+  Flags flagsSet = Flags();
   Map<String, Command> availableCommands;
 
   factory CommandLineRunner() {
@@ -18,12 +21,11 @@ class CommandLineRunner {
     return _self;
   }
 
-  static void init(List<Flag> availableFlags, List<Command> availableCommands) {
-    _self = CommandLineRunner.internal(
-        availableFlags, Commands.asMap(availableCommands));
+  static void init(List<Command> availableCommands) {
+    _self = CommandLineRunner.internal(Commands.asMap(availableCommands));
   }
 
-  CommandLineRunner.internal(this.availableFlags, this.availableCommands);
+  CommandLineRunner.internal(this.availableCommands);
 
   int process(List<String> arguments) {
     int exitCode;
@@ -38,13 +40,13 @@ class CommandLineRunner {
       final argument = arguments[i];
 
       if (Flags.isFlag(argument)) {
-        var flag = Flags.findFlag(argument, availableFlags);
+        var flag = flagsSet.findFlag(argument, availableFlags);
 
         if (flag != null) {
-          if (Flags.isSet(flag)) {
+          if (flagsSet.isSet(flag)) {
             throw DuplicateOptionsException(argument);
           }
-          Flags.set(flag);
+          flagsSet.set(flag);
           Settings().verbose('Setting flag: ${flag.name}');
           if (flag == VerboseFlag()) {
             Settings().verbose('DShell Version: ${Settings().version}');

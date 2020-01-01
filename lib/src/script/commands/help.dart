@@ -39,13 +39,14 @@ class HelpCommand extends Command {
     print('');
     print(yellow('Example: '));
     print(yellow('   dshell hello_world.dart'));
+    print(yellow('   dshell -v compile -nc hello_world.dart'));
     print('');
     print(green('Usage:'));
     print(
         '  dshell [${orange('flag, flag...')}] [${blue('command')}] [arguments...]');
     print('');
-    print(orange('Flags:'));
-    for (var flag in Flags.applicationFlags) {
+    print(orange('flags:'));
+    for (var flag in CommandLineRunner.availableFlags) {
       print('  ' + orange(flag.usage()));
       print('    ' + flag.description());
     }

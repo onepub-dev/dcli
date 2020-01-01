@@ -9,7 +9,7 @@ String script = 'test/test_scripts/hello_world.dart';
 
 void main() {
   group('Compile using DShell', () {
-    test('install examples/dsort.dart', () {
+    test('compile examples/dsort.dart', () {
       TestZone().run(() {
         var exit = -1;
         try {
@@ -17,6 +17,21 @@ void main() {
           // createDir('/home/test', recursive: true);
           wipe();
           exit = EntryPoint().process(['compile', 'example/dsort.dart']);
+        } on DShellException catch (e) {
+          print(e);
+        }
+        expect(exit, equals(0));
+      });
+    });
+
+    test('compile -nc examples/dsort.dart', () {
+      TestZone().run(() {
+        var exit = -1;
+        try {
+          // setEnv('HOME', '/home/test');
+          // createDir('/home/test', recursive: true);
+          wipe();
+          exit = EntryPoint().process(['compile', '-nc', 'example/dsort.dart']);
         } on DShellException catch (e) {
           print(e);
         }

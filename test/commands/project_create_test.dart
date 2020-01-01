@@ -6,7 +6,6 @@ import 'package:dshell/dshell.dart' hide equals;
 import 'package:dshell/src/script/command_line_runner.dart';
 import 'package:dshell/src/script/commands/commands.dart';
 import 'package:dshell/src/script/entry_point.dart';
-import 'package:dshell/src/script/flags.dart';
 import 'package:dshell/src/script/project_cache.dart';
 import 'package:test/test.dart';
 
@@ -50,7 +49,7 @@ void main() {
 }
 
 void setup(TestPaths paths) {
-  CommandLineRunner.init(Flags.applicationFlags, Commands.applicationCommands);
+  CommandLineRunner.init(Commands.applicationCommands);
   ProjectCache().cleanAll();
 }
 

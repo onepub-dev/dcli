@@ -4,7 +4,6 @@ import 'dart:io';
 import 'package:dshell/dshell.dart';
 
 import 'commands/help.dart';
-import 'flags.dart';
 import '../util/ansi_color.dart';
 import '../util/stack_trace_impl.dart';
 
@@ -29,14 +28,12 @@ class EntryPoint {
   }
 
   int process(List<String> arguments) {
-    return _parseCmdLine(
-        arguments, Flags.applicationFlags, Commands.applicationCommands);
+    return _parseCmdLine(arguments, Commands.applicationCommands);
   }
 
-  int _parseCmdLine(List<String> arguments, List<Flag> availableFlags,
-      List<Command> availableCommands) {
+  int _parseCmdLine(List<String> arguments, List<Command> availableCommands) {
     try {
-      CommandLineRunner.init(availableFlags, availableCommands);
+      CommandLineRunner.init(availableCommands);
       exitCode = CommandLineRunner().process(arguments);
 
       StdLog.stderr('Exiting with code $exitCode', LogLevel.verbose);

@@ -1,11 +1,9 @@
 import '../settings.dart';
 
 class Flags {
-  static List<Flag> applicationFlags = [VerboseFlag()];
+  bool get isVerbose => null;
 
-  static bool get isVerbose => null;
-
-  static Flag findFlag(String flagSwitch, List<Flag> flags) {
+  Flag findFlag(String flagSwitch, List<Flag> flags) {
     Flag found;
     for (var flag in flags) {
       if (nameSwitch(flag) == flagSwitch || abbrSwitch(flag) == flagSwitch) {
@@ -23,11 +21,11 @@ class Flags {
     return (argument.startsWith('-') || argument.startsWith('--'));
   }
 
-  static bool isSet(Flag flag) {
+  bool isSet(Flag flag) {
     return Settings().isFlagSet(flag);
   }
 
-  static void set(Flag flag) {
+  void set(Flag flag) {
     Settings().setFlag(flag);
   }
 }
