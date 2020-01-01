@@ -1,4 +1,6 @@
+@Timeout(const Duration(seconds: 450))
 import 'package:dshell/dshell.dart' hide equals;
+
 import 'package:dshell/src/util/file_sort.dart';
 import 'package:test/test.dart';
 
@@ -11,7 +13,7 @@ void main() {
         createDir(TEST_ROOT, recursive: true);
       }
 
-      var unsortedFile = 'unsorted.txt';
+      var unsortedFile = join(TEST_ROOT, 'unsorted.text');
       unsortedFile.truncate();
 
       for (var i = 9; i > 0; i--) {
@@ -34,7 +36,7 @@ void main() {
       if (!exists(TEST_ROOT)) {
         createDir(TEST_ROOT, recursive: true);
       }
-      var unsortedFile = 'unsorted.txt';
+      var unsortedFile = join(TEST_ROOT, 'unsorted.text');
       unsortedFile.truncate();
 
       for (var i = 9; i > 0; i--) {
@@ -54,7 +56,7 @@ void main() {
     });
 
     test('Col 2 Case Insensative Ascending -2sa', () {
-      var unsortedFile = 'unsorted.txt';
+      var unsortedFile = join(TEST_ROOT, 'unsorted.text');
       var fileSort = FileSort(unsortedFile, [Column.parse('2sa')], ',', '\n');
 
       var generated = <String>[];
@@ -71,7 +73,7 @@ void main() {
     });
 
     test('Col 2 Case Insensative Descending -2sd', () {
-      var unsortedFile = 'unsorted.txt';
+      var unsortedFile = join(TEST_ROOT, 'unsorted.text');
       var fileSort = FileSort(unsortedFile, [Column.parse('2sd')], ',', '\n');
 
       var generated = <String>[];
@@ -88,7 +90,7 @@ void main() {
     });
 
     test('Col 1 Case Sensative Descending -1Sd', () {
-      var unsortedFile = 'unsorted.txt';
+      var unsortedFile = join(TEST_ROOT, 'unsorted.text');
       var fileSort = FileSort(unsortedFile, [Column.parse('1Sd')], ',', '\n');
 
       var generated = <String>[];
@@ -112,7 +114,7 @@ void main() {
     });
 
     test('Col 2 Case numeric Descending -2nd', () {
-      var unsortedFile = 'unsorted.txt';
+      var unsortedFile = join(TEST_ROOT, 'unsorted.text');
       var fileSort = FileSort(unsortedFile, [Column.parse('2nd')], ',', '\n');
 
       var generated = <String>[];
@@ -129,7 +131,7 @@ void main() {
     });
 
     test('Col 2 Case MONTH Descending -2md', () {
-      var unsortedFile = 'unsorted.txt';
+      var unsortedFile = join(TEST_ROOT, 'unsorted.text');
       var fileSort = FileSort(unsortedFile, [Column.parse('2md')], ',', '\n');
 
       var monthList = <String>[
@@ -162,7 +164,7 @@ void main() {
     });
 
     test('Multi column -1m, 2', () {
-      var unsortedFile = 'unsorted.txt';
+      var unsortedFile = join(TEST_ROOT, 'unsorted.text');
       var fileSort = FileSort(
           unsortedFile, FileSort.expandColumns(['3m', '2nd']), ',', '\n');
       var generated = <String>[
@@ -185,7 +187,7 @@ void main() {
     });
 
     test('Range column 1-3', () {
-      var unsortedFile = 'unsorted.txt';
+      var unsortedFile = join(TEST_ROOT, 'unsorted.text');
       var fileSort =
           FileSort(unsortedFile, FileSort.expandColumns(['1-3']), ',', '\n');
 
@@ -208,7 +210,7 @@ void main() {
     });
 
     test('Range column 5-3', () {
-      var unsortedFile = 'unsorted.txt';
+      var unsortedFile = join(TEST_ROOT, 'unsorted.text');
       var fileSort =
           FileSort(unsortedFile, FileSort.expandColumns(['5-3']), ',', '\n');
 
@@ -231,7 +233,7 @@ void main() {
     });
 
     test('Double Range column 5-3,1-2', () {
-      var unsortedFile = 'unsorted.txt';
+      var unsortedFile = join(TEST_ROOT, 'unsorted.text');
       var fileSort = FileSort(
           unsortedFile, FileSort.expandColumns(['5-3', '1-2']), ',', '\n');
 
@@ -266,7 +268,7 @@ void main() {
     });
 
     test('Double Range  With types  5-3md,1-2na', () {
-      var unsortedFile = 'unsorted.txt';
+      var unsortedFile = join(TEST_ROOT, 'unsorted.text');
       var fileSort = FileSort(
           unsortedFile, FileSort.expandColumns(['5-3md', '1-2na']), ',', '\n');
 
@@ -293,6 +295,30 @@ void main() {
       expect(
           fileSort.columns[4].sortDirection, equals(SortDirection.Ascending));
       expect(fileSort.columns[4].comparator, equals(const NumericSort()));
+    });
+
+    test('merge sort', () {
+      if (!exists(TEST_ROOT)) {
+        createDir(TEST_ROOT, recursive: true);
+      }
+
+      var unsortedFile = join(TEST_ROOT, 'unsorted.text');
+      unsortedFile.truncate();
+
+      for (var i = 20000; i > 0; i--) {
+        unsortedFile.append('$i, line');
+      }
+
+      FileSort(unsortedFile, [Column.parse('1n')], ',', '\n').sort();
+
+      var expected = <String>[];
+      for (var i = 1; i <= 20000; i++) {
+        expected.add('$i, line');
+      }
+
+      var sorted = read(unsortedFile).toList();
+
+      expect(sorted, equals(expected));
     });
   });
 }

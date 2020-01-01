@@ -2,7 +2,7 @@ import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
 
-import 'package:dshell/dshell.dart';
+import 'package:dshell/dshell.dart' as d;
 import 'package:dshell/src/script/command_line_runner.dart';
 import 'package:dshell/src/util/waitForEx.dart';
 
@@ -26,51 +26,68 @@ class FileSort {
     waitForEx<void>(_sort());
   }
 
+  static const MERGE_SIZE = 1000;
   Future _sort() async {
     var completer = Completer<void>();
-    var instance = 1;
-    var lineCount = 1000;
+    var instance = 0;
+    var lineCount = MERGE_SIZE;
 
     var phaseDirectory = Directory.systemTemp.createTempSync();
 
-    var list = <String>[];
+    var list = <Line>[];
 
     var sentToPhase = false;
+
+    var phaseFutures = <Future<void>>[];
 
     await File(filename)
         .openRead()
         .map(utf8.decode)
         .transform(LineSplitter())
         .forEach((l) async {
-      list.add(l);
+      list.add(Line.fromString(l));
       lineCount--;
 
       if (lineCount == 0) {
-        await savePhase(phaseDirectory, 1, instance, list, lineDelimiter);
+        lineCount = MERGE_SIZE;
+        var phaseList = list;
+        list = [];
         instance++;
         sentToPhase = true;
+        var phaseFuture = Completer<void>();
+        phaseFutures.add(phaseFuture.future);
+
+        await savePhase(phaseDirectory, 1, instance, phaseList, lineDelimiter);
+        phaseFuture.complete(null);
       }
     });
 
     if (!sentToPhase) {
       await _sortList(list);
-      await overwrite(list);
+      await replaceFileWithSortedList(list);
+    } else {
+      if (list.isNotEmpty && list.length < MERGE_SIZE) {
+        await savePhase(phaseDirectory, 1, ++instance, list, lineDelimiter);
+      }
+      await Future.wait(phaseFutures);
+      await _mergeSort(phaseDirectory);
     }
     completer.complete();
 
     return completer.future;
   }
 
-  void overwrite(List<String> sorted) {
-    move(filename, '$filename.bak');
+  void replaceFileWithSortedList(List<Line> sorted) {
+    d.move(filename, '$filename.bak');
     saveSortedList(filename, sorted, lineDelimiter);
-    delete('$filename.bak');
+    d.delete('$filename.bak');
   }
 
-  void _sortList(List<String> list) {
+  /// Performs an insitu sort of the passed list.
+  void _sortList(List<Line> list) {
     list.sort((lhs, rhs) {
-      var lhsColumns = lhs.split(fieldDelimiter);
-      var rhsColumns = rhs.split(fieldDelimiter);
+      var lhsColumns = lhs.line.split(fieldDelimiter);
+      var rhsColumns = rhs.line.split(fieldDelimiter);
 
       if (maxColumn > lhsColumns.length) {
         throw InvalidArguments('Line $lhs does not have enough columns');
@@ -84,7 +101,7 @@ class FileSort {
 
       if (maxColumn == 0) {
         // just compare the whole line.
-        result = columns[0].comparator.compareTo(lhs, rhs);
+        result = columns[0].comparator.compareTo(lhs.line, rhs.line);
       } else {
         // compare the defined columns
         for (var column in columns) {
@@ -104,19 +121,25 @@ class FileSort {
   }
 
   void savePhase(Directory phaseDirectory, int phase, int instance,
-      List<String> list, String lineDelimiter) async {
-    var instanceFile = File(join(phaseDirectory.path, 'phase$phase-$instance'));
+      List<Line> list, String lineDelimiter) async {
+    var instanceFile =
+        await File(d.join(phaseDirectory.path, 'phase$phase-$instance'));
 
-    instanceFile.writeAsStringSync(list.join(lineDelimiter));
+    await _sortList(list);
+
+    var lines = list.map((line) => line.line).toList();
+
+    instanceFile.writeAsStringSync(lines.join(lineDelimiter) + lineDelimiter,
+        flush: true);
   }
 
   void saveSortedList(
-      String filename, List<String> list, String lineDelimiter) async {
-    var saveTo = FileSync(filename);
+      String filename, List<Line> list, String lineDelimiter) async {
+    var saveTo = d.FileSync(filename);
 
     saveTo.truncate();
     for (var line in list) {
-      saveTo.append(line, newline: lineDelimiter);
+      saveTo.append(line.line, newline: lineDelimiter);
     }
   }
 
@@ -162,6 +185,84 @@ class FileSort {
     }
 
     return columns;
+  }
+
+  /// Performs a merge sort
+  /// We open every file in the phase directory
+  /// and then read the first line from each file.
+  /// We then sort the list of the first lines.
+  /// We write the first line from the resulting sort
+  /// to the merge file noting what file the line
+  /// was read from.
+  /// We then read another line from the noted file
+  /// repeat the sort and the write.
+  /// if noted file is empty when then write
+  /// the first line from the sorted list
+  /// and write that line.
+  /// Rinse and repeat until all files are drained
+  /// and the list is empty.
+  void _mergeSort(Directory phaseDirectory) {
+    var lines = <Line>[];
+    var files = d.find('*', root: phaseDirectory.path).toList();
+
+    // Open and read the first line from each file.
+    for (var file in files) {
+      var fileSync = d.FileSync(file, fileMode: FileMode.read);
+      lines.add(Line(fileSync));
+    }
+
+    // Sort the set of first lines.
+    _sortList(lines);
+
+    var mergedFilename = 'merged.txt';
+    var mergedPath = d.join(phaseDirectory.path, mergedFilename);
+    var result = d.FileSync(mergedPath, fileMode: FileMode.writeOnlyAppend);
+
+    while (lines.isNotEmpty) {
+      var line = lines.removeAt(0);
+      result.append(line.line);
+
+      // a btree might give better performance as we wouldn't
+      // have to resort.
+      // If readNext returns false then the file is drained
+      // so we don't re-added to the list.
+      if (line.readNext()) {
+        lines.add(line);
+        _sortList(lines);
+      } else {
+        line.close();
+        line.delete();
+      }
+    }
+
+    d.move(filename, '$filename.bak');
+    d.move(mergedPath, '$filename');
+    d.delete('$filename.bak');
+    d.deleteDir(phaseDirectory.path);
+  }
+}
+
+class Line {
+  d.FileSync source;
+  String line;
+
+  Line(this.source) {
+    line = source.readLine();
+  }
+
+  Line.fromString(this.line);
+
+  bool readNext() {
+    line = source.readLine();
+    return line != null;
+  }
+
+  void close() {
+    source.close();
+  }
+
+  void delete() {
+    d.delete(source.path);
   }
 }
 

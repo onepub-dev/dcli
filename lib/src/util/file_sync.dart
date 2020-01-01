@@ -15,11 +15,37 @@ class FileSync {
 
   FileSync(String path, {FileMode fileMode = FileMode.writeOnlyAppend}) {
     _file = File(path);
-    _open(fileMode: fileMode);
+    _open(fileMode);
   }
 
-  void _open({FileMode fileMode = FileMode.read}) {
+  String get path => _file.path;
+
+  void _open(FileMode fileMode) {
     _raf = _file.openSync(mode: fileMode);
+  }
+
+  String readLine({String lineDelimiter = '\n'}) {
+    var line = '';
+    int byte;
+    var priorChar = '';
+
+    var foundDelimiter = false;
+
+    while ((byte = _raf.readByteSync()) != -1) {
+      var char = utf8.decode([byte]);
+
+      if (isLineDelimiter(priorChar, char, lineDelimiter)) {
+        foundDelimiter = true;
+        break;
+      }
+
+      line += char;
+      priorChar = char;
+    }
+    if (line.length == 0 && foundDelimiter == false) {
+      line = null;
+    }
+    return line;
   }
 
   ///
@@ -40,6 +66,10 @@ class FileSync {
     _raf.closeSync();
   }
 
+  /// reads every line from a file calling the passed [lineAction]
+  /// for each line.
+  /// if you return [false] from a [lineAction] call then
+  /// the read returns and no more lines are read.
   void read(CancelableLineAction lineAction) {
     var inputStream = _file.openRead();
 
@@ -117,5 +147,13 @@ class FileSync {
 
   void truncate() {
     _raf.truncateSync(0);
+  }
+
+  bool isLineDelimiter(String priorChar, String char, String lineDelimiter) {
+    if (lineDelimiter.length == 1) {
+      return char == lineDelimiter;
+    } else {
+      return priorChar + char == lineDelimiter;
+    }
   }
 }
