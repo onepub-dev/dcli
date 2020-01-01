@@ -10,23 +10,23 @@ mixin DependenciesMixin {
   MyYaml get yaml;
 
   List<Dependency> get dependencies {
-    _dependencies ??= _extractDependancies(yaml);
+    _dependencies ??= _extractDependencies(yaml);
     return _dependencies;
   }
 
   set dependencies(List<Dependency> lDependencies) =>
       _dependencies = lDependencies;
 
-  List<Dependency> _extractDependancies(MyYaml yaml) {
-    var dependancies = <Dependency>[];
+  List<Dependency> _extractDependencies(MyYaml yaml) {
+    var dependencies = <Dependency>[];
     var map = yaml.getMap('dependencies');
 
     if (map != null) {
       for (var entry in map.entries) {
         var dependency = Dependency(entry.key as String, entry.value as String);
-        dependancies.add(dependency);
+        dependencies.add(dependency);
       }
     }
-    return dependancies;
+    return dependencies;
   }
 }

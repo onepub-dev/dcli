@@ -1,6 +1,6 @@
 @t.Timeout(Duration(seconds: 600))
 import 'package:dshell/dshell.dart';
-import 'package:dshell/src/pubspec/global_dependancies.dart';
+import 'package:dshell/src/pubspec/global_dependencies.dart';
 import 'package:dshell/src/pubspec/pubspec.dart';
 import 'package:dshell/src/script/dependency.dart';
 import 'package:dshell/src/script/project_cache.dart';
@@ -40,12 +40,12 @@ dependencies:
   path: ^2.0.2
 ''';
 
-  t.test('No PubSpec - No Dependancies', () {
+  t.test('No PubSpec - No Dependencies', () {
     TestZone().run(() {
       if (exists(pubSpecScriptPath)) {
         delete(pubSpecScriptPath);
       }
-      runTest(null, main, GlobalDependancies.defaultDependencies);
+      runTest(null, main, GlobalDependencies.defaultDependencies);
     });
   }, skip: false);
 
@@ -60,7 +60,7 @@ ${basic}
       if (exists(pubSpecScriptPath)) {
         delete(pubSpecScriptPath);
       }
-      var dependencies = GlobalDependancies.defaultDependencies;
+      var dependencies = GlobalDependencies.defaultDependencies;
       dependencies.add(Dependency('collection', '^1.14.12'));
       dependencies.add(Dependency('file_utils', '^0.1.3'));
       runTest(annotationNoOverrides, main, dependencies);
@@ -96,7 +96,7 @@ $overrides
       PubSpec file = PubSpecImpl.fromString(basic);
       file.writeToFile(scriptPath);
 
-      var dependencies = GlobalDependancies.defaultDependencies;
+      var dependencies = GlobalDependencies.defaultDependencies;
       dependencies.add(Dependency('collection', '^1.14.12'));
       dependencies.add(Dependency('file_utils', '^0.1.3'));
       runTest(null, main, dependencies);
@@ -135,7 +135,7 @@ void runTest(String annotation, String main, List<Dependency> expected) {
   }
 
   createDir(Settings().dshellPath);
-  GlobalDependancies.createDefault();
+  GlobalDependencies.createDefault();
 
   ProjectCache().initCache();
 
@@ -145,8 +145,7 @@ void runTest(String annotation, String main, List<Dependency> expected) {
   }
   scriptPath.append(main);
 
-  var project =
-      ProjectCache().createProject(script, skipPubGet: true);
+  var project = ProjectCache().createProject(script, skipPubGet: true);
 
   var pubspec = project.pubSpec();
   t.expect(pubspec.dependencies, t.unorderedMatches(expected));

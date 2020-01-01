@@ -1,4 +1,4 @@
-import 'package:dshell/src/pubspec/global_dependancies.dart';
+import 'package:dshell/src/pubspec/global_dependencies.dart';
 import 'package:dshell/src/script/dependency.dart';
 import 'package:test/test.dart';
 
@@ -19,7 +19,7 @@ dependencies:
       Dependency('path', '^1.6.4'),
     ];
 
-    var gd = GlobalDependancies.fromString(content);
+    var gd = GlobalDependencies.fromString(content);
     expect(gd.dependencies, equals(expected));
   });
 }

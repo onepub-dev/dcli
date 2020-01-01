@@ -22,12 +22,6 @@ class PubSpecDefault implements PubSpec // with DependenciesMixin
 
   /// Creates default content for a virtual pubspec
   String _default() {
-    // List<Dependency> dependancies = defaultDepencies;
-
-    // List<String> yamlLines = dependancies
-    //     .map((dependancy) => "${dependancy.name}: ${dependancy.version}")
-    //     .toList();
-
     return '''
 name: ${_script.basename}
 version: $version

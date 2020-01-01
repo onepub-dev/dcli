@@ -8,19 +8,19 @@ import 'package:path/path.dart' as p;
 import 'dependencies_mixin.dart';
 
 ///
-/// Global dependancies is a file located in ~/.dshell/dependancies.yaml
+/// Global dependencies is a file located in ~/.dshell/dependencies.yaml
 /// that contains a 'dependencies' section from a pubsec.yaml file.abstract
 ///
-/// The global dependancies allows a user to inject a standard set
+/// The global dependencies allows a user to inject a standard set
 /// of dependencies into every script.
 ///
 ///
 
-class GlobalDependancies with DependenciesMixin {
-  static const String filename = 'dependancies.yaml';
+class GlobalDependencies with DependenciesMixin {
+  static const String filename = 'dependencies.yaml';
   MyYaml _yaml;
 
-  GlobalDependancies() {
+  GlobalDependencies() {
     if (!exists(path)) {
       touch(path, create: true);
     }
@@ -28,7 +28,7 @@ class GlobalDependancies with DependenciesMixin {
   }
 
   /// Use this ctor for unit testing.
-  GlobalDependancies.fromString(String yaml) {
+  GlobalDependencies.fromString(String yaml) {
     _yaml = MyYaml.fromString(yaml);
   }
 
@@ -37,7 +37,7 @@ class GlobalDependancies with DependenciesMixin {
   @override
   MyYaml get yaml => _yaml;
 
-  /// Creates the default global dependancies
+  /// Creates the default global dependencies
   static void createDefault() {
     if (!exists(path)) {
       path.write('dependencies:');

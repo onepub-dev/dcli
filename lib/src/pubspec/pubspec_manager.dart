@@ -1,5 +1,5 @@
 import '../functions/is.dart';
-import 'global_dependancies.dart';
+import 'global_dependencies.dart';
 import 'pubspec.dart';
 import 'pubspec_annotation.dart';
 import 'pubspec_default.dart';
@@ -47,7 +47,7 @@ class PubSpecManager {
 
     PubSpec pubSpec = PubSpecVirtual.fromPubSpec(sourcePubSpec);
 
-    var resolved = resolveDependancies(pubSpec, defaultPubspec);
+    var resolved = resolveDependencies(pubSpec, defaultPubspec);
 
     pubSpec.dependencies = resolved;
 
@@ -95,9 +95,9 @@ class PubSpecManager {
   //   return cleanRequried;
   // }
 
-  /// Loads dependancies from
+  /// Loads dependencies from
   /// virtual pubspec
-  /// global dependancies
+  /// global dependencies
   /// default dependencies
   ///
   /// and returns a resolve list.
@@ -107,34 +107,34 @@ class PubSpecManager {
   /// If there are duplicates the 'preferred' entrie
   /// is selected.
   ///
-  List<Dependency> resolveDependancies(
+  List<Dependency> resolveDependencies(
       PubSpec selected, PubSpec defaultPubSpec) {
     var resolved = <Dependency>[];
 
     // Start form least important to most imporant
     // Note: the defaultPubSpec no longer contains dependencies
     // but I've left this here incase it changes again.
-    var defaultDependancies = defaultPubSpec.dependencies;
-    var globalDependencies = _getGlobalDependancies();
+    var defaultDependencies = defaultPubSpec.dependencies;
+    var globalDependencies = _getGlobalDependencies();
 
     // take the preferred ones from global and default
-    resolved = resolve(globalDependencies, defaultDependancies);
+    resolved = resolve(globalDependencies, defaultDependencies);
 
-    var pubspecDependancies = selected.dependencies;
+    var pubspecDependencies = selected.dependencies;
 
     // If the default pubspec is also the selected one then
     // we MUST NOT re-resolve otherwise the defaults will take
     // precendence over the global dependencies which is against the rules.
     if (selected != defaultPubSpec) {
       // take the preferred ones from pubspec and the above
-      resolved = resolve(pubspecDependancies, resolved);
+      resolved = resolve(pubspecDependencies, resolved);
     }
 
     return resolved;
   }
 
-  List<Dependency> _getGlobalDependancies() {
-    var gd = GlobalDependancies();
+  List<Dependency> _getGlobalDependencies() {
+    var gd = GlobalDependencies();
     return gd.dependencies;
   }
 

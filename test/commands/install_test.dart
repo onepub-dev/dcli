@@ -1,5 +1,6 @@
 import 'package:dshell/dshell.dart' hide equals;
 import 'package:dshell/src/functions/is.dart';
+import 'package:dshell/src/pubspec/global_dependencies.dart';
 import 'package:dshell/src/script/entry_point.dart';
 import 'package:dshell/src/util/dshell_exception.dart';
 import 'package:test/test.dart';
@@ -64,5 +65,14 @@ void checkInstallStructure(TestPaths testPaths) {
 
   expect(exists('${testPaths.home}/.dshell/templates'), equals(true));
 
-  expect(exists('${testPaths.home}/.dshell/dependancies.yaml'), equals(true));
+  expect(exists('${testPaths.home}/.dshell/dependencies.yaml'), equals(true));
+
+  var content = read('${testPaths.home}/.dshell/dependencies.yaml').toList();
+  var expected = ['dependencies:'];
+
+  for (var dep in GlobalDependencies.defaultDependencies) {
+    expected.add('  ${dep.name}: ${dep.version}');
+  }
+
+  expect(content, equals(expected));
 }

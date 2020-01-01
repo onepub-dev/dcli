@@ -4,7 +4,7 @@ import 'package:dshell/src/script/commands/clean_all.dart';
 
 import '../../../dshell.dart';
 import '../../functions/which.dart';
-import '../../pubspec/global_dependancies.dart';
+import '../../pubspec/global_dependencies.dart';
 import '../command_line_runner.dart';
 import '../../settings.dart';
 import '../../util/ansi_color.dart';
@@ -43,10 +43,10 @@ class InstallCommand extends Command {
     var blue2 = blue(
         'Creating ${Settings().dshellPath}/dependencies.yaml with default packages.');
     print(blue2);
-    GlobalDependancies.createDefault();
+    GlobalDependencies.createDefault();
 
     print('Default packages are:');
-    for (var dep in GlobalDependancies.defaultDependencies) {
+    for (var dep in GlobalDependencies.defaultDependencies) {
       print('  ${dep.name}:${dep.version}');
     }
     print('');
