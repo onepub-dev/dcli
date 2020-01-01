@@ -42,6 +42,7 @@
   * [install](#install)
   * [run](#run)
   * [split](#split)
+* [Upgrading DShell](#upgrading-dshell)
 * [Internal workings](#Internal-workings)
   * [Virtual Projects](#virtual-projects)
   * [waitForEx](#waitForEx)
@@ -1287,6 +1288,15 @@ Example:
 dshell split my_script.dart
 ```
 
+# Upgrading DShell
+When a new version of DShell is released you will want to upgrade to the latest version.
+
+We run the same process as we did when installing DShell to upgraded it.
+
+```shell
+pub global activate dshell
+dshell install
+```
 
 # Internal workings
 For those of interest this section covers off how the internals of DShell function.
