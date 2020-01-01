@@ -42,7 +42,7 @@ class FileSync {
       line += char;
       priorChar = char;
     }
-    if (line.length == 0 && foundDelimiter == false) {
+    if (line.isEmpty && foundDelimiter == false) {
       line = null;
     }
     return line;
