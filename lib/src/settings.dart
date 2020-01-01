@@ -54,10 +54,15 @@ class Settings {
     var script = Platform.script;
 
     if (script.isScheme('file')) {
-      var dshellYaml = MyYaml.loadFromFile(
-          join(dirname(Platform.script.toFilePath()), '../pubspec.yaml'));
+      try {
+        var dshellYaml = MyYaml.loadFromFile(
+            join(dirname(Platform.script.toFilePath()), '../pubspec.yaml1'));
 
-      version = dshellYaml.getValue('version');
+        version = dshellYaml.getValue('version');
+      } catch (e) {
+        // looks like we can't determine the version
+        version = '1.0.28';
+      }
     } else {
       // we can't get Platform.script when we are in a unit test
       // so set the version to a default that makes it clear its bogus
