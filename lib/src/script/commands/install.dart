@@ -1,5 +1,7 @@
 import 'dart:io';
 
+import 'package:dshell/src/script/commands/clean_all.dart';
+
 import '../../../dshell.dart';
 import '../../functions/which.dart';
 import '../../pubspec/global_dependancies.dart';
@@ -64,6 +66,10 @@ class InstallCommand extends Command {
       print('');
       print(blue('Creating Cache directory in: ${Settings().cachePath}.'));
       createDir(Settings().cachePath);
+    } else {
+      print('');
+      print(blue("Running 'clean all' to upgrade your existing scripts"));
+      CleanAllCommand().run([], []);
     }
 
     print('');

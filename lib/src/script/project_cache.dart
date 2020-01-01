@@ -89,6 +89,8 @@ class ProjectCache {
     );
     try {
       waitForEx(Directory(Settings().cachePath).delete(recursive: true));
+      // now recreate the cache dir
+      initCache();
     } finally {}
   }
 }
