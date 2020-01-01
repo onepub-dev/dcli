@@ -13,7 +13,9 @@ export 'src/functions/head.dart' show head;
 export 'src/functions/is.dart' show isFile, isDirectory, exists;
 export 'src/functions/create_dir.dart' show createDir, CreateDirException;
 export 'src/functions/move.dart' show move, MoveException;
+export 'src/util/file_sort.dart' show FileSort, Column;
 export 'package:path/path.dart'
+
     hide
         PathMap,
         PathSet,
