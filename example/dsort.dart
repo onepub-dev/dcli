@@ -1,5 +1,7 @@
 #! /usr/bin/env dshell
 import 'dart:io';
+import 'package:args/args.dart';
+import 'package:dshell/dshell.dart';
 
 /// dsort
 ///
@@ -21,12 +23,6 @@ import 'dart:io';
 /// dsort -fd=, -ld=\n --sortkey=1nd,2,3sd,1-7nd unsorted.txt
 ///
 ///
-
-import 'package:args/args.dart';
-import 'package:args/command_runner.dart';
-import 'package:dshell/dshell.dart';
-import 'package:dshell/src/script/command_line_runner.dart';
-import 'package:dshell/src/util/file_sort.dart';
 
 const String fieldDelimiterOption = 'field-delimiter';
 const String lineDelimiterOption = 'line-delimiter';
