@@ -1,3 +1,15 @@
+## 1.0.28
+Change install so that it runs a cleanall so that dshell scripts use the latest version of dshell.
+
+## 1.0.27
+Improvements to dsort usage message and fixed a startup bug.
+
+## 1.0.26
+Looks like we still can't determine dshell version from the installed files.
+
+## 1.0.25
+Added dsort example which implements a merge sort.
+
 ## 1.0.24
 Updated notes on creating your first script and modify dshell create to facilitate the doco.
 More advanced examples will be introduced via templates.
