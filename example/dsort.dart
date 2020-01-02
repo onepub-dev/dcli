@@ -93,15 +93,19 @@ dsort --field-delimiter=<fd> --linedelimiter=<ld> --sortkey=<columns> file
  e.g. --sortkey=1sd
      --sortkey=1sd,2-5na,3md
 
-'Examples:
+${green("Examples:")}
  String sort, ascending, sort using the whole line
  ${green("dsort unsorted.txt")}
 
- Numeric sort, desending on the first column only using the default column delimiter ','
+ Numeric sort, desending on the first column only, using the default column delimiter ','
  ${green("dsort --sortkey=1nd unsorted.txt")}
 
- Descending, Numeric sort on col 1, then Ascending string sort on col2, then Descending numeric sort on cols 5-7 inclusive
- ${green("dsort --sortkey=1nd,2,3sd,5-7nd unsorted.txt")}
+ Descending, Numeric sort on col 1, 
+   then Ascending string sort on col 2, 
+  then Descending Case Sensitive String sort on col 3, 
+  then Descending numeric sort on cols 5-7 inclusive
+  using the column delimter ':'
+ ${green("dsort -f=: --sortkey=1nd,2,3Sd,5-7nd unsorted.txt")}
 ''');
 
   exit(-1);
