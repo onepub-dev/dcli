@@ -26,7 +26,7 @@ class PubSpecManager {
   /// Extract the pubspec annotation from the [project.script]
   ///
   /// If necessary, extract the pubspec annotation from a script file
-  /// and saves it to [path] as a pubspec.yaml file.
+  /// and saves it to [inputPath] as a pubspec.yaml file.
   ///
   void createVirtualPubSpec() {
     var script = project.script;
