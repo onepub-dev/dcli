@@ -7,18 +7,23 @@ import 'package:dshell/src/script/command_line_runner.dart';
 import 'package:dshell/src/util/waitForEx.dart';
 
 class FileSort {
-  final String filename;
+  final String inputPath;
+  final String outputPath;
   final List<Column> columns;
   final String fieldDelimiter;
   final String lineDelimiter;
+  final bool verbose;
   int maxColumn = -1;
 
-  FileSort(
-      this.filename, this.columns, this.fieldDelimiter, this.lineDelimiter) {
+  FileSort(this.inputPath, this.outputPath, this.columns, this.fieldDelimiter,
+      this.lineDelimiter,
+      {this.verbose = false}) {
     for (var column in columns) {
       if (maxColumn < column.ordinal) {
         maxColumn = column.ordinal;
       }
+
+    
     }
   }
 
@@ -40,7 +45,7 @@ class FileSort {
 
     var phaseFutures = <Future<void>>[];
 
-    await File(filename)
+    await File(inputPath)
         .openRead()
         .map(utf8.decode)
         .transform(LineSplitter())
@@ -78,9 +83,13 @@ class FileSort {
   }
 
   void replaceFileWithSortedList(List<Line> sorted) {
-    d.move(filename, '$filename.bak');
-    saveSortedList(filename, sorted, lineDelimiter);
-    d.delete('$filename.bak');
+    if (inputPath == outputPath) {
+      d.move(inputPath, '$inputPath.bak');
+      saveSortedList(outputPath, sorted, lineDelimiter);
+      d.delete('$inputPath.bak');
+    } else {
+      saveSortedList(outputPath, sorted, lineDelimiter);
+    }
   }
 
   /// Performs an insitu sort of the passed list.
@@ -101,14 +110,17 @@ class FileSort {
 
       if (maxColumn == 0) {
         // just compare the whole line.
-        result = columns[0].comparator.compareTo(lhs.line, rhs.line);
+        result =
+            columns[0].comparator.compareTo(columns[0], lhs.line, rhs.line);
       } else {
         // compare the defined columns
         for (var column in columns) {
           var direction =
               column.sortDirection == SortDirection.Ascending ? 1 : -1;
 
-          result = column.comparator.compareTo(lhsColumns[column.ordinal - 1],
+          result = column.comparator.compareTo(
+                  column,
+                  lhsColumns[column.ordinal - 1],
                   rhsColumns[column.ordinal - 1]) *
               direction;
           if (result != 0) {
@@ -235,9 +247,13 @@ class FileSort {
       }
     }
 
-    d.move(filename, '$filename.bak');
-    d.move(mergedPath, '$filename');
-    d.delete('$filename.bak');
+    if (inputPath == outputPath) {
+      d.move(inputPath, '$inputPath.bak');
+      d.move(mergedPath, inputPath);
+      d.delete('$inputPath.bak');
+    } else {
+      d.move(mergedPath, outputPath);
+    }
     d.deleteDir(phaseDirectory.path);
   }
 }
@@ -271,7 +287,7 @@ enum SortDirection { Ascending, Descending }
 class CaseInsensitiveSort implements ColumnComparator {
   const CaseInsensitiveSort();
   @override
-  int compareTo(String lhs, String rhs) {
+  int compareTo(Column column, String lhs, String rhs) {
     return lhs.toLowerCase().compareTo(rhs.toLowerCase());
   }
 }
@@ -279,7 +295,7 @@ class CaseInsensitiveSort implements ColumnComparator {
 class CaseSensitiveSort implements ColumnComparator {
   const CaseSensitiveSort();
   @override
-  int compareTo(String lhs, String rhs) {
+  int compareTo(Column column, String lhs, String rhs) {
     return lhs.compareTo(rhs);
   }
 }
@@ -287,9 +303,19 @@ class CaseSensitiveSort implements ColumnComparator {
 class NumericSort implements ColumnComparator {
   const NumericSort();
   @override
-  int compareTo(String lhs, String rhs) {
-    var numLhs = num.parse(lhs);
-    var numRhs = num.parse(rhs);
+  int compareTo(Column column, String lhs, String rhs) {
+    var numLhs = num.tryParse(lhs);
+    if (numLhs == null) {
+      throw FormatException(
+          'Column ${column.ordinal} contained a non-numeric value.', lhs);
+    }
+    var numRhs = num.tryParse(rhs);
+
+    if (numRhs == null) {
+      throw FormatException(
+          'Sort Column ${column.ordinal} contained a non-numeric value.', rhs);
+    }
+
     return numLhs.compareTo(numRhs);
   }
 }
@@ -297,7 +323,7 @@ class NumericSort implements ColumnComparator {
 class MonthSort implements ColumnComparator {
   const MonthSort();
   @override
-  int compareTo(String lhs, String rhs) {
+  int compareTo(Column column, String lhs, String rhs) {
     var mLhs = toMonthNo(lhs);
     var mRhs = toMonthNo(rhs);
     return mLhs.compareTo(mRhs);
@@ -334,7 +360,7 @@ class MonthSort implements ColumnComparator {
 }
 
 abstract class ColumnComparator {
-  int compareTo(String lhs, String rhs);
+  int compareTo(Column column, String lhs, String rhs);
 }
 
 class Column {
@@ -349,6 +375,11 @@ class Column {
     'a': SortDirection.Ascending,
     'd': SortDirection.Descending
   };
+
+  @override
+  String toString() {
+    return 'ordinal: $ordinal, comparator: ${comparator.runtimeType}, sortDirection: ${SortDirection}';
+  }
 
   /// [ordinal] is the column index using base 1
   /// An ordinal of 0 means that we are treating the entire
