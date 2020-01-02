@@ -56,7 +56,7 @@ class Settings {
     if (script.isScheme('file')) {
       try {
         var dshellYaml = MyYaml.loadFromFile(
-            join(dirname(Platform.script.toFilePath()), '../pubspec.yaml1'));
+            join(dirname(Platform.script.toFilePath()), '../pubspec.yaml'));
 
         version = dshellYaml.getValue('version');
       } catch (e) {
