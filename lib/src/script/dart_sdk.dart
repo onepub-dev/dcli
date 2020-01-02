@@ -33,12 +33,13 @@ class DartSdk {
   String get dart2NativePath => p.join(_sdkPath, 'bin', 'dart2native');
 
   Progress runDart2Native(
-      Script script, String outputDir, String workingDirectory) {
+      Script script, String outputDir, String workingDirectory,
+      {Progress progress}) {
     var runArgs = <String>[];
-    runArgs.add(script.scriptname);
+    runArgs.add(script.path);
     runArgs.add('--output=${outputDir}/${script.basename}');
 
-    return run(dart2NativePath, runArgs, workingDirectory);
+    return run(dart2NativePath, runArgs, workingDirectory, progress: progress);
   }
 
   Progress runPubGet(String workingDirectory, {Progress progress}) {
@@ -55,9 +56,11 @@ class DartSdk {
     try {
       forEach = progress ?? Progress.forEach();
 
+      Settings().verbose(
+          "running $processPath workingDir: $workingDirectory args: ${args.join(',')}");
       var runnable = RunnableProcess.fromList(processPath, args,
           workingDirectory: workingDirectory);
-      runnable.start();
+      runnable.start(runInShell: false);
       runnable.processUntilExit((line) => forEach.addToStdout(line),
           (line) => forEach.addToStderr(line));
     } finally {
