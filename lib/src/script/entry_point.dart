@@ -48,7 +48,7 @@ class EntryPoint {
       return 1;
     } catch (e, stackTrace) {
       var impl = StackTraceImpl.fromStackTrace(stackTrace);
-      StdLog.stderr('Exception occured: ${e}');
+      StdLog.stderr('Exception occured: ${e} of type ${e.runtimeType}');
       StdLog.stderr('Stacktrace: ${impl.formatStackTrace()}');
     }
 
