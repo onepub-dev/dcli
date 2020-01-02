@@ -56,10 +56,18 @@ class CompileCommand extends Command {
       var project = VirtualProject(Settings().cachePath, script);
 
       // by default we clean the project unless the -nc flagg is passed.
+      // howver if the project doesn't exist we force a clean
       if (!flagSet.isSet(NoCleanFlag())) {
         // make certain the project is upto date.
         project.clean();
       }
+
+      if (!exists(project.path)) {
+        print("Running 'clean' as Virtual Project does not exist.");
+      }
+
+      Settings().verbose(
+          "\nCompling with pubspec.yaml:\n${read(join(project.path, 'pubspec.yaml')).toList().join('\n')}\n");
 
       DartSdk().runDart2Native(script, script.scriptDirectory, project.path,
           progress:
