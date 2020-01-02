@@ -77,7 +77,7 @@ class Script {
 import 'package:dshell/dshell.dart';
 
 void main() {
-  print("${PithyGreetings.random()}");
+  print('Hello World');
 }
 """;
   }
