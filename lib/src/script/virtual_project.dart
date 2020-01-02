@@ -1,4 +1,6 @@
 import 'dart:io';
+import 'package:dshell/src/util/ansi_color.dart';
+
 import '../functions/is.dart';
 import '../pubspec/pubspec.dart';
 import '../pubspec/pubspec_file.dart';
@@ -112,7 +114,11 @@ class VirtualProject {
       File(_virtualProjectPath).deleteSync(recursive: true);
     }
 
-    createProject();
+    try {
+      createProject();
+    } on PubGetException catch (e) {
+      print(red("\ndshell clean failed due to the 'pub get' call failing."));
+    }
   }
 
   /// Causes a pub get to be run against the project.
