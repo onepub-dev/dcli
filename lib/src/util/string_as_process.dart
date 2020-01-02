@@ -80,6 +80,9 @@ extension StringAsProcess on String {
     return Pipe(lhsRunnable, rhsRunnable);
   }
 
+  // Treat the [this]  as the name of a file and
+  // write [line] to the file terminated by [newline].
+  // [newline] defaults to '\n'.
   void write(String line, {String newline = '\n'}) {
     var sink = FileSync(this);
     sink.write(line, newline: newline);
