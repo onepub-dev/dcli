@@ -30,8 +30,8 @@ class ScriptRunner {
         'Executing: ${Platform.executable} $vmArgs, in: ${project.script.scriptDirectory}');
 
     // Execute the script
-    final process = waitFor<Process>(Process.start(Platform.executable, vmArgs,
-        workingDirectory: project.script.scriptDirectory));
+    final process =
+        waitFor<Process>(Process.start(Platform.executable, vmArgs));
 
     // Pipe std out and in
     final StreamSubscription stderrSub =
