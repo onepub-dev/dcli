@@ -34,8 +34,6 @@ T waitForEx<T>(Future<T> future) {
     if (exception is DShellException) {
       throw exception.copyWith(stackTrace);
     } else {
-      Log.w(
-          'Rethrowing a non DShellException ${exception}- should we wrap this?');
       throw DShellException.from(exception, stackTrace);
     }
   }
