@@ -20,11 +20,15 @@ void main() {
 
     // Create a directory to hold poems for review
     // creating  any needed parents.
-    createDir(poetryForReviews, recursive: true);
+    if (!exists(poetryForReviews)) {
+      createDir(poetryForReviews, recursive: true);
+    }
 
     // Creating a directory to hold our published work.
     var poetryPublished = join(baseDir, 'published');
-    createDir(poetryPublished, recursive: true);
+    if (!exists(poetryPublished)) {
+      createDir(poetryPublished, recursive: true);
+    }
 
     // Create a self edifying poem.
     var poem = 'poem.txt';

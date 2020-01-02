@@ -9,7 +9,9 @@ void main() {
 
   t.test('Try everything', () {
     TestZone().run(() {
-      createDir(TEST_ROOT, recursive: true);
+      if (!exists(TEST_ROOT)) {
+        createDir(TEST_ROOT, recursive: true);
+      }
 
       try {
         push(TEST_ROOT);

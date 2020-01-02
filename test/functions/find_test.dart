@@ -12,13 +12,9 @@ void main() {
     t.test('Search for *.txt files in top directory ', () {
       TestZone().run(() {
         var paths = setup();
-        var found =
-            find('*.txt', root: paths.top, recursive: false).toList();
+        var found = find('*.txt', root: paths.top, recursive: false).toList();
         found.sort();
-        var expected = [
-          join(paths.top, 'one.txt'),
-          join(paths.top, 'two.txt')
-        ];
+        var expected = [join(paths.top, 'one.txt'), join(paths.top, 'two.txt')];
         expected.sort();
         t.expect(found, t.equals(expected));
       });
@@ -83,7 +79,9 @@ Paths setup() {
   var paths = Paths();
 
   // Create some the test dirs.
-  createDir(paths.bottom, recursive: true);
+  if (!exists(paths.bottom)) {
+    createDir(paths.bottom, recursive: true);
+  }
 
   // Create test files
 

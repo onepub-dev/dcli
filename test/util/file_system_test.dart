@@ -20,9 +20,11 @@ void main() {
       print('testzone cwd: ${Directory.current}');
 
       Directory.current = '/';
-      var dir = 'mfs.test';
+      var dir = '/tmp/mfs.test';
       // Directory(dir).createSync();
-      createDir(dir);
+      if (!exists(dir)) {
+        createDir(dir);
+      }
       cd(dir);
       print('testzone post cwd: ${pwd}');
     });

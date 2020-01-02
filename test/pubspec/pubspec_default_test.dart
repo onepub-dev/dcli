@@ -134,12 +134,16 @@ void runTest(String annotation, String main, List<Dependency> expected) {
     deleteDir(Settings().dshellPath, recursive: true);
   }
 
-  createDir(Settings().dshellPath);
+  if (!exists(Settings().dshellPath)) {
+    createDir(Settings().dshellPath);
+  }
   GlobalDependencies.createDefault();
 
   ProjectCache().initCache();
 
-  createDir(scriptDirectory, recursive: true);
+  if (!exists(scriptDirectory)) {
+    createDir(scriptDirectory, recursive: true);
+  }
   if (annotation != null) {
     scriptPath.append(annotation);
   }

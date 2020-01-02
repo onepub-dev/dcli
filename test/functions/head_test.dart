@@ -17,7 +17,9 @@ void main() {
         if (exists(testFile)) {
           delete(testFile);
         }
-        createDir(TEST_ROOT, recursive: true);
+        if (!exists(TEST_ROOT)) {
+          createDir(TEST_ROOT, recursive: true);
+        }
         var file = FileSync(testFile, fileMode: FileMode.write);
         for (var i = 0; i < 10; i++) {
           file.append('Line ${i} is here');

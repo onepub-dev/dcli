@@ -7,7 +7,9 @@ void createLineFile(String testFile, int lines) {
     delete(testFile);
   }
 
-  createDir(dirname(testFile));
+  if (!exists(dirname(testFile))) {
+    createDir(dirname(testFile));
+  }
 
   var file = FileSync(testFile);
   for (var i = 0; i < 10; i++) {
