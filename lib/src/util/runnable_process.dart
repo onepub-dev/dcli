@@ -2,6 +2,8 @@ import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
 
+import 'package:dshell/src/util/stack_trace_impl.dart';
+
 import 'waitForEx.dart';
 import '../../dshell.dart';
 import 'dshell_exception.dart';
@@ -29,11 +31,11 @@ class RunnableProcess {
 
   String get cmdLine => parsed.cmd + ' ' + parsed.args.join(' ');
 
-  void start() {
+  void start({bool runInShell = false}) {
     var workdir = workingDirectory;
     workdir ??= Directory.current.path;
     fProcess = Process.start(parsed.cmd, parsed.args,
-        runInShell: false, workingDirectory: workdir);
+        runInShell: runInShell, workingDirectory: workdir);
   }
 
   void pipeTo(RunnableProcess stdin) {
@@ -114,5 +116,11 @@ class ParsedCliCommand {
 class RunException extends DShellException {
   int exitCode;
   String reason;
-  RunException(this.exitCode, this.reason) : super(reason);
+  RunException(this.exitCode, this.reason, {StackTraceImpl stackTrace})
+      : super(reason, stackTrace);
+
+  @override
+  RunException copyWith(StackTraceImpl stackTrace) {
+    return RunException(exitCode, reason, stackTrace: stackTrace);
+  }
 }
