@@ -1,3 +1,10 @@
+## 1.0.30
+Numerous dsort bug fixeds.
+Fixed a bug with dshell incorrectly changing the working directory when a script is launched.
+
+## 1.0.29
+Fixed bug where dsort was dependant on internal dshell classes.
+
 ## 1.0.28
 Change install so that it runs a cleanall so that dshell scripts use the latest version of dshell.
 
