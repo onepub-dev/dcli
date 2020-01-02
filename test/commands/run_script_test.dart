@@ -1,4 +1,4 @@
-@Timeout(Duration(seconds: 600))
+@Timeout(Duration(seconds: 610))
 
 import 'package:dshell/dshell.dart' hide equals;
 import 'package:test/test.dart';
@@ -12,11 +12,13 @@ void main() {
 
       'test/test_scripts/hello_world.dart'.forEach((line) => results.add(line));
 
-      expect(results, equals(getExpected()));
+      // if clean hasn't been run then we have the results of a pub get in the the output.
+
+      expect(getExpected(), anyOf([contains(results), equals(results)]));
     });
   });
 }
 
 List<String> getExpected() {
-  return ['Hello world'];
+  return ['Hello World'];
 }
