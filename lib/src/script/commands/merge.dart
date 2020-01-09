@@ -10,7 +10,7 @@ class MergeCommand extends Command {
 
   @override
   int run(List<Flag> selectedFlags, List<String> subarguments) {
-    // TODO: implement run
+    // TODO: implement merge
     return 0;
   }
 
