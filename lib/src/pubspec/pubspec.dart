@@ -38,7 +38,7 @@ class PubSpecImpl implements PubSpec {
 
     for (var dependency in dependencies) {
       if (dependency.isPath) {
-        ref[dependency.name] = pub.PathReference(dependency.version);
+        ref[dependency.name] = pub.PathReference(dependency.path);
       } else {
         ref[dependency.name] = pub.HostedReference.fromJson(dependency.version);
       }
