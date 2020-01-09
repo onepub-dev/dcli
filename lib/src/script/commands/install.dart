@@ -1,8 +1,9 @@
 import 'dart:io';
 
+import 'package:dshell/dshell.dart';
+import 'package:dshell/src/functions/env.dart';
 import 'package:dshell/src/script/commands/clean_all.dart';
 
-import '../../../dshell.dart';
 import '../../functions/which.dart';
 import '../../pubspec/global_dependencies.dart';
 import '../command_line_runner.dart';
@@ -72,6 +73,16 @@ class InstallCommand extends Command {
       CleanAllCommand().run([], []);
     }
 
+    // create the bin directory
+    var binPath = Settings().dshellBinPath;
+    if (!exists(binPath)) {
+      print('');
+      print(blue('Creating bin directory in: $binPath.'));
+      createDir(binPath);
+
+      addBinToPath(binPath);
+    }
+
     print('');
 
     // print OS version.
@@ -110,13 +121,44 @@ class InstallCommand extends Command {
 
   @override
   String description() => """There are two forms of dshell isntall:
-      Running 'dshell install' completes the installation of dshell.
-      
-      EXPERIMENTAL:
-      Running 'dshell install <script> compiles the given script to a native executable and installs
-         the script to your path. Only required if you want super fast execution.
-         """;
+            Running 'dshell install' completes the installation of dshell.
+            
+            EXPERIMENTAL:
+            Running 'dshell install <script> compiles the given script to a native executable and installs
+               the script to your path. Only required if you want super fast execution.
+               """;
 
   @override
   String usage() => 'Install | install <script path.dart>';
+
+  void addBinToPath(String binPath) {
+    // only add the path if its not already present
+    if (!isOnPath(binPath)) {
+      var link =
+          'https://dartcode.org/docs/configuring-path-and-environment-variables/';
+      // see
+      // https://dartcode.org/docs/configuring-path-and-environment-variables/
+      //
+      if (Platform.isMacOS) {
+        '/etc/path.d/dshell'.write(binPath);
+      } else if (Settings().isLinux) {
+        var profile = join(Settings().homePath, '.profile');
+        if (exists(profile)) {
+          var export = 'export PATH=\$PATH:$binPath';
+          if (!read(profile).toList().contains(export)) {
+            profile.append(export);
+          }
+        }
+      } else if (Settings().isWindows) {
+        print(red(
+            "Please read the following link for details on how to add '$binPath' to your path."));
+        print('$link');
+      }
+    }
+  }
+
+  @override
+  List<String> completion(String word) {
+    return <String>[];
+  }
 }

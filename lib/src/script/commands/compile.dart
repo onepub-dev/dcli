@@ -14,7 +14,7 @@ import '../../util/runnable_process.dart';
 class CompileCommand extends Command {
   static const String NAME = 'compile';
 
-  List<Flag> compileFlags = [NoCleanFlag()];
+  List<Flag> compileFlags = [NoCleanFlag(), InstallFlag()];
 
   /// holds the set of flags passed to the compile command.
   Flags flagSet = Flags();
@@ -27,6 +27,7 @@ class CompileCommand extends Command {
 
     var scriptIndex = 0;
 
+    // check for any flags
     for (var i = 0; i < subarguments.length; i++) {
       final subargument = subarguments[i];
 
@@ -64,6 +65,7 @@ class CompileCommand extends Command {
 
       if (!exists(project.path)) {
         print("Running 'clean' as Virtual Project does not exist.");
+        project.clean();
       }
 
       Settings().verbose(
@@ -72,6 +74,11 @@ class CompileCommand extends Command {
       DartSdk().runDart2Native(script, script.scriptDirectory, project.path,
           progress:
               Progress((line) => print(line), stderr: (line) => print(line)));
+
+      if (flagSet.isSet(InstallFlag())) {
+        copy(join(script.scriptDirectory, script.basename),
+            Settings().dshellBinPath);
+      }
     } on RunException catch (e) {
       exitCode = e.exitCode;
     }
@@ -90,6 +97,18 @@ class CompileCommand extends Command {
       If set the project will NOT be cleaned before compiling.
       Use the noclean option to speed up compilation when you know your project structure is up to date.
       ''';
+
+  @override
+  List<String> completion(String word) {
+    var dartScripts = find('*.dart', recursive: false).toList();
+    var results = <String>[];
+    for (var script in dartScripts) {
+      if (script.startsWith(word)) {
+        results.add(script);
+      }
+    }
+    return results;
+  }
 }
 
 class NoCleanFlag extends Flag {
@@ -103,5 +122,19 @@ class NoCleanFlag extends Flag {
   @override
   String description() {
     return "Stops the compile from running 'dshell clean' before compiling.";
+  }
+}
+
+class InstallFlag extends Flag {
+  static const NAME = 'install';
+
+  InstallFlag() : super(NAME);
+
+  @override
+  String get abbreviation => 'i';
+
+  @override
+  String description() {
+    return 'Installs the compiled script into ${Settings().dshellBinPath}';
   }
 }

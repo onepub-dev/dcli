@@ -1,3 +1,5 @@
+import 'package:dshell/dshell.dart';
+
 import '../../settings.dart';
 import '../command_line_runner.dart';
 import '../flags.dart';
@@ -35,4 +37,16 @@ class CleanCommand extends Command {
   @override
   String description() =>
       "Deletes the project cache for <scriptname.dart> and forces a rebuild of the script's cache.";
+
+  @override
+  List<String> completion(String word) {
+    var dartScripts = find('*.dart', recursive: false).toList();
+    var results = <String>[];
+    for (var script in dartScripts) {
+      if (script.startsWith(word)) {
+        results.add(script);
+      }
+    }
+    return results;
+  }
 }

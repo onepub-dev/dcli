@@ -1,3 +1,5 @@
+import 'package:dshell/dshell.dart';
+
 import '../../pubspec/pubspec_manager.dart';
 
 import '../../settings.dart';
@@ -62,4 +64,16 @@ class RunCommand extends Command {
   //   Script script = Script.fromArg(selectedFlags.values.toList(), argument);
   //   script.run(selectedFlags, subarguments);
   // }
+
+  @override
+  List<String> completion(String word) {
+    var dartScripts = find('*.dart', recursive: false).toList();
+    var results = <String>[];
+    for (var script in dartScripts) {
+      if (script.startsWith(word)) {
+        results.add(script);
+      }
+    }
+    return results;
+  }
 }

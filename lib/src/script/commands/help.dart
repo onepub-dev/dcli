@@ -59,4 +59,19 @@ class HelpCommand extends Command {
       print('   ' + command.description());
     }
   }
+
+  @override
+  List<String> completion(String word) {
+    // find any command that matches the 'word' using it as prefix
+    var results = <String>[];
+
+    var commands = Commands.applicationCommands;
+    for (var command in commands) {
+      if (command.name.startsWith(word)) {
+        results.add(command.name);
+      }
+    }
+
+    return results;
+  }
 }

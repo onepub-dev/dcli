@@ -52,4 +52,13 @@ abstract class Command {
   String usage();
 
   String description();
+
+  /// Used by the dshell_completion app to
+  /// provide command line completion to bash
+  /// Each command should return of list of arguments
+  /// suitable for the command.
+  /// e.g. dshell clean <word> should return
+  /// a list of dshell scripts in the current directory
+  /// that match the word prefix.
+  List<String> completion(String word);
 }

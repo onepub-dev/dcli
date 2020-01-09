@@ -61,4 +61,9 @@ class CreateCommand extends Command {
 
   @override
   String usage() => 'create <script path.dart>';
+
+  @override
+  List<String> completion(String word) {
+    return <String>[];
+  }
 }
