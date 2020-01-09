@@ -12,6 +12,16 @@ import '../util/log.dart';
 ///
 String env(String name) => Env().env(name);
 
+/// Tests if the given [path] is contained
+/// in the OS's PATH environment variable.
+bool isOnPath(String path) => Env().isOnPath(path);
+
+/// Returns the list of directory paths that are contained
+/// in the OS's PATH environment variable.
+/// They are returned in the same order that they appear within
+/// the PATH environment variable (as order is important.)
+List<String> get PATH => Env().paths;
+
 ///
 /// Internally sets an environment varaible.
 /// NOTE: this does NOT affect the parent
@@ -39,6 +49,28 @@ class Env extends DShellFunction {
       Log.d('name:  ${name}');
     }
     return envVars[name];
+  }
+
+  List<String> get paths {
+    var pathEnv = env('PATH');
+
+    var separator = ':';
+
+    if (Platform.isWindows) {
+      separator = ';';
+    }
+    return pathEnv.split(separator);
+  }
+
+  bool isOnPath(String binPath) {
+    var found = false;
+    for (var path in paths) {
+      if (path == binPath) {
+        found = true;
+        break;
+      }
+    }
+    return found;
   }
 
   void setEnv(String name, String value) => envVars[name] = value;

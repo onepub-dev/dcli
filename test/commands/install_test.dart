@@ -1,10 +1,12 @@
 import 'package:dshell/dshell.dart' hide equals;
-import 'package:dshell/src/functions/is.dart';
 import 'package:dshell/src/pubspec/global_dependencies.dart';
+import 'package:dshell/src/script/commands/install.dart';
 import 'package:dshell/src/script/entry_point.dart';
 import 'package:dshell/src/util/dshell_exception.dart';
+import 'package:mockito/mockito.dart';
 import 'package:test/test.dart';
 
+import '../mocks/mock_settings.dart';
 import '../util/test_fs_zone.dart';
 import '../util/test_paths.dart';
 import '../util/wipe.dart';
@@ -52,6 +54,51 @@ void main() {
         }
         expect(exists('${paths.home}/.dshell'), equals(false));
       });
+    });
+
+    test('set env PATH Windows', () {
+      var settings = Settings();
+      var mockSettings = MockSettings();
+
+      // windows no change expected
+      when(mockSettings.isWindows).thenReturn(true);
+      when(mockSettings.isLinux).thenReturn(false);
+      when(mockSettings.isMacOS).thenReturn(false);
+      when(mockSettings.dshellBinPath).thenReturn(settings.dshellBinPath);
+      when(mockSettings.debug_on).thenReturn(false);
+      when(mockSettings.HOME).thenReturn('c:\\windows\\userdata');
+
+      Settings.setMock(mockSettings);
+
+      var install = InstallCommand();
+      install.addBinToPath(mockSettings.dshellBinPath);
+
+      expect(PATH, isNot(contains(settings.dshellBinPath)));
+    });
+
+    test('set env PATH Linux', () {
+      var settings = Settings();
+      var mockSettings = MockSettings();
+
+      // windows no change expected
+      when(mockSettings.isWindows).thenReturn(false);
+      when(mockSettings.isLinux).thenReturn(true);
+      when(mockSettings.isMacOS).thenReturn(false);
+      when(mockSettings.dshellBinPath).thenReturn(settings.dshellBinPath);
+      when(mockSettings.debug_on).thenReturn(false);
+      when(mockSettings.HOME).thenReturn(settings.HOME);
+
+      Settings.setMock(mockSettings);
+
+      //p.Context(style: Style.posix);
+
+      var install = InstallCommand();
+      install.addBinToPath(mockSettings.dshellBinPath);
+
+      var export = 'export PATH=\$PATH:${settings.dshellBinPath}';
+
+      expect(
+          read(join(settings.HOME, '.profile')).toList(), contains(export));
     });
 
     test('With Lib', () {});

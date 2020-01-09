@@ -21,9 +21,7 @@ void main(List<String> args) {
 
   var command = results.rest[0];
 
-  var paths = env('PATH').split(':');
-
-  for (var path in paths) {
+  for (var path in PATH) {
     if (verbose) {
       print('Searching: ${canonicalize(path)}');
     }

@@ -16,7 +16,7 @@ class TestPaths {
   TestPaths(String relativeScriptPath) {
     var cwd = Directory.current.path;
     testRoot = TEST_ROOT;
-    home = env('HOME');
+    home = Settings().HOME;
     scriptDir = join(cwd, relativeScriptPath);
     scriptPath = dirname(scriptDir);
     scriptName = basenameWithoutExtension(scriptDir);

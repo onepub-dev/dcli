@@ -5,7 +5,7 @@ export 'src/functions/chmod.dart' show chmod, ChModException;
 export 'src/functions/copy.dart' show copy, CopyException;
 export 'src/functions/delete.dart' show delete, DeleteException;
 export 'src/functions/echo.dart' show echo;
-export 'src/functions/env.dart' show env;
+export 'src/functions/env.dart' show env, PATH, isOnPath;
 export 'src/functions/fileList.dart' show fileList;
 export 'src/util/file_sync.dart';
 export 'src/functions/find.dart' show find;
@@ -14,8 +14,8 @@ export 'src/functions/is.dart' show isFile, isDirectory, exists;
 export 'src/functions/create_dir.dart' show createDir, CreateDirException;
 export 'src/functions/move.dart' show move, MoveException;
 export 'src/util/file_sort.dart' show FileSort, Column;
-export 'package:path/path.dart'
 
+export 'package:path/path.dart'
     hide
         PathMap,
         PathSet,

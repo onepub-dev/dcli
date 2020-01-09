@@ -142,7 +142,7 @@ class InstallCommand extends Command {
       if (Platform.isMacOS) {
         '/etc/path.d/dshell'.write(binPath);
       } else if (Settings().isLinux) {
-        var profile = join(Settings().homePath, '.profile');
+        var profile = join(Settings().HOME, '.profile');
         if (exists(profile)) {
           var export = 'export PATH=\$PATH:$binPath';
           if (!read(profile).toList().contains(export)) {

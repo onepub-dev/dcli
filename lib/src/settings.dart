@@ -22,7 +22,17 @@ class Settings {
   /// configuration files such as the cache.
   String _dshellPath;
 
+  String dshellDir = '.dshell';
+
+  /// When you run dshell install <script> the script
+  /// is moved to this path.
+  /// The dshellBinPath is added to the OS's path
+  /// allowing the installed scripts to be run from anywhere
+  String _dshellBinPath;
+
   String get dshellPath => _dshellPath;
+
+  String get dshellBinPath => _dshellBinPath;
 
   String get templatePath => p.join(dshellPath, templateDir);
 
@@ -49,7 +59,6 @@ class Settings {
 
   Settings.init({
     this.appname = 'dshell',
-    String dshellDir = '.dshell',
   }) {
     var script = Platform.script;
 
@@ -71,22 +80,40 @@ class Settings {
 
     _self = this;
 
-    var home = userHomePath;
+    var home = HOME;
     _dshellPath = p.absolute(p.join(home, dshellDir));
+    _dshellBinPath = p.absolute(p.join(home, dshellDir, 'bin'));
   }
 
   ///
   /// Gets the path to the users home directory
-  /// using the enviornment var HOME
-  String get userHomePath {
-    var home = env('HOME');
+  /// using the enviornment var appropriate for the user's OS.
+  String get HOME {
+    String home;
+
+    if (Settings().isWindows) {
+      home = env('AppData');
+    } else {
+      home = env('HOME');
+    }
 
     if (home == null) {
-      throw DShellException(
-          "Unable to find the 'HOME' enviroment variable. Please ensure it is set and try again.");
+      if (Settings().isWindows) {
+        throw DShellException(
+            "Unable to find the 'AppData' enviroment variable. Please ensure it is set and try again.");
+      } else {
+        throw DShellException(
+            "Unable to find the 'HOME' enviroment variable. Please ensure it is set and try again.");
+      }
     }
     return home;
   }
+
+  bool get isMacOS => Platform.isMacOS;
+
+  bool get isLinux => Platform.isLinux;
+
+  bool get isWindows => Platform.isWindows;
 
   bool isFlagSet(Flag flag) {
     return _selectedFlags.containsValue(flag);
@@ -124,6 +151,10 @@ class Settings {
     if (isVerbose) {
       print(string);
     }
+  }
+
+  static void setMock(Settings mockSettings) {
+    _self = mockSettings;
   }
 }
 

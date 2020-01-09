@@ -3,6 +3,7 @@ import '../util/progress.dart';
 import 'package:path/path.dart' as p;
 
 import 'dshell_function.dart';
+import 'env.dart';
 
 ///
 /// Searches the PATH for the location of the application
@@ -52,9 +53,7 @@ class Which extends DShellFunction {
     try {
       forEach = progress ?? Progress.forEach();
 
-      var paths = env('PATH').split(':');
-
-      for (var path in paths) {
+      for (var path in PATH) {
         if (verbose) {
           forEach.addToStdout('Searching: ${p.canonicalize(path)}');
         }

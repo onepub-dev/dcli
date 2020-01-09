@@ -101,7 +101,7 @@ class Paths {
   String testFile;
 
   Paths() {
-    home = env('HOME');
+    home = Settings().HOME;
     pathTestDir = join(TEST_ROOT, TEST_DIR, 'pathTestDir');
     testExtension = '.jpg';
     testBaseName = 'fred';
