@@ -11,8 +11,9 @@ void main(List<String> args) {
   var priorCommand = Commands.findCommand(
       priorWord, Commands.asMap(Commands.applicationCommands));
 
+  var results = <String>[];
   if (priorCommand != null) {
-    priorCommand.completion(word);
+    results = priorCommand.completion(word);
   } else {
     // find any command that matches the 'word' using it as prefix
     var results = <String>[];
@@ -22,9 +23,8 @@ void main(List<String> args) {
         results.add(command.name);
       }
     }
-
-    for (var result in results) {
-      print(result);
-    }
+  }
+  for (var result in results) {
+    print(result);
   }
 }
