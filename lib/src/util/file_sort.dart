@@ -22,8 +22,6 @@ class FileSort {
       if (maxColumn < column.ordinal) {
         maxColumn = column.ordinal;
       }
-
-    
     }
   }
 
