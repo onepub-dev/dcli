@@ -1,5 +1,3 @@
-import 'dart:collection';
-
 import 'package:yaml/yaml.dart';
 
 import '../script/dependency.dart';
