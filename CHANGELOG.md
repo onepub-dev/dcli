@@ -1,3 +1,15 @@
+## 1.0.34
+Added support of dependency_overrides in dependency.yaml and pubspec annotations.
+Improved support for windows and mac.
+Exposed additional help env methods PATH and HOME.
+Initial work on command line completion for dshell.
+
+## 1.0.32
+updated to latest verson of recase.
+
+## 1.0.31
+Fixed the pubspec package dependancy problem.
+
 ## 1.0.30
 Numerous dsort bug fixeds.
 Fixed a bug with dshell incorrectly changing the working directory when a script is launched.
