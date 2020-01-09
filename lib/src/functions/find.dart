@@ -91,7 +91,7 @@ class Find extends DShellFunction {
       for (var entity in all) {
         var type = FileSystemEntity.typeSync(entity.path);
         if (types.contains(type) && matcher.match(entity.path)) {
-          forEach.addToStdout(entity.path);
+          forEach.addToStdout(normalize(entity.path));
         }
       }
     } finally {
