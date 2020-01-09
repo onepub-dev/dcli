@@ -27,8 +27,9 @@ dev_dependencies:
   pedantic: ^1.8.0
 
   ##
-  ## To compile
+  ## To install locally 
   ## pub global activate --source path .
 executables:
   dshell: dshell
+  dshell_completion: dshell_completion
 
