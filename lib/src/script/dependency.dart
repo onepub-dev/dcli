@@ -5,7 +5,18 @@ class Dependency extends Equatable {
 
   final String version;
 
-  const Dependency(this.name, this.version);
+  final bool _isPath;
+  final String path;
+
+  const Dependency(this.name, this.version)
+      : _isPath = false,
+        path = null;
+
+  const Dependency.fromPath(this.name, this.path)
+      : _isPath = true,
+        version = null;
+
+  bool get isPath => _isPath;
 
   static Dependency fromLine(String line) {
     Dependency dep;
@@ -34,6 +45,6 @@ class Dependency extends Equatable {
 
   @override
   String toString() {
-    return '$name : $version';
+    return '$name : ${isPath ? path : version}';
   }
 }

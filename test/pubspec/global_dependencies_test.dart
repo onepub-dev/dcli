@@ -22,4 +22,30 @@ dependencies:
     var gd = GlobalDependencies.fromString(content);
     expect(gd.dependencies, equals(expected));
   });
+
+  test('dependency_overrides', () {
+    var content = '''
+dependencies:
+  args: ^1.5.2
+  collection: ^1.14.12
+  file_utils: ^0.1.3
+  path: ^1.6.4
+dependency_overrides:
+  dshell:
+    path: /home/dshell
+  args:
+    path: /home/args
+  ''';
+
+    var expected = [
+      Dependency.fromPath('args', '/home/args'),
+      Dependency('collection', '^1.14.12'),
+      Dependency('file_utils', '^0.1.3'),
+      Dependency('path', '^1.6.4'),
+      Dependency.fromPath('dshell', '/home/dshell'),
+    ];
+
+    var gd = GlobalDependencies.fromString(content);
+    expect(gd.dependencies, equals(expected));
+  });
 }

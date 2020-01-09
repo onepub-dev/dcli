@@ -1,5 +1,7 @@
 import 'dart:io';
 
+import 'package:dshell/src/script/command_line_runner.dart';
+
 import '../functions/read.dart';
 import '../script/dependency.dart';
 import '../util/waitForEx.dart';
@@ -32,10 +34,14 @@ class PubSpecImpl implements PubSpec {
 
   @override
   set dependencies(List<Dependency> dependencies) {
-    var ref = <String, pub.HostedReference>{};
+    var ref = <String, pub.DependencyReference>{};
 
     for (var dependency in dependencies) {
-      ref[dependency.name] = pub.HostedReference.fromJson(dependency.version);
+      if (dependency.isPath) {
+        ref[dependency.name] = pub.PathReference(dependency.version);
+      } else {
+        ref[dependency.name] = pub.HostedReference.fromJson(dependency.version);
+      }
     }
 
     pubspec = pubspec.copy(dependencies: ref);
@@ -48,9 +54,16 @@ class PubSpecImpl implements PubSpec {
     var map = pubspec.dependencies;
 
     for (var name in map.keys) {
-      var package = map[name] as pub.HostedReference;
+      var package = map[name];
 
-      depends.add(Dependency(name, package.versionConstraint.toString()));
+      if (package is pub.HostedReference) {
+        depends.add(Dependency(name, package.versionConstraint.toString()));
+      } else if (package is pub.PathReference) {
+        depends.add(Dependency.fromPath(name, package.path));
+      } else {
+        throw InvalidArguments(
+            'Unexpected Dependency type ${package.runtimeType}');
+      }
     }
 
     return depends;
