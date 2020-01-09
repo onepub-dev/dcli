@@ -16,36 +16,41 @@ class Settings {
   static const cacheDir = 'cache';
 
   final InternalSettings _settings = InternalSettings();
+  final String appname;
 
-  /// The directory where we store all of dshell's
-  /// configuration files such as the cache.
+  String version;
+
+  final _selectedFlags = <String, Flag>{};
+
   String _dshellPath;
 
   String dshellDir = '.dshell';
+
+  String _dshellBinPath;
+
+  /// The directory where we store all of dshell's
+  /// configuration files such as the cache.
+  String get dshellPath => _dshellPath;
 
   /// When you run dshell install <script> the script
   /// is moved to this path.
   /// The dshellBinPath is added to the OS's path
   /// allowing the installed scripts to be run from anywhere
-  String _dshellBinPath;
-
-  String get dshellPath => _dshellPath;
-
   String get dshellBinPath => _dshellBinPath;
 
+  /// path to the dshell template directory.
   String get templatePath => p.join(dshellPath, templateDir);
 
+  /// path to the dshell cache directory.
   String get cachePath => p.join(dshellPath, cacheDir);
 
-  final String appname;
-
-  String version;
-
-  // the list of flags selected via the cli.
-  final _selectedFlags = <String, Flag>{};
-
+  /// the list of flags selected via the cli.
   List<Flag> get selectedFlags => _selectedFlags.values.toList();
 
+  /// returns true if the -v (verbose) flag was set on the
+  /// dshell command line.
+  /// e.g.
+  /// dshell -v clean
   bool get isVerbose => isFlagSet(VerboseFlag());
 
   factory Settings() {
