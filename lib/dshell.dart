@@ -5,7 +5,7 @@ export 'src/functions/chmod.dart' show chmod, ChModException;
 export 'src/functions/copy.dart' show copy, CopyException;
 export 'src/functions/delete.dart' show delete, DeleteException;
 export 'src/functions/echo.dart' show echo;
-export 'src/functions/env.dart' show env, PATH, isOnPath;
+export 'src/functions/env.dart' show env, HOME, PATH, isOnPath;
 export 'src/functions/fileList.dart' show fileList;
 export 'src/util/file_sync.dart';
 export 'src/functions/find.dart' show find;

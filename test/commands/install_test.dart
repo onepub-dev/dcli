@@ -1,4 +1,5 @@
 import 'package:dshell/dshell.dart' hide equals;
+import 'package:dshell/src/functions/env.dart';
 import 'package:dshell/src/pubspec/global_dependencies.dart';
 import 'package:dshell/src/script/commands/install.dart';
 import 'package:dshell/src/script/entry_point.dart';
@@ -6,6 +7,7 @@ import 'package:dshell/src/util/dshell_exception.dart';
 import 'package:mockito/mockito.dart';
 import 'package:test/test.dart';
 
+import '../mocks/mock_env.dart';
 import '../mocks/mock_settings.dart';
 import '../util/test_fs_zone.dart';
 import '../util/test_paths.dart';
@@ -59,6 +61,7 @@ void main() {
     test('set env PATH Windows', () {
       var settings = Settings();
       var mockSettings = MockSettings();
+      var mockEnv = MockEnv();
 
       // windows no change expected
       when(mockSettings.isWindows).thenReturn(true);
@@ -66,9 +69,12 @@ void main() {
       when(mockSettings.isMacOS).thenReturn(false);
       when(mockSettings.dshellBinPath).thenReturn(settings.dshellBinPath);
       when(mockSettings.debug_on).thenReturn(false);
-      when(mockSettings.HOME).thenReturn('c:\\windows\\userdata');
+
+      when(mockEnv.HOME).thenReturn('c:\\windows\\userdata');
 
       Settings.setMock(mockSettings);
+
+      Env.setMock(mockEnv);
 
       var install = InstallCommand();
       install.addBinToPath(mockSettings.dshellBinPath);
@@ -78,7 +84,9 @@ void main() {
 
     test('set env PATH Linux', () {
       var settings = Settings();
+      var env = Env();
       var mockSettings = MockSettings();
+      var mockEnv = MockEnv();
 
       // windows no change expected
       when(mockSettings.isWindows).thenReturn(false);
@@ -86,9 +94,9 @@ void main() {
       when(mockSettings.isMacOS).thenReturn(false);
       when(mockSettings.dshellBinPath).thenReturn(settings.dshellBinPath);
       when(mockSettings.debug_on).thenReturn(false);
-      when(mockSettings.HOME).thenReturn(settings.HOME);
 
       Settings.setMock(mockSettings);
+      when(mockEnv.HOME).thenReturn(env.HOME);
 
       //p.Context(style: Style.posix);
 
@@ -97,8 +105,7 @@ void main() {
 
       var export = 'export PATH=\$PATH:${settings.dshellBinPath}';
 
-      expect(
-          read(join(settings.HOME, '.profile')).toList(), contains(export));
+      expect(read(join(env.HOME, '.profile')).toList(), contains(export));
     });
 
     test('With Lib', () {});

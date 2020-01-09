@@ -1,3 +1,4 @@
+import 'package:dshell/src/functions/env.dart';
 import 'package:test/test.dart' as t;
 import 'package:dshell/dshell.dart';
 
@@ -101,7 +102,7 @@ class Paths {
   String testFile;
 
   Paths() {
-    home = Settings().HOME;
+    home = HOME;
     pathTestDir = join(TEST_ROOT, TEST_DIR, 'pathTestDir');
     testExtension = '.jpg';
     testBaseName = 'fred';

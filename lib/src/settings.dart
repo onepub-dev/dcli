@@ -4,7 +4,6 @@ import 'package:dshell/dshell.dart';
 import 'package:dshell/src/script/my_yaml.dart';
 
 import 'script/flags.dart';
-import 'util/dshell_exception.dart';
 import 'util/stack_list.dart';
 import 'package:path/path.dart' as p;
 
@@ -83,30 +82,6 @@ class Settings {
     var home = HOME;
     _dshellPath = p.absolute(p.join(home, dshellDir));
     _dshellBinPath = p.absolute(p.join(home, dshellDir, 'bin'));
-  }
-
-  ///
-  /// Gets the path to the users home directory
-  /// using the enviornment var appropriate for the user's OS.
-  String get HOME {
-    String home;
-
-    if (Settings().isWindows) {
-      home = env('AppData');
-    } else {
-      home = env('HOME');
-    }
-
-    if (home == null) {
-      if (Settings().isWindows) {
-        throw DShellException(
-            "Unable to find the 'AppData' enviroment variable. Please ensure it is set and try again.");
-      } else {
-        throw DShellException(
-            "Unable to find the 'HOME' enviroment variable. Please ensure it is set and try again.");
-      }
-    }
-    return home;
   }
 
   bool get isMacOS => Platform.isMacOS;

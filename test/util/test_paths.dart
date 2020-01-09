@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:dshell/dshell.dart';
+import 'package:dshell/src/functions/env.dart';
 import 'package:path/path.dart';
 
 import '../test_settings.dart';
@@ -16,7 +17,7 @@ class TestPaths {
   TestPaths(String relativeScriptPath) {
     var cwd = Directory.current.path;
     testRoot = TEST_ROOT;
-    home = Settings().HOME;
+    home = HOME;
     scriptDir = join(cwd, relativeScriptPath);
     scriptPath = dirname(scriptDir);
     scriptName = basenameWithoutExtension(scriptDir);
