@@ -116,7 +116,7 @@ class VirtualProject {
 
     try {
       createProject();
-    } on PubGetException catch (e) {
+    } on PubGetException {
       print(red("\ndshell clean failed due to the 'pub get' call failing."));
     }
   }
