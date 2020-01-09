@@ -24,6 +24,23 @@ extension StringAsProcess on String {
   ///     [toList] to capture stdout to [List<String>]
   void get run => cmd.run(this);
 
+  /// shell
+  /// Runs the given string as a command in the OS shell.
+  ///
+  /// Allows you to execute the contents of a dart string as a
+  /// command line appliation within an OS shell (e.g. bash)
+  ///
+  /// Any output from the command is displayed on the console.
+  ///
+  /// ```dart
+  /// 'zip regions.txt regions.zip'.run
+  /// ```
+  ///
+  /// See [forEach] to capture output to stdout and stderr
+  ///     [toList] to capture stdout to [List<String>]
+
+  void get shell => cmd.run(this, runInShell: true);
+
   /// forEach runs the String [this] as a command line
   /// application.
   /// Output from the command can be captured by
@@ -41,14 +58,16 @@ extension StringAsProcess on String {
   /// See [run] if you don't care about capturing output
   ///     [list] to capture stdout as a String list.
   ///
-  void forEach(LineAction stdout, {LineAction stderr}) =>
-      cmd.run(this, progress: Progress(stdout, stderr: stderr));
+  void forEach(LineAction stdout,
+          {LineAction stderr, bool runInShell = false}) =>
+      cmd.run(this,
+          progress: Progress(stdout, stderr: stderr), runInShell: runInShell);
 
   /// [toList] runs [this] as a cli process and
   /// returns any output written to stdout as
   /// a [List<String>].
-  List<String> toList({Pattern lineDelimiter = '\n'}) {
-    return cmd.run(this).toList();
+  List<String> toList({Pattern lineDelimiter = '\n', bool runInShell = false}) {
+    return cmd.run(this, runInShell: runInShell).toList();
   }
 
   /// operator |

@@ -18,20 +18,20 @@ import 'dshell_function.dart';
 ///
 /// If the command fails or returns a non-zero exitCode
 /// Then a [RunCommand] exception will be thrown.
-Progress run(String command, {Progress progress}) =>
-    Run().run(command, progress: progress);
+Progress run(String command, {Progress progress, bool runInShell = false}) =>
+    Run().run(command, progress: progress, runInShell: runInShell);
 
 class Run extends DShellFunction {
   RunnableProcess runnable;
 
   /// returns the exitCode of the process that or command that was run.
-  Progress run(String command, {Progress progress}) {
+  Progress run(String command, {Progress progress, bool runInShell = false}) {
     Progress forEach;
 
     try {
       forEach = progress ?? Progress.forEach();
       runnable = RunnableProcess(command);
-      runnable.start();
+      runnable.start(runInShell: runInShell);
       runnable.processUntilExit((line) => forEach.addToStdout(line),
           (line) => forEach.addToStderr(line));
     } finally {
