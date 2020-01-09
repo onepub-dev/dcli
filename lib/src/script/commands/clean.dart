@@ -47,6 +47,7 @@ class CleanCommand extends Command {
         results.add(script);
       }
     }
+
     return results;
   }
 }
