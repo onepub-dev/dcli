@@ -44,7 +44,7 @@ class EntryPoint {
     } on CommandLineException catch (e) {
       StdLog.stderr(red(e.toString()));
       print('');
-      HelpCommand().printUsage();
+      HelpCommand().printUsageHowTo();
       return 1;
     } catch (e, stackTrace) {
       var impl = StackTraceImpl.fromStackTrace(stackTrace);

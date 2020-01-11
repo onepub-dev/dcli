@@ -27,10 +27,16 @@ class HelpCommand extends Command {
 
   @override
   String description() =>
-      'Displays the usage message | Display the commands usage message.';
+      "Displays the usage message | Display the command's usage message.";
 
   @override
   String usage() => 'help | help <command>';
+
+  void printUsageHowTo() {
+    print('For help with dshell options:');
+    print('  ${Settings().appname} ${usage()}');
+    print('    ${description()}');
+  }
 
   void printUsage() {
     var appname = Settings().appname;
