@@ -97,6 +97,9 @@ class ParsedCliCommand {
   ParsedCliCommand.fromParsed(this.cmd, this.args);
 
   void parse(String command) {
+    // TODO: improve parser so it can handle quoted strings.
+    // we shouldn't replace a double space if it is within a quoted string.
+    command = command.replaceAll('  ', ' ');
     var parts = command.split(' ');
 
     cmd = parts[0];
