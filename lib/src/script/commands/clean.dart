@@ -42,9 +42,13 @@ class CleanCommand extends Command {
   List<String> completion(String word) {
     var dartScripts = find('*.dart', recursive: false).toList();
     var results = <String>[];
-    for (var script in dartScripts) {
-      if (script.startsWith(word)) {
-        results.add(script);
+    if (word.isEmpty) {
+      results = dartScripts;
+    } else {
+      for (var script in dartScripts) {
+        if (script.startsWith(word)) {
+          results.add(script);
+        }
       }
     }
 
