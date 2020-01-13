@@ -1,3 +1,13 @@
+## 1.0.37
+dshell tab completion is now installed.
+
+## 1.0.36
+Fixed a bug in the pubspec pointing to the wrong completion name.
+
+## 1.0.35
+Updated to pubspec 0.1.3
+Compiles to native should now work.
+
 ## 1.0.34
 Added support of dependency_overrides in dependency.yaml and pubspec annotations.
 Improved support for windows and mac.

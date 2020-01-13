@@ -1,6 +1,6 @@
 name: dshell
 description: An API and dev environment for writing console apps/scripts using dart. e.g. allows you to build bash style scripts with dart. 
-version: 1.0.34
+version: 1.0.37
 homepage: https://github.com/bsutton/dshell
 
 environment:
@@ -32,5 +32,5 @@ dev_dependencies:
   ## pub global activate --source path .
 executables:
   dshell: dshell
-  dshell_completion: dshell_completion
+  dshell_complete: dshell_complete
 
