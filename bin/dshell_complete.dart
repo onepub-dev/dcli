@@ -24,7 +24,6 @@ void main(List<String> args) {
     print(
         'dshell_complete provides tab completion from the bash command line for dshell');
     print("You don't run dshell_complete directly");
-    install();
     exit(-1);
   }
 
@@ -70,8 +69,8 @@ void main(List<String> args) {
   }
 }
 
-void install() {
-  print('installing dshell');
-  'dart2native dshell_complete.dart --output=dshell_complete.dart --output=${join(HOME, ".dshell/bin/dshell_complete")}'
-      .run;
-}
+// void install() {
+//   print('installing dshell');
+//   'dart2native dshell_complete.dart --output=dshell_complete.dart --output=${join(HOME, ".dshell/bin/dshell_complete")}'
+//       .run;
+// }
