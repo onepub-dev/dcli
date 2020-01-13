@@ -63,6 +63,16 @@ void main() {
         t.expect(lines.length, t.equals(5));
       });
     });
+
+    t.test('forEach using runInShell', () {
+      var found = false;
+      'complete'.forEach((line) {
+        if (line.contains('complete')) {
+          found = true;
+        }
+      }, runInShell: true);
+      t.expect(found, t.equals(true));
+    });
   });
 }
 
