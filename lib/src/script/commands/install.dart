@@ -29,7 +29,7 @@ class InstallCommand extends Command {
           "'dshell install' does not take any arguments. Found $subarguments");
     }
 
-    print(red('Hang on a tick whilst we install dshell.'));
+    print('Hang on a tick whilst we install dshell.');
     print('');
     // Create the ~/.dshell root.
     if (!exists(Settings().dshellPath)) {
@@ -51,8 +51,8 @@ class InstallCommand extends Command {
       print('  ${dep.name}:${dep.version}');
     }
     print('');
-    print(red(
-        'Edit dependencies.yaml to add/remove/update your default dependencies.'));
+    print(
+        'Edit dependencies.yaml to add/remove/update your default dependencies.');
 
     /// create the template directory.
     if (!exists(Settings().templatePath)) {
@@ -85,6 +85,8 @@ class InstallCommand extends Command {
 
     print('');
 
+    addCompletion();
+
     // print OS version.
     // print('Platform.version ${Platform.version}');
 
@@ -92,7 +94,7 @@ class InstallCommand extends Command {
     // check if dshell is on the path
     if (dshellLocation.isEmpty) {
       print('');
-      print(red('ERROR: dshell was not found on your path!'));
+      print('ERROR: dshell was not found on your path!');
       print('Try to resolve the problem and then run dshell install again.');
       print('dshell is normally located in ~/$pubCache');
 
@@ -101,16 +103,16 @@ class InstallCommand extends Command {
       }
       exit(1);
     } else {
-      print('dshell found in : ${dshellLocation[0]}');
+      print(blue('dshell found in : ${dshellLocation[0]}'));
     }
     print('');
 
     // print('Copying dshell (${Platform.executable}) to /usr/bin/dshell');
     // copy(Platform.executable, '/usr/bin/dshell');
 
-    print(red('dshell installation complete.'));
+    print('dshell installation complete.');
     print('');
-    print(red('Create your first dshell script using:'));
+    print('Create your first dshell script using:');
     print(blue('  dshell create <scriptname>.dart'));
     print('');
     print(blue('  Run your script by typing:'));
@@ -121,12 +123,12 @@ class InstallCommand extends Command {
 
   @override
   String description() => """There are two forms of dshell isntall:
-            Running 'dshell install' completes the installation of dshell.
-            
-            EXPERIMENTAL:
-            Running 'dshell install <script> compiles the given script to a native executable and installs
-               the script to your path. Only required if you want super fast execution.
-               """;
+                Running 'dshell install' completes the installation of dshell.
+                
+                EXPERIMENTAL:
+                Running 'dshell install <script> compiles the given script to a native executable and installs
+                   the script to your path. Only requiwhite if you want super fast execution.
+                   """;
 
   @override
   String usage() => 'Install | install <script path.dart>';
@@ -150,8 +152,8 @@ class InstallCommand extends Command {
           }
         }
       } else if (Settings().isWindows) {
-        print(red(
-            "Please read the following link for details on how to add '$binPath' to your path."));
+        print(
+            "Please read the following link for details on how to add '$binPath' to your path.");
         print('$link');
       }
     }
@@ -160,5 +162,32 @@ class InstallCommand extends Command {
   @override
   List<String> completion(String word) {
     return <String>[];
+  }
+
+  // adds bash cli completion for dshell
+  // by adding a 'complete' command to ~/.bashrc
+  void addCompletion() {
+    if (!isCompletionInstalled()) {
+      // Add cli completion
+
+      join(HOME, '.bashrc').append("complete -C 'dshell_complete' dshell");
+
+      print(
+          'dshell tab completion installed. Restart your terminal to activate it.');
+    }
+  }
+
+  bool isCompletionInstalled() {
+    // run the complete command to see if dshell is handled.
+
+    //added runInShell and now install throws a stack trace
+    var dshellHandled = false;
+    read(join(HOME, '.bashrc')).forEach((line) {
+      if (line.contains('dshell_complete')) {
+        dshellHandled = true;
+      }
+    } //, runInShell: true
+        );
+    return dshellHandled;
   }
 }
