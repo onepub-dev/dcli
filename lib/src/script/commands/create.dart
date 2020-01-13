@@ -33,7 +33,7 @@ class CreateCommand extends Command {
 
     print('Project creation complete.');
 
-    print('To run your script:\n   dshell ${_script.scriptname}');
+    print('To run your script:\n   ./${_script.scriptname}');
 
     return 0;
   }
