@@ -17,4 +17,6 @@ class Pipe {
   void forEach(LineAction stdout, {LineAction stderr}) {
     rhs.processUntilExit(stdout, stderr);
   }
+
+  void get run => rhs.processUntilExit(null, null);
 }
