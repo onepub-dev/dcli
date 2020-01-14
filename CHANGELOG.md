@@ -1,3 +1,7 @@
+## 1.0.40
+Fixed a bug where .run wasn't writing output to the console.
+Introduced a new method printerr which prints to stderr.
+
 ## 1.0.39
 Added the 'start' method to string_as_process to allow a detached process to be created.
 e.g. 'longrunning.sh'.start(detached: true);
