@@ -1,9 +1,6 @@
 import 'dart:io';
 
-import 'package:dshell/src/functions/env.dart';
 import 'package:dshell/src/script/commands/commands.dart';
-import 'package:dshell/src/util/string_as_process.dart';
-import 'package:path/path.dart';
 
 /// provides command line tab completion for bash users.
 ///
