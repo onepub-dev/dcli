@@ -22,13 +22,15 @@ extension StringAsProcess on String {
   ///
   /// See [forEach] to capture output to stdout and stderr
   ///     [toList] to capture stdout to [List<String>]
+  ///     [start] - for more control over how the sub process is started.
   void get run => cmd.run(this);
 
   /// shell
   /// Runs the given string as a command in the OS shell.
   ///
   /// Allows you to execute the contents of a dart string as a
-  /// command line appliation within an OS shell (e.g. bash)
+  /// command line appliation within an OS shell (e.g. bash).
+  /// The application is run as a fully attached child process.
   ///
   /// Any output from the command is displayed on the console.
   ///
@@ -38,8 +40,28 @@ extension StringAsProcess on String {
   ///
   /// See [forEach] to capture output to stdout and stderr
   ///     [toList] to capture stdout to [List<String>]
-
+  ///
+  /// @deprecated use start(runInShell: true)
   void get shell => cmd.run(this, runInShell: true);
+
+  /// Runs the String [this] as a command line application.
+  /// Use [runInShell] if the command needs to be run inside
+  /// an OS shell (bash, cmd...).
+  ///    [runInShell] defaults to false.
+  /// Use [detached] to start the application as a fully
+  /// detached subprocess.
+  /// You cannot process output from a detached process
+  /// and it will continuing running after the dshell process
+  /// exits. The detached process is also detached from the console
+  /// and as such no output from the process will be visible.
+  ///
+  /// See  [run] if you just need to run a process with all the defaults.
+  ///      [forEach] to capture output to stdout and stderr
+  ///      [toList] to capture stdout to [List<String>]
+  void start({bool runInShell = false, bool detached = false}) {
+    var process = RunnableProcess(this);
+    process.start(runInShell: runInShell, detached: detached);
+  }
 
   /// forEach runs the String [this] as a command line
   /// application.
@@ -57,7 +79,7 @@ extension StringAsProcess on String {
   ///
   /// See [run] if you don't care about capturing output
   ///     [list] to capture stdout as a String list.
-  ///
+  ///     [start] - if you need to run a detached sub process.
   void forEach(LineAction stdout,
           {LineAction stderr, bool runInShell = false}) =>
       cmd.run(this,
@@ -66,6 +88,9 @@ extension StringAsProcess on String {
   /// [toList] runs [this] as a cli process and
   /// returns any output written to stdout as
   /// a [List<String>].
+  /// See [forEach] to capture output to stdout and stderr interactively
+  ///     [run] to run the application without capturing its output
+  ///     [start] - to run the process fully detached.
   List<String> toList({Pattern lineDelimiter = '\n', bool runInShell = false}) {
     return cmd.run(this, runInShell: runInShell).toList();
   }
@@ -99,18 +124,28 @@ extension StringAsProcess on String {
     return Pipe(lhsRunnable, rhsRunnable);
   }
 
-  /// Runs a child process in a fully detached mode.
-  /// When your dshell script ends the child process
-  /// will continue running.
-  ///
-  /// This api is considered experimental
-  void get detached {
-    var process = RunnableProcess(this);
-    process.start(detached: true);
+  /// Experiemental - DO NOT USE
+  Stream get stream {
+    var lhsRunnable = RunnableProcess(this);
+    lhsRunnable.start();
+    return lhsRunnable.stream;
   }
 
+  /// Experiemental - DO NOT USE
+  Sink get sink {
+    var lhsRunnable = RunnableProcess(this);
+    lhsRunnable.start();
+    return lhsRunnable.sink;
+  }
 
-  // Treat the [this]  as the name of a file and
+  /// Experiemental - DO NOT USE
+  RunnableProcess get process {
+    var process = RunnableProcess(this);
+    process.start();
+
+    return process;
+  } // Treat the [this]  as the name of a file and
+
   // write [line] to the file terminated by [newline].
   // [newline] defaults to '\n'.
   void write(String line, {String newline = '\n'}) {
