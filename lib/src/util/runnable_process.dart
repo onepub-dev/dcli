@@ -9,11 +9,18 @@ import '../../dshell.dart';
 import 'dshell_exception.dart';
 import 'log.dart';
 
-// Use to print to the console
-void console(String line) => print(line);
-
 typedef LineAction = void Function(String line);
 typedef CancelableLineAction = bool Function(String line);
+
+/// [printerr] provides the equivalent functionality to the
+/// standard Dart print function but instead writes
+/// the output to stderr rather than stdout.
+///
+/// CLI applications should, by convention, write error messages
+/// out to stderr and expected output to stdout.
+///
+/// [line] the line to write to stderr.
+void printerr(String line) => stderr.write(line);
 
 class RunnableProcess {
   Future<Process> fProcess;
@@ -30,6 +37,20 @@ class RunnableProcess {
       : parsed = ParsedCliCommand.fromParsed(command, args);
 
   String get cmdLine => parsed.cmd + ' ' + parsed.args.join(' ');
+
+  /// Experiemental - DO NOT USE
+  Stream<List<int>> get stream {
+    // wait until the process has started
+    var process = waitForEx<Process>(fProcess);
+    return process.stdout;
+  }
+
+  /// Experiemental - DO NOT USE
+  Sink<List<int>> get sink {
+    // wait until the process has started
+    var process = waitForEx<Process>(fProcess);
+    return process.stdin;
+  }
 
   void start({bool runInShell = false, bool detached = false}) {
     var workdir = workingDirectory;
