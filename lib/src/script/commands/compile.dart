@@ -14,7 +14,7 @@ import '../../util/runnable_process.dart';
 class CompileCommand extends Command {
   static const String NAME = 'compile';
 
-  List<Flag> compileFlags = [NoCleanFlag(), InstallFlag()];
+  List<Flag> compileFlags = [NoCleanFlag(), InstallFlag(), OverWriteFlag()];
 
   /// holds the set of flags passed to the compile command.
   Flags flagSet = Flags();
@@ -91,12 +91,18 @@ class CompileCommand extends Command {
       "Compiles the script using dart's native compiler. Only required if you want super fast execution.";
 
   @override
-  String usage() => '''compile [-noclean] <script path.dart>
-    ${orange("flags:")}
-      ${orange("--noclean | -nc")}
-      If set the project will NOT be cleaned before compiling.
-      Use the noclean option to speed up compilation when you know your project structure is up to date.
-      ''';
+  String usage() {
+    var description =
+        '''compile [--noclean] [--install] [--overwrite] <script path.dart>
+    ${orange("flags:")}{
+    ''';
+
+    for (var flag in compileFlags) {
+      description += orange('--${flag.name} | -${flag.abbreviation}');
+      description += ('  ${flag.description}');
+    }
+    return description;
+  }
 
   @override
   List<String> completion(String word) {
@@ -121,7 +127,9 @@ class NoCleanFlag extends Flag {
 
   @override
   String description() {
-    return "Stops the compile from running 'dshell clean' before compiling.";
+    return '''Stops the compile from running 'dshell clean' before compiling.
+   Use the noclean option to speed up compilation when you know your project structure is up to date.
+   ''';
   }
 }
 
@@ -135,6 +143,20 @@ class InstallFlag extends Flag {
 
   @override
   String description() {
-    return 'Installs the compiled script into ${Settings().dshellBinPath}';
+    return 'Installs the compiled script into your path ${Settings().dshellBinPath}';
+  }
+}
+
+class OverWriteFlag extends Flag {
+  static const NAME = 'overwrite';
+
+  OverWriteFlag() : super(NAME);
+
+  @override
+  String get abbreviation => 'o';
+
+  @override
+  String description() {
+    return 'If the installed executable already exists in ${Settings().dshellBinPath} then it will overwritten.';
   }
 }

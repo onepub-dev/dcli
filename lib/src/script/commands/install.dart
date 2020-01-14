@@ -121,18 +121,6 @@ class InstallCommand extends Command {
     return exitCode;
   }
 
-  @override
-  String description() => """There are two forms of dshell isntall:
-                Running 'dshell install' completes the installation of dshell.
-                
-                EXPERIMENTAL:
-                Running 'dshell install <script> compiles the given script to a native executable and installs
-                   the script to your path. Only requiwhite if you want super fast execution.
-                   """;
-
-  @override
-  String usage() => 'Install | install <script path.dart>';
-
   void addBinToPath(String binPath) {
     // only add the path if its not already present
     if (!isOnPath(binPath)) {
@@ -157,11 +145,6 @@ class InstallCommand extends Command {
         print('$link');
       }
     }
-  }
-
-  @override
-  List<String> completion(String word) {
-    return <String>[];
   }
 
   // adds bash cli completion for dshell
@@ -189,5 +172,17 @@ class InstallCommand extends Command {
     } //, runInShell: true
         );
     return dshellHandled;
+  }
+
+  @override
+  String description() =>
+      """Running 'dshell install' completes the installation of dshell.""";
+
+  @override
+  String usage() => 'Install';
+
+  @override
+  List<String> completion(String word) {
+    return <String>[];
   }
 }
