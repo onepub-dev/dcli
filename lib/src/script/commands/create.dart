@@ -43,6 +43,11 @@ class CreateCommand extends Command {
       throw InvalidArguments(
           'The create command takes only one argument. Found: ${arguments.join(',')}');
     }
+    var scriptName = arguments[0];
+    if (extension(scriptName) != '.dart') {
+      throw InvalidArguments(
+          "The create command expects a script name ending in '.dart'. Found: ${scriptName}");
+    }
 
     return Script.fromFile(arguments[0]);
   }
