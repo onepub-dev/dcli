@@ -1,6 +1,6 @@
 ## 1.0.39
-Added a method to string_as_process to allow a detached process to be created.
-e.g. 'longrunning.sh'.detached
+Added the 'start' method to string_as_process to allow a detached process to be created.
+e.g. 'longrunning.sh'.start(detached: true);
 The dshell create command now enforces a .dart extension on the script name.
 
 ## 1.0.38
