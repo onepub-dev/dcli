@@ -1,5 +1,4 @@
 import 'package:dshell/src/util/ansi_color.dart';
-import 'package:dshell/src/util/dshell_exception.dart';
 import 'package:dshell/src/util/progress.dart';
 
 import '../../../dshell.dart';
