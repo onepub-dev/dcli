@@ -1,3 +1,8 @@
+## 1.0.39
+Added a method to string_as_process to allow a detached process to be created.
+e.g. 'longrunning.sh'.detached
+The dshell create command now enforces a .dart extension on the script name.
+
 ## 1.0.38
 Implemented the 'run' method on the Pipe class so that ('ls' | 'head -n 5').run works.
 Completed work on moving the script install option from the install command to the compile command.
