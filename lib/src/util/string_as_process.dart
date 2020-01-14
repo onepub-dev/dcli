@@ -99,6 +99,17 @@ extension StringAsProcess on String {
     return Pipe(lhsRunnable, rhsRunnable);
   }
 
+  /// Runs a child process in a fully detached mode.
+  /// When your dshell script ends the child process
+  /// will continue running.
+  ///
+  /// This api is considered experimental
+  void get detached {
+    var process = RunnableProcess(this);
+    process.start(detached: true);
+  }
+
+
   // Treat the [this]  as the name of a file and
   // write [line] to the file terminated by [newline].
   // [newline] defaults to '\n'.
