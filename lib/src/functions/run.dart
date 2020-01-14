@@ -32,8 +32,8 @@ class Run extends DShellFunction {
       forEach = progress ?? Progress.forEach();
       runnable = RunnableProcess(command);
       runnable.start(runInShell: runInShell);
-      runnable.processUntilExit((line) => forEach.addToStdout(line),
-          (line) => forEach.addToStderr(line));
+      runnable.processUntilExit(
+          (line) => print(line), (line) => printerr(line));
     } finally {
       forEach.close();
     }
