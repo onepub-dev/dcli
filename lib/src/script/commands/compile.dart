@@ -1,4 +1,5 @@
 import 'package:dshell/src/util/ansi_color.dart';
+import 'package:dshell/src/util/dshell_exception.dart';
 import 'package:dshell/src/util/progress.dart';
 
 import '../../../dshell.dart';
@@ -76,8 +77,20 @@ class CompileCommand extends Command {
               Progress((line) => print(line), stderr: (line) => print(line)));
 
       if (flagSet.isSet(InstallFlag())) {
-        copy(join(script.scriptDirectory, script.basename),
-            Settings().dshellBinPath);
+        var install = true;
+        var to = join(Settings().dshellBinPath, script.basename);
+        var from = join(script.scriptDirectory, script.basename);
+        if (exists(to) && !flagSet.isSet(OverWriteFlag())) {
+          install = false;
+          print(red(
+              'The target file $to already exists. Use the --overwrite flag to overwrite it.'));
+        }
+
+        if (install) {
+          print('');
+          print(orange('Installing $from into $to'));
+          move(from, to);
+        }
       }
     } on RunException catch (e) {
       exitCode = e.exitCode;
@@ -160,3 +173,4 @@ class OverWriteFlag extends Flag {
     return 'If the installed executable already exists in ${Settings().dshellBinPath} then it will overwritten.';
   }
 }
+
