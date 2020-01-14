@@ -31,11 +31,19 @@ class RunnableProcess {
 
   String get cmdLine => parsed.cmd + ' ' + parsed.args.join(' ');
 
-  void start({bool runInShell = false}) {
+  void start({bool runInShell = false, bool detached = false}) {
     var workdir = workingDirectory;
     workdir ??= Directory.current.path;
-    fProcess = Process.start(parsed.cmd, parsed.args,
-        runInShell: runInShell, workingDirectory: workdir);
+
+    var mode = detached ? ProcessStartMode.detached : ProcessStartMode.normal;
+
+    fProcess = Process.start(
+      parsed.cmd,
+      parsed.args,
+      runInShell: runInShell,
+      workingDirectory: workdir,
+      mode: mode,
+    );
   }
 
   void pipeTo(RunnableProcess stdin) {
@@ -52,6 +60,7 @@ class RunnableProcess {
     var done = Completer<bool>();
 
     fProcess.then((process) {
+      /// handle stdout stream
       process.stdout
           .transform(utf8.decoder)
           .transform(const LineSplitter())
@@ -61,6 +70,7 @@ class RunnableProcess {
         }
       });
 
+      // handle stderr stream
       process.stderr
           .transform(utf8.decoder)
           .transform(const LineSplitter())
@@ -86,6 +96,9 @@ class RunnableProcess {
   }
 }
 
+/// Class to parse a OS command, contained in a string, which we need to pass
+/// into the dart Process.start method as a application name and a series
+/// of arguments.
 class ParsedCliCommand {
   String cmd;
   List<String> args;
