@@ -32,7 +32,7 @@ class Settings {
   /// configuration files such as the cache.
   String get dshellPath => _dshellPath;
 
-  /// When you run dshell install <script> the script
+  /// When you run dshell compile -i <script> the script
   /// is moved to this path.
   /// The dshellBinPath is added to the OS's path
   /// allowing the installed scripts to be run from anywhere
