@@ -1210,13 +1210,13 @@ dshell clean hello_world.dart
 ```
 
 ## compile
-The compile command will compile your DShell script into a native executuable.
+The compile command will compile your DShell script into a native executuable and optionally install it into your PATH.
 
 The resulting native application can be copied to any binary compatible OS and run without requiring Dart to be installed.
 
 Dart complied appliations are also super fast.
 
-Usage: `dshell compile <script path.dart>`
+Usage: `dshell compile [-nc, -i, -o] <script path.dart>`
 
 Example: 
 
@@ -1225,6 +1225,10 @@ dshell compile hello_world.dart
 
 ./hello_world
 ```
+Flags:
+    --noclean | -nc : stop dshell from running clean before doing a compile. Use this option if you know that you scripts dependency haven't change since the last compile.
+    --install | -i : install the compiled script into the ~/.dshell/bin directory which is on your path.
+    --overwrite | -o : if the target script has already been compiled and installed you must specify the -o flag to allow dshell ot overwrite it.
 
 ## create
 The create command create a sample DShell script using the given script file name and initialise your project by running `dshell clean`.
@@ -1238,25 +1242,12 @@ dshell create my_script.dart
 ```
 
 ## install
-The install command has two forms.
+The install command MUST be run after you install dshell to complete the dshell install.
       
 ```dart
 dshell install
 ```
 Completes the installation of dshell. See the section on (Installing DShell)[#Installing] for details.
-
-
-NOTE: The following variation is not implemented as yet.
-
-The alternate form 
-
-```dart
-dshell install <scriptname>
-```
-
-compiles the given script to a native executable and installs the script to your path. 
-
-You only need to use the 'install' or 'complie' commands if you want super fast execution.
 
 
 ## run
