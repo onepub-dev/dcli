@@ -115,7 +115,7 @@ DShell is hopefully that.
 * Process the output of a cli command.
   * 'grep error /var/lib/syslog'.forEach((line) => print(line));
 * Chain multiple cli commands using pipes
-  * 'grep error /var/lib/syslog' |'head 5'.forEach((line) => print(line));
+  * ('grep error /var/lib/syslog' |'head -n 5').forEach((line) => print(line));
 * executes commands synchronously, so no need to worry about futures.
 
 ## What commands does DShell support?
@@ -814,12 +814,13 @@ This is the resulting syntax:
 Now let's pipe the output of one cli command to another.
 
 ```dart
-
-    'grep import *.dart' | 'head 5'.forEach((line) => print(line)) ;
+('grep import *.dart' | 'head -n 5').forEach((line) => print(line)) ;
 
 ```
 
 The above command launches 'grep' and 'head' to find all import lines in any Dart file and then trim the list (via head) to the first five lines and finally print those lines.
+
+Note: when you use pipe use MUST surround the pipe commands with parentheses () due to a precedence issue. In the above example note the parentheses just before the .forEach and the matching one at the start of the line.
 
 What we have now is the power of Bash and the elegance of Dart.
 
