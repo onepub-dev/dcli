@@ -1,3 +1,7 @@
+## 1.0.38
+Implemented the 'run' method on the Pipe class so that ('ls' | 'head -n 5').run works.
+Completed work on moving the script install option from the install command to the compile command.
+
 ## 1.0.37
 dshell tab completion is now installed.
 
