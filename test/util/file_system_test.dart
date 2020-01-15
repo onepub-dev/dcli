@@ -15,6 +15,8 @@ void main() {
 
       // fs.file('.');
 
+      var restoreTo = Directory.current;
+
       print('root cwd: ${Directory.current}');
 
       print('testzone cwd: ${Directory.current}');
@@ -27,6 +29,8 @@ void main() {
       }
       cd(dir);
       print('testzone post cwd: ${pwd}');
+
+      Directory.current = restoreTo;
     });
-  }, skip: false);
+  }, skip: true);
 }
