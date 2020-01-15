@@ -1,3 +1,6 @@
+## 1.0.44
+Fixed .run yet again. Added unit tests for same.
+
 ## 1.0.43
 Fixed an NPE on start of a script with no args caused by the change to the command parser.
 
