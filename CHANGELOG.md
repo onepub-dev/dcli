@@ -1,3 +1,6 @@
+## 1.0.42
+Improved the command line parser for string_as_process so we cam handle arguments with spaces.
+
 ## 1.0.41
 Fixed a bug in run. We were printing the output rather than adding it to the foreach.
 .start can now capture command not found errors for detached processes.
