@@ -115,6 +115,17 @@ class RunnableProcess {
     });
     waitForEx<bool>(done.future);
   }
+
+  void waitForStart() {
+    var complete = Completer<Process>();
+
+    fProcess.then((process) {
+      complete.complete(process);
+    }).catchError((Object e, StackTrace s) {
+      complete.completeError(e);
+    });
+    waitForEx<Process>(complete.future);
+  }
 }
 
 /// Class to parse a OS command, contained in a string, which we need to pass

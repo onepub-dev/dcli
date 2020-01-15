@@ -61,6 +61,9 @@ extension StringAsProcess on String {
   void start({bool runInShell = false, bool detached = false}) {
     var process = RunnableProcess(this);
     process.start(runInShell: runInShell, detached: detached);
+
+    // we wait for start to complete to capture 'command not found' exceptions.
+    process.waitForStart();
   }
 
   /// forEach runs the String [this] as a command line
