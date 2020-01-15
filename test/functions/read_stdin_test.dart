@@ -1,4 +1,3 @@
-import 'package:dshell/src/util/runnable_process.dart';
 import 'package:test/test.dart' as t;
 import 'package:dshell/dshell.dart';
 
@@ -11,7 +10,7 @@ void main() {
   t.group('Read from stdin', () {
     t.test('Read and then write ', () {
       TestZone().run(() {
-        readStdin().forEach(console);
+        readStdin().forEach(print);
       });
     }, skip: true);
   });
