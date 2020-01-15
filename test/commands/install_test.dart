@@ -58,12 +58,12 @@ void main() {
       });
     });
 
-    test('set env PATH Windows', () {
+    test('add ~/.dshell/bin to PATH Windows', () {
       var settings = Settings();
       var mockSettings = MockSettings();
       var mockEnv = MockEnv();
 
-      // windows no change expected
+      // windows we can't add a path just expect user message.
       when(mockSettings.isWindows).thenReturn(true);
       when(mockSettings.isLinux).thenReturn(false);
       when(mockSettings.isMacOS).thenReturn(false);
@@ -71,6 +71,7 @@ void main() {
       when(mockSettings.debug_on).thenReturn(false);
 
       when(mockEnv.HOME).thenReturn('c:\\windows\\userdata');
+      when(mockEnv.isOnPath(settings.dshellBinPath)).thenReturn(false);
 
       Settings.setMock(mockSettings);
 
