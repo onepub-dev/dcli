@@ -1,4 +1,4 @@
-@Timeout(Duration(seconds: 600))
+//@Timeout(Duration(seconds: 600))
 
 import 'package:dshell/dshell.dart' hide equals;
 import 'package:dshell/src/functions/is.dart';
