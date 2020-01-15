@@ -526,7 +526,7 @@ To call the test method passing values to all of the above arguments you would u
 testMethod('value1', 'value2' , arg4: 'value4', arg3: 'value3');
 ```
 
-Note that I've reversed the order of `arg3` and `arg4`. As they are named arguments you can place them in an position AFTER the named and optional arguments.
+Note that I've reversed the order of `arg3` and `arg4`. As they are named arguments you can place them in any position AFTER the named and optional arguments.
 
 Lets finish with an example using the forEach method:
 
