@@ -9,7 +9,7 @@ void main() {
   Settings().debug_on = true;
 
   t.group('StringAsProcess', () {
-    t.test('Run', () {
+    t.test('Check .run executes', () {
       TestZone().run(() {
         var testFile = 'test.text';
 
@@ -18,6 +18,87 @@ void main() {
         }
 
         'touch test.text'.run;
+        t.expect(exists(testFile), t.equals(true));
+      });
+    });
+
+    t.test('Check .start executes - attached, not in shell', () {
+      TestZone().run(() {
+        var testFile = 'test.text';
+
+        if (exists(testFile)) {
+          delete(testFile);
+        }
+
+        'touch test.text'.start();
+        t.expect(exists(testFile), t.equals(true));
+      });
+    });
+
+    t.test('Check .start executes - attached,  in shell', () {
+      TestZone().run(() {
+        var testFile = 'test.text';
+
+        if (exists(testFile)) {
+          delete(testFile);
+        }
+
+        'touch test.text'.start(runInShell: true);
+
+        // Start returns before completion, wait for up to 10 seconds
+        // for it to create the file.
+        for (var i = 0; i < 10; i++) {
+          if (exists(testFile)) {
+            break;
+          }
+          sleep(1);
+        }
+        t.expect(exists(testFile), t.equals(true));
+      });
+    });
+
+    t.test('Check .start executes - detached, not in shell', () {
+      TestZone().run(() {
+        var testFile = 'test.text';
+
+        if (exists(testFile)) {
+          delete(testFile);
+        }
+
+        'touch test.text'.start(detached: true);
+
+        // we have ran a detached process. Wait for up to 10 seconds
+        // for it to create the file.
+        for (var i = 0; i < 10; i++) {
+          if (exists(testFile)) {
+            break;
+          }
+          sleep(1);
+        }
+
+        t.expect(exists(testFile), t.equals(true));
+      });
+    });
+
+    t.test('Check .start executes - detached,  in shell', () {
+      TestZone().run(() {
+        var testFile = 'test.text';
+
+        if (exists(testFile)) {
+          delete(testFile);
+        }
+
+        'touch test.text'.start(detached: true, runInShell: true);
+
+        // we have ran a detached process. Wait for up to 10 seconds
+        // for it to create the file.
+        for (var i = 0; i < 10; i++) {
+          if (exists(testFile)) {
+            break;
+          }
+          sleep(1);
+        }
+
         t.expect(exists(testFile), t.equals(true));
       });
     });
@@ -37,14 +118,8 @@ void main() {
         t.expect(lines.length, t.equals(5));
       });
     });
-/*
-    t.test('Pipe operator', () {
-      'head -n 5 ../data/lines.txt' | 'tail -n 1'.run;
-      t.expect(lines.length, t.equals(1));
-    });
-    */
 
-    t.test('Lines', () {
+    t.test('toList', () {
       TestZone().run(() {
         var path = '/tmp/log/syslog';
 
@@ -66,8 +141,8 @@ void main() {
 
     t.test('forEach using runInShell', () {
       var found = false;
-      'complete'.forEach((line) {
-        if (line.contains('complete')) {
+      'echo run test'.forEach((line) {
+        if (line.contains('run test')) {
           found = true;
         }
       }, runInShell: true);
