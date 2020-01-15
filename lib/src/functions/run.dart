@@ -24,7 +24,7 @@ Progress run(String command, {Progress progress, bool runInShell = false}) =>
 class Run extends DShellFunction {
   RunnableProcess runnable;
 
-  /// returns the exitCode of the process that or command that was run.
+  /// returns the exitCode of the process that was run.
   Progress run(String command, {Progress progress, bool runInShell = false}) {
     Progress forEach;
 
@@ -32,8 +32,8 @@ class Run extends DShellFunction {
       forEach = progress ?? Progress.forEach();
       runnable = RunnableProcess(command);
       runnable.start(runInShell: runInShell);
-      runnable.processUntilExit(
-          (line) => print(line), (line) => printerr(line));
+      runnable.processUntilExit((line) => forEach.addToStdout(line),
+          (line) => forEach.addToStderr(line));
     } finally {
       forEach.close();
     }
