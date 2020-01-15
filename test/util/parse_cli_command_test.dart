@@ -15,6 +15,7 @@ void main() {
       var parsed = ParsedCliCommand(test);
 
       expect(parsed.cmd, equals('a'));
+      expect(parsed.args, equals(<String>[]));
     });
 
     test('ab', () {

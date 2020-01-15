@@ -134,7 +134,7 @@ class RunnableProcess {
 /// of arguments.
 class ParsedCliCommand {
   String cmd;
-  List<String> args;
+  var args = <String>[];
 
   ParsedCliCommand(String command) {
     parse(command);
