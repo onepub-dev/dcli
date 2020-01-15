@@ -1,6 +1,7 @@
 @Timeout(Duration(seconds: 610))
 
 import 'package:dshell/dshell.dart' hide equals;
+import 'package:dshell/src/util/runnable_process.dart';
 import 'package:test/test.dart';
 
 import '../util/test_fs_zone.dart';
@@ -10,15 +11,17 @@ void main() {
     TestZone().run(() {
       var results = <String>[];
 
-      'test/test_scripts/hello_world.dart'.forEach((line) => results.add(line));
+      'dshell -v test/test_scripts/hello_world.dart'.forEach(
+          (line) => results.add(line),
+          stderr: (line) => printerr(line));
 
       // if clean hasn't been run then we have the results of a pub get in the the output.
 
-      expect(getExpected(), anyOf([contains(results), equals(results)]));
+      expect(results, anyOf([contains(getExpected()), equals(getExpected())]));
     });
   });
 }
 
-List<String> getExpected() {
-  return ['Hello World'];
+String getExpected() {
+  return 'Hello World';
 }
