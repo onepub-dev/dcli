@@ -11,7 +11,9 @@ void main() {
     t.test('delete ', () {
       TestZone().run(() {
         var testFile = join(TEST_ROOT, 'lines.txt');
-        createDir(dirname(testFile), recursive: true);
+        if (!exists(dirname(testFile))) {
+          createDir(dirname(testFile), recursive: true);
+        }
 
         touch(testFile, create: true);
 

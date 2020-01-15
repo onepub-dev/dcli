@@ -19,7 +19,9 @@ void main() {
 
         print('PWD: ${pwd}');
 
-        createDir('shell/main', recursive: true);
+        if (!exists('shell/main')) {
+          createDir('shell/main', recursive: true);
+        }
         push('shell');
         cd('main');
 
@@ -57,6 +59,7 @@ void main() {
         echo(pwd);
       } finally {
         print('In finally');
+        deleteDir('shell/main');
         pop();
       }
     });

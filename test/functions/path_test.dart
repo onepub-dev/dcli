@@ -55,7 +55,9 @@ void main() {
       TestZone().run(() {
         var testdir = pwd;
         print('mfs cwd: ${pwd}');
-        createDir('cd_test', recursive: true);
+        if (!exists('cd_test')) {
+          createDir('cd_test', recursive: true);
+        }
         cd('cd_test');
         t.expect(pwd, t.equals(absolute(join(testdir, 'cd_test'))));
         cd('..');
