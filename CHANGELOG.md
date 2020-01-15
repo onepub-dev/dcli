@@ -1,3 +1,8 @@
+## 1.0.41
+Fixed a bug in run. We were printing the output rather than adding it to the foreach.
+.start can now capture command not found errors for detached processes.
+Added unit tests for .start
+
 ## 1.0.40
 Fixed a bug where .run wasn't writing output to the console.
 Introduced a new method printerr which prints to stderr.
