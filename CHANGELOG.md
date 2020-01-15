@@ -1,3 +1,6 @@
+## 1.0.43
+Fixed an NPE on start of a script with no args caused by the change to the command parser.
+
 ## 1.0.42
 Improved the command line parser for string_as_process so we cam handle arguments with spaces.
 
