@@ -29,7 +29,11 @@ extension StringAsProcess on String {
   /// See [forEach] to capture output to stdout and stderr
   ///     [toList] to capture stdout to [List<String>]
   ///     [start] - for more control over how the sub process is started.
-  void get run => cmd.run(this);
+  void get run {
+    cmd.run(this,
+        progress:
+            Progress((line) => print(line), stderr: (line) => printerr(line)));
+  }
 
   /// shell
   /// Runs the given string as a command in the OS shell.
