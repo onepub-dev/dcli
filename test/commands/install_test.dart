@@ -89,20 +89,22 @@ void main() {
       var mockSettings = MockSettings();
       var mockEnv = MockEnv();
 
-      // windows no change expected
       when(mockSettings.isWindows).thenReturn(false);
       when(mockSettings.isLinux).thenReturn(true);
       when(mockSettings.isMacOS).thenReturn(false);
       when(mockSettings.dshellBinPath).thenReturn(settings.dshellBinPath);
       when(mockSettings.debug_on).thenReturn(false);
 
-      Settings.setMock(mockSettings);
       when(mockEnv.HOME).thenReturn(env.HOME);
+      when(mockEnv.isOnPath(settings.dshellBinPath)).thenReturn(false);
 
-      //p.Context(style: Style.posix);
+      Settings.setMock(mockSettings);
+      Env.setMock(mockEnv);
+
+      isOnPath(settings.dshellBinPath);
 
       var install = InstallCommand();
-      install.addBinToPath(mockSettings.dshellBinPath);
+      install.addBinToPath(settings.dshellBinPath);
 
       var export = 'export PATH=\$PATH:${settings.dshellBinPath}';
 
@@ -110,7 +112,7 @@ void main() {
     });
 
     test('With Lib', () {});
-  });
+  }, skip: true);
 }
 
 void checkInstallStructure(TestPaths testPaths) {
