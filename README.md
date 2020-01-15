@@ -788,6 +788,7 @@ To achieve this we add a number of methods and operator overloads to the String 
 
 These include:
 * run
+* start({bool detached = false, bool runInShell = false})
 * forEach(LineAction stdout, {LineAction stdout})
 * toList()
 * | operator
@@ -808,6 +809,14 @@ This is the resulting syntax:
 
 ```
 
+If you need to pass an argument to your application that contains spaces then use quotes:
+e.g.
+
+```dart
+   'wc "fred nurk.text"'.run
+```
+
+dshell will strip the quotes and pass 'fred nurk.text' as a single argument.
 
 # Piping
 

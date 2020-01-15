@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
 
+import 'package:dshell/src/script/command_line_runner.dart';
 import 'package:dshell/src/util/stack_trace_impl.dart';
 
 import 'waitForEx.dart';
@@ -142,13 +143,92 @@ class ParsedCliCommand {
   ParsedCliCommand.fromParsed(this.cmd, this.args);
 
   void parse(String command) {
-    // TODO: improve parser so it can handle quoted strings.
-    // we shouldn't replace a double space if it is within a quoted string.
-    command = command.replaceAll('  ', ' ');
-    var parts = command.split(' ');
+    var parts = <String>[];
 
+    var state = ParseState.STARTING;
+
+    // if try the next character should be escaped.
+    // var escapeNext = false;
+
+    // when we find a quote this will be storing
+    // the quote char (' or ") that we are looking for.
+
+    String matchingQuote;
+    var currentPart = '';
+
+    for (var i = 0; i < command.length; i++) {
+      var char = command[i];
+
+      switch (state) {
+        case ParseState.STARTING:
+          // ignore leading space.
+          if (char == ' ') {
+            break;
+          }
+          if (char == '"') {
+            state = ParseState.IN_QUOTE;
+            matchingQuote = '"';
+            break;
+          }
+          if (char == "'") {
+            state = ParseState.IN_QUOTE;
+            matchingQuote = "'";
+            break;
+          }
+          // if (char == '\\') {
+          //   //escapeNext = true;
+          // }
+
+          currentPart += char;
+          state = ParseState.IN_WORD;
+
+          break;
+
+        case ParseState.IN_WORD:
+          if (char == ' ') // && !escapeNext)
+          {
+            //escapeNext = false;
+            // a non-escape space means a new part.
+            state = ParseState.STARTING;
+            parts.add(currentPart);
+            currentPart = '';
+            break;
+          }
+
+          if (char == '"' || char == "'") {
+            throw InvalidArguments(
+                'A command argument may not have a quote in the middle of a word.');
+          }
+
+          // if (char == '\\' && !escapeNext) {
+          //   escapeNext = true;
+          // } else {
+          //   escapeNext = false;
+          // }
+          currentPart += char;
+          break;
+
+        case ParseState.IN_QUOTE:
+          if (char == matchingQuote) {
+            state = ParseState.STARTING;
+            parts.add(currentPart);
+            currentPart = '';
+            break;
+          }
+
+          currentPart += char;
+          break;
+      }
+    }
+
+    if (currentPart.isNotEmpty) {
+      parts.add(currentPart);
+    }
+
+    if (parts.isEmpty) {
+      throw InvalidArguments('The string did not contain a command.');
+    }
     cmd = parts[0];
-    args = [];
 
     if (parts.length > 1) {
       args = parts.sublist(1);
@@ -160,6 +240,8 @@ class ParsedCliCommand {
     }
   }
 }
+
+enum ParseState { STARTING, IN_QUOTE, IN_WORD }
 
 class RunException extends DShellException {
   int exitCode;

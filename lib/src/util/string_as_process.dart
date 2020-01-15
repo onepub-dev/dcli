@@ -20,6 +20,12 @@ extension StringAsProcess on String {
   /// 'zip regions.txt regions.zip'.run
   /// ```
   ///
+  /// If you need to pass an argument to your application that contains spaces then use nested quotes:
+  ///e.g.
+  ///  ```dart
+  ///  'wc "fred nurk.text"'.run
+  ///```
+  ///
   /// See [forEach] to capture output to stdout and stderr
   ///     [toList] to capture stdout to [List<String>]
   ///     [start] - for more control over how the sub process is started.
@@ -34,9 +40,16 @@ extension StringAsProcess on String {
   ///
   /// Any output from the command is displayed on the console.
   ///
+  ///
   /// ```dart
   /// 'zip regions.txt regions.zip'.run
   /// ```
+  ///
+  /// If you need to pass an argument to your application that contains spaces then use nested quotes:
+  ///e.g.
+  ///  ```dart
+  ///  'wc "fred nurk.text"'.run
+  ///```
   ///
   /// See [forEach] to capture output to stdout and stderr
   ///     [toList] to capture stdout to [List<String>]
@@ -54,6 +67,13 @@ extension StringAsProcess on String {
   /// and it will continuing running after the dshell process
   /// exits. The detached process is also detached from the console
   /// and as such no output from the process will be visible.
+  ///
+  ///
+  /// If you need to pass an argument to your application that contains spaces then use nested quotes:
+  ///e.g.
+  ///  ```dart
+  ///  'wc "fred nurk.text"'.run
+  ///```
   ///
   /// See  [run] if you just need to run a process with all the defaults.
   ///      [forEach] to capture output to stdout and stderr
@@ -79,6 +99,13 @@ extension StringAsProcess on String {
   /// 'grep alabama regions.txt'.forEach((line) => print(line)
   ///     , stderr: (line) => print(line));
   /// ```
+  ///
+  ///
+  /// If you need to pass an argument to your application that contains spaces then use nested quotes:
+  ///e.g.
+  ///  ```dart
+  ///  'wc "fred nurk.text"'.run
+  ///```
   ///
   /// See [run] if you don't care about capturing output
   ///     [list] to capture stdout as a String list.
@@ -145,6 +172,8 @@ extension StringAsProcess on String {
   RunnableProcess get process {
     var process = RunnableProcess(this);
     process.start();
+
+    process.waitForStart();
 
     return process;
   } // Treat the [this]  as the name of a file and
