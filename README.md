@@ -584,18 +584,6 @@ cli>
 
 You're now offically in the land of DShell magic.
 
-If you add your script directory to your path then you can run the script from anywhere.
-
-```
-cli>export PATH=~/scriptdir:${PATH}
-cli>first.dart
-Hello world
-My second line
-My third line
-Should I delete 'tmp'? (y/n):
-cli>
-```
-
 Faster you say? 
 
 Read the section on [compiling](#compiling-to-native) your script to make it run even faster.
@@ -627,7 +615,7 @@ Your script is now ready to run.
 if your not a Dart programmer (yet) one of the most difficult things about Dart are Futures. If you are familiar with Javascript then a Future is the equivalent of a Promise.
 
 ## Just ignore Futures
-If your not familiar with Dart of Javascript then for the moment you can just ignore futures. 
+If your not familiar with Dart or Javascript then for the moment you can just ignore futures. 
 
 DShell works very hard to ensure that you don't need to worry about Futures.
 
@@ -635,7 +623,7 @@ This is very intentional.
 
 If you stick to using DShell's built in functions then you can completely ignore Futures. If you start importing Dart's core libraries or third party libraries then you need to pay attention to return types. 
 
-The first time you try to call a method or function that returns a `Future` then its you will know its time to come back here and read about Futures.
+The first time you try to call a method or function that returns a `Future` then you will know its time to come back here and read about Futures.
 
 Until then you can just skip this section.
 
@@ -756,14 +744,11 @@ If you absolutely need to make your script perform to the max, you will want to 
 DShell also allows you to compile your script and any dependencies to a native executable.
 
 ```
-dshell compile <scriptname.dart> -o exename
+dshell compile <scriptname.dart>
 ```
 
-The `-o` option is optional. If not specified the resulting executable will be called `<scriptname>` without the `.dart` extension.
 
-The `-o` option also allows a path to be specified so you can install the executable directly into a directory such as `/usr/bin`.
-
-DShell will automatically marke your new exec as executable using `chmod +x`. 
+DShell will automatically mark your new exec as executable using `chmod +x`. 
 
 Run you natively compiled script to see just how much faster it is now:
 ```
@@ -771,6 +756,8 @@ Run you natively compiled script to see just how much faster it is now:
 ```
 
 As this is fully compiled, changes to your local script file will not affect it (until you recompile) and when the exe runs it will never need to do a pub get as all dependencies are compiled into the native executable.
+
+Check out the the --install option to install the script into your path.
 
 
 You can now copy the exe to another machine (that is binary compatible) and run the exe without having to install Dart, DShell or any other dependancy.
@@ -798,7 +785,10 @@ This is the resulting syntax:
 ```dart
     // run wc (word count) on a file
     // all wc output goes directly to the console
-    'wc fred.text'.run
+    'wc fred.text'.run;
+
+     // Run echo as a detached process
+    'echo into the void'.start(detached: true);
 
     // run grep, printing out each line but suppressing stderr
     'grep import *.dart'.forEach((line) => echo(line)) ;
@@ -829,16 +819,16 @@ Now let's pipe the output of one cli command to another.
 
 The above command launches 'grep' and 'head' to find all import lines in any Dart file and then trim the list (via head) to the first five lines and finally print those lines.
 
-Note: when you use pipe use MUST surround the pipe commands with parentheses () due to a precedence issue. In the above example note the parentheses just before the .forEach and the matching one at the start of the line.
+Note: when you use pipe you MUST surround the pipe commands with parentheses () due to a precedence issue. In the above example note the parentheses just before the .forEach and the matching one at the start of the line.
 
 What we have now is the power of Bash and the elegance of Dart.
 
 # CD/Push/Pop are evil
 The cd, pushd and popd commands of Bash seem like fun but they are actually harbingers of evil.
 
-DShell supports CD, Push and Pop but I strongly recommend that you don't use them.
+DShell supports cd, push and pop but I strongly recommend that you don't use them.
 
-I know that they they are used everywhere and they seem such an elegant solution but in a script they just shouldn't be used.
+I know that they are used everywhere and they seem such an elegant solution but in a script they just shouldn't be used.
 
 Instead use relative or absolute paths.
 
@@ -880,7 +870,7 @@ There are several reasons.
 
 The correct answer is simply don't use CD/PUSH/POP.
 
-Use relative or absolute paths.
+Use relative or preferably absolute paths.
 
 # Dependency Management
 Dart has a large collection of built in packages. You can read about the core packages at:
@@ -894,7 +884,7 @@ There are thousands of third party packages that you can use in your DShell scri
 
 https://pub.dev/packages
 
-NOTE: you can't use Flutter packages in your DShell scripts.
+NOTE: you can't use Flutter or web packages in your DShell scripts.
 
 To use an external package you need to add it as a dependency to your script.
 
@@ -955,7 +945,7 @@ The DShell `@pubspec` annotation allows you to retain the concept of a single sc
 anywhere and it will just work. 
 
 Using the `@pubspec` annotation also means that you can have many DShell scripts living in the same directory each with their
-own pubspec. If you use a classic pubspec.yaml then all your scripts will be sharing the same pubspec (which isn't necessarily a bad thing).
+own pubspec. If you use a classic pubspec.yaml then all your scripts, in that directory, will be sharing the same pubspec (which isn't necessarily a bad thing).
 
 See the section on [PubSpec precedence](#Pubspec-Precendence) for details on how DShell works if you mix pubspec annotations and a pubspec.yaml in the same directory.
 
@@ -993,7 +983,7 @@ dependencies:
   args: ^1.5.2
   path: ^1.6.4
 ```
-
+Dshell also supports the dependencies_override section if you have any locally developed packages you want to inject.
 
 If you find a really nice package that you use time and again then its easier to add it to the set of default dependencies than having to add it to every script.
 
@@ -1016,7 +1006,7 @@ The 'args' package makes it easy to process command line arguments including add
 
 DShell provides a nice set of basic tools (packages) for your DShell scripts and you can add more in your script's pubspec. 
 
-Some times you may find that a script needs a specific version of a default dependency. DShell allows you override a default dependencies version on a per script basis.
+Sometimes you may find that a script needs a specific version of a default dependency. DShell allows you override a default dependencies version on a per script basis.
 
 
 If you have declared any of the default packages in the dependancies section of you `@pubspec` annotation or your classic `pubspec.yaml` then the version you declare will be used instead of the default version.
@@ -1106,8 +1096,8 @@ Once the `split` command completes you will have a newly created `pubspec.yaml` 
 
 # Multi-file scripts
 
-As with all little projects they have a habit of getting larger than expected.
-At some point you are going to want to spread you script over multiple dart libraries.
+As with all little projects, they have a habit of getting larger than expected.
+At some point you are going to want to spread you script over multiple Dart libraries.
 
 Well, DShell supports this as well.
 
@@ -1166,11 +1156,12 @@ And copy the following contents into tax.dart.
 
 ```
 
-Run you script the same way as usual:
+Run your script the same way as usual:
 
 ```
     dshell tryme.dart
 ```
+All the standard Dart rules and features of lib directory apply.
 
 # DShell commands
 DShell provides a number of command line tools to help you manage your DShell scripts.
