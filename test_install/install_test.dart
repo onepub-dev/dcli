@@ -7,11 +7,11 @@ import 'package:dshell/src/util/dshell_exception.dart';
 import 'package:mockito/mockito.dart';
 import 'package:test/test.dart';
 
-import '../mocks/mock_env.dart';
-import '../mocks/mock_settings.dart';
-import '../util/test_fs_zone.dart';
-import '../util/test_paths.dart';
-import '../util/wipe.dart';
+import '../test/mocks/mock_env.dart';
+import '../test/mocks/mock_settings.dart';
+import '../test/util/test_fs_zone.dart';
+import '../test/util/test_paths.dart';
+import '../test/util/wipe.dart';
 
 String script = 'test/test_scripts/hello_world.dart';
 
