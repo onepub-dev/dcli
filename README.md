@@ -1,4 +1,4 @@
-# DShell - a bash replacement using the Dart programming language
+# DShell - a library and tools for building bash style cli scripts using the Dart programming language.
 
 # Contents
 * [Overview](#overview)
