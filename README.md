@@ -106,6 +106,7 @@ DShell is hopefully that.
 * Makes it easy to write maintenance scripts as you do with Bash. 
 * Uses the elegant and simple Dart language
 * Provides a set of functions (commands) that mimick common bash operations.
+* Simple to use tooling and dependency management.
 * Allows for simple manipulation of files and directories
   * move(from, to), createDir(path), cd(path)...
 * Allows you to call any cli application in a single line
@@ -116,7 +117,8 @@ DShell is hopefully that.
   * 'grep error /var/lib/syslog'.forEach((line) => print(line));
 * Chain multiple cli commands using pipes
   * ('grep error /var/lib/syslog' |'head -n 5').forEach((line) => print(line));
-* executes commands synchronously, so no need to worry about futures.
+* Executes commands synchronously, so no need to worry about futures.
+* Optionally compile scripts to a standalone native executable.
 
 ## What commands does DShell support?
 
