@@ -44,6 +44,7 @@ class Env extends DShellFunction {
   Env._internal() {
     var platformVars = Platform.environment;
 
+    // build a local map with all of the OS environment vars.
     for (var entry in platformVars.entries) {
       envVars.putIfAbsent(entry.key, () => entry.value);
     }
