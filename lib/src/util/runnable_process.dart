@@ -21,7 +21,10 @@ typedef CancelableLineAction = bool Function(String line);
 /// out to stderr and expected output to stdout.
 ///
 /// [line] the line to write to stderr.
-void printerr(String line) => stderr.write(line);
+void printerr(String line) {
+  stderr.write(line);
+  stderr.flush();
+}
 
 class RunnableProcess {
   Future<Process> fProcess;
