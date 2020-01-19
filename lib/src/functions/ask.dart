@@ -26,10 +26,38 @@ import 'echo.dart';
 /// to the console and the cursor placed immediately after the prompt.
 String ask({String prompt}) => Ask().ask(prompt: prompt);
 
+/// [yesNo] is a specialized version of ask that returns true or
+/// false based on the value entered.
+/// Accepted values are y|t|true|yes and n|f|false|no.
+/// Entered values are forced to lower case.
+/// If the user enteres an unknown value an error is printed
+/// and they are reprompted.
+bool yesNo({String prompt}) {
+  bool result;
+  var matched = false;
+  while (!matched) {
+    var entered = Ask().ask(prompt: prompt, toLower: true);
+    var lower = entered.toLowerCase();
+
+    if (['y', 't', 'true', 'yes'].contains(lower)) {
+      result = true;
+      matched = true;
+      break;
+    }
+    if (['n', 'f', 'false', 'no'].contains(lower)) {
+      result = false;
+      matched = true;
+      break;
+    }
+    print('Invalid value: $entered');
+  }
+  return result;
+}
+
 class Ask extends DShellFunction {
   ///
   /// Reads user input from stdin and returns it as a string.
-  String ask({String prompt}) {
+  String ask({String prompt, bool toLower}) {
     if (Settings().debug_on) {
       Log.d('ask:  ${prompt}');
     }
