@@ -1,7 +1,7 @@
 import 'dart:io';
 
 import 'package:dshell/dshell.dart';
-import 'package:dshell/src/script/my_yaml.dart';
+import 'util/version.g.dart';
 
 import 'script/flags.dart';
 import 'util/stack_list.dart';
@@ -64,23 +64,7 @@ class Settings {
   Settings.init({
     this.appname = 'dshell',
   }) {
-    var script = Platform.script;
-
-    if (script.isScheme('file')) {
-      try {
-        var dshellYaml = MyYaml.loadFromFile(
-            join(dirname(Platform.script.toFilePath()), '../pubspec.yaml'));
-
-        version = dshellYaml.getValue('version');
-      } catch (e) {
-        // looks like we can't determine the version
-        version = '1.0.28';
-      }
-    } else {
-      // we can't get Platform.script when we are in a unit test
-      // so set the version to a default that makes it clear its bogus
-      version = '1.x.x-unit-test';
-    }
+    version = dshell_version;
 
     _self = this;
 
