@@ -1,4 +1,4 @@
-export 'src/functions/ask.dart' show ask;
+export 'src/functions/ask.dart' show ask, yesNo;
 export 'src/functions/cat.dart' show cat, CatException;
 export 'src/functions/cd.dart' show cd, CDException;
 export 'src/functions/chmod.dart' show chmod, ChModException;
