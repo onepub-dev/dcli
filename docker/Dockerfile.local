@@ -1,0 +1,19 @@
+FROM google/dart
+
+WORKDIR /
+
+
+# Add the entire dshell project so we can run from the local filesystem
+ADD . /dshell
+
+RUN find / -name pubspec.yaml
+
+
+RUN pub global activate --source path /dshell 
+
+ADD test_install/install_test.dart /dshell/test_install/install_test.dart
+
+
+CMD []
+
+ENTRYPOINT ["/usr/bin/dart", "/dshell/test_install/install_test.dart"] 
