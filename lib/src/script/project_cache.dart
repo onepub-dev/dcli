@@ -1,9 +1,7 @@
-import 'dart:io';
+import 'package:file/file.dart';
 
+import '../../dshell.dart';
 import 'virtual_project.dart';
-import '../util/file_helper.dart';
-import '../util/log.dart';
-import '../util/waitForEx.dart';
 
 import '../settings.dart';
 import 'script.dart';
@@ -77,20 +75,40 @@ class ProjectCache {
   /// Checks if the dscript cache exists
   /// and if not creates it.
   void initCache() {
-    createDir(Settings().cachePath, 'cache');
+    if (!exists(Settings().cachePath)) {
+      createDir(Settings().cachePath);
+    }
   }
 
-  /// If the [cleanall] command issued
+  /// If the [cleanall] command is issued
   /// we will clean out the project cache
   /// for all scripts.
   void cleanAll() {
-    Log().d(
-      'Cleaning project cache ${Settings().cachePath}',
-    );
+    print('Cleaning project cache ${Settings().cachePath}');
+
     try {
-      waitForEx(Directory(Settings().cachePath).delete(recursive: true));
-      // now recreate the cache dir
-      initCache();
+      find('*.project',
+          root: Settings().cachePath,
+          recursive: true,
+          types: [FileSystemEntityType.directory]).forEach((projectPath) {
+        var scriptPath = join(
+            '/',
+            withoutExtension(
+                    relative(projectPath, from: Settings().cachePath)) +
+                '.dart');
+
+        deleteDir(projectPath, recursive: true);
+
+        if (exists(scriptPath)) {
+          print('');
+          print(green('Cleaning $scriptPath'));
+          var project =
+              VirtualProject(Settings().cachePath, Script.fromFile(scriptPath));
+          project.clean();
+        } else {
+          print('Removed obsolete cache for $scriptPath');
+        }
+      });
     } finally {}
   }
 }
