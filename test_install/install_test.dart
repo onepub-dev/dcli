@@ -16,7 +16,7 @@ import '../test/util/wipe.dart';
 String script = 'test/test_scripts/hello_world.dart';
 
 void main() {
-  group('Install DShell', () {
+  group('Install DShell', () {  
     test('clean install', () {
       TestZone().run(() {
         try {
@@ -81,9 +81,11 @@ void main() {
       install.addBinToPath(mockSettings.dshellBinPath);
 
       expect(PATH, isNot(contains(settings.dshellBinPath)));
-    });
+    }, skip: false);
 
     test('set env PATH Linux', () {
+      Settings.setMock(null);
+      Env.setMock(null);
       var settings = Settings();
       var env = Env();
       var mockSettings = MockSettings();
@@ -112,7 +114,7 @@ void main() {
     });
 
     test('With Lib', () {});
-  }, skip: true);
+  }, skip: false);
 }
 
 void checkInstallStructure(TestPaths testPaths) {
