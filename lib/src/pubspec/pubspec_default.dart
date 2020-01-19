@@ -26,9 +26,6 @@ class PubSpecDefault implements PubSpec // with DependenciesMixin
 name: ${_script.basename}
 version: $version
 ''';
-// dependencies:
-//   ${yamlLines.join("\n  ")}
-//    ''';
   }
 
   @override
@@ -43,12 +40,4 @@ version: $version
   void writeToFile(String path) {
     pubspec.writeToFile(path);
   }
-
-  // static List<Dependency> get defaultDepencies {
-  //   return [
-  //     Dependency("dshell", "^1.0.0"),
-  //     Dependency("args", "^1.5.2"),
-  //     Dependency("path", "^1.6.4"),
-  //   ];
-  // }
 }

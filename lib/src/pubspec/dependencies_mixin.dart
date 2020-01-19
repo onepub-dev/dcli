@@ -25,7 +25,13 @@ mixin DependenciesMixin {
 
     if (map != null) {
       for (var entry in map.entries) {
-        var dependency = Dependency(entry.key as String, entry.value as String);
+        Dependency dependency;
+        if (entry.value is String) {
+          dependency = Dependency(entry.key as String, entry.value as String);
+        } else {
+          var path = (entry.value as YamlMap)['path'] as String;
+          dependency = Dependency.fromPath(entry.key as String, path);
+        }
         dependencies[dependency.name] = dependency;
       }
     }

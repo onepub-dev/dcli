@@ -30,9 +30,9 @@ dependencies:
   collection: ^1.14.12
   file_utils: ^0.1.3
   path: ^1.6.4
-dependency_overrides:
   dshell:
     path: /home/dshell
+dependency_overrides:
   args:
     path: /home/args
   ''';
@@ -43,6 +43,28 @@ dependency_overrides:
       Dependency('file_utils', '^0.1.3'),
       Dependency('path', '^1.6.4'),
       Dependency.fromPath('dshell', '/home/dshell'),
+    ];
+
+    var gd = GlobalDependencies.fromString(content);
+    expect(gd.dependencies, equals(expected));
+  });
+
+  test('local dshell', () {
+    var content = '''
+dependencies:
+  dshell: ^1.0.44 
+  args: ^1.5.2
+  path: ^1.6.4
+
+dependency_overrides:
+  dshell: 
+    path: /home//dshell
+  ''';
+
+    var expected = [
+      Dependency.fromPath('dshell', '/home/dshell'),
+      Dependency('args', '^1.5.2'),
+      Dependency('path', '^1.6.4'),
     ];
 
     var gd = GlobalDependencies.fromString(content);
