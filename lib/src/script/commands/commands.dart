@@ -1,3 +1,5 @@
+import 'package:dshell/src/script/commands/version.dart';
+
 import 'clean.dart';
 import 'clean_all.dart';
 import 'compile.dart';
@@ -20,6 +22,7 @@ class Commands {
         MergeCommand(),
         RunCommand(),
         SplitCommand(),
+        VersionCommand(),
         HelpCommand(),
       ];
 
