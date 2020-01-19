@@ -1,3 +1,5 @@
+import 'package:pub_semver/pub_semver.dart';
+
 import 'pubspec.dart';
 import '../script/dependency.dart';
 import '../script/script.dart';
@@ -14,7 +16,9 @@ class PubSpecDefault implements PubSpec // with DependenciesMixin
   @override
   String get name => _script.basename;
   @override
-  String get version => '1.0.0';
+  Version get version => Version.parse('1.0.0');
+  @override 
+  set version(Version version) => pubspec.version = version;
 
   PubSpecDefault(this._script) {
     pubspec = PubSpecImpl.fromString(_default());

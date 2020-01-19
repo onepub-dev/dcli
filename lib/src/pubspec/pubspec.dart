@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:dshell/src/script/command_line_runner.dart';
+import 'package:pub_semver/pub_semver.dart';
 
 import '../functions/read.dart';
 import '../script/dependency.dart';
@@ -14,7 +15,8 @@ import 'package:pubspec/pubspec.dart' as pub;
 
 abstract class PubSpec {
   String get name;
-  String get version;
+  Version get version;
+  set version(Version version);
 
   /// Saves the pubspec.yaml into the
   /// given directory
@@ -30,7 +32,10 @@ class PubSpecImpl implements PubSpec {
   @override
   String get name => pubspec.name;
   @override
-  String get version => pubspec.version.toString();
+  Version get version => pubspec.version;
+
+  @override
+  set version(Version version) => pubspec.copy(version: version);
 
   @override
   set dependencies(List<Dependency> dependencies) {

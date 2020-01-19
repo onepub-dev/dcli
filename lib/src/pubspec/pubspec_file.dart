@@ -1,3 +1,5 @@
+import 'package:pub_semver/pub_semver.dart';
+
 import '../script/dependency.dart';
 import '../script/script.dart';
 
@@ -44,5 +46,8 @@ class PubSpecFile implements PubSpec // with DependenciesMixin
   String get name => pubspec.name;
 
   @override
-  String get version => pubspec.version;
+  Version get version => pubspec.version;
+
+  @override
+  set version(Version version) => pubspec.version = version;
 }
