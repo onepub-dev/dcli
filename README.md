@@ -138,7 +138,8 @@ These are some of the built-in commands:
 * createDir(path)
 * deleteDir(path)
 * pwd
-* ask({String prompt})
+* ask({String prompt, bool toLower, bool hidden})
+* confirm(String prompt)
 * read
 * touch(path)
 * basename(path)
@@ -320,6 +321,12 @@ import 'package:dshell/dshell.dart';
 void main() {
     print('Now lets do someting useful.');
 
+    var username =  ask(prompt: 'username:');
+    print('username: $username');
+
+    var password = ask(prompt: 'password:', hidden = true);
+    print('password: $password');
+    
     // create a directory
     createDir('tmp');
     
@@ -372,9 +379,7 @@ void main() {
             .forEach((line) => print('stdout: $line')
                 , stderr: (line) => print('stderr: $line'));
 
-    String result = ask(prompt: "Should I delete 'tmp'? (y/n):");
-
-    if (result == 'y') {
+    if (confirm(prompt: "Should I delete 'tmp'? (y/n):"))
         // Now lets clean up
         delete('tmp/text.txt');
         delete('tmp/second.txt');
