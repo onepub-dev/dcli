@@ -24,6 +24,8 @@ import 'echo.dart';
 ///
 /// If [prompt] set then the prompt will be printed
 /// to the console and the cursor placed immediately after the prompt.
+///
+/// if [multiline] is true then
 String ask({String prompt}) => Ask().ask(prompt: prompt);
 
 /// [yesNo] is a specialized version of ask that returns true or
@@ -32,7 +34,7 @@ String ask({String prompt}) => Ask().ask(prompt: prompt);
 /// Entered values are forced to lower case.
 /// If the user enteres an unknown value an error is printed
 /// and they are reprompted.
-bool yesNo({String prompt}) {
+bool confirm({String prompt}) {
   bool result;
   var matched = false;
   while (!matched) {

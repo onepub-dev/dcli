@@ -16,10 +16,17 @@ void main(List<String> args) {
 
   parser.addFlag('incVersion',
       abbr: 'i',
-      defaultsTo: false,
+      defaultsTo: true,
       help: 'Prompts the to increment the version no.');
 
+  parser.addCommand('help');
   var results = parser.parse(args);
+
+  // only one commmand so it must be help
+  if (results.command != null) {
+    showUsage(parser);
+    exit(0);
+  }
 
   var incVersion = results['incVersion'] as bool;
 
@@ -52,10 +59,10 @@ void main(List<String> args) {
   print('Current Dshell version is $version');
 
   if (incVersion) {
-    incrementVersion(version, pubspec, pubspecPath);
+    version = incrementVersion(version, pubspec, pubspecPath);
   }
 
-  if (yesNo(prompt: 'Create a git release tag (Y/N):')) {
+  if (confirm(prompt: 'Create a git release tag (Y/N):')) {
     var tagName = 'v${version}';
 
     // Check if the tag already exists and offer to replace it if it does.
@@ -70,24 +77,41 @@ void main(List<String> args) {
       }
     }
 
-    var message = ask(prompt: 'Enter a tag message:');
+    'git tag -a $tagName'.run;
+
+    var message = ask(prompt: 'Enter a release message:');
     'git tag -a $tagName -m "$message"'.run;
   }
+}
+
+void showUsage(ArgParser parser) {
+  print('''Releases a dart project:
+      Increments the version no. in pubspec.yaml
+      Regenerates src/util/version.g.dart with the new version no.
+      Creates a git tag with the version no. in the form 'v<version-no>'
+      Updates the CHANGELOG.md with a new version no. and the set of
+      git commit messages.
+      Commits the above changes
+      Pushes the final results to git
+      Runs docker unit tests checking that they have passed (?how)
+      Publishes the package using 'pub publish'
+
+      Usage:
+      ${parser.usage}
+      ''');
 }
 
 bool tagExists(String tagName) {
   var tags = 'git tag --list'.toList();
 
-  print(tags.join(','));
-
   return (tags.contains(tagName));
 }
 
-void incrementVersion(
+Version incrementVersion(
     Version version, PubSpecFile pubspec, String pubspecPath) {
-  if (yesNo(prompt: 'Is this a breaking change? (Y/N)')) {
+  if (confirm(prompt: 'Is this a breaking change? (Y/N)')) {
     version = version.nextBreaking;
-  } else if (yesNo(prompt: 'Is a small patch? (Y/N)')) {
+  } else if (confirm(prompt: 'Is a small patch? (Y/N)')) {
     version = version.nextPatch;
   } else {
     version = version.nextMinor;
@@ -98,7 +122,7 @@ void incrementVersion(
 
   print('');
   print('The new version is: $version');
-  if (yesNo(prompt: 'Is this the correct version (Y/N): ')) {
+  if (confirm(prompt: 'Is this the correct version (Y/N): ')) {
     // write new version.g.dart file.
     var versionPath =
         join(dshellRootPath, 'lib', 'src', 'util', 'version.g.dart');
@@ -112,4 +136,5 @@ void incrementVersion(
     pubspec.version = version;
     pubspec.writeToFile(pubspecPath);
   }
+  return version;
 }

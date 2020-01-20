@@ -1,5 +1,5 @@
 export 'package:args/args.dart';
-export 'src/functions/ask.dart' show ask, yesNo;
+export 'src/functions/ask.dart' show ask, confirm;
 export 'src/functions/cat.dart' show cat, CatException;
 export 'src/functions/cd.dart' show cd, CDException;
 export 'src/functions/chmod.dart' show chmod, ChModException;
