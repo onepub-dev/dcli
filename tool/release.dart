@@ -3,6 +3,7 @@ import 'dart:io';
 
 import 'package:args/args.dart';
 import 'package:dshell/dshell.dart';
+import 'package:dshell/src/functions/ask.dart';
 import 'package:dshell/src/pubspec/pubspec_file.dart';
 import 'package:pub_semver/pub_semver.dart';
 
@@ -27,6 +28,8 @@ void main(List<String> args) {
     showUsage(parser);
     exit(0);
   }
+
+  showEditor('/tmp/test.path');
 
   var incVersion = results['incVersion'] as bool;
 
