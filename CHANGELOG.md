@@ -1,3 +1,9 @@
+## 1.0.45
+Enhancements to ask. Now has option 'hidden' for password entry.
+Added method 'confirm' to accept yes/no answers.
+
+Started work on docker containers for unit testing.
+
 ## 1.0.44
 Fixed .run yet again. Added unit tests for same.
 
