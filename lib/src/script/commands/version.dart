@@ -16,8 +16,6 @@ class VersionCommand extends Command {
 
   @override
   int run(List<Flag> selectedFlags, List<String> subarguments) {
-    var exitCode = 0;
-
     if (subarguments.isNotEmpty) {
       throw CommandLineException(
           "'dshell version' does not take any arguments. Found $subarguments");
