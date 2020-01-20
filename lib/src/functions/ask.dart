@@ -40,10 +40,9 @@ import 'env.dart';
 String ask({String prompt, bool toLower = false, bool hidden = false}) =>
     Ask().ask(prompt: prompt, toLower: toLower, hidden: hidden);
 
-/// [yesNo] is a specialized version of ask that returns true or
+/// [confirm] is a specialized version of ask that returns true or
 /// false based on the value entered.
-/// Accepted values are y|t|true|yes and n|f|false|no.
-/// Entered values are forced to lower case.
+/// Accepted values are y|t|true|yes and n|f|false|no (case insenstiive)
 /// If the user enteres an unknown value an error is printed
 /// and they are reprompted.
 bool confirm({String prompt}) {
