@@ -4,6 +4,7 @@ import 'clean.dart';
 import 'clean_all.dart';
 import 'compile.dart';
 import 'create.dart';
+import 'doctor.dart';
 import 'merge.dart';
 import 'run.dart';
 import 'split.dart';
@@ -13,11 +14,13 @@ import 'help.dart';
 import 'install.dart';
 
 class Commands {
-  static List<Command> get applicationCommands => [
+  static List<Command> get 
+  applicationCommands => [
         CleanAllCommand(),
         CleanCommand(),
         CompileCommand(),
         CreateCommand(),
+        DoctorCommand(),
         InstallCommand(),
         MergeCommand(),
         RunCommand(),
