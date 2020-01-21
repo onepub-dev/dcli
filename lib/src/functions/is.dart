@@ -5,19 +5,26 @@ import '../util/dshell_exception.dart';
 import '../util/stack_trace_impl.dart';
 
 ///
-/// Returns true if the given path points to a file.
+/// Returns true if the given [path] points to a file.
 ///
 /// ```dart
 /// isFile("~/fred.jpg");
 /// ```
 bool isFile(String path) => Is().isFile(path);
 
-/// Returns try if the given path is a directory.
+/// Returns true if the given [path] is a directory.
 /// ```dart
 /// isDirectory("/tmp");
 ///
 /// ```
 bool isDirectory(String path) => Is().isDirectory(path);
+
+/// Returns true if the given [path] is a symlink
+///
+/// // ```dart
+/// isLink("~/fred.jpg");
+/// ```
+bool isLink(String path) => Is().isLink(path);
 
 /// returns true if the given path exists.
 /// It may be a file, directory or link.
@@ -75,6 +82,11 @@ class Is extends DShellFunction {
   bool isDirectory(String path) {
     var fromType = FileSystemEntity.typeSync(path);
     return (fromType == FileSystemEntityType.directory);
+  }
+
+  bool isLink(String path) {
+    var fromType = FileSystemEntity.typeSync(path);
+    return (fromType == FileSystemEntityType.link);
   }
 
   /// checks if the given [path] exists.
