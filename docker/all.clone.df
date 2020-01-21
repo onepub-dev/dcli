@@ -1,0 +1,16 @@
+FROM google/dart
+
+WORKDIR /
+
+RUN git clone https://github.com/bsutton/dshell.git
+
+RUN find / -name pubspec.yaml
+
+RUN pub global activate --source path /dshell 
+
+ADD test/ /dshell/test
+
+CMD []
+
+ENTRYPOINT ["/usr/bin/dart", "/dshell/test"] 
+

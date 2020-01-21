@@ -1,0 +1,27 @@
+# This docker file must be run from the root of dshell directory
+FROM google/dart
+
+WORKDIR /
+
+ENV HOME=/home
+RUN touch /home/.profile
+
+# Add the entire dshell project so we can run from the local filesystem
+COPY . /dshell
+
+RUN find /dshell -name "*"
+
+RUN pub global activate --source path /dshell 
+
+COPY test /dshell/test
+
+CMD []
+
+RUN echo 'about to run pub run'
+
+
+WORKDIR /dshell
+
+#ENTRYPOINT ["/usr/lib/dart/bin/pub", "run", "test", "/dshell/test"] 
+ENTRYPOINT pub run test test 
+#ENTRYPOINT ["echo.dart", "run", "test", "/dshell/test"] 

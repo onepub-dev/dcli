@@ -2,6 +2,8 @@ FROM google/dart
 
 WORKDIR /
 
+ENV HOME=/home
+RUN touch /home/.profile
 
 # Add the entire dshell project so we can run from the local filesystem
 ADD . /dshell
