@@ -157,3 +157,12 @@ class FileSync {
     }
   }
 }
+
+///
+/// Creates a link at [linkPath] which points to the
+/// file or directory at [targetPath]
+///
+void symlink(String linkPath, String targetPath) {
+  var link = Link(linkPath);
+  link.createSync(targetPath);
+}
