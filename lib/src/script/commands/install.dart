@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:dshell/dshell.dart';
 import 'package:dshell/src/functions/env.dart';
 import 'package:dshell/src/script/commands/clean_all.dart';
+import 'package:dshell/src/script/dart_sdk.dart';
 
 import '../../functions/which.dart';
 import '../../pubspec/global_dependencies.dart';
@@ -90,7 +91,7 @@ class InstallCommand extends Command {
     // print OS version.
     // print('Platform.version ${Platform.version}');
 
-    var dshellLocation = which('dshell').toList();
+    var dshellLocation = which('dshell', first: true).toList();
     // check if dshell is on the path
     if (dshellLocation.isEmpty) {
       print('');
@@ -103,7 +104,15 @@ class InstallCommand extends Command {
       }
       exit(1);
     } else {
-      print(blue('dshell found in : ${dshellLocation[0]}'));
+      var dshellPath = dshellLocation[0];
+      print(blue('dshell found in : ${dshellPath}'));
+
+      // link so all users can run dshell
+      // We use the location of dart exe and add dshell symlink
+      // to the same location.
+      // TODO: this is going to require sudo to install???
+      var linkPath = join(dirname(DartSdk().exePath), 'dshell');
+      //symlink(dshellPath, linkPath);
     }
     print('');
 
