@@ -13,31 +13,51 @@ class DartSdk {
   /// Path of Dart SDK
   String _sdkPath;
 
+  // Path the dart executable obtained by scanning the PATH
+  String _exePath;
+
   String _version;
 
   factory DartSdk() {
-    _self ??= DartSdk._internal(_detect());
+    _self ??= DartSdk._internal();
 
     return _self;
   }
 
-  DartSdk._internal(String sdkPath) {
-    _sdkPath = sdkPath;
-    Settings().verbose('Dart SDK Version  ${version}, path: ${_sdkPath}');
+  DartSdk._internal() {
+    if (Settings().isVerbose) {
+      // expensive operation so only peform if required.
+      Settings().verbose('Dart SDK Version  ${version}, path: ${_sdkPath}');
+    }
   }
 
-  String get dartPath => p.join(_sdkPath, 'bin', 'dart');
+  String get sdkPath {
+    _sdkPath ??= _detect();
+    return _sdkPath;
+  }
 
-  String get pubGetPath => p.join(_sdkPath, 'bin', 'pub');
+  String get exePath {
+    if (_exePath == null) {
+      // this is an expesive operation so only do it if required.
+      var paths = which('dart', first: true).toList();
+      assert(paths.length == 1);
+      _exePath = paths[0];
+    }
+    return _exePath;
+  }
 
-  String get dart2NativePath => p.join(_sdkPath, 'bin', 'dart2native');
+  String get dartPath => p.join(sdkPath, 'bin', 'dart');
+
+  String get pubGetPath => p.join(sdkPath, 'bin', 'pub');
+
+  String get dart2NativePath => p.join(sdkPath, 'bin', 'dart2native');
 
   Progress runDart2Native(
       Script script, String outputDir, String workingDirectory,
       {Progress progress}) {
     var runArgs = <String>[];
     runArgs.add(script.path);
-    runArgs.add('--output=${outputDir}/${script.basename}');
+    runArgs.add('--output=${join(outputDir, script.basename)}');
 
     return run(dart2NativePath, runArgs, workingDirectory, progress: progress);
   }
@@ -70,14 +90,7 @@ class DartSdk {
   }
 
   static String _detect() {
-    var executable = Platform.executable;
-    final s = Platform.pathSeparator;
-
-    if (!executable.contains(s)) {
-      if (Platform.isLinux) {
-        executable = Link('/proc/$pid/exe').resolveSymbolicLinksSync();
-      }
-    }
+    var executable = Platform.resolvedExecutable;
 
     final file = File(executable);
     if (!file.existsSync()) {
@@ -88,7 +101,7 @@ class DartSdk {
     parent = parent.parent;
 
     final sdkPath = parent.path;
-    final dartApi = '$sdkPath${s}include${s}dart_api.h';
+    final dartApi = "${join(sdkPath, 'include', 'dart_api.h')}";
     if (!File(dartApi).existsSync()) {
       throw Exception('Cannot find Dart SDK!');
     }
