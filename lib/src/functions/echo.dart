@@ -21,7 +21,6 @@ class Echo extends DShellFunction {
     } else {
       stdout.write(text);
     }
-    var future = stdout.flush();
-    waitForEx<dynamic>(future);
+    waitForEx<dynamic>(stdout.flush());
   }
 }
