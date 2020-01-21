@@ -16,7 +16,7 @@ import '../test/util/wipe.dart';
 String script = 'test/test_scripts/hello_world.dart';
 
 void main() {
-  group('Install DShell', () {  
+  group('Install DShell', () {
     test('clean install', () {
       TestZone().run(() {
         try {
@@ -74,20 +74,16 @@ void main() {
       when(mockEnv.isOnPath(settings.dshellBinPath)).thenReturn(false);
 
       Settings.setMock(mockSettings);
-
       Env.setMock(mockEnv);
 
       var install = InstallCommand();
       install.addBinToPath(mockSettings.dshellBinPath);
 
       expect(PATH, isNot(contains(settings.dshellBinPath)));
-    }, skip: false);
+    }, skip: true);
 
     test('set env PATH Linux', () {
-      Settings.setMock(null);
-      Env.setMock(null);
       var settings = Settings();
-      var env = Env();
       var mockSettings = MockSettings();
       var mockEnv = MockEnv();
 
@@ -97,20 +93,18 @@ void main() {
       when(mockSettings.dshellBinPath).thenReturn(settings.dshellBinPath);
       when(mockSettings.debug_on).thenReturn(false);
 
-      when(mockEnv.HOME).thenReturn(env.HOME);
+      when(mockEnv.HOME).thenReturn(HOME);
       when(mockEnv.isOnPath(settings.dshellBinPath)).thenReturn(false);
 
       Settings.setMock(mockSettings);
       Env.setMock(mockEnv);
-
-      isOnPath(settings.dshellBinPath);
 
       var install = InstallCommand();
       install.addBinToPath(settings.dshellBinPath);
 
       var export = 'export PATH=\$PATH:${settings.dshellBinPath}';
 
-      expect(read(join(env.HOME, '.profile')).toList(), contains(export));
+      expect(read(join(HOME, '.profile')).toList(), contains(export));
     });
 
     test('With Lib', () {});
