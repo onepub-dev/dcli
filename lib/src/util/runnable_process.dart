@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
 
+import 'package:dshell/src/functions/env.dart';
 import 'package:dshell/src/script/command_line_runner.dart';
 import 'package:dshell/src/util/stack_trace_impl.dart';
 
@@ -23,7 +24,7 @@ typedef CancelableLineAction = bool Function(String line);
 /// [line] the line to write to stderr.
 void printerr(String line) {
   stderr.write(line);
-  stderr.flush();
+  waitForEx<dynamic>(stderr.flush());
 }
 
 class RunnableProcess {
@@ -68,6 +69,7 @@ class RunnableProcess {
       runInShell: runInShell,
       workingDirectory: workdir,
       mode: mode,
+      environment: envs,
     );
   }
 

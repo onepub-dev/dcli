@@ -27,6 +27,11 @@ List<String> get PATH => Env().PATH;
 /// returns the path to the OS specific HOME directory
 String get HOME => Env().HOME;
 
+/// Returns a map of all the environment variables
+/// inherited from the parent as well as any changes
+/// made by calls to [setEnv].
+Map<String, String> get envs => Env().envVars;
+
 ///
 /// Internally sets an environment varaible.
 /// NOTE: this does NOT affect the parent
