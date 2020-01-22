@@ -759,6 +759,20 @@ If you run a child process via any of the DShell methods then the child process 
 
 You CANNOT change the DShell script parent environment variables. This is a security restriction imposed by the OS.
 
+DShell also exposed a number of commonly used environment variables as global getters.
+
+* HOME
+* PATH
+
+'''
+// home will contain the path to your HOME directory.
+var home = HOME;
+
+/// paths will contain a list of the paths contain in your OS PATH environment variable.
+List<String> paths = PATH;
+
+paths.forEach((path) => print(path));
+
 # Performance
 
 DShell is intended to start as fast as Bash and run faster than Bash. 
