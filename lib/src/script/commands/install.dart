@@ -3,7 +3,6 @@ import 'dart:io';
 import 'package:dshell/dshell.dart';
 import 'package:dshell/src/functions/env.dart';
 import 'package:dshell/src/script/commands/clean_all.dart';
-import 'package:dshell/src/script/dart_sdk.dart';
 
 import '../../functions/which.dart';
 import '../../pubspec/global_dependencies.dart';
