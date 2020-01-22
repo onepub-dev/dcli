@@ -2,6 +2,8 @@ import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
 
+import 'package:dshell/dshell.dart';
+
 import 'waitForEx.dart';
 
 import 'dshell_exception.dart';
@@ -122,6 +124,10 @@ class FileSync {
     return _file.statSync();
   }
 
+  String resolveSymLink() {
+    return _file.resolveSymbolicLinksSync();
+  }
+
   /// Truncates the file to zero bytes and
   /// then writes the given text to the file.
   /// If [newline] is null then no line terminator will
@@ -165,8 +171,23 @@ class FileSync {
 void symlink(
   String existingPath,
   String linkPath,
-  
 ) {
   var link = Link(linkPath);
   link.createSync(existingPath);
+}
+
+///
+/// Resolves the a symbolic link
+/// to the ultimate target path.
+/// The return path will be canonicalized.
+/// 
+/// e.g.
+/// resolveSymLink('/usr/bin/dart) == '/usr/lib/bin/dart'
+///
+/// throws a FileSystemException if the
+/// target path does not exist.
+String resolveSymLink(String path) {
+  var normalised = canonicalize(path);
+  var file = FileSync(normalised);
+  return canonicalize(file.resolveSymLink());
 }
