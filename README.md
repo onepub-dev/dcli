@@ -736,6 +736,28 @@ void main() {
 
 As you can see we have achieved much of the power of Bash without any of the ugly grammar, and what's more we only used one type of quote!
 
+# Environment Variables
+
+Dshell provides tools to manage the environment variables within your DShell script and any child process you call from a Dshell script.
+
+When a DShell script starts, it loads the set of environment variables from its parent process. The full set of environment variables are available via the `env` function.
+
+To access an environment variable:
+
+```
+var colorTermValue = env('COLORTERM');
+```
+
+You can also set an environment variable:
+
+```
+setEnv('DART_SDK', 'somepath');
+```
+Once you set an environment variable or modify an existing one, then any calls to `env()` will return the set value.
+
+If you run a child process via any of the DShell methods then the child process will be passed all of current environment variable.
+
+You CANNOT change the DShell script parent environment variables. This is a security restriction imposed by the OS.
 
 # Performance
 
