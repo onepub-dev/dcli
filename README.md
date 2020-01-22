@@ -17,6 +17,7 @@
   * [Just ignore Futures](#just-ignore-Futures)
   * [How DShell manages futures](#how-dshell-manages-futures)
 * [Using DShell functions](#using-dshell-functions)
+* [Environment Variables](#environment-variables)
 * [Performance](#performance)
 * [Compiling to Native](#compiling-to-native)
 * [Calling cli applications](#calling-cli-applications)
@@ -757,14 +758,14 @@ Once you set an environment variable or modify an existing one, then any calls t
 
 If you run a child process via any of the DShell methods then the child process will be passed all of current environment variable.
 
-You CANNOT change the DShell script parent environment variables. This is a security restriction imposed by the OS.
+You CANNOT change the DShell script's parent environment variables. This is a security restriction imposed by the OS.
 
-DShell also exposed a number of commonly used environment variables as global getters.
+DShell also exposes a number of commonly used environment variables as global getters.
 
 * HOME
 * PATH
 
-'''
+```
 // home will contain the path to your HOME directory.
 var home = HOME;
 
@@ -772,6 +773,7 @@ var home = HOME;
 List<String> paths = PATH;
 
 paths.forEach((path) => print(path));
+```
 
 # Performance
 
@@ -869,7 +871,6 @@ What we have now is the power of Bash and the elegance of Dart.
 # CD/Push/Pop are evil
 The cd, pushd and popd commands of Bash seem like fun but they are actually harbingers of evil.
 
-DShell supports cd, push and pop but I strongly recommend that you don't use them.
 
 I know that they are used everywhere and they seem such an elegant solution but in a script they just shouldn't be used.
 
@@ -879,7 +880,18 @@ DShell automatically injects the rather excelent package ['path'](https://pub.de
 
 Such as: 
 ```dart
-join('directory', 'file.txt');
+String filePath = join('directory', 'file.txt');
+
+String dartPath = join('usr', 'lib', 'bin', 'dart');
+
+// absolute path to your current working directory.
+String current = absolute('.');
+
+// create a safe path by replacing the segments (..) with the real path.
+String safe = canonicalize(join('..', '..', 'hacker'));
+
+String dirname = dirname(join('usr', 'lib', 'fred.text'));
+assert(dirname == '/usr/lib');
 ```
 
 With the `path` package at your disposal there is really no need to use cd, push or pop.
@@ -889,9 +901,9 @@ With the `path` package at your disposal there is really no need to use cd, push
 There are several reasons.
 
 1) Dart is multi-threaded
->This probably won't be an issue for you as DShell will NEVER start an Isolate and most scripts don't need to use Isolates but best pratices says that you should assume that one day you might just need to use one, so read on...
+>This probably won't be an issue for you as DShell will NEVER start an Isolate and most scripts don't need to use Isolates, but best pratices says that you should assume that one day you might just need to use one, so read on...
 >
->Dart and consequently DShell allow you to run multiple threads of execute via Isolates.
+>Dart and consequently DShell allow you to run multiple threads of execution via Isolates.
 >
 >The problem is that all of these Isolates running in your Dart process share a single common working directory (CWD or PWD).
 >
@@ -909,7 +921,7 @@ There are several reasons.
 >
 3) Another process deletes your working directory
 > What happens if another process deletes your working directory just as you are about to delete all of its contents?
-> If you are using the 'paths' package then it will climb the path until it finds a directory that exist and set that as you new working directory. Your new working directory could well be the root directory.
+> If you are using the 'paths' package then it will climb the path until it finds a directory that exists and set that as you new working directory. Your new working directory could well be the root directory.
 
 The correct answer is simply don't use CD/PUSH/POP.
 
