@@ -12,12 +12,12 @@ import '../util/log.dart';
 /// directory that match the passed glob pattern.
 ///
 /// ```dart
-/// find('*.jpg', recursive=true).forEach((file) => print(file));
+/// find('*.jpg', recursive:true).forEach((file) => print(file));
 ///
-/// String<List> results = find('[a-z]*.jpg', caseSensitive=true).toList();
+/// String<List> results = find('[a-z]*.jpg', caseSensitive:true).toList();
 ///
 /// find('*.jpg'
-///   , types=[FileSystemEntityType.directory, FileSystemEntityType.file])
+///   , types:[FileSystemEntityType.directory, FileSystemEntityType.file])
 ///     .forEach((file) => print(file));
 /// ```
 ///
