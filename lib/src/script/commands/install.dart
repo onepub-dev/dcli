@@ -30,6 +30,16 @@ class InstallCommand extends Command {
     var exitCode = 0;
     var scriptIndex = 0;
 
+    // check the user
+    if (Platform.isLinux || Platform.isMacOS) {
+      var user = 'whoami'.toList();
+      if (user.length == 1) {
+        if (user[0] == 'root') {
+          printerr('dshell install MUST not be run as root.');
+        }
+      }
+    }
+
     // check for any flags
     int i;
     for (i = 0; i < subarguments.length; i++) {
