@@ -13,31 +13,31 @@ void main() {
         createDir(TEST_ROOT, recursive: true);
       }
 
+      var shellPath = 'shell';
       try {
-        push(TEST_ROOT);
-        // Settings().debug_on = true;
-
         print('PWD: ${pwd}');
 
-        if (!exists('shell/main')) {
-          createDir('shell/main', recursive: true);
+        var mainPath = join(shellPath, 'main');
+        if (!exists(mainPath)) {
+          createDir(mainPath, recursive: true);
         }
-        push('shell');
-        cd('main');
 
-        createDir('fred/tom', recursive: true);
-        deleteDir('fred/tom');
+        createDir(join(mainPath, 'fred', 'tom'), recursive: true);
+        deleteDir(join(mainPath, 'fred', 'tom'));
 
-        touch('good.jpg', create: true);
-        createDir('subdir', recursive: true);
-        touch('subdir/goody.jpg', create: true);
+        touch(join(mainPath, 'good.jpg'), create: true);
+
+        var subdirPath = join(mainPath, 'subdir');
+
+        createDir(subdirPath, recursive: true);
+        touch(join(subdirPath, 'good.jpg'), create: true);
 
         echo('Find file matching *.jpg');
 
         for (var file in find(
           '*.jpg',
         ).toList()) {
-          print('Found jpg: $file');
+          print('Found jpg: ${absolute(file)}');
         }
         echo('sleeping for 2 seconds');
         sleep(2);
@@ -47,20 +47,18 @@ void main() {
           print(file);
         }
 
-        move('good.jpg', 'bad.jpg');
+        move(join(subdirPath, 'good.jpg'), join(subdirPath, 'bad.jpg'));
 
-        if (exists('bad.jpg')) {
+        if (exists(join(subdirPath, 'bad.jpg'))) {
           print('bad.jpg exists');
         }
 
-        delete('bad.jpg', ask: false);
+        delete(join(subdirPath, 'bad.jpg'), ask: false);
 
-        pop();
         echo(pwd);
       } finally {
         print('In finally');
-        deleteDir('shell/main');
-        pop();
+        deleteDir(shellPath);
       }
     });
   });

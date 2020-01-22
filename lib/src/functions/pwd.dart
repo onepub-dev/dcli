@@ -9,9 +9,7 @@ import 'dshell_function.dart';
 /// print(pwd);
 /// ```
 ///
-/// See [cd]
-///     [push]
-///     [pop]
+/// See [join]
 ///
 String get pwd => PWD().pwd;
 

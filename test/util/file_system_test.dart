@@ -27,7 +27,6 @@ void main() {
       if (!exists(dir)) {
         createDir(dir);
       }
-      cd(dir);
       print('testzone post cwd: ${pwd}');
 
       Directory.current = restoreTo;

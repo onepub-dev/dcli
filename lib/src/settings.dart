@@ -100,6 +100,7 @@ class Settings {
   /// ```dart
   /// Settings().isStackEmpty
   /// ```
+  @Deprecated('use join')
   bool get isStackEmpty => _settings.isStackEmpty;
 
   /// Set [debug_on] to true to have the system log additional information

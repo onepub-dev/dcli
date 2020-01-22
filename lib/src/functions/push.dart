@@ -25,9 +25,10 @@ import 'is.dart';
 /// See [cd]
 ///     [pop]
 ///     [pwd]
-
+@Deprecated('Use join')
 void push(String path) => Push().push(path);
 
+@Deprecated('Use join')
 class Push extends DShellFunction {
   /// Push the pwd onto the stack and change the
   /// current directory to [path].

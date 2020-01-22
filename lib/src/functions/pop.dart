@@ -41,8 +41,10 @@ import 'package:path/path.dart' as p;
 ///     [pwd]
 ///     [cd]
 ///
+@Deprecated('Use join') 
 void pop() => Pop().pop();
 
+@Deprecated('Use join') 
 class Pop extends DShellFunction {
   ///
   /// Change the working directory back
