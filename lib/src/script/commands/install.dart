@@ -11,9 +11,7 @@ import '../../settings.dart';
 import '../../util/ansi_color.dart';
 
 import '../flags.dart';
-import '../script.dart';
 import 'commands.dart';
-import 'compile.dart';
 
 class InstallCommand extends Command {
   static const String NAME = 'install';
@@ -231,5 +229,25 @@ class InstallCommand extends Command {
   @override
   List<String> completion(String word) {
     return <String>[];
+  }
+
+  @override
+  List<Flag> flags() {
+    return installFlags;
+  }
+}
+
+class NoCleanFlag extends Flag {
+  static const NAME = 'noclean';
+
+  NoCleanFlag() : super(NAME);
+
+  @override
+  String get abbreviation => 'nc';
+
+  @override
+  String description() {
+    return '''Stops the install from running 'dshell cleanall' as part of the install.
+      This option is for testing purposes. When doing a dshell upgrade you should always all install to do a clean all.''';
   }
 }
