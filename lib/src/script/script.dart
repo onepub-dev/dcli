@@ -109,7 +109,7 @@ void main() {
           'Expected a script name instead found: ${scriptArg}');
     }
 
-    if (!File(scriptArg).existsSync()) {
+    if (!exists(scriptArg)) {
       throw InvalidScript(
           'The script ${p.absolute(scriptArg)} does not exist.');
     }
