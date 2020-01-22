@@ -111,7 +111,7 @@ class InstallCommand extends Command {
       // We use the location of dart exe and add dshell symlink
       // to the same location.
       // TODO: this is going to require sudo to install???
-      var linkPath = join(dirname(DartSdk().exePath), 'dshell');
+      //var linkPath = join(dirname(DartSdk().exePath), 'dshell');
       //symlink(dshellPath, linkPath);
     }
     print('');
