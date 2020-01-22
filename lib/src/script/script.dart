@@ -106,7 +106,7 @@ void main() {
     var scriptArg = arguments[0];
     if (!scriptArg.endsWith('.dart')) {
       throw InvalidArguments(
-          'Expected a script name instead found: ${scriptArg}');
+          'Expected a script name (ending in .dart) instead found: ${scriptArg}');
     }
 
     if (!exists(scriptArg)) {
