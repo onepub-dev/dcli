@@ -1,10 +1,11 @@
-## 1.1.0
+## 1.1.0-dev.1
 Implemented dshell doctor to dump out system config to help with diagnosing issues.
 
 Continuing work on getting docker contains configured to run test units.
 
 Added support for a new symlink function.
 
+Removed support for CD/Push/Pop as they just encourange bad practices and 'join' does a better job.
 
 
 ## 1.0.45
