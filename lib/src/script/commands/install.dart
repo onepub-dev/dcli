@@ -11,20 +11,54 @@ import '../../settings.dart';
 import '../../util/ansi_color.dart';
 
 import '../flags.dart';
+import '../script.dart';
 import 'commands.dart';
+import 'compile.dart';
 
 class InstallCommand extends Command {
   static const String NAME = 'install';
 
   static const String pubCache = '.pub-cache/bin';
 
+  List<Flag> installFlags = [NoCleanFlag()];
+
+  /// holds the set of flags passed to the compile command.
+  Flags flagSet = Flags();
+
   InstallCommand() : super(NAME);
 
   @override
   int run(List<Flag> selectedFlags, List<String> subarguments) {
     var exitCode = 0;
+    var scriptIndex = 0;
 
-    if (subarguments.isNotEmpty) {
+    // check for any flags
+    int i;
+    for (i = 0; i < subarguments.length; i++) {
+      final subargument = subarguments[i];
+
+      if (Flags.isFlag(subargument)) {
+        var flag = flagSet.findFlag(subargument, installFlags);
+
+        if (flag != null) {
+          if (flagSet.isSet(flag)) {
+            throw DuplicateOptionsException(subargument);
+          }
+          flagSet.set(flag);
+          Settings().verbose('Setting flag: ${flag.name}');
+          continue;
+        } else {
+          throw UnknownFlag(subargument);
+        }
+      }
+
+      break;
+    }
+    scriptIndex = i;
+
+    print('in$scriptIndex len${subarguments.length}');
+
+    if (subarguments.length != scriptIndex) {
       throw CommandLineException(
           "'dshell install' does not take any arguments. Found $subarguments");
     }
@@ -69,8 +103,13 @@ class InstallCommand extends Command {
       createDir(Settings().cachePath);
     } else {
       print('');
-      print(blue("Running 'clean all' to upgrade your existing scripts"));
-      CleanAllCommand().run([], []);
+      if (!flagSet.isSet(NoCleanFlag())) {
+        // make certain the project is upto date.
+        print(blue("Running 'clean all' to upgrade your existing scripts"));
+        CleanAllCommand().run([], []);
+      } else {
+        print(blue('Skipping clean as -nc flag passed'));
+      }
     }
 
     // create the bin directory
