@@ -120,10 +120,6 @@ class FileSync {
     }
   }
 
-  FileStat stat() {
-    return _file.statSync();
-  }
-
   String resolveSymLink() {
     return _file.resolveSymbolicLinksSync();
   }
@@ -180,7 +176,7 @@ void symlink(
 /// Resolves the a symbolic link
 /// to the ultimate target path.
 /// The return path will be canonicalized.
-/// 
+///
 /// e.g.
 /// resolveSymLink('/usr/bin/dart) == '/usr/lib/bin/dart'
 ///
@@ -190,4 +186,11 @@ String resolveSymLink(String path) {
   var normalised = canonicalize(path);
   var file = FileSync(normalised);
   return canonicalize(file.resolveSymLink());
+}
+
+///
+/// Returns a FileStat instance describing the
+/// file or directory located by [path]
+FileStat stat(String path) {
+  return File(path).statSync();
 }

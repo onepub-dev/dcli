@@ -24,9 +24,9 @@ void main() {
         }
         file.close();
 
-        var stat = file.stat();
+        var fstat = stat(file.path);
 
-        t.expect(stat.size, t.equals(150));
+        t.expect(fstat.size, t.equals(150));
       });
     });
 
@@ -44,9 +44,9 @@ void main() {
         file.write(replacement, newline: null);
         file.close();
 
-        var stat = file.stat();
+        var fstat = stat(file.path);
 
-        t.expect(stat.size, t.equals(replacement.length));
+        t.expect(fstat.size, t.equals(replacement.length));
       });
     });
   });
