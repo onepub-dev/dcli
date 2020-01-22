@@ -41,8 +41,19 @@ class DoctorCommand extends Command {
     print('PATH \n\t${PATH.join("\n\t")}');
 
     print('');
+    print('Dart location');
     which('dart').forEach((line) => print('which: $line'));
 
+    print('');
+    print('Permissions');
+    showPermissions('HOME', HOME);
+    showPermissions('.dshell', Settings().dshellPath);
+    showPermissions('cache', Settings().cachePath);
+
+    showPermissions(
+        'dependencies.yaml', join(Settings().dshellPath, 'dependencies.yaml'));
+
+    showPermissions('templates', join(Settings().templatePath));
     return 0;
   }
 
@@ -56,5 +67,40 @@ class DoctorCommand extends Command {
   @override
   List<String> completion(String word) {
     return <String>[];
+  }
+
+  void showPermissions(String label, String path) {
+    var fstat = stat(path);
+    var owner = _Owner(path);
+
+    label = label.padRight(10);
+    print('$label: ${fstat.modeString()} ${owner.toString()}   $path ');
+  }
+}
+
+class _Owner {
+  String user;
+  String group;
+
+  _Owner(String path) {
+    var lsLine = 'ls -alFd $path'.toList();
+
+    if (lsLine.isEmpty) {
+      throw DShellException('No file/directory matched: ${absolute(path)}');
+    }
+
+    if (lsLine.length > 1) {
+      throw DShellException(
+          'More than on file/directory matched: ${absolute(path)}');
+    }
+
+    var parts = lsLine[0].split(' ');
+    user = parts[2];
+    group = parts[3];
+  }
+
+  @override
+  String toString() {
+    return '$user:$group';
   }
 }
