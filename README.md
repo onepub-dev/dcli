@@ -783,7 +783,7 @@ When you first run your new DShell script, DShell has some house keeping to do i
 
 The result is that DShell has similar start times to Bash and when running larger scripts is faster than Bash.
 
-If you absolutely need to make your script perform to the max, you will want to use DShell to compile your script
+If you absolutely need to make your script perform to the max, you will want to use DShell to compile your script.
 
 ## Compiling to Native
 DShell also allows you to compile your script and any dependencies to a native executable.
