@@ -1248,6 +1248,10 @@ Example:
 dshell create my_script.dart
 ```
 
+## doctor
+The doctor command dumps out your system settings to help in diagnosing problems with your dshell install.
+When raising a dshell issue on github please include the output from `dshell doctor`.
+
 ## install
 The install command MUST be run after you install dshell to complete the dshell install.
       
