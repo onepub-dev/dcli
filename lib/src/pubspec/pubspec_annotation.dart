@@ -21,7 +21,7 @@ enum _State {
 /// annotation from a script.
 class PubSpecAnnotation implements PubSpec // with DependenciesMixin
 {
-  PubSpecImpl pubspec;
+  PubSpec pubspec;
   Script script;
 
   PubSpecAnnotation.fromScript(this.script) {

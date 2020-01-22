@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:collection/collection.dart';
 import 'package:dshell/src/script/command_line_runner.dart';
 import 'package:pub_semver/pub_semver.dart';
 
@@ -24,6 +25,27 @@ abstract class PubSpec {
 
   set dependencies(List<Dependency> newDependencies);
   List<Dependency> get dependencies;
+
+  /// Compares two pubspec to see if they have the same content.
+  static bool equals(PubSpec lhs, PubSpec rhs) {
+    if (lhs.name != rhs.name) return false;
+
+    // if (lhs.author != rhs.author) return false;
+
+    if (lhs.version != rhs.version) return false;
+
+    // if (lhs.homepage != rhs.homepage) return false;
+
+    // if (lhs.documentation != rhs.documentation) return false;
+    // if (lhs.description != rhs.description) return false;
+    // if (lhs.publishTo != rhs.publishTo) return false;
+    // if (lhs.environment != rhs.environment) return false;
+
+    if (!const ListEquality<Dependency>()
+        .equals(lhs.dependencies, rhs.dependencies)) return false;
+
+    return true;
+  }
 }
 
 class PubSpecImpl implements PubSpec {

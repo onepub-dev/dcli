@@ -6,8 +6,7 @@ import '../script/script.dart';
 import 'pubspec.dart';
 
 ///
-///Used to read a pubspec.yaml file that is in the
-///same directory as the script.
+///Used to read a pubspec.yaml file
 ///
 class PubSpecFile implements PubSpec // with DependenciesMixin
 {
