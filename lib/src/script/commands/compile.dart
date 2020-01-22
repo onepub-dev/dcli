@@ -40,9 +40,6 @@ class CompileCommand extends Command {
           }
           flagSet.set(flag);
           Settings().verbose('Setting flag: ${flag.name}');
-          if (flag == VerboseFlag()) {
-            Settings().verbose('DShell Version: ${Settings().version}');
-          }
           continue;
         } else {
           throw UnknownFlag(subargument);
@@ -105,14 +102,8 @@ class CompileCommand extends Command {
   @override
   String usage() {
     var description =
-        '''compile [--noclean] [--install] [--overwrite] <script path.dart>
-    ${orange("flags:")}{
-    ''';
+        '''compile [--noclean] [--install] [--overwrite] <script path.dart>''';
 
-    for (var flag in compileFlags) {
-      description += orange('--${flag.name} | -${flag.abbreviation}');
-      description += ('  ${flag.description}');
-    }
     return description;
   }
 
@@ -127,6 +118,11 @@ class CompileCommand extends Command {
     }
     return results;
   }
+
+  @override
+  List<Flag> flags() {
+    return compileFlags;
+  }
 }
 
 class NoCleanFlag extends Flag {
@@ -140,8 +136,7 @@ class NoCleanFlag extends Flag {
   @override
   String description() {
     return '''Stops the compile from running 'dshell clean' before compiling.
-   Use the noclean option to speed up compilation when you know your project structure is up to date.
-   ''';
+      Use the noclean option to speed up compilation when you know your project structure is up to date.''';
   }
 }
 
@@ -172,4 +167,3 @@ class OverWriteFlag extends Flag {
     return 'If the installed executable already exists in ${Settings().dshellBinPath} then it will overwritten.';
   }
 }
-

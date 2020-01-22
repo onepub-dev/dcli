@@ -25,4 +25,9 @@ class CleanAllCommand extends Command {
     // clean all takes no arguments.
     return <String>[];
   }
+
+  @override
+  List<Flag> flags() {
+    return [];
+  }
 }

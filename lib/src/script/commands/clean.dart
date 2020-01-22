@@ -54,4 +54,9 @@ class CleanCommand extends Command {
 
     return results;
   }
+
+  @override
+  List<Flag> flags() {
+    return [];
+  }
 }

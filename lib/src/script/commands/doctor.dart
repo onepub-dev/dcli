@@ -76,6 +76,11 @@ class DoctorCommand extends Command {
     label = label.padRight(10);
     print('$label: ${fstat.modeString()} ${owner.toString()}   $path ');
   }
+
+  @override
+  List<Flag> flags() {
+    return [];
+  }
 }
 
 class _Owner {

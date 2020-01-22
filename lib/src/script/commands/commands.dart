@@ -14,8 +14,7 @@ import 'help.dart';
 import 'install.dart';
 
 class Commands {
-  static List<Command> get 
-  applicationCommands => [
+  static List<Command> get applicationCommands => [
         CleanAllCommand(),
         CleanCommand(),
         CompileCommand(),
@@ -55,9 +54,19 @@ abstract class Command {
 
   String get name => _name;
 
+  /// returns a single line  high level desription of how to use the command
+  /// e.g.
+  ///  compile [--noclean] [--install] [--overwrite] <script path.dart>
   String usage();
 
+  ///
+  /// returns detailed description of what the command does
+  /// which may be formatted across multiple lines.
+  /// Each line of the text should be indented by four spaces.
   String description();
+
+  /// Returns the list of flags supported by this command
+  List<Flag> flags();
 
   /// Used by the dshell_completion app to
   /// provide command line completion to bash

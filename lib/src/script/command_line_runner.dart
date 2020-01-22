@@ -8,7 +8,7 @@ import 'flags.dart';
 class CommandLineRunner {
   static CommandLineRunner _self;
 
-  static List<Flag> availableFlags = [VerboseFlag()];
+  static List<Flag> globalFlags = [VerboseFlag()];
 
   // Tracks the set of flags the users set on the command line.
   Flags flagsSet = Flags();
@@ -40,7 +40,7 @@ class CommandLineRunner {
       final argument = arguments[i];
 
       if (Flags.isFlag(argument)) {
-        var flag = flagsSet.findFlag(argument, availableFlags);
+        var flag = flagsSet.findFlag(argument, globalFlags);
 
         if (flag != null) {
           if (flagsSet.isSet(flag)) {

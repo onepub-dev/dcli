@@ -76,4 +76,9 @@ class RunCommand extends Command {
     }
     return results;
   }
+
+  @override
+  List<Flag> flags() {
+    return [];
+  }
 }

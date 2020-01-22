@@ -95,4 +95,9 @@ class SplitCommand extends Command {
 
     return const ListEquality<String>().equals(localContent, virtualContent);
   }
+
+    @override
+  List<Flag> flags() {
+    return [];
+  }
 }

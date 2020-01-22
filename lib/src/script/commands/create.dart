@@ -71,4 +71,9 @@ class CreateCommand extends Command {
   List<String> completion(String word) {
     return <String>[];
   }
+
+  @override
+  List<Flag> flags() {
+    return [];
+  }
 }

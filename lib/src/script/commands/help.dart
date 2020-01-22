@@ -43,26 +43,37 @@ class HelpCommand extends Command {
     print(green(
         '$appname: Executes Dart scripts.  Version: ${Settings().version}'));
     print('');
-    print(yellow('Example: '));
-    print(yellow('   dshell hello_world.dart'));
-    print(yellow('   dshell -v compile -nc hello_world.dart'));
+    print('Example: ');
+    print('   dshell hello_world.dart');
+    print('   dshell -v compile -nc hello_world.dart');
     print('');
     print(green('Usage:'));
     print(
-        '  dshell [${orange('flag, flag...')}] [${blue('command')}] [arguments...]');
+        '  dshell [${blue('flag, flag...')}] [${blue('command')}] [arguments...]');
     print('');
-    print(orange('flags:'));
-    for (var flag in CommandLineRunner.availableFlags) {
-      print('  ' + orange(flag.usage()));
-      print('    ' + flag.description());
+    print(blue('flags:'));
+    for (var flag in CommandLineRunner.globalFlags) {
+      print('  ' + blue(flag.usage()));
+      print('      ' + flag.description());
     }
 
     print('');
-    print(blue('Commands:'));
+    print(orange('Commands:'));
     for (var command in Commands.applicationCommands) {
-      print('');
-      print('  ' + blue(command.usage()));
+      print('  ' + orange(command.usage()));
       print('   ' + command.description());
+      if (command.flags().isNotEmpty) {
+        print('');
+        print('   ${blue("flags:")}');
+      }
+      var first = true;
+      command.flags().forEach((flag) {
+        if (!first) print('');
+        first = false;
+        print(blue('    ${flag.usage()}'));
+        print('      ${flag.description()}');
+      });
+      print('');
     }
   }
 
@@ -79,5 +90,10 @@ class HelpCommand extends Command {
     }
 
     return results;
+  }
+
+  @override
+  List<Flag> flags() {
+    return [];
   }
 }
