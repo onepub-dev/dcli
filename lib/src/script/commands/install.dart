@@ -208,7 +208,11 @@ class InstallCommand extends Command {
     if (!isCompletionInstalled()) {
       // Add cli completion
 
-      join(HOME, '.bashrc').append("complete -C 'dshell_complete' dshell");
+      var bashrc = join(HOME, '.bashrc');
+      if (!exists(bashrc)) {
+        touch(bashrc, create: true);
+      }
+      bashrc.append("complete -C 'dshell_complete' dshell");
 
       print(
           'dshell tab completion installed. Restart your terminal to activate it.');

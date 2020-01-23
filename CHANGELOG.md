@@ -1,3 +1,12 @@
+## 1.1.0-dev.2
+Added a check if .bashrc exists and create it if it doesn't.
+Clean up on the help output.
+Improved create error message.
+Added --noclean flag to install.
+Mad stat method a global function.
+Added notes on performance.
+Documente envionment variables.
+
 ## 1.1.0-dev.1
 Implemented dshell doctor to dump out system config to help with diagnosing issues.
 
