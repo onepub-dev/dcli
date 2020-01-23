@@ -1,6 +1,9 @@
+@Timeout(Duration(seconds: 600))
+
 import 'package:dshell/src/util/progress.dart';
 import 'package:test/test.dart' as t;
 import 'package:dshell/dshell.dart';
+import 'package:test/test.dart';
 
 import '../test_settings.dart';
 import '../util/test_fs_zone.dart';
@@ -26,6 +29,11 @@ void main() {
         var found = find('*.jpg', root: paths.top).toList();
 
         find('*.jpg', root: paths.top).forEach((line) => print(line));
+        t.expect(find('one.jpg', root: paths.top).toList(),
+            t.equals([join(paths.top, 'one.jpg')]));
+
+        t.expect(find('two.jpg', root: paths.top).toList(),
+            t.equals([join(paths.middle, 'two.jpg')]));
 
         find('*.jpg', progress: Progress((line) => print(line)));
 

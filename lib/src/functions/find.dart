@@ -1,4 +1,7 @@
+import 'dart:async';
 import 'dart:io';
+
+import 'package:dshell/src/util/waitForEx.dart';
 
 import 'function.dart';
 import '../util/progress.dart';
@@ -82,18 +85,19 @@ class Find extends DShellFunction {
             'find: pwd: ${pwd} ${absolute(root)} pattern: ${pattern} caseSensitive: ${caseSensitive} recursive: ${recursive} types: ${types} ');
       }
 
-      // get all files for consideration
-      // this could be problematic for a large tree.
-      // would be better if we process the files as we went.
-      var all = Directory(root).listSync(recursive: recursive);
+      var completer = Completer<void>();
+      var lister = Directory(root).list(recursive: recursive);
 
-      // TODO: consider doing a directory at a time so we don't blow all memory.
-      for (var entity in all) {
+      lister.listen((entity) {
         var type = FileSystemEntity.typeSync(entity.path);
-        if (types.contains(type) && matcher.match(entity.path)) {
+        if (types.contains(type) && matcher.match(basename(entity.path))) {
           forEach.addToStdout(normalize(entity.path));
         }
-      }
+      },
+          // should also register onError
+          onDone: () => completer.complete(null));
+
+      waitForEx<void>(completer.future);
     } finally {
       forEach.close();
     }
