@@ -1,3 +1,6 @@
+## 1.1.0-dev.3
+Fixed a bug where find didn't find a match on a simple file name.
+
 ## 1.1.0-dev.2
 Added a check if .bashrc exists and create it if it doesn't.
 Clean up on the help output.
