@@ -91,7 +91,7 @@ void main() {
 
           testFile.write(unsorted.join('\n'));
 
-          EntryPoint().process(['example/dsort.dart', testFile]);
+          EntryPoint().process(['-v', 'example/dsort.dart', testFile]);
         } on DShellException catch (e) {
           print(e);
         }

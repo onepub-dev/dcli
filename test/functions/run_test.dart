@@ -23,8 +23,12 @@ void main() {
       TestZone().run(() {
         var script = join('test', 'test_scripts', 'run_echo.dart');
 
+        if (!exists(basename(script))) {
+          createDir(basename(script));
+        }
+
         // make certain our test script will run
-        'dshell clean $script'.run;
+        'dshell create $script'.run;
 
         // run a script that uses '.run' and capture its output to prove
         // that .run works.

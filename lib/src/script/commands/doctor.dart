@@ -28,11 +28,16 @@ class DoctorCommand extends Command {
     print('Path separator: ${Platform.pathSeparator}');
     print('');
     print('dart version    : ${DartSdk().version}');
+
     print('dart exe path   : ${DartSdk().exePath}');
-    print('dart path       : ${DartSdk().dartPath}');
-    print('dart2Native path: ${DartSdk().dart2NativePath}');
+    var dartPath = which('dart', first: true).toList()[0];
+    print('dart path       : ${DartSdk().dartPath} : ${dartPath}');
+    var dart2NativePath = which('dart2native', first: true).toList()[0];
+    print(
+        'dart2Native path: ${DartSdk().dart2NativePath} : ${dart2NativePath}');
     print('');
-    print('pub get path    : ${DartSdk().pubGetPath}');
+    var pubPath = which('pub', first: true).toList()[0];
+    print('pub get path    : ${DartSdk().pubGetPath} : ${pubPath}');
     print('Package Config: ${Platform.packageConfig}');
 
     print('');

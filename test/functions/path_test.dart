@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:dshell/src/functions/env.dart';
 import 'package:test/test.dart' as t;
 import 'package:dshell/dshell.dart';
@@ -45,8 +47,7 @@ void main() {
 
     t.test('PWD', () {
       TestZone().run(() {
-        var paths = setup();
-        t.expect(pwd, t.startsWith(paths.home));
+        t.expect(pwd, t.equals(Directory.current));
       });
     });
   });
