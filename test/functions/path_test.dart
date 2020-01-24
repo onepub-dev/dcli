@@ -47,7 +47,7 @@ void main() {
 
     t.test('PWD', () {
       TestZone().run(() {
-        t.expect(pwd, t.equals(Directory.current));
+        t.expect(pwd, t.equals(Directory.current.path));
       });
     });
   });

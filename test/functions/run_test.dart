@@ -34,7 +34,7 @@ void main() {
         // that .run works.
         var results = 'dshell $script'.toList();
 
-        var expected = <String>['hi'];
+        var expected = <String>['Hello World'];
 
         t.expect(results, t.equals(expected));
       });
