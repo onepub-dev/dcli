@@ -1,9 +1,9 @@
 import 'package:test/test.dart' as t;
 import 'package:dshell/dshell.dart';
 
-import '../test_settings.dart';
 import '../util.dart';
 import '../util/test_fs_zone.dart';
+import '../util/test_paths.dart';
 
 String testFile;
 void main() {
@@ -15,7 +15,7 @@ void main() {
     t.test('Cat good ', () {
       TestZone().run(() {
         print('PWD $pwd');
-        testFile = join(TEST_ROOT, 'lines.txt');
+        testFile = join(TestPaths.TEST_ROOT, 'lines.txt');
         createLineFile(testFile, 10);
 
         var lines = <String>[];

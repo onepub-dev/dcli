@@ -1,16 +1,16 @@
 import 'package:test/test.dart' as t;
 import 'package:dshell/dshell.dart';
 
-import '../test_settings.dart';
 import '../util/test_fs_zone.dart';
+import '../util/test_paths.dart';
 
 void main() {
   Settings().debug_on = true;
 
   t.test('Try everything', () {
     TestZone().run(() {
-      if (!exists(TEST_ROOT)) {
-        createDir(TEST_ROOT, recursive: true);
+      if (!exists(TestPaths.TEST_ROOT)) {
+        createDir(TestPaths.TEST_ROOT, recursive: true);
       }
 
       var shellPath = 'shell';

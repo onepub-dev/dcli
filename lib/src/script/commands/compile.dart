@@ -51,7 +51,7 @@ class CompileCommand extends Command {
     }
     var script = Script.fromFile(subarguments[scriptIndex]);
     try {
-      var project = VirtualProject(Settings().cachePath, script);
+      var project = VirtualProject(Settings().dshellCachePath, script);
 
       // by default we clean the project unless the -nc flagg is passed.
       // howver if the project doesn't exist we force a clean

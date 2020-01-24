@@ -24,7 +24,7 @@ class CleanCommand extends Command {
 
     var script = Script.fromFile(arguments[0]);
 
-    var project = VirtualProject(Settings().cachePath, script);
+    var project = VirtualProject(Settings().dshellCachePath, script);
 
     project.clean();
 

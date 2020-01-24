@@ -4,8 +4,8 @@ import 'package:dshell/src/util/file_sync.dart';
 import 'package:test/test.dart' as t;
 import 'package:dshell/dshell.dart';
 
-import '../test_settings.dart';
 import '../util/test_fs_zone.dart';
+import '../util/test_paths.dart';
 
 void main() {
   Settings().debug_on = true;
@@ -13,7 +13,7 @@ void main() {
   t.group('FileSync', () {
     t.test('Append', () {
       TestZone().run(() {
-        var testFile = join(TEST_ROOT, 'lines.txt');
+        var testFile = join(TestPaths.TEST_ROOT, 'lines.txt');
 
         if (exists(testFile)) {
           delete(testFile);
@@ -32,7 +32,7 @@ void main() {
 
     t.test('Write', () {
       TestZone().run(() {
-        var testFile = join(TEST_ROOT, 'lines.txt');
+        var testFile = join(TestPaths.TEST_ROOT, 'lines.txt');
         if (exists(testFile)) {
           delete(testFile);
         }

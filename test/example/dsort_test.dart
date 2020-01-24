@@ -14,7 +14,7 @@ String script = 'test/test_scripts/hello_world.dart';
 
 void main() {
   group('dsort tests', () {
-    var paths = TestPaths(script);
+    var paths = TestPaths();
     var testFile = join(paths.testRoot, 'unsorted.txt');
 
     test('dsort unsorted.txt', () {

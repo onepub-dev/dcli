@@ -13,7 +13,7 @@ import 'functions/env.dart';
 class Settings {
   static Settings _self;
   static const templateDir = 'templates';
-  static const cacheDir = 'cache';
+  static const dshellCacheDir = 'cache';
 
   final InternalSettings _settings = InternalSettings();
   final String appname;
@@ -42,7 +42,7 @@ class Settings {
   String get templatePath => p.join(dshellPath, templateDir);
 
   /// path to the dshell cache directory.
-  String get cachePath => p.join(dshellPath, cacheDir);
+  String get dshellCachePath => p.join(dshellPath, dshellCacheDir);
 
   /// the list of flags selected via the cli.
   List<Flag> get selectedFlags => _selectedFlags.values.toList();
@@ -68,9 +68,8 @@ class Settings {
 
     _self = this;
 
-    var home = HOME;
-    _dshellPath = p.absolute(p.join(home, dshellDir));
-    _dshellBinPath = p.absolute(p.join(home, dshellDir, 'bin'));
+    _dshellPath = p.absolute(p.join(HOME, dshellDir));
+    _dshellBinPath = p.absolute(p.join(HOME, dshellDir, 'bin'));
   }
 
   bool get isMacOS => Platform.isMacOS;

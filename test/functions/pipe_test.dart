@@ -1,9 +1,9 @@
 import 'package:test/test.dart' as t;
 import 'package:dshell/dshell.dart';
 
-import '../test_settings.dart';
 import '../util.dart';
 import '../util/test_fs_zone.dart';
+import '../util/test_paths.dart';
 
 void main() {
   Settings().debug_on = true;
@@ -13,7 +13,7 @@ void main() {
 
     t.test('For Each on string', () {
       TestZone().run(() {
-        var linesFile = join(TEST_ROOT, TEST_LINES_FILE);
+        var linesFile = join(TestPaths.TEST_ROOT, TestPaths.TEST_LINES_FILE);
         createLineFile(linesFile, 10);
 
         'tail -n 100 $linesFile'.forEach((line) => lines.add(line));
@@ -23,7 +23,7 @@ void main() {
 
     t.test('forEach Single Pipe', () {
       TestZone().run(() {
-        var linesFile = join(TEST_ROOT, TEST_LINES_FILE);
+        var linesFile = join(TestPaths.TEST_ROOT, TestPaths.TEST_LINES_FILE);
         createLineFile(linesFile, 10);
 
         lines.clear();
@@ -36,7 +36,7 @@ void main() {
 
     t.test('forEach Double Pipe', () {
       TestZone().run(() {
-        var linesFile = join(TEST_ROOT, TEST_LINES_FILE);
+        var linesFile = join(TestPaths.TEST_ROOT, TestPaths.TEST_LINES_FILE);
         createLineFile(linesFile, 10);
 
         lines.clear();
@@ -48,7 +48,7 @@ void main() {
 
     t.test('forEach Triple Pipe', () {
       TestZone().run(() {
-        var linesFile = join(TEST_ROOT, TEST_LINES_FILE);
+        var linesFile = join(TestPaths.TEST_ROOT, TestPaths.TEST_LINES_FILE);
         createLineFile(linesFile, 10);
 
         lines.clear();
@@ -64,7 +64,7 @@ void main() {
 
     t.test('run on string', () {
       TestZone().run(() {
-        var linesFile = join(TEST_ROOT, TEST_LINES_FILE);
+        var linesFile = join(TestPaths.TEST_ROOT, TestPaths.TEST_LINES_FILE);
         createLineFile(linesFile, 10);
 
         'tail -n 100 $linesFile'.run;
@@ -74,7 +74,7 @@ void main() {
 
     t.test('run Single Pipe', () {
       TestZone().run(() {
-        var linesFile = join(TEST_ROOT, TEST_LINES_FILE);
+        var linesFile = join(TestPaths.TEST_ROOT, TestPaths.TEST_LINES_FILE);
         createLineFile(linesFile, 10);
 
         lines.clear();
@@ -86,7 +86,7 @@ void main() {
 
     t.test('run Double Pipe', () {
       TestZone().run(() {
-        var linesFile = join(TEST_ROOT, TEST_LINES_FILE);
+        var linesFile = join(TestPaths.TEST_ROOT, TestPaths.TEST_LINES_FILE);
         createLineFile(linesFile, 10);
 
         lines.clear();
@@ -97,7 +97,7 @@ void main() {
 
     t.test('run Triple Pipe', () {
       TestZone().run(() {
-        var linesFile = join(TEST_ROOT, TEST_LINES_FILE);
+        var linesFile = join(TestPaths.TEST_ROOT, TestPaths.TEST_LINES_FILE);
         createLineFile(linesFile, 10);
 
         lines.clear();

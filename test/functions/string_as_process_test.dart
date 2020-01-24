@@ -2,8 +2,8 @@ import 'package:dshell/src/util/file_sync.dart';
 import 'package:test/test.dart' as t;
 import 'package:dshell/dshell.dart';
 
-import '../test_settings.dart';
 import '../util/test_fs_zone.dart';
+import '../util/test_paths.dart';
 
 void main() {
   Settings().debug_on = true;
@@ -152,13 +152,13 @@ void main() {
 }
 
 String setup() {
-  var linesFile = join(TEST_ROOT, TEST_LINES_FILE);
+  var linesFile = join(TestPaths.TEST_ROOT, TestPaths.TEST_LINES_FILE);
 
-  if (exists(TEST_ROOT)) {
-    deleteDir(TEST_ROOT, recursive: true);
+  if (exists(TestPaths.TEST_ROOT)) {
+    deleteDir(TestPaths.TEST_ROOT, recursive: true);
   }
 
-  createDir(TEST_ROOT);
+  createDir(TestPaths.TEST_ROOT);
 
   var file = FileSync(linesFile);
   for (var i = 0; i < 10; i++) {

@@ -31,4 +31,6 @@ class PubCache {
   // Returns the path to the .pub-cache's bin directory
   // were executables from installed packages are stored.
   String get binPath => _pubCacheBinDir;
+
+  String get cacheDir => _pubCacheDir;
 }

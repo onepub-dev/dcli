@@ -54,7 +54,7 @@ class DoctorCommand extends Command {
     print('Permissions');
     showPermissions('HOME', HOME);
     showPermissions('.dshell', Settings().dshellPath);
-    showPermissions('cache', Settings().cachePath);
+    showPermissions('cache', Settings().dshellCachePath);
 
     showPermissions(
         'dependencies.yaml', join(Settings().dshellPath, 'dependencies.yaml'));

@@ -8,10 +8,10 @@ import 'package:dshell/src/script/script.dart';
 import 'package:path/path.dart' as p;
 import 'package:test/test.dart' as t;
 
-import '../test_settings.dart';
 import '../util/test_fs_zone.dart';
+import '../util/test_paths.dart';
 
-String scriptDirectory = p.join(TEST_ROOT, 'local');
+String scriptDirectory = p.join(TestPaths.TEST_ROOT, 'local');
 String scriptPath = p.join(scriptDirectory, 'test.dart');
 String pubSpecScriptPath = p.join(scriptDirectory, 'pubspec.yaml');
 

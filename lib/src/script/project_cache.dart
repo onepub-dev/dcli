@@ -58,7 +58,7 @@ class ProjectCache {
   }
 
   VirtualProject loadProject(Script script) {
-    return VirtualProject(Settings().cachePath, script);
+    return VirtualProject(Settings().dshellCachePath, script);
   }
 
   // Creates a project ready to run for
@@ -66,7 +66,7 @@ class ProjectCache {
   // If the project already exists then it will
   // be refreshed if required.
   VirtualProject createProject(Script script, {bool skipPubGet = false}) {
-    var project = VirtualProject(Settings().cachePath, script);
+    var project = VirtualProject(Settings().dshellCachePath, script);
     project.createProject(skipPubGet: skipPubGet);
     return project;
   }
@@ -75,8 +75,8 @@ class ProjectCache {
   /// Checks if the dscript cache exists
   /// and if not creates it.
   void initCache() {
-    if (!exists(Settings().cachePath)) {
-      createDir(Settings().cachePath);
+    if (!exists(Settings().dshellCachePath)) {
+      createDir(Settings().dshellCachePath);
     }
   }
 
@@ -84,17 +84,17 @@ class ProjectCache {
   /// we will clean out the project cache
   /// for all scripts.
   void cleanAll() {
-    print('Cleaning project cache ${Settings().cachePath}');
+    print('Cleaning project cache ${Settings().dshellCachePath}');
 
     try {
       find('*.project',
-          root: Settings().cachePath,
+          root: Settings().dshellCachePath,
           recursive: true,
           types: [FileSystemEntityType.directory]).forEach((projectPath) {
         var scriptPath = join(
             '/',
             withoutExtension(
-                    relative(projectPath, from: Settings().cachePath)) +
+                    relative(projectPath, from: Settings().dshellCachePath)) +
                 '.dart');
 
         deleteDir(projectPath, recursive: true);
@@ -103,7 +103,7 @@ class ProjectCache {
           print('');
           print(green('Cleaning $scriptPath'));
           var project =
-              VirtualProject(Settings().cachePath, Script.fromFile(scriptPath));
+              VirtualProject(Settings().dshellCachePath, Script.fromFile(scriptPath));
           project.clean();
         } else {
           print('Removed obsolete cache for $scriptPath');

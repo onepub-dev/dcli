@@ -104,10 +104,11 @@ class InstallCommand extends Command {
     }
 
     /// create the cache directory.
-    if (!exists(Settings().cachePath)) {
+    if (!exists(Settings().dshellCachePath)) {
       print('');
-      print(blue('Creating Cache directory in: ${Settings().cachePath}.'));
-      createDir(Settings().cachePath);
+      print(
+          blue('Creating Cache directory in: ${Settings().dshellCachePath}.'));
+      createDir(Settings().dshellCachePath);
     } else {
       print('');
       if (!flagSet.isSet(NoCleanFlag())) {
@@ -223,12 +224,16 @@ class InstallCommand extends Command {
 
     //added runInShell and now install throws a stack trace
     var dshellHandled = false;
-    read(join(HOME, '.bashrc')).forEach((line) {
-      if (line.contains('dshell_complete')) {
-        dshellHandled = true;
-      }
-    } //, runInShell: true
-        );
+    var bashrc = join(HOME, '.bashrc');
+
+    if (exists(bashrc)) {
+      read(bashrc).forEach((line) {
+        if (line.contains('dshell_complete')) {
+          dshellHandled = true;
+        }
+      } //, runInShell: true
+          );
+    }
     return dshellHandled;
   }
 

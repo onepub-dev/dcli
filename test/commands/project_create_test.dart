@@ -20,21 +20,21 @@ void main() {
   group('Create Project', () {
     test('Create hello world', () {
       TestZone().run(() {
-        var paths = TestPaths(script);
+        var paths = TestPaths();
         setup(paths);
         EntryPoint().process(['create', script]);
 
-        checkProjectStructure(paths);
+        checkProjectStructure(paths, script);
       });
     });
 
     test('Clean hello world', () {
       TestZone().run(() {
-        var paths = TestPaths(script);
+        var paths = TestPaths();
         setup(paths);
         EntryPoint().process(['clean', script]);
 
-        checkProjectStructure(paths);
+        checkProjectStructure(paths, script);
       });
     });
 
@@ -53,13 +53,13 @@ void setup(TestPaths paths) {
   ProjectCache().cleanAll();
 }
 
-void checkProjectStructure(TestPaths paths) {
-  expect(exists(paths.projectPath), equals(true));
+void checkProjectStructure(TestPaths paths, String scriptName) {
+  expect(exists(paths.projectPath(scriptName)), equals(true));
 
-  var pubspecPath = p.join(paths.projectPath, 'pubspec.yaml');
+  var pubspecPath = p.join(paths.projectPath(scriptName), 'pubspec.yaml');
   expect(exists(pubspecPath), equals(true));
 
-  var libPath = p.join(paths.projectPath, 'lib');
+  var libPath = p.join(paths.projectPath(scriptName), 'lib');
   expect(exists(libPath), equals(true));
 
   // There should be three files/directories in the project.
@@ -70,7 +70,7 @@ void checkProjectStructure(TestPaths paths) {
   // .packages
 
   var files = <String>[];
-  find('*.*', recursive: false, root: paths.projectPath, types: [
+  find('*.*', recursive: false, root: paths.projectPath(scriptName), types: [
     FileSystemEntityType.file,
   ]).forEach((line) => files.add(p.basename(line)));
   expect(
@@ -86,7 +86,7 @@ void checkProjectStructure(TestPaths paths) {
 
   find('*.*',
           recursive: false,
-          root: paths.projectPath,
+          root: paths.projectPath(scriptName),
           types: [FileSystemEntityType.directory])
       .forEach((line) => directories.add(p.basename(line)));
   expect(directories, unorderedEquals(<String>['lib', '.dart_tool']));

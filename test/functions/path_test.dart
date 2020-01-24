@@ -4,8 +4,8 @@ import 'package:dshell/src/functions/env.dart';
 import 'package:test/test.dart' as t;
 import 'package:dshell/dshell.dart';
 
-import '../test_settings.dart';
 import '../util/test_fs_zone.dart';
+import '../util/test_paths.dart';
 
 String TEST_DIR = 'path_test';
 void main() {
@@ -24,8 +24,8 @@ void main() {
     t.test('parent', () {
       TestZone().run(() {
         var paths = setup();
-        t.expect(
-            dirname(paths.pathTestDir), t.equals(join(TEST_ROOT, TEST_DIR)));
+        t.expect(dirname(paths.pathTestDir),
+            t.equals(join(TestPaths.TEST_ROOT, TEST_DIR)));
       });
     });
 
@@ -62,7 +62,7 @@ class Paths {
 
   Paths() {
     home = HOME;
-    pathTestDir = join(TEST_ROOT, TEST_DIR, 'pathTestDir');
+    pathTestDir = join(TestPaths.TEST_ROOT, TEST_DIR, 'pathTestDir');
     testExtension = '.jpg';
     testBaseName = 'fred';
     testFile = '$testBaseName$testExtension';

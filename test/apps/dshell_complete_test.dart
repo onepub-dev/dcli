@@ -46,7 +46,7 @@ void main() {
       TestZone().run(() {
         var results = <String>[];
 
-        var paths = TestPaths('.');
+        var paths = TestPaths();
         if (!exists(paths.testRoot)) {
           createDir(paths.testRoot, recursive: true);
         }
@@ -76,7 +76,7 @@ void main() {
       TestZone().run(() {
         var results = <String>[];
 
-        var paths = TestPaths('.');
+        var paths = TestPaths();
         if (!exists(paths.testRoot)) {
           createDir(paths.testRoot, recursive: true);
         }

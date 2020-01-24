@@ -16,6 +16,10 @@ import '../test/util/wipe.dart';
 String script = 'test/test_scripts/hello_world.dart';
 
 void main() {
+  setUpAll(() {
+    TestPaths();
+  });
+
   group('Install DShell', () {
     test('clean install', () {
       TestZone().run(() {
@@ -28,7 +32,7 @@ void main() {
           print(e);
         }
 
-        checkInstallStructure(TestPaths(script));
+        checkInstallStructure();
       });
     });
     test('install over existing', () {
@@ -41,13 +45,13 @@ void main() {
           print(e);
         }
 
-        checkInstallStructure(TestPaths(script));
+        checkInstallStructure();
       });
     });
 
     test('Install with error', () {
       TestZone().run(() {
-        var paths = TestPaths(script);
+        var paths = TestPaths();
         wipe();
         try {
           EntryPoint().process(['install', 'a']);
@@ -104,23 +108,26 @@ void main() {
 
       var export = 'export PATH=\$PATH:${settings.dshellBinPath}';
 
-      expect(read(join(HOME, '.profile')).toList(), contains(export));
+      var profilePath = join(HOME, '.profile');
+      if (exists(profilePath)) {
+        expect(read(profilePath).toList(), contains(export));
+      }
     });
 
     test('With Lib', () {});
   }, skip: false);
 }
 
-void checkInstallStructure(TestPaths testPaths) {
-  expect(exists('${testPaths.home}/.dshell'), equals(true));
+void checkInstallStructure() {
+  expect(exists(truepath(HOME, '.dshell')), equals(true));
 
-  expect(exists('${testPaths.home}/.dshell/cache'), equals(true));
+  expect(exists(truepath(HOME, '.dshell', 'cache')), equals(true));
 
-  expect(exists('${testPaths.home}/.dshell/templates'), equals(true));
+  expect(exists(truepath(HOME, '.dshell', 'templates')), equals(true));
 
-  expect(exists('${testPaths.home}/.dshell/dependencies.yaml'), equals(true));
+  expect(exists(truepath(HOME, '.dshell', 'dependencies.yaml')), equals(true));
 
-  var content = read('${testPaths.home}/.dshell/dependencies.yaml').toList();
+  var content = read(truepath(HOME, '.dshell', 'dependencies.yaml')).toList();
   var expected = ['dependencies:'];
 
   for (var dep in GlobalDependencies.defaultDependencies) {

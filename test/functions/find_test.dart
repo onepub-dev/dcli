@@ -5,8 +5,8 @@ import 'package:test/test.dart' as t;
 import 'package:dshell/dshell.dart';
 import 'package:test/test.dart';
 
-import '../test_settings.dart';
 import '../util/test_fs_zone.dart';
+import '../util/test_paths.dart';
 
 void main() {
   Settings().debug_on = true;
@@ -75,7 +75,7 @@ class Paths {
   String bottom;
 
   Paths() {
-    top = join(TEST_ROOT, 'top');
+    top = join(TestPaths.TEST_ROOT, 'top');
     middle = join(top, 'middle');
     bottom = join(middle, 'bottom');
   }

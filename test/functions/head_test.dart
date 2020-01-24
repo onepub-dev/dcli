@@ -4,8 +4,8 @@ import 'package:dshell/src/util/file_sync.dart';
 import 'package:test/test.dart' as t;
 import 'package:dshell/dshell.dart';
 
-import '../test_settings.dart';
 import '../util/test_fs_zone.dart';
+import '../util/test_paths.dart';
 
 void main() {
   Settings().debug_on = true;
@@ -13,12 +13,12 @@ void main() {
   t.group('Head', () {
     t.test('head 5', () {
       TestZone().run(() {
-        var testFile = join(TEST_ROOT, 'lines.txt');
+        var testFile = join(TestPaths.TEST_ROOT, 'lines.txt');
         if (exists(testFile)) {
           delete(testFile);
         }
-        if (!exists(TEST_ROOT)) {
-          createDir(TEST_ROOT, recursive: true);
+        if (!exists(TestPaths.TEST_ROOT)) {
+          createDir(TestPaths.TEST_ROOT, recursive: true);
         }
         var file = FileSync(testFile, fileMode: FileMode.write);
         for (var i = 0; i < 10; i++) {
