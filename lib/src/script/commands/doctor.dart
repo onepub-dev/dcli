@@ -1,5 +1,7 @@
 import 'dart:io';
 
+import 'package:dshell/src/util/pub_cache.dart';
+
 import '../../../dshell.dart';
 import '../command_line_runner.dart';
 
@@ -9,8 +11,6 @@ import 'commands.dart';
 
 class DoctorCommand extends Command {
   static const String NAME = 'doctor';
-
-  static const String pubCache = '.pub-cache/bin';
 
   DoctorCommand() : super(NAME);
 
@@ -38,6 +38,7 @@ class DoctorCommand extends Command {
     print('');
     var pubPath = which('pub', first: true).toList()[0];
     print('pub get path    : ${DartSdk().pubGetPath} : ${pubPath}');
+    print('.pub-cache      : ${PubCache().path}');
     print('Package Config: ${Platform.packageConfig}');
 
     print('');

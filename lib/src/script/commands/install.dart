@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:dshell/dshell.dart';
 import 'package:dshell/src/functions/env.dart';
 import 'package:dshell/src/script/commands/clean_all.dart';
+import 'package:dshell/src/util/pub_cache.dart';
 
 import '../../functions/which.dart';
 import '../../pubspec/global_dependencies.dart';
@@ -15,8 +16,6 @@ import 'commands.dart';
 
 class InstallCommand extends Command {
   static const String NAME = 'install';
-
-  static const String pubCache = '.pub-cache/bin';
 
   List<Flag> installFlags = [NoCleanFlag()];
 
@@ -143,10 +142,10 @@ class InstallCommand extends Command {
       print('');
       print('ERROR: dshell was not found on your path!');
       print('Try to resolve the problem and then run dshell install again.');
-      print('dshell is normally located in ~/$pubCache');
+      print('dshell is normally located in ${PubCache().path}');
 
-      if (!env('path').contains(join(env('home'), pubCache))) {
-        print('Your path does not contain ~/$pubCache');
+      if (!PATH.contains(PubCache().path)) {
+        print('Your path does not contain ${PubCache().path}');
       }
       exit(1);
     } else {
