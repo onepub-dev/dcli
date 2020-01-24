@@ -44,4 +44,5 @@ export 'src/functions/touch.dart' show touch, TouchException;
 export 'src/functions/which.dart' show which;
 export 'src/util/runnable_process.dart' show printerr;
 export 'src/util/string_as_process.dart';
+export 'src/util/truepath.dart' show truepath;
 export 'src/util/ansi_color.dart' hide AnsiColor;
