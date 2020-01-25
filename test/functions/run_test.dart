@@ -7,6 +7,8 @@ import '../util/test_fs_zone.dart';
 import '../util/test_paths.dart';
 
 void main() {
+  TestPaths();
+
   Settings().debug_on = true;
   t.group('RunCommand', () {
     t.test('Does command run', () {

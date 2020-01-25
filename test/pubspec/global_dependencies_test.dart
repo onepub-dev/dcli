@@ -2,7 +2,11 @@ import 'package:dshell/src/pubspec/global_dependencies.dart';
 import 'package:dshell/src/script/dependency.dart';
 import 'package:test/test.dart';
 
+import '../util/test_paths.dart';
+
 void main() {
+  TestPaths();
+  
   test('load', () {
     var content = '''
 dependencies:

@@ -4,8 +4,11 @@ import 'package:dshell/dshell.dart';
 import 'package:test/test.dart';
 
 import 'test_fs_zone.dart';
+import 'test_paths.dart';
 
 void main() {
+  TestPaths();
+  
   test('MemoryFileSystem', () {
     TestZone().run(() {
       // final fs = MemoryFileSystem();

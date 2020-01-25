@@ -4,6 +4,8 @@ import 'package:dshell/dshell.dart';
 import '../util/test_fs_zone.dart';
 
 void main() {
+  TestPaths();
+  
   Settings().debug_on = true;
 
   t.group('Environment', () {

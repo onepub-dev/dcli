@@ -5,8 +5,11 @@ import 'package:dshell/src/util/runnable_process.dart';
 import 'package:test/test.dart';
 
 import '../util/test_fs_zone.dart';
+import '../util/test_paths.dart';
 
 void main() {
+  TestPaths();
+  
   test('Run hello world', () {
     TestZone().run(() {
       var results = <String>[];

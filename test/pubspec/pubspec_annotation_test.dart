@@ -1,7 +1,12 @@
+
 import 'package:dshell/src/pubspec/pubspec_annotation.dart';
 import 'package:test/test.dart';
 
+import '../util/test_paths.dart';
+
 void main() {
+  TestPaths();
+  
   test('parse', () {
     var annotation = '''
     /*

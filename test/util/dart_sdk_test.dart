@@ -3,8 +3,11 @@ import 'package:dshell/src/script/dart_sdk.dart';
 import 'package:test/test.dart';
 
 import 'test_fs_zone.dart';
+import 'test_paths.dart';
 
 void main() {
+  TestPaths();
+  
   test('Detect Dart SDK', () {
     TestZone().run(() {
       print('Dart Path: ${DartSdk().dartPath}');

@@ -3,8 +3,11 @@ import 'package:dshell/src/util/dshell_exception.dart';
 import 'package:test/test.dart' as t;
 
 import 'util/test_fs_zone.dart';
+import 'util/test_paths.dart';
 
 void main() {
+  TestPaths();
+  
   Settings().debug_on = true;
 
   t.test('Stderr', () {

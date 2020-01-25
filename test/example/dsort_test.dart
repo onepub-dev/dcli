@@ -13,6 +13,8 @@ import '../util/test_paths.dart';
 String script = 'test/test_scripts/hello_world.dart';
 
 void main() {
+  TestPaths();
+
   var ROOT_TEST = 'sort1';
 
   group('dsort tests', () {

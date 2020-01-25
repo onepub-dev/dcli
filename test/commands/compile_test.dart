@@ -5,10 +5,13 @@ import 'package:dshell/src/util/dshell_exception.dart';
 import 'package:test/test.dart';
 
 import '../util/test_fs_zone.dart';
+import '../util/test_paths.dart';
 
 String script = 'test/test_scripts/hello_world.dart';
 
 void main() {
+  TestPaths();
+  
   group('Compile using DShell', () {
     test('compile examples/dsort.dart', () {
       TestZone().run(() {

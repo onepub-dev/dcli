@@ -63,6 +63,21 @@ class TestPaths {
     var home = truepath(TEST_ROOT, 'home');
     setEnv('HOME', home);
 
+    // create test .pub-cache dir
+    var pubCachePath = truepath(TEST_ROOT, PubCache().cacheDir);
+    setEnv('PUB_CACHE', pubCachePath);
+
+    // add the unit test dshell/bin path to the front
+    // of the PATH so that our test version of dshell tooling
+    // will run when we spawn a dshell process.
+    var path = PATH;
+    path.insert(0, Settings().dshellBinPath);
+
+    // .pub-cache so we run the test version of dshell.
+    path.insert(0, pubCachePath);
+
+    setEnv('PATH', path.join(Env().pathSeparator));
+
     var dshellPath = Settings().dshellPath;
     if (!dshellPath.startsWith('/tmp') ||
         !HOME.startsWith('/tmp') ||
@@ -71,7 +86,7 @@ class TestPaths {
           '''Something went wrong, the dshell path or HOME for unit tests is NOT pointing to /tmp. 
           dshell's path is pointing at $dshellPath
           HOME is pointing at $HOME
-          PUB_CACHE is pointint ag ${env('PUB_CACHE')}
+          PUB_CACHE is pointing at ${env('PUB_CACHE')}
           ''');
       printerr('We have shutdown the unit tests to protect your filesystem.');
       exit(1);
@@ -84,21 +99,10 @@ class TestPaths {
 
     recreateDir(Settings().dshellBinPath);
 
-    // add the unit test dshell/bin path to the front
-    // of the PATH so that our test version of dshell
-    // will run when we spawn a dshell process.
-    var path = PATH;
-    path.insert(0, Settings().dshellBinPath);
-
-    setEnv('PATH', path.join(Env().pathSeparator));
-
     // the cache is normally in .dshellPath
     // but just in case its not we create it directly
     recreateDir(Settings().dshellCachePath);
 
-    // create test .pub-cache dir
-    var pubCachePath = truepath(TEST_ROOT, PubCache().cacheDir);
-    setEnv('PUB_CACHE', pubCachePath);
     recreateDir(pubCachePath);
 
     testScriptPath = truepath(TEST_ROOT, 'scripts');

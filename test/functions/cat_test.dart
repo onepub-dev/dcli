@@ -7,6 +7,8 @@ import '../util/test_paths.dart';
 
 String testFile;
 void main() {
+  TestPaths();
+  
   Settings().debug_on = true;
 
   t.group('Cat', () {

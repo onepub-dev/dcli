@@ -16,6 +16,8 @@ String scriptPath = p.join(scriptDirectory, 'test.dart');
 String pubSpecScriptPath = p.join(scriptDirectory, 'pubspec.yaml');
 
 void main() {
+  TestPaths();
+  
   var main = '''
 void main()
 {

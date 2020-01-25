@@ -7,10 +7,13 @@ import 'package:dshell/src/settings.dart';
 import 'package:test/test.dart';
 
 import '../util/test_fs_zone.dart';
+import '../util/test_paths.dart';
 
 String scriptPath = 'test/test_scripts/hello_world.dart';
 
 void main() {
+  TestPaths();
+  
   group('Pub Get', () {
     test('Do it', () {
       TestZone().run(() {

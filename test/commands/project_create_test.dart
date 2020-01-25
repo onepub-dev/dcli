@@ -15,6 +15,8 @@ import '../util/test_fs_zone.dart';
 import '../util/test_paths.dart';
 
 void main() {
+  TestPaths();
+  
   var scriptPath = truepath(TestPaths().testScriptPath, 'create_test');
 
   if (!exists(scriptPath)) {

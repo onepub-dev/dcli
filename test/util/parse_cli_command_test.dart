@@ -2,7 +2,11 @@ import 'package:dshell/src/script/command_line_runner.dart';
 import 'package:dshell/src/util/runnable_process.dart';
 import 'package:test/test.dart';
 
+import 'test_paths.dart';
+
 void main() {
+  TestPaths();
+  
   group('ParseCLICommand', () {
     test('empty string', () {
       var test = '';

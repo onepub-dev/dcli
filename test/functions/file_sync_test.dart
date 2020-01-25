@@ -8,6 +8,8 @@ import '../util/test_fs_zone.dart';
 import '../util/test_paths.dart';
 
 void main() {
+  TestPaths();
+  
   Settings().debug_on = true;
 
   t.group('FileSync', () {
@@ -32,7 +34,8 @@ void main() {
 
     t.test('Write', () {
       TestZone().run(() {
-        var testFile = join(TestPaths.TEST_ROOT, 'lines.txt');
+        var testFile = join(TestPaths.
+        TEST_ROOT, 'lines.txt');
         if (exists(testFile)) {
           delete(testFile);
         }
