@@ -68,12 +68,25 @@ class Progress {
         cancelOnError: true);
   }
 
-  // Returns stdout lines as a list.
+  /// Returns stdout lines as a list.
+  /// See [firstLine]
+  ///     [forEach]
   List<String> toList() {
     var lines = <String>[];
 
     forEach((line) => lines.add(line));
     return lines;
+  }
+
+  // Returns the first (stdout) line from the command or
+  // null if no lines where returned
+  String get firstLine {
+    String line;
+    var lines = toList();
+    if (lines.isNotEmpty) {
+      line = lines[0];
+    }
+    return line;
   }
 
   void close() {

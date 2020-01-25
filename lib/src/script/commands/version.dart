@@ -23,10 +23,10 @@ class VersionCommand extends Command {
 
     var appname = Settings().appname;
 
-    var locations = which(appname, first: true).toList();
+    var locations = which(appname, first: true).firstLine;
 
     var location = 'Not on PATH';
-    if (locations.length != 1) {
+    if (locations == null) {
       printerr(red('Error: dshell is not on your path. Run "dshell install"'));
     } else {
       location = locations[0];

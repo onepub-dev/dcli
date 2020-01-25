@@ -29,6 +29,7 @@ extension StringAsProcess on String {
   /// See [forEach] to capture output to stdout and stderr
   ///     [toList] to capture stdout to [List<String>]
   ///     [start] - for more control over how the sub process is started.
+  ///     [firstLine] - returns just the first line written to stdout.
   void get run {
     cmd.run(this,
         progress:
@@ -57,6 +58,7 @@ extension StringAsProcess on String {
   ///
   /// See [forEach] to capture output to stdout and stderr
   ///     [toList] to capture stdout to [List<String>]
+  ///     [firstLine] - returns just the first line written to stdout.
   ///
   /// @deprecated use start(runInShell: true)
   void get shell => cmd.run(this, runInShell: true);
@@ -82,6 +84,7 @@ extension StringAsProcess on String {
   /// See  [run] if you just need to run a process with all the defaults.
   ///      [forEach] to capture output to stdout and stderr
   ///      [toList] to capture stdout to [List<String>]
+  ///     [firstLine] - returns just the first line written to stdout.
   void start({bool runInShell = false, bool detached = false}) {
     var process = RunnableProcess(this);
     process.start(runInShell: runInShell, detached: detached);
@@ -114,6 +117,7 @@ extension StringAsProcess on String {
   /// See [run] if you don't care about capturing output
   ///     [list] to capture stdout as a String list.
   ///     [start] - if you need to run a detached sub process.
+  ///     [firstLine] - returns just the first line written to stdout.
   void forEach(LineAction stdout,
           {LineAction stderr, bool runInShell = false}) =>
       cmd.run(this,
@@ -125,8 +129,27 @@ extension StringAsProcess on String {
   /// See [forEach] to capture output to stdout and stderr interactively
   ///     [run] to run the application without capturing its output
   ///     [start] - to run the process fully detached.
+  ///     [firstLine] - returns just the first line written to stdout.
   List<String> toList({Pattern lineDelimiter = '\n', bool runInShell = false}) {
     return cmd.run(this, runInShell: runInShell).toList();
+  }
+
+  /// [firstLine] runs [this] as a cli process and
+  /// returns the first line written to stdout as
+  /// a [String].
+  /// See [forEach] to capture output to stdout and stderr interactively
+  ///     [run] to run the application without capturing its output
+  ///     [start] - to run the process fully detached.
+  ///     [toList] - returns a lines written to stdout as a list.
+  String get firstLine {
+    var lines = toList();
+
+    String line;
+    if (lines.isNotEmpty) {
+      line = lines[0];
+    }
+
+    return line;
   }
 
   /// operator |

@@ -31,8 +31,8 @@ class InstallCommand extends Command {
 
     // check the user
     if (Platform.isLinux || Platform.isMacOS) {
-      var user = 'whoami'.toList();
-      if (user.length == 1) {
+      var user = 'whoami'.firstLine;
+      if (user != null) {
         if (user[0] == 'root') {
           printerr('dshell install MUST not be run as root.');
         }
@@ -135,9 +135,9 @@ class InstallCommand extends Command {
     // print OS version.
     // print('Platform.version ${Platform.version}');
 
-    var dshellLocation = which('dshell', first: true).toList();
+    var dshellLocation = which('dshell', first: true).firstLine;
     // check if dshell is on the path
-    if (dshellLocation.isEmpty) {
+    if (dshellLocation == null) {
       print('');
       print('ERROR: dshell was not found on your path!');
       print('Try to resolve the problem and then run dshell install again.');
@@ -148,7 +148,7 @@ class InstallCommand extends Command {
       }
       exit(1);
     } else {
-      var dshellPath = dshellLocation[0];
+      var dshellPath = dshellLocation;
       print(blue('dshell found in : ${dshellPath}'));
 
       // link so all users can run dshell

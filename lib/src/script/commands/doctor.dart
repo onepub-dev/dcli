@@ -30,13 +30,13 @@ class DoctorCommand extends Command {
     print('dart version    : ${DartSdk().version}');
 
     print('dart exe path   : ${DartSdk().exePath}');
-    var dartPath = which('dart', first: true).toList()[0];
+    var dartPath = which('dart', first: true).firstLine;
     print('dart path       : ${DartSdk().dartPath} : ${dartPath}');
-    var dart2NativePath = which('dart2native', first: true).toList()[0];
+    var dart2NativePath = which('dart2native', first: true).firstLine;
     print(
         'dart2Native path: ${DartSdk().dart2NativePath} : ${dart2NativePath}');
     print('');
-    var pubPath = which('pub', first: true).toList()[0];
+    var pubPath = which('pub', first: true).firstLine;
     print('pub get path    : ${DartSdk().pubGetPath} : ${pubPath}');
     print('.pub-cache      : ${PubCache().path}');
     print('Package Config: ${Platform.packageConfig}');
@@ -99,18 +99,13 @@ class _Owner {
   String group;
 
   _Owner(String path) {
-    var lsLine = 'ls -alFd $path'.toList();
+    var lsLine = 'ls -alFd $path'.firstLine;
 
-    if (lsLine.isEmpty) {
+    if (lsLine == null) {
       throw DShellException('No file/directory matched: ${absolute(path)}');
     }
 
-    if (lsLine.length > 1) {
-      throw DShellException(
-          'More than on file/directory matched: ${absolute(path)}');
-    }
-
-    var parts = lsLine[0].split(' ');
+    var parts = lsLine.split(' ');
     user = parts[2];
     group = parts[3];
   }

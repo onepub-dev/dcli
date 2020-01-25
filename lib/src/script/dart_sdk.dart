@@ -39,9 +39,9 @@ class DartSdk {
   String get exePath {
     if (_exePath == null) {
       // this is an expesive operation so only do it if required.
-      var paths = which('dart', first: true).toList();
-      assert(paths.length == 1);
-      _exePath = paths[0];
+      var path = which('dart', first: true).firstLine;
+      assert(path != null);
+      _exePath = path;
     }
     return _exePath;
   }
