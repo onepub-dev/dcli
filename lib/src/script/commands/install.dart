@@ -183,7 +183,7 @@ class InstallCommand extends Command {
       // https://dartcode.org/docs/configuring-path-and-environment-variables/
       //
       if (Platform.isMacOS) {
-        '/etc/path.d/dshell'.write(binPath);
+        addDshellToMacPath(binPath);
       } else if (Settings().isLinux) {
         var profile = join(HOME, '.profile');
         if (exists(profile)) {
@@ -250,6 +250,25 @@ class InstallCommand extends Command {
   @override
   List<Flag> flags() {
     return installFlags;
+  }
+
+  void addDshellToMacPath(String binPath) {
+    var macOSPathPath = join('/etc', 'path.d');
+
+    try {
+      if (!exists(macOSPathPath)) {
+        createDir(macOSPathPath, recursive: true);
+      }
+      if (exists(macOSPathPath)) {
+        join(macOSPathPath, 'dshell').write(binPath);
+      }
+    } catch (e) {
+      // ignore write permission problems.
+      printerr(red(
+          "Unable to add dshell/bin to path as we couldn't write to $macOSPathPath"));
+      printerr(
+          'If you want to use dshell compile -i to install script then you need to manually add the path.');
+    }
   }
 }
 
