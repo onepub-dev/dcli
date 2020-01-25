@@ -13,9 +13,14 @@ import '../util/test_paths.dart';
 String script = 'test/test_scripts/hello_world.dart';
 
 void main() {
+  var ROOT_TEST = 'sort1';
+
   group('dsort tests', () {
     var paths = TestPaths();
-    var testFile = join(paths.testRoot, 'unsorted.txt');
+    var testFile = join(paths.testRoot, ROOT_TEST, 'unsorted.txt');
+    if (!exists(dirname(testFile))) {
+      createDir(dirname(testFile), recursive: true);
+    }
 
     test('dsort unsorted.txt', () {
       TestZone().run(() {
@@ -178,5 +183,5 @@ void main() {
         expect(result, equals(expected));
       });
     });
-  });
+  }, skip: true);
 }

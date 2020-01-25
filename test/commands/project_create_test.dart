@@ -14,9 +14,14 @@ import 'package:path/path.dart' as p;
 import '../util/test_fs_zone.dart';
 import '../util/test_paths.dart';
 
-String script = 'test/test_scripts/hello_world.dart';
-
 void main() {
+  var scriptPath = truepath(TestPaths().testScriptPath, 'create_test');
+
+  if (!exists(scriptPath)) {
+    createDir(scriptPath, recursive: true);
+  }
+  var script = truepath(scriptPath, 'hello_world.dart');
+
   group('Create Project', () {
     test('Create hello world', () {
       TestZone().run(() {
@@ -84,7 +89,7 @@ void checkProjectStructure(TestPaths paths, String scriptName) {
 
   var directories = <String>[];
 
-  find('*.*',
+  find('*',
           recursive: false,
           root: paths.projectPath(scriptName),
           types: [FileSystemEntityType.directory])

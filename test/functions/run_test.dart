@@ -1,7 +1,10 @@
+@Timeout(Duration(seconds: 600))
 import 'package:test/test.dart' as t;
 import 'package:dshell/dshell.dart';
+import 'package:test/test.dart';
 
 import '../util/test_fs_zone.dart';
+import '../util/test_paths.dart';
 
 void main() {
   Settings().debug_on = true;
@@ -21,14 +24,15 @@ void main() {
 
     t.test('Does command write output to stdout', () {
       TestZone().run(() {
-        var script = join('test', 'test_scripts', 'run_echo.dart');
+        var scriptPath = truepath(TestPaths().testScriptPath, 'run_test');
 
-        if (!exists(basename(script))) {
-          createDir(basename(script));
+        if (!exists(scriptPath)) {
+          createDir(scriptPath, recursive: true);
         }
+        var script = truepath(scriptPath, 'run_echo.dart');
 
         // make certain our test script will run
-        'dshell create $script'.run;
+        '/home/bsutton/.pub-cache/bin/dshell -v create $script'.run;
 
         // run a script that uses '.run' and capture its output to prove
         // that .run works.
