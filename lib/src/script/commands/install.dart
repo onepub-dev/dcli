@@ -63,8 +63,6 @@ class InstallCommand extends Command {
     }
     scriptIndex = i;
 
-    print('in$scriptIndex len${subarguments.length}');
-
     if (subarguments.length != scriptIndex) {
       throw CommandLineException(
           "'dshell install' does not take any arguments. Found $subarguments");
