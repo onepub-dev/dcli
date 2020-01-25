@@ -3,10 +3,7 @@
 import 'dart:io';
 
 import 'package:dshell/dshell.dart' hide equals;
-import 'package:dshell/src/script/command_line_runner.dart';
-import 'package:dshell/src/script/commands/commands.dart';
 import 'package:dshell/src/script/entry_point.dart';
-import 'package:dshell/src/script/project_cache.dart';
 import 'package:test/test.dart';
 
 import 'package:path/path.dart' as p;
@@ -16,7 +13,7 @@ import '../util/test_paths.dart';
 
 void main() {
   TestPaths();
-  
+
   var scriptPath = truepath(TestPaths().testScriptPath, 'create_test');
 
   if (!exists(scriptPath)) {
@@ -56,8 +53,8 @@ void main() {
 }
 
 void setup(TestPaths paths) {
-  CommandLineRunner.init(Commands.applicationCommands);
-  ProjectCache().cleanAll();
+  // CommandLineRunner.init(Commands.applicationCommands);
+  // ProjectCache().cleanAll();
 }
 
 void checkProjectStructure(TestPaths paths, String scriptName) {
