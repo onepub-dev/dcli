@@ -62,15 +62,25 @@ class Env extends DShellFunction {
     return envVars[name];
   }
 
-  List<String> get PATH {
-    var pathEnv = env('PATH');
-
+  /// returns the path seperator used by the PATH enviorment variable.
+  ///
+  /// On linix it is ':' ond windows it is ';'
+  ///
+  /// NOTE do NOT confuses this with the file system path separator!!!
+  ///
+  String get pathSeparator {
     var separator = ':';
 
     if (Platform.isWindows) {
       separator = ';';
     }
-    return pathEnv.split(separator);
+    return separator;
+  }
+
+  List<String> get PATH {
+    var pathEnv = env('PATH');
+
+    return pathEnv.split(pathSeparator);
   }
 
   ///
