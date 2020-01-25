@@ -58,6 +58,8 @@ class TestPaths {
 
   TestPaths._internal() {
     testRoot = TEST_ROOT;
+
+    // redirecct HOME to /tmp/dshell/home
     var home = truepath(TEST_ROOT, 'home');
     setEnv('HOME', home);
 
@@ -79,6 +81,16 @@ class TestPaths {
     recreateDir(home);
 
     recreateDir(Settings().dshellPath);
+
+    recreateDir(Settings().dshellBinPath);
+
+    // add the unit test dshell/bin path to the front
+    // of the PATH so that our test version of dshell
+    // will run when we spawn a dshell process.
+    var path = PATH;
+    path.insert(0, Settings().dshellBinPath);
+
+    setEnv('PATH', path.join(Env().pathSeparator));
 
     // the cache is normally in .dshellPath
     // but just in case its not we create it directly
@@ -117,8 +129,10 @@ class TestPaths {
     createDir(path, recursive: true);
   }
 
-  void installDshell(String pidPath) {
+  void installDshell() {
     'pub global activate --source path .'.run;
+
+    which('dshell').forEach((line) => print(line));
 
     'dshell install'.run;
   }
