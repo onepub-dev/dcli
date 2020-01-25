@@ -1,3 +1,10 @@
+## 1.1.0
+Added support for PUB_CACHE environment var.
+Added dart:io to default script we create.
+Added check on install to ensure user isn't running as root.
+Core unit tests will now succeed in a single pass.
+
+
 ## 1.1.0-dev.3
 Fixed a bug where find didn't find a match on a simple file name.
 
