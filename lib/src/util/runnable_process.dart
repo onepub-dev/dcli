@@ -23,8 +23,8 @@ typedef CancelableLineAction = bool Function(String line);
 ///
 /// [line] the line to write to stderr.
 void printerr(String line) {
-  stderr.write(line);
-  waitForEx<dynamic>(stderr.flush());
+  stderr.writeln(line);
+  // waitForEx<dynamic>(stderr.flush());
 }
 
 class RunnableProcess {
