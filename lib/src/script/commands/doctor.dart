@@ -76,11 +76,16 @@ class DoctorCommand extends Command {
   }
 
   void showPermissions(String label, String path) {
-    var fstat = stat(path);
-    var owner = _Owner(path);
+    if (exists(path)) {
+      var fstat = stat(path);
 
-    label = label.padRight(10);
-    print('$label: ${fstat.modeString()} ${owner.toString()}   $path ');
+      var owner = _Owner(path);
+
+      label = label.padRight(10);
+      print('$label: ${fstat.modeString()} ${owner.toString()}   $path ');
+    } else {
+      print('$label: ${truepath(path)} does not exist');
+    }
   }
 
   @override
