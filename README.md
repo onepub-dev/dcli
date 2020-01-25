@@ -823,6 +823,7 @@ These include:
 * start({bool detached = false, bool runInShell = false})
 * forEach(LineAction stdout, {LineAction stdout})
 * toList()
+* firstLine
 * | operator
 
 This is the resulting syntax:
