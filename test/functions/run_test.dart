@@ -32,7 +32,7 @@ void main() {
         var script = truepath(scriptPath, 'run_echo.dart');
 
         // make certain our test script will run
-        '/home/bsutton/.pub-cache/bin/dshell -v create $script'.run;
+        'dshell -v create $script'.run;
 
         // run a script that uses '.run' and capture its output to prove
         // that .run works.
