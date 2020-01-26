@@ -47,7 +47,7 @@ class DoctorCommand extends Command {
     print('PATH \n\t${PATH.join("\n\t")}');
     print("\$SHELL ${env('SHELL')}");
     if (!Settings().isWindows) {
-      print('True SHELL ${PID().getShellName()}');
+      print('True SHELL ${Shell().getShellName()}');
     }
 
     print('');

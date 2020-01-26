@@ -1,18 +1,33 @@
-import 'dart:io' as d;
+import 'dart:io';
 import 'package:dshell/dshell.dart';
+
+enum SHELL { BASH, ZSH, UNKNOWN }
 
 ///
 /// Provides some conveinence funtions to get access to
-/// the scripts pid and its parents pid.
+/// details about the system shell that we were run from.
 ///
 /// This class is considered EXPERIMENTAL and is likely to change.
-class PID {
-  /// Just a convenience function that returns the
-  /// current processes PID. You can also obtain this
-  /// by just calling the global function [pid] which
-  /// is part of dart:io.
-  ///
-  int get pid => d.pid;
+class Shell {
+  static final Shell _shell = Shell._internal();
+
+  Shell._internal();
+
+  factory Shell() => _shell;
+
+  SHELL identifyShell() {
+    SHELL shell;
+    var shellName = Shell().getShellName();
+
+    if (shellName.toLowerCase() == 'bash') {
+      shell = SHELL.BASH;
+    } else if (shellName.toLowerCase() == 'zsh') {
+      shell = SHELL.ZSH;
+    } else {
+      shell = SHELL.UNKNOWN;
+    }
+    return shell;
+  }
 
   /// Gets the name of the shell that this dshell
   /// script is running under.
