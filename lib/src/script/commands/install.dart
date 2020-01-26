@@ -4,6 +4,7 @@ import 'package:dshell/dshell.dart';
 import 'package:dshell/src/functions/env.dart';
 import 'package:dshell/src/script/commands/clean_all.dart';
 import 'package:dshell/src/util/pub_cache.dart';
+import 'package:dshell/src/util/shell.dart';
 
 import '../../functions/which.dart';
 import '../../pubspec/global_dependencies.dart';
@@ -183,15 +184,9 @@ class InstallCommand extends Command {
       // https://dartcode.org/docs/configuring-path-and-environment-variables/
       //
       if (Settings().isMacOS) {
-        addDshellToMacPath(binPath);
+        addPathToMacPath(binPath);
       } else if (Settings().isLinux) {
-        var profile = join(HOME, '.profile');
-        if (exists(profile)) {
-          var export = 'export PATH=\$PATH:$binPath';
-          if (!read(profile).toList().contains(export)) {
-            profile.append(export);
-          }
-        }
+        addPathToLinxuPath(binPath);
       } else if (Settings().isWindows) {
         print(
             "Please read the following link for details on how to add '$binPath' to your path.");
@@ -245,13 +240,13 @@ class InstallCommand extends Command {
   }
 
   String _getShellStartFilePath() {
-    var shell = identifyShell();
+    var shell = Shell().identifyShell();
 
     String configFile;
-    if (shell == _SHELL.BASH) {
+    if (shell == SHELL.BASH) {
       configFile = join(HOME, '.bashrc');
     }
-    if (shell == _SHELL.ZSH) {
+    if (shell == SHELL.ZSH) {
       configFile = join(HOME, '.zshrc');
     }
 
@@ -275,7 +270,23 @@ class InstallCommand extends Command {
     return installFlags;
   }
 
-  void addDshellToMacPath(String binPath) {
+  void addPathToMacPath(String binPath) {
+    var shell = Shell().identifyShell();
+
+    switch (shell) {
+      case SHELL.BASH:
+        addPathToBash(binPath);
+        break;
+      case SHELL.ZSH:
+        addPathToZsh(binPath);
+        break;
+      case SHELL.UNKNOWN:
+        addPathToMacOsPathd(binPath);
+        break;
+    }
+  }
+
+  void addPathToMacOsPathd(String binPath) {
     var macOSPathPath = join('/etc', 'path.d');
 
     try {
@@ -294,22 +305,58 @@ class InstallCommand extends Command {
     }
   }
 
-  _SHELL identifyShell() {
-    _SHELL shell;
-    var shellName = PID().getShellName();
+  /// Adds the given path to the Bash path if it isn't
+  /// already on teh path.
+  void addPathToBash(String path) {
+    if (!isOnPath(path)) {
+      var export = 'export PATH=\$PATH:$path';
 
-    if (shellName.toLowerCase() == 'bash') {
-      shell = _SHELL.BASH;
-    } else if (shellName.toLowerCase() == 'zsh') {
-      shell = _SHELL.ZSH;
-    } else {
-      shell = _SHELL.UNKNOWN;
+      var rcPath = getBashRcPath();
+
+      if (!exists(rcPath)) {
+        rcPath.write(export);
+      } else {
+        rcPath.append(export);
+      }
     }
-    return shell;
+  }
+
+  /// Adds the given path to the Bash path if it isn't
+  /// already on teh path.
+  void addPathToZsh(String path) {
+    if (!isOnPath(path)) {
+      var export = 'export PATH=\$PATH:$path';
+
+      var rcPath = getZshRcPath();
+
+      if (!exists(rcPath)) {
+        rcPath.write(export);
+      } else {
+        rcPath.append(export);
+      }
+    }
+  }
+
+  String getBashRcPath() {
+    return join(HOME, '.bashrc');
+  }
+
+  String getZshRcPath() {
+    return join(HOME, '.zshrc');
+  }
+
+  void addPathToLinxuPath(String path) {
+    if (!isOnPath(path)) {
+      var profile = join(HOME, '.profile');
+      if (exists(profile)) {
+        var export = 'export PATH=\$PATH:$path';
+        if (!read(profile).toList().contains(export)) {
+          profile.append(export);
+        }
+      }
+    }
   }
 }
-
-enum _SHELL { BASH, ZSH, UNKNOWN }
 
 class NoCleanFlag extends Flag {
   static const NAME = 'noclean';
