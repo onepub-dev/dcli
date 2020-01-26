@@ -45,6 +45,10 @@ class DoctorCommand extends Command {
 
     print('HOME $HOME');
     print('PATH \n\t${PATH.join("\n\t")}');
+    print("\$SHELL ${env('SHELL')}");
+    if (!Settings().isWindows) {
+      print('True SHELL ${PID().getShellName()}');
+    }
 
     print('');
     print('Dart location');
