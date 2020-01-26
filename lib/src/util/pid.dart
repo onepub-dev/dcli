@@ -1,6 +1,5 @@
 import 'dart:io' as d;
 import 'package:dshell/dshell.dart';
-import 'package:dshell/src/util/runnable_process.dart';
 
 ///
 /// Provides some conveinence funtions to get access to
