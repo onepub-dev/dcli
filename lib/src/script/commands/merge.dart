@@ -1,11 +1,7 @@
 import 'package:collection/collection.dart';
 import 'package:dshell/dshell.dart';
 import 'package:dshell/src/functions/is.dart';
-import 'package:dshell/src/pubspec/pubspec.dart';
-import 'package:dshell/src/pubspec/pubspec_annotation.dart';
-import 'package:dshell/src/pubspec/pubspec_file.dart';
 
-import '../command_line_runner.dart';
 import '../flags.dart';
 import '../script.dart';
 import 'commands.dart';
@@ -17,10 +13,11 @@ class MergeCommand extends Command {
 
   @override
   int run(List<Flag> selectedFlags, List<String> subarguments) {
-    var exitCode = 0;
+    //var exitCode = 0;
 
     printerr('merge is not currently supported');
     return 1;
+    /*
     if (subarguments.isEmpty) {
       throw InvalidArguments('Merge requires a argument <script file.dart>');
     }
@@ -60,6 +57,7 @@ class MergeCommand extends Command {
     }
 
     return exitCode;
+    */
   }
 
   @override
