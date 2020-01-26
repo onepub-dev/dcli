@@ -68,9 +68,13 @@ class Shell {
     int shellPID;
 
     var dartPID = getParentPID(childPID);
+    Settings().verbose('dartPID: $dartPID ${getPIDName(dartPID)}');
     var envPID = getParentPID(dartPID);
+    Settings().verbose('envPID: $envPID ${getPIDName(envPID)}');
+
     if (getPIDName(envPID).toLowerCase() == 'sh') {
       shellPID = getParentPID(envPID);
+      // Log.d('shellPID: $envPID ${getPIDName(shellPID)}');
     } else {
       // if you run dshell directly then we don't use #! so 'sh' won't be our parent
       // instead the actuall shell will be our parent.
@@ -86,7 +90,12 @@ class Shell {
   String getPIDName(int pid) {
     String line;
 
-    line = 'ps -q $pid -o comm='.firstLine;
+    try {
+      line = 'ps -q $pid -o comm='.firstLine;
+    } on ProcessException {
+      // ps not supported on current OS
+      line = 'unknown';
+    }
     if (line != null) {
       line = line.trim();
     }
@@ -101,9 +110,29 @@ class Shell {
   int getParentPID(int childPid) {
     int parentPid;
 
-    var line = 'ps -p $childPid -o ppid='.firstLine;
+    String line;
+    try {
+      line = 'ps -p $childPid -o ppid='.firstLine;
+    } on ProcessException {
+      // ps not supported on current OS
+      line = '-1';
+    }
     parentPid = int.tryParse(line.trim());
 
     return parentPid;
+  }
+
+  String getShellStartScriptPath() {
+    var shell = Shell().identifyShell();
+
+    String configFile;
+    if (shell == SHELL.BASH) {
+      configFile = join(HOME, '.bashrc');
+    }
+    if (shell == SHELL.ZSH) {
+      configFile = join(HOME, '.zshrc');
+    }
+
+    return configFile;
   }
 }

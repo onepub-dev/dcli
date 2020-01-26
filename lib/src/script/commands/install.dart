@@ -202,7 +202,7 @@ class InstallCommand extends Command {
       // Add cli completion
       var command = "complete -C 'dshell_complete' dshell";
 
-      var startFile = _getShellStartFilePath();
+      var startFile = Shell().getShellStartScriptPath();
 
       if (startFile != null) {
         if (!exists(startFile)) {
@@ -225,7 +225,7 @@ class InstallCommand extends Command {
 
     //added runInShell and now install throws a stack trace
     var completeInstalled = false;
-    var startFile = _getShellStartFilePath();
+    var startFile = Shell().getShellStartScriptPath();
 
     if (startFile != null) {
       if (exists(startFile)) {
@@ -237,20 +237,6 @@ class InstallCommand extends Command {
       }
     }
     return completeInstalled;
-  }
-
-  String _getShellStartFilePath() {
-    var shell = Shell().identifyShell();
-
-    String configFile;
-    if (shell == SHELL.BASH) {
-      configFile = join(HOME, '.bashrc');
-    }
-    if (shell == SHELL.ZSH) {
-      configFile = join(HOME, '.zshrc');
-    }
-
-    return configFile;
   }
 
   @override
