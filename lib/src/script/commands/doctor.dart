@@ -49,6 +49,8 @@ class DoctorCommand extends Command {
     print("\$SHELL ${env('SHELL')}");
     if (!Settings().isWindows) {
       print('True SHELL ${Shell().getShellName()}');
+      print(
+          'Shell Start Script: ${privatePath(Shell().getShellStartScriptPath())}');
     }
 
     print('');
