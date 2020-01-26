@@ -29,22 +29,23 @@ class DoctorCommand extends Command {
     print('');
     print('dart version    : ${DartSdk().version}');
 
-    print('dart exe path   : ${DartSdk().exePath}');
+    print('dart exe path   : ${privatePath(DartSdk().exePath)}');
     var dartPath = which('dart', first: true).firstLine;
-    print('dart path       : ${DartSdk().dartPath} : ${dartPath}');
+    print(
+        'dart path       : ${privatePath(DartSdk().dartPath)} : ${privatePath(dartPath)}');
     var dart2NativePath = which('dart2native', first: true).firstLine;
     print(
-        'dart2Native path: ${DartSdk().dart2NativePath} : ${dart2NativePath}');
+        'dart2Native path: ${privatePath(DartSdk().dart2NativePath)} : ${privatePath(dart2NativePath)}');
     print('');
     var pubPath = which('pub', first: true).firstLine;
-    print('pub get path    : ${DartSdk().pubGetPath} : ${pubPath}');
-    print('.pub-cache      : ${PubCache().path}');
-    print('Package Config: ${Platform.packageConfig}');
+    print(
+        'pub get path    : ${privatePath(DartSdk().pubGetPath)} : ${privatePath(pubPath)}');
+    print('.pub-cache      : ${privatePath(PubCache().path)}');
+    print('Package Config: ${privatePath(Platform.packageConfig)}');
 
     print('');
 
-    print('HOME $HOME');
-    print('PATH \n\t${PATH.join("\n\t")}');
+    print('PATH \n\t${privatePath(PATH.join("\n\t"))}');
     print("\$SHELL ${env('SHELL')}");
     if (!Settings().isWindows) {
       print('True SHELL ${Shell().getShellName()}');
@@ -63,8 +64,20 @@ class DoctorCommand extends Command {
     showPermissions(
         'dependencies.yaml', join(Settings().dshellPath, 'dependencies.yaml'));
 
-    showPermissions('templates', join(Settings().templatePath));
+    showPermissions('templates', Settings().templatePath);
     return 0;
+  }
+
+  /// Removes the users home directory from a path replacing it with ~
+  String privatePath(String part1,
+      [String part2,
+      String part3,
+      String part4,
+      String part5,
+      String part6,
+      String part7]) {
+    return truepath(part1, part2, part3, part4, part5, part6, part7)
+        .replaceAll(HOME, '~');
   }
 
   @override
@@ -86,9 +99,12 @@ class DoctorCommand extends Command {
       var owner = _Owner(path);
 
       label = label.padRight(10);
-      print('$label: ${fstat.modeString()} ${owner.toString()}   $path ');
+
+      var username = env('USERNAME');
+      print(
+          '$label: ${fstat.modeString()} ${owner.toString().replaceAll(username, '<user>')}   ${privatePath(path)} ');
     } else {
-      print('$label: ${truepath(path)} does not exist');
+      print('$label: ${privatePath(path)} does not exist');
     }
   }
 
