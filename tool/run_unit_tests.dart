@@ -13,7 +13,7 @@ void main() {
 
 	if (!exists('pubspec.yaml'))
 	{
-		printerr(red('This script must be run from the packages root directory.'));
+		printerr(red("This script must be run from the package's root directory."));
 		exit(1);
 	}
 	'pub run test -j1'.run;
