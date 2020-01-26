@@ -8,7 +8,7 @@ import 'test_paths.dart';
 
 void main() {
   TestPaths();
-  
+
   test('MemoryFileSystem', () {
     TestZone().run(() {
       // final fs = MemoryFileSystem();

@@ -16,7 +16,7 @@ import 'util/test_paths.dart';
 
 void main() {
   TestPaths();
-  
+
   print('Print to stdout using "print');
 
   stdout.writeln('Print to stdout using "stsdout.writeln"');

@@ -6,7 +6,7 @@ import 'test_paths.dart';
 
 void main() {
   TestPaths();
-  
+
   group('ParseCLICommand', () {
     test('empty string', () {
       var test = '';

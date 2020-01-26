@@ -11,7 +11,7 @@ String script = 'test/test_scripts/hello_world.dart';
 
 void main() {
   TestPaths();
-  
+
   test('dshell doctor', () {
     TestZone().run(() {
       var exit = -1;

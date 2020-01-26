@@ -6,7 +6,7 @@ import '../util/test_paths.dart';
 
 void main() {
   TestPaths();
-  
+
   test('load', () {
     var content = '''
 dependencies:

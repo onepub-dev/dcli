@@ -28,10 +28,10 @@ import 'is.dart';
 ///     [join]
 ///
 ///     use join in prefrence to cd/push/pop
-@Deprecated('Use join') 
+@Deprecated('Use join')
 void cd(String path) => CD().cd(path);
 
-@Deprecated('Use join') 
+@Deprecated('Use join')
 class CD extends DShellFunction {
   void cd(String path) {
     if (Settings().debug_on) {

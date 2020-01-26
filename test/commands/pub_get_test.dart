@@ -1,4 +1,3 @@
-
 import 'package:dshell/src/script/dart_sdk.dart';
 import 'package:dshell/src/script/pub_get.dart';
 import 'package:dshell/src/script/script.dart';
@@ -13,7 +12,7 @@ String scriptPath = 'test/test_scripts/hello_world.dart';
 
 void main() {
   TestPaths();
-  
+
   group('Pub Get', () {
     test('Do it', () {
       TestZone().run(() {

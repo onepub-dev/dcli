@@ -11,7 +11,7 @@ String script = 'test/test_scripts/hello_world.dart';
 
 void main() {
   TestPaths();
-  
+
   group('Compile using DShell', () {
     test('compile examples/dsort.dart', () {
       TestZone().run(() {

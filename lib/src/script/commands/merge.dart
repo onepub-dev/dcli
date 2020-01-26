@@ -1,9 +1,6 @@
-import 'package:collection/collection.dart';
 import 'package:dshell/dshell.dart';
-import 'package:dshell/src/functions/is.dart';
 
 import '../flags.dart';
-import '../script.dart';
 import 'commands.dart';
 
 class MergeCommand extends Command {
@@ -79,6 +76,7 @@ class MergeCommand extends Command {
     return results;
   }
 
+/*
   void _replace(String path, String existing, String replacement) {
     var tmp = '$path.tmp';
     if (exists(tmp)) {
@@ -108,13 +106,13 @@ class MergeCommand extends Command {
 
     return _compare(localPubspecPath, script.pubSpecPath);
   }
+// */
+//   bool _compare(String localPubspecPath, String pubSpecPath) {
+//     var localContent = read(localPubspecPath).toList();
+//     var virtualContent = read(pubSpecPath).toList();
 
-  bool _compare(String localPubspecPath, String pubSpecPath) {
-    var localContent = read(localPubspecPath).toList();
-    var virtualContent = read(pubSpecPath).toList();
-
-    return const ListEquality<String>().equals(localContent, virtualContent);
-  }
+//     return const ListEquality<String>().equals(localContent, virtualContent);
+//   }
 
   @override
   List<Flag> flags() {

@@ -10,7 +10,7 @@ import '../util/test_paths.dart';
 
 void main() {
   TestPaths();
-  
+
   Settings().debug_on = true;
 
   t.group('Find', () {

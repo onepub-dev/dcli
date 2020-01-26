@@ -9,7 +9,7 @@ import '../util/test_paths.dart';
 
 void main() {
   TestPaths();
-  
+
   test('Run hello world', () {
     TestZone().run(() {
       var results = <String>[];

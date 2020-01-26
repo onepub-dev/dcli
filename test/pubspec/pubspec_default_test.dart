@@ -17,7 +17,7 @@ String pubSpecScriptPath = p.join(scriptDirectory, 'pubspec.yaml');
 
 void main() {
   TestPaths();
-  
+
   var main = '''
 void main()
 {

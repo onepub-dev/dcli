@@ -8,7 +8,7 @@ import '../util/test_paths.dart';
 
 void main() {
   TestPaths();
-  
+
   test('Run dshell_complete c', () {
     TestZone().run(() {
       var results = <String>[];

@@ -102,8 +102,8 @@ class ProjectCache {
         if (exists(scriptPath)) {
           print('');
           print(green('Cleaning $scriptPath'));
-          var project =
-              VirtualProject(Settings().dshellCachePath, Script.fromFile(scriptPath));
+          var project = VirtualProject(
+              Settings().dshellCachePath, Script.fromFile(scriptPath));
           project.clean();
         } else {
           print('Removed obsolete cache for $scriptPath');

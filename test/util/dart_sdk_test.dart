@@ -7,7 +7,7 @@ import 'test_paths.dart';
 
 void main() {
   TestPaths();
-  
+
   test('Detect Dart SDK', () {
     TestZone().run(() {
       print('Dart Path: ${DartSdk().dartPath}');

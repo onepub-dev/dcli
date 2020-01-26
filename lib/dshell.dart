@@ -1,7 +1,7 @@
 export 'package:args/args.dart';
 export 'src/functions/ask.dart' show ask, confirm;
 export 'src/functions/cat.dart' show cat, CatException;
-export 'src/functions/cd.dart' show cd, CDException;
+export 'src/functions/cd.dart' show CDException;
 export 'src/functions/chmod.dart' show chmod, ChModException;
 export 'src/functions/copy.dart' show copy, CopyException;
 export 'src/functions/delete.dart' show delete, DeleteException;
@@ -33,8 +33,8 @@ export 'package:path/path.dart'
         toUri,
         fromUri,
         current;
-export 'src/functions/pop.dart' show pop, PopException;
-export 'src/functions/push.dart' show push, PushException;
+export 'src/functions/pop.dart' show PopException;
+export 'src/functions/push.dart' show PushException;
 export 'src/functions/pwd.dart' show pwd;
 export 'src/functions/read.dart' show read, readStdin, ReadException;
 export 'src/functions/delete_dir.dart' show deleteDir, DeleteDirException;

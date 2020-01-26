@@ -10,8 +10,7 @@ import '../util/test_paths.dart';
 String TEST_DIR = 'path_test';
 void main() {
   TestPaths();
-  
-  
+
   Settings().debug_on = true;
 
   t.group('Directory Path manipulation testing', () {

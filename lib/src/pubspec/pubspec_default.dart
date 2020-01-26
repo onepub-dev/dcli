@@ -17,7 +17,7 @@ class PubSpecDefault implements PubSpec // with DependenciesMixin
   String get name => _script.basename;
   @override
   Version get version => Version.parse('1.0.0');
-  @override 
+  @override
   set version(Version version) => pubspec.version = version;
 
   PubSpecDefault(this._script) {
