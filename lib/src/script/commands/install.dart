@@ -30,7 +30,7 @@ class InstallCommand extends Command {
     var scriptIndex = 0;
 
     // check the user
-    if (Platform.isLinux || Platform.isMacOS) {
+    if (Settings().isLinux || Settings().isMacOS) {
       var user = 'whoami'.firstLine;
       if (user != null) {
         if (user[0] == 'root') {
@@ -182,7 +182,7 @@ class InstallCommand extends Command {
       // see
       // https://dartcode.org/docs/configuring-path-and-environment-variables/
       //
-      if (Platform.isMacOS) {
+      if (Settings().isMacOS) {
         addDshellToMacPath(binPath);
       } else if (Settings().isLinux) {
         var profile = join(HOME, '.profile');
@@ -205,15 +205,23 @@ class InstallCommand extends Command {
   void addCompletion() {
     if (!isCompletionInstalled()) {
       // Add cli completion
+      var command = "complete -C 'dshell_complete' dshell";
 
-      var bashrc = join(HOME, '.bashrc');
-      if (!exists(bashrc)) {
-        touch(bashrc, create: true);
+      var startFile = _getShellStartFilePath();
+
+      if (startFile != null) {
+        if (!exists(startFile)) {
+          touch(startFile, create: true);
+        }
+        startFile.append(command);
+
+        print(
+            'dshell tab completion installed. Restart your terminal to activate it.');
+      } else {
+        printerr(red('Unable to install dshell tab completion'));
+        printerr(
+            'Add $command to your start up script to enable tab completion');
       }
-      bashrc.append("complete -C 'dshell_complete' dshell");
-
-      print(
-          'dshell tab completion installed. Restart your terminal to activate it.');
     }
   }
 
@@ -221,18 +229,33 @@ class InstallCommand extends Command {
     // run the complete command to see if dshell is handled.
 
     //added runInShell and now install throws a stack trace
-    var dshellHandled = false;
-    var bashrc = join(HOME, '.bashrc');
+    var completeInstalled = false;
+    var startFile = _getShellStartFilePath();
 
-    if (exists(bashrc)) {
-      read(bashrc).forEach((line) {
-        if (line.contains('dshell_complete')) {
-          dshellHandled = true;
-        }
-      } //, runInShell: true
-          );
+    if (startFile != null) {
+      if (exists(startFile)) {
+        read(startFile).forEach((line) {
+          if (line.contains('dshell_complete')) {
+            completeInstalled = true;
+          }
+        });
+      }
     }
-    return dshellHandled;
+    return completeInstalled;
+  }
+
+  String _getShellStartFilePath() {
+    var shell = identifyShell();
+
+    String configFile;
+    if (shell == _SHELL.BASH) {
+      configFile = join(HOME, '.bashrc');
+    }
+    if (shell == _SHELL.ZSH) {
+      configFile = join(HOME, '.zshrc');
+    }
+
+    return configFile;
   }
 
   @override
@@ -270,7 +293,23 @@ class InstallCommand extends Command {
           'If you want to use dshell compile -i to install script then you need to manually add the path.');
     }
   }
+
+  _SHELL identifyShell() {
+    _SHELL shell;
+    var shellName = PID().getShellName();
+
+    if (shellName.toLowerCase() == 'bash') {
+      shell = _SHELL.BASH;
+    } else if (shellName.toLowerCase() == 'zsh') {
+      shell = _SHELL.ZSH;
+    } else {
+      shell = _SHELL.UNKNOWN;
+    }
+    return shell;
+  }
 }
+
+enum _SHELL { BASH, ZSH, UNKNOWN }
 
 class NoCleanFlag extends Flag {
   static const NAME = 'noclean';
