@@ -1,3 +1,11 @@
+## 1.1.1-dev.2
+Added support for .zshrc
+Added PID class to help get parent pid and shell names. Not certain this is the right structure.
+Now have a dshell script that can sucessfully run the unit tests.
+
+## 1.1.1-dev.1
+Fix for #45
+
 ## 1.1.0
 Added support for PUB_CACHE environment var.
 Added dart:io to default script we create.
