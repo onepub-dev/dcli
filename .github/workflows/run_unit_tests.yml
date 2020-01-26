@@ -1,4 +1,4 @@
-name: Dart CI
+name: tool/run_unit_tests.dart
 
 on: [push]
 
