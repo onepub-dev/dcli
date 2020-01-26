@@ -65,9 +65,17 @@ class Shell {
   int getShellPID({int childPID}) {
     childPID ??= pid;
 
+    int shellPID;
+
     var dartPID = getParentPID(childPID);
     var envPID = getParentPID(dartPID);
-    var shellPID = getParentPID(envPID);
+    if (getPIDName(envPID).toLowerCase() == 'sh') {
+      shellPID = getParentPID(envPID);
+    } else {
+      // if you run dshell directly then we don't use #! so 'sh' won't be our parent
+      // instead the actuall shell will be our parent.
+      shellPID = envPID;
+    }
     return shellPID;
   }
 
