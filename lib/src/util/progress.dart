@@ -16,8 +16,8 @@ class Progress {
   StreamController<String> stdoutController = StreamController();
   StreamController<String> stderrController = StreamController();
 
-  Progress(LineAction stdout, {LineAction stderr = _devNull}) {
-    stderr ??= _devNull;
+  Progress(LineAction stdout, {LineAction stderr = devNull}) {
+    stderr ??= devNull;
     _wireStreams(stdout, stderr);
   }
 
@@ -31,20 +31,20 @@ class Progress {
     stderrController.sink.add(line);
   }
 
-  void forEach(LineAction stdout, {LineAction stderr = _devNull}) {
-    stderr ??= _devNull;
+  void forEach(LineAction stdout, {LineAction stderr = devNull}) {
+    stderr ??= devNull;
     _processUntilComplete(stdout, stderr: stderr);
   }
 
   // if the user doesn't provide a LineAction then we
   // use this to consume the output.
-  static void _devNull(String line) {}
+  static void devNull(String line) {}
 
   ///
   /// processes both streams until they complete
   ///
   void _processUntilComplete(LineAction stdout,
-      {LineAction stderr = _devNull}) {
+      {LineAction stderr = devNull}) {
     _wireStreams(stdout, stderr);
 
     // Wait for both streams to complete
@@ -68,17 +68,17 @@ class Progress {
         cancelOnError: true);
   }
 
-  /// Returns stdout lines as a list.
+  /// Returns stdout and stderr lines as a list.
   /// See [firstLine]
   ///     [forEach]
   List<String> toList() {
     var lines = <String>[];
 
-    forEach((line) => lines.add(line));
+    forEach((line) => lines.add(line), stderr: (line) => lines.add(line));
     return lines;
   }
 
-  // Returns the first (stdout) line from the command or
+  // Returns the first line from the command or
   // null if no lines where returned
   String get firstLine {
     String line;
