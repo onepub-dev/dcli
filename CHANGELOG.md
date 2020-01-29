@@ -1,7 +1,11 @@
-## 1.1.1-dev.2
+## 1.1.1
 Added support for .zshrc
 Added PID class to help get parent pid and shell names. Not certain this is the right structure.
 Now have a dshell script that can sucessfully run the unit tests.
+Removed data of a private nature from dshell doctor output.
+Added new method lastLine on string as process.
+Exposed DartSDK class.
+Some fixes for shell detection.
 
 ## 1.1.1-dev.1
 Fix for #45
