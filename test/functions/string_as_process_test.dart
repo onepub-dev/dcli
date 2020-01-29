@@ -150,6 +150,20 @@ void main() {
       }, runInShell: true);
       t.expect(found, t.equals(true));
     });
+
+    t.test('firstLine', () {
+      var file = setup();
+      t.expect('cat $file'.firstLine, 'Line 0');
+    });
+
+    t.test('firstLine with stderr', () {
+      t.expect('dart --version'.firstLine, t.contains('version'));
+    });
+
+    t.test('lastLine', () {
+      var file = setup();
+      t.expect('cat $file'.lastLine, 'Line 9');
+    });
   });
 }
 
