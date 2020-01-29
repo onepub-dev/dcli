@@ -21,41 +21,52 @@ class DoctorCommand extends Command {
           "'dshell doctor' does not take any arguments. Found $subarguments");
     }
 
-    print('dshell doctor version ${Settings().version}');
+    colprint('Dshell doctor version', '${Settings().version}');
     print('');
-    print('OS: ${Platform.operatingSystem}');
-    print('OS Version: ${Platform.operatingSystemVersion}');
-    print('Path separator: ${Platform.pathSeparator}');
+    colprint('OS', '${Platform.operatingSystem}');
+    colprint('OS Version', '${Platform.operatingSystemVersion}');
+    colprint('Path separator', '${Platform.pathSeparator}');
     print('');
-    print('dart version    : ${DartSdk().version}');
+    colprint('dart version', '${DartSdk().version}');
 
-    print('dart exe path   : ${privatePath(DartSdk().exePath)}');
+    colprint('dart exe path', '${privatePath(DartSdk().exePath)}');
     var dartPath = which('dart', first: true).firstLine;
-    print(
-        'dart path       : ${privatePath(DartSdk().dartPath)} : ${privatePath(dartPath)}');
+    colprint('dart path',
+        '${privatePath(DartSdk().dartPath)} : ${privatePath(dartPath)}');
     var dart2NativePath = which('dart2native', first: true).firstLine;
-    print(
-        'dart2Native path: ${privatePath(DartSdk().dart2NativePath)} : ${privatePath(dart2NativePath)}');
+    colprint('dart2Native path',
+        '${privatePath(DartSdk().dart2NativePath)} : ${privatePath(dart2NativePath)}');
     print('');
     var pubPath = which('pub', first: true).firstLine;
-    print(
-        'pub get path    : ${privatePath(DartSdk().pubGetPath)} : ${privatePath(pubPath)}');
-    print('.pub-cache      : ${privatePath(PubCache().path)}');
-    print('Package Config: ${privatePath(Platform.packageConfig)}');
+    colprint('pub get path',
+        '${privatePath(DartSdk().pubGetPath)} : ${privatePath(pubPath)}');
+    colprint('.pub-cache', '${privatePath(PubCache().path)}');
 
-    print('');
-
-    print('PATH \n\t${privatePath(PATH.join("\n\t"))}');
-    print("\$SHELL ${env('SHELL')}");
-    if (!Settings().isWindows) {
-      print('True SHELL ${Shell().getShellName()}');
-      print(
-          'Shell Start Script: ${privatePath(Shell().getShellStartScriptPath())}');
+    if (Platform.packageConfig == null) {
+      colprint('Package Config', 'Not Passed');
+    } else {
+      colprint('Package Config', '${privatePath(Platform.packageConfig)}');
     }
 
     print('');
-    print('Dart location');
-    which('dart').forEach((line) => print('which: $line'));
+
+    print('PATH\n\t${privatePath(PATH.join("\n\t"))}');
+    colprint('\$SHELL', '${env('SHELL')}');
+    if (!Settings().isWindows) {
+      colprint('True SHELL', '${Shell().getShellName()}');
+
+      var startScriptPath = Shell().getShellStartScriptPath();
+
+      if (startScriptPath == null) {
+        colprint('Shell Start Script', 'Not Found');
+      } else {
+        colprint('Shell Start Script', '${privatePath(startScriptPath)}');
+      }
+    }
+
+    print('');
+    print('Dart location(s)');
+    which('dart').forEach((line) => colprint('', line));
 
     print('');
     print('Permissions');
@@ -68,6 +79,10 @@ class DoctorCommand extends Command {
 
     showPermissions('templates', Settings().templatePath);
     return 0;
+  }
+
+  void colprint(String label, String value, {int pad = 25}) {
+    print('${label.padRight(pad)}: ${value}');
   }
 
   /// Removes the users home directory from a path replacing it with ~
@@ -100,13 +115,13 @@ class DoctorCommand extends Command {
 
       var owner = _Owner(path);
 
-      label = label.padRight(10);
+      label = label.padRight(20);
 
       var username = env('USERNAME');
-      print(
-          '$label: ${fstat.modeString()} ${owner.toString().replaceAll(username, '<user>')}   ${privatePath(path)} ');
+      colprint('$label',
+          '${fstat.modeString()} ${owner.toString().replaceAll(username, '<user>')}   ${privatePath(path)} ');
     } else {
-      print('$label: ${privatePath(path)} does not exist');
+      colprint('$label', '${privatePath(path)} does not exist');
     }
   }
 
@@ -124,7 +139,7 @@ class _Owner {
     var lsLine = 'ls -alFd $path'.firstLine;
 
     if (lsLine == null) {
-      throw DShellException('No file/directory matched: ${absolute(path)}');
+      throw DShellException('No file/directory matched ${absolute(path)}');
     }
 
     var parts = lsLine.split(' ');
