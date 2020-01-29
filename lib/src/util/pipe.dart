@@ -1,3 +1,5 @@
+import 'package:dshell/src/util/progress.dart';
+
 import 'runnable_process.dart';
 
 class Pipe {
@@ -10,13 +12,15 @@ class Pipe {
 
   Pipe operator |(String next) {
     var pNext = RunnableProcess(next);
-    pNext.start();
+    pNext.start(waitForStart: false);
     return Pipe(rhs, pNext);
   }
 
   void forEach(LineAction stdout, {LineAction stderr}) {
-    rhs.processUntilExit(stdout, stderr);
+    var progress = Progress(stdout, stderr: stderr);
+    rhs.processUntilExit(progress);
   }
 
-  void get run => rhs.processUntilExit(null, null);
+  void get run => rhs
+      .processUntilExit(Progress(Progress.devNull, stderr: Progress.devNull));
 }
