@@ -2,6 +2,7 @@ export 'package:args/args.dart';
 export 'src/functions/ask.dart' show ask, confirm;
 export 'src/functions/cat.dart' show cat, CatException;
 export 'src/functions/cd.dart' show CDException;
+export 'src/script/dart_sdk.dart' show DartSdk;
 export 'src/functions/chmod.dart' show chmod, ChModException;
 export 'src/functions/copy.dart' show copy, CopyException;
 export 'src/functions/delete.dart' show delete, DeleteException;
