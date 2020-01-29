@@ -6,6 +6,7 @@ import 'package:dshell/src/functions/env.dart';
 import 'package:dshell/src/script/command_line_runner.dart';
 import 'package:dshell/src/util/stack_trace_impl.dart';
 
+import 'progress.dart';
 import 'waitForEx.dart';
 import '../../dshell.dart';
 import 'dshell_exception.dart';
@@ -57,7 +58,10 @@ class RunnableProcess {
     return process.stdin;
   }
 
-  void start({bool runInShell = false, bool detached = false}) {
+  void start(
+      {bool runInShell = false,
+      bool detached = false,
+      bool waitForStart = true}) {
     var workdir = workingDirectory;
     workdir ??= Directory.current.path;
 
@@ -71,6 +75,24 @@ class RunnableProcess {
       mode: mode,
       environment: envs,
     );
+
+    // we wait for the process to start.
+    // if the start fails we get a clean exception
+    // by waiting here.
+    if (waitForStart) {
+      _waitForStart();
+    }
+  }
+
+  void _waitForStart() {
+    var complete = Completer<Process>();
+
+    fProcess.then((process) {
+      complete.complete(process);
+    }).catchError((Object e, StackTrace s) {
+      complete.completeError(e);
+    });
+    waitForEx<Process>(complete.future);
   }
 
   void pipeTo(RunnableProcess stdin) {
@@ -83,8 +105,12 @@ class RunnableProcess {
   // Monitors the process until it exists.
   // If a LineAction exists we call
   // line action each time the process emmits a line.
-  void processUntilExit(LineAction stdoutAction, [LineAction stderrAction]) {
+  void processUntilExit(Progress progress) {
     var done = Completer<bool>();
+
+    Progress forEach;
+
+    forEach = progress ?? Progress.forEach();
 
     fProcess.then((process) {
       /// handle stdout stream
@@ -92,9 +118,7 @@ class RunnableProcess {
           .transform(utf8.decoder)
           .transform(const LineSplitter())
           .listen((line) {
-        if (stdoutAction != null) {
-          stdoutAction(line);
-        }
+        forEach.addToStdout(line);
       });
 
       // handle stderr stream
@@ -102,15 +126,14 @@ class RunnableProcess {
           .transform(utf8.decoder)
           .transform(const LineSplitter())
           .listen((line) {
-        if (stderrAction != null) {
-          stderrAction(line);
-        } else {
-          print(line);
-        }
+        forEach.addToStderr(line);
       });
       // trap the process finishing
       process.exitCode.then((exitCode) {
         // TODO: do we pass the exitCode to ForEach or just throw?
+        // If the start failed we don't want to rethrow
+        // as the exception will be thrown async and it will
+        // escape as an unhandled exception and stop the whole script
         if (exitCode != 0) {
           done.completeError(RunException(exitCode,
               'The command [$cmdLine] failed with exitCode: ${exitCode}'));
@@ -118,19 +141,17 @@ class RunnableProcess {
           done.complete(true);
         }
       });
-    });
-    waitForEx<bool>(done.future);
-  }
-
-  void waitForStart() {
-    var complete = Completer<Process>();
-
-    fProcess.then((process) {
-      complete.complete(process);
     }).catchError((Object e, StackTrace s) {
-      complete.completeError(e);
-    });
-    waitForEx<Process>(complete.future);
+      // print('caught ${e}');
+      // throw e;
+    }); // .whenComplete(() => print('start completed'));
+
+    try {
+      // wait for the process to finish.
+      waitForEx<bool>(done.future);
+    } catch (e) {
+      rethrow;
+    }
   }
 }
 
