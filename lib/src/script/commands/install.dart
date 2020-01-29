@@ -215,7 +215,7 @@ class InstallCommand extends Command {
       } else {
         printerr(red('Unable to install dshell tab completion'));
         printerr(
-            'Add $command to your start up script to enable tab completion');
+            "Add ${orange('$command')} to your start up script to enable tab completion");
       }
     }
   }
