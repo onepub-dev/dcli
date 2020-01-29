@@ -52,41 +52,27 @@ class DartSdk {
 
   String get dart2NativePath => p.join(sdkPath, 'bin', 'dart2native');
 
-  Progress runDart2Native(
-      Script script, String outputDir, String workingDirectory,
+  void runDart2Native(Script script, String outputDir, String workingDirectory,
       {Progress progress}) {
     var runArgs = <String>[];
     runArgs.add(script.path);
     runArgs.add('--output=${join(outputDir, script.basename)}');
 
-    return run(dart2NativePath, runArgs, workingDirectory, progress: progress);
+    var process = RunnableProcess.fromList(dart2NativePath, runArgs,
+        workingDirectory: workingDirectory);
+
+    process.start();
+
+    process.processUntilExit(progress);
   }
 
-  Progress runPubGet(String workingDirectory, {Progress progress}) {
-    return run(pubGetPath, ['get'], workingDirectory, progress: progress);
-  }
+  void runPubGet(String workingDirectory, {Progress progress}) {
+    var process = RunnableProcess.fromList(pubGetPath, ['get'],
+        workingDirectory: workingDirectory);
 
-  /// Runs a dart application.
-  /// Throws a RunException on failure
-  /// the project working dir.
-  Progress run(String processPath, List<String> args, String workingDirectory,
-      {Progress progress}) {
-    Progress forEach;
+    process.start();
 
-    try {
-      forEach = progress ?? Progress.forEach();
-
-      Settings().verbose(
-          "running $processPath workingDir: $workingDirectory args: ${args.join(',')}");
-      var runnable = RunnableProcess.fromList(processPath, args,
-          workingDirectory: workingDirectory);
-      runnable.start(runInShell: false);
-      runnable.processUntilExit((line) => forEach.addToStdout(line),
-          (line) => forEach.addToStderr(line));
-    } finally {
-      forEach.close();
-    }
-    return forEach;
+    process.processUntilExit(progress);
   }
 
   static String _detect() {
