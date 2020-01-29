@@ -11,9 +11,7 @@ void main(List<String> args) {
   var pubspecPath = join(cwd, pubspecName);
   var found = true;
 
-
   var parser = ArgParser();
-
 
   parser.addFlag('incVersion',
       abbr: 'i',

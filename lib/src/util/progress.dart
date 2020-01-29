@@ -43,8 +43,7 @@ class Progress {
   ///
   /// processes both streams until they complete
   ///
-  void _processUntilComplete(LineAction stdout,
-      {LineAction stderr = devNull}) {
+  void _processUntilComplete(LineAction stdout, {LineAction stderr = devNull}) {
     _wireStreams(stdout, stderr);
 
     // Wait for both streams to complete

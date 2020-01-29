@@ -16,8 +16,7 @@ void main(List<String> args) {
   if (!runOnly) {
     // mount the local dshell files from ..
     print('about to docker build');
-    'sudo docker build -f ./all.local.df -t dshell:all_local_test ..'
-        .run;
+    'sudo docker build -f ./all.local.df -t dshell:all_local_test ..'.run;
   }
 
   print('about to docker run');

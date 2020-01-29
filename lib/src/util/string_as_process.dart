@@ -162,7 +162,7 @@ extension StringAsProcess on String {
   /// NOTE: the current implementation is not efficient as it
   /// reads every line from the file rather than reading from the
   /// end backwards.
-  /// 
+  ///
   /// See [forEach] to capture output to stdout and stderr interactively
   ///     [run] to run the application without capturing its output
   ///     [start] - to run the process fully detached.
