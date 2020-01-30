@@ -77,13 +77,12 @@ void main() {
       expect(parsed.args, equals([r'b', 'c1']));
     });
 
-    test('okular "Introduction to Recursive Programming.pdf"', () {
-      var test = 'okular "Introduction to Recursive Programming.pdf"';
+    test('git log --pretty=format:"%s" v1.0.45', () {
+      var test = 'git log --pretty=format:"%s" v1.0.45';
       var parsed = ParsedCliCommand(test);
 
-      expect(parsed.cmd, equals('okular'));
-      expect(
-          parsed.args, equals(['Introduction to Recursive Programming.pdf']));
+      expect(parsed.cmd, equals('git'));
+      expect(parsed.args, equals(['log', '--pretty=format:%s', 'v1.0.45']));
     });
   });
 }

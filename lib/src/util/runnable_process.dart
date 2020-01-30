@@ -222,8 +222,13 @@ class ParsedCliCommand {
           }
 
           if (char == '"' || char == "'") {
-            throw InvalidArguments(
-                'A command argument may not have a quote in the middle of a word.');
+            state = ParseState.IN_QUOTE;
+            matchingQuote = char;
+            break;
+//             throw InvalidArguments(
+//                 '''A command argument may not have a quote in the middle of a word.
+// Command: $command
+// ${' '.padRight(9 + i)}^''');
           }
 
           // if (char == '\\' && !escapeNext) {
