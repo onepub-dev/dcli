@@ -24,12 +24,19 @@ class GlobalDependencies with DependenciesMixin {
     if (!exists(path)) {
       touch(path, create: true);
     }
-    _yaml = MyYaml.loadFromFile(path);
+    _yaml = MyYaml.fromFile(path);
   }
 
   /// Use this ctor for unit testing.
   GlobalDependencies.fromString(String yaml) {
     _yaml = MyYaml.fromString(yaml);
+  }
+
+   /// Use this ctor for unit testing.
+   /// [dependenciesYamlPath] is the path to the 'dependencies.yaml'
+   /// file you have created for unit testing.
+  GlobalDependencies.fromFile(String dependenciesYamlPath) {
+    _yaml = MyYaml.fromFile(dependenciesYamlPath);
   }
 
   static String get path => p.join(Settings().dshellPath, filename);
