@@ -42,6 +42,8 @@ dependencies:
   path: ^2.0.2
 ''';
 
+
+
   t.test('No PubSpec - No Dependencies', () {
     TestZone().run(() {
       if (exists(pubSpecScriptPath)) {
@@ -106,6 +108,24 @@ $overrides
   }, skip: false);
 
   t.test('File - override', () {
+    TestZone().run(() {
+      if (exists(pubSpecScriptPath)) {
+        delete(pubSpecScriptPath);
+      }
+      PubSpec file = PubSpecImpl.fromString(overrides);
+      file.writeToFile(scriptPath);
+
+      var dependencies = <Dependency>[];
+      dependencies.add(Dependency('dshell', '^2.0.0'));
+      dependencies.add(Dependency('args', '^2.0.1'));
+      dependencies.add(Dependency('path', '^2.0.2'));
+      dependencies.add(Dependency('collection', '^1.14.12'));
+      dependencies.add(Dependency('file_utils', '^0.1.3'));
+      runTest(null, main, dependencies);
+    });
+  }, skip: false);
+
+   t.test('File - override with path: dependencies', () {
     TestZone().run(() {
       if (exists(pubSpecScriptPath)) {
         delete(pubSpecScriptPath);
