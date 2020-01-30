@@ -23,10 +23,12 @@ class PubSpecManager {
 
   PubSpecManager(this.project);
 
-  /// Extract the pubspec annotation from the [project.script]
+  /// Creates a virtual pubspec.yaml for the passed project.
   ///
   /// If necessary, extract the pubspec annotation from a script file
-  /// and saves it to [inputPath] as a pubspec.yaml file.
+  /// and saves it to project as a pubspec.yaml file.
+  /// 
+  /// This is where the logic for dependency injection does its work.
   ///
   void createVirtualPubSpec() {
     var script = project.script;
@@ -102,7 +104,7 @@ class PubSpecManager {
   ///
   /// and returns a resolve list.
   ///
-  /// To resolve a list we deduplicate any entries
+  /// To resolve a list we de-duplicate any entries
   /// by name.
   /// If there are duplicates the 'preferred' entrie
   /// is selected.
