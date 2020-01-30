@@ -71,6 +71,8 @@ extension StringAsProcess on String {
   ///    [runInShell] defaults to false.
   /// Use [detached] to start the application as a fully
   /// detached subprocess.
+  /// Use [workingDirectory] to specify the directory the process should
+  /// be run from.
   /// You cannot process output from a detached process
   /// and it will continuing running after the dshell process
   /// exits. The detached process is also detached from the console
@@ -88,8 +90,11 @@ extension StringAsProcess on String {
   ///      [toList] to capture stdout and stderr to [List<String>]
   ///      [firstLine] - returns just the first line written to stdout or stderr.
   ///      [lastLine] - returns just the last line written to stdout or stderr.
-  void start({bool runInShell = false, bool detached = false}) {
-    var process = RunnableProcess(this);
+  void start(
+      {bool runInShell = false,
+      bool detached = false,
+      String workingDirectory}) {
+    var process = RunnableProcess(this, workingDirectory:workingDirectory);
     process.start(runInShell: runInShell, detached: detached);
   }
 
