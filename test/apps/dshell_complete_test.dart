@@ -48,9 +48,9 @@ void main() {
       TestZone().run(() {
         var results = <String>[];
 
-        var paths = TestPaths();
-        if (!exists(paths.testRoot)) {
-          createDir(paths.testRoot, recursive: true);
+        TestPaths();
+        if (!exists(TestPaths.TEST_ROOT)) {
+          createDir(TestPaths.TEST_ROOT, recursive: true);
         }
         var testRoot = '.';
         touch(join(testRoot, '_test_a.dart'), create: true);
@@ -78,9 +78,9 @@ void main() {
       TestZone().run(() {
         var results = <String>[];
 
-        var paths = TestPaths();
-        if (!exists(paths.testRoot)) {
-          createDir(paths.testRoot, recursive: true);
+        TestPaths();
+        if (!exists(TestPaths.TEST_ROOT)) {
+          createDir(TestPaths.TEST_ROOT, recursive: true);
         }
         var testRoot = '.';
         touch(join(testRoot, '_test_a.dart'), create: true);

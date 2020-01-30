@@ -18,8 +18,8 @@ void main() {
   var ROOT_TEST = 'sort1';
 
   group('dsort tests', () {
-    var paths = TestPaths();
-    var testFile = join(paths.testRoot, ROOT_TEST, 'unsorted.txt');
+    TestPaths();
+    var testFile = join(TestPaths.TEST_ROOT, ROOT_TEST, 'unsorted.txt');
     if (!exists(dirname(testFile))) {
       createDir(dirname(testFile), recursive: true);
     }
