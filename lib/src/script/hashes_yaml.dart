@@ -15,7 +15,7 @@ class HashesYaml {
       cachePathDirectory.createSync();
     }
 
-    hashes = MyYaml.loadFromFile(p.join(scriptCachePath, fileName));
+    hashes = MyYaml.fromFile(p.join(scriptCachePath, fileName));
   }
 
   static void create(String projectRootPath) {}

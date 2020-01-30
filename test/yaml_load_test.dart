@@ -13,7 +13,7 @@ void main() {
   t.test('Project Name', () {
     TestZone().run(() {
       print('$pwd');
-      var yaml = MyYaml.loadFromFile('pubspec.yaml');
+      var yaml = MyYaml.fromFile('pubspec.yaml');
       var projectName = yaml.getValue('name');
 
       t.expect(projectName, t.equals('dshell'));
