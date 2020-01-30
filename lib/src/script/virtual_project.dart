@@ -23,9 +23,6 @@ class VirtualProject {
   static const String PROJECT_DIR = '.project';
   final Script script;
 
-  // The  absolute path to our
-  // virtual project.
-  // The path name is of th
   String _virtualProjectPath;
 
   // The absolute path to the scripts lib directory.
@@ -61,6 +58,11 @@ class VirtualProject {
   String get scriptLib => _scriptLibPath;
   String get projectCacheLib => _projectLibPath;
 
+  /// The  absolute path to the
+  /// virtual project's project directory.
+  /// This is this is essentially:
+  /// join(Settings().dshellCache, dirname(script), PROJECT_DIR)
+  ///
   String get path => _virtualProjectPath;
 
   String get pubSpecPath => p.join(_virtualProjectPath, 'pubspec.yaml');
@@ -176,6 +178,9 @@ class VirtualProject {
     // does the project cache lib link exist?
   }
 
+  ///
+  /// reads and returns the projects virtual pubspec
+  /// and returns it.
   PubSpec pubSpec() {
     return PubSpecFile.fromFile(pubSpecPath);
   }
