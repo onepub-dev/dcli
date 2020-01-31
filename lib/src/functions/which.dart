@@ -34,11 +34,6 @@ import 'env.dart';
 /// which('ls', first: false, verbose: true);
 /// ```
 ///
-/// In most cases stdin is attached to the console
-/// allow you to which the user to input a value.
-///
-/// If [prompt] set then the prompt will be printed
-/// to the console and the cursor placed immediately after the prompt.
 Progress which(String appname,
         {bool first = true, bool verbose = false, Progress progress}) =>
     Which().which(appname, first: first, verbose: verbose, progress: progress);

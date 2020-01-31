@@ -1,35 +1,162 @@
 /// Returns a string wrapped with the selected ansi
 /// fg color codes.
 String red(String text, {AnsiColor bgcolor = AnsiColor.none}) =>
-    AnsiColor._apply(AnsiColor.Red, text, bgcolor: bgcolor);
+    AnsiColor._apply(AnsiColor._Red, text, bgcolor: bgcolor);
 
-String black(String text, {AnsiColor bgcolor = AnsiColor.White}) =>
-    AnsiColor._apply(AnsiColor.Black, text, bgcolor: bgcolor);
+///
+/// Wraps the passed text with the ANSI escape sequence for
+/// the color black.
+/// Use this to control the color of text when printing to the
+/// console.
+///
+/// ```
+/// print(black('a dark message'));
+/// ```
+/// The [text] to wrap.
+/// [bgcolor] is the background color to use when printing the
+/// text.  Defaults to White.
+///
+String black(String text, {AnsiColor bgcolor = AnsiColor._White}) =>
+    AnsiColor._apply(AnsiColor._Black, text, bgcolor: bgcolor);
 
+///
+/// Wraps the passed text with the ANSI escape sequence for
+/// the color green.
+/// Use this to control the color of text when printing to the
+/// console.
+///
+/// ```
+/// print(green('a colourful message'));
+/// ```
+/// The [text] to wrap.
+/// [bgcolor] is the background color to use when printing the
+/// text.  Defaults to none.
+///
 String green(String text, {AnsiColor bgcolor = AnsiColor.none}) =>
-    AnsiColor._apply(AnsiColor.Green, text, bgcolor: bgcolor);
+    AnsiColor._apply(AnsiColor._Green, text, bgcolor: bgcolor);
 
+///
+/// Wraps the passed text with the ANSI escape sequence for
+/// the color blue.
+/// Use this to control the color of text when printing to the
+/// console.
+///
+/// ```
+/// print(blue('a colourful message'));
+/// ```
+/// The [text] to wrap.
+/// [bgcolor] is the background color to use when printing the
+/// text.  Defaults to none.
+///
 String blue(String text, {AnsiColor bgcolor = AnsiColor.none}) =>
-    AnsiColor._apply(AnsiColor.Blue, text, bgcolor: bgcolor);
+    AnsiColor._apply(AnsiColor._Blue, text, bgcolor: bgcolor);
 
+///
+/// Wraps the passed text with the ANSI escape sequence for
+/// the color yellow.
+/// Use this to control the color of text when printing to the
+/// console.
+///
+/// ```
+/// print(yellow('a colourful message'));
+/// ```
+/// The [text] to wrap.
+/// [bgcolor] is the background color to use when printing the
+/// text.  Defaults to none.
+///
 String yellow(String text, {AnsiColor bgcolor = AnsiColor.none}) =>
-    AnsiColor._apply(AnsiColor.Yellow, text, bgcolor: bgcolor);
+    AnsiColor._apply(AnsiColor._Yellow, text, bgcolor: bgcolor);
 
+///
+/// Wraps the passed text with the ANSI escape sequence for
+/// the color magenta.
+/// Use this to control the color of text when printing to the
+/// console.
+///
+/// ```
+/// print(magenta('a colourful message'));
+/// ```
+/// The [text] to wrap.
+/// [bgcolor] is the background color to use when printing the
+/// text.  Defaults to none.
+///
 String magenta(String text, {AnsiColor bgcolor = AnsiColor.none}) =>
-    AnsiColor._apply(AnsiColor.Magenta, text, bgcolor: bgcolor);
+    AnsiColor._apply(AnsiColor._Magenta, text, bgcolor: bgcolor);
 
+///
+/// Wraps the passed text with the ANSI escape sequence for
+/// the color cyan.
+/// Use this to control the color of text when printing to the
+/// console.
+///
+/// ```
+/// print(cyan('a colourful message'));
+/// ```
+/// The [text] to wrap.
+/// [bgcolor] is the background color to use when printing the
+/// text.  Defaults to none.
+///
 String cyan(String text, {AnsiColor bgcolor = AnsiColor.none}) =>
-    AnsiColor._apply(AnsiColor.Cyan, text, bgcolor: bgcolor);
+    AnsiColor._apply(AnsiColor._Cyan, text, bgcolor: bgcolor);
 
+///
+/// Wraps the passed text with the ANSI escape sequence for
+/// the color white.
+/// Use this to control the color of text when printing to the
+/// console.
+///
+/// ```
+/// print(white('a colourful message'));
+/// ```
+/// The [text] to wrap.
+/// [bgcolor] is the background color to use when printing the
+/// text.  Defaults to none.
+///
 String white(String text, {AnsiColor bgcolor = AnsiColor.none}) =>
-    AnsiColor._apply(AnsiColor.White, text, bgcolor: bgcolor);
+    AnsiColor._apply(AnsiColor._White, text, bgcolor: bgcolor);
 
+///
+/// Wraps the passed text with the ANSI escape sequence for
+/// the color orange.
+/// Use this to control the color of text when printing to the
+/// console.
+///
+/// ```
+/// print(orange('a colourful message'));
+/// ```
+/// The [text] to wrap.
+/// [bgcolor] is the background color to use when printing the
+/// text.  Defaults to none.
+///
 String orange(String text, {AnsiColor bgcolor = AnsiColor.none}) =>
-    AnsiColor._apply(AnsiColor.Orange, text, bgcolor: bgcolor);
+    AnsiColor._apply(AnsiColor._Orange, text, bgcolor: bgcolor);
+
+///
+/// Wraps the passed text with the ANSI escape sequence for
+/// the color grey.
+/// Use this to control the color of text when printing to the
+/// console.
+///
+/// ```
+/// print(grey('a colourful message'));
+/// ```
+/// The [text] to wrap.
+/// [bgcolor] is the background color to use when printing the
+/// text.  Defaults to none.
+///
 String grey(String text,
         {double level = 0.5, AnsiColor bgcolor = AnsiColor.none}) =>
-    AnsiColor._apply(AnsiColor.Grey(level: level), text, bgcolor: bgcolor);
+    AnsiColor._apply(AnsiColor._Grey(level: level), text, bgcolor: bgcolor);
 
+/// Helper class to assist in printing text to the console with a color.
+///
+/// Use one of the color functions instead of this class.
+///
+/// See [black]
+///     [white]
+///     [green]
+///     [orange]
+///  ...
 class AnsiColor {
   static String reset() => _emmit(Reset);
 
@@ -108,20 +235,20 @@ class AnsiColor {
   static const String BgColor = '48;5;';
 
   /// Colors
-  static const AnsiColor Black = AnsiColor(30);
-  static const AnsiColor Red = AnsiColor(31);
-  static const AnsiColor Green = AnsiColor(32);
-  static const AnsiColor Yellow = AnsiColor(33);
-  static const AnsiColor Blue = AnsiColor(34);
-  static const AnsiColor Magenta = AnsiColor(35);
-  static const AnsiColor Cyan = AnsiColor(36);
-  static const AnsiColor White = AnsiColor(37);
-  static const AnsiColor Orange = AnsiColor(208);
-  static AnsiColor Grey({double level = 0.5}) =>
+  static const AnsiColor _Black = AnsiColor(30);
+  static const AnsiColor _Red = AnsiColor(31);
+  static const AnsiColor _Green = AnsiColor(32);
+  static const AnsiColor _Yellow = AnsiColor(33);
+  static const AnsiColor _Blue = AnsiColor(34);
+  static const AnsiColor _Magenta = AnsiColor(35);
+  static const AnsiColor _Cyan = AnsiColor(36);
+  static const AnsiColor _White = AnsiColor(37);
+  static const AnsiColor _Orange = AnsiColor(208);
+  static AnsiColor _Grey({double level = 0.5}) =>
       AnsiColor(232 + (level.clamp(0.0, 1.0) * 23).round());
 
-// passing this as the background color will cause
-// the background code to be suppressed resulting
-// in the default background color.
+  /// passing this as the background color will cause
+  /// the background code to be suppressed resulting
+  /// in the default background color.
   static const AnsiColor none = AnsiColor(-1);
 }

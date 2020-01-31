@@ -20,17 +20,17 @@ import 'env.dart';
 /// be returned.
 ///
 /// ```dart
-/// String response = ask(prompt="Do you like me?");
+/// String response = ask(prompt:"Do you like me?");
 /// ```
 ///
 /// In most cases stdin is attached to the console
 /// allow you to ask the user to input a value.
 ///
-/// If [prompt] set then the prompt will be printed
+/// If [prompt] is set then the prompt will be printed
 /// to the console and the cursor placed immediately after the prompt.
 ///
-/// if [toLower] is true then the returned result is converted to lower case
-/// this can be useful if you need to compare the entered value.
+/// if [toLower] is true then the returned result is converted to lower case.
+/// This can be useful if you need to compare the entered value.
 ///
 /// If [hidden] is true then the entered values will not be echoed to the
 /// console, instead '*' will be displayed. This is uesful for capturing
@@ -41,8 +41,8 @@ String ask({String prompt, bool toLower = false, bool hidden = false}) =>
 
 /// [confirm] is a specialized version of ask that returns true or
 /// false based on the value entered.
-/// Accepted values are y|t|true|yes and n|f|false|no (case insenstiive)
-/// If the user enteres an unknown value an error is printed
+/// Accepted values are y|t|true|yes and n|f|false|no (case insenstiive).
+/// If the user enters an unknown value an error is printed
 /// and they are reprompted.
 bool confirm({String prompt}) {
   bool result;

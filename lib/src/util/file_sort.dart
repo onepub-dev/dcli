@@ -6,25 +6,54 @@ import 'package:dshell/dshell.dart' as d;
 import 'package:dshell/src/script/command_line_runner.dart';
 import 'package:dshell/src/util/waitForEx.dart';
 
+/// FileSort provides the ability to sort files
+/// based on their columns.
+///
+/// FileSort does a file based merge sort and as
+/// such can sort large files without regard to
+/// memory constraints.
+/// You will need free disk space equivalent to
+/// 2 times the size of the [_inputPath] file.
+///
+/// FileSort provides a range of sort comparators including:
+/// String - case sensitive and case insenstive
+/// Numeric
+/// Month
+///
+/// FileSort is used by the DShell example apps
+/// dsort.dart to re-implement the standard cli
+/// tool 'sort'.
+///
+/// [_inputPath] is the path to the file to be sorted
+/// [_outputPath] is the path to write the sorted file to.
+/// [_columns] is used to describe the sort order to be
+/// applied to the selected columns.
+/// [_fieldDelimiter] is the delimiter to be used to separate each
+/// line of the file into columns.
+/// [lineDelimitier] is the delimiter to be used to separate each line.
+/// [verbose] caused FileSort to log debug level information as it sorts.
+///
 class FileSort {
-  final String inputPath;
-  final String outputPath;
-  final List<Column> columns;
-  final String fieldDelimiter;
-  final String lineDelimiter;
+  final String _inputPath;
+  final String _outputPath;
+  final List<Column> _columns;
+  final String _fieldDelimiter;
+  final String _lineDelimiter;
   final bool verbose;
-  int maxColumn = -1;
+  int _maxColumn = -1;
 
-  FileSort(this.inputPath, this.outputPath, this.columns, this.fieldDelimiter,
-      this.lineDelimiter,
+  FileSort(this._inputPath, this._outputPath, this._columns,
+      this._fieldDelimiter, this._lineDelimiter,
       {this.verbose = false}) {
-    for (var column in columns) {
-      if (maxColumn < column.ordinal) {
-        maxColumn = column.ordinal;
+    for (var column in _columns) {
+      if (_maxColumn < column.ordinal) {
+        _maxColumn = column.ordinal;
       }
     }
   }
 
+  ///
+  /// call this method to start the sort.
   void sort() {
     waitForEx<void>(_sort());
   }
@@ -37,18 +66,18 @@ class FileSort {
 
     var phaseDirectory = Directory.systemTemp.createTempSync();
 
-    var list = <Line>[];
+    var list = <_Line>[];
 
     var sentToPhase = false;
 
     var phaseFutures = <Future<void>>[];
 
-    await File(inputPath)
+    await File(_inputPath)
         .openRead()
         .map(utf8.decode)
         .transform(LineSplitter())
         .forEach((l) async {
-      list.add(Line.fromString(l));
+      list.add(_Line.fromString(l));
       lineCount--;
 
       if (lineCount == 0) {
@@ -60,17 +89,18 @@ class FileSort {
         var phaseFuture = Completer<void>();
         phaseFutures.add(phaseFuture.future);
 
-        await savePhase(phaseDirectory, 1, instance, phaseList, lineDelimiter);
+        await _savePhase(
+            phaseDirectory, 1, instance, phaseList, _lineDelimiter);
         phaseFuture.complete(null);
       }
     });
 
     if (!sentToPhase) {
       await _sortList(list);
-      await replaceFileWithSortedList(list);
+      await _replaceFileWithSortedList(list);
     } else {
       if (list.isNotEmpty && list.length < MERGE_SIZE) {
-        await savePhase(phaseDirectory, 1, ++instance, list, lineDelimiter);
+        await _savePhase(phaseDirectory, 1, ++instance, list, _lineDelimiter);
       }
       await Future.wait(phaseFutures);
       await _mergeSort(phaseDirectory);
@@ -80,39 +110,39 @@ class FileSort {
     return completer.future;
   }
 
-  void replaceFileWithSortedList(List<Line> sorted) {
-    if (inputPath == outputPath) {
-      d.move(inputPath, '$inputPath.bak');
-      saveSortedList(outputPath, sorted, lineDelimiter);
-      d.delete('$inputPath.bak');
+  void _replaceFileWithSortedList(List<_Line> sorted) {
+    if (_inputPath == _outputPath) {
+      d.move(_inputPath, '$_inputPath.bak');
+      _saveSortedList(_outputPath, sorted, _lineDelimiter);
+      d.delete('$_inputPath.bak');
     } else {
-      saveSortedList(outputPath, sorted, lineDelimiter);
+      _saveSortedList(_outputPath, sorted, _lineDelimiter);
     }
   }
 
   /// Performs an insitu sort of the passed list.
-  void _sortList(List<Line> list) {
+  void _sortList(List<_Line> list) {
     list.sort((lhs, rhs) {
-      var lhsColumns = lhs.line.split(fieldDelimiter);
-      var rhsColumns = rhs.line.split(fieldDelimiter);
+      var lhsColumns = lhs.line.split(_fieldDelimiter);
+      var rhsColumns = rhs.line.split(_fieldDelimiter);
 
-      if (maxColumn > lhsColumns.length) {
+      if (_maxColumn > lhsColumns.length) {
         throw InvalidArguments('Line $lhs does not have enough columns');
       }
 
-      if (maxColumn > rhsColumns.length) {
+      if (_maxColumn > rhsColumns.length) {
         throw InvalidArguments('Line $rhs does not have enough columns');
       }
 
       var result = 0;
 
-      if (maxColumn == 0) {
+      if (_maxColumn == 0) {
         // just compare the whole line.
         result =
-            columns[0].comparator.compareTo(columns[0], lhs.line, rhs.line);
+            _columns[0].comparator.compareTo(_columns[0], lhs.line, rhs.line);
       } else {
         // compare the defined columns
-        for (var column in columns) {
+        for (var column in _columns) {
           var direction =
               column.sortDirection == SortDirection.Ascending ? 1 : -1;
 
@@ -130,8 +160,8 @@ class FileSort {
     });
   }
 
-  void savePhase(Directory phaseDirectory, int phase, int instance,
-      List<Line> list, String lineDelimiter) async {
+  void _savePhase(Directory phaseDirectory, int phase, int instance,
+      List<_Line> list, String lineDelimiter) async {
     var instanceFile =
         await File(d.join(phaseDirectory.path, 'phase$phase-$instance'));
 
@@ -143,8 +173,8 @@ class FileSort {
         flush: true);
   }
 
-  void saveSortedList(
-      String filename, List<Line> list, String lineDelimiter) async {
+  void _saveSortedList(
+      String filename, List<_Line> list, String lineDelimiter) async {
     var saveTo = d.FileSync(filename);
 
     saveTo.truncate();
@@ -153,6 +183,9 @@ class FileSort {
     }
   }
 
+  /// Expands an list of columns defined as per [Column.parse]
+  /// into a list of [Column]s.
+  ///
   static List<Column> expandColumns(List<String> values) {
     var columns = <Column>[];
 
@@ -212,13 +245,13 @@ class FileSort {
   /// Rinse and repeat until all files are drained
   /// and the list is empty.
   void _mergeSort(Directory phaseDirectory) {
-    var lines = <Line>[];
+    var lines = <_Line>[];
     var files = d.find('*', root: phaseDirectory.path).toList();
 
     // Open and read the first line from each file.
     for (var file in files) {
       var fileSync = d.FileSync(file, fileMode: FileMode.read);
-      lines.add(Line(fileSync));
+      lines.add(_Line(fileSync));
     }
 
     // Sort the set of first lines.
@@ -245,26 +278,26 @@ class FileSort {
       }
     }
 
-    if (inputPath == outputPath) {
-      d.move(inputPath, '$inputPath.bak');
-      d.move(mergedPath, inputPath);
-      d.delete('$inputPath.bak');
+    if (_inputPath == _outputPath) {
+      d.move(_inputPath, '$_inputPath.bak');
+      d.move(mergedPath, _inputPath);
+      d.delete('$_inputPath.bak');
     } else {
-      d.move(mergedPath, outputPath);
+      d.move(mergedPath, _outputPath);
     }
     d.deleteDir(phaseDirectory.path);
   }
 }
 
-class Line {
+class _Line {
   d.FileSync source;
   String line;
 
-  Line(this.source) {
+  _Line(this.source) {
     line = source.readLine();
   }
 
-  Line.fromString(this.line);
+  _Line.fromString(this.line);
 
   bool readNext() {
     line = source.readLine();
@@ -361,6 +394,9 @@ abstract class ColumnComparator {
   int compareTo(Column column, String lhs, String rhs);
 }
 
+///
+/// Defined a column to sort by for the FileSort
+/// class.
 class Column {
   static const typeMap = {
     's': CaseInsensitiveSort(),
@@ -386,6 +422,11 @@ class Column {
   ColumnComparator comparator;
   SortDirection sortDirection;
 
+  /// [ordinal] the (base 1) index of the column.
+  /// The [comparator] we will used to compare
+  /// to lines when sorting.
+  /// The [sortDirection] is either ascending or decending.
+  ///
   Column(this.ordinal, this.comparator, this.sortDirection);
 
   /// A column string is formed as:
@@ -440,7 +481,7 @@ class Column {
     var digits = 0;
 
     for (var i = 0; i < column.length; i++) {
-      if (!isDigit(column[i])) {
+      if (!_isDigit(column[i])) {
         break;
       }
       digits++;
@@ -448,7 +489,7 @@ class Column {
     return digits;
   }
 
-  bool isDigit(String c) {
+  bool _isDigit(String c) {
     return c == '0' ||
         c == '1' ||
         c == '2' ||

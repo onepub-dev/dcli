@@ -6,7 +6,7 @@ import '../settings.dart';
 
 import '../util/log.dart';
 
-/// Creates a directory as described by [path]
+/// Creates a directory as described by [path].
 /// Path may be a single path segment (e.g. bin)
 /// or a full or partial tree (e.g. /usr/bin)
 ///
@@ -22,6 +22,7 @@ import '../util/log.dart';
 ///
 /// If the [path] already exists an exception is thrown.
 ///
+
 void createDir(String path, {bool recursive = false}) =>
     CreateDir().createDir(path, recursive: recursive);
 

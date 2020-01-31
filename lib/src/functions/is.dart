@@ -26,10 +26,10 @@ bool isDirectory(String path) => Is().isDirectory(path);
 /// ```
 bool isLink(String path) => Is().isLink(path);
 
-/// returns true if the given path exists.
+/// Returns true if the given path exists.
 /// It may be a file, directory or link.
 ///
-/// If [followLinks] is true (the default) then exists
+/// If [followLinks] is true (the default) then [exists]
 /// will return true if the resolved path exists.
 ///
 /// If [followLinks] is false then [exists] will return
@@ -38,6 +38,10 @@ bool isLink(String path) => Is().isLink(path);
 /// ```dart
 /// if (exists("/fred.txt"))
 /// ```
+///
+/// See [isLink]
+///     [isDirectory]
+///     [isFile]
 bool exists(String path, {bool followLinks = true}) =>
     Is().exists(path, followLinks);
 

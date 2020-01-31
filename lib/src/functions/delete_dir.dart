@@ -7,7 +7,7 @@ import '../util/log.dart';
 import 'is.dart';
 
 ///
-/// Deletes the directory at [path]
+/// Deletes the directory located at [path].
 ///
 /// If [recursive] is true then the directory and all child files
 /// and directories will be deleted.
@@ -23,6 +23,10 @@ import 'is.dart';
 /// If the directory cannot be delete (e.g. permissions) a [DeleteDirException] is thrown.
 ///
 /// If recursive is false the directory must be empty otherwise a [DeleteDirException] is thrown.
+///
+/// See [isDirectory]
+///     [exists]
+///
 void deleteDir(String path, {bool recursive = true}) =>
     DeleteDir().deleteDir(path, recursive: recursive);
 

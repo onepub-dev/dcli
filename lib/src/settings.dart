@@ -9,42 +9,59 @@ import 'package:path/path.dart' as p;
 
 import 'functions/env.dart';
 
-/// Holds all of the global settings for dshell
+/// Holds all of the global settings for DShell
+/// including dshell paths and any global
+/// flags passed on the command line to DShell.
+///
 class Settings {
   static Settings _self;
+
+  /// The directory name of the DShell templates.
   static const templateDir = 'templates';
+
+  /// The directory name of the DShell cache.
   static const dshellCacheDir = 'cache';
 
   final InternalSettings _settings = InternalSettings();
+
+  /// The name of the DShell app. This will
+  /// always be 'dshell'.
   final String appname;
 
+  /// The DShell version you are running
   String version;
 
   final _selectedFlags = <String, Flag>{};
 
   String _dshellPath;
 
+  /// The name of the dshell settings directory.
+  /// This is .dshell.
   String dshellDir = '.dshell';
 
   String _dshellBinPath;
 
   /// The directory where we store all of dshell's
   /// configuration files such as the cache.
+  /// This will normally be ~/.dshell
   String get dshellPath => _dshellPath;
 
-  /// When you run dshell compile -i <script> the script
+  /// When you run dshell compile -i <script> the compiled exe
   /// is moved to this path.
   /// The dshellBinPath is added to the OS's path
-  /// allowing the installed scripts to be run from anywhere
+  /// allowing the installed scripts to be run from anywhere.
+  /// This will normally be ~/.dshell/bin
   String get dshellBinPath => _dshellBinPath;
 
   /// path to the dshell template directory.
   String get templatePath => p.join(dshellPath, templateDir);
 
-  /// path to the dshell cache directory.
+  /// Path to the dshell cache directory.
+  /// This will normally be ~/.dshell/cache
   String get dshellCachePath => p.join(dshellPath, dshellCacheDir);
 
-  /// the list of flags selected via the cli.
+  /// the list of global flags selected via the cli when dshell
+  /// was started.
   List<Flag> get selectedFlags => _selectedFlags.values.toList();
 
   /// returns true if the -v (verbose) flag was set on the
@@ -53,6 +70,8 @@ class Settings {
   /// dshell -v clean
   bool get isVerbose => isFlagSet(VerboseFlag());
 
+  /// Returns a singleton providing
+  /// access to DShell settings.
   factory Settings() {
     if (_self == null) {
       Settings.init();
@@ -61,6 +80,10 @@ class Settings {
     return _self;
   }
 
+  /// Used internally be dshell to initialise
+  /// the settings.
+  ///
+  /// DO NOT CALL THIS METHOD!!!
   Settings.init({
     this.appname = 'dshell',
   }) {
@@ -72,16 +95,25 @@ class Settings {
     _dshellBinPath = p.absolute(p.join(HOME, dshellDir, 'bin'));
   }
 
+  /// True if you are running on a Mac.
+  /// I'm so sorry.
   bool get isMacOS => Platform.isMacOS;
 
+  // True if you are running on a Linux system.
   bool get isLinux => Platform.isLinux;
 
+  // True if you are running on a Window system.
   bool get isWindows => Platform.isWindows;
 
+  /// A method to test with a specific global
+  /// flag has been set.
+  ///
+  /// This is for interal useage.
   bool isFlagSet(Flag flag) {
     return _selectedFlags.containsValue(flag);
   }
 
+  /// A method to set a global flag.
   void setFlag(Flag flag) {
     _selectedFlags[flag.name] = flag;
   }
@@ -117,6 +149,8 @@ class Settings {
     }
   }
 
+  /// Used for unit testing dshell.
+  /// Please look away.
   static void setMock(Settings mockSettings) {
     _self = mockSettings;
   }

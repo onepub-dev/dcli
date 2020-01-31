@@ -11,6 +11,14 @@ import 'log.dart';
 import 'runnable_process.dart';
 import 'stack_trace_impl.dart';
 
+///
+/// Provides a set of methods to read/write
+/// a file synchronisly.
+///
+/// The class is mostly used internally.
+///
+/// Note: the api to this class is considered EXPERIMENTAL
+/// and is subject to change.
 class FileSync {
   File _file;
   RandomAccessFile _raf;
@@ -20,12 +28,18 @@ class FileSync {
     _open(fileMode);
   }
 
+  /// The path to this file.
   String get path => _file.path;
 
   void _open(FileMode fileMode) {
     _raf = _file.openSync(mode: fileMode);
   }
 
+  /// Reads a single line from the file.
+  /// [lineDelimiter] the end of line delimiter.
+  /// May be one or two characters long.
+  /// Defaults to \n.
+  ///
   String readLine({String lineDelimiter = '\n'}) {
     var line = '';
     int byte;
@@ -36,7 +50,7 @@ class FileSync {
     while ((byte = _raf.readByteSync()) != -1) {
       var char = utf8.decode([byte]);
 
-      if (isLineDelimiter(priorChar, char, lineDelimiter)) {
+      if (_isLineDelimiter(priorChar, char, lineDelimiter)) {
         foundDelimiter = true;
         break;
       }
@@ -63,7 +77,7 @@ class FileSync {
     return _file.lengthSync();
   }
 
-  // close and flushes a file.
+  /// Close and flushes a file to disk.
   void close() {
     _raf.closeSync();
   }
@@ -120,6 +134,8 @@ class FileSync {
     }
   }
 
+  /// See [File.resolveSymbolicLinkSync]
+  /// This is just a wrapper for the above method.
   String resolveSymLink() {
     return _file.resolveSymbolicLinksSync();
   }
@@ -147,11 +163,12 @@ class FileSync {
     _raf.writeStringSync(line);
   }
 
+  /// Truncates the file to zero bytes in length.
   void truncate() {
     _raf.truncateSync(0);
   }
 
-  bool isLineDelimiter(String priorChar, String char, String lineDelimiter) {
+  bool _isLineDelimiter(String priorChar, String char, String lineDelimiter) {
     if (lineDelimiter.length == 1) {
       return char == lineDelimiter;
     } else {
@@ -190,7 +207,8 @@ String resolveSymLink(String path) {
 
 ///
 /// Returns a FileStat instance describing the
-/// file or directory located by [path]
+/// file or directory located by [path].
+///
 FileStat stat(String path) {
   return File(path).statSync();
 }

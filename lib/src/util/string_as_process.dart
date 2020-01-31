@@ -9,9 +9,10 @@ import 'pipe.dart';
 /// A set of String extensions that lets you
 /// execute the contents of a string as a command line application.
 ///
+/// e.g.
+/// 'tail /var/log/syslog'.run;
+///
 extension StringAsProcess on String {
-  /// run
-  ///
   /// Allows you to execute the contents of a dart string as a
   /// command line appliation.
   /// Any output from the command is displayed on the console.
@@ -62,7 +63,7 @@ extension StringAsProcess on String {
   ///     [firstLine] - returns just the first line written to stdout.
   ///     [lastLine] - returns just the last line written to stdout or stderr.
   ///
-  /// @deprecated use start(runInShell: true)
+  @Deprecated('use start(runInShell: true)')
   void get shell => cmd.run(this, runInShell: true);
 
   /// Runs the String [this] as a command line application.
@@ -94,7 +95,7 @@ extension StringAsProcess on String {
       {bool runInShell = false,
       bool detached = false,
       String workingDirectory}) {
-    var process = RunnableProcess(this, workingDirectory:workingDirectory);
+    var process = RunnableProcess(this, workingDirectory: workingDirectory);
     process.start(runInShell: runInShell, detached: detached);
   }
 
@@ -129,9 +130,14 @@ extension StringAsProcess on String {
       cmd.run(this,
           progress: Progress(stdout, stderr: stderr), runInShell: runInShell);
 
-  /// [toList] runs [this] as a cli process and
+  /// [toList] runs [this] String as a cli process and
   /// returns any output written to stdout and stderr as
   /// a [List<String>].
+  ///
+  /// ```dart
+  /// var logLines = 'tail -n 10 /var/log/syslog'.toList();
+  /// ```
+  ///
   /// Note: [toList] does NOT capture output to stderr.
   /// See [forEach] to capture output to stdout and stderr interactively
   ///     [run] to run the application without capturing its output
@@ -142,9 +148,15 @@ extension StringAsProcess on String {
     return cmd.run(this, runInShell: runInShell).toList();
   }
 
-  /// [firstLine] runs [this] as a cli process and
+  /// [firstLine] treats the String [this] as a cli process and
   /// returns the first line written to stdout or stderr as
   /// a [String].
+  ///
+  /// e.g.
+  /// ```
+  /// 'tail -n 10 /var/log/syslog'.firstLine;
+  /// ```
+  ///
   /// See [forEach] to capture output to stdout and stderr interactively
   ///     [run] to run the application without capturing its output
   ///     [start] - to run the process fully detached.
@@ -164,6 +176,13 @@ extension StringAsProcess on String {
   /// [lastLine] runs [this] as a cli process and
   /// returns the last line written to stdout or stderr as
   /// a [String].
+  ///
+  ///
+  /// e.g.
+  /// ```
+  /// 'tail -n 10 /var/log/syslog'.lastLine;
+  /// ```
+  ///
   /// NOTE: the current implementation is not efficient as it
   /// reads every line from the file rather than reading from the
   /// end backwards.
@@ -181,10 +200,7 @@ extension StringAsProcess on String {
     return lastLine;
   }
 
-  /// operator |
-  ///
   /// The classic bash style pipe operator.
-  ///
   /// Allows you to chain mulitple processes by piping the output
   /// of the left hand process to the input of the right hand process.
   ///
@@ -199,7 +215,6 @@ extension StringAsProcess on String {
   /// ``` dart
   /// 'tail /var/log/syslog' | 'head -n 5' | 'tail -n 2'.forEach((line) => print(line));
   /// ```
-
   Pipe operator |(String rhs) {
     var rhsRunnable = RunnableProcess(rhs);
     rhsRunnable.start(waitForStart: false);
@@ -232,8 +247,15 @@ extension StringAsProcess on String {
     return process;
   } // Treat the [this]  as the name of a file and
 
-  // write [line] to the file terminated by [newline].
-  // [newline] defaults to '\n'.
+  /// Truncates and Writes [line] to the file terminated by [newline].
+  /// [newline] defaults to '\n'.
+  ///
+  /// e.g.
+  /// ```dart
+  /// '/tmp/log'.write('Start of Log')
+  /// ```
+  ///
+  /// See [append] appends a line to an existing file.
   void write(String line, {String newline = '\n'}) {
     var sink = FileSync(this);
     sink.write(line, newline: newline);
@@ -246,9 +268,15 @@ extension StringAsProcess on String {
     sink.truncate();
   }
 
-  // Treat the [this]  as the name of a file
-  // and append the [line] to it.
-  // If [newline] is true add a newline after the line.
+  /// Treat [this] String  as the name of a file
+  /// and append [line] to the file.
+  /// If [newline] is true add a newline after the line.
+  ///
+  /// e.g.
+  /// ```dart
+  /// '.bashrc'.append('export FRED=ONE');
+  /// ```
+  ///
   void append(String line, {String newline = '\n'}) {
     var sink = FileSync(this);
     sink.append(line, newline: newline);

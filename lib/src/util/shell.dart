@@ -5,7 +5,7 @@ enum SHELL { BASH, ZSH, UNKNOWN }
 
 ///
 /// Provides some conveinence funtions to get access to
-/// details about the system shell that we were run from.
+/// details about the system shell (e.g. bash) that we were run from.
 ///
 /// This class is considered EXPERIMENTAL and is likely to change.
 class Shell {
@@ -13,8 +13,15 @@ class Shell {
 
   Shell._internal();
 
+  /// obtain a singleton instance of Shell.
   factory Shell() => _shell;
 
+  /// Attempts to identify the shell that
+  /// DShell was run under.
+  /// Ignores the 'sh' instances used by #! to start
+  /// a DShell script.
+  ///
+  /// Currently this isn't very reliable.
   SHELL identifyShell() {
     SHELL shell;
     var shellName = Shell().getShellName();
@@ -122,6 +129,10 @@ class Shell {
     return parentPid;
   }
 
+  /// Attempts to identify the shell that
+  /// we are running under and returns the
+  /// path to the shell's configuration file
+  /// e.g. .bashrc.
   String getShellStartScriptPath() {
     var shell = Shell().identifyShell();
 

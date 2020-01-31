@@ -11,8 +11,11 @@ import '../../dshell.dart';
 import '../util/log.dart';
 
 ///
-/// Returns the list of files in the current
-/// directory that match the passed glob pattern.
+/// Returns the list of files in the current and child
+/// directories that match the passed glob pattern.
+/// 
+/// Note: this is a limited implementation of glob. 
+/// See the below notes for details.
 ///
 /// ```dart
 /// find('*.jpg', recursive:true).forEach((file) => print(file));
@@ -26,9 +29,7 @@ import '../util/log.dart';
 ///
 /// Valid patterns are:
 ///
-/// Note> the surround square brackets are not part of the pattern.
-///
-/// [*] - matches any number of any characters including none
+/// [*] - matches any number of any characters including none.
 ///
 /// [?] -  matches any single character
 ///
@@ -50,6 +51,15 @@ import '../util/log.dart';
 /// [types] allows you to specify the file types you want the find to return.
 /// By default [types] limits the results to files.
 ///
+/// [root] allows you to specify an alternate directory to seach within 
+/// rather than the current work directory.
+/// 
+/// [types] the list of types to search file. Defaults to file.
+///   See [FileSystemEntityType].
+/// [progress] a Progress to output the results to. Passing a progress will
+/// allow you to process the results as the are produced rather than having
+/// to wait for the call to find to complete.
+/// The passed progress is also returned.
 
 Progress find(String pattern,
         {bool caseSensitive = false,

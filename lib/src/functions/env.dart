@@ -6,7 +6,7 @@ import '../settings.dart';
 import 'dshell_function.dart';
 import '../util/log.dart';
 
-/// Gets an environment variable
+/// Gets an environment variable.
 ///
 ///```dart
 ///String path = env("PATH");
@@ -30,10 +30,22 @@ String get HOME => Env().HOME;
 /// Returns a map of all the environment variables
 /// inherited from the parent as well as any changes
 /// made by calls to [setEnv].
+/// 
+/// See [env]
+///     [setEnv]
 Map<String, String> get envs => Env().envVars;
 
 ///
-/// Internally sets an environment varaible.
+/// Sets an environment variable for the current process.
+/// 
+/// Any child processes spawned will inherit these changes.
+/// e.g. 
+/// ```
+///   setEnv('XXX', 'A Value');
+///   // the echo command will display the value off XXX.
+///   '''echo $XXX'''.run;
+/// 
+/// ```
 /// NOTE: this does NOT affect the parent
 /// processes environment.
 void setEnv(String name, String value) => Env().setEnv(name, value);

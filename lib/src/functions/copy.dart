@@ -8,7 +8,7 @@ import '../util/log.dart';
 import 'is.dart';
 
 ///
-/// Copies the file [from] to the file [to].
+/// Copies the file [from] to the path [to].
 ///
 /// ```dart
 /// copy("/tmp/fred.text", "/tmp/fred2.text", overwrite=true);

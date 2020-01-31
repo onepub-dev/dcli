@@ -4,7 +4,11 @@ import '../util/stack_trace_impl.dart';
 
 import 'dshell_function.dart';
 
-void chmod(int permission, String path) => ChMod().chmod(permission, path);
+/// Wrapper for the linux `chmod` command.
+/// [permission] is the standard bit map used by chmod e.g. 777
+/// [path] is the path to the file that we are changing the
+/// permissions of.
+void chmod(int permission, String path) => ChMod()._chmod(permission, path);
 // String chmod({String prompt}) => ChMod().chmod(prompt: prompt);
 
 enum permission { r, w, x }
@@ -12,7 +16,7 @@ enum permission { r, w, x }
 class ChMod extends DShellFunction {
 // this.user, this.group, this.other, this.path
 
-  void chmod(int permission, String path) {
+  void _chmod(int permission, String path) {
     if (!exists(path)) {
       throw ChModException('The file at ${absolute(path)} does not exists');
     }

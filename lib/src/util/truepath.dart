@@ -1,8 +1,8 @@
 import '../../dshell.dart';
 
-/// [truepath] creates an absolute and canocalize path.
+/// [truepath] creates an absolute and canonicalize path.
 ///
-/// True path provides a safe an consistent manner for
+/// True path provides a safe and consistent manner for
 /// manipulating, accessing and displaying paths.
 ///
 /// Works like [join] in that it concatenates a set of directories
