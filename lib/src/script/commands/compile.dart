@@ -66,7 +66,7 @@ class CompileCommand extends Command {
       }
 
       Settings().verbose(
-          "\nCompling with pubspec.yaml:\n${read(join(project.path, 'pubspec.yaml')).toList().join('\n')}\n");
+          "\nCompiling with pubspec.yaml:\n${read(join(project.path, 'pubspec.yaml')).toList().join('\n')}\n");
 
       DartSdk().runDart2Native(script, script.scriptDirectory, project.path,
           progress:
