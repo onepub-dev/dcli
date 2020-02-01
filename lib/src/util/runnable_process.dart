@@ -67,6 +67,12 @@ class RunnableProcess {
 
     var mode = detached ? ProcessStartMode.detached : ProcessStartMode.normal;
 
+    if (Settings().isVerbose) {
+      Settings().verbose(
+          'Starting(runInShell: $runInShell workingDir: $workingDirectory mode: $mode)');
+      Settings().verbose('CommandLine: ${parsed.cmd} ${parsed.args.join(' ')}');
+    }
+
     fProcess = Process.start(
       parsed.cmd,
       parsed.args,
