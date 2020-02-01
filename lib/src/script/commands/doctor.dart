@@ -118,8 +118,10 @@ class DoctorCommand extends Command {
       label = label.padRight(20);
 
       var username = env('USERNAME');
-      colprint('$label',
-          '${fstat.modeString()} ${owner.toString().replaceAll(username, '<user>')}   ${privatePath(path)} ');
+      if (username != null) {
+        colprint('$label',
+            '${fstat.modeString()} <user>:${(owner.group == owner.user ? '<group>' : owner.group)}   ${privatePath(path)} ');
+      }
     } else {
       colprint('$label', '${privatePath(path)} does not exist');
     }
