@@ -1,3 +1,8 @@
+## 1.1.2-dev.1
+Fix for NPE in doctor when username env variable not available.
+Added verbose logging to Process.start.
+
+
 ## 1.1.1
 Added support for .zshrc
 Added PID class to help get parent pid and shell names. Not certain this is the right structure.
