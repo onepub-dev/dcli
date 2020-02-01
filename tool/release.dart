@@ -133,7 +133,7 @@ PubSpecFile getPubSpec(String pubspecPath) {
 
 void addGitTag(Version version) {
   if (confirm(prompt: 'Create a git release tag (Y/N):')) {
-    var tagName = 'v${version}';
+    var tagName = '${version}';
 
     // Check if the tag already exists and offer to replace it if it does.
     if (tagExists(tagName)) {
