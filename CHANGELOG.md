@@ -1,3 +1,8 @@
+### 1.1.2-dev-5
+formatting.
+[ENH] dshell doctor now dumps .dshell/dependencies.yaml and can dump the details of a script.
+release notes for ### 1.1.2-dev.4
+
 ### 1.1.2-dev.4
 removed unused import.
 [ENH] completed work on a release script.
