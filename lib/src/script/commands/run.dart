@@ -24,6 +24,8 @@ class RunCommand extends Command {
     Script.validate(arguments);
 
     var script = Script.fromFile(arguments[0]);
+    Settings().scriptPath = script.path;
+
     Settings().verbose('Running script ${script.path}');
 
     var project = ProjectCache().loadProject(script);
