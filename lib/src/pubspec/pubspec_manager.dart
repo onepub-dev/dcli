@@ -27,7 +27,7 @@ class PubSpecManager {
   ///
   /// If necessary, extract the pubspec annotation from a script file
   /// and saves it to project as a pubspec.yaml file.
-  /// 
+  ///
   /// This is where the logic for dependency injection does its work.
   ///
   void createVirtualPubSpec() {

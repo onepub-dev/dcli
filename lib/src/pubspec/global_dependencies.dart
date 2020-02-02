@@ -32,9 +32,9 @@ class GlobalDependencies with DependenciesMixin {
     _yaml = MyYaml.fromString(yaml);
   }
 
-   /// Use this ctor for unit testing.
-   /// [dependenciesYamlPath] is the path to the 'dependencies.yaml'
-   /// file you have created for unit testing.
+  /// Use this ctor for unit testing.
+  /// [dependenciesYamlPath] is the path to the 'dependencies.yaml'
+  /// file you have created for unit testing.
   GlobalDependencies.fromFile(String dependenciesYamlPath) {
     _yaml = MyYaml.fromFile(dependenciesYamlPath);
   }
