@@ -1,7 +1,6 @@
 import 'dart:io';
 
 import '../../dshell.dart';
-import 'log.dart';
 
 void writeToFile(String path, String content) {
   File _file;
