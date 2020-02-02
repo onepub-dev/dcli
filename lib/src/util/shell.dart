@@ -1,5 +1,6 @@
 import 'dart:io';
 import 'package:dshell/dshell.dart';
+import 'package:dshell/src/util/process_helper.dart';
 
 ///
 /// Provides some conveinence funtions to get access to
@@ -49,7 +50,7 @@ class ShellDetection {
   String getShellName() {
     var shellName = 'unknown';
     try {
-      shellName = getPIDName(getShellPID());
+      shellName = ProcessHelper().getPIDName(getShellPID());
     } catch (e) {
       /// returns 'unknown'
     }
@@ -72,13 +73,14 @@ class ShellDetection {
 
     int shellPID;
 
-    var dartPID = getParentPID(childPID);
-    Settings().verbose('dartPID: $dartPID ${getPIDName(dartPID)}');
-    var envPID = getParentPID(dartPID);
-    Settings().verbose('envPID: $envPID ${getPIDName(envPID)}');
+    var dartPID = ProcessHelper().getParentPID(childPID);
+    Settings()
+        .verbose('dartPID: $dartPID ${ProcessHelper().getPIDName(dartPID)}');
+    var envPID = ProcessHelper().getParentPID(dartPID);
+    Settings().verbose('envPID: $envPID ${ProcessHelper().getPIDName(envPID)}');
 
-    if (getPIDName(envPID).toLowerCase() == 'sh') {
-      shellPID = getParentPID(envPID);
+    if (ProcessHelper().getPIDName(envPID).toLowerCase() == 'sh') {
+      shellPID = ProcessHelper().getParentPID(envPID);
       // Log.d('shellPID: $envPID ${getPIDName(shellPID)}');
     } else {
       // if you run dshell directly then we don't use #! so 'sh' won't be our parent
@@ -86,45 +88,6 @@ class ShellDetection {
       shellPID = envPID;
     }
     return shellPID;
-  }
-
-  /// Gest the process name for the given pid
-  ///
-  /// Throws an RunException exception if the name can't
-  /// be obtained.
-  String getPIDName(int pid) {
-    String line;
-
-    try {
-      line = 'ps -q $pid -o comm='.firstLine;
-    } on ProcessException {
-      // ps not supported on current OS
-      line = 'unknown';
-    }
-    if (line != null) {
-      line = line.trim();
-    }
-
-    return line;
-  }
-
-  /// Get the PID of the parent
-  /// Throws an RunException exception if the name can't
-  /// be obtained.
-  ///
-  int getParentPID(int childPid) {
-    int parentPid;
-
-    String line;
-    try {
-      line = 'ps -p $childPid -o ppid='.firstLine;
-    } on ProcessException {
-      // ps not supported on current OS
-      line = '-1';
-    }
-    parentPid = int.tryParse(line.trim());
-
-    return parentPid;
   }
 
   // /// Attempts to identify the shell that
