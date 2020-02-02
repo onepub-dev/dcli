@@ -13,8 +13,8 @@ import '../util/log.dart';
 ///
 /// Returns the list of files in the current and child
 /// directories that match the passed glob pattern.
-/// 
-/// Note: this is a limited implementation of glob. 
+///
+/// Note: this is a limited implementation of glob.
 /// See the below notes for details.
 ///
 /// ```dart
@@ -51,9 +51,9 @@ import '../util/log.dart';
 /// [types] allows you to specify the file types you want the find to return.
 /// By default [types] limits the results to files.
 ///
-/// [root] allows you to specify an alternate directory to seach within 
+/// [root] allows you to specify an alternate directory to seach within
 /// rather than the current work directory.
-/// 
+///
 /// [types] the list of types to search file. Defaults to file.
 ///   See [FileSystemEntityType].
 /// [progress] a Progress to output the results to. Passing a progress will

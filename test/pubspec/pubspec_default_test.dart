@@ -42,8 +42,6 @@ dependencies:
   path: ^2.0.2
 ''';
 
-
-
   t.test('No PubSpec - No Dependencies', () {
     TestZone().run(() {
       if (exists(pubSpecScriptPath)) {
@@ -125,7 +123,7 @@ $overrides
     });
   }, skip: false);
 
-   t.test('File - override with path: dependencies', () {
+  t.test('File - override with path: dependencies', () {
     TestZone().run(() {
       if (exists(pubSpecScriptPath)) {
         delete(pubSpecScriptPath);

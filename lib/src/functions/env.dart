@@ -30,21 +30,21 @@ String get HOME => Env().HOME;
 /// Returns a map of all the environment variables
 /// inherited from the parent as well as any changes
 /// made by calls to [setEnv].
-/// 
+///
 /// See [env]
 ///     [setEnv]
 Map<String, String> get envs => Env().envVars;
 
 ///
 /// Sets an environment variable for the current process.
-/// 
+///
 /// Any child processes spawned will inherit these changes.
-/// e.g. 
+/// e.g.
 /// ```
 ///   setEnv('XXX', 'A Value');
 ///   // the echo command will display the value off XXX.
 ///   '''echo $XXX'''.run;
-/// 
+///
 /// ```
 /// NOTE: this does NOT affect the parent
 /// processes environment.
