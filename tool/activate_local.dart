@@ -1,11 +1,11 @@
 #! /usr/bin/env dshell
- import 'dart:io';
+import 'dart:io';
 
 import 'package:dshell/dshell.dart';
 
 /// globally activates dshell from a local path rather than a public package.
 ///
-/// defaults to activation from ~/git/dshell
+/// defaults to activation from ..
 ///
 /// You can change the path by passing in:
 /// activate_local path=<your path>
@@ -15,9 +15,11 @@ void main(List<String> args) {
 
   parser.addCommand('help');
 
-  var path = join(HOME, 'git', 'dshell');
+  // activate_local lives in the tool directory
+  // so its parent directory should be the dshell package root.
+  var dshellPackageRoot = dirname(dirname(Settings().scriptPath));
 
-  parser.addOption('path', defaultsTo: path);
+  parser.addOption('path', defaultsTo: dshellPackageRoot);
 
   var result = parser.parse(args);
 
@@ -25,7 +27,7 @@ void main(List<String> args) {
     print(
         '''globally activates dshell from a local path rather than a public package.
 
-defaults to activation from ~/git/dshell
+defaults to activation from ..
 
 You can change the path by passing in:
 activate_local --path=<your path>
@@ -36,16 +38,18 @@ ${parser.usage}
     exit(0);
   }
 
-  path = result['path'] as String;
+  dshellPackageRoot = result['path'] as String;
+
+  print(orange('Activating dshell at $dshellPackageRoot'));
 
   var version = '';
-  if (result.rest.length == 1){
+  if (result.rest.length == 1) {
     version = result.rest[0];
-    'pub global activate --source path $path $version'.run;
-  }
-  else
-  {
-  'pub global activate --source path $path'.run;
+    'pub global activate --source path $dshellPackageRoot $version'
+        .start(workingDirectory: dshellPackageRoot);
+  } else {
+    'pub global activate --source path $dshellPackageRoot'
+        .start(workingDirectory: dshellPackageRoot);
   }
 
   // make certain the dependency injection points to $path
@@ -58,12 +62,9 @@ ${parser.usage}
   // make certain all script see the new settings.
   'dshell install -nc'.run;
 
-  // var lines = read(join(Settings().dshellPath, 'dependency.yaml')).toList();
-  // var pubspec = PubSpecFile.fromFile(dependancy);
-
   dependency.append('dependency_overrides:');
   dependency.append('  dshell:');
-  dependency.append('    path: $HOME/git/dshell');
+  dependency.append('    path: $dshellPackageRoot');
 
   print('dependency.yaml');
   cat(dependency);
