@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import '../../dshell.dart';
 import 'log.dart';
 
 void writeToFile(String path, String content) {
@@ -24,7 +25,7 @@ bool createDir(String dir, String description) {
       directory.createSync(recursive: true);
       created = true;
     } catch (e) {
-      Log().error(
+      printerr(
           'Unable to create the $description ${dir}. Error: ${e.toString()}');
       rethrow;
     }
