@@ -1,5 +1,9 @@
 import 'dart:io';
+import 'package:dshell/src/functions/env.dart';
+import 'package:dshell/src/functions/read.dart';
 import 'package:dshell/src/util/ansi_color.dart';
+import 'package:dshell/src/util/truepath.dart';
+import 'package:path/path.dart';
 
 import '../functions/is.dart';
 import '../pubspec/pubspec.dart';
@@ -175,6 +179,35 @@ class VirtualProject {
     }
 
     // does the project cache lib link exist?
+  }
+
+  void get doctor {
+    print('');
+    print('');
+    print('Script Details');
+    colprint('Name', script.scriptname);
+    colprint('Directory', privatePath(script.scriptDirectory));
+    colprint('Virtual Project', privatePath(dirname(pubSpecPath)));
+    print('');
+
+    print('');
+    print('Virtual pubspec.yaml');
+    read(pubSpecPath).forEach((line) {
+      print('  ${makeSafe(line)}');
+    });
+
+    print('');
+    colprint('Dependencies', '');
+    pubSpec().dependencies.forEach((d) => colprint(
+        '  ${d.name}', '${d.isPath ? privatePath(d.path) : d.version}'));
+  }
+
+  String makeSafe(String line) {
+    return line.replaceAll(HOME, '<HOME>');
+  }
+
+  void colprint(String label, String value, {int pad = 25}) {
+    print('${label.padRight(pad)}: ${value}');
   }
 
   ///

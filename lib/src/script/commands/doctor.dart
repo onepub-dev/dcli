@@ -1,12 +1,16 @@
 import 'dart:io';
 
+import 'package:dshell/src/pubspec/global_dependencies.dart';
 import 'package:dshell/src/util/pub_cache.dart';
+import 'package:dshell/src/util/truepath.dart';
 
 import '../../../dshell.dart';
 import '../command_line_runner.dart';
 
 import '../dart_sdk.dart';
 import '../flags.dart';
+import '../script.dart';
+import '../virtual_project.dart';
 import 'commands.dart';
 
 class DoctorCommand extends Command {
@@ -16,9 +20,16 @@ class DoctorCommand extends Command {
 
   @override
   int run(List<Flag> selectedFlags, List<String> subarguments) {
-    if (subarguments.isNotEmpty) {
+    var showScriptDetails = false;
+    VirtualProject script;
+    if (subarguments.length == 1) {
+      showScriptDetails = true;
+      script = VirtualProject(
+          Settings().dshellCachePath, Script.fromFile(subarguments[0]));
+    }
+    if (subarguments.length > 1) {
       throw CommandLineException(
-          "'dshell doctor' does not take any arguments. Found $subarguments");
+          "'dshell doctor' does zero or one arguments. Found $subarguments");
     }
 
     colprint('Dshell doctor version', '${Settings().version}');
@@ -79,6 +90,16 @@ class DoctorCommand extends Command {
         'dependencies.yaml', join(Settings().dshellPath, 'dependencies.yaml'));
 
     showPermissions('templates', Settings().templatePath);
+
+    print('');
+    print('.dshell/dependencies.yaml');
+    var gd = GlobalDependencies();
+    gd.dependencies.forEach((d) =>
+        colprint('  ${d.name}', '${d.isPath ? privatePath(d.path) : d.version}'));
+
+    if (showScriptDetails) {
+      script.doctor;
+    }
     return 0;
   }
 
@@ -86,28 +107,23 @@ class DoctorCommand extends Command {
     print('${label.padRight(pad)}: ${value}');
   }
 
-  /// Removes the users home directory from a path replacing it with ~
-  String privatePath(String part1,
-      [String part2,
-      String part3,
-      String part4,
-      String part5,
-      String part6,
-      String part7]) {
-    return truepath(part1, part2, part3, part4, part5, part6, part7)
-        .replaceAll(HOME, '~');
-  }
-
   @override
   String description() =>
-      """Running 'dshell doctor' provides diagnostic information on your install.""";
+      """Running 'dshell doctor' provides diagnostic information on your install and optionally a specific script.""";
 
   @override
-  String usage() => 'Doctor';
+  String usage() => 'doctor [<script path.dart>]';
 
   @override
   List<String> completion(String word) {
-    return <String>[];
+    var dartScripts = find('*.dart', recursive: false).toList();
+    var results = <String>[];
+    for (var script in dartScripts) {
+      if (script.startsWith(word)) {
+        results.add(script);
+      }
+    }
+    return results;
   }
 
   void showPermissions(String label, String path) {

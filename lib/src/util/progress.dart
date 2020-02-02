@@ -56,12 +56,16 @@ class Progress {
   void _wireStreams(LineAction stdout, LineAction stderr) {
     assert(stdout != null);
     assert(stderr != null);
-    stdoutController.stream.listen((line) => stdout(line),
+    stdoutController.stream.listen((line) {
+      stdout(line);
+    },
         onDone: () => stdoutCompleter.complete(true),
         onError: (Object e, StackTrace s) => stdoutCompleter.completeError(e),
         cancelOnError: true);
 
-    stderrController.stream.listen((line) => stderr(line),
+    stderrController.stream.listen((line) {
+      stderr(line);
+    },
         onDone: () => stderrCompleter.complete(true),
         onError: (Object e, StackTrace s) => stderrCompleter.completeError(e),
         cancelOnError: true);
