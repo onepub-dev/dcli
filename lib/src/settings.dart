@@ -41,6 +41,37 @@ class Settings {
 
   String _dshellBinPath;
 
+  /// The absolute path to the dshell script which
+  /// is currently running.
+  String _scriptPath;
+
+  String get scriptPath {
+    if (_scriptPath == null) {
+      var actual = Platform.script.toFilePath();
+      if (isWithin(dshellCachePath, actual)) {
+        // This is a script being run from a virtual project so we
+        // need to reconstruct is original path.
+
+        // strip of the cache prefix
+        var rel = join('/', relative(actual, from: dshellCachePath));
+        //.dshell/cache/home/bsutton/git/dshell/tool/activate_local.project/activate_local.dart
+
+        // now remove the virtual project directory
+        _scriptPath = join(dirname(dirname(rel)), basename(rel));
+      } else {
+        _scriptPath = actual;
+      }
+    }
+
+    return _scriptPath;
+  }
+
+  /// This is an internal function called by the run
+  /// command and you should NOT be calling it!
+  set scriptPath(String scriptPath) {
+    _scriptPath = scriptPath;
+  }
+
   /// The directory where we store all of dshell's
   /// configuration files such as the cache.
   /// This will normally be ~/.dshell
