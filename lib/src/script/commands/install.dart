@@ -76,7 +76,7 @@ class InstallCommand extends Command {
       print(blue('Creating ${Settings().dshellPath}'));
       createDir(Settings().dshellPath);
     } else {
-      print('Found existing install at: ${Settings().dshellPath}');
+      print('Found existing install at: ${Settings().dshellPath}.');
     }
     print('');
 
@@ -115,9 +115,11 @@ class InstallCommand extends Command {
         print(blue("Running 'clean all' to upgrade your existing scripts"));
         CleanAllCommand().run([], []);
       } else {
-        print(blue('Skipping clean as -nc flag passed'));
+        print(blue('Skipping clean as -nc flag passed.'));
       }
     }
+
+    var shell = ShellDetection().identifyShell();
 
     // create the bin directory
     var binPath = Settings().dshellBinPath;
@@ -126,12 +128,19 @@ class InstallCommand extends Command {
       print(blue('Creating bin directory in: $binPath.'));
       createDir(binPath);
 
-      addBinToPath(binPath);
+      if (!shell.addToPath(binPath)) {
+        printerr(
+            'If you want to use dshell compile -i to install scripts, then you need to manually add $binPath to your PATH.');
+      }
     }
 
     print('');
 
-    addCompletion();
+    if (shell.isCompletionSupported) {
+      if (!shell.isCompletionInstalled) {
+        shell.installTabCompletion();
+      }
+    }
 
     // print OS version.
     // print('Platform.version ${Platform.version}');
@@ -150,12 +159,12 @@ class InstallCommand extends Command {
       exit(1);
     } else {
       var dshellPath = dshellLocation;
-      print(blue('dshell found in : ${dshellPath}'));
+      print(blue('dshell found in : ${dshellPath}.'));
 
       // link so all users can run dshell
       // We use the location of dart exe and add dshell symlink
       // to the same location.
-      // TODO: this is going to require sudo to install???
+      // CONSIDER: this is going to require sudo to install???
       //var linkPath = join(dirname(DartSdk().exePath), 'dshell');
       //symlink(dshellPath, linkPath);
     }
@@ -175,70 +184,6 @@ class InstallCommand extends Command {
     return exitCode;
   }
 
-  void addBinToPath(String binPath) {
-    // only add the path if its not already present
-    if (!isOnPath(binPath)) {
-      var link =
-          'https://dartcode.org/docs/configuring-path-and-environment-variables/';
-      // see
-      // https://dartcode.org/docs/configuring-path-and-environment-variables/
-      //
-      if (Settings().isMacOS) {
-        addPathToMacPath(binPath);
-      } else if (Settings().isLinux) {
-        addPathToLinxuPath(binPath);
-      } else if (Settings().isWindows) {
-        print(
-            "Please read the following link for details on how to add '$binPath' to your path.");
-        print('$link');
-      }
-    }
-  }
-
-  // adds bash cli completion for dshell
-  // by adding a 'complete' command to ~/.bashrc
-  void addCompletion() {
-    if (!isCompletionInstalled()) {
-      // Add cli completion
-      var command = "complete -C 'dshell_complete' dshell";
-
-      var startFile = Shell().getShellStartScriptPath();
-
-      if (startFile != null) {
-        if (!exists(startFile)) {
-          touch(startFile, create: true);
-        }
-        startFile.append(command);
-
-        print(
-            'dshell tab completion installed. Restart your terminal to activate it.');
-      } else {
-        printerr(red('Unable to install dshell tab completion'));
-        printerr(
-            "Add ${orange('$command')} to your start up script to enable tab completion");
-      }
-    }
-  }
-
-  bool isCompletionInstalled() {
-    // run the complete command to see if dshell is handled.
-
-    //added runInShell and now install throws a stack trace
-    var completeInstalled = false;
-    var startFile = Shell().getShellStartScriptPath();
-
-    if (startFile != null) {
-      if (exists(startFile)) {
-        read(startFile).forEach((line) {
-          if (line.contains('dshell_complete')) {
-            completeInstalled = true;
-          }
-        });
-      }
-    }
-    return completeInstalled;
-  }
-
   @override
   String description() =>
       """Running 'dshell install' completes the installation of dshell.""";
@@ -254,93 +199,6 @@ class InstallCommand extends Command {
   @override
   List<Flag> flags() {
     return installFlags;
-  }
-
-  void addPathToMacPath(String binPath) {
-    var shell = Shell().identifyShell();
-
-    switch (shell) {
-      case SHELL.BASH:
-        addPathToBash(binPath);
-        break;
-      case SHELL.ZSH:
-        addPathToZsh(binPath);
-        break;
-      case SHELL.UNKNOWN:
-        addPathToMacOsPathd(binPath);
-        break;
-    }
-  }
-
-  void addPathToMacOsPathd(String binPath) {
-    var macOSPathPath = join('/etc', 'path.d');
-
-    try {
-      if (!exists(macOSPathPath)) {
-        createDir(macOSPathPath, recursive: true);
-      }
-      if (exists(macOSPathPath)) {
-        join(macOSPathPath, 'dshell').write(binPath);
-      }
-    } catch (e) {
-      // ignore write permission problems.
-      printerr(red(
-          "Unable to add dshell/bin to path as we couldn't write to $macOSPathPath"));
-      printerr(
-          'If you want to use dshell compile -i to install script then you need to manually add the path.');
-    }
-  }
-
-  /// Adds the given path to the Bash path if it isn't
-  /// already on teh path.
-  void addPathToBash(String path) {
-    if (!isOnPath(path)) {
-      var export = 'export PATH=\$PATH:$path';
-
-      var rcPath = getBashRcPath();
-
-      if (!exists(rcPath)) {
-        rcPath.write(export);
-      } else {
-        rcPath.append(export);
-      }
-    }
-  }
-
-  /// Adds the given path to the Bash path if it isn't
-  /// already on teh path.
-  void addPathToZsh(String path) {
-    if (!isOnPath(path)) {
-      var export = 'export PATH=\$PATH:$path';
-
-      var rcPath = getZshRcPath();
-
-      if (!exists(rcPath)) {
-        rcPath.write(export);
-      } else {
-        rcPath.append(export);
-      }
-    }
-  }
-
-  String getBashRcPath() {
-    return join(HOME, '.bashrc');
-  }
-
-  String getZshRcPath() {
-    return join(HOME, '.zshrc');
-  }
-
-  void addPathToLinxuPath(String path) {
-    if (!isOnPath(path)) {
-      var profile = join(HOME, '.profile');
-      if (exists(profile)) {
-        var export = 'export PATH=\$PATH:$path';
-        if (!read(profile).toList().contains(export)) {
-          profile.append(export);
-        }
-      }
-    }
   }
 }
 

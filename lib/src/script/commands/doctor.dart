@@ -53,9 +53,10 @@ class DoctorCommand extends Command {
     print('PATH\n\t${privatePath(PATH.join("\n\t"))}');
     colprint('\$SHELL', '${env('SHELL')}');
     if (!Settings().isWindows) {
-      colprint('True SHELL', '${Shell().getShellName()}');
+      colprint('True SHELL', '${ShellDetection().getShellName()}');
 
-      var startScriptPath = Shell().getShellStartScriptPath();
+      var shell = ShellDetection().identifyShell();
+      var startScriptPath = shell.startScriptPath;
 
       if (startScriptPath == null) {
         colprint('Shell Start Script', 'Not Found');

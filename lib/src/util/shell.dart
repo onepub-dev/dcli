@@ -1,20 +1,18 @@
 import 'dart:io';
 import 'package:dshell/dshell.dart';
 
-enum SHELL { BASH, ZSH, UNKNOWN }
-
 ///
 /// Provides some conveinence funtions to get access to
 /// details about the system shell (e.g. bash) that we were run from.
 ///
 /// This class is considered EXPERIMENTAL and is likely to change.
-class Shell {
-  static final Shell _shell = Shell._internal();
+class ShellDetection {
+  static final ShellDetection _shell = ShellDetection._internal();
 
-  Shell._internal();
+  ShellDetection._internal();
 
   /// obtain a singleton instance of Shell.
-  factory Shell() => _shell;
+  factory ShellDetection() => _shell;
 
   /// Attempts to identify the shell that
   /// DShell was run under.
@@ -22,16 +20,16 @@ class Shell {
   /// a DShell script.
   ///
   /// Currently this isn't very reliable.
-  SHELL identifyShell() {
-    SHELL shell;
-    var shellName = Shell().getShellName();
+  Shell identifyShell() {
+    Shell shell;
+    var shellName = ShellDetection().getShellName().toLowerCase();
 
-    if (shellName.toLowerCase() == 'bash') {
-      shell = SHELL.BASH;
-    } else if (shellName.toLowerCase() == 'zsh') {
-      shell = SHELL.ZSH;
+    if (shellName == BashShell().name.toLowerCase()) {
+      shell = BashShell();
+    } else if (shellName == ZshShell().name.toLowerCase()) {
+      shell = ZshShell();
     } else {
-      shell = SHELL.UNKNOWN;
+      shell = UnknownShell();
     }
     return shell;
   }
@@ -129,21 +127,244 @@ class Shell {
     return parentPid;
   }
 
-  /// Attempts to identify the shell that
-  /// we are running under and returns the
-  /// path to the shell's configuration file
-  /// e.g. .bashrc.
-  String getShellStartScriptPath() {
-    var shell = Shell().identifyShell();
+  // /// Attempts to identify the shell that
+  // /// we are running under and returns the
+  // /// path to the shell's configuration file
+  // /// e.g. .bashrc.
+  // String getShellStartScriptPath() {
+  //   var shell = Shell().identifyShell();
 
-    String configFile;
-    if (shell == SHELL.BASH) {
-      configFile = join(HOME, '.bashrc');
-    }
-    if (shell == SHELL.ZSH) {
-      configFile = join(HOME, '.zshrc');
-    }
+  //   String configFile;
+  //   if (shell == SHELL.BASH) {
+  //     configFile = join(HOME, '.bashrc');
+  //   }
+  //   if (shell == SHELL.ZSH) {
+  //     configFile = join(HOME, '.zshrc');
+  //   }
 
-    return configFile;
+  //   return configFile;
+  // }
+}
+
+/// an abstract class which allows each shell (bash, zsh)
+/// to provide specific implementation of features
+/// required by DShell.
+abstract class Shell {
+  bool get isCompletionInstalled;
+
+  bool get isCompletionSupported;
+
+  /// If the shell supports tab completion then
+  /// install it.
+  void installTabCompletion();
+
+  /// Returns the path to the shell's start script
+  String get startScriptPath;
+
+  /// Returns the  name of the shell's startup script
+  /// e.g. .bashrc
+  String get startScriptName;
+
+  /// The name of the shell
+  /// e.g. bash
+  String get name;
+
+  /// Added a path to the start script
+  /// returns true if adding the path was successful
+  bool addToPath(String path);
+}
+
+class BashShell implements Shell {
+  @override
+  String get startScriptPath {
+    return join(HOME, startScriptName);
   }
+
+  @override
+  bool get isCompletionSupported => true;
+
+  @override
+  bool get isCompletionInstalled {
+    var completeInstalled = false;
+    var startFile = startScriptPath;
+
+    if (startFile != null) {
+      if (exists(startFile)) {
+        read(startFile).forEach((line) {
+          if (line.contains('dshell_complete')) {
+            completeInstalled = true;
+          }
+        });
+      }
+    }
+    return completeInstalled;
+  }
+
+  // adds bash cli completion for dshell
+  // by adding a 'complete' command to ~/.bashrc
+  @override
+  void installTabCompletion() {
+    if (!isCompletionInstalled) {
+      // Add cli completion
+      var command = "complete -C 'dshell_complete' dshell";
+
+      var startFile = startScriptPath;
+
+      if (startFile != null) {
+        if (!exists(startFile)) {
+          touch(startFile, create: true);
+        }
+        startFile.append(command);
+
+        print(
+            'dshell tab completion installed. Restart your terminal to activate it.');
+      } else {
+        printerr(red('Unable to install dshell tab completion'));
+        printerr(
+            "Add ${orange('$command')} to your start up script to enable tab completion");
+      }
+    }
+  }
+
+  @override
+  String get name => 'Bash';
+
+  @override
+  String get startScriptName {
+    return '.bashrc';
+  }
+
+  /// Adds the given path to the bash path if it isn't
+  /// already on teh path.
+  @override
+  bool addToPath(String path) {
+    if (!isOnPath(path)) {
+      var export = 'export PATH=\$PATH:$path';
+
+      var rcPath = startScriptPath;
+
+      if (!exists(rcPath)) {
+        rcPath.write(export);
+      } else {
+        rcPath.append(export);
+      }
+    }
+    return true;
+  }
+}
+
+class ZshShell implements Shell {
+  @override
+  String get startScriptPath {
+    return join(HOME, startScriptName);
+  }
+
+  @override
+  bool get isCompletionSupported => false;
+
+  @override
+  bool get isCompletionInstalled => false;
+
+  @override
+  void installTabCompletion() {}
+
+  @override
+  String get name => 'zsh';
+
+  @override
+  String get startScriptName {
+    return '.zshrc';
+  }
+
+  /// Adds the given path to the zsh path if it isn't
+  /// already on teh path.
+  @override
+  bool addToPath(String path) {
+    if (!isOnPath(path)) {
+      var export = 'export PATH=\$PATH:$path';
+
+      var rcPath = startScriptPath;
+
+      if (!exists(rcPath)) {
+        rcPath.write(export);
+      } else {
+        rcPath.append(export);
+      }
+    }
+    return true;
+  }
+}
+
+class UnknownShell implements Shell {
+  @override
+  bool addToPath(String path) {
+    if (Settings().isMacOS) {
+      return addPathToMacOsPathd(path);
+    } else if (Settings().isLinux) {
+      return addPathToLinxuPath(path);
+    } else {
+      return false;
+    }
+  }
+
+  bool addPathToMacOsPathd(String path) {
+    var success = false;
+    if (!isOnPath(path)) {
+      var macOSPathPath = join('/etc', 'path.d');
+
+      try {
+        if (!exists(macOSPathPath)) {
+          createDir(macOSPathPath, recursive: true);
+        }
+        if (exists(macOSPathPath)) {
+          join(macOSPathPath, 'dshell').write(path);
+        }
+        success = true;
+      } catch (e) {
+        // ignore write permission problems.
+        printerr(red(
+            "Unable to add dshell/bin to path as we couldn't write to $macOSPathPath"));
+      }
+    }
+    return success;
+  }
+
+  bool addPathToLinxuPath(String path) {
+    var success = false;
+    if (!isOnPath(path)) {
+      var profile = join(HOME, '.profile');
+      try {
+        if (exists(profile)) {
+          var export = 'export PATH=\$PATH:$path';
+          if (!read(profile).toList().contains(export)) {
+            profile.append(export);
+            success = true;
+          }
+        }
+      } catch (e) {
+        // ignore write permission problems.
+        printerr(red(
+            "Unable to add dshell/bin to path as we couldn't write to $profile"));
+      }
+    }
+    return success;
+  }
+
+  @override
+  void installTabCompletion() {}
+
+  @override
+  bool get isCompletionInstalled => false;
+
+  @override
+  bool get isCompletionSupported => false;
+
+  @override
+  String get name => 'Unknown';
+
+  @override
+  String get startScriptName => null;
+
+  @override
+  String get startScriptPath => null;
 }

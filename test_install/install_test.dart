@@ -1,7 +1,6 @@
 import 'package:dshell/dshell.dart' hide equals;
 import 'package:dshell/src/functions/env.dart';
 import 'package:dshell/src/pubspec/global_dependencies.dart';
-import 'package:dshell/src/script/commands/install.dart';
 import 'package:dshell/src/script/entry_point.dart';
 import 'package:dshell/src/util/dshell_exception.dart';
 import 'package:mockito/mockito.dart';
@@ -79,11 +78,6 @@ void main() {
 
       Settings.setMock(mockSettings);
       Env.setMock(mockEnv);
-
-      var install = InstallCommand();
-      install.addBinToPath(mockSettings.dshellBinPath);
-
-      expect(PATH, isNot(contains(settings.dshellBinPath)));
     }, skip: true);
 
     test('set env PATH Linux', () {
@@ -102,9 +96,6 @@ void main() {
 
       Settings.setMock(mockSettings);
       Env.setMock(mockEnv);
-
-      var install = InstallCommand();
-      install.addBinToPath(settings.dshellBinPath);
 
       var export = 'export PATH=\$PATH:${settings.dshellBinPath}';
 
