@@ -121,7 +121,7 @@ class DoctorCommand extends Command {
       var username = env('USERNAME');
       if (username != null) {
         colprint('$label',
-            '${fstat.modeString()} <user>:${(owner.group == owner.user ? '<group>' : owner.group)}   ${privatePath(path)} ');
+            '${fstat.modeString()} <user>:${(owner.group == owner.user ? '<user>' : owner.group)}   ${privatePath(path)} ');
       }
     } else {
       colprint('$label', '${privatePath(path)} does not exist');
