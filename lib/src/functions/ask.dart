@@ -35,6 +35,12 @@ import 'env.dart';
 /// If [hidden] is true then the entered values will not be echoed to the
 /// console, instead '*' will be displayed. This is uesful for capturing
 /// passwords.
+/// NOTE: if there is no terminal detected then this will fallback to
+/// a standard ask input in which case the hidden characters WILL BE DISPLAYED
+/// as they are typed.
+///
+/// TODO: work out why we aren't detecting a terminal when running under
+/// dshell (and I assume the sh created by the #! env setting)
 ///
 String ask({String prompt, bool toLower = false, bool hidden = false}) =>
     Ask().ask(prompt: prompt, toLower: toLower, hidden: hidden);
@@ -117,7 +123,7 @@ class Ask extends DShellFunction {
     }
 
     String line;
-    if (hidden == true) {
+    if (hidden == true && stdin.hasTerminal) {
       line = readHidden();
     } else {
       line = stdin.readLineSync(
