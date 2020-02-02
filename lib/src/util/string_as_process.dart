@@ -91,12 +91,18 @@ extension StringAsProcess on String {
   ///      [toList] to capture stdout and stderr to [List<String>]
   ///      [firstLine] - returns just the first line written to stdout or stderr.
   ///      [lastLine] - returns just the last line written to stdout or stderr.
+  ///
   void start(
-      {bool runInShell = false,
+      {Progress progress,
+      bool runInShell = false,
       bool detached = false,
       String workingDirectory}) {
-    var process = RunnableProcess(this, workingDirectory: workingDirectory);
-    process.start(runInShell: runInShell, detached: detached);
+    cmd.start(this,
+        progress:
+            Progress((line) => print(line), stderr: (line) => printerr(line)),
+        runInShell: runInShell,
+        detached: detached,
+        workingDirectory: workingDirectory);
   }
 
   /// forEach runs the String [this] as a command line
