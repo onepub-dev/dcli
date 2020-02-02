@@ -21,10 +21,10 @@ class PubGet {
 
   /// Runs the pub get command against
   /// the project working dir.
-  PubGetResult run() {
+  PubGetResult run({bool compileExecutables = true}) {
     var result = PubGetResult();
     try {
-      DartSdk().runPubGet(project.path,
+      DartSdk().runPubGet(project.path,compileExecutables : compileExecutables ,
           progress: Progress((line) => result.processLine(line),
               stderr: (line) => print(line)));
 

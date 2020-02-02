@@ -6,7 +6,6 @@ import '../pubspec/pubspec.dart';
 import '../pubspec/pubspec_file.dart';
 import '../pubspec/pubspec_manager.dart';
 import 'pub_get.dart';
-import '../util/log.dart';
 import 'package:path/path.dart' as p;
 
 import '../settings.dart';
@@ -132,7 +131,7 @@ class VirtualProject {
   /// created and when a script's pubspec changes.
   void pubget() {
     var pubGet = PubGet(DartSdk(), this);
-    pubGet.run();
+    pubGet.run(compileExecutables: false);
   }
 
 // Create the cache lib as a real file or a link

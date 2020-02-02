@@ -66,8 +66,10 @@ class DartSdk {
     process.processUntilExit(progress);
   }
 
-  void runPubGet(String workingDirectory, {Progress progress}) {
-    var process = RunnableProcess.fromList(pubGetPath, ['get'],
+  void runPubGet(String workingDirectory,
+      {Progress progress, bool compileExecutables}) {
+    var process = RunnableProcess.fromList(
+        pubGetPath, ['get', '--no-precompile'],
         workingDirectory: workingDirectory);
 
     process.start();
