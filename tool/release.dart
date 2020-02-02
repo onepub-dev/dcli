@@ -37,6 +37,9 @@ void main(List<String> args) {
     newVersion = incrementVersion(currentVersion, pubspec, pubspecPath);
   }
 
+  // ensure that all code is correctly formatted.
+  'format_code.dart'.run;
+
   generateReleaseNotes(projectRootPath, newVersion, currentVersion);
 
   checkCommited();
