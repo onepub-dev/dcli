@@ -21,6 +21,8 @@ class Pipe {
     rhs.processUntilExit(progress);
   }
 
-  void get run => rhs
-      .processUntilExit(Progress(Progress.devNull, stderr: Progress.devNull));
+  // void get run => rhs
+  //     .processUntilExit(Progress(Progress.devNull, stderr: Progress.devNull));
+
+  void get run => rhs.processUntilExit(Progress(print, stderr: print));
 }

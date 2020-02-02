@@ -102,9 +102,36 @@ class RunnableProcess {
   }
 
   void pipeTo(RunnableProcess stdin) {
-    fProcess.then((stdoutProcess) {
-      stdin.fProcess.then<void>(
-          (stdInProcess) => stdoutProcess.stdout.pipe(stdInProcess.stdin));
+    // fProcess.then((stdoutProcess) {
+    //   stdin.fProcess.then<void>(
+    //       (stdInProcess) => stdoutProcess.stdout.pipe(stdInProcess.stdin));
+
+    // });
+
+    fProcess.then((lhsProcess) {
+      stdin.fProcess.then<void>((rhsProcess) {
+        // lhs.stdout -> rhs.stdin
+        lhsProcess.stdout.listen(rhsProcess.stdin.add);
+        // lhs.stderr -> rhs.stdin
+        lhsProcess.stderr.listen(rhsProcess.stdin.add).onDone(() {
+          rhsProcess.stdin.close();
+        });
+
+        // wire rhs to the console, but thats not our job.
+        // rhsProcess.stdout.listen(stdout.add);
+        // rhsProcess.stderr.listen(stderr.add);
+
+        // If the rhs process shutsdown before the lhs
+        // process we will get a broken pipe. We
+        // can safely ignore broken pipe errors (I think :).
+        rhsProcess.stdin.done.catchError(
+          (Object e) {
+            // forget broken pipe after rhs terminates before lhs
+          },
+          test: (e) =>
+              e is SocketException && e.osError.message == 'Broken pipe',
+        );
+      });
     });
   }
 
@@ -136,7 +163,7 @@ class RunnableProcess {
       });
       // trap the process finishing
       process.exitCode.then((exitCode) {
-        // TODO: do we pass the exitCode to ForEach or just throw?
+        // CONSIDER: do we pass the exitCode to ForEach or just throw?
         // If the start failed we don't want to rethrow
         // as the exception will be thrown async and it will
         // escape as an unhandled exception and stop the whole script
