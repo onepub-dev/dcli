@@ -111,7 +111,7 @@ class VirtualProject {
   void clean() {
     if (exists(_virtualProjectPath)) {
       if (Settings().isVerbose) {
-        Log().d('Deleting project path: $_virtualProjectPath');
+        Settings().verbose('Deleting project path: $_virtualProjectPath');
       }
       File(_virtualProjectPath).deleteSync(recursive: true);
     }
