@@ -63,7 +63,7 @@ ${parser.usage}
 
   dependency.append('dependency_overrides:');
   dependency.append('  dshell:');
-  dependency.append('    path: ~/git/dshell');
+  dependency.append('    path: $HOME/git/dshell');
 
   print('dependency.yaml');
   cat(dependency);
