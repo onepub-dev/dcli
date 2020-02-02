@@ -1,3 +1,563 @@
+### 1.1.2-dev.4
+released 1.1.2-dev.2
+script to add a local dshell override.
+formatting
+[ENH] changed pipeTo to pipe both stdout and stderr to the next process.
+fixed minor typo.
+Added logic to sett the Settings() scriptPath on start.
+[FIX] Ask with the hidden option now checks if a terminal is present and if not doesn't try to use the hidden feature.
+[ENH] improved performance of dshell clean by suppressing the compile executaable option which was re-compiling dshell each time.
+Moved start logic into Run class.
+[ENH] activate local now assumes it is run from the tools directory and goes looking for the correct dshell path.
+removed unused import.
+[ENH moved the start logic into the Run class and change the default operation of start so that it ouputs the process writes unless the process is started detached.
+[ENH] add property to return the scripts path.
+[FIX] dependencies don't recognize ~ so changed to full path.
+Renamed line to value to better reflect its contents.
+Moved process related methods into own class.
+[FIX] change <group> to <user> in permission line so it was more obvious that the group owner was the user.
+[FIX} Changed log.e to printerr as was a true error.
+[TEST] Test code for processing pipes as binary data and streaming stderr to stdin for pipes.
+[ENH] added logic to format code before releasing it.
+[FIX] Changed log.d to settings.verbose as i should be.
+[ENH] New tool to allow dshell developer to run from the local source.
+[FMT] Formatting.
+[FIX] improvements to the shell detection and install logic. code was adding tab complete to zsh which doesn't use the same mechanism as bash.
+[FIX] added required path var and remove extranious lines.
+[FIX] updated name of docker file to match actual file for install.clone.dart.
+Test for binary piping  of stdout and stderr.
+formatting
+experiment with vscode console:terminal setting.
+released ## 1.1.2-dev.1
+[ENH] Added verbose logging to  process.start
+change the tagname created to match the pubspec version no. as required by pub.dev.
+[FIX] NPE if USERNAME environment variable is missing.
+[FIX] Spelling.
+documentation improvements.
+[ENH] work on an automated release script.
+[FIX] removed an unecessary getter.
+[TEST] additional unit tests for path overrides.
+[ENH] added an option to pass a working directory to the start command.
+[DOC] improvements.
+[FIX] bug in parser that didn't handle quotes within a word.
+[FIX] renamed method from loadFromFile to fromFile to be more consistent.
+[DOC] improved documentation.
+Added optoin to load globaldependeies from a specific path for testing.
+ran drtformat.
+released 1.1.1
+changes to accomodate the new start logic. Pipes need to be wired immediately.
+added convenience method lastLine.
+coloured the command required to install tab completion.
+improved formatting fixed a couple npes.
+changed to passing a Progress. Fixed a bug where we were not waiting for the start future and the exist future separately. The result is that an exception could be thrown outside of the watiForEx scope. This result in an uncaught exception occuring on the microtask stack. The end result was tha the shell shutdown in an uncontrolled manner if an exe failed to start.
+added unit tests for firstLine and lastLine.
+exposed devNull so it could be used by other functions. Changed toList to include but stdout and stderr as that appears to be what users are expecting.
+changed to use the standard RunnableProcess rather than its own custom code.
+Changed processUntilExit to take a Progress rather than individual action so it could be used bu additional functions.
+test code used to understand with with .run.
+exposed DartSdk class as it has a no. of useful methods.
+changed to correct docker file.
+added catch blocks incase ps not supported and some lgging. Implemented new method to get the shell .rc file.
+Added shell .rc file to output.
+Fixed a bug where when running dshell directly the shell was reported incorrectly.
+removed any the usersname and home directory from the output.
+work on improving the logic to install dshell to the path.
+renamed PID to SHELL
+removed unused import.
+ran dartfmt over code.
+Merge branch 'master' of github.com:bsutton/dshell
+released 1.1.1-dev.2
+removed unsed import.
+added logic to dectect the shell and install the paths accordingly.
+removed unfinished code.
+scritp to activate dshell on you local path when you are contributing to dshell.
+typeo.
+added pid class to export list.
+added log of 'real' shell.
+Update run_unit_tests.yml
+Update run_unit_tests.yml
+Delete dart.yml
+Rename run_unit_tests to run_unit_tests.yml
+Create run_unit_tests
+created a helper to access PID data.
+added firstLine
+wrote a tool to run unit tests serially as vscode runs two isolites.
+Added new method firstLine which retuns just the first line writtent to stdout.
+Fixe for #45 - but I don't have a mac so can't test it.
+experimental tool to automate release of dshel
+release 1.1.0
+reverted back to simpler form as manipulating the env vars of PUB_CACHE and HOME where having some very wierd affects on dart an pub.
+test to dump out env vars.
+removed unused import.
+added getter for path env var.
+path reorg.
+removed testing log output.
+added test that directory exists.
+removed the clean. will do in docker.
+added call to TestPaths to each library to ensure they are initialised correctly.
+added test dshell/bin to front of path so unit tests find the correct version.
+changed back to a relative path.
+Added logic to do an install of dshell when the test suite starts.
+Fixed a bug where printerr was not writing a newline.
+Fixed the path to use the new TestPaths
+work on unit tests paths using ENV vars so we can run them safely on a local machine.
+created truepath method.
+added dart:io to default script.
+added dart.io to default script as it is very common in dshell scripts.
+correct the expected value.
+Created the class PubCache to proxy operations/access to .pub-cache. We now honour the PUB_CACHE environment variable.
+fixed some unit tests to run on CI server.
+release 1.1.0-dev.3
+Fixed a bug where a simple file name match was failing. Also improved performance.
+
+### 1.1.2-dev.4
+released 1.1.2-dev.2
+script to add a local dshell override.
+formatting
+[ENH] changed pipeTo to pipe both stdout and stderr to the next process.
+fixed minor typo.
+Added logic to sett the Settings() scriptPath on start.
+[FIX] Ask with the hidden option now checks if a terminal is present and if not doesn't try to use the hidden feature.
+[ENH] improved performance of dshell clean by suppressing the compile executaable option which was re-compiling dshell each time.
+Moved start logic into Run class.
+[ENH] activate local now assumes it is run from the tools directory and goes looking for the correct dshell path.
+removed unused import.
+[ENH moved the start logic into the Run class and change the default operation of start so that it ouputs the process writes unless the process is started detached.
+[ENH] add property to return the scripts path.
+[FIX] dependencies don't recognize ~ so changed to full path.
+Renamed line to value to better reflect its contents.
+Moved process related methods into own class.
+[FIX] change <group> to <user> in permission line so it was more obvious that the group owner was the user.
+[FIX} Changed log.e to printerr as was a true error.
+[TEST] Test code for processing pipes as binary data and streaming stderr to stdin for pipes.
+[ENH] added logic to format code before releasing it.
+[FIX] Changed log.d to settings.verbose as i should be.
+[ENH] New tool to allow dshell developer to run from the local source.
+[FMT] Formatting.
+[FIX] improvements to the shell detection and install logic. code was adding tab complete to zsh which doesn't use the same mechanism as bash.
+[FIX] added required path var and remove extranious lines.
+[FIX] updated name of docker file to match actual file for install.clone.dart.
+Test for binary piping  of stdout and stderr.
+formatting
+experiment with vscode console:terminal setting.
+released ## 1.1.2-dev.1
+[ENH] Added verbose logging to  process.start
+change the tagname created to match the pubspec version no. as required by pub.dev.
+[FIX] NPE if USERNAME environment variable is missing.
+[FIX] Spelling.
+documentation improvements.
+[ENH] work on an automated release script.
+[FIX] removed an unecessary getter.
+[TEST] additional unit tests for path overrides.
+[ENH] added an option to pass a working directory to the start command.
+[DOC] improvements.
+[FIX] bug in parser that didn't handle quotes within a word.
+[FIX] renamed method from loadFromFile to fromFile to be more consistent.
+[DOC] improved documentation.
+Added optoin to load globaldependeies from a specific path for testing.
+ran drtformat.
+released 1.1.1
+changes to accomodate the new start logic. Pipes need to be wired immediately.
+added convenience method lastLine.
+coloured the command required to install tab completion.
+improved formatting fixed a couple npes.
+changed to passing a Progress. Fixed a bug where we were not waiting for the start future and the exist future separately. The result is that an exception could be thrown outside of the watiForEx scope. This result in an uncaught exception occuring on the microtask stack. The end result was tha the shell shutdown in an uncontrolled manner if an exe failed to start.
+added unit tests for firstLine and lastLine.
+exposed devNull so it could be used by other functions. Changed toList to include but stdout and stderr as that appears to be what users are expecting.
+changed to use the standard RunnableProcess rather than its own custom code.
+Changed processUntilExit to take a Progress rather than individual action so it could be used bu additional functions.
+test code used to understand with with .run.
+exposed DartSdk class as it has a no. of useful methods.
+changed to correct docker file.
+added catch blocks incase ps not supported and some lgging. Implemented new method to get the shell .rc file.
+Added shell .rc file to output.
+Fixed a bug where when running dshell directly the shell was reported incorrectly.
+removed any the usersname and home directory from the output.
+work on improving the logic to install dshell to the path.
+renamed PID to SHELL
+removed unused import.
+ran dartfmt over code.
+Merge branch 'master' of github.com:bsutton/dshell
+released 1.1.1-dev.2
+removed unsed import.
+added logic to dectect the shell and install the paths accordingly.
+removed unfinished code.
+scritp to activate dshell on you local path when you are contributing to dshell.
+typeo.
+added pid class to export list.
+added log of 'real' shell.
+Update run_unit_tests.yml
+Update run_unit_tests.yml
+Delete dart.yml
+Rename run_unit_tests to run_unit_tests.yml
+Create run_unit_tests
+created a helper to access PID data.
+added firstLine
+wrote a tool to run unit tests serially as vscode runs two isolites.
+Added new method firstLine which retuns just the first line writtent to stdout.
+Fixe for #45 - but I don't have a mac so can't test it.
+experimental tool to automate release of dshel
+release 1.1.0
+reverted back to simpler form as manipulating the env vars of PUB_CACHE and HOME where having some very wierd affects on dart an pub.
+test to dump out env vars.
+removed unused import.
+added getter for path env var.
+path reorg.
+removed testing log output.
+added test that directory exists.
+removed the clean. will do in docker.
+added call to TestPaths to each library to ensure they are initialised correctly.
+added test dshell/bin to front of path so unit tests find the correct version.
+changed back to a relative path.
+Added logic to do an install of dshell when the test suite starts.
+Fixed a bug where printerr was not writing a newline.
+Fixed the path to use the new TestPaths
+work on unit tests paths using ENV vars so we can run them safely on a local machine.
+created truepath method.
+added dart:io to default script.
+added dart.io to default script as it is very common in dshell scripts.
+correct the expected value.
+Created the class PubCache to proxy operations/access to .pub-cache. We now honour the PUB_CACHE environment variable.
+fixed some unit tests to run on CI server.
+release 1.1.0-dev.3
+Fixed a bug where a simple file name match was failing. Also improved performance.
+
+### 1.1.2-dev.4
+released 1.1.2-dev.2
+script to add a local dshell override.
+formatting
+[ENH] changed pipeTo to pipe both stdout and stderr to the next process.
+fixed minor typo.
+Added logic to sett the Settings() scriptPath on start.
+[FIX] Ask with the hidden option now checks if a terminal is present and if not doesn't try to use the hidden feature.
+[ENH] improved performance of dshell clean by suppressing the compile executaable option which was re-compiling dshell each time.
+Moved start logic into Run class.
+[ENH] activate local now assumes it is run from the tools directory and goes looking for the correct dshell path.
+removed unused import.
+[ENH moved the start logic into the Run class and change the default operation of start so that it ouputs the process writes unless the process is started detached.
+[ENH] add property to return the scripts path.
+[FIX] dependencies don't recognize ~ so changed to full path.
+Renamed line to value to better reflect its contents.
+Moved process related methods into own class.
+[FIX] change <group> to <user> in permission line so it was more obvious that the group owner was the user.
+[FIX} Changed log.e to printerr as was a true error.
+[TEST] Test code for processing pipes as binary data and streaming stderr to stdin for pipes.
+[ENH] added logic to format code before releasing it.
+[FIX] Changed log.d to settings.verbose as i should be.
+[ENH] New tool to allow dshell developer to run from the local source.
+[FMT] Formatting.
+[FIX] improvements to the shell detection and install logic. code was adding tab complete to zsh which doesn't use the same mechanism as bash.
+[FIX] added required path var and remove extranious lines.
+[FIX] updated name of docker file to match actual file for install.clone.dart.
+Test for binary piping  of stdout and stderr.
+formatting
+experiment with vscode console:terminal setting.
+released ## 1.1.2-dev.1
+[ENH] Added verbose logging to  process.start
+change the tagname created to match the pubspec version no. as required by pub.dev.
+[FIX] NPE if USERNAME environment variable is missing.
+[FIX] Spelling.
+documentation improvements.
+[ENH] work on an automated release script.
+[FIX] removed an unecessary getter.
+[TEST] additional unit tests for path overrides.
+[ENH] added an option to pass a working directory to the start command.
+[DOC] improvements.
+[FIX] bug in parser that didn't handle quotes within a word.
+[FIX] renamed method from loadFromFile to fromFile to be more consistent.
+[DOC] improved documentation.
+Added optoin to load globaldependeies from a specific path for testing.
+ran drtformat.
+released 1.1.1
+changes to accomodate the new start logic. Pipes need to be wired immediately.
+added convenience method lastLine.
+coloured the command required to install tab completion.
+improved formatting fixed a couple npes.
+changed to passing a Progress. Fixed a bug where we were not waiting for the start future and the exist future separately. The result is that an exception could be thrown outside of the watiForEx scope. This result in an uncaught exception occuring on the microtask stack. The end result was tha the shell shutdown in an uncontrolled manner if an exe failed to start.
+added unit tests for firstLine and lastLine.
+exposed devNull so it could be used by other functions. Changed toList to include but stdout and stderr as that appears to be what users are expecting.
+changed to use the standard RunnableProcess rather than its own custom code.
+Changed processUntilExit to take a Progress rather than individual action so it could be used bu additional functions.
+test code used to understand with with .run.
+exposed DartSdk class as it has a no. of useful methods.
+changed to correct docker file.
+added catch blocks incase ps not supported and some lgging. Implemented new method to get the shell .rc file.
+Added shell .rc file to output.
+Fixed a bug where when running dshell directly the shell was reported incorrectly.
+removed any the usersname and home directory from the output.
+work on improving the logic to install dshell to the path.
+renamed PID to SHELL
+removed unused import.
+ran dartfmt over code.
+Merge branch 'master' of github.com:bsutton/dshell
+released 1.1.1-dev.2
+removed unsed import.
+added logic to dectect the shell and install the paths accordingly.
+removed unfinished code.
+scritp to activate dshell on you local path when you are contributing to dshell.
+typeo.
+added pid class to export list.
+added log of 'real' shell.
+Update run_unit_tests.yml
+Update run_unit_tests.yml
+Delete dart.yml
+Rename run_unit_tests to run_unit_tests.yml
+Create run_unit_tests
+created a helper to access PID data.
+added firstLine
+wrote a tool to run unit tests serially as vscode runs two isolites.
+Added new method firstLine which retuns just the first line writtent to stdout.
+Fixe for #45 - but I don't have a mac so can't test it.
+experimental tool to automate release of dshel
+release 1.1.0
+reverted back to simpler form as manipulating the env vars of PUB_CACHE and HOME where having some very wierd affects on dart an pub.
+test to dump out env vars.
+removed unused import.
+added getter for path env var.
+path reorg.
+removed testing log output.
+added test that directory exists.
+removed the clean. will do in docker.
+added call to TestPaths to each library to ensure they are initialised correctly.
+added test dshell/bin to front of path so unit tests find the correct version.
+changed back to a relative path.
+Added logic to do an install of dshell when the test suite starts.
+Fixed a bug where printerr was not writing a newline.
+Fixed the path to use the new TestPaths
+work on unit tests paths using ENV vars so we can run them safely on a local machine.
+created truepath method.
+added dart:io to default script.
+added dart.io to default script as it is very common in dshell scripts.
+correct the expected value.
+Created the class PubCache to proxy operations/access to .pub-cache. We now honour the PUB_CACHE environment variable.
+fixed some unit tests to run on CI server.
+release 1.1.0-dev.3
+Fixed a bug where a simple file name match was failing. Also improved performance.
+
+### 1.1.2-dev.3
+released 1.1.2-dev.2
+script to add a local dshell override.
+formatting
+[ENH] changed pipeTo to pipe both stdout and stderr to the next process.
+fixed minor typo.
+Added logic to sett the Settings() scriptPath on start.
+[FIX] Ask with the hidden option now checks if a terminal is present and if not doesn't try to use the hidden feature.
+[ENH] improved performance of dshell clean by suppressing the compile executaable option which was re-compiling dshell each time.
+Moved start logic into Run class.
+[ENH] activate local now assumes it is run from the tools directory and goes looking for the correct dshell path.
+removed unused import.
+[ENH moved the start logic into the Run class and change the default operation of start so that it ouputs the process writes unless the process is started detached.
+[ENH] add property to return the scripts path.
+[FIX] dependencies don't recognize ~ so changed to full path.
+Renamed line to value to better reflect its contents.
+Moved process related methods into own class.
+[FIX] change <group> to <user> in permission line so it was more obvious that the group owner was the user.
+[FIX} Changed log.e to printerr as was a true error.
+[TEST] Test code for processing pipes as binary data and streaming stderr to stdin for pipes.
+[ENH] added logic to format code before releasing it.
+[FIX] Changed log.d to settings.verbose as i should be.
+[ENH] New tool to allow dshell developer to run from the local source.
+[FMT] Formatting.
+[FIX] improvements to the shell detection and install logic. code was adding tab complete to zsh which doesn't use the same mechanism as bash.
+[FIX] added required path var and remove extranious lines.
+[FIX] updated name of docker file to match actual file for install.clone.dart.
+Test for binary piping  of stdout and stderr.
+formatting
+experiment with vscode console:terminal setting.
+released ## 1.1.2-dev.1
+[ENH] Added verbose logging to  process.start
+change the tagname created to match the pubspec version no. as required by pub.dev.
+[FIX] NPE if USERNAME environment variable is missing.
+[FIX] Spelling.
+documentation improvements.
+[ENH] work on an automated release script.
+[FIX] removed an unecessary getter.
+[TEST] additional unit tests for path overrides.
+[ENH] added an option to pass a working directory to the start command.
+[DOC] improvements.
+[FIX] bug in parser that didn't handle quotes within a word.
+[FIX] renamed method from loadFromFile to fromFile to be more consistent.
+[DOC] improved documentation.
+Added optoin to load globaldependeies from a specific path for testing.
+ran drtformat.
+released 1.1.1
+changes to accomodate the new start logic. Pipes need to be wired immediately.
+added convenience method lastLine.
+coloured the command required to install tab completion.
+improved formatting fixed a couple npes.
+changed to passing a Progress. Fixed a bug where we were not waiting for the start future and the exist future separately. The result is that an exception could be thrown outside of the watiForEx scope. This result in an uncaught exception occuring on the microtask stack. The end result was tha the shell shutdown in an uncontrolled manner if an exe failed to start.
+added unit tests for firstLine and lastLine.
+exposed devNull so it could be used by other functions. Changed toList to include but stdout and stderr as that appears to be what users are expecting.
+changed to use the standard RunnableProcess rather than its own custom code.
+Changed processUntilExit to take a Progress rather than individual action so it could be used bu additional functions.
+test code used to understand with with .run.
+exposed DartSdk class as it has a no. of useful methods.
+changed to correct docker file.
+added catch blocks incase ps not supported and some lgging. Implemented new method to get the shell .rc file.
+Added shell .rc file to output.
+Fixed a bug where when running dshell directly the shell was reported incorrectly.
+removed any the usersname and home directory from the output.
+work on improving the logic to install dshell to the path.
+renamed PID to SHELL
+removed unused import.
+ran dartfmt over code.
+Merge branch 'master' of github.com:bsutton/dshell
+released 1.1.1-dev.2
+removed unsed import.
+added logic to dectect the shell and install the paths accordingly.
+removed unfinished code.
+scritp to activate dshell on you local path when you are contributing to dshell.
+typeo.
+added pid class to export list.
+added log of 'real' shell.
+Update run_unit_tests.yml
+Update run_unit_tests.yml
+Delete dart.yml
+Rename run_unit_tests to run_unit_tests.yml
+Create run_unit_tests
+created a helper to access PID data.
+added firstLine
+wrote a tool to run unit tests serially as vscode runs two isolites.
+Added new method firstLine which retuns just the first line writtent to stdout.
+Fixe for #45 - but I don't have a mac so can't test it.
+experimental tool to automate release of dshel
+release 1.1.0
+reverted back to simpler form as manipulating the env vars of PUB_CACHE and HOME where having some very wierd affects on dart an pub.
+test to dump out env vars.
+removed unused import.
+added getter for path env var.
+path reorg.
+removed testing log output.
+added test that directory exists.
+removed the clean. will do in docker.
+added call to TestPaths to each library to ensure they are initialised correctly.
+added test dshell/bin to front of path so unit tests find the correct version.
+changed back to a relative path.
+Added logic to do an install of dshell when the test suite starts.
+Fixed a bug where printerr was not writing a newline.
+Fixed the path to use the new TestPaths
+work on unit tests paths using ENV vars so we can run them safely on a local machine.
+created truepath method.
+added dart:io to default script.
+added dart.io to default script as it is very common in dshell scripts.
+correct the expected value.
+Created the class PubCache to proxy operations/access to .pub-cache. We now honour the PUB_CACHE environment variable.
+fixed some unit tests to run on CI server.
+release 1.1.0-dev.3
+Fixed a bug where a simple file name match was failing. Also improved performance.
+
+### 1.1.2-dev.2
+released 1.1.2-dev.2
+script to add a local dshell override.
+formatting
+[ENH] changed pipeTo to pipe both stdout and stderr to the next process.
+fixed minor typo.
+Added logic to sett the Settings() scriptPath on start.
+[FIX] Ask with the hidden option now checks if a terminal is present and if not doesn't try to use the hidden feature.
+[ENH] improved performance of dshell clean by suppressing the compile executaable option which was re-compiling dshell each time.
+Moved start logic into Run class.
+[ENH] activate local now assumes it is run from the tools directory and goes looking for the correct dshell path.
+removed unused import.
+[ENH moved the start logic into the Run class and change the default operation of start so that it ouputs the process writes unless the process is started detached.
+[ENH] add property to return the scripts path.
+[FIX] dependencies don't recognize ~ so changed to full path.
+Renamed line to value to better reflect its contents.
+Moved process related methods into own class.
+[FIX] change <group> to <user> in permission line so it was more obvious that the group owner was the user.
+[FIX} Changed log.e to printerr as was a true error.
+[TEST] Test code for processing pipes as binary data and streaming stderr to stdin for pipes.
+[ENH] added logic to format code before releasing it.
+[FIX] Changed log.d to settings.verbose as i should be.
+[ENH] New tool to allow dshell developer to run from the local source.
+[FMT] Formatting.
+[FIX] improvements to the shell detection and install logic. code was adding tab complete to zsh which doesn't use the same mechanism as bash.
+[FIX] added required path var and remove extranious lines.
+[FIX] updated name of docker file to match actual file for install.clone.dart.
+Test for binary piping  of stdout and stderr.
+formatting
+experiment with vscode console:terminal setting.
+released ## 1.1.2-dev.1
+[ENH] Added verbose logging to  process.start
+change the tagname created to match the pubspec version no. as required by pub.dev.
+[FIX] NPE if USERNAME environment variable is missing.
+[FIX] Spelling.
+documentation improvements.
+[ENH] work on an automated release script.
+[FIX] removed an unecessary getter.
+[TEST] additional unit tests for path overrides.
+[ENH] added an option to pass a working directory to the start command.
+[DOC] improvements.
+[FIX] bug in parser that didn't handle quotes within a word.
+[FIX] renamed method from loadFromFile to fromFile to be more consistent.
+[DOC] improved documentation.
+Added optoin to load globaldependeies from a specific path for testing.
+ran drtformat.
+released 1.1.1
+changes to accomodate the new start logic. Pipes need to be wired immediately.
+added convenience method lastLine.
+coloured the command required to install tab completion.
+improved formatting fixed a couple npes.
+changed to passing a Progress. Fixed a bug where we were not waiting for the start future and the exist future separately. The result is that an exception could be thrown outside of the watiForEx scope. This result in an uncaught exception occuring on the microtask stack. The end result was tha the shell shutdown in an uncontrolled manner if an exe failed to start.
+added unit tests for firstLine and lastLine.
+exposed devNull so it could be used by other functions. Changed toList to include but stdout and stderr as that appears to be what users are expecting.
+changed to use the standard RunnableProcess rather than its own custom code.
+Changed processUntilExit to take a Progress rather than individual action so it could be used bu additional functions.
+test code used to understand with with .run.
+exposed DartSdk class as it has a no. of useful methods.
+changed to correct docker file.
+added catch blocks incase ps not supported and some lgging. Implemented new method to get the shell .rc file.
+Added shell .rc file to output.
+Fixed a bug where when running dshell directly the shell was reported incorrectly.
+removed any the usersname and home directory from the output.
+work on improving the logic to install dshell to the path.
+renamed PID to SHELL
+removed unused import.
+ran dartfmt over code.
+Merge branch 'master' of github.com:bsutton/dshell
+released 1.1.1-dev.2
+removed unsed import.
+added logic to dectect the shell and install the paths accordingly.
+removed unfinished code.
+scritp to activate dshell on you local path when you are contributing to dshell.
+typeo.
+added pid class to export list.
+added log of 'real' shell.
+Update run_unit_tests.yml
+Update run_unit_tests.yml
+Delete dart.yml
+Rename run_unit_tests to run_unit_tests.yml
+Create run_unit_tests
+created a helper to access PID data.
+added firstLine
+wrote a tool to run unit tests serially as vscode runs two isolites.
+Added new method firstLine which retuns just the first line writtent to stdout.
+Fixe for #45 - but I don't have a mac so can't test it.
+experimental tool to automate release of dshel
+release 1.1.0
+reverted back to simpler form as manipulating the env vars of PUB_CACHE and HOME where having some very wierd affects on dart an pub.
+test to dump out env vars.
+removed unused import.
+added getter for path env var.
+path reorg.
+removed testing log output.
+added test that directory exists.
+removed the clean. will do in docker.
+added call to TestPaths to each library to ensure they are initialised correctly.
+added test dshell/bin to front of path so unit tests find the correct version.
+changed back to a relative path.
+Added logic to do an install of dshell when the test suite starts.
+Fixed a bug where printerr was not writing a newline.
+Fixed the path to use the new TestPaths
+work on unit tests paths using ENV vars so we can run them safely on a local machine.
+created truepath method.
+added dart:io to default script.
+added dart.io to default script as it is very common in dshell scripts.
+correct the expected value.
+Created the class PubCache to proxy operations/access to .pub-cache. We now honour the PUB_CACHE environment variable.
+fixed some unit tests to run on CI server.
+release 1.1.0-dev.3
+Fixed a bug where a simple file name match was failing. Also improved performance.
+
 ### 1.1.2-dev.2
 script to add a local dshell override.
 formatting
