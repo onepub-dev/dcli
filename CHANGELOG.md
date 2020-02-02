@@ -1,3 +1,49 @@
+### 1.1.2-dev.2
+script to add a local dshell override.
+formatting
+[ENH] changed pipeTo to pipe both stdout and stderr to the next process.
+fixed minor typo.
+Added logic to sett the Settings() scriptPath on start.
+[FIX] Ask with the hidden option now checks if a terminal is present and if not doesn't try to use the hidden feature.
+[ENH] improved performance of dshell clean by suppressing the compile executaable option which was re-compiling dshell each time.
+Moved start logic into Run class.
+[ENH] activate local now assumes it is run from the tools directory and goes looking for the correct dshell path.
+removed unused import.
+[ENH moved the start logic into the Run class and change the default operation of start so that it ouputs the process writes unless the process is started detached.
+[ENH] add property to return the scripts path.
+[FIX] dependencies don't recognize ~ so changed to full path.
+Renamed line to value to better reflect its contents.
+Moved process related methods into own class.
+[FIX] change <group> to <user> in permission line so it was more obvious that the group owner was the user.
+[FIX} Changed log.e to printerr as was a true error.
+[TEST] Test code for processing pipes as binary data and streaming stderr to stdin for pipes.
+[ENH] added logic to format code before releasing it.
+[FIX] Changed log.d to settings.verbose as i should be.
+[ENH] New tool to allow dshell developer to run from the local source.
+[FMT] Formatting.
+[FIX] improvements to the shell detection and install logic. code was adding tab complete to zsh which doesn't use the same mechanism as bash.
+[FIX] added required path var and remove extranious lines.
+[FIX] updated name of docker file to match actual file for install.clone.dart.
+Test for binary piping  of stdout and stderr.
+formatting
+experiment with vscode console:terminal setting.
+released ## 1.1.2-dev.1
+[ENH] Added verbose logging to  process.start
+change the tagname created to match the pubspec version no. as required by pub.dev.
+[FIX] NPE if USERNAME environment variable is missing.
+[FIX] Spelling.
+documentation improvements.
+[ENH] work on an automated release script.
+[FIX] removed an unecessary getter.
+[TEST] additional unit tests for path overrides.
+[ENH] added an option to pass a working directory to the start command.
+[DOC] improvements.
+[FIX] bug in parser that didn't handle quotes within a word.
+[FIX] renamed method from loadFromFile to fromFile to be more consistent.
+[DOC] improved documentation.
+Added optoin to load globaldependeies from a specific path for testing.
+ran drtformat.
+r
 ## 1.1.2-dev.1
 Fix for NPE in doctor when username env variable not available.
 Added verbose logging to Process.start.
