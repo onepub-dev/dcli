@@ -57,7 +57,7 @@ class PubSpecImpl implements PubSpec {
   Version get version => pubspec.version;
 
   @override
-  set version(Version version) => pubspec.copy(version: version);
+  set version(Version version) => pubspec = pubspec.copy(version: version);
 
   @override
   set dependencies(List<Dependency> dependencies) {
