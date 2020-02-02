@@ -138,7 +138,7 @@ class Ask extends DShellFunction {
   }
 
   String readHidden() {
-    var line = <int>[];
+    var value = <int>[];
 
     try {
       stdin.echoMode = false;
@@ -150,7 +150,7 @@ class Ask extends DShellFunction {
           stdout.write('*');
           // we must wait for flush as only one flush can be outstanding at a time.
           waitForEx<void>(stdout.flush());
-          line.add(char);
+          value.add(char);
         }
       } while (char != 10);
     } finally {
@@ -160,6 +160,8 @@ class Ask extends DShellFunction {
 
     // output a newline as we have suppressed it.
     print('');
-    return Encoding.getByName('utf-8').decode(line);
+
+    // return the entered value as a String.
+    return Encoding.getByName('utf-8').decode(value);
   }
 }
