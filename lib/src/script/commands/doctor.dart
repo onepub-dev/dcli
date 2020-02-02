@@ -94,8 +94,8 @@ class DoctorCommand extends Command {
     print('');
     print('.dshell/dependencies.yaml');
     var gd = GlobalDependencies();
-    gd.dependencies.forEach((d) =>
-        colprint('  ${d.name}', '${d.isPath ? privatePath(d.path) : d.version}'));
+    gd.dependencies.forEach((d) => colprint(
+        '  ${d.name}', '${d.isPath ? privatePath(d.path) : d.version}'));
 
     if (showScriptDetails) {
       script.doctor;
