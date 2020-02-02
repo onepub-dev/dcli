@@ -26,7 +26,10 @@ Progress start(String command,
         bool runInShell = false,
         bool detached = false,
         String workingDirectory}) =>
-    Run().start(command, progress: progress, runInShell: runInShell);
+    Run().start(command,
+        progress: progress,
+        runInShell: runInShell,
+        workingDirectory: workingDirectory);
 
 class Run extends DShellFunction {
   RunnableProcess runnable;
