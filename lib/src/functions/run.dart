@@ -21,6 +21,13 @@ import 'dshell_function.dart';
 Progress run(String command, {Progress progress, bool runInShell = false}) =>
     Run().run(command, progress: progress, runInShell: runInShell);
 
+Progress start(String command,
+        {Progress progress,
+        bool runInShell = false,
+        bool detached = false,
+        String workingDirectory}) =>
+    Run().start(command, progress: progress, runInShell: runInShell);
+
 class Run extends DShellFunction {
   RunnableProcess runnable;
 
@@ -33,6 +40,28 @@ class Run extends DShellFunction {
       runnable = RunnableProcess(command);
       runnable.start(runInShell: runInShell);
       runnable.processUntilExit(forEach);
+    } finally {
+      forEach.close();
+    }
+    return forEach;
+  }
+
+  Progress start(String command,
+      {Progress progress,
+      bool runInShell = false,
+      bool detached = false,
+      String workingDirectory}) {
+    Progress forEach;
+
+    try {
+      forEach = progress ??
+          Progress((line) => print(line), stderr: (line) => printerr(line));
+      var process =
+          RunnableProcess(command, workingDirectory: workingDirectory);
+      process.start(runInShell: runInShell, detached: detached);
+      if (detached == false) {
+        process.processUntilExit(forEach);
+      }
     } finally {
       forEach.close();
     }
