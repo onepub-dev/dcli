@@ -72,44 +72,6 @@ bool confirm({String prompt}) {
   return result;
 }
 
-///
-/// Launches the systems default cli editor on Linux and MacOS
-/// using the EDITOR environment variable.
-/// If the EDITOR environment variable isn't found then
-/// we check for the VISUAL environment variable.
-/// If neither is found we use vi.
-///
-/// On Windows we launch notepad.
-///
-/// EXPERIMENTAL - does not work, do not use.
-void showEditor(String path) {
-  String editor;
-
-  if (Platform.isWindows) {
-    editor = 'notepad.exe';
-  } else {
-    editor = env('EDITOR');
-    editor ??= env('VISIBLE');
-    editor ??= 'vi';
-  }
-
-  // https://github.com/git/git/blob/master/editor.c
-  print('running $editor $path');
-  '$editor $path'.start(runInShell: true);
-
-  //(stdioType(stdin) == StdioType.terminal
-
-  // waitFor<void>(Process.start(editor, [path]).then((process) {
-  //   stdin.pipe(process.stdin);
-  // }));
-}
-
-bool isTerminalDumb() {
-  {
-    var terminal = env('TERM');
-    return terminal == null || terminal == 'dumb';
-  }
-}
 
 class Ask extends DShellFunction {
   ///

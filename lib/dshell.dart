@@ -11,11 +11,13 @@ export 'src/functions/env.dart' show env, HOME, PATH, isOnPath, setEnv, envs;
 export 'src/functions/fileList.dart' show fileList;
 export 'src/util/file_sync.dart';
 export 'src/util/dshell_exception.dart';
+
 export 'src/functions/find.dart' show find;
 export 'src/functions/head.dart' show head;
 export 'src/functions/is.dart' show isFile, isDirectory, exists;
 export 'src/functions/create_dir.dart' show createDir, CreateDirException;
 export 'src/functions/move.dart' show move, MoveException;
+export 'src/util/editor.dart' show showEditor;
 export 'src/util/file_sort.dart' show FileSort, Column;
 
 export 'package:path/path.dart'
