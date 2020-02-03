@@ -84,6 +84,8 @@ void checkCommited() {
   if (notCommited.isNotEmpty) {
     print('You have uncommited files');
     if (confirm(prompt: 'Do you want to list them (Y/N):')) {
+      // we get the list again as the user is likely to have committed files after seeing the question.
+      notCommited = 'git status --porcelain'.toList();
       print(notCommited.join('\n'));
     }
     if (!confirm(prompt: 'Do you want to continue with the release (Y/N)')) {
@@ -230,8 +232,6 @@ Version incrementVersion(
 
     version = Version.parse(versionString);
   }
-
-  version = Version.parse('1.1.2-dev.4');
 
   print('The accepted version is: $version');
 
