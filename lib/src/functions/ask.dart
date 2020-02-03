@@ -6,11 +6,9 @@ import 'package:dshell/src/util/waitForEx.dart';
 import '../settings.dart';
 
 import '../util/log.dart';
-import '../util/string_as_process.dart';
 
 import 'dshell_function.dart';
 import 'echo.dart';
-import 'env.dart';
 
 ///
 /// Reads a line of text from stdin with an optional prompt.
@@ -39,8 +37,6 @@ import 'env.dart';
 /// a standard ask input in which case the hidden characters WILL BE DISPLAYED
 /// as they are typed.
 ///
-/// TODO: work out why we aren't detecting a terminal when running under
-/// dshell (and I assume the sh created by the #! env setting)
 ///
 String ask({String prompt, bool toLower = false, bool hidden = false}) =>
     Ask().ask(prompt: prompt, toLower: toLower, hidden: hidden);
