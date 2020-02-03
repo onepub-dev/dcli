@@ -1,3 +1,7 @@
+### 1.1.3
+added terminal flag to pub publish start so it can ask user to publish.
+removed unused imports.
+
 ### 1.1.2
 added missing default value for terminal.
 removed unused import.
