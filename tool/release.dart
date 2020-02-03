@@ -71,7 +71,7 @@ void main(List<String> args) {
 void publish(String pubspecPath) {
   var projectRoot = dirname(pubspecPath);
 
-  'pub publish'.start(workingDirectory: projectRoot);
+  'pub publish'.start(workingDirectory: projectRoot, terminal:true);
 }
 
 void pushRelease() {
