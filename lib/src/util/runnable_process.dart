@@ -62,7 +62,7 @@ class RunnableProcess {
       {bool runInShell = false,
       bool detached = false,
       bool waitForStart = true,
-      bool terminal}) {
+      bool terminal = false}) {
     var workdir = workingDirectory;
     workdir ??= Directory.current.path;
 
@@ -93,9 +93,7 @@ class RunnableProcess {
     // if the start fails we get a clean exception
     // by waiting here.
     if (waitForStart) {
-      print('waiting for start $cmdLine');
       _waitForStart();
-      print('finished  start $cmdLine');
     }
   }
 
