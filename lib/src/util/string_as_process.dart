@@ -18,13 +18,13 @@ extension StringAsProcess on String {
   /// Any output from the command is displayed on the console.
   ///
   /// ```dart
-  /// 'zip regions.txt regions.zip'.run
+  /// 'zip regions.txt regions.zip'.run;
   /// ```
   ///
   /// If you need to pass an argument to your application that contains spaces then use nested quotes:
   ///e.g.
   ///  ```dart
-  ///  'wc "fred nurk.text"'.run
+  ///  'wc "fred nurk.text"'.run;
   ///```
   ///
   /// See [forEach] to capture output to stdout and stderr
@@ -49,13 +49,13 @@ extension StringAsProcess on String {
   ///
   ///
   /// ```dart
-  /// 'zip regions.txt regions.zip'.run
+  /// 'zip regions.txt regions.zip'.shell;
   /// ```
   ///
   /// If you need to pass an argument to your application that contains spaces then use nested quotes:
   ///e.g.
   ///  ```dart
-  ///  'wc "fred nurk.text"'.run
+  ///  'wc "fred nurk.text"'.shell;
   ///```
   ///
   /// See [forEach] to capture output to stdout and stderr
@@ -72,6 +72,14 @@ extension StringAsProcess on String {
   ///    [runInShell] defaults to false.
   /// Use [detached] to start the application as a fully
   /// detached subprocess.
+  ///
+  /// Use [terminal] when you need the process attached to a terminal.
+  /// When attached to a terminal you will not be able to process
+  /// any of the output from the child process.
+  /// (e.g. forEach won't work.)
+  ///
+  /// You can NOT use [terminal] and [detached] at the same time.
+  ///
   /// Use [workingDirectory] to specify the directory the process should
   /// be run from.
   /// You cannot process output from a detached process
@@ -83,7 +91,7 @@ extension StringAsProcess on String {
   /// If you need to pass an argument to your application that contains spaces then use nested quotes:
   ///e.g.
   ///  ```dart
-  ///  'wc "fred nurk.text"'.run;
+  ///  'wc "fred nurk.text"'.start(terminal: true);
   ///```
   ///
   /// See  [run] if you just need to run a process with all the defaults.
@@ -96,12 +104,14 @@ extension StringAsProcess on String {
       {Progress progress,
       bool runInShell = false,
       bool detached = false,
+      bool terminal = false,
       String workingDirectory}) {
     cmd.start(this,
         progress:
             Progress((line) => print(line), stderr: (line) => printerr(line)),
         runInShell: runInShell,
         detached: detached,
+        terminal: terminal,
         workingDirectory: workingDirectory);
   }
 
@@ -123,7 +133,7 @@ extension StringAsProcess on String {
   /// If you need to pass an argument to your application that contains spaces then use nested quotes:
   ///e.g.
   ///  ```dart
-  ///  'wc "fred nurk.text"'.run
+  ///  'wc "fred nurk.text"'.run;
   ///```
   ///
   /// See [run] if you don't care about capturing output

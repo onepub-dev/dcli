@@ -61,11 +61,18 @@ class RunnableProcess {
   void start(
       {bool runInShell = false,
       bool detached = false,
-      bool waitForStart = true}) {
+      bool waitForStart = true,
+      bool terminal}) {
     var workdir = workingDirectory;
     workdir ??= Directory.current.path;
 
+    assert(!(terminal == true && detached == true),
+        'You cannot enable terminal and detached at the same time');
+
     var mode = detached ? ProcessStartMode.detached : ProcessStartMode.normal;
+    if (terminal) {
+      mode = ProcessStartMode.inheritStdio;
+    }
 
     if (Settings().isVerbose) {
       Settings().verbose(
@@ -86,7 +93,9 @@ class RunnableProcess {
     // if the start fails we get a clean exception
     // by waiting here.
     if (waitForStart) {
+      print('waiting for start $cmdLine');
       _waitForStart();
+      print('finished  start $cmdLine');
     }
   }
 
@@ -99,6 +108,21 @@ class RunnableProcess {
       complete.completeError(e);
     });
     waitForEx<Process>(complete.future);
+  }
+
+  /// Waits for the process to exit
+  /// We use this method when we can't or don't
+  /// want to process IO.
+  /// The main use is when using start(terminal:true).
+  /// We don't have access to any IO so we just
+  /// have to wait for things to finish.
+  int waitForExit() {
+    var exited = Completer<int>();
+    fProcess.then((process) {
+      var exitCode = waitForEx<int>(process.exitCode);
+      exited.complete(exitCode);
+    });
+    return waitForEx<int>(exited.future);
   }
 
   void pipeTo(RunnableProcess stdin) {
