@@ -72,7 +72,6 @@ bool confirm({String prompt}) {
   return result;
 }
 
-
 class Ask extends DShellFunction {
   ///
   /// Reads user input from stdin and returns it as a string.

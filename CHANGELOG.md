@@ -1,3 +1,11 @@
+### 1.1.2
+added missing default value for terminal.
+removed unused import.
+[ENH] showEditor which will launch a system terminal.
+[ENH] added terminal option to start.
+added logic to retrieve the uncommited lists a second time.
+[FIX] fixed a bug where dshell wasn't passing tty down to a spawned process.
+
 ### 1.1.2-dev-5
 formatting.
 [ENH] dshell doctor now dumps .dshell/dependencies.yaml and can dump the details of a script.
