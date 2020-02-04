@@ -6,6 +6,7 @@ import 'package:dshell/dshell.dart';
 import 'package:dshell/src/util/waitForEx.dart';
 
 void main() {
+  print('child: has terminal: ${stdin.hasTerminal}');
   print('confirmed: ${confirm(prompt: "Do you agree?")}');
 
   print("user: ${ask(prompt: 'username:', toLower: true)}");
