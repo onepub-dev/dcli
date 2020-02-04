@@ -1,3 +1,12 @@
+### 1.2.0
+[ENH] toList now has optoin to skipLines to help bypass lists with a heading.
+[ENH] changed run so that it always is attached to a terminal.
+added another log message. tests scripts for terminal access.
+[ENH] exposed experimental ProcessHelper.
+Added ability to skip the first 'n' lines on toList.
+added experimental note.
+[ENH] add arg to skip the first 'n' lines from a list.
+
 ### 1.1.3
 added terminal flag to pub publish start so it can ask user to publish.
 removed unused imports.
