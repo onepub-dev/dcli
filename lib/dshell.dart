@@ -19,6 +19,7 @@ export 'src/functions/create_dir.dart' show createDir, CreateDirException;
 export 'src/functions/move.dart' show move, MoveException;
 export 'src/util/editor.dart' show showEditor;
 export 'src/util/file_sort.dart' show FileSort, Column;
+export 'src/util/process_helper.dart' show ProcessHelper;
 
 export 'package:path/path.dart'
     hide
