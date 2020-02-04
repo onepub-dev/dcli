@@ -160,8 +160,8 @@ extension StringAsProcess on String {
   ///     [start] - to run the process fully detached.
   ///     [firstLine] - returns just the first line written to stdout or stderr.
   ///     [lastLine] - returns just the last line written to stdout or stderr.
-  List<String> toList({bool runInShell = false}) {
-    return cmd.run(this, runInShell: runInShell).toList();
+  List<String> toList({bool runInShell = false, int skipLines = 0}) {
+    return cmd.run(this, runInShell: runInShell).toList(skipLines: skipLines);
   }
 
   /// [firstLine] treats the String [this] as a cli process and
