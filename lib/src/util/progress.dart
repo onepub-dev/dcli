@@ -72,12 +72,23 @@ class Progress {
   }
 
   /// Returns stdout and stderr lines as a list.
+  ///
+  /// If you pass a non-zero value to [skipLines]
+  /// then the list will skip over the first [skipLines] count;
+  /// [skipLines] must be +ve.
+  ///
   /// See [firstLine]
   ///     [forEach]
-  List<String> toList() {
+  List<String> toList({int skipLines = 0}) {
     var lines = <String>[];
 
-    forEach((line) => lines.add(line), stderr: (line) => lines.add(line));
+    forEach((line) => lines.add(line), stderr: (line) {
+      if (skipLines > 0) {
+        skipLines--;
+      } else {
+        lines.add(line);
+      }
+    });
     return lines;
   }
 
