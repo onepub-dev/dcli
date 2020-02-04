@@ -1,6 +1,10 @@
 import 'dart:io';
 import 'package:dshell/dshell.dart';
 
+///
+/// EXPERIMENTAL
+///
+/// This class is likely to change/replaced.
 class ProcessHelper {
   static final ProcessHelper _self = ProcessHelper._internal();
 
