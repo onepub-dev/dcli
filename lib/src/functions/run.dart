@@ -1,3 +1,4 @@
+
 import '../util/progress.dart';
 import '../util/runnable_process.dart';
 
@@ -65,15 +66,15 @@ class Run extends DShellFunction {
     try {
       forEach = progress ??
           Progress((line) => print(line), stderr: (line) => printerr(line));
-      var process =
+      var runnable =
           RunnableProcess(command, workingDirectory: workingDirectory);
-      process.start(
+      runnable.start(
           runInShell: runInShell, detached: detached, terminal: terminal);
       if (detached == false) {
         if (terminal == false) {
-          process.processUntilExit(forEach);
+          runnable.processUntilExit(forEach);
         } else {
-          process.waitForExit();
+          runnable.waitForExit();
         }
       }
     } finally {

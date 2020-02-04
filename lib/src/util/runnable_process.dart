@@ -118,7 +118,13 @@ class RunnableProcess {
     var exited = Completer<int>();
     fProcess.then((process) {
       var exitCode = waitForEx<int>(process.exitCode);
-      exited.complete(exitCode);
+
+      if (exitCode != 0) {
+        exited.completeError(RunException(exitCode,
+            'The command [$cmdLine] failed with exitCode: ${exitCode}'));
+      } else {
+        exited.complete(exitCode);
+      }
     });
     return waitForEx<int>(exited.future);
   }

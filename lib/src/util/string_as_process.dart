@@ -33,7 +33,8 @@ extension StringAsProcess on String {
   ///     [firstLine] - returns just the first line written to stdout or stderr.
   ///     [lastLine] - returns just the last line written to stdout or stderr.
   void get run {
-    cmd.run(this,
+    cmd.start(this,
+        terminal: true,
         progress:
             Progress((line) => print(line), stderr: (line) => printerr(line)));
   }
