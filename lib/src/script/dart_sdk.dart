@@ -78,10 +78,10 @@ class DartSdk {
   }
 
   static String _detect() {
-    var path = which('dart').firstLine;
+    var path = which('pub').firstLine;
 
     if (path != null) {
-      return dirname(which('dart').firstLine);
+      return dirname(dirname(path));
     } else {
       var executable = Platform.resolvedExecutable;
 
