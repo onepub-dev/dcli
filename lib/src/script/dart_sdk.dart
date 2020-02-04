@@ -78,23 +78,29 @@ class DartSdk {
   }
 
   static String _detect() {
-    var executable = Platform.resolvedExecutable;
+    var path = which('dart').firstLine;
 
-    final file = File(executable);
-    if (!file.existsSync()) {
-      throw dartSdkNotFound;
+    if (path != null) {
+      return dirname(which('dart').firstLine);
+    } else {
+      var executable = Platform.resolvedExecutable;
+
+      final file = File(executable);
+      if (!file.existsSync()) {
+        throw dartSdkNotFound;
+      }
+
+      var parent = file.absolute.parent;
+      parent = parent.parent;
+
+      final sdkPath = parent.path;
+      final dartApi = "${join(sdkPath, 'include', 'dart_api.h')}";
+      if (!File(dartApi).existsSync()) {
+        throw Exception('Cannot find Dart SDK!');
+      }
+
+      return sdkPath;
     }
-
-    var parent = file.absolute.parent;
-    parent = parent.parent;
-
-    final sdkPath = parent.path;
-    final dartApi = "${join(sdkPath, 'include', 'dart_api.h')}";
-    if (!File(dartApi).existsSync()) {
-      throw Exception('Cannot find Dart SDK!');
-    }
-
-    return sdkPath;
   }
 
   String get version {
