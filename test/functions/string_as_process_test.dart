@@ -141,6 +141,27 @@ void main() {
       });
     });
 
+    t.test('toList - skipLines', () {
+      TestZone().run(() {
+        var path = '/tmp/log/syslog';
+
+        if (exists(path)) {
+          deleteDir(dirname(path), recursive: true);
+        }
+        createDir(dirname(path), recursive: true);
+        touch(path, create: true);
+
+        path.truncate();
+
+        for (var i = 0; i < 10; i++) {
+          path.append('head $i');
+        }
+        var expected = ['head 1', 'head 2', 'head 3', 'head 4'];
+        var lines = 'head -n 5 $path'.toList(skipLines: 1);
+        t.expect(lines, t.equals(expected));
+      });
+    });
+
     t.test('forEach using runInShell', () {
       var found = false;
       'echo run test'.forEach((line) {

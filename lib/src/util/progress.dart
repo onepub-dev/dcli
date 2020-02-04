@@ -82,7 +82,13 @@ class Progress {
   List<String> toList({int skipLines = 0}) {
     var lines = <String>[];
 
-    forEach((line) => lines.add(line), stderr: (line) {
+    forEach((line) {
+      if (skipLines > 0) {
+        skipLines--;
+      } else {
+        lines.add(line);
+      }
+    }, stderr: (line) {
       if (skipLines > 0) {
         skipLines--;
       } else {
