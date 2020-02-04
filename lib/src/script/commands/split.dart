@@ -33,7 +33,7 @@ class SplitCommand extends Command {
     } else {
       copy(script.pubSpecPath, join(script.path, 'pubspec.yaml'));
       // now we need to disable the @pubspec annotation.
-      _replace(script.path, '@pubspec', '@disabled-pubspec');
+      replace(script.path, '@pubspec', '@disabled-pubspec');
       print('complete.');
     }
 
@@ -73,20 +73,6 @@ class SplitCommand extends Command {
     }
 
     return _compare(localPubspecPath, script.pubSpecPath);
-  }
-
-  void _replace(String path, String existing, String replacement) {
-    var tmp = '$path.tmp';
-    if (exists(tmp)) {
-      delete(tmp);
-    }
-    read(path).forEach((line) {
-      line = line.replaceFirst(existing, replacement);
-      tmp.append(line);
-    });
-    move(path, '$path.bak');
-    move(tmp, path);
-    delete('$path.bak');
   }
 
   bool _compare(String localPubspecPath, String pubSpecPath) {
