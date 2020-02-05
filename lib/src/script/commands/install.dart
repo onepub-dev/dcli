@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:dshell/dshell.dart';
 import 'package:dshell/src/functions/env.dart';
 import 'package:dshell/src/script/commands/clean_all.dart';
+import 'package:dshell/src/util/dart_install_apt.dart';
 import 'package:dshell/src/util/pub_cache.dart';
 import 'package:dshell/src/util/shell.dart';
 
@@ -71,6 +72,8 @@ class InstallCommand extends Command {
 
     print('Hang on a tick whilst we install dshell.');
     print('');
+
+    var dartWasInstalled = dartInstall();
     // Create the ~/.dshell root.
     if (!exists(Settings().dshellPath)) {
       print(blue('Creating ${Settings().dshellPath}'));
@@ -145,28 +148,37 @@ class InstallCommand extends Command {
     // print OS version.
     // print('Platform.version ${Platform.version}');
 
-    var dshellLocation = which('dshell', first: true).firstLine;
-    // check if dshell is on the path
-    if (dshellLocation == null) {
+    // If we just installed dart there is no pont
+    if (dartWasInstalled) {
       print('');
-      print('ERROR: dshell was not found on your path!');
-      print('Try to resolve the problem and then run dshell install again.');
-      print('dshell is normally located in ${PubCache().path}');
-
-      if (!PATH.contains(PubCache().path)) {
-        print('Your path does not contain ${PubCache().path}');
-      }
-      exit(1);
+      print(red('You need to restart your shell so the new paths can update'));
+      print('');
     } else {
-      var dshellPath = dshellLocation;
-      print(blue('dshell found in : ${dshellPath}.'));
+      var dshellLocation = which('dshell', first: true).firstLine;
+      // check if dshell is on the path
+      if (dshellLocation == null) {
+        print('');
+        print('ERROR: dshell was not found on your path!');
+        print("Try running 'pub global activate dshell' again.");
+        print('  otherwise');
+        print('Try to resolve the problem and then run dshell install again.');
+        print('dshell is normally located in ${PubCache().path}');
 
-      // link so all users can run dshell
-      // We use the location of dart exe and add dshell symlink
-      // to the same location.
-      // CONSIDER: this is going to require sudo to install???
-      //var linkPath = join(dirname(DartSdk().exePath), 'dshell');
-      //symlink(dshellPath, linkPath);
+        if (!PATH.contains(PubCache().path)) {
+          print('Your path does not contain ${PubCache().path}');
+        }
+        exit(1);
+      } else {
+        var dshellPath = dshellLocation;
+        print(blue('dshell found in : ${dshellPath}.'));
+
+        // link so all users can run dshell
+        // We use the location of dart exe and add dshell symlink
+        // to the same location.
+        // CONSIDER: this is going to require sudo to install???
+        //var linkPath = join(dirname(DartSdk().exePath), 'dshell');
+        //symlink(dshellPath, linkPath);
+      }
     }
     print('');
 
@@ -199,6 +211,10 @@ class InstallCommand extends Command {
   @override
   List<Flag> flags() {
     return installFlags;
+  }
+
+  bool dartInstall() {
+    return DartInstaller().installDart();
   }
 }
 
