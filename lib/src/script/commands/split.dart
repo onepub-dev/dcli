@@ -42,7 +42,8 @@ class SplitCommand extends Command {
 
   @override
   String description() =>
-      'Removes the pubspec annotation from your scripts and saves it to a pubspec.yaml file. Use this option when you project starts to grow.';
+      '''Removes the pubspec annotation from your scripts and saves it to a pubspec.yaml file. 
+   Use this option when you project starts to grow.''';
 
   @override
   String usage() => 'split <script path.dart>';

@@ -109,7 +109,8 @@ class DoctorCommand extends Command {
 
   @override
   String description() =>
-      """Running 'dshell doctor' provides diagnostic information on your install and optionally a specific script.""";
+      """Running 'dshell doctor' provides diagnostic information on your install 
+   and optionally a specific script.""";
 
   @override
   String usage() => 'doctor [<script path.dart>]';

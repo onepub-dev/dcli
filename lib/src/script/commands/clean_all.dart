@@ -18,7 +18,8 @@ class CleanAllCommand extends Command {
 
   @override
   String description() =>
-      "Delete the project cache for all scripts. The script's project cache will be rebuilt when the script is next run.";
+      '''Delete the project cache for all scripts. 
+   The script's project cache will be rebuilt when the script is next run.''';
 
   @override
   List<String> completion(String word) {
