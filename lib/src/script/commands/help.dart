@@ -51,7 +51,7 @@ class HelpCommand extends Command {
     print(
         '  dshell [${blue('flag, flag...')}] [${blue('command')}] [arguments...]');
     print('');
-    print(blue('flags:'));
+    print(blue('global flags:'));
     for (var flag in CommandLineRunner.globalFlags) {
       print('  ' + blue(flag.usage()));
       print('      ' + flag.description());

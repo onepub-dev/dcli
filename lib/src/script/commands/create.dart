@@ -6,7 +6,6 @@ import '../project_cache.dart';
 import 'package:path/path.dart' as p;
 
 import '../command_line_runner.dart';
-import '../flags.dart';
 import '../script.dart';
 import 'commands.dart';
 

@@ -176,7 +176,11 @@ class Settings {
 
   void verbose(String string) {
     if (isVerbose) {
-      print(string);
+      if (VerboseFlag().hasOption) {
+        VerboseFlag().option.append(string);
+      } else {
+        print(string);
+      }
     }
   }
 
