@@ -26,3 +26,4 @@ dev_dependencies:
 executables: 
   dshell: dshell
   dshell_complete: dshell_complete
+  dshell_install: dshell_install
