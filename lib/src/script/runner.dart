@@ -26,7 +26,7 @@ class ScriptRunner {
     vmArgs.addAll(scriptArguments);
 
     Settings().verbose(
-        'Executing: ${Platform.executable} $vmArgs, in: ${project.script.scriptDirectory}');
+        'Executing: ${DartSdk().dartPath} $vmArgs, in: ${project.script.scriptDirectory}');
 
     // Execute the script
     final process = waitFor<Process>(Process.start(Platform.executable, vmArgs,
