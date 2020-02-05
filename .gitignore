@@ -36,3 +36,6 @@ test/test_scripts/fred.dart
 test/test_scripts/help
 test/test_scripts/which
 test/test_scripts/which.dart
+bin/dshell_install
+bin/dshell
+example/dsort
