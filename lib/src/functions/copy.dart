@@ -20,7 +20,7 @@ import 'is.dart';
 ///
 /// If an error occurs a [CopyException] is thrown.
 void copy(String from, String to, {bool overwrite = false}) =>
-    Copy().copy(from, to);
+    Copy().copy(from, to, overwrite: overwrite);
 
 class Copy extends DShellFunction {
   void copy(String from, String to, {bool overwrite = false}) {
