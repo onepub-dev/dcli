@@ -1,5 +1,6 @@
 import '../../../dshell.dart';
 import '../../functions/is.dart';
+import '../flags.dart';
 import '../project_cache.dart';
 
 import 'package:path/path.dart' as p;
@@ -12,21 +13,52 @@ import 'commands.dart';
 class CreateCommand extends Command {
   static const String NAME = 'create';
 
+  List<Flag> createFlags = [ForegroundFlag()];
+
+  /// holds the set of flags passed to the compile command.
+  Flags flagSet = Flags();
+
   Script _script;
 
   CreateCommand() : super(NAME);
 
   @override
-  int run(List<Flag> selectedFlags, List<String> arguments) {
+  int run(List<Flag> selectedFlags, List<String> subarguments) {
     _initTemplates();
 
-    _script = validateArguments(selectedFlags, arguments);
+    var scriptIndex = 0;
+
+    // check for any flags
+    for (var i = 0; i < subarguments.length; i++) {
+      final subargument = subarguments[i];
+
+      if (Flags.isFlag(subargument)) {
+        var flag = flagSet.findFlag(subargument, createFlags);
+
+        if (flag != null) {
+          if (flagSet.isSet(flag)) {
+            throw DuplicateOptionsException(subargument);
+          }
+          flagSet.set(flag);
+          Settings().verbose('Setting flag: ${flag.name}');
+          continue;
+        } else {
+          throw UnknownFlag(subargument);
+        }
+      }
+      scriptIndex = i;
+
+      _script =
+          validateArguments(selectedFlags, subarguments.sublist(scriptIndex));
+      break;
+    }
 
     var body = _script.generateDefaultBody();
     _script.createDefaultFile(body);
 
     print('Creating project.');
-    ProjectCache().createProject(_script);
+    ProjectCache()
+        .createProject(_script, background: !flagSet.isSet(ForegroundFlag()));
 
     print('Making script executable');
     chmod(755, p.join(_script.scriptDirectory, _script.scriptname));
@@ -65,7 +97,7 @@ class CreateCommand extends Command {
       'Creates a script file with a default pubspec annotation and a main entry point.';
 
   @override
-  String usage() => 'create <script path.dart>';
+  String usage() => 'create [--foreground] <script path.dart>';
 
   @override
   List<String> completion(String word) {
@@ -74,6 +106,20 @@ class CreateCommand extends Command {
 
   @override
   List<Flag> flags() {
-    return [];
+    return createFlags;
+  }
+}
+
+class ForegroundFlag extends Flag {
+  static const NAME = 'foreground';
+
+  ForegroundFlag() : super(NAME);
+
+  @override
+  String get abbreviation => 'fg';
+
+  @override
+  String description() {
+    return '''Stops the create from running pub get in the background.''';
   }
 }

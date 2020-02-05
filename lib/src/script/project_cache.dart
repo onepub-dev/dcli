@@ -63,11 +63,13 @@ class ProjectCache {
 
   // Creates a project ready to run for
   // the given script.
-  // If the project already exists then it will
+  // If the project already exists then [it will
   // be refreshed if required.
-  VirtualProject createProject(Script script, {bool skipPubGet = false}) {
+  /// If [background] is true then the pub get is ran detached.
+  VirtualProject createProject(Script script,
+      {bool skipPubGet = false, bool background}) {
     var project = VirtualProject(Settings().dshellCachePath, script);
-    project.createProject(skipPubGet: skipPubGet);
+    project.createProject(skipPubGet: skipPubGet, background: background);
     return project;
   }
 

@@ -2,20 +2,20 @@ import 'dart:io';
 import 'package:dshell/src/functions/env.dart';
 import 'package:dshell/src/functions/read.dart';
 import 'package:dshell/src/util/ansi_color.dart';
+import 'package:dshell/src/util/process_helper.dart';
 import 'package:dshell/src/util/truepath.dart';
 import 'package:path/path.dart';
 
+import '../../dshell.dart';
 import '../functions/is.dart';
 import '../pubspec/pubspec.dart';
 import '../pubspec/pubspec_file.dart';
 import '../pubspec/pubspec_manager.dart';
 import 'pub_get.dart';
-import 'package:path/path.dart' as p;
 
 import '../settings.dart';
 import 'dart_sdk.dart';
 import 'script.dart';
-import '../util/file_helper.dart';
 
 /// Creates project directory structure
 /// All projects live under the dshell cache
@@ -50,12 +50,12 @@ class VirtualProject {
   /// script.
   VirtualProject(String cacheRootPath, this.script) {
     // /home/bsutton/.dshell/cache/home/bsutton/git/dshell/test/test_scripts/hello_world.project
-    _virtualProjectPath = p.join(cacheRootPath,
+    _virtualProjectPath = join(cacheRootPath,
         script.scriptDirectory.substring(1), script.basename + PROJECT_DIR);
 
-    _projectLibPath = p.join(_virtualProjectPath, 'lib');
-    _projectScriptLinkPath = p.join(_virtualProjectPath, script.scriptname);
-    _scriptLibPath = p.join(script.scriptDirectory, 'lib');
+    _projectLibPath = join(_virtualProjectPath, 'lib');
+    _projectScriptLinkPath = join(_virtualProjectPath, script.scriptname);
+    _scriptLibPath = join(script.scriptDirectory, 'lib');
   }
 
   String get scriptLib => _scriptLibPath;
@@ -68,7 +68,7 @@ class VirtualProject {
   ///
   String get path => _virtualProjectPath;
 
-  String get pubSpecPath => p.join(_virtualProjectPath, 'pubspec.yaml');
+  String get pubSpecPath => join(_virtualProjectPath, 'pubspec.yaml');
 
   /// Creates the projects cache directory under the
   ///  root directory of our global cache directory - [cacheRootDir]
@@ -78,26 +78,37 @@ class VirtualProject {
   /// Link to 'lib' directory of script file
   ///  or
   /// Lib directory if the script file doesn't have a lib dir.
-  /// pubsec.yaml copy from script annotation
+  /// pubsec.yaml copy from script annotationf
   ///  or
   /// Link to scripts own pubspec.yaml file.
   /// hashes.yaml file.
-  void createProject({bool skipPubGet = false}) {
-    if (!createDir(_virtualProjectPath, 'project cache')) {
-      print('Created Virtual Project at ${_virtualProjectPath}');
-    }
+  void createProject({bool skipPubGet = false, bool background = false}) {
+    withLock(() {
+      if (!exists(_virtualProjectPath)) {
+        createDir(_virtualProjectPath);
+        print('Created Virtual Project at ${_virtualProjectPath}');
+      }
 
-    // HashesYaml.create(_virtualProjectPath);
-
-    _createScriptLink(script);
-    _createLib();
-    PubSpecManager(this).createVirtualPubSpec();
-    if (skipPubGet) {
-      print('Skipping pub get.');
-    } else {
-      print('Running pub get...');
-      pubget();
-    }
+      _createScriptLink(script);
+      _createLib();
+      PubSpecManager(this).createVirtualPubSpec();
+      if (skipPubGet) {
+        print('Skipping pub get.');
+      } else {
+        if (background) {
+          // we run the clean in the background
+          // by running another copy of dshell.
+          print('dshell clean started in background');
+          // ('dshell clean ${script.path}' | 'echo > ${dirname(path)}/log').run;
+          // 'dshell -v clean ${script.path}'.run;
+          'dshell -v clean ${script.path}'
+              .start(detached: true, runInShell: true);
+        } else {
+          print('Running pub get...');
+          pubget();
+        }
+      }
+    });
   }
 
   /// We need to create a link to the script
@@ -112,18 +123,20 @@ class VirtualProject {
   ///
   /// deletes the project cache directory and recreates it.
   void clean() {
-    if (exists(_virtualProjectPath)) {
-      if (Settings().isVerbose) {
-        Settings().verbose('Deleting project path: $_virtualProjectPath');
+    withLock(() {
+      if (exists(_virtualProjectPath)) {
+        if (Settings().isVerbose) {
+          Settings().verbose('Deleting project path: $_virtualProjectPath');
+        }
+        deleteDir(_virtualProjectPath, recursive: true);
       }
-      File(_virtualProjectPath).deleteSync(recursive: true);
-    }
 
-    try {
-      createProject();
-    } on PubGetException {
-      print(red("\ndshell clean failed due to the 'pub get' call failing."));
-    }
+      try {
+        createProject();
+      } on PubGetException {
+        print(red("\ndshell clean failed due to the 'pub get' call failing."));
+      }
+    });
   }
 
   /// Causes a pub get to be run against the project.
@@ -134,14 +147,16 @@ class VirtualProject {
   /// This is normally done when the project cache is first
   /// created and when a script's pubspec changes.
   void pubget() {
-    var pubGet = PubGet(DartSdk(), this);
-    pubGet.run(compileExecutables: false);
+    withLock(() {
+      var pubGet = PubGet(DartSdk(), this);
+      pubGet.run(compileExecutables: false);
+    });
   }
 
-// Create the cache lib as a real file or a link
-// as needed.
-// This may change on each run so need to able
-// to swap between a link and a dir.
+  // Create the cache lib as a real file or a link
+  // as needed.
+  // This may change on each run so need to able
+  // to swap between a link and a dir.
   void _createLib() {
     // does the script have a lib directory
     if (Directory(scriptLib).existsSync()) {
@@ -215,5 +230,119 @@ class VirtualProject {
   /// and returns it.
   PubSpec pubSpec() {
     return PubSpecFile.fromFile(pubSpecPath);
+  }
+
+  /// We use this to allow a projects lock to be-reentrant
+  /// A non-zero value means we have the lock.
+  int _lockCount = 0;
+
+  /// Attempts to take a project lock.
+  /// We wait for upto 30 seconds for an existing lock to
+  /// be released and then give up.
+  ///
+  /// We create the lock file in the virtual project directory
+  /// in the form:
+  /// <pid>.clean.lock
+  ///
+  /// If we find an existing lock file we check if the process
+  /// that owns it is still running. If it isn't we
+  /// take a lock and delete the orphaned lock.
+  bool takeLock() {
+    var taken = false;
+
+    var lockFile = _lockFilePath;
+    assert(!exists(lockFile));
+
+    try {
+      // we take a lock up front so someone else
+      // can't come and add a lock whilst we are looking for
+      // a lock.
+      touch(lockFile, create: true);
+
+      // check for other lock files
+      var locks = find('*.$_lockSuffix', root: dirname(path)).toList();
+
+      if (locks.length == 1) {
+        // no other lock exists so we have taken a lock.
+        taken = true;
+      } else {
+        // we have found another lock file so check if it is held be an running process
+        for (var lock in locks) {
+          var parts = basename(lock).split('.');
+          if (parts.length != 4) {
+            // it can't actually be one of our lock files so ignore it
+            continue;
+          }
+          var lpid = int.tryParse(parts[0]);
+
+          if (lpid == pid) {
+            // ignore our own lock.
+            continue;
+          }
+
+          // wait for the lock to release
+          var released = false;
+          var waitCount = 30;
+          while (waitCount > 0) {
+            sleep(1);
+            if (!ProcessHelper().isRunning(lpid)) {
+              // If the forign lock file was left orphaned
+              // then we delete it.
+              if (exists(lock)) {
+                delete(lock);
+              }
+              released = true;
+              break;
+            }
+            waitCount--;
+          }
+
+          if (released) {
+            taken = true;
+          } else {
+            throw LockException(
+                'Unable to lock the Virtual Project ${truepath(path)} as it is currently held by ${ProcessHelper().getPIDName(lpid)}');
+          }
+        }
+      }
+    } finally {
+      if (taken == false) {
+        // if we couldn't take a lock then we should release ours.
+        delete(lockFile);
+      }
+    }
+
+    return taken;
+  }
+
+  void withLock(void Function() fn) {
+    try {
+      if (_lockCount > 0 || takeLock()) {
+        _lockCount++;
+        fn();
+      }
+    } finally {
+      if (_lockCount > 0) {
+        _lockCount--;
+        if (_lockCount == 0) delete(_lockFilePath);
+      }
+    }
+  }
+
+  String get _lockSuffix => '${basename(path).replaceAll('.', '_')}.clean.lock';
+  String get _lockFilePath {
+    // lock file is in the directory above the project
+    // as during cleaning we delete the project directory.
+    return join(dirname(path), '$pid.${_lockSuffix}');
+  }
+}
+
+class LockException implements Exception {
+  String message;
+  LockException(this.message);
+
+  @override
+  String toString() {
+    return message;
   }
 }
