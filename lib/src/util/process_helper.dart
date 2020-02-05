@@ -1,6 +1,7 @@
 import 'dart:io';
-import 'package:csv/csv.dart';
+// import 'package:csv/csv.dart';
 import 'package:dshell/dshell.dart';
+import 'package:dshell/src/util/runnable_process.dart';
 
 ///
 /// EXPERIMENTAL
@@ -89,7 +90,7 @@ class ProcessHelper {
       if (line != null) {
         isRunning = true;
       }
-    } on ProcessException {
+    } on RunException {
       // ps not supported on current OS
       // we have to assume the process running
     }
