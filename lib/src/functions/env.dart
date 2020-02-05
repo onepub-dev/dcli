@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:dshell/dshell.dart';
 import 'package:dshell/src/util/dshell_exception.dart';
 
 import '../settings.dart';
@@ -16,6 +17,8 @@ String env(String name) => Env().env(name);
 
 /// Tests if the given [path] is contained
 /// in the OS's PATH environment variable.
+/// An canonicalized match of [path] is made against
+/// each path on the OS's path.
 bool isOnPath(String path) => Env().isOnPath(path);
 
 /// Returns the list of directory paths that are contained
@@ -120,9 +123,10 @@ class Env extends DShellFunction {
   }
 
   bool isOnPath(String binPath) {
+    var canon = canonicalize(absolute(binPath));
     var found = false;
     for (var path in PATH) {
-      if (path == binPath) {
+      if (canonicalize(path) == canon) {
         found = true;
         break;
       }
