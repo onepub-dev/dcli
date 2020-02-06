@@ -1,3 +1,4 @@
+import 'package:dshell/src/script/entry_point.dart';
 @Timeout(Duration(seconds: 600))
 import 'package:test/test.dart' as t;
 import 'package:dshell/dshell.dart';
@@ -43,6 +44,29 @@ void main() {
         var expected = <String>['Hello World'];
 
         t.expect(results, t.equals(expected));
+
+        deleteDir(scriptPath, recursive: true);
+
+      });
+    });
+
+    // This entry point exists to make easy to debug the run
+    // command.
+    t.test('Debug test point', () {
+      TestZone().run(() {
+        var scriptPath = truepath(TestPaths().testScriptPath, 'run_test');
+
+        if (!exists(scriptPath)) {
+          createDir(scriptPath, recursive: true);
+        }
+        var script = truepath(scriptPath, 'run_echo.dart');
+
+        // make certain our test script exists and is in a runnable state.
+        'dshell -v create -fg $script'.run;
+
+        EntryPoint().process(['run', script]);
+
+        deleteDir(scriptPath, recursive: true);
       });
     });
   });

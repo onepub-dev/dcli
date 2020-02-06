@@ -106,7 +106,8 @@ class VirtualProject {
               .start(detached: true, runInShell: true);
         } else {
           print('Running pub get...');
-          pubget();
+          _pubget();
+          _markBuildComplete();
         }
       }
     });
@@ -147,7 +148,7 @@ class VirtualProject {
   ///
   /// This is normally done when the project cache is first
   /// created and when a script's pubspec changes.
-  void pubget() {
+  void _pubget() {
     withLock(() {
       var pubGet = PubGet(DartSdk(), this);
       pubGet.run(compileExecutables: false);
@@ -344,7 +345,9 @@ class VirtualProject {
     return join(dirname(path), '$pid.${_lockSuffix}');
   }
 
-  void markBuildComplete() {
+  /// Called after a project is created
+  /// and pub get run to mark a project as runnable.
+  void _markBuildComplete() {
     /// Create a file indicating that the clean has completed.
     /// This file is used by the RunCommand to know if the project
     /// is in a runnable state.

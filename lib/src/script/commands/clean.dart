@@ -28,10 +28,6 @@ class CleanCommand extends Command {
 
     project.clean();
 
-    project.markBuildComplete();
-
-
-
     return 0;
   }
 
