@@ -327,9 +327,9 @@ class ParsedCliCommand {
       args = parts.sublist(1);
     }
 
-    if (Settings().debug_on) {
-      Log.d('${Directory.current}');
-      Log.d('cmd: $cmd args: $args');
+    if (Settings().isVerbose) {
+      Settings().verbose('CWD: ${Directory.current}');
+      Settings().verbose('Parsed results cmd: $cmd args: $args');
     }
   }
 }
