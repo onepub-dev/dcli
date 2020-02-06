@@ -26,7 +26,7 @@ void main() {
       TestZone().run(() {
         var paths = TestPaths();
         setup(paths);
-        EntryPoint().process(['create', script]);
+        EntryPoint().process(['create', '--foreground', script]);
 
         checkProjectStructure(paths, script);
       });

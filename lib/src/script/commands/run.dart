@@ -46,7 +46,6 @@ class RunCommand extends Command {
     final runner = ScriptRunner(sdk, project, scriptArguments);
 
 
-
     final exitCode = runner.exec();
 
     return exitCode;
