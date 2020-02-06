@@ -101,6 +101,16 @@ class Settings {
   /// dshell -v clean
   bool get isVerbose => isFlagSet(VerboseFlag());
 
+  void setVerbose(bool enabled) {
+    if (enabled) {
+      if (!isVerbose) {
+        setFlag(VerboseFlag());
+      }
+    } else {
+      _selectedFlags.remove(VerboseFlag());
+    }
+  }
+
   /// Returns a singleton providing
   /// access to DShell settings.
   factory Settings() {
