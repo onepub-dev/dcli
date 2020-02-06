@@ -1,3 +1,4 @@
+import '../../dshell.dart';
 import 'virtual_project.dart';
 import '../util/progress.dart';
 
@@ -27,12 +28,18 @@ class PubGet {
       DartSdk().runPubGet(project.path,
           compileExecutables: compileExecutables,
           progress: Progress((line) => result.processLine(line),
-              stderr: (line) => print(line)));
+              stderr: (line) => println(line)));
 
       return result;
     } on RunException catch (e) {
+      Settings().verbose('pub get exeception: $e');
       throw PubGetException(e.exitCode);
     }
+  }
+
+  void println(String line) {
+    Settings().verbose('pubget: $line');
+    print(line);
   }
 }
 
@@ -44,6 +51,7 @@ class PubGetResult {
 
   void processLine(String line) {
     print(line);
+    Settings().verbose('processline $line');
     if (line.startsWith('+ ')) {
       var dep = Dependency.fromLine(line);
       if (dep != null) {

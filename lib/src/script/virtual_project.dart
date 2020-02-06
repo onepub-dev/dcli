@@ -24,6 +24,7 @@ import 'script.dart';
 /// required by dart.
 class VirtualProject {
   static const String PROJECT_DIR = '.project';
+  var BUILD_COMPLETE = 'build.complete';
   final Script script;
 
   String _virtualProjectPath;
@@ -247,7 +248,7 @@ class VirtualProject {
   /// If we find an existing lock file we check if the process
   /// that owns it is still running. If it isn't we
   /// take a lock and delete the orphaned lock.
-  bool takeLock() {
+  bool takeLock(String waiting) {
     var taken = false;
 
     var lockFile = _lockFilePath;
@@ -256,6 +257,7 @@ class VirtualProject {
     // can't come and add a lock whilst we are looking for
     // a lock.
     touch(lockFile, create: true);
+    Settings().verbose('Created lockfile $lockFile');
 
     // check for other lock files
     var locks = find('*.$_lockSuffix', root: dirname(path)).toList();
@@ -265,6 +267,7 @@ class VirtualProject {
       taken = true;
     } else {
       // we have found another lock file so check if it is held be an running process
+
       for (var lock in locks) {
         var parts = basename(lock).split('.');
         if (parts.length != 4) {
@@ -281,6 +284,7 @@ class VirtualProject {
         // wait for the lock to release
         var released = false;
         var waitCount = 30;
+        if (waiting != null) print(waiting);
         while (waitCount > 0) {
           sleep(1);
           if (!ProcessHelper().isRunning(lpid)) {
@@ -307,21 +311,28 @@ class VirtualProject {
     return taken;
   }
 
-  void withLock(void Function() fn) {
+  void withLock(void Function() fn, {String waiting}) {
     /// We must create the virtual project directory as we use
     /// its parent to store the lockfile.
     if (!exists(path)) {
       createDir(path, recursive: true);
     }
     try {
-      if (_lockCount > 0 || takeLock()) {
+      Settings().verbose('_lockcount = $_lockCount');
+      if (_lockCount > 0 || takeLock(waiting)) {
         _lockCount++;
         fn();
       }
+    } catch (e, st) {
+      Settings()
+          .verbose('Exception in withLoc ${e.toString()} ${st.toString()}');
     } finally {
       if (_lockCount > 0) {
         _lockCount--;
-        if (_lockCount == 0) delete(_lockFilePath);
+        if (_lockCount == 0) {
+          Settings().verbose('delete lock: $_lockFilePath');
+          delete(_lockFilePath);
+        }
       }
     }
   }
@@ -331,6 +342,30 @@ class VirtualProject {
     // lock file is in the directory above the project
     // as during cleaning we delete the project directory.
     return join(dirname(path), '$pid.${_lockSuffix}');
+  }
+
+  void markBuildComplete() {
+    /// Create a file indicating that the clean has completed.
+    /// This file is used by the RunCommand to know if the project
+    /// is in a runnable state.
+
+    touch(join(path, BUILD_COMPLETE), create: true);
+  }
+
+  bool isRunnable() {
+    return exists(join(path, BUILD_COMPLETE));
+  }
+
+  void cleanIfRequired() {
+    if (!isRunnable()) {
+      withLock(() {
+        // now we have the lock check runnable again as a clean may have just completed.
+        if (!isRunnable()) {
+          clean();
+          Settings().verbose('Cleaning Virtual Project');
+        }
+      }, waiting: 'Waiting for clean to complete...');
+    }
   }
 }
 

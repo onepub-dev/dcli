@@ -31,10 +31,7 @@ class RunCommand extends Command {
     var project = ProjectCache().loadProject(script);
     Settings().verbose('Virtual Project directory ${project.path}');
 
-    if (PubSpecManager(project).isCleanRequired()) {
-      project.clean();
-      Settings().verbose('Cleaning Virtual Project');
-    }
+    project.cleanIfRequired();
 
     var scriptArguments = <String>[];
 
@@ -47,6 +44,8 @@ class RunCommand extends Command {
     final sdk = DartSdk();
 
     final runner = ScriptRunner(sdk, project, scriptArguments);
+
+
 
     final exitCode = runner.exec();
 

@@ -31,12 +31,14 @@ class DartSdk {
     }
   }
 
+  /// The path to the dart 'bin' directory.
   String get sdkPath {
     _sdkPath ??= _detect();
     return _sdkPath;
   }
 
-  String get exePath {
+  /// The path to the dart exe.
+  String get dartExePath {
     if (_exePath == null) {
       // this is an expesive operation so only do it if required.
       var path = which('dart', first: true).firstLine;
@@ -45,8 +47,6 @@ class DartSdk {
     }
     return _exePath;
   }
-
-  String get dartPath => p.join(sdkPath, 'bin', 'dart');
 
   String get pubGetPath => p.join(sdkPath, 'bin', 'pub');
 
@@ -75,6 +75,7 @@ class DartSdk {
     process.start();
 
     process.processUntilExit(progress);
+    Settings().verbose('pub get finished');
   }
 
   static String _detect() {
@@ -106,7 +107,7 @@ class DartSdk {
   String get version {
     if (_version == null) {
       final res =
-          waitFor<ProcessResult>(Process.run(dartPath, <String>['--version']));
+          waitFor<ProcessResult>(Process.run(dartExePath, <String>['--version']));
       if (res.exitCode != 0) {
         throw Exception('Failed!');
       }

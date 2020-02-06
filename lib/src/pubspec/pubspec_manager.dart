@@ -69,16 +69,6 @@ class PubSpecManager {
     return wasModified;
   }
 
-  ///
-  /// If the virtual pubspec.yaml exists
-  /// we don't flag a clean.
-  ///
-  /// Currently its up to the user to tell us when
-  /// to do a clean.
-  bool isCleanRequired() {
-    return !exists(project.pubSpecPath);
-  }
-
   //   bool isCleanRequired() {
   //   bool cleanRequried = false;
 

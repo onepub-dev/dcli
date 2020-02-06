@@ -10,7 +10,6 @@ import 'progress.dart';
 import 'waitForEx.dart';
 import '../../dshell.dart';
 import 'dshell_exception.dart';
-import 'log.dart';
 
 typedef LineAction = void Function(String line);
 typedef CancelableLineAction = bool Function(String line);
