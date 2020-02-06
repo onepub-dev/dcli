@@ -26,10 +26,10 @@ class ScriptRunner {
     vmArgs.addAll(scriptArguments);
 
     Settings().verbose(
-        'Executing: ${DartSdk().dartPath} $vmArgs, in: ${project.script.scriptDirectory}');
+        'Executing: ${DartSdk().dartExePath} $vmArgs, in: ${project.script.scriptDirectory}');
 
     // Execute the script
-    final process = waitFor<Process>(Process.start(Platform.executable, vmArgs,
+    final process = waitFor<Process>(Process.start(sdk.dartExePath, vmArgs,
         mode: ProcessStartMode.inheritStdio));
 
     final exitCode = waitForEx<int>(process.exitCode);

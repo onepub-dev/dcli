@@ -40,10 +40,10 @@ class DoctorCommand extends Command {
     print('');
     colprint('dart version', '${DartSdk().version}');
 
-    colprint('dart exe path', '${privatePath(DartSdk().exePath)}');
+    colprint('dart exe path', '${privatePath(DartSdk().dartExePath)}');
     var dartPath = which('dart', first: true).firstLine;
     colprint('dart path',
-        '${privatePath(DartSdk().dartPath)} : ${privatePath(dartPath)}');
+        '${privatePath(DartSdk().dartExePath)} : ${privatePath(dartPath)}');
     var dart2NativePath = which('dart2native', first: true).firstLine;
     colprint('dart2Native path',
         '${privatePath(DartSdk().dart2NativePath)} : ${privatePath(dart2NativePath)}');
