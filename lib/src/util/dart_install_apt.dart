@@ -21,20 +21,27 @@ class AptDartInstaller implements DartInstaller {
 
     // add dart to bash path
 
-    if (!(isOnPath('/usr/bin/dart') || isOnPath('/usr/lib/bin/dart'))) {
-      // we need to add it.
-      var bashrc = join(HOME, '.bashrc');
-      // bashrc.append('''export PATH="\$PATH:/usr/lib/dart/bin"''');
+    //if (!(isOnPath('/usr/bin/dart') || isOnPath('/usr/lib/bin/dart'))) {
 
-      bashrc.append('''export PATH="\$PATH":"$HOME/.pub-cache/bin"''');
+    // we need to add it.
+    var bashrc = join(HOME, '.bashrc');
+    bashrc.append('''export PATH="\$PATH":"/usr/lib/dart/bin"''');
+    bashrc.append('''export PATH="\$PATH":"$HOME/.pub-cache/bin"''');
 
-      // add to root path.
-      var rootBashrc = join('/root', '.bashrc');
-      rootBashrc.append('''export PATH="\$PATH:/usr/lib/dart/bin"''');
-      rootBashrc.append('''export PATH="\$PATH:/root/.pub-cache/bin"''');
+    // add dart to root path.
+    // The tricks we have to play to get dart on the root users path.
+    'sudo echo export PATH="\$PATH:/usr/lib/dart/bin" | sudo tee -a /root/.bashrc'
+        .run;
+    // give root its own pub-cache
+    'sudo echo export PATH="\$PATH":"/root/.pub-cache/bin" | sudo tee -a /root/.bashrc'
+        .run;
 
-      print('You will need to restart your shell for dart to be available');
-    }
+// $PATH should not be expanded along the way.
+    // export PATH="$PATH":"$HOME/.pub-cache/bin"
+    // export PATH=$PATH:/usr/lib/dart/bin
+
+    print('You will need to restart your shell for dart to be available');
+    //}
 
     'sudo apt-get update'.run;
     'sudo apt-get install apt-transport-https'.run;
@@ -52,7 +59,10 @@ class AptDartInstaller implements DartInstaller {
     // CONSIDER a way of identifynig where dart has been installed to.
     '/usr/lib/dart/bin/pub global activate dshell'.run;
 
-    // also need to install it for the root user.
+    // also need to install it for the root user
+    // as root must have its own copy of .pub-cache otherwise
+    // if it updates .pub-cache of a user the user won't be able
+    // to use pub-get any more.
     'sudo /usr/lib/dart/bin/pub global activate dshell'.run;
 
     // yes we installed dart.
