@@ -83,7 +83,8 @@ void checkProjectStructure(TestPaths paths, String scriptName) {
         'hello_world.dart',
         'pubspec.yaml',
         'pubspec.lock',
-        '.packages'
+        '.packages',
+        'build.complete'
       ])));
 
   var directories = <String>[];
