@@ -151,6 +151,14 @@ extension StringAsProcess on String {
   /// returns any output written to stdout and stderr as
   /// a [List<String>].
   ///
+  ///EXPERIMENTAL argument.
+  /// If [nothrow] is set to true then an exception will not be thrown on
+  /// a non-zero exit code. Many applications output to stdout/stderr
+  /// to display an error message when a non-zero exit code is returned.
+  /// If you need to process these error messages then pass [nothrow:true].
+  /// The default for nothrow is false - i.e. we throw an exception on a
+  /// non-zero exitCode.
+  ///
   /// ```dart
   /// var logLines = 'tail -n 10 /var/log/syslog'.toList();
   /// ```
@@ -161,8 +169,11 @@ extension StringAsProcess on String {
   ///     [start] - to run the process fully detached.
   ///     [firstLine] - returns just the first line written to stdout or stderr.
   ///     [lastLine] - returns just the last line written to stdout or stderr.
-  List<String> toList({bool runInShell = false, int skipLines = 0}) {
-    return cmd.run(this, runInShell: runInShell).toList(skipLines: skipLines);
+  List<String> toList(
+      {bool runInShell = false, int skipLines = 0, bool nothrow = false}) {
+    return cmd
+        .run(this, runInShell: runInShell, nothrow: nothrow)
+        .toList(skipLines: skipLines);
   }
 
   /// [firstLine] treats the String [this] as a cli process and

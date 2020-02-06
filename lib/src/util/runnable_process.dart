@@ -166,7 +166,8 @@ class RunnableProcess {
   // Monitors the process until it exists.
   // If a LineAction exists we call
   // line action each time the process emmits a line.
-  void processUntilExit(Progress progress) {
+  /// The [nothrow] argument is EXPERIMENTAL
+  void processUntilExit(Progress progress, {bool nothrow}) {
     var done = Completer<bool>();
 
     Progress forEach;
@@ -195,7 +196,7 @@ class RunnableProcess {
         // If the start failed we don't want to rethrow
         // as the exception will be thrown async and it will
         // escape as an unhandled exception and stop the whole script
-        if (exitCode != 0) {
+        if (exitCode != 0 && nothrow == false) {
           done.completeError(RunException(exitCode,
               'The command [$cmdLine] failed with exitCode: ${exitCode}'));
         } else {
