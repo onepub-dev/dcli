@@ -253,62 +253,54 @@ class VirtualProject {
     var lockFile = _lockFilePath;
     assert(!exists(lockFile));
 
-    try {
-      // we take a lock up front so someone else
-      // can't come and add a lock whilst we are looking for
-      // a lock.
-      touch(lockFile, create: true);
+    // can't come and add a lock whilst we are looking for
+    // a lock.
+    touch(lockFile, create: true);
 
-      // check for other lock files
-      var locks = find('*.$_lockSuffix', root: dirname(path)).toList();
+    // check for other lock files
+    var locks = find('*.$_lockSuffix', root: dirname(path)).toList();
 
-      if (locks.length == 1) {
-        // no other lock exists so we have taken a lock.
-        taken = true;
-      } else {
-        // we have found another lock file so check if it is held be an running process
-        for (var lock in locks) {
-          var parts = basename(lock).split('.');
-          if (parts.length != 4) {
-            // it can't actually be one of our lock files so ignore it
-            continue;
-          }
-          var lpid = int.tryParse(parts[0]);
-
-          if (lpid == pid) {
-            // ignore our own lock.
-            continue;
-          }
-
-          // wait for the lock to release
-          var released = false;
-          var waitCount = 30;
-          while (waitCount > 0) {
-            sleep(1);
-            if (!ProcessHelper().isRunning(lpid)) {
-              // If the forign lock file was left orphaned
-              // then we delete it.
-              if (exists(lock)) {
-                delete(lock);
-              }
-              released = true;
-              break;
-            }
-            waitCount--;
-          }
-
-          if (released) {
-            taken = true;
-          } else {
-            throw LockException(
-                'Unable to lock the Virtual Project ${truepath(path)} as it is currently held by ${ProcessHelper().getPIDName(lpid)}');
-          }
+    if (locks.length == 1) {
+      // no other lock exists so we have taken a lock.
+      taken = true;
+    } else {
+      // we have found another lock file so check if it is held be an running process
+      for (var lock in locks) {
+        var parts = basename(lock).split('.');
+        if (parts.length != 4) {
+          // it can't actually be one of our lock files so ignore it
+          continue;
         }
-      }
-    } finally {
-      if (taken == false) {
-        // if we couldn't take a lock then we should release ours.
-        delete(lockFile);
+        var lpid = int.tryParse(parts[0]);
+
+        if (lpid == pid) {
+          // ignore our own lock.
+          continue;
+        }
+
+        // wait for the lock to release
+        var released = false;
+        var waitCount = 30;
+        while (waitCount > 0) {
+          sleep(1);
+          if (!ProcessHelper().isRunning(lpid)) {
+            // If the forign lock file was left orphaned
+            // then we delete it.
+            if (exists(lock)) {
+              delete(lock);
+            }
+            released = true;
+            break;
+          }
+          waitCount--;
+        }
+
+        if (released) {
+          taken = true;
+        } else {
+          throw LockException(
+              'Unable to lock the Virtual Project ${truepath(path)} as it is currently held by ${ProcessHelper().getPIDName(lpid)}');
+        }
       }
     }
 
@@ -316,6 +308,11 @@ class VirtualProject {
   }
 
   void withLock(void Function() fn) {
+    /// We must create the virtual project directory as we use
+    /// its parent to store the lockfile.
+    if (!exists(path)) {
+      createDir(path, recursive: true);
+    }
     try {
       if (_lockCount > 0 || takeLock()) {
         _lockCount++;
