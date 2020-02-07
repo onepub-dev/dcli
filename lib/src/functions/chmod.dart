@@ -20,7 +20,7 @@ class ChMod extends DShellFunction {
     if (!exists(path)) {
       throw ChModException('The file at ${absolute(path)} does not exists');
     }
-    'chmod ${permission} $path'.run;
+    'chmod ${permission} "$path"'.run;
   }
 
   //  String chmod({int user, int group, int other, this.path}) {}
