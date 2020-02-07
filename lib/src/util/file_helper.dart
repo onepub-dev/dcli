@@ -1,6 +1,5 @@
 import 'dart:io';
 
-
 void writeToFile(String path, String content) {
   File _file;
   RandomAccessFile _raf;

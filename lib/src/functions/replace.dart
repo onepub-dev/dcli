@@ -18,7 +18,7 @@ import 'dshell_function.dart';
 /// The above process essentially makes replace atomic so it should
 /// be impossible to loose your file. If replace does crash you may
 /// have to delete [path].tmp or [path].bak but this is highly unlikely.
-/// 
+///
 /// EXPERIMENTAL - this api may change. It is fairly likely to stay
 /// just that existing may change to support [Pattern]
 void replace(String path, String existing, String replacement) =>

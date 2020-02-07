@@ -1,3 +1,30 @@
+### 1.3.0
+[ENH] Added a background option for dshell create so we can run pub get in the background when creating a project. 
+When creating a project the clean is now run in the background so you have immediate access to edit the script. If you try to run the script before the clean is complete it will wait until the clean is done.
+[ENH] dshell create now has a --foreground flag to force the pub get back into the foreground if necessary.
+[ENH] Added global cli option to log verbose logs to a log file. -v=<logpath>
+We had to paths to the dart binary so choose one and deleted the other.
+[ENH] added method to allow verbose mode to be turned on/off at runtime.
+[ENH] Added experimental nothrow option to toList to allow it access error messages written to stdout/stderr even if a non-zero exit code is produced.
+re-added windows process detection.
+[ENH] When checking a path is no the PATH we canonicalize both paths to get a valid comparision.
+[ENH] New dshell installer which is able to install dart on an apt based systeml.
+[ENH] exposed a replace function that does a simple file content search and replace.
+[ENH] moved replace into its own library and exposed it as part of public interface.
+[ENH] Improved the dart detection logic to deal with dshell being compiled.
+[FIX] Cleaned up the help message alignment.
+[FIX] And now the sdk detect actually works.
+[FIX] copy method did not pass down the overright flag. Reported by Renato Athaydes.
+[FIX] chmod needed to quote paths to handle paths which contain a space.
+[FIX] The exception when the PS command can't be found.
+removed old version of createDir.
+Logic to run the dart installer if its not already installed.
+The project build complete file creates another file in the v.project.
+Fixed a bug in the build completion logic. A build is complete when pub get completes.
+Tweaked tests that assumed dshell create runs clean in the foreground.
+changed logs to use verbose.
+fun with root.
+tool to compile dshell_install. Only used for dev purposes.
 ### 1.2.0
 [ENH] toList now has optoin to skipLines to help bypass lists with a heading.
 [ENH] changed run so that it always is attached to a terminal.

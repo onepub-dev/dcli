@@ -106,8 +106,8 @@ class DartSdk {
 
   String get version {
     if (_version == null) {
-      final res =
-          waitFor<ProcessResult>(Process.run(dartExePath, <String>['--version']));
+      final res = waitFor<ProcessResult>(
+          Process.run(dartExePath, <String>['--version']));
       if (res.exitCode != 0) {
         throw Exception('Failed!');
       }
