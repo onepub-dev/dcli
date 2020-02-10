@@ -46,7 +46,6 @@ void main() {
         t.expect(results, t.equals(expected));
 
         deleteDir(scriptPath, recursive: true);
-
       });
     });
 

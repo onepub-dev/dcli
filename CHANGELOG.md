@@ -1,3 +1,6 @@
+### 1.4.1
+[FIX] had to move the cache test up as locks were artifically re-creating the cache.
+
 ### 1.4.0
 [FIX] doctor was reporting the scripts path rather than the virtual project path.
 [FIX] had a bug where a local pubspec.yaml was not being written to the virtual project.
