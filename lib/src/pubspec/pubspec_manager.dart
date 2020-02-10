@@ -1,4 +1,3 @@
-
 import '../functions/is.dart';
 import 'global_dependencies.dart';
 import 'pubspec.dart';

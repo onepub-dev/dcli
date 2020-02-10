@@ -1,3 +1,6 @@
+### 1.4.2
+[ENH] Added support  for all dependency ref types.
+
 ### 1.4.1
 [FIX] had to move the cache test up as locks were artifically re-creating the cache.
 
