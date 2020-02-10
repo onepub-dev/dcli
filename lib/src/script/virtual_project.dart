@@ -216,7 +216,7 @@ class VirtualProject {
     print('Script Details');
     colprint('Name', script.scriptname);
     colprint('Directory', privatePath(script.scriptDirectory));
-    colprint('Virtual Project', privatePath(dirname(script.pubSpecPath)));
+    colprint('Virtual Project', privatePath(path));
     print('');
 
     print('');
@@ -243,7 +243,7 @@ class VirtualProject {
   /// reads and returns the projects virtual pubspec
   /// and returns it.
   PubSpec pubSpec() {
-    return PubSpecFile.fromFile(script.pubSpecPath);
+    return PubSpecFile.fromFile(projectPubspecPath);
   }
 
   /// We use this to allow a projects lock to be-reentrant
