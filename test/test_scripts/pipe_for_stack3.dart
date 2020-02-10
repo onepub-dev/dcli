@@ -4,10 +4,16 @@ import 'dart:io';
 
 void main() async {
   //var ls = await start('ls');
-  var head = await start('head');
-  var tail = await start('tail');
+  // var head = await start('head', ['-n', '10']);
+  // var tail = await start('tail', ['-n' '3']);
 
-  run(generateLines(100), head, tail);
+  var head = await start('echo', ['-n', '10']);
+  var tail = await start('tail', ['-n' '3']);
+  run(
+    generateLines(1000),
+    head,
+    tail,
+  );
 }
 
 void run(Stream<String> ls, Process head, Process tail) {
@@ -39,10 +45,10 @@ void run(Stream<String> ls, Process head, Process tail) {
   Future.wait<void>([fls, fhead, ftail]);
 }
 
-Future<Process> start(String command) async {
+Future<Process> start(String command, List<String> args) async {
   var process = Process.start(
     command,
-    [],
+    args,
   );
   return process;
 }

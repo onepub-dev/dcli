@@ -6,8 +6,8 @@ void main() async {
   var ls = await start('ls', []);
   var head = await start('head', ['-n', '5']);
 
-   var cnt = 1;
-  ls.stdout
+  var cnt = 1;
+  await ls.stdout
       .transform(utf8.decoder)
       .transform(const LineSplitter())
       .map((line) {
@@ -17,7 +17,7 @@ void main() async {
       .transform(utf8.encoder)
       .pipe(head.stdin);
 
-  await head.stdout.transform(streamTransformer).pipe(stdout);
+  //await head.stdout.transform(streamTransformer).pipe(stdout);
 }
 
 Future<Process> start(String command, List<String> args) async {

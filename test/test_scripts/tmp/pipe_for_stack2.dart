@@ -6,7 +6,7 @@ void main() async {
   var ls = await start('ls');
   var head = await start('head');
 
-	ls.stdout
+  await ls.stdout
       .transform(utf8.decoder)
       .transform(const LineSplitter())
       .map((line) => '1: $line\n')
@@ -23,4 +23,3 @@ Future<Process> start(String command) async {
   );
   return process;
 }
-
