@@ -1,6 +1,7 @@
 import 'dart:io';
 import 'package:dshell/src/functions/env.dart';
 import 'package:dshell/src/functions/read.dart';
+import 'package:dshell/src/script/commands/install.dart';
 import 'package:dshell/src/util/ansi_color.dart';
 import 'package:dshell/src/util/process_helper.dart';
 import 'package:dshell/src/util/truepath.dart';
@@ -45,6 +46,8 @@ class VirtualProject {
   // that links to the actual script file.
   String _projectScriptLinkPath;
 
+  String _projectPubspecPath;
+
   // String _projectPubSpecPath;
 
   /// Returns a [project] instance for the given
@@ -57,6 +60,8 @@ class VirtualProject {
     _projectLibPath = join(_virtualProjectPath, 'lib');
     _projectScriptLinkPath = join(_virtualProjectPath, script.scriptname);
     _scriptLibPath = join(script.scriptDirectory, 'lib');
+
+    _projectPubspecPath = join(_virtualProjectPath, 'pubspec.yaml');
   }
 
   String get scriptLib => _scriptLibPath;
@@ -69,7 +74,9 @@ class VirtualProject {
   ///
   String get path => _virtualProjectPath;
 
-  String get pubSpecPath => join(_virtualProjectPath, 'pubspec.yaml');
+  /// The path to the virtual projects pubspec.yaml
+  /// e.g. PROJECT_DIR/pubspec.yaml
+  String get projectPubspecPath => _projectPubspecPath;
 
   /// Creates the projects cache directory under the
   ///  root directory of our global cache directory - [cacheRootDir]
@@ -86,6 +93,11 @@ class VirtualProject {
   void createProject({bool skipPubGet = false, bool background = false}) {
     withLock(() {
       if (!exists(_virtualProjectPath)) {
+        if (!exists(projectCacheLib)) {
+          printerr(
+              "The dshell cache doesn't exists. Please run 'dshell install' and then try again.");
+          throw InstallException('DShell needs to be re-installed');
+        }
         createDir(_virtualProjectPath);
         print('Created Virtual Project at ${_virtualProjectPath}');
       }
@@ -204,12 +216,12 @@ class VirtualProject {
     print('Script Details');
     colprint('Name', script.scriptname);
     colprint('Directory', privatePath(script.scriptDirectory));
-    colprint('Virtual Project', privatePath(dirname(pubSpecPath)));
+    colprint('Virtual Project', privatePath(dirname(script.pubSpecPath)));
     print('');
 
     print('');
     print('Virtual pubspec.yaml');
-    read(pubSpecPath).forEach((line) {
+    read(_projectPubspecPath).forEach((line) {
       print('  ${makeSafe(line)}');
     });
 
@@ -231,7 +243,7 @@ class VirtualProject {
   /// reads and returns the projects virtual pubspec
   /// and returns it.
   PubSpec pubSpec() {
-    return PubSpecFile.fromFile(pubSpecPath);
+    return PubSpecFile.fromFile(script.pubSpecPath);
   }
 
   /// We use this to allow a projects lock to be-reentrant
@@ -372,12 +384,6 @@ class VirtualProject {
   }
 }
 
-class LockException implements Exception {
-  String message;
-  LockException(this.message);
-
-  @override
-  String toString() {
-    return message;
-  }
+class LockException extends DShellException {
+  LockException(String message) : super(message);
 }

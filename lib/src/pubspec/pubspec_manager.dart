@@ -1,3 +1,5 @@
+import 'package:dshell/src/util/ansi_color.dart';
+
 import '../functions/is.dart';
 import 'global_dependencies.dart';
 import 'pubspec.dart';
@@ -25,10 +27,13 @@ class PubSpecManager {
 
   /// Creates a virtual pubspec.yaml for the passed project.
   ///
-  /// If necessary, extract the pubspec annotation from a script file
-  /// and saves it to project as a pubspec.yaml file.
+  /// 1) Searches for an annotation pubspec: if found uses this as a base
+  /// 2) if 1 failes looks for a local pubspec.yaml ; if found use this as a base
+  /// 3) if no pubspec then a default base is created.
   ///
-  /// This is where the logic for dependency injection does its work.
+  /// Dependency injection occurs.
+  ///
+  /// The resulting pubspec is written to the project directory.
   ///
   void createVirtualPubSpec() {
     var script = project.script;
@@ -40,8 +45,10 @@ class PubSpecManager {
     if (!annotation.exists()) {
       if (script.hasPubSpecYaml()) {
         sourcePubSpec = PubSpecFile.fromScript(script);
+        print(red('found pubspec at ${script.pubSpecPath}'));
       } else {
         sourcePubSpec = defaultPubspec;
+        print(red('using default  pubspec at ${script.pubSpecPath}'));
       }
     } else {
       sourcePubSpec = annotation;
@@ -53,7 +60,8 @@ class PubSpecManager {
 
     pubSpec.dependencies = resolved;
 
-    pubSpec.writeToFile(project.pubSpecPath);
+    print(red('writing pubspec in at ${script.pubSpecPath}'));
+    pubSpec.writeToFile(project.projectPubspecPath);
   }
 
   bool wasModified(String pubSpecPath, DateTime scriptModified) {
