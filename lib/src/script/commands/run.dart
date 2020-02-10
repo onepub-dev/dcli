@@ -1,6 +1,5 @@
 import 'package:dshell/dshell.dart';
 
-import '../../pubspec/pubspec_manager.dart';
 
 import '../../settings.dart';
 import '../dart_sdk.dart';
