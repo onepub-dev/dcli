@@ -18,6 +18,7 @@ export 'src/functions/is.dart' show isFile, isDirectory, exists;
 export 'src/functions/create_dir.dart' show createDir, CreateDirException;
 export 'src/functions/move.dart' show move, MoveException;
 export 'src/functions/replace.dart' show replace;
+export 'src/util/dev_null.dart' show devNull;
 export 'src/util/editor.dart' show showEditor;
 export 'src/util/file_sort.dart' show FileSort, Column;
 export 'src/util/process_helper.dart' show ProcessHelper;

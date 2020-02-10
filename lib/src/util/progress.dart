@@ -1,5 +1,7 @@
 import 'dart:async';
 
+import 'package:dshell/src/util/dev_null.dart';
+
 import 'waitForEx.dart';
 
 import 'runnable_process.dart';
@@ -36,9 +38,7 @@ class Progress {
     _processUntilComplete(stdout, stderr: stderr);
   }
 
-  // if the user doesn't provide a LineAction then we
-  // use this to consume the output.
-  static void devNull(String line) {}
+
 
   ///
   /// processes both streams until they complete
