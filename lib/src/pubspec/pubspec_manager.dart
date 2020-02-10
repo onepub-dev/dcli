@@ -45,7 +45,6 @@ class PubSpecManager {
     if (!annotation.exists()) {
       if (script.hasPubSpecYaml()) {
         sourcePubSpec = PubSpecFile.fromScript(script);
-        print(red('found pubspec at ${script.pubSpecPath}'));
       } else {
         sourcePubSpec = defaultPubspec;
       }
