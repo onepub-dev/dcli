@@ -2,6 +2,7 @@ import 'dart:io';
 import 'package:dshell/src/functions/env.dart';
 import 'package:dshell/src/functions/read.dart';
 import 'package:dshell/src/script/commands/install.dart';
+import 'package:dshell/src/script/project_cache.dart';
 import 'package:dshell/src/util/ansi_color.dart';
 import 'package:dshell/src/util/process_helper.dart';
 import 'package:dshell/src/util/truepath.dart';
@@ -35,11 +36,6 @@ class VirtualProject {
   // case this directory wont' exist.
   String _scriptLibPath;
 
-  // The absolute path to the projects lib directory.
-  // If the script lib exists then this will
-  // be a link to that directory.
-  // If the script lib doesn't exist then
-  // on will be created under the virtual project directory.
   String _projectLibPath;
 
   // A path to the 'Link' file in the project directory
@@ -65,6 +61,12 @@ class VirtualProject {
   }
 
   String get scriptLib => _scriptLibPath;
+
+  // The absolute path to the projects lib directory.
+  // If the script lib exists then this will
+  // be a link to that directory.
+  // If the script lib doesn't exist then
+  // on will be created under the virtual project directory.
   String get projectCacheLib => _projectLibPath;
 
   /// The  absolute path to the
@@ -93,11 +95,6 @@ class VirtualProject {
   void createProject({bool skipPubGet = false, bool background = false}) {
     withLock(() {
       if (!exists(_virtualProjectPath)) {
-        if (!exists(projectCacheLib)) {
-          printerr(
-              "The dshell cache doesn't exists. Please run 'dshell install' and then try again.");
-          throw InstallException('DShell needs to be re-installed');
-        }
         createDir(_virtualProjectPath);
         print('Created Virtual Project at ${_virtualProjectPath}');
       }
@@ -137,6 +134,14 @@ class VirtualProject {
   ///
   /// deletes the project cache directory and recreates it.
   void clean() {
+    if (!exists(Settings().dshellCachePath)) {
+      printerr(red(
+          "The dshell cache doesn't exists. Please run 'dshell install' and then try again."));
+      printerr('');
+      printerr('');
+      throw InstallException('DShell needs to be re-installed');
+    }
+
     withLock(() {
       if (exists(_virtualProjectPath)) {
         if (Settings().isVerbose) {
