@@ -1,7 +1,6 @@
 import 'dart:io';
 
 import 'package:collection/collection.dart';
-import 'package:dshell/src/script/command_line_runner.dart';
 import 'package:pub_semver/pub_semver.dart';
 
 import '../functions/read.dart';
@@ -64,11 +63,7 @@ class PubSpecImpl implements PubSpec {
     var ref = <String, pub.DependencyReference>{};
 
     for (var dependency in dependencies) {
-      if (dependency.isPath) {
-        ref[dependency.name] = pub.PathReference(dependency.path);
-      } else {
-        ref[dependency.name] = pub.HostedReference.fromJson(dependency.version);
-      }
+      ref[dependency.name] = dependency.reference;
     }
 
     pubspec = pubspec.copy(dependencies: ref);
@@ -81,16 +76,8 @@ class PubSpecImpl implements PubSpec {
     var map = pubspec.dependencies;
 
     for (var name in map.keys) {
-      var package = map[name];
-
-      if (package is pub.HostedReference) {
-        depends.add(Dependency(name, package.versionConstraint.toString()));
-      } else if (package is pub.PathReference) {
-        depends.add(Dependency.fromPath(name, package.path));
-      } else {
-        throw InvalidArguments(
-            'Unexpected Dependency type ${package.runtimeType}');
-      }
+      var reference = map[name];
+      depends.add(Dependency(name, reference));
     }
 
     return depends;

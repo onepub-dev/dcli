@@ -1,3 +1,5 @@
+import 'package:pubspec/pubspec.dart';
+
 import '../../dshell.dart';
 import '../functions/touch.dart';
 import '../script/dependency.dart';
@@ -50,16 +52,17 @@ class GlobalDependencies with DependenciesMixin {
       path.write('dependencies:');
 
       for (var dep in defaultDependencies) {
-        path.append('  ${dep.name}: ${dep.version}');
+        path.append(
+            '  ${dep.name}: ${(dep.reference as HostedReference).versionConstraint.toString()}');
       }
     }
   }
 
   static List<Dependency> get defaultDependencies {
     return [
-      Dependency('dshell', '^1.0.0'),
-      Dependency('args', '^1.5.2'),
-      Dependency('path', '^1.6.4'),
+      Dependency.fromHosted('dshell', '^1.0.0'),
+      Dependency.fromHosted('args', '^1.5.2'),
+      Dependency.fromHosted('path', '^1.6.4'),
     ];
   }
 }

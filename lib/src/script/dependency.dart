@@ -1,29 +1,32 @@
 import 'package:equatable/equatable.dart';
+import 'package:pub_semver/pub_semver.dart';
+import 'package:pubspec/pubspec.dart';
+import '../../src/pubspec/dep_ref_extension.dart';
 
 class Dependency extends Equatable {
   final String name;
+  final DependencyReference reference;
 
-  final String version;
+  const Dependency(this.name, this.reference);
 
-  final bool _isPath;
-  final String path;
+  static Dependency fromHosted(String name, String version) {
+    var reference = HostedReference(VersionConstraint.parse(version));
 
-  const Dependency(this.name, this.version)
-      : _isPath = false,
-        path = null;
+    return Dependency(name, reference);
+  }
 
-  const Dependency.fromPath(this.name, this.path)
-      : _isPath = true,
-        version = null;
+  static Dependency fromPath(String name, String path) {
+    var reference = PathReference(path);
 
-  bool get isPath => _isPath;
+    return Dependency(name, reference);
+  }
 
   static Dependency fromLine(String line) {
     Dependency dep;
 
     var parts = line.split(' ');
     if (parts.length == 3) {
-      dep = Dependency(parts[1], parts[2]);
+      // dep = Dependency(parts[1], parts[2]);
     }
     return dep;
   }
@@ -41,10 +44,14 @@ class Dependency extends Equatable {
   }
 */
   @override
-  List<Object> get props => [name, version];
+  List<Object> get props => [name, reference];
 
   @override
   String toString() {
-    return '$name : ${isPath ? path : version}';
+    return '${reference.rehydrate(this)}';
+  }
+
+  String rehydrate() {
+    return reference.rehydrate(this);
   }
 }

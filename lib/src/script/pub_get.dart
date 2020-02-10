@@ -51,7 +51,6 @@ class PubGetResult {
 
   void processLine(String line) {
     print(line);
-    Settings().verbose('processline $line');
     if (line.startsWith('+ ')) {
       var dep = Dependency.fromLine(line);
       if (dep != null) {

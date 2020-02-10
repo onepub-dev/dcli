@@ -91,7 +91,7 @@ class InstallCommand extends Command {
 
     print('Default packages are:');
     for (var dep in GlobalDependencies.defaultDependencies) {
-      print('  ${dep.name}:${dep.version}');
+      print('  ${dep.rehydrate()}');
     }
     print('');
     print(

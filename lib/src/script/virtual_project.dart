@@ -2,7 +2,6 @@ import 'dart:io';
 import 'package:dshell/src/functions/env.dart';
 import 'package:dshell/src/functions/read.dart';
 import 'package:dshell/src/script/commands/install.dart';
-import 'package:dshell/src/script/project_cache.dart';
 import 'package:dshell/src/util/ansi_color.dart';
 import 'package:dshell/src/util/process_helper.dart';
 import 'package:dshell/src/util/truepath.dart';
@@ -232,8 +231,7 @@ class VirtualProject {
 
     print('');
     colprint('Dependencies', '');
-    pubSpec().dependencies.forEach((d) => colprint(
-        '  ${d.name}', '${d.isPath ? privatePath(d.path) : d.version}'));
+    pubSpec().dependencies.forEach((d) => colprint(d.name, '${d.rehydrate()}'));
   }
 
   String makeSafe(String line) {

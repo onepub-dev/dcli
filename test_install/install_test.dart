@@ -4,6 +4,7 @@ import 'package:dshell/src/pubspec/global_dependencies.dart';
 import 'package:dshell/src/script/entry_point.dart';
 import 'package:dshell/src/util/dshell_exception.dart';
 import 'package:mockito/mockito.dart';
+import 'package:pubspec/pubspec.dart';
 import 'package:test/test.dart';
 
 import '../test/mocks/mock_env.dart';
@@ -122,7 +123,7 @@ void checkInstallStructure() {
   var expected = ['dependencies:'];
 
   for (var dep in GlobalDependencies.defaultDependencies) {
-    expected.add('  ${dep.name}: ${dep.version}');
+    expected.add('  ${dep.name}: ${(dep.reference as HostedReference).versionConstraint.toString()}');
   }
 
   expect(content, equals(expected));

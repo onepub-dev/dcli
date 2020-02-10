@@ -1,4 +1,3 @@
-import 'package:dshell/src/util/ansi_color.dart';
 
 import '../functions/is.dart';
 import 'global_dependencies.dart';

@@ -63,8 +63,8 @@ ${basic}
         delete(pubSpecScriptPath);
       }
       var dependencies = GlobalDependencies.defaultDependencies;
-      dependencies.add(Dependency('collection', '^1.14.12'));
-      dependencies.add(Dependency('file_utils', '^0.1.3'));
+      dependencies.add(Dependency.fromHosted('collection', '^1.14.12'));
+      dependencies.add(Dependency.fromHosted('file_utils', '^0.1.3'));
       runTest(annotationNoOverrides, main, dependencies);
     });
   }, skip: false);
@@ -81,11 +81,11 @@ $overrides
         delete(pubSpecScriptPath);
       }
       var dependencies = <Dependency>[];
-      dependencies.add(Dependency('dshell', '^2.0.0'));
-      dependencies.add(Dependency('args', '^2.0.1'));
-      dependencies.add(Dependency('path', '^2.0.2'));
-      dependencies.add(Dependency('collection', '^1.14.12'));
-      dependencies.add(Dependency('file_utils', '^0.1.3'));
+      dependencies.add(Dependency.fromHosted('dshell', '^2.0.0'));
+      dependencies.add(Dependency.fromHosted('args', '^2.0.1'));
+      dependencies.add(Dependency.fromHosted('path', '^2.0.2'));
+      dependencies.add(Dependency.fromHosted('collection', '^1.14.12'));
+      dependencies.add(Dependency.fromHosted('file_utils', '^0.1.3'));
       runTest(annotationWithOverrides, main, dependencies);
     });
   }, skip: false);
@@ -99,8 +99,8 @@ $overrides
       file.writeToFile(scriptPath);
 
       var dependencies = GlobalDependencies.defaultDependencies;
-      dependencies.add(Dependency('collection', '^1.14.12'));
-      dependencies.add(Dependency('file_utils', '^0.1.3'));
+      dependencies.add(Dependency.fromHosted('collection', '^1.14.12'));
+      dependencies.add(Dependency.fromHosted('file_utils', '^0.1.3'));
       runTest(null, main, dependencies);
     });
   }, skip: false);
@@ -114,11 +114,11 @@ $overrides
       file.writeToFile(scriptPath);
 
       var dependencies = <Dependency>[];
-      dependencies.add(Dependency('dshell', '^2.0.0'));
-      dependencies.add(Dependency('args', '^2.0.1'));
-      dependencies.add(Dependency('path', '^2.0.2'));
-      dependencies.add(Dependency('collection', '^1.14.12'));
-      dependencies.add(Dependency('file_utils', '^0.1.3'));
+      dependencies.add(Dependency.fromHosted('dshell', '^2.0.0'));
+      dependencies.add(Dependency.fromHosted('args', '^2.0.1'));
+      dependencies.add(Dependency.fromHosted('path', '^2.0.2'));
+      dependencies.add(Dependency.fromHosted('collection', '^1.14.12'));
+      dependencies.add(Dependency.fromHosted('file_utils', '^0.1.3'));
       runTest(null, main, dependencies);
     });
   }, skip: false);
@@ -132,11 +132,11 @@ $overrides
       file.writeToFile(scriptPath);
 
       var dependencies = <Dependency>[];
-      dependencies.add(Dependency('dshell', '^2.0.0'));
-      dependencies.add(Dependency('args', '^2.0.1'));
-      dependencies.add(Dependency('path', '^2.0.2'));
-      dependencies.add(Dependency('collection', '^1.14.12'));
-      dependencies.add(Dependency('file_utils', '^0.1.3'));
+      dependencies.add(Dependency.fromHosted('dshell', '^2.0.0'));
+      dependencies.add(Dependency.fromHosted('args', '^2.0.1'));
+      dependencies.add(Dependency.fromHosted('path', '^2.0.2'));
+      dependencies.add(Dependency.fromHosted('collection', '^1.14.12'));
+      dependencies.add(Dependency.fromHosted('file_utils', '^0.1.3'));
       runTest(null, main, dependencies);
     });
   }, skip: false);

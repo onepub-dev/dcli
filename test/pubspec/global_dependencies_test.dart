@@ -22,10 +22,10 @@ dependencies:
   ''';
 
     var expected = [
-      Dependency('args', '^1.5.2'),
-      Dependency('collection', '^1.14.12'),
-      Dependency('file_utils', '^0.1.3'),
-      Dependency('path', '^1.6.4'),
+      Dependency.fromHosted('args', '^1.5.2'),
+      Dependency.fromHosted('collection', '^1.14.12'),
+      Dependency.fromHosted('file_utils', '^0.1.3'),
+      Dependency.fromHosted('path', '^1.6.4'),
     ];
 
     var gd = GlobalDependencies.fromString(content);
@@ -48,9 +48,9 @@ dependency_overrides:
 
     var expected = [
       Dependency.fromPath('args', '/home/args'),
-      Dependency('collection', '^1.14.12'),
-      Dependency('file_utils', '^0.1.3'),
-      Dependency('path', '^1.6.4'),
+      Dependency.fromHosted('collection', '^1.14.12'),
+      Dependency.fromHosted('file_utils', '^0.1.3'),
+      Dependency.fromHosted('path', '^1.6.4'),
       Dependency.fromPath('dshell', '/home/dshell'),
     ];
 
@@ -72,8 +72,8 @@ dependency_overrides:
 
     var expected = [
       Dependency.fromPath('dshell', '/home/dshell'),
-      Dependency('args', '^1.5.2'),
-      Dependency('path', '^1.6.4'),
+      Dependency.fromHosted('args', '^1.5.2'),
+      Dependency.fromHosted('path', '^1.6.4'),
     ];
 
     var gd = GlobalDependencies.fromString(content);
@@ -105,8 +105,8 @@ dependency_overrides:
 
     var expected = [
       Dependency.fromPath('dshell', '/home/dshell'),
-      Dependency('args', '^1.5.2'),
-      Dependency('path', '^1.6.4'),
+      Dependency.fromHosted('args', '^1.5.2'),
+      Dependency.fromHosted('path', '^1.6.4'),
     ];
 
     expect(gd.dependencies, equals(expected));
@@ -137,8 +137,8 @@ dependency_overrides:
 
     var expected = [
       Dependency.fromPath('dshell', '~/git/dshell'),
-      Dependency('args', '^1.5.2'),
-      Dependency('path', '^1.6.4'),
+      Dependency.fromHosted('args', '^1.5.2'),
+      Dependency.fromHosted('path', '^1.6.4'),
     ];
 
     expect(gd.dependencies, equals(expected));
