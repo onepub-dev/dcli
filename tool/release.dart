@@ -187,8 +187,7 @@ void addGitTag(Version version) {
     print('creating git tag');
     // 'git tag -a $tagName'.run;
 
-    var message = ask(prompt: 'Enter a release message:');
-    'git tag -a $tagName -m "$message"'.run;
+    'git tag -a $tagName -m "released $tagName"'.run;
   }
 }
 
