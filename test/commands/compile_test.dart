@@ -41,20 +41,5 @@ void main() {
         expect(exit, equals(0));
       });
     });
-
-    test('compile a shell in a parent directory.', () {
-      TestZone().run(() {
-        Settings().reset();
-        var exit = -1;
-        try {
-          // setEnv('HOME', '/home/test');
-          // createDir('/home/test', recursive: true);
-          exit = EntryPoint().process(['-v', 'compile', '../util.dart']);
-        } on DShellException catch (e) {
-          print(e);
-        }
-        expect(exit, equals(0));
-      });
-    });
   });
 }
