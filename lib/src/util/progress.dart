@@ -38,8 +38,6 @@ class Progress {
     _processUntilComplete(stdout, stderr: stderr);
   }
 
-
-
   ///
   /// processes both streams until they complete
   ///

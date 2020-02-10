@@ -1,3 +1,6 @@
+### 1.4.3
+Exposed devNull which makes it eash for a forEach to supress output to stdout.
+
 ### 1.4.2
 [ENH] Added support  for all dependency ref types.
 
