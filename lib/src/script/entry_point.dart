@@ -42,14 +42,14 @@ class EntryPoint {
 
       return exitCode;
     } on CommandLineException catch (e) {
-      StdLog.stderr(red(e.toString()));
+      printerr(red(e.toString()));
       print('');
       HelpCommand().printUsageHowTo();
       return 1;
     } catch (e, stackTrace) {
       var impl = StackTraceImpl.fromStackTrace(stackTrace);
-      StdLog.stderr('Exception occured: ${e} of type ${e.runtimeType}');
-      StdLog.stderr('Stacktrace: ${impl.formatStackTrace()}');
+      printerr('Exception occured: ${e} of type ${e.runtimeType}');
+      printerr('Stacktrace: ${impl.formatStackTrace()}');
     }
 
     return 0;
