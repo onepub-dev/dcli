@@ -199,6 +199,12 @@ class Settings {
   static void setMock(Settings mockSettings) {
     _self = mockSettings;
   }
+
+  // Used when unit testing and we are re-using
+  // the current process.
+  void reset() {
+    selectedFlags.clear();
+  }
 }
 
 ///
