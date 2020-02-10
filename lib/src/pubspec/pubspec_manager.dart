@@ -48,7 +48,6 @@ class PubSpecManager {
         print(red('found pubspec at ${script.pubSpecPath}'));
       } else {
         sourcePubSpec = defaultPubspec;
-        print(red('using default  pubspec at ${script.pubSpecPath}'));
       }
     } else {
       sourcePubSpec = annotation;
@@ -60,7 +59,6 @@ class PubSpecManager {
 
     pubSpec.dependencies = resolved;
 
-    print(red('writing pubspec in at ${script.pubSpecPath}'));
     pubSpec.writeToFile(project.projectPubspecPath);
   }
 
