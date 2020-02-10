@@ -108,7 +108,7 @@ void generateReleaseNotes(
   var changeLogPath = join(projectRootPath, 'CHANGELOG.md');
 
   // write the commit messages to the change log.
-  // Not very nices as the commit messages are necessarily that useful.
+  // Not very nice as the commit messages are not necessarily that useful.
   var backup = '$changeLogPath.bak';
   move(changeLogPath, backup);
 
@@ -116,6 +116,13 @@ void generateReleaseNotes(
 
   messages.forEach((message) => changeLogPath.append(message));
   changeLogPath.append('');
+
+  // give the user a chance to clean up the change log.
+  if (confirm(prompt:'Would you like to clean up the change log (Y/N):'))
+  {	
+  	showEditor(changeLogPath);
+  }
+ 
   read(backup).forEach((line) => changeLogPath.append(line));
   delete(backup);
 }
