@@ -1,7 +1,6 @@
 // @Timeout(Duration(seconds: 600))
 
 import 'package:dshell/src/script/entry_point.dart';
-import 'package:dshell/src/settings.dart';
 import 'package:dshell/src/util/dshell_exception.dart';
 import 'package:test/test.dart';
 
