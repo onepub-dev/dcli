@@ -1,3 +1,12 @@
+### 1.4.0
+[FIX] doctor was reporting the scripts path rather than the virtual project path.
+[FIX] had a bug where a local pubspec.yaml was not being written to the virtual project.
+unused import.
+[ENH]Added an install exception if the clean found a missing cache directory. We now instruct the
+user to run dshell install again.
+[ENH] added logic to spawn an editor to allow the user to edit the change log as part of the release process.
+Added an option to reset Settings() when we are doing unit testing.
+
 ### 1.3.0
 [ENH] Added a background option for dshell create so we can run pub get in the background when creating a project. 
 When creating a project the clean is now run in the background so you have immediate access to edit the script. If you try to run the script before the clean is complete it will wait until the clean is done.
