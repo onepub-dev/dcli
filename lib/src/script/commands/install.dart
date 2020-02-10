@@ -233,3 +233,7 @@ class NoCleanFlag extends Flag {
       When doing a dshell upgrade you should always all install to do a clean all.''';
   }
 }
+
+class InstallException extends DShellException {
+  InstallException(String message) : super(message);
+}
