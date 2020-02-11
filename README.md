@@ -1257,7 +1257,7 @@ dshell cleanall
 ## clean
 The clean command will rebuild the Virtual Project for a single DShell script.
 
-Usage: `dshell clean <script path.dart>`
+Usage: `dshell clean [<script path.dart>, <script path.dart>,...]`
 
 Example: 
 
@@ -1265,14 +1265,19 @@ Example:
 dshell clean hello_world.dart
 ```
 
-## compile
-The compile command will compile your DShell script into a native executuable and optionally install it into your PATH.
+You may specify one or more scripts and dshell will clean each of them.
 
-The resulting native application can be copied to any binary compatible OS and run without requiring Dart to be installed.
+If you don't specify any scripts then dshell will clean all scripts in the current directory.
+
+
+## compile
+The compile command will compile your DShell script(s) into a native executable and optionally install it into your PATH.
+
+The resulting native application can be copied to any binary compatible OS and run without requiring Dart or Dshell to be installed.
 
 Dart complied appliations are also super fast.
 
-Usage: `dshell compile [-nc, -i, -o] <script path.dart>`
+Usage: `dshell compile [-nc, -i, -o] [<script path.dart>, <script path.dart>,...]`
 
 Example: 
 
@@ -1281,6 +1286,14 @@ dshell compile hello_world.dart
 
 ./hello_world
 ```
+
+You may specify one or more scripts and dshell will compile each of them.
+
+If you don't specify any scripts then dshell will compile all scripts in the current directory.
+
+If you use the --install option the compiled exe will be added to your path.
+
+
 Flags:
     --noclean | -nc : stop dshell from running clean before doing a compile. Use this option if you know that you scripts dependency haven't change since the last compile.
     --install | -i : install the compiled script into the ~/.dshell/bin directory which is on your path.

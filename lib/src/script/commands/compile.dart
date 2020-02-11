@@ -32,6 +32,7 @@ class CompileCommand extends Command {
       final subargument = subarguments[i];
 
       if (Flags.isFlag(subargument)) {
+        scriptIndex++;
         var flag = flagSet.findFlag(subargument, compileFlags);
 
         if (flag != null) {
@@ -45,11 +46,36 @@ class CompileCommand extends Command {
           throw UnknownFlag(subargument);
         }
       }
-      scriptIndex = i;
-      Script.validate(subarguments.sublist(scriptIndex));
       break;
     }
-    var script = Script.fromFile(subarguments[scriptIndex]);
+
+    var scriptList = subarguments.sublist(scriptIndex);
+
+    if (scriptList.isEmpty) {
+      scriptList = find('*.dart').toList();
+    }
+
+    if (scriptList.isEmpty) {
+      printerr('There are no scripts to compile');
+    } else {
+      for (var scriptPath in scriptList) {
+        exitCode = compileScript(scriptPath);
+        if (exitCode != 0) break;
+      }
+    }
+
+    return exitCode;
+  }
+
+  int compileScript(String scriptPath) {
+    var exitCode = 0;
+
+    print('');
+    print(orange('Compiling $scriptPath...'));
+    print('');
+
+    Script.validate(scriptPath);
+    var script = Script.fromFile(scriptPath);
     try {
       var project = VirtualProject(Settings().dshellCachePath, script);
 
@@ -91,18 +117,20 @@ class CompileCommand extends Command {
     } on RunException catch (e) {
       exitCode = e.exitCode;
     }
-
     return exitCode;
   }
 
   @override
   String description() =>
-      "Compiles the script using dart's native compiler. Only required if you want super fast execution.";
+      '''Compiles the given list of scripts using dart's native compiler. 
+   Only required if you want super fast execution.
+   If no scripts are passed then all scripts in the current directory are compiled.
+      ''';
 
   @override
   String usage() {
     var description =
-        '''compile [--noclean] [--install] [--overwrite] <script path.dart>''';
+        '''compile [--noclean] [--install] [--overwrite] [<script path.dart>, <script path.dart>,...]''';
 
     return description;
   }
