@@ -1,3 +1,7 @@
+### 1.5.0
+[ENH] dshell clean and compile command can now take a list of scripts to compile.
+If no scripts are specified DShell will compile all scripts in the current directory.
+
 ### 1.4.3
 Exposed devNull which makes it eash for a forEach to supress output to stdout.
 
