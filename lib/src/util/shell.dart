@@ -137,6 +137,9 @@ abstract class Shell {
   bool addToPath(String path);
 }
 
+/// Provides a number of helper functions
+/// when dshell needs to interact with the Bash shell.
+
 class BashShell implements Shell {
   @override
   String get startScriptPath {
@@ -216,6 +219,8 @@ class BashShell implements Shell {
   }
 }
 
+/// Provides a number of helper functions
+/// when dshell needs to interact with the Zsh shell.
 class ZshShell implements Shell {
   @override
   String get startScriptPath {
@@ -258,6 +263,9 @@ class ZshShell implements Shell {
   }
 }
 
+/// Used by dshell to interacte with the shell
+/// environment when we are unable to detect
+/// what shell is active.
 class UnknownShell implements Shell {
   @override
   bool addToPath(String path) {

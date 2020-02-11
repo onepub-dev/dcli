@@ -55,14 +55,13 @@ class CreateCommand extends Command {
     var body = _script.generateDefaultBody();
     _script.createDefaultFile(body);
 
-    print('Creating project.');
+    print('Creating project...');
     ProjectCache()
         .createProject(_script, background: !flagSet.isSet(ForegroundFlag()));
 
-    print('Making script executable');
     chmod(755, p.join(_script.scriptDirectory, _script.scriptname));
 
-    print('Project creation complete.');
+    print('');
 
     print('To run your script:\n   ./${_script.scriptname}');
 
@@ -80,6 +79,10 @@ class CreateCommand extends Command {
           "The create command expects a script name ending in '.dart'. Found: ${scriptName}");
     }
 
+    if (exists(scriptName)) {
+      throw InvalidArguments(
+          'The script ${truepath(scriptName)} already exists.');
+    }
     return Script.fromFile(arguments[0]);
   }
 

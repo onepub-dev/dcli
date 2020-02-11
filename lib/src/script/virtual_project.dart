@@ -107,7 +107,7 @@ class VirtualProject {
         if (background) {
           // we run the clean in the background
           // by running another copy of dshell.
-          print('dshell clean started in background');
+          print('DShell clean started in the background.');
           // ('dshell clean ${script.path}' | 'echo > ${dirname(path)}/log').run;
           // 'dshell -v clean ${script.path}'.run;
           'dshell -v=/tmp/dshell.clean.log clean ${script.path}'

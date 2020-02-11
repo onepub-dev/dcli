@@ -6,7 +6,8 @@ import '../util/progress.dart';
 import '../util/runnable_process.dart';
 import 'package:path/path.dart' as p;
 
-/// The [DartSdk] implementation where the Dart sdk directory is detected.
+/// The [DartSdk] provides access to a number of the dart sdk tools
+/// as well as details on the active sdk instance.
 class DartSdk {
   static DartSdk _self;
 

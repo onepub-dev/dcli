@@ -71,7 +71,7 @@ Bash has been around for a long time and wasn't so much designed as evolved.
 
 The problem now is that its old, has an archaic syntax and doesn't scale well.
 
-So why is dshell different?
+So why is DShell different?
 
 DShell is based on the relatively new programming language; Dart.
 
@@ -88,7 +88,7 @@ It provides elgant solutions for common problems and from a scripting perspectiv
 
 DShell excels in all of the functionality that you expect from Bash and then takes you to the next level.
 
-DShell is easy to install, makes it a breeze to create simple scripts and provides the tools to manage a script that started out as 100 lines but somehow grew to 10,000 lines. There is also a large collection of third party libraries that you can included in your script with no more than an import statment and a dependancy declaration. 
+DShell is easy to install, makes it a breeze to create simple scripts and provides the tools to manage a script that started out as 100 lines but somehow grew to 10,000 lines. There is also a large collection of third party libraries that you can included in your script with no more than an import statement and a dependancy declaration. 
 
 Dart is fast and if you need even more speed it can be compiled to a single file executable that is portable between binary compatible machines.
 
@@ -96,7 +96,7 @@ You can use your favorite editor to create DShell scripts. Vi or VIM work fine b
 
 DShell and Dart also make it harder to make some of the common mistakes that Bash invites.
 
-With Dart and DShell you have the option to Type your variables. This is a bit of a controversial issues so DShell doesn't force you to Type your scripts but I ALWAYS use types and you should too.
+With Dart and DShell you have the option to Type your variables. This is a bit of a controversial issues, so DShell doesn't force you to Type your scripts but I ALWAYS use types and you should too.
 
 For a long time I've wanted to build a replacement tool that has the elegance of a modern language, with the power of Bash.
 
@@ -175,9 +175,7 @@ dshell create test.dart
 ```
 
 As part of the creation process we need to fetch the set of dependencies for your script.
-The step 'Resolving dependencies...' can take 20 or 30 seconds to run.
-
-This is a once off process for each script.
+DShell starts a background process to fetch your dependencies. 
 
 ```
 cli> mkdir dtest
@@ -185,44 +183,10 @@ cli> cd dtest
 
 cli> dshell create test.dart
 Creating project.
-Created Virtual Project at /home/bsutton/.dshell/cache/tmp/test.project
-Running pub get...
-Resolving dependencies...
-+ args 1.5.2
-+ charcode 1.1.2
-+ collection 1.14.12
-+ dshell 1.0.23
-+ equatable 1.0.1
-+ file 5.1.0
-+ file_utils 0.1.3
-+ globbing 0.3.0
-+ intl 0.16.0
-+ logger 0.8.1
-+ matcher 0.12.6
-+ meta 1.1.8
-+ money2 1.3.0
-+ path 1.6.4
-+ pub_semver 1.4.2
-+ pubspec 0.1.2
-+ quiver 2.1.2+1
-+ recase 2.0.1
-+ source_span 1.5.5
-+ stack_trace 1.9.3
-+ string_scanner 1.0.5
-+ stuff 0.1.0
-+ term_glyph 1.1.0
-+ uri 0.11.3+1
-+ utf 0.9.0+5
-+ yaml 2.2.0
-Downloading dshell 1.0.23...
-Changed 26 dependencies!
-Precompiling executables...
-Precompiled dshell:dshell.
-Making script executable
-Project creation complete.
+DShell clean started in the background.
 
 To run your script:
-  dshell test.dart
+  ./test.dart
 cli>
 ```
 
@@ -244,9 +208,22 @@ Note: the 'Hello World' text may differ ;)
 You can now run you script:
 
 ```bash
-cli>dshell test.dart
+cli>./test.dart
 Hello World
 ```
+
+If you run you script immediately after creating it, the background 'clean' may still be running.
+
+In which case you may see the message:
+
+```
+./test.dart
+Waiting for clean to complete...
+Hello World
+```
+
+The clean process is a once off process and only needs to be run again if you change your dependencies.
+
 
 Note for Flutter users:
 
@@ -256,7 +233,7 @@ Removing it from my path allowed me to developed cli apps as well as flutter.
 
 ## Writing your first script
 
-In the Installing section we used the `dshell create` command to create a simple DShell script, but to show there isn't any magic lets create one from scratch.
+In the Installing section we used the `dshell create` command to create a simple DShell script, but you can create a script with any editor.
 
 Let's start with the classic hello_world.dart
 
@@ -270,35 +247,59 @@ Create a file called `hello_world.dart`.
 Copy the following contents to the script.
 
 ```dart
+#! /usr/bin/env dshell
+
 void main() {
     print('hello world');
 }
 ```
+Don't forget to mark your script as executable via:
+
+```baseh
+chmod +x hello_world.dart
+```
+
+Note: 
+
+The first line begins with a '#!'. This is refered to as a 'hash bang'. The hash bang MUST be on the first line of your script as it tells your OS that this script is a dshell script.
+
+Without the #! you must run the script using dshell explictily.
+
+```bash
+dshell hello_world.dart
+```
+
+With the #! you can run the script and our OS will work out that it is a dshell script:
+
+```base
+./hello_world.dart
+```
 
 Now run the script.
-You may see a few extra lines after 'Resolving dependancies...' as DShell downloads and caches any required libraries.
+You will see a few extra lines after 'Resolving dependancies...' as DShell downloads and caches any required libraries.
+
 
 ```
 cli> dshell hello_world.dart
-Resolving dependancies...
 ...
 hello world
 cli>
 ```
 
-So that was simple.
+or (if we have our #!)
 
+```
+cli> ./hello_world.dart
+...
+hello world
+cli>
+```
 
 The first time you run a given DShell script, DShell needs to resolve any dependancies by running a Dart `pub get` command and doing some other house keeping.
 
 If you run the same script a second time DShell has already resolved the dependancies and so it can run the script immediately.
 
-
-```
-cli>dshell hello_world.dart
-hello world
-cli>
-```
+If we had used `dshell create` the dependency resolution process would have been run in the background. But as we created the scripts ourselves it has to be run the first time you try to run the script.
 
 
 > In the Dart world a `.dart` file is referred to as a 'library'. As you will see a Dart library can contain global functions and multiple Dart classes.
@@ -316,6 +317,7 @@ Create a new script `first.dart`
 Copy the following contents to the script:
 
 ```dart
+#! /usr/bin/env dshell
 /// import DShell's global functions 
 import 'package:dshell/dshell.dart';
 
@@ -394,7 +396,7 @@ void main() {
 Now run our script.
 
 ```
-cli> dshell first.dart
+cli> ./first.dart
 Hello world
 My second line
 My third line
