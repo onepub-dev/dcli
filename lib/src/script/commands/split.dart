@@ -18,8 +18,9 @@ class SplitCommand extends Command {
     if (subarguments.isEmpty) {
       throw InvalidArguments('Split requires a argument <script file.dart>');
     }
-    Script.validate(subarguments);
-    var script = Script.fromFile(subarguments[0]);
+    var scriptPath = subarguments[0];
+    Script.validate(scriptPath);
+    var script = Script.fromFile(scriptPath);
 
     if (exists(join(script.path, 'pubspec.yaml'))) {
       if (_identical(script)) {

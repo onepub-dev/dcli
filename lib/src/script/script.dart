@@ -94,28 +94,19 @@ void main() {
   }
 
   /// validate that the passed arguments points to
-  /// a valid script.
-  /// The script name MUST be the first argument.
-  ///
-  /// Throws an exception if the script is invalid.
-  static void validate(List<String> arguments) {
-    if (arguments.isEmpty) {
+  static void validate(String scriptPath) {
+    if (!scriptPath.endsWith('.dart')) {
       throw InvalidArguments(
-          'Expected a script or command. No arguments were found');
+          'Expected a script name (ending in .dart) instead found: ${scriptPath}');
     }
 
-    var scriptArg = arguments[0];
-    if (!scriptArg.endsWith('.dart')) {
-      throw InvalidArguments(
-          'Expected a script name (ending in .dart) instead found: ${scriptArg}');
-    }
-
-    if (!exists(scriptArg)) {
+    if (!exists(scriptPath)) {
       throw InvalidScript(
-          'The script ${p.absolute(scriptArg)} does not exist.');
+          'The script ${p.absolute(scriptPath)} does not exist.');
     }
-    if (!FileSystemEntity.isFileSync(scriptArg)) {
-      throw InvalidScript('The script ${p.absolute(scriptArg)} is not a file.');
+    if (!FileSystemEntity.isFileSync(scriptPath)) {
+      throw InvalidScript(
+          'The script ${p.absolute(scriptPath)} is not a file.');
     }
   }
 

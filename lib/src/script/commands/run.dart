@@ -1,6 +1,7 @@
 import 'package:dshell/dshell.dart';
 
 import '../../settings.dart';
+import '../command_line_runner.dart';
 import '../dart_sdk.dart';
 import '../flags.dart';
 import '../project_cache.dart';
@@ -19,9 +20,14 @@ class RunCommand extends Command {
   /// Returns the [exitcode];
   @override
   int run(List<Flag> selectedFlags, List<String> arguments) {
-    Script.validate(arguments);
+    if (arguments.isEmpty) {
+      throw InvalidArguments(
+          'Expected a script or command. No arguments were found');
+    }
+    var scriptPath = arguments[0];
+    Script.validate(scriptPath);
 
-    var script = Script.fromFile(arguments[0]);
+    var script = Script.fromFile(scriptPath);
     Settings().scriptPath = script.path;
 
     Settings().verbose('Running script ${script.path}');
