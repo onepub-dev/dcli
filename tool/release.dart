@@ -38,7 +38,7 @@ void main(List<String> args) {
   }
 
   // ensure that all code is correctly formatted.
-  './format_code.dart'.run;
+  './format_code.dart'.forEach(devNull, stderr: (line)=> print(line));
 
   if (tagExists(newVersion.toString())) {
     print('');
