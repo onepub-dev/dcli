@@ -1,3 +1,6 @@
+### 1.6.0
+Added a new menu function which displays a console based menu of selectable options.
+
 ### 1.5.2
 A little cleanup of documentation and progress messages.
 
