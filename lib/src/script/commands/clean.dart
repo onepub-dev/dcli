@@ -1,7 +1,6 @@
 import 'package:dshell/dshell.dart';
 
 import '../../settings.dart';
-import '../command_line_runner.dart';
 import '../flags.dart';
 import '../script.dart';
 import '../virtual_project.dart';
