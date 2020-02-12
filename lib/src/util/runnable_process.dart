@@ -120,7 +120,7 @@ class RunnableProcess {
 
       if (exitCode != 0) {
         exited.completeError(RunException(exitCode,
-            'The command [$cmdLine] failed with exitCode: ${exitCode}'));
+            'The command ${red('[$cmdLine]')} failed with exitCode: ${exitCode}'));
       } else {
         exited.complete(exitCode);
       }
@@ -197,7 +197,7 @@ class RunnableProcess {
         // escape as an unhandled exception and stop the whole script
         if (exitCode != 0 && nothrow == false) {
           done.completeError(RunException(exitCode,
-              'The command [$cmdLine] failed with exitCode: ${exitCode}'));
+              'The command ${red('[$cmdLine]')} failed with exitCode: ${exitCode}'));
         } else {
           done.complete(true);
         }
