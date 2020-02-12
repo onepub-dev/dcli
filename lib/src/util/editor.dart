@@ -2,11 +2,10 @@ import 'dart:io';
 
 import '../../dshell.dart';
 
-///
 /// Launches the systems default cli editor on Linux and MacOS
 /// using the EDITOR environment variable.
 ///
-/// /// On Windows we launch notepad.
+/// On Windows we launch notepad.
 ///
 /// If the EDITOR environment variable isn't found then
 /// we check for the VISUAL environment variable.
