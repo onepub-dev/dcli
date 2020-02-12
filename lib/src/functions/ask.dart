@@ -49,6 +49,9 @@ String ask({String prompt, bool toLower = false, bool hidden = false}) =>
 bool confirm({String prompt}) {
   bool result;
   var matched = false;
+
+  prompt += ' (y/n):';
+
   while (!matched) {
     var entered = Ask().ask(prompt: prompt, toLower: true, hidden: false);
     var lower = entered.toLowerCase();
