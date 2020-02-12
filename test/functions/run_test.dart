@@ -68,5 +68,22 @@ void main() {
         deleteDir(scriptPath, recursive: true);
       });
     });
+
+    //  t.test('Does run expand wildcards', () {
+    //   TestZone().run(() {
+    //     var testFile = 'test.text';
+    //     var testFile1 = 'test2.text';
+
+    //     touch(testFile);
+    //     touch(testFile1);
+
+    //     'echo *.text'.run;
+    //     t.expect(exists(testFile), t.equals(true));
+
+    //       if (exists(testFile)) {
+    //       delete(testFile);
+      
+    //   });
+    // });
   });
 }
