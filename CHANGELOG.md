@@ -1,3 +1,6 @@
+### 1.6.3
+[FIX] Fixed a bug in menu and cleaned up the documentation.
+
 ### 1.6.2
 [ENH] Added (y/n): to the confirm prompt automatically.
 
