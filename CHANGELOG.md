@@ -1,3 +1,7 @@
+### 1.6.1
+Added an opton to control which end of a limited list the menu displays from.
+suppressed the output of the format command.
+
 ### 1.6.0
 Added a new menu function which displays a console based menu of selectable options.
 
