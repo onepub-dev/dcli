@@ -1,3 +1,6 @@
+### 1.6.2
+[ENH] Added (y/n): to the confirm prompt automatically.
+
 ### 1.6.1
 Added an opton to control which end of a limited list the menu displays from.
 suppressed the output of the format command.
