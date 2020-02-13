@@ -52,10 +52,10 @@ class TestPaths {
     return Directory(TEST_ROOT).createTempSync().path;
   }
 
-  String projectPath(String scriptName) {
-    var project =
-        VirtualProject(Settings().dshellCachePath, Script.fromFile(scriptName));
-    return project.path;
+  String runtimePath(String scriptName) {
+    var project = VirtualProject.create(
+        Settings().dshellCachePath, Script.fromFile(scriptName));
+    return project.runtimePath;
 
     // String projectPath;
     // var projectScriptPath =

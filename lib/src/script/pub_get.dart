@@ -25,7 +25,7 @@ class PubGet {
   PubGetResult run({bool compileExecutables = true}) {
     var result = PubGetResult();
     try {
-      DartSdk().runPubGet(project.path,
+      DartSdk().runPubGet(project.runtimePath,
           compileExecutables: compileExecutables,
           progress: Progress((line) => result.processLine(line),
               stderr: (line) => println(line)));

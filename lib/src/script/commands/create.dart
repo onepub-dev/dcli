@@ -1,12 +1,12 @@
 import '../../../dshell.dart';
 import '../../functions/is.dart';
 import '../flags.dart';
-import '../project_cache.dart';
 
 import 'package:path/path.dart' as p;
 
 import '../command_line_runner.dart';
 import '../script.dart';
+import '../virtual_project.dart';
 import 'commands.dart';
 
 class CreateCommand extends Command {
@@ -56,8 +56,8 @@ class CreateCommand extends Command {
     _script.createDefaultFile(body);
 
     print('Creating project...');
-    ProjectCache()
-        .createProject(_script, background: !flagSet.isSet(ForegroundFlag()));
+    var project = VirtualProject.create(Settings().dshellCachePath, _script);
+    project.clean(background: !flagSet.isSet(ForegroundFlag()));
 
     chmod(755, p.join(_script.scriptDirectory, _script.scriptname));
 

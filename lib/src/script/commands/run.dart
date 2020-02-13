@@ -4,9 +4,9 @@ import '../../settings.dart';
 import '../command_line_runner.dart';
 import '../dart_sdk.dart';
 import '../flags.dart';
-import '../project_cache.dart';
 import '../runner.dart';
 import '../script.dart';
+import '../virtual_project.dart';
 import 'commands.dart';
 
 /// Runs a dart script.
@@ -32,8 +32,8 @@ class RunCommand extends Command {
 
     Settings().verbose('Running script ${script.path}');
 
-    var project = ProjectCache().loadProject(script);
-    Settings().verbose('Virtual Project directory ${project.path}');
+    var project = VirtualProject.load(Settings().dshellCachePath, script);
+    Settings().verbose('Virtual Project directory ${project.runtimePath}');
 
     project.cleanIfRequired();
 

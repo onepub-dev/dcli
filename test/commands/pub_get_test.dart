@@ -17,7 +17,7 @@ void main() {
     test('Do it', () {
       TestZone().run(() {
         var script = Script.fromFile('test/test_scripts/hello_world.dart');
-        var project = VirtualProject(Settings().dshellCachePath, script);
+        var project = VirtualProject.load(Settings().dshellCachePath, script);
         var sdk = DartSdk();
         PubGet(sdk, project).run();
       });

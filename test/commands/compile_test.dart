@@ -40,5 +40,18 @@ void main() {
         expect(exit, equals(0));
       });
     });
+
+    test('compile  with a local pubspec', () {
+      TestZone().run(() {
+        var exit = -1;
+        try {
+          exit = EntryPoint().process(
+              ['compile', 'test/test_scripts/local_pubspec/hello_world.dart']);
+        } on DShellException catch (e) {
+          print(e);
+        }
+        expect(exit, equals(0));
+      });
+    });
   });
 }

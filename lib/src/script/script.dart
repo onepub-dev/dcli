@@ -1,6 +1,8 @@
 import 'dart:io';
 import 'dart:math';
 
+import 'package:dshell/src/pubspec/pubspec_annotation.dart';
+
 import '../functions/is.dart';
 import 'flags.dart';
 import '../util/file_helper.dart';
@@ -117,6 +119,16 @@ void main() {
     // The virtual project pubspec.yaml file.
     final pubSpecPath = p.join(_scriptDirectory, 'pubspec.yaml');
     return exists(pubSpecPath);
+  }
+
+  bool _hasPubspecAnnotation;
+
+  bool get hasPubspecAnnotation {
+    if (_hasPubspecAnnotation == null) {
+      var pubSpec = PubSpecAnnotation.fromScript(this);
+      _hasPubspecAnnotation = pubSpec.annotationFound();
+    }
+    return _hasPubspecAnnotation;
   }
 }
 

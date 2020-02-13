@@ -77,24 +77,26 @@ class CompileCommand extends Command {
     Script.validate(scriptPath);
     var script = Script.fromFile(scriptPath);
     try {
-      var project = VirtualProject(Settings().dshellCachePath, script);
+      VirtualProject project;
 
       // by default we clean the project unless the -nc flagg is passed.
       // howver if the project doesn't exist we force a clean
       if (!flagSet.isSet(NoCleanFlag())) {
         // make certain the project is upto date.
+        project = VirtualProject.create(Settings().dshellCachePath, script);
         project.clean();
-      }
-
-      if (!exists(project.path)) {
-        print("Running 'clean' as Virtual Project does not exist.");
-        project.clean();
+      } else {
+        project = VirtualProject.load(Settings().dshellCachePath, script);
+        if (!project.isRunnable()) {
+          project.clean();
+        }
       }
 
       Settings().verbose(
-          "\nCompiling with pubspec.yaml:\n${read(join(project.path, 'pubspec.yaml')).toList().join('\n')}\n");
+          "\nCompiling with pubspec.yaml:\n${read(project.runtimePubSpecPath).toList().join('\n')}\n");
 
-      DartSdk().runDart2Native(script, script.scriptDirectory, project.path,
+      DartSdk().runDart2Native(
+          script, script.scriptDirectory, project.runtimePath,
           progress:
               Progress((line) => print(line), stderr: (line) => print(line)));
 

@@ -21,10 +21,10 @@ class DoctorCommand extends Command {
   @override
   int run(List<Flag> selectedFlags, List<String> subarguments) {
     var showScriptDetails = false;
-    VirtualProject script;
+    VirtualProject project;
     if (subarguments.length == 1) {
       showScriptDetails = true;
-      script = VirtualProject(
+      project = VirtualProject.create(
           Settings().dshellCachePath, Script.fromFile(subarguments[0]));
     }
     if (subarguments.length > 1) {
@@ -97,7 +97,7 @@ class DoctorCommand extends Command {
     gd.dependencies.forEach((d) => colprint('  ${d.name}', '${d.rehydrate()}'));
 
     if (showScriptDetails) {
-      script.doctor;
+      project.doctor;
     }
     return 0;
   }

@@ -25,7 +25,13 @@ import 'script.dart';
 /// required by dart.
 class VirtualProject {
   static const String PROJECT_DIR = '.project';
-  var BUILD_COMPLETE = 'build.complete';
+
+  /// If this file exists in the VirtualProject directory
+  /// then the project is using a local pubspec.yaml
+  /// and we don't need to build the virtual project.
+  static const USING_LOCAL_PUBSPEC = '.using.local.pubspec';
+  static const USING_VIRTUAL_PUBSPEC = '.using.virtual.pubspec';
+  static const BUILD_COMPLETE = '.build.complete';
   final Script script;
 
   String _virtualProjectPath;
@@ -43,23 +49,9 @@ class VirtualProject {
 
   String _projectPubspecPath;
 
-  // String _projectPubSpecPath;
+  String _localPubspecIndicatorPath;
 
-  /// Returns a [project] instance for the given
-  /// script.
-  VirtualProject(String cacheRootPath, this.script) {
-    // /home/bsutton/.dshell/cache/home/bsutton/git/dshell/test/test_scripts/hello_world.project
-    _virtualProjectPath = join(cacheRootPath,
-        script.scriptDirectory.substring(1), script.basename + PROJECT_DIR);
-
-    _projectLibPath = join(_virtualProjectPath, 'lib');
-    _projectScriptLinkPath = join(_virtualProjectPath, script.scriptname);
-    _scriptLibPath = join(script.scriptDirectory, 'lib');
-
-    _projectPubspecPath = join(_virtualProjectPath, 'pubspec.yaml');
-  }
-
-  String get scriptLib => _scriptLibPath;
+  String _virtualPubspecIndicatorPath;
 
   // The absolute path to the projects lib directory.
   // If the script lib exists then this will
@@ -73,11 +65,120 @@ class VirtualProject {
   /// This is this is essentially:
   /// join(Settings().dshellCache, dirname(script), PROJECT_DIR)
   ///
-  String get path => _virtualProjectPath;
+  // String get path => _virtualProjectPath;
 
   /// The path to the virtual projects pubspec.yaml
   /// e.g. PROJECT_DIR/pubspec.yaml
   String get projectPubspecPath => _projectPubspecPath;
+
+  // String _projectPubSpecPath;
+
+  // String _runtimeLibPath;
+
+  // String _runtimeScriptPath;
+
+  String _runtimePubspecPath;
+  String _runtimePath;
+
+  bool _isProjectInitialised = false;
+
+  String get runtimePubSpecPath => _runtimePubspecPath;
+
+  String get runtimePath => _runtimePath;
+
+  /// Returns a [project] instance for the given
+  /// script.
+  static VirtualProject create(String cacheRootPath, Script script) {
+    var project = VirtualProject._internal(cacheRootPath, script);
+
+    if (script.hasPubSpecYaml() && !script.hasPubspecAnnotation) {
+      // we don't need a virtual project as the script
+      // is a full project in its own right.
+      // why do we have two lib paths?
+      setLocalPaths(project, script);
+
+      project.__usingLocalPubspec = true;
+    } else {
+      // we need a virtual pubspec.
+      // project._runtimeLibPath = project._projectLibPath;
+
+      // project._runtimeScriptPath = project._projectScriptLinkPath;
+
+      setVirtualPaths(project);
+
+      project.__usingLocalPubspec = false;
+    }
+
+    project._createProject();
+    return project;
+  }
+
+  static void setProjectPaths(VirtualProject project, Script script) {
+    project._projectLibPath = join(project._virtualProjectPath, 'lib');
+
+    project._scriptLibPath = join(script.path, 'lib');
+    project._projectScriptLinkPath =
+        join(project._virtualProjectPath, script.scriptname);
+    project._projectPubspecPath =
+        join(project._virtualProjectPath, 'pubspec.yaml');
+  }
+
+  static void setVirtualPaths(VirtualProject project) {
+    setProjectPaths(project, project.script);
+
+    project._runtimePubspecPath = project._projectPubspecPath;
+    project._runtimePath = project._virtualProjectPath;
+  }
+
+  static void setLocalPaths(VirtualProject project, Script script) {
+    // project._runtimeLibPath = join(script.path, 'lib');
+
+    // project._runtimeScriptPath = script.path;
+    setProjectPaths(project, script);
+
+    project._runtimePubspecPath = join(dirname(script.path), 'pubspec.yaml');
+
+    project._runtimePath = dirname(script.path);
+  }
+
+  /// loads an existing virtual project.
+  static VirtualProject load(String dshellCachePath, Script script) {
+    var project = VirtualProject._internal(dshellCachePath, script);
+
+    if (!project._isProjectInitialised) {
+      project = create(dshellCachePath, script);
+    } else {
+      if (project._usingLocalPubspec()) {
+        // why do we have two lib paths?
+        setLocalPaths(project, script);
+      } else {
+        setVirtualPaths(project);
+      }
+    }
+    return project;
+  }
+
+  bool __usingLocalPubspec;
+
+  bool _usingLocalPubspec() {
+    assert(_isProjectInitialised);
+    __usingLocalPubspec ??= exists(_localPubspecIndicatorPath);
+    return __usingLocalPubspec;
+  }
+
+  VirtualProject._internal(String cacheRootPath, this.script) {
+    // /home/bsutton/.dshell/cache/home/bsutton/git/dshell/test/test_scripts/hello_world.project
+    _virtualProjectPath = join(cacheRootPath,
+        script.scriptDirectory.substring(1), script.basename + PROJECT_DIR);
+
+    _localPubspecIndicatorPath = join(_virtualProjectPath, USING_LOCAL_PUBSPEC);
+    _virtualPubspecIndicatorPath =
+        join(_virtualProjectPath, USING_VIRTUAL_PUBSPEC);
+
+    _isProjectInitialised = exists(_virtualProjectPath) &&
+        (exists(_localPubspecIndicatorPath) ||
+            exists(_virtualPubspecIndicatorPath));
+  }
 
   /// Creates the projects cache directory under the
   ///  root directory of our global cache directory - [cacheRootDir]
@@ -91,33 +192,50 @@ class VirtualProject {
   ///  or
   /// Link to scripts own pubspec.yaml file.
   /// hashes.yaml file.
-  void createProject({bool skipPubGet = false, bool background = false}) {
+  void _createProject({bool skipPubGet = false}) {
     withLock(() {
       if (!exists(_virtualProjectPath)) {
         createDir(_virtualProjectPath);
         print('Created Virtual Project at ${_virtualProjectPath}');
       }
 
-      _createScriptLink(script);
-      _createLib();
-      PubSpecManager(this).createVirtualPubSpec();
-      if (skipPubGet) {
-        print('Skipping pub get.');
-      } else {
-        if (background) {
-          // we run the clean in the background
-          // by running another copy of dshell.
-          print('DShell clean started in the background.');
-          // ('dshell clean ${script.path}' | 'echo > ${dirname(path)}/log').run;
-          // 'dshell -v clean ${script.path}'.run;
-          'dshell -v=/tmp/dshell.clean.log clean ${script.path}'
-              .start(detached: true, runInShell: true);
-        } else {
-          print('Running pub get...');
-          _pubget();
-          _markBuildComplete();
+      if (script.hasPubSpecYaml() && !script.hasPubspecAnnotation) {
+        // create the indicator file so when we load
+        // the virtual project we know its a local
+        // pubspec without having to parse the script
+        // for a pubspec annotation.
+        if (exists(_virtualPubspecIndicatorPath)) {
+          delete(_virtualPubspecIndicatorPath);
         }
+        touch(_localPubspecIndicatorPath, create: true);
+        __usingLocalPubspec = true;
+
+        // clean up any old files.
+        // as the script may have changed from virtual to local.
+        if (exists(_projectScriptLinkPath)) {
+          delete(_projectScriptLinkPath);
+        }
+
+        if (exists(_projectLibPath)) {
+          delete(_projectLibPath);
+        }
+
+        if (exists(_projectPubspecPath)) {
+          delete(_projectPubspecPath);
+        }
+      } else {
+        if (exists(_localPubspecIndicatorPath)) {
+          delete(_localPubspecIndicatorPath);
+        }
+        touch(_virtualPubspecIndicatorPath, create: true);
+        __usingLocalPubspec = false;
+
+        // create the files/links for a virtual pubspec.
+        _createScriptLink(script);
+        _createLib();
+        PubSpecManager(this).createVirtualPubSpec();
       }
+      _isProjectInitialised = true;
     });
   }
 
@@ -132,7 +250,8 @@ class VirtualProject {
 
   ///
   /// deletes the project cache directory and recreates it.
-  void clean() {
+  void clean({bool background = false}) {
+    /// Check that dshells install has been rum.
     if (!exists(Settings().dshellCachePath)) {
       printerr(red(
           "The dshell cache doesn't exists. Please run 'dshell install' and then try again."));
@@ -142,15 +261,20 @@ class VirtualProject {
     }
 
     withLock(() {
-      if (exists(_virtualProjectPath)) {
-        if (Settings().isVerbose) {
-          Settings().verbose('Deleting project path: $_virtualProjectPath');
-        }
-        deleteDir(_virtualProjectPath, recursive: true);
-      }
-
       try {
-        createProject();
+        if (background) {
+          // we run the clean in the background
+          // by running another copy of dshell.
+          print('DShell clean started in the background.');
+          // ('dshell clean ${script.path}' | 'echo > ${dirname(path)}/log').run;
+          // 'dshell -v clean ${script.path}'.run;
+          'dshell -v=/tmp/dshell.clean.log clean ${script.path}'
+              .start(detached: true, runInShell: true);
+        } else {
+          print('Running pub get...');
+          _pubget();
+          _markBuildComplete();
+        }
       } on PubGetException {
         print(red("\ndshell clean failed due to the 'pub get' call failing."));
       }
@@ -177,7 +301,7 @@ class VirtualProject {
   // to swap between a link and a dir.
   void _createLib() {
     // does the script have a lib directory
-    if (Directory(scriptLib).existsSync()) {
+    if (Directory(_scriptLibPath).existsSync()) {
       // does the cache have a lib
       if (Directory(projectCacheLib).existsSync()) {
         // ensure we have a link from cache to the scriptlib
@@ -187,11 +311,11 @@ class VirtualProject {
           // the last run.
           Directory(projectCacheLib).deleteSync();
           var link = Link(projectCacheLib);
-          link.createSync(scriptLib);
+          link.createSync(_scriptLibPath);
         }
       } else {
         var link = Link(projectCacheLib);
-        link.createSync(scriptLib);
+        link.createSync(_scriptLibPath);
       }
     } else {
       // no script lib so we need to create a real lib
@@ -220,7 +344,7 @@ class VirtualProject {
     print('Script Details');
     colprint('Name', script.scriptname);
     colprint('Directory', privatePath(script.scriptDirectory));
-    colprint('Virtual Project', privatePath(path));
+    colprint('Virtual Project', privatePath(_virtualProjectPath));
     print('');
 
     print('');
@@ -246,7 +370,7 @@ class VirtualProject {
   /// reads and returns the projects virtual pubspec
   /// and returns it.
   PubSpec pubSpec() {
-    return PubSpecFile.fromFile(projectPubspecPath);
+    return PubSpecFile.fromFile(_runtimePubspecPath);
   }
 
   /// We use this to allow a projects lock to be-reentrant
@@ -276,7 +400,8 @@ class VirtualProject {
     Settings().verbose('Created lockfile $lockFile');
 
     // check for other lock files
-    var locks = find('*.$_lockSuffix', root: dirname(path)).toList();
+    var locks =
+        find('*.$_lockSuffix', root: dirname(_virtualProjectPath)).toList();
 
     if (locks.length == 1) {
       // no other lock exists so we have taken a lock.
@@ -319,7 +444,7 @@ class VirtualProject {
           taken = true;
         } else {
           throw LockException(
-              'Unable to lock the Virtual Project ${truepath(path)} as it is currently held by ${ProcessHelper().getPIDName(lpid)}');
+              'Unable to lock the Virtual Project ${truepath(_virtualProjectPath)} as it is currently held by ${ProcessHelper().getPIDName(lpid)}');
         }
       }
     }
@@ -330,8 +455,8 @@ class VirtualProject {
   void withLock(void Function() fn, {String waiting}) {
     /// We must create the virtual project directory as we use
     /// its parent to store the lockfile.
-    if (!exists(path)) {
-      createDir(path, recursive: true);
+    if (!exists(_virtualProjectPath)) {
+      createDir(_virtualProjectPath, recursive: true);
     }
     try {
       Settings().verbose('_lockcount = $_lockCount');
@@ -353,11 +478,12 @@ class VirtualProject {
     }
   }
 
-  String get _lockSuffix => '${basename(path).replaceAll('.', '_')}.clean.lock';
+  String get _lockSuffix =>
+      '${basename(_virtualProjectPath).replaceAll('.', '_')}.clean.lock';
   String get _lockFilePath {
     // lock file is in the directory above the project
     // as during cleaning we delete the project directory.
-    return join(dirname(path), '$pid.${_lockSuffix}');
+    return join(dirname(_virtualProjectPath), '$pid.${_lockSuffix}');
   }
 
   /// Called after a project is created
@@ -367,13 +493,15 @@ class VirtualProject {
     /// This file is used by the RunCommand to know if the project
     /// is in a runnable state.
 
-    touch(join(path, BUILD_COMPLETE), create: true);
+    touch(join(_virtualProjectPath, BUILD_COMPLETE), create: true);
   }
 
   bool isRunnable() {
-    return exists(join(path, BUILD_COMPLETE));
+    return _isProjectInitialised &&
+        exists(join(_virtualProjectPath, BUILD_COMPLETE));
   }
 
+  /// Cleans the project only if its not in a runnable state.
   void cleanIfRequired() {
     if (!isRunnable()) {
       withLock(() {

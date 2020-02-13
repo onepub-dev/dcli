@@ -57,21 +57,6 @@ class ProjectCache {
     return _self;
   }
 
-  VirtualProject loadProject(Script script) {
-    return VirtualProject(Settings().dshellCachePath, script);
-  }
-
-  // Creates a project ready to run for
-  // the given script.
-  // If the project already exists then [it will
-  // be refreshed if required.
-  /// If [background] is true then the pub get is ran detached.
-  VirtualProject createProject(Script script,
-      {bool skipPubGet = false, bool background}) {
-    var project = VirtualProject(Settings().dshellCachePath, script);
-    project.createProject(skipPubGet: skipPubGet, background: background);
-    return project;
-  }
 
   ///
   /// Checks if the dscript cache exists
@@ -104,7 +89,7 @@ class ProjectCache {
         if (exists(scriptPath)) {
           print('');
           print(green('Cleaning $scriptPath'));
-          var project = VirtualProject(
+          var project = VirtualProject.create(
               Settings().dshellCachePath, Script.fromFile(scriptPath));
           project.clean();
         } else {

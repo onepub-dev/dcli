@@ -1,7 +1,6 @@
 @Timeout(Duration(seconds: 600))
 import 'package:dshell/dshell.dart' hide equals;
 import 'package:dshell/src/pubspec/global_dependencies.dart';
-import 'package:dshell/src/pubspec/pubspec_manager.dart';
 import 'package:dshell/src/script/dependency.dart';
 import 'package:dshell/src/script/script.dart';
 import 'package:dshell/src/script/virtual_project.dart';
@@ -157,11 +156,7 @@ dependency_overrides:
     var script = Script.fromFile(testScriptPath);
 
     // create a virtual project for it.
-    var project = VirtualProject(TestPaths.TEST_ROOT, script);
-    project.createProject(skipPubGet: true);
-
-    var manager = PubSpecManager(project);
-    manager.createVirtualPubSpec();
+    var project = VirtualProject.create(TestPaths.TEST_ROOT, script);
 
     var pubspec = project.pubSpec();
 

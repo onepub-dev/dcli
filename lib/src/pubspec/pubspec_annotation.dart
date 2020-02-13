@@ -42,7 +42,7 @@ class PubSpecAnnotation implements PubSpec // with DependenciesMixin
   }
 
   /// returns true if a @pubspec annotation was found.
-  bool exists() {
+  bool annotationFound() {
     return pubspec != null;
   }
 

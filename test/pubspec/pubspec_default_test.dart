@@ -5,6 +5,7 @@ import 'package:dshell/src/pubspec/pubspec.dart';
 import 'package:dshell/src/script/dependency.dart';
 import 'package:dshell/src/script/project_cache.dart';
 import 'package:dshell/src/script/script.dart';
+import 'package:dshell/src/script/virtual_project.dart';
 import 'package:path/path.dart' as p;
 import 'package:test/test.dart' as t;
 
@@ -169,7 +170,7 @@ void runTest(String annotation, String main, List<Dependency> expected) {
   }
   scriptPath.append(main);
 
-  var project = ProjectCache().createProject(script, skipPubGet: true);
+  var project = VirtualProject.create(Settings().dshellCachePath, script);
 
   var pubspec = project.pubSpec();
   t.expect(pubspec.dependencies, t.unorderedMatches(expected));
