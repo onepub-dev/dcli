@@ -12,5 +12,6 @@ import 'package:dshell/dshell.dart';
 
 void main() {
   print(pwd);
+  'sleep 100'.run;
   'ls *.*'.run;
 }
