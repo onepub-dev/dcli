@@ -57,7 +57,6 @@ class ProjectCache {
     return _self;
   }
 
-
   ///
   /// Checks if the dscript cache exists
   /// and if not creates it.

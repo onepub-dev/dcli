@@ -1,3 +1,5 @@
+### 1.8.0
+[FIX} Fixed a major bug when a script had a local pubspec.yaml. If you are using vscode then vscode creates a local pubspec.lock and dshell also create a pubspec.lock. This resulted in dshell getting confused. Now if a local pubspec.yaml exists a virtual pubspec is not created and we run directly from the local pubspec.yam. This makes more sense as if you have a local pubspsec.yaml then you really have a full dart project.
 ### 1.7.0
 [ENH] added global function to clear the screen and clear a line. clearScreen() and clearLine()
 Highlighted the failed command by coloring it red.

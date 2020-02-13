@@ -2,7 +2,6 @@ import 'package:pub_semver/pub_semver.dart';
 
 import '../script/dependency.dart';
 
-
 import 'pubspec.dart';
 
 class PubSpecVirtual implements PubSpec //with DependenciesMixin {

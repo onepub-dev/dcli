@@ -43,7 +43,6 @@ class PubSpecManager {
     if (!annotation.annotationFound()) {
       if (script.hasPubSpecYaml()) {
         sourcePubSpec = PubSpecFile.fromScript(script);
-
       } else {
         sourcePubSpec = defaultPubspec;
       }
