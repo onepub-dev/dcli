@@ -1,3 +1,5 @@
+import 'package:dshell/src/functions/echo.dart';
+
 /// Returns a string wrapped with the selected ansi
 /// fg color codes.
 String red(String text, {AnsiColor bgcolor = AnsiColor.none}) =>
@@ -148,6 +150,31 @@ String grey(String text,
         {double level = 0.5, AnsiColor bgcolor = AnsiColor.none}) =>
     AnsiColor._apply(AnsiColor._Grey(level: level), text, bgcolor: bgcolor);
 
+///
+/// Modes available when clearing a screen or line.
+///
+/// When used with clearScreen:
+/// [all] - clears the entire screen
+/// [fromCursor] - clears from the cursor until the end of the screen
+/// [toCursor] - clears from the start of the screen to the cursor.
+///
+///  When used with clearLine:
+/// [all] - clears the entire line
+/// [fromCursor] - clears from the cursor until the end of the line.
+/// [toCursor] - clears from the start of the line to the cursor.
+///
+enum AnsiClearMode {
+  // scrollback,
+  all,
+  fromCursor,
+  toCursor
+}
+
+void clearScreen({AnsiClearMode mode = AnsiClearMode.all}) =>
+    AnsiColor.clearScreen(mode);
+void clearLine({AnsiClearMode mode = AnsiClearMode.all}) =>
+    AnsiColor.clearLine(mode);
+
 /// Helper class to assist in printing text to the console with a color.
 ///
 /// Use one of the color functions instead of this class.
@@ -158,10 +185,10 @@ String grey(String text,
 ///     [orange]
 ///  ...
 class AnsiColor {
-  static String reset() => _emmit(Reset);
+  static String reset() => _emit(Reset);
 
-  static String fgReset() => _emmit(FgReset);
-  static String bgReset() => _emmit(BgReset);
+  static String fgReset() => _emit(FgReset);
+  static String bgReset() => _emit(BgReset);
 
   final int _code;
   const AnsiColor(int code) : _code = code;
@@ -196,6 +223,38 @@ class AnsiColor {
     return output;
   }
 
+  static void clearScreen(AnsiClearMode mode) {
+    switch (mode) {
+      // case AnsiClearMode.scrollback:
+      //   echo('${esc}3J', newline: false);
+      //   break;
+      case AnsiClearMode.all:
+        echo('${esc}2J', newline: false);
+        break;
+      case AnsiClearMode.fromCursor:
+        echo('${esc}0J', newline: false);
+        break;
+      case AnsiClearMode.toCursor:
+        echo('${esc}1J', newline: false);
+        break;
+    }
+  }
+
+  static void clearLine(AnsiClearMode mode) {
+    switch (mode) {
+      // case AnsiClearMode.scrollback:
+      case AnsiClearMode.all:
+        echo(_emit('2K'), newline: false);
+        break;
+      case AnsiClearMode.fromCursor:
+        echo(_emit('0K'), newline: false);
+        break;
+      case AnsiClearMode.toCursor:
+        echo(_emit('1K'), newline: false);
+        break;
+    }
+  }
+
   // background colors are fg color + 10
   static String _bg(int code) {
     String output;
@@ -210,12 +269,13 @@ class AnsiColor {
     return output;
   }
 
-  static String _emmit(String ansicode) {
+  static String _emit(String ansicode) {
     return '${esc}${ansicode}m';
   }
 
   /// ANSI Control Sequence Introducer, signals the terminal for new settings.
   static const esc = '\x1B[';
+  // static const esc = '\u001b[';
 
   /// Resets
 
@@ -228,10 +288,10 @@ class AnsiColor {
   /// Defaults the terminal's bg color without altering the fg.
   static const String BgReset = '49';
 
-  // emmit this code followed by a color code to set the fg color
+  // emit this code followed by a color code to set the fg color
   static const String FgColor = '38;5;';
 
-// emmit this code followed by a color code to set the fg color
+// emit this code followed by a color code to set the fg color
   static const String BgColor = '48;5;';
 
   /// Colors
