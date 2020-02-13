@@ -1,3 +1,7 @@
+### 1.7.0
+[ENH] added global function to clear the screen and clear a line. clearScreen() and clearLine()
+Highlighted the failed command by coloring it red.
+
 ### 1.6.3
 [FIX] Fixed a bug in menu and cleaned up the documentation.
 

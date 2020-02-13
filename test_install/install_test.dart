@@ -1,9 +1,10 @@
+import 'package:mockito/mockito.dart';
+
 import 'package:dshell/dshell.dart' hide equals;
 import 'package:dshell/src/functions/env.dart';
 import 'package:dshell/src/pubspec/global_dependencies.dart';
 import 'package:dshell/src/script/entry_point.dart';
 import 'package:dshell/src/util/dshell_exception.dart';
-import 'package:mockito/mockito.dart';
 import 'package:pubspec/pubspec.dart';
 import 'package:test/test.dart';
 
@@ -123,7 +124,8 @@ void checkInstallStructure() {
   var expected = ['dependencies:'];
 
   for (var dep in GlobalDependencies.defaultDependencies) {
-    expected.add('  ${dep.name}: ${(dep.reference as HostedReference).versionConstraint.toString()}');
+    expected.add(
+        '  ${dep.name}: ${(dep.reference as HostedReference).versionConstraint.toString()}');
   }
 
   expect(content, equals(expected));
