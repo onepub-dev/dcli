@@ -100,10 +100,13 @@ class CompileCommand extends Command {
           progress:
               Progress((line) => print(line), stderr: (line) => print(line)));
 
-      if (flagSet.isSet(InstallFlag())) {
+      var exe = join(script.scriptDirectory, script.basename);
+
+      /// if an exe was produced and the --install flag was set.
+      /// If no exe then the compile failed.
+      if (flagSet.isSet(InstallFlag()) && exists(exe)) {
         var install = true;
         var to = join(Settings().dshellBinPath, script.basename);
-        var from = join(script.scriptDirectory, script.basename);
         if (exists(to) && !flagSet.isSet(OverWriteFlag())) {
           install = false;
           print(red(
@@ -112,8 +115,8 @@ class CompileCommand extends Command {
 
         if (install) {
           print('');
-          print(orange('Installing $from into $to'));
-          move(from, to);
+          print(orange('Installing $exe into $to'));
+          move(exe, to);
         }
       }
     } on RunException catch (e) {
