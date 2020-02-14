@@ -1,3 +1,6 @@
+### 1.8.2
+[ENH] Added 'toList' method to pipe.
+
 ### 1.8.1
 [ENH] changed find so that it no longer returns hidden folders or files. Added new switch 'includeHidden' if you need to find hidden files.
 [FIX] compile was compiling scripts in hidden folders. The enhancement to find to ignore hidden files fix this issue.
