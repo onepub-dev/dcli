@@ -61,29 +61,37 @@ import '../util/log.dart';
 /// to wait for the call to find to complete.
 /// The passed progress is also returned.
 
-Progress find(String pattern,
-        {bool caseSensitive = false,
-        bool recursive = true,
-        String root = '.',
-        Progress progress,
-        List<FileSystemEntityType> types = const [
-          FileSystemEntityType.file
-        ]}) =>
+Progress find(
+  String pattern, {
+  bool caseSensitive = false,
+  bool recursive = true,
+  bool includeHidden = false,
+  String root = '.',
+  Progress progress,
+  List<FileSystemEntityType> types = const [FileSystemEntityType.file],
+}) =>
     Find().find(pattern,
         caseSensitive: caseSensitive,
         recursive: recursive,
+        includeHidden: includeHidden,
         root: root,
         progress: progress,
         types: types);
 
 class Find extends DShellFunction {
-  Progress find(String pattern,
-      {bool caseSensitive = false,
-      bool recursive = true,
-      String root = '.',
-      Progress progress,
-      List<FileSystemEntityType> types = const [FileSystemEntityType.file]}) {
+  Progress find(
+    String pattern, {
+    bool caseSensitive = false,
+    bool recursive = true,
+    String root = '.',
+    Progress progress,
+    List<FileSystemEntityType> types = const [FileSystemEntityType.file],
+    bool includeHidden,
+  }) {
     var matcher = PatternMatcher(pattern, caseSensitive);
+    if (root == '.') {
+      root = pwd;
+    }
 
     Progress forEach;
 
@@ -100,7 +108,14 @@ class Find extends DShellFunction {
 
       lister.listen((entity) {
         var type = FileSystemEntity.typeSync(entity.path);
-        if (types.contains(type) && matcher.match(basename(entity.path))) {
+        //  print('testing ${entity.path}');
+        if (types.contains(type) &&
+            matcher.match(basename(entity.path)) &&
+            allowed(
+              root,
+              includeHidden,
+              entity,
+            )) {
           forEach.addToStdout(normalize(entity.path));
         }
       },
@@ -113,6 +128,27 @@ class Find extends DShellFunction {
     }
 
     return forEach;
+  }
+
+  bool allowed(String root, bool includeHidden, FileSystemEntity entity) {
+    return includeHidden || !isHidden(root, entity);
+  }
+
+  // check if the entity is a hidden file (.xxx) or
+  // if lives in a hidden directory.
+  bool isHidden(String root, FileSystemEntity entity) {
+    var relativePath = relative(entity.path, from: root);
+
+    var parts = relativePath.split(separator);
+
+    var isHidden = false;
+    for (var part in parts) {
+      if (part.startsWith('.')) {
+        isHidden = true;
+        break;
+      }
+    }
+    return isHidden;
   }
 }
 

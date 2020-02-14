@@ -68,18 +68,66 @@ void main() {
         t.expect(found, t.equals(expected));
       });
     });
+
+    t.test('ignore hidden files *.txt  ', () {
+      TestZone().run(() {
+        var paths = setup();
+        var found = find('*.txt', root: paths.top).toList();
+
+        found.sort();
+        var expected = [
+          join(paths.top, 'one.txt'),
+          join(paths.top, 'two.txt'),
+          join(paths.middle, 'three.txt'),
+          join(paths.middle, 'four.txt'),
+          join(paths.bottom, 'five.txt'),
+          join(paths.bottom, 'six.txt'),
+        ];
+        expected.sort();
+        t.expect(found, t.equals(expected));
+      });
+    });
+
+    t.test('find hidden files *.txt  ', () {
+      TestZone().run(() {
+        var paths = setup();
+        var found =
+            find('*.txt', root: paths.top, includeHidden: true).toList();
+
+        found.sort();
+        var expected = [
+          join(paths.thidden, 'fred.txt'),
+          join(paths.top, 'one.txt'),
+          join(paths.top, 'two.txt'),
+          join(paths.top, '.two.txt'),
+          join(paths.middle, 'three.txt'),
+          join(paths.middle, 'four.txt'),
+          join(paths.middle, '.four.txt'),
+          join(paths.bottom, 'five.txt'),
+          join(paths.bottom, 'six.txt'),
+          join(paths.hidden, 'seven.txt'),
+          join(paths.hidden, '.seven.txt'),
+        ];
+        expected.sort();
+        t.expect(found, t.equals(expected));
+      });
+    });
   });
 }
 
 class Paths {
   String top;
+  String thidden;
   String middle;
   String bottom;
+  String hidden;
 
   Paths() {
     top = join(TestPaths.TEST_ROOT, 'top');
+    thidden = join(top, '.hidden');
     middle = join(top, 'middle');
     bottom = join(middle, 'bottom');
+    hidden = join(middle, '.hidden');
   }
 }
 
@@ -89,23 +137,40 @@ Paths setup() {
   var paths = Paths();
 
   // Create some the test dirs.
+  if (!exists(paths.thidden)) {
+    createDir(paths.thidden, recursive: true);
+  }
+
+  // Create some the test dirs.
   if (!exists(paths.bottom)) {
     createDir(paths.bottom, recursive: true);
   }
 
+  // Create some the test dirs.
+  if (!exists(paths.hidden)) {
+    createDir(paths.hidden, recursive: true);
+  }
+
   // Create test files
+
+  touch(join(paths.thidden, 'fred.txt'), create: true);
 
   touch(join(paths.top, 'one.txt'), create: true);
   touch(join(paths.top, 'two.txt'), create: true);
   touch(join(paths.top, 'one.jpg'), create: true);
+  touch(join(paths.top, '.two.txt'), create: true);
 
   touch(join(paths.middle, 'three.txt'), create: true);
   touch(join(paths.middle, 'four.txt'), create: true);
   touch(join(paths.middle, 'two.jpg'), create: true);
+  touch(join(paths.middle, '.four.txt'), create: true);
 
   touch(join(paths.bottom, 'five.txt'), create: true);
   touch(join(paths.bottom, 'six.txt'), create: true);
   touch(join(paths.bottom, 'three.jpg'), create: true);
+
+  touch(join(paths.hidden, 'seven.txt'), create: true);
+  touch(join(paths.hidden, '.seven.txt'), create: true);
 
   return paths;
 }
