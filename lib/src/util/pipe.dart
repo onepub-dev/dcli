@@ -21,6 +21,14 @@ class Pipe {
     rhs.processUntilExit(progress);
   }
 
+  List<String> toList() {
+    List<String> list = [];
+
+    forEach((line) => list.add(line), stderr: (line) => list.add(line));
+
+    return list;
+  }
+
   // void get run => rhs
   //     .processUntilExit(Progress(Progress.devNull, stderr: Progress.devNull));
 
