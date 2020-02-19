@@ -50,8 +50,7 @@ class EntryPoint {
       var impl = StackTraceImpl.fromStackTrace(stackTrace);
       printerr('Exception occured: ${e} of type ${e.runtimeType}');
       printerr('Stacktrace: ${impl.formatStackTrace()}');
+      return 1;
     }
-
-    return 0;
   }
 }
