@@ -6,7 +6,7 @@ void main(List<String> arguments) {
 
 class DShellInstall {
   void run(List<String> arguments) {
-    List<String> mutableArgs = [];
+    var mutableArgs = <String>[];
     mutableArgs.addAll(arguments);
 
     if (!mutableArgs.contains('doctor')) {

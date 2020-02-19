@@ -22,7 +22,7 @@ class Pipe {
   }
 
   List<String> toList() {
-    List<String> list = [];
+    var list = <String>[];
 
     forEach((line) => list.add(line), stderr: (line) => list.add(line));
 
