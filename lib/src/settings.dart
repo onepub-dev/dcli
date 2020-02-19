@@ -75,14 +75,21 @@ class Settings {
   /// The directory where we store all of dshell's
   /// configuration files such as the cache.
   /// This will normally be ~/.dshell
-  String get dshellPath => _dshellPath;
+  String get dshellPath {
+    _dshellPath ??= p.absolute(p.join(HOME, dshellDir));
+    return _dshellPath;
+  }
 
   /// When you run dshell compile -i <script> the compiled exe
   /// is moved to this path.
   /// The dshellBinPath is added to the OS's path
   /// allowing the installed scripts to be run from anywhere.
   /// This will normally be ~/.dshell/bin
-  String get dshellBinPath => _dshellBinPath;
+  String get dshellBinPath {
+    _dshellBinPath ??= p.absolute(p.join(HOME, dshellDir, 'bin'));
+
+    return _dshellBinPath;
+  }
 
   /// path to the dshell template directory.
   String get templatePath => p.join(dshellPath, templateDir);
@@ -131,10 +138,14 @@ class Settings {
     version = dshell_version;
 
     _self = this;
-
-    _dshellPath = p.absolute(p.join(HOME, dshellDir));
-    _dshellBinPath = p.absolute(p.join(HOME, dshellDir, 'bin'));
   }
+
+  /// we consider dshell installed if the ~/.dshell directory
+  /// exists.
+  bool get isInstalled => exists(install_completed_indicator);
+
+  String get install_completed_indicator =>
+      join(dshellPath, 'install_completed');
 
   /// True if you are running on a Mac.
   /// I'm so sorry.
