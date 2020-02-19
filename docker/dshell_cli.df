@@ -1,0 +1,25 @@
+FROM google/dart
+
+WORKDIR /
+
+ENV HOME=/home
+ENV PATH="$PATH":"/home/.pub-cache/bin"
+RUN touch /home/.profile
+
+RUN apt -y update
+RUN apt -y install vim
+
+
+RUN pub global activate dshell 
+RUN dshell install
+
+WORKDIR /home
+
+
+RUN echo "PS1='\w\\$ ' " > /home/.bashrc
+
+CMD []
+
+ENTRYPOINT ["/bin/bash", "-c", "bash"] 
+
+
