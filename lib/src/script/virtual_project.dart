@@ -3,8 +3,8 @@ import 'package:dshell/src/functions/env.dart';
 import 'package:dshell/src/functions/read.dart';
 import 'package:dshell/src/script/commands/install.dart';
 import 'package:dshell/src/util/ansi_color.dart';
-import 'package:dshell/src/util/process_helper.dart';
 import 'package:dshell/src/util/truepath.dart';
+import 'package:dshell/src/util/with_lock.dart';
 import 'package:path/path.dart';
 
 import '../../dshell.dart';
@@ -85,6 +85,8 @@ class VirtualProject {
   String get runtimePubSpecPath => _runtimePubspecPath;
 
   String get runtimePath => _runtimePath;
+
+  Lock lock;
 
   /// Returns a [project] instance for the given
   /// script.
@@ -178,6 +180,10 @@ class VirtualProject {
     _isProjectInitialised = exists(_virtualProjectPath) &&
         (exists(_localPubspecIndicatorPath) ||
             exists(_virtualPubspecIndicatorPath));
+
+    lock = Lock(
+        lockSuffix: 'virtual_project.lock',
+        lockPath: dirname(_virtualProjectPath));
   }
 
   /// Creates the projects cache directory under the
@@ -193,9 +199,9 @@ class VirtualProject {
   /// Link to scripts own pubspec.yaml file.
   /// hashes.yaml file.
   void _createProject({bool skipPubGet = false}) {
-    withLock(() {
+    lock.withLock(() {
       if (!exists(_virtualProjectPath)) {
-        createDir(_virtualProjectPath);
+        createDir(_virtualProjectPath, recursive: true);
         print('Created Virtual Project at ${_virtualProjectPath}');
       }
 
@@ -260,7 +266,7 @@ class VirtualProject {
       throw InstallException('DShell needs to be re-installed');
     }
 
-    withLock(() {
+    lock.withLock(() {
       try {
         if (background) {
           // we run the clean in the background
@@ -268,7 +274,7 @@ class VirtualProject {
           print('DShell clean started in the background.');
           // ('dshell clean ${script.path}' | 'echo > ${dirname(path)}/log').run;
           // 'dshell -v clean ${script.path}'.run;
-          'dshell -v=/tmp/dshell.clean.log clean ${script.path}'
+          'dshell -v=${join(Directory.systemTemp.path, 'dshell.clean.log')} clean ${script.path}'
               .start(detached: true, runInShell: true);
         } else {
           print('Running pub get...');
@@ -289,7 +295,7 @@ class VirtualProject {
   /// This is normally done when the project cache is first
   /// created and when a script's pubspec changes.
   void _pubget() {
-    withLock(() {
+    lock.withLock(() {
       var pubGet = PubGet(DartSdk(), this);
       pubGet.run(compileExecutables: false);
     });
@@ -373,119 +379,6 @@ class VirtualProject {
     return PubSpecFile.fromFile(_runtimePubspecPath);
   }
 
-  /// We use this to allow a projects lock to be-reentrant
-  /// A non-zero value means we have the lock.
-  int _lockCount = 0;
-
-  /// Attempts to take a project lock.
-  /// We wait for upto 30 seconds for an existing lock to
-  /// be released and then give up.
-  ///
-  /// We create the lock file in the virtual project directory
-  /// in the form:
-  /// <pid>.clean.lock
-  ///
-  /// If we find an existing lock file we check if the process
-  /// that owns it is still running. If it isn't we
-  /// take a lock and delete the orphaned lock.
-  bool takeLock(String waiting) {
-    var taken = false;
-
-    var lockFile = _lockFilePath;
-    assert(!exists(lockFile));
-
-    // can't come and add a lock whilst we are looking for
-    // a lock.
-    touch(lockFile, create: true);
-    Settings().verbose('Created lockfile $lockFile');
-
-    // check for other lock files
-    var locks =
-        find('*.$_lockSuffix', root: dirname(_virtualProjectPath)).toList();
-
-    if (locks.length == 1) {
-      // no other lock exists so we have taken a lock.
-      taken = true;
-    } else {
-      // we have found another lock file so check if it is held be an running process
-
-      for (var lock in locks) {
-        var parts = basename(lock).split('.');
-        if (parts.length != 4) {
-          // it can't actually be one of our lock files so ignore it
-          continue;
-        }
-        var lpid = int.tryParse(parts[0]);
-
-        if (lpid == pid) {
-          // ignore our own lock.
-          continue;
-        }
-
-        // wait for the lock to release
-        var released = false;
-        var waitCount = 30;
-        if (waiting != null) print(waiting);
-        while (waitCount > 0) {
-          sleep(1);
-          if (!ProcessHelper().isRunning(lpid)) {
-            // If the forign lock file was left orphaned
-            // then we delete it.
-            if (exists(lock)) {
-              delete(lock);
-            }
-            released = true;
-            break;
-          }
-          waitCount--;
-        }
-
-        if (released) {
-          taken = true;
-        } else {
-          throw LockException(
-              'Unable to lock the Virtual Project ${truepath(_virtualProjectPath)} as it is currently held by ${ProcessHelper().getPIDName(lpid)}');
-        }
-      }
-    }
-
-    return taken;
-  }
-
-  void withLock(void Function() fn, {String waiting}) {
-    /// We must create the virtual project directory as we use
-    /// its parent to store the lockfile.
-    if (!exists(_virtualProjectPath)) {
-      createDir(_virtualProjectPath, recursive: true);
-    }
-    try {
-      Settings().verbose('_lockcount = $_lockCount');
-      if (_lockCount > 0 || takeLock(waiting)) {
-        _lockCount++;
-        fn();
-      }
-    } catch (e, st) {
-      Settings()
-          .verbose('Exception in withLoc ${e.toString()} ${st.toString()}');
-    } finally {
-      if (_lockCount > 0) {
-        _lockCount--;
-        if (_lockCount == 0) {
-          Settings().verbose('delete lock: $_lockFilePath');
-          delete(_lockFilePath);
-        }
-      }
-    }
-  }
-
-  String get _lockSuffix =>
-      '${basename(_virtualProjectPath).replaceAll('.', '_')}.clean.lock';
-  String get _lockFilePath {
-    // lock file is in the directory above the project
-    // as during cleaning we delete the project directory.
-    return join(dirname(_virtualProjectPath), '$pid.${_lockSuffix}');
-  }
-
   /// Called after a project is created
   /// and pub get run to mark a project as runnable.
   void _markBuildComplete() {
@@ -504,7 +397,7 @@ class VirtualProject {
   /// Cleans the project only if its not in a runnable state.
   void cleanIfRequired() {
     if (!isRunnable()) {
-      withLock(() {
+      lock.withLock(() {
         // now we have the lock check runnable again as a clean may have just completed.
         if (!isRunnable()) {
           clean();
@@ -513,8 +406,4 @@ class VirtualProject {
       }, waiting: 'Waiting for clean to complete...');
     }
   }
-}
-
-class LockException extends DShellException {
-  LockException(String message) : super(message);
 }

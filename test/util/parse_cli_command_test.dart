@@ -1,11 +1,11 @@
 import 'package:dshell/src/script/command_line_runner.dart';
-import 'package:dshell/src/util/runnable_process.dart';
+import 'package:dshell/src/util/parse_cli_command.dart';
 import 'package:test/test.dart';
 
-import 'test_paths.dart';
+import 'test_file_system.dart';
 
 void main() {
-  TestPaths();
+  TestFileSystem();
 
   group('ParseCLICommand', () {
     test('empty string', () {
@@ -53,22 +53,6 @@ void main() {
       expect(parsed.args, equals(['b', 'c']));
     });
 
-    // test(r'a  \ b  c\ 1', () {
-    //   var test = r'a  \ b  c\ 1';
-    //   var parsed = ParsedCliCommand(test);
-
-    //   expect(parsed.cmd, equals('a'));
-    //   expect(parsed.args, equals([r'\ b', r'c\ 1']));
-    // });
-
-    // test('a  \ b  c\ 1', () {
-    //   var test = r'a  \ b  c\\ 1';
-    //   var parsed = ParsedCliCommand(test);
-
-    //   expect(parsed.cmd, equals('a'));
-    //   expect(parsed.args, equals([r'\ b', r'c\\', '1']));
-    // });
-
     test('a  "b"  "c1"', () {
       var test = 'a  "b"  "c1"';
       var parsed = ParsedCliCommand(test);
@@ -83,6 +67,14 @@ void main() {
 
       expect(parsed.cmd, equals('git'));
       expect(parsed.args, equals(['log', '--pretty=format:%s', 'v1.0.45']));
+    });
+  });
+
+  group(('Glob expansion'), () {
+    test('No expansion', () {
+
+// var cmd = 'docker run   --network host   dshell:docker_dev_cli   -it --volume $HOME:/me --entrypoint /bin/bash';
+
     });
   });
 }
