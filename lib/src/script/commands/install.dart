@@ -185,6 +185,8 @@ class InstallCommand extends Command {
     // print('Copying dshell (${Platform.executable}) to /usr/bin/dshell');
     // copy(Platform.executable, '/usr/bin/dshell');
 
+    touch(Settings().install_completed_indicator, create: true);
+
     print('dshell installation complete.');
     print('');
     print('Create your first dshell script using:');
