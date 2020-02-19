@@ -1,13 +1,14 @@
 import 'package:dshell/src/pubspec/pubspec_annotation.dart';
 import 'package:test/test.dart';
 
-import '../util/test_paths.dart';
+import '../util/test_file_system.dart';
 
 void main() {
-  TestPaths();
+  TestFileSystem();
 
   test('parse', () {
-    var annotation = '''
+    TestFileSystem().withinZone((fs) {
+      var annotation = '''
     /*
       @pubspec
       name: find.dart
@@ -18,6 +19,7 @@ void main() {
     */
     ''';
 
-    PubSpecAnnotation.fromString(annotation);
+      PubSpecAnnotation.fromString(annotation);
+    });
   });
 }

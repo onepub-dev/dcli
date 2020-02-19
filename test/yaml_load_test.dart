@@ -2,16 +2,15 @@ import 'package:dshell/dshell.dart';
 import 'package:dshell/src/script/my_yaml.dart';
 import 'package:test/test.dart' as t;
 
-import 'util/test_fs_zone.dart';
-import 'util/test_paths.dart';
+import 'util/test_file_system.dart';
 
 void main() {
-  TestPaths();
+  TestFileSystem();
 
   Settings().debug_on = true;
 
   t.test('Project Name', () {
-    TestZone().run(() {
+    TestFileSystem().withinZone((fs) {
       print('$pwd');
       var yaml = MyYaml.fromFile('pubspec.yaml');
       var projectName = yaml.getValue('name');

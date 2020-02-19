@@ -3,14 +3,13 @@ import 'dart:io';
 import 'package:dshell/dshell.dart';
 import 'package:test/test.dart';
 
-import 'test_fs_zone.dart';
-import 'test_paths.dart';
+import 'test_file_system.dart';
 
 void main() {
-  TestPaths();
+  TestFileSystem();
 
   test('MemoryFileSystem', () {
-    TestZone().run(() {
+    TestFileSystem().withinZone((fs) {
       // final fs = MemoryFileSystem();
 
       // fs.directory('/tmp').createSync();

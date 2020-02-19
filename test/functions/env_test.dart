@@ -1,17 +1,16 @@
 import 'package:test/test.dart' as t;
 import 'package:dshell/dshell.dart';
 
-import '../util/test_fs_zone.dart';
-import '../util/test_paths.dart';
+import '../util/test_file_system.dart';
 
 void main() {
-  TestPaths();
+  TestFileSystem();
 
   Settings().debug_on = true;
 
   t.group('Environment', () {
     t.test('PATH', () {
-      TestZone().run(() {
+      TestFileSystem().withinZone((fs) {
         t.expect(env('PATH').length, t.greaterThan(0));
       });
     });

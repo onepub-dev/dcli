@@ -1,16 +1,15 @@
 import 'package:test/test.dart' as t;
 
-import '../util/test_fs_zone.dart';
-import '../util/test_paths.dart';
+import '../util/test_file_system.dart';
 
 void main() {
-  TestPaths();
+  TestFileSystem();
 
   /// waiting of dart fixed to Uri.base
   t.test('Test Zone CWD', () {
     // Test for dart bug
     // https://github.com/dart-lang/sdk/issues/39796
-    TestZone().run(() {
+    TestFileSystem().withinZone((fs) {
       t.expect(Uri.base, t.equals('.'));
     });
   }, skip: true);

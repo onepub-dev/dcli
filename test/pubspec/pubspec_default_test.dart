@@ -9,16 +9,9 @@ import 'package:dshell/src/script/virtual_project.dart';
 import 'package:path/path.dart' as p;
 import 'package:test/test.dart' as t;
 
-import '../util/test_fs_zone.dart';
-import '../util/test_paths.dart';
-
-String scriptDirectory = p.join(TestPaths.TEST_ROOT, 'local');
-String scriptPath = p.join(scriptDirectory, 'test.dart');
-String pubSpecScriptPath = p.join(scriptDirectory, 'pubspec.yaml');
+import '../util/test_file_system.dart';
 
 void main() {
-  TestPaths();
-
   var main = '''
 void main()
 {
@@ -44,11 +37,14 @@ dependencies:
 ''';
 
   t.test('No PubSpec - No Dependencies', () {
-    TestZone().run(() {
+    TestFileSystem().withinZone((fs) {
+      var scriptDirectory = p.join(fs.root, 'local');
+      var pubSpecScriptPath = p.join(scriptDirectory, 'pubspec.yaml');
+
       if (exists(pubSpecScriptPath)) {
         delete(pubSpecScriptPath);
       }
-      runTest(null, main, GlobalDependencies.defaultDependencies);
+      runTest(fs, null, main, GlobalDependencies.defaultDependencies);
     });
   }, skip: false);
 
@@ -59,14 +55,17 @@ ${basic}
   ''';
 
   t.test('Annotation - No Overrides', () {
-    TestZone().run(() {
+    TestFileSystem().withinZone((fs) {
+      var scriptDirectory = p.join(fs.root, 'local');
+      var pubSpecScriptPath = p.join(scriptDirectory, 'pubspec.yaml');
+
       if (exists(pubSpecScriptPath)) {
         delete(pubSpecScriptPath);
       }
       var dependencies = GlobalDependencies.defaultDependencies;
       dependencies.add(Dependency.fromHosted('collection', '^1.14.12'));
       dependencies.add(Dependency.fromHosted('file_utils', '^0.1.3'));
-      runTest(annotationNoOverrides, main, dependencies);
+      runTest(fs, annotationNoOverrides, main, dependencies);
     });
   }, skip: false);
 
@@ -77,7 +76,10 @@ $overrides
   ''';
 
   t.test('Annotaion With Overrides', () {
-    TestZone().run(() {
+    TestFileSystem().withinZone((fs) {
+      var scriptDirectory = p.join(fs.root, 'local');
+      var pubSpecScriptPath = p.join(scriptDirectory, 'pubspec.yaml');
+
       if (exists(pubSpecScriptPath)) {
         delete(pubSpecScriptPath);
       }
@@ -87,12 +89,15 @@ $overrides
       dependencies.add(Dependency.fromHosted('path', '^2.0.2'));
       dependencies.add(Dependency.fromHosted('collection', '^1.14.12'));
       dependencies.add(Dependency.fromHosted('file_utils', '^0.1.3'));
-      runTest(annotationWithOverrides, main, dependencies);
+      runTest(fs, annotationWithOverrides, main, dependencies);
     });
   }, skip: false);
 
   t.test('File - basic', () {
-    TestZone().run(() {
+    TestFileSystem().withinZone((fs) {
+      var scriptDirectory = p.join(fs.root, 'local');
+      var scriptPath = p.join(scriptDirectory, 'test.dart');
+      var pubSpecScriptPath = p.join(scriptDirectory, 'pubspec.yaml');
       if (exists(pubSpecScriptPath)) {
         delete(pubSpecScriptPath);
       }
@@ -102,12 +107,15 @@ $overrides
       var dependencies = GlobalDependencies.defaultDependencies;
       dependencies.add(Dependency.fromHosted('collection', '^1.14.12'));
       dependencies.add(Dependency.fromHosted('file_utils', '^0.1.3'));
-      runTest(null, main, dependencies);
+      runTest(fs, null, main, dependencies);
     });
   }, skip: false);
 
   t.test('File - override', () {
-    TestZone().run(() {
+    TestFileSystem().withinZone((fs) {
+      var scriptDirectory = p.join(fs.root, 'local');
+      var scriptPath = p.join(scriptDirectory, 'test.dart');
+      var pubSpecScriptPath = p.join(scriptDirectory, 'pubspec.yaml');
       if (exists(pubSpecScriptPath)) {
         delete(pubSpecScriptPath);
       }
@@ -120,12 +128,15 @@ $overrides
       dependencies.add(Dependency.fromHosted('path', '^2.0.2'));
       dependencies.add(Dependency.fromHosted('collection', '^1.14.12'));
       dependencies.add(Dependency.fromHosted('file_utils', '^0.1.3'));
-      runTest(null, main, dependencies);
+      runTest(fs, null, main, dependencies);
     });
   }, skip: false);
 
   t.test('File - override with path: dependencies', () {
-    TestZone().run(() {
+    TestFileSystem().withinZone((fs) {
+      var scriptDirectory = p.join(fs.root, 'local');
+      var scriptPath = p.join(scriptDirectory, 'test.dart');
+      var pubSpecScriptPath = p.join(scriptDirectory, 'pubspec.yaml');
       if (exists(pubSpecScriptPath)) {
         delete(pubSpecScriptPath);
       }
@@ -138,12 +149,15 @@ $overrides
       dependencies.add(Dependency.fromHosted('path', '^2.0.2'));
       dependencies.add(Dependency.fromHosted('collection', '^1.14.12'));
       dependencies.add(Dependency.fromHosted('file_utils', '^0.1.3'));
-      runTest(null, main, dependencies);
+      runTest(fs, null, main, dependencies);
     });
   }, skip: false);
 }
 
-void runTest(String annotation, String main, List<Dependency> expected) {
+void runTest(TestFileSystem fs, String annotation, String main,
+    List<Dependency> expected) {
+  var scriptDirectory = p.join(fs.root, 'local');
+  var scriptPath = p.join(scriptDirectory, 'test.dart');
   var script = Script.fromFile(scriptPath);
 
   // reset everything

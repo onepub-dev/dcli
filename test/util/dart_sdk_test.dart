@@ -2,14 +2,13 @@ import 'package:dshell/src/functions/which.dart';
 import 'package:dshell/src/script/dart_sdk.dart';
 import 'package:test/test.dart';
 
-import 'test_fs_zone.dart';
-import 'test_paths.dart';
+import 'test_file_system.dart';
 
 void main() {
-  TestPaths();
+  TestFileSystem();
 
   test('Detect Dart SDK', () {
-    TestZone().run(() {
+    TestFileSystem().withinZone((fs) {
       print('Dart Path: ${DartSdk().dartExePath}');
       print('Dart Path: ${DartSdk().dart2NativePath}');
       print('Dart Path: ${DartSdk().pubGetPath}');

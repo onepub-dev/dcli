@@ -1,20 +1,15 @@
 import 'package:test/test.dart' as t;
 import 'package:dshell/dshell.dart';
 
-import '../util/test_fs_zone.dart';
-import '../util/test_paths.dart';
+import '../util/test_file_system.dart';
 
 void main() {
-  TestPaths();
+  TestFileSystem();
 
   Settings().debug_on = true;
 
   t.test('Try everything', () {
-    TestZone().run(() {
-      if (!exists(TestPaths.TEST_ROOT)) {
-        createDir(TestPaths.TEST_ROOT, recursive: true);
-      }
-
+    TestFileSystem().withinZone((fs) {
       var shellPath = 'shell';
       try {
         print('PWD: ${pwd}');

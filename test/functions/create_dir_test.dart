@@ -1,18 +1,17 @@
 import 'package:test/test.dart' as t;
 import 'package:dshell/dshell.dart';
 
-import '../util/test_fs_zone.dart';
-import '../util/test_paths.dart';
+import '../util/test_file_system.dart';
 
 void main() {
-  TestPaths();
+  TestFileSystem();
 
   Settings().debug_on = true;
 
   t.group('Directory Creation', () {
     t.test('createDir', () {
-      TestZone().run(() {
-        var testDirectory = join(TestPaths.TEST_ROOT, 'tmp_test');
+      TestFileSystem().withinZone((fs) {
+        var testDirectory = join(fs.root, 'tmp_test');
 
         createDir(testDirectory, recursive: true);
 
@@ -21,8 +20,8 @@ void main() {
     });
 
     t.test('createDir with recursive', () {
-      TestZone().run(() {
-        var testPath = join(TestPaths.TEST_ROOT, 'tmp_test/longer/and/longer');
+      TestFileSystem().withinZone((fs) {
+        var testPath = join(fs.root, 'tmp_test/longer/and/longer');
         createDir(testPath, recursive: true);
 
         t.expect(exists(testPath), t.equals(true));
@@ -30,8 +29,8 @@ void main() {
     });
 
     t.test('deleteDir', () {
-      TestZone().run(() {
-        var testPath = join(TestPaths.TEST_ROOT, 'tmp_test/longer/and/longer');
+      TestFileSystem().withinZone((fs) {
+        var testPath = join(fs.root, 'tmp_test/longer/and/longer');
         deleteDir(testPath);
 
         t.expect(!exists(testPath), t.equals(true));
@@ -40,24 +39,24 @@ void main() {
     });
 
     t.test('Delete Dir recursive', () {
-      TestZone().run(() {
-        var testDirectory = join(TestPaths.TEST_ROOT, 'tmp_test');
-        deleteDir(TestPaths.TEST_ROOT, recursive: true);
+      TestFileSystem().withinZone((fs) {
+        var testDirectory = join(fs.root, 'tmp_test');
+        deleteDir(fs.root, recursive: true);
         t.expect(!exists(testDirectory), t.equals(true));
       });
     });
 
     t.test('deleteDir failure', () {
-      TestZone().run(() {
-        var testDirectory = join(TestPaths.TEST_ROOT, 'tmp_test');
+      TestFileSystem().withinZone((fs) {
+        var testDirectory = join(fs.root, 'tmp_test');
         t.expect(() => deleteDir(testDirectory),
             t.throwsA(t.TypeMatcher<DeleteDirException>()));
       });
     });
 
     t.test('createDir createPath failure', () {
-      TestZone().run(() {
-        var testPath = join(TestPaths.TEST_ROOT, 'tmp_test/longer/and/longer');
+      TestFileSystem().withinZone((fs) {
+        var testPath = join(fs.root, 'tmp_test/longer/and/longer');
         t.expect(() => createDir(testPath, recursive: false),
             t.throwsA(t.TypeMatcher<CreateDirException>()));
       });

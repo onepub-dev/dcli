@@ -3,17 +3,16 @@
 import 'package:dshell/src/script/entry_point.dart';
 import 'package:test/test.dart';
 
-import '../util/test_fs_zone.dart';
-import '../util/test_paths.dart';
+import '../util/test_file_system.dart';
 
 String script = 'test/test_scripts/hello_world.dart';
 
 void main() {
-  TestPaths();
+  TestFileSystem();
 
   group('Show Help', () {
     test('Help', () {
-      TestZone().run(() {
+      TestFileSystem().withinZone((fs) {
         EntryPoint().process(['help']);
       });
     });

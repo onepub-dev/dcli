@@ -5,17 +5,16 @@ import 'package:dshell/src/script/virtual_project.dart';
 import 'package:dshell/src/settings.dart';
 import 'package:test/test.dart';
 
-import '../util/test_fs_zone.dart';
-import '../util/test_paths.dart';
+import '../util/test_file_system.dart';
 
 String scriptPath = 'test/test_scripts/hello_world.dart';
 
 void main() {
-  TestPaths();
+  TestFileSystem();
 
   group('Pub Get', () {
     test('Do it', () {
-      TestZone().run(() {
+      TestFileSystem().withinZone((fs) {
         var script = Script.fromFile('test/test_scripts/hello_world.dart');
         var project = VirtualProject.load(Settings().dshellCachePath, script);
         var sdk = DartSdk();

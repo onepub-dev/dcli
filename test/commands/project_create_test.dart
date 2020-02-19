@@ -8,13 +8,12 @@ import 'package:test/test.dart';
 
 import 'package:path/path.dart' as p;
 
-import '../util/test_fs_zone.dart';
-import '../util/test_paths.dart';
+import '../util/test_file_system.dart';
 
 void main() {
-  TestPaths();
+  TestFileSystem();
 
-  var scriptPath = truepath(TestPaths().testScriptPath, 'create_test');
+  var scriptPath = truepath(TestFileSystem().testScriptPath, 'create_test');
 
   if (!exists(scriptPath)) {
     createDir(scriptPath, recursive: true);
@@ -23,9 +22,8 @@ void main() {
 
   group('Create Project', () {
     test('Create hello world', () {
-      TestZone().run(() {
-        var paths = TestPaths();
-        setup(paths);
+      TestFileSystem().withinZone((fs) {
+        var paths = TestFileSystem();
         EntryPoint().process(['create', '--foreground', script]);
 
         checkProjectStructure(paths, script);
@@ -33,9 +31,8 @@ void main() {
     });
 
     test('Clean hello world', () {
-      TestZone().run(() {
-        var paths = TestPaths();
-        setup(paths);
+      TestFileSystem().withinZone((fs) {
+        var paths = TestFileSystem();
         EntryPoint().process(['clean', script]);
 
         checkProjectStructure(paths, script);
@@ -43,7 +40,7 @@ void main() {
     });
 
     test('Run hello world', () {
-      TestZone().run(() {
+      TestFileSystem().withinZone((fs) {
         EntryPoint().process([script]);
       });
     });
@@ -52,12 +49,7 @@ void main() {
   });
 }
 
-void setup(TestPaths paths) {
-  // CommandLineRunner.init(Commands.applicationCommands);
-  // ProjectCache().cleanAll();
-}
-
-void checkProjectStructure(TestPaths paths, String scriptName) {
+void checkProjectStructure(TestFileSystem paths, String scriptName) {
   expect(exists(paths.runtimePath(scriptName)), equals(true));
 
   var pubspecPath = p.join(paths.runtimePath(scriptName), 'pubspec.yaml');

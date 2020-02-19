@@ -1,18 +1,19 @@
+import 'dart:io';
+
 import 'package:dshell/src/util/file_sync.dart';
 import 'package:test/test.dart' as t;
 import 'package:dshell/dshell.dart';
 
-import '../util/test_fs_zone.dart';
-import '../util/test_paths.dart';
+import '../util/test_file_system.dart';
 
 void main() {
-  TestPaths();
+  TestFileSystem();
 
   Settings().debug_on = true;
 
   t.group('StringAsProcess', () {
     t.test('Check .run executes', () {
-      TestZone().run(() {
+      TestFileSystem().withinZone((fs) {
         var testFile = 'test.text';
 
         if (exists(testFile)) {
@@ -25,7 +26,7 @@ void main() {
     });
 
     t.test('Check .start executes - attached, not in shell', () {
-      TestZone().run(() {
+      TestFileSystem().withinZone((fs) {
         var testFile = 'test.text';
 
         if (exists(testFile)) {
@@ -38,7 +39,7 @@ void main() {
     });
 
     t.test('Check .start executes - attached,  in shell', () {
-      TestZone().run(() {
+      TestFileSystem().withinZone((fs) {
         var testFile = 'test.text';
 
         if (exists(testFile)) {
@@ -60,7 +61,7 @@ void main() {
     });
 
     t.test('Check .start executes - detached, not in shell', () {
-      TestZone().run(() {
+      TestFileSystem().withinZone((fs) {
         var testFile = 'test.text';
 
         if (exists(testFile)) {
@@ -83,7 +84,7 @@ void main() {
     });
 
     t.test('Check .start executes - detached,  in shell', () {
-      TestZone().run(() {
+      TestFileSystem().withinZone((fs) {
         var testFile = 'test.text';
 
         if (exists(testFile)) {
@@ -106,10 +107,10 @@ void main() {
     });
 
     t.test('forEach', () {
-      TestZone().run(() {
+      TestFileSystem().withinZone((fs) {
         var lines = <String>[];
 
-        var linesFile = setup();
+        var linesFile = setup(fs);
 
         print('pwd: ' + pwd);
 
@@ -122,8 +123,8 @@ void main() {
     });
 
     t.test('toList', () {
-      TestZone().run(() {
-        var path = '/tmp/log/syslog';
+      TestFileSystem().withinZone((fs) {
+        var path = join(Directory.systemTemp.path, 'log/syslog');
 
         if (exists(path)) {
           deleteDir(dirname(path), recursive: true);
@@ -142,7 +143,7 @@ void main() {
     });
 
     t.test('toList - skipLines', () {
-      TestZone().run(() {
+      TestFileSystem().withinZone((fs) {
         var path = '/tmp/log/syslog';
 
         if (exists(path)) {
@@ -163,39 +164,47 @@ void main() {
     });
 
     t.test('forEach using runInShell', () {
-      var found = false;
-      'echo run test'.forEach((line) {
-        if (line.contains('run test')) {
-          found = true;
-        }
-      }, runInShell: true);
-      t.expect(found, t.equals(true));
+      TestFileSystem().withinZone((fs) {
+        var found = false;
+        'echo run test'.forEach((line) {
+          if (line.contains('run test')) {
+            found = true;
+          }
+        }, runInShell: true);
+        t.expect(found, t.equals(true));
+      });
     });
 
     t.test('firstLine', () {
-      var file = setup();
-      t.expect('cat $file'.firstLine, 'Line 0');
+      TestFileSystem().withinZone((fs) {
+        var file = setup(fs);
+        t.expect('cat $file'.firstLine, 'Line 0');
+      });
     });
 
     t.test('firstLine with stderr', () {
-      t.expect('dart --version'.firstLine, t.contains('version'));
+      TestFileSystem().withinZone((fs) {
+        t.expect('dart --version'.firstLine, t.contains('version'));
+      });
     });
 
     t.test('lastLine', () {
-      var file = setup();
-      t.expect('cat $file'.lastLine, 'Line 9');
+      TestFileSystem().withinZone((fs) {
+        var file = setup(fs);
+        t.expect('cat $file'.lastLine, 'Line 9');
+      });
     });
   });
 }
 
-String setup() {
-  var linesFile = join(TestPaths.TEST_ROOT, TestPaths.TEST_LINES_FILE);
+String setup(TestFileSystem fs) {
+  var linesFile = join(fs.root, TestFileSystem.TEST_LINES_FILE);
 
-  if (exists(TestPaths.TEST_ROOT)) {
-    deleteDir(TestPaths.TEST_ROOT, recursive: true);
+  if (exists(fs.root)) {
+    deleteDir(fs.root, recursive: true);
   }
 
-  createDir(TestPaths.TEST_ROOT);
+  createDir(fs.root);
 
   var file = FileSync(linesFile);
   for (var i = 0; i < 10; i++) {

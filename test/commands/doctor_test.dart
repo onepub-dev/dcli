@@ -4,16 +4,15 @@ import 'package:dshell/src/script/entry_point.dart';
 import 'package:dshell/src/util/dshell_exception.dart';
 import 'package:test/test.dart';
 
-import '../util/test_fs_zone.dart';
-import '../util/test_paths.dart';
+import '../util/test_file_system.dart';
 
 String script = 'test/test_scripts/hello_world.dart';
 
 void main() {
-  TestPaths();
+  TestFileSystem();
 
   test('dshell doctor', () {
-    TestZone().run(() {
+    TestFileSystem().withinZone((fs) {
       var exit = -1;
       try {
         exit = EntryPoint().process(['doctor']);

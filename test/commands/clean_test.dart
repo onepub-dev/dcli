@@ -1,21 +1,20 @@
-// @Timeout(Duration(seconds: 600))
+@Timeout(Duration(seconds: 600))
 
 import 'package:dshell/dshell.dart' hide equals;
 import 'package:dshell/src/script/entry_point.dart';
 import 'package:dshell/src/util/dshell_exception.dart';
 import 'package:test/test.dart';
 
-import '../util/test_fs_zone.dart';
-import '../util/test_paths.dart';
+import '../util/test_file_system.dart';
 
 String script = 'test/test_scripts/hello_world.dart';
 
 void main() {
-  TestPaths();
+  TestFileSystem();
 
   group('Cleaning using DShell', () {
     test('clean with virtual pubspec', () {
-      TestZone().run(() {
+      TestFileSystem().withinZone((fs) {
         var exit = -1;
         try {
           // with a virtual pubspec
@@ -28,7 +27,7 @@ void main() {
     });
 
     test('clean  with a local pubspec', () {
-      TestZone().run(() {
+      TestFileSystem().withinZone((fs) {
         var exit = -1;
         try {
           print(pwd);

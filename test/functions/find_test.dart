@@ -5,18 +5,17 @@ import 'package:test/test.dart' as t;
 import 'package:dshell/dshell.dart';
 import 'package:test/test.dart';
 
-import '../util/test_fs_zone.dart';
-import '../util/test_paths.dart';
+import '../util/test_file_system.dart';
 
 void main() {
-  TestPaths();
+  TestFileSystem();
 
   Settings().debug_on = true;
 
   t.group('Find', () {
     t.test('Search for *.txt files in top directory ', () {
-      TestZone().run(() {
-        var paths = setup();
+      TestFileSystem().withinZone((fs) {
+        var paths = TestFileSystem();
         var found = find('*.txt', root: paths.top, recursive: false).toList();
         found.sort();
         var expected = [join(paths.top, 'one.txt'), join(paths.top, 'two.txt')];
@@ -26,8 +25,8 @@ void main() {
     });
 
     t.test('Search recursive for *.jpg ', () {
-      TestZone().run(() {
-        var paths = setup();
+      TestFileSystem().withinZone((fs) {
+        var paths = TestFileSystem();
         var found = find('*.jpg', root: paths.top).toList();
 
         find('*.jpg', root: paths.top).forEach((line) => print(line));
@@ -51,8 +50,8 @@ void main() {
     });
 
     t.test('Search recursive for *.txt ', () {
-      TestZone().run(() {
-        var paths = setup();
+      TestFileSystem().withinZone((fs) {
+        var paths = TestFileSystem();
         var found = find('*.txt', root: paths.top).toList();
 
         found.sort();
@@ -70,8 +69,8 @@ void main() {
     });
 
     t.test('ignore hidden files *.txt  ', () {
-      TestZone().run(() {
-        var paths = setup();
+      TestFileSystem().withinZone((fs) {
+        var paths = TestFileSystem();
         var found = find('*.txt', root: paths.top).toList();
 
         found.sort();
@@ -89,8 +88,8 @@ void main() {
     });
 
     t.test('find hidden files *.txt  ', () {
-      TestZone().run(() {
-        var paths = setup();
+      TestFileSystem().withinZone((fs) {
+        var paths = TestFileSystem();
         var found =
             find('*.txt', root: paths.top, includeHidden: true).toList();
 
@@ -113,64 +112,4 @@ void main() {
       });
     });
   });
-}
-
-class Paths {
-  String top;
-  String thidden;
-  String middle;
-  String bottom;
-  String hidden;
-
-  Paths() {
-    top = join(TestPaths.TEST_ROOT, 'top');
-    thidden = join(top, '.hidden');
-    middle = join(top, 'middle');
-    bottom = join(middle, 'bottom');
-    hidden = join(middle, '.hidden');
-  }
-}
-
-Paths setup() {
-  print('PWD $pwd');
-
-  var paths = Paths();
-
-  // Create some the test dirs.
-  if (!exists(paths.thidden)) {
-    createDir(paths.thidden, recursive: true);
-  }
-
-  // Create some the test dirs.
-  if (!exists(paths.bottom)) {
-    createDir(paths.bottom, recursive: true);
-  }
-
-  // Create some the test dirs.
-  if (!exists(paths.hidden)) {
-    createDir(paths.hidden, recursive: true);
-  }
-
-  // Create test files
-
-  touch(join(paths.thidden, 'fred.txt'), create: true);
-
-  touch(join(paths.top, 'one.txt'), create: true);
-  touch(join(paths.top, 'two.txt'), create: true);
-  touch(join(paths.top, 'one.jpg'), create: true);
-  touch(join(paths.top, '.two.txt'), create: true);
-
-  touch(join(paths.middle, 'three.txt'), create: true);
-  touch(join(paths.middle, 'four.txt'), create: true);
-  touch(join(paths.middle, 'two.jpg'), create: true);
-  touch(join(paths.middle, '.four.txt'), create: true);
-
-  touch(join(paths.bottom, 'five.txt'), create: true);
-  touch(join(paths.bottom, 'six.txt'), create: true);
-  touch(join(paths.bottom, 'three.jpg'), create: true);
-
-  touch(join(paths.hidden, 'seven.txt'), create: true);
-  touch(join(paths.hidden, '.seven.txt'), create: true);
-
-  return paths;
 }

@@ -4,17 +4,16 @@ import 'package:dshell/src/script/entry_point.dart';
 import 'package:dshell/src/util/dshell_exception.dart';
 import 'package:test/test.dart';
 
-import '../util/test_fs_zone.dart';
-import '../util/test_paths.dart';
+import '../util/test_file_system.dart';
 
 String script = 'test/test_scripts/hello_world.dart';
 
 void main() {
-  TestPaths();
+  TestFileSystem();
 
   group('Compile using DShell', () {
     test('compile examples/dsort.dart', () {
-      TestZone().run(() {
+      TestFileSystem().withinZone((fs) {
         var exit = -1;
         try {
           // setEnv('HOME', '/home/test');
@@ -28,7 +27,7 @@ void main() {
     });
 
     test('compile -nc examples/dsort.dart', () {
-      TestZone().run(() {
+      TestFileSystem().withinZone((fs) {
         var exit = -1;
         try {
           // setEnv('HOME', '/home/test');
@@ -42,7 +41,7 @@ void main() {
     });
 
     test('compile  with a local pubspec', () {
-      TestZone().run(() {
+      TestFileSystem().withinZone((fs) {
         var exit = -1;
         try {
           exit = EntryPoint().process(

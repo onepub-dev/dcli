@@ -6,13 +6,14 @@ import 'package:dshell/src/script/script.dart';
 import 'package:dshell/src/script/virtual_project.dart';
 import 'package:test/test.dart';
 
-import '../util/test_paths.dart';
+import '../util/test_file_system.dart';
 
 void main() {
-  TestPaths();
+  TestFileSystem();
 
   test('load', () {
-    var content = '''
+    TestFileSystem().withinZone((fs) {
+      var content = '''
 dependencies:
   args: ^1.5.2
   collection: ^1.14.12
@@ -20,19 +21,21 @@ dependencies:
   path: ^1.6.4
   ''';
 
-    var expected = [
-      Dependency.fromHosted('args', '^1.5.2'),
-      Dependency.fromHosted('collection', '^1.14.12'),
-      Dependency.fromHosted('file_utils', '^0.1.3'),
-      Dependency.fromHosted('path', '^1.6.4'),
-    ];
+      var expected = [
+        Dependency.fromHosted('args', '^1.5.2'),
+        Dependency.fromHosted('collection', '^1.14.12'),
+        Dependency.fromHosted('file_utils', '^0.1.3'),
+        Dependency.fromHosted('path', '^1.6.4'),
+      ];
 
-    var gd = GlobalDependencies.fromString(content);
-    expect(gd.dependencies, equals(expected));
+      var gd = GlobalDependencies.fromString(content);
+      expect(gd.dependencies, equals(expected));
+    });
   });
 
   test('dependency_overrides', () {
-    var content = '''
+    TestFileSystem().withinZone((fs) {
+      var content = '''
 dependencies:
   args: ^1.5.2
   collection: ^1.14.12
@@ -45,20 +48,22 @@ dependency_overrides:
     path: /home/args
   ''';
 
-    var expected = [
-      Dependency.fromPath('args', '/home/args'),
-      Dependency.fromHosted('collection', '^1.14.12'),
-      Dependency.fromHosted('file_utils', '^0.1.3'),
-      Dependency.fromHosted('path', '^1.6.4'),
-      Dependency.fromPath('dshell', '/home/dshell'),
-    ];
+      var expected = [
+        Dependency.fromPath('args', '/home/args'),
+        Dependency.fromHosted('collection', '^1.14.12'),
+        Dependency.fromHosted('file_utils', '^0.1.3'),
+        Dependency.fromHosted('path', '^1.6.4'),
+        Dependency.fromPath('dshell', '/home/dshell'),
+      ];
 
-    var gd = GlobalDependencies.fromString(content);
-    expect(gd.dependencies, equals(expected));
+      var gd = GlobalDependencies.fromString(content);
+      expect(gd.dependencies, equals(expected));
+    });
   });
 
   test('local dshell', () {
-    var content = '''
+    TestFileSystem().withinZone((fs) {
+      var content = '''
 dependencies:
   dshell: ^1.0.44 
   args: ^1.5.2
@@ -69,18 +74,20 @@ dependency_overrides:
     path: /home/dshell
   ''';
 
-    var expected = [
-      Dependency.fromPath('dshell', '/home/dshell'),
-      Dependency.fromHosted('args', '^1.5.2'),
-      Dependency.fromHosted('path', '^1.6.4'),
-    ];
+      var expected = [
+        Dependency.fromPath('dshell', '/home/dshell'),
+        Dependency.fromHosted('args', '^1.5.2'),
+        Dependency.fromHosted('path', '^1.6.4'),
+      ];
 
-    var gd = GlobalDependencies.fromString(content);
-    expect(gd.dependencies, equals(expected));
+      var gd = GlobalDependencies.fromString(content);
+      expect(gd.dependencies, equals(expected));
+    });
   });
 
   test('local dshell - with file writes', () {
-    var content = '''
+    TestFileSystem().withinZone((fs) {
+      var content = '''
 dependencies:
   dshell: ^1.0.44 
   args: ^1.5.2
@@ -91,28 +98,30 @@ dependency_overrides:
     path: /home/dshell
   ''';
 
-    var paths = TestPaths();
+      var paths = TestFileSystem();
 
-    var workingDir = paths.unitTestWorkingDir;
+      var workingDir = paths.unitTestWorkingDir;
 
-    // create a temp 'dependencies.yaml
-    var depPath = join(workingDir, 'dependencies.yaml');
+      // create a temp 'dependencies.yaml
+      var depPath = join(workingDir, 'dependencies.yaml');
 
-    depPath.write(content);
+      depPath.write(content);
 
-    var gd = GlobalDependencies.fromFile(depPath);
+      var gd = GlobalDependencies.fromFile(depPath);
 
-    var expected = [
-      Dependency.fromPath('dshell', '/home/dshell'),
-      Dependency.fromHosted('args', '^1.5.2'),
-      Dependency.fromHosted('path', '^1.6.4'),
-    ];
+      var expected = [
+        Dependency.fromPath('dshell', '/home/dshell'),
+        Dependency.fromHosted('args', '^1.5.2'),
+        Dependency.fromHosted('path', '^1.6.4'),
+      ];
 
-    expect(gd.dependencies, equals(expected));
+      expect(gd.dependencies, equals(expected));
+    });
   });
 
   test('local dshell - write virtual pubsec.yaml', () {
-    var content = '''
+    TestFileSystem().withinZone((fs) {
+      var content = '''
 dependencies:
   dshell: ^1.0.44 
   args: ^1.5.2
@@ -123,46 +132,48 @@ dependency_overrides:
     path: ~/git/dshell
   ''';
 
-    var paths = TestPaths();
+      var paths = TestFileSystem();
 
-    var workingDir = paths.unitTestWorkingDir;
+      var workingDir = paths.unitTestWorkingDir;
 
-    // create a temp 'dependencies.yaml
-    var depPath = join(workingDir, 'dependencies.yaml');
+      // create a temp 'dependencies.yaml
+      var depPath = join(workingDir, 'dependencies.yaml');
 
-    depPath.write(content);
+      depPath.write(content);
 
-    var gd = GlobalDependencies.fromFile(depPath);
+      var gd = GlobalDependencies.fromFile(depPath);
 
-    var expected = [
-      Dependency.fromPath('dshell', '~/git/dshell'),
-      Dependency.fromHosted('args', '^1.5.2'),
-      Dependency.fromHosted('path', '^1.6.4'),
-    ];
+      var expected = [
+        Dependency.fromPath('dshell', '~/git/dshell'),
+        Dependency.fromHosted('args', '^1.5.2'),
+        Dependency.fromHosted('path', '^1.6.4'),
+      ];
 
-    expect(gd.dependencies, equals(expected));
+      expect(gd.dependencies, equals(expected));
 
-    var testScriptPath = join(workingDir, 'depends_test.dart');
+      var testScriptPath = join(workingDir, 'depends_test.dart');
 
-    // create a script
-    testScriptPath.write('''
+      // create a script
+      testScriptPath.write('''
     void main()
     {
       print('hellow world');
     }
     ''');
 
-    // load it
-    var script = Script.fromFile(testScriptPath);
+      // load it
+      var script = Script.fromFile(testScriptPath);
 
-    // create a virtual project for it.
-    var project = VirtualProject.create(TestPaths.TEST_ROOT, script);
+      // create a virtual project for it.
+      var project = VirtualProject.create(fs.root, script);
 
-    var pubspec = project.pubSpec();
+      var pubspec = project.pubSpec();
 
-    expect(
-        pubspec.dependencies..sort((lhs, rhs) => lhs.name.compareTo(rhs.name)),
-        equals(
-            gd.dependencies..sort((lhs, rhs) => lhs.name.compareTo(rhs.name))));
+      expect(
+          pubspec.dependencies
+            ..sort((lhs, rhs) => lhs.name.compareTo(rhs.name)),
+          equals(gd.dependencies
+            ..sort((lhs, rhs) => lhs.name.compareTo(rhs.name))));
+    });
   });
 }

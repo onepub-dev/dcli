@@ -5,14 +5,13 @@ import 'package:dshell/src/script/entry_point.dart';
 import 'package:dshell/src/util/runnable_process.dart';
 import 'package:test/test.dart';
 
-import '../util/test_fs_zone.dart';
-import '../util/test_paths.dart';
+import '../util/test_file_system.dart';
 
 void main() {
-  TestPaths();
+  TestFileSystem();
 
   test('Run hello world', () {
-    TestZone().run(() {
+    TestFileSystem().withinZone((fs) {
       var results = <String>[];
 
       'dshell -v test/test_scripts/hello_world.dart'.forEach(
@@ -26,7 +25,7 @@ void main() {
   });
 
   test('run with virtual pubspec', () {
-    TestZone().run(() {
+    TestFileSystem().withinZone((fs) {
       var exit = -1;
       try {
         // with a virtual pubspec
@@ -40,7 +39,7 @@ void main() {
   });
 
   test('run  with a local pubspec', () {
-    TestZone().run(() {
+    TestFileSystem().withinZone((fs) {
       var exit = -1;
       try {
         print(pwd);

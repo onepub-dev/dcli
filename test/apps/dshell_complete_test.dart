@@ -3,14 +3,13 @@
 import 'package:dshell/dshell.dart' hide equals;
 import 'package:test/test.dart';
 
-import '../util/test_fs_zone.dart';
-import '../util/test_paths.dart';
+import '../util/test_file_system.dart';
 
 void main() {
-  TestPaths();
+  TestFileSystem();
 
   test('Run dshell_complete c', () {
-    TestZone().run(() {
+    TestFileSystem().withinZone((fs) {
       var results = <String>[];
 
       // make dshell_complete executable
@@ -27,7 +26,7 @@ void main() {
   });
 
   test('Run dshell_complete cl', () {
-    TestZone().run(() {
+    TestFileSystem().withinZone((fs) {
       var results = <String>[];
 
       // make dshell_complete executable
@@ -45,17 +44,12 @@ void main() {
 
   group('previous word', () {
     test('Run dshell_complete clean _test_a', () {
-      TestZone().run(() {
+      TestFileSystem().withinZone((fs) {
         var results = <String>[];
 
-        TestPaths();
-        if (!exists(TestPaths.TEST_ROOT)) {
-          createDir(TestPaths.TEST_ROOT, recursive: true);
-        }
-        var testRoot = '.';
-        touch(join(testRoot, '_test_a.dart'), create: true);
-        touch(join(testRoot, '_test_ab.dart'), create: true);
-        touch(join(testRoot, '_test_b.dart'), create: true);
+        touch(join(fs.root, '_test_a.dart'), create: true);
+        touch(join(fs.root, '_test_ab.dart'), create: true);
+        touch(join(fs.root, '_test_b.dart'), create: true);
 
         // make dshell_complete executable
         //chmod(755, 'bin/dshell_complete.dart');
@@ -68,24 +62,19 @@ void main() {
 
         expect(results, unorderedEquals(expected));
 
-        delete(join(testRoot, '_test_a.dart'));
-        delete(join(testRoot, '_test_ab.dart'));
-        delete(join(testRoot, '_test_b.dart'));
+        delete(join(fs.root, '_test_a.dart'));
+        delete(join(fs.root, '_test_ab.dart'));
+        delete(join(fs.root, '_test_b.dart'));
       });
     });
 
     test('Run dshell_complete clean _test_ab', () {
-      TestZone().run(() {
+      TestFileSystem().withinZone((fs) {
         var results = <String>[];
 
-        TestPaths();
-        if (!exists(TestPaths.TEST_ROOT)) {
-          createDir(TestPaths.TEST_ROOT, recursive: true);
-        }
-        var testRoot = '.';
-        touch(join(testRoot, '_test_a.dart'), create: true);
-        touch(join(testRoot, '_test_ab.dart'), create: true);
-        touch(join(testRoot, '_test_b.dart'), create: true);
+        touch(join(fs.root, '_test_a.dart'), create: true);
+        touch(join(fs.root, '_test_ab.dart'), create: true);
+        touch(join(fs.root, '_test_b.dart'), create: true);
 
         // make dshell_complete executable
         //chmod(755, 'bin/dshell_complete.dart');
@@ -98,7 +87,7 @@ void main() {
 
         expect(results, unorderedEquals(expected));
 
-        delete(join(testRoot, '_test_ab.dart'));
+        delete(join(fs.root, '_test_ab.dart'));
       });
     });
   });

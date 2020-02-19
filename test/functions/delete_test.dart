@@ -1,18 +1,17 @@
 import 'package:test/test.dart' as t;
 import 'package:dshell/dshell.dart';
 
-import '../util/test_fs_zone.dart';
-import '../util/test_paths.dart';
+import '../util/test_file_system.dart';
 
 void main() {
-  TestPaths();
+  TestFileSystem();
 
   Settings().debug_on = true;
 
   t.group('Delete', () {
     t.test('delete ', () {
-      TestZone().run(() {
-        var testFile = join(TestPaths.TEST_ROOT, 'lines.txt');
+      TestFileSystem().withinZone((fs) {
+        var testFile = join(fs.root, 'lines.txt');
         if (!exists(dirname(testFile))) {
           createDir(dirname(testFile), recursive: true);
         }
@@ -25,8 +24,8 @@ void main() {
     });
 
     t.test('delete non-existing ', () {
-      TestZone().run(() {
-        var testFile = join(TestPaths.TEST_ROOT, 'lines.txt');
+      TestFileSystem().withinZone((fs) {
+        var testFile = join(fs.root, 'lines.txt');
         touch(testFile, create: true);
         delete(testFile);
 

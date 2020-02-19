@@ -4,16 +4,15 @@ import 'package:test/test.dart' as t;
 import 'package:dshell/dshell.dart';
 import 'package:test/test.dart';
 
-import '../util/test_fs_zone.dart';
-import '../util/test_paths.dart';
+import '../util/test_file_system.dart';
 
 void main() {
-  TestPaths();
+  TestFileSystem();
 
   Settings().debug_on = true;
   t.group('RunCommand', () {
     t.test('Does command run', () {
-      TestZone().run(() {
+      TestFileSystem().withinZone((fs) {
         var testFile = 'test.text';
 
         if (exists(testFile)) {
@@ -26,8 +25,8 @@ void main() {
     });
 
     t.test('Does command write output to stdout', () {
-      TestZone().run(() {
-        var scriptPath = truepath(TestPaths().testScriptPath, 'run_test');
+      TestFileSystem().withinZone((fs) {
+        var scriptPath = truepath(TestFileSystem().testScriptPath, 'run_test');
 
         if (!exists(scriptPath)) {
           createDir(scriptPath, recursive: true);
@@ -52,8 +51,8 @@ void main() {
     // This entry point exists to make easy to debug the run
     // command.
     t.test('Debug test point', () {
-      TestZone().run(() {
-        var scriptPath = truepath(TestPaths().testScriptPath, 'run_test');
+      TestFileSystem().withinZone((fs) {
+        var scriptPath = truepath(TestFileSystem().testScriptPath, 'run_test');
 
         if (!exists(scriptPath)) {
           createDir(scriptPath, recursive: true);
@@ -70,7 +69,7 @@ void main() {
     });
 
     //  t.test('Does run expand wildcards', () {
-    //   TestZone().run(() {
+    //   TestFileSystem().withinZone((fs){
     //     var testFile = 'test.text';
     //     var testFile1 = 'test2.text';
 
