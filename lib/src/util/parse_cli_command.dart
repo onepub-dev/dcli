@@ -21,8 +21,8 @@ class ParsedCliCommand {
     }
   }
 
-  ParsedCliCommand.fromParsed(this.cmd, List<String> args) {
-    var qargs = _QArg.translate(args);
+  ParsedCliCommand.fromParsed(this.cmd, List<String> rawArgs) {
+    var qargs = _QArg.translate(rawArgs);
     args = expandGlobs(qargs);
 
     if (Settings().isVerbose) {
