@@ -6,8 +6,6 @@ import 'package:dshell/dshell.dart';
 import 'package:dshell/src/util/waitForEx.dart';
 import 'package:meta/meta.dart';
 
-import 'stack_trace_impl.dart';
-
 class Lock {
   int port = 63424;
   String lockPath;
@@ -265,7 +263,7 @@ class Lock {
 }
 
 void log(String message) {
-  var id = Service.getIsolateID(Isolate.current);
+  // var id = Service.getIsolateID(Isolate.current);
   //print('$id: $message');
 }
 
