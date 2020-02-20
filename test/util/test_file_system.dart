@@ -20,11 +20,14 @@ class TestFileSystem {
 
   String home;
 
+  String get root => join(TestFileSystem._TEST_ROOT, uniquePath);
+
   /// The location of scripts used for testing.
   String testScriptPath;
 
   TestFileSystem() {
     uniquePath = Uuid().v4();
+    print('Creating TestFileSystem uuid=$uniquePath');
 
     testScriptPath = truepath(root, 'scripts');
   }
@@ -40,6 +43,9 @@ class TestFileSystem {
       var home = HOME;
       try {
         setEnv('HOME', root);
+
+        Settings().reset();
+        print('reset dshellPath~: ${Settings().dshellPath}');
 
         Settings().setVerbose(true);
 
@@ -139,8 +145,6 @@ class TestFileSystem {
       deleteDir(root, recursive: true);
     }
   }
-
-  String get root => join(TestFileSystem._TEST_ROOT, uniquePath);
 
   void install_dshell() {
     EntryPoint().process(['install']);

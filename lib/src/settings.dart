@@ -72,6 +72,14 @@ class Settings {
     _scriptPath = scriptPath;
   }
 
+  // Used when unit testing and we are re-using
+  // the current process.
+  void reset() {
+    selectedFlags.clear();
+    _dshellPath = null;
+    _dshellBinPath = null;
+  }
+
   /// The directory where we store all of dshell's
   /// configuration files such as the cache.
   /// This will normally be ~/.dshell
@@ -209,12 +217,6 @@ class Settings {
   /// Please look away.
   static void setMock(Settings mockSettings) {
     _self = mockSettings;
-  }
-
-  // Used when unit testing and we are re-using
-  // the current process.
-  void reset() {
-    selectedFlags.clear();
   }
 }
 
