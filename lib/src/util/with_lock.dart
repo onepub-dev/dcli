@@ -3,9 +3,13 @@ import 'dart:developer';
 import 'dart:isolate';
 
 import 'package:dshell/dshell.dart';
+import 'package:dshell/src/util/waitForEx.dart';
 import 'package:meta/meta.dart';
 
+import 'stack_trace_impl.dart';
+
 class Lock {
+  int port = 63424;
   String lockPath;
   String lockSuffix;
   String description;
@@ -13,8 +17,8 @@ class Lock {
   /// We use this to allow a projects lock to be-reentrant
   /// A non-zero value means we have the lock.
   /// We need to maintain a lock count per
-  /// lock file//isolate to allow the lock file to be re-entrant.
-  final Map<String, int> _lockCounts = {};
+  /// lock suffix to allow each suffix lock to be re-entrant.
+  static final Map<String, int> _lockCounts = {};
 
   Duration timeout;
 
@@ -45,7 +49,7 @@ class Lock {
     lockPath ??= join('/', Directory.systemTemp.path, 'dshell', 'locks');
     description ??= '';
 
-    Settings().setVerbose(true);
+    //Settings().setVerbose(true);
   }
 
   void withLock(
@@ -53,33 +57,60 @@ class Lock {
     String waiting,
   }) {
     /// Ensure that that the lockfile directory exists.
-    if (!exists(lockPath)) {
-      createDir(lockPath, recursive: true);
-    }
-    var lockCount = _lockCounts[_lockFilePath];
-    try {
-      lockCount ??= 0;
+    withHardLock(fn: () {
+      if (!exists(lockPath)) {
+        createDir(lockPath, recursive: true);
+      }
+    });
 
-      Settings().verbose('_lockcount = $lockCount');
+    try {
+      log('lockcount = ${lockCount}');
 
       if (lockCount > 0 || takeLock(waiting)) {
-        lockCount++;
+        incLockCount;
 
         fn();
       }
     } catch (e, st) {
-      Settings()
-          .verbose('Exception in withLoc ${e.toString()} ${st.toString()}');
+      log('Exception in withLock ${e.toString()} ${st.toString()}');
     } finally {
       if (lockCount > 0) {
-        lockCount--;
+        decLockCount;
+
         if (lockCount == 0) {
-          Settings().verbose('delete lock: $_lockFilePath');
-          delete(_lockFilePath);
+          log(red('delete lock: $_lockFilePath'));
+
+          withHardLock(fn: () => delete(_lockFilePath));
         }
       }
-      _lockCounts[_lockFilePath] = lockCount;
     }
+  }
+
+  int get lockCount {
+    var _lockCount = _lockCounts[lockSuffix];
+    _lockCount ??= 0;
+    return _lockCount;
+  }
+
+  /// increments the lock count and returns
+  /// the new lock count.
+  int get incLockCount {
+    var _lockCount = lockCount;
+    _lockCount++;
+    _lockCounts[lockSuffix] = _lockCount;
+    log(orange('Incremented lock: $_lockCount'));
+    return _lockCount;
+  }
+
+  /// decrements the lock count and returns
+  /// the new lock count.
+  int get decLockCount {
+    var _lockCount = lockCount;
+    _lockCount--;
+    _lockCounts[lockSuffix] = _lockCount;
+
+    log(orange('Decremented lock: $lockCount'));
+    return _lockCount;
   }
 
   String get _lockFilePath {
@@ -105,76 +136,137 @@ class Lock {
   bool takeLock(String waiting) {
     assert(exists(lockPath));
 
-    // can't come and add a lock whilst we are looking for
-    // a lock.
-    touch(_lockFilePath, create: true);
-    Settings().verbose('Created lockfile $_lockFilePath');
+    var taken = false;
 
-    // check for other lock files
-    var locks = find('*.$lockSuffix', root: lockPath).toList();
+    // wait for the lock to release or the timeout to expire
+    var waitCount = -1;
+    if (timeout != null) {
+      waitCount = timeout.inSeconds;
+    }
 
-    var lockFiles = locks.length;
+    while (!taken && waitCount != 0) {
+      withHardLock(fn: () {
+        // check for other lock files
+        var locks = find('*.$lockSuffix', root: lockPath).toList();
 
-    if (lockFiles == 1) {
-      // no other lock exists so we have taken a lock.
-      lockFiles = 0;
-    } else {
-      // we have found another lock file so check if it is held be a running process
+        var lockFiles = locks.length;
 
-      for (var lock in locks) {
-        var parts = basename(lock).split('.');
-        if (parts.length < 3) {
-          // it can't actually be one of our lock files so ignore it
-          continue;
-        }
-        var lpid = int.tryParse(parts[0]);
-        var isolateId = parts[1];
-        var currentIsolateId = Service.getIsolateID(Isolate.current);
-        currentIsolateId = currentIsolateId.replaceAll('/', '_');
-
-        if (lpid == pid && isolateId == currentIsolateId) {
-          // ignore our own lock.
-          lockFiles--;
-          continue;
-        }
-
-        // wait for the lock to release or the timeout to expire
-        var waitCount = 0;
-        var infinite = false;
-        if (timeout == null) {
-          infinite = true;
+        if (lockFiles == 0) {
+          // no other lock exists so we have taken a lock.
+          taken = true;
         } else {
-          waitCount = timeout.inSeconds;
-        }
-
-        if (waiting != null) print(waiting);
-        var taken = false;
-        while (infinite || waitCount > 0) {
-          if (!ProcessHelper().isRunning(lpid)) {
-            // If the foreign lock file was left orphaned
-            // then we delete it.
-            if (exists(lock)) {
-              delete(lock);
-            }
+          // we have found another lock file so check if it is held be a running process
+          lockFiles = clearOldLocks(locks, lockFiles);
+          if (lockFiles == 0) {
             taken = true;
-            lockFiles--;
-            break;
-          }
-          sleep(1);
-          if (!infinite) {
-            waitCount--;
           }
         }
 
-        if (!taken) {
-          throw LockException(
-              'Unable to lock $description ${truepath(lockPath)} as it is currently held by ${ProcessHelper().getPIDName(lpid)} IsolateId: $isolateId');
+        if (taken) {
+          log(green('Taking lock $_lockFilePath'));
+          touch(_lockFilePath, create: true);
+          //  log(StackTraceImpl().formatStackTrace(methodCount: 100));
         }
+      });
+      sleep(1);
+      if (waiting != null) {
+        print(waiting);
+        // only print waiting message once.
+        waiting = null;
+      }
+
+      if (waitCount > 0) {
+        waitCount--;
       }
     }
 
-    return lockFiles == 0;
+    if (!taken) {
+      throw LockException(
+          'Unable to lock $description ${truepath(lockPath)} as it is currently held'); //  by ${ProcessHelper().getPIDName(lpid)} IsolateId: $isolateId');
+    }
+
+    return taken;
   }
+
+  int clearOldLocks(List<String> locks, int lockFiles) {
+    for (var lock in locks) {
+      var parts = basename(lock).split('.');
+      if (parts.length < 3) {
+        // it can't actually be one of our lock files so ignore it
+        continue;
+      }
+      var lpid = int.tryParse(parts[0]);
+      var isolateId = parts[1];
+      var currentIsolateId = Service.getIsolateID(Isolate.current);
+      currentIsolateId = currentIsolateId.replaceAll('/', '_');
+
+      if (lpid == pid && isolateId == currentIsolateId) {
+        // ignore our own lock.
+        lockFiles--;
+        continue;
+      }
+
+      if (!ProcessHelper().isRunning(lpid)) {
+        // If the foreign lock file was left orphaned
+        // then we delete it.
+        if (exists(lock)) {
+          log(red('Clearing old lock file: $lock'));
+          delete(lock);
+        }
+        lockFiles--;
+      }
+    }
+    return lockFiles;
+  }
+
+  void withHardLock({
+    Duration timeout,
+    void Function() fn,
+  }) {
+    RawDatagramSocket socket;
+
+    var waitCount = -1;
+
+    if (timeout != null) waitCount = timeout.inSeconds;
+
+    try {
+      while (socket == null) {
+        socket = waitForEx<RawDatagramSocket>(RawDatagramSocket.bind(
+          '127.0.0.172',
+          port,
+          reuseAddress: true,
+          reusePort: true,
+        ));
+
+        if (waitCount > 0) {
+          waitCount--;
+        }
+
+        if (waitCount == 0) {
+          // we have timedout
+          break;
+        }
+        if (socket == null) {
+          sleep(1);
+        }
+      }
+
+      if (socket != null) {
+        log(blue('Hardlock taken'));
+        fn();
+      }
+    } finally {
+      if (socket != null) {
+        socket.close();
+        log(blue('Hardlock relased'));
+      }
+    }
+  }
+}
+
+void log(String message) {
+  var id = Service.getIsolateID(Isolate.current);
+  //print('$id: $message');
 }
 
 class LockException extends DShellException {
