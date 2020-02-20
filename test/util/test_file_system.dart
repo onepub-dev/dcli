@@ -130,8 +130,14 @@ class TestFileSystem {
   }
 
   void deleteTestFileSystem() {
-    if (exists(HOME)) deleteDir(HOME, recursive: true);
-    if (exists(root)) deleteDir(root, recursive: true);
+    if (exists(HOME)) {
+      print('Deleting $HOME');
+      deleteDir(HOME, recursive: true);
+    }
+    if (exists(root)) {
+      print('Deleting $root');
+      deleteDir(root, recursive: true);
+    }
   }
 
   String get root => join(TestFileSystem._TEST_ROOT, uniquePath);
