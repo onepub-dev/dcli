@@ -25,9 +25,22 @@ Progress run(String command,
     Run().run(command,
         progress: progress, runInShell: runInShell, nothrow: nothrow);
 
+Progress start(String command, List<String> args,
+        {Progress progress,
+        bool runInShell = false,
+        bool detached = false,
+        bool terminal = false,
+        String workingDirectory}) =>
+    Run().start(command,
+        args: args,
+        progress: progress,
+        runInShell: runInShell,
+        detached: detached,
+        terminal: terminal,
+        workingDirectory: workingDirectory);
+
 ///
-///
-Progress start(String command,
+Progress startFromParsed(String command,
         {Progress progress,
         bool runInShell = false,
         bool detached = false,
@@ -60,7 +73,8 @@ class Run extends DShellFunction {
   }
 
   Progress start(String command,
-      {Progress progress,
+      {List<String> args,
+      Progress progress,
       bool runInShell = false,
       bool detached = false,
       String workingDirectory,
@@ -70,8 +84,14 @@ class Run extends DShellFunction {
     try {
       forEach = progress ??
           Progress((line) => print(line), stderr: (line) => printerr(line));
-      var runnable =
-          RunnableProcess(command, workingDirectory: workingDirectory);
+      RunnableProcess runnable;
+      if (args == null) {
+        runnable = RunnableProcess(command, workingDirectory: workingDirectory);
+      } else {
+        runnable = RunnableProcess.fromList(command, args,
+            workingDirectory: workingDirectory);
+      }
+
       runnable.start(
           runInShell: runInShell, detached: detached, terminal: terminal);
       if (detached == false) {
