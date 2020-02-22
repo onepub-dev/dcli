@@ -57,11 +57,12 @@ class RunnableProcess {
     return process.stdin;
   }
 
-  void start(
-      {bool runInShell = false,
-      bool detached = false,
-      bool waitForStart = true,
-      bool terminal = false}) {
+  void start({
+    bool runInShell = false,
+    bool detached = false,
+    bool waitForStart = true,
+    bool terminal = false,
+  }) {
     var workdir = workingDirectory;
     workdir ??= Directory.current.path;
 
@@ -102,6 +103,16 @@ class RunnableProcess {
     fProcess.then((process) {
       complete.complete(process);
     }).catchError((Object e, StackTrace s) {
+      // 2 - No such file or directory
+      if (e is ProcessException && e.errorCode == 2) {
+        var ep = e as ProcessException;
+        e = ProcessException(
+          ep.executable,
+          ep.arguments,
+          'Could not find ${ep.executable} on the path.',
+          ep.errorCode,
+        );
+      }
       complete.completeError(e);
     });
     waitForEx<Process>(complete.future);
