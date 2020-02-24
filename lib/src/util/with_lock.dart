@@ -1,12 +1,40 @@
+import 'dart:async';
 import 'dart:io';
 import 'dart:developer';
 import 'dart:isolate';
 
 import 'package:dshell/dshell.dart';
+import 'package:dshell/src/util/stack_trace_impl.dart';
 import 'package:dshell/src/util/waitForEx.dart';
 import 'package:meta/meta.dart';
 
-class Lock {
+/// A [NamedLock] can be used to control access to a resource
+/// across processes and isolates.
+///
+/// A [NamedLock] uses a combination of a UDP socket and a files
+/// to provide a locking mechanism that is guarenteed to work across
+/// isolates in the same process as well as between processes.
+///
+/// If you only need locking 'within' an isolate that you should
+/// avoid using [NamedLock] as it is a realitively slow locking
+/// mechanism as it creates a file to represent a lock.
+///
+/// To ensure that [NamedLock]s hold across processes and isolates
+/// we use a two part locking mechanism.
+/// The first part is a UDP socket (on port 63424) that we
+/// refere to a hard lock.  The same hard lock is used for all
+/// [NamedLock]s and as such is a potential bottle neck. To limit
+/// this bottle neck we hold the hard lock for as short a period as possible.
+/// The hard lock is only used to create and delete the file based lock.
+/// As soon as a file based lock transition completes the hard lock is released.
+///
+/// On linux a traditional file lock will not block isolates
+/// in the same process from locking the same file hence we need
+class NamedLock {
+  /// The raw socket (udp) port we use to implement
+  /// a hard lock. A port can only be opened once
+  /// so its the perfect way to create a lock that works
+  /// across processes and isolates.
   int port = 63424;
   String lockPath;
   String lockSuffix;
@@ -37,7 +65,7 @@ class Lock {
   /// a lock to become available. The default [timeout] is
   /// infinite (null).
   ///
-  Lock({
+  NamedLock({
     @required this.lockSuffix,
     this.lockPath,
     this.description,
@@ -54,32 +82,44 @@ class Lock {
     void Function() fn, {
     String waiting,
   }) {
-    /// Ensure that that the lockfile directory exists.
-    withHardLock(fn: () {
-      if (!exists(lockPath)) {
-        createDir(lockPath, recursive: true);
-      }
-    });
-
-    try {
-      log('lockcount = ${lockCount}');
-
-      if (lockCount > 0 || takeLock(waiting)) {
-        incLockCount;
-
-        fn();
-      }
-    } catch (e, st) {
-      log('Exception in withLock ${e.toString()} ${st.toString()}');
-    } finally {
-      if (lockCount > 0) {
-        decLockCount;
-
-        if (lockCount == 0) {
-          log(red('delete lock: $_lockFilePath'));
-
-          withHardLock(fn: () => delete(_lockFilePath));
+    var lockHeld = false;
+    runZoned(() {
+      /// Ensure that that the lockfile directory exists.
+      withHardLock(fn: () {
+        if (!exists(lockPath)) {
+          createDir(lockPath, recursive: true);
         }
+      });
+
+      try {
+        log('lockcount = ${lockCount}');
+
+        if (lockCount > 0 || takeLock(waiting)) {
+          lockHeld = true;
+          incLockCount;
+
+          fn();
+        }
+      } finally {
+        releaseLock();
+        // just in case an async exception can be thrown
+        // I'm uncertain if this is a reality.
+        lockHeld = false;
+      }
+    }, onError: (Object e) {
+      if (lockHeld) releaseLock();
+      throw e;
+    });
+  }
+
+  void releaseLock() {
+    if (lockCount > 0) {
+      decLockCount;
+
+      if (lockCount == 0) {
+        Settings().verbose(red('Releasing lock: $_lockFilePath'));
+
+        withHardLock(fn: () => delete(_lockFilePath));
       }
     }
   }
@@ -161,7 +201,12 @@ class Lock {
         }
 
         if (taken) {
-          log(green('Taking lock $_lockFilePath'));
+          var isolateID = Service.getIsolateID(Isolate.current);
+          Settings().verbose(
+              orange('Taking lock ${basename(_lockFilePath)} for $isolateID'));
+
+          Settings().verbose(
+              'Lock Source: ${StackTraceImpl(skipFrames: 9).formatStackTrace(methodCount: 1)}');
           touch(_lockFilePath, create: true);
           //  log(StackTraceImpl().formatStackTrace(methodCount: 100));
         }

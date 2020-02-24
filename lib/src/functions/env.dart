@@ -72,7 +72,7 @@ class Env extends DShellFunction {
 
   String env(String name) {
     if (Settings().debug_on) {
-      Log.d('name:  ${name}');
+      Log.d('env:  ${name}:${envVars[name]}');
     }
     return envVars[name];
   }

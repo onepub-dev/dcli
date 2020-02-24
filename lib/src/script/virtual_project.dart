@@ -3,6 +3,7 @@ import 'package:dshell/src/functions/env.dart';
 import 'package:dshell/src/functions/read.dart';
 import 'package:dshell/src/script/commands/install.dart';
 import 'package:dshell/src/util/ansi_color.dart';
+import 'package:dshell/src/util/stack_trace_impl.dart';
 import 'package:dshell/src/util/truepath.dart';
 import 'package:dshell/src/util/with_lock.dart';
 import 'package:path/path.dart';
@@ -86,7 +87,7 @@ class VirtualProject {
 
   String get runtimePath => _runtimePath;
 
-  Lock lock;
+  NamedLock lock;
 
   /// Returns a [project] instance for the given
   /// script.
@@ -181,7 +182,7 @@ class VirtualProject {
         (exists(_localPubspecIndicatorPath) ||
             exists(_virtualPubspecIndicatorPath));
 
-    lock = Lock(
+    lock = NamedLock(
         lockSuffix: 'virtual_project.lock',
         lockPath: dirname(_virtualProjectPath));
   }

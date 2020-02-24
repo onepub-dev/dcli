@@ -1,4 +1,6 @@
 #! /usr/bin/env dshell
+@Timeout(Duration(minutes: 10))
+
 import 'dart:async';
 import 'dart:isolate';
 
@@ -9,7 +11,18 @@ import 'package:test/test.dart';
 import 'test_file_system.dart';
 
 void main() {
-  TestFileSystem();
+  test(
+    'timeout catch',
+    () {
+      expect(() {
+        TestFileSystem().withinZone((fs) async {
+          NamedLock(lockSuffix: 'timeout').withLock(() {
+            throw DShellException('fake exception');
+          });
+        });
+      }, throwsA(TypeMatcher<DShellException>()));
+    },
+  );
 
   test('withLock', () {
     TestFileSystem().withinZone((fs) async {
@@ -55,7 +68,7 @@ Future<ReceivePort> spawn(String message) async {
 }
 
 void takeLock(String message) {
-  Lock(lockSuffix: 'test.lock').withLock(() {
+  NamedLock(lockSuffix: 'test.lock').withLock(() {
     var count = 0;
     for (var i = 0; i < 4; i++) {
       var l = '$message + ${count++}';
