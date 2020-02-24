@@ -1,6 +1,7 @@
 import 'package:collection/collection.dart';
 import 'package:dshell/dshell.dart';
 import 'package:dshell/src/functions/is.dart';
+import 'package:dshell/src/util/completion.dart';
 
 import '../command_line_runner.dart';
 import '../flags.dart';
@@ -51,14 +52,7 @@ class SplitCommand extends Command {
 
   @override
   List<String> completion(String word) {
-    var dartScripts = find('*.dart', recursive: false).toList();
-    var results = <String>[];
-    for (var script in dartScripts) {
-      if (script.startsWith(word)) {
-        results.add(script);
-      }
-    }
-    return results;
+    return completion_expand_scripts(word);
   }
 
   // checks if the script's pubspec is identical to the

@@ -1,4 +1,5 @@
 import 'package:dshell/dshell.dart';
+import 'package:dshell/src/util/completion.dart';
 
 import '../../settings.dart';
 import '../flags.dart';
@@ -54,19 +55,7 @@ class CleanCommand extends Command {
 
   @override
   List<String> completion(String word) {
-    var dartScripts = find('*.dart', recursive: false).toList();
-    var results = <String>[];
-    if (word.isEmpty) {
-      results = dartScripts;
-    } else {
-      for (var script in dartScripts) {
-        if (script.startsWith(word)) {
-          results.add(script);
-        }
-      }
-    }
-
-    return results;
+    return completion_expand_scripts(word);
   }
 
   @override

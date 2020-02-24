@@ -1,4 +1,5 @@
 import 'package:dshell/dshell.dart';
+import 'package:dshell/src/util/completion.dart';
 
 import '../../settings.dart';
 import '../command_line_runner.dart';
@@ -70,14 +71,7 @@ class RunCommand extends Command {
 
   @override
   List<String> completion(String word) {
-    var dartScripts = find('*.dart', recursive: false).toList();
-    var results = <String>[];
-    for (var script in dartScripts) {
-      if (script.startsWith(word)) {
-        results.add(script);
-      }
-    }
-    return results;
+    return completion_expand_scripts(word);
   }
 
   @override
