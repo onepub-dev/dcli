@@ -108,7 +108,7 @@ extension StringAsProcess on String {
       bool terminal = false,
       String workingDirectory}) {
     cmd.startFromParsed(this,
-        progress:
+        progress: progress ??
             Progress((line) => print(line), stderr: (line) => printerr(line)),
         runInShell: runInShell,
         detached: detached,
