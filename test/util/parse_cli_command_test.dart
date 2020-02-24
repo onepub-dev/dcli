@@ -6,7 +6,6 @@ import 'package:test/test.dart';
 import 'test_file_system.dart';
 
 void main() {
-
   group('ParseCLICommand', () {
     test('empty string', () {
       var test = '';
@@ -72,9 +71,7 @@ void main() {
 
   group(('Glob expansion'), () {
     test('No expansion', () {
-
 // var cmd = 'docker run   --network host   dshell:docker_dev_cli   -it --volume $HOME:/me --entrypoint /bin/bash';
-
     });
   });
 }

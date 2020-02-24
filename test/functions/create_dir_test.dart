@@ -63,8 +63,6 @@ void main() {
         var testPath = join(fs.root, 'tmp_test/longer/and/longer');
         t.expect(() => createDir(testPath, recursive: false),
             t.throwsA(t.TypeMatcher<CreateDirException>()));
-
-            
       });
     });
   });

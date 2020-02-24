@@ -6,7 +6,6 @@ import '../util.dart';
 import '../util/test_file_system.dart';
 
 void main() {
-
   Settings().debug_on = true;
 
   t.group('Piping with ForEach ', () {

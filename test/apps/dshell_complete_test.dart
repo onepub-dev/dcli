@@ -6,7 +6,6 @@ import 'package:test/test.dart';
 import '../util/test_file_system.dart';
 
 void main() {
-
   test('Run dshell_complete c', () {
     TestFileSystem().withinZone((fs) {
       var results = <String>[];

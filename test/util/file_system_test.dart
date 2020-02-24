@@ -7,7 +7,6 @@ import 'package:test/test.dart';
 import 'test_file_system.dart';
 
 void main() {
-
   test('MemoryFileSystem', () {
     TestFileSystem().withinZone((fs) {
       // final fs = MemoryFileSystem();

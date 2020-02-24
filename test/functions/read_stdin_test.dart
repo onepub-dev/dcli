@@ -5,7 +5,6 @@ import 'package:dshell/dshell.dart';
 import '../util/test_file_system.dart';
 
 void main() {
-
   Settings().debug_on = true;
 
   // can't be run from within vscode as it needs console input.

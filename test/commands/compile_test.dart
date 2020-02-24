@@ -9,7 +9,6 @@ import '../util/test_file_system.dart';
 String script = 'test/test_scripts/hello_world.dart';
 
 void main() {
-
   group('Compile using DShell', () {
     test('compile examples/dsort.dart', () {
       TestFileSystem().withinZone((fs) {

@@ -4,7 +4,6 @@ import 'package:test/test.dart' as t;
 import '../util/test_file_system.dart';
 
 void main() {
-
   /// waiting of dart fixed to Uri.base
   t.test('Test Zone CWD', () {
     // Test for dart bug

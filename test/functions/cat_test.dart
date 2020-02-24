@@ -9,7 +9,6 @@ import '../util/test_file_system.dart';
 
 String testFile;
 void main() {
-
   Settings().debug_on = true;
 
   t.group('Cat', () {
