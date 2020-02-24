@@ -1,5 +1,7 @@
+@Timeout(Duration(seconds: 600))
 import 'package:dshell/dshell.dart';
 import 'package:dshell/src/util/file_sync.dart';
+import 'package:test/test.dart';
 
 // Creates text file with the given no. of lines.
 void createLineFile(String testFile, int lines) {
