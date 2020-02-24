@@ -145,24 +145,10 @@ class ParsedCliCommand {
       if (qarg.wasQuoted) {
         expanded.add(qarg.arg);
       } else {
-        expanded.addAll(expandGlob(qarg));
+        expanded.addAll(qarg.expandGlob());
       }
     }
     return expanded;
-  }
-
-  Iterable<String> expandGlob(_QArg qarg) {
-    var glob = Glob(qarg.arg);
-
-    var files = glob.listSync();
-
-    if (files.isEmpty) {
-      // if no matches the bash spec says return
-      // the original arg.
-      return [qarg.arg];
-    } else {
-      return files.map((f) => f.path);
-    }
   }
 }
 
@@ -189,6 +175,12 @@ class _QArg {
     }
   }
 
+  /// We only do glob expansion if the arg contains at least one of
+  /// *, [, ?
+  bool get needsExpansion {
+    return arg.contains('*') || arg.contains('[') || arg.contains('?');
+  }
+
   static List<_QArg> translate(List<String> args) {
     var qargs = <_QArg>[];
     for (var arg in args) {
@@ -196,5 +188,37 @@ class _QArg {
       qargs.add(qarg);
     }
     return qargs;
+  }
+
+  Iterable<String> expandGlob() {
+    var expanded = <String>[];
+    if (arg.contains('~')) {
+      arg = arg.replaceAll('~', HOME);
+    }
+    if (!needsExpansion) {
+      expanded.addAll(_expandGlob());
+    } else {
+      expanded.add(arg);
+    }
+    return expanded;
+  }
+
+  Iterable<String> _expandGlob() {
+    var glob = Glob(arg);
+
+    var files = <FileSystemEntity>[];
+    try {
+      files = glob.listSync();
+    } on FileSystemException {
+      files = [];
+    }
+
+    if (files.isEmpty) {
+      // if no matches the bash spec says return
+      // the original arg.
+      return [arg];
+    } else {
+      return files.map((f) => f.path);
+    }
   }
 }
