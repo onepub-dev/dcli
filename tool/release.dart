@@ -46,7 +46,7 @@ void main(List<String> args) {
     print(red('The tag $newVersion already exists.'));
     if (confirm(
         prompt:
-            'If you proceed the tag will be deleted and re-created. Proceed (Y/N)')) {
+            'If you proceed the tag will be deleted and re-created. Proceed?')) {
       deleteGitTag(newVersion);
     } else {
       exit(1);
@@ -84,12 +84,12 @@ void checkCommited() {
 
   if (notCommited.isNotEmpty) {
     print('You have uncommited files');
-    if (confirm(prompt: 'Do you want to list them (Y/N):')) {
+    if (confirm(prompt: 'Do you want to list them')) {
       // we get the list again as the user is likely to have committed files after seeing the question.
       notCommited = 'git status --porcelain'.toList();
       print(notCommited.join('\n'));
     }
-    if (!confirm(prompt: 'Do you want to continue with the release (Y/N)')) {
+    if (!confirm(prompt: 'Do you want to continue with the release')) {
       exit(-1);
     }
   }
@@ -119,7 +119,7 @@ void generateReleaseNotes(
   changeLogPath.append('');
 
   // give the user a chance to clean up the change log.
-  if (confirm(prompt:'Would you like to clean up the change log (Y/N):'))
+  if (confirm(prompt:'Would you like to clean up the change log'))
   {	
   	showEditor(changeLogPath);
   }
@@ -170,14 +170,14 @@ void deleteGitTag(Version newVersion) {
 }
 
 void addGitTag(Version version) {
-  if (confirm(prompt: 'Create a git release tag (Y/N):')) {
+  if (confirm(prompt: 'Create a git release tag')) {
     var tagName = '${version}';
 
     // Check if the tag already exists and offer to replace it if it does.
     if (tagExists(tagName)) {
       var replace = confirm(
           prompt:
-              'The tag $tagName already exists. Do you want to replace it? (Y/N):');
+              'The tag $tagName already exists. Do you want to replace it?');
       if (replace) {
         'git tag -d $tagName'.run;
         'git push origin :refs/tags/$tagName'.run;
@@ -217,9 +217,9 @@ bool tagExists(String tagName) {
 
 Version incrementVersion(
     Version version, PubSpecFile pubspec, String pubspecPath) {
-  if (confirm(prompt: 'Is this a breaking change? (Y/N)')) {
+  if (confirm(prompt: 'Is this a breaking change?')) {
     version = version.nextBreaking;
-  } else if (confirm(prompt: 'Is a small patch? (Y/N)')) {
+  } else if (confirm(prompt: 'Is a small patch?')) {
     version = version.nextPatch;
   } else {
     version = version.nextMinor;
@@ -230,10 +230,10 @@ Version incrementVersion(
 
   print('');
   print('The new version is: $version');
-  if (!confirm(prompt: 'Is this the correct version (Y/N): ')) {
+  if (!confirm(prompt: 'Is this the correct version')) {
     var versionString = ask(prompt: 'Enter the new version: ');
 
-    if (!confirm(prompt: 'Is $versionString the correct version (Y/N)')) {
+    if (!confirm(prompt: 'Is $versionString the correct version')) {
       exit(1);
     }
 
