@@ -9,7 +9,6 @@ import 'package:test/test.dart';
 import '../util/test_file_system.dart';
 
 void main() {
-  TestFileSystem();
 
   test('load', () {
     TestFileSystem().withinZone((fs) {

@@ -1,22 +1,23 @@
-//@Timeout(Duration(seconds: 610))
-
+@Timeout(Duration(seconds: 600))
 import 'package:dshell/dshell.dart' hide equals;
+import 'package:dshell/src/util/progress.dart';
 import 'package:test/test.dart';
 
 import '../util/test_file_system.dart';
 
 void main() {
-  TestFileSystem();
 
   test('Run dshell_complete c', () {
     TestFileSystem().withinZone((fs) {
       var results = <String>[];
 
       // make dshell_complete executable
-      //chmod(755, 'bin/dshell_complete.dart');
+      //chmod(755, 'bin/dshell_complete');
 
-      'dart bin/dshell_complete.dart dshell c'
-          .forEach((line) => results.add(line));
+      'dshell_complete dshell c'.start(
+        workingDirectory: fs.root,
+        progress: Progress((line) => results.add(line)),
+      );
 
       // if clean hasn't been run then we have the results of a pub get in the the output.
       var expected = ['cleanall', 'clean', 'compile', 'create'];
@@ -30,10 +31,12 @@ void main() {
       var results = <String>[];
 
       // make dshell_complete executable
-      //chmod(755, 'bin/dshell_complete.dart');
+      //chmod(755, 'bin/dshell_complete');
 
-      'dart bin/dshell_complete.dart dshell cl'
-          .forEach((line) => results.add(line));
+      'dshell_complete dshell cl'.start(
+        workingDirectory: fs.root,
+        progress: Progress((line) => results.add(line)),
+      );
 
       // if clean hasn't been run then we have the results of a pub get in the the output.
       var expected = ['cleanall', 'clean'];
@@ -52,10 +55,17 @@ void main() {
         touch(join(fs.root, '_test_b.dart'), create: true);
 
         // make dshell_complete executable
-        //chmod(755, 'bin/dshell_complete.dart');
 
-        'dart bin/dshell_complete.dart dshell _test_a clean'
-            .forEach((line) => results.add(line));
+        //chmod(755, 'bin/dshell_complete');
+
+        try {
+          'dshell_complete dshell _test_a clean'.start(
+            workingDirectory: fs.root,
+            progress: Progress((line) => results.add(line)),
+          );
+        } on DShellException catch (_) {
+          rethrow;
+        }
 
         // if clean hasn't been run then we have the results of a pub get in the the output.
         var expected = ['_test_a.dart', '_test_ab.dart'];
@@ -77,10 +87,12 @@ void main() {
         touch(join(fs.root, '_test_b.dart'), create: true);
 
         // make dshell_complete executable
-        //chmod(755, 'bin/dshell_complete.dart');
+        //chmod(755, 'bin/dshell_complete');
 
-        'dart bin/dshell_complete.dart dshell _test_a clean'
-            .forEach((line) => results.add(line));
+        'dshell_complete dshell _test_a clean'.start(
+          workingDirectory: fs.root,
+          progress: Progress((line) => results.add(line)),
+        );
 
         // if clean hasn't been run then we have the results of a pub get in the the output.
         var expected = ['_test_a.dart', '_test_ab.dart'];

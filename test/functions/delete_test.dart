@@ -1,10 +1,11 @@
+@Timeout(Duration(seconds: 600))
 import 'package:test/test.dart' as t;
 import 'package:dshell/dshell.dart';
+import 'package:test/test.dart';
 
 import '../util/test_file_system.dart';
 
 void main() {
-  TestFileSystem();
 
   Settings().debug_on = true;
 

@@ -1,10 +1,10 @@
+@Timeout(Duration(seconds: 600))
 import 'package:dshell/src/pubspec/pubspec_annotation.dart';
 import 'package:test/test.dart';
 
 import '../util/test_file_system.dart';
 
 void main() {
-  TestFileSystem();
 
   test('parse', () {
     TestFileSystem().withinZone((fs) {

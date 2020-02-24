@@ -1,3 +1,4 @@
+@Timeout(Duration(seconds: 600))
 import 'package:dshell/src/script/dart_sdk.dart';
 import 'package:dshell/src/script/pub_get.dart';
 import 'package:dshell/src/script/script.dart';
@@ -10,7 +11,6 @@ import '../util/test_file_system.dart';
 String scriptPath = 'test/test_scripts/hello_world.dart';
 
 void main() {
-  TestFileSystem();
 
   group('Pub Get', () {
     test('Do it', () {

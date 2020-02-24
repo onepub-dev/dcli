@@ -1,4 +1,4 @@
-// @Timeout(Duration(seconds: 600))
+@Timeout(Duration(seconds: 600))
 
 import 'package:dshell/src/script/entry_point.dart';
 import 'package:dshell/src/util/dshell_exception.dart';
@@ -9,7 +9,6 @@ import '../util/test_file_system.dart';
 String script = 'test/test_scripts/hello_world.dart';
 
 void main() {
-  TestFileSystem();
 
   test('dshell doctor', () {
     TestFileSystem().withinZone((fs) {

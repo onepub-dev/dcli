@@ -1,3 +1,4 @@
+@Timeout(Duration(seconds: 600))
 import 'package:dshell/src/script/command_line_runner.dart';
 import 'package:dshell/src/util/parse_cli_command.dart';
 import 'package:test/test.dart';
@@ -5,7 +6,6 @@ import 'package:test/test.dart';
 import 'test_file_system.dart';
 
 void main() {
-  TestFileSystem();
 
   group('ParseCLICommand', () {
     test('empty string', () {

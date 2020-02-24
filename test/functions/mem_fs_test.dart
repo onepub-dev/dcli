@@ -1,9 +1,9 @@
+@t.Timeout(Duration(seconds: 600))
 import 'package:test/test.dart' as t;
 
 import '../util/test_file_system.dart';
 
 void main() {
-  TestFileSystem();
 
   /// waiting of dart fixed to Uri.base
   t.test('Test Zone CWD', () {

@@ -1,3 +1,4 @@
+@Timeout(Duration(seconds: 600))
 import 'package:dshell/src/functions/which.dart';
 import 'package:dshell/src/script/dart_sdk.dart';
 import 'package:test/test.dart';
@@ -5,8 +6,6 @@ import 'package:test/test.dart';
 import 'test_file_system.dart';
 
 void main() {
-  TestFileSystem();
-
   test('Detect Dart SDK', () {
     TestFileSystem().withinZone((fs) {
       print('Dart Path: ${DartSdk().dartExePath}');

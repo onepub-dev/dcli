@@ -11,7 +11,6 @@ import 'package:dshell/dshell.dart' hide equals;
 import '../util/test_file_system.dart';
 
 void main() {
-  TestFileSystem();
 
   // This is intended to demonstrate that we ouput data as it flows in
   // I'm not certain how to actually test that so for the moment this test is disabled.

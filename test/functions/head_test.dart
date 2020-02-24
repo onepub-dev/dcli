@@ -1,3 +1,4 @@
+@t.Timeout(Duration(seconds: 600))
 import 'dart:io';
 
 import 'package:dshell/src/util/file_sync.dart';
@@ -7,7 +8,6 @@ import 'package:dshell/dshell.dart';
 import '../util/test_file_system.dart';
 
 void main() {
-  TestFileSystem();
 
   Settings().debug_on = true;
 

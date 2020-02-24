@@ -1,5 +1,5 @@
-import 'package:dshell/src/script/entry_point.dart';
 @Timeout(Duration(seconds: 600))
+import 'package:dshell/src/script/entry_point.dart';
 import 'package:test/test.dart' as t;
 import 'package:dshell/dshell.dart';
 import 'package:test/test.dart';
@@ -7,26 +7,24 @@ import 'package:test/test.dart';
 import '../util/test_file_system.dart';
 
 void main() {
-  TestFileSystem();
-
   Settings().debug_on = true;
   t.group('RunCommand', () {
     t.test('Does command run', () {
       TestFileSystem().withinZone((fs) {
-        var testFile = 'test.text';
+        var testFile = join(fs.root, 'test.text');
 
         if (exists(testFile)) {
           delete(testFile);
         }
 
-        'touch test.text'.run;
+        'touch $testFile'.run;
         t.expect(exists(testFile), t.equals(true));
       });
     });
 
     t.test('Does command write output to stdout', () {
       TestFileSystem().withinZone((fs) {
-        var scriptPath = truepath(TestFileSystem().testScriptPath, 'run_test');
+        var scriptPath = truepath(fs.testScriptPath, 'run_test');
 
         if (!exists(scriptPath)) {
           createDir(scriptPath, recursive: true);
@@ -52,7 +50,7 @@ void main() {
     // command.
     t.test('Debug test point', () {
       TestFileSystem().withinZone((fs) {
-        var scriptPath = truepath(TestFileSystem().testScriptPath, 'run_test');
+        var scriptPath = truepath(fs.testScriptPath, 'run_test');
 
         if (!exists(scriptPath)) {
           createDir(scriptPath, recursive: true);

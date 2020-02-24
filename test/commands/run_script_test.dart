@@ -1,4 +1,4 @@
-//@Timeout(Duration(seconds: 610))
+@Timeout(Duration(seconds: 610))
 
 import 'package:dshell/dshell.dart' hide equals;
 import 'package:dshell/src/script/entry_point.dart';
@@ -8,7 +8,6 @@ import 'package:test/test.dart';
 import '../util/test_file_system.dart';
 
 void main() {
-  TestFileSystem();
 
   test('Run hello world', () {
     TestFileSystem().withinZone((fs) {

@@ -1,4 +1,6 @@
 #! /usr/bin/env dshell
+@Timeout(Duration(seconds: 600))
+
 import 'package:dshell/src/util/parse_cli_command.dart';
 import 'package:test/test.dart';
 

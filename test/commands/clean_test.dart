@@ -10,8 +10,6 @@ import '../util/test_file_system.dart';
 String script = 'test/test_scripts/hello_world.dart';
 
 void main() {
-  TestFileSystem();
-
   group('Cleaning using DShell', () {
     test('clean with virtual pubspec', () {
       TestFileSystem().withinZone((fs) {

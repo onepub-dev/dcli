@@ -1,52 +1,53 @@
+@Timeout(Duration(seconds: 600))
+
 import 'dart:io';
 
 import 'package:dshell/src/util/file_sync.dart';
 import 'package:test/test.dart' as t;
 import 'package:dshell/dshell.dart';
+import 'package:test/test.dart';
 
 import '../util/test_file_system.dart';
 
 void main() {
-  TestFileSystem();
-
   Settings().debug_on = true;
 
   t.group('StringAsProcess', () {
     t.test('Check .run executes', () {
       TestFileSystem().withinZone((fs) {
-        var testFile = 'test.text';
+        var testFile = join(fs.root, 'test.text');
 
         if (exists(testFile)) {
           delete(testFile);
         }
 
-        'touch test.text'.run;
+        'touch $testFile'.run;
         t.expect(exists(testFile), t.equals(true));
       });
     });
 
     t.test('Check .start executes - attached, not in shell', () {
       TestFileSystem().withinZone((fs) {
-        var testFile = 'test.text';
+        var testFile = join(fs.root, 'test.text');
 
         if (exists(testFile)) {
           delete(testFile);
         }
 
-        'touch test.text'.start();
+        'touch $testFile'.start();
         t.expect(exists(testFile), t.equals(true));
       });
     });
 
     t.test('Check .start executes - attached,  in shell', () {
       TestFileSystem().withinZone((fs) {
-        var testFile = 'test.text';
+        var testFile = join(fs.root, 'test.text');
 
         if (exists(testFile)) {
           delete(testFile);
         }
 
-        'touch test.text'.start(runInShell: true);
+        'touch $testFile'.start(runInShell: true);
 
         // Start returns before completion, wait for up to 10 seconds
         // for it to create the file.
@@ -62,13 +63,13 @@ void main() {
 
     t.test('Check .start executes - detached, not in shell', () {
       TestFileSystem().withinZone((fs) {
-        var testFile = 'test.text';
+        var testFile = join(fs.root, 'test.text');
 
         if (exists(testFile)) {
           delete(testFile);
         }
 
-        'touch test.text'.start(detached: true);
+        'touch $testFile'.start(detached: true);
 
         // we have ran a detached process. Wait for up to 10 seconds
         // for it to create the file.
@@ -85,13 +86,13 @@ void main() {
 
     t.test('Check .start executes - detached,  in shell', () {
       TestFileSystem().withinZone((fs) {
-        var testFile = 'test.text';
+        var testFile = join(fs.root, 'test.text');
 
         if (exists(testFile)) {
           delete(testFile);
         }
 
-        'touch test.text'.start(detached: true, runInShell: true);
+        'touch $testFile'.start(detached: true, runInShell: true);
 
         // we have ran a detached process. Wait for up to 10 seconds
         // for it to create the file.
@@ -139,6 +140,7 @@ void main() {
         }
         var lines = 'head -n 5 $path'.toList();
         t.expect(lines.length, t.equals(5));
+        deleteDir(dirname(path), recursive: true);
       });
     });
 
@@ -160,51 +162,47 @@ void main() {
         var expected = ['head 1', 'head 2', 'head 3', 'head 4'];
         var lines = 'head -n 5 $path'.toList(skipLines: 1);
         t.expect(lines, t.equals(expected));
+
+        deleteDir(dirname(path), recursive: true);
       });
     });
+  });
 
-    t.test('forEach using runInShell', () {
-      TestFileSystem().withinZone((fs) {
-        var found = false;
-        'echo run test'.forEach((line) {
-          if (line.contains('run test')) {
-            found = true;
-          }
-        }, runInShell: true);
-        t.expect(found, t.equals(true));
-      });
+  t.test('forEach using runInShell', () {
+    TestFileSystem().withinZone((fs) {
+      var found = false;
+      'echo run test'.forEach((line) {
+        if (line.contains('run test')) {
+          found = true;
+        }
+      }, runInShell: true);
+      t.expect(found, t.equals(true));
     });
+  });
 
-    t.test('firstLine', () {
-      TestFileSystem().withinZone((fs) {
-        var file = setup(fs);
-        t.expect('cat $file'.firstLine, 'Line 0');
-      });
+  t.test('firstLine', () {
+    TestFileSystem().withinZone((fs) {
+      var file = setup(fs);
+      t.expect('cat $file'.firstLine, 'Line 0');
     });
+  });
 
-    t.test('firstLine with stderr', () {
-      TestFileSystem().withinZone((fs) {
-        t.expect('dart --version'.firstLine, t.contains('version'));
-      });
+  t.test('firstLine with stderr', () {
+    TestFileSystem().withinZone((fs) {
+      t.expect('dart --version'.firstLine, t.contains('version'));
     });
+  });
 
-    t.test('lastLine', () {
-      TestFileSystem().withinZone((fs) {
-        var file = setup(fs);
-        t.expect('cat $file'.lastLine, 'Line 9');
-      });
+  t.test('lastLine', () {
+    TestFileSystem().withinZone((fs) {
+      var file = setup(fs);
+      t.expect('cat $file'.lastLine, 'Line 9');
     });
   });
 }
 
 String setup(TestFileSystem fs) {
   var linesFile = join(fs.root, TestFileSystem.TEST_LINES_FILE);
-
-  if (exists(fs.root)) {
-    deleteDir(fs.root, recursive: true);
-  }
-
-  createDir(fs.root);
 
   var file = FileSync(linesFile);
   for (var i = 0; i < 10; i++) {

@@ -1,3 +1,4 @@
+@Timeout(Duration(minutes: 10))
 import 'package:dshell/dshell.dart' hide equals;
 import 'package:dshell/src/functions/env.dart';
 import 'package:dshell/src/pubspec/global_dependencies.dart';
@@ -15,7 +16,9 @@ String script = 'test/test_scripts/hello_world.dart';
 void main() {
   group('Install DShell', () {
     test('clean install', () {
-      TestFileSystem().withinZone((fs) {
+      var groupFS = TestFileSystem(useCommonPath: false);
+
+      groupFS.withinZone((fs) {
         try {
           EntryPoint().process(['install']);
         } on DShellException catch (e) {
@@ -23,13 +26,9 @@ void main() {
         }
 
         checkInstallStructure();
-      }, cleanInstall: true);
-    });
-    test('install over existing', () {
-      TestFileSystem().withinZone((fs) {
+
+        // Now install over existing
         try {
-          // setEnv('HOME', '/home/test');
-          // createDir('/home/test', recursive: true);
           EntryPoint().process(['install']);
         } on DShellException catch (e) {
           print(e);
@@ -40,14 +39,14 @@ void main() {
     });
 
     test('Install with error', () {
-      TestFileSystem().withinZone((fs) {
+      TestFileSystem(useCommonPath: false).withinZone((fs) {
         try {
           EntryPoint().process(['install', 'a']);
         } on DShellException catch (e) {
           print(e);
         }
         expect(exists('${fs.home}/.dshell'), equals(false));
-      }, cleanInstall: true);
+      });
     });
 
     test('add ~/.dshell/bin to PATH Windows', () {

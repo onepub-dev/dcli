@@ -1,5 +1,7 @@
+@Timeout(Duration(seconds: 600))
 import 'dart:io';
 import 'package:file/memory.dart';
+import 'package:test/test.dart';
 
 class TestZone {
   MemoryFileSystem _fs;

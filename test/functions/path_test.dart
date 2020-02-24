@@ -1,3 +1,4 @@
+@t.Timeout(Duration(seconds: 600))
 import 'dart:io';
 
 import 'package:dshell/src/functions/env.dart';

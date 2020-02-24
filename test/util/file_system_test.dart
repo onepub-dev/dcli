@@ -1,3 +1,4 @@
+@Timeout(Duration(seconds: 600))
 import 'dart:io';
 
 import 'package:dshell/dshell.dart';
@@ -6,7 +7,6 @@ import 'package:test/test.dart';
 import 'test_file_system.dart';
 
 void main() {
-  TestFileSystem();
 
   test('MemoryFileSystem', () {
     TestFileSystem().withinZone((fs) {
