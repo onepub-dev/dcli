@@ -14,6 +14,13 @@ import '../util/log.dart';
 /// Returns the list of files in the current and child
 /// directories that match the passed glob pattern.
 ///
+/// Each file is returned as absolute path.
+///
+/// You can obtain a relative path by calling:
+/// ```dart
+/// var relativePath = relative(filePath, from: searchRoot);
+/// ```
+///
 /// Note: this is a limited implementation of glob.
 /// See the below notes for details.
 ///
