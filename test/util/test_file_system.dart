@@ -1,10 +1,15 @@
+@Timeout(Duration(seconds: 600))
+import 'dart:developer';
 import 'dart:io';
+import 'dart:isolate';
 
 import 'package:dshell/dshell.dart';
+import 'package:path/path.dart';
 import 'package:dshell/src/script/entry_point.dart';
 import 'package:dshell/src/script/script.dart';
 import 'package:dshell/src/script/virtual_project.dart';
 import 'package:dshell/src/util/with_lock.dart';
+import 'package:test/test.dart';
 import 'package:uuid/uuid.dart';
 
 class TestFileSystem {
@@ -22,54 +27,106 @@ class TestFileSystem {
 
   String get root => join(TestFileSystem._TEST_ROOT, uniquePath);
 
+  bool initialised = false;
+
   /// The location of scripts used for testing.
   String testScriptPath;
 
-  TestFileSystem() {
+  static TestFileSystem common;
+
+  /// The TestFileSystem allows you to run
+  /// unit tests in a 'virtualised' filesystem.
+  ///
+  /// The 'virtualised' filesystem only provides
+  /// very weak containment and you need to follow
+  /// a couple of rules or you tests will write over
+  /// the rest of your file system.
+  ///
+  /// The virtualised file system is created by altering the
+  /// 'HOME' environment variable and by providing a
+  /// 'root' path [TestFileSystem.root]
+  /// You MUST prefix all of your paths of either [root] or
+  /// [HOME] to ensure that you code runs within the 'virtuallised'
+  /// files system.
+  ///
+  /// Each virtualised file system has its own copy of dshell installed.
+  ///
+  ///
+  /// Any test which is non-desctructive
+  /// can use a common TestFileSystem by setting [useCommonPath] to
+  /// [true] which is the default.
+  ///
+  /// Using a common file system greatly speeds
+  /// up testing as we don't need to install
+  /// a unique copy of dshell for each test.
+  ///
+  /// Set [useCommonPath] to [false] to run your own
+  /// copy of dshell. This should be used if you are testing
+  /// dshell's install.
+  ///
+  factory TestFileSystem({bool useCommonPath = true}) {
+    TestFileSystem use;
+    if (useCommonPath) {
+      common ??= TestFileSystem._internal();
+      use = common;
+    } else {
+      use = TestFileSystem._internal();
+    }
+
+    return use;
+  }
+
+  TestFileSystem._internal() {
     uniquePath = Uuid().v4();
-    print('Creating TestFileSystem uuid=$uniquePath');
+
+    var isolateID = Service.getIsolateID(Isolate.current);
+    Settings()
+        .verbose(red('Creating TestFileSystem $root for isolate $isolateID'));
 
     testScriptPath = truepath(root, 'scripts');
   }
 
   String tempFile({String suffix}) => FileSync.tempFile(suffix: suffix);
 
-  void withinZone(
-    void Function(TestFileSystem fs) function, {
-    bool preserveTestFileSystem = false,
-    bool cleanInstall = false,
-  }) {
-    Lock(lockSuffix: 'test_file_system.lock').withLock(() {
+  void withinZone(void Function(TestFileSystem fs) callback) {
+    NamedLock(lockSuffix: 'test_file_system.lock').withLock(() {
       var home = HOME;
+      var path = env('PATH');
       try {
         setEnv('HOME', root);
 
+        rebuildPath();
+
         Settings().reset();
-        print('reset dshellPath~: ${Settings().dshellPath}');
 
-        Settings().setVerbose(true);
+        var isolateID = Service.getIsolateID(Isolate.current);
+        Settings().verbose(green(
+            'Using TestFileSystem $root for Isolateexecutable: $isolateID'));
+        Settings().verbose('reset dshellPath: ${Settings().dshellPath}');
 
-        buildTestFileSystem();
+        initFS(home);
 
-        if (cleanInstall || !Settings().isInstalled) {
-          install_dshell();
-        }
-        function(this);
-
-        if (preserveTestFileSystem) {
-          print('preserving TestFileSystem $root');
-        } else {
-          deleteTestFileSystem();
-        }
+        callback(this);
+      } catch (e) {
+        Settings().verbose(e.toString());
+        rethrow;
       } finally {
         setEnv('HOME', home);
+        setEnv('PATH', path);
       }
     });
   }
 
-  static TestFileSystem setup() {
-    print('PWD $pwd');
+  void initFS(String originalHome) {
+    if (!initialised) {
+      initialised = true;
+      copyPubCache(originalHome, HOME);
+      buildTestFileSystem();
+      install_dshell();
+    }
+  }
 
+  static TestFileSystem setup() {
     var paths = TestFileSystem();
 
     return paths;
@@ -137,16 +194,59 @@ class TestFileSystem {
 
   void deleteTestFileSystem() {
     if (exists(HOME)) {
-      print('Deleting $HOME');
+      Settings().verbose('Deleting $HOME');
       deleteDir(HOME, recursive: true);
     }
     if (exists(root)) {
-      print('Deleting $root');
+      Settings().verbose('Deleting $root');
       deleteDir(root, recursive: true);
     }
   }
 
   void install_dshell() {
+    'pub global activate --source path $pwd'.run;
     EntryPoint().process(['install']);
+  }
+
+  void rebuildPath() {
+    var newPath = <String>[];
+
+    // remove .pub-cache and .dshell... and replace with the test FS ones
+
+    for (var path in PATH) {
+      if (path.contains('.pub-cache') || path.contains('.dshell')) {
+        continue;
+      }
+
+      newPath.add(path);
+    }
+
+    newPath.add('${join(root, ".pub-cache", "bin")}');
+    newPath.add('${join(root, '.dshell', 'bin')}');
+
+    setEnv('PATH', newPath.join(':'));
+  }
+
+  void copyPubCache(String originalHome, String newHome) {
+    Settings().verbose('Copying .pub-cache into TestFileSystem');
+    var list = find(
+      '*',
+      root: join(originalHome, '.pub-cache'),
+      recursive: true,
+    ).toList();
+
+    var verbose = Settings().isVerbose;
+
+    Settings().setVerbose(false);
+
+    for (var file in list) {
+      var target = join(newHome, relative(file, from: originalHome));
+
+      if (!exists(dirname(target))) createDir(dirname(target), recursive: true);
+
+      copy(file, target);
+    }
+
+    Settings().setVerbose(verbose);
   }
 }
