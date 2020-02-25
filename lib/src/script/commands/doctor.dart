@@ -25,8 +25,7 @@ class DoctorCommand extends Command {
     VirtualProject project;
     if (subarguments.length == 1) {
       showScriptDetails = true;
-      project = VirtualProject.create(
-          Settings().dshellCachePath, Script.fromFile(subarguments[0]));
+      project = VirtualProject.create(Script.fromFile(subarguments[0]));
     }
     if (subarguments.length > 1) {
       throw CommandLineException(
