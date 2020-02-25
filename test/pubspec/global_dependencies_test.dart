@@ -130,13 +130,12 @@ dependency_overrides:
     path: ~/git/dshell
   ''';
 
-      var paths = TestFileSystem();
+      var workingDir = fs.unitTestWorkingDir;
 
-      var workingDir = paths.unitTestWorkingDir;
-
-      // create a temp 'dependencies.yaml
-      var depPath = join(workingDir, 'dependencies.yaml');
-
+      // over-ride the default 'dependencies.yaml
+      var depPath = join(Settings().dshellPath, 'dependencies.yaml');
+      var backup = '$depPath.bak';
+      copy(depPath, backup);
       depPath.write(content);
 
       var gd = GlobalDependencies.fromFile(depPath);
@@ -163,7 +162,7 @@ dependency_overrides:
       var script = Script.fromFile(testScriptPath);
 
       // create a virtual project for it.
-      var project = VirtualProject.create(fs.root, script);
+      var project = VirtualProject.create(script);
 
       var pubspec = project.pubSpec();
 
@@ -172,6 +171,9 @@ dependency_overrides:
             ..sort((lhs, rhs) => lhs.name.compareTo(rhs.name)),
           equals(gd.dependencies
             ..sort((lhs, rhs) => lhs.name.compareTo(rhs.name))));
+
+      delete(depPath);
+      copy(backup, depPath);
     });
   });
 }
