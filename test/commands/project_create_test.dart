@@ -4,6 +4,8 @@ import 'dart:io';
 
 import 'package:dshell/dshell.dart' hide equals;
 import 'package:dshell/src/script/entry_point.dart';
+import 'package:dshell/src/script/script.dart';
+import 'package:dshell/src/script/virtual_project.dart';
 import 'package:test/test.dart';
 
 import 'package:path/path.dart' as p;
@@ -21,19 +23,20 @@ void main() {
   group('Create Project', () {
     test('Create hello world', () {
       TestFileSystem().withinZone((fs) {
-        var paths = TestFileSystem();
         EntryPoint().process(['create', '--foreground', script]);
 
-        checkProjectStructure(paths, script);
+        checkProjectStructure(fs, script);
       });
     });
 
     test('Clean hello world', () {
       TestFileSystem().withinZone((fs) {
-        var paths = TestFileSystem();
+        EntryPoint().process(['create', '--foreground', script]);
+
+        VirtualProject.load(Script.fromFile(script));
         EntryPoint().process(['clean', script]);
 
-        checkProjectStructure(paths, script);
+        checkProjectStructure(fs, script);
       });
     });
 
@@ -47,13 +50,13 @@ void main() {
   });
 }
 
-void checkProjectStructure(TestFileSystem paths, String scriptName) {
-  expect(exists(paths.runtimePath(scriptName)), equals(true));
+void checkProjectStructure(TestFileSystem fs, String scriptName) {
+  expect(exists(fs.runtimePath(scriptName)), equals(true));
 
-  var pubspecPath = p.join(paths.runtimePath(scriptName), 'pubspec.yaml');
+  var pubspecPath = p.join(fs.runtimePath(scriptName), 'pubspec.yaml');
   expect(exists(pubspecPath), equals(true));
 
-  var libPath = p.join(paths.runtimePath(scriptName), 'lib');
+  var libPath = p.join(fs.runtimePath(scriptName), 'lib');
   expect(exists(libPath), equals(true));
 
   // There should be three files/directories in the project.
@@ -64,9 +67,19 @@ void checkProjectStructure(TestFileSystem paths, String scriptName) {
   // .packages
 
   var files = <String>[];
-  find('*.*', recursive: false, root: paths.runtimePath(scriptName), types: [
-    FileSystemEntityType.file,
-  ]).forEach((line) => files.add(p.basename(line)));
+  find('*.*',
+          recursive: false,
+          root: fs.runtimePath(scriptName),
+          types: [
+            FileSystemEntityType.file,
+          ],
+          includeHidden: true)
+      .forEach((line) => files.add(p.basename(line)));
+
+  // find('.*', recursive: false, root: fs.runtimePath(scriptName), types: [
+  //   FileSystemEntityType.file,
+  // ]).forEach((line) => files.add(p.basename(line)));
+
   expect(
       files,
       unorderedEquals((<String>[
@@ -74,15 +87,17 @@ void checkProjectStructure(TestFileSystem paths, String scriptName) {
         'pubspec.yaml',
         'pubspec.lock',
         '.packages',
-        '.build.complete'
+        '.build.complete',
+        '.using.virtual.pubspec'
       ])));
 
   var directories = <String>[];
 
   find('*',
           recursive: false,
-          root: paths.runtimePath(scriptName),
-          types: [FileSystemEntityType.directory])
+          root: fs.runtimePath(scriptName),
+          types: [FileSystemEntityType.directory],
+          includeHidden: true)
       .forEach((line) => directories.add(p.basename(line)));
   expect(directories, unorderedEquals(<String>['lib', '.dart_tool']));
 }
