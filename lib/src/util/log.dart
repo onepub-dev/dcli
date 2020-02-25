@@ -8,7 +8,7 @@ class Log extends Logger {
   static Log _self;
   static String _localPath;
 
-  static Level _loggingLevel = Level.debug;
+  static Level _loggingLevel = Level.info;
 
   Log();
 
