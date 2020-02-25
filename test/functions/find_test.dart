@@ -38,6 +38,7 @@ void main() {
 
         found.sort();
         var expected = [
+          join(paths.top, 'fred.jpg'),
           join(paths.top, 'one.jpg'),
           join(paths.middle, 'two.jpg'),
           join(paths.bottom, 'three.jpg')
