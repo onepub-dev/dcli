@@ -35,11 +35,11 @@ class RunnableProcess {
   ParsedCliCommand parsed;
 
   RunnableProcess(String cmdLine, {this.workingDirectory})
-      : parsed = ParsedCliCommand(cmdLine);
+      : parsed = ParsedCliCommand(cmdLine, workingDirectory);
 
   RunnableProcess.fromList(String command, List<String> args,
       {this.workingDirectory})
-      : parsed = ParsedCliCommand.fromParsed(command, args);
+      : parsed = ParsedCliCommand.fromParsed(command, args, workingDirectory);
 
   String get cmdLine => parsed.cmd + ' ' + parsed.args.join(' ');
 

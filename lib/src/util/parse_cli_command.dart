@@ -11,9 +11,9 @@ class ParsedCliCommand {
   String cmd;
   var args = <String>[];
 
-  ParsedCliCommand(String command) {
+  ParsedCliCommand(String command, String workingDirectory) {
     var qargs = parse(command);
-    args = expandGlobs(qargs);
+    args = expandGlobs(qargs, workingDirectory);
 
     if (Settings().isVerbose) {
       Settings().verbose('CWD: ${Directory.current}');
@@ -21,9 +21,10 @@ class ParsedCliCommand {
     }
   }
 
-  ParsedCliCommand.fromParsed(this.cmd, List<String> rawArgs) {
+  ParsedCliCommand.fromParsed(
+      this.cmd, List<String> rawArgs, String workingDirectory) {
     var qargs = _QArg.translate(rawArgs);
-    args = expandGlobs(qargs);
+    args = expandGlobs(qargs, workingDirectory);
 
     if (Settings().isVerbose) {
       Settings().verbose('CWD: ${Directory.current}');
@@ -138,14 +139,14 @@ class ParsedCliCommand {
   /// be expanded.
   /// See https://github.com/bsutton/dshell/issues/56
   ///
-  List<String> expandGlobs(List<_QArg> qargs) {
+  List<String> expandGlobs(List<_QArg> qargs, String workingDirectory) {
     var expanded = <String>[];
 
     for (var qarg in qargs) {
       if (qarg.wasQuoted) {
         expanded.add(qarg.arg);
       } else {
-        expanded.addAll(qarg.expandGlob());
+        expanded.addAll(qarg.expandGlob(workingDirectory));
       }
     }
     return expanded;
@@ -190,25 +191,25 @@ class _QArg {
     return qargs;
   }
 
-  Iterable<String> expandGlob() {
+  Iterable<String> expandGlob(String workingDirectory) {
     var expanded = <String>[];
     if (arg.contains('~')) {
       arg = arg.replaceAll('~', HOME);
     }
-    if (!needsExpansion) {
-      expanded.addAll(_expandGlob());
+    if (needsExpansion) {
+      expanded.addAll(_expandGlob(workingDirectory));
     } else {
       expanded.add(arg);
     }
     return expanded;
   }
 
-  Iterable<String> _expandGlob() {
+  Iterable<String> _expandGlob(String workingDirectory) {
     var glob = Glob(arg);
 
     var files = <FileSystemEntity>[];
     try {
-      files = glob.listSync();
+      files = glob.listSync(root: workingDirectory);
     } on FileSystemException {
       files = [];
     }

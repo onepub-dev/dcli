@@ -1,21 +1,20 @@
+import 'package:dshell/src/functions/pwd.dart';
 @Timeout(Duration(seconds: 600))
 import 'package:dshell/src/script/command_line_runner.dart';
 import 'package:dshell/src/util/parse_cli_command.dart';
 import 'package:test/test.dart';
-
-import 'test_file_system.dart';
 
 void main() {
   group('ParseCLICommand', () {
     test('empty string', () {
       var test = '';
 
-      expect(() => ParsedCliCommand(test),
+      expect(() => ParsedCliCommand(test, pwd),
           throwsA(TypeMatcher<InvalidArguments>()));
     });
     test('a', () {
       var test = 'a';
-      var parsed = ParsedCliCommand(test);
+      var parsed = ParsedCliCommand(test, pwd);
 
       expect(parsed.cmd, equals('a'));
       expect(parsed.args, equals(<String>[]));
@@ -23,14 +22,14 @@ void main() {
 
     test('ab', () {
       var test = 'ab';
-      var parsed = ParsedCliCommand(test);
+      var parsed = ParsedCliCommand(test, pwd);
 
       expect(parsed.cmd, equals('ab'));
     });
 
     test('a b c', () {
       var test = 'a b c';
-      var parsed = ParsedCliCommand(test);
+      var parsed = ParsedCliCommand(test, pwd);
 
       expect(parsed.cmd, equals('a'));
       expect(parsed.args, equals(['b', 'c']));
@@ -38,7 +37,7 @@ void main() {
 
     test('aa bb cc', () {
       var test = 'aa bb cc';
-      var parsed = ParsedCliCommand(test);
+      var parsed = ParsedCliCommand(test, pwd);
 
       expect(parsed.cmd, equals('aa'));
       expect(parsed.args, equals(['bb', 'cc']));
@@ -46,7 +45,7 @@ void main() {
 
     test('a  b  c', () {
       var test = 'a  b  c';
-      var parsed = ParsedCliCommand(test);
+      var parsed = ParsedCliCommand(test, pwd);
 
       expect(parsed.cmd, equals('a'));
       expect(parsed.args, equals(['b', 'c']));
@@ -54,7 +53,7 @@ void main() {
 
     test('a  "b"  "c1"', () {
       var test = 'a  "b"  "c1"';
-      var parsed = ParsedCliCommand(test);
+      var parsed = ParsedCliCommand(test, pwd);
 
       expect(parsed.cmd, equals('a'));
       expect(parsed.args, equals([r'b', 'c1']));
@@ -62,7 +61,7 @@ void main() {
 
     test('git log --pretty=format:"%s" v1.0.45', () {
       var test = 'git log --pretty=format:"%s" v1.0.45';
-      var parsed = ParsedCliCommand(test);
+      var parsed = ParsedCliCommand(test, pwd);
 
       expect(parsed.cmd, equals('git'));
       expect(parsed.args, equals(['log', '--pretty=format:%s', 'v1.0.45']));
