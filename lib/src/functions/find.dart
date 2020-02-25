@@ -55,6 +55,10 @@ import '../util/log.dart';
 ///    (all the way down) is performed.
 /// [recursive] is true by default.
 ///
+/// [includeHidden] controls whether hidden files (.xx) are returned and
+/// whether hidden directorys (.xx) are recursed into when the [recursive]
+/// option is true. By default hidden files and directories are ignored.
+///
 /// [types] allows you to specify the file types you want the find to return.
 /// By default [types] limits the results to files.
 ///
@@ -67,6 +71,7 @@ import '../util/log.dart';
 /// allow you to process the results as the are produced rather than having
 /// to wait for the call to find to complete.
 /// The passed progress is also returned.
+///
 
 Progress find(
   String pattern, {
