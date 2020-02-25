@@ -1024,7 +1024,9 @@ If your script `<scriptname.dart>` contains a `@pubspec` annotation then DShell 
 ## Pubspec dependancy injection
 When DShell creates your virtual pubspec, on first run or after a clean,it will inject a default set of dependancies into your pubspec.
 
-It doesn't matter if you have relied on a virtual pubspec, used an `@pubspec` annotation or created a classic `pubspec.yaml` DShell always injects the default dependencies.
+Dependency injects occurs when you don't provide a pubspec.yaml or when you use the `@pubspec` annotation.
+
+If you created a classic `pubspec.yaml` then DShell will NOT perform dependencies injection.
 
 DShell stores the default dependencies in:
 
@@ -1041,7 +1043,11 @@ dependencies:
   args: ^1.5.2
   path: ^1.6.4
 ```
-Dshell also supports the dependencies_override section if you have any locally developed packages you want to inject.
+`dependencies.yaml` supports all of the standard dependency sources such as git and path.
+
+Dshell also supports the dependencies_override section if required.
+
+See [https://dart.dev/tools/pub/dependencies] for more details on dependencies and depencency sources.
 
 If you find a really nice package that you use time and again then its easier to add it to the set of default dependencies than having to add it to every script.
 
@@ -1067,7 +1073,9 @@ DShell provides a nice set of basic tools (packages) for your DShell scripts and
 Sometimes you may find that a script needs a specific version of a default dependency. DShell allows you override a default dependencies version on a per script basis.
 
 
-If you have declared any of the default packages in the dependancies section of you `@pubspec` annotation or your classic `pubspec.yaml` then the version you declare will be used instead of the default version.
+If you have declared any of the default packages in the dependancies section of you `@pubspec` annotation then the version you declare will be used instead of the default version.
+
+If you provide an actually `pubspec.yaml` in your script directory then DShell does NOT perform dependency injection.
 
 
 NOTE: you must run 'dshell cleanall' if you modify your 'dependancies.yaml' as DShell doesn't check this file for changes.
