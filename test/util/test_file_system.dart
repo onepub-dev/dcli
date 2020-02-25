@@ -80,8 +80,7 @@ class TestFileSystem {
     uniquePath = Uuid().v4();
 
     var isolateID = Service.getIsolateID(Isolate.current);
-    Settings()
-        .verbose(red('Creating TestFileSystem $root for isolate $isolateID'));
+    print(red('Creating TestFileSystem $root for isolate $isolateID'));
 
     testScriptPath = truepath(root, 'scripts');
   }
@@ -100,9 +99,9 @@ class TestFileSystem {
         Settings().reset();
 
         var isolateID = Service.getIsolateID(Isolate.current);
-        Settings().verbose(green(
+        print(green(
             'Using TestFileSystem $root for Isolateexecutable: $isolateID'));
-        Settings().verbose('reset dshellPath: ${Settings().dshellPath}');
+        print('Reset dshellPath: ${Settings().dshellPath}');
 
         initFS(home);
 
@@ -140,8 +139,7 @@ class TestFileSystem {
   }
 
   String runtimePath(String scriptName) {
-    var project = VirtualProject.create(
-        Settings().dshellCachePath, Script.fromFile(scriptName));
+    var project = VirtualProject.load(Script.fromFile(scriptName));
     return project.runtimePath;
   }
 
@@ -149,6 +147,7 @@ class TestFileSystem {
     if (!exists(HOME)) {
       createDir(HOME, recursive: true);
     }
+
     top = join(root, 'top');
     thidden = join(top, '.hidden');
     middle = join(top, 'middle');
@@ -172,6 +171,8 @@ class TestFileSystem {
 
     // Create test files
 
+    touch(join(top, 'fred.jpg'), create: true);
+    touch(join(top, 'fred.png'), create: true);
     touch(join(thidden, 'fred.txt'), create: true);
 
     touch(join(top, 'one.txt'), create: true);
@@ -228,7 +229,7 @@ class TestFileSystem {
   }
 
   void copyPubCache(String originalHome, String newHome) {
-    Settings().verbose('Copying .pub-cache into TestFileSystem');
+    print('Copying .pub-cache into TestFileSystem');
     var list = find(
       '*',
       root: join(originalHome, '.pub-cache'),
