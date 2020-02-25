@@ -11,18 +11,15 @@ import 'package:test/test.dart';
 import 'test_file_system.dart';
 
 void main() {
-  test(
-    'timeout catch',
-    () {
-      expect(() {
-        TestFileSystem().withinZone((fs) async {
-          NamedLock(lockSuffix: 'timeout').withLock(() {
-            throw DShellException('fake exception');
-          });
+  test('timeout catch', () {
+    expect(() {
+      TestFileSystem().withinZone((fs) async {
+        NamedLock(lockSuffix: 'timeout').withLock(() {
+          throw DShellException('fake exception');
         });
-      }, throwsA(TypeMatcher<DShellException>()));
-    },
-  );
+      });
+    }, throwsA(TypeMatcher<DShellException>()));
+  }, skip: true);
 
   test('withLock', () {
     TestFileSystem().withinZone((fs) async {
