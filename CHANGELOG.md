@@ -1,3 +1,9 @@
+### 1.8.3-dev.3
+[fix] glob expansion needed to use the workingdirectory to expand the correct files.
+updated the doco on dependency injection to reflect the fact that we don't inject if there is an actual pubspec.yaml.
+Documented the 'includeHidden' param.
+[fix] Fixed a number of unit test so the work correctly under the TestFileSystem.
+
 ### 1.8.3-dev.2
 [enh] Creation of a inter-process and inter-isolate locking mechanism [NamedLock]. Improved locking documentation and added logic to release locks when exceptions occur.
 [enh] Added ability to share a single TestFileSystem amoungst multiple tests. Speed up the unit testing by copying the primary .pub-cache to each test file system. Also sets the path and Settings to point to the test file system.
