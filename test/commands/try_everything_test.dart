@@ -11,10 +11,10 @@ void main() {
   t.test('Try everything', () {
     TestFileSystem().withinZone((fs) {
       var shellPath = 'shell';
+      var mainPath = join(shellPath, 'main');
       try {
         print('PWD: ${pwd}');
 
-        var mainPath = join(shellPath, 'main');
         if (!exists(mainPath)) {
           createDir(mainPath, recursive: true);
         }
@@ -26,7 +26,9 @@ void main() {
 
         var subdirPath = join(mainPath, 'subdir');
 
-        createDir(subdirPath, recursive: true);
+        if (!exists(subdirPath)) {
+          createDir(subdirPath, recursive: true);
+        }
         touch(join(subdirPath, 'good.jpg'), create: true);
 
         echo('Find file matching *.jpg');
@@ -56,6 +58,9 @@ void main() {
       } finally {
         print('In finally');
         deleteDir(shellPath);
+        if (exists(mainPath)) {
+          deleteDir(mainPath);
+        }
       }
     });
   });
