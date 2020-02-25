@@ -33,6 +33,7 @@ void main() {
     t.test('deleteDir', () {
       TestFileSystem().withinZone((fs) {
         var testPath = join(fs.root, 'tmp_test/longer/and/longer');
+        createDir(testPath, recursive: true);
         deleteDir(testPath);
 
         t.expect(!exists(testPath), t.equals(true));
