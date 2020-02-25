@@ -11,11 +11,14 @@ import '../virtual_project.dart';
 import 'commands.dart';
 
 /// Runs a dart script.
+/// If required a virtual project is created
+/// and built.
 class RunCommand extends Command {
   static const String NAME = 'run';
 
   RunCommand() : super(NAME);
 
+  ///
   ///
   /// [arguments] - the arguments passed directly to the run command.
   /// Returns the [exitcode];
@@ -33,10 +36,12 @@ class RunCommand extends Command {
 
     Settings().verbose('Running script ${script.path}');
 
-    var project = VirtualProject.load(Settings().dshellCachePath, script);
+    var project = VirtualProject.load(script);
     Settings().verbose('Virtual Project directory ${project.runtimePath}');
 
-    project.cleanIfRequired();
+    if (!project.isRunnable) {
+      project.build();
+    }
 
     var scriptArguments = <String>[];
 

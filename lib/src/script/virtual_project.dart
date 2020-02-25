@@ -3,7 +3,6 @@ import 'package:dshell/src/functions/env.dart';
 import 'package:dshell/src/functions/read.dart';
 import 'package:dshell/src/script/commands/install.dart';
 import 'package:dshell/src/util/ansi_color.dart';
-import 'package:dshell/src/util/stack_trace_impl.dart';
 import 'package:dshell/src/util/truepath.dart';
 import 'package:dshell/src/util/with_lock.dart';
 import 'package:path/path.dart';
@@ -83,24 +82,37 @@ class VirtualProject {
 
   bool _isProjectInitialised = false;
 
+  /// The location of the pubspec.yaml file that will
+  /// be used when running the project.
+  ///
+  /// See: runtimePath for how this is determined.
   String get runtimePubSpecPath => _runtimePubspecPath;
 
+  /// The directory the project will be run from.
+  /// For a project with an actual pubspec.yaml this
+  /// will be the directory the pubspec.yaml file lives
+  /// in (the same directory as the script). For
+  /// a project that requires a virtual pubspec.yaml
+  /// this will be in the projects cache directory
+  /// located under ~/.dshell/cache....
+  ///
   String get runtimePath => _runtimePath;
 
   NamedLock lock;
 
-  /// Returns a [project] instance for the given
-  /// script.
-  static VirtualProject create(String cacheRootPath, Script script) {
-    var project = VirtualProject._internal(cacheRootPath, script);
+  /// Creates a virtual project's directory
+  /// and calls initialiseProject.
+  /// The create does NOT build the project (i.e. call pub get)
+  static VirtualProject create(Script script) {
+    var dshellCachePath = Settings().dshellCachePath;
+    var project = VirtualProject._internal(dshellCachePath, script);
 
-    if (script.hasPubSpecYaml() && !script.hasPubspecAnnotation) {
+    if (project.usingLocalPubspec) {
       // we don't need a virtual project as the script
       // is a full project in its own right.
       // why do we have two lib paths?
       setLocalPaths(project, script);
-
-      project.__usingLocalPubspec = true;
+      project._usingLocalPubspec = true;
     } else {
       // we need a virtual pubspec.
       // project._runtimeLibPath = project._projectLibPath;
@@ -108,11 +120,25 @@ class VirtualProject {
       // project._runtimeScriptPath = project._projectScriptLinkPath;
 
       setVirtualPaths(project);
-
-      project.__usingLocalPubspec = false;
+      project._usingLocalPubspec = false;
     }
 
-    project._createProject();
+    project.initialiseProject();
+    return project;
+  }
+
+  /// loads an existing virtual project.
+  static VirtualProject load(Script script) {
+    var dshellCachePath = Settings().dshellCachePath;
+    var project = VirtualProject._internal(dshellCachePath, script);
+
+    if (project.usingLocalPubspec) {
+      // why do we have two lib paths?
+      setLocalPaths(project, script);
+    } else {
+      setVirtualPaths(project);
+    }
+
     return project;
   }
 
@@ -144,29 +170,12 @@ class VirtualProject {
     project._runtimePath = dirname(script.path);
   }
 
-  /// loads an existing virtual project.
-  static VirtualProject load(String dshellCachePath, Script script) {
-    var project = VirtualProject._internal(dshellCachePath, script);
+  bool _usingLocalPubspec;
 
-    if (!project._isProjectInitialised) {
-      project = create(dshellCachePath, script);
-    } else {
-      if (project._usingLocalPubspec()) {
-        // why do we have two lib paths?
-        setLocalPaths(project, script);
-      } else {
-        setVirtualPaths(project);
-      }
-    }
-    return project;
-  }
-
-  bool __usingLocalPubspec;
-
-  bool _usingLocalPubspec() {
-    assert(_isProjectInitialised);
-    __usingLocalPubspec ??= exists(_localPubspecIndicatorPath);
-    return __usingLocalPubspec;
+  bool get usingLocalPubspec {
+    _usingLocalPubspec ??=
+        script.hasPubSpecYaml() && script.hasPubspecAnnotation;
+    return _usingLocalPubspec;
   }
 
   VirtualProject._internal(String cacheRootPath, this.script) {
@@ -199,14 +208,14 @@ class VirtualProject {
   ///  or
   /// Link to scripts own pubspec.yaml file.
   /// hashes.yaml file.
-  void _createProject({bool skipPubGet = false}) {
+  void initialiseProject() {
     lock.withLock(() {
       if (!exists(_virtualProjectPath)) {
         createDir(_virtualProjectPath, recursive: true);
         print('Created Virtual Project at ${_virtualProjectPath}');
       }
 
-      if (script.hasPubSpecYaml() && !script.hasPubspecAnnotation) {
+      if (usingLocalPubspec) {
         // create the indicator file so when we load
         // the virtual project we know its a local
         // pubspec without having to parse the script
@@ -215,7 +224,6 @@ class VirtualProject {
           delete(_virtualPubspecIndicatorPath);
         }
         touch(_localPubspecIndicatorPath, create: true);
-        __usingLocalPubspec = true;
 
         // clean up any old files.
         // as the script may have changed from virtual to local.
@@ -235,7 +243,6 @@ class VirtualProject {
           delete(_localPubspecIndicatorPath);
         }
         touch(_virtualPubspecIndicatorPath, create: true);
-        __usingLocalPubspec = false;
 
         // create the files/links for a virtual pubspec.
         _createScriptLink(script);
@@ -256,8 +263,15 @@ class VirtualProject {
   }
 
   ///
-  /// deletes the project cache directory and recreates it.
-  void clean({bool background = false}) {
+  /// Builds the project.
+  /// This essentially means that we run pub get
+  /// however if the project hasn't been initialised
+  /// then we initialise the project as well.
+  /// if [background] is set to true then we
+  /// run the build as a background process.
+  /// [background] defaults to [false]
+  ///
+  void build({bool background = false}) {
     /// Check that dshells install has been rum.
     if (!exists(Settings().dshellCachePath)) {
       printerr(red(
@@ -269,6 +283,9 @@ class VirtualProject {
 
     lock.withLock(() {
       try {
+        if (!isInitialised) {
+          initialiseProject();
+        }
         if (background) {
           // we run the clean in the background
           // by running another copy of dshell.
@@ -285,7 +302,7 @@ class VirtualProject {
       } on PubGetException {
         print(red("\ndshell clean failed due to the 'pub get' call failing."));
       }
-    });
+    }, waiting: 'Waiting for clean to complete...');
   }
 
   /// Causes a pub get to be run against the project.
@@ -374,7 +391,7 @@ class VirtualProject {
   }
 
   ///
-  /// reads and returns the projects virtual pubspec
+  /// reads and returns the project's virtual pubspec
   /// and returns it.
   PubSpec pubSpec() {
     return PubSpecFile.fromFile(_runtimePubspecPath);
@@ -390,21 +407,19 @@ class VirtualProject {
     touch(join(_virtualProjectPath, BUILD_COMPLETE), create: true);
   }
 
-  bool isRunnable() {
+  /// Returns true if the projects structure has
+  /// been intialised. An initialised project
+  /// is one where the virtual project directory has been created
+  /// a pubspec.yaml exists any required links have been created.
+  ///
+  /// See: isRunnable to see if a project is in a runnable state.
+  bool get isInitialised => _isProjectInitialised;
+
+  /// Returns [true] if the project has been intialised
+  /// and a [build] has been run (which essentially calls
+  /// pub get).
+  bool get isRunnable {
     return _isProjectInitialised &&
         exists(join(_virtualProjectPath, BUILD_COMPLETE));
-  }
-
-  /// Cleans the project only if its not in a runnable state.
-  void cleanIfRequired() {
-    if (!isRunnable()) {
-      lock.withLock(() {
-        // now we have the lock check runnable again as a clean may have just completed.
-        if (!isRunnable()) {
-          clean();
-          Settings().verbose('Cleaning Virtual Project');
-        }
-      }, waiting: 'Waiting for clean to complete...');
-    }
   }
 }

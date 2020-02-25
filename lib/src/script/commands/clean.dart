@@ -1,7 +1,6 @@
 import 'package:dshell/dshell.dart';
 import 'package:dshell/src/util/completion.dart';
 
-import '../../settings.dart';
 import '../flags.dart';
 import '../script.dart';
 import '../virtual_project.dart';
@@ -40,8 +39,8 @@ class CleanCommand extends Command {
 
     var script = Script.fromFile(scriptPath);
 
-    var project = VirtualProject.create(Settings().dshellCachePath, script);
-    project.clean();
+    var project = VirtualProject.create(script);
+    project.build();
   }
 
   @override

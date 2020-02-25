@@ -78,19 +78,15 @@ class CompileCommand extends Command {
     Script.validate(scriptPath);
     var script = Script.fromFile(scriptPath);
     try {
-      VirtualProject project;
+      var project = VirtualProject.load(script);
 
       // by default we clean the project unless the -nc flagg is passed.
-      // howver if the project doesn't exist we force a clean
-      if (!flagSet.isSet(NoCleanFlag())) {
-        // make certain the project is upto date.
-        project = VirtualProject.create(Settings().dshellCachePath, script);
-        project.clean();
-      } else {
-        project = VirtualProject.load(Settings().dshellCachePath, script);
-        if (!project.isRunnable()) {
-          project.clean();
-        }
+      // however if the project isn't i a runnable state then we
+      // force a build.
+      var buildRequired = !flagSet.isSet(NoCleanFlag()) || !project.isRunnable;
+
+      if (buildRequired) {
+        project.build();
       }
 
       Settings().verbose(

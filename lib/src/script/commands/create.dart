@@ -56,8 +56,8 @@ class CreateCommand extends Command {
     _script.createDefaultFile(body);
 
     print('Creating project...');
-    var project = VirtualProject.create(Settings().dshellCachePath, _script);
-    project.clean(background: !flagSet.isSet(ForegroundFlag()));
+    var project = VirtualProject.create(_script);
+    project.build(background: !flagSet.isSet(ForegroundFlag()));
 
     chmod(755, p.join(_script.scriptDirectory, _script.scriptname));
 
