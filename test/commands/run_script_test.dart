@@ -42,13 +42,8 @@ void main() {
       try {
         print(pwd);
 
-        var projectPath =
-            '$HOME/.dshell/cache/home/bsutton/git/dshell/test/test_scripts/local_pubspec/hello_world.project';
-        if (exists(projectPath)) {
-          deleteDir(projectPath);
-        }
         exit = EntryPoint().process(
-            ['run', 'test/test_scripts/local_pubspec/hello_world.dart']);
+            ['-v', 'run', 'test/test_scripts/local_pubspec/hello_world.dart']);
       } on DShellException catch (e) {
         print(e);
       }
