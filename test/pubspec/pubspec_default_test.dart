@@ -101,10 +101,13 @@ $overrides
       if (exists(pubSpecScriptPath)) {
         delete(pubSpecScriptPath);
       }
+      if (!exists(dirname(scriptPath))) {
+        createDir(dirname(scriptPath));
+      }
       PubSpec file = PubSpecImpl.fromString(basic);
-      file.writeToFile(scriptPath);
+      file.writeToFile(pubSpecScriptPath);
 
-      var dependencies = GlobalDependencies.defaultDependencies;
+      var dependencies = <Dependency>[];
       dependencies.add(Dependency.fromHosted('collection', '^1.14.12'));
       dependencies.add(Dependency.fromHosted('file_utils', '^0.1.3'));
       runTest(fs, null, main, dependencies);
@@ -132,7 +135,7 @@ $overrides
     });
   }, skip: false);
 
-  t.test('File - override with path: dependencies', () {
+  t.test('File - local pubsec.yaml', () {
     TestFileSystem().withinZone((fs) {
       var scriptDirectory = p.join(fs.root, 'local');
       var scriptPath = p.join(scriptDirectory, 'test.dart');
@@ -184,7 +187,7 @@ void runTest(TestFileSystem fs, String annotation, String main,
   }
   scriptPath.append(main);
 
-  var project = VirtualProject.create(Settings().dshellCachePath, script);
+  var project = VirtualProject.create(script);
 
   var pubspec = project.pubSpec();
   t.expect(pubspec.dependencies, t.unorderedMatches(expected));
