@@ -25,11 +25,13 @@ class DoctorCommand extends Command {
     VirtualProject project;
     if (subarguments.length == 1) {
       showScriptDetails = true;
-      project = VirtualProject.create(Script.fromFile(subarguments[0]));
+      var scriptPath = subarguments[0];
+      Script.validate(scriptPath);
+      project = VirtualProject.create(Script.fromFile(scriptPath));
     }
     if (subarguments.length > 1) {
       throw CommandLineException(
-          "'dshell doctor' does zero or one arguments. Found $subarguments");
+          "'dshell doctor' takes zero or one arguments. Found $subarguments");
     }
 
     colprint('Dshell doctor version', '${Settings().version}');
