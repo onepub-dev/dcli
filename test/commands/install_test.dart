@@ -94,6 +94,8 @@ void main() {
         if (exists(profilePath)) {
           expect(read(profilePath).toList(), contains(export));
         }
+        Env.reset();
+        Settings.reset();
       });
     });
 

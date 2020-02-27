@@ -4,6 +4,7 @@ import 'dart:io';
 import 'dart:isolate';
 
 import 'package:dshell/dshell.dart';
+import 'package:dshell/src/functions/env.dart';
 import 'package:path/path.dart';
 import 'package:dshell/src/script/entry_point.dart';
 import 'package:dshell/src/script/script.dart';
@@ -89,14 +90,14 @@ class TestFileSystem {
 
   void withinZone(void Function(TestFileSystem fs) callback) {
     NamedLock(lockSuffix: 'test_file_system.lock').withLock(() {
+      Settings.reset();
+      Env.reset();
       var home = HOME;
       var path = env('PATH');
       try {
         setEnv('HOME', root);
 
         rebuildPath();
-
-        Settings().reset();
 
         var isolateID = Service.getIsolateID(Isolate.current);
         print(green(
@@ -214,6 +215,9 @@ class TestFileSystem {
 
     // remove .pub-cache and .dshell... and replace with the test FS ones
 
+    if (PATH == null || PATH.isEmpty) {
+      print(red('PATH is empty'));
+    }
     for (var path in PATH) {
       if (path.contains('.pub-cache') || path.contains('.dshell')) {
         continue;
