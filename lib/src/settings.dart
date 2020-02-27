@@ -74,10 +74,11 @@ class Settings {
 
   // Used when unit testing and we are re-using
   // the current process.
-  void reset() {
-    selectedFlags.clear();
-    _dshellPath = null;
-    _dshellBinPath = null;
+  static void reset() {
+    _self = Settings.init();
+    _self.selectedFlags.clear();
+    _self._dshellPath = null;
+    _self._dshellBinPath = null;
   }
 
   /// The directory where we store all of dshell's
@@ -129,9 +130,7 @@ class Settings {
   /// Returns a singleton providing
   /// access to DShell settings.
   factory Settings() {
-    if (_self == null) {
-      Settings.init();
-    }
+    _self ??= Settings.init();
 
     return _self;
   }
@@ -144,8 +143,6 @@ class Settings {
     this.appname = 'dshell',
   }) {
     version = dshell_version;
-
-    _self = this;
   }
 
   /// we consider dshell installed if the ~/.dshell directory

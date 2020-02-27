@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:dshell/dshell.dart';
 import 'package:dshell/src/util/dshell_exception.dart';
+import 'package:dshell/src/util/stack_trace_impl.dart';
 
 import '../settings.dart';
 import 'dshell_function.dart';
@@ -55,7 +56,7 @@ void setEnv(String name, String value) => Env().setEnv(name, value);
 
 class Env extends DShellFunction {
   static Env _self = Env._internal();
-  Map<String, String> envVars = {};
+  Map<String, String> envVars;
 
   factory Env() {
     return _self;
@@ -64,10 +65,16 @@ class Env extends DShellFunction {
   Env._internal() {
     var platformVars = Platform.environment;
 
+    envVars = {};
+
     // build a local map with all of the OS environment vars.
     for (var entry in platformVars.entries) {
       envVars.putIfAbsent(entry.key, () => entry.value);
     }
+  }
+
+  static void reset() {
+    _self = Env._internal();
   }
 
   String env(String name) {
@@ -134,7 +141,12 @@ class Env extends DShellFunction {
     return found;
   }
 
-  void setEnv(String name, String value) => envVars[name] = value;
+  /// Passing a null [value] will remove the key from the
+  /// set on environment variables.
+  void setEnv(String name, String value) {
+    if (value == null) envVars.remove(name);
+    envVars[name] = value;
+  }
 
   static void setMock(Env mockEnv) {
     _self = mockEnv;
