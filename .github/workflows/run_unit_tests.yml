@@ -13,14 +13,13 @@ jobs:
     steps:
     - uses: actions/checkout@v1
     - name: Install dependencies
-      run: pub get
-    - name: echo pwd
-      run: echo $PWD
-    - name: show files
-      run: find . 
-    - name: pub activate dshell
-      run: dart ./tool/activate_local.dart --path=. 
-    - name: complete dshell install
-      run: dart ./bin/dshell.dart install
-    - name: Run tests
-      run: ./tool/run_unit_tests.dart
+      run: |
+        pub get
+        echo pwd
+        echo $PWD
+        export PATH="$PATH":"$HOME/.pub-cache/bin"
+        echo PATH=$PATH
+        find . 
+        dart ./tool/activate_local.dart --path=. 
+        dart ./bin/dshell.dart install
+        dart ./tool/run_unit_tests.dart
