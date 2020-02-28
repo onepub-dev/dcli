@@ -23,19 +23,19 @@ import '../../dshell.dart';
 /// You may provide a [limit] which will cause the
 /// menu to only display the first [limit] options passed.
 ///
-/// If you pass a [description] lambda then [description] function
-/// will be called for for each option and the resulting description
+/// If you pass a [format] lambda then the [format] function
+/// will be called for for each option and the resulting format
 /// used to display the option in the menu.
 ///
 /// e.g.
 /// ```dart
 ///
 /// var colors = [Color('Red'), Color('Green')];
-/// var color = menu('Please select a color', colors, description: (color) => color.name);
+/// var color = menu('Please select a color', colors, format: (color) => color.name);
 /// ```
 ///
-/// If [description] is null then [option.toString()] will be used
-/// as the description for the menu option.
+/// If [format] is null then [option.toString()] will be used
+/// as the format for the menu option.
 ///
 /// When a [limit] is applied the menu will display the first [limit]
 /// options. If you specify [fromStart: false] then the menu will display the
@@ -43,7 +43,7 @@ import '../../dshell.dart';
 ///
 
 T menu<T>(String prompt, List<T> options,
-    {int limit, String Function(T) description, bool fromStart = true}) {
+    {int limit, String Function(T) format, bool fromStart = true}) {
   limit ??= options.length;
 
   var displayList = options;
@@ -56,8 +56,8 @@ T menu<T>(String prompt, List<T> options,
   for (var i = 1; i <= limit; i++) {
     var option = displayList[i - 1];
     String desc;
-    if (description != null) {
-      desc = description(option);
+    if (format != null) {
+      desc = format(option);
     } else {
       desc = option.toString();
     }
