@@ -7,6 +7,7 @@ import 'waitForEx.dart';
 import 'runnable_process.dart';
 
 class Progress {
+  bool closed = false;
   int _exitCode;
 
   set exitCode(int exitCode) => _exitCode = exitCode;
@@ -26,11 +27,11 @@ class Progress {
   Progress.forEach();
 
   void addToStdout(String line) {
-    stdoutController.sink.add(line);
+    if (!closed) stdoutController.sink.add(line);
   }
 
   void addToStderr(String line) {
-    stderrController.sink.add(line);
+    if (!closed) stderrController.sink.add(line);
   }
 
   void forEach(LineAction stdout, {LineAction stderr = devNull}) {
@@ -110,5 +111,6 @@ class Progress {
   void close() {
     stderrController.close();
     stdoutController.close();
+    closed = true;
   }
 }
