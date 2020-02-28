@@ -39,3 +39,4 @@ bin/dshell_install
 bin/dshell
 example/dsort
 shell/main/subdir/good.jpg
+test/test_scripts/local_pubspec/hello_world
