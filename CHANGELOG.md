@@ -1,3 +1,13 @@
+### 1.8.3-dev.4
+change the lambda description to the more consisely named format.
+Improved the documentation on avoiding cd/pushd/popd.
+Added which.dart as used by test scripts.
+Added logic so we don't try to add to the stream after it is closed.
+rework of run.
+Fixed the reset logic for mocks.
+Fixed the reset logic. Added logic so that callen setEnv with a null value removes the key from the map.
+Added validation that the passed argument is a script.
+
 ### 1.8.3-dev.3
 [fix] glob expansion needed to use the workingdirectory to expand the correct files.
 updated the doco on dependency injection to reflect the fact that we don't inject if there is an actual pubspec.yaml.
