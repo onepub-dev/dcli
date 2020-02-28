@@ -22,7 +22,7 @@
 * [Compiling to Native](#compiling-to-native)
 * [Calling cli applications](#calling-cli-applications)
 * [Piping](#piping)
-* [CD/Push/Pop are evil](#cdpushpop-are-evil)
+* [CD/pushd/popd are evil](#cdpushdpopd-are-evil)
   * [Why is cd dangerous?](#why-is-cd-dangerous)
 * [Dependency Management](#dependency-management)
   * [Sharing packages](#sharing-packages)
@@ -871,21 +871,28 @@ Note: when you use pipe you MUST surround the pipe commands with parentheses () 
 
 What we have now is the power of Bash and the elegance of Dart.
 
-# CD/Push/Pop are evil
+# CD/pushd/popd are evil
 The cd, pushd and popd commands of Bash seem like fun but they are actually harbingers of evil.
 
 
 I know that they are used everywhere and they seem such an elegant solution but in a script they just shouldn't be used.
 
-Instead use relative or absolute paths.
+So if you shouldn't use cd, pushd or popd what should you do instead?
 
-DShell automatically injects the rather excelent package ['path'](https://pub.dev/packages/path)  which includes an array of global functions that allow you to build and manipulate file paths.
+There a three basic techniques you will use:
+* absolute paths
+* use the 'start()' method with a working directory
+* relative paths
+
+DShell automatically injects the rather excelent package ['path'](https://pub.dev/packages/path)  which includes an array of global functions that allow you to build and manipulate file paths to create relative and absolute paths.
+
+You should prefer absolute paths over relative paths.
 
 Such as: 
 ```dart
-String filePath = join('directory', 'file.txt');
+String filePath = join(HOME, 'directory', 'file.txt');
 
-String dartPath = join('usr', 'lib', 'bin', 'dart');
+String dartPath = join('/', 'usr', 'lib', 'bin', 'dart');
 
 // absolute path to your current working directory.
 String current = absolute('.');
@@ -895,9 +902,23 @@ String safe = canonicalize(join('..', '..', 'hacker'));
 
 String dirname = dirname(join('usr', 'lib', 'fred.text'));
 assert(dirname == '/usr/lib');
+
 ```
 
-With the `path` package at your disposal there is really no need to use cd, push or pop.
+Often when running an application you need to set the working directory to run the command in.
+
+The following examples runs the command 'git status' from the working directory 
+
+/home/yourhome/dev/myproject.
+
+```dart
+
+// run a command using a specific working directory
+'git status'.start(workingDirectory: join(HOME, 'dev', 'myproject'));
+
+````
+
+With the `path` package at your disposal there is really no need to use cd, pushd or popd.
 
 ## Why is cd dangerous?
 
