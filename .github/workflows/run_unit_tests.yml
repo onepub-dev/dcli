@@ -19,7 +19,7 @@ jobs:
     - name: show files
       run: find . 
     - name: pub activate dshell
-      run: dart ./tool/activate --path=. 
+      run: dart ./tool/activate_local.dart --path=. 
     - name: complete dshell install
       run: dart ./bin/dshell.dart install
     - name: Run tests
