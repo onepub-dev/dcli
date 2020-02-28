@@ -17,7 +17,9 @@ jobs:
     - name: echo pwd
       run: echo $PWD
     - name: show files
-      run: find . -name "*.dart"
+      run: find . 
+    - name: pub activate dshell
+      run: dart ./tool/activate --path=. 
     - name: complete dshell install
       run: dart ./bin/dshell.dart install
     - name: Run tests
