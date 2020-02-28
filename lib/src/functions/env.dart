@@ -2,7 +2,6 @@ import 'dart:io';
 
 import 'package:dshell/dshell.dart';
 import 'package:dshell/src/util/dshell_exception.dart';
-import 'package:dshell/src/util/stack_trace_impl.dart';
 
 import '../settings.dart';
 import 'dshell_function.dart';
