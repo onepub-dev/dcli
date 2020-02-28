@@ -19,6 +19,6 @@ jobs:
     - name: show files
       run: find . -name "*.dart"
     - name: complete dshell install
-      run: ./bin/dshell.dart install
+      run: dart ./bin/dshell.dart install
     - name: Run tests
       run: ./tool/run_unit_tests.dart
