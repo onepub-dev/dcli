@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import '../functions/run.dart' as cmd;
 import 'runnable_process.dart';
 
@@ -27,13 +29,34 @@ extension StringAsProcess on String {
   ///  'wc "fred nurk.text"'.run;
   ///```
   ///
+  /// DShell performs glob (wildcard) expansion on command arguments if it contains any one
+  /// of *, [ or ?  unless the argument is quoted.
+  /// DShell uses the dart package Glob (https://pub.dev/packages/glob) to do the glob expansion.
+  ///
+  /// The following command will have the argument containing the wild card *.dart expanded to
+  /// the list of files, in the current directory, that match the pattern *.dart. If no files match the pattern then the pattern
+  /// will be passed to the command unchanged:
+  ///
+  /// ```dart
+  /// 'ls *.dart'.run;
+  /// ```
+  ///
+  /// If you add quotes around the wild card then it will not be expanded:
+  ///
+  /// ```dart
+  /// 'find . -name "*.dart"'.run;
+  /// ```
+  ///
+  ///
+  ///
   /// See [forEach] to capture output to stdout and stderr
   ///     [toList] to capture stdout  and stderr to [List<String>]
   ///     [start] - for more control over how the sub process is started.
   ///     [firstLine] - returns just the first line written to stdout or stderr.
   ///     [lastLine] - returns just the last line written to stdout or stderr.
+  ///     [toJson] - returns a json object by calling jsonDecode on the results.
   void get run {
-    cmd.startFromParsed(this,
+    cmd.startCommandLine(this,
         terminal: true,
         progress:
             Progress((line) => print(line), stderr: (line) => printerr(line)));
@@ -45,6 +68,8 @@ extension StringAsProcess on String {
   /// Allows you to execute the contents of a dart string as a
   /// command line appliation within an OS shell (e.g. bash).
   /// The application is run as a fully attached child process.
+  /// 
+  /// DShell performs Glob expansion on command arguments. See [run] for details.
   ///
   /// Any output from the command is displayed on the console.
   ///
@@ -58,21 +83,31 @@ extension StringAsProcess on String {
   ///  ```dart
   ///  'wc "fred nurk.text"'.shell;
   ///```
+  /// DShell performs Glob expansion on command arguments. See [run] for details.
   ///
   /// See [forEach] to capture output to stdout and stderr
   ///     [toList] to capture stdout and stderr to [List<String>]
   ///     [firstLine] - returns just the first line written to stdout.
   ///     [lastLine] - returns just the last line written to stdout or stderr.
-  ///
+  ///     [toJson] - returns a json object by calling jsonDecode on the results.
   @Deprecated('use start(runInShell: true)')
   void get shell => cmd.run(this, runInShell: true);
 
   /// Runs the String [this] as a command line application.
+  ///
+  /// DShell performs Glob expansion on command arguments. See [run] for details.
+  ///
   /// Use [runInShell] if the command needs to be run inside
-  /// an OS shell (bash, cmd...).
+  /// an OS shell (e.g bash).
   ///    [runInShell] defaults to false.
+  ///
   /// Use [detached] to start the application as a fully
   /// detached subprocess.
+  ///
+  /// You cannot process output from a detached process
+  /// and it will continuing running after the dshell process
+  /// exits. The detached process is also detached from the console
+  /// and as such no output from the process will be visible.
   ///
   /// Use [terminal] when you need the process attached to a terminal.
   /// When attached to a terminal you will not be able to process
@@ -83,10 +118,6 @@ extension StringAsProcess on String {
   ///
   /// Use [workingDirectory] to specify the directory the process should
   /// be run from.
-  /// You cannot process output from a detached process
-  /// and it will continuing running after the dshell process
-  /// exits. The detached process is also detached from the console
-  /// and as such no output from the process will be visible.
   ///
   ///
   /// If you need to pass an argument to your application that contains spaces then use nested quotes:
@@ -100,14 +131,14 @@ extension StringAsProcess on String {
   ///      [toList] to capture stdout and stderr to [List<String>]
   ///      [firstLine] - returns just the first line written to stdout or stderr.
   ///      [lastLine] - returns just the last line written to stdout or stderr.
-  ///
+  ///      [toJson] - returns a json object by calling jsonDecode on the results.
   void start(
       {Progress progress,
       bool runInShell = false,
       bool detached = false,
       bool terminal = false,
       String workingDirectory}) {
-    cmd.startFromParsed(this,
+    cmd.startCommandLine(this,
         progress: progress ??
             Progress((line) => print(line), stderr: (line) => printerr(line)),
         runInShell: runInShell,
@@ -118,6 +149,9 @@ extension StringAsProcess on String {
 
   /// forEach runs the String [this] as a command line
   /// application.
+  ///
+  /// DShell performs Glob expansion on command arguments. See [run] for details.
+  ///
   /// Output from the command can be captured by
   /// providing handlers for stdout and stderr.
   ///
@@ -138,18 +172,29 @@ extension StringAsProcess on String {
   ///```
   ///
   /// See [run] if you don't care about capturing output
-  ///     [list] to capture stdout as a String list.
+  ///     [toList] to capture stdout and stderr as a String list.
   ///     [start] - if you need to run a detached sub process.
   ///     [firstLine] - returns just the first line written to stdout or stderr.
   ///     [lastLine] - returns just the last line written to stdout or stderr.
+  ///     [toJson] - returns a json object by calling jsonDecode on the results.
   void forEach(LineAction stdout,
           {LineAction stderr, bool runInShell = false}) =>
       cmd.run(this,
           progress: Progress(stdout, stderr: stderr), runInShell: runInShell);
 
-  /// [toList] runs [this] String as a cli process and
+  /// [toList] runs [this] String as a cli command and
   /// returns any output written to stdout and stderr as
   /// a [List<String>].
+  ///
+  /// DShell performs Glob expansion on command arguments. See [run] for details.
+  ///
+  /// The [skipLines] argument tells [toList] to not return the first
+  /// [skipLines] lines. This is useful if a command outputs a heading
+  /// and you want to skip over the heading.
+  ///
+  /// If [runInShell] is true (defaults to false) then the command will
+  /// be run in a shell. This may be required if you are trying to run
+  /// a command that is builtin to the shell.
   ///
   ///EXPERIMENTAL argument.
   /// If [nothrow] is set to true then an exception will not be thrown on
@@ -160,15 +205,15 @@ extension StringAsProcess on String {
   /// non-zero exitCode.
   ///
   /// ```dart
-  /// var logLines = 'tail -n 10 /var/log/syslog'.toList();
+  /// List<String> logLines = 'tail -n 10 /var/log/syslog'.toList();
   /// ```
   ///
-  /// Note: [toList] does NOT capture output to stderr.
   /// See [forEach] to capture output to stdout and stderr interactively
   ///     [run] to run the application without capturing its output
   ///     [start] - to run the process fully detached.
   ///     [firstLine] - returns just the first line written to stdout or stderr.
   ///     [lastLine] - returns just the last line written to stdout or stderr.
+  ///     [toJson] - returns a json object by calling jsonDecode on the results.
   List<String> toList(
       {bool runInShell = false, int skipLines = 0, bool nothrow = false}) {
     return cmd
@@ -176,9 +221,47 @@ extension StringAsProcess on String {
         .toList(skipLines: skipLines);
   }
 
+  /// [toJson] takes the results returned by the command
+  /// and decodes them into a json object.
+  ///
+  /// EXPERIMENTAL: we may rework as a general transformation layer.
+  ///
+  /// DShell performs Glob expansion on command arguments. See [run] for details.
+  ///
+  /// If [runInShell] is true (defaults to false) then the command will
+  /// be run in a shell. This may be required if you are trying to run
+  /// a command that is builtin to the shell.
+  ///
+  /// An exception is throw if the results do not contain
+  /// valid json.
+  ///
+  /// If the command returns a non-zero value an exception will
+  /// be thrown.
+  ///
+  /// ```dart
+  ///  var json =
+  ///    'wget -qO- https://jsonplaceholder.typicode.com/todos/1'.tojson();
+  ///
+  ///   print('Title: ${json["title"]}');
+  /// ```
+  ///
+  /// See [forEach] to capture output to stdout and stderr interactively
+  ///     [run] to run the application without capturing its output
+  ///     [start] - to run the process fully detached.
+  ///     [firstLine] - returns just the first line written to stdout or stderr.
+  ///     [lastLine] - returns just the last line written to stdout or stderr.
+  ///     [toList] -  returns a lines written to stdout and stderr as a list.
+  dynamic toJson({bool runInShell = false}) {
+    var lines = toList(runInShell: runInShell);
+
+    return jsonDecode(lines.join('\n'));
+  }
+
   /// [firstLine] treats the String [this] as a cli process and
   /// returns the first line written to stdout or stderr as
   /// a [String].
+  ///
+  /// DShell performs Glob expansion on command arguments. See [run] for details.
   ///
   /// e.g.
   /// ```
@@ -190,6 +273,7 @@ extension StringAsProcess on String {
   ///     [start] - to run the process fully detached.
   ///     [toList] - returns a lines written to stdout and stderr as a list.
   ///     [lastLine] - returns just the last line written to stdout or stderr.
+  ///     [toJson] - returns a json object by calling jsonDecode on the results.
   String get firstLine {
     var lines = toList();
 
@@ -205,6 +289,7 @@ extension StringAsProcess on String {
   /// returns the last line written to stdout or stderr as
   /// a [String].
   ///
+  /// DShell performs Glob expansion on command arguments. See [run] for details.
   ///
   /// e.g.
   /// ```
@@ -220,6 +305,7 @@ extension StringAsProcess on String {
   ///     [start] - to run the process fully detached.
   ///     [toList] - returns a lines written to stdout and stderr as a list.
   ///     [firstLine] - returns just the first line written to stdout.
+  ///     [toJson] - returns a json object by calling jsonDecode on the results.
   String get lastLine {
     String lastLine;
 
@@ -231,6 +317,8 @@ extension StringAsProcess on String {
   /// The classic bash style pipe operator.
   /// Allows you to chain mulitple processes by piping the output
   /// of the left hand process to the input of the right hand process.
+  ///
+  /// DShell performs Glob expansion on command arguments. See [run] for details.
   ///
   /// The following command calls:
   ///  - tail on syslog
