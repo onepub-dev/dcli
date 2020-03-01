@@ -311,6 +311,11 @@ class _Line {
   void delete() {
     d.delete(source.path);
   }
+
+  @override
+  String toString() {
+    return 'File: $source.path : Line: $line';
+  }
 }
 
 enum SortDirection { Ascending, Descending }
