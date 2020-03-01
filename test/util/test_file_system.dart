@@ -89,7 +89,7 @@ class TestFileSystem {
   String tempFile({String suffix}) => FileSync.tempFile(suffix: suffix);
 
   void withinZone(void Function(TestFileSystem fs) callback) {
-    NamedLock(lockSuffix: 'test_file_system.lock').withLock(() {
+    NamedLock(name: 'test_file_system.lock').withLock(() {
       Settings.reset();
       Env.reset();
       var home = HOME;
