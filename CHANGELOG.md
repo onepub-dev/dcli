@@ -1,3 +1,15 @@
+### 1.8.3-dev.5
+[fix] Change package paths to point directly to the .packages file. Hopefull this will allow compile to work correctly for both local and virtual pubspecs.
+[enh] Renamed RunnableProcess ctors to make it clearer what each one does.
+[fix] NamedLock changed arg from lockSuffix to name
+[enh] Added toJson method. Added doco on glob expansion.
+
+### 1.8.3
+[fix] Change package paths to point directly to the .packages file. Hopefull this will allow compile to work correctly for both local and virtual pubspecs.
+[enh] Renamed RunnableProcess ctors to make it clearer what each one does.
+[fix] NamedLock changed arg from lockSuffix to name
+[enh] Added toJson method. Added doco on glob expansion.
+
 ### 1.8.3-dev.4
 change the lambda description to the more consisely named format.
 Improved the documentation on avoiding cd/pushd/popd.

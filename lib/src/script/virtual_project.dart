@@ -199,8 +199,9 @@ class VirtualProject {
             exists(_virtualPubspecIndicatorPath));
 
     lock = NamedLock(
-        name: 'virtual_project.lock',
-        lockPath: dirname(_virtualProjectPath));
+      name: 'virtual_project.lock',
+      lockPath: dirname(_virtualProjectPath),
+    );
   }
 
   /// Creates the projects cache directory under the
