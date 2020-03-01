@@ -98,6 +98,13 @@ class VirtualProject {
   ///
   String get runtimePath => _runtimePath;
 
+  /// The path to the script where we will run the script from.
+  /// For script with an actual pubspec.yaml this will
+  /// be the scripts natural directory. For a script
+  /// with a virtual pubsec this will be the linked script
+  /// in the projectc directory.
+  String get runtimeScriptPath => join(_runtimePath, script.scriptname);
+
   NamedLock lock;
 
   /// Creates a virtual project's directory
@@ -192,7 +199,7 @@ class VirtualProject {
             exists(_virtualPubspecIndicatorPath));
 
     lock = NamedLock(
-        lockSuffix: 'virtual_project.lock',
+        name: 'virtual_project.lock',
         lockPath: dirname(_virtualProjectPath));
   }
 

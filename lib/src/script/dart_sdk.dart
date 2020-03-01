@@ -1,7 +1,6 @@
 import 'dart:cli';
 import 'dart:io';
 import '../../dshell.dart';
-import 'script.dart';
 import '../util/progress.dart';
 import '../util/runnable_process.dart';
 import 'package:path/path.dart' as p;
@@ -53,14 +52,19 @@ class DartSdk {
 
   String get dart2NativePath => p.join(sdkPath, 'bin', 'dart2native');
 
-  void runDart2Native(Script script, String outputDir, String workingDirectory,
+  void runDart2Native(
+      String runtimeScriptPath, String outputDir, String runtimePath,
       {Progress progress}) {
     var runArgs = <String>[];
-    runArgs.add(script.path);
-    runArgs.add('--output=${join(outputDir, script.basename)}');
+    runArgs.add(runtimeScriptPath);
+    runArgs.add('--packages=${join(runtimePath, ".packages")}');
+    runArgs.add(
+        '--output=${join(outputDir, basenameWithoutExtension(runtimeScriptPath))}');
 
-    var process = RunnableProcess.fromList(dart2NativePath, runArgs,
-        workingDirectory: workingDirectory);
+    var process = RunnableProcess.fromCommandArgs(
+      dart2NativePath,
+      runArgs,
+    );
 
     process.start();
 
@@ -69,7 +73,7 @@ class DartSdk {
 
   void runPubGet(String workingDirectory,
       {Progress progress, bool compileExecutables}) {
-    var process = RunnableProcess.fromList(
+    var process = RunnableProcess.fromCommandArgs(
         pubGetPath, ['get', '--no-precompile'],
         workingDirectory: workingDirectory);
 
