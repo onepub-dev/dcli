@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:dshell/src/util/dev_null.dart';
 
+import '../../dshell.dart';
 import 'waitForEx.dart';
 
 import 'runnable_process.dart';
@@ -27,11 +28,19 @@ class Progress {
   Progress.forEach();
 
   void addToStdout(String line) {
-    if (!closed) stdoutController.sink.add(line);
+    if (!closed) {
+      stdoutController.sink.add(line);
+    } else {
+      Settings().verbose('addToStdout called after stream closed: line=$line');
+    }
   }
 
   void addToStderr(String line) {
-    if (!closed) stderrController.sink.add(line);
+    if (!closed) {
+      stderrController.sink.add(line);
+    } else {
+      Settings().verbose('addToStdout called after stream closed: line=$line');
+    }
   }
 
   void forEach(LineAction stdout, {LineAction stderr = devNull}) {
