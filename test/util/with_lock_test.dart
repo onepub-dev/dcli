@@ -14,7 +14,7 @@ void main() {
   test('timeout catch', () {
     expect(() {
       TestFileSystem().withinZone((fs) async {
-        NamedLock(lockSuffix: 'timeout').withLock(() {
+        NamedLock(name: 'timeout').withLock(() {
           throw DShellException('fake exception');
         });
       });
@@ -65,7 +65,7 @@ Future<ReceivePort> spawn(String message) async {
 }
 
 void takeLock(String message) {
-  NamedLock(lockSuffix: 'test.lock').withLock(() {
+  NamedLock(name: 'test.lock').withLock(() {
     var count = 0;
     for (var i = 0; i < 4; i++) {
       var l = '$message + ${count++}';

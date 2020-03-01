@@ -37,7 +37,7 @@ class NamedLock {
   /// across processes and isolates.
   int port = 63424;
   String lockPath;
-  String lockSuffix;
+  String name;
   String description;
 
   /// We use this to allow a projects lock to be-reentrant
@@ -56,7 +56,7 @@ class NamedLock {
   /// same [lockPath]. It is recommended that you
   /// pass an absolute path to ensure that the
   /// same path is used.
-  /// The [lockSuffix] is used as the suffix of the lockfile.
+  /// The [name] is used as the suffix of the lockfile.
   /// The suffix allows multiple locks to share a single
   /// lockPath.
   /// The [description], if passed, is used in error messages
@@ -66,12 +66,12 @@ class NamedLock {
   /// infinite (null).
   ///
   NamedLock({
-    @required this.lockSuffix,
+    @required this.name,
     this.lockPath,
     this.description,
     this.timeout,
   }) {
-    assert(lockSuffix != null);
+    assert(name != null);
     lockPath ??= join('/', Directory.systemTemp.path, 'dshell', 'locks');
     description ??= '';
 
@@ -106,8 +106,9 @@ class NamedLock {
         // I'm uncertain if this is a reality.
         lockHeld = false;
       }
-    }, onError: (Object e) {
+    }, onError: (Object e, StackTrace st) {
       if (lockHeld) releaseLock();
+      Settings().verbose(StackTraceImpl.fromStackTrace(st).formatStackTrace());
       throw e;
     });
   }
@@ -125,7 +126,7 @@ class NamedLock {
   }
 
   int get lockCount {
-    var _lockCount = _lockCounts[lockSuffix];
+    var _lockCount = _lockCounts[name];
     _lockCount ??= 0;
     return _lockCount;
   }
@@ -135,7 +136,7 @@ class NamedLock {
   int get incLockCount {
     var _lockCount = lockCount;
     _lockCount++;
-    _lockCounts[lockSuffix] = _lockCount;
+    _lockCounts[name] = _lockCount;
     log(orange('Incremented lock: $_lockCount'));
     return _lockCount;
   }
@@ -145,7 +146,7 @@ class NamedLock {
   int get decLockCount {
     var _lockCount = lockCount;
     _lockCount--;
-    _lockCounts[lockSuffix] = _lockCount;
+    _lockCounts[name] = _lockCount;
 
     log(orange('Decremented lock: $lockCount'));
     return _lockCount;
@@ -157,7 +158,7 @@ class NamedLock {
 
     var isolate = Service.getIsolateID(Isolate.current);
     isolate = isolate.replaceAll('/', '_');
-    return join(lockPath, '$pid.$isolate.${lockSuffix}');
+    return join(lockPath, '$pid.$isolate.${name}');
   }
 
   /// Attempts to take a project lock.
@@ -185,7 +186,7 @@ class NamedLock {
     while (!taken && waitCount != 0) {
       withHardLock(fn: () {
         // check for other lock files
-        var locks = find('*.$lockSuffix', root: lockPath).toList();
+        var locks = find('*.$name', root: lockPath).toList();
 
         var lockFiles = locks.length;
 
