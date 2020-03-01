@@ -68,7 +68,7 @@ extension StringAsProcess on String {
   /// Allows you to execute the contents of a dart string as a
   /// command line appliation within an OS shell (e.g. bash).
   /// The application is run as a fully attached child process.
-  /// 
+  ///
   /// DShell performs Glob expansion on command arguments. See [run] for details.
   ///
   /// Any output from the command is displayed on the console.
@@ -332,10 +332,10 @@ extension StringAsProcess on String {
   /// 'tail /var/log/syslog' | 'head -n 5' | 'tail -n 2'.forEach((line) => print(line));
   /// ```
   Pipe operator |(String rhs) {
-    var rhsRunnable = RunnableProcess(rhs);
+    var rhsRunnable = RunnableProcess.fromCommandLine(rhs);
     rhsRunnable.start(waitForStart: false);
 
-    var lhsRunnable = RunnableProcess(this);
+    var lhsRunnable = RunnableProcess.fromCommandLine(this);
     lhsRunnable.start(waitForStart: false);
 
     return Pipe(lhsRunnable, rhsRunnable);
@@ -343,21 +343,21 @@ extension StringAsProcess on String {
 
   /// Experiemental - DO NOT USE
   Stream get stream {
-    var lhsRunnable = RunnableProcess(this);
+    var lhsRunnable = RunnableProcess.fromCommandLine(this);
     lhsRunnable.start(waitForStart: false);
     return lhsRunnable.stream;
   }
 
   /// Experiemental - DO NOT USE
   Sink get sink {
-    var lhsRunnable = RunnableProcess(this);
+    var lhsRunnable = RunnableProcess.fromCommandLine(this);
     lhsRunnable.start(waitForStart: false);
     return lhsRunnable.sink;
   }
 
   /// Experiemental - DO NOT USE
   RunnableProcess get process {
-    var process = RunnableProcess(this);
+    var process = RunnableProcess.fromCommandLine(this);
     process.start(waitForStart: false);
 
     return process;

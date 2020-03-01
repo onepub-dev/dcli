@@ -115,7 +115,7 @@ class Run extends DShellFunction {
 
     try {
       forEach = progress ?? Progress.forEach();
-      runnable = RunnableProcess(commandLine);
+      runnable = RunnableProcess.fromCommandLine(commandLine);
       runnable.start(runInShell: runInShell);
       runnable.processUntilExit(forEach, nothrow: nothrow);
     } finally {
@@ -130,8 +130,8 @@ class Run extends DShellFunction {
       bool detached = false,
       String workingDirectory,
       bool terminal}) {
-    var runnable =
-        RunnableProcess(commandLine, workingDirectory: workingDirectory);
+    var runnable = RunnableProcess.fromCommandLine(commandLine,
+        workingDirectory: workingDirectory);
 
     return startRunnable(runnable,
         progress: progress,
@@ -147,7 +147,7 @@ class Run extends DShellFunction {
       bool detached = false,
       String workingDirectory,
       bool terminal}) {
-    var runnable = RunnableProcess.fromList(command, args,
+    var runnable = RunnableProcess.fromCommandArgs(command, args,
         workingDirectory: workingDirectory);
 
     return startRunnable(runnable,

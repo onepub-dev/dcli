@@ -34,10 +34,20 @@ class RunnableProcess {
 
   ParsedCliCommand parsed;
 
-  RunnableProcess(String cmdLine, {this.workingDirectory})
+  /// Spawns a process to run the command contained in [cmdLine] along with
+  /// the args passed via the [cmdLine].
+  ///
+  /// Glob expansion is performed on each non-quoted argument.
+  ///
+  RunnableProcess.fromCommandLine(String cmdLine, {this.workingDirectory})
       : parsed = ParsedCliCommand(cmdLine, workingDirectory);
 
-  RunnableProcess.fromList(String command, List<String> args,
+  /// Spawns a process to run the command contained in [command] along with
+  /// the args passed via the [args].
+  ///
+  /// Glob expansion is performed on each non-quoted argument.
+  ///
+  RunnableProcess.fromCommandArgs(String command, List<String> args,
       {this.workingDirectory})
       : parsed = ParsedCliCommand.fromParsed(command, args, workingDirectory);
 

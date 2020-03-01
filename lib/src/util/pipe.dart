@@ -11,7 +11,7 @@ class Pipe {
   }
 
   Pipe operator |(String next) {
-    var pNext = RunnableProcess(next);
+    var pNext = RunnableProcess.fromCommandLine(next);
     pNext.start(waitForStart: false);
     return Pipe(rhs, pNext);
   }
