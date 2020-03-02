@@ -1,4 +1,5 @@
-import 'dart:convert';
+
+import 'package:dshell/src/util/parser.dart';
 
 import '../functions/run.dart' as cmd;
 import 'runnable_process.dart';
@@ -54,7 +55,8 @@ extension StringAsProcess on String {
   ///     [start] - for more control over how the sub process is started.
   ///     [firstLine] - returns just the first line written to stdout or stderr.
   ///     [lastLine] - returns just the last line written to stdout or stderr.
-  ///     [toJson] - returns a json object by calling jsonDecode on the results.
+  ///     [parser] - returns a parser with the captured output ready to be interpreted
+  ///                as one of several file types.
   void get run {
     cmd.startCommandLine(this,
         terminal: true,
@@ -89,7 +91,8 @@ extension StringAsProcess on String {
   ///     [toList] to capture stdout and stderr to [List<String>]
   ///     [firstLine] - returns just the first line written to stdout.
   ///     [lastLine] - returns just the last line written to stdout or stderr.
-  ///     [toJson] - returns a json object by calling jsonDecode on the results.
+  ///     [parser] - returns a parser with the captured output ready to be interpreted
+  ///                as one of several file types.
   @Deprecated('use start(runInShell: true)')
   void get shell => cmd.run(this, runInShell: true);
 
@@ -131,7 +134,8 @@ extension StringAsProcess on String {
   ///      [toList] to capture stdout and stderr to [List<String>]
   ///      [firstLine] - returns just the first line written to stdout or stderr.
   ///      [lastLine] - returns just the last line written to stdout or stderr.
-  ///      [toJson] - returns a json object by calling jsonDecode on the results.
+  ///      [parser] - returns a parser with the captured output ready to be interpreted
+  ///                as one of several file types.
   void start(
       {Progress progress,
       bool runInShell = false,
@@ -176,7 +180,8 @@ extension StringAsProcess on String {
   ///     [start] - if you need to run a detached sub process.
   ///     [firstLine] - returns just the first line written to stdout or stderr.
   ///     [lastLine] - returns just the last line written to stdout or stderr.
-  ///     [toJson] - returns a json object by calling jsonDecode on the results.
+  ///     [parser] - returns a parser with the captured output ready to be interpreted
+  ///                as one of several file types.
   void forEach(LineAction stdout,
           {LineAction stderr, bool runInShell = false}) =>
       cmd.run(this,
@@ -213,7 +218,8 @@ extension StringAsProcess on String {
   ///     [start] - to run the process fully detached.
   ///     [firstLine] - returns just the first line written to stdout or stderr.
   ///     [lastLine] - returns just the last line written to stdout or stderr.
-  ///     [toJson] - returns a json object by calling jsonDecode on the results.
+  ///     [parser] - returns a parser with the captured output ready to be interpreted
+  ///                as one of several file types.
   List<String> toList(
       {bool runInShell = false, int skipLines = 0, bool nothrow = false}) {
     return cmd
@@ -221,26 +227,25 @@ extension StringAsProcess on String {
         .toList(skipLines: skipLines);
   }
 
-  /// [toJson] takes the results returned by the command
-  /// and decodes them into a json object.
+  /// [parser] runs [this] as a cli command line reading all of the
+  /// returned data and then passes the read lines to a [Parser]
+  /// to be decoded as a specific file type.
   ///
-  /// EXPERIMENTAL: we may rework as a general transformation layer.
+  /// EXPERIMENTAL: we may rework the data structures the parser returns.
   ///
-  /// DShell performs Glob expansion on command arguments. See [run] for details.
+  /// DShell performs Glob expansion on command line arguments. See [run] for details.
   ///
   /// If [runInShell] is true (defaults to false) then the command will
   /// be run in a shell. This may be required if you are trying to run
   /// a command that is builtin to the shell.
   ///
-  /// An exception is throw if the results do not contain
-  /// valid json.
   ///
   /// If the command returns a non-zero value an exception will
   /// be thrown.
   ///
   /// ```dart
   ///  var json =
-  ///    'wget -qO- https://jsonplaceholder.typicode.com/todos/1'.tojson();
+  ///    'wget -qO- https://jsonplaceholder.typicode.com/todos/1'.parser.jsonDecode();
   ///
   ///   print('Title: ${json["title"]}');
   /// ```
@@ -251,10 +256,11 @@ extension StringAsProcess on String {
   ///     [firstLine] - returns just the first line written to stdout or stderr.
   ///     [lastLine] - returns just the last line written to stdout or stderr.
   ///     [toList] -  returns a lines written to stdout and stderr as a list.
-  dynamic toJson({bool runInShell = false}) {
+
+  Parser parser({bool runInShell = false}) {
     var lines = toList(runInShell: runInShell);
 
-    return jsonDecode(lines.join('\n'));
+    return Parser(lines);
   }
 
   /// [firstLine] treats the String [this] as a cli process and
@@ -273,7 +279,8 @@ extension StringAsProcess on String {
   ///     [start] - to run the process fully detached.
   ///     [toList] - returns a lines written to stdout and stderr as a list.
   ///     [lastLine] - returns just the last line written to stdout or stderr.
-  ///     [toJson] - returns a json object by calling jsonDecode on the results.
+  ///     [parser] - returns a parser with the captured output ready to be interpreted
+  ///                as one of several file types.
   String get firstLine {
     var lines = toList();
 
@@ -305,7 +312,8 @@ extension StringAsProcess on String {
   ///     [start] - to run the process fully detached.
   ///     [toList] - returns a lines written to stdout and stderr as a list.
   ///     [firstLine] - returns just the first line written to stdout.
-  ///     [toJson] - returns a json object by calling jsonDecode on the results.
+  ///     [parser] - returns a parser with the captured output ready to be interpreted
+  ///                as one of several file types.
   String get lastLine {
     String lastLine;
 
