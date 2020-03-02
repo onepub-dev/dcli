@@ -21,8 +21,8 @@ class ScriptRunner {
     // Prepare VM arguments
     final vmArgs = <String>[];
     vmArgs.add('--enable-asserts');
-    vmArgs.add('--package-root=${project.runtimePath}'); // /.packages');
-    vmArgs.add(join(project.runtimePath, project.script.scriptname));
+    vmArgs.add('--package-root=${project.runtimeProjectPath}'); // /.packages');
+    vmArgs.add(join(project.runtimeProjectPath, project.script.scriptname));
     vmArgs.addAll(scriptArguments);
 
     Settings().verbose(

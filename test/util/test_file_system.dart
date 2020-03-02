@@ -141,7 +141,7 @@ class TestFileSystem {
 
   String runtimePath(String scriptName) {
     var project = VirtualProject.load(Script.fromFile(scriptName));
-    return project.runtimePath;
+    return project.runtimeProjectPath;
   }
 
   void buildTestFileSystem() {

@@ -78,7 +78,7 @@ class VirtualProject {
   // String _runtimeScriptPath;
 
   String _runtimePubspecPath;
-  String _runtimePath;
+  String _runtimeProjectPath;
 
   bool _isProjectInitialised = false;
 
@@ -96,14 +96,14 @@ class VirtualProject {
   /// this will be in the projects cache directory
   /// located under ~/.dshell/cache....
   ///
-  String get runtimePath => _runtimePath;
+  String get runtimeProjectPath => _runtimeProjectPath;
 
   /// The path to the script where we will run the script from.
   /// For script with an actual pubspec.yaml this will
   /// be the scripts natural directory. For a script
   /// with a virtual pubsec this will be the linked script
   /// in the projectc directory.
-  String get runtimeScriptPath => join(_runtimePath, script.scriptname);
+  String get runtimeScriptPath => join(_runtimeProjectPath, script.scriptname);
 
   NamedLock lock;
 
@@ -129,6 +129,8 @@ class VirtualProject {
       setVirtualPaths(project);
       project._usingLocalPubspec = false;
     }
+    Settings().verbose('Pubspec path: ${project._runtimePubspecPath}');
+    Settings().verbose('Project path: ${project._runtimeProjectPath}');
 
     project.initialiseProject();
     return project;
@@ -145,6 +147,9 @@ class VirtualProject {
     } else {
       setVirtualPaths(project);
     }
+
+    Settings().verbose('Pubspec path: ${project._runtimePubspecPath}');
+    Settings().verbose('Project path: ${project._runtimeProjectPath}');
 
     return project;
   }
@@ -163,7 +168,7 @@ class VirtualProject {
     setProjectPaths(project, project.script);
 
     project._runtimePubspecPath = project._projectPubspecPath;
-    project._runtimePath = project._virtualProjectPath;
+    project._runtimeProjectPath = project._virtualProjectPath;
   }
 
   static void setLocalPaths(VirtualProject project, Script script) {
@@ -174,14 +179,14 @@ class VirtualProject {
 
     project._runtimePubspecPath = join(dirname(script.path), 'pubspec.yaml');
 
-    project._runtimePath = dirname(script.path);
+    project._runtimeProjectPath = dirname(script.path);
   }
 
   bool _usingLocalPubspec;
 
   bool get usingLocalPubspec {
     _usingLocalPubspec ??=
-        script.hasPubSpecYaml() && script.hasPubspecAnnotation;
+        script.hasPubSpecYaml() && !script.hasPubspecAnnotation;
     return _usingLocalPubspec;
   }
 

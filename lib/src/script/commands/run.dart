@@ -37,7 +37,7 @@ class RunCommand extends Command {
     Settings().verbose('Running script ${script.path}');
 
     var project = VirtualProject.load(script);
-    Settings().verbose('Virtual Project directory ${project.runtimePath}');
+    Settings().verbose('Virtual Project directory ${project.runtimeProjectPath}');
 
     if (!project.isRunnable) {
       project.build();
