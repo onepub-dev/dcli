@@ -53,7 +53,7 @@ class CompileCommand extends Command {
     var scriptList = subarguments.sublist(scriptIndex);
 
     if (scriptList.isEmpty) {
-      scriptList = find('*.dart').toList();
+      scriptList = find('*.dart', recursive: false).toList();
     }
 
     if (scriptList.isEmpty) {
@@ -93,7 +93,7 @@ class CompileCommand extends Command {
           "\nCompiling with pubspec.yaml:\n${read(project.runtimePubSpecPath).toList().join('\n')}\n");
 
       DartSdk().runDart2Native(project.runtimeScriptPath,
-          script.scriptDirectory, project.runtimePath,
+          script.scriptDirectory, project.runtimeProjectPath,
           progress:
               Progress((line) => print(line), stderr: (line) => print(line)));
 
