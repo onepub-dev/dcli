@@ -1,3 +1,17 @@
+### 1.8.3
+[fix] Compile fixes when project has local pubspec.yaml.
+[enh] Added experimental parser to string_process which allows reading and parsing a number of common file formats.
+[enh] Added glob expansion when running command lines.
+[enh] New NamedLock class provides an inter isoloate and inter process locking mechanism.
+[enh] Improvements to documentation.
+[enh] New method on FileSync to create a temp file.
+[enh] Version of start which takes a command and an arg array to provide a simplified path
+when complex escaping is involved.
+[fix] For unit test so that all test can now complete in a single run.
+[fix] Start was not passing the Progress down.
+[fix] Bug in tab completion when expanding scripts.
+[fix] Two compiler bugs. It was trying to compile scripts in subdirectories when we are only meant to compile scripts in the current directory.  Fixed bug where local pubspec.yaml was being ignored.
+
 ### 1.8.3-dev.5
 [fix] Change package paths to point directly to the .packages file. Hopefull this will allow compile to work correctly for both local and virtual pubspecs.
 [enh] Renamed RunnableProcess ctors to make it clearer what each one does.
