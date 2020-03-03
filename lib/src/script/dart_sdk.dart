@@ -68,7 +68,7 @@ class DartSdk {
 
     process.start();
 
-    process.processUntilExit(progress);
+    process.processUntilExit(progress, nothrow: false);
   }
 
   void runPubGet(String workingDirectory,
@@ -79,7 +79,7 @@ class DartSdk {
 
     process.start();
 
-    process.processUntilExit(progress);
+    process.processUntilExit(progress, nothrow: false);
     Settings().verbose('pub get finished');
   }
 

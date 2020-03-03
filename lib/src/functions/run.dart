@@ -173,7 +173,7 @@ class Run extends DShellFunction {
           runInShell: runInShell, detached: detached, terminal: terminal);
       if (detached == false) {
         if (terminal == false) {
-          runnable.processUntilExit(forEach);
+          runnable.processUntilExit(forEach, nothrow: false);
         } else {
           runnable.waitForExit();
         }

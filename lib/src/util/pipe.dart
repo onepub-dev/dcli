@@ -18,7 +18,7 @@ class Pipe {
 
   void forEach(LineAction stdout, {LineAction stderr}) {
     var progress = Progress(stdout, stderr: stderr);
-    rhs.processUntilExit(progress);
+    rhs.processUntilExit(progress, nothrow: false);
   }
 
   List<String> toList() {
@@ -32,5 +32,6 @@ class Pipe {
   // void get run => rhs
   //     .processUntilExit(Progress(Progress.devNull, stderr: Progress.devNull));
 
-  void get run => rhs.processUntilExit(Progress(print, stderr: print));
+  void get run =>
+      rhs.processUntilExit(Progress(print, stderr: print), nothrow: false);
 }
