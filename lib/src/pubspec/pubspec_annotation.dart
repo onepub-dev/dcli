@@ -7,7 +7,7 @@ import 'pubspec.dart';
 import '../script/dependency.dart';
 import '../script/script.dart';
 import '../util/dshell_exception.dart';
-import '../util/waitForEx.dart';
+import '../util/wait_for_ex.dart';
 
 enum _State {
   notFound,

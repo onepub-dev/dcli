@@ -8,7 +8,7 @@ import 'package:dshell/src/util/stack_trace_impl.dart';
 import 'package:meta/meta.dart';
 
 import 'progress.dart';
-import 'waitForEx.dart';
+import 'wait_for_ex.dart';
 import '../../dshell.dart';
 import 'dshell_exception.dart';
 

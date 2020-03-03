@@ -3,7 +3,7 @@ import 'dart:async';
 import 'package:dshell/src/util/dev_null.dart';
 
 import '../../dshell.dart';
-import 'waitForEx.dart';
+import 'wait_for_ex.dart';
 
 import 'runnable_process.dart';
 

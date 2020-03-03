@@ -4,7 +4,7 @@ import 'dart:io';
 
 import 'package:dshell/dshell.dart' as d;
 import 'package:dshell/src/script/command_line_runner.dart';
-import 'package:dshell/src/util/waitForEx.dart';
+import 'package:dshell/src/util/wait_for_ex.dart';
 
 /// FileSort provides the ability to sort files
 /// based on their columns.

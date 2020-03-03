@@ -1,7 +1,7 @@
 import 'dart:io';
 
 import 'function.dart';
-import '../util/waitForEx.dart';
+import '../util/wait_for_ex.dart';
 
 /// Writes [text] to stdout including a newline.
 ///

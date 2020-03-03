@@ -1,4 +1,4 @@
-import '../util/waitForEx.dart';
+import '../util/wait_for_ex.dart';
 
 import '../settings.dart';
 import '../util/log.dart';

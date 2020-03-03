@@ -5,7 +5,7 @@ import 'dart:isolate';
 
 import 'package:dshell/dshell.dart';
 import 'package:dshell/src/util/stack_trace_impl.dart';
-import 'package:dshell/src/util/waitForEx.dart';
+import 'package:dshell/src/util/wait_for_ex.dart';
 import 'package:meta/meta.dart';
 
 /// A [NamedLock] can be used to control access to a resource

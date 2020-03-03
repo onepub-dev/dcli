@@ -1,7 +1,7 @@
 import 'dart:async';
 import 'dart:io';
 
-import 'package:dshell/src/util/waitForEx.dart';
+import 'package:dshell/src/util/wait_for_ex.dart';
 
 import 'function.dart';
 import '../util/progress.dart';

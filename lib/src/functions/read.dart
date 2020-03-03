@@ -5,7 +5,7 @@ import '../util/dshell_exception.dart';
 import '../util/progress.dart';
 
 import '../util/stack_trace_impl.dart';
-import '../util/waitForEx.dart';
+import '../util/wait_for_ex.dart';
 
 import '../settings.dart';
 import 'dshell_function.dart';

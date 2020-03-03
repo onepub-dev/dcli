@@ -5,7 +5,7 @@ import 'package:pub_semver/pub_semver.dart';
 
 import '../functions/read.dart';
 import '../script/dependency.dart';
-import '../util/waitForEx.dart';
+import '../util/wait_for_ex.dart';
 import 'package:path/path.dart';
 import 'package:pubspec/pubspec.dart' as pub;
 

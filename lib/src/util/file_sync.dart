@@ -5,7 +5,7 @@ import 'dart:io';
 import 'package:dshell/dshell.dart';
 import 'package:uuid/uuid.dart';
 
-import 'waitForEx.dart';
+import 'wait_for_ex.dart';
 
 import 'dshell_exception.dart';
 import 'log.dart';

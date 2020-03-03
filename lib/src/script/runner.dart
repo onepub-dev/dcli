@@ -4,7 +4,7 @@ import 'dart:io';
 import 'package:dshell/dshell.dart';
 
 import 'virtual_project.dart';
-import '../util/waitForEx.dart';
+import '../util/wait_for_ex.dart';
 
 import 'dart_sdk.dart';
 

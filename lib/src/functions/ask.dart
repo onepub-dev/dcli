@@ -1,7 +1,7 @@
 import 'dart:convert';
 import 'dart:io';
 
-import 'package:dshell/src/util/waitForEx.dart';
+import 'package:dshell/src/util/wait_for_ex.dart';
 
 import '../settings.dart';
 
