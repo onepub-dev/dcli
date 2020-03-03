@@ -5,6 +5,7 @@ import 'dart:io';
 import 'package:dshell/src/functions/env.dart';
 import 'package:dshell/src/util/parse_cli_command.dart';
 import 'package:dshell/src/util/stack_trace_impl.dart';
+import 'package:meta/meta.dart';
 
 import 'progress.dart';
 import 'waitForEx.dart';
@@ -187,7 +188,7 @@ class RunnableProcess {
   // If a LineAction exists we call
   // line action each time the process emmits a line.
   /// The [nothrow] argument is EXPERIMENTAL
-  void processUntilExit(Progress progress, {bool nothrow}) {
+  void processUntilExit(Progress progress, {@required bool nothrow}) {
     var done = Completer<bool>();
 
     Progress forEach;
@@ -216,6 +217,7 @@ class RunnableProcess {
         // If the start failed we don't want to rethrow
         // as the exception will be thrown async and it will
         // escape as an unhandled exception and stop the whole script
+        forEach.exitCode = exitCode;
         if (exitCode != 0 && nothrow == false) {
           done.completeError(RunException(exitCode,
               'The command ${red('[$cmdLine]')} failed with exitCode: ${exitCode}'));
@@ -224,6 +226,9 @@ class RunnableProcess {
         }
       });
     }).catchError((Object e, StackTrace s) {
+      // TODO what should happen here?
+      Settings().verbose(
+          '${e.toString()} stacktrace: ${StackTraceImpl.fromStackTrace(s).formatStackTrace()}');
       // print('caught ${e}');
       // throw e;
     }); // .whenComplete(() => print('start completed'));
