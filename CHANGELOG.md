@@ -1,3 +1,8 @@
+### 1.8.4-dev.1
+Reworked toList so when an exception is throw the stderr content is available in the exception.
+Fixed a bug where the exitcode wasn't being passed to the Progress.
+Fixed a bug where the nothrow arg was not being set.
+
 ### 1.8.3
 [fix] Compile fixes when project has local pubspec.yaml.
 [enh] Added experimental parser to string_process which allows reading and parsing a number of common file formats.
