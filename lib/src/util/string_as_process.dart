@@ -200,6 +200,11 @@ extension StringAsProcess on String {
   /// be run in a shell. This may be required if you are trying to run
   /// a command that is builtin to the shell.
   ///
+  /// If the command completes with a non-zero exit code then a
+  /// RunException is thrown. The RunException includes the exit code
+  /// and the cause contains all of the output the command wrote to
+  /// stdout and stderr before it exited.
+  ///
   ///EXPERIMENTAL argument.
   /// If [nothrow] is set to true then an exception will not be thrown on
   /// a non-zero exit code. Many applications output to stdout/stderr
@@ -219,11 +224,23 @@ extension StringAsProcess on String {
   ///     [lastLine] - returns just the last line written to stdout or stderr.
   ///     [parser] - returns a parser with the captured output ready to be interpreted
   ///                as one of several file types.
+
   List<String> toList(
       {bool runInShell = false, int skipLines = 0, bool nothrow = false}) {
-    return cmd
-        .run(this, runInShell: runInShell, nothrow: nothrow)
-        .toList(skipLines: skipLines);
+    var list = <String>[];
+    Progress progress;
+    try {
+      progress =
+          Progress((line) => list.add(line), stderr: (line) => list.add(line));
+
+      cmd.startCommandLine(this, runInShell: runInShell, progress: progress);
+    } catch (e) {
+      if (nothrow == false) {
+        throw RunException(progress.exitCode, list.join('\n'));
+      }
+      return list;
+    }
+    return list.sublist(skipLines);
   }
 
   /// [parser] runs [this] as a cli command line reading all of the

@@ -3,6 +3,7 @@
 import 'dart:io';
 
 import 'package:dshell/src/util/file_sync.dart';
+import 'package:dshell/src/util/runnable_process.dart';
 import 'package:test/test.dart' as t;
 import 'package:dshell/dshell.dart';
 import 'package:test/test.dart';
@@ -141,6 +142,36 @@ void main() {
         var lines = 'head -n 5 $path'.toList();
         t.expect(lines.length, t.equals(5));
         deleteDir(dirname(path), recursive: true);
+      });
+    });
+
+    t.test('toList - nothrow', () {
+      TestFileSystem().withinZone((fs) {
+        var result = 'ls *.fasdafefe'.toList(nothrow: true);
+        t.expect(
+            result,
+            t.equals([
+              "ls: cannot access '*.fasdafefe': No such file or directory"
+            ]));
+      });
+    });
+
+    t.test('toList - exception nothrow=false', () {
+      TestFileSystem().withinZone((fs) {
+        t.expect(() => 'ls *.abcdafe'.toList(),
+            t.throwsA(t.TypeMatcher<RunException>()));
+      });
+    });
+
+    t.test('toList -  exception with nothrow=true', () {
+      TestFileSystem().withinZone((fs) {
+        try {
+          'ls *.fasdafefe'.toList(nothrow: true);
+        } on RunException catch (e) {
+          t.expect(e.exitCode, 2);
+          t.expect(e.message,
+              "ls: cannot access '*.fasdafefe': No such file or directory");
+        }
       });
     });
 
