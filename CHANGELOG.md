@@ -1,3 +1,8 @@
+### 1.8.4-dev.2
+Exposed the Progress class.
+Exposed waitForEx as a end user function.
+renamed waitForEx to wait_for_ex.dart so its name was consistent.
+
 ### 1.8.4-dev.1
 Reworked toList so when an exception is throw the stderr content is available in the exception.
 Fixed a bug where the exitcode wasn't being passed to the Progress.
