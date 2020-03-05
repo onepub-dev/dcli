@@ -16,7 +16,11 @@ void main() {
       start('ls *.txt', workingDirectory: path)
           .forEach((file) => found.add(file));
 
-      expect(found, <String>[]);
+      expect(found, <String>[
+        join(path, 'one.txt'),
+        //join(path, '.two.txt'), // we should not be expanding .xx.txt
+        join(path, 'two.txt')
+      ]);
     });
   });
 }
