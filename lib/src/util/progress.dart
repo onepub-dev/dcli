@@ -25,7 +25,9 @@ class Progress {
     _wireStreams(stdout, stderr);
   }
 
-  Progress.forEach();
+  /// Use this progress to have both stdout and stderr output
+  /// suppressed.
+  Progress.devNull();
 
   void addToStdout(String line) {
     if (!closed) {
