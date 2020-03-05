@@ -68,6 +68,31 @@ class RunnableProcess {
     return process.stdin;
   }
 
+  Progress run(
+      {Progress progress,
+      bool runInShell = false,
+      bool detached = false,
+      String workingDirectory,
+      bool terminal,
+      bool nothrow}) {
+
+    progress ??= Progress.devNull();
+
+    try {
+      start(runInShell: runInShell, detached: detached, terminal: terminal);
+      if (detached == false) {
+        if (terminal == false) {
+          processUntilExit(progress, nothrow: nothrow);
+        } else {
+          _waitForExit();
+        }
+      }
+    } finally {
+      progress.close();
+    }
+    return progress;
+  }
+
   void start({
     bool runInShell = false,
     bool detached = false,
@@ -78,7 +103,7 @@ class RunnableProcess {
     workdir ??= Directory.current.path;
 
     assert(!(terminal == true && detached == true),
-        'You cannot enable terminal and detached at the same time');
+        'You cannot enable terminal and detached at the same time.');
 
     var mode = detached ? ProcessStartMode.detached : ProcessStartMode.normal;
     if (terminal) {
@@ -135,7 +160,7 @@ class RunnableProcess {
   /// The main use is when using start(terminal:true).
   /// We don't have access to any IO so we just
   /// have to wait for things to finish.
-  int waitForExit() {
+  int _waitForExit() {
     var exited = Completer<int>();
     fProcess.then((process) {
       var exitCode = waitForEx<int>(process.exitCode);
@@ -191,9 +216,8 @@ class RunnableProcess {
   void processUntilExit(Progress progress, {@required bool nothrow}) {
     var done = Completer<bool>();
 
-    Progress forEach;
 
-    forEach = progress ?? Progress.forEach();
+     progress ??= Progress.devNull();
 
     fProcess.then((process) {
       /// handle stdout stream
@@ -201,7 +225,7 @@ class RunnableProcess {
           .transform(utf8.decoder)
           .transform(const LineSplitter())
           .listen((line) {
-        forEach.addToStdout(line);
+        progress.addToStdout(line);
       });
 
       // handle stderr stream
@@ -209,7 +233,7 @@ class RunnableProcess {
           .transform(utf8.decoder)
           .transform(const LineSplitter())
           .listen((line) {
-        forEach.addToStderr(line);
+        progress.addToStderr(line);
       });
       // trap the process finishing
       process.exitCode.then((exitCode) {
@@ -217,7 +241,7 @@ class RunnableProcess {
         // If the start failed we don't want to rethrow
         // as the exception will be thrown async and it will
         // escape as an unhandled exception and stop the whole script
-        forEach.exitCode = exitCode;
+        progress.exitCode = exitCode;
         if (exitCode != 0 && nothrow == false) {
           done.completeError(RunException(exitCode,
               'The command ${red('[$cmdLine]')} failed with exitCode: ${exitCode}'));
@@ -226,11 +250,9 @@ class RunnableProcess {
         }
       });
     }).catchError((Object e, StackTrace s) {
-      // TODO what should happen here?
       Settings().verbose(
           '${e.toString()} stacktrace: ${StackTraceImpl.fromStackTrace(s).formatStackTrace()}');
-      // print('caught ${e}');
-      // throw e;
+      throw e;
     }); // .whenComplete(() => print('start completed'));
 
     try {
