@@ -57,7 +57,7 @@ extension StringAsProcess on String {
   ///     [parser] - returns a parser with the captured output ready to be interpreted
   ///                as one of several file types.
   void get run {
-    cmd.startCommandLine(this,
+    cmd.start(this,
         terminal: true,
         progress:
             Progress((line) => print(line), stderr: (line) => printerr(line)));
@@ -141,7 +141,7 @@ extension StringAsProcess on String {
       bool detached = false,
       bool terminal = false,
       String workingDirectory}) {
-    cmd.startCommandLine(this,
+    cmd.start(this,
         progress: progress ??
             Progress((line) => print(line), stderr: (line) => printerr(line)),
         runInShell: runInShell,
@@ -183,7 +183,7 @@ extension StringAsProcess on String {
   ///                as one of several file types.
   void forEach(LineAction stdout,
           {LineAction stderr, bool runInShell = false}) =>
-      cmd.run(this,
+      cmd.start(this,
           progress: Progress(stdout, stderr: stderr), runInShell: runInShell);
 
   /// [toList] runs [this] String as a cli command and
@@ -233,7 +233,7 @@ extension StringAsProcess on String {
       progress =
           Progress((line) => list.add(line), stderr: (line) => list.add(line));
 
-      cmd.startCommandLine(this, runInShell: runInShell, progress: progress);
+      cmd.start(this, runInShell: runInShell, progress: progress);
     } catch (e) {
       if (nothrow == false) {
         throw RunException(progress.exitCode, list.join('\n'));
