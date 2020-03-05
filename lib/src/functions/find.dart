@@ -105,10 +105,8 @@ class Find extends DShellFunction {
       root = pwd;
     }
 
-    Progress forEach;
-
     try {
-      forEach = progress ?? Progress.forEach();
+      progress ??= Progress.devNull();
 
       if (Settings().debug_on) {
         Log.d(
@@ -128,7 +126,7 @@ class Find extends DShellFunction {
               includeHidden,
               entity,
             )) {
-          forEach.addToStdout(normalize(entity.path));
+          progress.addToStdout(normalize(entity.path));
         }
       },
           // should also register onError
@@ -136,10 +134,10 @@ class Find extends DShellFunction {
 
       waitForEx<void>(completer.future);
     } finally {
-      forEach.close();
+      progress.close();
     }
 
-    return forEach;
+    return progress;
   }
 
   bool allowed(String root, bool includeHidden, FileSystemEntity entity) {

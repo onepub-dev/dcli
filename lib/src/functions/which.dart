@@ -43,26 +43,24 @@ class Which extends DShellFunction {
   /// Searches the path for the given appname.
   Progress which(String appname,
       {bool first, bool verbose, Progress progress}) {
-    Progress forEach;
-
     try {
-      forEach = progress ?? Progress.forEach();
+      progress ??= Progress.devNull();
 
       for (var path in PATH) {
         if (verbose) {
-          forEach.addToStdout('Searching: ${p.canonicalize(path)}');
+          progress.addToStdout('Searching: ${p.canonicalize(path)}');
         }
         if (exists(p.join(path, appname))) {
-          forEach.addToStdout('${p.canonicalize(p.join(path, appname))}');
+          progress.addToStdout('${p.canonicalize(p.join(path, appname))}');
           if (first) {
             break;
           }
         }
       }
     } finally {
-      forEach.close();
+      progress.close();
     }
 
-    return forEach;
+    return progress;
   }
 }

@@ -32,14 +32,12 @@ class Head extends DShellFunction {
       throw HeadException('The path ${absolute(path)} is not a file.');
     }
 
-    Progress forEach;
-
     try {
-      forEach = progress ?? Progress.forEach();
+      progress ??= Progress.devNull();
       var count = 0;
       var file = FileSync(path);
       file.read((line) {
-        forEach.addToStdout(line);
+        progress.addToStdout(line);
         count++;
         if (count >= lines) {
           return false;
@@ -50,10 +48,10 @@ class Head extends DShellFunction {
       throw HeadException(
           'An error occured reading ${absolute(path)}. Error: $e');
     } finally {
-      forEach.close();
+      progress.close();
     }
 
-    return forEach;
+    return progress;
   }
 }
 

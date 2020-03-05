@@ -39,19 +39,19 @@ class Read extends DShellFunction {
       throw ReadException('The file at ${absolute(path)} does not exists');
     }
 
-    var forEach = Progress.forEach();
+    progress ??= Progress.devNull();
 
     waitForEx<void>(sourceFile
         .openRead()
         .transform(utf8.decoder)
         .transform(LineSplitter())
         .forEach((line) {
-      forEach.addToStdout(line);
+      progress.addToStdout(line);
     }));
 
-    forEach.close();
+    progress.close();
 
-    return forEach;
+    return progress;
   }
 
   Progress readStdin({Progress progress}) {
@@ -59,20 +59,19 @@ class Read extends DShellFunction {
       Log.d('readStdin');
     }
 
-    Progress forEach;
 
     try {
-      forEach = progress ?? Progress.forEach();
+      progress ??= Progress.devNull();
       String line;
 
       while ((line = stdin.readLineSync()) != null) {
-        forEach.addToStdout(line);
+        progress.addToStdout(line);
       }
     } finally {
-      forEach.close();
+      progress.close();
     }
 
-    return forEach;
+    return progress;
   }
 }
 
