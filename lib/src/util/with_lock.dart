@@ -274,12 +274,14 @@ class NamedLock {
     if (timeout != null) waitCount = timeout.inSeconds;
 
     try {
+      var reusePort = Settings().isWindows ? false : true;
       while (socket == null) {
         socket = waitForEx<RawDatagramSocket>(RawDatagramSocket.bind(
           '127.0.0.172',
           port,
           reuseAddress: true,
-          reusePort: true,
+          reusePort: reusePort
+          ,
         ));
 
         if (waitCount > 0) {
