@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:collection/collection.dart';
 import 'package:dshell/dshell.dart';
 import 'package:dshell/src/util/dshell_exception.dart';
 
@@ -55,7 +56,10 @@ void setEnv(String name, String value) => Env().setEnv(name, value);
 
 class Env extends DShellFunction {
   static Env _self = Env._internal();
+
   Map<String, String> envVars;
+
+  bool caseSensitive = true;
 
   factory Env() {
     return _self;
@@ -64,7 +68,12 @@ class Env extends DShellFunction {
   Env._internal() {
     var platformVars = Platform.environment;
 
-    envVars = {};
+    if (Settings().isWindows) {
+      caseSensitive = false;
+    }
+
+    envVars =
+        CanonicalizedMap((key) => (caseSensitive) ? key : key.toUpperCase());
 
     // build a local map with all of the OS environment vars.
     for (var entry in platformVars.entries) {
@@ -80,6 +89,7 @@ class Env extends DShellFunction {
     if (Settings().debug_on) {
       Log.d('env:  ${name}:${envVars[name]}');
     }
+
     return envVars[name];
   }
 
@@ -111,7 +121,7 @@ class Env extends DShellFunction {
     String home;
 
     if (Settings().isWindows) {
-      home = env('AppData');
+      home = env('APPDATA');
     } else {
       home = env('HOME');
     }
@@ -119,7 +129,7 @@ class Env extends DShellFunction {
     if (home == null) {
       if (Settings().isWindows) {
         throw DShellException(
-            "Unable to find the 'AppData' enviroment variable. Please ensure it is set and try again.");
+            "Unable to find the 'APPDATA' enviroment variable. Please ensure it is set and try again.");
       } else {
         throw DShellException(
             "Unable to find the 'HOME' enviroment variable. Please ensure it is set and try again.");
