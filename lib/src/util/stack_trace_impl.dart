@@ -4,6 +4,8 @@ import 'dart:io';
 
 import 'package:path/path.dart';
 
+import '../settings.dart';
+
 class StackTraceImpl implements core.StackTrace {
   static final stackTraceRegex = RegExp(r'#[0-9]+[\s]+(.+) \(([^\s]+)\)');
   final core.StackTrace stackTrace;
@@ -124,17 +126,21 @@ class StackTraceImpl implements core.StackTrace {
       // package:/package/.path./filename.dart:column:line
       var source = match.group(2);
       var sourceParts = source.split(':');
-      ArgumentError.value(sourceParts.length == 4,
+
+      // deal with paths that contain c:\
+      var argOffset = sourceParts.length == 5 && Settings().isWindows ? 1 : 0;
+
+      ArgumentError.value(sourceParts.length == 4 + argOffset,
           "Stackframe source does not contain the expeted no of colons '$source'");
 
       var column = '0';
       var lineNo = '0';
-      var sourcePath = sourceParts[1];
-      if (sourceParts.length > 2) {
-        lineNo = sourceParts[2];
+      var sourcePath = sourceParts[1 + argOffset];
+      if (sourceParts.length > (2  + argOffset)) {
+        lineNo = sourceParts[2 + argOffset];
       }
-      if (sourceParts.length > 3) {
-        column = sourceParts[3];
+      if (sourceParts.length > (3 + argOffset)) {
+        column = sourceParts[3 + argOffset];
       }
 
       // the actual contents of the line (sort of)
