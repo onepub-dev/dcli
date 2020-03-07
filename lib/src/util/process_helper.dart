@@ -121,9 +121,11 @@ class ProcessHelper {
       var details = PIDDetails();
 
       details.processName = line[0] as String;
-      details.pid = line[1] as int;
-      details.memory = line[4] as String;
-      details.memoryUnits = line[5] as String;
+      details.pid = int.tryParse(line[1] as String);
+
+      var memparts = (line[4] as String).split( ' ');
+      details.memory = memparts[0];;
+      details.memoryUnits = memparts[1];
 
       pids.add(details);
     }
