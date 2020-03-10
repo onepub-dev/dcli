@@ -1,3 +1,9 @@
+### 1.8.4-dev.4
+removed dshell_complete from windows unit tests as its not supported.
+Fixed references to dshell exe names which all end in .bat on windows. 
+Added logic to allow reseting of PubCache paths for unit tests.
+Corrected messages on path for dshell as it wasn't outputing the /bin component of the path.
+
 ### 1.8.4-dev.3
 dartfrmt
 Fixed exe name to use platform specific version.
