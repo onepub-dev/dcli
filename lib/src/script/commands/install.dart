@@ -133,7 +133,7 @@ class InstallCommand extends Command {
 
       if (!shell.addToPath(binPath)) {
         printerr(
-            'If you want to use dshell compile -i to install scripts;  add $binPath to your PATH.');
+            'If you want to use dshell compile -i to install scripts, add $binPath to your PATH.');
       }
     }
 
