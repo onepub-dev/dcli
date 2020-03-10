@@ -1,3 +1,52 @@
+### 1.8.4-dev.3
+dartfrmt
+Fixed exe name to use platform specific version.
+grammar.
+restored missing activate statement.
+removed test print statements. restored the pub cache copy logic.
+Added getter for platform dependant rootPath. Added platform specific exe names for dart exes. Fixed a no. of paths that ignored the windows requirements. Fixed a bug where the PATH for windows was wrong.
+Synchronized APPDATA and HOME on Windows systems. I'm not certain this is the best idea.
+Changed to using Platform.windows to avoid initiialising Settings which was causing problems with the unit tests.
+Fixed the code that was retriving the parent pid so it works under windows.
+removed test code.
+Windows bug fixes
+added test for windows case-insensitive env.
+reuse port is not supported on windows. Not certain what the consequences of this is as dart does document reuseport.
+made vars case-insensitive on windows.
+now pulling pub-cache from single source.
+Fix for windows where sourcee paths contain an extra : due to c:/
+turns out that .pub-cache is called Pub/Cache under windows.
+Fixed bugs when parsing the tasklist under windows.
+Fixed unit tes t as glob expansion should not expand of (*.txt) hidden files such as .tow.txt
+unit test for runnable process start with a foreach.
+renamed forEach to devNull as more evokative of what it does.
+reversed the names of start and startCommandLine. This is a breking change probably of some significance but easy to fix and compile errors will make the problem evident.
+Modified run to return an exit code rather than a progress as as the returned Progress was non functional as alll output goes to the console. This is a breaking change but probably not used. Moved the run logic to runnable_process.
+change var names from forEach to progress.
+
+### 1.8.4
+Most of the work in this release is around getting dshell unit tests to pass on Windows.
+We are not quite there as yet as there are still a few path issues but I think we are not to far off.
+
+Added getter for platform dependant rootPath. 
+Added platform specific exe names for dart exes. 
+Fixed a no. of paths that ignored the windows requirements. 
+Fixed a bug where the PATH for windows was wrong.
+Synchronized APPDATA and HOME on Windows systems. I'm not certain this is the best idea.
+Changed to using Platform.windows to avoid initiialising Settings which was causing problems with the unit tests.
+Fixed the code that was retriving the parent pid so it works under windows.
+Made vars case-insensitive on windows.
+Added test for windows case-insensitive env.
+reuse port is not supported on windows. Not certain what the consequences of this is as dart does document reuseport.
+Fix for windows where stacktrace source paths contain an extra : due to c:/
+Turns out that .pub-cache is called Pub/Cache under windows.
+Fixed bugs when parsing the tasklist under windows.
+Fixed unit test as glob expansion should not expand (*.txt) hidden files such as .tow.txt
+Renamed forEach ctor on Progress to devNull as more evokative of what it does.
+Reversed the names of start and startCommandLine. This is a breaking change probably of some significance but easy to fix and compile errors will make the problem evident.
+Modified run to return an exit code rather than a progress as as the returned Progress was non functional as alll output goes to the console. This is a breaking change but probably not used. Moved the run logic to runnable_process.
+change var names from forEach to progress.
+
 ### 1.8.4-dev.2
 Exposed the Progress class.
 Exposed waitForEx as a end user function.
