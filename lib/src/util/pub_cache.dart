@@ -9,16 +9,16 @@ import '../../dshell.dart';
 class PubCache {
   static PubCache _self;
 
-    /// Dart allows the user to modify the location of
-    /// the .pub-cache by setting an environment var.
+  /// Dart allows the user to modify the location of
+  /// the .pub-cache by setting an environment var.
   String _pubCacheDir;
   String _pubCacheBinDir;
   static const String PUB_CACHE_ENV = 'PUB_CACHE';
   String _pubCachePath;
 
   factory PubCache() {
-     _self ??=   PubCache._internal();
-     return _self;
+    _self ??= PubCache._internal();
+    return _self;
   }
 
   PubCache._internal() {
@@ -46,11 +46,10 @@ class PubCache {
 
   String get cacheDir => _pubCacheDir;
 
-  /// only to be used for unit tests. 
+  /// only to be used for unit tests.
   /// It resets the paths so that they can pick
   /// up changes to HOME made by the unit tests.
-  static void unitTestreset()
-  {
+  static void unitTestreset() {
     _self = null;
   }
 }
