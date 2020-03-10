@@ -1,7 +1,6 @@
 import 'dart:io';
 
 import 'package:dshell/dshell.dart';
-import 'util/stack_trace_impl.dart';
 import 'util/version.g.dart';
 
 import 'script/flags.dart';
@@ -96,10 +95,10 @@ class Settings {
   /// allowing the installed scripts to be run from anywhere.
   /// This will normally be ~/.dshell/bin
   String get dshellBinPath {
-    var st = StackTraceImpl();
+    // var st = StackTraceImpl();
 
-    print('dshellBinPath current: ${_dshellBinPath}');
-    print(st.formatStackTrace());
+    // print('dshellBinPath current: ${_dshellBinPath}');
+    // print(st.formatStackTrace());
     _dshellBinPath ??= p.absolute(p.join(HOME, dshellDir, 'bin'));
 
     return _dshellBinPath;
