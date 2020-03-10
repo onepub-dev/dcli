@@ -11,6 +11,9 @@ class PubCache {
 
     String _pubCacheDir ;
     String _pubCacheBinDir;
+
+    /// Dart allows the user to modify the location of
+    /// the .pub-cache by setting an environment var.
   static const String PUB_CACHE_ENV = 'PUB_CACHE';
    String _pubCachePath;
 

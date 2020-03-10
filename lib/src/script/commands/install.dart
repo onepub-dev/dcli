@@ -154,7 +154,7 @@ class InstallCommand extends Command {
       print(red('You need to restart your shell so the new paths can update'));
       print('');
     } else {
-      var dshellLocation = which(DartSdk.dartExeName, first: true).firstLine;
+      var dshellLocation = which('dshell', first: true).firstLine;
       // check if dshell is on the path
       if (dshellLocation == null) {
         print('');
@@ -162,10 +162,10 @@ class InstallCommand extends Command {
         print("Try running 'pub global activate dshell' again.");
         print('  otherwise');
         print('Try to resolve the problem and then run dshell install again.');
-        print('dshell is normally located in ${PubCache().path}');
+        print('dshell is normally located in ${PubCache().binPath}');
 
-        if (!PATH.contains(PubCache().path)) {
-          print('Your path does not contain ${PubCache().path}');
+        if (!PATH.contains(PubCache().binPath)) {
+          print('Your path does not contain ${PubCache().binPath}');
         }
         exit(1);
       } else {
