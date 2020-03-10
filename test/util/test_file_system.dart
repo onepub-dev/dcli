@@ -13,6 +13,8 @@ import 'package:dshell/src/util/with_lock.dart';
 import 'package:test/test.dart';
 import 'package:uuid/uuid.dart';
 
+import 'package:dshell/src/util/pub_cache.dart';
+
 class TestFileSystem {
   String uniquePath;
   String top;
@@ -219,24 +221,24 @@ class TestFileSystem {
       print(red('PATH is empty'));
     }
     for (var path in PATH) {
-      if (path.contains('.pub-cache') || path.contains('.dshell')) {
+      if (path.contains(PubCache().path) || path.contains('.dshell')) {
         continue;
       }
 
       newPath.add(path);
     }
 
-    newPath.add('${join(root, ".pub-cache", "bin")}');
+    newPath.add('${join(root, PubCache().cacheDir, "bin")}');
     newPath.add('${join(root, '.dshell', 'bin')}');
 
     setEnv('PATH', newPath.join(':'));
   }
 
   void copyPubCache(String originalHome, String newHome) {
-    print('Copying .pub-cache into TestFileSystem');
+    print('Copying pub cache into TestFileSystem');
     var list = find(
       '*',
-      root: join(originalHome, '.pub-cache'),
+      root: join(originalHome, PubCache().cacheDir),
       recursive: true,
     ).toList();
 

@@ -21,6 +21,7 @@ void main() {
     t.test('Windows case-insensitive env vars', () {
       TestFileSystem().withinZone((fs) {
         try {
+          Settings.reset();
           var mockSettings = MockSettings();
           Settings.setMock(mockSettings);
           when(mockSettings.isWindows).thenReturn(true);

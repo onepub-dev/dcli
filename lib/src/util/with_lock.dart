@@ -108,8 +108,14 @@ class NamedLock {
       }
     }, onError: (Object e, StackTrace st) {
       if (lockHeld) releaseLock();
-      Settings().verbose(StackTraceImpl.fromStackTrace(st).formatStackTrace());
-      throw e;
+      var stackTrace = StackTraceImpl.fromStackTrace(st, skipFrames: 10);
+      Settings().verbose(stackTrace.formatStackTrace());
+
+      if (e is DShellException) {
+        throw e.copyWith(stackTrace);
+      } else {
+        throw DShellException.from(e, stackTrace);
+      }
     });
   }
 
@@ -280,8 +286,7 @@ class NamedLock {
           '127.0.0.172',
           port,
           reuseAddress: true,
-          reusePort: reusePort
-          ,
+          reusePort: reusePort,
         ));
 
         if (waitCount > 0) {
