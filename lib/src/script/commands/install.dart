@@ -4,6 +4,7 @@ import 'package:dshell/dshell.dart';
 import 'package:dshell/src/functions/env.dart';
 import 'package:dshell/src/script/commands/clean_all.dart';
 import 'package:dshell/src/util/dart_install_apt.dart';
+import 'package:dshell/src/util/dshell_paths.dart';
 import 'package:dshell/src/util/pub_cache.dart';
 import 'package:dshell/src/util/shell.dart';
 
@@ -154,7 +155,7 @@ class InstallCommand extends Command {
       print(red('You need to restart your shell so the new paths can update'));
       print('');
     } else {
-      var dshellLocation = which('dshell', first: true).firstLine;
+      var dshellLocation = which(DShellPaths().dshellName, first: true).firstLine;
       // check if dshell is on the path
       if (dshellLocation == null) {
         print('');

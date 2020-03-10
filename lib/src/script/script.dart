@@ -2,13 +2,13 @@ import 'dart:io';
 import 'dart:math';
 
 import 'package:dshell/src/pubspec/pubspec_annotation.dart';
+import 'package:dshell/src/util/dshell_paths.dart';
 
 import '../functions/is.dart';
 import 'flags.dart';
 import '../util/file_helper.dart';
 import 'package:path/path.dart' as p;
 
-import '../settings.dart';
 import 'command_line_runner.dart';
 
 class Script {
@@ -75,7 +75,7 @@ class Script {
 
   String generateDefaultBody() {
     /// The default body of the script we generate.
-    return """#! /usr/bin/env ${Settings().appname}
+    return """#! /usr/bin/env ${DShellPaths().dshellName}
 
 import 'dart:io';
 import 'package:dshell/dshell.dart';

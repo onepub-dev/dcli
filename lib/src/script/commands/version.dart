@@ -1,4 +1,5 @@
 import 'package:dshell/dshell.dart';
+import 'package:dshell/src/util/dshell_paths.dart';
 import 'package:dshell/src/util/runnable_process.dart';
 
 import '../../functions/which.dart';
@@ -21,7 +22,7 @@ class VersionCommand extends Command {
           "'dshell version' does not take any arguments. Found $subarguments");
     }
 
-    var appname = Settings().appname;
+    var appname = DShellPaths().dshellName;
 
     var locations = which(appname, first: true).firstLine;
 

@@ -95,6 +95,7 @@ class TestFileSystem {
     NamedLock(name: 'test_file_system.lock').withLock(() {
       Settings.reset();
       Env.reset();
+      PubCache.unitTestreset();
       // print('PATH: $PATH');
       // print(which(DartSdk.pubExeName).firstLine);
       var home = HOME;
@@ -233,7 +234,7 @@ class TestFileSystem {
       newPath.add(path);
     }
 
-    newPath.add('${join(root, PubCache().cacheDir, "bin")}');
+    newPath.add('${join(root, PubCache().binPath)}');
     newPath.add('${join(root, '.dshell', 'bin')}');
 
     setEnv('PATH', newPath.join(Env().pathSeparator));
