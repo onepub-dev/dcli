@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import '../../dshell.dart';
 
 /// Used to locate and manipulate the dart pub cache
@@ -20,7 +22,7 @@ class PubCache {
   {
      _pubCacheDir = '.pub-cache';
    
-    if (Settings().isWindows)
+    if (Platform.isWindows)
     {
       _pubCacheDir = join('Pub', 'Cache');
     }
