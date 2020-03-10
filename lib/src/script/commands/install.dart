@@ -154,7 +154,7 @@ class InstallCommand extends Command {
       print(red('You need to restart your shell so the new paths can update'));
       print('');
     } else {
-      var dshellLocation = which('dshell', first: true).firstLine;
+      var dshellLocation = which(DartSdk.dartExeName, first: true).firstLine;
       // check if dshell is on the path
       if (dshellLocation == null) {
         print('');
