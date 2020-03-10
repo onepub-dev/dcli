@@ -37,43 +37,28 @@ class DartSdk {
     return _sdkPath;
   }
 
-  static String get dartExeName
-  {
-    if (Platform.isWindows)
-    {
+  static String get dartExeName {
+    if (Platform.isWindows) {
       return 'dart.exe';
-    }
-    else
-    {
+    } else {
       return 'dart';
     }
   }
 
-  static String get pubExeName
-  {
-     if (Platform.isWindows)
-    {
+  static String get pubExeName {
+    if (Platform.isWindows) {
       return 'pub.bat';
-    }
-    else
-    {
+    } else {
       return 'pub';
     }
-
   }
 
-
-  static String get dart2NativeExeName
-  {
-     if (Platform.isWindows)
-    {
+  static String get dart2NativeExeName {
+    if (Platform.isWindows) {
       return 'dart2native.bat';
-    }
-    else
-    {
+    } else {
       return 'dart2native';
     }
-
   }
 
   /// The path to the dart exe.

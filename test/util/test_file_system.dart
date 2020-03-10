@@ -23,8 +23,8 @@ class TestFileSystem {
   String bottom;
   String hidden;
 
-   static String _TEST_ROOT;
-   static const  String TEST_LINES_FILE = 'lines.txt';
+  static String _TEST_ROOT;
+  static const String TEST_LINES_FILE = 'lines.txt';
 
   String home;
 
@@ -80,7 +80,7 @@ class TestFileSystem {
   }
 
   TestFileSystem._internal() {
-     _TEST_ROOT = join(rootPath, 'tmp', 'dshell');
+    _TEST_ROOT = join(rootPath, 'tmp', 'dshell');
     uniquePath = Uuid().v4();
 
     var isolateID = Service.getIsolateID(Isolate.current);
@@ -105,8 +105,7 @@ class TestFileSystem {
         rebuildPath();
 
         var isolateID = Service.getIsolateID(Isolate.current);
-        print(green(
-            'Using TestFileSystem $root for Isolate: $isolateID'));
+        print(green('Using TestFileSystem $root for Isolate: $isolateID'));
         print('Reset dshellPath: ${Settings().dshellPath}');
 
         initFS(home);
@@ -214,7 +213,7 @@ class TestFileSystem {
     // print('PATH: $PATH');
     // print(which(DartSdk.pubExeName).firstLine);
     '${DartSdk.pubExeName} global activate --source path $pwd'.run;
-    
+
     EntryPoint().process(['install']);
   }
 

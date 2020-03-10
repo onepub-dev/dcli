@@ -59,5 +59,3 @@ export 'src/util/shell.dart'
 export 'src/util/runnable_process.dart' show printerr;
 export 'src/util/string_as_process.dart';
 export 'src/util/truepath.dart' show truepath, rootPath;
-
-

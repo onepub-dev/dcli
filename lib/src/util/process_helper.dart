@@ -49,15 +49,11 @@ class ProcessHelper {
   /// be obtained.
   ///
   int getParentPID(int childPid) {
-    if (Platform.isWindows)
-    {
+    if (Platform.isWindows) {
       return _WindowsGetParentPid(childPid);
-    }
-    else
-    {
+    } else {
       return _LinuxGetParentPID(childPid);
     }
-
   }
 
   bool isRunning(int lpid) {
@@ -68,9 +64,7 @@ class ProcessHelper {
     }
   }
 
-
-
-int _LinuxGetParentPID(int childPid) {
+  int _LinuxGetParentPID(int childPid) {
     int parentPid;
 
     String line;
@@ -85,59 +79,46 @@ int _LinuxGetParentPID(int childPid) {
     return parentPid;
   }
 
+  int _WindowsGetParentPid(int childPid) {
+    var parents = _WindowsParentProcessList();
 
-  int _WindowsGetParentPid(int childPid)
-  {
-     var parents = _WindowsParentProcessList();
-
-     for (var parent in parents)
-     {
-       if (parent.processPid == childPid)
-       {
-         return parent.parentPid;
-       }
-     }
-     return -1;
-
+    for (var parent in parents) {
+      if (parent.processPid == childPid) {
+        return parent.parentPid;
+      }
+    }
+    return -1;
   }
 
-
-  List<_WindowsParentProcess> _WindowsParentProcessList()
-  {
+  List<_WindowsParentProcess> _WindowsParentProcessList() {
     var parents = <_WindowsParentProcess>[];
 
-     var processes = 'wmic process get processid,parentprocessid,executablepath'.toList(skipLines: 1);
+    var processes = 'wmic process get processid,parentprocessid,executablepath'
+        .toList(skipLines: 1);
 
+    for (var process in processes) {
+      process = process.trim();
+      process = process.replaceAll(RegExp(r'\s+'), ' ');
+      // print(process);
 
-     for (var process in processes)
-     {
-       
-       process = process.trim();
-       process = process.replaceAll(RegExp(r'\s+'), ' ');
-       // print(process);
-       
-       
-       var parts = process.split(' ');
-       if (parts.length < 3)
-       {
-         // a lot of the lines have blank process ames
-         continue;
-         
-       }
-          
-       // we have to deal with files that contain spaces in their name.
-       var exe = parts.sublist(0, parts.length-3).join(' ');
-       var parentPid = int.tryParse(parts[parts.length-2]);
-       var processPid = int.tryParse(parts[parts.length-1]);
+      var parts = process.split(' ');
+      if (parts.length < 3) {
+        // a lot of the lines have blank process ames
+        continue;
+      }
 
-       var parent = _WindowsParentProcess();
-       parent.path = exe;
-       parent.parentPid = parentPid;
-       parent.processPid = processPid;
-       parents.add(parent);
+      // we have to deal with files that contain spaces in their name.
+      var exe = parts.sublist(0, parts.length - 3).join(' ');
+      var parentPid = int.tryParse(parts[parts.length - 2]);
+      var processPid = int.tryParse(parts[parts.length - 1]);
 
-     }
-     return parents;
+      var parent = _WindowsParentProcess();
+      parent.path = exe;
+      parent.parentPid = parentPid;
+      parent.processPid = processPid;
+      parents.add(parent);
+    }
+    return parents;
   }
 
   bool _WindowsIsrunning(int lpid) {
@@ -192,12 +173,11 @@ int _LinuxGetParentPID(int childPid) {
       details.processName = line[0] as String;
       details.pid = int.tryParse(line[1] as String);
 
-      var memparts = (line[4] as String).split( ' ');
+      var memparts = (line[4] as String).split(' ');
       details.memory = memparts[0];
       // details.memory can contain 'N/A' in which case their is no units.
-      if (memparts.length == 2)
-      {
-      details.memoryUnits = memparts[1];
+      if (memparts.length == 2) {
+        details.memoryUnits = memparts[1];
       }
 
       pids.add(details);
@@ -214,10 +194,8 @@ class PIDDetails {
   String memoryUnits;
 }
 
- class _WindowsParentProcess
-  {
-    String path;
-    int parentPid;
-    int processPid;
-  }
-
+class _WindowsParentProcess {
+  String path;
+  int parentPid;
+  int processPid;
+}
