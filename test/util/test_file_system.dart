@@ -213,7 +213,7 @@ class TestFileSystem {
   void install_dshell() {
     // print('PATH: $PATH');
     // print(which(DartSdk.pubExeName).firstLine);
-    //   '${DartSdk.pubExeName} global activate --source path $pwd'.run;
+    '${DartSdk.pubExeName} global activate --source path $pwd'.run;
     
     EntryPoint().process(['install']);
   }
