@@ -37,20 +37,59 @@ class DartSdk {
     return _sdkPath;
   }
 
+  static String get dartExeName
+  {
+    if (Platform.isWindows)
+    {
+      return 'dart.exe';
+    }
+    else
+    {
+      return 'dart';
+    }
+  }
+
+  static String get pubExeName
+  {
+     if (Platform.isWindows)
+    {
+      return 'pub.bat';
+    }
+    else
+    {
+      return 'pub';
+    }
+
+  }
+
+
+  static String get dart2NativeExeName
+  {
+     if (Platform.isWindows)
+    {
+      return 'dart2native.bat';
+    }
+    else
+    {
+      return 'dart2native';
+    }
+
+  }
+
   /// The path to the dart exe.
   String get dartExePath {
     if (_exePath == null) {
       // this is an expesive operation so only do it if required.
-      var path = which('dart', first: true).firstLine;
+      var path = which(dartExeName, first: true).firstLine;
       assert(path != null);
       _exePath = path;
     }
     return _exePath;
   }
 
-  String get pubGetPath => p.join(sdkPath, 'bin', 'pub');
+  String get pubGetPath => p.join(sdkPath, 'bin', pubExeName);
 
-  String get dart2NativePath => p.join(sdkPath, 'bin', 'dart2native');
+  String get dart2NativePath => p.join(sdkPath, 'bin', dart2NativeExeName);
 
   void runDart2Native(
       String runtimeScriptPath, String outputDir, String runtimePath,
@@ -84,7 +123,7 @@ class DartSdk {
   }
 
   static String _detect() {
-    var path = which('pub').firstLine;
+    var path = which(pubExeName).firstLine;
 
     if (path != null) {
       return dirname(dirname(path));

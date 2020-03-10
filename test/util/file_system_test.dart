@@ -22,8 +22,8 @@ void main() {
 
       print('testzone cwd: ${Directory.current}');
 
-      Directory.current = '/';
-      var dir = '/tmp/mfs.test';
+      Directory.current = rootPath;
+      var dir = join(rootPath, 'tmp', 'mfs.test');
       // Directory(dir).createSync();
       if (!exists(dir)) {
         createDir(dir);

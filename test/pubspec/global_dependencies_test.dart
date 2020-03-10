@@ -47,11 +47,11 @@ dependency_overrides:
   ''';
 
       var expected = [
-        Dependency.fromPath('args', '/home/args'),
+        Dependency.fromPath('args', join(rootPath, 'home', 'args')),
         Dependency.fromHosted('collection', '^1.14.12'),
         Dependency.fromHosted('file_utils', '^0.1.3'),
         Dependency.fromHosted('path', '^1.6.4'),
-        Dependency.fromPath('dshell', '/home/dshell'),
+        Dependency.fromPath('dshell', join(rootPath, 'home', 'dshell')),
       ];
 
       var gd = GlobalDependencies.fromString(content);
@@ -73,7 +73,7 @@ dependency_overrides:
   ''';
 
       var expected = [
-        Dependency.fromPath('dshell', '/home/dshell'),
+        Dependency.fromPath('dshell', join(rootPath, 'home', 'dshell')),
         Dependency.fromHosted('args', '^1.5.2'),
         Dependency.fromHosted('path', '^1.6.4'),
       ];
@@ -108,7 +108,7 @@ dependency_overrides:
       var gd = GlobalDependencies.fromFile(depPath);
 
       var expected = [
-        Dependency.fromPath('dshell', '/home/dshell'),
+        Dependency.fromPath('dshell', join(rootPath, 'home', 'dshell')),
         Dependency.fromHosted('args', '^1.5.2'),
         Dependency.fromHosted('path', '^1.6.4'),
       ];
@@ -141,7 +141,7 @@ dependency_overrides:
       var gd = GlobalDependencies.fromFile(depPath);
 
       var expected = [
-        Dependency.fromPath('dshell', '~/git/dshell'),
+        Dependency.fromPath('dshell', join(HOME, 'git', 'dshell')),
         Dependency.fromHosted('args', '^1.5.2'),
         Dependency.fromHosted('path', '^1.6.4'),
       ];

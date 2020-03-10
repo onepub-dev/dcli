@@ -2,6 +2,7 @@ import 'dart:core' as core show StackTrace;
 import 'dart:core';
 import 'dart:io';
 
+import 'package:dshell/src/util/truepath.dart';
 import 'package:path/path.dart';
 
 import '../settings.dart';
@@ -148,8 +149,7 @@ class StackTraceImpl implements core.StackTrace {
 
       sourcePath = sourcePath.replaceAll('<anonymous closure>', '()');
       sourcePath = sourcePath.replaceAll('package:', '');
-      // sourcePath = sourcePath.replaceFirst('<package_name>', '/lib');
-
+      
       var frame = Stackframe(
           File(sourcePath), int.parse(lineNo), int.parse(column), details);
       stackFrames.add(frame);
@@ -174,7 +174,7 @@ class StackTraceImpl implements core.StackTrace {
   }
 }
 
-List<String> excludedSource = ['/flutter', '/ui', '/async', 'isolate'];
+List<String> excludedSource = [join(rootPath, 'flutter'), join(rootPath, 'ui'), join(rootPath, 'async'), 'isolate'];
 bool isExcludedSource(Stackframe frame) {
   var excludeSource = false;
 

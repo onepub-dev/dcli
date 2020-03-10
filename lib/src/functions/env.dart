@@ -97,7 +97,7 @@ class Env extends DShellFunction {
   ///
   /// On linix it is ':' ond windows it is ';'
   ///
-  /// NOTE do NOT confuses this with the file system path separator!!!
+  /// NOTE do NOT confuses this with the file system path root!!!
   ///
   String get pathSeparator {
     var separator = ':';

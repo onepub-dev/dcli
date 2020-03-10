@@ -78,7 +78,7 @@ class ProjectCache {
           recursive: true,
           types: [FileSystemEntityType.directory]).forEach((projectPath) {
         var scriptPath = join(
-            '/',
+            rootPath,
             withoutExtension(
                     relative(projectPath, from: Settings().dshellCachePath)) +
                 '.dart');

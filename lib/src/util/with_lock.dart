@@ -72,7 +72,7 @@ class NamedLock {
     this.timeout,
   }) {
     assert(name != null);
-    lockPath ??= join('/', Directory.systemTemp.path, 'dshell', 'locks');
+    lockPath ??= join(rootPath, Directory.systemTemp.path, 'dshell', 'locks');
     description ??= '';
 
     //Settings().setVerbose(true);
@@ -163,7 +163,8 @@ class NamedLock {
     // as during cleaning we delete the project directory.
 
     var isolate = Service.getIsolateID(Isolate.current);
-    isolate = isolate.replaceAll('/', '_');
+    isolate = isolate.replaceAll(r'/', '_');
+    isolate = isolate.replaceAll(r'\', '_');
     return join(lockPath, '$pid.$isolate.${name}');
   }
 
@@ -248,7 +249,8 @@ class NamedLock {
       var lpid = int.tryParse(parts[0]);
       var isolateId = parts[1];
       var currentIsolateId = Service.getIsolateID(Isolate.current);
-      currentIsolateId = currentIsolateId.replaceAll('/', '_');
+      currentIsolateId = currentIsolateId.replaceAll(r'\', '_');
+      currentIsolateId = currentIsolateId.replaceAll(r'/', '_');
 
       if (lpid == pid && isolateId == currentIsolateId) {
         // ignore our own lock.

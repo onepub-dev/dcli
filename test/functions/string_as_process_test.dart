@@ -177,7 +177,7 @@ void main() {
 
     t.test('toList - skipLines', () {
       TestFileSystem().withinZone((fs) {
-        var path = '/tmp/log/syslog';
+        var path = join(rootPath, 'tmp', 'log', 'syslog');
 
         if (exists(path)) {
           deleteDir(dirname(path), recursive: true);

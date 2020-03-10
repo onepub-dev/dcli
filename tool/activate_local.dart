@@ -45,10 +45,10 @@ ${parser.usage}
   var version = '';
   if (result.rest.length == 1) {
     version = result.rest[0];
-    'pub global activate --source path $dshellPackageRoot $version'
+    '${DartSdk.pubExeName} global activate --source path $dshellPackageRoot $version'
         .start(workingDirectory: dshellPackageRoot);
   } else {
-    'pub global activate --source path $dshellPackageRoot'
+    '${DartSdk.pubExeName} global activate --source path $dshellPackageRoot'
         .start(workingDirectory: dshellPackageRoot);
   }
 

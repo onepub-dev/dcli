@@ -1,5 +1,6 @@
 import 'package:intl/intl.dart';
 import 'package:logger/logger.dart';
+import 'package:path/path.dart';
 
 import 'enum_helper.dart';
 import 'stack_trace_impl.dart';
@@ -74,7 +75,7 @@ class Log extends Logger {
 
     for (var frame in frames.frames) {
       _localPath = frame.sourceFile.path
-          .substring(frame.sourceFile.path.lastIndexOf('/'));
+          .substring(frame.sourceFile.path.lastIndexOf(separator));
       break;
     }
   }

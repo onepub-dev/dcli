@@ -54,8 +54,8 @@ class AptDartInstaller implements DartInstaller {
     'sudo apt-get update'.run;
     'sudo apt install dart'.run;
 
-    // The normal dart detection process wont' work here
-    // as dart is not on the path so for the momemnt we hard code it.
+    // The normal dart detection process won't work here
+    // as dart is not on the path so for the momemnt so we hard code it.
     // CONSIDER a way of identifynig where dart has been installed to.
     '/usr/lib/dart/bin/pub global activate dshell'.run;
 

@@ -23,8 +23,8 @@ class TestFileSystem {
   String bottom;
   String hidden;
 
-  static const String _TEST_ROOT = '/tmp/dshell';
-  static const String TEST_LINES_FILE = 'lines.txt';
+   static String _TEST_ROOT;
+   static const  String TEST_LINES_FILE = 'lines.txt';
 
   String home;
 
@@ -80,6 +80,7 @@ class TestFileSystem {
   }
 
   TestFileSystem._internal() {
+     _TEST_ROOT = join(rootPath, 'tmp', 'dshell');
     uniquePath = Uuid().v4();
 
     var isolateID = Service.getIsolateID(Isolate.current);
@@ -94,6 +95,8 @@ class TestFileSystem {
     NamedLock(name: 'test_file_system.lock').withLock(() {
       Settings.reset();
       Env.reset();
+      print('PATH: $PATH');
+      print(which(DartSdk.pubExeName).firstLine);
       var home = HOME;
       var path = env('PATH');
       try {
@@ -103,7 +106,7 @@ class TestFileSystem {
 
         var isolateID = Service.getIsolateID(Isolate.current);
         print(green(
-            'Using TestFileSystem $root for Isolateexecutable: $isolateID'));
+            'Using TestFileSystem $root for Isolate: $isolateID'));
         print('Reset dshellPath: ${Settings().dshellPath}');
 
         initFS(home);
@@ -122,7 +125,7 @@ class TestFileSystem {
   void initFS(String originalHome) {
     if (!initialised) {
       initialised = true;
-      copyPubCache(originalHome, HOME);
+    //  copyPubCache(originalHome, HOME);
       buildTestFileSystem();
       install_dshell();
     }
@@ -208,7 +211,10 @@ class TestFileSystem {
   }
 
   void install_dshell() {
-    'pub global activate --source path $pwd'.run;
+    print('PATH: $PATH');
+    print(which(DartSdk.pubExeName).firstLine);
+      '${DartSdk.pubExeName} global activate --source path $pwd'.run;
+    
     EntryPoint().process(['install']);
   }
 
@@ -231,7 +237,7 @@ class TestFileSystem {
     newPath.add('${join(root, PubCache().cacheDir, "bin")}');
     newPath.add('${join(root, '.dshell', 'bin')}');
 
-    setEnv('PATH', newPath.join(':'));
+    setEnv('PATH', newPath.join(Env().pathSeparator));
   }
 
   void copyPubCache(String originalHome, String newHome) {

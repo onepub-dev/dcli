@@ -53,7 +53,7 @@ class Settings {
         // need to reconstruct is original path.
 
         // strip of the cache prefix
-        var rel = join('/', relative(actual, from: dshellCachePath));
+        var rel = join(rootPath, relative(actual, from: dshellCachePath));
         //.dshell/cache/home/bsutton/git/dshell/tool/activate_local.project/activate_local.dart
 
         // now remove the virtual project directory

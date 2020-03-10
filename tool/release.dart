@@ -137,7 +137,8 @@ String findPubSpec() {
   // climb the path searching for the pubspec
   while (!exists(pubspecPath)) {
     cwd = dirname(cwd);
-    if (cwd == '/') {
+    // Have we found the root?
+    if (cwd == rootPath) {
       found = false;
       break;
     }

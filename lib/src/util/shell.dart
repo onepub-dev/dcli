@@ -281,7 +281,7 @@ class UnknownShell implements Shell {
   bool addPathToMacOsPathd(String path) {
     var success = false;
     if (!isOnPath(path)) {
-      var macOSPathPath = join('/etc', 'path.d');
+      var macOSPathPath = join(rootPath, 'etc', 'path.d');
 
       try {
         if (!exists(macOSPathPath)) {
