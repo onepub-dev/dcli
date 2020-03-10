@@ -95,8 +95,8 @@ class TestFileSystem {
     NamedLock(name: 'test_file_system.lock').withLock(() {
       Settings.reset();
       Env.reset();
-      print('PATH: $PATH');
-      print(which(DartSdk.pubExeName).firstLine);
+      // print('PATH: $PATH');
+      // print(which(DartSdk.pubExeName).firstLine);
       var home = HOME;
       var path = env('PATH');
       try {
@@ -125,7 +125,7 @@ class TestFileSystem {
   void initFS(String originalHome) {
     if (!initialised) {
       initialised = true;
-    //  copyPubCache(originalHome, HOME);
+      copyPubCache(originalHome, HOME);
       buildTestFileSystem();
       install_dshell();
     }
@@ -211,9 +211,9 @@ class TestFileSystem {
   }
 
   void install_dshell() {
-    print('PATH: $PATH');
-    print(which(DartSdk.pubExeName).firstLine);
-      '${DartSdk.pubExeName} global activate --source path $pwd'.run;
+    // print('PATH: $PATH');
+    // print(which(DartSdk.pubExeName).firstLine);
+    //   '${DartSdk.pubExeName} global activate --source path $pwd'.run;
     
     EntryPoint().process(['install']);
   }
