@@ -153,31 +153,23 @@ class Env extends DShellFunction {
   /// Passing a null [value] will remove the key from the
   /// set on environment variables.
   void setEnv(String name, String value) {
-    if (value == null) 
-    {
-      
+    if (value == null) {
       envVars.remove(name);
-      if (Platform.isWindows){
-      if (name == 'HOME' || name =='APPDATA')
-      {
-        envVars.remove('HOME');
-        envVars.remove('APPDATA');
+      if (Platform.isWindows) {
+        if (name == 'HOME' || name == 'APPDATA') {
+          envVars.remove('HOME');
+          envVars.remove('APPDATA');
+        }
       }
+    } else {
+      envVars[name] = value;
+
+      if (Platform.isWindows) {
+        if (name == 'HOME' || name == 'APPDATA') {
+          envVars['HOME'] = value;
+          envVars['APPDATA'] = value;
+        }
       }
-    }
-    else
-    {
-    envVars[name] = value;
-
-  if (Platform.isWindows)
-  {
-     if (name == 'HOME' || name =='APPDATA')
-     {
-       envVars['HOME']  = value;
-       envVars['APPDATA']  = value;
-     }
-  }
-
     }
   }
 

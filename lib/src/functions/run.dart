@@ -3,7 +3,6 @@ import 'package:dshell/src/functions/pwd.dart';
 import '../util/progress.dart';
 import '../util/runnable_process.dart';
 
-
 ///
 /// Runs the given cli [commandline] writing any output
 /// from both stdout and stderr to the console.

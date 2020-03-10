@@ -43,7 +43,7 @@ import 'package:test/test.dart';
 class TestPaths {
   static final TestPaths _self = TestPaths._internal();
 
-  static  String TEST_ROOT;
+  static String TEST_ROOT;
   static const String TEST_LINES_FILE = 'lines.txt';
 
   String home;
@@ -58,7 +58,7 @@ class TestPaths {
   }
 
   TestPaths._internal() {
-    TEST_ROOT =  join(rootPath, 'tmp', 'dshell');
+    TEST_ROOT = join(rootPath, 'tmp', 'dshell');
     // each unit test process has its own directory.
 
     testRoot = join(TEST_ROOT, '$pid');
@@ -85,7 +85,8 @@ class TestPaths {
     setEnv('PATH', path.join(Env().pathSeparator));
 
     var dshellPath = Settings().dshellPath;
-    if (!dshellPath.startsWith(join(rootPath, 'tmp')) || !HOME.startsWith(join(rootPath, 'tmp')))
+    if (!dshellPath.startsWith(join(rootPath, 'tmp')) ||
+        !HOME.startsWith(join(rootPath, 'tmp')))
     //  ||        !env('PUB_CACHE').startsWith('/tmp'))
     {
       printerr(

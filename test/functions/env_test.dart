@@ -46,17 +46,15 @@ void main() {
           t.expect(env('AppData'), userDataPath);
           t.expect(env('APPDATA'), userDataPath);
 
-          var available = <String, String> {};
+          var available = <String, String>{};
           available.putIfAbsent('APPDATA', () => env('APPDATA'));
           available.putIfAbsent('MixedCase', () => env('MixedCase'));
 
-          var expected = <String, String> {};
-          
+          var expected = <String, String>{};
+
           expected.putIfAbsent('APPDATA', () => userDataPath);
           expected.putIfAbsent('MixedCase', () => 'mixed data');
-          t.expect(
-              available,
-              t.contains(expected));
+          t.expect(available, t.contains(expected));
         } finally {
           Settings.reset();
           Env.reset();

@@ -59,7 +59,6 @@ class Read extends DShellFunction {
       Log.d('readStdin');
     }
 
-
     try {
       progress ??= Progress.devNull();
       String line;

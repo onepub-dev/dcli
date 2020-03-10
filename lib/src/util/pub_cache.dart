@@ -9,24 +9,22 @@ import '../../dshell.dart';
 class PubCache {
   static final PubCache _self = PubCache._internal();
 
-    String _pubCacheDir ;
-    String _pubCacheBinDir;
+  String _pubCacheDir;
+  String _pubCacheBinDir;
   static const String PUB_CACHE_ENV = 'PUB_CACHE';
-   String _pubCachePath;
+  String _pubCachePath;
 
   factory PubCache() {
     return _self;
   }
 
-  PubCache._internal()
-  {
-     _pubCacheDir = '.pub-cache';
-   
-    if (Platform.isWindows)
-    {
+  PubCache._internal() {
+    _pubCacheDir = '.pub-cache';
+
+    if (Platform.isWindows) {
       _pubCacheDir = join('Pub', 'Cache');
     }
-     _pubCacheBinDir = join(_pubCacheDir, 'bin');
+    _pubCacheBinDir = join(_pubCacheDir, 'bin');
   }
 
   // Returns the path to the .pub-cache directory

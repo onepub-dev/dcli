@@ -137,7 +137,7 @@ class StackTraceImpl implements core.StackTrace {
       var column = '0';
       var lineNo = '0';
       var sourcePath = sourceParts[1 + argOffset];
-      if (sourceParts.length > (2  + argOffset)) {
+      if (sourceParts.length > (2 + argOffset)) {
         lineNo = sourceParts[2 + argOffset];
       }
       if (sourceParts.length > (3 + argOffset)) {
@@ -149,7 +149,7 @@ class StackTraceImpl implements core.StackTrace {
 
       sourcePath = sourcePath.replaceAll('<anonymous closure>', '()');
       sourcePath = sourcePath.replaceAll('package:', '');
-      
+
       var frame = Stackframe(
           File(sourcePath), int.parse(lineNo), int.parse(column), details);
       stackFrames.add(frame);
@@ -174,7 +174,12 @@ class StackTraceImpl implements core.StackTrace {
   }
 }
 
-List<String> excludedSource = [join(rootPath, 'flutter'), join(rootPath, 'ui'), join(rootPath, 'async'), 'isolate'];
+List<String> excludedSource = [
+  join(rootPath, 'flutter'),
+  join(rootPath, 'ui'),
+  join(rootPath, 'async'),
+  'isolate'
+];
 bool isExcludedSource(Stackframe frame) {
   var excludeSource = false;
 

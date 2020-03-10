@@ -75,7 +75,6 @@ class RunnableProcess {
       String workingDirectory,
       bool terminal,
       bool nothrow}) {
-
     progress ??= Progress.devNull();
 
     try {
@@ -216,8 +215,7 @@ class RunnableProcess {
   void processUntilExit(Progress progress, {@required bool nothrow}) {
     var done = Completer<bool>();
 
-
-     progress ??= Progress.devNull();
+    progress ??= Progress.devNull();
 
     fProcess.then((process) {
       /// handle stdout stream
