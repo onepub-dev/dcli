@@ -1,4 +1,5 @@
 @Timeout(Duration(seconds: 600))
+@TestOn('!windows')
 import 'package:dshell/dshell.dart' hide equals;
 import 'package:dshell/src/util/progress.dart';
 import 'package:test/test.dart';
