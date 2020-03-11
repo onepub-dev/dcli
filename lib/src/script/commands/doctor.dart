@@ -43,14 +43,14 @@ class DoctorCommand extends Command {
     colprint('dart version', '${DartSdk().version}');
 
     colprint('dart exe path', '${privatePath(DartSdk().dartExePath)}');
-    var dartPath = which('dart', first: true).firstLine;
+    var dartPath = which(DartSdk.dartExeName, first: true).firstLine;
     colprint('dart path',
         '${privatePath(DartSdk().dartExePath)} : ${privatePath(dartPath)}');
-    var dart2NativePath = which('dart2native', first: true).firstLine;
+    var dart2NativePath = which(DartSdk.dart2NativeExeName, first: true).firstLine;
     colprint('dart2Native path',
         '${privatePath(DartSdk().dart2NativePath)} : ${privatePath(dart2NativePath)}');
     print('');
-    var pubPath = which('pub', first: true).firstLine;
+    var pubPath = which(DartSdk.pubExeName, first: true).firstLine;
     colprint('pub get path',
         '${privatePath(DartSdk().pubGetPath)} : ${privatePath(pubPath)}');
     colprint('Pub cache', '${privatePath(PubCache().path)}');
@@ -150,6 +150,14 @@ class _Owner {
   String group;
 
   _Owner(String path) {
+
+    if (Platform.isWindows)
+    {
+      user = 'Unknown';
+      group = 'Unknown';
+    }
+    else
+    {
     var lsLine = 'ls -alFd $path'.firstLine;
 
     if (lsLine == null) {
@@ -159,6 +167,7 @@ class _Owner {
     var parts = lsLine.split(' ');
     user = parts[2];
     group = parts[3];
+    }
   }
 
   @override
