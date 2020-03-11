@@ -10,7 +10,7 @@ void main() {
     TestFileSystem().withinZone((fs) {
       print('Dart Path: ${DartSdk().dartExePath}');
       print('Dart Path: ${DartSdk().dart2NativePath}');
-      print('Dart Path: ${DartSdk().pubGetPath}');
+      print('Dart Path: ${DartSdk().pubPath}');
       print('Dart Path: ${DartSdk().version}');
 
       which('dart', first: true).forEach((line) => print('which: $line'));

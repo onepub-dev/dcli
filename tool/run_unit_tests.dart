@@ -13,5 +13,5 @@ void main() {
     printerr(red("This script must be run from the package's root directory."));
     exit(1);
   }
-  'pub run test -j1'.run;
+  '${DartSdk().pubPath} run test -j1'.run;
 }

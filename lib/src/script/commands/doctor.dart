@@ -52,7 +52,7 @@ class DoctorCommand extends Command {
     print('');
     var pubPath = which(DartSdk.pubExeName, first: true).firstLine;
     colprint('pub get path',
-        '${privatePath(DartSdk().pubGetPath)} : ${privatePath(pubPath)}');
+        '${privatePath(DartSdk().pubPath)} : ${privatePath(pubPath)}');
     colprint('Pub cache', '${privatePath(PubCache().path)}');
 
     if (Platform.packageConfig == null) {

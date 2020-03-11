@@ -72,7 +72,7 @@ class DartSdk {
     return _exePath;
   }
 
-  String get pubGetPath => p.join(sdkPath, 'bin', pubExeName);
+  String get pubPath => p.join(sdkPath, 'bin', pubExeName);
 
   String get dart2NativePath => p.join(sdkPath, 'bin', dart2NativeExeName);
 
@@ -98,7 +98,7 @@ class DartSdk {
   void runPubGet(String workingDirectory,
       {Progress progress, bool compileExecutables}) {
     var process = RunnableProcess.fromCommandArgs(
-        pubGetPath, ['get', '--no-precompile'],
+        pubPath, ['get', '--no-precompile'],
         workingDirectory: workingDirectory);
 
     process.start();
