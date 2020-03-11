@@ -130,6 +130,16 @@ void main() {
     }
     return _hasPubspecAnnotation;
   }
+
+  /// Strips the root prefix of a path so we can use
+  /// it as part of the virtual projects path.
+  /// For linux this just removes any leading /
+  /// For windows this removes c:\
+  static String sansRoot(String path) {
+
+    return path.substring(p.rootPrefix(path).length);
+
+  }
 }
 
 class PithyGreetings {

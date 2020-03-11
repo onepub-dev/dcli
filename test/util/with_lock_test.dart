@@ -2,6 +2,7 @@
 @Timeout(Duration(minutes: 10))
 
 import 'dart:async';
+import 'dart:io';
 import 'dart:isolate';
 
 import 'package:dshell/dshell.dart';
@@ -11,6 +12,12 @@ import 'package:test/test.dart';
 import 'test_file_system.dart';
 
 void main() {
+  test('lock path', () {
+      var lockPath = join(rootPath, Directory.systemTemp.path, 'dshell', 'locks');
+      print(lockPath);
+  });
+
+  
   test('timeout catch', () {
     expect(() {
       TestFileSystem().withinZone((fs) async {

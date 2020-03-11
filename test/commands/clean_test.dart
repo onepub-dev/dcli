@@ -16,7 +16,7 @@ void main() {
         var exit = -1;
         try {
           // with a virtual pubspec
-          exit = EntryPoint().process(['clean', 'example/dsort.dart']);
+          exit = EntryPoint().process(['clean', join('example', 'dsort.dart')]);
         } on DShellException catch (e) {
           print(e);
         }

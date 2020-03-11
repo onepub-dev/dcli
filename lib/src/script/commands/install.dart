@@ -29,7 +29,6 @@ class InstallCommand extends Command {
 
   @override
   int run(List<Flag> selectedFlags, List<String> subarguments) {
-    var exitCode = 0;
     var scriptIndex = 0;
 
     // check the user
@@ -86,7 +85,7 @@ class InstallCommand extends Command {
 
     // Create dependencies.yaml
     var blue2 = blue(
-        'Creating ${Settings().dshellPath}/dependencies.yaml with default packages.');
+        'Creating ${join(Settings().dshellPath, "dependencies.yaml")} with default packages.');
     print(blue2);
     GlobalDependencies.createDefault();
 
@@ -197,7 +196,7 @@ class InstallCommand extends Command {
     print(blue('  Run your script by typing:'));
     print(blue('  ./<scriptname>.dart'));
 
-    return exitCode;
+    return 0;
   }
 
   @override

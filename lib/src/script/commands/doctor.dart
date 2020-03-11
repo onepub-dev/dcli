@@ -94,7 +94,7 @@ class DoctorCommand extends Command {
     showPermissions('templates', Settings().templatePath);
 
     print('');
-    print('.dshell/dependencies.yaml');
+    print(join('.dshell','dependencies.yaml'));
     var gd = GlobalDependencies();
     gd.dependencies.forEach((d) => colprint('  ${d.name}', '${d.rehydrate()}'));
 

@@ -193,7 +193,7 @@ class VirtualProject {
   VirtualProject._internal(String cacheRootPath, this.script) {
     // /home/bsutton/.dshell/cache/home/bsutton/git/dshell/test/test_scripts/hello_world.project
     _virtualProjectPath = join(cacheRootPath,
-        script.scriptDirectory.substring(1), script.basename + PROJECT_DIR);
+         Script.sansRoot(script.scriptDirectory), script.basename + PROJECT_DIR);
 
     _localPubspecIndicatorPath = join(_virtualProjectPath, USING_LOCAL_PUBSPEC);
     _virtualPubspecIndicatorPath =

@@ -3,6 +3,7 @@ import 'dart:io';
 
 import 'package:dshell/dshell.dart';
 import 'package:dshell/src/functions/env.dart';
+import 'package:dshell/src/script/script.dart';
 import 'package:dshell/src/script/virtual_project.dart';
 import 'package:path/path.dart';
 import 'package:test/test.dart';
@@ -123,11 +124,11 @@ class TestPaths {
         join(dirname(scriptName), basenameWithoutExtension(scriptName));
     if (scriptName.startsWith(Platform.pathSeparator)) {
       projectPath = truepath(Settings().dshellCachePath,
-          projectScriptPath.substring(1) + VirtualProject.PROJECT_DIR);
+          Script.sansRoot(projectScriptPath) + VirtualProject.PROJECT_DIR);
     } else {
       projectPath = truepath(
           Settings().dshellCachePath,
-          testScriptPath.substring(1),
+          Script.sansRoot(testScriptPath),
           projectScriptPath + VirtualProject.PROJECT_DIR);
     }
     return projectPath;
