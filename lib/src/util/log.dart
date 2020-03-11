@@ -75,7 +75,6 @@ class Log extends Logger {
 
     for (var frame in frames.frames) {
       _localPath = basename(frame.sourceFile.path);
-          // .substring(frame.sourceFile.path.lastIndexOf(separator));
       break;
     }
   }

@@ -279,20 +279,19 @@ class PowerShell implements Shell
 
   @override
   void installTabCompletion() {
-    // TODO: implement installTabCompletion
+   // not supported.
   }
 
   @override
-  // TODO: implement isCompletionInstalled
-  bool get isCompletionInstalled => null;
+  
+  bool get isCompletionInstalled => false;
 
   @override
-  // TODO: implement isCompletionSupported
-  bool get isCompletionSupported => null;
+  
+  bool get isCompletionSupported => false;
 
   @override
-  // TODO: implement name
-  String get name => null;
+  String get name => 'powershell';
 
   @override
   // TODO: implement startScriptName
