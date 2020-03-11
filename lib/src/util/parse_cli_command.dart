@@ -178,11 +178,12 @@ class _QArg {
 
   /// We only do glob expansion if the arg contains at least one of
   /// *, [, ?
-  /// 
+  ///
   /// Note: under Windows powershell does perform glob expansion so we need
-  /// to supress glob expansion. 
+  /// to supress glob expansion.
   bool get needsExpansion {
-    return !Platform.isWindows && (arg.contains('*') || arg.contains('[') || arg.contains('?'));
+    return !Platform.isWindows &&
+        (arg.contains('*') || arg.contains('[') || arg.contains('?'));
   }
 
   static List<_QArg> translate(List<String> args) {

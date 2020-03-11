@@ -1,3 +1,8 @@
+### 1.8.4-dev.7
+Disabled globing under windows as powershow doesn't perform glob expansion.
+The stackframe path contain the wrong slash so moved to using basename which seems to deal with this problem for us.
+early experiments with replacement for ls under windows in unit tests.
+
 ### 1.8.4-dev.6
 Renamed pubGetPath to pubPath
 Fixed dshell doctor so it runs under windows.
