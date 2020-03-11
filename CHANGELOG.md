@@ -1,3 +1,6 @@
+### 1.8.4-dev.5
+exposed startFromArgs and run.
+
 ### 1.8.4-dev.4
 removed dshell_complete from windows unit tests as its not supported.
 Fixed references to dshell exe names which all end in .bat on windows. 
