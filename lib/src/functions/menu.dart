@@ -11,7 +11,7 @@ import '../../dshell.dart';
 /// e.g.
 /// ```dart
 /// var colors = [Color('Red'), Color('Green')];
-/// var color = menu('Please select a color', colors);
+/// var color = menu(prompt: 'Please select a color', options: colors);
 /// ```
 /// Results in:
 ///```
@@ -36,7 +36,7 @@ import '../../dshell.dart';
 /// ```dart
 ///
 /// var colors = [Color('Red'), Color('Green')];
-/// var color = menu('Please select a color', colors, format: (color) => color.name);
+/// var color = menu(prompt: 'Please select a color', options: colors, format: (color) => color.name);
 /// ```
 ///
 /// If [format] is null then [option.toString()] will be used
