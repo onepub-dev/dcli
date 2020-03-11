@@ -48,7 +48,7 @@ export 'src/functions/read.dart' show read, readStdin, ReadException;
 export 'src/functions/delete_dir.dart' show deleteDir, DeleteDirException;
 export 'src/functions/sleep.dart' show sleep;
 export 'src/settings.dart' show Settings;
-export 'src/functions/run.dart' show start;
+export 'src/functions/run.dart' show run, start, startFromArgs;
 export 'src/functions/touch.dart' show touch, TouchException;
 export 'src/functions/which.dart' show which;
 
