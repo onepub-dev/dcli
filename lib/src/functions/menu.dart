@@ -1,5 +1,6 @@
 import 'dart:math';
 
+import 'package:dshell/src/script/command_line_runner.dart';
 import 'package:meta/meta.dart';
 
 import '../../dshell.dart';
@@ -53,11 +54,11 @@ T menu<T>(
     String Function(T) format,
     bool fromStart = true}) {
   if (options == null || options.isEmpty) {
-    throw DShellException(
+    throw InvalidArguments(
         'The list of [options] passed to menu(options: ) was empty.');
   }
   if (prompt == null) {
-    throw DShellException('The [prompt] passed to menu(prompt: ) was null.');
+    throw InvalidArguments('The [prompt] passed to menu(prompt: ) was null.');
   }
   limit ??= options.length;
 
