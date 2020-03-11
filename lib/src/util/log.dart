@@ -74,8 +74,8 @@ class Log extends Logger {
     var frames = StackTraceImpl();
 
     for (var frame in frames.frames) {
-      _localPath = frame.sourceFile.path
-          .substring(frame.sourceFile.path.lastIndexOf(separator));
+      _localPath = basename(frame.sourceFile.path);
+          // .substring(frame.sourceFile.path.lastIndexOf(separator));
       break;
     }
   }
