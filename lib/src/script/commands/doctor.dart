@@ -41,7 +41,9 @@ class DoctorCommand extends Command {
     colprint('Path separator', '${Platform.pathSeparator}');
     print('');
     colprint('dart version', '${DartSdk().version}');
+    print('');
 
+    colprint('dshell path', '${privatePath(which("dshell").firstLine)}');
     colprint('dart exe path', '${privatePath(DartSdk().dartExePath)}');
     var dartPath = which(DartSdk.dartExeName, first: true).firstLine;
     colprint('dart path',
@@ -55,6 +57,7 @@ class DoctorCommand extends Command {
     colprint('pub get path',
         '${privatePath(DartSdk().pubPath)} : ${privatePath(pubPath)}');
     colprint('Pub cache', '${privatePath(PubCache().path)}');
+     
 
     if (Platform.packageConfig == null) {
       colprint('Package Config', 'Not Passed');
