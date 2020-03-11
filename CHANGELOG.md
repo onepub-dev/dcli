@@ -1,3 +1,13 @@
+### 1.8.4-dev.6
+Renamed pubGetPath to pubPath
+Fixed dshell doctor so it runs under windows.
+Excluded call to chmod on windows as it isn't necessary.
+Fixed a bug under windows we building the path to a srcripts virtual directory. 
+Additional work on cleaning out hardcoded slashes.
+Change the exception to InvalidArguments.
+Fixed bugs and made changes to the menu api.
+  Fixed two problems. 1) if the limit was greater than the no. of options an arrayOutofBounds was thrown. The menu now just displays the available options. 2) If the options list is empty we now throw an exception with a useful message. 3) broke the api by changing the prompt and options to named arguments.
+
 ### 1.8.4-dev.5
 exposed startFromArgs and run.
 

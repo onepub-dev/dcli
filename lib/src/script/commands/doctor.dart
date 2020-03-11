@@ -46,7 +46,8 @@ class DoctorCommand extends Command {
     var dartPath = which(DartSdk.dartExeName, first: true).firstLine;
     colprint('dart path',
         '${privatePath(DartSdk().dartExePath)} : ${privatePath(dartPath)}');
-    var dart2NativePath = which(DartSdk.dart2NativeExeName, first: true).firstLine;
+    var dart2NativePath =
+        which(DartSdk.dart2NativeExeName, first: true).firstLine;
     colprint('dart2Native path',
         '${privatePath(DartSdk().dart2NativePath)} : ${privatePath(dart2NativePath)}');
     print('');
@@ -94,7 +95,7 @@ class DoctorCommand extends Command {
     showPermissions('templates', Settings().templatePath);
 
     print('');
-    print(join('.dshell','dependencies.yaml'));
+    print(join('.dshell', 'dependencies.yaml'));
     var gd = GlobalDependencies();
     gd.dependencies.forEach((d) => colprint('  ${d.name}', '${d.rehydrate()}'));
 
@@ -150,23 +151,19 @@ class _Owner {
   String group;
 
   _Owner(String path) {
-
-    if (Platform.isWindows)
-    {
+    if (Platform.isWindows) {
       user = 'Unknown';
       group = 'Unknown';
-    }
-    else
-    {
-    var lsLine = 'ls -alFd $path'.firstLine;
+    } else {
+      var lsLine = 'ls -alFd $path'.firstLine;
 
-    if (lsLine == null) {
-      throw DShellException('No file/directory matched ${absolute(path)}');
-    }
+      if (lsLine == null) {
+        throw DShellException('No file/directory matched ${absolute(path)}');
+      }
 
-    var parts = lsLine.split(' ');
-    user = parts[2];
-    group = parts[3];
+      var parts = lsLine.split(' ');
+      user = parts[2];
+      group = parts[3];
     }
   }
 

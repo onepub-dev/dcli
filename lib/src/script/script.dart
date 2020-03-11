@@ -136,9 +136,7 @@ void main() {
   /// For linux this just removes any leading /
   /// For windows this removes c:\
   static String sansRoot(String path) {
-
     return path.substring(p.rootPrefix(path).length);
-
   }
 }
 

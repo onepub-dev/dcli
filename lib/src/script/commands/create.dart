@@ -61,9 +61,8 @@ class CreateCommand extends Command {
     var project = VirtualProject.create(_script);
     project.build(background: !flagSet.isSet(ForegroundFlag()));
 
-    if (!Platform.isWindows)
-    {
-    chmod(755, p.join(_script.scriptDirectory, _script.scriptname));
+    if (!Platform.isWindows) {
+      chmod(755, p.join(_script.scriptDirectory, _script.scriptname));
     }
 
     print('');
