@@ -263,6 +263,47 @@ class ZshShell implements Shell {
   }
 }
 
+class PowerShell implements Shell
+{
+  @override
+  bool addToPath(String path) {
+    // TODO: implement addToPath
+
+    /// These need to be run as admin
+    /// not working correctly at this point.
+    /// Looks like powershell ignores the file association.
+    'cmd /c assoc .dart=dshell'.run;
+    r'''cmd /c ftype dshell=`"C:\Users\User\dshell`" `"%1`" `"%2`" `"%3`" `"%4`" `"%5`" `"%6`" `"%7`" `"%8`" `"%9`"'''.run;
+    return null;
+  }
+
+  @override
+  void installTabCompletion() {
+    // TODO: implement installTabCompletion
+  }
+
+  @override
+  // TODO: implement isCompletionInstalled
+  bool get isCompletionInstalled => null;
+
+  @override
+  // TODO: implement isCompletionSupported
+  bool get isCompletionSupported => null;
+
+  @override
+  // TODO: implement name
+  String get name => null;
+
+  @override
+  // TODO: implement startScriptName
+  String get startScriptName => null;
+
+  @override
+  // TODO: implement startScriptPath
+  String get startScriptPath => null;
+  
+}
+
 /// Used by dshell to interacte with the shell
 /// environment when we are unable to detect
 /// what shell is active.
