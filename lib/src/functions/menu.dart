@@ -1,3 +1,7 @@
+import 'dart:math';
+
+import 'package:meta/meta.dart';
+
 import '../../dshell.dart';
 
 /// Displays a menu with each of the provided [options], prompts
@@ -42,14 +46,25 @@ import '../../dshell.dart';
 /// last [limit] options.
 ///
 
-T menu<T>(String prompt, List<T> options,
-    {int limit, String Function(T) format, bool fromStart = true}) {
+T menu<T>(
+    {@required String prompt,
+    @required List<T> options,
+    int limit,
+    String Function(T) format,
+    bool fromStart = true}) {
+  if (options == null || options.isEmpty) {
+    throw DShellException(
+        'The list of [options] passed to menu(options: ) was empty.');
+  }
+  if (prompt == null) {
+    throw DShellException('The [prompt] passed to menu(prompt: ) was null.');
+  }
   limit ??= options.length;
 
   var displayList = options;
   if (fromStart == false) {
     // get the last [limit] options
-    displayList = options.sublist(options.length - limit);
+    displayList = options.sublist(max(options.length, options.length - limit));
   }
 
   // display each option.
