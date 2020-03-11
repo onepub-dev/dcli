@@ -1,5 +1,8 @@
-#! /usr/bin/env dshell
 @Timeout(Duration(minutes: 10))
+
+import 'dart:io';
+
+
 
 import 'package:dshell/src/functions/run.dart';
 import 'package:path/path.dart';
@@ -12,9 +15,33 @@ void main() {
     TestFileSystem().withinZone((fs) async {
       var path = join(fs.root, 'top');
       print('starting ls in ${path}');
+
+      String command;
+      var skipLines = 0;
+      if (Platform.isWindows)
+      {
+
+        command = 'get-item  *.txt'; //  | Format-Wide -Property Name -Column 1';
+        skipLines = 1;
+
+      }
+      else
+      {
+        command = 'ls *.txt';
+
+      }
       var found = <String>[];
-      start('ls *.txt', workingDirectory: path)
-          .forEach((file) => found.add(file));
+      start(command, workingDirectory: path)
+          .forEach((file) {
+            if (skipLines == 0)
+            {
+            found.add(file);
+            }
+            else
+            {
+              skipLines--;
+            }
+          });
 
       expect(found, <String>[
         join(path, 'one.txt'),
