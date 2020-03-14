@@ -5,6 +5,7 @@ import 'package:dshell/dshell.dart';
 import 'package:dshell/src/functions/env.dart';
 import 'package:dshell/src/script/script.dart';
 import 'package:dshell/src/script/virtual_project.dart';
+import 'package:dshell/src/util/dshell_paths.dart';
 import 'package:path/path.dart';
 import 'package:test/test.dart';
 
@@ -153,7 +154,7 @@ class TestPaths {
     if (!exists(Settings().dshellPath)) {
       createDir(Settings().dshellPath);
 
-      'dshell install'.run;
+      '${DShellPaths().dshellName} install'.run;
     }
   }
 }

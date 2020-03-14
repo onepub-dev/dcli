@@ -23,7 +23,7 @@ void main() {
   }
 
   // make certain all script see the new settings.
-  'dshell install -nc'.run;
+  '${DShellPaths().dshellName} install -nc'.run;
 
   dependency.append('dependency_overrides:');
   dependency.append('  dshell:');

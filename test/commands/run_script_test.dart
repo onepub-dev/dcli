@@ -2,6 +2,7 @@
 
 import 'package:dshell/dshell.dart' hide equals;
 import 'package:dshell/src/script/entry_point.dart';
+import 'package:dshell/src/util/dshell_paths.dart';
 import 'package:dshell/src/util/runnable_process.dart';
 import 'package:test/test.dart';
 
@@ -12,7 +13,7 @@ void main() {
     TestFileSystem().withinZone((fs) {
       var results = <String>[];
 
-      'dshell -v test/test_scripts/hello_world.dart'.forEach(
+      '${DShellPaths().dshellName} -v test/test_scripts/hello_world.dart'.forEach(
           (line) => results.add(line),
           stderr: (line) => printerr(line));
 

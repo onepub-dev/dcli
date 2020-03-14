@@ -1,5 +1,6 @@
 @Timeout(Duration(seconds: 600))
 import 'package:dshell/src/script/entry_point.dart';
+import 'package:dshell/src/util/dshell_paths.dart';
 import 'package:test/test.dart' as t;
 import 'package:dshell/dshell.dart';
 import 'package:test/test.dart';
@@ -32,11 +33,11 @@ void main() {
         var script = truepath(scriptPath, 'run_echo.dart');
 
         // make certain our test script will run
-        'dshell -v create -fg $script'.run;
+        '${DShellPaths().dshellName} -v create -fg $script'.run;
 
         // run a script that uses '.run' and capture its output to prove
         // that .run works.
-        var results = 'dshell $script'.toList();
+        var results = '${DShellPaths().dshellName} $script'.toList();
 
         var expected = <String>['Hello World'];
 
@@ -58,7 +59,7 @@ void main() {
         var script = truepath(scriptPath, 'run_echo.dart');
 
         // make certain our test script exists and is in a runnable state.
-        'dshell -v create -fg $script'.run;
+        '${DShellPaths().dshellName} -v create -fg $script'.run;
 
         EntryPoint().process(['run', script]);
 
