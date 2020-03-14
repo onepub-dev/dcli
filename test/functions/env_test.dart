@@ -31,12 +31,6 @@ void main() {
 
           var userDataPath = 'C:\\Windows\\Userdata';
 
-          // windows we can't add a path just expect user message.
-
-          // when(mockEnv.HOME).thenReturn('C:\\Windows\\Userdata');
-          // when(mockEnv.env('APPDATA')).thenReturn(userDataPath);
-          // when(mockEnv.env('MixedCase')).thenReturn(userDataPath);
-
           setEnv('HOME', userDataPath);
           setEnv('APPDATA', userDataPath);
           setEnv('MixedCase', 'mixed data');
@@ -54,7 +48,7 @@ void main() {
 
           expected.putIfAbsent('APPDATA', () => userDataPath);
           expected.putIfAbsent('MixedCase', () => 'mixed data');
-          t.expect(available, t.contains(expected));
+          t.expect(available, expected);
         } finally {
           Settings.reset();
           Env.reset();
