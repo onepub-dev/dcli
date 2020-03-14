@@ -135,6 +135,9 @@ dependency_overrides:
       // over-ride the default 'dependencies.yaml
       var depPath = join(Settings().dshellPath, GlobalDependencies.filename);
       var backup = '$depPath.bak';
+      if (exists(backup)) {
+        delete(backup);
+      }
       copy(depPath, backup);
       depPath.write(content);
 

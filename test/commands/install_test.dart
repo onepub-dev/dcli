@@ -2,6 +2,7 @@
 import 'package:dshell/dshell.dart' hide equals;
 import 'package:dshell/src/functions/env.dart';
 import 'package:dshell/src/pubspec/global_dependencies.dart';
+import 'package:dshell/src/script/dependency.dart';
 import 'package:dshell/src/script/entry_point.dart';
 import 'package:mockito/mockito.dart';
 import 'package:pubspec/pubspec.dart';
@@ -108,14 +109,24 @@ void checkInstallStructure() {
 
   expect(exists(truepath(HOME, '.dshell', 'templates')), equals(true));
 
-  expect(exists(truepath(HOME, '.dshell', GlobalDependencies.filename)), equals(true));
+  expect(exists(truepath(HOME, '.dshell', GlobalDependencies.filename)),
+      equals(true));
 
-  var content = read(truepath(HOME, '.dshell', GlobalDependencies.filename)).toList();
+  var content =
+      read(truepath(HOME, '.dshell', GlobalDependencies.filename)).toList();
   var expected = ['dependencies:'];
 
   for (var dep in GlobalDependencies.defaultDependencies) {
-    expected.add(
-        '  ${dep.name}: ${(dep.reference as HostedReference).versionConstraint.toString()}');
+    if (dep.name == 'dshell') {
+      /// The TestFileSystem uses the locally installed version of dshell
+      /// The unit tests are always launched from the dshell directory
+      /// hence pwd will point to the locally installed dshell.
+      expected.add('  ${dep.name}:');
+      expected.add('    path: $pwd');
+    } else {
+      expected.add(
+          '  ${dep.name}: ${(dep.reference as HostedReference).versionConstraint.toString()}');
+    }
   }
 
   expect(content, equals(expected));
