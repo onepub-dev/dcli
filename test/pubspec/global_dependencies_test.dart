@@ -141,7 +141,7 @@ dependency_overrides:
       var gd = GlobalDependencies.fromFile(depPath);
 
       var expected = [
-        Dependency.fromPath('dshell', join(HOME, 'git', 'dshell')),
+        Dependency.fromPath('dshell', join('~', 'git', 'dshell')),
         Dependency.fromHosted('args', '^1.5.2'),
         Dependency.fromHosted('path', '^1.6.4'),
       ];
