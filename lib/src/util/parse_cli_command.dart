@@ -223,7 +223,26 @@ class _QArg {
       // the original arg.
       return [arg];
     } else {
-      return files.map((f) => f.path);
+      return files
+          .where((f) => !isHidden(workingDirectory, f))
+          .map((f) => f.path);
     }
+  }
+
+  // check if the entity is a hidden file (.xxx) or
+  // if lives in a hidden directory.
+  bool isHidden(String root, FileSystemEntity entity) {
+    var relativePath = relative(entity.path, from: root);
+
+    var parts = relativePath.split(separator);
+
+    var isHidden = false;
+    for (var part in parts) {
+      if (part.startsWith('.')) {
+        isHidden = true;
+        break;
+      }
+    }
+    return isHidden;
   }
 }
