@@ -108,7 +108,8 @@ class NamedLock {
       }
     }, onError: (Object e, StackTrace st) {
       if (lockHeld) releaseLock();
-      var stackTrace = StackTraceImpl.fromStackTrace(st, skipFrames: 10);
+      //var stackTrace = StackTraceImpl.fromStackTrace(st, skipFrames: 10);
+      var stackTrace = StackTraceImpl.fromStackTrace(st);
       Settings().verbose(stackTrace.formatStackTrace());
 
       if (e is DShellException) {
