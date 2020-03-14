@@ -5,6 +5,7 @@ import 'dart:isolate';
 
 import 'package:dshell/dshell.dart';
 import 'package:dshell/src/functions/env.dart';
+import 'package:dshell/src/pubspec/global_dependencies.dart';
 import 'package:path/path.dart';
 import 'package:dshell/src/script/entry_point.dart';
 import 'package:dshell/src/script/script.dart';
@@ -24,6 +25,11 @@ class TestFileSystem {
   String hidden;
 
   static String _TEST_ROOT;
+
+  /// directory under .dshell which we used to store compiled
+  /// tests scripts that we need to add to the TestFileSystems
+  /// path.
+  static const String _TEST_BIN = 'test_bin';
   static const String TEST_LINES_FILE = 'lines.txt';
 
   String home;
@@ -135,6 +141,7 @@ class TestFileSystem {
       copyPubCache(originalHome, HOME);
       buildTestFileSystem();
       install_dshell();
+      install_cross_platform_test_scripts(originalHome);
     }
   }
 
@@ -223,6 +230,29 @@ class TestFileSystem {
     '${DartSdk.pubExeName} global activate --source path $pwd'.run;
 
     EntryPoint().process(['install']);
+
+    /// rewrite dependencies.yaml so that the dshell path points
+    /// to the dev build directory
+    var dependencyFile =
+        join(Settings().dshellPath, GlobalDependencies.filename);
+    var lines = read(dependencyFile).toList();
+
+    var newContent = <String>[];
+
+    for (var line in lines) {
+      if (line.trim().startsWith('dshell')) {
+        newContent.add('  dshell:');
+        newContent.add('    path: $pwd');
+      } else {
+        newContent.add(line);
+      }
+    }
+
+    var backup = dependencyFile + '.bak';
+    if (exists(backup)) delete(backup);
+    move(dependencyFile, backup);
+
+    dependencyFile.write(newContent.join('\n'));
   }
 
   void rebuildPath() {
@@ -269,4 +299,34 @@ class TestFileSystem {
 
     Settings().setVerbose(verbose);
   }
+
+
+  void install_cross_platform_test_scripts(String originalHome) {
+    var required = ['head', 'tail', 'ls', 'touch'];
+
+    var testbinPath = join(originalHome, '.dshell', _TEST_BIN);
+
+    if (!exists(testbinPath)) {
+      createDir(testbinPath, recursive: true);
+    }
+
+    for (var command in required) {
+      if (exists(join(testbinPath, command))) {
+        // copy the existing command into the testzones .dshell/bin path
+        copy(join(testbinPath, command),
+            join(Settings().dshellBinPath, command));
+      } else {
+        /// compile and install the command
+        'dshell compile -i test/test_scripts/$command.dart'.run;
+        // copy it back to the dshell testbin so the next unit
+        // test doesn't have to compile it.
+        copy(join(Settings().dshellBinPath, command),
+            join(testbinPath, command));
+      }
+    }
+  }
+}
+
+class TestFileSystemException extends DShellException {
+  TestFileSystemException(String message) : super(message);
 }
