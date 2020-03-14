@@ -29,6 +29,11 @@ class Progress {
   /// suppressed.
   Progress.devNull();
 
+  /// Use this progress to only output data from  stdout
+  Progress.printStdOut() {
+    _wireStreams((line) => print(line), devNull);
+  }
+
   void addToStdout(String line) {
     if (!closed) {
       stdoutController.sink.add(line);
