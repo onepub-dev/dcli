@@ -128,7 +128,7 @@ class TestFileSystem {
           setEnv('PATH', path);
         }
       });
-    } on DShellException catch (e, st) {
+    } on DShellException catch (e) {
       print(e.toString());
       e.printStackTrace();
       rethrow;
