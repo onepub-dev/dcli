@@ -1,7 +1,3 @@
-@Timeout(Duration(minutes: 10))
-
-import 'dart:io';
-
 import 'package:dshell/src/functions/run.dart';
 import 'package:path/path.dart';
 import 'package:test/test.dart';
@@ -15,21 +11,10 @@ void main() {
       print('starting ls in ${path}');
 
       String command;
-      var skipLines = 0;
-      if (Platform.isWindows) {
-        command =
-            'get-item  *.txt'; //  | Format-Wide -Property Name -Column 1';
-        skipLines = 1;
-      } else {
-        command = 'ls *.txt';
-      }
+      command = 'ls *.txt';
       var found = <String>[];
       start(command, workingDirectory: path).forEach((file) {
-        if (skipLines == 0) {
-          found.add(file);
-        } else {
-          skipLines--;
-        }
+        found.add(file);
       });
 
       expect(found, <String>[
