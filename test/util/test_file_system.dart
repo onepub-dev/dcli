@@ -92,34 +92,41 @@ class TestFileSystem {
   String tempFile({String suffix}) => FileSync.tempFile(suffix: suffix);
 
   void withinZone(void Function(TestFileSystem fs) callback) {
-    NamedLock(name: 'test_file_system.lock').withLock(() {
-      Settings.reset();
-      Env.reset();
-      PubCache.unitTestreset();
-      // print('PATH: $PATH');
-      // print(which(DartSdk.pubExeName).firstLine);
-      var home = HOME;
-      var path = env('PATH');
-      try {
-        setEnv('HOME', root);
+    try {
+      NamedLock(name: 'test_file_system.lock').withLock(() {
+        Settings.reset();
+        Env.reset();
+        PubCache.unitTestreset();
+        // print('PATH: $PATH');
+        // print(which(DartSdk.pubExeName).firstLine);
+        var home = HOME;
+        var path = env('PATH');
+        try {
+          setEnv('HOME', root);
 
-        rebuildPath();
+          rebuildPath();
 
-        var isolateID = Service.getIsolateID(Isolate.current);
-        print(green('Using TestFileSystem $root for Isolate: $isolateID'));
-        print('Reset dshellPath: ${Settings().dshellPath}');
+          var isolateID = Service.getIsolateID(Isolate.current);
+          print(green('Using TestFileSystem $root for Isolate: $isolateID'));
+          print('Reset dshellPath: ${Settings().dshellPath}');
 
-        initFS(home);
+          initFS(home);
 
-        callback(this);
-      } catch (e) {
-        Settings().verbose(e.toString());
-        rethrow;
-      } finally {
-        setEnv('HOME', home);
-        setEnv('PATH', path);
-      }
-    });
+          callback(this);
+        } catch (e, st) {
+          Settings().verbose(e.toString());
+          st.toString();
+          rethrow;
+        } finally {
+          setEnv('HOME', home);
+          setEnv('PATH', path);
+        }
+      });
+    } on DShellException catch (e, st) {
+      print(e.toString());
+      e.printStackTrace();
+      rethrow;
+    }
   }
 
   void initFS(String originalHome) {
