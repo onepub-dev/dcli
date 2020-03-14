@@ -3,7 +3,6 @@ import '../util/file_sync.dart';
 import '../util/progress.dart';
 
 import '../settings.dart';
-import '../util/log.dart';
 
 import 'is.dart';
 
