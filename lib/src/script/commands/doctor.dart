@@ -93,8 +93,8 @@ class DoctorCommand extends Command {
     showPermissions('.dshell', Settings().dshellPath);
     showPermissions('cache', Settings().dshellCachePath);
 
-    showPermissions(
-        GlobalDependencies.filename, join(Settings().dshellPath, GlobalDependencies.filename));
+    showPermissions(GlobalDependencies.filename,
+        join(Settings().dshellPath, GlobalDependencies.filename));
 
     showPermissions('templates', Settings().templatePath);
 

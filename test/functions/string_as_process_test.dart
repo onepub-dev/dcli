@@ -11,7 +11,6 @@ import 'package:test/test.dart';
 import '../util/test_file_system.dart';
 
 void main() {
-
   t.group('StringAsProcess', () {
     t.test('Check .run executes', () {
       TestFileSystem().withinZone((fs) {

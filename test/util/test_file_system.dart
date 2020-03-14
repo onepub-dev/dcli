@@ -301,7 +301,6 @@ class TestFileSystem {
     Settings().setVerbose(verbose);
   }
 
-
   void install_cross_platform_test_scripts(String originalHome) {
     var required = ['head', 'tail', 'ls', 'touch'];
 
@@ -318,7 +317,8 @@ class TestFileSystem {
             join(Settings().dshellBinPath, command));
       } else {
         /// compile and install the command
-        '${DShellPaths().dshellName} compile -i test/test_scripts/$command.dart'.run;
+        '${DShellPaths().dshellName} compile -i test/test_scripts/$command.dart'
+            .run;
         // copy it back to the dshell testbin so the next unit
         // test doesn't have to compile it.
         copy(join(Settings().dshellBinPath, command),

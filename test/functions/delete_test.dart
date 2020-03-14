@@ -6,7 +6,6 @@ import 'package:test/test.dart';
 import '../util/test_file_system.dart';
 
 void main() {
-
   t.group('Delete', () {
     t.test('delete ', () {
       TestFileSystem().withinZone((fs) {

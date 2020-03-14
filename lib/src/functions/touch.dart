@@ -28,7 +28,7 @@ class Touch extends DShellFunction {
   void touch(String path, {bool create = false}) {
     var absolute = p.absolute(path);
 
-      Settings().verbose('touch: ${absolute} create: $create');
+    Settings().verbose('touch: ${absolute} create: $create');
 
     if (!exists(p.dirname(absolute))) {
       throw TouchException(

@@ -1,5 +1,4 @@
 #! /usr/bin/env dshell
-
 import 'package:dshell/dshell.dart';
 
 /// Used by unit tests as a cross platform version of cat

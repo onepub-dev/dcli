@@ -8,7 +8,6 @@ import 'package:dshell/dshell.dart';
 import '../util/test_file_system.dart';
 
 void main() {
-
   t.group('Head', () {
     t.test('head 5', () {
       TestFileSystem().withinZone((fs) {

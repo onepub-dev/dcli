@@ -13,9 +13,9 @@ void main() {
     TestFileSystem().withinZone((fs) {
       var results = <String>[];
 
-      '${DShellPaths().dshellName} -v test/test_scripts/hello_world.dart'.forEach(
-          (line) => results.add(line),
-          stderr: (line) => printerr(line));
+      '${DShellPaths().dshellName} -v test/test_scripts/hello_world.dart'
+          .forEach((line) => results.add(line),
+              stderr: (line) => printerr(line));
 
       // if clean hasn't been run then we have the results of a pub get in the the output.
 

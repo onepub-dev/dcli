@@ -9,7 +9,6 @@ import '../mocks/mock_settings.dart';
 import '../util/test_file_system.dart';
 
 void main() {
-
   t.group('Environment', () {
     t.test('PATH', () {
       TestFileSystem().withinZone((fs) {

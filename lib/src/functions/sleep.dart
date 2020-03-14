@@ -22,7 +22,7 @@ enum Interval { seconds, millseconds, minutes }
 
 class Sleep extends DShellFunction {
   void sleep(int duration, {Interval interval = Interval.seconds}) {
-      Settings().verbose('sleep: duration: ${duration} interval: $interval');
+    Settings().verbose('sleep: duration: ${duration} interval: $interval');
     Duration _duration;
     switch (interval) {
       case Interval.seconds:

@@ -52,7 +52,7 @@ class Read extends DShellFunction {
   }
 
   Progress readStdin({Progress progress}) {
-      Settings().verbose('readStdin');
+    Settings().verbose('readStdin');
 
     try {
       progress ??= Progress.devNull();

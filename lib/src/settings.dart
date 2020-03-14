@@ -214,7 +214,6 @@ class InternalSettings {
 
   StackList<Directory> directoryStack = StackList();
 
-
   bool get isStackEmpty => directoryStack.isEmpty;
 
   factory InternalSettings() {

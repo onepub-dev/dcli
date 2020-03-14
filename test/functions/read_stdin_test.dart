@@ -5,7 +5,6 @@ import 'package:dshell/dshell.dart';
 import '../util/test_file_system.dart';
 
 void main() {
-
   // can't be run from within vscode as it needs console input.
   t.group('Read from stdin', () {
     t.test('Read and then write ', () {

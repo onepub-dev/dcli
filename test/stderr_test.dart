@@ -7,7 +7,6 @@ import 'package:test/test.dart';
 import 'util/test_file_system.dart';
 
 void main() {
-
   t.test('Stderr', () {
     TestFileSystem().withinZone((fs) {
       print('$pwd');

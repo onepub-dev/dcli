@@ -37,5 +37,4 @@ void main() {
   }, onPlatform: <String, Skip>{
     'posix': Skip('posix systems do glob expansion'),
   });
-
 }
