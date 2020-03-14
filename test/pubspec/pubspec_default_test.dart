@@ -108,9 +108,6 @@ $overrides
       file.writeToFile(pubSpecScriptPath);
 
       var dependencies = <Dependency>[];
-      dependencies.add(Dependency.fromHosted('dshell', '^1.0.0'));
-      dependencies.add(Dependency.fromHosted('args', '^1.5.2'));
-      dependencies.add(Dependency.fromHosted('path', '^1.6.4'));
       dependencies.add(Dependency.fromHosted('collection', '^1.14.12'));
       dependencies.add(Dependency.fromHosted('file_utils', '^0.1.3'));
       runTest(fs, null, main, dependencies);
