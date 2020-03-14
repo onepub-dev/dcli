@@ -6,6 +6,7 @@ import 'dart:isolate';
 import 'package:dshell/dshell.dart';
 import 'package:dshell/src/functions/env.dart';
 import 'package:dshell/src/pubspec/global_dependencies.dart';
+import 'package:dshell/src/util/dshell_paths.dart';
 import 'package:path/path.dart';
 import 'package:dshell/src/script/entry_point.dart';
 import 'package:dshell/src/script/script.dart';
@@ -317,7 +318,7 @@ class TestFileSystem {
             join(Settings().dshellBinPath, command));
       } else {
         /// compile and install the command
-        'dshell compile -i test/test_scripts/$command.dart'.run;
+        '${DShellPaths().dshellName} compile -i test/test_scripts/$command.dart'.run;
         // copy it back to the dshell testbin so the next unit
         // test doesn't have to compile it.
         copy(join(Settings().dshellBinPath, command),

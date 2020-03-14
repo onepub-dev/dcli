@@ -305,7 +305,7 @@ class VirtualProject {
           print('DShell clean started in the background.');
           // ('dshell clean ${script.path}' | 'echo > ${dirname(path)}/log').run;
           // 'dshell -v clean ${script.path}'.run;
-          'dshell -v=${join(Directory.systemTemp.path, 'dshell.clean.log')} clean ${script.path}'
+          '${DShellPaths().dshellName} -v=${join(Directory.systemTemp.path, 'dshell.clean.log')} clean ${script.path}'
               .start(detached: true, runInShell: true);
         } else {
           print('Running pub get...');
