@@ -8,7 +8,6 @@ import 'package:uuid/uuid.dart';
 import 'wait_for_ex.dart';
 
 import 'dshell_exception.dart';
-import 'log.dart';
 import 'runnable_process.dart';
 import 'stack_trace_impl.dart';
 
@@ -114,34 +113,29 @@ class FileSync {
     Object exception;
 
     var done = Completer<bool>();
-    // bool stop = false;
 
-    try {
-      StreamSubscription<String> subscription;
+    StreamSubscription<String> subscription;
 
-      subscription =
-          utf8.decoder.bind(inputStream).transform(const LineSplitter()).listen(
-              (line) {
-                if (lineAction != null) {
-                  var cont = lineAction(line);
-                  if (cont == false) {
-                    subscription
-                        .cancel()
-                        .then((dynamic finished) => done.complete(true));
-                  }
+    subscription =
+        utf8.decoder.bind(inputStream).transform(const LineSplitter()).listen(
+            (line) {
+              if (lineAction != null) {
+                var cont = lineAction(line);
+                if (cont == false) {
+                  subscription
+                      .cancel()
+                      .then((dynamic finished) => done.complete(true));
                 }
-              },
-              cancelOnError: true,
-              onError: (Object error) {
-                exception = error;
-                done.complete(false);
-              },
-              onDone: () {
-                done.complete(true);
-              });
-    } catch (e) {
-      Log.e('exception $e');
-    }
+              }
+            },
+            cancelOnError: true,
+            onError: (Object error) {
+              exception = error;
+              done.complete(false);
+            },
+            onDone: () {
+              done.complete(true);
+            });
 
     waitForEx(done.future);
 

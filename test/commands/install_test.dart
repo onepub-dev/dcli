@@ -60,7 +60,6 @@ void main() {
         when(mockSettings.isLinux).thenReturn(false);
         when(mockSettings.isMacOS).thenReturn(false);
         when(mockSettings.dshellBinPath).thenReturn(settings.dshellBinPath);
-        when(mockSettings.debug_on).thenReturn(false);
 
         when(mockEnv.HOME).thenReturn('c:\\windows\\userdata');
         when(mockEnv.isOnPath(settings.dshellBinPath)).thenReturn(false);
@@ -80,7 +79,6 @@ void main() {
         when(mockSettings.isLinux).thenReturn(true);
         when(mockSettings.isMacOS).thenReturn(false);
         when(mockSettings.dshellBinPath).thenReturn(settings.dshellBinPath);
-        when(mockSettings.debug_on).thenReturn(false);
 
         when(mockEnv.HOME).thenReturn(HOME);
         when(mockEnv.isOnPath(settings.dshellBinPath)).thenReturn(false);

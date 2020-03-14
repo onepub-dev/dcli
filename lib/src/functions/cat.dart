@@ -10,7 +10,6 @@ import '../util/wait_for_ex.dart';
 
 import 'dshell_function.dart';
 import 'is.dart';
-import '../util/log.dart';
 
 /// Prints the contents of the file located at [path] to stdout.
 ///
@@ -27,9 +26,7 @@ class Cat extends DShellFunction {
   void cat(String path, {LineAction stdout}) {
     var sourceFile = File(path);
 
-    if (Settings().debug_on) {
-      Log.d('cat:  ${absolute(path)}');
-    }
+    Settings().verbose('cat:  ${absolute(path)}');
 
     if (!exists(path)) {
       throw CatException('The file at ${absolute(path)} does not exists');

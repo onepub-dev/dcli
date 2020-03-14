@@ -3,7 +3,6 @@ import 'dart:io';
 import 'function.dart';
 
 import '../settings.dart';
-import '../util/log.dart';
 
 import 'pwd.dart';
 
@@ -18,9 +17,7 @@ class FileList extends DShellFunction {
   List<String> get fileList {
     var files = <String>[];
 
-    if (Settings().debug_on) {
-      Log.d('fileList pwd: ${absolute(pwd)}');
-    }
+    Settings().verbose('fileList pwd: ${absolute(pwd)}');
 
     Directory.current.listSync().forEach((file) => files.add(file.path));
     return files;

@@ -4,8 +4,6 @@ import 'package:dshell/dshell.dart';
 import 'function.dart';
 import '../settings.dart';
 
-import '../util/log.dart';
-
 /// Creates a directory as described by [path].
 /// Path may be a single path segment (e.g. bin)
 /// or a full or partial tree (e.g. /usr/bin)
@@ -28,9 +26,7 @@ void createDir(String path, {bool recursive = false}) =>
 
 class CreateDir extends DShellFunction {
   void createDir(String path, {bool recursive}) {
-    if (Settings().debug_on) {
-      Log.d('createDir:  ${absolute(path)} recursive: $recursive');
-    }
+    Settings().verbose('createDir:  ${absolute(path)} recursive: $recursive');
 
     try {
       if (exists(path)) {

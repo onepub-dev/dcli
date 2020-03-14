@@ -3,7 +3,6 @@ import 'dart:io';
 import 'function.dart';
 
 import '../settings.dart';
-import '../util/log.dart';
 import 'package:path/path.dart' as p;
 
 ///
@@ -59,9 +58,7 @@ class Pop extends DShellFunction {
     }
     var path = InternalSettings().pop().path;
 
-    if (Settings().debug_on) {
-      Log.d('pop:  new -> ${p.absolute(path)}');
-    }
+    Settings().verbose('pop:  new -> ${p.absolute(path)}');
 
     try {
       Directory.current = path;

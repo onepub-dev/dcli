@@ -8,8 +8,6 @@ import '../util/progress.dart';
 
 import '../../dshell.dart';
 
-import '../util/log.dart';
-
 ///
 /// Returns the list of files in the current and child
 /// directories that match the passed glob pattern.
@@ -108,10 +106,8 @@ class Find extends DShellFunction {
     try {
       progress ??= Progress.devNull();
 
-      if (Settings().debug_on) {
-        Log.d(
-            'find: pwd: ${pwd} ${absolute(root)} pattern: ${pattern} caseSensitive: ${caseSensitive} recursive: ${recursive} types: ${types} ');
-      }
+      Settings().verbose(
+          'find: pwd: ${pwd} ${absolute(root)} pattern: ${pattern} caseSensitive: ${caseSensitive} recursive: ${recursive} types: ${types} ');
 
       var completer = Completer<void>();
       var lister = Directory(root).list(recursive: recursive);

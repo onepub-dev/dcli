@@ -2,7 +2,6 @@ import 'dart:io';
 import 'function.dart';
 
 import '../settings.dart';
-import '../util/log.dart';
 
 import 'is.dart';
 
@@ -32,9 +31,7 @@ void deleteDir(String path, {bool recursive = true}) =>
 
 class DeleteDir extends DShellFunction {
   void deleteDir(String path, {bool recursive}) {
-    if (Settings().debug_on) {
-      Log.d('deleteDir:  ${absolute(path)} recursive: $recursive');
-    }
+    Settings().verbose('deleteDir:  ${absolute(path)} recursive: $recursive');
 
     if (!exists(path)) {
       throw DeleteDirException('The path ${absolute(path)} does not exist.');

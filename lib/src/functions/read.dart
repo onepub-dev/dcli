@@ -10,7 +10,6 @@ import '../util/wait_for_ex.dart';
 import '../settings.dart';
 import 'dshell_function.dart';
 import 'is.dart';
-import '../util/log.dart';
 
 /// Reads lines from the file at [path].
 /// ```dart
@@ -31,9 +30,7 @@ class Read extends DShellFunction {
   Progress read(String path, {String delim, Progress progress}) {
     var sourceFile = File(path);
 
-    if (Settings().debug_on) {
-      Log.d('read: ${absolute(path)}, delim: ${delim}');
-    }
+    Settings().verbose('read: ${absolute(path)}, delim: ${delim}');
 
     if (!exists(path)) {
       throw ReadException('The file at ${absolute(path)} does not exists');
@@ -55,9 +52,7 @@ class Read extends DShellFunction {
   }
 
   Progress readStdin({Progress progress}) {
-    if (Settings().debug_on) {
-      Log.d('readStdin');
-    }
+      Settings().verbose('readStdin');
 
     try {
       progress ??= Progress.devNull();

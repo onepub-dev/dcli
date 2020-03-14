@@ -6,7 +6,6 @@ import 'package:dshell/src/util/dshell_exception.dart';
 
 import '../settings.dart';
 import 'dshell_function.dart';
-import '../util/log.dart';
 
 /// Gets an environment variable.
 ///
@@ -86,9 +85,7 @@ class Env extends DShellFunction {
   }
 
   String env(String name) {
-    if (Settings().debug_on) {
-      Log.d('env:  ${name}:${envVars[name]}');
-    }
+    Settings().verbose('env:  ${name}:${envVars[name]}');
 
     return envVars[name];
   }

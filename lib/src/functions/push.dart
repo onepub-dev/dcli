@@ -3,7 +3,6 @@ import 'dart:io';
 import 'package:path/path.dart' as p;
 
 import '../settings.dart';
-import '../util/log.dart';
 
 import 'dshell_function.dart';
 import 'is.dart';
@@ -33,9 +32,7 @@ class Push extends DShellFunction {
   /// Push the pwd onto the stack and change the
   /// current directory to [path].
   void push(String path) {
-    if (Settings().debug_on) {
-      Log.d('push: path: $path new -> ${p.absolute(path)}');
-    }
+    Settings().verbose('push: path: $path new -> ${p.absolute(path)}');
 
     if (!exists(path)) {
       throw PushException('The path ${absolute(path)} does not exist.');

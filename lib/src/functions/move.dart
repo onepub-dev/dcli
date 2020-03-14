@@ -3,7 +3,6 @@ import 'dart:io';
 import 'function.dart';
 import '../../dshell.dart';
 
-import '../util/log.dart';
 import 'package:path/path.dart' as p;
 
 ///
@@ -27,9 +26,7 @@ void move(String from, String to) => Move().move(from, to);
 
 class Move extends DShellFunction {
   void move(String from, String to) {
-    if (Settings().debug_on) {
-      Log.d('move ${absolute(from)} -> ${absolute(to)}');
-    }
+    Settings().verbose('move ${absolute(from)} -> ${absolute(to)}');
 
     var dest = to;
 

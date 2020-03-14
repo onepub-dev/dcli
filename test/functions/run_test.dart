@@ -8,7 +8,6 @@ import 'package:test/test.dart';
 import '../util/test_file_system.dart';
 
 void main() {
-  Settings().debug_on = true;
   t.group('RunCommand', () {
     t.test('Does command run', () {
       TestFileSystem().withinZone((fs) {

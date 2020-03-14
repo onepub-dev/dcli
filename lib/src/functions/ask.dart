@@ -5,8 +5,6 @@ import 'package:dshell/src/util/wait_for_ex.dart';
 
 import '../settings.dart';
 
-import '../util/log.dart';
-
 import 'dshell_function.dart';
 import 'echo.dart';
 
@@ -75,9 +73,7 @@ class Ask extends DShellFunction {
   ///
   /// Reads user input from stdin and returns it as a string.
   String ask({String prompt, bool toLower, bool hidden}) {
-    if (Settings().debug_on) {
-      Log.d('ask:  ${prompt}');
-    }
+    Settings().verbose('ask:  ${prompt}');
     if (prompt != null) {
       echo(prompt + ' ', newline: false);
     }
@@ -96,9 +92,7 @@ class Ask extends DShellFunction {
       line = line.toLowerCase();
     }
 
-    if (Settings().debug_on) {
-      Log.d('ask:  result ${line}');
-    }
+    Settings().verbose('ask:  result ${line}');
 
     return line;
   }

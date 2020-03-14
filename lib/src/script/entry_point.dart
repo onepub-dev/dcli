@@ -9,7 +9,6 @@ import '../util/stack_trace_impl.dart';
 
 import 'command_line_runner.dart';
 import 'commands/commands.dart';
-import 'std_log.dart';
 
 class EntryPoint {
   static EntryPoint _self;
@@ -36,7 +35,7 @@ class EntryPoint {
       CommandLineRunner.init(availableCommands);
       exitCode = CommandLineRunner().process(arguments);
 
-      StdLog.stderr('Exiting with code $exitCode', LogLevel.verbose);
+      Settings().verbose('Exiting with code $exitCode');
 
       waitFor<void>(stderr.flush());
 

@@ -81,7 +81,7 @@ class ShellDetection {
 
     if (ProcessHelper().getPIDName(envPID).toLowerCase() == 'sh') {
       shellPID = ProcessHelper().getParentPID(envPID);
-      // Log.d('shellPID: $envPID ${getPIDName(shellPID)}');
+      // Settings().verbose('shellPID: $envPID ${getPIDName(shellPID)}');
     } else {
       // if you run dshell directly then we don't use #! so 'sh' won't be our parent
       // instead the actuall shell will be our parent.
@@ -263,8 +263,7 @@ class ZshShell implements Shell {
   }
 }
 
-class PowerShell implements Shell
-{
+class PowerShell implements Shell {
   @override
   bool addToPath(String path) {
     // TODO: implement addToPath
@@ -273,21 +272,20 @@ class PowerShell implements Shell
     /// not working correctly at this point.
     /// Looks like powershell ignores the file association.
     'cmd /c assoc .dart=dshell'.run;
-    r'''cmd /c ftype dshell=`"C:\Users\User\dshell`" `"%1`" `"%2`" `"%3`" `"%4`" `"%5`" `"%6`" `"%7`" `"%8`" `"%9`"'''.run;
+    r'''cmd /c ftype dshell=`"C:\Users\User\dshell`" `"%1`" `"%2`" `"%3`" `"%4`" `"%5`" `"%6`" `"%7`" `"%8`" `"%9`"'''
+        .run;
     return null;
   }
 
   @override
   void installTabCompletion() {
-   // not supported.
+    // not supported.
   }
 
   @override
-  
   bool get isCompletionInstalled => false;
 
   @override
-  
   bool get isCompletionSupported => false;
 
   @override
@@ -300,7 +298,6 @@ class PowerShell implements Shell
   @override
   // TODO: implement startScriptPath
   String get startScriptPath => null;
-  
 }
 
 /// Used by dshell to interacte with the shell

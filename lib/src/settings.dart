@@ -179,13 +179,6 @@ class Settings {
     _selectedFlags[flag.name] = flag;
   }
 
-  /// returns the state of the debug options
-  /// True if debugging is on.
-  /// ```dart
-  /// Settings().debug_on
-  /// ```
-  bool get debug_on => _settings.debug_on;
-
   /// Returns true if the directory stack
   /// maintained by [push] and [pop] has
   /// is currently empty.
@@ -194,15 +187,6 @@ class Settings {
   /// ```
   @Deprecated('use join')
   bool get isStackEmpty => _settings.isStackEmpty;
-
-  /// Set [debug_on] to true to have the system log additional information
-  /// about each command that executes.
-  /// [debug_on] defaults to false.
-  ///
-  /// ```dart
-  /// Settings().debug_on = true;
-  /// ```
-  set debug_on(bool on) => _settings.debug_on = on;
 
   void verbose(String string) {
     if (isVerbose) {
@@ -230,13 +214,8 @@ class InternalSettings {
 
   StackList<Directory> directoryStack = StackList();
 
-  bool _debug_on = false;
-
-  bool get debug_on => _debug_on;
 
   bool get isStackEmpty => directoryStack.isEmpty;
-
-  set debug_on(bool on) => _debug_on = on;
 
   factory InternalSettings() {
     return _self;

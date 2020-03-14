@@ -1,7 +1,6 @@
 import 'dart:io';
 
 import '../settings.dart';
-import '../util/log.dart';
 import 'dshell_function.dart';
 import 'is.dart';
 import 'ask.dart';
@@ -23,9 +22,7 @@ void delete(String path, {bool ask = false}) => Delete().delete(path, ask: ask);
 
 class Delete extends DShellFunction {
   void delete(String path, {bool ask}) {
-    if (Settings().debug_on) {
-      Log.d('delete:  ${absolute(path)} ask: $ask');
-    }
+    Settings().verbose('delete:  ${absolute(path)} ask: $ask');
 
     if (!exists(path)) {
       throw DeleteException('The path ${absolute(path)} does not exists.');

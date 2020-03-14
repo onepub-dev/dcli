@@ -4,7 +4,6 @@ import 'function.dart';
 import '../settings.dart';
 import 'package:path/path.dart' as p;
 
-import '../util/log.dart';
 import 'is.dart';
 
 /// Change Directories to the relative or absolute path.
@@ -34,9 +33,7 @@ void cd(String path) => CD().cd(path);
 @Deprecated('Use join')
 class CD extends DShellFunction {
   void cd(String path) {
-    if (Settings().debug_on) {
-      Log.d('cd $path -> ${p.canonicalize(path)}');
-    }
+    Settings().verbose('cd $path -> ${p.canonicalize(path)}');
 
     if (!exists(path)) {
       throw CDException('The path ${p.canonicalize(path)} does not exists.');

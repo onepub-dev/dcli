@@ -1,7 +1,6 @@
 import '../util/wait_for_ex.dart';
 
 import '../settings.dart';
-import '../util/log.dart';
 
 import 'dshell_function.dart';
 
@@ -23,9 +22,7 @@ enum Interval { seconds, millseconds, minutes }
 
 class Sleep extends DShellFunction {
   void sleep(int duration, {Interval interval = Interval.seconds}) {
-    if (Settings().debug_on) {
-      Log.d('sleep: duration: ${duration} interval: $interval');
-    }
+      Settings().verbose('sleep: duration: ${duration} interval: $interval');
     Duration _duration;
     switch (interval) {
       case Interval.seconds:

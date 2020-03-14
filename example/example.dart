@@ -5,8 +5,6 @@ import 'package:dshell/dshell.dart';
 
 void main() {
   try {
-    Settings().debug_on = false;
-
     // Print the current working directory
     print('PWD: ${pwd}');
     echo('PWD: ${pwd}');

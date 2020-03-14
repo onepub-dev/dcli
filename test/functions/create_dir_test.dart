@@ -6,7 +6,6 @@ import 'package:test/test.dart';
 import '../util/test_file_system.dart';
 
 void main() {
-  Settings().debug_on = true;
 
   t.group('Directory Creation', () {
     t.test('createDir', () {

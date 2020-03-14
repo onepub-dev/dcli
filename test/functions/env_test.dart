@@ -9,7 +9,6 @@ import '../mocks/mock_settings.dart';
 import '../util/test_file_system.dart';
 
 void main() {
-  Settings().debug_on = true;
 
   t.group('Environment', () {
     t.test('PATH', () {
@@ -25,7 +24,6 @@ void main() {
           var mockSettings = MockSettings();
           Settings.setMock(mockSettings);
           when(mockSettings.isWindows).thenReturn(true);
-          when(mockSettings.debug_on).thenReturn(true);
           Env.reset();
           //var mockEnv = MockEnv();
 

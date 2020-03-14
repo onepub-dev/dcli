@@ -8,7 +8,6 @@ import 'package:test/test.dart';
 import '../util/test_file_system.dart';
 
 void main() {
-  Settings().debug_on = true;
 
   t.group('Find', () {
     t.test('Search for *.txt files in top directory ', () {

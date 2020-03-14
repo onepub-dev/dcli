@@ -3,8 +3,6 @@ import 'dart:io';
 import 'function.dart';
 import '../settings.dart';
 
-import '../util/log.dart';
-
 import 'is.dart';
 
 ///
@@ -39,9 +37,7 @@ class Copy extends DShellFunction {
           'An error occured copying ${absolute(from)} to ${absolute(to)}. Error: $e');
     }
 
-    if (Settings().debug_on) {
-      Log.d('mv ${absolute(from)} -> ${absolute(to)}');
-    }
+    Settings().verbose('mv ${absolute(from)} -> ${absolute(to)}');
   }
 }
 

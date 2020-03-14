@@ -9,7 +9,6 @@ import '../util/test_file_system.dart';
 
 String TEST_DIR = 'path_test';
 void main() {
-  Settings().debug_on = true;
 
   t.group('Directory Path manipulation testing', () {
     t.test('absolute', () {

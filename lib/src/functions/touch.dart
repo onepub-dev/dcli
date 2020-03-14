@@ -5,7 +5,6 @@ import 'package:path/path.dart' as p;
 import '../settings.dart';
 import 'dshell_function.dart';
 import 'is.dart';
-import '../util/log.dart';
 
 /// Updates the last modified time stamp of a file.
 ///
@@ -29,9 +28,7 @@ class Touch extends DShellFunction {
   void touch(String path, {bool create = false}) {
     var absolute = p.absolute(path);
 
-    if (Settings().debug_on) {
-      Log.d('touch: ${absolute} create: $create');
-    }
+      Settings().verbose('touch: ${absolute} create: $create');
 
     if (!exists(p.dirname(absolute))) {
       throw TouchException(
