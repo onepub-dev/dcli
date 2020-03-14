@@ -113,8 +113,8 @@ class Progress {
     return lines;
   }
 
-  // Returns the first line from the command or
-  // null if no lines where returned
+  /// Returns the first line from the command or
+  /// null if no lines where returned
   String get firstLine {
     String line;
     var lines = toList();
