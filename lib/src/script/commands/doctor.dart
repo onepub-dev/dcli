@@ -94,12 +94,12 @@ class DoctorCommand extends Command {
     showPermissions('cache', Settings().dshellCachePath);
 
     showPermissions(
-        'dependencies.yaml', join(Settings().dshellPath, 'dependencies.yaml'));
+        GlobalDependencies.filename, join(Settings().dshellPath, GlobalDependencies.filename));
 
     showPermissions('templates', Settings().templatePath);
 
     print('');
-    print(join('.dshell', 'dependencies.yaml'));
+    print(join('.dshell', GlobalDependencies.filename));
     var gd = GlobalDependencies();
     gd.dependencies.forEach((d) => colprint('  ${d.name}', '${d.rehydrate()}'));
 

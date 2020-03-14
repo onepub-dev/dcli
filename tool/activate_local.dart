@@ -2,6 +2,7 @@
 import 'dart:io';
 
 import 'package:dshell/dshell.dart';
+import 'package:dshell/src/pubspec/global_dependencies.dart';
 
 /// globally activates dshell from a local path rather than a public package.
 ///
@@ -53,7 +54,7 @@ ${parser.usage}
   }
 
   // make certain the dependency injection points to $path
-  var dependency = join(Settings().dshellPath, 'dependencies.yaml');
+  var dependency = join(Settings().dshellPath, GlobalDependencies.filename);
 
   if (exists(dependency)) {
     delete(dependency);
@@ -66,7 +67,7 @@ ${parser.usage}
   dependency.append('  dshell:');
   dependency.append('    path: $dshellPackageRoot');
 
-  print('dependency.yaml');
+  print(GlobalDependencies.filename);
   cat(dependency);
 
   //'dshell install'.run;

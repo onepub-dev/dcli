@@ -101,7 +101,7 @@ dependency_overrides:
       var workingDir = paths.unitTestWorkingDir;
 
       // create a temp 'dependencies.yaml
-      var depPath = join(workingDir, 'dependencies.yaml');
+      var depPath = join(workingDir, GlobalDependencies.filename);
 
       depPath.write(content);
 
@@ -133,7 +133,7 @@ dependency_overrides:
       var workingDir = fs.unitTestWorkingDir;
 
       // over-ride the default 'dependencies.yaml
-      var depPath = join(Settings().dshellPath, 'dependencies.yaml');
+      var depPath = join(Settings().dshellPath, GlobalDependencies.filename);
       var backup = '$depPath.bak';
       copy(depPath, backup);
       depPath.write(content);

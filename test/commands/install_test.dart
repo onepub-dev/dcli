@@ -110,9 +110,9 @@ void checkInstallStructure() {
 
   expect(exists(truepath(HOME, '.dshell', 'templates')), equals(true));
 
-  expect(exists(truepath(HOME, '.dshell', 'dependencies.yaml')), equals(true));
+  expect(exists(truepath(HOME, '.dshell', GlobalDependencies.filename)), equals(true));
 
-  var content = read(truepath(HOME, '.dshell', 'dependencies.yaml')).toList();
+  var content = read(truepath(HOME, '.dshell', GlobalDependencies.filename)).toList();
   var expected = ['dependencies:'];
 
   for (var dep in GlobalDependencies.defaultDependencies) {

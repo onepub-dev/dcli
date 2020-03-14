@@ -85,7 +85,7 @@ class InstallCommand extends Command {
 
     // Create dependencies.yaml
     var blue2 = blue(
-        'Creating ${join(Settings().dshellPath, "dependencies.yaml")} with default packages.');
+        'Creating ${join(Settings().dshellPath, GlobalDependencies.filename)} with default packages.');
     print(blue2);
     GlobalDependencies.createDefault();
 
@@ -95,7 +95,7 @@ class InstallCommand extends Command {
     }
     print('');
     print(
-        'Edit dependencies.yaml to add/remove/update your default dependencies.');
+        'Edit ${GlobalDependencies.filename} to add/remove/update your default dependencies.');
 
     /// create the template directory.
     if (!exists(Settings().templatePath)) {
