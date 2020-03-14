@@ -1,3 +1,22 @@
+### 1.8.4-dev.8
+Primarily working through fixing unit tests under windows.
+Major problem in this release is that dshell compile doesn't work as dart2native doesn't support symlinks. Have filed a bug report with google and looking an interium workaround.
+
+[FIX] Removed Log.dart as it's use of the Logger package was causing compile errors. See https://github.com/google/dart_cli_pkg/issues/42 for details. All Log.x calls have been changed to Settings().verbose as this is the direction I was heading in anyway. The -v option should now provide more detailed logging.
+[FIX] changed all command line execution of dshell to use the dshellpaths exe name as it is dshell.bat under windows.
+[ENH] Exposed DShellPaths
+[TESTS] Added dshell commands for tail, head, cat and ls so the unit tests would work as is under windows.
+[FIX] The TestFileSystem used by unit tests still pointed at the pub get version of dshell. Altered .dshell/dependencies.yaml in the test file system to point at the dev version of dshell we are testing.
+[CLEANUP] moved all references to dependency.yaml to a const.
+[ENH] Improved the exception stacktrace for TestFileSystem
+[BUG] the glob expansion was including hidden files which is not what bash does. No longer returns hidden files.
+[TEST] Added specific unit test for Windows glob expansion as it doesn't peform glob expansion
+[BUG] added npe check if dshell not on path in dshell doctor.
+[ENH] Added new ctor that prints to stdout.
+[FIX] changed from log.d to Settings().verbose to get around dart2native bug
+[ENH] Added experimenntal code for PowerShell support.
+[ENH] Added dshell path to doctors output.
+
 ### 1.8.4-dev.7
 Disabled globing under windows as powershow doesn't perform glob expansion.
 The stackframe path contain the wrong slash so moved to using basename which seems to deal with this problem for us.
