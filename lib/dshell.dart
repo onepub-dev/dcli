@@ -19,6 +19,7 @@ export 'src/functions/create_dir.dart' show createDir, CreateDirException;
 export 'src/functions/menu.dart' show menu;
 export 'src/functions/move.dart' show move, MoveException;
 export 'src/functions/replace.dart' show replace;
+export 'src/functions/tail.dart' show tail;
 export 'src/util/dev_null.dart' show devNull;
 export 'src/util/editor.dart' show showEditor;
 export 'src/util/file_sort.dart' show FileSort, Column;
