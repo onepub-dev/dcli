@@ -20,9 +20,7 @@ Progress head(String path, int lines) => Head().head(path, lines);
 
 class Head extends DShellFunction {
   Progress head(String path, int lines, {Progress progress}) {
-    if (Settings().debug_on) {
-      Log.d('head ${absolute(path)} lines: ${lines}');
-    }
+    Settings().verbose('head ${absolute(path)} lines: ${lines}');
 
     if (!exists(path)) {
       throw HeadException('The path ${absolute(path)} does not exist.');
@@ -33,7 +31,7 @@ class Head extends DShellFunction {
     }
 
     try {
-      progress ??= Progress.devNull();
+      progress ??= Progress.printStdOut();
       var count = 0;
       var file = FileSync(path);
       file.read((line) {
