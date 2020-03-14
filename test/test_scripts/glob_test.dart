@@ -8,7 +8,7 @@ import 'package:test/test.dart';
 import '../util/test_file_system.dart';
 
 void main() {
-  test('glob expansion', () {
+  test('glob expansion - linux/macos', () {
     TestFileSystem().withinZone((fs) {
       var parsed = ParsedCliCommand('ls *.jpg *.png', fs.top);
 
@@ -22,5 +22,20 @@ void main() {
             join(fs.top, 'fred.png'),
           ]));
     });
+  }, onPlatform: <String, Skip>{
+    'windows': Skip("Powershell doesn't do glob expansion")
   });
+
+  test('glob expansion - windows', () {
+    TestFileSystem().withinZone((fs) {
+      var parsed = ParsedCliCommand('ls *.jpg *.png', fs.top);
+
+      expect(parsed.cmd, equals('ls'));
+
+      expect(parsed.args, equals(['*.jpg', '*.png']));
+    });
+  }, onPlatform: <String, Skip>{
+    'posix': Skip('posix systems do glob expansion'),
+  });
+
 }
