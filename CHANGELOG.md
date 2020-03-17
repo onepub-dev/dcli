@@ -1,3 +1,541 @@
+### 1.8.4
+
+This release is primarily about getting dshell to work correctly under windows.
+There is still a no. of significant issues that need to be resolve for windows.
+This release however has sufficient improvements for general dshell users that I thought it was time for a release.
+The core windows issues is that dart2native doesn't support symlinks so compilation doesn't work.
+This is affecting unit tests so its a little hard to evaluate just how stable the windows release.
+Having said that it does look like dshell is broadly working under windows.
+I will be attempting to resolve these issues over the next week or so.
+
+This release also fixes an issue that Mac uses had that stopped them compiling dshell.
+It appears that the logger package has a problem (Invalid cid) that stopped compilation on Mac, windows and Rasp Pi. I've removed this package and now compilation seems to work fine.
+
+### 1.8.4-dev.8
+Primarily working through fixing unit tests under windows.
+Major problem in this release is that dshell compile doesn't work as dart2native doesn't support symlinks. Have filed a bug report with google and looking an interium workaround.
+
+[FIX] Removed Log.dart as it's use of the Logger package was causing compile errors. See https://github.com/google/dart_cli_pkg/issues/42 for details. All Log.x calls have been changed to Settings().verbose as this is the direction I was heading in anyway. The -v option should now provide more detailed logging.
+[FIX] changed all command line execution of dshell to use the dshellpaths exe name as it is dshell.bat under windows.
+[ENH] Exposed DShellPaths
+[TESTS] Added dshell commands for tail, head, cat and ls so the unit tests would work as is under windows.
+[FIX] The TestFileSystem used by unit tests still pointed at the pub get version of dshell. Altered .dshell/dependencies.yaml in the test file system to point at the dev version of dshell we are testing.
+[CLEANUP] moved all references to dependency.yaml to a const.
+[ENH] Improved the exception stacktrace for TestFileSystem
+[BUG] the glob expansion was including hidden files which is not what bash does. No longer returns hidden files.
+[TEST] Added specific unit test for Windows glob expansion as it doesn't peform glob expansion
+[BUG] added npe check if dshell not on path in dshell doctor.
+[ENH] Added new ctor that prints to stdout.
+[FIX] changed from log.d to Settings().verbose to get around dart2native bug
+[ENH] Added experimenntal code for PowerShell support.
+[ENH] Added dshell path to doctors output.
+
+### 1.8.4-dev.7
+Disabled globing under windows as powershow doesn't perform glob expansion.
+The stackframe path contain the wrong slash so moved to using basename which seems to deal with this problem for us.
+early experiments with replacement for ls under windows in unit tests.
+
+### 1.8.4-dev.6
+Renamed pubGetPath to pubPath
+Fixed dshell doctor so it runs under windows.
+Excluded call to chmod on windows as it isn't necessary.
+Fixed a bug under windows we building the path to a srcripts virtual directory. 
+Additional work on cleaning out hardcoded slashes.
+Change the exception to InvalidArguments.
+Fixed bugs and made changes to the menu api.
+  Fixed two problems. 1) if the limit was greater than the no. of options an arrayOutofBounds was thrown. The menu now just displays the available options. 2) If the options list is empty we now throw an exception with a useful message. 3) broke the api by changing the prompt and options to named arguments.
+
+### 1.8.4-dev.5
+exposed startFromArgs and run.
+
+### 1.8.4-dev.4
+removed dshell_complete from windows unit tests as its not supported.
+Fixed references to dshell exe names which all end in .bat on windows. 
+Added logic to allow reseting of PubCache paths for unit tests.
+Corrected messages on path for dshell as it wasn't outputing the /bin component of the path.
+
+### 1.8.4-dev.3
+dartfrmt
+Fixed exe name to use platform specific version.
+grammar.
+restored missing activate statement.
+removed test print statements. restored the pub cache copy logic.
+Added getter for platform dependant rootPath. Added platform specific exe names for dart exes. Fixed a no. of paths that ignored the windows requirements. Fixed a bug where the PATH for windows was wrong.
+Synchronized APPDATA and HOME on Windows systems. I'm not certain this is the best idea.
+Changed to using Platform.windows to avoid initiialising Settings which was causing problems with the unit tests.
+Fixed the code that was retriving the parent pid so it works under windows.
+removed test code.
+Windows bug fixes
+added test for windows case-insensitive env.
+reuse port is not supported on windows. Not certain what the consequences of this is as dart does document reuseport.
+made vars case-insensitive on windows.
+now pulling pub-cache from single source.
+Fix for windows where sourcee paths contain an extra : due to c:/
+turns out that .pub-cache is called Pub/Cache under windows.
+Fixed bugs when parsing the tasklist under windows.
+Fixed unit tes t as glob expansion should not expand of (*.txt) hidden files such as .tow.txt
+unit test for runnable process start with a foreach.
+renamed forEach to devNull as more evokative of what it does.
+reversed the names of start and startCommandLine. This is a breking change probably of some significance but easy to fix and compile errors will make the problem evident.
+Modified run to return an exit code rather than a progress as as the returned Progress was non functional as alll output goes to the console. This is a breaking change but probably not used. Moved the run logic to runnable_process.
+change var names from forEach to progress.
+
+### 1.8.4
+Most of the work in this release is around getting dshell unit tests to pass on Windows.
+We are not quite there as yet as there are still a few path issues but I think we are not to far off.
+
+Added getter for platform dependant rootPath. 
+Added platform specific exe names for dart exes. 
+Fixed a no. of paths that ignored the windows requirements. 
+Fixed a bug where the PATH for windows was wrong.
+Synchronized APPDATA and HOME on Windows systems. I'm not certain this is the best idea.
+Changed to using Platform.windows to avoid initiialising Settings which was causing problems with the unit tests.
+Fixed the code that was retriving the parent pid so it works under windows.
+Made vars case-insensitive on windows.
+Added test for windows case-insensitive env.
+reuse port is not supported on windows. Not certain what the consequences of this is as dart does document reuseport.
+Fix for windows where stacktrace source paths contain an extra : due to c:/
+Turns out that .pub-cache is called Pub/Cache under windows.
+Fixed bugs when parsing the tasklist under windows.
+Fixed unit test as glob expansion should not expand (*.txt) hidden files such as .tow.txt
+Renamed forEach ctor on Progress to devNull as more evokative of what it does.
+Reversed the names of start and startCommandLine. This is a breaking change probably of some significance but easy to fix and compile errors will make the problem evident.
+Modified run to return an exit code rather than a progress as as the returned Progress was non functional as alll output goes to the console. This is a breaking change but probably not used. Moved the run logic to runnable_process.
+change var names from forEach to progress.
+
+### 1.8.4-dev.2
+Exposed the Progress class.
+Exposed waitForEx as a end user function.
+renamed waitForEx to wait_for_ex.dart so its name was consistent.
+
+### 1.8.4-dev.1
+Reworked toList so when an exception is throw the stderr content is available in the exception.
+Fixed a bug where the exitcode wasn't being passed to the Progress.
+Fixed a bug where the nothrow arg was not being set.
+
+### 1.8.3
+[fix] Compile fixes when project has local pubspec.yaml.
+[enh] Added experimental parser to string_process which allows reading and parsing a number of common file formats.
+[enh] Added glob expansion when running command lines.
+[enh] New NamedLock class provides an inter isoloate and inter process locking mechanism.
+[enh] Improvements to documentation.
+[enh] New method on FileSync to create a temp file.
+[enh] Version of start which takes a command and an arg array to provide a simplified path
+when complex escaping is involved.
+[fix] For unit test so that all test can now complete in a single run.
+[fix] Start was not passing the Progress down.
+[fix] Bug in tab completion when expanding scripts.
+[fix] Two compiler bugs. It was trying to compile scripts in subdirectories when we are only meant to compile scripts in the current directory.  Fixed bug where local pubspec.yaml was being ignored.
+
+### 1.8.3-dev.5
+[fix] Change package paths to point directly to the .packages file. Hopefull this will allow compile to work correctly for both local and virtual pubspecs.
+[enh] Renamed RunnableProcess ctors to make it clearer what each one does.
+[fix] NamedLock changed arg from lockSuffix to name
+[enh] Added toJson method. Added doco on glob expansion.
+
+### 1.8.3
+[fix] Change package paths to point directly to the .packages file. Hopefull this will allow compile to work correctly for both local and virtual pubspecs.
+[enh] Renamed RunnableProcess ctors to make it clearer what each one does.
+[fix] NamedLock changed arg from lockSuffix to name
+[enh] Added toJson method. Added doco on glob expansion.
+
+### 1.8.3-dev.4
+change the lambda description to the more consisely named format.
+Improved the documentation on avoiding cd/pushd/popd.
+Added which.dart as used by test scripts.
+Added logic so we don't try to add to the stream after it is closed.
+rework of run.
+Fixed the reset logic for mocks.
+Fixed the reset logic. Added logic so that callen setEnv with a null value removes the key from the map.
+Added validation that the passed argument is a script.
+
+### 1.8.3-dev.3
+[fix] glob expansion needed to use the workingdirectory to expand the correct files.
+updated the doco on dependency injection to reflect the fact that we don't inject if there is an actual pubspec.yaml.
+Documented the 'includeHidden' param.
+[fix] Fixed a number of unit test so the work correctly under the TestFileSystem.
+
+### 1.8.3-dev.2
+[enh] Creation of a inter-process and inter-isolate locking mechanism [NamedLock]. Improved locking documentation and added logic to release locks when exceptions occur.
+[enh] Added ability to share a single TestFileSystem amoungst multiple tests. Speed up the unit testing by copying the primary .pub-cache to each test file system. Also sets the path and Settings to point to the test file system.
+[fix] start() was not passing down 'progress' arg if passed.
+[fix] Fixed glob expansion and added expansion of ~.
+[fix] Extended test timeouts to deal with longer runtime when using TestFileSystem.
+[fix] bug in tab completion with expanding scripts.
+[enh] Improvements to doco for find()
+[fix] Creation of new TestFileSystem designed to allow unit tests to run in an somewhat isolated file system so they don't damage the dev environment.
+[enh] improved the error message when start can't find the executable on the path.
+[fix] Fixed a bug where the processed args for glob expansion were being dumped on the ground.
+[enh] Added logic to reset Settings() paths after HOME is reset.
+optimistically a working interprocess locking system.
+[enh] moved install tests into main test dir as with the new TestFileSystem they can be run as part of the normal test suite.
+[imp] Moved the parser into its own dart file along with initial work on glob expansion.
+[enh] Added a method to FileSync to generate a temp file.
+[enh]Added a file to indicate a successful install.
+[exp] experiments in creating a dshell dev env within a docker container.
+
+### 1.8.3-dev.1
+Added start method which takes an arg array to avoid escaping lots of quotes.
+
+### 1.8.3
+Added start method which takes an arg array to avoid escaping lots of quotes.
+
+
+
+### 1.8.4-dev.8
+Primarily working through fixing unit tests under windows.
+Major problem in this release is that dshell compile doesn't work as dart2native doesn't support symlinks. Have filed a bug report with google and looking an interium workaround.
+
+[FIX] Removed Log.dart as it's use of the Logger package was causing compile errors. See https://github.com/google/dart_cli_pkg/issues/42 for details. All Log.x calls have been changed to Settings().verbose as this is the direction I was heading in anyway. The -v option should now provide more detailed logging.
+[FIX] changed all command line execution of dshell to use the dshellpaths exe name as it is dshell.bat under windows.
+[ENH] Exposed DShellPaths
+[TESTS] Added dshell commands for tail, head, cat and ls so the unit tests would work as is under windows.
+[FIX] The TestFileSystem used by unit tests still pointed at the pub get version of dshell. Altered .dshell/dependencies.yaml in the test file system to point at the dev version of dshell we are testing.
+[CLEANUP] moved all references to dependency.yaml to a const.
+[ENH] Improved the exception stacktrace for TestFileSystem
+[BUG] the glob expansion was including hidden files which is not what bash does. No longer returns hidden files.
+[TEST] Added specific unit test for Windows glob expansion as it doesn't peform glob expansion
+[BUG] added npe check if dshell not on path in dshell doctor.
+[ENH] Added new ctor that prints to stdout.
+[FIX] changed from log.d to Settings().verbose to get around dart2native bug
+[ENH] Added experimenntal code for PowerShell support.
+[ENH] Added dshell path to doctors output.
+
+### 1.8.4-dev.7
+Disabled globing under windows as powershow doesn't perform glob expansion.
+The stackframe path contain the wrong slash so moved to using basename which seems to deal with this problem for us.
+early experiments with replacement for ls under windows in unit tests.
+
+### 1.8.4-dev.6
+Renamed pubGetPath to pubPath
+Fixed dshell doctor so it runs under windows.
+Excluded call to chmod on windows as it isn't necessary.
+Fixed a bug under windows we building the path to a srcripts virtual directory. 
+Additional work on cleaning out hardcoded slashes.
+Change the exception to InvalidArguments.
+Fixed bugs and made changes to the menu api.
+  Fixed two problems. 1) if the limit was greater than the no. of options an arrayOutofBounds was thrown. The menu now just displays the available options. 2) If the options list is empty we now throw an exception with a useful message. 3) broke the api by changing the prompt and options to named arguments.
+
+### 1.8.4-dev.5
+exposed startFromArgs and run.
+
+### 1.8.4-dev.4
+removed dshell_complete from windows unit tests as its not supported.
+Fixed references to dshell exe names which all end in .bat on windows. 
+Added logic to allow reseting of PubCache paths for unit tests.
+Corrected messages on path for dshell as it wasn't outputing the /bin component of the path.
+
+### 1.8.4-dev.3
+dartfrmt
+Fixed exe name to use platform specific version.
+grammar.
+restored missing activate statement.
+removed test print statements. restored the pub cache copy logic.
+Added getter for platform dependant rootPath. Added platform specific exe names for dart exes. Fixed a no. of paths that ignored the windows requirements. Fixed a bug where the PATH for windows was wrong.
+Synchronized APPDATA and HOME on Windows systems. I'm not certain this is the best idea.
+Changed to using Platform.windows to avoid initiialising Settings which was causing problems with the unit tests.
+Fixed the code that was retriving the parent pid so it works under windows.
+removed test code.
+Windows bug fixes
+added test for windows case-insensitive env.
+reuse port is not supported on windows. Not certain what the consequences of this is as dart does document reuseport.
+made vars case-insensitive on windows.
+now pulling pub-cache from single source.
+Fix for windows where sourcee paths contain an extra : due to c:/
+turns out that .pub-cache is called Pub/Cache under windows.
+Fixed bugs when parsing the tasklist under windows.
+Fixed unit tes t as glob expansion should not expand of (*.txt) hidden files such as .tow.txt
+unit test for runnable process start with a foreach.
+renamed forEach to devNull as more evokative of what it does.
+reversed the names of start and startCommandLine. This is a breking change probably of some significance but easy to fix and compile errors will make the problem evident.
+Modified run to return an exit code rather than a progress as as the returned Progress was non functional as alll output goes to the console. This is a breaking change but probably not used. Moved the run logic to runnable_process.
+change var names from forEach to progress.
+
+### 1.8.4
+Most of the work in this release is around getting dshell unit tests to pass on Windows.
+We are not quite there as yet as there are still a few path issues but I think we are not to far off.
+
+Added getter for platform dependant rootPath. 
+Added platform specific exe names for dart exes. 
+Fixed a no. of paths that ignored the windows requirements. 
+Fixed a bug where the PATH for windows was wrong.
+Synchronized APPDATA and HOME on Windows systems. I'm not certain this is the best idea.
+Changed to using Platform.windows to avoid initiialising Settings which was causing problems with the unit tests.
+Fixed the code that was retriving the parent pid so it works under windows.
+Made vars case-insensitive on windows.
+Added test for windows case-insensitive env.
+reuse port is not supported on windows. Not certain what the consequences of this is as dart does document reuseport.
+Fix for windows where stacktrace source paths contain an extra : due to c:/
+Turns out that .pub-cache is called Pub/Cache under windows.
+Fixed bugs when parsing the tasklist under windows.
+Fixed unit test as glob expansion should not expand (*.txt) hidden files such as .tow.txt
+Renamed forEach ctor on Progress to devNull as more evokative of what it does.
+Reversed the names of start and startCommandLine. This is a breaking change probably of some significance but easy to fix and compile errors will make the problem evident.
+Modified run to return an exit code rather than a progress as as the returned Progress was non functional as alll output goes to the console. This is a breaking change but probably not used. Moved the run logic to runnable_process.
+change var names from forEach to progress.
+
+### 1.8.4-dev.2
+Exposed the Progress class.
+Exposed waitForEx as a end user function.
+renamed waitForEx to wait_for_ex.dart so its name was consistent.
+
+### 1.8.4-dev.1
+Reworked toList so when an exception is throw the stderr content is available in the exception.
+Fixed a bug where the exitcode wasn't being passed to the Progress.
+Fixed a bug where the nothrow arg was not being set.
+
+### 1.8.3
+[fix] Compile fixes when project has local pubspec.yaml.
+[enh] Added experimental parser to string_process which allows reading and parsing a number of common file formats.
+[enh] Added glob expansion when running command lines.
+[enh] New NamedLock class provides an inter isoloate and inter process locking mechanism.
+[enh] Improvements to documentation.
+[enh] New method on FileSync to create a temp file.
+[enh] Version of start which takes a command and an arg array to provide a simplified path
+when complex escaping is involved.
+[fix] For unit test so that all test can now complete in a single run.
+[fix] Start was not passing the Progress down.
+[fix] Bug in tab completion when expanding scripts.
+[fix] Two compiler bugs. It was trying to compile scripts in subdirectories when we are only meant to compile scripts in the current directory.  Fixed bug where local pubspec.yaml was being ignored.
+
+### 1.8.3-dev.5
+[fix] Change package paths to point directly to the .packages file. Hopefull this will allow compile to work correctly for both local and virtual pubspecs.
+[enh] Renamed RunnableProcess ctors to make it clearer what each one does.
+[fix] NamedLock changed arg from lockSuffix to name
+[enh] Added toJson method. Added doco on glob expansion.
+
+### 1.8.3
+[fix] Change package paths to point directly to the .packages file. Hopefull this will allow compile to work correctly for both local and virtual pubspecs.
+[enh] Renamed RunnableProcess ctors to make it clearer what each one does.
+[fix] NamedLock changed arg from lockSuffix to name
+[enh] Added toJson method. Added doco on glob expansion.
+
+### 1.8.3-dev.4
+change the lambda description to the more consisely named format.
+Improved the documentation on avoiding cd/pushd/popd.
+Added which.dart as used by test scripts.
+Added logic so we don't try to add to the stream after it is closed.
+rework of run.
+Fixed the reset logic for mocks.
+Fixed the reset logic. Added logic so that callen setEnv with a null value removes the key from the map.
+Added validation that the passed argument is a script.
+
+### 1.8.3-dev.3
+[fix] glob expansion needed to use the workingdirectory to expand the correct files.
+updated the doco on dependency injection to reflect the fact that we don't inject if there is an actual pubspec.yaml.
+Documented the 'includeHidden' param.
+[fix] Fixed a number of unit test so the work correctly under the TestFileSystem.
+
+### 1.8.3-dev.2
+[enh] Creation of a inter-process and inter-isolate locking mechanism [NamedLock]. Improved locking documentation and added logic to release locks when exceptions occur.
+[enh] Added ability to share a single TestFileSystem amoungst multiple tests. Speed up the unit testing by copying the primary .pub-cache to each test file system. Also sets the path and Settings to point to the test file system.
+[fix] start() was not passing down 'progress' arg if passed.
+[fix] Fixed glob expansion and added expansion of ~.
+[fix] Extended test timeouts to deal with longer runtime when using TestFileSystem.
+[fix] bug in tab completion with expanding scripts.
+[enh] Improvements to doco for find()
+[fix] Creation of new TestFileSystem designed to allow unit tests to run in an somewhat isolated file system so they don't damage the dev environment.
+[enh] improved the error message when start can't find the executable on the path.
+[fix] Fixed a bug where the processed args for glob expansion were being dumped on the ground.
+[enh] Added logic to reset Settings() paths after HOME is reset.
+optimistically a working interprocess locking system.
+[enh] moved install tests into main test dir as with the new TestFileSystem they can be run as part of the normal test suite.
+[imp] Moved the parser into its own dart file along with initial work on glob expansion.
+[enh] Added a method to FileSync to generate a temp file.
+[enh]Added a file to indicate a successful install.
+[exp] experiments in creating a dshell dev env within a docker container.
+
+### 1.8.3-dev.1
+Added start method which takes an arg array to avoid escaping lots of quotes.
+
+### 1.8.3
+Added start method which takes an arg array to avoid escaping lots of quotes.
+
+
+### 1.8.4
+
+This release is primarily about getting dshell to work correctly under windows.
+There is still a no. of significant issues that need to be resolve for windows.
+This release however has sufficient improvements for general dshell users that I thought it was time for a release.
+The core windows issues is that dart2native doesn't support symlinks so compilation doesn't work.
+This is affecting unit tests so its a little hard to evaluate just how stable the windows release.
+Having said that it does look like dshell is broadly working under windows.
+I will be attempting to resolve these issues over the next week or so.
+
+This release also fixes an issue that Mac uses had that stopped them compiling dshell.
+It appears that the logger package has a problem (Invalid cid) that stopped compilation on Mac, windows and Rasp Pi. I've removed this package and now compilation seems to work fine.
+
+### 1.8.4-dev.8
+Primarily working through fixing unit tests under windows.
+Major problem in this release is that dshell compile doesn't work as dart2native doesn't support symlinks. Have filed a bug report with google and looking an interium workaround.
+
+[FIX] Removed Log.dart as it's use of the Logger package was causing compile errors. See https://github.com/google/dart_cli_pkg/issues/42 for details. All Log.x calls have been changed to Settings().verbose as this is the direction I was heading in anyway. The -v option should now provide more detailed logging.
+[FIX] changed all command line execution of dshell to use the dshellpaths exe name as it is dshell.bat under windows.
+[ENH] Exposed DShellPaths
+[TESTS] Added dshell commands for tail, head, cat and ls so the unit tests would work as is under windows.
+[FIX] The TestFileSystem used by unit tests still pointed at the pub get version of dshell. Altered .dshell/dependencies.yaml in the test file system to point at the dev version of dshell we are testing.
+[CLEANUP] moved all references to dependency.yaml to a const.
+[ENH] Improved the exception stacktrace for TestFileSystem
+[BUG] the glob expansion was including hidden files which is not what bash does. No longer returns hidden files.
+[TEST] Added specific unit test for Windows glob expansion as it doesn't peform glob expansion
+[BUG] added npe check if dshell not on path in dshell doctor.
+[ENH] Added new ctor that prints to stdout.
+[FIX] changed from log.d to Settings().verbose to get around dart2native bug
+[ENH] Added experimenntal code for PowerShell support.
+[ENH] Added dshell path to doctors output.
+
+### 1.8.4-dev.7
+Disabled globing under windows as powershow doesn't perform glob expansion.
+The stackframe path contain the wrong slash so moved to using basename which seems to deal with this problem for us.
+early experiments with replacement for ls under windows in unit tests.
+
+### 1.8.4-dev.6
+Renamed pubGetPath to pubPath
+Fixed dshell doctor so it runs under windows.
+Excluded call to chmod on windows as it isn't necessary.
+Fixed a bug under windows we building the path to a srcripts virtual directory. 
+Additional work on cleaning out hardcoded slashes.
+Change the exception to InvalidArguments.
+Fixed bugs and made changes to the menu api.
+  Fixed two problems. 1) if the limit was greater than the no. of options an arrayOutofBounds was thrown. The menu now just displays the available options. 2) If the options list is empty we now throw an exception with a useful message. 3) broke the api by changing the prompt and options to named arguments.
+
+### 1.8.4-dev.5
+exposed startFromArgs and run.
+
+### 1.8.4-dev.4
+removed dshell_complete from windows unit tests as its not supported.
+Fixed references to dshell exe names which all end in .bat on windows. 
+Added logic to allow reseting of PubCache paths for unit tests.
+Corrected messages on path for dshell as it wasn't outputing the /bin component of the path.
+
+### 1.8.4-dev.3
+dartfrmt
+Fixed exe name to use platform specific version.
+grammar.
+restored missing activate statement.
+removed test print statements. restored the pub cache copy logic.
+Added getter for platform dependant rootPath. Added platform specific exe names for dart exes. Fixed a no. of paths that ignored the windows requirements. Fixed a bug where the PATH for windows was wrong.
+Synchronized APPDATA and HOME on Windows systems. I'm not certain this is the best idea.
+Changed to using Platform.windows to avoid initiialising Settings which was causing problems with the unit tests.
+Fixed the code that was retriving the parent pid so it works under windows.
+removed test code.
+Windows bug fixes
+added test for windows case-insensitive env.
+reuse port is not supported on windows. Not certain what the consequences of this is as dart does document reuseport.
+made vars case-insensitive on windows.
+now pulling pub-cache from single source.
+Fix for windows where sourcee paths contain an extra : due to c:/
+turns out that .pub-cache is called Pub/Cache under windows.
+Fixed bugs when parsing the tasklist under windows.
+Fixed unit tes t as glob expansion should not expand of (*.txt) hidden files such as .tow.txt
+unit test for runnable process start with a foreach.
+renamed forEach to devNull as more evokative of what it does.
+reversed the names of start and startCommandLine. This is a breking change probably of some significance but easy to fix and compile errors will make the problem evident.
+Modified run to return an exit code rather than a progress as as the returned Progress was non functional as alll output goes to the console. This is a breaking change but probably not used. Moved the run logic to runnable_process.
+change var names from forEach to progress.
+
+### 1.8.4
+Most of the work in this release is around getting dshell unit tests to pass on Windows.
+We are not quite there as yet as there are still a few path issues but I think we are not to far off.
+
+Added getter for platform dependant rootPath. 
+Added platform specific exe names for dart exes. 
+Fixed a no. of paths that ignored the windows requirements. 
+Fixed a bug where the PATH for windows was wrong.
+Synchronized APPDATA and HOME on Windows systems. I'm not certain this is the best idea.
+Changed to using Platform.windows to avoid initiialising Settings which was causing problems with the unit tests.
+Fixed the code that was retriving the parent pid so it works under windows.
+Made vars case-insensitive on windows.
+Added test for windows case-insensitive env.
+reuse port is not supported on windows. Not certain what the consequences of this is as dart does document reuseport.
+Fix for windows where stacktrace source paths contain an extra : due to c:/
+Turns out that .pub-cache is called Pub/Cache under windows.
+Fixed bugs when parsing the tasklist under windows.
+Fixed unit test as glob expansion should not expand (*.txt) hidden files such as .tow.txt
+Renamed forEach ctor on Progress to devNull as more evokative of what it does.
+Reversed the names of start and startCommandLine. This is a breaking change probably of some significance but easy to fix and compile errors will make the problem evident.
+Modified run to return an exit code rather than a progress as as the returned Progress was non functional as alll output goes to the console. This is a breaking change but probably not used. Moved the run logic to runnable_process.
+change var names from forEach to progress.
+
+### 1.8.4-dev.2
+Exposed the Progress class.
+Exposed waitForEx as a end user function.
+renamed waitForEx to wait_for_ex.dart so its name was consistent.
+
+### 1.8.4-dev.1
+Reworked toList so when an exception is throw the stderr content is available in the exception.
+Fixed a bug where the exitcode wasn't being passed to the Progress.
+Fixed a bug where the nothrow arg was not being set.
+
+### 1.8.3
+[fix] Compile fixes when project has local pubspec.yaml.
+[enh] Added experimental parser to string_process which allows reading and parsing a number of common file formats.
+[enh] Added glob expansion when running command lines.
+[enh] New NamedLock class provides an inter isoloate and inter process locking mechanism.
+[enh] Improvements to documentation.
+[enh] New method on FileSync to create a temp file.
+[enh] Version of start which takes a command and an arg array to provide a simplified path
+when complex escaping is involved.
+[fix] For unit test so that all test can now complete in a single run.
+[fix] Start was not passing the Progress down.
+[fix] Bug in tab completion when expanding scripts.
+[fix] Two compiler bugs. It was trying to compile scripts in subdirectories when we are only meant to compile scripts in the current directory.  Fixed bug where local pubspec.yaml was being ignored.
+
+### 1.8.3-dev.5
+[fix] Change package paths to point directly to the .packages file. Hopefull this will allow compile to work correctly for both local and virtual pubspecs.
+[enh] Renamed RunnableProcess ctors to make it clearer what each one does.
+[fix] NamedLock changed arg from lockSuffix to name
+[enh] Added toJson method. Added doco on glob expansion.
+
+### 1.8.3
+[fix] Change package paths to point directly to the .packages file. Hopefull this will allow compile to work correctly for both local and virtual pubspecs.
+[enh] Renamed RunnableProcess ctors to make it clearer what each one does.
+[fix] NamedLock changed arg from lockSuffix to name
+[enh] Added toJson method. Added doco on glob expansion.
+
+### 1.8.3-dev.4
+change the lambda description to the more consisely named format.
+Improved the documentation on avoiding cd/pushd/popd.
+Added which.dart as used by test scripts.
+Added logic so we don't try to add to the stream after it is closed.
+rework of run.
+Fixed the reset logic for mocks.
+Fixed the reset logic. Added logic so that callen setEnv with a null value removes the key from the map.
+Added validation that the passed argument is a script.
+
+### 1.8.3-dev.3
+[fix] glob expansion needed to use the workingdirectory to expand the correct files.
+updated the doco on dependency injection to reflect the fact that we don't inject if there is an actual pubspec.yaml.
+Documented the 'includeHidden' param.
+[fix] Fixed a number of unit test so the work correctly under the TestFileSystem.
+
+### 1.8.3-dev.2
+[enh] Creation of a inter-process and inter-isolate locking mechanism [NamedLock]. Improved locking documentation and added logic to release locks when exceptions occur.
+[enh] Added ability to share a single TestFileSystem amoungst multiple tests. Speed up the unit testing by copying the primary .pub-cache to each test file system. Also sets the path and Settings to point to the test file system.
+[fix] start() was not passing down 'progress' arg if passed.
+[fix] Fixed glob expansion and added expansion of ~.
+[fix] Extended test timeouts to deal with longer runtime when using TestFileSystem.
+[fix] bug in tab completion with expanding scripts.
+[enh] Improvements to doco for find()
+[fix] Creation of new TestFileSystem designed to allow unit tests to run in an somewhat isolated file system so they don't damage the dev environment.
+[enh] improved the error message when start can't find the executable on the path.
+[fix] Fixed a bug where the processed args for glob expansion were being dumped on the ground.
+[enh] Added logic to reset Settings() paths after HOME is reset.
+optimistically a working interprocess locking system.
+[enh] moved install tests into main test dir as with the new TestFileSystem they can be run as part of the normal test suite.
+[imp] Moved the parser into its own dart file along with initial work on glob expansion.
+[enh] Added a method to FileSync to generate a temp file.
+[enh]Added a file to indicate a successful install.
+[exp] experiments in creating a dshell dev env within a docker container.
+
+### 1.8.3-dev.1
+Added start method which takes an arg array to avoid escaping lots of quotes.
+
+### 1.8.3
+Added start method which takes an arg array to avoid escaping lots of quotes.
+
+
+
 ### 1.8.4-dev.8
 Primarily working through fixing unit tests under windows.
 Major problem in this release is that dshell compile doesn't work as dart2native doesn't support symlinks. Have filed a bug report with google and looking an interium workaround.
