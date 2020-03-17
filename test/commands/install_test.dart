@@ -2,7 +2,6 @@
 import 'package:dshell/dshell.dart' hide equals;
 import 'package:dshell/src/functions/env.dart';
 import 'package:dshell/src/pubspec/global_dependencies.dart';
-import 'package:dshell/src/script/dependency.dart';
 import 'package:dshell/src/script/entry_point.dart';
 import 'package:mockito/mockito.dart';
 import 'package:pubspec/pubspec.dart';
