@@ -141,11 +141,11 @@ class RunnableProcess {
       // 2 - No such file or directory
       if (e is ProcessException && e.errorCode == 2) {
         var ep = e as ProcessException;
-        e = ProcessException(
+        e = RunException.withArgs(
           ep.executable,
           ep.arguments,
-          'Could not find ${ep.executable} on the path.',
           ep.errorCode,
+          'Could not find ${ep.executable} on the path.',
         );
       }
       complete.completeError(e);
@@ -165,7 +165,7 @@ class RunnableProcess {
       var exitCode = waitForEx<int>(process.exitCode);
 
       if (exitCode != 0) {
-        exited.completeError(RunException(exitCode,
+        exited.completeError(RunException(cmdLine, exitCode,
             'The command ${red('[$cmdLine]')} failed with exitCode: ${exitCode}'));
       } else {
         exited.complete(exitCode);
@@ -241,7 +241,7 @@ class RunnableProcess {
         // escape as an unhandled exception and stop the whole script
         progress.exitCode = exitCode;
         if (exitCode != 0 && nothrow == false) {
-          done.completeError(RunException(exitCode,
+          done.completeError(RunException(cmdLine, exitCode,
               'The command ${red('[$cmdLine]')} failed with exitCode: ${exitCode}'));
         } else {
           done.complete(true);
@@ -263,13 +263,21 @@ class RunnableProcess {
 }
 
 class RunException extends DShellException {
+  String cmdLine;
   int exitCode;
   String reason;
-  RunException(this.exitCode, this.reason, {StackTraceImpl stackTrace})
+  RunException(this.cmdLine, this.exitCode, this.reason,
+      {StackTraceImpl stackTrace})
       : super(reason, stackTrace);
+
+  RunException.withArgs(
+      String cmd, List<String> args, this.exitCode, this.reason,
+      {StackTraceImpl stackTrace})
+      : cmdLine = '$cmd ${args.join(' ')}',
+        super(reason, stackTrace);
 
   @override
   RunException copyWith(StackTraceImpl stackTrace) {
-    return RunException(exitCode, reason, stackTrace: stackTrace);
+    return RunException(cmdLine, exitCode, reason, stackTrace: stackTrace);
   }
 }
