@@ -58,6 +58,6 @@ export 'src/util/ansi_color.dart' hide AnsiColor;
 export 'src/util/progress.dart' show Progress;
 export 'src/util/shell.dart'
     show ShellDetection, Shell, BashShell, ZshShell, UnknownShell;
-export 'src/util/runnable_process.dart' show printerr;
+export 'src/util/runnable_process.dart' show printerr, RunException;
 export 'src/util/string_as_process.dart';
 export 'src/util/truepath.dart' show truepath, rootPath;
