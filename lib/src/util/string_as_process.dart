@@ -236,7 +236,7 @@ extension StringAsProcess on String {
       cmd.start(this, runInShell: runInShell, progress: progress);
     } catch (e) {
       if (nothrow == false) {
-        throw RunException(progress.exitCode, list.join('\n'));
+        throw RunException(this, progress.exitCode, list.join('\n'));
       }
       return list;
     }
