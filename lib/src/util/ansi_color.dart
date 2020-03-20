@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:dshell/src/functions/echo.dart';
 
 /// Returns a string wrapped with the selected ansi
@@ -202,7 +204,11 @@ class AnsiColor {
       {AnsiColor bgcolor = none}) {
     String output;
 
-    output = '${_fg(color.code)}${_bg(bgcolor?.code)}${text}${_reset}';
+    if (stdin.supportsAnsiEscapes) {
+      output = '${_fg(color.code)}${_bg(bgcolor?.code)}${text}${_reset}';
+    } else {
+      output = text;
+    }
     return output;
   }
 
@@ -224,6 +230,7 @@ class AnsiColor {
   }
 
   static void clearScreen(AnsiClearMode mode) {
+    if (!stdin.supportsAnsiEscapes) return;
     switch (mode) {
       // case AnsiClearMode.scrollback:
       //   echo('${esc}3J', newline: false);
@@ -241,6 +248,7 @@ class AnsiColor {
   }
 
   static void clearLine(AnsiClearMode mode) {
+    if (!stdin.supportsAnsiEscapes) return;
     switch (mode) {
       // case AnsiClearMode.scrollback:
       case AnsiClearMode.all:
