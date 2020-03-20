@@ -1,3 +1,11 @@
+### 1.8.5
+[ENH] Exposed NamedLock as part of the official dshell api.
+    Tidied up the NamedLock documentation and removed internal implementation from the api. 
+[ENH] changed how we handle quoted arguments when the startWithArgs method is called. We no longer strip quotes from passed arguments because if you pass quotes you probably really need them to be there. This differs from passing cmdLine where we need to strip the quotes as bash does.
+[ENH] added logic to suppress color codes if terminal doesn't support them.
+[ENH] added support for backspace when entering hidden text for ask.
+[CLEANUP] dog fooding the internals of VirtualProject.
+
 ### 1.8.4
 
 This release is primarily about getting dshell to work correctly under windows.
