@@ -23,7 +23,9 @@ class ParsedCliCommand {
 
   ParsedCliCommand.fromParsed(
       this.cmd, List<String> rawArgs, String workingDirectory) {
-    var qargs = _QArg.translate(rawArgs);
+    // when passed individual args we respect any quotes that are
+    // passed as they have been put there with intent.
+    var qargs = _QArg.translate(rawArgs, stripQuotes: false);
     args = expandGlobs(qargs, workingDirectory);
 
     if (Settings().isVerbose) {
@@ -161,9 +163,10 @@ class _QArg {
 
   _QArg.fromParsed(this.arg, this.wasQuoted);
 
-  _QArg(String iarg) {
+  _QArg(String iarg, {bool stripQuotes}) {
     wasQuoted = false;
     arg = iarg.trim();
+
     if (arg.startsWith('"') && arg.endsWith('"')) {
       wasQuoted = true;
     }
@@ -171,7 +174,7 @@ class _QArg {
       wasQuoted = true;
     }
 
-    if (wasQuoted) {
+    if (wasQuoted && !stripQuotes) {
       arg = arg.substring(1, arg.length - 1);
     }
   }
@@ -186,10 +189,10 @@ class _QArg {
         (arg.contains('*') || arg.contains('[') || arg.contains('?'));
   }
 
-  static List<_QArg> translate(List<String> args) {
+  static List<_QArg> translate(List<String> args, {bool stripQuotes = true}) {
     var qargs = <_QArg>[];
     for (var arg in args) {
-      var qarg = _QArg(arg);
+      var qarg = _QArg(arg, stripQuotes: stripQuotes);
       qargs.add(qarg);
     }
     return qargs;
