@@ -35,18 +35,19 @@ class NamedLock {
   /// a hard lock. A port can only be opened once
   /// so its the perfect way to create a lock that works
   /// across processes and isolates.
-  int port = 63424;
-  String lockPath;
-  String name;
-  String description;
+  final int port = 63424;
+  String _lockPath;
+  final String name;
+  String _description;
 
-  /// We use this to allow a projects lock to be-reentrant
+  /// We use this to allow a lock to be-reentrant within an isolate.
   /// A non-zero value means we have the lock.
-  /// We need to maintain a lock count per
+  /// We maintain a lock count per
   /// lock suffix to allow each suffix lock to be re-entrant.
   static final Map<String, int> _lockCounts = {};
 
-  Duration timeout;
+  /// The duration to wait for a lock before timing out.
+  final Duration _timeout;
 
   /// [lockPath] is the path of the directory used
   /// to store the lock file.
@@ -61,21 +62,30 @@ class NamedLock {
   /// lockPath.
   /// The [description], if passed, is used in error messages
   /// to describe the lock.
-  /// The [timeout] field defines how long we will wait for
+  /// The [timeout] defines how long we will wait for
   /// a lock to become available. The default [timeout] is
   /// infinite (null).
   ///
+  /// ```dart
+  /// NamedLock(name: 'update-catalog').withLock(() {
+  ///   if (!exists('catalog'))
+  ///     createDir('catalog');
+  ///   updateCatalog();
+  /// });
+  /// ```
+  ///
   NamedLock({
     @required this.name,
-    this.lockPath,
-    this.description,
-    this.timeout,
-  }) {
+    String lockPath,
+    String description,
+    Duration timeout,
+  })  : _timeout = timeout,
+        _lockPath = lockPath,
+        _description = description {
     assert(name != null);
-    lockPath ??= join(rootPath, Directory.systemTemp.path, 'dshell', 'locks');
-    description ??= '';
 
-    //Settings().setVerbose(true);
+    _lockPath ??= join(rootPath, Directory.systemTemp.path, 'dshell', 'locks');
+    _description ??= '';
   }
 
   void withLock(
@@ -85,32 +95,30 @@ class NamedLock {
     var lockHeld = false;
     runZoned(() {
       /// Ensure that that the lockfile directory exists.
-      withHardLock(fn: () {
-        if (!exists(lockPath)) {
-          createDir(lockPath, recursive: true);
+      _withHardLock(fn: () {
+        if (!exists(_lockPath)) {
+          createDir(_lockPath, recursive: true);
         }
       });
 
       try {
-        log('lockcount = ${lockCount}');
+        _log('lockcount = ${lockCount}');
 
-        if (lockCount > 0 || takeLock(waiting)) {
+        if (lockCount > 0 || _takeLock(waiting)) {
           lockHeld = true;
           incLockCount;
 
           fn();
         }
       } finally {
-        releaseLock();
+        _releaseLock();
         // just in case an async exception can be thrown
         // I'm uncertain if this is a reality.
         lockHeld = false;
       }
     }, onError: (Object e, StackTrace st) {
-      if (lockHeld) releaseLock();
-      //var stackTrace = StackTraceImpl.fromStackTrace(st, skipFrames: 10);
+      if (lockHeld) _releaseLock();
       var stackTrace = StackTraceImpl.fromStackTrace(st);
-      Settings().verbose(stackTrace.formatStackTrace());
 
       if (e is DShellException) {
         throw e.copyWith(stackTrace);
@@ -120,14 +128,14 @@ class NamedLock {
     });
   }
 
-  void releaseLock() {
+  void _releaseLock() {
     if (lockCount > 0) {
       decLockCount;
 
       if (lockCount == 0) {
         Settings().verbose(red('Releasing lock: $_lockFilePath'));
 
-        withHardLock(fn: () => delete(_lockFilePath));
+        _withHardLock(fn: () => delete(_lockFilePath));
       }
     }
   }
@@ -144,7 +152,7 @@ class NamedLock {
     var _lockCount = lockCount;
     _lockCount++;
     _lockCounts[name] = _lockCount;
-    log(orange('Incremented lock: $_lockCount'));
+    _log(orange('Incremented lock: $_lockCount'));
     return _lockCount;
   }
 
@@ -155,7 +163,7 @@ class NamedLock {
     _lockCount--;
     _lockCounts[name] = _lockCount;
 
-    log(orange('Decremented lock: $lockCount'));
+    _log(orange('Decremented lock: $lockCount'));
     return _lockCount;
   }
 
@@ -166,7 +174,7 @@ class NamedLock {
     var isolate = Service.getIsolateID(Isolate.current);
     isolate = isolate.replaceAll(r'/', '_');
     isolate = isolate.replaceAll(r'\', '_');
-    return join(lockPath, '$pid.$isolate.${name}');
+    return join(_lockPath, '$pid.$isolate.${name}');
   }
 
   /// Attempts to take a project lock.
@@ -180,21 +188,21 @@ class NamedLock {
   /// If we find an existing lock file we check if the process
   /// that owns it is still running. If it isn't we
   /// take a lock and delete the orphaned lock.
-  bool takeLock(String waiting) {
-    assert(exists(lockPath));
+  bool _takeLock(String waiting) {
+    assert(exists(_lockPath));
 
     var taken = false;
 
     // wait for the lock to release or the timeout to expire
     var waitCount = -1;
-    if (timeout != null) {
-      waitCount = timeout.inSeconds;
+    if (_timeout != null) {
+      waitCount = _timeout.inSeconds;
     }
 
     while (!taken && waitCount != 0) {
-      withHardLock(fn: () {
+      _withHardLock(fn: () {
         // check for other lock files
-        var locks = find('*.$name', root: lockPath).toList();
+        var locks = find('*.$name', root: _lockPath).toList();
 
         var lockFiles = locks.length;
 
@@ -203,7 +211,7 @@ class NamedLock {
           taken = true;
         } else {
           // we have found another lock file so check if it is held be a running process
-          lockFiles = clearOldLocks(locks, lockFiles);
+          lockFiles = _clearOldLocks(locks, lockFiles);
           if (lockFiles == 0) {
             taken = true;
           }
@@ -234,13 +242,13 @@ class NamedLock {
 
     if (!taken) {
       throw LockException(
-          'Unable to lock $description ${truepath(lockPath)} as it is currently held'); //  by ${ProcessHelper().getPIDName(lpid)} IsolateId: $isolateId');
+          'Unable to lock $_description ${truepath(_lockPath)} as it is currently held'); //  by ${ProcessHelper().getPIDName(lpid)} IsolateId: $isolateId');
     }
 
     return taken;
   }
 
-  int clearOldLocks(List<String> locks, int lockFiles) {
+  int _clearOldLocks(List<String> locks, int lockFiles) {
     for (var lock in locks) {
       var parts = basename(lock).split('.');
       if (parts.length < 3) {
@@ -263,7 +271,7 @@ class NamedLock {
         // If the foreign lock file was left orphaned
         // then we delete it.
         if (exists(lock)) {
-          log(red('Clearing old lock file: $lock'));
+          _log(red('Clearing old lock file: $lock'));
           delete(lock);
         }
         lockFiles--;
@@ -272,7 +280,7 @@ class NamedLock {
     return lockFiles;
   }
 
-  void withHardLock({
+  void _withHardLock({
     Duration timeout,
     void Function() fn,
   }) {
@@ -306,19 +314,19 @@ class NamedLock {
       }
 
       if (socket != null) {
-        log(blue('Hardlock taken'));
+        _log(blue('Hardlock taken'));
         fn();
       }
     } finally {
       if (socket != null) {
         socket.close();
-        log(blue('Hardlock relased'));
+        _log(blue('Hardlock relased'));
       }
     }
   }
 }
 
-void log(String message) {
+void _log(String message) {
   // var id = Service.getIsolateID(Isolate.current);
   //print('$id: $message');
 }

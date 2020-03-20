@@ -26,6 +26,7 @@ export 'src/util/editor.dart' show showEditor;
 export 'src/util/file_sort.dart' show FileSort, Column;
 export 'src/util/process_helper.dart' show ProcessHelper;
 export 'src/util/wait_for_ex.dart' show waitForEx;
+export 'src/util/with_lock.dart' show NamedLock, LockException;
 
 export 'package:path/path.dart'
     hide
