@@ -338,34 +338,32 @@ class VirtualProject {
   // to swap between a link and a dir.
   void _createLib() {
     // does the script have a lib directory
-    if (Directory(_scriptLibPath).existsSync()) {
+    if (exists(_scriptLibPath)) {
       // does the cache have a lib
-      if (Directory(projectCacheLib).existsSync()) {
+      if (exists(projectCacheLib)) {
         // ensure we have a link from cache to the scriptlib
         if (!FileSystemEntity.isLinkSync(projectCacheLib)) {
           // its not a link so we need to recreate it as a link
           // the script directory structure may have changed since
           // the last run.
-          Directory(projectCacheLib).deleteSync();
-          var link = Link(projectCacheLib);
-          link.createSync(_scriptLibPath);
+          deleteDir(projectCacheLib);
+          symlink(_scriptLibPath, projectCacheLib);
         }
       } else {
-        var link = Link(projectCacheLib);
-        link.createSync(_scriptLibPath);
+        symlink(_scriptLibPath, projectCacheLib);
       }
     } else {
       // no script lib so we need to create a real lib
       // directory in the project cache.
-      if (!Directory(projectCacheLib).existsSync()) {
+      if (!exists(projectCacheLib)) {
         // create the lib as it doesn't exist.
-        Directory(projectCacheLib).createSync();
+        createDir(projectCacheLib);
       } else {
         if (FileSystemEntity.isLinkSync(projectCacheLib)) {
           {
             // delete the link and create the required directory
-            Directory(projectCacheLib).deleteSync();
-            Directory(projectCacheLib).createSync();
+            delete(projectCacheLib);
+            createDir(projectCacheLib);
           }
         }
         // it exists and is the correct type so no action required.
