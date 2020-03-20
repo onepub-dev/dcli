@@ -70,6 +70,10 @@ bool confirm({String prompt}) {
 }
 
 class Ask extends DShellFunction {
+  static const int BACKSPACE = 127;
+  static const int SPACE = 32;
+  static const int DEL = 8;
+
   ///
   /// Reads user input from stdin and returns it as a string.
   String ask({String prompt, bool toLower, bool hidden}) {
@@ -107,10 +111,23 @@ class Ask extends DShellFunction {
       do {
         char = stdin.readByteSync();
         if (char != 10) {
-          stdout.write('*');
-          // we must wait for flush as only one flush can be outstanding at a time.
-          waitForEx<void>(stdout.flush());
-          value.add(char);
+          if (char == BACKSPACE) {
+            if (value.isNotEmpty) {
+              // move back a character,
+              // print a space an move back again.
+              // required to clear the current character
+              // move back one space.
+              stdout.writeCharCode(DEL);
+              stdout.writeCharCode(SPACE);
+              stdout.writeCharCode(DEL);
+              value.removeLast();
+            }
+          } else {
+            stdout.write('*');
+            // we must wait for flush as only one flush can be outstanding at a time.
+            waitForEx<void>(stdout.flush());
+            value.add(char);
+          }
         }
       } while (char != 10);
     } finally {
