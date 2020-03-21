@@ -66,6 +66,28 @@ void main() {
       expect(parsed.cmd, equals('git'));
       expect(parsed.args, equals(['log', '--pretty=format:%s', 'v1.0.45']));
     });
+
+    test('ssh with quoted args', () {
+      var command =
+          'mkdir -p  /tmp/etc/openvpn; sudo cp -R /etc/openvpn/* /tmp/etc/openvpn';
+
+      var cmdArgs = <String>[];
+      cmdArgs.clear();
+      cmdArgs.add('-t');
+      cmdArgs.add('bilby.clouddialer.com.au');
+      cmdArgs.add("'echo abc123 | sudo -S  $command'");
+
+      var parsed = ParsedCliCommand.fromParsed('ssh', cmdArgs, pwd);
+
+      expect(parsed.cmd, equals('ssh'));
+      expect(
+          parsed.args,
+          equals([
+            '-t',
+            'bilby.clouddialer.com.au',
+            "'echo abc123 | sudo -S  $command'"
+          ]));
+    });
   });
 
   group(('Glob expansion'), () {

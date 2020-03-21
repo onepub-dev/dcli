@@ -174,7 +174,7 @@ class _QArg {
       wasQuoted = true;
     }
 
-    if (wasQuoted && !stripQuotes) {
+    if (wasQuoted && stripQuotes) {
       arg = arg.substring(1, arg.length - 1);
     }
   }
