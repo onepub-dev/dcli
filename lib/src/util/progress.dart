@@ -34,6 +34,11 @@ class Progress {
     _wireStreams((line) => print(line), devNull);
   }
 
+  /// Use this progress to print both stdout and stderr
+  Progress.print() {
+    _wireStreams((line) => print(line), (line) => printerr(line));
+  }
+
   void addToStdout(String line) {
     if (!closed) {
       stdoutController.sink.add(line);
