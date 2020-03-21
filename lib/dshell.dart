@@ -25,6 +25,7 @@ export 'src/util/dshell_paths.dart' show DShellPaths;
 export 'src/util/editor.dart' show showEditor;
 export 'src/util/file_sort.dart' show FileSort, Column;
 export 'src/util/process_helper.dart' show ProcessHelper;
+export 'src/util/remote.dart' show Remote;
 export 'src/util/wait_for_ex.dart' show waitForEx;
 export 'src/util/with_lock.dart' show NamedLock, LockException;
 
