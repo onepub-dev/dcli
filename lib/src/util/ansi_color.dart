@@ -187,6 +187,32 @@ void clearLine({AnsiClearMode mode = AnsiClearMode.all}) =>
 ///     [orange]
 ///  ...
 class AnsiColor {
+  static bool _emitAnsi;
+
+  static bool get emitAnsi {
+    if (_emitAnsi == null) {
+      return stdin.supportsAnsiEscapes;
+    } else {
+      return _emitAnsi;
+    }
+  }
+
+  /// You can set [emitAnsi] to
+  /// override the detected ansi settings.
+  /// Dart doesn't do a great job of correctly detecting
+  /// ansi support so this give a way to override it.
+  /// If [emitAnsi] is true then escape charaters are emmitted
+  /// If [emitAnsi] is false escape characters are not emmited
+  /// By default the detected setting is used.
+  /// After setting emitAnsi you can reset back to the
+  /// default detected by calling [resetEmitAnsi].
+  static set emitAnsi(bool emit) => _emitAnsi = emit;
+
+  /// If you have called [emitAnsi] then calling
+  /// [resetEmitAnsi]  will reset the emit
+  /// setting to the default detected.
+  static void get resetEmitAnsi => _emitAnsi = null;
+
   static String reset() => _emit(Reset);
 
   static String fgReset() => _emit(FgReset);
@@ -204,7 +230,7 @@ class AnsiColor {
       {AnsiColor bgcolor = none}) {
     String output;
 
-    if (stdin.supportsAnsiEscapes) {
+    if (emitAnsi) {
       output = '${_fg(color.code)}${_bg(bgcolor?.code)}${text}${_reset}';
     } else {
       output = text;
@@ -230,7 +256,7 @@ class AnsiColor {
   }
 
   static void clearScreen(AnsiClearMode mode) {
-    if (!stdin.supportsAnsiEscapes) return;
+    if (!emitAnsi) return;
     switch (mode) {
       // case AnsiClearMode.scrollback:
       //   echo('${esc}3J', newline: false);
@@ -248,7 +274,7 @@ class AnsiColor {
   }
 
   static void clearLine(AnsiClearMode mode) {
-    if (!stdin.supportsAnsiEscapes) return;
+    if (!emitAnsi) return;
     switch (mode) {
       // case AnsiClearMode.scrollback:
       case AnsiClearMode.all:
