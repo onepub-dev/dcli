@@ -165,8 +165,11 @@ class RunnableProcess {
       var exitCode = waitForEx<int>(process.exitCode);
 
       if (exitCode != 0) {
-        exited.completeError(RunException(cmdLine, exitCode,
-            'The command ${red('[$cmdLine]')} failed with exitCode: ${exitCode}'));
+        exited.completeError(RunException.withArgs(
+            parsed.cmd,
+            parsed.args,
+            exitCode,
+            'The command ${red('[${parsed.cmd}] with args [${parsed.args.join('\n  ')}')} failed with exitCode: ${exitCode}'));
       } else {
         exited.complete(exitCode);
       }
@@ -241,8 +244,11 @@ class RunnableProcess {
         // escape as an unhandled exception and stop the whole script
         progress.exitCode = exitCode;
         if (exitCode != 0 && nothrow == false) {
-          done.completeError(RunException(cmdLine, exitCode,
-              'The command ${red('[$cmdLine]')} failed with exitCode: ${exitCode}'));
+          done.completeError(RunException.withArgs(
+              parsed.cmd,
+              parsed.args,
+              exitCode,
+              'The command ${red('[${parsed.cmd}] with args [${parsed.args.join('\n  ')}')} failed with exitCode: ${exitCode}'));
         } else {
           done.complete(true);
         }
