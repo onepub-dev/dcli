@@ -1,3 +1,9 @@
+### 1.8.7-dev.1
+added logic to delete the commit.msg tmp file.
+Fixed the release script so it doesn't keep breaking the changelog.md
+Added a Format class and a fixed width column fomatter.
+Added logic to prompt the user before overwritting an existing exe rather than just shutting down.
+
 ### 1.8.6-dev.5
 Fixed the release script so it doesn't keep breaking the changelog.md
 ### 1.8.6-dev.4
