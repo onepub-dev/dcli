@@ -165,10 +165,14 @@ class Remote {
     // build fromArg user@host:/path
     var fromArg = '';
     if (fromHost != null) {
+      var fromUserArg = '';
       if (fromUser != null) {
-        fromArg += '$fromUser@';
+        fromUserArg = '$fromUser@';
       }
-      fromArg += '$fromHost:${from.join(" ")}';
+      // quote the [from] arg to stop it being
+      // glob expanded. When [host] is not null he [from] arg describes
+      // the remote file system so local expansion makes no sense.
+      fromArg = '"$fromUserArg$fromHost:${from.join(" ")}"';
     } else {
       fromArg = from.join(' ');
     }
@@ -178,10 +182,14 @@ class Remote {
     // build toArg user@host:/path
     var toArg = '';
     if (toHost != null) {
+      var toUserArg = '';
       if (toUser != null) {
-        toArg += '$toUser@';
+        toUserArg = '$toUser@';
       }
-      toArg += '$toHost:$to';
+      // quote the [to] arg to stop it being
+      // glob expanded. When [host] is not null he [to] arg describes
+      // the remote file system so local expansion makes no sense.
+      toArg = '"$toUserArg$toHost:$to"';
     } else {
       toArg = to;
     }
