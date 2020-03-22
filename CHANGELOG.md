@@ -1,6 +1,7 @@
 ### 1.8.6-dev.4
 Added a Format class and a fixed width column fomatter.
 Added logic to prompt the user before overwritting an existing exe rather than just shutting down.
+
 ### 1.8.6-dev.3
 Fixed a bug where remote wild cards were being expanded locally.
 Added a scp test with wild card expansion on remote system.
