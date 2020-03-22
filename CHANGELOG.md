@@ -1,3 +1,5 @@
+### 1.8.6-dev.5
+Fixed the release script so it doesn't keep breaking the changelog.md
 ### 1.8.6-dev.4
 Added a Format class and a fixed width column fomatter.
 Added logic to prompt the user before overwritting an existing exe rather than just shutting down.

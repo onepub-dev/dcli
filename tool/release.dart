@@ -108,22 +108,23 @@ void generateReleaseNotes(
       'git --no-pager log --pretty=format:"%s" ${currentTag}..HEAD'.toList();
   var changeLogPath = join(projectRootPath, 'CHANGELOG.md');
 
-  // write the commit messages to the change log.
-  // Not very nice as the commit messages are not necessarily that useful.
-  var backup = '$changeLogPath.bak';
-  move(changeLogPath, backup);
 
-  changeLogPath.write('### ${newVersion.toString()}');
+  var commitMessage = join(projectRootPath, 'commit.msg');
+  commitMessage.write('### ${newVersion.toString()}');
 
-  messages.forEach((message) => changeLogPath.append(message));
-  changeLogPath.append('');
+  messages.forEach((message) => commitMessage.append(message));
+  commitMessage.append('');
 
   // give the user a chance to clean up the change log.
   if (confirm(prompt:'Would you like to clean up the change log'))
   {	
-  	showEditor(changeLogPath);
+  	showEditor(commitMessage);
   }
  
+  // write the edited commit messages to the change log.
+  var backup = '$changeLogPath.bak';
+  move(changeLogPath, backup);
+  read(commitMessage).forEach((line) => changeLogPath.append(line));
   read(backup).forEach((line) => changeLogPath.append(line));
   delete(backup);
 }
