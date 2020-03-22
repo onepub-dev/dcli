@@ -17,6 +17,13 @@ void main(List<String> args) {
   var password = args[1];
   //  ask(prompt: 'Password for target:', hidden: true);
 
+  Remote.scp(
+    fromHost: fqdn,
+    from: ['/tmp/*.dart'],
+    recursive: true,
+    to: '/tmp',
+  );
+
   Remote.exec(
     host: fqdn,
     command: r'ls  /home/bsutton/*',
