@@ -1,5 +1,4 @@
 #! /usr/bin/env dshell
-  
 import 'dart:io';
 import 'package:dshell/dshell.dart';
 
@@ -13,7 +12,6 @@ import 'package:dshell/dshell.dart';
 ///
 
 void main() {
-        print('ansi supported: ${stdin.supportsAnsiEscapes}');
-        print(red('I should be red'));
-} 
-
+  print('ansi supported: ${stdin.supportsAnsiEscapes}');
+  print(red('I should be red'));
+}

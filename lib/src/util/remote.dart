@@ -88,7 +88,7 @@ class Remote {
         // -p ''  blank out the password prompt give we are echoing the password in.
         // We quote the [command] to stop glob expansion on the local system.
         if (password != null) {
-          command ="echo $password | sudo -Skp '' $command";
+          command = "echo $password | sudo -Skp '' $command";
         } else {
           command = 'sudo $command';
         }
