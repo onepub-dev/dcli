@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:dshell/src/pubspec/global_dependencies.dart';
 import 'package:dshell/src/util/completion.dart';
+import 'package:dshell/src/util/format.dart';
 import 'package:dshell/src/util/pub_cache.dart';
 import 'package:dshell/src/util/truepath.dart';
 
@@ -34,58 +35,72 @@ class DoctorCommand extends Command {
           "'dshell doctor' takes zero or one arguments. Found $subarguments");
     }
 
-    colprint('Dshell doctor version', '${Settings().version}');
+    colprint(['Dshell version', '${Settings().version}']);
     print('');
-    colprint('OS', '${Platform.operatingSystem}');
-    colprint('OS Version', '${Platform.operatingSystemVersion}');
-    colprint('Path separator', '${Platform.pathSeparator}');
+    colprint(['OS', '${Platform.operatingSystem}']);
+    print(Format.row(['OS Version', '${Platform.operatingSystemVersion}'],
+        widths: [17, -1]));
+    colprint(['Path separator', '${Platform.pathSeparator}']);
     print('');
-    colprint('dart version', '${DartSdk().version}');
+    colprint(['dart version', '${DartSdk().version}']);
     print('');
 
     var dshellPath = which('dshell').firstLine;
-    colprint('dshell path',
-        '${dshellPath == null ? 'Not found' : privatePath(dshellPath)}');
-    colprint('dart exe path', '${privatePath(DartSdk().dartExePath)}');
+    colprint([
+      'dshell path',
+      '${dshellPath == null ? 'Not found' : privatePath(dshellPath)}'
+    ]);
+    colprint(['dart exe path', '${privatePath(DartSdk().dartExePath)}']);
     var dartPath = which(DartSdk.dartExeName, first: true).firstLine;
-    colprint('dart path',
-        '${privatePath(DartSdk().dartExePath)} : ${privatePath(dartPath)}');
+    colprint([
+      'dart path',
+      '${privatePath(DartSdk().dartExePath)}',
+      'which: ${privatePath(dartPath)}'
+    ]);
     var dart2NativePath =
         which(DartSdk.dart2NativeExeName, first: true).firstLine;
-    colprint('dart2Native path',
-        '${privatePath(DartSdk().dart2NativePath)} : ${privatePath(dart2NativePath)}');
+    colprint([
+      'dart2Native path',
+      '${privatePath(DartSdk().dart2NativePath)}',
+      'which: ${privatePath(dart2NativePath)}'
+    ]);
     print('');
     var pubPath = which(DartSdk.pubExeName, first: true).firstLine;
-    colprint('pub get path',
-        '${privatePath(DartSdk().pubPath)} : ${privatePath(pubPath)}');
-    colprint('Pub cache', '${privatePath(PubCache().path)}');
+    colprint([
+      'pub get path',
+      '${privatePath(DartSdk().pubPath)}',
+      'which: ${privatePath(pubPath)}'
+    ]);
+    colprint(['Pub cache', '${privatePath(PubCache().path)}']);
 
     if (Platform.packageConfig == null) {
-      colprint('Package Config', 'Not Passed');
+      colprint(['Package Config', 'Not Passed']);
     } else {
-      colprint('Package Config', '${privatePath(Platform.packageConfig)}');
+      colprint(['Package Config', '${privatePath(Platform.packageConfig)}']);
     }
 
     print('');
 
-    print('PATH\n\t${privatePath(PATH.join("\n\t"))}');
-    colprint('\$SHELL', '${env('SHELL')}');
+    print('PATH');
+    PATH.forEach((path) => colprint(['', privatePath(path)]));
+    print('');
+    colprint(['\$SHELL', '${env('SHELL')}']);
     if (!Settings().isWindows) {
-      colprint('True SHELL', '${ShellDetection().getShellName()}');
+      colprint(['True SHELL', '${ShellDetection().getShellName()}']);
 
       var shell = ShellDetection().identifyShell();
       var startScriptPath = shell.startScriptPath;
 
       if (startScriptPath == null) {
-        colprint('Shell Start Script', 'Not Found');
+        colprint(['Shell Start Script', 'Not Found']);
       } else {
-        colprint('Shell Start Script', '${privatePath(startScriptPath)}');
+        colprint(['Shell Start Script', '${privatePath(startScriptPath)}']);
       }
     }
 
     print('');
     print('Dart location(s)');
-    which('dart').forEach((line) => colprint('', line));
+    which('dart').forEach((line) => colprint(['', line]));
 
     print('');
     print('Permissions');
@@ -101,7 +116,8 @@ class DoctorCommand extends Command {
     print('');
     print(join('.dshell', GlobalDependencies.filename));
     var gd = GlobalDependencies();
-    gd.dependencies.forEach((d) => colprint('  ${d.name}', '${d.rehydrate()}'));
+    gd.dependencies
+        .forEach((d) => colprint(['  ${d.name}', '${d.rehydrate()}']));
 
     if (showScriptDetails) {
       project.doctor;
@@ -109,8 +125,9 @@ class DoctorCommand extends Command {
     return 0;
   }
 
-  void colprint(String label, String value, {int pad = 25}) {
-    print('${label.padRight(pad)}: ${value}');
+  void colprint(List<String> cols) {
+    //cols[0] = green(cols[0]);
+    print(Format.row(cols, widths: [17, 40], delimiter: ' '));
   }
 
   @override
@@ -136,11 +153,25 @@ class DoctorCommand extends Command {
 
       var username = env('USERNAME');
       if (username != null) {
-        colprint('$label',
-            '${fstat.modeString()} <user>:${(owner.group == owner.user ? '<user>' : owner.group)}   ${privatePath(path)} ');
+        print(Format.row([
+          '$label',
+          '${fstat.modeString()}',
+          '<user>:${(owner.group == owner.user ? '<user>' : owner.group)}',
+          '${privatePath(path)} '
+        ], widths: [
+          17,
+          9,
+          16,
+          -1
+        ], alignments: [
+          TableAlignment.LEFT,
+          TableAlignment.LEFT,
+          TableAlignment.MIDDLE,
+          TableAlignment.LEFT
+        ]));
       }
     } else {
-      colprint('$label', '${privatePath(path)} does not exist');
+      colprint(['$label', '${privatePath(path)} does not exist']);
     }
   }
 

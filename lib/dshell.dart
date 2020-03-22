@@ -2,16 +2,12 @@ export 'package:args/args.dart';
 export 'src/functions/ask.dart' show ask, confirm;
 export 'src/functions/cat.dart' show cat, CatException;
 export 'src/functions/cd.dart' show CDException;
-export 'src/script/dart_sdk.dart' show DartSdk;
 export 'src/functions/chmod.dart' show chmod, ChModException;
 export 'src/functions/copy.dart' show copy, CopyException;
 export 'src/functions/delete.dart' show delete, DeleteException;
 export 'src/functions/echo.dart' show echo;
 export 'src/functions/env.dart' show env, HOME, PATH, isOnPath, setEnv, envs;
 export 'src/functions/fileList.dart' show fileList;
-export 'src/util/file_sync.dart';
-export 'src/util/dshell_exception.dart';
-
 export 'src/functions/find.dart' show find;
 export 'src/functions/head.dart' show head;
 export 'src/functions/is.dart' show isFile, isDirectory, exists;
@@ -20,10 +16,16 @@ export 'src/functions/menu.dart' show menu;
 export 'src/functions/move.dart' show move, MoveException;
 export 'src/functions/replace.dart' show replace;
 export 'src/functions/tail.dart' show tail;
+
+export 'src/script/dart_sdk.dart' show DartSdk;
+
 export 'src/util/dev_null.dart' show devNull;
+export 'src/util/dshell_exception.dart';
 export 'src/util/dshell_paths.dart' show DShellPaths;
 export 'src/util/editor.dart' show showEditor;
 export 'src/util/file_sort.dart' show FileSort, Column;
+export 'src/util/file_sync.dart';
+export 'src/util/format.dart' show Format;
 export 'src/util/process_helper.dart' show ProcessHelper;
 export 'src/util/remote.dart' show Remote;
 export 'src/util/wait_for_ex.dart' show waitForEx;
