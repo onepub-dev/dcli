@@ -127,6 +127,7 @@ void generateReleaseNotes(
   read(commitMessage).forEach((line) => changeLogPath.append(line));
   read(backup).forEach((line) => changeLogPath.append(line));
   delete(backup);
+  delete(commitMessage);
 }
 
 String findPubSpec() {
