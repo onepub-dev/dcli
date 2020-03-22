@@ -85,7 +85,7 @@ void main() {
           equals([
             '-t',
             'bilby.clouddialer.com.au',
-            "'echo abc123 | sudo -S  $command'"
+            'echo abc123 | sudo -S  $command'
           ]));
     });
   });
