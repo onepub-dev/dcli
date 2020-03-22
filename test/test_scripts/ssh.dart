@@ -11,11 +11,68 @@ import 'package:dshell/dshell.dart';
 ///
 
 void main(List<String> args) {
-  //Settings().setVerbose(true);
+  Settings().setVerbose(true);
   var fqdn = args[0];
   // ask(prompt: "FQDN of test target:");
   var password = args[1];
   //  ask(prompt: 'Password for target:', hidden: true);
+
+  Remote.exec(
+    host: fqdn,
+    command: r'ls  /home/bsutton/*',
+    progress: Progress.print(),
+  );
+
+  // works except that it doesn't have permission to one dir so throws.
+  // Remote.exec(
+  //   host: fqdn,
+  //   command: r'find  /home/bsutton -name "*.txt"',
+  //   progress: Progress.print(),
+  // );
+
+  // the arg --name "*.txt" cause our glob parser to throw
+  // needs further investigation but doesn't related to remote
+  // Remote.exec(
+  //   host: fqdn,
+  //   command: r'find  /home/bsutton -type f  -name "*.txt" -exec shasum {}  \;',
+  //   progress: Progress.print(),
+  // );
+
+  // works
+  // Remote.exec(
+  //     host: fqdn,
+  //     password: password,
+  //     command: r'find  /etc/openvpn -type f  -exec shasum {}  \;',
+  //     progress: Progress.print(),
+  //     sudo: true);
+
+  // works
+  Remote.scp(fromHost: fqdn, from: ['/etc/asterisk/sip.d/*'], to: '/tmp');
+
+  Remote.scp(
+      fromUser: "${env('USER')}",
+      fromHost: fqdn,
+      from: ['/tmp/*.log'],
+      to: '.');
+
+  Remote.scp(from: ['./*.dart'], toHost: fqdn, to: '/tmp', recursive: true);
+
+  var copy_secure_dir = which('copy_secure_dir').firstLine;
+
+  Remote.scp(from: [copy_secure_dir], to: '/tmp', toHost: fqdn);
+
+  // dart exe doesn't run on ubuntu 12.04
+  // Remote.exec(
+  //     host: fqdn,
+  //     command: '/tmp/copy_secure_dir',
+  //     sudo: true,
+  //     password: password);
+
+  Remote.scp(
+      recursive: true,
+      fromHost: fqdn,
+      from: ['/tmp/slow.dart', '/tmp/parent.dart'],
+      to: '/tmp');
 
   var command =
       "mkdir -p  /tmp/etc/openvpn; echo $password  | sudo -Sp '' cp -R /etc/openvpn/* /tmp/etc/openvpn; echo hi; ls -l /tmp/etc/openvpn; echo $password | sudo -Sp ''  rm -rf /tmp/etc/openvpn ; echo ho; ls /tmp";
@@ -27,8 +84,35 @@ void main(List<String> args) {
       password: password,
       progress: Progress.print());
 
+  Remote.execList(
+      host: fqdn,
+      commands: [
+        'mkdir -p  /tmp/etc/openvpn',
+        'rm -rf /tmp/etc/openvpn/*',
+        'cp -R /etc/openvpn/* /tmp/etc/openvpn',
+        'echo hi',
+        'ls -l /tmp/etc/openvpn',
+        'rm -rf /tmp/etc/openvpn',
+        'echo ho',
+        'ls /tmp'
+      ],
+      sudo: true,
+      password: password,
+      progress: Progress.print());
+
   touch('dshell.txt', create: true);
-  Remote.scp(from: 'dshell.txt', toHost: fqdn);
+  Remote.scp(from: ['dshell.txt'], toHost: fqdn, to: '/tmp');
+
+  //  "ssh -t bsutton@auditord.noojee.com.au '/home/bsutton/git/auditor/backup.sh nowString.sql'"
+  var now = DateTime.now();
+  Remote.exec(
+      host: 'bsutton@auditord.noojee.com.au',
+      command: '/home/bsutton/git/auditor/backup.sh ${now}.sql');
+
+  Remote.scp(
+      fromHost: 'auditord.noojee.com.au',
+      from: ['/home/bsutton/git/auditor/${now}.sql'],
+      to: '.');
 
   // // command = 'pwd;ls *';
   // var cmdArgs = <String>[];
