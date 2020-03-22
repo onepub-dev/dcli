@@ -111,8 +111,11 @@ class RunnableProcess {
 
     if (Settings().isVerbose) {
       Settings().verbose(
-          'Starting(runInShell: $runInShell workingDir: $workingDirectory mode: $mode)');
-      Settings().verbose('CommandLine: ${parsed.cmd} ${parsed.args.join(' ')}');
+          'Process.start: cmdLine ${green(parsed.cmd + ' ' + parsed.args.join(' '))}');
+      Settings().verbose(
+          'Process.start: cmd: ${parsed.cmd} args: ${parsed.args.join(', ')}');
+      Settings().verbose(
+          'Process.start(runInShell: $runInShell workingDir: $workingDirectory mode: $mode)');
     }
 
     fProcess = Process.start(
@@ -130,6 +133,7 @@ class RunnableProcess {
     if (waitForStart) {
       _waitForStart();
     }
+    Settings().verbose('Process.start returned');
   }
 
   void _waitForStart() {
