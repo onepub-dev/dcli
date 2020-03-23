@@ -1,3 +1,6 @@
+### 1.8.7
+[ENH] added copyDir and moveDir functions.
+
 ### 1.8.7-dev.1
 added logic to delete the commit.msg tmp file.
 Fixed the release script so it doesn't keep breaking the changelog.md

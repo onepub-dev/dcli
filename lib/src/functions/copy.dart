@@ -16,7 +16,7 @@ import 'is.dart';
 ///
 /// [to] may be a directory in which case the [from] filename is
 /// used to construct the [to] files full path.
-/// 
+///
 /// The [to] file must not exists unless [overwrite] is set to true.
 ///
 /// The default for [overwrite] is false.
@@ -27,7 +27,6 @@ void copy(String from, String to, {bool overwrite = false}) =>
 
 class Copy extends DShellFunction {
   void copy(String from, String to, {bool overwrite = false}) {
-
     if (isDirectory(to)) {
       to = join(to, basename(from));
     }
@@ -35,7 +34,6 @@ class Copy extends DShellFunction {
     if (overwrite == false && exists(to)) {
       throw CopyException('The target file ${absolute(to)} already exists');
     }
-
 
     try {
       File(from).copySync(to);

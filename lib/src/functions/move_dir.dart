@@ -7,7 +7,7 @@ import '../settings.dart';
 import 'is.dart';
 
 /// EXPERIMENTAL
-/// 
+///
 /// There are still questions on what constitutes a move.
 /// If we are only moving some files should we delete
 /// any empty directories in the from tree?
@@ -63,7 +63,7 @@ import 'is.dart';
 /// The default for [overwrite] is false.
 ///
 /// If an error occurs a [MoveDirException] is thrown.
-/// 
+///
 /// EXPERIMENTAL
 void moveDir(String from, String to,
         {bool overwrite = false,

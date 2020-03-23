@@ -70,7 +70,7 @@ void main() {
         var actual = find('*.txt', root: to, recursive: false).toList();
 
         t.expect(actual, expected);
-          t.expect(hasMoved(source), true);
+        t.expect(hasMoved(source), true);
       });
     });
 
@@ -135,7 +135,7 @@ void main() {
         var actual = find('*', root: to, recursive: true).toList();
 
         t.expect(actual, expected);
-         t.expect(hasMoved(source), true);
+        t.expect(hasMoved(source), true);
       });
     });
   });
