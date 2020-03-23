@@ -173,7 +173,7 @@ class RunnableProcess {
             parsed.cmd,
             parsed.args,
             exitCode,
-            'The command ${red('[${parsed.cmd}] with args [${parsed.args.join('\n  ')}')} failed with exitCode: ${exitCode}'));
+            'The command ${red('[${parsed.cmd}] with args [${parsed.args.join(', ')}]')} failed with exitCode: ${exitCode}'));
       } else {
         exited.complete(exitCode);
       }
@@ -252,7 +252,7 @@ class RunnableProcess {
               parsed.cmd,
               parsed.args,
               exitCode,
-              'The command ${red('[${parsed.cmd}] with args [${parsed.args.join('\n  ')}')} failed with exitCode: ${exitCode}'));
+              'The command ${red('[${parsed.cmd}] with args [${parsed.args.join(', ')}]')} failed with exitCode: ${exitCode}'));
         } else {
           done.complete(true);
         }
