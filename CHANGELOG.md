@@ -1,3 +1,6 @@
+### 1.8.9
+second go at fixing the compile install bug.
+
 ### 1.8.8
 [BUG] dshell compile was failing to install due to move bug.
 
@@ -7,7 +10,6 @@ bug in move as overwrite did not have a default value.
 ### 1.8.7
 [ENH] added copyDir and moveDir functions.
 
-### 1.8.7-dev
 ### 1.8.6
 [BUG] bug in the quote handling of startsWithArgs
 
