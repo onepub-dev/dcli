@@ -117,7 +117,7 @@ class CompileCommand extends Command {
         if (install) {
           print('');
           print(orange('Installing $exe into $to'));
-          move(exe, to);
+          move(exe, to, overwrite: true);
         }
       }
     } on RunException catch (e) {

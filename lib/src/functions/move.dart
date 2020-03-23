@@ -37,7 +37,7 @@ class Move extends DShellFunction {
 
     if (exists(dest) && !overwrite) {
       throw MoveException(
-          'The [to] path ${absolute(dest)} already exists. USe overwrite:true ');
+          'The [to] path ${absolute(dest)} already exists. Use overwrite:true ');
     }
     try {
       File(from).renameSync(dest);
