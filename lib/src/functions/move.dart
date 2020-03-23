@@ -22,7 +22,7 @@ import 'package:path/path.dart' as p;
 ///
 /// If the move fails for any reason a [MoveException] is thrown.
 ///
-void move(String from, String to, {bool overwrite}) =>
+void move(String from, String to, {bool overwrite = false}) =>
     Move().move(from, to, overwrite: overwrite);
 
 class Move extends DShellFunction {
