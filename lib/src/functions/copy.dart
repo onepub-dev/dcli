@@ -1,5 +1,7 @@
 import 'dart:io';
 
+import 'package:path/path.dart';
+
 import 'function.dart';
 import '../settings.dart';
 
@@ -12,7 +14,10 @@ import 'is.dart';
 /// copy("/tmp/fred.text", "/tmp/fred2.text", overwrite=true);
 /// ```
 ///
-/// The to file must not exists unless [overwrite] is set to true.
+/// [to] may be a directory in which case the [from] filename is
+/// used to construct the [to] files full path.
+/// 
+/// The [to] file must not exists unless [overwrite] is set to true.
 ///
 /// The default for [overwrite] is false.
 ///
@@ -22,13 +27,15 @@ void copy(String from, String to, {bool overwrite = false}) =>
 
 class Copy extends DShellFunction {
   void copy(String from, String to, {bool overwrite = false}) {
+
+    if (isDirectory(to)) {
+      to = join(to, basename(from));
+    }
+
     if (overwrite == false && exists(to)) {
       throw CopyException('The target file ${absolute(to)} already exists');
     }
 
-    if (isDirectory(to)) {
-      throw CopyException('The path ${absolute(to)} is a directory.');
-    }
 
     try {
       File(from).copySync(to);
@@ -37,7 +44,7 @@ class Copy extends DShellFunction {
           'An error occured copying ${absolute(from)} to ${absolute(to)}. Error: $e');
     }
 
-    Settings().verbose('mv ${absolute(from)} -> ${absolute(to)}');
+    Settings().verbose('copy ${absolute(from)} -> ${absolute(to)}');
   }
 }
 

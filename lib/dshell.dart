@@ -4,6 +4,7 @@ export 'src/functions/cat.dart' show cat, CatException;
 export 'src/functions/cd.dart' show CDException;
 export 'src/functions/chmod.dart' show chmod, ChModException;
 export 'src/functions/copy.dart' show copy, CopyException;
+export 'src/functions/copy_dir.dart' show copyDir, CopyDirException;
 export 'src/functions/delete.dart' show delete, DeleteException;
 export 'src/functions/echo.dart' show echo;
 export 'src/functions/env.dart' show env, HOME, PATH, isOnPath, setEnv, envs;
@@ -14,6 +15,7 @@ export 'src/functions/is.dart' show isFile, isDirectory, exists;
 export 'src/functions/create_dir.dart' show createDir, CreateDirException;
 export 'src/functions/menu.dart' show menu;
 export 'src/functions/move.dart' show move, MoveException;
+export 'src/functions/move_dir.dart' show moveDir, MoveDirException;
 export 'src/functions/replace.dart' show replace;
 export 'src/functions/tail.dart' show tail;
 

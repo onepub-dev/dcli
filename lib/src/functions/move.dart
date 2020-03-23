@@ -22,10 +22,11 @@ import 'package:path/path.dart' as p;
 ///
 /// If the move fails for any reason a [MoveException] is thrown.
 ///
-void move(String from, String to) => Move().move(from, to);
+void move(String from, String to, {bool overwrite}) =>
+    Move().move(from, to, overwrite: overwrite);
 
 class Move extends DShellFunction {
-  void move(String from, String to) {
+  void move(String from, String to, {bool overwrite = false}) {
     Settings().verbose('move ${absolute(from)} -> ${absolute(to)}');
 
     var dest = to;
@@ -34,6 +35,10 @@ class Move extends DShellFunction {
       dest = p.join(to, p.basename(from));
     }
 
+    if (exists(dest) && !overwrite) {
+      throw MoveException(
+          'The [to] path ${absolute(dest)} already exists. USe overwrite:true ');
+    }
     try {
       File(from).renameSync(dest);
     } catch (e) {
