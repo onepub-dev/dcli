@@ -235,7 +235,7 @@ class _QArg {
   // check if the entity is a hidden file (.xxx) or
   // if lives in a hidden directory.
   bool isHidden(String root, FileSystemEntity entity) {
-    var relativePath = relative(entity.path, from: root);
+    var relativePath = truepath(relative(entity.path, from: root));
 
     var parts = relativePath.split(separator);
 
