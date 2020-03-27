@@ -171,10 +171,20 @@ class NamedLock {
     // lock file is in the directory above the project
     // as during cleaning we delete the project directory.
 
-    var isolate = Service.getIsolateID(Isolate.current);
-    isolate = isolate.replaceAll(r'/', '_');
-    isolate = isolate.replaceAll(r'\', '_');
+    var isolate = _isolateID;
+
     return join(_lockPath, '$pid.$isolate.${name}');
+  }
+
+  String get _isolateID {
+    var isolate = Service.getIsolateID(Isolate.current);
+    if (isolate != null) {
+      isolate = isolate.replaceAll(r'/', '_');
+      isolate = isolate.replaceAll(r'\', '_');
+    } else {
+      isolate = '${Isolate.current.hashCode}';
+    }
+    return isolate;
   }
 
   /// Attempts to take a project lock.
@@ -257,9 +267,7 @@ class NamedLock {
       }
       var lpid = int.tryParse(parts[0]);
       var isolateId = parts[1];
-      var currentIsolateId = Service.getIsolateID(Isolate.current);
-      currentIsolateId = currentIsolateId.replaceAll(r'\', '_');
-      currentIsolateId = currentIsolateId.replaceAll(r'/', '_');
+      var currentIsolateId = _isolateID;
 
       if (lpid == pid && isolateId == currentIsolateId) {
         // ignore our own lock.
