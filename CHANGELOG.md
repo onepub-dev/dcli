@@ -1,3 +1,6 @@
+### 1.8.10
+Fixed bug in glob expansion where a relative path with ../ was mistaken for a hidden path.
+
 ### 1.8.9
 second go at fixing the compile install bug.
 
