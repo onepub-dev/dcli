@@ -41,10 +41,10 @@ class Settings {
 
   String _dshellBinPath;
 
-  /// The absolute path to the dshell script which
-  /// is currently running.
   String _scriptPath;
 
+  /// The absolute path to the dshell script which
+  /// is currently running.
   String get scriptPath {
     if (_scriptPath == null) {
       var actual = Platform.script.toFilePath();
