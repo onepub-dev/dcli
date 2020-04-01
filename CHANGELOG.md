@@ -1,3 +1,8 @@
+### 1.8.11
+[enh] adding validation to ask.
+[imp] moved the cleanall after the install has completed so that compile errors don't stop the install completeing.
+[bug] Fix for Service.getIsolateID returning null in compiled script. The hashcode should be a stable substitute. The question is why is getIsolateID only failing in some compiled scripts.
+
 ### 1.8.10
 Fixed bug in glob expansion where a relative path with ../ was mistaken for a hidden path.
 
