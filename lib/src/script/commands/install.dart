@@ -1,3 +1,4 @@
+
 import 'dart:io';
 
 import 'package:dshell/dshell.dart';
@@ -111,15 +112,6 @@ class InstallCommand extends Command {
       print(
           blue('Creating Cache directory in: ${Settings().dshellCachePath}.'));
       createDir(Settings().dshellCachePath);
-    } else {
-      print('');
-      if (!flagSet.isSet(NoCleanFlag())) {
-        // make certain the project is upto date.
-        print(blue("Running 'clean all' to upgrade your existing scripts"));
-        CleanAllCommand().run([], []);
-      } else {
-        print(blue('Skipping clean as -nc flag passed.'));
-      }
     }
 
     var shell = ShellDetection().identifyShell();
@@ -145,10 +137,8 @@ class InstallCommand extends Command {
       }
     }
 
-    // print OS version.
-    // print('Platform.version ${Platform.version}');
-
-    // If we just installed dart there is no pont
+    // If we just installed dart then we don't need
+    // to check the dshell paths.
     if (dartWasInstalled) {
       print('');
       print(red('You need to restart your shell so the new paths can update'));
@@ -188,7 +178,14 @@ class InstallCommand extends Command {
 
     touch(Settings().install_completed_indicator, create: true);
 
+    print(red('*' * 80));
+    print('');
     print('dshell installation complete.');
+    print('');
+    print(red('*' * 80));
+
+    cleanAll();
+
     print('');
     print('Create your first dshell script using:');
     print(blue('  dshell create <scriptname>.dart'));
@@ -197,6 +194,17 @@ class InstallCommand extends Command {
     print(blue('  ./<scriptname>.dart'));
 
     return 0;
+  }
+
+  void cleanAll() {
+    print('');
+    if (!flagSet.isSet(NoCleanFlag())) {
+      // make certain the project is upto date.
+      print(blue("Running 'clean all' to upgrade your existing scripts"));
+      CleanAllCommand().run([], []);
+    } else {
+      print(blue('Skipping clean as -nc flag passed.'));
+    }
   }
 
   @override
