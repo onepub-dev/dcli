@@ -3,7 +3,7 @@ import 'dart:io';
 import '../settings.dart';
 import 'dshell_function.dart';
 import 'is.dart';
-import 'ask.dart';
+import 'ask.dart' as a;
 
 ///
 /// Deletes the file at [path].
@@ -35,9 +35,9 @@ class Delete extends DShellFunction {
     var remove = true;
     if (ask) {
       remove = false;
-      var ask = Ask().ask(
+      var response = a.ask(
           prompt: "delete: Delete the regular file '${absolute(path)}'? y/N");
-      var yes = ask;
+      var yes = response;
       if (yes == 'y') {
         remove = true;
       }
