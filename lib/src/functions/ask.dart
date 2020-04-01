@@ -78,7 +78,8 @@ bool confirm({String prompt}) {
   prompt += ' (y/n):';
 
   while (!matched) {
-    var entered = Ask()._ask(prompt: prompt, toLower: true, hidden: false);
+    var entered = Ask()
+        ._ask(prompt: prompt, toLower: true, hidden: false, validator: Ask.any);
     var lower = entered.toLowerCase();
 
     if (['y', 't', 'true', 'yes'].contains(lower)) {
