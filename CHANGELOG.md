@@ -1,3 +1,11 @@
+### 1.8.12
+[ENH] created a command to upgrade dshell.
+[DOC] cleaned up the public interface by making a number a items private.
+[IMP] changed color for command messages for consistency.
+[IMP] removed clean all as when you first install as there should be no projects. dshell upgrade on the other hand does need to do a clean all.
+[IMP] cleaned up invalid argument processing.
+[FIX] Fixed a bug which allowed install to be run from sudo.
+
 ### 1.8.11
 [enh] adding validation to ask.
 [imp] moved the cleanall after the install has completed so that compile errors don't stop the install completeing.
