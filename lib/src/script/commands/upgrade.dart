@@ -23,7 +23,7 @@ class UpgradeCommand extends Command {
 
     var currentVersion = Settings().version;
 
-    print(red('Upgrading dshell.'));
+    print(red('Upgrading dshell...'));
     print('Current version $currentVersion');
     startFromArgs(DartSdk().pubPath, ['global', 'activate', 'dshell'],
         progress: Progress.print());
