@@ -98,9 +98,9 @@ bool confirm({String prompt}) {
 }
 
 class Ask extends DShellFunction {
-  static const int BACKSPACE = 127;
-  static const int SPACE = 32;
-  static const int DEL = 8;
+  static const int _BACKSPACE = 127;
+  static const int _SPACE = 32;
+  static const int _ = 8;
 
   ///
   /// Reads user input from stdin and returns it as a string.
@@ -154,15 +154,15 @@ class Ask extends DShellFunction {
       do {
         char = stdin.readByteSync();
         if (char != 10) {
-          if (char == BACKSPACE) {
+          if (char == _BACKSPACE) {
             if (value.isNotEmpty) {
               // move back a character,
               // print a space an move back again.
               // required to clear the current character
               // move back one space.
-              stdout.writeCharCode(DEL);
-              stdout.writeCharCode(SPACE);
-              stdout.writeCharCode(DEL);
+              stdout.writeCharCode(_);
+              stdout.writeCharCode(_SPACE);
+              stdout.writeCharCode(_);
               value.removeLast();
             }
           } else {
@@ -186,32 +186,32 @@ class Ask extends DShellFunction {
   }
 
   /// The default validator that considers any input as valid
-  static const AskValidator any = AskAny();
+  static const AskValidator any = _AskAny();
 
   /// The user must enter a non-empty string.
   /// Whitespace will be trimmed before the string is tested.
-  static const AskValidator required = AskRequired();
+  static const AskValidator required = _AskRequired();
 
   /// validates that the input is an email address
-  static const AskValidator email = AskEmail();
+  static const AskValidator email = _AskEmail();
 
   /// validates that the input is a fully qualified domian name.
-  static const AskValidator fqdn = AskFQDN();
+  static const AskValidator fqdn = _AskFQDN();
 
   /// validates that the input is a date.
-  static const AskValidator date = AskDate();
+  static const AskValidator date = _AskDate();
 
   /// validates that the input is an integer
-  static const AskValidator integer = AskInteger();
+  static const AskValidator integer = _AskInteger();
 
   /// validates that the input is a decimal
-  static const AskValidator decimal = AskDecimal();
+  static const AskValidator decimal = _AskDecimal();
 
   /// validates that the input is only alpha characters
-  static const AskValidator alpha = AskAlpha();
+  static const AskValidator alpha = _AskAlpha();
 
   /// validates that the input is only alphanumeric characters.
-  static const AskValidator alphaNumeric = AskAlphaNumeric();
+  static const AskValidator alphaNumeric = _AskAlphaNumeric();
 
   /// validates that the input is a valid ip address (v4 or v6)
   /// Use the AskIPAddress class directly if you want just a
@@ -231,8 +231,8 @@ abstract class AskValidator {
 }
 
 /// The default validator that considers any input as valid
-class AskAny extends AskValidator {
-  const AskAny();
+class _AskAny extends AskValidator {
+  const _AskAny();
   @override
   String validate(String line) {
     return line;
@@ -242,8 +242,8 @@ class AskAny extends AskValidator {
 /// The user must enter a non-empty string.
 /// Whitespace will be trimmed before the string is tested.
 ///
-class AskRequired extends AskValidator {
-  const AskRequired();
+class _AskRequired extends AskValidator {
+  const _AskRequired();
   @override
   String validate(String line) {
     line = line.trim();
@@ -254,8 +254,8 @@ class AskRequired extends AskValidator {
   }
 }
 
-class AskEmail extends AskValidator {
-  const AskEmail();
+class _AskEmail extends AskValidator {
+  const _AskEmail();
   @override
   String validate(String line) {
     line = line.trim();
@@ -267,8 +267,8 @@ class AskEmail extends AskValidator {
   }
 }
 
-class AskFQDN extends AskValidator {
-  const AskFQDN();
+class _AskFQDN extends AskValidator {
+  const _AskFQDN();
   @override
   String validate(String line) {
     line = line.trim();
@@ -280,8 +280,8 @@ class AskFQDN extends AskValidator {
   }
 }
 
-class AskDate extends AskValidator {
-  const AskDate();
+class _AskDate extends AskValidator {
+  const _AskDate();
   @override
   String validate(String line) {
     line = line.trim();
@@ -293,8 +293,8 @@ class AskDate extends AskValidator {
   }
 }
 
-class AskInteger extends AskValidator {
-  const AskInteger();
+class _AskInteger extends AskValidator {
+  const _AskInteger();
   @override
   String validate(String line) {
     line = line.trim();
@@ -306,8 +306,8 @@ class AskInteger extends AskValidator {
   }
 }
 
-class AskDecimal extends AskValidator {
-  const AskDecimal();
+class _AskDecimal extends AskValidator {
+  const _AskDecimal();
   @override
   String validate(String line) {
     line = line.trim();
@@ -319,8 +319,8 @@ class AskDecimal extends AskValidator {
   }
 }
 
-class AskAlpha extends AskValidator {
-  const AskAlpha();
+class _AskAlpha extends AskValidator {
+  const _AskAlpha();
   @override
   String validate(String line) {
     line = line.trim();
@@ -332,8 +332,8 @@ class AskAlpha extends AskValidator {
   }
 }
 
-class AskAlphaNumeric extends AskValidator {
-  const AskAlphaNumeric();
+class _AskAlphaNumeric extends AskValidator {
+  const _AskAlphaNumeric();
   @override
   String validate(String line) {
     line = line.trim();
