@@ -1,4 +1,3 @@
-
 import 'package:dshell/dshell.dart';
 
 import '../command_line_runner.dart';
@@ -34,7 +33,7 @@ class UpgradeCommand extends Command {
     upgradeVersion(currentVersion);
 
     print('');
-    print(orange('Running clean all to upgrade scripts.'));
+    print(green('Running clean all to upgrade scripts.'));
     ProjectCache().cleanAll();
 
     print('');
