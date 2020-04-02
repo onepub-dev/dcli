@@ -151,6 +151,23 @@ These are some of the built-in commands:
 # Getting Started
 ## Installing
 
+DShell now includes an installer which installs Dart and DShell.
+
+Status of dshell_install
+
+Linux - works well
+
+Windows - should work
+
+Mac OSx - untested
+
+To run the installer download: 
+[dshell_install](https://github.com/bsutton/dshell/raw/master/bin/dshell_install)
+
+The run:
+chmod +x dshell_install
+./dshell_install
+
 Lets install DShell, create and run our first script:
 
 Start by installing Dart as per:
