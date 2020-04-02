@@ -2,7 +2,6 @@ import 'dart:io';
 
 import 'package:dshell/dshell.dart';
 import 'package:dshell/src/functions/env.dart';
-import 'package:dshell/src/script/commands/clean_all.dart';
 import 'package:dshell/src/util/dart_install_apt.dart';
 import 'package:dshell/src/util/dshell_paths.dart';
 import 'package:dshell/src/util/pub_cache.dart';
@@ -185,8 +184,6 @@ class InstallCommand extends Command {
     print('');
     print(red('*' * 80));
 
-    cleanAll();
-
     print('');
     print('Create your first dshell script using:');
     print(blue('  dshell create <scriptname>.dart'));
@@ -195,17 +192,6 @@ class InstallCommand extends Command {
     print(blue('  ./<scriptname>.dart'));
 
     return 0;
-  }
-
-  void cleanAll() {
-    print('');
-    if (!flagSet.isSet(NoCleanFlag())) {
-      // make certain the project is upto date.
-      print(blue("Running 'clean all' to upgrade your existing scripts"));
-      CleanAllCommand().run([], []);
-    } else {
-      print(blue('Skipping clean as -nc flag passed.'));
-    }
   }
 
   @override
