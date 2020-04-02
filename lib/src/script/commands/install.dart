@@ -34,9 +34,11 @@ class InstallCommand extends Command {
     // check the user
     if (Settings().isLinux || Settings().isMacOS) {
       var user = 'whoami'.firstLine;
+      Settings().verbose('user: $user');
       if (user != null) {
-        if (user[0] == 'root') {
-          printerr('dshell install MUST not be run as root.');
+        if (user == 'root') {
+          printerr(red('dshell install MUST not be run as root.'));
+          exit(1);
         }
       }
     }
@@ -66,7 +68,7 @@ class InstallCommand extends Command {
     scriptIndex = i;
 
     if (subarguments.length != scriptIndex) {
-      throw CommandLineException(
+      throw InvalidArguments(
           "'dshell install' does not take any arguments. Found $subarguments");
     }
 
