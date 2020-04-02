@@ -26,7 +26,7 @@ class RunCommand extends Command {
   int run(List<Flag> selectedFlags, List<String> arguments) {
     if (arguments.isEmpty) {
       throw InvalidArguments(
-          'Expected a script or command. No arguments were found');
+          'Expected a script or command. No arguments were found.');
     }
     var scriptPath = arguments[0];
     Script.validate(scriptPath);

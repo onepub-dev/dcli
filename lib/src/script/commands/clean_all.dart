@@ -1,3 +1,4 @@
+import '../command_line_runner.dart';
 import '../flags.dart';
 import '../project_cache.dart';
 import 'commands.dart';
@@ -8,7 +9,12 @@ class CleanAllCommand extends Command {
   CleanAllCommand() : super(NAME);
 
   @override
-  int run(List<Flag> selectedFlags, List<String> subarguments) {
+  int run(List<Flag> selectedFlags, List<String> arguments) {
+    if (arguments.isNotEmpty) {
+      throw InvalidArguments(
+          'The cleanall command takes only no argument. Found: ${arguments.join(',')}');
+    }
+
     ProjectCache().cleanAll();
     return 0;
   }

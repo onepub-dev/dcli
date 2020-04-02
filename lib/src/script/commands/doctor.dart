@@ -31,7 +31,7 @@ class DoctorCommand extends Command {
       project = VirtualProject.create(Script.fromFile(scriptPath));
     }
     if (subarguments.length > 1) {
-      throw CommandLineException(
+      throw InvalidArguments(
           "'dshell doctor' takes zero or one arguments. Found $subarguments");
     }
 

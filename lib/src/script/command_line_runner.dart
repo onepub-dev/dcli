@@ -86,7 +86,10 @@ class CommandLineRunner {
   }
 }
 
-class CommandLineException extends DShellException {
+/// Don't use this exception directly (its abstract).
+/// Instead use one of the more specific derived exceptions or create
+/// your own extending from this exception.
+abstract class CommandLineException extends DShellException {
   CommandLineException(String message) : super(message);
 }
 

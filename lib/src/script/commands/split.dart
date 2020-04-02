@@ -17,7 +17,7 @@ class SplitCommand extends Command {
   int run(List<Flag> selectedFlags, List<String> subarguments) {
     var exitCode = 0;
     if (subarguments.isEmpty) {
-      throw InvalidArguments('Split requires a argument <script file.dart>');
+      throw InvalidArguments('Split requires a argument <script file.dart>.');
     }
     var scriptPath = subarguments[0];
     Script.validate(scriptPath);

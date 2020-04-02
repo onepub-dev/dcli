@@ -1,6 +1,7 @@
 import 'package:dshell/dshell.dart';
 import 'package:dshell/src/util/dshell_paths.dart';
 import 'package:dshell/src/util/runnable_process.dart';
+import 'package:recase/recase.dart';
 
 import '../../functions/which.dart';
 import '../command_line_runner.dart';
@@ -18,23 +19,20 @@ class VersionCommand extends Command {
   @override
   int run(List<Flag> selectedFlags, List<String> subarguments) {
     if (subarguments.isNotEmpty) {
-      throw CommandLineException(
+      throw InvalidArguments(
           "'dshell version' does not take any arguments. Found $subarguments");
     }
 
     var appname = DShellPaths().dshellName;
 
-    var locations = which(appname, first: true).firstLine;
+    var location = which(appname, first: true).firstLine;
 
-    var location = 'Not on PATH';
-    if (locations == null) {
+    if (location == null) {
       printerr(red('Error: dshell is not on your path. Run "dshell install"'));
-    } else {
-      location = locations[0];
     }
 
     print(green(
-        '$appname: Executes Dart scripts.  Version: ${Settings().version}, Located at: $location'));
+        '${ReCase(appname).sentenceCase} Version: ${Settings().version}, Located at: $location'));
 
     return 0;
   }

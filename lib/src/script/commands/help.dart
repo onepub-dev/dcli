@@ -32,10 +32,11 @@ class HelpCommand extends Command {
   @override
   String usage() => 'help | help <command>';
 
-  void printUsageHowTo() {
+  static void printUsageHowTo() {
+    var help = HelpCommand();
     print('For help with dshell options:');
-    print('  ${Settings().appname} ${usage()}');
-    print('    ${description()}');
+    print('  ${Settings().appname} ${help.usage()}');
+    print('    ${help.description()}');
   }
 
   void printUsage() {

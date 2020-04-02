@@ -1,4 +1,5 @@
 import 'package:dshell/dshell.dart';
+import 'package:dshell/src/script/command_line_runner.dart';
 import 'package:dshell/src/util/completion.dart';
 
 import '../flags.dart';
@@ -22,7 +23,7 @@ class CleanCommand extends Command {
     }
 
     if (scriptList.isEmpty) {
-      printerr('There are no scripts to clean.');
+      throw InvalidArguments('There are no scripts to clean.');
     } else {
       for (var scriptPath in scriptList) {
         cleanScript(scriptPath);

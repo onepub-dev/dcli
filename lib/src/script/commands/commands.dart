@@ -1,5 +1,4 @@
-import 'package:dshell/src/script/commands/version.dart';
-
+import '../flags.dart';
 import 'clean.dart';
 import 'clean_all.dart';
 import 'compile.dart';
@@ -8,8 +7,8 @@ import 'doctor.dart';
 import 'merge.dart';
 import 'run.dart';
 import 'split.dart';
-
-import '../flags.dart';
+import 'upgrade.dart';
+import 'version.dart';
 import 'help.dart';
 import 'install.dart';
 
@@ -24,6 +23,7 @@ class Commands {
         MergeCommand(),
         RunCommand(),
         SplitCommand(),
+        UpgradeCommand(),
         VersionCommand(),
         HelpCommand(),
       ];

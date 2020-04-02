@@ -57,7 +57,7 @@ class CompileCommand extends Command {
     }
 
     if (scriptList.isEmpty) {
-      printerr('There are no scripts to compile');
+      throw InvalidArguments('There are no scripts to compile.');
     } else {
       for (var scriptPath in scriptList) {
         exitCode = compileScript(scriptPath);
