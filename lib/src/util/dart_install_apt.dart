@@ -1,4 +1,5 @@
 import 'package:dshell/dshell.dart';
+import 'package:dshell/src/util/pub_cache.dart';
 import 'package:path/path.dart';
 
 ///
@@ -21,27 +22,22 @@ class AptDartInstaller implements DartInstaller {
 
     // add dart to bash path
 
-    //if (!(isOnPath('/usr/bin/dart') || isOnPath('/usr/lib/bin/dart'))) {
+    if (!(isOnPath('/usr/bin/dart') || isOnPath('/usr/lib/bin/dart'))) {
+      // we need to add it.
+      var bashrc = join(HOME, '.bashrc');
+      bashrc.append('''export PATH="\$PATH":"/usr/lib/dart/bin"''');
+      bashrc.append('''export PATH="\$PATH":"${PubCache().binPath}"''');
 
-    // we need to add it.
-    var bashrc = join(HOME, '.bashrc');
-    bashrc.append('''export PATH="\$PATH":"/usr/lib/dart/bin"''');
-    bashrc.append('''export PATH="\$PATH":"$HOME/.pub-cache/bin"''');
+      // add dart to root path.
+      // The tricks we have to play to get dart on the root users path.
+      'sudo echo export PATH="\$PATH:/usr/lib/dart/bin" | sudo tee -a /root/.bashrc'
+          .run;
+      // give root its own pub-cache
+      'sudo echo export PATH="\$PATH":"/root/.pub-cache/bin" | sudo tee -a /root/.bashrc'
+          .run;
 
-    // add dart to root path.
-    // The tricks we have to play to get dart on the root users path.
-    'sudo echo export PATH="\$PATH:/usr/lib/dart/bin" | sudo tee -a /root/.bashrc'
-        .run;
-    // give root its own pub-cache
-    'sudo echo export PATH="\$PATH":"/root/.pub-cache/bin" | sudo tee -a /root/.bashrc'
-        .run;
-
-// $PATH should not be expanded along the way.
-    // export PATH="$PATH":"$HOME/.pub-cache/bin"
-    // export PATH=$PATH:/usr/lib/dart/bin
-
-    print('You will need to restart your shell for dart to be available');
-    //}
+      print('You will need to restart your shell for dart to be available');
+    }
 
     'sudo apt-get update'.run;
     'sudo apt-get install apt-transport-https'.run;
@@ -55,7 +51,7 @@ class AptDartInstaller implements DartInstaller {
     'sudo apt install dart'.run;
 
     // The normal dart detection process won't work here
-    // as dart is not on the path so for the momemnt so we hard code it.
+    // as dart is not on the path so for the moment so we hard code it.
     // CONSIDER a way of identifynig where dart has been installed to.
     '/usr/lib/dart/bin/pub global activate dshell'.run;
 

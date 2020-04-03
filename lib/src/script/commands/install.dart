@@ -30,17 +30,7 @@ class InstallCommand extends Command {
   int run(List<Flag> selectedFlags, List<String> subarguments) {
     var scriptIndex = 0;
 
-    // check the user
-    if (Settings().isLinux || Settings().isMacOS) {
-      var user = 'whoami'.firstLine;
-      Settings().verbose('user: $user');
-      if (user != null) {
-        if (user == 'root') {
-          printerr(red('dshell install MUST not be run as root.'));
-          exit(1);
-        }
-      }
-    }
+    var shell = ShellDetection().identifyShell();
 
     // check for any flags
     int i;
@@ -114,8 +104,6 @@ class InstallCommand extends Command {
       createDir(Settings().dshellCachePath);
     }
 
-    var shell = ShellDetection().identifyShell();
-
     // create the bin directory
     var binPath = Settings().dshellBinPath;
     if (!exists(binPath)) {
@@ -173,6 +161,8 @@ class InstallCommand extends Command {
     }
     print('');
 
+    fixPermissions(shell);
+
     // print('Copying dshell (${Platform.executable}) to /usr/bin/dshell');
     // copy(Platform.executable, '/usr/bin/dshell');
 
@@ -213,6 +203,18 @@ class InstallCommand extends Command {
 
   bool dartInstall() {
     return DartInstaller().installDart();
+  }
+
+  void fixPermissions(Shell shell) {
+    if (shell.isPrivilegedUser) {
+      if (!Platform.isWindows) {
+        var user = shell.loggedInUser;
+        if (user != 'root') {
+          'chmod -R $user:$user ${Settings().dshellPath}'.run;
+          'chmod -R $user:$user ${PubCache().path}'.run;
+        }
+      }
+    }
   }
 }
 
