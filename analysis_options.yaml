@@ -11,7 +11,7 @@ include: package:pedantic/analysis_options.yaml
 linter:
   rules:
     - camel_case_types
-    # - always_declare_return_types
+    - always_declare_return_types
 
 analyzer:
   exclude: lib/templates/*.dart
