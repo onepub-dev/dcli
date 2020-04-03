@@ -9,8 +9,6 @@ import '../../dshell.dart';
 class PubCache {
   static PubCache _self;
 
-  /// Dart allows the user to modify the location of
-  /// the .pub-cache by setting an environment var.
   String _pubCacheDir;
   String _pubCacheBinDir;
   static const String PUB_CACHE_ENV = 'PUB_CACHE';
@@ -22,28 +20,46 @@ class PubCache {
   }
 
   PubCache._internal() {
-    _pubCacheDir = '.pub-cache';
+    // first check if an environment variable exists.
+    var pubCacheEnv = env(PUB_CACHE_ENV);
 
+    /// determine pubCacheDir
+    if (pubCacheEnv != null) {
+      _pubCacheDir = dirname(pubCacheEnv);
+    }
+    _pubCacheDir ??= '.pub-cache';
     if (Platform.isWindows) {
-      _pubCacheDir = join('Pub', 'Cache');
+      _pubCacheDir ??= join('Pub', 'Cache');
     }
-    _pubCacheBinDir = join(HOME, _pubCacheDir, 'bin');
+
+    // determine pub-cache path
+    _pubCachePath = pubCacheEnv;
+    _pubCachePath ??= truepath(join(HOME, _pubCacheDir));
+
+    // determine pub-cache/bin
+    _pubCacheBinDir = truepath(join(_pubCachePath, 'bin'));
   }
 
-  // Returns the path to the .pub-cache directory
-  String get path {
-    if (_pubCachePath == null) {
-      _pubCachePath = env(PUB_CACHE_ENV);
+  /// The fully qualified path to the pub cache.
+  ///
+  /// Dart allows the user to modify the location of
+  /// the .pub-cache by setting the environment var
+  /// PUB_CACHE.
+  ///
+  /// This method processes PUB_CACHE if it exists.
+  String get path => _pubCachePath;
 
-      _pubCachePath ??= join(HOME, _pubCacheDir);
-    }
-    return _pubCachePath;
-  }
-
-  // Returns the path to the .pub-cache's bin directory
-  // where executables from installed packages are stored.
+  /// Returns the path to the .pub-cache's bin directory
+  /// where executables from installed packages are stored.
   String get binPath => _pubCacheBinDir;
 
+  /// Returns the directory name of the pub cache.
+  ///
+  /// Dart allows the user to modify the location of
+  /// the .pub-cache by setting the environment var
+  /// PUB_CACHE.
+  ///
+  /// This method processes PUB_CACHE if it exists.
   String get cacheDir => _pubCacheDir;
 
   /// only to be used for unit tests.
