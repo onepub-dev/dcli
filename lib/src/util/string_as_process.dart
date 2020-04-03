@@ -282,6 +282,7 @@ extension StringAsProcess on String {
   /// [firstLine] treats the String [this] as a cli process and
   /// returns the first line written to stdout or stderr as
   /// a [String].
+  /// Returns null if no lines are returned.
   ///
   /// DShell performs Glob expansion on command arguments. See [run] for details.
   ///

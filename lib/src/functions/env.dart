@@ -7,7 +7,14 @@ import 'package:dshell/src/util/dshell_exception.dart';
 import '../settings.dart';
 import 'dshell_function.dart';
 
-/// Gets an environment variable.
+/// Returns the value of an environment variable.
+///
+/// [name] of the enviornment variable.
+///
+/// On posix systems [name] is case sensitive.
+///
+/// If the environment variable doesn't exists
+/// then [null] is returned.
 ///
 ///```dart
 ///String path = env("PATH");
