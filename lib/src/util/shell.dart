@@ -135,6 +135,14 @@ abstract class Shell {
   /// Added a path to the start script
   /// returns true if adding the path was successful
   bool addToPath(String path);
+
+  /// Returns the username of the logged in user.
+  String get loggedInUser;
+
+  /// Returns [true] if the current user has esclated
+  /// privileges.
+  /// e.g. root under posix, Administrator under windows.
+  bool get isPrivilegedUser;
 }
 
 /// Provides a number of helper functions
@@ -217,6 +225,30 @@ class BashShell implements Shell {
     }
     return true;
   }
+
+  @override
+  bool get isPrivilegedUser {
+    var user = 'whoami'.firstLine;
+    Settings().verbose('user: $user');
+    var privileged = (user == 'root');
+    Settings().verbose('isPrivilegedUser: $privileged');
+    return privileged;
+  }
+
+  @override
+  String get loggedInUser {
+    String user;
+
+    var line = 'who'.firstLine;
+    Settings().verbose('who: $line');
+    // username :1
+    var parts = line.split(':');
+    if (parts.isNotEmpty) {
+      user = parts[0];
+    }
+    Settings().verbose('loggedInUser: $user');
+    return user;
+  }
 }
 
 /// Provides a number of helper functions
@@ -261,6 +293,30 @@ class ZshShell implements Shell {
     }
     return true;
   }
+
+  @override
+  bool get isPrivilegedUser {
+    var user = 'whoami'.firstLine;
+    Settings().verbose('user: $user');
+    var privileged = (user == 'root');
+    Settings().verbose('isPrivilegedUser: $privileged');
+    return privileged;
+  }
+
+  @override
+  String get loggedInUser {
+    String user;
+
+    var line = 'who'.firstLine;
+    Settings().verbose('who: $line');
+    // username :1
+    var parts = line.split(':');
+    if (parts.isNotEmpty) {
+      user = parts[0];
+    }
+    Settings().verbose('loggedInUser: $user');
+    return user;
+  }
 }
 
 class PowerShell implements Shell {
@@ -298,6 +354,23 @@ class PowerShell implements Shell {
   @override
   // TODO: implement startScriptPath
   String get startScriptPath => null;
+
+  @override
+  bool get isPrivilegedUser {
+    var currentPrincipal =
+        'New-Object Security.Principal.WindowsPrincipal([Security.Principal.WindowsIdentity]::GetCurrent())'
+            .firstLine;
+    Settings().verbose('currentPrinciple: $currentPrincipal');
+    var isPrivileged =
+        '$currentPrincipal.IsInRole([Security.Principal.WindowsBuiltInRole]::Administrator)'
+            .firstLine;
+    Settings().verbose('isPrivileged: $isPrivileged');
+
+    return isPrivileged.toLowerCase() == 'true';
+  }
+
+  @override
+  String get loggedInUser => env('USERNAME');
 }
 
 /// Used by dshell to interacte with the shell
@@ -375,4 +448,10 @@ class UnknownShell implements Shell {
 
   @override
   String get startScriptPath => null;
+
+  @override
+  bool get isPrivilegedUser => null;
+
+  @override
+  String get loggedInUser => null;
 }
