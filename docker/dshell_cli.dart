@@ -23,7 +23,7 @@ void main(List<String> args) {
 
   // var cmd = 'docker run --network host  --mount src="$HOME", dst=/me, type=bind -it  dshell:docker_dev_cli /bin/bash';
   var cmd =
-      'docker run  --volume $HOME:/home --network host   -it dshell:dshell_cli      /bin/bash';
+      'docker run --volume $HOME:/home --network host -it dshell:dshell_cli /bin/bash';
 
   print(cmd);
   cmd.run;
