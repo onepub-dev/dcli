@@ -32,6 +32,7 @@ class ShellDetection {
     } else {
       shell = UnknownShell();
     }
+    Settings().verbose('Identified shell: $shellName');
     return shell;
   }
 
@@ -450,7 +451,7 @@ class UnknownShell implements Shell {
   String get startScriptPath => null;
 
   @override
-  bool get isPrivilegedUser => null;
+  bool get isPrivilegedUser => false;
 
   @override
   String get loggedInUser => null;
