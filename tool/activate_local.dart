@@ -13,6 +13,7 @@ import 'package:dshell/src/pubspec/global_dependencies.dart';
 ///
 void main(List<String> args) {
   var parser = ArgParser();
+  parser.addFlag('verbose', abbr: 'v');
 
   parser.addCommand('help');
 
@@ -23,6 +24,10 @@ void main(List<String> args) {
   parser.addOption('path', defaultsTo: dshellPackageRoot);
 
   var result = parser.parse(args);
+
+  if (result.wasParsed('verbose')) {
+    Settings().setVerbose(true);
+  }
 
   if (result.command != null) {
     print(
