@@ -1,3 +1,12 @@
+### 1.8.13-dev.1
+[ENH] Work on a docker based cli for dshell.
+[FIX] unknown shell no returns false for priviliged user to avoid npe.
+[Fix] for macos which by default only supports 127.0.0.1.
+[ENH] added logic to fix permission when dshell rans as root.
+[FIX] bug when determing pub-cache path if environment variable set.
+[ENH] added new methods loggedInUser and isPrivilegedUser.
+[ENH] released dshell_install as a binary so people could easily install dshell.
+
 ### 1.8.12
 [ENH] created a command to upgrade dshell.
 [DOC] cleaned up the public interface by making a number a items private.
