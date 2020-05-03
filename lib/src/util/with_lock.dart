@@ -302,7 +302,7 @@ class NamedLock {
       var reusePort = Settings().isWindows ? false : true;
       while (socket == null) {
         socket = waitForEx<RawDatagramSocket>(RawDatagramSocket.bind(
-          '127.0.0.172',
+          '127.0.0.1',
           port,
           reuseAddress: true,
           reusePort: reusePort,
