@@ -65,7 +65,7 @@ T menu<T>(
   var displayList = options;
   if (fromStart == false) {
     // get the last [limit] options
-    displayList = options.sublist(max(options.length, options.length - limit));
+    displayList = options.sublist(min(options.length, options.length - limit));
   }
 
   // display each option.
