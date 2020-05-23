@@ -1,11 +1,8 @@
 ### 1.8.13
+fixed indentation problem. released 1.8.13
 exposed SortDirection required for FileSort.
 applied effective dart.
-Had max/min back to front.
-
-### 1.8.13
-applied effective dart.
-Had max/min back to front for the menu class options.
+Had max/min back to front for Menu options.
 
 ### 1.8.13-dev.1
 [ENH] Work on a docker based cli for dshell.
