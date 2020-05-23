@@ -2,19 +2,22 @@ import 'dart:io';
 
 import 'package:collection/collection.dart';
 import 'package:pub_semver/pub_semver.dart';
+import 'package:path/path.dart';
+import 'package:pubspec/pubspec.dart' as pub;
 
 import '../functions/read.dart';
 import '../script/dependency.dart';
 import '../util/wait_for_ex.dart';
-import 'package:path/path.dart';
-import 'package:pubspec/pubspec.dart' as pub;
 
 ///
 /// Provides a common interface for access a pubspec content.abstract
 ///
 
 abstract class PubSpec {
+  /// name of the project
   String get name;
+
+  /// project version.
   Version get version;
   set version(Version version);
 
@@ -22,7 +25,10 @@ abstract class PubSpec {
   /// given directory
   void writeToFile(String directory);
 
+  /// sets the list of dependencies in this pubspec.yaml
   set dependencies(List<Dependency> newDependencies);
+
+  /// returns the list of dependencies in this pubspec.yaml
   List<Dependency> get dependencies;
 
   /// Compares two pubspec to see if they have the same content.
@@ -47,7 +53,9 @@ abstract class PubSpec {
   }
 }
 
+/// provides base implementation for PubSpec.
 class PubSpecImpl implements PubSpec {
+  /// the wrapped pubspec.
   pub.PubSpec pubspec;
 
   @override
@@ -83,6 +91,7 @@ class PubSpecImpl implements PubSpec {
     return depends;
   }
 
+  /// parses a pubspec from a yaml string.
   factory PubSpecImpl.fromString(String yamlString) {
     var impl = PubSpecImpl._internal();
     impl.pubspec = pub.PubSpec.fromYamlString(yamlString);
@@ -98,6 +107,7 @@ class PubSpecImpl implements PubSpec {
     waitForEx<dynamic>(pubspec.save(Directory(dirname(directory))));
   }
 
+  /// reads a pubspec.yaml.
   static PubSpec loadFromFile(String path) {
     var lines = read(path).toList();
     return PubSpecImpl.fromString(lines.join('\n'));

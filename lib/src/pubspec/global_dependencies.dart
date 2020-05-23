@@ -1,11 +1,10 @@
 import 'package:pubspec/pubspec.dart';
+import 'package:path/path.dart' as p;
 
 import '../../dshell.dart';
 import '../functions/touch.dart';
 import '../script/dependency.dart';
 import '../script/my_yaml.dart';
-
-import 'package:path/path.dart' as p;
 
 import 'dependencies_mixin.dart';
 
@@ -17,11 +16,12 @@ import 'dependencies_mixin.dart';
 /// of dependencies into every script.
 ///
 ///
-
 class GlobalDependencies with DependenciesMixin {
-  static const String filename = 'dependencies.yaml';
+  /// name of the file we use to store the dshell global dependencies.
+  static const filename = 'dependencies.yaml';
   MyYaml _yaml;
 
+  /// ctor.
   GlobalDependencies() {
     if (!exists(path)) {
       touch(path, create: true);
@@ -41,6 +41,7 @@ class GlobalDependencies with DependenciesMixin {
     _yaml = MyYaml.fromFile(dependenciesYamlPath);
   }
 
+  /// path to the global dependencies file.
   static String get path => p.join(Settings().dshellPath, filename);
 
   @override
@@ -58,6 +59,8 @@ class GlobalDependencies with DependenciesMixin {
     }
   }
 
+  /// returns the list of default dependencies the
+  /// global dependencies will be initialised with.
   static List<Dependency> get defaultDependencies {
     return [
       Dependency.fromHosted('dshell', '^1.0.0'),

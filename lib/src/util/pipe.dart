@@ -1,26 +1,31 @@
-import 'package:dshell/src/util/progress.dart';
+import 'progress.dart';
 
 import 'runnable_process.dart';
 
+/// used to pipe date from one proces to another.
 class Pipe {
-  RunnableProcess lhs;
-  RunnableProcess rhs;
+  final RunnableProcess _lhs;
+  final RunnableProcess _rhs;
 
-  Pipe(this.lhs, this.rhs) {
-    lhs.pipeTo(rhs);
+  ///
+  Pipe(this._lhs, this._rhs) {
+    _lhs.pipeTo(_rhs);
   }
 
+  ///
   Pipe operator |(String next) {
     var pNext = RunnableProcess.fromCommandLine(next);
     pNext.start(waitForStart: false);
-    return Pipe(rhs, pNext);
+    return Pipe(_rhs, pNext);
   }
 
+  ///
   void forEach(LineAction stdout, {LineAction stderr}) {
     var progress = Progress(stdout, stderr: stderr);
-    rhs.processUntilExit(progress, nothrow: false);
+    _rhs.processUntilExit(progress, nothrow: false);
   }
 
+  ///
   List<String> toList() {
     var list = <String>[];
 
@@ -32,6 +37,7 @@ class Pipe {
   // void get run => rhs
   //     .processUntilExit(Progress(Progress.devNull, stderr: Progress.devNull));
 
+  /// pumps data trough the pipe.
   void get run =>
-      rhs.processUntilExit(Progress(print, stderr: print), nothrow: false);
+      _rhs.processUntilExit(Progress(print, stderr: print), nothrow: false);
 }

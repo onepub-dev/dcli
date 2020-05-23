@@ -1,11 +1,11 @@
-import 'package:dshell/src/util/parser.dart';
-
 import '../functions/run.dart' as cmd;
-import 'runnable_process.dart';
-
 import 'file_sync.dart';
-import 'progress.dart';
+
+import 'parser.dart';
 import 'pipe.dart';
+import 'progress.dart';
+
+import 'runnable_process.dart';
 
 ///
 /// A set of String extensions that lets you
@@ -60,7 +60,7 @@ extension StringAsProcess on String {
     cmd.start(this,
         terminal: true,
         progress:
-            Progress((line) => print(line), stderr: (line) => printerr(line)));
+            Progress(print, stderr: printerr));
   }
 
   /// shell
@@ -143,7 +143,7 @@ extension StringAsProcess on String {
       String workingDirectory}) {
     cmd.start(this,
         progress: progress ??
-            Progress((line) => print(line), stderr: (line) => printerr(line)),
+            Progress(print, stderr: printerr),
         runInShell: runInShell,
         detached: detached,
         terminal: terminal,
@@ -234,7 +234,9 @@ extension StringAsProcess on String {
           Progress((line) => list.add(line), stderr: (line) => list.add(line));
 
       cmd.start(this, runInShell: runInShell, progress: progress);
-    } catch (e) {
+    }
+    // ignore: avoid_catches_without_on_clauses
+    catch (e) {
       if (nothrow == false) {
         throw RunException(this, progress.exitCode, list.join('\n'));
       }

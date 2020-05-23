@@ -1,26 +1,28 @@
-import 'package:dshell/src/util/ansi_color.dart';
-import 'package:dshell/src/util/completion.dart';
-import 'package:dshell/src/util/progress.dart';
-
 import '../../../dshell.dart';
 import '../../settings.dart';
+import '../../util/ansi_color.dart';
+import '../../util/completion.dart';
+import '../../util/progress.dart';
+import '../../util/runnable_process.dart';
+
 import '../command_line_runner.dart';
 import '../dart_sdk.dart';
 import '../flags.dart';
 import '../script.dart';
 import '../virtual_project.dart';
 import 'commands.dart';
-import '../../util/runnable_process.dart';
 
+/// implementation for the compile command.
 class CompileCommand extends Command {
-  static const String NAME = 'compile';
+  static const String _commandName = 'compile';
 
-  List<Flag> compileFlags = [NoCleanFlag(), InstallFlag(), OverWriteFlag()];
+  final _compileFlags = [NoCleanFlag(), InstallFlag(), OverWriteFlag()];
 
   /// holds the set of flags passed to the compile command.
   Flags flagSet = Flags();
 
-  CompileCommand() : super(NAME);
+  ///
+  CompileCommand() : super(_commandName);
 
   @override
   int run(List<Flag> selectedFlags, List<String> subarguments) {
@@ -34,7 +36,7 @@ class CompileCommand extends Command {
 
       if (Flags.isFlag(subargument)) {
         scriptIndex++;
-        var flag = flagSet.findFlag(subargument, compileFlags);
+        var flag = flagSet.findFlag(subargument, _compileFlags);
 
         if (flag != null) {
           if (flagSet.isSet(flag)) {
@@ -68,6 +70,7 @@ class CompileCommand extends Command {
     return exitCode;
   }
 
+  ///
   int compileScript(String scriptPath) {
     var exitCode = 0;
 
@@ -94,8 +97,7 @@ class CompileCommand extends Command {
 
       DartSdk().runDart2Native(project.runtimeScriptPath,
           script.scriptDirectory, project.runtimeProjectPath,
-          progress:
-              Progress((line) => print(line), stderr: (line) => print(line)));
+          progress: Progress(print, stderr: print));
 
       var exe = join(script.scriptDirectory, script.basename);
 
@@ -143,19 +145,21 @@ class CompileCommand extends Command {
 
   @override
   List<String> completion(String word) {
-    return completion_expand_scripts(word);
+    return completionExpandScripts(word);
   }
 
   @override
   List<Flag> flags() {
-    return compileFlags;
+    return _compileFlags;
   }
 }
 
+///
 class NoCleanFlag extends Flag {
-  static const NAME = 'noclean';
+  static const _flagName = 'noclean';
 
-  NoCleanFlag() : super(NAME);
+  ///
+  NoCleanFlag() : super(_flagName);
 
   @override
   String get abbreviation => 'nc';
@@ -167,10 +171,11 @@ class NoCleanFlag extends Flag {
   }
 }
 
+///
 class InstallFlag extends Flag {
-  static const NAME = 'install';
-
-  InstallFlag() : super(NAME);
+  static const _flagName = 'install';
+///
+  InstallFlag() : super(_flagName);
 
   @override
   String get abbreviation => 'i';
@@ -181,10 +186,11 @@ class InstallFlag extends Flag {
   }
 }
 
+///
 class OverWriteFlag extends Flag {
-  static const NAME = 'overwrite';
-
-  OverWriteFlag() : super(NAME);
+  static const _flagName = 'overwrite';
+///
+  OverWriteFlag() : super(_flagName);
 
   @override
   String get abbreviation => 'o';

@@ -46,13 +46,16 @@ void dsort(List<String> args) async {
     ..addOption(fieldDelimiterOption,
         abbr: 'f',
         defaultsTo: ',',
+        //ignore: avoid_types_on_closure_parameters
         callback: (String value) => fieldDelimiter = value)
     ..addOption(lineDelimiterOption,
         abbr: 'l',
         defaultsTo: '\n',
+        //ignore: avoid_types_on_closure_parameters
         callback: (String value) => lineDelimiter = value)
     ..addMultiOption(sortkeyOption,
         abbr: 's',
+        //ignore: avoid_types_on_closure_parameters
         callback: (List<String> values) =>
             columns.addAll(FileSort.expandColumns(values)))
     ..addOption(outputOption, abbr: 'o');
@@ -74,12 +77,12 @@ void dsort(List<String> args) async {
 
   if (columns.isEmpty) {
     /// if no columns defined we sort by the whole line.
-    columns.add(Column(0, CaseInsensitiveSort(), SortDirection.Ascending));
+    columns.add(Column(0, CaseInsensitiveSort(), SortDirection.ascending));
   }
 
   if (verbose) {
     print('Columns: ${columns.join("\n")}');
-    print('Input File: ${inputPath}, Output File: ${outputPath}');
+    print('Input File: $inputPath, Output File: $outputPath');
     print("Field Delimiter: '$fieldDelimiter'");
     print("Line Delimiter: '$lineDelimiter'");
   }

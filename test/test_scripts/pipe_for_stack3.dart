@@ -23,6 +23,7 @@ void run(Stream<String> ls, Process head, Process tail) {
       .map((line) => '${++cnt}: $line\n')
       .transform(utf8.encoder)
       .pipe(head.stdin)
+      //ignore: avoid_types_on_closure_parameters
       .catchError((Object e, StackTrace s) async {
     print('head exit: ${await head.exitCode}');
   },
@@ -36,6 +37,7 @@ void run(Stream<String> ls, Process head, Process tail) {
       .map((line) => 'tail: $line\n')
       .transform(utf8.encoder)
       .pipe(tail.stdin)
+      //ignore: avoid_types_on_closure_parameters
       .catchError((Object e, StackTrace s) async {
     print('tail exit: ${await tail.exitCode}');
   }, test: (e) => e is SocketException && e.osError.message == 'Broken pipe');

@@ -15,7 +15,7 @@ void main() {
 
       '${DShellPaths().dshellName} -v test/test_scripts/hello_world.dart'
           .forEach((line) => results.add(line),
-              stderr: (line) => printerr(line));
+              stderr: printerr);
 
       // if clean hasn't been run then we have the results of a pub get in the the output.
 

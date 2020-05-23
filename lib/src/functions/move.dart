@@ -1,9 +1,8 @@
 import 'dart:io';
-
-import 'function.dart';
-import '../../dshell.dart';
-
 import 'package:path/path.dart' as p;
+
+import '../../dshell.dart';
+import 'function.dart';
 
 ///
 /// Moves the file [from] to the location [to].
@@ -23,9 +22,9 @@ import 'package:path/path.dart' as p;
 /// If the move fails for any reason a [MoveException] is thrown.
 ///
 void move(String from, String to, {bool overwrite = false}) =>
-    Move().move(from, to, overwrite: overwrite);
+    _Move().move(from, to, overwrite: overwrite);
 
-class Move extends DShellFunction {
+class _Move extends DShellFunction {
   void move(String from, String to, {bool overwrite = false}) {
     Settings().verbose('move ${absolute(from)} -> ${absolute(to)}');
 
@@ -41,13 +40,17 @@ class Move extends DShellFunction {
     }
     try {
       File(from).renameSync(dest);
-    } catch (e) {
+    }
+    // ignore: avoid_catches_without_on_clauses
+    catch (e) {
       throw MoveException(
-          'The Move of ${absolute(from)} to ${absolute(dest)} failed. Error ${e}');
+          'The Move of ${absolute(from)} to ${absolute(dest)} failed. Error $e');
     }
   }
 }
 
+/// Thrown when the [move] function encouters an error.
 class MoveException extends FunctionException {
+  /// Thrown when the [move] function encouters an error.
   MoveException(String reason) : super(reason);
 }

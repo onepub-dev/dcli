@@ -20,7 +20,7 @@ void main() {
         }
         var file = FileSync(testFile, fileMode: FileMode.write);
         for (var i = 0; i < 10; i++) {
-          file.append('Line ${i} is here');
+          file.append('Line $i is here');
         }
         file.close();
 

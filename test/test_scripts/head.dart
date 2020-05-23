@@ -22,7 +22,7 @@ void main(List<String> args) {
     printerr('Expected at least one file');
     exit(1);
   }
-  Settings().setVerbose(true);
+  Settings().setVerbose(enabled: true);
 
   for (var path in paths) {
     if (Platform.isWindows) {

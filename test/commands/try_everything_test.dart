@@ -11,7 +11,7 @@ void main() {
       var shellPath = 'shell';
       var mainPath = join(shellPath, 'main');
       try {
-        print('PWD: ${pwd}');
+        print('PWD: $pwd');
 
         if (!exists(mainPath)) {
           createDir(mainPath, recursive: true);

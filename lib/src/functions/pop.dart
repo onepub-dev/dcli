@@ -1,9 +1,7 @@
 import 'dart:io';
-
-import 'function.dart';
-
-import '../settings.dart';
 import 'package:path/path.dart' as p;
+import '../settings.dart';
+import 'function.dart';
 
 ///
 /// Push and Pop work together to track a series
@@ -41,10 +39,10 @@ import 'package:path/path.dart' as p;
 ///     [cd]
 ///
 @Deprecated('Use join')
-void pop() => Pop().pop();
+void pop() => _Pop().pop();
 
 @Deprecated('Use join')
-class Pop extends DShellFunction {
+class _Pop extends DShellFunction {
   ///
   /// Change the working directory back
   /// to its location before [push] was called.
@@ -62,13 +60,19 @@ class Pop extends DShellFunction {
 
     try {
       Directory.current = path;
-    } catch (e) {
+    }
+    // ignore: avoid_catches_without_on_clauses
+    catch (e) {
       throw PopException(
           'An error occured popping to ${absolute(path)}. Error $e');
     }
   }
 }
 
+// ignore:deprecated_member_use_from_same_package
+/// Thrown when the [pop] function encouters an error.
 class PopException extends FunctionException {
+  // ignore:deprecated_member_use_from_same_package
+  /// Thrown when the [pop] function encouters an error.
   PopException(String reason) : super(reason);
 }

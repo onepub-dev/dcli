@@ -1,20 +1,25 @@
+/// a circular buffer.
 class CircularBuffer<T> {
   List<T> _buf;
   int _start;
   int _end;
   int _count;
 
-  CircularBuffer(int n) {
-    _buf = List<T>(n);
+  /// create a circulare buffer with the ability
+  /// to store at most [capacity] items.
+  CircularBuffer(int capacity) {
+    _buf = List<T>(capacity);
     reset();
   }
 
+  /// empty the buffer.
   void reset() {
     _start = 0;
     _end = -1;
     _count = 0;
   }
 
+  /// insert a value at the curent location.
   void insert(T el) async {
     // Inserting the next value
     _end++;
@@ -35,13 +40,22 @@ class CircularBuffer<T> {
     }
   }
 
+  /// the first value in the buffer
   T get start => _buf[_start];
+
+  /// the last value in the buffer.
   T get end => _buf[_end];
 
+  /// the current lenght of the buffer
   int get len => _count;
+
+  /// the max capacity of the buffer.
   int get cap => _buf.length;
 
+  /// true if the buffer is filled
   bool get filled => (_count == _buf.length);
+
+  /// false if the buffer is not a capacity.
   bool get unfilled => (_count < _buf.length);
 
   /// Allows you to iterate over the contents of the buffer

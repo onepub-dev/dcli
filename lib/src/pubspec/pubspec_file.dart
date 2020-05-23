@@ -10,43 +10,41 @@ import 'pubspec.dart';
 ///
 class PubSpecFile implements PubSpec // with DependenciesMixin
 {
-  PubSpec pubspec;
+  PubSpec __pubspec;
 
+  /// creates a pubspec based on the [script]s path.
   PubSpecFile.fromScript(Script script) {
     _fromFile(script.pubSpecPath);
   }
 
+  /// creates a pubspec based on the [path]
   PubSpecFile.fromFile(String path) {
     _fromFile(path);
   }
 
   void _fromFile(String path) {
-    pubspec = PubSpecImpl.loadFromFile(path);
+    __pubspec = PubSpecImpl.loadFromFile(path);
   }
-
-  PubSpecFile._internal();
 
   @override
   void writeToFile(String path) {
-    pubspec.writeToFile(path);
+    __pubspec.writeToFile(path);
   }
-
-  void injectDefaultPackages() {}
 
   @override
   set dependencies(List<Dependency> newDependencies) {
-    pubspec.dependencies = newDependencies;
+    __pubspec.dependencies = newDependencies;
   }
 
   @override
-  List<Dependency> get dependencies => pubspec.dependencies;
+  List<Dependency> get dependencies => __pubspec.dependencies;
 
   @override
-  String get name => pubspec.name;
+  String get name => __pubspec.name;
 
   @override
-  Version get version => pubspec.version;
+  Version get version => __pubspec.version;
 
   @override
-  set version(Version version) => pubspec.version = version;
+  set version(Version version) => __pubspec.version = version;
 }

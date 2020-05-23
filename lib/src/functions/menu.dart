@@ -1,9 +1,8 @@
 import 'dart:math';
-
-import 'package:dshell/src/script/command_line_runner.dart';
 import 'package:meta/meta.dart';
 
 import '../../dshell.dart';
+import '../script/command_line_runner.dart';
 
 /// Displays a menu with each of the provided [options], prompts
 /// the user to select an option and returns the selected option.
@@ -78,7 +77,7 @@ T menu<T>(
       desc = option.toString();
     }
     var no = '$i'.padLeft(3);
-    print('$no) ${desc}');
+    print('$no) $desc');
   }
 
   var valid = false;

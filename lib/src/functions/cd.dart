@@ -1,8 +1,8 @@
 import 'dart:io';
 
-import 'function.dart';
-import '../settings.dart';
 import 'package:path/path.dart' as p;
+import '../settings.dart';
+import 'function.dart';
 
 import 'is.dart';
 
@@ -30,8 +30,10 @@ import 'is.dart';
 @Deprecated('Use join')
 void cd(String path) => CD().cd(path);
 
+/// Class that implements the [cd] function.
 @Deprecated('Use join')
 class CD extends DShellFunction {
+  /// implements the [cd] (change dir) function.
   void cd(String path) {
     Settings().verbose('cd $path -> ${p.canonicalize(path)}');
 
@@ -42,6 +44,10 @@ class CD extends DShellFunction {
   }
 }
 
+/// ignore: deprecated_member_use_from_same_package
+/// Throw when the [cd] function encounters an error.
 class CDException extends FunctionException {
+  /// ignore: deprecated_member_use_from_same_package
+  /// Throw when the [cd] function encounters an error.
   CDException(String reason) : super(reason);
 }

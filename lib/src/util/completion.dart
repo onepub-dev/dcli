@@ -3,8 +3,8 @@ import '../../dshell.dart';
 /// Utility methods to aid the dshell_completion app.
 ///
 
-List<String> completion_expand_scripts(String word) {
-  var dartScripts = find('${word}*.dart', recursive: false).toList();
+List<String> completionExpandScripts(String word) {
+  var dartScripts = find('$word*.dart', recursive: false).toList();
 
   var results = <String>[];
   if (word.isEmpty) {

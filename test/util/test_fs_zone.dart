@@ -1,6 +1,7 @@
 @Timeout(Duration(seconds: 600))
 import 'dart:io';
 import 'package:file/memory.dart';
+import 'package:meta/meta.dart';
 import 'package:test/test.dart';
 
 class TestZone {
@@ -40,7 +41,7 @@ class TestZone {
     );
   }
 
-  FileSystemEntityType typeSync(String path, bool followLinks) {
+  FileSystemEntityType typeSync(String path, {@required bool followLinks}) {
     path = path.substring(0, path.length - 1);
 
     return _fs.typeSync(path, followLinks: followLinks);

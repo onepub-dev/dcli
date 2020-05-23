@@ -1,13 +1,15 @@
 import 'dart:io';
-
-import 'package:dshell/dshell.dart';
-import 'util/version.g.dart';
-
-import 'script/flags.dart';
-import 'util/stack_list.dart';
+import 'package:meta/meta.dart';
 import 'package:path/path.dart' as p;
 
+import '../dshell.dart';
+
 import 'functions/env.dart';
+
+import 'script/flags.dart';
+
+import 'util/stack_list.dart';
+import 'util/version.g.dart';
 
 /// Holds all of the global settings for DShell
 /// including dshell paths and any global
@@ -72,8 +74,8 @@ class Settings {
     _scriptPath = scriptPath;
   }
 
-  // Used when unit testing and we are re-using
-  // the current process.
+  /// Used when unit testing and we are re-using
+  /// the current process.
   static void reset() {
     _self = Settings.init();
     _self.selectedFlags.clear();
@@ -121,7 +123,8 @@ class Settings {
   /// dshell -v clean
   bool get isVerbose => isFlagSet(VerboseFlag());
 
-  void setVerbose(bool enabled) {
+  /// Turns on verbose logging.
+  void setVerbose({@required bool enabled}) {
     if (enabled) {
       if (!isVerbose) {
         setFlag(VerboseFlag());
@@ -146,24 +149,25 @@ class Settings {
   Settings.init({
     this.appname = 'dshell',
   }) {
-    version = dshell_version;
+    version = dshellVersion;
   }
 
   /// we consider dshell installed if the ~/.dshell directory
   /// exists.
-  bool get isInstalled => exists(install_completed_indicator);
+  bool get isInstalled => exists(installCompletedIndicator);
 
-  String get install_completed_indicator =>
-      join(dshellPath, 'install_completed');
+  /// returns the path to the file that we use to indicated
+  /// that the install completed succesfully.
+  String get installCompletedIndicator => join(dshellPath, 'install_completed');
 
   /// True if you are running on a Mac.
   /// I'm so sorry.
   bool get isMacOS => Platform.isMacOS;
 
-  // True if you are running on a Linux system.
+  /// True if you are running on a Linux system.
   bool get isLinux => Platform.isLinux;
 
-  // True if you are running on a Window system.
+  /// True if you are running on a Window system.
   bool get isWindows => Platform.isWindows;
 
   /// A method to test with a specific global
@@ -186,8 +190,10 @@ class Settings {
   /// Settings().isStackEmpty
   /// ```
   @Deprecated('use join')
-  bool get isStackEmpty => _settings.isStackEmpty;
+  bool get isStackEmpty => _settings._isStackEmpty;
 
+  /// Logs a message to the console if the verbose
+  /// settings are on.
   void verbose(String string) {
     if (isVerbose) {
       if (VerboseFlag().hasOption) {
@@ -200,7 +206,8 @@ class Settings {
 
   /// Used for unit testing dshell.
   /// Please look away.
-  static void setMock(Settings mockSettings) {
+  // ignore: avoid_setters_without_getters
+  static set mock(Settings mockSettings) {
     _self = mockSettings;
   }
 }
@@ -212,10 +219,11 @@ class Settings {
 class InternalSettings {
   static final InternalSettings _self = InternalSettings._internal();
 
-  StackList<Directory> directoryStack = StackList();
+  final _directoryStack = StackList<Directory>();
 
-  bool get isStackEmpty => directoryStack.isEmpty;
+  bool get _isStackEmpty => _directoryStack.isEmpty;
 
+  ///
   factory InternalSettings() {
     return _self;
   }
@@ -224,9 +232,9 @@ class InternalSettings {
 
   /// Internal methods used to maintain the directory stack
   /// DO NOT use this method directly instead use the [push] command.
-  void push(Directory current) => directoryStack.push(current);
+  void push(Directory current) => _directoryStack.push(current);
 
   /// Internal methods used to maintain the directory stack
   /// DO NOT use this method directly instead use the [pop] command.
-  Directory pop() => directoryStack.pop();
+  Directory pop() => _directoryStack.pop();
 }

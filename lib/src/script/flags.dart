@@ -1,7 +1,12 @@
-import 'package:dshell/dshell.dart';
+import 'package:meta/meta.dart';
+
+import '../../dshell.dart';
 import '../settings.dart';
 
+/// helper flass for manageing flags.
+@immutable
 class Flags {
+  /// Find the flag that matches [flagSwitch].
   Flag findFlag(String flagSwitch, List<Flag> flags) {
     Flag found;
     var foundOption = false;
@@ -29,29 +34,39 @@ class Flags {
     return found;
   }
 
+  /// the format of a named switch '--name'
   static String nameSwitch(Flag flag) => '--${flag._name}';
+
+  /// the format of an abbreviated switch '-n'
   static String abbrSwitch(Flag flag) => '-${flag.abbreviation}';
 
+  /// true if the given argument starts with '-' or '--'.
   static bool isFlag(String argument) {
     return (argument.startsWith('-') || argument.startsWith('--'));
   }
 
+  /// true if a global flag in the [Settings] class is set.
   bool isSet(Flag flag) {
     return Settings().isFlagSet(flag);
   }
 
+  /// sets a global flag in the [Settings] class.
   void set(Flag flag) {
     Settings().setFlag(flag);
   }
 }
 
+/// base class for command line flags (--name, -v ...)
 abstract class Flag {
   final String _name;
 
+  ///
   Flag(this._name);
 
+  /// name of the flag
   String get name => _name;
 
+  /// abbreviation for the flag.
   String get abbreviation;
 
   /// return true if the flag can take a value
@@ -59,20 +74,21 @@ abstract class Flag {
   /// e.g. -v=/var/log/syslog
   bool get isOptionSupported => false;
 
-  /// Set to true if the flag had a valid option
-  /// passed.
-  bool hasOption = false;
-
-  /// If the flag has an option this method is called to fetch it.
-  String optionValue;
-
+  /// returns the usage for this flag
   String usage() => '--$_name | -$abbreviation';
 
   @override
+  //ignore: avoid_equals_and_hash_code_on_mutable_classes
   bool operator ==(covariant Flag flag) {
     return flag.name == _name;
   }
 
+  @override
+  //ignore: avoid_equals_and_hash_code_on_mutable_classes
+  int get hashCode => name.hashCode;
+
+  /// [Flag] implementations must overload this to return a
+  /// description of the flag used in the usage statement.
   String description();
 
   /// Called if an option is passed to a flag
@@ -80,17 +96,21 @@ abstract class Flag {
   /// If the option value is invalid then throw a
   /// InvalidFlagOption exception.
 
-  /// Override this method if you flag takes an optional argument after an = sign.
+  /// Override this method if your flag takes an optional argument after an = sign.
   ///
   set option(String value) {
-    assert(!isOptionSupported, 'You must implement setOption for $_name flag');
+    assert(
+        !isOptionSupported, 'You must implement option setter for $_name flag');
   }
 
+  /// override this method if your flag takes an optional argument after an = sign.
+  /// this method should reutrn the value after the = sign.
   String get option => null;
 }
 
+///
 class VerboseFlag extends Flag {
-  static const NAME = 'verbose';
+  static const _flagName = 'verbose';
   static final _self = VerboseFlag._internal();
 
   String _option;
@@ -98,14 +118,15 @@ class VerboseFlag extends Flag {
   @override
   String get option => _option;
 
-  @override
+  /// true if the flag has an option.
   bool get hasOption => _option != null;
 
+  ///
   factory VerboseFlag() {
     return _self;
   }
 
-  VerboseFlag._internal() : super(NAME);
+  VerboseFlag._internal() : super(_flagName);
 
   @override
   bool get isOptionSupported => true;
@@ -128,14 +149,18 @@ class VerboseFlag extends Flag {
   String get abbreviation => 'v';
 
   @override
-  String usage() => '--$NAME[=<log path>] | -$abbreviation[=<log path>]';
+  String usage() => '--$_flagName[=<log path>] | -$abbreviation[=<log path>]';
 
   @override
   String description() => '''If passed, turns on verbose logging to the console.
       If you provide a log path then logging is written to the given logfile.''';
 }
 
+/// throw if we found an invalid flag.
 class InvalidFlagOption implements Exception {
+  ///
   String message;
+
+  ///
   InvalidFlagOption(this.message);
 }

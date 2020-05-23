@@ -1,7 +1,7 @@
 import 'dart:io';
 import 'package:csv/csv.dart';
-import 'package:dshell/dshell.dart';
-import 'package:dshell/src/util/runnable_process.dart';
+import '../../dshell.dart';
+import 'runnable_process.dart';
 
 ///
 /// EXPERIMENTAL
@@ -10,17 +10,19 @@ import 'package:dshell/src/util/runnable_process.dart';
 class ProcessHelper {
   static final ProcessHelper _self = ProcessHelper._internal();
 
+  ///
   factory ProcessHelper() {
     return _self;
   }
 
   ProcessHelper._internal();
 
-  String getPIDName(int pid) {
+  /// returns the name of the process for the given pid.
+  String getProcessName(int pid) {
     if (Platform.isWindows) {
-      return _getWindowsPidName(pid);
+      return _getWindowsProcessName(pid);
     } else {
-      return _getLinuxPIDName(pid);
+      return _getLinuxProcessName(pid);
     }
   }
 
@@ -28,7 +30,7 @@ class ProcessHelper {
   ///
   /// Throws an RunException exception if the name can't
   /// be obtained.
-  String _getLinuxPIDName(int pid) {
+  String _getLinuxProcessName(int pid) {
     String line;
 
     try {
@@ -50,21 +52,22 @@ class ProcessHelper {
   ///
   int getParentPID(int childPid) {
     if (Platform.isWindows) {
-      return _WindowsGetParentPid(childPid);
+      return _windowsGetParentPid(childPid);
     } else {
-      return _LinuxGetParentPID(childPid);
+      return _linuxGetParentPID(childPid);
     }
   }
 
-  bool isRunning(int lpid) {
+  /// returns true if the given [pid] is still running.
+  bool isRunning(int pid) {
     if (Platform.isWindows) {
-      return _WindowsIsrunning(lpid);
+      return _windowsIsrunning(pid);
     } else {
-      return _LinuxisRunning(lpid);
+      return _linuxisRunning(pid);
     }
   }
 
-  int _LinuxGetParentPID(int childPid) {
+  int _linuxGetParentPID(int childPid) {
     int parentPid;
 
     String line;
@@ -79,8 +82,8 @@ class ProcessHelper {
     return parentPid;
   }
 
-  int _WindowsGetParentPid(int childPid) {
-    var parents = _WindowsParentProcessList();
+  int _windowsGetParentPid(int childPid) {
+    var parents = _windowsParentProcessList();
 
     for (var parent in parents) {
       if (parent.processPid == childPid) {
@@ -90,7 +93,7 @@ class ProcessHelper {
     return -1;
   }
 
-  List<_WindowsParentProcess> _WindowsParentProcessList() {
+  List<_WindowsParentProcess> _windowsParentProcessList() {
     var parents = <_WindowsParentProcess>[];
 
     var processes = 'wmic process get processid,parentprocessid,executablepath'
@@ -121,7 +124,7 @@ class ProcessHelper {
     return parents;
   }
 
-  bool _WindowsIsrunning(int lpid) {
+  bool _windowsIsrunning(int lpid) {
     for (var details in _getWindowsProcesses()) {
       if (details.pid == lpid) {
         return true;
@@ -130,7 +133,7 @@ class ProcessHelper {
     return false;
   }
 
-  bool _LinuxisRunning(int lpid) {
+  bool _linuxisRunning(int lpid) {
     var isRunning = false;
 
     String line;
@@ -149,7 +152,7 @@ class ProcessHelper {
   }
 
   /// completely untested as I don't have a windows box.
-  String _getWindowsPidName(int lpid) {
+  String _getWindowsProcessName(int lpid) {
     String pidName;
     for (var details in _getWindowsProcesses()) {
       if (lpid == details.pid) {
@@ -160,15 +163,15 @@ class ProcessHelper {
     return pidName;
   }
 
-  List<PIDDetails> _getWindowsProcesses() {
-    var pids = <PIDDetails>[];
+  List<_PIDDetails> _getWindowsProcesses() {
+    var pids = <_PIDDetails>[];
 
     // "wininit.exe","584","Services","0","5,248 K"
     var tasks = 'tasklist /fo csv /nh'.toList();
 
     var lines = const CsvToListConverter().convert(tasks.join('\r\n'));
     for (var line in lines) {
-      var details = PIDDetails();
+      var details = _PIDDetails();
 
       details.processName = line[0] as String;
       details.pid = int.tryParse(line[1] as String);
@@ -187,7 +190,7 @@ class ProcessHelper {
   }
 }
 
-class PIDDetails {
+class _PIDDetails {
   int pid;
   String processName;
   String memory;

@@ -1,25 +1,26 @@
 import 'dart:async';
 
-import 'package:dshell/src/util/dev_null.dart';
-
 import '../../dshell.dart';
-import 'wait_for_ex.dart';
+import 'dev_null.dart';
 
 import 'runnable_process.dart';
+import 'wait_for_ex.dart';
 
+/// central class that provides progress information about a running
+/// process.
 class Progress {
-  bool closed = false;
-  int _exitCode;
+  bool _closed = false;
 
-  set exitCode(int exitCode) => _exitCode = exitCode;
-  int get exitCode => _exitCode;
+  /// The exist code of the completed process.
+  int exitCode;
 
-  Completer<bool> stdoutCompleter = Completer();
-  Completer<bool> stderrCompleter = Completer();
+  final _stdoutCompleter = Completer<bool>();
+  final _stderrCompleter = Completer<bool>();
 
-  StreamController<String> stdoutController = StreamController();
-  StreamController<String> stderrController = StreamController();
+  final _stdoutController = StreamController<String>();
+  final _stderrController = StreamController<String>();
 
+  ///
   Progress(LineAction stdout, {LineAction stderr = devNull}) {
     stderr ??= devNull;
     _wireStreams(stdout, stderr);
@@ -31,30 +32,33 @@ class Progress {
 
   /// Use this progress to only output data from  stdout
   Progress.printStdOut() {
-    _wireStreams((line) => print(line), devNull);
+    _wireStreams(print, devNull);
   }
 
   /// Use this progress to print both stdout and stderr
   Progress.print() {
-    _wireStreams((line) => print(line), (line) => printerr(line));
+    _wireStreams(print, printerr);
   }
 
+  /// adds the [line] to the stdout controller
   void addToStdout(String line) {
-    if (!closed) {
-      stdoutController.sink.add(line);
+    if (!_closed) {
+      _stdoutController.sink.add(line);
     } else {
       Settings().verbose('addToStdout called after stream closed: line=$line');
     }
   }
 
+  /// adds the [line] to the stderr controller
   void addToStderr(String line) {
-    if (!closed) {
-      stderrController.sink.add(line);
+    if (!_closed) {
+      _stderrController.sink.add(line);
     } else {
       Settings().verbose('addToStdout called after stream closed: line=$line');
     }
   }
 
+  ///
   void forEach(LineAction stdout, {LineAction stderr = devNull}) {
     stderr ??= devNull;
     _processUntilComplete(stdout, stderr: stderr);
@@ -67,7 +71,7 @@ class Progress {
     _wireStreams(stdout, stderr);
 
     // Wait for both streams to complete
-    waitForEx(Future.wait([stdoutCompleter.future, stderrCompleter.future]));
+    waitForEx(Future.wait([_stdoutCompleter.future, _stderrCompleter.future]));
   }
 
   ///
@@ -76,18 +80,20 @@ class Progress {
   void _wireStreams(LineAction stdout, LineAction stderr) {
     assert(stdout != null);
     assert(stderr != null);
-    stdoutController.stream.listen((line) {
+    _stdoutController.stream.listen((line) {
       stdout(line);
     },
-        onDone: () => stdoutCompleter.complete(true),
-        onError: (Object e, StackTrace s) => stdoutCompleter.completeError(e),
+        onDone: () => _stdoutCompleter.complete(true),
+        //ignore: avoid_types_on_closure_parameters
+        onError: (Object e, StackTrace s) => _stdoutCompleter.completeError(e),
         cancelOnError: true);
 
-    stderrController.stream.listen((line) {
+    _stderrController.stream.listen((line) {
       stderr(line);
     },
-        onDone: () => stderrCompleter.complete(true),
-        onError: (Object e, StackTrace s) => stderrCompleter.completeError(e),
+        onDone: () => _stderrCompleter.complete(true),
+        //ignore: avoid_types_on_closure_parameters
+        onError: (Object e, StackTrace s) => _stderrCompleter.completeError(e),
         cancelOnError: true);
   }
 
@@ -129,9 +135,10 @@ class Progress {
     return line;
   }
 
+  /// closes the progress.
   void close() {
-    stderrController.close();
-    stdoutController.close();
-    closed = true;
+    _stderrController.close();
+    _stdoutController.close();
+    _closed = true;
   }
 }

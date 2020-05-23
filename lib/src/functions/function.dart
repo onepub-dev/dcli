@@ -1,7 +1,8 @@
+import 'package:path/path.dart' as p;
 import '../util/dshell_exception.dart';
 import '../util/stack_trace_impl.dart';
-import 'package:path/path.dart' as p;
 
+/// Based class for all function
 class DShellFunction {
   /// Returns the absolute path of [path]
   /// If [path] does not start with a /
@@ -10,7 +11,9 @@ class DShellFunction {
   String absolute(String path) => p.absolute(path);
 }
 
+/// Based class for all function exceptions.
 class FunctionException extends DShellException {
+  /// Based class for all function exceptions.
   FunctionException(String message, [StackTraceImpl stackTrace])
       : super(message, stackTrace);
 

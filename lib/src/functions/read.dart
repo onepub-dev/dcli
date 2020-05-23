@@ -1,13 +1,13 @@
 import 'dart:convert';
 import 'dart:io';
 
+import '../settings.dart';
 import '../util/dshell_exception.dart';
 import '../util/progress.dart';
 
 import '../util/stack_trace_impl.dart';
 import '../util/wait_for_ex.dart';
 
-import '../settings.dart';
 import 'dshell_function.dart';
 import 'is.dart';
 
@@ -21,16 +21,16 @@ import 'is.dart';
 /// If the file does not exists then a ReadException is thrown.
 ///
 Progress read(String path, {String delim = '\n'}) =>
-    Read().read(path, delim: delim);
+    _Read().read(path, delim: delim);
 
 /// Read lines from stdin
-Progress readStdin() => Read().readStdin();
+Progress readStdin() => _Read()._readStdin();
 
-class Read extends DShellFunction {
+class _Read extends DShellFunction {
   Progress read(String path, {String delim, Progress progress}) {
     var sourceFile = File(path);
 
-    Settings().verbose('read: ${absolute(path)}, delim: ${delim}');
+    Settings().verbose('read: ${absolute(path)}, delim: $delim');
 
     if (!exists(path)) {
       throw ReadException('The file at ${absolute(path)} does not exists');
@@ -51,7 +51,7 @@ class Read extends DShellFunction {
     return progress;
   }
 
-  Progress readStdin({Progress progress}) {
+  Progress _readStdin({Progress progress}) {
     Settings().verbose('readStdin');
 
     try {
@@ -69,7 +69,9 @@ class Read extends DShellFunction {
   }
 }
 
+/// Thrown when the [read] function encouters an error.
 class ReadException extends DShellFunctionException {
+  /// Thrown when the [read] function encouters an error.
   ReadException(String reason, [StackTraceImpl stacktrace])
       : super(reason, stacktrace);
 

@@ -7,19 +7,19 @@ import 'package:yaml/yaml.dart';
 /// Provides parsers for a number of common file formats.
 ///
 class Parser {
-  final List<String> lines;
+  final List<String> _lines;
 
   /// Creates a Parser with a set of lines that will be interpreted
   /// as a selected file type.
   /// The parser may only be used once.
-  Parser(this.lines);
+  Parser(this._lines);
 
   ///
   /// Interprets the read lines as JSON strings and builds the corresponding objects.
   ///
   /// See: https://api.flutter.dev/flutter/dart-convert/JsonDecoder-class.html
   dynamic jsonDecode() {
-    return convert.jsonDecode(lines.join('\n'));
+    return convert.jsonDecode(_lines.join('\n'));
   }
 
   /// Loads a single document from a YAML string.
@@ -36,7 +36,7 @@ class Parser {
   /// In future versions, maps will instead be [HashMap]s with a custom equality
   /// operation.
   dynamic yamlDecode() {
-    return loadYaml(lines.join('\n'));
+    return loadYaml(_lines.join('\n'));
   }
 
   /// Interprets the read lines as a csv file.
@@ -46,12 +46,12 @@ class Parser {
   ///
   /// See: https://pub.dev/packages/csv
   List<List<dynamic>> csvDecode() {
-    return CsvToListConverter().convert(lines.join('\n'));
+    return CsvToListConverter().convert(_lines.join('\n'));
   }
 
   /// Interprets the read lines as an ini file.
   /// See https://pub.dev/packages/ini
   Config iniDecode() {
-    return Config.fromStrings(lines);
+    return Config.fromStrings(_lines);
   }
 }

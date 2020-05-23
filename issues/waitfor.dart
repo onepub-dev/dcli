@@ -28,19 +28,21 @@ Future<Process> startProcess() {
 void waitForMe(Future future) {
   try {
     future
+        //ignore: avoid_types_on_closure_parameters
         .catchError((Object e, StackTrace st) => print('onErrr: $e'))
         .whenComplete(() => print('future completed'));
     // print(waitFor<Process>(future));
     print(waitFor(future));
   } // on AsyncError
+  // ignore: avoid_catches_without_on_clauses
   catch (e) {
     if (e.error is Exception) {
       print(e.error);
     } else if (e is AsyncError) {
-      print('Rethrowing a non DShellException ${e}');
+      print('Rethrowing a non DShellException $e');
       rethrow;
     } else {
-      print('Rethrowing a non DShellException ${e}');
+      print('Rethrowing a non DShellException $e');
       rethrow;
     }
   } finally {
@@ -53,6 +55,7 @@ T waitForEx<T>(Future<T> future) {
   T value;
   try {
     // catch any unhandled exceptions
+    //ignore: avoid_types_on_closure_parameters
     future.catchError((Object e, StackTrace st) {
       print('catchError called');
       exception = e;
@@ -60,10 +63,14 @@ T waitForEx<T>(Future<T> future) {
 
     runZoned(() {
       value = waitFor<T>(future);
-    }, onError: (Object error, StackTrace st) {
+    },
+        //ignore: avoid_types_on_closure_parameters
+        onError: (Object error, StackTrace st) {
       exception = error;
     });
-  } on AsyncError catch (e) {
+  }
+  // ignore: avoid_catching_errors
+  on AsyncError catch (e) {
     exception = e.error;
   } finally {
     print('existing try');
@@ -88,11 +95,14 @@ Future<int> throwExceptionV3() {
   var complete = Completer<int>();
   try {
     var future = Future.delayed(Duration(seconds: 2), () => throw Exception());
+    //ignore: avoid_types_on_closure_parameters
     future.catchError((Object e) {
       print('caught 1');
       complete.completeError('caught ');
     });
-  } catch (e) {
+  }
+  // ignore: avoid_catches_without_on_clauses
+  catch (e) {
     print('e');
   }
   return complete.future;

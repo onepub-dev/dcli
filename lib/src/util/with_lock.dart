@@ -1,12 +1,14 @@
 import 'dart:async';
-import 'dart:io';
 import 'dart:developer';
+import 'dart:io';
+
 import 'dart:isolate';
 
-import 'package:dshell/dshell.dart';
-import 'package:dshell/src/util/stack_trace_impl.dart';
-import 'package:dshell/src/util/wait_for_ex.dart';
 import 'package:meta/meta.dart';
+
+import '../../dshell.dart';
+import 'stack_trace_impl.dart';
+import 'wait_for_ex.dart';
 
 /// A [NamedLock] can be used to control access to a resource
 /// across processes and isolates.
@@ -37,6 +39,8 @@ class NamedLock {
   /// across processes and isolates.
   final int port = 63424;
   String _lockPath;
+
+  /// The name of the lock.
   final String name;
   String _description;
 
@@ -88,6 +92,10 @@ class NamedLock {
     _description ??= '';
   }
 
+  /// creates a lock file and then calls [fn]
+  /// once [fn] returns the lock is released.
+  /// If [waiting] is passed it will be used to write
+  /// a log message to the console.
   void withLock(
     void Function() fn, {
     String waiting,
@@ -102,9 +110,9 @@ class NamedLock {
       });
 
       try {
-        _log('lockcount = ${lockCount}');
+        _log('lockcount = $_lockCountForName');
 
-        if (lockCount > 0 || _takeLock(waiting)) {
+        if (_lockCountForName > 0 || _takeLock(waiting)) {
           lockHeld = true;
           incLockCount;
 
@@ -116,7 +124,9 @@ class NamedLock {
         // I'm uncertain if this is a reality.
         lockHeld = false;
       }
-    }, onError: (Object e, StackTrace st) {
+    }, 
+    //ignore: avoid_types_on_closure_parameters
+    onError: (Object e, StackTrace st) {
       if (lockHeld) _releaseLock();
       var stackTrace = StackTraceImpl.fromStackTrace(st);
 
@@ -129,10 +139,10 @@ class NamedLock {
   }
 
   void _releaseLock() {
-    if (lockCount > 0) {
+    if (_lockCountForName > 0) {
       decLockCount;
 
-      if (lockCount == 0) {
+      if (_lockCountForName == 0) {
         Settings().verbose(red('Releasing lock: $_lockFilePath'));
 
         _withHardLock(fn: () => delete(_lockFilePath));
@@ -140,7 +150,7 @@ class NamedLock {
     }
   }
 
-  int get lockCount {
+  int get _lockCountForName {
     var _lockCount = _lockCounts[name];
     _lockCount ??= 0;
     return _lockCount;
@@ -149,7 +159,7 @@ class NamedLock {
   /// increments the lock count and returns
   /// the new lock count.
   int get incLockCount {
-    var _lockCount = lockCount;
+    var _lockCount = _lockCountForName;
     _lockCount++;
     _lockCounts[name] = _lockCount;
     _log(orange('Incremented lock: $_lockCount'));
@@ -159,11 +169,11 @@ class NamedLock {
   /// decrements the lock count and returns
   /// the new lock count.
   int get decLockCount {
-    var _lockCount = lockCount;
+    var _lockCount = _lockCountForName;
     _lockCount--;
     _lockCounts[name] = _lockCount;
 
-    _log(orange('Decremented lock: $lockCount'));
+    _log(orange('Decremented lock: $_lockCountForName'));
     return _lockCount;
   }
 
@@ -173,7 +183,7 @@ class NamedLock {
 
     var isolate = _isolateID;
 
-    return join(_lockPath, '$pid.$isolate.${name}');
+    return join(_lockPath, '$pid.$isolate.$name');
   }
 
   String get _isolateID {
@@ -338,7 +348,8 @@ void _log(String message) {
   // var id = Service.getIsolateID(Isolate.current);
   //print('$id: $message');
 }
-
+///
 class LockException extends DShellException {
+  ///
   LockException(String message) : super(message);
 }

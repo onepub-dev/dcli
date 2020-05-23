@@ -2,8 +2,8 @@ import 'dart:io';
 
 import 'package:path/path.dart';
 
-import 'function.dart';
 import '../settings.dart';
+import 'function.dart';
 
 import 'is.dart';
 
@@ -23,9 +23,9 @@ import 'is.dart';
 ///
 /// If an error occurs a [CopyException] is thrown.
 void copy(String from, String to, {bool overwrite = false}) =>
-    Copy().copy(from, to, overwrite: overwrite);
+    _Copy().copy(from, to, overwrite: overwrite);
 
-class Copy extends DShellFunction {
+class _Copy extends DShellFunction {
   void copy(String from, String to, {bool overwrite = false}) {
     if (isDirectory(to)) {
       to = join(to, basename(from));
@@ -37,7 +37,9 @@ class Copy extends DShellFunction {
 
     try {
       File(from).copySync(to);
-    } catch (e) {
+    } 
+    // ignore: avoid_catches_without_on_clauses
+    catch (e) {
       throw CopyException(
           'An error occured copying ${absolute(from)} to ${absolute(to)}. Error: $e');
     }
@@ -46,6 +48,8 @@ class Copy extends DShellFunction {
   }
 }
 
+/// Throw when the [copy] function encounters an error.
 class CopyException extends FunctionException {
+  /// Throw when the [copy] function encounters an error.
   CopyException(String reason) : super(reason);
 }

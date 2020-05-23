@@ -1,6 +1,6 @@
 import 'dart:io';
-import 'package:dshell/dshell.dart';
-import 'package:dshell/src/util/process_helper.dart';
+import '../../dshell.dart';
+import 'process_helper.dart';
 
 ///
 /// Provides some conveinence funtions to get access to
@@ -51,8 +51,10 @@ class ShellDetection {
   String getShellName() {
     var shellName = 'unknown';
     try {
-      shellName = ProcessHelper().getPIDName(getShellPID());
-    } catch (e) {
+      shellName = ProcessHelper().getProcessName(getShellPID());
+    }
+    // ignore: avoid_catches_without_on_clauses
+    catch (e) {
       /// returns 'unknown'
     }
     return shellName;
@@ -75,12 +77,13 @@ class ShellDetection {
     int shellPID;
 
     var dartPID = ProcessHelper().getParentPID(childPID);
-    Settings()
-        .verbose('dartPID: $dartPID ${ProcessHelper().getPIDName(dartPID)}');
+    Settings().verbose(
+        'dartPID: $dartPID ${ProcessHelper().getProcessName(dartPID)}');
     var envPID = ProcessHelper().getParentPID(dartPID);
-    Settings().verbose('envPID: $envPID ${ProcessHelper().getPIDName(envPID)}');
+    Settings()
+        .verbose('envPID: $envPID ${ProcessHelper().getProcessName(envPID)}');
 
-    if (ProcessHelper().getPIDName(envPID).toLowerCase() == 'sh') {
+    if (ProcessHelper().getProcessName(envPID).toLowerCase() == 'sh') {
       shellPID = ProcessHelper().getParentPID(envPID);
       // Settings().verbose('shellPID: $envPID ${getPIDName(shellPID)}');
     } else {
@@ -114,8 +117,10 @@ class ShellDetection {
 /// to provide specific implementation of features
 /// required by DShell.
 abstract class Shell {
+  ///
   bool get isCompletionInstalled;
 
+  ///
   bool get isCompletionSupported;
 
   /// If the shell supports tab completion then
@@ -320,6 +325,7 @@ class ZshShell implements Shell {
   }
 }
 
+/// Windows Power Shell
 class PowerShell implements Shell {
   @override
   bool addToPath(String path) {
@@ -331,7 +337,7 @@ class PowerShell implements Shell {
     'cmd /c assoc .dart=dshell'.run;
     r'''cmd /c ftype dshell=`"C:\Users\User\dshell`" `"%1`" `"%2`" `"%3`" `"%4`" `"%5`" `"%6`" `"%7`" `"%8`" `"%9`"'''
         .run;
-    return null;
+    return false;
   }
 
   @override
@@ -383,12 +389,13 @@ class UnknownShell implements Shell {
     if (Settings().isMacOS) {
       return addPathToMacOsPathd(path);
     } else if (Settings().isLinux) {
-      return addPathToLinxuPath(path);
+      return _addPathToLinuxPath(path);
     } else {
       return false;
     }
   }
 
+  ///
   bool addPathToMacOsPathd(String path) {
     var success = false;
     if (!isOnPath(path)) {
@@ -402,7 +409,9 @@ class UnknownShell implements Shell {
           join(macOSPathPath, 'dshell').write(path);
         }
         success = true;
-      } catch (e) {
+      }
+      // ignore: avoid_catches_without_on_clauses
+      catch (e) {
         // ignore write permission problems.
         printerr(red(
             "Unable to add dshell/bin to path as we couldn't write to $macOSPathPath"));
@@ -411,7 +420,7 @@ class UnknownShell implements Shell {
     return success;
   }
 
-  bool addPathToLinxuPath(String path) {
+  bool _addPathToLinuxPath(String path) {
     var success = false;
     if (!isOnPath(path)) {
       var profile = join(HOME, '.profile');
@@ -423,7 +432,9 @@ class UnknownShell implements Shell {
             success = true;
           }
         }
-      } catch (e) {
+      }
+      // ignore: avoid_catches_without_on_clauses
+      catch (e) {
         // ignore write permission problems.
         printerr(red(
             "Unable to add dshell/bin to path as we couldn't write to $profile"));

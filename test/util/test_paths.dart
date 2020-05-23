@@ -45,30 +45,29 @@ import 'package:test/test.dart';
 class TestPaths {
   static final TestPaths _self = TestPaths._internal();
 
-  static String TEST_ROOT;
-  static const String TEST_LINES_FILE = 'lines.txt';
+  static String testRoot;
 
   String home;
   //String scriptDir;
   String testScriptPath;
   String scriptName;
   //String projectPath;
-  String testRoot;
+  String testRootForPid;
 
   factory TestPaths() {
     return _self;
   }
 
   TestPaths._internal() {
-    TEST_ROOT = join(rootPath, 'tmp', 'dshell');
+    testRoot = join(rootPath, 'tmp', 'dshell');
     // each unit test process has its own directory.
 
-    testRoot = join(TEST_ROOT, '$pid');
+    testRootForPid = join(testRoot, '$pid');
 
     print('unit test for $pid running from $pid');
 
     // redirecct HOME to /tmp/dshell/home
-    var home = truepath(TEST_ROOT, 'home');
+    var home = truepath(testRoot, 'home');
     setEnv('HOME', home);
 
     // // create test .pub-cache dir
@@ -114,7 +113,7 @@ class TestPaths {
 
     // recreateDir(pubCachePath);
 
-    testScriptPath = truepath(TEST_ROOT, 'scripts');
+    testScriptPath = truepath(testRoot, 'scripts');
 
     installDshell();
   }
@@ -125,12 +124,12 @@ class TestPaths {
         join(dirname(scriptName), basenameWithoutExtension(scriptName));
     if (scriptName.startsWith(Platform.pathSeparator)) {
       projectPath = truepath(Settings().dshellCachePath,
-          Script.sansRoot(projectScriptPath) + VirtualProject.PROJECT_DIR);
+          Script.sansRoot(projectScriptPath) + VirtualProject.projectDir);
     } else {
       projectPath = truepath(
           Settings().dshellCachePath,
           Script.sansRoot(testScriptPath),
-          projectScriptPath + VirtualProject.PROJECT_DIR);
+          projectScriptPath + VirtualProject.projectDir);
     }
     return projectPath;
   }
@@ -147,7 +146,7 @@ class TestPaths {
   void installDshell() {
     'pub global activate --source path .'.run;
 
-    which('dshell').forEach((line) => print(line));
+    which('dshell').forEach(print);
 
     print('dshell path: ${Settings().dshellPath}');
 

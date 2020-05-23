@@ -1,19 +1,22 @@
+import '../settings.dart';
 import '../util/dshell_exception.dart';
 
-import '../settings.dart';
 import 'commands/commands.dart';
 import 'commands/run.dart';
 import 'flags.dart';
 
+/// Runs a dshell script.
 class CommandLineRunner {
   static CommandLineRunner _self;
 
+  /// the list of flags set on the command line.
   static List<Flag> globalFlags = [VerboseFlag()];
 
   // Tracks the set of flags the users set on the command line.
-  Flags flagsSet = Flags();
-  Map<String, Command> availableCommands;
+  final Flags _flagsSet = Flags();
+  Map<String, Command> _availableCommands;
 
+  ///
   factory CommandLineRunner() {
     if (_self == null) {
       throw Exception('The CommandLineRunner has not been intialised');
@@ -21,12 +24,14 @@ class CommandLineRunner {
     return _self;
   }
 
+  /// initialises the [CommandLineRunner]
   static void init(List<Command> availableCommands) {
-    _self = CommandLineRunner.internal(Commands.asMap(availableCommands));
+    _self = CommandLineRunner._internal(Commands.asMap(availableCommands));
   }
 
-  CommandLineRunner.internal(this.availableCommands);
+  CommandLineRunner._internal(this._availableCommands);
 
+  /// Process the command line arguments to run the command.
   int process(List<String> arguments) {
     int exitCode;
 
@@ -40,13 +45,13 @@ class CommandLineRunner {
       final argument = arguments[i];
 
       if (Flags.isFlag(argument)) {
-        var flag = flagsSet.findFlag(argument, globalFlags);
+        var flag = _flagsSet.findFlag(argument, globalFlags);
 
         if (flag != null) {
-          if (flagsSet.isSet(flag)) {
+          if (_flagsSet.isSet(flag)) {
             throw DuplicateOptionsException(argument);
           }
-          flagsSet.set(flag);
+          _flagsSet.set(flag);
           Settings().verbose('Setting flag: ${flag.name}');
           if (flag == VerboseFlag()) {
             Settings().verbose('DShell Version: ${Settings().version}');
@@ -58,7 +63,7 @@ class CommandLineRunner {
       }
 
       // there may only be one command on the cli.
-      command = Commands.findCommand(argument, availableCommands);
+      command = Commands.findCommand(argument, _availableCommands);
       if (command != null) {
         if (i + 1 < arguments.length) {
           cmdArguments = arguments.sublist(i + 1);
@@ -90,52 +95,60 @@ class CommandLineRunner {
 /// Instead use one of the more specific derived exceptions or create
 /// your own extending from this exception.
 abstract class CommandLineException extends DShellException {
+  ///
   CommandLineException(String message) : super(message);
 }
 
+/// Thrown when an invalid command line option is passed.
 class OptionsException extends CommandLineException {
+  ///
   OptionsException(String message) : super(message);
 }
 
+/// Thrown when an duplicate command line option is passed.
 class DuplicateOptionsException extends OptionsException {
-  final String optionName;
-
-  DuplicateOptionsException(this.optionName)
-      : super('Option ${optionName} used twice!');
+  /// Thrown when an invalid command line option is passed.
+  DuplicateOptionsException(String optionName)
+      : super('Option $optionName used twice!');
   @override
   String toString() => message;
 }
 
+/// Thrown when an unknown command line option is passed.
 class UnknownOption extends OptionsException {
-  final String optionName;
-
-  UnknownOption(this.optionName) : super('The option $optionName is unknown!');
+  ///
+  UnknownOption(String optionName)
+      : super('The option $optionName is unknown!');
 
   @override
   String toString() => message;
 }
 
+/// Thrown when an invalid script name is passed to the  command line.
 class InvalidScript extends CommandLineException {
+  /// Thrown when an invalid script name is passed to the  command line.
   InvalidScript(String message) : super(message);
 }
 
+/// Thrown when an invalid command  is passed.
 class UnknownCommand extends CommandLineException {
-  final String command;
-
-  UnknownCommand(this.command)
+  ///
+  UnknownCommand(String command)
       : super(
-            'The command ${command} was not recognised. Scripts must end with .dart!');
+            'The command $command was not recognised. Scripts must end with .dart!');
 }
 
+/// Thrown when an unknown flag is passed to a command.
 class UnknownFlag extends CommandLineException {
-  final String flag;
-
-  UnknownFlag(this.flag) : super('The flag ${flag} was not recognised!');
+  ///
+  UnknownFlag(String flag) : super('The flag $flag was not recognised!');
 
   @override
   String toString() => message;
 }
 
+/// Thrown when an invalid argument is passed to a command.
 class InvalidArguments extends CommandLineException {
+  ///
   InvalidArguments(String message) : super(message);
 }

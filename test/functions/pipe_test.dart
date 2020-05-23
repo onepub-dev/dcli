@@ -11,7 +11,7 @@ void main() {
 
     t.test('For Each on string', () {
       TestFileSystem().withinZone((fs) {
-        var linesFile = join(fs.root, TestFileSystem.TEST_LINES_FILE);
+        var linesFile = join(fs.root, TestFileSystem.testLinesFile);
         createLineFile(linesFile, 10);
 
         'tail -n 100 $linesFile'.forEach((line) => lines.add(line));
@@ -21,7 +21,7 @@ void main() {
 
     t.test('forEach Single Pipe', () {
       TestFileSystem().withinZone((fs) {
-        var linesFile = join(fs.root, TestFileSystem.TEST_LINES_FILE);
+        var linesFile = join(fs.root, TestFileSystem.testLinesFile);
         createLineFile(linesFile, 10);
 
         lines.clear();
@@ -34,7 +34,7 @@ void main() {
 
     t.test('forEach Double Pipe', () {
       TestFileSystem().withinZone((fs) {
-        var linesFile = join(fs.root, TestFileSystem.TEST_LINES_FILE);
+        var linesFile = join(fs.root, TestFileSystem.testLinesFile);
         createLineFile(linesFile, 10);
 
         lines.clear();
@@ -46,7 +46,7 @@ void main() {
 
     t.test('forEach Triple Pipe', () {
       TestFileSystem().withinZone((fs) {
-        var linesFile = join(fs.root, TestFileSystem.TEST_LINES_FILE);
+        var linesFile = join(fs.root, TestFileSystem.testLinesFile);
         createLineFile(linesFile, 10);
 
         lines.clear();
@@ -62,7 +62,7 @@ void main() {
 
     t.test('run on string', () {
       TestFileSystem().withinZone((fs) {
-        var linesFile = join(fs.root, TestFileSystem.TEST_LINES_FILE);
+        var linesFile = join(fs.root, TestFileSystem.testLinesFile);
         createLineFile(linesFile, 10);
 
         'tail -n 100 $linesFile'.run;
@@ -72,7 +72,7 @@ void main() {
 
     t.test('run Single Pipe', () {
       TestFileSystem().withinZone((fs) {
-        var linesFile = join(fs.root, TestFileSystem.TEST_LINES_FILE);
+        var linesFile = join(fs.root, TestFileSystem.testLinesFile);
         createLineFile(linesFile, 10);
 
         lines.clear();
@@ -84,7 +84,7 @@ void main() {
 
     t.test('run Double Pipe', () {
       TestFileSystem().withinZone((fs) {
-        var linesFile = join(fs.root, TestFileSystem.TEST_LINES_FILE);
+        var linesFile = join(fs.root, TestFileSystem.testLinesFile);
         createLineFile(linesFile, 10);
 
         lines.clear();
@@ -95,7 +95,7 @@ void main() {
 
     t.test('run Triple Pipe', () {
       TestFileSystem().withinZone((fs) {
-        var linesFile = join(fs.root, TestFileSystem.TEST_LINES_FILE);
+        var linesFile = join(fs.root, TestFileSystem.testLinesFile);
         createLineFile(linesFile, 10);
 
         lines.clear();

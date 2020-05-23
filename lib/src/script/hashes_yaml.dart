@@ -3,11 +3,15 @@ import 'package:path/path.dart' as p;
 
 import 'my_yaml.dart';
 
+/// not currently used.
+/// idea was to keep a hash of files so we can tell if they have changed.
 class HashesYaml {
-  String fileName = 'hashes.yaml';
+  final String _fileName = 'hashes.yaml';
 
-  MyYaml hashes;
+  /// ignore: unused_field
+  MyYaml _hashes;
 
+  ///
   HashesYaml(String scriptCachePath) {
     var cachePathDirectory = Directory(scriptCachePath);
 
@@ -15,8 +19,9 @@ class HashesYaml {
       cachePathDirectory.createSync();
     }
 
-    hashes = MyYaml.fromFile(p.join(scriptCachePath, fileName));
+    _hashes = MyYaml.fromFile(p.join(scriptCachePath, _fileName));
   }
 
+  ///
   static void create(String projectRootPath) {}
 }

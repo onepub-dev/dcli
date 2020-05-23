@@ -40,12 +40,11 @@ Future<void> pipeTo2(Future<Process> lhs, Future<Process> rhs) async {
   rhsProcess.stdout.listen(stdout.add);
   rhsProcess.stderr.listen(stderr.add);
 
-  await rhsProcess.stdin.done.catchError(
-    (Object e) {
-      // forget broken pipe after rhs terminates before lhs
-    },
-    test: (e) => e is SocketException && e.osError.message == 'Broken pipe',
-  );
+  await rhsProcess.stdin.done
+      //ignore: avoid_types_on_closure_parameters
+      .catchError((Object e) {
+    // forget broken pipe after rhs terminates before lhs
+  }, test: (e) => e is SocketException && e.osError.message == 'Broken pipe');
 }
 
 void pipeTo(Future<Process> lhs, Future<Process> rhs) {
@@ -65,6 +64,7 @@ void pipeTo(Future<Process> lhs, Future<Process> rhs) {
         print('done');
         complete.complete();
       }, // stdoutCompleter.complete(true),
+      //ignore: avoid_types_on_closure_parameters
           onError: (Object e, StackTrace s) =>
               print('onError $e'), // stdoutCompleter.completeError(e),
           cancelOnError: true);
@@ -78,6 +78,7 @@ void pipeTo(Future<Process> lhs, Future<Process> rhs) {
         print('done err');
         if (!complete.isCompleted) complete.complete();
       }, // stdoutCompleter.complete(true),
+      //ignore: avoid_types_on_closure_parameters
           onError: (Object e, StackTrace s) =>
               print('onError $e'), // stdoutCompleter.completeError(e),
           cancelOnError: true);

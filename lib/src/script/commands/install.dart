@@ -1,30 +1,32 @@
 import 'dart:io';
 
-import 'package:dshell/dshell.dart';
-import 'package:dshell/src/functions/env.dart';
-import 'package:dshell/src/util/dart_install_apt.dart';
-import 'package:dshell/src/util/dshell_paths.dart';
-import 'package:dshell/src/util/pub_cache.dart';
-import 'package:dshell/src/util/shell.dart';
-
+import '../../../dshell.dart';
+import '../../functions/env.dart';
 import '../../functions/which.dart';
 import '../../pubspec/global_dependencies.dart';
-import '../command_line_runner.dart';
 import '../../settings.dart';
 import '../../util/ansi_color.dart';
+import '../../util/dart_install_apt.dart';
+import '../../util/dshell_paths.dart';
+import '../../util/pub_cache.dart';
+import '../../util/shell.dart';
+
+import '../command_line_runner.dart';
 
 import '../flags.dart';
 import 'commands.dart';
 
+///
 class InstallCommand extends Command {
-  static const String NAME = 'install';
+  static const _commandName = 'install';
 
-  List<Flag> installFlags = [NoCleanFlag()];
+  final _installFlags = [_NoCleanFlag()];
 
   /// holds the set of flags passed to the compile command.
   Flags flagSet = Flags();
 
-  InstallCommand() : super(NAME);
+  /// ctor.
+  InstallCommand() : super(_commandName);
 
   @override
   int run(List<Flag> selectedFlags, List<String> subarguments) {
@@ -38,7 +40,7 @@ class InstallCommand extends Command {
       final subargument = subarguments[i];
 
       if (Flags.isFlag(subargument)) {
-        var flag = flagSet.findFlag(subargument, installFlags);
+        var flag = flagSet.findFlag(subargument, _installFlags);
 
         if (flag != null) {
           if (flagSet.isSet(flag)) {
@@ -64,7 +66,7 @@ class InstallCommand extends Command {
     print('Hang on a tick whilst we install dshell.');
     print('');
 
-    var dartWasInstalled = dartInstall();
+    var dartWasInstalled = _dartInstall();
     // Create the ~/.dshell root.
     if (!exists(Settings().dshellPath)) {
       print(blue('Creating ${Settings().dshellPath}'));
@@ -149,7 +151,7 @@ class InstallCommand extends Command {
         exit(1);
       } else {
         var dshellPath = dshellLocation;
-        print(blue('dshell found in : ${dshellPath}.'));
+        print(blue('dshell found in : $dshellPath.'));
 
         // link so all users can run dshell
         // We use the location of dart exe and add dshell symlink
@@ -161,12 +163,12 @@ class InstallCommand extends Command {
     }
     print('');
 
-    fixPermissions(shell);
+    _fixPermissions(shell);
 
     // print('Copying dshell (${Platform.executable}) to /usr/bin/dshell');
     // copy(Platform.executable, '/usr/bin/dshell');
 
-    touch(Settings().install_completed_indicator, create: true);
+    touch(Settings().installCompletedIndicator, create: true);
 
     print(red('*' * 80));
     print('');
@@ -198,14 +200,14 @@ class InstallCommand extends Command {
 
   @override
   List<Flag> flags() {
-    return installFlags;
+    return _installFlags;
   }
 
-  bool dartInstall() {
+  bool _dartInstall() {
     return DartInstaller().installDart();
   }
 
-  void fixPermissions(Shell shell) {
+  void _fixPermissions(Shell shell) {
     if (shell.isPrivilegedUser) {
       if (!Platform.isWindows) {
         var user = shell.loggedInUser;
@@ -218,10 +220,10 @@ class InstallCommand extends Command {
   }
 }
 
-class NoCleanFlag extends Flag {
-  static const NAME = 'noclean';
+class _NoCleanFlag extends Flag {
+  static const _flagName = 'noclean';
 
-  NoCleanFlag() : super(NAME);
+  _NoCleanFlag() : super(_flagName);
 
   @override
   String get abbreviation => 'nc';
@@ -234,6 +236,8 @@ class NoCleanFlag extends Flag {
   }
 }
 
+/// Thrown if an error is encountered during an install
 class InstallException extends DShellException {
+  /// Thrown if an error is encountered during an install
   InstallException(String message) : super(message);
 }

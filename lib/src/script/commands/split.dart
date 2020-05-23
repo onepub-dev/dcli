@@ -1,17 +1,18 @@
 import 'package:collection/collection.dart';
-import 'package:dshell/dshell.dart';
-import 'package:dshell/src/functions/is.dart';
-import 'package:dshell/src/util/completion.dart';
+import '../../../dshell.dart';
+import '../../functions/is.dart';
+import '../../util/completion.dart';
 
 import '../command_line_runner.dart';
 import '../flags.dart';
 import '../script.dart';
 import 'commands.dart';
 
+///
 class SplitCommand extends Command {
-  static const String NAME = 'split';
-
-  SplitCommand() : super(NAME);
+  static const String _commandName = 'split';
+///
+  SplitCommand() : super(_commandName);
 
   @override
   int run(List<Flag> selectedFlags, List<String> subarguments) {
@@ -52,7 +53,7 @@ class SplitCommand extends Command {
 
   @override
   List<String> completion(String word) {
-    return completion_expand_scripts(word);
+    return completionExpandScripts(word);
   }
 
   // checks if the script's pubspec is identical to the

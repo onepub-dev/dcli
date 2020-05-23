@@ -2,15 +2,16 @@ import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
 
-import 'package:dshell/src/functions/env.dart';
-import 'package:dshell/src/util/parse_cli_command.dart';
-import 'package:dshell/src/util/stack_trace_impl.dart';
 import 'package:meta/meta.dart';
 
-import 'progress.dart';
-import 'wait_for_ex.dart';
 import '../../dshell.dart';
+import '../functions/env.dart';
 import 'dshell_exception.dart';
+import 'parse_cli_command.dart';
+import 'progress.dart';
+import 'stack_trace_impl.dart';
+
+import 'wait_for_ex.dart';
 
 typedef LineAction = void Function(String line);
 typedef CancelableLineAction = bool Function(String line);
@@ -28,12 +29,14 @@ void printerr(String line) {
   // waitForEx<dynamic>(stderr.flush());
 }
 
+///
 class RunnableProcess {
-  Future<Process> fProcess;
+  Future<Process> _fProcess;
 
+  /// The directory the process is running in.
   final String workingDirectory;
 
-  ParsedCliCommand parsed;
+  final ParsedCliCommand _parsed;
 
   /// Spawns a process to run the command contained in [cmdLine] along with
   /// the args passed via the [cmdLine].
@@ -41,7 +44,7 @@ class RunnableProcess {
   /// Glob expansion is performed on each non-quoted argument.
   ///
   RunnableProcess.fromCommandLine(String cmdLine, {this.workingDirectory})
-      : parsed = ParsedCliCommand(cmdLine, workingDirectory);
+      : _parsed = ParsedCliCommand(cmdLine, workingDirectory);
 
   /// Spawns a process to run the command contained in [command] along with
   /// the args passed via the [args].
@@ -50,24 +53,26 @@ class RunnableProcess {
   ///
   RunnableProcess.fromCommandArgs(String command, List<String> args,
       {this.workingDirectory})
-      : parsed = ParsedCliCommand.fromParsed(command, args, workingDirectory);
+      : _parsed = ParsedCliCommand.fromParsed(command, args, workingDirectory);
 
-  String get cmdLine => parsed.cmd + ' ' + parsed.args.join(' ');
+  /// returns the original command line that started this process.
+  String get cmdLine => '${_parsed.cmd} ${_parsed.args.join(' ')}';
 
   /// Experiemental - DO NOT USE
   Stream<List<int>> get stream {
     // wait until the process has started
-    var process = waitForEx<Process>(fProcess);
+    var process = waitForEx<Process>(_fProcess);
     return process.stdout;
   }
 
   /// Experiemental - DO NOT USE
   Sink<List<int>> get sink {
     // wait until the process has started
-    var process = waitForEx<Process>(fProcess);
+    var process = waitForEx<Process>(_fProcess);
     return process.stdin;
   }
 
+  /// runs the process.
   Progress run(
       {Progress progress,
       bool runInShell = false,
@@ -92,6 +97,8 @@ class RunnableProcess {
     return progress;
   }
 
+  /// starts the process
+  /// provides additional options to [run].
   void start({
     bool runInShell = false,
     bool detached = false,
@@ -110,17 +117,17 @@ class RunnableProcess {
     }
 
     if (Settings().isVerbose) {
+      var cmdLine = "${_parsed.cmd} ${_parsed.args.join(' ')}";
+      Settings().verbose('Process.start: cmdLine ${green(cmdLine)}');
       Settings().verbose(
-          'Process.start: cmdLine ${green(parsed.cmd + ' ' + parsed.args.join(' '))}');
-      Settings().verbose(
-          'Process.start: cmd: ${parsed.cmd} args: ${parsed.args.join(', ')}');
+          'Process.start: cmd: ${_parsed.cmd} args: ${_parsed.args.join(', ')}');
       Settings().verbose(
           'Process.start(runInShell: $runInShell workingDir: $workingDirectory mode: $mode)');
     }
 
-    fProcess = Process.start(
-      parsed.cmd,
-      parsed.args,
+    _fProcess = Process.start(
+      _parsed.cmd,
+      _parsed.args,
       runInShell: runInShell,
       workingDirectory: workdir,
       mode: mode,
@@ -139,9 +146,11 @@ class RunnableProcess {
   void _waitForStart() {
     var complete = Completer<Process>();
 
-    fProcess.then((process) {
+    _fProcess.then((process) {
       complete.complete(process);
-    }).catchError((Object e, StackTrace s) {
+    })
+        //ignore: avoid_types_on_closure_parameters
+        .catchError((Object e, StackTrace s) {
       // 2 - No such file or directory
       if (e is ProcessException && e.errorCode == 2) {
         var ep = e as ProcessException;
@@ -165,15 +174,15 @@ class RunnableProcess {
   /// have to wait for things to finish.
   int _waitForExit() {
     var exited = Completer<int>();
-    fProcess.then((process) {
+    _fProcess.then((process) {
       var exitCode = waitForEx<int>(process.exitCode);
 
       if (exitCode != 0) {
         exited.completeError(RunException.withArgs(
-            parsed.cmd,
-            parsed.args,
+            _parsed.cmd,
+            _parsed.args,
             exitCode,
-            'The command ${red('[${parsed.cmd}] with args [${parsed.args.join(', ')}]')} failed with exitCode: ${exitCode}'));
+            'The command ${red('[${_parsed.cmd}] with args [${_parsed.args.join(', ')}]')} failed with exitCode: $exitCode'));
       } else {
         exited.complete(exitCode);
       }
@@ -181,6 +190,7 @@ class RunnableProcess {
     return waitForEx<int>(exited.future);
   }
 
+  ///
   void pipeTo(RunnableProcess stdin) {
     // fProcess.then((stdoutProcess) {
     //   stdin.fProcess.then<void>(
@@ -188,8 +198,8 @@ class RunnableProcess {
 
     // });
 
-    fProcess.then((lhsProcess) {
-      stdin.fProcess.then<void>((rhsProcess) {
+    _fProcess.then((lhsProcess) {
+      stdin._fProcess.then<void>((rhsProcess) {
         // lhs.stdout -> rhs.stdin
         lhsProcess.stdout.listen(rhsProcess.stdin.add);
         // lhs.stderr -> rhs.stdin
@@ -205,6 +215,7 @@ class RunnableProcess {
         // process we will get a broken pipe. We
         // can safely ignore broken pipe errors (I think :).
         rhsProcess.stdin.done.catchError(
+          //ignore: avoid_types_on_closure_parameters
           (Object e) {
             // forget broken pipe after rhs terminates before lhs
           },
@@ -224,7 +235,7 @@ class RunnableProcess {
 
     progress ??= Progress.devNull();
 
-    fProcess.then((process) {
+    _fProcess.then((process) {
       /// handle stdout stream
       process.stdout
           .transform(utf8.decoder)
@@ -249,15 +260,17 @@ class RunnableProcess {
         progress.exitCode = exitCode;
         if (exitCode != 0 && nothrow == false) {
           done.completeError(RunException.withArgs(
-              parsed.cmd,
-              parsed.args,
+              _parsed.cmd,
+              _parsed.args,
               exitCode,
-              'The command ${red('[${parsed.cmd}] with args [${parsed.args.join(', ')}]')} failed with exitCode: ${exitCode}'));
+              'The command ${red('[${_parsed.cmd}] with args [${_parsed.args.join(', ')}]')} failed with exitCode: $exitCode'));
         } else {
           done.complete(true);
         }
       });
-    }).catchError((Object e, StackTrace s) {
+    })
+        //ignore: avoid_types_on_closure_parameters
+        .catchError((Object e, StackTrace s) {
       Settings().verbose(
           '${e.toString()} stacktrace: ${StackTraceImpl.fromStackTrace(s).formatStackTrace()}');
       throw e;
@@ -266,20 +279,31 @@ class RunnableProcess {
     try {
       // wait for the process to finish.
       waitForEx<bool>(done.future);
-    } catch (e) {
+    }
+    // ignore: avoid_catches_without_on_clauses
+    catch (e) {
       rethrow;
     }
   }
 }
 
+///
 class RunException extends DShellException {
+  /// The command line that was being run.
   String cmdLine;
+
+  /// the exit code of the command.
   int exitCode;
+
+  /// the error.
   String reason;
+
+  ///
   RunException(this.cmdLine, this.exitCode, this.reason,
       {StackTraceImpl stackTrace})
       : super(reason, stackTrace);
 
+  ///
   RunException.withArgs(
       String cmd, List<String> args, this.exitCode, this.reason,
       {StackTraceImpl stackTrace})

@@ -64,8 +64,8 @@ void main() {
         when(mockEnv.HOME).thenReturn('c:\\windows\\userdata');
         when(mockEnv.isOnPath(settings.dshellBinPath)).thenReturn(false);
 
-        Settings.setMock(mockSettings);
-        Env.setMock(mockEnv);
+        Settings.mock = mockSettings;
+        Env.mock = mockEnv;
       });
     });
 
@@ -83,8 +83,8 @@ void main() {
         when(mockEnv.HOME).thenReturn(HOME);
         when(mockEnv.isOnPath(settings.dshellBinPath)).thenReturn(false);
 
-        Settings.setMock(mockSettings);
-        Env.setMock(mockEnv);
+        Settings.mock = mockSettings;
+        Env.mock = mockEnv;
 
         var export = 'export PATH=\$PATH:${settings.dshellBinPath}';
 

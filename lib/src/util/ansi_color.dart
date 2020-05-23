@@ -1,11 +1,11 @@
 import 'dart:io';
 
-import 'package:dshell/src/functions/echo.dart';
+import '../functions/echo.dart';
 
 /// Returns a string wrapped with the selected ansi
 /// fg color codes.
 String red(String text, {AnsiColor bgcolor = AnsiColor.none}) =>
-    AnsiColor._apply(AnsiColor._Red, text, bgcolor: bgcolor);
+    AnsiColor._apply(AnsiColor._red, text, bgcolor: bgcolor);
 
 ///
 /// Wraps the passed text with the ANSI escape sequence for
@@ -20,8 +20,8 @@ String red(String text, {AnsiColor bgcolor = AnsiColor.none}) =>
 /// [bgcolor] is the background color to use when printing the
 /// text.  Defaults to White.
 ///
-String black(String text, {AnsiColor bgcolor = AnsiColor._White}) =>
-    AnsiColor._apply(AnsiColor._Black, text, bgcolor: bgcolor);
+String black(String text, {AnsiColor bgcolor = AnsiColor._white}) =>
+    AnsiColor._apply(AnsiColor._black, text, bgcolor: bgcolor);
 
 ///
 /// Wraps the passed text with the ANSI escape sequence for
@@ -37,7 +37,7 @@ String black(String text, {AnsiColor bgcolor = AnsiColor._White}) =>
 /// text.  Defaults to none.
 ///
 String green(String text, {AnsiColor bgcolor = AnsiColor.none}) =>
-    AnsiColor._apply(AnsiColor._Green, text, bgcolor: bgcolor);
+    AnsiColor._apply(AnsiColor._green, text, bgcolor: bgcolor);
 
 ///
 /// Wraps the passed text with the ANSI escape sequence for
@@ -53,7 +53,7 @@ String green(String text, {AnsiColor bgcolor = AnsiColor.none}) =>
 /// text.  Defaults to none.
 ///
 String blue(String text, {AnsiColor bgcolor = AnsiColor.none}) =>
-    AnsiColor._apply(AnsiColor._Blue, text, bgcolor: bgcolor);
+    AnsiColor._apply(AnsiColor._blue, text, bgcolor: bgcolor);
 
 ///
 /// Wraps the passed text with the ANSI escape sequence for
@@ -69,7 +69,7 @@ String blue(String text, {AnsiColor bgcolor = AnsiColor.none}) =>
 /// text.  Defaults to none.
 ///
 String yellow(String text, {AnsiColor bgcolor = AnsiColor.none}) =>
-    AnsiColor._apply(AnsiColor._Yellow, text, bgcolor: bgcolor);
+    AnsiColor._apply(AnsiColor._yellow, text, bgcolor: bgcolor);
 
 ///
 /// Wraps the passed text with the ANSI escape sequence for
@@ -85,7 +85,7 @@ String yellow(String text, {AnsiColor bgcolor = AnsiColor.none}) =>
 /// text.  Defaults to none.
 ///
 String magenta(String text, {AnsiColor bgcolor = AnsiColor.none}) =>
-    AnsiColor._apply(AnsiColor._Magenta, text, bgcolor: bgcolor);
+    AnsiColor._apply(AnsiColor._magenta, text, bgcolor: bgcolor);
 
 ///
 /// Wraps the passed text with the ANSI escape sequence for
@@ -101,7 +101,7 @@ String magenta(String text, {AnsiColor bgcolor = AnsiColor.none}) =>
 /// text.  Defaults to none.
 ///
 String cyan(String text, {AnsiColor bgcolor = AnsiColor.none}) =>
-    AnsiColor._apply(AnsiColor._Cyan, text, bgcolor: bgcolor);
+    AnsiColor._apply(AnsiColor._cyan, text, bgcolor: bgcolor);
 
 ///
 /// Wraps the passed text with the ANSI escape sequence for
@@ -117,7 +117,7 @@ String cyan(String text, {AnsiColor bgcolor = AnsiColor.none}) =>
 /// text.  Defaults to none.
 ///
 String white(String text, {AnsiColor bgcolor = AnsiColor.none}) =>
-    AnsiColor._apply(AnsiColor._White, text, bgcolor: bgcolor);
+    AnsiColor._apply(AnsiColor._white, text, bgcolor: bgcolor);
 
 ///
 /// Wraps the passed text with the ANSI escape sequence for
@@ -133,7 +133,7 @@ String white(String text, {AnsiColor bgcolor = AnsiColor.none}) =>
 /// text.  Defaults to none.
 ///
 String orange(String text, {AnsiColor bgcolor = AnsiColor.none}) =>
-    AnsiColor._apply(AnsiColor._Orange, text, bgcolor: bgcolor);
+    AnsiColor._apply(AnsiColor._orange, text, bgcolor: bgcolor);
 
 ///
 /// Wraps the passed text with the ANSI escape sequence for
@@ -150,7 +150,7 @@ String orange(String text, {AnsiColor bgcolor = AnsiColor.none}) =>
 ///
 String grey(String text,
         {double level = 0.5, AnsiColor bgcolor = AnsiColor.none}) =>
-    AnsiColor._apply(AnsiColor._Grey(level: level), text, bgcolor: bgcolor);
+    AnsiColor._apply(AnsiColor._grey(level: level), text, bgcolor: bgcolor);
 
 ///
 /// Modes available when clearing a screen or line.
@@ -167,13 +167,21 @@ String grey(String text,
 ///
 enum AnsiClearMode {
   // scrollback,
+  /// clear whole screen
   all,
+
+  /// clear screen from the cursor to the bottom of the screen.
   fromCursor,
+
+  /// clear screen from the top of the screen to the cursor
   toCursor
 }
 
+///
 void clearScreen({AnsiClearMode mode = AnsiClearMode.all}) =>
     AnsiColor.clearScreen(mode);
+
+///
 void clearLine({AnsiClearMode mode = AnsiClearMode.all}) =>
     AnsiColor.clearLine(mode);
 
@@ -189,6 +197,7 @@ void clearLine({AnsiClearMode mode = AnsiClearMode.all}) =>
 class AnsiColor {
   static bool _emitAnsi;
 
+  /// returns true of the terminal supports ansi escape characters.
   static bool get emitAnsi {
     if (_emitAnsi == null) {
       return stdin.supportsAnsiEscapes;
@@ -213,16 +222,24 @@ class AnsiColor {
   /// setting to the default detected.
   static void get resetEmitAnsi => _emitAnsi = null;
 
-  static String reset() => _emit(Reset);
+  /// resets the color scheme.
+  static String reset() => _emit(_resetCode);
 
-  static String fgReset() => _emit(FgReset);
-  static String bgReset() => _emit(BgReset);
+  /// resets the foreground color
+  static String fgReset() => _emit(_fgResetCode);
+
+  /// resets the background color.
+  static String bgReset() => _emit(_bgResetCode);
 
   final int _code;
+
+  ///
   const AnsiColor(int code) : _code = code;
 
+  /// ansi code for this color.
   int get code => _code;
 
+  /// writes the text to the terminal.
   String apply(String text, {AnsiColor bgcolor = none}) =>
       _apply(this, text, bgcolor: bgcolor);
 
@@ -231,7 +248,7 @@ class AnsiColor {
     String output;
 
     if (emitAnsi) {
-      output = '${_fg(color.code)}${_bg(bgcolor?.code)}${text}${_reset}';
+      output = '${_fg(color.code)}${_bg(bgcolor?.code)}$text$_reset';
     } else {
       output = text;
     }
@@ -239,7 +256,7 @@ class AnsiColor {
   }
 
   static String get _reset {
-    return '${esc}${Reset}m';
+    return '$esc${_resetCode}m';
   }
 
   static String _fg(int code) {
@@ -248,13 +265,14 @@ class AnsiColor {
     if (code == none.code) {
       output = '';
     } else if (code > 39) {
-      output = '${esc}${FgColor}${code}m';
+      output = '$esc$_fgColorCode${code}m';
     } else {
-      output = '${esc}${code}m';
+      output = '$esc${code}m';
     }
     return output;
   }
 
+  ///
   static void clearScreen(AnsiClearMode mode) {
     if (!emitAnsi) return;
     switch (mode) {
@@ -273,6 +291,7 @@ class AnsiColor {
     }
   }
 
+  ///
   static void clearLine(AnsiClearMode mode) {
     if (!emitAnsi) return;
     switch (mode) {
@@ -296,15 +315,15 @@ class AnsiColor {
     if (code == none.code) {
       output = '';
     } else if (code > 49) {
-      output = '${esc}${BgColor}${code + 10}m';
+      output = '$esc$_bgColorCode${code + 10}m';
     } else {
-      output = '${esc}${code + 10}m';
+      output = '$esc${code + 10}m';
     }
     return output;
   }
 
   static String _emit(String ansicode) {
-    return '${esc}${ansicode}m';
+    return '$esc${ansicode}m';
   }
 
   /// ANSI Control Sequence Introducer, signals the terminal for new settings.
@@ -314,31 +333,31 @@ class AnsiColor {
   /// Resets
 
   /// Reset fg and bg colors
-  static const String Reset = '0';
+  static const String _resetCode = '0';
 
   /// Defaults the terminal's fg color without altering the bg.
-  static const String FgReset = '39';
+  static const String _fgResetCode = '39';
 
   /// Defaults the terminal's bg color without altering the fg.
-  static const String BgReset = '49';
+  static const String _bgResetCode = '49';
 
   // emit this code followed by a color code to set the fg color
-  static const String FgColor = '38;5;';
+  static const String _fgColorCode = '38;5;';
 
 // emit this code followed by a color code to set the fg color
-  static const String BgColor = '48;5;';
+  static const String _bgColorCode = '48;5;';
 
   /// Colors
-  static const AnsiColor _Black = AnsiColor(30);
-  static const AnsiColor _Red = AnsiColor(31);
-  static const AnsiColor _Green = AnsiColor(32);
-  static const AnsiColor _Yellow = AnsiColor(33);
-  static const AnsiColor _Blue = AnsiColor(34);
-  static const AnsiColor _Magenta = AnsiColor(35);
-  static const AnsiColor _Cyan = AnsiColor(36);
-  static const AnsiColor _White = AnsiColor(37);
-  static const AnsiColor _Orange = AnsiColor(208);
-  static AnsiColor _Grey({double level = 0.5}) =>
+  static const AnsiColor _black = AnsiColor(30);
+  static const AnsiColor _red = AnsiColor(31);
+  static const AnsiColor _green = AnsiColor(32);
+  static const AnsiColor _yellow = AnsiColor(33);
+  static const AnsiColor _blue = AnsiColor(34);
+  static const AnsiColor _magenta = AnsiColor(35);
+  static const AnsiColor _cyan = AnsiColor(36);
+  static const AnsiColor _white = AnsiColor(37);
+  static const AnsiColor _orange = AnsiColor(208);
+  static AnsiColor _grey({double level = 0.5}) =>
       AnsiColor(232 + (level.clamp(0.0, 1.0) * 23).round());
 
   /// passing this as the background color will cause

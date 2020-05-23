@@ -1,7 +1,7 @@
-import 'package:dshell/src/functions/pwd.dart';
-
 import '../util/progress.dart';
 import '../util/runnable_process.dart';
+
+import 'pwd.dart';
 
 ///
 /// Runs the given cli [commandline] writing any output
@@ -71,7 +71,7 @@ int run(String commandLine,
   return runnable
       .run(
           progress:
-              Progress((line) => print(line), stderr: (line) => printerr(line)),
+              Progress(print, stderr: printerr),
           runInShell: runInShell,
           detached: false,
           terminal: false,

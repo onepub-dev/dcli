@@ -22,7 +22,9 @@ import 'is.dart';
 ///
 void cat(String path, {LineAction stdout}) => Cat().cat(path, stdout: stdout);
 
+/// Class for the [cat] function.
 class Cat extends DShellFunction {
+  /// implementation for the [cat] function.
   void cat(String path, {LineAction stdout}) {
     var sourceFile = File(path);
 
@@ -46,7 +48,9 @@ class Cat extends DShellFunction {
   }
 }
 
+/// Thrown if the [cat] function encouters an error.
 class CatException extends DShellFunctionException {
+  /// Thrown if the [cat] function encouters an error.
   CatException(String reason, [StackTraceImpl stacktrace])
       : super(reason, stacktrace);
 

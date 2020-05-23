@@ -1,8 +1,9 @@
-import 'function.dart';
+import '../settings.dart';
+
 import '../util/file_sync.dart';
 import '../util/progress.dart';
 
-import '../settings.dart';
+import 'function.dart';
 
 import 'is.dart';
 
@@ -15,11 +16,11 @@ import 'is.dart';
 ///
 /// Throws a [HeadException] exception if [path] is not a file.
 ///
-Progress head(String path, int lines) => Head().head(path, lines);
+Progress head(String path, int lines) => _Head().head(path, lines);
 
-class Head extends DShellFunction {
+class _Head extends DShellFunction {
   Progress head(String path, int lines, {Progress progress}) {
-    Settings().verbose('head ${absolute(path)} lines: ${lines}');
+    Settings().verbose('head ${absolute(path)} lines: $lines');
 
     if (!exists(path)) {
       throw HeadException('The path ${absolute(path)} does not exist.');
@@ -41,7 +42,9 @@ class Head extends DShellFunction {
         }
         return true;
       });
-    } catch (e) {
+    }
+    // ignore: avoid_catches_without_on_clauses
+    catch (e) {
       throw HeadException(
           'An error occured reading ${absolute(path)}. Error: $e');
     } finally {
@@ -52,6 +55,8 @@ class Head extends DShellFunction {
   }
 }
 
+/// Thrown if the [head] function encounters an error.
 class HeadException extends FunctionException {
+  /// Thrown if the [head] function encounters an error.
   HeadException(String reason) : super(reason);
 }

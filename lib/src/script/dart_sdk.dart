@@ -1,9 +1,9 @@
 import 'dart:cli';
 import 'dart:io';
+import 'package:path/path.dart' as p;
 import '../../dshell.dart';
 import '../util/progress.dart';
 import '../util/runnable_process.dart';
-import 'package:path/path.dart' as p;
 
 /// The [DartSdk] provides access to a number of the dart sdk tools
 /// as well as details on the active sdk instance.
@@ -18,6 +18,7 @@ class DartSdk {
 
   String _version;
 
+  ///
   factory DartSdk() {
     _self ??= DartSdk._internal();
 
@@ -27,7 +28,7 @@ class DartSdk {
   DartSdk._internal() {
     if (Settings().isVerbose) {
       // expensive operation so only peform if required.
-      Settings().verbose('Dart SDK Version  ${version}, path: ${_sdkPath}');
+      Settings().verbose('Dart SDK Version  $version, path: $_sdkPath');
     }
   }
 
@@ -37,6 +38,7 @@ class DartSdk {
     return _sdkPath;
   }
 
+  /// platform specific name of the 'dart' executable
   static String get dartExeName {
     if (Platform.isWindows) {
       return 'dart.exe';
@@ -45,6 +47,7 @@ class DartSdk {
     }
   }
 
+  /// platform specific name of the 'pub' executable
   static String get pubExeName {
     if (Platform.isWindows) {
       return 'pub.bat';
@@ -53,6 +56,7 @@ class DartSdk {
     }
   }
 
+  /// platform specific name of the 'dart2native' executable
   static String get dart2NativeExeName {
     if (Platform.isWindows) {
       return 'dart2native.bat';
@@ -72,18 +76,24 @@ class DartSdk {
     return _exePath;
   }
 
+  /// file path to the 'pub' command.
   String get pubPath => p.join(sdkPath, 'bin', pubExeName);
 
+  /// file path to the 'dart2native' command.
   String get dart2NativePath => p.join(sdkPath, 'bin', dart2NativeExeName);
 
+  /// run the 'dart2native' command.
+  /// [runtimeScriptPath] is the path of the dshell script we are compiling.
+  /// [outputPath] is the path to write the compiled ex to .
+  /// [runtimePath] is the path to execute 'dart2native' in.
   void runDart2Native(
-      String runtimeScriptPath, String outputDir, String runtimePath,
+      String runtimeScriptPath, String outputPath, String runtimePath,
       {Progress progress}) {
     var runArgs = <String>[];
     runArgs.add(runtimeScriptPath);
     runArgs.add('--packages=${join(runtimePath, ".packages")}');
     runArgs.add(
-        '--output=${join(outputDir, basenameWithoutExtension(runtimeScriptPath))}');
+        '--output=${join(outputPath, basenameWithoutExtension(runtimeScriptPath))}');
 
     var process = RunnableProcess.fromCommandArgs(
       dart2NativePath,
@@ -95,6 +105,7 @@ class DartSdk {
     process.processUntilExit(progress, nothrow: false);
   }
 
+  /// runs 'pub get'
   void runPubGet(String workingDirectory,
       {Progress progress, bool compileExecutables}) {
     var process = RunnableProcess.fromCommandArgs(
@@ -133,6 +144,7 @@ class DartSdk {
     }
   }
 
+  /// returns the version of date.
   String get version {
     if (_version == null) {
       final res = waitFor<ProcessResult>(
@@ -151,4 +163,5 @@ class DartSdk {
   }
 }
 
+/// Exception throw if we can't find the dart sdk.
 final Exception dartSdkNotFound = Exception('Dart SDK not found!');

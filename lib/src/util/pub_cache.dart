@@ -11,9 +11,10 @@ class PubCache {
 
   String _pubCacheDir;
   String _pubCacheBinDir;
-  static const String PUB_CACHE_ENV = 'PUB_CACHE';
+  static const String _pubCacheEnv = 'PUB_CACHE';
   String _pubCachePath;
 
+  ///
   factory PubCache() {
     _self ??= PubCache._internal();
     return _self;
@@ -21,7 +22,7 @@ class PubCache {
 
   PubCache._internal() {
     // first check if an environment variable exists.
-    var pubCacheEnv = env(PUB_CACHE_ENV);
+    var pubCacheEnv = env(_pubCacheEnv);
 
     /// determine pubCacheDir
     if (pubCacheEnv != null) {

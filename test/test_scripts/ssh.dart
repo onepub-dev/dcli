@@ -11,7 +11,7 @@ import 'package:dshell/dshell.dart';
 ///
 
 void main(List<String> args) {
-  Settings().setVerbose(true);
+  Settings().setVerbose(enabled: true);
   var fqdn = args[0];
   // ask(prompt: "FQDN of test target:");
   var password = args[1];
@@ -64,9 +64,9 @@ void main(List<String> args) {
 
   Remote.scp(from: ['./*.dart'], toHost: fqdn, to: '/tmp', recursive: true);
 
-  var copy_secure_dir = which('copy_secure_dir').firstLine;
+  var copySecureDir = which('copy_secure_dir').firstLine;
 
-  Remote.scp(from: [copy_secure_dir], to: '/tmp', toHost: fqdn);
+  Remote.scp(from: [copySecureDir], to: '/tmp', toHost: fqdn);
 
   // dart exe doesn't run on ubuntu 12.04
   // Remote.exec(
@@ -114,11 +114,11 @@ void main(List<String> args) {
   var now = DateTime.now();
   Remote.exec(
       host: 'bsutton@auditord.noojee.com.au',
-      command: '/home/bsutton/git/auditor/backup.sh ${now}.sql');
+      command: '/home/bsutton/git/auditor/backup.sh $now.sql');
 
   Remote.scp(
       fromHost: 'auditord.noojee.com.au',
-      from: ['/home/bsutton/git/auditor/${now}.sql'],
+      from: ['/home/bsutton/git/auditor/$now.sql'],
       to: '.');
 
   // // command = 'pwd;ls *';

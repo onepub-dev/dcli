@@ -21,7 +21,7 @@ void main() {
         try {
           Settings.reset();
           var mockSettings = MockSettings();
-          Settings.setMock(mockSettings);
+          Settings.mock = mockSettings;
           when(mockSettings.isWindows).thenReturn(true);
           Env.reset();
           //var mockEnv = MockEnv();

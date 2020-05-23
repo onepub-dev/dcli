@@ -2,9 +2,9 @@ import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
 
-import 'package:dshell/dshell.dart' as d;
-import 'package:dshell/src/script/command_line_runner.dart';
-import 'package:dshell/src/util/wait_for_ex.dart';
+import '../../dshell.dart' as d;
+import '../script/command_line_runner.dart';
+import 'wait_for_ex.dart';
 
 /// FileSort provides the ability to sort files
 /// based on their columns.
@@ -39,9 +39,12 @@ class FileSort {
   final List<Column> _columns;
   final String _fieldDelimiter;
   final String _lineDelimiter;
+
+  ///
   final bool verbose;
   int _maxColumn = -1;
 
+  ///
   FileSort(this._inputPath, this._outputPath, this._columns,
       this._fieldDelimiter, this._lineDelimiter,
       {this.verbose = false}) {
@@ -58,11 +61,11 @@ class FileSort {
     waitForEx<void>(_sort());
   }
 
-  static const MERGE_SIZE = 1000;
+  static const _mergeSize = 1000;
   Future _sort() async {
     var completer = Completer<void>();
     var instance = 0;
-    var lineCount = MERGE_SIZE;
+    var lineCount = _mergeSize;
 
     var phaseDirectory = Directory.systemTemp.createTempSync();
 
@@ -81,7 +84,7 @@ class FileSort {
       lineCount--;
 
       if (lineCount == 0) {
-        lineCount = MERGE_SIZE;
+        lineCount = _mergeSize;
         var phaseList = list;
         list = [];
         instance++;
@@ -99,7 +102,7 @@ class FileSort {
       await _sortList(list);
       await _replaceFileWithSortedList(list);
     } else {
-      if (list.isNotEmpty && list.length < MERGE_SIZE) {
+      if (list.isNotEmpty && list.length < _mergeSize) {
         await _savePhase(phaseDirectory, 1, ++instance, list, _lineDelimiter);
       }
       await Future.wait(phaseFutures);
@@ -139,14 +142,14 @@ class FileSort {
       if (_maxColumn == 0) {
         // just compare the whole line.
         result =
-            _columns[0].comparator.compareTo(_columns[0], lhs.line, rhs.line);
+            _columns[0]._comparator.compareTo(_columns[0], lhs.line, rhs.line);
       } else {
         // compare the defined columns
         for (var column in _columns) {
           var direction =
-              column.sortDirection == SortDirection.Ascending ? 1 : -1;
+              column._sortDirection == SortDirection.ascending ? 1 : -1;
 
-          result = column.comparator.compareTo(
+          result = column._comparator.compareTo(
                   column,
                   lhsColumns[column.ordinal - 1],
                   rhsColumns[column.ordinal - 1]) *
@@ -201,12 +204,12 @@ class FileSort {
 
         var end = Column.parse(parts[1]);
 
-        var comparator = end.comparator;
-        var sortDirection = end.sortDirection;
+        var comparator = end._comparator;
+        var sortDirection = end._sortDirection;
 
         var start = Column.parse(parts[0], ordinalOnly: true);
-        start.comparator = comparator;
-        start.sortDirection = sortDirection;
+        start._comparator = comparator;
+        start._sortDirection = sortDirection;
 
         int index;
         if (end.ordinal > start.ordinal) {
@@ -318,9 +321,18 @@ class _Line {
   }
 }
 
-enum SortDirection { Ascending, Descending }
+/// Sets the sort direction.
+enum SortDirection {
+  ///
+  ascending,
 
+  ///
+  descending
+}
+
+///
 class CaseInsensitiveSort implements ColumnComparator {
+  ///
   const CaseInsensitiveSort();
   @override
   int compareTo(Column column, String lhs, String rhs) {
@@ -328,15 +340,18 @@ class CaseInsensitiveSort implements ColumnComparator {
   }
 }
 
+///
 class CaseSensitiveSort implements ColumnComparator {
+  ///
   const CaseSensitiveSort();
   @override
   int compareTo(Column column, String lhs, String rhs) {
     return lhs.compareTo(rhs);
   }
 }
-
+///
 class NumericSort implements ColumnComparator {
+  ///
   const NumericSort();
   @override
   int compareTo(Column column, String lhs, String rhs) {
@@ -355,8 +370,9 @@ class NumericSort implements ColumnComparator {
     return numLhs.compareTo(numRhs);
   }
 }
-
+///
 class MonthSort implements ColumnComparator {
+  ///
   const MonthSort();
   @override
   int compareTo(Column column, String lhs, String rhs) {
@@ -365,6 +381,7 @@ class MonthSort implements ColumnComparator {
     return mLhs.compareTo(mRhs);
   }
 
+///
   static const Map<String, int> months = {
     'jan': 1,
     'feb': 2,
@@ -394,8 +411,10 @@ class MonthSort implements ColumnComparator {
     return months[monthName];
   }
 }
-
+///
+// ignore: one_member_abstracts
 abstract class ColumnComparator {
+  ///
   int compareTo(Column column, String lhs, String rhs);
 }
 
@@ -403,36 +422,35 @@ abstract class ColumnComparator {
 /// Defined a column to sort by for the FileSort
 /// class.
 class Column {
-  static const typeMap = {
+  static const _typeMap = {
     's': CaseInsensitiveSort(),
     'S': CaseSensitiveSort(),
     'n': NumericSort(),
     'm': MonthSort(),
   };
-
-  static const directionMap = {
-    'a': SortDirection.Ascending,
-    'd': SortDirection.Descending
+  static const _directionMap = {
+    'a': SortDirection.ascending,
+    'd': SortDirection.descending
   };
 
   @override
   String toString() {
-    return 'ordinal: $ordinal, comparator: ${comparator.runtimeType}, sortDirection: ${SortDirection}';
+    return 'ordinal: $ordinal, comparator: ${_comparator.runtimeType}, sortDirection: $SortDirection';
   }
 
   /// [ordinal] is the column index using base 1
   /// An ordinal of 0 means that we are treating the entire
   /// line as a single column.
   int ordinal;
-  ColumnComparator comparator;
-  SortDirection sortDirection;
+  ColumnComparator _comparator;
+  SortDirection _sortDirection;
 
   /// [ordinal] the (base 1) index of the column.
-  /// The [comparator] we will used to compare
+  /// The [_comparator] we will used to compare
   /// to lines when sorting.
-  /// The [sortDirection] is either ascending or decending.
+  /// The [_sortDirection] is either ascending or decending.
   ///
-  Column(this.ordinal, this.comparator, this.sortDirection);
+  Column(this.ordinal, this._comparator, this._sortDirection);
 
   /// A column string is formed as:
   /// [ordinal]<type><direction>
@@ -450,7 +468,7 @@ class Column {
   /// d - descending
   ///
   Column.parse(String column, {bool ordinalOnly = false}) {
-    var digits = countDigits(column);
+    var digits = _countDigits(column);
 
     ordinal = int.parse(column.substring(0, digits));
 
@@ -464,9 +482,9 @@ class Column {
       type = column.substring(digits, digits + 1);
     }
 
-    comparator = typeMap[type];
+    _comparator = _typeMap[type];
 
-    if (comparator == null) {
+    if (_comparator == null) {
       throw InvalidArguments('The sort type $type is not valid');
     }
 
@@ -475,14 +493,14 @@ class Column {
     if (column.length > digits + 1) {
       direction = column.substring(digits + 1, digits + 2);
     }
-    sortDirection = directionMap[direction];
+    _sortDirection = _directionMap[direction];
 
-    if (sortDirection == null) {
+    if (_sortDirection == null) {
       throw InvalidArguments('The sort direction $direction is not valid');
     }
   }
 
-  int countDigits(String column) {
+  int _countDigits(String column) {
     var digits = 0;
 
     for (var i = 0; i < column.length; i++) {

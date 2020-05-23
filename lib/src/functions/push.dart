@@ -25,10 +25,10 @@ import 'is.dart';
 ///     [pop]
 ///     [pwd]
 @Deprecated('Use join')
-void push(String path) => Push().push(path);
+void push(String path) => _Push().push(path);
 
 @Deprecated('Use join')
-class Push extends DShellFunction {
+class _Push extends DShellFunction {
   /// Push the pwd onto the stack and change the
   /// current directory to [path].
   void push(String path) {
@@ -46,13 +46,19 @@ class Push extends DShellFunction {
 
     try {
       Directory.current = path;
-    } catch (e) {
+    }
+    // ignore: avoid_catches_without_on_clauses
+    catch (e) {
       throw PushException(
           'An error occured pushing to ${absolute(path)}. Error $e');
     }
   }
 }
 
+// ignore:deprecated_member_use_from_same_package
+/// Thrown when the [push] function encouters an error.
 class PushException extends DShellFunctionException {
+  // ignore:deprecated_member_use_from_same_package
+  /// Thrown when the [push] function encouters an error.
   PushException(String reason) : super(reason);
 }

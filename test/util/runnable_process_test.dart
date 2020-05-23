@@ -8,7 +8,7 @@ void main() {
   test('runnable process Start - forEach', () {
     TestFileSystem().withinZone((fs) async {
       var path = join(fs.root, 'top');
-      print('starting ls in ${path}');
+      print('starting ls in $path');
 
       String command;
       command = 'ls *.txt';

@@ -12,11 +12,11 @@ import '../util/test_file_system.dart';
 String script = 'test/test_scripts/hello_world.dart';
 
 void main() {
-  var ROOT_TEST = 'sort1';
+  const rootTest = 'sort1';
 
   group('dsort tests', () {
     TestFileSystem().withinZone((fs) {
-      var testFile = join(fs.root, ROOT_TEST, 'unsorted.txt');
+      var testFile = join(fs.root, rootTest, 'unsorted.txt');
       if (!exists(dirname(testFile))) {
         createDir(dirname(testFile), recursive: true);
       }
@@ -35,7 +35,7 @@ void main() {
             var fileSort = FileSort(
                 testFile,
                 testFile,
-                [Column(0, CaseInsensitiveSort(), SortDirection.Ascending)],
+                [Column(0, CaseInsensitiveSort(), SortDirection.ascending)],
                 ',',
                 '\n');
             fileSort.sort();
@@ -70,7 +70,7 @@ void main() {
             var fileSort = FileSort(
                 testFile,
                 testFile,
-                [Column(1, NumericSort(), SortDirection.Descending)],
+                [Column(1, NumericSort(), SortDirection.descending)],
                 ',',
                 '\n');
             fileSort.sort();

@@ -11,9 +11,9 @@ import 'dshell_function.dart';
 ///
 /// See [join]
 ///
-String get pwd => PWD().pwd;
+String get pwd => _PWD().pwd;
 
-class PWD extends DShellFunction {
+class _PWD extends DShellFunction {
   String get pwd {
     return Directory.current.path;
   }

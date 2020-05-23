@@ -8,19 +8,18 @@ import 'dshell_function.dart';
 /// [permission] is the standard bit map used by chmod e.g. 777
 /// [path] is the path to the file that we are changing the
 /// permissions of.
-void chmod(int permission, String path) => ChMod()._chmod(permission, path);
+void chmod(int permission, String path) => _ChMod()._chmod(permission, path);
 // String chmod({String prompt}) => ChMod().chmod(prompt: prompt);
 
-enum permission { r, w, x }
-
-class ChMod extends DShellFunction {
+/// Implementatio for [chmod] function.
+class _ChMod extends DShellFunction {
 // this.user, this.group, this.other, this.path
 
   void _chmod(int permission, String path) {
     if (!exists(path)) {
       throw ChModException('The file at ${absolute(path)} does not exists');
     }
-    'chmod ${permission} "$path"'.run;
+    'chmod $permission "$path"'.run;
   }
 
   //  String chmod({int user, int group, int other, this.path}) {}
@@ -33,7 +32,9 @@ class ChMod extends DShellFunction {
   */
 }
 
+/// Thrown if the [chmod] function encounters an error.
 class ChModException extends DShellFunctionException {
+  /// Thrown if the [chmod] function encounters an error.
   ChModException(String reason, [StackTraceImpl stacktrace])
       : super(reason, stacktrace);
 

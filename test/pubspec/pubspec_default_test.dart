@@ -50,7 +50,7 @@ dependencies:
 
   var annotationNoOverrides = '''
     /* @pubspec
-${basic}
+$basic
 */
   ''';
 

@@ -3,7 +3,7 @@ import 'package:dshell/dshell.dart';
 
 void main() {
   echo('Hello World');
-  echo('Where are we: ${pwd}?');
+  echo('Where are we: $pwd?');
 
   var dir = 'test';
   createDir(dir);
@@ -12,7 +12,9 @@ void main() {
   touch(join(dir, 'dog.png'));
 
   // print all the file names in the current directory.
-  fileList.forEach((file) => print('Found: ${file}'));
+  for (var file in fileList) {
+    print('Found: $file');
+  }
 
   touch(join(dir, 'subdir', 'monkey.png'));
 

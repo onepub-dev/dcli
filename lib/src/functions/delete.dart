@@ -1,9 +1,9 @@
 import 'dart:io';
 
 import '../settings.dart';
+import 'ask.dart' as a;
 import 'dshell_function.dart';
 import 'is.dart';
-import 'ask.dart' as a;
 
 ///
 /// Deletes the file at [path].
@@ -18,9 +18,10 @@ import 'ask.dart' as a;
 /// The default value for [ask] is false.
 ///
 /// If the [path] is a directory a DeleteException is thrown.
-void delete(String path, {bool ask = false}) => Delete().delete(path, ask: ask);
+void delete(String path, {bool ask = false}) =>
+    _Delete().delete(path, ask: ask);
 
-class Delete extends DShellFunction {
+class _Delete extends DShellFunction {
   void delete(String path, {bool ask}) {
     Settings().verbose('delete:  ${absolute(path)} ask: $ask');
 
@@ -46,7 +47,9 @@ class Delete extends DShellFunction {
     if (remove == true) {
       try {
         File(path).deleteSync();
-      } catch (e) {
+      }
+      // ignore: avoid_catches_without_on_clauses
+      catch (e) {
         throw DeleteException(
             'An error occured deleting ${absolute(path)}. Error: $e');
       }
@@ -54,6 +57,8 @@ class Delete extends DShellFunction {
   }
 }
 
+/// Thrown when the [delete] function encounters an error
 class DeleteException extends DShellFunctionException {
+  /// Thrown when the [delete] function encounters an error
   DeleteException(String reason) : super(reason);
 }

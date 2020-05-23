@@ -7,7 +7,7 @@ import 'package:dshell/dshell.dart';
 
 import '../util/test_file_system.dart';
 
-String TEST_DIR = 'path_test';
+String _testDir = 'path_test';
 void main() {
   t.group('Directory Path manipulation testing', () {
     t.test('absolute', () {
@@ -22,7 +22,7 @@ void main() {
     t.test('parent', () {
       TestFileSystem().withinZone((fs) {
         var paths = setup(fs);
-        t.expect(dirname(paths.pathTestDir), t.equals(join(fs.root, TEST_DIR)));
+        t.expect(dirname(paths.pathTestDir), t.equals(join(fs.root, _testDir)));
       });
     });
 
@@ -59,7 +59,7 @@ class Paths {
 
   Paths(TestFileSystem fs) {
     home = HOME;
-    pathTestDir = join(fs.root, TEST_DIR, 'pathTestDir');
+    pathTestDir = join(fs.root, _testDir, 'pathTestDir');
     testExtension = '.jpg';
     testBaseName = 'fred';
     testFile = '$testBaseName$testExtension';

@@ -28,7 +28,7 @@ void main() {
       if (!exists(dir)) {
         createDir(dir);
       }
-      print('testzone post cwd: ${pwd}');
+      print('testzone post cwd: $pwd');
 
       Directory.current = restoreTo;
     });

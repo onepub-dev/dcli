@@ -1,7 +1,7 @@
-import 'package:dshell/dshell.dart';
-import 'package:dshell/src/util/completion.dart';
-
+import '../../../dshell.dart';
 import '../../settings.dart';
+import '../../util/completion.dart';
+
 import '../command_line_runner.dart';
 import '../dart_sdk.dart';
 import '../flags.dart';
@@ -14,9 +14,10 @@ import 'commands.dart';
 /// If required a virtual project is created
 /// and built.
 class RunCommand extends Command {
-  static const String NAME = 'run';
+  static const String _commandName = 'run';
 
-  RunCommand() : super(NAME);
+///
+  RunCommand() : super(_commandName);
 
   ///
   ///
@@ -77,7 +78,7 @@ class RunCommand extends Command {
 
   @override
   List<String> completion(String word) {
-    return completion_expand_scripts(word);
+    return completionExpandScripts(word);
   }
 
   @override

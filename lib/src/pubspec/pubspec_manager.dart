@@ -1,27 +1,23 @@
-import '../functions/is.dart';
+import '../script/dependency.dart';
+import '../script/virtual_project.dart';
+
 import 'global_dependencies.dart';
 import 'pubspec.dart';
 import 'pubspec_annotation.dart';
 import 'pubspec_default.dart';
 import 'pubspec_file.dart';
 import 'pubspec_virtual.dart';
-import '../script/dependency.dart';
-import '../script/virtual_project.dart';
 
+/// Provides a collection of methods to assist with managing a pubspec.
 class PubSpecManager {
-  VirtualProject project;
+  final VirtualProject _project;
 
-  // The pubspec in the scripts annotation.
-  PubSpec annotationSpec;
-
-  // the pubspec in the virtual project
-  PubSpec virtualSpec;
-
-  // the pubsec from the scripts root directory
-  // (if it exists)
+  /// the pubsec from the scripts root directory
+  /// (if it exists)
   PubSpec packageSpec;
 
-  PubSpecManager(this.project);
+  /// Create a manager for the given [_project].
+  PubSpecManager(this._project);
 
   /// Creates a virtual pubspec.yaml for the passed project.
   ///
@@ -34,7 +30,7 @@ class PubSpecManager {
   /// The resulting pubspec is written to the project directory.
   ///
   void createVirtualPubSpec() {
-    var script = project.script;
+    var script = _project.script;
     PubSpec sourcePubSpec;
 
     PubSpec defaultPubspec = PubSpecDefault(script);
@@ -56,20 +52,7 @@ class PubSpecManager {
 
     pubSpec.dependencies = resolved;
 
-    pubSpec.writeToFile(project.projectPubspecPath);
-  }
-
-  bool wasModified(String pubSpecPath, DateTime scriptModified) {
-    var wasModified = true;
-
-    // If the script hasn't changed since we last
-    // updated the pubspec then we don't need to run pub get.
-    var pubSpecModified = lastModified(pubSpecPath);
-    if (scriptModified == pubSpecModified) {
-      // no changes so signal that we don't need to run pub get.
-      wasModified = false;
-    }
-    return wasModified;
+    pubSpec.writeToFile(_project.projectPubspecPath);
   }
 
   //   bool isCleanRequired() {
@@ -113,7 +96,7 @@ class PubSpecManager {
     var globalDependencies = _getGlobalDependencies();
 
     // take the preferred ones from global and default
-    resolved = resolve(globalDependencies, defaultDependencies);
+    resolved = _resolve(globalDependencies, defaultDependencies);
 
     var pubspecDependencies = selected.dependencies;
 
@@ -122,7 +105,7 @@ class PubSpecManager {
     // precendence over the global dependencies which is against the rules.
     if (selected != defaultPubSpec) {
       // take the preferred ones from pubspec and the above
-      resolved = resolve(pubspecDependencies, resolved);
+      resolved = _resolve(pubspecDependencies, resolved);
     }
 
     return resolved;
@@ -133,7 +116,7 @@ class PubSpecManager {
     return gd.dependencies;
   }
 
-  List<Dependency> resolve(List<Dependency> preferred, List<Dependency> base) {
+  List<Dependency> _resolve(List<Dependency> preferred, List<Dependency> base) {
     var resolved = <Dependency>[];
     for (var basic in base) {
       // if there is a matching preferred item then use that.

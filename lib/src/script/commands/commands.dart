@@ -4,15 +4,18 @@ import 'clean_all.dart';
 import 'compile.dart';
 import 'create.dart';
 import 'doctor.dart';
+import 'help.dart';
+import 'install.dart';
 import 'merge.dart';
 import 'run.dart';
 import 'split.dart';
 import 'upgrade.dart';
 import 'version.dart';
-import 'help.dart';
-import 'install.dart';
 
+// ignore: avoid_classes_with_only_static_members
+//// List of supported commands.
 class Commands {
+  /// List of supported comands
   static List<Command> get applicationCommands => [
         CleanAllCommand(),
         CleanCommand(),
@@ -28,30 +31,37 @@ class Commands {
         HelpCommand(),
       ];
 
+  /// Find the command based on the [argument] passed
   static Command findCommand(String argument, Map<String, Command> commands) {
     var command = commands[argument.toLowerCase()];
 
     return command;
   }
 
+  /// returns map of supprted commands where the command name is the key.
   static Map<String, Command> asMap(List<Command> availableCommands) {
     var mapCommands = <String, Command>{};
-    availableCommands.forEach((command) => mapCommands[command.name] = command);
+    for (var command in availableCommands) {
+      mapCommands[command.name] = command;
+    }
 
     return mapCommands;
   }
 }
 
+/// base class for all commands.
 abstract class Command {
   final String _name;
 
+  ///
   Command(this._name);
 
-  // Returns the exitCode of the script that is run
-  // If a script isn't run then return 0 for success
-  // or thrown an exception on any error.
+  /// Returns the exitCode of the script that is run
+  /// If a script isn't run then return 0 for success
+  /// or thrown an exception on any error.
   int run(List<Flag> selectedFlags, List<String> subarguments);
 
+  /// name of the command
   String get name => _name;
 
   /// returns a single line  high level desription of how to use the command

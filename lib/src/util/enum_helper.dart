@@ -5,10 +5,12 @@ import 'package:recase/recase.dart';
 /// enums.
 ///
 class EnumHelper {
+  /// returns an enum based on its index.
   static T getByIndex<T>(List<T> values, int index) {
     return values.elementAt(index - 1);
   }
 
+  /// returns the index of a enum value.
   static int getIndexOf<T>(List<T> values, T value) {
     return values.indexOf(value);
   }
@@ -27,10 +29,12 @@ class EnumHelper {
     return recase(name.substring(period + 1));
   }
 
+  /// formats an enum value use titleCase.
   static String reCase(String value) {
     return ReCase(value).titleCase;
   }
 
+  /// returns a enum based on its name.
   static T getEnum<T>(String enumName, List<T> values) {
     var cleanedName = reCase(enumName);
     for (var i = 0; i < values.length; i++) {

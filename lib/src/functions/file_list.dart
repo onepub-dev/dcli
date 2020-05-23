@@ -1,8 +1,7 @@
 import 'dart:io';
 
-import 'function.dart';
-
 import '../settings.dart';
+import 'function.dart';
 
 import 'pwd.dart';
 
@@ -10,10 +9,10 @@ import 'pwd.dart';
 /// returns the list of files and directories
 /// in the current directory.
 ///
-/// See [find] for more advanced options when obtain a file list.
-List<String> get fileList => FileList().fileList;
+/// See [_find] for more advanced options when obtain a file list.
+List<String> get fileList => _FileList().fileList;
 
-class FileList extends DShellFunction {
+class _FileList extends DShellFunction {
   List<String> get fileList {
     var files = <String>[];
 

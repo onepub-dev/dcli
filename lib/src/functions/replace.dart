@@ -1,4 +1,4 @@
-import 'package:dshell/dshell.dart';
+import '../../dshell.dart';
 
 import 'dshell_function.dart';
 
@@ -22,9 +22,9 @@ import 'dshell_function.dart';
 /// EXPERIMENTAL - this api may change. It is fairly likely to stay
 /// just that existing may change to support [Pattern]
 void replace(String path, String existing, String replacement) =>
-    Replace().replace(path, existing, replacement);
+    _Replace().replace(path, existing, replacement);
 
-class Replace extends DShellFunction {
+class _Replace extends DShellFunction {
   void replace(String path, String existing, String replacement) {
     var tmp = '$path.tmp';
     if (exists(tmp)) {

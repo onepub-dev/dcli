@@ -1,13 +1,15 @@
-import 'package:dshell/dshell.dart';
-import 'package:dshell/src/util/completion.dart';
+import '../../../dshell.dart';
+import '../../util/completion.dart';
 
 import '../flags.dart';
 import 'commands.dart';
 
+///
 class MergeCommand extends Command {
-  static const String NAME = 'merge';
+  static const String _commandName = 'merge';
 
-  MergeCommand() : super(NAME);
+  ///
+  MergeCommand() : super(_commandName);
 
   @override
   int run(List<Flag> selectedFlags, List<String> subarguments) {
@@ -68,7 +70,7 @@ class MergeCommand extends Command {
 
   @override
   List<String> completion(String word) {
-    return completion_expand_scripts(word);
+    return completionExpandScripts(word);
   }
 
 /*

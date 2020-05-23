@@ -1,12 +1,13 @@
 import 'dart:io';
 
-import 'package:dshell/src/pubspec/global_dependencies.dart';
-import 'package:dshell/src/util/completion.dart';
-import 'package:dshell/src/util/format.dart';
-import 'package:dshell/src/util/pub_cache.dart';
-import 'package:dshell/src/util/truepath.dart';
-
 import '../../../dshell.dart';
+import '../../pubspec/global_dependencies.dart';
+
+import '../../util/completion.dart';
+import '../../util/format.dart';
+import '../../util/pub_cache.dart';
+import '../../util/truepath.dart';
+
 import '../command_line_runner.dart';
 
 import '../dart_sdk.dart';
@@ -15,10 +16,12 @@ import '../script.dart';
 import '../virtual_project.dart';
 import 'commands.dart';
 
+/// implementst the 'doctor' command
 class DoctorCommand extends Command {
-  static const String NAME = 'doctor';
+  static const String _commandName = 'doctor';
 
-  DoctorCommand() : super(NAME);
+  ///
+  DoctorCommand() : super(_commandName);
 
   @override
   int run(List<Flag> selectedFlags, List<String> subarguments) {
@@ -35,89 +38,92 @@ class DoctorCommand extends Command {
           "'dshell doctor' takes zero or one arguments. Found $subarguments");
     }
 
-    colprint(['Dshell version', '${Settings().version}']);
+    _colprint(['Dshell version', '${Settings().version}']);
     print('');
-    colprint(['OS', '${Platform.operatingSystem}']);
+    _colprint(['OS', '${Platform.operatingSystem}']);
     print(Format.row(['OS Version', '${Platform.operatingSystemVersion}'],
         widths: [17, -1]));
-    colprint(['Path separator', '${Platform.pathSeparator}']);
+    _colprint(['Path separator', '${Platform.pathSeparator}']);
     print('');
-    colprint(['dart version', '${DartSdk().version}']);
+    _colprint(['dart version', '${DartSdk().version}']);
     print('');
 
     var dshellPath = which('dshell').firstLine;
-    colprint([
+    _colprint([
       'dshell path',
       '${dshellPath == null ? 'Not found' : privatePath(dshellPath)}'
     ]);
-    colprint(['dart exe path', '${privatePath(DartSdk().dartExePath)}']);
+    _colprint(['dart exe path', '${privatePath(DartSdk().dartExePath)}']);
     var dartPath = which(DartSdk.dartExeName, first: true).firstLine;
-    colprint([
+    _colprint([
       'dart path',
       '${privatePath(DartSdk().dartExePath)}',
       'which: ${privatePath(dartPath)}'
     ]);
     var dart2NativePath =
         which(DartSdk.dart2NativeExeName, first: true).firstLine;
-    colprint([
+    _colprint([
       'dart2Native path',
       '${privatePath(DartSdk().dart2NativePath)}',
       'which: ${privatePath(dart2NativePath)}'
     ]);
     print('');
     var pubPath = which(DartSdk.pubExeName, first: true).firstLine;
-    colprint([
+    _colprint([
       'pub get path',
       '${privatePath(DartSdk().pubPath)}',
       'which: ${privatePath(pubPath)}'
     ]);
-    colprint(['Pub cache', '${privatePath(PubCache().path)}']);
+    _colprint(['Pub cache', '${privatePath(PubCache().path)}']);
 
     if (Platform.packageConfig == null) {
-      colprint(['Package Config', 'Not Passed']);
+      _colprint(['Package Config', 'Not Passed']);
     } else {
-      colprint(['Package Config', '${privatePath(Platform.packageConfig)}']);
+      _colprint(['Package Config', '${privatePath(Platform.packageConfig)}']);
     }
 
     print('');
 
     print('PATH');
-    PATH.forEach((path) => colprint(['', privatePath(path)]));
+    for (var path in PATH) {
+      _colprint(['', privatePath(path)]);
+    }
     print('');
-    colprint(['\$SHELL', '${env('SHELL')}']);
+    _colprint(['\$SHELL', '${env('SHELL')}']);
     if (!Settings().isWindows) {
-      colprint(['True SHELL', '${ShellDetection().getShellName()}']);
+      _colprint(['True SHELL', '${ShellDetection().getShellName()}']);
 
       var shell = ShellDetection().identifyShell();
       var startScriptPath = shell.startScriptPath;
 
       if (startScriptPath == null) {
-        colprint(['Shell Start Script', 'Not Found']);
+        _colprint(['Shell Start Script', 'Not Found']);
       } else {
-        colprint(['Shell Start Script', '${privatePath(startScriptPath)}']);
+        _colprint(['Shell Start Script', '${privatePath(startScriptPath)}']);
       }
     }
 
     print('');
     print('Dart location(s)');
-    which('dart').forEach((line) => colprint(['', line]));
+    which('dart').forEach((line) => _colprint(['', line]));
 
     print('');
     print('Permissions');
-    showPermissions('HOME', HOME);
-    showPermissions('.dshell', Settings().dshellPath);
-    showPermissions('cache', Settings().dshellCachePath);
+    _showPermissions('HOME', HOME);
+    _showPermissions('.dshell', Settings().dshellPath);
+    _showPermissions('cache', Settings().dshellCachePath);
 
-    showPermissions(GlobalDependencies.filename,
+    _showPermissions(GlobalDependencies.filename,
         join(Settings().dshellPath, GlobalDependencies.filename));
 
-    showPermissions('templates', Settings().templatePath);
+    _showPermissions('templates', Settings().templatePath);
 
     print('');
     print(join('.dshell', GlobalDependencies.filename));
     var gd = GlobalDependencies();
-    gd.dependencies
-        .forEach((d) => colprint(['  ${d.name}', '${d.rehydrate()}']));
+    for (var d in gd.dependencies) {
+      _colprint(['  ${d.name}', '${d.rehydrate()}']);
+    }
 
     if (showScriptDetails) {
       project.doctor;
@@ -125,7 +131,7 @@ class DoctorCommand extends Command {
     return 0;
   }
 
-  void colprint(List<String> cols) {
+  void _colprint(List<String> cols) {
     //cols[0] = green(cols[0]);
     print(Format.row(cols, widths: [17, 40], delimiter: ' '));
   }
@@ -140,10 +146,10 @@ class DoctorCommand extends Command {
 
   @override
   List<String> completion(String word) {
-    return completion_expand_scripts(word);
+    return completionExpandScripts(word);
   }
 
-  void showPermissions(String label, String path) {
+  void _showPermissions(String label, String path) {
     if (exists(path)) {
       var fstat = stat(path);
 
@@ -164,14 +170,14 @@ class DoctorCommand extends Command {
           16,
           -1
         ], alignments: [
-          TableAlignment.LEFT,
-          TableAlignment.LEFT,
-          TableAlignment.MIDDLE,
-          TableAlignment.LEFT
+          TableAlignment.left,
+          TableAlignment.left,
+          TableAlignment.middle,
+          TableAlignment.left
         ]));
       }
     } else {
-      colprint(['$label', '${privatePath(path)} does not exist']);
+      _colprint(['$label', '${privatePath(path)} does not exist']);
     }
   }
 

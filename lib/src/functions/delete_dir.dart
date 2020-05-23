@@ -1,7 +1,7 @@
 import 'dart:io';
-import 'function.dart';
 
 import '../settings.dart';
+import 'function.dart';
 
 import 'is.dart';
 
@@ -27,9 +27,9 @@ import 'is.dart';
 ///     [exists]
 ///
 void deleteDir(String path, {bool recursive = true}) =>
-    DeleteDir().deleteDir(path, recursive: recursive);
+    _DeleteDir().deleteDir(path, recursive: recursive);
 
-class DeleteDir extends DShellFunction {
+class _DeleteDir extends DShellFunction {
   void deleteDir(String path, {bool recursive}) {
     Settings().verbose('deleteDir:  ${absolute(path)} recursive: $recursive');
 
@@ -44,13 +44,17 @@ class DeleteDir extends DShellFunction {
 
     try {
       Directory(path).deleteSync(recursive: recursive);
-    } catch (e) {
+    }
+    // ignore: avoid_catches_without_on_clauses
+    catch (e) {
       throw DeleteDirException(
           'Unable to delete the directory ${absolute(path)}. Error: $e');
     }
   }
 }
 
+/// Throw when [deleteDir] function encounters an error
 class DeleteDirException extends FunctionException {
+  /// Throw when [deleteDir] function encounters an error
   DeleteDirException(String reason) : super(reason);
 }

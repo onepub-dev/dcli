@@ -1,10 +1,10 @@
 import 'package:file/file.dart';
 
 import '../../dshell.dart';
-import 'virtual_project.dart';
-
 import '../settings.dart';
+
 import 'script.dart';
+import 'virtual_project.dart';
 
 ///
 /// The aim of the cache is to speed up launch times
@@ -50,6 +50,7 @@ class ProjectCache {
     _self = this;
   }
 
+  ///
   factory ProjectCache() {
     _self ??= ProjectCache._internal();
     _self.initCache();
@@ -80,8 +81,7 @@ class ProjectCache {
         var scriptPath = join(
             rootPath,
             withoutExtension(
-                    relative(projectPath, from: Settings().dshellCachePath)) +
-                '.dart');
+                '${relative(projectPath, from: Settings().dshellCachePath)}.dart'));
 
         deleteDir(projectPath, recursive: true);
 

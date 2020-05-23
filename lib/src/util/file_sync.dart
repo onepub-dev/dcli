@@ -1,15 +1,13 @@
 import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
-
-import 'package:dshell/dshell.dart';
 import 'package:uuid/uuid.dart';
-
-import 'wait_for_ex.dart';
+import '../../dshell.dart';
 
 import 'dshell_exception.dart';
 import 'runnable_process.dart';
 import 'stack_trace_impl.dart';
+import 'wait_for_ex.dart';
 
 ///
 /// Provides a set of methods to read/write
@@ -32,12 +30,13 @@ class FileSync {
     suffix ??= 'tmp';
 
     if (!suffix.startsWith('.')) {
-      suffix = '.' + suffix;
+      suffix = '.$suffix';
     }
     var uuid = Uuid();
     return '${join(Directory.systemTemp.path, uuid.v4())}$suffix';
   }
 
+  ///
   FileSync(String path, {FileMode fileMode = FileMode.writeOnlyAppend}) {
     _file = File(path);
     _open(fileMode);
@@ -48,10 +47,6 @@ class FileSync {
 
   void _open(FileMode fileMode) {
     _raf = _file.openSync(mode: fileMode);
-  }
-
-  void lock() {
-    _raf.lockSync();
   }
 
   /// Reads a single line from the file.
@@ -129,6 +124,7 @@ class FileSync {
               }
             },
             cancelOnError: true,
+            //ignore: avoid_types_on_closure_parameters
             onError: (Object error) {
               exception = error;
               done.complete(false);

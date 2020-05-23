@@ -1,16 +1,18 @@
-import 'package:dshell/dshell.dart';
-import 'package:dshell/src/script/command_line_runner.dart';
-import 'package:dshell/src/util/completion.dart';
+import '../../../dshell.dart';
+import '../../util/completion.dart';
+import '../command_line_runner.dart';
 
 import '../flags.dart';
 import '../script.dart';
 import '../virtual_project.dart';
 import 'commands.dart';
 
+/// implementation for the 'clean' command.
 class CleanCommand extends Command {
-  static const String NAME = 'clean';
+  static const String _commandName = 'clean';
 
-  CleanCommand() : super(NAME);
+  ///
+  CleanCommand() : super(_commandName);
 
   /// [arguments] contains a list of scripts to clean or if empty all scripts in the
   /// current directory are cleaned.
@@ -26,13 +28,13 @@ class CleanCommand extends Command {
       throw InvalidArguments('There are no scripts to clean.');
     } else {
       for (var scriptPath in scriptList) {
-        cleanScript(scriptPath);
+        _cleanScript(scriptPath);
       }
     }
     return 0;
   }
 
-  void cleanScript(String scriptPath) {
+  void _cleanScript(String scriptPath) {
     print('');
     print(orange('Cleaning $scriptPath...'));
     print('');
@@ -55,7 +57,7 @@ class CleanCommand extends Command {
 
   @override
   List<String> completion(String word) {
-    return completion_expand_scripts(word);
+    return completionExpandScripts(word);
   }
 
   @override

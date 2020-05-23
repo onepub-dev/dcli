@@ -1,20 +1,21 @@
-import 'package:dshell/dshell.dart';
-import 'package:dshell/src/util/dshell_paths.dart';
-import 'package:dshell/src/util/runnable_process.dart';
 import 'package:recase/recase.dart';
-
+import '../../../dshell.dart';
 import '../../functions/which.dart';
-import '../command_line_runner.dart';
 import '../../settings.dart';
 import '../../util/ansi_color.dart';
+import '../../util/dshell_paths.dart';
+import '../../util/runnable_process.dart';
+
+import '../command_line_runner.dart';
 
 import '../flags.dart';
 import 'commands.dart';
 
+///
 class VersionCommand extends Command {
-  static const String NAME = 'version';
-
-  VersionCommand() : super(NAME);
+  static const String _commandName = 'version';
+///
+  VersionCommand() : super(_commandName);
 
   @override
   int run(List<Flag> selectedFlags, List<String> subarguments) {

@@ -21,7 +21,7 @@ void main(List<String> args) {
   headStream
       .transform(utf8.decoder)
       .transform(const LineSplitter())
-      .listen((line) => print(line), onDone: () {
+      .listen(print, onDone: () {
     head.sink.close();
   });
 

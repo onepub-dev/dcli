@@ -3,11 +3,11 @@ import 'dart:io';
 
 import 'package:pub_semver/pub_semver.dart';
 
-import 'pubspec.dart';
 import '../script/dependency.dart';
 import '../script/script.dart';
 import '../util/dshell_exception.dart';
 import '../util/wait_for_ex.dart';
+import 'pubspec.dart';
 
 enum _State {
   notFound,
@@ -21,29 +21,31 @@ enum _State {
 /// annotation from a script.
 class PubSpecAnnotation implements PubSpec // with DependenciesMixin
 {
-  PubSpec pubspec;
-  Script script;
+  PubSpec _pubspec;
+  Script _script;
 
-  PubSpecAnnotation.fromScript(this.script) {
+  /// creates an annotation by reading it from a dart script.
+  PubSpecAnnotation.fromScript(this._script) {
     // Read script file as lines
-    var lines = _readLines(File(script.path));
+    var lines = _readLines(File(_script.path));
 
     var sourceLines = _extractAnnotation(lines);
 
     if (sourceLines.isNotEmpty) {
-      pubspec = PubSpecImpl.fromString(sourceLines.join('\n'));
+      _pubspec = PubSpecImpl.fromString(sourceLines.join('\n'));
     }
   }
 
+  /// creates an annotation by reading it from a string.
   PubSpecAnnotation.fromString(String annotation) {
     var sourceLines = _extractAnnotation(annotation.split('\n'));
 
-    pubspec = PubSpecImpl.fromString(sourceLines.join('\n'));
+    _pubspec = PubSpecImpl.fromString(sourceLines.join('\n'));
   }
 
   /// returns true if a @pubspec annotation was found.
   bool annotationFound() {
-    return pubspec != null;
+    return _pubspec != null;
   }
 
   ///
@@ -72,13 +74,13 @@ class PubSpecAnnotation implements PubSpec // with DependenciesMixin
           final trimmed = line.trim();
           if (trimmed == r'/*') {
             state = _State.findHeader;
-          } else if (isStart(trimmed)) {
+          } else if (_isStart(trimmed)) {
             state = _State.data;
           }
           break;
         case _State.findHeader:
           final trimmed = line.trim();
-          if (isAtPubSpec(trimmed)) {
+          if (_isAtPubSpec(trimmed)) {
             state = _State.data;
           } else {
             state = _State.notFound;
@@ -123,37 +125,39 @@ class PubSpecAnnotation implements PubSpec // with DependenciesMixin
 
   @override
   set dependencies(List<Dependency> newDependencies) {
-    pubspec.dependencies = newDependencies;
+    _pubspec.dependencies = newDependencies;
   }
 
   @override
-  List<Dependency> get dependencies => pubspec.dependencies;
+  List<Dependency> get dependencies => _pubspec.dependencies;
 
   @override
-  String get name => pubspec.name;
+  String get name => _pubspec.name;
 
   @override
-  Version get version => pubspec.version;
+  Version get version => _pubspec.version;
 
   @override
-  set version(Version version) => pubspec.version = version;
+  set version(Version version) => _pubspec.version = version;
 
   @override
   void writeToFile(String path) {
-    pubspec.writeToFile(path);
+    _pubspec.writeToFile(path);
   }
 
-  static bool isStart(String line) {
+  static bool _isStart(String line) {
     var compressed = line.replaceAll(RegExp(r'\s'), '');
 
     return (compressed == r'/*@pubspec' || compressed == r'/*@pubspec.yaml');
   }
 
-  static bool isAtPubSpec(String trimmed) {
+  static bool _isAtPubSpec(String trimmed) {
     return (trimmed == r'@pubspec' || trimmed == r'@pubspec.yaml');
   }
 }
 
+/// Throw if we encounter an error reading an annotation.
 class PubSpecAnnotationException extends DShellException {
+  /// Throw if we encounter an error reading an annotation.
   PubSpecAnnotationException(String message) : super(message);
 }

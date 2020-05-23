@@ -1,8 +1,8 @@
-import 'package:dshell/src/script/command_line_runner.dart';
-import 'package:dshell/src/script/dependency.dart';
 import 'package:pubspec/pubspec.dart';
+import '../script/command_line_runner.dart';
+import '../script/dependency.dart';
 
-extension DependencyReferenceEx on DependencyReference {
+extension _DependencyReferenceEx on DependencyReference {
   String rehydrate(Dependency dependency) {
     if (dependency.reference is HostedReference) {
       return (dependency.reference as HostedReference).rehydrate(dependency);
@@ -20,41 +20,41 @@ extension DependencyReferenceEx on DependencyReference {
   }
 }
 
-extension HostedReferenceExt on HostedReference {
+extension _HostedReferenceExt on HostedReference {
   String rehydrate(Dependency dependency) {
     return '${dependency.name}: ${versionConstraint.toString()}';
   }
 }
 
-extension GitReferenceExt on GitReference {
+extension _GitReferenceExt on GitReference {
   String rehydrate(Dependency dependency) {
     var expanded = '''${dependency.name}: 
   git: 
-    url: ${url}''';
+    url: $url''';
 
     if (ref != null) {
-      expanded += '\n    ref: ${ref}';
+      expanded += '\n    ref: $ref';
     }
 
     return expanded;
   }
 }
 
-extension PathReferenceExt on PathReference {
+extension _PathReferenceExt on PathReference {
   String rehydrate(Dependency dependency) {
     var expanded = '''${dependency.name}: 
-    path: ${path}''';
+    path: $path''';
 
     return expanded;
   }
 }
 
-extension ExternalHostedReferenceExt on ExternalHostedReference {
+extension _ExternalHostedReferenceExt on ExternalHostedReference {
   String rehydrate(Dependency dependency) {
     var expanded = '''${dependency.name}: 
 hosted:
-  name: ${name}
-  url: ${url}
+  name: $name
+  url: $url
 version: ${versionConstraint.toString()}''';
 
     return expanded;

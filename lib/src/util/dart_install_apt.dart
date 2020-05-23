@@ -1,6 +1,6 @@
-import 'package:dshell/dshell.dart';
-import 'package:dshell/src/util/pub_cache.dart';
 import 'package:path/path.dart';
+import '../../dshell.dart';
+import 'pub_cache.dart';
 
 ///
 /// Installs dart on an apt base system.abstract
@@ -66,7 +66,9 @@ class AptDartInstaller implements DartInstaller {
   }
 }
 
+/// install dart using platform specific installer
 class DartInstaller {
+  /// install dart using platform specific installer
   bool installDart() {
     if (which('apt').firstLine != null) {
       return AptDartInstaller().installDart();

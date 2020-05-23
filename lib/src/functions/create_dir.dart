@@ -1,8 +1,7 @@
 import 'dart:io';
-import 'package:dshell/dshell.dart';
-
-import 'function.dart';
+import '../../dshell.dart';
 import '../settings.dart';
+import 'function.dart';
 
 /// Creates a directory as described by [path].
 /// Path may be a single path segment (e.g. bin)
@@ -22,9 +21,9 @@ import '../settings.dart';
 ///
 
 void createDir(String path, {bool recursive = false}) =>
-    CreateDir().createDir(path, recursive: recursive);
+    _CreateDir().createDir(path, recursive: recursive);
 
-class CreateDir extends DShellFunction {
+class _CreateDir extends DShellFunction {
   void createDir(String path, {bool recursive}) {
     Settings().verbose('createDir:  ${absolute(path)} recursive: $recursive');
 
@@ -34,13 +33,17 @@ class CreateDir extends DShellFunction {
       }
 
       Directory(path).createSync(recursive: recursive);
-    } catch (e) {
+    } 
+    // ignore: avoid_catches_without_on_clauses
+    catch (e) {
       throw CreateDirException(
-          'Unable to create the directory ${absolute(path)}. Error: ${e}');
+          'Unable to create the directory ${absolute(path)}. Error: $e');
     }
   }
 }
 
+/// Thrown when the function [createDir] encounters an error
 class CreateDirException extends FunctionException {
+  /// Thrown when the function [createDir] encounters an error
   CreateDirException(String reason) : super(reason);
 }

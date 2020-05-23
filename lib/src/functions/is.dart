@@ -1,8 +1,10 @@
 import 'dart:io';
 
-import 'function.dart';
+import 'package:meta/meta.dart';
+
 import '../util/dshell_exception.dart';
 import '../util/stack_trace_impl.dart';
+import 'function.dart';
 
 ///
 /// Returns true if the given [path] points to a file.
@@ -10,21 +12,21 @@ import '../util/stack_trace_impl.dart';
 /// ```dart
 /// isFile("~/fred.jpg");
 /// ```
-bool isFile(String path) => Is().isFile(path);
+bool isFile(String path) => _Is().isFile(path);
 
 /// Returns true if the given [path] is a directory.
 /// ```dart
 /// isDirectory("/tmp");
 ///
 /// ```
-bool isDirectory(String path) => Is().isDirectory(path);
+bool isDirectory(String path) => _Is().isDirectory(path);
 
 /// Returns true if the given [path] is a symlink
 ///
 /// // ```dart
 /// isLink("~/fred.jpg");
 /// ```
-bool isLink(String path) => Is().isLink(path);
+bool isLink(String path) => _Is().isLink(path);
 
 /// Returns true if the given path exists.
 /// It may be a file, directory or link.
@@ -43,7 +45,7 @@ bool isLink(String path) => Is().isLink(path);
 ///     [isDirectory]
 ///     [isFile]
 bool exists(String path, {bool followLinks = true}) =>
-    Is().exists(path, followLinks);
+    _Is().exists(path, followLinks: followLinks);
 
 /// Returns the datetime the path was last modified
 ///
@@ -76,7 +78,7 @@ void setLastModifed(String path, DateTime lastModified) {
   }
 }
 
-class Is extends DShellFunction {
+class _Is extends DShellFunction {
   bool isFile(String path) {
     var fromType = FileSystemEntity.typeSync(path);
     return (fromType == FileSystemEntityType.file);
@@ -94,7 +96,7 @@ class Is extends DShellFunction {
   }
 
   /// checks if the given [path] exists.
-  bool exists(String path, bool followLinks) {
+  bool exists(String path, {@required bool followLinks}) {
     //return FileSystemEntity.existsSync(path);
     return FileSystemEntity.typeSync(path, followLinks: followLinks) !=
         FileSystemEntityType.notFound;

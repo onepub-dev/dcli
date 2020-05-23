@@ -3,10 +3,12 @@ import '../flags.dart';
 import '../project_cache.dart';
 import 'commands.dart';
 
+/// implementation for the 'cleanall' command.
 class CleanAllCommand extends Command {
-  static const String NAME = 'cleanall';
+  static const String _commandName = 'cleanall';
 
-  CleanAllCommand() : super(NAME);
+  ///
+  CleanAllCommand() : super(_commandName);
 
   @override
   int run(List<Flag> selectedFlags, List<String> arguments) {

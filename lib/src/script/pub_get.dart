@@ -1,10 +1,11 @@
 import '../../dshell.dart';
-import 'virtual_project.dart';
 import '../util/progress.dart';
+import '../util/runnable_process.dart';
 
 import 'dart_sdk.dart';
 import 'dependency.dart';
-import '../util/runnable_process.dart';
+
+import 'virtual_project.dart';
 
 ///
 /// runs and retrives the results of calling
@@ -15,20 +16,20 @@ import '../util/runnable_process.dart';
 ///
 
 class PubGet {
-  final DartSdk dartSdk;
-  final VirtualProject project;
+  final VirtualProject _project;
 
-  PubGet(this.dartSdk, this.project);
+  ///
+  PubGet(this._project);
 
   /// Runs the pub get command against
   /// the project working dir.
   PubGetResult run({bool compileExecutables = true}) {
     var result = PubGetResult();
     try {
-      DartSdk().runPubGet(project.runtimeProjectPath,
+      DartSdk().runPubGet(_project.runtimeProjectPath,
           compileExecutables: compileExecutables,
-          progress: Progress((line) => result.processLine(line),
-              stderr: (line) => println(line)));
+          progress:
+              Progress((line) => result._processLine(line), stderr: _println));
 
       return result;
     } on RunException catch (e) {
@@ -37,19 +38,22 @@ class PubGet {
     }
   }
 
-  void println(String line) {
+  void _println(String line) {
     Settings().verbose('pubget: $line');
     print(line);
   }
 }
 
+/// results from running pub get.
+/// we parse lines of interest.
 class PubGetResult {
   final List<Dependency> _added = <Dependency>[];
   final List<Dependency> _removed = <Dependency>[];
 
+  ///
   PubGetResult();
 
-  void processLine(String line) {
+  void _processLine(String line) {
     print(line);
     if (line.startsWith('+ ')) {
       var dep = Dependency.fromLine(line);
@@ -66,13 +70,19 @@ class PubGetResult {
     }
   }
 
+  /// list of dependency that pub get added
   List<Dependency> get added => _added;
 
+  /// list of dependency that pub get removed
   List<Dependency> get removed => _removed;
 }
 
+///
+
 class PubGetException {
+  /// the pub get exit code.
   final int exitCode;
 
+  ///
   PubGetException(this.exitCode);
 }

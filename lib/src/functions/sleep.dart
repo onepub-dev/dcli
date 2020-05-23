@@ -1,6 +1,5 @@
-import '../util/wait_for_ex.dart';
-
 import '../settings.dart';
+import '../util/wait_for_ex.dart';
 
 import 'dshell_function.dart';
 
@@ -16,13 +15,24 @@ import 'dshell_function.dart';
 ///
 /// If the duration is 0 or less sleep returns immediately.
 void sleep(int duration, {Interval interval = Interval.seconds}) =>
-    Sleep().sleep(duration, interval: interval);
+    _Sleep().sleep(duration, interval: interval);
 
-enum Interval { seconds, millseconds, minutes }
+/// Allows you to specify how the [duration] argument
+/// to [sleep] is interpreted.
+enum Interval {
+  /// the [duration] argument is in seconds
+  seconds,
 
-class Sleep extends DShellFunction {
+  /// the [millseconds] argument is in seconds
+  millseconds,
+
+  /// the [minutes] argument is in seconds
+  minutes
+}
+
+class _Sleep extends DShellFunction {
   void sleep(int duration, {Interval interval = Interval.seconds}) {
-    Settings().verbose('sleep: duration: ${duration} interval: $interval');
+    Settings().verbose('sleep: duration: $duration interval: $interval');
     Duration _duration;
     switch (interval) {
       case Interval.seconds:

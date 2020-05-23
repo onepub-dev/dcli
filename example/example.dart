@@ -6,8 +6,8 @@ import 'package:dshell/dshell.dart';
 void main() {
   try {
     // Print the current working directory
-    print('PWD: ${pwd}');
-    echo('PWD: ${pwd}');
+    print('PWD: $pwd');
+    echo('PWD: $pwd');
 
     var baseDir = 'poetry';
 
@@ -73,7 +73,7 @@ void main() {
     // or use the forEach method which will
     // print each match as its found.
     echo('Print matches as we go');
-    find('*.txt').forEach((line) => print(line));
+    find('*.txt').forEach(print);
 
     print('');
     print('Please review this most gloreous work.');
@@ -82,7 +82,7 @@ void main() {
     // Review our good woork.
     cat(restingPlace);
 
-    read(restingPlace, delim: '\r\n').forEach((line) => print(line));
+    read(restingPlace, delim: '\r\n').forEach(print);
 
     // ask the user if we are ready to publish.
     // But we can't do this in a vscode debug session
@@ -108,7 +108,7 @@ void main() {
 
     // Lets get a word count
     'wc $restingPlace'
-        .forEach((line) => print('WC: $line'), stderr: (line) => print(line));
+        .forEach((line) => print('WC: $line'), stderr: print);
 
     print('');
 
@@ -117,12 +117,14 @@ void main() {
         stderr: (line) => [print(line)]);
 
     // lets do some pipeing and see the 3-5 lines
-    ('head  -5 $restingPlace' | 'tail -n 3').forEach((line) => print(line));
+    ('head  -5 $restingPlace' | 'tail -n 3').forEach(print);
 
     // but the world doesn't deserve our work
     // so burn it all to hell.
     delete(restingPlace, ask: false);
-  } catch (e) {
+  } 
+  // ignore: avoid_catches_without_on_clauses
+  catch (e) {
     // All errors are thrown as exceptions.
     print('An error occured: ${e.toString()}');
     e.printStackTrace();

@@ -1,6 +1,7 @@
-import 'dart:cli' as cli;
 import 'dart:async';
-import 'package:dshell/dshell.dart';
+import 'dart:cli' as cli;
+
+import '../../dshell.dart';
 
 import 'dshell_exception.dart';
 import 'stack_trace_impl.dart';
@@ -17,11 +18,13 @@ T waitForEx<T>(Future<T> future) {
   T value;
   try {
     value = cli.waitFor<T>(future);
-  } on AsyncError catch (e) {
+  }
+  // ignore: avoid_catching_errors
+  on AsyncError catch (e) {
     if (e.error is Exception) {
       exception = e.error as Exception;
     } else {
-      Settings().verbose('Rethrowing a non DShellException ${e}');
+      Settings().verbose('Rethrowing a non DShellException $e');
       rethrow;
     }
   }

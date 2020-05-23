@@ -1,10 +1,10 @@
 import 'dart:io';
 
 import 'package:collection/collection.dart';
-import 'package:dshell/dshell.dart';
-import 'package:dshell/src/util/dshell_exception.dart';
-
+import '../../dshell.dart';
 import '../settings.dart';
+import '../util/dshell_exception.dart';
+
 import 'dshell_function.dart';
 
 /// Returns the value of an environment variable.
@@ -20,7 +20,7 @@ import 'dshell_function.dart';
 ///String path = env("PATH");
 ///```
 ///
-String env(String name) => Env().env(name);
+String env(String name) => Env()._env(name);
 
 /// Tests if the given [path] is contained
 /// in the OS's PATH environment variable.
@@ -32,9 +32,11 @@ bool isOnPath(String path) => Env().isOnPath(path);
 /// in the OS's PATH environment variable.
 /// They are returned in the same order that they appear within
 /// the PATH environment variable (as order is important.)
-List<String> get PATH => Env().PATH;
+//ignore: non_constant_identifier_names
+List<String> get PATH => Env()._path;
 
 /// returns the path to the OS specific HOME directory
+//ignore: non_constant_identifier_names
 String get HOME => Env().HOME;
 
 /// Returns a map of all the environment variables
@@ -43,7 +45,7 @@ String get HOME => Env().HOME;
 ///
 /// See [env]
 ///     [setEnv]
-Map<String, String> get envs => Env().envVars;
+Map<String, String> get envs => Env()._envVars;
 
 ///
 /// Sets an environment variable for the current process.
@@ -60,13 +62,15 @@ Map<String, String> get envs => Env().envVars;
 /// processes environment.
 void setEnv(String name, String value) => Env().setEnv(name, value);
 
+/// Implementation class for the functions [_env] and [setEnv].
 class Env extends DShellFunction {
   static Env _self = Env._internal();
 
-  Map<String, String> envVars;
+  Map<String, String> _envVars;
 
-  bool caseSensitive = true;
+  bool _caseSensitive = true;
 
+  /// Implementation class for the functions [_env] and [setEnv].
   factory Env() {
     return _self;
   }
@@ -75,26 +79,29 @@ class Env extends DShellFunction {
     var platformVars = Platform.environment;
 
     if (Settings().isWindows) {
-      caseSensitive = false;
+      _caseSensitive = false;
     }
 
-    envVars =
-        CanonicalizedMap((key) => (caseSensitive) ? key : key.toUpperCase());
+    _envVars =
+        CanonicalizedMap((key) => (_caseSensitive) ? key : key.toUpperCase());
 
     // build a local map with all of the OS environment vars.
     for (var entry in platformVars.entries) {
-      envVars.putIfAbsent(entry.key, () => entry.value);
+      _envVars.putIfAbsent(entry.key, () => entry.value);
     }
   }
 
+  /// conveience method for unit tests.
+  /// resets all environment variables to the state
+  /// we inheritied from the parent process.
   static void reset() {
     _self = Env._internal();
   }
 
-  String env(String name) {
-    Settings().verbose('env:  ${name}:${envVars[name]}');
+  String _env(String name) {
+    Settings().verbose('env:  $name:${_envVars[name]}');
 
-    return envVars[name];
+    return _envVars[name];
   }
 
   /// returns the path seperator used by the PATH enviorment variable.
@@ -112,8 +119,9 @@ class Env extends DShellFunction {
     return separator;
   }
 
-  List<String> get PATH {
-    var pathEnv = env('PATH');
+  /// returns the PATH environment var.
+  List<String> get _path {
+    var pathEnv = _env('PATH');
 
     return pathEnv.split(pathSeparator);
   }
@@ -121,13 +129,14 @@ class Env extends DShellFunction {
   ///
   /// Gets the path to the users home directory
   /// using the enviornment var appropriate for the user's OS.
+  //ignore: non_constant_identifier_names
   String get HOME {
     String home;
 
     if (Settings().isWindows) {
-      home = env('APPDATA');
+      home = _env('APPDATA');
     } else {
-      home = env('HOME');
+      home = _env('HOME');
     }
 
     if (home == null) {
@@ -142,10 +151,12 @@ class Env extends DShellFunction {
     return home;
   }
 
-  bool isOnPath(String binPath) {
-    var canon = canonicalize(absolute(binPath));
+  /// returns true if the given [path] is in the list
+  /// of paths defined in the environment variable [PATH].
+  bool isOnPath(String checkPath) {
+    var canon = canonicalize(absolute(checkPath));
     var found = false;
-    for (var path in PATH) {
+    for (var path in _path) {
       if (canonicalize(path) == canon) {
         found = true;
         break;
@@ -158,26 +169,28 @@ class Env extends DShellFunction {
   /// set on environment variables.
   void setEnv(String name, String value) {
     if (value == null) {
-      envVars.remove(name);
+      _envVars.remove(name);
       if (Platform.isWindows) {
         if (name == 'HOME' || name == 'APPDATA') {
-          envVars.remove('HOME');
-          envVars.remove('APPDATA');
+          _envVars.remove('HOME');
+          _envVars.remove('APPDATA');
         }
       }
     } else {
-      envVars[name] = value;
+      _envVars[name] = value;
 
       if (Platform.isWindows) {
         if (name == 'HOME' || name == 'APPDATA') {
-          envVars['HOME'] = value;
-          envVars['APPDATA'] = value;
+          _envVars['HOME'] = value;
+          _envVars['APPDATA'] = value;
         }
       }
     }
   }
 
-  static void setMock(Env mockEnv) {
+  /// Used in unit tests to mock the Env class.
+  // ignore: avoid_setters_without_getters
+  static set mock(Env mockEnv) {
     _self = mockEnv;
   }
 }

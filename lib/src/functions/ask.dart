@@ -1,11 +1,11 @@
 import 'dart:convert';
 import 'dart:io';
 
-import 'package:dshell/dshell.dart';
-import 'package:dshell/src/util/wait_for_ex.dart';
 import 'package:validators/validators.dart';
 
+import '../../dshell.dart';
 import '../settings.dart';
+import '../util/wait_for_ex.dart';
 
 import 'dshell_function.dart';
 import 'echo.dart';
@@ -42,7 +42,7 @@ import 'echo.dart';
 /// input. The [validator] must return the normalised value which
 /// will be the value returned by [ask].
 /// If the [validator] detects an invalid input then you MUST
-/// throw [AskException.invalid(error)]. The error will
+/// throw [AskValidatorException(error)]. The error will
 /// be displayed on the console and the user reprompted.
 /// You can color code the error using any of the dshell
 /// color functions.  By default all input is considered valid.
@@ -97,9 +97,10 @@ bool confirm({String prompt}) {
   return result;
 }
 
+/// Class for [ask] and related code.
 class Ask extends DShellFunction {
-  static const int _BACKSPACE = 127;
-  static const int _SPACE = 32;
+  static const int _backspace = 127;
+  static const int _space = 32;
   static const int _ = 8;
 
   ///
@@ -107,13 +108,13 @@ class Ask extends DShellFunction {
   /// [prompt]
   String _ask(
       {String prompt, bool toLower, bool hidden, AskValidator validator}) {
-    Settings().verbose('ask:  ${prompt} toLower: $toLower hidden: $hidden');
+    Settings().verbose('ask:  $prompt toLower: $toLower hidden: $hidden');
 
     String line;
     var valid = false;
     do {
       if (prompt != null) {
-        echo(prompt + ' ', newline: false);
+        echo('$prompt ', newline: false);
       }
 
       if (hidden == true && stdin.hasTerminal) {
@@ -130,15 +131,15 @@ class Ask extends DShellFunction {
       }
 
       try {
-        Settings().verbose('ask: pre validation "${line}"');
+        Settings().verbose('ask: pre validation "$line"');
         line = validator.validate(line);
-        Settings().verbose('ask: post validation "${line}"');
+        Settings().verbose('ask: post validation "$line"');
         valid = true;
-      } on AskException catch (e) {
+      } on AskValidatorException catch (e) {
         print(e.message);
       }
 
-      Settings().verbose('ask: result ${line}');
+      Settings().verbose('ask: result $line');
     } while (!valid);
 
     return line;
@@ -154,14 +155,14 @@ class Ask extends DShellFunction {
       do {
         char = stdin.readByteSync();
         if (char != 10) {
-          if (char == _BACKSPACE) {
+          if (char == _backspace) {
             if (value.isNotEmpty) {
               // move back a character,
               // print a space an move back again.
               // required to clear the current character
               // move back one space.
               stdout.writeCharCode(_);
-              stdout.writeCharCode(_SPACE);
+              stdout.writeCharCode(_space);
               stdout.writeCharCode(_);
               value.removeLast();
             }
@@ -219,14 +220,23 @@ class Ask extends DShellFunction {
   static const AskValidator ipAddress = AskIPAddress();
 }
 
-class AskException extends DShellException {
-  AskException(String message) : super(message);
-
-  AskException.invalid(String error) : super(error);
+/// Thrown when an [Askvalidator] detects an invalid input.
+class AskValidatorException extends DShellException {
+  /// validator with a [message] indicating the error.
+  AskValidatorException(String message) : super(message);
 }
 
+/// Base class for all [AskValidator]s.
+/// You can add your own by extending this class.
 abstract class AskValidator {
+  /// allows us to make validators consts.
   const AskValidator();
+
+  /// This method is called by [ask] to valiate the
+  /// string entered by the user.
+  /// It should throw an AskValidatorException if the input
+  /// is invalid.
+  /// The validate method is called when the user hits the enter key.
   String validate(String line);
 }
 
@@ -248,7 +258,7 @@ class _AskRequired extends AskValidator {
   String validate(String line) {
     line = line.trim();
     if (line.isEmpty) {
-      throw AskException.invalid(red('You must enter a value.'));
+      throw AskValidatorException(red('You must enter a value.'));
     }
     return line;
   }
@@ -261,7 +271,7 @@ class _AskEmail extends AskValidator {
     line = line.trim();
 
     if (!isEmail(line)) {
-      throw AskException.invalid(red('Invalid email address.'));
+      throw AskValidatorException(red('Invalid email address.'));
     }
     return line;
   }
@@ -274,7 +284,7 @@ class _AskFQDN extends AskValidator {
     line = line.trim();
 
     if (!isFQDN(line)) {
-      throw AskException.invalid(red('Invalid FQDN.'));
+      throw AskValidatorException(red('Invalid FQDN.'));
     }
     return line;
   }
@@ -287,7 +297,7 @@ class _AskDate extends AskValidator {
     line = line.trim();
 
     if (!isDate(line)) {
-      throw AskException.invalid(red('Invalid date.'));
+      throw AskValidatorException(red('Invalid date.'));
     }
     return line;
   }
@@ -300,7 +310,7 @@ class _AskInteger extends AskValidator {
     line = line.trim();
 
     if (!isInt(line)) {
-      throw AskException.invalid(red('Invalid integer.'));
+      throw AskValidatorException(red('Invalid integer.'));
     }
     return line;
   }
@@ -313,7 +323,7 @@ class _AskDecimal extends AskValidator {
     line = line.trim();
 
     if (!isFloat(line)) {
-      throw AskException.invalid(red('Invalid decimal number.'));
+      throw AskValidatorException(red('Invalid decimal number.'));
     }
     return line;
   }
@@ -326,7 +336,7 @@ class _AskAlpha extends AskValidator {
     line = line.trim();
 
     if (!isAlpha(line)) {
-      throw AskException.invalid(red('Alphabetical characters only.'));
+      throw AskValidatorException(red('Alphabetical characters only.'));
     }
     return line;
   }
@@ -339,13 +349,18 @@ class _AskAlphaNumeric extends AskValidator {
     line = line.trim();
 
     if (!isAlphanumeric(line)) {
-      throw AskException.invalid(red('Alphanumerical characters only.'));
+      throw AskValidatorException(red('Alphanumerical characters only.'));
     }
     return line;
   }
 }
 
+/// Validates that input is a IP address
+/// By default both v4 and v6 addresses are valid
+/// Pass a [version] to limit the input to one or the
+/// other. If passed [version] must be 4 or 6.
 class AskIPAddress extends AskValidator {
+  /// IP version (on 4 and 6 are valid versions.)
   final int version;
 
   /// Validates that input is a IP address
@@ -361,47 +376,63 @@ class AskIPAddress extends AskValidator {
     line = line.trim();
 
     if (!isIP(line, version)) {
-      throw AskException.invalid(red('Invalid IP Address.'));
+      throw AskValidatorException(red('Invalid IP Address.'));
     }
     return line;
   }
 }
 
+/// Validates that the entered line is no longer
+/// than [maxLength].
 class AskMaxLength extends AskValidator {
+  /// the maximum allows length for the entered string.
   final int maxLength;
+
+  /// Validates that the entered line is no longer
+  /// than [maxLength].
   const AskMaxLength(this.maxLength);
   @override
   String validate(String line) {
     line = line.trim();
 
     if (line.length > maxLength) {
-      throw AskException.invalid(red(
+      throw AskValidatorException(red(
           'You have exceeded the maximum length of $maxLength characters.'));
     }
     return line;
   }
 }
 
+/// Validates that the entered line is not less
+/// than [minLength].
 class AskMinLength extends AskValidator {
+  /// the minimum allows length of the string.
   final int minLength;
+
+  /// Validates that the entered line is not less
+  /// than [minLength].
   const AskMinLength(this.minLength);
   @override
   String validate(String line) {
     line = line.trim();
 
     if (line.length < minLength) {
-      throw AskException.invalid(
+      throw AskValidatorException(
           red('You must enter at least $minLength characters.'));
     }
     return line;
   }
 }
 
+/// Validates that the length of the entered text
+/// as at least [minLength] but no more than [maxLength].
 class AskLength extends AskValidator {
-  AskMultiValidator validator;
+  AskMultiValidator _validator;
 
+  /// Validates that the length of the entered text
+  /// as at least [minLength] but no more than [maxLength].
   AskLength(int minLength, int maxLength) {
-    validator = AskMultiValidator([
+    _validator = AskMultiValidator([
       AskMinLength(minLength),
       AskMaxLength(maxLength),
     ]);
@@ -410,7 +441,7 @@ class AskLength extends AskValidator {
   String validate(String line) {
     line = line.trim();
 
-    line = validator.validate(line);
+    line = _validator.validate(line);
     return line;
   }
 }
@@ -420,14 +451,18 @@ class AskLength extends AskValidator {
 /// of [valiadators] in the provided order.
 /// Validation stops when the first validator fails.
 class AskMultiValidator extends AskValidator {
-  final List<AskValidator> validators;
+  final List<AskValidator> _validators;
 
-  AskMultiValidator(this.validators);
+  /// Allows you to combine multiple validators
+  /// When the user hits enter we apply the list
+  /// of [valiadators] in the provided order.
+  /// Validation stops when the first validator fails.
+  AskMultiValidator(this._validators);
   @override
   String validate(String line) {
     line = line.trim();
 
-    for (var validator in validators) {
+    for (var validator in _validators) {
       line = validator.validate(line);
     }
     return line;
@@ -439,8 +474,13 @@ class AskMultiValidator extends AskValidator {
 /// If the validator fails it prints out the
 /// list of available inputs.
 class AskListValidator extends AskValidator {
+  /// The list of allowed values.
   final List<String> validItems;
 
+  /// Checks that the input matches one of the
+  /// provided [validItems].
+  /// If the validator fails it prints out the
+  /// list of available inputs.
   AskListValidator(this.validItems, {bool caseSensitive = false});
   @override
   String validate(String line) {
@@ -453,7 +493,7 @@ class AskListValidator extends AskValidator {
       }
     }
     if (!found) {
-      throw AskException.invalid(
+      throw AskValidatorException(
           red('The valid responses are ${validItems.join(' | ')}.'));
     }
 

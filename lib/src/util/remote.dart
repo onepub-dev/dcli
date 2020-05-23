@@ -1,5 +1,5 @@
-import 'package:dshell/dshell.dart';
 import 'package:meta/meta.dart';
+import '../../dshell.dart';
 
 ///
 /// Provides remote access methods for posix based systems.
@@ -107,7 +107,7 @@ class Remote {
     try {
       startFromArgs('ssh', cmdArgs, progress: progress);
     } on RunException catch (e) {
-      var error = sshErrors[e.exitCode];
+      var error = _sshErrors[e.exitCode];
       throw RunException(
           e.cmdLine, e.exitCode, red('ssh exit code: ${e.exitCode} - $error'),
           stackTrace: e.stackTrace);
@@ -201,14 +201,14 @@ class Remote {
     try {
       startFromArgs('scp', cmdArgs, progress: progress, terminal: true);
     } on RunException catch (e) {
-      var error = scpErrors[e.exitCode];
+      var error = _scpErrors[e.exitCode];
       throw RunException(
           e.cmdLine, e.exitCode, red('scp exit code: ${e.exitCode} - $error'),
           stackTrace: e.stackTrace);
     }
   }
 
-  static const Map<int, String> sshErrors = <int, String>{
+  static const Map<int, String> _sshErrors = <int, String>{
     0: 'Operation was successful',
     1: 'Generic error, usually because invalid command line options or malformed configuration',
     2: 'Connection failed',
@@ -229,7 +229,7 @@ class Remote {
     79: 'Invalid user name'
   };
 
-  static const Map<int, String> scpErrors = <int, String>{
+  static const Map<int, String> _scpErrors = <int, String>{
     0: 'Operation was successful',
     1: 'General error in file copy',
     2: 'Destination is not directory, but it should be',
@@ -259,10 +259,14 @@ class Remote {
   };
 }
 
+///
 class ScpException extends RemoteException {
+  ///
   ScpException(String message) : super(message);
 }
 
+///
 class RemoteException extends DShellException {
+  ///
   RemoteException(String message) : super(message);
 }

@@ -1,7 +1,8 @@
 import 'dart:io';
+import 'package:meta/meta.dart';
 
-import 'function.dart';
 import '../util/wait_for_ex.dart';
+import 'function.dart';
 
 /// Writes [text] to stdout including a newline.
 ///
@@ -12,10 +13,11 @@ import '../util/wait_for_ex.dart';
 /// If [newline] is false then a newline will not be output.
 ///
 /// [newline] defaults to false.
-void echo(String text, {bool newline = false}) => Echo().echo(text, newline);
+void echo(String text, {bool newline = false}) =>
+    _Echo().echo(text, newline: newline);
 
-class Echo extends DShellFunction {
-  void echo(String text, bool newline) {
+class _Echo extends DShellFunction {
+  void echo(String text, {@required bool newline}) {
     if (newline) {
       stdout.writeln(text);
     } else {

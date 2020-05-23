@@ -1,18 +1,22 @@
 import 'dart:io';
-
-import 'package:dshell/dshell.dart';
-import 'package:dshell/src/script/command_line_runner.dart';
 import 'package:glob/glob.dart';
+import 'package:meta/meta.dart';
+import '../../dshell.dart';
+import '../script/command_line_runner.dart';
 
 /// Class to parse a OS command, contained in a string, which we need to pass
 /// into the dart Process.start method as a application name and a series
 /// of arguments.
 class ParsedCliCommand {
+  /// The commdand that we parsed from the command line
   String cmd;
-  var args = <String>[];
 
+  /// The args that we parsed from the command line
+  List<String> args = <String>[];
+
+  ///
   ParsedCliCommand(String command, String workingDirectory) {
-    var qargs = parse(command);
+    var qargs = _parse(command);
     args = expandGlobs(qargs, workingDirectory);
 
     if (Settings().isVerbose) {
@@ -21,10 +25,10 @@ class ParsedCliCommand {
     }
   }
 
+  /// when passed individual args we respect any quotes that are
+  /// passed as they have been put there with intent.
   ParsedCliCommand.fromParsed(
       this.cmd, List<String> rawArgs, String workingDirectory) {
-    // when passed individual args we respect any quotes that are
-    // passed as they have been put there with intent.
     var qargs = _QArg.translate(rawArgs);
     args = expandGlobs(qargs, workingDirectory);
 
@@ -34,10 +38,11 @@ class ParsedCliCommand {
     }
   }
 
-  List<_QArg> parse(String command) {
+  /// parses the given command breaking them done into words
+  List<_QArg> _parse(String commandLine) {
     var parts = <_QArg>[];
 
-    var state = ParseState.STARTING;
+    var state = _ParseState.starting;
 
     // if try the next character should be escaped.
     // var escapeNext = false;
@@ -48,22 +53,22 @@ class ParsedCliCommand {
     String matchingQuote;
     var currentPart = '';
 
-    for (var i = 0; i < command.length; i++) {
-      var char = command[i];
+    for (var i = 0; i < commandLine.length; i++) {
+      var char = commandLine[i];
 
       switch (state) {
-        case ParseState.STARTING:
+        case _ParseState.starting:
           // ignore leading space.
           if (char == ' ') {
             break;
           }
           if (char == '"') {
-            state = ParseState.IN_QUOTE;
+            state = _ParseState.inQuote;
             matchingQuote = '"';
             break;
           }
           if (char == "'") {
-            state = ParseState.IN_QUOTE;
+            state = _ParseState.inQuote;
             matchingQuote = "'";
             break;
           }
@@ -72,23 +77,23 @@ class ParsedCliCommand {
           // }
 
           currentPart += char;
-          state = ParseState.IN_WORD;
+          state = _ParseState.inWord;
 
           break;
 
-        case ParseState.IN_WORD:
+        case _ParseState.inWord:
           if (char == ' ') // && !escapeNext)
           {
             //escapeNext = false;
             // a non-escape space means a new part.
-            state = ParseState.STARTING;
+            state = _ParseState.starting;
             parts.add(_QArg(currentPart));
             currentPart = '';
             break;
           }
 
           if (char == '"' || char == "'") {
-            state = ParseState.IN_QUOTE;
+            state = _ParseState.inQuote;
             matchingQuote = char;
             break;
             //             throw InvalidArguments(
@@ -105,10 +110,10 @@ class ParsedCliCommand {
           currentPart += char;
           break;
 
-        case ParseState.IN_QUOTE:
+        case _ParseState.inQuote:
           if (char == matchingQuote) {
-            state = ParseState.STARTING;
-            parts.add(_QArg.fromParsed(currentPart, true));
+            state = _ParseState.starting;
+            parts.add(_QArg.fromParsed(currentPart, wasQuoted: true));
             currentPart = '';
             break;
           }
@@ -119,7 +124,7 @@ class ParsedCliCommand {
     }
 
     if (currentPart.isNotEmpty) {
-      parts.add(_QArg.fromParsed(currentPart, false));
+      parts.add(_QArg.fromParsed(currentPart, wasQuoted: false));
     }
 
     if (parts.isEmpty) {
@@ -155,13 +160,13 @@ class ParsedCliCommand {
   }
 }
 
-enum ParseState { STARTING, IN_QUOTE, IN_WORD }
+enum _ParseState { starting, inQuote, inWord }
 
 class _QArg {
   bool wasQuoted;
   String arg;
 
-  _QArg.fromParsed(this.arg, this.wasQuoted);
+  _QArg.fromParsed(this.arg, {@required this.wasQuoted});
 
   _QArg(String iarg) {
     wasQuoted = false;

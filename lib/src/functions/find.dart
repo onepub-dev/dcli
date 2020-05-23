@@ -1,12 +1,14 @@
 import 'dart:async';
 import 'dart:io';
 
-import 'package:dshell/src/util/wait_for_ex.dart';
-
-import 'function.dart';
-import '../util/progress.dart';
+import 'package:meta/meta.dart';
 
 import '../../dshell.dart';
+
+import '../util/progress.dart';
+import '../util/wait_for_ex.dart';
+
+import 'function.dart';
 
 ///
 /// Returns the list of files in the current and child
@@ -80,7 +82,7 @@ Progress find(
   Progress progress,
   List<FileSystemEntityType> types = const [FileSystemEntityType.file],
 }) =>
-    Find().find(pattern,
+    Find()._find(pattern,
         caseSensitive: caseSensitive,
         recursive: recursive,
         includeHidden: includeHidden,
@@ -88,8 +90,9 @@ Progress find(
         progress: progress,
         types: types);
 
+/// Implementation for the [_find] function.
 class Find extends DShellFunction {
-  Progress find(
+  Progress _find(
     String pattern, {
     bool caseSensitive = false,
     bool recursive = true,
@@ -98,7 +101,7 @@ class Find extends DShellFunction {
     List<FileSystemEntityType> types = const [FileSystemEntityType.file],
     bool includeHidden,
   }) {
-    var matcher = PatternMatcher(pattern, caseSensitive);
+    var matcher = _PatternMatcher(pattern, caseSensitive: caseSensitive);
     if (root == '.') {
       root = pwd;
     }
@@ -107,7 +110,7 @@ class Find extends DShellFunction {
       progress ??= Progress.devNull();
 
       Settings().verbose(
-          'find: pwd: ${pwd} ${absolute(root)} pattern: ${pattern} caseSensitive: ${caseSensitive} recursive: ${recursive} types: ${types} ');
+          'find: pwd: $pwd ${absolute(root)} pattern: $pattern caseSensitive: $caseSensitive recursive: $recursive types: $types ');
 
       var completer = Completer<void>();
       var lister = Directory(root).list(recursive: recursive);
@@ -117,10 +120,10 @@ class Find extends DShellFunction {
         //  print('testing ${entity.path}');
         if (types.contains(type) &&
             matcher.match(basename(entity.path)) &&
-            allowed(
+            _allowed(
               root,
-              includeHidden,
               entity,
+              includeHidden: includeHidden,
             )) {
           progress.addToStdout(normalize(entity.path));
         }
@@ -136,13 +139,14 @@ class Find extends DShellFunction {
     return progress;
   }
 
-  bool allowed(String root, bool includeHidden, FileSystemEntity entity) {
-    return includeHidden || !isHidden(root, entity);
+  bool _allowed(String root, FileSystemEntity entity,
+      {@required bool includeHidden}) {
+    return includeHidden || !_isHidden(root, entity);
   }
 
   // check if the entity is a hidden file (.xxx) or
   // if lives in a hidden directory.
-  bool isHidden(String root, FileSystemEntity entity) {
+  bool _isHidden(String root, FileSystemEntity entity) {
     var relativePath = relative(entity.path, from: root);
 
     var parts = relativePath.split(separator);
@@ -158,12 +162,12 @@ class Find extends DShellFunction {
   }
 }
 
-class PatternMatcher {
+class _PatternMatcher {
   String pattern;
   RegExp regEx;
   bool caseSensitive;
 
-  PatternMatcher(this.pattern, this.caseSensitive) {
+  _PatternMatcher(this.pattern, {@required this.caseSensitive}) {
     regEx = buildRegEx();
   }
 

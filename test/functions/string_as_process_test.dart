@@ -112,7 +112,7 @@ void main() {
 
         var linesFile = setup(fs);
 
-        print('pwd: ' + pwd);
+        print('pwd: $pwd');
 
         assert(exists(linesFile));
 
@@ -231,7 +231,7 @@ void main() {
 }
 
 String setup(TestFileSystem fs) {
-  var linesFile = join(fs.root, TestFileSystem.TEST_LINES_FILE);
+  var linesFile = join(fs.root, TestFileSystem.testLinesFile);
 
   var file = FileSync(linesFile);
   for (var i = 0; i < 10; i++) {

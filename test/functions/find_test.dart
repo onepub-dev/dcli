@@ -25,14 +25,14 @@ void main() {
         var paths = TestFileSystem();
         var found = find('*.jpg', root: paths.top).toList();
 
-        find('*.jpg', root: paths.top).forEach((line) => print(line));
+        find('*.jpg', root: paths.top).forEach(print);
         t.expect(find('one.jpg', root: paths.top).toList(),
             t.equals([join(paths.top, 'one.jpg')]));
 
         t.expect(find('two.jpg', root: paths.top).toList(),
             t.equals([join(paths.middle, 'two.jpg')]));
 
-        find('*.jpg', progress: Progress((line) => print(line)));
+        find('*.jpg', progress: Progress(print));
 
         found.sort();
         var expected = [

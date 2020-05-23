@@ -18,7 +18,7 @@ void main() {
         }
         var file = FileSync(testFile, fileMode: FileMode.writeOnlyAppend);
         for (var i = 0; i < 10; i++) {
-          file.append('Line ${i} is here');
+          file.append('Line $i is here');
         }
         file.close();
 
@@ -36,7 +36,7 @@ void main() {
         }
         var file = FileSync(testFile, fileMode: FileMode.writeOnlyAppend);
         for (var i = 0; i < 10; i++) {
-          file.append('Line ${i} is here');
+          file.append('Line $i is here');
         }
         var replacement = 'This is all that should be left';
         file.write(replacement, newline: null);

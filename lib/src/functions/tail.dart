@@ -1,10 +1,10 @@
-import 'package:dshell/src/util/circular_buffer.dart';
+import '../settings.dart';
+import '../util/circular_buffer.dart';
 
-import 'function.dart';
 import '../util/file_sync.dart';
 import '../util/progress.dart';
 
-import '../settings.dart';
+import 'function.dart';
 
 import 'is.dart';
 
@@ -17,11 +17,11 @@ import 'is.dart';
 ///
 /// Throws a [TailException] exception if [path] is not a file.
 ///
-Progress tail(String path, int lines) => Tail().tail(path, lines);
+Progress tail(String path, int lines) => _Tail().tail(path, lines);
 
-class Tail extends DShellFunction {
+class _Tail extends DShellFunction {
   Progress tail(String path, int lines, {Progress progress}) {
-    Settings().verbose('tail ${absolute(path)} lines: ${lines}');
+    Settings().verbose('tail ${absolute(path)} lines: $lines');
 
     if (!exists(path)) {
       throw TailException('The path ${absolute(path)} does not exist.');
@@ -44,7 +44,9 @@ class Tail extends DShellFunction {
       });
 
       buf.forEach((line) => progress.addToStdout(line));
-    } catch (e) {
+    }
+    // ignore: avoid_catches_without_on_clauses
+    catch (e) {
       throw TailException(
           'An error occured reading ${absolute(path)}. Error: $e');
     } finally {
@@ -55,6 +57,8 @@ class Tail extends DShellFunction {
   }
 }
 
+/// thrown when the [tail] function encounters an exception
 class TailException extends FunctionException {
+  /// thrown when the [tail] function encounters an exception
   TailException(String reason) : super(reason);
 }

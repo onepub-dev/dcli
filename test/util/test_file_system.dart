@@ -25,17 +25,17 @@ class TestFileSystem {
   String bottom;
   String hidden;
 
-  static String _TEST_ROOT;
+  static String _testRoot;
 
   /// directory under .dshell which we used to store compiled
   /// tests scripts that we need to add to the TestFileSystems
   /// path.
-  static const String _TEST_BIN = 'test_bin';
-  static const String TEST_LINES_FILE = 'lines.txt';
+  static const String _testBin = 'test_bin';
+  static const String testLinesFile = 'lines.txt';
 
   String home;
 
-  String get root => join(TestFileSystem._TEST_ROOT, uniquePath);
+  String get root => join(TestFileSystem._testRoot, uniquePath);
 
   bool initialised = false;
 
@@ -87,7 +87,7 @@ class TestFileSystem {
   }
 
   TestFileSystem._internal() {
-    _TEST_ROOT = join(rootPath, 'tmp', 'dshell');
+    _testRoot = join(rootPath, 'tmp', 'dshell');
     uniquePath = Uuid().v4();
 
     var isolateID = Service.getIsolateID(Isolate.current);
@@ -120,7 +120,9 @@ class TestFileSystem {
           initFS(home);
 
           callback(this);
-        } catch (e, st) {
+        }
+        // ignore: avoid_catches_without_on_clauses
+        catch (e, st) {
           Settings().verbose(e.toString());
           st.toString();
           rethrow;
@@ -141,8 +143,8 @@ class TestFileSystem {
       initialised = true;
       copyPubCache(originalHome, HOME);
       buildTestFileSystem();
-      install_dshell();
-      install_cross_platform_test_scripts(originalHome);
+      installDshell();
+      installCrossPlatformTestScripts(originalHome);
     }
   }
 
@@ -225,7 +227,7 @@ class TestFileSystem {
     }
   }
 
-  void install_dshell() {
+  void installDshell() {
     // print('PATH: $PATH');
     // print(which(DartSdk.pubExeName).firstLine);
     '${DartSdk.pubExeName} global activate --source path $pwd'.run;
@@ -249,7 +251,7 @@ class TestFileSystem {
       }
     }
 
-    var backup = dependencyFile + '.bak';
+    var backup = '$dependencyFile.bak';
     if (exists(backup)) delete(backup);
     move(dependencyFile, backup);
 
@@ -288,7 +290,7 @@ class TestFileSystem {
 
     var verbose = Settings().isVerbose;
 
-    Settings().setVerbose(false);
+    Settings().setVerbose(enabled: false);
 
     for (var file in list) {
       var target = join(newHome, relative(file, from: originalHome));
@@ -298,13 +300,13 @@ class TestFileSystem {
       copy(file, target);
     }
 
-    Settings().setVerbose(verbose);
+    Settings().setVerbose(enabled: verbose);
   }
 
-  void install_cross_platform_test_scripts(String originalHome) {
+  void installCrossPlatformTestScripts(String originalHome) {
     var required = ['head', 'tail', 'ls', 'touch'];
 
-    var testbinPath = join(originalHome, '.dshell', _TEST_BIN);
+    var testbinPath = join(originalHome, '.dshell', _testBin);
 
     if (!exists(testbinPath)) {
       createDir(testbinPath, recursive: true);

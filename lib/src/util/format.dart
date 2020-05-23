@@ -31,7 +31,7 @@ class Format {
     widths ??= [20];
     var width = widths[0];
 
-    alignments ??= [TableAlignment.LEFT];
+    alignments ??= [TableAlignment.left];
     var alignment = alignments[0];
 
     delimiter ??= ' ';
@@ -48,13 +48,13 @@ class Format {
         }
       }
       switch (alignment) {
-        case TableAlignment.LEFT:
+        case TableAlignment.left:
           row += col.padRight(width);
           break;
-        case TableAlignment.RIGHT:
+        case TableAlignment.right:
           row += col.padLeft(width);
           break;
-        case TableAlignment.MIDDLE:
+        case TableAlignment.middle:
           var padding = width = colwidth;
           row += col.padLeft(padding);
           break;
@@ -80,4 +80,13 @@ class Format {
 
 /// Used by [Format.table] to control the alignment of each
 /// column in the table.
-enum TableAlignment { LEFT, RIGHT, MIDDLE }
+enum TableAlignment {
+  ///
+  left,
+
+  ///
+  right,
+
+  ///
+  middle
+}

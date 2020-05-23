@@ -26,7 +26,7 @@ void main(List<String> args) {
   var result = parser.parse(args);
 
   if (result.wasParsed('verbose')) {
-    Settings().setVerbose(true);
+    Settings().setVerbose(enabled: true);
   }
 
   if (result.command != null) {

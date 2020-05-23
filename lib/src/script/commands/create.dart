@@ -1,27 +1,29 @@
 import 'dart:io';
-
-import '../../../dshell.dart';
-import '../../functions/is.dart';
-import '../flags.dart';
-
 import 'package:path/path.dart' as p;
 
+import '../../../dshell.dart';
+
+import '../../functions/is.dart';
 import '../command_line_runner.dart';
+import '../flags.dart';
+
 import '../script.dart';
 import '../virtual_project.dart';
 import 'commands.dart';
 
+/// implementation of the 'create' command
 class CreateCommand extends Command {
-  static const String NAME = 'create';
+  static const String _commandName = 'create';
 
-  List<Flag> createFlags = [ForegroundFlag()];
+  final  _createFlags = [ForegroundFlag()];
 
   /// holds the set of flags passed to the compile command.
   Flags flagSet = Flags();
 
   Script _script;
 
-  CreateCommand() : super(NAME);
+  ///
+  CreateCommand() : super(_commandName);
 
   @override
   int run(List<Flag> selectedFlags, List<String> subarguments) {
@@ -34,7 +36,7 @@ class CreateCommand extends Command {
       final subargument = subarguments[i];
 
       if (Flags.isFlag(subargument)) {
-        var flag = flagSet.findFlag(subargument, createFlags);
+        var flag = flagSet.findFlag(subargument, _createFlags);
 
         if (flag != null) {
           if (flagSet.isSet(flag)) {
@@ -50,7 +52,7 @@ class CreateCommand extends Command {
       scriptIndex = i;
 
       _script =
-          validateArguments(selectedFlags, subarguments.sublist(scriptIndex));
+          _validateArguments(selectedFlags, subarguments.sublist(scriptIndex));
       break;
     }
 
@@ -72,7 +74,7 @@ class CreateCommand extends Command {
     return 0;
   }
 
-  Script validateArguments(List<Flag> selectedFlags, List<String> arguments) {
+  Script _validateArguments(List<Flag> selectedFlags, List<String> arguments) {
     if (arguments.length != 1) {
       throw InvalidArguments(
           'The create command takes only one argument. Found: ${arguments.join(',')}');
@@ -80,7 +82,7 @@ class CreateCommand extends Command {
     var scriptName = arguments[0];
     if (extension(scriptName) != '.dart') {
       throw InvalidArguments(
-          "The create command expects a script name ending in '.dart'. Found: ${scriptName}");
+          "The create command expects a script name ending in '.dart'. Found: $scriptName");
     }
 
     if (exists(scriptName)) {
@@ -112,14 +114,16 @@ class CreateCommand extends Command {
 
   @override
   List<Flag> flags() {
-    return createFlags;
+    return _createFlags;
   }
 }
 
+///
 class ForegroundFlag extends Flag {
-  static const NAME = 'foreground';
+  static const _flagName = 'foreground';
 
-  ForegroundFlag() : super(NAME);
+///
+  ForegroundFlag() : super(_flagName);
 
   @override
   String get abbreviation => 'fg';

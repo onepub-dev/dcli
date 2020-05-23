@@ -1,8 +1,8 @@
 import 'package:path/path.dart';
 
 import '../../dshell.dart';
-import 'function.dart';
 import '../settings.dart';
+import 'function.dart';
 
 import 'is.dart';
 
@@ -70,7 +70,7 @@ void moveDir(String from, String to,
         bool includeHidden = false,
         bool recursive = false,
         bool Function(String file) filter}) =>
-    MoveDir().moveDir(
+    _MoveDir().moveDir(
       from,
       to,
       overwrite: overwrite,
@@ -79,7 +79,7 @@ void moveDir(String from, String to,
       filter: filter,
     );
 
-class MoveDir extends DShellFunction {
+class _MoveDir extends DShellFunction {
   void moveDir(
     String from,
     String to, {
@@ -135,13 +135,17 @@ class MoveDir extends DShellFunction {
               'moveDir copying: ${truepath(from)} -> ${truepath(target)}');
         }
       });
-    } catch (e) {
+    }
+    // ignore: avoid_catches_without_on_clauses
+    catch (e) {
       throw MoveDirException(
           'An error occured copying directory ${truepath(from)} to ${truepath(to)}. Error: $e');
     }
   }
 }
 
+/// Thrown when the [moveDir] function encouters an error.
 class MoveDirException extends FunctionException {
+  /// Thrown when the [moveDir] function encouters an error.
   MoveDirException(String reason) : super(reason);
 }
