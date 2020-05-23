@@ -64,7 +64,7 @@ void pipeTo(Future<Process> lhs, Future<Process> rhs) {
         print('done');
         complete.complete();
       }, // stdoutCompleter.complete(true),
-      //ignore: avoid_types_on_closure_parameters
+          //ignore: avoid_types_on_closure_parameters
           onError: (Object e, StackTrace s) =>
               print('onError $e'), // stdoutCompleter.completeError(e),
           cancelOnError: true);
@@ -78,7 +78,7 @@ void pipeTo(Future<Process> lhs, Future<Process> rhs) {
         print('done err');
         if (!complete.isCompleted) complete.complete();
       }, // stdoutCompleter.complete(true),
-      //ignore: avoid_types_on_closure_parameters
+          //ignore: avoid_types_on_closure_parameters
           onError: (Object e, StackTrace s) =>
               print('onError $e'), // stdoutCompleter.completeError(e),
           cancelOnError: true);

@@ -15,7 +15,7 @@ import 'commands.dart';
 class CreateCommand extends Command {
   static const String _commandName = 'create';
 
-  final  _createFlags = [ForegroundFlag()];
+  final _createFlags = [ForegroundFlag()];
 
   /// holds the set of flags passed to the compile command.
   Flags flagSet = Flags();
@@ -122,7 +122,7 @@ class CreateCommand extends Command {
 class ForegroundFlag extends Flag {
   static const _flagName = 'foreground';
 
-///
+  ///
   ForegroundFlag() : super(_flagName);
 
   @override

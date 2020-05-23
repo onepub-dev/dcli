@@ -10,7 +10,8 @@ import 'commands.dart';
 /// and then cleaning all projects.
 class UpgradeCommand extends Command {
   static const String _commandName = 'upgrade';
-///
+
+  ///
   UpgradeCommand() : super(_commandName);
 
   /// The upgrade command takes no arguments.

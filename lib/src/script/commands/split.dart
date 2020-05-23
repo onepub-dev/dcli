@@ -11,7 +11,8 @@ import 'commands.dart';
 ///
 class SplitCommand extends Command {
   static const String _commandName = 'split';
-///
+
+  ///
   SplitCommand() : super(_commandName);
 
   @override

@@ -107,7 +107,7 @@ class _CopyDir extends DShellFunction {
               'copyDir copying: ${truepath(from)} -> ${truepath(target)}');
         }
       });
-    } 
+    }
     // ignore: avoid_catches_without_on_clauses
     catch (e) {
       throw CopyDirException(

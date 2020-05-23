@@ -14,7 +14,8 @@ import 'commands.dart';
 ///
 class VersionCommand extends Command {
   static const String _commandName = 'version';
-///
+
+  ///
   VersionCommand() : super(_commandName);
 
   @override

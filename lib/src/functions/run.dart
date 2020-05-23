@@ -70,8 +70,7 @@ int run(String commandLine,
 
   return runnable
       .run(
-          progress:
-              Progress(print, stderr: printerr),
+          progress: Progress(print, stderr: printerr),
           runInShell: runInShell,
           detached: false,
           terminal: false,

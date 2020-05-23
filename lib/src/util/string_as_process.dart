@@ -58,9 +58,7 @@ extension StringAsProcess on String {
   ///                as one of several file types.
   void get run {
     cmd.start(this,
-        terminal: true,
-        progress:
-            Progress(print, stderr: printerr));
+        terminal: true, progress: Progress(print, stderr: printerr));
   }
 
   /// shell
@@ -142,8 +140,7 @@ extension StringAsProcess on String {
       bool terminal = false,
       String workingDirectory}) {
     cmd.start(this,
-        progress: progress ??
-            Progress(print, stderr: printerr),
+        progress: progress ?? Progress(print, stderr: printerr),
         runInShell: runInShell,
         detached: detached,
         terminal: terminal,

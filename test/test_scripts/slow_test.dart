@@ -16,8 +16,7 @@ void main() {
   test('Slow', () {
     TestFileSystem().withinZone((fs) {
       print('$pwd');
-      'bash /home/bsutton/git/dshell/test/test_scripts/slow.sh'
-          .forEach(print);
+      'bash /home/bsutton/git/dshell/test/test_scripts/slow.sh'.forEach(print);
       expect(() => 'tail -n 5 badfilename.txt'.run,
           throwsA(TypeMatcher<DShellException>()));
     });

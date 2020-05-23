@@ -33,7 +33,7 @@ class _CreateDir extends DShellFunction {
       }
 
       Directory(path).createSync(recursive: recursive);
-    } 
+    }
     // ignore: avoid_catches_without_on_clauses
     catch (e) {
       throw CreateDirException(

@@ -124,9 +124,9 @@ class NamedLock {
         // I'm uncertain if this is a reality.
         lockHeld = false;
       }
-    }, 
-    //ignore: avoid_types_on_closure_parameters
-    onError: (Object e, StackTrace st) {
+    },
+        //ignore: avoid_types_on_closure_parameters
+        onError: (Object e, StackTrace st) {
       if (lockHeld) _releaseLock();
       var stackTrace = StackTraceImpl.fromStackTrace(st);
 
@@ -348,6 +348,7 @@ void _log(String message) {
   // var id = Service.getIsolateID(Isolate.current);
   //print('$id: $message');
 }
+
 ///
 class LockException extends DShellException {
   ///

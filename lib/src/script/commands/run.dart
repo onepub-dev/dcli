@@ -16,7 +16,7 @@ import 'commands.dart';
 class RunCommand extends Command {
   static const String _commandName = 'run';
 
-///
+  ///
   RunCommand() : super(_commandName);
 
   ///

@@ -399,7 +399,9 @@ class VirtualProject {
 
     print('');
     _colprint('Dependencies', '');
-    pubSpec().dependencies.forEach((d) => _colprint(d.name, '${d.rehydrate()}'));
+    pubSpec()
+        .dependencies
+        .forEach((d) => _colprint(d.name, '${d.rehydrate()}'));
   }
 
   String _makeSafe(String line) {

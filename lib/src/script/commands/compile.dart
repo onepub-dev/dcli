@@ -174,7 +174,8 @@ class NoCleanFlag extends Flag {
 ///
 class InstallFlag extends Flag {
   static const _flagName = 'install';
-///
+
+  ///
   InstallFlag() : super(_flagName);
 
   @override
@@ -189,7 +190,8 @@ class InstallFlag extends Flag {
 ///
 class OverWriteFlag extends Flag {
   static const _flagName = 'overwrite';
-///
+
+  ///
   OverWriteFlag() : super(_flagName);
 
   @override

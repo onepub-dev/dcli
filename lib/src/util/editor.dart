@@ -27,7 +27,7 @@ void showEditor(String path) {
   '$editor $path'.start(terminal: true);
 }
 
-/// True if the console is a dumb termainl 
+/// True if the console is a dumb termainl
 bool isTerminalDumb() {
   {
     var terminal = env('TERM');

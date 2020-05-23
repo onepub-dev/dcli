@@ -349,6 +349,7 @@ class CaseSensitiveSort implements ColumnComparator {
     return lhs.compareTo(rhs);
   }
 }
+
 ///
 class NumericSort implements ColumnComparator {
   ///
@@ -370,6 +371,7 @@ class NumericSort implements ColumnComparator {
     return numLhs.compareTo(numRhs);
   }
 }
+
 ///
 class MonthSort implements ColumnComparator {
   ///
@@ -381,7 +383,7 @@ class MonthSort implements ColumnComparator {
     return mLhs.compareTo(mRhs);
   }
 
-///
+  ///
   static const Map<String, int> months = {
     'jan': 1,
     'feb': 2,
@@ -411,6 +413,7 @@ class MonthSort implements ColumnComparator {
     return months[monthName];
   }
 }
+
 ///
 // ignore: one_member_abstracts
 abstract class ColumnComparator {

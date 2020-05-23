@@ -37,7 +37,7 @@ class _Copy extends DShellFunction {
 
     try {
       File(from).copySync(to);
-    } 
+    }
     // ignore: avoid_catches_without_on_clauses
     catch (e) {
       throw CopyException(
