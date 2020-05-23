@@ -1,4 +1,9 @@
 ### 1.8.13
+exposed SortDirection required for FileSort.
+applied effective dart.
+Had max/min back to front.
+
+### 1.8.13
 applied effective dart.
 Had max/min back to front for the menu class options.
 
