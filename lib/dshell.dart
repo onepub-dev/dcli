@@ -55,7 +55,7 @@ export 'src/util/dev_null.dart' show devNull;
 export 'src/util/dshell_exception.dart';
 export 'src/util/dshell_paths.dart' show DShellPaths;
 export 'src/util/editor.dart' show showEditor;
-export 'src/util/file_sort.dart' show FileSort, Column;
+export 'src/util/file_sort.dart' show FileSort, Column, SortDirection;
 export 'src/util/file_sync.dart';
 export 'src/util/format.dart' show Format;
 export 'src/util/process_helper.dart' show ProcessHelper;
