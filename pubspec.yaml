@@ -17,8 +17,8 @@ dependencies:
   logger: ^0.9.1
   meta: ^1.1.8
   mockito: ^4.0.0
-  money2: ^1.0.5
-  path: ^1.6.4
+  money2: ^1.4.0
+  path: ^1.7.0
   pubspec: ^0.1.3
   pub_semver: ^1.4.2
   recase: ^3.0.0
