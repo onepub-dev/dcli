@@ -1,3 +1,7 @@
+### 1.8.13
+applied effective dart.
+Had max/min back to front for the menu class options.
+
 ### 1.8.13-dev.1
 [ENH] Work on a docker based cli for dshell.
 [FIX] unknown shell no returns false for priviliged user to avoid npe.
