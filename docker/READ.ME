@@ -1,0 +1,63 @@
+Create a dshell script:
+
+```
+dshell create hello.dart
+Creating project.
+DShell clean started in the background.
+
+To run your script:
+  ./hello.dart
+Hello World
+```
+
+Compile your script:
+```
+dshell compile hello.dart
+```
+
+Run the compiled script:
+```
+./test
+```
+
+Once you have finished developing your script and you need it to go faster...
+
+Compile and install the script onto your path:
+```
+dshell compile -i hello.dart
+```
+
+Now the script is installed you can run it:
+```
+hello
+```
+
+The `dshell create hello.dart` command creates a basic hello world script.
+
+If you `cat` the contents you should see:
+
+```
+#! /usr/bin/env dshell
+import 'package:dshell/dshell.dart';
+
+void main() {
+  print("Hello World");
+}
+```
+
+If you run you script immediately after creating it, the background 'clean' may still be running.
+The 'clean' process fetches any needed dependancies. 
+
+In which case you may see the message:
+
+```
+./hello.dart
+Waiting for clean to complete...
+Hello World
+```
+
+The clean process is a once off process and only needs to be run again if you change your dependencies.
+
+See dshell on pub.dev for more examples:
+https://pub.dev/packages/dshell
+

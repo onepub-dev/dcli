@@ -5,6 +5,7 @@ import 'package:dshell/dshell.dart';
 /// Starts a docker shell from which you can do dshell development
 
 void main(List<String> args) {
+  Settings().setVerbose(enabled: false);
   var parser = ArgParser();
   parser.addFlag('runOnly', abbr: 'r', defaultsTo: false);
 
@@ -16,15 +17,12 @@ void main(List<String> args) {
     'sudo docker build -f ./dshell_cli.df -t dshell:dshell_cli .'.run;
   }
 
-  // 'sudo docker run dshell:docker_dev_cli -i -t bash -c'.run;
-  // -v ~:/home maps the users entire home directory into docker.
-  // 'docker run --network host  -v $HOME:/mnt/ -it  dshell:docker_dev_cli /bin/bash'
-  //     .run;
-
-  // var cmd = 'docker run --network host  --mount src="$HOME", dst=/me, type=bind -it  dshell:docker_dev_cli /bin/bash';
+  /// The volume will only be created if it doesn't already exist.
+  'docker volume create dshell_scripts'
+      .forEach(devNull, stderr: (line) => print(red(line)));
   var cmd =
-      'docker run --volume $HOME:/home --network host -it dshell:dshell_cli /bin/bash';
+      'docker run -v dshell_scripts:/home/scripts --network host -it dshell:dshell_cli /bin/bash';
 
-  print(cmd);
+  // print(cmd);
   cmd.run;
 }
