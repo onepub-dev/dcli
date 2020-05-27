@@ -34,6 +34,11 @@ class InstallCommand extends Command {
 
     var shell = ShellDetection().identifyShell();
 
+    if (!shell.isPrivilegedUser) {
+      print(red(shell.privilegesRequiredMessage('dshell_install')));
+      exit(1);
+    }
+
     // check for any flags
     int i;
     for (i = 0; i < subarguments.length; i++) {

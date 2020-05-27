@@ -149,6 +149,10 @@ abstract class Shell {
   /// privileges.
   /// e.g. root under posix, Administrator under windows.
   bool get isPrivilegedUser;
+
+  /// Returns a message informing the user that they need to run
+  /// as a priviledged user to run an app.
+  String privilegesRequiredMessage(String appname);
 }
 
 /// Provides a number of helper functions
@@ -255,6 +259,11 @@ class BashShell implements Shell {
     Settings().verbose('loggedInUser: $user');
     return user;
   }
+
+  @override
+  String privilegesRequiredMessage(String app) {
+    return 'Please run with: sudo $app';
+  }
 }
 
 /// Provides a number of helper functions
@@ -323,6 +332,11 @@ class ZshShell implements Shell {
     Settings().verbose('loggedInUser: $user');
     return user;
   }
+
+  @override
+  String privilegesRequiredMessage(String app) {
+    return 'Please run with: sudo $app';
+  }
 }
 
 /// Windows Power Shell
@@ -378,6 +392,11 @@ class PowerShell implements Shell {
 
   @override
   String get loggedInUser => env('USERNAME');
+
+  @override
+  String privilegesRequiredMessage(String app) {
+    return 'You need to be a privileged user to run $app';
+  }
 }
 
 /// Used by dshell to interacte with the shell
@@ -466,4 +485,9 @@ class UnknownShell implements Shell {
 
   @override
   String get loggedInUser => null;
+
+  @override
+  String privilegesRequiredMessage(String app) {
+    return 'You need to be a privileged user to run $app';
+  }
 }
