@@ -1,5 +1,7 @@
 import 'dart:io';
 
+import '../../shell/shell_detection.dart';
+
 import '../../../dshell.dart';
 import '../../pubspec/global_dependencies.dart';
 

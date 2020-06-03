@@ -1,5 +1,4 @@
 export 'package:args/args.dart';
-
 export 'package:path/path.dart'
     hide
         PathMap,
@@ -45,11 +44,13 @@ export 'src/functions/sleep.dart' show sleep;
 export 'src/functions/tail.dart' show tail;
 export 'src/functions/touch.dart' show touch, TouchException;
 export 'src/functions/which.dart' show which;
-
 export 'src/script/dart_sdk.dart' show DartSdk;
-
 export 'src/settings.dart' show Settings;
-
+export 'src/shell/bash.dart';
+export 'src/shell/shell.dart';
+export 'src/shell/shell_detection.dart';
+export 'src/shell/unknown_shell.dart';
+export 'src/shell/zshell.dart';
 export 'src/util/ansi_color.dart' hide AnsiColor;
 export 'src/util/dev_null.dart' show devNull;
 export 'src/util/dshell_exception.dart';
@@ -62,8 +63,6 @@ export 'src/util/process_helper.dart' show ProcessHelper;
 export 'src/util/progress.dart' show Progress;
 export 'src/util/remote.dart' show Remote;
 export 'src/util/runnable_process.dart' show printerr, RunException;
-export 'src/util/shell.dart'
-    show ShellDetection, Shell, BashShell, ZshShell, UnknownShell;
 export 'src/util/string_as_process.dart';
 export 'src/util/truepath.dart' show truepath, rootPath;
 export 'src/util/wait_for_ex.dart' show waitForEx;

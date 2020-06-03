@@ -9,7 +9,7 @@ import '../../util/ansi_color.dart';
 import '../../util/dart_install_apt.dart';
 import '../../util/dshell_paths.dart';
 import '../../util/pub_cache.dart';
-import '../../util/shell.dart';
+import '../../shell/shell.dart';
 
 import '../command_line_runner.dart';
 

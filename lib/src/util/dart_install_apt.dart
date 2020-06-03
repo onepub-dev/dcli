@@ -1,5 +1,6 @@
 import 'package:path/path.dart';
 import '../../dshell.dart';
+import '../shell/shell_detection.dart';
 import 'pub_cache.dart';
 
 ///
