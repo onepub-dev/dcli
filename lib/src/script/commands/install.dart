@@ -237,7 +237,7 @@ class _NoCleanFlag extends Flag {
   String description() {
     return '''Stops the install from running 'dshell cleanall' as part of the install.
       This option is for testing purposes. 
-      When doing a dshell upgrade you should always all install to do a clean all.''';
+      When doing a dshell upgrade you should always allow install to do a clean all.''';
   }
 }
 
