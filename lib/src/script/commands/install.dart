@@ -196,7 +196,7 @@ class InstallCommand extends Command {
       """Running 'dshell install' completes the installation of dshell.""";
 
   @override
-  String usage() => 'Install';
+  String usage() => 'install';
 
   @override
   List<String> completion(String word) {
