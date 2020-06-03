@@ -133,7 +133,7 @@ class DoctorCommand extends Command {
 
   void _colprint(List<String> cols) {
     //cols[0] = green(cols[0]);
-    print(Format.row(cols, widths: [17, 40], delimiter: ' '));
+    print(Format.row(cols, widths: [17, 55], delimiter: ' '));
   }
 
   @override
