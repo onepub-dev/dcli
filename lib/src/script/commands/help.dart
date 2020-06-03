@@ -20,9 +20,10 @@ class HelpCommand extends Command {
         throw InvalidArguments(
             'help expected a command name. Found $subarguments');
       }
-      command.usage();
+      print(command.usage());
+    } else {
+      _printUsage();
     }
-    _printUsage();
     return 0;
   }
 
