@@ -44,6 +44,7 @@ export 'src/functions/sleep.dart' show sleep;
 export 'src/functions/tail.dart' show tail;
 export 'src/functions/touch.dart' show touch, TouchException;
 export 'src/functions/which.dart' show which;
+export 'src/pubspec/pubspec_file.dart';
 export 'src/script/dart_sdk.dart' show DartSdk;
 export 'src/settings.dart' show Settings;
 export 'src/shell/bash.dart';
