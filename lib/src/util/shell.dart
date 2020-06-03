@@ -32,7 +32,7 @@ class ShellDetection {
     } else {
       shell = UnknownShell();
     }
-    Settings().verbose('Identified shell: $shellName');
+    Settings().verbose(blue('Identified shell: $shellName'));
     return shell;
   }
 
