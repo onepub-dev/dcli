@@ -133,17 +133,20 @@ extension StringAsProcess on String {
   ///      [lastLine] - returns just the last line written to stdout or stderr.
   ///      [parser] - returns a parser with the captured output ready to be interpreted
   ///                as one of several file types.
-  void start(
-      {Progress progress,
-      bool runInShell = false,
-      bool detached = false,
-      bool terminal = false,
-      String workingDirectory}) {
+  void start({
+    Progress progress,
+    bool runInShell = false,
+    bool detached = false,
+    bool terminal = false,
+    bool nothrow = false,
+    String workingDirectory,
+  }) {
     cmd.start(this,
         progress: progress ?? Progress(print, stderr: printerr),
         runInShell: runInShell,
         detached: detached,
         terminal: terminal,
+        nothrow: nothrow,
         workingDirectory: workingDirectory);
   }
 
