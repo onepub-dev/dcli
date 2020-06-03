@@ -12,12 +12,12 @@ class PubSpecFile implements PubSpec // with DependenciesMixin
 {
   PubSpec __pubspec;
 
-  /// creates a pubspec based on the [script]s path.
+  /// Reads a pubspec.yaml from the path that  [script] is located in.
   PubSpecFile.fromScript(Script script) {
     _fromFile(script.pubSpecPath);
   }
 
-  /// creates a pubspec based on the [path]
+  /// Reads a pubspec.yaml located at [path]
   PubSpecFile.fromFile(String path) {
     _fromFile(path);
   }
@@ -26,25 +26,34 @@ class PubSpecFile implements PubSpec // with DependenciesMixin
     __pubspec = PubSpecImpl.loadFromFile(path);
   }
 
+  /// Saves this [PubSpecFile] to a pubspec.yaml at the given
+  /// [path].
+  /// The [path] must be a directory not a file name.
   @override
-  void writeToFile(String path) {
-    __pubspec.writeToFile(path);
+  void saveToFile(String path) {
+    __pubspec.saveToFile(path);
   }
 
+  /// Sets the list of dependencies for this pubspec.
   @override
   set dependencies(List<Dependency> newDependencies) {
     __pubspec.dependencies = newDependencies;
   }
 
+  /// Returns the set of dependencies contained in this pubspec.
   @override
   List<Dependency> get dependencies => __pubspec.dependencies;
 
+  /// Returns the name field from the pubspec.yaml
   @override
   String get name => __pubspec.name;
 
+  /// Returns the version field from the pubspec.yaml
   @override
   Version get version => __pubspec.version;
 
+  /// Sets the version field for the pubspec.
+  /// Call [saveToFile] to update the contents of the pubspec.yaml.
   @override
   set version(Version version) => __pubspec.version = version;
 }

@@ -52,7 +52,7 @@ class PubSpecManager {
 
     pubSpec.dependencies = resolved;
 
-    pubSpec.writeToFile(_project.projectPubspecPath);
+    pubSpec.saveToFile(_project.projectPubspecPath);
   }
 
   //   bool isCleanRequired() {

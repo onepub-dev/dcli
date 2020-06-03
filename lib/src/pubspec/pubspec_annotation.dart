@@ -141,8 +141,8 @@ class PubSpecAnnotation implements PubSpec // with DependenciesMixin
   set version(Version version) => _pubspec.version = version;
 
   @override
-  void writeToFile(String path) {
-    _pubspec.writeToFile(path);
+  void saveToFile(String path) {
+    _pubspec.saveToFile(path);
   }
 
   static bool _isStart(String line) {

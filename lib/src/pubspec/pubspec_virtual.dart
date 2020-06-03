@@ -35,7 +35,7 @@ class PubSpecVirtual implements PubSpec //with DependenciesMixin {
   set version(Version version) => _pubspec.version;
 
   @override
-  void writeToFile(String path) {
-    _pubspec.writeToFile(path);
+  void saveToFile(String path) {
+    _pubspec.saveToFile(path);
   }
 }

@@ -43,7 +43,7 @@ version: $version
   List<Dependency> get dependencies => _pubspec.dependencies;
 
   @override
-  void writeToFile(String path) {
-    _pubspec.writeToFile(path);
+  void saveToFile(String path) {
+    _pubspec.saveToFile(path);
   }
 }

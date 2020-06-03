@@ -1,8 +1,8 @@
 #! /usr/bin/env dshell
 import 'dart:io';
 
-import 'package:dshell/dshell.dart';
-import 'package:dshell/src/pubspec/pubspec_file.dart';
+import '../lib/dshell.dart';
+import '../lib/src/pubspec/pubspec_file.dart';
 import 'package:pub_semver/pub_semver.dart';
 
 void main(List<String> args) {
@@ -257,6 +257,6 @@ Version incrementVersion(
   pubspec.version = version;
   print('pubspec version is: ${pubspec.version}');
   print('pubspec path is: $pubspecPath');
-  pubspec.writeToFile(pubspecPath);
+  pubspec.saveToFile(pubspecPath);
   return version;
 }

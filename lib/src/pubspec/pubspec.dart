@@ -23,7 +23,7 @@ abstract class PubSpec {
 
   /// Saves the pubspec.yaml into the
   /// given directory
-  void writeToFile(String directory);
+  void saveToFile(String directory);
 
   /// sets the list of dependencies in this pubspec.yaml
   set dependencies(List<Dependency> newDependencies);
@@ -103,7 +103,7 @@ class PubSpecImpl implements PubSpec {
   /// Saves the pubspec.yaml into the
   /// given directory
   @override
-  void writeToFile(String directory) {
+  void saveToFile(String directory) {
     waitForEx<dynamic>(pubspec.save(Directory(dirname(directory))));
   }
 
