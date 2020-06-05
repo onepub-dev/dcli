@@ -1,17 +1,13 @@
 import 'dart:io';
 
-import '../../shell/shell_detection.dart';
-
 import '../../../dshell.dart';
 import '../../pubspec/global_dependencies.dart';
-
+import '../../shell/shell_detection.dart';
 import '../../util/completion.dart';
 import '../../util/format.dart';
 import '../../util/pub_cache.dart';
 import '../../util/truepath.dart';
-
 import '../command_line_runner.dart';
-
 import '../dart_sdk.dart';
 import '../flags.dart';
 import '../script.dart';

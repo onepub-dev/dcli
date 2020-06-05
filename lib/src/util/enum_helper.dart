@@ -1,4 +1,3 @@
-import 'package:recase/recase.dart';
 
 ///
 /// Provides a collection of methods that help when working with
@@ -21,22 +20,21 @@ class EnumHelper {
   /// By default we recase the value to Title Case.
   /// You can pass an alternate method to control the format.
   ///
-  static String getName<T>(T enumValue,
-      {String Function(String value) recase = reCase}) {
+  static String getName<T>(T enumValue) {
     var name = enumValue.toString();
     var period = name.indexOf('.');
 
-    return recase(name.substring(period + 1));
+    return _titleCase(name.substring(period + 1));
   }
 
   /// formats an enum value use titleCase.
-  static String reCase(String value) {
-    return ReCase(value).titleCase;
+  static String _titleCase(String word) {
+    return '${word.substring(0, 1).toUpperCase()}${word.substring(1).toLowerCase()}';
   }
 
   /// returns a enum based on its name.
   static T getEnum<T>(String enumName, List<T> values) {
-    var cleanedName = reCase(enumName);
+    var cleanedName = _titleCase(enumName);
     for (var i = 0; i < values.length; i++) {
       if (cleanedName == getName(values[i])) {
         return values[i];

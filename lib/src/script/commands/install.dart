@@ -5,14 +5,12 @@ import '../../functions/env.dart';
 import '../../functions/which.dart';
 import '../../pubspec/global_dependencies.dart';
 import '../../settings.dart';
+import '../../shell/shell.dart';
 import '../../util/ansi_color.dart';
 import '../../util/dart_install_apt.dart';
 import '../../util/dshell_paths.dart';
 import '../../util/pub_cache.dart';
-import '../../shell/shell.dart';
-
 import '../command_line_runner.dart';
-
 import '../flags.dart';
 import 'commands.dart';
 
