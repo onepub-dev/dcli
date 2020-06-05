@@ -105,7 +105,7 @@ $overrides
         createDir(dirname(scriptPath));
       }
       PubSpec file = PubSpecImpl.fromString(basic);
-      file.writeToFile(pubSpecScriptPath);
+      file.saveToFile(pubSpecScriptPath);
 
       var dependencies = <Dependency>[];
       dependencies.add(Dependency.fromHosted('collection', '^1.14.12'));
@@ -123,7 +123,7 @@ $overrides
         delete(pubSpecScriptPath);
       }
       PubSpec file = PubSpecImpl.fromString(overrides);
-      file.writeToFile(scriptPath);
+      file.saveToFile(scriptPath);
 
       var dependencies = <Dependency>[];
       dependencies.add(Dependency.fromHosted('dshell', '^2.0.0'));
@@ -144,7 +144,7 @@ $overrides
         delete(pubSpecScriptPath);
       }
       PubSpec file = PubSpecImpl.fromString(overrides);
-      file.writeToFile(scriptPath);
+      file.saveToFile(scriptPath);
 
       var dependencies = <Dependency>[];
       dependencies.add(Dependency.fromHosted('dshell', '^2.0.0'));
