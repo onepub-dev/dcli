@@ -1,13 +1,11 @@
-import 'package:recase/recase.dart';
 import '../../../dshell.dart';
 import '../../functions/which.dart';
 import '../../settings.dart';
 import '../../util/ansi_color.dart';
 import '../../util/dshell_paths.dart';
+import '../../util/recase.dart';
 import '../../util/runnable_process.dart';
-
 import '../command_line_runner.dart';
-
 import '../flags.dart';
 import 'commands.dart';
 
@@ -34,7 +32,7 @@ class VersionCommand extends Command {
     }
 
     print(green(
-        '${ReCase(appname).sentenceCase} Version: ${Settings().version}, Located at: $location'));
+        '${ReCase.titleCase(appname)} Version: ${Settings().version}, Located at: $location'));
 
     return 0;
   }

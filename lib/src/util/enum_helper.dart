@@ -1,3 +1,4 @@
+import 'recase.dart';
 
 ///
 /// Provides a collection of methods that help when working with
@@ -24,17 +25,12 @@ class EnumHelper {
     var name = enumValue.toString();
     var period = name.indexOf('.');
 
-    return _titleCase(name.substring(period + 1));
-  }
-
-  /// formats an enum value use titleCase.
-  static String _titleCase(String word) {
-    return '${word.substring(0, 1).toUpperCase()}${word.substring(1).toLowerCase()}';
+    return ReCase.titleCase(name.substring(period + 1));
   }
 
   /// returns a enum based on its name.
   static T getEnum<T>(String enumName, List<T> values) {
-    var cleanedName = _titleCase(enumName);
+    var cleanedName = ReCase.titleCase(enumName);
     for (var i = 0; i < values.length; i++) {
       if (cleanedName == getName(values[i])) {
         return values[i];
