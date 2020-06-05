@@ -1,3 +1,8 @@
+# 1.8.14-dev.1
+Work on improving shell detection.
+Added nothrow to string_as_process start method.
+Exposed PubSpec_File class as part of the public api.
+
 ### 1.8.13
 fixed indentation problem. released 1.8.13
 exposed SortDirection required for FileSort.
