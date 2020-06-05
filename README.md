@@ -57,12 +57,6 @@ DShell is intended to provide a replacement for bash and similar shell scripting
 Bash has been the 'go to tool' for scripting file system operations for decades and it provides a wealth 
 of really useful features.
 
-Bash exemplifies the unix philosophy of Lego. The building of small, simple, re-usable blocks (applications) that can be coupled together to solve complex problems.
-
-Bash's power lies in its ability to chain multiple commands together to provide a quick (and often dirty) solution.
-
-Bash has an elegant set of commands for common file operations such as mv, cp, rm etc.
-
 ## So why DShell?
 
 Bash is probably the most commonly used scripting tool for system maintenance.
@@ -75,7 +69,7 @@ So why is DShell different?
 
 DShell is based on the relatively new programming language; Dart.
 
-Dart is currently the fastest growing language on github and is the basis on which Flutter is built. If have not heard of flutter then you should have a look, but I digress.
+Dart is currently the fastest growing language on github and is the basis on which Flutter is built. If you have not heard of flutter then you should have a look, but I digress.
 
 If you have used multiple languages you well know how the learning curve goes. Its usually doesn't take long to the get to the point where you love or hate a language. 
 As you begin to discover the little nooks and crannies of a language you either despise the designer's solutions or fall in love with it.
