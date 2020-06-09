@@ -150,11 +150,18 @@ class StackTraceImpl implements core.StackTrace {
       // the actual contents of the line (sort of)
       var details = match.group(1);
 
-      sourcePath = sourcePath.replaceAll('<anonymous closure>', '()');
-      sourcePath = sourcePath.replaceAll('package:', '');
+      Stackframe frame;
+      if (sourcePath != null) {
+        sourcePath = sourcePath.replaceAll('<anonymous closure>', '()');
+        sourcePath = sourcePath.replaceAll('package:', '');
 
-      var frame = Stackframe(
-          File(sourcePath), int.parse(lineNo), int.parse(column), details);
+        frame = Stackframe(
+            File(sourcePath), int.parse(lineNo), int.parse(column), details);
+      } else {
+        frame = Stackframe(
+            File('<unknown>'), int.parse(lineNo), int.parse(column), details);
+      }
+
       stackFrames.add(frame);
     }
     return stackFrames;
