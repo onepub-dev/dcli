@@ -1,6 +1,9 @@
+import 'package:meta/meta.dart';
+
 /// an abstract class which allows each shell (bash, zsh)
 /// to provide specific implementation of features
 /// required by DShell.
+@immutable
 abstract class Shell {
   ///
   bool get isCompletionInstalled;
@@ -22,6 +25,12 @@ abstract class Shell {
   /// The name of the shell
   /// e.g. bash
   String get name;
+
+
+  /// Returns true if the shells name matches
+  /// the passed [name].
+  /// The comparison is case insensitive.
+  bool matchByName(String name);
 
   /// Added a path to the start script
   /// returns true if adding the path was successful

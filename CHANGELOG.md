@@ -1,6 +1,9 @@
 # 1.8.14-dev.3
-# 1.8.14-dev.2
 Added null check around sourcePath.
+
+# 1.8.14-dev.2
+Removed ReCase as a dependency as its used in lots of other project causing dependency conflicts.
+
 # 1.8.14-dev.1
 Work on improving shell detection.
 Added nothrow to string_as_process start method.

@@ -166,6 +166,7 @@ class ProcessHelper {
   List<_PIDDetails> _getWindowsProcesses() {
     var pids = <_PIDDetails>[];
 
+    // example:
     // "wininit.exe","584","Services","0","5,248 K"
     var tasks = 'tasklist /fo csv /nh'.toList();
 

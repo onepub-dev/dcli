@@ -87,18 +87,17 @@ class DoctorCommand extends Command {
       _colprint(['', privatePath(path)]);
     }
     print('');
-    _colprint(['\$SHELL', '${env('SHELL')}']);
-    if (!Settings().isWindows) {
-      _colprint(['True SHELL', '${ShellDetection().getShellName()}']);
+    _colprint([r'$SHELL', '${env('SHELL')}']);
 
-      var shell = ShellDetection().identifyShell();
-      var startScriptPath = shell.startScriptPath;
+    var shell = ShellDetection().identifyShell();
+    _colprint(['Detected SHELL', '${shell.name}']);
 
-      if (startScriptPath == null) {
-        _colprint(['Shell Start Script', 'Not Found']);
-      } else {
-        _colprint(['Shell Start Script', '${privatePath(startScriptPath)}']);
-      }
+    var startScriptPath = shell.startScriptPath;
+
+    if (startScriptPath == null) {
+      _colprint(['Shell Start Script', 'Not Found']);
+    } else {
+      _colprint(['Shell Start Script', '${privatePath(startScriptPath)}']);
     }
 
     print('');

@@ -161,7 +161,6 @@ class StackTraceImpl implements core.StackTrace {
         frame = Stackframe(
             File('<unknown>'), int.parse(lineNo), int.parse(column), details);
       }
-
       stackFrames.add(frame);
     }
     return stackFrames;

@@ -2,9 +2,9 @@ import '../../dshell.dart';
 import 'shell_mixin.dart';
 
 /// Windows Power Shell
-class PowerShell with ShellMixin {
+class CmdShell with ShellMixin {
   /// Name of the shell
-  static const String shellName = 'powershell';
+  static const String shellName = 'cmd';
 
   @override
   bool addToPath(String path) {
@@ -32,7 +32,7 @@ class PowerShell with ShellMixin {
   String get name => shellName;
 
   @override
-  bool operator ==(covariant PowerShell other) {
+  bool operator ==(covariant CmdShell other) {
     return name == other.name;
   }
 

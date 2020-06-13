@@ -1,9 +1,21 @@
 import '../../dshell.dart';
+import 'shell_mixin.dart';
 
 /// Used by dshell to interacte with the shell
 /// environment when we are unable to detect
 /// what shell is active.
-class UnknownShell implements Shell {
+/// This may simply be the parent process of the
+/// dart app so not a shell at all.
+class UnknownShell with ShellMixin {
+  /// Name of the shell
+  static const String shellName = 'Unknown';
+
+  /// the name of the process
+  final String processName;
+
+  ///
+  UnknownShell(this.processName);
+
   @override
   bool addToPath(String path) {
     if (Settings().isMacOS) {
@@ -73,7 +85,15 @@ class UnknownShell implements Shell {
   bool get isCompletionSupported => false;
 
   @override
-  String get name => 'Unknown';
+  String get name => shellName;
+
+  @override
+  bool operator ==(covariant UnknownShell other) {
+    return name == other.name;
+  }
+
+  @override
+  int get hashCode => name.hashCode;
 
   @override
   String get startScriptName => null;

@@ -47,7 +47,7 @@ export 'src/functions/which.dart' show which;
 export 'src/pubspec/pubspec_file.dart';
 export 'src/script/dart_sdk.dart' show DartSdk;
 export 'src/settings.dart' show Settings;
-export 'src/shell/bash.dart';
+export 'src/shell/bash_shell.dart';
 export 'src/shell/shell.dart';
 export 'src/shell/shell_detection.dart';
 export 'src/shell/unknown_shell.dart';
