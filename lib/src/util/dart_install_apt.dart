@@ -28,6 +28,7 @@ class AptDartInstaller implements DartInstaller {
       var bashrc = join(HOME, '.bashrc');
       bashrc.append('''export PATH="\$PATH":"/usr/lib/dart/bin"''');
       bashrc.append('''export PATH="\$PATH":"${PubCache().binPath}"''');
+      bashrc.append('''export PATH="\$PATH":"${Settings().dshellBinPath}"''');
 
       var shell = ShellDetection().identifyShell();
       Settings().verbose('Found shell: shell');
