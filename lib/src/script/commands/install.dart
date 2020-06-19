@@ -32,10 +32,10 @@ class InstallCommand extends Command {
 
     var shell = ShellDetection().identifyShell();
 
-    if (!shell.isPrivilegedUser) {
-      print(red(shell.privilegesRequiredMessage('dshell_install')));
-      exit(1);
-    }
+    // if (!shell.isPrivilegedUser) {
+    //   print(red(shell.privilegesRequiredMessage('dshell_install')));
+    //   exit(1);
+    // }
 
     // check for any flags
     int i;
@@ -132,11 +132,8 @@ class InstallCommand extends Command {
 
     // If we just installed dart then we don't need
     // to check the dshell paths.
-    if (dartWasInstalled) {
-      print('');
-      print(red('You need to restart your shell so the new paths can update'));
-      print('');
-    } else {
+    if (!dartWasInstalled) {
+ 
       var dshellLocation =
           which(DShellPaths().dshellName, first: true).firstLine;
       // check if dshell is on the path
@@ -172,6 +169,13 @@ class InstallCommand extends Command {
     // copy(Platform.executable, '/usr/bin/dshell');
 
     touch(Settings().installCompletedIndicator, create: true);
+
+    if (dartWasInstalled)
+    {          print('');
+      print(red('You need to restart your shell so the new paths can update'));
+      print('');
+    }
+
 
     print(red('*' * 80));
     print('');
@@ -211,15 +215,15 @@ class InstallCommand extends Command {
   }
 
   void _fixPermissions(Shell shell) {
-    if (shell.isPrivilegedUser) {
-      if (!Platform.isWindows) {
-        var user = shell.loggedInUser;
-        if (user != 'root') {
-          'chmod -R $user:$user ${Settings().dshellPath}'.run;
-          'chmod -R $user:$user ${PubCache().path}'.run;
-        }
-      }
-    }
+    // if (shell.isPrivilegedUser) {
+    //   if (!Platform.isWindows) {
+    //     var user = shell.loggedInUser;
+    //     if (user != 'root') {
+    //       'chmod -R $user:$user ${Settings().dshellPath}'.run;
+    //       'chmod -R $user:$user ${PubCache().path}'.run;
+    //     }
+    //   }
+    // }
   }
 }
 
