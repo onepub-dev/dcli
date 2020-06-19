@@ -133,7 +133,6 @@ class InstallCommand extends Command {
     // If we just installed dart then we don't need
     // to check the dshell paths.
     if (!dartWasInstalled) {
- 
       var dshellLocation =
           which(DShellPaths().dshellName, first: true).firstLine;
       // check if dshell is on the path
@@ -170,12 +169,11 @@ class InstallCommand extends Command {
 
     touch(Settings().installCompletedIndicator, create: true);
 
-    if (dartWasInstalled)
-    {          print('');
+    if (dartWasInstalled) {
+      print('');
       print(red('You need to restart your shell so the new paths can update'));
       print('');
     }
-
 
     print(red('*' * 80));
     print('');

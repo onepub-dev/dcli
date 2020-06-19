@@ -26,7 +26,6 @@ abstract class Shell {
   /// e.g. bash
   String get name;
 
-
   /// Returns true if the shells name matches
   /// the passed [name].
   /// The comparison is case insensitive.

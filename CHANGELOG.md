@@ -1,3 +1,27 @@
+### 1.8.14
+moved mockit to dev dependencies.
+For the moment I've wound back the privileged requirements for install as it makes unit tests fail.
+fixed unit tests to deal with unordered file lists.
+Added logic to handling moving files between partitions. We fallback to doing a copy then delete.
+Added .dshell/bin to path during install.
+work on improving shell detection
+Now using our own version of recase.
+now using official pub_release.
+changed writeToFile to saveToFile as felt it was more evocative.
+removed dependancy on recase as was causing conflicts and we only use one line from it.
+now exporting pubspec_file as its a useful class.
+Added nothrow option to string start method.
+restructured shell related classes as part of work to improve shell detection.
+incorrect case in help.
+seplling.
+Fixed a bug where running 'dshell help <command>' wouldn't print the command help but did print the entire usage.
+made the path columns wider.
+colour coded the shell name.
+fixed warning.
+v 0.1.0 of docker cli for dshell.
+Work on installing dshell using sudo and as a root user. Added priviledged required message.
+The default script was using a relative path when it should be using a package.
+
 # 1.8.14-dev.3
 Added null check around sourcePath.
 
