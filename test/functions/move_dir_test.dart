@@ -25,7 +25,7 @@ void main() {
 
         var actual = find('*', root: to, recursive: false).toList();
 
-        t.expect(actual, expected);
+        t.expect(actual, t.unorderedEquals(expected));
 
         t.expect(hasMoved(source), true);
       });
@@ -48,7 +48,7 @@ void main() {
 
         var actual = find('*', root: to, recursive: false).toList();
 
-        t.expect(actual, expected);
+        t.expect(actual, unorderedEquals(expected));
         t.expect(hasMoved(source), true);
       });
     });
@@ -69,7 +69,7 @@ void main() {
 
         var actual = find('*.txt', root: to, recursive: false).toList();
 
-        t.expect(actual, expected);
+        t.expect(actual, unorderedEquals(expected));
         t.expect(hasMoved(source), true);
       });
     });
@@ -91,7 +91,7 @@ void main() {
 
         var actual = find('*.txt', root: to, recursive: true).toList();
 
-        t.expect(actual, expected);
+        t.expect(actual, unorderedEquals(expected));
         t.expect(hasMoved(source), true);
       });
     });
@@ -112,7 +112,7 @@ void main() {
 
         var actual = find('*', root: to, recursive: true).toList();
 
-        t.expect(actual, expected);
+        t.expect(actual, unorderedEquals(expected));
         t.expect(hasMoved(source), true);
       });
     });

@@ -16,7 +16,7 @@ void main() {
 
       expect(
           parsed.args,
-          equals([
+          unorderedEquals(<String>[
             join(fs.top, 'fred.jpg'),
             join(fs.top, 'one.jpg'),
             join(fs.top, 'fred.png'),
