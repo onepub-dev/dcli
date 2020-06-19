@@ -118,7 +118,7 @@ class _MoveDir extends DShellFunction {
 
           // we create directories as we go.
           // only directories that contain a file that is to be
-          // copied will be created.
+          // moved will be created.
           if (isDirectory(dirname(file))) {
             if (!exists(dirname(target))) {
               createDir(dirname(target), recursive: true);
