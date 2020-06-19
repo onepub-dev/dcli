@@ -40,6 +40,17 @@ class _Move extends DShellFunction {
     }
     try {
       File(from).renameSync(dest);
+    } on FileSystemException catch (e) {
+      if (e.osError != null && e.osError.errorCode == 18) {
+        /// Invalid cross-device link
+        /// We can't move files across a partition so
+        /// do a copy/delete.
+        copy(from, to);
+        delete(from);
+      } else {
+        throw MoveException(
+            'The Move of ${absolute(from)} to ${absolute(dest)} failed. Error $e');
+      }
     }
     // ignore: avoid_catches_without_on_clauses
     catch (e) {
