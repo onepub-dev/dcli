@@ -147,7 +147,9 @@ These are some of the built-in commands:
 
 DShell now includes an installer which installs Dart and DShell.
 
+
 Linux:
+(installer)[ https://github.com/bsutton/dshell/raw/master/bin/linux/dshell_install]
 
 ```bash
 wget https://github.com/bsutton/dshell/raw/master/bin/linux/dshell_install
