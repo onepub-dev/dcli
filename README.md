@@ -150,7 +150,7 @@ DShell now includes an installer which installs Dart and DShell.
 Linux:
 
 ```bash
-wget https://github.com/bsutton/dshell/raw/master/bin/dshell_install
+wget https://github.com/bsutton/dshell/raw/master/bin/linux/dshell_install
 chmod +x dshell_install
 ./dshell_install
 ```
