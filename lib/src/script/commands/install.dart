@@ -1,5 +1,7 @@
 import 'dart:io';
 
+import 'package:pub_semver/pub_semver.dart';
+
 import '../../../dshell.dart';
 import '../../functions/env.dart';
 import '../../functions/which.dart';
@@ -66,7 +68,7 @@ class InstallCommand extends Command {
           "'dshell install' does not take any arguments. Found $subarguments");
     }
 
-    print('Hang on a tick whilst we install dshell.');
+    print('Hang on a tick whilst we install dshell ${Settings().version}');
     print('');
 
     var dartWasInstalled = _dartInstall();

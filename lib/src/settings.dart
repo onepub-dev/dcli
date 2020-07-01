@@ -1,15 +1,13 @@
 import 'dart:io';
+
 import 'package:meta/meta.dart';
 import 'package:path/path.dart' as p;
 
 import '../dshell.dart';
-
 import 'functions/env.dart';
-
 import 'script/flags.dart';
-
 import 'util/stack_list.dart';
-import 'util/version.g.dart';
+import 'version/version.g.dart';
 
 /// Holds all of the global settings for DShell
 /// including dshell paths and any global
@@ -149,7 +147,7 @@ class Settings {
   Settings.init({
     this.appname = 'dshell',
   }) {
-    version = dshellVersion;
+    version = packageVersion;
   }
 
   /// we consider dshell installed if the ~/.dshell directory
