@@ -1,23 +1,19 @@
 import 'dart:io';
+
 import 'package:path/path.dart';
 
 import '../../dshell.dart';
 import '../functions/env.dart';
 import '../functions/is.dart';
 import '../functions/read.dart';
-
 import '../pubspec/pubspec.dart';
 import '../pubspec/pubspec_file.dart';
 import '../pubspec/pubspec_manager.dart';
-
 import '../settings.dart';
-
 import '../util/ansi_color.dart';
+import '../util/named_lock.dart';
 import '../util/truepath.dart';
-import '../util/with_lock.dart';
-
 import 'commands/install.dart';
-
 import 'pub_get.dart';
 import 'script.dart';
 

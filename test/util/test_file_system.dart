@@ -11,7 +11,7 @@ import 'package:path/path.dart';
 import 'package:dshell/src/script/entry_point.dart';
 import 'package:dshell/src/script/script.dart';
 import 'package:dshell/src/script/virtual_project.dart';
-import 'package:dshell/src/util/with_lock.dart';
+import 'package:dshell/src/util/named_lock.dart';
 import 'package:test/test.dart';
 import 'package:uuid/uuid.dart';
 

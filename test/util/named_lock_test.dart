@@ -6,7 +6,7 @@ import 'dart:io';
 import 'dart:isolate';
 
 import 'package:dshell/dshell.dart';
-import 'package:dshell/src/util/with_lock.dart';
+import 'package:dshell/src/util/named_lock.dart';
 import 'package:test/test.dart';
 
 import 'test_file_system.dart';
