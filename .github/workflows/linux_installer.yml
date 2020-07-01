@@ -17,12 +17,10 @@ jobs:
       run: pub get
     - name: Generate installer
       run: dart2native bin/dshell_install.dart -o bin/linux/dshell_install
-    - name: ls
-      run: ls -R
-    - name: pwd
-      run: pwd
-    - name: workspace
-      run: echo $GITHUB_WORKSPACE
+    - name: git email
+      run: git config --global user.email "bsutton@noojee.com.au"
+    - name: git name
+      run: git config --global user.name "bsutton"
       
     - name: Commit results
       run: |
