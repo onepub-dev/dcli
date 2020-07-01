@@ -21,8 +21,10 @@ jobs:
       run: ls -R
     - name: pwd
       run: pwd
+    - name: workspace
+      run: echo $GITHUB_WORKSPACE
       
     - name: Commit results
       run: |
-          git commit ./bin/linux/dshell_install -m 'dart_install for linux' || echo "exec has not changed"
+          git commit $GITHUB_WORKSPACE/bin/linux/dshell_install -m 'dart_install for linux' || echo "exec has not changed"
           git push origin || echo "exec has not changed."
