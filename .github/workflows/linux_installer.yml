@@ -16,9 +16,9 @@ jobs:
     - name: Install dependencies
       run: pub get
     - name: Generate installer
-      run: dart2native bin/dshell_install.dart -o linux/dart_install
+      run: dart2native bin/dshell_install.dart -o bin/linux/dart_install
       
     - name: Commit results
       run: |
-          git commit linux/dart_install -m 'dart_install' || echo "exec has not changed"
+          git commit bin/linux/dart_install -m 'dart_install for linux' || echo "exec has not changed"
           git push origin || echo "exec has not changed."
