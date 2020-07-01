@@ -2,7 +2,7 @@ name: Release executables for Linux
 
 on:
   push:
-    tags: [ master ]
+   
 jobs:
   build:
 
