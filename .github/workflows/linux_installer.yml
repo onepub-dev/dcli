@@ -1,0 +1,24 @@
+name: Release executables for Linux
+
+on:
+  push:
+    tags: [ master ]
+jobs:
+  build:
+
+    runs-on: ubuntu-latest
+
+    container:
+      image:  google/dart:latest
+
+    steps:
+    - uses: actions/checkout@v2
+    - name: Install dependencies
+      run: pub get
+    - name: Generate installer
+      run: dart2native bin/dshell_install.dart -o linux/dart_install
+      
+    - name: Commit results
+      run: |
+          git commit linux/dart_install -m 'dart_install' || echo "exec has not changed"
+          git push origin || echo "exec has not changed."
