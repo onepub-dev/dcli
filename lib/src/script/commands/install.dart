@@ -1,6 +1,5 @@
 import 'dart:io';
 
-import 'package:pub_semver/pub_semver.dart';
 
 import '../../../dshell.dart';
 import '../../functions/env.dart';
