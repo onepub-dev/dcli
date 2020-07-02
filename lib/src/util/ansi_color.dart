@@ -185,6 +185,15 @@ void clearScreen({AnsiClearMode mode = AnsiClearMode.all}) =>
 void clearLine({AnsiClearMode mode = AnsiClearMode.all}) =>
     AnsiColor.clearLine(mode);
 
+/// Move the cursor to the start of the line.
+void startOfLine() => AnsiColor.startOfLine();
+
+/// Move the cursor to the start of the line.
+void setColumn(int column) => AnsiColor.setColumn(column);
+
+/// Shows or hides the cursor.
+void showCursor({bool show}) => AnsiColor.showCursor(show: show);
+
 /// Helper class to assist in printing text to the console with a color.
 ///
 /// Use one of the color functions instead of this class.
@@ -200,10 +209,9 @@ class AnsiColor {
   /// returns true of the terminal supports ansi escape characters.
   static bool get emitAnsi {
     if (_emitAnsi == null) {
-      return stdin.supportsAnsiEscapes;
-    } else {
-      return _emitAnsi;
+      _emitAnsi = stdin.supportsAnsiEscapes;
     }
+    return _emitAnsi;
   }
 
   /// You can set [emitAnsi] to
@@ -297,14 +305,39 @@ class AnsiColor {
     switch (mode) {
       // case AnsiClearMode.scrollback:
       case AnsiClearMode.all:
-        echo(_emit('2K'), newline: false);
+        echo('${esc}2K', newline: false);
         break;
       case AnsiClearMode.fromCursor:
-        echo(_emit('0K'), newline: false);
+        echo('${esc}0K', newline: false);
         break;
       case AnsiClearMode.toCursor:
-        echo(_emit('1K'), newline: false);
+        echo('${esc}1K', newline: false);
         break;
+    }
+  }
+
+  /// Moves the cursor to the start of line.
+  static void startOfLine() {
+    setColumn(1);
+  }
+
+  /// moves the cursor to the given column
+  /// 1 is the first column
+  static void setColumn(int column) {
+    echo('$esc${column}G', newline: false);
+  }
+
+  /// Moves the cursor to the start of line.
+  static void previousLine() {
+    echo('${esc}0F', newline: false);
+  }
+
+  /// show/hide the cursor
+  static void showCursor({bool show}) {
+    if (show) {
+      echo("$esc?25h");
+    } else {
+      echo("$esc?25l");
     }
   }
 
