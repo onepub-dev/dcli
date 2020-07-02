@@ -1,6 +1,7 @@
 @Timeout(Duration(seconds: 600))
-import 'package:dshell/src/functions/which.dart';
+import 'package:dshell/dshell.dart' hide equals;
 import 'package:dshell/src/script/dart_sdk.dart';
+import 'package:path/path.dart' hide equals;
 import 'package:test/test.dart';
 
 import 'test_file_system.dart';
@@ -16,4 +17,14 @@ void main() {
       which('dart', first: true).forEach((line) => print('which: $line'));
     });
   }, skip: false);
+
+  test('Install Dart Sdk', () {
+    TestFileSystem().withinZone((fs) {
+      var defaultPath = join(fs.uniquePath, 'dart-sdk');
+      var installPath = DartSdk().installFromArchive(defaultPath);
+      setDartSdkPath(installPath);
+      print('installed To $installPath');
+      expect(exists(DartSdk().dartExePath), equals(true));
+    });
+  });
 }

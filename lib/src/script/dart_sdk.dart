@@ -1,9 +1,14 @@
 import 'dart:cli';
 import 'dart:io';
+
+import 'package:archive/archive.dart';
 import 'package:path/path.dart' as p;
+import 'package:system_info/system_info.dart';
+
 import '../../dshell.dart';
 import '../util/progress.dart';
 import '../util/runnable_process.dart';
+import '../util/terminal.dart';
 
 /// The [DartSdk] provides access to a number of the dart sdk tools
 /// as well as details on the active sdk instance.
@@ -161,7 +166,109 @@ class DartSdk {
 
     return _version;
   }
+
+  /// Installs the latest version of DartSdk from the official google archives
+  /// This is simply the process of downloading and extracting the
+  /// sdk to the [defaultDartSdkPath].
+  ///
+  /// The user is asked to confirm the install path and can modifiy
+  /// it if desired.
+  ///
+  /// returns the directory where the dartSdk was installed.
+  String installFromArchive(String defaultDartSdkPath) {
+    Settings().verbose('Architecture: ${SysInfo.kernelArchitecture}');
+    var zipRelease = _fetchDartSdk();
+
+    var installDir = _askForDartSdkInstallDir(defaultDartSdkPath);
+
+    // Read the Zip file from disk.
+    _extractDartSdk(zipRelease, installDir);
+    delete(zipRelease);
+
+    return installDir;
+  }
+
+  String _fetchDartSdk() {
+    var bitness = SysInfo.kernelBitness;
+    var architechture = 'x64';
+    if (bitness == 32) {
+      architechture = 'ia32';
+    }
+    var platform = Platform.operatingSystem;
+
+    var zipRelease = FileSync.tempFile(suffix: 'release.zip');
+
+    // the sdk's can be found here:
+    /// https://dart.dev/tools/sdk/archive
+
+    var term = Terminal();
+    term.showCursor(show: false);
+
+    fetch(
+        url:
+            'https://storage.googleapis.com/dart-archive/channels/stable/release/latest/sdk/dartsdk-$platform-$architechture-release.zip',
+        saveToPath: zipRelease,
+        onProgress: _showProgress);
+
+    term.showCursor(show: true);
+    print('');
+    return zipRelease;
+  }
+
+  String _askForDartSdkInstallDir(String dartToolDir) {
+    var confirmed = false;
+
+    /// ask for and confirm the install directory.
+    while (!confirmed) {
+      dartToolDir =
+          ask(prompt: 'Install dartSdk (Enter for default $dartToolDir): ');
+
+      confirmed = confirm(prompt: 'Is $dartToolDir correct:');
+    }
+
+    if (!exists(dartToolDir)) {
+      createDir(dartToolDir, recursive: true);
+    }
+    return dartToolDir;
+  }
+
+  void _extractDartSdk(String zipRelease, String dartToolDir) {
+    // Read the Zip file from disk.
+    final bytes = File(zipRelease).readAsBytesSync();
+
+    // Decode the Zip file
+    final archive = ZipDecoder().decodeBytes(bytes);
+
+    for (final file in archive) {
+      final filename = file.name;
+      var path = join(dartToolDir, filename);
+      if (file.isFile) {
+        final data = file.content as List<int>;
+        File(path)
+          ..createSync(recursive: true)
+          ..writeAsBytesSync(data);
+      } else {
+        createDir(path, recursive: true);
+      }
+    }
+  }
+
+  void _showProgress(FetchProgress progress) {
+    // var term = Terminal();
+    // term.clearLine(mode: TerminalClearMode.all);
+    // term.startOfLine();
+    // var percentage = Format().percentage(progress.progress, 1);
+    // echo(
+    //     '${EnumHelper.getName(progress.status).padRight(15)}${humanNumber(progress.downloaded)}/${humanNumber(progress.length)} $percentage');
+  }
 }
 
 /// Exception throw if we can't find the dart sdk.
 final Exception dartSdkNotFound = Exception('Dart SDK not found!');
+
+/// This method is ONLY for use by the installer so that we can
+/// set the path during the install when it won't be detectable
+/// as its not on the system path.
+void setDartSdkPath(String dartSdkPath) {
+  DartSdk()._sdkPath = dartSdkPath;
+}
