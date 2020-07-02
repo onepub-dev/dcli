@@ -1,6 +1,5 @@
-import 'dart:io';
 
-import '../functions/echo.dart';
+import 'ansi.dart';
 
 /// Returns a string wrapped with the selected ansi
 /// fg color codes.
@@ -152,48 +151,6 @@ String grey(String text,
         {double level = 0.5, AnsiColor bgcolor = AnsiColor.none}) =>
     AnsiColor._apply(AnsiColor._grey(level: level), text, bgcolor: bgcolor);
 
-///
-/// Modes available when clearing a screen or line.
-///
-/// When used with clearScreen:
-/// [all] - clears the entire screen
-/// [fromCursor] - clears from the cursor until the end of the screen
-/// [toCursor] - clears from the start of the screen to the cursor.
-///
-///  When used with clearLine:
-/// [all] - clears the entire line
-/// [fromCursor] - clears from the cursor until the end of the line.
-/// [toCursor] - clears from the start of the line to the cursor.
-///
-enum AnsiClearMode {
-  // scrollback,
-  /// clear whole screen
-  all,
-
-  /// clear screen from the cursor to the bottom of the screen.
-  fromCursor,
-
-  /// clear screen from the top of the screen to the cursor
-  toCursor
-}
-
-///
-void clearScreen({AnsiClearMode mode = AnsiClearMode.all}) =>
-    AnsiColor.clearScreen(mode);
-
-///
-void clearLine({AnsiClearMode mode = AnsiClearMode.all}) =>
-    AnsiColor.clearLine(mode);
-
-/// Move the cursor to the start of the line.
-void startOfLine() => AnsiColor.startOfLine();
-
-/// Move the cursor to the start of the line.
-void setColumn(int column) => AnsiColor.setColumn(column);
-
-/// Shows or hides the cursor.
-void showCursor({bool show}) => AnsiColor.showCursor(show: show);
-
 /// Helper class to assist in printing text to the console with a color.
 ///
 /// Use one of the color functions instead of this class.
@@ -204,32 +161,6 @@ void showCursor({bool show}) => AnsiColor.showCursor(show: show);
 ///     [orange]
 ///  ...
 class AnsiColor {
-  static bool _emitAnsi;
-
-  /// returns true of the terminal supports ansi escape characters.
-  static bool get emitAnsi {
-    if (_emitAnsi == null) {
-      _emitAnsi = stdin.supportsAnsiEscapes;
-    }
-    return _emitAnsi;
-  }
-
-  /// You can set [emitAnsi] to
-  /// override the detected ansi settings.
-  /// Dart doesn't do a great job of correctly detecting
-  /// ansi support so this give a way to override it.
-  /// If [emitAnsi] is true then escape charaters are emmitted
-  /// If [emitAnsi] is false escape characters are not emmited
-  /// By default the detected setting is used.
-  /// After setting emitAnsi you can reset back to the
-  /// default detected by calling [resetEmitAnsi].
-  static set emitAnsi(bool emit) => _emitAnsi = emit;
-
-  /// If you have called [emitAnsi] then calling
-  /// [resetEmitAnsi]  will reset the emit
-  /// setting to the default detected.
-  static void get resetEmitAnsi => _emitAnsi = null;
-
   /// resets the color scheme.
   static String reset() => _emit(_resetCode);
 
@@ -244,6 +175,11 @@ class AnsiColor {
   ///
   const AnsiColor(int code) : _code = code;
 
+  //
+  static String _emit(String ansicode) {
+    return '${Ansi.esc}${ansicode}m';
+  }
+
   /// ansi code for this color.
   int get code => _code;
 
@@ -255,7 +191,7 @@ class AnsiColor {
       {AnsiColor bgcolor = none}) {
     String output;
 
-    if (emitAnsi) {
+    if (Ansi.isSupported) {
       output = '${_fg(color.code)}${_bg(bgcolor?.code)}$text$_reset';
     } else {
       output = text;
@@ -264,7 +200,7 @@ class AnsiColor {
   }
 
   static String get _reset {
-    return '$esc${_resetCode}m';
+    return '${Ansi.esc}${_resetCode}m';
   }
 
   static String _fg(int code) {
@@ -273,72 +209,11 @@ class AnsiColor {
     if (code == none.code) {
       output = '';
     } else if (code > 39) {
-      output = '$esc$_fgColorCode${code}m';
+      output = '${Ansi.esc}$_fgColorCode${code}m';
     } else {
-      output = '$esc${code}m';
+      output = '${Ansi.esc}${code}m';
     }
     return output;
-  }
-
-  ///
-  static void clearScreen(AnsiClearMode mode) {
-    if (!emitAnsi) return;
-    switch (mode) {
-      // case AnsiClearMode.scrollback:
-      //   echo('${esc}3J', newline: false);
-      //   break;
-      case AnsiClearMode.all:
-        echo('${esc}2J', newline: false);
-        break;
-      case AnsiClearMode.fromCursor:
-        echo('${esc}0J', newline: false);
-        break;
-      case AnsiClearMode.toCursor:
-        echo('${esc}1J', newline: false);
-        break;
-    }
-  }
-
-  ///
-  static void clearLine(AnsiClearMode mode) {
-    if (!emitAnsi) return;
-    switch (mode) {
-      // case AnsiClearMode.scrollback:
-      case AnsiClearMode.all:
-        echo('${esc}2K', newline: false);
-        break;
-      case AnsiClearMode.fromCursor:
-        echo('${esc}0K', newline: false);
-        break;
-      case AnsiClearMode.toCursor:
-        echo('${esc}1K', newline: false);
-        break;
-    }
-  }
-
-  /// Moves the cursor to the start of line.
-  static void startOfLine() {
-    setColumn(1);
-  }
-
-  /// moves the cursor to the given column
-  /// 1 is the first column
-  static void setColumn(int column) {
-    echo('$esc${column}G', newline: false);
-  }
-
-  /// Moves the cursor to the start of line.
-  static void previousLine() {
-    echo('${esc}0F', newline: false);
-  }
-
-  /// show/hide the cursor
-  static void showCursor({bool show}) {
-    if (show) {
-      echo("$esc?25h");
-    } else {
-      echo("$esc?25l");
-    }
   }
 
   // background colors are fg color + 10
@@ -348,20 +223,12 @@ class AnsiColor {
     if (code == none.code) {
       output = '';
     } else if (code > 49) {
-      output = '$esc$_bgColorCode${code + 10}m';
+      output = '${Ansi.esc}$_bgColorCode${code + 10}m';
     } else {
-      output = '$esc${code + 10}m';
+      output = '${Ansi.esc}${code + 10}m';
     }
     return output;
   }
-
-  static String _emit(String ansicode) {
-    return '$esc${ansicode}m';
-  }
-
-  /// ANSI Control Sequence Introducer, signals the terminal for new settings.
-  static const esc = '\x1B[';
-  // static const esc = '\u001b[';
 
   /// Resets
 
