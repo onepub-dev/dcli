@@ -1,12 +1,12 @@
 import 'dart:async';
 import 'dart:io';
 
-import 'package:dshell/src/util/file_system.dart';
 import 'package:meta/meta.dart';
 import 'package:pedantic/pedantic.dart';
 
 import '../settings.dart';
 import '../util/dshell_exception.dart';
+import '../util/file_system.dart';
 import '../util/wait_for_ex.dart';
 import 'function.dart';
 import 'is.dart';
