@@ -1,6 +1,5 @@
 import 'dart:io';
 
-
 import '../../../dshell.dart';
 import '../../functions/env.dart';
 import '../../functions/which.dart';
@@ -8,7 +7,6 @@ import '../../pubspec/global_dependencies.dart';
 import '../../settings.dart';
 import '../../shell/shell.dart';
 import '../../util/ansi_color.dart';
-import '../../util/dart_install_apt.dart';
 import '../../util/dshell_paths.dart';
 import '../../util/pub_cache.dart';
 import '../command_line_runner.dart';
@@ -70,7 +68,7 @@ class InstallCommand extends Command {
     print('Hang on a tick whilst we install dshell ${Settings().version}');
     print('');
 
-    var dartWasInstalled = _dartInstall();
+    var dartWasInstalled = shell.install();
     // Create the ~/.dshell root.
     if (!exists(Settings().dshellPath)) {
       print(blue('Creating ${Settings().dshellPath}'));
@@ -207,10 +205,6 @@ class InstallCommand extends Command {
   @override
   List<Flag> flags() {
     return _installFlags;
-  }
-
-  bool _dartInstall() {
-    return DartInstaller().installDart();
   }
 
   void _fixPermissions(Shell shell) {

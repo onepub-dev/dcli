@@ -66,4 +66,10 @@ class PowerShell with ShellMixin {
   String privilegesRequiredMessage(String app) {
     return 'You need to be a privileged user to run $app';
   }
+
+  @override
+  bool install() {
+    // TODO: implement install
+    throw UnimplementedError();
+  }
 }

@@ -1,4 +1,9 @@
+import 'dart:io';
+
 import '../../dshell.dart';
+import '../installers/apt_installer.dart';
+import '../installers/macosx_installer.dart';
+import '../installers/windows_installer.dart';
 import 'shell_mixin.dart';
 
 /// Used by dshell to interacte with the shell
@@ -110,5 +115,18 @@ class UnknownShell with ShellMixin {
   @override
   String privilegesRequiredMessage(String app) {
     return 'You need to be a privileged user to run $app';
+  }
+
+  @override
+  bool install() {
+    if (Platform.isLinux) {
+      return AptDShellInstaller().install();
+    } else if (Platform.isWindows) {
+      return WindowsDShellInstaller().install();
+    } else if (Platform.isMacOS) {
+      return MacOsxDshellInstaller().install();
+    } else {
+      throw UnsupportedError('Unsupported OS. ${Platform.operatingSystem}');
+    }
   }
 }

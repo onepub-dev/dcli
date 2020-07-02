@@ -1,4 +1,8 @@
+import 'dart:io';
+
 import '../../dshell.dart';
+import '../installers/apt_installer.dart';
+import '../installers/macosx_installer.dart';
 
 /// Provides a number of helper functions
 /// when for posix based shells.
@@ -66,5 +70,13 @@ mixin PosixMixin {
 
   String privilegesRequiredMessage(String app) {
     return 'Please run with: sudo $app';
+  }
+
+  bool install() {
+    if (Platform.isLinux) {
+      return AptDShellInstaller().install();
+    } else {
+      return MacOsxDshellInstaller().install();
+    }
   }
 }

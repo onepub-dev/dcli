@@ -46,4 +46,9 @@ abstract class Shell {
   /// Returns a message informing the user that they need to run
   /// as a priviledged user to run an app.
   String privilegesRequiredMessage(String appname);
+
+  /// Installs dart and dshell.
+  /// Returns true if dart was installed.
+  /// Returns false if dart was already installed.
+  bool install();
 }
