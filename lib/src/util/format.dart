@@ -72,6 +72,12 @@ class Format {
     return row;
   }
 
+  /// returns a double as a percentage to the given [precision]
+  /// e.g. 0.11 becomes 11% if [precision] is 0.
+  String percentage(double progress, int precision) {
+    return '${(progress * 100).toStringAsFixed(precision)}%';
+  }
+
   // ///
   // void colprint(String label, String value, {int pad = 25}) {
   //   print('${label.padRight(pad)}: ${value}');
