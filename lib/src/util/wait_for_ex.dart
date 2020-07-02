@@ -8,7 +8,7 @@ import 'stack_trace_impl.dart';
 
 /// Wraps the standard cli waitFor
 /// but rethrows any exceptions with
-/// a stack that is cohernt.
+/// a stack that is coherent.
 /// Exceptions would normally have a microtask
 /// stack which is useless.
 /// This version replaces the exceptions stack
