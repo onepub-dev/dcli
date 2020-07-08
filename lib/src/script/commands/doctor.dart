@@ -60,19 +60,35 @@ class DoctorCommand extends Command {
     ]);
     var dart2NativePath =
         which(DartSdk.dart2NativeExeName, first: true).firstLine;
-    _colprint([
-      'dart2Native path',
-      '${privatePath(DartSdk().dart2NativePath)}',
-      'which: ${privatePath(dart2NativePath)}'
-    ]);
+
+    if (dart2NativePath != null) {
+      _colprint([
+        'dart2Native path',
+        '${privatePath(DartSdk().dart2NativePath)}',
+        'which: ${privatePath(dart2NativePath)}'
+      ]);
+    } else {
+      _colprint([
+        'dart2Native path',
+        'Not Found',
+      ]);
+    }
     print('');
     var pubPath = which(DartSdk.pubExeName, first: true).firstLine;
-    _colprint([
-      'pub get path',
-      '${privatePath(DartSdk().pubPath)}',
-      'which: ${privatePath(pubPath)}'
-    ]);
-    _colprint(['Pub cache', '${privatePath(PubCache().path)}']);
+
+    if (pubPath != null) {
+      _colprint([
+        'pub path',
+        '${privatePath(DartSdk().pubPath)}',
+        'which: ${privatePath(pubPath)}'
+      ]);
+      _colprint(['Pub cache', '${privatePath(PubCache().path)}']);
+    } else {
+      _colprint([
+        'pub path',
+        'Not Found',
+      ]);
+    }
 
     if (Platform.packageConfig == null) {
       _colprint(['Package Config', 'Not Passed']);
