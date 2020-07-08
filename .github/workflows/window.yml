@@ -13,10 +13,14 @@ jobs:
 
     steps:
     - uses: actions/checkout@v2
-    - name: Install dependencies
-      run: pub get
+    - name: Download dart
+      run: curl https://storage.googleapis.com/dart-archive/channels/stable/release/2.8.4/sdk/dartsdk-windows-x64-release.zip -o dartsdk.zip 
+    - name: unzip dart
+      run: tar.exe -xf dartsdk.zip
+    - name: init dart
+      run: dartsdk/bin/pub get
     - name: Generate installer
-      run: dart2native bin/dshell_install.dart -o bin/windows/dshell_install.exe
+      run: dartsdk/bin/dart2native bin/dshell_install.dart -o bin/windows/dshell_install.exe
     - name: git email
       run: git config --global user.email "bsutton@noojee.com.au"
     - name: git name
