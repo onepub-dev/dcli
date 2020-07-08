@@ -1,4 +1,4 @@
-name: Release executables for Windos
+name: Release executables for Windows
 
 on:
   push:
