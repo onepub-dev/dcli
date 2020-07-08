@@ -26,7 +26,7 @@ void move(String from, String to, {bool overwrite = false}) =>
 
 class _Move extends DShellFunction {
   void move(String from, String to, {bool overwrite = false}) {
-    Settings().verbose('move ${absolute(from)} -> ${absolute(to)}');
+    Settings().verbose('move ${truepath(from)} -> ${truepath(to)}');
 
     var dest = to;
 
@@ -36,7 +36,7 @@ class _Move extends DShellFunction {
 
     if (exists(dest) && !overwrite) {
       throw MoveException(
-          'The [to] path ${absolute(dest)} already exists. Use overwrite:true ');
+          'The [to] path ${truepath(dest)} already exists. Use overwrite:true ');
     }
     try {
       File(from).renameSync(dest);
@@ -49,13 +49,13 @@ class _Move extends DShellFunction {
         delete(from);
       } else {
         throw MoveException(
-            'The Move of ${absolute(from)} to ${absolute(dest)} failed. Error $e');
+            'The Move of ${truepath(from)} to ${truepath(dest)} failed. Error $e');
       }
     }
     // ignore: avoid_catches_without_on_clauses
     catch (e) {
       throw MoveException(
-          'The Move of ${absolute(from)} to ${absolute(dest)} failed. Error $e');
+          'The Move of ${truepath(from)} to ${truepath(dest)} failed. Error $e');
     }
   }
 }
