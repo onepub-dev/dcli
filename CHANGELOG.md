@@ -1,3 +1,6 @@
+# 1.8.16
+Fixed for doctor when some paths missing.
+
 # 1.8.15
 Created github actions to generated linux and windows installer for dshell and dart.
 Change copyDir to copyTree.
