@@ -233,7 +233,7 @@ extension StringAsProcess on String {
       progress =
           Progress((line) => list.add(line), stderr: (line) => list.add(line));
 
-      cmd.start(this, runInShell: runInShell, progress: progress);
+      progress = cmd.start(this, runInShell: runInShell, progress: progress);
     }
     // ignore: avoid_catches_without_on_clauses
     catch (e) {
