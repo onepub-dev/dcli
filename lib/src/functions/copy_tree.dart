@@ -8,29 +8,29 @@ import 'is.dart';
 
 ///
 /// Copies the contents of the [from] directory to the
-/// to the [to] path.
+/// to the [to] path with an optional filter.
 ///
 /// The [to] path must exist.
 ///
 /// If any copied file already exists in the [to] path then
-/// an exeption is throw and a parital copyDir may occured.
+/// an exeption is throw and a parital copyTree may occured.
 ///
-/// You can force the copyDir to overwrite files in the [to]
+/// You can force the copyTree to overwrite files in the [to]
 /// directory by setting [overwrite] to true (defaults to false).
 ///
 ///
 /// ```dart
-/// copyDir("/tmp/", "/tmp/new_dir", overwrite=true);
+/// copyTree("/tmp/", "/tmp/new_dir", overwrite:true);
 /// ```
 /// By default hidden files are ignored. To allow hidden files to
-/// be passed set [includeHidden] to true.
+/// be processed set [includeHidden] to true.
 ///
 /// You can select which files are to be copied by passing a [filter].
 /// If a [filter] isn't passed then all files are copied as per
 /// the [includeHidden] state.
 ///
 /// ```dart
-/// copyDir("/tmp/", "/tmp/new_dir", overwrite=true
+/// copyTree("/tmp/", "/tmp/new_dir", overwrite:true, includeHidden:true
 ///   , filter: (file) => extension(file) == 'dart');
 /// ```
 ///
@@ -38,7 +38,7 @@ import 'is.dart';
 /// is called just before we copy a file.
 ///
 /// ```dart
-/// copyDir("/tmp/", "/tmp/new_dir", overwrite=true
+/// copyTree("/tmp/", "/tmp/new_dir", overwrite:true
 ///   , filter: (file) {
 ///   var include = extension(file) == 'dart';
 ///   if (include) {
@@ -51,39 +51,39 @@ import 'is.dart';
 ///
 /// The default for [overwrite] is false.
 ///
-/// If an error occurs a [CopyDirException] is thrown.
-void copyDir(String from, String to,
+/// If an error occurs a [CopyTreeException] is thrown.
+void copyTree(String from, String to,
         {bool overwrite = false,
         bool includeHidden = false,
         bool recursive = false,
         bool Function(String file) filter}) =>
-    _CopyDir().copyDir(from, to,
+    _CopyTree().copyTree(from, to,
         overwrite: overwrite,
         includeHidden: includeHidden,
         filter: filter,
         recursive: recursive);
 
-class _CopyDir extends DShellFunction {
-  void copyDir(String from, String to,
+class _CopyTree extends DShellFunction {
+  void copyTree(String from, String to,
       {bool overwrite = false,
       bool Function(String file) filter,
       bool includeHidden,
       bool recursive}) {
     if (!isDirectory(from)) {
-      throw CopyDirException(
+      throw CopyTreeException(
           'The [from] path ${truepath(from)} must be a directory.');
     }
     if (!exists(to)) {
-      throw CopyDirException(
+      throw CopyTreeException(
           'The [to] path ${truepath(to)} must already exist.');
     }
 
     if (!isDirectory(to)) {
-      throw CopyDirException(
+      throw CopyTreeException(
           'The [to] path ${truepath(to)} must be a directory.');
     }
 
-    Settings().verbose('copyDir called ${truepath(from)} -> ${truepath(to)}');
+    Settings().verbose('copyTree called ${truepath(from)} -> ${truepath(to)}');
 
     try {
       find('*', root: from, includeHidden: includeHidden, recursive: recursive)
@@ -98,26 +98,26 @@ class _CopyDir extends DShellFunction {
           }
 
           if (!overwrite && exists(target)) {
-            throw CopyDirException(
+            throw CopyTreeException(
                 'The target file ${truepath(target)} already exists.');
           }
 
           copy(file, target, overwrite: overwrite);
           Settings().verbose(
-              'copyDir copying: ${truepath(from)} -> ${truepath(target)}');
+              'copyTree copying: ${truepath(from)} -> ${truepath(target)}');
         }
       });
     }
     // ignore: avoid_catches_without_on_clauses
     catch (e) {
-      throw CopyDirException(
+      throw CopyTreeException(
           'An error occured copying directory ${truepath(from)} to ${truepath(to)}. Error: $e');
     }
   }
 }
 
 /// Throw when the [copy] function encounters an error.
-class CopyDirException extends FunctionException {
+class CopyTreeException extends FunctionException {
   /// Throw when the [copy] function encounters an error.
-  CopyDirException(String reason) : super(reason);
+  CopyTreeException(String reason) : super(reason);
 }

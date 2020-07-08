@@ -9,7 +9,7 @@ import '../util/test_file_system.dart';
 String testFile;
 void main() {
   t.group('moveDir', () {
-    t.test('empty target ', () {
+    t.test('empty to ', () {
       TestFileSystem().withinZone((fs) {
         var from = join(fs.root, 'top');
         var to = join(fs.root, 'new_top');
@@ -17,125 +17,61 @@ void main() {
         if (exists(to)) {
           deleteDir(to, recursive: true);
         }
-
-        var source = find('*', root: from, recursive: false).toList();
-        var expected = subname(source, 'top', 'new_top');
-        createDir(to);
         moveDir(from, to);
-
-        var actual = find('*', root: to, recursive: false).toList();
-
-        t.expect(actual, t.unorderedEquals(expected));
-
-        t.expect(hasMoved(source), true);
+        t.expect(exists(to), t.equals(true));
       });
     });
 
-    t.test('empty target - overwrite', () {
+    t.test('existing to ', () {
       TestFileSystem().withinZone((fs) {
         var from = join(fs.root, 'top');
         var to = join(fs.root, 'new_top');
 
-        if (exists(to)) {
-          deleteDir(to, recursive: true);
+        if (!exists(from)) {
+          createDir(from, recursive: true);
+        }
+        if (!exists(to)) {
+          createDir(to, recursive: true);
         }
 
-        var source = find('*', root: from, recursive: false).toList();
-        var expected = subname(source, 'top', 'new_top');
-        createDir(to);
-        moveDir(from, to);
-        moveDir(from, to, overwrite: true);
-
-        var actual = find('*', root: to, recursive: false).toList();
-
-        t.expect(actual, unorderedEquals(expected));
-        t.expect(hasMoved(source), true);
+        t.expect(
+            () => moveDir(from, to),
+            throwsA(t.predicate<MoveDirException>((e) =>
+                e is MoveDirException &&
+                e.message == 'The [to] path ${truepath(to)} must NOT exist.')));
       });
     });
 
-    t.test('empty target - filter *.txt', () {
+    t.test('from not a directory ', () {
       TestFileSystem().withinZone((fs) {
-        var from = join(fs.root, 'top');
+        var from = join(fs.root, 'top', 'file');
         var to = join(fs.root, 'new_top');
 
-        if (exists(to)) {
-          deleteDir(to, recursive: true);
+        if (!exists(dirname(from))) {
+          createDir(dirname(from), recursive: true);
         }
+        touch(from, create: true);
 
-        var source = find('*.txt', root: from, recursive: false).toList();
-        var expected = subname(source, 'top', 'new_top');
-        createDir(to);
-        moveDir(from, to, filter: (file) => extension(file) == '.txt');
-
-        var actual = find('*.txt', root: to, recursive: false).toList();
-
-        t.expect(actual, unorderedEquals(expected));
-        t.expect(hasMoved(source), true);
+        t.expect(
+            () => moveDir(from, to),
+            throwsA(t.predicate<MoveDirException>((e) =>
+                e is MoveDirException &&
+                e.message ==
+                    'The [from] path ${truepath(from)} must be a directory.')));
       });
     });
 
-    t.test('empty target - recursive - filter *.txt', () {
+    t.test('from does not exist ', () {
       TestFileSystem().withinZone((fs) {
-        var from = join(fs.root, 'top');
+        var from = join(fs.root, 'random');
         var to = join(fs.root, 'new_top');
 
-        if (exists(to)) {
-          deleteDir(to, recursive: true);
-        }
-
-        var source = find('*.txt', root: from, recursive: true).toList();
-        var expected = subname(source, 'top', 'new_top');
-        createDir(to);
-        moveDir(from, to,
-            recursive: true, filter: (file) => extension(file) == '.txt');
-
-        var actual = find('*.txt', root: to, recursive: true).toList();
-
-        t.expect(actual, unorderedEquals(expected));
-        t.expect(hasMoved(source), true);
-      });
-    });
-
-    t.test('empty target - recursive ', () {
-      TestFileSystem().withinZone((fs) {
-        var from = join(fs.root, 'top');
-        var to = join(fs.root, 'new_top');
-
-        if (exists(to)) {
-          deleteDir(to, recursive: true);
-        }
-
-        var source = find('*', root: from, recursive: true).toList();
-        var expected = subname(source, 'top', 'new_top');
-        createDir(to);
-        moveDir(from, to, recursive: true);
-
-        var actual = find('*', root: to, recursive: true).toList();
-
-        t.expect(actual, unorderedEquals(expected));
-        t.expect(hasMoved(source), true);
-      });
-    });
-
-    t.test('empty target - recursive- overwrite', () {
-      TestFileSystem().withinZone((fs) {
-        var from = join(fs.root, 'top');
-        var to = join(fs.root, 'new_top');
-
-        if (exists(to)) {
-          deleteDir(to, recursive: true);
-        }
-
-        var source = find('*', root: from, recursive: true).toList();
-        var expected = subname(source, 'top', 'new_top');
-        createDir(to);
-        moveDir(from, to, recursive: true);
-        moveDir(from, to, overwrite: true, recursive: true);
-
-        var actual = find('*', root: to, recursive: true).toList();
-
-        t.expect(actual, expected);
-        t.expect(hasMoved(source), true);
+        t.expect(
+            () => moveDir(from, to),
+            throwsA(t.predicate<MoveDirException>((e) =>
+                e is MoveDirException &&
+                e.message ==
+                    'The [from] path ${truepath(from)} does not exists.')));
       });
     });
   });

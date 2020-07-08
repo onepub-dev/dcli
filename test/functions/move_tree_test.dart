@@ -8,7 +8,7 @@ import '../util/test_file_system.dart';
 
 String testFile;
 void main() {
-  t.group('copyTree', () {
+  t.group('moveTree', () {
     t.test('empty target ', () {
       TestFileSystem().withinZone((fs) {
         var from = join(fs.root, 'top');
@@ -18,14 +18,16 @@ void main() {
           deleteDir(to, recursive: true);
         }
 
-        var expected = find('*', root: from, recursive: false).toList();
-        expected = subname(expected, 'top', 'new_top');
+        var source = find('*', root: from, recursive: false).toList();
+        var expected = subname(source, 'top', 'new_top');
         createDir(to);
-        copyTree(from, to);
+        moveTree(from, to);
 
         var actual = find('*', root: to, recursive: false).toList();
 
-        t.expect(actual, unorderedEquals(expected));
+        t.expect(actual, t.unorderedEquals(expected));
+
+        t.expect(hasMoved(source), true);
       });
     });
 
@@ -38,15 +40,16 @@ void main() {
           deleteDir(to, recursive: true);
         }
 
-        var expected = find('*', root: from, recursive: false).toList();
-        expected = subname(expected, 'top', 'new_top');
+        var source = find('*', root: from, recursive: false).toList();
+        var expected = subname(source, 'top', 'new_top');
         createDir(to);
-        copyTree(from, to);
-        copyTree(from, to, overwrite: true);
+        moveTree(from, to);
+        moveTree(from, to, overwrite: true);
 
         var actual = find('*', root: to, recursive: false).toList();
 
         t.expect(actual, unorderedEquals(expected));
+        t.expect(hasMoved(source), true);
       });
     });
 
@@ -59,14 +62,15 @@ void main() {
           deleteDir(to, recursive: true);
         }
 
-        var expected = find('*.txt', root: from, recursive: false).toList();
-        expected = subname(expected, 'top', 'new_top');
+        var source = find('*.txt', root: from, recursive: false).toList();
+        var expected = subname(source, 'top', 'new_top');
         createDir(to);
-        copyTree(from, to, filter: (file) => extension(file) == '.txt');
+        moveTree(from, to, filter: (file) => extension(file) == '.txt');
 
         var actual = find('*.txt', root: to, recursive: false).toList();
 
         t.expect(actual, unorderedEquals(expected));
+        t.expect(hasMoved(source), true);
       });
     });
 
@@ -79,15 +83,16 @@ void main() {
           deleteDir(to, recursive: true);
         }
 
-        var expected = find('*.txt', root: from, recursive: true).toList();
-        expected = subname(expected, 'top', 'new_top');
+        var source = find('*.txt', root: from, recursive: true).toList();
+        var expected = subname(source, 'top', 'new_top');
         createDir(to);
-        copyTree(from, to,
+        moveTree(from, to,
             recursive: true, filter: (file) => extension(file) == '.txt');
 
         var actual = find('*.txt', root: to, recursive: true).toList();
 
         t.expect(actual, unorderedEquals(expected));
+        t.expect(hasMoved(source), true);
       });
     });
 
@@ -100,14 +105,15 @@ void main() {
           deleteDir(to, recursive: true);
         }
 
-        var expected = find('*', root: from, recursive: true).toList();
-        expected = subname(expected, 'top', 'new_top');
+        var source = find('*', root: from, recursive: true).toList();
+        var expected = subname(source, 'top', 'new_top');
         createDir(to);
-        copyTree(from, to, recursive: true);
+        moveTree(from, to, recursive: true);
 
         var actual = find('*', root: to, recursive: true).toList();
 
         t.expect(actual, unorderedEquals(expected));
+        t.expect(hasMoved(source), true);
       });
     });
 
@@ -120,18 +126,32 @@ void main() {
           deleteDir(to, recursive: true);
         }
 
-        var expected = find('*', root: from, recursive: true).toList();
-        expected = subname(expected, 'top', 'new_top');
+        var source = find('*', root: from, recursive: true).toList();
+        var expected = subname(source, 'top', 'new_top');
         createDir(to);
-        copyTree(from, to, recursive: true);
-        copyTree(from, to, overwrite: true, recursive: true);
+        moveTree(from, to, recursive: true);
+        moveTree(from, to, overwrite: true, recursive: true);
 
         var actual = find('*', root: to, recursive: true).toList();
 
-        t.expect(actual, unorderedEquals(expected));
+        t.expect(actual, expected);
+        t.expect(hasMoved(source), true);
       });
     });
   });
+}
+
+/// checks that the given list of files no longer exists.
+bool hasMoved(List<String> files) {
+  var moved = true;
+  for (var file in files) {
+    if (exists(file)) {
+      printerr('The file $file was not moved');
+      moved = false;
+      break;
+    }
+  }
+  return moved;
 }
 
 List<String> subname(List<String> expected, String from, String replace) {
