@@ -1,18 +1,18 @@
-import 'dart:core' as core show StackTrace;
-import 'dart:core';
+import "dart:core" as core show StackTrace;
+import "dart:core";
 import 'dart:io';
+
 import 'package:path/path.dart';
-import '../settings.dart';
+
 import 'truepath.dart';
 
 /// Provides dart stack frame handling.
 class StackTraceImpl implements core.StackTrace {
-  static final RegExp _stackTraceRegex =
-      RegExp(r'#[0-9]+[\s]+(.+) \(([^\s]+)\)');
+  static final _stackTraceRegex = RegExp(r'#[0-9]+[\s]+(.+) \(([^\s]+)\)');
   final core.StackTrace _stackTrace;
 
   /// The working directory of the project (if provided)
-  final String workingDirectory;
+  final String _workingDirectory;
   final int _skipFrames;
 
   List<Stackframe> _frames;
@@ -21,17 +21,18 @@ class StackTraceImpl implements core.StackTrace {
   /// by specifing a non-zero value for [skipFrames]
   /// If the [workingDirectory] is provided we will output
   /// a full file path to the dart library.
-  StackTraceImpl({int skipFrames = 0, this.workingDirectory})
+  StackTraceImpl({int skipFrames = 0, String workingDirectory})
       : _stackTrace = core.StackTrace.current,
-        _skipFrames = skipFrames + 1; // always skip ourselves.
+        _skipFrames = skipFrames + 1, // always skip ourselves.
+        _workingDirectory = workingDirectory;
 
   ///
-  StackTraceImpl.fromStackTrace(core.StackTrace stackTrace,
-      {this.workingDirectory, int skipFrames = 0})
-      : _stackTrace = stackTrace,
-        _skipFrames = skipFrames {
-    if (stackTrace is StackTraceImpl) {
-      _frames = stackTrace.frames;
+  StackTraceImpl.fromStackTrace(this._stackTrace,
+      {String workingDirectory, int skipFrames = 0})
+      : _skipFrames = skipFrames,
+        _workingDirectory = workingDirectory {
+    if (_stackTrace is StackTraceImpl) {
+      _frames = (_stackTrace as StackTraceImpl).frames;
     }
   }
 
@@ -87,8 +88,8 @@ class StackTraceImpl implements core.StackTrace {
       var newLine =
           ('$sourceFile : ${stackFrame.details} : ${stackFrame.lineNo}');
 
-      if (workingDirectory != null) {
-        formatted.add('file:///$workingDirectory$newLine');
+      if (_workingDirectory != null) {
+        formatted.add('file:///$_workingDirectory$newLine');
       } else {
         formatted.add(newLine);
       }
@@ -104,7 +105,7 @@ class StackTraceImpl implements core.StackTrace {
     }
   }
 
-  /// returns all frames from the stack trace.
+  ///
   List<Stackframe> get frames {
     _frames ??= _extractFrames();
     return _frames;
@@ -125,35 +126,58 @@ class StackTraceImpl implements core.StackTrace {
       var match = _stackTraceRegex.matchAsPrefix(line);
       if (match == null) continue;
 
-      // source is one of two formats
-      // file:///.../package/filename.dart:column:line
-      // package:/package/.path./filename.dart:column:line
+      // source is one of following formats
+      /// Linux
+      /// file:///.../package/filename.dart:line:column
+      ///
+      /// Windows
+      /// (file:///d:/a/dshell/dshell/bin/dshell_install.dart:line:column
+      ///
+      /// Package
+      /// package:/package/.path./filename.dart:line:column
+      ///
       var source = match.group(2);
-      var sourceParts = source.split(':');
-
-      // deal with paths that contain c:\
-      var argOffset = sourceParts.length == 5 && Settings().isWindows ? 1 : 0;
-
-      ArgumentError.value(sourceParts.length == 4 + argOffset,
-          "Stackframe source does not contain the expeted no of colons '$source'");
-
-      var column = '0';
-      var lineNo = '0';
-      var sourcePath = sourceParts[1 + argOffset];
-      if (sourceParts.length > (2 + argOffset)) {
-        lineNo = sourceParts[2 + argOffset];
-      }
-      if (sourceParts.length > (3 + argOffset)) {
-        column = sourceParts[3 + argOffset];
+      var sourceParts = source.split(":");
+      var column = "0";
+      var lineNo = "0";
+      var sourcePath = sourceParts[1];
+      if (Platform.isWindows && source.startsWith('file:')) {
+        switch (sourceParts.length) {
+          case 3:
+            sourcePath = _getWindowsPath(sourceParts);
+            break;
+          case 4:
+            sourcePath = _getWindowsPath(sourceParts);
+            lineNo = sourceParts[3];
+            break;
+          case 5:
+            sourcePath = _getWindowsPath(sourceParts);
+            lineNo = sourceParts[3];
+            column = sourceParts[4];
+            break;
+          default:
+            sourcePath = sourceParts.join(':');
+            break;
+        }
+      } else {
+        if (sourceParts.length > 2) {
+          lineNo = sourceParts[2];
+        }
+        if (sourceParts.length > 3) {
+          column = sourceParts[3];
+        }
       }
 
       // the actual contents of the line (sort of)
       var details = match.group(1);
 
       Stackframe frame;
+
+      /// closures don't have a sourcePath.
       if (sourcePath != null) {
         sourcePath = sourcePath.replaceAll('<anonymous closure>', '()');
-        sourcePath = sourcePath.replaceAll('package:', '');
+        sourcePath = sourcePath.replaceAll("package:", "");
+        // sourcePath = sourcePath.replaceFirst("<package_name>", "/lib");
 
         frame = Stackframe(
             File(sourcePath), int.parse(lineNo), int.parse(column), details);
@@ -166,6 +190,12 @@ class StackTraceImpl implements core.StackTrace {
     return stackFrames;
   }
 
+  String _getWindowsPath(List<String> sourceParts) {
+    var len = sourceParts[1].length;
+    return '${sourceParts[1].substring(len - 1)}'
+        ':${sourceParts[2]}';
+  }
+
   /// merges two stack traces. Used when handling futures and you want
   /// combine a futures stack exception with the original calls stack
   StackTraceImpl merge(core.StackTrace microTask) {
@@ -176,7 +206,7 @@ class StackTraceImpl implements core.StackTrace {
     var index = 0;
     for (var frame in _microImpl.frames) {
       // best we can do is exclude any files that are in the flutter src tree.
-      if (_isExcludedSource(frame)) {
+      if (isExcludedSource(frame)) {
         continue;
       }
       merged.frames.insert(index++, frame);
@@ -191,7 +221,9 @@ List<String> _excludedSource = [
   join(rootPath, 'async'),
   'isolate'
 ];
-bool _isExcludedSource(Stackframe frame) {
+
+///
+bool isExcludedSource(Stackframe frame) {
   var excludeSource = false;
 
   var path = frame.sourceFile.absolute.path;
