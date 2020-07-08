@@ -314,4 +314,12 @@ class RunException extends DShellException {
   RunException copyWith(StackTraceImpl stackTrace) {
     return RunException(cmdLine, exitCode, reason, stackTrace: stackTrace);
   }
+
+  @override
+  String get message {
+    print('RunException');
+    return '''$cmdLine 
+exit: $exitCode
+reason: $reason''';
+  }
 }
