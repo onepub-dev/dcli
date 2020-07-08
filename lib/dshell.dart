@@ -43,6 +43,7 @@ export 'src/functions/is.dart' show isFile, isDirectory, exists;
 export 'src/functions/menu.dart' show menu;
 export 'src/functions/move.dart' show move, MoveException;
 export 'src/functions/move_dir.dart' show moveDir, MoveDirException;
+export 'src/functions/move_tree.dart' show moveTree, MoveTreeException;
 export 'src/functions/pop.dart' show PopException;
 export 'src/functions/push.dart' show PushException;
 export 'src/functions/pwd.dart' show pwd;
