@@ -115,6 +115,7 @@ class InstallCommand extends Command {
       print(blue('Creating bin directory in: $binPath.'));
       createDir(binPath);
 
+      // check if shell can add a path.
       if (!shell.hasStartScript || !shell.addToPath(binPath)) {
         printerr(
             'If you want to use dshell compile -i to install scripts, add $binPath to your PATH.');
