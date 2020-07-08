@@ -20,7 +20,7 @@ jobs:
     - name: init dart
       run: dart-sdk/bin/pub.bat get
     - name: Generate installer
-      run: dartsdk/bin/dart2native.bat bin/dshell_install.dart -o bin/windows/dshell_install.exe
+      run: dart-sdk/bin/dart2native.bat bin/dshell_install.dart -o bin/windows/dshell_install.exe
     - name: git email
       run: git config --global user.email "bsutton@noojee.com.au"
     - name: git name
