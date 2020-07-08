@@ -18,9 +18,9 @@ jobs:
     - name: unzip dart
       run: tar.exe -xf dartsdk.zip
     - name: init dart
-      run: dartsdk/bin/pub get
+      run: dart-sdk/bin/pub.bat get
     - name: Generate installer
-      run: dartsdk/bin/dart2native bin/dshell_install.dart -o bin/windows/dshell_install.exe
+      run: dartsdk/bin/dart2native.bat bin/dshell_install.dart -o bin/windows/dshell_install.exe
     - name: git email
       run: git config --global user.email "bsutton@noojee.com.au"
     - name: git name
