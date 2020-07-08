@@ -108,12 +108,15 @@ class DoctorCommand extends Command {
     var shell = ShellDetection().identifyShell();
     _colprint(['Detected SHELL', '${shell.name}']);
 
-    var startScriptPath = shell.startScriptPath;
-
-    if (startScriptPath == null) {
-      _colprint(['Shell Start Script', 'Not Found']);
+    if (shell.hasStartScript) {
+      var startScriptPath = shell.startScriptPath;
+      if (startScriptPath == null) {
+        _colprint(['Shell Start Script', '${privatePath(startScriptPath)}']);
+      } else {
+        _colprint(['Shell Start Script', 'Not Found']);
+      }
     } else {
-      _colprint(['Shell Start Script', '${privatePath(startScriptPath)}']);
+      _colprint(['Shell Start Script', 'Not supported by shell']);
     }
 
     print('');
