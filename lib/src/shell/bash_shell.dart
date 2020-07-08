@@ -51,6 +51,6 @@ class BashShell with ShellMixin, PosixMixin {
     return '.bashrc';
   }
 
-   @override
+  @override
   bool get hasStartScript => true;
 }

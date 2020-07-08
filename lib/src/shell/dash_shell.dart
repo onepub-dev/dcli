@@ -20,7 +20,7 @@ class DashShell with ShellMixin, PosixMixin {
     return '.dashrc';
   }
 
-   @override
+  @override
   bool get hasStartScript => true;
 
   @override

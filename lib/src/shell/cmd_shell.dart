@@ -42,7 +42,7 @@ class CmdShell with ShellMixin {
   @override
   String get startScriptName => throw UnimplementedError;
 
-   @override
+  @override
   bool get hasStartScript => false;
 
   @override

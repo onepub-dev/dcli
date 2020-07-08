@@ -45,7 +45,7 @@ class PowerShell with ShellMixin {
   @override
   String get startScriptPath => throw UnimplementedError;
 
-   @override
+  @override
   bool get hasStartScript => false;
 
   @override

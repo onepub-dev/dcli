@@ -35,6 +35,6 @@ class ShShell with ShellMixin, PosixMixin {
     throw UnimplementedError;
   }
 
-   @override
+  @override
   bool get hasStartScript => false;
 }

@@ -1,4 +1,3 @@
-
 import 'ansi.dart';
 
 /// Returns a string wrapped with the selected ansi
