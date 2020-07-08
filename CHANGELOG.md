@@ -1,3 +1,22 @@
+# 1.8.15
+Created github actions to generated linux and windows installer for dshell and dart.
+Change copyDir to copyTree.
+Changed moveDir to moveTree.
+Created new simplified moveDir that just moves the top level dir.
+Created a 'fetch' method for downloading files.
+add logic to check if shell has a start script. Only trys to add a path when it does.
+Fixed a npe when who doesn't return a user.
+trying to improve the error message with .run is called and fails.
+fixed an npe if the SHELL env var doesn't exist.
+change paths to use truepath for consistency.
+fixed broken brackets in readme.md
+Developed code to download dartsdk from google archive and wrote test for same.
+refactored the ansi classes and introduced additional methods for controlling a terminal.
+added method to format a double as a percentage.
+added cursor management.
+dart_install for linux
+workflow to create installer each time we do a release.
+
 ### 1.8.14
 moved mockit to dev dependencies.
 For the moment I've wound back the privileged requirements for install as it makes unit tests fail.
