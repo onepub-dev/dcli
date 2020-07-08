@@ -59,10 +59,12 @@ mixin PosixMixin {
 
     var line = 'who'.firstLine;
     Settings().verbose('who: $line');
-    // username :1
-    var parts = line.split(':');
-    if (parts.isNotEmpty) {
-      user = parts[0];
+    if (line != null) {
+      // username :1
+      var parts = line.split(':');
+      if (parts.isNotEmpty) {
+        user = parts[0];
+      }
     }
     Settings().verbose('loggedInUser: $user');
     return user;
