@@ -148,16 +148,24 @@ These are some of the built-in commands:
 DShell now includes an installer which installs Dart and DShell.
 
 
-Linux:
-[Installer](https://github.com/bsutton/dshell/raw/master/bin/linux/dshell_install)
+#### Linux:
+[Installer](https://raw.githubusercontent.com/bsutton/dshell/master/bin/linux/dshell_install)
 
 ```bash
-wget https://github.com/bsutton/dshell/raw/master/bin/linux/dshell_install
+wget https://raw.githubusercontent.com/bsutton/dshell/master/bin/linux/dshell_install
 chmod +x dshell_install
 ./dshell_install
 ```
 
-To install DShell manually:
+#### Windows
+[Installer](https://raw.githubusercontent.com/bsutton/dshell/master/bin/windows/dshell_install.exe)
+
+```cmd
+curl https://raw.githubusercontent.com/bsutton/dshell/master/bin/windows/dshell_install.exe -o dshell_install.exe
+dshell_install.exe
+```
+
+### To install DShell manually:
 
 Lets install DShell, create and run our first script:
 
