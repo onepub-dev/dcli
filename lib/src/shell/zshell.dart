@@ -34,4 +34,7 @@ class ZshShell with ShellMixin, PosixMixin {
   String get startScriptName {
     return '.zshrc';
   }
+
+  @override
+  bool get hasStartScript => true;
 }

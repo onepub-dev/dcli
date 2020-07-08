@@ -34,4 +34,7 @@ class ShShell with ShellMixin, PosixMixin {
   String get startScriptName {
     throw UnimplementedError;
   }
+
+   @override
+  bool get hasStartScript => false;
 }

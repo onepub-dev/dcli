@@ -22,6 +22,10 @@ abstract class Shell {
   /// e.g. .bashrc
   String get startScriptName;
 
+  /// True if this shell supports a start script.
+  /// e.g. a script that is run by the shell when the shell starts.
+  bool get hasStartScript;
+
   /// The name of the shell
   /// e.g. bash
   String get name;

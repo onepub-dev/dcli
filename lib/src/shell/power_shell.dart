@@ -45,6 +45,9 @@ class PowerShell with ShellMixin {
   @override
   String get startScriptPath => throw UnimplementedError;
 
+   @override
+  bool get hasStartScript => false;
+
   @override
   bool get isPrivilegedUser {
     var currentPrincipal =

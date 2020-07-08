@@ -26,4 +26,7 @@ class AshShell with ShellMixin, PosixMixin {
   String get startScriptName {
     return '.ashrc';
   }
+
+  @override
+  bool get hasStartScript => true;
 }

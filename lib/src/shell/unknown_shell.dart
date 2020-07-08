@@ -101,7 +101,10 @@ class UnknownShell with ShellMixin {
   int get hashCode => name.hashCode;
 
   @override
-  String get startScriptName => null;
+  String get startScriptName => throw UnimplementedError;
+
+  @override
+  bool get hasStartScript => true;
 
   @override
   String get startScriptPath => null;

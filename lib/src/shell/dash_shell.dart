@@ -20,6 +20,9 @@ class DashShell with ShellMixin, PosixMixin {
     return '.dashrc';
   }
 
+   @override
+  bool get hasStartScript => true;
+
   @override
   void installTabCompletion() {
     throw UnimplementedError();

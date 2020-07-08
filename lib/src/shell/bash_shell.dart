@@ -50,4 +50,7 @@ class BashShell with ShellMixin, PosixMixin {
   String get startScriptName {
     return '.bashrc';
   }
+
+   @override
+  bool get hasStartScript => true;
 }
