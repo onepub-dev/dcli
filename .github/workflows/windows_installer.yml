@@ -28,5 +28,5 @@ jobs:
       
     - name: Commit results
       run: |
-          git commit $GITHUB_WORKSPACE/bin/linux/dshell_install.exe -m 'dart_install.exe for windows' || echo "exec has not changed"
+          git commit $GITHUB_WORKSPACE/bin/windows/dshell_install.exe -m 'dart_install.exe for windows' || echo "exec has not changed"
           git push origin || echo "exec has not changed."
