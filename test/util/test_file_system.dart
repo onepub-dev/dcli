@@ -232,7 +232,7 @@ class TestFileSystem {
     // print(which(DartSdk.pubExeName).firstLine);
     '${DartSdk.pubExeName} global activate --source path $pwd'.run;
 
-    EntryPoint().process(['install']);
+    EntryPoint().process(['install', '--nodart']);
 
     /// rewrite dependencies.yaml so that the dshell path points
     /// to the dev build directory
