@@ -26,5 +26,5 @@ void main() {
       print('installed To $installPath');
       expect(exists(DartSdk().dartExePath), equals(true));
     });
-  });
+  }, skip: true);
 }
