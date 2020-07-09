@@ -220,8 +220,12 @@ class DartSdk {
 
     /// ask for and confirm the install directory.
     while (!confirmed) {
-      dartToolDir =
-          ask(prompt: 'Install dartSdk (Enter for default $dartToolDir): ');
+      var entered = ask(
+          prompt:
+              'Install dart-sdk to (Enter for default [${truepath(dartToolDir)}]): ');
+      if (!entered.isEmpty) {
+        dartToolDir = entered;
+      }
 
       confirmed = confirm(prompt: 'Is $dartToolDir correct:');
     }
