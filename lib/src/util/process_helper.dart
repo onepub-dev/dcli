@@ -47,9 +47,7 @@ class ProcessHelper {
   }
 
   /// Get the PID of the parent
-  /// Throws an RunException exception if the name can't
-  /// be obtained.
-  ///
+  /// Returns -1 if a parent can't be obtained.
   int getParentPID(int childPid) {
     if (Platform.isWindows) {
       return _windowsGetParentPid(childPid);
@@ -67,6 +65,8 @@ class ProcessHelper {
     }
   }
 
+  /// returns the pid of the parent pid of -1 if the
+  /// child doesn't have a parent.
   int _linuxGetParentPID(int childPid) {
     int parentPid;
 
@@ -82,6 +82,8 @@ class ProcessHelper {
     return parentPid;
   }
 
+  /// returns the pid of the parent pid of -1 if the
+  /// child doesn't have a parent.
   int _windowsGetParentPid(int childPid) {
     var parents = _windowsParentProcessList();
 
@@ -176,6 +178,7 @@ class ProcessHelper {
 
       details.processName = line[0] as String;
       details.pid = int.tryParse(line[1] as String);
+      print('${details.processName} ${details.pid}');
 
       var memparts = (line[4] as String).split(' ');
       details.memory = memparts[0];

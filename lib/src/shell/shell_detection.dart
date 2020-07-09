@@ -77,8 +77,9 @@ class ShellDetection {
     while (shell == null) {
       var possiblePid = ProcessHelper().getParentPID(childPID);
 
-      /// Check if we ran into the root process.
-      if (possiblePid == 0) {
+      /// Check if we ran into the root process or we
+      ///  couldn't get the parent pid.
+      if (possiblePid == 0 || possiblePid == -1) {
         break;
       }
       var processName = ProcessHelper().getProcessName(possiblePid);

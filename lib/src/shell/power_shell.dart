@@ -4,7 +4,7 @@ import 'shell_mixin.dart';
 /// Windows Power Shell
 class PowerShell with ShellMixin {
   /// Name of the shell
-  static const String shellName = 'powershell';
+  static const String shellName = 'powershell.exe';
 
   @override
   bool addToPath(String path) {
