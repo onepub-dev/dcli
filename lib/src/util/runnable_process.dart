@@ -317,7 +317,6 @@ class RunException extends DShellException {
 
   @override
   String get message {
-    print('RunException');
     return '''$cmdLine 
 exit: $exitCode
 reason: $reason''';
