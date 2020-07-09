@@ -146,8 +146,8 @@ class _Fetch extends DShellFunction {
           _sendProgressEvent(FetchProgress._downloading(
               fetchUrl, contentLength, lengthReceived));
 
-          Settings().verbose(
-              'Download progress: %$lengthReceived / $contentLength} ');
+          Settings()
+              .verbose('Download progress: $lengthReceived / $contentLength ');
         },
         onDone: () async {
           /// down load is complete
