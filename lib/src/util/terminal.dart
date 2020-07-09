@@ -36,6 +36,9 @@ class Terminal {
 
   Terminal._internal();
 
+  /// Returns true if ansi escape characters are supported.
+  bool get isAnsi => Ansi.isSupported;
+
   ///
   void clearScreen({TerminalClearMode mode}) {
     if (!Ansi.isSupported) return;
