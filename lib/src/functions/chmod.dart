@@ -5,6 +5,7 @@ import '../util/stack_trace_impl.dart';
 import 'dshell_function.dart';
 
 /// Wrapper for the linux `chmod` command.
+///
 /// [permission] is the standard bit map used by chmod e.g. 777
 /// [path] is the path to the file that we are changing the
 /// permissions of.
