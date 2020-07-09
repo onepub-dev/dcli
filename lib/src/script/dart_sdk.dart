@@ -30,12 +30,7 @@ class DartSdk {
     return _self;
   }
 
-  DartSdk._internal() {
-    if (Settings().isVerbose) {
-      // expensive operation so only peform if required.
-      Settings().verbose('Dart SDK Version  $version, path: $_sdkPath');
-    }
-  }
+  DartSdk._internal();
 
   /// The path to the dart 'bin' directory.
   String get sdkPath {
@@ -149,7 +144,7 @@ class DartSdk {
     }
   }
 
-  /// returns the version of date.
+  /// returns the version of dart.
   String get version {
     if (_version == null) {
       final res = waitFor<ProcessResult>(
@@ -162,6 +157,7 @@ class DartSdk {
 
       _version =
           resultString.substring('Dart VM version: '.length).split(' ').first;
+      Settings().verbose('Dart SDK Version  $_version, path: $dartExePath');
     }
 
     return _version;
