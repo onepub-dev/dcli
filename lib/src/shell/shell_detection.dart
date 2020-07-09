@@ -81,13 +81,15 @@ class ShellDetection {
       if (possiblePid == 0) {
         break;
       }
-      var processName =
-          ProcessHelper().getProcessName(possiblePid).toLowerCase();
-      Settings().verbose('parentPID: $possiblePid $processName');
-
-      shell = _shellByName(processName);
-
-      Settings().verbose('found: $possiblePid $processName');
+      var processName = ProcessHelper().getProcessName(possiblePid);
+      if (processName != null) {
+        processName = processName.toLowerCase();
+        Settings().verbose('found: $possiblePid $processName');
+        shell = _shellByName(processName);
+      } else {
+        Settings()
+            .verbose('possiblePID: $possiblePid Unable to obtain process name');
+      }
 
       if (firstPass) {
         firstPass = false;
