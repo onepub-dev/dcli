@@ -284,7 +284,8 @@ class DartSdk {
       echo(
           '${EnumHelper.getName(progress.status).padRight(15)}${humanNumber(progress.downloaded)}/${humanNumber(progress.length)} $percentage');
     } else {
-      if (_progressSuppressor % 1000 == 0) {
+      if (_progressSuppressor % 1000 == 0 ||
+          progress.status == FetchStatus.complete) {
         print(
             '${EnumHelper.getName(progress.status).padRight(15)}${humanNumber(progress.downloaded)}/${humanNumber(progress.length)} $percentage');
       }
