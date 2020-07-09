@@ -17,7 +17,7 @@ import 'commands.dart';
 class InstallCommand extends Command {
   static const _commandName = 'install';
 
-  final _installFlags = [_NoCleanFlag()];
+  final _installFlags = [_NoCleanFlag(), _NoDartFlag()];
 
   /// holds the set of flags passed to the compile command.
   Flags flagSet = Flags();
@@ -234,6 +234,21 @@ class _NoCleanFlag extends Flag {
     return '''Stops the install from running 'dshell cleanall' as part of the install.
       This option is for testing purposes. 
       When doing a dshell upgrade you should always allow install to do a clean all.''';
+  }
+}
+
+class _NoDartFlag extends Flag {
+  static const _flagName = 'nodart';
+
+  _NoDartFlag() : super(_flagName);
+
+  @override
+  String get abbreviation => 'nd';
+
+  @override
+  String description() {
+    return '''Stops the install from installing dart as part of the install.
+      This option is for testing purposes.''';
   }
 }
 
