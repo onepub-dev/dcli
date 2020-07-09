@@ -65,14 +65,12 @@ import 'is.dart';
 void moveTree(String from, String to,
         {bool overwrite = false,
         bool includeHidden = false,
-        bool recursive = false,
         bool Function(String file) filter}) =>
     _MoveTree().moveTree(
       from,
       to,
       overwrite: overwrite,
       includeHidden: includeHidden,
-      recursive: recursive,
       filter: filter,
     );
 
@@ -83,7 +81,6 @@ class _MoveTree extends DShellFunction {
     bool overwrite = false,
     bool Function(String file) filter,
     bool includeHidden,
-    bool recursive,
   }) {
     if (!isDirectory(from)) {
       throw MoveTreeException(
@@ -106,7 +103,7 @@ class _MoveTree extends DShellFunction {
         '*',
         root: from,
         includeHidden: includeHidden,
-        recursive: recursive,
+        recursive: true,
       ).forEach((file) {
         var include = true;
         if (filter != null) include = filter(file);
