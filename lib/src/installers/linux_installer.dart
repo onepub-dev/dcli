@@ -46,7 +46,7 @@ class LinuxDShellInstaller {
         _installDartWithApt();
       } else {
         Settings().verbose('Apt not found. Installing from archive');
-        DartSdk().installFromArchive('/usr/lib/dart');
+        DartSdk().installFromArchive('/usr/lib/dart', askUser: false);
       }
 
       installedDart = true;

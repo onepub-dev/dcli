@@ -15,7 +15,8 @@ class WindowsDShellInstaller {
 
       var defaultDartToolDir = "C:\tools\dart-sdk";
 
-      var dartToolDir = DartSdk().installFromArchive(defaultDartToolDir);
+      var dartToolDir =
+          DartSdk().installFromArchive(defaultDartToolDir, askUser: false);
 
       /// add the dartsdk path to the windows path.
       'setx path "%path%";$dartToolDir'.run;
