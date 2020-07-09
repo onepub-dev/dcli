@@ -1,3 +1,13 @@
+# 1.8.19
+Work on getting dshell to install under alpine docker image.
+reduced progress messages when ansi not supported.
+Added logic to move the dart-sdk to the write directory after expanding it. Added execute permissions to files in dart/bin directory. reduced the no. of progress messages.
+Now printing out the dir dart is installed into.
+Terminal: added method to check if ansi escapses are supported.
+suppressed asking the user to confirm the install path.
+Fixed a bug where moveTree wasn't actually recursive.
+Added a fallback mechanism on linux system to install from the archive if apt isn't found.
+
 # 1.8.18
 Fixed a number of bugs around shell detection when one can't be determined.
 exists() - added test for null or empty path.

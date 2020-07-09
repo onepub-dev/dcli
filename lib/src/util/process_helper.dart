@@ -42,9 +42,7 @@ class ProcessHelper {
     }
     if (line != null) {
       processName = line.trim();
-
     }
-
 
     Settings().verbose('_getLinuxProcessName $lpid $processName');
 
@@ -157,7 +155,6 @@ class ProcessHelper {
       // ps not supported on current OS
       // we have to assume the process running
     }
-    
 
     return isRunning;
   }
