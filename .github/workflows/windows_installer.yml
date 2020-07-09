@@ -29,4 +29,5 @@ jobs:
     - name: Commit results
       run: |
           git commit bin/windows/dshell_install.exe -m 'dart_install.exe for windows' || echo "exec has not changed"
+          git pull
           git push origin || echo "exec has not changed."
