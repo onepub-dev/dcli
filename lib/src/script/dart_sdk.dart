@@ -6,6 +6,8 @@ import 'package:path/path.dart' as p;
 import 'package:system_info/system_info.dart';
 
 import '../../dshell.dart';
+import '../util/enum_helper.dart';
+import '../util/file_system.dart';
 import '../util/progress.dart';
 import '../util/runnable_process.dart';
 import '../util/terminal.dart';
@@ -175,11 +177,28 @@ class DartSdk {
     Settings().verbose('Architecture: ${SysInfo.kernelArchitecture}');
     var zipRelease = _fetchDartSdk();
 
-    var installDir = _askForDartSdkInstallDir(defaultDartSdkPath);
+    var installDir = defaultDartSdkPath;
+
+    if (askUser) installDir = _askForDartSdkInstallDir(defaultDartSdkPath);
+
+    if (!exists(installDir)) {
+      createDir(installDir, recursive: true);
+    }
 
     // Read the Zip file from disk.
     _extractDartSdk(zipRelease, installDir);
     delete(zipRelease);
+
+    /// the archive creates a root of 'dart-sdk' we need to move
+    /// all of the files directly under the [installDir] (/usr/bin/dart).
+    moveTree(join(installDir, 'dart-sdk'), installDir, includeHidden: true);
+    deleteDir(join(installDir, 'dart-sdk'));
+
+    if (Platform.isLinux || Platform.isMacOS) {
+      /// make execs executable.
+      find('*', root: join(installDir, 'bin'), recursive: false)
+          .forEach((file) => 'chmod +x, $file'.run);
+    }
 
     // The normal dart detection process won't work here
     // as dart is not on the path so for the moment we force it
@@ -203,7 +222,7 @@ class DartSdk {
     /// https://dart.dev/tools/sdk/archive
 
     var term = Terminal();
-    term.showCursor(show: false);
+    if (term.isAnsi) term.showCursor(show: false);
 
     fetch(
         url:
@@ -211,7 +230,7 @@ class DartSdk {
         saveToPath: zipRelease,
         onProgress: _showProgress);
 
-    term.showCursor(show: true);
+    if (term.isAnsi) term.showCursor(show: true);
     print('');
     return zipRelease;
   }
@@ -231,9 +250,6 @@ class DartSdk {
       confirmed = confirm(prompt: 'Is $dartToolDir correct:');
     }
 
-    if (!exists(dartToolDir)) {
-      createDir(dartToolDir, recursive: true);
-    }
     return dartToolDir;
   }
 
@@ -258,13 +274,23 @@ class DartSdk {
     }
   }
 
+  int _progressSuppressor = 0;
   void _showProgress(FetchProgress progress) {
-    // var term = Terminal();
-    // term.clearLine(mode: TerminalClearMode.all);
-    // term.startOfLine();
-    // var percentage = Format().percentage(progress.progress, 1);
-    // echo(
-    //     '${EnumHelper.getName(progress.status).padRight(15)}${humanNumber(progress.downloaded)}/${humanNumber(progress.length)} $percentage');
+    var term = Terminal();
+    var percentage = Format().percentage(progress.progress, 1);
+    if (term.isAnsi) {
+      term.clearLine(mode: TerminalClearMode.all);
+      term.startOfLine();
+      echo(
+          '${EnumHelper.getName(progress.status).padRight(15)}${humanNumber(progress.downloaded)}/${humanNumber(progress.length)} $percentage');
+    } else {
+      if (_progressSuppressor % 1000 == 0) {
+        print(
+            '${EnumHelper.getName(progress.status).padRight(15)}${humanNumber(progress.downloaded)}/${humanNumber(progress.length)} $percentage');
+      }
+      _progressSuppressor++;
+      if (_progressSuppressor > 1000) _progressSuppressor = 0;
+    }
   }
 }
 
