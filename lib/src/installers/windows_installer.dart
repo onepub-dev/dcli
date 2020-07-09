@@ -20,14 +20,6 @@ class WindowsDShellInstaller {
       /// add the dartsdk path to the windows path.
       'setx path "%path%";$dartToolDir'.run;
 
-      /// using the archive would allow us to provide a consistent install experience without requiring
-      /// a package manager to be preinstalled.
-
-      // The normal dart detection process won't work here
-      // as dart is not on the path so for the moment we force it
-      // to the path we just downloaded it to.
-      // CONSIDER a way of identifying where dart has been installed to.
-      setDartSdkPath(dartToolDir);
       installedDart = true;
     } else {
       // nothing to do dart is already installed.

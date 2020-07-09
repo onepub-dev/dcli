@@ -171,11 +171,11 @@ class DartSdk {
   /// This is simply the process of downloading and extracting the
   /// sdk to the [defaultDartSdkPath].
   ///
-  /// The user is asked to confirm the install path and can modifiy
-  /// it if desired.
+  /// If [askUser] is true (the default) the user is asked to confirm the
+  /// install path and can modifiy it if desired.
   ///
   /// returns the directory where the dartSdk was installed.
-  String installFromArchive(String defaultDartSdkPath) {
+  String installFromArchive(String defaultDartSdkPath, {bool askUser = true}) {
     Settings().verbose('Architecture: ${SysInfo.kernelArchitecture}');
     var zipRelease = _fetchDartSdk();
 
@@ -184,6 +184,11 @@ class DartSdk {
     // Read the Zip file from disk.
     _extractDartSdk(zipRelease, installDir);
     delete(zipRelease);
+
+    // The normal dart detection process won't work here
+    // as dart is not on the path so for the moment we force it
+    // to the path we just downloaded it to.
+    setDartSdkPath(installDir);
 
     return installDir;
   }

@@ -1,7 +1,7 @@
 import 'dart:io';
 
 import '../../dshell.dart';
-import '../installers/apt_installer.dart';
+import '../installers/linux_installer.dart';
 import '../installers/macosx_installer.dart';
 import '../installers/windows_installer.dart';
 import 'shell_mixin.dart';
@@ -123,7 +123,7 @@ class UnknownShell with ShellMixin {
   @override
   bool install() {
     if (Platform.isLinux) {
-      return AptDShellInstaller().install();
+      return LinuxDShellInstaller().install();
     } else if (Platform.isWindows) {
       return WindowsDShellInstaller().install();
     } else if (Platform.isMacOS) {

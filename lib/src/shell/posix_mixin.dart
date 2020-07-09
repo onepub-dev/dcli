@@ -1,7 +1,7 @@
 import 'dart:io';
 
 import '../../dshell.dart';
-import '../installers/apt_installer.dart';
+import '../installers/linux_installer.dart';
 import '../installers/macosx_installer.dart';
 
 /// Provides a number of helper functions
@@ -76,7 +76,7 @@ mixin PosixMixin {
 
   bool install() {
     if (Platform.isLinux) {
-      return AptDShellInstaller().install();
+      return LinuxDShellInstaller().install();
     } else {
       return MacOsxDshellInstaller().install();
     }

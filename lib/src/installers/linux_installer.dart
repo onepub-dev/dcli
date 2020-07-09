@@ -7,15 +7,10 @@ import '../util/pub_cache.dart';
 /// Installs dart on an apt base system.abstract
 ///
 
-class AptDShellInstaller {
+class LinuxDShellInstaller {
   /// returns true if it needed to install dart.
   bool install() {
     var installedDart = false;
-
-    /// check that apt is available.
-    if (which('apt').firstLine == null) {
-      throw UnsupportedError('Unable to find apt. Install failed.');
-    }
 
     // first check that dart isn't already installed
     if (which('dart').firstLine == null) {
@@ -45,16 +40,15 @@ class AptDShellInstaller {
         print('You will need to restart your shell for dart to be available');
       }
 
-      'apt update'.run;
-      'apt install apt-transport-https'.run;
+      /// check that apt is available.
+      if (which('apt').firstLine != null) {
+        Settings().verbose('Usimg the apt installer');
+        _installDartWithApt();
+      } else {
+        Settings().verbose('Apt not found. Installing from archive');
+        DartSdk().installFromArchive('/usr/lib/dart');
+      }
 
-      "sh -c 'wget -qO- https://dl-ssl.google.com/linux/linux_signing_key.pub | apt-key add -'"
-          .run;
-
-      "sh -c 'wget -qO- https://storage.googleapis.com/download.dartlang.org/linux/debian/dart_stable.list > /etc/apt/sources.list.d/dart_stable.list'"
-          .run;
-      'apt update'.run;
-      'apt install dart'.run;
       installedDart = true;
     } else {
       // dart is already installed.
@@ -75,5 +69,18 @@ class AptDShellInstaller {
     // '/usr/lib/dart/bin/pub global activate dshell'.run;
 
     return installedDart;
+  }
+
+  void _installDartWithApt() {
+    'apt update'.run;
+    'apt install apt-transport-https'.run;
+
+    "sh -c 'wget -qO- https://dl-ssl.google.com/linux/linux_signing_key.pub | apt-key add -'"
+        .run;
+
+    "sh -c 'wget -qO- https://storage.googleapis.com/download.dartlang.org/linux/debian/dart_stable.list > /etc/apt/sources.list.d/dart_stable.list'"
+        .run;
+    'apt update'.run;
+    'apt install dart'.run;
   }
 }
