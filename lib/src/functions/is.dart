@@ -41,6 +41,8 @@ bool isLink(String path) => _Is().isLink(path);
 /// if (exists("/fred.txt"))
 /// ```
 ///
+/// Throws [ArgumentError] if [path] is null or an empty string.
+///
 /// See [isLink]
 ///     [isDirectory]
 ///     [isFile]
@@ -96,7 +98,12 @@ class _Is extends DShellFunction {
   }
 
   /// checks if the given [path] exists.
+  ///
+  /// Throws [ArgumentError] if [path] is null or an empty string.
   bool exists(String path, {@required bool followLinks}) {
+    if (path == null || path.isEmpty) {
+      throw ArgumentError('path must not be null or empty');
+    }
     //return FileSystemEntity.existsSync(path);
     return FileSystemEntity.typeSync(path, followLinks: followLinks) !=
         FileSystemEntityType.notFound;
