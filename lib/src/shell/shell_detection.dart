@@ -90,6 +90,7 @@ class ShellDetection {
       } else {
         Settings()
             .verbose('possiblePID: $possiblePid Unable to obtain process name');
+        shell = UnknownShell('unknown');
       }
 
       if (firstPass) {
