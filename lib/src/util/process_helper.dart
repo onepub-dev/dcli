@@ -30,18 +30,23 @@ class ProcessHelper {
   ///
   /// Throws an RunException exception if the name can't
   /// be obtained.
-  String _getLinuxProcessName(int pid) {
+  String _getLinuxProcessName(int lpid) {
     String line;
+    var processName = 'unknown';
 
     try {
-      line = 'ps -q $pid -o comm='.firstLine;
+      line = 'ps -q $lpid -o comm='.firstLine;
+      Settings().verbose('ps: $line');
     } on ProcessException {
       // ps not supported on current OS
-      line = 'unknown';
     }
     if (line != null) {
-      line = line.trim();
+      processName = line.trim();
+
     }
+
+
+    Settings().verbose('_getLinuxProcessName $lpid $processName');
 
     return line;
   }
@@ -73,6 +78,7 @@ class ProcessHelper {
     String line;
     try {
       line = 'ps -p $childPid -o ppid='.firstLine;
+      Settings().verbose('ps: $line');
     } on ProcessException {
       // ps not supported on current OS
       line = '-1';
@@ -102,6 +108,7 @@ class ProcessHelper {
         .toList(skipLines: 1);
 
     for (var process in processes) {
+      Settings().verbose('wmic: $process');
       process = process.trim();
       process = process.replaceAll(RegExp(r'\s+'), ' ');
       // print(process);
@@ -142,6 +149,7 @@ class ProcessHelper {
 
     try {
       line = 'ps -q $lpid -o comm='.firstLine;
+      Settings().verbose('ps: $line');
       if (line != null) {
         isRunning = true;
       }
@@ -149,6 +157,7 @@ class ProcessHelper {
       // ps not supported on current OS
       // we have to assume the process running
     }
+    
 
     return isRunning;
   }
@@ -162,6 +171,7 @@ class ProcessHelper {
         break;
       }
     }
+    Settings().verbose('_getWindowsProcessName $lpid $pidName');
     return pidName;
   }
 
@@ -174,6 +184,7 @@ class ProcessHelper {
 
     var lines = const CsvToListConverter().convert(tasks.join('\r\n'));
     for (var line in lines) {
+      Settings().verbose('tasklist: $line');
       var details = _PIDDetails();
 
       details.processName = line[0] as String;

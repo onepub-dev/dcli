@@ -121,6 +121,9 @@ class ShellDetection {
 
     /// If we didn't find a shell then use firstShell.
     shell ??= firstShell;
+
+    /// if things are really sad.
+    shell ??= UnknownShell('unknwon');
     Settings().verbose(blue('Identified shell: ${shell.name}'));
     return shell;
   }
