@@ -21,6 +21,8 @@ class WindowsDShellInstaller {
       /// add the dartsdk path to the windows path.
       'setx path "%path%";$dartToolDir'.run;
 
+      print('Installed dart to: $dartToolDir');
+
       installedDart = true;
     } else {
       // nothing to do dart is already installed.
