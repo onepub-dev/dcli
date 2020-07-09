@@ -1,3 +1,10 @@
+# 1.8.18
+Fixed a number of bugs around shell detection when one can't be determined.
+exists() - added test for null or empty path.
+dshell install - added a --nodart option to suppress installation of dart.
+Fixed bugs in windows stackframe parsing.
+Added install link for windows dshell_install.
+
 # 1.8.17
 another script path error.
 

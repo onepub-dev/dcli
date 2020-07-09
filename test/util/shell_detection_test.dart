@@ -12,16 +12,11 @@ void main() {
     print(shell.name);
 
     String expected;
-    if (Platform.isWindows)
-    {
+    if (Platform.isWindows) {
       expected = CmdShell.shellName;
-    }
-    else if (Platform.isLinux)
-    {
+    } else if (Platform.isLinux) {
       expected = BashShell.shellName;
-    }
-     else if (Platform.isMacOS)
-    {
+    } else if (Platform.isMacOS) {
       expected = ZshShell.shellName;
     }
 
