@@ -1,3 +1,6 @@
+# 1.8.20
+Fixed a bug in the default script which had an extra /
+
 # 1.8.19
 Work on getting dshell to install under alpine docker image.
 reduced progress messages when ansi not supported.
