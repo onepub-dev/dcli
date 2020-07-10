@@ -86,8 +86,7 @@ void main() {
         var source = find('*.txt', root: from, recursive: true).toList();
         var expected = subname(source, 'top', 'new_top');
         createDir(to);
-        moveTree(from, to,
-            recursive: true, filter: (file) => extension(file) == '.txt');
+        moveTree(from, to, filter: (file) => extension(file) == '.txt');
 
         var actual = find('*.txt', root: to, recursive: true).toList();
 
@@ -108,7 +107,7 @@ void main() {
         var source = find('*', root: from, recursive: true).toList();
         var expected = subname(source, 'top', 'new_top');
         createDir(to);
-        moveTree(from, to, recursive: true);
+        moveTree(from, to);
 
         var actual = find('*', root: to, recursive: true).toList();
 
@@ -129,8 +128,8 @@ void main() {
         var source = find('*', root: from, recursive: true).toList();
         var expected = subname(source, 'top', 'new_top');
         createDir(to);
-        moveTree(from, to, recursive: true);
-        moveTree(from, to, overwrite: true, recursive: true);
+        moveTree(from, to);
+        moveTree(from, to, overwrite: true);
 
         var actual = find('*', root: to, recursive: true).toList();
 
