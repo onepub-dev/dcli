@@ -7,8 +7,11 @@ import 'package:test/test.dart';
 
 void main() {
   test('PubCache', () {
+    PubCache.reset();
+    Env.reset();
+
     /// we don't necessarily have a HOME env in the test environment.
-    setEnv('HOME', '/home');
+    setEnv('HOME', join('/home'));
     if (Platform.isWindows) {
       expect(PubCache().binPath,
           equals(join(env('LocalAppData'), 'Pub', 'Cache', 'bin')));
@@ -19,8 +22,11 @@ void main() {
   }, skip: false);
 
   test('PubCache - from ENV', () {
+    PubCache.reset();
+    Env.reset();
+
     /// we don't necessarily have a HOME env in the test environment.
-    setEnv('HOME', '/home');
+    setEnv('HOME', join('/home'));
     setEnv('PUB_CACHE', join(Platform.pathSeparator, 'test_cache'));
     if (Platform.isWindows) {
       expect(PubCache().binPath,
