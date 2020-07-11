@@ -14,7 +14,7 @@ void main() {
     setEnv('HOME', join('/home'));
     if (Platform.isWindows) {
       expect(PubCache().binPath,
-          equals(join(env('LocalAppData'), 'Pub', 'Cache', 'bin')));
+          equals(join(env('LocalAppData'), 'Pub', 'Cache', 'bin').toLowerCase()));
     } else {
       expect(
           PubCache().binPath, equals(join(env('HOME'), '.pub-cache', 'bin')));
@@ -30,7 +30,7 @@ void main() {
     setEnv('PUB_CACHE', join(Platform.pathSeparator, 'test_cache'));
     if (Platform.isWindows) {
       expect(PubCache().binPath,
-          equals(join(Platform.pathSeparator, 'test_cache', 'bin')));
+          equals(join(r'c:\test_cache', 'bin').toLowerCase()));
     } else {
       expect(PubCache().binPath,
           equals(join(Platform.pathSeparator, 'test_cache', 'bin')));
