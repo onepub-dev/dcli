@@ -134,7 +134,7 @@ class Env extends DShellFunction {
   ///
   /// Changing the path affects the current script
   /// and any children that it spawns.
-  void appendToPATH(String newPath) {
+  void pathAppend(String newPath) {
     var path = PATH;
     path.add(newPath);
     setEnv("PATH", path.join(Env().pathSeparator));
@@ -148,7 +148,7 @@ class Env extends DShellFunction {
   ///
   /// Changing the path affects the current script
   /// and any children that it spawns.
-  void prependToPATH(String newPath) {
+  void pathPrepend(String newPath) {
     var path = PATH;
     path.insert(0, newPath);
     setEnv("PATH", path.join(Env().pathSeparator));
@@ -161,10 +161,28 @@ class Env extends DShellFunction {
   ///
   /// Changing the path affects the current script
   /// and any children that it spawns.
-  void removeFromPath(String oldPath) {
+  void pathRemove(String oldPath) {
     var path = PATH;
     path.remove(oldPath);
     setEnv("PATH", path.join(Env().pathSeparator));
+  }
+
+  /// Adds [newPath] to the PATH environment variable
+  /// if it is not already present.
+  ///
+  /// The [newPath] will be added to the end of the PATH list.
+  ///
+  /// Changing the PATH has no affect on the parent
+  /// process (shell) that launched this script.
+  ///
+  /// Changing the PATH affects the current script
+  /// and any children that it spawns.
+  void pathPutIfAbsent(String newPath) {
+    var path = PATH;
+    if (!path.contains(newPath)) {
+      path.add(newPath);
+      setEnv("PATH", path.join(Env().pathSeparator));
+    }
   }
 
   ///
