@@ -81,4 +81,7 @@ mixin PosixMixin {
       return MacOsxDshellInstaller().install();
     }
   }
+
+  /// at this point no posix system has any preconditions.
+  String checkInstallPreconditions() => null;
 }

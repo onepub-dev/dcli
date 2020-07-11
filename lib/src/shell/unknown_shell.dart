@@ -132,4 +132,9 @@ class UnknownShell with ShellMixin {
       throw UnsupportedError('Unsupported OS. ${Platform.operatingSystem}');
     }
   }
+
+  @override
+  String checkInstallPreconditions() {
+    return null;
+  }
 }

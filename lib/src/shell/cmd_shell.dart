@@ -72,7 +72,11 @@ class CmdShell with ShellMixin {
 
   @override
   bool install() {
-    // TODO: implement install
     throw UnimplementedError();
+  }
+
+  @override
+  String checkInstallPreconditions() {
+    return 'You must the DShell install from PowerShell.';
   }
 }

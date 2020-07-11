@@ -55,4 +55,11 @@ abstract class Shell {
   /// Returns true if dart was installed.
   /// Returns false if dart was already installed.
   bool install();
+
+  /// Some OS/Shell combinations have some preconditions that must
+  /// be met before dshell can be installed.
+  ///
+  /// This method returns a String describing those preconditions
+  /// or null if there are no preconditions.
+  String checkInstallPreconditions();
 }

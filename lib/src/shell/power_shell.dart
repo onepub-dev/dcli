@@ -1,4 +1,6 @@
 import '../../dshell.dart';
+import '../installers/windows_installer.dart';
+import '../script/commands/install.dart';
 import 'shell_mixin.dart';
 
 /// Windows Power Shell
@@ -72,7 +74,34 @@ class PowerShell with ShellMixin {
 
   @override
   bool install() {
-    // TODO: implement install
-    throw UnimplementedError();
+    return WindowsDShellInstaller().install();
+  }
+
+  @override
+  String checkInstallPreconditions() {
+    if (!inDeveloperMode()) {
+      return '''You must be running in Windows Developer Mode to install DShell.
+Read additional details here: https://github.com/bsutton/dshell/wiki/Installing-DShell#windows''';
+    }
+    return null;
+  }
+
+  /// Windows 10+ has a developer mode that needs to be enabled to create symlinks without escalated prividedges.
+  bool inDeveloperMode() {
+    /// Example result:
+    /// <blank line>
+    /// HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\AppModelUnlock
+    /// AllowDevelopmentWithoutDevLicense    REG_DWORD    0x1
+
+    var response =
+        'reg query "HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\AppModelUnlock" /v "AllowDevelopmentWithoutDevLicense"'
+            .toList(skipLines: 2)
+            .first;
+    var parts = response.split(r'\s+');
+    if (parts.length != 3) {
+      throw InstallException('Unable to obtain development mode settings');
+    }
+
+    return parts[3] == '0x1';
   }
 }

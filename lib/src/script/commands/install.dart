@@ -68,6 +68,13 @@ class InstallCommand extends Command {
     print('Hang on a tick whilst we install dshell ${Settings().version}');
     print('');
 
+    var conditions = shell.checkInstallPreconditions();
+    if (conditions != null) {
+      print(red('*' * 80));
+      print(red('$conditions'));
+      print(red('*' * 80));
+      exit(1);
+    }
     var dartWasInstalled = shell.install();
     // Create the ~/.dshell root.
     if (!exists(Settings().dshellPath)) {
