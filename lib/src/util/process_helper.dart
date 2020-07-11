@@ -108,7 +108,7 @@ class ProcessHelper {
         .toList(skipLines: 1);
 
     for (var process in processes) {
-      Settings().verbose('wmic: $process');
+      // Settings().verbose('wmic: $process');
       process = process.trim();
       process = process.replaceAll(RegExp(r'\s+'), ' ');
 
@@ -182,12 +182,12 @@ class ProcessHelper {
 
     var lines = const CsvToListConverter().convert(tasks.join('\r\n'));
     for (var line in lines) {
-      Settings().verbose('tasklist: $line');
+      //Settings().verbose('tasklist: $line');
       var details = _PIDDetails();
 
       details.processName = line[0] as String;
       details.pid = int.tryParse(line[1] as String);
-      Settings().verbose('${details.processName} ${details.pid}');
+      // Settings().verbose('${details.processName} ${details.pid}');
 
       var memparts = (line[4] as String).split(' ');
       details.memory = memparts[0];
