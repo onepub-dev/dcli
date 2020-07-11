@@ -1,8 +1,9 @@
 import '../../dshell.dart';
 import 'shell_mixin.dart';
+import 'windows_mixin.dart';
 
 /// Windows Power Shell
-class CmdShell with ShellMixin {
+class CmdShell with WindowsMixin, ShellMixin {
   /// Name of the shell
   static const String shellName = 'cmd.exe';
 
@@ -47,36 +48,4 @@ class CmdShell with ShellMixin {
 
   @override
   String get startScriptPath => throw UnimplementedError;
-
-  @override
-  bool get isPrivilegedUser {
-    var currentPrincipal =
-        'New-Object Security.Principal.WindowsPrincipal([Security.Principal.WindowsIdentity]::GetCurrent())'
-            .firstLine;
-    Settings().verbose('currentPrinciple: $currentPrincipal');
-    var isPrivileged =
-        '$currentPrincipal.IsInRole([Security.Principal.WindowsBuiltInRole]::Administrator)'
-            .firstLine;
-    Settings().verbose('isPrivileged: $isPrivileged');
-
-    return isPrivileged.toLowerCase() == 'true';
-  }
-
-  @override
-  String get loggedInUser => env('USERNAME');
-
-  @override
-  String privilegesRequiredMessage(String app) {
-    return 'You need to be a privileged user to run $app';
-  }
-
-  @override
-  bool install() {
-    throw UnimplementedError();
-  }
-
-  @override
-  String checkInstallPreconditions() {
-    return 'You must the DShell install from PowerShell.';
-  }
 }
