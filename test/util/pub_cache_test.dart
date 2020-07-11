@@ -8,10 +8,10 @@ import 'package:test/test.dart';
 void main() {
   test('PubCache', () {
     /// we don't necessarily have a HOME env in the test environment.
-    setEnv('HOME', '/home');
+    setEnv('HOME',join(Platform.pathSeparator, 'home'));
     if (Platform.isWindows) {
       expect(PubCache().binPath,
-          equals(join(env('LocalAppData'), 'Pub', 'Cache', 'bin')));
+          equals(join(env('LocalAppData'), 'Pub', 'Cache', 'bin').toLowerCase()));
     } else {
       expect(
           PubCache().binPath, equals(join(env('HOME'), '.pub-cache', 'bin')));
@@ -19,12 +19,13 @@ void main() {
   }, skip: false);
 
   test('PubCache - from ENV', () {
+    PubCache.reset();
     /// we don't necessarily have a HOME env in the test environment.
     setEnv('HOME', '/home');
     setEnv('PUB_CACHE', join(Platform.pathSeparator, 'test_cache'));
     if (Platform.isWindows) {
       expect(PubCache().binPath,
-          equals(join(Platform.pathSeparator, 'test_cache', 'bin')));
+          equals(join(r'c:\test_cache', 'bin').toLowerCase()));
     } else {
       expect(PubCache().binPath,
           equals(join(Platform.pathSeparator, 'test_cache', 'bin')));
