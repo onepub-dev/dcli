@@ -1,0 +1,43 @@
+FROM ubuntu:latest
+
+WORKDIR /
+
+ENV HOME=/home
+ENV PATH="$PATH":"/home/.pub-cache/bin"
+RUN touch /home/.profile
+
+RUN apt -y update
+RUN apt -y upgrade
+RUN apt -y install vim
+
+ENV rebuild=1
+RUN apt-get install --no-install-recommends -y wget ca-certificates gnupg2
+RUN wget https://github.com/bsutton/dshell/raw/master/bin/linux/dshell_install
+RUN chmod +x dshell_install
+RUN ./dshell_install
+ENV PATH="${PATH}:/usr/lib/dart/bin:/root/.pub-cache/bin"
+
+
+# Add the entire dshell project so we can run from the local filesystem
+ADD . /dshell
+
+This doesn't work as we want to always have the 'live' copy of dshell we are editing
+But we want to be able to mount any directory for testing.
+The option to mount any directory might be a problem.
+We may just need a dcli version that contains dshell but then the global version does this.
+
+1) we have published a dshell docker container that lets you dshell dev using
+  the released version
+2) we need a version that lets you run scripts against the dev tree but only from the dev tree.
+3) need a version that runs unit tests (I think) as this might allow use to get the 
+    tests passing on github.
+4) we need split/merge to work.
+RUN pub global activate --source path /dshell 
+
+WORKDIR /home
+
+
+CMD ["/bin/bash"]
+
+
+
