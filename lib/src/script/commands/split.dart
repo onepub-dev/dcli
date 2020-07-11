@@ -35,7 +35,7 @@ class SplitCommand extends Command {
         exitCode = 1;
       }
     } else {
-      copy(script.pubSpecPath, join(script.path, 'pubspec.yaml'));
+      copy(script.pubSpecPath, join(dirname(script.path), 'pubspec.yaml'));
       // now we need to disable the @pubspec annotation.
       replace(script.path, '@pubspec', '@disabled-pubspec');
       print('complete.');
