@@ -11,6 +11,7 @@ import '../util/file_system.dart';
 import '../util/progress.dart';
 import '../util/runnable_process.dart';
 import '../util/terminal.dart';
+import 'commands/install.dart';
 
 /// The [DartSdk] provides access to a number of the dart sdk tools
 /// as well as details on the active sdk instance.
@@ -184,6 +185,21 @@ class DartSdk {
     if (!exists(installDir)) {
       createDir(installDir, recursive: true);
     }
+    else
+    {
+      print('The install directory $installDir already exists. If you proceed all files under $installDir will be deleted.');
+      if (confirm(prompt: 'Proceed to delete $installDir'))
+      {
+      /// I've added this incase we have a failed install and need to do a restart.
+      /// 
+      deleteDir(installDir, recursive: true);
+      }
+      else
+      {
+        throw InstallException('Install Directory $installDir already exists.');
+      }
+    }
+  
 
     // Read the Zip file from disk.
     _extractDartSdk(zipRelease, installDir);
