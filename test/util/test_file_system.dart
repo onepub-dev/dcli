@@ -103,7 +103,7 @@ class TestFileSystem {
       NamedLock(name: 'test_file_system.lock').withLock(() {
         Settings.reset();
         Env.reset();
-        PubCache.unitTestreset();
+        PubCache.reset();
         // print('PATH: $PATH');
         // print(which(DartSdk.pubExeName).firstLine);
         var home = HOME;

@@ -74,6 +74,7 @@ class Settings {
 
   /// Used when unit testing and we are re-using
   /// the current process.
+  @visibleForTesting
   static void reset() {
     _self = Settings.init();
     _self.selectedFlags.clear();

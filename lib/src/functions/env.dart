@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:collection/collection.dart';
+import 'package:meta/meta.dart';
 import '../../dshell.dart';
 import '../settings.dart';
 import '../util/dshell_exception.dart';
@@ -94,6 +95,7 @@ class Env extends DShellFunction {
   /// conveience method for unit tests.
   /// resets all environment variables to the state
   /// we inheritied from the parent process.
+  @visibleForTesting
   static void reset() {
     _self = Env._internal();
   }

@@ -1,5 +1,7 @@
 import 'dart:io';
 
+import 'package:meta/meta.dart';
+
 import '../../dshell.dart';
 
 /// Used to locate and manipulate the dart pub cache
@@ -69,7 +71,8 @@ class PubCache {
   /// only to be used for unit tests.
   /// It resets the paths so that they can pick
   /// up changes to HOME made by the unit tests.
-  static void unitTestreset() {
+  @visibleForTesting
+  static void reset() {
     _self = null;
   }
 }
