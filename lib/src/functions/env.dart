@@ -126,6 +126,47 @@ class Env extends DShellFunction {
     return pathEnv.split(pathSeparator);
   }
 
+  /// Appends [newPath] to the list of paths in the
+  /// PATH environment variable.
+  ///
+  /// Changing the PATH has no affect on the parent
+  /// process (shell) that launched this script.
+  ///
+  /// Changing the path affects the current script
+  /// and any children that it spawns.
+  void appendToPATH(String newPath) {
+    var path = PATH;
+    path.add(newPath);
+    setEnv("PATH", path.join(Env().pathSeparator));
+  }
+
+  /// Prepends [newPath] to the list of paths in the
+  /// PATH environment variable.
+  ///
+  /// Changing the PATH has no affect on the parent
+  /// process (shell) that launched this script.
+  ///
+  /// Changing the path affects the current script
+  /// and any children that it spawns.
+  void prependToPATH(String newPath) {
+    var path = PATH;
+    path.insert(0, newPath);
+    setEnv("PATH", path.join(Env().pathSeparator));
+  }
+
+  /// Removes the given [oldPath] from the PATH environment variable.
+  ///
+  /// Changing the PATH has no affect on the parent
+  /// process (shell) that launched this script.
+  ///
+  /// Changing the path affects the current script
+  /// and any children that it spawns.
+  void removeFromPath(String oldPath) {
+    var path = PATH;
+    path.remove(oldPath);
+    setEnv("PATH", path.join(Env().pathSeparator));
+  }
+
   ///
   /// Gets the path to the users home directory
   /// using the enviornment var appropriate for the user's OS.
