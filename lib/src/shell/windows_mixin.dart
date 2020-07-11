@@ -19,15 +19,15 @@ Read additional details here: https://github.com/bsutton/dshell/wiki/Installing-
     /// AllowDevelopmentWithoutDevLicense    REG_DWORD    0x1
 
     var response =
-        'reg query "HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\AppModelUnlock" /v "AllowDevelopmentWithoutDevLicense"'
-            .toList(skipLines: 2)
+        r'reg query "HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\AppModelUnlock" /v "AllowDevelopmentWithoutDevLicense"'
+            .toList(runInShell: true, skipLines: 2)
             .first;
-    var parts = response.split(r'\s+');
+    var parts = response.trim().split(RegExp(r'\s+'));
     if (parts.length != 3) {
       throw InstallException('Unable to obtain development mode settings');
     }
 
-    return parts[3] == '0x1';
+    return parts[2] == '0x1';
   }
 
   bool get isPrivilegedUser {
