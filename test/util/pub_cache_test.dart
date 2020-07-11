@@ -13,8 +13,10 @@ void main() {
     /// we don't necessarily have a HOME env in the test environment.
     setEnv('HOME', join('/home'));
     if (Platform.isWindows) {
-      expect(PubCache().binPath,
-          equals(join(env('LocalAppData'), 'Pub', 'Cache', 'bin').toLowerCase()));
+      expect(
+          PubCache().binPath,
+          equals(
+              join(env('LocalAppData'), 'Pub', 'Cache', 'bin').toLowerCase()));
     } else {
       expect(
           PubCache().binPath, equals(join(env('HOME'), '.pub-cache', 'bin')));

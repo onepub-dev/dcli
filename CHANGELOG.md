@@ -1,3 +1,23 @@
+# 1.8.21
+Work on improving the windows installer.
+Exposed the Env class as it has a number of useful PATH related methods.
+Windows Installer now checks that developer mode is enabled so we can use symlinks.
+
+Added resets between pub-cache tests. Looks like join recognizes both slashes so no need to use platform specific slash.
+marked reset method in a number of classes as only visible for unit testing. renamed pubcache unitTestrest to reset for consitency.
+Looks like c:\ is prefixed also need to reset pubcache between tests.
+removed pathSeparator as it duplicated dart Platform functionality.
+Fixes for bugs with locating pub cache on windows and added unit tests.
+Added addition paths to the windows PATH.
+Added pathPutIfAbsent. Also renamed all the path functions to begin with 'path'.
+Added pubcache and .dshell/bin to path.
+Fixed a bug in the format of setx.
+Added dshell path and now launches bash shell to do dev in. Not certain its what we need.
+incomplete docker script to do local dev.
+Added logic to delete the install dir if it already exists.
+Added a check for install preconditions. If they are not met the installer will exit. For powershell we now check that developer mode is enabled as we require this for symlinks. We nolonger allow an install from the old command shell.
+Added methods to manipulate the path.
+Removed a sperious print statement.
 # 1.8.20
 Fixed a bug in the default script which had an extra /
 
