@@ -109,7 +109,6 @@ class ProcessHelper {
       Settings().verbose('wmic: $process');
       process = process.trim();
       process = process.replaceAll(RegExp(r'\s+'), ' ');
-      // print(process);
 
       var parts = process.split(' ');
       if (parts.length < 3) {
@@ -186,7 +185,7 @@ class ProcessHelper {
 
       details.processName = line[0] as String;
       details.pid = int.tryParse(line[1] as String);
-      print('${details.processName} ${details.pid}');
+      Settings().verbose('${details.processName} ${details.pid}');
 
       var memparts = (line[4] as String).split(' ');
       details.memory = memparts[0];
