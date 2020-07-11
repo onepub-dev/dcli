@@ -1,8 +1,7 @@
 import 'dart:io';
 
+import 'package:dshell/dshell.dart';
 import 'package:test/test.dart';
-
-import '../../lib/src/util/process_helper.dart';
 
 void main() {
   test('ProcessHelper', () {

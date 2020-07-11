@@ -1,5 +1,6 @@
 import 'dart:io';
 import 'package:csv/csv.dart';
+import 'package:meta/meta.dart';
 import '../../dshell.dart';
 import 'runnable_process.dart';
 
@@ -7,6 +8,7 @@ import 'runnable_process.dart';
 /// EXPERIMENTAL
 ///
 /// This class is likely to change/replaced.
+@visibleForTesting
 class ProcessHelper {
   static final ProcessHelper _self = ProcessHelper._internal();
 
