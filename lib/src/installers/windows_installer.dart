@@ -1,4 +1,5 @@
 import '../../dshell.dart';
+import '../functions/env.dart';
 import '../script/dart_sdk.dart';
 import '../util/pub_cache.dart';
 
@@ -20,9 +21,11 @@ class WindowsDShellInstaller {
           DartSdk().installFromArchive(defaultDartToolDir, askUser: false);
 
       /// add the dartsdk path to the windows path.
-      'setx PATH "%PATH%;${join(dartToolDir, 'bin')}"'.run;
-      'setx PATH="%PATH%;${PubCache().binPath}"'.run;
-      'setx PATH="%PATH%;${Settings().dshellBinPath}"'.run;
+      Env().pathPutIfAbsent(join(dartToolDir, 'bin'));
+      Env().pathPutIfAbsent(PubCache().binPath);
+      Env().pathPutIfAbsent(Settings().dshellBinPath);
+
+      'setx PATH="%PATH%;${PATH.join(Env().pathSeparator)}"'.run;
 
       print('Installed dart to: $dartToolDir');
 

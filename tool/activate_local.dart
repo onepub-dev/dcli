@@ -76,7 +76,7 @@ ${parser.usage}
   print(GlobalDependencies.filename);
   cat(dependency);
 
-  Env().prependToPATH(dshellPackageRoot);
+  Env().pathPrepend(dshellPackageRoot);
 
   'bash'.run;
 
