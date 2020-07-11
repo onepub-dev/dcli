@@ -184,22 +184,17 @@ class DartSdk {
 
     if (!exists(installDir)) {
       createDir(installDir, recursive: true);
-    }
-    else
-    {
-      print('The install directory $installDir already exists. If you proceed all files under $installDir will be deleted.');
-      if (confirm(prompt: 'Proceed to delete $installDir'))
-      {
-      /// I've added this incase we have a failed install and need to do a restart.
-      /// 
-      deleteDir(installDir, recursive: true);
-      }
-      else
-      {
+    } else {
+      print(
+          'The install directory $installDir already exists. If you proceed all files under $installDir will be deleted.');
+      if (confirm(prompt: 'Proceed to delete $installDir')) {
+        /// I've added this incase we have a failed install and need to do a restart.
+        ///
+        deleteDir(installDir, recursive: true);
+      } else {
         throw InstallException('Install Directory $installDir already exists.');
       }
     }
-  
 
     // Read the Zip file from disk.
     _extractDartSdk(zipRelease, installDir);
@@ -207,6 +202,7 @@ class DartSdk {
 
     /// the archive creates a root of 'dart-sdk' we need to move
     /// all of the files directly under the [installDir] (/usr/bin/dart).
+    print('Preparing dart sdk');
     moveTree(join(installDir, 'dart-sdk'), installDir, includeHidden: true);
     deleteDir(join(installDir, 'dart-sdk'));
 
@@ -270,6 +266,7 @@ class DartSdk {
   }
 
   void _extractDartSdk(String zipRelease, String dartToolDir) {
+    print('Extracting dart sdk..');
     // Read the Zip file from disk.
     final bytes = File(zipRelease).readAsBytesSync();
 
@@ -284,10 +281,12 @@ class DartSdk {
         File(path)
           ..createSync(recursive: true)
           ..writeAsBytesSync(data);
+        echo('.');
       } else {
         createDir(path, recursive: true);
       }
     }
+    print('');
   }
 
   int _progressSuppressor = 0;
