@@ -22,20 +22,23 @@ class PubCache {
 
   PubCache._internal() {
     // first check if an environment variable exists.
+    // The PUB_CACHE env var allows a user to over-ride
+    // the standard location of the pub cache.
     var pubCacheEnv = env(_pubCacheEnv);
 
     /// determine pubCacheDir
     if (pubCacheEnv != null) {
-      _pubCacheDir = dirname(pubCacheEnv);
+      _pubCacheDir = pubCacheEnv;
     }
-    _pubCacheDir ??= '.pub-cache';
     if (Platform.isWindows) {
       _pubCacheDir ??= join('Pub', 'Cache');
+      // doco says this is AppData but the installer seems to use LocalAppData
+      _pubCachePath ??= truepath(join(env('LocalAppData'), _pubCacheDir));
+    } else {
+      _pubCacheDir ??= '.pub-cache';
+      // determine pub-cache path
+      _pubCachePath ??= truepath(join(env('HOME'), _pubCacheDir));
     }
-
-    // determine pub-cache path
-    _pubCachePath = pubCacheEnv;
-    _pubCachePath ??= truepath(join(HOME, _pubCacheDir));
 
     // determine pub-cache/bin
     _pubCacheBinDir = truepath(join(_pubCachePath, 'bin'));
