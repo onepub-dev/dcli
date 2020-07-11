@@ -277,7 +277,7 @@ class TestFileSystem {
     newPath.add('${join(root, PubCache().binPath)}');
     newPath.add('${join(root, '.dshell', 'bin')}');
 
-    setEnv('PATH', newPath.join(Env().pathSeparator));
+    setEnv('PATH', newPath.join(Platform.pathSeparator));
   }
 
   void copyPubCache(String originalHome, String newHome) {
