@@ -1,0 +1,17 @@
+FROM google/dart
+
+WORKDIR /
+
+ENV HOME=/home
+ENV PATH="$PATH":"/home/.pub-cache/bin"
+RUN touch /home/.profile
+
+# Add the entire dshell project so we can run from the local filesystem
+ADD . /dshell
+
+RUN pub global activate --source path /dshell 
+
+
+CMD ["/usr/bin/bash"]
+
+

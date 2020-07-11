@@ -2,6 +2,7 @@
 import 'dart:io';
 
 import 'package:dshell/dshell.dart';
+import 'package:dshell/src/functions/env.dart';
 import 'package:dshell/src/pubspec/global_dependencies.dart';
 
 /// globally activates dshell from a local path rather than a public package.
@@ -74,6 +75,10 @@ ${parser.usage}
 
   print(GlobalDependencies.filename);
   cat(dependency);
+
+  Env().prependToPATH(dshellPackageRoot);
+
+  'bash'.run;
 
   //'dshell install'.run;
 }
