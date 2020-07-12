@@ -83,7 +83,7 @@ class TestPaths {
     // .pub-cache so we run the test version of dshell.
     // path.insert(0, pubCachePath);
 
-    setEnv('PATH', path.join(Platform.pathSeparator));
+    setEnv('PATH', path.join(Env().pathDelimiter));
 
     var dshellPath = Settings().dshellPath;
     if (!dshellPath.startsWith(join(rootPath, 'tmp')) ||

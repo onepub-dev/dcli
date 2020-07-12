@@ -110,7 +110,7 @@ class Env extends DShellFunction {
   List<String> get _path {
     var pathEnv = _env('PATH');
 
-    return pathEnv.split(Platform.pathSeparator);
+    return pathEnv.split(pathDelimiter);
   }
 
   /// Appends [newPath] to the list of paths in the
@@ -124,7 +124,7 @@ class Env extends DShellFunction {
   void pathAppend(String newPath) {
     var path = PATH;
     path.add(newPath);
-    setEnv("PATH", path.join(Platform.pathSeparator));
+    setEnv("PATH", path.join(pathDelimiter));
   }
 
   /// Prepends [newPath] to the list of paths in the
@@ -138,7 +138,7 @@ class Env extends DShellFunction {
   void pathPrepend(String newPath) {
     var path = PATH;
     path.insert(0, newPath);
-    setEnv("PATH", path.join(Platform.pathSeparator));
+    setEnv("PATH", path.join(pathDelimiter));
   }
 
   /// Removes the given [oldPath] from the PATH environment variable.
@@ -151,7 +151,7 @@ class Env extends DShellFunction {
   void pathRemove(String oldPath) {
     var path = PATH;
     path.remove(oldPath);
-    setEnv("PATH", path.join(Platform.pathSeparator));
+    setEnv("PATH", path.join(pathDelimiter));
   }
 
   /// Adds [newPath] to the PATH environment variable
@@ -168,7 +168,7 @@ class Env extends DShellFunction {
     var path = PATH;
     if (!path.contains(newPath)) {
       path.add(newPath);
-      setEnv("PATH", path.join(Platform.pathSeparator));
+      setEnv("PATH", path.join(pathDelimiter));
     }
   }
 
@@ -232,6 +232,21 @@ class Env extends DShellFunction {
         }
       }
     }
+  }
+
+  /// returns the delimiter used by the PATH enviorment variable.
+  ///
+  /// On linix it is ':' ond windows it is ';'
+  ///
+  /// NOTE do NOT confuses this with the file system path root!!!
+  ///
+  String get pathDelimiter {
+    var separator = ':';
+
+    if (Platform.isWindows) {
+      separator = ';';
+    }
+    return separator;
   }
 
   /// Used in unit tests to mock the Env class.
