@@ -13,16 +13,18 @@ jobs:
 
     steps:
     - uses: actions/checkout@v2
-    - name: Install dependencies
+    - name: Pub dependencies
       run: pub get
-    - name: Generate installer
-      run: dart2native bin/dshell_install.dart -o bin/linux/dshell_install
-    - name: git email
+    - name: Compile installer
+      run: 
+        dart2native bin/dshell_install.dart -o bin/linux/dshell_install
+    - name: Git email
       run: git config --global user.email "bsutton@noojee.com.au"
-    - name: git name
+    - name: Git name
       run: git config --global user.name "bsutton"
-      
-    - name: Commit results
-      run: |
-          git commit $GITHUB_WORKSPACE/bin/linux/dshell_install -m 'dart_install for linux' || echo "exec has not changed"
-          git push origin || echo "exec has not changed."
+    - name: Git Commit
+      run: git commit $GITHUB_WORKSPACE/bin/linux/dshell_install -m 'dart_install for linux' || echo "exec has not changed"
+    - name: Git Pull 
+      run: git pull
+    - name: Git Push
+      run: git push origin || echo "exec has not changed."
