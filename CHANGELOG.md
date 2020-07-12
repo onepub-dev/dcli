@@ -1,3 +1,7 @@
+# 1.8.23
+'command'.start() now returns a progress.
+
+
 # 1.8.22
 made tests OS specific.
 Fixed duplication of windows paths during install issue.
