@@ -13,21 +13,14 @@ jobs:
 
     steps:
     - uses: actions/checkout@v2
-    - name: Download dart
-      run: curl https://storage.googleapis.com/dart-archive/channels/stable/release/2.8.4/sdk/dartsdk-windows-x64-release.zip -o dartsdk.zip 
-    - name: unzip dart
-      run: tar.exe -xf dartsdk.zip
-    - name: init dart
-      run: dart-sdk/bin/pub.bat get
-    - name: Generate installer
-      run: dart-sdk/bin/dart2native.bat bin/dshell_install.dart -o bin/windows/dshell_install.exe
-    - name: git email
-      run: git config --global user.email "bsutton@noojee.com.au"
-    - name: git name
-      run: git config --global user.name "bsutton"
-      
-    - name: Commit results
+    - name: Build Installer
       run: |
-          git commit bin/windows/dshell_install.exe -m 'dart_install.exe for windows' || echo "exec has not changed"
-          git pull
-          git push origin || echo "exec has not changed."
+        curl https://storage.googleapis.com/dart-archive/channels/stable/release/2.8.4/sdk/dartsdk-windows-x64-release.zip -o dartsdk.zip 
+        tar.exe -xf dartsdk.zip
+        dart-sdk/bin/pub.bat get
+        dart-sdk/bin/dart2native.bat bin/dshell_install.dart -o bin/windows/dshell_install.exe
+        git config --global user.email "bsutton@noojee.com.au"
+        git config --global user.name "bsutton"
+        git commit bin/windows/dshell_install.exe -m 'dart_install.exe for windows' || echo "exec has not changed"
+        git pull
+        git push origin || echo "exec has not changed."
