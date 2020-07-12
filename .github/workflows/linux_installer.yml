@@ -18,10 +18,13 @@ jobs:
     - name: Compile installer
       run: 
         dart2native bin/dshell_install.dart -o bin/linux/dshell_install
-    - name: Commit
-      run: |
-        git config --global user.email "bsutton@noojee.com.au"
-        git config --global user.name "bsutton"
-        git commit $GITHUB_WORKSPACE/bin/linux/dshell_install -m 'dart_install for linux' || echo "exec has not changed"
-        git pull
-        git push origin || echo "exec has not changed."
+    - name: Git email
+      run: git config --global user.email "bsutton@noojee.com.au"
+    - name: Git name
+      run: git config --global user.name "bsutton"
+    - name: Git Commit
+      run: git commit $GITHUB_WORKSPACE/bin/linux/dshell_install -m 'dart_install for linux' || echo "exec has not changed"
+    - name: Git Pull 
+      run: git pull
+    - name: Git Push
+      run: git push origin || echo "exec has not changed."
