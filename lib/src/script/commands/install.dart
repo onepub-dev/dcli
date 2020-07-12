@@ -178,7 +178,8 @@ class InstallCommand extends Command {
 
     if (dartWasInstalled) {
       print('');
-      print(red('You need to restart your shell so the new paths can update'));
+      print(
+          red('You need to restart your shell for the adjusted PATH to work.'));
       print('');
     }
 
