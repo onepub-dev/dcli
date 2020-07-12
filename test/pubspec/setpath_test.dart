@@ -27,5 +27,16 @@ void main() {
     Env().pathPutIfAbsent(Settings().dshellBinPath);
 
     print(PATH);
-  });
+  }, skip: !Platform.isWindows);
+
+  test('PutIfAbsent', () {
+    var dartToolDir = r"/tools/dart-sdk";
+
+    /// add the dartsdk path to the windows path.
+    Env().pathPutIfAbsent(join(dartToolDir, 'bin'));
+    Env().pathPutIfAbsent(PubCache().binPath);
+    Env().pathPutIfAbsent(Settings().dshellBinPath);
+
+    print(PATH);
+  }, skip: !Platform.isLinux);
 }
