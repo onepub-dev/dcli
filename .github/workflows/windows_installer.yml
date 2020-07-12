@@ -24,6 +24,7 @@ jobs:
     - name: commit changes
       run: |
         git config --global user.email "bsutton@noojee.com.au"
+        git name
         git config --global user.name "bsutton"
         git commit bin/windows/dshell_install.exe -m 'dart_install.exe for windows' || echo "exec has not changed"
         git pull
