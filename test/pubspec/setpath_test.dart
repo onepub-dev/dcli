@@ -15,7 +15,7 @@ void main() {
 
     print(PATH);
 
-    'setx PATH "%PATH%;${PATH.join(Env().pathDelimiter)}"'.run;
+    'setx PATH "${PATH.join(Env().pathDelimiter)}"'.run;
   }, skip: !Platform.isWindows);
 
   test('PutIfAbsent', () {

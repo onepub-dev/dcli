@@ -1,3 +1,10 @@
+# 1.8.22
+made tests OS specific.
+Fixed duplication of windows paths during install issue.
+test script for path manipulation.
+move pub_cache back to util.
+restored the correct pathSeparator method and renamed it pathDelimiter to make it clearer what its purpose is.
+
 # 1.8.21
 Work on improving the windows installer.
 Exposed the Env class as it has a number of useful PATH related methods.
