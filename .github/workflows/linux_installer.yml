@@ -17,10 +17,10 @@ jobs:
       run: pub get
     - name: Generate installer
       run: |
-        git pull
         dart2native bin/dshell_install.dart -o bin/linux/dshell_install
         git config --global user.email "bsutton@noojee.com.au"
         git name
         git config --global user.name "bsutton"
         git commit $GITHUB_WORKSPACE/bin/linux/dshell_install -m 'dart_install for linux' || echo "exec has not changed"
+        git pull
         git push origin || echo "exec has not changed."
