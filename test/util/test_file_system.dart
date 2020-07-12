@@ -15,7 +15,7 @@ import 'package:dshell/src/util/named_lock.dart';
 import 'package:test/test.dart';
 import 'package:uuid/uuid.dart';
 
-import 'package:dshell/src/pubspec/pub_cache.dart';
+import 'package:dshell/src/util/pub_cache.dart';
 
 class TestFileSystem {
   String uniquePath;

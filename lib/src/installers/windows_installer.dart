@@ -1,8 +1,8 @@
 
 import '../../dshell.dart';
 import '../functions/env.dart';
-import '../pubspec/pub_cache.dart';
 import '../script/dart_sdk.dart';
+import '../util/pub_cache.dart';
 
 ///
 /// Installs dart on an apt base system.abstract
