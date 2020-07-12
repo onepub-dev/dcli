@@ -21,10 +21,9 @@ jobs:
       run: dart-sdk/bin/pub.bat get
     - name: Compile Installer
       run: dart-sdk/bin/dart2native.bat bin/dshell_install.dart -o bin/windows/dshell_install.exe
-    - name: commit changes
+    - name: Commit results
       run: |
         git config --global user.email "bsutton@noojee.com.au"
-        git name
         git config --global user.name "bsutton"
         git commit bin/windows/dshell_install.exe -m 'dart_install.exe for windows' || echo "exec has not changed"
         git pull
