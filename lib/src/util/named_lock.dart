@@ -119,7 +119,7 @@ class NamedLock {
           fn();
         }
       } finally {
-        _releaseLock();
+        if (lockHeld) _releaseLock();
         // just in case an async exception can be thrown
         // I'm uncertain if this is a reality.
         lockHeld = false;
@@ -317,7 +317,11 @@ class NamedLock {
 
     var waitCount = -1;
 
-    if (timeout != null) waitCount = timeout.inSeconds;
+    if (timeout != null) {
+      waitCount = timeout.inMilliseconds ~/ 100;
+      // ensure at least one retry.
+      if (waitCount == 0) waitCount = 1;
+    }
 
     try {
       var reusePort = Settings().isWindows ? false : true;
@@ -338,7 +342,7 @@ class NamedLock {
           break;
         }
         if (socket == null) {
-          sleep(1);
+          waitForEx<void>(Future.delayed(Duration(milliseconds: 100)));
         }
       }
 
@@ -356,8 +360,7 @@ class NamedLock {
 }
 
 void _log(String message) {
-  // var id = Service.getIsolateID(Isolate.current);
-  //print('$id: $message');
+  Settings().verbose(message);
 }
 
 ///
