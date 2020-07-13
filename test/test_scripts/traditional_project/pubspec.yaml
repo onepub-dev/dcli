@@ -1,0 +1,6 @@
+name: traditional_project
+
+dependencies:
+  dshell: 
+    path: ../../../
+

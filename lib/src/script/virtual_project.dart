@@ -17,6 +17,31 @@ import 'commands/install.dart';
 import 'pub_get.dart';
 import 'script.dart';
 
+/// Used to describe the location of the pubsec.yaml file.
+///
+enum PubspecLocation {
+  /// There is no pubspec so we create a virtual one.
+  virtual,
+
+  /// The script file as a @pubspec annotation so the pubspec
+  /// resides in the script.
+  annotation,
+
+  /// The script file has a pubspec.yaml in the same directory.
+  local,
+
+  /// This is a standand dart pubspec directory structure with the
+  /// pubspec in the projects root.
+  /// We only look for a traditional structure if the script is in one
+  /// of the following directories:
+  ///
+  /// benchmark
+  /// bin
+  /// tool
+  /// example
+  traditional
+}
+
 /// Creates project directory structure
 /// All projects live under the dshell cache
 /// directory are form a virtual copy of the
@@ -38,12 +63,16 @@ class VirtualProject {
 
   String _virtualProjectPath;
 
+  /// indicates the type of project based on the location
+  /// of the pubspec.yaml
+  PubspecLocation _pubspecLocation;
+
   // The absolute path to the scripts lib directory.
   // The script may not have a lib in which
   // case this directory wont' exist.
   String _scriptLibPath;
 
-  String _projectLibPath;
+  String _projectCacheLibPath;
 
   // A path to the 'Link' file in the project directory
   // that links to the actual script file.
@@ -60,7 +89,7 @@ class VirtualProject {
   /// be a link to that directory.
   /// If the script lib doesn't exist then
   /// on will be created under the virtual project directory.
-  String get projectCacheLib => _projectLibPath;
+  String get projectCacheLib => _projectCacheLibPath;
 
   /// The  absolute path to the
   /// virtual project's project directory.
@@ -116,23 +145,7 @@ class VirtualProject {
     var dshellCachePath = Settings().dshellCachePath;
     var project = VirtualProject._internal(dshellCachePath, script);
 
-    if (project.usingLocalPubspec) {
-      // we don't need a virtual project as the script
-      // is a full project in its own right.
-      // why do we have two lib paths?
-      _setLocalPaths(project, script);
-      project._usingLocalPubspec = true;
-    } else {
-      // we need a virtual pubspec.
-      // project._runtimeLibPath = project._projectLibPath;
-
-      // project._runtimeScriptPath = project._projectScriptLinkPath;
-
-      _setVirtualPaths(project);
-      project._usingLocalPubspec = false;
-    }
-    Settings().verbose('Pubspec path: ${project._runtimePubspecPath}');
-    Settings().verbose('Project path: ${project._runtimeProjectPath}');
+    _configProjectPaths(project, script);
 
     project.initialiseProject();
     return project;
@@ -143,21 +156,80 @@ class VirtualProject {
     var dshellCachePath = Settings().dshellCachePath;
     var project = VirtualProject._internal(dshellCachePath, script);
 
-    if (project.usingLocalPubspec) {
-      // why do we have two lib paths?
-      _setLocalPaths(project, script);
-    } else {
-      _setVirtualPaths(project);
-    }
-
-    Settings().verbose('Pubspec path: ${project._runtimePubspecPath}');
-    Settings().verbose('Project path: ${project._runtimeProjectPath}');
+    _configProjectPaths(project, script);
 
     return project;
   }
 
+  static void _configProjectPaths(VirtualProject project, Script script) {
+    switch (project.getPubspecLocation) {
+      case PubspecLocation.annotation:
+        _setVirtualPaths(project);
+        break;
+
+      case PubspecLocation.virtual:
+        _setVirtualPaths(project);
+        break;
+
+      case PubspecLocation.local:
+        // we don't need a virtual project as the script
+        // is a full project in its own right.
+        // why do we have two lib paths?
+        _setLocalPaths(project, script);
+        break;
+
+      case PubspecLocation.traditional:
+        _setTraditionalPaths(project, script);
+        break;
+    }
+
+    Settings().verbose('ProjectLocation: ${project.getPubspecLocation}');
+    Settings().verbose('Pubspec path: ${project._runtimePubspecPath}');
+    Settings().verbose('Project path: ${project._runtimeProjectPath}');
+  }
+
+  /// Used when the pubspec.yaml file doesn't exist and we need to
+  /// create a virtual one.
+  static void _setVirtualPaths(VirtualProject project) {
+    _setProjectPaths(project, project.script);
+
+    project._runtimePubspecPath = project._projectPubspecPath;
+    project._runtimeProjectPath = project._virtualProjectPath;
+  }
+
+  /// Used when the pubspec.yaml is an actual file and lives in the same
+  /// directory as the script.
+  static void _setLocalPaths(VirtualProject project, Script script) {
+    _setProjectPaths(project, script);
+
+    // pubspec.yaml lives in the same dir as the script.
+    project._runtimePubspecPath = join(dirname(script.path), 'pubspec.yaml');
+
+    project._runtimeProjectPath = dirname(script.path);
+  }
+
+  /// Used when we are running from a traditional dart package.
+  static void _setTraditionalPaths(VirtualProject project, Script script) {
+    // root director of real (traditional) dart projet.
+    var projectRoot = dirname(dirname(script.path));
+
+    /// pubspec.yaml lives in the parent of th script
+    project._runtimePubspecPath = join(projectRoot, 'pubspec.yaml');
+
+    project._runtimeProjectPath = dirname(script.path);
+
+    project._projectCacheLibPath = join(projectRoot, 'lib');
+    project._scriptLibPath = join(projectRoot, 'lib');
+
+    /// script link not required as we will compile against the traditional
+    /// project root.
+    project._projectScriptLinkPath = null;
+
+    project._projectPubspecPath = project._runtimePubspecPath;
+  }
+
   static void _setProjectPaths(VirtualProject project, Script script) {
-    project._projectLibPath = join(project._virtualProjectPath, 'lib');
+    project._projectCacheLibPath = join(project._virtualProjectPath, 'lib');
 
     project._scriptLibPath = join(script.path, 'lib');
     project._projectScriptLinkPath =
@@ -166,31 +238,25 @@ class VirtualProject {
         join(project._virtualProjectPath, 'pubspec.yaml');
   }
 
-  static void _setVirtualPaths(VirtualProject project) {
-    _setProjectPaths(project, project.script);
+  /// Determines the location of the pubspec.yaml file
+  /// which dictates how we create the virtual project.
+  PubspecLocation get getPubspecLocation {
+    if (_pubspecLocation == null) {
+      if (script.hasPubspecAnnotation) {
+        _pubspecLocation = PubspecLocation.annotation;
+      } else if (script.hasPubSpecYaml()) {
+        _pubspecLocation = PubspecLocation.local;
+      } else {
+        var parent = dirname(script.path);
+        if (isDartProject(parent)) {
+          _pubspecLocation = PubspecLocation.traditional;
+        } else {
+          _pubspecLocation = PubspecLocation.virtual;
+        }
+      }
+    }
 
-    project._runtimePubspecPath = project._projectPubspecPath;
-    project._runtimeProjectPath = project._virtualProjectPath;
-  }
-
-  static void _setLocalPaths(VirtualProject project, Script script) {
-    // project._runtimeLibPath = join(script.path, 'lib');
-
-    // project._runtimeScriptPath = script.path;
-    _setProjectPaths(project, script);
-
-    project._runtimePubspecPath = join(dirname(script.path), 'pubspec.yaml');
-
-    project._runtimeProjectPath = dirname(script.path);
-  }
-
-  bool _usingLocalPubspec;
-
-  /// true if we are using a local pubspec (e.g. its in the same dir as the script.)
-  bool get usingLocalPubspec {
-    _usingLocalPubspec ??=
-        script.hasPubSpecYaml() && !script.hasPubspecAnnotation;
-    return _usingLocalPubspec;
+    return _pubspecLocation;
   }
 
   VirtualProject._internal(String cacheRootPath, this.script) {
@@ -227,45 +293,35 @@ class VirtualProject {
   /// hashes.yaml file.
   void initialiseProject() {
     _lock.withLock(() {
-      if (!exists(_virtualProjectPath)) {
-        createDir(_virtualProjectPath, recursive: true);
-        print('Created Virtual Project at $_virtualProjectPath');
+      if (exists(_virtualProjectPath)) {
+        // clear the project directory in case things have changed.
+        deleteDir(_virtualProjectPath, recursive: true);
+      }
+      createDir(_virtualProjectPath, recursive: true);
+      print('Created Virtual Project at $_virtualProjectPath');
+
+      switch (getPubspecLocation) {
+        case PubspecLocation.annotation:
+        // fall through
+        case PubspecLocation.virtual:
+          touch(_virtualPubspecIndicatorPath, create: true);
+
+          // create the files/links for a virtual pubspec.
+          _createScriptLink(script);
+          _createLib();
+          PubSpecManager(this).createVirtualPubSpec();
+          break;
+        case PubspecLocation.local:
+        // fall through.
+        case PubspecLocation.traditional:
+          // create the indicator file so when we load
+          // the virtual project we know its a local
+          // pubspec without having to parse the script
+          // for a pubspec annotation.
+          touch(_localPubspecIndicatorPath, create: true);
+          break;
       }
 
-      if (usingLocalPubspec) {
-        // create the indicator file so when we load
-        // the virtual project we know its a local
-        // pubspec without having to parse the script
-        // for a pubspec annotation.
-        if (exists(_virtualPubspecIndicatorPath)) {
-          delete(_virtualPubspecIndicatorPath);
-        }
-        touch(_localPubspecIndicatorPath, create: true);
-
-        // clean up any old files.
-        // as the script may have changed from virtual to local.
-        if (exists(_projectScriptLinkPath)) {
-          delete(_projectScriptLinkPath);
-        }
-
-        if (exists(_projectLibPath)) {
-          delete(_projectLibPath);
-        }
-
-        if (exists(_projectPubspecPath)) {
-          delete(_projectPubspecPath);
-        }
-      } else {
-        if (exists(_localPubspecIndicatorPath)) {
-          delete(_localPubspecIndicatorPath);
-        }
-        touch(_virtualPubspecIndicatorPath, create: true);
-
-        // create the files/links for a virtual pubspec.
-        _createScriptLink(script);
-        _createLib();
-        PubSpecManager(this).createVirtualPubSpec();
-      }
       _isProjectInitialised = true;
     });
   }
@@ -385,6 +441,7 @@ class VirtualProject {
     _colprint('Name', script.scriptname);
     _colprint('Directory', privatePath(script.scriptDirectory));
     _colprint('Virtual Project', privatePath(_virtualProjectPath));
+    _colprint('Pubspec Location', getPubspecLocation.toString());
     print('');
 
     print('');
@@ -439,5 +496,27 @@ class VirtualProject {
   bool get isRunnable {
     return _isProjectInitialised &&
         exists(join(_virtualProjectPath, _buildCompleteFilename));
+  }
+
+  /// Returns true if the name of the pass directory is on the list
+  /// of prescribed dart project layout directores that may contain
+  /// top level scripts.
+  ///
+  ///
+  bool isPrescribedDartDirectory(String parent) {
+    var leaf = basename(parent);
+
+    return (['benchmark', 'bin', 'tool', 'example'].contains(leaf));
+  }
+
+  /// We are trying to determine if this is a traditional dart package.
+  /// If it is we should use the actual pubspec.yaml rather than creating
+  /// a virtual one.
+  /// Returns true if the given path is a prescribed dart directory
+  /// and its parent contains a pubspec.yaml.
+  ///
+  bool isDartProject(String path) {
+    return isPrescribedDartDirectory(path) &&
+        exists(join(dirname(path), 'pubspec.yaml'));
   }
 }

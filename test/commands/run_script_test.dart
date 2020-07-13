@@ -50,6 +50,60 @@ void main() {
       expect(exit, equals(0));
     });
   });
+
+  test('run  with traditional dart project structure - bin', () {
+    TestFileSystem().withinZone((fs) {
+      var exit = -1;
+      try {
+        print(pwd);
+
+        exit = EntryPoint().process([
+          '-v',
+          'run',
+          'test/test_scripts/traditional_project/bin/traditional.dart'
+        ]);
+      } on DShellException catch (e) {
+        print(e);
+      }
+      expect(exit, equals(0));
+    });
+  });
+
+  test('run  with traditional dart project structure - example', () {
+    TestFileSystem().withinZone((fs) {
+      var exit = -1;
+      try {
+        print(pwd);
+
+        exit = EntryPoint().process([
+          '-v',
+          'run',
+          'test/test_scripts/traditional_project/example/traditional.dart'
+        ]);
+      } on DShellException catch (e) {
+        print(e);
+      }
+      expect(exit, equals(0));
+    });
+  });
+
+  test('run  with traditional dart project structure - tool', () {
+    TestFileSystem().withinZone((fs) {
+      var exit = -1;
+      try {
+        print(pwd);
+
+        exit = EntryPoint().process([
+          '-v',
+          'run',
+          'test/test_scripts/traditional_project/tool/traditional.dart'
+        ]);
+      } on DShellException catch (e) {
+        print(e);
+      }
+      expect(exit, equals(0));
+    });
+  });
 }
 
 String getExpected() {

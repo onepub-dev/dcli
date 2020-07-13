@@ -26,7 +26,8 @@ class PubGet {
   PubGetResult run({bool compileExecutables = true}) {
     var result = PubGetResult();
     try {
-      DartSdk().runPubGet(_project.runtimeProjectPath,
+      // pub get MUST be run from the directory which contains the pubspec.yaml file.
+      DartSdk().runPubGet(dirname(_project.runtimePubSpecPath),
           compileExecutables: compileExecutables,
           progress:
               Progress((line) => result._processLine(line), stderr: _println));
