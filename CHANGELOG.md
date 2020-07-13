@@ -1,3 +1,11 @@
+# 1.9.0
+Added support for running scripts from a standard dart project structure. We now detect the correct pubspec.yaml and run from there.
+This is a fairly significant change as it fixes a long standing hole in dshells execurtion model.
+
+Fixed a bug where the releaseLock would be called even when the lock had failed.
+Improved the timeout exception so that you actually know the locked timed out. Change the retry interval to 100ms (down from 1s). Now guarentee that at least one lock attempt will be made even if the timeout is less then 100ms.
+reverted start returning a progress as that doesn't work as the stream has already been processed by the time start returns. Added a unit test for same.
+
 # 1.8.23
 'command'.start() now returns a progress.
 
