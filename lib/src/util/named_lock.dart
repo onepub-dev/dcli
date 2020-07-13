@@ -216,7 +216,11 @@ class NamedLock {
     // wait for the lock to release or the timeout to expire
     var waitCount = -1;
     if (_timeout != null) {
-      waitCount = _timeout.inSeconds;
+      // we will be retrying every 100 ms.
+      waitCount = _timeout.inMilliseconds ~/ 100;
+      if (waitCount == 0) {
+        waitCount = 0;
+      }
     }
 
     while (!taken && waitCount != 0) {
@@ -248,7 +252,9 @@ class NamedLock {
           //  log(StackTraceImpl().formatStackTrace(methodCount: 100));
         }
       });
-      sleep(1);
+
+      /// sleep for 100ms and then we will try again.
+      waitForEx<void>(Future.delayed(Duration(milliseconds: 100)));
       if (waiting != null) {
         print(waiting);
         // only print waiting message once.
@@ -261,8 +267,13 @@ class NamedLock {
     }
 
     if (!taken) {
-      throw LockException(
-          'Unable to lock $_description ${truepath(_lockPath)} as it is currently held'); //  by ${ProcessHelper().getPIDName(lpid)} IsolateId: $isolateId');
+      if (waitCount == 0) {
+        throw LockException(
+            'NamedLock timedout on $_description ${truepath(_lockPath)} as it is currently held');
+      } else {
+        throw LockException(
+            'Unable to lock $_description ${truepath(_lockPath)} as it is currently held');
+      }
     }
 
     return taken;
