@@ -1,3 +1,6 @@
+# 1.9.1
+Fixed a bug in the call to setVerbose when disabling verbose.
+
 # 1.9.0
 Added support for running scripts from a standard dart project structure. We now detect the correct pubspec.yaml and run from there.
 This is a fairly significant change as it fixes a long standing hole in dshells execurtion model.
