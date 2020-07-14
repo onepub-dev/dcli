@@ -129,7 +129,7 @@ class Settings {
         setFlag(VerboseFlag());
       }
     } else {
-      _selectedFlags.remove(VerboseFlag());
+      _selectedFlags.remove(VerboseFlag().name);
     }
   }
 
