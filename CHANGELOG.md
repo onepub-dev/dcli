@@ -1,3 +1,5 @@
+# 1.9.3
+Fixed the compile path to .packages for the traditional projects.
 # 1.9.3-dev.1
 Fixed the compile path to .packages for traditional projects.
 
