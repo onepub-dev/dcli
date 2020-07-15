@@ -1,3 +1,6 @@
+# 1.9.2
+Dshell was failing to return non-zero exit codes.
+
 # 1.9.1
 Fixed a bug in the call to setVerbose when disabling verbose.
 
