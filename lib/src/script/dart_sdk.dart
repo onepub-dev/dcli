@@ -86,15 +86,15 @@ class DartSdk {
   String get dart2NativePath => p.join(sdkPath, 'bin', dart2NativeExeName);
 
   /// run the 'dart2native' command.
-  /// [runtimeScriptPath] is the path of the dshell script we are compiling.
+  /// [runtimeScriptPath] is the path to the dshell script we are compiling.
   /// [outputPath] is the path to write the compiled ex to .
-  /// [runtimePath] is the path to execute 'dart2native' in.
+  /// [projectRootPath] is the path to the projects root directory.
   void runDart2Native(
-      String runtimeScriptPath, String outputPath, String runtimePath,
+      String runtimeScriptPath, String outputPath, String projectRootPath,
       {Progress progress}) {
     var runArgs = <String>[];
     runArgs.add(runtimeScriptPath);
-    runArgs.add('--packages=${join(runtimePath, ".packages")}');
+    runArgs.add('--packages=${join(projectRootPath, ".packages")}');
     runArgs.add(
         '--output=${join(outputPath, basenameWithoutExtension(runtimeScriptPath))}');
 

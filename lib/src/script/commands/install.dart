@@ -124,8 +124,8 @@ class InstallCommand extends Command {
 
       // check if shell can add a path.
       if (!shell.hasStartScript || !shell.addToPath(binPath)) {
-        printerr(
-            'If you want to use dshell compile -i to install scripts, add $binPath to your PATH.');
+        print(orange(
+            'If you want to use dshell compile -i to install scripts, add $binPath to your PATH.'));
       }
     }
 

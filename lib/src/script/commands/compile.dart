@@ -96,7 +96,7 @@ class CompileCommand extends Command {
           "\nCompiling with pubspec.yaml:\n${read(project.runtimePubSpecPath).toList().join('\n')}\n");
 
       DartSdk().runDart2Native(project.runtimeScriptPath,
-          script.scriptDirectory, project.runtimeProjectPath,
+          script.scriptDirectory, project.projectRootPath,
           progress: Progress(print, stderr: print));
 
       var exe = join(script.scriptDirectory, script.basename);

@@ -63,6 +63,8 @@ class VirtualProject {
 
   String _virtualProjectPath;
 
+  String _projectRootPath;
+
   /// indicates the type of project based on the location
   /// of the pubspec.yaml
   PubspecLocation _pubspecLocation;
@@ -138,6 +140,14 @@ class VirtualProject {
 
   NamedLock _lock;
 
+  /// The root directory of the dart project.
+  /// This is the directory that the pubspec.yaml file lives in.
+  ///
+  /// In most cases this is the same as the [_virtualProjectPath]
+  /// except for when the [PubspecLocation] is [traditional] in which
+  /// case it will be the project's actual root directory.
+  String get projectRootPath => _projectRootPath;
+
   /// Creates a virtual project's directory
   /// and calls initialiseProject.
   /// The create does NOT build the project (i.e. call pub get)
@@ -162,24 +172,34 @@ class VirtualProject {
   }
 
   static void _configProjectPaths(VirtualProject project, Script script) {
+    Settings().verbose(red('*' * 80));
     switch (project.getPubspecLocation) {
       case PubspecLocation.annotation:
         _setVirtualPaths(project);
+        Settings().verbose(
+            'Pubspec is an Annotation. Project root: ${project.projectRootPath} ');
         break;
 
       case PubspecLocation.virtual:
         _setVirtualPaths(project);
+        Settings().verbose(
+            'Pubspec is Virtual. Project root: ${project.projectRootPath} ');
         break;
 
       case PubspecLocation.local:
+
         // we don't need a virtual project as the script
         // is a full project in its own right.
         // why do we have two lib paths?
         _setLocalPaths(project, script);
+        Settings().verbose(
+            'Pubspec is Local. Project root: ${project.projectRootPath} ');
         break;
 
       case PubspecLocation.traditional:
         _setTraditionalPaths(project, script);
+        Settings().verbose(
+            'Pubspec is Traditional. Project root: ${project.projectRootPath} ');
         break;
     }
 
@@ -191,6 +211,7 @@ class VirtualProject {
   /// Used when the pubspec.yaml file doesn't exist and we need to
   /// create a virtual one.
   static void _setVirtualPaths(VirtualProject project) {
+    project._projectRootPath = project._virtualProjectPath;
     _setProjectPaths(project, project.script);
 
     project._runtimePubspecPath = project._projectPubspecPath;
@@ -200,6 +221,7 @@ class VirtualProject {
   /// Used when the pubspec.yaml is an actual file and lives in the same
   /// directory as the script.
   static void _setLocalPaths(VirtualProject project, Script script) {
+    project._projectRootPath = project._virtualProjectPath;
     _setProjectPaths(project, script);
 
     // pubspec.yaml lives in the same dir as the script.
@@ -211,15 +233,16 @@ class VirtualProject {
   /// Used when we are running from a traditional dart package.
   static void _setTraditionalPaths(VirtualProject project, Script script) {
     // root director of real (traditional) dart projet.
-    var projectRoot = dirname(dirname(script.path));
+    project._projectRootPath = dirname(dirname(script.path));
 
     /// pubspec.yaml lives in the parent of th script
-    project._runtimePubspecPath = join(projectRoot, 'pubspec.yaml');
+    project._runtimePubspecPath =
+        join(project._projectRootPath, 'pubspec.yaml');
 
     project._runtimeProjectPath = dirname(script.path);
 
-    project._projectCacheLibPath = join(projectRoot, 'lib');
-    project._scriptLibPath = join(projectRoot, 'lib');
+    project._projectCacheLibPath = join(project._projectRootPath, 'lib');
+    project._scriptLibPath = join(project._projectRootPath, 'lib');
 
     /// script link not required as we will compile against the traditional
     /// project root.
