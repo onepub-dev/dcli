@@ -6,7 +6,7 @@ import 'package:test/test.dart';
 
 void main() {
   test('setx', () {
-    var dartToolDir = r"C:\tools\dart-sdk";
+    var dartToolDir = r'C:\tools\dart-sdk';
 
     /// add the dartsdk path to the windows path.
     Env().pathPutIfAbsent(join(dartToolDir, 'bin'));
@@ -19,7 +19,7 @@ void main() {
   }, skip: !Platform.isWindows);
 
   test('PutIfAbsent', () {
-    var dartToolDir = r"C:\tools\dart-sdk";
+    var dartToolDir = r'C:\tools\dart-sdk';
 
     /// add the dartsdk path to the windows path.
     Env().pathPutIfAbsent(join(dartToolDir, 'bin'));
@@ -30,7 +30,7 @@ void main() {
   }, skip: !Platform.isWindows);
 
   test('PutIfAbsent', () {
-    var dartToolDir = r"/tools/dart-sdk";
+    var dartToolDir = r'/tools/dart-sdk';
 
     /// add the dartsdk path to the windows path.
     Env().pathPutIfAbsent(join(dartToolDir, 'bin'));

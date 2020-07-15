@@ -255,7 +255,7 @@ class DartSdk {
       var entered = ask(
           prompt:
               'Install dart-sdk to (Enter for default [${truepath(dartToolDir)}]): ');
-      if (!entered.isEmpty) {
+      if (entered.isNotEmpty) {
         dartToolDir = entered;
       }
 

@@ -278,6 +278,7 @@ class FetchProgress {
         downloaded = 0,
         status = FetchStatus.error;
 
+  @override
   String toString() =>
       '$status progress:${humanNumber(downloaded)}/${humanNumber(length)} ${fetch.url}';
 }

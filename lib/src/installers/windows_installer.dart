@@ -15,7 +15,7 @@ class WindowsDShellInstaller {
     if (which('dart').firstLine == null) {
       print('Installing Dart');
 
-      var defaultDartToolDir = r"C:\tools\dart-sdk";
+      var defaultDartToolDir = r'C:\tools\dart-sdk';
 
       var dartToolDir =
           DartSdk().installFromArchive(defaultDartToolDir, askUser: false);

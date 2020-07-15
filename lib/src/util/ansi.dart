@@ -18,9 +18,7 @@ class Ansi {
 
   /// returns true of the terminal supports ansi escape characters.
   static bool get isSupported {
-    if (_emitAnsi == null) {
-      _emitAnsi = stdin.supportsAnsiEscapes;
-    }
+    _emitAnsi ??= stdin.supportsAnsiEscapes;
     return _emitAnsi;
   }
 

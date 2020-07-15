@@ -124,7 +124,7 @@ class Env extends DShellFunction {
   void pathAppend(String newPath) {
     var path = PATH;
     path.add(newPath);
-    setEnv("PATH", path.join(pathDelimiter));
+    setEnv('PATH', path.join(pathDelimiter));
   }
 
   /// Prepends [newPath] to the list of paths in the
@@ -138,7 +138,7 @@ class Env extends DShellFunction {
   void pathPrepend(String newPath) {
     var path = PATH;
     path.insert(0, newPath);
-    setEnv("PATH", path.join(pathDelimiter));
+    setEnv('PATH', path.join(pathDelimiter));
   }
 
   /// Removes the given [oldPath] from the PATH environment variable.
@@ -151,7 +151,7 @@ class Env extends DShellFunction {
   void pathRemove(String oldPath) {
     var path = PATH;
     path.remove(oldPath);
-    setEnv("PATH", path.join(pathDelimiter));
+    setEnv('PATH', path.join(pathDelimiter));
   }
 
   /// Adds [newPath] to the PATH environment variable
@@ -168,7 +168,7 @@ class Env extends DShellFunction {
     var path = PATH;
     if (!path.contains(newPath)) {
       path.add(newPath);
-      setEnv("PATH", path.join(pathDelimiter));
+      setEnv('PATH', path.join(pathDelimiter));
     }
   }
 

@@ -96,9 +96,9 @@ class Terminal {
   /// show/hide the cursor
   void showCursor({bool show}) {
     if (show) {
-      echo("${Ansi.esc}?25h");
+      echo('${Ansi.esc}?25h');
     } else {
-      echo("${Ansi.esc}?25l");
+      echo('${Ansi.esc}?25l');
     }
   }
 }

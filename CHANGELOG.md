@@ -1,3 +1,6 @@
+# 1.9.4
+Fixed lints.
+
 # 1.9.3
 Fixed the compile path to .packages for the traditional projects.
 

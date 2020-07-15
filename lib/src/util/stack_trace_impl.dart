@@ -1,5 +1,5 @@
-import "dart:core" as core show StackTrace;
-import "dart:core";
+import 'dart:core' as core show StackTrace;
+import 'dart:core';
 import 'dart:io';
 
 import 'package:path/path.dart';
@@ -137,9 +137,9 @@ class StackTraceImpl implements core.StackTrace {
       /// package:/package/.path./filename.dart:line:column
       ///
       var source = match.group(2);
-      var sourceParts = source.split(":");
-      var column = "0";
-      var lineNo = "0";
+      var sourceParts = source.split(':');
+      var column = '0';
+      var lineNo = '0';
       var sourcePath = sourceParts[1];
       if (Platform.isWindows && source.startsWith('file:')) {
         switch (sourceParts.length) {
@@ -176,8 +176,8 @@ class StackTraceImpl implements core.StackTrace {
       /// closures don't have a sourcePath.
       if (sourcePath != null) {
         sourcePath = sourcePath.replaceAll('<anonymous closure>', '()');
-        sourcePath = sourcePath.replaceAll("package:", "");
-        // sourcePath = sourcePath.replaceFirst("<package_name>", "/lib");
+        sourcePath = sourcePath.replaceAll('package:', '');
+        // sourcePath = sourcePath.replaceFirst('<package_name>', '/lib');
 
         frame = Stackframe(
             File(sourcePath), int.parse(lineNo), int.parse(column), details);
