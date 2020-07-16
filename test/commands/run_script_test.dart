@@ -69,6 +69,24 @@ void main() {
     });
   });
 
+  test('run  with traditional dart project structure - nested bin', () {
+    TestFileSystem().withinZone((fs) {
+      var exit = -1;
+      try {
+        print(pwd);
+
+        exit = EntryPoint().process([
+          '-v',
+          'run',
+          'test/test_scripts/traditional_project/bin/nested/traditional.dart'
+        ]);
+      } on DShellException catch (e) {
+        print(e);
+      }
+      expect(exit, equals(0));
+    });
+  });
+
   test('run  with traditional dart project structure - example', () {
     TestFileSystem().withinZone((fs) {
       var exit = -1;

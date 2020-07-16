@@ -233,7 +233,7 @@ class VirtualProject {
   /// Used when we are running from a traditional dart package.
   static void _setTraditionalPaths(VirtualProject project, Script script) {
     // root director of real (traditional) dart projet.
-    project._projectRootPath = dirname(dirname(script.path));
+    project._projectRootPath = project._getTradionalProjectRoot(script.path);
 
     /// pubspec.yaml lives in the parent of th script
     project._runtimePubspecPath =
@@ -271,7 +271,7 @@ class VirtualProject {
         _pubspecLocation = PubspecLocation.local;
       } else {
         var parent = dirname(script.path);
-        if (isDartProject(parent)) {
+        if (isTraditionalProject(parent)) {
           _pubspecLocation = PubspecLocation.traditional;
         } else {
           _pubspecLocation = PubspecLocation.virtual;
@@ -535,11 +535,41 @@ class VirtualProject {
   /// We are trying to determine if this is a traditional dart package.
   /// If it is we should use the actual pubspec.yaml rather than creating
   /// a virtual one.
-  /// Returns true if the given path is a prescribed dart directory
-  /// and its parent contains a pubspec.yaml.
+  /// Returns true if a parent of the given path is a prescribed dart directory
+  /// and that prescribed directorie's parent contains a pubspec.yaml.
+  /// e.g.
+  /// pubspec.yaml
+  /// bin/work/fred.dart
   ///
-  bool isDartProject(String path) {
-    return isPrescribedDartDirectory(path) &&
-        exists(join(dirname(path), 'pubspec.yaml'));
+  bool isTraditionalProject(String path) {
+    var current = truepath(path);
+
+    var root = rootPrefix(path);
+
+    // traverse up the directory to find if we are in a traditional directory.
+    while (current != root) {
+      if (isPrescribedDartDirectory(current) &&
+          exists(join(dirname(current), 'pubspec.yaml'))) {
+        return true;
+      }
+      current = dirname(current);
+    }
+    return false;
+  }
+
+  String _getTradionalProjectRoot(String path) {
+    var current = truepath(path);
+
+    var root = rootPrefix(path);
+
+    // traverse up the directory to find if we are in a traditional directory.
+    while (current != root) {
+      if (isPrescribedDartDirectory(current) &&
+          exists(join(dirname(current), 'pubspec.yaml'))) {
+        return dirname(current);
+      }
+      current = dirname(current);
+    }
+    return null;
   }
 }
