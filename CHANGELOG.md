@@ -1,3 +1,6 @@
+# 1.9.5
+enhanced the logic for tradititional builds to work even if the file is deeply nested under a prescribed directory.
+
 # 1.9.4
 Fixed lints.
 
