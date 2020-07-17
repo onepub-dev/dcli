@@ -33,8 +33,10 @@ class BashShell with ShellMixin, PosixMixin {
         }
         startFile.append(command);
 
-        print(
-            'dshell tab completion installed. Restart your terminal to activate it.');
+        if (!quiet) {
+          print(
+              'dshell tab completion installed. Restart your terminal to activate it.');
+        }
       } else {
         printerr(red('Unable to install dshell tab completion'));
         printerr(
