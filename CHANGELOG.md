@@ -1,3 +1,7 @@
+# 1.9.6
+Added a method to remove a symbolic link.
+
+
 # 1.9.5
 enhanced the logic for tradititional builds to work even if the file is deeply nested under a prescribed directory.
 
