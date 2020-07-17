@@ -144,8 +144,8 @@ class FileSync {
     }
   }
 
-  /// See [File.resolveSymbolicLinkSync]
-  /// This is just a wrapper for the above method.
+  /// This is just a wrapper for [File.resolveSymbolicLinkSync].
+  /// Returns the path the symbolic link links to.
   String resolveSymLink() {
     return _file.resolveSymbolicLinksSync();
   }
@@ -197,6 +197,14 @@ void symlink(
 ) {
   var link = Link(linkPath);
   link.createSync(existingPath);
+}
+
+///
+/// Deletes the symlink at [linkPath]
+///
+void deleteSymlink(String linkPath) {
+  var link = Link(linkPath);
+  link.deleteSync();
 }
 
 ///
