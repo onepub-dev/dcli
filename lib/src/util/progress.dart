@@ -30,9 +30,14 @@ class Progress {
   /// suppressed.
   Progress.devNull();
 
-  /// Use this progress to only output data from  stdout
+  /// Use this progress to only output data sent to stdout
   Progress.printStdOut() {
     _wireStreams(print, devNull);
+  }
+
+  /// Use this progress to only output data sent to stderr
+  Progress.printStdErr() {
+    _wireStreams(devNull, print);
   }
 
   /// Use this progress to print both stdout and stderr
