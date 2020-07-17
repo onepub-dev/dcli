@@ -14,7 +14,7 @@ class PubSpecFile implements PubSpec // with DependenciesMixin
 
   /// Reads a pubspec.yaml from the path that  [script] is located in.
   PubSpecFile.fromScript(Script script) {
-    _fromFile(script.pubSpecPath);
+    _fromFile(script.localPubSpecPath);
   }
 
   /// Reads a pubspec.yaml located at [path]

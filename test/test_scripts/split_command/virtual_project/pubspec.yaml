@@ -1,0 +1,7 @@
+name: cat
+version: 1.0.0
+dependencies: 
+  args: ^1.5.2
+  path: ^1.6.4
+  dshell: 
+    path: /home/bsutton/git/dshell

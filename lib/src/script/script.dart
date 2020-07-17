@@ -50,8 +50,13 @@ class Script {
   /// The scriptname without its '.dart' extension.
   String get basename => p.basenameWithoutExtension(scriptname);
 
-  /// the path to the scripts pubspec.yaml.
-  String get pubSpecPath => p.join(_scriptDirectory, 'pubspec.yaml');
+  /// the path to a scripts local pubspec.yaml.
+  /// Only a script that has a pubspec.yaml in the same directory as the script
+  /// will have a pubspec.yaml at this location.
+  ///
+  /// You should use [VirtualProject.projectPubspecPath] as that will always point
+  /// the the correct pubspec.yaml regardless of the project type.
+  String get localPubSpecPath => p.join(_scriptDirectory, 'pubspec.yaml');
 
   // the scriptnameArg may contain a relative path: fred/home.dart
   // we need to get the actually name and full path to the script file.

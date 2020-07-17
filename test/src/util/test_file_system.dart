@@ -228,11 +228,11 @@ class TestFileSystem {
   }
 
   void installDshell() {
-    // print('PATH: $PATH');
-    // print(which(DartSdk.pubExeName).firstLine);
-    '${DartSdk.pubExeName} global activate --source path $pwd'.run;
+    /// run pub get and only display errors.
+    '${DartSdk.pubExeName} global activate --source path $pwd'.start(
+        progress: Progress((line) => null, stderr: (line) => print(line)));
 
-    EntryPoint().process(['install', '--nodart']);
+    EntryPoint().process(['install', '--nodart', '--quiet']);
 
     /// rewrite dependencies.yaml so that the dshell path points
     /// to the dev build directory

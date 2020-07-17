@@ -6,6 +6,7 @@ import '../../util/completion.dart';
 import '../command_line_runner.dart';
 import '../flags.dart';
 import '../script.dart';
+import '../virtual_project.dart';
 import 'commands.dart';
 
 ///
@@ -27,6 +28,7 @@ class SplitCommand extends Command {
 
     if (exists(join(script.path, 'pubspec.yaml'))) {
       if (_identical(script)) {
+        /// there is already a pubspec. Nothing to do here.
         print('The pubspec.yaml already exists and is upto date');
       } else {
         printerr(
@@ -35,8 +37,13 @@ class SplitCommand extends Command {
         exitCode = 1;
       }
     } else {
-      copy(script.pubSpecPath, join(dirname(script.path), 'pubspec.yaml'));
-      // now we need to disable the @pubspec annotation.
+      /// We are going to do the split!
+
+      /// make certain the project exists before we try to split it.
+      var project = VirtualProject.create(script);
+      copy(project.projectPubspecPath,
+          join(dirname(script.path), 'pubspec.yaml'));
+      // now we need to disable the @pubspec annotation (if the script has one.)
       replace(script.path, '@pubspec', '@disabled-pubspec');
       print('complete.');
     }
@@ -63,14 +70,14 @@ class SplitCommand extends Command {
     var localPubspecPath = canonicalize(join(script.path, 'pubspec.yaml'));
 
     // check the virtual project has a symlink back to the local pubspec.
-    if (isLink(script.pubSpecPath)) {
-      var resolved = resolveSymLink(script.pubSpecPath);
+    if (isLink(script.localPubSpecPath)) {
+      var resolved = resolveSymLink(script.localPubSpecPath);
       if (resolved == localPubspecPath) {
         return true;
       }
     }
 
-    return _compare(localPubspecPath, script.pubSpecPath);
+    return _compare(localPubspecPath, script.localPubSpecPath);
   }
 
   bool _compare(String localPubspecPath, String pubSpecPath) {
