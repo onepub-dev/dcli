@@ -6,7 +6,7 @@ import 'package:dshell/src/util/dshell_paths.dart';
 import 'package:dshell/src/util/runnable_process.dart';
 import 'package:test/test.dart';
 
-import '../util/test_file_system.dart';
+import '../../util/test_file_system.dart';
 
 void main() {
   test('Run hello world', () {

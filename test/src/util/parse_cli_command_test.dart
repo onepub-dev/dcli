@@ -1,8 +1,12 @@
-import 'package:dshell/src/functions/pwd.dart';
 @Timeout(Duration(seconds: 600))
+import 'package:dshell/dshell.dart' hide equals;
+import 'package:dshell/src/functions/pwd.dart';
+
 import 'package:dshell/src/script/command_line_runner.dart';
 import 'package:dshell/src/util/parse_cli_command.dart';
 import 'package:test/test.dart';
+
+import 'test_file_system.dart';
 
 void main() {
   group('ParseCLICommand', () {
@@ -94,5 +98,35 @@ void main() {
     test('No expansion', () {
 // var cmd = 'docker run   --network host   dshell:docker_dev_cli   -it --volume $HOME:/me --entrypoint /bin/bash';
     });
+  });
+
+  test('glob expansion - linux/macos', () {
+    TestFileSystem().withinZone((fs) {
+      var parsed = ParsedCliCommand('ls *.jpg *.png', fs.top);
+
+      expect(parsed.cmd, equals('ls'));
+
+      expect(
+          parsed.args,
+          unorderedEquals(<String>[
+            join(fs.top, 'fred.jpg'),
+            join(fs.top, 'one.jpg'),
+            join(fs.top, 'fred.png'),
+          ]));
+    });
+  }, onPlatform: <String, Skip>{
+    'windows': Skip("Powershell doesn't do glob expansion")
+  });
+
+  test('glob expansion - windows', () {
+    TestFileSystem().withinZone((fs) {
+      var parsed = ParsedCliCommand('ls *.jpg *.png', fs.top);
+
+      expect(parsed.cmd, equals('ls'));
+
+      expect(parsed.args, equals(['*.jpg', '*.png']));
+    });
+  }, onPlatform: <String, Skip>{
+    'posix': Skip('posix systems do glob expansion'),
   });
 }

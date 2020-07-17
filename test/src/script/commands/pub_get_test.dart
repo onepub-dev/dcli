@@ -3,7 +3,8 @@ import 'package:dshell/src/script/script.dart';
 import 'package:dshell/src/script/virtual_project.dart';
 import 'package:test/test.dart';
 
-import '../util/test_file_system.dart';
+import '../../util/test_file_system.dart';
+
 
 String scriptPath = 'test/test_scripts/hello_world.dart';
 

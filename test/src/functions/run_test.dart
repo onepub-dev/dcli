@@ -83,4 +83,13 @@ void main() {
     //   });
     // });
   });
+
+  t.test('Stderr', () {
+    TestFileSystem().withinZone((fs) {
+      print('$pwd');
+
+      t.expect(() => 'tail -n 5 badfilename.txt'.run,
+          t.throwsA(t.TypeMatcher<DShellException>()));
+    });
+  });
 }

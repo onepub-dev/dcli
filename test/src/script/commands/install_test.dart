@@ -7,9 +7,9 @@ import 'package:mockito/mockito.dart';
 import 'package:pubspec/pubspec.dart';
 import 'package:test/test.dart';
 
-import '../mocks/mock_env.dart';
-import '../mocks/mock_settings.dart';
-import '../util/test_file_system.dart';
+import '../../mocks/mock_env.dart';
+import '../../mocks/mock_settings.dart';
+import '../../util/test_file_system.dart';
 
 String script = 'test/test_scripts/hello_world.dart';
 

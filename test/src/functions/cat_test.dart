@@ -4,7 +4,7 @@ import 'package:test/test.dart' as t;
 import 'package:dshell/dshell.dart';
 import 'package:test/test.dart';
 
-import '../util.dart';
+import '../../test_utils.dart';
 import '../util/test_file_system.dart';
 
 String testFile;

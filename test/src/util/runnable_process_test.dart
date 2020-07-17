@@ -1,3 +1,6 @@
+import 'dart:io';
+
+import 'package:dshell/dshell.dart';
 import 'package:dshell/src/functions/run.dart';
 import 'package:path/path.dart';
 import 'package:test/test.dart';
@@ -23,5 +26,17 @@ void main() {
         join(path, 'two.txt')
       ]);
     });
+  });
+
+  test('runnable process Start - forEach', () {
+    print('Print to stdout using "print');
+
+    stdout.writeln('Print to stdout using "stsdout.writeln"');
+
+    stderr.writeln('Print to stderr using "stderr.writeln"');
+
+    stderr.write('Print to stderr using "stderr.write"');
+    stderr.write('\n');
+    printerr('Print to stderr using "printerr"');
   });
 }

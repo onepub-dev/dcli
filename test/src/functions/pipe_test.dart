@@ -2,7 +2,7 @@
 import 'package:test/test.dart' as t;
 import 'package:dshell/dshell.dart';
 
-import '../util.dart';
+import '../../test_utils.dart';
 import '../util/test_file_system.dart';
 
 void main() {

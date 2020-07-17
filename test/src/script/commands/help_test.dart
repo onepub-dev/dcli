@@ -3,7 +3,8 @@
 import 'package:dshell/src/script/entry_point.dart';
 import 'package:test/test.dart';
 
-import '../util/test_file_system.dart';
+import '../../util/test_file_system.dart';
+
 
 String script = 'test/test_scripts/hello_world.dart';
 
