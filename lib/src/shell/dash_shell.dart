@@ -24,7 +24,7 @@ class DashShell with ShellMixin, PosixMixin {
   bool get hasStartScript => true;
 
   @override
-  void installTabCompletion() {
+  void installTabCompletion({bool quiet = false}) {
     throw UnimplementedError();
   }
 }

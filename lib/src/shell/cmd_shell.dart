@@ -19,7 +19,7 @@ class CmdShell with WindowsMixin, ShellMixin {
   }
 
   @override
-  void installTabCompletion() {
+  void installTabCompletion({bool quiet = false}) {
     // not supported.
   }
 

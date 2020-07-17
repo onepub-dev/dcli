@@ -17,10 +17,14 @@ import 'commands.dart';
 class InstallCommand extends Command {
   static const _commandName = 'install';
 
-  final _installFlags = [_NoCleanFlag(), _NoDartFlag()];
+  final _installFlags = const [_NoCleanFlag(), _NoDartFlag(), _QuietFlag()];
 
   /// holds the set of flags passed to the compile command.
   Flags flagSet = Flags();
+
+  /// set by the [_QuietFlag].
+  /// if [quiet] is true only errors are displayed during the install.
+  bool quiet = false;
 
   /// ctor.
   InstallCommand() : super(_commandName);
@@ -32,7 +36,7 @@ class InstallCommand extends Command {
     var shell = ShellDetection().identifyShell();
 
     // if (!shell.isPrivilegedUser) {
-    //   print(red(shell.privilegesRequiredMessage('dshell_install')));
+    //   qprint(red(shell.privilegesRequiredMessage('dshell_install')));
     //   exit(1);
     // }
 
@@ -65,52 +69,54 @@ class InstallCommand extends Command {
           "'dshell install' does not take any arguments. Found $subarguments");
     }
 
-    print('Hang on a tick whilst we install dshell ${Settings().version}');
-    print('');
+    quiet = flagSet.isSet(_QuietFlag());
+
+    qprint('Hang on a tick whilst we install dshell ${Settings().version}');
+    qprint('');
 
     var conditions = shell.checkInstallPreconditions();
     if (conditions != null) {
-      print(red('*' * 80));
-      print(red('$conditions'));
-      print(red('*' * 80));
+      printerr(red('*' * 80));
+      printerr(red('$conditions'));
+      printerr(red('*' * 80));
       exit(1);
     }
     var dartWasInstalled = shell.install();
     // Create the ~/.dshell root.
     if (!exists(Settings().dshellPath)) {
-      print(blue('Creating ${Settings().dshellPath}'));
+      qprint(blue('Creating ${Settings().dshellPath}'));
       createDir(Settings().dshellPath);
     } else {
-      print('Found existing install at: ${Settings().dshellPath}.');
+      qprint('Found existing install at: ${Settings().dshellPath}.');
     }
-    print('');
+    qprint('');
 
     // Create dependencies.yaml
     var blue2 = blue(
         'Creating ${join(Settings().dshellPath, GlobalDependencies.filename)} with default packages.');
-    print(blue2);
+    qprint(blue2);
     GlobalDependencies.createDefault();
 
-    print('Default packages are:');
+    qprint('Default packages are:');
     for (var dep in GlobalDependencies.defaultDependencies) {
-      print('  ${dep.rehydrate()}');
+      qprint('  ${dep.rehydrate()}');
     }
-    print('');
-    print(
+    qprint('');
+    qprint(
         'Edit ${GlobalDependencies.filename} to add/remove/update your default dependencies.');
 
     /// create the template directory.
     if (!exists(Settings().templatePath)) {
-      print('');
-      print(
+      qprint('');
+      qprint(
           blue('Creating Template directory in: ${Settings().templatePath}.'));
       createDir(Settings().templatePath);
     }
 
     /// create the cache directory.
     if (!exists(Settings().dshellCachePath)) {
-      print('');
-      print(
+      qprint('');
+      qprint(
           blue('Creating Cache directory in: ${Settings().dshellCachePath}.'));
       createDir(Settings().dshellCachePath);
     }
@@ -118,22 +124,22 @@ class InstallCommand extends Command {
     // create the bin directory
     var binPath = Settings().dshellBinPath;
     if (!exists(binPath)) {
-      print('');
-      print(blue('Creating bin directory in: $binPath.'));
+      qprint('');
+      qprint(blue('Creating bin directory in: $binPath.'));
       createDir(binPath);
 
       // check if shell can add a path.
       if (!shell.hasStartScript || !shell.addToPath(binPath)) {
-        print(orange(
+        qprint(orange(
             'If you want to use dshell compile -i to install scripts, add $binPath to your PATH.'));
       }
     }
 
-    print('');
+    qprint('');
 
     if (shell.isCompletionSupported) {
       if (!shell.isCompletionInstalled) {
-        shell.installTabCompletion();
+        shell.installTabCompletion(quiet: true);
       }
     }
 
@@ -157,7 +163,7 @@ class InstallCommand extends Command {
         exit(1);
       } else {
         var dshellPath = dshellLocation;
-        print(blue('dshell found in : $dshellPath.'));
+        qprint(blue('dshell found in : $dshellPath.'));
 
         // link so all users can run dshell
         // We use the location of dart exe and add dshell symlink
@@ -167,36 +173,40 @@ class InstallCommand extends Command {
         //symlink(dshellPath, linkPath);
       }
     }
-    print('');
+    qprint('');
 
     _fixPermissions(shell);
 
-    // print('Copying dshell (${Platform.executable}) to /usr/bin/dshell');
+    // qprint('Copying dshell (${Platform.executable}) to /usr/bin/dshell');
     // copy(Platform.executable, '/usr/bin/dshell');
 
     touch(Settings().installCompletedIndicator, create: true);
 
     if (dartWasInstalled) {
-      print('');
-      print(
+      qprint('');
+      qprint(
           red('You need to restart your shell for the adjusted PATH to work.'));
-      print('');
+      qprint('');
     }
 
-    print(red('*' * 80));
-    print('');
+    qprint(red('*' * 80));
+    qprint('');
     print('dshell installation complete.');
-    print('');
-    print(red('*' * 80));
+    qprint('');
+    qprint(red('*' * 80));
 
-    print('');
-    print('Create your first dshell script using:');
-    print(blue('  dshell create <scriptname>.dart'));
-    print('');
-    print(blue('  Run your script by typing:'));
-    print(blue('  ./<scriptname>.dart'));
+    qprint('');
+    qprint('Create your first dshell script using:');
+    qprint(blue('  dshell create <scriptname>.dart'));
+    qprint('');
+    qprint(blue('  Run your script by typing:'));
+    qprint(blue('  ./<scriptname>.dart'));
 
     return 0;
+  }
+
+  void qprint(String message) {
+    if (!quiet) print(message);
   }
 
   @override
@@ -232,7 +242,7 @@ class InstallCommand extends Command {
 class _NoCleanFlag extends Flag {
   static const _flagName = 'noclean';
 
-  _NoCleanFlag() : super(_flagName);
+  const _NoCleanFlag() : super(_flagName);
 
   @override
   String get abbreviation => 'nc';
@@ -248,7 +258,7 @@ class _NoCleanFlag extends Flag {
 class _NoDartFlag extends Flag {
   static const _flagName = 'nodart';
 
-  _NoDartFlag() : super(_flagName);
+  const _NoDartFlag() : super(_flagName);
 
   @override
   String get abbreviation => 'nd';
@@ -257,6 +267,20 @@ class _NoDartFlag extends Flag {
   String description() {
     return '''Stops the install from installing dart as part of the install.
       This option is for testing purposes.''';
+  }
+}
+
+class _QuietFlag extends Flag {
+  static const _flagName = 'quiet';
+
+  const _QuietFlag() : super(_flagName);
+
+  @override
+  String get abbreviation => 'q';
+
+  @override
+  String description() {
+    return '''Runs the install in quiet mode. Only errors are displayed''';
   }
 }
 

@@ -81,7 +81,7 @@ class UnknownShell with ShellMixin {
   }
 
   @override
-  void installTabCompletion() {}
+  void installTabCompletion({bool quiet = false}) {}
 
   @override
   bool get isCompletionInstalled => false;

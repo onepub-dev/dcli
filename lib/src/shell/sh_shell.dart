@@ -23,7 +23,7 @@ class ShShell with ShellMixin, PosixMixin {
   }
 
   @override
-  void installTabCompletion() {
+  void installTabCompletion({bool quiet = false}) {
     throw UnimplementedError;
   }
 

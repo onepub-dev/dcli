@@ -20,7 +20,7 @@ class BashShell with ShellMixin, PosixMixin {
   // adds bash cli completion for dshell
   // by adding a 'complete' command to ~/.bashrc
   @override
-  void installTabCompletion() {
+  void installTabCompletion({bool quiet = false}) {
     if (!isCompletionInstalled) {
       // Add cli completion
       var command = "complete -C 'dshell_complete' dshell";

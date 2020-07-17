@@ -61,7 +61,7 @@ abstract class Flag {
   final String _name;
 
   ///
-  Flag(this._name);
+  const Flag(this._name);
 
   /// name of the flag
   String get name => _name;

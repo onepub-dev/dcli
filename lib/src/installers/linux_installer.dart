@@ -62,7 +62,8 @@ class LinuxDShellInstaller {
     // The normal dart detection process won't work here
     // as dart is not on the path so for the moment so we hard code it.
     // CONSIDER a way of identifying where dart has been installed to.
-    '/usr/lib/dart/bin/pub global activate dshell'.run;
+    '/usr/lib/dart/bin/pub global activate dshell'
+        .start(progress: Progress.printStdErr());
 
     // // also need to install it for the root user
     // // as root must have its own copy of .pub-cache otherwise

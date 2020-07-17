@@ -15,7 +15,7 @@ class ZshShell with ShellMixin, PosixMixin {
   bool get isCompletionInstalled => false;
 
   @override
-  void installTabCompletion() {
+  void installTabCompletion({bool quiet = false}) {
     throw UnimplementedError();
   }
 

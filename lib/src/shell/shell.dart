@@ -13,7 +13,9 @@ abstract class Shell {
 
   /// If the shell supports tab completion then
   /// install it.
-  void installTabCompletion();
+  /// If [quiet] is trie the suppress any console output except
+  /// for errors.
+  void installTabCompletion({bool quiet});
 
   /// Returns the path to the shell's start script
   String get startScriptPath;
