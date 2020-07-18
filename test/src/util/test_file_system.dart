@@ -281,7 +281,7 @@ class TestFileSystem {
   }
 
   void copyPubCache(String originalHome, String newHome) {
-    print('Copying pub cache into TestFileSystem');
+    print('Copying pub cache into TestFileSystem... ');
     var list = find(
       '*',
       root: join(originalHome, PubCache().cacheDir),
