@@ -12,7 +12,7 @@ import 'pubspec.dart';
 enum _State {
   notFound,
   findHeader,
-  data,
+  content,
   found,
 }
 
@@ -72,25 +72,33 @@ class PubSpecAnnotation implements PubSpec // with DependenciesMixin
       switch (state) {
         case _State.notFound:
           final trimmed = line.trim();
-          if (trimmed == r'/*') {
+          if (_isCommentStart(trimmed)) {
             state = _State.findHeader;
-          } else if (_isStart(trimmed)) {
-            state = _State.data;
+            // check if the comment start also contains a pubspec.
+            if (_hasPubspecStart(trimmed)) {
+              state = _State.content;
+            }
           }
           break;
         case _State.findHeader:
           final trimmed = line.trim();
-          if (_isAtPubSpec(trimmed)) {
-            state = _State.data;
-          } else {
+          if (_hasPubspecStart(trimmed)) {
+            state = _State.content;
+          } else if (_isCommentEnd(trimmed)) {
             state = _State.notFound;
           }
           break;
-        case _State.data:
+        case _State.content:
           final trimmed = line.trim();
-          if (trimmed == r'*/') {
+          if (_isCommentEnd(trimmed)) {
             state = _State.found;
           } else {
+            /// remove leading comment characters
+            /// e.g.
+            /// ** name:xxx
+            /// becomes
+            /// name:xxx
+            line = _stripComment(trimmed);
             dataLines.add(line);
           }
           break;
@@ -103,7 +111,7 @@ class PubSpecAnnotation implements PubSpec // with DependenciesMixin
       }
     }
 
-    if (state == _State.data) {
+    if (state == _State.content) {
       throw PubSpecAnnotationException(
           "@pubspec annotation found but the closing '*/' was not seen");
     }
@@ -145,14 +153,22 @@ class PubSpecAnnotation implements PubSpec // with DependenciesMixin
     _pubspec.saveToFile(path);
   }
 
-  static bool _isStart(String line) {
-    var compressed = line.replaceAll(RegExp(r'\s'), '');
-
-    return (compressed == r'/*@pubspec' || compressed == r'/*@pubspec.yaml');
+  static bool _hasPubspecStart(String line) {
+    return (line.contains(r'@pubspec') || line.contains(r'@pubspec.yaml'));
   }
 
-  static bool _isAtPubSpec(String trimmed) {
-    return (trimmed == r'@pubspec' || trimmed == r'@pubspec.yaml');
+  /// Strips leading C style comments off a line.
+  static String _stripComment(String line) {
+    // remove leading comment characters '*' or '**'
+    return line.replaceAll(RegExp(r'^\*+'), '');
+  }
+
+  static bool _isCommentStart(String trimmed) {
+    return trimmed.startsWith(r'/*') || trimmed.startsWith(r'/**');
+  }
+
+  static bool _isCommentEnd(String trimmed) {
+    return trimmed.endsWith(r'*/') || trimmed.endsWith(r'**/');
   }
 }
 

@@ -32,7 +32,7 @@
   * [Pubspec dependancy injection](#pubspec-dependancy-injection)
   * [Overriding default dependancy](#overriding-default-dependancy)
   * [Pubspec precendence](#pubspec-precendence)
-  * [@pubspec Annotation](#@pubspec-annotation)
+  * [@pubspec Annotation](#pubspec-annotation)
 * [Multi-file scripts](#multi-file-scripts)
 * [DShell commands](#dshell-commands)
   * [flags](#flags)
@@ -1152,7 +1152,7 @@ So a word of caution.
 If you have an existing DShell script which relies on DShell's 'virtual pubpsec' (i.e. it doesn't have an `@pubspec` annotation) and you copy the script into a directory that has an existing `pubspec.yaml` then the next time you run your script from its new home it will use the adjacent `pubspec.yaml`.
 
 
-## @pubspec Annotation
+## Pubspec Annotation
 
 The `@pubspec` annotation allows you to specify your pubspec defintion right inside your DShell script.
 
