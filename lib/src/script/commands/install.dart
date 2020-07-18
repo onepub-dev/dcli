@@ -71,7 +71,11 @@ class InstallCommand extends Command {
 
     quiet = flagSet.isSet(_QuietFlag());
 
-    qprint('Hang on a tick whilst we install dshell ${Settings().version}');
+    if (quiet) {
+      print('Installing DShell...  ');
+    }
+    qprint('Hang on a tick whilst we install DShell ${Settings().version}');
+
     qprint('');
 
     var conditions = shell.checkInstallPreconditions();
@@ -191,7 +195,12 @@ class InstallCommand extends Command {
 
     qprint(red('*' * 80));
     qprint('');
-    print('dshell installation complete.');
+    // if (quiet) {
+    //   print('done.');
+    // }
+
+    qprint('dshell installation complete.');
+
     qprint('');
     qprint(red('*' * 80));
 
