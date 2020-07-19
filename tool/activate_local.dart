@@ -59,12 +59,31 @@ ${parser.usage}
         .start(workingDirectory: dshellPackageRoot);
   }
 
+  var dshellBin = join(dshellPackageRoot, 'bin', '${DShellPaths().dshellName}');
+  if (exists(dshellBin)) {
+    delete(dshellBin);
+  }
+
+  /// alter the version so we can tell we are activating the local version
+  ///
+  var versionfile =
+      join(dshellPackageRoot, 'lib', 'src', 'version', 'version.g.dart');
+  var versionbackup = '$versionfile.bak';
+  move(versionfile, versionbackup, overwrite: true);
+  versionfile.write("String packageVersion = 'activate_local_version';");
+
+  /// use the global dshell version to compile the local version.
+  'dshell compile $dshellBin.dart'.run;
+
   // make certain the dependency injection points to $path
   var dependency = join(Settings().dshellPath, GlobalDependencies.filename);
 
   if (exists(dependency)) {
     delete(dependency);
   }
+
+  /// set the path the local dshell.
+  Env().pathPrepend(join(dshellPackageRoot, 'bin'));
 
   // make certain all script see the new settings.
   '${DShellPaths().dshellName} install -nc'.run;
@@ -76,9 +95,8 @@ ${parser.usage}
   print(GlobalDependencies.filename);
   cat(dependency);
 
-  Env().pathPrepend(dshellPackageRoot);
-
   'bash'.run;
 
+  move(versionbackup, versionfile);
   //'dshell install'.run;
 }
