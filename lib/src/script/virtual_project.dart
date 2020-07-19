@@ -101,7 +101,7 @@ class VirtualProject {
   // String get path => _virtualProjectPath;
 
   /// The path to the virtual projects pubspec.yaml.
-  /// 
+  ///
   /// Regardless of the [ProjectStorageLocation] this
   /// path will always point to the actual pubspec.yaml.
   /// e.g. PROJECT_DIR/pubspec.yaml

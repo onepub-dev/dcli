@@ -5,7 +5,6 @@ import 'package:test/test.dart';
 
 import '../../util/test_file_system.dart';
 
-
 void main() {
   t.test('Try everything', () {
     TestFileSystem().withinZone((fs) {
