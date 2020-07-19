@@ -37,15 +37,31 @@ class SplitCommand extends Command {
         exitCode = 1;
       }
     } else {
-      /// We are going to do the split!
-
-      /// make certain the project exists before we try to split it.
+      /// make certain the virtual project exists before we try to split it.
       var project = VirtualProject.create(script);
-      copy(project.projectPubspecPath,
-          join(dirname(script.path), 'pubspec.yaml'));
-      // now we need to disable the @pubspec annotation (if the script has one.)
-      replace(script.path, '@pubspec', '@disabled-pubspec');
-      print('complete.');
+
+      if (project.getPubspecLocation == PubspecLocation.traditional) {
+        print(
+            'This appears to be a traditional dart project and already has a pubspec located at: ${project.projectPubspecPath}');
+        exitCode = 1;
+      }
+
+      if (project.getPubspecLocation == PubspecLocation.local) {
+        print(
+            'This script already has a local pubspec located at: ${project.projectPubspecPath}');
+        exitCode = 1;
+      }
+
+      if (exitCode == 0) {
+        /// We are going to do the split!
+        copy(project.projectPubspecPath,
+            join(dirname(script.path), 'pubspec.yaml'));
+        // now we need to disable the @pubspec annotation (if the script has one.)
+        if (project.getPubspecLocation == PubspecLocation.annotation) {
+          replace(script.path, '@pubspec', '@disabled-pubspec');
+        }
+        print('complete.');
+      }
     }
 
     return exitCode;
