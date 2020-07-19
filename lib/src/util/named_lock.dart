@@ -143,7 +143,7 @@ class NamedLock {
       decLockCount;
 
       if (_lockCountForName == 0) {
-        Settings().verbose(red('Releasing lock: $_lockFilePath'));
+        Settings().verbose('Releasing lock: $_lockFilePath');
 
         _withHardLock(fn: () => delete(_lockFilePath));
       }
@@ -162,7 +162,7 @@ class NamedLock {
     var _lockCount = _lockCountForName;
     _lockCount++;
     _lockCounts[name] = _lockCount;
-    _log(orange('Incremented lock: $_lockCount'));
+    _log('Incremented lock: $_lockCount');
     return _lockCount;
   }
 
@@ -173,7 +173,7 @@ class NamedLock {
     _lockCount--;
     _lockCounts[name] = _lockCount;
 
-    _log(orange('Decremented lock: $_lockCountForName'));
+    _log('Decremented lock: $_lockCountForName');
     return _lockCount;
   }
 
@@ -243,8 +243,8 @@ class NamedLock {
 
         if (taken) {
           var isolateID = Service.getIsolateID(Isolate.current);
-          Settings().verbose(
-              orange('Taking lock ${basename(_lockFilePath)} for $isolateID'));
+          Settings()
+              .verbose('Taking lock ${basename(_lockFilePath)} for $isolateID');
 
           Settings().verbose(
               'Lock Source: ${StackTraceImpl(skipFrames: 9).formatStackTrace(methodCount: 1)}');
