@@ -98,7 +98,7 @@ class PubSpecAnnotation implements PubSpec // with DependenciesMixin
             /// ** name:xxx
             /// becomes
             /// name:xxx
-            line = _stripComment(trimmed);
+            line = _stripComment(line);
             dataLines.add(line);
           }
           break;
@@ -160,7 +160,7 @@ class PubSpecAnnotation implements PubSpec // with DependenciesMixin
   /// Strips leading C style comments off a line.
   static String _stripComment(String line) {
     // remove leading comment characters '*' or '**'
-    return line.replaceAll(RegExp(r'^\*+'), '');
+    return line.replaceAll(RegExp(r'^\s+\*+'), '');
   }
 
   static bool _isCommentStart(String trimmed) {
