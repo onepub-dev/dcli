@@ -1015,14 +1015,21 @@ By default you do NOT need a pubspec.yaml when using DShell.
 
 NOTE: if you change the structure of your DShell script you need to run a `dshell clean`. Simple edits to you DShell script do NOT require a `clean` to be run.
 
-## Default pubsec
+## Supported pubspec locations
+DShell allows you to place your pubspec in the following locations:
+* No pubspec - we create a virtual pubsec for you.
+* @pubspec annotation - the pubspec lives in your script in the form of an annotation.
+* Local pubspec - you place a pubspec.yaml file in the same directory as your script.
+* Traditional pubspec.yaml - you use the standard dart package structure with the pubspec.yaml in the root of your project.
+
+## No pubsec
 
 If DShell doesn't find a pubspec then it will automatically create a default pubspec for you.
 The default pubspec is stored in the script's Virtual Project cache (under `~/.dshell/cache/<path_to_script>.project`).
 
 We refer to this as a 'virtual pubspec'.
 
-When you first launch your script and after calling `dshell clean <scriptname.dart>` DShell creates/recreates your virtual pubspec.
+When you first launch your script or when running `dshell clean <scriptname.dart>` DShell creates/recreates your `virtual pubspec`.
 
 Whether you use a virtual pubspec or create your own, DShell performs dependancy injection ([see dependancy injection](#Pubspec-dependancy-injection)) providing a common set of packages that together create a 'swiss army knife' of useful tools to use when developing DShell scripts.
 
