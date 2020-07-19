@@ -1,6 +1,6 @@
 @Timeout(Duration(minutes: 30))
 import 'package:dshell/dshell.dart' hide equals;
-import 'package:dshell/src/pubspec/global_dependencies.dart';
+import 'package:dshell/src/script/dependency.dart';
 import 'package:dshell/src/script/entry_point.dart';
 import 'package:test/test.dart';
 
@@ -12,16 +12,12 @@ void main() {
       TestFileSystem().withinZone((fs) {
         var root =
             join('test', 'test_scripts', 'split_command', 'virtual_project');
-
         var scriptpath = join(root, 'cat.dart');
         var pubspecpath = join(root, 'pubspec.yaml');
 
         /// prepare the folder
-        if (!exists(root)) {
-          createDir(root, recursive: true);
-          if (exists(pubspecpath)) {
-            delete(pubspecpath);
-          }
+        if (exists(pubspecpath)) {
+          delete(pubspecpath);
         }
         EntryPoint().process(['split', scriptpath]);
 
@@ -29,8 +25,42 @@ void main() {
 
         var pubspec = PubSpecFile.fromFile(pubspecpath);
         expect('cat', equals(pubspec.name));
-        expect(pubspec.dependencies,
-            equals(GlobalDependencies.defaultDependencies));
+        expect(pubspec.dependencies.length, equals(3));
+        expect(pubspec.dependencies[0].name, equals('args'));
+        expect(pubspec.dependencies[1].name, equals('path'));
+        expect(pubspec.dependencies[2].name, equals('dshell'));
+      });
+    });
+
+    test('annotation pubspec', () {
+      TestFileSystem().withinZone((fs) {
+        var root =
+            join('test', 'test_scripts', 'split_command', 'annotated_project');
+        var scriptpath = join(root, 'cat.dart');
+        var pubspecpath = join(root, 'pubspec.yaml');
+
+        /// restore the script.
+        replace(scriptpath, '@disabled-pubspec.yaml', '@pubspec.yaml');
+
+        if (exists(pubspecpath)) {
+          delete(pubspecpath);
+        }
+        EntryPoint().process(['split', scriptpath]);
+
+        expect(exists(pubspecpath), equals(true));
+
+        var pubspec = PubSpecFile.fromFile(pubspecpath);
+        expect(pubspec.name, equals('annotated_cat'));
+        expect(pubspec.dependencies.length, equals(3));
+
+        var dependencies = <Dependency>[];
+        dependencies.add(Dependency.fromHosted('dshell', '^1.1.1'));
+        dependencies.add(Dependency.fromHosted('path', '^1.8.3'));
+
+        /// added via dependency injection.
+        dependencies.add(Dependency.fromHosted('args', '^1.5.2'));
+
+        expect(pubspec.dependencies, unorderedMatches(dependencies));
       });
     });
   });
