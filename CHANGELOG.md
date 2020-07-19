@@ -1,3 +1,19 @@
+# 1.9.7
+FIX: split command now works!
+
+tweaked doco on pubspec locations.
+Fixes for activatelocal.dart We now compile the local dshell and set the path correctly. We also change the version no. so you can see that we are running the local version.
+added unit tests for annotated pubspecs.
+Added tests for the more liberal parsing of annotations.
+removed color coding on verbose output as it was distracting.
+updated doco to reflect that [local] pubspec also have a projectRootPath that is actual.
+Fixed a bug which stripped required indentation on pubspec annotations.
+Added unit test for pubspec annotations and enhanced the parser to handle more commenting styles.
+Added support for install quiet option to the tab completion installer.
+Added printStdErr progression which only prints to stderr.
+Added a quiet option to the installer to suppress progress messages.
+restructured test folders to match src folders
+
 # 1.9.6
 Added a method to remove a symbolic link.
 
