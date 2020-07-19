@@ -147,7 +147,7 @@ class VirtualProject {
   /// This is the directory that the pubspec.yaml file lives in.
   ///
   /// In most cases this is the same as the [_virtualProjectPath]
-  /// except for when the [PubspecLocation] is [traditional] in which
+  /// except for when the [PubspecLocation] is [traditional] or [local] in which
   /// case it will be the project's actual root directory.
   String get projectRootPath => _projectRootPath;
 
@@ -224,7 +224,7 @@ class VirtualProject {
   /// Used when the pubspec.yaml is an actual file and lives in the same
   /// directory as the script.
   static void _setLocalPaths(VirtualProject project, Script script) {
-    project._projectRootPath = project._virtualProjectPath;
+    project._projectRootPath = script.scriptDirectory;
     _setProjectPaths(project, script);
 
     // pubspec.yaml lives in the same dir as the script.
@@ -238,7 +238,7 @@ class VirtualProject {
     // root director of real (traditional) dart projet.
     project._projectRootPath = project._getTradionalProjectRoot(script.path);
 
-    /// pubspec.yaml lives in the parent of th script
+    /// pubspec.yaml lives in the script's project root
     project._runtimePubspecPath =
         join(project._projectRootPath, 'pubspec.yaml');
 
