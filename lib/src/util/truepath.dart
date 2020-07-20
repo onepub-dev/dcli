@@ -31,5 +31,5 @@ String privatePath(String part1,
       .replaceAll(HOME, '/<HOME>');
 }
 
-/// returns the root path this is '/' or '\' depending on platform.
+/// returns the root path this is '/' or '\\' depending on platform.
 String get rootPath => separator;
