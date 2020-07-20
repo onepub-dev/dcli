@@ -57,6 +57,7 @@ export 'src/functions/touch.dart' show touch, TouchException;
 export 'src/functions/which.dart' show which;
 export 'src/pubspec/pubspec_file.dart';
 export 'src/script/dart_sdk.dart' show DartSdk;
+export 'src/script/script.dart' show Script;
 export 'src/settings.dart' show Settings;
 export 'src/shell/bash_shell.dart';
 export 'src/shell/shell.dart';

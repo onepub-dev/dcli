@@ -37,7 +37,7 @@ class PubSpecManager {
     var annotation = PubSpecAnnotation.fromScript(script);
 
     if (!annotation.annotationFound()) {
-      if (script.hasPubSpecYaml()) {
+      if (script.hasLocalPubSpecYaml()) {
         sourcePubSpec = PubSpecFile.fromScript(script);
       } else {
         sourcePubSpec = defaultPubspec;

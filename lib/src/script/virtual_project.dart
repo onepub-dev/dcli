@@ -270,7 +270,7 @@ class VirtualProject {
     if (_pubspecLocation == null) {
       if (script.hasPubspecAnnotation) {
         _pubspecLocation = PubspecLocation.annotation;
-      } else if (script.hasPubSpecYaml()) {
+      } else if (script.hasLocalPubSpecYaml()) {
         _pubspecLocation = PubspecLocation.local;
       } else {
         var parent = dirname(script.path);

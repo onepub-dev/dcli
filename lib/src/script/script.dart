@@ -2,6 +2,7 @@ import 'dart:io';
 import 'dart:math';
 
 import 'package:path/path.dart' as p;
+import 'package:path/path.dart';
 
 import '../functions/is.dart';
 import '../pubspec/pubspec_annotation.dart';
@@ -11,7 +12,14 @@ import '../util/file_helper.dart';
 
 import 'command_line_runner.dart';
 
-/// used to manage a dshell script.
+/// Used to manage a DShell script.
+///
+/// This class is primarily for internal use.
+///
+/// We expose [Script] as it permits some self discovery
+/// of the script you are currently running.
+///
+///
 class Script {
   /// The directory where the script file lives
   /// stored as an absolute path.
@@ -23,16 +31,21 @@ class Script {
   /// Creates a script object from a scriptArg
   /// passed to a command.
   ///
-  /// The [scriptArg] may be a filename or
+  /// The [script] may be a filename or
   /// a filename with a path prefix (relative or absolute)
   /// If the path is realtive then it will be joined
   /// with the current working directory to form
   /// a absolute path.
   ///
+  /// To obtain a [Script] instance for your cli application call:
+  ///
+  /// ```dart
+  /// var script = Script.fromFile(Platform.script);
+  ///
   Script.fromFile(
-    String scriptArg,
-  )   : _scriptname = _extractScriptname(scriptArg),
-        _scriptDirectory = _extractScriptDirectory(scriptArg);
+    String script,
+  )   : _scriptname = _extractScriptname(script),
+        _scriptDirectory = _extractScriptDirectory(script);
 
   /// the file name of the script including the extension.
   String get scriptname => _scriptname;
@@ -75,6 +88,7 @@ class Script {
   }
 
   /// Generates the default scriptfile contents
+  /// when use runs 'dshell create <script>'
   ///
   void createDefaultFile(String defaultBody) {
     writeToFile(path, defaultBody);
@@ -82,6 +96,7 @@ class Script {
 
   /// When we create a dshell script using 'dshell create' we need
   /// a default body for the script.
+  /// This methods returns a default body as a String.
   String generateDefaultBody() {
     /// The default body of the script we generate.
     return """#! /usr/bin/env ${DShellPaths().dshellName}
@@ -122,7 +137,7 @@ void main() {
   }
 
   /// Returns true if the script has a pubspec.yaml in its directory.
-  bool hasPubSpecYaml() {
+  bool hasLocalPubSpecYaml() {
     // The virtual project pubspec.yaml file.
     final pubSpecPath = p.join(_scriptDirectory, 'pubspec.yaml');
     return exists(pubSpecPath);
@@ -145,6 +160,37 @@ void main() {
   /// For windows this removes c:\
   static String sansRoot(String path) {
     return path.substring(p.rootPrefix(path).length);
+  }
+
+  /// Determines the script project root.
+  /// The project root is defined as the directory which contains
+  /// the scripts 'pubspec.yaml' file.
+  ///
+  /// For a script which contains a @pubspec annotation or
+  /// a script which doesn't have a pubspec.yaml
+  /// this is the same directory that the script lives in.
+  ///
+  ///
+  String getProjectRoot() {
+    var current = _scriptDirectory;
+
+    /// Script has a @pubspec annotation so the project root is the script directory
+    if (_hasPubspecAnnotation) {
+      return _scriptDirectory;
+    }
+
+    var root = rootPrefix(path);
+
+    // traverse up the directory to find if we are in a traditional directory.
+    while (current != root) {
+      if (exists(join(dirname(current), 'pubspec.yaml'))) {
+        return dirname(current);
+      }
+      current = dirname(current);
+    }
+
+    /// no pubspec.yaml found so the project root is the script directory
+    return _scriptDirectory;
   }
 }
 
