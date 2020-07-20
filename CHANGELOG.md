@@ -1,3 +1,8 @@
+# 1.9.8
+Exposed the Script class as part of the public api as it has some useful methods.
+experiments with generating coverage.
+Minor documentation fix.
+
 # 1.9.7
 FIX: split command now works!
 
