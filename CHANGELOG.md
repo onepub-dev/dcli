@@ -1,3 +1,11 @@
+# 1.9.9
+Fixed the fetch unit tests as the download path had moved after re-org of test directory.
+Unit tests for VirtualProject.doctor to address #71
+Fixed a bug in split where it always tried to create a project even when it already exists.
+Added method createOrLoad.  Fixed a bug in the loading of local projects where the pubspec path was not being set correctly.
+Fixed doco. Changed getProjectRoot to a getter.
+wording.
+
 # 1.9.8
 Exposed the Script class as part of the public api as it has some useful methods.
 experiments with generating coverage.
