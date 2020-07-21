@@ -5,7 +5,7 @@ import 'package:test/test.dart';
 import '../util/test_file_system.dart';
 
 String baseURl =
-    'https://raw.githubusercontent.com/bsutton/dshell/master/test/functions/fetch_downloads';
+    'https://raw.githubusercontent.com/bsutton/dshell/master/test/src/functions/fetch_downloads';
 String testFile;
 void main() {
   group('Fetch Single', () {
