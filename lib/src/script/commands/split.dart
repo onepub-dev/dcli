@@ -38,7 +38,7 @@ class SplitCommand extends Command {
       }
     } else {
       /// make certain the virtual project exists before we try to split it.
-      var project = VirtualProject.create(script);
+      var project = VirtualProject.createOrLoad(script);
 
       if (project.getPubspecLocation == PubspecLocation.traditional) {
         print(
