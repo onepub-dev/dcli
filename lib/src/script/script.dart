@@ -40,7 +40,7 @@ class Script {
   /// To obtain a [Script] instance for your cli application call:
   ///
   /// ```dart
-  /// var script = Script.fromFile(Platform.script);
+  /// var script = Script.fromFile(Platform.script.toFilePath());
   ///
   Script.fromFile(
     String script,
@@ -171,11 +171,11 @@ void main() {
   /// this is the same directory that the script lives in.
   ///
   ///
-  String getProjectRoot() {
+  String get projectRoot {
     var current = _scriptDirectory;
 
     /// Script has a @pubspec annotation so the project root is the script directory
-    if (_hasPubspecAnnotation) {
+    if (hasPubspecAnnotation) {
       return _scriptDirectory;
     }
 
