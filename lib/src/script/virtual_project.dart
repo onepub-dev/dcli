@@ -151,12 +151,28 @@ class VirtualProject {
   /// case it will be the project's actual root directory.
   String get projectRootPath => _projectRootPath;
 
+  /// Loads a virtual project.
+  /// If it doesn't already exist it creates the project and then loads it.
+  ///
+  /// This is the safest way to load a project unless you are certain you know its state.
+  ///
+  /// Use this method to load a project if you are uncertain if it
+  /// already exists.
+  static VirtualProject createOrLoad(Script script) {
+    var project = VirtualProject._internal(script);
+
+    if (project.isInitialised) {
+      return load(script);
+    } else {
+      return create(script);
+    }
+  }
+
   /// Creates a virtual project's directory
   /// and calls initialiseProject.
   /// The create does NOT build the project (i.e. call pub get)
   static VirtualProject create(Script script) {
-    var dshellCachePath = Settings().dshellCachePath;
-    var project = VirtualProject._internal(dshellCachePath, script);
+    var project = VirtualProject._internal(script);
 
     _configProjectPaths(project, script);
 
@@ -166,8 +182,7 @@ class VirtualProject {
 
   /// loads an existing virtual project.
   static VirtualProject load(Script script) {
-    var dshellCachePath = Settings().dshellCachePath;
-    var project = VirtualProject._internal(dshellCachePath, script);
+    var project = VirtualProject._internal(script);
 
     _configProjectPaths(project, script);
 
@@ -227,6 +242,9 @@ class VirtualProject {
     project._projectRootPath = script.scriptDirectory;
     _setProjectPaths(project, script);
 
+    project._projectPubspecPath =
+        join(project._projectRootPath, 'pubspec.yaml');
+
     // pubspec.yaml lives in the same dir as the script.
     project._runtimePubspecPath = join(dirname(script.path), 'pubspec.yaml');
 
@@ -285,7 +303,8 @@ class VirtualProject {
     return _pubspecLocation;
   }
 
-  VirtualProject._internal(String cacheRootPath, this.script) {
+  VirtualProject._internal(this.script) {
+    var cacheRootPath = Settings().dshellCachePath;
     // /home/bsutton/.dshell/cache/home/bsutton/git/dshell/test/test_scripts/hello_world.project
     _virtualProjectPath = join(cacheRootPath,
         Script.sansRoot(script.scriptDirectory), script.basename + projectDir);
@@ -468,10 +487,11 @@ class VirtualProject {
     _colprint('Directory', privatePath(script.scriptDirectory));
     _colprint('Virtual Project', privatePath(_virtualProjectPath));
     _colprint('Pubspec Location', getPubspecLocation.toString());
+    _colprint('Pubspec Path', privatePath(projectPubspecPath));
     print('');
 
     print('');
-    print('Virtual pubspec.yaml');
+    print('pubspec.yaml');
     read(_projectPubspecPath).forEach((line) {
       print('  ${_makeSafe(line)}');
     });
