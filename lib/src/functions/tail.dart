@@ -9,7 +9,7 @@ import 'function.dart';
 import 'is.dart';
 
 ///
-/// Returns count [lines] from the file at [path].
+/// Returns count [lines] from the end of the file at [path].
 ///
 /// ```dart
 /// tail('/var/log/syslog', 10).forEach((line) => print(line));
