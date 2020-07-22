@@ -154,3 +154,16 @@ Progress start(String commandLine,
       terminal: terminal,
       nothrow: nothrow);
 }
+
+Progress startStreaming(String commandLine,
+    {Progress progress,
+    bool runInShell = false,
+    bool nothrow = false,
+    String workingDirectory}) {
+  workingDirectory ??= pwd;
+  var runnable = RunnableProcess.fromCommandLine(commandLine,
+      workingDirectory: workingDirectory);
+
+  return runnable.runStreaming(
+      progress: progress, runInShell: runInShell, nothrow: nothrow);
+}

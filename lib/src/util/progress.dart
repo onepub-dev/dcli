@@ -205,4 +205,8 @@ class Progress {
     _stdoutController.close();
     _closed = true;
   }
+
+  void onError(RunException error) {
+    _stderrController.addError(error);
+  }
 }

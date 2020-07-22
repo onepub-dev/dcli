@@ -38,13 +38,26 @@ class RunnableProcess {
 
   final ParsedCliCommand _parsed;
 
+  /// Used when the process is exiting to ensure that we wait
+  /// for stdout and stderr to be flushed.
+
+  var stdoutFlushed = Completer<void>();
+  var stderrFlushed = Completer<void>();
+  Future<List<void>> streamsFlushed;
+
+  RunnableProcess._internal(this._parsed, this.workingDirectory) {
+    streamsFlushed =
+        Future.wait<void>([stdoutFlushed.future, stderrFlushed.future]);
+  }
+
   /// Spawns a process to run the command contained in [cmdLine] along with
   /// the args passed via the [cmdLine].
   ///
   /// Glob expansion is performed on each non-quoted argument.
   ///
-  RunnableProcess.fromCommandLine(String cmdLine, {this.workingDirectory})
-      : _parsed = ParsedCliCommand(cmdLine, workingDirectory);
+  RunnableProcess.fromCommandLine(String cmdLine, {String workingDirectory})
+      : this._internal(
+            ParsedCliCommand(cmdLine, workingDirectory), workingDirectory);
 
   /// Spawns a process to run the command contained in [command] along with
   /// the args passed via the [args].
@@ -52,8 +65,10 @@ class RunnableProcess {
   /// Glob expansion is performed on each non-quoted argument.
   ///
   RunnableProcess.fromCommandArgs(String command, List<String> args,
-      {this.workingDirectory})
-      : _parsed = ParsedCliCommand.fromParsed(command, args, workingDirectory);
+      {String workingDirectory})
+      : this._internal(
+            ParsedCliCommand.fromParsed(command, args, workingDirectory),
+            workingDirectory);
 
   /// returns the original command line that started this process.
   String get cmdLine => '${_parsed.cmd} ${_parsed.args.join(' ')}';
@@ -70,6 +85,24 @@ class RunnableProcess {
     // wait until the process has started
     var process = waitForEx<Process>(_fProcess);
     return process.stdin;
+  }
+
+  /// runs the process and returns as soon as the process
+  /// has started.
+  ///
+  /// This method is used to stream apps output via when
+  /// using [Progress.stream].
+  Progress runStreaming(
+      {Progress progress,
+      bool runInShell = false,
+      String workingDirectory,
+      bool nothrow}) {
+    progress ??= Progress.devNull();
+
+    start(runInShell: runInShell);
+    processStream(progress, nothrow: nothrow);
+
+    return progress;
   }
 
   /// runs the process.
@@ -226,6 +259,36 @@ class RunnableProcess {
     });
   }
 
+  /// Unlike [processUntilExit] this method wires the streams and then returns
+  /// immediately.
+  ///
+  /// When the process exits it closes the [progress] streams.
+  void processStream(Progress progress, {@required bool nothrow}) {
+    progress ??= Progress.devNull();
+
+    _fProcess.then((process) {
+      _wireStreams(process, progress);
+
+      // trap the process finishing
+      process.exitCode.then((exitCode) {
+        // CONSIDER: do we pass the exitCode to ForEach or just throw?
+        // If the start failed we don't want to rethrow
+        // as the exception will be thrown async and it will
+        // escape as an unhandled exception and stop the whole script
+        progress.exitCode = exitCode;
+        if (exitCode != 0 && nothrow == false) {
+          var error = RunException.withArgs(_parsed.cmd, _parsed.args, exitCode,
+              'The command ${red('[${_parsed.cmd}] with args [${_parsed.args.join(', ')}]')} failed with exitCode: $exitCode');
+          progress.onError(error);
+          progress.close();
+        } else {
+          waitForEx<void>(streamsFlushed);
+          progress.close();
+        }
+      });
+    });
+  }
+
   // Monitors the process until it exists.
   // If a LineAction exists we call
   // line action each time the process emmits a line.
@@ -236,21 +299,8 @@ class RunnableProcess {
     progress ??= Progress.devNull();
 
     _fProcess.then((process) {
-      /// handle stdout stream
-      process.stdout
-          .transform(utf8.decoder)
-          .transform(const LineSplitter())
-          .listen((line) {
-        progress.addToStdout(line);
-      });
+      _wireStreams(process, progress);
 
-      // handle stderr stream
-      process.stderr
-          .transform(utf8.decoder)
-          .transform(const LineSplitter())
-          .listen((line) {
-        progress.addToStderr(line);
-      });
       // trap the process finishing
       process.exitCode.then((exitCode) {
         // CONSIDER: do we pass the exitCode to ForEach or just throw?
@@ -284,6 +334,28 @@ class RunnableProcess {
     catch (e) {
       rethrow;
     }
+  }
+
+  void _wireStreams(Process process, Progress progress) {
+    /// handle stdout stream
+    process.stdout
+        .transform(utf8.decoder)
+        .transform(const LineSplitter())
+        .listen((line) {
+      progress.addToStdout(line);
+    }).onDone(() {
+      stdoutFlushed.complete();
+    });
+
+    // handle stderr stream
+    process.stderr
+        .transform(utf8.decoder)
+        .transform(const LineSplitter())
+        .listen((line) {
+      progress.addToStderr(line);
+    }).onDone(() {
+      stderrFlushed.complete();
+    });
   }
 }
 

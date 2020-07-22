@@ -394,7 +394,7 @@ extension StringAsProcess on String {
       bool nothrow = false}) {
     var progress = Progress.stream();
 
-    cmd.start(this,
+    cmd.startStreaming(this,
         runInShell: runInShell,
         progress: progress,
         workingDirectory: workingDirectory,
