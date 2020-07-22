@@ -1,6 +1,8 @@
+import 'dart:cli';
+import 'dart:convert';
 import 'dart:io';
 
-import 'package:dshell/dshell.dart';
+import 'package:dshell/dshell.dart' hide sleep;
 import 'package:dshell/src/functions/run.dart';
 import 'package:path/path.dart';
 import 'package:test/test.dart';
@@ -39,4 +41,30 @@ void main() {
     stderr.write('\n');
     printerr('Print to stderr using "printerr"');
   });
+
+  test('Child process shutdown', () {
+    var fprocess = Process.start(
+      'tail',
+      ['-f', '/var/log/syslog'],
+      mode: ProcessStartMode.normal,
+    );
+
+    fprocess.then((process) {
+      process.stdout
+          .transform(utf8.decoder)
+          .transform(const LineSplitter())
+          .listen((line) {
+        print('stdout: $line');
+      });
+
+      process.exitCode.then((exitCode) {
+        print('tail exited with $exitCode');
+      });
+    });
+
+    waitFor<void>(Future.delayed(Duration(seconds: 10)));
+
+    /// test in current form can't actually test for shutdown.
+    /// needs to spawn another process then check the outcome.
+  }, skip: test);
 }
