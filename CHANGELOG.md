@@ -1,3 +1,7 @@
+# 1.9.13
+Added defaultValue option to ask function.
+Added code to test for child shutdown.
+
 # 1.9.12
 Improved the progress.stream method so that it streams data even when the called process is long running. It also waits for stderr/stdout streams to be fully processed before shutting down.
 
