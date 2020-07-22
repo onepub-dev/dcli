@@ -1,3 +1,7 @@
+# 1.9.10
+Added stream option to string_as_process.
+Added the ability to return a stream from a progress.
+
 # 1.9.9
 Fixed the fetch unit tests as the download path had moved after re-org of test directory.
 Unit tests for VirtualProject.doctor to address #71
