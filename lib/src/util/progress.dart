@@ -14,6 +14,14 @@ class Progress {
   /// The exist code of the completed process.
   int exitCode;
 
+  /// If true then lines written to stderr will
+  /// be included in the stream.
+  final bool includeStderr;
+
+  /// If true then lines written to stdout will
+  /// be included in the stream.
+  final bool includeStdout;
+
   final _stdoutCompleter = Completer<bool>();
   final _stderrCompleter = Completer<bool>();
 
@@ -21,33 +29,79 @@ class Progress {
   final _stderrController = StreamController<String>();
 
   ///
-  Progress(LineAction stdout, {LineAction stderr = devNull}) {
+  Progress(LineAction stdout, {LineAction stderr = devNull})
+      : includeStdout = true,
+        includeStderr = (stderr != devNull) {
     stderr ??= devNull;
     _wireStreams(stdout, stderr);
   }
 
   /// Use this progress to have both stdout and stderr output
   /// suppressed.
-  Progress.devNull();
+  Progress.devNull()
+      : includeStdout = false,
+        includeStderr = false;
 
   /// Use this progress to only output data sent to stdout
-  Progress.printStdOut() {
+  Progress.printStdOut()
+      : includeStdout = true,
+        includeStderr = false {
     _wireStreams(print, devNull);
   }
 
   /// Use this progress to only output data sent to stderr
-  Progress.printStdErr() {
+  Progress.printStdErr()
+      : includeStdout = false,
+        includeStderr = true {
     _wireStreams(devNull, print);
   }
 
   /// Use this progress to print both stdout and stderr
-  Progress.print() {
+  Progress.print()
+      : includeStdout = true,
+        includeStderr = true {
     _wireStreams(print, printerr);
   }
 
+  /// EXPERIMENTAL
+  ///
+  /// Constructs a Progress that provides a stream of all lines written
+  /// to stdout.
+  /// If you want the stream to include stderr then set [includeStderr] to true.
+  ///
+  /// To obtain the stream call the [Progress.stream] method.
+  ///
+  /// Using a stream is one of the few (only) places in dshell that you will need
+  /// to use a future. If you don't use the Completer then the stream will essentially
+  /// output stream data as the rest of your script continues to run.
+  ///
+  ///
+  /// ```dart
+  ///   var progress = Progress.stream();
+  ///   'tail /var/log/syslog'.start(
+  ///       progress: progress,
+  ///       runInShell: true,
+  ///   );
+  ///
+  ///   /// Use a Completer with onDone to and waitForEx to
+  ///   /// have your code wait until the stream is drained.
+  ///   var done = Completer<void>();
+  ///   progress.stream.listen((event) {
+  ///       print('stream: $event');
+  ///     }).onDone(() => done.complete());
+  ///   waitForEx<void>(done.future);
+  ///   print('done');
+  ///````
+  ///
+  Progress.stream({this.includeStderr}) : includeStdout = true {
+    /// we don't wire the stream but rather allow the user to obtain the stream directly
+  }
+
+  Stream<String> get stream => _stdoutController.stream;
+
   /// adds the [line] to the stdout controller
   void addToStdout(String line) {
-    if (!_closed) {
+    if (!_closed && includeStdout) {
       _stdoutController.sink.add(line);
     } else {
       Settings().verbose('addToStdout called after stream closed: line=$line');
@@ -56,7 +110,7 @@ class Progress {
 
   /// adds the [line] to the stderr controller
   void addToStderr(String line) {
-    if (!_closed) {
+    if (!_closed && includeStderr) {
       _stderrController.sink.add(line);
     } else {
       Settings().verbose('addToStdout called after stream closed: line=$line');
