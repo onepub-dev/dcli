@@ -1,3 +1,6 @@
+# 1.9.12
+Improved the progress.stream method so that it streams data even when the called process is long running. It also waits for stderr/stdout streams to be fully processed before shutting down.
+
 # 1.9.11
 Fixed defaults for runInShell and nothrow for string_as_process stream.
 
