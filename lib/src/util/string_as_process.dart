@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import '../functions/run.dart' as cmd;
 import 'file_sync.dart';
 
@@ -368,11 +370,35 @@ extension StringAsProcess on String {
     return Pipe(lhsRunnable, rhsRunnable);
   }
 
-  /// Experiemental - DO NOT USE
-  Stream get stream {
-    var lhsRunnable = RunnableProcess.fromCommandLine(this);
-    lhsRunnable.start(waitForStart: false);
-    return lhsRunnable.stream;
+  // // /// Experiemental - DO NOT USE
+  // // Stream<String> get stream {
+  // //   var lhsRunnable = RunnableProcess.fromCommandLine(this);
+  // //   lhsRunnable.start(waitForStart: false);
+  // //   return lhsRunnable.stream;
+  // // }
+
+  // Stream<String> stream({
+  //   bool runInShell = false,
+  //   bool nothrow = false,
+  //   String workingDirectory,
+  // }) {
+  //   var runnable = RunnableProcess.fromCommandLine(this,
+  //       workingDirectory: workingDirectory);
+  //   runnable.run(runInShell: runInShell, nothrow: nothrow, terminal: false);
+  //   return runnable.stream.transform(utf8.decoder);
+  // }
+
+  Stream<String> stream(
+      {bool runInShell, String workingDirectory, bool nothrow}) {
+    var progress = Progress.stream();
+
+    cmd.start(this,
+        runInShell: runInShell,
+        progress: progress,
+        workingDirectory: workingDirectory,
+        nothrow: nothrow);
+
+    return progress.stream;
   }
 
   /// Experiemental - DO NOT USE

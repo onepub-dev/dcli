@@ -14,6 +14,11 @@ class Progress {
   /// The exist code of the completed process.
   int exitCode;
 
+  /// TODO: setting [includeStderr] or [includeStdout]
+  /// to false stop methods like [toList] from working.
+  /// I've not quite got my head around why so for the minute
+  /// we only set this settings to false when using [Progress.stream].
+
   /// If true then lines written to stderr will
   /// be included in the stream.
   final bool includeStderr;
@@ -31,7 +36,7 @@ class Progress {
   ///
   Progress(LineAction stdout, {LineAction stderr = devNull})
       : includeStdout = true,
-        includeStderr = (stderr != devNull) {
+        includeStderr = true {
     stderr ??= devNull;
     _wireStreams(stdout, stderr);
   }
@@ -39,19 +44,19 @@ class Progress {
   /// Use this progress to have both stdout and stderr output
   /// suppressed.
   Progress.devNull()
-      : includeStdout = false,
-        includeStderr = false;
+      : includeStdout = true,
+        includeStderr = true;
 
   /// Use this progress to only output data sent to stdout
   Progress.printStdOut()
       : includeStdout = true,
-        includeStderr = false {
+        includeStderr = true {
     _wireStreams(print, devNull);
   }
 
   /// Use this progress to only output data sent to stderr
   Progress.printStdErr()
-      : includeStdout = false,
+      : includeStdout = true,
         includeStderr = true {
     _wireStreams(devNull, print);
   }
