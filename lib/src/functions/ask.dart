@@ -37,6 +37,20 @@ import 'echo.dart';
 /// a standard ask input in which case the hidden characters WILL BE DISPLAYED
 /// as they are typed.
 ///
+/// If a [defaultValue] is passed then it is displayed and the user
+/// fails to enter a value (just hits the enter key) then the
+/// [defaultValue] is returned.
+///
+/// Passing a [defaultValue] also modifies the prompt to display the value:
+///
+/// ```dart
+/// var result = ask(prompt: 'How many', defaultValue: '5');
+/// > 'How many [5]'
+/// ```
+/// [ask] will throw an [AskValidatorException] if the defaultValue doesn't match
+/// the given [validator].
+///
+///
 /// The [validator] is called each time the user hits enter.
 /// The [validator] allows you to normalise and validate the user's
 /// input. The [validator] must return the normalised value which
@@ -62,9 +76,14 @@ String ask(
         {String prompt,
         bool toLower = false,
         bool hidden = false,
+        String defaultValue,
         AskValidator validator = Ask.any}) =>
     Ask()._ask(
-        prompt: prompt, toLower: toLower, hidden: hidden, validator: validator);
+        prompt: prompt,
+        toLower: toLower,
+        hidden: hidden,
+        defaultValue: defaultValue,
+        validator: validator);
 
 /// [confirm] is a specialized version of ask that returns true or
 /// false based on the value entered.
@@ -107,8 +126,19 @@ class Ask extends DShellFunction {
   /// Reads user input from stdin and returns it as a string.
   /// [prompt]
   String _ask(
-      {String prompt, bool toLower, bool hidden, AskValidator validator}) {
-    Settings().verbose('ask:  $prompt toLower: $toLower hidden: $hidden');
+      {String prompt,
+      bool toLower,
+      bool hidden,
+      AskValidator validator,
+      String defaultValue}) {
+    Settings().verbose(
+        'ask:  $prompt toLower: $toLower hidden: $hidden defaultValue: $defaultValue');
+
+    /// check the caller isn't being silly
+    if (defaultValue != null) {
+      validator.validate(defaultValue);
+      prompt = '$prompt [$defaultValue]';
+    }
 
     String line;
     var valid = false;
@@ -125,6 +155,10 @@ class Ask extends DShellFunction {
       }
 
       line ??= '';
+
+      if (line.isEmpty && defaultValue != null) {
+        line = defaultValue;
+      }
 
       if (toLower == true) {
         line = line.toLowerCase();
@@ -308,6 +342,7 @@ class _AskInteger extends AskValidator {
   @override
   String validate(String line) {
     line = line.trim();
+    Settings().verbose('AskInteger: $line');
 
     if (!isInt(line)) {
       throw AskValidatorException(red('Invalid integer.'));
@@ -481,6 +516,7 @@ class AskListValidator extends AskValidator {
   /// provided [validItems].
   /// If the validator fails it prints out the
   /// list of available inputs.
+  /// By default [caseSensitive] matches are off.
   AskListValidator(this.validItems, {bool caseSensitive = false});
   @override
   String validate(String line) {
