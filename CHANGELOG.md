@@ -1,3 +1,9 @@
+# 1.9.11
+Fixed defaults for runInShell and nothrow for string_as_process stream.
+
+# 1.9.11
+Fixed defaults for runInShell and nothrow.
+
 # 1.9.10
 Added stream option to string_as_process.
 Added the ability to return a stream from a progress.
