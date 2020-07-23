@@ -9,5 +9,13 @@ void main() {
     result = ask(
         prompt: 'How old are you', defaultValue: '5', validator: Ask.integer);
     print('result: $result');
-  }, skip: false);
+  }, skip: true);
+
+  test('range', () {
+    var result = ask(
+        prompt: 'Range Test: How old are you',
+        defaultValue: '5',
+        validator: AskRange(4, 7));
+    print('result: $result');
+  }, skip: true);
 }
