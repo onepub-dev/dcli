@@ -1,3 +1,7 @@
+# 1.9.16
+Exposed TableAlign and privatePath.
+Setting up more detailed testing of .run and toList with intent to display stderr for .run.
+
 # 1.9.15
 Changed defaultValue to defaultOption to better indicate that it should be from the list of options. Fixed a bug when the defaultOption is null. Documented defaultOption.
 
