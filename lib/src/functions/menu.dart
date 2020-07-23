@@ -45,11 +45,16 @@ import '../script/command_line_runner.dart';
 /// options. If you specify [fromStart: false] then the menu will display the
 /// last [limit] options.
 ///
+/// If you pass a [defaultOption] the matching [option] is highlighted in green in the menu
+/// and if the user hits enter without entering a value the [defaultOption] is returned.
+///
+/// If the [defaultOption] does not match any the supplied [option]s then an ArgumentError is thrown.
+///
 
 T menu<T>(
     {@required String prompt,
     @required List<T> options,
-    T defaultValue,
+    T defaultOption,
     int limit,
     String Function(T) format,
     bool fromStart = true}) {
@@ -69,13 +74,13 @@ T menu<T>(
   }
 
   // on the way in we check that the default value acutally exists in the list.
-  int defaultOption;
+  String defaultIndex;
   // display each option.
   for (var i = 1; i <= limit; i++) {
     var option = displayList[i - 1];
 
-    if (option == defaultValue) {
-      defaultOption = i;
+    if (option == defaultOption) {
+      defaultIndex = i.toString();
     }
     String desc;
     if (format != null) {
@@ -84,7 +89,7 @@ T menu<T>(
       desc = option.toString();
     }
     var no = '$i'.padLeft(3);
-    if (defaultValue != null && defaultValue == option) {
+    if (defaultOption != null && defaultOption == option) {
       /// highlight the default value.
       print('${green('$no) $desc')}');
     } else {
@@ -92,9 +97,9 @@ T menu<T>(
     }
   }
 
-  if (defaultValue != null && defaultOption == null) {
+  if (defaultOption != null && defaultIndex == null) {
     throw ArgumentError(
-        "The [defaultValue] $defaultValue doesn't match any of the passed [options]."
+        "The [defaultOption] $defaultOption doesn't match any of the passed [options]."
         ' Check the == operator for ${options[0].runtimeType}.');
   }
 
@@ -106,7 +111,7 @@ T menu<T>(
   while (!valid) {
     var selected = ask(
         prompt: prompt,
-        defaultValue: defaultOption.toString(),
+        defaultValue: defaultIndex,
         validator: MenuRange(limit));
     if (selected == null) continue;
     valid = true;
