@@ -9,8 +9,6 @@ import 'package:test/test.dart';
 import '../../util/test_file_system.dart';
 
 void main() {
-
-
   test('Create and run a script', () {
     TestFileSystem().withinZone((fs) {
       var scriptPath = truepath(fs.testScriptPath, 'run_test');
@@ -141,8 +139,6 @@ void main() {
       expect(exit, equals(0));
     });
   });
-
-
 }
 
 String getExpected() {

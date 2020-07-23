@@ -71,7 +71,7 @@ void main() {
         // that .run works.
         var results = '${DShellPaths().dshellName} $script'.toList();
 
-       var expected = <String>['Hello World', 'Hello World - Error'];
+        var expected = <String>['Hello World', 'Hello World - Error'];
 
         t.expect(results, t.equals(expected));
       });
