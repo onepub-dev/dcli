@@ -5,30 +5,17 @@ import 'package:dshell/dshell.dart';
 import '../util/test_file_system.dart';
 
 void main() {
-  t.group('RunCommand', () {
-    t.test('Basic .run', () {
-      TestFileSystem().withinZone((fs) {
-        var testFile = join(fs.root, 'test.text');
-
-        if (exists(testFile)) {
-          delete(testFile);
-        }
-
-        'touch $testFile'.run;
-        t.expect(exists(testFile), t.equals(true));
-      });
-    });
-
-    t.test('Check .run captures stdout', () {
+  t.group('toList', () {
+    t.test('Check .toList captures stdout', () {
       TestFileSystem().withinZone((fs) {
         var scriptPath = truepath(join('test', 'test_scripts'));
+
         var script = truepath(scriptPath, 'print_to_stdout.dart');
 
         // make certain our test script will run
-        '${DShellPaths().dshellName} -v clean $script'.run;
+        '${DShellPaths().dshellName} -v clean  $script'.run;
 
-        // run a script that uses '.run' and capture its output to prove
-        // that .run works.
+        // run a script that prints to stdout and prove that toList captures it.
         var results = '${DShellPaths().dshellName} $script'.toList();
 
         var expected = <String>['Hello World'];
@@ -37,9 +24,10 @@ void main() {
       });
     });
 
-    t.test('Check .run captures stderr', () {
+    t.test('Check .toList captures stderr', () {
       TestFileSystem().withinZone((fs) {
         var scriptPath = truepath(join('test', 'test_scripts'));
+
         var script = truepath(scriptPath, 'print_to_stderr.dart');
 
         // make certain our test script will run
@@ -47,7 +35,8 @@ void main() {
 
         // run a script that uses '.run' and capture its output to prove
         // that .run works.
-        var results = '${DShellPaths().dshellName} $script'.toList();
+        var results =
+            '${DShellPaths().dshellName} $script'.toList(nothrow: true);
 
         var expected = <String>['Hello World - Error'];
 
@@ -55,43 +44,40 @@ void main() {
       });
     });
 
-    t.test('Does .run capture stdout and stderr', () {
+    t.test('Check .toList captures stderr and stdout', () {
       TestFileSystem().withinZone((fs) {
         var scriptPath = truepath(join('test', 'test_scripts'));
 
-        if (!exists(scriptPath)) {
-          createDir(scriptPath, recursive: true);
-        }
         var script = truepath(scriptPath, 'print_to_both.dart');
 
         // make certain our test script will run
-        '${DShellPaths().dshellName} -v clean $script'.run;
+        '${DShellPaths().dshellName} -v clean  $script'.run;
 
         // run a script that uses '.run' and capture its output to prove
         // that .run works.
-        var results = '${DShellPaths().dshellName} $script'.toList();
+        var results =
+            '${DShellPaths().dshellName} $script'.toList(nothrow: true);
 
-       var expected = <String>['Hello World', 'Hello World - Error'];
+        var expected = <String>['Hello World', 'Hello World - Error'];
 
         t.expect(results, t.equals(expected));
       });
     });
 
-    t.test('Run method should display both stdout and stderr with error', () {
+    t.test('Check .toList captures stderr and stdout when non-xero exit occurs',
+        () {
       TestFileSystem().withinZone((fs) {
         var scriptPath = truepath(join('test', 'test_scripts'));
 
-        if (!exists(scriptPath)) {
-          createDir(scriptPath, recursive: true);
-        }
         var script = truepath(scriptPath, 'print_to_both_with_error.dart');
 
         // make certain our test script will run
-        '${DShellPaths().dshellName} -v clean $script'.run;
+        '${DShellPaths().dshellName} -v clean  $script'.run;
 
         // run a script that uses '.run' and capture its output to prove
         // that .run works.
-        var results = '${DShellPaths().dshellName} $script'.toList();
+        var results =
+            '${DShellPaths().dshellName} $script'.toList(nothrow: true);
 
         var expected = <String>['Hello World', 'Hello World - Error'];
 
