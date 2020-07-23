@@ -1,3 +1,6 @@
+# 1.9.15
+Changed defaultValue to defaultOption to better indicate that it should be from the list of options. Fixed a bug when the defaultOption is null. Documented defaultOption.
+
 # 1.9.14
 unit test for ask and menu.
 Added a Range validator to ask.
