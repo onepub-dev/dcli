@@ -364,6 +364,33 @@ class _AskDecimal extends AskValidator {
   }
 }
 
+class AskRange extends AskValidator {
+  final num minValue;
+  final num maxValue;
+
+  const AskRange(this.minValue, this.maxValue);
+  @override
+  String validate(String line) {
+    line = line.trim();
+    var value = num.tryParse(line);
+    if (value == null) {
+      throw AskValidatorException(red('Must be a number.'));
+    }
+
+    if (value < minValue) {
+      throw AskValidatorException(
+          red('The number must be greater than or equal to $minValue.'));
+    }
+
+    if (value > maxValue) {
+      throw AskValidatorException(
+          red('The number must be less than or equal to $maxValue.'));
+    }
+
+    return line;
+  }
+}
+
 class _AskAlpha extends AskValidator {
   const _AskAlpha();
   @override
