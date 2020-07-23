@@ -49,15 +49,16 @@ import '../script/command_line_runner.dart';
 T menu<T>(
     {@required String prompt,
     @required List<T> options,
+    T defaultValue,
     int limit,
     String Function(T) format,
     bool fromStart = true}) {
   if (options == null || options.isEmpty) {
-    throw InvalidArguments(
+    throw ArgumentError(
         'The list of [options] passed to menu(options: ) was empty.');
   }
   if (prompt == null) {
-    throw InvalidArguments('The [prompt] passed to menu(prompt: ) was null.');
+    throw ArgumentError('The [prompt] passed to menu(prompt: ) was null.');
   }
   limit ??= options.length;
 
@@ -67,9 +68,15 @@ T menu<T>(
     displayList = options.sublist(min(options.length, options.length - limit));
   }
 
+  // on the way in we check that the default value acutally exists in the list.
+  int defaultOption;
   // display each option.
   for (var i = 1; i <= limit; i++) {
     var option = displayList[i - 1];
+
+    if (option == defaultValue) {
+      defaultOption = i;
+    }
     String desc;
     if (format != null) {
       desc = format(option);
@@ -77,7 +84,18 @@ T menu<T>(
       desc = option.toString();
     }
     var no = '$i'.padLeft(3);
-    print('$no) $desc');
+    if (defaultValue != null && defaultValue == option) {
+      /// highlight the default value.
+      print('${green('$no) $desc')}');
+    } else {
+      print('$no) $desc');
+    }
+  }
+
+  if (defaultValue != null && defaultOption == null) {
+    throw ArgumentError(
+        "The [defaultValue] $defaultValue doesn't match any of the passed [options]."
+        ' Check the == operator for ${options[0].runtimeType}.');
   }
 
   var valid = false;
@@ -86,20 +104,35 @@ T menu<T>(
 
   // loop until the user enters a valid selection.
   while (!valid) {
-    var selected = ask(prompt: prompt);
+    var selected = ask(
+        prompt: prompt,
+        defaultValue: defaultOption.toString(),
+        validator: MenuRange(limit));
     if (selected == null) continue;
-
-    index = int.tryParse(selected);
-    if (index == null) {
-      printerr('Value must be an integer from 1 to $limit');
-      continue;
-    }
-
-    if (index < 1 || index > limit) {
-      printerr('Invalid selection');
-      continue;
-    }
     valid = true;
+    index = int.parse(selected);
   }
+
   return options[index - 1];
+}
+
+class MenuRange extends AskValidator {
+  final int limit;
+
+  const MenuRange(this.limit);
+  @override
+  String validate(String line) {
+    line = line.trim();
+    var value = num.tryParse(line);
+    if (value == null) {
+      throw AskValidatorException(
+          red('Value must be an integer from 1 to $limit'));
+    }
+
+    if (value < 1 || value > limit) {
+      throw AskValidatorException('Invalid selection.');
+    }
+
+    return line;
+  }
 }
