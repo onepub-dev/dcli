@@ -98,7 +98,7 @@ class Progress {
   ///   print('done');
   ///````
   ///
-  Progress.stream({this.includeStderr}) : includeStdout = true {
+  Progress.stream({this.includeStderr = false}) : includeStdout = true {
     /// we don't wire the stream but rather allow the user to obtain the stream directly
   }
 
