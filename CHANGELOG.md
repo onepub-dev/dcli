@@ -1,3 +1,9 @@
+# 1.9.18
+Added methods to check file permission access. Only implemented on linux at this point.
+
+# 1.9.17
+Fixed a bug where Progress.stream was missing a default value for a bool
+
 # 1.9.16
 Exposed TableAlign and privatePath.
 Setting up more detailed testing of .run and toList with intent to display stderr for .run.
