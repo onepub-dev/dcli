@@ -21,8 +21,11 @@ class FileSync {
   File _file;
   RandomAccessFile _raf;
 
-  /// creates a temporary file in the system temp directory.
-  /// You are responsible for deleting the file once done.
+  /// Generates a temporary filename in the system temp directory
+  /// that is guaranteed to be unique.
+  ///
+  /// This method does not create the file.
+  ///
   /// The temp file name will be <uuid>.tmp
   /// unless you provide a [suffix] in which
   /// case the file name will be <uuid>.<suffix>

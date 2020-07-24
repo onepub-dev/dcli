@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:meta/meta.dart';
 
+import '../../dshell.dart';
 import '../util/dshell_exception.dart';
 import '../util/stack_trace_impl.dart';
 import 'function.dart';
@@ -80,6 +81,18 @@ void setLastModifed(String path, DateTime lastModified) {
   }
 }
 
+/// checks if the passed [path] (a file or directory) is
+/// writable by the user that owns this process
+bool isWritable(String path) => _Is().isWritable(path);
+
+/// checks if the passed [path] (a file or directory) is
+/// readable by the user that owns this process
+bool isReadable(String path) => _Is().isReadable(path);
+
+/// checks if the passed [path] (a file or directory) is
+/// executable by the user that owns this process
+bool isExecutable(String path) => _Is().isExecutable(path);
+
 class _Is extends DShellFunction {
   bool isFile(String path) {
     var fromType = FileSystemEntity.typeSync(path);
@@ -115,5 +128,72 @@ class _Is extends DShellFunction {
 
   void setLastModifed(String path, DateTime lastModified) {
     File(path).setLastModifiedSync(lastModified);
+  }
+
+  /// checks if the passed [path] (a file or directory) is
+  /// writable by the user that owns this process
+  bool isWritable(String path) {
+    return _checkPermission(path, WRITE_BIT_MASK);
+  }
+
+  /// checks if the passed [path] (a file or directory) is
+  /// readable by the user that owns this process
+  bool isReadable(String path) {
+    return _checkPermission(path, READ_BIT_MASK);
+  }
+
+  /// checks if the passed [path] (a file or directory) is
+  /// executable by the user that owns this process
+  bool isExecutable(String path) {
+    return _checkPermission(path, EXECUTE_BIT_MASK);
+  }
+
+  static const READ_BIT_MASK = 0x4;
+  static const WRITE_BIT_MASK = 0x2;
+  static const EXECUTE_BIT_MASK = 0x1;
+
+  /// Checks if the user permission to act on the [path] (a file or directory)
+  /// for the given permission bit mask. (read, write or execute)
+  bool _checkPermission(String path, int permissionBitMask) {
+    var user = env('USER');
+
+    //e.g 755 tomcat bsutton
+    var stat = 'stat -L -c "%a %G %U" "$path"'.firstLine;
+
+    var parts = stat.split(' ');
+
+    var permissions = int.parse(parts[0], radix: 8);
+    var group = parts[1];
+    var owner = parts[2];
+
+    // var group = mode.substring(8,16);
+    // var owner = mode.substring(16,24);
+
+    var access = false;
+    //  if (( ($PERM & 0002) != 0 )); then
+    if ((permissions & permissionBitMask) != 0) {
+      // Everyone has write access
+      access = true;
+    } else if ((permissions & (permissionBitMask << 3)) != 0) {
+      // Some groups have write access
+      if (isMemberOfGroup(group)) {
+        access = true;
+      }
+    } else if ((permissions & (permissionBitMask << 6)) != 0) {
+      if (user == owner) {
+        access = true;
+      }
+    }
+    return access;
+  }
+
+  /// Returns true if the owner of this process
+  /// is a member of [group].
+  bool isMemberOfGroup(String group) {
+    // get the list of groups this user belongs to.
+    var groups = 'groups'.firstLine.split(' ');
+
+    // is the user a member of the file's group.
+    return (groups.contains(group));
   }
 }

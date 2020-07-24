@@ -40,7 +40,8 @@ export 'src/functions/fetch.dart'
 export 'src/functions/file_list.dart' show fileList;
 export 'src/functions/find.dart' show find;
 export 'src/functions/head.dart' show head;
-export 'src/functions/is.dart' show isFile, isDirectory, exists;
+export 'src/functions/is.dart'
+    show isFile, isDirectory, exists, isWritable, isReadable, isExecutable;
 export 'src/functions/menu.dart' show menu;
 export 'src/functions/move.dart' show move, MoveException;
 export 'src/functions/move_dir.dart' show moveDir, MoveDirException;

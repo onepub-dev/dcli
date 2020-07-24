@@ -81,10 +81,12 @@ int run(String commandLine,
 /// Allows you to execute a command by passing a [command]
 /// and a list of args in [args].
 ///
-/// The
-///
 /// The start method provides additional controls (compared to the run method)
 /// over how the commmand is executed.
+///
+/// By default [startFromArgs] will output both stdout and stderr.
+/// Pass in a [progress] to capture or suppress stdout and stderr.
+///
 ///
 ///
 /// DShell performs Glob expansion on command arguments. See [run] for details.
@@ -99,6 +101,7 @@ Progress startFromArgs(
   bool nothrow = false,
   String workingDirectory,
 }) {
+  progress ??= Progress.print();
   workingDirectory ??= pwd;
   var runnable = RunnableProcess.fromCommandArgs(command, args,
       workingDirectory: workingDirectory);
