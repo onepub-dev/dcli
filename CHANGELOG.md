@@ -1,3 +1,8 @@
+# 1.10.0
+Fixed a bug with glob expansion that was returning absolute paths when apps expect relative paths. Was causing problems when trying to zip a directory and the files being expanded with absolute paths into the zip file.
+
+Its unlikely that any apps dependend on the prior behaviour and going forward this must be changed in order to get the expected behaviour.
+
 # 1.9.18
 Added methods to check file permission access. Only implemented on linux at this point.
 
