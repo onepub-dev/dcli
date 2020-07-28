@@ -109,9 +109,27 @@ void main() {
       expect(
           parsed.args,
           unorderedEquals(<String>[
-            join(fs.top, 'fred.jpg'),
-            join(fs.top, 'one.jpg'),
-            join(fs.top, 'fred.png'),
+            'fred.jpg',
+            'one.jpg',
+            'fred.png',
+          ]));
+    });
+  }, onPlatform: <String, Skip>{
+    'windows': Skip("Powershell doesn't do glob expansion")
+  });
+
+  test('glob expansion - alternate working directory', () {
+    TestFileSystem().withinZone((fs) {
+      var parsed = ParsedCliCommand('ls *.txt *.jpg', fs.middle);
+
+      expect(parsed.cmd, equals('ls'));
+
+      expect(
+          parsed.args,
+          unorderedEquals(<String>[
+            'three.txt',
+            'four.txt',
+            'two.jpg',
           ]));
     });
   }, onPlatform: <String, Skip>{

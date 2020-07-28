@@ -209,7 +209,15 @@ class _QArg {
       arg = arg.replaceAll('~', HOME);
     }
     if (needsExpansion) {
-      expanded.addAll(_expandGlob(workingDirectory));
+      var files = _expandGlob(workingDirectory);
+
+      /// translate the files to relative paths if appropriate.
+      for (var file in files) {
+        if (isWithin(workingDirectory, file)) {
+          file = relative(file, from: workingDirectory);
+        }
+        expanded.add(file);
+      }
     } else {
       expanded.add(arg);
     }
