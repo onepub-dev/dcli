@@ -1,3 +1,6 @@
+# 1.10.1
+Fixed a bug when the move command has to fall back to a copy/delete it wasn't passing down the overwrite flag.
+
 # 1.10.0
 Fixed a bug with glob expansion that was returning absolute paths when apps expect relative paths. Was causing problems when trying to zip a directory and the files being expanded with absolute paths into the zip file.
 
