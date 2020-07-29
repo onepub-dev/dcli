@@ -45,7 +45,7 @@ class _Move extends DShellFunction {
         /// Invalid cross-device link
         /// We can't move files across a partition so
         /// do a copy/delete.
-        copy(from, to);
+        copy(from, to, overwrite: overwrite);
         delete(from);
       } else {
         throw MoveException(
