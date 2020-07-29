@@ -8,7 +8,7 @@ import 'is.dart';
 
 ///
 /// Copies the contents of the [from] directory to the
-/// to the [to] path with an optional filter.
+/// [to] path with an optional filter.
 ///
 /// The [to] path must exist.
 ///
