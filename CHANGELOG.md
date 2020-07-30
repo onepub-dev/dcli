@@ -1,3 +1,6 @@
+# 1.10.3
+Now throws a RunException if the passed working directory doesn't exists. We found that if the working directory is invalid then for some reason searching the PATH fails. You end up with a command not found error rather than the real error which is that the working directory doesn't exists.
+
 # 1.10.2
 Added test for quote expansion with a complex mysql command.
 A number of functions where not passing down the working directory and the nothrow setting.
