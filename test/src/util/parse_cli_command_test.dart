@@ -147,4 +147,37 @@ void main() {
   }, onPlatform: <String, Skip>{
     'posix': Skip('posix systems do glob expansion'),
   });
+
+  test('Quote handling', () {
+    var cmd = '''docker 
+      exec
+      -it 
+      XXXXXX
+      mysql
+      --user=root
+      --password=password
+      --host=slayer
+      --port=3306
+      -e
+      "CREATE USER 'me'@'localhost' IDENTIFIED BY 'mypassword'; GRANT ALL ON dshell.* TO 'me'@'slayer';"
+      ''';
+
+    var parsed = ParsedCliCommand(cmd.replaceAll('\n', ' '), pwd);
+
+    expect(parsed.cmd, equals('docker'));
+    expect(parsed.args.length, equals(10));
+    expect(parsed.args[0], equals('''exec'''));
+    expect(parsed.args[1], equals('''-it'''));
+    expect(parsed.args[2], equals('''XXXXXX'''));
+    expect(parsed.args[3], equals('''mysql'''));
+    expect(parsed.args[4], equals('''--user=root'''));
+    expect(parsed.args[5], equals('''--password=password'''));
+    expect(parsed.args[6], equals('''--host=slayer'''));
+    expect(parsed.args[7], equals('''--port=3306'''));
+    expect(parsed.args[8], equals('''-e'''));
+    expect(
+        parsed.args[9],
+        equals(
+            '''CREATE USER 'me'@'localhost' IDENTIFIED BY 'mypassword'; GRANT ALL ON dshell.* TO 'me'@'slayer';'''));
+  });
 }
