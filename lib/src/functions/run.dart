@@ -74,7 +74,8 @@ int run(String commandLine,
           runInShell: runInShell,
           detached: false,
           terminal: false,
-          nothrow: nothrow)
+          nothrow: nothrow,
+          workingDirectory: workingDirectory)
       .exitCode;
 }
 
@@ -111,7 +112,8 @@ Progress startFromArgs(
       runInShell: runInShell,
       detached: detached,
       terminal: terminal,
-      nothrow: false);
+      nothrow: nothrow,
+      workingDirectory: workingDirectory);
 }
 
 /// Allows you to execute a cli [commandLine].
@@ -155,7 +157,8 @@ Progress start(String commandLine,
       runInShell: runInShell,
       detached: detached,
       terminal: terminal,
-      nothrow: nothrow);
+      nothrow: nothrow,
+      workingDirectory: workingDirectory);
 }
 
 Progress startStreaming(String commandLine,
@@ -168,5 +171,8 @@ Progress startStreaming(String commandLine,
       workingDirectory: workingDirectory);
 
   return runnable.runStreaming(
-      progress: progress, runInShell: runInShell, nothrow: nothrow);
+      progress: progress,
+      runInShell: runInShell,
+      nothrow: nothrow,
+      workingDirectory: workingDirectory);
 }
