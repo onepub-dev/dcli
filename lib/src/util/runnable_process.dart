@@ -158,6 +158,11 @@ class RunnableProcess {
           'Process.start(runInShell: $runInShell workingDir: $workingDirectory mode: $mode)');
     }
 
+    if (!exists(workdir)) {
+      var cmdLine = "${_parsed.cmd} ${_parsed.args.join(' ')}";
+      throw RunException(cmdLine, -1,
+          'The specified workingDirectory [$workdir] does not exist.');
+    }
     _fProcess = Process.start(
       _parsed.cmd,
       _parsed.args,
