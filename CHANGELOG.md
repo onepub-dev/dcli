@@ -1,3 +1,7 @@
+# 1.10.2
+Added test for quote expansion with a complex mysql command.
+A number of functions where not passing down the working directory and the nothrow setting.
+
 # 1.10.1
 Fixed a bug when the move command has to fall back to a copy/delete it wasn't passing down the overwrite flag.
 
