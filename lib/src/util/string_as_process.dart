@@ -141,7 +141,7 @@ extension StringAsProcess on String {
     bool detached = false,
     bool terminal = false,
     bool nothrow = false,
-    bool privileged,
+    bool privileged = false,
     String workingDirectory,
   }) {
     cmd.start(this,
