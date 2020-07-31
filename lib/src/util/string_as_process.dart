@@ -150,7 +150,8 @@ extension StringAsProcess on String {
         detached: detached,
         terminal: terminal,
         nothrow: nothrow,
-        privileged: privileged);
+        privileged: privileged,
+        workingDirectory: workingDirectory);
   }
 
   /// forEach runs the String [this] as a command line
