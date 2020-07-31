@@ -1,3 +1,7 @@
+# 1.10.4
+Added a 'privildeged' option to the run/start commands which attempts to escalate privildges if not currently running as a privildeged user.
+Currently only supported under Linux
+
 # 1.10.3
 Now throws a RunException if the passed working directory doesn't exists. We found that if the working directory is invalid then for some reason searching the PATH fails. You end up with a command not found error rather than the real error which is that the working directory doesn't exists.
 
