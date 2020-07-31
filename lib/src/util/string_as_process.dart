@@ -141,6 +141,7 @@ extension StringAsProcess on String {
     bool detached = false,
     bool terminal = false,
     bool nothrow = false,
+    bool privileged,
     String workingDirectory,
   }) {
     cmd.start(this,
@@ -149,7 +150,7 @@ extension StringAsProcess on String {
         detached: detached,
         terminal: terminal,
         nothrow: nothrow,
-        workingDirectory: workingDirectory);
+        privileged: privileged);
   }
 
   /// forEach runs the String [this] as a command line

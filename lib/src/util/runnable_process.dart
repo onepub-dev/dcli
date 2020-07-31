@@ -92,31 +92,62 @@ class RunnableProcess {
   ///
   /// This method is used to stream apps output via when
   /// using [Progress.stream].
+  ///
+  /// The [privileged] argument attempts to escalate the priviledge that the command is run
+  /// at.
+  /// If the script is already running in a priviledge environment this switch will have no
+  /// affect.
+  /// Running a command with the [priviledged] switch may cause the OS to prompt the user
+  /// for a password.
+  ///
+  /// For Linux passing the [priviledged] argument will cause the command to be prefix
+  /// vai the `sudo` command.
+  ///
+  /// Current [priviledged] is only supported under Linux.
+  ///
   Progress runStreaming(
       {Progress progress,
       bool runInShell = false,
-      String workingDirectory,
+      bool privileged = false,
       bool nothrow}) {
     progress ??= Progress.devNull();
 
-    start(runInShell: runInShell);
+    start(runInShell: runInShell, privileged: privileged);
     processStream(progress, nothrow: nothrow);
 
     return progress;
   }
 
   /// runs the process.
-  Progress run(
-      {Progress progress,
-      bool runInShell = false,
-      bool detached = false,
-      String workingDirectory,
-      bool terminal,
-      bool nothrow}) {
+  ///
+  /// The [privileged] argument attempts to escalate the priviledge that the command is run
+  /// at.
+  /// If the script is already running in a priviledge environment this switch will have no
+  /// affect.
+  /// Running a command with the [priviledged] switch may cause the OS to prompt the user
+  /// for a password.
+  ///
+  /// For Linux passing the [priviledged] argument will cause the command to be prefix
+  /// vai the `sudo` command.
+  ///
+  /// Current [priviledged] is only supported under Linux.
+  ///
+  Progress run({
+    Progress progress,
+    bool runInShell = false,
+    bool detached = false,
+    bool terminal,
+    bool privileged = false,
+    bool nothrow,
+  }) {
     progress ??= Progress.devNull();
 
     try {
-      start(runInShell: runInShell, detached: detached, terminal: terminal);
+      start(
+          runInShell: runInShell,
+          detached: detached,
+          terminal: terminal,
+          privileged: privileged);
       if (detached == false) {
         if (terminal == false) {
           processUntilExit(progress, nothrow: nothrow);
@@ -132,11 +163,26 @@ class RunnableProcess {
 
   /// starts the process
   /// provides additional options to [run].
+  ///
+  ///
+  /// The [privileged] argument attempts to escalate the priviledge that the command is run
+  /// at.
+  /// If the script is already running in a priviledge environment this switch will have no
+  /// affect.
+  /// Running a command with the [priviledged] switch may cause the OS to prompt the user
+  /// for a password.
+  ///
+  /// For Linux passing the [priviledged] argument will cause the command to be prefix
+  /// vai the `sudo` command.
+  ///
+  /// Current [priviledged] is only supported under Linux.
+  ///
   void start({
     bool runInShell = false,
     bool detached = false,
     bool waitForStart = true,
     bool terminal = false,
+    bool privileged = false,
   }) {
     var workdir = workingDirectory;
     workdir ??= Directory.current.path;
@@ -147,6 +193,13 @@ class RunnableProcess {
     var mode = detached ? ProcessStartMode.detached : ProcessStartMode.normal;
     if (terminal) {
       mode = ProcessStartMode.inheritStdio;
+    }
+
+    if (privileged && Settings().isLinux) {
+      if (!ShellDetection().identifyShell().isPrivilegedUser) {
+        _parsed.args.insert(0, _parsed.cmd);
+        _parsed.cmd = 'sudo';
+      }
     }
 
     if (Settings().isVerbose) {

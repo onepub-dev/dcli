@@ -27,6 +27,18 @@ import 'pwd.dart';
 /// within a shell (e.g. bash). This may be necessary if you need to access
 /// a command builtin to the shell.
 ///
+/// The [privileged] argument attempts to escalate the priviledge that the command is run
+/// at.
+/// If the script is already running in a priviledge environment this switch will have no
+/// affect.
+/// Running a command with the [priviledged] switch may cause the OS to prompt the user
+/// for a password.
+///
+/// For Linux passing the [priviledged] argument will cause the command to be prefix
+/// vai the `sudo` command.
+///
+/// Current [priviledged] is only supported under Linux.
+///
 /// DShell performs glob (wildcard) expansion on command arguments if it contains any one
 /// of *, [ or ?  unless the argument is quoted.
 /// DShell uses the dart package Glob (https://pub.dev/packages/glob) to do the glob expansion.
@@ -62,7 +74,10 @@ import 'pwd.dart';
 ///      process data rather than just outputing it to the cli.
 ///
 int run(String commandLine,
-    {bool runInShell = false, bool nothrow = false, String workingDirectory}) {
+    {bool runInShell = false,
+    bool nothrow = false,
+    bool privileged = false,
+    String workingDirectory}) {
   workingDirectory ??= pwd;
 
   var runnable = RunnableProcess.fromCommandLine(commandLine,
@@ -70,12 +85,13 @@ int run(String commandLine,
 
   return runnable
       .run(
-          progress: Progress(print, stderr: printerr),
-          runInShell: runInShell,
-          detached: false,
-          terminal: false,
-          nothrow: nothrow,
-          workingDirectory: workingDirectory)
+        progress: Progress(print, stderr: printerr),
+        runInShell: runInShell,
+        detached: false,
+        terminal: false,
+        privileged: privileged,
+        nothrow: nothrow,
+      )
       .exitCode;
 }
 
@@ -89,6 +105,18 @@ int run(String commandLine,
 /// Pass in a [progress] to capture or suppress stdout and stderr.
 ///
 ///
+/// The [privileged] argument attempts to escalate the priviledge that the command is run
+/// at.
+/// If the script is already running in a priviledge environment this switch will have no
+/// affect.
+/// Running a command with the [priviledged] switch may cause the OS to prompt the user
+/// for a password.
+///
+/// For Linux passing the [priviledged] argument will cause the command to be prefix
+/// vai the `sudo` command.
+///
+/// Current [priviledged] is only supported under Linux.
+///
 ///
 /// DShell performs Glob expansion on command arguments. See [run] for details.
 ///
@@ -99,6 +127,7 @@ Progress startFromArgs(
   bool runInShell = false,
   bool detached = false,
   bool terminal = false,
+  bool privileged = false,
   bool nothrow = false,
   String workingDirectory,
 }) {
@@ -108,12 +137,13 @@ Progress startFromArgs(
       workingDirectory: workingDirectory);
 
   return runnable.run(
-      progress: progress,
-      runInShell: runInShell,
-      detached: detached,
-      terminal: terminal,
-      nothrow: nothrow,
-      workingDirectory: workingDirectory);
+    progress: progress,
+    runInShell: runInShell,
+    detached: detached,
+    terminal: terminal,
+    privileged: privileged,
+    nothrow: nothrow,
+  );
 }
 
 /// Allows you to execute a cli [commandLine].
@@ -138,6 +168,18 @@ Progress startFromArgs(
 /// if [nothrow] is false (the default for most methods that use run) then
 /// a non-zero exit code will result in an exception being thrown.
 ///
+/// The [privileged] argument attempts to escalate the priviledge that the command is run
+/// at.
+/// If the script is already running in a priviledge environment this switch will have no
+/// affect.
+/// Running a command with the [priviledged] switch may cause the OS to prompt the user
+/// for a password.
+///
+/// For Linux passing the [priviledged] argument will cause the command to be prefix
+/// vai the `sudo` command.
+///
+/// Current [priviledged] is only supported under Linux.
+///
 /// if [runInShell] is set to true (default is false) then command will
 /// be run in a shell (e.g. bash).
 ///
@@ -147,32 +189,49 @@ Progress start(String commandLine,
     bool detached = false,
     bool terminal = false,
     bool nothrow = false,
+    bool privileged = false,
     String workingDirectory}) {
   workingDirectory ??= pwd;
   var runnable = RunnableProcess.fromCommandLine(commandLine,
       workingDirectory: workingDirectory);
 
   return runnable.run(
-      progress: progress,
-      runInShell: runInShell,
-      detached: detached,
-      terminal: terminal,
-      nothrow: nothrow,
-      workingDirectory: workingDirectory);
+    progress: progress,
+    runInShell: runInShell,
+    detached: detached,
+    terminal: terminal,
+    privileged: privileged,
+    nothrow: nothrow,
+  );
 }
 
+///
+/// The [privileged] argument attempts to escalate the priviledge that the command is run
+/// at.
+/// If the script is already running in a priviledge environment this switch will have no
+/// affect.
+/// Running a command with the [priviledged] switch may cause the OS to prompt the user
+/// for a password.
+///
+/// For Linux passing the [priviledged] argument will cause the command to be prefix
+/// vai the `sudo` command.
+///
+/// Current [priviledged] is only supported under Linux.
+///
 Progress startStreaming(String commandLine,
     {Progress progress,
     bool runInShell = false,
     bool nothrow = false,
+    bool privileged = false,
     String workingDirectory}) {
   workingDirectory ??= pwd;
   var runnable = RunnableProcess.fromCommandLine(commandLine,
       workingDirectory: workingDirectory);
 
   return runnable.runStreaming(
-      progress: progress,
-      runInShell: runInShell,
-      nothrow: nothrow,
-      workingDirectory: workingDirectory);
+    progress: progress,
+    runInShell: runInShell,
+    privileged: privileged,
+    nothrow: nothrow,
+  );
 }
