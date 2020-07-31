@@ -1,3 +1,6 @@
+# 1.10.7
+Fixed a bug where glob was ignoring hidden files even when the pattern was .* I'm not certain if this is the right solution. Need more usage patterns.
+
 # 1.10.6
 argh. managed to delete the working directory arg.
 

@@ -124,12 +124,7 @@ void main() {
 
       expect(parsed.cmd, equals('ls'));
 
-      expect(
-          parsed.args,
-          unorderedEquals(<String>[
-            '.hidden',
-            '.two.txt'
-          ]));
+      expect(parsed.args, unorderedEquals(<String>['.hidden', '.two.txt']));
     });
   }, onPlatform: <String, Skip>{
     'windows': Skip("Powershell doesn't do glob expansion")
