@@ -18,11 +18,6 @@ class ParsedCliCommand {
   ParsedCliCommand(String command, String workingDirectory) {
     var qargs = _parse(command);
     args = expandGlobs(qargs, workingDirectory);
-
-    if (Settings().isVerbose) {
-      Settings().verbose('CWD: ${Directory.current}');
-      Settings().verbose('Parsed results cmd: $cmd args: $args');
-    }
   }
 
   /// when passed individual args we respect any quotes that are
@@ -31,11 +26,6 @@ class ParsedCliCommand {
       this.cmd, List<String> rawArgs, String workingDirectory) {
     var qargs = _QArg.translate(rawArgs);
     args = expandGlobs(qargs, workingDirectory);
-
-    if (Settings().isVerbose) {
-      Settings().verbose('CWD: ${Directory.current}');
-      Settings().verbose('Parsed results cmd: $cmd args: $args');
-    }
   }
 
   /// parses the given command breaking them done into words
@@ -226,6 +216,7 @@ class _QArg {
 
   Iterable<String> _expandGlob(String workingDirectory) {
     var glob = Glob(arg);
+    var includeHidden = arg.startsWith('.');
 
     var files = <FileSystemEntity>[];
     try {
@@ -240,7 +231,7 @@ class _QArg {
       return [arg];
     } else {
       return files
-          .where((f) => !isHidden(workingDirectory, f))
+          .where((f) => includeHidden || !isHidden(workingDirectory, f))
           .map((f) => f.path);
     }
   }

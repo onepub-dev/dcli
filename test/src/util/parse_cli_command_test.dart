@@ -118,6 +118,23 @@ void main() {
     'windows': Skip("Powershell doesn't do glob expansion")
   });
 
+  test('glob expansion - .*', () {
+    TestFileSystem().withinZone((fs) {
+      var parsed = ParsedCliCommand('ls .*', fs.top);
+
+      expect(parsed.cmd, equals('ls'));
+
+      expect(
+          parsed.args,
+          unorderedEquals(<String>[
+            '.hidden',
+            '.two.txt'
+          ]));
+    });
+  }, onPlatform: <String, Skip>{
+    'windows': Skip("Powershell doesn't do glob expansion")
+  });
+
   test('glob expansion - alternate working directory', () {
     TestFileSystem().withinZone((fs) {
       var parsed = ParsedCliCommand('ls *.txt *.jpg', fs.middle);

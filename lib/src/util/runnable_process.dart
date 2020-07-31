@@ -231,7 +231,6 @@ class RunnableProcess {
     if (waitForStart) {
       _waitForStart();
     }
-    Settings().verbose('Process.start returned');
   }
 
   void _waitForStart() {
