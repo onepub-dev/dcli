@@ -1,3 +1,6 @@
+# 1.10.5
+Fixed a bug in the start command. Needed a default for priviledged.
+
 # 1.10.4
 Added a 'privildeged' option to the run/start commands which attempts to escalate privildges if not currently running as a privildeged user.
 Currently only supported under Linux
