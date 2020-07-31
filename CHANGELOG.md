@@ -1,3 +1,6 @@
+# 1.10.6
+argh. managed to delete the working directory arg.
+
 # 1.10.5
 Fixed a bug in the start command. Needed a default for priviledged.
 
