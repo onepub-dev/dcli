@@ -1,4 +1,3 @@
-
 import 'package:dshell/dshell.dart';
 
 /// Wipes the entire HOME/.dshell directory tree.
