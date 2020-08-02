@@ -23,6 +23,7 @@ jobs:
         # find . 
         cd ..
         pwd
+        apt update -y
         apt install -y procps ca-certificates gnupg2
        
     - name: activate dshell
