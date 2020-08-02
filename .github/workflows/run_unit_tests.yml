@@ -41,8 +41,7 @@ jobs:
         echo $PATH
         ls "$HOME/.pub-cache/bin"
         dshell install
-        cd dshell
-        
+                
         
     - name: Run pubspec_default_tesets
       run: |
