@@ -1,6 +1,7 @@
 import 'dart:io';
 import 'dart:math';
 
+import 'package:dshell/src/settings.dart';
 import 'package:path/path.dart' as p;
 import 'package:path/path.dart';
 
@@ -191,6 +192,15 @@ void main() {
 
     /// no pubspec.yaml found so the project root is the script directory
     return _scriptDirectory;
+  }
+
+  static Script _current;
+
+  /// Returns the instance of the currently running script.
+  ///
+  static Script get current {
+    _current ??= Script.fromFile(Settings().scriptPath);
+    return _current;
   }
 }
 
