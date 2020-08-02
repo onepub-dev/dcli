@@ -29,4 +29,7 @@ jobs:
         dshell_install
         cd dshell
         pwd
+        
+    - name: Run tests
+      run: |
         dart ./tool/run_unit_tests.dart
