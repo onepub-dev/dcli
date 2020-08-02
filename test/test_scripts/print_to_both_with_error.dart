@@ -6,5 +6,5 @@ import 'package:dshell/dshell.dart';
 void main() {
   print('Hello World');
   printerr('Hello World - Error');
-  exit(1);
+  exit(25);
 }

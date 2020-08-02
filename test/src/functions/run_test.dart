@@ -60,6 +60,8 @@ void main() {
     t.test('Does .run capture stdout and stderr', () {
       TestFileSystem().withinZone((fs) {
         var scriptPath = truepath(join('test', 'test_scripts'));
+        var runChildScript =
+            truepath(join('test', 'test_scripts', 'run_child.dart'));
 
         if (!exists(scriptPath)) {
           createDir(scriptPath, recursive: true);
@@ -68,10 +70,12 @@ void main() {
 
         // make certain our test script will run
         '${DShellPaths().dshellName} -v clean $script'.run;
+        '${DShellPaths().dshellName} -v clean $runChildScript'.run;
 
         // run a script that uses '.run' and capture its output to prove
         // that .run works.
-        var results = '${DShellPaths().dshellName} $script'.toList();
+        var results =
+            '${DShellPaths().dshellName} $runChildScript $script'.toList();
 
         var expected = <String>['Hello World', 'Hello World - Error'];
 
@@ -93,7 +97,8 @@ void main() {
 
         // run a script that uses '.run' and capture its output to prove
         // that .run works.
-        var results = '${DShellPaths().dshellName} $script'.toList();
+        var results = <String>[];
+        '${DShellPaths().dshellName} $script'.toList(nothrow: true);
 
         var expected = <String>['Hello World', 'Hello World - Error'];
 
