@@ -37,6 +37,7 @@ jobs:
     - name: install dshell
       run: |
         pwd
+        export PATH="$PATH":"$HOME/.pub-cache/bin"
         dshell install
         cd dshell
         
@@ -44,6 +45,7 @@ jobs:
     - name: Run pubspec_default_tesets
       run: |
         pwd
+        export PATH="$PATH":"$HOME/.pub-cache/bin"
         pub run test/src/pubspec/pubspec_default_test.dart
         
     #- name: Run tests
