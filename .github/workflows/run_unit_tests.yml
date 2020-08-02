@@ -29,6 +29,8 @@ jobs:
     - name: activate dshell
       run: |
         ls
+        cd ..
+        pwd
         pub global activate dshell --source path
         # dart ./tool/activate_local.dart --path=. 
         
