@@ -32,6 +32,7 @@ jobs:
         # dart ./tool/activate_local.dart --path=. 
         
     - name: install dshell
+      run: |
         pwd
         dshell_install
         cd dshell
