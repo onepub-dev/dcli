@@ -12,6 +12,7 @@ jobs:
 
     steps:
     - uses: actions/checkout@v1
+      
     - name: Install dependencies
       run: |
         pub get
@@ -19,7 +20,35 @@ jobs:
         echo $PWD
         export PATH="$PATH":"$HOME/.pub-cache/bin"
         echo PATH=$PATH
-        find . 
-        dart ./tool/activate_local.dart --path=. 
-        dart ./bin/dshell.dart install
-        dart ./tool/run_unit_tests.dart
+        # find . 
+        cd ..
+        pwd
+        apt update -y
+        apt install -y procps ca-certificates gnupg2
+       
+    - name: activate dshell
+      run: |
+        ls
+        cd ..
+        pwd
+        pub global activate dshell --source path
+        # dart ./tool/activate_local.dart --path=. 
+        
+    - name: install dshell
+      run: |
+        echo $PWD
+        export PATH="$PATH":"$HOME/.pub-cache/bin"
+        echo $PATH
+        ls "$HOME/.pub-cache/bin"
+        dshell install
+                
+        
+    - name: Run pubspec_default_tesets
+      run: |
+        pwd
+        export PATH="$PATH":"$HOME/.pub-cache/bin"
+        pub run test/src/pubspec/pubspec_default_test.dart
+        
+    #- name: Run tests
+     # run: |
+      #  dart ./tool/run_unit_tests.dart
