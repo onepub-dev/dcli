@@ -37,7 +37,7 @@ jobs:
     - name: install dshell
       run: |
         pwd
-        dshell_install
+        dshell install
         cd dshell
         
         
