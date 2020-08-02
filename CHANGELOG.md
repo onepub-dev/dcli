@@ -1,3 +1,9 @@
+# 1.10.8
+Added a new method to Script so you can get the currently running script.
+Work on testing .run and handling of stderr and stdout.
+added unit test timeouts as the github actions run rather slowly.
+work on generating test coverage.
+
 # 1.10.7
 Fixed a bug where glob was ignoring hidden files even when the pattern was .* I'm not certain if this is the right solution. Need more usage patterns.
 
