@@ -1,5 +1,5 @@
-import 'package:dshell/dshell.dart' hide equals;
 @Timeout(Duration(seconds: 600))
+import 'package:dshell/dshell.dart' hide equals;
 import 'package:test/test.dart';
 
 import '../util/test_file_system.dart';

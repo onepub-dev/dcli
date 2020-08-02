@@ -1,3 +1,4 @@
+@Timeout(Duration(minutes: 5))
 import 'package:dshell/dshell.dart' hide equals;
 import 'package:dshell/src/script/my_yaml.dart';
 import 'package:test/test.dart';

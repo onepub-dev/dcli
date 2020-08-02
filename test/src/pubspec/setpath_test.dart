@@ -1,3 +1,4 @@
+@Timeout(Duration(minutes: 5))
 import 'dart:io';
 import 'package:dshell/dshell.dart';
 import 'package:dshell/src/util/pub_cache.dart';

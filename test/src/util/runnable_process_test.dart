@@ -1,3 +1,4 @@
+@Timeout(Duration(minutes: 5))
 import 'dart:cli';
 import 'dart:convert';
 import 'dart:io';

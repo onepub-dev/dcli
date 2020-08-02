@@ -1,3 +1,5 @@
+
+@Timeout(Duration(minutes: 5))
 import 'dart:io';
 
 import 'package:dshell/dshell.dart';

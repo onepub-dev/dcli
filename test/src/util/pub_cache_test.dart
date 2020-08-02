@@ -1,6 +1,5 @@
+@Timeout(Duration(minutes: 5))
 import 'dart:io';
-
-@Timeout(Duration(seconds: 600))
 import 'package:dshell/dshell.dart' hide equals;
 import 'package:dshell/src/util/pub_cache.dart';
 import 'package:test/test.dart';

@@ -1,6 +1,8 @@
+@Timeout(Duration(minutes: 5))
 import 'package:dshell/src/util/dshell_paths.dart';
 import 'package:test/test.dart' as t;
 import 'package:dshell/dshell.dart';
+import 'package:test/test.dart';
 
 import '../util/test_file_system.dart';
 
