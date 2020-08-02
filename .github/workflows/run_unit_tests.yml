@@ -12,6 +12,7 @@ jobs:
 
     steps:
     - uses: actions/checkout@v1
+      
     - name: Install dependencies
       run: |
         pub get
@@ -22,14 +23,25 @@ jobs:
         # find . 
         cd ..
         pwd
+        apt install -y procps
+       
+    - name: activate dshell
+      run: |
         ls
         pub global activate dshell --source path
         # dart ./tool/activate_local.dart --path=. 
+        
+    - name: install dshell
         pwd
         dshell_install
         cd dshell
-        pwd
         
-    - name: Run tests
+        
+    - name: Run pubspec_default_tesets
       run: |
-        dart ./tool/run_unit_tests.dart
+        pwd
+        pub run test/src/pubspec/pubspec_default_test.dart
+        
+    #- name: Run tests
+     # run: |
+      #  dart ./tool/run_unit_tests.dart
