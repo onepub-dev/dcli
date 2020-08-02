@@ -19,7 +19,14 @@ jobs:
         echo $PWD
         export PATH="$PATH":"$HOME/.pub-cache/bin"
         echo PATH=$PATH
-        find . 
-        dart ./tool/activate_local.dart --path=. 
-        dart ./bin/dshell.dart install
+        # find . 
+        cd ..
+        pwd
+        ls
+        pub global activate dshell --source path
+        # dart ./tool/activate_local.dart --path=. 
+        pwd
+        dshell_install
+        cd dshell
+        pwd
         dart ./tool/run_unit_tests.dart
