@@ -44,6 +44,10 @@ abstract class Shell {
   bool addToPath(String path);
 
   /// Returns the username of the logged in user.
+  ///
+  /// Linux:
+  /// If you are running sudo this will still return the actual
+  /// username rather than root.
   String get loggedInUser;
 
   /// Returns [true] if the current user has esclated
