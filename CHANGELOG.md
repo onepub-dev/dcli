@@ -1,3 +1,7 @@
+# 1.10.12
+Fixed a bug where the username had a trialing space char.
+improved doco.
+
 # 1.10.11
 Added method to Shell to return the current shell. This replaces having to call ShellDetection().detectShell();
 Removed ShellDetection from the public api.
