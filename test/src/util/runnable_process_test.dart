@@ -67,5 +67,5 @@ void main() {
 
     /// test in current form can't actually test for shutdown.
     /// needs to spawn another process then check the outcome.
-  }, skip: test);
+  }, skip: true);
 }
