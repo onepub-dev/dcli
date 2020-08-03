@@ -1,3 +1,7 @@
+# 1.10.11
+Added method to Shell to return the current shell. This replaces having to call ShellDetection().detectShell();
+Removed ShellDetection from the public api.
+
 # 1.10.10
 Fixed isComple.
 # 1.10.9
