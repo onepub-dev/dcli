@@ -73,15 +73,7 @@ void main() {
 }
 
 void takeHardLock() {
-  var reusePort = Settings().isWindows ? false : true;
-  // var socket = waitForEx<RawDatagramSocket>(RawDatagramSocket.bind(
-  //   '127.0.0.1',
-  //   port,
-  //   reuseAddress: true,
-  //   reusePort: reusePort,
-  // ));
-
-  var socket = waitForEx<RawServerSocket>(RawServerSocket.bind(
+  waitForEx<RawServerSocket>(RawServerSocket.bind(
     '127.0.0.1',
     port,
   ));
