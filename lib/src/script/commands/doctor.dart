@@ -2,7 +2,6 @@ import 'dart:io';
 
 import '../../../dshell.dart';
 import '../../pubspec/global_dependencies.dart';
-import '../../shell/shell_detection.dart';
 import '../../util/completion.dart';
 import '../../util/format.dart';
 import '../../util/pub_cache.dart';
@@ -38,14 +37,96 @@ class DoctorCommand extends Command {
 
     _colprint(['Dshell version', '${Settings().version}']);
     print('');
-    _colprint(['OS', '${Platform.operatingSystem}']);
-    print(Format.row(['OS Version', '${Platform.operatingSystemVersion}'],
-        widths: [17, -1]));
-    _colprint(['Path separator', '${Platform.pathSeparator}']);
-    print('');
-    _colprint(['dart version', '${DartSdk().version}']);
+
+    printPlatform();
     print('');
 
+    printExePaths();
+    print('');
+
+    printPackageConfig();
+    print('');
+
+    printPATH();
+    print('');
+
+    printShell();
+    print('');
+
+    printDartLocations();
+    print('');
+
+    printPermissions();
+    print('');
+
+    printDependencies();
+    print('');
+
+    if (showScriptDetails) {
+      project.doctor;
+    }
+    return 0;
+  }
+
+  void printDartLocations() {
+    print('Dart location(s)');
+    which('dart').forEach((line) => _colprint(['', line]));
+  }
+
+  void printDependencies() {
+    print(join('.dshell', GlobalDependencies.filename));
+    var gd = GlobalDependencies();
+    for (var d in gd.dependencies) {
+      _colprint(['  ${d.name}', '${d.rehydrate()}']);
+    }
+  }
+
+  void printPermissions() {
+    print('Permissions');
+    _showPermissions('HOME', HOME);
+    _showPermissions('.dshell', Settings().dshellPath);
+    _showPermissions('cache', Settings().dshellCachePath);
+
+    _showPermissions(GlobalDependencies.filename,
+        join(Settings().dshellPath, GlobalDependencies.filename));
+
+    _showPermissions('templates', Settings().templatePath);
+  }
+
+  void printShell() {
+    _colprint([r'$SHELL', '${env('SHELL')}']);
+
+    var shell = Shell.current;
+    _colprint(['Detected SHELL', '${shell.name}']);
+
+    if (shell.hasStartScript) {
+      var startScriptPath = shell.startScriptPath;
+      if (startScriptPath == null) {
+        _colprint(['Shell Start Script', '${privatePath(startScriptPath)}']);
+      } else {
+        _colprint(['Shell Start Script', 'Not Found']);
+      }
+    } else {
+      _colprint(['Shell Start Script', 'Not supported by shell']);
+    }
+  }
+
+  void printPATH() {
+    print('PATH');
+    for (var path in PATH) {
+      _colprint(['', privatePath(path)]);
+    }
+  }
+
+  void printPackageConfig() {
+    if (Platform.packageConfig == null) {
+      _colprint(['Package Config', 'Not Passed']);
+    } else {
+      _colprint(['Package Config', '${privatePath(Platform.packageConfig)}']);
+    }
+  }
+
+  void printExePaths() {
     var dshellPath = which('dshell').firstLine;
     _colprint([
       'dshell path',
@@ -89,62 +170,15 @@ class DoctorCommand extends Command {
         'Not Found',
       ]);
     }
+  }
 
-    if (Platform.packageConfig == null) {
-      _colprint(['Package Config', 'Not Passed']);
-    } else {
-      _colprint(['Package Config', '${privatePath(Platform.packageConfig)}']);
-    }
-
+  void printPlatform() {
+    _colprint(['OS', '${Platform.operatingSystem}']);
+    print(Format.row(['OS Version', '${Platform.operatingSystemVersion}'],
+        widths: [17, -1]));
+    _colprint(['Path separator', '${Platform.pathSeparator}']);
     print('');
-
-    print('PATH');
-    for (var path in PATH) {
-      _colprint(['', privatePath(path)]);
-    }
-    print('');
-    _colprint([r'$SHELL', '${env('SHELL')}']);
-
-    var shell = ShellDetection().identifyShell();
-    _colprint(['Detected SHELL', '${shell.name}']);
-
-    if (shell.hasStartScript) {
-      var startScriptPath = shell.startScriptPath;
-      if (startScriptPath == null) {
-        _colprint(['Shell Start Script', '${privatePath(startScriptPath)}']);
-      } else {
-        _colprint(['Shell Start Script', 'Not Found']);
-      }
-    } else {
-      _colprint(['Shell Start Script', 'Not supported by shell']);
-    }
-
-    print('');
-    print('Dart location(s)');
-    which('dart').forEach((line) => _colprint(['', line]));
-
-    print('');
-    print('Permissions');
-    _showPermissions('HOME', HOME);
-    _showPermissions('.dshell', Settings().dshellPath);
-    _showPermissions('cache', Settings().dshellCachePath);
-
-    _showPermissions(GlobalDependencies.filename,
-        join(Settings().dshellPath, GlobalDependencies.filename));
-
-    _showPermissions('templates', Settings().templatePath);
-
-    print('');
-    print(join('.dshell', GlobalDependencies.filename));
-    var gd = GlobalDependencies();
-    for (var d in gd.dependencies) {
-      _colprint(['  ${d.name}', '${d.rehydrate()}']);
-    }
-
-    if (showScriptDetails) {
-      project.doctor;
-    }
-    return 0;
+    _colprint(['dart version', '${DartSdk().version}']);
   }
 
   void _colprint(List<String> cols) {
