@@ -1,3 +1,5 @@
+# 1.10.10
+Fixed isComple.
 # 1.10.9
 Added a method to detect if the script is compiled. Also fixed #83 by not trying to read the annotation from the scrsipt when the script is compiled.
 
