@@ -11,11 +11,21 @@ import 'package:test/test.dart';
 
 import 'test_file_system.dart';
 
+final port = 63424;
+
 void main() {
   test('lock path', () {
     var lockPath = join(rootPath, Directory.systemTemp.path, 'dshell', 'locks');
     print(lockPath);
   });
+
+  // test('Thrash test', () {
+  //   for (var i = 0; i < 20; i++) {
+  //     print('spawning worker $i');
+  //     Isolate.spawn(worker, i);
+  //   }
+  //   sleep(59);
+  // }, timeout: Timeout(Duration(minutes: 2)));
 
   test('timeout catch', () {
     expect(() {
@@ -62,6 +72,21 @@ void main() {
   }, skip: false);
 }
 
+void takeHardLock() {
+  var reusePort = Settings().isWindows ? false : true;
+  // var socket = waitForEx<RawDatagramSocket>(RawDatagramSocket.bind(
+  //   '127.0.0.1',
+  //   port,
+  //   reuseAddress: true,
+  //   reusePort: reusePort,
+  // ));
+
+  var socket = waitForEx<RawServerSocket>(RawServerSocket.bind(
+    '127.0.0.1',
+    port,
+  ));
+}
+
 Future<ReceivePort> spawn(String message) async {
   var back = await Isolate.spawn(takeLock, message, paused: true);
   var port = ReceivePort();
@@ -79,5 +104,15 @@ void takeLock(String message) {
       '$HOME/lock.log'.append(l);
       sleep(1);
     }
+  });
+}
+
+void worker(int instance) {
+  // Settings().setVerbose(enabled: true);
+  print('starting worker instance $instance');
+  NamedLock(name: 'gshared-compile').withLock(() {
+    print('acquired lock worker $instance');
+    sleep(5);
+    print('finished work $instance');
   });
 }

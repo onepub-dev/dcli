@@ -313,7 +313,7 @@ class NamedLock {
     Duration timeout,
     void Function() fn,
   }) {
-    RawDatagramSocket socket;
+    RawServerSocket socket;
 
     var waitCount = -1;
 
@@ -324,15 +324,16 @@ class NamedLock {
     }
 
     try {
-      var reusePort = Settings().isWindows ? false : true;
+      // var reusePort = Settings().isWindows ? false : true;
       while (socket == null) {
-        socket = waitForEx<RawDatagramSocket>(RawDatagramSocket.bind(
-          '127.0.0.1',
-          port,
-          reuseAddress: true,
-          reusePort: reusePort,
-        ));
+        // socket = waitForEx<RawDatagramSocket>(RawDatagramSocket.bind(
+        //   '127.0.0.1',
+        //   port,
+        //   reuseAddress: true,
+        //   reusePort: reusePort,
+        // ));
 
+        socket = waitForEx<RawServerSocket>(_bindSocket());
         if (waitCount > 0) {
           waitCount--;
         }
@@ -356,6 +357,19 @@ class NamedLock {
         _log(blue('Hardlock relased'));
       }
     }
+  }
+
+  Future<RawServerSocket> _bindSocket() async {
+    RawServerSocket socket;
+    try {
+      socket = await RawServerSocket.bind(
+        '127.0.0.1',
+        port,
+      );
+    } on SocketException catch (_) {
+      /// no op. We expect this if the hardlock is already held.
+    }
+    return socket;
   }
 }
 
