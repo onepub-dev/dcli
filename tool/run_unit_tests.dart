@@ -14,4 +14,7 @@ void main() {
     exit(1);
   }
   '${DartSdk().pubPath} run test -j1'.run;
+
+  // cleanup temp
+  if (exists('/tmp/dshell')) deleteDir('/tmp/dshell', recursive: true);
 }
