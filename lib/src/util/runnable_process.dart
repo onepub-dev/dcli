@@ -365,6 +365,10 @@ class RunnableProcess {
         // as the exception will be thrown async and it will
         // escape as an unhandled exception and stop the whole script
         progress.exitCode = exitCode;
+
+        /// the process may have exited by the streams are likely to still
+        /// contain data.
+        _waitForStreams();
         if (exitCode != 0 && nothrow == false) {
           done.completeError(RunException.withArgs(
               _parsed.cmd,
@@ -393,6 +397,17 @@ class RunnableProcess {
     }
   }
 
+  ///
+  /// processes both streams until they complete.
+  ///
+  void _waitForStreams() {
+    // Wait for both streams to complete
+    waitForEx(Future.wait([_stdoutCompleter.future, _stderrCompleter.future]));
+  }
+
+  final _stdoutCompleter = Completer<bool>();
+  final _stderrCompleter = Completer<bool>();
+
   void _wireStreams(Process process, Progress progress) {
     /// handle stdout stream
     process.stdout
@@ -402,6 +417,7 @@ class RunnableProcess {
       progress.addToStdout(line);
     }).onDone(() {
       stdoutFlushed.complete();
+      _stdoutCompleter.complete();
     });
 
     // handle stderr stream
@@ -412,6 +428,7 @@ class RunnableProcess {
       progress.addToStderr(line);
     }).onDone(() {
       stderrFlushed.complete();
+      _stderrCompleter.complete();
     });
   }
 }

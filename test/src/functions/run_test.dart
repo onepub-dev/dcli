@@ -7,7 +7,7 @@ import 'package:test/test.dart';
 import '../util/test_file_system.dart';
 
 void main() {
-  t.group('RunCommand', () {
+  t.group('.run', () {
     t.test('Basic .run', () {
       TestFileSystem().withinZone((fs) {
         var testFile = join(fs.root, 'test.text');
@@ -21,17 +21,12 @@ void main() {
       });
     });
 
-    t.test('Check .run captures stdout', () {
+    t.test('print stdout', () {
       TestFileSystem().withinZone((fs) {
         var scriptPath = truepath(join('test', 'test_scripts'));
         var script = truepath(scriptPath, 'print_to_stdout.dart');
 
-        // make certain our test script will run
-        '${DShellPaths().dshellName} -v clean $script'.run;
-
-        // run a script that uses '.run' and capture its output to prove
-        // that .run works.
-        var results = '${DShellPaths().dshellName} $script'.toList();
+        var results = run_child(script);
 
         var expected = <String>['Hello World'];
 
@@ -39,17 +34,12 @@ void main() {
       });
     });
 
-    t.test('Check .run captures stderr', () {
+    t.test('print stderr', () {
       TestFileSystem().withinZone((fs) {
         var scriptPath = truepath(join('test', 'test_scripts'));
         var script = truepath(scriptPath, 'print_to_stderr.dart');
 
-        // make certain our test script will run
-        '${DShellPaths().dshellName} -v clean  $script'.run;
-
-        // run a script that uses '.run' and capture its output to prove
-        // that .run works.
-        var results = '${DShellPaths().dshellName} $script'.toList();
+        var results = run_child(script);
 
         var expected = <String>['Hello World - Error'];
 
@@ -57,25 +47,15 @@ void main() {
       });
     });
 
-    t.test('Does .run capture stdout and stderr', () {
+    t.test('print stdout and stderr', () {
       TestFileSystem().withinZone((fs) {
         var scriptPath = truepath(join('test', 'test_scripts'));
-        var runChildScript =
-            truepath(join('test', 'test_scripts', 'run_child.dart'));
 
         if (!exists(scriptPath)) {
           createDir(scriptPath, recursive: true);
         }
         var script = truepath(scriptPath, 'print_to_both.dart');
-
-        // make certain our test script will run
-        '${DShellPaths().dshellName} -v clean $script'.run;
-        '${DShellPaths().dshellName} -v clean $runChildScript'.run;
-
-        // run a script that uses '.run' and capture its output to prove
-        // that .run works.
-        var results =
-            '${DShellPaths().dshellName} $runChildScript $script'.toList();
+        var results = run_child(script);
 
         var expected = <String>['Hello World', 'Hello World - Error'];
 
@@ -83,7 +63,7 @@ void main() {
       });
     });
 
-    t.test('Run method should display both stdout and stderr with error', () {
+    t.test('print stdout and stderr with error', () {
       TestFileSystem().withinZone((fs) {
         var scriptPath = truepath(join('test', 'test_scripts'));
 
@@ -92,18 +72,28 @@ void main() {
         }
         var script = truepath(scriptPath, 'print_to_both_with_error.dart');
 
-        // make certain our test script will run
-        '${DShellPaths().dshellName} -v clean $script'.run;
-
-        // run a script that uses '.run' and capture its output to prove
-        // that .run works.
-        var results = <String>[];
-        '${DShellPaths().dshellName} $script'.toList(nothrow: true);
+        var results = run_child(script);
 
         var expected = <String>['Hello World', 'Hello World - Error'];
 
-        t.expect(results, t.equals(expected));
+        t.expect(results, t.containsAll(expected));
       });
     });
   });
+}
+
+List<String> run_child(String childScript) {
+  /// The run_child.script file will use .run to run [script].
+  var runChildScript = truepath(join('test', 'test_scripts', 'run_child.dart'));
+
+  // make certain our test script will run
+  '${DShellPaths().dshellName} -v clean $childScript'.run;
+  '${DShellPaths().dshellName} -v clean $runChildScript'.run;
+
+  // run a script that uses '.run' and capture its output to prove
+  // that .run works.
+  var results = '${DShellPaths().dshellName} $runChildScript $childScript'
+      .toList(nothrow: true);
+
+  return results;
 }

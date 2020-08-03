@@ -19,7 +19,7 @@ import 'runnable_process.dart';
 extension StringAsProcess on String {
   /// Allows you to execute the contents of a dart string as a
   /// command line appliation.
-  /// Any output from the command is displayed on the console.
+  /// Any output from the command  (stderr and stdout) is displayed on the console.
   ///
   /// ```dart
   /// 'zip regions.txt regions.zip'.run;
@@ -31,13 +31,15 @@ extension StringAsProcess on String {
   ///  'wc "fred nurk.text"'.run;
   ///```
   ///
+  /// Linux:
   /// DShell performs glob (wildcard) expansion on command arguments if it contains any one
   /// of *, [ or ?  unless the argument is quoted.
   /// DShell uses the dart package Glob (https://pub.dev/packages/glob) to do the glob expansion.
   ///
   /// The following command will have the argument containing the wild card *.dart expanded to
-  /// the list of files, in the current directory, that match the pattern *.dart. If no files match the pattern then the pattern
-  /// will be passed to the command unchanged:
+  /// the list of files, in the current directory, that match the pattern *.dart.
+  ///
+  /// If no files match the pattern then the pattern will be passed to the command unchanged:
   ///
   /// ```dart
   /// 'ls *.dart'.run;
@@ -49,6 +51,9 @@ extension StringAsProcess on String {
   /// 'find . -name "*.dart"'.run;
   /// ```
   ///
+  /// Windows:
+  ///  On windows Glob expansion is suppressed as both Command and Powershell don't expand
+  ///  globs.
   ///
   ///
   /// See [forEach] to capture output to stdout and stderr
@@ -233,19 +238,13 @@ extension StringAsProcess on String {
       {bool runInShell = false, int skipLines = 0, bool nothrow = false}) {
     var list = <String>[];
     Progress progress;
-    try {
-      progress =
-          Progress((line) => list.add(line), stderr: (line) => list.add(line));
 
-      progress = cmd.start(this, runInShell: runInShell, progress: progress);
-    }
-    // ignore: avoid_catches_without_on_clauses
-    catch (e) {
-      if (nothrow == false) {
-        throw RunException(this, progress.exitCode, list.join('\n'));
-      }
-      return list;
-    }
+    progress =
+        Progress((line) => list.add(line), stderr: (line) => list.add(line));
+
+    progress = cmd.start(this,
+        runInShell: runInShell, progress: progress, nothrow: nothrow);
+
     return list.sublist(skipLines);
   }
 
