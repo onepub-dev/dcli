@@ -13,7 +13,7 @@ void main() {
     printerr(red("This script must be run from the package's root directory."));
     exit(1);
   }
-  '${DartSdk().pubPath} run test -j1'.run;
+  '${DartSdk().pubPath} run test -j1'.start(nothrow: true);
 
   // cleanup temp
   if (exists('/tmp/dshell')) deleteDir('/tmp/dshell', recursive: true);
