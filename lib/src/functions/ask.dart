@@ -41,6 +41,9 @@ import 'echo.dart';
 /// fails to enter a value (just hits the enter key) then the
 /// [defaultValue] is returned.
 ///
+/// If you pass in a [defaultValue] which doesn't pass the [validator] test then
+/// an [AskValidatorException] will be thrown.
+///
 /// Passing a [defaultValue] also modifies the prompt to display the value:
 ///
 /// ```dart
@@ -136,7 +139,12 @@ class Ask extends DShellFunction {
 
     /// check the caller isn't being silly
     if (defaultValue != null) {
-      validator.validate(defaultValue);
+      try {
+        validator.validate(defaultValue);
+      } on AskValidatorException catch (e) {
+        throw AskValidatorException(
+            'The [defaultValue] $defaultValue failed the validator: ${e.message}');
+      }
       prompt = '$prompt [$defaultValue]';
     }
 
