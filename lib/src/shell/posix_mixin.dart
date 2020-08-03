@@ -63,7 +63,7 @@ mixin PosixMixin {
       // username :1
       var parts = line.split(':');
       if (parts.isNotEmpty) {
-        user = parts[0];
+        user = parts[0].trim();
       }
     }
     Settings().verbose('loggedInUser: $user');
