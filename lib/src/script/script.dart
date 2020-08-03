@@ -49,6 +49,11 @@ class Script {
         _scriptDirectory = _extractScriptDirectory(script);
 
   /// the file name of the script including the extension.
+  /// If you are running in a compiled script then
+  /// [scriptname] won't have a '.dart' extension.
+  /// In an compiled script the extension generally depends on the OS but
+  /// it could in theory be anything (except for .dart).
+  /// Common extensions are .exe for windows and no extension for Linux and OSx.
   String get scriptname => _scriptname;
 
   /// the absolute path to the directory the script lives in
@@ -202,6 +207,8 @@ void main() {
     _current ??= Script.fromFile(Settings().scriptPath);
     return _current;
   }
+
+  bool get isCompiled => scriptname.endsWith('.dart');
 }
 
 // ignore: avoid_classes_with_only_static_members

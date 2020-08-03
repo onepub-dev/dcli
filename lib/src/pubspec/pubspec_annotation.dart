@@ -25,14 +25,19 @@ class PubSpecAnnotation implements PubSpec // with DependenciesMixin
   Script _script;
 
   /// creates an annotation by reading it from a dart script.
+  /// If we are compiled then you can't get the annotation.
   PubSpecAnnotation.fromScript(this._script) {
-    // Read script file as lines
-    var lines = _readLines(File(_script.path));
+    /// If we have been compiled then we can't get access to the annotation.
+    /// A compiled script won't end in .dart.
+    if (!_script.isCompiled) {
+      // Read script file as lines
+      var lines = _readLines(File(_script.path));
 
-    var sourceLines = _extractAnnotation(lines);
+      var sourceLines = _extractAnnotation(lines);
 
-    if (sourceLines.isNotEmpty) {
-      _pubspec = PubSpecImpl.fromString(sourceLines.join('\n'));
+      if (sourceLines.isNotEmpty) {
+        _pubspec = PubSpecImpl.fromString(sourceLines.join('\n'));
+      }
     }
   }
 
