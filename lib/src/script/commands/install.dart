@@ -33,7 +33,7 @@ class InstallCommand extends Command {
   int run(List<Flag> selectedFlags, List<String> subarguments) {
     var scriptIndex = 0;
 
-    var shell = ShellDetection().identifyShell();
+    var shell = Shell.current;
 
     // if (!shell.isPrivilegedUser) {
     //   qprint(red(shell.privilegesRequiredMessage('dshell_install')));

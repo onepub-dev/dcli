@@ -1,3 +1,5 @@
+import 'package:dshell/dshell.dart';
+import 'package:dshell/src/shell/shell_detection.dart';
 import 'package:meta/meta.dart';
 
 /// an abstract class which allows each shell (bash, zsh)
@@ -64,4 +66,16 @@ abstract class Shell {
   /// This method returns a String describing those preconditions
   /// or null if there are no preconditions.
   String checkInstallPreconditions();
+
+  static Shell _current;
+
+  /// Returns the user shell that this script was launched from
+  /// e.g. bash, powershell, ....
+  /// If the shell can't be deteremined then the [UnknownShell] is returned.
+  ///
+  static Shell get current {
+    _current ??= ShellDetection().identifyShell();
+
+    return _current;
+  }
 }

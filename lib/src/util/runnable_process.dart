@@ -196,7 +196,7 @@ class RunnableProcess {
     }
 
     if (privileged && Settings().isLinux) {
-      if (!ShellDetection().identifyShell().isPrivilegedUser) {
+      if (!Shell.current.isPrivilegedUser) {
         _parsed.args.insert(0, _parsed.cmd);
         _parsed.cmd = 'sudo';
       }
