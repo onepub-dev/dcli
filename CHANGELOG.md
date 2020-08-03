@@ -1,3 +1,6 @@
+# 1.10.9
+Added a method to detect if the script is compiled. Also fixed #83 by not trying to read the annotation from the scrsipt when the script is compiled.
+
 # 1.10.8
 Added a new method to Script so you can get the currently running script.
 Work on testing .run and handling of stderr and stdout.
