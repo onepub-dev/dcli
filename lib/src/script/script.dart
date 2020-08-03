@@ -208,7 +208,7 @@ void main() {
     return _current;
   }
 
-  bool get isCompiled => scriptname.endsWith('.dart');
+  bool get isCompiled => !scriptname.endsWith('.dart');
 }
 
 // ignore: avoid_classes_with_only_static_members
