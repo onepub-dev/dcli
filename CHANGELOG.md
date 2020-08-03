@@ -1,3 +1,9 @@
+# 1.10.13
+Fixed #81 NamedLocks where allowing multiple isolates/processes through. 
+Added logic to ensure that streams are fully process to the Progress even when a non-zero exit code is returned. .run will now fully output both stdout and stderr even if a non-zero exit code is returned.
+doco on exceptions when the default value is invalid. Improved the message output when the defaultValue fails validation.
+Added code to clean up the temp directory after unit tests complete.
+
 # 1.10.12
 Fixed a bug where the username had a trialing space char.
 improved doco.
