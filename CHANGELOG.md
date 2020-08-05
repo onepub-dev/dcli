@@ -1,3 +1,6 @@
+# 1.10.14
+Fixed a bug in parsing the results of who which resulting the logged in user name being reported incorrectly.
+
 # 1.10.13
 Fixed #81 NamedLocks where allowing multiple isolates/processes through. 
 Added logic to ensure that streams are fully process to the Progress even when a non-zero exit code is returned. .run will now fully output both stdout and stderr even if a non-zero exit code is returned.
