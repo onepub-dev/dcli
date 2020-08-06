@@ -86,7 +86,7 @@ void checkProjectStructure(TestFileSystem fs, String scriptName) {
         'hello_world.dart',
         'pubspec.yaml',
         'pubspec.lock',
-        '.packages',
+        join('.dart_tool', 'package_config.json'),
         '.build.complete',
         '.using.virtual.pubspec'
       ])));

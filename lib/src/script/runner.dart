@@ -10,17 +10,26 @@ class ScriptRunner {
   final VirtualProject _project;
   final DartSdk _sdk;
   final List<String> _scriptArguments;
+  final Script script;
 
   ///
-  ScriptRunner(this._sdk, this._project, this._scriptArguments);
+  ScriptRunner(this._sdk, this._project, this.script, this._scriptArguments);
 
   /// Executes the script
   int exec() {
     // Prepare VM arguments
     final vmArgs = <String>[];
     vmArgs.add('--enable-asserts');
-    vmArgs
-        .add('--package-root=${_project.runtimeProjectPath}'); // /.packages');
+
+    var projectRoot = script.projectRoot;
+
+    if (!script.hasLocalPubSpecYaml()) {
+      projectRoot = _project.runtimeProjectPath;
+    }
+
+    vmArgs.add(
+        '--packages=${join(projectRoot, '.dart_tool/package_config.json')}');
+
     vmArgs.add(join(_project.runtimeProjectPath, _project.script.scriptname));
     vmArgs.addAll(_scriptArguments);
 

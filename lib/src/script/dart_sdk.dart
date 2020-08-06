@@ -94,7 +94,8 @@ class DartSdk {
       {Progress progress}) {
     var runArgs = <String>[];
     runArgs.add(runtimeScriptPath);
-    runArgs.add('--packages=${join(projectRootPath, ".packages")}');
+    runArgs.add(
+        '--packages=${join(projectRootPath, '.dart_tool', 'package_config.json')}');
     runArgs.add(
         '--output=${join(outputPath, basenameWithoutExtension(runtimeScriptPath))}');
 

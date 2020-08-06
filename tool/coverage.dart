@@ -19,5 +19,5 @@ void main() {
 
 'dart --observe test/.test_coverage.dart'.run;
 
-'pub global run coverage:format_coverage --packages=.packages --in=coverage/coverage.json --lcov --report-on=lib --out=coverage/lcov.info'.run;
+'pub global run coverage:format_coverage --packages=.dart_tool/package_config.json --in=coverage/coverage.json --lcov --report-on=lib --out=coverage/lcov.info'.run;
 }
