@@ -538,11 +538,18 @@ class VirtualProject {
 
   /// Returns [true] if the project has been intialised
   /// and a [build] has been run (which essentially calls
-  /// pub get).
+  /// pub get) and the .dart_tools exists.
+  /// We check for .dart_tools as there is a chance that the
+  /// user has changed from a virtual pubspec.yaml to an actual
+  /// pubspec.yaml. This additional check allows us to pick this
+  /// scenario up.
   bool get isRunnable {
     return _isProjectInitialised &&
-        exists(join(_virtualProjectPath, _buildCompleteFilename));
+        exists(join(_virtualProjectPath, _buildCompleteFilename)) &&
+        exists(join(_projectRootPath, packageConfigRelativePath));
   }
+
+  String get packageConfigRelativePath => join('.dart_tool', 'package_config.json');
 
   /// Returns true if the name of the pass directory is on the list
   /// of prescribed dart project layout directores that may contain
