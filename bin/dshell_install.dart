@@ -1,4 +1,5 @@
 #! /usr/bin/env dshell
+
 import 'package:dshell/src/script/entry_point.dart';
 
 void main(List<String> arguments) {

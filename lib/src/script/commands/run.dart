@@ -55,8 +55,6 @@ class RunCommand extends Command {
 
     final sdk = DartSdk();
 
-
-
     final runner = ScriptRunner(sdk, project, script, scriptArguments);
 
     final exitCode = runner.exec();

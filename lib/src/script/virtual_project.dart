@@ -549,7 +549,8 @@ class VirtualProject {
         exists(join(_projectRootPath, packageConfigRelativePath));
   }
 
-  String get packageConfigRelativePath => join('.dart_tool', 'package_config.json');
+  String get packageConfigRelativePath =>
+      join('.dart_tool', 'package_config.json');
 
   /// Returns true if the name of the pass directory is on the list
   /// of prescribed dart project layout directores that may contain
