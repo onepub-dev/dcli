@@ -1,3 +1,7 @@
+# 1.10.17
+Fixed the compile for scripts with a 'local' pubspec.yaml
+removed stray print statment.
+
 # 1.10.16
 Fixed dshell compile so it works with 2.9.
 
