@@ -1,3 +1,6 @@
+# 1.10.16
+Fixed dshell compile so it works with 2.9.
+
 # 1.10.15
 moved to support the new .dart_tools directory so we work with dart 2.9.
 Added an addition check for runnable that the package config exists.
