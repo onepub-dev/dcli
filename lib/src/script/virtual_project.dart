@@ -191,7 +191,7 @@ class VirtualProject {
 
   static void _configProjectPaths(VirtualProject project, Script script) {
     Settings().verbose(red('*' * 80));
-    switch (project.getPubspecLocation) {
+    switch (project.pubspecLocation) {
       case PubspecLocation.annotation:
         _setVirtualPaths(project);
         Settings().verbose(
@@ -221,7 +221,7 @@ class VirtualProject {
         break;
     }
 
-    Settings().verbose('ProjectLocation: ${project.getPubspecLocation}');
+    Settings().verbose('ProjectLocation: ${project.pubspecLocation}');
     Settings().verbose('Pubspec path: ${project._runtimePubspecPath}');
     Settings().verbose('Project path: ${project._runtimeProjectPath}');
   }
@@ -284,7 +284,7 @@ class VirtualProject {
 
   /// Determines the location of the pubspec.yaml file
   /// which dictates how we create the virtual project.
-  PubspecLocation get getPubspecLocation {
+  PubspecLocation get pubspecLocation {
     if (_pubspecLocation == null) {
       if (script.hasPubspecAnnotation) {
         _pubspecLocation = PubspecLocation.annotation;
@@ -345,7 +345,7 @@ class VirtualProject {
       createDir(_virtualProjectPath, recursive: true);
       print('Created Virtual Project at $_virtualProjectPath');
 
-      switch (getPubspecLocation) {
+      switch (pubspecLocation) {
         case PubspecLocation.annotation:
         // fall through
         case PubspecLocation.virtual:
@@ -486,7 +486,7 @@ class VirtualProject {
     _colprint('Name', script.scriptname);
     _colprint('Directory', privatePath(script.scriptDirectory));
     _colprint('Virtual Project', privatePath(_virtualProjectPath));
-    _colprint('Pubspec Location', getPubspecLocation.toString());
+    _colprint('Pubspec Location', pubspecLocation.toString());
     _colprint('Pubspec Path', privatePath(projectPubspecPath));
     print('');
 

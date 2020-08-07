@@ -2,6 +2,7 @@ import 'dart:cli';
 import 'dart:io';
 
 import 'package:archive/archive.dart';
+import 'package:dshell/src/script/virtual_project.dart';
 import 'package:path/path.dart' as p;
 import 'package:system_info/system_info.dart';
 
@@ -89,13 +90,15 @@ class DartSdk {
   /// [runtimeScriptPath] is the path to the dshell script we are compiling.
   /// [outputPath] is the path to write the compiled ex to .
   /// [projectRootPath] is the path to the projects root directory.
-  void runDart2Native(
-      String runtimeScriptPath, String outputPath, String projectRootPath,
+  void runDart2Native(VirtualProject project, String runtimeScriptPath,
+      String outputPath, String projectRootPath,
       {Progress progress}) {
     var runArgs = <String>[];
     runArgs.add(runtimeScriptPath);
-    runArgs.add(
-        '--packages=${join(projectRootPath, '.dart_tool', 'package_config.json')}');
+    if (project.pubspecLocation != PubspecLocation.traditional) {
+      runArgs.add(
+          '--packages=${join(dirname(project.projectPubspecPath), '.dart_tool', 'package_config.json')}');
+    }
     runArgs.add(
         '--output=${join(outputPath, basenameWithoutExtension(runtimeScriptPath))}');
 

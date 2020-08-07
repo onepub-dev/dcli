@@ -21,14 +21,11 @@ class ScriptRunner {
     final vmArgs = <String>[];
     vmArgs.add('--enable-asserts');
 
-    var projectRoot = script.projectRoot;
-
-    if (!script.hasLocalPubSpecYaml()) {
-      projectRoot = _project.runtimeProjectPath;
+    print(red('*') * 20 + _project.pubspecLocation.toString());
+    if (_project.pubspecLocation != PubspecLocation.traditional) {
+      vmArgs.add(
+          '--packages=${join(dirname(_project.projectPubspecPath), '.dart_tool/package_config.json')}');
     }
-
-    vmArgs.add(
-        '--packages=${join(projectRoot, '.dart_tool/package_config.json')}');
 
     vmArgs.add(join(_project.runtimeProjectPath, _project.script.scriptname));
     vmArgs.addAll(_scriptArguments);

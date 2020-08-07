@@ -40,13 +40,13 @@ class SplitCommand extends Command {
       /// make certain the virtual project exists before we try to split it.
       var project = VirtualProject.createOrLoad(script);
 
-      if (project.getPubspecLocation == PubspecLocation.traditional) {
+      if (project.pubspecLocation == PubspecLocation.traditional) {
         print(
             'This appears to be a traditional dart project and already has a pubspec located at: ${project.projectPubspecPath}');
         exitCode = 1;
       }
 
-      if (project.getPubspecLocation == PubspecLocation.local) {
+      if (project.pubspecLocation == PubspecLocation.local) {
         print(
             'This script already has a local pubspec located at: ${project.projectPubspecPath}');
         exitCode = 1;
@@ -57,7 +57,7 @@ class SplitCommand extends Command {
         copy(project.projectPubspecPath,
             join(dirname(script.path), 'pubspec.yaml'));
         // now we need to disable the @pubspec annotation (if the script has one.)
-        if (project.getPubspecLocation == PubspecLocation.annotation) {
+        if (project.pubspecLocation == PubspecLocation.annotation) {
           replace(script.path, '@pubspec', '@disabled-pubspec');
         }
         print('complete.');
