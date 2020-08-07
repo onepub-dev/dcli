@@ -95,7 +95,8 @@ class DartSdk {
       {Progress progress}) {
     var runArgs = <String>[];
     runArgs.add(runtimeScriptPath);
-    if (project.pubspecLocation != PubspecLocation.traditional) {
+    if (project.pubspecLocation != PubspecLocation.traditional &&
+        project.pubspecLocation != PubspecLocation.local) {
       runArgs.add(
           '--packages=${join(dirname(project.projectPubspecPath), '.dart_tool', 'package_config.json')}');
     }
