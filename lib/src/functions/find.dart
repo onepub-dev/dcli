@@ -117,7 +117,6 @@ class Find extends DShellFunction {
 
       lister.listen((entity) {
         var type = FileSystemEntity.typeSync(entity.path);
-        //  print('testing ${entity.path}');
         if (types.contains(type) &&
             matcher.match(basename(entity.path)) &&
             _allowed(

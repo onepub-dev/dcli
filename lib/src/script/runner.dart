@@ -21,7 +21,6 @@ class ScriptRunner {
     final vmArgs = <String>[];
     vmArgs.add('--enable-asserts');
 
-    print(red('*') * 20 + _project.pubspecLocation.toString());
     if (_project.pubspecLocation != PubspecLocation.traditional) {
       vmArgs.add(
           '--packages=${join(dirname(_project.projectPubspecPath), '.dart_tool/package_config.json')}');
