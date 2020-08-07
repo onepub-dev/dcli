@@ -1,3 +1,7 @@
+# 1.10.15
+moved to support the new .dart_tools directory so we work with dart 2.9.
+Added an addition check for runnable that the package config exists.
+
 # 1.10.14
 Fixed a bug in parsing the results of who which resulting the logged in user name being reported incorrectly.
 
