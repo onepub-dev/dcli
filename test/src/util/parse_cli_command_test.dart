@@ -1,6 +1,6 @@
+@Timeout(Duration(seconds: 600))
 import 'dart:io';
 
-@Timeout(Duration(seconds: 600))
 import 'package:dshell/dshell.dart' hide equals;
 import 'package:dshell/src/functions/pwd.dart';
 
