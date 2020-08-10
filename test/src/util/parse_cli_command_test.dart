@@ -1,3 +1,5 @@
+import 'dart:io';
+
 @Timeout(Duration(seconds: 600))
 import 'package:dshell/dshell.dart' hide equals;
 import 'package:dshell/src/functions/pwd.dart';
@@ -100,7 +102,7 @@ void main() {
     });
   });
 
-  test('glob expansion - linux/macos', () {
+  test('linux/macos', () {
     TestFileSystem().withinZone((fs) {
       var parsed = ParsedCliCommand('ls *.jpg *.png', fs.top);
 
@@ -118,7 +120,7 @@ void main() {
     'windows': Skip("Powershell doesn't do glob expansion")
   });
 
-  test('glob expansion - .*', () {
+  test('.*', () {
     TestFileSystem().withinZone((fs) {
       var parsed = ParsedCliCommand('ls .*', fs.top);
 
@@ -130,7 +132,29 @@ void main() {
     'windows': Skip("Powershell doesn't do glob expansion")
   });
 
-  test('glob expansion - alternate working directory', () {
+  test('invalid/.*', () {
+    TestFileSystem().withinZone((fs) {
+      expect(() => ParsedCliCommand('ls invalid/.*', fs.top),
+          throwsA(TypeMatcher<FileSystemException>()));
+    });
+  }, onPlatform: <String, Skip>{
+    'windows': Skip("Powershell doesn't do glob expansion")
+  });
+
+  test('valid/.*', () {
+    TestFileSystem().withinZone((fs) {
+      var parsed = ParsedCliCommand('ls middle/.*', fs.top);
+
+      expect(parsed.cmd, equals('ls'));
+
+      expect(parsed.args,
+          unorderedEquals(<String>['middle/.hidden', 'middle/.four.txt']));
+    });
+  }, onPlatform: <String, Skip>{
+    'windows': Skip("Powershell doesn't do glob expansion")
+  });
+
+  test('alternate working directory', () {
     TestFileSystem().withinZone((fs) {
       var parsed = ParsedCliCommand('ls *.txt *.jpg', fs.middle);
 
@@ -148,7 +172,42 @@ void main() {
     'windows': Skip("Powershell doesn't do glob expansion")
   });
 
-  test('glob expansion - windows', () {
+  test('valid non-local path', () {
+    TestFileSystem().withinZone((fs) {
+      var parsed = ParsedCliCommand('ls middle/*.txt', fs.top);
+
+      expect(parsed.cmd, equals('ls'));
+
+      expect(
+          parsed.args,
+          unorderedEquals(<String>[
+            'middle/three.txt',
+            'middle/four.txt',
+          ]));
+    });
+  });
+
+  test('invalid absolute path/*', () {
+    TestFileSystem().withinZone((fs) {
+      expect(() => ParsedCliCommand('ls /git/dshell/*', fs.top),
+          throwsA(TypeMatcher<FileSystemException>()));
+    });
+  });
+
+  test('valid absolute path/*', () {
+    TestFileSystem().withinZone((fs) {
+      var parsed = ParsedCliCommand('ls ${join(fs.top, '*.txt')}', fs.middle);
+
+      expect(parsed.cmd, equals('ls'));
+
+      expect(
+          parsed.args,
+          unorderedEquals(
+              <String>[join(fs.top, 'one.txt'), join(fs.top, 'two.txt')]));
+    });
+  });
+
+  test('windows', () {
     TestFileSystem().withinZone((fs) {
       var parsed = ParsedCliCommand('ls *.jpg *.png', fs.top);
 

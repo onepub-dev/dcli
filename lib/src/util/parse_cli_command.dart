@@ -16,6 +16,10 @@ class ParsedCliCommand {
 
   ///
   ParsedCliCommand(String command, String workingDirectory) {
+    if (!exists(workingDirectory)) {
+      throw RunException(command, -1,
+          "The workingDirectory ${truepath(workingDirectory)} doesn't exists.");
+    }
     var qargs = _parse(command);
     args = expandGlobs(qargs, workingDirectory);
   }
@@ -24,6 +28,11 @@ class ParsedCliCommand {
   /// passed as they have been put there with intent.
   ParsedCliCommand.fromParsed(
       this.cmd, List<String> rawArgs, String workingDirectory) {
+    if (!exists(workingDirectory)) {
+      throw RunException('$cmd ${rawArgs.join(' ')}', -1,
+          "The workingDirectory ${truepath(workingDirectory)} doesn't exists.");
+    }
+
     var qargs = _QArg.translate(rawArgs);
     args = expandGlobs(qargs, workingDirectory);
   }
@@ -216,14 +225,14 @@ class _QArg {
 
   Iterable<String> _expandGlob(String workingDirectory) {
     var glob = Glob(arg);
-    var includeHidden = arg.startsWith('.');
+
+    /// we are interested in the last part of the arg.
+    /// e.g. of  path/.* we want the .*
+    var includeHidden = basename(arg).startsWith('.');
 
     var files = <FileSystemEntity>[];
-    try {
-      files = glob.listSync(root: workingDirectory);
-    } on FileSystemException {
-      files = [];
-    }
+
+    files = glob.listSync(root: workingDirectory);
 
     if (files.isEmpty) {
       // if no matches the bash spec says return
