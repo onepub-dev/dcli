@@ -1,3 +1,7 @@
+# 1.10.18
+Set the working directory to pwd if not passed.
+Glob: fixed bug where globs like middle/.* where not being expanded correctly. Also modified the exception handling so that if the glob describes a directory that doesn't exist we now throw an exception rather than suppressing it. This is not the same as bash. If the glob doesn't match a valid directory it will just pass back the original glob.  The new approach however is more consistent with dshells philosophy that any invalid paths should generate an exception. Added unit tests around the above concepts.
+
 # 1.10.17
 Fixed the compile for scripts with a 'local' pubspec.yaml
 removed stray print statment.
