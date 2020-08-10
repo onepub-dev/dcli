@@ -16,6 +16,7 @@ class ParsedCliCommand {
 
   ///
   ParsedCliCommand(String command, String workingDirectory) {
+    workingDirectory ??= pwd;
     if (!exists(workingDirectory)) {
       throw RunException(command, -1,
           "The workingDirectory ${truepath(workingDirectory)} doesn't exists.");
@@ -28,6 +29,7 @@ class ParsedCliCommand {
   /// passed as they have been put there with intent.
   ParsedCliCommand.fromParsed(
       this.cmd, List<String> rawArgs, String workingDirectory) {
+    workingDirectory ??= pwd;
     if (!exists(workingDirectory)) {
       throw RunException('$cmd ${rawArgs.join(' ')}', -1,
           "The workingDirectory ${truepath(workingDirectory)} doesn't exists.");
