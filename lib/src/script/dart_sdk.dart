@@ -164,7 +164,7 @@ class DartSdk {
       var resultString = res.stderr as String;
 
       _version =
-          resultString.substring('Dart VM version: '.length).split(' ').first;
+          resultString.substring('Dart SDK version: '.length).split(' ').first;
       Settings().verbose('Dart SDK Version  $_version, path: $dartExePath');
     }
 
