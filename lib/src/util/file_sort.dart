@@ -2,8 +2,11 @@ import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
 
+import 'package:dshell/dshell.dart';
+
 import '../../dshell.dart' as d;
 import '../script/command_line_runner.dart';
+import 'file_sync.dart';
 import 'wait_for_ex.dart';
 
 /// FileSort provides the ability to sort files
@@ -45,8 +48,7 @@ class FileSort {
   int _maxColumn = -1;
 
   ///
-  FileSort(this._inputPath, this._outputPath, this._columns,
-      this._fieldDelimiter, this._lineDelimiter,
+  FileSort(this._inputPath, this._outputPath, this._columns, this._fieldDelimiter, this._lineDelimiter,
       {this.verbose = false}) {
     for (var column in _columns) {
       if (_maxColumn < column.ordinal) {
@@ -75,12 +77,8 @@ class FileSort {
 
     var phaseFutures = <Future<void>>[];
 
-    await File(_inputPath)
-        .openRead()
-        .map(utf8.decode)
-        .transform(LineSplitter())
-        .forEach((l) async {
-      list.add(_Line.fromString(l));
+    await File(_inputPath).openRead().map(utf8.decode).transform(LineSplitter()).forEach((l) async {
+      list.add(_Line.fromString(_inputPath, l));
       lineCount--;
 
       if (lineCount == 0) {
@@ -92,8 +90,7 @@ class FileSort {
         var phaseFuture = Completer<void>();
         phaseFutures.add(phaseFuture.future);
 
-        await _savePhase(
-            phaseDirectory, 1, instance, phaseList, _lineDelimiter);
+        await _savePhase(phaseDirectory, 1, instance, phaseList, _lineDelimiter);
         phaseFuture.complete(null);
       }
     });
@@ -115,7 +112,11 @@ class FileSort {
 
   void _replaceFileWithSortedList(List<_Line> sorted) {
     if (_inputPath == _outputPath) {
-      d.move(_inputPath, '$_inputPath.bak');
+      var backup = '$_inputPath.bak';
+      if (exists(backup)) {
+        delete(backup);
+      }
+      d.move(_inputPath, backup);
       _saveSortedList(_outputPath, sorted, _lineDelimiter);
       d.delete('$_inputPath.bak');
     } else {
@@ -130,30 +131,28 @@ class FileSort {
       var rhsColumns = rhs.line.split(_fieldDelimiter);
 
       if (_maxColumn > lhsColumns.length) {
-        throw InvalidArguments('Line $lhs does not have enough columns');
+        throw InvalidArguments(
+            'Line $lhs does not have enough columns. Expected ${_maxColumn}, found ${lhsColumns.length}');
       }
 
       if (_maxColumn > rhsColumns.length) {
-        throw InvalidArguments('Line $rhs does not have enough columns');
+        throw InvalidArguments(
+            'Line $rhs does not have enough columns. Expected ${_maxColumn}, found ${lhsColumns.length}');
       }
 
       var result = 0;
 
       if (_maxColumn == 0) {
         // just compare the whole line.
-        result =
-            _columns[0]._comparator.compareTo(_columns[0], lhs.line, rhs.line);
+        result = _columns[0]._comparator.compareTo(_columns[0], lhs.line, rhs.line);
       } else {
         // compare the defined columns
         for (var column in _columns) {
-          var direction =
-              column._sortDirection == SortDirection.ascending ? 1 : -1;
+          var direction = column._sortDirection == SortDirection.ascending ? 1 : -1;
 
-          result = column._comparator.compareTo(
-                  column,
-                  lhsColumns[column.ordinal - 1],
-                  rhsColumns[column.ordinal - 1]) *
-              direction;
+          result =
+              column._comparator.compareTo(column, lhsColumns[column.ordinal - 1], rhsColumns[column.ordinal - 1]) *
+                  direction;
           if (result != 0) {
             break;
           }
@@ -163,21 +162,17 @@ class FileSort {
     });
   }
 
-  void _savePhase(Directory phaseDirectory, int phase, int instance,
-      List<_Line> list, String lineDelimiter) async {
-    var instanceFile =
-        await File(d.join(phaseDirectory.path, 'phase$phase-$instance'));
+  void _savePhase(Directory phaseDirectory, int phase, int instance, List<_Line> list, String lineDelimiter) async {
+    var instanceFile = await File(d.join(phaseDirectory.path, 'phase$phase-$instance'));
 
     await _sortList(list);
 
     var lines = list.map((line) => line.line).toList();
 
-    instanceFile.writeAsStringSync(lines.join(lineDelimiter) + lineDelimiter,
-        flush: true);
+    instanceFile.writeAsStringSync(lines.join(lineDelimiter) + lineDelimiter, flush: true);
   }
 
-  void _saveSortedList(
-      String filename, List<_Line> list, String lineDelimiter) async {
+  void _saveSortedList(String filename, List<_Line> list, String lineDelimiter) async {
     var saveTo = d.FileSync(filename);
 
     saveTo.truncate();
@@ -282,9 +277,13 @@ class FileSort {
     }
 
     if (_inputPath == _outputPath) {
-      d.move(_inputPath, '$_inputPath.bak');
+      var backup = '$_inputPath.bak';
+      if (exists(backup)) {
+        delete(backup);
+      }
+      d.move(_inputPath, backup);
       d.move(mergedPath, _inputPath);
-      d.delete('$_inputPath.bak');
+      d.delete(backup);
     } else {
       d.move(mergedPath, _outputPath);
     }
@@ -293,14 +292,16 @@ class FileSort {
 }
 
 class _Line {
-  d.FileSync source;
+  FileSync source;
+  String sourcePath;
   String line;
 
   _Line(this.source) {
+    sourcePath = source.path;
     line = source.readLine();
   }
 
-  _Line.fromString(this.line);
+  _Line.fromString(this.sourcePath, this.line);
 
   bool readNext() {
     line = source.readLine();
@@ -317,7 +318,7 @@ class _Line {
 
   @override
   String toString() {
-    return 'File: $source.path : Line: $line';
+    return 'File: ${sourcePath} : Line: $line';
   }
 }
 
@@ -358,14 +359,12 @@ class NumericSort implements ColumnComparator {
   int compareTo(Column column, String lhs, String rhs) {
     var numLhs = num.tryParse(lhs);
     if (numLhs == null) {
-      throw FormatException(
-          'Column ${column.ordinal} contained a non-numeric value.', lhs);
+      throw FormatException('Column ${column.ordinal} contained a non-numeric value.', lhs);
     }
     var numRhs = num.tryParse(rhs);
 
     if (numRhs == null) {
-      throw FormatException(
-          'Sort Column ${column.ordinal} contained a non-numeric value.', rhs);
+      throw FormatException('Sort Column ${column.ordinal} contained a non-numeric value.', rhs);
     }
 
     return numLhs.compareTo(numRhs);
@@ -431,14 +430,11 @@ class Column {
     'n': NumericSort(),
     'm': MonthSort(),
   };
-  static const _directionMap = {
-    'a': SortDirection.ascending,
-    'd': SortDirection.descending
-  };
+  static const _directionMap = {'a': SortDirection.ascending, 'd': SortDirection.descending};
 
   @override
   String toString() {
-    return 'ordinal: $ordinal, comparator: ${_comparator.runtimeType}, sortDirection: $SortDirection';
+    return 'ordinal: $ordinal, comparator: ${_comparator.runtimeType}, sortDirection: ${_sortDirection}';
   }
 
   /// [ordinal] is the column index using base 1
