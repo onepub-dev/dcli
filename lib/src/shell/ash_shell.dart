@@ -6,6 +6,10 @@ import 'shell_mixin.dart';
 /// when dshell needs to interact with the Bash shell.
 
 class AshShell with ShellMixin, PosixMixin {
+  @override
+  final int pid;
+  AshShell.withPid(this.pid);
+
   /// Name of the shell
   static const String shellName = 'ash';
 

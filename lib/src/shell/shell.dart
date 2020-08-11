@@ -71,6 +71,8 @@ abstract class Shell {
   /// or null if there are no preconditions.
   String checkInstallPreconditions();
 
+  int get pid;
+
   static Shell _current;
 
   /// Returns the user shell that this script was launched from

@@ -32,13 +32,13 @@ class ShellDetection {
   static final ShellDetection _shell = ShellDetection._internal();
 
   final _shells = <String, Shell Function(int pid)>{
-    AshShell.shellName: (pid) => AshShell(),
-    CmdShell.shellName: (pid) => CmdShell(),
-    DashShell.shellName: (pid) => DashShell(),
-    BashShell.shellName: (pid) => BashShell(),
-    PowerShell.shellName: (pid) => PowerShell(),
-    ShShell.shellName: (pid) => ShShell(),
-    ZshShell.shellName: (pid) => ZshShell(),
+    AshShell.shellName: (pid) => AshShell.withPid(pid),
+    CmdShell.shellName: (pid) => CmdShell.withPid(pid),
+    DashShell.shellName: (pid) => DashShell.withPid(pid),
+    BashShell.shellName: (pid) => BashShell.withPid(pid),
+    PowerShell.shellName: (pid) => PowerShell.withPid(pid),
+    ShShell.shellName: (pid) => ShShell.withPid(pid),
+    ZshShell.shellName: (pid) => ZshShell.withPid(pid),
   };
 
   ShellDetection._internal();
@@ -62,7 +62,7 @@ class ShellDetection {
     /// on posix systems this MAY give us the login shell name.
     var _loginShell = ShellMixin.loginShell();
     if (_loginShell != null) {
-      return _shellByName(_loginShell);
+      return _shellByName(_loginShell, -1);
     } else {
       return _searchProcessTree();
     }
@@ -70,6 +70,7 @@ class ShellDetection {
 
   Shell _searchProcessTree() {
     Shell firstShell;
+    int firstPid;
     Shell shell;
     var childPID = pid;
 
@@ -86,11 +87,10 @@ class ShellDetection {
       if (processName != null) {
         processName = processName.toLowerCase();
         Settings().verbose('found: $possiblePid $processName');
-        shell = _shellByName(processName);
+        shell = _shellByName(processName, possiblePid);
       } else {
-        Settings()
-            .verbose('possiblePID: $possiblePid Unable to obtain process name');
-        shell = UnknownShell('unknown');
+        Settings().verbose('possiblePID: $possiblePid Unable to obtain process name');
+        shell = UnknownShell.withPid(possiblePid, processName: 'unknown');
       }
 
       if (firstPass) {
@@ -101,6 +101,7 @@ class ShellDetection {
         /// and we will return UnknownShell with the parent processes
         /// id
         firstShell = shell;
+        firstPid = possiblePid;
 
         /// If started by #! the parent willl be an 'sh' shell
         ///  which we need to ignore.
@@ -121,16 +122,17 @@ class ShellDetection {
 
     /// If we didn't find a shell then use firstShell.
     shell ??= firstShell;
+    childPID ??= firstPid;
 
     /// if things are really sad.
-    shell ??= UnknownShell('unknwon');
+    shell ??= UnknownShell.withPid(childPID);
     Settings().verbose(blue('Identified shell: ${shell.name}'));
     return shell;
   }
 
   /// Returns the shell with the name that matches [processName]
   /// If there is no match then [UnknownShell] is returned.
-  Shell _shellByName(String processName) {
+  Shell _shellByName(String processName, int pid) {
     Shell shell;
 
     processName = processName.toLowerCase();
@@ -139,7 +141,7 @@ class ShellDetection {
       shell = _shells[processName].call(pid);
     }
 
-    shell ??= UnknownShell(processName);
+    shell ??= UnknownShell.withPid(pid, processName: processName);
     return shell;
   }
 }

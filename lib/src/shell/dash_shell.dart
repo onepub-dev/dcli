@@ -10,6 +10,10 @@ class DashShell with ShellMixin, PosixMixin {
   static const String shellName = 'dash';
 
   @override
+  final int pid;
+  DashShell.withPid(this.pid);
+
+  @override
   bool get isCompletionSupported => false;
 
   @override

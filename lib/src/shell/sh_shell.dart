@@ -10,6 +10,10 @@ class ShShell with ShellMixin, PosixMixin {
   static const String shellName = 'sh';
 
   @override
+  final int pid;
+  ShShell.withPid(this.pid);
+
+  @override
   String get startScriptPath {
     return join(HOME, startScriptName);
   }

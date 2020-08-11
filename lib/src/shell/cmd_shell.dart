@@ -8,6 +8,10 @@ class CmdShell with WindowsMixin, ShellMixin {
   static const String shellName = 'cmd.exe';
 
   @override
+  final int pid;
+  CmdShell.withPid(this.pid);
+
+  @override
   bool addToPath(String path) {
     /// These need to be run as admin
     /// not working correctly at this point.

@@ -9,6 +9,10 @@ class ZshShell with ShellMixin, PosixMixin {
   static const String shellName = 'zsh';
 
   @override
+  final int pid;
+  ZshShell.withPid(this.pid);
+
+  @override
   bool get isCompletionSupported => false;
 
   @override

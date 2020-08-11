@@ -10,6 +10,10 @@ class BashShell with ShellMixin, PosixMixin {
   static const String shellName = 'bash';
 
   @override
+  final int pid;
+  BashShell.withPid(this.pid);
+
+  @override
   String get startScriptPath {
     return join(HOME, startScriptName);
   }
@@ -34,13 +38,11 @@ class BashShell with ShellMixin, PosixMixin {
         startFile.append(command);
 
         if (!quiet) {
-          print(
-              'dshell tab completion installed. Restart your terminal to activate it.');
+          print('dshell tab completion installed. Restart your terminal to activate it.');
         }
       } else {
         printerr(red('Unable to install dshell tab completion'));
-        printerr(
-            "Add ${orange('$command')} to your start up script to enable tab completion");
+        printerr("Add ${orange('$command')} to your start up script to enable tab completion");
       }
     }
   }

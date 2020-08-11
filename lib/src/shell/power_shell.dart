@@ -8,6 +8,10 @@ class PowerShell with WindowsMixin, ShellMixin {
   static const String shellName = 'powershell.exe';
 
   @override
+  final int pid;
+  PowerShell.withPid(this.pid);
+
+  @override
   bool addToPath(String path) {
     /// These need to be run as admin
     /// not working correctly at this point.
