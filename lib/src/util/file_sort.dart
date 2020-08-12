@@ -48,7 +48,8 @@ class FileSort {
   int _maxColumn = -1;
 
   ///
-  FileSort(this._inputPath, this._outputPath, this._columns, this._fieldDelimiter, this._lineDelimiter,
+  FileSort(this._inputPath, this._outputPath, this._columns,
+      this._fieldDelimiter, this._lineDelimiter,
       {this.verbose = false}) {
     for (var column in _columns) {
       if (_maxColumn < column.ordinal) {
@@ -77,7 +78,11 @@ class FileSort {
 
     var phaseFutures = <Future<void>>[];
 
-    await File(_inputPath).openRead().map(utf8.decode).transform(LineSplitter()).forEach((l) async {
+    await File(_inputPath)
+        .openRead()
+        .map(utf8.decode)
+        .transform(LineSplitter())
+        .forEach((l) async {
       list.add(_Line.fromString(_inputPath, l));
       lineCount--;
 
@@ -90,7 +95,8 @@ class FileSort {
         var phaseFuture = Completer<void>();
         phaseFutures.add(phaseFuture.future);
 
-        await _savePhase(phaseDirectory, 1, instance, phaseList, _lineDelimiter);
+        await _savePhase(
+            phaseDirectory, 1, instance, phaseList, _lineDelimiter);
         phaseFuture.complete(null);
       }
     });
@@ -144,15 +150,19 @@ class FileSort {
 
       if (_maxColumn == 0) {
         // just compare the whole line.
-        result = _columns[0]._comparator.compareTo(_columns[0], lhs.line, rhs.line);
+        result =
+            _columns[0]._comparator.compareTo(_columns[0], lhs.line, rhs.line);
       } else {
         // compare the defined columns
         for (var column in _columns) {
-          var direction = column._sortDirection == SortDirection.ascending ? 1 : -1;
+          var direction =
+              column._sortDirection == SortDirection.ascending ? 1 : -1;
 
-          result =
-              column._comparator.compareTo(column, lhsColumns[column.ordinal - 1], rhsColumns[column.ordinal - 1]) *
-                  direction;
+          result = column._comparator.compareTo(
+                  column,
+                  lhsColumns[column.ordinal - 1],
+                  rhsColumns[column.ordinal - 1]) *
+              direction;
           if (result != 0) {
             break;
           }
@@ -162,17 +172,21 @@ class FileSort {
     });
   }
 
-  void _savePhase(Directory phaseDirectory, int phase, int instance, List<_Line> list, String lineDelimiter) async {
-    var instanceFile = await File(d.join(phaseDirectory.path, 'phase$phase-$instance'));
+  void _savePhase(Directory phaseDirectory, int phase, int instance,
+      List<_Line> list, String lineDelimiter) async {
+    var instanceFile =
+        await File(d.join(phaseDirectory.path, 'phase$phase-$instance'));
 
     await _sortList(list);
 
     var lines = list.map((line) => line.line).toList();
 
-    instanceFile.writeAsStringSync(lines.join(lineDelimiter) + lineDelimiter, flush: true);
+    instanceFile.writeAsStringSync(lines.join(lineDelimiter) + lineDelimiter,
+        flush: true);
   }
 
-  void _saveSortedList(String filename, List<_Line> list, String lineDelimiter) async {
+  void _saveSortedList(
+      String filename, List<_Line> list, String lineDelimiter) async {
     var saveTo = d.FileSync(filename);
 
     saveTo.truncate();
@@ -359,12 +373,14 @@ class NumericSort implements ColumnComparator {
   int compareTo(Column column, String lhs, String rhs) {
     var numLhs = num.tryParse(lhs);
     if (numLhs == null) {
-      throw FormatException('Column ${column.ordinal} contained a non-numeric value.', lhs);
+      throw FormatException(
+          'Column ${column.ordinal} contained a non-numeric value.', lhs);
     }
     var numRhs = num.tryParse(rhs);
 
     if (numRhs == null) {
-      throw FormatException('Sort Column ${column.ordinal} contained a non-numeric value.', rhs);
+      throw FormatException(
+          'Sort Column ${column.ordinal} contained a non-numeric value.', rhs);
     }
 
     return numLhs.compareTo(numRhs);
@@ -430,7 +446,10 @@ class Column {
     'n': NumericSort(),
     'm': MonthSort(),
   };
-  static const _directionMap = {'a': SortDirection.ascending, 'd': SortDirection.descending};
+  static const _directionMap = {
+    'a': SortDirection.ascending,
+    'd': SortDirection.descending
+  };
 
   @override
   String toString() {
