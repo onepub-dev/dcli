@@ -23,6 +23,9 @@ void main() {
   group('Create Project', () {
     test('Create hello world', () {
       TestFileSystem().withinZone((fs) {
+        if (exists(script)) {
+          delete(script);
+        }
         EntryPoint().process(['create', '--foreground', script]);
 
         checkProjectStructure(fs, script);
@@ -31,6 +34,10 @@ void main() {
 
     test('Clean hello world', () {
       TestFileSystem().withinZone((fs) {
+        if (exists(script)) {
+          delete(script);
+        }
+
         EntryPoint().process(['create', '--foreground', script]);
 
         VirtualProject.load(Script.fromFile(script));
@@ -68,13 +75,8 @@ void checkProjectStructure(TestFileSystem fs, String scriptName) {
 
   var files = <String>[];
   find('*.*',
-          recursive: false,
-          root: fs.runtimePath(scriptName),
-          types: [
-            FileSystemEntityType.file,
-          ],
-          includeHidden: true)
-      .forEach((line) => files.add(p.basename(line)));
+          recursive: true, root: fs.runtimePath(scriptName), types: [FileSystemEntityType.file], includeHidden: true)
+      .forEach((line) => files.add(p.relative(line, from: fs.runtimePath(scriptName))));
 
   // find('.*', recursive: false, root: fs.runtimePath(scriptName), types: [
   //   FileSystemEntityType.file,
@@ -88,7 +90,8 @@ void checkProjectStructure(TestFileSystem fs, String scriptName) {
         'pubspec.lock',
         join('.dart_tool', 'package_config.json'),
         '.build.complete',
-        '.using.virtual.pubspec'
+        '.using.virtual.pubspec',
+        '.packages' // when dart 2.10 is released this will no longer be created.
       ])));
 
   var directories = <String>[];
