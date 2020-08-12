@@ -1,3 +1,11 @@
+# 1.10.19
+dshell doctor wasn't printing the dart version as the cli output from dart --version had changed. Improved the parsing method so it should be more robust in the face of future changes.
+Added coverage switch to run_unit_tests.dart
+corrected the name of the coverage directory.
+create_project_test: Fixed a bug in the set of expeced filenames after upgrading to dart 2.9.
+Added pid to Shell.
+Unit test incorrectly had paths presenting as absolute after glob expansion when we only get relative paths.
+
 # 1.10.18
 Set the working directory to pwd if not passed.
 Glob: fixed bug where globs like middle/.* where not being expanded correctly. Also modified the exception handling so that if the glob describes a directory that doesn't exist we now throw an exception rather than suppressing it. This is not the same as bash. If the glob doesn't match a valid directory it will just pass back the original glob.  The new approach however is more consistent with dshells philosophy that any invalid paths should generate an exception. Added unit tests around the above concepts.

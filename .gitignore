@@ -42,3 +42,4 @@ shell/main/subdir/good.jpg
 test/test_scripts/local_pubspec/hello_world
 test/.test_coverage.dart
 coverage
+lcov.info
