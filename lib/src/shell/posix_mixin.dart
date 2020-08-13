@@ -47,29 +47,24 @@ mixin PosixMixin {
   }
 
   bool get isPrivilegedUser {
-    var user = 'whoami'.firstLine;
-    Settings().verbose('user: $user');
+    var user = _whoami();
     var privileged = (user == 'root');
     Settings().verbose('isPrivilegedUser: $privileged');
     return privileged;
   }
 
   String get loggedInUser {
-    String user;
-
-    // bsutton  pts/0        2020-08-06 09:47 (14.201.92.199)
-    // bsutton  :0           2020-08-02 10:56 (:0)
-
-    var line = 'who'.firstLine;
-    Settings().verbose('who: $line');
-    if (line != null) {
-      // username :1
-      var parts = line.split(' ');
-      if (parts.isNotEmpty) {
-        user = parts[0].trim();
-      }
+    var user = _whoami();
+    if (user == 'root') {
+      user = env('SUDO_USER');
     }
     Settings().verbose('loggedInUser: $user');
+    return user;
+  }
+
+  String _whoami() {
+    var user = 'whoami'.firstLine;
+    Settings().verbose('whoami: $user');
     return user;
   }
 
