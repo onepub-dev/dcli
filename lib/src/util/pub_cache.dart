@@ -34,7 +34,7 @@ class PubCache {
     }
     if (Platform.isWindows) {
       _pubCacheDir ??= join('Pub', 'Cache');
-      // doco says this is AppData but the installer seems to use LocalAppData
+      // doco says this is AppData but the dart installer seems to use LocalAppData
       _pubCachePath ??= truepath(join(env('LocalAppData'), _pubCacheDir));
     } else {
       _pubCacheDir ??= '.pub-cache';
@@ -60,6 +60,9 @@ class PubCache {
   String get binPath => _pubCacheBinDir;
 
   /// Returns the directory name of the pub cache.
+  ///
+  /// e.g.
+  /// .pub-cache
   ///
   /// Dart allows the user to modify the location of
   /// the .pub-cache by setting the environment var

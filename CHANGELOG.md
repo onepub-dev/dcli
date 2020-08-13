@@ -1,3 +1,5 @@
+# 1.10.20
+Exposed the PubCache class as part of the public api as part of the tooling we are providing to explore the scripts dart environment.
 # 1.10.19
 dshell doctor wasn't printing the dart version as the cli output from dart --version had changed. Improved the parsing method so it should be more robust in the face of future changes.
 Added coverage switch to run_unit_tests.dart
