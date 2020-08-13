@@ -86,7 +86,8 @@ class Env extends DShellFunction {
       _caseSensitive = false;
     }
 
-    _envVars = CanonicalizedMap((key) => (_caseSensitive) ? key : key.toUpperCase());
+    _envVars =
+        CanonicalizedMap((key) => (_caseSensitive) ? key : key.toUpperCase());
 
     // build a local map with all of the OS environment vars.
     for (var entry in platformVars.entries) {
@@ -192,7 +193,8 @@ class Env extends DShellFunction {
         throw DShellException(
             "Unable to find the 'APPDATA' enviroment variable. Please ensure it is set and try again.");
       } else {
-        throw DShellException("Unable to find the 'HOME' enviroment variable. Please ensure it is set and try again.");
+        throw DShellException(
+            "Unable to find the 'HOME' enviroment variable. Please ensure it is set and try again.");
       }
     }
     return home;

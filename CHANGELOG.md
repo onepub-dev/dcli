@@ -1,3 +1,7 @@
+# 1.10.21
+Fixed a bug in Shell.loggedInUser. If you use sudo and the system has multiple users logged in then the wrong username would be returned.
+updated doco for setEnv.
+
 # 1.10.20
 Exposed the PubCache class as part of the public api as part of the tooling we are providing to explore the scripts dart environment.
 # 1.10.19
