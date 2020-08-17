@@ -340,10 +340,10 @@ import 'package:dshell/dshell.dart';
 void main() {
     print('Now lets do someting useful.');
 
-    var username =  ask(prompt: 'username:');
+    var username =  ask( 'username:');
     print('username: $username');
 
-    var password = ask(prompt: 'password:', hidden = true);
+    var password = ask( 'password:', hidden = true);
     print('password: $password');
     
     // create a directory
@@ -398,7 +398,7 @@ void main() {
             .forEach((line) => print('stdout: $line')
                 , stderr: (line) => print('stderr: $line'));
 
-    if (confirm(prompt: "Should I delete 'tmp'? (y/n):"))
+    if (confirm( "Should I delete 'tmp'? (y/n):"))
         // Now lets clean up
         delete('tmp/text.txt');
         delete('tmp/second.txt');

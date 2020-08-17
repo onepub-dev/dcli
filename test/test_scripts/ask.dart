@@ -12,6 +12,6 @@ import 'package:dshell/dshell.dart';
 ///
 
 void main() {
-  var name = ask(prompt: 'tell me your name:');
+  var name = ask('tell me your name:');
   print('your name is: $name');
 }

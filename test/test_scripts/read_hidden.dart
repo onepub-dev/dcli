@@ -8,11 +8,11 @@ import 'package:dshell/src/util/wait_for_ex.dart';
 
 void main() {
   print('child: has terminal: ${stdin.hasTerminal}');
-  print('confirmed: ${confirm(prompt: "Do you agree?")}');
+  print('confirmed: ${confirm("Do you agree?")}');
 
-  print("user: ${ask(prompt: 'username:', toLower: true)}");
+  print("user: ${ask('username:', toLower: true)}");
 
-  print("password: ${ask(prompt: 'password:', hidden: true)}");
+  print("password: ${ask('password:', hidden: true)}");
 }
 
 String readHidden() {

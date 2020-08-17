@@ -190,7 +190,7 @@ class DartSdk {
     } else {
       print(
           'The install directory $installDir already exists. If you proceed all files under $installDir will be deleted.');
-      if (confirm(prompt: 'Proceed to delete $installDir')) {
+      if (confirm('Proceed to delete $installDir')) {
         /// I've added this incase we have a failed install and need to do a restart.
         ///
         deleteDir(installDir, recursive: true);
@@ -256,13 +256,12 @@ class DartSdk {
     /// ask for and confirm the install directory.
     while (!confirmed) {
       var entered = ask(
-          prompt:
-              'Install dart-sdk to (Enter for default [${truepath(dartToolDir)}]): ');
+          'Install dart-sdk to (Enter for default [${truepath(dartToolDir)}]): ');
       if (entered.isNotEmpty) {
         dartToolDir = entered;
       }
 
-      confirmed = confirm(prompt: 'Is $dartToolDir correct:');
+      confirmed = confirm('Is $dartToolDir correct:');
     }
 
     return dartToolDir;

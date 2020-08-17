@@ -14,9 +14,9 @@ import 'package:dshell/dshell.dart';
 void main(List<String> args) {
   Settings().setVerbose(enabled: true);
   var fqdn = args[0];
-  // ask(prompt: "FQDN of test target:");
+  // ask( "FQDN of test target:");
   var password = args[1];
-  //  ask(prompt: 'Password for target:', hidden: true);
+  //  ask( 'Password for target:', hidden: true);
 
   Remote.scp(
     fromHost: fqdn,

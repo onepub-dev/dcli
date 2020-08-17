@@ -36,8 +36,8 @@ class _Delete extends DShellFunction {
     var remove = true;
     if (ask) {
       remove = false;
-      var response = a.ask(
-          prompt: "delete: Delete the regular file '${absolute(path)}'? y/N");
+      var response =
+          a.ask("delete: Delete the regular file '${absolute(path)}'? y/N");
       var yes = response;
       if (yes == 'y') {
         remove = true;

@@ -9,7 +9,7 @@ import '../../dshell.dart';
 /// e.g.
 /// ```dart
 /// var colors = [Color('Red'), Color('Green')];
-/// var color = menu(prompt: 'Please select a color', options: colors);
+/// var color = menu( 'Please select a color', options: colors);
 /// ```
 /// Results in:
 ///```
@@ -108,10 +108,8 @@ T menu<T>(
 
   // loop until the user enters a valid selection.
   while (!valid) {
-    var selected = ask(
-        prompt: prompt,
-        defaultValue: defaultIndex,
-        validator: MenuRange(limit));
+    var selected =
+        ask(prompt, defaultValue: defaultIndex, validator: MenuRange(limit));
     if (selected == null) continue;
     valid = true;
     index = int.parse(selected);

@@ -18,7 +18,7 @@ import 'echo.dart';
 /// be returned.
 ///
 /// ```dart
-/// String response = ask(prompt:"Do you like me?");
+/// String response = ask("Do you like me?");
 /// ```
 ///
 /// In most cases stdin is attached to the console
@@ -47,7 +47,7 @@ import 'echo.dart';
 /// Passing a [defaultValue] also modifies the prompt to display the value:
 ///
 /// ```dart
-/// var result = ask(prompt: 'How many', defaultValue: '5');
+/// var result = ask('How many', defaultValue: '5');
 /// > 'How many [5]'
 /// ```
 /// [ask] will throw an [AskValidatorException] if the defaultValue doesn't match
@@ -65,24 +65,22 @@ import 'echo.dart';
 /// color functions.  By default all input is considered valid.
 ///
 ///```dart
-///   var subject = ask(prompt: 'Subject');
-///   subject = ask(prompt: 'Subject', validator: Ask.required);
-///   subject = ask(prompt: 'Subject', validator: AskMinLength(10));
-///   var name = ask(prompt: 'What is your name?', validator: Ask.alpha);
-///   var age = ask(prompt: 'How old are you?', validator: Ask.integer);
-///   var username = ask(prompt: 'Username?', validator: Ask.email);
-///   var password = ask(prompt: 'Password?', hidden: true, validator: AskMultiValidator([Ask.alphaNumeric, AskLength(10,16)]));
-///   var color = ask(prompt: 'Favourite colour?', AskListValidator(['red', 'green', 'blue']));
+///   var subject = ask( 'Subject');
+///   subject = ask( 'Subject', validator: Ask.required);
+///   subject = ask( 'Subject', validator: AskMinLength(10));
+///   var name = ask( 'What is your name?', validator: Ask.alpha);
+///   var age = ask( 'How old are you?', validator: Ask.integer);
+///   var username = ask( 'Username?', validator: Ask.email);
+///   var password = ask( 'Password?', hidden: true, validator: AskMultiValidator([Ask.alphaNumeric, AskLength(10,16)]));
+///   var color = ask( 'Favourite colour?', AskListValidator(['red', 'green', 'blue']));
 ///
 ///```
-String ask(
-        {String prompt,
-        bool toLower = false,
+String ask(String prompt,
+        {bool toLower = false,
         bool hidden = false,
         String defaultValue,
         AskValidator validator = Ask.any}) =>
-    Ask()._ask(
-        prompt: prompt,
+    Ask()._ask(prompt,
         toLower: toLower,
         hidden: hidden,
         defaultValue: defaultValue,
@@ -93,15 +91,15 @@ String ask(
 /// Accepted values are y|t|true|yes and n|f|false|no (case insenstiive).
 /// If the user enters an unknown value an error is printed
 /// and they are reprompted.
-bool confirm({String prompt}) {
+bool confirm(String prompt) {
   bool result;
   var matched = false;
 
   prompt += ' (y/n):';
 
   while (!matched) {
-    var entered = Ask()
-        ._ask(prompt: prompt, toLower: true, hidden: false, validator: Ask.any);
+    var entered =
+        Ask()._ask(prompt, toLower: true, hidden: false, validator: Ask.any);
     var lower = entered.toLowerCase();
 
     if (['y', 't', 'true', 'yes'].contains(lower)) {
@@ -128,9 +126,8 @@ class Ask extends DShellFunction {
   ///
   /// Reads user input from stdin and returns it as a string.
   /// [prompt]
-  String _ask(
-      {String prompt,
-      bool toLower,
+  String _ask(String prompt,
+      {bool toLower,
       bool hidden,
       AskValidator validator,
       String defaultValue}) {

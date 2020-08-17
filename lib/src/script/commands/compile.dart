@@ -107,7 +107,7 @@ class CompileCommand extends Command {
         var install = true;
         var to = join(Settings().dshellBinPath, script.basename);
         if (exists(to) && !flagSet.isSet(OverWriteFlag())) {
-          var overwrite = confirm(prompt: 'Overwrite the existing exe?');
+          var overwrite = confirm('Overwrite the existing exe?');
           if (!overwrite) {
             install = false;
 

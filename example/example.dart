@@ -1,4 +1,5 @@
 #! /usr/bin/env dshell
+
 import 'dart:io';
 
 import 'package:dshell/dshell.dart';
@@ -88,7 +89,7 @@ void main() {
     // But we can't do this in a vscode debug session
     // so commenting it out for now.
     // a patch is comming for vscode.
-    var publish = ask(prompt: 'Publish (y/n):');
+    var publish = ask('Publish (y/n):');
 
     //String publish = 'y';
     if (publish.toLowerCase() == 'y') {
@@ -107,8 +108,7 @@ void main() {
     }
 
     // Lets get a word count
-    'wc $restingPlace'
-        .forEach((line) => print('WC: $line'), stderr: print);
+    'wc $restingPlace'.forEach((line) => print('WC: $line'), stderr: print);
 
     print('');
 
@@ -122,7 +122,7 @@ void main() {
     // but the world doesn't deserve our work
     // so burn it all to hell.
     delete(restingPlace, ask: false);
-  } 
+  }
   // ignore: avoid_catches_without_on_clauses
   catch (e) {
     // All errors are thrown as exceptions.
