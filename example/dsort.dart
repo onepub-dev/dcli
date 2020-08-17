@@ -1,4 +1,5 @@
 #! /usr/bin/env dshell
+
 import 'dart:io';
 import 'package:dshell/dshell.dart';
 import 'package:dshell/src/util/file_sort.dart';

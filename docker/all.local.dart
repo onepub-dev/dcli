@@ -1,4 +1,5 @@
 #! /usr/bin/env dshell
+
 import 'package:dshell/dshell.dart';
 import 'package:args/args.dart';
 

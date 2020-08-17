@@ -1,4 +1,5 @@
 #! /usr/bin/env dshell
+
 import 'package:dshell/dshell.dart';
 import 'package:args/args.dart';
 
@@ -22,7 +23,8 @@ void main(List<String> args) {
         .start(workingDirectory: '..');
   } else {
     /// runt the s
-    'docker run -v $pwd:/home --network host -it dshell:run_local  /bin/bash'.run;
-        // .start(workingDirectory: '..');
+    'docker run -v $pwd:/home --network host -it dshell:run_local  /bin/bash'
+        .run;
+    // .start(workingDirectory: '..');
   }
 }

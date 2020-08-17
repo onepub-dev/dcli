@@ -10,7 +10,6 @@ import 'dshell_function.dart';
 /// [path] is the path to the file that we are changing the
 /// permissions of.
 void chmod(int permission, String path) => _ChMod()._chmod(permission, path);
-// String chmod({String prompt}) => ChMod().chmod(prompt: prompt);
 
 /// Implementatio for [chmod] function.
 class _ChMod extends DShellFunction {

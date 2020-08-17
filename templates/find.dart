@@ -56,8 +56,7 @@ void main(List<String> args) {
     print('Verbose is on, starting find');
   }
 
-  find(pattern, root: root, recursive: recursive)
-      .forEach(print);
+  find(pattern, root: root, recursive: recursive).forEach(print);
 
   if (verbose) {
     print('Verbose is on, completed find');

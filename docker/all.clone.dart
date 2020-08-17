@@ -1,4 +1,5 @@
 #! /usr/bin/env dshell
+
 import 'package:dshell/dshell.dart';
 
 /// Runs the install tests by cloning the dshell git repo.
