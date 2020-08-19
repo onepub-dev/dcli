@@ -320,7 +320,7 @@ class _AskFQDN extends AskValidator {
   const _AskFQDN();
   @override
   String validate(String line) {
-    line = line.trim();
+    line = line.trim().toLowerCase();
 
     if (!isFQDN(line)) {
       throw AskValidatorException(red('Invalid FQDN.'));
