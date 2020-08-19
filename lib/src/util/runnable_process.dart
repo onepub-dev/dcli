@@ -206,9 +206,7 @@ class RunnableProcess {
       var cmdLine = "${_parsed.cmd} ${_parsed.args.join(' ')}";
       Settings().verbose('Process.start: cmdLine ${green(cmdLine)}');
       Settings().verbose(
-          'Process.start: cmd: ${_parsed.cmd} args: ${_parsed.args.join(', ')}');
-      Settings().verbose(
-          'Process.start(runInShell: $runInShell workingDir: $workingDirectory mode: $mode)');
+          'Process.start: runInShell: $runInShell workingDir: $workingDirectory mode: $mode cmd: ${_parsed.cmd} args: ${_parsed.args.join(', ')}');
     }
 
     if (!exists(workdir)) {
