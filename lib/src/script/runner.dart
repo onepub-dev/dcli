@@ -23,7 +23,7 @@ class ScriptRunner {
 
     if (_project.pubspecLocation != PubspecLocation.traditional) {
       vmArgs.add(
-          '--packages=${join(dirname(_project.projectPubspecPath), '.dart_tool/package_config.json')}');
+          '--packages=${join(dirname(_project.projectPubspecPath), DartSdk().packagePath)}');
     }
 
     vmArgs.add(join(_project.runtimeProjectPath, _project.script.scriptname));

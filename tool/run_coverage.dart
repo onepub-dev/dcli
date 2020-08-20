@@ -19,11 +19,10 @@ void main() {
   if (!exists(coveragePath)) {
     createDir(coveragePath);
   }
-  var url =
-      'dart --pause-isolates-on-exit --enable-vm-service=NNNN ${join(projectRoot, 'tool', 'run_unit_tests.dart')}'
-          .toList();
+  var url = 'dart --pause-isolates-on-exit --enable-vm-service=NNNN ${join(projectRoot, 'tool', 'run_unit_tests.dart')}'
+      .toList();
   'collect_coverage -o $coveragePath/coverage.json --uri$url'.run;
-  'format_coverage -l -i $coveragePath/coverage.json -o $coveragePath/lcov.info --packages=${join(projectRoot, '.dart_tool', 'package_config.json')} --report-on=lib'
+  'format_coverage -l -i $coveragePath/coverage.json -o $coveragePath/lcov.info --packages=${join(projectRoot, DartSdk().packagePath)} --report-on=lib'
       .run;
 }
 

@@ -85,22 +85,30 @@ class DartSdk {
   /// file path to the 'dart2native' command.
   String get dart2NativePath => p.join(sdkPath, 'bin', dart2NativeExeName);
 
+  int get versionMajor {
+    var parts = version.split('.');
+
+    return int.tryParse(parts[0]) ?? 2;
+  }
+
+  int get versionMinor {
+    var parts = version.split('.');
+
+    return int.tryParse(parts[1]) ?? 9;
+  }
+
   /// run the 'dart2native' command.
   /// [runtimeScriptPath] is the path to the dshell script we are compiling.
   /// [outputPath] is the path to write the compiled ex to .
   /// [projectRootPath] is the path to the projects root directory.
-  void runDart2Native(VirtualProject project, String runtimeScriptPath,
-      String outputPath, String projectRootPath,
+  void runDart2Native(VirtualProject project, String runtimeScriptPath, String outputPath, String projectRootPath,
       {Progress progress}) {
     var runArgs = <String>[];
     runArgs.add(runtimeScriptPath);
-    if (project.pubspecLocation != PubspecLocation.traditional &&
-        project.pubspecLocation != PubspecLocation.local) {
-      runArgs.add(
-          '--packages=${join(dirname(project.projectPubspecPath), '.dart_tool', 'package_config.json')}');
+    if (project.pubspecLocation != PubspecLocation.traditional && project.pubspecLocation != PubspecLocation.local) {
+      runArgs.add('--packages=${join(dirname(project.projectPubspecPath), packagePath)}');
     }
-    runArgs.add(
-        '--output=${join(outputPath, basenameWithoutExtension(runtimeScriptPath))}');
+    runArgs.add('--output=${join(outputPath, basenameWithoutExtension(runtimeScriptPath))}');
 
     var process = RunnableProcess.fromCommandArgs(
       dart2NativePath,
@@ -112,12 +120,21 @@ class DartSdk {
     process.processUntilExit(progress, nothrow: false);
   }
 
+  /// returns the relative path to the packges configuration file.
+  /// For versions of dart prior to 2.10 this returns '.packages'
+  /// For versions of dart from 2.10 it returns .dart_tools/package_config.json
+  String get packagePath {
+    if (DartSdk().versionMajor >= 2 && DartSdk().versionMinor >= 10) {
+      return join('.dart_tool', 'package_config.json');
+    } else {
+      return '.packages';
+    }
+  }
+
   /// runs 'pub get'
-  void runPubGet(String workingDirectory,
-      {Progress progress, bool compileExecutables}) {
-    var process = RunnableProcess.fromCommandArgs(
-        pubPath, ['get', '--no-precompile'],
-        workingDirectory: workingDirectory);
+  void runPubGet(String workingDirectory, {Progress progress, bool compileExecutables}) {
+    var process =
+        RunnableProcess.fromCommandArgs(pubPath, ['get', '--no-precompile'], workingDirectory: workingDirectory);
 
     process.start();
 
@@ -211,8 +228,7 @@ class DartSdk {
 
     if (Platform.isLinux || Platform.isMacOS) {
       /// make execs executable.
-      find('*', root: join(installDir, 'bin'), recursive: false)
-          .forEach((file) => 'chmod +x, $file'.run);
+      find('*', root: join(installDir, 'bin'), recursive: false).forEach((file) => 'chmod +x, $file'.run);
     }
 
     // The normal dart detection process won't work here
@@ -255,8 +271,7 @@ class DartSdk {
 
     /// ask for and confirm the install directory.
     while (!confirmed) {
-      var entered = ask(
-          'Install dart-sdk to (Enter for default [${truepath(dartToolDir)}]): ');
+      var entered = ask('Install dart-sdk to (Enter for default [${truepath(dartToolDir)}]): ');
       if (entered.isNotEmpty) {
         dartToolDir = entered;
       }
@@ -301,8 +316,7 @@ class DartSdk {
       echo(
           '${EnumHelper.getName(progress.status).padRight(15)}${humanNumber(progress.downloaded)}/${humanNumber(progress.length)} $percentage');
     } else {
-      if (_progressSuppressor % 1000 == 0 ||
-          progress.status == FetchStatus.complete) {
+      if (_progressSuppressor % 1000 == 0 || progress.status == FetchStatus.complete) {
         print(
             '${EnumHelper.getName(progress.status).padRight(15)}${humanNumber(progress.downloaded)}/${humanNumber(progress.length)} $percentage');
       }
