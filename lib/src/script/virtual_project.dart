@@ -194,12 +194,14 @@ class VirtualProject {
     switch (project.pubspecLocation) {
       case PubspecLocation.annotation:
         _setVirtualPaths(project);
-        Settings().verbose('Pubspec is an Annotation. Project root: ${project.projectRootPath} ');
+        Settings().verbose(
+            'Pubspec is an Annotation. Project root: ${project.projectRootPath} ');
         break;
 
       case PubspecLocation.virtual:
         _setVirtualPaths(project);
-        Settings().verbose('Pubspec is Virtual. Project root: ${project.projectRootPath} ');
+        Settings().verbose(
+            'Pubspec is Virtual. Project root: ${project.projectRootPath} ');
         break;
 
       case PubspecLocation.local:
@@ -208,12 +210,14 @@ class VirtualProject {
         // is a full project in its own right.
         // why do we have two lib paths?
         _setLocalPaths(project, script);
-        Settings().verbose('Pubspec is Local. Project root: ${project.projectRootPath} ');
+        Settings().verbose(
+            'Pubspec is Local. Project root: ${project.projectRootPath} ');
         break;
 
       case PubspecLocation.traditional:
         _setTraditionalPaths(project, script);
-        Settings().verbose('Pubspec is Traditional. Project root: ${project.projectRootPath} ');
+        Settings().verbose(
+            'Pubspec is Traditional. Project root: ${project.projectRootPath} ');
         break;
     }
 
@@ -238,7 +242,8 @@ class VirtualProject {
     project._projectRootPath = script.scriptDirectory;
     _setProjectPaths(project, script);
 
-    project._projectPubspecPath = join(project._projectRootPath, 'pubspec.yaml');
+    project._projectPubspecPath =
+        join(project._projectRootPath, 'pubspec.yaml');
 
     // pubspec.yaml lives in the same dir as the script.
     project._runtimePubspecPath = join(dirname(script.path), 'pubspec.yaml');
@@ -252,7 +257,8 @@ class VirtualProject {
     project._projectRootPath = project._getTradionalProjectRoot(script.path);
 
     /// pubspec.yaml lives in the script's project root
-    project._runtimePubspecPath = join(project._projectRootPath, 'pubspec.yaml');
+    project._runtimePubspecPath =
+        join(project._projectRootPath, 'pubspec.yaml');
 
     project._runtimeProjectPath = dirname(script.path);
 
@@ -270,8 +276,10 @@ class VirtualProject {
     project._projectCacheLibPath = join(project._virtualProjectPath, 'lib');
 
     project._scriptLibPath = join(script.path, 'lib');
-    project._projectScriptLinkPath = join(project._virtualProjectPath, script.scriptname);
-    project._projectPubspecPath = join(project._virtualProjectPath, 'pubspec.yaml');
+    project._projectScriptLinkPath =
+        join(project._virtualProjectPath, script.scriptname);
+    project._projectPubspecPath =
+        join(project._virtualProjectPath, 'pubspec.yaml');
   }
 
   /// Determines the location of the pubspec.yaml file
@@ -298,13 +306,17 @@ class VirtualProject {
   VirtualProject._internal(this.script) {
     var cacheRootPath = Settings().dshellCachePath;
     // /home/bsutton/.dshell/cache/home/bsutton/git/dshell/test/test_scripts/hello_world.project
-    _virtualProjectPath = join(cacheRootPath, Script.sansRoot(script.scriptDirectory), script.basename + projectDir);
+    _virtualProjectPath = join(cacheRootPath,
+        Script.sansRoot(script.scriptDirectory), script.basename + projectDir);
 
-    _localPubspecIndicatorPath = join(_virtualProjectPath, _usingLocalPubpsecFilename);
-    _virtualPubspecIndicatorPath = join(_virtualProjectPath, _usingVirtualPubspecFilename);
+    _localPubspecIndicatorPath =
+        join(_virtualProjectPath, _usingLocalPubpsecFilename);
+    _virtualPubspecIndicatorPath =
+        join(_virtualProjectPath, _usingVirtualPubspecFilename);
 
-    _isProjectInitialised =
-        exists(_virtualProjectPath) && (exists(_localPubspecIndicatorPath) || exists(_virtualPubspecIndicatorPath));
+    _isProjectInitialised = exists(_virtualProjectPath) &&
+        (exists(_localPubspecIndicatorPath) ||
+            exists(_virtualPubspecIndicatorPath));
 
     _lock = NamedLock(
       name: 'virtual_project.lock',
@@ -380,7 +392,8 @@ class VirtualProject {
   void build({bool background = false}) {
     /// Check that dshells install has been rum.
     if (!exists(Settings().dshellCachePath)) {
-      printerr(red("The dshell cache doesn't exists. Please run 'dshell install' and then try again."));
+      printerr(red(
+          "The dshell cache doesn't exists. Please run 'dshell install' and then try again."));
       printerr('');
       printerr('');
       throw InstallException('DShell needs to be re-installed');
@@ -485,7 +498,9 @@ class VirtualProject {
 
     print('');
     _colprint('Dependencies', '');
-    pubSpec().dependencies.forEach((d) => _colprint(d.name, '${d.rehydrate()}'));
+    pubSpec()
+        .dependencies
+        .forEach((d) => _colprint(d.name, '${d.rehydrate()}'));
   }
 
   String _makeSafe(String line) {
@@ -534,8 +549,6 @@ class VirtualProject {
         exists(join(_projectRootPath, DartSdk().packagePath));
   }
 
-  
-
   /// Returns true if the name of the pass directory is on the list
   /// of prescribed dart project layout directores that may contain
   /// top level scripts.
@@ -563,7 +576,8 @@ class VirtualProject {
 
     // traverse up the directory to find if we are in a traditional directory.
     while (current != root) {
-      if (isPrescribedDartDirectory(current) && exists(join(dirname(current), 'pubspec.yaml'))) {
+      if (isPrescribedDartDirectory(current) &&
+          exists(join(dirname(current), 'pubspec.yaml'))) {
         return true;
       }
       current = dirname(current);
@@ -578,7 +592,8 @@ class VirtualProject {
 
     // traverse up the directory to find if we are in a traditional directory.
     while (current != root) {
-      if (isPrescribedDartDirectory(current) && exists(join(dirname(current), 'pubspec.yaml'))) {
+      if (isPrescribedDartDirectory(current) &&
+          exists(join(dirname(current), 'pubspec.yaml'))) {
         return dirname(current);
       }
       current = dirname(current);
