@@ -74,13 +74,17 @@ void checkProjectStructure(TestFileSystem fs, String scriptName) {
   // .packages
 
   var files = <String>[];
-  find('*.*',
-          recursive: true,
-          root: fs.runtimePath(scriptName),
-          types: [FileSystemEntityType.file],
-          includeHidden: true)
-      .forEach((line) =>
-          files.add(p.relative(line, from: fs.runtimePath(scriptName))));
+  find(
+    '*.*',
+    recursive: true,
+    root: fs.runtimePath(scriptName),
+    types: [FileSystemEntityType.file],
+    includeHidden: true,
+  ).forEach(
+    (line) => files.add(
+      p.relative(line, from: fs.runtimePath(scriptName)),
+    ),
+  );
 
   // find('.*', recursive: false, root: fs.runtimePath(scriptName), types: [
   //   FileSystemEntityType.file,
