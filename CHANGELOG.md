@@ -1,3 +1,13 @@
+# 1.11.1
+Changed how we determine the packages path as a work around for #95
+reduce logging for start method.
+Forced fqdn to lowercase.
+
+# 1.11.0
+Breaking changes:  
+
+Changed the 'prompt' argument on ask and confirm to be a positional argument.  This feels like a more natual use and is an easy fix where it breaks code.
+
 # 1.10.21
 Fixed a bug in Shell.loggedInUser. If you use sudo and the system has multiple users logged in then the wrong username would be returned.
 updated doco for setEnv.
