@@ -1,12 +1,12 @@
-#! /usr/bin/env dshell
+#! /usr/bin/env dcli
 
-import 'package:dshell/dshell.dart';
+import 'package:dcli/dcli.dart';
 
 /**
  * @disabled-pubspec.yaml
  * name: annotated_cat
  * dependencies:
- *   dshell: ^1.1.1
+ *   dcli: ^1.1.1
  *   path: ^1.8.3
  */
 /// Used by unit tests as a cross platform version of cat

@@ -1,9 +1,9 @@
 @Timeout(Duration(seconds: 600))
-import 'package:dshell/dshell.dart' hide equals;
-import 'package:dshell/src/pubspec/global_dependencies.dart';
-import 'package:dshell/src/script/dependency.dart';
-import 'package:dshell/src/script/script.dart';
-import 'package:dshell/src/script/virtual_project.dart';
+import 'package:dcli/dcli.dart' hide equals;
+import 'package:dcli/src/pubspec/global_dependencies.dart';
+import 'package:dcli/src/script/dependency.dart';
+import 'package:dcli/src/script/script.dart';
+import 'package:dcli/src/script/virtual_project.dart';
 import 'package:test/test.dart';
 
 import '../util/test_file_system.dart';
@@ -39,8 +39,8 @@ dependencies:
   collection: ^1.14.12
   file_utils: ^0.1.3
   path: ^1.6.4
-  dshell:
-    path: /home/dshell
+  dcli:
+    path: /home/dcli
 dependency_overrides:
   args:
     path: /home/args
@@ -51,7 +51,7 @@ dependency_overrides:
         Dependency.fromHosted('collection', '^1.14.12'),
         Dependency.fromHosted('file_utils', '^0.1.3'),
         Dependency.fromHosted('path', '^1.6.4'),
-        Dependency.fromPath('dshell', join(rootPath, 'home', 'dshell')),
+        Dependency.fromPath('dcli', join(rootPath, 'home', 'dcli')),
       ];
 
       var gd = GlobalDependencies.fromString(content);
@@ -59,21 +59,21 @@ dependency_overrides:
     });
   });
 
-  test('local dshell', () {
+  test('local dcli', () {
     TestFileSystem().withinZone((fs) {
       var content = '''
 dependencies:
-  dshell: ^1.0.44 
+  dcli: ^1.0.44 
   args: ^1.5.2
   path: ^1.6.4
 
 dependency_overrides:
-  dshell: 
-    path: /home/dshell
+  dcli: 
+    path: /home/dcli
   ''';
 
       var expected = [
-        Dependency.fromPath('dshell', join(rootPath, 'home', 'dshell')),
+        Dependency.fromPath('dcli', join(rootPath, 'home', 'dcli')),
         Dependency.fromHosted('args', '^1.5.2'),
         Dependency.fromHosted('path', '^1.6.4'),
       ];
@@ -83,17 +83,17 @@ dependency_overrides:
     });
   });
 
-  test('local dshell - with file writes', () {
+  test('local dcli - with file writes', () {
     TestFileSystem().withinZone((fs) {
       var content = '''
 dependencies:
-  dshell: ^1.0.44 
+  dcli: ^1.0.44 
   args: ^1.5.2
   path: ^1.6.4
 
 dependency_overrides:
-  dshell: 
-    path: /home/dshell
+  dcli: 
+    path: /home/dcli
   ''';
 
       var paths = TestFileSystem();
@@ -108,7 +108,7 @@ dependency_overrides:
       var gd = GlobalDependencies.fromFile(depPath);
 
       var expected = [
-        Dependency.fromPath('dshell', join(rootPath, 'home', 'dshell')),
+        Dependency.fromPath('dcli', join(rootPath, 'home', 'dcli')),
         Dependency.fromHosted('args', '^1.5.2'),
         Dependency.fromHosted('path', '^1.6.4'),
       ];
@@ -117,23 +117,23 @@ dependency_overrides:
     });
   });
 
-  test('local dshell - write virtual pubsec.yaml', () {
+  test('local dcli - write virtual pubsec.yaml', () {
     TestFileSystem().withinZone((fs) {
       var content = '''
 dependencies:
-  dshell: ^1.0.44 
+  dcli: ^1.0.44 
   args: ^1.5.2
   path: ^1.6.4
 
 dependency_overrides:
-  dshell: 
-    path: ~/git/dshell
+  dcli: 
+    path: ~/git/dcli
   ''';
 
       var workingDir = fs.unitTestWorkingDir;
 
       // over-ride the default 'dependencies.yaml
-      var depPath = join(Settings().dshellPath, GlobalDependencies.filename);
+      var depPath = join(Settings().dcliPath, GlobalDependencies.filename);
       var backup = '$depPath.bak';
       if (exists(backup)) {
         delete(backup);
@@ -144,7 +144,7 @@ dependency_overrides:
       var gd = GlobalDependencies.fromFile(depPath);
 
       var expected = [
-        Dependency.fromPath('dshell', join('~', 'git', 'dshell')),
+        Dependency.fromPath('dcli', join('~', 'git', 'dcli')),
         Dependency.fromHosted('args', '^1.5.2'),
         Dependency.fromHosted('path', '^1.6.4'),
       ];

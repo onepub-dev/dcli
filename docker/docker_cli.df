@@ -10,13 +10,13 @@ RUN apt -y upgrade
 RUN apt -y install vim
 RUN apt -y install wget
 
-# Add the entire dshell project so we can run from the local filesystem
-ADD . /dshell
+# Add the entire dcli project so we can run from the local filesystem
+ADD . /dcli
 
 we need to mount the file system when we start running rather than
 adding it to the built docker image.
 
 if we are running as sudo all references to HOME are suspect.
-sudo -i, sudo -s and sudo dshell_install may have different HOME.
+sudo -i, sudo -s and sudo dcli_install may have different HOME.
 
 CMD ["/bin/bash"]

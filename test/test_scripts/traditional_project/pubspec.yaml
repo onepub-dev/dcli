@@ -1,6 +1,6 @@
 name: traditional_project
 
 dependencies:
-  dshell: 
+  dcli: 
     path: ../../../
 

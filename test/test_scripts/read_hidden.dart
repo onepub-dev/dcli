@@ -1,10 +1,10 @@
-#! /usr/bin/env dshell
+#! /usr/bin/env dcli
 
 import 'dart:convert';
 import 'dart:io';
 
-import 'package:dshell/dshell.dart';
-import 'package:dshell/src/util/wait_for_ex.dart';
+import 'package:dcli/dcli.dart';
+import 'package:dcli/src/util/wait_for_ex.dart';
 
 void main() {
   print('child: has terminal: ${stdin.hasTerminal}');

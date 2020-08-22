@@ -29,7 +29,7 @@ import 'is.dart';
 void deleteDir(String path, {bool recursive = true}) =>
     _DeleteDir().deleteDir(path, recursive: recursive);
 
-class _DeleteDir extends DShellFunction {
+class _DeleteDir extends DCliFunction {
   void deleteDir(String path, {bool recursive}) {
     Settings().verbose('deleteDir:  ${absolute(path)} recursive: $recursive');
 

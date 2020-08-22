@@ -39,9 +39,9 @@ import 'pwd.dart';
 ///
 /// Current [priviledged] is only supported under Linux.
 ///
-/// DShell performs glob (wildcard) expansion on command arguments if it contains any one
+/// DCli performs glob (wildcard) expansion on command arguments if it contains any one
 /// of *, [ or ?  unless the argument is quoted.
-/// DShell uses the dart package Glob (https://pub.dev/packages/glob) to do the glob expansion.
+/// DCli uses the dart package Glob (https://pub.dev/packages/glob) to do the glob expansion.
 ///
 /// The following command will have the argument containing the wild card *.dart expanded to
 /// the list of files, in the current directory, that match the pattern *.dart. If no files match the pattern then the pattern
@@ -118,7 +118,7 @@ int run(String commandLine,
 /// Current [priviledged] is only supported under Linux.
 ///
 ///
-/// DShell performs Glob expansion on command arguments. See [run] for details.
+/// DCli performs Glob expansion on command arguments. See [run] for details.
 ///
 Progress startFromArgs(
   String command,
@@ -148,7 +148,7 @@ Progress startFromArgs(
 
 /// Allows you to execute a cli [commandLine].
 ///
-/// DShell performs Glob expansion on command arguments. See [run] for details.
+/// DCli performs Glob expansion on command arguments. See [run] for details.
 ///
 /// Runs the given [commandLine] which may contain a command and
 /// arguments to pass to the command.
@@ -160,7 +160,7 @@ Progress startFromArgs(
 /// [progress] is returned from the [run] method.
 /// If you don't passing in a [progress] then a [progress] is created
 /// and returned from the method, however as the [run] method is synchronous
-/// (like all DShell commands) you won't be able to process the output
+/// (like all DCli commands) you won't be able to process the output
 /// until the command completes.
 ///
 /// The returned [progress] gives you access to the exit code of the called

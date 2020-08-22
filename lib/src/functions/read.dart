@@ -2,13 +2,13 @@ import 'dart:convert';
 import 'dart:io';
 
 import '../settings.dart';
-import '../util/dshell_exception.dart';
+import '../util/dcli_exception.dart';
 import '../util/progress.dart';
 
 import '../util/stack_trace_impl.dart';
 import '../util/wait_for_ex.dart';
 
-import 'dshell_function.dart';
+import 'dcli_function.dart';
 import 'is.dart';
 
 /// Reads lines from the file at [path].
@@ -26,7 +26,7 @@ Progress read(String path, {String delim = '\n'}) =>
 /// Read lines from stdin
 Progress readStdin() => _Read()._readStdin();
 
-class _Read extends DShellFunction {
+class _Read extends DCliFunction {
   Progress read(String path, {String delim, Progress progress}) {
     var sourceFile = File(path);
 
@@ -70,13 +70,13 @@ class _Read extends DShellFunction {
 }
 
 /// Thrown when the [read] function encouters an error.
-class ReadException extends DShellFunctionException {
+class ReadException extends DCliFunctionException {
   /// Thrown when the [read] function encouters an error.
   ReadException(String reason, [StackTraceImpl stacktrace])
       : super(reason, stacktrace);
 
   @override
-  DShellException copyWith(StackTraceImpl stackTrace) {
+  DCliException copyWith(StackTraceImpl stackTrace) {
     return ReadException(message, stackTrace);
   }
 }

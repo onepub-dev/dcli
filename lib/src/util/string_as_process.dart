@@ -32,9 +32,9 @@ extension StringAsProcess on String {
   ///```
   ///
   /// Linux:
-  /// DShell performs glob (wildcard) expansion on command arguments if it contains any one
+  /// DCli performs glob (wildcard) expansion on command arguments if it contains any one
   /// of *, [ or ?  unless the argument is quoted.
-  /// DShell uses the dart package Glob (https://pub.dev/packages/glob) to do the glob expansion.
+  /// DCli uses the dart package Glob (https://pub.dev/packages/glob) to do the glob expansion.
   ///
   /// The following command will have the argument containing the wild card *.dart expanded to
   /// the list of files, in the current directory, that match the pattern *.dart.
@@ -75,7 +75,7 @@ extension StringAsProcess on String {
   /// command line appliation within an OS shell (e.g. bash).
   /// The application is run as a fully attached child process.
   ///
-  /// DShell performs Glob expansion on command arguments. See [run] for details.
+  /// DCli performs Glob expansion on command arguments. See [run] for details.
   ///
   /// Any output from the command is displayed on the console.
   ///
@@ -89,7 +89,7 @@ extension StringAsProcess on String {
   ///  ```dart
   ///  'wc "fred nurk.text"'.shell;
   ///```
-  /// DShell performs Glob expansion on command arguments. See [run] for details.
+  /// DCli performs Glob expansion on command arguments. See [run] for details.
   ///
   /// See [forEach] to capture output to stdout and stderr
   ///     [toList] to capture stdout and stderr to [List<String>]
@@ -102,7 +102,7 @@ extension StringAsProcess on String {
 
   /// Runs the String [this] as a command line application.
   ///
-  /// DShell performs Glob expansion on command arguments. See [run] for details.
+  /// DCli performs Glob expansion on command arguments. See [run] for details.
   ///
   /// Use [runInShell] if the command needs to be run inside
   /// an OS shell (e.g bash).
@@ -112,7 +112,7 @@ extension StringAsProcess on String {
   /// detached subprocess.
   ///
   /// You cannot process output from a detached process
-  /// and it will continuing running after the dshell process
+  /// and it will continuing running after the dcli process
   /// exits. The detached process is also detached from the console
   /// and as such no output from the process will be visible.
   ///
@@ -162,7 +162,7 @@ extension StringAsProcess on String {
   /// forEach runs the String [this] as a command line
   /// application.
   ///
-  /// DShell performs Glob expansion on command arguments. See [run] for details.
+  /// DCli performs Glob expansion on command arguments. See [run] for details.
   ///
   /// Output from the command can be captured by
   /// providing handlers for stdout and stderr.
@@ -199,7 +199,7 @@ extension StringAsProcess on String {
   /// returns any output written to stdout and stderr as
   /// a [List<String>].
   ///
-  /// DShell performs Glob expansion on command arguments. See [run] for details.
+  /// DCli performs Glob expansion on command arguments. See [run] for details.
   ///
   /// The [skipLines] argument tells [toList] to not return the first
   /// [skipLines] lines. This is useful if a command outputs a heading
@@ -254,7 +254,7 @@ extension StringAsProcess on String {
   ///
   /// EXPERIMENTAL: we may rework the data structures the parser returns.
   ///
-  /// DShell performs Glob expansion on command line arguments. See [run] for details.
+  /// DCli performs Glob expansion on command line arguments. See [run] for details.
   ///
   /// If [runInShell] is true (defaults to false) then the command will
   /// be run in a shell. This may be required if you are trying to run
@@ -289,7 +289,7 @@ extension StringAsProcess on String {
   /// a [String].
   /// Returns null if no lines are returned.
   ///
-  /// DShell performs Glob expansion on command arguments. See [run] for details.
+  /// DCli performs Glob expansion on command arguments. See [run] for details.
   ///
   /// e.g.
   /// ```
@@ -318,7 +318,7 @@ extension StringAsProcess on String {
   /// returns the last line written to stdout or stderr as
   /// a [String].
   ///
-  /// DShell performs Glob expansion on command arguments. See [run] for details.
+  /// DCli performs Glob expansion on command arguments. See [run] for details.
   ///
   /// e.g.
   /// ```
@@ -348,7 +348,7 @@ extension StringAsProcess on String {
   /// Allows you to chain mulitple processes by piping the output
   /// of the left hand process to the input of the right hand process.
   ///
-  /// DShell performs Glob expansion on command arguments. See [run] for details.
+  /// DCli performs Glob expansion on command arguments. See [run] for details.
   ///
   /// The following command calls:
   ///  - tail on syslog

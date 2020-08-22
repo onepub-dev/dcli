@@ -2,7 +2,7 @@
 import 'dart:io';
 
 import 'package:test/test.dart';
-import 'package:dshell/dshell.dart' hide equals;
+import 'package:dcli/dcli.dart' hide equals;
 
 import '../util/test_file_system.dart';
 

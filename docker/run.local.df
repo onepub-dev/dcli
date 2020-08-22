@@ -12,27 +12,27 @@ RUN apt -y install vim
 
 ENV rebuild=1
 RUN apt-get install --no-install-recommends -y wget ca-certificates gnupg2
-RUN wget https://github.com/bsutton/dshell/raw/master/bin/linux/dshell_install
-RUN chmod +x dshell_install
-RUN ./dshell_install
+RUN wget https://github.com/bsutton/dcli/raw/master/bin/linux/dcli_install
+RUN chmod +x dcli_install
+RUN ./dcli_install
 ENV PATH="${PATH}:/usr/lib/dart/bin:/root/.pub-cache/bin"
 
 
-# Add the entire dshell project so we can run from the local filesystem
-ADD . /dshell
+# Add the entire dcli project so we can run from the local filesystem
+ADD . /dcli
 
-This doesn't work as we want to always have the 'live' copy of dshell we are editing
+This doesn't work as we want to always have the 'live' copy of dcli we are editing
 But we want to be able to mount any directory for testing.
 The option to mount any directory might be a problem.
-We may just need a dcli version that contains dshell but then the global version does this.
+We may just need a dcli version that contains dcli but then the global version does this.
 
-1) we have published a dshell docker container that lets you dshell dev using
+1) we have published a dcli docker container that lets you dcli dev using
   the released version
 2) we need a version that lets you run scripts against the dev tree but only from the dev tree.
 3) need a version that runs unit tests (I think) as this might allow use to get the 
     tests passing on github.
 4) we need split/merge to work.
-RUN pub global activate --source path /dshell 
+RUN pub global activate --source path /dcli 
 
 WORKDIR /home
 

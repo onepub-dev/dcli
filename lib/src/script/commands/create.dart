@@ -1,7 +1,7 @@
 import 'dart:io';
 import 'package:path/path.dart' as p;
 
-import '../../../dshell.dart';
+import '../../../dcli.dart';
 
 import '../../functions/is.dart';
 import '../command_line_runner.dart';
@@ -92,7 +92,7 @@ class CreateCommand extends Command {
     return Script.fromFile(arguments[0]);
   }
 
-  /// Checks if the templates directory exists and .dshell and if not creates
+  /// Checks if the templates directory exists and .dcli and if not creates
   /// the directory and copies the default scripts in.
   void _initTemplates() {
     if (!exists(Settings().templatePath)) {

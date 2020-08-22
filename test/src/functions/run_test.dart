@@ -1,7 +1,7 @@
 @Timeout(Duration(minutes: 5))
-import 'package:dshell/src/util/dshell_paths.dart';
+import 'package:dcli/src/util/dcli_paths.dart';
 import 'package:test/test.dart' as t;
-import 'package:dshell/dshell.dart';
+import 'package:dcli/dcli.dart';
 import 'package:test/test.dart';
 
 import '../util/test_file_system.dart';
@@ -87,12 +87,12 @@ List<String> run_child(String childScript) {
   var runChildScript = truepath(join('test', 'test_scripts', 'run_child.dart'));
 
   // make certain our test script will run
-  '${DShellPaths().dshellName} -v clean $childScript'.run;
-  '${DShellPaths().dshellName} -v clean $runChildScript'.run;
+  '${DCliPaths().dcliName} -v clean $childScript'.run;
+  '${DCliPaths().dcliName} -v clean $runChildScript'.run;
 
   // run a script that uses '.run' and capture its output to prove
   // that .run works.
-  var results = '${DShellPaths().dshellName} $runChildScript $childScript'
+  var results = '${DCliPaths().dcliName} $runChildScript $childScript'
       .toList(nothrow: true);
 
   return results;

@@ -1,6 +1,6 @@
 import 'dart:io';
 
-import '../../dshell.dart';
+import '../../dcli.dart';
 import 'shell.dart';
 
 mixin ShellMixin implements Shell {

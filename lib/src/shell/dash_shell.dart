@@ -3,7 +3,7 @@ import 'posix_mixin.dart';
 import 'shell_mixin.dart';
 
 /// Provides a number of helper functions
-/// when dshell needs to interact with the Bash shell.
+/// when dcli needs to interact with the Bash shell.
 
 class DashShell with ShellMixin, PosixMixin {
   /// Name of the shell

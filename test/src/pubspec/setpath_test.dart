@@ -1,7 +1,7 @@
 @Timeout(Duration(minutes: 5))
 import 'dart:io';
-import 'package:dshell/dshell.dart';
-import 'package:dshell/src/util/pub_cache.dart';
+import 'package:dcli/dcli.dart';
+import 'package:dcli/src/util/pub_cache.dart';
 import 'package:path/path.dart';
 import 'package:test/test.dart';
 
@@ -12,7 +12,7 @@ void main() {
     /// add the dartsdk path to the windows path.
     Env().pathPutIfAbsent(join(dartToolDir, 'bin'));
     Env().pathPutIfAbsent(PubCache().binPath);
-    Env().pathPutIfAbsent(Settings().dshellBinPath);
+    Env().pathPutIfAbsent(Settings().dcliBinPath);
 
     print(PATH);
 
@@ -25,7 +25,7 @@ void main() {
     /// add the dartsdk path to the windows path.
     Env().pathPutIfAbsent(join(dartToolDir, 'bin'));
     Env().pathPutIfAbsent(PubCache().binPath);
-    Env().pathPutIfAbsent(Settings().dshellBinPath);
+    Env().pathPutIfAbsent(Settings().dcliBinPath);
 
     print(PATH);
   }, skip: !Platform.isWindows);
@@ -36,7 +36,7 @@ void main() {
     /// add the dartsdk path to the windows path.
     Env().pathPutIfAbsent(join(dartToolDir, 'bin'));
     Env().pathPutIfAbsent(PubCache().binPath);
-    Env().pathPutIfAbsent(Settings().dshellBinPath);
+    Env().pathPutIfAbsent(Settings().dcliBinPath);
 
     print(PATH);
   }, skip: !Platform.isLinux);

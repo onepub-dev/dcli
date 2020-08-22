@@ -1,6 +1,6 @@
 import 'dart:io';
 
-import '../../../dshell.dart';
+import '../../../dcli.dart';
 import '../../pubspec/global_dependencies.dart';
 import '../../util/completion.dart';
 import '../../util/format.dart';
@@ -32,10 +32,10 @@ class DoctorCommand extends Command {
     }
     if (subarguments.length > 1) {
       throw InvalidArguments(
-          "'dshell doctor' takes zero or one arguments. Found $subarguments");
+          "'dcli doctor' takes zero or one arguments. Found $subarguments");
     }
 
-    _colprint(['Dshell version', '${Settings().version}']);
+    _colprint(['DCli version', '${Settings().version}']);
     print('');
 
     printPlatform();
@@ -74,7 +74,7 @@ class DoctorCommand extends Command {
   }
 
   void printDependencies() {
-    print(join('.dshell', GlobalDependencies.filename));
+    print(join('.dcli', GlobalDependencies.filename));
     var gd = GlobalDependencies();
     for (var d in gd.dependencies) {
       _colprint(['  ${d.name}', '${d.rehydrate()}']);
@@ -84,11 +84,11 @@ class DoctorCommand extends Command {
   void printPermissions() {
     print('Permissions');
     _showPermissions('HOME', HOME);
-    _showPermissions('.dshell', Settings().dshellPath);
-    _showPermissions('cache', Settings().dshellCachePath);
+    _showPermissions('.dcli', Settings().dcliPath);
+    _showPermissions('cache', Settings().dcliCachePath);
 
     _showPermissions(GlobalDependencies.filename,
-        join(Settings().dshellPath, GlobalDependencies.filename));
+        join(Settings().dcliPath, GlobalDependencies.filename));
 
     _showPermissions('templates', Settings().templatePath);
   }
@@ -127,10 +127,10 @@ class DoctorCommand extends Command {
   }
 
   void printExePaths() {
-    var dshellPath = which('dshell').firstLine;
+    var dcliPath = which('dcli').firstLine;
     _colprint([
-      'dshell path',
-      '${dshellPath == null ? 'Not found' : privatePath(dshellPath)}'
+      'dcli path',
+      '${dcliPath == null ? 'Not found' : privatePath(dcliPath)}'
     ]);
     _colprint(['dart exe path', '${privatePath(DartSdk().dartExePath)}']);
     var dartPath = which(DartSdk.dartExeName, first: true).firstLine;
@@ -188,7 +188,7 @@ class DoctorCommand extends Command {
 
   @override
   String description() =>
-      """Running 'dshell doctor' provides diagnostic information on your install 
+      """Running 'dcli doctor' provides diagnostic information on your install 
    and optionally a specific script.""";
 
   @override
@@ -249,7 +249,7 @@ class _Owner {
       var lsLine = 'ls -alFd $path'.firstLine;
 
       if (lsLine == null) {
-        throw DShellException('No file/directory matched ${absolute(path)}');
+        throw DCliException('No file/directory matched ${absolute(path)}');
       }
 
       var parts = lsLine.split(' ');

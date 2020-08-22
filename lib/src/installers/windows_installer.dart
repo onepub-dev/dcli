@@ -1,4 +1,4 @@
-import '../../dshell.dart';
+import '../../dcli.dart';
 import '../functions/env.dart';
 import '../script/dart_sdk.dart';
 import '../util/pub_cache.dart';
@@ -7,7 +7,7 @@ import '../util/pub_cache.dart';
 /// Installs dart on an apt base system.abstract
 ///
 
-class WindowsDShellInstaller {
+class WindowsDCliInstaller {
   /// returns true if it needed to install dart.
   bool install() {
     var installedDart = false;
@@ -23,7 +23,7 @@ class WindowsDShellInstaller {
       /// add the dartsdk path to the windows path.
       Env().pathPutIfAbsent(join(dartToolDir, 'bin'));
       Env().pathPutIfAbsent(PubCache().binPath);
-      Env().pathPutIfAbsent(Settings().dshellBinPath);
+      Env().pathPutIfAbsent(Settings().dcliBinPath);
 
       'setx PATH "${PATH.join(Env().pathDelimiter)}"'.run;
 
@@ -35,7 +35,7 @@ class WindowsDShellInstaller {
       Settings().verbose(
           "Found dart at: ${which('dart').firstLine} and as such will not install dart.");
     }
-    '${DartSdk().pubPath} global activate dshell'.run;
+    '${DartSdk().pubPath} global activate dcli'.run;
 
     return installedDart;
   }
@@ -44,7 +44,7 @@ class WindowsDShellInstaller {
 // chocolaty for windows installs.
 // if (which('choco').firstLine == null) {
 //         printerr(
-//             "DShell requires the 'Chocolatey' package manager to be installed to install dart");
+//             "DCli requires the 'Chocolatey' package manager to be installed to install dart");
 //         printerr('Please install Chocolatey and then try again');
 //         throw InstallException('The Chocolatey package manager was not found');
 //       }

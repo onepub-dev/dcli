@@ -1,6 +1,6 @@
 import 'dart:io';
 
-import '../../dshell.dart';
+import '../../dcli.dart';
 import 'ash_shell.dart';
 import 'bash_shell.dart';
 import 'cmd_shell.dart';
@@ -20,10 +20,10 @@ import 'zshell.dart';
 /// Provides some conveinence funtions to get access to
 /// details about the system shell (e.g. bash) that we were run from.
 ///
-/// Note: when you start up dshell from the cli there are three processes
+/// Note: when you start up dcli from the cli there are three processes
 /// involved:
 ///
-/// cli - the cli you started dshell from. This is the shell we will return
+/// cli - the cli you started dcli from. This is the shell we will return
 /// sh - the shebang (#!) spawns a [sh] shell which dart is run under.
 /// dart - the dart process
 ///
@@ -47,9 +47,9 @@ class ShellDetection {
   factory ShellDetection() => _shell;
 
   /// Attempts to identify the shell that
-  /// DShell was run under.
+  /// DCli was run under.
   /// Ignores the 'sh' instances used by #! to start
-  /// a DShell script.
+  /// a DCli script.
   ///
   /// We we can't find a known shell we will return
   /// [UnknownShell].

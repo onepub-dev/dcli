@@ -1,6 +1,6 @@
-import '../../dshell.dart';
+import '../../dcli.dart';
 
-/// Utility methods to aid the dshell_completion app.
+/// Utility methods to aid the dcli_completion app.
 ///
 
 List<String> completionExpandScripts(String word) {

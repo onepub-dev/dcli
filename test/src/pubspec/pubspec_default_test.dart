@@ -1,11 +1,11 @@
 @t.Timeout(Duration(seconds: 600))
-import 'package:dshell/dshell.dart';
-import 'package:dshell/src/pubspec/global_dependencies.dart';
-import 'package:dshell/src/pubspec/pubspec.dart';
-import 'package:dshell/src/script/dependency.dart';
-import 'package:dshell/src/script/project_cache.dart';
-import 'package:dshell/src/script/script.dart';
-import 'package:dshell/src/script/virtual_project.dart';
+import 'package:dcli/dcli.dart';
+import 'package:dcli/src/pubspec/global_dependencies.dart';
+import 'package:dcli/src/pubspec/pubspec.dart';
+import 'package:dcli/src/script/dependency.dart';
+import 'package:dcli/src/script/project_cache.dart';
+import 'package:dcli/src/script/script.dart';
+import 'package:dcli/src/script/virtual_project.dart';
 import 'package:path/path.dart' as p;
 import 'package:test/test.dart' as t;
 
@@ -29,7 +29,7 @@ dependencies:
   var overrides = '''name: test
 version: 1.0.0
 dependencies:
-  dshell: ^2.0.0
+  dcli: ^2.0.0
   args: ^2.0.1
   collection: ^1.14.12
   file_utils: ^0.1.3
@@ -84,7 +84,7 @@ $overrides
         delete(pubSpecScriptPath);
       }
       var dependencies = <Dependency>[];
-      dependencies.add(Dependency.fromHosted('dshell', '^2.0.0'));
+      dependencies.add(Dependency.fromHosted('dcli', '^2.0.0'));
       dependencies.add(Dependency.fromHosted('args', '^2.0.1'));
       dependencies.add(Dependency.fromHosted('path', '^2.0.2'));
       dependencies.add(Dependency.fromHosted('collection', '^1.14.12'));
@@ -126,7 +126,7 @@ $overrides
       file.saveToFile(scriptPath);
 
       var dependencies = <Dependency>[];
-      dependencies.add(Dependency.fromHosted('dshell', '^2.0.0'));
+      dependencies.add(Dependency.fromHosted('dcli', '^2.0.0'));
       dependencies.add(Dependency.fromHosted('args', '^2.0.1'));
       dependencies.add(Dependency.fromHosted('path', '^2.0.2'));
       dependencies.add(Dependency.fromHosted('collection', '^1.14.12'));
@@ -147,7 +147,7 @@ $overrides
       file.saveToFile(scriptPath);
 
       var dependencies = <Dependency>[];
-      dependencies.add(Dependency.fromHosted('dshell', '^2.0.0'));
+      dependencies.add(Dependency.fromHosted('dcli', '^2.0.0'));
       dependencies.add(Dependency.fromHosted('args', '^2.0.1'));
       dependencies.add(Dependency.fromHosted('path', '^2.0.2'));
       dependencies.add(Dependency.fromHosted('collection', '^1.14.12'));
@@ -168,12 +168,12 @@ void runTest(TestFileSystem fs, String annotation, String main,
     delete(scriptPath);
   }
 
-  if (exists(Settings().dshellPath)) {
-    deleteDir(Settings().dshellPath, recursive: true);
+  if (exists(Settings().dcliPath)) {
+    deleteDir(Settings().dcliPath, recursive: true);
   }
 
-  if (!exists(Settings().dshellPath)) {
-    createDir(Settings().dshellPath);
+  if (!exists(Settings().dcliPath)) {
+    createDir(Settings().dcliPath);
   }
   GlobalDependencies.createDefault();
 

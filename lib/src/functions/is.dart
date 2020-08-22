@@ -2,8 +2,8 @@ import 'dart:io';
 
 import 'package:meta/meta.dart';
 
-import '../../dshell.dart';
-import '../util/dshell_exception.dart';
+import '../../dcli.dart';
+import '../util/dcli_exception.dart';
 import '../util/stack_trace_impl.dart';
 import 'function.dart';
 
@@ -54,14 +54,14 @@ bool exists(String path, {bool followLinks = true}) =>
 ///
 /// [path[ can be either a file or a directory.
 ///
-/// Throws a [DShellException] with a nested
+/// Throws a [DCliException] with a nested
 /// [FileSystemException] if the file does not
 /// exist or the operation fails.
 DateTime lastModified(String path) {
   try {
     return File(path).lastModifiedSync();
   } on FileSystemException catch (e) {
-    throw DShellException.from(e, StackTraceImpl());
+    throw DCliException.from(e, StackTraceImpl());
   }
 }
 
@@ -69,7 +69,7 @@ DateTime lastModified(String path) {
 ///
 /// [path] can be either a file or a directory.
 ///
-/// Throws a [DShellException] with a nested
+/// Throws a [DCliException] with a nested
 /// [FileSystemException] if the file does not
 /// exist or the operation fails.
 
@@ -77,7 +77,7 @@ void setLastModifed(String path, DateTime lastModified) {
   try {
     File(path).setLastModifiedSync(lastModified);
   } on FileSystemException catch (e) {
-    throw DShellException.from(e, StackTraceImpl());
+    throw DCliException.from(e, StackTraceImpl());
   }
 }
 
@@ -93,7 +93,7 @@ bool isReadable(String path) => _Is().isReadable(path);
 /// executable by the user that owns this process
 bool isExecutable(String path) => _Is().isExecutable(path);
 
-class _Is extends DShellFunction {
+class _Is extends DCliFunction {
   bool isFile(String path) {
     var fromType = FileSystemEntity.typeSync(path);
     return (fromType == FileSystemEntityType.file);

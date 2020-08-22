@@ -3,11 +3,11 @@ import 'dart:io';
 
 import 'package:validators/validators.dart';
 
-import '../../dshell.dart';
+import '../../dcli.dart';
 import '../settings.dart';
 import '../util/wait_for_ex.dart';
 
-import 'dshell_function.dart';
+import 'dcli_function.dart';
 import 'echo.dart';
 
 ///
@@ -61,7 +61,7 @@ import 'echo.dart';
 /// If the [validator] detects an invalid input then you MUST
 /// throw [AskValidatorException(error)]. The error will
 /// be displayed on the console and the user reprompted.
-/// You can color code the error using any of the dshell
+/// You can color code the error using any of the dcli
 /// color functions.  By default all input is considered valid.
 ///
 ///```dart
@@ -118,7 +118,7 @@ bool confirm(String prompt) {
 }
 
 /// Class for [ask] and related code.
-class Ask extends DShellFunction {
+class Ask extends DCliFunction {
   static const int _backspace = 127;
   static const int _space = 32;
   static const int _ = 8;
@@ -260,7 +260,7 @@ class Ask extends DShellFunction {
 }
 
 /// Thrown when an [Askvalidator] detects an invalid input.
-class AskValidatorException extends DShellException {
+class AskValidatorException extends DCliException {
   /// validator with a [message] indicating the error.
   AskValidatorException(String message) : super(message);
 }

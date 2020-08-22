@@ -1,4 +1,4 @@
-import '../../../dshell.dart';
+import '../../../dcli.dart';
 import '../../settings.dart';
 import '../../util/ansi_color.dart';
 import '../../util/completion.dart';
@@ -105,7 +105,7 @@ class CompileCommand extends Command {
       /// If no exe then the compile failed.
       if (flagSet.isSet(InstallFlag()) && exists(exe)) {
         var install = true;
-        var to = join(Settings().dshellBinPath, script.basename);
+        var to = join(Settings().dcliBinPath, script.basename);
         if (exists(to) && !flagSet.isSet(OverWriteFlag())) {
           var overwrite = confirm('Overwrite the existing exe?');
           if (!overwrite) {
@@ -166,7 +166,7 @@ class NoCleanFlag extends Flag {
 
   @override
   String description() {
-    return '''Stops the compile from running 'dshell clean' before compiling.
+    return '''Stops the compile from running 'dcli clean' before compiling.
       Use the noclean option to speed up compilation when you know your project structure is up to date.''';
   }
 }
@@ -183,7 +183,7 @@ class InstallFlag extends Flag {
 
   @override
   String description() {
-    return 'Installs the compiled script into your path ${Settings().dshellBinPath}';
+    return 'Installs the compiled script into your path ${Settings().dcliBinPath}';
   }
 }
 
@@ -199,6 +199,6 @@ class OverWriteFlag extends Flag {
 
   @override
   String description() {
-    return 'If the installed executable already exists in ${Settings().dshellBinPath} then it will overwritten.';
+    return 'If the installed executable already exists in ${Settings().dcliBinPath} then it will overwritten.';
   }
 }

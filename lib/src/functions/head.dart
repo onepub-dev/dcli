@@ -18,7 +18,7 @@ import 'is.dart';
 ///
 Progress head(String path, int lines) => _Head().head(path, lines);
 
-class _Head extends DShellFunction {
+class _Head extends DCliFunction {
   Progress head(String path, int lines, {Progress progress}) {
     Settings().verbose('head ${absolute(path)} lines: $lines');
 

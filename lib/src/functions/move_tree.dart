@@ -1,6 +1,6 @@
 import 'package:path/path.dart';
 
-import '../../dshell.dart';
+import '../../dcli.dart';
 import '../settings.dart';
 import 'function.dart';
 
@@ -74,7 +74,7 @@ void moveTree(String from, String to,
       filter: filter,
     );
 
-class _MoveTree extends DShellFunction {
+class _MoveTree extends DCliFunction {
   void moveTree(
     String from,
     String to, {

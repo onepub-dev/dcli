@@ -32,7 +32,7 @@ void cd(String path) => CD().cd(path);
 
 /// Class that implements the [cd] function.
 @Deprecated('Use join')
-class CD extends DShellFunction {
+class CD extends DCliFunction {
   /// implements the [cd] (change dir) function.
   void cd(String path) {
     Settings().verbose('cd $path -> ${p.canonicalize(path)}');

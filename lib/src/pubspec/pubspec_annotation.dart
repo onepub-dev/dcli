@@ -5,7 +5,7 @@ import 'package:pub_semver/pub_semver.dart';
 
 import '../script/dependency.dart';
 import '../script/script.dart';
-import '../util/dshell_exception.dart';
+import '../util/dcli_exception.dart';
 import '../util/wait_for_ex.dart';
 import 'pubspec.dart';
 
@@ -68,7 +68,7 @@ class PubSpecAnnotation implements PubSpec // with DependenciesMixin
     /// /*
     /// name: script_name
     ///   dependencies:
-    ///      dshell: ^1.0.0
+    ///      dcli: ^1.0.0
     /// */
     ///
 
@@ -178,7 +178,7 @@ class PubSpecAnnotation implements PubSpec // with DependenciesMixin
 }
 
 /// Throw if we encounter an error reading an annotation.
-class PubSpecAnnotationException extends DShellException {
+class PubSpecAnnotationException extends DCliException {
   /// Throw if we encounter an error reading an annotation.
   PubSpecAnnotationException(String message) : super(message);
 }

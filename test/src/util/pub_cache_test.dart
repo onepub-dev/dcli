@@ -1,7 +1,7 @@
 @Timeout(Duration(minutes: 5))
 import 'dart:io';
-import 'package:dshell/dshell.dart' hide equals;
-import 'package:dshell/src/util/pub_cache.dart';
+import 'package:dcli/dcli.dart' hide equals;
+import 'package:dcli/src/util/pub_cache.dart';
 import 'package:test/test.dart';
 
 void main() {

@@ -2,9 +2,9 @@ import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
 import 'package:uuid/uuid.dart';
-import '../../dshell.dart';
+import '../../dcli.dart';
 
-import 'dshell_exception.dart';
+import 'dcli_exception.dart';
 import 'runnable_process.dart';
 import 'stack_trace_impl.dart';
 import 'wait_for_ex.dart';
@@ -139,10 +139,10 @@ class FileSync {
     waitForEx(done.future);
 
     if (exception != null) {
-      if (exception is DShellException) {
+      if (exception is DCliException) {
         // not an exception, the user just doesn't want to continue.
       } else {
-        throw DShellException.from(exception, stackTrace);
+        throw DCliException.from(exception, stackTrace);
       }
     }
   }

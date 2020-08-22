@@ -25,7 +25,7 @@ import 'is.dart';
 void copy(String from, String to, {bool overwrite = false}) =>
     _Copy().copy(from, to, overwrite: overwrite);
 
-class _Copy extends DShellFunction {
+class _Copy extends DCliFunction {
   void copy(String from, String to, {bool overwrite = false}) {
     if (isDirectory(to)) {
       to = join(to, basename(from));

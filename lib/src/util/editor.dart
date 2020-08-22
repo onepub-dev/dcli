@@ -1,6 +1,6 @@
 import 'dart:io';
 
-import '../../dshell.dart';
+import '../../dcli.dart';
 
 /// Launches the systems default cli editor on Linux and MacOS
 /// using the EDITOR environment variable.

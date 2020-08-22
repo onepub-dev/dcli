@@ -1,7 +1,7 @@
 import 'dart:io';
 import 'package:csv/csv.dart';
 import 'package:meta/meta.dart';
-import '../../dshell.dart';
+import '../../dcli.dart';
 import 'runnable_process.dart';
 
 ///

@@ -1,9 +1,9 @@
-import 'package:dshell/dshell.dart';
+import 'package:dcli/dcli.dart';
 
-/// Wipes the entire HOME/.dshell directory tree.
+/// Wipes the entire HOME/.dcli directory tree.
 void wipe() {
-  var dshellPath = Settings().dshellPath;
-  if (exists(dshellPath)) {
-    deleteDir(dshellPath, recursive: true);
+  var dcliPath = Settings().dcliPath;
+  if (exists(dcliPath)) {
+    deleteDir(dcliPath, recursive: true);
   }
 }

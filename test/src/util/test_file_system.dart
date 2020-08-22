@@ -3,19 +3,19 @@ import 'dart:developer';
 import 'dart:io';
 import 'dart:isolate';
 
-import 'package:dshell/dshell.dart';
-import 'package:dshell/src/functions/env.dart';
-import 'package:dshell/src/pubspec/global_dependencies.dart';
-import 'package:dshell/src/util/dshell_paths.dart';
+import 'package:dcli/dcli.dart';
+import 'package:dcli/src/functions/env.dart';
+import 'package:dcli/src/pubspec/global_dependencies.dart';
+import 'package:dcli/src/util/dcli_paths.dart';
 import 'package:path/path.dart';
-import 'package:dshell/src/script/entry_point.dart';
-import 'package:dshell/src/script/script.dart';
-import 'package:dshell/src/script/virtual_project.dart';
-import 'package:dshell/src/util/named_lock.dart';
+import 'package:dcli/src/script/entry_point.dart';
+import 'package:dcli/src/script/script.dart';
+import 'package:dcli/src/script/virtual_project.dart';
+import 'package:dcli/src/util/named_lock.dart';
 import 'package:test/test.dart';
 import 'package:uuid/uuid.dart';
 
-import 'package:dshell/src/util/pub_cache.dart';
+import 'package:dcli/src/util/pub_cache.dart';
 
 class TestFileSystem {
   String uniquePath;
@@ -27,7 +27,7 @@ class TestFileSystem {
 
   static String _testRoot;
 
-  /// directory under .dshell which we used to store compiled
+  /// directory under .dcli which we used to store compiled
   /// tests scripts that we need to add to the TestFileSystems
   /// path.
   static const String _testBin = 'test_bin';
@@ -59,7 +59,7 @@ class TestFileSystem {
   /// [HOME] to ensure that you code runs within the 'virtuallised'
   /// files system.
   ///
-  /// Each virtualised file system has its own copy of dshell installed.
+  /// Each virtualised file system has its own copy of dcli installed.
   ///
   ///
   /// Any test which is non-desctructive
@@ -68,11 +68,11 @@ class TestFileSystem {
   ///
   /// Using a common file system greatly speeds
   /// up testing as we don't need to install
-  /// a unique copy of dshell for each test.
+  /// a unique copy of dcli for each test.
   ///
   /// Set [useCommonPath] to [false] to run your own
-  /// copy of dshell. This should be used if you are testing
-  /// dshell's install.
+  /// copy of dcli. This should be used if you are testing
+  /// dcli's install.
   ///
   factory TestFileSystem({bool useCommonPath = true}) {
     TestFileSystem use;
@@ -87,7 +87,7 @@ class TestFileSystem {
   }
 
   TestFileSystem._internal() {
-    _testRoot = join(rootPath, 'tmp', 'dshell');
+    _testRoot = join(rootPath, 'tmp', 'dcli');
     uniquePath = Uuid().v4();
 
     var isolateID = Service.getIsolateID(Isolate.current);
@@ -115,7 +115,7 @@ class TestFileSystem {
 
           var isolateID = Service.getIsolateID(Isolate.current);
           print(green('Using TestFileSystem $root for Isolate: $isolateID'));
-          print('Reset dshellPath: ${Settings().dshellPath}');
+          print('Reset dcliPath: ${Settings().dcliPath}');
 
           initFS(home);
 
@@ -131,7 +131,7 @@ class TestFileSystem {
           setEnv('PATH', path);
         }
       });
-    } on DShellException catch (e) {
+    } on DCliException catch (e) {
       print(e.toString());
       e.printStackTrace();
       rethrow;
@@ -143,7 +143,7 @@ class TestFileSystem {
       initialised = true;
       copyPubCache(originalHome, HOME);
       buildTestFileSystem();
-      installDshell();
+      installDCli();
       installCrossPlatformTestScripts(originalHome);
     }
   }
@@ -227,24 +227,23 @@ class TestFileSystem {
     }
   }
 
-  void installDshell() {
+  void installDCli() {
     /// run pub get and only display errors.
     '${DartSdk.pubExeName} global activate --source path $pwd'.start(
         progress: Progress((line) => null, stderr: (line) => print(line)));
 
     EntryPoint().process(['install', '--nodart', '--quiet']);
 
-    /// rewrite dependencies.yaml so that the dshell path points
+    /// rewrite dependencies.yaml so that the dcli path points
     /// to the dev build directory
-    var dependencyFile =
-        join(Settings().dshellPath, GlobalDependencies.filename);
+    var dependencyFile = join(Settings().dcliPath, GlobalDependencies.filename);
     var lines = read(dependencyFile).toList();
 
     var newContent = <String>[];
 
     for (var line in lines) {
-      if (line.trim().startsWith('dshell')) {
-        newContent.add('  dshell:');
+      if (line.trim().startsWith('dcli')) {
+        newContent.add('  dcli:');
         newContent.add('    path: $pwd');
       } else {
         newContent.add(line);
@@ -261,13 +260,13 @@ class TestFileSystem {
   void rebuildPath() {
     var newPath = <String>[];
 
-    // remove .pub-cache and .dshell... and replace with the test FS ones
+    // remove .pub-cache and .dcli... and replace with the test FS ones
 
     if (PATH == null || PATH.isEmpty) {
       print(red('PATH is empty'));
     }
     for (var path in PATH) {
-      if (path.contains(PubCache().path) || path.contains('.dshell')) {
+      if (path.contains(PubCache().path) || path.contains('.dcli')) {
         continue;
       }
 
@@ -275,7 +274,7 @@ class TestFileSystem {
     }
 
     newPath.add('${join(root, PubCache().binPath)}');
-    newPath.add('${join(root, '.dshell', 'bin')}');
+    newPath.add('${join(root, '.dcli', 'bin')}');
 
     setEnv('PATH', newPath.join(Env().pathDelimiter));
   }
@@ -306,7 +305,7 @@ class TestFileSystem {
   void installCrossPlatformTestScripts(String originalHome) {
     var required = ['head', 'tail', 'ls', 'touch'];
 
-    var testbinPath = join(originalHome, '.dshell', _testBin);
+    var testbinPath = join(originalHome, '.dcli', _testBin);
 
     if (!exists(testbinPath)) {
       createDir(testbinPath, recursive: true);
@@ -314,22 +313,20 @@ class TestFileSystem {
 
     for (var command in required) {
       if (exists(join(testbinPath, command))) {
-        // copy the existing command into the testzones .dshell/bin path
-        copy(join(testbinPath, command),
-            join(Settings().dshellBinPath, command));
+        // copy the existing command into the testzones .dcli/bin path
+        copy(join(testbinPath, command), join(Settings().dcliBinPath, command));
       } else {
         /// compile and install the command
-        '${DShellPaths().dshellName} compile -i test/test_scripts/$command.dart'
+        '${DCliPaths().dcliName} compile -i test/test_scripts/$command.dart'
             .run;
-        // copy it back to the dshell testbin so the next unit
+        // copy it back to the dcli testbin so the next unit
         // test doesn't have to compile it.
-        copy(join(Settings().dshellBinPath, command),
-            join(testbinPath, command));
+        copy(join(Settings().dcliBinPath, command), join(testbinPath, command));
       }
     }
   }
 }
 
-class TestFileSystemException extends DShellException {
+class TestFileSystemException extends DCliException {
   TestFileSystemException(String message) : super(message);
 }

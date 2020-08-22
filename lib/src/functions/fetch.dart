@@ -5,7 +5,7 @@ import 'package:meta/meta.dart';
 import 'package:pedantic/pedantic.dart';
 
 import '../settings.dart';
-import '../util/dshell_exception.dart';
+import '../util/dcli_exception.dart';
 import '../util/file_system.dart';
 import '../util/wait_for_ex.dart';
 import 'function.dart';
@@ -71,7 +71,7 @@ void fetch(
 void fetchMultiple({@required List<FetchUrl> urls}) =>
     _Fetch().fetchMultiple(urls: urls);
 
-class _Fetch extends DShellFunction {
+class _Fetch extends DCliFunction {
   void fetch({String url, String saveToPath, OnFetchProgress onProgress}) {
     waitForEx<void>(download(
         FetchUrl(url: url, saveToPath: saveToPath, onProgress: onProgress)));
@@ -87,7 +87,7 @@ class _Fetch extends DShellFunction {
     try {
       /// wait for all downloads to complete.
       waitForEx<void>(Future.wait(futures));
-    } on DShellException catch (e, st) {
+    } on DCliException catch (e, st) {
       print(st);
     }
   }
@@ -284,7 +284,7 @@ class FetchProgress {
 }
 
 /// Throw when an error occurs fetching a resource.
-class FetchException extends DShellException {
+class FetchException extends DCliException {
   /// ctor
   FetchException(String message) : super(message);
 }

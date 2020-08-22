@@ -1,6 +1,6 @@
 import 'package:meta/meta.dart';
 
-import '../../dshell.dart';
+import '../../dcli.dart';
 import '../settings.dart';
 
 /// helper flass for manageing flags.

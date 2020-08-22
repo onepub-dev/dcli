@@ -1,6 +1,6 @@
 @Timeout(Duration(seconds: 600))
-import 'package:dshell/dshell.dart' hide equals;
-import 'package:dshell/src/script/dart_sdk.dart';
+import 'package:dcli/dcli.dart' hide equals;
+import 'package:dcli/src/script/dart_sdk.dart';
 import 'package:path/path.dart' hide equals;
 import 'package:test/test.dart';
 

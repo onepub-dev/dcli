@@ -1,6 +1,6 @@
 import 'dart:io';
 
-import '../../dshell.dart';
+import '../../dcli.dart';
 import '../installers/linux_installer.dart';
 import '../installers/macosx_installer.dart';
 
@@ -37,7 +37,7 @@ mixin PosixMixin {
     if (startFile != null) {
       if (exists(startFile)) {
         read(startFile).forEach((line) {
-          if (line.contains('dshell_complete')) {
+          if (line.contains('dcli_complete')) {
             completeInstalled = true;
           }
         });
@@ -74,9 +74,9 @@ mixin PosixMixin {
 
   bool install() {
     if (Platform.isLinux) {
-      return LinuxDShellInstaller().install();
+      return LinuxDCliInstaller().install();
     } else {
-      return MacOsxDshellInstaller().install();
+      return MacOsxDCliInstaller().install();
     }
   }
 

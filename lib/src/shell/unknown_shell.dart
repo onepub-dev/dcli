@@ -1,12 +1,12 @@
 import 'dart:io';
 
-import '../../dshell.dart';
+import '../../dcli.dart';
 import '../installers/linux_installer.dart';
 import '../installers/macosx_installer.dart';
 import '../installers/windows_installer.dart';
 import 'shell_mixin.dart';
 
-/// Used by dshell to interacte with the shell
+/// Used by dcli to interacte with the shell
 /// environment when we are unable to detect
 /// what shell is active.
 /// This may simply be the parent process of the
@@ -45,7 +45,7 @@ class UnknownShell with ShellMixin {
           createDir(macOSPathPath, recursive: true);
         }
         if (exists(macOSPathPath)) {
-          join(macOSPathPath, 'dshell').write(path);
+          join(macOSPathPath, 'dcli').write(path);
         }
         success = true;
       }
@@ -53,7 +53,7 @@ class UnknownShell with ShellMixin {
       catch (e) {
         // ignore write permission problems.
         printerr(red(
-            "Unable to add dshell/bin to path as we couldn't write to $macOSPathPath"));
+            "Unable to add dcli/bin to path as we couldn't write to $macOSPathPath"));
       }
     }
     return success;
@@ -76,7 +76,7 @@ class UnknownShell with ShellMixin {
       catch (e) {
         // ignore write permission problems.
         printerr(red(
-            "Unable to add dshell/bin to path as we couldn't write to $profile"));
+            "Unable to add dcli/bin to path as we couldn't write to $profile"));
       }
     }
     return success;
@@ -125,11 +125,11 @@ class UnknownShell with ShellMixin {
   @override
   bool install() {
     if (Platform.isLinux) {
-      return LinuxDShellInstaller().install();
+      return LinuxDCliInstaller().install();
     } else if (Platform.isWindows) {
-      return WindowsDShellInstaller().install();
+      return WindowsDCliInstaller().install();
     } else if (Platform.isMacOS) {
-      return MacOsxDshellInstaller().install();
+      return MacOsxDCliInstaller().install();
     } else {
       throw UnsupportedError('Unsupported OS. ${Platform.operatingSystem}');
     }

@@ -1,7 +1,7 @@
 import 'dart:io';
 import 'package:glob/glob.dart';
 import 'package:meta/meta.dart';
-import '../../dshell.dart';
+import '../../dcli.dart';
 import '../script/command_line_runner.dart';
 
 /// Class to parse a OS command, contained in a string, which we need to pass
@@ -145,7 +145,7 @@ class ParsedCliCommand {
   /// globs.
   /// Any argument that contains *, ? or [ will
   /// be expanded.
-  /// See https://github.com/bsutton/dshell/issues/56
+  /// See https://github.com/bsutton/dcli/issues/56
   ///
   List<String> expandGlobs(List<_QArg> qargs, String workingDirectory) {
     var expanded = <String>[];

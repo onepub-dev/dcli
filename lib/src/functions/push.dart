@@ -4,7 +4,7 @@ import 'package:path/path.dart' as p;
 
 import '../settings.dart';
 
-import 'dshell_function.dart';
+import 'dcli_function.dart';
 import 'is.dart';
 
 ///
@@ -28,7 +28,7 @@ import 'is.dart';
 void push(String path) => _Push().push(path);
 
 @Deprecated('Use join')
-class _Push extends DShellFunction {
+class _Push extends DCliFunction {
   /// Push the pwd onto the stack and change the
   /// current directory to [path].
   void push(String path) {
@@ -57,7 +57,7 @@ class _Push extends DShellFunction {
 
 // ignore:deprecated_member_use_from_same_package
 /// Thrown when the [push] function encouters an error.
-class PushException extends DShellFunctionException {
+class PushException extends DCliFunctionException {
   // ignore:deprecated_member_use_from_same_package
   /// Thrown when the [push] function encouters an error.
   PushException(String reason) : super(reason);

@@ -1,11 +1,11 @@
 @Timeout(Duration(seconds: 600))
-import 'package:dshell/dshell.dart' hide equals;
+import 'package:dcli/dcli.dart' hide equals;
 import 'package:test/test.dart';
 
 import '../util/test_file_system.dart';
 
 String baseURl =
-    'https://raw.githubusercontent.com/bsutton/dshell/master/test/src/functions/fetch_downloads';
+    'https://raw.githubusercontent.com/bsutton/dcli/master/test/src/functions/fetch_downloads';
 String testFile;
 void main() {
   group('Fetch Single', () {

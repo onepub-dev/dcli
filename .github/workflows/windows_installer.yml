@@ -20,13 +20,13 @@ jobs:
     - name: Pub get
       run: dart-sdk/bin/pub.bat get
     - name: Compile Installer
-      run: dart-sdk/bin/dart2native.bat bin/dshell_install.dart -o bin/windows/dshell_install.exe
+      run: dart-sdk/bin/dart2native.bat bin/dcli_install.dart -o bin/windows/dcli_install.exe
     - name: Commit results
       run: git config --global user.email "bsutton@noojee.com.au"
     - name: Git name
       run: git config --global user.name "bsutton"
     - name: Git Commit
-      run: git commit bin/windows/dshell_install.exe -m 'dart_install.exe for windows' || echo "exec has not changed"
+      run: git commit bin/windows/dcli_install.exe -m 'dart_install.exe for windows' || echo "exec has not changed"
     - name: Git Pull
       run: git pull
     - name: Git Push

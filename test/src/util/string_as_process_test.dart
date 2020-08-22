@@ -2,7 +2,7 @@
 import 'dart:async';
 
 import 'package:test/test.dart';
-import 'package:dshell/dshell.dart' hide equals;
+import 'package:dcli/dcli.dart' hide equals;
 
 void main() {
   test('start with progress', () {

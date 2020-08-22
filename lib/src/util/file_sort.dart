@@ -2,9 +2,9 @@ import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
 
-import 'package:dshell/dshell.dart';
+import 'package:dcli/dcli.dart';
 
-import '../../dshell.dart' as d;
+import '../../dcli.dart' as d;
 import '../script/command_line_runner.dart';
 import 'file_sync.dart';
 import 'wait_for_ex.dart';
@@ -23,7 +23,7 @@ import 'wait_for_ex.dart';
 /// Numeric
 /// Month
 ///
-/// FileSort is used by the DShell example apps
+/// FileSort is used by the DCli example apps
 /// dsort.dart to re-implement the standard cli
 /// tool 'sort'.
 ///

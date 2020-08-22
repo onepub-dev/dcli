@@ -1,8 +1,8 @@
-#! /usr/bin/env dshell
+#! /usr/bin/env dcli
 
 import 'dart:io';
 
-import 'package:dshell/dshell.dart';
+import 'package:dcli/dcli.dart';
 
 /// Used by unit tests as a cross platform version of touch
 void main(List<String> args) {

@@ -1,6 +1,6 @@
-import '../../dshell.dart';
+import '../../dcli.dart';
 
-import 'dshell_function.dart';
+import 'dcli_function.dart';
 
 ///
 /// Does an insitu replacement on the file located at [path].
@@ -24,7 +24,7 @@ import 'dshell_function.dart';
 void replace(String path, String existing, String replacement) =>
     _Replace().replace(path, existing, replacement);
 
-class _Replace extends DShellFunction {
+class _Replace extends DCliFunction {
   void replace(String path, String existing, String replacement) {
     var tmp = '$path.tmp';
     if (exists(tmp)) {

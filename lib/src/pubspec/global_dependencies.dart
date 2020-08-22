@@ -1,7 +1,7 @@
 import 'package:pubspec/pubspec.dart';
 import 'package:path/path.dart' as p;
 
-import '../../dshell.dart';
+import '../../dcli.dart';
 import '../functions/touch.dart';
 import '../script/dependency.dart';
 import '../script/my_yaml.dart';
@@ -9,7 +9,7 @@ import '../script/my_yaml.dart';
 import 'dependencies_mixin.dart';
 
 ///
-/// Global dependencies is a file located in ~/.dshell/dependencies.yaml
+/// Global dependencies is a file located in ~/.dcli/dependencies.yaml
 /// that contains a 'dependencies' section from a pubsec.yaml file.abstract
 ///
 /// The global dependencies allows a user to inject a standard set
@@ -17,7 +17,7 @@ import 'dependencies_mixin.dart';
 ///
 ///
 class GlobalDependencies with DependenciesMixin {
-  /// name of the file we use to store the dshell global dependencies.
+  /// name of the file we use to store the dcli global dependencies.
   static const filename = 'dependencies.yaml';
   MyYaml _yaml;
 
@@ -42,7 +42,7 @@ class GlobalDependencies with DependenciesMixin {
   }
 
   /// path to the global dependencies file.
-  static String get path => p.join(Settings().dshellPath, filename);
+  static String get path => p.join(Settings().dcliPath, filename);
 
   @override
   MyYaml get yaml => _yaml;
@@ -63,7 +63,7 @@ class GlobalDependencies with DependenciesMixin {
   /// global dependencies will be initialised with.
   static List<Dependency> get defaultDependencies {
     return [
-      Dependency.fromHosted('dshell', '^1.0.0'),
+      Dependency.fromHosted('dcli', '^1.0.0'),
       Dependency.fromHosted('args', '^1.5.2'),
       Dependency.fromHosted('path', '^1.6.4'),
     ];

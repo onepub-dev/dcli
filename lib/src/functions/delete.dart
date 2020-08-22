@@ -2,7 +2,7 @@ import 'dart:io';
 
 import '../settings.dart';
 import 'ask.dart' as a;
-import 'dshell_function.dart';
+import 'dcli_function.dart';
 import 'is.dart';
 
 ///
@@ -21,7 +21,7 @@ import 'is.dart';
 void delete(String path, {bool ask = false}) =>
     _Delete().delete(path, ask: ask);
 
-class _Delete extends DShellFunction {
+class _Delete extends DCliFunction {
   void delete(String path, {bool ask}) {
     Settings().verbose('delete:  ${absolute(path)} ask: $ask');
 
@@ -58,7 +58,7 @@ class _Delete extends DShellFunction {
 }
 
 /// Thrown when the [delete] function encounters an error
-class DeleteException extends DShellFunctionException {
+class DeleteException extends DCliFunctionException {
   /// Thrown when the [delete] function encounters an error
   DeleteException(String reason) : super(reason);
 }

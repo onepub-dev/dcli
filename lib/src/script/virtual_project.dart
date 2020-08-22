@@ -2,7 +2,7 @@ import 'dart:io';
 
 import 'package:path/path.dart';
 
-import '../../dshell.dart';
+import '../../dcli.dart';
 import '../functions/env.dart';
 import '../functions/is.dart';
 import '../functions/read.dart';
@@ -43,7 +43,7 @@ enum PubspecLocation {
 }
 
 /// Creates project directory structure
-/// All projects live under the dshell cache
+/// All projects live under the dcli cache
 /// directory are form a virtual copy of the
 /// user's Script with the additional files
 /// required by dart.
@@ -96,7 +96,7 @@ class VirtualProject {
   /// The  absolute path to the
   /// virtual project's project directory.
   /// This is this is essentially:
-  /// join(Settings().dshellCache, dirname(script), PROJECT_DIR)
+  /// join(Settings().dcliCache, dirname(script), PROJECT_DIR)
   ///
   // String get path => _virtualProjectPath;
 
@@ -130,7 +130,7 @@ class VirtualProject {
   /// in (the same directory as the script). For
   /// a project that requires a virtual pubspec.yaml
   /// this will be in the projects cache directory
-  /// located under ~/.dshell/cache....
+  /// located under ~/.dcli/cache....
   ///
   String get runtimeProjectPath => _runtimeProjectPath;
 
@@ -304,8 +304,8 @@ class VirtualProject {
   }
 
   VirtualProject._internal(this.script) {
-    var cacheRootPath = Settings().dshellCachePath;
-    // /home/bsutton/.dshell/cache/home/bsutton/git/dshell/test/test_scripts/hello_world.project
+    var cacheRootPath = Settings().dcliCachePath;
+    // /home/bsutton/.dcli/cache/home/bsutton/git/dcli/test/test_scripts/hello_world.project
     _virtualProjectPath = join(cacheRootPath,
         Script.sansRoot(script.scriptDirectory), script.basename + projectDir);
 
@@ -390,13 +390,13 @@ class VirtualProject {
   /// [background] defaults to [false]
   ///
   void build({bool background = false}) {
-    /// Check that dshells install has been rum.
-    if (!exists(Settings().dshellCachePath)) {
+    /// Check that dclis install has been rum.
+    if (!exists(Settings().dcliCachePath)) {
       printerr(red(
-          "The dshell cache doesn't exists. Please run 'dshell install' and then try again."));
+          "The dcli cache doesn't exists. Please run 'dcli install' and then try again."));
       printerr('');
       printerr('');
-      throw InstallException('DShell needs to be re-installed');
+      throw InstallException('DCli needs to be re-installed');
     }
 
     _lock.withLock(() {
@@ -406,11 +406,11 @@ class VirtualProject {
         }
         if (background) {
           // we run the clean in the background
-          // by running another copy of dshell.
-          print('DShell clean started in the background.');
-          // ('dshell clean ${script.path}' | 'echo > ${dirname(path)}/log').run;
-          // 'dshell -v clean ${script.path}'.run;
-          '${DShellPaths().dshellName} -v=${join(Directory.systemTemp.path, 'dshell.clean.log')} clean ${script.path}'
+          // by running another copy of dcli.
+          print('DCli clean started in the background.');
+          // ('dcli clean ${script.path}' | 'echo > ${dirname(path)}/log').run;
+          // 'dcli -v clean ${script.path}'.run;
+          '${DCliPaths().dcliName} -v=${join(Directory.systemTemp.path, 'dcli.clean.log')} clean ${script.path}'
               .start(detached: true, runInShell: true);
         } else {
           print('Running pub get...');
@@ -418,7 +418,7 @@ class VirtualProject {
           _markBuildComplete();
         }
       } on PubGetException {
-        print(red("\ndshell clean failed due to the 'pub get' call failing."));
+        print(red("\ndcli clean failed due to the 'pub get' call failing."));
       }
     }, waiting: 'Waiting for clean to complete...');
   }

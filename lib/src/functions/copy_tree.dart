@@ -1,6 +1,6 @@
 import 'package:path/path.dart';
 
-import '../../dshell.dart';
+import '../../dcli.dart';
 import '../settings.dart';
 import 'function.dart';
 
@@ -63,7 +63,7 @@ void copyTree(String from, String to,
         filter: filter,
         recursive: recursive);
 
-class _CopyTree extends DShellFunction {
+class _CopyTree extends DCliFunction {
   void copyTree(String from, String to,
       {bool overwrite = false,
       bool Function(String file) filter,

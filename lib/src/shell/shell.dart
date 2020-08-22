@@ -1,10 +1,10 @@
-import 'package:dshell/dshell.dart';
-import 'package:dshell/src/shell/shell_detection.dart';
+import 'package:dcli/dcli.dart';
+import 'package:dcli/src/shell/shell_detection.dart';
 import 'package:meta/meta.dart';
 
 /// an abstract class which allows each shell (bash, zsh)
 /// to provide specific implementation of features
-/// required by DShell.
+/// required by DCli.
 @immutable
 abstract class Shell {
   ///
@@ -59,13 +59,13 @@ abstract class Shell {
   /// as a priviledged user to run an app.
   String privilegesRequiredMessage(String appname);
 
-  /// Installs dart and dshell.
+  /// Installs dart and dcli.
   /// Returns true if dart was installed.
   /// Returns false if dart was already installed.
   bool install();
 
   /// Some OS/Shell combinations have some preconditions that must
-  /// be met before dshell can be installed.
+  /// be met before dcli can be installed.
   ///
   /// This method returns a String describing those preconditions
   /// or null if there are no preconditions.

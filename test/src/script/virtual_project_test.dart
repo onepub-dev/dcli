@@ -1,6 +1,6 @@
 @Timeout(Duration(minutes: 10))
-import 'package:dshell/dshell.dart';
-import 'package:dshell/src/script/virtual_project.dart';
+import 'package:dcli/dcli.dart';
+import 'package:dcli/src/script/virtual_project.dart';
 import 'package:path/path.dart';
 import 'package:test/test.dart';
 
@@ -16,10 +16,10 @@ void main() {
 
         var scriptPath = join(scriptDir, 'local.dart');
 
-        'dshell create $scriptPath'.run;
+        'dcli create $scriptPath'.run;
 
         /// create a local pubspec for the script.
-        'dshell split $scriptPath'.run;
+        'dcli split $scriptPath'.run;
 
         var script = Script.fromFile(scriptPath);
 
@@ -37,7 +37,7 @@ void main() {
 
         var scriptPath = join(scriptDir, 'virtual.dart');
 
-        'dshell create $scriptPath'.run;
+        'dcli create $scriptPath'.run;
 
         var script = Script.fromFile(scriptPath);
 
@@ -55,10 +55,10 @@ void main() {
         var scriptName = 'traditional.dart';
         var scriptPath = join(scriptDir, scriptName);
 
-        'dshell create $scriptPath'.run;
+        'dcli create $scriptPath'.run;
 
         /// create a local pubspec for the script.
-        'dshell split $scriptPath'.run;
+        'dcli split $scriptPath'.run;
 
         /// move the script into a bin directory to mimic a traditional dart package layout.
         var binDir = join(scriptDir, 'bin');
@@ -82,13 +82,13 @@ void main() {
         var scriptName = 'annotation.dart';
         var scriptPath = join(scriptDir, scriptName);
 
-        var scriptContent = '''#! /bin/env dshell
+        var scriptContent = '''#! /bin/env dcli
 
 /**
  * @pubspec
  * name: annotation_test
  * dependencies:
- *   dshell: ^1.0.0
+ *   dcli: ^1.0.0
  *   skippy: ^2.0.0
  */
 void main(){

@@ -1,4 +1,4 @@
-import '../../dshell.dart';
+import '../../dcli.dart';
 
 /// [truepath] creates an absolute and canonicalize path.
 ///

@@ -1,12 +1,12 @@
-#! /usr/bin/env dshell
+#! /usr/bin/env dcli
 
 import 'dart:io';
 
-import 'package:dshell/dshell.dart';
-import 'package:dshell/src/functions/env.dart';
-import 'package:dshell/src/pubspec/global_dependencies.dart';
+import 'package:dcli/dcli.dart';
+import 'package:dcli/src/functions/env.dart';
+import 'package:dcli/src/pubspec/global_dependencies.dart';
 
-/// globally activates dshell from a local path rather than a public package.
+/// globally activates dcli from a local path rather than a public package.
 ///
 /// defaults to activation from ..
 ///
@@ -20,10 +20,10 @@ void main(List<String> args) {
   parser.addCommand('help');
 
   // activate_local lives in the tool directory
-  // so its parent directory should be the dshell package root.
-  var dshellPackageRoot = dirname(dirname(Settings().scriptPath));
+  // so its parent directory should be the dcli package root.
+  var dcliPackageRoot = dirname(dirname(Settings().scriptPath));
 
-  parser.addOption('path', defaultsTo: dshellPackageRoot);
+  parser.addOption('path', defaultsTo: dcliPackageRoot);
 
   var result = parser.parse(args);
 
@@ -32,8 +32,7 @@ void main(List<String> args) {
   }
 
   if (result.command != null) {
-    print(
-        '''globally activates dshell from a local path rather than a public package.
+    print('''globally activates dcli from a local path rather than a public package.
 
 defaults to activation from ..
 
@@ -46,52 +45,50 @@ ${parser.usage}
     exit(0);
   }
 
-  dshellPackageRoot = result['path'] as String;
+  dcliPackageRoot = result['path'] as String;
 
-  print(orange('Activating dshell at $dshellPackageRoot'));
+  print(orange('Activating dcli at $dcliPackageRoot'));
 
   var version = '';
   if (result.rest.length == 1) {
     version = result.rest[0];
-    '${DartSdk.pubExeName} global activate --source path $dshellPackageRoot $version'
-        .start(workingDirectory: dshellPackageRoot);
+    '${DartSdk.pubExeName} global activate --source path $dcliPackageRoot $version'
+        .start(workingDirectory: dcliPackageRoot);
   } else {
-    '${DartSdk.pubExeName} global activate --source path $dshellPackageRoot'
-        .start(workingDirectory: dshellPackageRoot);
+    '${DartSdk.pubExeName} global activate --source path $dcliPackageRoot'.start(workingDirectory: dcliPackageRoot);
   }
 
-  var dshellBin = join(dshellPackageRoot, 'bin', '${DShellPaths().dshellName}');
-  if (exists(dshellBin)) {
-    delete(dshellBin);
+  var dcliBin = join(dcliPackageRoot, 'bin', '${DCliPaths().dcliName}');
+  if (exists(dcliBin)) {
+    delete(dcliBin);
   }
 
   /// alter the version so we can tell we are activating the local version
   ///
-  var versionfile =
-      join(dshellPackageRoot, 'lib', 'src', 'version', 'version.g.dart');
+  var versionfile = join(dcliPackageRoot, 'lib', 'src', 'version', 'version.g.dart');
   var versionbackup = '$versionfile.bak';
   move(versionfile, versionbackup, overwrite: true);
   versionfile.write("String packageVersion = 'activate_local_version';");
 
-  /// use the global dshell version to compile the local version.
-  'dshell compile $dshellBin.dart'.run;
+  /// use the global dcli version to compile the local version.
+  'dcli compile $dcliBin.dart'.run;
 
   // make certain the dependency injection points to $path
-  var dependency = join(Settings().dshellPath, GlobalDependencies.filename);
+  var dependency = join(Settings().dcliPath, GlobalDependencies.filename);
 
   if (exists(dependency)) {
     delete(dependency);
   }
 
-  /// set the path the local dshell.
-  Env().pathPrepend(join(dshellPackageRoot, 'bin'));
+  /// set the path the local dcli.
+  Env().pathPrepend(join(dcliPackageRoot, 'bin'));
 
   // make certain all script see the new settings.
-  '${DShellPaths().dshellName} install -nc'.run;
+  '${DCliPaths().dcliName} install -nc'.run;
 
   dependency.append('dependency_overrides:');
-  dependency.append('  dshell:');
-  dependency.append('    path: $dshellPackageRoot');
+  dependency.append('  dcli:');
+  dependency.append('    path: $dcliPackageRoot');
 
   print(GlobalDependencies.filename);
   cat(dependency);
@@ -99,5 +96,5 @@ ${parser.usage}
   'bash'.run;
 
   move(versionbackup, versionfile);
-  //'dshell install'.run;
+  //'dcli install'.run;
 }

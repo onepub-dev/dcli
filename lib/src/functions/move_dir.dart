@@ -1,6 +1,6 @@
 import 'dart:io';
 
-import '../../dshell.dart';
+import '../../dcli.dart';
 import '../settings.dart';
 import 'function.dart';
 
@@ -31,7 +31,7 @@ void moveDir(String from, String to) => _MoveDir().moveDir(
       to,
     );
 
-class _MoveDir extends DShellFunction {
+class _MoveDir extends DCliFunction {
   void moveDir(String from, String to) {
     if (!exists(from)) {
       throw MoveDirException(

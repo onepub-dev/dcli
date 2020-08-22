@@ -1,10 +1,10 @@
-import '../../dshell.dart';
+import '../../dcli.dart';
 
 ///
 /// Installs dart on an apt base system.abstract
 ///
 
-class MacOsxDshellInstaller {
+class MacOsxDCliInstaller {
   /// returns true if it needed to install dart.
   bool install() {
     // first check that dart isn't already installed
@@ -21,13 +21,13 @@ class MacOsxDshellInstaller {
     // The normal dart detection process won't work here
     // as dart is not on the path so for the moment so we hard code it.
     // CONSIDER a way of identifying where dart has been installed to.
-    '/usr/lib/dart/bin/pub global activate dshell'.run;
+    '/usr/lib/dart/bin/pub global activate dcli'.run;
 
     // also need to install it for the root user
     // as root must have its own copy of .pub-cache otherwise
     // if it updates .pub-cache of a user the user won't be able
     // to use pub-get any more.
-    '/usr/lib/dart/bin/pub global activate dshell'.run;
+    '/usr/lib/dart/bin/pub global activate dcli'.run;
 
     // yes we installed dart.
     return true;

@@ -1,11 +1,11 @@
 import 'dart:io';
 
 import 'package:archive/archive.dart';
-import 'package:dshell/src/script/virtual_project.dart';
+import 'package:dcli/src/script/virtual_project.dart';
 import 'package:path/path.dart' as p;
 import 'package:system_info/system_info.dart';
 
-import '../../dshell.dart';
+import '../../dcli.dart';
 import '../util/enum_helper.dart';
 import '../util/file_system.dart';
 import '../util/progress.dart';
@@ -98,7 +98,7 @@ class DartSdk {
   }
 
   /// run the 'dart2native' command.
-  /// [runtimeScriptPath] is the path to the dshell script we are compiling.
+  /// [runtimeScriptPath] is the path to the dcli script we are compiling.
   /// [outputPath] is the path to write the compiled ex to .
   /// [projectRootPath] is the path to the projects root directory.
   void runDart2Native(VirtualProject project, String runtimeScriptPath,

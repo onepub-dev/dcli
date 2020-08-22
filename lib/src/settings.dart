@@ -3,58 +3,58 @@ import 'dart:io';
 import 'package:meta/meta.dart';
 import 'package:path/path.dart' as p;
 
-import '../dshell.dart';
+import '../dcli.dart';
 import 'functions/env.dart';
 import 'script/flags.dart';
 import 'util/stack_list.dart';
 import 'version/version.g.dart';
 
-/// Holds all of the global settings for DShell
-/// including dshell paths and any global
-/// flags passed on the command line to DShell.
+/// Holds all of the global settings for DCli
+/// including dcli paths and any global
+/// flags passed on the command line to DCli.
 ///
 class Settings {
   static Settings _self;
 
-  /// The directory name of the DShell templates.
+  /// The directory name of the DCli templates.
   static const templateDir = 'templates';
 
-  /// The directory name of the DShell cache.
-  static const dshellCacheDir = 'cache';
+  /// The directory name of the DCli cache.
+  static const dcliCacheDir = 'cache';
 
   final InternalSettings _settings = InternalSettings();
 
-  /// The name of the DShell app. This will
-  /// always be 'dshell'.
+  /// The name of the DCli app. This will
+  /// always be 'dcli'.
   final String appname;
 
-  /// The DShell version you are running
+  /// The DCli version you are running
   String version;
 
   final _selectedFlags = <String, Flag>{};
 
-  String _dshellPath;
+  String _dcliPath;
 
-  /// The name of the dshell settings directory.
-  /// This is .dshell.
-  String dshellDir = '.dshell';
+  /// The name of the dcli settings directory.
+  /// This is .dcli.
+  String dcliDir = '.dcli';
 
-  String _dshellBinPath;
+  String _dcliBinPath;
 
   String _scriptPath;
 
-  /// The absolute path to the dshell script which
+  /// The absolute path to the dcli script which
   /// is currently running.
   String get scriptPath {
     if (_scriptPath == null) {
       var actual = Platform.script.toFilePath();
-      if (isWithin(dshellCachePath, actual)) {
+      if (isWithin(dcliCachePath, actual)) {
         // This is a script being run from a virtual project so we
         // need to reconstruct is original path.
 
         // strip of the cache prefix
-        var rel = join(rootPath, relative(actual, from: dshellCachePath));
-        //.dshell/cache/home/bsutton/git/dshell/tool/activate_local.project/activate_local.dart
+        var rel = join(rootPath, relative(actual, from: dcliCachePath));
+        //.dcli/cache/home/bsutton/git/dcli/tool/activate_local.project/activate_local.dart
 
         // now remove the virtual project directory
         _scriptPath = join(dirname(dirname(rel)), basename(rel));
@@ -78,48 +78,48 @@ class Settings {
   static void reset() {
     _self = Settings.init();
     _self.selectedFlags.clear();
-    _self._dshellPath = null;
-    _self._dshellBinPath = null;
+    _self._dcliPath = null;
+    _self._dcliBinPath = null;
   }
 
-  /// The directory where we store all of dshell's
+  /// The directory where we store all of dcli's
   /// configuration files such as the cache.
-  /// This will normally be ~/.dshell
-  String get dshellPath {
-    _dshellPath ??= p.absolute(p.join(HOME, dshellDir));
-    return _dshellPath;
+  /// This will normally be ~/.dcli
+  String get dcliPath {
+    _dcliPath ??= p.absolute(p.join(HOME, dcliDir));
+    return _dcliPath;
   }
 
-  /// When you run dshell compile -i <script> the compiled exe
+  /// When you run dcli compile -i <script> the compiled exe
   /// is moved to this path.
-  /// The dshellBinPath is added to the OS's path
+  /// The dcliBinPath is added to the OS's path
   /// allowing the installed scripts to be run from anywhere.
-  /// This will normally be ~/.dshell/bin
-  String get dshellBinPath {
+  /// This will normally be ~/.dcli/bin
+  String get dcliBinPath {
     // var st = StackTraceImpl();
 
-    // print('dshellBinPath current: ${_dshellBinPath}');
+    // print('dcliBinPath current: ${_dcliBinPath}');
     // print(st.formatStackTrace());
-    _dshellBinPath ??= p.absolute(p.join(HOME, dshellDir, 'bin'));
+    _dcliBinPath ??= p.absolute(p.join(HOME, dcliDir, 'bin'));
 
-    return _dshellBinPath;
+    return _dcliBinPath;
   }
 
-  /// path to the dshell template directory.
-  String get templatePath => p.join(dshellPath, templateDir);
+  /// path to the dcli template directory.
+  String get templatePath => p.join(dcliPath, templateDir);
 
-  /// Path to the dshell cache directory.
-  /// This will normally be ~/.dshell/cache
-  String get dshellCachePath => p.join(dshellPath, dshellCacheDir);
+  /// Path to the dcli cache directory.
+  /// This will normally be ~/.dcli/cache
+  String get dcliCachePath => p.join(dcliPath, dcliCacheDir);
 
-  /// the list of global flags selected via the cli when dshell
+  /// the list of global flags selected via the cli when dcli
   /// was started.
   List<Flag> get selectedFlags => _selectedFlags.values.toList();
 
   /// returns true if the -v (verbose) flag was set on the
-  /// dshell command line.
+  /// dcli command line.
   /// e.g.
-  /// dshell -v clean
+  /// dcli -v clean
   bool get isVerbose => isFlagSet(VerboseFlag());
 
   /// Turns on verbose logging.
@@ -134,30 +134,30 @@ class Settings {
   }
 
   /// Returns a singleton providing
-  /// access to DShell settings.
+  /// access to DCli settings.
   factory Settings() {
     _self ??= Settings.init();
 
     return _self;
   }
 
-  /// Used internally be dshell to initialise
+  /// Used internally be dcli to initialise
   /// the settings.
   ///
   /// DO NOT CALL THIS METHOD!!!
   Settings.init({
-    this.appname = 'dshell',
+    this.appname = 'dcli',
   }) {
     version = packageVersion;
   }
 
-  /// we consider dshell installed if the ~/.dshell directory
+  /// we consider dcli installed if the ~/.dcli directory
   /// exists.
   bool get isInstalled => exists(installCompletedIndicator);
 
   /// returns the path to the file that we use to indicated
   /// that the install completed succesfully.
-  String get installCompletedIndicator => join(dshellPath, 'install_completed');
+  String get installCompletedIndicator => join(dcliPath, 'install_completed');
 
   /// True if you are running on a Mac.
   /// I'm so sorry.
@@ -203,7 +203,7 @@ class Settings {
     }
   }
 
-  /// Used for unit testing dshell.
+  /// Used for unit testing dcli.
   /// Please look away.
   // ignore: avoid_setters_without_getters
   static set mock(Settings mockSettings) {

@@ -1,8 +1,8 @@
 import 'package:path/path.dart' as p;
-import '../../dshell.dart';
+import '../../dcli.dart';
 import '../util/progress.dart';
 
-import 'dshell_function.dart';
+import 'dcli_function.dart';
 import 'env.dart';
 
 ///
@@ -38,7 +38,7 @@ Progress which(String appname,
         {bool first = true, bool verbose = false, Progress progress}) =>
     _Which().which(appname, first: first, verbose: verbose, progress: progress);
 
-class _Which extends DShellFunction {
+class _Which extends DCliFunction {
   ///
   /// Searches the path for the given appname.
   Progress which(String appname,

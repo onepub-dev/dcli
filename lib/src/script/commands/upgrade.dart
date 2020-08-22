@@ -1,12 +1,12 @@
-import '../../../dshell.dart';
+import '../../../dcli.dart';
 
 import '../command_line_runner.dart';
 import '../flags.dart';
 import '../project_cache.dart';
 import 'commands.dart';
 
-/// upgrades dshell by running:
-/// pub global active dshell
+/// upgrades dcli by running:
+/// pub global active dcli
 /// and then cleaning all projects.
 class UpgradeCommand extends Command {
   static const String _commandName = 'upgrade';
@@ -19,17 +19,17 @@ class UpgradeCommand extends Command {
   @override
   int run(List<Flag> selectedFlags, List<String> arguments) {
     if (arguments.isNotEmpty) {
-      throw InvalidArguments('dshell upgrade does not take any arguments.');
+      throw InvalidArguments('dcli upgrade does not take any arguments.');
     }
 
     var currentVersion = Settings().version;
 
-    print(red('Upgrading dshell...'));
+    print(red('Upgrading dcli...'));
     print('Current version $currentVersion');
-    startFromArgs(DartSdk().pubPath, ['global', 'activate', 'dshell'],
+    startFromArgs(DartSdk().pubPath, ['global', 'activate', 'dcli'],
         progress: Progress.print());
 
-    Settings().verbose('pub global activate dshell finished');
+    Settings().verbose('pub global activate dcli finished');
 
     upgradeVersion(currentVersion);
 
@@ -40,9 +40,9 @@ class UpgradeCommand extends Command {
     print('');
     print(red('*' * 80));
     print('');
-    print('Dshell upgrade completed.');
+    print('DCli upgrade completed.');
     print('');
-    'dshell version'.run;
+    'dcli version'.run;
     print('');
     print(red('*' * 80));
 
@@ -50,7 +50,7 @@ class UpgradeCommand extends Command {
   }
 
   /// place holder which will be used to make any modifications
-  /// required to the dshell directory structure or files
+  /// required to the dcli directory structure or files
   /// as part of an upgrade.
   void upgradeVersion(String currentVersion) {}
 
@@ -59,7 +59,7 @@ class UpgradeCommand extends Command {
 
   @override
   String description() =>
-      '''Upgrades dshell to the latest version and cleans all of your projects.''';
+      '''Upgrades dcli to the latest version and cleans all of your projects.''';
 
   @override
   List<String> completion(String word) {

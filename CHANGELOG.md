@@ -15,7 +15,7 @@ updated doco for setEnv.
 # 1.10.20
 Exposed the PubCache class as part of the public api as part of the tooling we are providing to explore the scripts dart environment.
 # 1.10.19
-dshell doctor wasn't printing the dart version as the cli output from dart --version had changed. Improved the parsing method so it should be more robust in the face of future changes.
+dcli doctor wasn't printing the dart version as the cli output from dart --version had changed. Improved the parsing method so it should be more robust in the face of future changes.
 Added coverage switch to run_unit_tests.dart
 corrected the name of the coverage directory.
 create_project_test: Fixed a bug in the set of expeced filenames after upgrading to dart 2.9.
@@ -24,14 +24,14 @@ Unit test incorrectly had paths presenting as absolute after glob expansion when
 
 # 1.10.18
 Set the working directory to pwd if not passed.
-Glob: fixed bug where globs like middle/.* where not being expanded correctly. Also modified the exception handling so that if the glob describes a directory that doesn't exist we now throw an exception rather than suppressing it. This is not the same as bash. If the glob doesn't match a valid directory it will just pass back the original glob.  The new approach however is more consistent with dshells philosophy that any invalid paths should generate an exception. Added unit tests around the above concepts.
+Glob: fixed bug where globs like middle/.* where not being expanded correctly. Also modified the exception handling so that if the glob describes a directory that doesn't exist we now throw an exception rather than suppressing it. This is not the same as bash. If the glob doesn't match a valid directory it will just pass back the original glob.  The new approach however is more consistent with dclis philosophy that any invalid paths should generate an exception. Added unit tests around the above concepts.
 
 # 1.10.17
 Fixed the compile for scripts with a 'local' pubspec.yaml
 removed stray print statment.
 
 # 1.10.16
-Fixed dshell compile so it works with 2.9.
+Fixed dcli compile so it works with 2.9.
 
 # 1.10.15
 moved to support the new .dart_tools directory so we work with dart 2.9.
@@ -145,7 +145,7 @@ Minor documentation fix.
 FIX: split command now works!
 
 tweaked doco on pubspec locations.
-Fixes for activatelocal.dart We now compile the local dshell and set the path correctly. We also change the version no. so you can see that we are running the local version.
+Fixes for activatelocal.dart We now compile the local dcli and set the path correctly. We also change the version no. so you can see that we are running the local version.
 added unit tests for annotated pubspecs.
 Added tests for the more liberal parsing of annotations.
 removed color coding on verbose output as it was distracting.
@@ -171,14 +171,14 @@ Fixed lints.
 Fixed the compile path to .packages for the traditional projects.
 
 # 1.9.2
-Dshell was failing to return non-zero exit codes.
+dcli was failing to return non-zero exit codes.
 
 # 1.9.1
 Fixed a bug in the call to setVerbose when disabling verbose.
 
 # 1.9.0
 Added support for running scripts from a standard dart project structure. We now detect the correct pubspec.yaml and run from there.
-This is a fairly significant change as it fixes a long standing hole in dshells execurtion model.
+This is a fairly significant change as it fixes a long standing hole in dclis execurtion model.
 
 Fixed a bug where the releaseLock would be called even when the lock had failed.
 Improved the timeout exception so that you actually know the locked timed out. Change the retry interval to 100ms (down from 1s). Now guarentee that at least one lock attempt will be made even if the timeout is less then 100ms.
@@ -207,9 +207,9 @@ removed pathSeparator as it duplicated dart Platform functionality.
 Fixes for bugs with locating pub cache on windows and added unit tests.
 Added addition paths to the windows PATH.
 Added pathPutIfAbsent. Also renamed all the path functions to begin with 'path'.
-Added pubcache and .dshell/bin to path.
+Added pubcache and .dcli/bin to path.
 Fixed a bug in the format of setx.
-Added dshell path and now launches bash shell to do dev in. Not certain its what we need.
+Added dcli path and now launches bash shell to do dev in. Not certain its what we need.
 incomplete docker script to do local dev.
 Added logic to delete the install dir if it already exists.
 Added a check for install preconditions. If they are not met the installer will exit. For powershell we now check that developer mode is enabled as we require this for symlinks. We nolonger allow an install from the old command shell.
@@ -219,7 +219,7 @@ Removed a sperious print statement.
 Fixed a bug in the default script which had an extra /
 
 # 1.8.19
-Work on getting dshell to install under alpine docker image.
+Work on getting dcli to install under alpine docker image.
 reduced progress messages when ansi not supported.
 Added logic to move the dart-sdk to the write directory after expanding it. Added execute permissions to files in dart/bin directory. reduced the no. of progress messages.
 Now printing out the dir dart is installed into.
@@ -231,9 +231,9 @@ Added a fallback mechanism on linux system to install from the archive if apt is
 # 1.8.18
 Fixed a number of bugs around shell detection when one can't be determined.
 exists() - added test for null or empty path.
-dshell install - added a --nodart option to suppress installation of dart.
+dcli install - added a --nodart option to suppress installation of dart.
 Fixed bugs in windows stackframe parsing.
-Added install link for windows dshell_install.
+Added install link for windows dcli_install.
 
 # 1.8.17
 another script path error.
@@ -242,7 +242,7 @@ another script path error.
 Fixed for doctor when some paths missing.
 
 # 1.8.15
-Created github actions to generated linux and windows installer for dshell and dart.
+Created github actions to generated linux and windows installer for dcli and dart.
 Change copyDir to copyTree.
 Changed moveDir to moveTree.
 Created new simplified moveDir that just moves the top level dir.
@@ -265,7 +265,7 @@ moved mockit to dev dependencies.
 For the moment I've wound back the privileged requirements for install as it makes unit tests fail.
 fixed unit tests to deal with unordered file lists.
 Added logic to handling moving files between partitions. We fallback to doing a copy then delete.
-Added .dshell/bin to path during install.
+Added .dcli/bin to path during install.
 work on improving shell detection
 Now using our own version of recase.
 now using official pub_release.
@@ -276,12 +276,12 @@ Added nothrow option to string start method.
 restructured shell related classes as part of work to improve shell detection.
 incorrect case in help.
 seplling.
-Fixed a bug where running 'dshell help <command>' wouldn't print the command help but did print the entire usage.
+Fixed a bug where running 'dcli help <command>' wouldn't print the command help but did print the entire usage.
 made the path columns wider.
 colour coded the shell name.
 fixed warning.
-v 0.1.0 of docker cli for dshell.
-Work on installing dshell using sudo and as a root user. Added priviledged required message.
+v 0.1.0 of docker cli for dcli.
+Work on installing dcli using sudo and as a root user. Added priviledged required message.
 The default script was using a relative path when it should be using a package.
 
 # 1.8.14-dev.3
@@ -302,19 +302,19 @@ applied effective dart.
 Had max/min back to front for Menu options.
 
 ### 1.8.13-dev.1
-[ENH] Work on a docker based cli for dshell.
+[ENH] Work on a docker based cli for dcli.
 [FIX] unknown shell no returns false for priviliged user to avoid npe.
 [Fix] for macos which by default only supports 127.0.0.1.
-[ENH] added logic to fix permission when dshell rans as root.
+[ENH] added logic to fix permission when dcli rans as root.
 [FIX] bug when determing pub-cache path if environment variable set.
 [ENH] added new methods loggedInUser and isPrivilegedUser.
-[ENH] released dshell_install as a binary so people could easily install dshell.
+[ENH] released dcli_install as a binary so people could easily install dcli.
 
 ### 1.8.12
-[ENH] created a command to upgrade dshell.
+[ENH] created a command to upgrade dcli.
 [DOC] cleaned up the public interface by making a number a items private.
 [IMP] changed color for command messages for consistency.
-[IMP] removed clean all as when you first install as there should be no projects. dshell upgrade on the other hand does need to do a clean all.
+[IMP] removed clean all as when you first install as there should be no projects. dcli upgrade on the other hand does need to do a clean all.
 [IMP] cleaned up invalid argument processing.
 [FIX] Fixed a bug which allowed install to be run from sudo.
 
@@ -330,7 +330,7 @@ Fixed bug in glob expansion where a relative path with ../ was mistaken for a hi
 second go at fixing the compile install bug.
 
 ### 1.8.8
-[BUG] dshell compile was failing to install due to move bug.
+[BUG] dcli compile was failing to install due to move bug.
 
 reformatted error so you can copy paste cmdline for testing.
 bug in move as overwrite did not have a default value.
@@ -342,7 +342,7 @@ bug in move as overwrite did not have a default value.
 [BUG] bug in the quote handling of startsWithArgs
 
 ### 1.8.5
-[ENH] Exposed NamedLock as part of the official dshell api.
+[ENH] Exposed NamedLock as part of the official dcli api.
     Tidied up the NamedLock documentation and removed internal implementation from the api. 
 [ENH] changed how we handle quoted arguments when the startWithArgs method is called. We no longer strip quotes from passed arguments because if you pass quotes you probably really need them to be there. This differs from passing cmdLine where we need to strip the quotes as bash does.
 [ENH] added logic to suppress color codes if terminal doesn't support them.
@@ -351,15 +351,15 @@ bug in move as overwrite did not have a default value.
 
 ### 1.8.4
 
-This release is primarily about getting dshell to work correctly under windows.
+This release is primarily about getting dcli to work correctly under windows.
 There is still a no. of significant issues that need to be resolve for windows.
-This release however has sufficient improvements for general dshell users that I thought it was time for a release.
+This release however has sufficient improvements for general dcli users that I thought it was time for a release.
 The core windows issues is that dart2native doesn't support symlinks so compilation doesn't work.
 This is affecting unit tests so its a little hard to evaluate just how stable the windows release.
-Having said that it does look like dshell is broadly working under windows.
+Having said that it does look like dcli is broadly working under windows.
 I will be attempting to resolve these issues over the next week or so.
 
-This release also fixes an issue that Mac uses had that stopped them compiling dshell.
+This release also fixes an issue that Mac uses had that stopped them compiling dcli.
 It appears that the logger package has a problem (Invalid cid) that stopped compilation on Mac, windows and Rasp Pi. I've removed this package and now compilation seems to work fine.
 
 

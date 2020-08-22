@@ -1,9 +1,9 @@
-#! /usr/bin/env dshell
+#! /usr/bin/env dcli
 /*
 @pubspec
 name: dep.dart
 dependencies:
-  dshell: ^1.0.0
+  dcli: ^1.0.0
   money2: ^1.0.0
 */
 

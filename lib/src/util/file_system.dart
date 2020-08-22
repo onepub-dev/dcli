@@ -1,6 +1,6 @@
 import 'dart:io';
 
-import '../../dshell.dart';
+import '../../dcli.dart';
 
 /// Returns the amount of space (in bytes) available on the disk
 /// that [path] exists on.

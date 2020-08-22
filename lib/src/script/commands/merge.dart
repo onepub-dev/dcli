@@ -1,4 +1,4 @@
-import '../../../dshell.dart';
+import '../../../dcli.dart';
 import '../../util/completion.dart';
 
 import '../flags.dart';

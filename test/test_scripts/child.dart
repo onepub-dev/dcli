@@ -1,7 +1,7 @@
-#! /usr/bin/env dshell
+#! /usr/bin/env dcli
 
 import 'dart:io';
-import 'package:dshell/dshell.dart';
+import 'package:dcli/dcli.dart';
 
 void main() {
   print('child: has terminal: ${stdin.hasTerminal}');

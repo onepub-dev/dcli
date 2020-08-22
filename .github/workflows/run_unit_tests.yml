@@ -26,21 +26,21 @@ jobs:
         apt update -y
         apt install -y procps ca-certificates gnupg2
        
-    - name: activate dshell
+    - name: activate dcli
       run: |
         ls
         cd ..
         pwd
-        pub global activate dshell --source path
+        pub global activate dcli --source path
         # dart ./tool/activate_local.dart --path=. 
         
-    - name: install dshell
+    - name: install dcli
       run: |
         echo $PWD
         export PATH="$PATH":"$HOME/.pub-cache/bin"
         echo $PATH
         ls "$HOME/.pub-cache/bin"
-        dshell install
+        dcli install
                 
         
     - name: Run pubspec_default_tesets

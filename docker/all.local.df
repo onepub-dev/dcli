@@ -1,4 +1,4 @@
-# This docker file must be run from the root of dshell directory
+# This docker file must be run from the root of dcli directory
 FROM google/dart
 
 WORKDIR /
@@ -7,20 +7,20 @@ WORKDIR /
 ENV PATH="${PATH}":"/home/.pub-cache/bin"
 RUN touch /home/.profile
 
-# Add the entire dshell project so we can run from the local filesystem
-COPY . /dshell
+# Add the entire dcli project so we can run from the local filesystem
+COPY . /dcli
 
-#RUN find /dshell -name "*"
+#RUN find /dcli -name "*"
 
 #RUN export PATH="$PATH":"/home/.pub-cache/bin"
 RUN echo PATH=$PATH
-RUN pub global activate --source path /dshell 
-RUN dshell install
+RUN pub global activate --source path /dcli 
+RUN dcli install
 
-#COPY test /dshell/test
+#COPY test /dcli/test
 
 CMD []
 
-WORKDIR /dshell
+WORKDIR /dcli
 
 ENTRYPOINT pub run test test 

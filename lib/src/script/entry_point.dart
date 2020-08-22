@@ -1,7 +1,7 @@
 import 'dart:cli';
 import 'dart:io';
 
-import '../../dshell.dart';
+import '../../dcli.dart';
 
 import '../util/ansi_color.dart';
 import '../util/stack_trace_impl.dart';

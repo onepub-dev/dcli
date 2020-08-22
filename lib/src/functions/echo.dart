@@ -16,7 +16,7 @@ import 'function.dart';
 void echo(String text, {bool newline = false}) =>
     _Echo().echo(text, newline: newline);
 
-class _Echo extends DShellFunction {
+class _Echo extends DCliFunction {
   void echo(String text, {@required bool newline}) {
     if (newline) {
       stdout.writeln(text);

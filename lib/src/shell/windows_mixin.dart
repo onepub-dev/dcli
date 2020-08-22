@@ -1,12 +1,12 @@
-import '../../dshell.dart';
+import '../../dcli.dart';
 import '../installers/windows_installer.dart';
 import '../script/commands/install.dart';
 
 mixin WindowsMixin {
   String checkInstallPreconditions() {
     if (!inDeveloperMode()) {
-      return '''You must be running in Windows Developer Mode to install DShell.
-Read additional details here: https://github.com/bsutton/dshell/wiki/Installing-DShell#windows''';
+      return '''You must be running in Windows Developer Mode to install DCli.
+Read additional details here: https://github.com/bsutton/dcli/wiki/Installing-DCli#windows''';
     }
     return null;
   }
@@ -44,7 +44,7 @@ Read additional details here: https://github.com/bsutton/dshell/wiki/Installing-
   }
 
   bool install() {
-    return WindowsDShellInstaller().install();
+    return WindowsDCliInstaller().install();
   }
 
   String privilegesRequiredMessage(String app) {

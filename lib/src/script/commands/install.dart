@@ -1,13 +1,13 @@
 import 'dart:io';
 
-import '../../../dshell.dart';
+import '../../../dcli.dart';
 import '../../functions/env.dart';
 import '../../functions/which.dart';
 import '../../pubspec/global_dependencies.dart';
 import '../../settings.dart';
 import '../../shell/shell.dart';
 import '../../util/ansi_color.dart';
-import '../../util/dshell_paths.dart';
+import '../../util/dcli_paths.dart';
 import '../../util/pub_cache.dart';
 import '../command_line_runner.dart';
 import '../flags.dart';
@@ -36,7 +36,7 @@ class InstallCommand extends Command {
     var shell = Shell.current;
 
     // if (!shell.isPrivilegedUser) {
-    //   qprint(red(shell.privilegesRequiredMessage('dshell_install')));
+    //   qprint(red(shell.privilegesRequiredMessage('dcli_install')));
     //   exit(1);
     // }
 
@@ -66,15 +66,15 @@ class InstallCommand extends Command {
 
     if (subarguments.length != scriptIndex) {
       throw InvalidArguments(
-          "'dshell install' does not take any arguments. Found $subarguments");
+          "'dcli install' does not take any arguments. Found $subarguments");
     }
 
     quiet = flagSet.isSet(_QuietFlag());
 
     if (quiet) {
-      print('Installing DShell...  ');
+      print('Installing DCli...  ');
     }
-    qprint('Hang on a tick whilst we install DShell ${Settings().version}');
+    qprint('Hang on a tick whilst we install DCli ${Settings().version}');
 
     qprint('');
 
@@ -86,18 +86,18 @@ class InstallCommand extends Command {
       exit(1);
     }
     var dartWasInstalled = shell.install();
-    // Create the ~/.dshell root.
-    if (!exists(Settings().dshellPath)) {
-      qprint(blue('Creating ${Settings().dshellPath}'));
-      createDir(Settings().dshellPath);
+    // Create the ~/.dcli root.
+    if (!exists(Settings().dcliPath)) {
+      qprint(blue('Creating ${Settings().dcliPath}'));
+      createDir(Settings().dcliPath);
     } else {
-      qprint('Found existing install at: ${Settings().dshellPath}.');
+      qprint('Found existing install at: ${Settings().dcliPath}.');
     }
     qprint('');
 
     // Create dependencies.yaml
     var blue2 = blue(
-        'Creating ${join(Settings().dshellPath, GlobalDependencies.filename)} with default packages.');
+        'Creating ${join(Settings().dcliPath, GlobalDependencies.filename)} with default packages.');
     qprint(blue2);
     GlobalDependencies.createDefault();
 
@@ -118,15 +118,14 @@ class InstallCommand extends Command {
     }
 
     /// create the cache directory.
-    if (!exists(Settings().dshellCachePath)) {
+    if (!exists(Settings().dcliCachePath)) {
       qprint('');
-      qprint(
-          blue('Creating Cache directory in: ${Settings().dshellCachePath}.'));
-      createDir(Settings().dshellCachePath);
+      qprint(blue('Creating Cache directory in: ${Settings().dcliCachePath}.'));
+      createDir(Settings().dcliCachePath);
     }
 
     // create the bin directory
-    var binPath = Settings().dshellBinPath;
+    var binPath = Settings().dcliBinPath;
     if (!exists(binPath)) {
       qprint('');
       qprint(blue('Creating bin directory in: $binPath.'));
@@ -135,7 +134,7 @@ class InstallCommand extends Command {
       // check if shell can add a path.
       if (!shell.hasStartScript || !shell.addToPath(binPath)) {
         qprint(orange(
-            'If you want to use dshell compile -i to install scripts, add $binPath to your PATH.'));
+            'If you want to use dcli compile -i to install scripts, add $binPath to your PATH.'));
       }
     }
 
@@ -148,41 +147,40 @@ class InstallCommand extends Command {
     }
 
     // If we just installed dart then we don't need
-    // to check the dshell paths.
+    // to check the dcli paths.
     if (!dartWasInstalled) {
-      var dshellLocation =
-          which(DShellPaths().dshellName, first: true).firstLine;
-      // check if dshell is on the path
-      if (dshellLocation == null) {
+      var dcliLocation = which(DCliPaths().dcliName, first: true).firstLine;
+      // check if dcli is on the path
+      if (dcliLocation == null) {
         print('');
-        print('ERROR: dshell was not found on your path!');
-        print("Try running 'pub global activate dshell' again.");
+        print('ERROR: dcli was not found on your path!');
+        print("Try running 'pub global activate dcli' again.");
         print('  otherwise');
-        print('Try to resolve the problem and then run dshell install again.');
-        print('dshell is normally located in ${PubCache().binPath}');
+        print('Try to resolve the problem and then run dcli install again.');
+        print('dcli is normally located in ${PubCache().binPath}');
 
         if (!PATH.contains(PubCache().binPath)) {
           print('Your path does not contain ${PubCache().binPath}');
         }
         exit(1);
       } else {
-        var dshellPath = dshellLocation;
-        qprint(blue('dshell found in : $dshellPath.'));
+        var dcliPath = dcliLocation;
+        qprint(blue('dcli found in : $dcliPath.'));
 
-        // link so all users can run dshell
-        // We use the location of dart exe and add dshell symlink
+        // link so all users can run dcli
+        // We use the location of dart exe and add dcli symlink
         // to the same location.
         // CONSIDER: this is going to require sudo to install???
-        //var linkPath = join(dirname(DartSdk().exePath), 'dshell');
-        //symlink(dshellPath, linkPath);
+        //var linkPath = join(dirname(DartSdk().exePath), 'dcli');
+        //symlink(dcliPath, linkPath);
       }
     }
     qprint('');
 
     _fixPermissions(shell);
 
-    // qprint('Copying dshell (${Platform.executable}) to /usr/bin/dshell');
-    // copy(Platform.executable, '/usr/bin/dshell');
+    // qprint('Copying dcli (${Platform.executable}) to /usr/bin/dcli');
+    // copy(Platform.executable, '/usr/bin/dcli');
 
     touch(Settings().installCompletedIndicator, create: true);
 
@@ -199,14 +197,14 @@ class InstallCommand extends Command {
     //   print('done.');
     // }
 
-    qprint('dshell installation complete.');
+    qprint('dcli installation complete.');
 
     qprint('');
     qprint(red('*' * 80));
 
     qprint('');
-    qprint('Create your first dshell script using:');
-    qprint(blue('  dshell create <scriptname>.dart'));
+    qprint('Create your first dcli script using:');
+    qprint(blue('  dcli create <scriptname>.dart'));
     qprint('');
     qprint(blue('  Run your script by typing:'));
     qprint(blue('  ./<scriptname>.dart'));
@@ -220,7 +218,7 @@ class InstallCommand extends Command {
 
   @override
   String description() =>
-      """Running 'dshell install' completes the installation of dshell.""";
+      """Running 'dcli install' completes the installation of dcli.""";
 
   @override
   String usage() => 'install';
@@ -240,7 +238,7 @@ class InstallCommand extends Command {
     //   if (!Platform.isWindows) {
     //     var user = shell.loggedInUser;
     //     if (user != 'root') {
-    //       'chmod -R $user:$user ${Settings().dshellPath}'.run;
+    //       'chmod -R $user:$user ${Settings().dcliPath}'.run;
     //       'chmod -R $user:$user ${PubCache().path}'.run;
     //     }
     //   }
@@ -258,9 +256,9 @@ class _NoCleanFlag extends Flag {
 
   @override
   String description() {
-    return '''Stops the install from running 'dshell cleanall' as part of the install.
+    return '''Stops the install from running 'dcli cleanall' as part of the install.
       This option is for testing purposes. 
-      When doing a dshell upgrade you should always allow install to do a clean all.''';
+      When doing a dcli upgrade you should always allow install to do a clean all.''';
   }
 }
 
@@ -294,7 +292,7 @@ class _QuietFlag extends Flag {
 }
 
 /// Thrown if an error is encountered during an install
-class InstallException extends DShellException {
+class InstallException extends DCliException {
   /// Thrown if an error is encountered during an install
   InstallException(String message) : super(message);
 }

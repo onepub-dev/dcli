@@ -1,6 +1,6 @@
 import 'package:file/file.dart';
 
-import '../../dshell.dart';
+import '../../dcli.dart';
 import '../settings.dart';
 
 import 'script.dart';
@@ -41,8 +41,8 @@ import 'virtual_project.dart';
 ///  the project folder.
 class ProjectCache {
   // Name of the cache directory which is normally
-  // located dshell settings directory
-  // which is normally .dshell
+  // located dcli settings directory
+  // which is normally .dcli
 
   static ProjectCache _self;
 
@@ -62,8 +62,8 @@ class ProjectCache {
   /// Checks if the dscript cache exists
   /// and if not creates it.
   void initCache() {
-    if (!exists(Settings().dshellCachePath)) {
-      createDir(Settings().dshellCachePath);
+    if (!exists(Settings().dcliCachePath)) {
+      createDir(Settings().dcliCachePath);
     }
   }
 
@@ -71,17 +71,17 @@ class ProjectCache {
   /// we will clean out the project cache
   /// for all scripts.
   void cleanAll() {
-    print('Cleaning project cache ${Settings().dshellCachePath}');
+    print('Cleaning project cache ${Settings().dcliCachePath}');
 
     try {
       find('*.project',
-          root: Settings().dshellCachePath,
+          root: Settings().dcliCachePath,
           recursive: true,
           types: [FileSystemEntityType.directory]).forEach((projectPath) {
         var scriptPath = join(
             rootPath,
             withoutExtension(
-                '${relative(projectPath, from: Settings().dshellCachePath)}.dart'));
+                '${relative(projectPath, from: Settings().dcliCachePath)}.dart'));
 
         deleteDir(projectPath, recursive: true);
 

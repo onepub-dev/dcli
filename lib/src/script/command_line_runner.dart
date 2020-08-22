@@ -1,11 +1,11 @@
 import '../settings.dart';
-import '../util/dshell_exception.dart';
+import '../util/dcli_exception.dart';
 
 import 'commands/commands.dart';
 import 'commands/run.dart';
 import 'flags.dart';
 
-/// Runs a dshell script.
+/// Runs a dcli script.
 class CommandLineRunner {
   static CommandLineRunner _self;
 
@@ -54,7 +54,7 @@ class CommandLineRunner {
           _flagsSet.set(flag);
           Settings().verbose('Setting flag: ${flag.name}');
           if (flag == VerboseFlag()) {
-            Settings().verbose('DShell Version: ${Settings().version}');
+            Settings().verbose('DCli Version: ${Settings().version}');
           }
           continue;
         } else {
@@ -94,7 +94,7 @@ class CommandLineRunner {
 /// Don't use this exception directly (its abstract).
 /// Instead use one of the more specific derived exceptions or create
 /// your own extending from this exception.
-abstract class CommandLineException extends DShellException {
+abstract class CommandLineException extends DCliException {
   ///
   CommandLineException(String message) : super(message);
 }

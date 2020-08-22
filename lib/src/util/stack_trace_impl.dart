@@ -131,7 +131,7 @@ class StackTraceImpl implements core.StackTrace {
       /// file:///.../package/filename.dart:line:column
       ///
       /// Windows
-      /// (file:///d:/a/dshell/dshell/bin/dshell_install.dart:line:column
+      /// (file:///d:/a/dcli/dcli/bin/dcli_install.dart:line:column
       ///
       /// Package
       /// package:/package/.path./filename.dart:line:column

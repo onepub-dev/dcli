@@ -19,10 +19,10 @@ A clear and concise description of what you expected to happen.
 **Logs**
 If applicable, add any logs to help explain your problem.
 
-**Run dshell doctor:**
-From the cli run `dshell doctor`
+**Run dcli doctor:**
+From the cli run `dcli doctor`
 ```
-Paste the output from dshell doctor here
+Paste the output from dcli doctor here
 ```
 
 

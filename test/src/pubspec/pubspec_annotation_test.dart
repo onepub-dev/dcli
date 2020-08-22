@@ -1,5 +1,5 @@
 @Timeout(Duration(seconds: 600))
-import 'package:dshell/src/pubspec/pubspec_annotation.dart';
+import 'package:dcli/src/pubspec/pubspec_annotation.dart';
 import 'package:test/test.dart';
 
 void main() {
@@ -9,7 +9,7 @@ void main() {
       @pubspec
       name: find.dart
       dependencies:
-        dshell: ^1.0.0
+        dcli: ^1.0.0
         args: ^1.5.2
         path: ^1.6.4
     */
@@ -25,7 +25,7 @@ void main() {
       @pubspec
       name: find.dart
       dependencies:
-        dshell: ^1.0.0
+        dcli: ^1.0.0
         args: ^1.5.2
         path: ^1.6.4
     **/
@@ -44,7 +44,7 @@ void main() {
      *  @pubspec
      *  name: find.dart
      *  dependencies:
-     *    dshell: ^1.0.0
+     *    dcli: ^1.0.0
      *    args: ^1.5.2
      *    path: ^1.6.4
     **/
@@ -62,7 +62,7 @@ void main() {
     /*@pubspec
      *  name: find.dart
      *  dependencies:
-     *    dshell: ^1.0.0
+     *    dcli: ^1.0.0
      *    args: ^1.5.2
      *    path: ^1.6.4
     */
@@ -80,7 +80,7 @@ void main() {
     /**@pubspec
      *  name: find.dart
      *  dependencies:
-     *    dshell: ^1.0.0
+     *    dcli: ^1.0.0
      *    args: ^1.5.2
      *    path: ^1.6.4
     */
@@ -98,7 +98,7 @@ void main() {
     /**@pubspec
      *  name: find.dart
      *  dependencies:
-     *    dshell: ^1.0.0
+     *    dcli: ^1.0.0
      *    args: ^1.5.2
      *    path: ^1.6.4
     */
@@ -114,7 +114,7 @@ void main() {
 name: test
 version: 1.0.0
 dependencies:
-  dshell: ^2.0.0
+  dcli: ^2.0.0
   args: ^2.0.1
   collection: ^1.14.12
   file_utils: ^0.1.3

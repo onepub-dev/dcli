@@ -6,7 +6,7 @@ import 'dart:isolate';
 
 import 'package:meta/meta.dart';
 
-import '../../dshell.dart';
+import '../../dcli.dart';
 import 'stack_trace_impl.dart';
 import 'wait_for_ex.dart';
 
@@ -55,7 +55,7 @@ class NamedLock {
 
   /// [lockPath] is the path of the directory used
   /// to store the lock file.
-  /// If no lockPath is given then [Directory.systemTemp]/dshell/locks is used
+  /// If no lockPath is given then [Directory.systemTemp]/dcli/locks is used
   /// to store locks.
   /// All code that shares the lock MUST use the
   /// same [lockPath]. It is recommended that you
@@ -88,7 +88,7 @@ class NamedLock {
         _description = description {
     assert(name != null);
 
-    _lockPath ??= join(rootPath, Directory.systemTemp.path, 'dshell', 'locks');
+    _lockPath ??= join(rootPath, Directory.systemTemp.path, 'dcli', 'locks');
     _description ??= '';
   }
 
@@ -130,10 +130,10 @@ class NamedLock {
       if (lockHeld) _releaseLock();
       var stackTrace = StackTraceImpl.fromStackTrace(st);
 
-      if (e is DShellException) {
+      if (e is DCliException) {
         throw e.copyWith(stackTrace);
       } else {
-        throw DShellException.from(e, stackTrace);
+        throw DCliException.from(e, stackTrace);
       }
     });
   }
@@ -378,7 +378,7 @@ void _log(String message) {
 }
 
 ///
-class LockException extends DShellException {
+class LockException extends DCliException {
   ///
   LockException(String message) : super(message);
 }

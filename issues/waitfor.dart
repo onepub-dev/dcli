@@ -4,8 +4,8 @@ import 'dart:cli';
 
 import 'dart:io';
 
-import 'package:dshell/dshell.dart';
-import 'package:dshell/src/util/stack_trace_impl.dart';
+import 'package:dcli/dcli.dart';
+import 'package:dcli/src/util/stack_trace_impl.dart';
 
 void main() {
   var future = startProcess();
@@ -39,10 +39,10 @@ void waitForMe(Future future) {
     if (e.error is Exception) {
       print(e.error);
     } else if (e is AsyncError) {
-      print('Rethrowing a non DShellException $e');
+      print('Rethrowing a non DCliException $e');
       rethrow;
     } else {
-      print('Rethrowing a non DShellException $e');
+      print('Rethrowing a non DCliException $e');
       rethrow;
     }
   } finally {
@@ -82,10 +82,10 @@ T waitForEx<T>(Future<T> future) {
     // stacktrace the future leaves us with.
     var stackTrace = StackTraceImpl(skipFrames: 2);
 
-    if (exception is DShellException) {
-      throw (exception as DShellException).copyWith(stackTrace);
+    if (exception is DCliException) {
+      throw (exception as DCliException).copyWith(stackTrace);
     } else {
-      throw DShellException.from(exception, stackTrace);
+      throw DCliException.from(exception, stackTrace);
     }
   }
   return value;

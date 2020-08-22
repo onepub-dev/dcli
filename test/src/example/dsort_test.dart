@@ -1,10 +1,10 @@
 @Timeout(Duration(seconds: 600))
 
-import 'package:dshell/dshell.dart' hide equals;
-import 'package:dshell/src/functions/is.dart';
-import 'package:dshell/src/script/entry_point.dart';
-import 'package:dshell/src/util/dshell_exception.dart';
-import 'package:dshell/src/util/file_sort.dart';
+import 'package:dcli/dcli.dart' hide equals;
+import 'package:dcli/src/functions/is.dart';
+import 'package:dcli/src/script/entry_point.dart';
+import 'package:dcli/src/util/dcli_exception.dart';
+import 'package:dcli/src/util/file_sort.dart';
 import 'package:test/test.dart';
 
 import '../util/test_file_system.dart';
@@ -39,7 +39,7 @@ void main() {
                 ',',
                 '\n');
             fileSort.sort();
-          } on DShellException catch (e) {
+          } on DCliException catch (e) {
             print(e);
           }
 
@@ -74,7 +74,7 @@ void main() {
                 ',',
                 '\n');
             fileSort.sort();
-          } on DShellException catch (e) {
+          } on DCliException catch (e) {
             print(e);
           }
 
@@ -100,7 +100,7 @@ void main() {
             testFile.write(unsorted.join('\n'));
 
             EntryPoint().process(['-v', 'example/dsort.dart', testFile]);
-          } on DShellException catch (e) {
+          } on DCliException catch (e) {
             print(e);
           }
 
@@ -130,7 +130,7 @@ void main() {
           try {
             EntryPoint().process(
                 ['example/dsort.dart', '-v', '--sortkey=1nd', testFile]);
-          } on DShellException catch (e) {
+          } on DCliException catch (e) {
             print(e);
           }
 
@@ -168,7 +168,7 @@ void main() {
               '--sortkey=1nd,2,3Sd,5-7nd',
               testFile
             ]);
-          } on DShellException catch (e) {
+          } on DCliException catch (e) {
             print(e);
           }
 

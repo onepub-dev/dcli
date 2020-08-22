@@ -1,8 +1,8 @@
-import '../../../dshell.dart';
+import '../../../dcli.dart';
 import '../../functions/which.dart';
 import '../../settings.dart';
 import '../../util/ansi_color.dart';
-import '../../util/dshell_paths.dart';
+import '../../util/dcli_paths.dart';
 import '../../util/recase.dart';
 import '../../util/runnable_process.dart';
 import '../command_line_runner.dart';
@@ -20,15 +20,15 @@ class VersionCommand extends Command {
   int run(List<Flag> selectedFlags, List<String> subarguments) {
     if (subarguments.isNotEmpty) {
       throw InvalidArguments(
-          "'dshell version' does not take any arguments. Found $subarguments");
+          "'dcli version' does not take any arguments. Found $subarguments");
     }
 
-    var appname = DShellPaths().dshellName;
+    var appname = DCliPaths().dcliName;
 
     var location = which(appname, first: true).firstLine;
 
     if (location == null) {
-      printerr(red('Error: dshell is not on your path. Run "dshell install"'));
+      printerr(red('Error: dcli is not on your path. Run "dcli install"'));
     }
 
     print(green(
@@ -39,7 +39,7 @@ class VersionCommand extends Command {
 
   @override
   String description() =>
-      """Running 'dshell version' displays the dshell version and path.""";
+      """Running 'dcli version' displays the dcli version and path.""";
 
   @override
   String usage() => 'Version';

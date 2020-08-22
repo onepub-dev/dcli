@@ -1,7 +1,7 @@
 import '../settings.dart';
 import '../util/wait_for_ex.dart';
 
-import 'dshell_function.dart';
+import 'dcli_function.dart';
 
 /// sleeps for the provided [duration] of the given [interval].
 ///
@@ -30,7 +30,7 @@ enum Interval {
   minutes
 }
 
-class _Sleep extends DShellFunction {
+class _Sleep extends DCliFunction {
   void sleep(int duration, {Interval interval = Interval.seconds}) {
     Settings().verbose('sleep: duration: $duration interval: $interval');
     Duration _duration;

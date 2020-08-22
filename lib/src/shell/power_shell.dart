@@ -1,4 +1,4 @@
-import '../../dshell.dart';
+import '../../dcli.dart';
 import 'shell_mixin.dart';
 import 'windows_mixin.dart';
 
@@ -16,8 +16,8 @@ class PowerShell with WindowsMixin, ShellMixin {
     /// These need to be run as admin
     /// not working correctly at this point.
     /// Looks like powershell ignores the file association.
-    'cmd /c assoc .dart=dshell'.run;
-    r'''cmd /c ftype dshell=`"C:\Users\User\dshell`" `"%1`" `"%2`" `"%3`" `"%4`" `"%5`" `"%6`" `"%7`" `"%8`" `"%9`"'''
+    'cmd /c assoc .dart=dcli'.run;
+    r'''cmd /c ftype dcli=`"C:\Users\User\dcli`" `"%1`" `"%2`" `"%3`" `"%4`" `"%5`" `"%6`" `"%7`" `"%8`" `"%9`"'''
         .run;
     return true;
   }

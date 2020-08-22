@@ -1,9 +1,9 @@
-import '../../dshell.dart';
+import '../../dcli.dart';
 import 'posix_mixin.dart';
 import 'shell_mixin.dart';
 
 /// Provides a number of helper functions
-/// when dshell needs to interact with the Bash shell.
+/// when dcli needs to interact with the Bash shell.
 
 class BashShell with ShellMixin, PosixMixin {
   /// Name of the shell
@@ -21,13 +21,13 @@ class BashShell with ShellMixin, PosixMixin {
   @override
   bool get isCompletionSupported => true;
 
-  // adds bash cli completion for dshell
+  // adds bash cli completion for dcli
   // by adding a 'complete' command to ~/.bashrc
   @override
   void installTabCompletion({bool quiet = false}) {
     if (!isCompletionInstalled) {
       // Add cli completion
-      var command = "complete -C 'dshell_complete' dshell";
+      var command = "complete -C 'dcli_complete' dcli";
 
       var startFile = startScriptPath;
 
@@ -39,10 +39,10 @@ class BashShell with ShellMixin, PosixMixin {
 
         if (!quiet) {
           print(
-              'dshell tab completion installed. Restart your terminal to activate it.');
+              'dcli tab completion installed. Restart your terminal to activate it.');
         }
       } else {
-        printerr(red('Unable to install dshell tab completion'));
+        printerr(red('Unable to install dcli tab completion'));
         printerr(
             "Add ${orange('$command')} to your start up script to enable tab completion");
       }

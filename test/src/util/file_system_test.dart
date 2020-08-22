@@ -1,7 +1,7 @@
 @Timeout(Duration(seconds: 600))
 import 'dart:io';
 
-import 'package:dshell/dshell.dart';
+import 'package:dcli/dcli.dart';
 import 'package:test/test.dart';
 
 import 'test_file_system.dart';

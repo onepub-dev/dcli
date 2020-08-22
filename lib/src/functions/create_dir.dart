@@ -1,5 +1,5 @@
 import 'dart:io';
-import '../../dshell.dart';
+import '../../dcli.dart';
 import '../settings.dart';
 import 'function.dart';
 
@@ -23,7 +23,7 @@ import 'function.dart';
 void createDir(String path, {bool recursive = false}) =>
     _CreateDir().createDir(path, recursive: recursive);
 
-class _CreateDir extends DShellFunction {
+class _CreateDir extends DCliFunction {
   void createDir(String path, {bool recursive}) {
     Settings().verbose('createDir:  ${absolute(path)} recursive: $recursive');
 

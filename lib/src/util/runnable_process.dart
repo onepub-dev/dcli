@@ -4,9 +4,9 @@ import 'dart:io';
 
 import 'package:meta/meta.dart';
 
-import '../../dshell.dart';
+import '../../dcli.dart';
 import '../functions/env.dart';
-import 'dshell_exception.dart';
+import 'dcli_exception.dart';
 import 'parse_cli_command.dart';
 import 'progress.dart';
 import 'stack_trace_impl.dart';
@@ -432,7 +432,7 @@ class RunnableProcess {
 }
 
 ///
-class RunException extends DShellException {
+class RunException extends DCliException {
   /// The command line that was being run.
   String cmdLine;
 

@@ -1,7 +1,7 @@
 @Timeout(Duration(minutes: 5))
-import 'package:dshell/src/script/pub_get.dart';
-import 'package:dshell/src/script/script.dart';
-import 'package:dshell/src/script/virtual_project.dart';
+import 'package:dcli/src/script/pub_get.dart';
+import 'package:dcli/src/script/script.dart';
+import 'package:dcli/src/script/virtual_project.dart';
 import 'package:test/test.dart';
 
 import '../../util/test_file_system.dart';

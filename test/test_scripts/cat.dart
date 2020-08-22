@@ -1,6 +1,6 @@
-#! /usr/bin/env dshell
+#! /usr/bin/env dcli
 
-import 'package:dshell/dshell.dart';
+import 'package:dcli/dcli.dart';
 
 /// Used by unit tests as a cross platform version of cat
 void main(List<String> args) {

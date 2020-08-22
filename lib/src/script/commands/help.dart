@@ -37,7 +37,7 @@ class HelpCommand extends Command {
   /// Print the help usage statement.
   static void printUsageHowTo() {
     var help = HelpCommand();
-    print('For help with dshell options:');
+    print('For help with dcli options:');
     print('  ${Settings().appname} ${help.usage()}');
     print('    ${help.description()}');
   }
@@ -48,12 +48,12 @@ class HelpCommand extends Command {
         '$appname: Executes Dart scripts.  Version: ${Settings().version}'));
     print('');
     print('Example: ');
-    print('   dshell hello_world.dart');
-    print('   dshell -v compile -nc hello_world.dart');
+    print('   dcli hello_world.dart');
+    print('   dcli -v compile -nc hello_world.dart');
     print('');
     print(green('Usage:'));
     print(
-        '  dshell [${blue('flag, flag...')}] [${blue('command')}] [arguments...]');
+        '  dcli [${blue('flag, flag...')}] [${blue('command')}] [arguments...]');
     print('');
     print(blue('global flags:'));
     for (var flag in CommandLineRunner.globalFlags) {

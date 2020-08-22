@@ -1,9 +1,9 @@
 import 'dart:async';
 import 'dart:cli' as cli;
 
-import '../../dshell.dart';
+import '../../dcli.dart';
 
-import 'dshell_exception.dart';
+import 'dcli_exception.dart';
 import 'stack_trace_impl.dart';
 
 /// Wraps the standard cli waitFor
@@ -24,7 +24,7 @@ T waitForEx<T>(Future<T> future) {
     if (e.error is Exception) {
       exception = e.error as Exception;
     } else {
-      Settings().verbose('Rethrowing a non DShellException $e');
+      Settings().verbose('Rethrowing a non DCliException $e');
       rethrow;
     }
   }
@@ -35,10 +35,10 @@ T waitForEx<T>(Future<T> future) {
     // stacktrace the future leaves us with.
     var stackTrace = StackTraceImpl(skipFrames: 2);
 
-    if (exception is DShellException) {
+    if (exception is DCliException) {
       throw exception.copyWith(stackTrace);
     } else {
-      throw DShellException.from(exception, stackTrace);
+      throw DCliException.from(exception, stackTrace);
     }
   }
   return value;

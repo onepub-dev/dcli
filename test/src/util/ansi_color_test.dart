@@ -1,7 +1,7 @@
 @Timeout(Duration(seconds: 600))
-import 'package:dshell/dshell.dart';
-import 'package:dshell/src/util/ansi.dart';
-import 'package:dshell/src/util/ansi_color.dart';
+import 'package:dcli/dcli.dart';
+import 'package:dcli/src/util/ansi.dart';
+import 'package:dcli/src/util/ansi_color.dart';
 
 import 'package:test/test.dart';
 

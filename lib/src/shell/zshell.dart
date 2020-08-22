@@ -3,7 +3,7 @@ import 'posix_mixin.dart';
 import 'shell_mixin.dart';
 
 /// Provides a number of helper functions
-/// when dshell needs to interact with the Zsh shell.
+/// when dcli needs to interact with the Zsh shell.
 class ZshShell with ShellMixin, PosixMixin {
   /// Name of the shell
   static const String shellName = 'zsh';

@@ -1,9 +1,9 @@
-Create a dshell script:
+Create a dcli script:
 
 ```
-dshell create hello.dart
+dcli create hello.dart
 Creating project.
-DShell clean started in the background.
+DCli clean started in the background.
 
 To run your script:
   ./hello.dart
@@ -12,7 +12,7 @@ Hello World
 
 Compile your script:
 ```
-dshell compile hello.dart
+dcli compile hello.dart
 ```
 
 Run the compiled script:
@@ -24,7 +24,7 @@ Once you have finished developing your script and you need it to go faster...
 
 Compile and install the script onto your path:
 ```
-dshell compile -i hello.dart
+dcli compile -i hello.dart
 ```
 
 Now the script is installed you can run it:
@@ -32,13 +32,13 @@ Now the script is installed you can run it:
 hello
 ```
 
-The `dshell create hello.dart` command creates a basic hello world script.
+The `dcli create hello.dart` command creates a basic hello world script.
 
 If you `cat` the contents you should see:
 
 ```
-#! /usr/bin/env dshell
-import 'package:dshell/dshell.dart';
+#! /usr/bin/env dcli
+import 'package:dcli/dcli.dart';
 
 void main() {
   print("Hello World");
@@ -58,6 +58,6 @@ Hello World
 
 The clean process is a once off process and only needs to be run again if you change your dependencies.
 
-See dshell on pub.dev for more examples:
-https://pub.dev/packages/dshell
+See dcli on pub.dev for more examples:
+https://pub.dev/packages/dcli
 

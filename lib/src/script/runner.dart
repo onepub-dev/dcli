@@ -1,7 +1,7 @@
 import 'dart:cli';
 import 'dart:io';
 
-import '../../dshell.dart';
+import '../../dcli.dart';
 import '../util/wait_for_ex.dart';
 import 'virtual_project.dart';
 

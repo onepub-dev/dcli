@@ -1,4 +1,4 @@
-#! /usr/bin/env dshell
+#! /usr/bin/env dcli
 
 @Timeout(Duration(minutes: 10))
 
@@ -6,8 +6,8 @@ import 'dart:async';
 import 'dart:io';
 import 'dart:isolate';
 
-import 'package:dshell/dshell.dart';
-import 'package:dshell/src/util/named_lock.dart';
+import 'package:dcli/dcli.dart';
+import 'package:dcli/src/util/named_lock.dart';
 import 'package:test/test.dart';
 
 import 'test_file_system.dart';
@@ -16,7 +16,7 @@ final port = 63424;
 
 void main() {
   test('lock path', () {
-    var lockPath = join(rootPath, Directory.systemTemp.path, 'dshell', 'locks');
+    var lockPath = join(rootPath, Directory.systemTemp.path, 'dcli', 'locks');
     print(lockPath);
   });
 
@@ -32,10 +32,10 @@ void main() {
     expect(() {
       TestFileSystem().withinZone((fs) async {
         NamedLock(name: 'timeout').withLock(() {
-          throw DShellException('fake exception');
+          throw DCliException('fake exception');
         });
       });
-    }, throwsA(TypeMatcher<DShellException>()));
+    }, throwsA(TypeMatcher<DCliException>()));
   }, skip: true);
 
   test('withLock', () {

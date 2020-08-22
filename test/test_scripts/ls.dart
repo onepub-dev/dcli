@@ -1,8 +1,8 @@
-#! /usr/bin/env dshell
+#! /usr/bin/env dcli
 
 import 'dart:io';
 
-import 'package:dshell/dshell.dart';
+import 'package:dcli/dcli.dart';
 
 /// Used by unit tests as a cross platform version of ls.
 void main(List<String> args) {
@@ -19,7 +19,7 @@ void main(List<String> args) {
       }
     }
   } else {
-    // for linux/mac dshell will have expanded globs to file names
+    // for linux/mac dcli will have expanded globs to file names
     for (var arg in args) {
       if (!exists(arg)) {
         print("ls: cannot access '$arg': No such file or directory");

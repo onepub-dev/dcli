@@ -1,6 +1,6 @@
 import 'dart:convert';
 
-import 'package:dshell/dshell.dart';
+import 'package:dcli/dcli.dart';
 
 void main(List<String> args) {
   var ls = 'ls'.process;

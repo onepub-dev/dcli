@@ -1,27 +1,27 @@
-#! /usr/bin/env dshell
+#! /usr/bin/env dcli
 // remove the next line
 // ignore_for_file: unused_import
 /*
 @pubspec
 name: find.dart
 dependencies:
-  dshell: ^1.0.0
+  dcli: ^1.0.0
   args: ^1.5.2
   path: ^1.6.4
 */
 
 import 'dart:io';
-import 'package:dshell/dshell.dart';
+import 'package:dcli/dcli.dart';
 import 'package:path/path.dart' as p;
 import 'package:args/args.dart';
 
 ///
 /// Call this program using:
-/// dshell find.dart -v --root . ---recursive --pattern *.*
+/// dcli find.dart -v --root . ---recursive --pattern *.*
 ///
 /// to see the usage run:
 ///
-/// dshell find.dart
+/// dcli find.dart
 ///
 /// Find all files that match the given pattern.
 /// Starts from the current directory unless [--root]
@@ -32,9 +32,7 @@ void main(List<String> args) {
   parser
     ..addFlag('verbose', abbr: 'v', defaultsTo: false)
     ..addFlag('recursive', abbr: 'r', defaultsTo: true)
-    ..addOption('root',
-        defaultsTo: '.',
-        help: 'Specifies the directory to start searching from')
+    ..addOption('root', defaultsTo: '.', help: 'Specifies the directory to start searching from')
     ..addOption('pattern',
         abbr: 'p',
         help:

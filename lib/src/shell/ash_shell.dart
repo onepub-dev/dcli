@@ -3,7 +3,7 @@ import 'posix_mixin.dart';
 import 'shell_mixin.dart';
 
 /// Provides a number of helper functions
-/// when dshell needs to interact with the Bash shell.
+/// when dcli needs to interact with the Bash shell.
 
 class AshShell with ShellMixin, PosixMixin {
   @override
@@ -16,7 +16,7 @@ class AshShell with ShellMixin, PosixMixin {
   @override
   bool get isCompletionSupported => false;
 
-  // adds bash cli completion for dshell
+  // adds bash cli completion for dcli
   // by adding a 'complete' command to ~/.bashrc
   @override
   void installTabCompletion({bool quiet = false}) {

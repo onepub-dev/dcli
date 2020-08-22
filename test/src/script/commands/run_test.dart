@@ -1,9 +1,9 @@
 @Timeout(Duration(seconds: 610))
 
-import 'package:dshell/dshell.dart' hide equals;
-import 'package:dshell/src/script/entry_point.dart';
-import 'package:dshell/src/util/dshell_paths.dart';
-import 'package:dshell/src/util/runnable_process.dart';
+import 'package:dcli/dcli.dart' hide equals;
+import 'package:dcli/src/script/entry_point.dart';
+import 'package:dcli/src/util/dcli_paths.dart';
+import 'package:dcli/src/util/runnable_process.dart';
 import 'package:test/test.dart';
 
 import '../../util/test_file_system.dart';
@@ -19,7 +19,7 @@ void main() {
       var script = truepath(scriptPath, 'print_to_stdout.dart');
 
       // make certain our test script exists and is in a runnable state.
-      '${DShellPaths().dshellName} -v create -fg $script'.run;
+      '${DCliPaths().dcliName} -v create -fg $script'.run;
 
       EntryPoint().process(['run', script]);
 
@@ -30,7 +30,7 @@ void main() {
     TestFileSystem().withinZone((fs) {
       var results = <String>[];
 
-      '${DShellPaths().dshellName} -v test/test_scripts/hello_world.dart'
+      '${DCliPaths().dcliName} -v test/test_scripts/hello_world.dart'
           .forEach((line) => results.add(line), stderr: printerr);
 
       // if clean hasn't been run then we have the results of a pub get in the the output.
@@ -46,7 +46,7 @@ void main() {
         // with a virtual pubspec
         exit =
             EntryPoint().process(['run', 'test/test_scripts/which.dart', 'ls']);
-      } on DShellException catch (e) {
+      } on DCliException catch (e) {
         print(e);
       }
       expect(exit, equals(0));
@@ -61,7 +61,7 @@ void main() {
 
         exit = EntryPoint().process(
             ['-v', 'run', 'test/test_scripts/local_pubspec/hello_world.dart']);
-      } on DShellException catch (e) {
+      } on DCliException catch (e) {
         print(e);
       }
       expect(exit, equals(0));
@@ -79,7 +79,7 @@ void main() {
           'run',
           'test/test_scripts/traditional_project/bin/traditional.dart'
         ]);
-      } on DShellException catch (e) {
+      } on DCliException catch (e) {
         print(e);
       }
       expect(exit, equals(0));
@@ -97,7 +97,7 @@ void main() {
           'run',
           'test/test_scripts/traditional_project/bin/nested/traditional.dart'
         ]);
-      } on DShellException catch (e) {
+      } on DCliException catch (e) {
         print(e);
       }
       expect(exit, equals(0));
@@ -115,7 +115,7 @@ void main() {
           'run',
           'test/test_scripts/traditional_project/example/traditional.dart'
         ]);
-      } on DShellException catch (e) {
+      } on DCliException catch (e) {
         print(e);
       }
       expect(exit, equals(0));
@@ -133,7 +133,7 @@ void main() {
           'run',
           'test/test_scripts/traditional_project/tool/traditional.dart'
         ]);
-      } on DShellException catch (e) {
+      } on DCliException catch (e) {
         print(e);
       }
       expect(exit, equals(0));

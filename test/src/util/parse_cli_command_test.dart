@@ -1,11 +1,11 @@
 @Timeout(Duration(seconds: 600))
 import 'dart:io';
 
-import 'package:dshell/dshell.dart' hide equals;
-import 'package:dshell/src/functions/pwd.dart';
+import 'package:dcli/dcli.dart' hide equals;
+import 'package:dcli/src/functions/pwd.dart';
 
-import 'package:dshell/src/script/command_line_runner.dart';
-import 'package:dshell/src/util/parse_cli_command.dart';
+import 'package:dcli/src/script/command_line_runner.dart';
+import 'package:dcli/src/util/parse_cli_command.dart';
 import 'package:test/test.dart';
 
 import 'test_file_system.dart';
@@ -98,7 +98,7 @@ void main() {
 
   group(('Glob expansion'), () {
     test('No expansion', () {
-// var cmd = 'docker run   --network host   dshell:docker_dev_cli   -it --volume $HOME:/me --entrypoint /bin/bash';
+// var cmd = 'docker run   --network host   dcli:docker_dev_cli   -it --volume $HOME:/me --entrypoint /bin/bash';
     });
   });
 
@@ -189,7 +189,7 @@ void main() {
 
   test('invalid absolute path/*', () {
     TestFileSystem().withinZone((fs) {
-      expect(() => ParsedCliCommand('ls /git/dshell/*', fs.top),
+      expect(() => ParsedCliCommand('ls /git/dcli/*', fs.top),
           throwsA(TypeMatcher<FileSystemException>()));
     });
   });
@@ -230,7 +230,7 @@ void main() {
       --host=slayer
       --port=3306
       -e
-      "CREATE USER 'me'@'localhost' IDENTIFIED BY 'mypassword'; GRANT ALL ON dshell.* TO 'me'@'slayer';"
+      "CREATE USER 'me'@'localhost' IDENTIFIED BY 'mypassword'; GRANT ALL ON dcli.* TO 'me'@'slayer';"
       ''';
 
     var parsed = ParsedCliCommand(cmd.replaceAll('\n', ' '), pwd);
@@ -249,6 +249,6 @@ void main() {
     expect(
         parsed.args[9],
         equals(
-            '''CREATE USER 'me'@'localhost' IDENTIFIED BY 'mypassword'; GRANT ALL ON dshell.* TO 'me'@'slayer';'''));
+            '''CREATE USER 'me'@'localhost' IDENTIFIED BY 'mypassword'; GRANT ALL ON dcli.* TO 'me'@'slayer';'''));
   });
 }

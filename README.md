@@ -1,10 +1,10 @@
-# DShell - a library and tools for building bash style cli scripts using the Dart programming language.
+# dcli - a library and tools for building bash style cli scripts using the Dart programming language.
 
 # Contents
 * [Overview](#overview)
-* [So why DShell](#so-why-dshell)
-* [What does DShell do?](#what-does-dshell-do)
-* [What commands does DShell support?](#what-commands-does-dshell-support)
+* [So why DCli](#so-why-dcli)
+* [What does DCli do?](#what-does-dcli-do)
+* [What commands does DCli support?](#what-commands-does-dcli-support)
 * [Getting Started](#getting-started)
 * [Installing](#installing)
 * [Writing your first script](#writing-your-first-script)
@@ -12,11 +12,11 @@
   * [Dart lambda functions](#dart-lambda-functions)
   * [Named Arguments](#named-arguments)
   * [Use a shebang](#use-a-shebang)
-  * [DShell clean](#dShell-clean)
-* [DShell and futures](#dshell-and-futures)
+  * [DCli clean](#dcli-clean)
+* [DCli and futures](#dcli-and-futures)
   * [Just ignore Futures](#just-ignore-Futures)
-  * [How DShell manages futures](#how-dshell-manages-futures)
-* [Using DShell functions](#using-dshell-functions)
+  * [How DCli manages futures](#how-dcli-manages-futures)
+* [Using DCli functions](#using-dcli-functions)
 * [Environment Variables](#environment-variables)
 * [Performance](#performance)
 * [Compiling to Native](#compiling-to-native)
@@ -34,7 +34,7 @@
   * [Pubspec precendence](#pubspec-precendence)
   * [@pubspec Annotation](#pubspec-annotation)
 * [Multi-file scripts](#multi-file-scripts)
-* [DShell commands](#dshell-commands)
+* [DCli commands](#dcli-commands)
   * [flags](#flags)
   * [cleanall](#cleanall)
   * [clean](#clean)
@@ -43,7 +43,7 @@
   * [install](#install)
   * [run](#run)
   * [split](#split)
-* [Upgrading DShell](#upgrading-dshell)
+* [Upgrading DCli](#upgrading-dcli)
 * [Internal workings](#Internal-workings)
   * [Virtual Projects](#virtual-projects)
   * [waitForEx](#waitForEx)
@@ -52,12 +52,12 @@
 
 # Overview
 
-DShell is intended to provide a replacement for bash and similar shell scripting languages with a Dart based scripting tool.
+DCli is intended to provide a replacement for bash and similar shell scripting languages with a Dart based scripting tool.
 
 Bash has been the 'go to tool' for scripting file system operations for decades and it provides a wealth 
 of really useful features.
 
-## So why DShell?
+## So why DCli?
 
 Bash is probably the most commonly used scripting tool for system maintenance.
 
@@ -65,9 +65,9 @@ Bash has been around for a long time and wasn't so much designed as evolved.
 
 The problem now is that its old, has an archaic syntax and doesn't scale well.
 
-So why is DShell different?
+So why is DCli different?
 
-DShell is based on the relatively new programming language; Dart.
+DCli is based on the relatively new programming language; Dart.
 
 Dart is currently the fastest growing language on github and is the basis on which Flutter is built. If you have not heard of flutter then you should have a look, but I digress.
 
@@ -80,23 +80,23 @@ Dart is a simple to learn, and uses the all too familiar 'C' style syntax.
 
 It provides elgant solutions for common problems and from a scripting perspective hits all of the high notes.
 
-DShell excels in all of the functionality that you expect from Bash and then takes you to the next level.
+DCli excels in all of the functionality that you expect from Bash and then takes you to the next level.
 
-DShell is easy to install, makes it a breeze to create simple scripts and provides the tools to manage a script that started out as 100 lines but somehow grew to 10,000 lines. There is also a large collection of third party libraries that you can included in your script with no more than an import statement and a dependancy declaration. 
+DCli is easy to install, makes it a breeze to create simple scripts and provides the tools to manage a script that started out as 100 lines but somehow grew to 10,000 lines. There is also a large collection of third party libraries that you can included in your script with no more than an import statement and a dependancy declaration. 
 
 Dart is fast and if you need even more speed it can be compiled to a single file executable that is portable between binary compatible machines.
 
-You can use your favorite editor to create DShell scripts. Vi or VIM work fine but Visual Code is recommended. 
+You can use your favorite editor to create DCli scripts. Vi or VIM work fine but Visual Code is recommended. 
 
-DShell and Dart also make it harder to make some of the common mistakes that Bash invites.
+DCli and Dart also make it harder to make some of the common mistakes that Bash invites.
 
-With Dart and DShell you have the option to Type your variables. This is a bit of a controversial issues, so DShell doesn't force you to Type your scripts but I ALWAYS use types and you should too.
+With Dart and DCli you have the option to Type your variables. This is a bit of a controversial issues, so DCli doesn't force you to Type your scripts but I ALWAYS use types and you should too.
 
 For a long time I've wanted to build a replacement tool that has the elegance of a modern language, with the power of Bash.
 
-DShell is hopefully that.
+DCli is hopefully that.
 
-## What does DShell do?
+## What does DCli do?
 
 * Makes it easy to write maintenance scripts as you do with Bash. 
 * Uses the elegant and simple Dart language
@@ -115,9 +115,9 @@ DShell is hopefully that.
 * Executes commands synchronously, so no need to worry about futures.
 * Optionally compile scripts to a standalone native executable.
 
-## What commands does DShell support?
+## What commands does DCli support?
 
-DShell ships with a number of built in functions and the abilty to call any cli application and easily process the output.
+DCli ships with a number of built in functions and the abilty to call any cli application and easily process the output.
 
 These are some of the built-in commands:
 * move(from, to)
@@ -145,74 +145,74 @@ These are some of the built-in commands:
 # Getting Started
 ## Installing
 
-DShell now includes an installer which installs Dart and DShell.
+DCli now includes an installer which installs Dart and DCli.
 
 
 #### Linux:
-[Installer](https://raw.githubusercontent.com/bsutton/dshell/master/bin/linux/dshell_install)
+[Installer](https://raw.githubusercontent.com/bsutton/dcli/master/bin/linux/dcli_install)
 
 ```bash
-wget https://raw.githubusercontent.com/bsutton/dshell/master/bin/linux/dshell_install
-chmod +x dshell_install
-./dshell_install
+wget https://raw.githubusercontent.com/bsutton/dcli/master/bin/linux/dcli_install
+chmod +x dcli_install
+./dcli_install
 ```
 
 #### Windows
-[Installer](https://raw.githubusercontent.com/bsutton/dshell/master/bin/windows/dshell_install.exe)
+[Installer](https://raw.githubusercontent.com/bsutton/dcli/master/bin/windows/dcli_install.exe)
 
 ```cmd
-curl https://raw.githubusercontent.com/bsutton/dshell/master/bin/windows/dshell_install.exe -o dshell_install.exe
-dshell_install.exe
+curl https://raw.githubusercontent.com/bsutton/dcli/master/bin/windows/dcli_install.exe -o dcli_install.exe
+dcli_install.exe
 ```
 
-### To install DShell manually:
+### To install DCli manually:
 
-Lets install DShell, create and run our first script:
+Lets install DCli, create and run our first script:
 
 Start by installing Dart as per:
 
 https://dart.dev/get-dart
 
 
-Once Dart is installed we can install DShell.
+Once Dart is installed we can install DCli.
 
 ```shell
-pub global activate dshell
-dshell install
+pub global activate dcli
+dcli install
 ```
 
-Now lets create and run our first DShell script.
+Now lets create and run our first DCli script.
 
-To create a script we can use the `dshell create` command.
+To create a script we can use the `dcli create` command.
 
 e.g. 
 ```bash
-dshell create test.dart
+dcli create test.dart
 ```
 
 As part of the creation process we need to fetch the set of dependencies for your script.
-DShell starts a background process to fetch your dependencies. 
+DCli starts a background process to fetch your dependencies. 
 
 ```
 cli> mkdir dtest
 cli> cd dtest
 
-cli> dshell create test.dart
+cli> dcli create test.dart
 Creating project.
-DShell clean started in the background.
+DCli clean started in the background.
 
 To run your script:
   ./test.dart
 cli>
 ```
 
-The `dshell create test.dart` command creates a basic hello world script.
+The `dcli create test.dart` command creates a basic hello world script.
 
 If you `cat`/`type` the contents you should see:
 
 ```
-#! /usr/bin/env dshell
-import 'package:dshell/dshell.dart';
+#! /usr/bin/env dcli
+import 'package:dcli/dcli.dart';
 
 void main() {
   print("Hello World");
@@ -249,7 +249,7 @@ Removing it from my path allowed me to developed cli apps as well as flutter.
 
 ## Writing your first script
 
-In the Installing section we used the `dshell create` command to create a simple DShell script, but you can create a script with any editor.
+In the Installing section we used the `dcli create` command to create a simple DCli script, but you can create a script with any editor.
 
 Let's start with the classic hello_world.dart
 
@@ -263,7 +263,7 @@ Create a file called `hello_world.dart`.
 Copy the following contents to the script.
 
 ```dart
-#! /usr/bin/env dshell
+#! /usr/bin/env dcli
 
 void main() {
     print('hello world');
@@ -277,26 +277,26 @@ chmod +x hello_world.dart
 
 Note: 
 
-The first line begins with a '#!'. This is refered to as a 'hash bang'. The hash bang MUST be on the first line of your script as it tells your OS that this script is a dshell script.
+The first line begins with a '#!'. This is refered to as a 'hash bang'. The hash bang MUST be on the first line of your script as it tells your OS that this script is a dcli script.
 
-Without the #! you must run the script using dshell explictily.
+Without the #! you must run the script using dcli explictily.
 
 ```bash
-dshell hello_world.dart
+dcli hello_world.dart
 ```
 
-With the #! you can run the script and our OS will work out that it is a dshell script:
+With the #! you can run the script and our OS will work out that it is a dcli script:
 
 ```base
 ./hello_world.dart
 ```
 
 Now run the script.
-You will see a few extra lines after 'Resolving dependancies...' as DShell downloads and caches any required libraries.
+You will see a few extra lines after 'Resolving dependancies...' as DCli downloads and caches any required libraries.
 
 
 ```
-cli> dshell hello_world.dart
+cli> dcli hello_world.dart
 ...
 hello world
 cli>
@@ -311,31 +311,31 @@ hello world
 cli>
 ```
 
-The first time you run a given DShell script, DShell needs to resolve any dependancies by running a Dart `pub get` command and doing some other house keeping.
+The first time you run a given DCli script, DCli needs to resolve any dependancies by running a Dart `pub get` command and doing some other house keeping.
 
-If you run the same script a second time DShell has already resolved the dependancies and so it can run the script immediately.
+If you run the same script a second time DCli has already resolved the dependancies and so it can run the script immediately.
 
-If we had used `dshell create` the dependency resolution process would have been run in the background. But as we created the scripts ourselves it has to be run the first time you try to run the script.
+If we had used `dcli create` the dependency resolution process would have been run in the background. But as we created the scripts ourselves it has to be run the first time you try to run the script.
 
 
 > In the Dart world a `.dart` file is referred to as a 'library'. As you will see a Dart library can contain global functions and multiple Dart classes.
 
 So far this is just a normal dart library that you can run directly from the command line.
 
-The point here is that DShell isn't magic. You can just write normal Dart code using all of Dart's features and any libraries that work with a cli application. (i.e. flutter and web specific libraries are NOT going to work here.)
+The point here is that DCli isn't magic. You can just write normal Dart code using all of Dart's features and any libraries that work with a cli application. (i.e. flutter and web specific libraries are NOT going to work here.)
 
 ## Our first real script
 
-So let's do something that DShell was designed for; file management.
+So let's do something that DCli was designed for; file management.
 
 Create a new script `first.dart`
 
 Copy the following contents to the script:
 
 ```dart
-#! /usr/bin/env dshell
-/// import DShell's global functions 
-import 'package:dshell/dshell.dart';
+#! /usr/bin/env dcli
+/// import DCli's global functions 
+import 'package:dcli/dcli.dart';
 
 void main() {
     print('Now lets do someting useful.');
@@ -350,7 +350,7 @@ void main() {
     createDir('tmp');
     
     // Lets write some text to a file.
-    // DShell uses dart 2.6 extensions.
+    // DCli uses dart 2.6 extensions.
     // Ths allows us to extend [String] with
     // functions like [write] and [append].
     // [write] and [append] treat the contents
@@ -419,7 +419,7 @@ My third line
 Should I delete 'tmp'? (y/n):
 
 ```
-You are now officially a DShell guru. 
+You are now officially a DCli guru. 
 
 Go forth young man (or gal) and create.
 
@@ -430,11 +430,11 @@ To learn more about Dart's syntax read the Dart language tour.
 https://dart.dev/guides/language/language-tour
 
 
-DShell makes extensive use of Dart's lambdas.  
+DCli makes extensive use of Dart's lambdas.  
 
-Lambdas are essentially annonymous functions which DShell uses for callbacks.
+Lambdas are essentially annonymous functions which DCli uses for callbacks.
 
-The most common use of lambdas in DShell are in the forEach method.
+The most common use of lambdas in DCli are in the forEach method.
 
 In prior examples you have already seen the forEach method in action.
 
@@ -567,7 +567,7 @@ The above example will print any output sent to stdout or stderr from the 'tail'
 
 ## Use a shebang
 
-DShell also allows you to directly run a script. 
+DCli also allows you to directly run a script. 
 e.g.
 ```shell
 ./first.dart
@@ -579,10 +579,10 @@ To do this add a shebang at the top of the script:
 (Note: it must be the very first line!)
 
 ```dart 
-#! /usr/bin/env dshell
+#! /usr/bin/env dcli
 
-/// import DShell's global functions 
-import 'package:dshell/dshell.dart';
+/// import DCli's global functions 
+import 'package:dcli/dcli.dart';
 
 void main() {
 ```
@@ -595,7 +595,7 @@ Now mark the file as executable:
 chmod +x  first.dart
 ```
 
-Note: if you used the `dshell create <script>` command then DShell will have already set the execute permission on your script and added the shebang!
+Note: if you used the `dcli create <script>` command then DCli will have already set the execute permission on your script and added the shebang!
 
 Now run the script from the cli:
 
@@ -608,74 +608,74 @@ Should I delete 'tmp'? (y/n):
 cli>
 ```
 
-You're now offically in the land of DShell magic.
+You're now offically in the land of DCli magic.
 
 Faster you say? 
 
 Read the section on [compiling](#compiling-to-native) your script to make it run even faster.
 
 
-## DShell clean
-If you change the structue of your DShell script project then you need to run `dshell clean` so that DShell sees the changes you have made.
+## DCli clean
+If you change the structue of your DCli script project then you need to run `dcli clean` so that DCli sees the changes you have made.
 
 What constitutes a structural changes?
-* adding an `@pubspec` annotation to your DShell script
+* adding an `@pubspec` annotation to your DCli script
 * creating a `pubspec.yaml` file in your scripts directory.
 * creating a `lib` directory in your script's directory.
 * editing an existing `pubspec.yaml`
 * editing an existing `@pubspec` annotation
 
 What doesn't constitue a structural change?
-* editing your DShell script
+* editing your DCli script
 
 If you make a structure change simply call
 
 ```
-dshell clean <scriptname.dart>
+dcli clean <scriptname.dart>
 ```
 
 Your script is now ready to run.
 
 
-# DShell and futures
+# DCli and futures
 if your not a Dart programmer (yet) one of the most difficult things about Dart are Futures. If you are familiar with Javascript then a Future is the equivalent of a Promise.
 
 ## Just ignore Futures
 If your not familiar with Dart or Javascript then for the moment you can just ignore futures. 
 
-DShell works very hard to ensure that you don't need to worry about Futures.
+DCli works very hard to ensure that you don't need to worry about Futures.
 
 This is very intentional.
 
-If you stick to using DShell's built in functions then you can completely ignore Futures. If you start importing Dart's core libraries or third party libraries then you need to pay attention to return types. 
+If you stick to using DCli's built in functions then you can completely ignore Futures. If you start importing Dart's core libraries or third party libraries then you need to pay attention to return types. 
 
 The first time you try to call a method or function that returns a `Future` then you will know its time to come back here and read about Futures.
 
 Until then you can just skip this section.
 
-## How DShell manages futures
+## How DCli manages futures
 
-DShell does not stop you using `await`, `Futures`, `Isolates` or any other Dart functionallity. Its all yours to use and abuse as you will.
+DCli does not stop you using `await`, `Futures`, `Isolates` or any other Dart functionallity. Its all yours to use and abuse as you will.
 
-DShells global functions however intentially avoid `Futures`.
+DClis global functions however intentially avoid `Futures`.
 
-They aim of DShell is to create a Bash like simplicity to system maintenance.  `Futures` are great and all but they do make the code more complex and harder to read.
+They aim of DCli is to create a Bash like simplicity to system maintenance.  `Futures` are great and all but they do make the code more complex and harder to read.
 
-Futures also can make your scripts a little dangerous. If you copy a file and then want to append to the copied file, you had better be certain that the copy command has completed before you start the append.  DShell's global functions remove those complications.
+Futures also can make your scripts a little dangerous. If you copy a file and then want to append to the copied file, you had better be certain that the copy command has completed before you start the append.  DCli's global functions remove those complications.
 
 
-If you are interested in how we avoid using `Futures` read up on `waitFor` and check out DShell's own `waitForEx` function that does stacktrace repair when an exception is thrown.
+If you are interested in how we avoid using `Futures` read up on `waitFor` and check out DCli's own `waitForEx` function that does stacktrace repair when an exception is thrown.
 
 When you need to use futures you can read up on them in the Dart language Tour:
 
 https://dart.dev/guides/language/language-tour
 
-# Using DShell functions
-Lets start by looking at the some of the built in functions that DShell supports. 
+# Using DCli functions
+Lets start by looking at the some of the built in functions that DCli supports. 
 
-DShell exposes a range of built-in functions which are Dart global functions.
+DCli exposes a range of built-in functions which are Dart global functions.
 
-These functions are the core of how DShell provides a very Bash like feel to writing DShell scripts.
+These functions are the core of how DCli provides a very Bash like feel to writing DCli scripts.
 
 These functions make strong use of named arguments with intelligent defaults so mostly you can use the minimal form of the function.
 
@@ -684,12 +684,12 @@ Take note, there are no `Futures` or `await`s here. Each function runs synchrono
 Note: the file starts with a shebang which allows this script to be 
 run directly from the cli (no precompilation required).
 ```dart
-#! /usr/bin/env dshell
+#! /usr/bin/env dcli
 
-import 'package:dshell/dshell.dart';
+import 'package:dcli/dcli.dart';
 
 void main() {
-    // Use the global DShell Settings to enable debug output.
+    // Use the global DCli Settings to enable debug output.
     Settings().debug_on = true;
 
     // Print the current working directory
@@ -757,9 +757,9 @@ As you can see we have achieved much of the power of Bash without any of the ugl
 
 # Environment Variables
 
-Dshell provides tools to manage the environment variables within your DShell script and any child process you call from a Dshell script.
+DCli provides tools to manage the environment variables within your DCli script and any child process you call from a DCli script.
 
-When a DShell script starts, it loads the set of environment variables from its parent process. The full set of environment variables are available via the `env` function.
+When a DCli script starts, it loads the set of environment variables from its parent process. The full set of environment variables are available via the `env` function.
 
 To access an environment variable:
 
@@ -774,11 +774,11 @@ setEnv('DART_SDK', 'somepath');
 ```
 Once you set an environment variable or modify an existing one, then any calls to `env()` will return the set value.
 
-If you run a child process via any of the DShell methods then the child process will be passed all of current environment variable.
+If you run a child process via any of the DCli methods then the child process will be passed all of current environment variable.
 
-You CANNOT change the DShell script's parent environment variables. This is a security restriction imposed by the OS.
+You CANNOT change the DCli script's parent environment variables. This is a security restriction imposed by the OS.
 
-DShell also exposes a number of commonly used environment variables as global getters.
+DCli also exposes a number of commonly used environment variables as global getters.
 
 * HOME
 * PATH
@@ -795,23 +795,23 @@ paths.forEach((path) => print(path));
 
 # Performance
 
-DShell is intended to start as fast as Bash and run faster than Bash. 
+DCli is intended to start as fast as Bash and run faster than Bash. 
 
-When you first run your new DShell script, DShell has some house keeping to do including running a `pub get` which retrieves and caches any of your scripts dependancies. After the first run DShell will only run `pub get` if you call `dshell clean <scriptname.dart>`.
+When you first run your new DCli script, DCli has some house keeping to do including running a `pub get` which retrieves and caches any of your scripts dependancies. After the first run DCli will only run `pub get` if you call `dcli clean <scriptname.dart>`.
 
-The result is that DShell has similar start times to Bash and when running larger scripts is faster than Bash.
+The result is that DCli has similar start times to Bash and when running larger scripts is faster than Bash.
 
-If you absolutely need to make your script perform to the max, you will want to use DShell to compile your script.
+If you absolutely need to make your script perform to the max, you will want to use DCli to compile your script.
 
 ## Compiling to Native
-DShell also allows you to compile your script and any dependencies to a native executable.
+DCli also allows you to compile your script and any dependencies to a native executable.
 
 ```
-dshell compile <scriptname.dart>
+dcli compile <scriptname.dart>
 ```
 
 
-DShell will automatically mark your new exec as executable using `chmod +x`. 
+DCli will automatically mark your new exec as executable using `chmod +x`. 
 
 Run you natively compiled script to see just how much faster it is now:
 ```
@@ -823,14 +823,14 @@ As this is fully compiled, changes to your local script file will not affect it 
 Check out the the --install option to install the script into your path.
 
 
-You can now copy the exe to another machine (that is binary compatible) and run the exe without having to install Dart, DShell or any other dependancy.
+You can now copy the exe to another machine (that is binary compatible) and run the exe without having to install Dart, DCli or any other dependancy.
 
 
 # Calling cli applications
 
-DShell can call any console application.
+DCli can call any console application.
 
-DShell does the nasty with the String class using Dart's (2.6+) 'extension' feature.
+DCli does the nasty with the String class using Dart's (2.6+) 'extension' feature.
 The aim of this somewhat unorthodox approach is to deliver the elegance that Bash achieves when
 calling cli applications.
 
@@ -870,7 +870,7 @@ e.g.
    'wc "fred nurk.text"'.run
 ```
 
-dshell will strip the quotes and pass 'fred nurk.text' as a single argument.
+dcli will strip the quotes and pass 'fred nurk.text' as a single argument.
 
 # Piping
 
@@ -900,7 +900,7 @@ There a three basic techniques you will use:
 * use the 'start()' method with a working directory
 * relative paths
 
-DShell automatically injects the rather excelent package ['path'](https://pub.dev/packages/path)  which includes an array of global functions that allow you to build and manipulate file paths to create relative and absolute paths.
+DCli automatically injects the rather excelent package ['path'](https://pub.dev/packages/path)  which includes an array of global functions that allow you to build and manipulate file paths to create relative and absolute paths.
 
 You should prefer absolute paths over relative paths.
 
@@ -941,9 +941,9 @@ With the `path` package at your disposal there is really no need to use cd, push
 There are several reasons.
 
 1) Dart is multi-threaded
->This probably won't be an issue for you as DShell will NEVER start an Isolate and most scripts don't need to use Isolates, but best pratices says that you should assume that one day you might just need to use one, so read on...
+>This probably won't be an issue for you as DCli will NEVER start an Isolate and most scripts don't need to use Isolates, but best pratices says that you should assume that one day you might just need to use one, so read on...
 >
->Dart and consequently DShell allow you to run multiple threads of execution via Isolates.
+>Dart and consequently DCli allow you to run multiple threads of execution via Isolates.
 >
 >The problem is that all of these Isolates running in your Dart process share a single common working directory (CWD or PWD).
 >
@@ -975,11 +975,11 @@ https://dart.dev/guides/libraries/library-tour
 
 However, sometimes you need a specialised package.
 
-There are thousands of third party packages that you can use in your DShell scripts which can be found at:
+There are thousands of third party packages that you can use in your DCli scripts which can be found at:
 
 https://pub.dev/packages
 
-NOTE: you can't use Flutter or web packages in your DShell scripts.
+NOTE: you can't use Flutter or web packages in your DCli scripts.
 
 To use an external package you need to add it as a dependency to your script.
 
@@ -989,12 +989,12 @@ See the section on [Pubspec Management](#pubspec-management) for details.
 
 Each package includes install instructions which is simply a matter of adding a dependency line to your pubspec and running:
 
-`dshell clean <script>`.
+`dcli clean <script>`.
 
 ## Sharing packages
 When building scripts you often developed common coding patterns and use a common set of packages to help get the job done.
 
-DShell helps you manage these common packages by allowing you to define a set of Dart packages that are injected into every script you run.
+DCli helps you manage these common packages by allowing you to define a set of Dart packages that are injected into every script you run.
 
 See the section on [Customising Depenendency Injection](#customising-dependancy-injection) for details.
 
@@ -1009,14 +1009,14 @@ You can see additional details on Dart's pubspec here:
 https://dart.dev/tools/pub/pubspec
 
 
-DShell aims to make creating a script as simple as possible and with that in mind we provide a number of ways of creating and managing your pubspec.yaml.
+DCli aims to make creating a script as simple as possible and with that in mind we provide a number of ways of creating and managing your pubspec.yaml.
 
-By default you do NOT need a pubspec.yaml when using DShell.
+By default you do NOT need a pubspec.yaml when using DCli.
 
-NOTE: if you change the structure of your DShell script you need to run a `dshell clean`. Simple edits to you DShell script do NOT require a `clean` to be run.
+NOTE: if you change the structure of your DCli script you need to run a `dcli clean`. Simple edits to you DCli script do NOT require a `clean` to be run.
 
 ## Supported pubspec locations
-DShell allows you to place your pubspec in the following locations:
+DCli allows you to place your pubspec in the following locations:
 * No pubspec - we create a virtual pubsec for you.
 * @pubspec annotation - the pubspec lives in your script in the form of an annotation.
 * Local pubspec - you place a pubspec.yaml file in the same directory as your script.
@@ -1024,57 +1024,57 @@ DShell allows you to place your pubspec in the following locations:
 
 ## No pubsec
 
-If DShell doesn't find a pubspec then it will automatically create a default pubspec for you.
-The default pubspec is stored in the script's Virtual Project cache (under `~/.dshell/cache/<path_to_script>.project`).
+If DCli doesn't find a pubspec then it will automatically create a default pubspec for you.
+The default pubspec is stored in the script's Virtual Project cache (under `~/.dcli/cache/<path_to_script>.project`).
 
 We refer to this as a 'virtual pubspec'.
 
-When you first launch your script or when running `dshell clean <scriptname.dart>` DShell creates/recreates your `virtual pubspec`.
+When you first launch your script or when running `dcli clean <scriptname.dart>` DCli creates/recreates your `virtual pubspec`.
 
-Whether you use a virtual pubspec or create your own, DShell performs dependancy injection ([see dependancy injection](#Pubspec-dependancy-injection)) providing a common set of packages that together create a 'swiss army knife' of useful tools to use when developing DShell scripts.
+Whether you use a virtual pubspec or create your own, DCli performs dependancy injection ([see dependancy injection](#Pubspec-dependancy-injection)) providing a common set of packages that together create a 'swiss army knife' of useful tools to use when developing DCli scripts.
 
 ## Explicitly defining a pubspec
 
 If you find that you need additional dependencies or other controls that an explict pubspec provides, then you may
 need to create your own pubspec.
 
-DShell provides two ways to do this.
+DCli provides two ways to do this.
 
-* an inline pubspec using DShell's `@pubspec` annotation.
+* an inline pubspec using DCli's `@pubspec` annotation.
 * a classic Dart pubspec.yaml with all the normal features.
 
-The DShell `@pubspec` annotation allows you to retain the concept of a single script so you can copy your DShell script
+The DCli `@pubspec` annotation allows you to retain the concept of a single script so you can copy your DCli script
 anywhere and it will just work. 
 
-Using the `@pubspec` annotation also means that you can have many DShell scripts living in the same directory each with their
+Using the `@pubspec` annotation also means that you can have many DCli scripts living in the same directory each with their
 own pubspec. If you use a classic pubspec.yaml then all your scripts, in that directory, will be sharing the same pubspec (which isn't necessarily a bad thing).
 
-See the section on [PubSpec precedence](#Pubspec-Precendence) for details on how DShell works if you mix pubspec annotations and a pubspec.yaml in the same directory.
+See the section on [PubSpec precedence](#Pubspec-Precendence) for details on how DCli works if you mix pubspec annotations and a pubspec.yaml in the same directory.
 
 
 For simple scripts you will normally use the `@pubspec` annotation but as your script grows you may want to migrate
 to a separate `pubspec.yaml`. 
 
-DShell has a tool to make this easier.
+DCli has a tool to make this easier.
 
 Run:
 ```
-dshell split <scriptname.dart>
+dcli split <scriptname.dart>
 ```
 
-If your script `<scriptname.dart>` contains a `@pubspec` annotation then DShell will remove it from your script and create a classic `pubspec.yaml` file in the directory along side your script.
+If your script `<scriptname.dart>` contains a `@pubspec` annotation then DCli will remove it from your script and create a classic `pubspec.yaml` file in the directory along side your script.
 
 
 ## Pubspec dependancy injection
-When DShell creates your virtual pubspec, on first run or after a clean,it will inject a default set of dependancies into your pubspec.
+When DCli creates your virtual pubspec, on first run or after a clean,it will inject a default set of dependancies into your pubspec.
 
 Dependency injects occurs when you don't provide a pubspec.yaml or when you use the `@pubspec` annotation.
 
-If you created a classic `pubspec.yaml` then DShell will NOT perform dependencies injection.
+If you created a classic `pubspec.yaml` then DCli will NOT perform dependencies injection.
 
-DShell stores the default dependencies in:
+DCli stores the default dependencies in:
 
-`~/.dshell/dependencies.yaml`
+`~/.dcli/dependencies.yaml`
 
 
 The syntax of `dependancies.yaml` is idential to the standard `pubspec.yaml` dependancies section.
@@ -1083,53 +1083,53 @@ Example:
 ```yaml
 
 dependencies:
-  dshell: ^1.0.0
+  dcli: ^1.0.0
   args: ^1.5.2
   path: ^1.6.4
 ```
 `dependencies.yaml` supports all of the standard dependency sources such as git and path.
 
-Dshell also supports the dependencies_override section if required.
+DCli also supports the dependencies_override section if required.
 
 See [https://dart.dev/tools/pub/dependencies] for more details on dependencies and depencency sources.
 
 If you find a really nice package that you use time and again then its easier to add it to the set of default dependencies than having to add it to every script.
 
-Feel free to modify the set of dependencies that DShell ships with. The only one you really need is the Dshell package (but you can even remove that if you don't like the standard DShell library). 
+Feel free to modify the set of dependencies that DCli ships with. The only one you really need is the DCli package (but you can even remove that if you don't like the standard DCli library). 
 
 The default dependancies are:
 
-* dshell
+* dcli
 * [path](https://pub.dev/packages/path)
 * [args](https://pub.dev/packages/args)
 
-The above packages provide your script with a swiss army collection of tools that we think will make your life easier when writing DShell scripts.
+The above packages provide your script with a swiss army collection of tools that we think will make your life easier when writing DCli scripts.
 
 The 'path' package provide tooling for building and manipulating directory paths as strings.
 
-The 'args' package makes it easy to process command line arguments including adding flags and options to your DShell script.
+The 'args' package makes it easy to process command line arguments including adding flags and options to your DCli script.
 
 
 ## Overriding default dependancy
 
-DShell provides a nice set of basic tools (packages) for your DShell scripts and you can add more in your script's pubspec. 
+DCli provides a nice set of basic tools (packages) for your DCli scripts and you can add more in your script's pubspec. 
 
-Sometimes you may find that a script needs a specific version of a default dependency. DShell allows you override a default dependencies version on a per script basis.
+Sometimes you may find that a script needs a specific version of a default dependency. DCli allows you override a default dependencies version on a per script basis.
 
 
 If you have declared any of the default packages in the dependancies section of you `@pubspec` annotation then the version you declare will be used instead of the default version.
 
-If you provide an actually `pubspec.yaml` in your script directory then DShell does NOT perform dependency injection.
+If you provide an actually `pubspec.yaml` in your script directory then DCli does NOT perform dependency injection.
 
 
-NOTE: you must run 'dshell cleanall' if you modify your 'dependancies.yaml' as DShell doesn't check this file for changes.
+NOTE: you must run 'dcli cleanall' if you modify your 'dependancies.yaml' as DCli doesn't check this file for changes.
 
 
 ## Pubspec precendence
-DShell allows you to define your pubspec either via a `@pubspec` annotation within your script or a classic
+DCli allows you to define your pubspec either via a `@pubspec` annotation within your script or a classic
 `pubspec.yaml` which lives in the same directory as your script.
 
-DShell also support the concept of allowing multiple single file DShell scripts to exist
+DCli also support the concept of allowing multiple single file DCli scripts to exist
 in the same directory.
 
 This has the potential to create ambiguities as to which pubspec definition is to be used.
@@ -1139,7 +1139,7 @@ To remove the ambiguities these pubspec rules are used and applied in the follow
 2) If the scripts directory contains a `pubspec.yaml` use it.
 3) If 1) and 2) fail then create a default virtual pubspec definition.
 
-So what happens if you have multiple DShell scripts in a single directory and a classic pubspec.yaml file?
+So what happens if you have multiple DCli scripts in a single directory and a classic pubspec.yaml file?
 ```
 cli> ls
 hello_world.art
@@ -1148,23 +1148,23 @@ pubsec.yaml
 cli>
 ```
 
-Well according to the rules, if a DShell script has an `@pubspec` annotation then that will be used and the classic `pubspec.yaml` file will be ignored.
+Well according to the rules, if a DCli script has an `@pubspec` annotation then that will be used and the classic `pubspec.yaml` file will be ignored.
 
-If your DShell script doesn't have an `@pubspec` annotation then the `pubspec.yaml` file will be used.
+If your DCli script doesn't have an `@pubspec` annotation then the `pubspec.yaml` file will be used.
 
-This means that multiple DShell scripts can share the same `pubspec.yaml` which could be convenient at times.
+This means that multiple DCli scripts can share the same `pubspec.yaml` which could be convenient at times.
 
 So a word of caution.
 
-If you have an existing DShell script which relies on DShell's 'virtual pubpsec' (i.e. it doesn't have an `@pubspec` annotation) and you copy the script into a directory that has an existing `pubspec.yaml` then the next time you run your script from its new home it will use the adjacent `pubspec.yaml`.
+If you have an existing DCli script which relies on DCli's 'virtual pubpsec' (i.e. it doesn't have an `@pubspec` annotation) and you copy the script into a directory that has an existing `pubspec.yaml` then the next time you run your script from its new home it will use the adjacent `pubspec.yaml`.
 
 
 ## Pubspec Annotation
 
-The `@pubspec` annotation allows you to specify your pubspec defintion right inside your DShell script.
+The `@pubspec` annotation allows you to specify your pubspec defintion right inside your DCli script.
 
 Using an `@pubspec` annotation allows you to retain the concept of a single independant script file.
-This has the advanage that you can copy your DShell script file anywhere and just run it (provided DShell is installed).
+This has the advanage that you can copy your DCli script file anywhere and just run it (provided DCli is installed).
 
 To add a `@pubspec` annotation to your file add the `@pubspec` annotation within a `/*  */` comment and follow the standard
 rules for formatting a `pubspec.yaml` file.
@@ -1173,7 +1173,7 @@ Remember, yaml is fussy about the right level of indentation!
 
 
 ```dart
-#! /usr/bin/env dshell
+#! /usr/bin/env dcli
 
 /*
 @pubspec.yaml
@@ -1182,7 +1182,7 @@ dependencies:
   money2: ^1.0.3
 */
 
-import 'package:dshell/dshell.dart';
+import 'package:dcli/dcli.dart';
 import 'package:money2/money2.dart';
 
 void main()
@@ -1196,10 +1196,10 @@ void main()
 ```
 
 If your `@pubspec` annotation gets large, you might want to split the annotation out to a classic `pubspec.yaml` file.
-To do this you can use the DShell split command.
+To do this you can use the DCli split command.
 
 ```
-dshell split <script filename>
+dcli split <script filename>
 ```
 
 Once the `split` command completes you will have a newly created `pubspec.yaml` file and you `@pubspec` annotation will have been removed from your script.
@@ -1209,7 +1209,7 @@ Once the `split` command completes you will have a newly created `pubspec.yaml` 
 As with all little projects, they have a habit of getting larger than expected.
 At some point you are going to want to spread you script over multiple Dart libraries.
 
-Well, DShell supports this as well.
+Well, DCli supports this as well.
 
 If you need to create additional libraries (.dart files) create a subdirectory called 'lib', which shouldn't be too much of a surprise for Dart programmers.
 
@@ -1220,7 +1220,7 @@ Place the following file in:
 
 ```dart
 
-#! /usr/bin/env dshell
+#! /usr/bin/env dcli
 
 /*
 @pubspec.yaml
@@ -1229,7 +1229,7 @@ dependencies:
   money2: ^1.0.3
 */
 
-import 'package:dshell/dshell.dart';
+import 'package:dcli/dcli.dart';
 import 'package:money2/money2.dart';
 
 // import a local library
@@ -1269,156 +1269,156 @@ And copy the following contents into tax.dart.
 Run your script the same way as usual:
 
 ```
-    dshell tryme.dart
+    dcli tryme.dart
 ```
 All the standard Dart rules and features of lib directory apply.
 
-# DShell commands
-DShell provides a number of command line tools to help you manage your DShell scripts.
-All of the tools are commands passed to the `dshell` application.
+# DCli commands
+DCli provides a number of command line tools to help you manage your DCli scripts.
+All of the tools are commands passed to the `dcli` application.
 
-You can see a full list of `dshell` commands and arguments by running:
+You can see a full list of `dcli` commands and arguments by running:
 ```
-dshell 
-dshell help
-dshell help <command>
+dcli 
+dcli help
+dcli help <command>
 ```
 
 
-The syntax of `dshell` is: 
+The syntax of `dcli` is: 
 
 ```
-dshell [flag, flag...] [command] [arguments...]
+dcli [flag, flag...] [command] [arguments...]
 ```
 
 ## flags
-DShell supports a verbose flag: `--verbose | -v`
+DCli supports a verbose flag: `--verbose | -v`
 
-When passed to dshell it will result in additional logging being written to the cli (stdout).
+When passed to dcli it will result in additional logging being written to the cli (stdout).
 
 
 ## cleanall
-The clean all command will delete all of the Virtual Projects under `~/.dshell/cache and rebuild each of them.
+The clean all command will delete all of the Virtual Projects under `~/.dcli/cache and rebuild each of them.
 
-Usage: `dshell cleanall`
+Usage: `dcli cleanall`
 
 Example:
 
 ```
-dshell cleanall
+dcli cleanall
 ```
 
 ## clean
-The clean command will rebuild the Virtual Project for a single DShell script.
+The clean command will rebuild the Virtual Project for a single DCli script.
 
-Usage: `dshell clean [<script path.dart>, <script path.dart>,...]`
+Usage: `dcli clean [<script path.dart>, <script path.dart>,...]`
 
 Example: 
 
 ```
-dshell clean hello_world.dart
+dcli clean hello_world.dart
 ```
 
-You may specify one or more scripts and dshell will clean each of them.
+You may specify one or more scripts and dcli will clean each of them.
 
-If you don't specify any scripts then dshell will clean all scripts in the current directory.
+If you don't specify any scripts then dcli will clean all scripts in the current directory.
 
 
 ## compile
-The compile command will compile your DShell script(s) into a native executable and optionally install it into your PATH.
+The compile command will compile your DCli script(s) into a native executable and optionally install it into your PATH.
 
-The resulting native application can be copied to any binary compatible OS and run without requiring Dart or Dshell to be installed.
+The resulting native application can be copied to any binary compatible OS and run without requiring Dart or DCli to be installed.
 
 Dart complied appliations are also super fast.
 
-Usage: `dshell compile [-nc, -i, -o] [<script path.dart>, <script path.dart>,...]`
+Usage: `dcli compile [-nc, -i, -o] [<script path.dart>, <script path.dart>,...]`
 
 Example: 
 
 ```
-dshell compile hello_world.dart
+dcli compile hello_world.dart
 
 ./hello_world
 ```
 
-You may specify one or more scripts and dshell will compile each of them.
+You may specify one or more scripts and dcli will compile each of them.
 
-If you don't specify any scripts then dshell will compile all scripts in the current directory.
+If you don't specify any scripts then dcli will compile all scripts in the current directory.
 
 If you use the --install option the compiled exe will be added to your path.
 
 
 Flags:
-    --noclean | -nc : stop dshell from running clean before doing a compile. Use this option if you know that you scripts dependency haven't change since the last compile.
-    --install | -i : install the compiled script into the ~/.dshell/bin directory which is on your path.
-    --overwrite | -o : if the target script has already been compiled and installed you must specify the -o flag to allow dshell ot overwrite it.
+    --noclean | -nc : stop dcli from running clean before doing a compile. Use this option if you know that you scripts dependency haven't change since the last compile.
+    --install | -i : install the compiled script into the ~/.dcli/bin directory which is on your path.
+    --overwrite | -o : if the target script has already been compiled and installed you must specify the -o flag to allow dcli ot overwrite it.
 
 ## create
-The create command create a sample DShell script using the given script file name and initialise your project by running `dshell clean`.
+The create command create a sample DCli script using the given script file name and initialise your project by running `dcli clean`.
 
-Usage: `dshell create <script path.dart>`
+Usage: `dcli create <script path.dart>`
 
 Example: 
 
 ```
-dshell create my_script.dart
+dcli create my_script.dart
 ```
 
 ## doctor
-The doctor command dumps out your system settings to help in diagnosing problems with your dshell install.
-When raising a dshell issue on github please include the output from `dshell doctor`.
+The doctor command dumps out your system settings to help in diagnosing problems with your dcli install.
+When raising a dcli issue on github please include the output from `dcli doctor`.
 
 ## install
-The install command MUST be run after you install dshell to complete the dshell install.
+The install command MUST be run after you install dcli to complete the dcli install.
       
 ```dart
-dshell install
+dcli install
 ```
-Completes the installation of dshell. See the section on (Installing DShell)[#Installing] for details.
+Completes the installation of dcli. See the section on (Installing DCli)[#Installing] for details.
 
 
 ## run
-Runs the given DShell script.
+Runs the given DCli script.
 
 This command is NOT required. 
 
-The recommended way to run a dshell script is via one of the documented [run methods](#Running-a-script).
+The recommended way to run a dcli script is via one of the documented [run methods](#Running-a-script).
 
-The `dshell run` command is provided for symmetry and the possiblity that someone, someday, may try to auto generate calls to dshell and having a consistent command structure can make this easier.
+The `dcli run` command is provided for symmetry and the possiblity that someone, someday, may try to auto generate calls to dcli and having a consistent command structure can make this easier.
 
-Usage: `dshell run <script path.dart>`
+Usage: `dcli run <script path.dart>`
 
 Example: 
 
 ```
-dshell run my_script.dart
+dcli run my_script.dart
 ```
 
 ## split
-The split command extracts a `@pubspec` annotation from a DShell script and writes it to a `pubslec.yaml` file in the same directory as the script.
+The split command extracts a `@pubspec` annotation from a DCli script and writes it to a `pubslec.yaml` file in the same directory as the script.
 
 This is a convenience method as you can perform the same process manually.
 
-Usage: `dshell split <script path.dart>`
+Usage: `dcli split <script path.dart>`
 
 Example: 
 
 ```
-dshell split my_script.dart
+dcli split my_script.dart
 ```
 
-# Upgrading DShell
-When a new version of DShell is released you will want to upgrade to the latest version.
+# Upgrading DCli
+When a new version of DCli is released you will want to upgrade to the latest version.
 
-We run the same process as we did when installing DShell to upgraded it.
+We run the same process as we did when installing DCli to upgraded it.
 
 ```shell
-pub global activate dshell
-dshell install
+pub global activate dcli
+dcli install
 ```
 
 # Internal workings
-For those of interest this section covers off how the internals of DShell function.
+For those of interest this section covers off how the internals of DCli function.
 
 ## Virtual Projects
 A normal Dart program requires a certain directory structure to work:
@@ -1428,34 +1428,34 @@ pubspec.yaml
 lib/util.dart
 ```
 
-The aim of DShell is to remove the normal requirements so we can run a single Dart script while still allowing you to gracefully grow your little project to a full blow application without having to start over.
+The aim of DCli is to remove the normal requirements so we can run a single Dart script while still allowing you to gracefully grow your little project to a full blow application without having to start over.
 
 Virtual Projects are where this magic happens.
 
-DShell creates a configuration directory in you home directory:
+DCli creates a configuration directory in you home directory:
 ```
-~/.dshell
-~/.dshell/templates
-~/.dshell/dependancies.yaml
-~/.dshell/cache
+~/.dcli
+~/.dcli/templates
+~/.dcli/dependancies.yaml
+~/.dcli/cache
 ```
 
-When you run a DShell script, DShell creates a Virtual Project under the `cache` directory using the fully qualified path to you script.
+When you run a DCli script, DCli creates a Virtual Project under the `cache` directory using the fully qualified path to you script.
 
 So if you have a script:
 ```
 /home/fred/myscripts/hello_world.dart
 ```
 
-then DShell will create a Virtual Project under the path
+then DCli will create a Virtual Project under the path
 
 ```
-~/.dshell/cache/home/fred/myscripts/hello_world.project
+~/.dcli/cache/home/fred/myscripts/hello_world.project
 ```
 
 Using the fully qualified path allows multiple scripts to exist in the same directory and we can still run a Virtual Project for each script.
 
-Within the Virtual Project directory DShell creates all the necessary files and directories need to make Dart happy
+Within the Virtual Project directory DCli creates all the necessary files and directories need to make Dart happy
 
 So a typical Virtual Project will contain:
 
@@ -1474,10 +1474,10 @@ pubspec.yaml
 symlink -> /home/fred/myscripts/lib
 ```
 
-The first  time you run a DShell script and when you perform a `dshell clean` DShell recreates your pubspec.yaml, rebuilds your Virtual Project and runs `pub get`.
+The first  time you run a DCli script and when you perform a `dcli clean` DCli recreates your pubspec.yaml, rebuilds your Virtual Project and runs `pub get`.
 
 ## waitForEx
-DShell goes to great lengths to remove the need to use `Futures` and `await` there are two key tools we use for this.
+DCli goes to great lengths to remove the need to use `Futures` and `await` there are two key tools we use for this.
 
 `waitFor` and `streams`.
 
@@ -1485,7 +1485,7 @@ DShell goes to great lengths to remove the need to use `Futures` and `await` the
 
 `waitFor` allows a Dart cli application to turn what would normally be an async method into a normal synchronious method by effectively absorbing a future.
 Normally in Dart, as soon as you have one async function, its async all of the way up.
-DShell simply wouldn't have been possible without `waitFor`.
+DCli simply wouldn't have been possible without `waitFor`.
 
 `waitFor` does however have a problem. If an exception gets thrown whilst in a `waitFor` call, then the stacktrace generated will be a microtask based stack trace. These stacktraces are useless as they don't show you where the original call came from.
 
@@ -1498,9 +1498,9 @@ The result is that you get a clean stacktrace that points to the exact line that
 
 
 # Contributing
-Read the wiki on contributing to DShell
+Read the wiki on contributing to DCli
 
-https://github.com/bsutton/dshell/wiki
+https://github.com/bsutton/dcli/wiki
 
 # References
 

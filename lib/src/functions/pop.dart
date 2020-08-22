@@ -42,7 +42,7 @@ import 'function.dart';
 void pop() => _Pop().pop();
 
 @Deprecated('Use join')
-class _Pop extends DShellFunction {
+class _Pop extends DCliFunction {
   ///
   /// Change the working directory back
   /// to its location before [push] was called.

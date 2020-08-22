@@ -1,7 +1,7 @@
 import 'dart:math';
 import 'package:meta/meta.dart';
 
-import '../../dshell.dart';
+import '../../dcli.dart';
 
 /// Displays a menu with each of the provided [options], prompts
 /// the user to select an option and returns the selected option.

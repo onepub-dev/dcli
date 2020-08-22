@@ -2,7 +2,7 @@ import 'dart:io';
 
 import 'package:meta/meta.dart';
 
-import '../../dshell.dart';
+import '../../dcli.dart';
 
 /// Used to locate and manipulate the dart pub cache
 ///

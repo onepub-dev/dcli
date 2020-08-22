@@ -1,11 +1,11 @@
-#! /usr/bin/env dshell
+#! /usr/bin/env dcli
 
-import 'package:dshell/dshell.dart';
+import 'package:dcli/dcli.dart';
 import 'package:args/args.dart';
 
 ///
-/// Allows you to run a clean cli that runs dshell from the local
-/// dshell source (located at ..)
+/// Allows you to run a clean cli that runs dcli from the local
+/// dcli source (located at ..)
 
 void main(List<String> args) {
   var parser = ArgParser();
@@ -17,14 +17,12 @@ void main(List<String> args) {
     if (results.command.name != 'build') {
       throw ArgumentError('The only supported command is "build"');
     }
-    // mount the local dshell files from ..
+    // mount the local dcli files from ..
     print('Starting build of docker image');
-    'sudo docker build -f docker/run.local.df -t dshell:run_local .'
-        .start(workingDirectory: '..');
+    'sudo docker build -f docker/run.local.df -t dcli:run_local .'.start(workingDirectory: '..');
   } else {
     /// runt the s
-    'docker run -v $pwd:/home --network host -it dshell:run_local  /bin/bash'
-        .run;
+    'docker run -v $pwd:/home --network host -it dcli:run_local  /bin/bash'.run;
     // .start(workingDirectory: '..');
   }
 }

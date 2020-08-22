@@ -1,6 +1,6 @@
-#! /usr/bin/env dshell
+#! /usr/bin/env dcli
 
-import 'package:dshell/dshell.dart';
+import 'package:dcli/dcli.dart';
 import 'package:args/args.dart';
 
 ///
@@ -15,11 +15,11 @@ void main(List<String> args) {
   var runOnly = results['runOnly'] as bool;
 
   if (!runOnly) {
-    // mount the local dshell files from ..
+    // mount the local dcli files from ..
     print('about to docker build');
-    'sudo docker build -f ./all.local.df -t dshell:all_local_test ..'.run;
+    'sudo docker build -f ./all.local.df -t dcli:all_local_test ..'.run;
   }
 
   print('about to docker run');
-  'sudo docker run dshell:all_local_test'.run;
+  'sudo docker run dcli:all_local_test'.run;
 }

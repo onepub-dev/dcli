@@ -1,13 +1,13 @@
-#! /usr/bin/env dshell
+#! /usr/bin/env dcli
 /*
 @pubspec
 name: which.dart
 dependencies:
-  dshell: ^1.0.0
+  dcli: ^1.0.0
 */
 
 import 'dart:io';
-import 'package:dshell/dshell.dart';
+import 'package:dcli/dcli.dart';
 import 'package:path/path.dart' as p;
 import 'package:args/args.dart';
 

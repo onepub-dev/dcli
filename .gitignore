@@ -35,8 +35,8 @@ test/test_scripts/fred
 test/test_scripts/fred.dart
 test/test_scripts/help
 test/test_scripts/which
-bin/dshell_install
-bin/dshell
+bin/dcli_install
+bin/dcli
 example/dsort
 shell/main/subdir/good.jpg
 test/test_scripts/local_pubspec/hello_world

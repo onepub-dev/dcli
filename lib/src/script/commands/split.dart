@@ -1,5 +1,5 @@
 import 'package:collection/collection.dart';
-import '../../../dshell.dart';
+import '../../../dcli.dart';
 import '../../functions/is.dart';
 import '../../util/completion.dart';
 

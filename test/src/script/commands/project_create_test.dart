@@ -2,10 +2,10 @@
 
 import 'dart:io';
 
-import 'package:dshell/dshell.dart' hide equals;
-import 'package:dshell/src/script/entry_point.dart';
-import 'package:dshell/src/script/script.dart';
-import 'package:dshell/src/script/virtual_project.dart';
+import 'package:dcli/dcli.dart' hide equals;
+import 'package:dcli/src/script/entry_point.dart';
+import 'package:dcli/src/script/script.dart';
+import 'package:dcli/src/script/virtual_project.dart';
 import 'package:test/test.dart';
 
 import 'package:path/path.dart' as p;

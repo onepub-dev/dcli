@@ -1,5 +1,5 @@
 @Timeout(Duration(seconds: 600))
-import 'package:dshell/dshell.dart';
+import 'package:dcli/dcli.dart';
 import 'package:test/test.dart';
 
 import 'test_file_system.dart';
@@ -25,7 +25,7 @@ version: 1.0.0
 environment: 
   sdk: '>=2.6.0 <3.0.0'
 dependencies: 
-  dshell: ^1.0.0''');
+  dcli: ^1.0.0''');
       expect('cat $yamlFile'.parser().yamlDecode()['name'], 'pubspec_local');
 
       var iniFile = join(fs.root, 'sample.init');

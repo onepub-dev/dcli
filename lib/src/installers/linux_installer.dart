@@ -1,5 +1,5 @@
 import 'package:path/path.dart';
-import '../../dshell.dart';
+import '../../dcli.dart';
 import '../shell/shell_detection.dart';
 import '../util/pub_cache.dart';
 
@@ -7,7 +7,7 @@ import '../util/pub_cache.dart';
 /// Installs dart on an apt base system.abstract
 ///
 
-class LinuxDShellInstaller {
+class LinuxDCliInstaller {
   /// returns true if it needed to install dart.
   bool install() {
     var installedDart = false;
@@ -23,7 +23,7 @@ class LinuxDShellInstaller {
         var bashrc = join(HOME, '.bashrc');
         bashrc.append('''export PATH="\$PATH":"/usr/lib/dart/bin"''');
         bashrc.append('''export PATH="\$PATH":"${PubCache().binPath}"''');
-        bashrc.append('''export PATH="\$PATH":"${Settings().dshellBinPath}"''');
+        bashrc.append('''export PATH="\$PATH":"${Settings().dcliBinPath}"''');
 
         var shell = ShellDetection().identifyShell();
         Settings().verbose('Found shell: shell');
@@ -58,18 +58,18 @@ class LinuxDShellInstaller {
           "Found dart at: ${which('dart').firstLine} and as such will not install dart.");
     }
 
-    // now activate dshell.
+    // now activate dcli.
     // The normal dart detection process won't work here
     // as dart is not on the path so for the moment so we hard code it.
     // CONSIDER a way of identifying where dart has been installed to.
-    '/usr/lib/dart/bin/pub global activate dshell'
+    '/usr/lib/dart/bin/pub global activate dcli'
         .start(progress: Progress.printStdErr());
 
     // // also need to install it for the root user
     // // as root must have its own copy of .pub-cache otherwise
     // // if it updates .pub-cache of a user the user won't be able
     // // to use pub-get any more.
-    // '/usr/lib/dart/bin/pub global activate dshell'.run;
+    // '/usr/lib/dart/bin/pub global activate dcli'.run;
 
     return installedDart;
   }

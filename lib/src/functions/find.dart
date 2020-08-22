@@ -3,7 +3,7 @@ import 'dart:io';
 
 import 'package:meta/meta.dart';
 
-import '../../dshell.dart';
+import '../../dcli.dart';
 
 import '../util/progress.dart';
 import '../util/wait_for_ex.dart';
@@ -91,7 +91,7 @@ Progress find(
         types: types);
 
 /// Implementation for the [_find] function.
-class Find extends DShellFunction {
+class Find extends DCliFunction {
   Progress _find(
     String pattern, {
     bool caseSensitive = false,

@@ -3,8 +3,8 @@ import 'dart:cli';
 import 'dart:convert';
 import 'dart:io';
 
-import 'package:dshell/dshell.dart' hide sleep;
-import 'package:dshell/src/functions/run.dart';
+import 'package:dcli/dcli.dart' hide sleep;
+import 'package:dcli/src/functions/run.dart';
 import 'package:path/path.dart';
 import 'package:test/test.dart';
 

@@ -1,6 +1,6 @@
-#! /usr/bin/env dshell
+#! /usr/bin/env dcli
 
-import 'package:dshell/dshell.dart';
+import 'package:dcli/dcli.dart';
 
 ///
 /// This script will '.run' a child script passed as the first and only argument.

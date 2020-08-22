@@ -12,7 +12,7 @@ import 'pwd.dart';
 /// See [_find] for more advanced options when obtain a file list.
 List<String> get fileList => _FileList().fileList;
 
-class _FileList extends DShellFunction {
+class _FileList extends DCliFunction {
   List<String> get fileList {
     var files = <String>[];
 

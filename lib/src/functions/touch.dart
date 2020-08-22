@@ -3,7 +3,7 @@ import 'package:file_utils/file_utils.dart';
 import 'package:path/path.dart' as p;
 
 import '../settings.dart';
-import 'dshell_function.dart';
+import 'dcli_function.dart';
 import 'is.dart';
 
 /// Updates the last modified time stamp of a file.
@@ -24,7 +24,7 @@ import 'is.dart';
 void touch(String path, {bool create = false}) =>
     _Touch().touch(path, create: create);
 
-class _Touch extends DShellFunction {
+class _Touch extends DCliFunction {
   void touch(String path, {bool create = false}) {
     var absolute = p.absolute(path);
 
@@ -53,7 +53,7 @@ class _Touch extends DShellFunction {
 }
 
 /// thrown when the [touch] function encounters an exception
-class TouchException extends DShellFunctionException {
+class TouchException extends DCliFunctionException {
   /// thrown when the [touch] function encounters an exception
   TouchException(String reason) : super(reason);
 }

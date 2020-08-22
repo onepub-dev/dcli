@@ -2,11 +2,11 @@ import 'dart:io';
 
 import 'package:collection/collection.dart';
 import 'package:meta/meta.dart';
-import '../../dshell.dart';
+import '../../dcli.dart';
 import '../settings.dart';
-import '../util/dshell_exception.dart';
+import '../util/dcli_exception.dart';
 
-import 'dshell_function.dart';
+import 'dcli_function.dart';
 
 /// Returns the value of an environment variable.
 ///
@@ -67,7 +67,7 @@ Map<String, String> get envs => Env()._envVars;
 void setEnv(String name, String value) => Env().setEnv(name, value);
 
 /// Implementation class for the functions [_env] and [setEnv].
-class Env extends DShellFunction {
+class Env extends DCliFunction {
   static Env _self = Env._internal();
 
   Map<String, String> _envVars;
@@ -190,10 +190,10 @@ class Env extends DShellFunction {
 
     if (home == null) {
       if (Settings().isWindows) {
-        throw DShellException(
+        throw DCliException(
             "Unable to find the 'APPDATA' enviroment variable. Please ensure it is set and try again.");
       } else {
-        throw DShellException(
+        throw DCliException(
             "Unable to find the 'HOME' enviroment variable. Please ensure it is set and try again.");
       }
     }

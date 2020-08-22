@@ -19,7 +19,7 @@ import 'is.dart';
 ///
 Progress tail(String path, int lines) => _Tail().tail(path, lines);
 
-class _Tail extends DShellFunction {
+class _Tail extends DCliFunction {
   Progress tail(String path, int lines, {Progress progress}) {
     Settings().verbose('tail ${absolute(path)} lines: $lines');
 

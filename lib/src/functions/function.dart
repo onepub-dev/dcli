@@ -1,9 +1,9 @@
 import 'package:path/path.dart' as p;
-import '../util/dshell_exception.dart';
+import '../util/dcli_exception.dart';
 import '../util/stack_trace_impl.dart';
 
 /// Based class for all function
-class DShellFunction {
+class DCliFunction {
   /// Returns the absolute path of [path]
   /// If [path] does not start with a /
   /// then it is treated as a relative path
@@ -12,13 +12,13 @@ class DShellFunction {
 }
 
 /// Based class for all function exceptions.
-class FunctionException extends DShellException {
+class FunctionException extends DCliException {
   /// Based class for all function exceptions.
   FunctionException(String message, [StackTraceImpl stackTrace])
       : super(message, stackTrace);
 
   @override
-  DShellException copyWith(StackTraceImpl stackTrace) {
+  DCliException copyWith(StackTraceImpl stackTrace) {
     return FunctionException(message, stackTrace);
   }
 }

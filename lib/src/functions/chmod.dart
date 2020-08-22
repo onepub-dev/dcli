@@ -1,8 +1,8 @@
-import '../../dshell.dart';
-import '../util/dshell_exception.dart';
+import '../../dcli.dart';
+import '../util/dcli_exception.dart';
 import '../util/stack_trace_impl.dart';
 
-import 'dshell_function.dart';
+import 'dcli_function.dart';
 
 /// Wrapper for the linux `chmod` command.
 ///
@@ -12,7 +12,7 @@ import 'dshell_function.dart';
 void chmod(int permission, String path) => _ChMod()._chmod(permission, path);
 
 /// Implementatio for [chmod] function.
-class _ChMod extends DShellFunction {
+class _ChMod extends DCliFunction {
 // this.user, this.group, this.other, this.path
 
   void _chmod(int permission, String path) {
@@ -33,13 +33,13 @@ class _ChMod extends DShellFunction {
 }
 
 /// Thrown if the [chmod] function encounters an error.
-class ChModException extends DShellFunctionException {
+class ChModException extends DCliFunctionException {
   /// Thrown if the [chmod] function encounters an error.
   ChModException(String reason, [StackTraceImpl stacktrace])
       : super(reason, stacktrace);
 
   @override
-  DShellException copyWith(StackTraceImpl stackTrace) {
+  DCliException copyWith(StackTraceImpl stackTrace) {
     return ChModException(message, stackTrace);
   }
 }

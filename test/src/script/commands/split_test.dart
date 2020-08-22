@@ -1,7 +1,7 @@
 @Timeout(Duration(minutes: 30))
-import 'package:dshell/dshell.dart' hide equals;
-import 'package:dshell/src/script/dependency.dart';
-import 'package:dshell/src/script/entry_point.dart';
+import 'package:dcli/dcli.dart' hide equals;
+import 'package:dcli/src/script/dependency.dart';
+import 'package:dcli/src/script/entry_point.dart';
 import 'package:test/test.dart';
 
 import '../../util/test_file_system.dart';
@@ -28,7 +28,7 @@ void main() {
         expect(pubspec.dependencies.length, equals(3));
         expect(pubspec.dependencies[0].name, equals('args'));
         expect(pubspec.dependencies[1].name, equals('path'));
-        expect(pubspec.dependencies[2].name, equals('dshell'));
+        expect(pubspec.dependencies[2].name, equals('dcli'));
       });
     });
 
@@ -54,7 +54,7 @@ void main() {
         expect(pubspec.dependencies.length, equals(3));
 
         var dependencies = <Dependency>[];
-        dependencies.add(Dependency.fromHosted('dshell', '^1.1.1'));
+        dependencies.add(Dependency.fromHosted('dcli', '^1.1.1'));
         dependencies.add(Dependency.fromHosted('path', '^1.8.3'));
 
         /// added via dependency injection.

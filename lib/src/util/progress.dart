@@ -1,6 +1,6 @@
 import 'dart:async';
 
-import '../../dshell.dart';
+import '../../dcli.dart';
 import 'dev_null.dart';
 
 import 'runnable_process.dart';
@@ -76,7 +76,7 @@ class Progress {
   ///
   /// To obtain the stream call the [Progress.stream] method.
   ///
-  /// Using a stream is one of the few (only) places in dshell that you will need
+  /// Using a stream is one of the few (only) places in dcli that you will need
   /// to use a future. If you don't use the Completer then the stream will essentially
   /// output stream data as the rest of your script continues to run.
   ///

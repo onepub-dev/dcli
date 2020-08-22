@@ -1,5 +1,5 @@
 import 'package:meta/meta.dart';
-import '../../dshell.dart';
+import '../../dcli.dart';
 
 ///
 /// Provides remote access methods for posix based systems.
@@ -266,7 +266,7 @@ class ScpException extends RemoteException {
 }
 
 ///
-class RemoteException extends DShellException {
+class RemoteException extends DCliException {
   ///
   RemoteException(String message) : super(message);
 }
