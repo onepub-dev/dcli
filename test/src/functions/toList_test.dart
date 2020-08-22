@@ -10,7 +10,7 @@ void main() {
   t.group('toList', () {
     t.test('Check .toList captures stdout', () {
       TestFileSystem().withinZone((fs) {
-        var scriptPath = truepath(join('test', 'test_scripts'));
+        var scriptPath = truepath(join('test', 'test_scripts/bin'));
 
         var script = truepath(scriptPath, 'print_to_stdout.dart');
 
@@ -28,7 +28,7 @@ void main() {
 
     t.test('Check .toList captures stderr', () {
       TestFileSystem().withinZone((fs) {
-        var scriptPath = truepath(join('test', 'test_scripts'));
+        var scriptPath = truepath(join('test', 'test_scripts/bin'));
 
         var script = truepath(scriptPath, 'print_to_stderr.dart');
 
@@ -47,7 +47,7 @@ void main() {
 
     t.test('Check .toList captures stderr and stdout', () {
       TestFileSystem().withinZone((fs) {
-        var scriptPath = truepath(join('test', 'test_scripts'));
+        var scriptPath = truepath(join('test', 'test_scripts/bin'));
 
         var script = truepath(scriptPath, 'print_to_both.dart');
 
@@ -64,10 +64,9 @@ void main() {
       });
     });
 
-    t.test('Check .toList captures stderr and stdout when non-xero exit occurs',
-        () {
+    t.test('Check .toList captures stderr and stdout when non-xero exit occurs', () {
       TestFileSystem().withinZone((fs) {
-        var scriptPath = truepath(join('test', 'test_scripts'));
+        var scriptPath = truepath(join('test', 'test_scripts/bin'));
 
         var script = truepath(scriptPath, 'print_to_both_with_error.dart');
 

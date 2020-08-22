@@ -4,7 +4,7 @@ import 'package:test/test.dart' as t;
 import 'package:dcli/dcli.dart';
 import 'package:test/test.dart';
 
-import '../../test_utils.dart';
+import '../../test_scripts/bin/test_utils.dart';
 import '../util/test_file_system.dart';
 
 String testFile;

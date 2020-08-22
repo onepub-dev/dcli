@@ -6,7 +6,7 @@ import 'package:test/test.dart';
 
 import '../../util/test_file_system.dart';
 
-String script = 'test/test_scripts/hello_world.dart';
+String script = 'test/test_scripts/bin/hello_world.dart';
 
 void main() {
   group('Compile using DCli', () {
@@ -42,8 +42,7 @@ void main() {
       TestFileSystem().withinZone((fs) {
         var exit = -1;
         try {
-          exit = EntryPoint().process(
-              ['compile', 'test/test_scripts/local_pubspec/hello_world.dart']);
+          exit = EntryPoint().process(['compile', 'test/test_scripts/bin/local_pubspec/hello_world.dart']);
         } on DCliException catch (e) {
           print(e);
         }

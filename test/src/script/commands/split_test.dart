@@ -10,8 +10,7 @@ void main() {
   group('Split Command', () {
     test('virtual pubspec', () {
       TestFileSystem().withinZone((fs) {
-        var root =
-            join('test', 'test_scripts', 'split_command', 'virtual_project');
+        var root = join('test', 'test_scripts/bin', 'split_command', 'virtual_project');
         var scriptpath = join(root, 'cat.dart');
         var pubspecpath = join(root, 'pubspec.yaml');
 
@@ -34,8 +33,7 @@ void main() {
 
     test('annotation pubspec', () {
       TestFileSystem().withinZone((fs) {
-        var root =
-            join('test', 'test_scripts', 'split_command', 'annotated_project');
+        var root = join('test', 'test_scripts/bin', 'split_command', 'annotated_project');
         var scriptpath = join(root, 'cat.dart');
         var pubspecpath = join(root, 'pubspec.yaml');
 

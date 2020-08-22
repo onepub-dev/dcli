@@ -11,7 +11,7 @@ import '../../mocks/mock_env.dart';
 import '../../mocks/mock_settings.dart';
 import '../../util/test_file_system.dart';
 
-String script = 'test/test_scripts/hello_world.dart';
+String script = 'test/test_scripts/bin/hello_world.dart';
 
 void main() {
   group('Install DCli', () {
@@ -108,11 +108,9 @@ void checkInstallStructure() {
 
   expect(exists(truepath(HOME, '.dcli', 'templates')), equals(true));
 
-  expect(exists(truepath(HOME, '.dcli', GlobalDependencies.filename)),
-      equals(true));
+  expect(exists(truepath(HOME, '.dcli', GlobalDependencies.filename)), equals(true));
 
-  var content =
-      read(truepath(HOME, '.dcli', GlobalDependencies.filename)).toList();
+  var content = read(truepath(HOME, '.dcli', GlobalDependencies.filename)).toList();
   var expected = ['dependencies:'];
 
   for (var dep in GlobalDependencies.defaultDependencies) {
@@ -123,8 +121,7 @@ void checkInstallStructure() {
       expected.add('  ${dep.name}:');
       expected.add('    path: $pwd');
     } else {
-      expected.add(
-          '  ${dep.name}: ${(dep.reference as HostedReference).versionConstraint.toString()}');
+      expected.add('  ${dep.name}: ${(dep.reference as HostedReference).versionConstraint.toString()}');
     }
   }
 

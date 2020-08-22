@@ -297,7 +297,7 @@ class VirtualProject {
 
   VirtualProject._internal(this.script) {
     var cacheRootPath = Settings().dcliCachePath;
-    // /home/bsutton/.dcli/cache/home/bsutton/git/dcli/test/test_scripts/hello_world.project
+    // /home/bsutton/.dcli/cache/home/bsutton/git/dcli/test/test_scripts/bin/hello_world.project
     _virtualProjectPath = join(cacheRootPath, Script.sansRoot(script.scriptDirectory), script.basename + projectDir);
 
     _localPubspecIndicatorPath = join(_virtualProjectPath, _usingLocalPubpsecFilename);
