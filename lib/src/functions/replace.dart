@@ -36,6 +36,7 @@ class _Replace extends DCliFunction {
     if (exists(tmp)) {
       delete(tmp);
     }
+    touch(tmp, create: true);
     read(path).forEach((line) {
       String newline;
       if (all) {
@@ -53,6 +54,8 @@ class _Replace extends DCliFunction {
       move(path, '$path.bak');
       move(tmp, path);
       delete('$path.bak');
+    } else {
+      delete(tmp);
     }
     return changed;
   }
