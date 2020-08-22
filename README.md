@@ -1,5 +1,7 @@
 # dcli - a library and tools for building bash style cli scripts using the Dart programming language.
 
+Note: dcli was orginally released under the name `dcli`. The project has been renamed to better reflect its core use - building cli apps in dart.ZZ
+
 # Contents
 * [Overview](#overview)
 * [So why DCli](#so-why-dcli)
@@ -1083,7 +1085,7 @@ Example:
 ```yaml
 
 dependencies:
-  dcli: ^1.0.0
+  dcli: ^0.20.0
   args: ^1.5.2
   path: ^1.6.4
 ```

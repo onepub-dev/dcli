@@ -1,3 +1,15 @@
+# 0.20.0
+Renamed dcli to dcli to better reflect its functionality and improve its discoverability on the pub.dev store.
+
+Also took the opportunity to change the version no. to 0.x to reflect the fact that the api is still in flux.
+
+
+
+# 0.11.1
+Merge branch 'master' of https://github.com/bsutton/dcli into master
+dart_install.exe for windows
+dart_install for linux
+
 # 1.11.1
 Changed how we determine the packages path as a work around for #95
 reduce logging for start method.

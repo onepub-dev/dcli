@@ -1,5 +1,5 @@
 name: dcli
-version: 0.11.1
+version: 0.20.0
 homepage: https://github.com/bsutton/dcli
 description: An API and dev environment for writing console (cli) apps/scripts using dart. e.g. allows you to build bash style scripts with dart.
 environment: 
@@ -35,3 +35,4 @@ executables:
   dcli: dcli
   dcli_complete: dcli_complete
   dcli_install: dcli_install
+  dshell_upgrade: dshell_upgrade
