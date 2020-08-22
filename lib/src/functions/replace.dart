@@ -8,6 +8,11 @@ import 'dcli_function.dart';
 /// [replace] searches the file at [path] for any occurances
 /// of [existing] and replaces them with [replacement].
 ///
+/// By default we only replace the first occurance of [existing] on each line.
+/// To replace every (non-overlapping) occurance of [existing] on a line then set [all] to true;
+///
+/// The [replace] method returns true if it modified the file.
+///
 /// During the process a tempory file called [path].tmp is created
 /// in the directory of [path].
 /// The modified file is written to [path].tmp.
@@ -21,21 +26,34 @@ import 'dcli_function.dart';
 ///
 /// EXPERIMENTAL - this api may change. It is fairly likely to stay
 /// just that existing may change to support [Pattern]
-void replace(String path, String existing, String replacement) =>
-    _Replace().replace(path, existing, replacement);
+bool replace(String path, String existing, String replacement, {bool all = false}) =>
+    _Replace().replace(path, existing, replacement, all: all);
 
 class _Replace extends DCliFunction {
-  void replace(String path, String existing, String replacement) {
+  bool replace(String path, String existing, String replacement, {bool all = false}) {
+    var changed = false;
     var tmp = '$path.tmp';
     if (exists(tmp)) {
       delete(tmp);
     }
     read(path).forEach((line) {
-      line = line.replaceFirst(existing, replacement);
-      tmp.append(line);
+      String newline;
+      if (all) {
+        newline = line.replaceAll(existing, replacement);
+      } else {
+        newline = line.replaceFirst(existing, replacement);
+      }
+      if (!changed && newline != line) {
+        changed = true;
+      }
+
+      tmp.append(newline);
     });
-    move(path, '$path.bak');
-    move(tmp, path);
-    delete('$path.bak');
+    if (changed) {
+      move(path, '$path.bak');
+      move(tmp, path);
+      delete('$path.bak');
+    }
+    return changed;
   }
 }
