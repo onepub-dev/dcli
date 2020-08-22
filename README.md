@@ -1,4 +1,12 @@
-# dcli - a library and tools for building bash style cli scripts using the Dart programming language.
+# DCli - An extensive library and tooling for building console/cli applications and scripts using the Dart programming language.
+
+Looking for DShell?
+
+DShell has been renamed DCli to better reflect its intended purposes.
+
+We also took the opportunity to change the version no. to 0.x.x to reflect that the api is still in flux (though less so every day).
+
+Nothing else has changed except for its name and we continue to improve the api.
 
 Note: dcli was orginally released under the name `dcli`. The project has been renamed to better reflect its core use - building cli apps in dart.ZZ
 
