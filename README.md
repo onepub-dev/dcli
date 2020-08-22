@@ -1,5 +1,13 @@
 # DCli - An extensive library and tooling for building console/cli applications and scripts using the Dart programming language.
 
+Looking for DShell?
+
+DShell has been renamed DCli to better reflect its intended purposes.
+
+We also took the opportunity to change the version no. to 0.x.x to reflect that the api is still in flux (though less so every day).
+
+Nothing else has changed except for its name and we continue to improve the api.
+
 # Contents
 * [Overview](#overview)
 * [So why DCli](#so-why-dcli)
