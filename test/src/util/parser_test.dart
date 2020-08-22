@@ -25,7 +25,7 @@ version: 1.0.0
 environment: 
   sdk: '>=2.6.0 <3.0.0'
 dependencies: 
-  dcli: ^1.0.0''');
+  dcli: ^0.20.0''');
       expect('cat $yamlFile'.parser().yamlDecode()['name'], 'pubspec_local');
 
       var iniFile = join(fs.root, 'sample.init');

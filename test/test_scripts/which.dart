@@ -3,7 +3,7 @@
 @pubspec
 name: which.dart
 dependencies:
-  dcli: ^1.0.0
+  dcli: ^0.20.0
 */
 
 import 'dart:io';

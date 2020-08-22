@@ -3,8 +3,8 @@
 @pubspec
 name: dep.dart
 dependencies:
-  dcli: ^1.0.0
-  money2: ^1.0.0
+  dcli: ^0.20.0
+  money2: ^0.20.0
 */
 
 void main() {

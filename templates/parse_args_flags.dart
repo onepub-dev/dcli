@@ -7,7 +7,7 @@
 @pubspec
 name: hello_world.dart
 dependencies:
-  dcli: ^1.0.0
+  dcli: ^0.20.0
   args: ^1.5.2
   path: ^1.6.4
 */

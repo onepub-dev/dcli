@@ -88,7 +88,7 @@ void main() {
  * @pubspec
  * name: annotation_test
  * dependencies:
- *   dcli: ^1.0.0
+ *   dcli: ^0.20.0
  *   skippy: ^2.0.0
  */
 void main(){

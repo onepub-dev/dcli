@@ -9,7 +9,7 @@ void main() {
       @pubspec
       name: find.dart
       dependencies:
-        dcli: ^1.0.0
+        dcli: ^0.20.0
         args: ^1.5.2
         path: ^1.6.4
     */
@@ -25,7 +25,7 @@ void main() {
       @pubspec
       name: find.dart
       dependencies:
-        dcli: ^1.0.0
+        dcli: ^0.20.0
         args: ^1.5.2
         path: ^1.6.4
     **/
@@ -44,7 +44,7 @@ void main() {
      *  @pubspec
      *  name: find.dart
      *  dependencies:
-     *    dcli: ^1.0.0
+     *    dcli: ^0.20.0
      *    args: ^1.5.2
      *    path: ^1.6.4
     **/
@@ -62,7 +62,7 @@ void main() {
     /*@pubspec
      *  name: find.dart
      *  dependencies:
-     *    dcli: ^1.0.0
+     *    dcli: ^0.20.0
      *    args: ^1.5.2
      *    path: ^1.6.4
     */
@@ -80,7 +80,7 @@ void main() {
     /**@pubspec
      *  name: find.dart
      *  dependencies:
-     *    dcli: ^1.0.0
+     *    dcli: ^0.20.0
      *    args: ^1.5.2
      *    path: ^1.6.4
     */
@@ -98,7 +98,7 @@ void main() {
     /**@pubspec
      *  name: find.dart
      *  dependencies:
-     *    dcli: ^1.0.0
+     *    dcli: ^0.20.0
      *    args: ^1.5.2
      *    path: ^1.6.4
     */

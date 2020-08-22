@@ -53,8 +53,7 @@ class GlobalDependencies with DependenciesMixin {
       path.write('dependencies:');
 
       for (var dep in defaultDependencies) {
-        path.append(
-            '  ${dep.name}: ${(dep.reference as HostedReference).versionConstraint.toString()}');
+        path.append('  ${dep.name}: ${(dep.reference as HostedReference).versionConstraint.toString()}');
       }
     }
   }
@@ -63,7 +62,7 @@ class GlobalDependencies with DependenciesMixin {
   /// global dependencies will be initialised with.
   static List<Dependency> get defaultDependencies {
     return [
-      Dependency.fromHosted('dcli', '^1.0.0'),
+      Dependency.fromHosted('dcli', '^0.20.0'),
       Dependency.fromHosted('args', '^1.5.2'),
       Dependency.fromHosted('path', '^1.6.4'),
     ];
