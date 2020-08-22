@@ -1,4 +1,4 @@
-# DCli - a library and tools for building bash style cli scripts using the Dart programming language.
+# DCli - An extensive library and tooling for building console/cli applications and scripts using the Dart programming language.
 
 # Contents
 * [Overview](#overview)
