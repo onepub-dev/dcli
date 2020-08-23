@@ -249,7 +249,7 @@ class InstallCommand extends Command {
     }
 
     var root = 'assets/templates';
-    var templates = Assets().list('*.dart', root: root, recursive: true);
+    var templates = Assets().list('*', root: root, recursive: true);
 
     for (var template in templates) {
       var start = template.indexOf(root);
