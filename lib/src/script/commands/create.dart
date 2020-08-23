@@ -55,6 +55,19 @@ class CreateCommand extends Command {
 
     _script.createFromTemplate(join(Settings().templatePath, 'cli_args.dart'));
 
+    if (!_script.hasLocalPubSpecYaml() && !exists(join(_script.projectRoot, 'pubspec.yaml'))) {
+      // no pubspec.yaml in scope so lets create one.
+      var pubspec = Assets().loadString('assets/templates/pubspec.yaml.template');
+      var pubspecPath = join(dirname(_script.path), 'pubspec.yaml');
+      pubspecPath.write(pubspec);
+      replace(pubspecPath, '%scriptname%', _script.basename);
+
+      /// add pedantic to the project
+      var analysis = Assets().loadString('assets/templates/analysis_options.yaml');
+      var analysisPath = join(dirname(_script.path), 'analysis_options.yaml');
+      analysisPath.write(analysis);
+    }
+
     print('Creating project...');
     var project = VirtualProject.create(_script);
     project.build(background: !flagSet.isSet(ForegroundFlag()));
