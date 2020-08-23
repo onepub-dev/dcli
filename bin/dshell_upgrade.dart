@@ -40,13 +40,13 @@ void upgradeProject() {
 }
 
 void upgradeDartLibrary(String file) {
-  var changed = false;
-  changed |= replace(file, 'dshell', 'dcli', all: true);
-  changed |= replace(file, 'DShell', 'DCli', all: true);
-  changed |= replace(file, 'Dshell', 'DCli', all: true);
+  var changed = 0;
+  changed += replace(file, 'dshell', 'dcli', all: true);
+  changed += replace(file, 'DShell', 'DCli', all: true);
+  changed += replace(file, 'Dshell', 'DCli', all: true);
 
-  if (changed) {
-    print('Upgraded dart library: $file');
+  if (changed > 0) {
+    print('Upgraded dart library: $file. Changed $changed lines');
   }
 }
 
