@@ -120,6 +120,9 @@ void checkInstallStructure(TestFileSystem fs) {
       <String>[
         join(base, 'cli_args.dart'),
         join(base, 'hello_world.dart'),
+        join(base, 'pubspec.yaml.template'),
+        join(base, 'README.md'),
+        join(base, 'analysis_options.yaml'),
       ],
     ),
   );
