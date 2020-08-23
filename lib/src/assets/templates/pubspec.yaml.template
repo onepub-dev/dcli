@@ -6,7 +6,6 @@ environment:
 dependencies: 
   args: ^1.0.0
   dcli: ^0.20.0
-  logger: ^0.9.1
   path: ^1.0.0
 
 dev_dependencies: 
