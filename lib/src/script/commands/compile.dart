@@ -79,7 +79,7 @@ class CompileCommand extends Command {
     print('');
 
     Script.validate(scriptPath);
-    var script = Script.fromFile(scriptPath);
+    var script = Script.init(scriptPath, showWarnings: true);
     try {
       var project = VirtualProject.load(script);
 

@@ -26,20 +26,18 @@ class RunCommand extends Command {
   @override
   int run(List<Flag> selectedFlags, List<String> arguments) {
     if (arguments.isEmpty) {
-      throw InvalidArguments(
-          'Expected a script or command. No arguments were found.');
+      throw InvalidArguments('Expected a script or command. No arguments were found.');
     }
     var scriptPath = arguments[0];
     Script.validate(scriptPath);
 
-    var script = Script.fromFile(scriptPath);
+    var script = Script.init(scriptPath, showWarnings: true);
     Settings().scriptPath = script.path;
 
     Settings().verbose('Running script ${script.path}');
 
     var project = VirtualProject.load(script);
-    Settings()
-        .verbose('Virtual Project directory ${project.runtimeProjectPath}');
+    Settings().verbose('Virtual Project directory ${project.runtimeProjectPath}');
 
     if (!project.isRunnable) {
       project.build();
@@ -66,8 +64,7 @@ class RunCommand extends Command {
   String usage() => 'run <script path.dart>';
 
   @override
-  String description() =>
-      '''Runs the given script. This command is provided for the sake of symmetry. 
+  String description() => '''Runs the given script. This command is provided for the sake of symmetry. 
    The recommended method is to use the simplier form ${Settings().appname} <script path.dart>''';
 
   // CommandRun.fromScriptArg(String argument) {

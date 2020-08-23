@@ -10,7 +10,6 @@ import '../functions/is.dart';
 import '../pubspec/pubspec_annotation.dart';
 import '../util/dcli_paths.dart';
 
-
 import 'command_line_runner.dart';
 
 /// Used to manage a DCli script.
@@ -32,7 +31,7 @@ class Script {
   /// Creates a script object from a scriptArg
   /// passed to a command.
   ///
-  /// The [script] may be a filename or
+  /// The [scriptPath] may be a filename or
   /// a filename with a path prefix (relative or absolute)
   /// If the path is realtive then it will be joined
   /// with the current working directory to form
@@ -44,9 +43,84 @@ class Script {
   /// var script = Script.fromFile(Platform.script.toFilePath());
   ///
   Script.fromFile(
-    String script,
-  )   : _scriptname = _extractScriptname(script),
-        _scriptDirectory = _extractScriptDirectory(script);
+    String scriptPath,
+  ) : this._internal(scriptPath, init: false, showWarnings: false);
+
+  /// Creates a [Script] from the file at [scriptPath] and initialises
+  /// the script if required by creating a pubspec.yaml and
+  /// analysis_options.yaml file.
+  Script.init(String scriptPath, {bool showWarnings = false})
+      : this._internal(scriptPath, showWarnings: showWarnings, init: true);
+
+  Script._internal(String scriptPath, {bool init, bool showWarnings})
+      : _scriptname = _extractScriptname(scriptPath),
+        _scriptDirectory = _extractScriptDirectory(scriptPath) {
+    {
+      if (init) {
+        var hasLocal = hasLocalPubspecYaml();
+        var hasAnscestor = hasAncestorPubspecYaml();
+        if (!hasLocal && !hasAnscestor) {
+          if (hasPubspecAnnotation) {
+            _createPubspecFromAnnotation(showWarnings);
+          } else {
+            _createLocalPubspec(showWarnings);
+          }
+        }
+
+        if (!hasAnscestor) {
+          /// add pedantic to the project
+          _createAnalysisOptions(showWarnings);
+        }
+        if (hasLocal && hasAnscestor && showWarnings) {
+          print(orange('Your script has a local pubspec.yaml and a pubspec.yaml in an ancestor directory.'));
+          print(orange('You may get inconsistent results when compiling.'));
+        }
+      }
+    }
+  }
+
+  void _createAnalysisOptions(bool showWarnings) {
+    /// add pedantic to the project
+
+    var analysisPath = join(dirname(path), 'analysis_options.yaml');
+    if (!exists(analysisPath)) {
+      if (showWarnings) {
+        print(orange('Creating missing analysis_options.yaml.'));
+      }
+      var analysis = Assets().loadString('assets/templates/analysis_options.yaml');
+      analysisPath.write(analysis);
+    }
+  }
+
+  void _createLocalPubspec(bool showWarnings) {
+    if (showWarnings) {
+      print(orange('Creating missing pubspec.yaml.'));
+    }
+    // no pubspec.yaml in scope so lets create one.
+    var pubspec = Assets().loadString('assets/templates/pubspec.yaml.template');
+    var pubspecPath = join(dirname(path), 'pubspec.yaml');
+    pubspecPath.write(pubspec);
+    replace(pubspecPath, '%scriptname%', basename);
+  }
+
+  void _createPubspecFromAnnotation(bool showWarnings) {
+    if (showWarnings) {
+      print(orange('Extracting @pubspec annotation to create missing pubspec.yaml.'));
+    }
+
+    var annotation = PubSpecAnnotation.fromScript(this);
+    var pubspecPath = join(dirname(path), 'pubspec.yaml');
+    annotation.saveToFile(pubspecPath);
+  }
+
+  /// Creates a script located at [scriptPath] from the passed [templatePath].
+  /// When the user runs 'dcli create <script>'
+  static void createFromTemplate({String templatePath, String scriptPath}) {
+    copy(templatePath, scriptPath);
+
+    replace(scriptPath, '%dcliName%', DCliPaths().dcliName);
+    replace(scriptPath, '%scriptname%', p.basename(scriptPath));
+  }
 
   /// the file name of the script including the extension.
   /// If you are running in a compiled script then
@@ -93,15 +167,6 @@ class Script {
     return scriptDirectory;
   }
 
-  /// Creates a default script from the passed [templatePath]
-  /// when the user runs 'dcli create <script>'
-  void createFromTemplate(String templatePath) {
-    copy(templatePath, path);
-
-    replace(path, '%dcliName%', DCliPaths().dcliName);
-    replace(path, '%scriptname%', scriptname);
-  }
-
   /// validate that the passed arguments points to
   static void validate(String scriptPath) {
     if (!scriptPath.endsWith('.dart')) {
@@ -117,10 +182,16 @@ class Script {
   }
 
   /// Returns true if the script has a pubspec.yaml in its directory.
-  bool hasLocalPubSpecYaml() {
+  bool hasLocalPubspecYaml() {
     // The virtual project pubspec.yaml file.
     final pubSpecPath = p.join(_scriptDirectory, 'pubspec.yaml');
     return exists(pubSpecPath);
+  }
+
+  /// returns true if the script has a pubspec in anscestor directory.
+  ///
+  bool hasAncestorPubspecYaml() {
+    return projectRoot != _scriptDirectory;
   }
 
   bool _hasPubspecAnnotation;

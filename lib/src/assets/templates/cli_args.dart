@@ -1,4 +1,4 @@
-#! /usr/bin/env ${DCliPaths().dcliName}
+#! /usr/bin/env %dcliName%
 
 import 'dart:io';
 import 'package:dcli/dcli.dart';
