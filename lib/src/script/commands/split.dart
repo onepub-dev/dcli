@@ -40,7 +40,7 @@ class SplitCommand extends Command {
       /// make certain the virtual project exists before we try to split it.
       var project = VirtualProject.createOrLoad(script);
 
-      if (project.pubspecLocation == PubspecLocation.traditional) {
+      if (project.pubspecLocation == PubspecLocation.standard) {
         print(
             'This appears to be a traditional dart project and already has a pubspec located at: ${project.projectPubspecPath}');
         exitCode = 1;

@@ -28,18 +28,13 @@ enum PubspecLocation {
   annotation,
 
   /// The script file has a pubspec.yaml in the same directory.
+  /// I'm not certain there is an actual difference betwen local and
+  /// standard and I think these two should be merged.
   local,
 
   /// This is a standand dart pubspec directory structure with the
-  /// pubspec in the projects root.
-  /// We only look for a traditional structure if the script is in one
-  /// of the following directories:
-  ///
-  /// benchmark
-  /// bin
-  /// tool
-  /// example
-  traditional
+  /// pubspec in the project's root.
+  standard
 }
 
 /// Creates project directory structure
@@ -147,7 +142,7 @@ class VirtualProject {
   /// This is the directory that the pubspec.yaml file lives in.
   ///
   /// In most cases this is the same as the [_virtualProjectPath]
-  /// except for when the [PubspecLocation] is [traditional] or [local] in which
+  /// except for when the [PubspecLocation] is [PubspecLocation.standard] or [PubspecLocation.local] in which
   /// case it will be the project's actual root directory.
   String get projectRootPath => _projectRootPath;
 
@@ -211,9 +206,9 @@ class VirtualProject {
         Settings().verbose('Pubspec is Local. Project root: ${project.projectRootPath} ');
         break;
 
-      case PubspecLocation.traditional:
-        _setTraditionalPaths(project, script);
-        Settings().verbose('Pubspec is Traditional. Project root: ${project.projectRootPath} ');
+      case PubspecLocation.standard:
+        _setStandardPaths(project, script);
+        Settings().verbose('Pubspec is Standard. Project root: ${project.projectRootPath} ');
         break;
     }
 
@@ -246,10 +241,10 @@ class VirtualProject {
     project._runtimeProjectPath = dirname(script.path);
   }
 
-  /// Used when we are running from a traditional dart package.
-  static void _setTraditionalPaths(VirtualProject project, Script script) {
-    // root director of real (traditional) dart projet.
-    project._projectRootPath = project._getTradionalProjectRoot(script.path);
+  /// Used when we are running from a standard dart package.
+  static void _setStandardPaths(VirtualProject project, Script script) {
+    // root director of real (standard) dart projet.
+    project._projectRootPath = project._getStandardProjectRoot(script.path);
 
     /// pubspec.yaml lives in the script's project root
     project._runtimePubspecPath = join(project._projectRootPath, 'pubspec.yaml');
@@ -259,7 +254,7 @@ class VirtualProject {
     project._projectCacheLibPath = join(project._projectRootPath, 'lib');
     project._scriptLibPath = join(project._projectRootPath, 'lib');
 
-    /// script link not required as we will compile against the traditional
+    /// script link not required as we will compile against the standard
     /// project root.
     project._projectScriptLinkPath = null;
 
@@ -284,8 +279,8 @@ class VirtualProject {
         _pubspecLocation = PubspecLocation.local;
       } else {
         var parent = dirname(script.path);
-        if (isTraditionalProject(parent)) {
-          _pubspecLocation = PubspecLocation.traditional;
+        if (isStandardProject(parent)) {
+          _pubspecLocation = PubspecLocation.standard;
         } else {
           _pubspecLocation = PubspecLocation.virtual;
         }
@@ -346,7 +341,7 @@ class VirtualProject {
           break;
         case PubspecLocation.local:
         // fall through.
-        case PubspecLocation.traditional:
+        case PubspecLocation.standard:
           // create the indicator file so when we load
           // the virtual project we know its a local
           // pubspec without having to parse the script
@@ -534,18 +529,6 @@ class VirtualProject {
         exists(join(_projectRootPath, DartSdk().packagePath));
   }
 
-  /// Returns true if the name of the pass directory is on the list
-  /// of prescribed dart project layout directores that may contain
-  /// top level scripts.
-  ///
-  ///
-  bool isPrescribedDartDirectory(String parent) {
-    var leaf = basename(parent);
-
-    return (['benchmark', 'bin', 'tool', 'example', 'test'].contains(leaf));
-  }
-
-  /// We are trying to determine if this is a traditional dart package.
   /// If it is we should use the actual pubspec.yaml rather than creating
   /// a virtual one.
   /// Returns true if a parent of the given path is a prescribed dart directory
@@ -554,14 +537,14 @@ class VirtualProject {
   /// pubspec.yaml
   /// bin/work/fred.dart
   ///
-  bool isTraditionalProject(String path) {
+  bool isStandardProject(String path) {
     var current = truepath(path);
 
     var root = rootPrefix(path);
 
-    // traverse up the directory to find if we are in a traditional directory.
+    // traverse up the directory to find if we are in a standard directory.
     while (current != root) {
-      if (isPrescribedDartDirectory(current) && exists(join(dirname(current), 'pubspec.yaml'))) {
+      if (exists(join(dirname(current), 'pubspec.yaml'))) {
         return true;
       }
       current = dirname(current);
@@ -569,14 +552,14 @@ class VirtualProject {
     return false;
   }
 
-  String _getTradionalProjectRoot(String path) {
+  String _getStandardProjectRoot(String path) {
     var current = truepath(path);
 
     var root = rootPrefix(path);
 
-    // traverse up the directory to find if we are in a traditional directory.
+    // traverse up the directory to find if we are in a standard directory.
     while (current != root) {
-      if (isPrescribedDartDirectory(current) && exists(join(dirname(current), 'pubspec.yaml'))) {
+      if (exists(join(dirname(current), 'pubspec.yaml'))) {
         return dirname(current);
       }
       current = dirname(current);
