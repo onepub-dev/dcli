@@ -4,8 +4,8 @@ import 'package:test/test.dart' as t;
 import 'package:dcli/dcli.dart';
 import 'package:test/test.dart';
 
-import '../../test_scripts/bin/test_utils.dart';
 import '../util/test_file_system.dart';
+import '../util/test_utils.dart';
 
 String testFile;
 void main() {
@@ -26,8 +26,7 @@ void main() {
 
     t.test('cat non-existing ', () {
       TestFileSystem().withinZone((fs) {
-        t.expect(() => cat('bad file.text'),
-            t.throwsA(t.TypeMatcher<CatException>()));
+        t.expect(() => cat('bad file.text'), t.throwsA(t.TypeMatcher<CatException>()));
       });
     });
   });

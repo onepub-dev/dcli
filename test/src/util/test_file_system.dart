@@ -317,7 +317,7 @@ class TestFileSystem {
         copy(join(testbinPath, command), join(Settings().dcliBinPath, command));
       } else {
         /// compile and install the command
-        '${DCliPaths().dcliName} compile -i test/test_scripts/bin/$command.dart'.run;
+        '${DCliPaths().dcliName} compile -i test/test_scripts/general/bin/$command.dart'.run;
         // copy it back to the dcli testbin so the next unit
         // test doesn't have to compile it.
         copy(join(Settings().dcliBinPath, command), join(testbinPath, command));

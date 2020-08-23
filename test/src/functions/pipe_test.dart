@@ -2,8 +2,8 @@
 import 'package:test/test.dart' as t;
 import 'package:dcli/dcli.dart';
 
-import '../../test_scripts/bin/test_utils.dart';
 import '../util/test_file_system.dart';
+import '../util/test_utils.dart';
 
 void main() {
   t.group('Piping with ForEach ', () {
@@ -25,8 +25,7 @@ void main() {
         createLineFile(linesFile, 10);
 
         lines.clear();
-        ('tail -n 100 $linesFile' | 'head -n 5')
-            .forEach((line) => lines.add(line));
+        ('tail -n 100 $linesFile' | 'head -n 5').forEach((line) => lines.add(line));
 
         t.expect(lines.length, t.equals(5));
       });
@@ -38,8 +37,7 @@ void main() {
         createLineFile(linesFile, 10);
 
         lines.clear();
-        ('tail $linesFile' | 'head -n 5' | 'tail -n 2')
-            .forEach((line) => lines.add(line));
+        ('tail $linesFile' | 'head -n 5' | 'tail -n 2').forEach((line) => lines.add(line));
         t.expect(lines.length, t.equals(2));
       });
     });
@@ -50,8 +48,7 @@ void main() {
         createLineFile(linesFile, 10);
 
         lines.clear();
-        ('tail $linesFile' | 'head -n 5' | 'head -n 3' | 'tail -n 2')
-            .forEach((line) => lines.add(line));
+        ('tail $linesFile' | 'head -n 5' | 'head -n 3' | 'tail -n 2').forEach((line) => lines.add(line));
         t.expect(lines.length, t.equals(2));
       });
     });

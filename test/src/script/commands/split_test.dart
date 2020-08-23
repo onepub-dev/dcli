@@ -10,7 +10,7 @@ void main() {
   group('Split Command', () {
     test('virtual pubspec', () {
       TestFileSystem().withinZone((fs) {
-        var root = join('test', 'test_scripts/bin', 'split_command', 'virtual_project');
+        var root = join('test', 'test_scripts', 'virtual_project');
         var scriptpath = join(root, 'cat.dart');
         var pubspecpath = join(root, 'pubspec.yaml');
 
@@ -33,7 +33,7 @@ void main() {
 
     test('annotation pubspec', () {
       TestFileSystem().withinZone((fs) {
-        var root = join('test', 'test_scripts/bin', 'split_command', 'annotated_project');
+        var root = join('test', 'test_scripts', 'annotated_project');
         var scriptpath = join(root, 'cat.dart');
         var pubspecpath = join(root, 'pubspec.yaml');
 
@@ -53,7 +53,7 @@ void main() {
 
         var dependencies = <Dependency>[];
         dependencies.add(Dependency.fromHosted('dcli', '^1.1.1'));
-        dependencies.add(Dependency.fromHosted('path', '^1.8.3'));
+        dependencies.add(Dependency.fromHosted('path', '^1.7.0'));
 
         /// added via dependency injection.
         dependencies.add(Dependency.fromHosted('args', '^1.5.2'));

@@ -30,7 +30,7 @@ void main() {
     TestFileSystem().withinZone((fs) {
       var results = <String>[];
 
-      '${DCliPaths().dcliName} -v test/test_scripts/bin/hello_world.dart'
+      '${DCliPaths().dcliName} -v test/test_scripts/general/bin/hello_world.dart'
           .forEach((line) => results.add(line), stderr: printerr);
 
       // if clean hasn't been run then we have the results of a pub get in the the output.
@@ -44,7 +44,7 @@ void main() {
       var exit = -1;
       try {
         // with a virtual pubspec
-        exit = EntryPoint().process(['run', 'test/test_scripts/bin/which.dart', 'ls']);
+        exit = EntryPoint().process(['run', 'test/test_scripts/general/bin/which.dart', 'ls']);
       } on DCliException catch (e) {
         print(e);
       }
@@ -58,7 +58,7 @@ void main() {
       try {
         print(pwd);
 
-        exit = EntryPoint().process(['-v', 'run', 'test/test_scripts/bin/local_pubspec/hello_world.dart']);
+        exit = EntryPoint().process(['-v', 'run', 'test/test_scripts/local_pubspec/hello_world.dart']);
       } on DCliException catch (e) {
         print(e);
       }
@@ -72,7 +72,7 @@ void main() {
       try {
         print(pwd);
 
-        exit = EntryPoint().process(['-v', 'run', 'test/test_scripts/bin/traditional_project/bin/traditional.dart']);
+        exit = EntryPoint().process(['-v', 'run', 'test/test_scripts/traditional_project/bin/traditional.dart']);
       } on DCliException catch (e) {
         print(e);
       }
@@ -86,8 +86,7 @@ void main() {
       try {
         print(pwd);
 
-        exit = EntryPoint()
-            .process(['-v', 'run', 'test/test_scripts/bin/traditional_project/bin/nested/traditional.dart']);
+        exit = EntryPoint().process(['-v', 'run', 'test/test_scripts/traditional_project/bin/nested/traditional.dart']);
       } on DCliException catch (e) {
         print(e);
       }
@@ -101,8 +100,7 @@ void main() {
       try {
         print(pwd);
 
-        exit =
-            EntryPoint().process(['-v', 'run', 'test/test_scripts/bin/traditional_project/example/traditional.dart']);
+        exit = EntryPoint().process(['-v', 'run', 'test/test_scripts/traditional_project/example/traditional.dart']);
       } on DCliException catch (e) {
         print(e);
       }
@@ -116,7 +114,7 @@ void main() {
       try {
         print(pwd);
 
-        exit = EntryPoint().process(['-v', 'run', 'test/test_scripts/bin/traditional_project/tool/traditional.dart']);
+        exit = EntryPoint().process(['-v', 'run', 'test/test_scripts//traditional_project/tool/traditional.dart']);
       } on DCliException catch (e) {
         print(e);
       }

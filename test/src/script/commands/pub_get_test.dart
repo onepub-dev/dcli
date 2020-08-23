@@ -6,13 +6,13 @@ import 'package:test/test.dart';
 
 import '../../util/test_file_system.dart';
 
-String scriptPath = 'test/test_scripts/bin/hello_world.dart';
+String scriptPath = 'test/test_scripts/general/bin/hello_world.dart';
 
 void main() {
   group('Pub Get', () {
     test('Do it', () {
       TestFileSystem().withinZone((fs) {
-        var script = Script.fromFile('test/test_scripts/bin/hello_world.dart');
+        var script = Script.fromFile('test/test_scripts/general/bin/hello_world.dart');
         var project = VirtualProject.create(script);
         PubGet(project).run();
       });

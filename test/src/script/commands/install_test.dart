@@ -11,7 +11,7 @@ import '../../mocks/mock_env.dart';
 import '../../mocks/mock_settings.dart';
 import '../../util/test_file_system.dart';
 
-String script = 'test/test_scripts/bin/hello_world.dart';
+String script = 'test/test_scripts/general/bin/hello_world.dart';
 
 void main() {
   group('Install DCli', () {
