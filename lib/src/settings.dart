@@ -47,7 +47,21 @@ class Settings {
   /// is currently running.
   String get scriptPath {
     if (_scriptPath == null) {
-      var actual = Platform.script.toFilePath();
+      var script = Platform.script;
+      String actual;
+      if (script.isScheme('file')) {
+        actual = Platform.script.toFilePath();
+      } else {
+        /// when running in a unit test we can end up with a 'data' scheme
+        if (script.isScheme('data')) {
+          var start = script.path.indexOf('file:');
+          var end = script.path.lastIndexOf('.dart');
+          var fileUri = script.path.substring(start, end + 5);
+
+          /// now find the pubsped
+          actual = Uri.parse(fileUri).toFilePath();
+        }
+      }
       if (isWithin(dcliCachePath, actual)) {
         // This is a script being run from a virtual project so we
         // need to reconstruct is original path.
