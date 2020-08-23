@@ -27,8 +27,6 @@ class CreateCommand extends Command {
 
   @override
   int run(List<Flag> selectedFlags, List<String> subarguments) {
-    _initTemplates();
-
     var scriptIndex = 0;
 
     // check for any flags
@@ -51,13 +49,11 @@ class CreateCommand extends Command {
       }
       scriptIndex = i;
 
-      _script =
-          _validateArguments(selectedFlags, subarguments.sublist(scriptIndex));
+      _script = _validateArguments(selectedFlags, subarguments.sublist(scriptIndex));
       break;
     }
 
-    var body = _script.generateDefaultBody();
-    _script.createDefaultFile(body);
+    _script.createFromTemplate(join(Settings().templatePath, 'cli_args.dart'));
 
     print('Creating project...');
     var project = VirtualProject.create(_script);
@@ -76,33 +72,21 @@ class CreateCommand extends Command {
 
   Script _validateArguments(List<Flag> selectedFlags, List<String> arguments) {
     if (arguments.length != 1) {
-      throw InvalidArguments(
-          'The create command takes only one argument. Found: ${arguments.join(',')}');
+      throw InvalidArguments('The create command takes only one argument. Found: ${arguments.join(',')}');
     }
     var scriptName = arguments[0];
     if (extension(scriptName) != '.dart') {
-      throw InvalidArguments(
-          "The create command expects a script name ending in '.dart'. Found: $scriptName");
+      throw InvalidArguments("The create command expects a script name ending in '.dart'. Found: $scriptName");
     }
 
     if (exists(scriptName)) {
-      throw InvalidArguments(
-          'The script ${truepath(scriptName)} already exists.');
+      throw InvalidArguments('The script ${truepath(scriptName)} already exists.');
     }
     return Script.fromFile(arguments[0]);
   }
 
-  /// Checks if the templates directory exists and .dcli and if not creates
-  /// the directory and copies the default scripts in.
-  void _initTemplates() {
-    if (!exists(Settings().templatePath)) {
-      createDir(Settings().templatePath, recursive: true);
-    }
-  }
-
   @override
-  String description() =>
-      'Creates a script file with a default pubspec annotation and a main entry point.';
+  String description() => 'Creates a script file with a default pubspec annotation and a main entry point.';
 
   @override
   String usage() => 'create [--foreground] <script path.dart>';

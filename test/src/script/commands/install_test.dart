@@ -25,7 +25,7 @@ void main() {
           print(e);
         }
 
-        checkInstallStructure();
+        checkInstallStructure(fs);
 
         // Now install over existing
         try {
@@ -34,12 +34,14 @@ void main() {
           print(e);
         }
 
-        checkInstallStructure();
+        checkInstallStructure(fs);
       });
     });
 
     test('Install with error', () {
-      TestFileSystem(useCommonPath: false).withinZone((fs) {
+      TestFileSystem(
+        useCommonPath: false,
+      ).withinZone((fs) {
         try {
           EntryPoint().process(['install', 'a']);
         } on DCliException catch (e) {
@@ -101,12 +103,26 @@ void main() {
   }, skip: false);
 }
 
-void checkInstallStructure() {
+void checkInstallStructure(TestFileSystem fs) {
   expect(exists(truepath(HOME, '.dcli')), equals(true));
 
   expect(exists(truepath(HOME, '.dcli', 'cache')), equals(true));
 
   expect(exists(truepath(HOME, '.dcli', 'templates')), equals(true));
+
+  var templates = find('*.dart', root: join('${fs.home}/.dcli', 'templates')).toList();
+
+  var base = join('${fs.home}/.dcli', 'templates');
+
+  expect(
+    templates,
+    unorderedEquals(
+      <String>[
+        join(base, 'cli_args.dart'),
+        join(base, 'hello_world.dart'),
+      ],
+    ),
+  );
 
   expect(exists(truepath(HOME, '.dcli', GlobalDependencies.filename)), equals(true));
 

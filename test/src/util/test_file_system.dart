@@ -106,10 +106,11 @@ class TestFileSystem {
         PubCache.reset();
         // print('PATH: $PATH');
         // print(which(DartSdk.pubExeName).firstLine);
-        var home = HOME;
+        var originalHome = HOME;
         var path = env('PATH');
         try {
           setEnv('HOME', root);
+          home = root;
 
           rebuildPath();
 
@@ -117,7 +118,7 @@ class TestFileSystem {
           print(green('Using TestFileSystem $root for Isolate: $isolateID'));
           print('Reset dcliPath: ${Settings().dcliPath}');
 
-          initFS(home);
+          initFS(originalHome);
 
           callback(this);
         }
@@ -127,7 +128,7 @@ class TestFileSystem {
           st.toString();
           rethrow;
         } finally {
-          setEnv('HOME', home);
+          setEnv('HOME', originalHome);
           setEnv('PATH', path);
         }
       });
