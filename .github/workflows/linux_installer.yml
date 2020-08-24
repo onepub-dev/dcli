@@ -17,7 +17,7 @@ jobs:
     - uses: actions/checkout@v2
     - name: install pub_release
       # run: pub global activate pub_release
-      run: pub global activate --source git git@github.com:bsutton/pub_release.git
+      run: pub global activate --source git https://github.com/bsutton/pub_release.git
     - name: Pub dependencies
       run: pub get
     - name: Create release
