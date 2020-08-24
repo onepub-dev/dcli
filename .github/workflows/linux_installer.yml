@@ -22,7 +22,7 @@ jobs:
     - name: clone pub_release
       # run: pub global activate pub_release
       run:  git clone https://github.com/bsutton/pub_release.git
-      working-directory: ../pub_release
+      working-directory: ..
     - name: pub get for pub_release
       run: pub get
       working-directory: ../pub_release
