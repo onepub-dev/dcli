@@ -16,6 +16,8 @@ jobs:
     steps:
     - uses: actions/checkout@v2
     
+    - name: setup paths
+      run: export PATH="${PATH}":/usr/lib/dart/bin:"${HOME}/.pub-cache/bin":"${HOME}/.dcli/bin"
     - name: create working dir
       run: mkdir ../pub_release
       
