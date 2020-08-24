@@ -17,9 +17,12 @@ jobs:
     - uses: actions/checkout@v2
     - name: clone pub_release
       # run: pub global activate pub_release
-      run: git clone https://github.com/bsutton/pub_release.git
+      run:  git clone https://github.com/bsutton/pub_release.git
+      working-directory: depends
+      
     - name: install pub_release
       run: pub global activate pub_release --source=path
+      working-directory: depends
     - name: Pub dependencies
       run: pub get
     - name: Create release
