@@ -19,7 +19,7 @@ jobs:
       # run: pub global activate pub_release
       run: git clone https://github.com/bsutton/pub_release.git
     - name: install pub_release
-      run: pub global activate pub_release--source=path
+      run: pub global activate pub_release --source=path
     - name: Pub dependencies
       run: pub get
     - name: Create release
