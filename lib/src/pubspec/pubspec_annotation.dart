@@ -143,6 +143,9 @@ class PubSpecAnnotation implements PubSpec // with DependenciesMixin
   List<Dependency> get dependencies => _pubspec.dependencies;
 
   @override
+  List<Executable> get executables => _pubspec.executables;
+
+  @override
   String get name => _pubspec.name;
 
   @override

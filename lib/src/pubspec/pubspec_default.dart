@@ -43,6 +43,9 @@ version: $version
   List<Dependency> get dependencies => _pubspec.dependencies;
 
   @override
+  List<Executable> get executables => _pubspec.executables;
+
+  @override
   void saveToFile(String path) {
     _pubspec.saveToFile(path);
   }

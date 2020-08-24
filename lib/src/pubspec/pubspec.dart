@@ -31,6 +31,8 @@ abstract class PubSpec {
   /// returns the list of dependencies in this pubspec.yaml
   List<Dependency> get dependencies;
 
+  List<Executable> get executables;
+
   /// Compares two pubspec to see if they have the same content.
   static bool equals(PubSpec lhs, PubSpec rhs) {
     if (lhs.name != rhs.name) return false;
@@ -46,8 +48,7 @@ abstract class PubSpec {
     // if (lhs.publishTo != rhs.publishTo) return false;
     // if (lhs.environment != rhs.environment) return false;
 
-    if (!const ListEquality<Dependency>()
-        .equals(lhs.dependencies, rhs.dependencies)) return false;
+    if (!const ListEquality<Dependency>().equals(lhs.dependencies, rhs.dependencies)) return false;
 
     return true;
   }
@@ -91,6 +92,18 @@ class PubSpecImpl implements PubSpec {
     return depends;
   }
 
+  List<Executable> _executables;
+  @override
+  List<Executable> get executables {
+    if (_executables == null) {
+      _executables = <Executable>[];
+      for (var key in pubspec.executables.keys) {
+        _executables.add(Executable(key, pubspec.executables[key].scriptPath));
+      }
+    }
+    return _executables;
+  }
+
   /// parses a pubspec from a yaml string.
   factory PubSpecImpl.fromString(String yamlString) {
     var impl = PubSpecImpl._internal();
@@ -112,4 +125,11 @@ class PubSpecImpl implements PubSpec {
     var lines = read(path).toList();
     return PubSpecImpl.fromString(lines.join('\n'));
   }
+}
+
+class Executable {
+  String name;
+  String script;
+
+  Executable(this.name, this.script);
 }

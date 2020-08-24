@@ -40,6 +40,12 @@ class PubSpecFile implements PubSpec // with DependenciesMixin
     __pubspec.dependencies = newDependencies;
   }
 
+  /// Sets the list of executables for this pubspec.
+  @override
+  List<Executable> get executables {
+    return __pubspec.executables;
+  }
+
   /// Returns the set of dependencies contained in this pubspec.
   @override
   List<Dependency> get dependencies => __pubspec.dependencies;
