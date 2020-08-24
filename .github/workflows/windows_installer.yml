@@ -17,17 +17,28 @@ jobs:
       run: curl https://storage.googleapis.com/dart-archive/channels/stable/release/2.8.4/sdk/dartsdk-windows-x64-release.zip -o dartsdk.zip 
     - name: Extract Dart sDK
       run: tar.exe -xf dartsdk.zip
-    - name: Pub get
-      run: dart-sdk/bin/pub.bat get
-    - name: Compile Installer
-      run: dart-sdk/bin/dart2native.bat bin/dcli_install.dart -o bin/windows/dcli_install.exe
-    - name: Commit results
-      run: git config --global user.email "bsutton@noojee.com.au"
-    - name: Git name
-      run: git config --global user.name "bsutton"
-    - name: Git Commit
-      run: git commit bin/windows/dcli_install.exe -m 'dart_install.exe for windows' || echo "exec has not changed"
-    - name: Git Pull
-      run: git pull
-    - name: Git Push
-      run: git push origin || echo "exec has not changed."
+    
+    - name: setup paths
+      run: export PATH="${PATH}":/usr/lib/dart/bin:"${HOME}/.pub-cache/bin":"${HOME}/.dcli/bin"
+    - name: create working dir
+      run: mkdir ../pub_release
+      
+    - name: clone pub_release
+      # run: pub global activate pub_release
+      run:  git clone https://github.com/bsutton/pub_release.git
+      working-directory: ..
+      
+    - name: activate pub_release
+      run: pub global activate pub_release --source=path
+      working-directory: ..
+      
+    - name: activate dcli
+      run: pub global activate dcli --source=path
+      working-directory: ..
+      
+      
+    - name: Create release
+      env:
+        APITOKEN:  ${{ secrets.APITOKEN }}
+      run: git_release --username bsutton --apiToken "$APITOKEN" --owner bsutton --repository dcli --suffix windows
+  
