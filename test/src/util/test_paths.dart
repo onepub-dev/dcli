@@ -78,14 +78,14 @@ class TestPaths {
     // of the PATH so that our test version of dcli tooling
     // will run when we spawn a dcli process.
     var path = PATH;
-    path.insert(0, Settings().dcliBinPath);
+    path.insert(0, Settings().pathToDCliBin);
 
     // .pub-cache so we run the test version of dcli.
     // path.insert(0, pubCachePath);
 
-    setEnv('PATH', path.join(Env().pathDelimiter));
+    setEnv('PATH', path.join(Env().delimiterForPATH));
 
-    var dcliPath = Settings().dcliPath;
+    var dcliPath = Settings().pathToDCli;
     if (!dcliPath.startsWith(join(rootPath, 'tmp')) ||
         !HOME.startsWith(join(rootPath, 'tmp')))
     //  ||        !env('PUB_CACHE').startsWith('/tmp'))
@@ -103,13 +103,13 @@ class TestPaths {
     // create test home dir
     recreateDir(home);
 
-    recreateDir(Settings().dcliPath);
+    recreateDir(Settings().pathToDCli);
 
-    recreateDir(Settings().dcliBinPath);
+    recreateDir(Settings().pathToDCliBin);
 
     // the cache is normally in .dcliPath
     // but just in case its not we create it directly
-    recreateDir(Settings().dcliCachePath);
+    recreateDir(Settings().pathToDCliCache);
 
     // recreateDir(pubCachePath);
 
@@ -123,11 +123,11 @@ class TestPaths {
     var projectScriptPath =
         join(dirname(scriptName), basenameWithoutExtension(scriptName));
     if (scriptName.startsWith(Platform.pathSeparator)) {
-      projectPath = truepath(Settings().dcliCachePath,
+      projectPath = truepath(Settings().pathToDCliCache,
           Script.sansRoot(projectScriptPath) + VirtualProject.projectDir);
     } else {
       projectPath = truepath(
-          Settings().dcliCachePath,
+          Settings().pathToDCliCache,
           Script.sansRoot(testScriptPath),
           projectScriptPath + VirtualProject.projectDir);
     }
@@ -148,10 +148,10 @@ class TestPaths {
 
     which('dcli').forEach(print);
 
-    print('dcli path: ${Settings().dcliPath}');
+    print('dcli path: ${Settings().pathToDCli}');
 
-    if (!exists(Settings().dcliPath)) {
-      createDir(Settings().dcliPath);
+    if (!exists(Settings().pathToDCli)) {
+      createDir(Settings().pathToDCli);
 
       '${DCliPaths().dcliName} install'.run;
     }

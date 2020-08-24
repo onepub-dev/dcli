@@ -133,7 +133,7 @@ dependency_overrides:
       var workingDir = fs.unitTestWorkingDir;
 
       // over-ride the default 'dependencies.yaml
-      var depPath = join(Settings().dcliPath, GlobalDependencies.filename);
+      var depPath = join(Settings().pathToDCli, GlobalDependencies.filename);
       var backup = '$depPath.bak';
       if (exists(backup)) {
         delete(backup);

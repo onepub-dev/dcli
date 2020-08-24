@@ -95,17 +95,17 @@ class CompileCommand extends Command {
       Settings().verbose(
           "\nCompiling with pubspec.yaml:\n${read(project.runtimePubSpecPath).toList().join('\n')}\n");
 
-      DartSdk().runDart2Native(project, project.runtimeScriptPath,
-          script.scriptDirectory, project.projectRootPath,
+      DartSdk().runDart2Native(project, project.pathToRuntimeScript,
+          script.pathToScriptDirectory, project.pathToProjectRoot,
           progress: Progress(print, stderr: print));
 
-      var exe = join(script.scriptDirectory, script.basename);
+      var exe = join(script.pathToScriptDirectory, script.basename);
 
       /// if an exe was produced and the --install flag was set.
       /// If no exe then the compile failed.
       if (flagSet.isSet(InstallFlag()) && exists(exe)) {
         var install = true;
-        var to = join(Settings().dcliBinPath, script.basename);
+        var to = join(Settings().pathToDCliBin, script.basename);
         if (exists(to) && !flagSet.isSet(OverWriteFlag())) {
           var overwrite = confirm('Overwrite the existing exe?');
           if (!overwrite) {
@@ -183,7 +183,7 @@ class InstallFlag extends Flag {
 
   @override
   String description() {
-    return 'Installs the compiled script into your path ${Settings().dcliBinPath}';
+    return 'Installs the compiled script into your path ${Settings().pathToDCliBin}';
   }
 }
 
@@ -199,6 +199,6 @@ class OverWriteFlag extends Flag {
 
   @override
   String description() {
-    return 'If the installed executable already exists in ${Settings().dcliBinPath} then it will overwritten.';
+    return 'If the installed executable already exists in ${Settings().pathToDCliBin} then it will overwritten.';
   }
 }

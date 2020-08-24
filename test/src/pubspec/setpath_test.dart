@@ -10,22 +10,22 @@ void main() {
     var dartToolDir = r'C:\tools\dart-sdk';
 
     /// add the dartsdk path to the windows path.
-    Env().pathPutIfAbsent(join(dartToolDir, 'bin'));
-    Env().pathPutIfAbsent(PubCache().binPath);
-    Env().pathPutIfAbsent(Settings().dcliBinPath);
+    Env().addToPATHIfAbsent(join(dartToolDir, 'bin'));
+    Env().addToPATHIfAbsent(PubCache().pathToBin);
+    Env().addToPATHIfAbsent(Settings().pathToDCliBin);
 
     print(PATH);
 
-    'setx PATH "${PATH.join(Env().pathDelimiter)}"'.run;
+    'setx PATH "${PATH.join(Env().delimiterForPATH)}"'.run;
   }, skip: !Platform.isWindows);
 
   test('PutIfAbsent', () {
     var dartToolDir = r'C:\tools\dart-sdk';
 
     /// add the dartsdk path to the windows path.
-    Env().pathPutIfAbsent(join(dartToolDir, 'bin'));
-    Env().pathPutIfAbsent(PubCache().binPath);
-    Env().pathPutIfAbsent(Settings().dcliBinPath);
+    Env().addToPATHIfAbsent(join(dartToolDir, 'bin'));
+    Env().addToPATHIfAbsent(PubCache().pathToBin);
+    Env().addToPATHIfAbsent(Settings().pathToDCliBin);
 
     print(PATH);
   }, skip: !Platform.isWindows);
@@ -34,9 +34,9 @@ void main() {
     var dartToolDir = r'/tools/dart-sdk';
 
     /// add the dartsdk path to the windows path.
-    Env().pathPutIfAbsent(join(dartToolDir, 'bin'));
-    Env().pathPutIfAbsent(PubCache().binPath);
-    Env().pathPutIfAbsent(Settings().dcliBinPath);
+    Env().addToPATHIfAbsent(join(dartToolDir, 'bin'));
+    Env().addToPATHIfAbsent(PubCache().pathToBin);
+    Env().addToPATHIfAbsent(Settings().pathToDCliBin);
 
     print(PATH);
   }, skip: !Platform.isLinux);

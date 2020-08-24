@@ -8,7 +8,7 @@ void main() {
 
     expect(content, isNotNull);
 
-    var actual = read(join(Script.current.projectRoot, 'lib', 'src', path))
+    var actual = read(join(Script.current.pathToProjectRoot, 'lib', 'src', path))
         .toList()
         .join('\n');
 
@@ -22,7 +22,7 @@ void main() {
     var path = 'assets/templates/';
     var templates = Assets().list('*.dart', root: path);
 
-    var base = join(Script.current.projectRoot, 'lib', 'src', path);
+    var base = join(Script.current.pathToProjectRoot, 'lib', 'src', path);
 
     expect(
       templates,

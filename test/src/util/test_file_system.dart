@@ -116,7 +116,7 @@ class TestFileSystem {
 
           var isolateID = Service.getIsolateID(Isolate.current);
           print(green('Using TestFileSystem $root for Isolate: $isolateID'));
-          print('Reset dcliPath: ${Settings().dcliPath}');
+          print('Reset dcliPath: ${Settings().pathToDCli}');
 
           initFS(originalHome);
 
@@ -164,7 +164,7 @@ class TestFileSystem {
 
   String runtimePath(String scriptName) {
     var project = VirtualProject.load(Script.fromFile(scriptName));
-    return project.runtimeProjectPath;
+    return project.pathToRuntimeProject;
   }
 
   void buildTestFileSystem() {
@@ -230,14 +230,14 @@ class TestFileSystem {
 
   void installDCli() {
     /// run pub get and only display errors.
-    '${DartSdk.pubExeName} global activate --source path $pwd'.start(
-        progress: Progress((line) => null, stderr: (line) => print(line)));
+    '${DartSdk.pubExeName} global activate --source path $pwd'
+        .start(progress: Progress((line) => null, stderr: (line) => print(line)));
 
     EntryPoint().process(['install', '--nodart', '--quiet']);
 
     /// rewrite dependencies.yaml so that the dcli path points
     /// to the dev build directory
-    var dependencyFile = join(Settings().dcliPath, GlobalDependencies.filename);
+    var dependencyFile = join(Settings().pathToDCli, GlobalDependencies.filename);
     var lines = read(dependencyFile).toList();
 
     var newContent = <String>[];
@@ -267,17 +267,17 @@ class TestFileSystem {
       print(red('PATH is empty'));
     }
     for (var path in PATH) {
-      if (path.contains(PubCache().path) || path.contains('.dcli')) {
+      if (path.contains(PubCache().pathTo) || path.contains('.dcli')) {
         continue;
       }
 
       newPath.add(path);
     }
 
-    newPath.add('${join(root, PubCache().binPath)}');
+    newPath.add('${join(root, PubCache().pathToBin)}');
     newPath.add('${join(root, '.dcli', 'bin')}');
 
-    setEnv('PATH', newPath.join(Env().pathDelimiter));
+    setEnv('PATH', newPath.join(Env().delimiterForPATH));
   }
 
   void copyPubCache(String originalHome, String newHome) {
@@ -312,17 +312,21 @@ class TestFileSystem {
       createDir(testbinPath, recursive: true);
     }
 
+    // may not exists on the first pass through.
+    if (!exists(Settings().pathToDCliBin)) {
+      createDir(Settings().pathToDCliBin, recursive: true);
+    }
+
     for (var command in required) {
       if (exists(join(testbinPath, command))) {
         // copy the existing command into the testzones .dcli/bin path
-        copy(join(testbinPath, command), join(Settings().dcliBinPath, command));
+        copy(join(testbinPath, command), join(Settings().pathToDCliBin, command));
       } else {
         /// compile and install the command
-        '${DCliPaths().dcliName} compile -i test/test_scripts/general/bin/$command.dart'
-            .run;
+        '${DCliPaths().dcliName} compile -i test/test_scripts/general/bin/$command.dart'.run;
         // copy it back to the dcli testbin so the next unit
         // test doesn't have to compile it.
-        copy(join(Settings().dcliBinPath, command), join(testbinPath, command));
+        copy(join(Settings().pathToDCliBin, command), join(testbinPath, command));
       }
     }
   }

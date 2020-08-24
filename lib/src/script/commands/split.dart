@@ -26,13 +26,13 @@ class SplitCommand extends Command {
     Script.validate(scriptPath);
     var script = Script.fromFile(scriptPath);
 
-    if (exists(join(script.path, 'pubspec.yaml'))) {
+    if (exists(join(script.pathToScript, 'pubspec.yaml'))) {
       if (_identical(script)) {
         /// there is already a pubspec. Nothing to do here.
         print('The pubspec.yaml already exists and is upto date');
       } else {
         printerr(
-            'A pubspec.yaml already exists in ${script.path}, however it is not up to date');
+            'A pubspec.yaml already exists in ${script.pathToScript}, however it is not up to date');
         printerr('Delete the existing pubspec.yaml and try again.');
         exitCode = 1;
       }
@@ -55,10 +55,10 @@ class SplitCommand extends Command {
       if (exitCode == 0) {
         /// We are going to do the split!
         copy(project.projectPubspecPath,
-            join(dirname(script.path), 'pubspec.yaml'));
+            join(dirname(script.pathToScript), 'pubspec.yaml'));
         // now we need to disable the @pubspec annotation (if the script has one.)
         if (project.pubspecLocation == PubspecLocation.annotation) {
-          replace(script.path, '@pubspec', '@disabled-pubspec');
+          replace(script.pathToScript, '@pubspec', '@disabled-pubspec');
         }
         print('complete.');
       }
@@ -83,17 +83,17 @@ class SplitCommand extends Command {
   // checks if the script's pubspec is identical to the
   // pubspec in the local directory
   bool _identical(Script script) {
-    var localPubspecPath = canonicalize(join(script.path, 'pubspec.yaml'));
+    var localPubspecPath = canonicalize(join(script.pathToScript, 'pubspec.yaml'));
 
     // check the virtual project has a symlink back to the local pubspec.
-    if (isLink(script.localPubSpecPath)) {
-      var resolved = resolveSymLink(script.localPubSpecPath);
+    if (isLink(script.pathToLocalPubSpec)) {
+      var resolved = resolveSymLink(script.pathToLocalPubSpec);
       if (resolved == localPubspecPath) {
         return true;
       }
     }
 
-    return _compare(localPubspecPath, script.localPubSpecPath);
+    return _compare(localPubspecPath, script.pathToLocalPubSpec);
   }
 
   bool _compare(String localPubspecPath, String pubSpecPath) {

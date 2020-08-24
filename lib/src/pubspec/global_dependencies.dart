@@ -23,10 +23,10 @@ class GlobalDependencies with DependenciesMixin {
 
   /// ctor.
   GlobalDependencies() {
-    if (!exists(path)) {
-      touch(path, create: true);
+    if (!exists(pathTo)) {
+      touch(pathTo, create: true);
     }
-    _yaml = MyYaml.fromFile(path);
+    _yaml = MyYaml.fromFile(pathTo);
   }
 
   /// Use this ctor for unit testing.
@@ -42,18 +42,18 @@ class GlobalDependencies with DependenciesMixin {
   }
 
   /// path to the global dependencies file.
-  static String get path => p.join(Settings().dcliPath, filename);
+  static String get pathTo => p.join(Settings().pathToDCli, filename);
 
   @override
   MyYaml get yaml => _yaml;
 
   /// Creates the default global dependencies
   static void createDefault() {
-    if (!exists(path)) {
-      path.write('dependencies:');
+    if (!exists(pathTo)) {
+      pathTo.write('dependencies:');
 
       for (var dep in defaultDependencies) {
-        path.append(
+        pathTo.append(
             '  ${dep.name}: ${(dep.reference as HostedReference).versionConstraint.toString()}');
       }
     }

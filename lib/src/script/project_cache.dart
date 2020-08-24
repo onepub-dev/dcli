@@ -62,8 +62,8 @@ class ProjectCache {
   /// Checks if the dscript cache exists
   /// and if not creates it.
   void initCache() {
-    if (!exists(Settings().dcliCachePath)) {
-      createDir(Settings().dcliCachePath);
+    if (!exists(Settings().pathToDCliCache)) {
+      createDir(Settings().pathToDCliCache);
     }
   }
 
@@ -71,17 +71,17 @@ class ProjectCache {
   /// we will clean out the project cache
   /// for all scripts.
   void cleanAll() {
-    print('Cleaning project cache ${Settings().dcliCachePath}');
+    print('Cleaning project cache ${Settings().pathToDCliCache}');
 
     try {
       find('*.project',
-          root: Settings().dcliCachePath,
+          root: Settings().pathToDCliCache,
           recursive: true,
           types: [FileSystemEntityType.directory]).forEach((projectPath) {
         var scriptPath = join(
             rootPath,
             withoutExtension(
-                '${relative(projectPath, from: Settings().dcliCachePath)}.dart'));
+                '${relative(projectPath, from: Settings().pathToDCliCache)}.dart'));
 
         deleteDir(projectPath, recursive: true);
 

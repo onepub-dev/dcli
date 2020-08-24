@@ -21,7 +21,7 @@ void main(List<String> args) {
 
   // activate_local lives in the tool directory
   // so its parent directory should be the dcli package root.
-  var dcliPackageRoot = dirname(dirname(Settings().scriptPath));
+  var dcliPackageRoot = dirname(dirname(Settings().pathToScript));
 
   parser.addOption('path', defaultsTo: dcliPackageRoot);
 
@@ -74,14 +74,14 @@ ${parser.usage}
   'dcli compile $dcliBin.dart'.run;
 
   // make certain the dependency injection points to $path
-  var dependency = join(Settings().dcliPath, GlobalDependencies.filename);
+  var dependency = join(Settings().pathToDCli, GlobalDependencies.filename);
 
   if (exists(dependency)) {
     delete(dependency);
   }
 
   /// set the path the local dcli.
-  Env().pathPrepend(join(dcliPackageRoot, 'bin'));
+  Env().prependToPATH(join(dcliPackageRoot, 'bin'));
 
   // make certain all script see the new settings.
   '${DCliPaths().dcliName} install -nc'.run;

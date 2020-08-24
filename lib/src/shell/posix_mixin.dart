@@ -9,17 +9,17 @@ import '../installers/macosx_installer.dart';
 mixin PosixMixin {
   String get startScriptName;
 
-  String get startScriptPath {
+  String get pathToStartScript {
     return join(HOME, startScriptName);
   }
 
   /// Adds the given path to the zsh path if it isn't
   /// already on teh path.
-  bool addToPath(String path) {
-    if (!isOnPath(path)) {
+  bool addToPATH(String path) {
+    if (!isOnPATH(path)) {
       var export = 'export PATH=\$PATH:$path';
 
-      var rcPath = startScriptPath;
+      var rcPath = pathToStartScript;
 
       if (!exists(rcPath)) {
         rcPath.write(export);
@@ -32,7 +32,7 @@ mixin PosixMixin {
 
   bool get isCompletionInstalled {
     var completeInstalled = false;
-    var startFile = startScriptPath;
+    var startFile = pathToStartScript;
 
     if (startFile != null) {
       if (exists(startFile)) {

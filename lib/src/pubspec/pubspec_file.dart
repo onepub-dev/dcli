@@ -14,7 +14,7 @@ class PubSpecFile implements PubSpec // with DependenciesMixin
 
   /// Reads a pubspec.yaml from the path that  [script] is located in.
   PubSpecFile.fromScript(Script script) {
-    _fromFile(script.localPubSpecPath);
+    _fromFile(script.pathToLocalPubSpec);
   }
 
   /// Reads a pubspec.yaml located at [path]
@@ -40,11 +40,12 @@ class PubSpecFile implements PubSpec // with DependenciesMixin
     __pubspec.dependencies = newDependencies;
   }
 
-  /// Sets the list of executables for this pubspec.
-  @override
-  List<Executable> get executables {
-    return __pubspec.executables;
-  }
+  // removed unti pupspec 0.14 is released
+  // /// Sets the list of executables for this pubspec.
+  // @override
+  // List<Executable> get executables {
+  //   return __pubspec.executables;
+  // }
 
   /// Returns the set of dependencies contained in this pubspec.
   @override

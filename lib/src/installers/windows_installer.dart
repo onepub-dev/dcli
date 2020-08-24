@@ -21,11 +21,11 @@ class WindowsDCliInstaller {
           DartSdk().installFromArchive(defaultDartToolDir, askUser: false);
 
       /// add the dartsdk path to the windows path.
-      Env().pathPutIfAbsent(join(dartToolDir, 'bin'));
-      Env().pathPutIfAbsent(PubCache().binPath);
-      Env().pathPutIfAbsent(Settings().dcliBinPath);
+      Env().addToPATHIfAbsent(join(dartToolDir, 'bin'));
+      Env().addToPATHIfAbsent(PubCache().pathToBin);
+      Env().addToPATHIfAbsent(Settings().pathToDCliBin);
 
-      'setx PATH "${PATH.join(Env().pathDelimiter)}"'.run;
+      'setx PATH "${PATH.join(Env().delimiterForPATH)}"'.run;
 
       print('Installed dart to: $dartToolDir');
 
@@ -35,7 +35,7 @@ class WindowsDCliInstaller {
       Settings().verbose(
           "Found dart at: ${which('dart').firstLine} and as such will not install dart.");
     }
-    '${DartSdk().pubPath} global activate dcli'.run;
+    '${DartSdk().pathToPubExe} global activate dcli'.run;
 
     return installedDart;
   }

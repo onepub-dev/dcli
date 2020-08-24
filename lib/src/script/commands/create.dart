@@ -53,7 +53,7 @@ class CreateCommand extends Command {
           _validateArguments(selectedFlags, subarguments.sublist(scriptIndex));
 
       Script.createFromTemplate(
-        templatePath: join(Settings().templatePath, 'cli_args.dart'),
+        templatePath: join(Settings().pathToTemplate, 'cli_args.dart'),
         scriptPath: scriptPath,
       );
 
@@ -67,7 +67,7 @@ class CreateCommand extends Command {
     project.build(background: !flagSet.isSet(ForegroundFlag()));
 
     if (!Platform.isWindows) {
-      chmod(755, p.join(_script.scriptDirectory, _script.scriptname));
+      chmod(755, p.join(_script.pathToScriptDirectory, _script.scriptname));
     }
 
     print('');

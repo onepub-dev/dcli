@@ -31,7 +31,7 @@ class PubSpecAnnotation implements PubSpec // with DependenciesMixin
     /// A compiled script won't end in .dart.
     if (!_script.isCompiled) {
       // Read script file as lines
-      var lines = _readLines(File(_script.path));
+      var lines = _readLines(File(_script.pathToScript));
 
       var sourceLines = _extractAnnotation(lines);
 
@@ -117,8 +117,7 @@ class PubSpecAnnotation implements PubSpec // with DependenciesMixin
     }
 
     if (state == _State.content) {
-      throw PubSpecAnnotationException(
-          "@pubspec annotation found but the closing '*/' was not seen");
+      throw PubSpecAnnotationException("@pubspec annotation found but the closing '*/' was not seen");
     }
     return dataLines;
   }
@@ -129,8 +128,7 @@ class PubSpecAnnotation implements PubSpec // with DependenciesMixin
   ///
   List<String> _readLines(File file) {
     // Read script file as lines
-    final stream =
-        file.openRead().transform(utf8.decoder).transform(LineSplitter());
+    final stream = file.openRead().transform(utf8.decoder).transform(LineSplitter());
 
     var lines = waitForEx(stream.toList());
     return lines;
@@ -144,8 +142,9 @@ class PubSpecAnnotation implements PubSpec // with DependenciesMixin
   @override
   List<Dependency> get dependencies => _pubspec.dependencies;
 
-  @override
-  List<Executable> get executables => _pubspec.executables;
+  // removed unti pupspec 0.14 is released
+  // @override
+  // List<Executable> get executables => _pubspec.executables;
 
   @override
   String get name => _pubspec.name;

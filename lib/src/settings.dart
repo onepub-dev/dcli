@@ -45,7 +45,7 @@ class Settings {
 
   /// The absolute path to the dcli script which
   /// is currently running.
-  String get scriptPath {
+  String get pathToScript {
     if (_scriptPath == null) {
       var script = Platform.script;
       String actual;
@@ -62,12 +62,12 @@ class Settings {
           actual = Uri.parse(fileUri).toFilePath();
         }
       }
-      if (isWithin(dcliCachePath, actual)) {
+      if (isWithin(pathToDCliCache, actual)) {
         // This is a script being run from a virtual project so we
         // need to reconstruct is original path.
 
         // strip of the cache prefix
-        var rel = join(rootPath, relative(actual, from: dcliCachePath));
+        var rel = join(rootPath, relative(actual, from: pathToDCliCache));
         //.dcli/cache/home/bsutton/git/dcli/tool/activate_local.project/activate_local.dart
 
         // now remove the virtual project directory
@@ -82,7 +82,7 @@ class Settings {
 
   /// This is an internal function called by the run
   /// command and you should NOT be calling it!
-  set scriptPath(String scriptPath) {
+  set pathToScript(String scriptPath) {
     _scriptPath = scriptPath;
   }
 
@@ -99,7 +99,7 @@ class Settings {
   /// The directory where we store all of dcli's
   /// configuration files such as the cache.
   /// This will normally be ~/.dcli
-  String get dcliPath {
+  String get pathToDCli {
     _dcliPath ??= p.absolute(p.join(HOME, dcliDir));
     return _dcliPath;
   }
@@ -109,7 +109,7 @@ class Settings {
   /// The dcliBinPath is added to the OS's path
   /// allowing the installed scripts to be run from anywhere.
   /// This will normally be ~/.dcli/bin
-  String get dcliBinPath {
+  String get pathToDCliBin {
     // var st = StackTraceImpl();
 
     // print('dcliBinPath current: ${_dcliBinPath}');
@@ -120,11 +120,11 @@ class Settings {
   }
 
   /// path to the dcli template directory.
-  String get templatePath => p.join(dcliPath, templateDir);
+  String get pathToTemplate => p.join(pathToDCli, templateDir);
 
   /// Path to the dcli cache directory.
   /// This will normally be ~/.dcli/cache
-  String get dcliCachePath => p.join(dcliPath, dcliCacheDir);
+  String get pathToDCliCache => p.join(pathToDCli, dcliCacheDir);
 
   /// the list of global flags selected via the cli when dcli
   /// was started.
@@ -171,7 +171,7 @@ class Settings {
 
   /// returns the path to the file that we use to indicated
   /// that the install completed succesfully.
-  String get installCompletedIndicator => join(dcliPath, 'install_completed');
+  String get installCompletedIndicator => join(pathToDCli, 'install_completed');
 
   /// True if you are running on a Mac.
   /// I'm so sorry.

@@ -27,7 +27,7 @@ String env(String name) => Env()._env(name);
 /// in the OS's PATH environment variable.
 /// An canonicalized match of [path] is made against
 /// each path on the OS's path.
-bool isOnPath(String path) => Env().isOnPath(path);
+bool isOnPATH(String path) => Env().isOnPATH(path);
 
 /// Returns the list of directory paths that are contained
 /// in the OS's PATH environment variable.
@@ -113,7 +113,7 @@ class Env extends DCliFunction {
   List<String> get _path {
     var pathEnv = _env('PATH');
 
-    return pathEnv.split(pathDelimiter);
+    return pathEnv.split(delimiterForPATH);
   }
 
   /// Appends [newPath] to the list of paths in the
@@ -124,10 +124,10 @@ class Env extends DCliFunction {
   ///
   /// Changing the path affects the current script
   /// and any children that it spawns.
-  void pathAppend(String newPath) {
+  void appendToPATH(String newPath) {
     var path = PATH;
     path.add(newPath);
-    setEnv('PATH', path.join(pathDelimiter));
+    setEnv('PATH', path.join(delimiterForPATH));
   }
 
   /// Prepends [newPath] to the list of paths in the
@@ -138,10 +138,10 @@ class Env extends DCliFunction {
   ///
   /// Changing the path affects the current script
   /// and any children that it spawns.
-  void pathPrepend(String newPath) {
+  void prependToPATH(String newPath) {
     var path = PATH;
     path.insert(0, newPath);
-    setEnv('PATH', path.join(pathDelimiter));
+    setEnv('PATH', path.join(delimiterForPATH));
   }
 
   /// Removes the given [oldPath] from the PATH environment variable.
@@ -151,10 +151,10 @@ class Env extends DCliFunction {
   ///
   /// Changing the path affects the current script
   /// and any children that it spawns.
-  void pathRemove(String oldPath) {
+  void removeFromPATH(String oldPath) {
     var path = PATH;
     path.remove(oldPath);
-    setEnv('PATH', path.join(pathDelimiter));
+    setEnv('PATH', path.join(delimiterForPATH));
   }
 
   /// Adds [newPath] to the PATH environment variable
@@ -167,11 +167,11 @@ class Env extends DCliFunction {
   ///
   /// Changing the PATH affects the current script
   /// and any children that it spawns.
-  void pathPutIfAbsent(String newPath) {
+  void addToPATHIfAbsent(String newPath) {
     var path = PATH;
     if (!path.contains(newPath)) {
       path.add(newPath);
-      setEnv('PATH', path.join(pathDelimiter));
+      setEnv('PATH', path.join(delimiterForPATH));
     }
   }
 
@@ -200,9 +200,9 @@ class Env extends DCliFunction {
     return home;
   }
 
-  /// returns true if the given [path] is in the list
+  /// returns true if the given [pathToScript] is in the list
   /// of paths defined in the environment variable [PATH].
-  bool isOnPath(String checkPath) {
+  bool isOnPATH(String checkPath) {
     var canon = canonicalize(absolute(checkPath));
     var found = false;
     for (var path in _path) {
@@ -243,7 +243,7 @@ class Env extends DCliFunction {
   ///
   /// NOTE do NOT confuses this with the file system path root!!!
   ///
-  String get pathDelimiter {
+  String get delimiterForPATH {
     var separator = ':';
 
     if (Platform.isWindows) {

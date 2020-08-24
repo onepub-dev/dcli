@@ -168,12 +168,12 @@ void runTest(TestFileSystem fs, String annotation, String main,
     delete(scriptPath);
   }
 
-  if (exists(Settings().dcliPath)) {
-    deleteDir(Settings().dcliPath, recursive: true);
+  if (exists(Settings().pathToDCli)) {
+    deleteDir(Settings().pathToDCli, recursive: true);
   }
 
-  if (!exists(Settings().dcliPath)) {
-    createDir(Settings().dcliPath);
+  if (!exists(Settings().pathToDCli)) {
+    createDir(Settings().pathToDCli);
   }
   GlobalDependencies.createDefault();
 

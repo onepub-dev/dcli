@@ -89,17 +89,17 @@ class InstallCommand extends Command {
     }
     var dartWasInstalled = shell.install();
     // Create the ~/.dcli root.
-    if (!exists(Settings().dcliPath)) {
-      qprint(blue('Creating ${Settings().dcliPath}'));
-      createDir(Settings().dcliPath);
+    if (!exists(Settings().pathToDCli)) {
+      qprint(blue('Creating ${Settings().pathToDCli}'));
+      createDir(Settings().pathToDCli);
     } else {
-      qprint('Found existing install at: ${Settings().dcliPath}.');
+      qprint('Found existing install at: ${Settings().pathToDCli}.');
     }
     qprint('');
 
     // Create dependencies.yaml
     var blue2 = blue(
-        'Creating ${join(Settings().dcliPath, GlobalDependencies.filename)} with default packages.');
+        'Creating ${join(Settings().pathToDCli, GlobalDependencies.filename)} with default packages.');
     qprint(blue2);
     GlobalDependencies.createDefault();
 
@@ -112,29 +112,29 @@ class InstallCommand extends Command {
         'Edit ${GlobalDependencies.filename} to add/remove/update your default dependencies.');
 
     /// create the template directory.
-    if (!exists(Settings().templatePath)) {
+    if (!exists(Settings().pathToTemplate)) {
       qprint('');
       qprint(
-          blue('Creating Template directory in: ${Settings().templatePath}.'));
+          blue('Creating Template directory in: ${Settings().pathToTemplate}.'));
       initTemplates();
     }
 
     /// create the cache directory.
-    if (!exists(Settings().dcliCachePath)) {
+    if (!exists(Settings().pathToDCliCache)) {
       qprint('');
-      qprint(blue('Creating Cache directory in: ${Settings().dcliCachePath}.'));
-      createDir(Settings().dcliCachePath);
+      qprint(blue('Creating Cache directory in: ${Settings().pathToDCliCache}.'));
+      createDir(Settings().pathToDCliCache);
     }
 
     // create the bin directory
-    var binPath = Settings().dcliBinPath;
+    var binPath = Settings().pathToDCliBin;
     if (!exists(binPath)) {
       qprint('');
       qprint(blue('Creating bin directory in: $binPath.'));
       createDir(binPath);
 
       // check if shell can add a path.
-      if (!shell.hasStartScript || !shell.addToPath(binPath)) {
+      if (!shell.hasStartScript || !shell.addToPATH(binPath)) {
         qprint(orange(
             'If you want to use dcli compile -i to install scripts, add $binPath to your PATH.'));
       }
@@ -159,10 +159,10 @@ class InstallCommand extends Command {
         print("Try running 'pub global activate dcli' again.");
         print('  otherwise');
         print('Try to resolve the problem and then run dcli install again.');
-        print('dcli is normally located in ${PubCache().binPath}');
+        print('dcli is normally located in ${PubCache().pathToBin}');
 
-        if (!PATH.contains(PubCache().binPath)) {
-          print('Your path does not contain ${PubCache().binPath}');
+        if (!PATH.contains(PubCache().pathToBin)) {
+          print('Your path does not contain ${PubCache().pathToBin}');
         }
         exit(1);
       } else {
@@ -251,8 +251,8 @@ class InstallCommand extends Command {
   /// the directory and copies the default scripts in.
   @visibleForTesting
   void initTemplates() {
-    if (!exists(Settings().templatePath)) {
-      createDir(Settings().templatePath, recursive: true);
+    if (!exists(Settings().pathToTemplate)) {
+      createDir(Settings().pathToTemplate, recursive: true);
     }
 
     var root = 'assets/templates';
@@ -261,7 +261,7 @@ class InstallCommand extends Command {
     for (var template in templates) {
       var start = template.indexOf(root);
       var dest = template.substring(start + root.length + 1);
-      copy(template, join(Settings().templatePath, dest));
+      copy(template, join(Settings().pathToTemplate, dest));
     }
   }
 }

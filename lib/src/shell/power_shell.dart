@@ -12,7 +12,7 @@ class PowerShell with WindowsMixin, ShellMixin {
   PowerShell.withPid(this.pid);
 
   @override
-  bool addToPath(String path) {
+  bool addToPATH(String path) {
     /// These need to be run as admin
     /// not working correctly at this point.
     /// Looks like powershell ignores the file association.
@@ -48,7 +48,7 @@ class PowerShell with WindowsMixin, ShellMixin {
   String get startScriptName => throw UnimplementedError;
 
   @override
-  String get startScriptPath => throw UnimplementedError;
+  String get pathToStartScript => throw UnimplementedError;
 
   @override
   bool get hasStartScript => false;

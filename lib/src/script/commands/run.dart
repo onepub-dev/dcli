@@ -33,13 +33,13 @@ class RunCommand extends Command {
     Script.validate(scriptPath);
 
     var script = Script.init(scriptPath, showWarnings: true);
-    Settings().scriptPath = script.path;
+    Settings().pathToScript = script.pathToScript;
 
-    Settings().verbose('Running script ${script.path}');
+    Settings().verbose('Running script ${script.pathToScript}');
 
     var project = VirtualProject.load(script);
     Settings()
-        .verbose('Virtual Project directory ${project.runtimeProjectPath}');
+        .verbose('Virtual Project directory ${project.pathToRuntimeProject}');
 
     if (!project.isRunnable) {
       project.build();

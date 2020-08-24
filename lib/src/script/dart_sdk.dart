@@ -36,7 +36,7 @@ class DartSdk {
   DartSdk._internal();
 
   /// The path to the dart 'bin' directory.
-  String get sdkPath {
+  String get pathToSdk {
     _sdkPath ??= _detect();
     return _sdkPath;
   }
@@ -69,7 +69,7 @@ class DartSdk {
   }
 
   /// The path to the dart exe.
-  String get dartExePath {
+  String get pathToDartExe {
     if (_exePath == null) {
       // this is an expesive operation so only do it if required.
       var path = which(dartExeName, first: true).firstLine;
@@ -80,10 +80,10 @@ class DartSdk {
   }
 
   /// file path to the 'pub' command.
-  String get pubPath => p.join(sdkPath, 'bin', pubExeName);
+  String get pathToPubExe => p.join(pathToSdk, 'bin', pubExeName);
 
   /// file path to the 'dart2native' command.
-  String get dart2NativePath => p.join(sdkPath, 'bin', dart2NativeExeName);
+  String get dart2NativePath => p.join(pathToSdk, 'bin', dart2NativeExeName);
 
   int get versionMajor {
     var parts = version.split('.');
@@ -109,7 +109,7 @@ class DartSdk {
     if (project.pubspecLocation != PubspecLocation.standard &&
         project.pubspecLocation != PubspecLocation.local) {
       runArgs.add(
-          '--packages=${join(dirname(project.projectPubspecPath), packagePath)}');
+          '--packages=${join(dirname(project.projectPubspecPath), pathToPackageConfig)}');
     }
     runArgs.add(
         '--output=${join(outputPath, basenameWithoutExtension(runtimeScriptPath))}');
@@ -127,7 +127,7 @@ class DartSdk {
   /// returns the relative path to the packges configuration file.
   /// For versions of dart prior to 2.10 this returns '.packages'
   /// For versions of dart from 2.10 it returns .dart_tools/package_config.json
-  String get packagePath {
+  String get pathToPackageConfig {
     if (DartSdk().versionMajor >= 2 && DartSdk().versionMinor >= 10) {
       return join('.dart_tool', 'package_config.json');
     } else {
@@ -139,7 +139,7 @@ class DartSdk {
   void runPubGet(String workingDirectory,
       {Progress progress, bool compileExecutables}) {
     var process = RunnableProcess.fromCommandArgs(
-        pubPath, ['get', '--no-precompile'],
+        pathToPubExe, ['get', '--no-precompile'],
         workingDirectory: workingDirectory);
 
     process.start();
@@ -177,7 +177,7 @@ class DartSdk {
   /// returns the version of dart.
   String get version {
     if (_version == null) {
-      var output = '${dartExePath} --version'.firstLine;
+      var output = '${pathToDartExe} --version'.firstLine;
 
       /// extract the version out of the dumped line.
       var regx = RegExp(r'[0-9]*\.[0-9]*\.[0-9]*');
@@ -186,7 +186,7 @@ class DartSdk {
         _version = parsed.group(0);
       }
 
-      Settings().verbose('Dart SDK Version  $_version, path: $dartExePath');
+      Settings().verbose('Dart SDK Version  $_version, path: $pathToDartExe');
     }
 
     return _version;
@@ -241,7 +241,7 @@ class DartSdk {
     // The normal dart detection process won't work here
     // as dart is not on the path so for the moment we force it
     // to the path we just downloaded it to.
-    setDartSdkPath(installDir);
+    setPathToDartSdk(installDir);
 
     return installDir;
   }
@@ -341,6 +341,6 @@ final Exception dartSdkNotFound = Exception('Dart SDK not found!');
 /// This method is ONLY for use by the installer so that we can
 /// set the path during the install when it won't be detectable
 /// as its not on the system path.
-void setDartSdkPath(String dartSdkPath) {
+void setPathToDartSdk(String dartSdkPath) {
   DartSdk()._sdkPath = dartSdkPath;
 }

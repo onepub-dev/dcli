@@ -14,7 +14,7 @@ class ShShell with ShellMixin, PosixMixin {
   ShShell.withPid(this.pid);
 
   @override
-  String get startScriptPath {
+  String get pathToStartScript {
     return join(HOME, startScriptName);
   }
 

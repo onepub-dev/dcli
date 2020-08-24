@@ -14,7 +14,7 @@ class BashShell with ShellMixin, PosixMixin {
   BashShell.withPid(this.pid);
 
   @override
-  String get startScriptPath {
+  String get pathToStartScript {
     return join(HOME, startScriptName);
   }
 
@@ -29,7 +29,7 @@ class BashShell with ShellMixin, PosixMixin {
       // Add cli completion
       var command = "complete -C 'dcli_complete' dcli";
 
-      var startFile = startScriptPath;
+      var startFile = pathToStartScript;
 
       if (startFile != null) {
         if (!exists(startFile)) {

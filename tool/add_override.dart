@@ -17,7 +17,7 @@ void main() {
   // so its parent directory should be the dcli package root.
   var dcliPackageRoot = canonicalize(absolute('..'));
 
-  var dependency = join(Settings().dcliPath, GlobalDependencies.filename);
+  var dependency = join(Settings().pathToDCli, GlobalDependencies.filename);
 
   if (exists(dependency)) {
     delete(dependency);

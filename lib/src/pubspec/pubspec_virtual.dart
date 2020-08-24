@@ -25,8 +25,9 @@ class PubSpecVirtual implements PubSpec //with DependenciesMixin {
   @override
   List<Dependency> get dependencies => _pubspec.dependencies;
 
-  @override
-  List<Executable> get executables => _pubspec.executables;
+  // removed unti pupspec 0.14 is released
+  // @override
+  // List<Executable> get executables => _pubspec.executables;
 
   @override
   String get name => _pubspec.name;

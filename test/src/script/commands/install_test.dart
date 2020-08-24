@@ -61,10 +61,10 @@ void main() {
         when(mockSettings.isWindows).thenReturn(true);
         when(mockSettings.isLinux).thenReturn(false);
         when(mockSettings.isMacOS).thenReturn(false);
-        when(mockSettings.dcliBinPath).thenReturn(settings.dcliBinPath);
+        when(mockSettings.pathToDCliBin).thenReturn(settings.pathToDCliBin);
 
         when(mockEnv.HOME).thenReturn('c:\\windows\\userdata');
-        when(mockEnv.isOnPath(settings.dcliBinPath)).thenReturn(false);
+        when(mockEnv.isOnPATH(settings.pathToDCliBin)).thenReturn(false);
 
         Settings.mock = mockSettings;
         Env.mock = mockEnv;
@@ -80,15 +80,15 @@ void main() {
         when(mockSettings.isWindows).thenReturn(false);
         when(mockSettings.isLinux).thenReturn(true);
         when(mockSettings.isMacOS).thenReturn(false);
-        when(mockSettings.dcliBinPath).thenReturn(settings.dcliBinPath);
+        when(mockSettings.pathToDCliBin).thenReturn(settings.pathToDCliBin);
 
         when(mockEnv.HOME).thenReturn(HOME);
-        when(mockEnv.isOnPath(settings.dcliBinPath)).thenReturn(false);
+        when(mockEnv.isOnPATH(settings.pathToDCliBin)).thenReturn(false);
 
         Settings.mock = mockSettings;
         Env.mock = mockEnv;
 
-        var export = 'export PATH=\$PATH:${settings.dcliBinPath}';
+        var export = 'export PATH=\$PATH:${settings.pathToDCliBin}';
 
         var profilePath = join(HOME, '.profile');
         if (exists(profilePath)) {

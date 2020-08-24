@@ -13,12 +13,12 @@ void main() {
     setEnv('HOME', join('/home'));
     if (Platform.isWindows) {
       expect(
-          PubCache().binPath,
+          PubCache().pathToBin,
           equals(
               join(env('LocalAppData'), 'Pub', 'Cache', 'bin').toLowerCase()));
     } else {
       expect(
-          PubCache().binPath, equals(join(env('HOME'), '.pub-cache', 'bin')));
+          PubCache().pathToBin, equals(join(env('HOME'), '.pub-cache', 'bin')));
     }
   }, skip: false);
 
@@ -30,10 +30,10 @@ void main() {
     setEnv('HOME', join('/home'));
     setEnv('PUB_CACHE', join(Platform.pathSeparator, 'test_cache'));
     if (Platform.isWindows) {
-      expect(PubCache().binPath,
+      expect(PubCache().pathToBin,
           equals(join(r'c:\test_cache', 'bin').toLowerCase()));
     } else {
-      expect(PubCache().binPath,
+      expect(PubCache().pathToBin,
           equals(join(Platform.pathSeparator, 'test_cache', 'bin')));
     }
   }, skip: false);

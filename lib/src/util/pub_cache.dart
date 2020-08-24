@@ -53,11 +53,11 @@ class PubCache {
   /// PUB_CACHE.
   ///
   /// This method processes PUB_CACHE if it exists.
-  String get path => _pubCachePath;
+  String get pathTo => _pubCachePath;
 
   /// Returns the path to the .pub-cache's bin directory
   /// where executables from installed packages are stored.
-  String get binPath => _pubCacheBinDir;
+  String get pathToBin => _pubCacheBinDir;
 
   /// Returns the directory name of the pub cache.
   ///

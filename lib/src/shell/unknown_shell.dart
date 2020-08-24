@@ -24,11 +24,11 @@ class UnknownShell with ShellMixin {
   UnknownShell.withPid(this.pid, {this.processName});
 
   @override
-  bool addToPath(String path) {
+  bool addToPATH(String path) {
     if (Settings().isMacOS) {
       return addPathToMacOsPathd(path);
     } else if (Settings().isLinux) {
-      return _addPathToLinuxPath(path);
+      return _addPathToLinuxPATH(path);
     } else {
       return false;
     }
@@ -37,7 +37,7 @@ class UnknownShell with ShellMixin {
   ///
   bool addPathToMacOsPathd(String path) {
     var success = false;
-    if (!isOnPath(path)) {
+    if (!isOnPATH(path)) {
       var macOSPathPath = join(rootPath, 'etc', 'path.d');
 
       try {
@@ -59,9 +59,9 @@ class UnknownShell with ShellMixin {
     return success;
   }
 
-  bool _addPathToLinuxPath(String path) {
+  bool _addPathToLinuxPATH(String path) {
     var success = false;
-    if (!isOnPath(path)) {
+    if (!isOnPATH(path)) {
       var profile = join(HOME, '.profile');
       try {
         if (exists(profile)) {
@@ -109,7 +109,7 @@ class UnknownShell with ShellMixin {
   bool get hasStartScript => true;
 
   @override
-  String get startScriptPath => null;
+  String get pathToStartScript => null;
 
   @override
   bool get isPrivilegedUser => false;

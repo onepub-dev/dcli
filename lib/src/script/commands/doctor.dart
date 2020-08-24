@@ -84,13 +84,13 @@ class DoctorCommand extends Command {
   void printPermissions() {
     print('Permissions');
     _showPermissions('HOME', HOME);
-    _showPermissions('.dcli', Settings().dcliPath);
-    _showPermissions('cache', Settings().dcliCachePath);
+    _showPermissions('.dcli', Settings().pathToDCli);
+    _showPermissions('cache', Settings().pathToDCliCache);
 
     _showPermissions(GlobalDependencies.filename,
-        join(Settings().dcliPath, GlobalDependencies.filename));
+        join(Settings().pathToDCli, GlobalDependencies.filename));
 
-    _showPermissions('templates', Settings().templatePath);
+    _showPermissions('templates', Settings().pathToTemplate);
   }
 
   void printShell() {
@@ -100,7 +100,7 @@ class DoctorCommand extends Command {
     _colprint(['Detected SHELL', '${shell.name}']);
 
     if (shell.hasStartScript) {
-      var startScriptPath = shell.startScriptPath;
+      var startScriptPath = shell.pathToStartScript;
       if (startScriptPath == null) {
         _colprint(['Shell Start Script', '${privatePath(startScriptPath)}']);
       } else {
@@ -132,11 +132,11 @@ class DoctorCommand extends Command {
       'dcli path',
       '${dcliPath == null ? 'Not found' : privatePath(dcliPath)}'
     ]);
-    _colprint(['dart exe path', '${privatePath(DartSdk().dartExePath)}']);
+    _colprint(['dart exe path', '${privatePath(DartSdk().pathToDartExe)}']);
     var dartPath = which(DartSdk.dartExeName, first: true).firstLine;
     _colprint([
       'dart path',
-      '${privatePath(DartSdk().dartExePath)}',
+      '${privatePath(DartSdk().pathToDartExe)}',
       'which: ${privatePath(dartPath)}'
     ]);
     var dart2NativePath =
@@ -160,10 +160,10 @@ class DoctorCommand extends Command {
     if (pubPath != null) {
       _colprint([
         'pub path',
-        '${privatePath(DartSdk().pubPath)}',
+        '${privatePath(DartSdk().pathToPubExe)}',
         'which: ${privatePath(pubPath)}'
       ]);
-      _colprint(['Pub cache', '${privatePath(PubCache().path)}']);
+      _colprint(['Pub cache', '${privatePath(PubCache().pathTo)}']);
     } else {
       _colprint([
         'pub path',

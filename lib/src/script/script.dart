@@ -72,8 +72,7 @@ class Script {
           _createAnalysisOptions(showWarnings);
         }
         if (hasLocal && hasAnscestor && showWarnings) {
-          print(orange(
-              'Your script has a local pubspec.yaml and a pubspec.yaml in an ancestor directory.'));
+          print(orange('Your script has a local pubspec.yaml and a pubspec.yaml in an ancestor directory.'));
           print(orange('You may get inconsistent results when compiling.'));
         }
       }
@@ -83,13 +82,12 @@ class Script {
   void _createAnalysisOptions(bool showWarnings) {
     /// add pedantic to the project
 
-    var analysisPath = join(dirname(path), 'analysis_options.yaml');
+    var analysisPath = join(dirname(pathToScript), 'analysis_options.yaml');
     if (!exists(analysisPath)) {
       if (showWarnings) {
         print(orange('Creating missing analysis_options.yaml.'));
       }
-      var analysis =
-          Assets().loadString('assets/templates/analysis_options.yaml');
+      var analysis = Assets().loadString('assets/templates/analysis_options.yaml');
       analysisPath.write(analysis);
     }
   }
@@ -100,19 +98,18 @@ class Script {
     }
     // no pubspec.yaml in scope so lets create one.
     var pubspec = Assets().loadString('assets/templates/pubspec.yaml.template');
-    var pubspecPath = join(dirname(path), 'pubspec.yaml');
+    var pubspecPath = join(dirname(pathToScript), 'pubspec.yaml');
     pubspecPath.write(pubspec);
     replace(pubspecPath, '%scriptname%', basename);
   }
 
   void _createPubspecFromAnnotation(bool showWarnings) {
     if (showWarnings) {
-      print(orange(
-          'Extracting @pubspec annotation to create missing pubspec.yaml.'));
+      print(orange('Extracting @pubspec annotation to create missing pubspec.yaml.'));
     }
 
     var annotation = PubSpecAnnotation.fromScript(this);
-    var pubspecPath = join(dirname(path), 'pubspec.yaml');
+    var pubspecPath = join(dirname(pathToScript), 'pubspec.yaml');
     annotation.saveToFile(pubspecPath);
   }
 
@@ -134,10 +131,10 @@ class Script {
   String get scriptname => _scriptname;
 
   /// the absolute path to the directory the script lives in
-  String get scriptDirectory => _scriptDirectory;
+  String get pathToScriptDirectory => _scriptDirectory;
 
   /// the absolute path of the script file.
-  String get path => p.join(scriptDirectory, scriptname);
+  String get pathToScript => p.join(pathToScriptDirectory, scriptname);
 
   /// the name of the script without its extension.
   /// this is used for the 'name' key in the pubspec.
@@ -152,7 +149,7 @@ class Script {
   ///
   /// You should use [VirtualProject.projectPubspecPath] as that will always point
   /// the the correct pubspec.yaml regardless of the project type.
-  String get localPubSpecPath => p.join(_scriptDirectory, 'pubspec.yaml');
+  String get pathToLocalPubSpec => p.join(_scriptDirectory, 'pubspec.yaml');
 
   // the scriptnameArg may contain a relative path: fred/home.dart
   // we need to get the actually name and full path to the script file.
@@ -173,17 +170,14 @@ class Script {
   /// validate that the passed arguments points to
   static void validate(String scriptPath) {
     if (!scriptPath.endsWith('.dart')) {
-      throw InvalidArguments(
-          'Expected a script name (ending in .dart) instead found: $scriptPath');
+      throw InvalidArguments('Expected a script name (ending in .dart) instead found: $scriptPath');
     }
 
     if (!exists(scriptPath)) {
-      throw InvalidScript(
-          'The script ${p.absolute(scriptPath)} does not exist.');
+      throw InvalidScript('The script ${p.absolute(scriptPath)} does not exist.');
     }
     if (!FileSystemEntity.isFileSync(scriptPath)) {
-      throw InvalidScript(
-          'The script ${p.absolute(scriptPath)} is not a file.');
+      throw InvalidScript('The script ${p.absolute(scriptPath)} is not a file.');
     }
   }
 
@@ -197,7 +191,7 @@ class Script {
   /// returns true if the script has a pubspec in anscestor directory.
   ///
   bool hasAncestorPubspecYaml() {
-    return projectRoot != _scriptDirectory;
+    return pathToProjectRoot != _scriptDirectory;
   }
 
   bool _hasPubspecAnnotation;
@@ -228,7 +222,7 @@ class Script {
   /// this is the same directory that the script lives in.
   ///
   ///
-  String get projectRoot {
+  String get pathToProjectRoot {
     var current = _scriptDirectory;
 
     /// Script has a @pubspec annotation so the project root is the script directory
@@ -236,7 +230,7 @@ class Script {
       return _scriptDirectory;
     }
 
-    var root = rootPrefix(path);
+    var root = rootPrefix(pathToScript);
 
     // traverse up the directory to find if we are in a traditional directory.
     while (current != root) {
@@ -255,7 +249,7 @@ class Script {
   /// Returns the instance of the currently running script.
   ///
   static Script get current {
-    _current ??= Script.fromFile(Settings().scriptPath);
+    _current ??= Script.fromFile(Settings().pathToScript);
     return _current;
   }
 

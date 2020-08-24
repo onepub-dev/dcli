@@ -86,7 +86,7 @@ class VirtualProject {
   /// be a link to that directory.
   /// If the script lib doesn't exist then
   /// on will be created under the virtual project directory.
-  String get projectCacheLib => _projectCacheLibPath;
+  String get pathToProjectCacheLib => _projectCacheLibPath;
 
   /// The  absolute path to the
   /// virtual project's project directory.
@@ -127,14 +127,14 @@ class VirtualProject {
   /// this will be in the projects cache directory
   /// located under ~/.dcli/cache....
   ///
-  String get runtimeProjectPath => _runtimeProjectPath;
+  String get pathToRuntimeProject => _runtimeProjectPath;
 
   /// The path to the script where we will run the script from.
   /// For script with an actual pubspec.yaml this will
   /// be the scripts natural directory. For a script
   /// with a virtual pubsec this will be the linked script
   /// in the projectc directory.
-  String get runtimeScriptPath => join(_runtimeProjectPath, script.scriptname);
+  String get pathToRuntimeScript => join(_runtimeProjectPath, script.scriptname);
 
   NamedLock _lock;
 
@@ -144,7 +144,7 @@ class VirtualProject {
   /// In most cases this is the same as the [_virtualProjectPath]
   /// except for when the [PubspecLocation] is [PubspecLocation.standard] or [PubspecLocation.local] in which
   /// case it will be the project's actual root directory.
-  String get projectRootPath => _projectRootPath;
+  String get pathToProjectRoot => _projectRootPath;
 
   /// Loads a virtual project.
   /// If it doesn't already exist it creates the project and then loads it.
@@ -190,13 +190,13 @@ class VirtualProject {
       case PubspecLocation.annotation:
         _setVirtualPaths(project);
         Settings().verbose(
-            'Pubspec is an Annotation. Project root: ${project.projectRootPath} ');
+            'Pubspec is an Annotation. Project root: ${project.pathToProjectRoot} ');
         break;
 
       case PubspecLocation.virtual:
         _setVirtualPaths(project);
         Settings().verbose(
-            'Pubspec is Virtual. Project root: ${project.projectRootPath} ');
+            'Pubspec is Virtual. Project root: ${project.pathToProjectRoot} ');
         break;
 
       case PubspecLocation.local:
@@ -206,13 +206,13 @@ class VirtualProject {
         // why do we have two lib paths?
         _setLocalPaths(project, script);
         Settings().verbose(
-            'Pubspec is Local. Project root: ${project.projectRootPath} ');
+            'Pubspec is Local. Project root: ${project.pathToProjectRoot} ');
         break;
 
       case PubspecLocation.standard:
         _setStandardPaths(project, script);
         Settings().verbose(
-            'Pubspec is Standard. Project root: ${project.projectRootPath} ');
+            'Pubspec is Standard. Project root: ${project.pathToProjectRoot} ');
         break;
     }
 
@@ -234,28 +234,28 @@ class VirtualProject {
   /// Used when the pubspec.yaml is an actual file and lives in the same
   /// directory as the script.
   static void _setLocalPaths(VirtualProject project, Script script) {
-    project._projectRootPath = script.scriptDirectory;
+    project._projectRootPath = script.pathToScriptDirectory;
     _setProjectPaths(project, script);
 
     project._projectPubspecPath =
         join(project._projectRootPath, 'pubspec.yaml');
 
     // pubspec.yaml lives in the same dir as the script.
-    project._runtimePubspecPath = join(dirname(script.path), 'pubspec.yaml');
+    project._runtimePubspecPath = join(dirname(script.pathToScript), 'pubspec.yaml');
 
-    project._runtimeProjectPath = dirname(script.path);
+    project._runtimeProjectPath = dirname(script.pathToScript);
   }
 
   /// Used when we are running from a standard dart package.
   static void _setStandardPaths(VirtualProject project, Script script) {
     // root director of real (standard) dart projet.
-    project._projectRootPath = project._getStandardProjectRoot(script.path);
+    project._projectRootPath = project._getStandardProjectRoot(script.pathToScript);
 
     /// pubspec.yaml lives in the script's project root
     project._runtimePubspecPath =
         join(project._projectRootPath, 'pubspec.yaml');
 
-    project._runtimeProjectPath = dirname(script.path);
+    project._runtimeProjectPath = dirname(script.pathToScript);
 
     project._projectCacheLibPath = join(project._projectRootPath, 'lib');
     project._scriptLibPath = join(project._projectRootPath, 'lib');
@@ -270,7 +270,7 @@ class VirtualProject {
   static void _setProjectPaths(VirtualProject project, Script script) {
     project._projectCacheLibPath = join(project._virtualProjectPath, 'lib');
 
-    project._scriptLibPath = join(script.path, 'lib');
+    project._scriptLibPath = join(script.pathToScript, 'lib');
     project._projectScriptLinkPath =
         join(project._virtualProjectPath, script.scriptname);
     project._projectPubspecPath =
@@ -286,7 +286,7 @@ class VirtualProject {
       } else if (script.hasLocalPubspecYaml()) {
         _pubspecLocation = PubspecLocation.local;
       } else {
-        var parent = dirname(script.path);
+        var parent = dirname(script.pathToScript);
         if (isStandardProject(parent)) {
           _pubspecLocation = PubspecLocation.standard;
         } else {
@@ -299,10 +299,10 @@ class VirtualProject {
   }
 
   VirtualProject._internal(this.script) {
-    var cacheRootPath = Settings().dcliCachePath;
+    var cacheRootPath = Settings().pathToDCliCache;
     // /home/bsutton/.dcli/cache/home/bsutton/git/dcli/test/test_scripts/bin/hello_world.project
     _virtualProjectPath = join(cacheRootPath,
-        Script.sansRoot(script.scriptDirectory), script.basename + projectDir);
+        Script.sansRoot(script.pathToScriptDirectory), script.basename + projectDir);
 
     _localPubspecIndicatorPath =
         join(_virtualProjectPath, _usingLocalPubpsecFilename);
@@ -371,7 +371,7 @@ class VirtualProject {
   void _createScriptLink(Script script) {
     if (!exists(_projectScriptLinkPath, followLinks: false)) {
       var link = Link(_projectScriptLinkPath);
-      link.createSync(script.path);
+      link.createSync(script.pathToScript);
     }
   }
 
@@ -386,7 +386,7 @@ class VirtualProject {
   ///
   void build({bool background = false}) {
     /// Check that dclis install has been rum.
-    if (!exists(Settings().dcliCachePath)) {
+    if (!exists(Settings().pathToDCliCache)) {
       printerr(red(
           "The dcli cache doesn't exists. Please run 'dcli install' and then try again."));
       printerr('');
@@ -405,7 +405,7 @@ class VirtualProject {
           print('DCli clean started in the background.');
           // ('dcli clean ${script.path}' | 'echo > ${dirname(path)}/log').run;
           // 'dcli -v clean ${script.path}'.run;
-          '${DCliPaths().dcliName} -v=${join(Directory.systemTemp.path, 'dcli.clean.log')} clean ${script.path}'
+          '${DCliPaths().dcliName} -v=${join(Directory.systemTemp.path, 'dcli.clean.log')} clean ${script.pathToScript}'
               .start(detached: true, runInShell: true);
         } else {
           print('Running pub get...');
@@ -440,30 +440,30 @@ class VirtualProject {
     // does the script have a lib directory
     if (exists(_scriptLibPath)) {
       // does the cache have a lib
-      if (exists(projectCacheLib)) {
+      if (exists(pathToProjectCacheLib)) {
         // ensure we have a link from cache to the scriptlib
-        if (!FileSystemEntity.isLinkSync(projectCacheLib)) {
+        if (!FileSystemEntity.isLinkSync(pathToProjectCacheLib)) {
           // its not a link so we need to recreate it as a link
           // the script directory structure may have changed since
           // the last run.
-          deleteDir(projectCacheLib);
-          symlink(_scriptLibPath, projectCacheLib);
+          deleteDir(pathToProjectCacheLib);
+          symlink(_scriptLibPath, pathToProjectCacheLib);
         }
       } else {
-        symlink(_scriptLibPath, projectCacheLib);
+        symlink(_scriptLibPath, pathToProjectCacheLib);
       }
     } else {
       // no script lib so we need to create a real lib
       // directory in the project cache.
-      if (!exists(projectCacheLib)) {
+      if (!exists(pathToProjectCacheLib)) {
         // create the lib as it doesn't exist.
-        createDir(projectCacheLib);
+        createDir(pathToProjectCacheLib);
       } else {
-        if (FileSystemEntity.isLinkSync(projectCacheLib)) {
+        if (FileSystemEntity.isLinkSync(pathToProjectCacheLib)) {
           {
             // delete the link and create the required directory
-            delete(projectCacheLib);
-            createDir(projectCacheLib);
+            delete(pathToProjectCacheLib);
+            createDir(pathToProjectCacheLib);
           }
         }
         // it exists and is the correct type so no action required.
@@ -479,7 +479,7 @@ class VirtualProject {
     print('');
     print('Script Details');
     _colprint('Name', script.scriptname);
-    _colprint('Directory', privatePath(script.scriptDirectory));
+    _colprint('Directory', privatePath(script.pathToScriptDirectory));
     _colprint('Virtual Project', privatePath(_virtualProjectPath));
     _colprint('Pubspec Location', pubspecLocation.toString());
     _colprint('Pubspec Path', privatePath(projectPubspecPath));
@@ -541,7 +541,7 @@ class VirtualProject {
   bool get isRunnable {
     return _isProjectInitialised &&
         exists(join(_virtualProjectPath, _buildCompleteFilename)) &&
-        exists(join(_projectRootPath, DartSdk().packagePath));
+        exists(join(_projectRootPath, DartSdk().pathToPackageConfig));
   }
 
   /// If it is we should use the actual pubspec.yaml rather than creating

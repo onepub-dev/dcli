@@ -20,7 +20,7 @@ abstract class Shell {
   void installTabCompletion({bool quiet});
 
   /// Returns the path to the shell's start script
-  String get startScriptPath;
+  String get pathToStartScript;
 
   /// Returns the  name of the shell's startup script
   /// e.g. .bashrc
@@ -39,9 +39,9 @@ abstract class Shell {
   /// The comparison is case insensitive.
   bool matchByName(String name);
 
-  /// Added a path to the start script
+  /// Adds a path to the start script
   /// returns true if adding the path was successful
-  bool addToPath(String path);
+  bool addToPATH(String path);
 
   /// Returns the username of the logged in user.
   ///

@@ -12,7 +12,7 @@ class CmdShell with WindowsMixin, ShellMixin {
   CmdShell.withPid(this.pid);
 
   @override
-  bool addToPath(String path) {
+  bool addToPATH(String path) {
     /// These need to be run as admin
     /// not working correctly at this point.
     /// Looks like powershell ignores the file association.
@@ -51,5 +51,5 @@ class CmdShell with WindowsMixin, ShellMixin {
   bool get hasStartScript => false;
 
   @override
-  String get startScriptPath => throw UnimplementedError;
+  String get pathToStartScript => throw UnimplementedError;
 }

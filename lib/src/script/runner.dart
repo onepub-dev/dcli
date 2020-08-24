@@ -23,17 +23,17 @@ class ScriptRunner {
 
     if (_project.pubspecLocation != PubspecLocation.standard) {
       vmArgs.add(
-          '--packages=${join(dirname(_project.projectPubspecPath), DartSdk().packagePath)}');
+          '--packages=${join(dirname(_project.projectPubspecPath), DartSdk().pathToPackageConfig)}');
     }
 
-    vmArgs.add(join(_project.runtimeProjectPath, _project.script.scriptname));
+    vmArgs.add(join(_project.pathToRuntimeProject, _project.script.scriptname));
     vmArgs.addAll(_scriptArguments);
 
     Settings().verbose(
-        'Executing: ${DartSdk().dartExePath} $vmArgs, in: ${_project.script.scriptDirectory}');
+        'Executing: ${DartSdk().pathToDartExe} $vmArgs, in: ${_project.script.pathToScriptDirectory}');
 
     // Execute the script
-    final process = waitFor<Process>(Process.start(_sdk.dartExePath, vmArgs,
+    final process = waitFor<Process>(Process.start(_sdk.pathToDartExe, vmArgs,
         mode: ProcessStartMode.inheritStdio));
 
     final exitCode = waitForEx<int>(process.exitCode);

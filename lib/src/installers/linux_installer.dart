@@ -18,12 +18,12 @@ class LinuxDCliInstaller {
 
       // add dart to bash path
 
-      if (!(isOnPath('/usr/bin/dart') || isOnPath('/usr/lib/bin/dart'))) {
+      if (!(isOnPATH('/usr/bin/dart') || isOnPATH('/usr/lib/bin/dart'))) {
         // we need to add it.
         var bashrc = join(HOME, '.bashrc');
         bashrc.append('''export PATH="\$PATH":"/usr/lib/dart/bin"''');
-        bashrc.append('''export PATH="\$PATH":"${PubCache().binPath}"''');
-        bashrc.append('''export PATH="\$PATH":"${Settings().dcliBinPath}"''');
+        bashrc.append('''export PATH="\$PATH":"${PubCache().pathToBin}"''');
+        bashrc.append('''export PATH="\$PATH":"${Settings().pathToDCliBin}"''');
 
         var shell = ShellDetection().identifyShell();
         Settings().verbose('Found shell: shell');
