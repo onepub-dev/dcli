@@ -35,4 +35,4 @@ jobs:
     - name: Create release
       env:
         APITOKEN:  ${{ secrets.APITOKEN }}
-      run: ../pub_release/bin/git_release.dart --username bsutton --apiToken "$APITOKEN" --owner bsutton --repository dcli --suffix linux-test 
+      run: dart ../pub_release/bin/git_release.dart --username bsutton --apiToken "$APITOKEN" --owner bsutton --repository dcli --suffix linux-test 
