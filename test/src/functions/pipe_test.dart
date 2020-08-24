@@ -25,7 +25,8 @@ void main() {
         createLineFile(linesFile, 10);
 
         lines.clear();
-        ('tail -n 100 $linesFile' | 'head -n 5').forEach((line) => lines.add(line));
+        ('tail -n 100 $linesFile' | 'head -n 5')
+            .forEach((line) => lines.add(line));
 
         t.expect(lines.length, t.equals(5));
       });
@@ -37,7 +38,8 @@ void main() {
         createLineFile(linesFile, 10);
 
         lines.clear();
-        ('tail $linesFile' | 'head -n 5' | 'tail -n 2').forEach((line) => lines.add(line));
+        ('tail $linesFile' | 'head -n 5' | 'tail -n 2')
+            .forEach((line) => lines.add(line));
         t.expect(lines.length, t.equals(2));
       });
     });
@@ -48,7 +50,8 @@ void main() {
         createLineFile(linesFile, 10);
 
         lines.clear();
-        ('tail $linesFile' | 'head -n 5' | 'head -n 3' | 'tail -n 2').forEach((line) => lines.add(line));
+        ('tail $linesFile' | 'head -n 5' | 'head -n 3' | 'tail -n 2')
+            .forEach((line) => lines.add(line));
         t.expect(lines.length, t.equals(2));
       });
     });

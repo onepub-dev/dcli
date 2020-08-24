@@ -84,7 +84,8 @@ void main() {
 
 List<String> run_child(String childScript) {
   /// The run_child.script file will use .run to run [script].
-  var runChildScript = truepath(join('test', 'test_scripts/general/bin', 'run_child.dart'));
+  var runChildScript =
+      truepath(join('test', 'test_scripts/general/bin', 'run_child.dart'));
 
   // make certain our test script will run
   '${DCliPaths().dcliName} -v clean $childScript'.run;
@@ -92,7 +93,8 @@ List<String> run_child(String childScript) {
 
   // run a script that uses '.run' and capture its output to prove
   // that .run works.
-  var results = '${DCliPaths().dcliName} $runChildScript $childScript'.toList(nothrow: true);
+  var results = '${DCliPaths().dcliName} $runChildScript $childScript'
+      .toList(nothrow: true);
 
   return results;
 }

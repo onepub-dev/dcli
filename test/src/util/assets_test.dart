@@ -8,7 +8,9 @@ void main() {
 
     expect(content, isNotNull);
 
-    var actual = read(join(Script.current.projectRoot, 'lib', 'src', path)).toList().join('\n');
+    var actual = read(join(Script.current.projectRoot, 'lib', 'src', path))
+        .toList()
+        .join('\n');
 
     /// the join trims the last \n
     actual += '\n';

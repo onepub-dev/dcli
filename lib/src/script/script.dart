@@ -72,7 +72,8 @@ class Script {
           _createAnalysisOptions(showWarnings);
         }
         if (hasLocal && hasAnscestor && showWarnings) {
-          print(orange('Your script has a local pubspec.yaml and a pubspec.yaml in an ancestor directory.'));
+          print(orange(
+              'Your script has a local pubspec.yaml and a pubspec.yaml in an ancestor directory.'));
           print(orange('You may get inconsistent results when compiling.'));
         }
       }
@@ -87,7 +88,8 @@ class Script {
       if (showWarnings) {
         print(orange('Creating missing analysis_options.yaml.'));
       }
-      var analysis = Assets().loadString('assets/templates/analysis_options.yaml');
+      var analysis =
+          Assets().loadString('assets/templates/analysis_options.yaml');
       analysisPath.write(analysis);
     }
   }
@@ -105,7 +107,8 @@ class Script {
 
   void _createPubspecFromAnnotation(bool showWarnings) {
     if (showWarnings) {
-      print(orange('Extracting @pubspec annotation to create missing pubspec.yaml.'));
+      print(orange(
+          'Extracting @pubspec annotation to create missing pubspec.yaml.'));
     }
 
     var annotation = PubSpecAnnotation.fromScript(this);
@@ -170,14 +173,17 @@ class Script {
   /// validate that the passed arguments points to
   static void validate(String scriptPath) {
     if (!scriptPath.endsWith('.dart')) {
-      throw InvalidArguments('Expected a script name (ending in .dart) instead found: $scriptPath');
+      throw InvalidArguments(
+          'Expected a script name (ending in .dart) instead found: $scriptPath');
     }
 
     if (!exists(scriptPath)) {
-      throw InvalidScript('The script ${p.absolute(scriptPath)} does not exist.');
+      throw InvalidScript(
+          'The script ${p.absolute(scriptPath)} does not exist.');
     }
     if (!FileSystemEntity.isFileSync(scriptPath)) {
-      throw InvalidScript('The script ${p.absolute(scriptPath)} is not a file.');
+      throw InvalidScript(
+          'The script ${p.absolute(scriptPath)} is not a file.');
     }
   }
 

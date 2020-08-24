@@ -26,11 +26,13 @@ import 'dcli_function.dart';
 ///
 /// EXPERIMENTAL - this api may change. It is fairly likely to stay
 /// just that existing may change to support [Pattern]
-int replace(String path, String existing, String replacement, {bool all = false}) =>
+int replace(String path, String existing, String replacement,
+        {bool all = false}) =>
     _Replace().replace(path, existing, replacement, all: all);
 
 class _Replace extends DCliFunction {
-  int replace(String path, String existing, String replacement, {bool all = false}) {
+  int replace(String path, String existing, String replacement,
+      {bool all = false}) {
     var changes = 0;
     var tmp = '$path.tmp';
     if (exists(tmp)) {

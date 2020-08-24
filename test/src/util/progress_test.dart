@@ -10,8 +10,10 @@ void main() {
   test('Slow', () {
     TestFileSystem().withinZone((fs) {
       print('$pwd');
-      'bash /home/bsutton/git/dcli/test/test_scripts/general/bin/slow.sh'.forEach(print);
-      expect(() => 'tail -n 5 badfilename.txt'.run, throwsA(TypeMatcher<DCliException>()));
+      'bash /home/bsutton/git/dcli/test/test_scripts/general/bin/slow.sh'
+          .forEach(print);
+      expect(() => 'tail -n 5 badfilename.txt'.run,
+          throwsA(TypeMatcher<DCliException>()));
     });
   }, skip: true);
 }

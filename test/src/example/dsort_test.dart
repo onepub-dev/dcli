@@ -32,8 +32,12 @@ void main() {
 
             testFile.write(unsorted.join('\n'));
 
-            var fileSort =
-                FileSort(testFile, testFile, [Column(0, CaseInsensitiveSort(), SortDirection.ascending)], ',', '\n');
+            var fileSort = FileSort(
+                testFile,
+                testFile,
+                [Column(0, CaseInsensitiveSort(), SortDirection.ascending)],
+                ',',
+                '\n');
             fileSort.sort();
           } on DCliException catch (e) {
             print(e);
@@ -63,8 +67,12 @@ void main() {
           testFile.write(unsorted.join('\n'));
 
           try {
-            var fileSort =
-                FileSort(testFile, testFile, [Column(1, NumericSort(), SortDirection.descending)], ',', '\n');
+            var fileSort = FileSort(
+                testFile,
+                testFile,
+                [Column(1, NumericSort(), SortDirection.descending)],
+                ',',
+                '\n');
             fileSort.sort();
           } on DCliException catch (e) {
             print(e);
@@ -120,7 +128,8 @@ void main() {
           testFile.write(unsorted.join('\n'));
 
           try {
-            EntryPoint().process(['example/dsort.dart', '-v', '--sortkey=1nd', testFile]);
+            EntryPoint().process(
+                ['example/dsort.dart', '-v', '--sortkey=1nd', testFile]);
           } on DCliException catch (e) {
             print(e);
           }
@@ -153,7 +162,12 @@ void main() {
               delete(testFile);
             }
             testFile.write(unsorted.join('\n'));
-            EntryPoint().process(['example/dsort.dart', '-f=:', '--sortkey=1nd,2,3Sd,5-7nd', testFile]);
+            EntryPoint().process([
+              'example/dsort.dart',
+              '-f=:',
+              '--sortkey=1nd,2,3Sd,5-7nd',
+              testFile
+            ]);
           } on DCliException catch (e) {
             print(e);
           }

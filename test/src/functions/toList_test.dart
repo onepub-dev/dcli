@@ -64,7 +64,8 @@ void main() {
       });
     });
 
-    t.test('Check .toList captures stderr and stdout when non-xero exit occurs', () {
+    t.test('Check .toList captures stderr and stdout when non-xero exit occurs',
+        () {
       TestFileSystem().withinZone((fs) {
         var scriptPath = truepath(join('test', 'test_scripts/general/bin'));
 

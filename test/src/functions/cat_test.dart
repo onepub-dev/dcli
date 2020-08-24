@@ -26,7 +26,8 @@ void main() {
 
     t.test('cat non-existing ', () {
       TestFileSystem().withinZone((fs) {
-        t.expect(() => cat('bad file.text'), t.throwsA(t.TypeMatcher<CatException>()));
+        t.expect(() => cat('bad file.text'),
+            t.throwsA(t.TypeMatcher<CatException>()));
       });
     });
   });

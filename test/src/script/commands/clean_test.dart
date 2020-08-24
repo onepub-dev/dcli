@@ -29,7 +29,8 @@ void main() {
         var exit = -1;
         try {
           print(pwd);
-          exit = EntryPoint().process(['clean', 'test/test_scripts/local_pubspec/hello_world.dart']);
+          exit = EntryPoint().process(
+              ['clean', 'test/test_scripts/local_pubspec/hello_world.dart']);
         } on DCliException catch (e) {
           print(e);
         }

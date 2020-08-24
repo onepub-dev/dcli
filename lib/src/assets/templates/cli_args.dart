@@ -40,7 +40,8 @@ void main(List<String> args) {
   var valid = false;
   String response;
   do {
-    response = ask('$prompt:', validator: AskMultiValidator([Ask.alpha, Ask.required]));
+    response = ask('$prompt:',
+        validator: AskMultiValidator([Ask.alpha, Ask.required]));
 
     valid = confirm('Is this your response? ${green(response)}');
   } while (!valid);

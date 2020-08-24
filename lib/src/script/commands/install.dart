@@ -67,7 +67,8 @@ class InstallCommand extends Command {
     scriptIndex = i;
 
     if (subarguments.length != scriptIndex) {
-      throw InvalidArguments("'dcli install' does not take any arguments. Found $subarguments");
+      throw InvalidArguments(
+          "'dcli install' does not take any arguments. Found $subarguments");
     }
 
     quiet = flagSet.isSet(_QuietFlag());
@@ -97,7 +98,8 @@ class InstallCommand extends Command {
     qprint('');
 
     // Create dependencies.yaml
-    var blue2 = blue('Creating ${join(Settings().dcliPath, GlobalDependencies.filename)} with default packages.');
+    var blue2 = blue(
+        'Creating ${join(Settings().dcliPath, GlobalDependencies.filename)} with default packages.');
     qprint(blue2);
     GlobalDependencies.createDefault();
 
@@ -106,12 +108,14 @@ class InstallCommand extends Command {
       qprint('  ${dep.rehydrate()}');
     }
     qprint('');
-    qprint('Edit ${GlobalDependencies.filename} to add/remove/update your default dependencies.');
+    qprint(
+        'Edit ${GlobalDependencies.filename} to add/remove/update your default dependencies.');
 
     /// create the template directory.
     if (!exists(Settings().templatePath)) {
       qprint('');
-      qprint(blue('Creating Template directory in: ${Settings().templatePath}.'));
+      qprint(
+          blue('Creating Template directory in: ${Settings().templatePath}.'));
       initTemplates();
     }
 
@@ -131,7 +135,8 @@ class InstallCommand extends Command {
 
       // check if shell can add a path.
       if (!shell.hasStartScript || !shell.addToPath(binPath)) {
-        qprint(orange('If you want to use dcli compile -i to install scripts, add $binPath to your PATH.'));
+        qprint(orange(
+            'If you want to use dcli compile -i to install scripts, add $binPath to your PATH.'));
       }
     }
 
@@ -183,7 +188,8 @@ class InstallCommand extends Command {
 
     if (dartWasInstalled) {
       qprint('');
-      qprint(red('You need to restart your shell for the adjusted PATH to work.'));
+      qprint(
+          red('You need to restart your shell for the adjusted PATH to work.'));
       qprint('');
     }
 
@@ -213,7 +219,8 @@ class InstallCommand extends Command {
   }
 
   @override
-  String description() => """Running 'dcli install' completes the installation of dcli.""";
+  String description() =>
+      """Running 'dcli install' completes the installation of dcli.""";
 
   @override
   String usage() => 'install';
