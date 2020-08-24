@@ -1,3 +1,6 @@
+# 0.20.2
+Added support for fetching a list of executables.
+
 # 0.20.0
 Renamed dcli to dcli to better reflect its functionality and improve its discoverability on the pub.dev store.
 
