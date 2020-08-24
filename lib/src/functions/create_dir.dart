@@ -17,27 +17,21 @@ import 'function.dart';
 /// If [recursive] is false then any parent paths
 /// don't exist then a [CreateDirException] will be thrown.
 ///
-/// If the [path] already exists an exception is thrown.
+/// If the [path] already exists no action will be taken.
 ///
 
-void createDir(String path, {bool recursive = false}) =>
-    _CreateDir().createDir(path, recursive: recursive);
+void createDir(String path, {bool recursive = false}) => _CreateDir().createDir(path, recursive: recursive);
 
 class _CreateDir extends DCliFunction {
   void createDir(String path, {bool recursive}) {
     Settings().verbose('createDir:  ${absolute(path)} recursive: $recursive');
 
     try {
-      if (exists(path)) {
-        throw CreateDirException('The path ${absolute(path)} already exists');
-      }
-
       Directory(path).createSync(recursive: recursive);
     }
     // ignore: avoid_catches_without_on_clauses
     catch (e) {
-      throw CreateDirException(
-          'Unable to create the directory ${absolute(path)}. Error: $e');
+      throw CreateDirException('Unable to create the directory ${absolute(path)}. Error: $e');
     }
   }
 }
