@@ -15,14 +15,18 @@ jobs:
 
     steps:
     - uses: actions/checkout@v2
+    
+    - name: create working dir
+      run: mkdir ../pub_release
+      
     - name: clone pub_release
       # run: pub global activate pub_release
       run:  git clone https://github.com/bsutton/pub_release.git
-      working-directory: depends
+      working-directory: ../pub_release
       
     - name: install pub_release
       run: pub global activate pub_release --source=path
-      working-directory: depends
+      working-directory: ../pub_release
     - name: Pub dependencies
       run: pub get
     - name: Create release
