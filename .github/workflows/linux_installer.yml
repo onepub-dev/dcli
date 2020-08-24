@@ -2,8 +2,8 @@ name: Release executables for Linux
 
 on:
   push:
-    tags:
-      - '*'
+#    tags:
+#      - '*'
    
 jobs:
   build:
