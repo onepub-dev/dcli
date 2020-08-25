@@ -1,33 +1,100 @@
 #! /usr/bin/env dcli
 
+import 'dart:io';
+
+import 'package:args/command_runner.dart';
 import 'package:dcli/dcli.dart';
 
 ///
 /// Starts a docker shell with a full install
 /// of the dcli tools
-/// 
+///
 /// This is intended to allow you to work on scripts developed
 /// with dcli.
-/// 
+///
 /// If you are looking to work on dcli itself then use dev_dcli_cli.dart
 
-void main(List<String> args) {
+void main(List<String> args) async {
   Settings().setVerbose(enabled: false);
-  var parser = ArgParser();
-  parser.addFlag('runOnly', abbr: 'r', defaultsTo: false);
+  var cmds = CommandRunner<void>('dcli_cli', 'Manage and run the dcli_cli docker container');
+  cmds.addCommand(RunCommand());
+  cmds.addCommand(BuildCommand());
+  cmds.addCommand(PushCommand());
 
-  var results = parser.parse(args);
-  var runOnly = results['runOnly'] as bool;
-
-  if (!runOnly) {
-    // mount the local dcli files from ..
-    'sudo docker build -f ./dcli_cli.df -t dcli:dcli_cli .'.run;
+  try {
+    await cmds.run(args);
+  } on UsageException catch (e) {
+    print(e.message);
+    showUsage(cmds.argParser);
   }
+}
 
-  /// The volume will only be created if it doesn't already exist.
-  'docker volume create dcli_scripts'.forEach(devNull, stderr: (line) => print(red(line)));
-  var cmd = 'docker run -v dcli_scripts:/home/scripts --network host -it dcli:dcli_cli /bin/bash';
+void showUsage(ArgParser parser) {
+  print(parser.usage);
+  exit(1);
+}
 
-  // print(cmd);
-  cmd.run;
+class RunCommand extends Command<void> {
+  @override
+  String get description => 'Starts the dcli_cli container and drops you into the cli';
+
+  @override
+  String get name => 'run';
+
+  @override
+  void run() {
+    /// The volume will only be created if it doesn't already exist.
+    'docker volume create dcli_scripts'.forEach(devNull, stderr: (line) => print(red(line)));
+    var cmd = 'docker run -v dcli_scripts:/home/scripts --network host -it dcli:dcli_cli /bin/bash';
+
+    // print(cmd);
+    cmd.run;
+  }
+}
+
+class BuildCommand extends Command<void> {
+  @override
+  String get description => 'Builds the dcli_cli image';
+
+  @override
+  String get name => 'build';
+
+  @override
+  void run() {
+    var pubspec = PubSpecFile.fromScript(Script.current);
+    var version = pubspec.version.toString();
+    // if (!argResults.wasParsed('version')) {
+    //   printerr(red('You must pass a --version.'));
+    //   showUsage(argParser);
+    // }
+    // var version = argResults['version'] as String;
+    // mount the local dcli files from ..
+    print('Building version: $version');
+    'sudo docker build -f ./dcli_cli.df -t bsuttonnoojee/dcli_cli:$version .'.run;
+  }
+}
+
+class PushCommand extends Command<void> {
+  PushCommand() {
+    argParser.addOption('version', help: 'The version no. to tag this image with');
+  }
+  @override
+  String get description => 'Pushes the dcli_cli container to docker hub';
+
+  @override
+  String get name => 'push';
+
+  @override
+  void run() {
+    // if (!argResults.wasParsed('version')) {
+    //   printerr(red('You must pass a --version.'));
+    //   showUsage(argParser);
+    // }
+    // var version = argResults['version'] as String;
+
+    var pubspec = PubSpecFile.fromScript(Script.current);
+    var version = pubspec.version.toString();
+    print('Pushing version: $version');
+    'sudo docker push bsuttonnoojee/dcli_cli:$version'.run;
+  }
 }
