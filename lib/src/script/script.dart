@@ -72,8 +72,7 @@ class Script {
           _createAnalysisOptions(showWarnings);
         }
         if (hasLocal && hasAnscestor && showWarnings) {
-          print(orange(
-              'Your script has a local pubspec.yaml and a pubspec.yaml in an ancestor directory.'));
+          print(orange('Your script has a local pubspec.yaml and a pubspec.yaml in an ancestor directory.'));
           print(orange('You may get inconsistent results when compiling.'));
         }
       }
@@ -89,8 +88,7 @@ class Script {
         print(orange('Creating missing analysis_options.yaml.'));
       }
 
-      copy(join(Settings().pathToTemplate, 'analysis_options.yaml'),
-          analysisPath);
+      copy(join(Settings().pathToTemplate, 'analysis_options.yaml'), analysisPath);
     }
   }
 
@@ -107,8 +105,7 @@ class Script {
 
   void _createPubspecFromAnnotation(bool showWarnings) {
     if (showWarnings) {
-      print(orange(
-          'Extracting @pubspec annotation to create missing pubspec.yaml.'));
+      print(orange('Extracting @pubspec annotation to create missing pubspec.yaml.'));
     }
 
     var annotation = PubSpecAnnotation.fromScript(this);
@@ -154,6 +151,10 @@ class Script {
   /// the the correct pubspec.yaml regardless of the project type.
   String get pathToLocalPubSpec => p.join(_scriptDirectory, 'pubspec.yaml');
 
+  /// Returns the path to a scripts pubspec.yaml.
+  /// The pubspec.yaml is located in the project's root directory.
+  String get pathToPubSpec => p.join(pathToProjectRoot, 'pubspec.yaml');
+
   // the scriptnameArg may contain a relative path: fred/home.dart
   // we need to get the actually name and full path to the script file.
   static String _extractScriptname(String scriptArg) {
@@ -173,17 +174,14 @@ class Script {
   /// validate that the passed arguments points to
   static void validate(String scriptPath) {
     if (!scriptPath.endsWith('.dart')) {
-      throw InvalidArguments(
-          'Expected a script name (ending in .dart) instead found: $scriptPath');
+      throw InvalidArguments('Expected a script name (ending in .dart) instead found: $scriptPath');
     }
 
     if (!exists(scriptPath)) {
-      throw InvalidScript(
-          'The script ${p.absolute(scriptPath)} does not exist.');
+      throw InvalidScript('The script ${p.absolute(scriptPath)} does not exist.');
     }
     if (!FileSystemEntity.isFileSync(scriptPath)) {
-      throw InvalidScript(
-          'The script ${p.absolute(scriptPath)} is not a file.');
+      throw InvalidScript('The script ${p.absolute(scriptPath)} is not a file.');
     }
   }
 
