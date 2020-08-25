@@ -1,17 +1,22 @@
+
+
+# 0.21.0
+
+Breaking changes:
+Refactored methods names related to paths. They now all start with a pathTo prefix. 
+The aim is to make it easier to find the methods and for ide auto-completion to be more useful.
+
+All methods that refer to the PATH environment variable now use the capitalised word PATH in the method name.
+
+
 # 0.20.2
-Added support for fetching a list of executables.
+Pubspec - Added support for fetching a list of executables.
 
 # 0.20.0
-Renamed dcli to dcli to better reflect its functionality and improve its discoverability on the pub.dev store.
+Renamed dshell to dcli to better reflect its functionality and improve its discoverability on the pub.dev store.
 
 Also took the opportunity to change the version no. to 0.x to reflect the fact that the api is still in flux.
 
-
-
-# 0.11.1
-Merge branch 'master' of https://github.com/bsutton/dcli into master
-dart_install.exe for windows
-dart_install for linux
 
 # 1.11.1
 Changed how we determine the packages path as a work around for #95

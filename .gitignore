@@ -46,3 +46,4 @@ lcov.info
 dcli.code-workspace
 .release.notes.tmp.swp
 release.notes.tmp
+github_credentials.yaml

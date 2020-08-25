@@ -1011,7 +1011,6 @@ See the section on [Customising Depenendency Injection](#customising-dependancy-
 
 # Pubspec Management
 
-
 The `pubspec.yaml` file is Dart's  equivalent of a `makefile`, `pom.xml`, `build.gradle` or `package.json`.
 
 You can see additional details on Dart's pubspec here:
@@ -1019,23 +1018,36 @@ You can see additional details on Dart's pubspec here:
 https://dart.dev/tools/pub/pubspec
 
 
+
 DCli aims to make creating a script as simple as possible and with that in mind we provide a number of ways of creating and managing your pubspec.yaml.
 
-By default you do NOT need a pubspec.yaml when using DCli.
+By default you do NOT need a pubspec.yaml when using DCli but its generally easier if you do create one as your dev tools (vscode android studio) expect to find one.
 
 NOTE: if you change the structure of your DCli script you need to run a `dcli clean`. Simple edits to you DCli script do NOT require a `clean` to be run.
 
 ## Supported pubspec locations
 DCli allows you to place your pubspec in the following locations:
+* Standard pubspec.yaml - you use the standard dart package structure with the pubspec.yaml in the root of your project.
+* Local pubspec - you place a pubspec.yaml file in the same directory as your script.
 * No pubspec - we create a virtual pubsec for you.
 * @pubspec annotation - the pubspec lives in your script in the form of an annotation.
-* Local pubspec - you place a pubspec.yaml file in the same directory as your script.
-* Traditional pubspec.yaml - you use the standard dart package structure with the pubspec.yaml in the root of your project.
+
+## How we locate your pubspec
+
+Its important to understand that DCli follows the same rules as dart does for locating a pubspec.yaml, with a few additions.
+
+By following the same rules as dart does DCli makes it possible for DCli scripts to work seamless with your current development tools.
+
+There are some exceptions.
+
+
+
+
 
 ## No pubsec
 
-If DCli doesn't find a pubspec then it will automatically create a default pubspec for you.
-The default pubspec is stored in the script's Virtual Project cache (under `~/.dcli/cache/<path_to_script>.project`).
+If DCli doesn't find a pubspec then it will automatically create a default pubspec.yaml for you.
+The default pubspec.yaml is stored in the script's Virtual Project cache (under `~/.dcli/cache/<path_to_script>.project`).
 
 We refer to this as a 'virtual pubspec'.
 
