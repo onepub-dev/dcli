@@ -3,7 +3,13 @@
 import 'package:dcli/dcli.dart';
 
 ///
-/// Starts a docker shell from which you can do dcli development
+/// Starts a docker shell with a full install
+/// of the dcli tools
+/// 
+/// This is intended to allow you to work on scripts developed
+/// with dcli.
+/// 
+/// If you are looking to work on dcli itself then use dev_dcli_cli.dart
 
 void main(List<String> args) {
   Settings().setVerbose(enabled: false);

@@ -5,10 +5,7 @@ WORKDIR /
 ENV HOME=/home
 RUN touch /home/.profile
 
-RUN apt -y update
-RUN apt -y upgrade
-RUN apt -y install vim
-RUN apt -y install wget
+RUN apt -y update && apt -y upgrade && apt -y install vim wget
 
 # Add the entire dcli project so we can run from the local filesystem
 ADD . /dcli
