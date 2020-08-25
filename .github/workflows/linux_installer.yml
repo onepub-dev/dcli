@@ -2,12 +2,11 @@ name: Release executables for Linux
 
 on:
   push:
-    tags:
-      - '*'
+#    tags:
+#      - '*'
    
 jobs:
   build:
-
     runs-on: ubuntu-latest
 
     container:
@@ -15,12 +14,26 @@ jobs:
 
     steps:
     - uses: actions/checkout@v2
-    - name: install pub_release
+    
+    - name: setup paths
+      run: export PATH="${PATH}":/usr/lib/dart/bin:"${HOME}/.pub-cache/bin":"${HOME}/.dcli/bin"
+    - name: create working dir
+      run: mkdir ../pub_release
+      
+    - name: clone pub_release
       # run: pub global activate pub_release
-      run: pub global activate --source git git@github.com:bsutton/pub_release.git
+      run:  git clone https://github.com/bsutton/pub_release.git
+      working-directory: ..
+    - name: pub get for pub_release
+      run: pub get
+      working-directory: ../pub_release
+      
+    #- name: install pub_release
+     # run: pub global activate pub_release --source=path
+#      working-directory: ../pub_release
     - name: Pub dependencies
       run: pub get
     - name: Create release
       env:
         APITOKEN:  ${{ secrets.APITOKEN }}
-      run: git_release --username bsutton --apiToken "$APITOKEN" --owner bsutton --repository dcli --suffix linux-test 
+      run: dart ../pub_release/bin/git_release.dart --username bsutton --apiToken "$APITOKEN" --owner bsutton --repository dcli --suffix linux-test 
