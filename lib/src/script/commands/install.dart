@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:dcli/src/templates/expander.dart';
 import 'package:meta/meta.dart';
 
 import '../../../dcli.dart';
@@ -114,15 +115,16 @@ class InstallCommand extends Command {
     /// create the template directory.
     if (!exists(Settings().pathToTemplate)) {
       qprint('');
-      qprint(
-          blue('Creating Template directory in: ${Settings().pathToTemplate}.'));
+      qprint(blue(
+          'Creating Template directory in: ${Settings().pathToTemplate}.'));
       initTemplates();
     }
 
     /// create the cache directory.
     if (!exists(Settings().pathToDCliCache)) {
       qprint('');
-      qprint(blue('Creating Cache directory in: ${Settings().pathToDCliCache}.'));
+      qprint(
+          blue('Creating Cache directory in: ${Settings().pathToDCliCache}.'));
       createDir(Settings().pathToDCliCache);
     }
 
@@ -255,14 +257,7 @@ class InstallCommand extends Command {
       createDir(Settings().pathToTemplate, recursive: true);
     }
 
-    var root = 'assets/templates';
-    var templates = Assets().list('*', root: root, recursive: true);
-
-    for (var template in templates) {
-      var start = template.indexOf(root);
-      var dest = template.substring(start + root.length + 1);
-      copy(template, join(Settings().pathToTemplate, dest));
-    }
+    TemplateExpander(Settings().pathToTemplate).expand();
   }
 }
 
