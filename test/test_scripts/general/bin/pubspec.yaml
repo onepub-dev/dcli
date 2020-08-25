@@ -1,6 +1,0 @@
-name: pubspec_local
-version: 1.0.0
-environment: 
-  sdk: '>=2.6.0 <3.0.0'
-dependencies: 
-  dcli: any
