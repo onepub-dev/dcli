@@ -76,12 +76,14 @@ class Assets {
     if (!root.startsWith('assets/')) {
       throw ArgumentError('The root must start with assets/');
     }
-    return find(pattern, root: _resolveAssetPath(root), recursive: recursive).toList();
+    return find(pattern, root: _resolveAssetPath(root), recursive: recursive)
+        .toList();
   }
 
   /// loads an asset as a byte buffer.
   Uint8List loadBytes(String path) {
-    var resolvedUri = waitForEx<Uri>(Isolate.resolvePackageUri(Uri.file('lib/src/assets/templates')));
+    var resolvedUri = waitForEx<Uri>(
+        Isolate.resolvePackageUri(Uri.file('lib/src/assets/templates')));
 
     print('resolved: ${resolvedUri.toFilePath()}');
 
@@ -91,8 +93,8 @@ class Assets {
   /// Converts an asset path of the form assert/somepath/note/txt
   /// to the absolute file system path (usually in .pub-cache)
   String _resolveAssetPath(String path) {
-    var resolvedUri =
-        waitForEx<Uri>(Isolate.resolvePackageUri(Uri(scheme: 'package', path: '$_packageName/src/$path')));
+    var resolvedUri = waitForEx<Uri>(Isolate.resolvePackageUri(
+        Uri(scheme: 'package', path: '$_packageName/src/$path')));
     return resolvedUri.toFilePath();
   }
 }

@@ -134,7 +134,8 @@ class VirtualProject {
   /// be the scripts natural directory. For a script
   /// with a virtual pubsec this will be the linked script
   /// in the projectc directory.
-  String get pathToRuntimeScript => join(_runtimeProjectPath, script.scriptname);
+  String get pathToRuntimeScript =>
+      join(_runtimeProjectPath, script.scriptname);
 
   NamedLock _lock;
 
@@ -241,7 +242,8 @@ class VirtualProject {
         join(project._projectRootPath, 'pubspec.yaml');
 
     // pubspec.yaml lives in the same dir as the script.
-    project._runtimePubspecPath = join(dirname(script.pathToScript), 'pubspec.yaml');
+    project._runtimePubspecPath =
+        join(dirname(script.pathToScript), 'pubspec.yaml');
 
     project._runtimeProjectPath = dirname(script.pathToScript);
   }
@@ -249,7 +251,8 @@ class VirtualProject {
   /// Used when we are running from a standard dart package.
   static void _setStandardPaths(VirtualProject project, Script script) {
     // root director of real (standard) dart projet.
-    project._projectRootPath = project._getStandardProjectRoot(script.pathToScript);
+    project._projectRootPath =
+        project._getStandardProjectRoot(script.pathToScript);
 
     /// pubspec.yaml lives in the script's project root
     project._runtimePubspecPath =
@@ -301,8 +304,10 @@ class VirtualProject {
   VirtualProject._internal(this.script) {
     var cacheRootPath = Settings().pathToDCliCache;
     // /home/bsutton/.dcli/cache/home/bsutton/git/dcli/test/test_scripts/bin/hello_world.project
-    _virtualProjectPath = join(cacheRootPath,
-        Script.sansRoot(script.pathToScriptDirectory), script.basename + projectDir);
+    _virtualProjectPath = join(
+        cacheRootPath,
+        Script.sansRoot(script.pathToScriptDirectory),
+        script.basename + projectDir);
 
     _localPubspecIndicatorPath =
         join(_virtualProjectPath, _usingLocalPubpsecFilename);

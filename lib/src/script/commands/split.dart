@@ -83,7 +83,8 @@ class SplitCommand extends Command {
   // checks if the script's pubspec is identical to the
   // pubspec in the local directory
   bool _identical(Script script) {
-    var localPubspecPath = canonicalize(join(script.pathToScript, 'pubspec.yaml'));
+    var localPubspecPath =
+        canonicalize(join(script.pathToScript, 'pubspec.yaml'));
 
     // check the virtual project has a symlink back to the local pubspec.
     if (isLink(script.pathToLocalPubSpec)) {

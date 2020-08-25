@@ -117,7 +117,8 @@ class PubSpecAnnotation implements PubSpec // with DependenciesMixin
     }
 
     if (state == _State.content) {
-      throw PubSpecAnnotationException("@pubspec annotation found but the closing '*/' was not seen");
+      throw PubSpecAnnotationException(
+          "@pubspec annotation found but the closing '*/' was not seen");
     }
     return dataLines;
   }
@@ -128,7 +129,8 @@ class PubSpecAnnotation implements PubSpec // with DependenciesMixin
   ///
   List<String> _readLines(File file) {
     // Read script file as lines
-    final stream = file.openRead().transform(utf8.decoder).transform(LineSplitter());
+    final stream =
+        file.openRead().transform(utf8.decoder).transform(LineSplitter());
 
     var lines = waitForEx(stream.toList());
     return lines;
