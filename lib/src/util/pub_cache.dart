@@ -11,8 +11,10 @@ import '../../dcli.dart';
 class PubCache {
   static PubCache _self;
 
+  /// The name of the pub cache directory (e.g. .pub-cache)
   String _pubCacheDir;
-  String _pubCacheBinDir;
+
+  String _pubCacheBinPath;
   static const String _pubCacheEnv = 'PUB_CACHE';
   String _pubCachePath;
 
@@ -43,7 +45,7 @@ class PubCache {
     }
 
     // determine pub-cache/bin
-    _pubCacheBinDir = truepath(join(_pubCachePath, 'bin'));
+    _pubCacheBinPath = truepath(join(_pubCachePath, 'bin'));
   }
 
   /// The fully qualified path to the pub cache.
@@ -55,9 +57,9 @@ class PubCache {
   /// This method processes PUB_CACHE if it exists.
   String get pathTo => _pubCachePath;
 
-  /// Returns the path to the .pub-cache's bin directory
+  /// The fully qualified path to the pub cache's bin directory
   /// where executables from installed packages are stored.
-  String get pathToBin => _pubCacheBinDir;
+  String get pathToBin => _pubCacheBinPath;
 
   /// Returns the directory name of the pub cache.
   ///
