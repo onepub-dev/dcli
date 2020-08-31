@@ -1,3 +1,7 @@
+# 0.21.2
+Fixed a bug in the Progress.stream mehthod. It was only outputing stdout and it needs
+to also output stderr. It now does.
+
 # 0.21.1
 renamed _pubCacheBinDir to _pubCacheBinPath for consistency.
 Changed the default stream method so that it now includes stderr by default as this is generally what people expect (e.g. stream what I would normally see).
