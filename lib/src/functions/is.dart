@@ -47,8 +47,7 @@ bool isLink(String path) => _Is().isLink(path);
 /// See [isLink]
 ///     [isDirectory]
 ///     [isFile]
-bool exists(String path, {bool followLinks = true}) =>
-    _Is().exists(path, followLinks: followLinks);
+bool exists(String path, {bool followLinks = true}) => _Is().exists(path, followLinks: followLinks);
 
 /// Returns the datetime the path was last modified
 ///
@@ -118,8 +117,7 @@ class _Is extends DCliFunction {
       throw ArgumentError('path must not be null or empty');
     }
     //return FileSystemEntity.existsSync(path);
-    return FileSystemEntity.typeSync(path, followLinks: followLinks) !=
-        FileSystemEntityType.notFound;
+    return FileSystemEntity.typeSync(path, followLinks: followLinks) != FileSystemEntityType.notFound;
   }
 
   DateTime lastModified(String path) {
@@ -155,7 +153,7 @@ class _Is extends DCliFunction {
   /// Checks if the user permission to act on the [path] (a file or directory)
   /// for the given permission bit mask. (read, write or execute)
   bool _checkPermission(String path, int permissionBitMask) {
-    var user = env('USER');
+    var user = env['USER'];
 
     //e.g 755 tomcat bsutton
     var stat = 'stat -L -c "%a %G %U" "$path"'.firstLine;

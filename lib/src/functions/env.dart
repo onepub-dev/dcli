@@ -18,10 +18,12 @@ import 'dcli_function.dart';
 /// then [null] is returned.
 ///
 ///```dart
-///String path = env("PATH");
+///String path = env["PATH"];
 ///```
 ///
-String env(String name) => Env()._env(name);
+// String env(String name) => Env()._env(name);
+
+Env env = Env();
 
 /// Tests if the given [path] is contained
 /// in the OS's PATH environment variable.
@@ -64,7 +66,7 @@ Map<String, String> get envs => Env()._envVars;
 /// ```
 /// NOTE: this does NOT affect the parent
 /// processes environment.
-void setEnv(String name, String value) => Env().setEnv(name, value);
+/// void setEnv(String name, String value) => Env().setEnv(name, value);
 
 /// Implementation class for the functions [_env] and [setEnv].
 class Env extends DCliFunction {
@@ -86,8 +88,7 @@ class Env extends DCliFunction {
       _caseSensitive = false;
     }
 
-    _envVars =
-        CanonicalizedMap((key) => (_caseSensitive) ? key : key.toUpperCase());
+    _envVars = CanonicalizedMap((key) => (_caseSensitive) ? key : key.toUpperCase());
 
     // build a local map with all of the OS environment vars.
     for (var entry in platformVars.entries) {
@@ -111,10 +112,13 @@ class Env extends DCliFunction {
 
   /// returns the PATH environment var.
   List<String> get _path {
-    var pathEnv = _env('PATH');
+    var pathEnv = this['PATH'];
 
     return pathEnv.split(delimiterForPATH);
   }
+
+  String operator [](String name) => _env(name);
+  void operator []=(String name, String value) => setEnv(name, value);
 
   /// Appends [newPath] to the list of paths in the
   /// PATH environment variable.
@@ -190,11 +194,9 @@ class Env extends DCliFunction {
 
     if (home == null) {
       if (Settings().isWindows) {
-        throw DCliException(
-            "Unable to find the 'APPDATA' enviroment variable. Please ensure it is set and try again.");
+        throw DCliException("Unable to find the 'APPDATA' enviroment variable. Please ensure it is set and try again.");
       } else {
-        throw DCliException(
-            "Unable to find the 'HOME' enviroment variable. Please ensure it is set and try again.");
+        throw DCliException("Unable to find the 'HOME' enviroment variable. Please ensure it is set and try again.");
       }
     }
     return home;

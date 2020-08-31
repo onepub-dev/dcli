@@ -13,10 +13,10 @@ mixin ShellMixin implements Shell {
   /// This will only work on posix systems.
   /// For Windows systems we will return null.
   static String loginShell() {
-    var shell = env('SHELL');
+    var shell = env['SHELL'];
     if (Platform.isWindows || shell == null) return null;
 
-    return basename(env('SHELL'));
+    return basename(env['SHELL']);
   }
 
   @override

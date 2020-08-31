@@ -26,22 +26,13 @@ export 'src/functions/create_dir.dart' show createDir, CreateDirException;
 export 'src/functions/delete.dart' show delete, DeleteException;
 export 'src/functions/delete_dir.dart' show deleteDir, DeleteDirException;
 export 'src/functions/echo.dart' show echo;
-export 'src/functions/env.dart'
-    show env, HOME, PATH, isOnPATH, setEnv, envs, Env;
+export 'src/functions/env.dart' show env, HOME, PATH, isOnPATH, envs, Env;
 export 'src/functions/fetch.dart'
-    show
-        fetch,
-        fetchMultiple,
-        FetchException,
-        FetchProgress,
-        FetchStatus,
-        FetchUrl,
-        OnFetchProgress;
+    show fetch, fetchMultiple, FetchException, FetchProgress, FetchStatus, FetchUrl, OnFetchProgress;
 export 'src/functions/file_list.dart' show fileList;
 export 'src/functions/find.dart' show find;
 export 'src/functions/head.dart' show head;
-export 'src/functions/is.dart'
-    show isFile, isDirectory, exists, isWritable, isReadable, isExecutable;
+export 'src/functions/is.dart' show isFile, isDirectory, exists, isWritable, isReadable, isExecutable;
 export 'src/functions/menu.dart' show menu;
 export 'src/functions/move.dart' show move, MoveException;
 export 'src/functions/move_dir.dart' show moveDir, MoveDirException;

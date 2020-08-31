@@ -4,3 +4,8 @@ environment:
   sdk: '>=2.6.0 <3.0.0'
 dependencies: 
   dcli: any
+
+dependency_overrides:
+  dcli:
+    path:
+      ../../..

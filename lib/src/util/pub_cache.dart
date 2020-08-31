@@ -28,7 +28,7 @@ class PubCache {
     // first check if an environment variable exists.
     // The PUB_CACHE env var allows a user to over-ride
     // the standard location of the pub cache.
-    var pubCacheEnv = env(_pubCacheEnv);
+    var pubCacheEnv = env[_pubCacheEnv];
 
     /// determine pubCacheDir
     if (pubCacheEnv != null) {
@@ -37,11 +37,11 @@ class PubCache {
     if (Platform.isWindows) {
       _pubCacheDir ??= join('Pub', 'Cache');
       // doco says this is AppData but the dart installer seems to use LocalAppData
-      _pubCachePath ??= truepath(join(env('LocalAppData'), _pubCacheDir));
+      _pubCachePath ??= truepath(join(env['LocalAppData'], _pubCacheDir));
     } else {
       _pubCacheDir ??= '.pub-cache';
       // determine pub-cache path
-      _pubCachePath ??= truepath(join(env('HOME'), _pubCacheDir));
+      _pubCachePath ??= truepath(join(env['HOME'], _pubCacheDir));
     }
 
     // determine pub-cache/bin

@@ -774,15 +774,15 @@ When a DCli script starts, it loads the set of environment variables from its pa
 To access an environment variable:
 
 ```
-var colorTermValue = env('COLORTERM');
+var colorTermValue = env['COLORTERM'];
 ```
 
 You can also set an environment variable:
 
 ```
-setEnv('DART_SDK', 'somepath');
+env['DART_SDK] = 'somepath';
 ```
-Once you set an environment variable or modify an existing one, then any calls to `env()` will return the set value.
+Once you set an environment variable or modify an existing one, then any calls to `env[]` will return the set value.
 
 If you run a child process via any of the DCli methods then the child process will be passed all of current environment variable.
 

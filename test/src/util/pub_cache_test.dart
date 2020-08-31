@@ -10,15 +10,11 @@ void main() {
     Env.reset();
 
     /// we don't necessarily have a HOME env in the test environment.
-    setEnv('HOME', join('/home'));
+    env['HOME'] = join('/home');
     if (Platform.isWindows) {
-      expect(
-          PubCache().pathToBin,
-          equals(
-              join(env('LocalAppData'), 'Pub', 'Cache', 'bin').toLowerCase()));
+      expect(PubCache().pathToBin, equals(join(env['LocalAppData'], 'Pub', 'Cache', 'bin').toLowerCase()));
     } else {
-      expect(
-          PubCache().pathToBin, equals(join(env('HOME'), '.pub-cache', 'bin')));
+      expect(PubCache().pathToBin, equals(join(env['HOME'], '.pub-cache', 'bin')));
     }
   }, skip: false);
 
@@ -27,14 +23,12 @@ void main() {
     Env.reset();
 
     /// we don't necessarily have a HOME env in the test environment.
-    setEnv('HOME', join('/home'));
-    setEnv('PUB_CACHE', join(Platform.pathSeparator, 'test_cache'));
+    env['HOME'] = join('/home');
+    env['PUB_CACHE'] = join(Platform.pathSeparator, 'test_cache');
     if (Platform.isWindows) {
-      expect(PubCache().pathToBin,
-          equals(join(r'c:\test_cache', 'bin').toLowerCase()));
+      expect(PubCache().pathToBin, equals(join(r'c:\test_cache', 'bin').toLowerCase()));
     } else {
-      expect(PubCache().pathToBin,
-          equals(join(Platform.pathSeparator, 'test_cache', 'bin')));
+      expect(PubCache().pathToBin, equals(join(Platform.pathSeparator, 'test_cache', 'bin')));
     }
   }, skip: false);
 }

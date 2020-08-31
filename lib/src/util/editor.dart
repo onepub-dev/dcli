@@ -18,8 +18,8 @@ void showEditor(String path) {
   if (Platform.isWindows) {
     editor = 'notepad.exe';
   } else {
-    editor = env('EDITOR');
-    editor ??= env('VISIBLE');
+    editor = env['EDITOR'];
+    editor ??= env['VISIBLE'];
     editor ??= 'vi';
   }
 
@@ -30,7 +30,7 @@ void showEditor(String path) {
 /// True if the console is a dumb termainl
 bool isTerminalDumb() {
   {
-    var terminal = env('TERM');
+    var terminal = env['TERM'];
     return terminal == null || terminal == 'dumb';
   }
 }

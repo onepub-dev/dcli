@@ -12,7 +12,7 @@ void main() {
   t.group('Environment', () {
     t.test('PATH', () {
       TestFileSystem().withinZone((fs) {
-        t.expect(env('PATH').length, t.greaterThan(0));
+        t.expect(env['PATH'].length, t.greaterThan(0));
       });
     });
 
@@ -28,18 +28,18 @@ void main() {
 
           var userDataPath = 'C:\\Windows\\Userdata';
 
-          setEnv('HOME', userDataPath);
-          setEnv('APPDATA', userDataPath);
-          setEnv('MixedCase', 'mixed data');
+          env['HOME'] = userDataPath;
+           env['APPDATA'] =  userDataPath;
+           env['MixedCase'] =  'mixed data';
 
           // test that env
-          t.expect(env('HOME'), userDataPath);
-          t.expect(env('AppData'), userDataPath);
-          t.expect(env('APPDATA'), userDataPath);
+          t.expect(env['HOME'], userDataPath);
+          t.expect(env['AppData'], userDataPath);
+          t.expect(env['APPDATA'], userDataPath);
 
           var available = <String, String>{};
-          available.putIfAbsent('APPDATA', () => env('APPDATA'));
-          available.putIfAbsent('MixedCase', () => env('MixedCase'));
+          available.putIfAbsent('APPDATA', () => env['APPDATA']);
+          available.putIfAbsent('MixedCase', () => env['MixedCase']);
 
           var expected = <String, String>{};
 

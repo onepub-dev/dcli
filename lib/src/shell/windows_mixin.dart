@@ -32,12 +32,9 @@ Read additional details here: https://github.com/bsutton/dcli/wiki/Installing-DC
 
   bool get isPrivilegedUser {
     var currentPrincipal =
-        'New-Object Security.Principal.WindowsPrincipal([Security.Principal.WindowsIdentity]::GetCurrent())'
-            .firstLine;
+        'New-Object Security.Principal.WindowsPrincipal([Security.Principal.WindowsIdentity]::GetCurrent())'.firstLine;
     Settings().verbose('currentPrinciple: $currentPrincipal');
-    var isPrivileged =
-        '$currentPrincipal.IsInRole([Security.Principal.WindowsBuiltInRole]::Administrator)'
-            .firstLine;
+    var isPrivileged = '$currentPrincipal.IsInRole([Security.Principal.WindowsBuiltInRole]::Administrator)'.firstLine;
     Settings().verbose('isPrivileged: $isPrivileged');
 
     return isPrivileged.toLowerCase() == 'true';
@@ -51,5 +48,5 @@ Read additional details here: https://github.com/bsutton/dcli/wiki/Installing-DC
     return 'You need to be a privileged user to run $app';
   }
 
-  String get loggedInUser => env('USERNAME');
+  String get loggedInUser => env['USERNAME'];
 }

@@ -28,10 +28,10 @@ void main(List<String> args) {
   }
 
   var command = results.rest[0];
-  var home = env('HOME');
+  var home = env['HOME'];
 
   List<String> paths;
-  paths = env('PATH').split(':');
+  paths = env['PATH'].split(':');
 
   for (var path in paths) {
     if (path.startsWith('~')) {
