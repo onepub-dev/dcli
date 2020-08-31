@@ -8,7 +8,7 @@ We also took the opportunity to change the version no. to 0.x.x to reflect that 
 
 Nothing else has changed except for its name and we continue to improve the api.
 
-Note: dcli was orginally released under the name `dcli`. The project has been renamed to better reflect its core use - building cli apps in dart.ZZ
+Note: dcli was orginally released under the name `dcli`. The project has been renamed to better reflect its core use - building cli apps in dart.
 
 # Contents
 * [Overview](#overview)
