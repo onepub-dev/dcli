@@ -392,8 +392,10 @@ extension StringAsProcess on String {
   Stream<String> stream(
       {bool runInShell = false,
       String workingDirectory,
-      bool nothrow = false}) {
-    var progress = Progress.stream();
+      bool nothrow = false,
+      bool includeStderr = true
+      }) {
+    var progress = Progress.stream(includeStderr: includeStderr);
 
     cmd.startStreaming(this,
         runInShell: runInShell,
