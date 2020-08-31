@@ -1,5 +1,7 @@
 import 'dart:async';
 
+import 'package:async/async.dart';
+
 import '../../dcli.dart';
 import 'dev_null.dart';
 
@@ -71,14 +73,17 @@ class Progress {
   /// EXPERIMENTAL
   ///
   /// Constructs a Progress that provides a stream of all lines written
-  /// to stdout.
-  /// If you want the stream to include stderr then set [includeStderr] to true.
+  /// to stdout and stderr.
   ///
-  /// To obtain the stream call the [Progress.stream] method.
+  /// You can take control over whether both stdout and stderr are included
+  /// via the named args  [includeStderr] and [includeStdout].
   ///
-  /// Using a stream is one of the few (only) places in dcli that you will need
-  /// to use a future. If you don't use the Completer then the stream will essentially
-  /// output stream data as the rest of your script continues to run.
+  /// By default both are set to true.
+  ///
+  /// Using a stream is one of the few places in dcli that you will need
+  /// to use a future. If you don't use a Completer as per the following
+  /// example then the stream will output data as the rest of your script
+  /// continues to run.
   ///
   ///
   /// ```dart
@@ -88,7 +93,7 @@ class Progress {
   ///       runInShell: true,
   ///   );
   ///
-  ///   /// Use a Completer with onDone to and waitForEx to
+  ///   /// Use a Completer with onDone and waitForEx to
   ///   /// have your code wait until the stream is drained.
   ///   var done = Completer<void>();
   ///   progress.stream.listen((event) {
@@ -98,11 +103,15 @@ class Progress {
   ///   print('done');
   ///````
   ///
-  Progress.stream({this.includeStderr = false}) : includeStdout = true {
+  Progress.stream({this.includeStdout = true, this.includeStderr = true}) {
     /// we don't wire the stream but rather allow the user to obtain the stream directly
   }
 
-  Stream<String> get stream => _stdoutController.stream;
+  /// Returns a combined stream including stdout and stderr.
+  /// You control whether stderr and/or stdout are inserted into the stream when you call
+  /// [stream(includeStderr: true, includeStdout)]
+  Stream<String> get stream =>
+      StreamGroup.merge([_stdoutController.stream, _stderrController.stream]);
 
   /// adds the [line] to the stdout controller
   void addToStdout(String line) {
