@@ -106,8 +106,12 @@ class Progress {
 
   /// adds the [line] to the stdout controller
   void addToStdout(String line) {
-    if (!_closed && includeStdout) {
-      _stdoutController.sink.add(line);
+    if (!_closed) {
+      if (includeStdout) {
+        _stdoutController.sink.add(line);
+      } else {
+        Settings().verbose('addToStdout excluded: line=$line');
+      }
     } else {
       Settings().verbose('addToStdout called after stream closed: line=$line');
     }
@@ -115,10 +119,14 @@ class Progress {
 
   /// adds the [line] to the stderr controller
   void addToStderr(String line) {
-    if (!_closed && includeStderr) {
-      _stderrController.sink.add(line);
+    if (!_closed) {
+      if (includeStderr) {
+        _stderrController.sink.add(line);
+      } else {
+        Settings().verbose('addToStderr excluded: line=$line');
+      }
     } else {
-      Settings().verbose('addToStdout called after stream closed: line=$line');
+      Settings().verbose('addToStderr called after stream closed: line=$line');
     }
   }
 
