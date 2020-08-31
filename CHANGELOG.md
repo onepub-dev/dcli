@@ -1,3 +1,8 @@
+# 0.21.1
+renamed _pubCacheBinDir to _pubCacheBinPath for consistency.
+Changed the default stream method so that it now includes stderr by default as this is generally what people expect (e.g. stream what I would normally see).
+Fixed the verbose messages that mis-reported why stream output was being ignored.
+
 
 
 # 0.21.0
