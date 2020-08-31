@@ -1,3 +1,6 @@
+# 0.22.0
+removed env() and setEnv() and replaced them with operators env[] and env[]=
+
 # 0.21.2
 Fixed a bug in the Progress.stream mehthod. It was only outputing stdout and it needs
 to also output stderr. It now does.
