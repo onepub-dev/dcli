@@ -57,7 +57,11 @@ void main(List<String> args) {
   // works
   Remote.scp(fromHost: fqdn, from: ['/etc/asterisk/sip.d/*'], to: '/tmp');
 
-  Remote.scp(fromUser: "${env['USER']}", fromHost: fqdn, from: ['/tmp/*.log'], to: '.');
+  Remote.scp(
+      fromUser: "${env['USER']}",
+      fromHost: fqdn,
+      from: ['/tmp/*.log'],
+      to: '.');
 
   Remote.scp(from: ['./*.dart'], toHost: fqdn, to: '/tmp', recursive: true);
 
@@ -72,12 +76,21 @@ void main(List<String> args) {
   //     sudo: true,
   //     password: password);
 
-  Remote.scp(recursive: true, fromHost: fqdn, from: ['/tmp/slow.dart', '/tmp/parent.dart'], to: '/tmp');
+  Remote.scp(
+      recursive: true,
+      fromHost: fqdn,
+      from: ['/tmp/slow.dart', '/tmp/parent.dart'],
+      to: '/tmp');
 
   var command =
       "mkdir -p  /tmp/etc/openvpn; echo $password  | sudo -Sp '' cp -R /etc/openvpn/* /tmp/etc/openvpn; echo hi; ls -l /tmp/etc/openvpn; echo $password | sudo -Sp ''  rm -rf /tmp/etc/openvpn ; echo ho; ls /tmp";
 
-  Remote.exec(host: fqdn, command: command, sudo: true, password: password, progress: Progress.print());
+  Remote.exec(
+      host: fqdn,
+      command: command,
+      sudo: true,
+      password: password,
+      progress: Progress.print());
 
   Remote.execList(
       host: fqdn,
@@ -100,9 +113,14 @@ void main(List<String> args) {
 
   //  "ssh -t bsutton@auditord.noojee.com.au '/home/bsutton/git/auditor/backup.sh nowString.sql'"
   var now = DateTime.now();
-  Remote.exec(host: 'bsutton@auditord.noojee.com.au', command: '/home/bsutton/git/auditor/backup.sh $now.sql');
+  Remote.exec(
+      host: 'bsutton@auditord.noojee.com.au',
+      command: '/home/bsutton/git/auditor/backup.sh $now.sql');
 
-  Remote.scp(fromHost: 'auditord.noojee.com.au', from: ['/home/bsutton/git/auditor/$now.sql'], to: '.');
+  Remote.scp(
+      fromHost: 'auditord.noojee.com.au',
+      from: ['/home/bsutton/git/auditor/$now.sql'],
+      to: '.');
 
   // // command = 'pwd;ls *';
   // var cmdArgs = <String>[];

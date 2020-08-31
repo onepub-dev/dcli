@@ -47,7 +47,8 @@ bool isLink(String path) => _Is().isLink(path);
 /// See [isLink]
 ///     [isDirectory]
 ///     [isFile]
-bool exists(String path, {bool followLinks = true}) => _Is().exists(path, followLinks: followLinks);
+bool exists(String path, {bool followLinks = true}) =>
+    _Is().exists(path, followLinks: followLinks);
 
 /// Returns the datetime the path was last modified
 ///
@@ -117,7 +118,8 @@ class _Is extends DCliFunction {
       throw ArgumentError('path must not be null or empty');
     }
     //return FileSystemEntity.existsSync(path);
-    return FileSystemEntity.typeSync(path, followLinks: followLinks) != FileSystemEntityType.notFound;
+    return FileSystemEntity.typeSync(path, followLinks: followLinks) !=
+        FileSystemEntityType.notFound;
   }
 
   DateTime lastModified(String path) {

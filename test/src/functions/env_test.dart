@@ -29,8 +29,8 @@ void main() {
           var userDataPath = 'C:\\Windows\\Userdata';
 
           env['HOME'] = userDataPath;
-           env['APPDATA'] =  userDataPath;
-           env['MixedCase'] =  'mixed data';
+          env['APPDATA'] = userDataPath;
+          env['MixedCase'] = 'mixed data';
 
           // test that env
           t.expect(env['HOME'], userDataPath);
