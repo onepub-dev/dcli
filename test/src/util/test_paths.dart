@@ -72,7 +72,7 @@ class TestPaths {
 
     // // create test .pub-cache dir
     // var pubCachePath = truepath(TEST_ROOT, PubCache().cacheDir);
-    // setEnv('PUB_CACHE', pubCachePath);
+    // env['PUB_CACHE'] = pubCachePath;
 
     // add the unit test dcli/bin path to the front
     // of the PATH so that our test version of dcli tooling
@@ -86,12 +86,10 @@ class TestPaths {
     env['PATH'] = path.join(Env().delimiterForPATH);
 
     var dcliPath = Settings().pathToDCli;
-    if (!dcliPath.startsWith(join(rootPath, 'tmp')) ||
-        !HOME.startsWith(join(rootPath, 'tmp')))
+    if (!dcliPath.startsWith(join(rootPath, 'tmp')) || !HOME.startsWith(join(rootPath, 'tmp')))
     //  ||        !env['PUB_CACHE'].startsWith('/tmp'))
     {
-      printerr(
-          '''Something went wrong, the dcli path or HOME for unit tests is NOT pointing to /tmp. 
+      printerr('''Something went wrong, the dcli path or HOME for unit tests is NOT pointing to /tmp. 
           dcli's path is pointing at $dcliPath
           HOME is pointing at $HOME
           PUB_CACHE is pointing at ${env['PUB_CACHE']}
@@ -120,16 +118,13 @@ class TestPaths {
 
   String projectPath(String scriptName) {
     String projectPath;
-    var projectScriptPath =
-        join(dirname(scriptName), basenameWithoutExtension(scriptName));
+    var projectScriptPath = join(dirname(scriptName), basenameWithoutExtension(scriptName));
     if (scriptName.startsWith(Platform.pathSeparator)) {
-      projectPath = truepath(Settings().pathToDCliCache,
-          Script.sansRoot(projectScriptPath) + VirtualProject.projectDir);
+      projectPath =
+          truepath(Settings().pathToDCliCache, Script.sansRoot(projectScriptPath) + VirtualProject.projectDir);
     } else {
       projectPath = truepath(
-          Settings().pathToDCliCache,
-          Script.sansRoot(testScriptPath),
-          projectScriptPath + VirtualProject.projectDir);
+          Settings().pathToDCliCache, Script.sansRoot(testScriptPath), projectScriptPath + VirtualProject.projectDir);
     }
     return projectPath;
   }

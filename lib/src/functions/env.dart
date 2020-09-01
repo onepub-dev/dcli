@@ -44,10 +44,10 @@ String get HOME => Env().HOME;
 
 /// Returns a map of all the environment variables
 /// inherited from the parent as well as any changes
-/// made by calls to [setEnv].
+/// made by calls to [env[]=].
 ///
-/// See [env]
-///     [setEnv]
+/// See [env[]]
+///     [env[]=]
 Map<String, String> get envs => Env()._envVars;
 
 ///
@@ -59,16 +59,15 @@ Map<String, String> get envs => Env()._envVars;
 /// Any child processes spawned will inherit these changes.
 /// e.g.
 /// ```
-///   setEnv('XXX', 'A Value');
+///   env['XXX'] = 'A Value';
 ///   // the echo command will display the value off XXX.
 ///   '''echo $XXX'''.run;
 ///
 /// ```
 /// NOTE: this does NOT affect the parent
 /// processes environment.
-/// void setEnv(String name, String value) => Env().setEnv(name, value);
 
-/// Implementation class for the functions [_env] and [setEnv].
+/// Implementation class for the functions [env[]] and [env[]=].
 class Env extends DCliFunction {
   static Env _self = Env._internal();
 
@@ -76,7 +75,7 @@ class Env extends DCliFunction {
 
   bool _caseSensitive = true;
 
-  /// Implementation class for the functions [_env] and [setEnv].
+  /// Implementation class for the functions [env[]] and [env[]=].
   factory Env() {
     return _self;
   }
@@ -88,8 +87,7 @@ class Env extends DCliFunction {
       _caseSensitive = false;
     }
 
-    _envVars =
-        CanonicalizedMap((key) => (_caseSensitive) ? key : key.toUpperCase());
+    _envVars = CanonicalizedMap((key) => (_caseSensitive) ? key : key.toUpperCase());
 
     // build a local map with all of the OS environment vars.
     for (var entry in platformVars.entries) {
@@ -119,7 +117,7 @@ class Env extends DCliFunction {
   }
 
   String operator [](String name) => _env(name);
-  void operator []=(String name, String value) => setEnv(name, value);
+  void operator []=(String name, String value) => _setEnv(name, value);
 
   /// Appends [newPath] to the list of paths in the
   /// PATH environment variable.
@@ -132,7 +130,7 @@ class Env extends DCliFunction {
   void appendToPATH(String newPath) {
     var path = PATH;
     path.add(newPath);
-    setEnv('PATH', path.join(delimiterForPATH));
+    _setEnv('PATH', path.join(delimiterForPATH));
   }
 
   /// Prepends [newPath] to the list of paths in the
@@ -146,7 +144,7 @@ class Env extends DCliFunction {
   void prependToPATH(String newPath) {
     var path = PATH;
     path.insert(0, newPath);
-    setEnv('PATH', path.join(delimiterForPATH));
+    _setEnv('PATH', path.join(delimiterForPATH));
   }
 
   /// Removes the given [oldPath] from the PATH environment variable.
@@ -159,7 +157,7 @@ class Env extends DCliFunction {
   void removeFromPATH(String oldPath) {
     var path = PATH;
     path.remove(oldPath);
-    setEnv('PATH', path.join(delimiterForPATH));
+    _setEnv('PATH', path.join(delimiterForPATH));
   }
 
   /// Adds [newPath] to the PATH environment variable
@@ -176,7 +174,7 @@ class Env extends DCliFunction {
     var path = PATH;
     if (!path.contains(newPath)) {
       path.add(newPath);
-      setEnv('PATH', path.join(delimiterForPATH));
+      _setEnv('PATH', path.join(delimiterForPATH));
     }
   }
 
@@ -195,11 +193,9 @@ class Env extends DCliFunction {
 
     if (home == null) {
       if (Settings().isWindows) {
-        throw DCliException(
-            "Unable to find the 'APPDATA' enviroment variable. Please ensure it is set and try again.");
+        throw DCliException("Unable to find the 'APPDATA' enviroment variable. Please ensure it is set and try again.");
       } else {
-        throw DCliException(
-            "Unable to find the 'HOME' enviroment variable. Please ensure it is set and try again.");
+        throw DCliException("Unable to find the 'HOME' enviroment variable. Please ensure it is set and try again.");
       }
     }
     return home;
@@ -221,7 +217,7 @@ class Env extends DCliFunction {
 
   /// Passing a null [value] will remove the key from the
   /// set of environment variables.
-  void setEnv(String name, String value) {
+  void _setEnv(String name, String value) {
     if (value == null) {
       _envVars.remove(name);
       if (Platform.isWindows) {

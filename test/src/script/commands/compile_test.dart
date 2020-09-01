@@ -14,7 +14,7 @@ void main() {
       TestFileSystem().withinZone((fs) {
         var exit = -1;
         try {
-          // setEnv('HOME', '/home/test');
+          // env['HOME'] = '/home/test';
           // createDir('/home/test', recursive: true);
           exit = EntryPoint().process(['compile', 'example/dsort.dart']);
         } on DCliException catch (e) {
@@ -28,7 +28,7 @@ void main() {
       TestFileSystem().withinZone((fs) {
         var exit = -1;
         try {
-          // setEnv('HOME', '/home/test');
+          // env['HOME'] = '/home/test';
           // createDir('/home/test', recursive: true);
           exit = EntryPoint().process(['compile', '-nc', 'example/dsort.dart']);
         } on DCliException catch (e) {
@@ -42,10 +42,7 @@ void main() {
       TestFileSystem().withinZone((fs) {
         var exit = -1;
         try {
-          exit = EntryPoint().process([
-            'compile',
-            'test/test_scripts/general/bin/local_pubspec/hello_world.dart'
-          ]);
+          exit = EntryPoint().process(['compile', 'test/test_scripts/general/bin/local_pubspec/hello_world.dart']);
         } on DCliException catch (e) {
           print(e);
         }
