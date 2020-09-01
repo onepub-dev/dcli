@@ -81,14 +81,20 @@ Progress find(
   String root = '.',
   Progress progress,
   List<FileSystemEntityType> types = const [FileSystemEntityType.file],
-}) =>
-    Find()._find(pattern,
-        caseSensitive: caseSensitive,
-        recursive: recursive,
-        includeHidden: includeHidden,
-        root: root,
-        progress: progress,
-        types: types);
+}) {
+  ArgumentError.checkNotNull(caseSensitive, 'caseSensitive');
+  ArgumentError.checkNotNull(recursive, 'recursive');
+  ArgumentError.checkNotNull(includeHidden, 'includeHidden');
+  ArgumentError.checkNotNull(root, 'root');
+  ArgumentError.checkNotNull(types, 'types');
+  return Find()._find(pattern,
+      caseSensitive: caseSensitive,
+      recursive: recursive,
+      includeHidden: includeHidden,
+      root: root,
+      progress: progress,
+      types: types);
+}
 
 /// Implementation for the [_find] function.
 class Find extends DCliFunction {
@@ -138,8 +144,7 @@ class Find extends DCliFunction {
     return progress;
   }
 
-  bool _allowed(String root, FileSystemEntity entity,
-      {@required bool includeHidden}) {
+  bool _allowed(String root, FileSystemEntity entity, {@required bool includeHidden}) {
     return includeHidden || !_isHidden(root, entity);
   }
 
