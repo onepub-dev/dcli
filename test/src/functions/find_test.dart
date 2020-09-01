@@ -1,5 +1,6 @@
-@Timeout(Duration(seconds: 600))
+import 'dart:io';
 
+@Timeout(Duration(seconds: 600))
 import 'package:dcli/src/util/progress.dart';
 import 'package:test/test.dart' as t;
 import 'package:dcli/dcli.dart';
@@ -26,11 +27,9 @@ void main() {
         var found = find('*.jpg', root: paths.top).toList();
 
         find('*.jpg', root: paths.top).forEach(print);
-        t.expect(find('one.jpg', root: paths.top).toList(),
-            t.equals([join(paths.top, 'one.jpg')]));
+        t.expect(find('one.jpg', root: paths.top).toList(), t.equals([join(paths.top, 'one.jpg')]));
 
-        t.expect(find('two.jpg', root: paths.top).toList(),
-            t.equals([join(paths.middle, 'two.jpg')]));
+        t.expect(find('two.jpg', root: paths.top).toList(), t.equals([join(paths.middle, 'two.jpg')]));
 
         find('*.jpg', progress: Progress(print));
 
@@ -87,8 +86,7 @@ void main() {
     t.test('find hidden files *.txt  ', () {
       TestFileSystem().withinZone((fs) {
         var paths = TestFileSystem();
-        var found =
-            find('*.txt', root: paths.top, includeHidden: true).toList();
+        var found = find('*.txt', root: paths.top, includeHidden: true).toList();
 
         found.sort();
         var expected = [
@@ -107,6 +105,35 @@ void main() {
         expected.sort();
         t.expect(found, t.equals(expected));
       });
+    });
+
+    t.test('non-recursive find', () async {
+      var tmp = Directory('/tmp').createTempSync().path;
+
+      var paths = <String>[
+        join(tmp, '.thidden' 'fred.txt'),
+        join(tmp, 'top', 'one.txt'),
+        join(tmp, 'top', 'two.txt'),
+        join(tmp, 'top', '.two.txt'),
+        join(tmp, 'middle', 'three.txt'),
+        join(tmp, 'middle', 'four.txt'),
+        join(tmp, 'middle', '.four.txt'),
+        join(tmp, 'bottom', 'five.txt'),
+        join(tmp, 'bottom', 'six.txt'),
+        join(tmp, '.hidden', 'seven.txt'),
+        join(tmp, '.hidden', '.seven.txt')
+      ];
+
+      for (var file in paths) {
+        if (!exists(dirname(file))) {
+          createDir(dirname(file));
+        }
+        touch(file, create: true);
+      }
+
+      var found = find('*.txt', root: tmp, includeHidden: true).toList();
+
+      t.expect(found, t.unorderedEquals(paths));
     });
   });
 }
