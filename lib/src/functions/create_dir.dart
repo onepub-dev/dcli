@@ -19,12 +19,21 @@ import 'function.dart';
 ///
 /// If the [path] already exists an exception is thrown.
 ///
+/// As a convenience [createDir] returns the same path
+/// that it was passed (as an [truepath]). This
+/// allows you to chain the createDir command.
+/// 
+/// The following will create the directory /tmp/new_home
+/// and the copy the contents /home/me into /tmp/new_home.
+/// ```dart
+///  copy('/home/me', createDir('/tmp/new_home'));
+/// ```
+///
 
-void createDir(String path, {bool recursive = false}) =>
-    _CreateDir().createDir(path, recursive: recursive);
+String createDir(String path, {bool recursive = false}) => _CreateDir().createDir(path, recursive: recursive);
 
 class _CreateDir extends DCliFunction {
-  void createDir(String path, {bool recursive}) {
+  String createDir(String path, {bool recursive}) {
     Settings().verbose('createDir:  ${absolute(path)} recursive: $recursive');
 
     try {
@@ -36,9 +45,9 @@ class _CreateDir extends DCliFunction {
     }
     // ignore: avoid_catches_without_on_clauses
     catch (e) {
-      throw CreateDirException(
-          'Unable to create the directory ${absolute(path)}. Error: $e');
+      throw CreateDirException('Unable to create the directory ${absolute(path)}. Error: $e');
     }
+    return truepath(path);
   }
 }
 
