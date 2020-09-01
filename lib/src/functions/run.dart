@@ -74,14 +74,10 @@ import 'pwd.dart';
 ///      process data rather than just outputing it to the cli.
 ///
 int run(String commandLine,
-    {bool runInShell = false,
-    bool nothrow = false,
-    bool privileged = false,
-    String workingDirectory}) {
+    {bool runInShell = false, bool nothrow = false, bool privileged = false, String workingDirectory}) {
   workingDirectory ??= pwd;
 
-  var runnable = RunnableProcess.fromCommandLine(commandLine,
-      workingDirectory: workingDirectory);
+  var runnable = RunnableProcess.fromCommandLine(commandLine, workingDirectory: workingDirectory);
 
   return runnable
       .run(
@@ -100,6 +96,16 @@ int run(String commandLine,
 ///
 /// The start method provides additional controls (compared to the run method)
 /// over how the commmand is executed.
+///
+/// DCli will do glob expansion on each passed argument (for Linux and OSx).
+/// You can stop glob expansion by adding a set of single or double quotes around the string.
+/// DCli will remove the extra quotes and NOT perform glob expansion.
+///
+/// e.g.
+/// '''"dontexpand.*"'''
+///
+/// results in
+/// dontexpand.*
 ///
 /// By default [startFromArgs] will output both stdout and stderr.
 /// Pass in a [progress] to capture or suppress stdout and stderr.
@@ -133,8 +139,7 @@ Progress startFromArgs(
 }) {
   progress ??= Progress.print();
   workingDirectory ??= pwd;
-  var runnable = RunnableProcess.fromCommandArgs(command, args,
-      workingDirectory: workingDirectory);
+  var runnable = RunnableProcess.fromCommandArgs(command, args, workingDirectory: workingDirectory);
 
   return runnable.run(
     progress: progress,
@@ -192,8 +197,7 @@ Progress start(String commandLine,
     bool privileged = false,
     String workingDirectory}) {
   workingDirectory ??= pwd;
-  var runnable = RunnableProcess.fromCommandLine(commandLine,
-      workingDirectory: workingDirectory);
+  var runnable = RunnableProcess.fromCommandLine(commandLine, workingDirectory: workingDirectory);
 
   return runnable.run(
     progress: progress,
@@ -225,8 +229,7 @@ Progress startStreaming(String commandLine,
     bool privileged = false,
     String workingDirectory}) {
   workingDirectory ??= pwd;
-  var runnable = RunnableProcess.fromCommandLine(commandLine,
-      workingDirectory: workingDirectory);
+  var runnable = RunnableProcess.fromCommandLine(commandLine, workingDirectory: workingDirectory);
 
   return runnable.runStreaming(
     progress: progress,
