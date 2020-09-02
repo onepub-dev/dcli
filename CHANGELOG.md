@@ -1,3 +1,16 @@
+# 0.23.0
+Breaking changes:
+Added requirements for privileges when installing so we can set up paths for sudo usage of dcli. Also added option to disable the requirement primarily for unit testing.
+Changed the names of all validators to start with AskValidator. The aim is to make auto completion in ide's work better.
+
+Non breaking changes
+Rewrote the find command so that it works even if a directory contains a file for which we don't have permissions.
+Performance improvements for the find command by reducing the amount of heap allocation going on. We now re-use arrays as much as possible. We can process 1.3M files in 3 seconds. The performance problems start when we push the files into the Progress stream.
+Updated doco to remove any references to setEnv
+Changed from Platform.isWindows to Settings().isWindows so that we can mock the platform when unit testing.
+createDir now returns the path that it created.
+Marked some tests as skip until we work out what tests are required now we have changed how we handle pubspec.yaml
+
 # 0.22.0
 removed env() and setEnv() and replaced them with operators env[] and env[]=
 
