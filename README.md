@@ -8,7 +8,7 @@ We also took the opportunity to change the version no. to 0.x.x to reflect that 
 
 Nothing else has changed except for its name and we continue to improve the api.
 
-Note: dcli was orginally released under the name `dcli`. The project has been renamed to better reflect its core use - building cli apps in dart.ZZ
+Note: dcli was orginally released under the name `dcli`. The project has been renamed to better reflect its core use - building cli apps in dart.
 
 # Contents
 * [Overview](#overview)
@@ -159,19 +159,19 @@ DCli now includes an installer which installs Dart and DCli.
 
 
 #### Linux:
-[Installer](https://raw.githubusercontent.com/bsutton/dcli/master/bin/linux/dcli_install)
+[Installer](https://github.com/bsutton/dcli/releases/download/latest-linux/dcli_install)
 
 ```bash
-wget https://raw.githubusercontent.com/bsutton/dcli/master/bin/linux/dcli_install
+wget https://github.com/bsutton/dcli/releases/download/latest-linux/dcli_install
 chmod +x dcli_install
 ./dcli_install
 ```
 
 #### Windows
-[Installer](https://raw.githubusercontent.com/bsutton/dcli/master/bin/windows/dcli_install.exe)
+[Installer](https://github.com/bsutton/dcli/releases/download/latest-linux/dcli_install.exe)
 
 ```cmd
-curl https://raw.githubusercontent.com/bsutton/dcli/master/bin/windows/dcli_install.exe -o dcli_install.exe
+curl https://github.com/bsutton/dcli/releases/download/latest-linux/dcli_install.exe
 dcli_install.exe
 ```
 
