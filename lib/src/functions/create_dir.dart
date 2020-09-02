@@ -20,13 +20,10 @@ import 'function.dart';
 /// If the [path] already exists an exception is thrown.
 ///
 /// As a convenience [createDir] returns the same path
-/// that it was passed (as an [truepath]). This
-/// allows you to chain the createDir command.
-/// 
-/// The following will create the directory /tmp/new_home
-/// and the copy the contents /home/me into /tmp/new_home.
+/// that it was passed.
+///
 /// ```dart
-///  copy('/home/me', createDir('/tmp/new_home'));
+///  var path = createDir('/tmp/new_home'));
 /// ```
 ///
 
@@ -47,7 +44,7 @@ class _CreateDir extends DCliFunction {
     catch (e) {
       throw CreateDirException('Unable to create the directory ${absolute(path)}. Error: $e');
     }
-    return truepath(path);
+    return path;
   }
 }
 
