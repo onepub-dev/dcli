@@ -8,10 +8,7 @@ void main() {
 
     expect(content, isNotNull);
 
-    var actual =
-        read(join(Script.current.pathToProjectRoot, 'lib', 'src', path))
-            .toList()
-            .join('\n');
+    var actual = read(join(Script.current.pathToProjectRoot, 'lib', 'src', path)).toList().join('\n');
 
     /// the join trims the last \n
     actual += '\n';
@@ -21,7 +18,7 @@ void main() {
 
   test('Assets().list', () async {
     var path = 'assets/templates/';
-    var templates = Assets().list('*.dart', root: path);
+    var templates = Assets().list('*', root: path);
 
     var base = join(Script.current.pathToProjectRoot, 'lib', 'src', path);
 
@@ -32,6 +29,8 @@ void main() {
           join(base, 'cli_args.dart'),
           join(base, 'hello_world.dart'),
           join(base, 'README.md'),
+          join(base, 'analysis_options.yaml'),
+          join(base, 'pubspec.yaml.template'),
         ],
       ),
     );
