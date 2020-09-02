@@ -21,7 +21,7 @@ class ProcessHelper {
 
   /// returns the name of the process for the given pid.
   String getProcessName(int pid) {
-    if (Platform.isWindows) {
+    if (Settings().isWindows) {
       return _getWindowsProcessName(pid);
     } else {
       return _getLinuxProcessName(pid);
@@ -54,7 +54,7 @@ class ProcessHelper {
   /// Get the PID of the parent
   /// Returns -1 if a parent can't be obtained.
   int getParentPID(int childPid) {
-    if (Platform.isWindows) {
+    if (Settings().isWindows) {
       return _windowsGetParentPid(childPid);
     } else {
       return _linuxGetParentPID(childPid);
@@ -63,7 +63,7 @@ class ProcessHelper {
 
   /// returns true if the given [pid] is still running.
   bool isRunning(int pid) {
-    if (Platform.isWindows) {
+    if (Settings().isWindows) {
       return _windowsIsrunning(pid);
     } else {
       return _linuxisRunning(pid);
@@ -104,8 +104,7 @@ class ProcessHelper {
   List<_WindowsParentProcess> _windowsParentProcessList() {
     var parents = <_WindowsParentProcess>[];
 
-    var processes = 'wmic process get processid,parentprocessid,executablepath'
-        .toList(skipLines: 1);
+    var processes = 'wmic process get processid,parentprocessid,executablepath'.toList(skipLines: 1);
 
     for (var process in processes) {
       // Settings().verbose('wmic: $process');

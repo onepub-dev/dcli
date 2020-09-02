@@ -18,11 +18,10 @@ void main(List<String> args) {
   Settings().setVerbose(enabled: true);
 
   for (var path in paths) {
-    if (Platform.isWindows) {
+    if (Settings().isWindows) {
       var files = find(path).toList();
       if (files.isEmpty) {
-        printerr(
-            "touch: cannot open '$path' for reading: No such file or directory");
+        printerr("touch: cannot open '$path' for reading: No such file or directory");
         exit(1);
       } else {
         for (var file in files) {
@@ -31,8 +30,7 @@ void main(List<String> args) {
       }
     } else {
       if (!exists(path)) {
-        printerr(
-            "touch: cannot open '$path' for reading: No such file or directory");
+        printerr("touch: cannot open '$path' for reading: No such file or directory");
       } else {
         touch(path, create: true);
       }

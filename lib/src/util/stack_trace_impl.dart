@@ -27,8 +27,7 @@ class StackTraceImpl implements core.StackTrace {
         _workingDirectory = workingDirectory;
 
   ///
-  StackTraceImpl.fromStackTrace(this._stackTrace,
-      {String workingDirectory, int skipFrames = 0})
+  StackTraceImpl.fromStackTrace(this._stackTrace, {String workingDirectory, int skipFrames = 0})
       : _skipFrames = skipFrames,
         _workingDirectory = workingDirectory {
     if (_stackTrace is StackTraceImpl) {
@@ -69,8 +68,7 @@ class StackTraceImpl implements core.StackTrace {
   /// showing upto [methodCount] methods in the trace.
   /// [methodCount] defaults to 10.
 
-  String formatStackTrace(
-      {bool showPath = false, int methodCount = 10, int skipFrames = 0}) {
+  String formatStackTrace({bool showPath = false, int methodCount = 10, int skipFrames = 0}) {
     var formatted = <String>[];
     var count = 0;
 
@@ -85,8 +83,7 @@ class StackTraceImpl implements core.StackTrace {
       } else {
         sourceFile = basename(stackFrame.sourceFile.path);
       }
-      var newLine =
-          ('$sourceFile : ${stackFrame.details} : ${stackFrame.lineNo}');
+      var newLine = ('$sourceFile : ${stackFrame.details} : ${stackFrame.lineNo}');
 
       if (_workingDirectory != null) {
         formatted.add('file:///$_workingDirectory$newLine');
@@ -141,7 +138,7 @@ class StackTraceImpl implements core.StackTrace {
       var column = '0';
       var lineNo = '0';
       var sourcePath = sourceParts[1];
-      if (Platform.isWindows && source.startsWith('file:')) {
+      if (Settings().isWindows && source.startsWith('file:')) {
         switch (sourceParts.length) {
           case 3:
             sourcePath = _getWindowsPath(sourceParts);
@@ -179,11 +176,9 @@ class StackTraceImpl implements core.StackTrace {
         sourcePath = sourcePath.replaceAll('package:', '');
         // sourcePath = sourcePath.replaceFirst('<package_name>', '/lib');
 
-        frame = Stackframe(
-            File(sourcePath), int.parse(lineNo), int.parse(column), details);
+        frame = Stackframe(File(sourcePath), int.parse(lineNo), int.parse(column), details);
       } else {
-        frame = Stackframe(
-            File('<unknown>'), int.parse(lineNo), int.parse(column), details);
+        frame = Stackframe(File('<unknown>'), int.parse(lineNo), int.parse(column), details);
       }
       stackFrames.add(frame);
     }
@@ -215,12 +210,7 @@ class StackTraceImpl implements core.StackTrace {
   }
 }
 
-List<String> _excludedSource = [
-  join(rootPath, 'flutter'),
-  join(rootPath, 'ui'),
-  join(rootPath, 'async'),
-  'isolate'
-];
+List<String> _excludedSource = [join(rootPath, 'flutter'), join(rootPath, 'ui'), join(rootPath, 'async'), 'isolate'];
 
 ///
 bool isExcludedSource(Stackframe frame) {

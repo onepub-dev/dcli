@@ -49,8 +49,7 @@ class CreateCommand extends Command {
       }
       scriptIndex = i;
 
-      var scriptPath =
-          _validateArguments(selectedFlags, subarguments.sublist(scriptIndex));
+      var scriptPath = _validateArguments(selectedFlags, subarguments.sublist(scriptIndex));
 
       Script.createFromTemplate(
         templatePath: join(Settings().pathToTemplate, 'cli_args.dart'),
@@ -66,7 +65,7 @@ class CreateCommand extends Command {
     var project = VirtualProject.create(_script);
     project.build(background: !flagSet.isSet(ForegroundFlag()));
 
-    if (!Platform.isWindows) {
+    if (!Settings().isWindows) {
       chmod(755, p.join(_script.pathToScriptDirectory, _script.scriptname));
     }
 
@@ -80,25 +79,21 @@ class CreateCommand extends Command {
   /// returns the script path.
   String _validateArguments(List<Flag> selectedFlags, List<String> arguments) {
     if (arguments.length != 1) {
-      throw InvalidArguments(
-          'The create command takes only one argument. Found: ${arguments.join(',')}');
+      throw InvalidArguments('The create command takes only one argument. Found: ${arguments.join(',')}');
     }
     var scriptPath = arguments[0];
     if (extension(scriptPath) != '.dart') {
-      throw InvalidArguments(
-          "The create command expects a script path ending in '.dart'. Found: $scriptPath");
+      throw InvalidArguments("The create command expects a script path ending in '.dart'. Found: $scriptPath");
     }
 
     if (exists(scriptPath)) {
-      throw InvalidArguments(
-          'The script ${truepath(scriptPath)} already exists.');
+      throw InvalidArguments('The script ${truepath(scriptPath)} already exists.');
     }
     return arguments[0];
   }
 
   @override
-  String description() =>
-      'Creates a script file with a default pubspec annotation and a main entry point.';
+  String description() => 'Creates a script file with a default pubspec annotation and a main entry point.';
 
   @override
   String usage() => 'create [--foreground] <script path.dart>';

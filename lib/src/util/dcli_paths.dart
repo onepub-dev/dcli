@@ -20,7 +20,7 @@ class DCliPaths {
   }
 
   DCliPaths._internal() {
-    if (Platform.isWindows) {
+    if (Settings().isWindows) {
       dcliName = 'dcli.bat';
       dcliInstallName = 'dcli_install.bat';
       dcliCompleteName = 'dcli_complete.bat';

@@ -230,15 +230,14 @@ class TestFileSystem {
 
   void installDCli() {
     /// run pub get and only display errors.
-    '${DartSdk.pubExeName} global activate --source path $pwd'.start(
-        progress: Progress((line) => null, stderr: (line) => print(line)));
+    '${DartSdk.pubExeName} global activate --source path $pwd'
+        .start(progress: Progress((line) => null, stderr: (line) => print(line)));
 
-    EntryPoint().process(['install', '--nodart', '--quiet']);
+    EntryPoint().process(['install', '--nodart', '--quiet', '--noprivileges']);
 
     /// rewrite dependencies.yaml so that the dcli path points
     /// to the dev build directory
-    var dependencyFile =
-        join(Settings().pathToDCli, GlobalDependencies.filename);
+    var dependencyFile = join(Settings().pathToDCli, GlobalDependencies.filename);
     var lines = read(dependencyFile).toList();
 
     var newContent = <String>[];
@@ -321,16 +320,13 @@ class TestFileSystem {
     for (var command in required) {
       if (exists(join(testbinPath, command))) {
         // copy the existing command into the testzones .dcli/bin path
-        copy(join(testbinPath, command),
-            join(Settings().pathToDCliBin, command));
+        copy(join(testbinPath, command), join(Settings().pathToDCliBin, command));
       } else {
         /// compile and install the command
-        '${DCliPaths().dcliName} compile -i test/test_scripts/general/bin/$command.dart'
-            .run;
+        '${DCliPaths().dcliName} compile -i test/test_scripts/general/bin/$command.dart'.run;
         // copy it back to the dcli testbin so the next unit
         // test doesn't have to compile it.
-        copy(join(Settings().pathToDCliBin, command),
-            join(testbinPath, command));
+        copy(join(Settings().pathToDCliBin, command), join(testbinPath, command));
       }
     }
   }

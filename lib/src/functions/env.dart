@@ -220,7 +220,7 @@ class Env extends DCliFunction {
   void _setEnv(String name, String value) {
     if (value == null) {
       _envVars.remove(name);
-      if (Platform.isWindows) {
+      if (Settings().isWindows) {
         if (name == 'HOME' || name == 'APPDATA') {
           _envVars.remove('HOME');
           _envVars.remove('APPDATA');
@@ -229,7 +229,7 @@ class Env extends DCliFunction {
     } else {
       _envVars[name] = value;
 
-      if (Platform.isWindows) {
+      if (Settings().isWindows) {
         if (name == 'HOME' || name == 'APPDATA') {
           _envVars['HOME'] = value;
           _envVars['APPDATA'] = value;
@@ -247,7 +247,7 @@ class Env extends DCliFunction {
   String get delimiterForPATH {
     var separator = ':';
 
-    if (Platform.isWindows) {
+    if (Settings().isWindows) {
       separator = ';';
     }
     return separator;

@@ -6,7 +6,7 @@ import 'package:dcli/dcli.dart';
 
 /// Used by unit tests as a cross platform version of ls.
 void main(List<String> args) {
-  if (Platform.isWindows) {
+  if (Settings().isWindows) {
     for (var arg in args) {
       //  on windows powershell does not do glob expansion
       var files = find(arg).toList();

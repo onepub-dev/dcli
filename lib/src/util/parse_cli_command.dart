@@ -18,8 +18,7 @@ class ParsedCliCommand {
   ParsedCliCommand(String command, String workingDirectory) {
     workingDirectory ??= pwd;
     if (!exists(workingDirectory)) {
-      throw RunException(command, -1,
-          "The workingDirectory ${truepath(workingDirectory)} doesn't exists.");
+      throw RunException(command, -1, "The workingDirectory ${truepath(workingDirectory)} doesn't exists.");
     }
     var qargs = _parse(command);
     args = expandGlobs(qargs, workingDirectory);
@@ -27,12 +26,11 @@ class ParsedCliCommand {
 
   /// when passed individual args we respect any quotes that are
   /// passed as they have been put there with intent.
-  ParsedCliCommand.fromParsed(
-      this.cmd, List<String> rawArgs, String workingDirectory) {
+  ParsedCliCommand.fromParsed(this.cmd, List<String> rawArgs, String workingDirectory) {
     workingDirectory ??= pwd;
     if (!exists(workingDirectory)) {
-      throw RunException('$cmd ${rawArgs.join(' ')}', -1,
-          "The workingDirectory ${truepath(workingDirectory)} doesn't exists.");
+      throw RunException(
+          '$cmd ${rawArgs.join(' ')}', -1, "The workingDirectory ${truepath(workingDirectory)} doesn't exists.");
     }
 
     var qargs = _QArg.translate(rawArgs);
@@ -191,8 +189,7 @@ class _QArg {
   /// Note: under Windows powershell does perform glob expansion so we need
   /// to supress glob expansion.
   bool get needsExpansion {
-    return !Platform.isWindows &&
-        (arg.contains('*') || arg.contains('[') || arg.contains('?'));
+    return !Settings().isWindows && (arg.contains('*') || arg.contains('[') || arg.contains('?'));
   }
 
   static List<_QArg> translate(List<String> args) {
@@ -241,9 +238,7 @@ class _QArg {
       // the original arg.
       return [arg];
     } else {
-      return files
-          .where((f) => includeHidden || !isHidden(workingDirectory, f))
-          .map((f) => f.path);
+      return files.where((f) => includeHidden || !isHidden(workingDirectory, f)).map((f) => f.path);
     }
   }
 

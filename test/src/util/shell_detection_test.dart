@@ -11,7 +11,7 @@ void main() {
     print(shell.name);
 
     String expected;
-    if (Platform.isWindows) {
+    if (Settings().isWindows) {
       expected = CmdShell.shellName;
     } else if (Platform.isLinux) {
       expected = BashShell.shellName;

@@ -34,7 +34,7 @@ class PubCache {
     if (pubCacheEnv != null) {
       _pubCacheDir = pubCacheEnv;
     }
-    if (Platform.isWindows) {
+    if (Settings().isWindows) {
       _pubCacheDir ??= join('Pub', 'Cache');
       // doco says this is AppData but the dart installer seems to use LocalAppData
       _pubCachePath ??= truepath(join(env['LocalAppData'], _pubCacheDir));
