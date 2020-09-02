@@ -20,7 +20,7 @@ import 'commands.dart';
 class InstallCommand extends Command {
   static const _commandName = 'install';
 
-  final _installFlags = const [_NoCleanFlag(), _NoDartFlag(), _QuietFlag()];
+  final _installFlags = const [_NoCleanFlag(), _NoDartFlag(), _QuietFlag(), _NoPrivilegesFlag()];
 
   /// holds the set of flags passed to the compile command.
   Flags flagSet = Flags();
@@ -28,6 +28,8 @@ class InstallCommand extends Command {
   /// set by the [_QuietFlag].
   /// if [quiet] is true only errors are displayed during the install.
   bool quiet = false;
+
+  bool requirePrivileges = true;
 
   /// ctor.
   InstallCommand() : super(_commandName);
@@ -37,11 +39,6 @@ class InstallCommand extends Command {
     var scriptIndex = 0;
 
     var shell = Shell.current;
-
-    // if (!shell.isPrivilegedUser) {
-    //   qprint(red(shell.privilegesRequiredMessage('dcli_install')));
-    //   exit(1);
-    // }
 
     // check for any flags
     int i;
@@ -68,8 +65,15 @@ class InstallCommand extends Command {
     scriptIndex = i;
 
     if (subarguments.length != scriptIndex) {
-      throw InvalidArguments(
-          "'dcli install' does not take any arguments. Found $subarguments");
+      throw InvalidArguments("'dcli install' does not take any arguments. Found $subarguments");
+    }
+
+    requirePrivileges = !flagSet.isSet(_NoPrivilegesFlag());
+
+    /// We need to be privilidged to create the dcli symlink
+    if (requirePrivileges && !shell.isPrivilegedUser) {
+      qprint(red(shell.privilegesRequiredMessage('dcli_install')));
+      exit(1);
     }
 
     quiet = flagSet.isSet(_QuietFlag());
@@ -89,6 +93,7 @@ class InstallCommand extends Command {
       exit(1);
     }
     var dartWasInstalled = shell.install();
+
     // Create the ~/.dcli root.
     if (!exists(Settings().pathToDCli)) {
       qprint(blue('Creating ${Settings().pathToDCli}'));
@@ -99,8 +104,7 @@ class InstallCommand extends Command {
     qprint('');
 
     // Create dependencies.yaml
-    var blue2 = blue(
-        'Creating ${join(Settings().pathToDCli, GlobalDependencies.filename)} with default packages.');
+    var blue2 = blue('Creating ${join(Settings().pathToDCli, GlobalDependencies.filename)} with default packages.');
     qprint(blue2);
     GlobalDependencies.createDefault();
 
@@ -109,22 +113,19 @@ class InstallCommand extends Command {
       qprint('  ${dep.rehydrate()}');
     }
     qprint('');
-    qprint(
-        'Edit ${GlobalDependencies.filename} to add/remove/update your default dependencies.');
+    qprint('Edit ${GlobalDependencies.filename} to add/remove/update your default dependencies.');
 
     /// create the template directory.
     if (!exists(Settings().pathToTemplate)) {
       qprint('');
-      qprint(blue(
-          'Creating Template directory in: ${Settings().pathToTemplate}.'));
+      qprint(blue('Creating Template directory in: ${Settings().pathToTemplate}.'));
       initTemplates();
     }
 
     /// create the cache directory.
     if (!exists(Settings().pathToDCliCache)) {
       qprint('');
-      qprint(
-          blue('Creating Cache directory in: ${Settings().pathToDCliCache}.'));
+      qprint(blue('Creating Cache directory in: ${Settings().pathToDCliCache}.'));
       createDir(Settings().pathToDCliCache);
     }
 
@@ -137,8 +138,7 @@ class InstallCommand extends Command {
 
       // check if shell can add a path.
       if (!shell.hasStartScript || !shell.addToPATH(binPath)) {
-        qprint(orange(
-            'If you want to use dcli compile -i to install scripts, add $binPath to your PATH.'));
+        qprint(orange('If you want to use dcli compile -i to install scripts, add $binPath to your PATH.'));
       }
     }
 
@@ -153,7 +153,7 @@ class InstallCommand extends Command {
     // If we just installed dart then we don't need
     // to check the dcli paths.
     if (!dartWasInstalled) {
-      var dcliLocation = which(DCliPaths().dcliName, first: true).firstLine;
+      var dcliLocation = which(DCliPaths().dcliName).firstLine;
       // check if dcli is on the path
       if (dcliLocation == null) {
         print('');
@@ -171,12 +171,7 @@ class InstallCommand extends Command {
         var dcliPath = dcliLocation;
         qprint(blue('dcli found in : $dcliPath.'));
 
-        // link so all users can run dcli
-        // We use the location of dart exe and add dcli symlink
-        // to the same location.
-        // CONSIDER: this is going to require sudo to install???
-        //var linkPath = join(dirname(DartSdk().exePath), 'dcli');
-        //symlink(dcliPath, linkPath);
+        symlinkDCli(shell, dcliPath);
       }
     }
     qprint('');
@@ -190,8 +185,7 @@ class InstallCommand extends Command {
 
     if (dartWasInstalled) {
       qprint('');
-      qprint(
-          red('You need to restart your shell for the adjusted PATH to work.'));
+      qprint(red('You need to restart your shell for the adjusted PATH to work.'));
       qprint('');
     }
 
@@ -216,13 +210,22 @@ class InstallCommand extends Command {
     return 0;
   }
 
+  /// Symlink so dcli works under sudo.
+  /// We use the location of dart exe and add dcli symlink
+  /// to the same location.
+  void symlinkDCli(Shell shell, String dcliPath) {
+    if (shell.isPrivilegedUser && !Platform.isWindows) {
+      var linkPath = join(dirname(DartSdk().pathToDartExe), 'dcli');
+      symlink(dcliPath, linkPath);
+    }
+  }
+
   void qprint(String message) {
     if (!quiet) print(message);
   }
 
   @override
-  String description() =>
-      """Running 'dcli install' completes the installation of dcli.""";
+  String description() => """Running 'dcli install' completes the installation of dcli.""";
 
   @override
   String usage() => 'install';
@@ -238,15 +241,15 @@ class InstallCommand extends Command {
   }
 
   void _fixPermissions(Shell shell) {
-    // if (shell.isPrivilegedUser) {
-    //   if (!Platform.isWindows) {
-    //     var user = shell.loggedInUser;
-    //     if (user != 'root') {
-    //       'chmod -R $user:$user ${Settings().dcliPath}'.run;
-    //       'chmod -R $user:$user ${PubCache().path}'.run;
-    //     }
-    //   }
-    // }
+    if (shell.isPrivilegedUser) {
+      if (!Platform.isWindows) {
+        var user = shell.loggedInUser;
+        if (user != 'root') {
+          'chmod -R $user:$user ${Settings().pathToDCli}'.run;
+          'chmod -R $user:$user ${PubCache().pathTo}'.run;
+        }
+      }
+    }
   }
 
   /// Checks if the templates directory exists and .dcli and if not creates
@@ -303,6 +306,21 @@ class _QuietFlag extends Flag {
   @override
   String description() {
     return '''Runs the install in quiet mode. Only errors are displayed''';
+  }
+}
+
+class _NoPrivilegesFlag extends Flag {
+  static const _flagName = 'noprivileges';
+
+  const _NoPrivilegesFlag() : super(_flagName);
+
+  @override
+  String get abbreviation => 'np';
+
+  @override
+  String description() {
+    return '''Allows the install to be run without privileges. This flag is primarily used for unit testing. 
+      Some features will not be available if you run in this mode.''';
   }
 }
 
