@@ -1,4 +1,5 @@
-import 'dart:io';
+
+import '../settings.dart';
 
 /// platform specific names of the dcli commands.
 class DCliPaths {

@@ -4,6 +4,7 @@ import 'dart:io';
 
 import 'package:path/path.dart';
 
+import '../settings.dart';
 import 'truepath.dart';
 
 /// Provides dart stack frame handling.
