@@ -12,7 +12,8 @@ void main() {
   }, skip: true);
 
   test('range', () {
-    var result = ask('Range Test: How old are you', defaultValue: '5', validator: AskValidatorRange(4, 7));
+    var result = ask('Range Test: How old are you',
+        defaultValue: '5', validator: AskValidatorRange(4, 7));
     print('result: $result');
   }, skip: true);
 

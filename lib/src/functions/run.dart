@@ -74,10 +74,14 @@ import 'pwd.dart';
 ///      process data rather than just outputing it to the cli.
 ///
 int run(String commandLine,
-    {bool runInShell = false, bool nothrow = false, bool privileged = false, String workingDirectory}) {
+    {bool runInShell = false,
+    bool nothrow = false,
+    bool privileged = false,
+    String workingDirectory}) {
   workingDirectory ??= pwd;
 
-  var runnable = RunnableProcess.fromCommandLine(commandLine, workingDirectory: workingDirectory);
+  var runnable = RunnableProcess.fromCommandLine(commandLine,
+      workingDirectory: workingDirectory);
 
   return runnable
       .run(
@@ -139,7 +143,8 @@ Progress startFromArgs(
 }) {
   progress ??= Progress.print();
   workingDirectory ??= pwd;
-  var runnable = RunnableProcess.fromCommandArgs(command, args, workingDirectory: workingDirectory);
+  var runnable = RunnableProcess.fromCommandArgs(command, args,
+      workingDirectory: workingDirectory);
 
   return runnable.run(
     progress: progress,
@@ -197,7 +202,8 @@ Progress start(String commandLine,
     bool privileged = false,
     String workingDirectory}) {
   workingDirectory ??= pwd;
-  var runnable = RunnableProcess.fromCommandLine(commandLine, workingDirectory: workingDirectory);
+  var runnable = RunnableProcess.fromCommandLine(commandLine,
+      workingDirectory: workingDirectory);
 
   return runnable.run(
     progress: progress,
@@ -229,7 +235,8 @@ Progress startStreaming(String commandLine,
     bool privileged = false,
     String workingDirectory}) {
   workingDirectory ??= pwd;
-  var runnable = RunnableProcess.fromCommandLine(commandLine, workingDirectory: workingDirectory);
+  var runnable = RunnableProcess.fromCommandLine(commandLine,
+      workingDirectory: workingDirectory);
 
   return runnable.runStreaming(
     progress: progress,

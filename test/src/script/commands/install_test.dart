@@ -92,7 +92,8 @@ void main() {
 
         var profilePath = join(HOME, '.profile');
         if (exists(profilePath)) {
-          var exportLines = read(profilePath).toList()..retainWhere((line) => line.startsWith('export'));
+          var exportLines = read(profilePath).toList()
+            ..retainWhere((line) => line.startsWith('export'));
           expect(exportLines, contains(export));
         }
         Env.reset();
@@ -111,7 +112,8 @@ void checkInstallStructure(TestFileSystem fs) {
 
   expect(exists(truepath(HOME, '.dcli', 'templates')), equals(true));
 
-  var templates = find('*.dart', root: join('${fs.home}/.dcli', 'templates')).toList();
+  var templates =
+      find('*.dart', root: join('${fs.home}/.dcli', 'templates')).toList();
 
   var base = join('${fs.home}/.dcli', 'templates');
 
@@ -128,9 +130,11 @@ void checkInstallStructure(TestFileSystem fs) {
     ),
   );
 
-  expect(exists(truepath(HOME, '.dcli', GlobalDependencies.filename)), equals(true));
+  expect(exists(truepath(HOME, '.dcli', GlobalDependencies.filename)),
+      equals(true));
 
-  var content = read(truepath(HOME, '.dcli', GlobalDependencies.filename)).toList();
+  var content =
+      read(truepath(HOME, '.dcli', GlobalDependencies.filename)).toList();
   var expected = ['dependencies:'];
 
   for (var dep in GlobalDependencies.defaultDependencies) {
@@ -141,7 +145,8 @@ void checkInstallStructure(TestFileSystem fs) {
       expected.add('  ${dep.name}:');
       expected.add('    path: $pwd');
     } else {
-      expected.add('  ${dep.name}: ${(dep.reference as HostedReference).versionConstraint.toString()}');
+      expected.add(
+          '  ${dep.name}: ${(dep.reference as HostedReference).versionConstraint.toString()}');
     }
   }
 

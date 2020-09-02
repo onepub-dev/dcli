@@ -31,7 +31,8 @@ class DoctorCommand extends Command {
       project = VirtualProject.create(Script.fromFile(scriptPath));
     }
     if (subarguments.length > 1) {
-      throw InvalidArguments("'dcli doctor' takes zero or one arguments. Found $subarguments");
+      throw InvalidArguments(
+          "'dcli doctor' takes zero or one arguments. Found $subarguments");
     }
 
     _colprint(['DCli version', '${Settings().version}']);
@@ -86,7 +87,8 @@ class DoctorCommand extends Command {
     _showPermissions('.dcli', Settings().pathToDCli);
     _showPermissions('cache', Settings().pathToDCliCache);
 
-    _showPermissions(GlobalDependencies.filename, join(Settings().pathToDCli, GlobalDependencies.filename));
+    _showPermissions(GlobalDependencies.filename,
+        join(Settings().pathToDCli, GlobalDependencies.filename));
 
     _showPermissions('templates', Settings().pathToTemplate);
   }
@@ -126,15 +128,26 @@ class DoctorCommand extends Command {
 
   void printExePaths() {
     var dcliPath = which('dcli').firstLine;
-    _colprint(['dcli path', '${dcliPath == null ? 'Not found' : privatePath(dcliPath)}']);
+    _colprint([
+      'dcli path',
+      '${dcliPath == null ? 'Not found' : privatePath(dcliPath)}'
+    ]);
     _colprint(['dart exe path', '${privatePath(DartSdk().pathToDartExe)}']);
     var dartPath = which(DartSdk.dartExeName, first: true).firstLine;
-    _colprint(['dart path', '${privatePath(DartSdk().pathToDartExe)}', 'which: ${privatePath(dartPath)}']);
-    var dart2NativePath = which(DartSdk.dart2NativeExeName, first: true).firstLine;
+    _colprint([
+      'dart path',
+      '${privatePath(DartSdk().pathToDartExe)}',
+      'which: ${privatePath(dartPath)}'
+    ]);
+    var dart2NativePath =
+        which(DartSdk.dart2NativeExeName, first: true).firstLine;
 
     if (dart2NativePath != null) {
-      _colprint(
-          ['dart2Native path', '${privatePath(DartSdk().dart2NativePath)}', 'which: ${privatePath(dart2NativePath)}']);
+      _colprint([
+        'dart2Native path',
+        '${privatePath(DartSdk().dart2NativePath)}',
+        'which: ${privatePath(dart2NativePath)}'
+      ]);
     } else {
       _colprint([
         'dart2Native path',
@@ -145,7 +158,11 @@ class DoctorCommand extends Command {
     var pubPath = which(DartSdk.pubExeName, first: true).firstLine;
 
     if (pubPath != null) {
-      _colprint(['pub path', '${privatePath(DartSdk().pathToPubExe)}', 'which: ${privatePath(pubPath)}']);
+      _colprint([
+        'pub path',
+        '${privatePath(DartSdk().pathToPubExe)}',
+        'which: ${privatePath(pubPath)}'
+      ]);
       _colprint(['Pub cache', '${privatePath(PubCache().pathTo)}']);
     } else {
       _colprint([
@@ -157,7 +174,8 @@ class DoctorCommand extends Command {
 
   void printPlatform() {
     _colprint(['OS', '${Platform.operatingSystem}']);
-    print(Format.row(['OS Version', '${Platform.operatingSystemVersion}'], widths: [17, -1]));
+    print(Format.row(['OS Version', '${Platform.operatingSystemVersion}'],
+        widths: [17, -1]));
     _colprint(['Path separator', '${Platform.pathSeparator}']);
     print('');
     _colprint(['dart version', '${DartSdk().version}']);
@@ -169,7 +187,8 @@ class DoctorCommand extends Command {
   }
 
   @override
-  String description() => """Running 'dcli doctor' provides diagnostic information on your install 
+  String description() =>
+      """Running 'dcli doctor' provides diagnostic information on your install 
    and optionally a specific script.""";
 
   @override

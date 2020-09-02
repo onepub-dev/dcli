@@ -29,9 +29,11 @@ class LinuxDCliInstaller {
         if (shell.loggedInUser != 'root') {
           // add dart to root path.
           // The tricks we have to play to get dart on the root users path.
-          'echo export PATH="\$PATH:/usr/lib/dart/bin" | sudo tee -a /root/.bashrc'.run;
+          'echo export PATH="\$PATH:/usr/lib/dart/bin" | sudo tee -a /root/.bashrc'
+              .run;
           // give root its own pub-cache
-          'echo export PATH="\$PATH":"/root/.pub-cache/bin" | sudo tee -a /root/.bashrc'.run;
+          'echo export PATH="\$PATH":"/root/.pub-cache/bin" | sudo tee -a /root/.bashrc'
+              .run;
         }
 
         print('You will need to restart your shell for dart to be available');
@@ -43,14 +45,16 @@ class LinuxDCliInstaller {
         _installDartWithApt();
       } else {
         Settings().verbose('Apt not found. Installing from archive');
-        var dartInstallDir = DartSdk().installFromArchive('/usr/lib/dart', askUser: false);
+        var dartInstallDir =
+            DartSdk().installFromArchive('/usr/lib/dart', askUser: false);
         print('Installed dart to: $dartInstallDir');
       }
 
       installedDart = true;
     } else {
       // dart is already installed.
-      Settings().verbose("Found dart at: ${which('dart').firstLine} and as such will not install dart.");
+      Settings().verbose(
+          "Found dart at: ${which('dart').firstLine} and as such will not install dart.");
     }
 
     // now activate dcli.
@@ -70,7 +74,8 @@ class LinuxDCliInstaller {
     'apt update'.run;
     'apt install apt-transport-https'.run;
 
-    "sh -c 'wget -qO- https://dl-ssl.google.com/linux/linux_signing_key.pub | apt-key add -'".run;
+    "sh -c 'wget -qO- https://dl-ssl.google.com/linux/linux_signing_key.pub | apt-key add -'"
+        .run;
 
     "sh -c 'wget -qO- https://storage.googleapis.com/download.dartlang.org/linux/debian/dart_stable.list > /etc/apt/sources.list.d/dart_stable.list'"
         .run;

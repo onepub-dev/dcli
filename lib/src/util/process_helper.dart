@@ -104,7 +104,8 @@ class ProcessHelper {
   List<_WindowsParentProcess> _windowsParentProcessList() {
     var parents = <_WindowsParentProcess>[];
 
-    var processes = 'wmic process get processid,parentprocessid,executablepath'.toList(skipLines: 1);
+    var processes = 'wmic process get processid,parentprocessid,executablepath'
+        .toList(skipLines: 1);
 
     for (var process in processes) {
       // Settings().verbose('wmic: $process');
