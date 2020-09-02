@@ -27,8 +27,7 @@ void main() {
       var exit = -1;
       try {
         // with a virtual pubspec
-        exit = EntryPoint()
-            .process(['run', 'test/test_scripts/general/bin/which.dart', 'ls']);
+        exit = EntryPoint().process(['run', 'test/test_scripts/general/bin/which.dart', 'ls']);
       } on DCliException catch (e) {
         print(e);
       }
@@ -42,8 +41,7 @@ void main() {
       try {
         print(pwd);
 
-        exit = EntryPoint().process(
-            ['-v', 'run', 'test/test_scripts/local_pubspec/hello_world.dart']);
+        exit = EntryPoint().process(['-v', 'run', 'test/test_scripts/local_pubspec/hello_world.dart']);
       } on DCliException catch (e) {
         print(e);
       }
@@ -57,11 +55,7 @@ void main() {
       try {
         print(pwd);
 
-        exit = EntryPoint().process([
-          '-v',
-          'run',
-          'test/test_scripts/traditional_project/bin/traditional.dart'
-        ]);
+        exit = EntryPoint().process(['-v', 'run', 'test/test_scripts/traditional_project/bin/traditional.dart']);
       } on DCliException catch (e) {
         print(e);
       }
@@ -75,11 +69,7 @@ void main() {
       try {
         print(pwd);
 
-        exit = EntryPoint().process([
-          '-v',
-          'run',
-          'test/test_scripts/traditional_project/bin/nested/traditional.dart'
-        ]);
+        exit = EntryPoint().process(['-v', 'run', 'test/test_scripts/traditional_project/bin/nested/traditional.dart']);
       } on DCliException catch (e) {
         print(e);
       }
@@ -93,17 +83,17 @@ void main() {
       try {
         print(pwd);
 
-        exit = EntryPoint().process([
-          '-v',
-          'run',
-          'test/test_scripts/traditional_project/example/traditional.dart'
-        ]);
+        exit = EntryPoint().process(['-v', 'run', 'test/test_scripts/traditional_project/example/traditional.dart']);
       } on DCliException catch (e) {
         print(e);
       }
       expect(exit, equals(0));
     });
-  });
+
+    /// this script no longer exists after changing the rules about how we
+    /// locate pubspec.yaml files.
+    /// TODO: do we still need a test like this one?
+  }, skip: true);
 
   test('run  with traditional dart project structure - tool', () {
     TestFileSystem().withinZone((fs) {
@@ -111,11 +101,7 @@ void main() {
       try {
         print(pwd);
 
-        exit = EntryPoint().process([
-          '-v',
-          'run',
-          'test/test_scripts/traditional_project/tool/traditional.dart'
-        ]);
+        exit = EntryPoint().process(['-v', 'run', 'test/test_scripts/traditional_project/tool/traditional.dart']);
       } on DCliException catch (e) {
         print(e);
       }
