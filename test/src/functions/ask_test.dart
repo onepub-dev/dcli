@@ -12,8 +12,22 @@ void main() {
   }, skip: true);
 
   test('range', () {
-    var result = ask('Range Test: How old are you',
-        defaultValue: '5', validator: AskRange(4, 7));
+    var result = ask('Range Test: How old are you', defaultValue: '5', validator: AskValidatorRange(4, 7));
+    print('result: $result');
+  }, skip: true);
+
+  test('confirm no default', () {
+    var result = confirm('Are you good?');
+    print('result: $result');
+  }, skip: true);
+
+  test('confirm default=true', () {
+    var result = confirm('Are you good?', defaultValue: true);
+    print('result: $result');
+  }, skip: true);
+
+  test('confirm default=false', () {
+    var result = confirm('Are you good?', defaultValue: false);
     print('result: $result');
   }, skip: true);
 }

@@ -98,7 +98,7 @@ Progress find(
 
 /// Implementation for the [_find] function.
 class Find extends DCliFunction {
-  Progress _find(
+  Progress _findOld(
     String pattern, {
     bool caseSensitive = false,
     bool recursive = true,
@@ -144,6 +144,110 @@ class Find extends DCliFunction {
     return progress;
   }
 
+  Progress _find(
+    String pattern, {
+    bool caseSensitive = false,
+    bool recursive = true,
+    String root = '.',
+    Progress progress,
+    List<FileSystemEntityType> types = const [FileSystemEntityType.file],
+    bool includeHidden,
+  }) {
+    return waitForEx<Progress>(_innerFind(pattern,
+        caseSensitive: caseSensitive,
+        recursive: recursive,
+        root: root,
+        progress: progress,
+        types: types,
+        includeHidden: includeHidden));
+  }
+
+  Future<Progress> _innerFind(
+    String pattern, {
+    bool caseSensitive = false,
+    bool recursive = true,
+    String root = '.',
+    Progress progress,
+    List<FileSystemEntityType> types = const [FileSystemEntityType.file],
+    bool includeHidden,
+  }) async {
+    var matcher = _PatternMatcher(pattern, caseSensitive: caseSensitive);
+    if (root == '.') {
+      root = pwd;
+    }
+
+    try {
+      progress ??= Progress.devNull();
+
+      Settings().verbose(
+          'find: pwd: $pwd ${absolute(root)} pattern: $pattern caseSensitive: $caseSensitive recursive: $recursive types: $types ');
+      var nextLevel = <FileSystemEntity>[]..length = 100;
+      var childDirectories = <FileSystemEntity>[]..length = 100;
+      await _processDirectory(root, recursive, types, matcher, includeHidden, progress, childDirectories);
+
+      while (childDirectories.isNotEmpty) {
+        zeroElements(nextLevel);
+        for (var directory in childDirectories) {
+          if (directory == null) break;
+          await _processDirectory(directory.path, recursive, types, matcher, includeHidden, progress, nextLevel);
+        }
+        copyInto(childDirectories, nextLevel);
+      }
+    } finally {
+      progress.close();
+    }
+    return progress;
+  }
+
+  Future<void> _processDirectory(String root, bool recursive, List<FileSystemEntityType> types, _PatternMatcher matcher,
+      bool includeHidden, Progress progress, List<FileSystemEntity> nextLevel) async {
+    var lister = Directory(root).list(recursive: false);
+    var nextLevelIndex = 0;
+
+    var completer = Completer<void>();
+
+    lister.listen(
+      (entity) async {
+        var type = FileSystemEntity.typeSync(entity.path);
+        if (types.contains(type) &&
+            matcher.match(basename(entity.path)) &&
+            _allowed(
+              root,
+              entity,
+              includeHidden: includeHidden,
+            )) {
+          progress.addToStdout(normalize(entity.path));
+        }
+
+        /// If we are recursing then we need to add any directories
+        /// to the list of childDirectories that need to be recursed.
+        if (recursive && type == FileSystemEntityType.directory) {
+          // processing the /proc directory causes dart to crash
+          // https://github.com/dart-lang/sdk/issues/43176
+          if (entity.path != '/proc' && entity.path != '/dev' && entity.path != '/snap' && entity.path != '/sys') {
+            if (nextLevel.length > nextLevelIndex) {
+              nextLevel[nextLevelIndex] = entity;
+            } else {
+              nextLevel.add(entity);
+            }
+          }
+        }
+      },
+      // should also register onError
+      onDone: () => completer.complete(null),
+      onError: (Object e, StackTrace st) {
+        /// check for and ignore permission denied.
+        if (e is FileSystemException && e.osError.errorCode == 13) {
+          Settings().verbose('Permission denied: ${e.path}');
+        } else {
+          throw e;
+        }
+      },
+    );
+
+    await completer.future;
+  }
+
   bool _allowed(String root, FileSystemEntity entity, {@required bool includeHidden}) {
     return includeHidden || !_isHidden(root, entity);
   }
@@ -163,6 +267,23 @@ class Find extends DCliFunction {
       }
     }
     return isHidden;
+  }
+
+  void zeroElements(List<FileSystemEntity> nextLevel) {
+    for (var i = 0; i < nextLevel.length; i++) {
+      nextLevel[i] = null;
+    }
+  }
+
+  void copyInto(List<FileSystemEntity> childDirectories, List<FileSystemEntity> nextLevel) {
+    zeroElements(childDirectories);
+    for (var i = 0; i < nextLevel.length; i++) {
+      if (childDirectories.length > i) {
+        childDirectories[i] = nextLevel[i];
+      } else {
+        childDirectories.add(nextLevel[i]);
+      }
+    }
   }
 }
 

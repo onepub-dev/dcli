@@ -1,6 +1,5 @@
-import 'dart:io';
-
 @Timeout(Duration(seconds: 600))
+import 'dart:io';
 import 'package:dcli/src/util/progress.dart';
 import 'package:test/test.dart' as t;
 import 'package:dcli/dcli.dart';
@@ -9,6 +8,90 @@ import 'package:test/test.dart';
 import '../util/test_file_system.dart';
 
 void main() {
+  t.group('Find', () {
+    t.test('manualRecursion', () async {
+      var foundDirs = find('*',
+              root: '/',
+              recursive: false,
+              types: <FileSystemEntityType>[FileSystemEntityType.directory],
+              includeHidden: true)
+          .toList();
+
+      var rootDirs = <String>[
+        '/boot',
+        '/lib',
+        '/cdrom',
+        '/proc',
+        '/root',
+        '/run',
+        '/etc',
+        '/snap',
+        '/bin',
+        '/usr',
+        '/lib64',
+        '/media',
+        '/lib32',
+        '/dev',
+        '/var',
+        '/home',
+        '/opt',
+        '/srv',
+        '/libx32',
+        '/tmp',
+        '/mnt',
+        '/sbin',
+        '/sys',
+      ];
+
+      expect(foundDirs, t.unorderedEquals(rootDirs));
+    });
+
+    test('Recurse entire filesystem', () {
+      var count = 1;
+      find(
+        '*',
+        root: '/',
+        recursive: true,
+        types: <FileSystemEntityType>[FileSystemEntityType.directory],
+        includeHidden: true,
+        progress: Progress((line) {
+          if (count++ % 1000 == 0) print(count);
+        }),
+      );
+    }, skip: false); // takes too long to run
+
+    // test('hidden a', () {
+    //   var count = 0;
+    //   var withHidden = find(
+    //     '*',
+    //     root: '/',
+    //     recursive: true,
+    //     types: <FileSystemEntityType>[FileSystemEntityType.directory],
+    //     includeHidden: true,
+    //     progress: Progress((line) {
+    //       if (count++ % 1000 == 0) print(count);
+    //     }),
+    //   ).toList();
+    //   count = 1;
+    //   var withOutHidden = find(
+    //     '*',
+    //     root: '/',
+    //     recursive: true,
+    //     types: <FileSystemEntityType>[FileSystemEntityType.directory],
+    //     includeHidden: false,
+    //     progress: Progress((line) {
+    //       if (count++ % 1000 == 0) print(count);
+    //     }),
+    //   ).toList();
+
+    //   // print(withHidden.length);
+
+    //   expect(withHidden, t.isNot(t.unorderedEquals(withOutHidden)));
+
+    //   expect(withHidden.length, t.lessThan(withOutHidden.length));
+    // }, skip: false); // takes
+  });
+
   t.group('Find', () {
     t.test('Search for *.txt files in top directory ', () {
       TestFileSystem().withinZone((fs) {
