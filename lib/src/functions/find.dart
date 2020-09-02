@@ -174,6 +174,8 @@ class Find extends DCliFunction {
     var matcher = _PatternMatcher(pattern, caseSensitive: caseSensitive);
     if (root == '.') {
       root = pwd;
+    } else {
+      root = truepath(root);
     }
 
     try {
@@ -182,14 +184,20 @@ class Find extends DCliFunction {
       Settings().verbose(
           'find: pwd: $pwd ${absolute(root)} pattern: $pattern caseSensitive: $caseSensitive recursive: $recursive types: $types ');
       var nextLevel = <FileSystemEntity>[]..length = 100;
+      var singleDirectory = <FileSystemEntity>[]..length = 100;
       var childDirectories = <FileSystemEntity>[]..length = 100;
-      await _processDirectory(root, recursive, types, matcher, includeHidden, progress, childDirectories);
+      await _processDirectory(root, root, recursive, types, matcher, includeHidden, progress, childDirectories);
 
-      while (childDirectories.isNotEmpty) {
+      while (childDirectories[0] != null) {
         zeroElements(nextLevel);
         for (var directory in childDirectories) {
-          if (directory == null) break;
-          await _processDirectory(directory.path, recursive, types, matcher, includeHidden, progress, nextLevel);
+          if (directory == null) {
+            break;
+          }
+          await _processDirectory(
+              root, directory.path, recursive, types, matcher, includeHidden, progress, singleDirectory);
+          appendTo(nextLevel, singleDirectory);
+          zeroElements(singleDirectory);
         }
         copyInto(childDirectories, nextLevel);
       }
@@ -199,9 +207,9 @@ class Find extends DCliFunction {
     return progress;
   }
 
-  Future<void> _processDirectory(String root, bool recursive, List<FileSystemEntityType> types, _PatternMatcher matcher,
-      bool includeHidden, Progress progress, List<FileSystemEntity> nextLevel) async {
-    var lister = Directory(root).list(recursive: false);
+  Future<void> _processDirectory(String root, String currentDirectory, bool recursive, List<FileSystemEntityType> types,
+      _PatternMatcher matcher, bool includeHidden, Progress progress, List<FileSystemEntity> nextLevel) async {
+    var lister = Directory(currentDirectory).list(recursive: false);
     var nextLevelIndex = 0;
 
     var completer = Completer<void>();
@@ -216,7 +224,7 @@ class Find extends DCliFunction {
               entity,
               includeHidden: includeHidden,
             )) {
-          progress.addToStdout(normalize(entity.path));
+          progress.addToStdout(entity.path);
         }
 
         /// If we are recursing then we need to add any directories
@@ -226,7 +234,7 @@ class Find extends DCliFunction {
           // https://github.com/dart-lang/sdk/issues/43176
           if (entity.path != '/proc' && entity.path != '/dev' && entity.path != '/snap' && entity.path != '/sys') {
             if (nextLevel.length > nextLevelIndex) {
-              nextLevel[nextLevelIndex] = entity;
+              nextLevel[nextLevelIndex++] = entity;
             } else {
               nextLevel.add(entity);
             }
@@ -270,7 +278,7 @@ class Find extends DCliFunction {
   }
 
   void zeroElements(List<FileSystemEntity> nextLevel) {
-    for (var i = 0; i < nextLevel.length; i++) {
+    for (var i = 0; i < nextLevel.length && nextLevel[i] != null; i++) {
       nextLevel[i] = null;
     }
   }
@@ -284,6 +292,30 @@ class Find extends DCliFunction {
         childDirectories.add(nextLevel[i]);
       }
     }
+  }
+
+  void appendTo(List<FileSystemEntity> nextLevel, List<FileSystemEntity> singleDirectory) {
+    var index = firstAvailable(nextLevel);
+
+    for (var i = 0; i < singleDirectory.length; i++) {
+      if (singleDirectory[i] == null) {
+        break;
+      }
+      if (index >= nextLevel.length) {
+        nextLevel.add(singleDirectory[i]);
+        index++;
+      } else {
+        nextLevel[index++] = singleDirectory[i];
+      }
+    }
+  }
+
+  int firstAvailable(List<FileSystemEntity> nextLevel) {
+    var firstAvailable = 0;
+    while (firstAvailable < nextLevel.length && nextLevel[firstAvailable] != null) {
+      firstAvailable++;
+    }
+    return firstAvailable;
   }
 }
 

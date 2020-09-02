@@ -47,18 +47,24 @@ void main() {
     });
 
     test('Recurse entire filesystem', () {
-      var count = 1;
+      // var count = 1;
+
+      print(DateTime.now());
       find(
         '*',
         root: '/',
         recursive: true,
         types: <FileSystemEntityType>[FileSystemEntityType.directory],
         includeHidden: true,
-        progress: Progress((line) {
-          if (count++ % 1000 == 0) print(count);
-        }),
+        // progress: Progress((line) {
+        // if (count++ % 10000 == 0) print(count);
+        // if (count == 100000) {
+        //   //print(DateTime.now());
+        //  // exit(1);
+        // }
+        // }),
       );
-    }, skip: false); // takes too long to run
+    }, skip: true); // takes too long to run
 
     // test('hidden a', () {
     //   var count = 0;
