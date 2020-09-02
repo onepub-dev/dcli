@@ -98,52 +98,6 @@ Progress find(
 
 /// Implementation for the [_find] function.
 class Find extends DCliFunction {
-  Progress _findOld(
-    String pattern, {
-    bool caseSensitive = false,
-    bool recursive = true,
-    String root = '.',
-    Progress progress,
-    List<FileSystemEntityType> types = const [FileSystemEntityType.file],
-    bool includeHidden,
-  }) {
-    var matcher = _PatternMatcher(pattern, caseSensitive: caseSensitive);
-    if (root == '.') {
-      root = pwd;
-    }
-
-    try {
-      progress ??= Progress.devNull();
-
-      Settings().verbose(
-          'find: pwd: $pwd ${absolute(root)} pattern: $pattern caseSensitive: $caseSensitive recursive: $recursive types: $types ');
-
-      var completer = Completer<void>();
-      var lister = Directory(root).list(recursive: recursive);
-
-      lister.listen((entity) {
-        var type = FileSystemEntity.typeSync(entity.path);
-        if (types.contains(type) &&
-            matcher.match(basename(entity.path)) &&
-            _allowed(
-              root,
-              entity,
-              includeHidden: includeHidden,
-            )) {
-          progress.addToStdout(normalize(entity.path));
-        }
-      },
-          // should also register onError
-          onDone: () => completer.complete(null));
-
-      waitForEx<void>(completer.future);
-    } finally {
-      progress.close();
-    }
-
-    return progress;
-  }
-
   Progress _find(
     String pattern, {
     bool caseSensitive = false,
