@@ -41,7 +41,7 @@ void main(List<String> args) {
   String response;
   do {
     response = ask('$prompt:',
-        validator: AskMultiValidator([Ask.alpha, Ask.required]));
+        validator: AskValidatorMulti([Ask.alpha, Ask.required]));
 
     valid = confirm('Is this your response? ${green(response)}');
   } while (!valid);
