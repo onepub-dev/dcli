@@ -71,20 +71,13 @@ import 'echo.dart';
 ///   var name = ask( 'What is your name?', validator: Ask.alpha);
 ///   var age = ask( 'How old are you?', validator: Ask.integer);
 ///   var username = ask( 'Username?', validator: Ask.email);
-///   var password = ask( 'Password?', hidden: true, validator: AskMultiValidator([Ask.alphaNumeric, AskLength(10,16)]));
+///   var password = ask( 'Password?', hidden: true, validator: AskValidatorMulti([Ask.alphaNumeric, AskLength(10,16)]));
 ///   var color = ask( 'Favourite colour?', AskListValidator(['red', 'green', 'blue']));
 ///
 ///```
 String ask(String prompt,
-        {bool toLower = false,
-        bool hidden = false,
-        String defaultValue,
-        AskValidator validator = Ask.any}) =>
-    Ask()._ask(prompt,
-        toLower: toLower,
-        hidden: hidden,
-        defaultValue: defaultValue,
-        validator: validator);
+        {bool toLower = false, bool hidden = false, String defaultValue, AskValidator validator = Ask.any}) =>
+    Ask()._ask(prompt, toLower: toLower, hidden: hidden, defaultValue: defaultValue, validator: validator);
 
 /// [confirm] is a specialized version of ask that returns true or
 /// false based on the value entered.
@@ -106,8 +99,7 @@ bool confirm(String prompt, {bool defaultValue}) {
   }
 
   while (!matched) {
-    var entered =
-        Ask()._ask(prompt, toLower: true, hidden: false, validator: Ask.any);
+    var entered = Ask()._ask(prompt, toLower: true, hidden: false, validator: Ask.any);
     var lower = entered.trim().toLowerCase();
 
     if (lower.isEmpty && defaultValue != null) {
@@ -138,21 +130,15 @@ class Ask extends DCliFunction {
   ///
   /// Reads user input from stdin and returns it as a string.
   /// [prompt]
-  String _ask(String prompt,
-      {bool toLower,
-      bool hidden,
-      AskValidator validator,
-      String defaultValue}) {
-    Settings().verbose(
-        'ask:  $prompt toLower: $toLower hidden: $hidden defaultValue: $defaultValue');
+  String _ask(String prompt, {bool toLower, bool hidden, AskValidator validator, String defaultValue}) {
+    Settings().verbose('ask:  $prompt toLower: $toLower hidden: $hidden defaultValue: $defaultValue');
 
     /// check the caller isn't being silly
     if (defaultValue != null) {
       try {
         validator.validate(defaultValue);
       } on AskValidatorException catch (e) {
-        throw AskValidatorException(
-            'The [defaultValue] $defaultValue failed the validator: ${e.message}');
+        throw AskValidatorException('The [defaultValue] $defaultValue failed the validator: ${e.message}');
       }
       prompt = '$prompt [$defaultValue]';
     }
@@ -167,8 +153,7 @@ class Ask extends DCliFunction {
       if (hidden == true && stdin.hasTerminal) {
         line = _readHidden();
       } else {
-        line = stdin.readLineSync(
-            encoding: Encoding.getByName('utf-8'), retainNewlines: false);
+        line = stdin.readLineSync(encoding: Encoding.getByName('utf-8'), retainNewlines: false);
       }
 
       line ??= '';
@@ -395,13 +380,11 @@ class AskValidatorRange extends AskValidator {
     }
 
     if (value < minValue) {
-      throw AskValidatorException(
-          red('The number must be greater than or equal to $minValue.'));
+      throw AskValidatorException(red('The number must be greater than or equal to $minValue.'));
     }
 
     if (value > maxValue) {
-      throw AskValidatorException(
-          red('The number must be less than or equal to $maxValue.'));
+      throw AskValidatorException(red('The number must be less than or equal to $maxValue.'));
     }
 
     return line;
@@ -475,8 +458,7 @@ class AskValidatorMaxLength extends AskValidator {
     line = line.trim();
 
     if (line.length > maxLength) {
-      throw AskValidatorException(red(
-          'You have exceeded the maximum length of $maxLength characters.'));
+      throw AskValidatorException(red('You have exceeded the maximum length of $maxLength characters.'));
     }
     return line;
   }
@@ -496,8 +478,7 @@ class AskValidatorMinLength extends AskValidator {
     line = line.trim();
 
     if (line.length < minLength) {
-      throw AskValidatorException(
-          red('You must enter at least $minLength characters.'));
+      throw AskValidatorException(red('You must enter at least $minLength characters.'));
     }
     return line;
   }
@@ -573,8 +554,7 @@ class AskValidatorList extends AskValidator {
       }
     }
     if (!found) {
-      throw AskValidatorException(
-          red('The valid responses are ${validItems.join(' | ')}.'));
+      throw AskValidatorException(red('The valid responses are ${validItems.join(' | ')}.'));
     }
 
     return line;
