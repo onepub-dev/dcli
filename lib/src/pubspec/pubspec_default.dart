@@ -42,6 +42,9 @@ version: $version
   @override
   List<Dependency> get dependencies => _pubspec.dependencies;
 
+  @override
+  List<Dependency> get dependencyOverrides => _pubspec.dependencyOverrides;
+
   // removed unti pupspec 0.14 is released
   // @override
   // List<Executable> get executables => _pubspec.executables;

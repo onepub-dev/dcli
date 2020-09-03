@@ -40,6 +40,9 @@ class PubSpecFile implements PubSpec // with DependenciesMixin
     __pubspec.dependencies = newDependencies;
   }
 
+  @override
+  List<Dependency> get dependencyOverrides => __pubspec.dependencyOverrides;
+
   // removed unti pupspec 0.14 is released
   // /// Sets the list of executables for this pubspec.
   // @override

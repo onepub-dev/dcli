@@ -31,6 +31,8 @@ abstract class PubSpec {
   /// returns the list of dependencies in this pubspec.yaml
   List<Dependency> get dependencies;
 
+  List<Dependency> get dependencyOverrides;
+
   // removed unti pupspec 0.14 is released
   /// List<Executable> get executables;
 
@@ -49,8 +51,7 @@ abstract class PubSpec {
     // if (lhs.publishTo != rhs.publishTo) return false;
     // if (lhs.environment != rhs.environment) return false;
 
-    if (!const ListEquality<Dependency>()
-        .equals(lhs.dependencies, rhs.dependencies)) return false;
+    if (!const ListEquality<Dependency>().equals(lhs.dependencies, rhs.dependencies)) return false;
 
     return true;
   }
@@ -78,6 +79,20 @@ class PubSpecImpl implements PubSpec {
     }
 
     pubspec = pubspec.copy(dependencies: ref);
+  }
+
+  @override
+  List<Dependency> get dependencyOverrides {
+    var depends = <Dependency>[];
+
+    var map = pubspec.dependencyOverrides;
+
+    for (var name in map.keys) {
+      var reference = map[name];
+      depends.add(Dependency(name, reference));
+    }
+
+    return depends;
   }
 
   @override
