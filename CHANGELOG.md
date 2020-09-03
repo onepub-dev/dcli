@@ -1,3 +1,6 @@
+# 0.24.0
+added method to get overriden dependencies.
+
 # 0.23.0
 Breaking changes:
 Added requirements for privileges when installing so we can set up paths for sudo usage of dcli. Also added option to disable the requirement primarily for unit testing.

@@ -51,7 +51,8 @@ abstract class PubSpec {
     // if (lhs.publishTo != rhs.publishTo) return false;
     // if (lhs.environment != rhs.environment) return false;
 
-    if (!const ListEquality<Dependency>().equals(lhs.dependencies, rhs.dependencies)) return false;
+    if (!const ListEquality<Dependency>()
+        .equals(lhs.dependencies, rhs.dependencies)) return false;
 
     return true;
   }
