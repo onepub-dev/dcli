@@ -4,13 +4,13 @@ DCli has a singular focus: make it easy to build command line apps.
 
 DCli aims to fully utilise the expressiveness of Dart to make building CLI apps as natural as walking.
 
-DCli's library also works seamlessly with the core Dart libraries.
+DCli's API also works seamlessly with the core Dart libraries.
 
 DCli's API covers a number of core areas:
 
 ### User input
 
-Asking the user to input data into a cli application should be simple. DCli provide a number of core methods to facilitate user input.
+Asking the user to input data into a CLI application should be simple. DCli provide a number of core methods to facilitate user input.
 
 * ask
 * confirm
@@ -33,8 +33,9 @@ print(green('You chose $selected'));
 
 ### Displaying information
 
-Out of the box dart provides the basic 'print' statement which DCli extends to provide common features
+Out of the box dart provides the basic 'print' statement which DCli extends to provide common features.
 
+* print
 * printerr - prints to stderr.
 * colour coding
 * cursor management
@@ -183,7 +184,7 @@ dart hello.dart
 > hello world
 ```
 
-By adding a  shebang \(\#!\) at the top of your dart file means that you can directly run your script:
+By adding a  shebang \(\#!\) at the top of your dart file allows you to directly run your script:
 
 ```dart
 #! /usr/bin/env dcli

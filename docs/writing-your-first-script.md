@@ -1,6 +1,6 @@
 # Writing your first script
 
-Let's start by going over the basic by writing the class hello world program.
+Let's start by going over the basic by writing the classic hello world program.
 
 Create a directory to work in:
 
@@ -27,7 +27,7 @@ cd dcli_scripts
 {% endtab %}
 {% endtabs %}
 
-Using your selected editor create a file called 'hello.dart' with following content:
+Using your preferred editor create a file called 'hello.dart' with following content:
 
 ```dart
 void main() {
@@ -66,13 +66,13 @@ The exe is 5MB in size and does NOT require Dart to be installed.
 
 ### Dependencies
 
-So far we haven't actually used the DCli API in our hello.dart program. Lets now setup dependency management so we can use DCli and any other Dart package \(API\).
+So far we haven't actually used the DCli API in our hello.dart program. Lets now setup dependency management so we can use the DCli API and any other Dart package.
 
 Dart uses a special file called `pubspec.yaml` to control the set of packages accessible to your application.
 
 Dart's pubspec.yaml is equivalent to a makefile, pom.xml, gradle.build or package.json in that it defines the set of dependencies for you application.
 
-To use DCli or any other dart you need to added the dependency to your pubspec.yaml.
+To use DCli or any other Dart package you need to added the dependency to your pubspec.yaml.
 
 Create and edit your first pubspec.yaml:
 
@@ -94,12 +94,13 @@ Got dependencies!
 
 ### Writing a DCli script
 
-We can now modify hello.dart to make calls to the DCli API.
+Now that we have added DCli to our pubspec.yaml we can now modify hello.dart to make calls to the DCli API.
 
 Edit your hello.dart script as follows:
 
 ```bash
 import 'package:dcli/dcli.dart';
+
 
 void main() {
     print('Now lets do someting useful.');
@@ -107,18 +108,13 @@ void main() {
     var username =  ask( 'username:');
     print('username: $username');
 
-    var password = ask( 'password:', hidden = true);
+    var password = ask( 'password:', hidden: true);
     print('password: $password');
 
     // create a directory
-    createDir('tmp');
-
-    // Lets write some text to a file.
-    // DCli uses dart 2.6 extensions.
-    // Ths allows us to extend [String] with
-    // functions like [write] and [append].
-    // [write] and [append] treat the contents
-    // of the [String] as a filename.
+    if (!exists('tmp')) {
+    	createDir('tmp');
+    }
 
     // Truncate any existing content
     // of the file 'tmp/text.txt' and write
@@ -132,10 +128,10 @@ void main() {
     'tmp/text.txt'.append('My third line');
 
     // now copy the file tmp/text.txt to second.txt
-    copy('tmp/text.txt', 'tmp/second.txt');
+    copy('tmp/text.txt', 'tmp/second.txt', overwrite: true);
 
     // lets dump the file we just created to the console
-    cat('tmp/second.txt').forEach((line) => print(line));
+    read('tmp/second.txt').forEach((line) => print(line));
 
     // lets prove that both files exist by running
     // a recursive find.
@@ -147,22 +143,13 @@ void main() {
     // a child process.
     // Any stdout and stderr output is written
     // directly to the console.
-    'tail tmp/text.txt'.run
+    'tail tmp/text.txt'.run;
 
     // Lets do a word count capturing stdout,
     // stderr will will be swallowed.
-    'wc tmp.second.txt'.forEach((line) => print('Captured $line'));
+    'wc tmp/second.txt'.forEach((line) => print('Captured $line'));
 
-    // lets tail a non existent file and see stderr.
-    // The forEach method signature is
-    // forEach(LineAction stdout, {LineAction stderr})
-    // The curly braces make [stderr] a 'named' parameter
-    // whilst [stdout] is a a positional parameter.
-    'tail tmp/nonexistant.txt'
-            .forEach((line) => print('stdout: $line')
-                , stderr: (line) => print('stderr: $line'));
-
-    if (confirm( "Should I delete 'tmp'? (y/n):"))
+    if (confirm( "Should I delete 'tmp'? (y/n):")) {
         // Now lets clean up
         delete('tmp/text.txt');
         delete('tmp/second.txt');
@@ -170,17 +157,27 @@ void main() {
     }
 
 }
-
 ```
 
 Now run our script.
 
 ```bash
 dart hello.dart
+Now lets do someting useful.
+username: auser
+username: auser
+password: *********
+password: apassword
 Hello world
 My second line
 My third line
-Should I delete 'tmp'? (y/n):
+Found /tmp/fred/tmp/second.txt
+Found /tmp/fred/tmp/text.txt
+Hello world
+My second line
+My third line
+Captured  3  8 41 tmp/second.txt
+Should I delete 'tmp'? (y/n): (y/n): y
 ```
 
 You are now officially a DCli guru.

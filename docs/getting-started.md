@@ -12,7 +12,7 @@ Start by installing Dart as per:
 Install Dart from : [https://dart.dev/get-dart](https://dart.dev/get-dart)
 {% endhint %}
 
-If you want to use DCli's optional command line tools including Shebang \(\#!\) support you need to globally active DCli.
+If you want to use DCli's optional command line tools including Shebang \(\#!\) support you need to globally activate DCli.
 
 If you only want to use the DCli API then you can skip this step.
 

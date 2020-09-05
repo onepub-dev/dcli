@@ -1,6 +1,6 @@
 # Added DCli to your project
 
-If you are just using the DCli Api then adding DCli to your existing app is like adding any other Dart package to your app.
+If you are just using the DCli API \(and not the DCli tools\) then adding DCli to your existing app is like adding any other Dart package to your app.
 
 Go to [pub.dev](https://pub.dev/packages/dcli/install), find the section 'Depend on it' and copy the indicated dcli dependency into your pubspec.yaml:
 
@@ -20,4 +20,6 @@ Now in your Dart code, you can use:
 ```text
 import 'package:dcli/dcli.dart';
 ```
+
+You now have access to the full DCli API.
 

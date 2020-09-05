@@ -1,4 +1,4 @@
-# Named Arguments
+# Function Arguments
 
 This section provides details on the Dart language:
 

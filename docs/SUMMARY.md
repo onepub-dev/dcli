@@ -1,19 +1,17 @@
 # Table of contents
 
 * [Introduction](README.md)
-* [So why DCli?](so-why-dcli.md)
 * [What does DCli do?](what-does-dcli-do.md)
 * [Getting Started](getting-started.md)
 * [Writing your first script](writing-your-first-script.md)
 * [Added DCli to your project](added-dcli-to-your-project.md)
-* [Use a shebang \#!](use-a-shebang.md)
 * [pub.dev](pub.dev.md)
 * [github](github.md)
 
 ## Dart basics
 
 * [Dart lambda functions](dart-basics/dart-lambda-functions.md)
-* [Named Arguments](dart-basics/named-arguments.md)
+* [Function Arguments](dart-basics/named-arguments.md)
 * [Futures](dart-basics/futures.md)
 
 ## DCli API
@@ -25,6 +23,7 @@
 * [Managing Files And Directories](dcli-api/managing-files-and-directories.md)
 * [Environment variables](dcli-api/environment-variables.md)
 * [Calling apps](dcli-api/calling-apps.md)
+* [Command Line Arguments](dcli-api/command-line-arguments.md)
 * [Glob Expansion](dcli-api/glob-expansion.md)
 * [Piping](dcli-api/piping.md)
 * [Locking](dcli-api/locking.md)
@@ -39,6 +38,7 @@
 ## DCli Tools <a id="dcli-tools-1"></a>
 
 * [DCli tools](dcli-tools-1/dcli-tools.md)
+* [Use a shebang \#!](dcli-tools-1/use-a-shebang.md)
 * [DCli Create](dcli-tools-1/dcli-create.md)
 * [DCli Clean](dcli-tools-1/dcli-clean.md)
 * [DCli Clean All](dcli-tools-1/dcli-clean-all.md)
