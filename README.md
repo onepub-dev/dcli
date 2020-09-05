@@ -1,14 +1,14 @@
 # README
 
+See the online [gitbook](https://app.gitbook.com/@bsutton/s/dcli/) for Dcli
+
 
 
 DCli is an extensive library and tooling for building cross platform command line \(CLI\) applications and scripts using the Dart programming language.
 
-{% hint style="info" %}
 ## Looking for DShell? You are in the right place.
 
 DShell has been renamed DCli to better reflect its intended purposes. 
-{% endhint %}
 
 ## Overview
 
@@ -32,9 +32,7 @@ For me at least, it was love at first sight.
 
 Dart is a simple to learn, and uses the all too familiar 'C' style syntax. I've heard Dart described as the love child of Java and Javascript. If you come from either of these environments you will find dart easy to work with.
 
-{% hint style="info" %}
 **I've heard Dart described as the love child of Java and Javascript.**
-{% endhint %}
 
 Dart provides elegant solutions for common problems and from a scripting perspective hits all of the high notes.
 
@@ -48,9 +46,9 @@ Dart is fast and if you need even more speed it can be compiled to a single file
 
 You can use your favourite editor to create DCli scripts. Vi or VIM work fine but Visual Code is recommended.
 
-{% hint style="success" %}
+
 **Use Visual Code for the best development experience with Dart.**
-{% endhint %}
+
 
 DCli and Dart also make it harder to make some of the common mistakes that Bash invites.
 
