@@ -39,7 +39,7 @@ We refer to this as a 'virtual pubspec'.
 
 When you first launch your script or when running `dcli clean <scriptname.dart>` DCli creates/recreates your `virtual pubspec`.
 
-Whether you use a virtual pubspec or create your own, DCli performs dependancy injection \([see dependancy injection](./#Pubspec-dependancy-injection)\) providing a common set of packages that together create a 'swiss army knife' of useful tools to use when developing DCli scripts.
+Whether you use a virtual pubspec or create your own, DCli performs dependancy injection \([see dependancy injection](../#Pubspec-dependancy-injection)\) providing a common set of packages that together create a 'swiss army knife' of useful tools to use when developing DCli scripts.
 
 ### Explicitly defining a pubspec
 
@@ -54,7 +54,7 @@ The DCli `@pubspec` annotation allows you to retain the concept of a single scri
 
 Using the `@pubspec` annotation also means that you can have many DCli scripts living in the same directory each with their own pubspec. If you use a classic pubspec.yaml then all your scripts, in that directory, will be sharing the same pubspec \(which isn't necessarily a bad thing\).
 
-See the section on [PubSpec precedence](./#Pubspec-Precendence) for details on how DCli works if you mix pubspec annotations and a pubspec.yaml in the same directory.
+See the section on [PubSpec precedence](../#Pubspec-Precendence) for details on how DCli works if you mix pubspec annotations and a pubspec.yaml in the same directory.
 
 For simple scripts you will normally use the `@pubspec` annotation but as your script grows you may want to migrate to a separate `pubspec.yaml`.
 

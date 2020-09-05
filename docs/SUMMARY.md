@@ -1,6 +1,6 @@
 # Table of contents
 
-* [README](README.md)
+* [Introduction](README.md)
 * [So why DCli?](so-why-dcli.md)
 * [What does DCli do?](what-does-dcli-do.md)
 * [Getting Started](getting-started.md)
@@ -31,10 +31,8 @@
 
 ## Dependency Management <a id="dependency-management-1"></a>
 
----
-
-* [Dependency Management](dependency-management.md)
-* [Pubspec Managment](pubspec-managment.md)
+* [Dependency Management](dependency-management-1/dependency-management.md)
+* [Pubspec Managment](dependency-management-1/pubspec-managment.md)
 
 ## DCli Tools <a id="dcli-tools-1"></a>
 
