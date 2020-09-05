@@ -1,6 +1,6 @@
 # Table of contents
 
-* [Initial page](README.md)
+* [README](README.md)
 * [So why DCli?](so-why-dcli.md)
 * [What does DCli do?](what-does-dcli-do.md)
 * [Getting Started](getting-started.md)
