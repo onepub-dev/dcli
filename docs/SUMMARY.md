@@ -7,6 +7,8 @@
 * [Writing your first script](writing-your-first-script.md)
 * [Added DCli to your project](added-dcli-to-your-project.md)
 * [Use a shebang \#!](use-a-shebang.md)
+* [pub.dev](pub.dev.md)
+* [github](github.md)
 
 ## Dart basics
 
