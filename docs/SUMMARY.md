@@ -24,6 +24,7 @@
 * [Environment variables](dcli-api/environment-variables.md)
 * [Calling apps](dcli-api/calling-apps.md)
 * [Command Line Arguments](dcli-api/command-line-arguments.md)
+* [Paths](dcli-api/paths.md)
 * [Glob Expansion](dcli-api/glob-expansion.md)
 * [Piping](dcli-api/piping.md)
 * [Locking](dcli-api/locking.md)
