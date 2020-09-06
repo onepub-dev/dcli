@@ -13,6 +13,11 @@ abstract class Shell {
   ///
   bool get isCompletionSupported;
 
+  bool get isSudo =>
+      !Settings().isWindows &&
+      Shell.current.isPrivilegedUser &&
+      Shell.current.loggedInUser != 'ROOT';
+
   /// If the shell supports tab completion then
   /// install it.
   /// If [quiet] is trie the suppress any console output except
