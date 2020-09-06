@@ -24,7 +24,7 @@ class InstallCommand extends Command {
     _NoCleanFlag(),
     _NoDartFlag(),
     _QuietFlag(),
-    _NoPrivilegesFlag()
+    // _NoPrivilegesFlag()
   ];
 
   /// holds the set of flags passed to the compile command.
@@ -34,7 +34,7 @@ class InstallCommand extends Command {
   /// if [quiet] is true only errors are displayed during the install.
   bool quiet = false;
 
-  bool requirePrivileges = true;
+  bool requirePrivileges = false;
 
   /// ctor.
   InstallCommand() : super(_commandName);
@@ -74,9 +74,9 @@ class InstallCommand extends Command {
           "'dcli install' does not take any arguments. Found $subarguments");
     }
 
-    requirePrivileges = !flagSet.isSet(_NoPrivilegesFlag());
+    // requirePrivileges = !flagSet.isSet(_NoPrivilegesFlag());
 
-    /// We need to be privilidged to create the dcli symlink
+    /// We need to be priviledged to create the dcli symlink
     if (requirePrivileges && !shell.isPrivilegedUser) {
       qprint(red(shell.privilegesRequiredMessage('dcli_install')));
       exit(1);
@@ -226,9 +226,10 @@ class InstallCommand extends Command {
   /// We use the location of dart exe and add dcli symlink
   /// to the same location.
   void symlinkDCli(Shell shell, String dcliPath) {
-    if (shell.isPrivilegedUser && !Platform.isWindows) {
+    if (!Platform.isWindows) {
       var linkPath = join(dirname(DartSdk().pathToDartExe), 'dcli');
-      symlink(dcliPath, linkPath);
+      'ln -sf $dcliPath $linkPath'.start(privileged: true);
+      // symlink(dcliPath, linkPath);
     }
   }
 
