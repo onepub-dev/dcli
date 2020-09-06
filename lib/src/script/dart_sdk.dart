@@ -149,7 +149,7 @@ class DartSdk {
   }
 
   static String _detect() {
-    var path = which(pubExeName).firstLine;
+    var path = which(dartExeName).firstLine;
 
     if (path != null) {
       return dirname(dirname(path));
