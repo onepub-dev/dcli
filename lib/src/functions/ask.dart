@@ -71,20 +71,13 @@ import 'echo.dart';
 ///   var name = ask( 'What is your name?', validator: Ask.alpha);
 ///   var age = ask( 'How old are you?', validator: Ask.integer);
 ///   var username = ask( 'Username?', validator: Ask.email);
-///   var password = ask( 'Password?', hidden: true, validator: AskValidatorMulti([Ask.alphaNumeric, AskLength(10,16)]));
+///   var password = ask( 'Password?', hidden: true, validator: AskValidatorMulti([Ask.alphaNumeric, AskValidatorLength(10,16)]));
 ///   var color = ask( 'Favourite colour?', AskListValidator(['red', 'green', 'blue']));
 ///
 ///```
 String ask(String prompt,
-        {bool toLower = false,
-        bool hidden = false,
-        String defaultValue,
-        AskValidator validator = Ask.any}) =>
-    Ask()._ask(prompt,
-        toLower: toLower,
-        hidden: hidden,
-        defaultValue: defaultValue,
-        validator: validator);
+        {bool toLower = false, bool hidden = false, String defaultValue, AskValidator validator = Ask.dontCare}) =>
+    Ask()._ask(prompt, toLower: toLower, hidden: hidden, defaultValue: defaultValue, validator: validator);
 
 /// [confirm] is a specialized version of ask that returns true or
 /// false based on the value entered.
@@ -106,8 +99,7 @@ bool confirm(String prompt, {bool defaultValue}) {
   }
 
   while (!matched) {
-    var entered =
-        Ask()._ask(prompt, toLower: true, hidden: false, validator: Ask.any);
+    var entered = Ask()._ask(prompt, toLower: true, hidden: false, validator: Ask.dontCare);
     var lower = entered.trim().toLowerCase();
 
     if (lower.isEmpty && defaultValue != null) {
@@ -138,21 +130,15 @@ class Ask extends DCliFunction {
   ///
   /// Reads user input from stdin and returns it as a string.
   /// [prompt]
-  String _ask(String prompt,
-      {bool toLower,
-      bool hidden,
-      AskValidator validator,
-      String defaultValue}) {
-    Settings().verbose(
-        'ask:  $prompt toLower: $toLower hidden: $hidden defaultValue: $defaultValue');
+  String _ask(String prompt, {bool toLower, bool hidden, AskValidator validator, String defaultValue}) {
+    Settings().verbose('ask:  $prompt toLower: $toLower hidden: $hidden defaultValue: $defaultValue');
 
     /// check the caller isn't being silly
     if (defaultValue != null) {
       try {
         validator.validate(defaultValue);
       } on AskValidatorException catch (e) {
-        throw AskValidatorException(
-            'The [defaultValue] $defaultValue failed the validator: ${e.message}');
+        throw AskValidatorException('The [defaultValue] $defaultValue failed the validator: ${e.message}');
       }
       prompt = '$prompt [$defaultValue]';
     }
@@ -167,8 +153,7 @@ class Ask extends DCliFunction {
       if (hidden == true && stdin.hasTerminal) {
         line = _readHidden();
       } else {
-        line = stdin.readLineSync(
-            encoding: Encoding.getByName('utf-8'), retainNewlines: false);
+        line = stdin.readLineSync(encoding: Encoding.getByName('utf-8'), retainNewlines: false);
       }
 
       line ??= '';
@@ -238,7 +223,54 @@ class Ask extends DCliFunction {
   }
 
   /// The default validator that considers any input as valid
-  static const AskValidator any = _AskAny();
+  static const AskValidator dontCare = _AskDontCare();
+
+  /// Takes an array of validators. The input is considered valid if any one
+  /// of the validators returns true.
+  /// The validators are processed in order from left to right.
+  /// If none of the validators pass then the error from the first validator
+  /// that failed is returned. The implications is that the user will only
+  /// ever see the error from the first validator.
+  static AskValidator any(List<AskValidator> validators) => AskValidatorAny(validators);
+
+  /// Takes an array of validators. The input is considered valid only if
+  /// everyone of the validators pass.
+  ///
+  /// The validators are processed in order from left to right.
+  ///
+  /// The error from the first validator that failes is returned.
+  ///
+  /// It should be noted that the user input is passed to each validator in turn
+  /// and each validator has the opportunity to modify the input. As a result
+  /// a validators will be operating on a version of the input
+  /// that has been processed  by all validators that appear earlier in the list.
+  static AskValidator all(List<AskValidator> validators) => AskValidatorAll(validators);
+
+  /// Validates that input is a IP address
+  /// By default both v4 and v6 addresses are valid
+  /// Pass a [version] to limit the input to one or the
+  /// other. If passed [version] must be [AskValidatorIPAddress.tcp4] or [AskValidatorIPAddress.tcp6].
+  static AskValidator ipAddress({int version}) => AskValidatorIPAddress(version: version);
+
+  /// Validates that the entered line is no longer
+  /// than [maxLength].
+  static AskValidator lengthMax(int maxLength) => AskValidatorMaxLength(maxLength);
+
+  /// Validates that the entered line is not less
+  /// than [minLength].
+  static AskValidator lengthMin(int minLength) => AskValidatorMinLength(minLength);
+
+  /// Validates that the length of the entered text
+  /// as at least [minLength] but no more than [maxLength].
+  static AskValidator lengthRange(int minLength, int maxLength) => AskValidatorLength(minLength, maxLength);
+
+  /// Checks that the input matches one of the
+  /// provided [validItems].
+  /// If the validator fails it prints out the
+  /// list of available inputs.
+  /// By default [caseSensitive] matches are off.
+  static AskValidator inList(List<Object> validItems, {bool caseSensitive = false}) =>
+      AskValidatorList(validItems, caseSensitive: caseSensitive);
 
   /// The user must enter a non-empty string.
   /// Whitespace will be trimmed before the string is tested.
@@ -265,10 +297,7 @@ class Ask extends DCliFunction {
   /// validates that the input is only alphanumeric characters.
   static const AskValidator alphaNumeric = _AskAlphaNumeric();
 
-  /// validates that the input is a valid ip address (v4 or v6)
-  /// Use the AskIPAddress class directly if you want just a
-  /// v4 or v6 address.
-  static const AskValidator ipAddress = AskValidatorIPAddress();
+
 }
 
 /// Thrown when an [Askvalidator] detects an invalid input.
@@ -292,8 +321,8 @@ abstract class AskValidator {
 }
 
 /// The default validator that considers any input as valid
-class _AskAny extends AskValidator {
-  const _AskAny();
+class _AskDontCare extends AskValidator {
+  const _AskDontCare();
   @override
   String validate(String line) {
     return line;
@@ -395,13 +424,11 @@ class AskValidatorRange extends AskValidator {
     }
 
     if (value < minValue) {
-      throw AskValidatorException(
-          red('The number must be greater than or equal to $minValue.'));
+      throw AskValidatorException(red('The number must be greater than or equal to $minValue.'));
     }
 
     if (value > maxValue) {
-      throw AskValidatorException(
-          red('The number must be less than or equal to $maxValue.'));
+      throw AskValidatorException(red('The number must be less than or equal to $maxValue.'));
     }
 
     return line;
@@ -437,8 +464,11 @@ class _AskAlphaNumeric extends AskValidator {
 /// Validates that input is a IP address
 /// By default both v4 and v6 addresses are valid
 /// Pass a [version] to limit the input to one or the
-/// other. If passed [version] must be 4 or 6.
+/// other. If passed [version] must be [ipv4] or [ipv6].
 class AskValidatorIPAddress extends AskValidator {
+  static const int ipv4 = 4;
+  static const int ipv6 = 6;
+
   /// IP version (on 4 and 6 are valid versions.)
   final int version;
 
@@ -450,7 +480,7 @@ class AskValidatorIPAddress extends AskValidator {
 
   @override
   String validate(String line) {
-    assert(version == null || version == 4 || version == 6);
+    assert(version == null || version == ipv4 || version == ipv6);
 
     line = line.trim();
 
@@ -475,8 +505,7 @@ class AskValidatorMaxLength extends AskValidator {
     line = line.trim();
 
     if (line.length > maxLength) {
-      throw AskValidatorException(red(
-          'You have exceeded the maximum length of $maxLength characters.'));
+      throw AskValidatorException(red('You have exceeded the maximum length of $maxLength characters.'));
     }
     return line;
   }
@@ -496,15 +525,14 @@ class AskValidatorMinLength extends AskValidator {
     line = line.trim();
 
     if (line.length < minLength) {
-      throw AskValidatorException(
-          red('You must enter at least $minLength characters.'));
+      throw AskValidatorException(red('You must enter at least $minLength characters.'));
     }
     return line;
   }
 }
 
 /// Validates that the length of the entered text
-/// as at least [minLength] but no more than [maxLength].
+/// as at least [minLength] but no more than [lengthMin].
 class AskValidatorLength extends AskValidator {
   AskValidatorMulti _validator;
 
@@ -521,6 +549,94 @@ class AskValidatorLength extends AskValidator {
     line = line.trim();
 
     line = _validator.validate(line);
+    return line;
+  }
+}
+
+/// Takes an array of validators. The input is considered valid only if
+/// everyone of the validators pass.
+///
+/// The validators are processed in order from left to right.
+///
+/// The error from the first validator that failes is returned.
+///
+/// It should be noted that the user input is passed to each validator in turn
+/// and the validator has the opportunity to modify the input. As a result
+/// a validators will be operating on a version of the input
+/// that has been processed  by all validators that appear earlier in the list.
+class AskValidatorAll extends AskValidator {
+  final List<AskValidator> _validators;
+
+  /// Takes an array of validators. The input is considered valid only if
+  /// everyone of the validators pass.
+  ///
+  /// The validators are processed in order from left to right.
+  ///
+  /// The error from the first validator that failes is returned.
+  ///
+  /// It should be noted that the user input is passed to each validator in turn
+  /// and the validator has the opportunity to modify the input. As a result
+  /// a validators will be operating on a version of the input
+  /// that has been processed  by all validators that appear earlier in the list.
+  AskValidatorAll(this._validators);
+  @override
+  String validate(String line) {
+    line = line.trim();
+
+    for (var validator in _validators) {
+      line = validator.validate(line);
+    }
+    return line;
+  }
+}
+
+/// Takes an array of validators. The input is considered valid if any one
+/// of the validators returns true.
+/// The validators are processed in order from left to right.
+/// If none of the validators pass then the error from the first validator
+/// that failed is returned. The implications is that the user will only
+/// ever see the error from the first validator.
+///
+/// It should be noted that the user input is passed to each validator in turn
+/// and each validator has the opportunity to modify the input. As a result
+/// a validators will be operating on a version of the input
+/// that has been processed  by all validators that appear earlier in the list.
+class AskValidatorAny extends AskValidator {
+  final List<AskValidator> _validators;
+
+  /// Takes an array of validators. The input is considered valid if any one
+  /// of the validators returns true.
+  /// The validators are processed in order from left to right.
+  /// If none of the validators pass then the error from the first validator
+  /// that failed is returned. The implications is that the user will only
+  /// ever see the error from the first validator.
+  ///
+  /// It should be noted that the user input is passed to each validator in turn
+  /// and each validator has the opportunity to modify the input. As a result
+  /// a validators will be operating on a version of the input
+  /// that has been processed  by all successful validators that appear earlier in the list.
+  ///
+  /// Validators that fail don't get an opportunity to modify the input.
+  AskValidatorAny(this._validators);
+  @override
+  String validate(String line) {
+    line = line.trim();
+
+    AskValidator firstFailure;
+
+    var onePassed = false;
+
+    for (var validator in _validators) {
+      try {
+        line = validator.validate(line);
+        onePassed = true;
+      } on AskValidator catch (_) {
+        firstFailure ??= validator;
+      }
+    }
+    if (!onePassed) {
+      throw firstFailure;
+    }
     return line;
   }
 }
@@ -554,27 +670,35 @@ class AskValidatorMulti extends AskValidator {
 /// list of available inputs.
 class AskValidatorList extends AskValidator {
   /// The list of allowed values.
-  final List<String> validItems;
+  final List<Object> validItems;
+  final bool caseSensitive;
 
   /// Checks that the input matches one of the
   /// provided [validItems].
   /// If the validator fails it prints out the
   /// list of available inputs.
   /// By default [caseSensitive] matches are off.
-  AskValidatorList(this.validItems, {bool caseSensitive = false});
+  AskValidatorList(this.validItems, {this.caseSensitive = false});
   @override
   String validate(String line) {
     line = line.trim();
+    if (caseSensitive) {
+      line = line.toLowerCase();
+    }
     var found = false;
     for (var item in validItems) {
-      if (line == item) {
+      var itemValue = item.toString();
+      if (caseSensitive) {
+        itemValue = itemValue.toLowerCase();
+      }
+
+      if (line == itemValue) {
         found = true;
         break;
       }
     }
     if (!found) {
-      throw AskValidatorException(
-          red('The valid responses are ${validItems.join(' | ')}.'));
+      throw AskValidatorException(red('The valid responses are ${validItems.join(' | ')}.'));
     }
 
     return line;
