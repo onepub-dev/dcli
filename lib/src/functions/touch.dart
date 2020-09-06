@@ -10,7 +10,7 @@ import 'is.dart';
 ///
 /// ```dart
 /// touch('fred.txt');
-/// touch('fred.txt, create=true');
+/// touch('fred.txt, create: true');
 /// ```
 ///
 ///
@@ -21,34 +21,34 @@ import 'is.dart';
 /// a [TouchException] will be thrown.
 ///
 /// [create] is false by default.
-void touch(String path, {bool create = false}) =>
-    _Touch().touch(path, create: create);
+///
+/// As a convenience the touch function returns the [path] variable
+/// that was passed in.
+String touch(String path, {bool create = false}) => _Touch().touch(path, create: create);
 
 class _Touch extends DCliFunction {
-  void touch(String path, {bool create = false}) {
-    var absolute = p.absolute(path);
+  String touch(String path, {bool create = false}) {
+    var absolutePath = p.absolute(path);
 
     Settings().verbose('touch: $absolute create: $create');
 
-    if (!exists(p.dirname(absolute))) {
-      throw TouchException(
-          'The directory tree above $absolute does not exist. Create the tree and try again.');
+    if (!exists(p.dirname(absolutePath))) {
+      throw TouchException('The directory tree above $absolute does not exist. Create the tree and try again.');
     }
-    if (create == false && !exists(path)) {
-      throw TouchException(
-          'The file $absolute does not exist. Did you mean to use touch(path, create: true) ?');
+    if (create == false && !exists(absolutePath)) {
+      throw TouchException('The file $absolute does not exist. Did you mean to use touch(path, create: true) ?');
     }
 
     try {
-      if (!FileUtils.touch([path], create: true)) {
-        throw TouchException(
-            'Unable to touch file $absolute: check permissions');
+      if (!FileUtils.touch([absolutePath], create: true)) {
+        throw TouchException('Unable to touch file $absolute: check permissions');
       }
     }
     // ignore: avoid_catches_without_on_clauses
     catch (e) {
       throw TouchException('An error occured touching $absolute: $e');
     }
+    return path;
   }
 }
 
