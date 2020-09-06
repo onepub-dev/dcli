@@ -8,8 +8,6 @@ dependencies:
 
 import 'dart:io';
 import 'package:dcli/dcli.dart';
-import 'package:path/path.dart' as p;
-import 'package:args/args.dart';
 
 /// which appname
 void main(List<String> args) {
