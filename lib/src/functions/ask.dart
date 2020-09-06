@@ -76,8 +76,15 @@ import 'echo.dart';
 ///
 ///```
 String ask(String prompt,
-        {bool toLower = false, bool hidden = false, String defaultValue, AskValidator validator = Ask.dontCare}) =>
-    Ask()._ask(prompt, toLower: toLower, hidden: hidden, defaultValue: defaultValue, validator: validator);
+        {bool toLower = false,
+        bool hidden = false,
+        String defaultValue,
+        AskValidator validator = Ask.dontCare}) =>
+    Ask()._ask(prompt,
+        toLower: toLower,
+        hidden: hidden,
+        defaultValue: defaultValue,
+        validator: validator);
 
 /// [confirm] is a specialized version of ask that returns true or
 /// false based on the value entered.
@@ -99,7 +106,8 @@ bool confirm(String prompt, {bool defaultValue}) {
   }
 
   while (!matched) {
-    var entered = Ask()._ask(prompt, toLower: true, hidden: false, validator: Ask.dontCare);
+    var entered = Ask()
+        ._ask(prompt, toLower: true, hidden: false, validator: Ask.dontCare);
     var lower = entered.trim().toLowerCase();
 
     if (lower.isEmpty && defaultValue != null) {
@@ -130,15 +138,21 @@ class Ask extends DCliFunction {
   ///
   /// Reads user input from stdin and returns it as a string.
   /// [prompt]
-  String _ask(String prompt, {bool toLower, bool hidden, AskValidator validator, String defaultValue}) {
-    Settings().verbose('ask:  $prompt toLower: $toLower hidden: $hidden defaultValue: $defaultValue');
+  String _ask(String prompt,
+      {bool toLower,
+      bool hidden,
+      AskValidator validator,
+      String defaultValue}) {
+    Settings().verbose(
+        'ask:  $prompt toLower: $toLower hidden: $hidden defaultValue: $defaultValue');
 
     /// check the caller isn't being silly
     if (defaultValue != null) {
       try {
         validator.validate(defaultValue);
       } on AskValidatorException catch (e) {
-        throw AskValidatorException('The [defaultValue] $defaultValue failed the validator: ${e.message}');
+        throw AskValidatorException(
+            'The [defaultValue] $defaultValue failed the validator: ${e.message}');
       }
       prompt = '$prompt [$defaultValue]';
     }
@@ -153,7 +167,8 @@ class Ask extends DCliFunction {
       if (hidden == true && stdin.hasTerminal) {
         line = _readHidden();
       } else {
-        line = stdin.readLineSync(encoding: Encoding.getByName('utf-8'), retainNewlines: false);
+        line = stdin.readLineSync(
+            encoding: Encoding.getByName('utf-8'), retainNewlines: false);
       }
 
       line ??= '';
@@ -231,7 +246,8 @@ class Ask extends DCliFunction {
   /// If none of the validators pass then the error from the first validator
   /// that failed is returned. The implications is that the user will only
   /// ever see the error from the first validator.
-  static AskValidator any(List<AskValidator> validators) => AskValidatorAny(validators);
+  static AskValidator any(List<AskValidator> validators) =>
+      AskValidatorAny(validators);
 
   /// Takes an array of validators. The input is considered valid only if
   /// everyone of the validators pass.
@@ -244,32 +260,38 @@ class Ask extends DCliFunction {
   /// and each validator has the opportunity to modify the input. As a result
   /// a validators will be operating on a version of the input
   /// that has been processed  by all validators that appear earlier in the list.
-  static AskValidator all(List<AskValidator> validators) => AskValidatorAll(validators);
+  static AskValidator all(List<AskValidator> validators) =>
+      AskValidatorAll(validators);
 
   /// Validates that input is a IP address
   /// By default both v4 and v6 addresses are valid
   /// Pass a [version] to limit the input to one or the
   /// other. If passed [version] must be [AskValidatorIPAddress.tcp4] or [AskValidatorIPAddress.tcp6].
-  static AskValidator ipAddress({int version}) => AskValidatorIPAddress(version: version);
+  static AskValidator ipAddress({int version}) =>
+      AskValidatorIPAddress(version: version);
 
   /// Validates that the entered line is no longer
   /// than [maxLength].
-  static AskValidator lengthMax(int maxLength) => AskValidatorMaxLength(maxLength);
+  static AskValidator lengthMax(int maxLength) =>
+      AskValidatorMaxLength(maxLength);
 
   /// Validates that the entered line is not less
   /// than [minLength].
-  static AskValidator lengthMin(int minLength) => AskValidatorMinLength(minLength);
+  static AskValidator lengthMin(int minLength) =>
+      AskValidatorMinLength(minLength);
 
   /// Validates that the length of the entered text
   /// as at least [minLength] but no more than [maxLength].
-  static AskValidator lengthRange(int minLength, int maxLength) => AskValidatorLength(minLength, maxLength);
+  static AskValidator lengthRange(int minLength, int maxLength) =>
+      AskValidatorLength(minLength, maxLength);
 
   /// Checks that the input matches one of the
   /// provided [validItems].
   /// If the validator fails it prints out the
   /// list of available inputs.
   /// By default [caseSensitive] matches are off.
-  static AskValidator inList(List<Object> validItems, {bool caseSensitive = false}) =>
+  static AskValidator inList(List<Object> validItems,
+          {bool caseSensitive = false}) =>
       AskValidatorList(validItems, caseSensitive: caseSensitive);
 
   /// The user must enter a non-empty string.
@@ -296,8 +318,6 @@ class Ask extends DCliFunction {
 
   /// validates that the input is only alphanumeric characters.
   static const AskValidator alphaNumeric = _AskAlphaNumeric();
-
-
 }
 
 /// Thrown when an [Askvalidator] detects an invalid input.
@@ -424,11 +444,13 @@ class AskValidatorRange extends AskValidator {
     }
 
     if (value < minValue) {
-      throw AskValidatorException(red('The number must be greater than or equal to $minValue.'));
+      throw AskValidatorException(
+          red('The number must be greater than or equal to $minValue.'));
     }
 
     if (value > maxValue) {
-      throw AskValidatorException(red('The number must be less than or equal to $maxValue.'));
+      throw AskValidatorException(
+          red('The number must be less than or equal to $maxValue.'));
     }
 
     return line;
@@ -505,7 +527,8 @@ class AskValidatorMaxLength extends AskValidator {
     line = line.trim();
 
     if (line.length > maxLength) {
-      throw AskValidatorException(red('You have exceeded the maximum length of $maxLength characters.'));
+      throw AskValidatorException(red(
+          'You have exceeded the maximum length of $maxLength characters.'));
     }
     return line;
   }
@@ -525,7 +548,8 @@ class AskValidatorMinLength extends AskValidator {
     line = line.trim();
 
     if (line.length < minLength) {
-      throw AskValidatorException(red('You must enter at least $minLength characters.'));
+      throw AskValidatorException(
+          red('You must enter at least $minLength characters.'));
     }
     return line;
   }
@@ -698,7 +722,8 @@ class AskValidatorList extends AskValidator {
       }
     }
     if (!found) {
-      throw AskValidatorException(red('The valid responses are ${validItems.join(' | ')}.'));
+      throw AskValidatorException(
+          red('The valid responses are ${validItems.join(' | ')}.'));
     }
 
     return line;

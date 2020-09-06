@@ -125,14 +125,14 @@ extension StringAsProcess on String {
   ///
   /// Use [workingDirectory] to specify the directory the process should
   /// be run from.
-  /// 
+  ///
   /// If you need to run a command with escalated privileged then set the [privileged]
-  /// argument to true. On Linux this equates to using the sudo command. 
+  /// argument to true. On Linux this equates to using the sudo command.
   /// The advantage of using the 'privileged' option is that it will first check if you are
   /// already running in a privileged environment. This is extremly useful if you
   /// are running in the likes of a Docker container that doesn't implement sudo but
   /// in which you are already running as root.
-  /// 
+  ///
   ///
   /// If you need to pass an argument to your application that contains spaces then use nested quotes:
   ///e.g.
@@ -244,7 +244,7 @@ extension StringAsProcess on String {
   List<String> toList(
       {bool runInShell = false, int skipLines = 0, bool nothrow = false}) {
     var list = <String>[];
-    
+
     Progress progress;
 
     progress =

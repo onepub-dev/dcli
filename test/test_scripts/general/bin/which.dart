@@ -36,10 +36,10 @@ void main(List<String> args) {
       path = path.replaceAll('~', home);
     }
     if (verbose) {
-      print('Searching: ${p.canonicalize(path)}');
+      print('Searching: ${canonicalize(path)}');
     }
-    if (exists(p.join(path, command))) {
-      print(red('Found at: ${p.canonicalize(p.join(path, command))}'));
+    if (exists(join(path, command))) {
+      print(red('Found at: ${canonicalize(join(path, command))}'));
     }
   }
 }

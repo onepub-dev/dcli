@@ -67,7 +67,7 @@ import 'function.dart';
 ///
 /// [types] the list of types to search file. Defaults to file.
 ///   See [FileSystemEntityType].
-/// 
+///
 /// Passing a [progress] will allow you to process the results as the are
 /// produced rather than having to wait for the call to find to complete.
 /// The passed progress is also returned.

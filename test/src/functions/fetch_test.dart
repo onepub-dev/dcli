@@ -4,7 +4,8 @@ import 'package:test/test.dart';
 
 import '../util/test_file_system.dart';
 
-String baseURl = 'https://raw.githubusercontent.com/bsutton/dcli/master/test/src/functions/fetch_downloads';
+String baseURl =
+    'https://raw.githubusercontent.com/bsutton/dcli/master/test/src/functions/fetch_downloads';
 String testFile;
 void main() {
   group('Fetch Single', () {
@@ -57,7 +58,10 @@ void main() {
         var sampleWav = fs.tempFile();
 
         fetchMultiple(urls: [
-          FetchUrl(url: '$baseURl/sample.aac', saveToPath: sampleAac, onProgress: showProgress),
+          FetchUrl(
+              url: '$baseURl/sample.aac',
+              saveToPath: sampleAac,
+              onProgress: showProgress),
           FetchUrl(url: '$baseURl/sample.wav', saveToPath: sampleWav)
         ]);
         expect(FileSync(sampleAac).length, equals(14951));
@@ -74,8 +78,14 @@ void main() {
         var sampleWav = fs.tempFile();
 
         fetchMultiple(urls: [
-          FetchUrl(url: '$baseURl/sample.aac', saveToPath: sampleAac, onProgress: showProgress),
-          FetchUrl(url: '$baseURl/sample.wav', saveToPath: sampleWav, onProgress: showProgress)
+          FetchUrl(
+              url: '$baseURl/sample.aac',
+              saveToPath: sampleAac,
+              onProgress: showProgress),
+          FetchUrl(
+              url: '$baseURl/sample.wav',
+              saveToPath: sampleWav,
+              onProgress: showProgress)
         ]);
         expect(FileSync(sampleAac).length, equals(14951));
         expect(FileSync(sampleWav).length, equals(212948));

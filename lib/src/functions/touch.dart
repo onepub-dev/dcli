@@ -24,7 +24,8 @@ import 'is.dart';
 ///
 /// As a convenience the touch function returns the [path] variable
 /// that was passed in.
-String touch(String path, {bool create = false}) => _Touch().touch(path, create: create);
+String touch(String path, {bool create = false}) =>
+    _Touch().touch(path, create: create);
 
 class _Touch extends DCliFunction {
   String touch(String path, {bool create = false}) {
@@ -33,15 +34,18 @@ class _Touch extends DCliFunction {
     Settings().verbose('touch: $absolute create: $create');
 
     if (!exists(p.dirname(absolutePath))) {
-      throw TouchException('The directory tree above $absolute does not exist. Create the tree and try again.');
+      throw TouchException(
+          'The directory tree above $absolute does not exist. Create the tree and try again.');
     }
     if (create == false && !exists(absolutePath)) {
-      throw TouchException('The file $absolute does not exist. Did you mean to use touch(path, create: true) ?');
+      throw TouchException(
+          'The file $absolute does not exist. Did you mean to use touch(path, create: true) ?');
     }
 
     try {
       if (!FileUtils.touch([absolutePath], create: true)) {
-        throw TouchException('Unable to touch file $absolute: check permissions');
+        throw TouchException(
+            'Unable to touch file $absolute: check permissions');
       }
     }
     // ignore: avoid_catches_without_on_clauses
