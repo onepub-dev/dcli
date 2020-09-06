@@ -98,6 +98,7 @@ class InstallCommand extends Command {
       printerr(red('*' * 80));
       exit(1);
     }
+    // install dart and dcli
     var dartWasInstalled = shell.install();
 
     // Create the ~/.dcli root.
@@ -161,29 +162,26 @@ class InstallCommand extends Command {
       }
     }
 
-    // If we just installed dart then we don't need
-    // to check the dcli paths.
-    if (!dartWasInstalled) {
-      var dcliLocation = which(DCliPaths().dcliName).firstLine;
-      // check if dcli is on the path
-      if (dcliLocation == null) {
-        print('');
-        print('ERROR: dcli was not found on your path!');
-        print("Try running 'pub global activate dcli' again.");
-        print('  otherwise');
-        print('Try to resolve the problem and then run dcli install again.');
-        print('dcli is normally located in ${PubCache().pathToBin}');
+    // the dcli executable has just been installed by pub global activate
+    var dcliLocation = join(PubCache().pathToBin, DCliPaths().dcliName);
+    // check if dcli is on the path
+    if (dcliLocation == null) {
+      print('');
+      print('ERROR: dcli was not found on your path!');
+      print("Try running 'pub global activate dcli' again.");
+      print('  otherwise');
+      print('Try to resolve the problem and then run dcli install again.');
+      print('dcli is normally located in ${PubCache().pathToBin}');
 
-        if (!PATH.contains(PubCache().pathToBin)) {
-          print('Your path does not contain ${PubCache().pathToBin}');
-        }
-        exit(1);
-      } else {
-        var dcliPath = dcliLocation;
-        qprint(blue('dcli found in : $dcliPath.'));
-
-        symlinkDCli(shell, dcliPath);
+      if (!PATH.contains(PubCache().pathToBin)) {
+        print('Your path does not contain ${PubCache().pathToBin}');
       }
+      exit(1);
+    } else {
+      var dcliPath = dcliLocation;
+      qprint(blue('dcli found in : $dcliPath.'));
+
+      symlinkDCli(shell, dcliPath);
     }
     qprint('');
 
