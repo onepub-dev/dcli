@@ -44,19 +44,18 @@ class Script {
   ///
   Script.fromFile(
     String scriptPath,
-  ) : this._internal(scriptPath, init: false, showWarnings: false);
+  ) : this._internal(scriptPath, create: false, showWarnings: false);
 
-  /// Creates a [Script] from the file at [scriptPath] and initialises
-  /// the script if required by creating a pubspec.yaml and
-  /// analysis_options.yaml file.
-  Script.init(String scriptPath, {bool showWarnings = false})
-      : this._internal(scriptPath, showWarnings: showWarnings, init: true);
+  /// Prepares a [Script] to run from the file at [scriptPath].
+  /// If required it creates a pubspec.yaml and analysis_options.yaml file.
+  Script.prepareToRun(String scriptPath, {bool showWarnings = false, bool create = true})
+      : this._internal(scriptPath, showWarnings: showWarnings, create: create);
 
-  Script._internal(String scriptPath, {bool init, bool showWarnings})
+  Script._internal(String scriptPath, {bool create, bool showWarnings})
       : _scriptname = _extractScriptname(scriptPath),
         _scriptDirectory = _extractScriptDirectory(scriptPath) {
     {
-      if (init) {
+      if (create) {
         var hasLocal = hasLocalPubspecYaml();
         var hasAnscestor = hasAncestorPubspecYaml();
         if (!hasLocal && !hasAnscestor) {
@@ -72,12 +71,24 @@ class Script {
           _createAnalysisOptions(showWarnings);
         }
         if (hasLocal && hasAnscestor && showWarnings) {
-          print(orange(
-              'Your script has a local pubspec.yaml and a pubspec.yaml in an ancestor directory.'));
+          print(orange('Your script has a local pubspec.yaml and a pubspec.yaml in an ancestor directory.'));
           print(orange('You may get inconsistent results when compiling.'));
         }
       }
     }
+  }
+
+  /// We have:
+  /// * pubspec.yaml
+  /// * pubspec.lock
+  /// *
+  bool get isReadyToRun {
+    // TODO: this is still risky as pub get does a test to see if the versions have changed.
+    // we could improve this by checking that the .lock files date is after the .yamls date.
+    /// there is a 'generated' date stamp in the .json file which might be more definitive.
+    return (exists(join(pathToProjectRoot, '.dart_code', 'package_config.json')) &&
+        exists(join(pathToProjectRoot, 'pubspec.lock')) &&
+        (hasLocalPubspecYaml() || hasAncestorPubspecYaml()));
   }
 
   void _createAnalysisOptions(bool showWarnings) {
@@ -89,8 +100,7 @@ class Script {
         print(orange('Creating missing analysis_options.yaml.'));
       }
 
-      copy(join(Settings().pathToTemplate, 'analysis_options.yaml'),
-          analysisPath);
+      copy(join(Settings().pathToTemplate, 'analysis_options.yaml'), analysisPath);
     }
   }
 
@@ -107,8 +117,7 @@ class Script {
 
   void _createPubspecFromAnnotation(bool showWarnings) {
     if (showWarnings) {
-      print(orange(
-          'Extracting @pubspec annotation to create missing pubspec.yaml.'));
+      print(orange('Extracting @pubspec annotation to create missing pubspec.yaml.'));
     }
 
     var annotation = PubSpecAnnotation.fromScript(this);
@@ -174,20 +183,17 @@ class Script {
     return scriptDirectory;
   }
 
-  /// validate that the passed arguments points to
+  /// validate that the passed arguments points to a valid script
   static void validate(String scriptPath) {
     if (!scriptPath.endsWith('.dart')) {
-      throw InvalidArguments(
-          'Expected a script name (ending in .dart) instead found: $scriptPath');
+      throw InvalidArguments('Expected a script name (ending in .dart) instead found: $scriptPath');
     }
 
     if (!exists(scriptPath)) {
-      throw InvalidScript(
-          'The script ${p.absolute(scriptPath)} does not exist.');
+      throw InvalidScript('The script ${p.absolute(scriptPath)} does not exist.');
     }
     if (!FileSystemEntity.isFileSync(scriptPath)) {
-      throw InvalidScript(
-          'The script ${p.absolute(scriptPath)} is not a file.');
+      throw InvalidScript('The script ${p.absolute(scriptPath)} is not a file.');
     }
   }
 
