@@ -27,7 +27,7 @@ import 'is.dart';
 ///
 ///
 /// ```dart
-/// moveTree("/tmp/", "/tmp/new_dir", overwrite=true);
+/// moveTree("/tmp/", "/tmp/new_dir", overwrite: true);
 /// ```
 ///
 /// By default hidden files are ignored. To allow hidden files to
@@ -38,7 +38,7 @@ import 'is.dart';
 /// the [includeHidden] state.
 ///
 /// ```dart
-/// moveTree("/tmp/", "/tmp/new_dir", overwrite=true
+/// moveTree("/tmp/", "/tmp/new_dir", overwrite: true
 ///   , filter: (file) => extension(file) == 'dart');
 /// ```
 ///
@@ -46,7 +46,7 @@ import 'is.dart';
 /// is called just before we move a file or directory.
 ///
 /// ```dart
-/// moveTree("/tmp/", "/tmp/new_dir", overwrite=true
+/// moveTree("/tmp/", "/tmp/new_dir", overwrite: true
 ///   , filter: (entity) {
 ///   var include = extension(entity) == 'dart';
 ///   if (include) {

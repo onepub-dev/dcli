@@ -27,7 +27,7 @@ import 'function.dart';
 /// ```dart
 /// find('*.jpg', recursive:true).forEach((file) => print(file));
 ///
-/// String<List> results = find('[a-z]*.jpg', caseSensitive:true).toList();
+/// List<String> results = find('[a-z]*.jpg', caseSensitive:true).toList();
 ///
 /// find('*.jpg'
 ///   , types:[FileSystemEntityType.directory, FileSystemEntityType.file])
@@ -67,9 +67,9 @@ import 'function.dart';
 ///
 /// [types] the list of types to search file. Defaults to file.
 ///   See [FileSystemEntityType].
-/// [progress] a Progress to output the results to. Passing a progress will
-/// allow you to process the results as the are produced rather than having
-/// to wait for the call to find to complete.
+/// 
+/// Passing a [progress] will allow you to process the results as the are
+/// produced rather than having to wait for the call to find to complete.
 /// The passed progress is also returned.
 ///
 

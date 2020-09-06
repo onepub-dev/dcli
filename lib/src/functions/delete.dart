@@ -11,7 +11,7 @@ import 'is.dart';
 /// If the file does not exists a DeleteException is thrown.
 ///
 /// ```dart
-/// delete("/tmp/test.fred", ask = true);
+/// delete("/tmp/test.fred", ask: true);
 /// ```
 ///
 /// If [ask] is true then the user is prompted to confirm the file deletion.

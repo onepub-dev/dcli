@@ -88,7 +88,7 @@ class Terminal {
     echo('${Ansi.esc}${column}G', newline: false);
   }
 
-  /// Moves the cursor to the start of line.
+  /// Moves the cursor to the start of previous line.
   static void previousLine() {
     echo('${Ansi.esc}0F', newline: false);
   }

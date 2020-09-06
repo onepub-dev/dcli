@@ -8,7 +8,7 @@ import 'function.dart';
 /// or a full or partial tree (e.g. /usr/bin)
 ///
 /// ```dart
-/// createDir("/tmp/fred/tools", recursive=true);
+/// createDir("/tmp/fred/tools", recursive: true);
 /// ```
 ///
 /// If [recursive] is true then any parent
