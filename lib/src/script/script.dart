@@ -146,13 +146,13 @@ class Script {
   /// The scriptname without its '.dart' extension.
   String get basename => p.basenameWithoutExtension(scriptname);
 
-  /// the path to a scripts local pubspec.yaml.
-  /// Only a script that has a pubspec.yaml in the same directory as the script
-  /// will have a pubspec.yaml at this location.
-  ///
-  /// You should use [VirtualProject.projectPubspecPath] as that will always point
-  /// the the correct pubspec.yaml regardless of the project type.
-  String get pathToLocalPubSpec => p.join(_scriptDirectory, 'pubspec.yaml');
+  // /// the path to a scripts local pubspec.yaml.
+  // /// Only a script that has a pubspec.yaml in the same directory as the script
+  // /// will have a pubspec.yaml at this location.
+  // ///
+  // /// You should use [VirtualProject.projectPubspecPath] as that will always point
+  // /// the the correct pubspec.yaml regardless of the project type.
+  // String get pathToLocalPubSpec => p.join(_scriptDirectory, 'pubspec.yaml');
 
   /// Returns the path to a scripts pubspec.yaml.
   /// The pubspec.yaml is located in the project's root directory.

@@ -87,14 +87,14 @@ class SplitCommand extends Command {
         canonicalize(join(script.pathToScript, 'pubspec.yaml'));
 
     // check the virtual project has a symlink back to the local pubspec.
-    if (isLink(script.pathToLocalPubSpec)) {
-      var resolved = resolveSymLink(script.pathToLocalPubSpec);
+    if (isLink(script.pathToPubSpec)) {
+      var resolved = resolveSymLink(script.pathToPubSpec);
       if (resolved == localPubspecPath) {
         return true;
       }
     }
 
-    return _compare(localPubspecPath, script.pathToLocalPubSpec);
+    return _compare(localPubspecPath, script.pathToPubSpec);
   }
 
   bool _compare(String localPubspecPath, String pubSpecPath) {
