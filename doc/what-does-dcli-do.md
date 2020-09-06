@@ -6,9 +6,13 @@ DCli has a singular focus:
 make it easy to build command line apps using the Dart programming language.
 {% endhint %}
 
-DCli aims to fully utilise the expressiveness of Dart to make building CLI apps as natural as walking.
+DCli has the following aims
 
-DCli's API also works seamlessly with the core Dart libraries.
+* make building CLI apps as easy as walking.
+* fully utilise the expressiveness of Dart
+* works seamlessly with the core Dart libraries.
+* make debugging CLI apps easy
+* provide quality documentation and examples
 
 DCli's API covers a number of core areas:
 
@@ -107,7 +111,7 @@ settings.append('color=blue');
 replace(settings, 'color', 'colour');
 ```
 
-## Call any command line app
+## Call command line apps
 
 A core feature of bash is the ability to call other CLI apps and process their output. DCli provides the same facilities.
 
@@ -158,7 +162,7 @@ Env().addToPATHIfAbsent('/home/me/bin');
 Env().removeFromPATH('/home/me/bin');
 ```
 
-You can also explore the Dart environment.
+And the ability to explore the Dart environment.
 
 ```dart
 /// Get details of the current dart script that is running.
@@ -167,41 +171,5 @@ DartSdk().pathToDartExe;
 PubCache().pathTo;
 ```
 
-## Shebang \(\#!\) support
-
-As DCli is focused on building command line scripts it wouldn't be complete without [Shebang](https://en.wikipedia.org/wiki/Shebang_%28Unix%29) support.
-
-Out of the box dart will allow you to run a dart script from the command line:
-
-Create the classic hello world script and call it hello.dart.
-
-```dart
-void main() {
-    print('hello world');
-}
-```
-
-Now its ready run:
-
-```bash
-dart hello.dart
-> hello world
-```
-
-By adding a shebang \(\#!\) at the top of your dart file allows you to directly run your script:
-
-```dart
-#! /usr/bin/env dcli
-void main() {
-    print('hello world');
-}
-```
-
-You can run your script directly \(after a little prep\)
-
-```dart
-chmod +x hello.dart
-./hello.dart
-> hello world
-```
+## 
 
