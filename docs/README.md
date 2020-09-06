@@ -1,14 +1,12 @@
-# README
-
-See the online [gitbook](https://app.gitbook.com/@bsutton/s/dcli/) for Dcli
-
-
+# Introduction
 
 DCli is an extensive library and tooling for building cross platform command line \(CLI\) applications and scripts using the Dart programming language.
 
+{% hint style="info" %}
 ## Looking for DShell? You are in the right place.
 
 DShell has been renamed DCli to better reflect its intended purposes. 
+{% endhint %}
 
 ## Overview
 
@@ -30,9 +28,11 @@ If you have used multiple languages you well know how the learning curve goes. I
 
 For me at least, it was love at first sight.
 
-Dart is a simple to learn, and uses the all too familiar 'C' style syntax. I've heard Dart described as the love child of Java and Javascript. If you come from either of these environments you will find dart easy to work with.
+Dart is a simple to learn, and uses the all too familiar 'C' style syntax. I've heard Dart described as the love child of Java and JavaScript. If you come from either of these environments you will find dart easy to work with.
 
-**I've heard Dart described as the love child of Java and Javascript.**
+{% hint style="info" %}
+**Dart is the love child of Java and JavaScript. In short, Dart is delightful.**
+{% endhint %}
 
 Dart provides elegant solutions for common problems and from a scripting perspective hits all of the high notes.
 
@@ -46,20 +46,15 @@ Dart is fast and if you need even more speed it can be compiled to a single file
 
 You can use your favourite editor to create DCli scripts. Vi or VIM work fine but Visual Code is recommended.
 
-
+{% hint style="success" %}
 **Use Visual Code for the best development experience with Dart.**
-
+{% endhint %}
 
 DCli and Dart also make it harder to make some of the common mistakes that Bash invites.
 
-With Dart and DCli you have the option to Type your variables. This is a bit of a controversial issues, so DCli doesn't force you to Type your scripts but I ALWAYS use types and you should too.
+With Dart and DCli you have the option to use static typing. This is a bit of a controversial issues \(particularly if you are coming from JavaScript\), so DCli doesn't force you to type your scripts but I ALWAYS use types and you should too.
 
 For a long time I've wanted to build a replacement tool that has the elegance of a modern language, with the power of Bash.
 
 DCli is hopefully that.
 
-For more details see the online gitbook:
-
-See the online [gitbook](https://app.gitbook.com/@bsutton/s/dcli/) for Dcli
-
-See the API documentation at [pub.dev](https://pub.dev/packages/dcli)
