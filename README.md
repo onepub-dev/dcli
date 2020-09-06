@@ -1,6 +1,6 @@
 # README
 
-See the online [gitbook](https://app.gitbook.com/@bsutton/s/dcli/) for Dcli
+See the online [gitbook](https://bsutton.gitbook.io/dcli/) for Dcli
 
 
 
@@ -60,6 +60,6 @@ DCli is hopefully that.
 
 For more details see the online gitbook:
 
-See the online [gitbook](https://app.gitbook.com/@bsutton/s/dcli/) for Dcli
+See the online [gitbook](https://bsutton.gitbook.io/dcli/) for Dcli
 
 See the API documentation at [pub.dev](https://pub.dev/packages/dcli)
