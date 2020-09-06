@@ -19,6 +19,7 @@
 * [Overview](dcli-api/overview.md)
 * [Using DCli functions](dcli-api/using-dcli-functions.md)
 * [User input](dcli-api/user-input.md)
+* [Ask Validators](dcli-api/ask-validators.md)
 * [Displaying information](dcli-api/displaying-information.md)
 * [Managing Files And Directories](dcli-api/managing-files-and-directories.md)
 * [Environment variables](dcli-api/environment-variables.md)

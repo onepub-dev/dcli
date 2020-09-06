@@ -16,6 +16,8 @@ The 'ask' function provides a simple but flexible means of requesting informatio
 
 In its simplest form you can ask the user for an input string.
 
+You may pass null for the prompt in which case not prompt will be displayed.
+
 ```dart
 var username = ask('Username:');
 ```
@@ -54,33 +56,6 @@ var age = ask('Age:', validator: Ask.integer);
 Age: abc
 Invalid integer.
 Age:
-```
-
-You can also combine multiple validators:
-
-```dart
- var password = ask( 'Password?', hidden: true
-      , validator: AskValidatorMulti([Ask.alphaNumeric, AskLength(10,16)]));
-```
-
-You can also write your own validators:
-
-```dart
-class AskGoodOrBad extends AskValidator {
-  const AskGoodOrBad();
-  @override
-  String validate(String line) {
-    line = line.trim();
-
-    if (line != 'good' && line != 'bad') {
-      throw AskValidatorException(red('The response must be good | bad'));
-    }
-    return line;
-  }
-}
-
-var getsPresent = ask('Have you been good or bad'
-  , validator:  AskValidatorMulti([Ask.required, AskGoodOrBad()]);
 ```
 
 ### Confirm
