@@ -3,9 +3,11 @@
 import 'package:dcli/dcli.dart';
 
 void main() {
-  var templatePath = join(Script.current.pathToProjectRoot, 'lib', 'src', 'assets', 'templates');
+  var templatePath = join(
+      Script.current.pathToProjectRoot, 'lib', 'src', 'assets', 'templates');
 
-  var expanderPath = join(Script.current.pathToProjectRoot, 'lib', 'src', 'templates', 'expander.dart');
+  var expanderPath = join(Script.current.pathToProjectRoot, 'lib', 'src',
+      'templates', 'expander.dart');
 
   var expanders = <String>[];
 

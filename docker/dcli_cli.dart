@@ -16,7 +16,8 @@ import 'package:dcli/dcli.dart';
 
 void main(List<String> args) async {
   Settings().setVerbose(enabled: false);
-  var cmds = CommandRunner<void>('dcli_cli', 'Manage and run the dcli_cli docker container');
+  var cmds = CommandRunner<void>(
+      'dcli_cli', 'Manage and run the dcli_cli docker container');
   cmds.addCommand(RunCommand());
   cmds.addCommand(BuildCommand());
   cmds.addCommand(PushCommand());
@@ -36,7 +37,8 @@ void showUsage(ArgParser parser) {
 
 class RunCommand extends Command<void> {
   @override
-  String get description => 'Starts the dcli_cli container and drops you into the cli';
+  String get description =>
+      'Starts the dcli_cli container and drops you into the cli';
 
   @override
   String get name => 'run';
@@ -44,8 +46,10 @@ class RunCommand extends Command<void> {
   @override
   void run() {
     /// The volume will only be created if it doesn't already exist.
-    'docker volume create dcli_scripts'.forEach(devNull, stderr: (line) => print(red(line)));
-    var cmd = 'docker run -v dcli_scripts:/home/scripts --network host -it dcli:dcli_cli /bin/bash';
+    'docker volume create dcli_scripts'
+        .forEach(devNull, stderr: (line) => print(red(line)));
+    var cmd =
+        'docker run -v dcli_scripts:/home/scripts --network host -it dcli:dcli_cli /bin/bash';
 
     // print(cmd);
     cmd.run;
@@ -70,13 +74,15 @@ class BuildCommand extends Command<void> {
     // var version = argResults['version'] as String;
     // mount the local dcli files from ..
     print('Building version: $version');
-    'sudo docker build -f ./dcli_cli.df -t bsuttonnoojee/dcli_cli:$version .'.run;
+    'sudo docker build -f ./dcli_cli.df -t bsuttonnoojee/dcli_cli:$version .'
+        .run;
   }
 }
 
 class PushCommand extends Command<void> {
   PushCommand() {
-    argParser.addOption('version', help: 'The version no. to tag this image with');
+    argParser.addOption('version',
+        help: 'The version no. to tag this image with');
   }
   @override
   String get description => 'Pushes the dcli_cli container to docker hub';

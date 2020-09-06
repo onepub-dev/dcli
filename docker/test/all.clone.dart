@@ -7,5 +7,6 @@ import 'package:dcli/dcli.dart';
 void main() {
   /// --no-cache is used as we want the git clone to occur every time
   /// so we are always running of the latest version
-  'sudo docker build --no-cache -f ./all.clone.df -t dcli:all_clone_test ..'.run;
+  'sudo docker build --no-cache -f ./all.clone.df -t dcli:all_clone_test ..'
+      .run;
 }

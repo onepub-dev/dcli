@@ -14,7 +14,8 @@ void main() {
     printerr(red("This script must be run from the package's root directory."));
     exit(1);
   }
-  '${DartSdk().pathToPubExe} run test -j1 --coverage ${join(Script.current.pathToProjectRoot, 'coverage')}'.start(nothrow: true);
+  '${DartSdk().pathToPubExe} run test -j1 --coverage ${join(Script.current.pathToProjectRoot, 'coverage')}'
+      .start(nothrow: true);
 
   // cleanup temp
   if (exists('/tmp/dcli')) deleteDir('/tmp/dcli', recursive: true);

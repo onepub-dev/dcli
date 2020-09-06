@@ -113,7 +113,8 @@ void main() {
     print('');
 
     // Find each line in our poem that contains the word rose.
-    'grep rose $restingPlace'.forEach((line) => print('Grep: $line'), stderr: (line) => [print(line)]);
+    'grep rose $restingPlace'.forEach((line) => print('Grep: $line'),
+        stderr: (line) => [print(line)]);
 
     // lets do some pipeing and see the 3-5 lines
     ('head  -5 $restingPlace' | 'tail -n 3').forEach(print);

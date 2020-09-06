@@ -32,7 +32,9 @@ void main(List<String> args) {
   parser
     ..addFlag('verbose', abbr: 'v', defaultsTo: false)
     ..addFlag('recursive', abbr: 'r', defaultsTo: true)
-    ..addOption('root', defaultsTo: '.', help: 'Specifies the directory to start searching from')
+    ..addOption('root',
+        defaultsTo: '.',
+        help: 'Specifies the directory to start searching from')
     ..addOption('pattern',
         abbr: 'p',
         help:
