@@ -10,7 +10,7 @@ Asking the user to input data into a cli application should be simple. DCli prov
 * confirm
 * menu
 
-### Ask
+## Ask
 
 The 'ask' function provides a simple but flexible means of requesting information from the user.
 
@@ -43,7 +43,7 @@ var username = ask('Username:', defaultValue: 'Administrator');
 ```
 
 ```bash
-Username: 
+Username:
 ```
 
 You can also add a validator. If the entered input doesn't match the supplied validator then the user will be re-prompted until the enter a valid value.
@@ -58,7 +58,7 @@ Invalid integer.
 Age:
 ```
 
-### Confirm
+## Confirm
 
 The confirm method allows you to ask the user fro a true/false response and returns a bool reflecting what the user entered.
 
@@ -66,7 +66,7 @@ The confirm method allows you to ask the user fro a true/false response and retu
 bool allowed = confirm('Are you over 18', defaultValue: false);
 ```
 
-### Menu
+## Menu
 
 The menu function allows you to display a list of menu items for the user to select from and returns the selected item.
 
@@ -108,6 +108,4 @@ print(green('You chose $selected'));
 3) BMW M3
 Choose your preferred car: 1
 ```
-
-
 

@@ -41,7 +41,7 @@ print(tmp);
 ```
 
 {% hint style="info" %}
-HOME  is a DCli property which  returns the value of the environment variable 'HOME' \(in this example /home/me\)
+HOME is a DCli property which returns the value of the environment variable 'HOME' \(in this example /home/me\)
 {% endhint %}
 
 In the above example we can see that the join path combines two path fragments to form a complete path.

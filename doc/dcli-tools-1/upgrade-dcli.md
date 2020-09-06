@@ -25,5 +25,3 @@ If you have been using a Shebang or the dcli tools you can also run cleanall to 
 dcli cleanall
 ```
 
-
-

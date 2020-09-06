@@ -8,7 +8,7 @@ Like many languages Dart allows you to pass arguments to your main method..
 void main(List<String> args)
 {
     print('Found ${arg.length} arguments.');
-    
+
     print('The arguments are:');
 
     for (int i = 0; i < args.lenght; i++) {
@@ -36,11 +36,11 @@ import 'dart:io';
 void main(List<String> args)
 {
     print('Found ${arg.length} arguments.');
-    
+
     /// stops the progam so no further lines will be executed.
     /// The progam outputs an exit code of 1.
     exit(1);
-    
+
     print('The arguments are:');
 
     for (int i = 0; i < args.lenght; i++) {
@@ -49,13 +49,13 @@ void main(List<String> args)
 }
 ```
 
-### ArgParser
+## ArgParser
 
-For simple command argument processing you can process the args argument yourself. 
+For simple command argument processing you can process the args argument yourself.
 
 If you want to do more complex argument processing then its better to get some help.
 
-The Dart team has very kindly put together the [args](https://pub.dev/packages/args) package which provides advanced argument parsing.  The DCli API includes the args package so you do NOT need to added it to your pubspec.yaml dependencies.
+The Dart team has very kindly put together the [args](https://pub.dev/packages/args) package which provides advanced argument parsing. The DCli API includes the args package so you do NOT need to added it to your pubspec.yaml dependencies.
 
 You can read all about using the [args](https://pub.dev/packages/args) package on [pub.dev](https://pub.dev/packages/args) but here is a little example of what you can do:
 
@@ -66,14 +66,14 @@ import 'package:dcli/dcli.dart';
 /// This is a full implementation of the linux cli 'which' app.
 /// The which command searches the PATH for the passed exe.
 void main(List<String> args) {
-  
+
   /// create the parser and add a --verbose option
   var parser = ArgParser();
   parser..addFlag('verbose', abbr: 'v', defaultsTo: false, negatable: false);
 
   /// parse the passed in command line arguments.
   var results = parser.parse(args);
-  
+
   /// get the value of the passed in verbose flag.
   var verbose = results['verbose'] as bool;
 
@@ -105,7 +105,6 @@ void main(List<String> args) {
     }
   }
 }
-
 ```
 
 To use the above application:
@@ -114,8 +113,5 @@ To use the above application:
 dart which.dart ls
 Found at: /usr/bin/ls
 Found at: /bin/ls
-
 ```
-
-
 

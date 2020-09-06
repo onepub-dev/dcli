@@ -1,6 +1,6 @@
 # DCli Clean
 
-### DCli clean
+## DCli clean
 
 If you change the structure of your DCli script project then you need to run `dcli clean` so that DCli sees the changes you have made.
 

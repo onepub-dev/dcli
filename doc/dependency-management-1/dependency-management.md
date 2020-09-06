@@ -18,9 +18,7 @@ NOTE: you can't use Flutter or web packages in your DCli scripts.
 
 To use an external package you need to add it as a dependency to your script.
 
-Dart's dependency management is done via a pubspec.yaml file. 
-
-
+Dart's dependency management is done via a pubspec.yaml file.
 
 See the section on [Pubspec Management](../#pubspec-management) for details.
 

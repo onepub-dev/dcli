@@ -8,7 +8,7 @@ For complete API documentation refer to: [pub.dev](https://pub.dev/documentation
 
 DCli allows you to fetch a single web resource with progress information or to simultaneously fetch multiple resources.
 
-### Fetch a single resource
+## Fetch a single resource
 
 The resource 'sample.aac' will be downloaded and saved to the temporary file 'sampleAac';
 
@@ -19,7 +19,7 @@ The resource 'sample.aac' will be downloaded and saved to the temporary file 'sa
     fetch(url: '$baseURl/sample.aac', saveToPath: sampleAac);
 ```
 
-### Fetch as single resource and show progress
+## Fetch as single resource and show progress
 
 ```dart
  var sampleAac = fs.tempFile();
@@ -30,7 +30,7 @@ The resource 'sample.aac' will be downloaded and saved to the temporary file 'sa
  });
 ```
 
-### Fetch multiple resource and show progress
+## Fetch multiple resource and show progress
 
 ```dart
 void get() {
@@ -42,11 +42,9 @@ void get() {
           FetchUrl(url: '$baseURl/sample.wav', saveToPath: sampleWav)
         ]);
 }
-        
+
 void showProgress(FetchProgress progress) {
   print(progress);
-}        
+}
 ```
-
-
 

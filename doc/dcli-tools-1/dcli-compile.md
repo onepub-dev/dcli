@@ -20,7 +20,7 @@ dcli compile hello_world.dart
 {% endtab %}
 
 {% tab title="OSx" %}
-```
+```text
 dcli compile hello_world.dart
 
 ./hello_world
@@ -28,7 +28,7 @@ dcli compile hello_world.dart
 {% endtab %}
 
 {% tab title="Windows" %}
-```
+```text
 dcli compile hello_world.dart
 
 hello_world.exe
@@ -52,17 +52,17 @@ hello_world
 {% endtab %}
 {% endtabs %}
 
-### Flags:
+## Flags:
 
-####  --noclean \| -nc : 
+### --noclean \| -nc :
 
 stop dcli from running clean before doing a compile. Use this option if you know that you scripts dependency haven't change since the last compile resulting in a faster compile.
 
-####  --install \| -i : 
+### --install \| -i :
 
 install the compiled script into the ~/.dcli/bin directory which is on your path. -
 
-#### -overwrite \| -o :
+### -overwrite \| -o :
 
- if the target script has already been compiled and installed you must specify the -o flag to allow dcli to overwrite it.
+if the target script has already been compiled and installed you must specify the -o flag to allow dcli to overwrite it.
 

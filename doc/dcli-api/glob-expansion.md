@@ -28,5 +28,3 @@ DCli uses the same process. If you encase a glob in quotes then DCli will not ex
 
 In the above example DCli sees that the glob is wrapped in quotes and as such passes the glob to chmod without first expanding it.
 
-
-

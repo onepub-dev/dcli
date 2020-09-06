@@ -1,6 +1,6 @@
 # DCli run
 
-### run
+## run
 
 Runs the given DCli script.
 

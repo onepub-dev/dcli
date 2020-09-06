@@ -38,9 +38,7 @@ List<String> results = find('[a-z]*.jpg').toList();
 
 The find command starts from the present working directory \(pwd\) searching for any files that start with the lowercase letters a-z and ending with the extension '.jpg'.
 
-The default action of find is to do a recursive search. 
-
-
+The default action of find is to do a recursive search.
 
 ```dart
 List<String> results = find('[a-z]*.jpg', root: '\' ).toList();
@@ -48,22 +46,17 @@ List<String> results = find('[a-z]*.jpg', root: '\' ).toList();
 
 If you need to do a search starting from a location other than you current directory you can use the 'root' argument which controls where the find starts searching from.
 
-
-
 ```dart
 List<String> results = find('[a-z]*.jpg', root: '\', hidden: true ).toList();
 ```
 
 The find command will ignore hidden files \(those starting with a '.'\) and directories. If you need to scan hidden files and directories then pass 'hidden: true'.
 
-
-
 ```dart
 var progress = Progress((file) => print(file));
 find('*.jpg', root: '\'
   , types:[FileSystemEntityType.directory, FileSystemEntityType.file]
   , progress: progress);
-    
 ```
 
 If you are process a large amount of results you may want to process them as you go rather than waiting for the full result list to be available.
@@ -141,7 +134,7 @@ The delete function deletes a file.
 delete("/tmp/test.fred", ask: true);
 ```
 
-If you pass the 'ask' argument to the delete function then the user will be prompted to confirm the delete action. 
+If you pass the 'ask' argument to the delete function then the user will be prompted to confirm the delete action.
 
 ### deleteDir
 
@@ -161,7 +154,7 @@ deleteDir("/tmp/testing", recursive=true);
 
 ### createDir
 
-The createDir function creates a directory.  If the directory already exists then a CreateDirException will be thrown.
+The createDir function creates a directory. If the directory already exists then a CreateDirException will be thrown.
 
 ```dart
 if (!exists('/tmp/fred/tools')) {

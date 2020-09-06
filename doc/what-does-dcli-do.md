@@ -1,6 +1,10 @@
 # What does DCli do?
 
-DCli has a singular focus: make it easy to build command line apps.
+DCli has a singular focus: 
+
+{% hint style="info" %}
+make it easy to build command line apps using the Dart programming language.
+{% endhint %}
 
 DCli aims to fully utilise the expressiveness of Dart to make building CLI apps as natural as walking.
 
@@ -8,7 +12,7 @@ DCli's API also works seamlessly with the core Dart libraries.
 
 DCli's API covers a number of core areas:
 
-### User input
+## User input
 
 Asking the user to input data into a CLI application should be simple. DCli provide a number of core methods to facilitate user input.
 
@@ -31,7 +35,7 @@ print(green('You chose $selected'));
 **DCli provide an extensive API designed specifically for building command line apps.**
 {% endhint %}
 
-### Displaying information
+## Displaying information
 
 Out of the box dart provides the basic 'print' statement which DCli extends to provide common features.
 
@@ -41,7 +45,7 @@ Out of the box dart provides the basic 'print' statement which DCli extends to p
 * cursor management
 * clear screen/clear line
 
-### Manage files and directories
+## Manage files and directories
 
 A fundamental task of most CLI applications is the management of files and directories. DCli provides a large set of tools for file management.
 
@@ -78,9 +82,9 @@ for (var image in images) {
 }
 ```
 
-### Read/Write files
+## Read/Write files
 
-You are often going to need to read/write and modify text and binary files. 
+You are often going to need to read/write and modify text and binary files.
 
 * read
 * write
@@ -91,7 +95,7 @@ You are often going to need to read/write and modify text and binary files.
 * cat
 
 {% hint style="info" %}
-You still have full access to the  core Dart APIs as well as [ffi](https://dart.dev/guides/libraries/c-interop) to call native C libraries.
+You still have full access to the core Dart APIs as well as [ffi](https://dart.dev/guides/libraries/c-interop) to call native C libraries.
 {% endhint %}
 
 ```dart
@@ -103,7 +107,7 @@ settings.append('color=blue');
 replace(settings, 'color', 'colour');
 ```
 
-### Call any command line app
+## Call any command line app
 
 A core feature of bash is the ability to call other CLI apps and process their output. DCli provides the same facilities.
 
@@ -137,7 +141,7 @@ for (var user in users) {
 'grep error /var/lib/syslog'.forEach((line) => print(line));
 ```
 
-### Explore you environment
+## Explore you environment
 
 DCli makes it easy to explore your environment with direct manipulation of environment variables.
 
@@ -163,7 +167,7 @@ DartSdk().pathToDartExe;
 PubCache().pathTo;
 ```
 
-### Shebang \(\#!\) support
+## Shebang \(\#!\) support
 
 As DCli is focused on building command line scripts it wouldn't be complete without [Shebang](https://en.wikipedia.org/wiki/Shebang_%28Unix%29) support.
 
@@ -184,7 +188,7 @@ dart hello.dart
 > hello world
 ```
 
-By adding a  shebang \(\#!\) at the top of your dart file allows you to directly run your script:
+By adding a shebang \(\#!\) at the top of your dart file allows you to directly run your script:
 
 ```dart
 #! /usr/bin/env dcli
@@ -200,8 +204,4 @@ chmod +x hello.dart
 ./hello.dart
 > hello world
 ```
-
-
-
-
 

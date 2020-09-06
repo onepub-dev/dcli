@@ -1,6 +1,6 @@
 # Virtual Projects
 
-### Virtual Projects
+## Virtual Projects
 
 A normal Dart program requires a certain directory structure to work:
 

@@ -13,14 +13,14 @@ cd dcli_scripts
 {% endtab %}
 
 {% tab title="Windows" %}
-```
+```text
 mkdir dcli_scripts
 cd dcli_scripts
 ```
 {% endtab %}
 
 {% tab title="OSx" %}
-```
+```text
 mkdir dcli_scripts
 cd dcli_scripts
 ```
@@ -35,7 +35,7 @@ void main() {
 }
 ```
 
-### Running
+## Running
 
 Now lets run your script:
 
@@ -46,7 +46,7 @@ dart hello.dart
 
 When we run our script using the `dart` command, dart performs JIT compilation of our script which slows down the startup time a little.
 
-### Compiling
+## Compiling
 
 You can compile your script to a native executable so that it launches and runs much faster.
 
@@ -64,7 +64,7 @@ You now have a completely self contained executable which you can copy to any bi
 
 The exe is 5MB in size and does NOT require Dart to be installed.
 
-### Dependencies
+## Dependencies
 
 So far we haven't actually used the DCli API in our hello.dart program. Lets now setup dependency management so we can use the DCli API and any other Dart package.
 
@@ -92,7 +92,7 @@ Resolving dependencies...
 Got dependencies!
 ```
 
-### Writing a DCli script
+## Writing a DCli script
 
 Now that we have added DCli to our pubspec.yaml we can now modify hello.dart to make calls to the DCli API.
 
@@ -113,7 +113,7 @@ void main() {
 
     // create a directory
     if (!exists('tmp')) {
-    	createDir('tmp');
+        createDir('tmp');
     }
 
     // Truncate any existing content

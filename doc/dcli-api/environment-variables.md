@@ -48,11 +48,11 @@ paths.forEach((path) => print(path));
 print('Your working directory is $pwd);
 ```
 
-#### envs -&gt; Map&lt;String, String&gt;
+### envs -&gt; Map&lt;String, String&gt;
 
- Returns a map of all the environment variables inherited from the parent as well as any changes made by calls to env\[\]=.
+Returns a map of all the environment variables inherited from the parent as well as any changes made by calls to env\[\]=.
 
-#### PATH
+### PATH
 
 DCli provides a list of methods allow you to modify the PATH. Like any environment variables modifying the PATH will only affect child process you call and not the parent shell.
 
@@ -64,8 +64,4 @@ Methods to manipulate the path include:
 * addToPATHIfAbsent
 * isOnPATH
 * delimiterForPATH
-
-
-
-
 
