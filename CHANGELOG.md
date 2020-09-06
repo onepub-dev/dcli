@@ -1,3 +1,8 @@
+# 0.24.1
+Updated readme to refer to the new gitbook manual.
+touch : now returns the path that was passed in.
+Documentation improvements. Added Ask.any and Ask.all. Exposed all of the built in validators as methods.
+
 # 0.24.0
 added method to get overriden dependencies.
 
