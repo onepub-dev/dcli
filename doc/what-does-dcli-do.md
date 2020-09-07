@@ -12,7 +12,13 @@ DCli has the following aims
 * fully utilise the expressiveness of Dart
 * works seamlessly with the core Dart libraries.
 * make debugging CLI apps easy
+* generate error messages that make it easy to resolve problems
 * provide quality documentation and examples
+* Executes commands synchronously, so no need to worry about futures.
+* Chain multiple cli commands using pipes
+* Optionally compile scripts to a standalone native executable.
+* Write and execute single file scripts
+* Allows you to call any cli application in a single line
 
 DCli's API covers a number of core areas:
 
