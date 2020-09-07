@@ -139,4 +139,7 @@ class UnknownShell with ShellMixin {
   String checkInstallPreconditions() {
     return null;
   }
+
+  @override
+  bool get isSudo => throw UnimplementedError();
 }

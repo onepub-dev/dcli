@@ -52,4 +52,6 @@ Read additional details here: https://github.com/bsutton/dcli/wiki/Installing-DC
   }
 
   String get loggedInUser => env['USERNAME'];
+
+  bool get isSudo => false;
 }

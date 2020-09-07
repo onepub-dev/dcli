@@ -13,10 +13,7 @@ abstract class Shell {
   ///
   bool get isCompletionSupported;
 
-  bool get isSudo =>
-      !Settings().isWindows &&
-      Shell.current.isPrivilegedUser &&
-      Shell.current.loggedInUser != 'ROOT';
+  bool get isSudo;
 
   /// If the shell supports tab completion then
   /// install it.
