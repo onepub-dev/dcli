@@ -26,7 +26,7 @@ dependencies:
   uuid: ^2.0.4
   validators: ^2.0.0+1
   yaml: ^2.2.0
-  pubspec: ^0.1.4
+  pubspec: ^0.1.5
 dev_dependencies: 
   test: 1.15.3
   effective_dart: ^1.0.0

@@ -147,9 +147,8 @@ class PubSpecAnnotation implements PubSpec // with DependenciesMixin
   @override
   List<Dependency> get dependencyOverrides => _pubspec.dependencyOverrides;
 
-  // removed unti pupspec 0.14 is released
-  // @override
-  // List<Executable> get executables => _pubspec.executables;
+  @override
+  List<Executable> get executables => _pubspec.executables;
 
   @override
   String get name => _pubspec.name;

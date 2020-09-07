@@ -33,8 +33,7 @@ abstract class PubSpec {
 
   List<Dependency> get dependencyOverrides;
 
-  // removed unti pupspec 0.14 is released
-  /// List<Executable> get executables;
+  List<Executable> get executables;
 
   /// Compares two pubspec to see if they have the same content.
   static bool equals(PubSpec lhs, PubSpec rhs) {
@@ -110,18 +109,17 @@ class PubSpecImpl implements PubSpec {
     return depends;
   }
 
-  // removed until pubspec 0.14.0 is released.
-  // List<Executable> _executables;
-  // @override
-  // List<Executable> get executables {
-  //   if (_executables == null) {
-  //     _executables = <Executable>[];
-  //     for (var key in pubspec.executables.keys) {
-  //       _executables.add(Executable(key, pubspec.executables[key].scriptPath));
-  //     }
-  //   }
-  //   return _executables;
-  // }
+  List<Executable> _executables;
+  @override
+  List<Executable> get executables {
+    if (_executables == null) {
+      _executables = <Executable>[];
+      for (var key in pubspec.executables.keys) {
+        _executables.add(Executable(key, pubspec.executables[key].scriptPath));
+      }
+    }
+    return _executables;
+  }
 
   /// parses a pubspec from a yaml string.
   factory PubSpecImpl.fromString(String yamlString) {

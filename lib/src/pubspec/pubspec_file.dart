@@ -43,12 +43,11 @@ class PubSpecFile implements PubSpec // with DependenciesMixin
   @override
   List<Dependency> get dependencyOverrides => __pubspec.dependencyOverrides;
 
-  // removed unti pupspec 0.14 is released
-  // /// Sets the list of executables for this pubspec.
-  // @override
-  // List<Executable> get executables {
-  //   return __pubspec.executables;
-  // }
+  /// Sets the list of executables for this pubspec.
+  @override
+  List<Executable> get executables {
+    return __pubspec.executables;
+  }
 
   /// Returns the set of dependencies contained in this pubspec.
   @override
