@@ -5,7 +5,6 @@ import 'package:meta/meta.dart';
 
 import '../../../dcli.dart';
 import '../../functions/env.dart';
-import '../../functions/which.dart';
 import '../../pubspec/global_dependencies.dart';
 import '../../settings.dart';
 import '../../shell/shell.dart';
@@ -76,11 +75,11 @@ class InstallCommand extends Command {
 
     // requirePrivileges = !flagSet.isSet(_NoPrivilegesFlag());
 
-    /// We need to be priviledged to create the dcli symlink
-    if (requirePrivileges && !shell.isPrivilegedUser) {
-      qprint(red(shell.privilegesRequiredMessage('dcli_install')));
-      exit(1);
-    }
+    // /// We need to be priviledged to create the dcli symlink
+    // if (requirePrivileges && !shell.isPrivilegedUser) {
+    //   qprint(red(shell.privilegesRequiredMessage('dcli_install')));
+    //   exit(1);
+    // }
 
     quiet = flagSet.isSet(_QuietFlag());
 
@@ -321,20 +320,20 @@ class _QuietFlag extends Flag {
   }
 }
 
-class _NoPrivilegesFlag extends Flag {
-  static const _flagName = 'noprivileges';
+// class _NoPrivilegesFlag extends Flag {
+//   static const _flagName = 'noprivileges';
 
-  const _NoPrivilegesFlag() : super(_flagName);
+//   const _NoPrivilegesFlag() : super(_flagName);
 
-  @override
-  String get abbreviation => 'np';
+//   @override
+//   String get abbreviation => 'np';
 
-  @override
-  String description() {
-    return '''Allows the install to be run without privileges. This flag is primarily used for unit testing. 
-      Some features will not be available if you run in this mode.''';
-  }
-}
+//   @override
+//   String description() {
+//     return '''Allows the install to be run without privileges. This flag is primarily used for unit testing.
+//       Some features will not be available if you run in this mode.''';
+//   }
+// }
 
 /// Thrown if an error is encountered during an install
 class InstallException extends DCliException {
