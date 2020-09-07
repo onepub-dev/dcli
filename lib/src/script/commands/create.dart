@@ -28,6 +28,11 @@ class CreateCommand extends Command {
   int run(List<Flag> selectedFlags, List<String> subarguments) {
     var scriptIndex = 0;
 
+    if (Shell.current.isSudo) {
+      printerr('You cannot create a script as sudo.');
+      return 1;
+    }
+
     // check for any flags
     for (var i = 0; i < subarguments.length; i++) {
       final subargument = subarguments[i];
@@ -56,7 +61,7 @@ class CreateCommand extends Command {
         scriptPath: scriptPath,
       );
 
-      _script = Script.init(scriptPath);
+      _script = Script.prepareToRun(scriptPath);
 
       break;
     }

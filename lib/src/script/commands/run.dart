@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import '../../../dcli.dart';
 import '../../settings.dart';
 import '../../util/completion.dart';
@@ -32,7 +34,18 @@ class RunCommand extends Command {
     var scriptPath = arguments[0];
     Script.validate(scriptPath);
 
-    var script = Script.init(scriptPath, showWarnings: true);
+    var script = Script.fromFile(scriptPath);
+
+    if (Shell.current.isSudo) {
+      /// we are running sudo, so we can't init a script
+      /// as we will end up with root permissions everywhere.
+      if (!script.isReadyToRun) {
+        printerr(red(
+            'The script is not ready to run, so cannot be run from sudo. Run dcli clean $scriptPath'));
+        exit(1);
+      }
+    }
+
     Settings().pathToScript = script.pathToScript;
 
     Settings().verbose('Running script ${script.pathToScript}');
@@ -41,8 +54,14 @@ class RunCommand extends Command {
     Settings()
         .verbose('Virtual Project directory ${project.pathToRuntimeProject}');
 
-    if (!project.isRunnable) {
-      project.build();
+    if (!project.isReadyToRun) {
+      if (Shell.current.isSudo) {
+        printerr(red(
+            'The script is not ready to run, so cannot be run from sudo. Run dcli clean $scriptPath'));
+        exit(1);
+      } else {
+        project.build();
+      }
     }
 
     var scriptArguments = <String>[];

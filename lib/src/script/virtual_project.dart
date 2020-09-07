@@ -433,6 +433,15 @@ class VirtualProject {
   void _pubget() {
     _lock.withLock(() {
       var pubGet = PubGet(this);
+      if (Shell.current.isSudo) {
+        /// bugger we just screwed the cache permissions so lets fix them.
+//         'chmod -R ${env['USER']}:${env['USER']} ${PubCache().pathTo}'.run;
+
+        printerr('You must compile your script before running it under sudo');
+
+        /// TODO: should this be a throw?
+        exit(1);
+      }
       pubGet.run(compileExecutables: false);
     });
   }
@@ -543,7 +552,7 @@ class VirtualProject {
   /// user has changed from a virtual pubspec.yaml to an actual
   /// pubspec.yaml. This additional check allows us to pick this
   /// scenario up.
-  bool get isRunnable {
+  bool get isReadyToRun {
     return _isProjectInitialised &&
         exists(join(_virtualProjectPath, _buildCompleteFilename)) &&
         exists(join(_projectRootPath, DartSdk().pathToPackageConfig));

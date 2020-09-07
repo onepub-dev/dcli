@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import '../../../dcli.dart';
 import '../../settings.dart';
 import '../../util/ansi_color.dart';
@@ -79,14 +81,28 @@ class CompileCommand extends Command {
     print('');
 
     Script.validate(scriptPath);
-    var script = Script.init(scriptPath, showWarnings: true);
+    var script = Script.fromFile(scriptPath);
+
+    var preparationAllowed = !(Shell.current.isSudo);
+
+    if (!preparationAllowed) {
+      /// we are running sudo, so we can't init a script
+      /// as we will end up with root permissions everywhere.
+      if (!script.isReadyToRun) {
+        printerr(red(
+            'The script is not ready to run, so cannot be run from sudo. Run dcli clean $scriptPath'));
+        exit(1);
+      }
+    }
+
     try {
       var project = VirtualProject.load(script);
 
       // by default we clean the project unless the -nc flagg is passed.
       // however if the project isn't i a runnable state then we
       // force a build.
-      var buildRequired = !flagSet.isSet(NoCleanFlag()) || !project.isRunnable;
+      var buildRequired =
+          !flagSet.isSet(NoCleanFlag()) || !project.isReadyToRun;
 
       if (buildRequired) {
         project.build();
