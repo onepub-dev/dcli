@@ -148,11 +148,12 @@ class DartSdk {
     Settings().verbose('pub get finished');
   }
 
+  /// Attempts to detect the location of the dart sdk.
   static String _detect() {
     var path = which(dartExeName).firstLine;
 
     if (path != null) {
-      return dirname(dirname(path));
+      return dirname(dirname(File(path).resolveSymbolicLinksSync()));
     } else {
       var executable = Platform.resolvedExecutable;
 
