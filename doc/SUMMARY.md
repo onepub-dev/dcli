@@ -13,6 +13,7 @@
 * [Dart lambda functions](dart-basics/dart-lambda-functions.md)
 * [Function Arguments](dart-basics/named-arguments.md)
 * [Futures](dart-basics/futures.md)
+* [stdin/stdout/stderr](dart-basics/stdin-stdout-stderr.md)
 
 ## DCli API
 
