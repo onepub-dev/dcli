@@ -3,7 +3,7 @@ import 'ansi.dart';
 /// Returns a string wrapped with the selected ansi
 /// fg color codes.
 String red(String text, {AnsiColor bgcolor = AnsiColor.none}) =>
-    AnsiColor._apply(AnsiColor._red, text, bgcolor: bgcolor);
+    AnsiColor._apply(AnsiColor.red, text, bgcolor: bgcolor);
 
 ///
 /// Wraps the passed text with the ANSI escape sequence for
@@ -18,8 +18,8 @@ String red(String text, {AnsiColor bgcolor = AnsiColor.none}) =>
 /// [bgcolor] is the background color to use when printing the
 /// text.  Defaults to White.
 ///
-String black(String text, {AnsiColor bgcolor = AnsiColor._white}) =>
-    AnsiColor._apply(AnsiColor._black, text, bgcolor: bgcolor);
+String black(String text, {AnsiColor bgcolor = AnsiColor.white}) =>
+    AnsiColor._apply(AnsiColor.black, text, bgcolor: bgcolor);
 
 ///
 /// Wraps the passed text with the ANSI escape sequence for
@@ -35,7 +35,7 @@ String black(String text, {AnsiColor bgcolor = AnsiColor._white}) =>
 /// text.  Defaults to none.
 ///
 String green(String text, {AnsiColor bgcolor = AnsiColor.none}) =>
-    AnsiColor._apply(AnsiColor._green, text, bgcolor: bgcolor);
+    AnsiColor._apply(AnsiColor.green, text, bgcolor: bgcolor);
 
 ///
 /// Wraps the passed text with the ANSI escape sequence for
@@ -51,7 +51,7 @@ String green(String text, {AnsiColor bgcolor = AnsiColor.none}) =>
 /// text.  Defaults to none.
 ///
 String blue(String text, {AnsiColor bgcolor = AnsiColor.none}) =>
-    AnsiColor._apply(AnsiColor._blue, text, bgcolor: bgcolor);
+    AnsiColor._apply(AnsiColor.blue, text, bgcolor: bgcolor);
 
 ///
 /// Wraps the passed text with the ANSI escape sequence for
@@ -67,7 +67,7 @@ String blue(String text, {AnsiColor bgcolor = AnsiColor.none}) =>
 /// text.  Defaults to none.
 ///
 String yellow(String text, {AnsiColor bgcolor = AnsiColor.none}) =>
-    AnsiColor._apply(AnsiColor._yellow, text, bgcolor: bgcolor);
+    AnsiColor._apply(AnsiColor.yellow, text, bgcolor: bgcolor);
 
 ///
 /// Wraps the passed text with the ANSI escape sequence for
@@ -83,7 +83,7 @@ String yellow(String text, {AnsiColor bgcolor = AnsiColor.none}) =>
 /// text.  Defaults to none.
 ///
 String magenta(String text, {AnsiColor bgcolor = AnsiColor.none}) =>
-    AnsiColor._apply(AnsiColor._magenta, text, bgcolor: bgcolor);
+    AnsiColor._apply(AnsiColor.magenta, text, bgcolor: bgcolor);
 
 ///
 /// Wraps the passed text with the ANSI escape sequence for
@@ -99,7 +99,7 @@ String magenta(String text, {AnsiColor bgcolor = AnsiColor.none}) =>
 /// text.  Defaults to none.
 ///
 String cyan(String text, {AnsiColor bgcolor = AnsiColor.none}) =>
-    AnsiColor._apply(AnsiColor._cyan, text, bgcolor: bgcolor);
+    AnsiColor._apply(AnsiColor.cyan, text, bgcolor: bgcolor);
 
 ///
 /// Wraps the passed text with the ANSI escape sequence for
@@ -115,7 +115,7 @@ String cyan(String text, {AnsiColor bgcolor = AnsiColor.none}) =>
 /// text.  Defaults to none.
 ///
 String white(String text, {AnsiColor bgcolor = AnsiColor.none}) =>
-    AnsiColor._apply(AnsiColor._white, text, bgcolor: bgcolor);
+    AnsiColor._apply(AnsiColor.white, text, bgcolor: bgcolor);
 
 ///
 /// Wraps the passed text with the ANSI escape sequence for
@@ -131,7 +131,7 @@ String white(String text, {AnsiColor bgcolor = AnsiColor.none}) =>
 /// text.  Defaults to none.
 ///
 String orange(String text, {AnsiColor bgcolor = AnsiColor.none}) =>
-    AnsiColor._apply(AnsiColor._orange, text, bgcolor: bgcolor);
+    AnsiColor._apply(AnsiColor.orange, text, bgcolor: bgcolor);
 
 ///
 /// Wraps the passed text with the ANSI escape sequence for
@@ -247,15 +247,15 @@ class AnsiColor {
   static const String _bgColorCode = '48;5;';
 
   /// Colors
-  static const AnsiColor _black = AnsiColor(30);
-  static const AnsiColor _red = AnsiColor(31);
-  static const AnsiColor _green = AnsiColor(32);
-  static const AnsiColor _yellow = AnsiColor(33);
-  static const AnsiColor _blue = AnsiColor(34);
-  static const AnsiColor _magenta = AnsiColor(35);
-  static const AnsiColor _cyan = AnsiColor(36);
-  static const AnsiColor _white = AnsiColor(37);
-  static const AnsiColor _orange = AnsiColor(208);
+  static const AnsiColor black = AnsiColor(30);
+  static const AnsiColor red = AnsiColor(31);
+  static const AnsiColor green = AnsiColor(32);
+  static const AnsiColor yellow = AnsiColor(33);
+  static const AnsiColor blue = AnsiColor(34);
+  static const AnsiColor magenta = AnsiColor(35);
+  static const AnsiColor cyan = AnsiColor(36);
+  static const AnsiColor white = AnsiColor(37);
+  static const AnsiColor orange = AnsiColor(208);
   static AnsiColor _grey({double level = 0.5}) =>
       AnsiColor(232 + (level.clamp(0.0, 1.0) * 23).round());
 
