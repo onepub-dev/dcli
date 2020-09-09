@@ -65,7 +65,7 @@ export 'src/shell/shell.dart';
 export 'src/shell/unknown_shell.dart';
 export 'src/shell/zshell.dart';
 export 'src/util/ansi.dart';
-export 'src/util/ansi_color.dart' hide AnsiColor;
+export 'src/util/ansi_color.dart';
 export 'src/util/assets.dart';
 export 'src/util/dcli_exception.dart';
 export 'src/util/dcli_paths.dart' show DCliPaths;

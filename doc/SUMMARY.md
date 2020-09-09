@@ -4,7 +4,7 @@
 * [What does DCli do?](what-does-dcli-do.md)
 * [Getting Started](getting-started.md)
 * [Writing your first script](writing-your-first-script.md)
-* [Added DCli to your project](added-dcli-to-your-project.md)
+* [Add DCli to your project](added-dcli-to-your-project.md)
 * [pub.dev](pub.dev.md)
 * [github](github.md)
 
@@ -13,6 +13,7 @@
 * [Dart lambda functions](dart-basics/dart-lambda-functions.md)
 * [Function Arguments](dart-basics/named-arguments.md)
 * [Futures](dart-basics/futures.md)
+* [stdin/stdout/stderr](dart-basics/stdin-stdout-stderr.md)
 
 ## DCli API
 

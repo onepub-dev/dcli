@@ -61,7 +61,7 @@ chmod +x  first.dart
 ```
 
 {% hint style="info" %}
- if you used the `dcli create <script>` command then DCli will have already set the execute permission on your script and added the shebang!
+if you used the `dcli create <script>` command then DCli will have already set the execute permission on your script and added the shebang!
 {% endhint %}
 
 Now run the script from the cli:

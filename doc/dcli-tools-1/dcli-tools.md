@@ -25,7 +25,7 @@ The syntax of `dcli` is:
 dcli [flag, flag...] [command] [flag, flag...] [arguments...]
 ```
 
-### flags
+## flags
 
 DCli supports a global verbose flag: `--verbose | -v`
 

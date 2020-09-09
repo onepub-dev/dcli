@@ -50,7 +50,7 @@ The first time you run a given DCli script \(created with dcli create\), DCli ne
 
 If you run the same script a second time DCli has already resolved the dependencies and so it can run the script immediately.
 
-#### Flags
+## Flags
 
 The dcli create command accepts the following flags:
 

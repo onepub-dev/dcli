@@ -8,5 +8,3 @@ If you run a script with the DCli tools it sprinkles a little magic around to ma
 
 The following sections describe the internal workings of the DCli tools.
 
-
-

@@ -1,6 +1,6 @@
 # DCli Install
 
-### install
+## install
 
 The install command MUST be run after you activate dcli to complete the dcli install.
 
@@ -9,7 +9,5 @@ pub global activate dcli
 dcli install
 ```
 
-Completes the installation of dcli. 
-
-
+Completes the installation of dcli.
 

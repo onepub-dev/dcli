@@ -1,11 +1,9 @@
 # Introduction
 
-DCli is an extensive library and tooling for building cross platform command line \(CLI\) applications and scripts using the Dart programming language.
+DCli is an API and tooling for building cross platform command line \(CLI\) applications and scripts using the Dart programming language.
 
 {% hint style="info" %}
-## Looking for DShell? You are in the right place.
-
-DShell has been renamed DCli to better reflect its intended purposes. 
+Looking for DShell? You are in the right place. DShell has been renamed DCli.
 {% endhint %}
 
 ## Overview
@@ -38,7 +36,7 @@ Dart provides elegant solutions for common problems and from a scripting perspec
 
 DCli excels in all of the functionality that you expect from Bash and then takes you to the next level.
 
-DCli is easy to install; makes it a breeze to create simple scripts and provides the tools to manage a script that started out as 100 lines but somehow grew to 10,000 lines. 
+DCli is easy to install; makes it a breeze to create simple scripts and provides the tools to manage a script that started out as 100 lines but somehow grew to 10,000 lines.
 
 Dart has is also a large and growing eco-system of [third party libraries](https://pub.dev) that you can included in your script with no more than an import statement and a dependency declaration.
 

@@ -2,7 +2,7 @@
 
 DCli provides a number of methods to display information to a user:
 
-### print
+## print
 
 Dart provides the built in function 'print' which prints a line of text including a new line.
 
@@ -10,7 +10,7 @@ Dart provides the built in function 'print' which prints a line of text includin
 print('hello world');
 ```
 
-### printerr 
+## printerr
 
 The standard Dart 'print' function prints to stdout, DCli's 'printerr' function is identical except that it prints to stderr.
 
@@ -20,7 +20,7 @@ printerr('something bad happened.');
 
 You should use printerr when you are printing error messages.
 
-### echo
+## echo
 
 The echo function is provided to supplement the Dart print method. The 'echo' allows you to control whether a new line is output after the text. By default echo will NOT output a newline.
 
@@ -28,7 +28,7 @@ The echo function is provided to supplement the Dart print method. The 'echo' al
 echo('hello', newline: false);
 ```
 
-### Colour coding
+## Colour coding
 
 DCli allows you colour code your ouput.
 
@@ -44,7 +44,7 @@ print(orange('hello world'), bgcolor: AnsiColor.black);
 
 The following colours are supported for both the foreground \(text\) and background colours.
 
-You can also set the background color to the default by passing 
+You can also set the background color to the default by passing
 
 * red
 * black
@@ -57,7 +57,7 @@ You can also set the background color to the default by passing
 * orange
 * grey
 
-### Format.row
+## Format.row
 
 This method is considered experimental. Use at your own peril.
 
@@ -91,7 +91,7 @@ print(Format.row([
 
 Outputs a row with four columns of widths 17, 9, 16 and infinite. The columns are aligned, left, right, middle and left.
 
-### clearScreen
+## clearScreen
 
 Clears the console.
 
@@ -99,7 +99,7 @@ Clears the console.
 clearScreen();
 ```
 
-### clearLine
+## clearLine
 
 Clears the current line.
 
@@ -107,7 +107,7 @@ Clears the current line.
 clearLine();
 ```
 
-### startOfLine
+## startOfLine
 
 Moves the cursor to the start of the current line.
 
@@ -115,11 +115,11 @@ Moves the cursor to the start of the current line.
 startOfLine;
 ```
 
-### previousLine
+## previousLine
 
 Moves the cursor to the start of the previous line.
 
-### showCursor
+## showCursor
 
 Shows or hides the cursor.
 
@@ -127,7 +127,7 @@ Shows or hides the cursor.
 showCursor(show: true);
 ```
 
-### column
+## column
 
 Moves the cursor to the given column on the current line.
 

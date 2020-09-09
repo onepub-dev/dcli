@@ -16,11 +16,11 @@ The importance of this ability is clearly reflected in the no. of ways that the 
 
 DCli has a philosophy of explicit directives. By this we mean that if something does work as explicitly stated we throw an exception.
 
-One of the key consequences of this principle is that  when an application returns an non-zero exit code then DCli will throw an exception.
+One of the key consequences of this principle is that when an application returns an non-zero exit code then DCli will throw an exception.
 
 In most cases this is the correct action to take.
 
-However some application return a non-zero exit code to indicate something other than a failure. In these cases you need to suppress the exception.  A number of methods include a 'nothrow' option will will suppress the normal exception in the case of a non-zero exit code.
+However some application return a non-zero exit code to indicate something other than a failure. In these cases you need to suppress the exception. A number of methods include a 'nothrow' option will will suppress the normal exception in the case of a non-zero exit code.
 
 Using the 'nothrow' option allows you to obtain the exit code as well as any output from the application.
 
@@ -108,15 +108,15 @@ If you have read the section on the evils of CD then you will understand the nee
 
 #### privileged
 
-If you need to run a command with escalated privileged then set the \[privileged\] flag. argument to true. 
+If you need to run a command with escalated privileged then set the \[privileged\] flag. argument to true.
 
-On Linux this equates to using the sudo command. The advantage of using the 'privileged' option it is cross platform and it will first check if you are already running in a privileged environment. 
+On Linux this equates to using the sudo command. The advantage of using the 'privileged' option it is cross platform and it will first check if you are already running in a privileged environment.
 
 This is extremely useful if you are running in the likes of a Docker container that doesn't implement sudo but in which you are already running as root.
 
 ### which
 
-While the 'which' function doesn't run an executable  it can be invaluable as it searches your PATH for the location of an executable.
+While the 'which' function doesn't run an executable it can be invaluable as it searches your PATH for the location of an executable.
 
 To run an executable with any of the DCli methods you don't need to know its location \(provided its on the path\) but some times you want to know if an executable is installed before you try to run it.
 

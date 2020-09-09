@@ -13,14 +13,14 @@ cd dcli_scripts
 {% endtab %}
 
 {% tab title="Windows" %}
-```
+```text
 mkdir dcli_scripts
 cd dcli_scripts
 ```
 {% endtab %}
 
 {% tab title="OSx" %}
-```
+```text
 mkdir dcli_scripts
 cd dcli_scripts
 ```
@@ -35,7 +35,7 @@ void main() {
 }
 ```
 
-### Running
+## Running
 
 Now lets run your script:
 
@@ -44,11 +44,19 @@ dart hello.dart
 > Hello World.
 ```
 
-When we run our script using the `dart` command, dart performs JIT compilation of our script which slows down the startup time a little.
+When we run our script using the `dart` command, dart performs JIT compilation of our script which slows down the startup time a little but makes for fast test iteration.
 
-### Compiling
+{% hint style="info" %}
+In vscode you should see 'Run \| Debug' just above main\(\). Click Debug to start your app.
+{% endhint %}
+
+## Compiling
 
 You can compile your script to a native executable so that it launches and runs much faster.
+
+{% hint style="info" %}
+The [DCli tools](dcli-tools-1/dcli-tools.md) allow you to run you app without compiling and without prefixing it with dart.
+{% endhint %}
 
 ```bash
 dart2native hello.dart
@@ -64,17 +72,25 @@ You now have a completely self contained executable which you can copy to any bi
 
 The exe is 5MB in size and does NOT require Dart to be installed.
 
-### Dependencies
+## Dependencies
 
-So far we haven't actually used the DCli API in our hello.dart program. Lets now setup dependency management so we can use the DCli API and any other Dart package.
+So far we haven't actually used the DCli API in our hello.dart program. Let's now setup dependency management so we can use the DCli API and any other Dart package.
+
+{% hint style="info" %}
+Search [pub.dev](https://pub.dev/) for third party package. You can only use packages labelled 'DART \| NATIVE'
+{% endhint %}
 
 Dart uses a special file called `pubspec.yaml` to control the set of packages accessible to your application.
 
 Dart's pubspec.yaml is equivalent to a makefile, pom.xml, gradle.build or package.json in that it defines the set of dependencies for you application.
 
-To use DCli or any other Dart package you need to added the dependency to your pubspec.yaml.
+To use the DCli API or any other Dart package you need to add the dependency to your pubspec.yaml.
 
-Create and edit your first pubspec.yaml:
+Create and edit your first 'pubspec.yaml' file using your preferred editor:
+
+{% hint style="info" %}
+Check [pub.dev](https://pub.dev/packages/dcli/install) for the latest version no. of DCli.
+{% endhint %}
 
 ```bash
 name: hello_world
@@ -84,7 +100,11 @@ dependencies:
   dcli: ^0.24.0
 ```
 
-Whenever you change your pubspec.yaml you must run pub get to download the required dependencies:
+{% hint style="info" %}
+The pubspec.yaml lives at the top of your projects directory tree. We refer to this directory as your package root.
+{% endhint %}
+
+Whenever you change your 'pubspec.yaml' you must run 'pub get' to download the required dependencies:
 
 ```bash
 pub get
@@ -92,18 +112,17 @@ Resolving dependencies...
 Got dependencies!
 ```
 
-### Writing a DCli script
+## Writing a DCli script
 
-Now that we have added DCli to our pubspec.yaml we can now modify hello.dart to make calls to the DCli API.
+Now that we have added DCli to our pubspec.yaml we can modify hello.dart to make calls to the DCli API.
 
 Edit your hello.dart script as follows:
 
 ```bash
 import 'package:dcli/dcli.dart';
 
-
 void main() {
-    print('Now lets do someting useful.');
+    print("Now let's do someting useful.");
 
     var username =  ask( 'username:');
     print('username: $username');
@@ -113,7 +132,7 @@ void main() {
 
     // create a directory
     if (!exists('tmp')) {
-    	createDir('tmp');
+        createDir('tmp');
     }
 
     // Truncate any existing content
@@ -138,10 +157,10 @@ void main() {
     find('*.txt').forEach((file) => print('Found $file'));
 
     // Now lets tail the file using the OS tail command.
-    // Again using dart 2.6 extensions we treat a string
+    // Again a dart extensions we treat a string
     // as an OS command and run that command as 
     // a child process.
-    // Any stdout and stderr output is written
+    // Stdout and stderr output are written
     // directly to the console.
     'tail tmp/text.txt'.run;
 

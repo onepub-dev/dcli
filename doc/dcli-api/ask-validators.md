@@ -14,13 +14,13 @@ The DCli Ask command allows you to combine multiple validators with the Ask.any 
 
 ### Ask.all
 
-The Ask.all validator takes an array of validators. 
+The Ask.all validator takes an array of validators.
 
-All validators must pass for the input to be considered valid. The validators are processed in the order they are passed \(left to right\).  The error from the first validator that fails is displayed.
+All validators must pass for the input to be considered valid. The validators are processed in the order they are passed \(left to right\). The error from the first validator that fails is displayed.
 
 The Ask.all validator is the equivalent of a boolean AND operator.
 
-It should be noted that the user input is passed to each validator in turn  and each validator has the opportunity to modify the input. As a result each validators will be operating on a version of the input that has been processed by all validators that appear earlier in the list.
+It should be noted that the user input is passed to each validator in turn and each validator has the opportunity to modify the input. As a result each validators will be operating on a version of the input that has been processed by all validators that appear earlier in the list.
 
 ```dart
  var password = ask( 'Password?', hidden: true
@@ -29,13 +29,13 @@ It should be noted that the user input is passed to each validator in turn  and 
 
 ### Ask.any
 
-The Ask.any validator takes an array of validators. 
+The Ask.any validator takes an array of validators.
 
-Only one of the validators must pass for the input to be considered valid. The validators are processed in the order they are passed \(left to right\).  The error from the first validator that fails is displayed.
+Only one of the validators must pass for the input to be considered valid. The validators are processed in the order they are passed \(left to right\). The error from the first validator that fails is displayed.
 
 The Ask.any validator is the equivalent of a boolean OR operator.
 
-It should be noted that the user input is passed to each validator in turn  and each validator has the opportunity to modify the input. As a result each validators will be operating on a version of the input that has been processed by all validators that appear earlier in the list.
+It should be noted that the user input is passed to each validator in turn and each validator has the opportunity to modify the input. As a result each validators will be operating on a version of the input that has been processed by all validators that appear earlier in the list.
 
 If none of the validators pass then the error from the first validator that failed is displayed. The implications is that the user will only ever see the error from the first validator.
 
@@ -84,7 +84,7 @@ var username = ask( 'username?', validator: Ask.lengthRange(26, 32);
 
 ### Ask.inList
 
-Validates that the input is contained in the provided list. 
+Validates that the input is contained in the provided list.
 
 {% hint style="info" %}
 You are often better of using a menu.
@@ -185,6 +185,4 @@ To use your your new validator:
 var getsPresent = ask('Have you been good or bad'
     , validator:  AskGoodOrBad();
 ```
-
-
 
