@@ -3,8 +3,7 @@ import '../../util/completion.dart';
 import '../command_line_runner.dart';
 
 import '../flags.dart';
-import '../script.dart';
-import '../virtual_project.dart';
+import '../dart_project.dart';
 import 'commands.dart';
 
 /// implementation for the 'clean' command.
@@ -18,42 +17,44 @@ class CleanCommand extends Command {
   /// current directory are cleaned.
   @override
   int run(List<Flag> selectedFlags, List<String> arguments) {
-    var scriptList = arguments;
+    String projectDirectory;
 
-    if (scriptList.isEmpty) {
-      scriptList = find('*.dart').toList();
-    }
-
-    if (scriptList.isEmpty) {
-      throw InvalidArguments('There are no scripts to clean.');
+    if (arguments.isEmpty) {
+      projectDirectory = pwd;
+    } else if (arguments.length != 1) {
+      throw InvalidArguments(
+          'Expected a single project path or no project path. Found ${arguments.length} ');
     } else {
-      for (var scriptPath in scriptList) {
-        _cleanScript(scriptPath);
-      }
+      projectDirectory = arguments[0];
     }
+
+    _cleanProject(projectDirectory);
     return 0;
   }
 
-  void _cleanScript(String scriptPath) {
+  void _cleanProject(String projectPath) {
     print('');
-    print(orange('Cleaning $scriptPath...'));
+    print(orange('Cleaning $projectPath ...'));
     print('');
-    Script.validate(scriptPath);
+    if (!exists(projectPath)) {
+      throw InvalidArguments(
+          'The project path ${projectPath} does not exists.');
+    }
+    if (!isDirectory(projectPath)) {
+      throw InvalidArguments('The project path must be a directory.');
+    }
 
-    var script = Script.fromFile(scriptPath);
+    var project = DartProject.fromPath(projectPath);
 
-    var project = VirtualProject.create(script);
-    project.build();
+    project.clean();
   }
 
   @override
-  String usage() => 'clean [<script path.dart>, <script path.dart> ...]';
+  String usage() => 'clean [<project path>]';
 
   @override
-  String description() =>
-      '''Deletes the project cache for each <scriptname.dart> and forces a rebuild of the script's cache.
-   If no script is passed then all scripts in the current directory are cleaned.
-      ''';
+  String description() => '''Runs pub upgrade on the given directory.
+  If no directory is passed then the current directory is cleaned''';
 
   @override
   List<String> completion(String word) {

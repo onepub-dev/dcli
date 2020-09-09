@@ -1,7 +1,6 @@
 import 'dart:io';
 
 import '../../../dcli.dart';
-import '../../pubspec/global_dependencies.dart';
 import '../../util/completion.dart';
 import '../../util/format.dart';
 import '../../util/pub_cache.dart';
@@ -10,7 +9,6 @@ import '../command_line_runner.dart';
 import '../dart_sdk.dart';
 import '../flags.dart';
 import '../script.dart';
-import '../virtual_project.dart';
 import 'commands.dart';
 
 /// implementst the 'doctor' command
@@ -23,12 +21,13 @@ class DoctorCommand extends Command {
   @override
   int run(List<Flag> selectedFlags, List<String> subarguments) {
     var showScriptDetails = false;
-    VirtualProject project;
+
+    Script script;
     if (subarguments.length == 1) {
       showScriptDetails = true;
       var scriptPath = subarguments[0];
       Script.validate(scriptPath);
-      project = VirtualProject.create(Script.fromFile(scriptPath));
+      script = Script.fromFile(scriptPath);
     }
     if (subarguments.length > 1) {
       throw InvalidArguments(
@@ -59,11 +58,8 @@ class DoctorCommand extends Command {
     printPermissions();
     print('');
 
-    printDependencies();
-    print('');
-
     if (showScriptDetails) {
-      project.doctor;
+      script.doctor;
     }
     return 0;
   }
@@ -73,22 +69,11 @@ class DoctorCommand extends Command {
     which('dart').forEach((line) => _colprint(['', line]));
   }
 
-  void printDependencies() {
-    print(join('.dcli', GlobalDependencies.filename));
-    var gd = GlobalDependencies();
-    for (var d in gd.dependencies) {
-      _colprint(['  ${d.name}', '${d.rehydrate()}']);
-    }
-  }
-
   void printPermissions() {
     print('Permissions');
     _showPermissions('HOME', HOME);
     _showPermissions('.dcli', Settings().pathToDCli);
     _showPermissions('cache', Settings().pathToDCliCache);
-
-    _showPermissions(GlobalDependencies.filename,
-        join(Settings().pathToDCli, GlobalDependencies.filename));
 
     _showPermissions('templates', Settings().pathToTemplate);
   }

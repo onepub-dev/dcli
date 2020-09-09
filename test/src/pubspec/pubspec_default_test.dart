@@ -1,11 +1,8 @@
 @t.Timeout(Duration(seconds: 600))
 import 'package:dcli/dcli.dart';
-import 'package:dcli/src/pubspec/global_dependencies.dart';
 import 'package:dcli/src/pubspec/pubspec.dart';
 import 'package:dcli/src/script/dependency.dart';
-import 'package:dcli/src/script/project_cache.dart';
 import 'package:dcli/src/script/script.dart';
-import 'package:dcli/src/script/virtual_project.dart';
 import 'package:path/path.dart' as p;
 import 'package:test/test.dart' as t;
 
@@ -35,63 +32,6 @@ dependencies:
   file_utils: ^0.1.3
   path: ^2.0.2
 ''';
-
-  t.test('No PubSpec - No Dependencies', () {
-    TestFileSystem().withinZone((fs) {
-      var scriptDirectory = p.join(fs.root, 'local');
-      var pubSpecScriptPath = p.join(scriptDirectory, 'pubspec.yaml');
-
-      if (exists(pubSpecScriptPath)) {
-        delete(pubSpecScriptPath);
-      }
-      runTest(fs, null, main, GlobalDependencies.defaultDependencies);
-    });
-  }, skip: false);
-
-  var annotationNoOverrides = '''
-    /* @pubspec
-$basic
-*/
-  ''';
-
-  t.test('Annotation - No Overrides', () {
-    TestFileSystem().withinZone((fs) {
-      var scriptDirectory = p.join(fs.root, 'local');
-      var pubSpecScriptPath = p.join(scriptDirectory, 'pubspec.yaml');
-
-      if (exists(pubSpecScriptPath)) {
-        delete(pubSpecScriptPath);
-      }
-      var dependencies = GlobalDependencies.defaultDependencies;
-      dependencies.add(Dependency.fromHosted('collection', '^1.14.12'));
-      dependencies.add(Dependency.fromHosted('file_utils', '^0.1.3'));
-      runTest(fs, annotationNoOverrides, main, dependencies);
-    });
-  }, skip: false);
-
-  var annotationWithOverrides = '''
-    /* @pubspec
-$overrides
-*/
-  ''';
-
-  t.test('Annotaion With Overrides', () {
-    TestFileSystem().withinZone((fs) {
-      var scriptDirectory = p.join(fs.root, 'local');
-      var pubSpecScriptPath = p.join(scriptDirectory, 'pubspec.yaml');
-
-      if (exists(pubSpecScriptPath)) {
-        delete(pubSpecScriptPath);
-      }
-      var dependencies = <Dependency>[];
-      dependencies.add(Dependency.fromHosted('dcli', '^2.0.0'));
-      dependencies.add(Dependency.fromHosted('args', '^2.0.1'));
-      dependencies.add(Dependency.fromHosted('path', '^2.0.2'));
-      dependencies.add(Dependency.fromHosted('collection', '^1.14.12'));
-      dependencies.add(Dependency.fromHosted('file_utils', '^0.1.3'));
-      runTest(fs, annotationWithOverrides, main, dependencies);
-    });
-  }, skip: false);
 
   t.test('File - basic', () {
     TestFileSystem().withinZone((fs) {
@@ -175,9 +115,6 @@ void runTest(TestFileSystem fs, String annotation, String main,
   if (!exists(Settings().pathToDCli)) {
     createDir(Settings().pathToDCli);
   }
-  GlobalDependencies.createDefault();
-
-  ProjectCache().initCache();
 
   if (!exists(scriptDirectory)) {
     createDir(scriptDirectory, recursive: true);
@@ -187,8 +124,6 @@ void runTest(TestFileSystem fs, String annotation, String main,
   }
   scriptPath.append(main);
 
-  var project = VirtualProject.create(script);
-
-  var pubspec = project.pubSpec();
+  var pubspec = script.pubSpec;
   t.expect(pubspec.dependencies, t.unorderedMatches(expected));
 }

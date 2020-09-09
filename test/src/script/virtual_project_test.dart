@@ -1,6 +1,5 @@
 @Timeout(Duration(minutes: 10))
 import 'package:dcli/dcli.dart';
-import 'package:dcli/src/script/virtual_project.dart';
 import 'package:path/path.dart';
 import 'package:test/test.dart';
 
@@ -23,9 +22,7 @@ void main() {
 
         var script = Script.fromFile(scriptPath);
 
-        var project = VirtualProject.load(script);
-
-        project.doctor;
+        script.doctor;
       });
     });
 
@@ -41,9 +38,7 @@ void main() {
 
         var script = Script.fromFile(scriptPath);
 
-        var project = VirtualProject.load(script);
-
-        project.doctor;
+        script.doctor;
       });
     });
 
@@ -68,9 +63,7 @@ void main() {
 
         var script = Script.fromFile(scriptPath);
 
-        var project = VirtualProject.load(script);
-
-        project.doctor;
+        script.doctor;
       });
     });
 
@@ -98,9 +91,7 @@ void main(){
 
         var script = Script.fromFile(scriptPath);
 
-        var project = VirtualProject.create(script);
-
-        project.doctor;
+        script.doctor;
       });
     });
   });

@@ -2,8 +2,6 @@ import 'dart:io';
 import 'dart:isolate';
 import 'dart:typed_data';
 
-import 'package:dcli/src/script/virtual_project.dart';
-
 import '../../dcli.dart';
 
 ///
@@ -32,7 +30,7 @@ class Assets {
   String _packageName;
 
   Assets._internal() {
-    _packageName = VirtualProject.load(Script.current).pubSpec().name;
+    _packageName = Script.current.pubSpec.name;
   }
 
   /// Loads an asset as a string.

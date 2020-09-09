@@ -5,7 +5,6 @@ import 'package:meta/meta.dart';
 
 import '../../../dcli.dart';
 import '../../functions/env.dart';
-import '../../pubspec/global_dependencies.dart';
 import '../../settings.dart';
 import '../../shell/shell.dart';
 import '../../util/ansi_color.dart';
@@ -108,20 +107,6 @@ class InstallCommand extends Command {
       qprint('Found existing install at: ${Settings().pathToDCli}.');
     }
     qprint('');
-
-    // Create dependencies.yaml
-    var blue2 = blue(
-        'Creating ${join(Settings().pathToDCli, GlobalDependencies.filename)} with default packages.');
-    qprint(blue2);
-    GlobalDependencies.createDefault();
-
-    qprint('Default packages are:');
-    for (var dep in GlobalDependencies.defaultDependencies) {
-      qprint('  ${dep.rehydrate()}');
-    }
-    qprint('');
-    qprint(
-        'Edit ${GlobalDependencies.filename} to add/remove/update your default dependencies.');
 
     /// create the template directory.
     if (!exists(Settings().pathToTemplate)) {

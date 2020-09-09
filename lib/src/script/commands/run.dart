@@ -9,7 +9,7 @@ import '../dart_sdk.dart';
 import '../flags.dart';
 import '../runner.dart';
 import '../script.dart';
-import '../virtual_project.dart';
+import '../dart_project.dart';
 import 'commands.dart';
 
 /// Runs a dart script.
@@ -50,17 +50,14 @@ class RunCommand extends Command {
 
     Settings().verbose('Running script ${script.pathToScript}');
 
-    var project = VirtualProject.load(script);
-    Settings()
-        .verbose('Virtual Project directory ${project.pathToRuntimeProject}');
-
-    if (!project.isReadyToRun) {
+    if (!script.isReadyToRun) {
       if (Shell.current.isSudo) {
         printerr(red(
             'The script is not ready to run, so cannot be run from sudo. Run dcli clean $scriptPath'));
         exit(1);
       } else {
-        project.build();
+        var project = DartProject.fromPath(script.pathToScriptDirectory);
+        
       }
     }
 
@@ -74,7 +71,7 @@ class RunCommand extends Command {
 
     final sdk = DartSdk();
 
-    final runner = ScriptRunner(sdk, project, script, scriptArguments);
+    final runner = ScriptRunner(sdk, script, scriptArguments);
 
     final exitCode = runner.exec();
 

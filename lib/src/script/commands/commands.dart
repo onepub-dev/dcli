@@ -1,14 +1,11 @@
 import '../flags.dart';
 import 'clean.dart';
-import 'clean_all.dart';
 import 'compile.dart';
 import 'create.dart';
 import 'doctor.dart';
 import 'help.dart';
 import 'install.dart';
-import 'merge.dart';
 import 'run.dart';
-import 'split.dart';
 import 'upgrade.dart';
 import 'version.dart';
 
@@ -17,15 +14,12 @@ import 'version.dart';
 class Commands {
   /// List of supported comands
   static List<Command> get applicationCommands => [
-        CleanAllCommand(),
         CleanCommand(),
         CompileCommand(),
         CreateCommand(),
         DoctorCommand(),
         InstallCommand(),
-        MergeCommand(),
         RunCommand(),
-        SplitCommand(),
         UpgradeCommand(),
         VersionCommand(),
         HelpCommand(),

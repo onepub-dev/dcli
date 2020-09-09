@@ -5,12 +5,9 @@ import 'dart:isolate';
 
 import 'package:dcli/dcli.dart';
 import 'package:dcli/src/functions/env.dart';
-import 'package:dcli/src/pubspec/global_dependencies.dart';
 import 'package:dcli/src/util/dcli_paths.dart';
 import 'package:path/path.dart';
 import 'package:dcli/src/script/entry_point.dart';
-import 'package:dcli/src/script/script.dart';
-import 'package:dcli/src/script/virtual_project.dart';
 import 'package:dcli/src/util/named_lock.dart';
 import 'package:test/test.dart';
 import 'package:uuid/uuid.dart';
@@ -163,8 +160,8 @@ class TestFileSystem {
   }
 
   String runtimePath(String scriptName) {
-    var project = VirtualProject.load(Script.fromFile(scriptName));
-    return project.pathToRuntimeProject;
+    var script = Script.fromFile(scriptName);
+    return script.pathToProjectRoot;
   }
 
   void buildTestFileSystem() {
@@ -234,29 +231,6 @@ class TestFileSystem {
         progress: Progress((line) => null, stderr: (line) => print(line)));
 
     EntryPoint().process(['install', '--nodart', '--quiet', '--noprivileges']);
-
-    /// rewrite dependencies.yaml so that the dcli path points
-    /// to the dev build directory
-    var dependencyFile =
-        join(Settings().pathToDCli, GlobalDependencies.filename);
-    var lines = read(dependencyFile).toList();
-
-    var newContent = <String>[];
-
-    for (var line in lines) {
-      if (line.trim().startsWith('dcli')) {
-        newContent.add('  dcli:');
-        newContent.add('    path: $pwd');
-      } else {
-        newContent.add(line);
-      }
-    }
-
-    var backup = '$dependencyFile.bak';
-    if (exists(backup)) delete(backup);
-    move(dependencyFile, backup);
-
-    dependencyFile.write(newContent.join('\n'));
   }
 
   void rebuildPath() {

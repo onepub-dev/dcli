@@ -4,8 +4,7 @@ import '../util/runnable_process.dart';
 
 import 'dart_sdk.dart';
 import 'dependency.dart';
-
-import 'virtual_project.dart';
+import 'dart_project.dart';
 
 ///
 /// runs and retrives the results of calling
@@ -16,7 +15,7 @@ import 'virtual_project.dart';
 ///
 
 class PubGet {
-  final VirtualProject _project;
+  final DartProject _project;
 
   ///
   PubGet(this._project);
@@ -27,7 +26,7 @@ class PubGet {
     var result = PubGetResult();
     try {
       // pub get MUST be run from the directory which contains the pubspec.yaml file.
-      DartSdk().runPubGet(dirname(_project.runtimePubSpecPath),
+      DartSdk().runPubGet(dirname(_project.pathToPubSpec),
           compileExecutables: compileExecutables,
           progress:
               Progress((line) => result._processLine(line), stderr: _println));

@@ -11,7 +11,7 @@ import '../command_line_runner.dart';
 import '../dart_sdk.dart';
 import '../flags.dart';
 import '../script.dart';
-import '../virtual_project.dart';
+import '../dart_project.dart';
 import 'commands.dart';
 
 /// implementation for the compile command.
@@ -96,23 +96,22 @@ class CompileCommand extends Command {
     }
 
     try {
-      var project = VirtualProject.load(script);
-
       // by default we clean the project unless the -nc flagg is passed.
       // however if the project isn't i a runnable state then we
       // force a build.
-      var buildRequired =
-          !flagSet.isSet(NoCleanFlag()) || !project.isReadyToRun;
+      var buildRequired = !flagSet.isSet(NoCleanFlag()) || !script.isReadyToRun;
+
+      print('path: ${script.pathToScript}');
+      var project = DartProject.fromPath(script.pathToScriptDirectory);
 
       if (buildRequired) {
-        project.build();
+        project.clean();
       }
 
       Settings().verbose(
-          "\nCompiling with pubspec.yaml:\n${read(project.runtimePubSpecPath).toList().join('\n')}\n");
+          "\nCompiling with pubspec.yaml:\n${read(script.pathToPubSpec).toList().join('\n')}\n");
 
-      DartSdk().runDart2Native(project, project.pathToRuntimeScript,
-          script.pathToScriptDirectory, project.pathToProjectRoot,
+      DartSdk().runDart2Native(script, dirname(script.pathToScript),
           progress: Progress(print, stderr: print));
 
       var exe = join(script.pathToScriptDirectory, script.basename);

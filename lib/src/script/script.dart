@@ -2,13 +2,12 @@ import 'dart:io';
 import 'dart:math';
 
 import 'package:dcli/dcli.dart';
+import 'package:dcli/src/pubspec/pubspec.dart';
 import 'package:dcli/src/settings.dart';
 import 'package:path/path.dart' as p;
 import 'package:path/path.dart';
 
 import '../functions/is.dart';
-import '../pubspec/pubspec_annotation.dart';
-import '../util/dcli_paths.dart';
 
 import 'command_line_runner.dart';
 
@@ -42,96 +41,24 @@ class Script {
   /// ```dart
   /// var script = Script.fromFile(Platform.script.toFilePath());
   ///
-  Script.fromFile(
-    String scriptPath,
-  ) : this._internal(scriptPath, create: false, showWarnings: false);
+  Script.fromFile(String scriptPath, {DartProject project})
+      : this._internal(scriptPath,
+            create: false, showWarnings: false, project: project);
 
-  /// Prepares a [Script] to run from the file at [scriptPath].
-  /// If required it creates a pubspec.yaml and analysis_options.yaml file.
-  Script.prepareToRun(String scriptPath, {bool showWarnings = false, bool create = true})
-      : this._internal(scriptPath, showWarnings: showWarnings, create: create);
+  
 
-  Script._internal(String scriptPath, {bool create, bool showWarnings})
+  Script._internal(String scriptPath,
+      {bool create, bool showWarnings, DartProject project})
       : _scriptname = _extractScriptname(scriptPath),
-        _scriptDirectory = _extractScriptDirectory(scriptPath) {
+        _scriptDirectory = _extractScriptDirectory(scriptPath),
+        _project = project {
     {
+      assert(scriptPath.endsWith('.dart'));
       if (create) {
-        var hasLocal = hasLocalPubspecYaml();
-        var hasAnscestor = hasAncestorPubspecYaml();
-        if (!hasLocal && !hasAnscestor) {
-          if (hasPubspecAnnotation) {
-            _createPubspecFromAnnotation(showWarnings);
-          } else {
-            _createLocalPubspec(showWarnings);
-          }
-        }
-
-        if (!hasAnscestor) {
-          /// add pedantic to the project
-          _createAnalysisOptions(showWarnings);
-        }
-        if (hasLocal && hasAnscestor && showWarnings) {
-          print(orange('Your script has a local pubspec.yaml and a pubspec.yaml in an ancestor directory.'));
-          print(orange('You may get inconsistent results when compiling.'));
-        }
+        var project = DartProject.fromPath(pathToProjectRoot);
+        project.prepareToRun();
       }
     }
-  }
-
-  /// We have:
-  /// * pubspec.yaml
-  /// * pubspec.lock
-  /// *
-  bool get isReadyToRun {
-    // TODO: this is still risky as pub get does a test to see if the versions have changed.
-    // we could improve this by checking that the .lock files date is after the .yamls date.
-    /// there is a 'generated' date stamp in the .json file which might be more definitive.
-    return (exists(join(pathToProjectRoot, '.dart_code', 'package_config.json')) &&
-        exists(join(pathToProjectRoot, 'pubspec.lock')) &&
-        (hasLocalPubspecYaml() || hasAncestorPubspecYaml()));
-  }
-
-  void _createAnalysisOptions(bool showWarnings) {
-    /// add pedantic to the project
-
-    var analysisPath = join(dirname(pathToScript), 'analysis_options.yaml');
-    if (!exists(analysisPath)) {
-      if (showWarnings) {
-        print(orange('Creating missing analysis_options.yaml.'));
-      }
-
-      copy(join(Settings().pathToTemplate, 'analysis_options.yaml'), analysisPath);
-    }
-  }
-
-  void _createLocalPubspec(bool showWarnings) {
-    if (showWarnings) {
-      print(orange('Creating missing pubspec.yaml.'));
-    }
-    // no pubspec.yaml in scope so lets create one.
-    var pubspecPath = join(dirname(pathToScript), 'pubspec.yaml');
-
-    copy(join(Settings().pathToTemplate, 'pubspec.yaml.template'), pubspecPath);
-    replace(pubspecPath, '%scriptname%', basename);
-  }
-
-  void _createPubspecFromAnnotation(bool showWarnings) {
-    if (showWarnings) {
-      print(orange('Extracting @pubspec annotation to create missing pubspec.yaml.'));
-    }
-
-    var annotation = PubSpecAnnotation.fromScript(this);
-    var pubspecPath = join(dirname(pathToScript), 'pubspec.yaml');
-    annotation.saveToFile(pubspecPath);
-  }
-
-  /// Creates a script located at [scriptPath] from the passed [templatePath].
-  /// When the user runs 'dcli create <script>'
-  static void createFromTemplate({String templatePath, String scriptPath}) {
-    copy(templatePath, scriptPath);
-
-    replace(scriptPath, '%dcliName%', DCliPaths().dcliName);
-    replace(scriptPath, '%scriptname%', p.basename(scriptPath));
   }
 
   /// the file name of the script including the extension.
@@ -165,7 +92,9 @@ class Script {
 
   /// Returns the path to a scripts pubspec.yaml.
   /// The pubspec.yaml is located in the project's root directory.
-  String get pathToPubSpec => p.join(pathToProjectRoot, 'pubspec.yaml');
+  String get pathToPubSpec => project.pathToPubSpec;
+
+  bool get isReadyToRun => project.isReadyToRun;
 
   // the scriptnameArg may contain a relative path: fred/home.dart
   // we need to get the actually name and full path to the script file.
@@ -175,10 +104,21 @@ class Script {
     return p.basename(p.join(cwd, scriptArg));
   }
 
-  static String _extractScriptDirectory(String scriptArg) {
-    var cwd = Directory.current.path;
+  // /// Returns true if the script has a pubspec.yaml in its directory.
+  // bool hasLocalPubspecYaml() {
+  //   // The virtual project pubspec.yaml file.
+  //   final pubSpecPath = p.join(_scriptDirectory, 'pubspec.yaml');
+  //   return exists(pubSpecPath);
+  // }
 
-    var scriptDirectory = p.canonicalize(p.dirname(p.join(cwd, scriptArg)));
+  // /// returns true if the script has a pubspec in anscestor directory.
+  // ///
+  // bool hasAncestorPubspecYaml() {
+  //   return pathToProjectRoot != _scriptDirectory;
+  // }
+
+  static String _extractScriptDirectory(String scriptArg) {
+    var scriptDirectory = p.canonicalize(p.dirname(p.join(pwd, scriptArg)));
 
     return scriptDirectory;
   }
@@ -186,39 +126,18 @@ class Script {
   /// validate that the passed arguments points to a valid script
   static void validate(String scriptPath) {
     if (!scriptPath.endsWith('.dart')) {
-      throw InvalidArguments('Expected a script name (ending in .dart) instead found: $scriptPath');
+      throw InvalidArguments(
+          'Expected a script name (ending in .dart) instead found: $scriptPath');
     }
 
     if (!exists(scriptPath)) {
-      throw InvalidScript('The script ${p.absolute(scriptPath)} does not exist.');
+      throw InvalidScript(
+          'The script ${p.absolute(scriptPath)} does not exist.');
     }
     if (!FileSystemEntity.isFileSync(scriptPath)) {
-      throw InvalidScript('The script ${p.absolute(scriptPath)} is not a file.');
+      throw InvalidScript(
+          'The script ${p.absolute(scriptPath)} is not a file.');
     }
-  }
-
-  /// Returns true if the script has a pubspec.yaml in its directory.
-  bool hasLocalPubspecYaml() {
-    // The virtual project pubspec.yaml file.
-    final pubSpecPath = p.join(_scriptDirectory, 'pubspec.yaml');
-    return exists(pubSpecPath);
-  }
-
-  /// returns true if the script has a pubspec in anscestor directory.
-  ///
-  bool hasAncestorPubspecYaml() {
-    return pathToProjectRoot != _scriptDirectory;
-  }
-
-  bool _hasPubspecAnnotation;
-
-  /// true if the script has a @pubspec annotation embedded.
-  bool get hasPubspecAnnotation {
-    if (_hasPubspecAnnotation == null) {
-      var pubSpec = PubSpecAnnotation.fromScript(this);
-      _hasPubspecAnnotation = pubSpec.annotationFound();
-    }
-    return _hasPubspecAnnotation;
   }
 
   /// Strips the root prefix of a path so we can use
@@ -238,27 +157,7 @@ class Script {
   /// this is the same directory that the script lives in.
   ///
   ///
-  String get pathToProjectRoot {
-    var current = _scriptDirectory;
-
-    /// Script has a @pubspec annotation so the project root is the script directory
-    if (hasPubspecAnnotation) {
-      return _scriptDirectory;
-    }
-
-    var root = rootPrefix(pathToScript);
-
-    // traverse up the directory to find if we are in a traditional directory.
-    while (current != root) {
-      if (exists(join(dirname(current), 'pubspec.yaml'))) {
-        return dirname(current);
-      }
-      current = dirname(current);
-    }
-
-    /// no pubspec.yaml found so the project root is the script directory
-    return _scriptDirectory;
-  }
+  String get pathToProjectRoot => project.pathToProjectRoot;
 
   static Script _current;
 
@@ -269,7 +168,32 @@ class Script {
     return _current;
   }
 
+  DartProject _project;
+
+  DartProject get project =>
+      _project ??= DartProject.fromPath(pathToScriptDirectory, search: true);
+
   bool get isCompiled => !scriptname.endsWith('.dart');
+
+  /// used by the 'doctor' command to prints the details for this project.
+  void get doctor {
+    print('');
+    print('');
+    print('Script Details');
+    _colprint('Name', scriptname);
+    _colprint('Directory', privatePath(pathToScriptDirectory));
+
+    project.doctor;
+  }
+
+  void _colprint(String label, String value, {int pad = 25}) {
+    print('${label.padRight(pad)}: $value');
+  }
+
+  ///
+  /// reads and returns the project's virtual pubspec
+  /// and returns it.
+  PubSpec get pubSpec => project.pubSpec;
 }
 
 // ignore: avoid_classes_with_only_static_members

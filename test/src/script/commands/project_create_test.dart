@@ -4,8 +4,6 @@ import 'dart:io';
 
 import 'package:dcli/dcli.dart' hide equals;
 import 'package:dcli/src/script/entry_point.dart';
-import 'package:dcli/src/script/script.dart';
-import 'package:dcli/src/script/virtual_project.dart';
 import 'package:test/test.dart';
 
 import 'package:path/path.dart' as p;
@@ -40,7 +38,6 @@ void main() {
 
         EntryPoint().process(['create', '--foreground', script]);
 
-        VirtualProject.load(Script.fromFile(script));
         EntryPoint().process(['clean', script]);
 
         checkProjectStructure(fs, script);

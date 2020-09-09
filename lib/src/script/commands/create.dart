@@ -7,8 +7,8 @@ import '../command_line_runner.dart';
 import '../flags.dart';
 
 import '../script.dart';
-import '../virtual_project.dart';
 import 'commands.dart';
+import '../dart_project.dart';
 
 /// implementation of the 'create' command
 class CreateCommand extends Command {
@@ -27,6 +27,7 @@ class CreateCommand extends Command {
   @override
   int run(List<Flag> selectedFlags, List<String> subarguments) {
     var scriptIndex = 0;
+    DartProject project;
 
     if (Shell.current.isSudo) {
       printerr('You cannot create a script as sudo.');
@@ -53,22 +54,18 @@ class CreateCommand extends Command {
       }
       scriptIndex = i;
 
-      var scriptPath =
+      var pathToScript =
           _validateArguments(selectedFlags, subarguments.sublist(scriptIndex));
 
-      Script.createFromTemplate(
-        templatePath: join(Settings().pathToTemplate, 'cli_args.dart'),
-        scriptPath: scriptPath,
-      );
+      print('Creating script...');
 
-      _script = Script.prepareToRun(scriptPath);
+      project = DartProject.fromPath(pathToScript, search: true);
+      _script = project.createScript(pathToScript);
 
       break;
     }
 
-    print('Creating project...');
-    var project = VirtualProject.create(_script);
-    project.build(background: !flagSet.isSet(ForegroundFlag()));
+    project.clean(background: !flagSet.isSet(ForegroundFlag()));
 
     if (!Settings().isWindows) {
       chmod(755, p.join(_script.pathToScriptDirectory, _script.scriptname));

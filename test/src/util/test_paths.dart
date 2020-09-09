@@ -3,8 +3,6 @@ import 'dart:io';
 
 import 'package:dcli/dcli.dart';
 import 'package:dcli/src/functions/env.dart';
-import 'package:dcli/src/script/script.dart';
-import 'package:dcli/src/script/virtual_project.dart';
 import 'package:dcli/src/util/dcli_paths.dart';
 import 'package:path/path.dart';
 import 'package:test/test.dart';
@@ -116,22 +114,6 @@ class TestPaths {
     testScriptPath = truepath(testRoot, 'scripts');
 
     installDCli();
-  }
-
-  String projectPath(String scriptName) {
-    String projectPath;
-    var projectScriptPath =
-        join(dirname(scriptName), basenameWithoutExtension(scriptName));
-    if (scriptName.startsWith(Platform.pathSeparator)) {
-      projectPath = truepath(Settings().pathToDCliCache,
-          Script.sansRoot(projectScriptPath) + VirtualProject.projectDir);
-    } else {
-      projectPath = truepath(
-          Settings().pathToDCliCache,
-          Script.sansRoot(testScriptPath),
-          projectScriptPath + VirtualProject.projectDir);
-    }
-    return projectPath;
   }
 
   void recreateDir(String path) {

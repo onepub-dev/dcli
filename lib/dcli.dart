@@ -84,3 +84,4 @@ export 'src/util/string_as_process.dart';
 export 'src/util/terminal.dart';
 export 'src/util/truepath.dart' show truepath, rootPath, privatePath;
 export 'src/util/wait_for_ex.dart' show waitForEx;
+export 'src/script/dart_project.dart';

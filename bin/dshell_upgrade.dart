@@ -3,7 +3,6 @@
 import 'package:dcli/dcli.dart';
 
 const pubspec = 'pubspec.yaml';
-const dependFile = 'dependencies.yaml';
 
 /// Use this script to upgrade a project from dshell to dcli
 void main() {
@@ -65,14 +64,7 @@ void upgradeDotDshell() {
 
   var deleteCache = false;
   if (exists(dot_dcli)) {
-    if (exists(dot_dshell) && exists(join(dot_dshell, dependFile))) {
-      if (exists(join(dot_dcli, dependFile))) {
-        delete(join(dot_dcli, dependFile));
-      }
-      // copy the old dshell file over the dcli file.
-      move(join(dot_dshell, dependFile), join(dot_dcli, dependFile));
-      deleteCache = true;
-    }
+    deleteCache = true;
   } else {
     if (exists(dot_dshell)) {
       /// So no .dcli so rename .dshell to .dcli
@@ -80,10 +72,6 @@ void upgradeDotDshell() {
       deleteCache = true;
     }
   }
-
-  /// upgrade the dshell : ^1.0.0 to dcli : ^0.20.0
-  var dependencies = join(dot_dcli, dependFile);
-  upgradeDependencies(dependencies);
 
   if (deleteCache) {
     var cacheCleared = join(dot_dcli, '.cleared_cache');

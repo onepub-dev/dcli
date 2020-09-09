@@ -1,10 +1,8 @@
 @Timeout(Duration(minutes: 10))
 import 'package:dcli/dcli.dart' hide equals;
 import 'package:dcli/src/functions/env.dart';
-import 'package:dcli/src/pubspec/global_dependencies.dart';
 import 'package:dcli/src/script/entry_point.dart';
 import 'package:mockito/mockito.dart';
-import 'package:pubspec/pubspec.dart';
 import 'package:test/test.dart';
 
 import '../../mocks/mock_env.dart';
@@ -129,26 +127,4 @@ void checkInstallStructure(TestFileSystem fs) {
       ],
     ),
   );
-
-  expect(exists(truepath(HOME, '.dcli', GlobalDependencies.filename)),
-      equals(true));
-
-  var content =
-      read(truepath(HOME, '.dcli', GlobalDependencies.filename)).toList();
-  var expected = ['dependencies:'];
-
-  for (var dep in GlobalDependencies.defaultDependencies) {
-    if (dep.name == 'dcli') {
-      /// The TestFileSystem uses the locally installed version of dcli
-      /// The unit tests are always launched from the dcli directory
-      /// hence pwd will point to the locally installed dcli.
-      expected.add('  ${dep.name}:');
-      expected.add('    path: $pwd');
-    } else {
-      expected.add(
-          '  ${dep.name}: ${(dep.reference as HostedReference).versionConstraint.toString()}');
-    }
-  }
-
-  expect(content, equals(expected));
 }

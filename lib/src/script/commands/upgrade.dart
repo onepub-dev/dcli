@@ -2,7 +2,6 @@ import '../../../dcli.dart';
 
 import '../command_line_runner.dart';
 import '../flags.dart';
-import '../project_cache.dart';
 import 'commands.dart';
 
 /// upgrades dcli by running:
@@ -32,10 +31,6 @@ class UpgradeCommand extends Command {
     Settings().verbose('pub global activate dcli finished');
 
     upgradeVersion(currentVersion);
-
-    print('');
-    print(green('Running clean all to upgrade scripts.'));
-    ProjectCache().cleanAll();
 
     print('');
     print(red('*' * 80));
