@@ -31,26 +31,26 @@ class _Touch extends DCliFunction {
   String touch(String path, {bool create = false}) {
     var absolutePath = p.absolute(path);
 
-    Settings().verbose('touch: $absolute create: $create');
+    Settings().verbose('touch: $absolutePath create: $create');
 
     if (!exists(p.dirname(absolutePath))) {
       throw TouchException(
-          'The directory tree above $absolute does not exist. Create the tree and try again.');
+          'The directory tree above $absolutePath does not exist. Create the tree and try again.');
     }
     if (create == false && !exists(absolutePath)) {
       throw TouchException(
-          'The file $absolute does not exist. Did you mean to use touch(path, create: true) ?');
+          'The file $absolutePath does not exist. Did you mean to use touch(path, create: true) ?');
     }
 
     try {
       if (!FileUtils.touch([absolutePath], create: true)) {
         throw TouchException(
-            'Unable to touch file $absolute: check permissions');
+            'Unable to touch file $absolutePath: check permissions');
       }
     }
     // ignore: avoid_catches_without_on_clauses
     catch (e) {
-      throw TouchException('An error occured touching $absolute: $e');
+      throw TouchException('An error occured touching $absolutePath: $e');
     }
     return path;
   }
