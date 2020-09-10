@@ -21,3 +21,5 @@ The NamedLock class tries to be clever and is able to detect if a crashed applic
         });
 ```
 
+There a many uses case for a NamedLock, internally we run parallel deployments which require dcli scripts to be pre-compiled. Rather than having multiple deployment tools all trying to compile the tools at the same time we wrap the compile step in a named lock.
+
