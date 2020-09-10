@@ -247,7 +247,7 @@ class Ask extends DCliFunction {
   /// that failed is returned. The implications is that the user will only
   /// ever see the error from the first validator.
   static AskValidator any(List<AskValidator> validators) =>
-      AskValidatorAny(validators);
+      _AskValidatorAny(validators);
 
   /// Takes an array of validators. The input is considered valid only if
   /// everyone of the validators pass.
@@ -261,29 +261,34 @@ class Ask extends DCliFunction {
   /// a validators will be operating on a version of the input
   /// that has been processed  by all validators that appear earlier in the list.
   static AskValidator all(List<AskValidator> validators) =>
-      AskValidatorAll(validators);
+      _AskValidatorAll(validators);
 
   /// Validates that input is a IP address
   /// By default both v4 and v6 addresses are valid
   /// Pass a [version] to limit the input to one or the
-  /// other. If passed [version] must be [AskValidatorIPAddress.tcp4] or [AskValidatorIPAddress.tcp6].
+  /// other. If passed [version] must be [_AskValidatorIPAddress.tcp4] or [_AskValidatorIPAddress.tcp6].
   static AskValidator ipAddress({int version}) =>
-      AskValidatorIPAddress(version: version);
+      _AskValidatorIPAddress(version: version);
 
   /// Validates that the entered line is no longer
   /// than [maxLength].
   static AskValidator lengthMax(int maxLength) =>
-      AskValidatorMaxLength(maxLength);
+      _AskValidatorMaxLength(maxLength);
 
   /// Validates that the entered line is not less
   /// than [minLength].
   static AskValidator lengthMin(int minLength) =>
-      AskValidatorMinLength(minLength);
+      _AskValidatorMinLength(minLength);
 
   /// Validates that the length of the entered text
   /// as at least [minLength] but no more than [maxLength].
   static AskValidator lengthRange(int minLength, int maxLength) =>
-      AskValidatorLength(minLength, maxLength);
+      _AskValidatorLength(minLength, maxLength);
+
+  /// Validates that a number is between a minimum value (inclusive)
+  /// and a maximum value (inclusive).
+  static AskValidator valueRange(num minValue, num maxValue) =>
+      _AskValidatorValueRange(minValue, maxValue);
 
   /// Checks that the input matches one of the
   /// provided [validItems].
@@ -292,7 +297,7 @@ class Ask extends DCliFunction {
   /// By default [caseSensitive] matches are off.
   static AskValidator inList(List<Object> validItems,
           {bool caseSensitive = false}) =>
-      AskValidatorList(validItems, caseSensitive: caseSensitive);
+      _AskValidatorList(validItems, caseSensitive: caseSensitive);
 
   /// The user must enter a non-empty string.
   /// Whitespace will be trimmed before the string is tested.
@@ -430,33 +435,6 @@ class _AskDecimal extends AskValidator {
   }
 }
 
-class AskValidatorRange extends AskValidator {
-  final num minValue;
-  final num maxValue;
-
-  const AskValidatorRange(this.minValue, this.maxValue);
-  @override
-  String validate(String line) {
-    line = line.trim();
-    var value = num.tryParse(line);
-    if (value == null) {
-      throw AskValidatorException(red('Must be a number.'));
-    }
-
-    if (value < minValue) {
-      throw AskValidatorException(
-          red('The number must be greater than or equal to $minValue.'));
-    }
-
-    if (value > maxValue) {
-      throw AskValidatorException(
-          red('The number must be less than or equal to $maxValue.'));
-    }
-
-    return line;
-  }
-}
-
 class _AskAlpha extends AskValidator {
   const _AskAlpha();
   @override
@@ -487,7 +465,7 @@ class _AskAlphaNumeric extends AskValidator {
 /// By default both v4 and v6 addresses are valid
 /// Pass a [version] to limit the input to one or the
 /// other. If passed [version] must be [ipv4] or [ipv6].
-class AskValidatorIPAddress extends AskValidator {
+class _AskValidatorIPAddress extends AskValidator {
   static const int ipv4 = 4;
   static const int ipv6 = 6;
 
@@ -498,7 +476,7 @@ class AskValidatorIPAddress extends AskValidator {
   /// By default both v4 and v6 addresses are valid
   /// Pass a [version] to limit the input to one or the
   /// other. If passed [version] must be 4 or 6.
-  const AskValidatorIPAddress({this.version});
+  const _AskValidatorIPAddress({this.version});
 
   @override
   String validate(String line) {
@@ -515,13 +493,13 @@ class AskValidatorIPAddress extends AskValidator {
 
 /// Validates that the entered line is no longer
 /// than [maxLength].
-class AskValidatorMaxLength extends AskValidator {
+class _AskValidatorMaxLength extends AskValidator {
   /// the maximum allows length for the entered string.
   final int maxLength;
 
   /// Validates that the entered line is no longer
   /// than [maxLength].
-  const AskValidatorMaxLength(this.maxLength);
+  const _AskValidatorMaxLength(this.maxLength);
   @override
   String validate(String line) {
     line = line.trim();
@@ -536,13 +514,13 @@ class AskValidatorMaxLength extends AskValidator {
 
 /// Validates that the entered line is not less
 /// than [minLength].
-class AskValidatorMinLength extends AskValidator {
+class _AskValidatorMinLength extends AskValidator {
   /// the minimum allows length of the string.
   final int minLength;
 
   /// Validates that the entered line is not less
   /// than [minLength].
-  const AskValidatorMinLength(this.minLength);
+  const _AskValidatorMinLength(this.minLength);
   @override
   String validate(String line) {
     line = line.trim();
@@ -557,15 +535,15 @@ class AskValidatorMinLength extends AskValidator {
 
 /// Validates that the length of the entered text
 /// as at least [minLength] but no more than [lengthMin].
-class AskValidatorLength extends AskValidator {
-  AskValidatorMulti _validator;
+class _AskValidatorLength extends AskValidator {
+  _AskValidatorMulti _validator;
 
   /// Validates that the length of the entered text
   /// as at least [minLength] but no more than [maxLength].
-  AskValidatorLength(int minLength, int maxLength) {
-    _validator = AskValidatorMulti([
-      AskValidatorMinLength(minLength),
-      AskValidatorMaxLength(maxLength),
+  _AskValidatorLength(int minLength, int maxLength) {
+    _validator = _AskValidatorMulti([
+      _AskValidatorMinLength(minLength),
+      _AskValidatorMaxLength(maxLength),
     ]);
   }
   @override
@@ -573,6 +551,33 @@ class AskValidatorLength extends AskValidator {
     line = line.trim();
 
     line = _validator.validate(line);
+    return line;
+  }
+}
+
+class _AskValidatorValueRange extends AskValidator {
+  final num minValue;
+  final num maxValue;
+
+  const _AskValidatorValueRange(this.minValue, this.maxValue);
+  @override
+  String validate(String line) {
+    line = line.trim();
+    var value = num.tryParse(line);
+    if (value == null) {
+      throw AskValidatorException(red('Must be a number.'));
+    }
+
+    if (value < minValue) {
+      throw AskValidatorException(
+          red('The number must be greater than or equal to $minValue.'));
+    }
+
+    if (value > maxValue) {
+      throw AskValidatorException(
+          red('The number must be less than or equal to $maxValue.'));
+    }
+
     return line;
   }
 }
@@ -588,7 +593,7 @@ class AskValidatorLength extends AskValidator {
 /// and the validator has the opportunity to modify the input. As a result
 /// a validators will be operating on a version of the input
 /// that has been processed  by all validators that appear earlier in the list.
-class AskValidatorAll extends AskValidator {
+class _AskValidatorAll extends AskValidator {
   final List<AskValidator> _validators;
 
   /// Takes an array of validators. The input is considered valid only if
@@ -602,7 +607,7 @@ class AskValidatorAll extends AskValidator {
   /// and the validator has the opportunity to modify the input. As a result
   /// a validators will be operating on a version of the input
   /// that has been processed  by all validators that appear earlier in the list.
-  AskValidatorAll(this._validators);
+  _AskValidatorAll(this._validators);
   @override
   String validate(String line) {
     line = line.trim();
@@ -625,7 +630,7 @@ class AskValidatorAll extends AskValidator {
 /// and each validator has the opportunity to modify the input. As a result
 /// a validators will be operating on a version of the input
 /// that has been processed  by all validators that appear earlier in the list.
-class AskValidatorAny extends AskValidator {
+class _AskValidatorAny extends AskValidator {
   final List<AskValidator> _validators;
 
   /// Takes an array of validators. The input is considered valid if any one
@@ -641,12 +646,12 @@ class AskValidatorAny extends AskValidator {
   /// that has been processed  by all successful validators that appear earlier in the list.
   ///
   /// Validators that fail don't get an opportunity to modify the input.
-  AskValidatorAny(this._validators);
+  _AskValidatorAny(this._validators);
   @override
   String validate(String line) {
     line = line.trim();
 
-    AskValidator firstFailure;
+    AskValidatorException firstFailure;
 
     var onePassed = false;
 
@@ -654,8 +659,8 @@ class AskValidatorAny extends AskValidator {
       try {
         line = validator.validate(line);
         onePassed = true;
-      } on AskValidator catch (_) {
-        firstFailure ??= validator;
+      } on AskValidatorException catch (e) {
+        firstFailure ??= e;
       }
     }
     if (!onePassed) {
@@ -669,14 +674,14 @@ class AskValidatorAny extends AskValidator {
 /// When the user hits enter we apply the list
 /// of [valiadators] in the provided order.
 /// Validation stops when the first validator fails.
-class AskValidatorMulti extends AskValidator {
+class _AskValidatorMulti extends AskValidator {
   final List<AskValidator> _validators;
 
   /// Allows you to combine multiple validators
   /// When the user hits enter we apply the list
   /// of [valiadators] in the provided order.
   /// Validation stops when the first validator fails.
-  AskValidatorMulti(this._validators);
+  _AskValidatorMulti(this._validators);
   @override
   String validate(String line) {
     line = line.trim();
@@ -692,7 +697,7 @@ class AskValidatorMulti extends AskValidator {
 /// provided [validItems].
 /// If the validator fails it prints out the
 /// list of available inputs.
-class AskValidatorList extends AskValidator {
+class _AskValidatorList extends AskValidator {
   /// The list of allowed values.
   final List<Object> validItems;
   final bool caseSensitive;
@@ -702,7 +707,7 @@ class AskValidatorList extends AskValidator {
   /// If the validator fails it prints out the
   /// list of available inputs.
   /// By default [caseSensitive] matches are off.
-  AskValidatorList(this.validItems, {this.caseSensitive = false});
+  _AskValidatorList(this.validItems, {this.caseSensitive = false});
   @override
   String validate(String line) {
     line = line.trim();
