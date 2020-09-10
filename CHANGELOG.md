@@ -1,3 +1,19 @@
+# 0.25.0
+This is a major update which has removed support for virtual pubspecs and pubspec annotations.
+The reality was that in production we used neither of these as ide's don't work with out an actual pubspec and in as the code built up we would
+normally cluster files into a single directory so having a pubspec wasn't an issue.
+
+Change dcli create to generate a pubspec.yaml and an analysis_options.yaml. Also now generates a more complex sample using a template.
+
+Ask: Added logic to hide default hidden values when logging.
+Ask: Fixed bugs in the Ask.any method. Exposed valueRange and removed all of the validator classes from the public api.
+AnsiColor: made AnsiColor class and static properties public so that you can actually use the background colours.
+Clean: Added logic to stop pub get occuring when running under sudo.
+PubspecFile: Added support for executables back in now the pubspec 0.1.5 has been released.
+Improved the process of detecting the dartsdk by resolving sym links.
+Fixed the paths so that dcli will run under sudo. The logic to find the dcli exe assumed it was on the path and that won't be the case during install.
+updated the links to the dcli manual
+
 # 0.24.1
 Updated readme to refer to the new gitbook manual.
 touch : now returns the path that was passed in.
