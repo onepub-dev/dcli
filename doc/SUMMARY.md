@@ -64,3 +64,11 @@
 * [Contributing](contributing.md)
 * [References](references.md)
 
+## Examples
+
+* [dmysql](examples/dmysql.md)
+
+## Articles
+
+* [package of the week](articles/package-of-the-week.md)
+
