@@ -53,8 +53,7 @@ class UpgradeCommand extends Command {
   String usage() => 'upgrade';
 
   @override
-  String description() =>
-      '''Upgrades dcli to the latest version and cleans all of your projects.''';
+  String description() => '''Upgrades dcli to the latest version.''';
 
   @override
   List<String> completion(String word) {
