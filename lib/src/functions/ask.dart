@@ -144,7 +144,7 @@ class Ask extends DCliFunction {
       AskValidator validator,
       String defaultValue}) {
     Settings().verbose(
-        'ask:  $prompt toLower: $toLower hidden: $hidden defaultValue: $defaultValue');
+        'ask:  $prompt toLower: $toLower hidden: $hidden defaultValue: ${hidden ? '******' : defaultValue}');
 
     /// check the caller isn't being silly
     if (defaultValue != null) {
@@ -154,7 +154,9 @@ class Ask extends DCliFunction {
         throw AskValidatorException(
             'The [defaultValue] $defaultValue failed the validator: ${e.message}');
       }
-      prompt = '$prompt [$defaultValue]';
+
+      /// don't display the default value if hidden is true.
+      prompt = '$prompt [${hidden ? '******' : defaultValue}]';
     }
 
     String line;
