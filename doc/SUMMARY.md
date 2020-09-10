@@ -48,14 +48,12 @@
 * [DCli Doctor](dcli-tools-1/dcli-doctor.md)
 * [DCli Install](dcli-tools-1/dcli-install.md)
 * [DCli run](dcli-tools-1/dcli-run.md)
-* [DCli Split](dcli-tools-1/dcli-split.md)
 * [Upgrade DCli](dcli-tools-1/upgrade-dcli.md)
 * [Performance](dcli-tools-1/performance.md)
 
 ## Internal Workings
 
 * [Internal Workings](internal-workings/internal-workings.md)
-* [Virtual Projects](internal-workings/virtual-projects.md)
 * [waitForEx](internal-workings/waitforex.md)
 
 ---

@@ -6,7 +6,7 @@ Runs the given DCli script.
 
 This command is NOT required.
 
-The recommended way to run a DCli script is via one of the documented [run methods](../#Running-a-script).
+The recommended way to run a DCli script via ./&lt;scriptname&gt;.dart.
 
 The `dcli run` command is provided for symmetry and the possibility that someone, someday, may try to auto generate calls to dcli and having a consistent command structure can make this easier.
 
