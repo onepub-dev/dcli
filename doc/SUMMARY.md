@@ -50,6 +50,7 @@
 * [DCli run](dcli-tools-1/dcli-run.md)
 * [Upgrade DCli](dcli-tools-1/upgrade-dcli.md)
 * [Performance](dcli-tools-1/performance.md)
+* [Docker](dcli-tools-1/docker.md)
 
 ## Internal Workings
 
@@ -59,14 +60,17 @@
 ---
 
 * [Contributing](contributing.md)
+* [Creating a release](creating-a-release.md)
 * [References](references.md)
 
 ## Examples
 
+* [Overview](examples/overview.md)
 * [dmysql](examples/dmysql.md)
 
 ## Articles
 
 * [package of the week](articles/package-of-the-week.md)
-* [build console apps in dart](articles/build-console-apps-in-dart.md)
+* [build CLI apps in dart - part 1](articles/build-console-apps-in-dart.md)
+* [build CLI apps in dart - part 2](articles/build-cli-apps-in-dart-part-2.md)
 

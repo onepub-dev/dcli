@@ -1,4 +1,4 @@
-# build console apps in dart
+# build CLI apps in dart - part 1
 
 > [Read part 2](https://medium.com/@bsutton.noojee/dshell-build-console-apps-in-dart-part-2-39719cb6d051)
 
