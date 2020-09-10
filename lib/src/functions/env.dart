@@ -73,19 +73,15 @@ class Env extends DCliFunction {
 
   Map<String, String> _envVars;
 
-  bool _caseSensitive = true;
+  final bool _caseSensitive;
 
   /// Implementation class for the functions [env[]] and [env[]=].
   factory Env() {
     return _self;
   }
 
-  Env._internal() {
+  Env._internal() : _caseSensitive = !Settings().isWindows {
     var platformVars = Platform.environment;
-
-    if (Settings().isWindows) {
-      _caseSensitive = false;
-    }
 
     _envVars =
         CanonicalizedMap((key) => (_caseSensitive) ? key : key.toUpperCase());
@@ -102,12 +98,13 @@ class Env extends DCliFunction {
   @visibleForTesting
   static void reset() {
     _self = Env._internal();
+    env = _self;
   }
 
   String _env(String name) {
     Settings().verbose('env:  $name:${_envVars[name]}');
 
-    return _envVars[name];
+    return _envVars[(_caseSensitive) ? name : name.toUpperCase()];
   }
 
   /// returns the PATH environment var.

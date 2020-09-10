@@ -22,7 +22,7 @@ class InstallCommand extends Command {
     _NoCleanFlag(),
     _NoDartFlag(),
     _QuietFlag(),
-    // _NoPrivilegesFlag()
+    _NoPrivilegesFlag()
   ];
 
   /// holds the set of flags passed to the compile command.
@@ -72,7 +72,7 @@ class InstallCommand extends Command {
           "'dcli install' does not take any arguments. Found $subarguments");
     }
 
-    // requirePrivileges = !flagSet.isSet(_NoPrivilegesFlag());
+    requirePrivileges = !flagSet.isSet(_NoPrivilegesFlag());
 
     // /// We need to be priviledged to create the dcli symlink
     // if (requirePrivileges && !shell.isPrivilegedUser) {
@@ -165,7 +165,9 @@ class InstallCommand extends Command {
       var dcliPath = dcliLocation;
       qprint(blue('dcli found in : $dcliPath.'));
 
-      symlinkDCli(shell, dcliPath);
+      if (requirePrivileges) {
+        symlinkDCli(shell, dcliPath);
+      }
     }
     qprint('');
 
@@ -305,20 +307,20 @@ class _QuietFlag extends Flag {
   }
 }
 
-// class _NoPrivilegesFlag extends Flag {
-//   static const _flagName = 'noprivileges';
+class _NoPrivilegesFlag extends Flag {
+  static const _flagName = 'noprivileges';
 
-//   const _NoPrivilegesFlag() : super(_flagName);
+  const _NoPrivilegesFlag() : super(_flagName);
 
-//   @override
-//   String get abbreviation => 'np';
+  @override
+  String get abbreviation => 'np';
 
-//   @override
-//   String description() {
-//     return '''Allows the install to be run without privileges. This flag is primarily used for unit testing.
-//       Some features will not be available if you run in this mode.''';
-//   }
-// }
+  @override
+  String description() {
+    return '''Allows the install to be run without privileges. This flag is primarily used for unit testing.
+      Some features will not be available if you run in this mode.''';
+  }
+}
 
 /// Thrown if an error is encountered during an install
 class InstallException extends DCliException {

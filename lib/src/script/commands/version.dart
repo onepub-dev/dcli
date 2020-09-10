@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import '../../../dcli.dart';
 import '../../functions/which.dart';
 import '../../settings.dart';
@@ -30,6 +32,8 @@ class VersionCommand extends Command {
     if (location == null) {
       printerr(red('Error: dcli is not on your path. Run "dcli install"'));
     }
+    // expand symlink
+    location = File(location).resolveSymbolicLinksSync();
 
     print(green(
         '${ReCase.titleCase(appname)} Version: ${Settings().version}, Located at: $location'));
@@ -42,7 +46,7 @@ class VersionCommand extends Command {
       """Running 'dcli version' displays the dcli version and path.""";
 
   @override
-  String usage() => 'Version';
+  String usage() => 'version';
 
   @override
   List<String> completion(String word) {

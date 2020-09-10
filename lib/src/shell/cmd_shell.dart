@@ -52,5 +52,4 @@ class CmdShell with WindowsMixin, ShellMixin {
 
   @override
   String get pathToStartScript => throw UnimplementedError;
-
 }

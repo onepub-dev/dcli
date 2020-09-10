@@ -20,7 +20,7 @@ void main() {
       );
 
       // if clean hasn't been run then we have the results of a pub get in the the output.
-      var expected = ['cleanall', 'clean', 'compile', 'create'];
+      var expected = ['clean', 'compile', 'create'];
 
       expect(results, equals(expected));
     });
@@ -39,7 +39,7 @@ void main() {
       );
 
       // if clean hasn't been run then we have the results of a pub get in the the output.
-      var expected = ['cleanall', 'clean'];
+      var expected = ['clean'];
 
       expect(results, equals(expected));
     });

@@ -5,7 +5,6 @@ import 'package:dcli/dcli.dart';
 import 'package:dcli/src/pubspec/pubspec.dart';
 import 'package:dcli/src/settings.dart';
 import 'package:path/path.dart' as p;
-import 'package:path/path.dart';
 
 import '../functions/is.dart';
 
@@ -44,8 +43,6 @@ class Script {
   Script.fromFile(String scriptPath, {DartProject project})
       : this._internal(scriptPath,
             create: false, showWarnings: false, project: project);
-
-  
 
   Script._internal(String scriptPath,
       {bool create, bool showWarnings, DartProject project})

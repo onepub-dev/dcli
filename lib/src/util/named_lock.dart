@@ -83,7 +83,7 @@ class NamedLock {
     String lockPath,
     String description,
     Duration timeout,
-  })  : _timeout = timeout,
+  })  : _timeout = timeout ??= Duration(seconds: 30),
         _lockPath = lockPath,
         _description = description {
     assert(name != null);
@@ -214,16 +214,17 @@ class NamedLock {
     var taken = false;
 
     // wait for the lock to release or the timeout to expire
-    var waitCount = -1;
+    var waitCount = 1;
     if (_timeout != null) {
       // we will be retrying every 100 ms.
       waitCount = _timeout.inMilliseconds ~/ 100;
+      // ensure at least one retry
       if (waitCount == 0) {
-        waitCount = 0;
+        waitCount = 1;
       }
     }
 
-    while (!taken && waitCount != 0) {
+    while (!taken && waitCount > 0) {
       _withHardLock(fn: () {
         // check for other lock files
         var locks = find('*.$name', root: _lockPath).toList();

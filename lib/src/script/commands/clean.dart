@@ -17,34 +17,34 @@ class CleanCommand extends Command {
   /// current directory are cleaned.
   @override
   int run(List<Flag> selectedFlags, List<String> arguments) {
-    String projectDirectory;
+    String targetPath;
 
     if (arguments.isEmpty) {
-      projectDirectory = pwd;
+      targetPath = pwd;
     } else if (arguments.length != 1) {
       throw InvalidArguments(
           'Expected a single project path or no project path. Found ${arguments.length} ');
     } else {
-      projectDirectory = arguments[0];
+      targetPath = arguments[0];
     }
 
-    _cleanProject(projectDirectory);
+    _cleanProject(targetPath);
     return 0;
   }
 
-  void _cleanProject(String projectPath) {
-    print('');
-    print(orange('Cleaning $projectPath ...'));
-    print('');
-    if (!exists(projectPath)) {
-      throw InvalidArguments(
-          'The project path ${projectPath} does not exists.');
+  void _cleanProject(String targetPath) {
+    if (!exists(targetPath)) {
+      throw InvalidArguments('The project path ${targetPath} does not exists.');
     }
-    if (!isDirectory(projectPath)) {
+    if (!isDirectory(targetPath)) {
       throw InvalidArguments('The project path must be a directory.');
     }
 
-    var project = DartProject.fromPath(projectPath);
+    var project = DartProject.fromPath(targetPath, search: true);
+
+    print('');
+    print(orange('Cleaning ${project.pathToProjectRoot} ...'));
+    print('');
 
     project.clean();
   }

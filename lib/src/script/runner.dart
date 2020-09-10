@@ -19,6 +19,9 @@ class ScriptRunner {
     final vmArgs = <String>[];
     vmArgs.add('--enable-asserts');
 
+    vmArgs.add(
+        '--packages=${join(script.pathToProjectRoot, DartSdk().pathToPackageConfig)}');
+
     vmArgs.add(script.pathToScript);
     vmArgs.addAll(_scriptArguments);
 

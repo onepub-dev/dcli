@@ -102,7 +102,7 @@ class DartProject {
           '${DCliPaths().dcliName} -v=${join(Directory.systemTemp.path, 'dcli.clean.log')} clean ${pathToProjectRoot}'
               .start(detached: true, runInShell: true);
         } else {
-          print(orange('Running pub get...'));
+          // print(orange('Running pub get...'));
           _pubget();
         }
       } on PubGetException {

@@ -102,7 +102,8 @@ class CompileCommand extends Command {
       var buildRequired = !flagSet.isSet(NoCleanFlag()) || !script.isReadyToRun;
 
       print('path: ${script.pathToScript}');
-      var project = DartProject.fromPath(script.pathToScriptDirectory);
+      var project =
+          DartProject.fromPath(script.pathToScriptDirectory, search: true);
 
       if (buildRequired) {
         project.clean();

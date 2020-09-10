@@ -88,8 +88,8 @@ List<String> run_child(String childScript) {
       truepath(join('test', 'test_scripts/general/bin', 'run_child.dart'));
 
   // make certain our test script will run
-  '${DCliPaths().dcliName} -v clean $childScript'.run;
-  '${DCliPaths().dcliName} -v clean $runChildScript'.run;
+  '${DCliPaths().dcliName} -v clean ${dirname(childScript)}'.run;
+  '${DCliPaths().dcliName} -v clean $dirname(runChildScript)}'.run;
 
   // run a script that uses '.run' and capture its output to prove
   // that .run works.

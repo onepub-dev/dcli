@@ -9,7 +9,6 @@ import '../dart_sdk.dart';
 import '../flags.dart';
 import '../runner.dart';
 import '../script.dart';
-import '../dart_project.dart';
 import 'commands.dart';
 
 /// Runs a dart script.
@@ -55,9 +54,6 @@ class RunCommand extends Command {
         printerr(red(
             'The script is not ready to run, so cannot be run from sudo. Run dcli clean $scriptPath'));
         exit(1);
-      } else {
-        var project = DartProject.fromPath(script.pathToScriptDirectory);
-        
       }
     }
 

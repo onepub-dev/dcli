@@ -34,8 +34,8 @@ void main() {
 
           // test that env
           t.expect(env['HOME'], userDataPath);
-          t.expect(env['AppData'], userDataPath);
           t.expect(env['APPDATA'], userDataPath);
+          t.expect(env['AppData'], userDataPath);
 
           var available = <String, String>{};
           available.putIfAbsent('APPDATA', () => env['APPDATA']);
