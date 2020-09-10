@@ -13,6 +13,10 @@ dcli create performs the following actions:
 * adds a shebang \#! to the start of your script.
 * runs `dcli clean` in the background.
 
+{% hint style="info" %}
+dcli create won't create the pubspec.yaml nor analysis\_options.yaml if you create your new script in an existing dart project.
+{% endhint %}
+
 Usage: `dcli create <script.dart>`
 
 Example:

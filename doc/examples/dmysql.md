@@ -116,11 +116,11 @@ void config(String dbname, String pathToDbSettings) {
   settings['host'] = ask(
     'host:',
     defaultValue: settings['host'] as String,
-    // validator: Ask.any([
-    //   Ask.fqdn,
-    //   Ask.ipAddress(),
-    //   Ask.inList(['localhost', '127.0.0.1'])
-    // ]));
+     validator: Ask.any([
+       Ask.fqdn,
+       Ask.ipAddress(),
+       Ask.inList(['localhost'])
+    ]));
   );
 
   settings['port'] = int.parse(ask('port:',

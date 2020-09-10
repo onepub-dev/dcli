@@ -44,7 +44,6 @@
 * [Use a shebang \#!](dcli-tools-1/use-a-shebang.md)
 * [DCli Create](dcli-tools-1/dcli-create.md)
 * [DCli Clean](dcli-tools-1/dcli-clean.md)
-* [DCli Clean All](dcli-tools-1/dcli-clean-all.md)
 * [DCli Compile](dcli-tools-1/dcli-compile.md)
 * [DCli Doctor](dcli-tools-1/dcli-doctor.md)
 * [DCli Install](dcli-tools-1/dcli-install.md)
@@ -71,4 +70,5 @@
 ## Articles
 
 * [package of the week](articles/package-of-the-week.md)
+* [build console apps in dart](articles/build-console-apps-in-dart.md)
 
