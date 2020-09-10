@@ -11,6 +11,7 @@ DCli has the following aims:
 * make building CLI apps as easy as walking.
 * fully utilise the expressiveness of Dart.
 * works seamlessly with the core Dart libraries.
+* provide a cross platform API for Windows, OSx and Linux.
 * create a completely synchronously API \(no futures and no async\).
 * call any CLI app.
 * make debugging CLI apps easy.
