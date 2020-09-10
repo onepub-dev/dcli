@@ -6,6 +6,12 @@ DCli is an API and tooling for building cross platform command line \(CLI\) appl
 Looking for DShell? You are in the right place. DShell has been renamed DCli.
 {% endhint %}
 
+DCli has just been featured on Jermaine Oppong package of the week vlog.
+
+{% embed url="https://www.youtube.com/watch?v=z99IxxWmD1Q&feature=youtu.be" %}
+
+But I call it D-cli not d.c.l.i ;\)
+
 ## Overview
 
 DCli is intended to provide a replacement for bash and similar shell scripting languages with a Dart based scripting tool.

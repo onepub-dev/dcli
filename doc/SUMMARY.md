@@ -70,7 +70,7 @@
 
 ## Articles
 
-* [package of the week](articles/package-of-the-week.md)
+* [Video: package of the week](articles/package-of-the-week.md)
 * [build CLI apps in dart - part 1](articles/build-console-apps-in-dart.md)
 * [build CLI apps in dart - part 2](articles/build-cli-apps-in-dart-part-2.md)
 
