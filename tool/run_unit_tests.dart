@@ -1,6 +1,5 @@
 #! /usr/bin/env dcli
 
-import 'dart:io';
 import 'package:dcli/dcli.dart';
 
 ///
@@ -10,12 +9,21 @@ import 'package:dcli/dcli.dart';
 /// So this script forces the test to run serially via the -j1 option.
 ///
 void main() {
-  if (!exists('pubspec.yaml')) {
-    printerr(red("This script must be run from the package's root directory."));
-    exit(1);
-  }
-  '${DartSdk().pathToPubExe} run test -j1 --coverage ${join(Script.current.pathToProjectRoot, 'coverage')}'
-      .start(nothrow: true);
+  var root = Script.current.pathToProjectRoot;
+
+  print(orange('cleaning old test and build artifacts'));
+  if (exists('/tmp/dcli')) deleteDir('/tmp/dcli', recursive: true);
+
+  /// Start by cleaning out any old build artifacts
+  find('.packages', root: root, recursive: true)
+      .forEach((file) => delete(file));
+  find('.dart_tool', root: root, recursive: true)
+      .forEach((file) => deleteDir(file, recursive: true));
+  find('pubspec.lock', root: root, recursive: true)
+      .forEach((file) => delete(file));
+
+  '${DartSdk().pathToPubExe} run test -j1 --coverage ${join(root, 'coverage')}'
+      .start(nothrow: true, workingDirectory: root);
 
   // cleanup temp
   if (exists('/tmp/dcli')) deleteDir('/tmp/dcli', recursive: true);
