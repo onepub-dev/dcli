@@ -20,9 +20,7 @@ To use an external package you need to add it as a dependency to your script.
 
 Dart's dependency management is done via a pubspec.yaml file.
 
-See the section on [Pubspec Management](../#pubspec-management) for details.
-
 Each package includes install instructions which is simply a matter of adding a dependency line to your pubspec and running:
 
-`dcli clean <script>`.
+`dcli clean`.
 

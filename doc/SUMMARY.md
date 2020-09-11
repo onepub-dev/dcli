@@ -44,31 +44,33 @@
 * [Use a shebang \#!](dcli-tools-1/use-a-shebang.md)
 * [DCli Create](dcli-tools-1/dcli-create.md)
 * [DCli Clean](dcli-tools-1/dcli-clean.md)
-* [DCli Clean All](dcli-tools-1/dcli-clean-all.md)
 * [DCli Compile](dcli-tools-1/dcli-compile.md)
 * [DCli Doctor](dcli-tools-1/dcli-doctor.md)
 * [DCli Install](dcli-tools-1/dcli-install.md)
 * [DCli run](dcli-tools-1/dcli-run.md)
-* [DCli Split](dcli-tools-1/dcli-split.md)
 * [Upgrade DCli](dcli-tools-1/upgrade-dcli.md)
 * [Performance](dcli-tools-1/performance.md)
+* [Docker](dcli-tools-1/docker.md)
 
 ## Internal Workings
 
 * [Internal Workings](internal-workings/internal-workings.md)
-* [Virtual Projects](internal-workings/virtual-projects.md)
 * [waitForEx](internal-workings/waitforex.md)
 
 ---
 
 * [Contributing](contributing.md)
+* [Creating a release](creating-a-release.md)
 * [References](references.md)
 
 ## Examples
 
+* [Overview](examples/overview.md)
 * [dmysql](examples/dmysql.md)
 
 ## Articles
 
-* [package of the week](articles/package-of-the-week.md)
+* [Video: package of the week](articles/package-of-the-week.md)
+* [build CLI apps in dart - part 1](articles/build-console-apps-in-dart.md)
+* [build CLI apps in dart - part 2](articles/build-cli-apps-in-dart-part-2.md)
 

@@ -2,32 +2,17 @@
 
 ## DCli clean
 
-If you change the structure of your DCli script project then you need to run `dcli clean` so that DCli sees the changes you have made.
+DCli clean essentially does the same as a pub upgrade.  It is provided as a convenience function and you can use a pub upgrade/pub get interchangeably with DCli clean.
 
-What constitutes a structural changes?
+{% hint style="info" %}
+If you edit the pubspec.yaml of your DCli script project then you need to run `dcli clean` so that DCli sees the changes you have made.
+{% endhint %}
 
-* adding an `@pubspec` annotation to your DCli script
-* creating a `pubspec.yaml` file in your scripts directory.
-* editing an existing `pubspec.yaml`
-* editing an existing `@pubspec` annotation
-
-What doesn't constitute a structural change?
-
-* editing your DCli script
-
-If you make a structure change simply call
+If you change your pubspec.yaml you can call dcli clean from anywhere in your projects directory structure.
 
 ```text
-dcli clean <scriptname.dart>
+dcli clean 
 ```
 
-Your script is now ready to run.
-
-You may specify one or more scripts then dcli will clean each of them.
-
-```text
-dcli clean hello.dart welcom.dart
-```
-
-If you don't specify any scripts then dcli will clean all scripts in the current directory.
+Your scripts are now ready to run.
 

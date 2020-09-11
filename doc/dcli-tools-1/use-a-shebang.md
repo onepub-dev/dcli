@@ -6,7 +6,7 @@ A Shebang is a special entry on the first line of your script that tells the OS 
 Shebangs are currently only supported on Linux and OSx.
 {% endhint %}
 
-By adding a Shebang you can directly run a script from the cli.
+By adding a Shebang to the start of you Dart script you can directly run a script from the cli.
 
 Without a Shebang:
 
@@ -57,7 +57,7 @@ On Linux and OSX you must mark the file as executable for the Shebang to work.
 Mark the file as executable:
 
 ```bash
-chmod +x  first.dart
+chmod +x  hello.dart
 ```
 
 {% hint style="info" %}

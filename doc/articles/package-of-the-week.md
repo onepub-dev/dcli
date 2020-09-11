@@ -1,4 +1,4 @@
-# package of the week
+# Video: package of the week
 
 Jermaine Oppong released a video with an overview of using DCli.
 

@@ -9,5 +9,7 @@ pub global activate dcli
 dcli install
 ```
 
-Completes the installation of dcli.
+The dcli install command creates the ~/.dcli directory, expands the dcli templates and adds ~/.dcli/bin to your path.
+
+You will need to restart your terminal after the install completes for your paths to update correctly.
 

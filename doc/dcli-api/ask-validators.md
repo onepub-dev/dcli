@@ -130,6 +130,15 @@ Validates that the user input is a valid integer.
 var age = ask( 'Age?', validator: Ask.integer);
 ```
 
+### Ask.valueRange
+
+Validates that an entered number is within the provided range \(inclusive\). Can be used with both integer and decimal no.s
+
+```dart
+var age = ask('Age?', 
+    validator: Ask.all([Ask.integer, Ask.valueRange(18, 25)]);
+```
+
 ### Ask.decimal
 
 Validates that the user input is a valid decimal number.
@@ -160,7 +169,11 @@ You can also write your own validators.
 
 All validators must inherit from the AskValidator class and implement the validate method.
 
-The validator method must return the passed line, but may alter the line before returning it. The altered results is what will be passed out to the caller of the ask function.
+The validator method must return the passed line, but may alter the line before returning it. The altered results is what will be returned from the ask function.
+
+{% hint style="warning" %}
+ a validator MUST not include the value of the 'line' in an error message as your risk exposing a password that the user is entering.
+{% endhint %}
 
 If the ask function uses one of the combination validators \(Ask.all, Ask.any\) then the line input by the user will be passed to each validator in turn. Each validator may change the line and that altered value will be passed to the next validator. In this way the entered value may go through multiple transformations before being returned to the caller.
 

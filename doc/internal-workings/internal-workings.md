@@ -1,10 +1,12 @@
 # Internal Workings
 
-If you are NOT using the DCli tools you can ignore this section.
+The DCli public API is almost 100% from of Dart Futures and async statements.
 
-Users of the DCli API can safely ignore this section.
+This is intentional as Futures provide almost no benefit in cli applications and actually make it harder to write cli apps.
 
-If you run a script with the DCli tools it sprinkles a little magic around to make it easier to run a dart script with minimal fuss.
+The Dart api has a single function which can only be used on cli applications which is called 'waitFor'.
 
-The following sections describe the internal workings of the DCli tools.
+The 'waitFor' function essentially removes Futures.
+
+DShell relies heavily on the 'waitFor' function to make writing cli apps easy.
 
