@@ -8,7 +8,7 @@ Looking for DShell? You are in the right place. DShell has been renamed DCli.
 
 DCli has just been featured on Jermaine Oppong package of the week vlog.
 
-{% embed url="https://www.youtube.com/watch?v=z99IxxWmD1Q&feature=youtu.be" %}
+{% embed url="https://youtu.be/z99IxxWmD1Q" %}
 
 But I call it D-cli not d.c.l.i ;\)
 
