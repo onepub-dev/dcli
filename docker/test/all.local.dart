@@ -17,7 +17,9 @@ void main(List<String> args) {
   if (!runOnly) {
     // mount the local dcli files from ..
     print('about to docker build');
-    'sudo docker build -f ./all.local.df -t dcli:all_local_test ..'.run;
+    var root = Script.current.pathToProjectRoot;
+    'sudo docker build -f ./all.local.df -t dcli:all_local_test .'
+        .start(workingDirectory: root);
   }
 
   print('about to docker run');
