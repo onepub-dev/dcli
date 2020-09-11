@@ -4,6 +4,7 @@ import 'dart:io';
 
 import 'package:args/command_runner.dart';
 import 'package:dcli/dcli.dart';
+import 'package:dcli/src/pubspec/pubspec.dart';
 
 ///
 /// Starts a docker shell with a full install
@@ -65,7 +66,7 @@ class BuildCommand extends Command<void> {
 
   @override
   void run() {
-    var pubspec = PubSpecFile.fromScript(Script.current);
+    var pubspec = PubSpec.fromScript(Script.current);
     var version = pubspec.version.toString();
     // if (!argResults.wasParsed('version')) {
     //   printerr(red('You must pass a --version.'));
@@ -98,7 +99,7 @@ class PushCommand extends Command<void> {
     // }
     // var version = argResults['version'] as String;
 
-    var pubspec = PubSpecFile.fromScript(Script.current);
+    var pubspec = PubSpec.fromScript(Script.current);
     var version = pubspec.version.toString();
     print('Pushing version: $version');
     'sudo docker push bsuttonnoojee/dcli_cli:$version'.run;

@@ -44,7 +44,7 @@ dependencies:
       if (!exists(dirname(scriptPath))) {
         createDir(dirname(scriptPath));
       }
-      PubSpec file = PubSpecImpl.fromString(basic);
+      var file = PubSpec.fromString(basic);
       file.saveToFile(pubSpecScriptPath);
 
       var dependencies = <Dependency>[];
@@ -62,7 +62,7 @@ dependencies:
       if (exists(pubSpecScriptPath)) {
         delete(pubSpecScriptPath);
       }
-      PubSpec file = PubSpecImpl.fromString(overrides);
+      var file = PubSpec.fromString(overrides);
       file.saveToFile(scriptPath);
 
       var dependencies = <Dependency>[];
@@ -83,7 +83,7 @@ dependencies:
       if (exists(pubSpecScriptPath)) {
         delete(pubSpecScriptPath);
       }
-      PubSpec file = PubSpecImpl.fromString(overrides);
+      var file = PubSpec.fromString(overrides);
       file.saveToFile(scriptPath);
 
       var dependencies = <Dependency>[];

@@ -1,39 +1,123 @@
 import 'dart:io';
 
 import 'package:collection/collection.dart';
+import 'package:dcli/src/util/wait_for_ex.dart';
 import 'package:pub_semver/pub_semver.dart';
-import 'package:path/path.dart';
 import 'package:pubspec/pubspec.dart' as pub;
 
-import '../functions/read.dart';
+import '../../dcli.dart';
 import '../script/dependency.dart';
-import '../util/wait_for_ex.dart';
+import '../script/script.dart';
 
 ///
-/// Provides a common interface for access a pubspec content.abstract
+///Used to read a pubspec.yaml file
 ///
+class PubSpec {
+  /// the wrapped pubspec.
+  pub.PubSpec pubspec;
 
-abstract class PubSpec {
-  /// name of the project
-  String get name;
+  /// Returns the name field from the pubspec.yaml
+  String get name => pubspec.name;
 
-  /// project version.
-  Version get version;
-  set version(Version version);
+  /// Returns the version field from the pubspec.yaml
+  Version get version => pubspec.version;
 
-  /// Saves the pubspec.yaml into the
-  /// given directory
-  void saveToFile(String directory);
+  /// Sets the version field for the pubspec.
+  /// Call [saveToFile] to update the contents of the pubspec.yaml.
+  set version(Version version) => pubspec = pubspec.copy(version: version);
+  List<Executable> _executables;
 
-  /// sets the list of dependencies in this pubspec.yaml
-  set dependencies(List<Dependency> newDependencies);
+  /// Get the list of exectuables
+  List<Executable> get executables {
+    if (_executables == null) {
+      _executables = <Executable>[];
+      for (var key in pubspec.executables.keys) {
+        _executables.add(Executable(key, pubspec.executables[key].scriptPath));
+      }
+    }
+    return _executables;
+  }
 
-  /// returns the list of dependencies in this pubspec.yaml
-  List<Dependency> get dependencies;
+  /// Sets the list of dependencies for this pubspec.
+  set dependencies(List<Dependency> dependencies) {
+    var ref = <String, pub.DependencyReference>{};
 
-  List<Dependency> get dependencyOverrides;
+    for (var dependency in dependencies) {
+      ref[dependency.name] = dependency.reference;
+    }
 
-  List<Executable> get executables;
+    pubspec = pubspec.copy(dependencies: ref);
+  }
+
+  /// Returns the set of dependencies contained in this pubspec.
+  List<Dependency> get dependencies {
+    var depends = <Dependency>[];
+
+    var map = pubspec.dependencies;
+
+    for (var name in map.keys) {
+      var reference = map[name];
+      depends.add(Dependency(name, reference));
+    }
+
+    return depends;
+  }
+
+  /// Sets the list of dependencies for this pubspec.
+  set dependencyOverrides(List<Dependency> dependencies) {
+    var ref = <String, pub.DependencyReference>{};
+
+    for (var dependency in dependencies) {
+      ref[dependency.name] = dependency.reference;
+    }
+
+    pubspec = pubspec.copy(dependencyOverrides: ref);
+  }
+
+  List<Dependency> get dependencyOverrides {
+    var depends = <Dependency>[];
+
+    var map = pubspec.dependencyOverrides;
+
+    for (var name in map.keys) {
+      var reference = map[name];
+      depends.add(Dependency(name, reference));
+    }
+
+    return depends;
+  }
+
+  PubSpec._internal();
+
+  /// Reads a pubspec.yaml from the path that  [script] is located in.
+  PubSpec.fromScript(Script script) {
+    _fromFile(script.pathToPubSpec);
+  }
+
+  /// Reads a pubspec.yaml located at [path]
+  PubSpec.fromFile(String path) {
+    _fromFile(path);
+  }
+
+  /// parses a pubspec from a yaml string.
+  factory PubSpec.fromString(String yamlString) {
+    var impl = PubSpec._internal();
+    impl.pubspec = pub.PubSpec.fromYamlString(yamlString);
+    return impl;
+  }
+
+  void _fromFile(String path) {
+    var lines = read(path).toList();
+
+    pubspec = pub.PubSpec.fromYamlString(lines.join('\n'));
+  }
+
+  /// Saves this [PubSpec] to a pubspec.yaml at the given
+  /// [path].
+  /// The [path] must be a directory not a file name.
+  void saveToFile(String path) {
+    waitForEx<dynamic>(pubspec.save(Directory(dirname(path))));
+  }
 
   /// Compares two pubspec to see if they have the same content.
   static bool equals(PubSpec lhs, PubSpec rhs) {
@@ -54,93 +138,6 @@ abstract class PubSpec {
         .equals(lhs.dependencies, rhs.dependencies)) return false;
 
     return true;
-  }
-}
-
-/// provides base implementation for PubSpec.
-class PubSpecImpl implements PubSpec {
-  /// the wrapped pubspec.
-  pub.PubSpec pubspec;
-
-  @override
-  String get name => pubspec.name;
-  @override
-  Version get version => pubspec.version;
-
-  @override
-  set version(Version version) => pubspec = pubspec.copy(version: version);
-
-  @override
-  set dependencies(List<Dependency> dependencies) {
-    var ref = <String, pub.DependencyReference>{};
-
-    for (var dependency in dependencies) {
-      ref[dependency.name] = dependency.reference;
-    }
-
-    pubspec = pubspec.copy(dependencies: ref);
-  }
-
-  @override
-  List<Dependency> get dependencyOverrides {
-    var depends = <Dependency>[];
-
-    var map = pubspec.dependencyOverrides;
-
-    for (var name in map.keys) {
-      var reference = map[name];
-      depends.add(Dependency(name, reference));
-    }
-
-    return depends;
-  }
-
-  @override
-  List<Dependency> get dependencies {
-    var depends = <Dependency>[];
-
-    var map = pubspec.dependencies;
-
-    for (var name in map.keys) {
-      var reference = map[name];
-      depends.add(Dependency(name, reference));
-    }
-
-    return depends;
-  }
-
-  List<Executable> _executables;
-  @override
-  List<Executable> get executables {
-    if (_executables == null) {
-      _executables = <Executable>[];
-      for (var key in pubspec.executables.keys) {
-        _executables.add(Executable(key, pubspec.executables[key].scriptPath));
-      }
-    }
-    return _executables;
-  }
-
-  /// parses a pubspec from a yaml string.
-  factory PubSpecImpl.fromString(String yamlString) {
-    var impl = PubSpecImpl._internal();
-    impl.pubspec = pub.PubSpec.fromYamlString(yamlString);
-    return impl;
-  }
-
-  PubSpecImpl._internal();
-
-  /// Saves the pubspec.yaml into the
-  /// given directory
-  @override
-  void saveToFile(String directory) {
-    waitForEx<dynamic>(pubspec.save(Directory(dirname(directory))));
-  }
-
-  /// reads a pubspec.yaml.
-  static PubSpec loadFromFile(String path) {
-    var lines = read(path).toList();
-    return PubSpecImpl.fromString(lines.join('\n'));
   }
 }
 

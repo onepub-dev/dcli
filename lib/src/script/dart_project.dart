@@ -29,7 +29,7 @@ class DartProject {
   /// reads and returns the project's virtual pubspec
   /// and returns it.
   PubSpec get pubSpec {
-    return PubSpecFile.fromFile(pathToPubSpec);
+    return PubSpec.fromFile(pathToPubSpec);
   }
 
   String get pathToProjectRoot => _pathToProjectRoot;
