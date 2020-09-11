@@ -56,7 +56,7 @@ mixin PosixMixin {
   String get loggedInUser {
     var user = _whoami();
     if (user == 'root') {
-      user = env['SUDO_USER'];
+      user = env['SUDO_USER'] ?? 'root';
     }
     Settings().verbose('loggedInUser: $user');
     return user;
@@ -71,7 +71,7 @@ mixin PosixMixin {
   bool get isSudo =>
       !Settings().isWindows &&
       Shell.current.isPrivilegedUser &&
-      Shell.current.loggedInUser != 'ROOT';
+      Shell.current.loggedInUser != 'root';
 
   String privilegesRequiredMessage(String app) {
     return 'Please run with: sudo $app';
