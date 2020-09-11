@@ -10,6 +10,16 @@ void main() {
     print('PWD: $pwd');
     echo('PWD: $pwd');
 
+    print(green("Let's compose a sonet together"));
+    var name = ask('Name of our poem:', validator: Ask.alpha);
+
+    print(orange("'Let's keep it our secret"));
+    var password = ask(red('Password:'),
+        hidden: true,
+        validator: Ask.all([Ask.alphaNumeric, Ask.lengthMin(12)]));
+
+    print(red('your password is: $password'));
+
     var baseDir = 'poetry';
 
     // We could use cd, push and pop but that is considered bad
@@ -30,7 +40,7 @@ void main() {
     }
 
     // Create a self edifying poem.
-    var poem = 'poem.txt';
+    var poem = '$name.txt';
 
     // write a poem of such beauty it will mesmerise the beholder.
     var verse1 = '''
@@ -89,10 +99,7 @@ void main() {
     // But we can't do this in a vscode debug session
     // so commenting it out for now.
     // a patch is comming for vscode.
-    var publish = ask('Publish (y/n):');
-
-    //String publish = 'y';
-    if (publish.toLowerCase() == 'y') {
+    if (confirm('Publish:')) {
       // move to the published directory.
       move(restingPlace, poetryPublished);
 
