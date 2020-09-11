@@ -1,19 +1,27 @@
 # This docker file must be run from the root of dcli directory
-FROM google/dart
+FROM ubuntu:20.04
+
+# We use the current dcli install to get docker installed.
+# we the overwrite it with our local copy.
+RUN apt-get -y update
+RUN apt-get install --no-install-recommends -y wget ca-certificates gnupg2 procps
+RUN wget https://github.com/bsutton/dcli/releases/download/latest-linux/dcli_install
+RUN chmod +x dcli_install
+ENV PATH="${PATH}":/usr/lib/dart/bin:"${HOME}/.pub-cache/bin":"${HOME}/.dcli/bin"
+RUN ./dcli_install
 
 WORKDIR /
 
-#ENV HOME=/home
-ENV PATH="${PATH}":"/home/.pub-cache/bin"
-RUN touch /home/.profile
+
+
+
+RUN touch /$HOME/.profile
 
 # Add the entire dcli project so we can run from the local filesystem
 COPY . /dcli
 
 #RUN find /dcli -name "*"
 
-#RUN export PATH="$PATH":"/home/.pub-cache/bin"
-RUN echo PATH=$PATH
 RUN pub global activate --source path /dcli 
 RUN dcli install
 
@@ -23,4 +31,4 @@ CMD []
 
 WORKDIR /dcli
 
-ENTRYPOINT pub run test test 
+ENTRYPOINT /dcli/tool/run_unit_tests.dart
