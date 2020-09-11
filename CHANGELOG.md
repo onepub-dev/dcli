@@ -1,3 +1,12 @@
+# 0.26.0
+In a docker shell SUDO_USER isn't defined so we need to default back to 'root'
+Improved the sudo detection.
+Fixed the install so it will work for a root usage such as in a docker container.
+Added ask and confirm examples to the script
+
+PubSpecFile has been replaced with PubSpec.
+Reduced pubspec to a single class now we have removed virtual projects.
+
 # 0.25.0
 This is a major update which has removed support for virtual pubspecs and pubspec annotations.
 The reality was that in production we used neither of these as ide's don't work with out an actual pubspec and in as the code built up we would
