@@ -68,10 +68,7 @@ mixin PosixMixin {
     return user;
   }
 
-  bool get isSudo =>
-      !Settings().isWindows &&
-      Shell.current.isPrivilegedUser &&
-      Shell.current.loggedInUser != 'root';
+  bool get isSudo => !Settings().isWindows && env['SUDO_USER'] != null;
 
   String privilegesRequiredMessage(String app) {
     return 'Please run with: sudo $app';
