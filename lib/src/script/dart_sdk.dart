@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:archive/archive.dart';
+import 'package:meta/meta.dart';
 import 'package:path/path.dart' as p;
 import 'package:system_info/system_info.dart';
 
@@ -98,18 +99,16 @@ class DartSdk {
 
   /// run the 'dart2native' command.
   /// [runtimeScriptPath] is the path to the dcli script we are compiling.
-  /// [outputPath] is the path to write the compiled ex to .
+  /// [pathToExe] is the path (including the filename) to write the compiled ex to .
   /// [projectRootPath] is the path to the projects root directory.
-  void runDart2Native(Script script, String outputPath, {Progress progress}) {
+  void runDart2Native(Script script,
+      {@required String pathToExe, Progress progress}) {
     var runArgs = <String>[];
     runArgs.add(script.pathToScript);
-    runArgs.add(
-        '--output=${join(outputPath, basenameWithoutExtension(script.pathToScript))}');
+    runArgs.add('--output=${pathToExe}');
 
-    var process = RunnableProcess.fromCommandArgs(
-      dart2NativePath,
-      runArgs,
-    );
+    var process = RunnableProcess.fromCommandArgs(dart2NativePath, runArgs,
+        workingDirectory: script.pathToScriptDirectory);
 
     process.start();
 
