@@ -24,27 +24,25 @@ You should use printerr when you are printing error messages.
 
 The echo function is provided to supplement the Dart print method. The 'echo' allows you to control whether a new line is output after the text. By default echo will NOT output a newline.
 
-```text
+```dart
 echo('hello', newline: false);
 ```
 
 ## Colour coding
 
-DCli allows you colour code your ouput.
+DCli allows you colour code your text output.
 
-```text
+```dart
 print(orange('hello world'));
 ```
 
 You can also control the background colour:
 
-```text
-print(orange('hello world'), bgcolor: AnsiColor.black);
+```dart
+print(orange('hello world', background: AnsiColor.white));
 ```
 
 The following colours are supported for both the foreground \(text\) and background colours.
-
-You can also set the background color to the default by passing
 
 * red
 * black
@@ -56,6 +54,12 @@ You can also set the background color to the default by passing
 * white
 * orange
 * grey
+
+By default the bold attribute is attached to each of the above builtin colours. You can suppress the bold attribute:
+
+```text
+ print(red('a dark message', bold: false));
+```
 
 ## Format.row
 
