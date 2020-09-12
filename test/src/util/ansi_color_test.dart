@@ -37,7 +37,8 @@ void main() {
     print(green('Hellow worlrd', bold: false));
 
     print(red('hi',
-        bold: false, background: AnsiColor(AnsiColor.code_yellow, bold: false)));
+        bold: false,
+        background: AnsiColor(AnsiColor.code_yellow, bold: false)));
     print(red('hi', bold: false, background: AnsiColor.yellow));
     print(red('hi', bold: true, background: AnsiColor.yellow));
 

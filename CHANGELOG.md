@@ -1,3 +1,8 @@
+# 0.27.0
+Small breaking change:
+For each of the color function we have changed the argument bgcolor to background. 
+Abbreviations go against the coding guidelines and this one wasn't even very mature.
+
 # 0.26.1
 ENH: Added bold option to ansi colors and made it the default for the set of built in colors e.g. red(), green()
 ENH: Added a compile method to DartProject and Script so that users can do compiles without spawning a new process.
