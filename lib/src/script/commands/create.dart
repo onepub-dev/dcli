@@ -59,7 +59,7 @@ class CreateCommand extends Command {
 
       print('Creating script...');
 
-      project = DartProject.fromPath(pathToScript, search: true);
+      project = DartProject.fromPath(dirname(pathToScript), search: true);
       _script = project.createScript(pathToScript);
 
       break;
