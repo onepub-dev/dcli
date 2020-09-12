@@ -41,19 +41,22 @@ class Terminal {
 
   ///
   void clearScreen({TerminalClearMode mode}) {
+    //print('clearing screen');
     if (!Ansi.isSupported) return;
     switch (mode) {
       // case AnsiClearMode.scrollback:
       //   echo('${esc}3J', newline: false);
       //   break;
+
       case TerminalClearMode.all:
-        echo('${Ansi.esc}2J', newline: false);
+        // print('clearing screen');
+        echo('${Ansi.esc}2Jm', newline: false);
         break;
       case TerminalClearMode.fromCursor:
-        echo('${Ansi.esc}0J', newline: false);
+        echo('${Ansi.esc}0Jm', newline: false);
         break;
       case TerminalClearMode.toCursor:
-        echo('${Ansi.esc}1J', newline: false);
+        echo('${Ansi.esc}1Jm', newline: false);
         break;
     }
   }
@@ -64,13 +67,13 @@ class Terminal {
     switch (mode) {
       // case AnsiClearMode.scrollback:
       case TerminalClearMode.all:
-        echo('${Ansi.esc}2K', newline: false);
+        echo('${Ansi.esc}[2K', newline: false);
         break;
       case TerminalClearMode.fromCursor:
-        echo('${Ansi.esc}0K', newline: false);
+        echo('${Ansi.esc}[0K', newline: false);
         break;
       case TerminalClearMode.toCursor:
-        echo('${Ansi.esc}1K', newline: false);
+        echo('${Ansi.esc}[1K', newline: false);
         break;
     }
   }

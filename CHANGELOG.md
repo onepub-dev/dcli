@@ -1,3 +1,12 @@
+# 0.26.1
+ENH: Added bold option to ansi colors and made it the default for the set of built in colors e.g. red(), green()
+ENH: Added a compile method to DartProject and Script so that users can do compiles without spawning a new process.
+removed dart_project until we decide how much to expose.
+FIX: Fixed a number of bugs in dcli create,clean and compile after we stripped out virtual projects.
+Fixed a bug where the pubspec name ended up as '.' when the script was created in the current directory.
+Fixed a bug when trying to create a script in the local directory which was also the projectRoot.
+FIX: Modified runDart2Native to take a full path to the executable file that is to be created and modified the dart2native call so it now runs in the scripts directory.
+
 # 0.26.0
 In a docker shell SUDO_USER isn't defined so we need to default back to 'root'
 Improved the sudo detection.

@@ -33,14 +33,30 @@ void main() {
 
   test('clear line', () {
     print('');
+    Ansi.isSupported = true;
+
+    print(red('hi',
+        bold: false, bgcolor: AnsiColor(AnsiColor.code_yellow, bold: false)));
+         print(red('hi', bold: false, bgcolor: AnsiColor.yellow));
+    print(red('hi',
+        bold: true, bgcolor: AnsiColor.yellow));
+
+        print(orange('hello world', bgcolor: AnsiColor.black));
+
+
+    print(red('hi', bold: true, bgcolor: AnsiColor.yellow));
+    print(red('hi', bold: false, bgcolor: AnsiColor.yellow));
+
+    print('ansi=${Ansi.isSupported}');
     var term = Terminal();
-    term.showCursor(show: false);
+    // term.showCursor(show: false);
     for (var i = 0; i < 10; i++) {
-      term.clearLine();
-      term.startOfLine();
-      echo('hellow $i', newline: false);
+      // term.clearLine();
+      term.clearScreen();
+      // term.startOfLine();
+      echo(red('hellow $i')); // , newline: false);
     }
-    term.showCursor(show: true);
+    // term.showCursor(show: true);
     print('');
     print('end');
   });
