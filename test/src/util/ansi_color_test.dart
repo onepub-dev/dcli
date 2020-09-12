@@ -32,20 +32,19 @@ void main() {
   });
 
   test('clear line', () {
-    print('');
     Ansi.isSupported = true;
+    print(green('Hellow worlrd'));
+    print(green('Hellow worlrd', bold: false));
 
     print(red('hi',
-        bold: false, bgcolor: AnsiColor(AnsiColor.code_yellow, bold: false)));
-         print(red('hi', bold: false, bgcolor: AnsiColor.yellow));
-    print(red('hi',
-        bold: true, bgcolor: AnsiColor.yellow));
+        bold: false, background: AnsiColor(AnsiColor.code_yellow, bold: false)));
+    print(red('hi', bold: false, background: AnsiColor.yellow));
+    print(red('hi', bold: true, background: AnsiColor.yellow));
 
-        print(orange('hello world', bgcolor: AnsiColor.black));
+    print(orange('hello world', background: AnsiColor.black));
 
-
-    print(red('hi', bold: true, bgcolor: AnsiColor.yellow));
-    print(red('hi', bold: false, bgcolor: AnsiColor.yellow));
+    print(red('hi', bold: true, background: AnsiColor.yellow));
+    print(red('hi', bold: false, background: AnsiColor.yellow));
 
     print('ansi=${Ansi.isSupported}');
     var term = Terminal();

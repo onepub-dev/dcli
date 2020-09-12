@@ -16,16 +16,16 @@ import 'ansi.dart';
 /// print(red('a dark message', bold: false));
 /// ```
 ///
-/// [bgcolor] is the background color to use when printing the
+/// [background] is the background color to use when printing the
 /// text.  Defaults to White.
 ///
 String red(
   String text, {
-  AnsiColor bgcolor = AnsiColor.none,
+  AnsiColor background = AnsiColor.none,
   bool bold = true,
 }) =>
     AnsiColor._apply(AnsiColor(AnsiColor.code_red, bold: bold), text,
-        bgcolor: bgcolor);
+        background: background);
 
 /// Wraps the passed text with the ANSI escape sequence for
 /// the color red.
@@ -43,16 +43,16 @@ String red(
 /// print(black('a dark message', bold: false));
 /// ```
 ///
-/// [bgcolor] is the background color to use when printing the
+/// [background] is the background color to use when printing the
 /// text.  Defaults to White.
 ///
 String black(
   String text, {
-  AnsiColor bgcolor = AnsiColor.white,
+  AnsiColor background = AnsiColor.white,
   bool bold = true,
 }) =>
     AnsiColor._apply(AnsiColor(AnsiColor.code_black, bold: bold), text,
-        bgcolor: bgcolor);
+        background: background);
 
 /// Wraps the passed text with the ANSI escape sequence for
 /// the color red.
@@ -70,16 +70,16 @@ String black(
 /// print(green('a dark message', bold: false));
 /// ```
 ///
-/// [bgcolor] is the background color to use when printing the
+/// [background] is the background color to use when printing the
 /// text.  Defaults to White.
 ///
 String green(
   String text, {
-  AnsiColor bgcolor = AnsiColor.none,
+  AnsiColor background = AnsiColor.none,
   bool bold = true,
 }) =>
     AnsiColor._apply(AnsiColor(AnsiColor.code_green, bold: bold), text,
-        bgcolor: bgcolor);
+        background: background);
 
 /// Wraps the passed text with the ANSI escape sequence for
 /// the color red.
@@ -97,16 +97,16 @@ String green(
 /// print(blue('a dark message', bold: false));
 /// ```
 ///
-/// [bgcolor] is the background color to use when printing the
+/// [background] is the background color to use when printing the
 /// text.  Defaults to White.
 ///
 String blue(
   String text, {
-  AnsiColor bgcolor = AnsiColor.none,
+  AnsiColor background = AnsiColor.none,
   bool bold = true,
 }) =>
     AnsiColor._apply(AnsiColor(AnsiColor.code_blue, bold: bold), text,
-        bgcolor: bgcolor);
+        background: background);
 
 /// Wraps the passed text with the ANSI escape sequence for
 /// the color red.
@@ -124,16 +124,16 @@ String blue(
 /// print(yellow('a dark message', bold: false));
 /// ```
 ///
-/// [bgcolor] is the background color to use when printing the
+/// [background] is the background color to use when printing the
 /// text.  Defaults to White.
 ///
 String yellow(
   String text, {
-  AnsiColor bgcolor = AnsiColor.none,
+  AnsiColor background = AnsiColor.none,
   bool bold = true,
 }) =>
     AnsiColor._apply(AnsiColor(AnsiColor.code_yellow, bold: bold), text,
-        bgcolor: bgcolor);
+        background: background);
 
 /// Wraps the passed text with the ANSI escape sequence for
 /// the color red.
@@ -151,17 +151,17 @@ String yellow(
 /// print(magenta('a dark message', bold: false));
 /// ```
 ///
-/// [bgcolor] is the background color to use when printing the
+/// [background] is the background color to use when printing the
 /// text.  Defaults to White.
 ///xt.  Defaults to none.
 ///
 String magenta(
   String text, {
-  AnsiColor bgcolor = AnsiColor.none,
+  AnsiColor background = AnsiColor.none,
   bool bold = true,
 }) =>
     AnsiColor._apply(AnsiColor(AnsiColor.code_magenta, bold: bold), text,
-        bgcolor: bgcolor);
+        background: background);
 
 /// Wraps the passed text with the ANSI escape sequence for
 /// the color red.
@@ -179,17 +179,17 @@ String magenta(
 /// print(cyan('a dark message', bold: false));
 /// ```
 ///
-/// [bgcolor] is the background color to use when printing the
+/// [background] is the background color to use when printing the
 /// text.  Defaults to White.
 ///xt.  Defaults to none.
 ///
 String cyan(
   String text, {
-  AnsiColor bgcolor = AnsiColor.none,
+  AnsiColor background = AnsiColor.none,
   bool bold = true,
 }) =>
     AnsiColor._apply(AnsiColor(AnsiColor.code_cyan, bold: bold), text,
-        bgcolor: bgcolor);
+        background: background);
 
 /// Wraps the passed text with the ANSI escape sequence for
 /// the color red.
@@ -207,17 +207,17 @@ String cyan(
 /// print(white('a dark message', bold: false));
 /// ```
 ///
-/// [bgcolor] is the background color to use when printing the
+/// [background] is the background color to use when printing the
 /// text.  Defaults to White.
 ///xt.  Defaults to none.
 ///
 String white(
   String text, {
-  AnsiColor bgcolor = AnsiColor.none,
+  AnsiColor background = AnsiColor.none,
   bool bold = true,
 }) =>
     AnsiColor._apply(AnsiColor(AnsiColor.code_white, bold: bold), text,
-        bgcolor: bgcolor);
+        background: background);
 
 /// Wraps the passed text with the ANSI escape sequence for
 /// the color red.
@@ -235,17 +235,17 @@ String white(
 /// print(orange('a dark message', bold: false));
 /// ```
 ///
-/// [bgcolor] is the background color to use when printing the
+/// [background] is the background color to use when printing the
 /// text.  Defaults to White.
 ///xt.  Defaults to none.
 ///
 String orange(
   String text, {
-  AnsiColor bgcolor = AnsiColor.none,
+  AnsiColor background = AnsiColor.none,
   bool bold = true,
 }) =>
     AnsiColor._apply(AnsiColor(AnsiColor.code_orange, bold: bold), text,
-        bgcolor: bgcolor);
+        background: background);
 
 /// Wraps the passed text with the ANSI escape sequence for
 /// the color red.
@@ -263,18 +263,18 @@ String orange(
 /// print(grey('a dark message', bold: false));
 /// ```
 ///
-/// [bgcolor] is the background color to use when printing the
+/// [background] is the background color to use when printing the
 /// text.  Defaults to White.
 ///xt.  Defaults to none.
 ///
 String grey(
   String text, {
   double level = 0.5,
-  AnsiColor bgcolor = AnsiColor.none,
+  AnsiColor background = AnsiColor.none,
   bool bold = true,
 }) =>
     AnsiColor._apply(AnsiColor._grey(level: level, bold: bold), text,
-        bgcolor: bgcolor);
+        background: background);
 
 /// Helper class to assist in printing text to the console with a color.
 ///
@@ -318,19 +318,19 @@ class AnsiColor {
   bool get bold => _bold;
 
   /// writes the text to the terminal.
-  String apply(String text, {AnsiColor bgcolor = none}) =>
-      _apply(this, text, bgcolor: bgcolor);
+  String apply(String text, {AnsiColor background = none}) =>
+      _apply(this, text, background: background);
 
   static String _apply(
     AnsiColor color,
     String text, {
-    AnsiColor bgcolor = none,
+    AnsiColor background = none,
   }) {
     String output;
 
     if (Ansi.isSupported) {
       output =
-          '${_fg(color.code, bold: color.bold)}${_bg(bgcolor?.code)}$text$_reset';
+          '${_fg(color.code, bold: color.bold)}${_bg(background?.code)}$text$_reset';
     } else {
       output = text;
     }
@@ -364,7 +364,7 @@ class AnsiColor {
     if (code == none.code) {
       output = '';
     } else if (code > 49) {
-      output = '${Ansi.esc}$_bgColorCode${code + 10}m';
+      output = '${Ansi.esc}$_backgroundCode${code + 10}m';
     } else {
       output = '${Ansi.esc}${code + 10}m';
     }
@@ -386,7 +386,7 @@ class AnsiColor {
   static const String _fgColorCode = '38;5;';
 
 // emit this code followed by a color code to set the fg color
-  static const String _bgColorCode = '48;5;';
+  static const String _backgroundCode = '48;5;';
 
   static const int code_black = 30;
   static const int code_red = 31;
