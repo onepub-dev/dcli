@@ -23,6 +23,7 @@ class DartProject {
     } else {
       _pathToProjectRoot = pathToSearchFrom;
     }
+    _pathToProjectRoot = truepath(_pathToProjectRoot);
   }
 
   ///
