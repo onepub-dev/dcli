@@ -7,6 +7,7 @@ import 'package:dcli/src/settings.dart';
 import 'package:path/path.dart' as p;
 
 import '../functions/is.dart';
+import 'dart_project.dart';
 
 import 'command_line_runner.dart';
 
@@ -191,6 +192,40 @@ class Script {
   /// reads and returns the project's virtual pubspec
   /// and returns it.
   PubSpec get pubSpec => project.pubSpec;
+
+  void compile({bool install = false, bool overwrite = false}) {
+    Settings().verbose(
+        "\nCompiling with pubspec.yaml:\n${read(pathToPubSpec).toList().join('\n')}\n");
+
+    if (install && isInstalled && !overwrite) {
+      throw InvalidArguments(
+          'You selected to install the compiled exe however it is already installed. Use overwrite=true');
+    }
+
+    var pathToExe = basename;
+
+    DartSdk().runDart2Native(this,
+        pathToExe: pathToExe, progress: Progress(print, stderr: print));
+
+    if (install) {
+      print('');
+      print(orange('Installing $pathToExe into $pathToInstalledExe'));
+      move(pathToExe, pathToInstalledExe, overwrite: true);
+    }
+  }
+
+  /// returns the platform dependant name of the compiled scripts exe name.
+  /// On Linux and OSX this is just the basename (script name without the extension)
+  /// on Windows this is the 'basename.exe'.
+  String get exeName => '${basename}${Settings().isWindows ? '.exe' : ''}';
+
+  /// Checks if the Script has been compiled and installed into the ~/.dcli/bin path
+  bool get isInstalled {
+    return exists(pathToInstalledExe);
+  }
+
+  /// Returns the path that the script would be installed to if compiled with [install] = true.
+  String get pathToInstalledExe => join(Settings().pathToDCliBin, exeName);
 }
 
 // ignore: avoid_classes_with_only_static_members

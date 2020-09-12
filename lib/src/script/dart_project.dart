@@ -19,7 +19,7 @@ class DartProject {
   /// project root. directory.
   DartProject.fromPath(String pathToSearchFrom, {bool search = false}) {
     if (search) {
-      _pathToProjectRoot = findProjectRoot(pathToSearchFrom);
+      _pathToProjectRoot = _findProjectRoot(pathToSearchFrom);
     } else {
       _pathToProjectRoot = pathToSearchFrom;
     }
@@ -32,11 +32,16 @@ class DartProject {
     return PubSpec.fromFile(pathToPubSpec);
   }
 
+  /// Returns the path to the project's root diretory.
   String get pathToProjectRoot => _pathToProjectRoot;
+
+  // Returns the pat to the project's pubspec.yaml
   String get pathToPubSpec =>
       _pathToPubSpec ??= join(_pathToProjectRoot, 'pubspec.yaml');
 
-  void get doctor {
+  // Used by the dcli doctor command to print
+  // out the DartProjects details.
+  void doctor() {
     _colprint('Pubspec Path', privatePath(pathToPubSpec));
     print('');
 
@@ -59,7 +64,7 @@ class DartProject {
     return line.replaceAll(HOME, '<HOME>');
   }
 
-  String findProjectRoot(String pathToSearchFrom) {
+  String _findProjectRoot(String pathToSearchFrom) {
     var current = absolute(pathToSearchFrom);
 
     var root = rootPrefix(current);
@@ -109,6 +114,12 @@ class DartProject {
         print(red("\ndcli clean failed due to the 'pub get' call failing."));
       }
     }, waiting: 'Waiting for clean to complete...');
+  }
+
+  /// compiles all dart scripts in the project.
+  void compile({bool install, bool overright}) {
+    find('*.dart', root: pathToProjectRoot).forEach((file) =>
+        Script.fromFile(file).compile(install: install, overwrite: overright));
   }
 
   /// Causes a pub get to be run against the project.

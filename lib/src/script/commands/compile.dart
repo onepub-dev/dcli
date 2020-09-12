@@ -4,11 +4,9 @@ import '../../../dcli.dart';
 import '../../settings.dart';
 import '../../util/ansi_color.dart';
 import '../../util/completion.dart';
-import '../../util/progress.dart';
 import '../../util/runnable_process.dart';
 
 import '../command_line_runner.dart';
-import '../dart_sdk.dart';
 import '../flags.dart';
 import '../script.dart';
 import '../dart_project.dart';
@@ -96,7 +94,7 @@ class CompileCommand extends Command {
     }
 
     try {
-      // by default we clean the project unless the -nc flagg is passed.
+      // by default we clean the project unless the -nc flag is passed.
       // however if the project isn't i a runnable state then we
       // force a build.
       var buildRequired = !flagSet.isSet(NoCleanFlag()) || !script.isReadyToRun;
@@ -109,35 +107,24 @@ class CompileCommand extends Command {
         project.clean();
       }
 
-      Settings().verbose(
-          "\nCompiling with pubspec.yaml:\n${read(script.pathToPubSpec).toList().join('\n')}\n");
-
-      DartSdk().runDart2Native(script, dirname(script.pathToScript),
-          progress: Progress(print, stderr: print));
-
-      var exe = join(script.pathToScriptDirectory, script.basename);
+      var install = flagSet.isSet(InstallFlag());
+      var overwrite = flagSet.isSet(OverWriteFlag());
 
       /// if an exe was produced and the --install flag was set.
       /// If no exe then the compile failed.
-      if (flagSet.isSet(InstallFlag()) && exists(exe)) {
-        var install = true;
-        var to = join(Settings().pathToDCliBin, script.basename);
-        if (exists(to) && !flagSet.isSet(OverWriteFlag())) {
+      if (install && script.isInstalled) {
+        if (!overwrite) {
           var overwrite = confirm('Overwrite the existing exe?');
           if (!overwrite) {
             install = false;
 
             print(red(
-                'The target file $to already exists. Use the --overwrite flag to overwrite it.'));
+                'The target file ${script.pathToInstalledExe} already exists. Use the --overwrite flag to overwrite it.'));
           }
         }
-
-        if (install) {
-          print('');
-          print(orange('Installing $exe into $to'));
-          move(exe, to, overwrite: true);
-        }
       }
+
+      script.compile(install: install, overwrite: overwrite);
     } on RunException catch (e) {
       exitCode = e.exitCode;
     }
