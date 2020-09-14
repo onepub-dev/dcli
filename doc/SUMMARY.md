@@ -68,8 +68,11 @@
 * [Overview](examples/overview.md)
 * [hello world.](examples/hello-world..md)
 * [dcompress](examples/dcompress.md)
+* [dpath](examples/dpath.md)
 * [dmysql](examples/dmysql.md)
 * [dshell](examples/dshell.md)
+* [dwhich](examples/dwhich.md)
+* [dipaddr](examples/dipaddr.md)
 
 ## Articles
 
