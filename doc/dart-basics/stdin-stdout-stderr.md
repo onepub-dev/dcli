@@ -158,6 +158,87 @@ A couple of other interesting things happened here.
 
 2\) stdout of `grep` is still connected to the terminal anything that grep writes to its stdout will appear on the terminal.
 
+### Implement a shell
+
+To make the whole concept a little more concrete we are going to implement a toy shell replacement for Bash.
+
+Bash, Powershell and every other shell implement a read–eval–print loop \(REPL\).
+
+Read input from the user, evaluate the input \(execute it\), print the results.
+
+It turns it that its really easy to implement your own toy shell. So let's do it in just 50 lines of code.
+
+```dart
+#! /usr/bin/env dcli
+
+import 'dart:async';
+import 'dart:io';
+
+import 'package:dcli/dcli.dart';
+
+void main(List<String> args) {
+  for (;;) {
+    var line = ask('${green(basename(pwd))}${blue('>')}');
+    if (line.isNotEmpty) {
+      dispatch(line);
+    }
+  }
+}
+
+void dispatch(String command) {
+  var parts = command.split(' ');
+  switch (parts[0]) {
+    case 'ls':
+      ls(parts.sublist(1));
+      break;
+    case 'cd':
+      Directory.current = join(pwd, parts[1]);
+      break;
+    default:
+      if (which(parts[0]).firstLine != null) {
+        command.run;
+      } else {
+        print(red('Unknown command: ${parts[0]}'));
+      }
+      break;
+  }
+}
+
+void ls(List<String> patterns) {
+  if (patterns.isEmpty) {
+    find('*',
+            root: pwd,  recursive: false,
+            types: [FileSystemEntityType.file, FileSystemEntityType.directory])
+        .forEach((file) => print('  $file'));
+  } else {
+    for (var pattern in patterns) {
+      find(pattern, root: pwd,  recursive: false, types: [
+        FileSystemEntityType.file,
+        FileSystemEntityType.directory
+      ]).forEach((file) => print('  $file'));
+    }
+  }
+}
+```
+
+If you save and run the above Dart script you will get an interactive shell. Here is a sample session:
+
+```bash
+./dshell.dart 
+example> ls
+  dshell.dart
+example> mkdir tmp
+example> cd tmp
+tmp> touch me
+tmp> ls
+  me
+tmp> cd ..
+example> ls
+  dshell.dart
+  tmp
+example>      
+```
+
 ## Revelations
 
 {% hint style="warning" %}
