@@ -66,6 +66,8 @@
 ## Examples
 
 * [Overview](examples/overview.md)
+* [hello world.](examples/hello-world..md)
+* [dcompress](examples/dcompress.md)
 * [dmysql](examples/dmysql.md)
 * [dshell](examples/dshell.md)
 
