@@ -4,15 +4,13 @@ When building console apps you are going to hear a lot about three little entiti
 
 In the Linux, Windows and OSX world any time you launch an application three file descriptors are automatically opened and attached to the application.
 
-I refer to these three file descriptors as 'the holy trinity'. If you are going to do cli programming then it is imperative that you understand what they are and how to use them.
+I refer to these three file descriptors as 'the holy trinity'. If you are going to do Command Line Interface \(CLI\) programming then it is imperative that you understand what they are and how to use them.
 
-This primer discusses the origins, the structure and finally how to interact with the holy trinity of cli apps.
+This primer discusses the origins, the structure and finally how to interact with the holy trinity in CLI apps.
 
 {% hint style="info" %}
 stdin/stdout/stderr are not unique to dart. Virtually every langue supports them.
 {% endhint %}
-
-If you want to program cli apps, then you must understand what these three file descriptors are and what they do.
 
 ## In the beginning
 
@@ -23,21 +21,29 @@ Way back in the dark ages \(circa 1970\) the computer gods got together and crea
 {% hint style="info" %}
 And Dennis said let there be 'C'. And Denis looked upon 'C' and said it was good and the people agreed.
 
-But Dennis did not rest on the seven day, instead he called Ken and over lunch created Unix.
+But Dennis did not rest on the seventh day, instead he called Kenneth and over lunch created Unix.
 
 Dennis Ritchie ; 9th Sept 1944 - 12th Oct 2011
 {% endhint %}
 
 ![My first bible.](../.gitbook/assets/image.png)
 
-Unix is the direct ancestor of Linux, OSX and to a lesser extent Windows. You might more correctly say that 'C' is the common ancestor of all three OSs  as their kernels are written in C.
+Unix is the direct ancestor of Linux, OSX and to a lesser extent Windows. You might more correctly say that 'C' is the common ancestor of all three OSs  as their kernels are all written in C.
 
-## File Descriptors
+The concept of stdin/stdout and stderr proliferated across the OS world as C was taken up as the primary language for writing Operating Systems.
+
+The result is today that a large no. of operating systems support stdin/stdout and stderr in all CLI applications.
+
+The majority of people  reading this primer will be working with Linux, OSx or Windows and in each of these cases the Holy Trinity \(stdin/stdout/stderr\) are available in every CLI app they use or write.
+
+The following examples are presented using the Dart programming language but the concepts and and even most of the details are correct across multiple OSs and languages.
+
+## When you have a hammer, everything's a snail
 
 In the Unix world EVERYTHING is a file. Even devices and processes are treated as files.
 
 {% hint style="info" %}
-If you know where to look, running processes and devices are actually visible in the Linux/OSx directory tree as files!
+If you know where to look, processes and devices are actually visible in the Linux/OSx directory tree as files.
 {% endhint %}
 
 So if everything is a file, does that mean we can directly read/write to a device/process/directory ....? 
@@ -48,7 +54,7 @@ If we want to read/write to a file we need to open the file. In the Unix world \
 
 > The terms 'file descriptor' and 'file handle' are often used interchangeably.
 
-So what exactly is an FD? Under the hood an FD is just an integer that acts as a index to an array of open files. The FD array contains information such as the path to the  file, the size of the file, the current seek position...
+So what exactly is an FD? Under the hood an FD is just an integer that acts as an index to an array of open files. The FD array contains information such as the path to the  file, the size of the file, the current seek position and more.
 
 ## The Holy Trinity
 
@@ -56,7 +62,7 @@ So now we understand that in Unix everything is a file, you probably won't be su
 
 So if stdin/stdout/stderr are files how do you open them? 
 
-You don't need to open them as the OS opens them for you. When your app starts, it is passed one file descriptor \(FD\) for each of stdin/stdout/stderr.
+The answer is you don't need to open them as the OS opens them for you. When your app starts, it is passed one file descriptor \(FD\) for each of stdin/stdout/stderr.
 
 If you recall we said that FD's are just integers into an array of open files. Each application has its own array.  When your app starts that array already has three entries, stdin, stdout and stderr.
 
@@ -72,7 +78,7 @@ If you open any additional files they will appear as element \[3\] and greater.
 
 ## The tower of Babel
 
-If you have done any Bash programming you may have seen a line like:
+If you have done any Bash, Zsh or Powershell programming you may have seen a line similar to:
 
 ```text
 find . '*.png' >out 2>&1
@@ -84,9 +90,9 @@ You can't get much more obtuse than the above line, but now we know about FD's i
 Bash was not created by the gods. I think the other bloke had a hand in this one.
 {% endhint %}
 
-The `>out` is actually a shorthand for  `1>out` .  It instructs Bash to take anything that `find` writes to FD =1 and re-write it to the file called 'out'.  i.e. anything  `find` writes to sdtout \(FD=1\) should be rewritten to the file called 'out'.
+The `>out` section is actually a shorthand for  `1>out` .  It instructs Bash to take anything that `find` writes to FD =1 \(stdout\) and re-write it to the file called 'out'.  
 
-The `2> &1` instructs bash to take anything `find` writes to FD=2 and re-write it to FD=1. i.e. anything written to stderr \(FD=2\) should be re-written to stdout \(FD=1\).  
+The `2> &1` section instructs Bash to take anything `find` writes to FD=2 \(stderr\) and re-write it to FD=1. i.e. anything written to stderr \(FD=2\) should be re-written to stdout \(FD=1\).  
 
 The result of the above command is that both stdout and stderr are written to the file called 'out'.
 
@@ -100,7 +106,7 @@ But of course we are talking about Bash here and apparently more obtuse is alway
 
 * Many other shells use a similar syntax.
 
-Most languages provide specific wrapper for each these file handles. In Dart we have the properties:
+Most languages provide specific wrapper for each these file handles. In Dart we have the global properties:
 
 * stdin
 * stdout
@@ -112,11 +118,13 @@ The 'C' programming language has the same three properties and many other langua
 
 I like to think of the Unix philosophy as programming by Lego.
 
+Linux, OSx and Windows 
+
 {% hint style="info" %}
 Unix was all about Lego - build lots of little bricks \(apps\) that can be connected.
 {% endhint %}
 
-In the Unix world \(and the dart world\) every CLI app you write contributes to the set of available Lego bricks.  But Lego bricks would be useless unless you can connect them. In order to connect them the 'pegs' on each brick must match the 'holes' on the other bricks and that where stdin/stdout/stderr come in.
+In the Unix world \(and the dart world\) every CLI app you write contributes to the set of available Lego bricks.  But Lego bricks would be useless unless you can connect them. In order to connect bricks the 'pegs' on each brick must match the 'holes' on other bricks and that's where stdin/stdout/stderr come in.
 
 In the Unix world every brick \(app\) has three connection points: 
 
@@ -124,19 +132,21 @@ In the Unix world every brick \(app\) has three connection points:
 * stdout - a peg for output
 * stderr - a peg for error output
 
-Any peg can go into any hole.
+Any peg can go into any hole. 
 
-You might now have guess that you can connect stdout from one program to stdin on another program:
+You might now have guessed that you can connect stdout from one program to stdin on another program:
 
 \(myapp -&gt; stdout\) -&gt; \(stdin -&gt; yourapp\)
 
-If you are familiar with bash you may have even seen one way of connecting two apps using the pipe '\|' character:
+If you are familiar with Bash you may have even seen one of the common ways to connect two apps. 
 
 ```text
 ls "*.png" | grep "pengiuns"
 ```
 
 The '\|' pipe operator connects the stdout of 'ls' to the stdin of 'grep'.
+
+If you like, the 'pipe' command is the plumbing and Bash is the plumber.
 
 Any data `ls` writes to it's stdout, is written to 'grep's stdin. The two apps are now connected via a 'pipe'.
 
