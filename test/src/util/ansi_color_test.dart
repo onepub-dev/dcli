@@ -60,4 +60,14 @@ void main() {
     print('');
     print('end');
   });
+
+  test('Green On Black', () {
+    print(green('Hello World'));
+    print(white('And back to normal'));
+    print(red('And some red'));
+    print(orange('Now orange'));
+    print(grey('Grey 0.75', level: 0.75));
+    print(grey('Grey 0.50', level: 0.50));
+    print(red('Red on Yellow', background: AnsiColor.yellow));
+  });
 }
