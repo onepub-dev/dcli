@@ -67,6 +67,7 @@
 
 * [Overview](examples/overview.md)
 * [dmysql](examples/dmysql.md)
+* [dshell](examples/dshell.md)
 
 ## Articles
 
