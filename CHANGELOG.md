@@ -1,3 +1,7 @@
+# 0.27.1
+Exposed DartProject class as part of the public api
+Added color tests.
+
 # 0.27.0
 Small breaking change:
 For each of the color function we have changed the argument bgcolor to background. 

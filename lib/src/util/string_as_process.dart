@@ -385,7 +385,6 @@ extension StringAsProcess on String {
   // //   lhsRunnable.start(waitForStart: false);
   // //   return lhsRunnable.stream;
   // // }
-
   // Stream<String> stream({
   //   bool runInShell = false,
   //   bool nothrow = false,
@@ -396,7 +395,6 @@ extension StringAsProcess on String {
   //   runnable.run(runInShell: runInShell, nothrow: nothrow, terminal: false);
   //   return runnable.stream.transform(utf8.decoder);
   // }
-
   Stream<String> stream(
       {bool runInShell = false,
       String workingDirectory,

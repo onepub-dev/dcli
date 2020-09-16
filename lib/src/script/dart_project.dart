@@ -117,10 +117,18 @@ class DartProject {
     }, waiting: 'Waiting for clean to complete...');
   }
 
-  /// compiles all dart scripts in the project.
-  void compile({bool install, bool overright}) {
+  /// Compiles all dart scripts in the project.
+  /// If you set[install] to true then each compiled script
+  /// is added to your PATH by copying it into ~/.dcli/bin.
+  /// [install] defaults to false.
+  ///
+  /// The [overwrite] flag allows the [compile] to install the
+  /// compiled script even if one of the same name exists in `/.dcli/bin
+  /// [overwrite] defaults to false.
+  ///
+  void compile({bool install = false, bool overwrite = false}) {
     find('*.dart', root: pathToProjectRoot).forEach((file) =>
-        Script.fromFile(file).compile(install: install, overwrite: overright));
+        Script.fromFile(file).compile(install: install, overwrite: overwrite));
   }
 
   /// Causes a pub get to be run against the project.
@@ -149,6 +157,10 @@ class DartProject {
     });
   }
 
+  /// Returns true if the project is in state when any of its scripts can be run.
+  ///
+  /// This essentially means that pub get has been ran.
+  ///
   /// We have:
   /// * pubspec.yaml
   /// * pubspec.lock
@@ -163,11 +175,16 @@ class DartProject {
         (hasPubSpec));
   }
 
+  /// Returns true if the project contains a pubspec.yaml.
   bool get hasPubSpec => exists(join(pathToProjectRoot, 'pubspec.yaml'));
+
+  /// Returs true if the project has an 'analyssi_options.yaml' file.
   bool get hasAnalysisOptions =>
       exists(join(pathToProjectRoot, 'analysis_options.yaml'));
 
-  void prepareToRun() {
+  /// Prepares the project by creating a pubspec.yaml and
+  /// the analysis_options.yaml file.
+  void initFiles() {
     if (!hasPubSpec) {
       _createPubspecFromTemplate(showWarnings: false);
     }
@@ -180,7 +197,7 @@ class DartProject {
 
   /// Creates a script located at [scriptPath] from the passed [templatePath].
   /// When the user runs 'dcli create <script>'
-  void createFromTemplate({String templatePath, String pathToScript}) {
+  void _createFromTemplate({String templatePath, String pathToScript}) {
     copy(templatePath, pathToScript);
 
     replace(pathToScript, '%dcliName%', DCliPaths().dcliName);
@@ -218,8 +235,9 @@ class DartProject {
     replace(pathToPubSpec, '%scriptname%', basename(pathToProjectRoot));
   }
 
+  /// Creates a script using the default template.
   Script createScript(String pathToScript) {
-    createFromTemplate(
+    _createFromTemplate(
       templatePath: join(Settings().pathToTemplate, 'cli_args.dart'),
       pathToScript: pathToScript,
     );

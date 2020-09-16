@@ -54,7 +54,7 @@ class Script {
       assert(scriptPath.endsWith('.dart'));
       if (create) {
         var project = DartProject.fromPath(pathToProjectRoot);
-        project.prepareToRun();
+        project.initFiles();
       }
     }
   }
