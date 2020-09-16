@@ -13,7 +13,7 @@
 * [Dart lambda functions](dart-basics/dart-lambda-functions.md)
 * [Function Arguments](dart-basics/named-arguments.md)
 * [Futures](dart-basics/futures.md)
-* [stdin/stdout/stderr](dart-basics/stdin-stdout-stderr.md)
+* [stdin/stdout/stderr a primer](dart-basics/stdin-stdout-stderr.md)
 
 ## DCli API
 
@@ -66,7 +66,13 @@
 ## Examples
 
 * [Overview](examples/overview.md)
+* [hello world.](examples/hello-world..md)
+* [dcompress](examples/dcompress.md)
+* [dpath](examples/dpath.md)
 * [dmysql](examples/dmysql.md)
+* [dshell](examples/dshell.md)
+* [dwhich](examples/dwhich.md)
+* [dipaddr](examples/dipaddr.md)
 
 ## Articles
 
