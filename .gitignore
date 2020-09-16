@@ -47,3 +47,4 @@ dcli.code-workspace
 .release.notes.tmp.swp
 release.notes.tmp
 github_credentials.yaml
+tool/post_release_hook/git_release.dart
