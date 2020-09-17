@@ -34,7 +34,7 @@ class _Move extends DCliFunction {
       dest = p.join(to, p.basename(from));
     }
 
-    if (exists(dest) && !overwrite) {
+    if (!overwrite && exists(dest)) {
       throw MoveException(
           'The [to] path ${truepath(dest)} already exists. Use overwrite:true ');
     }
