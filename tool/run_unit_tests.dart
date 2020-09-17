@@ -12,18 +12,22 @@ void main() {
   var root = Script.current.pathToProjectRoot;
 
   print(orange('cleaning old test and build artifacts'));
+
   if (exists('/tmp/dcli')) deleteDir('/tmp/dcli', recursive: true);
 
-  /// Start by cleaning out any old build artifacts
-  find('.packages', root: root, recursive: true)
-      .forEach((file) => delete(file));
-  find('.dart_tool', root: root, recursive: true)
-      .forEach((file) => deleteDir(file, recursive: true));
-  find('pubspec.lock', root: root, recursive: true)
-      .forEach((file) => delete(file));
+  /// remove all of the test artifacts from our test_scripts
+  /// so we are in a clean state.
+  /// The artifacts (e.g. .packages) also have paths that won't
+  /// be valide in our test file system.
+  print('purging test artifacts');
+  DartProject.fromPath(join(root, 'test', 'test_scripts')).purge();
 
+
+  
   /// we need to clean before we can run unit test script
   DartProject.fromPath(root).clean();
+
+
 
   print('Run unit tests from $root');
   '${DartSdk().pathToPubExe} run test -j1 --coverage ${join(root, 'coverage')}'

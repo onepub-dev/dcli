@@ -117,6 +117,33 @@ class DartProject {
     }, waiting: 'Waiting for clean to complete...');
   }
 
+  /// Removes any of the dart build artifacts so you have a clean directory.
+  /// We do this recursively so all subdirectories will also be purged.
+  ///
+  /// Deletes:
+  /// pubspec.lock
+  /// ./packages
+  /// .dart_tools
+  ///
+  /// Any exes for scripts in the directory.
+  void purge() {
+    _lock.withLock(() {
+      find('.packages', root: pathToProjectRoot, recursive: true)
+          .forEach((file) => delete(file));
+      find('.dart_tool', root: pathToProjectRoot, recursive: true)
+          .forEach((file) => deleteDir(file, recursive: true));
+      find('pubspec.lock', root: pathToProjectRoot, recursive: true)
+          .forEach((file) => delete(file));
+
+      find('*.dart', root: pathToProjectRoot).forEach((scriptPath) {
+        var script = Script.fromFile(scriptPath);
+        if (exists(script.pathToExe)) {
+          delete(script.pathToExe);
+        }
+      });
+    }, waiting: 'Waiting for clean to complete...');
+  }
+
   /// Compiles all dart scripts in the project.
   /// If you set[install] to true then each compiled script
   /// is added to your PATH by copying it into ~/.dcli/bin.
