@@ -229,8 +229,6 @@ class TestFileSystem {
     '${DartSdk.pubExeName} global activate --source path $pwd'.start(
         progress: Progress((line) => null, stderr: (line) => print(line)));
 
-        
-
     EntryPoint().process(['install', '--nodart', '--quiet', '--noprivileges']);
   }
 
@@ -275,6 +273,9 @@ class TestFileSystem {
 
       copy(file, target);
     }
+
+    /// tell the world where to find the new pubache.
+    PubCache().pathTo = join(newHome, PubCache().cacheDir);
 
     Settings().setVerbose(enabled: verbose);
   }
