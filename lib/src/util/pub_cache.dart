@@ -55,6 +55,17 @@ class PubCache {
   /// This method processes PUB_CACHE if it exists.
   String get pathTo => _pubCachePath;
 
+  /// Updates the PUB_CACHE environment variable
+  /// which will cause pub get (and friends) to look to this
+  /// alternate path.
+  ///
+  /// This will only affect any child processes spawned from
+  /// this script.
+  set pathTo(String pathToPubCache) {
+    env[_pubCacheEnv] = pathToPubCache;
+    _pubCachePath = pathToPubCache;
+  }
+
   /// The fully qualified path to the pub cache's bin directory
   /// where executables from installed packages are stored.
   String get pathToBin => _pubCacheBinPath;
