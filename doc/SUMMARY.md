@@ -66,7 +66,7 @@
 
 ## Examples
 
-* [Overview](examples/overview/README.md)
+* [Index](examples/overview/README.md)
   * [hello world.](examples/overview/hello-world..md)
   * [dcompress](examples/overview/dcompress.md)
   * [dpath](examples/overview/dpath.md)
