@@ -5,7 +5,6 @@ import 'dart:isolate';
 
 import 'package:dcli/dcli.dart';
 import 'package:dcli/src/functions/env.dart';
-import 'package:dcli/src/util/dcli_paths.dart';
 import 'package:path/path.dart';
 import 'package:dcli/src/script/entry_point.dart';
 import 'package:dcli/src/util/named_lock.dart';
@@ -230,6 +229,8 @@ class TestFileSystem {
     '${DartSdk.pubExeName} global activate --source path $pwd'.start(
         progress: Progress((line) => null, stderr: (line) => print(line)));
 
+        
+
     EntryPoint().process(['install', '--nodart', '--quiet', '--noprivileges']);
   }
 
@@ -299,8 +300,8 @@ class TestFileSystem {
             join(Settings().pathToDCliBin, command));
       } else {
         /// compile and install the command
-        '${DCliPaths().dcliName} compile -i test/test_scripts/general/bin/$command.dart'
-            .run;
+        Script.fromFile('test/test_scripts/general/bin/$command.dart')
+            .compile(install: true);
         // copy it back to the dcli testbin so the next unit
         // test doesn't have to compile it.
         copy(join(Settings().pathToDCliBin, command),
