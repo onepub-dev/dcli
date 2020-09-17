@@ -3,7 +3,6 @@
 import 'dart:io';
 
 import 'package:dcli/dcli.dart' hide equals;
-import 'package:dcli/src/script/entry_point.dart';
 import 'package:test/test.dart';
 
 import 'package:path/path.dart' as p;
@@ -16,37 +15,38 @@ void main() {
   if (!exists(scriptPath)) {
     createDir(scriptPath, recursive: true);
   }
-  var script = truepath(scriptPath, 'hello_world.dart');
+  var pathToScript = truepath(scriptPath, 'hello_world.dart');
 
   group('Create Project', () {
     test('Create hello world', () {
       TestFileSystem().withinZone((fs) {
-        if (exists(script)) {
-          delete(script);
+        if (exists(pathToScript)) {
+          delete(pathToScript);
         }
-        EntryPoint().process(['create', '--foreground', script]);
+        var project = DartProject.fromPath(dirname(pathToScript));
+        project.createScript(basename(pathToScript));
 
-        checkProjectStructure(fs, script);
+        checkProjectStructure(fs, pathToScript);
       });
     });
 
     test('Clean hello world', () {
       TestFileSystem().withinZone((fs) {
-        if (exists(script)) {
-          delete(script);
+        if (exists(pathToScript)) {
+          delete(pathToScript);
         }
 
-        EntryPoint().process(['create', '--foreground', script]);
+        var project = DartProject.fromPath(dirname(pathToScript));
+        project.createScript(basename(pathToScript));
+        project.clean();
 
-        EntryPoint().process(['clean', script]);
-
-        checkProjectStructure(fs, script);
+        checkProjectStructure(fs, pathToScript);
       });
     });
 
     test('Run hello world', () {
       TestFileSystem().withinZone((fs) {
-        EntryPoint().process([script]);
+        Script.fromFile(pathToScript).run([]);
       });
     });
 
