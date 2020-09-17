@@ -42,11 +42,12 @@
 
 * [DCli tools](dcli-tools-1/dcli-tools.md)
 * [Use a shebang \#!](dcli-tools-1/use-a-shebang.md)
-* [DCli Create](dcli-tools-1/dcli-create.md)
-* [DCli Clean](dcli-tools-1/dcli-clean.md)
 * [DCli Compile](dcli-tools-1/dcli-compile.md)
+* [DCli Clean](dcli-tools-1/dcli-clean-1.md)
+* [DCli Create](dcli-tools-1/dcli-create.md)
 * [DCli Doctor](dcli-tools-1/dcli-doctor.md)
 * [DCli Install](dcli-tools-1/dcli-install.md)
+* [DCli Prepare](dcli-tools-1/dcli-clean.md)
 * [DCli run](dcli-tools-1/dcli-run.md)
 * [Upgrade DCli](dcli-tools-1/upgrade-dcli.md)
 * [Performance](dcli-tools-1/performance.md)
@@ -65,14 +66,14 @@
 
 ## Examples
 
-* [Overview](examples/overview.md)
-* [hello world.](examples/hello-world..md)
-* [dcompress](examples/dcompress.md)
-* [dpath](examples/dpath.md)
-* [dmysql](examples/dmysql.md)
-* [dshell](examples/dshell.md)
-* [dwhich](examples/dwhich.md)
-* [dipaddr](examples/dipaddr.md)
+* [Overview](examples/overview/README.md)
+  * [hello world.](examples/overview/hello-world..md)
+  * [dcompress](examples/overview/dcompress.md)
+  * [dpath](examples/overview/dpath.md)
+  * [dmysql](examples/overview/dmysql.md)
+  * [dshell](examples/overview/dshell.md)
+  * [dwhich](examples/overview/dwhich.md)
+  * [dipaddr](examples/overview/dipaddr.md)
 
 ## Articles
 

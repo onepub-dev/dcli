@@ -34,7 +34,7 @@ The longer answer is; in a cli script, futures are a pain and for most requireme
 
 With that done let’s get back to building our first app.
 
-> You can see some additional sample apps in the [example's](../examples/overview.md) section of this manual.
+> You can see some additional sample apps in the [example's](../examples/overview/) section of this manual.
 
 Every Linux system ships with the ‘**which**’ command. The ‘which’ command is used to find which directory an application is run from.
 
