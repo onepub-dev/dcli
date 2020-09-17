@@ -48,15 +48,24 @@ class _Move extends DCliFunction {
         copy(from, to, overwrite: overwrite);
         delete(from);
       } else {
-        throw MoveException(
-            'The Move of ${truepath(from)} to ${truepath(dest)} failed. Error $e');
+        _improveError(e, from, to);
       }
     }
     // ignore: avoid_catches_without_on_clauses
     catch (e) {
-      throw MoveException(
-          'The Move of ${truepath(from)} to ${truepath(dest)} failed. Error $e');
+      _improveError(e, from, to);
     }
+  }
+}
+
+/// We try to improve the OS error message, because its crap.
+void _improveError(Object e, String from, String to) {
+  if (!exists(from)) {
+    throw MoveException(
+        'The Move of ${truepath(from)} failed as it does not exist.');
+  } else {
+    throw MoveException(
+        'The Move of ${truepath(from)} to ${truepath(to)} failed. Error $e');
   }
 }
 

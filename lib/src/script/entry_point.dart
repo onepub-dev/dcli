@@ -53,7 +53,7 @@ class EntryPoint {
     // ignore: avoid_catches_without_on_clauses
     catch (e, stackTrace) {
       var impl = StackTraceImpl.fromStackTrace(stackTrace);
-      printerr('Exception occured: $e of type ${e.runtimeType}');
+      printerr('${e.runtimeType}: $e ');
       printerr('Stacktrace: ${impl.formatStackTrace()}');
       return 1;
     }
