@@ -114,7 +114,7 @@ class CompileCommand extends Command {
       /// If no exe then the compile failed.
       if (install && script.isInstalled) {
         if (!overwrite) {
-          var overwrite = confirm('Overwrite the existing exe?');
+          overwrite = confirm('Overwrite the existing exe?');
           if (!overwrite) {
             install = false;
 
