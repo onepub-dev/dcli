@@ -29,10 +29,10 @@ class LinuxDCliInstaller {
         if (shell.loggedInUser != 'root') {
           // add dart to root path.
           // The tricks we have to play to get dart on the root users path.
-          'echo export PATH="\$PATH:/usr/lib/dart/bin" | sudo tee -a /root/.bashrc'
+          'echo export PATH="\$PATH":/usr/lib/dart/bin | sudo tee -a /root/.bashrc'
               .run;
           // give root its own pub-cache
-          'echo export PATH="\$PATH":"/root/.pub-cache/bin" | sudo tee -a /root/.bashrc'
+          'echo export PATH="\$PATH":/root/.pub-cache/bin | sudo tee -a /root/.bashrc'
               .run;
         }
 
