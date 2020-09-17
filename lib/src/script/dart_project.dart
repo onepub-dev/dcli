@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:dcli/src/functions/find.dart';
 import 'package:dcli/src/pubspec/pubspec.dart';
 import 'package:path/path.dart';
 
@@ -128,10 +129,18 @@ class DartProject {
   /// Any exes for scripts in the directory.
   void purge() {
     _lock.withLock(() {
-      find('.packages', root: pathToProjectRoot, recursive: true)
-          .forEach((file) => delete(file));
-      find('.dart_tool', root: pathToProjectRoot, recursive: true)
-          .forEach((file) => deleteDir(file, recursive: true));
+      find(
+        '.packages',
+        types: [Find.file],
+        root: pathToProjectRoot,
+        recursive: true,
+      ).forEach((file) => delete(file));
+      find(
+        '.dart_tool',
+        types: [Find.directory],
+        root: pathToProjectRoot,
+        recursive: true,
+      ).forEach((file) => deleteDir(file, recursive: true));
       find('pubspec.lock', root: pathToProjectRoot, recursive: true)
           .forEach((file) => delete(file));
 
