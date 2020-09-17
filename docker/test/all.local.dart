@@ -16,12 +16,13 @@ void main(List<String> args) {
 
   if (!runOnly) {
     // mount the local dcli files from ..
-    print('about to docker build');
+    print(green('About to build docker'));
     var root = Script.current.pathToProjectRoot;
     'sudo docker build -f docker/test/all.local.df -t dcli:all_local_test .'
         .start(workingDirectory: root);
   }
 
-  print('about to docker run');
+  print(green('About to docker run'));
+
   'sudo docker run dcli:all_local_test'.run;
 }
