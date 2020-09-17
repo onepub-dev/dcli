@@ -22,6 +22,10 @@ void main() {
   find('pubspec.lock', root: root, recursive: true)
       .forEach((file) => delete(file));
 
+  /// we need to clean before we can run unit test script
+  DartProject.fromPath(root).clean();
+
+  print('Run unit tests from $root');
   '${DartSdk().pathToPubExe} run test -j1 --coverage ${join(root, 'coverage')}'
       .start(nothrow: true, workingDirectory: root);
 
