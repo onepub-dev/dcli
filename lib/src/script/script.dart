@@ -3,6 +3,7 @@ import 'dart:math';
 
 import 'package:dcli/dcli.dart';
 import 'package:dcli/src/pubspec/pubspec.dart';
+import 'package:dcli/src/script/runner.dart';
 import 'package:dcli/src/settings.dart';
 import 'package:path/path.dart' as p;
 
@@ -199,7 +200,7 @@ class Script {
 
     if (install && isInstalled && !overwrite) {
       throw InvalidArguments(
-          'You selected to install the compiled exe however it is already installed. Use overwrite=true');
+          'You selected to install the compiled exe however an installed exe of that name already exists. Use overwrite=true');
     }
 
     var pathToExe = basename;
@@ -214,10 +215,25 @@ class Script {
     }
   }
 
+  /// Runs the script passing in the given [args]
+  ///
+  /// Returns the processes exit code.
+  int run(List<String> args) {
+    final sdk = DartSdk();
+
+    final runner = ScriptRunner(sdk, this, args);
+
+    return runner.exec();
+  }
+
   /// returns the platform dependant name of the compiled scripts exe name.
   /// On Linux and OSX this is just the basename (script name without the extension)
   /// on Windows this is the 'basename.exe'.
   String get exeName => '${basename}${Settings().isWindows ? '.exe' : ''}';
+
+  /// Returns the path to the executable if it was to be compiled into
+  /// its local directory (the default action of compile).
+  String get exePath => join(pathToScriptDirectory, exeName);
 
   /// Checks if the Script has been compiled and installed into the ~/.dcli/bin path
   bool get isInstalled {

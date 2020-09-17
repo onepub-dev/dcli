@@ -1,7 +1,6 @@
 @Timeout(Duration(seconds: 610))
 
 import 'package:dcli/dcli.dart' hide equals;
-import 'package:dcli/src/script/entry_point.dart';
 import 'package:dcli/src/util/dcli_paths.dart';
 import 'package:dcli/src/util/runnable_process.dart';
 import 'package:test/test.dart';
@@ -11,19 +10,21 @@ import '../../util/test_file_system.dart';
 void main() {
   test('Create and run a script', () {
     TestFileSystem().withinZone((fs) {
-      var scriptPath = truepath(fs.testScriptPath, 'run_test');
+      var scriptParentPath = truepath(fs.testScriptPath, 'run_test');
 
-      if (!exists(scriptPath)) {
-        createDir(scriptPath, recursive: true);
+      if (!exists(scriptParentPath)) {
+        createDir(scriptParentPath, recursive: true);
       }
-      var script = truepath(scriptPath, 'print_to_stdout.dart');
+      var scriptPath = truepath(scriptParentPath, 'print_to_stdout.dart');
 
       // make certain our test script exists and is in a runnable state.
-      '${DCliPaths().dcliName} -v create -fg $script'.run;
+      '${DCliPaths().dcliName} -v create -fg $scriptPath'.run;
 
-      EntryPoint().process(['run', script]);
+      var project = DartProject.fromPath(scriptParentPath);
+      var script = project.createScript(basename(scriptPath));
+      script.run([]);
 
-      deleteDir(scriptPath, recursive: true);
+      deleteDir(scriptParentPath, recursive: true);
     });
   });
   test('Run hello world', () {
@@ -43,9 +44,9 @@ void main() {
     TestFileSystem().withinZone((fs) {
       var exit = -1;
       try {
-        // with a virtual pubspec
-        exit = EntryPoint()
-            .process(['run', 'test/test_scripts/general/bin/which.dart', 'ls']);
+        var script =
+            Script.fromFile('test/test_scripts/general/bin/which.dart');
+        exit = script.run(['ls']);
       } on DCliException catch (e) {
         print(e);
       }
@@ -59,8 +60,9 @@ void main() {
       try {
         print(pwd);
 
-        exit = EntryPoint().process(
-            ['-v', 'run', 'test/test_scripts/local_pubspec/hello_world.dart']);
+        var script =
+            Script.fromFile('test/test_scripts/local_pubspec/hello_world.dart');
+        exit = script.run(['-v']);
       } on DCliException catch (e) {
         print(e);
       }
@@ -74,11 +76,9 @@ void main() {
       try {
         print(pwd);
 
-        exit = EntryPoint().process([
-          '-v',
-          'run',
-          'test/test_scripts/traditional_project/bin/traditional.dart'
-        ]);
+        var script = Script.fromFile(
+            'test/test_scripts/traditional_project/bin/traditional.dart');
+        exit = script.run(['-v']);
       } on DCliException catch (e) {
         print(e);
       }
@@ -92,11 +92,9 @@ void main() {
       try {
         print(pwd);
 
-        exit = EntryPoint().process([
-          '-v',
-          'run',
-          'test/test_scripts/traditional_project/bin/nested/traditional.dart'
-        ]);
+        var script = Script.fromFile(
+            'test/test_scripts/traditional_project/bin/nested/traditional.dart');
+        exit = script.run(['-v']);
       } on DCliException catch (e) {
         print(e);
       }
@@ -110,11 +108,9 @@ void main() {
       try {
         print(pwd);
 
-        exit = EntryPoint().process([
-          '-v',
-          'run',
-          'test/test_scripts/traditional_project/example/traditional.dart'
-        ]);
+        var script = Script.fromFile(
+            'test/test_scripts/traditional_project/example/traditional.dart');
+        exit = script.run(['-v']);
       } on DCliException catch (e) {
         print(e);
       }
@@ -128,11 +124,9 @@ void main() {
       try {
         print(pwd);
 
-        exit = EntryPoint().process([
-          '-v',
-          'run',
-          'test/test_scripts//traditional_project/tool/traditional.dart'
-        ]);
+        var script = Script.fromFile(
+            'test/test_scripts//traditional_project/tool/traditional.dart');
+        exit = script.run(['-v']);
       } on DCliException catch (e) {
         print(e);
       }

@@ -5,9 +5,7 @@ import '../../settings.dart';
 import '../../util/completion.dart';
 
 import '../command_line_runner.dart';
-import '../dart_sdk.dart';
 import '../flags.dart';
-import '../runner.dart';
 import '../script.dart';
 import 'commands.dart';
 
@@ -65,11 +63,7 @@ class RunCommand extends Command {
 
     Settings().verbose('Script Arguments: ${scriptArguments.join(", ")}');
 
-    final sdk = DartSdk();
-
-    final runner = ScriptRunner(sdk, script, scriptArguments);
-
-    final exitCode = runner.exec();
+    final exitCode = script.run(scriptArguments);
 
     return exitCode;
   }
