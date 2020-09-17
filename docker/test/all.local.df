@@ -7,28 +7,22 @@ RUN apt-get -y update
 RUN apt-get install --no-install-recommends -y wget ca-certificates gnupg2 procps
 RUN wget https://github.com/bsutton/dcli/releases/download/latest-linux/dcli_install
 RUN chmod +x dcli_install
-ENV PATH="${PATH}":/usr/lib/dart/bin:"${HOME}/.pub-cache/bin":"${HOME}/.dcli/bin"
+ENV PATH="${PATH}":/usr/lib/dart/bin:"/root/.pub-cache/bin":"/root/.dcli/bin"
 RUN ./dcli_install
 
 WORKDIR /
-
-
-
 
 RUN touch /$HOME/.profile
 
 # Add the entire dcli project so we can run from the local filesystem
 COPY . /dcli
 
-#RUN find /dcli -name "*"
-
 RUN pub global activate --source path /dcli 
 RUN dcli install
-
-#COPY test /dcli/test
 
 CMD []
 
 WORKDIR /dcli
+RUN pub get
 
 ENTRYPOINT /dcli/tool/run_unit_tests.dart
