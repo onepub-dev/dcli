@@ -225,6 +225,8 @@ class TestFileSystem {
   }
 
   void installDCli() {
+    print(red('Pub-cache path = ${PubCache().pathTo}'));
+
     /// run pub get and only display errors.
     '${DartSdk.pubExeName} global activate --source path $pwd'.start(
         progress: Progress((line) => null, stderr: (line) => print(line)));
@@ -276,6 +278,8 @@ class TestFileSystem {
 
     /// tell the world where to find the new pubache.
     PubCache().pathTo = join(newHome, PubCache().cacheDir);
+
+    print('Reset ${PubCache.ENV_VAR} to ${env[PubCache.ENV_VAR]}');
 
     Settings().setVerbose(enabled: verbose);
   }

@@ -91,7 +91,7 @@ class DartProject {
   }
 
   ///
-  /// Clean the project.
+  /// Prepare the project so it can be run.
   /// This essentially means that we run pub get
   /// however if the project hasn't been initialised
   /// then we initialise the project as well.
@@ -99,23 +99,23 @@ class DartProject {
   /// run the build as a background process.
   /// [background] defaults to [false]
   ///
-  void clean({bool background = false}) {
+  void prepare({bool background = false}) {
     _lock.withLock(() {
       try {
         if (background) {
           // we run the clean in the background
           // by running another copy of dcli.
-          print('DCli clean started in the background.');
-          '${DCliPaths().dcliName} -v=${join(Directory.systemTemp.path, 'dcli.clean.log')} clean ${pathToProjectRoot}'
+          print('DCli prepare started in the background.');
+          '${DCliPaths().dcliName} -v=${join(Directory.systemTemp.path, 'dcli.prepare.log')} prepare ${pathToProjectRoot}'
               .start(detached: true, runInShell: true);
         } else {
           // print(orange('Running pub get...'));
           _pubget();
         }
       } on PubGetException {
-        print(red("\ndcli clean failed due to the 'pub get' call failing."));
+        print(red("\ndcli prepare failed due to the 'pub get' call failing."));
       }
-    }, waiting: 'Waiting for clean to complete...');
+    }, waiting: 'Waiting for prepare to complete...');
   }
 
   /// Removes any of the dart build artifacts so you have a clean directory.
@@ -127,7 +127,7 @@ class DartProject {
   /// .dart_tools
   ///
   /// Any exes for scripts in the directory.
-  void purge() {
+  void clean() {
     _lock.withLock(() {
       find(
         '.packages',

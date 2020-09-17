@@ -16,7 +16,7 @@ import 'commands.dart';
 class CompileCommand extends Command {
   static const String _commandName = 'compile';
 
-  final _compileFlags = [NoCleanFlag(), InstallFlag(), OverWriteFlag()];
+  final _compileFlags = [NoPrepareFlag(), InstallFlag(), OverWriteFlag()];
 
   /// holds the set of flags passed to the compile command.
   Flags flagSet = Flags();
@@ -88,23 +88,24 @@ class CompileCommand extends Command {
       /// as we will end up with root permissions everywhere.
       if (!script.isReadyToRun) {
         printerr(red(
-            'The script is not ready to run, so cannot be run from sudo. Run dcli clean $scriptPath'));
+            'The script is not ready to run, so cannot be run from sudo. Run dcli prepare $scriptPath'));
         exit(1);
       }
     }
 
     try {
-      // by default we clean the project unless the -nc flag is passed.
+      // by default we prepare the project unless the -np flag is passed.
       // however if the project isn't i a runnable state then we
       // force a build.
-      var buildRequired = !flagSet.isSet(NoCleanFlag()) || !script.isReadyToRun;
+      var buildRequired =
+          !flagSet.isSet(NoPrepareFlag()) || !script.isReadyToRun;
 
       print('path: ${script.pathToScript}');
       var project =
           DartProject.fromPath(script.pathToScriptDirectory, search: true);
 
       if (buildRequired) {
-        project.clean();
+        project.prepare();
       }
 
       var install = flagSet.isSet(InstallFlag());
@@ -135,13 +136,12 @@ class CompileCommand extends Command {
   String description() =>
       '''Compiles the given list of scripts using dart's native compiler. 
    Only required if you want super fast execution.
-   If no scripts are passed then all scripts in the current directory are compiled.
-      ''';
+   If no scripts are passed then all scripts in the current directory are compiled.''';
 
   @override
   String usage() {
     var description =
-        '''compile [--noclean] [--install] [--overwrite] [<script path.dart>, <script path.dart>,...]''';
+        '''compile [--noprepare] [--install] [--overwrite] [<script path.dart>, <script path.dart>,...]''';
 
     return description;
   }
@@ -158,19 +158,19 @@ class CompileCommand extends Command {
 }
 
 ///
-class NoCleanFlag extends Flag {
-  static const _flagName = 'noclean';
+class NoPrepareFlag extends Flag {
+  static const _flagName = 'noprepare';
 
   ///
-  NoCleanFlag() : super(_flagName);
+  NoPrepareFlag() : super(_flagName);
 
   @override
-  String get abbreviation => 'nc';
+  String get abbreviation => 'np';
 
   @override
   String description() {
-    return '''Stops the compile from running 'dcli clean' before compiling.
-      Use the noclean option to speed up compilation when you know your project structure is up to date.''';
+    return '''Stops the compile from running 'dcli prepare' before compiling.
+      Use the noprepare option to speed up compilation when you know your project structure is up to date.''';
   }
 }
 

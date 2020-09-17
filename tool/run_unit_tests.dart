@@ -20,14 +20,10 @@ void main() {
   /// The artifacts (e.g. .packages) also have paths that won't
   /// be valide in our test file system.
   print('purging test artifacts');
-  DartProject.fromPath(join(root, 'test', 'test_scripts')).purge();
+  DartProject.fromPath(join(root, 'test', 'test_scripts')).clean();
 
-
-  
-  /// we need to clean before we can run unit test script
-  DartProject.fromPath(root).clean();
-
-
+  /// we need to prepare before we can run the unit test script
+  DartProject.fromPath(root).prepare();
 
   print('Run unit tests from $root');
   '${DartSdk().pathToPubExe} run test -j1 --coverage ${join(root, 'coverage')}'

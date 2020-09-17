@@ -19,7 +19,6 @@ class InstallCommand extends Command {
   static const _commandName = 'install';
 
   final _installFlags = const [
-    _NoCleanFlag(),
     _NoDartFlag(),
     _QuietFlag(),
     _NoPrivilegesFlag()
@@ -264,22 +263,6 @@ class InstallCommand extends Command {
     }
 
     TemplateExpander(Settings().pathToTemplate).expand();
-  }
-}
-
-class _NoCleanFlag extends Flag {
-  static const _flagName = 'noclean';
-
-  const _NoCleanFlag() : super(_flagName);
-
-  @override
-  String get abbreviation => 'nc';
-
-  @override
-  String description() {
-    return '''Stops the install from running 'dcli cleanall' as part of the install.
-      This option is for testing purposes. 
-      When doing a dcli upgrade you should always allow install to do a clean all.''';
   }
 }
 

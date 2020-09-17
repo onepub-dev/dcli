@@ -179,7 +179,7 @@ class NamedLock {
 
   String get _lockFilePath {
     // lock file is in the directory above the project
-    // as during cleaning we delete the project directory.
+    // as during preparing we delete the project directory.
 
     var isolate = _isolateID;
 
@@ -203,7 +203,7 @@ class NamedLock {
   ///
   /// We create the lock file in the virtual project directory
   /// in the form:
-  /// <pid>.clean.lock
+  /// <pid>.prepare.lock
   ///
   /// If we find an existing lock file we check if the process
   /// that owns it is still running. If it isn't we

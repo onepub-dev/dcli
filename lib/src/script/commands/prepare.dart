@@ -6,17 +6,16 @@ import '../flags.dart';
 import '../dart_project.dart';
 import 'commands.dart';
 
-/// Implementation for the 'clean' command.
-/// The clean command removes all build artifiacts
-/// including pubspec.lock, .packages, .dart_tools and
-/// any compiled exes.
-class CleanCommand extends Command {
-  static const String _commandName = 'clean';
+/// implementation for the 'prepare' command
+/// which does any work necessary to prepare a projects
+/// to be run. Essentially this equates to doing a pub get.
+class PrepareCommand extends Command {
+  static const String _commandName = 'prepare';
 
   ///
-  CleanCommand() : super(_commandName);
+  PrepareCommand() : super(_commandName);
 
-  /// [arguments] contains path to clean
+  /// [arguments] contains path to prepare
   @override
   int run(List<Flag> selectedFlags, List<String> arguments) {
     String targetPath;
@@ -30,11 +29,11 @@ class CleanCommand extends Command {
       targetPath = arguments[0];
     }
 
-    _cleanProject(targetPath);
+    _prepareProject(targetPath);
     return 0;
   }
 
-  void _cleanProject(String targetPath) {
+  void _prepareProject(String targetPath) {
     if (!exists(targetPath)) {
       throw InvalidArguments('The project path ${targetPath} does not exists.');
     }
@@ -45,18 +44,18 @@ class CleanCommand extends Command {
     var project = DartProject.fromPath(targetPath, search: true);
 
     print('');
-    print(orange('Cleaning ${project.pathToProjectRoot} ...'));
+    print(orange('Preparinging ${project.pathToProjectRoot} ...'));
     print('');
 
-    project.clean();
+    project.prepare();
   }
 
   @override
-  String usage() => 'clean [<project path>]';
+  String usage() => 'prepare [<project path>]';
 
   @override
-  String description() => '''Removes all build artfiacts.
-   If no directory is passed then the current directory is cleaned''';
+  String description() => '''Runs pub upgrade on the given directory.
+   If no directory is passed then the current directory is prepared.''';
 
   @override
   List<String> completion(String word) {

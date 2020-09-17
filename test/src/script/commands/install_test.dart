@@ -13,7 +13,7 @@ String script = 'test/test_scripts/general/bin/hello_world.dart';
 
 void main() {
   group('Install DCli', () {
-    test('clean install', () {
+    test('prepare install', () {
       var groupFS = TestFileSystem(useCommonPath: false);
 
       groupFS.withinZone((fs) {

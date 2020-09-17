@@ -19,8 +19,8 @@ void main() {
         progress: Progress((line) => results.add(line)),
       );
 
-      // if clean hasn't been run then we have the results of a pub get in the the output.
-      var expected = ['clean', 'compile', 'create'];
+      // if prepare hasn't been run then we have the results of a pub get in the the output.
+      var expected = ['prepare', 'compile', 'create'];
 
       expect(results, equals(expected));
     });
@@ -38,15 +38,15 @@ void main() {
         progress: Progress((line) => results.add(line)),
       );
 
-      // if clean hasn't been run then we have the results of a pub get in the the output.
-      var expected = ['clean'];
+      // if prepare hasn't been run then we have the results of a pub get in the the output.
+      var expected = ['prepare'];
 
       expect(results, equals(expected));
     });
   });
 
   group('previous word', () {
-    test('Run dcli_complete clean _test_a', () {
+    test('Run dcli_complete prepare _test_a', () {
       TestFileSystem().withinZone((fs) {
         var results = <String>[];
 
@@ -59,7 +59,7 @@ void main() {
         //chmod(755, 'bin/dcli_complete');
 
         try {
-          'dcli_complete dcli _test_a clean'.start(
+          'dcli_complete dcli _test_a prepare'.start(
             workingDirectory: fs.root,
             progress: Progress((line) => results.add(line)),
           );
@@ -67,7 +67,7 @@ void main() {
           rethrow;
         }
 
-        // if clean hasn't been run then we have the results of a pub get in the the output.
+        // if prepare hasn't been run then we have the results of a pub get in the the output.
         var expected = ['_test_a.dart', '_test_ab.dart'];
 
         expect(results, unorderedEquals(expected));
@@ -78,7 +78,7 @@ void main() {
       });
     });
 
-    test('Run dcli_complete clean _test_ab', () {
+    test('Run dcli_complete prepare _test_ab', () {
       TestFileSystem().withinZone((fs) {
         var results = <String>[];
 
@@ -89,12 +89,12 @@ void main() {
         // make dcli_complete executable
         //chmod(755, 'bin/dcli_complete');
 
-        'dcli_complete dcli _test_a clean'.start(
+        'dcli_complete dcli _test_a prepare'.start(
           workingDirectory: fs.root,
           progress: Progress((line) => results.add(line)),
         );
 
-        // if clean hasn't been run then we have the results of a pub get in the the output.
+        // if prepare hasn't been run then we have the results of a pub get in the the output.
         var expected = ['_test_a.dart', '_test_ab.dart'];
 
         expect(results, unorderedEquals(expected));

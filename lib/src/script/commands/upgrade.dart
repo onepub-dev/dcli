@@ -6,7 +6,7 @@ import 'commands.dart';
 
 /// upgrades dcli by running:
 /// pub global active dcli
-/// and then cleaning all projects.
+/// and then preparing all projects.
 class UpgradeCommand extends Command {
   static const String _commandName = 'upgrade';
 
