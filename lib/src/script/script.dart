@@ -203,8 +203,6 @@ class Script {
           'You selected to install the compiled exe however an installed exe of that name already exists. Use overwrite=true');
     }
 
-    var pathToExe = basename;
-
     DartSdk().runDart2Native(this,
         pathToExe: pathToExe, progress: Progress(print, stderr: print));
 
@@ -233,7 +231,7 @@ class Script {
 
   /// Returns the path to the executable if it was to be compiled into
   /// its local directory (the default action of compile).
-  String get exePath => join(pathToScriptDirectory, exeName);
+  String get pathToExe => join(pathToScriptDirectory, exeName);
 
   /// Checks if the Script has been compiled and installed into the ~/.dcli/bin path
   bool get isInstalled {
