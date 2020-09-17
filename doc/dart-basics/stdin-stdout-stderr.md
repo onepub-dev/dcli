@@ -21,20 +21,20 @@ Way back in the dark ages \(circa 1970\) the computer gods got together and crea
 {% hint style="info" %}
 And Dennis said let there be 'C'. And Denis looked upon 'C' and said it was good and the people agreed.
 
-But Dennis did not rest on the seventh day, instead he called Kenneth and over lunch created Unix.
+But Dennis did not rest on the seventh day, instead he called upon Kenneth and over lunch the doth created Unix.
 
 Dennis Ritchie ; 9th Sept 1944 - 12th Oct 2011
 {% endhint %}
 
-![My first bible.](../.gitbook/assets/image.png)
+![My first bible.](../.gitbook/assets/image%20%281%29.png)
 
-Unix is the direct ancestor of Linux, OSX and to a lesser extent Windows. You might more correctly say that 'C' is the common ancestor of all three OSs  as their kernels are all written in C.
+Unix is the direct ancestor of Linux, OSX and to a lesser extent Windows. You might more correctly say that 'C' is the common ancestor of all three OSs as their kernels are all written in C.
 
 The concept of stdin/stdout and stderr proliferated across the OS world as C was taken up as the primary language for writing Operating Systems.
 
 The result is today that a large no. of operating systems support stdin/stdout and stderr in all CLI applications.
 
-The majority of people  reading this primer will be working with Linux, OSx or Windows and in each of these cases the Holy Trinity \(stdin/stdout/stderr\) are available in every CLI app they use or write.
+The majority of people reading this primer will be working with Linux, OSx or Windows and in each of these cases the Holy Trinity \(stdin/stdout/stderr\) are available in every CLI app they use or write.
 
 The following examples are presented using the Dart programming language but the concepts and and even most of the details are correct across multiple OSs and languages.
 
@@ -46,25 +46,25 @@ In the Unix world EVERYTHING is a file. Even devices and processes are treated a
 If you know where to look, processes and devices are actually visible in the Linux/OSx directory tree as files.
 {% endhint %}
 
-So if everything is a file, does that mean we can directly read/write to a device/process/directory ....? 
+So if everything is a file, does that mean we can directly read/write to a device/process/directory ....?
 
-The simple answer is yes. 
+The simple answer is yes.
 
 If we want to read/write to a file we need to open the file. In the Unix world \(and virtually every other OS\) when we open a file we get a 'file descriptor' or FD for short. Once we have an FD we can read/write to the file. The FD may be presented differently in your language of choice but under the hood its still an FD. \(**In Dart we have the File class that wraps an FD**\).
 
 > The terms 'file descriptor' and 'file handle' are often used interchangeably.
 
-So what exactly is an FD? Under the hood an FD is just an integer that acts as an index to an array of open files. The FD array contains information such as the path to the  file, the size of the file, the current seek position and more.
+So what exactly is an FD? Under the hood an FD is just an integer that acts as an index to an array of open files. The FD array contains information such as the path to the file, the size of the file, the current seek position and more.
 
 ## The Holy Trinity
 
-So now we understand that in Unix everything is a file, you probably won't be surprised when I tell you that stdin/stdout/stderr are also files.  
+So now we understand that in Unix everything is a file, you probably won't be surprised when I tell you that stdin/stdout/stderr are also files.
 
-So if stdin/stdout/stderr are files how do you open them? 
+So if stdin/stdout/stderr are files how do you open them?
 
 The answer is you don't need to open them as the OS opens them for you. When your app starts, it is passed one file descriptor \(FD\) for each of stdin/stdout/stderr.
 
-If you recall we said that FD's are just integers into an array of open files. Each application has its own array.  When your app starts that array already has three entries, stdin, stdout and stderr.
+If you recall we said that FD's are just integers into an array of open files. Each application has its own array. When your app starts that array already has three entries, stdin, stdout and stderr.
 
 The order of those entries in the array is important.
 
@@ -90,9 +90,9 @@ You can't get much more obtuse than the above line, but now we know about FD's i
 Bash was not created by the gods. I think the other bloke had a hand in this one.
 {% endhint %}
 
-The `>out` section is actually a shorthand for  `1>out` .  It instructs Bash to take anything that `find` writes to FD =1 \(stdout\) and re-write it to the file called 'out'.  
+The `>out` section is actually a shorthand for `1>out` . It instructs Bash to take anything that `find` writes to FD =1 \(stdout\) and re-write it to the file called 'out'.
 
-The `2> &1` section instructs Bash to take anything `find` writes to FD=2 \(stderr\) and re-write it to FD=1. i.e. anything written to stderr \(FD=2\) should be re-written to stdout \(FD=1\).  
+The `2> &1` section instructs Bash to take anything `find` writes to FD=2 \(stderr\) and re-write it to FD=1. i.e. anything written to stderr \(FD=2\) should be re-written to stdout \(FD=1\).
 
 The result of the above command is that both stdout and stderr are written to the file called 'out'.
 
@@ -118,27 +118,27 @@ The 'C' programming language has the same three properties and many other langua
 
 I like to think of the Unix philosophy as programming by Lego.
 
-Linux, OSx and Windows 
+Linux, OSx and Windows
 
 {% hint style="info" %}
 Unix was all about Lego - build lots of little bricks \(apps\) that can be connected.
 {% endhint %}
 
-In the Unix world \(and the dart world\) every CLI app you write contributes to the set of available Lego bricks.  But Lego bricks would be useless unless you can connect them. In order to connect bricks the 'pegs' on each brick must match the 'holes' on other bricks and that's where stdin/stdout/stderr come in.
+In the Unix world \(and the dart world\) every CLI app you write contributes to the set of available Lego bricks. But Lego bricks would be useless unless you can connect them. In order to connect bricks the 'pegs' on each brick must match the 'holes' on other bricks and that's where stdin/stdout/stderr come in.
 
-In the Unix world every brick \(app\) has three connection points: 
+In the Unix world every brick \(app\) has three connection points:
 
 * stdin - a hole for input 
 * stdout - a peg for output
 * stderr - a peg for error output
 
-Any peg can go into any hole. 
+Any peg can go into any hole.
 
 You might now have guessed that you can connect stdout from one program to stdin on another program:
 
 \(myapp -&gt; stdout\) -&gt; \(stdin -&gt; yourapp\)
 
-If you are familiar with Bash you may have even seen one of the common ways to connect two apps. 
+If you are familiar with Bash you may have even seen one of the common ways to connect two apps.
 
 ```text
 ls "*.png" | grep "pengiuns"
@@ -236,18 +236,18 @@ tmp> cd ..
 example> ls
   dshell.dart
   tmp
-example>      
+example>
 ```
 
 ## Revelations
 
 {% hint style="warning" %}
-You take the _red_ pill—you stay in Wonderland, and I show you how deep the rabbit hole goes. 
+You take the _red_ pill—you stay in Wonderland, and I show you how deep the rabbit hole goes.
 {% endhint %}
 
 So lets just stop for a moment and consider this fact; **the terminal you are using is actually an app!**
 
-Like every other app it has stdin/stdout/stderr. 
+Like every other app it has stdin/stdout/stderr.
 
 ### Writing to stdout
 
@@ -255,21 +255,66 @@ When you run an app in a console/terminal window your app's stdout is automatica
 
 > \[print\('hellow'\) -&gt; stdout\] -&gt; \[stdin -&gt; terminal -&gt; font -&gt; graphics card -&gt; eye -&gt; brain\]
 
-When you call `print('hello')` your app writes 'hello' to stdout, this arrives in the terminal app via its stdin. 
+When you call `print('hello')` your app writes 'hello' to stdout, this arrives in the terminal app via its stdin.
 
-The terminal app then takes the ASCII characters you sent \(hello\) and sends little blobs of pixels to your graphics card. These blobs of pixel form, what many people like to call, a 'font'.  Somehow, rather magically, your brain translates this little pixels into characters and you see the word 'hello'.
+The terminal app then takes the ASCII characters you sent \(hello\) and sends little blobs of pixels to your graphics card. These blobs of pixel form, what many people like to call, a 'font'. Somehow, rather magically, your brain translates this little pixels into characters and you see the word 'hello'.
 
 {% hint style="info" %}
 In the beginning was the Word, and the Word was 'hello world'.
 {% endhint %}
 
-
+The above example uses `print` to write to stdout. Print is a common function for writing to stdout and `print` or similar exists in most languages. Under the hood `print` literally writes to stdout:
 
 
 
 So where does stderr fit in?
 
+```text
+void print(String message)
+{
+    stdout.write('message\n');
+}
+```
+
+Well yes, I did, but it was a morally sound lie. I really wanted to avoid melting your brain.
+
+{% hint style="info" %}
+And you will know the truth, and the truth will set you free.”
+{% endhint %}
+
+When your app is launched from the CLI \(command line interface\) your app is actually connected to the shell that launched. It doesn't matter if the shell was Bash, Powershell or Zsh.
+
+> In case you skipped the class, a command line interface \(CLI\) is a type of application referred to as a shell. A shell is designed to take keystrokes from a user, echo those keystrokes to the screen and when the user hits the enter key, try to interpret those keystrokes as a command. Often the command will be the name of an application, in which case the shell will start that application. Examples of shells are: Bash, Zsh, Powershell, cmd, Ash, Bourne, Korn, Hamilton............. and of course you could build your own.
+
+So lets look at what actually happens when you launch a terminal window or connect to a console.
+
+When the terminal window launches it creates a canvas to display text on and starts listening to keystrokes. If the terminal window has the focus then the OS will send keystrokes to it, otherwise it gets nothing.  It then launches your default shell as a child process. Let's call this shell `Bash`  but it could be called `Powershell`.
+
+When Bash is launched it of course receives three file descriptors stdin/stdout and stderr.
+
+The terminal window, being an app, also has its own stdin/stdout and stderr, but it essentially ignores them and they don't play a part in our process.
+
+### Reading from stdin
+
+
+
+```text
+import 'dart:io';
+
+void main() {
+  stdout.writeln('Type something');
+  String input = stdin.readLineSync();
+  stdout.writeln('You typed: $input');
+}
+```
+
+
+
 So by default 'find''s stderr is also connected to 'greps' stdin. The pipe ''\|' is doing this for use by interleaving stdout and stderr from 'find' into 'grep's stdin.
+
+
+
+If you recall earlier we mentioned that most classes provide a wrapper for each of the holy trinity.
 
 You can however separate stderr and stdout and read them independently.
 
@@ -301,7 +346,9 @@ More correctly we say that we write data to stdout and read data from stdin.
 
 So if we want to capture what the user is typing into the terminal then we need to 'read' from stdin.
 
-     user -&gt; hello -&gt; terminal -&gt; stdin -&gt; read
+```text
+ user -&gt; hello -&gt; terminal -&gt; stdin -&gt; read
+```
 
 Dart actually provides low level methods to directly read from stdin but their a little bit painful to work with.
 
@@ -326,6 +373,4 @@ printerr('hello world');
 ```
 
 So if it looks the same to the user why do we have both stdout and stderr?
-
-
 

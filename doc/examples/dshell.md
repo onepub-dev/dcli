@@ -35,7 +35,7 @@ void dispatch(String command) {
     case 'cd':
       Directory.current = join(pwd, parts[1]);
       break;
-      
+
     /// run any other command that is on  the path.
     default:
       if (which(parts[0]).firstLine != null) {
@@ -63,6 +63,5 @@ void ls(List<String> patterns) {
     }
   }
 }
-
 ```
 
