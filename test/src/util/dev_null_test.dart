@@ -4,7 +4,7 @@ import 'package:test/test.dart';
 
 void main() {
   test('Dev null', () {
-    // mainly just check if devnull compiles as expected.
+    // mainly just check if devnull runs as expected.
     'ls'.forEach(devNull, stderr: printerr);
   });
 }
