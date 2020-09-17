@@ -58,9 +58,9 @@ hello_world
 
 ## Flags:
 
-### --noclean \| -nc :
+### --noprepare \| -nc :
 
-stop dcli from running clean before doing a compile. Use this option if you know that you script's dependencies haven't change since the last compile resulting in a faster compile.
+stop dcli from running prepare before doing a compile. Use this option if you know that you script's dependencies haven't change since the last compile resulting in a faster compile.
 
 ### --install \| -i :
 
