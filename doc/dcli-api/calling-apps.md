@@ -6,17 +6,37 @@
 For complete API documentation refer to: [pub.dev](https://pub.dev/documentation/dcli/latest/dcli/dcli-library.html)
 {% endhint %}
 
-The DCli API can call any console application.
+The DCli API can run any console application.
 
-DCli provides a extensive number of methods to run cli applications as being able to run and process the output of other applications is critical writing console apps.
+DCli provides a extensive number of methods to run CLI applications.
+
+DCLI is also  being able to process the output of any  application it runs.
 
 The importance of this ability is clearly reflected in the no. of ways that the DCli API gives you to run other apps.
 
 ### nothrow
 
-DCli has a philosophy of explicit directives. By this we mean that if something does work as explicitly stated we throw an exception.
+DCli has a philosophy of explicit directives. By this we mean;  if something doesn't work as explicitly stated then we throw an exception.
 
-One of the key consequences of this principle is that when an application returns an non-zero exit code then DCli will throw an exception.
+For example if you try to delete an directory that doesn't exist then DCli will throw an exception.
+
+```dart
+delete('non existant file');
+```
+
+When running CLI apps the convention is that an app returns '0' to indicate success.
+
+You can do this in your own DCli scripts via a call to exit
+
+```dart
+import 'dart:io';
+void main()
+{
+    exit(0);
+}
+```
+
+One of the key consequences of this principle is that if you run an app from DCli and then application returns an non-zero exit code then DCli will throw an exception.
 
 In most cases this is the correct action to take.
 

@@ -2,7 +2,7 @@
 
 Glob Expansion refers to the expansion of wildcards \(\*.txt\) into a list of files.
 
-When you type a command such as 'ls \*.txt' on the command line the shell expands the '\*.txt' wildcard \(referred to as a glob\) to a list of files that match the given wildcard.
+When you type a command such as 'ls \*.txt' the shell expands the '\*.txt' wildcard \(referred to as a glob\) to a list of files that match the given wildcard.
 
 As a result of Glob expansion the 'ls' command receives a list of files that end in \*.txt rather than the original glob.
 
@@ -23,8 +23,8 @@ If the '\*.txt' glob was expanded then the find command would be passed a list o
 DCli uses the same process. If you encase a glob in quotes then DCli will not expand the glob.
 
 ```dart
-'chmod -R +x "*.dart"'.run;
+'find / -name "*.dart"'.run;
 ```
 
-In the above example DCli sees that the glob is wrapped in quotes and as such passes the glob to chmod without first expanding it.
+In the above example DCli sees that the glob is wrapped in quotes and as such passes the glob to find without first expanding it.
 
