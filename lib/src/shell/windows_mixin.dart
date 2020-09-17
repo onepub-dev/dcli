@@ -43,8 +43,8 @@ Read additional details here: https://github.com/bsutton/dcli/wiki/Installing-DC
     return isPrivileged.toLowerCase() == 'true';
   }
 
-  bool install() {
-    return WindowsDCliInstaller().install();
+  bool install({bool installDart}) {
+    return WindowsDCliInstaller().install(installDart: installDart);
   }
 
   String privilegesRequiredMessage(String app) {

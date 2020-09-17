@@ -29,10 +29,14 @@ class InstallCommand extends Command {
   Flags flagSet = Flags();
 
   /// set by the [_QuietFlag].
-  /// if [quiet] is true only errors are displayed during the install.
-  bool quiet = false;
+  /// if [_quiet] is true only errors are displayed during the install.
+  bool _quiet = false;
 
-  bool requirePrivileges = false;
+  /// set by the [_NoDartFlag].
+  /// If [_installDart] is true then we won't attempt to install dart.
+  bool _installDart = false;
+
+  bool _requirePrivileges = false;
 
   /// ctor.
   InstallCommand() : super(_commandName);
@@ -72,7 +76,7 @@ class InstallCommand extends Command {
           "'dcli install' does not take any arguments. Found $subarguments");
     }
 
-    requirePrivileges = !flagSet.isSet(_NoPrivilegesFlag());
+    _requirePrivileges = !flagSet.isSet(_NoPrivilegesFlag());
 
     // /// We need to be priviledged to create the dcli symlink
     // if (requirePrivileges && !shell.isPrivilegedUser) {
@@ -80,9 +84,10 @@ class InstallCommand extends Command {
     //   exit(1);
     // }
 
-    quiet = flagSet.isSet(_QuietFlag());
+    _quiet = flagSet.isSet(_QuietFlag());
+    _installDart = !flagSet.isSet(_NoDartFlag());
 
-    if (quiet) {
+    if (_quiet) {
       print('Installing DCli...  ');
     }
     qprint('Hang on a tick whilst we install DCli ${Settings().version}');
@@ -97,7 +102,7 @@ class InstallCommand extends Command {
       exit(1);
     }
     // install dart and dcli
-    var dartWasInstalled = shell.install();
+    var dartWasInstalled = shell.install(installDart: _installDart);
 
     // Create the ~/.dcli root.
     if (!exists(Settings().pathToDCli)) {
@@ -165,7 +170,7 @@ class InstallCommand extends Command {
       var dcliPath = dcliLocation;
       qprint(blue('dcli found in : $dcliPath.'));
 
-      if (requirePrivileges) {
+      if (_requirePrivileges) {
         symlinkDCli(shell, dcliPath);
       }
     }
@@ -218,7 +223,7 @@ class InstallCommand extends Command {
   }
 
   void qprint(String message) {
-    if (!quiet) print(message);
+    if (!_quiet) print(message);
   }
 
   @override

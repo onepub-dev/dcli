@@ -9,9 +9,26 @@ import '../util/pub_cache.dart';
 
 class LinuxDCliInstaller {
   /// returns true if it needed to install dart.
-  bool install() {
+  bool install({bool installDart}) {
     var installedDart = false;
 
+    if (installDart) _installDart();
+
+    // now activate dcli.
+    var pubPath = determinePubPath();
+    '$pubPath global activate dcli'.start(progress: Progress.printStdErr());
+
+    // // also need to install it for the root user
+    // // as root must have its own copy of .pub-cache otherwise
+    // // if it updates .pub-cache of a user the user won't be able
+    // // to use pub-get any more.
+    // '/usr/lib/dart/bin/pub global activate dcli'.run;
+
+    return installedDart;
+  }
+
+  bool _installDart() {
+    var installedDart = false;
     // first check that dart isn't already installed
     if (which('dart').firstLine == null) {
       print('Installing Dart');
@@ -56,16 +73,6 @@ class LinuxDCliInstaller {
       Settings().verbose(
           "Found dart at: ${which('dart').firstLine} and as such will not install dart.");
     }
-
-    // now activate dcli.
-    var pubPath = determinePubPath();
-    '$pubPath global activate dcli'.start(progress: Progress.printStdErr());
-
-    // // also need to install it for the root user
-    // // as root must have its own copy of .pub-cache otherwise
-    // // if it updates .pub-cache of a user the user won't be able
-    // // to use pub-get any more.
-    // '/usr/lib/dart/bin/pub global activate dcli'.run;
 
     return installedDart;
   }

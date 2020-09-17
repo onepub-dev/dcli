@@ -6,7 +6,21 @@ import '../../dcli.dart';
 
 class MacOsxDCliInstaller {
   /// returns true if it needed to install dart.
-  bool install() {
+  bool install({bool installDart}) {
+    if (installDart) {
+      _installDart();
+    }
+
+    // The normal dart detection process won't work here
+    // as dart is not on the path so for the moment so we hard code it.
+    // CONSIDER a way of identifying where dart has been installed to.
+    '/usr/lib/dart/bin/pub global activate dcli'.run;
+
+    // we currently never install dart.
+    return false;
+  }
+
+  bool _installDart() {
     // first check that dart isn't already installed
     if (which('dart').firstLine != null) {
       // nothing to do dart is already installed.
@@ -18,18 +32,6 @@ class MacOsxDCliInstaller {
     print('You must first install dart.');
     print('See the install instructions at: https://dart.dev/get-dart');
 
-    // The normal dart detection process won't work here
-    // as dart is not on the path so for the moment so we hard code it.
-    // CONSIDER a way of identifying where dart has been installed to.
-    '/usr/lib/dart/bin/pub global activate dcli'.run;
-
-    // also need to install it for the root user
-    // as root must have its own copy of .pub-cache otherwise
-    // if it updates .pub-cache of a user the user won't be able
-    // to use pub-get any more.
-    '/usr/lib/dart/bin/pub global activate dcli'.run;
-
-    // yes we installed dart.
-    return true;
+    return false;
   }
 }

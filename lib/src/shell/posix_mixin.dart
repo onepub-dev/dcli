@@ -74,11 +74,11 @@ mixin PosixMixin {
     return 'Please run with: sudo $app';
   }
 
-  bool install() {
+  bool install({bool installDart}) {
     if (Platform.isLinux) {
-      return LinuxDCliInstaller().install();
+      return LinuxDCliInstaller().install(installDart: installDart);
     } else {
-      return MacOsxDCliInstaller().install();
+      return MacOsxDCliInstaller().install(installDart: installDart);
     }
   }
 

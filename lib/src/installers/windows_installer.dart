@@ -9,8 +9,23 @@ import '../util/pub_cache.dart';
 
 class WindowsDCliInstaller {
   /// returns true if it needed to install dart.
-  bool install() {
+  bool install({bool installDart}) {
     var installedDart = false;
+
+    if (installDart) installedDart = _installDart();
+
+    Env().addToPATHIfAbsent(Settings().pathToDCliBin);
+
+    'setx PATH "${PATH.join(Env().delimiterForPATH)}"'.run;
+
+    '${DartSdk().pathToPubExe} global activate dcli'.run;
+
+    return installedDart;
+  }
+
+  bool _installDart() {
+    var installedDart = false;
+
     // first check that dart isn't already installed
     if (which('dart').firstLine == null) {
       print('Installing Dart');
@@ -23,9 +38,6 @@ class WindowsDCliInstaller {
       /// add the dartsdk path to the windows path.
       Env().addToPATHIfAbsent(join(dartToolDir, 'bin'));
       Env().addToPATHIfAbsent(PubCache().pathToBin);
-      Env().addToPATHIfAbsent(Settings().pathToDCliBin);
-
-      'setx PATH "${PATH.join(Env().delimiterForPATH)}"'.run;
 
       print('Installed dart to: $dartToolDir');
 
@@ -35,7 +47,6 @@ class WindowsDCliInstaller {
       Settings().verbose(
           "Found dart at: ${which('dart').firstLine} and as such will not install dart.");
     }
-    '${DartSdk().pathToPubExe} global activate dcli'.run;
 
     return installedDart;
   }

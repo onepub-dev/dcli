@@ -123,13 +123,13 @@ class UnknownShell with ShellMixin {
   }
 
   @override
-  bool install() {
+  bool install({bool installDart = false}) {
     if (Platform.isLinux) {
-      return LinuxDCliInstaller().install();
+      return LinuxDCliInstaller().install(installDart: installDart);
     } else if (Settings().isWindows) {
-      return WindowsDCliInstaller().install();
+      return WindowsDCliInstaller().install(installDart: installDart);
     } else if (Platform.isMacOS) {
-      return MacOsxDCliInstaller().install();
+      return MacOsxDCliInstaller().install(installDart: installDart);
     } else {
       throw UnsupportedError('Unsupported OS. ${Platform.operatingSystem}');
     }
