@@ -1,5 +1,5 @@
 @Timeout(Duration(seconds: 600))
-import 'package:dcli/dcli.dart';
+import 'package:dcli/dcli.dart' hide equals;
 import 'package:test/test.dart';
 
 void main() {
@@ -78,5 +78,17 @@ void main() {
             e is AskValidatorException &&
             e.message ==
                 red('The number must be greater than or equal to 10.'))));
+  });
+
+  test('ask.integer - failure', () {
+    var validator = Ask.integer;
+
+    expect(
+        () => validator.validate('a'),
+        throwsA(predicate<AskValidatorException>((e) =>
+            e is AskValidatorException &&
+            e.message == red('Invalid integer.'))));
+
+    expect(validator.validate('9'), equals('9'));
   });
 }
