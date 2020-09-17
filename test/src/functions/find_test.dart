@@ -13,7 +13,7 @@ void main() {
       var foundDirs = find('*',
               root: '/',
               recursive: false,
-              types: <FileSystemEntityType>[FileSystemEntityType.directory],
+              types: <FileSystemEntityType>[Find.directory],
               includeHidden: true)
           .toList();
 
@@ -54,7 +54,7 @@ void main() {
         '*',
         root: '/',
         recursive: true,
-        types: <FileSystemEntityType>[FileSystemEntityType.directory],
+        types: <FileSystemEntityType>[Find.directory],
         includeHidden: true,
         // progress: Progress((line) {
         // if (count++ % 10000 == 0) print(count);
@@ -72,7 +72,7 @@ void main() {
     //     '*',
     //     root: '/',
     //     recursive: true,
-    //     types: <FileSystemEntityType>[FileSystemEntityType.directory],
+    //     types: <FileSystemEntityType>[Find.directory],
     //     includeHidden: true,
     //     progress: Progress((line) {
     //       if (count++ % 1000 == 0) print(count);
@@ -83,7 +83,7 @@ void main() {
     //     '*',
     //     root: '/',
     //     recursive: true,
-    //     types: <FileSystemEntityType>[FileSystemEntityType.directory],
+    //     types: <FileSystemEntityType>[Find.directory],
     //     includeHidden: false,
     //     progress: Progress((line) {
     //       if (count++ % 1000 == 0) print(count);

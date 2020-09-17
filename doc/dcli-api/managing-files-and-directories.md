@@ -55,7 +55,7 @@ The find command will ignore hidden files \(those starting with a '.'\) and dire
 ```dart
 var progress = Progress((file) => print(file));
 find('*.jpg', root: '\'
-  , types:[FileSystemEntityType.directory, FileSystemEntityType.file]
+  , types:[Find.directory, Find.file]
   , progress: progress);
 ```
 

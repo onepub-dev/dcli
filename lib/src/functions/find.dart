@@ -30,7 +30,7 @@ import 'function.dart';
 /// List<String> results = find('[a-z]*.jpg', caseSensitive:true).toList();
 ///
 /// find('*.jpg'
-///   , types:[FileSystemEntityType.directory, FileSystemEntityType.file])
+///   , types:[Find.directory, Find.file])
 ///     .forEach((file) => print(file));
 /// ```
 ///
@@ -58,6 +58,8 @@ import 'function.dart';
 /// [includeHidden] controls whether hidden files (.xx) are returned and
 /// whether hidden directorys (.xx) are recursed into when the [recursive]
 /// option is true. By default hidden files and directories are ignored.
+/// If the wildcard begins with a '.' then includeHidden will be enabled
+/// automatically.
 ///
 /// [types] allows you to specify the file types you want the find to return.
 /// By default [types] limits the results to files.
@@ -65,8 +67,8 @@ import 'function.dart';
 /// [root] allows you to specify an alternate directory to seach within
 /// rather than the current work directory.
 ///
-/// [types] the list of types to search file. Defaults to file.
-///   See [FileSystemEntityType].
+/// [types] the list of types to search file. Defaults to [Find.file].
+///   See [Find.file], [Find.directory], [Find.link].
 ///
 /// Passing a [progress] will allow you to process the results as the are
 /// produced rather than having to wait for the call to find to complete.
@@ -80,7 +82,7 @@ Progress find(
   bool includeHidden = false,
   String root = '.',
   Progress progress,
-  List<FileSystemEntityType> types = const [FileSystemEntityType.file],
+  List<FileSystemEntityType> types = const [Find.file],
 }) {
   ArgumentError.checkNotNull(caseSensitive, 'caseSensitive');
   ArgumentError.checkNotNull(recursive, 'recursive');
@@ -104,7 +106,7 @@ class Find extends DCliFunction {
     bool recursive = true,
     String root = '.',
     Progress progress,
-    List<FileSystemEntityType> types = const [FileSystemEntityType.file],
+    List<FileSystemEntityType> types = const [Find.file],
     bool includeHidden,
   }) {
     return waitForEx<Progress>(_innerFind(pattern,
@@ -122,7 +124,7 @@ class Find extends DCliFunction {
     bool recursive = true,
     String root = '.',
     Progress progress,
-    List<FileSystemEntityType> types = const [FileSystemEntityType.file],
+    List<FileSystemEntityType> types = const [Find.file],
     bool includeHidden,
   }) async {
     var matcher = _PatternMatcher(pattern, caseSensitive: caseSensitive);
@@ -130,6 +132,10 @@ class Find extends DCliFunction {
       root = pwd;
     } else {
       root = truepath(root);
+    }
+
+    if (pattern.startsWith('.')) {
+      includeHidden = true;
     }
 
     try {
@@ -144,17 +150,17 @@ class Find extends DCliFunction {
           includeHidden, progress, childDirectories);
 
       while (childDirectories[0] != null) {
-        zeroElements(nextLevel);
+        _zeroElements(nextLevel);
         for (var directory in childDirectories) {
           if (directory == null) {
             break;
           }
           await _processDirectory(root, directory.path, recursive, types,
               matcher, includeHidden, progress, singleDirectory);
-          appendTo(nextLevel, singleDirectory);
-          zeroElements(singleDirectory);
+          _appendTo(nextLevel, singleDirectory);
+          _zeroElements(singleDirectory);
         }
-        copyInto(childDirectories, nextLevel);
+        _copyInto(childDirectories, nextLevel);
       }
     } finally {
       progress.close();
@@ -191,7 +197,7 @@ class Find extends DCliFunction {
 
         /// If we are recursing then we need to add any directories
         /// to the list of childDirectories that need to be recursed.
-        if (recursive && type == FileSystemEntityType.directory) {
+        if (recursive && type == Find.directory) {
           // processing the /proc directory causes dart to crash
           // https://github.com/dart-lang/sdk/issues/43176
           if (entity.path != '/proc' &&
@@ -243,15 +249,15 @@ class Find extends DCliFunction {
     return isHidden;
   }
 
-  void zeroElements(List<FileSystemEntity> nextLevel) {
+  void _zeroElements(List<FileSystemEntity> nextLevel) {
     for (var i = 0; i < nextLevel.length && nextLevel[i] != null; i++) {
       nextLevel[i] = null;
     }
   }
 
-  void copyInto(List<FileSystemEntity> childDirectories,
+  void _copyInto(List<FileSystemEntity> childDirectories,
       List<FileSystemEntity> nextLevel) {
-    zeroElements(childDirectories);
+    _zeroElements(childDirectories);
     for (var i = 0; i < nextLevel.length; i++) {
       if (childDirectories.length > i) {
         childDirectories[i] = nextLevel[i];
@@ -261,9 +267,9 @@ class Find extends DCliFunction {
     }
   }
 
-  void appendTo(List<FileSystemEntity> nextLevel,
+  void _appendTo(List<FileSystemEntity> nextLevel,
       List<FileSystemEntity> singleDirectory) {
-    var index = firstAvailable(nextLevel);
+    var index = _firstAvailable(nextLevel);
 
     for (var i = 0; i < singleDirectory.length; i++) {
       if (singleDirectory[i] == null) {
@@ -278,7 +284,7 @@ class Find extends DCliFunction {
     }
   }
 
-  int firstAvailable(List<FileSystemEntity> nextLevel) {
+  int _firstAvailable(List<FileSystemEntity> nextLevel) {
     var firstAvailable = 0;
     while (firstAvailable < nextLevel.length &&
         nextLevel[firstAvailable] != null) {
@@ -286,6 +292,18 @@ class Find extends DCliFunction {
     }
     return firstAvailable;
   }
+
+  /// pass as an argument to the [types] argument
+  /// to select files to be found
+  static const file = FileSystemEntityType.file;
+
+  /// pass as an argument to the [types] argument
+  /// to select directories to be found
+  static const directory = FileSystemEntityType.directory;
+
+  /// pass as an argument to the [types] argument
+  /// to select links to be found
+  static const link = FileSystemEntityType.link;
 }
 
 class _PatternMatcher {

@@ -37,7 +37,7 @@ export 'src/functions/fetch.dart'
         FetchUrl,
         OnFetchProgress;
 export 'src/functions/file_list.dart' show fileList;
-export 'src/functions/find.dart' show find;
+export 'src/functions/find.dart' show find, Find;
 export 'src/functions/head.dart' show head;
 export 'src/functions/is.dart'
     show isFile, isDirectory, exists, isWritable, isReadable, isExecutable;

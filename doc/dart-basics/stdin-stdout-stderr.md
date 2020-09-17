@@ -208,13 +208,13 @@ void ls(List<String> patterns) {
   if (patterns.isEmpty) {
     find('*',
             root: pwd,  recursive: false,
-            types: [FileSystemEntityType.file, FileSystemEntityType.directory])
+            types: [Find.file, Find.directory])
         .forEach((file) => print('  $file'));
   } else {
     for (var pattern in patterns) {
       find(pattern, root: pwd,  recursive: false, types: [
-        FileSystemEntityType.file,
-        FileSystemEntityType.directory
+        Find.file,
+        Find.directory
       ]).forEach((file) => print('  $file'));
     }
   }
