@@ -13,7 +13,11 @@ class PubCache {
   String _pubCacheDir;
 
   String _pubCacheBinPath;
-  static const String _pubCacheEnv = 'PUB_CACHE';
+
+  /// The name of the environment variable that can be
+  /// set to change the location of the .pub-cache directory.
+  /// You should change this path by calling [pathTo].
+  static const String ENV_VAR = 'PUB_CACHE';
   String _pubCachePath;
 
   ///
@@ -26,7 +30,7 @@ class PubCache {
     // first check if an environment variable exists.
     // The PUB_CACHE env var allows a user to over-ride
     // the standard location of the pub cache.
-    var pubCacheEnv = env[_pubCacheEnv];
+    var pubCacheEnv = env[ENV_VAR];
 
     /// determine pubCacheDir
     if (pubCacheEnv != null) {
@@ -62,7 +66,7 @@ class PubCache {
   /// This will only affect any child processes spawned from
   /// this script.
   set pathTo(String pathToPubCache) {
-    env[_pubCacheEnv] = pathToPubCache;
+    env[ENV_VAR] = pathToPubCache;
     _pubCachePath = pathToPubCache;
   }
 
