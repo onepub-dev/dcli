@@ -89,7 +89,7 @@ List<String> run_child(String childScript) {
 
   // make certain our test script will run
   '${DCliPaths().dcliName} -v warmup ${dirname(childScript)}'.run;
-  '${DCliPaths().dcliName} -v warmup $dirname(runChildScript)}'.run;
+  '${DCliPaths().dcliName} -v warmup ${dirname(runChildScript)}'.run;
 
   // run a script that uses '.run' and capture its output to prove
   // that .run works.
