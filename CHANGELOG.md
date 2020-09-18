@@ -1,3 +1,20 @@
+# 0.28.0
+This release includes significant changes to the dcli command line.
+The command 'clean' has been renamed to warmup.
+There is now a new 'clean' command which now does what the label says. It removes all build artifiacts.
+Find: Added static properties for file, directory and link which can be used a short hand for FileSystemEntityType.
+exposed the pub cache environment variable.
+Added a method clean to DartProjects.
+Added method warmup to DartProjects.
+Added method to PubCache to set the .pub-cache path to an alternate location.
+Improved the Move exception error.
+Fixed the compile install option which was using the wrong source path.
+Fixes to the docker unit tests.
+Added test for integer validator.
+Added compile entry point to Script and updated unit tests to use it.
+Added a 'run' method to Script so users can easily run a script from the dcli api.
+Fixed a bug in the compiler. Even if you agreed to overwrite the exe during the install it would still report an error.
+
 # 0.27.1
 Exposed DartProject class as part of the public api
 Added color tests.
