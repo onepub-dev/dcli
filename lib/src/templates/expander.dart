@@ -18,7 +18,7 @@ class TemplateExpander {
     expandTo.write(r'''This directory contains the templates used by dcli create
 
 Eventually you will be able to run
- dcli create --template cli_args.dart snake.dart''');
+ dcli create --template default.dart snake.dart''');
   }
 
   void analysis_options() {
@@ -60,8 +60,8 @@ void main() {
 }''');
   }
 
-  void cli_args() {
-    var expandTo = join(targetPath, 'cli_args.dart');
+  void default_template() {
+    var expandTo = join(targetPath, 'default.dart');
     expandTo.write(r'''#! /usr/bin/env %dcliName%
 
 import 'dart:io';
@@ -140,7 +140,7 @@ dev_dependencies:
     README();
     analysis_options();
     hello_world();
-    cli_args();
+    default_template();
     pubspec();
   }
 }

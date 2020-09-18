@@ -3,7 +3,7 @@ import 'package:test/test.dart';
 
 void main() {
   test('Assets().toString', () async {
-    var path = 'assets/templates/cli_args.dart';
+    var path = 'assets/templates/default.dart';
     var content = Assets().loadString(path);
 
     expect(content, isNotNull);
@@ -29,7 +29,7 @@ void main() {
       templates,
       unorderedEquals(
         <String>[
-          join(base, 'cli_args.dart'),
+          join(base, 'default.dart'),
           join(base, 'hello_world.dart'),
           join(base, 'README.md'),
           join(base, 'analysis_options.yaml'),

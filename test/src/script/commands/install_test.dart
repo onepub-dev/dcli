@@ -119,7 +119,7 @@ void checkInstallStructure(TestFileSystem fs) {
     templates,
     unorderedEquals(
       <String>[
-        join(base, 'cli_args.dart'),
+        join(base, 'default.dart'),
         join(base, 'hello_world.dart'),
         join(base, 'pubspec.yaml.template'),
         join(base, 'README.md'),
