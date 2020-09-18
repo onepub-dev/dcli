@@ -21,7 +21,8 @@ void main() {
       '${DCliPaths().dcliName} -v create -fg $scriptPath'.run;
 
       var project = DartProject.fromPath(scriptParentPath);
-      var script = project.createScript(basename(scriptPath));
+      var script = project.createScript(basename(scriptPath),
+          templateName: 'hello_world.dart');
       script.run([]);
 
       deleteDir(scriptParentPath, recursive: true);
@@ -31,7 +32,7 @@ void main() {
     TestFileSystem().withinZone((fs) {
       var results = <String>[];
 
-      '${DCliPaths().dcliName} -v test/test_scripts/general/bin/hello_world.dart'
+      '${DCliPaths().dcliName} test/test_scripts/local_pubspec/hello_world.dart'
           .forEach((line) => results.add(line), stderr: printerr);
 
       // if warmup hasn't been run then we have the results of a pub get in the the output.
@@ -47,22 +48,6 @@ void main() {
         var script =
             Script.fromFile('test/test_scripts/general/bin/which.dart');
         exit = script.run(['ls']);
-      } on DCliException catch (e) {
-        print(e);
-      }
-      expect(exit, equals(0));
-    });
-  });
-
-  test('run  with a local pubspec', () {
-    TestFileSystem().withinZone((fs) {
-      var exit = -1;
-      try {
-        print(pwd);
-
-        var script =
-            Script.fromFile('test/test_scripts/local_pubspec/hello_world.dart');
-        exit = script.run(['-v']);
       } on DCliException catch (e) {
         print(e);
       }
