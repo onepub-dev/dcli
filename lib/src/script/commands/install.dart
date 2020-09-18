@@ -247,8 +247,8 @@ class InstallCommand extends Command {
       if (!Platform.isWindows) {
         var user = shell.loggedInUser;
         if (user != 'root') {
-          'chmod -R $user:$user ${Settings().pathToDCli}'.run;
-          'chmod -R $user:$user ${PubCache().pathTo}'.run;
+          'chown -R $user:$user ${Settings().pathToDCli}'.run;
+          'chown -R $user:$user ${PubCache().pathTo}'.run;
         }
       }
     }
