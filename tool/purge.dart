@@ -13,7 +13,6 @@ import 'package:dcli/dcli.dart';
 ///
 
 void main(List<String> args) {
-	Settings().setVerbose(enabled: true);
-	DartProject.fromPath('.').purge();
+  Settings().setVerbose(enabled: true);
+  DartProject.fromPath('.').clean();
 }
-
