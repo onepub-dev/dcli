@@ -145,7 +145,9 @@ class _Is extends DCliFunction {
   /// checks if the passed [path] (a file or directory) is
   /// executable by the user that owns this process
   bool isExecutable(String path) {
-    return _checkPermission(path, EXECUTE_BIT_MASK);
+    return Settings().isWindows
+        ? true
+        : _checkPermission(path, EXECUTE_BIT_MASK);
   }
 
   static const READ_BIT_MASK = 0x4;
@@ -155,6 +157,11 @@ class _Is extends DCliFunction {
   /// Checks if the user permission to act on the [path] (a file or directory)
   /// for the given permission bit mask. (read, write or execute)
   bool _checkPermission(String path, int permissionBitMask) {
+    if (Settings().isWindows) {
+      throw UnsupportedError(
+          'isMemberOfGroup is not Not currently supported on windows');
+    }
+
     var user = env['USER'];
 
     //e.g 755 tomcat bsutton
@@ -190,6 +197,10 @@ class _Is extends DCliFunction {
   /// Returns true if the owner of this process
   /// is a member of [group].
   bool isMemberOfGroup(String group) {
+    if (Settings().isWindows) {
+      throw UnsupportedError(
+          'isMemberOfGroup is not Not currently supported on windows');
+    }
     // get the list of groups this user belongs to.
     var groups = 'groups'.firstLine.split(' ');
 
