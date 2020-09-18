@@ -99,23 +99,23 @@ class DartProject {
   /// run the build as a background process.
   /// [background] defaults to [false]
   ///
-  void prepare({bool background = false}) {
+  void warmup({bool background = false}) {
     _lock.withLock(() {
       try {
         if (background) {
           // we run the clean in the background
           // by running another copy of dcli.
-          print('DCli prepare started in the background.');
-          '${DCliPaths().dcliName} -v=${join(Directory.systemTemp.path, 'dcli.prepare.log')} prepare ${pathToProjectRoot}'
+          print('DCli warmup started in the background.');
+          '${DCliPaths().dcliName} -v=${join(Directory.systemTemp.path, 'dcli.warmup.log')} warmup ${pathToProjectRoot}'
               .start(detached: true, runInShell: true);
         } else {
           // print(orange('Running pub get...'));
           _pubget();
         }
       } on PubGetException {
-        print(red("\ndcli prepare failed due to the 'pub get' call failing."));
+        print(red("\ndcli warmup failed due to the 'pub get' call failing."));
       }
-    }, waiting: 'Waiting for prepare to complete...');
+    }, waiting: 'Waiting for warmup to complete...');
   }
 
   /// Removes any of the dart build artifacts so you have a clean directory.

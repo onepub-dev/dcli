@@ -15,7 +15,7 @@ void main() {
       '${DCliPaths().dcliName} -v test/test_scripts/general/bin/hello_world.dart'
           .forEach((line) => results.add(line), stderr: printerr);
 
-      // if prepare hasn't been run then we have the results of a pub get in the the output.
+      // if warmup hasn't been run then we have the results of a pub get in the the output.
 
       expect(results, anyOf([contains(getExpected()), equals(getExpected())]));
     });

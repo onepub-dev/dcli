@@ -15,7 +15,7 @@ void main() {
         var script = truepath(scriptPath, 'print_to_stdout.dart');
 
         // make certain our test script will run
-        '${DCliPaths().dcliName} -v prepare  $script'.run;
+        '${DCliPaths().dcliName} -v warmup  $script'.run;
 
         // run a script that prints to stdout and prove that toList captures it.
         var results = '${DCliPaths().dcliName} $script'.toList();
@@ -33,7 +33,7 @@ void main() {
         var script = truepath(scriptPath, 'print_to_stderr.dart');
 
         // make certain our test script will run
-        '${DCliPaths().dcliName} -v prepare  $script'.run;
+        '${DCliPaths().dcliName} -v warmup  $script'.run;
 
         // run a script that uses '.run' and capture its output to prove
         // that .run works.
@@ -52,7 +52,7 @@ void main() {
         var script = truepath(scriptPath, 'print_to_both.dart');
 
         // make certain our test script will run
-        '${DCliPaths().dcliName} -v prepare  $script'.run;
+        '${DCliPaths().dcliName} -v warmup  $script'.run;
 
         // run a script that uses '.run' and capture its output to prove
         // that .run works.
@@ -72,7 +72,7 @@ void main() {
         var script = truepath(scriptPath, 'print_to_both_with_error.dart');
 
         // make certain our test script will run
-        '${DCliPaths().dcliName} -v prepare  $script'.run;
+        '${DCliPaths().dcliName} -v warmup  $script'.run;
 
         // run a script that uses '.run' and capture its output to prove
         // that .run works.

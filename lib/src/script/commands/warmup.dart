@@ -9,11 +9,11 @@ import 'commands.dart';
 /// implementation for the 'prepare' command
 /// which does any work necessary to prepare a projects
 /// to be run. Essentially this equates to doing a pub get.
-class PrepareCommand extends Command {
-  static const String _commandName = 'prepare';
+class WarmupCommand extends Command {
+  static const String _commandName = 'warmup';
 
   ///
-  PrepareCommand() : super(_commandName);
+  WarmupCommand() : super(_commandName);
 
   /// [arguments] contains path to prepare
   @override
@@ -44,18 +44,18 @@ class PrepareCommand extends Command {
     var project = DartProject.fromPath(targetPath, search: true);
 
     print('');
-    print(orange('Preparinging ${project.pathToProjectRoot} ...'));
+    print(orange('Preparing ${project.pathToProjectRoot} ...'));
     print('');
 
-    project.prepare();
+    project.warmup();
   }
 
   @override
-  String usage() => 'prepare [<project path>]';
+  String usage() => 'warmup [<project path>]';
 
   @override
   String description() => '''Runs pub upgrade on the given directory.
-   If no directory is passed then the current directory is prepared.''';
+   If no directory is passed then the current directory is warmed up.''';
 
   @override
   List<String> completion(String word) {

@@ -16,7 +16,7 @@ import 'commands.dart';
 class CompileCommand extends Command {
   static const String _commandName = 'compile';
 
-  final _compileFlags = [NoPrepareFlag(), InstallFlag(), OverWriteFlag()];
+  final _compileFlags = [NoWarmupFlag(), InstallFlag(), OverWriteFlag()];
 
   /// holds the set of flags passed to the compile command.
   Flags flagSet = Flags();
@@ -88,24 +88,24 @@ class CompileCommand extends Command {
       /// as we will end up with root permissions everywhere.
       if (!script.isReadyToRun) {
         printerr(red(
-            'The script is not ready to run, so cannot be run from sudo. Run dcli prepare $scriptPath'));
+            'The script is not ready to run, so cannot be run from sudo. Run dcli warmup $scriptPath'));
         exit(1);
       }
     }
 
     try {
-      // by default we prepare the project unless the -np flag is passed.
+      // by default we warmup the project unless the -np flag is passed.
       // however if the project isn't i a runnable state then we
       // force a build.
       var buildRequired =
-          !flagSet.isSet(NoPrepareFlag()) || !script.isReadyToRun;
+          !flagSet.isSet(NoWarmupFlag()) || !script.isReadyToRun;
 
       print('path: ${script.pathToScript}');
       var project =
           DartProject.fromPath(script.pathToScriptDirectory, search: true);
 
       if (buildRequired) {
-        project.prepare();
+        project.warmup();
       }
 
       var install = flagSet.isSet(InstallFlag());
@@ -141,7 +141,7 @@ class CompileCommand extends Command {
   @override
   String usage() {
     var description =
-        '''compile [--noprepare] [--install] [--overwrite] [<script path.dart>, <script path.dart>,...]''';
+        '''compile [--nowarmup] [--install] [--overwrite] [<script path.dart>, <script path.dart>,...]''';
 
     return description;
   }
@@ -158,19 +158,19 @@ class CompileCommand extends Command {
 }
 
 ///
-class NoPrepareFlag extends Flag {
-  static const _flagName = 'noprepare';
+class NoWarmupFlag extends Flag {
+  static const _flagName = 'nowarmup';
 
   ///
-  NoPrepareFlag() : super(_flagName);
+  NoWarmupFlag() : super(_flagName);
 
   @override
-  String get abbreviation => 'np';
+  String get abbreviation => 'nw';
 
   @override
   String description() {
-    return '''Stops the compile from running 'dcli prepare' before compiling.
-      Use the noprepare option to speed up compilation when you know your project structure is up to date.''';
+    return '''Stops the compile from running 'dcli warmup' before compiling.
+      Use the nowarmup option to speed up compilation when you know your project structure is up to date.''';
   }
 }
 

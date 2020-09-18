@@ -22,8 +22,8 @@ void main() {
   print('purging test artifacts');
   DartProject.fromPath(join(root, 'test', 'test_scripts')).clean();
 
-  /// we need to prepare before we can run the unit test script
-  DartProject.fromPath(root).prepare();
+  /// we need to warmup before we can run the unit test script
+  DartProject.fromPath(root).warmup();
 
   print('Run unit tests from $root');
   '${DartSdk().pathToPubExe} run test -j1 --coverage ${join(root, 'coverage')}'

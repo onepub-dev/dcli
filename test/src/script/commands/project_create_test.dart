@@ -30,7 +30,7 @@ void main() {
       });
     });
 
-    test('Prepare hello world', () {
+    test('warmup hello world', () {
       TestFileSystem().withinZone((fs) {
         if (exists(pathToScript)) {
           delete(pathToScript);
@@ -38,7 +38,7 @@ void main() {
 
         var project = DartProject.fromPath(dirname(pathToScript));
         project.createScript(basename(pathToScript));
-        project.prepare();
+        project.warmup();
 
         checkProjectStructure(fs, pathToScript);
       });

@@ -203,7 +203,7 @@ class NamedLock {
   ///
   /// We create the lock file in the virtual project directory
   /// in the form:
-  /// <pid>.prepare.lock
+  /// <pid>.warmup.lock
   ///
   /// If we find an existing lock file we check if the process
   /// that owns it is still running. If it isn't we

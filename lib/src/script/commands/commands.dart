@@ -1,6 +1,6 @@
 import '../flags.dart';
 import 'clean.dart';
-import 'prepare.dart';
+import 'warmup.dart';
 import 'compile.dart';
 import 'create.dart';
 import 'doctor.dart';
@@ -20,10 +20,10 @@ class Commands {
         CreateCommand(),
         DoctorCommand(),
         InstallCommand(),
-        PrepareCommand(),
         RunCommand(),
         UpgradeCommand(),
         VersionCommand(),
+        WarmupCommand(),
         HelpCommand(),
       ];
 
@@ -62,7 +62,7 @@ abstract class Command {
 
   /// returns a single line  high level desription of how to use the command
   /// e.g.
-  ///  compile [--noprepare] [--install] [--overwrite] <script path.dart>
+  ///  compile [--nowarmup] [--install] [--overwrite] <script path.dart>
   String usage();
 
   ///
@@ -78,7 +78,7 @@ abstract class Command {
   /// provide command line completion to bash
   /// Each command should return of list of arguments
   /// suitable for the command.
-  /// e.g. dcli prepare <word> should return
+  /// e.g. dcli warmup <word> should return
   /// a list of dcli scripts in the current directory
   /// that match the word prefix.
   List<String> completion(String word);
