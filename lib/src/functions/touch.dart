@@ -1,4 +1,4 @@
-import 'package:file_utils/file_utils.dart';
+import 'dart:io';
 
 import 'package:path/path.dart' as p;
 
@@ -43,14 +43,17 @@ class _Touch extends DCliFunction {
     }
 
     try {
-      if (!FileUtils.touch([absolutePath], create: true)) {
-        throw TouchException(
-            'Unable to touch file $absolutePath: check permissions');
+      var file = File(absolutePath);
+
+      if (file.existsSync()) {
+        var now = DateTime.now();
+        file.setLastAccessedSync(now);
+        file.setLastModifiedSync(now);
+      } else {
+        if (create) file.createSync();
       }
-    }
-    // ignore: avoid_catches_without_on_clauses
-    catch (e) {
-      throw TouchException('An error occured touching $absolutePath: $e');
+    } on FileSystemException catch (e) {
+      throw TouchException('Unable to touch file $absolutePath: ${e.message}');
     }
     return path;
   }
