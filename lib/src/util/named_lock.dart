@@ -355,7 +355,7 @@ class NamedLock {
     } finally {
       if (socket != null) {
         socket.close();
-        _log(blue('Hardlock relased'));
+        _log(blue('Hardlock released'));
       }
     }
   }
