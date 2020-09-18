@@ -20,7 +20,8 @@ void main() {
           delete(pathToScript);
         }
         var project = DartProject.fromPath(dirname(pathToScript));
-        project.createScript(basename(pathToScript));
+        project.createScript(basename(pathToScript),
+            templateName: 'hello_world.dart');
 
         checkProjectStructure(fs, pathToScript);
       });
