@@ -20,7 +20,7 @@ void main() {
       );
 
       // if warmup hasn't been run then we have the results of a pub get in the the output.
-      var expected = ['warmup', 'compile', 'create'];
+      var expected = ['cleanup', 'compile', 'create'];
 
       expect(results, equals(expected));
     });
