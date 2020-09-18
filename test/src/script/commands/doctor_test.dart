@@ -6,8 +6,6 @@ import 'package:test/test.dart';
 
 import '../../util/test_file_system.dart';
 
-String script = 'test/test_scripts/general/bin/hello_world.dart';
-
 void main() {
   test('dcli doctor', () {
     TestFileSystem().withinZone((fs) {
