@@ -12,7 +12,7 @@ void main() {
     TestFileSystem().withinZone((fs) {
       var results = <String>[];
 
-      '${DCliPaths().dcliName} -v ${join(fs.testScriptPath, 'general/bin/hello_world.dart)')}'
+      '${DCliPaths().dcliName} -v ${join(fs.testScriptPath, 'general/bin/hello_world.dart')}'
           .forEach((line) => results.add(line), stderr: printerr);
 
       // if warmup hasn't been run then we have the results of a pub get in the the output.
@@ -35,7 +35,7 @@ void main() {
     });
   });
 
-  test('run  with a local pubspec', () {
+  test('run  with traditional dart project structure - bin', () {
     TestFileSystem().withinZone((fs) {
       var exit = -1;
       try {
@@ -43,22 +43,6 @@ void main() {
 
         exit = Script.fromFile(
                 join(fs.testScriptPath, 'general/bin/hello_world.dart'))
-            .run([]);
-      } on DCliException catch (e) {
-        print(e);
-      }
-      expect(exit, equals(0));
-    });
-  });
-
-  test('run  with traditional dart project structure - bin', () {
-    TestFileSystem().withinZone((fs) {
-      var exit = -1;
-      try {
-        print(pwd);
-
-        exit = Script.fromFile(join(
-                fs.testScriptPath, 'traditional_project/bin/traditional.dart'))
             .run([]);
       } on DCliException catch (e) {
         print(e);

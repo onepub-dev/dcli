@@ -5,10 +5,12 @@ import 'dart:isolate';
 
 import 'package:dcli/dcli.dart';
 import 'package:dcli/src/functions/env.dart';
+import 'package:dcli/src/script/dependency.dart';
 import 'package:dcli/src/util/stack_trace_impl.dart';
 import 'package:path/path.dart';
 import 'package:dcli/src/script/entry_point.dart';
 import 'package:dcli/src/util/named_lock.dart';
+import 'package:pubspec/pubspec.dart' as ps;
 import 'package:test/test.dart';
 import 'package:uuid/uuid.dart';
 
@@ -250,8 +252,6 @@ class TestFileSystem {
   }
 
   void installDCli() {
-    print(red('Pub-cache path = ${PubCache().pathTo}'));
-
     /// run pub get and only display errors.
     '${DartSdk.pubExeName} global activate --source path $pwd'.start(
         progress: Progress((line) => null, stderr: (line) => print(line)));
@@ -315,9 +315,41 @@ class TestFileSystem {
     }
 
     copyTree(join(Script.current.pathToProjectRoot, 'test', 'test_script'),
-        testScriptPath);
+        testScriptPath,
+        recursive: true);
+
+    _patchRelativeDependenciesAndWarmup(testScriptPath);
+    DartProject.fromPath(join(testScriptPath, 'general')).warmup();
 
     Settings().setVerbose(enabled: verbose);
+  }
+
+  /// we need to update any pubspec.yaml files that have a relative
+  /// dependency to dcli after we move them to the test file system.
+  void _patchRelativeDependenciesAndWarmup(String testScriptPath) {
+    find('pubspec.yaml', root: testScriptPath).forEach((pathToPubspec) {
+      var pubspec = PubSpec.fromFile(pathToPubspec);
+      var dependency = pubspec.dependencies['dcli'];
+
+      var dcliProject = DartProject.fromPath('.');
+
+      if (dependency.reference is ps.PathReference) {
+        var pathDependency = dependency.reference as ps.PathReference;
+
+        var dir = relative(dirname(pathToPubspec), from: fsRoot);
+        var absolutePathToDcli = truepath(
+            dcliProject.pathToProjectRoot, 'test', dir, pathDependency.path);
+
+        var newPath = PubSpec.createPathReference(absolutePathToDcli);
+
+        var newMap = Map<String, Dependency>.from(pubspec.dependencies);
+        newMap['dcli'] = Dependency('dcli', newPath);
+        pubspec.dependencies = newMap;
+        pubspec.saveToFile(pathToPubspec);
+      }
+
+      DartProject.fromPath(dirname(pathToPubspec)).warmup();
+    });
   }
 
   void installCrossPlatformTestScripts(String originalHome) {
