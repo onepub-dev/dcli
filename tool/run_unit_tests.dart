@@ -15,12 +15,12 @@ void main() {
 
   if (exists('/tmp/dcli')) deleteDir('/tmp/dcli', recursive: true);
 
-  /// remove all of the test artifacts from our test_scripts
+  /// remove all of the test artifacts from our test_script
   /// so we are in a clean state.
   /// The artifacts (e.g. .packages) also have paths that won't
   /// be valide in our test file system.
   print('purging test artifacts');
-  DartProject.fromPath(join(root, 'test', 'test_scripts')).clean();
+  DartProject.fromPath(join(root, 'test', 'test_script')).clean();
 
   /// we need to warmup before we can run the unit test script
   DartProject.fromPath(root).warmup();

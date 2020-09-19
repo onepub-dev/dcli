@@ -1,5 +1,0 @@
-name: local_pubspec
-dependencies: 
-  dcli: any
-  args: ^1.5.2
-  path: ^1.7.0
