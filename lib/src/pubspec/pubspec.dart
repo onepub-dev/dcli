@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:collection/collection.dart';
 import 'package:dcli/src/util/wait_for_ex.dart';
+import 'package:meta/meta.dart';
 import 'package:pub_semver/pub_semver.dart';
 import 'package:pubspec/pubspec.dart' as pub;
 
@@ -35,10 +36,11 @@ class PubSpec {
         _executables.add(Executable(key, pubspec.executables[key].scriptPath));
       }
     }
-    return _executables;
+
+    return List.unmodifiable(_executables);
   }
 
-  /// Sets the list of dependencies for this pubspec.
+  /// Sets the map of dependencies for this pubspec.
   set dependencies(Map<String, Dependency> dependencies) {
     var ref = <String, pub.DependencyReference>{};
 
@@ -49,7 +51,9 @@ class PubSpec {
     pubspec = pubspec.copy(dependencies: ref);
   }
 
-  /// Returns the set of dependencies contained in this pubspec.
+  /// Returns an unmodifiable map of the dependencies
+  /// If you need to update the map pass a new map
+  /// with the updated values.
   Map<String, Dependency> get dependencies {
     var depends = <String, Dependency>{};
 
@@ -60,7 +64,7 @@ class PubSpec {
       depends.putIfAbsent(name, () => Dependency(name, reference));
     }
 
-    return depends;
+    return Map.unmodifiable(depends);
   }
 
   /// Sets the list of dependencies for this pubspec.
@@ -74,6 +78,9 @@ class PubSpec {
     pubspec = pubspec.copy(dependencyOverrides: ref);
   }
 
+  /// Returns an unmodifiable map of the dependency overrides
+  /// If you need to update the map pass a new map
+  /// with the updated values.
   Map<String, Dependency> get dependencyOverrides {
     var depends = <String, Dependency>{};
 
@@ -84,7 +91,7 @@ class PubSpec {
       depends.putIfAbsent(name, () => Dependency(name, reference));
     }
 
-    return depends;
+    return Map.unmodifiable(depends);
   }
 
   PubSpec._internal();
@@ -138,6 +145,10 @@ class PubSpec {
         .equals(lhs.dependencies, rhs.dependencies)) return false;
 
     return true;
+  }
+
+  static pub.PathReference createPathReference(String path) {
+    return pub.PathReference.fromJson(<String, String>{'path': path});
   }
 }
 
