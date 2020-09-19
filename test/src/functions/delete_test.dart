@@ -9,7 +9,7 @@ void main() {
   t.group('Delete', () {
     t.test('delete ', () {
       TestFileSystem().withinZone((fs) {
-        var testFile = join(fs.root, 'lines.txt');
+        var testFile = join(fs.fsRoot, 'lines.txt');
         if (!exists(dirname(testFile))) {
           createDir(dirname(testFile), recursive: true);
         }
@@ -23,7 +23,7 @@ void main() {
 
     t.test('delete non-existing ', () {
       TestFileSystem().withinZone((fs) {
-        var testFile = join(fs.root, 'lines.txt');
+        var testFile = join(fs.fsRoot, 'lines.txt');
         touch(testFile, create: true);
         delete(testFile);
 

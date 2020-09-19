@@ -10,7 +10,7 @@ import '../../util/test_file_system.dart';
 void main() {
   test('Create and run a script', () {
     TestFileSystem().withinZone((fs) {
-      var scriptParentPath = truepath(fs.testScriptPath, 'run_test');
+      var scriptParentPath = truepath(fs.tmpScriptPath, 'run_test');
 
       if (!exists(scriptParentPath)) {
         createDir(scriptParentPath, recursive: true);
@@ -32,7 +32,7 @@ void main() {
     TestFileSystem().withinZone((fs) {
       var results = <String>[];
 
-      '${DCliPaths().dcliName} test/test_scripts/local_pubspec/hello_world.dart'
+      '${DCliPaths().dcliName} ${join(fs.testScriptPath, 'general/bin/hello_world.dart')}'
           .forEach((line) => results.add(line), stderr: printerr);
 
       // if warmup hasn't been run then we have the results of a pub get in the the output.
@@ -46,7 +46,7 @@ void main() {
       var exit = -1;
       try {
         var script =
-            Script.fromFile('test/test_scripts/general/bin/which.dart');
+            Script.fromFile(join(fs.testScriptPath, 'general/bin/which.dart'));
         exit = script.run(['ls']);
       } on DCliException catch (e) {
         print(e);
@@ -61,8 +61,8 @@ void main() {
       try {
         print(pwd);
 
-        var script = Script.fromFile(
-            'test/test_scripts/traditional_project/bin/traditional.dart');
+        var script = Script.fromFile(join(
+            fs.testScriptPath, 'traditional_project/bin/traditional.dart'));
         exit = script.run(['-v']);
       } on DCliException catch (e) {
         print(e);
@@ -77,8 +77,8 @@ void main() {
       try {
         print(pwd);
 
-        var script = Script.fromFile(
-            'test/test_scripts/traditional_project/bin/nested/traditional.dart');
+        var script = Script.fromFile(join(fs.testScriptPath,
+            'traditional_project/bin/nested/traditional.dart'));
         exit = script.run(['-v']);
       } on DCliException catch (e) {
         print(e);
@@ -93,8 +93,8 @@ void main() {
       try {
         print(pwd);
 
-        var script = Script.fromFile(
-            'test/test_scripts/traditional_project/example/traditional.dart');
+        var script = Script.fromFile(join(
+            fs.testScriptPath, 'traditional_project/example/traditional.dart'));
         exit = script.run(['-v']);
       } on DCliException catch (e) {
         print(e);
@@ -109,8 +109,8 @@ void main() {
       try {
         print(pwd);
 
-        var script = Script.fromFile(
-            'test/test_scripts//traditional_project/tool/traditional.dart');
+        var script = Script.fromFile(join(
+            fs.testScriptPath, 'traditional_project/tool/traditional.dart'));
         exit = script.run(['-v']);
       } on DCliException catch (e) {
         print(e);

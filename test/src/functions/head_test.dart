@@ -11,12 +11,12 @@ void main() {
   t.group('Head', () {
     t.test('head 5', () {
       TestFileSystem().withinZone((fs) {
-        var testFile = join(fs.root, 'lines.txt');
+        var testFile = join(fs.fsRoot, 'lines.txt');
         if (exists(testFile)) {
           delete(testFile);
         }
-        if (!exists(fs.root)) {
-          createDir(fs.root, recursive: true);
+        if (!exists(fs.fsRoot)) {
+          createDir(fs.fsRoot, recursive: true);
         }
         var file = FileSync(testFile, fileMode: FileMode.write);
         for (var i = 0; i < 10; i++) {

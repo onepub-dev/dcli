@@ -14,7 +14,7 @@ void main() {
   t.group('StringAsProcess', () {
     t.test('Check .run executes', () {
       TestFileSystem().withinZone((fs) {
-        var testFile = join(fs.root, 'test.text');
+        var testFile = join(fs.fsRoot, 'test.text');
 
         if (exists(testFile)) {
           delete(testFile);
@@ -27,7 +27,7 @@ void main() {
 
     t.test('Check .start executes - attached, not in shell', () {
       TestFileSystem().withinZone((fs) {
-        var testFile = join(fs.root, 'test.text');
+        var testFile = join(fs.fsRoot, 'test.text');
 
         if (exists(testFile)) {
           delete(testFile);
@@ -40,7 +40,7 @@ void main() {
 
     t.test('Check .start executes - attached,  in shell', () {
       TestFileSystem().withinZone((fs) {
-        var testFile = join(fs.root, 'test.text');
+        var testFile = join(fs.fsRoot, 'test.text');
 
         if (exists(testFile)) {
           delete(testFile);
@@ -62,7 +62,7 @@ void main() {
 
     t.test('Check .start executes - detached, not in shell', () {
       TestFileSystem().withinZone((fs) {
-        var testFile = join(fs.root, 'test.text');
+        var testFile = join(fs.fsRoot, 'test.text');
 
         if (exists(testFile)) {
           delete(testFile);
@@ -85,7 +85,7 @@ void main() {
 
     t.test('Check .start executes - detached,  in shell', () {
       TestFileSystem().withinZone((fs) {
-        var testFile = join(fs.root, 'test.text');
+        var testFile = join(fs.fsRoot, 'test.text');
 
         if (exists(testFile)) {
           delete(testFile);
@@ -231,7 +231,7 @@ void main() {
 }
 
 String setup(TestFileSystem fs) {
-  var linesFile = join(fs.root, TestFileSystem.testLinesFile);
+  var linesFile = join(fs.fsRoot, TestFileSystem.testLinesFile);
 
   var file = FileSync(linesFile);
   for (var i = 0; i < 10; i++) {

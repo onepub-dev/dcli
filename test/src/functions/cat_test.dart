@@ -15,7 +15,7 @@ void main() {
     t.test('Cat good ', () {
       TestFileSystem().withinZone((fs) {
         print('PWD $pwd');
-        testFile = join(fs.root, 'lines.txt');
+        testFile = join(fs.fsRoot, 'lines.txt');
         createLineFile(testFile, 10);
 
         var lines = <String>[];

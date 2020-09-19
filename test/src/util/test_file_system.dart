@@ -32,11 +32,15 @@ class TestFileSystem {
 
   String home;
 
-  String get root => join(TestFileSystem._testRoot, uniquePath);
+  String get fsRoot => join(TestFileSystem._testRoot, uniquePath);
 
   bool initialised = false;
 
-  /// The location of scripts used for testing.
+  /// The location of any temp scripts
+  /// that need to be created during testing.
+  String tmpScriptPath;
+
+  /// The location of the test_script directory
   String testScriptPath;
 
   static TestFileSystem common;
@@ -51,8 +55,8 @@ class TestFileSystem {
   ///
   /// The virtualised file system is created by altering the
   /// 'HOME' environment variable and by providing a
-  /// 'root' path [TestFileSystem.root]
-  /// You MUST prefix all of your paths of either [root] or
+  /// 'root' path [TestFileSystem.fsRoot]
+  /// You MUST prefix all of your paths of either [fsRoot] or
   /// [HOME] to ensure that you code runs within the 'virtuallised'
   /// files system.
   ///
@@ -88,14 +92,17 @@ class TestFileSystem {
     uniquePath = Uuid().v4();
 
     var isolateID = Service.getIsolateID(Isolate.current);
-    print(red('Creating TestFileSystem $root for isolate $isolateID'));
+    print(red('Creating TestFileSystem $fsRoot for isolate $isolateID'));
 
-    testScriptPath = truepath(root, 'scripts');
+    tmpScriptPath = truepath(fsRoot, 'scripts');
+    testScriptPath = truepath(fsRoot, 'test_script');
   }
 
   String tempFile({String suffix}) => FileSync.tempFile(suffix: suffix);
 
-  void withinZone(void Function(TestFileSystem fs) callback) {
+  void withinZone(
+    void Function(TestFileSystem fs) callback,
+  ) {
     var stack = StackTraceImpl(skipFrames: 1);
 
     try {
@@ -112,13 +119,13 @@ class TestFileSystem {
         var originalHome = HOME;
         var path = env['PATH'];
         try {
-          env['HOME'] = root;
-          home = root;
+          env['HOME'] = fsRoot;
+          home = fsRoot;
 
           rebuildPath();
 
           var isolateID = Service.getIsolateID(Isolate.current);
-          print(green('Using TestFileSystem $root for Isolate: $isolateID'));
+          print(green('Using TestFileSystem $fsRoot for Isolate: $isolateID'));
           print('Reset dcliPath: ${Settings().pathToDCli}');
 
           initFS(originalHome);
@@ -133,8 +140,8 @@ class TestFileSystem {
         } finally {
           env['HOME'] = originalHome;
           env['PATH'] = path;
-          print(red(
-              '${'*' * 40} Ending test ${frame.sourceFile}:${frame.lineNo} ${'*' * 80}'));
+          print(green(
+              '${'-' * 40} Ending test ${frame.sourceFile}:${frame.lineNo} ${'-' * 80}'));
         }
       });
     } on DCliException catch (e) {
@@ -147,9 +154,18 @@ class TestFileSystem {
   void initFS(String originalHome) {
     if (!initialised) {
       initialised = true;
+
+      /// If we copy pub-cache we also need to
+      /// copy the testscripts as when the .dart_tools
+      /// is created it includes absolute paths to the pub-cache.
+      /// If we are creating/destroying pub-caches and sharing
+      /// the tests scripts the paths to pub-cache keep getting
+      /// broken.
       copyPubCache(originalHome, HOME);
-      buildTestFileSystem();
+      copyTestScripts();
       installDCli();
+      buildTestFileSystem();
+
       installCrossPlatformTestScripts(originalHome);
     }
   }
@@ -161,10 +177,10 @@ class TestFileSystem {
   }
 
   String get unitTestWorkingDir {
-    if (!exists(root)) {
-      createDir(root, recursive: true);
+    if (!exists(fsRoot)) {
+      createDir(fsRoot, recursive: true);
     }
-    return Directory(root).createTempSync().path;
+    return Directory(fsRoot).createTempSync().path;
   }
 
   String runtimePath(String scriptName) {
@@ -177,7 +193,7 @@ class TestFileSystem {
       createDir(HOME, recursive: true);
     }
 
-    top = join(root, 'top');
+    top = join(fsRoot, 'top');
     thidden = join(top, '.hidden');
     middle = join(top, 'middle');
     bottom = join(middle, 'bottom');
@@ -227,9 +243,9 @@ class TestFileSystem {
       Settings().verbose('Deleting $HOME');
       deleteDir(HOME, recursive: true);
     }
-    if (exists(root)) {
-      Settings().verbose('Deleting $root');
-      deleteDir(root, recursive: true);
+    if (exists(fsRoot)) {
+      Settings().verbose('Deleting $fsRoot');
+      deleteDir(fsRoot, recursive: true);
     }
   }
 
@@ -259,36 +275,47 @@ class TestFileSystem {
       newPath.add(path);
     }
 
-    newPath.add('${join(root, PubCache().pathToBin)}');
-    newPath.add('${join(root, '.dcli', 'bin')}');
+    newPath.add('${join(fsRoot, PubCache().pathToBin)}');
+    newPath.add('${join(fsRoot, '.dcli', 'bin')}');
 
     env['PATH'] = newPath.join(Env().delimiterForPATH);
   }
 
   void copyPubCache(String originalHome, String newHome) {
     print('Copying pub cache into TestFileSystem... ');
-    var list = find(
-      '*',
-      root: join(originalHome, PubCache().cacheDir),
-      recursive: true,
-    ).toList();
 
     var verbose = Settings().isVerbose;
 
     Settings().setVerbose(enabled: false);
 
-    for (var file in list) {
-      var target = join(newHome, relative(file, from: originalHome));
-
-      if (!exists(dirname(target))) createDir(dirname(target), recursive: true);
-
-      copy(file, target);
-    }
-
     /// tell the world where to find the new pubache.
     PubCache().pathTo = join(newHome, PubCache().cacheDir);
 
+    if (!exists(PubCache().pathTo)) {
+      createDir(PubCache().pathTo, recursive: true);
+    }
+
+    copyTree(join(join(originalHome, PubCache().cacheDir)), PubCache().pathTo);
+
     print('Reset ${PubCache.ENV_VAR} to ${env[PubCache.ENV_VAR]}');
+
+    Settings().setVerbose(enabled: verbose);
+  }
+
+  //
+  void copyTestScripts() {
+    print('Copying test_script into TestFileSystem... ');
+
+    var verbose = Settings().isVerbose;
+
+    Settings().setVerbose(enabled: false);
+
+    if (!exists(testScriptPath)) {
+      createDir(testScriptPath, recursive: true);
+    }
+
+    copyTree(join(Script.current.pathToProjectRoot, 'test', 'test_script'),
+        testScriptPath);
 
     Settings().setVerbose(enabled: verbose);
   }
@@ -314,7 +341,7 @@ class TestFileSystem {
             join(Settings().pathToDCliBin, command));
       } else {
         /// compile and install the command
-        Script.fromFile('test/test_scripts/general/bin/$command.dart')
+        Script.fromFile('test/test_script/general/bin/$command.dart')
             .compile(install: true);
         // copy it back to the dcli testbin so the next unit
         // test doesn't have to compile it.

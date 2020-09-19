@@ -10,7 +10,7 @@ void main() {
   t.group('.run', () {
     t.test('Basic .run', () {
       TestFileSystem().withinZone((fs) {
-        var testFile = join(fs.root, 'test.text');
+        var testFile = join(fs.fsRoot, 'test.text');
 
         if (exists(testFile)) {
           delete(testFile);
@@ -23,7 +23,7 @@ void main() {
 
     t.test('print stdout', () {
       TestFileSystem().withinZone((fs) {
-        var scriptPath = truepath(join('test', 'test_scripts/general/bin'));
+        var scriptPath = truepath(join(fs.testScriptPath, 'general/bin'));
         var script = truepath(scriptPath, 'print_to_stdout.dart');
 
         var results = run_child(script);
@@ -36,7 +36,7 @@ void main() {
 
     t.test('print stderr', () {
       TestFileSystem().withinZone((fs) {
-        var scriptPath = truepath(join('test', 'test_scripts/general/bin'));
+        var scriptPath = truepath(join(fs.testScriptPath, 'general/bin'));
         var script = truepath(scriptPath, 'print_to_stderr.dart');
 
         var results = run_child(script);
@@ -49,7 +49,7 @@ void main() {
 
     t.test('print stdout and stderr', () {
       TestFileSystem().withinZone((fs) {
-        var scriptPath = truepath(join('test', 'test_scripts/general/bin'));
+        var scriptPath = truepath(join(fs.testScriptPath, 'general/bin'));
 
         if (!exists(scriptPath)) {
           createDir(scriptPath, recursive: true);
@@ -65,7 +65,7 @@ void main() {
 
     t.test('print stdout and stderr with error', () {
       TestFileSystem().withinZone((fs) {
-        var scriptPath = truepath(join('test', 'test_scripts/general/bin'));
+        var scriptPath = truepath(join(fs.testScriptPath, 'general/bin'));
 
         if (!exists(scriptPath)) {
           createDir(scriptPath, recursive: true);
@@ -83,18 +83,21 @@ void main() {
 }
 
 List<String> run_child(String childScript) {
-  /// The run_child.script file will use .run to run [script].
-  var runChildScript =
-      truepath(join('test', 'test_scripts/general/bin', 'run_child.dart'));
+  TestFileSystem().withinZone((fs) {
+    /// The run_child.script file will use .run to run [script].
+    var runChildScript =
+        truepath(join(fs.testScriptPath, 'general/bin', 'run_child.dart'));
 
-  // make certain our test script will run
-  '${DCliPaths().dcliName} -v warmup ${dirname(childScript)}'.run;
-  '${DCliPaths().dcliName} -v warmup ${dirname(runChildScript)}'.run;
+    // make certain our test script will run
+    '${DCliPaths().dcliName} -v warmup ${dirname(childScript)}'.run;
+    '${DCliPaths().dcliName} -v warmup ${dirname(runChildScript)}'.run;
 
-  // run a script that uses '.run' and capture its output to prove
-  // that .run works.
-  var results = '${DCliPaths().dcliName} $runChildScript $childScript'
-      .toList(nothrow: true);
+    // run a script that uses '.run' and capture its output to prove
+    // that .run works.
+    var results = '${DCliPaths().dcliName} $runChildScript $childScript'
+        .toList(nothrow: true);
 
-  return results;
+    return results;
+  });
+  return null;
 }

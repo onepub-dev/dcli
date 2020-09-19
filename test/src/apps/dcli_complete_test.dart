@@ -15,12 +15,12 @@ void main() {
       //chmod(755, 'bin/dcli_complete');
 
       'dcli_complete dcli c'.start(
-        workingDirectory: fs.root,
+        workingDirectory: fs.fsRoot,
         progress: Progress((line) => results.add(line)),
       );
 
       // if warmup hasn't been run then we have the results of a pub get in the the output.
-      var expected = ['cleanup', 'compile', 'create'];
+      var expected = ['clean', 'compile', 'create'];
 
       expect(results, equals(expected));
     });
@@ -34,12 +34,12 @@ void main() {
       //chmod(755, 'bin/dcli_complete');
 
       'dcli_complete dcli cl'.start(
-        workingDirectory: fs.root,
+        workingDirectory: fs.fsRoot,
         progress: Progress((line) => results.add(line)),
       );
 
       // if warmup hasn't been run then we have the results of a pub get in the the output.
-      var expected = ['warmup'];
+      var expected = ['clean'];
 
       expect(results, equals(expected));
     });
@@ -50,9 +50,9 @@ void main() {
       TestFileSystem().withinZone((fs) {
         var results = <String>[];
 
-        touch(join(fs.root, '_test_a.dart'), create: true);
-        touch(join(fs.root, '_test_ab.dart'), create: true);
-        touch(join(fs.root, '_test_b.dart'), create: true);
+        touch(join(fs.fsRoot, '_test_a.dart'), create: true);
+        touch(join(fs.fsRoot, '_test_ab.dart'), create: true);
+        touch(join(fs.fsRoot, '_test_b.dart'), create: true);
 
         // make dcli_complete executable
 
@@ -60,7 +60,7 @@ void main() {
 
         try {
           'dcli_complete dcli _test_a warmup'.start(
-            workingDirectory: fs.root,
+            workingDirectory: fs.fsRoot,
             progress: Progress((line) => results.add(line)),
           );
         } on DCliException catch (_) {
@@ -72,9 +72,9 @@ void main() {
 
         expect(results, unorderedEquals(expected));
 
-        delete(join(fs.root, '_test_a.dart'));
-        delete(join(fs.root, '_test_ab.dart'));
-        delete(join(fs.root, '_test_b.dart'));
+        delete(join(fs.fsRoot, '_test_a.dart'));
+        delete(join(fs.fsRoot, '_test_ab.dart'));
+        delete(join(fs.fsRoot, '_test_b.dart'));
       });
     });
 
@@ -82,15 +82,15 @@ void main() {
       TestFileSystem().withinZone((fs) {
         var results = <String>[];
 
-        touch(join(fs.root, '_test_a.dart'), create: true);
-        touch(join(fs.root, '_test_ab.dart'), create: true);
-        touch(join(fs.root, '_test_b.dart'), create: true);
+        touch(join(fs.fsRoot, '_test_a.dart'), create: true);
+        touch(join(fs.fsRoot, '_test_ab.dart'), create: true);
+        touch(join(fs.fsRoot, '_test_b.dart'), create: true);
 
         // make dcli_complete executable
         //chmod(755, 'bin/dcli_complete');
 
         'dcli_complete dcli _test_a warmup'.start(
-          workingDirectory: fs.root,
+          workingDirectory: fs.fsRoot,
           progress: Progress((line) => results.add(line)),
         );
 
@@ -99,7 +99,7 @@ void main() {
 
         expect(results, unorderedEquals(expected));
 
-        delete(join(fs.root, '_test_ab.dart'));
+        delete(join(fs.fsRoot, '_test_ab.dart'));
       });
     });
   });

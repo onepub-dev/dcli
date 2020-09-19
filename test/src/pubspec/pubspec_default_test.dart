@@ -35,7 +35,7 @@ dependencies:
 
   t.test('File - basic', () {
     TestFileSystem().withinZone((fs) {
-      var scriptDirectory = p.join(fs.root, 'local');
+      var scriptDirectory = p.join(fs.fsRoot, 'local');
       var scriptPath = p.join(scriptDirectory, 'test.dart');
       var pubSpecScriptPath = p.join(scriptDirectory, 'pubspec.yaml');
       if (exists(pubSpecScriptPath)) {
@@ -56,7 +56,7 @@ dependencies:
 
   t.test('File - override', () {
     TestFileSystem().withinZone((fs) {
-      var scriptDirectory = p.join(fs.root, 'local');
+      var scriptDirectory = p.join(fs.fsRoot, 'local');
       var scriptPath = p.join(scriptDirectory, 'test.dart');
       var pubSpecScriptPath = p.join(scriptDirectory, 'pubspec.yaml');
       if (exists(pubSpecScriptPath)) {
@@ -77,7 +77,7 @@ dependencies:
 
   t.test('File - local pubsec.yaml', () {
     TestFileSystem().withinZone((fs) {
-      var scriptDirectory = p.join(fs.root, 'local');
+      var scriptDirectory = p.join(fs.fsRoot, 'local');
       var scriptPath = p.join(scriptDirectory, 'test.dart');
       var pubSpecScriptPath = p.join(scriptDirectory, 'pubspec.yaml');
       if (exists(pubSpecScriptPath)) {
@@ -99,7 +99,7 @@ dependencies:
 
 void runTest(TestFileSystem fs, String annotation, String main,
     List<Dependency> expected) {
-  var scriptDirectory = p.join(fs.root, 'local');
+  var scriptDirectory = p.join(fs.fsRoot, 'local');
   var scriptPath = p.join(scriptDirectory, 'test.dart');
   var script = Script.fromFile(scriptPath);
 

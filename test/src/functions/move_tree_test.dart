@@ -11,8 +11,8 @@ void main() {
   t.group('moveTree', () {
     t.test('empty target ', () {
       TestFileSystem().withinZone((fs) {
-        var from = join(fs.root, 'top');
-        var to = join(fs.root, 'new_top');
+        var from = join(fs.fsRoot, 'top');
+        var to = join(fs.fsRoot, 'new_top');
 
         if (exists(to)) {
           deleteDir(to, recursive: true);
@@ -33,8 +33,8 @@ void main() {
 
     t.test('empty target - overwrite', () {
       TestFileSystem().withinZone((fs) {
-        var from = join(fs.root, 'top');
-        var to = join(fs.root, 'new_top');
+        var from = join(fs.fsRoot, 'top');
+        var to = join(fs.fsRoot, 'new_top');
 
         if (exists(to)) {
           deleteDir(to, recursive: true);
@@ -55,8 +55,8 @@ void main() {
 
     t.test('empty target - filter *.txt', () {
       TestFileSystem().withinZone((fs) {
-        var from = join(fs.root, 'top');
-        var to = join(fs.root, 'new_top');
+        var from = join(fs.fsRoot, 'top');
+        var to = join(fs.fsRoot, 'new_top');
 
         if (exists(to)) {
           deleteDir(to, recursive: true);
@@ -76,8 +76,8 @@ void main() {
 
     t.test('empty target - recursive - filter *.txt', () {
       TestFileSystem().withinZone((fs) {
-        var from = join(fs.root, 'top');
-        var to = join(fs.root, 'new_top');
+        var from = join(fs.fsRoot, 'top');
+        var to = join(fs.fsRoot, 'new_top');
 
         if (exists(to)) {
           deleteDir(to, recursive: true);
@@ -97,8 +97,8 @@ void main() {
 
     t.test('empty target - recursive ', () {
       TestFileSystem().withinZone((fs) {
-        var from = join(fs.root, 'top');
-        var to = join(fs.root, 'new_top');
+        var from = join(fs.fsRoot, 'top');
+        var to = join(fs.fsRoot, 'new_top');
 
         if (exists(to)) {
           deleteDir(to, recursive: true);
@@ -118,8 +118,8 @@ void main() {
 
     t.test('empty target - recursive- overwrite', () {
       TestFileSystem().withinZone((fs) {
-        var from = join(fs.root, 'top');
-        var to = join(fs.root, 'new_top');
+        var from = join(fs.fsRoot, 'top');
+        var to = join(fs.fsRoot, 'new_top');
 
         if (exists(to)) {
           deleteDir(to, recursive: true);

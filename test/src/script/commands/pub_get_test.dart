@@ -6,14 +6,12 @@ import 'package:test/test.dart';
 
 import '../../util/test_file_system.dart';
 
-String scriptPath = 'test/test_scripts/general/bin/hello_world.dart';
-
 void main() {
   group('Pub Get', () {
     test('Do it', () {
       TestFileSystem().withinZone((fs) {
         var project = DartProject.fromPath(
-            dirname('test/test_scripts/general/bin/hello_world.dart'));
+            dirname(join(fs.testScriptPath, 'general/bin/hello_world.dart')));
         PubGet(project).run();
       });
     });

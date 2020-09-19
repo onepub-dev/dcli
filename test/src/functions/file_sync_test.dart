@@ -11,7 +11,7 @@ void main() {
   t.group('FileSync', () {
     t.test('Append', () {
       TestFileSystem().withinZone((fs) {
-        var testFile = join(fs.root, 'lines.txt');
+        var testFile = join(fs.fsRoot, 'lines.txt');
 
         if (exists(testFile)) {
           delete(testFile);
@@ -30,7 +30,7 @@ void main() {
 
     t.test('Write', () {
       TestFileSystem().withinZone((fs) {
-        var testFile = join(fs.root, 'lines.txt');
+        var testFile = join(fs.fsRoot, 'lines.txt');
         if (exists(testFile)) {
           delete(testFile);
         }

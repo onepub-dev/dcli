@@ -1,3 +1,4 @@
+@Timeout(Duration(minutes: 5))
 import 'package:dcli/dcli.dart' hide equals;
 import 'package:test/test.dart';
 
@@ -6,7 +7,7 @@ import 'package:path/path.dart' as p;
 import '../../util/test_file_system.dart';
 
 void main() {
-  var scriptPath = truepath(TestFileSystem().testScriptPath, 'create_test');
+  var scriptPath = truepath(TestFileSystem().tmpScriptPath, 'create_test');
 
   if (!exists(scriptPath)) {
     createDir(scriptPath, recursive: true);
@@ -19,9 +20,8 @@ void main() {
         if (exists(pathToScript)) {
           delete(pathToScript);
         }
-        var project = DartProject.fromPath(dirname(pathToScript));
-        project.createScript(basename(pathToScript),
-            templateName: 'hello_world.dart');
+        var project = DartProject.fromPath(scriptPath);
+        project.createScript(pathToScript, templateName: 'hello_world.dart');
 
         checkProjectStructure(fs, pathToScript);
       });

@@ -11,8 +11,8 @@ void main() {
   t.group('moveDir', () {
     t.test('empty to ', () {
       TestFileSystem().withinZone((fs) {
-        var from = join(fs.root, 'top');
-        var to = join(fs.root, 'new_top');
+        var from = join(fs.fsRoot, 'top');
+        var to = join(fs.fsRoot, 'new_top');
 
         if (exists(to)) {
           deleteDir(to, recursive: true);
@@ -24,8 +24,8 @@ void main() {
 
     t.test('existing to ', () {
       TestFileSystem().withinZone((fs) {
-        var from = join(fs.root, 'top');
-        var to = join(fs.root, 'new_top');
+        var from = join(fs.fsRoot, 'top');
+        var to = join(fs.fsRoot, 'new_top');
 
         if (!exists(from)) {
           createDir(from, recursive: true);
@@ -44,8 +44,8 @@ void main() {
 
     t.test('from not a directory ', () {
       TestFileSystem().withinZone((fs) {
-        var from = join(fs.root, 'top', 'file');
-        var to = join(fs.root, 'new_top');
+        var from = join(fs.fsRoot, 'top', 'file');
+        var to = join(fs.fsRoot, 'new_top');
 
         if (!exists(dirname(from))) {
           createDir(dirname(from), recursive: true);
@@ -63,8 +63,8 @@ void main() {
 
     t.test('from does not exist ', () {
       TestFileSystem().withinZone((fs) {
-        var from = join(fs.root, 'random');
-        var to = join(fs.root, 'new_top');
+        var from = join(fs.fsRoot, 'random');
+        var to = join(fs.fsRoot, 'new_top');
 
         t.expect(
             () => moveDir(from, to),

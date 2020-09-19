@@ -22,7 +22,7 @@ void main() {
     t.test('parent', () {
       TestFileSystem().withinZone((fs) {
         var paths = setup(fs);
-        t.expect(dirname(paths.pathTestDir), t.equals(join(fs.root, _testDir)));
+        t.expect(dirname(paths.pathTestDir), t.equals(join(fs.fsRoot, _testDir)));
       });
     });
 
@@ -59,7 +59,7 @@ class Paths {
 
   Paths(TestFileSystem fs) {
     home = HOME;
-    pathTestDir = join(fs.root, _testDir, 'pathTestDir');
+    pathTestDir = join(fs.fsRoot, _testDir, 'pathTestDir');
     testExtension = '.jpg';
     testBaseName = 'fred';
     testFile = '$testBaseName$testExtension';
