@@ -18,6 +18,10 @@ import 'is.dart';
 /// You can force the copyTree to overwrite files in the [to]
 /// directory by setting [overwrite] to true (defaults to false).
 ///
+/// The [recursive] argument controls whether subdirectories are
+/// copied. If [recursive] is true (the default) it will copy
+/// subdirectories.
+///
 ///
 /// ```dart
 /// copyTree("/tmp/", "/tmp/new_dir", overwrite:true);
@@ -55,7 +59,7 @@ import 'is.dart';
 void copyTree(String from, String to,
         {bool overwrite = false,
         bool includeHidden = false,
-        bool recursive = false,
+        bool recursive = true,
         bool Function(String file) filter}) =>
     _CopyTree().copyTree(from, to,
         overwrite: overwrite,
