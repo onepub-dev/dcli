@@ -5,6 +5,7 @@ import 'dart:isolate';
 
 import 'package:dcli/dcli.dart';
 import 'package:dcli/src/functions/env.dart';
+import 'package:dcli/src/util/stack_trace_impl.dart';
 import 'package:path/path.dart';
 import 'package:dcli/src/script/entry_point.dart';
 import 'package:dcli/src/util/named_lock.dart';
@@ -95,8 +96,14 @@ class TestFileSystem {
   String tempFile({String suffix}) => FileSync.tempFile(suffix: suffix);
 
   void withinZone(void Function(TestFileSystem fs) callback) {
+    var stack = StackTraceImpl(skipFrames: 1);
+
     try {
       NamedLock(name: 'test_file_system.lock').withLock(() {
+        var frame = stack.frames[0];
+
+        print(red(
+            '${'*' * 40} Starting test ${frame.sourceFile}:${frame.lineNo} ${'*' * 80}'));
         Settings.reset();
         Env.reset();
         PubCache.reset();
@@ -126,6 +133,8 @@ class TestFileSystem {
         } finally {
           env['HOME'] = originalHome;
           env['PATH'] = path;
+          print(red(
+              '${'*' * 40} Ending test ${frame.sourceFile}:${frame.lineNo} ${'*' * 80}'));
         }
       });
     } on DCliException catch (e) {
