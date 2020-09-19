@@ -275,7 +275,7 @@ class DartProject {
   Script createScript(String pathToScript,
       {String templateName = 'default.dart'}) {
     _createFromTemplate(
-      templatePath: join(Settings().pathToTemplate, 'default.dart'),
+      templatePath: join(Settings().pathToTemplate, templateName),
       pathToScript: pathToScript,
     );
 
