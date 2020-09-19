@@ -5,20 +5,20 @@ void main() {
   privileged(false);
 
   /// we touch all of the dart files but don't change their ownership.
-  find('*.dart', root: '.').forEach((file) {
-    print('touching $file');
-    copy(file, '$file.bak', overwrite: true);
-  });
+  // find('*.dart', root: '.').forEach((file) {
+  //   print('touching $file');
+  //   copy(file, '$file.bak', overwrite: true);
+  // });
 
-  if (exists('/tmp/test')) {
-    deleteDir('/tmp/test');
-  }
-  createDir('/tmp/test');
-  // do something terrible by temporary regaining the privileges.
-  withPrivileges(() {
-    print('copy stuff I should not.');
-    copyTree('/etc/', '/tmp/test');
-  });
+  // if (exists('/tmp/test')) {
+  //   deleteDir('/tmp/test');
+  // }
+  // createDir('/tmp/test');
+  // // do something terrible by temporary regaining the privileges.
+  // withPrivileges(() {
+  //   print('copy stuff I should not.');
+  //   copyTree('/etc/', '/tmp/test');
+  // });
 }
 
 void privileged(bool enabled) {
