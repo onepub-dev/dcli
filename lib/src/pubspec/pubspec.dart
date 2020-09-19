@@ -39,49 +39,49 @@ class PubSpec {
   }
 
   /// Sets the list of dependencies for this pubspec.
-  set dependencies(List<Dependency> dependencies) {
+  set dependencies(Map<String, Dependency> dependencies) {
     var ref = <String, pub.DependencyReference>{};
 
-    for (var dependency in dependencies) {
-      ref[dependency.name] = dependency.reference;
+    for (var name in dependencies.keys) {
+      ref[name] = dependencies[name].reference;
     }
 
     pubspec = pubspec.copy(dependencies: ref);
   }
 
   /// Returns the set of dependencies contained in this pubspec.
-  List<Dependency> get dependencies {
-    var depends = <Dependency>[];
+  Map<String, Dependency> get dependencies {
+    var depends = <String, Dependency>{};
 
     var map = pubspec.dependencies;
 
     for (var name in map.keys) {
       var reference = map[name];
-      depends.add(Dependency(name, reference));
+      depends.putIfAbsent(name, () => Dependency(name, reference));
     }
 
     return depends;
   }
 
   /// Sets the list of dependencies for this pubspec.
-  set dependencyOverrides(List<Dependency> dependencies) {
+  set dependencyOverrides(Map<String, Dependency> dependencies) {
     var ref = <String, pub.DependencyReference>{};
 
-    for (var dependency in dependencies) {
-      ref[dependency.name] = dependency.reference;
+    for (var name in dependencies.keys) {
+      ref[name] = dependencies[name].reference;
     }
 
     pubspec = pubspec.copy(dependencyOverrides: ref);
   }
 
-  List<Dependency> get dependencyOverrides {
-    var depends = <Dependency>[];
+  Map<String, Dependency> get dependencyOverrides {
+    var depends = <String, Dependency>{};
 
     var map = pubspec.dependencyOverrides;
 
     for (var name in map.keys) {
       var reference = map[name];
-      depends.add(Dependency(name, reference));
+      depends.putIfAbsent(name, () => Dependency(name, reference));
     }
 
     return depends;
@@ -134,7 +134,7 @@ class PubSpec {
     // if (lhs.publishTo != rhs.publishTo) return false;
     // if (lhs.environment != rhs.environment) return false;
 
-    if (!const ListEquality<Dependency>()
+    if (!const MapEquality<String, Dependency>()
         .equals(lhs.dependencies, rhs.dependencies)) return false;
 
     return true;

@@ -39,18 +39,6 @@ class Dependency extends Equatable {
     return dep;
   }
 
-/*  Dependency.fromYaml(YamlNode node)
-      : name = extractName(node),
-        version = extractVersion(node);
-*/
-/*  static String extractVersion(YamlNode node) {
-    print(node);
-  }
-
-  static String extractName(YamlNode node) {
-    print(node);
-  }
-*/
   @override
   List<Object> get props => [name, reference];
 

@@ -55,7 +55,8 @@ class DartProject {
 
     print('');
     _colprint('Dependencies', '');
-    pubSpec.dependencies.forEach((d) => _colprint(d.name, '${d.rehydrate()}'));
+    pubSpec.dependencies.keys.forEach(
+        (name) => _colprint(name, '${pubSpec.dependencies[name].rehydrate()}'));
   }
 
   void _colprint(String label, String value, {int pad = 25}) {
