@@ -17,8 +17,15 @@ void main() {
   });
 
   test('stream - using start', () {
+    var log = '/tmp/access.log';
+    log.write('Line 1/5');
+    log.append('Line 2/5');
+    log.append('Line 3/5');
+    log.append('Line 4/5');
+    log.append('Line 5/5');
+
     var progress = Progress.stream();
-    'tail /var/log/syslog'.start(
+    'tail /tmp/access.log'.start(
       progress: progress,
       runInShell: true,
     );
@@ -33,7 +40,14 @@ void main() {
   });
 
   test('stream', () {
-    var stream = 'tail /var/log/syslog'.stream(
+    var log = '/tmp/access.log';
+    log.write('Line 1/5');
+    log.append('Line 2/5');
+    log.append('Line 3/5');
+    log.append('Line 4/5');
+    log.append('Line 5/5');
+
+    var stream = 'tail /tmp/access.log'.stream(
       runInShell: true,
     );
 
