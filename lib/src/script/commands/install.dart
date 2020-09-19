@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:dcli/src/templates/expander.dart';
+import 'package:dcli/src/version/version.g.dart';
 import 'package:meta/meta.dart';
 
 import '../../../dcli.dart';
@@ -87,7 +88,7 @@ class InstallCommand extends Command {
     _installDart = !flagSet.isSet(_NoDartFlag());
 
     if (_quiet) {
-      print('Installing DCli...  ');
+      print('Installing DCli v$packageVersion ...');
     }
     qprint('Hang on a tick whilst we install DCli ${Settings().version}');
 
