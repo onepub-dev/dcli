@@ -125,5 +125,5 @@ void runTest(TestFileSystem fs, String annotation, String main,
   scriptPath.append(main);
 
   var pubspec = script.pubSpec;
-  t.expect(pubspec.dependencies, t.unorderedMatches(expected));
+  t.expect(pubspec.dependencies.values, t.unorderedMatches(expected));
 }
