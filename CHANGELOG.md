@@ -1,3 +1,24 @@
+# 0.29.0
+breaking change: PubSpec now returns a map for dependencies and dependency overrides rather than a list.
+renamed the default.dart template to basic.dart as default is a dart keyword and was causing conflicts in the asset generation.
+optimised the unit test by using a shared file system.
+Fixed a bug in the unit test runner as we need to run with a bash shell rather than  sh as a number of unit tests expect to find bash.
+fixed a unit test as dependencies have changed fro ma list to a map.
+change from env to loggedInUser as this will be more cross platform.
+reverted logic that had the script being run from the script directory as it doesn't allow people to select the directory they want to run the script in.
+removed references to syslog as it doesn't exists in the docker test environment.
+updated name in pubspect to match directory.
+added version no. to the install started message.
+changed to using the newist patToProjectRoot
+copyTree: Changed the default for the [recursive] argument. It is now true by default (it recurses). The command is copyTree which implies its recursive.
+renamed directory test_scripts to test_script in line with dart conventions.
+Fix: create was ignorning the passed templatename.
+fixed bug as clean now works on projects not scripts.
+added test for warmup.
+removed the --package switch as we no longer need it as we have removed virtual projects.
+re-implemented touch using native dart libs.
+install: fixed bug where we were trying to use chmod to change ownership :<
+
 # 0.28.0
 This release includes significant changes to the dcli command line.
 The command 'clean' has been renamed to warmup.

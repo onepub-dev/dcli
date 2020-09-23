@@ -1,4 +1,3 @@
-
 void main() {
   /// reduce the scripts privileges
   privileged(false);

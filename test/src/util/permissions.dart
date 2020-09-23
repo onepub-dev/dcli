@@ -26,7 +26,7 @@ typedef getRealUID = int Function();
 
 void main() {
   var priv = Priviliges();
-  priv.descalate();
+  // priv.descalate();
   // priv.escalate();
   // priv.descalate();
 
@@ -71,7 +71,7 @@ void main() {
 }
 
 class Priviliges {
-  static Priviliges _self = Priviliges._internal();
+  static final Priviliges _self = Priviliges._internal();
 
   DynamicLibrary dylib;
 
@@ -94,25 +94,25 @@ class Priviliges {
   factory Priviliges() => _self;
 
   Priviliges._internal() {
-    var path = 'libc.so.6';
-    if (Platform.isMacOS) path = '/usr/lib/libSystem.dylib';
-    if (Platform.isWindows) path = r'primitives_library\Debug\primitives.dll';
-    dylib = DynamicLibrary.open(path);
+    // var path = 'libc.so.6';
+    // if (Platform.isMacOS) path = '/usr/lib/libSystem.dylib';
+    // if (Platform.isWindows) path = r'primitives_library\Debug\primitives.dll';
+    // dylib = DynamicLibrary.open(path);
 
-    realUID = _realUID;
+    // realUID = _realUID;
 
-    var sudo_uid = env['SUDO_UID'];
-    if (sudo_uid != null) {
-      sudo = true;
-      userUID = int.tryParse(sudo_uid);
-    } else {
-      /// we aren't running sudo
-      sudo = false;
-      userUID = realUID;
-    }
+    // var sudo_uid = env['SUDO_UID'];
+    // if (sudo_uid != null) {
+    //   sudo = true;
+    //   userUID = int.tryParse(sudo_uid);
+    // } else {
+    //   /// we aren't running sudo
+    //   sudo = false;
+    //   userUID = realUID;
+    // }
 
-    originalEffectiveUID = _effectiveUID;
-    currentEffectiveUID = originalEffectiveUID;
+    // originalEffectiveUID = _effectiveUID;
+    // currentEffectiveUID = originalEffectiveUID;
   }
 
   /// If the script was started as sudo then any [task]
@@ -121,88 +121,88 @@ class Priviliges {
   ///
   /// If the script wasn't run as sudo then there will
   /// be no changes to their privildege level.
-  void withPrivileges(void Function() task) {
-    escalate();
-    task();
-    descalate();
-  }
+  // void withPrivileges(void Function() task) {
+  //   escalate();
+  //   task();
+  //   descalate();
+  // }
 
-  int get effectiveUID => currentEffectiveUID;
+  // int get effectiveUID => currentEffectiveUID;
 
-  void escalate() {
-    if (sudo && currentEffectiveUID == userUID) {
-      print(green('escalate'));
-      _effectiveUID = originalEffectiveUID;
-      currentEffectiveUID = originalEffectiveUID;
-      // _realUID = originalEffectiveUID;
-    }
-  }
+  // void escalate() {
+  //   if (sudo && currentEffectiveUID == userUID) {
+  //     print(green('escalate'));
+  //     _effectiveUID = originalEffectiveUID;
+  //     currentEffectiveUID = originalEffectiveUID;
+  //     // _realUID = originalEffectiveUID;
+  //   }
+  // }
 
-  void descalate() {
-    /// if the real and original is the same then they
-    /// mustn't be running under sudo so we can't help them.
-    if (sudo && currentEffectiveUID != userUID) {
-      print(red('descalate'));
-      _effectiveUID = userUID;
-      // _realUID = userUID;
-      currentEffectiveUID = userUID;
-    }
-  }
+  // void descalate() {
+  //   /// if the real and original is the same then they
+  //   /// mustn't be running under sudo so we can't help them.
+  //   if (sudo && currentEffectiveUID != userUID) {
+  //     print(red('descalate'));
+  //     _effectiveUID = userUID;
+  //     // _realUID = userUID;
+  //     currentEffectiveUID = userUID;
+  //   }
+  // }
 
-  int get _realUID {
-    final getuidPointer =
-        dylib.lookup<NativeFunction<getRealUID_func>>('getuid');
-    final getuid = getuidPointer.asFunction<getRealUID>();
+  // int get _realUID {
+  //   final getuidPointer =
+  //       dylib.lookup<NativeFunction<getRealUID_func>>('getuid');
+  //   final getuid = getuidPointer.asFunction<getRealUID>();
 
-    int uid = getuid();
-    print('get real guid=$uid');
-    return uid;
-  }
+  //   int uid = getuid();
+  //   print('get real guid=$uid');
+  //   return uid;
+  // }
 
-  set _realUID(int realUID) {
-    final setuidPointer = dylib.lookup<NativeFunction<setUID_func>>('setreuid');
-    final setuid = setuidPointer.asFunction<setUID>();
+  // set _realUID(int realUID) {
+  //   final setuidPointer = dylib.lookup<NativeFunction<setUID_func>>('setreuid');
+  //   final setuid = setuidPointer.asFunction<setUID>();
 
-    print(blue('settting realUID =$realUID'));
-    var result = setuid(realUID, -1);
-    if (result != 0) {
-      throw PriviligesException('Unable to set the Effective UID: $result');
-    }
-  }
+  //   print(blue('settting realUID =$realUID'));
+  //   var result = setuid(realUID, -1);
+  //   if (result != 0) {
+  //     throw PriviligesException('Unable to set the Effective UID: $result');
+  //   }
+  // }
 
-  int get _effectiveUID {
-    final geteuidPointer =
-        dylib.lookup<NativeFunction<getEffectiveUID_func>>('geteuid');
-    final geteuid = geteuidPointer.asFunction<getEffectiveUID>();
-    var uid = geteuid();
+  // int get _effectiveUID {
+  //   final geteuidPointer =
+  //       dylib.lookup<NativeFunction<getEffectiveUID_func>>('geteuid');
+  //   final geteuid = geteuidPointer.asFunction<getEffectiveUID>();
+  //   var uid = geteuid();
 
-    print('get effiective guid=$uid');
-    return uid;
-  }
+  //   print('get effiective guid=$uid');
+  //   return uid;
+  // }
 
-  set _effectiveUID(int effectiveUID) {
-    print('setting effective to $effectiveUID');
-    var result = -1;
-    try {
-      final seteuidPointer =
-          dylib.lookup<NativeFunction<setEffectiveUID_func>>('seteuid');
-      final seteuid = seteuidPointer.asFunction<setEffectiveUID>();
+  // set _effectiveUID(int effectiveUID) {
+  //   print('setting effective to $effectiveUID');
+  //   var result = -1;
+  //   try {
+  //     final seteuidPointer =
+  //         dylib.lookup<NativeFunction<setEffectiveUID_func>>('seteuid');
+  //     final seteuid = seteuidPointer.asFunction<setEffectiveUID>();
 
-      print(blue('settting effectiveUID =$effectiveUID'));
-      result = seteuid(effectiveUID);
-    } on ArgumentError catch (_) {
-      // seteuid isn't available so lets try setreuid
+  //     print(blue('settting effectiveUID =$effectiveUID'));
+  //     result = seteuid(effectiveUID);
+  //   } on ArgumentError catch (_) {
+  //     // seteuid isn't available so lets try setreuid
 
-      final setreuidPointer =
-          dylib.lookup<NativeFunction<setUID_func>>('setreuid');
-      final setreuid = setreuidPointer.asFunction<setUID>();
-      result = setreuid(-1, effectiveUID);
-    }
+  //     final setreuidPointer =
+  //         dylib.lookup<NativeFunction<setUID_func>>('setreuid');
+  //     final setreuid = setreuidPointer.asFunction<setUID>();
+  //     result = setreuid(-1, effectiveUID);
+  //   }
 
-    if (result != 0) {
-      throw PriviligesException('Unable to set the Effective UID: $result');
-    }
-  }
+  //   if (result != 0) {
+  //     throw PriviligesException('Unable to set the Effective UID: $result');
+  //   }
+  // }
 }
 
 class PriviligesException extends DCliException {
