@@ -1,4 +1,3 @@
-import 'package:dcli/dcli.dart';
 
 void main() {
   /// reduce the scripts privileges
