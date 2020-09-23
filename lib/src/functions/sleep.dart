@@ -20,6 +20,9 @@ void sleep(int duration, {Interval interval = Interval.seconds}) =>
 /// Allows you to specify how the [duration] argument
 /// to [sleep] is interpreted.
 enum Interval {
+  /// the duration argument is in hours.
+  hours,
+
   /// the [duration] argument is in seconds
   seconds,
 
@@ -35,6 +38,9 @@ class _Sleep extends DCliFunction {
     Settings().verbose('sleep: duration: $duration interval: $interval');
     Duration _duration;
     switch (interval) {
+      case Interval.hours:
+        _duration = Duration(hours: duration);
+        break;
       case Interval.seconds:
         _duration = Duration(seconds: duration);
         break;
