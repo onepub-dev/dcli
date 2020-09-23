@@ -26,7 +26,7 @@ void main() {
         var scriptPath = truepath(join(fs.testScriptPath, 'general/bin'));
         var script = truepath(scriptPath, 'print_to_stdout.dart');
 
-        var results = run_child(script);
+        var results = run_child(script, fs);
 
         var expected = <String>['Hello World'];
 
@@ -39,7 +39,7 @@ void main() {
         var scriptPath = truepath(join(fs.testScriptPath, 'general/bin'));
         var script = truepath(scriptPath, 'print_to_stderr.dart');
 
-        var results = run_child(script);
+        var results = run_child(script, fs);
 
         var expected = <String>['Hello World - Error'];
 
@@ -55,7 +55,7 @@ void main() {
           createDir(scriptPath, recursive: true);
         }
         var script = truepath(scriptPath, 'print_to_both.dart');
-        var results = run_child(script);
+        var results = run_child(script, fs);
 
         var expected = <String>['Hello World', 'Hello World - Error'];
 
@@ -72,7 +72,7 @@ void main() {
         }
         var script = truepath(scriptPath, 'print_to_both_with_error.dart');
 
-        var results = run_child(script);
+        var results = run_child(script, fs);
 
         var expected = <String>['Hello World', 'Hello World - Error'];
 
@@ -82,8 +82,7 @@ void main() {
   });
 }
 
-List<String> run_child(String childScript) {
-  TestFileSystem().withinZone((fs) {
+List<String> run_child(String childScript, TestFileSystem fs) {
     /// The run_child.script file will use .run to run [script].
     var runChildScript =
         truepath(join(fs.testScriptPath, 'general/bin', 'run_child.dart'));
@@ -98,6 +97,4 @@ List<String> run_child(String childScript) {
         .toList(nothrow: true);
 
     return results;
-  });
-  return null;
 }
