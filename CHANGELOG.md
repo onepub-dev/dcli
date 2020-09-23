@@ -1,3 +1,6 @@
+# 0.29.2
+Exposed the 'Interval' enum used by the sleep method.
+
 # 0.29.1
 somehow I reverted the code to remove the workingdirectory.
 

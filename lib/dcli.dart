@@ -51,7 +51,7 @@ export 'src/functions/pwd.dart' show pwd;
 export 'src/functions/read.dart' show read, readStdin, ReadException;
 export 'src/functions/replace.dart' show replace;
 export 'src/functions/run.dart' show run, start, startFromArgs;
-export 'src/functions/sleep.dart' show sleep;
+export 'src/functions/sleep.dart' show sleep, Interval;
 export 'src/functions/tail.dart' show tail;
 export 'src/functions/touch.dart' show touch, TouchException;
 export 'src/functions/which.dart' show which;
