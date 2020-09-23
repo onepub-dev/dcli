@@ -1,5 +1,5 @@
 import 'dart:ffi';
-import 'dart:io' show Platform;
+// import 'dart:io' show Platform;
 
 import 'package:dcli/dcli.dart';
 
@@ -25,7 +25,7 @@ typedef getRealUID_func = Int32 Function();
 typedef getRealUID = int Function();
 
 void main() {
-  var priv = Priviliges();
+  // var priv = Priviliges();
   // priv.descalate();
   // priv.escalate();
   // priv.descalate();
