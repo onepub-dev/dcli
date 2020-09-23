@@ -221,7 +221,7 @@ class Script {
 
     final runner = ScriptRunner(sdk, this, args);
 
-    return runner.exec();
+    return runner.run();
   }
 
   /// returns the platform dependant name of the compiled scripts exe name.
