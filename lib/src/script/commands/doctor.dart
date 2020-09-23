@@ -192,7 +192,7 @@ class DoctorCommand extends Command {
 
       label = label.padRight(20);
 
-      var username = env['USERNAME'];
+      var username = Shell.current.loggedInUser;
       if (username != null) {
         print(Format.row([
           '$label',
