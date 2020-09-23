@@ -162,7 +162,7 @@ class _Is extends DCliFunction {
           'isMemberOfGroup is not Not currently supported on windows');
     }
 
-    var user = env['USER'];
+    var user = Shell.current.loggedInUser;
 
     //e.g 755 tomcat bsutton
     var stat = 'stat -L -c "%a %G %U" "$path"'.firstLine;
