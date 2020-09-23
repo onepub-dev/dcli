@@ -272,9 +272,9 @@ class DartProject {
     replace(pathToPubSpec, '%scriptname%', basename(pathToProjectRoot));
   }
 
-  /// Creates a script using the default template (default.dart)
+  /// Creates a script using the default template (basic.dart)
   Script createScript(String pathToScript,
-      {String templateName = 'default.dart'}) {
+      {String templateName = 'basic.dart'}) {
     _createFromTemplate(
       templatePath: join(Settings().pathToTemplate, templateName),
       pathToScript: pathToScript,

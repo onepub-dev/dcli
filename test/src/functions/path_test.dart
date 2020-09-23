@@ -22,7 +22,8 @@ void main() {
     t.test('parent', () {
       TestFileSystem().withinZone((fs) {
         var paths = setup(fs);
-        t.expect(dirname(paths.pathTestDir), t.equals(join(fs.fsRoot, _testDir)));
+        t.expect(
+            dirname(paths.pathTestDir), t.equals(join(fs.fsRoot, _testDir)));
       });
     });
 

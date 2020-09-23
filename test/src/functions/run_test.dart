@@ -83,18 +83,18 @@ void main() {
 }
 
 List<String> run_child(String childScript, TestFileSystem fs) {
-    /// The run_child.script file will use .run to run [script].
-    var runChildScript =
-        truepath(join(fs.testScriptPath, 'general/bin', 'run_child.dart'));
+  /// The run_child.script file will use .run to run [script].
+  var runChildScript =
+      truepath(join(fs.testScriptPath, 'general/bin', 'run_child.dart'));
 
-    // make certain our test script will run
-    '${DCliPaths().dcliName} -v warmup ${dirname(childScript)}'.run;
-    '${DCliPaths().dcliName} -v warmup ${dirname(runChildScript)}'.run;
+  // make certain our test script will run
+  '${DCliPaths().dcliName} -v warmup ${dirname(childScript)}'.run;
+  '${DCliPaths().dcliName} -v warmup ${dirname(runChildScript)}'.run;
 
-    // run a script that uses '.run' and capture its output to prove
-    // that .run works.
-    var results = '${DCliPaths().dcliName} $runChildScript $childScript'
-        .toList(nothrow: true);
+  // run a script that uses '.run' and capture its output to prove
+  // that .run works.
+  var results = '${DCliPaths().dcliName} $runChildScript $childScript'
+      .toList(nothrow: true);
 
-    return results;
+  return results;
 }
