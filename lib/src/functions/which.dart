@@ -37,13 +37,13 @@ import 'env.dart';
 /// To print the path to the command:
 ///
 /// ```dart
-/// print(which('ls').first);
+/// print(which('ls').path);
 /// ```
 ///
 /// To check if an app is on the path use:
 ///
 /// ```dart
-/// if (which('apt').isNotEmpty)
+/// if (which('apt').found)
 /// {
 ///   print('found apt');
 /// }
@@ -58,6 +58,11 @@ class Which {
   final _paths = <String>[];
   bool _found = false;
 
+  /// The progress used to accumualte the results
+  /// If [verbose] was passed this will contain all
+  /// of the verbose output. If you passed a [progress]
+  /// into the which call then this will be the same progress
+  /// otherwse a Progress.devNull will be allocated and returned.
   Progress progress;
 
   /// The first path found containing [appname]
