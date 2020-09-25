@@ -1,3 +1,6 @@
+# 0.30.0
+Breaking Change: Changed the which function to return an list of paths rather than a progress as users expect to diretcly access the list.
+Added an hours interval to sleep.
 # 0.29.2
 Exposed the 'Interval' enum used by the sleep method.
 

@@ -124,8 +124,7 @@ class DoctorCommand extends Command {
       '${privatePath(DartSdk().pathToDartExe)}',
       'which: ${privatePath(dartPath)}'
     ]);
-    var dart2NativePath =
-        which(DartSdk.dart2NativeExeName, first: true).first;
+    var dart2NativePath = which(DartSdk.dart2NativeExeName, first: true).first;
 
     if (dart2NativePath != null) {
       _colprint([
