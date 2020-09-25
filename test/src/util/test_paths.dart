@@ -128,7 +128,7 @@ class TestPaths {
   void installDCli() {
     'pub global activate --source path .'.run;
 
-    which('dcli').forEach(print);
+    which('dcli').paths.forEach(print);
 
     print('dcli path: ${Settings().pathToDCli}');
 

@@ -14,7 +14,7 @@ void main() {
       print('Dart Path: ${DartSdk().pathToPubExe}');
       print('Dart Path: ${DartSdk().version}');
 
-      which('dart', first: true).forEach((line) => print('which: $line'));
+      which('dart', first: true).paths.forEach((line) => print('which: $line'));
     });
   }, skip: false);
 

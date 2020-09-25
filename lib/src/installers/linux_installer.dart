@@ -30,7 +30,7 @@ class LinuxDCliInstaller {
   bool _installDart() {
     var installedDart = false;
     // first check that dart isn't already installed
-    if (which('dart').isEmpty) {
+    if (which('dart').found) {
       print('Installing Dart');
 
       // add dart to bash path
@@ -57,7 +57,7 @@ class LinuxDCliInstaller {
       }
 
       /// check that apt is available.
-      if (which('apt').isNotEmpty) {
+      if (which('apt').found) {
         Settings().verbose('Usimg the apt installer');
         _installDartWithApt();
       } else {
@@ -71,7 +71,7 @@ class LinuxDCliInstaller {
     } else {
       // dart is already installed.
       Settings().verbose(
-          "Found dart at: ${which('dart').first} and as such will not install dart.");
+          "Found dart at: ${which('dart').path ?? "<not found>"} and as such will not install dart.");
     }
 
     return installedDart;
@@ -96,7 +96,7 @@ class LinuxDCliInstaller {
   // CONSIDER a way of identifying where dart has been installed to.
 
   String determinePubPath() {
-    var pubPath = which('pub').first;
+    var pubPath = which('pub').path;
 
     if (pubPath == null) {
       /// lets try some likely locations

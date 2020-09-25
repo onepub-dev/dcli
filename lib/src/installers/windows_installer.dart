@@ -27,7 +27,7 @@ class WindowsDCliInstaller {
     var installedDart = false;
 
     // first check that dart isn't already installed
-    if (which('dart').isEmpty) {
+    if (which('dart').notfound) {
       print('Installing Dart');
 
       var defaultDartToolDir = r'C:\tools\dart-sdk';
@@ -45,7 +45,7 @@ class WindowsDCliInstaller {
     } else {
       // nothing to do dart is already installed.
       Settings().verbose(
-          "Found dart at: ${which('dart').first} and as such will not install dart.");
+          "Found dart at: ${which('dart').path} and as such will not install dart.");
     }
 
     return installedDart;

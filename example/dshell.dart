@@ -26,7 +26,7 @@ void dispatch(String command) {
       Directory.current = join(pwd, parts[1]);
       break;
     default:
-      if (which(parts[0]).isNotEmpty) {
+      if (which(parts[0]).found) {
         command.run;
       } else {
         print(red('Unknown command: ${parts[0]}'));

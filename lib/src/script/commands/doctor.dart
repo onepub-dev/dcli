@@ -66,7 +66,7 @@ class DoctorCommand extends Command {
 
   void printDartLocations() {
     print('Dart location(s)');
-    which('dart').forEach((line) => _colprint(['', line]));
+    which('dart').paths.forEach((line) => _colprint(['', line]));
   }
 
   void printPermissions() {
@@ -112,19 +112,19 @@ class DoctorCommand extends Command {
   }
 
   void printExePaths() {
-    var dcliPath = which('dcli').first;
+    var dcliPath = which('dcli').path;
     _colprint([
       'dcli path',
       '${dcliPath == null ? 'Not found' : privatePath(dcliPath)}'
     ]);
     _colprint(['dart exe path', '${privatePath(DartSdk().pathToDartExe)}']);
-    var dartPath = which(DartSdk.dartExeName, first: true).first;
+    var dartPath = which(DartSdk.dartExeName, first: true).path;
     _colprint([
       'dart path',
       '${privatePath(DartSdk().pathToDartExe)}',
       'which: ${privatePath(dartPath)}'
     ]);
-    var dart2NativePath = which(DartSdk.dart2NativeExeName, first: true).first;
+    var dart2NativePath = which(DartSdk.dart2NativeExeName, first: true).path;
 
     if (dart2NativePath != null) {
       _colprint([
@@ -139,7 +139,7 @@ class DoctorCommand extends Command {
       ]);
     }
     print('');
-    var pubPath = which(DartSdk.pubExeName, first: true).first;
+    var pubPath = which(DartSdk.pubExeName, first: true).path;
 
     if (pubPath != null) {
       _colprint([

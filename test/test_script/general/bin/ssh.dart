@@ -65,7 +65,7 @@ void main(List<String> args) {
 
   Remote.scp(from: ['./*.dart'], toHost: fqdn, to: '/tmp', recursive: true);
 
-  var copySecureDir = which('copy_secure_dir').first;
+  var copySecureDir = which('copy_secure_dir').path;
 
   Remote.scp(from: [copySecureDir], to: '/tmp', toHost: fqdn);
 
