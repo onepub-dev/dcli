@@ -72,7 +72,7 @@ class DartSdk {
   String get pathToDartExe {
     if (_exePath == null) {
       // this is an expesive operation so only do it if required.
-      var path = which(dartExeName, first: true).firstLine;
+      var path = which(dartExeName, first: true).first;
       assert(path != null);
       _exePath = path;
     }
@@ -141,7 +141,7 @@ class DartSdk {
 
   /// Attempts to detect the location of the dart sdk.
   static String _detect() {
-    var path = which(dartExeName).firstLine;
+    var path = which(dartExeName).first;
 
     if (path != null) {
       return dirname(dirname(File(path).resolveSymbolicLinksSync()));

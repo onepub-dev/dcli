@@ -26,7 +26,7 @@ void dispatch(String command) {
       Directory.current = join(pwd, parts[1]);
       break;
     default:
-      if (which(parts[0]).firstLine != null) {
+      if (which(parts[0]).isNotEmpty) {
         command.run;
       } else {
         print(red('Unknown command: ${parts[0]}'));
@@ -60,17 +60,13 @@ void dispatch(String command) {
 
 void ls(List<String> patterns) {
   if (patterns.isEmpty) {
-    find('*',
-            root: pwd,
-            recursive: false,
-            types: [Find.file, Find.directory])
+    find('*', root: pwd, recursive: false, types: [Find.file, Find.directory])
         .forEach((file) => print(basename(file)));
   } else {
     for (var pattern in patterns) {
-      find(pattern, root: pwd, recursive: false, types: [
-        Find.file,
-        Find.directory
-      ]).forEach((file) => print(basename(file)));
+      find(pattern,
+              root: pwd, recursive: false, types: [Find.file, Find.directory])
+          .forEach((file) => print(basename(file)));
     }
   }
 }

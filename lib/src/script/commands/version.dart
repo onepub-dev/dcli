@@ -27,7 +27,7 @@ class VersionCommand extends Command {
 
     var appname = DCliPaths().dcliName;
 
-    var location = which(appname, first: true).firstLine;
+    var location = which(appname, first: true).first;
 
     if (location == null) {
       printerr(red('Error: dcli is not on your path. Run "dcli install"'));

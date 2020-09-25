@@ -14,8 +14,8 @@ import 'env.dart';
 /// left to right (start to end) as this is the
 /// same order the OS searches the path.
 ///
-/// If the [verbose] flag is true then a line is output
-/// for each path searched.
+/// If the [verbose] flag is true then a line is output to
+/// the [progress] for each path searched.
 ///
 /// It is possible that more than one copy of the
 /// appliation is found.
@@ -34,9 +34,26 @@ import 'env.dart';
 /// which('ls', first: false, verbose: true);
 /// ```
 ///
-Progress which(String appname,
+/// To print the path to the command:
+///
+/// ```dart
+/// print(which('ls').first);
+/// ```
+///
+/// To check if an app is on the path use:
+///
+/// ```dart
+/// if (which('apt').isNotEmpty)
+/// {
+///   print('found apt');
+/// }
+/// ```
+///
+List<String> which(String appname,
         {bool first = true, bool verbose = false, Progress progress}) =>
-    _Which().which(appname, first: first, verbose: verbose, progress: progress);
+    _Which()
+        .which(appname, first: first, verbose: verbose, progress: progress)
+        .toList();
 
 class _Which extends DCliFunction {
   ///

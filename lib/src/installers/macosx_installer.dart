@@ -22,10 +22,10 @@ class MacOsxDCliInstaller {
 
   bool _installDart() {
     // first check that dart isn't already installed
-    if (which('dart').firstLine != null) {
+    if (which('dart').first != null) {
       // nothing to do dart is already installed.
       Settings().verbose(
-          "Found dart at: ${which('dart').firstLine} and as such will not install dart.");
+          "Found dart at: ${which('dart').first} and as such will not install dart.");
       return false;
     }
 

@@ -112,20 +112,20 @@ class DoctorCommand extends Command {
   }
 
   void printExePaths() {
-    var dcliPath = which('dcli').firstLine;
+    var dcliPath = which('dcli').first;
     _colprint([
       'dcli path',
       '${dcliPath == null ? 'Not found' : privatePath(dcliPath)}'
     ]);
     _colprint(['dart exe path', '${privatePath(DartSdk().pathToDartExe)}']);
-    var dartPath = which(DartSdk.dartExeName, first: true).firstLine;
+    var dartPath = which(DartSdk.dartExeName, first: true).first;
     _colprint([
       'dart path',
       '${privatePath(DartSdk().pathToDartExe)}',
       'which: ${privatePath(dartPath)}'
     ]);
     var dart2NativePath =
-        which(DartSdk.dart2NativeExeName, first: true).firstLine;
+        which(DartSdk.dart2NativeExeName, first: true).first;
 
     if (dart2NativePath != null) {
       _colprint([
@@ -140,7 +140,7 @@ class DoctorCommand extends Command {
       ]);
     }
     print('');
-    var pubPath = which(DartSdk.pubExeName, first: true).firstLine;
+    var pubPath = which(DartSdk.pubExeName, first: true).first;
 
     if (pubPath != null) {
       _colprint([
