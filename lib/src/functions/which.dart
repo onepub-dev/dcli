@@ -58,6 +58,8 @@ class Which {
   final _paths = <String>[];
   bool _found = false;
 
+  Progress progress;
+
   /// The first path found containing [appname]
   ///
   /// See [paths] for a list of all paths that contained [appnam]
@@ -84,6 +86,7 @@ class _Which extends DCliFunction {
     var results = Which();
     try {
       progress ??= Progress.devNull();
+      results.progress = progress;
 
       for (var path in PATH) {
         if (verbose) {
