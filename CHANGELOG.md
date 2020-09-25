@@ -1,3 +1,6 @@
+# 0.32.0
+exported the Dependency class.
+
 # 0.31.0
 Changed which again. It now returns a specific class (Which) that contains information specfic to the which command which makes it much more intuitive to use.
 Which: improved the doco.
