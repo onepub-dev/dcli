@@ -1,3 +1,8 @@
+# 0.31.0
+Changed which again. It now returns a specific class (Which) that contains information specfic to the which command which makes it much more intuitive to use.
+Which: improved the doco.
+Added the progress to the Which class.
+
 # 0.30.0
 Breaking Change: Changed the which function to return an list of paths rather than a progress as users expect to diretcly access the list.
 Added an hours interval to sleep.
