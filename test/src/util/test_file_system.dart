@@ -5,7 +5,7 @@ import 'dart:isolate';
 
 import 'package:dcli/dcli.dart';
 import 'package:dcli/src/functions/env.dart';
-import 'package:dcli/src/script/dependency.dart';
+import 'package:dcli/src/pubspec/dependency.dart';
 import 'package:dcli/src/util/stack_trace_impl.dart';
 import 'package:path/path.dart';
 import 'package:dcli/src/script/entry_point.dart';

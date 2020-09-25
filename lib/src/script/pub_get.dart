@@ -3,7 +3,7 @@ import '../util/progress.dart';
 import '../util/runnable_process.dart';
 
 import 'dart_sdk.dart';
-import 'dependency.dart';
+import '../pubspec/dependency.dart';
 import 'dart_project.dart';
 
 ///

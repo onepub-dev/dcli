@@ -1,7 +1,7 @@
 @t.Timeout(Duration(seconds: 600))
 import 'package:dcli/dcli.dart';
 import 'package:dcli/src/pubspec/pubspec.dart';
-import 'package:dcli/src/script/dependency.dart';
+import 'package:dcli/src/pubspec/dependency.dart';
 import 'package:dcli/src/script/script.dart';
 import 'package:path/path.dart' as p;
 import 'package:test/test.dart' as t;

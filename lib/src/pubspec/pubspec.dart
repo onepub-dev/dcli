@@ -6,7 +6,7 @@ import 'package:pub_semver/pub_semver.dart';
 import 'package:pubspec/pubspec.dart' as pub;
 
 import '../../dcli.dart';
-import '../script/dependency.dart';
+import 'dependency.dart';
 import '../script/script.dart';
 
 ///

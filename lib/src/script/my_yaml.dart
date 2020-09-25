@@ -2,7 +2,7 @@ import 'dart:cli';
 import 'dart:io';
 
 import 'package:yaml/yaml.dart' as y;
-import 'dependency.dart';
+import '../pubspec/dependency.dart';
 
 /// wrapper for the YamlDocument
 /// designed to make it easier to read yaml files.

@@ -1,6 +1,6 @@
 import 'package:pubspec/pubspec.dart';
 import '../script/command_line_runner.dart';
-import '../script/dependency.dart';
+import 'dependency.dart';
 
 /// adds rehydrate method to DependencyReference and friends.
 extension DependencyReferenceEx on DependencyReference {

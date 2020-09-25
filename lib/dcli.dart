@@ -55,6 +55,7 @@ export 'src/functions/sleep.dart' show sleep, Interval;
 export 'src/functions/tail.dart' show tail;
 export 'src/functions/touch.dart' show touch, TouchException;
 export 'src/functions/which.dart' show which, Which;
+export 'src/pubspec/dependency.dart';
 export 'src/pubspec/pubspec.dart';
 export 'src/script/dart_project.dart';
 export 'src/script/dart_sdk.dart' show DartSdk;
