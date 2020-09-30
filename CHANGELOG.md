@@ -1,3 +1,6 @@
+# 0.32.1
+Fixed a bug with the logic to check for dart. Had the found logic inverted.
+
 # 0.32.0
 exported the Dependency class.
 
