@@ -30,7 +30,7 @@ class LinuxDCliInstaller {
   bool _installDart() {
     var installedDart = false;
     // first check that dart isn't already installed
-    if (which('dart').found) {
+    if (which('dart').notfound) {
       print('Installing Dart');
 
       // add dart to bash path
