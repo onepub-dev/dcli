@@ -1,3 +1,10 @@
+# 0.32.3
+Added DartProject.current which will return the current script's dart project.
+
+# 0.32.2
+
+Fixed git_release script so that it stores the settings in a config file.
+
 # 0.32.1
 Fixed a bug with the logic to check for dart. Had the found logic inverted.
 
