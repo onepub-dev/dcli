@@ -27,6 +27,17 @@ class DartProject {
     _pathToProjectRoot = truepath(_pathToProjectRoot);
   }
 
+  static DartProject _current;
+
+  /// Returns the instance of the currently running DartProject.
+  ///
+  /// This method will only work if your are running the project
+  /// from somewhere in the source directory tree.
+  static DartProject get current {
+    _current ??= DartProject.fromPath(Settings().pathToScript, search: true);
+    return _current;
+  }
+
   ///
   /// reads and returns the project's virtual pubspec
   /// and returns it.
