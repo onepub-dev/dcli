@@ -21,9 +21,10 @@ Way back in the dark ages \(circa 1970\) the computer gods got together and crea
 {% hint style="info" %}
 And Dennis said let there be 'C'. And Denis looked upon 'C' and said it was good and the people agreed.
 
-But Dennis did not rest on the seventh day, instead he called upon Kenneth and over lunch the doth created Unix.
+But Dennis did not rest on the seventh day, instead he called upon Kenneth and over lunch they doth created Unix.
 
-Dennis Ritchie ; 9th Sept 1944 - 12th Oct 2011
+Dennis Ritchie ; 9th Sept 1944 - 12th Oct 2011  
+Kenneth Lane Thompson February 4, 1943 
 {% endhint %}
 
 ![My first bible.](../.gitbook/assets/image%20%281%29.png)
@@ -36,7 +37,7 @@ The result is today that a large no. of operating systems support stdin/stdout a
 
 The majority of people reading this primer will be working with Linux, OSx or Windows and in each of these cases the Holy Trinity \(stdin/stdout/stderr\) are available in every CLI app they use or write.
 
-The following examples are presented using the Dart programming language but the concepts and and even most of the details are correct across multiple OSs and languages.
+The following examples are presented using the Dart programming language but the concepts and even most of the details are correct across multiple OSs and languages.
 
 ## When you have a hammer, everything's a snail
 
@@ -64,7 +65,7 @@ So if stdin/stdout/stderr are files how do you open them?
 
 The answer is you don't need to open them as the OS opens them for you. When your app starts, it is passed one file descriptor \(FD\) for each of stdin/stdout/stderr.
 
-If you recall we said that FD's are just integers into an array of open files. Each application has its own array. When your app starts that array already has three entries, stdin, stdout and stderr.
+If you recall we said that an FD is just an integer indexing into an array of structures, with one array entry for each open file. Each application has its own array. When your app starts that array already has three entries, stdin, stdout and stderr.
 
 The order of those entries in the array is important.
 
@@ -81,7 +82,7 @@ If you open any additional files they will appear as element \[3\] and greater.
 If you have done any Bash, Zsh or Powershell programming you may have seen a line similar to:
 
 ```text
-find . '*.png' >out 2>&1
+find . '*.png' >out.txt 2>&1
 ```
 
 You can't get much more obtuse than the above line, but now we know about FD's it actually makes a little more sense.
@@ -90,35 +91,33 @@ You can't get much more obtuse than the above line, but now we know about FD's i
 Bash was not created by the gods. I think the other bloke had a hand in this one.
 {% endhint %}
 
-The `>out` section is actually a shorthand for `1>out` . It instructs Bash to take anything that `find` writes to FD =1 \(stdout\) and re-write it to the file called 'out'.
+The `>out.txt` section is actually a shorthand for `1>out.txt` . It instructs Bash to take anything that `find` writes to FD =1 \(stdout\) and re-write it to the file called 'out.txt'.
 
 The `2> &1` section instructs Bash to take anything `find` writes to FD=2 \(stderr\) and re-write it to FD=1. i.e. anything written to stderr \(FD=2\) should be re-written to stdout \(FD=1\).
 
-The result of the above command is that both stdout and stderr are written to the file called 'out'.
+The result of the above command is that both stdout and stderr are written to the file called 'out.txt'.
 
 It would have been less obtuse to write:
 
 ```text
-find . '*.png' 1>out 2>out
+find . '*.png' 1>out.txt 2>out.txt
 ```
 
 But of course we are talking about Bash here and apparently more obtuse is always better :\)
 
 * Many other shells use a similar syntax.
 
-Most languages provide specific wrapper for each these file handles. In Dart we have the global properties:
+Most languages provide a specific wrapper for each these file handles. In Dart we have the global properties:
 
 * stdin
 * stdout
 * stderr
 
-The 'C' programming language has the same three properties and many other languages use the same names.
+> The 'C' programming language has the same three properties and many other languages use the same names.
 
 ## And on this rock I will build my app
 
 I like to think of the Unix philosophy as programming by Lego.
-
-Linux, OSx and Windows
 
 {% hint style="info" %}
 Unix was all about Lego - build lots of little bricks \(apps\) that can be connected.
@@ -129,7 +128,7 @@ In the Unix world \(and the dart world\) every CLI app you write contributes to 
 In the Unix world every brick \(app\) has three connection points:
 
 * stdin - a hole for input 
-* stdout - a peg for output
+* stdout - a peg for normal output
 * stderr - a peg for error output
 
 Any peg can go into any hole.
@@ -150,7 +149,7 @@ If you like, the 'pipe' command is the plumbing and Bash is the plumber.
 
 Any data `ls` writes to it's stdout, is written to 'grep's stdin. The two apps are now connected via a 'pipe'.
 
-> A 'pipe' is just a program that reads from one FD and writes to another. In this case Bash is acting as the pipe. If your app reads from stdin and then writes to stdout or stderr then your app can act as a pipe.
+> A 'pipe' is just a program that reads from one FD and writes to another. When Bash sees the '\|' character it takes it as an instruction to launch the two applications \(ls and grep\) read stdout from ls and write that data to stdin of grep.
 
 A couple of other interesting things happened here.
 
@@ -164,7 +163,7 @@ To make the whole concept a little more concrete we are going to implement a toy
 
 Bash, Powershell and every other shell implement a read–eval–print loop \(REPL\).
 
-Read input from the user, evaluate the input \(execute it\), print the results.
+**R**ead input from the user, **E**valuate the input \(execute it\), **P**rint the results, **L**oop and do it again.
 
 It turns it that its really easy to implement your own toy shell. So let's do it in just 50 lines of code.
 
@@ -177,15 +176,16 @@ import 'dart:io';
 import 'package:dcli/dcli.dart';
 
 void main(List<String> args) {
+  // Loop, asking for user input and evaluating it
   for (;;) {
     var line = ask('${green(basename(pwd))}${blue('>')}');
     if (line.isNotEmpty) {
-      dispatch(line);
+      evaluate(line);
     }
   }
 }
-
-void dispatch(String command) {
+// Evaluate the users input
+void evaluate(String command) {
   var parts = command.split(' ');
   switch (parts[0]) {
     case 'ls':
@@ -195,7 +195,7 @@ void dispatch(String command) {
       Directory.current = join(pwd, parts[1]);
       break;
     default:
-      if (which(parts[0]).firstLine != null) {
+      if (which(parts[0]).found) {
         command.run;
       } else {
         print(red('Unknown command: ${parts[0]}'));
@@ -203,7 +203,7 @@ void dispatch(String command) {
       break;
   }
 }
-
+/// our own implementation of the 'ls' command.
 void ls(List<String> patterns) {
   if (patterns.isEmpty) {
     find('*',
@@ -238,6 +238,12 @@ example> ls
   tmp
 example>
 ```
+
+### Implement a pipe
+
+Now we have a basic shell let's extend it to implement a pipe.
+
+
 
 ## Revelations
 
