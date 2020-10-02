@@ -1,3 +1,8 @@
+# 0.32.4
+
+Updated DartProject.current so that it works somewhat intelligently for compiled scripts.
+As a compiled script doesn't have a pubspec.yaml we will return the current working directory.
+
 # 0.32.3
 Added DartProject.current which will return the current script's dart project.
 
