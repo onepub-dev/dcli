@@ -1,22 +1,21 @@
 #! /usr/bin/env dcli
 
 import 'dart:io';
-
 import 'package:dcli/dcli.dart';
 
+/// A toy REPL shell to replace your bash command line in just 50 lines of dart.
 void main(List<String> args) {
+  // Loop, asking for user input and evaluating it
   for (;;) {
     var line = ask('${green(basename(pwd))}${blue('>')}');
     if (line.isNotEmpty) {
-      dispatch(line);
+      evaluate(line);
     }
   }
 }
 
-void dispatch(String command) {
-  // if (command.contains('|')) {
-  //   buildPipe(command);
-  // }
+// Evaluate the users input
+void evaluate(String command) {
   var parts = command.split(' ');
   switch (parts[0]) {
     case 'ls':
@@ -25,9 +24,12 @@ void dispatch(String command) {
     case 'cd':
       Directory.current = join(pwd, parts[1]);
       break;
+    case 'exit':
+      exit(0);
+      break;
     default:
       if (which(parts[0]).found) {
-        command.run;
+        command.start(nothrow: true, progress: Progress.print());
       } else {
         print(red('Unknown command: ${parts[0]}'));
       }
@@ -35,38 +37,16 @@ void dispatch(String command) {
   }
 }
 
-// void buildPipe(String line) {
-//   var commands = line.split('|');
-
-//   for (var command in commands)
-
-//   var progress = Progress.stream();
-//   parts[0].start(
-//     progress: progress,
-//     runInShell: true,
-//   );
-
-//   RunnableProcess();
-
-//   var done = Completer<void>();
-//   progress.stream.listen((event) {
-//     print('stream: $event');
-//   }).onDone(() => done.complete());
-//   waitForEx<void>(done.future);
-//   print('done');
-
-//   parts[0].stream;
-// }
-
+/// our own implementation of the 'ls' command.
 void ls(List<String> patterns) {
   if (patterns.isEmpty) {
     find('*', root: pwd, recursive: false, types: [Find.file, Find.directory])
-        .forEach((file) => print(basename(file)));
+        .forEach((file) => print('  $file'));
   } else {
     for (var pattern in patterns) {
       find(pattern,
               root: pwd, recursive: false, types: [Find.file, Find.directory])
-          .forEach((file) => print(basename(file)));
+          .forEach((file) => print('  $file'));
     }
   }
 }
