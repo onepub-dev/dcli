@@ -106,9 +106,10 @@ class DartProject {
   }
 
   NamedLock __lock;
+  static const _lockName = 'script.lock';
 
   NamedLock get _lock {
-    __lock ??= NamedLock(name: '.script.lock', lockPath: pathToProjectRoot);
+    __lock ??= NamedLock(name: _lockName, lockPath: pathToProjectRoot);
     return __lock;
   }
 
@@ -198,7 +199,7 @@ class DartProject {
   /// created and when a script's pubspec changes.
   void _pubget() {
     NamedLock(
-      name: '.script.lock',
+      name: _lockName,
       lockPath: pathToProjectRoot,
     ).withLock(() {
       var pubGet = PubGet(this);
@@ -270,8 +271,7 @@ class DartProject {
   void _createAnalysisOptionsFromTemplate({bool showWarnings}) {
     /// add pedantic to the project
 
-    var analysisPath =
-        join(dirname(pathToProjectRoot), 'analysis_options.yaml');
+    var analysisPath = join(pathToProjectRoot, 'analysis_options.yaml');
     if (!exists(analysisPath)) {
       if (showWarnings) {
         print(orange('Creating missing analysis_options.yaml.'));
