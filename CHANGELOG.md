@@ -1,3 +1,11 @@
+# 0.32.5
+dcli create - improved doco and made the creating script prompt green.
+     Fixed a bug in the creation of the analysis_options path.
+Added a dot before the name of the lock so it is hidden.
+dart_project: centralise the lock filename,  
+pubspec.yaml.template: upgraded the min dcli and sdk versions.
+exists - added verbose logging.
+
 # 0.32.4
 
 Updated DartProject.current so that it works somewhat intelligently for compiled scripts.
