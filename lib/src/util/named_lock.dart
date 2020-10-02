@@ -183,7 +183,7 @@ class NamedLock {
 
     var isolate = _isolateID;
 
-    return join(_lockPath, '$pid.$isolate.$name');
+    return join(_lockPath, '.$pid.$isolate.$name');
   }
 
   String get _isolateID {
