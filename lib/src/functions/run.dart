@@ -165,10 +165,13 @@ Progress startFromArgs(
 ///
 ///
 ///
-/// You may passing in a [progress] which allows you to process
+/// You may pass in a [progress] which allows you to process
 /// output as it is generated. If you pass in a [progress] the same
 /// [progress] is returned from the [run] method.
-/// If you don't passing in a [progress] then a [progress] is created
+///
+/// If you don't passing in a [progress] then a default [progress] is created
+/// which suppresses output from both stdout and stderr.
+///
 /// and returned from the method, however as the [run] method is synchronous
 /// (like all DCli commands) you won't be able to process the output
 /// until the command completes.
