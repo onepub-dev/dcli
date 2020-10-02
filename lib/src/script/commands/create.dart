@@ -57,9 +57,12 @@ class CreateCommand extends Command {
       var pathToScript =
           _validateArguments(selectedFlags, subarguments.sublist(scriptIndex));
 
-      print('Creating script...');
+      print(green('Creating script...'));
 
-      project = DartProject.fromPath(dirname(pathToScript), search: true);
+      /// There is a question here about whether we should always create a pubspec.yaml
+      /// or do we search for a parent pubspec.yaml.
+      /// For now we have decided to always create one.
+      project = DartProject.fromPath(dirname(pathToScript));
       _script = project.createScript(pathToScript);
 
       break;
