@@ -31,10 +31,20 @@ class DartProject {
 
   /// Returns the instance of the currently running DartProject.
   ///
-  /// This method will only work if your are running the project
-  /// from somewhere in the source directory tree.
+  /// If you call this method from a non-compiled script
+  /// then we start the search from the scripts directory
+  /// and search up the directory tree.
+  ///
+  /// If you call this method from a compiled script
+  /// then we will return the current working directory
+  /// as there is no 'project root' for a compiled script.
   static DartProject get current {
-    _current ??= DartProject.fromPath(Settings().pathToScript, search: true);
+    var script = Script.current;
+    var startFrom = '.';
+    if (!script.isCompiled) {
+      startFrom = Settings().pathToScript;
+    }
+    _current ??= DartProject.fromPath(startFrom, search: true);
     return _current;
   }
 
