@@ -4,6 +4,18 @@ The dshell example demonstrates building a toy command line shell \(just like Ba
 
 It has three built in commands \(ls,  cd and exit\) and allows you to run any other CLI application that's on your PATH.
 
+To run this script you need to [install dart](../../dcli-tools-1/dcli-install.md)
+
+```yaml
+mkdir shell
+vi dshell.dart # paste contents of dshell.dart below
+vi pubspec.yaml # paste contents of pubspec.yaml below
+pub get
+dart dshell.dart
+```
+
+dshell.dart
+
 ```dart
 #! /usr/bin/env dcli
 
@@ -58,5 +70,15 @@ void ls(List<String> patterns) {
   }
 }
 
+```
+
+The required pubspec.yaml
+
+pubspec.yaml
+
+```yaml
+name: dshell
+dependencies: 
+  dcli: ^0.32.0
 ```
 
