@@ -117,6 +117,8 @@ class _Is extends DCliFunction {
     if (path == null || path.isEmpty) {
       throw ArgumentError('path must not be null or empty');
     }
+
+    Settings().verbose('exists: $path followLinks: $followLinks');
     //return FileSystemEntity.existsSync(path);
     return FileSystemEntity.typeSync(path, followLinks: followLinks) !=
         FileSystemEntityType.notFound;
