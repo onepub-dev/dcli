@@ -109,7 +109,7 @@ void checkInstallStructure(TestFileSystem fs) {
   expect(exists(truepath(HOME, '.dcli', 'templates')), equals(true));
 
   var templates =
-      find('*.dart', root: join('${fs.home}/.dcli', 'templates')).toList();
+      find('*.*', root: join('${fs.home}/.dcli', 'templates')).toList();
 
   var base = join('${fs.home}/.dcli', 'templates');
 

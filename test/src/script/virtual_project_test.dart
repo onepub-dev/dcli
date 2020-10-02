@@ -17,9 +17,6 @@ void main() {
 
         'dcli create $scriptPath'.run;
 
-        /// create a local pubspec for the script.
-        'dcli split $scriptPath'.run;
-
         var script = Script.fromFile(scriptPath);
 
         script.doctor;
@@ -51,9 +48,6 @@ void main() {
         var scriptPath = join(scriptDir, scriptName);
 
         'dcli create $scriptPath'.run;
-
-        /// create a local pubspec for the script.
-        'dcli split $scriptPath'.run;
 
         /// move the script into a bin directory to mimic a traditional dart package layout.
         var binDir = join(scriptDir, 'bin');

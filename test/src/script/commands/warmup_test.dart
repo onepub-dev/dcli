@@ -16,7 +16,7 @@ void main() {
 
         expect(exists(join('example', '.dart_tool')), equals(true));
         expect(exists(join('example', '.packages')), equals(true));
-        expect(exists(join('example', '.pubspec.lock')), equals(true));
+        expect(exists(join('example', 'pubspec.lock')), equals(true));
       });
     });
   });

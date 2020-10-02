@@ -22,19 +22,6 @@ void main() {
         }
         var project = DartProject.fromPath(scriptPath);
         project.createScript(pathToScript, templateName: 'hello_world.dart');
-
-        checkProjectStructure(fs, pathToScript);
-      });
-    });
-
-    test('warmup hello world', () {
-      TestFileSystem().withinZone((fs) {
-        if (exists(pathToScript)) {
-          delete(pathToScript);
-        }
-
-        var project = DartProject.fromPath(dirname(pathToScript));
-        project.createScript(basename(pathToScript));
         project.warmup();
 
         checkProjectStructure(fs, pathToScript);
@@ -57,15 +44,13 @@ void checkProjectStructure(TestFileSystem fs, String scriptName) {
   var pubspecPath = p.join(fs.runtimePath(scriptName), 'pubspec.yaml');
   expect(exists(pubspecPath), equals(true));
 
-  var libPath = p.join(fs.runtimePath(scriptName), 'lib');
-  expect(exists(libPath), equals(true));
-
-  // There should be three files/directories in the project.
-  // script link
-  // lib or lib link
+  // There should be:
+  // script
   // pubspec.lock
   // pubspec.yaml
   // .packages
+  // .dart_tools
+  // analysis_options.yaml
 
   var files = <String>[];
   find(
@@ -90,9 +75,8 @@ void checkProjectStructure(TestFileSystem fs, String scriptName) {
         'hello_world.dart',
         'pubspec.yaml',
         'pubspec.lock',
+        'analysis_options.yaml',
         join('.dart_tool', 'package_config.json'),
-        '.build.complete',
-        '.using.virtual.pubspec',
         '.packages' // when dart 2.10 is released this will no longer be created.
       ])));
 
@@ -104,5 +88,5 @@ void checkProjectStructure(TestFileSystem fs, String scriptName) {
           types: [Find.directory],
           includeHidden: true)
       .forEach((line) => directories.add(p.basename(line)));
-  expect(directories, unorderedEquals(<String>['lib', '.dart_tool']));
+  expect(directories, unorderedEquals(<String>['.dart_tool']));
 }

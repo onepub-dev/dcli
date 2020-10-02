@@ -10,8 +10,9 @@ void main() {
   group('Pub Get', () {
     test('Do it', () {
       TestFileSystem().withinZone((fs) {
-        var project = DartProject.fromPath(
-            dirname(join(fs.testScriptPath, 'general/bin/hello_world.dart')));
+        var scriptPath =
+            join(fs.testScriptPath, 'general/bin/hello_world.dart');
+        var project = DartProject.fromPath(dirname(scriptPath), search: true);
         PubGet(project).run();
       });
     });

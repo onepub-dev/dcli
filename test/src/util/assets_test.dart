@@ -34,6 +34,7 @@ void main() {
           join(base, 'README.md'),
           join(base, 'analysis_options.yaml'),
           join(base, 'pubspec.yaml.template'),
+          join(base, 'cmd_args.dart')
         ],
       ),
     );
