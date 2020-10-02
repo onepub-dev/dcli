@@ -74,7 +74,7 @@ void ls(List<String> patterns) {
 
 The required pubspec.yaml
 
-pubspec.yaml
+pubspec.yaml 
 
 ```yaml
 name: dshell
