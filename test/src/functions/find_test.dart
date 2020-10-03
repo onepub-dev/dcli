@@ -10,17 +10,14 @@ import '../util/test_file_system.dart';
 void main() {
   t.group('Find', () {
     t.test('manualRecursion', () async {
-      var foundDirs = find('*',
-              root: '/',
-              recursive: false,
-              types: <FileSystemEntityType>[Find.directory],
-              includeHidden: true)
-          .toList();
+      var foundDirs =
+          find('*', root: '/', recursive: false, types: <FileSystemEntityType>[Find.directory], includeHidden: true)
+              .toList();
 
       var rootDirs = <String>[
         '/boot',
         '/lib',
-        '/cdrom',
+        // '/cdrom',
         '/proc',
         '/root',
         '/run',
@@ -116,11 +113,9 @@ void main() {
         var found = find('*.jpg', root: paths.top).toList();
 
         find('*.jpg', root: paths.top).forEach(print);
-        t.expect(find('one.jpg', root: paths.top).toList(),
-            t.equals([join(paths.top, 'one.jpg')]));
+        t.expect(find('one.jpg', root: paths.top).toList(), t.equals([join(paths.top, 'one.jpg')]));
 
-        t.expect(find('two.jpg', root: paths.top).toList(),
-            t.equals([join(paths.middle, 'two.jpg')]));
+        t.expect(find('two.jpg', root: paths.top).toList(), t.equals([join(paths.middle, 'two.jpg')]));
 
         find('*.jpg', progress: Progress(print));
 
@@ -177,8 +172,7 @@ void main() {
     t.test('find hidden files *.txt  ', () {
       TestFileSystem().withinZone((fs) {
         var paths = TestFileSystem();
-        var found =
-            find('*.txt', root: paths.top, includeHidden: true).toList();
+        var found = find('*.txt', root: paths.top, includeHidden: true).toList();
 
         found.sort();
         var expected = [
