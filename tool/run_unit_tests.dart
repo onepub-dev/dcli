@@ -11,6 +11,8 @@ import 'package:dcli/dcli.dart';
 void main() {
   var root = Script.current.pathToProjectRoot;
 
+  print(green('Running under shell: ${Shell.current.name}'));
+
   print(orange('cleaning old test and build artifacts'));
 
   if (exists('/tmp/dcli')) deleteDir('/tmp/dcli', recursive: true);
@@ -26,7 +28,7 @@ void main() {
   DartProject.fromPath(root).warmup();
 
   print('Run unit tests from $root');
-  '${DartSdk().pathToPubExe} run test -j1 --coverage ${join(root, 'coverage')}'
+  'bash -c "${DartSdk().pathToPubExe} run test -j1 --coverage ${join(root, 'coverage')}"'
       .start(nothrow: true, workingDirectory: root);
 
   // cleanup temp
