@@ -30,4 +30,4 @@ ENV USER=root
 
 # we start the unit tests with bash as the shell detection tests
 # are expecting to find bash as the root shell.
-ENTRYPOINT bash -c /dcli/tool/run_unit_tests.dart
+ENTRYPOINT  /dcli/tool/run_unit_tests.dart

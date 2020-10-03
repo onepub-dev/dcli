@@ -2,6 +2,7 @@
 import 'dart:io';
 import 'package:dcli/dcli.dart' hide equals;
 import 'package:dcli/src/shell/cmd_shell.dart';
+import 'package:dcli/src/shell/sh_shell.dart';
 import 'package:test/test.dart';
 
 void main() {
@@ -14,7 +15,7 @@ void main() {
     if (Settings().isWindows) {
       expected = CmdShell.shellName;
     } else if (Platform.isLinux) {
-      expected = BashShell.shellName;
+      expected = ShShell.shellName;
     } else if (Platform.isMacOS) {
       expected = ZshShell.shellName;
     }
