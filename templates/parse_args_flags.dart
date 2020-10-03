@@ -3,19 +3,8 @@
 /// remove the next line
 /// ignore_for_file: unused_import
 
-/*
-@pubspec
-name: hello_world.dart
-dependencies:
-  dcli: ^0.20.0
-  args: ^1.5.2
-  path: ^1.6.4
-*/
-
-import 'dart:io';
-import 'package:dcli/dcli.dart';
-import 'package:path/path.dart' as p;
 import 'package:args/args.dart';
+import 'package:dcli/dcli.dart';
 
 ///
 /// Call this program using:
