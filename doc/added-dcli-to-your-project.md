@@ -6,7 +6,7 @@ Go to [pub.dev](https://pub.dev/packages/dcli/install), find the section 'Depend
 
 ```text
 dependencies:
-  dcli: ^0.24.0
+  dcli: ^0.32.0
 ```
 
 From the same directory that your pubspec.yaml lives in run:
