@@ -32,18 +32,15 @@ Read additional details here: https://github.com/bsutton/dcli/wiki/Installing-DC
 
   bool get isPrivilegedUser {
     var currentPrincipal =
-        'New-Object Security.Principal.WindowsPrincipal([Security.Principal.WindowsIdentity]::GetCurrent())'
-            .firstLine;
+        'New-Object Security.Principal.WindowsPrincipal([Security.Principal.WindowsIdentity]::GetCurrent())'.firstLine;
     Settings().verbose('currentPrinciple: $currentPrincipal');
-    var isPrivileged =
-        '$currentPrincipal.IsInRole([Security.Principal.WindowsBuiltInRole]::Administrator)'
-            .firstLine;
+    var isPrivileged = '$currentPrincipal.IsInRole([Security.Principal.WindowsBuiltInRole]::Administrator)'.firstLine;
     Settings().verbose('isPrivileged: $isPrivileged');
 
     return isPrivileged.toLowerCase() == 'true';
   }
 
-  bool install({bool installDart}) {
+  bool install({bool installDart = true}) {
     return WindowsDCliInstaller().install(installDart: installDart);
   }
 
