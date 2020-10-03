@@ -1,7 +1,6 @@
 @Timeout(Duration(minutes: 10))
 import 'package:dcli/dcli.dart' hide equals;
 import 'package:dcli/src/functions/env.dart';
-import 'package:dcli/src/script/entry_point.dart';
 import 'package:mockito/mockito.dart';
 import 'package:test/test.dart';
 
@@ -16,7 +15,7 @@ void main() {
 
       groupFS.withinZone((fs) {
         try {
-          EntryPoint().process(['install']);
+          Shell.current.install();
         } on DCliException catch (e) {
           print(e);
         }
@@ -25,7 +24,7 @@ void main() {
 
         // Now install over existing
         try {
-          EntryPoint().process(['install']);
+          Shell.current.install();
         } on DCliException catch (e) {
           print(e);
         }
@@ -33,20 +32,6 @@ void main() {
         checkInstallStructure(fs);
       });
     });
-
-    test('Install with error', () {
-      TestFileSystem(
-        useCommonPath: false,
-      ).withinZone((fs) {
-        try {
-          EntryPoint().process(['install', 'a']);
-        } on DCliException catch (e) {
-          print(e);
-        }
-        expect(exists('${fs.home}/.dcli'), equals(false));
-      });
-    });
-
     test('add ~/.dcli/bin to PATH Windows', () {
       TestFileSystem().withinZone((fs) {
         var settings = Settings();
@@ -88,8 +73,7 @@ void main() {
 
         var profilePath = join(HOME, '.profile');
         if (exists(profilePath)) {
-          var exportLines = read(profilePath).toList()
-            ..retainWhere((line) => line.startsWith('export'));
+          var exportLines = read(profilePath).toList()..retainWhere((line) => line.startsWith('export'));
           expect(exportLines, contains(export));
         }
         Env.reset();
@@ -108,8 +92,7 @@ void checkInstallStructure(TestFileSystem fs) {
 
   expect(exists(truepath(HOME, '.dcli', 'templates')), equals(true));
 
-  var templates =
-      find('*.*', root: join('${fs.home}/.dcli', 'templates')).toList();
+  var templates = find('*.*', root: join('${fs.home}/.dcli', 'templates')).toList();
 
   var base = join('${fs.home}/.dcli', 'templates');
 
@@ -122,6 +105,7 @@ void checkInstallStructure(TestFileSystem fs) {
         join(base, 'pubspec.yaml.template'),
         join(base, 'README.md'),
         join(base, 'analysis_options.yaml'),
+        join(base, 'cmd_args.dart'),
       ],
     ),
   );
