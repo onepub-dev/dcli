@@ -86,13 +86,13 @@ class TestFileSystem {
       common ??= TestFileSystem._internal(installDcli: installDcli);
       use = common;
     } else {
-      use = TestFileSystem._internal((installDcli: installDcli);
+      use = TestFileSystem._internal(installDcli: installDcli);
     }
 
     return use;
   }
 
-  TestFileSystem._internal({this. installDcli}) {
+  TestFileSystem._internal({this.installDcli}) {
     _testRoot = join(rootPath, 'tmp', 'dcli');
     uniquePath = Uuid().v4();
 
@@ -166,9 +166,8 @@ class TestFileSystem {
       /// broken.
       copyPubCache(originalHome, HOME);
       copyTestScripts();
-      if (installDcli)
-      {
-      installDCli();
+      if (installDcli) {
+        installDCli();
       }
       buildTestFileSystem();
 
