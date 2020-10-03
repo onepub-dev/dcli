@@ -97,7 +97,9 @@ class TestFileSystem {
     uniquePath = Uuid().v4();
 
     var isolateID = Service.getIsolateID(Isolate.current);
-    print(red('+' * 20 + 'Creating TestFileSystem $fsRoot for isolate $isolateID') + '+' * 20);
+    print(red('+' * 20 +
+            'Creating TestFileSystem $fsRoot for isolate $isolateID') +
+        '+' * 20);
 
     tmpScriptPath = truepath(fsRoot, 'scripts');
     testScriptPath = truepath(fsRoot, 'test_script');
@@ -114,7 +116,8 @@ class TestFileSystem {
       NamedLock(name: 'test_file_system.lock').withLock(() {
         var frame = stack.frames[0];
 
-        print(red('${'*' * 40} Starting test ${frame.sourceFile}:${frame.lineNo} ${'*' * 80}'));
+        print(red(
+            '${'*' * 40} Starting test ${frame.sourceFile}:${frame.lineNo} ${'*' * 80}'));
         Settings.reset();
         Env.reset();
         PubCache.reset();
@@ -144,7 +147,8 @@ class TestFileSystem {
         } finally {
           env['HOME'] = originalHome;
           env['PATH'] = path;
-          print(green('${'-' * 40} Ending test ${frame.sourceFile}:${frame.lineNo} ${'-' * 80}'));
+          print(green(
+              '${'-' * 40} Ending test ${frame.sourceFile}:${frame.lineNo} ${'-' * 80}'));
         }
       });
     } on DCliException catch (e) {
@@ -256,8 +260,8 @@ class TestFileSystem {
 
   void installDCli() {
     /// run pub get and only display errors.
-    '${DartSdk.pubExeName} global activate --source path $pwd'
-        .start(progress: Progress((line) => null, stderr: (line) => print(line)));
+    '${DartSdk.pubExeName} global activate --source path $pwd'.start(
+        progress: Progress((line) => null, stderr: (line) => print(line)));
 
     EntryPoint().process(['install', '--nodart', '--quiet', '--noprivileges']);
   }
@@ -317,7 +321,9 @@ class TestFileSystem {
       createDir(testScriptPath, recursive: true);
     }
 
-    copyTree(join(Script.current.pathToProjectRoot, 'test', 'test_script'), testScriptPath, recursive: true);
+    copyTree(join(Script.current.pathToProjectRoot, 'test', 'test_script'),
+        testScriptPath,
+        recursive: true);
 
     _patchRelativeDependenciesAndWarmup(testScriptPath);
     DartProject.fromPath(join(testScriptPath, 'general')).warmup();
@@ -338,7 +344,8 @@ class TestFileSystem {
         var pathDependency = dependency.reference as ps.PathReference;
 
         var dir = relative(dirname(pathToPubspec), from: fsRoot);
-        var absolutePathToDcli = truepath(dcliProject.pathToProjectRoot, 'test', dir, pathDependency.path);
+        var absolutePathToDcli = truepath(
+            dcliProject.pathToProjectRoot, 'test', dir, pathDependency.path);
 
         var newPath = PubSpec.createPathReference(absolutePathToDcli);
 
@@ -369,13 +376,16 @@ class TestFileSystem {
     for (var command in required) {
       if (exists(join(testbinPath, command))) {
         // copy the existing command into the testzones .dcli/bin path
-        copy(join(testbinPath, command), join(Settings().pathToDCliBin, command));
+        copy(join(testbinPath, command),
+            join(Settings().pathToDCliBin, command));
       } else {
         /// compile and install the command
-        Script.fromFile('test/test_script/general/bin/$command.dart').compile(install: true);
+        Script.fromFile('test/test_script/general/bin/$command.dart')
+            .compile(install: true);
         // copy it back to the dcli testbin so the next unit
         // test doesn't have to compile it.
-        copy(join(Settings().pathToDCliBin, command), join(testbinPath, command));
+        copy(join(Settings().pathToDCliBin, command),
+            join(testbinPath, command));
       }
     }
   }

@@ -1,3 +1,15 @@
+# 0.32.6
+Update windows_installer.yml
+
+Fixes for unit tests
+ the root dir was not deterministic for testing so changed to a path we own.
+ removed the bash launcher and changed expect to sh.
+ added missing default.
+ add arg to suppress dcli install.
+ removed the @pubspec as we no longer support it.
+ Added option to test file system to no install dcli so we can test installing dcli.
+ Moved to using the Shell install method.
+
 # 0.32.5
 dcli create - improved doco and made the creating script prompt green.
      Fixed a bug in the creation of the analysis_options path.

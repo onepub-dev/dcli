@@ -73,7 +73,8 @@ void main() {
 
         var profilePath = join(HOME, '.profile');
         if (exists(profilePath)) {
-          var exportLines = read(profilePath).toList()..retainWhere((line) => line.startsWith('export'));
+          var exportLines = read(profilePath).toList()
+            ..retainWhere((line) => line.startsWith('export'));
           expect(exportLines, contains(export));
         }
         Env.reset();
@@ -92,7 +93,8 @@ void checkInstallStructure(TestFileSystem fs) {
 
   expect(exists(truepath(HOME, '.dcli', 'templates')), equals(true));
 
-  var templates = find('*.*', root: join('${fs.home}/.dcli', 'templates')).toList();
+  var templates =
+      find('*.*', root: join('${fs.home}/.dcli', 'templates')).toList();
 
   var base = join('${fs.home}/.dcli', 'templates');
 
