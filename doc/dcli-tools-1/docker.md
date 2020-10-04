@@ -81,9 +81,9 @@ ARG PULL_LATEST_DSHELL_INSTALL=1
 
 ## Using the DCli docker image
 
-A Docker image is available which can be used to create a DCli cli on your system without polluting your OS.
+A Docker image is available which can be used to create a DCli CLI on your system without polluting your OS.
 
-The docker container presents a cli with dart and DCli pre-installed so you can experiment with DCli or deploy DCli to system instances.
+The docker container presents a CLI with dart and DCli pre-installed so you can experiment with DCli or deploy DCli to system instances.
 
 To use the container:
 

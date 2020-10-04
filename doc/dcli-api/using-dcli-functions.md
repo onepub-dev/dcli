@@ -8,7 +8,7 @@ For complete API documentation refer to: [pub.dev](https://pub.dev/documentation
 
 Lets start by looking at the some of the built in functions that DCli supports.
 
-DCli exposes a range of built-in functions which are Dart global functions.
+DCli exposes a range of built-in functions that are exposed as Dart global functions.
 
 These functions are the core of how DCli provides a very Bash like feel to writing DCli scripts.
 
@@ -24,63 +24,51 @@ void main() {
     Settings().setVerbose(enabled: true);
 
     // Print the current working directory
-    print("PWD: ${pwd}");
-
-    // Change to the directory 'main' 
-    // NOTE: this is NOT best pratice use paths 
-    // to each file instead.
-    cd("main");
+    print('PWD: ${pwd}');
 
     // Create a directory and if necessary
     // its parent directories.
-    createDir("tools/images", recursive: true);
+    var pathToImages = 'tools/images';
+    createDir(pathToImages, recursive: true);
 
-    // Push the current directory onto the stack
-    // and change directory to 'main/tools/images'
-    push("tools/images");
-
+  
+    var pathToGoodJpg = join(pathToImages, 'good.jpg');
     // create a file (its empty)
-    touch("good.jpg", create: true);
+    touch(pathToGoodJpg, create: true);
 
     // update the last modified time on an existing file
-    touch("good.jpg");
+    touch(pathToGoodJpg);
 
     // I think you know this one.
     // print works just as well.
-    echo("All files");
+    echo('Showing all files');
 
     // print out all files in the current directory.
     // [file] is just a [String]
-    find("*.*", recursive=false).forEach((file) => print(file));
+    find('*.*', recursive: false).forEach((file) => print(file));
 
     // take a nap for a couple of seconds.
     sleep(2);
 
-    echo("Find file matching *.jpg");
+    echo('Find file matching *.jpg');
     // Find all files that end with .jpg
     // in the current directory and any subdirectories
-    for (var file in find("*.jpg").toList()) {
+    for (var file in find('*.jpg', root: pathToImages).toList()) {
         print(file);
     }
 
+    var pathToBadJpg = join(pathToImages, "bad.jpg");
     // Move/rename a file
-    move("good.jpg", "bad.jpg");
+    move(pathToGoodJpg, pathToBadJpg);
 
     // check if a file exists.
-    if (exists("bad.jpg")) {
+    if (exists(pathToBadJpg)) {
         print("bad.jpg exists");
     }
 
     // Delete a file asking the user first.
-    delete("bad.jpg", ask: true);
+    delete(pathToBadJpg, ask: true);
 
-    // return to the directory we were in
-    // before we called push above.
-    pop();
-
-    // Print out our current working directory.
-    // should be main.
-    echo(pwd);
 }
 ```
 
