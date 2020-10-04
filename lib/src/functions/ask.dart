@@ -13,9 +13,6 @@ import 'echo.dart';
 ///
 /// Reads a line of text from stdin with an optional prompt.
 ///
-/// If the user immediately enters newline without
-/// entering any text then an empty string will
-/// be returned.
 ///
 /// ```dart
 /// String response = ask("Do you like me?");
@@ -26,6 +23,19 @@ import 'echo.dart';
 ///
 /// If [prompt] is set then the prompt will be printed
 /// to the console and the cursor placed immediately after the prompt.
+///
+/// Pass an empty string to suppress the prompt.
+///
+/// ```dart
+/// var secret = ask('', required: false);
+/// ```
+///
+/// By default the ask [require] argument is true requiring the user to enter a non-empty string.
+/// All whitespace is trimmed from the string before the user input is validated so
+/// a single space is not an accepted input.
+/// If you set the [required] argument to false then the user can just hit
+/// enter to skip past the ask prompt. If you use other validators when [required] = false
+/// then those validators will not be called if the entered value is empty (after it is trimmed).
 ///
 /// if [toLower] is true then the returned result is converted to lower case.
 /// This can be useful if you need to compare the entered value.
@@ -136,6 +146,7 @@ class Ask extends DCliFunction {
   /// Reads user input from stdin and returns it as a string.
   /// [prompt]
   String _ask(String prompt, {bool toLower, bool hidden, bool required, AskValidator validator, String defaultValue}) {
+    ArgumentError.checkNotNull(prompt);
     Settings().verbose(
         'ask:  $prompt toLower: $toLower hidden: $hidden required: $required defaultValue: ${hidden ? '******' : defaultValue}');
 
@@ -147,16 +158,17 @@ class Ask extends DCliFunction {
         throw AskValidatorException('The [defaultValue] $defaultValue failed the validator: ${e.message}');
       }
 
-      /// don't display the default value if hidden is true.
-      prompt = '$prompt [${hidden ? '******' : defaultValue}]';
+      /// completely suppress the default value and the prompt if the prompt is empty.
+      if (prompt.isNotEmpty) {
+        /// don't display the default value if hidden is true.
+        prompt = '$prompt [${hidden ? '******' : defaultValue}]';
+      }
     }
 
     String line;
     var valid = false;
     do {
-      if (prompt != null) {
-        echo('$prompt ', newline: false);
-      }
+      echo('$prompt ', newline: false);
 
       if (hidden == true && stdin.hasTerminal) {
         line = _readHidden();
