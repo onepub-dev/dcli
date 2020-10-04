@@ -6,6 +6,10 @@ DCli ships with a number built in validators for use with the ask function.
 
 When a validator is applied to the ask method, the ask method will not return until the user enters a value that satisfies the validator.
 
+{% hint style="warning" %}
+If you pass required: false to ask then the validator won't be called if the user input is empty!
+{% endhint %}
+
 In addition to the built in validators you can also creating your own custom validators and combine multiple validators.
 
 ## Combining Validators
@@ -16,7 +20,7 @@ The DCli Ask command allows you to combine multiple validators with the Ask.any 
 
 The Ask.all validator takes an array of validators.
 
-All validators must pass for the input to be considered valid. The validators are processed in the order they are passed \(left to right\). The error from the first validator that fails is displayed.
+All validators must succeed for the input to be considered valid. The validators are processed in the order they are passed \(left to right\). The error from the first validator that fails is displayed.
 
 The Ask.all validator is the equivalent of a boolean AND operator.
 
@@ -27,11 +31,13 @@ It should be noted that the user input is passed to each validator in turn and e
       , validator: Ask.all([Ask.alphaNumeric, AskLength(10,16)]));
 ```
 
+The password must be composed of alphanumeric characters **and** be between 10 and 16 characters long.
+
 ### Ask.any
 
 The Ask.any validator takes an array of validators.
 
-Only one of the validators must pass for the input to be considered valid. The validators are processed in the order they are passed \(left to right\). The error from the first validator that fails is displayed.
+Only one of the validators must succeed for the input to be considered valid. The validators are processed in the order they are passed \(left to right\). In no validators pass, then the error from the first validator is displayed.
 
 The Ask.any validator is the equivalent of a boolean OR operator.
 
@@ -46,6 +52,14 @@ If none of the validators pass then the error from the first validator that fail
 
 ## Standard Ask Validators
 
+The set of standard Ask Validators allow you to validate common input requirements. You can combine them with the Ask.all and Ask.any methods to allow for more complicated validation.
+
+All of the standard Ask Validators allow the user to enter a blank value
+
+{% hint style="info" %}
+If you only want the validator applied if a user enters a value, then pass 'required: false' to the ask function.
+{% endhint %}
+
 ### Ask.ipAddress
 
 Validates that the entered value is an ip address. By default both IPv4 and IPv6 address are permitted.
@@ -55,7 +69,7 @@ To restrict the ip address to a specific version, pass in the expected version.
 ```dart
 var ipAddress = ask( 'Server IP?',  validator: Ask.ipAddress());
 var ipV4Address = ask( 'Merchant IP?'
-    , validator: Ask.ipAddress(AskValidatorIPAddress.ipv4);
+    , validator: Ask.ipAddress(AskValidatorIPAddress.ipv4));
 ```
 
 ### Ask.lengthMax
@@ -63,7 +77,7 @@ var ipV4Address = ask( 'Merchant IP?'
 Validates that the input is no longer than the provided maximum.
 
 ```dart
-var username = ask( 'username?', validator: Ask.lengthMax(32);
+var username = ask( 'username?', validator: Ask.lengthMax(32));
 ```
 
 ### Ask.lengthMin
@@ -71,15 +85,15 @@ var username = ask( 'username?', validator: Ask.lengthMax(32);
 Validates that the input is no shorter than the provided minimum.
 
 ```dart
-var username = ask( 'username?', validator: Ask.lengthMin(26);
+var username = ask( 'username?', validator: Ask.lengthMin(26));
 ```
 
 ### Ask.lengthRange
 
-Validates that the input is no shorter than the provided minimum.
+Validates that the input is no shorter than the provided minimum and no longer than the provided max.
 
 ```dart
-var username = ask( 'username?', validator: Ask.lengthRange(26, 32);
+var username = ask( 'username?', validator: Ask.lengthRange(26, 32));
 ```
 
 ### Ask.inList
@@ -90,20 +104,14 @@ Validates that the input is contained in the provided list.
 You are often better of using a menu.
 {% endhint %}
 
-Set the caseSensitive to true to do a case sensitive comparison. Defaults to false.
+Set the caseSensitive to true to do a case sensitive comparison against the list. Defaults to false.
 
-The toString method on the object is called to obtain the comparison string.
+The list may contain strings or any Dart Object.
 
-```dart
-var sex = ask( 'sex?', validator: Ask.inList(['male', 'female']);
-```
-
-### Ask.required
-
-Forces the user to enter an input value. There is no point using Ask.required if you also provide a defaultValue as the defaultValue will satisfy the required condition.
+The toString method is called on each object pass to the list to obtain the comparison string.
 
 ```dart
-var sex = ask( 'sex?', validator: Ask.required);
+var sex = ask( 'sex?', validator: Ask.inList(['male', 'female']));
 ```
 
 ### Ask.email
@@ -111,40 +119,47 @@ var sex = ask( 'sex?', validator: Ask.required);
 Validates that the user input is a valid email address.
 
 ```dart
-var email = ask( 'Email Address?', validator: Ask.email);
+var email = ask( 'Email Address?', validator: Ask.email));
 ```
 
 ### Ask.fqdn
 
-Validates that the user input is a valid email address.
+Validates that the user input is a valid Fully Qualified Domain Name \(www.noojee.com.au\) address.
 
 ```dart
-var email = ask( 'Email Address?', validator: Ask.email);
+var email = ask( 'FQDN?', validator: Ask.fqdn));
 ```
 
 ### Ask.integer
 
 Validates that the user input is a valid integer.
 
+The integer is returned as a string. 
+
 ```dart
-var age = ask( 'Age?', validator: Ask.integer);
+var ageAsString = ask( 'Age?', validator: Ask.integer));
+var age = int.parse(ageAsString);
 ```
 
 ### Ask.valueRange
 
 Validates that an entered number is within the provided range \(inclusive\). Can be used with both integer and decimal no.s
 
+The value is returned as a string. 
+
 ```dart
 var age = ask('Age?', 
-    validator: Ask.all([Ask.integer, Ask.valueRange(18, 25)]);
+    validator: Ask.all([Ask.integer, Ask.valueRange(18, 25)]));
 ```
 
 ### Ask.decimal
 
 Validates that the user input is a valid decimal number.
 
+The decimal is returned as a string. 
+
 ```dart
-var age = ask( 'Age?', validator: Ask.decimal);
+var age = ask( 'Age?', validator: Ask.decimal));
 ```
 
 ### Ask.alpha
@@ -152,7 +167,7 @@ var age = ask( 'Age?', validator: Ask.decimal);
 Validates that the user input is a alpha string with every character in the range \[a-zA-Z\].
 
 ```dart
-var name = ask( 'name?', validator: Ask.alpha);
+var name = ask( 'name?', validator: Ask.alpha));
 ```
 
 ### Ask.alphaNumeric
@@ -160,7 +175,7 @@ var name = ask( 'name?', validator: Ask.alpha);
 Validates that the user input is a alphaNumeric string with every character in the range \[a-zA-Z0-9\].
 
 ```dart
-var name = ask( 'name?', validator: Ask.alpha);
+var name = ask( 'name?', validator: Ask.alpha));
 ```
 
 ## Custom Validators
@@ -172,7 +187,7 @@ All validators must inherit from the AskValidator class and implement the valida
 The validator method must return the passed line, but may alter the line before returning it. The altered results is what will be returned from the ask function.
 
 {% hint style="warning" %}
- a validator MUST not include the value of the 'line' in an error message as your risk exposing a password that the user is entering.
+ a validator MUST not include the value of the 'line' in an error message as you risk exposing a password that the user is entering.
 {% endhint %}
 
 If the ask function uses one of the combination validators \(Ask.all, Ask.any\) then the line input by the user will be passed to each validator in turn. Each validator may change the line and that altered value will be passed to the next validator. In this way the entered value may go through multiple transformations before being returned to the caller.
@@ -196,6 +211,6 @@ To use your your new validator:
 
 ```dart
 var getsPresent = ask('Have you been good or bad'
-    , validator:  AskGoodOrBad();
+    , validator:  AskGoodOrBad());
 ```
 
