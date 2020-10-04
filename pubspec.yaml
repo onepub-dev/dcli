@@ -12,11 +12,10 @@ dependencies:
   csv: ^4.0.3
   equatable: ^1.0.1
   ffi: ^0.1.3
-  file: ^5.1.0
   glob: ^1.2.0
   ini: ^2.0.1
   intl: ^0.16.0
-  logger: ^0.9.1
+  logger: ^0.9.4
   meta: ^1.1.8
   path: ^1.7.0
   pedantic: ^1.6.0
@@ -27,11 +26,13 @@ dependencies:
   yaml: ^2.2.0
   pubspec: ^0.1.5
 dev_dependencies: 
-  test: 1.15.3
   effective_dart: ^1.0.0
+  file: ^6.0.0-nullsafetey.1
   mockito: ^4.0.0
-  test_coverage: ^0.4.2
   settings_yaml: ^2.1.0
+  test: 1.15.4
+  test_coverage: ^0.4.2
+  
 executables: 
   dcli: dcli
   dcli_complete: dcli_complete
