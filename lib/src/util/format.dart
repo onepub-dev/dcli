@@ -18,14 +18,13 @@ class Format {
   ///
   /// If their are more [cols] than [widths] then the last width
   /// is used repeatedly.
-  /// If [widths] is null then a default with of 20 is used.
+  /// If [widths] is null then a default width of 20 is used.
   ///
   /// returns a string with each of the columns padded according to the
   /// [widths].
   ///
   ///
-  static String row(List<String> cols,
-      {List<int> widths, List<TableAlignment> alignments, String delimiter}) {
+  static String row(List<String> cols, {List<int> widths, List<TableAlignment> alignments, String delimiter}) {
     var row = '';
     var i = 0;
     widths ??= [20];
@@ -74,8 +73,29 @@ class Format {
 
   /// returns a double as a percentage to the given [precision]
   /// e.g. 0.11 becomes 11% if [precision] is 0.
-  String percentage(double progress, int precision) {
+  static String percentage(double progress, int precision) {
     return '${(progress * 100).toStringAsFixed(precision)}%';
+  }
+
+  /// returns the the number of [bytes] in a human readable
+  /// form. e.g. 10G, 100M, 20K, 10B
+  static String bytesAsReadable(int bytes) {
+    String human;
+
+    var svalue = '$bytes';
+    if (bytes > 1000000000) {
+      human = svalue.substring(0, svalue.length - 9);
+      human += 'G';
+    } else if (bytes > 1000000) {
+      human = svalue.substring(0, svalue.length - 6);
+      human += 'M';
+    } else if (bytes > 1000) {
+      human = svalue.substring(0, svalue.length - 3);
+      human += 'K';
+    } else {
+      human = '${svalue}B';
+    }
+    return human;
   }
 
   // ///

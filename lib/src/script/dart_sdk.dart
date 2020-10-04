@@ -7,7 +7,6 @@ import 'package:system_info/system_info.dart';
 
 import '../../dcli.dart';
 import '../util/enum_helper.dart';
-import '../util/file_system.dart';
 import '../util/progress.dart';
 import '../util/runnable_process.dart';
 import '../util/terminal.dart';
@@ -101,14 +100,13 @@ class DartSdk {
   /// [runtimeScriptPath] is the path to the dcli script we are compiling.
   /// [pathToExe] is the path (including the filename) to write the compiled ex to .
   /// [projectRootPath] is the path to the projects root directory.
-  void runDart2Native(Script script,
-      {@required String pathToExe, Progress progress}) {
+  void runDart2Native(Script script, {@required String pathToExe, Progress progress}) {
     var runArgs = <String>[];
     runArgs.add(script.pathToScript);
     runArgs.add('--output=${pathToExe}');
 
-    var process = RunnableProcess.fromCommandArgs(dart2NativePath, runArgs,
-        workingDirectory: script.pathToScriptDirectory);
+    var process =
+        RunnableProcess.fromCommandArgs(dart2NativePath, runArgs, workingDirectory: script.pathToScriptDirectory);
 
     process.start();
 
@@ -127,11 +125,9 @@ class DartSdk {
   }
 
   /// runs 'pub get'
-  void runPubGet(String workingDirectory,
-      {Progress progress, bool compileExecutables}) {
-    var process = RunnableProcess.fromCommandArgs(
-        pathToPubExe, ['get', '--no-precompile'],
-        workingDirectory: workingDirectory);
+  void runPubGet(String workingDirectory, {Progress progress, bool compileExecutables}) {
+    var process =
+        RunnableProcess.fromCommandArgs(pathToPubExe, ['get', '--no-precompile'], workingDirectory: workingDirectory);
 
     process.start();
 
@@ -226,8 +222,7 @@ class DartSdk {
 
     if (Platform.isLinux || Platform.isMacOS) {
       /// make execs executable.
-      find('*', root: join(installDir, 'bin'), recursive: false)
-          .forEach((file) => 'chmod +x, $file'.run);
+      find('*', root: join(installDir, 'bin'), recursive: false).forEach((file) => 'chmod +x, $file'.run);
     }
 
     // The normal dart detection process won't work here
@@ -270,8 +265,7 @@ class DartSdk {
 
     /// ask for and confirm the install directory.
     while (!confirmed) {
-      var entered = ask(
-          'Install dart-sdk to (Enter for default [${truepath(dartToolDir)}]): ');
+      var entered = ask('Install dart-sdk to (Enter for default [${truepath(dartToolDir)}]): ');
       if (entered.isNotEmpty) {
         dartToolDir = entered;
       }
@@ -309,17 +303,16 @@ class DartSdk {
   int _progressSuppressor = 0;
   void _showProgress(FetchProgress progress) {
     var term = Terminal();
-    var percentage = Format().percentage(progress.progress, 1);
+    var percentage = Format.percentage(progress.progress, 1);
     if (term.isAnsi) {
       term.clearLine(mode: TerminalClearMode.all);
       term.startOfLine();
       echo(
-          '${EnumHelper.getName(progress.status).padRight(15)}${humanNumber(progress.downloaded)}/${humanNumber(progress.length)} $percentage');
+          '${EnumHelper.getName(progress.status).padRight(15)}${Format.bytesAsReadable(progress.downloaded)}/${Format.bytesAsReadable(progress.length)} $percentage');
     } else {
-      if (_progressSuppressor % 1000 == 0 ||
-          progress.status == FetchStatus.complete) {
+      if (_progressSuppressor % 1000 == 0 || progress.status == FetchStatus.complete) {
         print(
-            '${EnumHelper.getName(progress.status).padRight(15)}${humanNumber(progress.downloaded)}/${humanNumber(progress.length)} $percentage');
+            '${EnumHelper.getName(progress.status).padRight(15)}${Format.bytesAsReadable(progress.downloaded)}/${Format.bytesAsReadable(progress.length)} $percentage');
       }
       _progressSuppressor++;
       if (_progressSuppressor > 1000) _progressSuppressor = 0;
