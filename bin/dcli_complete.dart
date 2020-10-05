@@ -33,9 +33,6 @@ void main(List<String> args) {
 
   var priorCommandFound = false;
 
-  //print('args ${args}');
-
-  //print('args length: ${args.length}');
   // do we have a prior word.
   if (args.length == 3) {
     var priorWord = args[2];
