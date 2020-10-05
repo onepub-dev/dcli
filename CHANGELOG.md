@@ -1,3 +1,10 @@
+# 0.33.0
+upgraded package versions for dart 2.10 compatability.
+moved humanReadable into Format class and made it part of the public api. Changed Format.percentage to static.
+Modifyed the prompt argument to accept an empty string rather than null to make way for null safety
+Added 'required' parameter to ask.
+Update windows_installer.yml
+
 # 0.32.6
 Update windows_installer.yml
 

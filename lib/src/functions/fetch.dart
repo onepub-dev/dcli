@@ -35,7 +35,10 @@ typedef OnFetchProgress = void Function(FetchProgress progress);
 /// to the [onProgress] call. In the meantime ensure that you always return [true] from
 /// the 'onProgress' callback.
 ///
-void fetch({@required String url, @required String saveToPath, OnFetchProgress onProgress}) =>
+void fetch(
+        {@required String url,
+        @required String saveToPath,
+        OnFetchProgress onProgress}) =>
     _Fetch().fetch(url: url, saveToPath: saveToPath, onProgress: onProgress);
 
 /// Fetches the list of of resources indicated by [urls];
@@ -65,11 +68,13 @@ void fetch({@required String url, @required String saveToPath, OnFetchProgress o
 /// You must call cancel on all downloads or the remaining downloads must complete before
 /// [fetchMultiple] will return.
 ///
-void fetchMultiple({@required List<FetchUrl> urls}) => _Fetch().fetchMultiple(urls: urls);
+void fetchMultiple({@required List<FetchUrl> urls}) =>
+    _Fetch().fetchMultiple(urls: urls);
 
 class _Fetch extends DCliFunction {
   void fetch({String url, String saveToPath, OnFetchProgress onProgress}) {
-    waitForEx<void>(download(FetchUrl(url: url, saveToPath: saveToPath, onProgress: onProgress)));
+    waitForEx<void>(download(
+        FetchUrl(url: url, saveToPath: saveToPath, onProgress: onProgress)));
   }
 
   void fetchMultiple({List<FetchUrl> urls}) {
@@ -94,7 +99,8 @@ class _Fetch extends DCliFunction {
     _sendProgressEvent(FetchProgress._initialising(fetchUrl));
 
     if (exists(fetchUrl.saveToPath)) {
-      throw FetchException('The file at saveToPath:${fetchUrl.saveToPath} already exists.');
+      throw FetchException(
+          'The file at saveToPath:${fetchUrl.saveToPath} already exists.');
     }
 
     touch(fetchUrl.saveToPath, create: true);
@@ -115,7 +121,8 @@ class _Fetch extends DCliFunction {
       var contentLength = response.contentLength;
 
       // we have a response.
-      _sendProgressEvent(FetchProgress._downloading(fetchUrl, contentLength, 0));
+      _sendProgressEvent(
+          FetchProgress._downloading(fetchUrl, contentLength, 0));
 
       /// prep the save file.
       var saveFile = File(fetchUrl.saveToPath);
@@ -136,14 +143,17 @@ class _Fetch extends DCliFunction {
           lengthReceived += newBytes.length;
 
           /// progres indicated to cancel the download.
-          _sendProgressEvent(FetchProgress._downloading(fetchUrl, contentLength, lengthReceived));
+          _sendProgressEvent(FetchProgress._downloading(
+              fetchUrl, contentLength, lengthReceived));
 
-          Settings().verbose('Download progress: $lengthReceived / $contentLength ');
+          Settings()
+              .verbose('Download progress: $lengthReceived / $contentLength ');
         },
         onDone: () async {
           /// down load is complete
           await raf.close();
-          _sendProgressEvent(FetchProgress._complete(fetchUrl, contentLength, lengthReceived));
+          _sendProgressEvent(
+              FetchProgress._complete(fetchUrl, contentLength, lengthReceived));
           Settings().verbose('Completed downloading: ${fetchUrl.url}');
           unawaited(subscription.cancel());
           completer.complete();
