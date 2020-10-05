@@ -56,7 +56,8 @@ void dsort(List<String> args) async {
     ..addMultiOption(sortkeyOption,
         abbr: 's',
         //ignore: avoid_types_on_closure_parameters
-        callback: (List<String> values) => columns.addAll(FileSort.expandColumns(values)))
+        callback: (List<String> values) =>
+            columns.addAll(FileSort.expandColumns(values)))
     ..addOption(outputOption, abbr: 'o');
 
   var results = parser.parse(args);
@@ -91,10 +92,13 @@ void dsort(List<String> args) async {
   }
 
   if (exists(outputPath) && outputPath != inputPath) {
-    usageError('The output_file $outputPath already exist. Delete the file and try again.');
+    usageError(
+        'The output_file $outputPath already exist. Delete the file and try again.');
   }
 
-  var sort = FileSort(inputPath, outputPath, columns, fieldDelimiter, lineDelimiter, verbose: verbose);
+  var sort = FileSort(
+      inputPath, outputPath, columns, fieldDelimiter, lineDelimiter,
+      verbose: verbose);
 
   await sort.sort();
 }
