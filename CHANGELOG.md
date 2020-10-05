@@ -1,3 +1,6 @@
+# 0.33.1
+Fixed a bug in confirm as it needs to explictly set required .
+
 # 0.33.0
 upgraded package versions for dart 2.10 compatability.
 moved humanReadable into Format class and made it part of the public api. Changed Format.percentage to static.
