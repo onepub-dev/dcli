@@ -1,3 +1,9 @@
+# 0.33.3
+tab completion now works with a complete directory name as the search word.
+
+# 0.33.2
+work on improving the tab completion when a partial path is entered.
+
 # 0.33.1
 Fixed a bug in confirm as it needs to explictly set required .
 
