@@ -14,15 +14,43 @@ void main() {
       List<String> paths;
       test('empty word', () async {
         var paths = completionExpandScripts('', workingDirectory: root);
+        expect(paths, unorderedEquals(<String>['fred.jpg', 'fred.png', 'one.txt', 'two.txt', 'one.jpg', 'middle/']));
+      });
+
+      test('single match', () async {
+        paths = completionExpandScripts('middl', workingDirectory: root);
         expect(
             paths,
             unorderedEquals(<String>[
-              'fred.jpg',
-              'fred.png',
-              'one.txt',
-              'two.txt',
-              'one.jpg',
-              'middle'
+              'middle/',
+            ]));
+      });
+
+      test('directory with trailing slash', () async {
+        paths = completionExpandScripts('middle/', workingDirectory: root);
+        expect(
+            paths,
+            unorderedEquals(<String>[
+              'middle/bottom/',
+              'middle/four.txt',
+              'middle/three.txt',
+              'middle/two.jpg',
+            ]));
+      });
+
+      /// need a test where we enter a partial directory and two directories match
+      /// the completion seems to auto complete to the first exact match.
+      /// e.g.
+      /// doc
+      /// docker
+      /// match word: doc which then return doc/
+      test('two matching directories', () {
+        paths = completionExpandScripts('doc', workingDirectory: root);
+        expect(
+            paths,
+            unorderedEquals(<String>[
+              'doc/',
+              'docker/',
             ]));
       });
 
@@ -31,7 +59,7 @@ void main() {
         expect(
             paths,
             unorderedEquals(<String>[
-              'middle/bottom',
+              'middle/bottom/',
               'middle/four.txt',
               'middle/three.txt',
               'middle/two.jpg',
@@ -40,8 +68,7 @@ void main() {
 
       test('directory and letter', () async {
         paths = completionExpandScripts('middle/t', workingDirectory: root);
-        expect(paths,
-            unorderedEquals(<String>['middle/two.jpg', 'middle/three.txt']));
+        expect(paths, unorderedEquals(<String>['middle/two.jpg', 'middle/three.txt']));
       });
     });
   });

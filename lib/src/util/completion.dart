@@ -5,8 +5,7 @@ import '../../dcli.dart';
 /// Utility methods to aid the dcli_completion app.
 ///
 
-List<String> completionExpandScripts(String word,
-    {String workingDirectory = '.'}) {
+List<String> completionExpandScripts(String word, {String workingDirectory = '.'}) {
   var root = workingDirectory;
 
   var searchTerm = word;
@@ -16,8 +15,7 @@ List<String> completionExpandScripts(String word,
     searchTerm = parts.last;
 
     if (parts.length > 1) {
-      root = join(root,
-          parts.sublist(0, parts.length - 1).join(Platform.pathSeparator));
+      root = join(root, parts.sublist(0, parts.length - 1).join(Platform.pathSeparator));
     }
   }
 
@@ -28,18 +26,16 @@ List<String> completionExpandScripts(String word,
     root = join(root, searchTerm);
     searchTerm = '';
   }
-  var entries = find('$searchTerm*',
-          types: [Find.directory, Find.file], root: root, recursive: false)
-      .toList();
+  var entries = find('$searchTerm*', types: [Find.directory, Find.file], root: root, recursive: false).toList();
 
   var results = <String>[];
-  if (word.isEmpty) {
-    for (var script in entries) {
-      results.add(relative(script, from: workingDirectory));
-    }
-  } else {
-    for (var script in entries) {
-      if (relative(script, from: workingDirectory).startsWith(word)) {
+  for (var script in entries) {
+    if (word.isEmpty || relative(script, from: workingDirectory).startsWith(word)) {
+      var matchPath = join(root, script);
+      if (isDirectory(matchPath)) {
+        // its a directory add trailing slash and returning.
+        results.add('${relative('$script', from: workingDirectory)}/');
+      } else {
         results.add(relative(script, from: workingDirectory));
       }
     }
