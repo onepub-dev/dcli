@@ -5,8 +5,7 @@ import '../../dcli.dart';
 /// Utility methods to aid the dcli_completion app.
 ///
 
-List<String> completionExpandScripts(String word,
-    {String workingDirectory = '.'}) {
+List<String> completionExpandScripts(String word, {String workingDirectory = '.'}) {
   var root = workingDirectory;
 
   var searchTerm = word;
@@ -16,13 +15,18 @@ List<String> completionExpandScripts(String word,
     searchTerm = parts.last;
 
     if (parts.length > 1) {
-      root = join(root,
-          parts.sublist(0, parts.length - 1).join(Platform.pathSeparator));
+      root = join(root, parts.sublist(0, parts.length - 1).join(Platform.pathSeparator));
     }
   }
-  var entries = find('$searchTerm*',
-          types: [Find.directory, Find.file], root: root, recursive: false)
-      .toList();
+
+  /// if the searchTerm is actually a directory name
+  /// then we need to use the directory as the root so we
+  /// search in it.
+  if (exists(join(root, searchTerm))) {
+    root = join(root, searchTerm);
+    searchTerm = '';
+  }
+  var entries = find('$searchTerm*', types: [Find.directory, Find.file], root: root, recursive: false).toList();
 
   var results = <String>[];
   if (word.isEmpty) {
