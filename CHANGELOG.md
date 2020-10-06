@@ -1,3 +1,6 @@
+# 0.33.4
+Simplified the logic and doing a better job of directory expansion. Still has a problem with two matching directories.
+
 # 0.33.3
 tab completion now works with a complete directory name as the search word.
 
