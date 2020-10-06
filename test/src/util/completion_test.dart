@@ -14,7 +14,16 @@ void main() {
       List<String> paths;
       test('empty word', () async {
         var paths = completionExpandScripts('', workingDirectory: root);
-        expect(paths, unorderedEquals(<String>['fred.jpg', 'fred.png', 'one.txt', 'two.txt', 'one.jpg', 'middle/']));
+        expect(
+            paths,
+            unorderedEquals(<String>[
+              'fred.jpg',
+              'fred.png',
+              'one.txt',
+              'two.txt',
+              'one.jpg',
+              'middle/'
+            ]));
       });
 
       test('single match', () async {
@@ -68,7 +77,8 @@ void main() {
 
       test('directory and letter', () async {
         paths = completionExpandScripts('middle/t', workingDirectory: root);
-        expect(paths, unorderedEquals(<String>['middle/two.jpg', 'middle/three.txt']));
+        expect(paths,
+            unorderedEquals(<String>['middle/two.jpg', 'middle/three.txt']));
       });
     });
   });
