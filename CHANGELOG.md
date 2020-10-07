@@ -1,3 +1,6 @@
+# 0.33.6
+command line completion for dcli cli: added test for an invalid path. Added logic to quote paths that contains spaces. Added bash option so it won't add a space after directory names.
+
 # 0.33.5
 tweak tab completion so that dir/ matches the ls behaviour.
 
