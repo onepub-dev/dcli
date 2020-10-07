@@ -1,3 +1,6 @@
+# 0.33.5
+tweak tab completion so that dir/ matches the ls behaviour.
+
 # 0.33.4
 Simplified the logic and doing a better job of directory expansion. Still has a problem with two matching directories.
 
