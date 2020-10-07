@@ -31,6 +31,9 @@ List<String> completionExpandScripts(String word,
     }
   }
 
+  /// if the resulting path is invalid return an empty list.
+  if (!exists(root)) return <String>[];
+
   // /// if the work ends in a slash then we treat it as a directory
   // /// then we need to use the directory as the root so we
   // /// search in it.
@@ -48,12 +51,18 @@ List<String> completionExpandScripts(String word,
     if (word.isEmpty ||
         relative(script, from: workingDirectory).startsWith(word)) {
       var matchPath = join(root, script);
+      String filePath;
       if (isDirectory(matchPath)) {
         // its a directory add trailing slash and returning.
-        results.add('${relative('$script', from: workingDirectory)}/');
+        filePath = '${relative('$script', from: workingDirectory)}/';
       } else {
-        results.add(relative(script, from: workingDirectory));
+        filePath = relative(script, from: workingDirectory);
       }
+      if (filePath.contains(' ')) {
+        /// we quote filenames that include a space
+        filePath = '"$filePath"';
+      }
+      results.add(filePath);
     }
   }
 

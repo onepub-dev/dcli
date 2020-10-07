@@ -75,6 +75,15 @@ void main() {
             ]));
       });
 
+      test('invalid directory', () async {
+        paths = completionExpandScripts('muddle/', workingDirectory: root);
+        expect(
+            paths,
+            unorderedEquals(<String>[
+              'middle/',
+            ]));
+      });
+
       test('directory and letter', () async {
         paths = completionExpandScripts('middle/t', workingDirectory: root);
         expect(paths,

@@ -27,7 +27,9 @@ class BashShell with ShellMixin, PosixMixin {
   void installTabCompletion({bool quiet = false}) {
     if (!isCompletionInstalled) {
       // Add cli completion
-      var command = "complete -C 'dcli_complete' dcli";
+      /// -o nospace - after directory names
+
+      var command = "complete -o nospace -C 'dcli_complete' dcli";
 
       var startFile = pathToStartScript;
 
