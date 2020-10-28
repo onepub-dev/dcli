@@ -83,12 +83,26 @@ class Env extends DCliFunction {
   Env._internal() : _caseSensitive = !Settings().isWindows {
     var platformVars = Platform.environment;
 
-    _envVars =
-        CanonicalizedMap((key) => (_caseSensitive) ? key : key.toUpperCase());
+    _envVars = CanonicalizedMap((key) => (_caseSensitive) ? key : key.toUpperCase());
 
     // build a local map with all of the OS environment vars.
     for (var entry in platformVars.entries) {
       _envVars.putIfAbsent(entry.key, () => entry.value);
+    }
+  }
+
+  /// Saves the dcli environment map back into the [Platform.environment]
+  /// You may need to do this before spawing an isolate so that it
+  /// recieves an updates to enviroment variables.
+  ///
+  /// EXPERIMENTAL: my preferred option is that any updated to our environment
+  /// is automatically pushed to [Platform.environment] however we do
+  /// play with the case of environment variables under Windows so I'm not
+  /// quite certain of the correct way to do it. So for the moment this is
+  /// a hack.
+  void save() {
+    for (var entry in _envVars.entries) {
+      Platform.environment[entry.key] = entry.value;
     }
   }
 
@@ -191,11 +205,9 @@ class Env extends DCliFunction {
 
     if (home == null) {
       if (Settings().isWindows) {
-        throw DCliException(
-            "Unable to find the 'APPDATA' enviroment variable. Please ensure it is set and try again.");
+        throw DCliException("Unable to find the 'APPDATA' enviroment variable. Please ensure it is set and try again.");
       } else {
-        throw DCliException(
-            "Unable to find the 'HOME' enviroment variable. Please ensure it is set and try again.");
+        throw DCliException("Unable to find the 'HOME' enviroment variable. Please ensure it is set and try again.");
       }
     }
     return home;
@@ -220,10 +232,13 @@ class Env extends DCliFunction {
   void _setEnv(String name, String value) {
     if (value == null) {
       _envVars.remove(name);
+      Platform.environment.remove(name);
       if (Settings().isWindows) {
         if (name == 'HOME' || name == 'APPDATA') {
           _envVars.remove('HOME');
           _envVars.remove('APPDATA');
+          Platform.environment.remove('HOME');
+          Platform.environment.remove('APPDATA');
         }
       }
     } else {
