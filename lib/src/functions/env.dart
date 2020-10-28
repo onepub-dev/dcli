@@ -106,6 +106,17 @@ class Env extends DCliFunction {
     return _envVars[(_caseSensitive) ? name : name.toUpperCase()];
   }
 
+  /// Returns the complete set of Environment variable entries.
+  Iterable<MapEntry<String, String>> get entries => _envVars.entries;
+
+  /// Adds all of the entries in the [other] map as environment variables.
+  /// Case translation will occur if the platform is case sensitive.
+  void addAll(Map<String, String> other) {
+    for (var entry in other.entries) {
+      _setEnv(entry.key, entry.value);
+    }
+  }
+
   /// returns the PATH environment var.
   List<String> get _path {
     var pathEnv = this['PATH'];
