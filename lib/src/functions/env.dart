@@ -1,3 +1,4 @@
+import 'dart:convert';
 import 'dart:io';
 
 import 'package:collection/collection.dart';
@@ -83,8 +84,7 @@ class Env extends DCliFunction {
   Env._internal() : _caseSensitive = !Settings().isWindows {
     var platformVars = Platform.environment;
 
-    _envVars =
-        CanonicalizedMap((key) => (_caseSensitive) ? key : key.toUpperCase());
+    _envVars = CanonicalizedMap((key) => (_caseSensitive) ? key : key.toUpperCase());
 
     // build a local map with all of the OS environment vars.
     for (var entry in platformVars.entries) {
@@ -202,11 +202,9 @@ class Env extends DCliFunction {
 
     if (home == null) {
       if (Settings().isWindows) {
-        throw DCliException(
-            "Unable to find the 'APPDATA' enviroment variable. Please ensure it is set and try again.");
+        throw DCliException("Unable to find the 'APPDATA' enviroment variable. Please ensure it is set and try again.");
       } else {
-        throw DCliException(
-            "Unable to find the 'HOME' enviroment variable. Please ensure it is set and try again.");
+        throw DCliException("Unable to find the 'HOME' enviroment variable. Please ensure it is set and try again.");
       }
     }
     return home;
@@ -265,6 +263,62 @@ class Env extends DCliFunction {
       separator = ';';
     }
     return separator;
+  }
+
+  /// Encodes all environment variables to a json string.
+  /// This method is intended to be used in conjuction with
+  /// [fromJson].
+  ///
+  /// You will find this method useful when spawning an isolate
+  /// that depends on environment variables created by calls
+  /// to DCli [env] property.
+  ///
+  /// When creating an isolate it takes its environment variables
+  /// from [Platform.environment]. This means that any environment
+  /// variables created via DCli will not be visible to the isolate.
+  ///
+  /// The way to over come this problem is to call [Env().toJson()]
+  /// pass the resulting string to the isolate and then have the
+  /// isolate call [Env().fromJson()]  which resets the isolates
+  /// environment variables.
+  ///
+  /// ```dart
+  ///void startIsolate() {
+  ///   var iso = waitForEx<IsolateRunner>(IsolateRunner.spawn());
+  ///
+  ///   try {
+  ///      iso.run(scheduler, Env().toJson());
+  ///   } finally {
+  ///     waitForEx(iso.close());
+  ///   }
+  ///}
+  ///
+  /// // This method runs in the new isolate.
+  /// void scheduler(String jsonEnvironment) {
+  ///   Env().fromJson(jsonEnvironment);
+  ///   Certbot().scheduleRenews();
+  /// }
+  /// ```
+  String toJson() {
+    var envMap = <String, String>{};
+    envMap.addEntries(env.entries.toSet());
+    return JsonEncoder(_toEncodable).convert(envMap);
+  }
+
+  /// Takes a json string created by [toJson]
+  /// clears the current set of environment variables
+  /// and replaces them with the environment variables
+  /// encoded in the json string.
+  ///
+  /// If you choose not to use [toJson] to create the json
+  /// then [json ] must be in form of an json encoded Map<String,String>.
+  void fromJson(String json) {
+    _envVars.clear();
+    env.addAll(Map<String, String>.from(JsonDecoder().convert(json) as Map<dynamic, dynamic>));
+  }
+
+  String _toEncodable(Object object) {
+    return object.toString();
   }
 
   /// Used in unit tests to mock the Env class.
