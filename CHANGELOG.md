@@ -1,3 +1,6 @@
+# 0.34.0
+Added methods to encode environment vars to json and then restore them from json.
+
 # 0.33.8
 Added 'entries' and 'addAll' methods to Env.
 removed save as you can't update the Platform.environment.

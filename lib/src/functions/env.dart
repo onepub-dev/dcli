@@ -84,7 +84,8 @@ class Env extends DCliFunction {
   Env._internal() : _caseSensitive = !Settings().isWindows {
     var platformVars = Platform.environment;
 
-    _envVars = CanonicalizedMap((key) => (_caseSensitive) ? key : key.toUpperCase());
+    _envVars =
+        CanonicalizedMap((key) => (_caseSensitive) ? key : key.toUpperCase());
 
     // build a local map with all of the OS environment vars.
     for (var entry in platformVars.entries) {
@@ -202,9 +203,11 @@ class Env extends DCliFunction {
 
     if (home == null) {
       if (Settings().isWindows) {
-        throw DCliException("Unable to find the 'APPDATA' enviroment variable. Please ensure it is set and try again.");
+        throw DCliException(
+            "Unable to find the 'APPDATA' enviroment variable. Please ensure it is set and try again.");
       } else {
-        throw DCliException("Unable to find the 'HOME' enviroment variable. Please ensure it is set and try again.");
+        throw DCliException(
+            "Unable to find the 'HOME' enviroment variable. Please ensure it is set and try again.");
       }
     }
     return home;
@@ -314,7 +317,8 @@ class Env extends DCliFunction {
   /// then [json ] must be in form of an json encoded Map<String,String>.
   void fromJson(String json) {
     _envVars.clear();
-    env.addAll(Map<String, String>.from(JsonDecoder().convert(json) as Map<dynamic, dynamic>));
+    env.addAll(Map<String, String>.from(
+        JsonDecoder().convert(json) as Map<dynamic, dynamic>));
   }
 
   String _toEncodable(Object object) {
