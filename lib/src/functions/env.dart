@@ -91,21 +91,6 @@ class Env extends DCliFunction {
     }
   }
 
-  /// Saves the dcli environment map back into the [Platform.environment]
-  /// You may need to do this before spawing an isolate so that it
-  /// recieves an updates to enviroment variables.
-  ///
-  /// EXPERIMENTAL: my preferred option is that any updated to our environment
-  /// is automatically pushed to [Platform.environment] however we do
-  /// play with the case of environment variables under Windows so I'm not
-  /// quite certain of the correct way to do it. So for the moment this is
-  /// a hack.
-  void save() {
-    for (var entry in _envVars.entries) {
-      Platform.environment[entry.key] = entry.value;
-    }
-  }
-
   /// conveience method for unit tests.
   /// resets all environment variables to the state
   /// we inheritied from the parent process.
