@@ -1,3 +1,10 @@
+# 0.33.8
+Added 'entries' and 'addAll' methods to Env.
+removed save as you can't update the Platform.environment.
+
+# 0.33.7
+Added method to save the environment back to the platform.
+
 # 0.33.6
 command line completion for dcli cli: added test for an invalid path. Added logic to quote paths that contains spaces. Added bash option so it won't add a space after directory names.
 
