@@ -111,7 +111,15 @@ Alternatively you can install and run dcli directly from your cli.
 
 dart allows you to include dependencies which are pulled from a git repo.
 
-dependencies: gcloud\_lib: git: url: [git@bitbucket.org](mailto:git@bitbucket.org):bsutton/gcloud\_lib.git path: gcloud\_lib
+e.g.
+
+```text
+dependencies:
+  gcloud_lib: 
+    git: 
+      url: git@bitbucket.org:myrepo/gcloud_lib.git 
+      path: gcloud_lib
+```
 
 If your git repository is public then you don't need to do anything special.
 
