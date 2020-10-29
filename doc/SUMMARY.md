@@ -2,7 +2,7 @@
 
 * [Introduction](README.md)
 * [What does DCli do?](what-does-dcli-do.md)
-* [Getting Started](getting-started.md)
+* [Install DCli](getting-started.md)
 * [Writing your first script](writing-your-first-script.md)
 * [Add DCli to your project](added-dcli-to-your-project.md)
 * [pub.dev](pub.dev.md)
