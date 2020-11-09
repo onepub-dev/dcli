@@ -70,8 +70,8 @@ void main() {
   // 'ls -la /tmp/me.special.*'.run;
 }
 
-class Priviliges {
-  static final Priviliges _self = Priviliges._internal();
+class Privileges {
+  static final Privileges _self = Privileges._internal();
 
   DynamicLibrary dylib;
 
@@ -91,9 +91,9 @@ class Priviliges {
   /// Used to track what UID is currently in effect.
   int currentEffectiveUID;
 
-  factory Priviliges() => _self;
+  factory Privileges() => _self;
 
-  Priviliges._internal() {
+  Privileges._internal() {
     // var path = 'libc.so.6';
     // if (Platform.isMacOS) path = '/usr/lib/libSystem.dylib';
     // if (Platform.isWindows) path = r'primitives_library\Debug\primitives.dll';
