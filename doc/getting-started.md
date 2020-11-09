@@ -1,4 +1,4 @@
-# Getting Started
+# Install DCli
 
 To get started with DCli you first need to install Dart and optionally the DCli tools.
 
