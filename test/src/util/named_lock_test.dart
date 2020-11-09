@@ -6,7 +6,7 @@ import 'dart:async';
 import 'dart:io';
 import 'dart:isolate';
 
-import 'package:dcli/dcli.dart';
+import 'package:dcli/dcli.dart' hide equals;
 import 'package:dcli/src/util/named_lock.dart';
 import 'package:test/test.dart';
 
@@ -19,14 +19,6 @@ void main() {
     var lockPath = join(rootPath, Directory.systemTemp.path, 'dcli', 'locks');
     print(lockPath);
   });
-
-  // test('Thrash test', () {
-  //   for (var i = 0; i < 20; i++) {
-  //     print('spawning worker $i');
-  //     Isolate.spawn(worker, i);
-  //   }
-  //   sleep(59);
-  // }, timeout: Timeout(Duration(minutes: 2)));
 
   test('timeout catch', () {
     expect(() {
@@ -71,6 +63,23 @@ void main() {
       delete(logFile);
     });
   }, skip: false);
+
+  test('Thrash test', () {
+    Settings().setVerbose(enabled: true);
+    if (exists(lockCheckPath)) {
+      deleteDir(lockCheckPath, recursive: true);
+    }
+
+    createDir(lockCheckPath, recursive: true);
+
+    for (var i = 0; i < 20; i++) {
+      print('spawning worker $i');
+      Isolate.spawn(worker, i);
+    }
+    sleep(59);
+
+    expect(exists(lockFailedPath), equals(false));
+  }, timeout: Timeout(Duration(minutes: 2)));
 }
 
 void takeHardLock() {
@@ -100,12 +109,26 @@ void takeLock(String message) {
   });
 }
 
+const lockCheckPath = '/tmp/lockcheck';
+final lockFailedPath = join(lockCheckPath, 'lock_failed');
+
+/// must be a global function as we us it to spawn an isolate
 void worker(int instance) {
+  Settings().setVerbose(enabled: true);
   // Settings().setVerbose(enabled: true);
   print('starting worker instance $instance');
   NamedLock(name: 'gshared-compile').withLock(() {
     print('acquired lock worker $instance');
+    var inLockPath = join(lockCheckPath, 'inlock');
+    if (exists(inLockPath)) {
+      touch(lockFailedPath, create: true);
+      throw 'NamedLock for $instance failed as another lock is active';
+    }
+
+    touch(inLockPath, create: true);
+
     sleep(5);
     print('finished work $instance');
+    delete(inLockPath);
   });
 }

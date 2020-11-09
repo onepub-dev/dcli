@@ -102,13 +102,6 @@ class NamedLock {
   }) {
     var lockHeld = false;
     runZoned(() {
-      /// Ensure that that the lockfile directory exists.
-      _withHardLock(fn: () {
-        if (!exists(_lockPath)) {
-          createDir(_lockPath, recursive: true);
-        }
-      });
-
       try {
         _log('lockcount = $_lockCountForName');
 
@@ -183,18 +176,35 @@ class NamedLock {
 
     var isolate = _isolateID;
 
-    return join(_lockPath, '.$pid.$isolate.$name');
+    return join(_lockPath, '.$pid.${isolate}.$name');
   }
 
-  String get _isolateID {
-    var isolate = Service.getIsolateID(Isolate.current);
-    if (isolate != null) {
-      isolate = isolate.replaceAll(r'/', '_');
-      isolate = isolate.replaceAll(r'\', '_');
-    } else {
-      isolate = '${Isolate.current.hashCode}';
+  _LockFileParts _lockFileParts(String lockfilePath) {
+    var parts = basename(lockfilePath).split('.');
+    // it can't actually be one of our lock files
+    if (parts.length < 3) {
+      return null;
     }
-    return isolate;
+
+    var pid = int.tryParse(parts[1]);
+    var isolateId = int.tryParse(parts[2]);
+
+    return _LockFileParts(pid, isolateId);
+  }
+
+  int get _isolateID {
+    var isolateString = Service.getIsolateID(Isolate.current);
+    int isolateId;
+    if (isolateString != null) {
+      isolateString = isolateString.replaceAll(r'/', '_');
+      isolateString = isolateString.replaceAll(r'\', '_');
+      if (isolateString.contains('_')) {
+        /// just the numeric value.
+        isolateId = int.tryParse(isolateString.split('_')[1]);
+      }
+    }
+    isolateId ??= Isolate.current.hashCode;
+    return isolateId;
   }
 
   /// Attempts to take a project lock.
@@ -209,8 +219,6 @@ class NamedLock {
   /// that owns it is still running. If it isn't we
   /// take a lock and delete the orphaned lock.
   bool _takeLock(String waiting) {
-    assert(exists(_lockPath));
-
     var taken = false;
 
     // wait for the lock to release or the timeout to expire
@@ -226,8 +234,13 @@ class NamedLock {
 
     while (!taken && waitCount > 0) {
       _withHardLock(fn: () {
+        /// Ensure that that the lockfile directory exists.
+        if (!exists(_lockPath)) {
+          createDir(_lockPath, recursive: true);
+        }
         // check for other lock files
-        var locks = find('*.$name', root: _lockPath).toList();
+        var locks = find('*.$name', root: _lockPath, includeHidden: true).toList();
+        _log(red('found $locks lock files'));
 
         var lockFiles = locks.length;
 
@@ -244,11 +257,9 @@ class NamedLock {
 
         if (taken) {
           var isolateID = Service.getIsolateID(Isolate.current);
-          Settings()
-              .verbose('Taking lock ${basename(_lockFilePath)} for $isolateID');
+          Settings().verbose('Taking lock ${basename(_lockFilePath)} for $isolateID');
 
-          Settings().verbose(
-              'Lock Source: ${StackTraceImpl(skipFrames: 9).formatStackTrace(methodCount: 1)}');
+          Settings().verbose('Lock Source: ${StackTraceImpl(skipFrames: 9).formatStackTrace(methodCount: 1)}');
           touch(_lockFilePath, create: true);
           //  log(StackTraceImpl().formatStackTrace(methodCount: 100));
         }
@@ -269,11 +280,9 @@ class NamedLock {
 
     if (!taken) {
       if (waitCount == 0) {
-        throw LockException(
-            'NamedLock timedout on $_description ${truepath(_lockPath)} as it is currently held');
+        throw LockException('NamedLock timedout on $_description ${truepath(_lockPath)} as it is currently held');
       } else {
-        throw LockException(
-            'Unable to lock $_description ${truepath(_lockPath)} as it is currently held');
+        throw LockException('Unable to lock $_description ${truepath(_lockPath)} as it is currently held');
       }
     }
 
@@ -282,22 +291,19 @@ class NamedLock {
 
   int _clearOldLocks(List<String> locks, int lockFiles) {
     for (var lock in locks) {
-      var parts = basename(lock).split('.');
-      if (parts.length < 3) {
-        // it can't actually be one of our lock files so ignore it
+      var lockFileParts = _lockFileParts(lock);
+      if (lockFileParts == null) {
+        /// isn't a valid lock file so ignore.
         continue;
       }
-      var lpid = int.tryParse(parts[0]);
-      var isolateId = parts[1];
       var currentIsolateId = _isolateID;
-
-      if (lpid == pid && isolateId == currentIsolateId) {
+      if (lockFileParts.pid == pid && lockFileParts.isolateId == currentIsolateId) {
         // ignore our own lock.
         lockFiles--;
         continue;
       }
 
-      if (!ProcessHelper().isRunning(lpid)) {
+      if (!ProcessHelper().isRunning(lockFileParts.pid)) {
         // If the foreign lock file was left orphaned
         // then we delete it.
         if (exists(lock)) {
@@ -325,22 +331,14 @@ class NamedLock {
     }
 
     try {
-      // var reusePort = Settings().isWindows ? false : true;
       while (socket == null) {
-        // socket = waitForEx<RawDatagramSocket>(RawDatagramSocket.bind(
-        //   '127.0.0.1',
-        //   port,
-        //   reuseAddress: true,
-        //   reusePort: reusePort,
-        // ));
-
         socket = waitForEx<RawServerSocket>(_bindSocket());
         if (waitCount > 0) {
           waitCount--;
         }
 
         if (waitCount == 0) {
-          // we have timedout
+          // we have timed out
           break;
         }
         if (socket == null) {
@@ -376,6 +374,13 @@ class NamedLock {
 
 void _log(String message) {
   Settings().verbose(message);
+}
+
+class _LockFileParts {
+  int pid;
+  int isolateId;
+
+  _LockFileParts(this.pid, this.isolateId);
 }
 
 ///
