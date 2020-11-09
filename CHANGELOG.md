@@ -1,3 +1,7 @@
+# 0.34.1
+Fixed two bugs in the NamedLock which effectively made it totally non-functional. The lock name had changed to have a leading '.' which meant the find command didn't find the locks and the parser no longer parsed the pid from the lock file name. 
+Added new unit test that can now detected if a lock isn't taken correctly.
+
 # 0.34.0
 Added methods to encode environment vars to json and then restore them from json.
 

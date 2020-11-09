@@ -239,7 +239,8 @@ class NamedLock {
           createDir(_lockPath, recursive: true);
         }
         // check for other lock files
-        var locks = find('*.$name', root: _lockPath, includeHidden: true).toList();
+        var locks =
+            find('*.$name', root: _lockPath, includeHidden: true).toList();
         _log(red('found $locks lock files'));
 
         var lockFiles = locks.length;
@@ -257,9 +258,11 @@ class NamedLock {
 
         if (taken) {
           var isolateID = Service.getIsolateID(Isolate.current);
-          Settings().verbose('Taking lock ${basename(_lockFilePath)} for $isolateID');
+          Settings()
+              .verbose('Taking lock ${basename(_lockFilePath)} for $isolateID');
 
-          Settings().verbose('Lock Source: ${StackTraceImpl(skipFrames: 9).formatStackTrace(methodCount: 1)}');
+          Settings().verbose(
+              'Lock Source: ${StackTraceImpl(skipFrames: 9).formatStackTrace(methodCount: 1)}');
           touch(_lockFilePath, create: true);
           //  log(StackTraceImpl().formatStackTrace(methodCount: 100));
         }
@@ -280,9 +283,11 @@ class NamedLock {
 
     if (!taken) {
       if (waitCount == 0) {
-        throw LockException('NamedLock timedout on $_description ${truepath(_lockPath)} as it is currently held');
+        throw LockException(
+            'NamedLock timedout on $_description ${truepath(_lockPath)} as it is currently held');
       } else {
-        throw LockException('Unable to lock $_description ${truepath(_lockPath)} as it is currently held');
+        throw LockException(
+            'Unable to lock $_description ${truepath(_lockPath)} as it is currently held');
       }
     }
 
@@ -297,7 +302,8 @@ class NamedLock {
         continue;
       }
       var currentIsolateId = _isolateID;
-      if (lockFileParts.pid == pid && lockFileParts.isolateId == currentIsolateId) {
+      if (lockFileParts.pid == pid &&
+          lockFileParts.isolateId == currentIsolateId) {
         // ignore our own lock.
         lockFiles--;
         continue;
