@@ -146,8 +146,7 @@ class Find extends DCliFunction {
       var nextLevel = <FileSystemEntity>[]..length = 100;
       var singleDirectory = <FileSystemEntity>[]..length = 100;
       var childDirectories = <FileSystemEntity>[]..length = 100;
-      await _processDirectory(root, root, recursive, types, matcher,
-          includeHidden, progress, childDirectories);
+      await _processDirectory(root, root, recursive, types, matcher, includeHidden, progress, childDirectories);
 
       while (childDirectories[0] != null) {
         _zeroElements(nextLevel);
@@ -155,8 +154,8 @@ class Find extends DCliFunction {
           if (directory == null) {
             break;
           }
-          await _processDirectory(root, directory.path, recursive, types,
-              matcher, includeHidden, progress, singleDirectory);
+          await _processDirectory(
+              root, directory.path, recursive, types, matcher, includeHidden, progress, singleDirectory);
           _appendTo(nextLevel, singleDirectory);
           _zeroElements(singleDirectory);
         }
@@ -168,15 +167,8 @@ class Find extends DCliFunction {
     return progress;
   }
 
-  Future<void> _processDirectory(
-      String root,
-      String currentDirectory,
-      bool recursive,
-      List<FileSystemEntityType> types,
-      _PatternMatcher matcher,
-      bool includeHidden,
-      Progress progress,
-      List<FileSystemEntity> nextLevel) async {
+  Future<void> _processDirectory(String root, String currentDirectory, bool recursive, List<FileSystemEntityType> types,
+      _PatternMatcher matcher, bool includeHidden, Progress progress, List<FileSystemEntity> nextLevel) async {
     var lister = Directory(currentDirectory).list(recursive: false);
     var nextLevelIndex = 0;
 
@@ -184,32 +176,34 @@ class Find extends DCliFunction {
 
     lister.listen(
       (entity) async {
-        var type = FileSystemEntity.typeSync(entity.path);
-        if (types.contains(type) &&
-            matcher.match(basename(entity.path)) &&
-            _allowed(
-              root,
-              entity,
-              includeHidden: includeHidden,
-            )) {
-          progress.addToStdout(entity.path);
-        }
+        try {
+          var type = FileSystemEntity.typeSync(entity.path);
+          if (types.contains(type) &&
+              matcher.match(basename(entity.path)) &&
+              _allowed(
+                root,
+                entity,
+                includeHidden: includeHidden,
+              )) {
+            progress.addToStdout(entity.path);
+          }
 
-        /// If we are recursing then we need to add any directories
-        /// to the list of childDirectories that need to be recursed.
-        if (recursive && type == Find.directory) {
-          // processing the /proc directory causes dart to crash
-          // https://github.com/dart-lang/sdk/issues/43176
-          if (entity.path != '/proc' &&
-              entity.path != '/dev' &&
-              entity.path != '/snap' &&
-              entity.path != '/sys') {
-            if (nextLevel.length > nextLevelIndex) {
-              nextLevel[nextLevelIndex++] = entity;
-            } else {
-              nextLevel.add(entity);
+          /// If we are recursing then we need to add any directories
+          /// to the list of childDirectories that need to be recursed.
+          if (recursive && type == Find.directory) {
+            // processing the /proc directory causes dart to crash
+            // https://github.com/dart-lang/sdk/issues/43176
+            if (entity.path != '/proc' && entity.path != '/dev' && entity.path != '/snap' && entity.path != '/sys') {
+              if (nextLevel.length > nextLevelIndex) {
+                nextLevel[nextLevelIndex++] = entity;
+              } else {
+                nextLevel.add(entity);
+              }
             }
           }
+        } on FileSystemException catch (e) {
+          // the directory/file may have been deleted between originally listing it and processing it.
+          Settings().verbose('Exception ignored process ${entity.path} during find:    $e');
         }
       },
       // should also register onError
@@ -227,8 +221,7 @@ class Find extends DCliFunction {
     await completer.future;
   }
 
-  bool _allowed(String root, FileSystemEntity entity,
-      {@required bool includeHidden}) {
+  bool _allowed(String root, FileSystemEntity entity, {@required bool includeHidden}) {
     return includeHidden || !_isHidden(root, entity);
   }
 
@@ -249,14 +242,15 @@ class Find extends DCliFunction {
     return isHidden;
   }
 
+  /// set all elements in the array to null so we can re-use the list
+  /// to reduce GC.
   void _zeroElements(List<FileSystemEntity> nextLevel) {
     for (var i = 0; i < nextLevel.length && nextLevel[i] != null; i++) {
       nextLevel[i] = null;
     }
   }
 
-  void _copyInto(List<FileSystemEntity> childDirectories,
-      List<FileSystemEntity> nextLevel) {
+  void _copyInto(List<FileSystemEntity> childDirectories, List<FileSystemEntity> nextLevel) {
     _zeroElements(childDirectories);
     for (var i = 0; i < nextLevel.length; i++) {
       if (childDirectories.length > i) {
@@ -267,8 +261,7 @@ class Find extends DCliFunction {
     }
   }
 
-  void _appendTo(List<FileSystemEntity> nextLevel,
-      List<FileSystemEntity> singleDirectory) {
+  void _appendTo(List<FileSystemEntity> nextLevel, List<FileSystemEntity> singleDirectory) {
     var index = _firstAvailable(nextLevel);
 
     for (var i = 0; i < singleDirectory.length; i++) {
@@ -286,8 +279,7 @@ class Find extends DCliFunction {
 
   int _firstAvailable(List<FileSystemEntity> nextLevel) {
     var firstAvailable = 0;
-    while (firstAvailable < nextLevel.length &&
-        nextLevel[firstAvailable] != null) {
+    while (firstAvailable < nextLevel.length && nextLevel[firstAvailable] != null) {
       firstAvailable++;
     }
     return firstAvailable;
