@@ -19,10 +19,9 @@ void main(List<String> args) {
 
   for (var path in paths) {
     if (Settings().isWindows) {
-      var files = find(path).toList();
+      var files = find(path, recursive: false).toList();
       if (files.isEmpty) {
-        printerr(
-            "touch: cannot open '$path' for reading: No such file or directory");
+        printerr("touch: cannot open '$path' for reading: No such file or directory");
         exit(1);
       } else {
         for (var file in files) {
@@ -31,8 +30,7 @@ void main(List<String> args) {
       }
     } else {
       if (!exists(path)) {
-        printerr(
-            "touch: cannot open '$path' for reading: No such file or directory");
+        printerr("touch: cannot open '$path' for reading: No such file or directory");
       } else {
         touch(path, create: true);
       }

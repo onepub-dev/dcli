@@ -176,34 +176,29 @@ class Find extends DCliFunction {
 
     lister.listen(
       (entity) async {
-        try {
-          var type = FileSystemEntity.typeSync(entity.path);
-          if (types.contains(type) &&
-              matcher.match(basename(entity.path)) &&
-              _allowed(
-                root,
-                entity,
-                includeHidden: includeHidden,
-              )) {
-            progress.addToStdout(entity.path);
-          }
+        var type = FileSystemEntity.typeSync(entity.path);
+        if (types.contains(type) &&
+            matcher.match(basename(entity.path)) &&
+            _allowed(
+              root,
+              entity,
+              includeHidden: includeHidden,
+            )) {
+          progress.addToStdout(entity.path);
+        }
 
-          /// If we are recursing then we need to add any directories
-          /// to the list of childDirectories that need to be recursed.
-          if (recursive && type == Find.directory) {
-            // processing the /proc directory causes dart to crash
-            // https://github.com/dart-lang/sdk/issues/43176
-            if (entity.path != '/proc' && entity.path != '/dev' && entity.path != '/snap' && entity.path != '/sys') {
-              if (nextLevel.length > nextLevelIndex) {
-                nextLevel[nextLevelIndex++] = entity;
-              } else {
-                nextLevel.add(entity);
-              }
+        /// If we are recursing then we need to add any directories
+        /// to the list of childDirectories that need to be recursed.
+        if (recursive && type == Find.directory) {
+          // processing the /proc directory causes dart to crash
+          // https://github.com/dart-lang/sdk/issues/43176
+          if (entity.path != '/proc' && entity.path != '/dev' && entity.path != '/snap' && entity.path != '/sys') {
+            if (nextLevel.length > nextLevelIndex) {
+              nextLevel[nextLevelIndex++] = entity;
+            } else {
+              nextLevel.add(entity);
             }
           }
-        } on FileSystemException catch (e) {
-          // the directory/file may have been deleted between originally listing it and processing it.
-          Settings().verbose('Exception ignored process ${entity.path} during find:    $e');
         }
       },
       // should also register onError

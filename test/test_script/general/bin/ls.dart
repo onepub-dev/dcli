@@ -7,7 +7,7 @@ void main(List<String> args) {
   if (Settings().isWindows) {
     for (var arg in args) {
       //  on windows powershell does not do glob expansion
-      var files = find(arg).toList();
+      var files = find(arg, recursive: false).toList();
       if (files.isEmpty) {
         print("ls: cannot access '$arg': No such file or directory");
       } else {

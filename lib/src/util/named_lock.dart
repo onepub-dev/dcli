@@ -240,7 +240,7 @@ class NamedLock {
         }
         // check for other lock files
         var locks =
-            find('*.$name', root: _lockPath, includeHidden: true).toList();
+            find('*.$name', root: _lockPath, includeHidden: true, recursive: false).toList();
         _log(red('found $locks lock files'));
 
         var lockFiles = locks.length;
@@ -250,7 +250,7 @@ class NamedLock {
           taken = true;
         } else {
           // we have found another lock file so check if it is held be a running process
-          lockFiles = _clearOldLocks(locks, lockFiles);
+          lockFiles = _clearStaleLocks(locks, lockFiles);
           if (lockFiles == 0) {
             taken = true;
           }
@@ -294,7 +294,7 @@ class NamedLock {
     return taken;
   }
 
-  int _clearOldLocks(List<String> locks, int lockFiles) {
+  int _clearStaleLocks(List<String> locks, int lockFiles) {
     for (var lock in locks) {
       var lockFileParts = _lockFileParts(lock);
       if (lockFileParts == null) {

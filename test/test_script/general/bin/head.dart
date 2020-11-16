@@ -27,10 +27,9 @@ void main(List<String> args) {
 
   for (var path in paths) {
     if (Settings().isWindows) {
-      var files = find(path).toList();
+      var files = find(path, recursive: true).toList();
       if (files.isEmpty) {
-        printerr(
-            "head: cannot open '$path' for reading: No such file or directory");
+        printerr("head: cannot open '$path' for reading: No such file or directory");
         exit(1);
       } else {
         for (var file in files) {
@@ -39,8 +38,7 @@ void main(List<String> args) {
       }
     } else {
       if (!exists(path)) {
-        printerr(
-            "head: cannot open '$path' for reading: No such file or directory");
+        printerr("head: cannot open '$path' for reading: No such file or directory");
       } else {
         head(path, lines);
       }
