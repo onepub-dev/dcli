@@ -239,8 +239,9 @@ class NamedLock {
           createDir(_lockPath, recursive: true);
         }
         // check for other lock files
-        var locks =
-            find('*.$name', root: _lockPath, includeHidden: true, recursive: false).toList();
+        var locks = find('*.$name',
+                root: _lockPath, includeHidden: true, recursive: false)
+            .toList();
         _log(red('found $locks lock files'));
 
         var lockFiles = locks.length;

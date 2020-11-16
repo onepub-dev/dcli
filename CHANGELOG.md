@@ -1,3 +1,9 @@
+# 0.34.3
+Fixed code that was using find and forgetting to turn recursion off.
+
+# 0.34.2
+Added exception handler to find to deal with files being deleted during the find operation.
+
 # 0.34.1
 Fixed two bugs in the NamedLock which effectively made it totally non-functional. The lock name had changed to have a leading '.' which meant the find command didn't find the locks and the parser no longer parsed the pid from the lock file name. 
 Added new unit test that can now detected if a lock isn't taken correctly.
