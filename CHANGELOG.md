@@ -1,3 +1,7 @@
+# 0.34.4
+Created an examples/readme.md to highlight additional examples.
+
+
 # 0.34.3
 Fixed code that was using find and forgetting to turn recursion off.
 
