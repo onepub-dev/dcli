@@ -1,3 +1,6 @@
+# 0.34.5
+renamed example/readme.md to example/example.md as looks like the doco I found was wrong on what name was required.
+
 # 0.34.4
 Created an examples/readme.md to highlight additional examples.
 
