@@ -64,8 +64,7 @@ extension StringAsProcess on String {
   ///     [parser] - returns a parser with the captured output ready to be interpreted
   ///                as one of several file types.
   void get run {
-    cmd.start(this,
-        terminal: true, progress: Progress(print, stderr: printerr));
+    cmd.start(this, terminal: true, progress: Progress(print, stderr: printerr));
   }
 
   /// shell
@@ -197,10 +196,8 @@ extension StringAsProcess on String {
   ///     [lastLine] - returns just the last line written to stdout or stderr.
   ///     [parser] - returns a parser with the captured output ready to be interpreted
   ///                as one of several file types.
-  void forEach(LineAction stdout,
-          {LineAction stderr, bool runInShell = false}) =>
-      cmd.start(this,
-          progress: Progress(stdout, stderr: stderr), runInShell: runInShell);
+  void forEach(LineAction stdout, {LineAction stderr, bool runInShell = false}) =>
+      cmd.start(this, progress: Progress(stdout, stderr: stderr), runInShell: runInShell);
 
   /// [toList] runs [this] String as a cli command and
   /// returns any output written to stdout and stderr as
@@ -241,17 +238,14 @@ extension StringAsProcess on String {
   ///     [parser] - returns a parser with the captured output ready to be interpreted
   ///                as one of several file types.
 
-  List<String> toList(
-      {bool runInShell = false, int skipLines = 0, bool nothrow = false}) {
+  List<String> toList({bool runInShell = false, int skipLines = 0, bool nothrow = false}) {
     var list = <String>[];
 
     Progress progress;
 
-    progress =
-        Progress((line) => list.add(line), stderr: (line) => list.add(line));
+    progress = Progress((line) => list.add(line), stderr: (line) => list.add(line));
 
-    progress = cmd.start(this,
-        runInShell: runInShell, progress: progress, nothrow: nothrow);
+    progress = cmd.start(this, runInShell: runInShell, progress: progress, nothrow: nothrow);
 
     return list.sublist(skipLines);
   }
@@ -396,17 +390,11 @@ extension StringAsProcess on String {
   //   return runnable.stream.transform(utf8.decoder);
   // }
   Stream<String> stream(
-      {bool runInShell = false,
-      String workingDirectory,
-      bool nothrow = false,
-      bool includeStderr = true}) {
+      {bool runInShell = false, String workingDirectory, bool nothrow = false, bool includeStderr = true}) {
     var progress = Progress.stream(includeStderr: includeStderr);
 
     cmd.startStreaming(this,
-        runInShell: runInShell,
-        progress: progress,
-        workingDirectory: workingDirectory,
-        nothrow: nothrow);
+        runInShell: runInShell, progress: progress, workingDirectory: workingDirectory, nothrow: nothrow);
 
     return progress.stream;
   }
@@ -449,7 +437,9 @@ extension StringAsProcess on String {
 
   /// Treat [this] String  as the name of a file
   /// and append [line] to the file.
-  /// If [newline] is true add a newline after the line.
+  /// [newline] specifies the line termination character.
+  /// If you don't want a newline appended then pass an empty string to [newline].
+  /// [newline] defaults to '\n'.
   ///
   /// e.g.
   /// ```dart
