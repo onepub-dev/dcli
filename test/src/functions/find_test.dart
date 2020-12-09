@@ -208,5 +208,51 @@ void main() {
 
       t.expect(found, t.unorderedEquals(paths));
     });
+
+    t.test('non-recursive find with path in pattern', () async {
+      var tmp = Directory('/tmp').createTempSync().path;
+
+      var paths = <String>[
+        join(tmp, 'middle', 'three.txt'),
+        join(tmp, 'middle', 'four.txt'),
+        join(tmp, 'middle', '.four.txt'),
+      ];
+
+      for (var file in paths) {
+        if (!exists(dirname(file))) {
+          createDir(dirname(file));
+        }
+        touch(file, create: true);
+      }
+
+      var found =
+          find('middle/*.txt', root: tmp, recursive: false, includeHidden: true)
+              .toList();
+
+      t.expect(found, t.unorderedEquals(paths));
+    });
+
+    t.test('recursive find with path in pattern', () async {
+      var tmp = Directory('/tmp').createTempSync().path;
+
+      var paths = <String>[
+        join(tmp, 'middle', 'three.txt'),
+        join(tmp, 'middle', 'four.txt'),
+        join(tmp, 'middle', '.four.txt'),
+      ];
+
+      for (var file in paths) {
+        if (!exists(dirname(file))) {
+          createDir(dirname(file));
+        }
+        touch(file, create: true);
+      }
+
+      var found =
+          find('middle/*.txt', root: tmp, recursive: true, includeHidden: true)
+              .toList();
+
+      t.expect(found, t.unorderedEquals(paths));
+    });
   });
 }

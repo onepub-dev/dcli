@@ -109,6 +109,20 @@ class Find extends DCliFunction {
     List<FileSystemEntityType> types = const [Find.file],
     bool includeHidden,
   }) {
+    /// If the pattern contains a relative path we need
+    /// to move it into the root as the user really
+    /// wants to search  in the directory root/relativepath.
+    /// This only applies for non-recursive searches as
+    /// when we do
+    var relativeDir = dirname(pattern);
+    if (recursive == false && relativeDir != '.') {
+      root = join(root, relativeDir);
+      if (!exists(root)) {
+        throw FindException('The path ${truepath(root)} does not exists');
+      }
+      pattern = basename(pattern);
+    }
+
     return waitForEx<Progress>(_innerFind(pattern,
         caseSensitive: caseSensitive,
         recursive: recursive,
@@ -127,7 +141,8 @@ class Find extends DCliFunction {
     List<FileSystemEntityType> types = const [Find.file],
     bool includeHidden,
   }) async {
-    var matcher = _PatternMatcher(pattern, caseSensitive: caseSensitive);
+    var matcher =
+        _PatternMatcher(pattern, caseSensitive: caseSensitive, root: root);
     if (root == '.') {
       root = pwd;
     } else {
@@ -142,7 +157,7 @@ class Find extends DCliFunction {
       progress ??= Progress.devNull();
 
       Settings().verbose(
-          'find: pwd: $pwd ${absolute(root)} pattern: $pattern caseSensitive: $caseSensitive recursive: $recursive types: $types ');
+          'find: pwd: $pwd root: ${absolute(root)} pattern: $pattern caseSensitive: $caseSensitive recursive: $recursive types: $types ');
       var nextLevel = <FileSystemEntity>[]..length = 100;
       var singleDirectory = <FileSystemEntity>[]..length = 100;
       var childDirectories = <FileSystemEntity>[]..length = 100;
@@ -186,7 +201,7 @@ class Find extends DCliFunction {
       (entity) async {
         var type = FileSystemEntity.typeSync(entity.path);
         if (types.contains(type) &&
-            matcher.match(basename(entity.path)) &&
+            matcher.match(entity.path) &&
             _allowed(
               root,
               entity,
@@ -227,6 +242,8 @@ class Find extends DCliFunction {
     await completer.future;
   }
 
+  /// Checks if a hidden file is allowed.
+  /// Non-hidden files are always allowed.
   bool _allowed(String root, FileSystemEntity entity,
       {@required bool includeHidden}) {
     return includeHidden || !_isHidden(root, entity);
@@ -310,15 +327,26 @@ class Find extends DCliFunction {
 
 class _PatternMatcher {
   String pattern;
+  String root;
   RegExp regEx;
   bool caseSensitive;
 
-  _PatternMatcher(this.pattern, {@required this.caseSensitive}) {
+  /// the no. of directories in the pattern
+  int directoryParts;
+
+  _PatternMatcher(this.pattern,
+      {@required this.root, @required this.caseSensitive}) {
     regEx = buildRegEx();
+
+    var patternParts = split(dirname(pattern));
+    directoryParts = patternParts.length;
+    if (patternParts.length == 1 && patternParts[0] == '.') directoryParts = 0;
   }
 
-  bool match(String value) {
-    return regEx.stringMatch(value) == value;
+  bool match(String path) {
+    var matchPart = _extractMatchPart(path);
+    //  print('path: $path, matchPart: $matchPart pattern: $pattern');
+    return regEx.stringMatch(matchPart) == matchPart;
   }
 
   RegExp buildRegEx() {
@@ -356,4 +384,35 @@ class _PatternMatcher {
     }
     return RegExp(regEx, caseSensitive: caseSensitive);
   }
+
+  /// A pattern may contain a relative path in which case
+  /// we need to match [path] with the same no. of directories
+  /// as is contained in the pattern.
+  ///
+  /// This method extracts the components of a absolute [path]
+  /// that must be used when doing the pattern match.
+  String _extractMatchPart(String path) {
+    if (directoryParts == 0) return basename(path);
+
+    var pathParts = split(dirname(relative(path, from: root)));
+
+    var partsCount = pathParts.length;
+    if (pathParts.length == 1 && pathParts[0] == '.') partsCount = 0;
+
+    /// If the path doesn't have enough parts then just
+    /// return the path relative to the root.
+    if (partsCount < directoryParts) {
+      return relative(path, from: root);
+    }
+
+    /// return just the required parts.
+    return joinAll(
+        [...pathParts.sublist(partsCount - directoryParts), basename(path)]);
+  }
+}
+
+/// Thrown when the [find] function encouters an error.
+class FindException extends FunctionException {
+  /// Thrown when the [move] function encouters an error.
+  FindException(String reason) : super(reason);
 }
