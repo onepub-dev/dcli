@@ -100,7 +100,7 @@ void dsort(List<String> args) async {
       inputPath, outputPath, columns, fieldDelimiter, lineDelimiter,
       verbose: verbose);
 
-  await sort.sort();
+  sort.sort();
 }
 
 void usageError(String error) {

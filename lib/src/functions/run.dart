@@ -8,8 +8,8 @@ import 'pwd.dart';
 /// from both stdout and stderr to the console.
 ///
 /// if the [nothrow] argument is false (the default) then
-/// a non-zero exit code will result in RunException been thrown.
-/// The RunException will contain the non-zero exit code.
+/// a non-zero exit code will result in [RunException] been thrown.
+/// The [RunException] will contain the non-zero exit code.
 ///
 /// As stderr is written to the console the associated error message
 /// will have been written to the console before the command exists.
