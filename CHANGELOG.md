@@ -1,3 +1,8 @@
+# 0.34.6
+Added support in the find method for patterns that contain a partial path.
+added lint to warn about incorrect usage of await.
+Fixed the doco on the append method as it incorrectly states that newline is a bool.
+
 # 0.34.5
 renamed example/readme.md to example/example.md as looks like the doco I found was wrong on what name was required.
 
