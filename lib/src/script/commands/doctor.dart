@@ -79,7 +79,7 @@ class DoctorCommand extends Command {
   }
 
   void printShell() {
-    _colprint([r'$SHELL', env['SHELL']]);
+    _colprint([r'$SHELL', env['SHELL'] ?? '']);
 
     final shell = Shell.current;
     _colprint(['detected SHELL', shell.name]);

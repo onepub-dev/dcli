@@ -476,7 +476,7 @@ class Column {
   Column(this.ordinal, this._comparator, this._sortDirection);
 
   /// A column string is formed as:
-  /// 
+  ///
   /// ```
   /// [ordinal]<type><direction>
   ///

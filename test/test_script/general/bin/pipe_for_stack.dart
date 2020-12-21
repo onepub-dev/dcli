@@ -2,9 +2,9 @@ import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
 
-void main() async {
-  var ls = await start('ls', []);
-  var head = await start('head', ['-n', '5']);
+Future<void> main() async {
+  final ls = await start('ls', []);
+  final head = await start('head', ['-n', '5']);
 
   var cnt = 1;
   await ls.stdout
@@ -21,7 +21,7 @@ void main() async {
 }
 
 Future<Process> start(String command, List<String> args) async {
-  var process = Process.start(
+  final process = Process.start(
     command,
     args,
   );

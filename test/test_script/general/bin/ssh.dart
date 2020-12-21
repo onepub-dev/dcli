@@ -13,9 +13,9 @@ import 'package:dcli/dcli.dart';
 
 void main(List<String> args) {
   Settings().setVerbose(enabled: true);
-  var fqdn = args[0];
+  final fqdn = args[0];
   // ask( "FQDN of test target:");
-  var password = args[1];
+  final password = args[1];
   //  ask( 'Password for target:', hidden: true);
 
   Remote.scp(
@@ -27,7 +27,7 @@ void main(List<String> args) {
 
   Remote.exec(
     host: fqdn,
-    command: r'ls  /home/bsutton/*',
+    command: 'ls  /home/bsutton/*',
     progress: Progress.print(),
   );
 
@@ -58,14 +58,11 @@ void main(List<String> args) {
   Remote.scp(fromHost: fqdn, from: ['/etc/asterisk/sip.d/*'], to: '/tmp');
 
   Remote.scp(
-      fromUser: "${env['USER']}",
-      fromHost: fqdn,
-      from: ['/tmp/*.log'],
-      to: '.');
+      fromUser: "env['USER']", fromHost: fqdn, from: ['/tmp/*.log'], to: '.');
 
   Remote.scp(from: ['./*.dart'], toHost: fqdn, to: '/tmp', recursive: true);
 
-  var copySecureDir = which('copy_secure_dir').path;
+  final copySecureDir = which('copy_secure_dir').path;
 
   Remote.scp(from: [copySecureDir], to: '/tmp', toHost: fqdn);
 
@@ -82,7 +79,7 @@ void main(List<String> args) {
       from: ['/tmp/slow.dart', '/tmp/parent.dart'],
       to: '/tmp');
 
-  var command =
+  final command =
       "mkdir -p  /tmp/etc/openvpn; echo $password  | sudo -Sp '' cp -R /etc/openvpn/* /tmp/etc/openvpn; echo hi; ls -l /tmp/etc/openvpn; echo $password | sudo -Sp ''  rm -rf /tmp/etc/openvpn ; echo ho; ls /tmp";
 
   Remote.exec(
@@ -112,7 +109,7 @@ void main(List<String> args) {
   Remote.scp(from: ['dcli.txt'], toHost: fqdn, to: '/tmp');
 
   //  "ssh -t bsutton@auditord.noojee.com.au '/home/bsutton/git/auditor/backup.sh nowString.sql'"
-  var now = DateTime.now();
+  final now = DateTime.now();
   Remote.exec(
       host: 'bsutton@auditord.noojee.com.au',
       command: '/home/bsutton/git/auditor/backup.sh $now.sql');

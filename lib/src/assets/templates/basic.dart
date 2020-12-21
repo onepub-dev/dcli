@@ -13,7 +13,7 @@ import 'package:dcli/dcli.dart';
 ///
 
 void main(List<String> args) {
-  final  parser = ArgParser();
+  final parser = ArgParser();
   parser.addFlag(
     'verbose',
     abbr: 'v',

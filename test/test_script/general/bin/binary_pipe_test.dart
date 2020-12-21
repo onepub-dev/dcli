@@ -23,16 +23,16 @@ Future<void> main() async {
 
   // await pipeTo2(dart, head);
 
-  ('dart --version').run;
+  'dart --version'.run;
   ('dart --version' | 'cat').run;
 
   //Future.wait([dart.])
 }
 
 Future<void> pipeTo2(Future<Process> lhs, Future<Process> rhs) async {
-  var lhsProcess = await lhs;
-  var rhsProcess = await rhs;
-  lhsProcess.stdout..listen(rhsProcess.stdin.add);
+  final lhsProcess = await lhs;
+  final rhsProcess = await rhs;
+  lhsProcess.stdout.listen(rhsProcess.stdin.add);
   //..onError()
   lhsProcess.stderr.listen(rhsProcess.stdin.add).onDone(() {
     rhsProcess.stdin.close();
@@ -49,7 +49,7 @@ Future<void> pipeTo2(Future<Process> lhs, Future<Process> rhs) async {
 }
 
 void pipeTo(Future<Process> lhs, Future<Process> rhs) {
-  var complete = Completer<void>();
+  final complete = Completer<void>();
   print('pipeTo called');
   // wait for the lhs process to
   // start and then start piping its
@@ -98,7 +98,7 @@ void pipeTo(Future<Process> lhs, Future<Process> rhs) {
 }
 
 Future<Process> start(String command, List<String> args) async {
-  var process = Process.start(
+  final process = Process.start(
     command,
     args,
   );

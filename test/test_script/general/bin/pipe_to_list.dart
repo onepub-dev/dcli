@@ -12,7 +12,7 @@ import 'package:dcli/dcli.dart';
 ///
 
 void main() {
-  var list = ('cat pipe_to_list.dart' | 'grep list').toList();
+  final list = ('cat pipe_to_list.dart' | 'grep list').toList();
 
   print('list ${list.join("\n")}');
 }

@@ -31,9 +31,12 @@ class TemplateExpander {
 
   find('*', root: templatePath).forEach((file) {
     content.write('''
+\t\t// ignore: non_constant_identifier_names
 \t\tvoid ${buildMethodName(file)}() {
-      var expandTo = join(targetPath, '${basename(file)}');
-       expandTo.write(r\'\'\'${read(file).toList().join('\n')}\'\'\');
+      final expandTo = join(targetPath, '${basename(file)}');
+       // ignore: unnecessary_raw_strings
+       expandTo.write(r\'\'\'
+${read(file).toList().join('\n')}\'\'\');
     }
 
 ''');

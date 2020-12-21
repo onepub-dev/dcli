@@ -354,7 +354,7 @@ class RunnableProcess {
   void processUntilExit(Progress progress, {@required bool nothrow}) {
     final done = Completer<bool>();
 
-    final _progress  = progress ?? Progress.devNull();
+    final _progress = progress ?? Progress.devNull();
 
     _fProcess.then((process) {
       _wireStreams(process, _progress);

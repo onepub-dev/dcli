@@ -88,8 +88,7 @@ class TestPaths {
         !HOME.startsWith(join(rootPath, 'tmp')))
     //  ||        !env['PUB_CACHE'].startsWith('/tmp'))
     {
-      printerr(
-          '''
+      printerr('''
 Something went wrong, the dcli path or HOME for unit tests is NOT pointing to /tmp. 
           dcli's path is pointing at $dcliPath
           HOME is pointing at $HOME

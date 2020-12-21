@@ -84,7 +84,10 @@ void main() {
         final paths = TestFileSystem();
         final found = find('*.txt', root: paths.top, recursive: false).toList();
         found.sort();
-        final expected = [join(paths.top, 'one.txt'), join(paths.top, 'two.txt')];
+        final expected = [
+          join(paths.top, 'one.txt'),
+          join(paths.top, 'two.txt')
+        ];
         expected.sort();
         t.expect(found, t.equals(expected));
       });
@@ -248,8 +251,7 @@ void main() {
       }
 
       final found =
-          find('middle/*.txt', root: tmp, includeHidden: true)
-              .toList();
+          find('middle/*.txt', root: tmp, includeHidden: true).toList();
 
       t.expect(found, t.unorderedEquals(paths));
     });

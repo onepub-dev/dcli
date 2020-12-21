@@ -1,3 +1,7 @@
+# 0.37.0
+We now take pub from the PATH rather than calculating it from the dart directory as on some systems its not in the dart-sdk dir.
+moved from pedantic to lint and removed all of the lint warnings.
+
 # 0.35.0
 We now test if dart compile is supported (2.10 onwards) and use that rather than dart2native.
 

@@ -72,8 +72,7 @@ class RunCommand extends Command {
   String usage() => 'run <script path.dart>';
 
   @override
-  String description() =>
-      '''
+  String description() => '''
   Runs the given script. This command is provided for the sake of symmetry. 
    The recommended method is to use the simplier form ${Settings().appname} <script path.dart>''';
 

@@ -21,7 +21,7 @@ class CircularBuffer<T> {
   }
 
   /// insert a value at the curent location.
-  void insert(T el)  {
+  void insert(T el) {
     // Inserting the next value
     _end++;
     if (_end == capacity) {

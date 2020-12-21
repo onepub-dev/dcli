@@ -97,8 +97,9 @@ class TestFileSystem {
     uniquePath = Uuid().v4();
 
     final isolateID = Service.getIsolateID(Isolate.current);
-    print(red('${'+' * 20}${'Creating TestFileSystem $fsRoot for isolate $isolateID'}') +
-        '+' * 20);
+    print(
+        red('${'+' * 20}${'Creating TestFileSystem $fsRoot for isolate $isolateID'}') +
+            '+' * 20);
 
     tmpScriptPath = truepath(fsRoot, 'scripts');
     testScriptPath = truepath(fsRoot, 'test_script');

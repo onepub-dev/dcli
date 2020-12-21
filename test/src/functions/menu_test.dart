@@ -23,7 +23,7 @@ void main() {
 
     try {
       menu(prompt: 'How old are you', defaultOption: 9, options: numoptions);
-    // ignore: avoid_catching_errors
+      // ignore: avoid_catching_errors
     } on ArgumentError catch (e) {
       print('Expected Argument error ${e.toString()}');
     }

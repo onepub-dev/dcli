@@ -40,6 +40,9 @@ class Format {
       if (row.isNotEmpty) {
         row += delimiter;
       }
+
+      /// make row robust if a null col is passed.
+      col ??= '';
       var colwidth = col.length;
       if (colwidth > width) {
         colwidth = width;

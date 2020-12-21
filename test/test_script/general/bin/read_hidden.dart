@@ -16,7 +16,7 @@ void main() {
 }
 
 String readHidden() {
-  var line = <int>[];
+  final line = <int>[];
 
   print('read hidden');
 

@@ -6,10 +6,10 @@ import 'package:dcli/dcli.dart';
 
 /// Used by unit tests as a cross platform version of touch
 void main(List<String> args) {
-  var parser = ArgParser();
-  var results = parser.parse(args);
+  final parser = ArgParser();
+  final results = parser.parse(args);
 
-  var paths = results.rest;
+  final paths = results.rest;
 
   if (paths.isEmpty) {
     printerr('Expected at least one file');
@@ -17,15 +17,15 @@ void main(List<String> args) {
   }
   Settings().setVerbose(enabled: true);
 
-  for (var path in paths) {
+  for (final path in paths) {
     if (Settings().isWindows) {
-      var files = find(path, recursive: false).toList();
+      final files = find(path, recursive: false).toList();
       if (files.isEmpty) {
         printerr(
             "touch: cannot open '$path' for reading: No such file or directory");
         exit(1);
       } else {
-        for (var file in files) {
+        for (final file in files) {
           touch(file, create: true);
         }
       }

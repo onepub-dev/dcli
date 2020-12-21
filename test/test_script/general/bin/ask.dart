@@ -12,6 +12,6 @@ import 'package:dcli/dcli.dart';
 ///
 
 void main() {
-  var name = ask('tell me your name:');
+  final name = ask('tell me your name:');
   print('your name is: $name');
 }

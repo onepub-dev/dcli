@@ -3,9 +3,9 @@ import 'dart:convert';
 import 'package:dcli/dcli.dart';
 
 void main(List<String> args) {
-  var ls = 'ls'.process;
-  var head = 'head'.process;
-  var headStream = head.stream;
+  final ls = 'ls'.process;
+  final head = 'head'.process;
+  final headStream = head.stream;
   // stdout.addStream(head.stream);
 
   ls.stream

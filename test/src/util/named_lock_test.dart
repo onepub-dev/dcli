@@ -65,7 +65,7 @@ void main() {
   }, skip: false);
 
   test('Thrash test', () {
-    Settings().setVerbose(enabled: true);
+    Settings().setVerbose(enabled: false);
     if (exists(lockCheckPath)) {
       deleteDir(lockCheckPath);
     }
@@ -114,8 +114,7 @@ final lockFailedPath = join(lockCheckPath, 'lock_failed');
 
 /// must be a global function as we us it to spawn an isolate
 void worker(int instance) {
-  Settings().setVerbose(enabled: true);
-  // Settings().setVerbose(enabled: true);
+  Settings().setVerbose(enabled: false);
   print('starting worker instance $instance');
   NamedLock(name: 'gshared-compile').withLock(() {
     print('acquired lock worker $instance');
