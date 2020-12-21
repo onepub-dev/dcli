@@ -63,8 +63,4 @@ void main(List<String> args) {
   }
 }
 
-// void install() {
-//   print('installing dcli');
-//   'dart2native dcli_complete.dart --output=dcli_complete.dart --output=${join(HOME, ".dcli/bin/dcli_complete")}'
-//       .run;
-// }
+
