@@ -58,7 +58,7 @@ class LinuxDCliInstaller {
 
       /// check that apt is available.
       if (which('apt').found) {
-        Settings().verbose('Usimg the apt installer');
+        Settings().verbose('Using the apt installer');
         _installDartWithApt();
       } else {
         Settings().verbose('Apt not found. Installing from archive');

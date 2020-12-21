@@ -83,7 +83,8 @@ class DartSdk {
   String get pathToPubExe => p.join(pathToSdk, 'bin', pubExeName);
 
   /// file path to the 'dart2native' command.
-  String get pathToDartToNativeExe => p.join(pathToSdk, 'bin', dart2NativeExeName);
+  String get pathToDartToNativeExe =>
+      p.join(pathToSdk, 'bin', dart2NativeExeName);
 
   int get versionMajor {
     var parts = version.split('.');
@@ -99,8 +100,10 @@ class DartSdk {
 
   /// From 2.10 onwards we use the dart compile option rather than dart2native.
   bool get useDartCompiler {
-    var dartVersion = Version.parse(Platform.version);
-    return (dartVersion.compareTo(Version.parse('2.10')) >= 0);
+    var platform = Platform.version;
+    var parts = platform.split(' ');
+    var dartVersion = Version.parse(parts[0]);
+    return (dartVersion.compareTo(Version.parse('2.10.0')) >= 0);
   }
 
   /// run the 'dart2native' command.
@@ -114,7 +117,8 @@ class DartSdk {
     RunnableProcess process;
     if (useDartCompiler) {
       /// use dart compile exe
-      runArgs.insert(0, 'exe');
+      runArgs.add('compile');
+      runArgs.add('exe');
       runArgs.add(script.pathToScript);
       runArgs.add('--output=${pathToExe}');
       process = RunnableProcess.fromCommandArgs(dartExeName, runArgs,
@@ -253,6 +257,12 @@ class DartSdk {
     setPathToDartSdk(installDir);
 
     return installDir;
+  }
+
+  /// Fetchs the list of available dart versions from 
+  List<String> fetchVersions()
+  {
+
   }
 
   String _fetchDartSdk() {
