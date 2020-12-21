@@ -4,11 +4,12 @@ class CircularBuffer<T> {
   int _start;
   int _end;
   int _count;
+  int capacity;
 
   /// create a circulare buffer with the ability
   /// to store at most [capacity] items.
   CircularBuffer(int capacity) {
-    _buf = List<T>(capacity);
+    _buf = <T>[];
     reset();
   }
 
@@ -23,19 +24,19 @@ class CircularBuffer<T> {
   void insert(T el) async {
     // Inserting the next value
     _end++;
-    if (_end == _buf.length) {
+    if (_end == capacity) {
       _end = 0;
     }
     _buf[_end] = el;
 
     // updating the start
-    if (_count < _buf.length) {
+    if (_count < capacity) {
       _count++;
       return;
     }
 
     _start++;
-    if (_start == _buf.length) {
+    if (_start == capacity) {
       _start = 0;
     }
   }
@@ -50,13 +51,13 @@ class CircularBuffer<T> {
   int get len => _count;
 
   /// the max capacity of the buffer.
-  int get cap => _buf.length;
+  int get cap => capacity;
 
   /// true if the buffer is filled
-  bool get filled => (_count == _buf.length);
+  bool get filled => (_count == capacity);
 
   /// false if the buffer is not a capacity.
-  bool get unfilled => (_count < _buf.length);
+  bool get unfilled => (_count < capacity);
 
   /// Allows you to iterate over the contents of the buffer
   /// The [action] callback is called for each item in the
