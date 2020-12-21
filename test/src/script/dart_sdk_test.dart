@@ -10,7 +10,7 @@ void main() {
   test('Detect Dart SDK', () {
     TestFileSystem().withinZone((fs) {
       print('Dart Path: ${DartSdk().pathToDartExe}');
-      print('Dart Path: ${DartSdk().dart2NativePath}');
+      print('Dart Path: ${DartSdk().pathToDartToNativeExe}');
       print('Dart Path: ${DartSdk().pathToPubExe}');
       print('Dart Path: ${DartSdk().version}');
 

@@ -13,7 +13,7 @@ import '../../dcli.dart';
 /// running from a local source directory then your app will have access to their
 /// assets.
 ///
-/// If you have AOT compiled your application (e.g. dart2native or dcli compile)
+/// If you have AOT compiled your application (e.g. dart compile or dcli compile)
 /// then you will NOT have access to the assets as they are not deployed.
 ///
 /// To create an asset place it under:

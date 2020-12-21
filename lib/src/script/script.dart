@@ -203,7 +203,7 @@ class Script {
           'You selected to install the compiled exe however an installed exe of that name already exists. Use overwrite=true');
     }
 
-    DartSdk().runDart2Native(this,
+    DartSdk().runDartCompiler(this,
         pathToExe: pathToExe, progress: Progress(print, stderr: print));
 
     if (install) {

@@ -124,19 +124,24 @@ class DoctorCommand extends Command {
       '${privatePath(DartSdk().pathToDartExe)}',
       'which: ${privatePath(dartPath)}'
     ]);
-    var dart2NativePath = which(DartSdk.dart2NativeExeName, first: true).path;
 
-    if (dart2NativePath != null) {
-      _colprint([
-        'dart2Native path',
-        '${privatePath(DartSdk().dart2NativePath)}',
-        'which: ${privatePath(dart2NativePath)}'
-      ]);
+    if (DartSdk().useDartCompiler) {
+      _colprint(["Using 'dart compile exe'"]);
     } else {
-      _colprint([
-        'dart2Native path',
-        'Not Found',
-      ]);
+      var dart2NativePath = which(DartSdk.dart2NativeExeName, first: true).path;
+
+      if (dart2NativePath != null) {
+        _colprint([
+          'dart2Native path',
+          '${privatePath(DartSdk().pathToDartToNativeExe)}',
+          'which: ${privatePath(dart2NativePath)}'
+        ]);
+      } else {
+        _colprint([
+          'dart2Native path',
+          'Not Found',
+        ]);
+      }
     }
     print('');
     var pubPath = which(DartSdk.pubExeName, first: true).path;

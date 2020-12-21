@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:archive/archive.dart';
 import 'package:meta/meta.dart';
 import 'package:path/path.dart' as p;
+import 'package:pub_semver/pub_semver.dart';
 import 'package:system_info/system_info.dart';
 
 import '../../dcli.dart';
@@ -82,7 +83,7 @@ class DartSdk {
   String get pathToPubExe => p.join(pathToSdk, 'bin', pubExeName);
 
   /// file path to the 'dart2native' command.
-  String get dart2NativePath => p.join(pathToSdk, 'bin', dart2NativeExeName);
+  String get pathToDartToNativeExe => p.join(pathToSdk, 'bin', dart2NativeExeName);
 
   int get versionMajor {
     var parts = version.split('.');
@@ -96,18 +97,35 @@ class DartSdk {
     return int.tryParse(parts[1]) ?? 9;
   }
 
+  /// From 2.10 onwards we use the dart compile option rather than dart2native.
+  bool get useDartCompiler {
+    var dartVersion = Version.parse(Platform.version);
+    return (dartVersion.compareTo(Version.parse('2.10')) >= 0);
+  }
+
   /// run the 'dart2native' command.
   /// [runtimeScriptPath] is the path to the dcli script we are compiling.
   /// [pathToExe] is the path (including the filename) to write the compiled ex to .
   /// [projectRootPath] is the path to the projects root directory.
-  void runDart2Native(Script script,
+  void runDartCompiler(Script script,
       {@required String pathToExe, Progress progress}) {
     var runArgs = <String>[];
-    runArgs.add(script.pathToScript);
-    runArgs.add('--output=${pathToExe}');
 
-    var process = RunnableProcess.fromCommandArgs(dart2NativePath, runArgs,
-        workingDirectory: script.pathToScriptDirectory);
+    RunnableProcess process;
+    if (useDartCompiler) {
+      /// use dart compile exe
+      runArgs.insert(0, 'exe');
+      runArgs.add(script.pathToScript);
+      runArgs.add('--output=${pathToExe}');
+      process = RunnableProcess.fromCommandArgs(dartExeName, runArgs,
+          workingDirectory: script.pathToScriptDirectory);
+    } else {
+      /// use old dart2native
+      runArgs.add(script.pathToScript);
+      runArgs.add('--output=${pathToExe}');
+      process = RunnableProcess.fromCommandArgs(pathToDartToNativeExe, runArgs,
+          workingDirectory: script.pathToScriptDirectory);
+    }
 
     process.start();
 
