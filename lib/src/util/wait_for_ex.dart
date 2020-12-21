@@ -33,7 +33,7 @@ T waitForEx<T>(Future<T> future) {
     // recreate the exception so we have a full
     // stacktrace rather than the microtask
     // stacktrace the future leaves us with.
-    var stackTrace = StackTraceImpl(skipFrames: 2);
+    final stackTrace = StackTraceImpl(skipFrames: 2);
 
     if (exception is DCliException) {
       throw exception.copyWith(stackTrace);

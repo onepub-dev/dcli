@@ -24,7 +24,7 @@ import 'zshell.dart';
 /// involved:
 ///
 /// cli - the cli you started dcli from. This is the shell we will return
-/// sh - the shebang (#!) spawns a [sh] shell which dart is run under.
+/// sh - the shebang (#!) spawns an 'sh' shell which dart is run under.
 /// dart - the dart process
 ///
 /// This class is considered EXPERIMENTAL and is likely to change.
@@ -41,10 +41,10 @@ class ShellDetection {
     ZshShell.shellName: (pid) => ZshShell.withPid(pid),
   };
 
-  ShellDetection._internal();
-
   /// obtain a singleton instance of Shell.
   factory ShellDetection() => _shell;
+
+  ShellDetection._internal();
 
   /// Attempts to identify the shell that
   /// DCli was run under.
@@ -60,7 +60,7 @@ class ShellDetection {
   /// Currently this isn't very reliable.
   Shell identifyShell() {
     /// on posix systems this MAY give us the login shell name.
-    var _loginShell = ShellMixin.loginShell();
+    final _loginShell = ShellMixin.loginShell();
     if (_loginShell != null) {
       return _shellByName(_loginShell, -1);
     } else {
@@ -76,7 +76,7 @@ class ShellDetection {
 
     var firstPass = true;
     while (shell == null) {
-      var possiblePid = ProcessHelper().getParentPID(childPID);
+      final possiblePid = ProcessHelper().getParentPID(childPID);
 
       /// Check if we ran into the root process or we
       ///  couldn't get the parent pid.
@@ -136,13 +136,12 @@ class ShellDetection {
   Shell _shellByName(String processName, int pid) {
     Shell shell;
 
-    processName = processName.toLowerCase();
+    final finalprocessName = processName.toLowerCase();
 
-    if (_shells.containsKey(processName)) {
-      shell = _shells[processName].call(pid);
+    if (_shells.containsKey(finalprocessName)) {
+      shell = _shells[finalprocessName].call(pid);
     }
 
-    shell ??= UnknownShell.withPid(pid, processName: processName);
-    return shell;
+    return shell ??= UnknownShell.withPid(pid, processName: finalprocessName);
   }
 }

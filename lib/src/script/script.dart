@@ -8,9 +8,8 @@ import 'package:dcli/src/settings.dart';
 import 'package:path/path.dart' as p;
 
 import '../functions/is.dart';
-import 'dart_project.dart';
-
 import 'command_line_runner.dart';
+import 'dart_project.dart';
 
 /// Used to manage a DCli script.
 ///
@@ -43,18 +42,16 @@ class Script {
   /// var script = Script.fromFile(Platform.script.toFilePath());
   ///
   Script.fromFile(String scriptPath, {DartProject project})
-      : this._internal(scriptPath,
-            create: false, showWarnings: false, project: project);
+      : this._internal(scriptPath, create: false, project: project);
 
-  Script._internal(String scriptPath,
-      {bool create, bool showWarnings, DartProject project})
+  Script._internal(String scriptPath, {bool create, DartProject project})
       : _scriptname = _extractScriptname(scriptPath),
         _scriptDirectory = _extractScriptDirectory(scriptPath),
         _project = project {
     {
       assert(scriptPath.endsWith('.dart'));
       if (create) {
-        var project = DartProject.fromPath(pathToProjectRoot);
+        final project = DartProject.fromPath(pathToProjectRoot);
         project.initFiles();
       }
     }
@@ -98,7 +95,7 @@ class Script {
   // the scriptnameArg may contain a relative path: fred/home.dart
   // we need to get the actually name and full path to the script file.
   static String _extractScriptname(String scriptArg) {
-    var cwd = Directory.current.path;
+    final cwd = Directory.current.path;
 
     return p.basename(p.join(cwd, scriptArg));
   }
@@ -117,7 +114,7 @@ class Script {
   // }
 
   static String _extractScriptDirectory(String scriptArg) {
-    var scriptDirectory = p.canonicalize(p.dirname(p.join(pwd, scriptArg)));
+    final scriptDirectory = p.canonicalize(p.dirname(p.join(pwd, scriptArg)));
 
     return scriptDirectory;
   }
@@ -162,10 +159,9 @@ class Script {
 
   /// Returns the instance of the currently running script.
   ///
-  static Script get current {
-    _current ??= Script.fromFile(Settings().pathToScript);
-    return _current;
-  }
+  // ignore: prefer_constructors_over_static_methods
+  static Script get current =>
+      _current ??= Script.fromFile(Settings().pathToScript);
 
   DartProject _project;
 
@@ -181,8 +177,6 @@ class Script {
     print('Script Details');
     _colprint('Name', scriptname);
     _colprint('Directory', privatePath(pathToScriptDirectory));
-
-    project.doctor;
   }
 
   void _colprint(String label, String value, {int pad = 25}) {
@@ -227,7 +221,7 @@ class Script {
   /// returns the platform dependant name of the compiled scripts exe name.
   /// On Linux and OSX this is just the basename (script name without the extension)
   /// on Windows this is the 'basename.exe'.
-  String get exeName => '${basename}${Settings().isWindows ? '.exe' : ''}';
+  String get exeName => '$basename${Settings().isWindows ? '.exe' : ''}';
 
   /// Returns the path to the executable if it was to be compiled into
   /// its local directory (the default action of compile).
@@ -238,7 +232,7 @@ class Script {
     return exists(pathToInstalledExe);
   }
 
-  /// Returns the path that the script would be installed to if compiled with [install] = true.
+  /// Returns the path that the script would be installed to if compiled with install = true.
   String get pathToInstalledExe => join(Settings().pathToDCliBin, exeName);
 }
 
@@ -260,7 +254,7 @@ class PithyGreetings {
 
   /// returns a random pithy greeting.
   static String random() {
-    var selected = Random().nextInt(greeting.length - 1);
+    final selected = Random().nextInt(greeting.length - 1);
 
     return greeting[selected];
   }

@@ -4,7 +4,7 @@ import '../util/runnable_process.dart';
 import 'pwd.dart';
 
 ///
-/// Runs the given cli [commandline] writing any output
+/// Runs the given cli [commandLine] writing any output
 /// from both stdout and stderr to the console.
 ///
 /// if the [nothrow] argument is false (the default) then
@@ -31,13 +31,13 @@ import 'pwd.dart';
 /// at.
 /// If the script is already running in a priviledge environment this switch will have no
 /// affect.
-/// Running a command with the [priviledged] switch may cause the OS to prompt the user
+/// Running a command with the [privileged] switch may cause the OS to prompt the user
 /// for a password.
 ///
-/// For Linux passing the [priviledged] argument will cause the command to be prefix
+/// For Linux passing the [privileged] argument will cause the command to be prefix
 /// vai the `sudo` command.
 ///
-/// Current [priviledged] is only supported under Linux.
+/// Current [privileged] is only supported under Linux.
 ///
 /// DCli performs glob (wildcard) expansion on command arguments if it contains any one
 /// of *, [ or ?  unless the argument is quoted.
@@ -80,14 +80,13 @@ int run(String commandLine,
     String workingDirectory}) {
   workingDirectory ??= pwd;
 
-  var runnable = RunnableProcess.fromCommandLine(commandLine,
+  final runnable = RunnableProcess.fromCommandLine(commandLine,
       workingDirectory: workingDirectory);
 
   return runnable
       .run(
         progress: Progress(print, stderr: printerr),
         runInShell: runInShell,
-        detached: false,
         terminal: false,
         privileged: privileged,
         nothrow: nothrow,
@@ -119,13 +118,13 @@ int run(String commandLine,
 /// at.
 /// If the script is already running in a priviledge environment this switch will have no
 /// affect.
-/// Running a command with the [priviledged] switch may cause the OS to prompt the user
+/// Running a command with the [privileged] switch may cause the OS to prompt the user
 /// for a password.
 ///
-/// For Linux passing the [priviledged] argument will cause the command to be prefix
+/// For Linux passing the [privileged] argument will cause the command to be prefix
 /// vai the `sudo` command.
 ///
-/// Current [priviledged] is only supported under Linux.
+/// Current [privileged] is only supported under Linux.
 ///
 ///
 /// DCli performs Glob expansion on command arguments. See [run] for details.
@@ -143,7 +142,7 @@ Progress startFromArgs(
 }) {
   progress ??= Progress.print();
   workingDirectory ??= pwd;
-  var runnable = RunnableProcess.fromCommandArgs(command, args,
+  final runnable = RunnableProcess.fromCommandArgs(command, args,
       workingDirectory: workingDirectory);
 
   return runnable.run(
@@ -185,13 +184,13 @@ Progress startFromArgs(
 /// at.
 /// If the script is already running in a priviledge environment this switch will have no
 /// affect.
-/// Running a command with the [priviledged] switch may cause the OS to prompt the user
+/// Running a command with the [privileged] switch may cause the OS to prompt the user
 /// for a password.
 ///
-/// For Linux passing the [priviledged] argument will cause the command to be prefix
+/// For Linux passing the [privileged] argument will cause the command to be prefix
 /// vai the `sudo` command.
 ///
-/// Current [priviledged] is only supported under Linux.
+/// Current [privileged] is only supported under Linux.
 ///
 /// if [runInShell] is set to true (default is false) then command will
 /// be run in a shell (e.g. bash).
@@ -205,7 +204,7 @@ Progress start(String commandLine,
     bool privileged = false,
     String workingDirectory}) {
   workingDirectory ??= pwd;
-  var runnable = RunnableProcess.fromCommandLine(commandLine,
+  final runnable = RunnableProcess.fromCommandLine(commandLine,
       workingDirectory: workingDirectory);
 
   return runnable.run(
@@ -223,13 +222,13 @@ Progress start(String commandLine,
 /// at.
 /// If the script is already running in a priviledge environment this switch will have no
 /// affect.
-/// Running a command with the [priviledged] switch may cause the OS to prompt the user
+/// Running a command with the [privileged] switch may cause the OS to prompt the user
 /// for a password.
 ///
-/// For Linux passing the [priviledged] argument will cause the command to be prefix
+/// For Linux passing the [privileged] argument will cause the command to be prefix
 /// vai the `sudo` command.
 ///
-/// Current [priviledged] is only supported under Linux.
+/// Current [privileged] is only supported under Linux.
 ///
 Progress startStreaming(String commandLine,
     {Progress progress,
@@ -238,7 +237,7 @@ Progress startStreaming(String commandLine,
     bool privileged = false,
     String workingDirectory}) {
   workingDirectory ??= pwd;
-  var runnable = RunnableProcess.fromCommandLine(commandLine,
+  final runnable = RunnableProcess.fromCommandLine(commandLine,
       workingDirectory: workingDirectory);
 
   return runnable.runStreaming(

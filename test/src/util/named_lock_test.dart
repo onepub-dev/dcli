@@ -12,11 +12,11 @@ import 'package:test/test.dart';
 
 import 'test_file_system.dart';
 
-final port = 63424;
+const port = 63424;
 
 void main() {
   test('lock path', () {
-    var lockPath = join(rootPath, Directory.systemTemp.path, 'dcli', 'locks');
+    final lockPath = join(rootPath, Directory.systemTemp.path, 'dcli', 'locks');
     print(lockPath);
   });
 
@@ -27,24 +27,24 @@ void main() {
           throw DCliException('fake exception');
         });
       });
-    }, throwsA(TypeMatcher<DCliException>()));
+    }, throwsA(const TypeMatcher<DCliException>()));
   }, skip: true);
 
   test('withLock', () {
     TestFileSystem().withinZone((fs) async {
-      var logFile = fs.tempFile(suffix: 'log');
+      final logFile = fs.tempFile(suffix: 'log');
       print('logfile: $logFile');
       logFile.truncate();
 
-      var portBack = await spawn('background');
-      var portMid = await spawn('middle');
-      var portFore = await spawn('foreground');
+      final portBack = await spawn('background');
+      final portMid = await spawn('middle');
+      final portFore = await spawn('foreground');
 
       await portBack.first;
       await portMid.first;
       await portFore.first;
 
-      var actual = read(logFile).toList();
+      final actual = read(logFile).toList();
 
       expect(actual, [
         'background + 0',
@@ -67,7 +67,7 @@ void main() {
   test('Thrash test', () {
     Settings().setVerbose(enabled: true);
     if (exists(lockCheckPath)) {
-      deleteDir(lockCheckPath, recursive: true);
+      deleteDir(lockCheckPath);
     }
 
     createDir(lockCheckPath, recursive: true);
@@ -79,7 +79,7 @@ void main() {
     sleep(59);
 
     expect(exists(lockFailedPath), equals(false));
-  }, timeout: Timeout(Duration(minutes: 2)));
+  }, timeout: const Timeout(Duration(minutes: 2)));
 }
 
 void takeHardLock() {
@@ -90,8 +90,8 @@ void takeHardLock() {
 }
 
 Future<ReceivePort> spawn(String message) async {
-  var back = await Isolate.spawn(takeLock, message, paused: true);
-  var port = ReceivePort();
+  final back = await Isolate.spawn(takeLock, message, paused: true);
+  final port = ReceivePort();
   back.addOnExitListener(port.sendPort);
   back.resume(back.pauseCapability);
   return port;
@@ -101,7 +101,7 @@ void takeLock(String message) {
   NamedLock(name: 'test.lock').withLock(() {
     var count = 0;
     for (var i = 0; i < 4; i++) {
-      var l = '$message + ${count++}';
+      final l = '$message + ${count++}';
       print(l);
       '$HOME/lock.log'.append(l);
       sleep(1);
@@ -119,7 +119,7 @@ void worker(int instance) {
   print('starting worker instance $instance');
   NamedLock(name: 'gshared-compile').withLock(() {
     print('acquired lock worker $instance');
-    var inLockPath = join(lockCheckPath, 'inlock');
+    final inLockPath = join(lockCheckPath, 'inlock');
     if (exists(inLockPath)) {
       touch(lockFailedPath, create: true);
       throw 'NamedLock for $instance failed as another lock is active';

@@ -14,7 +14,7 @@ class HelpCommand extends Command {
   @override
   int run(List<Flag> selectedFlags, List<String> subarguments) {
     if (subarguments.isNotEmpty) {
-      var command = Commands.findCommand(
+      final command = Commands.findCommand(
           subarguments[0], Commands.asMap(Commands.applicationCommands));
       if (command == null) {
         throw InvalidArguments(
@@ -36,14 +36,14 @@ class HelpCommand extends Command {
 
   /// Print the help usage statement.
   static void printUsageHowTo() {
-    var help = HelpCommand();
+    final help = HelpCommand();
     print('For help with dcli options:');
     print('  ${Settings().appname} ${help.usage()}');
     print('    ${help.description()}');
   }
 
   void _printUsage() {
-    var appname = Settings().appname;
+    final appname = Settings().appname;
     print(green(
         '$appname: Executes Dart scripts.  Version: ${Settings().version}'));
     print('');
@@ -56,14 +56,14 @@ class HelpCommand extends Command {
         '  dcli [${blue('flag, flag...')}] [${blue('command')}] [arguments...]');
     print('');
     print(blue('global flags:'));
-    for (var flag in CommandLineRunner.globalFlags) {
+    for (final flag in CommandLineRunner.globalFlags) {
       print('  ${blue(flag.usage())}');
       print('      ${flag.description()}');
     }
 
     print('');
     print(orange('Commands:'));
-    for (var command in Commands.applicationCommands) {
+    for (final command in Commands.applicationCommands) {
       print('  ${orange(command.usage())}');
       print('   ${command.description()}');
       if (command.flags().isNotEmpty) {
@@ -84,10 +84,10 @@ class HelpCommand extends Command {
   @override
   List<String> completion(String word) {
     // find any command that matches the 'word' using it as prefix
-    var results = <String>[];
+    final results = <String>[];
 
-    var commands = Commands.applicationCommands;
-    for (var command in commands) {
+    final commands = Commands.applicationCommands;
+    for (final command in commands) {
       if (command.name.startsWith(word)) {
         results.add(command.name);
       }

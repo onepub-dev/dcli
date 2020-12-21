@@ -3,15 +3,15 @@
 import 'package:dcli/dcli.dart';
 
 void main() {
-  var templatePath = join(
+  final templatePath = join(
       Script.current.pathToProjectRoot, 'lib', 'src', 'assets', 'templates');
 
-  var expanderPath = join(Script.current.pathToProjectRoot, 'lib', 'src',
+  final expanderPath = join(Script.current.pathToProjectRoot, 'lib', 'src',
       'templates', 'expander.dart');
 
-  var expanders = <String>[];
+  final expanders = <String>[];
 
-  var content = '''
+  final content = StringBuffer('''
 import 'package:dcli/dcli.dart';
 
 /// GENERATED -- GENERATED
@@ -27,42 +27,45 @@ class TemplateExpander {
     String targetPath;
     TemplateExpander(this.targetPath);
 
-''';
+''');
 
   find('*', root: templatePath).forEach((file) {
-    content += '''\t\tvoid ${buildMethodName(file)}() {
+    content.write('''
+\t\tvoid ${buildMethodName(file)}() {
       var expandTo = join(targetPath, '${basename(file)}');
-       expandTo.write(r\'\'\'${read('$file').toList().join('\n')}\'\'\');
+       expandTo.write(r\'\'\'${read(file).toList().join('\n')}\'\'\');
     }
 
-''';
+''');
 
     expanders.add('\t\t\t${buildMethodName(file)}();\n');
   });
 
-  content += '''\t\tvoid expand() {
-''';
+  content.write('''
+\t\tvoid expand() {
+''');
 
-  for (var expander in expanders) {
-    content += expander;
+  for (final expander in expanders) {
+    content.write(expander);
   }
-  content += '''
+  content.write('''
   }
-''';
+''');
 
-  content += '''
-}''';
+  content.write('''
+}''');
 
   if (!exists(dirname(expanderPath))) {
     createDir(dirname(expanderPath));
   }
-  expanderPath.write(content);
+  expanderPath.write(content.toString());
 }
 
 String buildMethodName(String file) {
-  if (file.endsWith('.template')) {
-    file = basenameWithoutExtension(file);
+  var _file = file;
+  if (_file.endsWith('.template')) {
+    _file = basenameWithoutExtension(_file);
   }
 
-  return basenameWithoutExtension(file);
+  return basenameWithoutExtension(_file);
 }

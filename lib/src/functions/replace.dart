@@ -34,7 +34,7 @@ class _Replace extends DCliFunction {
   int replace(String path, String existing, String replacement,
       {bool all = false}) {
     var changes = 0;
-    var tmp = '$path.tmp';
+    final tmp = '$path.tmp';
     if (exists(tmp)) {
       delete(tmp);
     }

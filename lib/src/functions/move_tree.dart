@@ -103,12 +103,11 @@ class _MoveTree extends DCliFunction {
         '*',
         root: from,
         includeHidden: includeHidden,
-        recursive: true,
       ).forEach((file) {
         var include = true;
         if (filter != null) include = filter(file);
         if (include) {
-          var target = join(to, relative(file, from: from));
+          final target = join(to, relative(file, from: from));
 
           // we create directories as we go.
           // only directories that contain a file that is to be

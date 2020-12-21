@@ -8,16 +8,16 @@ import 'package:args/args.dart';
 /// from the local files system at ..
 
 void main(List<String> args) {
-  var parser = ArgParser();
-  parser.addFlag('runOnly', abbr: 'r', defaultsTo: false);
+  final parser = ArgParser();
+  parser.addFlag('runOnly', abbr: 'r');
 
-  var results = parser.parse(args);
-  var runOnly = results['runOnly'] as bool;
+  final results = parser.parse(args);
+  final runOnly = results['runOnly'] as bool;
 
   if (!runOnly) {
     // mount the local dcli files from ..
     print(green('About to build docker'));
-    var root = Script.current.pathToProjectRoot;
+    final root = Script.current.pathToProjectRoot;
     'sudo docker build -f docker/test/all.local.df -t dcli:all_local_test .'
         .start(workingDirectory: root);
   }

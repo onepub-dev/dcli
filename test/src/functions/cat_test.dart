@@ -18,7 +18,7 @@ void main() {
         testFile = join(fs.fsRoot, 'lines.txt');
         createLineFile(testFile, 10);
 
-        var lines = <String>[];
+        final lines = <String>[];
         cat(testFile, stdout: (line) => lines.add(line));
         t.expect(lines.length, t.equals(10));
       });
@@ -27,7 +27,7 @@ void main() {
     t.test('cat non-existing ', () {
       TestFileSystem().withinZone((fs) {
         t.expect(() => cat('bad file.text'),
-            t.throwsA(t.TypeMatcher<CatException>()));
+            t.throwsA(const t.TypeMatcher<CatException>()));
       });
     });
   });

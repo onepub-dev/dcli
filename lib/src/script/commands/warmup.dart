@@ -1,9 +1,8 @@
 import '../../../dcli.dart';
 import '../../util/completion.dart';
 import '../command_line_runner.dart';
-
-import '../flags.dart';
 import '../dart_project.dart';
+import '../flags.dart';
 import 'commands.dart';
 
 /// implementation for the 'prepare' command
@@ -35,13 +34,13 @@ class WarmupCommand extends Command {
 
   void _prepareProject(String targetPath) {
     if (!exists(targetPath)) {
-      throw InvalidArguments('The project path ${targetPath} does not exists.');
+      throw InvalidArguments('The project path $targetPath does not exists.');
     }
     if (!isDirectory(targetPath)) {
       throw InvalidArguments('The project path must be a directory.');
     }
 
-    var project = DartProject.fromPath(targetPath, search: true);
+    final project = DartProject.fromPath(targetPath, search: true);
 
     print('');
     print(orange('Preparing ${project.pathToProjectRoot} ...'));
@@ -54,7 +53,8 @@ class WarmupCommand extends Command {
   String usage() => 'warmup [<project path>]';
 
   @override
-  String description() => '''Runs pub upgrade on the given directory.
+  String description() => '''
+Runs pub upgrade on the given directory.
    If no directory is passed then the current directory is warmed up.''';
 
   @override

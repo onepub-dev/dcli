@@ -5,7 +5,8 @@ import '../script/commands/install.dart';
 mixin WindowsMixin {
   String checkInstallPreconditions() {
     if (!inDeveloperMode()) {
-      return '''You must be running in Windows Developer Mode to install DCli.
+      return '''
+You must be running in Windows Developer Mode to install DCli.
 Read additional details here: https://github.com/bsutton/dcli/wiki/Installing-DCli#windows''';
     }
     return null;
@@ -18,11 +19,11 @@ Read additional details here: https://github.com/bsutton/dcli/wiki/Installing-DC
     /// HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\AppModelUnlock
     /// AllowDevelopmentWithoutDevLicense    REG_DWORD    0x1
 
-    var response =
+    final response =
         r'reg query "HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\AppModelUnlock" /v "AllowDevelopmentWithoutDevLicense"'
             .toList(runInShell: true, skipLines: 2)
             .first;
-    var parts = response.trim().split(RegExp(r'\s+'));
+    final parts = response.trim().split(RegExp(r'\s+'));
     if (parts.length != 3) {
       throw InstallException('Unable to obtain development mode settings');
     }
@@ -31,11 +32,11 @@ Read additional details here: https://github.com/bsutton/dcli/wiki/Installing-DC
   }
 
   bool get isPrivilegedUser {
-    var currentPrincipal =
+    final currentPrincipal =
         'New-Object Security.Principal.WindowsPrincipal([Security.Principal.WindowsIdentity]::GetCurrent())'
             .firstLine;
     Settings().verbose('currentPrinciple: $currentPrincipal');
-    var isPrivileged =
+    final isPrivileged =
         '$currentPrincipal.IsInRole([Security.Principal.WindowsBuiltInRole]::Administrator)'
             .firstLine;
     Settings().verbose('isPrivileged: $isPrivileged');

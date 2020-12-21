@@ -1,9 +1,8 @@
 import '../../../dcli.dart';
 import '../../util/completion.dart';
 import '../command_line_runner.dart';
-
-import '../flags.dart';
 import '../dart_project.dart';
+import '../flags.dart';
 import 'commands.dart';
 
 /// Implementation for the 'clean' command.
@@ -36,13 +35,13 @@ class CleanCommand extends Command {
 
   void _cleanProject(String targetPath) {
     if (!exists(targetPath)) {
-      throw InvalidArguments('The project path ${targetPath} does not exists.');
+      throw InvalidArguments('The project path $targetPath does not exists.');
     }
     if (!isDirectory(targetPath)) {
       throw InvalidArguments('The project path must be a directory.');
     }
 
-    var project = DartProject.fromPath(targetPath, search: true);
+    final project = DartProject.fromPath(targetPath, search: true);
 
     print('');
     print(orange('Cleaning ${project.pathToProjectRoot} ...'));
@@ -55,7 +54,8 @@ class CleanCommand extends Command {
   String usage() => 'clean [<project path>]';
 
   @override
-  String description() => '''Removes all build artfiacts.
+  String description() => '''
+Removes all build artfiacts.
    If no directory is passed then the current directory is cleaned''';
 
   @override

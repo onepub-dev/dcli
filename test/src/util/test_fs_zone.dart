@@ -42,8 +42,9 @@ class TestZone {
   }
 
   FileSystemEntityType typeSync(String path, {@required bool followLinks}) {
-    path = path.substring(0, path.length - 1);
+    var _path = path;
+    _path = _path.substring(0, _path.length - 1);
 
-    return _fs.typeSync(path, followLinks: followLinks);
+    return _fs.typeSync(_path, followLinks: followLinks);
   }
 }

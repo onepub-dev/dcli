@@ -9,7 +9,7 @@ import '../util/test_file_system.dart';
 void main() {
   test('Run dcli_complete c', () {
     TestFileSystem().withinZone((fs) {
-      var results = <String>[];
+      final results = <String>[];
 
       // make dcli_complete executable
       //chmod(755, 'bin/dcli_complete');
@@ -20,7 +20,7 @@ void main() {
       );
 
       // if warmup hasn't been run then we have the results of a pub get in the the output.
-      var expected = ['clean', 'compile', 'create'];
+      final expected = ['clean', 'compile', 'create'];
 
       expect(results, equals(expected));
     });
@@ -28,7 +28,7 @@ void main() {
 
   test('Run dcli_complete cl', () {
     TestFileSystem().withinZone((fs) {
-      var results = <String>[];
+      final results = <String>[];
 
       // make dcli_complete executable
       //chmod(755, 'bin/dcli_complete');
@@ -39,7 +39,7 @@ void main() {
       );
 
       // if warmup hasn't been run then we have the results of a pub get in the the output.
-      var expected = ['clean'];
+      final expected = ['clean'];
 
       expect(results, equals(expected));
     });
@@ -48,7 +48,7 @@ void main() {
   group('previous word', () {
     test('Run dcli_complete warmup _test_a', () {
       TestFileSystem(installDcli: false).withinZone((fs) {
-        var results = <String>[];
+        final results = <String>[];
 
         touch(join(fs.fsRoot, '_test_a.dart'), create: true);
         touch(join(fs.fsRoot, '_test_ab.dart'), create: true);
@@ -68,7 +68,7 @@ void main() {
         }
 
         // if warmup hasn't been run then we have the results of a pub get in the the output.
-        var expected = ['_test_a.dart', '_test_ab.dart'];
+        final expected = ['_test_a.dart', '_test_ab.dart'];
 
         expect(results, unorderedEquals(expected));
 
@@ -80,7 +80,7 @@ void main() {
 
     test('Run dcli_complete warmup _test_ab', () {
       TestFileSystem().withinZone((fs) {
-        var results = <String>[];
+        final results = <String>[];
 
         touch(join(fs.fsRoot, '_test_a.dart'), create: true);
         touch(join(fs.fsRoot, '_test_ab.dart'), create: true);
@@ -95,7 +95,7 @@ void main() {
         );
 
         // if warmup hasn't been run then we have the results of a pub get in the the output.
-        var expected = ['_test_a.dart', '_test_ab.dart'];
+        final expected = ['_test_a.dart', '_test_ab.dart'];
 
         expect(results, unorderedEquals(expected));
 

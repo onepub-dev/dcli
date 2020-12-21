@@ -47,16 +47,16 @@ class Settings {
   /// is currently running.
   String get pathToScript {
     if (_scriptPath == null) {
-      var script = Platform.script;
+      final script = Platform.script;
       String actual;
       if (script.isScheme('file')) {
         actual = Platform.script.toFilePath();
       } else {
         /// when running in a unit test we can end up with a 'data' scheme
         if (script.isScheme('data')) {
-          var start = script.path.indexOf('file:');
-          var end = script.path.lastIndexOf('.dart');
-          var fileUri = script.path.substring(start, end + 5);
+          final start = script.path.indexOf('file:');
+          final end = script.path.lastIndexOf('.dart');
+          final fileUri = script.path.substring(start, end + 5);
 
           /// now find the pubsped
           actual = Uri.parse(fileUri).toFilePath();
@@ -67,7 +67,7 @@ class Settings {
         // need to reconstruct is original path.
 
         // strip of the cache prefix
-        var rel = join(rootPath, relative(actual, from: pathToDCliCache));
+        final rel = join(rootPath, relative(actual, from: pathToDCliCache));
         //.dcli/cache/home/bsutton/git/dcli/tool/activate_local.project/activate_local.dart
 
         // now remove the virtual project directory
@@ -99,25 +99,15 @@ class Settings {
   /// The directory where we store all of dcli's
   /// configuration files such as the cache.
   /// This will normally be ~/.dcli
-  String get pathToDCli {
-    _dcliPath ??= p.absolute(p.join(HOME, dcliDir));
-    return _dcliPath;
-  }
+  String get pathToDCli => _dcliPath ??= p.absolute(p.join(HOME, dcliDir));
 
   /// When you run dcli compile -i <script> the compiled exe
   /// is moved to this path.
   /// The dcliBinPath is added to the OS's path
   /// allowing the installed scripts to be run from anywhere.
   /// This will normally be ~/.dcli/bin
-  String get pathToDCliBin {
-    // var st = StackTraceImpl();
-
-    // print('dcliBinPath current: ${_dcliBinPath}');
-    // print(st.formatStackTrace());
-    _dcliBinPath ??= p.absolute(p.join(HOME, dcliDir, 'bin'));
-
-    return _dcliBinPath;
-  }
+  String get pathToDCliBin =>
+      _dcliBinPath ??= p.absolute(p.join(HOME, dcliDir, 'bin'));
 
   /// path to the dcli template directory.
   String get pathToTemplate => p.join(pathToDCli, templateDir);
@@ -149,11 +139,7 @@ class Settings {
 
   /// Returns a singleton providing
   /// access to DCli settings.
-  factory Settings() {
-    _self ??= Settings.init();
-
-    return _self;
-  }
+  factory Settings() => _self ??= Settings.init();
 
   /// Used internally be dcli to initialise
   /// the settings.
@@ -197,7 +183,7 @@ class Settings {
   }
 
   /// Returns true if the directory stack
-  /// maintained by [push] and [pop] has
+  /// maintained by push and pop has
   /// is currently empty.
   /// ```dart
   /// Settings().isStackEmpty

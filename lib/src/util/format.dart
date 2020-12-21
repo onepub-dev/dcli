@@ -55,7 +55,7 @@ class Format {
           row += col.padLeft(width);
           break;
         case TableAlignment.middle:
-          var padding = width = colwidth;
+          final padding = width = colwidth;
           row += col.padLeft(padding);
           break;
       }
@@ -83,7 +83,7 @@ class Format {
   static String bytesAsReadable(int bytes) {
     String human;
 
-    var svalue = '$bytes';
+    final svalue = '$bytes';
     if (bytes > 1000000000) {
       human = svalue.substring(0, svalue.length - 9);
       human += 'G';
@@ -105,7 +105,7 @@ class Format {
   // }
 }
 
-/// Used by [Format.table] to control the alignment of each
+/// Used by [Format.row] to control the alignment of each
 /// column in the table.
 enum TableAlignment {
   ///

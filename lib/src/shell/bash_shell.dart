@@ -29,9 +29,9 @@ class BashShell with ShellMixin, PosixMixin {
       // Add cli completion
       /// -o nospace - after directory names
 
-      var command = "complete -o nospace -C 'dcli_complete' dcli";
+      const command = "complete -o nospace -C 'dcli_complete' dcli";
 
-      var startFile = pathToStartScript;
+      final startFile = pathToStartScript;
 
       if (startFile != null) {
         if (!exists(startFile)) {
@@ -46,7 +46,7 @@ class BashShell with ShellMixin, PosixMixin {
       } else {
         printerr(red('Unable to install dcli tab completion'));
         printerr(
-            "Add ${orange('$command')} to your start up script to enable tab completion");
+            "Add ${orange(command)} to your start up script to enable tab completion");
       }
     }
   }

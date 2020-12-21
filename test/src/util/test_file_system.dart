@@ -69,13 +69,13 @@ class TestFileSystem {
   ///
   /// Any test which is non-desctructive
   /// can use a common TestFileSystem by setting [useCommonPath] to
-  /// [true] which is the default.
+  /// true which is the default.
   ///
   /// Using a common file system greatly speeds
   /// up testing as we don't need to install
   /// a unique copy of dcli for each test.
   ///
-  /// Set [useCommonPath] to [false] to run your own
+  /// Set [useCommonPath] to false to run your own
   /// copy of dcli. This should be used if you are testing
   /// dcli's install.
   ///
@@ -96,9 +96,8 @@ class TestFileSystem {
     _testRoot = join(rootPath, 'tmp', 'dcli');
     uniquePath = Uuid().v4();
 
-    var isolateID = Service.getIsolateID(Isolate.current);
-    print(red('+' * 20 +
-            'Creating TestFileSystem $fsRoot for isolate $isolateID') +
+    final isolateID = Service.getIsolateID(Isolate.current);
+    print(red('${'+' * 20}${'Creating TestFileSystem $fsRoot for isolate $isolateID'}') +
         '+' * 20);
 
     tmpScriptPath = truepath(fsRoot, 'scripts');
@@ -110,11 +109,11 @@ class TestFileSystem {
   void withinZone(
     void Function(TestFileSystem fs) callback,
   ) {
-    var stack = StackTraceImpl(skipFrames: 1);
+    final stack = StackTraceImpl(skipFrames: 1);
 
     try {
       NamedLock(name: 'test_file_system.lock').withLock(() {
-        var frame = stack.frames[0];
+        final frame = stack.frames[0];
 
         print(red(
             '${'*' * 40} Starting test ${frame.sourceFile}:${frame.lineNo} ${'*' * 80}'));
@@ -123,15 +122,15 @@ class TestFileSystem {
         PubCache.reset();
         // print('PATH: $PATH');
         // print(which(DartSdk.pubExeName).firstLine);
-        var originalHome = HOME;
-        var path = env['PATH'];
+        final originalHome = HOME;
+        final path = env['PATH'];
         try {
           env['HOME'] = fsRoot;
           home = fsRoot;
 
           rebuildPath();
 
-          var isolateID = Service.getIsolateID(Isolate.current);
+          final isolateID = Service.getIsolateID(Isolate.current);
           print(green('Using TestFileSystem $fsRoot for Isolate: $isolateID'));
           print('Reset dcliPath: ${Settings().pathToDCli}');
 
@@ -179,8 +178,9 @@ class TestFileSystem {
     }
   }
 
+  // ignore: prefer_constructors_over_static_methods
   static TestFileSystem setup() {
-    var paths = TestFileSystem();
+    final paths = TestFileSystem();
 
     return paths;
   }
@@ -193,7 +193,7 @@ class TestFileSystem {
   }
 
   String runtimePath(String scriptName) {
-    var script = Script.fromFile(scriptName);
+    final script = Script.fromFile(scriptName);
     return script.pathToProjectRoot;
   }
 
@@ -250,11 +250,11 @@ class TestFileSystem {
   void deleteTestFileSystem() {
     if (exists(HOME)) {
       Settings().verbose('Deleting $HOME');
-      deleteDir(HOME, recursive: true);
+      deleteDir(HOME);
     }
     if (exists(fsRoot)) {
       Settings().verbose('Deleting $fsRoot');
-      deleteDir(fsRoot, recursive: true);
+      deleteDir(fsRoot);
     }
   }
 
@@ -267,14 +267,14 @@ class TestFileSystem {
   }
 
   void rebuildPath() {
-    var newPath = <String>[];
+    final newPath = <String>[];
 
     // remove .pub-cache and .dcli... and replace with the test FS ones
 
     if (PATH == null || PATH.isEmpty) {
       print(red('PATH is empty'));
     }
-    for (var path in PATH) {
+    for (final path in PATH) {
       if (path.contains(PubCache().pathTo) || path.contains('.dcli')) {
         continue;
       }
@@ -282,8 +282,8 @@ class TestFileSystem {
       newPath.add(path);
     }
 
-    newPath.add('${join(fsRoot, PubCache().pathToBin)}');
-    newPath.add('${join(fsRoot, '.dcli', 'bin')}');
+    newPath.add(join(fsRoot, PubCache().pathToBin));
+    newPath.add(join(fsRoot, '.dcli', 'bin'));
 
     env['PATH'] = newPath.join(Env().delimiterForPATH);
   }
@@ -291,7 +291,7 @@ class TestFileSystem {
   void copyPubCache(String originalHome, String newHome) {
     print('Copying pub cache into TestFileSystem... ');
 
-    var verbose = Settings().isVerbose;
+    final verbose = Settings().isVerbose;
 
     Settings().setVerbose(enabled: false);
 
@@ -304,7 +304,7 @@ class TestFileSystem {
 
     copyTree(join(join(originalHome, PubCache().cacheDir)), PubCache().pathTo);
 
-    print('Reset ${PubCache.ENV_VAR} to ${env[PubCache.ENV_VAR]}');
+    print('Reset ${PubCache.envVar} to ${env[PubCache.envVar]}');
 
     Settings().setVerbose(enabled: verbose);
   }
@@ -313,7 +313,7 @@ class TestFileSystem {
   void copyTestScripts() {
     print('Copying test_script into TestFileSystem... ');
 
-    var verbose = Settings().isVerbose;
+    final verbose = Settings().isVerbose;
 
     Settings().setVerbose(enabled: false);
 
@@ -322,8 +322,7 @@ class TestFileSystem {
     }
 
     copyTree(join(Script.current.pathToProjectRoot, 'test', 'test_script'),
-        testScriptPath,
-        recursive: true);
+        testScriptPath);
 
     _patchRelativeDependenciesAndWarmup(testScriptPath);
     DartProject.fromPath(join(testScriptPath, 'general')).warmup();
@@ -335,21 +334,21 @@ class TestFileSystem {
   /// dependency to dcli after we move them to the test file system.
   void _patchRelativeDependenciesAndWarmup(String testScriptPath) {
     find('pubspec.yaml', root: testScriptPath).forEach((pathToPubspec) {
-      var pubspec = PubSpec.fromFile(pathToPubspec);
-      var dependency = pubspec.dependencies['dcli'];
+      final pubspec = PubSpec.fromFile(pathToPubspec);
+      final dependency = pubspec.dependencies['dcli'];
 
-      var dcliProject = DartProject.fromPath('.');
+      final dcliProject = DartProject.fromPath('.');
 
       if (dependency.reference is ps.PathReference) {
-        var pathDependency = dependency.reference as ps.PathReference;
+        final pathDependency = dependency.reference as ps.PathReference;
 
-        var dir = relative(dirname(pathToPubspec), from: fsRoot);
-        var absolutePathToDcli = truepath(
+        final dir = relative(dirname(pathToPubspec), from: fsRoot);
+        final absolutePathToDcli = truepath(
             dcliProject.pathToProjectRoot, 'test', dir, pathDependency.path);
 
-        var newPath = PubSpec.createPathReference(absolutePathToDcli);
+        final newPath = PubSpec.createPathReference(absolutePathToDcli);
 
-        var newMap = Map<String, Dependency>.from(pubspec.dependencies);
+        final newMap = Map<String, Dependency>.from(pubspec.dependencies);
         newMap['dcli'] = Dependency('dcli', newPath);
         pubspec.dependencies = newMap;
         pubspec.saveToFile(pathToPubspec);
@@ -360,9 +359,9 @@ class TestFileSystem {
   }
 
   void installCrossPlatformTestScripts(String originalHome) {
-    var required = ['head', 'tail', 'ls', 'touch'];
+    final required = ['head', 'tail', 'ls', 'touch'];
 
-    var testbinPath = join(originalHome, '.dcli', _testBin);
+    final testbinPath = join(originalHome, '.dcli', _testBin);
 
     if (!exists(testbinPath)) {
       createDir(testbinPath, recursive: true);
@@ -373,7 +372,7 @@ class TestFileSystem {
       createDir(Settings().pathToDCliBin, recursive: true);
     }
 
-    for (var command in required) {
+    for (final command in required) {
       if (exists(join(testbinPath, command))) {
         // copy the existing command into the testzones .dcli/bin path
         copy(join(testbinPath, command),

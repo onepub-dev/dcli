@@ -21,7 +21,7 @@ class UpgradeCommand extends Command {
       throw InvalidArguments('dcli upgrade does not take any arguments.');
     }
 
-    var currentVersion = Settings().version;
+    final currentVersion = Settings().version;
 
     print(red('Upgrading dcli...'));
     print('Current version $currentVersion');

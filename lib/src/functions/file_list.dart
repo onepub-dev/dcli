@@ -9,12 +9,12 @@ import 'pwd.dart';
 /// returns the list of files and directories
 /// in the current directory.
 ///
-/// See [_find] for more advanced options when obtain a file list.
+/// See 'find' for more advanced options when obtain a file list.
 List<String> get fileList => _FileList().fileList;
 
 class _FileList extends DCliFunction {
   List<String> get fileList {
-    var files = <String>[];
+    final files = <String>[];
 
     Settings().verbose('fileList pwd: ${absolute(pwd)}');
 

@@ -10,21 +10,23 @@ class Flags {
   Flag findFlag(String flagSwitch, List<Flag> flags) {
     Flag found;
     var foundOption = false;
+    var finalFlagSwitch = flagSwitch;
 
     // Some flags allow an option after an equals sign
-    var parts = flagSwitch.split('=');
+    final parts = finalFlagSwitch.split('=');
     if (parts.length == 2) {
       foundOption = true;
-      flagSwitch = parts[0];
+      finalFlagSwitch = parts[0];
     }
-    for (var flag in flags) {
-      if (nameSwitch(flag) == flagSwitch || abbrSwitch(flag) == flagSwitch) {
+    for (final flag in flags) {
+      if (nameSwitch(flag) == finalFlagSwitch ||
+          abbrSwitch(flag) == finalFlagSwitch) {
         if (foundOption) {
           if (flag.isOptionSupported) {
             flag.option = parts[1];
           } else {
             throw InvalidFlagOption(
-                'The flag $flagSwitch was passed with an option but it does not support options.');
+                'The flag $finalFlagSwitch was passed with an option but it does not support options.');
           }
         }
         found = flag;
@@ -42,7 +44,7 @@ class Flags {
 
   /// true if the given argument starts with '-' or '--'.
   static bool isFlag(String argument) {
-    return (argument.startsWith('-') || argument.startsWith('--'));
+    return argument.startsWith('-') || argument.startsWith('--');
   }
 
   /// true if a global flag in the [Settings] class is set.
@@ -152,7 +154,8 @@ class VerboseFlag extends Flag {
   String usage() => '--$_flagName[=<log path>] | -$abbreviation[=<log path>]';
 
   @override
-  String description() => '''If passed, turns on verbose logging to the console.
+  String description() => '''
+If passed, turns on verbose logging to the console.
       If you provide a log path then logging is written to the given logfile.''';
 }
 

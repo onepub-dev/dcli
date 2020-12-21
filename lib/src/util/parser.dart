@@ -33,7 +33,7 @@ class Parser {
   /// These have a few small behavioral differences from the default Map
   /// implementation; for details, see the [YamlMap] class.
   ///
-  /// In future versions, maps will instead be [HashMap]s with a custom equality
+  /// In future versions, maps will instead be HashMaps with a custom equality
   /// operation.
   dynamic yamlDecode() {
     return loadYaml(_lines.join('\n'));
@@ -46,7 +46,7 @@ class Parser {
   ///
   /// See: https://pub.dev/packages/csv
   List<List<dynamic>> csvDecode() {
-    return CsvToListConverter().convert(_lines.join('\n'));
+    return const CsvToListConverter().convert(_lines.join('\n'));
   }
 
   /// Interprets the read lines as an ini file.

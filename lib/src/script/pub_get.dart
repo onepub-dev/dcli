@@ -1,10 +1,9 @@
 import '../../dcli.dart';
+import '../pubspec/dependency.dart';
 import '../util/progress.dart';
 import '../util/runnable_process.dart';
-
-import 'dart_sdk.dart';
-import '../pubspec/dependency.dart';
 import 'dart_project.dart';
+import 'dart_sdk.dart';
 
 ///
 /// runs and retrives the results of calling
@@ -23,7 +22,7 @@ class PubGet {
   /// Runs the pub get command against
   /// the project working dir.
   PubGetResult run({bool compileExecutables = true}) {
-    var result = PubGetResult();
+    final result = PubGetResult();
     try {
       // pub get MUST be run from the directory which contains the pubspec.yaml file.
       DartSdk().runPubGet(_project.pathToProjectRoot,
@@ -56,14 +55,14 @@ class PubGetResult {
   void _processLine(String line) {
     print(line);
     if (line.startsWith('+ ')) {
-      var dep = Dependency.fromLine(line);
+      final dep = Dependency.fromLine(line);
       if (dep != null) {
         _added.add(dep);
       }
     }
 
     if (line.startsWith('- ')) {
-      var dep = Dependency.fromLine(line);
+      final dep = Dependency.fromLine(line);
       if (dep != null) {
         _removed.add(dep);
       }

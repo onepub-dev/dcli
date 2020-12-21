@@ -26,7 +26,7 @@ void cat(String path, {LineAction stdout}) => Cat().cat(path, stdout: stdout);
 class Cat extends DCliFunction {
   /// implementation for the [cat] function.
   void cat(String path, {LineAction stdout}) {
-    var sourceFile = File(path);
+    final sourceFile = File(path);
 
     Settings().verbose('cat:  ${absolute(path)}');
 
@@ -37,7 +37,7 @@ class Cat extends DCliFunction {
     waitForEx<void>(sourceFile
         .openRead()
         .transform(utf8.decoder)
-        .transform(LineSplitter())
+        .transform(const LineSplitter())
         .forEach((line) {
       if (stdout != null) {
         stdout(line);

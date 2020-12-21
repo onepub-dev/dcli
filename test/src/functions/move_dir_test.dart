@@ -11,11 +11,11 @@ void main() {
   t.group('moveDir', () {
     t.test('empty to ', () {
       TestFileSystem().withinZone((fs) {
-        var from = join(fs.fsRoot, 'top');
-        var to = join(fs.fsRoot, 'new_top');
+        final from = join(fs.fsRoot, 'top');
+        final to = join(fs.fsRoot, 'new_top');
 
         if (exists(to)) {
-          deleteDir(to, recursive: true);
+          deleteDir(to);
         }
         moveDir(from, to);
         t.expect(exists(to), t.equals(true));
@@ -24,8 +24,8 @@ void main() {
 
     t.test('existing to ', () {
       TestFileSystem().withinZone((fs) {
-        var from = join(fs.fsRoot, 'top');
-        var to = join(fs.fsRoot, 'new_top');
+        final from = join(fs.fsRoot, 'top');
+        final to = join(fs.fsRoot, 'new_top');
 
         if (!exists(from)) {
           createDir(from, recursive: true);
@@ -44,8 +44,8 @@ void main() {
 
     t.test('from not a directory ', () {
       TestFileSystem().withinZone((fs) {
-        var from = join(fs.fsRoot, 'top', 'file');
-        var to = join(fs.fsRoot, 'new_top');
+        final from = join(fs.fsRoot, 'top', 'file');
+        final to = join(fs.fsRoot, 'new_top');
 
         if (!exists(dirname(from))) {
           createDir(dirname(from), recursive: true);
@@ -63,8 +63,8 @@ void main() {
 
     t.test('from does not exist ', () {
       TestFileSystem().withinZone((fs) {
-        var from = join(fs.fsRoot, 'random');
-        var to = join(fs.fsRoot, 'new_top');
+        final from = join(fs.fsRoot, 'random');
+        final to = join(fs.fsRoot, 'new_top');
 
         t.expect(
             () => moveDir(from, to),
@@ -80,7 +80,7 @@ void main() {
 /// checks that the given list of files no longer exists.
 bool hasMoved(List<String> files) {
   var moved = true;
-  for (var file in files) {
+  for (final file in files) {
     if (exists(file)) {
       printerr('The file $file was not moved');
       moved = false;
@@ -91,7 +91,7 @@ bool hasMoved(List<String> files) {
 }
 
 List<String> subname(List<String> expected, String from, String replace) {
-  var result = <String>[];
+  final result = <String>[];
 
   for (var path in expected) {
     path = path.replaceAll(from, replace);

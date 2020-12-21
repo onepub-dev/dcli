@@ -16,7 +16,7 @@ enum _FilePermissionRole { world, group, user }
 /// If the path doesn't exist then false is returned.
 bool hasPermission(String path, _FilePermission permission,
     {_FilePermissionRole role = _FilePermissionRole.world}) {
-  var stat = FileStat.statSync(path);
+  final stat = FileStat.statSync(path);
 
   // if (stat.type == FileSystemEntityType.notFound)
 
@@ -25,7 +25,7 @@ bool hasPermission(String path, _FilePermission permission,
 
 bool _hasPermission(FileStat stat, _FilePermission permission,
     {_FilePermissionRole role = _FilePermissionRole.world}) {
-  var bitIndex = _getPermissionBitIndex(permission, role);
+  final bitIndex = _getPermissionBitIndex(permission, role);
   return (stat.mode & (1 << bitIndex)) != 0;
 }
 

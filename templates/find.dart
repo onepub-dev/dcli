@@ -27,10 +27,10 @@ import 'package:args/args.dart';
 /// Starts from the current directory unless [--root]
 /// is provided.
 void main(List<String> args) {
-  var parser = ArgParser();
+  final parser = ArgParser();
 
   parser
-    ..addFlag('verbose', abbr: 'v', defaultsTo: false)
+    ..addFlag('verbose', abbr: 'v')
     ..addFlag('recursive', abbr: 'r', defaultsTo: true)
     ..addOption('root',
         defaultsTo: '.',
@@ -40,12 +40,12 @@ void main(List<String> args) {
         help:
             'The search pattern to apply. e.g. *.txt. You need to quote the pattern to stop bash expanding it into a file list.');
 
-  var results = parser.parse(args);
+  final results = parser.parse(args);
 
-  var pattern = results['pattern'] as String;
-  var root = results['root'] as String;
-  var verbose = results['verbose'] as bool;
-  var recursive = results['recursive'] as bool;
+  final pattern = results['pattern'] as String;
+  final root = results['root'] as String;
+  final verbose = results['verbose'] as bool;
+  final recursive = results['recursive'] as bool;
 
   if (pattern == null) {
     parser.usage;

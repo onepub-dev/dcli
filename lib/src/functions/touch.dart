@@ -29,7 +29,7 @@ String touch(String path, {bool create = false}) =>
 
 class _Touch extends DCliFunction {
   String touch(String path, {bool create = false}) {
-    var absolutePath = p.absolute(path);
+    final absolutePath = p.absolute(path);
 
     Settings().verbose('touch: $absolutePath create: $create');
 
@@ -43,10 +43,10 @@ class _Touch extends DCliFunction {
     }
 
     try {
-      var file = File(absolutePath);
+      final file = File(absolutePath);
 
       if (file.existsSync()) {
-        var now = DateTime.now();
+        final now = DateTime.now();
         file.setLastAccessedSync(now);
         file.setLastModifiedSync(now);
       } else {

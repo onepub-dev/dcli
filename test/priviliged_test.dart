@@ -1,6 +1,6 @@
 void main() {
   /// reduce the scripts privileges
-  privileged(false);
+  privileged(enabled: false);
 
   /// we touch all of the dart files but don't change their ownership.
   // find('*.dart', root: '.').forEach((file) {
@@ -19,7 +19,7 @@ void main() {
   // });
 }
 
-void privileged(bool enabled) {
+void privileged({bool enabled}) {
   /// how do I changed from root back to the normal user.
   if (enabled) {
     print('enabled root priviliges');
@@ -29,7 +29,7 @@ void privileged(bool enabled) {
 }
 
 void withPrivileges(void Function() task) {
-  privileged(true);
+  privileged(enabled: true);
   task();
-  privileged(false);
+  privileged(enabled: false);
 }

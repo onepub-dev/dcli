@@ -25,7 +25,7 @@ class DoctorCommand extends Command {
     Script script;
     if (subarguments.length == 1) {
       showScriptDetails = true;
-      var scriptPath = subarguments[0];
+      final scriptPath = subarguments[0];
       Script.validate(scriptPath);
       script = Script.fromFile(scriptPath);
     }
@@ -34,7 +34,7 @@ class DoctorCommand extends Command {
           "'dcli doctor' takes zero or one arguments. Found $subarguments");
     }
 
-    _colprint(['DCli version', '${Settings().version}']);
+    _colprint(['DCli version', Settings().version]);
     print('');
 
     printPlatform();
@@ -79,15 +79,15 @@ class DoctorCommand extends Command {
   }
 
   void printShell() {
-    _colprint([r'$SHELL', '${env['SHELL']}']);
+    _colprint([r'$SHELL', env['SHELL']]);
 
-    var shell = Shell.current;
-    _colprint(['detected SHELL', '${shell.name}']);
+    final shell = Shell.current;
+    _colprint(['detected SHELL', shell.name]);
 
     if (shell.hasStartScript) {
-      var startScriptPath = shell.pathToStartScript;
+      final startScriptPath = shell.pathToStartScript;
       if (startScriptPath == null) {
-        _colprint(['shell Start Script', '${privatePath(startScriptPath)}']);
+        _colprint(['shell Start Script', privatePath(startScriptPath)]);
       } else {
         _colprint(['shell Start Script', 'not found']);
       }
@@ -98,7 +98,7 @@ class DoctorCommand extends Command {
 
   void printPATH() {
     print('PATH');
-    for (var path in PATH) {
+    for (final path in PATH) {
       _colprint(['', privatePath(path)]);
     }
   }
@@ -107,21 +107,21 @@ class DoctorCommand extends Command {
     if (Platform.packageConfig == null) {
       _colprint(['package Config', 'not passed']);
     } else {
-      _colprint(['package Config', '${privatePath(Platform.packageConfig)}']);
+      _colprint(['package Config', privatePath(Platform.packageConfig)]);
     }
   }
 
   void printExePaths() {
-    var dcliPath = which('dcli').path;
+    final dcliPath = which('dcli').path;
     _colprint([
       'dcli path',
-      '${dcliPath == null ? 'Not found' : privatePath(dcliPath)}'
+      if (dcliPath == null) 'Not found' else privatePath(dcliPath)
     ]);
-    _colprint(['dart exe path', '${privatePath(DartSdk().pathToDartExe)}']);
-    var dartPath = which(DartSdk.dartExeName, first: true).path;
+    _colprint(['dart exe path', privatePath(DartSdk().pathToDartExe)]);
+    final dartPath = which(DartSdk.dartExeName).path;
     _colprint([
       'dart path',
-      '${privatePath(DartSdk().pathToDartExe)}',
+      privatePath(DartSdk().pathToDartExe),
       'which: ${privatePath(dartPath)}'
     ]);
 
@@ -129,12 +129,12 @@ class DoctorCommand extends Command {
       _colprint(['compiler', "using 'dart compile exe'"]);
     } else {
       _colprint(['compiler', "using 'dart2native'"]);
-      var dart2NativePath = which(DartSdk.dart2NativeExeName, first: true).path;
+      final dart2NativePath = which(DartSdk.dart2NativeExeName).path;
 
       if (dart2NativePath != null) {
         _colprint([
           'dart2Native path',
-          '${privatePath(DartSdk().pathToDartToNativeExe)}',
+          privatePath(DartSdk().pathToDartToNativeExe),
           'which: ${privatePath(dart2NativePath)}'
         ]);
       } else {
@@ -145,15 +145,15 @@ class DoctorCommand extends Command {
       }
     }
     print('');
-    var pubPath = which(DartSdk.pubExeName, first: true).path;
+    final pubPath = which(DartSdk.pubExeName).path;
 
     if (pubPath != null) {
       _colprint([
         'pub path',
-        '${privatePath(DartSdk().pathToPubExe)}',
+        privatePath(DartSdk().pathToPubExe),
         'which: ${privatePath(pubPath)}'
       ]);
-      _colprint(['Pub cache', '${privatePath(PubCache().pathTo)}']);
+      _colprint(['Pub cache', privatePath(PubCache().pathTo)]);
     } else {
       _colprint([
         'pub path',
@@ -163,12 +163,12 @@ class DoctorCommand extends Command {
   }
 
   void printPlatform() {
-    _colprint(['OS', '${Platform.operatingSystem}']);
-    print(Format.row(['OS Version', '${Platform.operatingSystemVersion}'],
+    _colprint(['OS', Platform.operatingSystem]);
+    print(Format.row(['OS Version', Platform.operatingSystemVersion],
         widths: [17, -1]));
-    _colprint(['path separator', '${Platform.pathSeparator}']);
+    _colprint(['path separator', Platform.pathSeparator]);
     print('');
-    _colprint(['dart version', '${DartSdk().version}']);
+    _colprint(['dart version', DartSdk().version]);
   }
 
   void _colprint(List<String> cols) {
@@ -177,8 +177,8 @@ class DoctorCommand extends Command {
   }
 
   @override
-  String description() =>
-      """Running 'dcli doctor' provides diagnostic information on your install 
+  String description() => """
+Running 'dcli doctor' provides diagnostic information on your install 
    and optionally a specific script.""";
 
   @override
@@ -190,19 +190,20 @@ class DoctorCommand extends Command {
   }
 
   void _showPermissions(String label, String path) {
+    var finallabel = label;
     if (exists(path)) {
-      var fstat = stat(path);
+      final fstat = stat(path);
 
-      var owner = _Owner(path);
+      final owner = _Owner(path);
 
-      label = label.padRight(20);
+      finallabel = label.padRight(20);
 
-      var username = Shell.current.loggedInUser;
+      final username = Shell.current.loggedInUser;
       if (username != null) {
         print(Format.row([
-          '$label',
-          '${fstat.modeString()}',
-          '<user>:${(owner.group == owner.user ? '<user>' : owner.group)}',
+          finallabel,
+          fstat.modeString(),
+          '<user>:${owner.group == owner.user ? '<user>' : owner.group}',
           '${privatePath(path)} '
         ], widths: [
           17,
@@ -217,7 +218,7 @@ class DoctorCommand extends Command {
         ]));
       }
     } else {
-      _colprint(['$label', '${privatePath(path)} does not exist']);
+      _colprint([finallabel, '${privatePath(path)} does not exist']);
     }
   }
 
@@ -236,13 +237,13 @@ class _Owner {
       user = 'Unknown';
       group = 'Unknown';
     } else {
-      var lsLine = 'ls -alFd $path'.firstLine;
+      final lsLine = 'ls -alFd $path'.firstLine;
 
       if (lsLine == null) {
         throw DCliException('No file/directory matched ${absolute(path)}');
       }
 
-      var parts = lsLine.split(' ');
+      final parts = lsLine.split(' ');
       user = parts[2];
       group = parts[3];
     }

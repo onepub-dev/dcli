@@ -15,10 +15,7 @@ class EntryPoint {
   static EntryPoint _self;
 
   ///
-  factory EntryPoint() {
-    _self ??= EntryPoint._internal();
-    return _self;
-  }
+  factory EntryPoint() => _self ??= EntryPoint._internal();
 
   EntryPoint._internal() {
     _self = this;
@@ -52,7 +49,7 @@ class EntryPoint {
     }
     // ignore: avoid_catches_without_on_clauses
     catch (e, stackTrace) {
-      var impl = StackTraceImpl.fromStackTrace(stackTrace);
+      final impl = StackTraceImpl.fromStackTrace(stackTrace);
       printerr('${e.runtimeType}: $e ');
       printerr('Stacktrace: ${impl.formatStackTrace()}');
       return 1;

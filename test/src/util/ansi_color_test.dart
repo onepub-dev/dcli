@@ -38,17 +38,17 @@ void main() {
 
     print(red('hi',
         bold: false,
-        background: AnsiColor(AnsiColor.code_yellow, bold: false)));
+        background: const AnsiColor(AnsiColor.codeYellow, bold: false)));
     print(red('hi', bold: false, background: AnsiColor.yellow));
-    print(red('hi', bold: true, background: AnsiColor.yellow));
+    print(red('hi', background: AnsiColor.yellow));
 
     print(orange('hello world', background: AnsiColor.black));
 
-    print(red('hi', bold: true, background: AnsiColor.yellow));
+    print(red('hi', background: AnsiColor.yellow));
     print(red('hi', bold: false, background: AnsiColor.yellow));
 
     print('ansi=${Ansi.isSupported}');
-    var term = Terminal();
+    final term = Terminal();
     // term.showCursor(show: false);
     for (var i = 0; i < 10; i++) {
       // term.clearLine();
@@ -67,7 +67,7 @@ void main() {
     print(red('And some red'));
     print(orange('Now orange'));
     print(grey('Grey 0.75', level: 0.75));
-    print(grey('Grey 0.50', level: 0.50));
+    print(grey('Grey 0.50'));
     print(red('Red on Yellow', background: AnsiColor.yellow));
   });
 }

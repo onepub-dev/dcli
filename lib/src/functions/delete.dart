@@ -36,9 +36,9 @@ class _Delete extends DCliFunction {
     var remove = true;
     if (ask) {
       remove = false;
-      var response =
+      final response =
           a.ask("delete: Delete the regular file '${absolute(path)}'? y/N");
-      var yes = response;
+      final yes = response;
       if (yes == 'y') {
         remove = true;
       }

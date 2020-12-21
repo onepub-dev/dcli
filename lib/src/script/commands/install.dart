@@ -45,7 +45,7 @@ class InstallCommand extends Command {
   int run(List<Flag> selectedFlags, List<String> subarguments) {
     var scriptIndex = 0;
 
-    var shell = Shell.current;
+    final shell = Shell.current;
 
     // check for any flags
     int i;
@@ -53,7 +53,7 @@ class InstallCommand extends Command {
       final subargument = subarguments[i];
 
       if (Flags.isFlag(subargument)) {
-        var flag = flagSet.findFlag(subargument, _installFlags);
+        final flag = flagSet.findFlag(subargument, _installFlags);
 
         if (flag != null) {
           if (flagSet.isSet(flag)) {
@@ -76,7 +76,7 @@ class InstallCommand extends Command {
           "'dcli install' does not take any arguments. Found $subarguments");
     }
 
-    _requirePrivileges = !flagSet.isSet(_NoPrivilegesFlag());
+    _requirePrivileges = !flagSet.isSet(const _NoPrivilegesFlag());
 
     // /// We need to be priviledged to create the dcli symlink
     // if (requirePrivileges && !shell.isPrivilegedUser) {
@@ -84,8 +84,8 @@ class InstallCommand extends Command {
     //   exit(1);
     // }
 
-    _quiet = flagSet.isSet(_QuietFlag());
-    _installDart = !flagSet.isSet(_NoDartFlag());
+    _quiet = flagSet.isSet(const _QuietFlag());
+    _installDart = !flagSet.isSet(const _NoDartFlag());
 
     if (_quiet) {
       print('Installing DCli v$packageVersion ...');
@@ -94,15 +94,15 @@ class InstallCommand extends Command {
 
     qprint('');
 
-    var conditions = shell.checkInstallPreconditions();
+    final conditions = shell.checkInstallPreconditions();
     if (conditions != null) {
       printerr(red('*' * 80));
-      printerr(red('$conditions'));
+      printerr(red(conditions));
       printerr(red('*' * 80));
       exit(1);
     }
     // install dart and dcli
-    var dartWasInstalled = shell.install(installDart: _installDart);
+    final dartWasInstalled = shell.install(installDart: _installDart);
 
     // Create the ~/.dcli root.
     if (!exists(Settings().pathToDCli)) {
@@ -130,7 +130,7 @@ class InstallCommand extends Command {
     }
 
     // create the bin directory
-    var binPath = Settings().pathToDCliBin;
+    final binPath = Settings().pathToDCliBin;
     if (!exists(binPath)) {
       qprint('');
       qprint(blue('Creating bin directory in: $binPath.'));
@@ -152,7 +152,7 @@ class InstallCommand extends Command {
     }
 
     // the dcli executable has just been installed by pub global activate
-    var dcliLocation = join(PubCache().pathToBin, DCliPaths().dcliName);
+    final dcliLocation = join(PubCache().pathToBin, DCliPaths().dcliName);
     // check if dcli is on the path
     if (dcliLocation == null) {
       print('');
@@ -167,7 +167,7 @@ class InstallCommand extends Command {
       }
       exit(1);
     } else {
-      var dcliPath = dcliLocation;
+      final dcliPath = dcliLocation;
       qprint(blue('dcli found in : $dcliPath.'));
 
       if (_requirePrivileges) {
@@ -216,7 +216,7 @@ class InstallCommand extends Command {
   /// to the same location.
   void symlinkDCli(Shell shell, String dcliPath) {
     if (!Platform.isWindows) {
-      var linkPath = join(dirname(DartSdk().pathToDartExe), 'dcli');
+      final linkPath = join(dirname(DartSdk().pathToDartExe), 'dcli');
       'ln -sf $dcliPath $linkPath'.start(privileged: true);
       // symlink(dcliPath, linkPath);
     }
@@ -246,7 +246,7 @@ class InstallCommand extends Command {
   void _fixPermissions(Shell shell) {
     if (shell.isPrivilegedUser) {
       if (!Platform.isWindows) {
-        var user = shell.loggedInUser;
+        final user = shell.loggedInUser;
         if (user != 'root') {
           'chown -R $user:$user ${Settings().pathToDCli}'.run;
           'chown -R $user:$user ${PubCache().pathTo}'.run;
@@ -277,7 +277,8 @@ class _NoDartFlag extends Flag {
 
   @override
   String description() {
-    return '''Stops the install from installing dart as part of the install.
+    return '''
+Stops the install from installing dart as part of the install.
       This option is for testing purposes.''';
   }
 }
@@ -306,7 +307,8 @@ class _NoPrivilegesFlag extends Flag {
 
   @override
   String description() {
-    return '''Allows the install to be run without privileges. This flag is primarily used for unit testing.
+    return '''
+Allows the install to be run without privileges. This flag is primarily used for unit testing.
       Some features will not be available if you run in this mode.''';
   }
 }

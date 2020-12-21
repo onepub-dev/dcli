@@ -10,12 +10,12 @@ import '../util/pub_cache.dart';
 class LinuxDCliInstaller {
   /// returns true if it needed to install dart.
   bool install({bool installDart}) {
-    var installedDart = false;
+    const installedDart = false;
 
     if (installDart) _installDart();
 
     // now activate dcli.
-    var pubPath = determinePubPath();
+    final pubPath = determinePubPath();
     '$pubPath global activate dcli'.start(progress: Progress.printStdErr());
 
     // // also need to install it for the root user
@@ -36,12 +36,12 @@ class LinuxDCliInstaller {
       // add dart to bash path
       if (!(isOnPATH('/usr/bin/dart') || isOnPATH('/usr/lib/bin/dart'))) {
         // we need to add it.
-        var bashrc = join(HOME, '.bashrc');
+        final bashrc = join(HOME, '.bashrc');
         bashrc.append('''export PATH="\$PATH":"/usr/lib/dart/bin"''');
         bashrc.append('''export PATH="\$PATH":"${PubCache().pathToBin}"''');
         bashrc.append('''export PATH="\$PATH":"${Settings().pathToDCliBin}"''');
 
-        var shell = ShellDetection().identifyShell();
+        final shell = ShellDetection().identifyShell();
         Settings().verbose('Found shell: shell');
         if (shell.loggedInUser != 'root') {
           // add dart to root path.
@@ -62,7 +62,7 @@ class LinuxDCliInstaller {
         _installDartWithApt();
       } else {
         Settings().verbose('Apt not found. Installing from archive');
-        var dartInstallDir =
+        final dartInstallDir =
             DartSdk().installFromArchive('/usr/lib/dart', askUser: false);
         print('Installed dart to: $dartInstallDir');
       }

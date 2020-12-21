@@ -3,8 +3,8 @@ import 'package:test/test.dart';
 
 void main() {
   test('Assets().toString', () async {
-    var path = 'assets/templates/basic.dart';
-    var content = Assets().loadString(path);
+    const path = 'assets/templates/basic.dart';
+    final content = Assets().loadString(path);
 
     expect(content, isNotNull);
 
@@ -20,10 +20,10 @@ void main() {
   });
 
   test('Assets().list', () async {
-    var path = 'assets/templates/';
-    var templates = Assets().list('*', root: path);
+    const path = 'assets/templates/';
+    final templates = Assets().list('*', root: path);
 
-    var base = join(Script.current.pathToProjectRoot, 'lib', 'src', path);
+    final base = join(Script.current.pathToProjectRoot, 'lib', 'src', path);
 
     expect(
       templates,

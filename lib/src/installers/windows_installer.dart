@@ -30,9 +30,9 @@ class WindowsDCliInstaller {
     if (which('dart').notfound) {
       print('Installing Dart');
 
-      var defaultDartToolDir = r'C:\tools\dart-sdk';
+      const defaultDartToolDir = r'C:\tools\dart-sdk';
 
-      var dartToolDir =
+      final dartToolDir =
           DartSdk().installFromArchive(defaultDartToolDir, askUser: false);
 
       /// add the dartsdk path to the windows path.

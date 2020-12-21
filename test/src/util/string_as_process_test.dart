@@ -6,7 +6,7 @@ import 'package:dcli/dcli.dart' hide equals;
 
 void main() {
   test('start with progress', () {
-    var result = <String>[];
+    final result = <String>[];
     'echo hi'.start(
       runInShell: true,
       progress: Progress((line) => result.add(line),
@@ -17,20 +17,20 @@ void main() {
   });
 
   test('stream - using start', () {
-    var log = '/tmp/access.log';
+    const log = '/tmp/access.log';
     log.write('Line 1/5');
     log.append('Line 2/5');
     log.append('Line 3/5');
     log.append('Line 4/5');
     log.append('Line 5/5');
 
-    var progress = Progress.stream();
+    final progress = Progress.stream();
     'tail /tmp/access.log'.start(
       progress: progress,
       runInShell: true,
     );
 
-    var done = Completer<void>();
+    final done = Completer<void>();
     progress.stream.listen((event) {
       print('stream: $event');
     }).onDone(() => done.complete());
@@ -40,18 +40,18 @@ void main() {
   });
 
   test('stream', () {
-    var log = '/tmp/access.log';
+    const log = '/tmp/access.log';
     log.write('Line 1/5');
     log.append('Line 2/5');
     log.append('Line 3/5');
     log.append('Line 4/5');
     log.append('Line 5/5');
 
-    var stream = 'tail /tmp/access.log'.stream(
+    final stream = 'tail /tmp/access.log'.stream(
       runInShell: true,
     );
 
-    var done = Completer<void>();
+    final done = Completer<void>();
     stream.listen((event) {
       print('stream: $event');
     }).onDone(() => done.complete());
@@ -63,18 +63,18 @@ void main() {
   test('tail -f', () {
     Settings().setVerbose(enabled: true);
 
-    var log = '/tmp/access.log';
+    const log = '/tmp/access.log';
     log.write('Line 1/5');
     log.append('Line 2/5');
     log.append('Line 3/5');
     log.append('Line 4/5');
     log.append('Line 5/5');
 
-    var stream = 'tail -f $log'.stream(
+    final stream = 'tail -f $log'.stream(
         // runInShell: true,
         );
 
-    var done = Completer<void>();
+    final done = Completer<void>();
     var linesRead = 0;
     print('have stream');
     stream.listen((event) {
@@ -99,18 +99,18 @@ void main() {
   });
 
   test('tail -n 100', () {
-    var log = '/tmp/access.log';
+    const log = '/tmp/access.log';
     log.write('Line 1/5');
     log.append('Line 2/5');
     log.append('Line 3/5');
     log.append('Line 4/5');
     log.append('Line 5/5');
     Settings().setVerbose(enabled: true);
-    var stream = 'tail -n 100 $log'.stream(
+    final stream = 'tail -n 100 $log'.stream(
         // runInShell: true,
         );
 
-    var done = Completer<void>();
+    final done = Completer<void>();
     stream.listen((event) {
       print('stream: $event');
     }).onDone(() => done.complete());

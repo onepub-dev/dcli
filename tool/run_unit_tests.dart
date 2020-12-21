@@ -9,13 +9,13 @@ import 'package:dcli/dcli.dart';
 /// So this script forces the test to run serially via the -j1 option.
 ///
 void main() {
-  var root = Script.current.pathToProjectRoot;
+  final root = Script.current.pathToProjectRoot;
 
   print(green('Running under shell: ${Shell.current.name}'));
 
   print(orange('cleaning old test and build artifacts'));
 
-  if (exists('/tmp/dcli')) deleteDir('/tmp/dcli', recursive: true);
+  if (exists('/tmp/dcli')) deleteDir('/tmp/dcli');
 
   /// remove all of the test artifacts from our test_script
   /// so we are in a clean state.
@@ -32,5 +32,5 @@ void main() {
       .start(nothrow: true, workingDirectory: root);
 
   // cleanup temp
-  if (exists('/tmp/dcli')) deleteDir('/tmp/dcli', recursive: true);
+  if (exists('/tmp/dcli')) deleteDir('/tmp/dcli');
 }

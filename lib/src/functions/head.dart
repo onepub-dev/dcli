@@ -33,7 +33,7 @@ class _Head extends DCliFunction {
     try {
       progress ??= Progress.printStdOut();
       var count = 0;
-      var file = FileSync(path);
+      final file = FileSync(path);
       file.read((line) {
         progress.addToStdout(line);
         count++;

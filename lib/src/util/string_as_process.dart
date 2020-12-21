@@ -100,7 +100,7 @@ extension StringAsProcess on String {
   @Deprecated('use start(runInShell: true)')
   void get shell => cmd.run(this, runInShell: true);
 
-  /// Runs the String [this] as a command line application.
+  /// Runs the contents of this String as a command line application.
   ///
   /// DCli performs Glob expansion on command arguments. See [run] for details.
   ///
@@ -166,7 +166,7 @@ extension StringAsProcess on String {
         workingDirectory: workingDirectory);
   }
 
-  /// forEach runs the String [this] as a command line
+  /// forEach runs the contents of this String as a command line
   /// application.
   ///
   /// DCli performs Glob expansion on command arguments. See [run] for details.
@@ -202,7 +202,7 @@ extension StringAsProcess on String {
       cmd.start(this,
           progress: Progress(stdout, stderr: stderr), runInShell: runInShell);
 
-  /// [toList] runs [this] String as a cli command and
+  /// [toList] runs the contents of this String as a cli command and
   /// returns any output written to stdout and stderr as
   /// a [List<String>].
   ///
@@ -243,7 +243,7 @@ extension StringAsProcess on String {
 
   List<String> toList(
       {bool runInShell = false, int skipLines = 0, bool nothrow = false}) {
-    var list = <String>[];
+    final list = <String>[];
 
     Progress progress;
 
@@ -256,7 +256,7 @@ extension StringAsProcess on String {
     return list.sublist(skipLines);
   }
 
-  /// [parser] runs [this] as a cli command line reading all of the
+  /// [parser] runs the contents of this String as a cli command line reading all of the
   /// returned data and then passes the read lines to a [Parser]
   /// to be decoded as a specific file type.
   ///
@@ -287,12 +287,12 @@ extension StringAsProcess on String {
   ///     [toList] -  returns a lines written to stdout and stderr as a list.
 
   Parser parser({bool runInShell = false}) {
-    var lines = toList(runInShell: runInShell);
+    final lines = toList(runInShell: runInShell);
 
     return Parser(lines);
   }
 
-  /// [firstLine] treats the String [this] as a cli process and
+  /// [firstLine] treats the contents of this String as a cli process and
   /// returns the first line written to stdout or stderr as
   /// a [String].
   /// Returns null if no lines are returned.
@@ -312,7 +312,7 @@ extension StringAsProcess on String {
   ///     [parser] - returns a parser with the captured output ready to be interpreted
   ///                as one of several file types.
   String get firstLine {
-    var lines = toList();
+    final lines = toList();
 
     String line;
     if (lines.isNotEmpty) {
@@ -322,7 +322,7 @@ extension StringAsProcess on String {
     return line;
   }
 
-  /// [lastLine] runs [this] as a cli process and
+  /// [lastLine] runs the contents of this String as a cli process and
   /// returns the last line written to stdout or stderr as
   /// a [String].
   ///
@@ -370,10 +370,10 @@ extension StringAsProcess on String {
   /// 'tail /var/log/syslog' | 'head -n 5' | 'tail -n 2'.forEach((line) => print(line));
   /// ```
   Pipe operator |(String rhs) {
-    var rhsRunnable = RunnableProcess.fromCommandLine(rhs);
+    final rhsRunnable = RunnableProcess.fromCommandLine(rhs);
     rhsRunnable.start(waitForStart: false);
 
-    var lhsRunnable = RunnableProcess.fromCommandLine(this);
+    final lhsRunnable = RunnableProcess.fromCommandLine(this);
     lhsRunnable.start(waitForStart: false);
 
     return Pipe(lhsRunnable, rhsRunnable);
@@ -400,7 +400,7 @@ extension StringAsProcess on String {
       String workingDirectory,
       bool nothrow = false,
       bool includeStderr = true}) {
-    var progress = Progress.stream(includeStderr: includeStderr);
+    final progress = Progress.stream(includeStderr: includeStderr);
 
     cmd.startStreaming(this,
         runInShell: runInShell,
@@ -413,14 +413,14 @@ extension StringAsProcess on String {
 
   /// Experiemental - DO NOT USE
   Sink get sink {
-    var lhsRunnable = RunnableProcess.fromCommandLine(this);
+    final lhsRunnable = RunnableProcess.fromCommandLine(this);
     lhsRunnable.start(waitForStart: false);
     return lhsRunnable.sink;
   }
 
   /// Experiemental - DO NOT USE
   RunnableProcess get process {
-    var process = RunnableProcess.fromCommandLine(this);
+    final process = RunnableProcess.fromCommandLine(this);
     process.start(waitForStart: false);
 
     return process;
@@ -436,18 +436,18 @@ extension StringAsProcess on String {
   ///
   /// See [append] appends a line to an existing file.
   void write(String line, {String newline = '\n'}) {
-    var sink = FileSync(this);
+    final sink = FileSync(this);
     sink.write(line, newline: newline);
     sink.close();
   }
 
   /// Truncates a file by setting its length to zero.
   void truncate() {
-    var sink = FileSync(this);
+    final sink = FileSync(this);
     sink.truncate();
   }
 
-  /// Treat [this] String  as the name of a file
+  /// Treat the contents of this String  as the name of a file
   /// and append [line] to the file.
   /// [newline] specifies the line termination character.
   /// If you don't want a newline appended then pass an empty string to [newline].
@@ -459,7 +459,7 @@ extension StringAsProcess on String {
   /// ```
   ///
   void append(String line, {String newline = '\n'}) {
-    var sink = FileSync(this);
+    final sink = FileSync(this);
     sink.append(line, newline: newline);
     sink.close();
   }

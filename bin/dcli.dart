@@ -8,7 +8,7 @@ void main(List<String> arguments) {
 
 class DCli {
   void run(List<String> arguments) {
-    var exitCode = EntryPoint().process(arguments);
+    final exitCode = EntryPoint().process(arguments);
 
     exit(exitCode);
   }

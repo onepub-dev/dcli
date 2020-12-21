@@ -52,7 +52,7 @@ abstract class Shell {
   /// username rather than root.
   String get loggedInUser;
 
-  /// Returns [true] if the current user has esclated
+  /// Returns true if the current user has esclated
   /// privileges.
   /// e.g. root under posix, Administrator under windows.
   bool get isPrivilegedUser;
@@ -81,9 +81,5 @@ abstract class Shell {
   /// e.g. bash, powershell, ....
   /// If the shell can't be deteremined then the [UnknownShell] is returned.
   ///
-  static Shell get current {
-    _current ??= ShellDetection().identifyShell();
-
-    return _current;
-  }
+  static Shell get current => _current ??= ShellDetection().identifyShell();
 }

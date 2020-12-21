@@ -141,8 +141,8 @@ class Progress {
 
   ///
   void forEach(LineAction stdout, {LineAction stderr = devNull}) {
-    stderr ??= devNull;
-    _processUntilComplete(stdout, stderr: stderr);
+    final _stderr = stderr == null ? stderr : devNull;
+    _processUntilComplete(stdout, stderr: _stderr);
   }
 
   ///
@@ -186,18 +186,19 @@ class Progress {
   ///
   /// See [firstLine]
   ///     [forEach]
-  List<String> toList({int skipLines = 0}) {
-    var lines = <String>[];
+  List<String> toList({final int skipLines = 0}) {
+    var _skipLines = skipLines;
+    final lines = <String>[];
 
     forEach((line) {
-      if (skipLines > 0) {
-        skipLines--;
+      if (_skipLines > 0) {
+        _skipLines--;
       } else {
         lines.add(line);
       }
     }, stderr: (line) {
-      if (skipLines > 0) {
-        skipLines--;
+      if (_skipLines > 0) {
+        _skipLines--;
       } else {
         lines.add(line);
       }
@@ -209,7 +210,7 @@ class Progress {
   /// null if no lines where returned
   String get firstLine {
     String line;
-    var lines = toList();
+    final lines = toList();
     if (lines.isNotEmpty) {
       line = lines[0];
     }

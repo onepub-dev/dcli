@@ -5,11 +5,10 @@ import '../../settings.dart';
 import '../../util/ansi_color.dart';
 import '../../util/completion.dart';
 import '../../util/runnable_process.dart';
-
 import '../command_line_runner.dart';
+import '../dart_project.dart';
 import '../flags.dart';
 import '../script.dart';
-import '../dart_project.dart';
 import 'commands.dart';
 
 /// implementation for the compile command.
@@ -36,7 +35,7 @@ class CompileCommand extends Command {
 
       if (Flags.isFlag(subargument)) {
         scriptIndex++;
-        var flag = flagSet.findFlag(subargument, _compileFlags);
+        final flag = flagSet.findFlag(subargument, _compileFlags);
 
         if (flag != null) {
           if (flagSet.isSet(flag)) {
@@ -61,7 +60,7 @@ class CompileCommand extends Command {
     if (scriptList.isEmpty) {
       throw InvalidArguments('There are no scripts to compile.');
     } else {
-      for (var scriptPath in scriptList) {
+      for (final scriptPath in scriptList) {
         exitCode = compileScript(scriptPath);
         if (exitCode != 0) break;
       }
@@ -79,9 +78,9 @@ class CompileCommand extends Command {
     print('');
 
     Script.validate(scriptPath);
-    var script = Script.fromFile(scriptPath);
+    final script = Script.fromFile(scriptPath);
 
-    var preparationAllowed = !(Shell.current.isSudo);
+    final preparationAllowed = !Shell.current.isSudo;
 
     if (!preparationAllowed) {
       /// we are running sudo, so we can't init a script
@@ -97,11 +96,11 @@ class CompileCommand extends Command {
       // by default we warmup the project unless the -np flag is passed.
       // however if the project isn't i a runnable state then we
       // force a build.
-      var buildRequired =
+      final buildRequired =
           !flagSet.isSet(NoWarmupFlag()) || !script.isReadyToRun;
 
       print('path: ${script.pathToScript}');
-      var project =
+      final project =
           DartProject.fromPath(script.pathToScriptDirectory, search: true);
 
       if (buildRequired) {
@@ -134,14 +133,15 @@ class CompileCommand extends Command {
 
   @override
   String description() =>
-      '''Compiles the given list of scripts using dart's native compiler. 
+      '''
+  Compiles the given list of scripts using dart's native compiler. 
    Only required if you want super fast execution.
    If no scripts are passed then all scripts in the current directory are compiled.''';
 
   @override
   String usage() {
-    var description =
-        '''compile [--nowarmup] [--install] [--overwrite] [<script path.dart>, <script path.dart>,...]''';
+    const description =
+        'compile [--nowarmup] [--install] [--overwrite] [<script path.dart>, <script path.dart>,...]';
 
     return description;
   }
@@ -169,7 +169,8 @@ class NoWarmupFlag extends Flag {
 
   @override
   String description() {
-    return '''Stops the compile from running 'dcli warmup' before compiling.
+    return '''
+Stops the compile from running 'dcli warmup' before compiling.
       Use the nowarmup option to speed up compilation when you know your project structure is up to date.''';
   }
 }

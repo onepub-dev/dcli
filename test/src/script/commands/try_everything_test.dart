@@ -8,8 +8,8 @@ import '../../util/test_file_system.dart';
 void main() {
   t.test('Try everything', () {
     TestFileSystem().withinZone((fs) {
-      var shellPath = 'shell';
-      var mainPath = join(shellPath, 'main');
+      const shellPath = 'shell';
+      final mainPath = join(shellPath, 'main');
       try {
         print('PWD: $pwd');
 
@@ -22,7 +22,7 @@ void main() {
 
         touch(join(mainPath, 'good.jpg'), create: true);
 
-        var subdirPath = join(mainPath, 'subdir');
+        final subdirPath = join(mainPath, 'subdir');
 
         if (!exists(subdirPath)) {
           createDir(subdirPath, recursive: true);
@@ -31,7 +31,7 @@ void main() {
 
         echo('Find file matching *.jpg');
 
-        for (var file in find(
+        for (final file in find(
           '*.jpg',
         ).toList()) {
           print('Found jpg: ${absolute(file)}');
@@ -40,7 +40,7 @@ void main() {
         sleep(2);
 
         echo('All files');
-        for (var file in fileList) {
+        for (final file in fileList) {
           print(file);
         }
 
@@ -50,7 +50,7 @@ void main() {
           print('bad.jpg exists');
         }
 
-        delete(join(subdirPath, 'bad.jpg'), ask: false);
+        delete(join(subdirPath, 'bad.jpg'));
 
         echo(pwd);
       } finally {

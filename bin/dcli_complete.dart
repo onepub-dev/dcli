@@ -25,9 +25,9 @@ void main(List<String> args) {
   }
 
   //var appname = args[0];
-  var word = args[1];
+  final word = args[1];
 
-  var commands = Commands.applicationCommands;
+  final commands = Commands.applicationCommands;
 
   var results = <String>[];
 
@@ -35,10 +35,10 @@ void main(List<String> args) {
 
   // do we have a prior word.
   if (args.length == 3) {
-    var priorWord = args[2];
+    final priorWord = args[2];
     //print('prior word: $priorWord');
     if (priorWord.isNotEmpty) {
-      var priorCommand = Commands.findCommand(
+      final priorCommand = Commands.findCommand(
           priorWord, Commands.asMap(Commands.applicationCommands));
 
       if (priorCommand != null) {
@@ -52,15 +52,13 @@ void main(List<String> args) {
   if (!priorCommandFound) {
     // find any command that matches the 'word' using it as prefix
 
-    for (var command in commands) {
+    for (final command in commands) {
       if (command.name.startsWith(word)) {
         results.add(command.name);
       }
     }
   }
-  for (var result in results) {
+  for (final result in results) {
     print(result);
   }
 }
-
-

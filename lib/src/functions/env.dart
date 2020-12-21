@@ -11,12 +11,12 @@ import 'dcli_function.dart';
 
 /// Returns the value of an environment variable.
 ///
-/// [name] of the enviornment variable.
+/// name of the environment variable.
 ///
-/// On posix systems [name] is case sensitive.
+/// On posix systems name of the environment variable is case sensitive.
 ///
 /// If the environment variable doesn't exists
-/// then [null] is returned.
+/// then null is returned.
 ///
 ///```dart
 ///String path = env["PATH"];
@@ -54,7 +54,7 @@ Map<String, String> get envs => Env()._envVars;
 ///
 /// Sets an environment variable for the current process.
 ///
-/// Passing a null [value] will remove the key from the
+/// Passing a null value will remove the key from the
 /// set of environment variables.
 ///
 /// Any child processes spawned will inherit these changes.
@@ -82,13 +82,13 @@ class Env extends DCliFunction {
   }
 
   Env._internal() : _caseSensitive = !Settings().isWindows {
-    var platformVars = Platform.environment;
+    final platformVars = Platform.environment;
 
     _envVars =
-        CanonicalizedMap((key) => (_caseSensitive) ? key : key.toUpperCase());
+        CanonicalizedMap((key) => _caseSensitive ? key : key.toUpperCase());
 
     // build a local map with all of the OS environment vars.
-    for (var entry in platformVars.entries) {
+    for (final entry in platformVars.entries) {
       _envVars.putIfAbsent(entry.key, () => entry.value);
     }
   }
@@ -105,7 +105,7 @@ class Env extends DCliFunction {
   String _env(String name) {
     Settings().verbose('env:  $name:${_envVars[name]}');
 
-    return _envVars[(_caseSensitive) ? name : name.toUpperCase()];
+    return _envVars[_caseSensitive ? name : name.toUpperCase()];
   }
 
   /// Returns the complete set of Environment variable entries.
@@ -114,14 +114,14 @@ class Env extends DCliFunction {
   /// Adds all of the entries in the [other] map as environment variables.
   /// Case translation will occur if the platform is case sensitive.
   void addAll(Map<String, String> other) {
-    for (var entry in other.entries) {
+    for (final entry in other.entries) {
       _setEnv(entry.key, entry.value);
     }
   }
 
   /// returns the PATH environment var.
   List<String> get _path {
-    var pathEnv = this['PATH'];
+    final pathEnv = this['PATH'];
 
     return pathEnv.split(delimiterForPATH);
   }
@@ -138,7 +138,7 @@ class Env extends DCliFunction {
   /// Changing the path affects the current script
   /// and any children that it spawns.
   void appendToPATH(String newPath) {
-    var path = PATH;
+    final path = PATH;
     path.add(newPath);
     _setEnv('PATH', path.join(delimiterForPATH));
   }
@@ -152,7 +152,7 @@ class Env extends DCliFunction {
   /// Changing the path affects the current script
   /// and any children that it spawns.
   void prependToPATH(String newPath) {
-    var path = PATH;
+    final path = PATH;
     path.insert(0, newPath);
     _setEnv('PATH', path.join(delimiterForPATH));
   }
@@ -165,7 +165,7 @@ class Env extends DCliFunction {
   /// Changing the path affects the current script
   /// and any children that it spawns.
   void removeFromPATH(String oldPath) {
-    var path = PATH;
+    final path = PATH;
     path.remove(oldPath);
     _setEnv('PATH', path.join(delimiterForPATH));
   }
@@ -181,7 +181,7 @@ class Env extends DCliFunction {
   /// Changing the PATH affects the current script
   /// and any children that it spawns.
   void addToPATHIfAbsent(String newPath) {
-    var path = PATH;
+    final path = PATH;
     if (!path.contains(newPath)) {
       path.add(newPath);
       _setEnv('PATH', path.join(delimiterForPATH));
@@ -213,12 +213,12 @@ class Env extends DCliFunction {
     return home;
   }
 
-  /// returns true if the given [pathToScript] is in the list
+  /// returns true if the given [checkPath] is in the list
   /// of paths defined in the environment variable [PATH].
   bool isOnPATH(String checkPath) {
-    var canon = canonicalize(absolute(checkPath));
+    final canon = canonicalize(absolute(checkPath));
     var found = false;
-    for (var path in _path) {
+    for (final path in _path) {
       if (canonicalize(path) == canon) {
         found = true;
         break;
@@ -303,7 +303,7 @@ class Env extends DCliFunction {
   /// }
   /// ```
   String toJson() {
-    var envMap = <String, String>{};
+    final envMap = <String, String>{};
     envMap.addEntries(env.entries.toSet());
     return JsonEncoder(_toEncodable).convert(envMap);
   }
@@ -318,7 +318,7 @@ class Env extends DCliFunction {
   void fromJson(String json) {
     _envVars.clear();
     env.addAll(Map<String, String>.from(
-        JsonDecoder().convert(json) as Map<dynamic, dynamic>));
+        const JsonDecoder().convert(json) as Map<dynamic, dynamic>));
   }
 
   String _toEncodable(Object object) {

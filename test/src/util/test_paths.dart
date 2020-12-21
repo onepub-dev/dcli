@@ -65,7 +65,7 @@ class TestPaths {
     print('unit test for $pid running from $pid');
 
     // redirecct HOME to /tmp/dcli/home
-    var home = truepath(testRoot, 'home');
+    final home = truepath(testRoot, 'home');
     env['HOME'] = home;
 
     // // create test .pub-cache dir
@@ -75,7 +75,7 @@ class TestPaths {
     // add the unit test dcli/bin path to the front
     // of the PATH so that our test version of dcli tooling
     // will run when we spawn a dcli process.
-    var path = PATH;
+    final path = PATH;
     path.insert(0, Settings().pathToDCliBin);
 
     // .pub-cache so we run the test version of dcli.
@@ -83,13 +83,14 @@ class TestPaths {
 
     env['PATH'] = path.join(Env().delimiterForPATH);
 
-    var dcliPath = Settings().pathToDCli;
+    final dcliPath = Settings().pathToDCli;
     if (!dcliPath.startsWith(join(rootPath, 'tmp')) ||
         !HOME.startsWith(join(rootPath, 'tmp')))
     //  ||        !env['PUB_CACHE'].startsWith('/tmp'))
     {
       printerr(
-          '''Something went wrong, the dcli path or HOME for unit tests is NOT pointing to /tmp. 
+          '''
+Something went wrong, the dcli path or HOME for unit tests is NOT pointing to /tmp. 
           dcli's path is pointing at $dcliPath
           HOME is pointing at $HOME
           PUB_CACHE is pointing at ${env['PUB_CACHE']}

@@ -11,19 +11,19 @@ void main() {
   t.group('moveTree', () {
     t.test('empty target ', () {
       TestFileSystem().withinZone((fs) {
-        var from = join(fs.fsRoot, 'top');
-        var to = join(fs.fsRoot, 'new_top');
+        final from = join(fs.fsRoot, 'top');
+        final to = join(fs.fsRoot, 'new_top');
 
         if (exists(to)) {
-          deleteDir(to, recursive: true);
+          deleteDir(to);
         }
 
-        var source = find('*', root: from, recursive: false).toList();
-        var expected = subname(source, 'top', 'new_top');
+        final source = find('*', root: from, recursive: false).toList();
+        final expected = subname(source, 'top', 'new_top');
         createDir(to);
         moveTree(from, to);
 
-        var actual = find('*', root: to, recursive: false).toList();
+        final actual = find('*', root: to, recursive: false).toList();
 
         t.expect(actual, t.unorderedEquals(expected));
 
@@ -33,20 +33,20 @@ void main() {
 
     t.test('empty target - overwrite', () {
       TestFileSystem().withinZone((fs) {
-        var from = join(fs.fsRoot, 'top');
-        var to = join(fs.fsRoot, 'new_top');
+        final from = join(fs.fsRoot, 'top');
+        final to = join(fs.fsRoot, 'new_top');
 
         if (exists(to)) {
-          deleteDir(to, recursive: true);
+          deleteDir(to);
         }
 
-        var source = find('*', root: from, recursive: false).toList();
-        var expected = subname(source, 'top', 'new_top');
+        final source = find('*', root: from, recursive: false).toList();
+        final expected = subname(source, 'top', 'new_top');
         createDir(to);
         moveTree(from, to);
         moveTree(from, to, overwrite: true);
 
-        var actual = find('*', root: to, recursive: false).toList();
+        final actual = find('*', root: to, recursive: false).toList();
 
         t.expect(actual, unorderedEquals(expected));
         t.expect(hasMoved(source), true);
@@ -55,19 +55,19 @@ void main() {
 
     t.test('empty target - filter *.txt', () {
       TestFileSystem().withinZone((fs) {
-        var from = join(fs.fsRoot, 'top');
-        var to = join(fs.fsRoot, 'new_top');
+        final from = join(fs.fsRoot, 'top');
+        final to = join(fs.fsRoot, 'new_top');
 
         if (exists(to)) {
-          deleteDir(to, recursive: true);
+          deleteDir(to);
         }
 
-        var source = find('*.txt', root: from, recursive: false).toList();
-        var expected = subname(source, 'top', 'new_top');
+        final source = find('*.txt', root: from, recursive: false).toList();
+        final expected = subname(source, 'top', 'new_top');
         createDir(to);
         moveTree(from, to, filter: (file) => extension(file) == '.txt');
 
-        var actual = find('*.txt', root: to, recursive: false).toList();
+        final actual = find('*.txt', root: to, recursive: false).toList();
 
         t.expect(actual, unorderedEquals(expected));
         t.expect(hasMoved(source), true);
@@ -76,19 +76,19 @@ void main() {
 
     t.test('empty target - recursive - filter *.txt', () {
       TestFileSystem().withinZone((fs) {
-        var from = join(fs.fsRoot, 'top');
-        var to = join(fs.fsRoot, 'new_top');
+        final from = join(fs.fsRoot, 'top');
+        final to = join(fs.fsRoot, 'new_top');
 
         if (exists(to)) {
-          deleteDir(to, recursive: true);
+          deleteDir(to);
         }
 
-        var source = find('*.txt', root: from, recursive: true).toList();
-        var expected = subname(source, 'top', 'new_top');
+        final source = find('*.txt', root: from).toList();
+        final expected = subname(source, 'top', 'new_top');
         createDir(to);
         moveTree(from, to, filter: (file) => extension(file) == '.txt');
 
-        var actual = find('*.txt', root: to, recursive: true).toList();
+        final actual = find('*.txt', root: to).toList();
 
         t.expect(actual, unorderedEquals(expected));
         t.expect(hasMoved(source), true);
@@ -97,19 +97,19 @@ void main() {
 
     t.test('empty target - recursive ', () {
       TestFileSystem().withinZone((fs) {
-        var from = join(fs.fsRoot, 'top');
-        var to = join(fs.fsRoot, 'new_top');
+        final from = join(fs.fsRoot, 'top');
+        final to = join(fs.fsRoot, 'new_top');
 
         if (exists(to)) {
-          deleteDir(to, recursive: true);
+          deleteDir(to);
         }
 
-        var source = find('*', root: from, recursive: true).toList();
-        var expected = subname(source, 'top', 'new_top');
+        final source = find('*', root: from).toList();
+        final expected = subname(source, 'top', 'new_top');
         createDir(to);
         moveTree(from, to);
 
-        var actual = find('*', root: to, recursive: true).toList();
+        final actual = find('*', root: to).toList();
 
         t.expect(actual, unorderedEquals(expected));
         t.expect(hasMoved(source), true);
@@ -118,20 +118,20 @@ void main() {
 
     t.test('empty target - recursive- overwrite', () {
       TestFileSystem().withinZone((fs) {
-        var from = join(fs.fsRoot, 'top');
-        var to = join(fs.fsRoot, 'new_top');
+        final from = join(fs.fsRoot, 'top');
+        final to = join(fs.fsRoot, 'new_top');
 
         if (exists(to)) {
-          deleteDir(to, recursive: true);
+          deleteDir(to);
         }
 
-        var source = find('*', root: from, recursive: true).toList();
-        var expected = subname(source, 'top', 'new_top');
+        final source = find('*', root: from).toList();
+        final expected = subname(source, 'top', 'new_top');
         createDir(to);
         moveTree(from, to);
         moveTree(from, to, overwrite: true);
 
-        var actual = find('*', root: to, recursive: true).toList();
+        final actual = find('*', root: to).toList();
 
         t.expect(actual, expected);
         t.expect(hasMoved(source), true);
@@ -143,7 +143,7 @@ void main() {
 /// checks that the given list of files no longer exists.
 bool hasMoved(List<String> files) {
   var moved = true;
-  for (var file in files) {
+  for (final file in files) {
     if (exists(file)) {
       printerr('The file $file was not moved');
       moved = false;
@@ -154,7 +154,7 @@ bool hasMoved(List<String> files) {
 }
 
 List<String> subname(List<String> expected, String from, String replace) {
-  var result = <String>[];
+  final result = <String>[];
 
   for (var path in expected) {
     path = path.replaceAll(from, replace);

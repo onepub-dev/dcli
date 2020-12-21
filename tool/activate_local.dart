@@ -6,7 +6,7 @@ import 'package:dcli/dcli.dart';
 ///
 ///
 void main(List<String> args) {
-  var root = Script.current.pathToProjectRoot;
+  final root = Script.current.pathToProjectRoot;
   'pub global activate dcli --source=path'
       .start(workingDirectory: dirname(root));
   'dcli install'.start();

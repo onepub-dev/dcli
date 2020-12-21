@@ -2,7 +2,7 @@ import 'dart:io';
 
 import 'package:dcli/dcli.dart';
 
-final port = 63424;
+const port = 63424;
 
 void main() {
   _bindSocket();

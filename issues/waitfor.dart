@@ -61,11 +61,9 @@ T waitForEx<T>(Future<T> future) {
       exception = e;
     }).whenComplete(() => print('future completed'));
 
-    runZoned(() {
+    runZonedGuarded(() {
       value = waitFor<T>(future);
-    },
-        //ignore: avoid_types_on_closure_parameters
-        onError: (Object error, StackTrace st) {
+    }, (Object error, StackTrace st) {
       exception = error;
     });
   }
@@ -80,7 +78,7 @@ T waitForEx<T>(Future<T> future) {
     // recreate the exception so we have a full
     // stacktrace rather than the microtask
     // stacktrace the future leaves us with.
-    var stackTrace = StackTraceImpl(skipFrames: 2);
+    final stackTrace = StackTraceImpl(skipFrames: 2);
 
     if (exception is DCliException) {
       throw (exception as DCliException).copyWith(stackTrace);
@@ -92,9 +90,10 @@ T waitForEx<T>(Future<T> future) {
 }
 
 Future<int> throwExceptionV3() {
-  var complete = Completer<int>();
+  final complete = Completer<int>();
   try {
-    var future = Future.delayed(Duration(seconds: 2), () => throw Exception());
+    final future =
+        Future.delayed(const Duration(seconds: 2), () => throw Exception());
     //ignore: avoid_types_on_closure_parameters
     future.catchError((Object e) {
       print('caught 1');

@@ -6,6 +6,7 @@ import 'package:dcli/src/util/file_sort.dart';
 
 /// dsort
 ///
+///```
 /// dsort --field-delimiter=<FD> --linedelimiter=<LD> --key=<columns> --output output <file>
 ///
 /// <columns>=1[type][direction],3,7,1-7
@@ -22,6 +23,7 @@ import 'package:dcli/src/util/file_sort.dart';
 /// e.g.
 ///
 /// dsort -fd=, -ld=\n --sortkey=1nd,2,3sd,1-7nd unsorted.txt
+/// ```
 ///
 ///
 
@@ -34,14 +36,14 @@ void main(List<String> args) {
   dsort(args);
 }
 
-void dsort(List<String> args) async {
-  var columns = <Column>[];
+void dsort(List<String> args)  {
+  final columns = <Column>[];
   String fieldDelimiter;
   String lineDelimiter;
   String outputPath;
   bool verbose;
 
-  var parser = ArgParser()
+  final parser = ArgParser()
     ..addFlag('verbose', abbr: 'v', callback: (value) => verbose = value)
     ..addOption(fieldDelimiterOption,
         abbr: 'f',
@@ -60,13 +62,13 @@ void dsort(List<String> args) async {
             columns.addAll(FileSort.expandColumns(values)))
     ..addOption(outputOption, abbr: 'o');
 
-  var results = parser.parse(args);
+  final results = parser.parse(args);
 
   if (results.rest.length != 1) {
     usageError('Expected an input_file to sort.');
   }
 
-  var inputPath = absolute(results.rest[0]);
+  final inputPath = absolute(results.rest[0]);
 
   if (results[outputOption] != null) {
     outputPath = results[outputOption].toString();
@@ -77,7 +79,7 @@ void dsort(List<String> args) async {
 
   if (columns.isEmpty) {
     /// if no columns defined we sort by the whole line.
-    columns.add(Column(0, CaseInsensitiveSort(), SortDirection.ascending));
+    columns.add(Column(0, const CaseInsensitiveSort(), SortDirection.ascending));
   }
 
   if (verbose) {
@@ -96,7 +98,7 @@ void dsort(List<String> args) async {
         'The output_file $outputPath already exist. Delete the file and try again.');
   }
 
-  var sort = FileSort(
+  final sort = FileSort(
       inputPath, outputPath, columns, fieldDelimiter, lineDelimiter,
       verbose: verbose);
 

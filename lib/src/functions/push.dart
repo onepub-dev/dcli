@@ -21,7 +21,7 @@ import 'is.dart';
 /// Note: change the directory changes the directory
 /// for all isolates.
 ///
-/// See [cd]
+/// See cd
 ///     [pop]
 ///     [pwd]
 @Deprecated('Use join')

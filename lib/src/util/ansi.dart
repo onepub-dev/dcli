@@ -4,7 +4,7 @@ import 'dart:io';
 ///
 /// Use one of the color functions instead of this class.
 ///
-/// See [AnsiColor]
+/// See AnsiColor
 ///     [Terminal]
 ///  ...
 class Ansi {
@@ -17,10 +17,7 @@ class Ansi {
   const Ansi._internal();
 
   /// returns true of the terminal supports ansi escape characters.
-  static bool get isSupported {
-    _emitAnsi ??= stdin.supportsAnsiEscapes;
-    return _emitAnsi;
-  }
+  static bool get isSupported => _emitAnsi ??= stdin.supportsAnsiEscapes;
 
   /// You can set [isSupported] to
   /// override the detected ansi settings.

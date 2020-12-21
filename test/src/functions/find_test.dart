@@ -11,14 +11,14 @@ void main() {
   t.group('Find', () {
     t.test('manualRecursion', () async {
       TestFileSystem().withinZone((fs) {
-        var foundDirs = find('*',
+        final foundDirs = find('*',
                 root: fs.testScriptPath,
                 recursive: false,
                 types: <FileSystemEntityType>[Find.directory],
                 includeHidden: true)
             .toList();
 
-        var rootDirs = <String>[
+        final rootDirs = <String>[
           join(fs.testScriptPath, 'general'),
           join(fs.testScriptPath, 'traditional_project')
         ];
@@ -34,7 +34,6 @@ void main() {
       find(
         '*',
         root: '/',
-        recursive: true,
         types: <FileSystemEntityType>[Find.directory],
         includeHidden: true,
         // progress: Progress((line) {
@@ -82,10 +81,10 @@ void main() {
   t.group('Find', () {
     t.test('Search for *.txt files in top directory ', () {
       TestFileSystem().withinZone((fs) {
-        var paths = TestFileSystem();
-        var found = find('*.txt', root: paths.top, recursive: false).toList();
+        final paths = TestFileSystem();
+        final found = find('*.txt', root: paths.top, recursive: false).toList();
         found.sort();
-        var expected = [join(paths.top, 'one.txt'), join(paths.top, 'two.txt')];
+        final expected = [join(paths.top, 'one.txt'), join(paths.top, 'two.txt')];
         expected.sort();
         t.expect(found, t.equals(expected));
       });
@@ -93,8 +92,8 @@ void main() {
 
     t.test('Search recursive for *.jpg ', () {
       TestFileSystem().withinZone((fs) {
-        var paths = TestFileSystem();
-        var found = find('*.jpg', root: paths.top).toList();
+        final paths = TestFileSystem();
+        final found = find('*.jpg', root: paths.top).toList();
 
         find('*.jpg', root: paths.top).forEach(print);
         t.expect(find('one.jpg', root: paths.top).toList(),
@@ -106,7 +105,7 @@ void main() {
         find('*.jpg', progress: Progress(print));
 
         found.sort();
-        var expected = [
+        final expected = [
           join(paths.top, 'fred.jpg'),
           join(paths.top, 'one.jpg'),
           join(paths.middle, 'two.jpg'),
@@ -119,11 +118,11 @@ void main() {
 
     t.test('Search recursive for *.txt ', () {
       TestFileSystem().withinZone((fs) {
-        var paths = TestFileSystem();
-        var found = find('*.txt', root: paths.top).toList();
+        final paths = TestFileSystem();
+        final found = find('*.txt', root: paths.top).toList();
 
         found.sort();
-        var expected = [
+        final expected = [
           join(paths.top, 'one.txt'),
           join(paths.top, 'two.txt'),
           join(paths.middle, 'three.txt'),
@@ -138,11 +137,11 @@ void main() {
 
     t.test('ignore hidden files *.txt  ', () {
       TestFileSystem().withinZone((fs) {
-        var paths = TestFileSystem();
-        var found = find('*.txt', root: paths.top).toList();
+        final paths = TestFileSystem();
+        final found = find('*.txt', root: paths.top).toList();
 
         found.sort();
-        var expected = [
+        final expected = [
           join(paths.top, 'one.txt'),
           join(paths.top, 'two.txt'),
           join(paths.middle, 'three.txt'),
@@ -157,12 +156,12 @@ void main() {
 
     t.test('find hidden files *.txt  ', () {
       TestFileSystem().withinZone((fs) {
-        var paths = TestFileSystem();
-        var found =
+        final paths = TestFileSystem();
+        final found =
             find('*.txt', root: paths.top, includeHidden: true).toList();
 
         found.sort();
-        var expected = [
+        final expected = [
           join(paths.thidden, 'fred.txt'),
           join(paths.top, 'one.txt'),
           join(paths.top, 'two.txt'),
@@ -181,9 +180,9 @@ void main() {
     });
 
     t.test('non-recursive find', () async {
-      var tmp = Directory('/tmp').createTempSync().path;
+      final tmp = Directory('/tmp').createTempSync().path;
 
-      var paths = <String>[
+      final paths = <String>[
         join(tmp, '.thidden' 'fred.txt'),
         join(tmp, 'top', 'one.txt'),
         join(tmp, 'top', 'two.txt'),
@@ -197,35 +196,35 @@ void main() {
         join(tmp, '.hidden', '.seven.txt')
       ];
 
-      for (var file in paths) {
+      for (final file in paths) {
         if (!exists(dirname(file))) {
           createDir(dirname(file));
         }
         touch(file, create: true);
       }
 
-      var found = find('*.txt', root: tmp, includeHidden: true).toList();
+      final found = find('*.txt', root: tmp, includeHidden: true).toList();
 
       t.expect(found, t.unorderedEquals(paths));
     });
 
     t.test('non-recursive find with path in pattern', () async {
-      var tmp = Directory('/tmp').createTempSync().path;
+      final tmp = Directory('/tmp').createTempSync().path;
 
-      var paths = <String>[
+      final paths = <String>[
         join(tmp, 'middle', 'three.txt'),
         join(tmp, 'middle', 'four.txt'),
         join(tmp, 'middle', '.four.txt'),
       ];
 
-      for (var file in paths) {
+      for (final file in paths) {
         if (!exists(dirname(file))) {
           createDir(dirname(file));
         }
         touch(file, create: true);
       }
 
-      var found =
+      final found =
           find('middle/*.txt', root: tmp, recursive: false, includeHidden: true)
               .toList();
 
@@ -233,23 +232,23 @@ void main() {
     });
 
     t.test('recursive find with path in pattern', () async {
-      var tmp = Directory('/tmp').createTempSync().path;
+      final tmp = Directory('/tmp').createTempSync().path;
 
-      var paths = <String>[
+      final paths = <String>[
         join(tmp, 'middle', 'three.txt'),
         join(tmp, 'middle', 'four.txt'),
         join(tmp, 'middle', '.four.txt'),
       ];
 
-      for (var file in paths) {
+      for (final file in paths) {
         if (!exists(dirname(file))) {
           createDir(dirname(file));
         }
         touch(file, create: true);
       }
 
-      var found =
-          find('middle/*.txt', root: tmp, recursive: true, includeHidden: true)
+      final found =
+          find('middle/*.txt', root: tmp, includeHidden: true)
               .toList();
 
       t.expect(found, t.unorderedEquals(paths));

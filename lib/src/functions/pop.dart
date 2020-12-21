@@ -34,7 +34,7 @@ import 'function.dart';
 /// If you pop and there are no more directories
 /// on the stack then a [PopException] is thrown.
 ///
-/// See [push]
+/// See push
 ///     [pwd]
 ///     [cd]
 ///
@@ -45,7 +45,7 @@ void pop() => _Pop().pop();
 class _Pop extends DCliFunction {
   ///
   /// Change the working directory back
-  /// to its location before [push] was called.
+  /// to its location before push was called.
   ///
   /// Note: change the directory changes the directory
   /// for all isolates.
@@ -54,7 +54,7 @@ class _Pop extends DCliFunction {
       throw PopException(
           'Pop failed. You are already at the top of the stack. You need to be more pushy.');
     }
-    var path = InternalSettings().pop().path;
+    final path = InternalSettings().pop().path;
 
     Settings().verbose('pop:  new -> ${p.absolute(path)}');
 

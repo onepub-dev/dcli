@@ -34,7 +34,8 @@ extension HostedReferenceExt on HostedReference {
 extension _GitReferenceExt on GitReference {
   /// expands the dependancy to its yaml form.
   String rehydrate(Dependency dependency) {
-    var expanded = '''${dependency.name}: 
+    var expanded = '''
+${dependency.name}: 
   git: 
     url: $url''';
 
@@ -50,7 +51,8 @@ extension _GitReferenceExt on GitReference {
 extension _PathReferenceExt on PathReference {
   /// expands the dependancy to its yaml form.
   String rehydrate(Dependency dependency) {
-    var expanded = '''${dependency.name}: 
+    final expanded = '''
+${dependency.name}: 
     path: $path''';
 
     return expanded;
@@ -61,7 +63,8 @@ extension _PathReferenceExt on PathReference {
 extension _ExternalHostedReferenceExt on ExternalHostedReference {
   /// expands the dependancy to its yaml form.
   String rehydrate(Dependency dependency) {
-    var expanded = '''${dependency.name}: 
+    final expanded = '''
+${dependency.name}: 
 hosted:
   name: $name
   url: $url

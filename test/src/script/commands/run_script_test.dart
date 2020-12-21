@@ -10,7 +10,7 @@ import '../../util/test_file_system.dart';
 void main() {
   test('Run hello world', () {
     TestFileSystem().withinZone((fs) {
-      var results = <String>[];
+      final results = <String>[];
 
       '${DCliPaths().dcliName} -v ${join(fs.testScriptPath, 'general/bin/hello_world.dart')}'
           .forEach((line) => results.add(line), stderr: printerr);

@@ -24,7 +24,7 @@ String red(
   AnsiColor background = AnsiColor.none,
   bool bold = true,
 }) =>
-    AnsiColor._apply(AnsiColor(AnsiColor.code_red, bold: bold), text,
+    AnsiColor._apply(AnsiColor(AnsiColor.codeRed, bold: bold), text,
         background: background);
 
 /// Wraps the passed text with the ANSI escape sequence for
@@ -51,7 +51,7 @@ String black(
   AnsiColor background = AnsiColor.white,
   bool bold = true,
 }) =>
-    AnsiColor._apply(AnsiColor(AnsiColor.code_black, bold: bold), text,
+    AnsiColor._apply(AnsiColor(AnsiColor.codeBlack, bold: bold), text,
         background: background);
 
 /// Wraps the passed text with the ANSI escape sequence for
@@ -78,7 +78,7 @@ String green(
   AnsiColor background = AnsiColor.none,
   bool bold = true,
 }) =>
-    AnsiColor._apply(AnsiColor(AnsiColor.code_green, bold: bold), text,
+    AnsiColor._apply(AnsiColor(AnsiColor.codeGeen, bold: bold), text,
         background: background);
 
 /// Wraps the passed text with the ANSI escape sequence for
@@ -105,7 +105,7 @@ String blue(
   AnsiColor background = AnsiColor.none,
   bool bold = true,
 }) =>
-    AnsiColor._apply(AnsiColor(AnsiColor.code_blue, bold: bold), text,
+    AnsiColor._apply(AnsiColor(AnsiColor.codeBlue, bold: bold), text,
         background: background);
 
 /// Wraps the passed text with the ANSI escape sequence for
@@ -132,7 +132,7 @@ String yellow(
   AnsiColor background = AnsiColor.none,
   bool bold = true,
 }) =>
-    AnsiColor._apply(AnsiColor(AnsiColor.code_yellow, bold: bold), text,
+    AnsiColor._apply(AnsiColor(AnsiColor.codeYellow, bold: bold), text,
         background: background);
 
 /// Wraps the passed text with the ANSI escape sequence for
@@ -160,7 +160,7 @@ String magenta(
   AnsiColor background = AnsiColor.none,
   bool bold = true,
 }) =>
-    AnsiColor._apply(AnsiColor(AnsiColor.code_magenta, bold: bold), text,
+    AnsiColor._apply(AnsiColor(AnsiColor.codeMagenta, bold: bold), text,
         background: background);
 
 /// Wraps the passed text with the ANSI escape sequence for
@@ -188,7 +188,7 @@ String cyan(
   AnsiColor background = AnsiColor.none,
   bool bold = true,
 }) =>
-    AnsiColor._apply(AnsiColor(AnsiColor.code_cyan, bold: bold), text,
+    AnsiColor._apply(AnsiColor(AnsiColor.codeCyan, bold: bold), text,
         background: background);
 
 /// Wraps the passed text with the ANSI escape sequence for
@@ -216,7 +216,7 @@ String white(
   AnsiColor background = AnsiColor.none,
   bool bold = true,
 }) =>
-    AnsiColor._apply(AnsiColor(AnsiColor.code_white, bold: bold), text,
+    AnsiColor._apply(AnsiColor(AnsiColor.codeWhite, bold: bold), text,
         background: background);
 
 /// Wraps the passed text with the ANSI escape sequence for
@@ -244,7 +244,7 @@ String orange(
   AnsiColor background = AnsiColor.none,
   bool bold = true,
 }) =>
-    AnsiColor._apply(AnsiColor(AnsiColor.code_orange, bold: bold), text,
+    AnsiColor._apply(AnsiColor(AnsiColor.codeOrange, bold: bold), text,
         background: background);
 
 /// Wraps the passed text with the ANSI escape sequence for
@@ -350,9 +350,9 @@ class AnsiColor {
     if (code == none.code) {
       output = '';
     } else if (code > 39) {
-      output = '${Ansi.esc}$_fgColorCode${code}${(bold ? ';1' : '')}m';
+      output = '${Ansi.esc}$_fgColorCode$code${bold ? ';1' : ''}m';
     } else {
-      output = '${Ansi.esc}${code}${(bold ? ';1' : '')}m';
+      output = '${Ansi.esc}$code${bold ? ';1' : ''}m';
     }
     return output;
   }
@@ -388,32 +388,32 @@ class AnsiColor {
 // emit this code followed by a color code to set the fg color
   static const String _backgroundCode = '48;5;';
 
-  static const int code_black = 30;
-  static const int code_red = 31;
-  static const int code_green = 32;
-  static const int code_yellow = 33;
-  static const int code_blue = 34;
-  static const int code_magenta = 35;
-  static const int code_cyan = 36;
-  static const int code_white = 37;
-  static const int code_orange = 208;
-  static const int code_grey = 232;
+  static const int codeBlack = 30;
+  static const int codeRed = 31;
+  static const int codeGeen = 32;
+  static const int codeYellow = 33;
+  static const int codeBlue = 34;
+  static const int codeMagenta = 35;
+  static const int codeCyan = 36;
+  static const int codeWhite = 37;
+  static const int codeOrange = 208;
+  static const int codeGrey = 232;
 
   /// Colors
-  static const AnsiColor black = AnsiColor(code_black);
-  static const AnsiColor red = AnsiColor(code_red);
-  static const AnsiColor green = AnsiColor(code_green);
-  static const AnsiColor yellow = AnsiColor(code_yellow);
-  static const AnsiColor blue = AnsiColor(code_blue);
-  static const AnsiColor magenta = AnsiColor(code_magenta);
-  static const AnsiColor cyan = AnsiColor(code_cyan);
-  static const AnsiColor white = AnsiColor(code_white);
-  static const AnsiColor orange = AnsiColor(code_orange);
-  static AnsiColor _grey({
+  static const AnsiColor black = AnsiColor(codeBlack);
+  static const AnsiColor red = AnsiColor(codeRed);
+  static const AnsiColor green = AnsiColor(codeGeen);
+  static const AnsiColor yellow = AnsiColor(codeYellow);
+  static const AnsiColor blue = AnsiColor(codeBlue);
+  static const AnsiColor magenta = AnsiColor(codeMagenta);
+  static const AnsiColor cyan = AnsiColor(codeCyan);
+  static const AnsiColor white = AnsiColor(codeWhite);
+  static const AnsiColor orange = AnsiColor(codeOrange);
+  AnsiColor._grey({
     double level = 0.5,
     bool bold = true,
-  }) =>
-      AnsiColor(code_grey + (level.clamp(0.0, 1.0) * 23).round(), bold: bold);
+  })  : _code = codeGrey + (level.clamp(0.0, 1.0) * 23).round(),
+        _bold = bold;
 
   /// passing this as the background color will cause
   /// the background code to be suppressed resulting

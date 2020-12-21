@@ -14,14 +14,14 @@ void main() {
       print('Dart Path: ${DartSdk().pathToPubExe}');
       print('Dart Path: ${DartSdk().version}');
 
-      which('dart', first: true).paths.forEach((line) => print('which: $line'));
+      which('dart').paths.forEach((line) => print('which: $line'));
     });
   }, skip: false);
 
   test('Install Dart Sdk', () {
     TestFileSystem().withinZone((fs) {
-      var defaultPath = join(fs.uniquePath, 'dart-sdk');
-      var installPath = DartSdk().installFromArchive(defaultPath);
+      final defaultPath = join(fs.uniquePath, 'dart-sdk');
+      final installPath = DartSdk().installFromArchive(defaultPath);
       setPathToDartSdk(installPath);
       print('installed To $installPath');
       expect(exists(DartSdk().pathToDartExe), equals(true));
@@ -29,11 +29,11 @@ void main() {
   }, skip: true);
 
   test('Parse sdk version', () {
-    var output = '${DartSdk().pathToDartExe} --version'.firstLine;
+    final output = '${DartSdk().pathToDartExe} --version'.firstLine;
 
     expect(output, contains('Dart'));
 
-    var version = DartSdk().version;
+    final version = DartSdk().version;
 
     expect(output, contains(version));
 

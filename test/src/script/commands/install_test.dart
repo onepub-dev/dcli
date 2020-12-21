@@ -11,7 +11,7 @@ import '../../util/test_file_system.dart';
 void main() {
   group('Install DCli', () {
     test('warmup install', () {
-      var groupFS = TestFileSystem(useCommonPath: false);
+      final groupFS = TestFileSystem(useCommonPath: false);
 
       groupFS.withinZone((fs) {
         try {
@@ -34,9 +34,9 @@ void main() {
     });
     test('add ~/.dcli/bin to PATH Windows', () {
       TestFileSystem().withinZone((fs) {
-        var settings = Settings();
-        var mockSettings = MockSettings();
-        var mockEnv = MockEnv();
+        final settings = Settings();
+        final mockSettings = MockSettings();
+        final mockEnv = MockEnv();
 
         // windows we can't add a path just expect user message.
         when(mockSettings.isWindows).thenReturn(true);
@@ -54,9 +54,9 @@ void main() {
 
     test('set env PATH Linux', () {
       TestFileSystem().withinZone((fs) {
-        var settings = Settings();
-        var mockSettings = MockSettings();
-        var mockEnv = MockEnv();
+        final settings = Settings();
+        final mockSettings = MockSettings();
+        final mockEnv = MockEnv();
 
         when(mockSettings.isWindows).thenReturn(false);
         when(mockSettings.isLinux).thenReturn(true);
@@ -69,11 +69,11 @@ void main() {
         Settings.mock = mockSettings;
         Env.mock = mockEnv;
 
-        var export = 'export PATH=\$PATH:${settings.pathToDCliBin}';
+        final export = 'export PATH=\$PATH:${settings.pathToDCliBin}';
 
-        var profilePath = join(HOME, '.profile');
+        final profilePath = join(HOME, '.profile');
         if (exists(profilePath)) {
-          var exportLines = read(profilePath).toList()
+          final exportLines = read(profilePath).toList()
             ..retainWhere((line) => line.startsWith('export'));
           expect(exportLines, contains(export));
         }
@@ -93,10 +93,10 @@ void checkInstallStructure(TestFileSystem fs) {
 
   expect(exists(truepath(HOME, '.dcli', 'templates')), equals(true));
 
-  var templates =
+  final templates =
       find('*.*', root: join('${fs.home}/.dcli', 'templates')).toList();
 
-  var base = join('${fs.home}/.dcli', 'templates');
+  final base = join('${fs.home}/.dcli', 'templates');
 
   expect(
     templates,

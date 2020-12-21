@@ -11,7 +11,7 @@ mixin ShellMixin implements Shell {
   /// This will only work on posix systems.
   /// For Windows systems we will return null.
   static String loginShell() {
-    var shell = env['SHELL'];
+    final shell = env['SHELL'];
     if (Settings().isWindows || shell == null) return null;
 
     return basename(env['SHELL']);

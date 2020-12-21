@@ -1,14 +1,12 @@
 import 'package:path/path.dart' as p;
 
 import '../../../dcli.dart';
-
 import '../../functions/is.dart';
 import '../command_line_runner.dart';
+import '../dart_project.dart';
 import '../flags.dart';
-
 import '../script.dart';
 import 'commands.dart';
-import '../dart_project.dart';
 
 /// implementation of the 'create' command
 class CreateCommand extends Command {
@@ -39,7 +37,7 @@ class CreateCommand extends Command {
       final subargument = subarguments[i];
 
       if (Flags.isFlag(subargument)) {
-        var flag = flagSet.findFlag(subargument, _createFlags);
+        final flag = flagSet.findFlag(subargument, _createFlags);
 
         if (flag != null) {
           if (flagSet.isSet(flag)) {
@@ -54,7 +52,7 @@ class CreateCommand extends Command {
       }
       scriptIndex = i;
 
-      var pathToScript =
+      final pathToScript =
           _validateArguments(selectedFlags, subarguments.sublist(scriptIndex));
 
       print(green('Creating script...'));
@@ -87,7 +85,7 @@ class CreateCommand extends Command {
       throw InvalidArguments(
           'The create command takes only one argument. Found: ${arguments.join(',')}');
     }
-    var scriptPath = arguments[0];
+    final scriptPath = arguments[0];
     if (extension(scriptPath) != '.dart') {
       throw InvalidArguments(
           "The create command expects a script path ending in '.dart'. Found: $scriptPath");

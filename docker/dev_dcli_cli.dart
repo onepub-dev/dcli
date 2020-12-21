@@ -10,11 +10,11 @@ import 'package:dcli/dcli.dart';
 /// dcli then use dcli_cli.df
 
 void main(List<String> args) {
-  var parser = ArgParser();
-  parser.addFlag('runOnly', abbr: 'r', defaultsTo: false);
+  final parser = ArgParser();
+  parser.addFlag('runOnly', abbr: 'r');
 
-  var results = parser.parse(args);
-  var runOnly = results['runOnly'] as bool;
+  final results = parser.parse(args);
+  final runOnly = results['runOnly'] as bool;
 
   if (!runOnly) {
     // mount the local dcli files from ..

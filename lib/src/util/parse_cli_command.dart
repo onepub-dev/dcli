@@ -21,7 +21,7 @@ class ParsedCliCommand {
       throw RunException(command, -1,
           "The workingDirectory ${truepath(workingDirectory)} doesn't exists.");
     }
-    var qargs = _parse(command);
+    final qargs = _parse(command);
     args = expandGlobs(qargs, workingDirectory);
   }
 
@@ -35,13 +35,13 @@ class ParsedCliCommand {
           "The workingDirectory ${truepath(workingDirectory)} doesn't exists.");
     }
 
-    var qargs = _QArg.translate(rawArgs);
+    final qargs = _QArg.translate(rawArgs);
     args = expandGlobs(qargs, workingDirectory);
   }
 
   /// parses the given command breaking them done into words
   List<_QArg> _parse(String commandLine) {
-    var parts = <_QArg>[];
+    final parts = <_QArg>[];
 
     var state = _ParseState.starting;
 
@@ -55,7 +55,7 @@ class ParsedCliCommand {
     var currentPart = '';
 
     for (var i = 0; i < commandLine.length; i++) {
-      var char = commandLine[i];
+      final char = commandLine[i];
 
       switch (state) {
         case _ParseState.starting:
@@ -83,6 +83,8 @@ class ParsedCliCommand {
           break;
 
         case _ParseState.inWord:
+          // added ignore as lint has a bug for conditional in a switch statement #27
+          // ignore: invariant_booleans
           if (char == ' ') // && !escapeNext)
           {
             //escapeNext = false;
@@ -148,9 +150,9 @@ class ParsedCliCommand {
   /// See https://github.com/bsutton/dcli/issues/56
   ///
   List<String> expandGlobs(List<_QArg> qargs, String workingDirectory) {
-    var expanded = <String>[];
+    final expanded = <String>[];
 
-    for (var qarg in qargs) {
+    for (final qarg in qargs) {
       if (qarg.wasQuoted) {
         expanded.add(qarg.arg);
       } else {
@@ -166,8 +168,6 @@ enum _ParseState { starting, inQuote, inWord }
 class _QArg {
   bool wasQuoted;
   String arg;
-
-  _QArg.fromParsed(this.arg, {@required this.wasQuoted});
 
   _QArg(String iarg) {
     wasQuoted = false;
@@ -185,6 +185,8 @@ class _QArg {
     }
   }
 
+  _QArg.fromParsed(this.arg, {@required this.wasQuoted});
+
   /// We only do glob expansion if the arg contains at least one of
   /// *, [, ?
   ///
@@ -196,21 +198,21 @@ class _QArg {
   }
 
   static List<_QArg> translate(List<String> args) {
-    var qargs = <_QArg>[];
-    for (var arg in args) {
-      var qarg = _QArg(arg);
+    final qargs = <_QArg>[];
+    for (final arg in args) {
+      final qarg = _QArg(arg);
       qargs.add(qarg);
     }
     return qargs;
   }
 
   Iterable<String> expandGlob(String workingDirectory) {
-    var expanded = <String>[];
+    final expanded = <String>[];
     if (arg.contains('~')) {
       arg = arg.replaceAll('~', HOME);
     }
     if (needsExpansion) {
-      var files = _expandGlob(workingDirectory);
+      final files = _expandGlob(workingDirectory);
 
       /// translate the files to relative paths if appropriate.
       for (var file in files) {
@@ -226,11 +228,11 @@ class _QArg {
   }
 
   Iterable<String> _expandGlob(String workingDirectory) {
-    var glob = Glob(arg);
+    final glob = Glob(arg);
 
     /// we are interested in the last part of the arg.
     /// e.g. of  path/.* we want the .*
-    var includeHidden = basename(arg).startsWith('.');
+    final includeHidden = basename(arg).startsWith('.');
 
     var files = <FileSystemEntity>[];
 
@@ -250,12 +252,12 @@ class _QArg {
   // check if the entity is a hidden file (.xxx) or
   // if lives in a hidden directory.
   bool isHidden(String root, FileSystemEntity entity) {
-    var relativePath = truepath(relative(entity.path, from: root));
+    final relativePath = truepath(relative(entity.path, from: root));
 
-    var parts = relativePath.split(separator);
+    final parts = relativePath.split(separator);
 
     var isHidden = false;
-    for (var part in parts) {
+    for (final part in parts) {
       if (part.startsWith('.')) {
         isHidden = true;
         break;

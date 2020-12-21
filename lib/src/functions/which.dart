@@ -59,28 +59,28 @@ class Which {
   bool _found = false;
 
   /// The progress used to accumualte the results
-  /// If [verbose] was passed this will contain all
+  /// If verbose was passed this will contain all
   /// of the verbose output. If you passed a [progress]
   /// into the which call then this will be the same progress
   /// otherwse a Progress.devNull will be allocated and returned.
   Progress progress;
 
-  /// The first path found containing [appname]
+  /// The first path found containing appname
   ///
-  /// See [paths] for a list of all paths that contained [appnam]
+  /// See [paths] for a list of all paths that contained appname
   String get path => _path;
 
-  /// Contains the list of paths that contain [appname].
+  /// Contains the list of paths that contain appname.
   ///
   /// If no paths are found then this list will be empty.
   ///
-  /// If [first] is true this will contain at most 1 path.
+  /// If first is true this will contain at most 1 path.
   List<String> get paths => _paths;
 
-  /// Returns true if at least one path was found that contained [appname]
+  /// Returns true if at least one path was found that contained appname
   bool get found => _found;
 
-  /// Returns true if [appname] was not found in any path.
+  /// Returns true if appname was not found in any path.
   bool get notfound => !_found;
 }
 
@@ -88,17 +88,17 @@ class _Which extends DCliFunction {
   ///
   /// Searches the path for the given appname.
   Which which(String appname, {bool first, bool verbose, Progress progress}) {
-    var results = Which();
+    final results = Which();
     try {
       progress ??= Progress.devNull();
       results.progress = progress;
 
-      for (var path in PATH) {
+      for (final path in PATH) {
         if (verbose) {
           progress.addToStdout('Searching: ${truepath(path)}');
         }
         if (exists(p.join(path, appname))) {
-          var fullpath = truepath(p.join(path, appname));
+          final fullpath = truepath(p.join(path, appname));
           progress.addToStdout(fullpath);
           results._path ??= fullpath;
           results.paths.add(fullpath);

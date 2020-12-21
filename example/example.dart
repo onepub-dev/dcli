@@ -11,21 +11,21 @@ void main() {
     echo('PWD: $pwd');
 
     print(green("Let's compose a sonet together"));
-    var name = ask('Name of our poem:', validator: Ask.alpha);
+    final name = ask('Name of our poem:', validator: Ask.alpha);
 
     print(orange("'Let's keep it our secret"));
-    var password = ask(red('Password:'),
+    final password = ask(red('Password:'),
         hidden: true,
         validator: Ask.all([Ask.alphaNumeric, Ask.lengthMin(12)]));
 
     print(red('your password is: $password'));
 
-    var baseDir = 'poetry';
+    const baseDir = 'poetry';
 
     // We could use cd, push and pop but that is considered bad
     // practice.
     // So we use explict paths becuase we are good people.
-    var poetryForReviews = join(baseDir, 'forReview');
+    final poetryForReviews = join(baseDir, 'forReview');
 
     // Create a directory to hold poems for review
     // creating  any needed parents.
@@ -34,23 +34,23 @@ void main() {
     }
 
     // Creating a directory to hold our published work.
-    var poetryPublished = join(baseDir, 'published');
+    final poetryPublished = join(baseDir, 'published');
     if (!exists(poetryPublished)) {
       createDir(poetryPublished, recursive: true);
     }
 
     // Create a self edifying poem.
-    var poem = '$name.txt';
+    final poem = '$name.txt';
 
     // write a poem of such beauty it will mesmerise the beholder.
-    var verse1 = '''
+    const verse1 = '''
     A rose is a rose by any other name.
     But don't let its beauty bewilder you,
     as its tongue is sharp and it will surely tear you apart.
     Go not amongst the roses, for they will surely taunt your ever step
     and claw at your very flesh.''';
 
-    var verse2 = '''
+    const verse2 = '''
     Do not listen to the gardener, they are not your friend.
     The will speak with venom of the Aphids that suck the sap
     and praise the lady beetle that attack the poor Aphid.
@@ -77,7 +77,7 @@ void main() {
     echo('Find files matching *.txt');
     // Find all files that end with .jpg
     // in the current directory and any subdirectories
-    for (var file in find('*.txt').toList()) {
+    for (final file in find('*.txt').toList()) {
       print(file);
     }
 
@@ -128,7 +128,7 @@ void main() {
 
     // but the world doesn't deserve our work
     // so burn it all to hell.
-    delete(restingPlace, ask: false);
+    delete(restingPlace);
   }
   // ignore: avoid_catches_without_on_clauses
   catch (e) {

@@ -9,7 +9,7 @@ void main() {
   t.group('Directory Creation', () {
     t.test('createDir', () {
       TestFileSystem().withinZone((fs) {
-        var testDirectory = join(fs.fsRoot, 'tmp_test');
+        final testDirectory = join(fs.fsRoot, 'tmp_test');
 
         createDir(testDirectory, recursive: true);
 
@@ -20,48 +20,48 @@ void main() {
 
     t.test('createDir with recursive', () {
       TestFileSystem().withinZone((fs) {
-        var testPath = join(fs.fsRoot, 'tmp_test/longer/and/longer');
+        final testPath = join(fs.fsRoot, 'tmp_test/longer/and/longer');
         createDir(testPath, recursive: true);
 
         t.expect(exists(testPath), t.equals(true));
-        deleteDir(join(fs.fsRoot, 'tmp_test'), recursive: true);
+        deleteDir(join(fs.fsRoot, 'tmp_test'));
       });
     });
 
     t.test('deleteDir', () {
       TestFileSystem().withinZone((fs) {
-        var testPath = join(fs.fsRoot, 'tmp_test/longer/and/longer');
+        final testPath = join(fs.fsRoot, 'tmp_test/longer/and/longer');
         createDir(testPath, recursive: true);
         deleteDir(testPath);
 
         t.expect(!exists(testPath), t.equals(true));
         t.expect(exists(dirname(testPath)), t.equals(true));
-        deleteDir(join(fs.fsRoot, 'tmp_test'), recursive: true);
+        deleteDir(join(fs.fsRoot, 'tmp_test'));
       });
     });
 
     t.test('Delete Dir recursive', () {
       TestFileSystem().withinZone((fs) {
-        var testDirectory = join(fs.fsRoot, 'tmp_test');
+        final testDirectory = join(fs.fsRoot, 'tmp_test');
         createDir(testDirectory);
-        deleteDir(testDirectory, recursive: true);
+        deleteDir(testDirectory);
         t.expect(!exists(testDirectory), t.equals(true));
       });
     });
 
     t.test('deleteDir failure', () {
       TestFileSystem().withinZone((fs) {
-        var testDirectory = join(fs.fsRoot, 'tmp_test');
+        final testDirectory = join(fs.fsRoot, 'tmp_test');
         t.expect(() => deleteDir(testDirectory),
-            t.throwsA(t.TypeMatcher<DeleteDirException>()));
+            t.throwsA(const t.TypeMatcher<DeleteDirException>()));
       });
     });
 
     t.test('createDir createPath failure', () {
       TestFileSystem().withinZone((fs) {
-        var testPath = join(fs.fsRoot, 'tmp_test/longer/and/longer');
-        t.expect(() => createDir(testPath, recursive: false),
-            t.throwsA(t.TypeMatcher<CreateDirException>()));
+        final testPath = join(fs.fsRoot, 'tmp_test/longer/and/longer');
+        t.expect(() => createDir(testPath),
+            t.throwsA(const t.TypeMatcher<CreateDirException>()));
       });
     });
   });

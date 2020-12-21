@@ -8,7 +8,7 @@ import 'package:test/test.dart';
 void main() {
   test('Detect Shell', () {
     //TestFileSystem().withinZone((fs) {
-    var shell = Shell.current;
+    final shell = Shell.current;
     print(shell.name);
 
     String expected;

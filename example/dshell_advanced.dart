@@ -10,7 +10,7 @@ import 'package:dcli/dcli.dart';
 void main(List<String> args) {
   // Loop, asking for user input and evaluating it
   for (;;) {
-    var line = ask('${green(basename(pwd))}${blue('>')}');
+    final line = ask('${green(basename(pwd))}${blue('>')}');
     if (line.isNotEmpty) {
       evaluate(line);
     }
@@ -22,7 +22,7 @@ void evaluate(String command) {
   // if (command.contains('|')) {
   //   buildPipe(command);
   // }
-  var parts = command.split(' ');
+  final parts = command.split(' ');
   switch (parts[0]) {
     case 'ls':
       ls(parts.sublist(1));
@@ -46,7 +46,7 @@ void ls(List<String> patterns) {
     find('*', root: pwd, recursive: false, types: [Find.file, Find.directory])
         .forEach((file) => print('  $file'));
   } else {
-    for (var pattern in patterns) {
+    for (final pattern in patterns) {
       find(pattern,
               root: pwd, recursive: false, types: [Find.file, Find.directory])
           .forEach((file) => print('  $file'));

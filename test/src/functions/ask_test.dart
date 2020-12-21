@@ -12,28 +12,28 @@ void main() {
   }, skip: true);
 
   test('range', () {
-    var result = ask('Range Test: How old are you',
+    final result = ask('Range Test: How old are you',
         defaultValue: '5', validator: Ask.lengthRange(4, 7));
     print('result: $result');
   }, skip: true);
 
   test('confirm no default', () {
-    var result = confirm('Are you good?');
+    final result = confirm('Are you good?');
     print('result: $result');
   }, skip: true);
 
   test('confirm default=true', () {
-    var result = confirm('Are you good?', defaultValue: true);
+    final result = confirm('Are you good?', defaultValue: true);
     print('result: $result');
   }, skip: true);
 
   test('confirm default=false', () {
-    var result = confirm('Are you good?', defaultValue: false);
+    final result = confirm('Are you good?', defaultValue: false);
     print('result: $result');
   }, skip: true);
 
   test('ask.any - success', () {
-    var validator = Ask.any([
+    final validator = Ask.any([
       Ask.fqdn,
       Ask.ipAddress(),
       Ask.inList(['localhost'])
@@ -43,7 +43,7 @@ void main() {
   });
 
   test('ask.any - throws', () {
-    var validator = Ask.any([
+    final validator = Ask.any([
       Ask.fqdn,
       Ask.ipAddress(),
       Ask.inList(['localhost'])
@@ -56,7 +56,7 @@ void main() {
   });
 
   test('ask.all - success', () {
-    var validator = Ask.all([
+    final validator = Ask.all([
       Ask.integer,
       Ask.valueRange(10, 25),
       Ask.inList(['11', '12', '13'])
@@ -66,7 +66,7 @@ void main() {
   });
 
   test('ask.all - failure', () {
-    var validator = Ask.all([
+    final validator = Ask.all([
       Ask.integer,
       Ask.valueRange(10, 25),
       Ask.inList(['11', '12', '13'])
@@ -81,7 +81,7 @@ void main() {
   });
 
   test('ask.integer - failure', () {
-    var validator = Ask.integer;
+    final validator = Ask.integer;
 
     expect(
         () => validator.validate('a'),

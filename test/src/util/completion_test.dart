@@ -9,11 +9,11 @@ import 'test_file_system.dart';
 void main() {
   group('completion ...', () {
     TestFileSystem(installDcli: false).withinZone((fs) {
-      var root = join(fs.fsRoot, 'top');
+      final root = join(fs.fsRoot, 'top');
 
       List<String> paths;
       test('empty word', () async {
-        var paths = completionExpandScripts('', workingDirectory: root);
+        final paths = completionExpandScripts('', workingDirectory: root);
         expect(
             paths,
             unorderedEquals(<String>[
@@ -54,7 +54,7 @@ void main() {
       /// docker
       /// match word: doc which then return doc/
       test('two matching directories', () {
-        var mid = join(root, 'mid');
+        final mid = join(root, 'mid');
         if (!exists(mid)) createDir(mid);
         paths = completionExpandScripts('mid', workingDirectory: root);
         deleteDir(mid);

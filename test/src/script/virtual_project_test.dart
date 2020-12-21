@@ -9,15 +9,15 @@ void main() {
   group('Virtual Project ', () {
     test('Doctor - local pubspec', () {
       TestFileSystem().withinZone((fs) {
-        var scriptDir = join(fs.unitTestWorkingDir, 'local');
+        final scriptDir = join(fs.unitTestWorkingDir, 'local');
 
         createDir(scriptDir, recursive: true);
 
-        var scriptPath = join(scriptDir, 'local.dart');
+        final scriptPath = join(scriptDir, 'local.dart');
 
         'dcli create $scriptPath'.run;
 
-        var script = Script.fromFile(scriptPath);
+        final script = Script.fromFile(scriptPath);
 
         script.doctor;
       });
@@ -25,15 +25,15 @@ void main() {
 
     test('Doctor - virtual pubspec', () {
       TestFileSystem().withinZone((fs) {
-        var scriptDir = join(fs.unitTestWorkingDir, 'virtual');
+        final scriptDir = join(fs.unitTestWorkingDir, 'virtual');
 
         createDir(scriptDir, recursive: true);
 
-        var scriptPath = join(scriptDir, 'virtual.dart');
+        final scriptPath = join(scriptDir, 'virtual.dart');
 
         'dcli create $scriptPath'.run;
 
-        var script = Script.fromFile(scriptPath);
+        final script = Script.fromFile(scriptPath);
 
         script.doctor;
       });
@@ -41,21 +41,21 @@ void main() {
 
     test('Doctor - traditional pubspec', () {
       TestFileSystem().withinZone((fs) {
-        var scriptDir = join(fs.unitTestWorkingDir, 'traditional');
+        final scriptDir = join(fs.unitTestWorkingDir, 'traditional');
 
         createDir(scriptDir, recursive: true);
-        var scriptName = 'traditional.dart';
+        const scriptName = 'traditional.dart';
         var scriptPath = join(scriptDir, scriptName);
 
         'dcli create $scriptPath'.run;
 
         /// move the script into a bin directory to mimic a traditional dart package layout.
-        var binDir = join(scriptDir, 'bin');
+        final binDir = join(scriptDir, 'bin');
         createDir(binDir);
         move(scriptPath, binDir);
         scriptPath = join(binDir, scriptName);
 
-        var script = Script.fromFile(scriptPath);
+        final script = Script.fromFile(scriptPath);
 
         script.doctor;
       });
@@ -63,13 +63,14 @@ void main() {
 
     test('Doctor - annotation pubspec', () {
       TestFileSystem().withinZone((fs) {
-        var scriptDir = join(fs.unitTestWorkingDir, 'annotation');
+        final scriptDir = join(fs.unitTestWorkingDir, 'annotation');
 
         createDir(scriptDir, recursive: true);
-        var scriptName = 'annotation.dart';
-        var scriptPath = join(scriptDir, scriptName);
+        const scriptName = 'annotation.dart';
+        final scriptPath = join(scriptDir, scriptName);
 
-        var scriptContent = '''#! /bin/env dcli
+        const scriptContent = '''
+#! /bin/env dcli
 
 /**
  * @pubspec
@@ -83,7 +84,7 @@ void main(){
 ''';
         scriptPath.write(scriptContent);
 
-        var script = Script.fromFile(scriptPath);
+        final script = Script.fromFile(scriptPath);
 
         script.doctor;
       });

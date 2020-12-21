@@ -34,9 +34,9 @@ class _Tail extends DCliFunction {
     try {
       progress ??= Progress.printStdOut();
 
-      var buf = CircularBuffer<String>(lines);
+      final buf = CircularBuffer<String>(lines);
 
-      var file = FileSync(path);
+      final file = FileSync(path);
       file.read((line) {
         buf.insert(line);
 

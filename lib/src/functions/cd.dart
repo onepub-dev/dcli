@@ -21,7 +21,7 @@ import 'is.dart';
 ///
 /// Instead use absolute or relative paths.
 ///
-/// See [push]
+/// See push
 ///     [pop]
 ///     [pwd]
 ///     [join]

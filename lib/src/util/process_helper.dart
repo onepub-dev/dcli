@@ -73,8 +73,6 @@ class ProcessHelper {
   /// returns the pid of the parent pid of -1 if the
   /// child doesn't have a parent.
   int _linuxGetParentPID(int childPid) {
-    int parentPid;
-
     String line;
     try {
       line = 'ps -p $childPid -o ppid='.firstLine;
@@ -83,17 +81,15 @@ class ProcessHelper {
       // ps not supported on current OS
       line = '-1';
     }
-    parentPid = int.tryParse(line.trim());
-
-    return parentPid;
+    return int.tryParse(line.trim());
   }
 
   /// returns the pid of the parent pid of -1 if the
   /// child doesn't have a parent.
   int _windowsGetParentPid(int childPid) {
-    var parents = _windowsParentProcessList();
+    final parents = _windowsParentProcessList();
 
-    for (var parent in parents) {
+    for (final parent in parents) {
       if (parent.processPid == childPid) {
         return parent.parentPid;
       }
@@ -102,28 +98,29 @@ class ProcessHelper {
   }
 
   List<_WindowsParentProcess> _windowsParentProcessList() {
-    var parents = <_WindowsParentProcess>[];
+    final parents = <_WindowsParentProcess>[];
 
-    var processes = 'wmic process get processid,parentprocessid,executablepath'
-        .toList(skipLines: 1);
+    final processes =
+        'wmic process get processid,parentprocessid,executablepath'
+            .toList(skipLines: 1);
 
     for (var process in processes) {
       // Settings().verbose('wmic: $process');
       process = process.trim();
       process = process.replaceAll(RegExp(r'\s+'), ' ');
 
-      var parts = process.split(' ');
+      final parts = process.split(' ');
       if (parts.length < 3) {
         // a lot of the lines have blank process ames
         continue;
       }
 
       // we have to deal with files that contain spaces in their name.
-      var exe = parts.sublist(0, parts.length - 3).join(' ');
-      var parentPid = int.tryParse(parts[parts.length - 2]);
-      var processPid = int.tryParse(parts[parts.length - 1]);
+      final exe = parts.sublist(0, parts.length - 3).join(' ');
+      final parentPid = int.tryParse(parts[parts.length - 2]);
+      final processPid = int.tryParse(parts[parts.length - 1]);
 
-      var parent = _WindowsParentProcess();
+      final parent = _WindowsParentProcess();
       parent.path = exe;
       parent.parentPid = parentPid;
       parent.processPid = processPid;
@@ -133,7 +130,7 @@ class ProcessHelper {
   }
 
   bool _windowsIsrunning(int lpid) {
-    for (var details in _getWindowsProcesses()) {
+    for (final details in _getWindowsProcesses()) {
       if (details.pid == lpid) {
         return true;
       }
@@ -163,7 +160,7 @@ class ProcessHelper {
   /// completely untested as I don't have a windows box.
   String _getWindowsProcessName(int lpid) {
     String pidName;
-    for (var details in _getWindowsProcesses()) {
+    for (final details in _getWindowsProcesses()) {
       if (lpid == details.pid) {
         pidName = details.processName;
         break;
@@ -174,22 +171,22 @@ class ProcessHelper {
   }
 
   List<_PIDDetails> _getWindowsProcesses() {
-    var pids = <_PIDDetails>[];
+    final pids = <_PIDDetails>[];
 
     // example:
     // "wininit.exe","584","Services","0","5,248 K"
-    var tasks = 'tasklist /fo csv /nh'.toList();
+    final tasks = 'tasklist /fo csv /nh'.toList();
 
-    var lines = const CsvToListConverter().convert(tasks.join('\r\n'));
-    for (var line in lines) {
+    final lines = const CsvToListConverter().convert(tasks.join('\r\n'));
+    for (final line in lines) {
       //Settings().verbose('tasklist: $line');
-      var details = _PIDDetails();
+      final details = _PIDDetails();
 
       details.processName = line[0] as String;
       details.pid = int.tryParse(line[1] as String);
       // Settings().verbose('${details.processName} ${details.pid}');
 
-      var memparts = (line[4] as String).split(' ');
+      final memparts = (line[4] as String).split(' ');
       details.memory = memparts[0];
       // details.memory can contain 'N/A' in which case their is no units.
       if (memparts.length == 2) {

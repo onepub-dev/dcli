@@ -95,7 +95,7 @@ class _CopyTree extends DCliFunction {
         var include = true;
         if (filter != null) include = filter(file);
         if (include) {
-          var target = join(to, relative(file, from: from));
+          final target = join(to, relative(file, from: from));
 
           if (recursive && !exists(dirname(target))) {
             createDir(dirname(target), recursive: true);

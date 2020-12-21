@@ -26,11 +26,7 @@ class DartSdk {
   String _version;
 
   ///
-  factory DartSdk() {
-    _self ??= DartSdk._internal();
-
-    return _self;
-  }
+  factory DartSdk() => _self ??= DartSdk._internal();
 
   DartSdk._internal();
 
@@ -65,7 +61,7 @@ class DartSdk {
   }
 
   /// The path to the dart exe.
-  String get pathToDartExe => _exePath ??= which(dartExeName, first: true).path;
+  String get pathToDartExe => _exePath ??= which(dartExeName).path;
 
   String _pathToPubExe;
 
@@ -79,32 +75,31 @@ class DartSdk {
       _pathToDartToNativeExe ??= which(dart2NativeExeName).path;
 
   int get versionMajor {
-    var parts = version.split('.');
+    final parts = version.split('.');
 
     return int.tryParse(parts[0]) ?? 2;
   }
 
   int get versionMinor {
-    var parts = version.split('.');
+    final parts = version.split('.');
 
     return int.tryParse(parts[1]) ?? 9;
   }
 
   /// From 2.10 onwards we use the dart compile option rather than dart2native.
   bool get useDartCompiler {
-    var platform = Platform.version;
-    var parts = platform.split(' ');
-    var dartVersion = Version.parse(parts[0]);
-    return (dartVersion.compareTo(Version.parse('2.10.0')) >= 0);
+    final platform = Platform.version;
+    final parts = platform.split(' ');
+    final dartVersion = Version.parse(parts[0]);
+    return dartVersion.compareTo(Version.parse('2.10.0')) >= 0;
   }
 
-  /// run the 'dart2native' command.
-  /// [runtimeScriptPath] is the path to the dcli script we are compiling.
+  /// Run the 'dart compiler' command.
+  /// [script] is the path to the dcli script we are compiling.
   /// [pathToExe] is the path (including the filename) to write the compiled ex to .
-  /// [projectRootPath] is the path to the projects root directory.
   void runDartCompiler(Script script,
       {@required String pathToExe, Progress progress}) {
-    var runArgs = <String>[];
+    final runArgs = <String>[];
 
     RunnableProcess process;
     if (useDartCompiler) {
@@ -112,13 +107,13 @@ class DartSdk {
       runArgs.add('compile');
       runArgs.add('exe');
       runArgs.add(script.pathToScript);
-      runArgs.add('--output=${pathToExe}');
+      runArgs.add('--output=$pathToExe');
       process = RunnableProcess.fromCommandArgs(dartExeName, runArgs,
           workingDirectory: script.pathToScriptDirectory);
     } else {
       /// use old dart2native
       runArgs.add(script.pathToScript);
-      runArgs.add('--output=${pathToExe}');
+      runArgs.add('--output=$pathToExe');
       process = RunnableProcess.fromCommandArgs(pathToDartToNativeExe, runArgs,
           workingDirectory: script.pathToScriptDirectory);
     }
@@ -142,7 +137,7 @@ class DartSdk {
   /// runs 'pub get'
   void runPubGet(String workingDirectory,
       {Progress progress, bool compileExecutables}) {
-    var process = RunnableProcess.fromCommandArgs(
+    final process = RunnableProcess.fromCommandArgs(
         pathToPubExe, ['get', '--no-precompile'],
         workingDirectory: workingDirectory);
 
@@ -154,12 +149,12 @@ class DartSdk {
 
   /// Attempts to detect the location of the dart sdk.
   static String _detect() {
-    var path = which(dartExeName).path;
+    final path = which(dartExeName).path;
 
     if (path != null) {
       return dirname(dirname(File(path).resolveSymbolicLinksSync()));
     } else {
-      var executable = Platform.resolvedExecutable;
+      final executable = Platform.resolvedExecutable;
 
       final file = File(executable);
       if (!file.existsSync()) {
@@ -170,7 +165,7 @@ class DartSdk {
       parent = parent.parent;
 
       final sdkPath = parent.path;
-      final dartApi = "${join(sdkPath, 'include', 'dart_api.h')}";
+      final dartApi = join(sdkPath, 'include', 'dart_api.h');
       if (!File(dartApi).existsSync()) {
         throw Exception('Cannot find Dart SDK!');
       }
@@ -182,11 +177,11 @@ class DartSdk {
   /// returns the version of dart.
   String get version {
     if (_version == null) {
-      var output = '${pathToDartExe} --version'.firstLine;
+      final output = '$pathToDartExe --version'.firstLine;
 
       /// extract the version out of the dumped line.
-      var regx = RegExp(r'[0-9]*\.[0-9]*\.[0-9]*');
-      var parsed = regx.firstMatch(output);
+      final regx = RegExp(r'[0-9]*\.[0-9]*\.[0-9]*');
+      final parsed = regx.firstMatch(output);
       if (parsed != null) {
         _version = parsed.group(0);
       }
@@ -207,7 +202,7 @@ class DartSdk {
   /// returns the directory where the dartSdk was installed.
   String installFromArchive(String defaultDartSdkPath, {bool askUser = true}) {
     Settings().verbose('Architecture: ${SysInfo.kernelArchitecture}');
-    var zipRelease = _fetchDartSdk();
+    final zipRelease = _fetchDartSdk();
 
     var installDir = defaultDartSdkPath;
 
@@ -221,7 +216,7 @@ class DartSdk {
       if (confirm('Proceed to delete $installDir')) {
         /// I've added this incase we have a failed install and need to do a restart.
         ///
-        deleteDir(installDir, recursive: true);
+        deleteDir(installDir);
       } else {
         throw InstallException('Install Directory $installDir already exists.');
       }
@@ -255,26 +250,26 @@ class DartSdk {
   // List<String> fetchVersions() {}
 
   String _fetchDartSdk() {
-    var bitness = SysInfo.kernelBitness;
+    final bitness = SysInfo.kernelBitness;
     var architechture = 'x64';
     if (bitness == 32) {
       architechture = 'ia32';
     }
-    var platform = Platform.operatingSystem;
+    final platform = Platform.operatingSystem;
 
-    var zipRelease = FileSync.tempFile(suffix: 'release.zip');
+    final zipRelease = FileSync.tempFile(suffix: 'release.zip');
 
     // the sdk's can be found here:
     /// https://dart.dev/tools/sdk/archive
 
-    var term = Terminal();
+    final term = Terminal();
     if (term.isAnsi) term.showCursor(show: false);
 
     fetch(
         url:
             'https://storage.googleapis.com/dart-archive/channels/stable/release/latest/sdk/dartsdk-$platform-$architechture-release.zip',
         saveToPath: zipRelease,
-        onProgress: _showProgress);
+        fetchProgress: _showProgress);
 
     if (term.isAnsi) term.showCursor(show: true);
     print('');
@@ -283,19 +278,20 @@ class DartSdk {
 
   String _askForDartSdkInstallDir(String dartToolDir) {
     var confirmed = false;
+    var finaldartToolDir = dartToolDir;
 
     /// ask for and confirm the install directory.
     while (!confirmed) {
-      var entered = ask(
-          'Install dart-sdk to (Enter for default [${truepath(dartToolDir)}]): ');
+      final entered = ask(
+          'Install dart-sdk to (Enter for default [${truepath(finaldartToolDir)}]): ');
       if (entered.isNotEmpty) {
-        dartToolDir = entered;
+        finaldartToolDir = entered;
       }
 
-      confirmed = confirm('Is $dartToolDir correct:');
+      confirmed = confirm('Is $finaldartToolDir correct:');
     }
 
-    return dartToolDir;
+    return finaldartToolDir;
   }
 
   void _extractDartSdk(String zipRelease, String dartToolDir) {
@@ -308,7 +304,7 @@ class DartSdk {
 
     for (final file in archive) {
       final filename = file.name;
-      var path = join(dartToolDir, filename);
+      final path = join(dartToolDir, filename);
       if (file.isFile) {
         final data = file.content as List<int>;
         File(path)
@@ -324,8 +320,8 @@ class DartSdk {
 
   int _progressSuppressor = 0;
   void _showProgress(FetchProgress progress) {
-    var term = Terminal();
-    var percentage = Format.percentage(progress.progress, 1);
+    final term = Terminal();
+    final percentage = Format.percentage(progress.progress, 1);
     if (term.isAnsi) {
       term.clearLine(mode: TerminalClearMode.all);
       term.startOfLine();

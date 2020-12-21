@@ -38,7 +38,7 @@ class UnknownShell with ShellMixin {
   bool addPathToMacOsPathd(String path) {
     var success = false;
     if (!isOnPATH(path)) {
-      var macOSPathPath = join(rootPath, 'etc', 'path.d');
+      final macOSPathPath = join(rootPath, 'etc', 'path.d');
 
       try {
         if (!exists(macOSPathPath)) {
@@ -62,10 +62,10 @@ class UnknownShell with ShellMixin {
   bool _addPathToLinuxPATH(String path) {
     var success = false;
     if (!isOnPATH(path)) {
-      var profile = join(HOME, '.profile');
+      final profile = join(HOME, '.profile');
       try {
         if (exists(profile)) {
-          var export = 'export PATH=\$PATH:$path';
+          final export = 'export PATH=\$PATH:$path';
           if (!read(profile).toList().contains(export)) {
             profile.append(export);
             success = true;

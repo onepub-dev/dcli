@@ -9,7 +9,7 @@ void main() {
   group('warmup using DCli', () {
     test('warmup ', () {
       TestFileSystem().withinZone((fs) {
-        var project = DartProject.fromPath('example');
+        final project = DartProject.fromPath('example');
 
         project.clean();
         project.warmup();

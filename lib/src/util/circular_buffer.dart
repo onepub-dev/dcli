@@ -4,11 +4,11 @@ class CircularBuffer<T> {
   int _start;
   int _end;
   int _count;
-  int capacity;
+  final int capacity;
 
   /// create a circulare buffer with the ability
   /// to store at most [capacity] items.
-  CircularBuffer(int capacity) {
+  CircularBuffer(this.capacity) {
     _buf = <T>[];
     reset();
   }
@@ -21,7 +21,7 @@ class CircularBuffer<T> {
   }
 
   /// insert a value at the curent location.
-  void insert(T el) async {
+  void insert(T el)  {
     // Inserting the next value
     _end++;
     if (_end == capacity) {
@@ -54,17 +54,17 @@ class CircularBuffer<T> {
   int get cap => capacity;
 
   /// true if the buffer is filled
-  bool get filled => (_count == capacity);
+  bool get filled => _count == capacity;
 
   /// false if the buffer is not a capacity.
-  bool get unfilled => (_count < capacity);
+  bool get unfilled => _count < capacity;
 
   /// Allows you to iterate over the contents of the buffer
   /// The [action] callback is called for each item in the
   /// buffer.
   void forEach(void Function(T) action) {
     for (var i = _start; i < _start + _count; i++) {
-      var val = _buf[i % len];
+      final val = _buf[i % len];
       action(val);
     }
   }

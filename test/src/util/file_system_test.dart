@@ -16,14 +16,14 @@ void main() {
 
       // fs.file('.');
 
-      var restoreTo = Directory.current;
+      final restoreTo = Directory.current;
 
       print('root cwd: ${Directory.current}');
 
       print('testzone cwd: ${Directory.current}');
 
       Directory.current = rootPath;
-      var dir = join(rootPath, 'tmp', 'mfs.test');
+      final dir = join(rootPath, 'tmp', 'mfs.test');
       // Directory(dir).createSync();
       if (!exists(dir)) {
         createDir(dir);

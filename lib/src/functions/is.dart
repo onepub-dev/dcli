@@ -95,19 +95,19 @@ bool isExecutable(String path) => _Is().isExecutable(path);
 
 class _Is extends DCliFunction {
   bool isFile(String path) {
-    var fromType = FileSystemEntity.typeSync(path);
-    return (fromType == FileSystemEntityType.file);
+    final fromType = FileSystemEntity.typeSync(path);
+    return fromType == FileSystemEntityType.file;
   }
 
   /// true if the given path is a directory.
   bool isDirectory(String path) {
-    var fromType = FileSystemEntity.typeSync(path);
-    return (fromType == FileSystemEntityType.directory);
+    final fromType = FileSystemEntity.typeSync(path);
+    return fromType == FileSystemEntityType.directory;
   }
 
   bool isLink(String path) {
-    var fromType = FileSystemEntity.typeSync(path);
-    return (fromType == FileSystemEntityType.link);
+    final fromType = FileSystemEntity.typeSync(path);
+    return fromType == FileSystemEntityType.link;
   }
 
   /// checks if the given [path] exists.
@@ -135,26 +135,24 @@ class _Is extends DCliFunction {
   /// checks if the passed [path] (a file or directory) is
   /// writable by the user that owns this process
   bool isWritable(String path) {
-    return _checkPermission(path, WRITE_BIT_MASK);
+    return _checkPermission(path, writeBitMask);
   }
 
   /// checks if the passed [path] (a file or directory) is
   /// readable by the user that owns this process
   bool isReadable(String path) {
-    return _checkPermission(path, READ_BIT_MASK);
+    return _checkPermission(path, readBitMask);
   }
 
   /// checks if the passed [path] (a file or directory) is
   /// executable by the user that owns this process
   bool isExecutable(String path) {
-    return Settings().isWindows
-        ? true
-        : _checkPermission(path, EXECUTE_BIT_MASK);
+    return Settings().isWindows || _checkPermission(path, executeBitMask);
   }
 
-  static const READ_BIT_MASK = 0x4;
-  static const WRITE_BIT_MASK = 0x2;
-  static const EXECUTE_BIT_MASK = 0x1;
+  static const readBitMask = 0x4;
+  static const writeBitMask = 0x2;
+  static const executeBitMask = 0x1;
 
   /// Checks if the user permission to act on the [path] (a file or directory)
   /// for the given permission bit mask. (read, write or execute)
@@ -164,16 +162,16 @@ class _Is extends DCliFunction {
           'isMemberOfGroup is not Not currently supported on windows');
     }
 
-    var user = Shell.current.loggedInUser;
+    final user = Shell.current.loggedInUser;
 
     //e.g 755 tomcat bsutton
-    var stat = 'stat -L -c "%a %G %U" "$path"'.firstLine;
+    final stat = 'stat -L -c "%a %G %U" "$path"'.firstLine;
 
-    var parts = stat.split(' ');
+    final parts = stat.split(' ');
 
-    var permissions = int.parse(parts[0], radix: 8);
-    var group = parts[1];
-    var owner = parts[2];
+    final permissions = int.parse(parts[0], radix: 8);
+    final group = parts[1];
+    final owner = parts[2];
 
     // var group = mode.substring(8,16);
     // var owner = mode.substring(16,24);
@@ -204,9 +202,9 @@ class _Is extends DCliFunction {
           'isMemberOfGroup is not Not currently supported on windows');
     }
     // get the list of groups this user belongs to.
-    var groups = 'groups'.firstLine.split(' ');
+    final groups = 'groups'.firstLine.split(' ');
 
     // is the user a member of the file's group.
-    return (groups.contains(group));
+    return groups.contains(group);
   }
 }

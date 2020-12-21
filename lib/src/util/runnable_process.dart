@@ -41,8 +41,8 @@ class RunnableProcess {
   /// Used when the process is exiting to ensure that we wait
   /// for stdout and stderr to be flushed.
 
-  var stdoutFlushed = Completer<void>();
-  var stderrFlushed = Completer<void>();
+  Completer<void> stdoutFlushed = Completer<void>();
+  Completer<void> stderrFlushed = Completer<void>();
   Future<List<void>> streamsFlushed;
 
   RunnableProcess._internal(this._parsed, this.workingDirectory) {
@@ -76,14 +76,14 @@ class RunnableProcess {
   /// Experiemental - DO NOT USE
   Stream<List<int>> get stream {
     // wait until the process has started
-    var process = waitForEx<Process>(_fProcess);
+    final process = waitForEx<Process>(_fProcess);
     return process.stdout;
   }
 
   /// Experiemental - DO NOT USE
   Sink<List<int>> get sink {
     // wait until the process has started
-    var process = waitForEx<Process>(_fProcess);
+    final process = waitForEx<Process>(_fProcess);
     return process.stdin;
   }
 
@@ -97,13 +97,13 @@ class RunnableProcess {
   /// at.
   /// If the script is already running in a priviledge environment this switch will have no
   /// affect.
-  /// Running a command with the [priviledged] switch may cause the OS to prompt the user
+  /// Running a command with the [privileged] switch may cause the OS to prompt the user
   /// for a password.
   ///
-  /// For Linux passing the [priviledged] argument will cause the command to be prefix
+  /// For Linux passing the [privileged] argument will cause the command to be prefix
   /// vai the `sudo` command.
   ///
-  /// Current [priviledged] is only supported under Linux.
+  /// Current [privileged] is only supported under Linux.
   ///
   Progress runStreaming(
       {Progress progress,
@@ -124,13 +124,13 @@ class RunnableProcess {
   /// at.
   /// If the script is already running in a priviledge environment this switch will have no
   /// affect.
-  /// Running a command with the [priviledged] switch may cause the OS to prompt the user
+  /// Running a command with the [privileged] switch may cause the OS to prompt the user
   /// for a password.
   ///
-  /// For Linux passing the [priviledged] argument will cause the command to be prefix
+  /// For Linux passing the [privileged] argument will cause the command to be prefix
   /// vai the `sudo` command.
   ///
-  /// Current [priviledged] is only supported under Linux.
+  /// Current [privileged] is only supported under Linux.
   ///
   Progress run({
     Progress progress,
@@ -169,13 +169,13 @@ class RunnableProcess {
   /// at.
   /// If the script is already running in a priviledge environment this switch will have no
   /// affect.
-  /// Running a command with the [priviledged] switch may cause the OS to prompt the user
+  /// Running a command with the [privileged] switch may cause the OS to prompt the user
   /// for a password.
   ///
-  /// For Linux passing the [priviledged] argument will cause the command to be prefix
+  /// For Linux passing the [privileged] argument will cause the command to be prefix
   /// vai the `sudo` command.
   ///
-  /// Current [priviledged] is only supported under Linux.
+  /// Current [privileged] is only supported under Linux.
   ///
   void start({
     bool runInShell = false,
@@ -203,14 +203,14 @@ class RunnableProcess {
     }
 
     if (Settings().isVerbose) {
-      var cmdLine = "${_parsed.cmd} ${_parsed.args.join(' ')}";
+      final cmdLine = "${_parsed.cmd} ${_parsed.args.join(' ')}";
       Settings().verbose('Process.start: cmdLine ${green(cmdLine)}');
       Settings().verbose(
           'Process.start: runInShell: $runInShell workingDir: $workingDirectory mode: $mode cmd: ${_parsed.cmd} args: ${_parsed.args.join(', ')}');
     }
 
     if (!exists(workdir)) {
-      var cmdLine = "${_parsed.cmd} ${_parsed.args.join(' ')}";
+      final cmdLine = "${_parsed.cmd} ${_parsed.args.join(' ')}";
       throw RunException(cmdLine, -1,
           'The specified workingDirectory [$workdir] does not exist.');
     }
@@ -232,7 +232,7 @@ class RunnableProcess {
   }
 
   void _waitForStart() {
-    var complete = Completer<Process>();
+    final complete = Completer<Process>();
 
     _fProcess.then((process) {
       complete.complete(process);
@@ -241,7 +241,7 @@ class RunnableProcess {
         .catchError((Object e, StackTrace s) {
       // 2 - No such file or directory
       if (e is ProcessException && e.errorCode == 2) {
-        var ep = e as ProcessException;
+        final ep = e as ProcessException;
         e = RunException.withArgs(
           ep.executable,
           ep.arguments,
@@ -261,9 +261,9 @@ class RunnableProcess {
   /// We don't have access to any IO so we just
   /// have to wait for things to finish.
   int _waitForExit() {
-    var exited = Completer<int>();
+    final exited = Completer<int>();
     _fProcess.then((process) {
-      var exitCode = waitForEx<int>(process.exitCode);
+      final exitCode = waitForEx<int>(process.exitCode);
 
       if (exitCode != 0) {
         exited.completeError(RunException.withArgs(
@@ -319,10 +319,10 @@ class RunnableProcess {
   ///
   /// When the process exits it closes the [progress] streams.
   void processStream(Progress progress, {@required bool nothrow}) {
-    progress ??= Progress.devNull();
+    final _progress = progress ?? Progress.devNull();
 
     _fProcess.then((process) {
-      _wireStreams(process, progress);
+      _wireStreams(process, _progress);
 
       // trap the process finishing
       process.exitCode.then((exitCode) {
@@ -330,15 +330,18 @@ class RunnableProcess {
         // If the start failed we don't want to rethrow
         // as the exception will be thrown async and it will
         // escape as an unhandled exception and stop the whole script
-        progress.exitCode = exitCode;
+        _progress.exitCode = exitCode;
         if (exitCode != 0 && nothrow == false) {
-          var error = RunException.withArgs(_parsed.cmd, _parsed.args, exitCode,
+          final error = RunException.withArgs(
+              _parsed.cmd,
+              _parsed.args,
+              exitCode,
               'The command ${red('[${_parsed.cmd}] with args [${_parsed.args.join(', ')}]')} failed with exitCode: $exitCode');
-          progress.onError(error);
-          progress.close();
+          _progress.onError(error);
+          _progress.close();
         } else {
           waitForEx<void>(streamsFlushed);
-          progress.close();
+          _progress.close();
         }
       });
     });
@@ -349,12 +352,12 @@ class RunnableProcess {
   // line action each time the process emmits a line.
   /// The [nothrow] argument is EXPERIMENTAL
   void processUntilExit(Progress progress, {@required bool nothrow}) {
-    var done = Completer<bool>();
+    final done = Completer<bool>();
 
-    progress ??= Progress.devNull();
+    final _progress  = progress ?? Progress.devNull();
 
     _fProcess.then((process) {
-      _wireStreams(process, progress);
+      _wireStreams(process, _progress);
 
       // trap the process finishing
       process.exitCode.then((exitCode) {
@@ -362,7 +365,7 @@ class RunnableProcess {
         // If the start failed we don't want to rethrow
         // as the exception will be thrown async and it will
         // escape as an unhandled exception and stop the whole script
-        progress.exitCode = exitCode;
+        _progress.exitCode = exitCode;
 
         /// the process may have exited by the streams are likely to still
         /// contain data.
@@ -461,7 +464,8 @@ class RunException extends DCliException {
 
   @override
   String get message {
-    return '''$cmdLine 
+    return '''
+$cmdLine 
 exit: $exitCode
 reason: $reason''';
   }

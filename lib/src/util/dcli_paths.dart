@@ -14,10 +14,7 @@ class DCliPaths {
   String dcliCompleteName;
 
   ///
-  factory DCliPaths() {
-    _self ??= DCliPaths._internal();
-    return _self;
-  }
+  factory DCliPaths() => _self ??= DCliPaths._internal();
 
   DCliPaths._internal() {
     if (Settings().isWindows) {

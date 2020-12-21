@@ -72,12 +72,13 @@ class StackTraceImpl implements core.StackTrace {
 
   String formatStackTrace(
       {bool showPath = false, int methodCount = 10, int skipFrames = 0}) {
-    var formatted = <String>[];
+    var _skipFrames = skipFrames;
+    final formatted = <String>[];
     var count = 0;
 
-    for (var stackFrame in frames) {
-      if (skipFrames > 0) {
-        skipFrames--;
+    for (final stackFrame in frames) {
+      if (_skipFrames > 0) {
+        _skipFrames--;
         continue;
       }
       String sourceFile;
@@ -86,8 +87,8 @@ class StackTraceImpl implements core.StackTrace {
       } else {
         sourceFile = basename(stackFrame.sourceFile.path);
       }
-      var newLine =
-          ('$sourceFile : ${stackFrame.details} : ${stackFrame.lineNo}');
+      final newLine =
+          '$sourceFile : ${stackFrame.details} : ${stackFrame.lineNo}';
 
       if (_workingDirectory != null) {
         formatted.add('file:///$_workingDirectory$newLine');
@@ -107,24 +108,21 @@ class StackTraceImpl implements core.StackTrace {
   }
 
   ///
-  List<Stackframe> get frames {
-    _frames ??= _extractFrames();
-    return _frames;
-  }
+  List<Stackframe> get frames => _frames ??= _extractFrames();
 
   List<Stackframe> _extractFrames() {
-    var lines = _stackTrace.toString().split('\n');
+    final lines = _stackTrace.toString().split('\n');
 
     // we don't want the call to StackTrace to be on the stack.
     var skipFrames = _skipFrames;
 
-    var stackFrames = <Stackframe>[];
-    for (var line in lines) {
+    final stackFrames = <Stackframe>[];
+    for (final line in lines) {
       if (skipFrames > 0) {
         skipFrames--;
         continue;
       }
-      var match = _stackTraceRegex.matchAsPrefix(line);
+      final match = _stackTraceRegex.matchAsPrefix(line);
       if (match == null) continue;
 
       // source is one of following formats
@@ -137,8 +135,8 @@ class StackTraceImpl implements core.StackTrace {
       /// Package
       /// package:/package/.path./filename.dart:line:column
       ///
-      var source = match.group(2);
-      var sourceParts = source.split(':');
+      final source = match.group(2);
+      final sourceParts = source.split(':');
       var column = '0';
       var lineNo = '0';
       var sourcePath = sourceParts[1];
@@ -170,7 +168,7 @@ class StackTraceImpl implements core.StackTrace {
       }
 
       // the actual contents of the line (sort of)
-      var details = match.group(1);
+      final details = match.group(1);
 
       Stackframe frame;
 
@@ -192,7 +190,7 @@ class StackTraceImpl implements core.StackTrace {
   }
 
   String _getWindowsPath(List<String> sourceParts) {
-    var len = sourceParts[1].length;
+    final len = sourceParts[1].length;
     return '${sourceParts[1].substring(len - 1)}'
         ':${sourceParts[2]}';
   }
@@ -200,12 +198,12 @@ class StackTraceImpl implements core.StackTrace {
   /// merges two stack traces. Used when handling futures and you want
   /// combine a futures stack exception with the original calls stack
   StackTraceImpl merge(core.StackTrace microTask) {
-    var _microImpl = StackTraceImpl.fromStackTrace(microTask);
+    final _microImpl = StackTraceImpl.fromStackTrace(microTask);
 
-    var merged = StackTraceImpl.fromStackTrace(this);
+    final merged = StackTraceImpl.fromStackTrace(this);
 
     var index = 0;
-    for (var frame in _microImpl.frames) {
+    for (final frame in _microImpl.frames) {
       // best we can do is exclude any files that are in the flutter src tree.
       if (isExcludedSource(frame)) {
         continue;
@@ -227,8 +225,8 @@ List<String> _excludedSource = [
 bool isExcludedSource(Stackframe frame) {
   var excludeSource = false;
 
-  var path = frame.sourceFile.absolute.path;
-  for (var exclude in _excludedSource) {
+  final path = frame.sourceFile.absolute.path;
+  for (final exclude in _excludedSource) {
     if (path.startsWith(exclude)) {
       excludeSource = true;
       break;

@@ -13,7 +13,7 @@ class HashesYaml {
 
   ///
   HashesYaml(String scriptCachePath) {
-    var cachePathDirectory = Directory(scriptCachePath);
+    final cachePathDirectory = Directory(scriptCachePath);
 
     if (!cachePathDirectory.existsSync()) {
       cachePathDirectory.createSync();

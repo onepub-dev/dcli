@@ -13,77 +13,77 @@ import 'test_file_system.dart';
 void main() {
   group('ParseCLICommand', () {
     test('empty string', () {
-      var test = '';
+      const test = '';
 
       expect(() => ParsedCliCommand(test, pwd),
-          throwsA(TypeMatcher<InvalidArguments>()));
+          throwsA(const TypeMatcher<InvalidArguments>()));
     });
     test('a', () {
-      var test = 'a';
-      var parsed = ParsedCliCommand(test, pwd);
+      const test = 'a';
+      final parsed = ParsedCliCommand(test, pwd);
 
       expect(parsed.cmd, equals('a'));
       expect(parsed.args, equals(<String>[]));
     });
 
     test('ab', () {
-      var test = 'ab';
-      var parsed = ParsedCliCommand(test, pwd);
+      const test = 'ab';
+      final parsed = ParsedCliCommand(test, pwd);
 
       expect(parsed.cmd, equals('ab'));
     });
 
     test('a b c', () {
-      var test = 'a b c';
-      var parsed = ParsedCliCommand(test, pwd);
+      const test = 'a b c';
+      final parsed = ParsedCliCommand(test, pwd);
 
       expect(parsed.cmd, equals('a'));
       expect(parsed.args, equals(['b', 'c']));
     });
 
     test('aa bb cc', () {
-      var test = 'aa bb cc';
-      var parsed = ParsedCliCommand(test, pwd);
+      const test = 'aa bb cc';
+      final parsed = ParsedCliCommand(test, pwd);
 
       expect(parsed.cmd, equals('aa'));
       expect(parsed.args, equals(['bb', 'cc']));
     });
 
     test('a  b  c', () {
-      var test = 'a  b  c';
-      var parsed = ParsedCliCommand(test, pwd);
+      const test = 'a  b  c';
+      final parsed = ParsedCliCommand(test, pwd);
 
       expect(parsed.cmd, equals('a'));
       expect(parsed.args, equals(['b', 'c']));
     });
 
     test('a  "b"  "c1"', () {
-      var test = 'a  "b"  "c1"';
-      var parsed = ParsedCliCommand(test, pwd);
+      const test = 'a  "b"  "c1"';
+      final parsed = ParsedCliCommand(test, pwd);
 
       expect(parsed.cmd, equals('a'));
-      expect(parsed.args, equals([r'b', 'c1']));
+      expect(parsed.args, equals(['b', 'c1']));
     });
 
     test('git log --pretty=format:"%s" v1.0.45', () {
-      var test = 'git log --pretty=format:"%s" v1.0.45';
-      var parsed = ParsedCliCommand(test, pwd);
+      const test = 'git log --pretty=format:"%s" v1.0.45';
+      final parsed = ParsedCliCommand(test, pwd);
 
       expect(parsed.cmd, equals('git'));
       expect(parsed.args, equals(['log', '--pretty=format:%s', 'v1.0.45']));
     });
 
     test('ssh with quoted args', () {
-      var command =
+      const command =
           'mkdir -p  /tmp/etc/openvpn; sudo cp -R /etc/openvpn/* /tmp/etc/openvpn';
 
-      var cmdArgs = <String>[];
+      final cmdArgs = <String>[];
       cmdArgs.clear();
       cmdArgs.add('-t');
       cmdArgs.add('bilby.clouddialer.com.au');
       cmdArgs.add("'echo abc123 | sudo -S  $command'");
 
-      var parsed = ParsedCliCommand.fromParsed('ssh', cmdArgs, pwd);
+      final parsed = ParsedCliCommand.fromParsed('ssh', cmdArgs, pwd);
 
       expect(parsed.cmd, equals('ssh'));
       expect(
@@ -96,7 +96,7 @@ void main() {
     });
   });
 
-  group(('Glob expansion'), () {
+  group('Glob expansion', () {
     test('No expansion', () {
 // var cmd = 'docker run   --network host   dcli:docker_dev_cli   -it --volume $HOME:/me --entrypoint /bin/bash';
     });
@@ -104,7 +104,7 @@ void main() {
 
   test('linux/macos', () {
     TestFileSystem().withinZone((fs) {
-      var parsed = ParsedCliCommand('ls *.jpg *.png', fs.top);
+      final parsed = ParsedCliCommand('ls *.jpg *.png', fs.top);
 
       expect(parsed.cmd, equals('ls'));
 
@@ -117,33 +117,33 @@ void main() {
           ]));
     });
   }, onPlatform: <String, Skip>{
-    'windows': Skip("Powershell doesn't do glob expansion")
+    'windows': const Skip("Powershell doesn't do glob expansion")
   });
 
   test('.*', () {
     TestFileSystem().withinZone((fs) {
-      var parsed = ParsedCliCommand('ls .*', fs.top);
+      final parsed = ParsedCliCommand('ls .*', fs.top);
 
       expect(parsed.cmd, equals('ls'));
 
       expect(parsed.args, unorderedEquals(<String>['.hidden', '.two.txt']));
     });
   }, onPlatform: <String, Skip>{
-    'windows': Skip("Powershell doesn't do glob expansion")
+    'windows': const Skip("Powershell doesn't do glob expansion")
   });
 
   test('invalid/.*', () {
     TestFileSystem().withinZone((fs) {
       expect(() => ParsedCliCommand('ls invalid/.*', fs.top),
-          throwsA(TypeMatcher<FileSystemException>()));
+          throwsA(const TypeMatcher<FileSystemException>()));
     });
   }, onPlatform: <String, Skip>{
-    'windows': Skip("Powershell doesn't do glob expansion")
+    'windows': const Skip("Powershell doesn't do glob expansion")
   });
 
   test('valid/.*', () {
     TestFileSystem().withinZone((fs) {
-      var parsed = ParsedCliCommand('ls middle/.*', fs.top);
+      final parsed = ParsedCliCommand('ls middle/.*', fs.top);
 
       expect(parsed.cmd, equals('ls'));
 
@@ -151,12 +151,12 @@ void main() {
           unorderedEquals(<String>['middle/.hidden', 'middle/.four.txt']));
     });
   }, onPlatform: <String, Skip>{
-    'windows': Skip("Powershell doesn't do glob expansion")
+    'windows': const Skip("Powershell doesn't do glob expansion")
   });
 
   test('alternate working directory', () {
     TestFileSystem().withinZone((fs) {
-      var parsed = ParsedCliCommand('ls *.txt *.jpg', fs.middle);
+      final parsed = ParsedCliCommand('ls *.txt *.jpg', fs.middle);
 
       expect(parsed.cmd, equals('ls'));
 
@@ -169,12 +169,12 @@ void main() {
           ]));
     });
   }, onPlatform: <String, Skip>{
-    'windows': Skip("Powershell doesn't do glob expansion")
+    'windows': const Skip("Powershell doesn't do glob expansion")
   });
 
   test('valid non-local path', () {
     TestFileSystem().withinZone((fs) {
-      var parsed = ParsedCliCommand('ls middle/*.txt', fs.top);
+      final parsed = ParsedCliCommand('ls middle/*.txt', fs.top);
 
       expect(parsed.cmd, equals('ls'));
 
@@ -190,13 +190,13 @@ void main() {
   test('invalid absolute path/*', () {
     TestFileSystem().withinZone((fs) {
       expect(() => ParsedCliCommand('ls /git/dcli/*', fs.top),
-          throwsA(TypeMatcher<FileSystemException>()));
+          throwsA(const TypeMatcher<FileSystemException>()));
     });
   });
 
   test('valid absolute path/*', () {
     TestFileSystem().withinZone((fs) {
-      var parsed = ParsedCliCommand('ls ${join(fs.top, '*.txt')}', fs.middle);
+      final parsed = ParsedCliCommand('ls ${join(fs.top, '*.txt')}', fs.middle);
 
       expect(parsed.cmd, equals('ls'));
 
@@ -209,18 +209,19 @@ void main() {
 
   test('windows', () {
     TestFileSystem().withinZone((fs) {
-      var parsed = ParsedCliCommand('ls *.jpg *.png', fs.top);
+      final parsed = ParsedCliCommand('ls *.jpg *.png', fs.top);
 
       expect(parsed.cmd, equals('ls'));
 
       expect(parsed.args, equals(['*.jpg', '*.png']));
     });
   }, onPlatform: <String, Skip>{
-    'posix': Skip('posix systems do glob expansion'),
+    'posix': const Skip('posix systems do glob expansion'),
   });
 
   test('Quote handling', () {
-    var cmd = '''docker 
+    const cmd = '''
+docker 
       exec
       -it 
       XXXXXX
@@ -233,7 +234,7 @@ void main() {
       "CREATE USER 'me'@'localhost' IDENTIFIED BY 'mypassword'; GRANT ALL ON dcli.* TO 'me'@'slayer';"
       ''';
 
-    var parsed = ParsedCliCommand(cmd.replaceAll('\n', ' '), pwd);
+    final parsed = ParsedCliCommand(cmd.replaceAll('\n', ' '), pwd);
 
     expect(parsed.cmd, equals('docker'));
     expect(parsed.args.length, equals(10));

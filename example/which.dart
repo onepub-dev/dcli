@@ -6,12 +6,12 @@ import 'package:args/args.dart';
 
 /// which appname
 void main(List<String> args) {
-  var parser = ArgParser();
-  parser..addFlag('verbose', abbr: 'v', defaultsTo: false, negatable: false);
+  final parser = ArgParser();
+  parser.addFlag('verbose', abbr: 'v', negatable: false);
 
-  var results = parser.parse(args);
+  final results = parser.parse(args);
 
-  var verbose = results['verbose'] as bool;
+  final verbose = results['verbose'] as bool;
 
   if (results.rest.length != 1) {
     print(red('You must pass the name of the executable to search for.'));
@@ -20,9 +20,9 @@ void main(List<String> args) {
     exit(1);
   }
 
-  var command = results.rest[0];
+  final command = results.rest[0];
 
-  for (var path in PATH) {
+  for (final path in PATH) {
     if (verbose) {
       print('Searching: ${canonicalize(path)}');
     }

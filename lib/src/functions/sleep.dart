@@ -17,19 +17,19 @@ import 'dcli_function.dart';
 void sleep(int duration, {Interval interval = Interval.seconds}) =>
     _Sleep().sleep(duration, interval: interval);
 
-/// Allows you to specify how the [duration] argument
+/// Allows you to specify how the duration argument
 /// to [sleep] is interpreted.
 enum Interval {
   /// the duration argument is in hours.
   hours,
 
-  /// the [duration] argument is in seconds
+  /// the duration argument is in seconds
   seconds,
 
-  /// the [millseconds] argument is in seconds
+  /// the duration argument is in seconds
   millseconds,
 
-  /// the [minutes] argument is in seconds
+  /// the duration argument is in seconds
   minutes
 }
 

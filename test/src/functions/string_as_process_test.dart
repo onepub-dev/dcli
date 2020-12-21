@@ -14,7 +14,7 @@ void main() {
   t.group('StringAsProcess', () {
     t.test('Check .run executes', () {
       TestFileSystem().withinZone((fs) {
-        var testFile = join(fs.fsRoot, 'test.text');
+        final testFile = join(fs.fsRoot, 'test.text');
 
         if (exists(testFile)) {
           delete(testFile);
@@ -27,7 +27,7 @@ void main() {
 
     t.test('Check .start executes - attached, not in shell', () {
       TestFileSystem().withinZone((fs) {
-        var testFile = join(fs.fsRoot, 'test.text');
+        final testFile = join(fs.fsRoot, 'test.text');
 
         if (exists(testFile)) {
           delete(testFile);
@@ -40,7 +40,7 @@ void main() {
 
     t.test('Check .start executes - attached,  in shell', () {
       TestFileSystem().withinZone((fs) {
-        var testFile = join(fs.fsRoot, 'test.text');
+        final testFile = join(fs.fsRoot, 'test.text');
 
         if (exists(testFile)) {
           delete(testFile);
@@ -62,7 +62,7 @@ void main() {
 
     t.test('Check .start executes - detached, not in shell', () {
       TestFileSystem().withinZone((fs) {
-        var testFile = join(fs.fsRoot, 'test.text');
+        final testFile = join(fs.fsRoot, 'test.text');
 
         if (exists(testFile)) {
           delete(testFile);
@@ -85,7 +85,7 @@ void main() {
 
     t.test('Check .start executes - detached,  in shell', () {
       TestFileSystem().withinZone((fs) {
-        var testFile = join(fs.fsRoot, 'test.text');
+        final testFile = join(fs.fsRoot, 'test.text');
 
         if (exists(testFile)) {
           delete(testFile);
@@ -108,9 +108,9 @@ void main() {
 
     t.test('forEach', () {
       TestFileSystem().withinZone((fs) {
-        var lines = <String>[];
+        final lines = <String>[];
 
-        var linesFile = setup(fs);
+        final linesFile = setup(fs);
 
         print('pwd: $pwd');
 
@@ -124,10 +124,10 @@ void main() {
 
     t.test('toList', () {
       TestFileSystem().withinZone((fs) {
-        var path = join(Directory.systemTemp.path, 'log/syslog');
+        final path = join(Directory.systemTemp.path, 'log/syslog');
 
         if (exists(path)) {
-          deleteDir(dirname(path), recursive: true);
+          deleteDir(dirname(path));
         }
         createDir(dirname(path), recursive: true);
         touch(path, create: true);
@@ -137,15 +137,15 @@ void main() {
         for (var i = 0; i < 10; i++) {
           path.append('head $i');
         }
-        var lines = 'head -n 5 $path'.toList();
+        final lines = 'head -n 5 $path'.toList();
         t.expect(lines.length, t.equals(5));
-        deleteDir(dirname(path), recursive: true);
+        deleteDir(dirname(path));
       });
     });
 
     t.test('toList - nothrow', () {
       TestFileSystem().withinZone((fs) {
-        var result = 'ls *.fasdafefe'.toList(nothrow: true);
+        final result = 'ls *.fasdafefe'.toList(nothrow: true);
         t.expect(
             result,
             t.equals([
@@ -157,7 +157,7 @@ void main() {
     t.test('toList - exception nothrow=false', () {
       TestFileSystem().withinZone((fs) {
         t.expect(() => 'ls *.abcdafe'.toList(),
-            t.throwsA(t.TypeMatcher<RunException>()));
+            t.throwsA(const t.TypeMatcher<RunException>()));
       });
     });
 
@@ -175,10 +175,10 @@ void main() {
 
     t.test('toList - skipLines', () {
       TestFileSystem().withinZone((fs) {
-        var path = join(rootPath, 'tmp', 'log', 'syslog');
+        final path = join(rootPath, 'tmp', 'log', 'syslog');
 
         if (exists(path)) {
-          deleteDir(dirname(path), recursive: true);
+          deleteDir(dirname(path));
         }
         createDir(dirname(path), recursive: true);
         touch(path, create: true);
@@ -188,11 +188,11 @@ void main() {
         for (var i = 0; i < 10; i++) {
           path.append('head $i');
         }
-        var expected = ['head 1', 'head 2', 'head 3', 'head 4'];
-        var lines = 'head -n 5 $path'.toList(skipLines: 1);
+        final expected = ['head 1', 'head 2', 'head 3', 'head 4'];
+        final lines = 'head -n 5 $path'.toList(skipLines: 1);
         t.expect(lines, t.equals(expected));
 
-        deleteDir(dirname(path), recursive: true);
+        deleteDir(dirname(path));
       });
     });
   });
@@ -211,7 +211,7 @@ void main() {
 
   t.test('firstLine', () {
     TestFileSystem().withinZone((fs) {
-      var file = setup(fs);
+      final file = setup(fs);
       t.expect('cat $file'.firstLine, 'Line 0');
     });
   });
@@ -224,16 +224,16 @@ void main() {
 
   t.test('lastLine', () {
     TestFileSystem().withinZone((fs) {
-      var file = setup(fs);
+      final file = setup(fs);
       t.expect('cat $file'.lastLine, 'Line 9');
     });
   });
 }
 
 String setup(TestFileSystem fs) {
-  var linesFile = join(fs.fsRoot, TestFileSystem.testLinesFile);
+  final linesFile = join(fs.fsRoot, TestFileSystem.testLinesFile);
 
-  var file = FileSync(linesFile);
+  final file = FileSync(linesFile);
   for (var i = 0; i < 10; i++) {
     file.append('Line $i');
   }

@@ -15,24 +15,17 @@ class Dependency extends Equatable {
   const Dependency(this.name, this.reference);
 
   /// Creates a dependancy ref from hosted ref.
-  static Dependency fromHosted(String name, String version) {
-    var reference = HostedReference(VersionConstraint.parse(version));
-
-    return Dependency(name, reference);
-  }
+  Dependency.fromHosted(this.name, String version)
+      : reference = HostedReference(VersionConstraint.parse(version));
 
   ///
-  static Dependency fromPath(String name, String path) {
-    var reference = PathReference(path);
-
-    return Dependency(name, reference);
-  }
+  Dependency.fromPath(this.name, String path) : reference = PathReference(path);
 
   ///
   static Dependency fromLine(String line) {
     Dependency dep;
 
-    var parts = line.split(' ');
+    final parts = line.split(' ');
     if (parts.length == 3) {
       // dep = Dependency(parts[1], parts[2]);
     }
@@ -44,7 +37,7 @@ class Dependency extends Equatable {
 
   @override
   String toString() {
-    return '${reference.rehydrate(this)}';
+    return reference.rehydrate(this);
   }
 
   ///

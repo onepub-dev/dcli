@@ -8,9 +8,9 @@ import '../util/test_file_system.dart';
 void main() {
   test('Project Name', () {
     TestFileSystem().withinZone((fs) {
-      print('$pwd');
-      var yaml = MyYaml.fromFile('pubspec.yaml');
-      var projectName = yaml.getValue('name');
+      print(pwd);
+      final yaml = MyYaml.fromFile('pubspec.yaml');
+      final projectName = yaml.getValue('name');
 
       expect(projectName, equals('dcli'));
     });

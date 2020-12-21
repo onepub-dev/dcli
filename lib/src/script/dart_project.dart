@@ -38,14 +38,14 @@ class DartProject {
   /// If you call this method from a compiled script
   /// then we will return the current working directory
   /// as there is no 'project root' for a compiled script.
+  // ignore: prefer_constructors_over_static_methods
   static DartProject get current {
-    var script = Script.current;
+    final script = Script.current;
     var startFrom = '.';
     if (!script.isCompiled) {
       startFrom = Settings().pathToScript;
     }
-    _current ??= DartProject.fromPath(startFrom, search: true);
-    return _current;
+    return _current ??= DartProject.fromPath(startFrom, search: true);
   }
 
   ///
@@ -76,8 +76,9 @@ class DartProject {
 
     print('');
     _colprint('Dependencies', '');
-    pubSpec.dependencies.keys.forEach(
-        (name) => _colprint(name, '${pubSpec.dependencies[name].rehydrate()}'));
+    for (final name in pubSpec.dependencies.keys) {
+      _colprint(name, pubSpec.dependencies[name].rehydrate());
+    }
   }
 
   void _colprint(String label, String value, {int pad = 25}) {
@@ -91,7 +92,7 @@ class DartProject {
   String _findProjectRoot(String pathToSearchFrom) {
     var current = absolute(pathToSearchFrom);
 
-    var root = rootPrefix(current);
+    final root = rootPrefix(current);
 
     // traverse up the directory to find if we are in a traditional directory.
     while (current != root) {
@@ -108,10 +109,8 @@ class DartProject {
   NamedLock __lock;
   static const _lockName = 'script.lock';
 
-  NamedLock get _lock {
-    __lock ??= NamedLock(name: _lockName, lockPath: pathToProjectRoot);
-    return __lock;
-  }
+  NamedLock get _lock =>
+      __lock ??= NamedLock(name: _lockName, lockPath: pathToProjectRoot);
 
   ///
   /// Prepare the project so it can be run.
@@ -120,7 +119,7 @@ class DartProject {
   /// then we initialise the project as well.
   /// if [background] is set to true then we
   /// run the build as a background process.
-  /// [background] defaults to [false]
+  /// [background] defaults to false.
   ///
   void warmup({bool background = false}) {
     _lock.withLock(() {
@@ -129,7 +128,7 @@ class DartProject {
           // we run the clean in the background
           // by running another copy of dcli.
           print('DCli warmup started in the background.');
-          '${DCliPaths().dcliName} -v=${join(Directory.systemTemp.path, 'dcli.warmup.log')} warmup ${pathToProjectRoot}'
+          '${DCliPaths().dcliName} -v=${join(Directory.systemTemp.path, 'dcli.warmup.log')} warmup $pathToProjectRoot'
               .start(detached: true, runInShell: true);
         } else {
           // print(orange('Running pub get...'));
@@ -156,19 +155,17 @@ class DartProject {
         '.packages',
         types: [Find.file],
         root: pathToProjectRoot,
-        recursive: true,
       ).forEach((file) => delete(file));
       find(
         '.dart_tool',
         types: [Find.directory],
         root: pathToProjectRoot,
-        recursive: true,
-      ).forEach((file) => deleteDir(file, recursive: true));
-      find('pubspec.lock', root: pathToProjectRoot, recursive: true)
+      ).forEach((file) => deleteDir(file));
+      find('pubspec.lock', root: pathToProjectRoot)
           .forEach((file) => delete(file));
 
       find('*.dart', root: pathToProjectRoot).forEach((scriptPath) {
-        var script = Script.fromFile(scriptPath);
+        final script = Script.fromFile(scriptPath);
         if (exists(script.pathToExe)) {
           delete(script.pathToExe);
         }
@@ -202,7 +199,7 @@ class DartProject {
       name: _lockName,
       lockPath: pathToProjectRoot,
     ).withLock(() {
-      var pubGet = PubGet(this);
+      final pubGet = PubGet(this);
       if (Shell.current.isSudo) {
         /// bugger we just screwed the cache permissions so lets fix them.
 //         'chmod -R ${env['USER']}:${env['USER']} ${PubCache().pathTo}'.run;
@@ -228,10 +225,10 @@ class DartProject {
     // TODO: this is still risky as pub get does a test to see if the versions have changed.
     // we could improve this by checking that the .lock files date is after the .yamls date.
     /// there is a 'generated' date stamp in the .json file which might be more definitive.
-    return (exists(
+    return exists(
             join(pathToProjectRoot, '.dart_code', 'package_config.json')) &&
         exists(join(pathToProjectRoot, 'pubspec.lock')) &&
-        (hasPubSpec));
+        hasPubSpec;
   }
 
   /// Returns true if the project contains a pubspec.yaml.
@@ -254,7 +251,7 @@ class DartProject {
     }
   }
 
-  /// Creates a script located at [scriptPath] from the passed [templatePath].
+  /// Creates a script located at [pathToScript] from the passed [templatePath].
   /// When the user runs 'dcli create <script>'
   void _createFromTemplate({String templatePath, String pathToScript}) {
     copy(templatePath, pathToScript);
@@ -271,7 +268,7 @@ class DartProject {
   void _createAnalysisOptionsFromTemplate({bool showWarnings}) {
     /// add pedantic to the project
 
-    var analysisPath = join(pathToProjectRoot, 'analysis_options.yaml');
+    final analysisPath = join(pathToProjectRoot, 'analysis_options.yaml');
     if (!exists(analysisPath)) {
       if (showWarnings) {
         print(orange('Creating missing analysis_options.yaml.'));

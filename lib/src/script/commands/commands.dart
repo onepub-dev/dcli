@@ -1,6 +1,5 @@
 import '../flags.dart';
 import 'clean.dart';
-import 'warmup.dart';
 import 'compile.dart';
 import 'create.dart';
 import 'doctor.dart';
@@ -9,6 +8,7 @@ import 'install.dart';
 import 'run.dart';
 import 'upgrade.dart';
 import 'version.dart';
+import 'warmup.dart';
 
 // ignore: avoid_classes_with_only_static_members
 //// List of supported commands.
@@ -29,15 +29,15 @@ class Commands {
 
   /// Find the command based on the [argument] passed
   static Command findCommand(String argument, Map<String, Command> commands) {
-    var command = commands[argument.toLowerCase()];
+    final command = commands[argument.toLowerCase()];
 
     return command;
   }
 
   /// returns map of supprted commands where the command name is the key.
   static Map<String, Command> asMap(List<Command> availableCommands) {
-    var mapCommands = <String, Command>{};
-    for (var command in availableCommands) {
+    final mapCommands = <String, Command>{};
+    for (final command in availableCommands) {
       mapCommands[command.name] = command;
     }
 

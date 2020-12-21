@@ -30,13 +30,13 @@ class FileSync {
   /// unless you provide a [suffix] in which
   /// case the file name will be <uuid>.<suffix>
   static String tempFile({String suffix}) {
-    suffix ??= 'tmp';
+    var finalsuffix = suffix ?? 'tmp';
 
-    if (!suffix.startsWith('.')) {
-      suffix = '.$suffix';
+    if (!finalsuffix.startsWith('.')) {
+      finalsuffix = '.$finalsuffix';
     }
-    var uuid = Uuid();
-    return '${join(Directory.systemTemp.path, uuid.v4())}$suffix';
+    final uuid = Uuid();
+    return '${join(Directory.systemTemp.path, uuid.v4())}$finalsuffix';
   }
 
   ///
@@ -58,27 +58,27 @@ class FileSync {
   /// Defaults to \n.
   ///
   String readLine({String lineDelimiter = '\n'}) {
-    var line = '';
+    var line = StringBuffer();
     int byte;
     var priorChar = '';
 
     var foundDelimiter = false;
 
     while ((byte = _raf.readByteSync()) != -1) {
-      var char = utf8.decode([byte]);
+      final char = utf8.decode([byte]);
 
       if (_isLineDelimiter(priorChar, char, lineDelimiter)) {
         foundDelimiter = true;
         break;
       }
 
-      line += char;
+      line.write(char);
       priorChar = char;
     }
     if (line.isEmpty && foundDelimiter == false) {
       line = null;
     }
-    return line;
+    return line.toString();
   }
 
   ///
@@ -101,16 +101,16 @@ class FileSync {
 
   /// reads every line from a file calling the passed [lineAction]
   /// for each line.
-  /// if you return [false] from a [lineAction] call then
+  /// if you return false from a [lineAction] call then
   /// the read returns and no more lines are read.
   void read(CancelableLineAction lineAction) {
-    var inputStream = _file.openRead();
+    final inputStream = _file.openRead();
 
-    var stackTrace = StackTraceImpl();
+    final stackTrace = StackTraceImpl();
 
     Object exception;
 
-    var done = Completer<bool>();
+    final done = Completer<bool>();
 
     StreamSubscription<String> subscription;
 
@@ -118,7 +118,7 @@ class FileSync {
         utf8.decoder.bind(inputStream).transform(const LineSplitter()).listen(
             (line) {
               if (lineAction != null) {
-                var cont = lineAction(line);
+                final cont = lineAction(line);
                 if (cont == false) {
                   subscription
                       .cancel()
@@ -147,7 +147,7 @@ class FileSync {
     }
   }
 
-  /// This is just a wrapper for [File.resolveSymbolicLinkSync].
+  /// This is just a wrapper for the method File.resolveSymbolicLinksSync.
   /// Returns the path the symbolic link links to.
   String resolveSymLink() {
     return _file.resolveSymbolicLinksSync();
@@ -158,22 +158,22 @@ class FileSync {
   /// If [newline] is null then no line terminator will
   /// be added.
   void write(String line, {String newline = '\n'}) {
-    line += (newline ?? '');
+    final finalline = line + (newline ?? '');
     _raf.truncateSync(0);
 
     _raf.setPositionSync(0);
     _raf.flushSync();
 
-    _raf.writeStringSync(line);
+    _raf.writeStringSync(finalline);
   }
 
   /// Appends the [line] to the file
-  /// If [newLine] is true then append a newline after the line.
+  /// If [newline] is true then append a newline after the line.
   void append(String line, {String newline = '\n'}) {
-    line += (newline ?? '');
+    final finalline = line + (newline ?? '');
 
     _raf.setPositionSync(_raf.lengthSync());
-    _raf.writeStringSync(line);
+    _raf.writeStringSync(finalline);
   }
 
   /// Truncates the file to zero bytes in length.
@@ -198,7 +198,7 @@ void symlink(
   String existingPath,
   String linkPath,
 ) {
-  var link = Link(linkPath);
+  final link = Link(linkPath);
   link.createSync(existingPath);
 }
 
@@ -206,7 +206,7 @@ void symlink(
 /// Deletes the symlink at [linkPath]
 ///
 void deleteSymlink(String linkPath) {
-  var link = Link(linkPath);
+  final link = Link(linkPath);
   link.deleteSync();
 }
 
@@ -221,8 +221,8 @@ void deleteSymlink(String linkPath) {
 /// throws a FileSystemException if the
 /// target path does not exist.
 String resolveSymLink(String path) {
-  var normalised = canonicalize(path);
-  var file = FileSync(normalised);
+  final normalised = canonicalize(path);
+  final file = FileSync(normalised);
   return canonicalize(file.resolveSymLink());
 }
 

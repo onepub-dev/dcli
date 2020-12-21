@@ -14,20 +14,20 @@ class Pipe {
 
   ///
   Pipe operator |(String next) {
-    var pNext = RunnableProcess.fromCommandLine(next);
+    final pNext = RunnableProcess.fromCommandLine(next);
     pNext.start(waitForStart: false);
     return Pipe(_rhs, pNext);
   }
 
   ///
   void forEach(LineAction stdout, {LineAction stderr}) {
-    var progress = Progress(stdout, stderr: stderr);
+    final progress = Progress(stdout, stderr: stderr);
     _rhs.processUntilExit(progress, nothrow: false);
   }
 
   ///
   List<String> toList() {
-    var list = <String>[];
+    final list = <String>[];
 
     forEach((line) => list.add(line), stderr: (line) => list.add(line));
 

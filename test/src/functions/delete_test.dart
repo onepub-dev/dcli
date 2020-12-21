@@ -9,7 +9,7 @@ void main() {
   t.group('Delete', () {
     t.test('delete ', () {
       TestFileSystem().withinZone((fs) {
-        var testFile = join(fs.fsRoot, 'lines.txt');
+        final testFile = join(fs.fsRoot, 'lines.txt');
         if (!exists(dirname(testFile))) {
           createDir(dirname(testFile), recursive: true);
         }
@@ -23,12 +23,12 @@ void main() {
 
     t.test('delete non-existing ', () {
       TestFileSystem().withinZone((fs) {
-        var testFile = join(fs.fsRoot, 'lines.txt');
+        final testFile = join(fs.fsRoot, 'lines.txt');
         touch(testFile, create: true);
         delete(testFile);
 
         t.expect(() => delete(testFile),
-            t.throwsA(t.TypeMatcher<DeleteException>()));
+            t.throwsA(const t.TypeMatcher<DeleteException>()));
       });
     });
   });

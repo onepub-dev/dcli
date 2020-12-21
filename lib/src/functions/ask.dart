@@ -30,7 +30,7 @@ import 'echo.dart';
 /// var secret = ask('', required: false);
 /// ```
 ///
-/// By default the ask [require] argument is true requiring the user to enter a non-empty string.
+/// By default the ask [required] argument is true requiring the user to enter a non-empty string.
 /// All whitespace is trimmed from the string before the user input is validated so
 /// a single space is not an accepted input.
 /// If you set the [required] argument to false then the user can just hit
@@ -106,19 +106,20 @@ String ask(String prompt,
 bool confirm(String prompt, {bool defaultValue}) {
   bool result;
   var matched = false;
+  var finalPrompt = prompt;
 
   if (defaultValue == null) {
-    prompt += ' (y/n):';
+    finalPrompt += ' (y/n):';
   } else {
     if (defaultValue == true) {
-      prompt += ' (Y/n):';
+      finalPrompt += ' (Y/n):';
     } else {
-      prompt += ' (y/N):';
+      finalPrompt += ' (y/N):';
     }
   }
 
   while (!matched) {
-    var entered = Ask()._ask(prompt,
+    final entered = Ask()._ask(finalPrompt,
         toLower: true, hidden: false, required: false, validator: Ask.dontCare);
     var lower = entered.trim().toLowerCase();
 
@@ -160,6 +161,8 @@ class Ask extends DCliFunction {
     Settings().verbose(
         'ask:  $prompt toLower: $toLower hidden: $hidden required: $required defaultValue: ${hidden ? '******' : defaultValue}');
 
+    var finalPrompt = prompt;
+
     /// check the caller isn't being silly
     if (defaultValue != null) {
       try {
@@ -170,16 +173,16 @@ class Ask extends DCliFunction {
       }
 
       /// completely suppress the default value and the prompt if the prompt is empty.
-      if (prompt.isNotEmpty) {
+      if (finalPrompt.isNotEmpty) {
         /// don't display the default value if hidden is true.
-        prompt = '$prompt [${hidden ? '******' : defaultValue}]';
+        finalPrompt = '$finalPrompt [${hidden ? '******' : defaultValue}]';
       }
     }
 
     String line;
     var valid = false;
     do {
-      echo('$prompt ', newline: false);
+      echo('$finalPrompt ');
 
       if (hidden == true && stdin.hasTerminal) {
         line = _readHidden();
@@ -199,7 +202,7 @@ class Ask extends DCliFunction {
       }
 
       try {
-        if (required) _AskRequired().validate(line);
+        if (required) const _AskRequired().validate(line);
         Settings().verbose('ask: pre validation "$line"');
         line = validator.validate(line);
         Settings().verbose('ask: post validation "$line"');
@@ -215,7 +218,7 @@ class Ask extends DCliFunction {
   }
 
   String _readHidden() {
-    var value = <int>[];
+    final value = <int>[];
 
     try {
       stdin.echoMode = false;
@@ -284,7 +287,7 @@ class Ask extends DCliFunction {
   /// Validates that input is a IP address
   /// By default both v4 and v6 addresses are valid
   /// Pass a [version] to limit the input to one or the
-  /// other. If passed [version] must be [_AskValidatorIPAddress.tcp4] or [_AskValidatorIPAddress.tcp6].
+  /// other. If passed [version] must be [_AskValidatorIPAddress.ipv4] or [_AskValidatorIPAddress.ipv6].
   static AskValidator ipAddress({int version}) =>
       _AskValidatorIPAddress(version: version);
 
@@ -343,7 +346,7 @@ class Ask extends DCliFunction {
   static const AskValidator alphaNumeric = _AskAlphaNumeric();
 }
 
-/// Thrown when an [Askvalidator] detects an invalid input.
+/// Thrown when an [AskValidator] detects an invalid input.
 class AskValidatorException extends DCliException {
   /// validator with a [message] indicating the error.
   AskValidatorException(String message) : super(message);
@@ -379,11 +382,11 @@ class _AskRequired extends AskValidator {
   const _AskRequired();
   @override
   String validate(String line) {
-    line = line.trim();
-    if (line.isEmpty) {
+    final finalLine = line.trim();
+    if (finalLine.isEmpty) {
       throw AskValidatorException(red('You must enter a value.'));
     }
-    return line;
+    return finalLine;
   }
 }
 
@@ -391,12 +394,12 @@ class _AskEmail extends AskValidator {
   const _AskEmail();
   @override
   String validate(String line) {
-    line = line.trim();
+    final finalLine = line.trim();
 
-    if (!isEmail(line)) {
+    if (!isEmail(finalLine)) {
       throw AskValidatorException(red('Invalid email address.'));
     }
-    return line;
+    return finalLine;
   }
 }
 
@@ -404,12 +407,12 @@ class _AskFQDN extends AskValidator {
   const _AskFQDN();
   @override
   String validate(String line) {
-    line = line.trim().toLowerCase();
+    final finalLine = line.trim().toLowerCase();
 
-    if (!isFQDN(line)) {
+    if (!isFQDN(finalLine)) {
       throw AskValidatorException(red('Invalid FQDN.'));
     }
-    return line;
+    return finalLine;
   }
 }
 
@@ -417,12 +420,12 @@ class _AskDate extends AskValidator {
   const _AskDate();
   @override
   String validate(String line) {
-    line = line.trim();
+    final finalLine = line.trim();
 
-    if (!isDate(line)) {
+    if (!isDate(finalLine)) {
       throw AskValidatorException(red('Invalid date.'));
     }
-    return line;
+    return finalLine;
   }
 }
 
@@ -430,13 +433,13 @@ class _AskInteger extends AskValidator {
   const _AskInteger();
   @override
   String validate(String line) {
-    line = line.trim();
-    Settings().verbose('AskInteger: $line');
+    final finalLine = line.trim();
+    Settings().verbose('AskInteger: $finalLine');
 
-    if (!isInt(line)) {
+    if (!isInt(finalLine)) {
       throw AskValidatorException(red('Invalid integer.'));
     }
-    return line;
+    return finalLine;
   }
 }
 
@@ -444,12 +447,12 @@ class _AskDecimal extends AskValidator {
   const _AskDecimal();
   @override
   String validate(String line) {
-    line = line.trim();
+    final finalline = line.trim();
 
-    if (!isFloat(line)) {
+    if (!isFloat(finalline)) {
       throw AskValidatorException(red('Invalid decimal number.'));
     }
-    return line;
+    return finalline;
   }
 }
 
@@ -457,12 +460,12 @@ class _AskAlpha extends AskValidator {
   const _AskAlpha();
   @override
   String validate(String line) {
-    line = line.trim();
+    final finalline = line.trim();
 
-    if (!isAlpha(line)) {
+    if (!isAlpha(finalline)) {
       throw AskValidatorException(red('Alphabetical characters only.'));
     }
-    return line;
+    return finalline;
   }
 }
 
@@ -470,12 +473,12 @@ class _AskAlphaNumeric extends AskValidator {
   const _AskAlphaNumeric();
   @override
   String validate(String line) {
-    line = line.trim();
+    final finalline = line.trim();
 
-    if (!isAlphanumeric(line)) {
+    if (!isAlphanumeric(finalline)) {
       throw AskValidatorException(red('Alphanumerical characters only.'));
     }
-    return line;
+    return finalline;
   }
 }
 
@@ -500,12 +503,12 @@ class _AskValidatorIPAddress extends AskValidator {
   String validate(String line) {
     assert(version == null || version == ipv4 || version == ipv6);
 
-    line = line.trim();
+    final finalline = line.trim();
 
-    if (!isIP(line, version)) {
+    if (!isIP(finalline, version)) {
       throw AskValidatorException(red('Invalid IP Address.'));
     }
-    return line;
+    return finalline;
   }
 }
 
@@ -520,13 +523,13 @@ class _AskValidatorMaxLength extends AskValidator {
   const _AskValidatorMaxLength(this.maxLength);
   @override
   String validate(String line) {
-    line = line.trim();
+    final finalline = line.trim();
 
-    if (line.length > maxLength) {
+    if (finalline.length > maxLength) {
       throw AskValidatorException(red(
           'You have exceeded the maximum length of $maxLength characters.'));
     }
-    return line;
+    return finalline;
   }
 }
 
@@ -541,18 +544,19 @@ class _AskValidatorMinLength extends AskValidator {
   const _AskValidatorMinLength(this.minLength);
   @override
   String validate(String line) {
-    line = line.trim();
+    final finalline = line.trim();
 
-    if (line.length < minLength) {
+    if (finalline.length < minLength) {
       throw AskValidatorException(
           red('You must enter at least $minLength characters.'));
     }
-    return line;
+    return finalline;
   }
 }
 
 /// Validates that the length of the entered text
-/// as at least [minLength] but no more than [lengthMin].
+// ignore: comment_references
+/// as at least [minLength] but no more than [maxLength].
 class _AskValidatorLength extends AskValidator {
   _AskValidatorAll _validator;
 
@@ -566,10 +570,9 @@ class _AskValidatorLength extends AskValidator {
   }
   @override
   String validate(String line) {
-    line = line.trim();
+    final finalline = line.trim();
 
-    line = _validator.validate(line);
-    return line;
+    return _validator.validate(finalline);
   }
 }
 
@@ -580,9 +583,9 @@ class _AskValidatorValueRange extends AskValidator {
   const _AskValidatorValueRange(this.minValue, this.maxValue);
   @override
   String validate(String line) {
-    line = line.trim();
+    final finalline = line.trim();
 
-    var value = num.tryParse(line);
+    final value = num.tryParse(finalline);
     if (value == null) {
       throw AskValidatorException(red('Must be a number.'));
     }
@@ -597,7 +600,7 @@ class _AskValidatorValueRange extends AskValidator {
           red('The number must be less than or equal to $maxValue.'));
     }
 
-    return line;
+    return finalline;
   }
 }
 
@@ -629,12 +632,12 @@ class _AskValidatorAll extends AskValidator {
   _AskValidatorAll(this._validators);
   @override
   String validate(String line) {
-    line = line.trim();
+    var finalline = line.trim();
 
-    for (var validator in _validators) {
-      line = validator.validate(line);
+    for (final validator in _validators) {
+      finalline = validator.validate(finalline);
     }
-    return line;
+    return finalline;
   }
 }
 
@@ -668,15 +671,15 @@ class _AskValidatorAny extends AskValidator {
   _AskValidatorAny(this._validators);
   @override
   String validate(String line) {
-    line = line.trim();
+    var finalline = line.trim();
 
     AskValidatorException firstFailure;
 
     var onePassed = false;
 
-    for (var validator in _validators) {
+    for (final validator in _validators) {
       try {
-        line = validator.validate(line);
+        finalline = validator.validate(finalline);
         onePassed = true;
       } on AskValidatorException catch (e) {
         firstFailure ??= e;
@@ -685,7 +688,7 @@ class _AskValidatorAny extends AskValidator {
     if (!onePassed) {
       throw firstFailure;
     }
-    return line;
+    return finalline;
   }
 }
 
@@ -706,19 +709,19 @@ class _AskValidatorList extends AskValidator {
   _AskValidatorList(this.validItems, {this.caseSensitive = false});
   @override
   String validate(String line) {
-    line = line.trim();
+    var finalline = line.trim();
 
     if (caseSensitive) {
-      line = line.toLowerCase();
+      finalline = finalline.toLowerCase();
     }
     var found = false;
-    for (var item in validItems) {
+    for (final item in validItems) {
       var itemValue = item.toString();
       if (caseSensitive) {
         itemValue = itemValue.toLowerCase();
       }
 
-      if (line == itemValue) {
+      if (finalline == itemValue) {
         found = true;
         break;
       }
@@ -728,6 +731,6 @@ class _AskValidatorList extends AskValidator {
           red('The valid responses are ${validItems.join(' | ')}.'));
     }
 
-    return line;
+    return finalline;
   }
 }

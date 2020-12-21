@@ -17,9 +17,9 @@ mixin PosixMixin {
   /// already on teh path.
   bool addToPATH(String path) {
     if (!isOnPATH(path)) {
-      var export = 'export PATH=\$PATH:$path';
+      final export = 'export PATH=\$PATH:$path';
 
-      var rcPath = pathToStartScript;
+      final rcPath = pathToStartScript;
 
       if (!exists(rcPath)) {
         rcPath.write(export);
@@ -32,7 +32,7 @@ mixin PosixMixin {
 
   bool get isCompletionInstalled {
     var completeInstalled = false;
-    var startFile = pathToStartScript;
+    final startFile = pathToStartScript;
 
     if (startFile != null) {
       if (exists(startFile)) {
@@ -47,8 +47,8 @@ mixin PosixMixin {
   }
 
   bool get isPrivilegedUser {
-    var user = _whoami();
-    var privileged = (user == 'root');
+    final user = _whoami();
+    final privileged = user == 'root';
     Settings().verbose('isPrivilegedUser: $privileged');
     return privileged;
   }
@@ -63,7 +63,7 @@ mixin PosixMixin {
   }
 
   String _whoami() {
-    var user = 'whoami'.firstLine;
+    final user = 'whoami'.firstLine;
     Settings().verbose('whoami: $user');
     return user;
   }

@@ -45,7 +45,7 @@ class CommandLineRunner {
       final argument = arguments[i];
 
       if (Flags.isFlag(argument)) {
-        var flag = _flagsSet.findFlag(argument, globalFlags);
+        final flag = _flagsSet.findFlag(argument, globalFlags);
 
         if (flag != null) {
           if (_flagsSet.isSet(flag)) {

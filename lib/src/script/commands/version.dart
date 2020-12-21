@@ -25,9 +25,9 @@ class VersionCommand extends Command {
           "'dcli version' does not take any arguments. Found $subarguments");
     }
 
-    var appname = DCliPaths().dcliName;
+    final appname = DCliPaths().dcliName;
 
-    var location = which(appname, first: true).path;
+    var location = which(appname).path;
 
     if (location == null) {
       printerr(red('Error: dcli is not on your path. Run "dcli install"'));

@@ -10,7 +10,7 @@ void main() {
   t.group('.run', () {
     t.test('Basic .run', () {
       TestFileSystem().withinZone((fs) {
-        var testFile = join(fs.fsRoot, 'test.text');
+        final testFile = join(fs.fsRoot, 'test.text');
 
         if (exists(testFile)) {
           delete(testFile);
@@ -23,12 +23,12 @@ void main() {
 
     t.test('print stdout', () {
       TestFileSystem().withinZone((fs) {
-        var scriptPath = truepath(join(fs.testScriptPath, 'general/bin'));
-        var script = truepath(scriptPath, 'print_to_stdout.dart');
+        final scriptPath = truepath(join(fs.testScriptPath, 'general/bin'));
+        final script = truepath(scriptPath, 'print_to_stdout.dart');
 
-        var results = run_child(script, fs);
+        final results = runChild(script, fs);
 
-        var expected = <String>['Hello World'];
+        final expected = <String>['Hello World'];
 
         t.expect(results, t.equals(expected));
       });
@@ -36,12 +36,12 @@ void main() {
 
     t.test('print stderr', () {
       TestFileSystem().withinZone((fs) {
-        var scriptPath = truepath(join(fs.testScriptPath, 'general/bin'));
-        var script = truepath(scriptPath, 'print_to_stderr.dart');
+        final scriptPath = truepath(join(fs.testScriptPath, 'general/bin'));
+        final script = truepath(scriptPath, 'print_to_stderr.dart');
 
-        var results = run_child(script, fs);
+        final results = runChild(script, fs);
 
-        var expected = <String>['Hello World - Error'];
+        final expected = <String>['Hello World - Error'];
 
         t.expect(results, t.equals(expected));
       });
@@ -49,15 +49,15 @@ void main() {
 
     t.test('print stdout and stderr', () {
       TestFileSystem().withinZone((fs) {
-        var scriptPath = truepath(join(fs.testScriptPath, 'general/bin'));
+        final scriptPath = truepath(join(fs.testScriptPath, 'general/bin'));
 
         if (!exists(scriptPath)) {
           createDir(scriptPath, recursive: true);
         }
-        var script = truepath(scriptPath, 'print_to_both.dart');
-        var results = run_child(script, fs);
+        final script = truepath(scriptPath, 'print_to_both.dart');
+        final results = runChild(script, fs);
 
-        var expected = <String>['Hello World', 'Hello World - Error'];
+        final expected = <String>['Hello World', 'Hello World - Error'];
 
         t.expect(results, t.equals(expected));
       });
@@ -65,16 +65,16 @@ void main() {
 
     t.test('print stdout and stderr with error', () {
       TestFileSystem().withinZone((fs) {
-        var scriptPath = truepath(join(fs.testScriptPath, 'general/bin'));
+        final scriptPath = truepath(join(fs.testScriptPath, 'general/bin'));
 
         if (!exists(scriptPath)) {
           createDir(scriptPath, recursive: true);
         }
-        var script = truepath(scriptPath, 'print_to_both_with_error.dart');
+        final script = truepath(scriptPath, 'print_to_both_with_error.dart');
 
-        var results = run_child(script, fs);
+        final results = runChild(script, fs);
 
-        var expected = <String>['Hello World', 'Hello World - Error'];
+        final expected = <String>['Hello World', 'Hello World - Error'];
 
         t.expect(results, t.containsAll(expected));
       });
@@ -82,9 +82,9 @@ void main() {
   });
 }
 
-List<String> run_child(String childScript, TestFileSystem fs) {
+List<String> runChild(String childScript, TestFileSystem fs) {
   /// The run_child.script file will use .run to run [script].
-  var runChildScript =
+  final runChildScript =
       truepath(join(fs.testScriptPath, 'general/bin', 'run_child.dart'));
 
   // make certain our test script will run
@@ -93,7 +93,7 @@ List<String> run_child(String childScript, TestFileSystem fs) {
 
   // run a script that uses '.run' and capture its output to prove
   // that .run works.
-  var results = '${DCliPaths().dcliName} $runChildScript $childScript'
+  final results = '${DCliPaths().dcliName} $runChildScript $childScript'
       .toList(nothrow: true);
 
   return results;

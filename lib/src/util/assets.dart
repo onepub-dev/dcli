@@ -80,7 +80,7 @@ class Assets {
 
   /// loads an asset as a byte buffer.
   Uint8List loadBytes(String path) {
-    var resolvedUri = waitForEx<Uri>(
+    final resolvedUri = waitForEx<Uri>(
         Isolate.resolvePackageUri(Uri.file('lib/src/assets/templates')));
 
     print('resolved: ${resolvedUri.toFilePath()}');
@@ -91,7 +91,7 @@ class Assets {
   /// Converts an asset path of the form assert/somepath/note/txt
   /// to the absolute file system path (usually in .pub-cache)
   String _resolveAssetPath(String path) {
-    var resolvedUri = waitForEx<Uri>(Isolate.resolvePackageUri(
+    final resolvedUri = waitForEx<Uri>(Isolate.resolvePackageUri(
         Uri(scheme: 'package', path: '$_packageName/src/$path')));
     return resolvedUri.toFilePath();
   }

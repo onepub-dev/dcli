@@ -13,18 +13,17 @@ import 'package:dcli/dcli.dart';
 ///
 
 void main(List<String> args) {
-  var parser = ArgParser();
+  final parser = ArgParser();
   parser.addFlag(
     'verbose',
     abbr: 'v',
     negatable: false,
-    defaultsTo: false,
     help: 'Logs additional details to the cli',
   );
 
   parser.addOption('prompt', abbr: 'p', help: 'The prompt to show the user.');
 
-  var parsed = parser.parse(args);
+  final parsed = parser.parse(args);
 
   if (parsed.wasParsed('verbose')) {
     Settings().setVerbose(enabled: true);
@@ -35,7 +34,7 @@ void main(List<String> args) {
     showUsage(parser);
   }
 
-  var prompt = parsed['prompt'] as String;
+  final prompt = parsed['prompt'] as String;
 
   var valid = false;
   String response;

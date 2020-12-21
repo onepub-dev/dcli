@@ -11,20 +11,20 @@ void main() {
   t.group('Head', () {
     t.test('head 5', () {
       TestFileSystem().withinZone((fs) {
-        var testFile = join(fs.fsRoot, 'lines.txt');
+        final testFile = join(fs.fsRoot, 'lines.txt');
         if (exists(testFile)) {
           delete(testFile);
         }
         if (!exists(fs.fsRoot)) {
           createDir(fs.fsRoot, recursive: true);
         }
-        var file = FileSync(testFile, fileMode: FileMode.write);
+        final file = FileSync(testFile, fileMode: FileMode.write);
         for (var i = 0; i < 10; i++) {
           file.append('Line $i is here');
         }
         file.close();
 
-        var lines = head(testFile, 5).toList();
+        final lines = head(testFile, 5).toList();
 
         t.expect(lines.length, t.equals(5));
       });

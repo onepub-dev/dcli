@@ -12,14 +12,14 @@ import 'package:dcli/dcli.dart';
 ///
 
 void main() {
-  var projectRoot = findProjectRoot();
+  final projectRoot = findProjectRoot();
 
   final coveragePath = join(projectRoot, 'coverage');
 
   if (!exists(coveragePath)) {
     createDir(coveragePath);
   }
-  var url =
+  final url =
       'dart --pause-isolates-on-exit --enable-vm-service=NNNN ${join(projectRoot, 'tool', 'run_unit_tests.dart')}'
           .toList();
   'collect_coverage -o $coveragePath/coverage.json --uri$url'.run;

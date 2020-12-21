@@ -11,11 +11,11 @@ void main() {
   t.group('copyTree', () {
     t.test('empty target ', () {
       TestFileSystem().withinZone((fs) {
-        var from = join(fs.fsRoot, 'top');
-        var to = join(fs.fsRoot, 'new_top');
+        final from = join(fs.fsRoot, 'top');
+        final to = join(fs.fsRoot, 'new_top');
 
         if (exists(to)) {
-          deleteDir(to, recursive: true);
+          deleteDir(to);
         }
 
         var expected = find('*', root: from, recursive: false).toList();
@@ -23,7 +23,7 @@ void main() {
         createDir(to);
         copyTree(from, to);
 
-        var actual = find('*', root: to, recursive: false).toList();
+        final actual = find('*', root: to, recursive: false).toList();
 
         t.expect(actual, unorderedEquals(expected));
       });
@@ -31,11 +31,11 @@ void main() {
 
     t.test('empty target - overwrite', () {
       TestFileSystem().withinZone((fs) {
-        var from = join(fs.fsRoot, 'top');
-        var to = join(fs.fsRoot, 'new_top');
+        final from = join(fs.fsRoot, 'top');
+        final to = join(fs.fsRoot, 'new_top');
 
         if (exists(to)) {
-          deleteDir(to, recursive: true);
+          deleteDir(to);
         }
 
         var expected = find('*', root: from, recursive: false).toList();
@@ -44,7 +44,7 @@ void main() {
         copyTree(from, to);
         copyTree(from, to, overwrite: true);
 
-        var actual = find('*', root: to, recursive: false).toList();
+        final actual = find('*', root: to, recursive: false).toList();
 
         t.expect(actual, unorderedEquals(expected));
       });
@@ -52,11 +52,11 @@ void main() {
 
     t.test('empty target - filter *.txt', () {
       TestFileSystem().withinZone((fs) {
-        var from = join(fs.fsRoot, 'top');
-        var to = join(fs.fsRoot, 'new_top');
+        final from = join(fs.fsRoot, 'top');
+        final to = join(fs.fsRoot, 'new_top');
 
         if (exists(to)) {
-          deleteDir(to, recursive: true);
+          deleteDir(to);
         }
 
         var expected = find('*.txt', root: from, recursive: false).toList();
@@ -64,7 +64,7 @@ void main() {
         createDir(to);
         copyTree(from, to, filter: (file) => extension(file) == '.txt');
 
-        var actual = find('*.txt', root: to, recursive: false).toList();
+        final actual = find('*.txt', root: to, recursive: false).toList();
 
         t.expect(actual, unorderedEquals(expected));
       });
@@ -72,20 +72,19 @@ void main() {
 
     t.test('empty target - recursive - filter *.txt', () {
       TestFileSystem().withinZone((fs) {
-        var from = join(fs.fsRoot, 'top');
-        var to = join(fs.fsRoot, 'new_top');
+        final from = join(fs.fsRoot, 'top');
+        final to = join(fs.fsRoot, 'new_top');
 
         if (exists(to)) {
-          deleteDir(to, recursive: true);
+          deleteDir(to);
         }
 
-        var expected = find('*.txt', root: from, recursive: true).toList();
+        var expected = find('*.txt', root: from).toList();
         expected = subname(expected, 'top', 'new_top');
         createDir(to);
-        copyTree(from, to,
-            recursive: true, filter: (file) => extension(file) == '.txt');
+        copyTree(from, to, filter: (file) => extension(file) == '.txt');
 
-        var actual = find('*.txt', root: to, recursive: true).toList();
+        final actual = find('*.txt', root: to).toList();
 
         t.expect(actual, unorderedEquals(expected));
       });
@@ -93,19 +92,19 @@ void main() {
 
     t.test('empty target - recursive ', () {
       TestFileSystem().withinZone((fs) {
-        var from = join(fs.fsRoot, 'top');
-        var to = join(fs.fsRoot, 'new_top');
+        final from = join(fs.fsRoot, 'top');
+        final to = join(fs.fsRoot, 'new_top');
 
         if (exists(to)) {
-          deleteDir(to, recursive: true);
+          deleteDir(to);
         }
 
-        var expected = find('*', root: from, recursive: true).toList();
+        var expected = find('*', root: from).toList();
         expected = subname(expected, 'top', 'new_top');
         createDir(to);
-        copyTree(from, to, recursive: true);
+        copyTree(from, to);
 
-        var actual = find('*', root: to, recursive: true).toList();
+        final actual = find('*', root: to).toList();
 
         t.expect(actual, unorderedEquals(expected));
       });
@@ -113,20 +112,20 @@ void main() {
 
     t.test('empty target - recursive- overwrite', () {
       TestFileSystem().withinZone((fs) {
-        var from = join(fs.fsRoot, 'top');
-        var to = join(fs.fsRoot, 'new_top');
+        final from = join(fs.fsRoot, 'top');
+        final to = join(fs.fsRoot, 'new_top');
 
         if (exists(to)) {
-          deleteDir(to, recursive: true);
+          deleteDir(to);
         }
 
-        var expected = find('*', root: from, recursive: true).toList();
+        var expected = find('*', root: from).toList();
         expected = subname(expected, 'top', 'new_top');
         createDir(to);
-        copyTree(from, to, recursive: true);
-        copyTree(from, to, overwrite: true, recursive: true);
+        copyTree(from, to);
+        copyTree(from, to, overwrite: true);
 
-        var actual = find('*', root: to, recursive: true).toList();
+        final actual = find('*', root: to).toList();
 
         t.expect(actual, unorderedEquals(expected));
       });
@@ -135,7 +134,7 @@ void main() {
 }
 
 List<String> subname(List<String> expected, String from, String replace) {
-  var result = <String>[];
+  final result = <String>[];
 
   for (var path in expected) {
     path = path.replaceAll(from, replace);

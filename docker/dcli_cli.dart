@@ -15,9 +15,9 @@ import 'package:dcli/src/pubspec/pubspec.dart';
 ///
 /// If you are looking to work on dcli itself then use dev_dcli_cli.dart
 
-void main(List<String> args) async {
+Future<void> main(List<String> args) async {
   Settings().setVerbose(enabled: false);
-  var cmds = CommandRunner<void>(
+  final cmds = CommandRunner<void>(
       'dcli_cli', 'Manage and run the dcli_cli docker container');
   cmds.addCommand(RunCommand());
   cmds.addCommand(BuildCommand());
@@ -49,7 +49,7 @@ class RunCommand extends Command<void> {
     /// The volume will only be created if it doesn't already exist.
     'docker volume create dcli_scripts'
         .forEach(devNull, stderr: (line) => print(red(line)));
-    var cmd =
+    const cmd =
         'docker run -v dcli_scripts:/home/scripts --network host -it dcli:dcli_cli /bin/bash';
 
     // print(cmd);
@@ -66,8 +66,8 @@ class BuildCommand extends Command<void> {
 
   @override
   void run() {
-    var pubspec = PubSpec.fromScript(Script.current);
-    var version = pubspec.version.toString();
+    final pubspec = PubSpec.fromScript(Script.current);
+    final version = pubspec.version.toString();
     // if (!argResults.wasParsed('version')) {
     //   printerr(red('You must pass a --version.'));
     //   showUsage(argParser);
@@ -99,8 +99,8 @@ class PushCommand extends Command<void> {
     // }
     // var version = argResults['version'] as String;
 
-    var pubspec = PubSpec.fromScript(Script.current);
-    var version = pubspec.version.toString();
+    final pubspec = PubSpec.fromScript(Script.current);
+    final version = pubspec.version.toString();
     print('Pushing version: $version');
     'sudo docker push bsuttonnoojee/dcli_cli:$version'.run;
   }

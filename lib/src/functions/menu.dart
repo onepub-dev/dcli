@@ -44,10 +44,10 @@ import '../../dcli.dart';
 /// options. If you specify [fromStart: false] then the menu will display the
 /// last [limit] options.
 ///
-/// If you pass a [defaultOption] the matching [option] is highlighted in green in the menu
+/// If you pass a [defaultOption] the matching option is highlighted in green in the menu
 /// and if the user hits enter without entering a value the [defaultOption] is returned.
 ///
-/// If the [defaultOption] does not match any the supplied [option]s then an ArgumentError is thrown.
+/// If the [defaultOption] does not match any the supplied [options] then an ArgumentError is thrown.
 ///
 
 T menu<T>(
@@ -76,7 +76,7 @@ T menu<T>(
   String defaultIndex;
   // display each option.
   for (var i = 1; i <= limit; i++) {
-    var option = displayList[i - 1];
+    final option = displayList[i - 1];
 
     if (option == defaultOption) {
       defaultIndex = i.toString();
@@ -87,10 +87,10 @@ T menu<T>(
     } else {
       desc = option.toString();
     }
-    var no = '$i'.padLeft(3);
+    final no = '$i'.padLeft(3);
     if (defaultOption != null && defaultOption == option) {
       /// highlight the default value.
-      print('${green('$no) $desc')}');
+      print(green('$no) $desc'));
     } else {
       print('$no) $desc');
     }
@@ -108,7 +108,7 @@ T menu<T>(
 
   // loop until the user enters a valid selection.
   while (!valid) {
-    var selected =
+    final selected =
         ask(prompt, defaultValue: defaultIndex, validator: MenuRange(limit));
     if (selected == null) continue;
     valid = true;
@@ -124,8 +124,8 @@ class MenuRange extends AskValidator {
   const MenuRange(this.limit);
   @override
   String validate(String line) {
-    line = line.trim();
-    var value = num.tryParse(line);
+    final finalline = line.trim();
+    final value = num.tryParse(finalline);
     if (value == null) {
       throw AskValidatorException(
           red('Value must be an integer from 1 to $limit'));
@@ -135,6 +135,6 @@ class MenuRange extends AskValidator {
       throw AskValidatorException('Invalid selection.');
     }
 
-    return line;
+    return finalline;
   }
 }

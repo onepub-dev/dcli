@@ -1,3 +1,6 @@
+# 0.35.0
+We now test if dart compile is supported (2.10 onwards) and use that rather than dart2native.
+
 # 0.34.6
 Added support in the find method for patterns that contain a partial path.
 added lint to warn about incorrect usage of await.

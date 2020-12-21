@@ -12,8 +12,8 @@ void main() {
   t.group('Directory Path manipulation testing', () {
     t.test('absolute', () {
       TestFileSystem().withinZone((fs) {
-        var paths = setup(fs);
-        var cwd = pwd;
+        final paths = setup(fs);
+        final cwd = pwd;
         t.expect(absolute(paths.pathTestDir),
             t.equals(join(cwd, paths.pathTestDir)));
       });
@@ -21,7 +21,7 @@ void main() {
 
     t.test('parent', () {
       TestFileSystem().withinZone((fs) {
-        var paths = setup(fs);
+        final paths = setup(fs);
         t.expect(
             dirname(paths.pathTestDir), t.equals(join(fs.fsRoot, _testDir)));
       });
@@ -29,7 +29,7 @@ void main() {
 
     t.test('extension', () {
       TestFileSystem().withinZone((fs) {
-        var paths = setup(fs);
+        final paths = setup(fs);
         t.expect(extension(join(paths.pathTestDir, paths.testFile)),
             t.equals(paths.testExtension));
       });
@@ -37,7 +37,7 @@ void main() {
 
     t.test('basename', () {
       TestFileSystem().withinZone((fs) {
-        var paths = setup(fs);
+        final paths = setup(fs);
         t.expect(basename(join(paths.pathTestDir, paths.testFile)),
             t.equals(paths.testFile));
       });

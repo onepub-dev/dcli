@@ -23,17 +23,17 @@ void main() {
 }
 
 void upgradeProject() {
-  find('*.dart', recursive: true).forEach((file) {
+  find('*.dart').forEach((file) {
     upgradeDartLibrary(file);
   });
 
   /// upgrade pubspec.yaml if found
-  find('pubspec.yaml', recursive: true).forEach((file) {
+  find('pubspec.yaml').forEach((file) {
     upgradePubspec(file);
   });
 
   /// upgrade pubspec.yaml if found
-  find('lauch.json', recursive: true).forEach((file) {
+  find('lauch.json').forEach((file) {
     replace(file, 'dshell', 'dcli', all: true);
   });
 }
@@ -59,25 +59,25 @@ void upgradePubspec(String file) {
 
 void upgradeDotDshell() {
   /// rename .dshell to .dcli
-  var dot_dshell = join(HOME, '.dshell');
-  var dot_dcli = join(HOME, '.dcli');
+  final dotDShell = join(HOME, '.dshell');
+  final dotDCli = join(HOME, '.dcli');
 
   var deleteCache = false;
-  if (exists(dot_dcli)) {
+  if (exists(dotDCli)) {
     deleteCache = true;
   } else {
-    if (exists(dot_dshell)) {
+    if (exists(dotDShell)) {
       /// So no .dcli so rename .dshell to .dcli
-      moveDir(dot_dshell, dot_dcli);
+      moveDir(dotDShell, dotDCli);
       deleteCache = true;
     }
   }
 
   if (deleteCache) {
-    var cacheCleared = join(dot_dcli, '.cleared_cache');
-    if (!exists(cacheCleared) && exists(join(dot_dcli, 'cache'))) {
-      deleteDir(join(dot_dcli, 'cache'));
-      createDir(join(dot_dcli, 'cache'));
+    final cacheCleared = join(dotDCli, '.cleared_cache');
+    if (!exists(cacheCleared) && exists(join(dotDCli, 'cache'))) {
+      deleteDir(join(dotDCli, 'cache'));
+      createDir(join(dotDCli, 'cache'));
     }
     touch(cacheCleared, create: true);
   }
@@ -85,11 +85,11 @@ void upgradeDotDshell() {
 
 void upgradeDependencies(String path) {
   if (exists(path)) {
-    var lines = read(path).toList();
+    final lines = read(path).toList();
     move(path, '$path.bak');
     touch(path, create: true);
-    for (var line in lines) {
-      var tmp = line.trim().replaceAll(' ', '');
+    for (final line in lines) {
+      final tmp = line.trim().replaceAll(' ', '');
       if (tmp.startsWith('dshell')) {
         if (tmp == 'dshell:') {
           /// means its not a simple version and probably has a path on the next line.

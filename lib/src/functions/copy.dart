@@ -27,24 +27,26 @@ void copy(String from, String to, {bool overwrite = false}) =>
 
 class _Copy extends DCliFunction {
   void copy(String from, String to, {bool overwrite = false}) {
-    if (isDirectory(to)) {
-      to = join(to, basename(from));
+    var finalto = to;
+    if (isDirectory(finalto)) {
+      finalto = join(finalto, basename(from));
     }
 
-    if (overwrite == false && exists(to)) {
-      throw CopyException('The target file ${absolute(to)} already exists');
+    if (overwrite == false && exists(finalto)) {
+      throw CopyException(
+          'The target file ${absolute(finalto)} already exists');
     }
 
     try {
-      File(from).copySync(to);
+      File(from).copySync(finalto);
     }
     // ignore: avoid_catches_without_on_clauses
     catch (e) {
       throw CopyException(
-          'An error occured copying ${absolute(from)} to ${absolute(to)}. Error: $e');
+          'An error occured copying ${absolute(from)} to ${absolute(finalto)}. Error: $e');
     }
 
-    Settings().verbose('copy ${absolute(from)} -> ${absolute(to)}');
+    Settings().verbose('copy ${absolute(from)} -> ${absolute(finalto)}');
   }
 }
 

@@ -50,13 +50,13 @@ class Terminal {
 
       case TerminalClearMode.all:
         // print('clearing screen');
-        echo('${Ansi.esc}2Jm', newline: false);
+        echo('${Ansi.esc}2Jm');
         break;
       case TerminalClearMode.fromCursor:
-        echo('${Ansi.esc}0Jm', newline: false);
+        echo('${Ansi.esc}0Jm');
         break;
       case TerminalClearMode.toCursor:
-        echo('${Ansi.esc}1Jm', newline: false);
+        echo('${Ansi.esc}1Jm');
         break;
     }
   }
@@ -67,13 +67,13 @@ class Terminal {
     switch (mode) {
       // case AnsiClearMode.scrollback:
       case TerminalClearMode.all:
-        echo('${Ansi.esc}[2K', newline: false);
+        echo('${Ansi.esc}[2K');
         break;
       case TerminalClearMode.fromCursor:
-        echo('${Ansi.esc}[0K', newline: false);
+        echo('${Ansi.esc}[0K');
         break;
       case TerminalClearMode.toCursor:
-        echo('${Ansi.esc}[1K', newline: false);
+        echo('${Ansi.esc}[1K');
         break;
     }
   }
@@ -88,12 +88,12 @@ class Terminal {
   /// 1 is the first column
   // ignore: avoid_setters_without_getters
   set column(int column) {
-    echo('${Ansi.esc}${column}G', newline: false);
+    echo('${Ansi.esc}${column}G');
   }
 
   /// Moves the cursor to the start of previous line.
   static void previousLine() {
-    echo('${Ansi.esc}0F', newline: false);
+    echo('${Ansi.esc}0F');
   }
 
   /// show/hide the cursor

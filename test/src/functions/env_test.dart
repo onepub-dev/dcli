@@ -14,7 +14,7 @@ void main() {
     });
 
     t.test('addAll', () {
-      var count = env.entries.length;
+      final count = env.entries.length;
       env.addAll({'hi': 'there'});
       t.expect(env.entries.length, t.equals(count + 1));
 
@@ -25,13 +25,13 @@ void main() {
     t.test('Windows case-insensitive env vars', () {
       try {
         Settings.reset();
-        var mockSettings = MockSettings();
+        final mockSettings = MockSettings();
         Settings.mock = mockSettings;
         when(mockSettings.isWindows).thenReturn(true);
         Env.reset();
         //var mockEnv = MockEnv();
 
-        var userDataPath = 'C:\\Windows\\Userdata';
+        const userDataPath = 'C:\\Windows\\Userdata';
 
         env['HOME'] = userDataPath;
         env['APPDATA'] = userDataPath;
@@ -42,11 +42,11 @@ void main() {
         t.expect(env['APPDATA'], userDataPath);
         t.expect(env['AppData'], userDataPath);
 
-        var available = <String, String>{};
+        final available = <String, String>{};
         available.putIfAbsent('APPDATA', () => env['APPDATA']);
         available.putIfAbsent('MixedCase', () => env['MixedCase']);
 
-        var expected = <String, String>{};
+        final expected = <String, String>{};
 
         expected.putIfAbsent('APPDATA', () => userDataPath);
         expected.putIfAbsent('MixedCase', () => 'mixed data');

@@ -6,8 +6,8 @@ import 'package:pub_semver/pub_semver.dart';
 import 'package:pubspec/pubspec.dart' as pub;
 
 import '../../dcli.dart';
-import 'dependency.dart';
 import '../script/script.dart';
+import 'dependency.dart';
 
 ///
 ///Used to read a pubspec.yaml file
@@ -31,7 +31,7 @@ class PubSpec {
   List<Executable> get executables {
     if (_executables == null) {
       _executables = <Executable>[];
-      for (var key in pubspec.executables.keys) {
+      for (final key in pubspec.executables.keys) {
         _executables.add(Executable(key, pubspec.executables[key].scriptPath));
       }
     }
@@ -41,9 +41,9 @@ class PubSpec {
 
   /// Sets the map of dependencies for this pubspec.
   set dependencies(Map<String, Dependency> dependencies) {
-    var ref = <String, pub.DependencyReference>{};
+    final ref = <String, pub.DependencyReference>{};
 
-    for (var name in dependencies.keys) {
+    for (final name in dependencies.keys) {
       ref[name] = dependencies[name].reference;
     }
 
@@ -54,12 +54,12 @@ class PubSpec {
   /// If you need to update the map pass a new map
   /// with the updated values.
   Map<String, Dependency> get dependencies {
-    var depends = <String, Dependency>{};
+    final depends = <String, Dependency>{};
 
-    var map = pubspec.dependencies;
+    final map = pubspec.dependencies;
 
-    for (var name in map.keys) {
-      var reference = map[name];
+    for (final name in map.keys) {
+      final reference = map[name];
       depends.putIfAbsent(name, () => Dependency(name, reference));
     }
 
@@ -68,9 +68,9 @@ class PubSpec {
 
   /// Sets the list of dependencies for this pubspec.
   set dependencyOverrides(Map<String, Dependency> dependencies) {
-    var ref = <String, pub.DependencyReference>{};
+    final ref = <String, pub.DependencyReference>{};
 
-    for (var name in dependencies.keys) {
+    for (final name in dependencies.keys) {
       ref[name] = dependencies[name].reference;
     }
 
@@ -81,12 +81,12 @@ class PubSpec {
   /// If you need to update the map pass a new map
   /// with the updated values.
   Map<String, Dependency> get dependencyOverrides {
-    var depends = <String, Dependency>{};
+    final depends = <String, Dependency>{};
 
-    var map = pubspec.dependencyOverrides;
+    final map = pubspec.dependencyOverrides;
 
-    for (var name in map.keys) {
-      var reference = map[name];
+    for (final name in map.keys) {
+      final reference = map[name];
       depends.putIfAbsent(name, () => Dependency(name, reference));
     }
 
@@ -107,13 +107,13 @@ class PubSpec {
 
   /// parses a pubspec from a yaml string.
   factory PubSpec.fromString(String yamlString) {
-    var impl = PubSpec._internal();
+    final impl = PubSpec._internal();
     impl.pubspec = pub.PubSpec.fromYamlString(yamlString);
     return impl;
   }
 
   void _fromFile(String path) {
-    var lines = read(path).toList();
+    final lines = read(path).toList();
 
     pubspec = pub.PubSpec.fromYamlString(lines.join('\n'));
   }

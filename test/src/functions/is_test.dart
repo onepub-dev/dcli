@@ -12,7 +12,7 @@ void main() {
 // owner, group, world, read, write execute
 
       test('owner', () {
-        var one = fs.tempFile();
+        final one = fs.tempFile();
         touch(one, create: true);
         'chmod 200 $one'.run;
         expect(isWritable(one), equals(true));
@@ -25,7 +25,7 @@ void main() {
       });
 
       test('group', () {
-        var one = fs.tempFile();
+        final one = fs.tempFile();
         touch(one, create: true);
         'chmod 020 $one'.run;
         expect(isWritable(one), equals(true));
@@ -38,7 +38,7 @@ void main() {
       });
 
       test('world', () {
-        var one = fs.tempFile();
+        final one = fs.tempFile();
         touch(one, create: true);
         'chmod 002 $one'.run;
         expect(isWritable(one), equals(true));
@@ -57,7 +57,7 @@ void main() {
 // owner, group, world, read, write execute
 
       test('owner', () {
-        var one = fs.tempFile();
+        final one = fs.tempFile();
         touch(one, create: true);
         'chmod 400 $one'.run;
         expect(isReadable(one), equals(true));
@@ -70,7 +70,7 @@ void main() {
       });
 
       test('group', () {
-        var one = fs.tempFile();
+        final one = fs.tempFile();
         touch(one, create: true);
         'chmod 040 $one'.run;
         expect(isReadable(one), equals(true));
@@ -83,7 +83,7 @@ void main() {
       });
 
       test('world', () {
-        var one = fs.tempFile();
+        final one = fs.tempFile();
         touch(one, create: true);
         'chmod 004 $one'.run;
         expect(isReadable(one), equals(true));
@@ -102,7 +102,7 @@ void main() {
 // owner, group, world, read, write execute
 
       test('owner', () {
-        var one = fs.tempFile();
+        final one = fs.tempFile();
         touch(one, create: true);
         'chmod 100 $one'.run;
         expect(isExecutable(one), equals(true));
@@ -115,7 +115,7 @@ void main() {
       });
 
       test('group', () {
-        var one = fs.tempFile();
+        final one = fs.tempFile();
         touch(one, create: true);
         'chmod 010 $one'.run;
         expect(isExecutable(one), equals(true));
@@ -128,7 +128,7 @@ void main() {
       });
 
       test('world', () {
-        var one = fs.tempFile();
+        final one = fs.tempFile();
         touch(one, create: true);
         'chmod 001 $one'.run;
         expect(isExecutable(one), equals(true));

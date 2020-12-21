@@ -28,7 +28,7 @@ void showEditor(String path) {
 /// True if the console is a dumb termainl
 bool isTerminalDumb() {
   {
-    var terminal = env['TERM'];
+    final terminal = env['TERM'];
     return terminal == null || terminal == 'dumb';
   }
 }

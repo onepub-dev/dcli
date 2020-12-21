@@ -22,15 +22,15 @@ class EnumHelper {
   /// You can pass an alternate method to control the format.
   ///
   static String getName<T>(T enumValue) {
-    var name = enumValue.toString();
-    var period = name.indexOf('.');
+    final name = enumValue.toString();
+    final period = name.indexOf('.');
 
     return ReCase.titleCase(name.substring(period + 1));
   }
 
   /// returns a enum based on its name.
   static T getEnum<T>(String enumName, List<T> values) {
-    var cleanedName = ReCase.titleCase(enumName);
+    final cleanedName = ReCase.titleCase(enumName);
     for (var i = 0; i < values.length; i++) {
       if (cleanedName == getName(values[i])) {
         return values[i];

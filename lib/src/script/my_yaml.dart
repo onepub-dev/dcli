@@ -19,7 +19,7 @@ class MyYaml {
 
   /// reads yaml from file.
   MyYaml.fromFile(String path) {
-    var contents = waitFor<String>(File(path).readAsString());
+    final contents = waitFor<String>(File(path).readAsString());
     _document = _load(contents);
   }
 

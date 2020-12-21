@@ -14,8 +14,8 @@ void main() {
 
 void compile(String pathToScript) {
   TestFileSystem().withinZone((fs) {
-    var script = join(fs.testScriptPath, 'general/bin/hello_world.dart');
-    var exe = join(dirname(script), basenameWithoutExtension(script));
+    final script = join(fs.testScriptPath, 'general/bin/hello_world.dart');
+    final exe = join(dirname(script), basenameWithoutExtension(script));
 
     try {
       if (exists(exe)) {

@@ -28,7 +28,7 @@ Progress readStdin() => _Read()._readStdin();
 
 class _Read extends DCliFunction {
   Progress read(String path, {String delim, Progress progress}) {
-    var sourceFile = File(path);
+    final sourceFile = File(path);
 
     Settings().verbose('read: ${absolute(path)}, delim: $delim');
 
@@ -41,7 +41,7 @@ class _Read extends DCliFunction {
     waitForEx<void>(sourceFile
         .openRead()
         .transform(utf8.decoder)
-        .transform(LineSplitter())
+        .transform(const LineSplitter())
         .forEach((line) {
       progress.addToStdout(line);
     }));

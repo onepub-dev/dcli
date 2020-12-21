@@ -7,12 +7,12 @@ import 'package:path/path.dart' as p;
 import '../../util/test_file_system.dart';
 
 void main() {
-  var scriptPath = truepath(TestFileSystem().tmpScriptPath, 'create_test');
+  final scriptPath = truepath(TestFileSystem().tmpScriptPath, 'create_test');
 
   if (!exists(scriptPath)) {
     createDir(scriptPath, recursive: true);
   }
-  var pathToScript = truepath(scriptPath, 'hello_world.dart');
+  final pathToScript = truepath(scriptPath, 'hello_world.dart');
 
   group('Create Project', () {
     test('Create hello world', () {
@@ -20,7 +20,7 @@ void main() {
         if (exists(pathToScript)) {
           delete(pathToScript);
         }
-        var project = DartProject.fromPath(scriptPath);
+        final project = DartProject.fromPath(scriptPath);
         project.createScript(pathToScript, templateName: 'hello_world.dart');
         project.warmup();
 
@@ -41,7 +41,7 @@ void main() {
 void checkProjectStructure(TestFileSystem fs, String scriptName) {
   expect(exists(fs.runtimePath(scriptName)), equals(true));
 
-  var pubspecPath = p.join(fs.runtimePath(scriptName), 'pubspec.yaml');
+  final pubspecPath = p.join(fs.runtimePath(scriptName), 'pubspec.yaml');
   expect(exists(pubspecPath), equals(true));
 
   // There should be:
@@ -52,10 +52,9 @@ void checkProjectStructure(TestFileSystem fs, String scriptName) {
   // .dart_tools
   // analysis_options.yaml
 
-  var files = <String>[];
+  final files = <String>[];
   find(
     '*.*',
-    recursive: true,
     root: fs.runtimePath(scriptName),
     types: [Find.file],
     includeHidden: true,
@@ -71,16 +70,16 @@ void checkProjectStructure(TestFileSystem fs, String scriptName) {
 
   expect(
       files,
-      unorderedEquals((<String>[
+      unorderedEquals(<String>[
         'hello_world.dart',
         'pubspec.yaml',
         'pubspec.lock',
         'analysis_options.yaml',
         join('.dart_tool', 'package_config.json'),
         '.packages' // when dart 2.10 is released this will no longer be created.
-      ])));
+      ]));
 
-  var directories = <String>[];
+  final directories = <String>[];
 
   find('*',
           recursive: false,

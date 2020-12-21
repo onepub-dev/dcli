@@ -8,7 +8,7 @@ void main(List<String> arguments) {
 
 class DCliInstall {
   void run(List<String> arguments) {
-    var mutableArgs = <String>[];
+    final mutableArgs = <String>[];
     mutableArgs.addAll(arguments);
 
     if (!mutableArgs.contains('doctor')) {

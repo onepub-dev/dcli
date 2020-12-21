@@ -13,12 +13,12 @@ import 'test_file_system.dart';
 void main() {
   test('runnable process Start - forEach', () {
     TestFileSystem().withinZone((fs) async {
-      var path = join(fs.fsRoot, 'top');
+      final path = join(fs.fsRoot, 'top');
       print('starting ls in $path');
 
       String command;
       command = 'ls *.txt';
-      var found = <String>[];
+      final found = <String>[];
       start(command, workingDirectory: path).forEach((file) {
         found.add(file);
       });
@@ -40,7 +40,7 @@ void main() {
   });
 
   test('Child process shutdown', () {
-    var fprocess = Process.start(
+    final fprocess = Process.start(
       'tail',
       ['-f', '/var/log/syslog'],
       mode: ProcessStartMode.normal,
@@ -59,7 +59,7 @@ void main() {
       });
     });
 
-    waitFor<void>(Future.delayed(Duration(seconds: 10)));
+    waitFor<void>(Future.delayed(const Duration(seconds: 10)));
 
     /// test in current form can't actually test for shutdown.
     /// needs to spawn another process then check the outcome.

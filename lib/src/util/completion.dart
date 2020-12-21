@@ -20,7 +20,7 @@ List<String> completionExpandScripts(String word,
     // in which case we use the last part as the search term
     // and append any remaining path to the root.
     if (word.isNotEmpty) {
-      var parts = split(word);
+      final parts = split(word);
 
       searchTerm = parts.last;
 
@@ -42,19 +42,19 @@ List<String> completionExpandScripts(String word,
   //   searchTerm = '';
   // }
 
-  var entries = find('$searchTerm*',
+  final entries = find('$searchTerm*',
           types: [Find.directory, Find.file], root: root, recursive: false)
       .toList();
 
-  var results = <String>[];
-  for (var script in entries) {
+  final results = <String>[];
+  for (final script in entries) {
     if (word.isEmpty ||
         relative(script, from: workingDirectory).startsWith(word)) {
-      var matchPath = join(root, script);
+      final matchPath = join(root, script);
       String filePath;
       if (isDirectory(matchPath)) {
         // its a directory add trailing slash and returning.
-        filePath = '${relative('$script', from: workingDirectory)}/';
+        filePath = '${relative(script, from: workingDirectory)}/';
       } else {
         filePath = relative(script, from: workingDirectory);
       }

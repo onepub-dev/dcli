@@ -21,17 +21,17 @@ class RunCommand extends Command {
   ///
   ///
   /// [arguments] - the arguments passed directly to the run command.
-  /// Returns the [exitcode];
+  /// Returns the called processes exitcode;
   @override
   int run(List<Flag> selectedFlags, List<String> arguments) {
     if (arguments.isEmpty) {
       throw InvalidArguments(
           'Expected a script or command. No arguments were found.');
     }
-    var scriptPath = arguments[0];
+    final scriptPath = arguments[0];
     Script.validate(scriptPath);
 
-    var script = Script.fromFile(scriptPath);
+    final script = Script.fromFile(scriptPath);
 
     if (Shell.current.isSudo) {
       /// we are running sudo, so we can't init a script
@@ -73,7 +73,8 @@ class RunCommand extends Command {
 
   @override
   String description() =>
-      '''Runs the given script. This command is provided for the sake of symmetry. 
+      '''
+  Runs the given script. This command is provided for the sake of symmetry. 
    The recommended method is to use the simplier form ${Settings().appname} <script path.dart>''';
 
   // CommandRun.fromScriptArg(String argument) {

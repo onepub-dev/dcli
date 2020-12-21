@@ -35,6 +35,7 @@ import 'function.dart';
 /// ```
 ///
 /// Valid patterns are:
+/// ```
 ///
 /// [*] - matches any number of any characters including none.
 ///
@@ -47,6 +48,7 @@ import 'function.dart';
 /// [[!abc]] - matches one character that is not given in the bracket
 ///
 /// [[!a-z]] - matches one character that is not from the range given in the bracket
+/// ```
 ///
 /// If [caseSensitive] is true then a case sensitive match is performed.
 /// [caseSensitive] defaults to false.
@@ -109,24 +111,27 @@ class Find extends DCliFunction {
     List<FileSystemEntityType> types = const [Find.file],
     bool includeHidden,
   }) {
+    var finalroot = root;
+    var finalpattern = pattern;
+
     /// If the pattern contains a relative path we need
     /// to move it into the root as the user really
     /// wants to search  in the directory root/relativepath.
     /// This only applies for non-recursive searches as
     /// when we do
-    var relativeDir = dirname(pattern);
+    final relativeDir = dirname(finalpattern);
     if (recursive == false && relativeDir != '.') {
-      root = join(root, relativeDir);
-      if (!exists(root)) {
-        throw FindException('The path ${truepath(root)} does not exists');
+      finalroot = join(finalroot, relativeDir);
+      if (!exists(finalroot)) {
+        throw FindException('The path ${truepath(finalroot)} does not exists');
       }
-      pattern = basename(pattern);
+      finalpattern = basename(finalpattern);
     }
 
-    return waitForEx<Progress>(_innerFind(pattern,
+    return waitForEx<Progress>(_innerFind(finalpattern,
         caseSensitive: caseSensitive,
         recursive: recursive,
-        root: root,
+        root: finalroot,
         progress: progress,
         types: types,
         includeHidden: includeHidden));
@@ -141,37 +146,40 @@ class Find extends DCliFunction {
     List<FileSystemEntityType> types = const [Find.file],
     bool includeHidden,
   }) async {
-    var matcher =
-        _PatternMatcher(pattern, caseSensitive: caseSensitive, root: root);
-    if (root == '.') {
-      root = pwd;
+    var finalroot = root;
+    var finalIncludeHidden = includeHidden;
+
+    final matcher =
+        _PatternMatcher(pattern, caseSensitive: caseSensitive, root: finalroot);
+    if (finalroot == '.') {
+      finalroot = pwd;
     } else {
-      root = truepath(root);
+      finalroot = truepath(finalroot);
     }
 
     if (pattern.startsWith('.')) {
-      includeHidden = true;
+      finalIncludeHidden = true;
     }
 
     try {
       progress ??= Progress.devNull();
 
       Settings().verbose(
-          'find: pwd: $pwd root: ${absolute(root)} pattern: $pattern caseSensitive: $caseSensitive recursive: $recursive types: $types ');
-      var nextLevel = <FileSystemEntity>[]..length = 100;
-      var singleDirectory = <FileSystemEntity>[]..length = 100;
-      var childDirectories = <FileSystemEntity>[]..length = 100;
-      await _processDirectory(root, root, recursive, types, matcher,
-          includeHidden, progress, childDirectories);
+          'find: pwd: $pwd root: ${absolute(finalroot)} pattern: $pattern caseSensitive: $caseSensitive recursive: $recursive types: $types ');
+      final nextLevel = <FileSystemEntity>[]..length = 100;
+      final singleDirectory = <FileSystemEntity>[]..length = 100;
+      final childDirectories = <FileSystemEntity>[]..length = 100;
+      await _processDirectory(finalroot, finalroot, recursive, types, matcher,
+          finalIncludeHidden, progress, childDirectories);
 
       while (childDirectories[0] != null) {
         _zeroElements(nextLevel);
-        for (var directory in childDirectories) {
+        for (final directory in childDirectories) {
           if (directory == null) {
             break;
           }
-          await _processDirectory(root, directory.path, recursive, types,
-              matcher, includeHidden, progress, singleDirectory);
+          await _processDirectory(finalroot, directory.path, recursive, types,
+              matcher, finalIncludeHidden, progress, singleDirectory);
           _appendTo(nextLevel, singleDirectory);
           _zeroElements(singleDirectory);
         }
@@ -192,14 +200,14 @@ class Find extends DCliFunction {
       bool includeHidden,
       Progress progress,
       List<FileSystemEntity> nextLevel) async {
-    var lister = Directory(currentDirectory).list(recursive: false);
+    final lister = Directory(currentDirectory).list(recursive: false);
     var nextLevelIndex = 0;
 
-    var completer = Completer<void>();
+    final completer = Completer<void>();
 
     lister.listen(
       (entity) async {
-        var type = FileSystemEntity.typeSync(entity.path);
+        final type = FileSystemEntity.typeSync(entity.path);
         if (types.contains(type) &&
             matcher.match(entity.path) &&
             _allowed(
@@ -252,12 +260,12 @@ class Find extends DCliFunction {
   // check if the entity is a hidden file (.xxx) or
   // if lives in a hidden directory.
   bool _isHidden(String root, FileSystemEntity entity) {
-    var relativePath = relative(entity.path, from: root);
+    final relativePath = relative(entity.path, from: root);
 
-    var parts = relativePath.split(separator);
+    final parts = relativePath.split(separator);
 
     var isHidden = false;
-    for (var part in parts) {
+    for (final part in parts) {
       if (part.startsWith('.')) {
         isHidden = true;
         break;
@@ -312,15 +320,15 @@ class Find extends DCliFunction {
     return firstAvailable;
   }
 
-  /// pass as an argument to the [types] argument
+  /// pass as a value to the find types argument
   /// to select files to be found
   static const file = FileSystemEntityType.file;
 
-  /// pass as an argument to the [types] argument
+  /// pass as a value to the final types argument
   /// to select directories to be found
   static const directory = FileSystemEntityType.directory;
 
-  /// pass as an argument to the [types] argument
+  /// pass as a value to the final types argument
   /// to select links to be found
   static const link = FileSystemEntityType.link;
 }
@@ -338,13 +346,13 @@ class _PatternMatcher {
       {@required this.root, @required this.caseSensitive}) {
     regEx = buildRegEx();
 
-    var patternParts = split(dirname(pattern));
+    final patternParts = split(dirname(pattern));
     directoryParts = patternParts.length;
     if (patternParts.length == 1 && patternParts[0] == '.') directoryParts = 0;
   }
 
   bool match(String path) {
-    var matchPart = _extractMatchPart(path);
+    final matchPart = _extractMatchPart(path);
     //  print('path: $path, matchPart: $matchPart pattern: $pattern');
     return regEx.stringMatch(matchPart) == matchPart;
   }
@@ -353,7 +361,7 @@ class _PatternMatcher {
     var regEx = '';
 
     for (var i = 0; i < pattern.length; i++) {
-      var char = pattern[i];
+      final char = pattern[i];
 
       switch (char) {
         case '[':
@@ -394,7 +402,7 @@ class _PatternMatcher {
   String _extractMatchPart(String path) {
     if (directoryParts == 0) return basename(path);
 
-    var pathParts = split(dirname(relative(path, from: root)));
+    final pathParts = split(dirname(relative(path, from: root)));
 
     var partsCount = pathParts.length;
     if (pathParts.length == 1 && pathParts[0] == '.') partsCount = 0;

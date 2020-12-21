@@ -69,7 +69,7 @@ class Remote {
       bool sudo = false,
       String password,
       Progress progress}) {
-    var cmdArgs = <String>[];
+    final cmdArgs = <String>[];
 
     // enable agent forwarding only
     // if the user doesn't pass a password.
@@ -78,9 +78,9 @@ class Remote {
     }
     // disable psuedo terminal
     cmdArgs.add('-T');
-    cmdArgs.add('$host');
+    cmdArgs.add(host);
 
-    var cmdLine = '';
+    final cmdLine = StringBuffer();
     for (var command in commands) {
       if (sudo) {
         // -S accept echoed password{
@@ -95,9 +95,9 @@ class Remote {
       }
       if (cmdLine.isNotEmpty) {
         // bash command delimiter.
-        cmdLine += ';';
+        cmdLine.write(';');
       }
-      cmdLine += command;
+      cmdLine.write(command);
     }
 
     cmdArgs.add('"$cmdLine"');
@@ -107,7 +107,7 @@ class Remote {
     try {
       startFromArgs('ssh', cmdArgs, progress: progress);
     } on RunException catch (e) {
-      var error = _sshErrors[e.exitCode];
+      final error = _sshErrors[e.exitCode];
       throw RunException(
           e.cmdLine, e.exitCode, red('ssh exit code: ${e.exitCode} - $error'),
           stackTrace: e.stackTrace);
@@ -156,7 +156,7 @@ class Remote {
       throw ScpException('[fromUser] is only valid if toHost is also past');
     }
 
-    var cmdArgs = <String>[];
+    final cmdArgs = <String>[];
 
     if (recursive) {
       cmdArgs.add('-r');
@@ -201,7 +201,7 @@ class Remote {
     try {
       startFromArgs('scp', cmdArgs, progress: progress, terminal: true);
     } on RunException catch (e) {
-      var error = _scpErrors[e.exitCode];
+      final error = _scpErrors[e.exitCode];
       throw RunException(
           e.cmdLine, e.exitCode, red('scp exit code: ${e.exitCode} - $error'),
           stackTrace: e.stackTrace);
