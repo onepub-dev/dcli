@@ -1,5 +1,6 @@
 name: general
 version: 1.0.0
+publish_to: none
 environment: 
   sdk: '>=2.6.0 <3.0.0'
 dependencies: 
