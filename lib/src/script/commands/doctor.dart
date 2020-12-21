@@ -65,12 +65,12 @@ class DoctorCommand extends Command {
   }
 
   void printDartLocations() {
-    print('Dart location(s)');
+    print('dart location(s)');
     which('dart').paths.forEach((line) => _colprint(['', line]));
   }
 
   void printPermissions() {
-    print('Permissions');
+    print('permissions');
     _showPermissions('HOME', HOME);
     _showPermissions('.dcli', Settings().pathToDCli);
     _showPermissions('cache', Settings().pathToDCliCache);
@@ -82,17 +82,17 @@ class DoctorCommand extends Command {
     _colprint([r'$SHELL', '${env['SHELL']}']);
 
     var shell = Shell.current;
-    _colprint(['Detected SHELL', '${shell.name}']);
+    _colprint(['detected SHELL', '${shell.name}']);
 
     if (shell.hasStartScript) {
       var startScriptPath = shell.pathToStartScript;
       if (startScriptPath == null) {
-        _colprint(['Shell Start Script', '${privatePath(startScriptPath)}']);
+        _colprint(['shell Start Script', '${privatePath(startScriptPath)}']);
       } else {
-        _colprint(['Shell Start Script', 'Not Found']);
+        _colprint(['shell Start Script', 'not found']);
       }
     } else {
-      _colprint(['Shell Start Script', 'Not supported by shell']);
+      _colprint(['shell Start Script', 'not supported by shell']);
     }
   }
 
@@ -105,9 +105,9 @@ class DoctorCommand extends Command {
 
   void printPackageConfig() {
     if (Platform.packageConfig == null) {
-      _colprint(['Package Config', 'Not Passed']);
+      _colprint(['package Config', 'not passed']);
     } else {
-      _colprint(['Package Config', '${privatePath(Platform.packageConfig)}']);
+      _colprint(['package Config', '${privatePath(Platform.packageConfig)}']);
     }
   }
 
@@ -126,8 +126,9 @@ class DoctorCommand extends Command {
     ]);
 
     if (DartSdk().useDartCompiler) {
-      _colprint(["Using 'dart compile exe'"]);
+      _colprint(['compiler', "using 'dart compile exe'"]);
     } else {
+      _colprint(['compiler', "using 'dart2native'"]);
       var dart2NativePath = which(DartSdk.dart2NativeExeName, first: true).path;
 
       if (dart2NativePath != null) {
@@ -165,7 +166,7 @@ class DoctorCommand extends Command {
     _colprint(['OS', '${Platform.operatingSystem}']);
     print(Format.row(['OS Version', '${Platform.operatingSystemVersion}'],
         widths: [17, -1]));
-    _colprint(['Path separator', '${Platform.pathSeparator}']);
+    _colprint(['path separator', '${Platform.pathSeparator}']);
     print('');
     _colprint(['dart version', '${DartSdk().version}']);
   }

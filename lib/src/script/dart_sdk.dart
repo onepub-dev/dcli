@@ -2,7 +2,6 @@ import 'dart:io';
 
 import 'package:archive/archive.dart';
 import 'package:meta/meta.dart';
-import 'package:path/path.dart' as p;
 import 'package:pub_semver/pub_semver.dart';
 import 'package:system_info/system_info.dart';
 
@@ -36,10 +35,7 @@ class DartSdk {
   DartSdk._internal();
 
   /// The path to the dart 'bin' directory.
-  String get pathToSdk {
-    _sdkPath ??= _detect();
-    return _sdkPath;
-  }
+  String get pathToSdk => _sdkPath ??= _detect();
 
   /// platform specific name of the 'dart' executable
   static String get dartExeName {
@@ -69,22 +65,18 @@ class DartSdk {
   }
 
   /// The path to the dart exe.
-  String get pathToDartExe {
-    if (_exePath == null) {
-      // this is an expesive operation so only do it if required.
-      var path = which(dartExeName, first: true).path;
-      assert(path != null);
-      _exePath = path;
-    }
-    return _exePath;
-  }
+  String get pathToDartExe => _exePath ??= which(dartExeName, first: true).path;
+
+  String _pathToPubExe;
 
   /// file path to the 'pub' command.
-  String get pathToPubExe => p.join(pathToSdk, 'bin', pubExeName);
+  String get pathToPubExe => _pathToPubExe ??= which(pubExeName).path;
+
+  String _pathToDartToNativeExe;
 
   /// file path to the 'dart2native' command.
   String get pathToDartToNativeExe =>
-      p.join(pathToSdk, 'bin', dart2NativeExeName);
+      _pathToDartToNativeExe ??= which(dart2NativeExeName).path;
 
   int get versionMajor {
     var parts = version.split('.');
@@ -259,11 +251,8 @@ class DartSdk {
     return installDir;
   }
 
-  /// Fetchs the list of available dart versions from 
-  List<String> fetchVersions()
-  {
-
-  }
+  /// Fetchs the list of available dart versions from
+  // List<String> fetchVersions() {}
 
   String _fetchDartSdk() {
     var bitness = SysInfo.kernelBitness;
