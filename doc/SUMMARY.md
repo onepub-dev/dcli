@@ -60,7 +60,8 @@
 
 ---
 
-* [Contributing](contributing.md)
+* [Contributing](contributing/README.md)
+  * [Running Unit tests](contributing/running-unit-tests.md)
 * [Creating a release](creating-a-release.md)
 * [References](references.md)
 

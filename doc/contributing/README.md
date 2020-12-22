@@ -99,58 +99,7 @@ To switch back to the pub-cache version of dcli
 pub global activate dcli
 ```
 
-### Running unit tests.
-
-Running DCli unit tests can be a little tricky as they perform write operations on your file system. In particular the install unit tests will delete your dcli installation which is rather inconvenient.
-
-DCli ships with a number of tools to help you manage this problem.
-
-DCli unit tests are split into two folders. `dcli/tests` is the standard location for unit tests. You can run these unit tests from within vscode using the standard unit test tools.
-
-These unit tests all write to your `/tmp` folder and are safe to run.
-
-You can also run the unit tests from the cli by running:
-
-```text
-cd ~/dcli
-tool/run_unit_tests.dart
-```
-
-Alternatively you can run the unit tests from a docker container as noted below.
-
-### install unit\_tests.
-
-The install unit\_tests are located under `dcli/test_install`
-
-These unit tests are, by design, destructive as they need to delete your current dcli install and recreated it.
-
-To avoid interfering with your local system the DCli source includes a number of docker containers to run your unit tests.
-
-Under the `dcli/docker` folder you will find docker containers and dcli scripts to run those containers.
-
-To run the install unit\_test there are two containers and two dcli scripts.
-
-`install.local.df and install.local.dart`
-
-The install.local pair allow you to run the unit tests using your local dcli source. To run the install unit tests run:
-
-```text
-cd dcli/docker
-./install.local.dart
-```
-
-`install.clone.df and install.clone.dart`
-
-This pair runs the install scripts by first cloning the git repo and running the scripts against the cloned repo.
-
-The docker file pulls the repo from the main dcli github site. You may want to modify the repo to point to your forked repo.
-
-To run the dcli install unit tests from the cloned git repo run:
-
-```text
-cd dcli/docker
-./install.clone.dart
-```
+### 
 
 ### Raising a Pull Request \(PR\)
 
