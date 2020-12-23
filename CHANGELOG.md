@@ -1,3 +1,6 @@
+# 0.38.0
+change calls to  'pub' to 'dart pub'.
+
 # 0.37.2
 finally fixed the clearLine method. Looks like it was the flush in the echo method that was causing the problem. Now using stdout.write directly.
 
