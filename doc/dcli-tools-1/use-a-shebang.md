@@ -31,7 +31,7 @@ You do NOT need the DCli tools if you just want to use the DCli API but they are
 If you want to use the DCli tools you must first activate them.
 
 ```bash
-pub global activate dcli
+dart pub global activate dcli
 dcli install
 ```
 

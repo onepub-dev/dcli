@@ -3,7 +3,7 @@
 To get started with DCli you first need to install Dart and optionally the DCli tools.
 
 {% hint style="info" %}
-If you just want to use the DCli library then you don't need to install the [DCli tools](dcli-tools-1/dcli-tools.md).
+If you just want to use the DCli library then you don't need to install the [DCli tools](../dcli-tools-1/dcli-tools.md).
 {% endhint %}
 
 There are three methods for installing Dart and the DCli tools.
@@ -29,12 +29,12 @@ Start by installing Dart as per:
 Install Dart from : [https://dart.dev/get-dart](https://dart.dev/get-dart)
 {% endhint %}
 
-If you want to use the [DCli tools](dcli-tools-1/dcli-tools.md), including Shebang \(\#!\) support you need to globally activate DCli.
+If you want to use the [DCli tools](../dcli-tools-1/dcli-tools.md), including Shebang \(\#!\) support you need to globally activate DCli.
 
 Now activate the DCli tools:
 
 ```text
-pub global activate dcli
+dart pub global activate dcli
 dcli install
 ```
 

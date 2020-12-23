@@ -7,7 +7,7 @@ Any of your scripts which use DCli will need to have their pubspec.yaml  manuall
 Once you have updated the version you need to run pub upgrade:
 
 ```text
-pub upgrade
+dart pub upgrade
 ```
 
 If you are using the DCli tools then you will need to upgrade the tools:
@@ -15,7 +15,7 @@ If you are using the DCli tools then you will need to upgrade the tools:
 We run the same process as we did when installing DCli to upgraded it.
 
 ```text
-pub global activate dcli
+dart pub global activate dcli
 dcli install
 ```
 
