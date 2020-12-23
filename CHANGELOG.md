@@ -1,3 +1,11 @@
+# 0.37.2
+finally fixed the clearLine method. Looks like it was the flush in the echo method that was causing the problem. Now using stdout.write directly.
+
+# 0.38.0
+finally fixed the clearLine method. Looks like it was the flush in the echo method that was causing the problem. Now using stdout.write directly.
+Finally got clearLine to work. Echo flushing stdio was causing the problem.
+released 0.37.1
+
 # 0.37.1
 Updated the path to use a test script rather than the eample directory.
 Fixed a bug with resolving symbolic links when the link was to a directory.
