@@ -23,8 +23,6 @@ class _Echo extends DCliFunction {
     } else {
       stdout.write(text);
     }
-    // remove the flush as it was stopping
-    // ansi escape sequences working.
-    // waitForEx<dynamic>(stdout.flush());
+    waitForEx<dynamic>(stdout.flush());
   }
 }

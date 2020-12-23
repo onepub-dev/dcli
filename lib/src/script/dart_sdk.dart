@@ -323,7 +323,7 @@ class DartSdk {
     final term = Terminal();
     final percentage = Format.percentage(progress.progress, 1);
     if (term.isAnsi) {
-      term.clearLine(mode: TerminalClearMode.all);
+      term.clearLine();
       term.startOfLine();
       echo(
           '${EnumHelper.getName(progress.status).padRight(15)}${Format.bytesAsReadable(progress.downloaded)}/${Format.bytesAsReadable(progress.length)} $percentage');

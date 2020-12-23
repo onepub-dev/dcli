@@ -1,7 +1,5 @@
 import 'dart:io';
 
-import '../functions/echo.dart';
-
 import 'ansi.dart';
 
 ///
@@ -47,18 +45,18 @@ class Terminal {
     if (!Ansi.isSupported) return;
     switch (mode) {
       // case AnsiClearMode.scrollback:
-      //   echo('${esc}3J', newline: false);
+      //   write('${esc}3J', newline: false);
       //   break;
 
       case TerminalClearMode.all:
         // print('clearing screen');
-        echo('${Ansi.esc}2Jm');
+        write('${Ansi.esc}2Jm');
         break;
       case TerminalClearMode.fromCursor:
-        echo('${Ansi.esc}0Jm');
+        write('${Ansi.esc}0Jm');
         break;
       case TerminalClearMode.toCursor:
-        echo('${Ansi.esc}1Jm');
+        write('${Ansi.esc}1Jm');
         break;
     }
   }
@@ -69,14 +67,14 @@ class Terminal {
     switch (mode) {
       // case AnsiClearMode.scrollback:
       case TerminalClearMode.all:
-        echo('\r');
-        echo('${Ansi.esc}2K');
+        write('\r');
+        write('${Ansi.esc}2K');
         break;
       case TerminalClearMode.fromCursor:
-        echo('${Ansi.esc}0K');
+        write('${Ansi.esc}0K');
         break;
       case TerminalClearMode.toCursor:
-        echo('${Ansi.esc}1K');
+        write('${Ansi.esc}1K');
         break;
     }
   }
@@ -91,20 +89,22 @@ class Terminal {
   /// 1 is the first column
   // ignore: avoid_setters_without_getters
   set column(int column) {
-    echo('${Ansi.esc}${column}G');
+    write('${Ansi.esc}${column}G');
   }
 
   /// Moves the cursor to the start of previous line.
   static void previousLine() {
-    echo('${Ansi.esc}0F');
+    write('${Ansi.esc}0F');
   }
 
   /// show/hide the cursor
   void showCursor({bool show}) {
     if (show) {
-      echo('${Ansi.esc}?25h');
+      write('${Ansi.esc}?25h');
     } else {
-      echo('${Ansi.esc}?25l');
+      write('${Ansi.esc}?25l');
     }
   }
+
+  static void write(String text) => stdout.write(text);
 }
