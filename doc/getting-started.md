@@ -8,7 +8,7 @@ If you just want to use the DCli library then you don't need to install the [DCl
 
 There are three methods for installing Dart and the DCli tools.
 
-## Use DCli library from your project Option 1
+## Option 1\) Use DCli library from your project 
 
 If you only want to use the DCli library then you can add DCli to your pubspec.yaml as you would any other package.
 
@@ -21,7 +21,7 @@ Check pub.dev for the latest version no.
 
 [https://pub.dev/packages/dcli/install](https://pub.dev/packages/dcli/install)
 
-## Install Dart/DCli Option 2
+## Option 2\) Install Dart/DCli 
 
 Start by installing Dart as per:
 
@@ -31,8 +31,6 @@ Install Dart from : [https://dart.dev/get-dart](https://dart.dev/get-dart)
 
 If you want to use the [DCli tools](dcli-tools-1/dcli-tools.md), including Shebang \(\#!\) support you need to globally activate DCli.
 
-If you only want to use the DCli API then you can skip this step.
-
 Now activate the DCli tools:
 
 ```text
@@ -40,7 +38,7 @@ pub global activate dcli
 dcli install
 ```
 
-## Install Dart/DCli Option 3
+## Option 3\) Install Dart/DCli 
 
 This is still a work in progress but is intended to provide a three line script to install Dart and the DCli tools.
 
