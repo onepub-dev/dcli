@@ -1,3 +1,6 @@
+# 0.39.1
+Fixed bug for windows cmd shell when running isPriviligedUser
+
 # 0.39.0
 Removed the development mode requirement for dcli as we no longer symlink under windows.
 Added notes on the symlink methods for running under windows.
