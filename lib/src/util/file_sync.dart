@@ -194,6 +194,16 @@ class FileSync {
 /// Creates a link at [linkPath] which points to an
 /// existing file or directory at [existingPath]
 ///
+/// On Windows you need to be in developer mode or running as an Administrator
+/// to create a symlink.
+///
+/// To enable developer mode see:
+/// https://bsutton.gitbook.io/dcli/getting-started/installing-on-windows
+///
+/// To check if your script is running as an administrator use:
+///
+/// [Shell.current.isPrivileged]
+///
 void symlink(
   String existingPath,
   String linkPath,
@@ -204,6 +214,16 @@ void symlink(
 
 ///
 /// Deletes the symlink at [linkPath]
+///
+/// On Windows you need to be in developer mode or running as an Administrator
+/// to delete a symlink.
+///
+/// To enable developer mode see:
+/// https://bsutton.gitbook.io/dcli/getting-started/installing-on-windows
+///
+/// To check if your script is running as an administrator use:
+///
+/// [Shell.current.isPrivileged]
 ///
 void deleteSymlink(String linkPath) {
   final link = Link(linkPath);
