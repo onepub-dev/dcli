@@ -28,6 +28,20 @@ class PowerShell with WindowsMixin, ShellMixin {
   }
 
   @override
+  bool get isPrivilegedUser {
+    final currentPrincipal =
+        'New-Object Security.Principal.WindowsPrincipal([Security.Principal.WindowsIdentity]::GetCurrent())'
+            .firstLine;
+    Settings().verbose('currentPrinciple: $currentPrincipal');
+    final isPrivileged =
+        '$currentPrincipal.IsInRole([Security.Principal.WindowsBuiltInRole]::Administrator)'
+            .firstLine;
+    Settings().verbose('isPrivileged: $isPrivileged');
+
+    return isPrivileged.toLowerCase() == 'true';
+  }
+
+  @override
   bool get isCompletionInstalled => false;
 
   @override

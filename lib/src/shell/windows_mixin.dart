@@ -33,19 +33,6 @@ mixin WindowsMixin {
     return parts[2] == '0x1';
   }
 
-  bool get isPrivilegedUser {
-    final currentPrincipal =
-        'New-Object Security.Principal.WindowsPrincipal([Security.Principal.WindowsIdentity]::GetCurrent())'
-            .firstLine;
-    Settings().verbose('currentPrinciple: $currentPrincipal');
-    final isPrivileged =
-        '$currentPrincipal.IsInRole([Security.Principal.WindowsBuiltInRole]::Administrator)'
-            .firstLine;
-    Settings().verbose('isPrivileged: $isPrivileged');
-
-    return isPrivileged.toLowerCase() == 'true';
-  }
-
   bool install({bool installDart = true}) {
     return WindowsDCliInstaller().install(installDart: installDart);
   }
