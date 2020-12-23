@@ -1,3 +1,7 @@
+# 0.37.1
+Updated the path to use a test script rather than the eample directory.
+Fixed a bug with resolving symbolic links when the link was to a directory.
+
 # 0.37.0
 We now take pub from the PATH rather than calculating it from the dart directory as on some systems its not in the dart-sdk dir.
 moved from pedantic to lint and removed all of the lint warnings.
