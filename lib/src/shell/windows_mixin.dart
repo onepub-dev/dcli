@@ -4,15 +4,17 @@ import '../script/commands/install.dart';
 
 mixin WindowsMixin {
   String checkInstallPreconditions() {
-    if (!inDeveloperMode()) {
-      return '''
-You must be running in Windows Developer Mode to install DCli.
-Read additional details here: https://github.com/bsutton/dcli/wiki/Installing-DCli#windows''';
-    }
+//     if (!inDeveloperMode()) {
+//       return '''
+// You must be running in Windows Developer Mode to install DCli.
+// Read additional details here: https://bsutton.gitbook.io/dcli/getting-started/installing-on-windows''';
+//     }
     return null;
   }
 
   /// Windows 10+ has a developer mode that needs to be enabled to create symlinks without escalated prividedges.
+  /// For details on enabling dev mode on windows see:
+  /// https://bsutton.gitbook.io/dcli/getting-started/installing-on-windows
   bool inDeveloperMode() {
     /// Example result:
     /// <blank line>
