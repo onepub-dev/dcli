@@ -6,9 +6,22 @@ To get started with DCli you first need to install Dart and optionally the DCli 
 If you just want to use the DCli library then you don't need to install the [DCli tools](dcli-tools-1/dcli-tools.md).
 {% endhint %}
 
-There are two methods for installing Dart and the DCli tools.
+There are three methods for installing Dart and the DCli tools.
 
-## Install Dart/DCli Option 1
+## Use DCli library from your project Option 1
+
+If you only want to use the DCli library then you can add DCli to your pubspec.yaml as you would any other package.
+
+```yaml
+dependencies:
+  dcli: 0.37.0
+```
+
+Check pub.dev for the latest version no.
+
+[https://pub.dev/packages/dcli/install](https://pub.dev/packages/dcli/install)
+
+## Install Dart/DCli Option 2
 
 Start by installing Dart as per:
 
@@ -27,7 +40,7 @@ pub global activate dcli
 dcli install
 ```
 
-## Install Dart/DCli Option 2
+## Install Dart/DCli Option 3
 
 This is still a work in progress but is intended to provide a three line script to install Dart and the DCli tools.
 
