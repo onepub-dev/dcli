@@ -211,19 +211,27 @@ void deleteSymlink(String linkPath) {
 }
 
 ///
-/// Resolves the a symbolic link
+/// Resolves the a symbolic link [pathToLink]
 /// to the ultimate target path.
+///
 /// The return path will be canonicalized.
 ///
 /// e.g.
+/// ```dart
 /// resolveSymLink('/usr/bin/dart) == '/usr/lib/bin/dart'
+/// ```
 ///
-/// throws a FileSystemException if the
-/// target path does not exist.
-String resolveSymLink(String path) {
-  final normalised = canonicalize(path);
-  final file = FileSync(normalised);
-  return canonicalize(file.resolveSymLink());
+/// throws a FileSystemException if the target path does not exist.
+String resolveSymLink(String pathToLink) {
+  final normalised = canonicalize(pathToLink);
+
+  String resolved;
+  if (isDirectory(normalised)) {
+    resolved = Directory(normalised).resolveSymbolicLinksSync();
+  } else {
+    resolved = canonicalize(File(normalised).resolveSymbolicLinksSync());
+  }
+  return resolved;
 }
 
 ///
