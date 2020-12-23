@@ -14,6 +14,6 @@ import 'package:dcli/src/util/terminal.dart';
 
 void main() {
   print('Hello World');
-  Terminal().clearScreen(mode: TerminalClearMode.all);
+  Terminal().clearScreen();
   print('Hello World');
 }
