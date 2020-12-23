@@ -1,3 +1,8 @@
+# 0.39.0
+Removed the development mode requirement for dcli as we no longer symlink under windows.
+Added notes on the symlink methods for running under windows.
+Improved the version message when dcli install hasn't been run.
+
 # 0.38.0
 change calls to  'pub' to 'dart pub'.
 
