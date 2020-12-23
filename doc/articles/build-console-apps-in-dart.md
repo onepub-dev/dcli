@@ -34,7 +34,7 @@ Start by installing Dart:
 Now install DCli:
 
 ```text
-pub global activate dcli
+dart pub global activate dcli
 dcli install
 ```
 

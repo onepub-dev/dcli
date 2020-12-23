@@ -34,7 +34,7 @@ If you want to use the [DCli tools](dcli-tools-1/dcli-tools.md), including Sheba
 Now activate the DCli tools:
 
 ```text
-pub global activate dcli
+dart pub global activate dcli
 dcli install
 ```
 

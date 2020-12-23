@@ -5,7 +5,7 @@
 The install command MUST be run after you activate dcli to complete the dcli install.
 
 ```dart
-pub global activate dcli
+dart pub global activate dcli
 dcli install
 ```
 

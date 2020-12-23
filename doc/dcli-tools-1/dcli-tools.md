@@ -7,7 +7,7 @@ If you are just using the DCli library then you can safely ignore the DCli tools
 If you want to use the DCli tools then you must first install them:
 
 ```bash
-pub global activate dcli
+dart pub global activate dcli
 dcli install
 ```
 
