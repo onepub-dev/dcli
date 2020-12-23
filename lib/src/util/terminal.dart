@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import '../functions/echo.dart';
 
 import 'ansi.dart';
@@ -40,7 +42,7 @@ class Terminal {
   bool get isAnsi => Ansi.isSupported;
 
   ///
-  void clearScreen({TerminalClearMode mode}) {
+  void clearScreen({TerminalClearMode mode = TerminalClearMode.all}) {
     //print('clearing screen');
     if (!Ansi.isSupported) return;
     switch (mode) {
@@ -62,18 +64,19 @@ class Terminal {
   }
 
   ///
-  void clearLine({TerminalClearMode mode}) {
+  void clearLine({TerminalClearMode mode = TerminalClearMode.all}) {
     if (!Ansi.isSupported) return;
     switch (mode) {
       // case AnsiClearMode.scrollback:
       case TerminalClearMode.all:
-        echo('${Ansi.esc}[2K');
+        echo('\r');
+        echo('${Ansi.esc}2K');
         break;
       case TerminalClearMode.fromCursor:
-        echo('${Ansi.esc}[0K');
+        echo('${Ansi.esc}0K');
         break;
       case TerminalClearMode.toCursor:
-        echo('${Ansi.esc}[1K');
+        echo('${Ansi.esc}1K');
         break;
     }
   }

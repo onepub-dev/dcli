@@ -36,6 +36,6 @@ class Ansi {
   static void get resetEmitAnsi => _emitAnsi = null;
 
   /// ANSI Control Sequence Introducer, signals the terminal for new settings.
-  static const esc = '\x1B[';
+  static const esc = '\x1b[';
   // static const esc = '\u001b[';
 }
