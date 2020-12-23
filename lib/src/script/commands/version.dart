@@ -32,6 +32,8 @@ class VersionCommand extends Command {
     if (location == null) {
       printerr(red('Error: dcli is not on your path. Run "dcli install"'));
     }
+
+    location ??= 'Not installed';
     // expand symlink
     location = File(location).resolveSymbolicLinksSync();
 
