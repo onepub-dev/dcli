@@ -87,7 +87,7 @@ class DartSdk {
   }
 
   /// From 2.10 onwards we use the dart compile option rather than dart2native.
-  bool get useDartCompiler {
+  bool get useDartCommand {
     final platform = Platform.version;
     final parts = platform.split(' ');
     final dartVersion = Version.parse(parts[0]);
@@ -102,7 +102,7 @@ class DartSdk {
     final runArgs = <String>[];
 
     RunnableProcess process;
-    if (useDartCompiler) {
+    if (useDartCommand) {
       /// use dart compile exe
       runArgs.add('compile');
       runArgs.add('exe');
@@ -137,9 +137,16 @@ class DartSdk {
   /// runs 'pub get'
   void runPubGet(String workingDirectory,
       {Progress progress, bool compileExecutables}) {
-    final process = RunnableProcess.fromCommandArgs(
-        pathToPubExe, ['get', '--no-precompile'],
-        workingDirectory: workingDirectory);
+    RunnableProcess process;
+    if (useDartCommand) {
+      process = RunnableProcess.fromCommandArgs(
+          pathToDartExe, ['pub', 'get', '--no-precompile'],
+          workingDirectory: workingDirectory);
+    } else {
+      process = RunnableProcess.fromCommandArgs(
+          pathToPubExe, ['get', '--no-precompile'],
+          workingDirectory: workingDirectory);
+    }
 
     process.start();
 
@@ -335,6 +342,14 @@ class DartSdk {
       }
       _progressSuppressor++;
       if (_progressSuppressor > 1000) _progressSuppressor = 0;
+    }
+  }
+
+  void globalActivate(String package) {
+    if (useDartCommand) {
+      '${DartSdk().pathToDartExe} pub global activate dcli'.run;
+    } else {
+      '${DartSdk().pathToPubExe} global activate dcli'.run;
     }
   }
 }

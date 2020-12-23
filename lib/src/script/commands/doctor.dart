@@ -125,7 +125,7 @@ class DoctorCommand extends Command {
       'which: ${privatePath(dartPath)}'
     ]);
 
-    if (DartSdk().useDartCompiler) {
+    if (DartSdk().useDartCommand) {
       _colprint(['compiler', "using 'dart compile exe'"]);
     } else {
       _colprint(['compiler', "using 'dart2native'"]);
@@ -145,20 +145,25 @@ class DoctorCommand extends Command {
       }
     }
     print('');
-    final pubPath = which(DartSdk.pubExeName).path;
 
-    if (pubPath != null) {
-      _colprint([
-        'pub path',
-        privatePath(DartSdk().pathToPubExe),
-        'which: ${privatePath(pubPath)}'
-      ]);
-      _colprint(['Pub cache', privatePath(PubCache().pathTo)]);
+    if (DartSdk().useDartCommand) {
+      _colprint(['pub', "using 'dart pub'"]);
     } else {
-      _colprint([
-        'pub path',
-        'Not Found',
-      ]);
+      final pubPath = which(DartSdk.pubExeName).path;
+
+      if (pubPath != null) {
+        _colprint([
+          'pub path',
+          privatePath(DartSdk().pathToPubExe),
+          'which: ${privatePath(pubPath)}'
+        ]);
+      } else {
+        _colprint([
+          'pub path',
+          'Not Found',
+        ]);
+      }
+      _colprint(['Pub cache', privatePath(PubCache().pathTo)]);
     }
   }
 

@@ -151,13 +151,13 @@ class InstallCommand extends Command {
       }
     }
 
-    // the dcli executable has just been installed by pub global activate
+    // the dcli executable has just been installed by dart pub global activate
     final dcliLocation = join(PubCache().pathToBin, DCliPaths().dcliName);
     // check if dcli is on the path
     if (dcliLocation == null) {
       print('');
       print('ERROR: dcli was not found on your path!');
-      print("Try running 'pub global activate dcli' again.");
+      print("Try running 'dart pub global activate dcli' again.");
       print('  otherwise');
       print('Try to resolve the problem and then run dcli install again.');
       print('dcli is normally located in ${PubCache().pathToBin}');

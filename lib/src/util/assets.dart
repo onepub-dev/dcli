@@ -9,7 +9,7 @@ import '../../dcli.dart';
 ///
 /// TO A POINT!
 ///
-/// Applications deployed using `pub global activate` or if you are just
+/// Applications deployed using `dart pub global activate` or if you are just
 /// running from a local source directory then your app will have access to their
 /// assets.
 ///

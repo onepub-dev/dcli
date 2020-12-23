@@ -126,7 +126,7 @@ Something went wrong, the dcli path or HOME for unit tests is NOT pointing to /t
   }
 
   void installDCli() {
-    'pub global activate --source path .'.run;
+    'dart pub global activate --source path .'.run;
 
     which('dcli').paths.forEach(print);
 

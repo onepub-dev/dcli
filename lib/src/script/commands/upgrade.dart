@@ -25,10 +25,9 @@ class UpgradeCommand extends Command {
 
     print(red('Upgrading dcli...'));
     print('Current version $currentVersion');
-    startFromArgs(DartSdk().pathToPubExe, ['global', 'activate', 'dcli'],
-        progress: Progress.print());
+    DartSdk().globalActivate('dcli');
 
-    Settings().verbose('pub global activate dcli finished');
+    Settings().verbose('dart pub global activate dcli finished');
 
     upgradeVersion(currentVersion);
 

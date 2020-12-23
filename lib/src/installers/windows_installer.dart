@@ -18,7 +18,8 @@ class WindowsDCliInstaller {
 
     'setx PATH "${PATH.join(Env().delimiterForPATH)}"'.run;
 
-    '${DartSdk().pathToPubExe} global activate dcli'.run;
+    DartSdk().globalActivate('dcli');
+    
 
     return installedDart;
   }

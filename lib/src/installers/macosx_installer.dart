@@ -14,7 +14,7 @@ class MacOsxDCliInstaller {
     // The normal dart detection process won't work here
     // as dart is not on the path so for the moment so we hard code it.
     // CONSIDER a way of identifying where dart has been installed to.
-    '/usr/lib/dart/bin/pub global activate dcli'.run;
+    '/usr/lib/dart/bin/dart pub global activate dcli'.run;
 
     // we currently never install dart.
     return false;

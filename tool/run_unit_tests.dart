@@ -28,7 +28,7 @@ void main() {
   DartProject.fromPath(root).warmup();
 
   print('Run unit tests from $root');
-  '${DartSdk().pathToPubExe} run test -j1 --coverage ${join(root, 'coverage')}'
+  '${DartSdk().pathToDartExe} pub run test -j1 --coverage ${join(root, 'coverage')}'
       .start(nothrow: true, workingDirectory: root);
 
   // cleanup temp

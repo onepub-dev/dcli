@@ -122,7 +122,6 @@ class TestFileSystem {
         Env.reset();
         PubCache.reset();
         // print('PATH: $PATH');
-        // print(which(DartSdk.pubExeName).firstLine);
         final originalHome = HOME;
         final path = env['PATH'];
         try {
@@ -261,7 +260,7 @@ class TestFileSystem {
 
   void installDCli() {
     /// run pub get and only display errors.
-    '${DartSdk.pubExeName} global activate --source path $pwd'.start(
+    '${DartSdk.dartExeName} pub global activate --source path $pwd'.start(
         progress: Progress((line) => null, stderr: (line) => print(line)));
 
     EntryPoint().process(['install', '--nodart', '--quiet', '--noprivileges']);
