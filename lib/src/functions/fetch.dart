@@ -12,7 +12,7 @@ import 'function.dart';
 import 'is.dart';
 import 'touch.dart';
 
-typedef OnFetchProgress = Future<void> Function(FetchProgress progress);
+typedef OnFetchProgress = void Function(FetchProgress progress);
 
 /// Fetches the given resource at the passed [url].
 ///
@@ -122,7 +122,7 @@ class _Fetch extends DCliFunction {
       final contentLength = response.contentLength;
 
       // we have a response.
-      await _sendProgressEvent(
+      _sendProgressEvent(
           FetchProgress._downloading(fetchUrl, contentLength, 0));
 
       /// prep the save file.
@@ -144,7 +144,7 @@ class _Fetch extends DCliFunction {
           lengthReceived += newBytes.length;
 
           /// progres indicated to cancel the download.
-          await _sendProgressEvent(FetchProgress._downloading(
+          _sendProgressEvent(FetchProgress._downloading(
               fetchUrl, contentLength, lengthReceived));
 
           subscription.resume();
@@ -155,7 +155,7 @@ class _Fetch extends DCliFunction {
         onDone: () async {
           /// down load is complete
           await raf.close();
-          await _sendProgressEvent(
+           _sendProgressEvent(
               FetchProgress._complete(fetchUrl, contentLength, lengthReceived));
           Settings().verbose('Completed downloading: ${fetchUrl.url}');
           unawaited(subscription.cancel());
@@ -164,7 +164,7 @@ class _Fetch extends DCliFunction {
         // ignore: avoid_types_on_closure_parameters
         onError: (Object e, StackTrace st) async {
           // something went wrong.
-          await _sendProgressEvent(FetchProgress._error(fetchUrl));
+           _sendProgressEvent(FetchProgress._error(fetchUrl));
           Settings().verbose(
             'Error downloading: ${fetchUrl.url}',
           );
@@ -178,9 +178,9 @@ class _Fetch extends DCliFunction {
     return completer.future;
   }
 
-  static Future<void> _sendProgressEvent(FetchProgress progress) async {
+  static void _sendProgressEvent(FetchProgress progress) {
     if (progress.fetch.progress != null) {
-      await progress.fetch.progress(progress);
+      progress.fetch.progress(progress);
     }
   }
 }
