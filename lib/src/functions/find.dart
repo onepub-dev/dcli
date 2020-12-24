@@ -225,7 +225,7 @@ class Find extends DCliFunction {
           // https://github.com/dart-lang/sdk/issues/43176
           /// This bug was fixed in 2.10 but we preserve the exclusions for
           /// older versions of dart.
-          if (_is43176Fixed() ||
+          if (_is43176Fixed ||
               (entity.path != '/proc' &&
                   entity.path != '/dev' &&
                   entity.path != '/snap' &&
