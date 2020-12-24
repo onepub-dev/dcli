@@ -140,12 +140,14 @@ class _Fetch extends DCliFunction {
 
           /// we have new data to save.
           await raf.writeFrom(newBytes);
-          subscription.resume();
+
           lengthReceived += newBytes.length;
 
           /// progres indicated to cancel the download.
           await _sendProgressEvent(FetchProgress._downloading(
               fetchUrl, contentLength, lengthReceived));
+
+          subscription.resume();
 
           Settings()
               .verbose('Download progress: $lengthReceived / $contentLength ');
