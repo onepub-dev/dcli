@@ -155,7 +155,7 @@ class _Fetch extends DCliFunction {
         onDone: () async {
           /// down load is complete
           await raf.close();
-           _sendProgressEvent(
+          _sendProgressEvent(
               FetchProgress._complete(fetchUrl, contentLength, lengthReceived));
           Settings().verbose('Completed downloading: ${fetchUrl.url}');
           unawaited(subscription.cancel());
@@ -164,7 +164,7 @@ class _Fetch extends DCliFunction {
         // ignore: avoid_types_on_closure_parameters
         onError: (Object e, StackTrace st) async {
           // something went wrong.
-           _sendProgressEvent(FetchProgress._error(fetchUrl));
+          _sendProgressEvent(FetchProgress._error(fetchUrl));
           Settings().verbose(
             'Error downloading: ${fetchUrl.url}',
           );
