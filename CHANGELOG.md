@@ -1,3 +1,11 @@
+# 0.39.3
+Fixed a bug on osx where the install was looking for dart in the wrong place.
+
+# 0.39.2
+tried removing the futures now we fixed the core problem with the stackoverflow.
+work on stackoverflow - tried leaving the subscription until after the progress event returns.
+attempt to fix the stackoverflow caused by fetch progress events that use the echo function. The progress events are now async which I hope will resolve the issue.
+
 # 0.39.1
 Fixed bug for windows cmd shell when running isPriviligedUser
 
