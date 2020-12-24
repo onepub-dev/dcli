@@ -27,7 +27,7 @@ dependencies:
   yaml: ^2.2.0
 dev_dependencies: 
   effective_dart: ^1.0.0
-  file: ^6.0.0-nullsafetey.1
+  file: ^5.2.1
   lint: ^1.0.0
   mockito: ^4.0.0
   settings_yaml: ^2.1.0

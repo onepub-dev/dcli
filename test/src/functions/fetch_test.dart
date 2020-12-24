@@ -31,8 +31,8 @@ void main() {
         fetch(
             url: '$baseURl/sample.aac',
             saveToPath: sampleAac,
-            fetchProgress: (progress) {
-              print(progress);
+            fetchProgress: (progress) async {
+              print('${progress.progress * 100} %');
             });
         expect(FileSync(sampleAac).length, equals(14951));
         delete(sampleAac);
@@ -41,8 +41,8 @@ void main() {
         fetch(
             url: '$baseURl/sample.wav',
             saveToPath: sampleWav,
-            fetchProgress: (progress) {
-              print(progress);
+            fetchProgress: (progress) async {
+              print('${progress.progress * 100} %');
             });
         expect(FileSync(sampleWav).length, equals(212948));
         delete(sampleWav);
@@ -96,6 +96,6 @@ void main() {
   });
 }
 
-void showProgress(FetchProgress progress) {
-  print(progress);
+Future<void> showProgress(FetchProgress progress) async {
+  print('${progress.progress * 100} %');
 }

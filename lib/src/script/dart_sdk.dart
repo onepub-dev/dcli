@@ -326,7 +326,7 @@ class DartSdk {
   }
 
   int _progressSuppressor = 0;
-  void _showProgress(FetchProgress progress) {
+  Future<void> _showProgress(FetchProgress progress) async {
     final term = Terminal();
     final percentage = Format.percentage(progress.progress, 1);
     if (term.isAnsi) {
