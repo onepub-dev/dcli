@@ -223,10 +223,13 @@ class Find extends DCliFunction {
         if (recursive && type == Find.directory) {
           // processing the /proc directory causes dart to crash
           // https://github.com/dart-lang/sdk/issues/43176
-          if (entity.path != '/proc' &&
-              entity.path != '/dev' &&
-              entity.path != '/snap' &&
-              entity.path != '/sys') {
+          /// This bug was fixed in 2.10 but we preserve the exclusions for
+          /// older versions of dart.
+          if (_is43176Fixed() ||
+              (entity.path != '/proc' &&
+                  entity.path != '/dev' &&
+                  entity.path != '/snap' &&
+                  entity.path != '/sys')) {
             if (nextLevel.length > nextLevelIndex) {
               nextLevel[nextLevelIndex++] = entity;
             } else {
@@ -331,6 +334,13 @@ class Find extends DCliFunction {
   /// pass as a value to the final types argument
   /// to select links to be found
   static const link = FileSystemEntityType.link;
+
+  bool __is43176Fixed;
+
+  /// was fixed in 2.10
+  bool get _is43176Fixed => __is43176Fixed ??=
+      (DartSdk().versionMajor == 2 && DartSdk().versionMinor > 10) ||
+          DartSdk().versionMajor >= 3;
 }
 
 class _PatternMatcher {
