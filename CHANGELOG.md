@@ -1,3 +1,9 @@
+# 0.39.4
+Fixed a bug where the fetch caused an app to not shutdown as we failed to close the client.
+Adding fish shell support
+the method is a getter.
+Code no longer exludes proc et el directories if running 2.10 or later as bug is fixed.
+
 # 0.39.3
 Fixed a bug on osx where the install was looking for dart in the wrong place.
 
