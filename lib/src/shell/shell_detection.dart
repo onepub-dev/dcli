@@ -5,6 +5,7 @@ import 'ash_shell.dart';
 import 'bash_shell.dart';
 import 'cmd_shell.dart';
 import 'dash_shell.dart';
+import 'fish_shell.dart';
 import 'power_shell.dart';
 import 'sh_shell.dart';
 import 'shell_mixin.dart';
@@ -39,6 +40,7 @@ class ShellDetection {
     PowerShell.shellName: (pid) => PowerShell.withPid(pid),
     ShShell.shellName: (pid) => ShShell.withPid(pid),
     ZshShell.shellName: (pid) => ZshShell.withPid(pid),
+    FishShell.shellName: (pid) => FishShell.withPid(pid),
   };
 
   /// obtain a singleton instance of Shell.
