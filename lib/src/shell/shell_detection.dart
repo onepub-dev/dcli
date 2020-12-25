@@ -10,7 +10,7 @@ import 'power_shell.dart';
 import 'sh_shell.dart';
 import 'shell_mixin.dart';
 import 'unknown_shell.dart';
-import 'zshell.dart';
+import 'zsh_shell.dart';
 
 /// The project:
 /// https://github.com/sarugaku/shellingham

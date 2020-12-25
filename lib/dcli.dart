@@ -65,7 +65,7 @@ export 'src/shell/bash_shell.dart';
 export 'src/shell/shell.dart';
 export 'src/shell/unknown_shell.dart';
 export 'src/shell/windows_mixin.dart';
-export 'src/shell/zshell.dart';
+export 'src/shell/zsh_shell.dart';
 export 'src/util/ansi.dart';
 export 'src/util/ansi_color.dart';
 export 'src/util/assets.dart';
