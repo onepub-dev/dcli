@@ -63,6 +63,7 @@
 
 * [Contributing](contributing/README.md)
   * [Running Unit tests](contributing/running-unit-tests.md)
+  * [Implemention support for a shell](contributing/implemention-support-for-a-shell.md)
 * [Creating a release](creating-a-release.md)
 * [References](references.md)
 
