@@ -7,20 +7,6 @@ import 'package:meta/meta.dart';
 /// required by DCli.
 @immutable
 abstract class Shell {
-  ///
-  bool get isCompletionInstalled;
-
-  ///
-  bool get isCompletionSupported;
-
-  bool get isSudo;
-
-  /// If the shell supports tab completion then
-  /// install it.
-  /// If [quiet] is trie the suppress any console output except
-  /// for errors.
-  void installTabCompletion({bool quiet});
-
   /// The name of the shell
   /// e.g. bash
   String get name;
@@ -46,7 +32,21 @@ abstract class Shell {
 
   /// Adds a path to the start script
   /// returns true if adding the path was successful
-  bool addToPATH(String path);
+  bool addToPATH(String path) => false;
+
+  ///
+  bool get isCompletionSupported => false;
+
+  ///
+  bool get isCompletionInstalled => false;
+
+  bool get isSudo => false;
+
+  /// If the shell supports tab completion then
+  /// install it.
+  /// If [quiet] is trie the suppress any console output except
+  /// for errors.
+  void installTabCompletion({bool quiet}) => throw UnimplementedError();
 
   /// Returns the username of the logged in user.
   ///
@@ -58,7 +58,7 @@ abstract class Shell {
   /// Returns true if the current user has esclated
   /// privileges.
   /// e.g. root under posix, Administrator under windows.
-  bool get isPrivilegedUser;
+  bool get isPrivilegedUser => false;
 
   /// Returns a message informing the user that they need to run
   /// as a priviledged user to run an app.
@@ -67,14 +67,14 @@ abstract class Shell {
   /// Installs dart and dcli.
   /// Returns true if dart was installed.
   /// Returns false if dart was already installed.
-  bool install({bool installDart = false});
+  bool install({bool installDart = false}) => false;
 
   /// Some OS/Shell combinations have some preconditions that must
   /// be met before dcli can be installed.
   ///
   /// This method returns a String describing those preconditions
   /// or null if there are no preconditions.
-  String checkInstallPreconditions();
+  String checkInstallPreconditions() => null;
 
   int get pid;
 

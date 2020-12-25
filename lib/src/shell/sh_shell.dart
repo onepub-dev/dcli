@@ -1,4 +1,3 @@
-import '../../dcli.dart';
 import 'posix_mixin.dart';
 import 'shell_mixin.dart';
 

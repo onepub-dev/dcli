@@ -13,17 +13,6 @@ class FishShell with ShellMixin, PosixMixin {
   FishShell.withPid(this.pid);
 
   @override
-  bool get isCompletionSupported => false;
-
-  @override
-  bool get isCompletionInstalled => false;
-
-  @override
-  void installTabCompletion({bool quiet = false}) {
-    throw UnimplementedError();
-  }
-
-  @override
   String get name => shellName;
 
   @override
@@ -42,6 +31,17 @@ class FishShell with ShellMixin, PosixMixin {
 
   @override
   String get pathToStartScript => '~/.config/fish/config.fish';
+
+  @override
+  bool get isCompletionSupported => false;
+
+  @override
+  bool get isCompletionInstalled => false;
+
+  @override
+  void installTabCompletion({bool quiet = false}) {
+    throw UnimplementedError();
+  }
 
   @override
   bool addToPATH(String path) {
