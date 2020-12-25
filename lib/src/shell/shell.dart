@@ -21,20 +21,23 @@ abstract class Shell {
   /// for errors.
   void installTabCompletion({bool quiet});
 
-  /// Returns the path to the shell's start script
-  String get pathToStartScript;
-
-  /// Returns the  name of the shell's startup script
-  /// e.g. .bashrc
-  String get startScriptName;
-
-  /// True if this shell supports a start script.
-  /// e.g. a script that is run by the shell when the shell starts.
-  bool get hasStartScript;
-
   /// The name of the shell
   /// e.g. bash
   String get name;
+
+  /// True if this shell supports a start script or configuration file.
+  /// e.g. a script that is run by the shell or a configuration file
+  /// that is read when the shell starts.
+  bool get hasStartScript;
+
+  /// Returns the  name of the shell's startup script or
+  /// configuration file
+  /// e.g. .bashrc
+  String get startScriptName;
+
+  /// Returns the path to the shell's start script or config file
+  /// e.g /home/<user>/.bashrc
+  String get pathToStartScript;
 
   /// Returns true if the shells name matches
   /// the passed [name].

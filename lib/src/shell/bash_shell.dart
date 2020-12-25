@@ -14,11 +14,6 @@ class BashShell with ShellMixin, PosixMixin {
   BashShell.withPid(this.pid);
 
   @override
-  String get pathToStartScript {
-    return join(HOME, startScriptName);
-  }
-
-  @override
   bool get isCompletionSupported => true;
 
   // adds bash cli completion for dcli
@@ -51,8 +46,46 @@ class BashShell with ShellMixin, PosixMixin {
     }
   }
 
+  /// Adds the given path to the bash path if it isn't
+  /// already on teh path.
+  @override
+  bool addToPATH(String path) {
+    if (!isOnPATH(path)) {
+      final export = 'export PATH=\$PATH:$path';
+
+      final rcPath = pathToStartScript;
+
+      if (!exists(rcPath)) {
+        rcPath.write(export);
+      } else {
+        rcPath.append(export);
+      }
+    }
+    return true;
+  }
+
+  @override
+  bool get isCompletionInstalled {
+    var completeInstalled = false;
+    final startFile = pathToStartScript;
+
+    if (startFile != null) {
+      if (exists(startFile)) {
+        read(startFile).forEach((line) {
+          if (line.contains('dcli_complete')) {
+            completeInstalled = true;
+          }
+        });
+      }
+    }
+    return completeInstalled;
+  }
+
   @override
   String get name => shellName;
+
+  @override
+  bool get hasStartScript => true;
 
   @override
   String get startScriptName {
@@ -60,5 +93,7 @@ class BashShell with ShellMixin, PosixMixin {
   }
 
   @override
-  bool get hasStartScript => true;
+  String get pathToStartScript {
+    return join(HOME, startScriptName);
+  }
 }

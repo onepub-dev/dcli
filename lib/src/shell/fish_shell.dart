@@ -35,10 +35,17 @@ class FishShell with ShellMixin, PosixMixin {
   int get hashCode => name.hashCode;
 
   @override
-  String get startScriptName {
-    throw UnimplementedError;
-  }
+  bool get hasStartScript => true;
 
   @override
-  bool get hasStartScript => false;
+  String get startScriptName => 'config.fish';
+
+  @override
+  String get pathToStartScript => '~/.config/fish/config.fish';
+
+  @override
+  bool addToPATH(String path) {
+    /// todo implement.
+    return false;
+  }
 }

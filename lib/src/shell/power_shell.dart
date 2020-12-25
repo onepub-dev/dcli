@@ -59,11 +59,11 @@ class PowerShell with WindowsMixin, ShellMixin {
   int get hashCode => name.hashCode;
 
   @override
+  bool get hasStartScript => false;
+
+  @override
   String get startScriptName => throw UnimplementedError;
 
   @override
   String get pathToStartScript => throw UnimplementedError;
-
-  @override
-  bool get hasStartScript => false;
 }

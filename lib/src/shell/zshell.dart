@@ -1,3 +1,6 @@
+import 'package:dcli/src/functions/env.dart';
+import 'package:path/path.dart';
+
 import 'posix_mixin.dart';
 
 import 'shell_mixin.dart';
@@ -35,10 +38,17 @@ class ZshShell with ShellMixin, PosixMixin {
   int get hashCode => name.hashCode;
 
   @override
-  String get startScriptName {
-    return '.zshrc';
-  }
+  bool get hasStartScript => true;
 
   @override
-  bool get hasStartScript => true;
+  String get startScriptName => '.zshrc';
+
+  @override
+  String get pathToStartScript => join(HOME, startScriptName);
+
+  @override
+  bool addToPATH(String path) {
+    /// TODO: needs to be implemented.
+    return false;
+  }
 }

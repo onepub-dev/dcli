@@ -1,3 +1,6 @@
+import 'package:dcli/src/functions/env.dart';
+import 'package:path/path.dart';
+
 import 'posix_mixin.dart';
 
 import 'shell_mixin.dart';
@@ -20,15 +23,24 @@ class DashShell with ShellMixin, PosixMixin {
   String get name => shellName;
 
   @override
-  String get startScriptName {
-    return '.dashrc';
-  }
-
-  @override
-  bool get hasStartScript => true;
-
-  @override
   void installTabCompletion({bool quiet = false}) {
     throw UnimplementedError();
   }
+
+  @override
+  bool addToPATH(String path) {
+    return false;
+  }
+
+  @override
+  bool get isCompletionInstalled => false;
+
+  @override
+  bool get hasStartScript => env['ENV'] != null;
+
+  @override
+  String get startScriptName => basename(env['ENV']);
+
+  @override
+  String get pathToStartScript => env['ENV'];
 }

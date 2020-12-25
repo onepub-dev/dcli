@@ -55,10 +55,10 @@ class CmdShell with WindowsMixin, ShellMixin {
   int get hashCode => name.hashCode;
 
   @override
-  String get startScriptName => throw UnimplementedError;
+  bool get hasStartScript => false;
 
   @override
-  bool get hasStartScript => false;
+  String get startScriptName => throw UnimplementedError;
 
   @override
   String get pathToStartScript => throw UnimplementedError;

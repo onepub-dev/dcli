@@ -7,45 +7,6 @@ import '../installers/macosx_installer.dart';
 /// Provides a number of helper functions
 /// when for posix based shells.
 mixin PosixMixin {
-  String get startScriptName;
-
-  String get pathToStartScript {
-    return join(HOME, startScriptName);
-  }
-
-  /// Adds the given path to the zsh path if it isn't
-  /// already on teh path.
-  bool addToPATH(String path) {
-    if (!isOnPATH(path)) {
-      final export = 'export PATH=\$PATH:$path';
-
-      final rcPath = pathToStartScript;
-
-      if (!exists(rcPath)) {
-        rcPath.write(export);
-      } else {
-        rcPath.append(export);
-      }
-    }
-    return true;
-  }
-
-  bool get isCompletionInstalled {
-    var completeInstalled = false;
-    final startFile = pathToStartScript;
-
-    if (startFile != null) {
-      if (exists(startFile)) {
-        read(startFile).forEach((line) {
-          if (line.contains('dcli_complete')) {
-            completeInstalled = true;
-          }
-        });
-      }
-    }
-    return completeInstalled;
-  }
-
   bool get isPrivilegedUser {
     final user = _whoami();
     final privileged = user == 'root';

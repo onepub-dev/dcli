@@ -14,11 +14,6 @@ class ShShell with ShellMixin, PosixMixin {
   ShShell.withPid(this.pid);
 
   @override
-  String get pathToStartScript {
-    return join(HOME, startScriptName);
-  }
-
-  @override
   bool get isCompletionSupported => false;
 
   @override
@@ -35,10 +30,21 @@ class ShShell with ShellMixin, PosixMixin {
   String get name => shellName;
 
   @override
+  bool get hasStartScript => false;
+
+  @override
   String get startScriptName {
     throw UnimplementedError;
   }
 
   @override
-  bool get hasStartScript => false;
+  String get pathToStartScript {
+    throw UnimplementedError;
+  }
+
+  @override
+  bool addToPATH(String path) {
+    /// TODO: implement.
+    return false;
+  }
 }

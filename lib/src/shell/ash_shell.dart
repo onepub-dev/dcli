@@ -1,3 +1,6 @@
+import 'package:path/path.dart';
+
+import '../../dcli.dart';
 import 'posix_mixin.dart';
 
 import 'shell_mixin.dart';
@@ -27,10 +30,21 @@ class AshShell with ShellMixin, PosixMixin {
   String get name => shellName;
 
   @override
+  bool addToPATH(String path) {
+    return false;
+  }
+
+  @override
+  bool get isCompletionInstalled => false;
+
+  @override
+  bool get hasStartScript => true;
+
+  @override
   String get startScriptName {
     return '.ashrc';
   }
 
   @override
-  bool get hasStartScript => true;
+  String get pathToStartScript => join(HOME, startScriptName);
 }
