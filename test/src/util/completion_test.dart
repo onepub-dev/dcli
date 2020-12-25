@@ -77,11 +77,7 @@ void main() {
 
       test('invalid directory', () async {
         paths = completionExpandScripts('muddle/', workingDirectory: root);
-        expect(
-            paths,
-            unorderedEquals(<String>[
-              'middle/',
-            ]));
+        expect(paths, <String>[]);
       });
 
       test('directory and letter', () async {
