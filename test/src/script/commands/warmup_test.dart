@@ -9,14 +9,15 @@ void main() {
   group('warmup using DCli', () {
     test('warmup ', () {
       TestFileSystem().withinZone((fs) {
-        final project = DartProject.fromPath('test/test_script/general');
+        const projectPath = 'test/test_script/general';
+        final project = DartProject.fromPath(projectPath);
 
         project.clean();
         project.warmup();
 
-        expect(exists(join('example', '.dart_tool')), equals(true));
-        expect(exists(join('example', '.packages')), equals(true));
-        expect(exists(join('example', 'pubspec.lock')), equals(true));
+        expect(exists(join(projectPath, '.dart_tool')), equals(true));
+        expect(exists(join(projectPath, '.packages')), equals(true));
+        expect(exists(join(projectPath, 'pubspec.lock')), equals(true));
       });
     });
   });
