@@ -155,10 +155,12 @@ class _Fetch extends DCliFunction {
         onDone: () async {
           /// down load is complete
           await raf.close();
+          await subscription.cancel();
+          client.close();
           _sendProgressEvent(
               FetchProgress._complete(fetchUrl, contentLength, lengthReceived));
           Settings().verbose('Completed downloading: ${fetchUrl.url}');
-          unawaited(subscription.cancel());
+
           completer.complete();
         },
         // ignore: avoid_types_on_closure_parameters
@@ -169,6 +171,9 @@ class _Fetch extends DCliFunction {
             'Error downloading: ${fetchUrl.url}',
           );
           await raf.close();
+          await subscription.cancel();
+          client.close();
+
           completer.completeError(e, st);
         },
         cancelOnError: true,

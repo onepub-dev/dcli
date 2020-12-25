@@ -94,6 +94,31 @@ void main() {
       });
     });
   });
+
+  test('Fetch - shutdown bug', () {
+    final sampleAac = FileSync.tempFile();
+    fetch(
+        url: '$baseURl/sample.aac',
+        saveToPath: sampleAac,
+        fetchProgress: (progress) async {
+          Terminal().clearLine();
+          echo('\r');
+          echo('${progress.progress * 100} %');
+        });
+    expect(FileSync(sampleAac).length, equals(14951));
+    delete(sampleAac);
+
+    final sampleWav = FileSync.tempFile();
+    fetch(
+        url: '$baseURl/sample.wav',
+        saveToPath: sampleWav,
+        fetchProgress: (progress) async {
+          print('${progress.progress * 100} %');
+        });
+    expect(FileSync(sampleWav).length, equals(212948));
+    delete(sampleWav);
+    print('finished');
+  });
 }
 
 Future<void> showProgress(FetchProgress progress) async {
