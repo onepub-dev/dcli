@@ -119,7 +119,10 @@ class Env extends DCliFunction {
     }
   }
 
-  /// returns the PATH environment var.
+  /// returns the PATH environment var as an ordered
+  /// array of the paths contained in the PATH.
+  /// The list is ordered Left to right of the paths in
+  /// the PATH environment var.
   List<String> get _path {
     final pathEnv = this['PATH'];
 
