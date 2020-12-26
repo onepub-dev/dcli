@@ -1,4 +1,11 @@
+import 'package:dcli/dcli.dart';
+import 'package:test/test.dart';
+
 void main() {
+  test('isPrivligedUser', () {
+    Shell.current.isPrivilegedUser;
+  });
+
   /// reduce the scripts privileges
   privileged(enabled: false);
 
