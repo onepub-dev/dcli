@@ -35,8 +35,11 @@ class PubCache {
     }
     if (Settings().isWindows) {
       _pubCacheDir ??= join('Pub', 'Cache');
-      // doco says this is AppData but the dart installer seems to use LocalAppData
-      _pubCachePath ??= truepath(join(env['LocalAppData'], _pubCacheDir));
+      // doco says this is AppData but some installers seem to use LocalAppData
+      _pubCachePath ??= truepath(join(env['AppData'], _pubCacheDir));
+      if (_pubCachePath != null && !exists(_pubCachePath)) {
+        _pubCachePath ??= truepath(join(env['LocalAppData'], _pubCacheDir));
+      }
     } else {
       _pubCacheDir ??= '.pub-cache';
       // determine pub-cache path
