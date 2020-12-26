@@ -385,12 +385,13 @@ class TestFileSystem {
             join(Settings().pathToDCliBin, command));
       } else {
         /// compile and install the command
-        Script.fromFile('test/test_script/general/bin/$command.dart')
-            .compile(install: true);
+        final script =
+            Script.fromFile('test/test_script/general/bin/$command.dart');
+        script.compile(install: true);
+
         // copy it back to the dcli testbin so the next unit
         // test doesn't have to compile it.
-        copy(join(Settings().pathToDCliBin, command),
-            join(testbinPath, command));
+        copy(script.pathToExe, join(testbinPath, script.exeName));
       }
     }
   }
