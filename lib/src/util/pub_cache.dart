@@ -38,7 +38,7 @@ class PubCache {
       // doco says this is AppData but some installers seem to use LocalAppData
       _pubCachePath ??= truepath(join(env['AppData'], _pubCacheDir));
       if (_pubCachePath != null && !exists(_pubCachePath)) {
-        _pubCachePath ??= truepath(join(env['LocalAppData'], _pubCacheDir));
+        _pubCachePath = truepath(join(env['LocalAppData'], _pubCacheDir));
       }
     } else {
       _pubCacheDir ??= '.pub-cache';
@@ -59,15 +59,16 @@ class PubCache {
   /// This method processes PUB_CACHE if it exists.
   String get pathTo => _pubCachePath;
 
-  /// Updates the PUB_CACHE environment variable
+  /// Updates pathTo, pathToBin and the PUB_CACHE environment variable
   /// which will cause pub get (and friends) to look to this
   /// alternate path.
   ///
-  /// This will only affect any child processes spawned from
+  /// This will only affect this script and any child processes spawned from
   /// this script.
   set pathTo(String pathToPubCache) {
     env[envVar] = pathToPubCache;
     _pubCachePath = pathToPubCache;
+    _pubCacheBinPath = truepath(join(_pubCachePath, 'bin'));
   }
 
   /// The fully qualified path to the pub cache's bin directory

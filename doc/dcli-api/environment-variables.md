@@ -33,7 +33,7 @@ You CANNOT change the parent shell's environment variables. This is a security r
 DCli also exposes a number of commonly used environment variables as global getters.
 
 * HOME - your home directory
-* PATH - a list of all the paths that make up you PATH.
+* PATH - a list of all the paths that make up your PATH.
 * pwd - the present working directory.
 
 ```text

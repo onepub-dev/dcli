@@ -107,6 +107,8 @@ class TestFileSystem {
 
   String tempFile({String suffix}) => FileSync.tempFile(suffix: suffix);
 
+  String originalPubCache;
+
   void withinZone(
     void Function(TestFileSystem fs) callback,
   ) {
@@ -121,12 +123,16 @@ class TestFileSystem {
         Settings.reset();
         Env.reset();
         PubCache.reset();
+        originalPubCache = PubCache().pathTo;
         // print('PATH: $PATH');
         final originalHome = HOME;
         final path = env['PATH'];
         try {
           env['HOME'] = fsRoot;
           home = fsRoot;
+
+          /// Force PubCache path to point at the new file system.
+          PubCache().pathTo = join(fsRoot, PubCache().cacheDir);
 
           rebuildPath();
 
@@ -275,14 +281,14 @@ class TestFileSystem {
       print(red('PATH is empty'));
     }
     for (final path in PATH) {
-      if (path.contains(PubCache().pathTo) || path.contains('.dcli')) {
+      if (isWithin(originalPubCache, path) || path.contains('.dcli')) {
         continue;
       }
 
       newPath.add(path);
     }
 
-    newPath.add(join(fsRoot, PubCache().pathToBin));
+    newPath.add(PubCache().pathToBin);
     newPath.add(join(fsRoot, '.dcli', 'bin'));
 
     env['PATH'] = newPath.join(Env().delimiterForPATH);
@@ -296,13 +302,13 @@ class TestFileSystem {
     Settings().setVerbose(enabled: false);
 
     /// tell the world where to find the new pubache.
-    PubCache().pathTo = join(newHome, PubCache().cacheDir);
+    //  PubCache().pathTo = join(newHome, PubCache().cacheDir);
 
     if (!exists(PubCache().pathTo)) {
       createDir(PubCache().pathTo, recursive: true);
     }
 
-    copyTree(join(join(originalHome, PubCache().cacheDir)), PubCache().pathTo);
+    copyTree(originalPubCache, PubCache().pathTo);
 
     print('Reset ${PubCache.envVar} to ${env[PubCache.envVar]}');
 

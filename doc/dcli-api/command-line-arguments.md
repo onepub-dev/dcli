@@ -90,8 +90,7 @@ void main(List<String> args) {
   var command = results.rest[0];
   var home = env['HOME'];
 
-  List<String> paths;
-  paths = env['PATH'].split(':');
+  List<String> paths = Env().path;
 
   for (var path in paths) {
     if (path.startsWith('~')) {
