@@ -51,6 +51,11 @@ mixin WindowsMixin {
   bool get isSudo => false;
 
   static void setPath(List<String> paths) {
+    // TODO: impement notification so desktop apps update their environment.
+    // const char * what = "Environment";
+    // DWORD rv;
+    // SendMessageTimeout( HWND_BROADCAST, WM_SETTINGCHANGE, 0,
+    // 						(LPARAM) what, SMTO_ABORTIFHUNG, 5000, & rv );
     _setRegistryValue(HKEY_CURRENT_USER, "Environment", "PATH",
         paths.join(Env().delimiterForPATH));
   }

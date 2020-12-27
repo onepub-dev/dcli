@@ -6,7 +6,7 @@ import 'package:path/path.dart';
 import 'package:test/test.dart';
 
 void main() {
-  test('setx', () {
+  test('setPath', () {
     const dartToolDir = r'C:\tools\dart-sdk';
 
     /// add the dartsdk path to the windows path.
