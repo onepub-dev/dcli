@@ -59,7 +59,7 @@ The [DCli tools](dcli-tools-1/dcli-tools.md) allow you to run you app without co
 {% endhint %}
 
 ```bash
-dart2native hello.dart
+dart compile exe hello.dart
 Generated: hello.exe
 ./hello.exe
 > Hello World
