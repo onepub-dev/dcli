@@ -1,3 +1,8 @@
+import 'dart:ffi';
+
+import 'package:ffi/ffi.dart';
+import 'package:win32/win32.dart';
+
 import '../../dcli.dart';
 import '../installers/windows_installer.dart';
 import '../script/commands/install.dart';
@@ -44,4 +49,47 @@ mixin WindowsMixin {
   String get loggedInUser => env['USERNAME'];
 
   bool get isSudo => false;
+
+  static void setPath(List<String> paths) {
+    _setRegistryValue(HKEY_CURRENT_USER, "Environment", "PATH",
+        paths.join(Env().delimiterForPATH));
+  }
+
+  // Update a windows value.
+  static void _setRegistryValue(
+      int key, String subKey, String valueName, String value) {
+    /// RegOpenKeyEx
+    final subKeyPtr = TEXT(subKey);
+    final openKeyPtr = allocate<IntPtr>();
+
+    // RegSetValueEx
+    final valueNamePtr = TEXT(valueName);
+    final valuePtr = TEXT(value);
+    final dataType = allocate<Uint32>()..value = REG_EXPAND_SZ;
+
+    final data = allocate<Uint8>(count: value.length + 1);
+    final dataSize = allocate<Uint32>()..value = value.length + 1;
+
+    try {
+      var result = RegOpenKeyEx(key, subKeyPtr, 0, REG_EXPAND_SZ, openKeyPtr);
+      if (result == ERROR_SUCCESS) {
+        result = RegSetValueEx(openKeyPtr.value, valueNamePtr, nullptr,
+            dataType, valuePtr.cast(), dataSize);
+
+        // ignore: invariant_booleans
+        if (result != ERROR_SUCCESS) {
+          throw WindowsException(HRESULT_FROM_WIN32(result));
+        }
+      } else {
+        throw WindowsException(HRESULT_FROM_WIN32(result));
+      }
+    } finally {
+      free(subKeyPtr);
+      free(valueNamePtr);
+      free(openKeyPtr);
+      free(data);
+      free(dataSize);
+    }
+    RegCloseKey(openKeyPtr.value);
+  }
 }

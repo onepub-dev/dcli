@@ -9,14 +9,16 @@ import '../util/pub_cache.dart';
 
 class WindowsDCliInstaller {
   /// returns true if it needed to install dart.
-  bool install({bool installDart}) {
+  bool install({bool installDart = true}) {
     var installedDart = false;
 
     if (installDart) installedDart = _installDart();
 
     Env().addToPATHIfAbsent(Settings().pathToDCliBin);
 
-    'setx PATH "${PATH.join(Env().delimiterForPATH)}"'.run;
+    WindowsMixin.setPath(PATH);
+
+    // 'setx PATH "${PATH.join(Env().delimiterForPATH)}"'.run;
 
     DartSdk().globalActivate('dcli');
 

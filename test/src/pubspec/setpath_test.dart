@@ -16,7 +16,9 @@ void main() {
 
     print(PATH);
 
-    'setx PATH "${PATH.join(Env().delimiterForPATH)}"'.run;
+    WindowsMixin.setPath(PATH);
+
+    // 'setx PATH "${PATH.join(Env().delimiterForPATH)}"'.run;
   }, skip: !Platform.isWindows);
 
   test('PutIfAbsent', () {

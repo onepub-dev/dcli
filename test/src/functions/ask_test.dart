@@ -81,7 +81,7 @@ void main() {
   });
 
   test('ask.integer - failure', () {
-    final AskValidator validator = Ask.integer;
+    const AskValidator validator = Ask.integer;
 
     expect(
         () => validator.validate('a'),
