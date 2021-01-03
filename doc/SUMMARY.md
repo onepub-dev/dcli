@@ -53,6 +53,7 @@
 * [Upgrade DCli](dcli-tools-1/upgrade-dcli.md)
 * [Performance](dcli-tools-1/performance.md)
 * [Docker](dcli-tools-1/docker.md)
+* [Sudo](dcli-tools-1/sudo.md)
 
 ## Internal Workings
 
