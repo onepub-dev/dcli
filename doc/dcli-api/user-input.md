@@ -52,8 +52,6 @@ Password: ******
 
 You can provide a default value. If the user hits enter without entering any text then the default value will be returned.
 
-The defaultValue MUST pass any validators passed to the ask function.
-
 ```dart
 var username = ask('Username:', defaultValue: 'Administrator');
 ```
