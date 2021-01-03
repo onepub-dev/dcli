@@ -51,9 +51,6 @@ import 'echo.dart';
 /// fails to enter a value (just hits the enter key) then the
 /// [defaultValue] is returned.
 ///
-/// If you pass in a [defaultValue] which doesn't pass the [validator] test then
-/// an [AskValidatorException] will be thrown.
-///
 /// Passing a [defaultValue] also modifies the prompt to display the value:
 ///
 /// ```dart
@@ -76,13 +73,13 @@ import 'echo.dart';
 ///
 ///```dart
 ///   var subject = ask( 'Subject');
-///   subject = ask( 'Subject', validator: Ask.required);
-///   subject = ask( 'Subject', validator: AskMinLength(10));
+///   subject = ask( 'Subject', required: true);
+///   subject = ask( 'Subject', validator: Ask.minLength(10));
 ///   var name = ask( 'What is your name?', validator: Ask.alpha);
 ///   var age = ask( 'How old are you?', validator: Ask.integer);
 ///   var username = ask( 'Username?', validator: Ask.email);
-///   var password = ask( 'Password?', hidden: true, validator: AskValidatorMulti([Ask.alphaNumeric, AskValidatorLength(10,16)]));
-///   var color = ask( 'Favourite colour?', AskListValidator(['red', 'green', 'blue']));
+///   var password = ask( 'Password?', hidden: true, validator: Ask.all([Ask.alphaNumeric, AskValidatorLength(10,16)]));
+///   var color = ask( 'Favourite colour?', Ask.inList(['red', 'green', 'blue']));
 ///
 ///```
 String ask(String prompt,
@@ -163,20 +160,10 @@ class Ask extends DCliFunction {
 
     var finalPrompt = prompt;
 
-    /// check the caller isn't being silly
-    if (defaultValue != null) {
-      try {
-        validator.validate(defaultValue);
-      } on AskValidatorException catch (e) {
-        throw AskValidatorException(
-            'The [defaultValue] $defaultValue failed the validator: ${e.message}');
-      }
-
-      /// completely suppress the default value and the prompt if the prompt is empty.
-      if (finalPrompt.isNotEmpty) {
-        /// don't display the default value if hidden is true.
-        finalPrompt = '$finalPrompt [${hidden ? '******' : defaultValue}]';
-      }
+    /// completely suppress the default value and the prompt if the prompt is empty.
+    if (defaultValue != null && finalPrompt.isNotEmpty) {
+      /// don't display the default value if hidden is true.
+      finalPrompt = '$finalPrompt [${hidden ? '******' : defaultValue}]';
     }
 
     String line;
