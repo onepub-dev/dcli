@@ -1,3 +1,7 @@
+# 0.39.5
+Fixes #126 - Does not like dashes in directory name. We now replace any invalid chars in the project name with _.
+Relaxed the requirement that the default value had to pass the validator. It made it hard to initialise the default from an uninitialised settings file.
+
 # 0.39.4
 Fixed a bug where the fetch caused an app to not shutdown as we failed to close the client.
 Adding fish shell support

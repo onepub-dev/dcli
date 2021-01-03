@@ -28,7 +28,7 @@ void main(List<String> args) {
   final command = results.rest[0];
   final home = env['HOME'];
 
-  List<String> paths = PATH;
+  final paths = PATH;
 
   for (var path in paths) {
     if (path.startsWith('~')) {
