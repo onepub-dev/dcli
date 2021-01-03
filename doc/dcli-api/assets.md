@@ -7,7 +7,7 @@ Flutter allows you to bundle assets \(graphics, sounds, ...\) along with your fl
 DCli provides a set of asset management tools and an api to work around this limitation.
 
 {% hint style="info" %}
-If you use these tools to package assets into a package that you are going to publish to pub.dev remember there is a 10MB limit.
+If you use assets in a package that will be publish to pub.dev, remember there is a 10MB limit on the entire dart package.
 {% endhint %}
 
 DCli does this by packaging an asset into a .dart library and then providing an api that allows you to unpack the assets at runtime.
