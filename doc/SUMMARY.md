@@ -33,6 +33,7 @@
 * [Locking](dcli-api/locking.md)
 * [Fetch](dcli-api/fetch.md)
 * [The evils of CD](dcli-api/the-evils-of-cd.md)
+* [Assets](dcli-api/assets.md)
 
 ## Dependency Management <a id="dependency-management-1"></a>
 
@@ -53,6 +54,7 @@
 * [Upgrade DCli](dcli-tools-1/upgrade-dcli.md)
 * [Performance](dcli-tools-1/performance.md)
 * [Docker](dcli-tools-1/docker.md)
+* [Sudo](dcli-tools-1/sudo.md)
 
 ## Internal Workings
 
