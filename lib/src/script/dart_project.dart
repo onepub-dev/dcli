@@ -287,7 +287,8 @@ class DartProject {
 
     copy(join(Settings().pathToTemplate, 'pubspec.yaml.template'),
         pathToPubSpec);
-    replace(pathToPubSpec, '%scriptname%', basename(pathToProjectRoot));
+    replace(pathToPubSpec, '%scriptname%',
+        _replaceInvalidCharactersForName(basename(pathToProjectRoot)));
   }
 
   /// Creates a script using the default template (basic.dart)
@@ -299,5 +300,11 @@ class DartProject {
     );
 
     return Script.fromFile(pathToScript, project: this);
+  }
+
+  /// The name used in the pubspec.yaml must come from the character set [a-z0-9_]
+  /// so wer replace any invalid character with an '_'.
+  String _replaceInvalidCharactersForName(String proposedName) {
+    return proposedName.replaceAll(RegExp('[^a-zA-Z0-9_]'), '_');
   }
 }
