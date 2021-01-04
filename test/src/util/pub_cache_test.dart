@@ -17,8 +17,8 @@ void main() {
           equals(
               join(env['LocalAppData']!, 'Pub', 'Cache', 'bin').toLowerCase()));
     } else {
-      expect(
-          PubCache().pathToBin, equals(join(env['HOME']!, '.pub-cache', 'bin')));
+      expect(PubCache().pathToBin,
+          equals(join(env['HOME']!, '.pub-cache', 'bin')));
     }
   }, skip: false);
 

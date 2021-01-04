@@ -85,6 +85,7 @@ void checkProjectStructure(TestFileSystem fs, String scriptName) {
           recursive: false,
           root: fs.runtimePath(scriptName),
           types: [Find.directory],
-          includeHidden: true).forEach((line) => directories.add(p.basename(line)));
+          includeHidden: true)
+      .forEach((line) => directories.add(p.basename(line)));
   expect(directories, unorderedEquals(<String>['.dart_tool']));
 }

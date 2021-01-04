@@ -83,7 +83,8 @@ class UnknownShell with ShellMixin {
   }
 
   @override
-  void installTabCompletion({bool? quiet = false}) => throw UnimplementedError();
+  void installTabCompletion({bool? quiet = false}) =>
+      throw UnimplementedError();
 
   @override
   bool get isCompletionInstalled => false;

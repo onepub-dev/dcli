@@ -1,3 +1,6 @@
+// @dart=2.9
+// TODO: remove the above when we get past mix-mode.
+
 import 'dart:io';
 
 import 'package:dcli/src/script/entry_point.dart';
