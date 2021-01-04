@@ -49,7 +49,7 @@ This method is still dangerous as if dart decides your script needs to be update
 
 4\) Use withPrivilege
 
-So this method doesn't actually exist as yet but we are working on it.
+So this method doesn't actually exist as yet but we are working on it and hopefully it will be released with 0.40.0.
 
 The intent is to allow you to start your script with sudo but only the parts of your script to that need sudo will actually use it.
 
