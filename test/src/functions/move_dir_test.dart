@@ -6,7 +6,7 @@ import 'package:test/test.dart';
 
 import '../util/test_file_system.dart';
 
-String testFile;
+String? testFile;
 void main() {
   t.group('moveDir', () {
     t.test('empty to ', () {

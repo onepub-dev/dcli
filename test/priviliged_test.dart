@@ -26,7 +26,7 @@ void main() {
   // });
 }
 
-void privileged({bool enabled}) {
+void privileged({required bool enabled}) {
   /// how do I changed from root back to the normal user.
   if (enabled) {
     print('enabled root priviliges');

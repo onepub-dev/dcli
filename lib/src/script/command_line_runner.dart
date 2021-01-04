@@ -7,7 +7,7 @@ import 'flags.dart';
 
 /// Runs a dcli script.
 class CommandLineRunner {
-  static CommandLineRunner _self;
+  static CommandLineRunner? _self;
 
   /// the list of flags set on the command line.
   static List<Flag> globalFlags = [VerboseFlag()];
@@ -21,7 +21,7 @@ class CommandLineRunner {
     if (_self == null) {
       throw Exception('The CommandLineRunner has not been intialised');
     }
-    return _self;
+    return _self!;
   }
 
   /// initialises the [CommandLineRunner]
@@ -32,13 +32,13 @@ class CommandLineRunner {
   CommandLineRunner._internal(this._availableCommands);
 
   /// Process the command line arguments to run the command.
-  int process(List<String> arguments) {
-    int exitCode;
+  int? process(List<String> arguments) {
+    int? exitCode;
 
     var success = false;
 
     // Find the command and run it.
-    Command command;
+    Command? command;
     var cmdArguments = <String>[];
 
     for (var i = 0; i < arguments.length; i++) {
@@ -83,7 +83,7 @@ class CommandLineRunner {
 
     if (success) {
       // get the script name and remaning args as they are the arguments for the command to process.
-      exitCode = command.run(Settings().selectedFlags, cmdArguments);
+      exitCode = command!.run(Settings().selectedFlags, cmdArguments);
     } else {
       throw InvalidArguments('Invalid arguments passed.');
     }

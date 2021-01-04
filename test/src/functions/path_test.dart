@@ -14,7 +14,7 @@ void main() {
       TestFileSystem().withinZone((fs) {
         final paths = setup(fs);
         final cwd = pwd;
-        t.expect(absolute(paths.pathTestDir),
+        t.expect(absolute(paths.pathTestDir!),
             t.equals(join(cwd, paths.pathTestDir)));
       });
     });
@@ -23,14 +23,14 @@ void main() {
       TestFileSystem().withinZone((fs) {
         final paths = setup(fs);
         t.expect(
-            dirname(paths.pathTestDir), t.equals(join(fs.fsRoot, _testDir)));
+            dirname(paths.pathTestDir!), t.equals(join(fs.fsRoot, _testDir)));
       });
     });
 
     t.test('extension', () {
       TestFileSystem().withinZone((fs) {
         final paths = setup(fs);
-        t.expect(extension(join(paths.pathTestDir, paths.testFile)),
+        t.expect(extension(join(paths.pathTestDir!, paths.testFile)),
             t.equals(paths.testExtension));
       });
     });
@@ -38,7 +38,7 @@ void main() {
     t.test('basename', () {
       TestFileSystem().withinZone((fs) {
         final paths = setup(fs);
-        t.expect(basename(join(paths.pathTestDir, paths.testFile)),
+        t.expect(basename(join(paths.pathTestDir!, paths.testFile)),
             t.equals(paths.testFile));
       });
     });
@@ -52,11 +52,11 @@ void main() {
 }
 
 class Paths {
-  String home;
-  String pathTestDir;
-  String testExtension;
-  String testBaseName;
-  String testFile;
+  String? home;
+  String? pathTestDir;
+  String? testExtension;
+  String? testBaseName;
+  String? testFile;
 
   Paths(TestFileSystem fs) {
     home = HOME;

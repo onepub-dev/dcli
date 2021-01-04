@@ -1,7 +1,5 @@
 import 'dart:io';
 
-import 'package:meta/meta.dart';
-
 import '../../dcli.dart';
 import '../util/dcli_exception.dart';
 import '../util/stack_trace_impl.dart';
@@ -113,9 +111,9 @@ class _Is extends DCliFunction {
   /// checks if the given [path] exists.
   ///
   /// Throws [ArgumentError] if [path] is null or an empty string.
-  bool exists(String path, {@required bool followLinks}) {
-    if (path == null || path.isEmpty) {
-      throw ArgumentError('path must not be null or empty');
+  bool exists(String path, {required bool followLinks}) {
+    if (path.isEmpty) {
+      throw ArgumentError('path must not be empty');
     }
 
     Settings().verbose('exists: $path followLinks: $followLinks');
@@ -165,7 +163,7 @@ class _Is extends DCliFunction {
     final user = Shell.current.loggedInUser;
 
     //e.g 755 tomcat bsutton
-    final stat = 'stat -L -c "%a %G %U" "$path"'.firstLine;
+    final stat = 'stat -L -c "%a %G %U" "$path"'.firstLine!;
 
     final parts = stat.split(' ');
 
@@ -202,7 +200,7 @@ class _Is extends DCliFunction {
           'isMemberOfGroup is not Not currently supported on windows');
     }
     // get the list of groups this user belongs to.
-    final groups = 'groups'.firstLine.split(' ');
+    final groups = 'groups'.firstLine!.split(' ');
 
     // is the user a member of the file's group.
     return groups.contains(group);

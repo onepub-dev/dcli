@@ -82,7 +82,7 @@ void main() {
   });
 }
 
-List<String> runChild(String childScript, TestFileSystem fs) {
+List<String?> runChild(String childScript, TestFileSystem fs) {
   /// The run_child.script file will use .run to run [script].
   final runChildScript =
       truepath(join(fs.testScriptPath, 'general/bin', 'run_child.dart'));

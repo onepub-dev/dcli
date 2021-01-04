@@ -6,7 +6,7 @@ import '../util/test_file_system.dart';
 
 String baseURl =
     'https://raw.githubusercontent.com/bsutton/dcli/master/test/src/functions/fetch_downloads';
-String testFile;
+String? testFile;
 void main() {
   group('Fetch Single', () {
     // Don't know how to test this as it writes directly to stdout.

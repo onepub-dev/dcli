@@ -36,6 +36,5 @@ String readHidden() {
     stdin.echoMode = true;
     stdin.lineMode = true;
   }
-
-  return Encoding.getByName('utf-8').decode(line);
+  return Encoding.getByName('utf-8')!.decode(line);
 }

@@ -1,8 +1,6 @@
 import 'dart:async';
 import 'dart:io';
 
-import 'package:meta/meta.dart';
-
 import '../../dcli.dart';
 
 import '../util/progress.dart';
@@ -83,14 +81,9 @@ Progress find(
   bool recursive = true,
   bool includeHidden = false,
   String root = '.',
-  Progress progress,
+  Progress? progress,
   List<FileSystemEntityType> types = const [Find.file],
 }) {
-  ArgumentError.checkNotNull(caseSensitive, 'caseSensitive');
-  ArgumentError.checkNotNull(recursive, 'recursive');
-  ArgumentError.checkNotNull(includeHidden, 'includeHidden');
-  ArgumentError.checkNotNull(root, 'root');
-  ArgumentError.checkNotNull(types, 'types');
   return Find()._find(pattern,
       caseSensitive: caseSensitive,
       recursive: recursive,
@@ -107,9 +100,9 @@ class Find extends DCliFunction {
     bool caseSensitive = false,
     bool recursive = true,
     String root = '.',
-    Progress progress,
+    Progress? progress,
     List<FileSystemEntityType> types = const [Find.file],
-    bool includeHidden,
+    bool includeHidden = false,
   }) {
     var finalroot = root;
     var finalpattern = pattern;
@@ -142,9 +135,9 @@ class Find extends DCliFunction {
     bool caseSensitive = false,
     bool recursive = true,
     String root = '.',
-    Progress progress,
+    final Progress? progress,
     List<FileSystemEntityType> types = const [Find.file],
-    bool includeHidden,
+    bool includeHidden = false,
   }) async {
     var finalroot = root;
     var finalIncludeHidden = includeHidden;
@@ -161,16 +154,15 @@ class Find extends DCliFunction {
       finalIncludeHidden = true;
     }
 
+    final Progress _progress = progress ?? Progress.devNull();
     try {
-      progress ??= Progress.devNull();
-
       Settings().verbose(
           'find: pwd: $pwd root: ${absolute(finalroot)} pattern: $pattern caseSensitive: $caseSensitive recursive: $recursive types: $types ');
       final nextLevel = <FileSystemEntity>[]..length = 100;
       final singleDirectory = <FileSystemEntity>[]..length = 100;
-      final childDirectories = <FileSystemEntity>[]..length = 100;
+      final childDirectories = <FileSystemEntity?>[]..length = 100;
       await _processDirectory(finalroot, finalroot, recursive, types, matcher,
-          finalIncludeHidden, progress, childDirectories);
+          finalIncludeHidden, _progress, childDirectories);
 
       while (childDirectories[0] != null) {
         _zeroElements(nextLevel);
@@ -179,16 +171,16 @@ class Find extends DCliFunction {
             break;
           }
           await _processDirectory(finalroot, directory.path, recursive, types,
-              matcher, finalIncludeHidden, progress, singleDirectory);
+              matcher, finalIncludeHidden, _progress, singleDirectory);
           _appendTo(nextLevel, singleDirectory);
           _zeroElements(singleDirectory);
         }
         _copyInto(childDirectories, nextLevel);
       }
     } finally {
-      progress.close();
+      _progress.close();
     }
-    return progress;
+    return _progress;
   }
 
   Future<void> _processDirectory(
@@ -199,8 +191,8 @@ class Find extends DCliFunction {
       _PatternMatcher matcher,
       bool includeHidden,
       Progress progress,
-      List<FileSystemEntity> nextLevel) async {
-    final lister = Directory(currentDirectory).list(recursive: false);
+      List<FileSystemEntity?> nextLevel) async {
+    final lister = Directory(currentDirectory).list();
     var nextLevelIndex = 0;
 
     final completer = Completer<void>();
@@ -221,20 +213,10 @@ class Find extends DCliFunction {
         /// If we are recursing then we need to add any directories
         /// to the list of childDirectories that need to be recursed.
         if (recursive && type == Find.directory) {
-          // processing the /proc directory causes dart to crash
-          // https://github.com/dart-lang/sdk/issues/43176
-          /// This bug was fixed in 2.10 but we preserve the exclusions for
-          /// older versions of dart.
-          if (_is43176Fixed ||
-              (entity.path != '/proc' &&
-                  entity.path != '/dev' &&
-                  entity.path != '/snap' &&
-                  entity.path != '/sys')) {
-            if (nextLevel.length > nextLevelIndex) {
-              nextLevel[nextLevelIndex++] = entity;
-            } else {
-              nextLevel.add(entity);
-            }
+          if (nextLevel.length > nextLevelIndex) {
+            nextLevel[nextLevelIndex++] = entity;
+          } else {
+            nextLevel.add(entity);
           }
         }
       },
@@ -242,7 +224,7 @@ class Find extends DCliFunction {
       onDone: () => completer.complete(null),
       onError: (Object e, StackTrace st) {
         /// check for and ignore permission denied.
-        if (e is FileSystemException && e.osError.errorCode == 13) {
+        if (e is FileSystemException && e.osError!.errorCode == 13) {
           Settings().verbose('Permission denied: ${e.path}');
         } else {
           throw e;
@@ -256,7 +238,7 @@ class Find extends DCliFunction {
   /// Checks if a hidden file is allowed.
   /// Non-hidden files are always allowed.
   bool _allowed(String root, FileSystemEntity entity,
-      {@required bool includeHidden}) {
+      {required bool includeHidden}) {
     return includeHidden || !_isHidden(root, entity);
   }
 
@@ -279,14 +261,14 @@ class Find extends DCliFunction {
 
   /// set all elements in the array to null so we can re-use the list
   /// to reduce GC.
-  void _zeroElements(List<FileSystemEntity> nextLevel) {
+  void _zeroElements(List<FileSystemEntity?> nextLevel) {
     for (var i = 0; i < nextLevel.length && nextLevel[i] != null; i++) {
       nextLevel[i] = null;
     }
   }
 
-  void _copyInto(List<FileSystemEntity> childDirectories,
-      List<FileSystemEntity> nextLevel) {
+  void _copyInto(List<FileSystemEntity?> childDirectories,
+      List<FileSystemEntity?> nextLevel) {
     _zeroElements(childDirectories);
     for (var i = 0; i < nextLevel.length; i++) {
       if (childDirectories.length > i) {
@@ -297,8 +279,8 @@ class Find extends DCliFunction {
     }
   }
 
-  void _appendTo(List<FileSystemEntity> nextLevel,
-      List<FileSystemEntity> singleDirectory) {
+  void _appendTo(List<FileSystemEntity?> nextLevel,
+      List<FileSystemEntity?> singleDirectory) {
     var index = _firstAvailable(nextLevel);
 
     for (var i = 0; i < singleDirectory.length; i++) {
@@ -314,7 +296,7 @@ class Find extends DCliFunction {
     }
   }
 
-  int _firstAvailable(List<FileSystemEntity> nextLevel) {
+  int _firstAvailable(List<FileSystemEntity?> nextLevel) {
     var firstAvailable = 0;
     while (firstAvailable < nextLevel.length &&
         nextLevel[firstAvailable] != null) {
@@ -334,26 +316,19 @@ class Find extends DCliFunction {
   /// pass as a value to the final types argument
   /// to select links to be found
   static const link = FileSystemEntityType.link;
-
-  bool __is43176Fixed;
-
-  /// was fixed in 2.10
-  bool get _is43176Fixed => __is43176Fixed ??=
-      (DartSdk().versionMajor == 2 && DartSdk().versionMinor > 10) ||
-          DartSdk().versionMajor >= 3;
 }
 
 class _PatternMatcher {
   String pattern;
   String root;
-  RegExp regEx;
+  late RegExp regEx;
   bool caseSensitive;
 
   /// the no. of directories in the pattern
-  int directoryParts;
+  int directoryParts = 0;
 
   _PatternMatcher(this.pattern,
-      {@required this.root, @required this.caseSensitive}) {
+      {required this.root, required this.caseSensitive}) {
     regEx = buildRegEx();
 
     final patternParts = split(dirname(pattern));

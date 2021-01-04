@@ -45,7 +45,7 @@ Future<void> pipeTo2(Future<Process> lhs, Future<Process> rhs) async {
       //ignore: avoid_types_on_closure_parameters
       .catchError((Object e) {
     // forget broken pipe after rhs terminates before lhs
-  }, test: (e) => e is SocketException && e.osError.message == 'Broken pipe');
+  }, test: (e) => e is SocketException && e.osError!.message == 'Broken pipe');
 }
 
 void pipeTo(Future<Process> lhs, Future<Process> rhs) {

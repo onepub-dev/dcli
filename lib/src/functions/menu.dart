@@ -1,7 +1,8 @@
 import 'dart:math';
-import 'package:meta/meta.dart';
 
 import '../../dcli.dart';
+
+String _noFormat<T>(T option) => option.toString();
 
 /// Displays a menu with each of the provided [options], prompts
 /// the user to select an option and returns the selected option.
@@ -37,8 +38,6 @@ import '../../dcli.dart';
 /// var color = menu(prompt: 'Please select a color', options: colors, format: (color) => color.name);
 /// ```
 ///
-/// If [format] is null then [option.toString()] will be used
-/// as the format for the menu option.
 ///
 /// When a [limit] is applied the menu will display the first [limit]
 /// options. If you specify [fromStart: false] then the menu will display the
@@ -49,22 +48,19 @@ import '../../dcli.dart';
 ///
 /// If the [defaultOption] does not match any the supplied [options] then an ArgumentError is thrown.
 ///
-
 T menu<T>(
-    {@required String prompt,
-    @required List<T> options,
-    T defaultOption,
-    int limit,
-    String Function(T) format,
+    {required String prompt,
+    required List<T> options,
+    T? defaultOption,
+    int? limit,
+    String Function(T)? format,
     bool fromStart = true}) {
-  if (options == null || options.isEmpty) {
+  if (options.isEmpty) {
     throw ArgumentError(
         'The list of [options] passed to menu(options: ) was empty.');
   }
-  if (prompt == null) {
-    throw ArgumentError('The [prompt] passed to menu(prompt: ) was null.');
-  }
   limit ??= options.length;
+  format ??= _noFormat;
 
   var displayList = options;
   if (fromStart == false) {
@@ -73,7 +69,7 @@ T menu<T>(
   }
 
   // on the way in we check that the default value acutally exists in the list.
-  String defaultIndex;
+  String? defaultIndex;
   // display each option.
   for (var i = 1; i <= limit; i++) {
     final option = displayList[i - 1];
@@ -81,12 +77,7 @@ T menu<T>(
     if (option == defaultOption) {
       defaultIndex = i.toString();
     }
-    String desc;
-    if (format != null) {
-      desc = format(option);
-    } else {
-      desc = option.toString();
-    }
+    final desc = format(option);
     final no = '$i'.padLeft(3);
     if (defaultOption != null && defaultOption == option) {
       /// highlight the default value.
@@ -110,7 +101,7 @@ T menu<T>(
   while (!valid) {
     final selected =
         ask(prompt, defaultValue: defaultIndex, validator: MenuRange(limit));
-    if (selected == null) continue;
+    if (selected.isEmpty) continue;
     valid = true;
     index = int.parse(selected);
   }

@@ -1,13 +1,16 @@
 import 'dart:convert' as convert;
 
+// ignore: import_of_legacy_library_into_null_safe
 import 'package:csv/csv.dart';
+// ignore: import_of_legacy_library_into_null_safe
 import 'package:ini/ini.dart';
+// ignore: import_of_legacy_library_into_null_safe
 import 'package:yaml/yaml.dart';
 
 /// Provides parsers for a number of common file formats.
 ///
 class Parser {
-  final List<String> _lines;
+  final List<String?> _lines;
 
   /// Creates a Parser with a set of lines that will be interpreted
   /// as a selected file type.
@@ -52,6 +55,6 @@ class Parser {
   /// Interprets the read lines as an ini file.
   /// See https://pub.dev/packages/ini
   Config iniDecode() {
-    return Config.fromStrings(_lines);
+    return Config.fromStrings(_lines as List<String>);
   }
 }

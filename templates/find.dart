@@ -13,6 +13,7 @@ dependencies:
 import 'dart:io';
 import 'package:dcli/dcli.dart';
 import 'package:path/path.dart' as p;
+// ignore: import_of_legacy_library_into_null_safe
 import 'package:args/args.dart';
 
 ///
@@ -43,14 +44,9 @@ void main(List<String> args) {
   final results = parser.parse(args);
 
   final pattern = results['pattern'] as String;
-  final root = results['root'] as String;
+  final root = results['root'] as String? ?? pwd;
   final verbose = results['verbose'] as bool;
   final recursive = results['recursive'] as bool;
-
-  if (pattern == null) {
-    parser.usage;
-    exit(-1);
-  }
 
   if (verbose) {
     print('Verbose is on, starting find');

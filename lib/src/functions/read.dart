@@ -27,7 +27,7 @@ Progress read(String path, {String delim = '\n'}) =>
 Progress readStdin() => _Read()._readStdin();
 
 class _Read extends DCliFunction {
-  Progress read(String path, {String delim, Progress progress}) {
+  Progress read(String path, {String delim = '\n', Progress? progress}) {
     final sourceFile = File(path);
 
     Settings().verbose('read: ${absolute(path)}, delim: $delim');
@@ -43,7 +43,7 @@ class _Read extends DCliFunction {
         .transform(utf8.decoder)
         .transform(const LineSplitter())
         .forEach((line) {
-      progress.addToStdout(line);
+      progress!.addToStdout(line);
     }));
 
     progress.close();
@@ -51,18 +51,18 @@ class _Read extends DCliFunction {
     return progress;
   }
 
-  Progress _readStdin({Progress progress}) {
+  Progress _readStdin({Progress? progress}) {
     Settings().verbose('readStdin');
 
     try {
       progress ??= Progress.devNull();
-      String line;
+      String? line;
 
       while ((line = stdin.readLineSync()) != null) {
         progress.addToStdout(line);
       }
     } finally {
-      progress.close();
+      progress!.close();
     }
 
     return progress;
@@ -72,7 +72,7 @@ class _Read extends DCliFunction {
 /// Thrown when the [read] function encouters an error.
 class ReadException extends DCliFunctionException {
   /// Thrown when the [read] function encouters an error.
-  ReadException(String reason, [StackTraceImpl stacktrace])
+  ReadException(String reason, [StackTraceImpl? stacktrace])
       : super(reason, stacktrace);
 
   @override

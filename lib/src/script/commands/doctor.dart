@@ -22,7 +22,7 @@ class DoctorCommand extends Command {
   int run(List<Flag> selectedFlags, List<String> subarguments) {
     var showScriptDetails = false;
 
-    Script script;
+    late Script script;
     if (subarguments.length == 1) {
       showScriptDetails = true;
       final scriptPath = subarguments[0];
@@ -87,7 +87,7 @@ class DoctorCommand extends Command {
     if (shell.hasStartScript) {
       final startScriptPath = shell.pathToStartScript;
       if (startScriptPath == null) {
-        _colprint(['shell Start Script', privatePath(startScriptPath)]);
+        _colprint(['shell Start Script', privatePath(startScriptPath!)]);
       } else {
         _colprint(['shell Start Script', 'not found']);
       }
@@ -107,7 +107,7 @@ class DoctorCommand extends Command {
     if (Platform.packageConfig == null) {
       _colprint(['package Config', 'not passed']);
     } else {
-      _colprint(['package Config', privatePath(Platform.packageConfig)]);
+      _colprint(['package Config', privatePath(Platform.packageConfig!)]);
     }
   }
 
@@ -117,11 +117,11 @@ class DoctorCommand extends Command {
       'dcli path',
       if (dcliPath == null) 'Not found' else privatePath(dcliPath)
     ]);
-    _colprint(['dart exe path', privatePath(DartSdk().pathToDartExe)]);
-    final dartPath = which(DartSdk.dartExeName).path;
+    _colprint(['dart exe path', privatePath(DartSdk().pathToDartExe!)]);
+    final dartPath = which(DartSdk.dartExeName).path!;
     _colprint([
       'dart path',
-      privatePath(DartSdk().pathToDartExe),
+      privatePath(DartSdk().pathToDartExe!),
       'which: ${privatePath(dartPath)}'
     ]);
 
@@ -134,7 +134,7 @@ class DoctorCommand extends Command {
       if (dart2NativePath != null) {
         _colprint([
           'dart2Native path',
-          privatePath(DartSdk().pathToDartToNativeExe),
+          privatePath(DartSdk().pathToDartToNativeExe!),
           'which: ${privatePath(dart2NativePath)}'
         ]);
       } else {
@@ -154,7 +154,7 @@ class DoctorCommand extends Command {
       if (pubPath != null) {
         _colprint([
           'pub path',
-          privatePath(DartSdk().pathToPubExe),
+          privatePath(DartSdk().pathToPubExe!),
           'which: ${privatePath(pubPath)}'
         ]);
       } else {
@@ -176,7 +176,7 @@ class DoctorCommand extends Command {
     _colprint(['dart version', DartSdk().version]);
   }
 
-  void _colprint(List<String> cols) {
+  void _colprint(List<String?> cols) {
     //cols[0] = green(cols[0]);
     print(Format.row(cols, widths: [17, 55], delimiter: ' '));
   }
@@ -234,8 +234,8 @@ Running 'dcli doctor' provides diagnostic information on your install
 }
 
 class _Owner {
-  String user;
-  String group;
+  String? user;
+  String? group;
 
   _Owner(String path) {
     if (Settings().isWindows) {

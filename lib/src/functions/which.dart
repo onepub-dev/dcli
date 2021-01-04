@@ -50,11 +50,11 @@ import 'env.dart';
 /// ```
 ///
 Which which(String appname,
-        {bool first = true, bool verbose = false, Progress progress}) =>
+        {bool first = true, bool verbose = false, Progress? progress}) =>
     _Which().which(appname, first: first, verbose: verbose, progress: progress);
 
 class Which {
-  String _path;
+  String? _path;
   final _paths = <String>[];
   bool _found = false;
 
@@ -63,12 +63,12 @@ class Which {
   /// of the verbose output. If you passed a [progress]
   /// into the which call then this will be the same progress
   /// otherwse a Progress.devNull will be allocated and returned.
-  Progress progress;
+  Progress? progress;
 
   /// The first path found containing appname
   ///
   /// See [paths] for a list of all paths that contained appname
-  String get path => _path;
+  String? get path => _path;
 
   /// Contains the list of paths that contain appname.
   ///
@@ -87,7 +87,8 @@ class Which {
 class _Which extends DCliFunction {
   ///
   /// Searches the path for the given appname.
-  Which which(String appname, {bool first, bool verbose, Progress progress}) {
+  Which which(String appname,
+      {bool first = true, bool verbose = false, Progress? progress}) {
     final results = Which();
     try {
       progress ??= Progress.devNull();
@@ -109,7 +110,7 @@ class _Which extends DCliFunction {
         }
       }
     } finally {
-      progress.close();
+      progress!.close();
     }
 
     return results;
