@@ -17,7 +17,7 @@ class CreateCommand extends Command {
   /// holds the set of flags passed to the compile command.
   Flags flagSet = Flags();
 
-  Script _script;
+  late Script _script;
 
   ///
   CreateCommand() : super(_commandName);
@@ -25,7 +25,7 @@ class CreateCommand extends Command {
   @override
   int run(List<Flag> selectedFlags, List<String> subarguments) {
     var scriptIndex = 0;
-    DartProject project;
+    late DartProject project;
 
     if (Shell.current.isSudo) {
       printerr('You cannot create a script as sudo.');

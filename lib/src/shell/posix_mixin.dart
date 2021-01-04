@@ -14,7 +14,7 @@ mixin PosixMixin {
     return privileged;
   }
 
-  String get loggedInUser {
+  String? get loggedInUser {
     var user = _whoami();
     if (user == 'root') {
       user = env['SUDO_USER'] ?? 'root';
@@ -23,7 +23,7 @@ mixin PosixMixin {
     return user;
   }
 
-  String _whoami() {
+  String? _whoami() {
     final user = 'whoami'.firstLine;
     Settings().verbose('whoami: $user');
     return user;
@@ -44,5 +44,5 @@ mixin PosixMixin {
   }
 
   /// at this point no posix system has any preconditions.
-  String checkInstallPreconditions() => null;
+  String? checkInstallPreconditions() => null;
 }

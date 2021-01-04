@@ -9,7 +9,7 @@ class DCliException implements Exception {
   final StackTraceImpl stackTrace;
 
   ///
-  DCliException(this.message, [StackTraceImpl stackTrace])
+  DCliException(this.message, [StackTraceImpl? stackTrace])
       : stackTrace = stackTrace ?? StackTraceImpl(skipFrames: 2);
 
   ///
@@ -32,6 +32,6 @@ class DCliException implements Exception {
   }
 
   ///
-  DCliException.from(Object exception, this.stackTrace)
+  DCliException.from(Object? exception, this.stackTrace)
       : message = exception.toString();
 }

@@ -14,10 +14,14 @@ class ScriptRunner {
   ScriptRunner(this._sdk, this.script, this._scriptArguments);
 
   /// Run the script
-  int run() {
+  int? run() {
+    Settings().setVerbose(enabled: true);
     // Prepare VM arguments
     final vmArgs = <String>[];
     vmArgs.add('--enable-asserts');
+
+    /// TODO: remove once we get pass mix-mode null saftey.
+    vmArgs.add('--no-sound-null-safety');
 
     // vmArgs.add(
     //     '--packages=${join(script.pathToProjectRoot, DartSdk().pathToPackageConfig)}');
@@ -30,7 +34,7 @@ class ScriptRunner {
 
     // Execute the script
     final process = waitFor<Process>(Process.start(
-      _sdk.pathToDartExe,
+      _sdk.pathToDartExe!,
       vmArgs,
       mode: ProcessStartMode.inheritStdio,
     ));

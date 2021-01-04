@@ -6,7 +6,7 @@ import '../../dcli.dart';
 
 class MacOsxDCliInstaller {
   /// returns true if it needed to install dart.
-  bool install({bool installDart}) {
+  bool install({required bool installDart}) {
     if (installDart) {
       _installDart();
     }

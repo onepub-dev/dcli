@@ -1,6 +1,6 @@
 import 'dart:io';
+// ignore: import_of_legacy_library_into_null_safe
 import 'package:glob/glob.dart';
-import 'package:meta/meta.dart';
 import '../../dcli.dart';
 import '../script/command_line_runner.dart';
 
@@ -9,13 +9,13 @@ import '../script/command_line_runner.dart';
 /// of arguments.
 class ParsedCliCommand {
   /// The commdand that we parsed from the command line
-  String cmd;
+  String? cmd;
 
   /// The args that we parsed from the command line
-  List<String> args = <String>[];
+  List<String?> args = <String?>[];
 
   ///
-  ParsedCliCommand(String command, String workingDirectory) {
+  ParsedCliCommand(String command, String? workingDirectory) {
     workingDirectory ??= pwd;
     if (!exists(workingDirectory)) {
       throw RunException(command, -1,
@@ -28,7 +28,7 @@ class ParsedCliCommand {
   /// when passed individual args we respect any quotes that are
   /// passed as they have been put there with intent.
   ParsedCliCommand.fromParsed(
-      this.cmd, List<String> rawArgs, String workingDirectory) {
+      this.cmd, List<String?> rawArgs, String? workingDirectory) {
     workingDirectory ??= pwd;
     if (!exists(workingDirectory)) {
       throw RunException('$cmd ${rawArgs.join(' ')}', -1,
@@ -51,7 +51,7 @@ class ParsedCliCommand {
     // when we find a quote this will be storing
     // the quote char (' or ") that we are looking for.
 
-    String matchingQuote;
+    String? matchingQuote;
     var currentPart = '';
 
     for (var i = 0; i < commandLine.length; i++) {
@@ -149,11 +149,11 @@ class ParsedCliCommand {
   /// be expanded.
   /// See https://github.com/bsutton/dcli/issues/56
   ///
-  List<String> expandGlobs(List<_QArg> qargs, String workingDirectory) {
-    final expanded = <String>[];
+  List<String?> expandGlobs(List<_QArg> qargs, String? workingDirectory) {
+    final expanded = <String?>[];
 
     for (final qarg in qargs) {
-      if (qarg.wasQuoted) {
+      if (qarg.wasQuoted!) {
         expanded.add(qarg.arg);
       } else {
         expanded.addAll(qarg.expandGlob(workingDirectory));
@@ -166,26 +166,26 @@ class ParsedCliCommand {
 enum _ParseState { starting, inQuote, inWord }
 
 class _QArg {
-  bool wasQuoted;
-  String arg;
+  bool? wasQuoted;
+  String? arg;
 
   _QArg(String iarg) {
     wasQuoted = false;
     arg = iarg.trim();
 
-    if (arg.startsWith('"') && arg.endsWith('"')) {
+    if (arg!.startsWith('"') && arg!.endsWith('"')) {
       wasQuoted = true;
     }
-    if (arg.startsWith("'") && arg.endsWith("'")) {
+    if (arg!.startsWith("'") && arg!.endsWith("'")) {
       wasQuoted = true;
     }
 
-    if (wasQuoted) {
-      arg = arg.substring(1, arg.length - 1);
+    if (wasQuoted!) {
+      arg = arg!.substring(1, arg!.length - 1);
     }
   }
 
-  _QArg.fromParsed(this.arg, {@required this.wasQuoted});
+  _QArg.fromParsed(this.arg, {required this.wasQuoted});
 
   /// We only do glob expansion if the arg contains at least one of
   /// *, [, ?
@@ -194,29 +194,29 @@ class _QArg {
   /// to supress glob expansion.
   bool get needsExpansion {
     return !Settings().isWindows &&
-        (arg.contains('*') || arg.contains('[') || arg.contains('?'));
+        (arg!.contains('*') || arg!.contains('[') || arg!.contains('?'));
   }
 
-  static List<_QArg> translate(List<String> args) {
+  static List<_QArg> translate(List<String?> args) {
     final qargs = <_QArg>[];
     for (final arg in args) {
-      final qarg = _QArg(arg);
+      final qarg = _QArg(arg!);
       qargs.add(qarg);
     }
     return qargs;
   }
 
-  Iterable<String> expandGlob(String workingDirectory) {
-    final expanded = <String>[];
-    if (arg.contains('~')) {
-      arg = arg.replaceAll('~', HOME);
+  Iterable<String?> expandGlob(String? workingDirectory) {
+    final expanded = <String?>[];
+    if (arg!.contains('~')) {
+      arg = arg!.replaceAll('~', HOME);
     }
     if (needsExpansion) {
-      final files = _expandGlob(workingDirectory);
+      final files = _expandGlob(workingDirectory!);
 
       /// translate the files to relative paths if appropriate.
       for (var file in files) {
-        if (isWithin(workingDirectory, file)) {
+        if (isWithin(workingDirectory, file!)) {
           file = relative(file, from: workingDirectory);
         }
         expanded.add(file);
@@ -227,12 +227,12 @@ class _QArg {
     return expanded;
   }
 
-  Iterable<String> _expandGlob(String workingDirectory) {
-    final glob = Glob(arg);
+  Iterable<String?> _expandGlob(String workingDirectory) {
+    final glob = Glob(arg!);
 
     /// we are interested in the last part of the arg.
     /// e.g. of  path/.* we want the .*
-    final includeHidden = basename(arg).startsWith('.');
+    final includeHidden = basename(arg!).startsWith('.');
 
     var files = <FileSystemEntity>[];
 

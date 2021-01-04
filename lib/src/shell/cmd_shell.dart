@@ -8,7 +8,7 @@ class CmdShell with WindowsMixin, ShellMixin {
   static const String shellName = 'cmd.exe';
 
   @override
-  final int pid;
+  final int? pid;
   CmdShell.withPid(this.pid);
 
   @override
@@ -23,14 +23,14 @@ class CmdShell with WindowsMixin, ShellMixin {
   }
 
   @override
-  void installTabCompletion({bool quiet = false}) {
+  void installTabCompletion({bool? quiet = false}) {
     // not supported.
   }
 
   @override
   bool get isPrivilegedUser {
     final lines = 'net session'.toList(nothrow: true);
-    if (lines.isNotEmpty && lines[0].contains('System error 5 has occured.')) {
+    if (lines.isNotEmpty && lines[0]!.contains('System error 5 has occured.')) {
       return false;
     }
 

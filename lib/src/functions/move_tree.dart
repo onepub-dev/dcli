@@ -65,7 +65,7 @@ import 'is.dart';
 void moveTree(String from, String to,
         {bool overwrite = false,
         bool includeHidden = false,
-        bool Function(String file) filter}) =>
+        bool Function(String file) filter = _allowAll}) =>
     _MoveTree().moveTree(
       from,
       to,
@@ -74,13 +74,15 @@ void moveTree(String from, String to,
       filter: filter,
     );
 
+bool _allowAll(String file) => true;
+
 class _MoveTree extends DCliFunction {
   void moveTree(
     String from,
     String to, {
     bool overwrite = false,
-    bool Function(String file) filter,
-    bool includeHidden,
+    bool Function(String file) filter = _allowAll,
+    bool includeHidden = false,
   }) {
     if (!isDirectory(from)) {
       throw MoveTreeException(
@@ -104,9 +106,7 @@ class _MoveTree extends DCliFunction {
         root: from,
         includeHidden: includeHidden,
       ).forEach((file) {
-        var include = true;
-        if (filter != null) include = filter(file);
-        if (include) {
+        if (filter(file)) {
           final target = join(to, relative(file, from: from));
 
           // we create directories as we go.

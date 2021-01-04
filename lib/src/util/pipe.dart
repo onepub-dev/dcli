@@ -20,14 +20,14 @@ class Pipe {
   }
 
   ///
-  void forEach(LineAction stdout, {LineAction stderr}) {
+  void forEach(LineAction stdout, {LineAction? stderr}) {
     final progress = Progress(stdout, stderr: stderr);
     _rhs.processUntilExit(progress, nothrow: false);
   }
 
   ///
-  List<String> toList() {
-    final list = <String>[];
+  List<String?> toList() {
+    final list = <String?>[];
 
     forEach((line) => list.add(line), stderr: (line) => list.add(line));
 

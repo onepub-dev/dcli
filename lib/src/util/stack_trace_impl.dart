@@ -13,23 +13,23 @@ class StackTraceImpl implements core.StackTrace {
   final core.StackTrace _stackTrace;
 
   /// The working directory of the project (if provided)
-  final String _workingDirectory;
+  final String? _workingDirectory;
   final int _skipFrames;
 
-  List<Stackframe> _frames;
+  List<Stackframe>? _frames;
 
   /// You can suppress call frames from showing
   /// by specifing a non-zero value for [skipFrames]
   /// If the [workingDirectory] is provided we will output
   /// a full file path to the dart library.
-  StackTraceImpl({int skipFrames = 0, String workingDirectory})
+  StackTraceImpl({int skipFrames = 0, String? workingDirectory})
       : _stackTrace = core.StackTrace.current,
         _skipFrames = skipFrames + 1, // always skip ourselves.
         _workingDirectory = workingDirectory;
 
   ///
   StackTraceImpl.fromStackTrace(this._stackTrace,
-      {String workingDirectory, int skipFrames = 0})
+      {String? workingDirectory, int skipFrames = 0})
       : _skipFrames = skipFrames,
         _workingDirectory = workingDirectory {
     if (_stackTrace is StackTraceImpl) {
@@ -63,14 +63,14 @@ class StackTraceImpl implements core.StackTrace {
 
   @override
   String toString() {
-    return formatStackTrace();
+    return formatStackTrace()!;
   }
 
   /// Outputs a formatted string of the current stack_trace_nj
   /// showing upto [methodCount] methods in the trace.
   /// [methodCount] defaults to 10.
 
-  String formatStackTrace(
+  String? formatStackTrace(
       {bool showPath = false, int methodCount = 10, int skipFrames = 0}) {
     var _skipFrames = skipFrames;
     final formatted = <String>[];
@@ -135,7 +135,7 @@ class StackTraceImpl implements core.StackTrace {
       /// Package
       /// package:/package/.path./filename.dart:line:column
       ///
-      final source = match.group(2);
+      final source = match.group(2)!;
       final sourceParts = source.split(':');
       var column = '0';
       var lineNo = '0';
@@ -173,17 +173,12 @@ class StackTraceImpl implements core.StackTrace {
       Stackframe frame;
 
       /// closures don't have a sourcePath.
-      if (sourcePath != null) {
-        sourcePath = sourcePath.replaceAll('<anonymous closure>', '()');
-        sourcePath = sourcePath.replaceAll('package:', '');
-        // sourcePath = sourcePath.replaceFirst('<package_name>', '/lib');
+      sourcePath = sourcePath.replaceAll('<anonymous closure>', '()');
+      sourcePath = sourcePath.replaceAll('package:', '');
+      // sourcePath = sourcePath.replaceFirst('<package_name>', '/lib');
 
-        frame = Stackframe(
-            File(sourcePath), int.parse(lineNo), int.parse(column), details);
-      } else {
-        frame = Stackframe(
-            File('<unknown>'), int.parse(lineNo), int.parse(column), details);
-      }
+      frame = Stackframe(
+          File(sourcePath), int.parse(lineNo), int.parse(column), details);
       stackFrames.add(frame);
     }
     return stackFrames;
@@ -250,7 +245,7 @@ class Stackframe {
   final int column;
 
   ///
-  final String details;
+  final String? details;
 
   ///
   Stackframe(this.sourceFile, this.lineNo, this.column, this.details);

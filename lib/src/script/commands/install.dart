@@ -154,7 +154,7 @@ class InstallCommand extends Command {
     // the dcli executable has just been installed by dart pub global activate
     final dcliLocation = join(PubCache().pathToBin, DCliPaths().dcliName);
     // check if dcli is on the path
-    if (dcliLocation == null) {
+    if (!exists(dcliLocation)) {
       print('');
       print('ERROR: dcli was not found on your path!');
       print("Try running 'dart pub global activate dcli' again.");
@@ -216,13 +216,13 @@ class InstallCommand extends Command {
   /// to the same location.
   void symlinkDCli(Shell shell, String dcliPath) {
     if (!Platform.isWindows) {
-      final linkPath = join(dirname(DartSdk().pathToDartExe), 'dcli');
+      final linkPath = join(dirname(DartSdk().pathToDartExe!), 'dcli');
       'ln -sf $dcliPath $linkPath'.start(privileged: true);
       // symlink(dcliPath, linkPath);
     }
   }
 
-  void qprint(String message) {
+  void qprint(String? message) {
     if (!_quiet) print(message);
   }
 

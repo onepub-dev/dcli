@@ -15,7 +15,7 @@ class DCliFunction {
 /// Base class for all dcli function exceptions.
 class DCliFunctionException extends DCliException {
   /// Base class for all dcli function exceptions.
-  DCliFunctionException(String message, [StackTraceImpl stackTrace])
+  DCliFunctionException(String message, [StackTraceImpl? stackTrace])
       : super(message, stackTrace);
 
   @override

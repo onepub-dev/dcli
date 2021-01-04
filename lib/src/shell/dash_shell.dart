@@ -13,7 +13,7 @@ class DashShell with ShellMixin, PosixMixin {
   static const String shellName = 'dash';
 
   @override
-  final int pid;
+  final int? pid;
   DashShell.withPid(this.pid);
 
   @override
@@ -23,7 +23,7 @@ class DashShell with ShellMixin, PosixMixin {
   String get name => shellName;
 
   @override
-  void installTabCompletion({bool quiet = false}) {
+  void installTabCompletion({bool? quiet = false}) {
     throw UnimplementedError();
   }
 
@@ -39,8 +39,8 @@ class DashShell with ShellMixin, PosixMixin {
   bool get hasStartScript => env['ENV'] != null;
 
   @override
-  String get startScriptName => basename(env['ENV']);
+  String get startScriptName => basename(env['ENV']!);
 
   @override
-  String get pathToStartScript => env['ENV'];
+  String? get pathToStartScript => env['ENV'];
 }

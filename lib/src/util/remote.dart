@@ -1,4 +1,3 @@
-import 'package:meta/meta.dart';
 import '../../dcli.dart';
 
 ///
@@ -30,12 +29,12 @@ class Remote {
   ///
   ///  EXPERIMENTAL
   static void exec(
-      {String host,
-      String command,
+      {required String host,
+      required String command,
       bool agent = true,
       bool sudo = false,
-      String password,
-      Progress progress}) {
+      String? password,
+      Progress? progress}) {
     execList(
         host: host,
         commands: [command],
@@ -63,12 +62,12 @@ class Remote {
   /// ```
   ///
   static void execList(
-      {String host,
-      List<String> commands,
+      {required String host,
+      required List<String?> commands,
       bool agent = true,
       bool sudo = false,
-      String password,
-      Progress progress}) {
+      String? password,
+      Progress? progress}) {
     final cmdArgs = <String>[];
 
     // enable agent forwarding only
@@ -107,7 +106,7 @@ class Remote {
     try {
       startFromArgs('ssh', cmdArgs, progress: progress);
     } on RunException catch (e) {
-      final error = _sshErrors[e.exitCode];
+      final error = _sshErrors[e.exitCode!];
       throw RunException(
           e.cmdLine, e.exitCode, red('ssh exit code: ${e.exitCode} - $error'),
           stackTrace: e.stackTrace);
@@ -131,21 +130,14 @@ class Remote {
   /// [from] path. [recursive] defaults to false.
   /// EXPERIMENTAL
   static void scp(
-      {@required List<String> from,
-      @required String to,
-      String fromHost,
-      String toHost,
-      String fromUser,
-      String toUser,
+      {required List<String> from,
+      required String to,
+      String? fromHost,
+      String? toHost,
+      String? fromUser,
+      String? toUser,
       bool recursive = false,
-      Progress progress}) {
-    if (from == null) {
-      throw ScpException('You must pass a [from] path');
-    }
-
-    if (to == null) {
-      throw ScpException('You must pass a [to] path');
-    }
+      Progress? progress}) {
     // toUser is only valid if toHost is given
     if (toUser != null && toHost == null) {
       throw ScpException('[toUser] is only valid if toHost is also past');
@@ -201,7 +193,7 @@ class Remote {
     try {
       startFromArgs('scp', cmdArgs, progress: progress, terminal: true);
     } on RunException catch (e) {
-      final error = _scpErrors[e.exitCode];
+      final error = _scpErrors[e.exitCode!];
       throw RunException(
           e.cmdLine, e.exitCode, red('scp exit code: ${e.exitCode} - $error'),
           stackTrace: e.stackTrace);

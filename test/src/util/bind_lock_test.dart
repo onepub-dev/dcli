@@ -8,8 +8,8 @@ void main() {
   _bindSocket();
 }
 
-Future<RawServerSocket> _bindSocket() async {
-  RawServerSocket socket;
+Future<RawServerSocket?> _bindSocket() async {
+  RawServerSocket? socket;
   try {
     socket = await RawServerSocket.bind(
       '127.0.0.1',

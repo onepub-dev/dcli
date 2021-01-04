@@ -30,7 +30,7 @@ void main() {
   });
   test('Run hello world', () {
     TestFileSystem().withinZone((fs) {
-      final results = <String>[];
+      final results = <String?>[];
 
       '${DCliPaths().dcliName} ${join(fs.testScriptPath, 'general/bin/hello_world.dart')}'
           .forEach((line) => results.add(line), stderr: printerr);
@@ -43,7 +43,7 @@ void main() {
 
   test('run with virtual pubspec', () {
     TestFileSystem().withinZone((fs) {
-      var exit = -1;
+      int? exit = -1;
       try {
         final script =
             Script.fromFile(join(fs.testScriptPath, 'general/bin/which.dart'));
@@ -57,7 +57,7 @@ void main() {
 
   test('run  with traditional dart project structure - bin', () {
     TestFileSystem().withinZone((fs) {
-      var exit = -1;
+      int? exit = -1;
       try {
         print(pwd);
 
@@ -73,7 +73,7 @@ void main() {
 
   test('run  with traditional dart project structure - nested bin', () {
     TestFileSystem().withinZone((fs) {
-      var exit = -1;
+      int? exit = -1;
       try {
         print(pwd);
 
@@ -89,7 +89,7 @@ void main() {
 
   test('run  with traditional dart project structure - example', () {
     TestFileSystem().withinZone((fs) {
-      var exit = -1;
+      int? exit = -1;
       try {
         print(pwd);
 
@@ -105,7 +105,7 @@ void main() {
 
   test('run  with traditional dart project structure - tool', () {
     TestFileSystem().withinZone((fs) {
-      var exit = -1;
+      int? exit = -1;
       try {
         print(pwd);
 
