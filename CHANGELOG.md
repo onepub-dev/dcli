@@ -1,3 +1,6 @@
+# 0.39.6
+Added method to check if the script is running from pub-cache.
+
 # 0.39.5
 Fixes #126 - Does not like dashes in directory name. We now replace any invalid chars in the project name with _.
 Relaxed the requirement that the default value had to pass the validator. It made it hard to initialise the default from an uninitialised settings file.
