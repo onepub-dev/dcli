@@ -10,6 +10,10 @@ There are two core issues:
 
 2\) when trying to run a dart script you may cause the pub cache to be update at which point it will be owned by root and your normally user account won't be able to access it.
 
+{% hint style="info" %}
+The following dart code also works on Windows. The privilege options simply check that you are running as an Administrator and throw an exception if you are not. Running as a Windows Administrator does not have the same problems that sudo introduces.
+{% endhint %}
+
 The following provides guidelines on how to avoid this problems.
 
 1\) where ever possible avoid using sudo. Of course this often just isn't practical
