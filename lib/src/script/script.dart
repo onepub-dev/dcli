@@ -78,19 +78,23 @@ class Script {
   /// The scriptname without its '.dart' extension.
   String get basename => p.basenameWithoutExtension(scriptname);
 
-  // /// the path to a scripts local pubspec.yaml.
-  // /// Only a script that has a pubspec.yaml in the same directory as the script
-  // /// will have a pubspec.yaml at this location.
-  // ///
-  // /// You should use [VirtualProject.projectPubspecPath] as that will always point
-  // /// the the correct pubspec.yaml regardless of the project type.
-  // String get pathToLocalPubSpec => p.join(_scriptDirectory, 'pubspec.yaml');
-
   /// Returns the path to a scripts pubspec.yaml.
   /// The pubspec.yaml is located in the project's root directory.
   String get pathToPubSpec => project.pathToPubSpec;
 
   bool get isReadyToRun => project.isReadyToRun;
+
+  /// True if the script is compiled.
+  bool get isCompiled => !scriptname.endsWith('.dart');
+
+  /// Checks if the Script has been compiled and installed into the ~/.dcli/bin path
+  bool get isInstalled {
+    return exists(pathToInstalledExe);
+  }
+
+  /// True if the script has been installed via 'dart pub global active'
+  /// and as such is running from the pub cache.
+  bool get isPubGlobalActivated => pathToScript.startsWith(PubCache().pathTo);
 
   // the scriptnameArg may contain a relative path: fred/home.dart
   // we need to get the actually name and full path to the script file.
@@ -148,11 +152,8 @@ class Script {
   /// The project root is defined as the directory which contains
   /// the scripts 'pubspec.yaml' file.
   ///
-  /// For a script which contains a @pubspec annotation or
-  /// a script which doesn't have a pubspec.yaml
-  /// this is the same directory that the script lives in.
-  ///
-  ///
+  /// If the script is compiled or installed by pub global activate
+  /// then this will be the location of the script file.
   String get pathToProjectRoot => project.pathToProjectRoot;
 
   static Script _current;
@@ -167,8 +168,6 @@ class Script {
 
   DartProject get project =>
       _project ??= DartProject.fromPath(pathToScriptDirectory, search: true);
-
-  bool get isCompiled => !scriptname.endsWith('.dart');
 
   /// used by the 'doctor' command to prints the details for this project.
   void get doctor {
@@ -226,11 +225,6 @@ class Script {
   /// Returns the path to the executable if it was to be compiled into
   /// its local directory (the default action of compile).
   String get pathToExe => join(pathToScriptDirectory, exeName);
-
-  /// Checks if the Script has been compiled and installed into the ~/.dcli/bin path
-  bool get isInstalled {
-    return exists(pathToInstalledExe);
-  }
 
   /// Returns the path that the script would be installed to if compiled with install = true.
   String get pathToInstalledExe => join(Settings().pathToDCliBin, exeName);
