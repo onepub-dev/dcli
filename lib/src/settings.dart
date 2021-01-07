@@ -14,7 +14,7 @@ import 'version/version.g.dart';
 /// flags passed on the command line to DCli.
 ///
 class Settings {
-  static Settings _self;
+  static Settings? _self;
 
   /// The directory name of the DCli templates.
   static const templateDir = 'templates';
@@ -29,26 +29,26 @@ class Settings {
   final String appname;
 
   /// The DCli version you are running
-  String version;
+  String? version;
 
   final _selectedFlags = <String, Flag>{};
 
-  String _dcliPath;
+  String? _dcliPath;
 
   /// The name of the dcli settings directory.
   /// This is .dcli.
   String dcliDir = '.dcli';
 
-  String _dcliBinPath;
+  String? _dcliBinPath;
 
-  String _scriptPath;
+  String? _scriptPath;
 
   /// The absolute path to the dcli script which
   /// is currently running.
   String get pathToScript {
     if (_scriptPath == null) {
       final script = Platform.script;
-      String actual;
+      late String actual;
       if (script.isScheme('file')) {
         actual = Platform.script.toFilePath();
       } else {
@@ -77,12 +77,12 @@ class Settings {
       }
     }
 
-    return _scriptPath;
+    return _scriptPath!;
   }
 
   /// This is an internal function called by the run
   /// command and you should NOT be calling it!
-  set pathToScript(String scriptPath) {
+  set pathToScript(String? scriptPath) {
     _scriptPath = scriptPath;
   }
 
@@ -91,9 +91,9 @@ class Settings {
   @visibleForTesting
   static void reset() {
     _self = Settings.init();
-    _self.selectedFlags.clear();
-    _self._dcliPath = null;
-    _self._dcliBinPath = null;
+    _self!.selectedFlags.clear();
+    _self!._dcliPath = null;
+    _self!._dcliBinPath = null;
   }
 
   /// The directory where we store all of dcli's
@@ -127,7 +127,7 @@ class Settings {
   bool get isVerbose => isFlagSet(VerboseFlag());
 
   /// Turns on verbose logging.
-  void setVerbose({@required bool enabled}) {
+  void setVerbose({required bool enabled}) {
     if (enabled) {
       if (!isVerbose) {
         setFlag(VerboseFlag());
@@ -193,10 +193,10 @@ class Settings {
 
   /// Logs a message to the console if the verbose
   /// settings are on.
-  void verbose(String string) {
+  void verbose(String? string) {
     if (isVerbose) {
       if (VerboseFlag().hasOption) {
-        VerboseFlag().option.append(string);
+        VerboseFlag().option.append(string!);
       } else {
         print(string);
       }

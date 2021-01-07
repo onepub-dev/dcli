@@ -11,7 +11,7 @@ void main() {
     final shell = Shell.current;
     print(shell.name);
 
-    String expected;
+    String? expected;
     if (Settings().isWindows) {
       expected = CmdShell.shellName;
     } else if (Platform.isLinux) {

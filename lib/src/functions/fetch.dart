@@ -2,7 +2,6 @@ import 'dart:async';
 import 'dart:io';
 
 import 'package:dcli/src/util/format.dart';
-import 'package:meta/meta.dart';
 import 'package:pedantic/pedantic.dart';
 
 import '../settings.dart';
@@ -13,6 +12,8 @@ import 'is.dart';
 import 'touch.dart';
 
 typedef OnFetchProgress = void Function(FetchProgress progress);
+
+void _devNull(FetchProgress _) {}
 
 /// Fetches the given resource at the passed [url].
 ///
@@ -36,9 +37,9 @@ typedef OnFetchProgress = void Function(FetchProgress progress);
 /// the 'onProgress' callback.
 ///
 void fetch(
-        {@required String url,
-        @required String saveToPath,
-        OnFetchProgress fetchProgress}) =>
+        {required String url,
+        required String saveToPath,
+        OnFetchProgress fetchProgress = _devNull}) =>
     _Fetch().fetch(url: url, saveToPath: saveToPath, progress: fetchProgress);
 
 /// Fetches the list of of resources indicated by [urls];
@@ -69,16 +70,19 @@ void fetch(
 /// You must call cancel on all downloads or the remaining downloads must complete before
 /// [fetchMultiple] will return.
 ///
-void fetchMultiple({@required List<FetchUrl> urls}) =>
+void fetchMultiple({required List<FetchUrl> urls}) =>
     _Fetch().fetchMultiple(urls: urls);
 
 class _Fetch extends DCliFunction {
-  void fetch({String url, String saveToPath, OnFetchProgress progress}) {
+  void fetch(
+      {required String url,
+      required String saveToPath,
+      OnFetchProgress progress = _devNull}) {
     waitForEx<void>(download(
         FetchUrl(url: url, saveToPath: saveToPath, progress: progress)));
   }
 
-  void fetchMultiple({List<FetchUrl> urls}) {
+  void fetchMultiple({required List<FetchUrl> urls}) {
     final futures = <Future<void>>[];
 
     for (final url in urls) {
@@ -130,7 +134,7 @@ class _Fetch extends DCliFunction {
       final raf = await saveFile.open(mode: FileMode.append);
       await raf.truncate(0);
 
-      StreamSubscription<List<int>> subscription;
+      late StreamSubscription<List<int>> subscription;
       subscription = response.listen(
         (newBytes) async {
           /// if we don't pause we get overlapping calls from listen
@@ -184,9 +188,7 @@ class _Fetch extends DCliFunction {
   }
 
   static void _sendProgressEvent(FetchProgress progress) {
-    if (progress.fetch.progress != null) {
-      progress.fetch.progress(progress);
-    }
+    progress.fetch.progress(progress);
   }
 }
 
@@ -229,7 +231,8 @@ class FetchUrl {
   final OnFetchProgress progress;
 
   /// ctor.
-  FetchUrl({this.url, this.saveToPath, this.progress});
+  FetchUrl(
+      {required this.url, required this.saveToPath, this.progress = _devNull});
 }
 
 /// Passed to the [progress] method to indicate the current progress of

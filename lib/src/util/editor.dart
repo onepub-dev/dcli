@@ -12,7 +12,7 @@ import '../../dcli.dart';
 ///
 /// EXPERIMENTAL
 void showEditor(String path) {
-  String editor;
+  String? editor;
   if (Settings().isWindows) {
     editor = 'notepad.exe';
   } else {

@@ -24,8 +24,8 @@ class CompileCommand extends Command {
   CompileCommand() : super(_commandName);
 
   @override
-  int run(List<Flag> selectedFlags, List<String> subarguments) {
-    var exitCode = 0;
+  int? run(List<Flag> selectedFlags, List<String> subarguments) {
+    int? exitCode = 0;
 
     var scriptIndex = 0;
 
@@ -51,7 +51,7 @@ class CompileCommand extends Command {
       break;
     }
 
-    var scriptList = subarguments.sublist(scriptIndex);
+    List<String?> scriptList = subarguments.sublist(scriptIndex);
 
     if (scriptList.isEmpty) {
       scriptList = find('*.dart', recursive: false).toList();
@@ -61,7 +61,7 @@ class CompileCommand extends Command {
       throw InvalidArguments('There are no scripts to compile.');
     } else {
       for (final scriptPath in scriptList) {
-        exitCode = compileScript(scriptPath);
+        exitCode = compileScript(scriptPath!);
         if (exitCode != 0) break;
       }
     }
@@ -70,8 +70,8 @@ class CompileCommand extends Command {
   }
 
   ///
-  int compileScript(String scriptPath) {
-    var exitCode = 0;
+  int? compileScript(String scriptPath) {
+    int? exitCode = 0;
 
     print('');
     print(orange('Compiling $scriptPath...'));
@@ -108,7 +108,7 @@ class CompileCommand extends Command {
       }
 
       var install = flagSet.isSet(InstallFlag());
-      var overwrite = flagSet.isSet(OverWriteFlag());
+      bool? overwrite = flagSet.isSet(OverWriteFlag());
 
       /// if an exe was produced and the --install flag was set.
       /// If no exe then the compile failed.

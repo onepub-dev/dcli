@@ -16,7 +16,7 @@ int availableSpace(String path) {
         "An error occured retrieving the device path: ${lines.join('\n')}");
   }
 
-  final line = lines[1];
+  final line = lines[1]!;
   final parts = line.split(RegExp(r'\s+'));
 
   if (parts.length != 6) {
@@ -38,5 +38,5 @@ int availableSpace(String path) {
         "Unrecognized size factor '$factoryLetter' in $havailable");
   }
 
-  return int.tryParse(hsize) * factor;
+  return int.tryParse(hsize)! * factor;
 }

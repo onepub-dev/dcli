@@ -1,4 +1,5 @@
 import 'dart:io';
+// ignore: import_of_legacy_library_into_null_safe
 import 'package:csv/csv.dart';
 import 'package:meta/meta.dart';
 import '../../dcli.dart';
@@ -20,7 +21,7 @@ class ProcessHelper {
   ProcessHelper._internal();
 
   /// returns the name of the process for the given pid.
-  String getProcessName(int pid) {
+  String? getProcessName(int? pid) {
     if (Settings().isWindows) {
       return _getWindowsProcessName(pid);
     } else {
@@ -32,8 +33,8 @@ class ProcessHelper {
   ///
   /// Throws an RunException exception if the name can't
   /// be obtained.
-  String _getLinuxProcessName(int lpid) {
-    String line;
+  String? _getLinuxProcessName(int? lpid) {
+    String? line;
     var processName = 'unknown';
 
     try {
@@ -53,7 +54,7 @@ class ProcessHelper {
 
   /// Get the PID of the parent
   /// Returns -1 if a parent can't be obtained.
-  int getParentPID(int childPid) {
+  int? getParentPID(int? childPid) {
     if (Settings().isWindows) {
       return _windowsGetParentPid(childPid);
     } else {
@@ -62,7 +63,7 @@ class ProcessHelper {
   }
 
   /// returns true if the given [pid] is still running.
-  bool isRunning(int pid) {
+  bool isRunning(int? pid) {
     if (Settings().isWindows) {
       return _windowsIsrunning(pid);
     } else {
@@ -72,8 +73,8 @@ class ProcessHelper {
 
   /// returns the pid of the parent pid of -1 if the
   /// child doesn't have a parent.
-  int _linuxGetParentPID(int childPid) {
-    String line;
+  int? _linuxGetParentPID(int? childPid) {
+    String? line;
     try {
       line = 'ps -p $childPid -o ppid='.firstLine;
       Settings().verbose('ps: $line');
@@ -81,12 +82,12 @@ class ProcessHelper {
       // ps not supported on current OS
       line = '-1';
     }
-    return int.tryParse(line.trim());
+    return int.tryParse(line!.trim());
   }
 
   /// returns the pid of the parent pid of -1 if the
   /// child doesn't have a parent.
-  int _windowsGetParentPid(int childPid) {
+  int? _windowsGetParentPid(int? childPid) {
     final parents = _windowsParentProcessList();
 
     for (final parent in parents) {
@@ -106,7 +107,7 @@ class ProcessHelper {
 
     for (var process in processes) {
       // Settings().verbose('wmic: $process');
-      process = process.trim();
+      process = process!.trim();
       process = process.replaceAll(RegExp(r'\s+'), ' ');
 
       final parts = process.split(' ');
@@ -129,7 +130,7 @@ class ProcessHelper {
     return parents;
   }
 
-  bool _windowsIsrunning(int lpid) {
+  bool _windowsIsrunning(int? lpid) {
     for (final details in _getWindowsProcesses()) {
       if (details.pid == lpid) {
         return true;
@@ -138,10 +139,10 @@ class ProcessHelper {
     return false;
   }
 
-  bool _linuxisRunning(int lpid) {
+  bool _linuxisRunning(int? lpid) {
     var isRunning = false;
 
-    String line;
+    String? line;
 
     try {
       line = 'ps -q $lpid -o comm='.firstLine;
@@ -158,8 +159,8 @@ class ProcessHelper {
   }
 
   /// completely untested as I don't have a windows box.
-  String _getWindowsProcessName(int lpid) {
-    String pidName;
+  String? _getWindowsProcessName(int? lpid) {
+    String? pidName;
     for (final details in _getWindowsProcesses()) {
       if (lpid == details.pid) {
         pidName = details.processName;
@@ -182,7 +183,7 @@ class ProcessHelper {
       //Settings().verbose('tasklist: $line');
       final details = _PIDDetails();
 
-      details.processName = line[0] as String;
+      details.processName = line[0] as String?;
       details.pid = int.tryParse(line[1] as String);
       // Settings().verbose('${details.processName} ${details.pid}');
 
@@ -201,14 +202,14 @@ class ProcessHelper {
 }
 
 class _PIDDetails {
-  int pid;
-  String processName;
-  String memory;
-  String memoryUnits;
+  int? pid;
+  String? processName;
+  String? memory;
+  String? memoryUnits;
 }
 
 class _WindowsParentProcess {
-  String path;
-  int parentPid;
-  int processPid;
+  String? path;
+  int? parentPid;
+  int? processPid;
 }

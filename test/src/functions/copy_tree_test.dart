@@ -6,7 +6,7 @@ import 'package:test/test.dart';
 
 import '../util/test_file_system.dart';
 
-String testFile;
+String? testFile;
 void main() {
   t.group('copyTree', () {
     t.test('empty target ', () {
@@ -133,11 +133,11 @@ void main() {
   });
 }
 
-List<String> subname(List<String> expected, String from, String replace) {
+List<String> subname(List<String?> expected, String from, String replace) {
   final result = <String>[];
 
   for (var path in expected) {
-    path = path.replaceAll(from, replace);
+    path = path!.replaceAll(from, replace);
     result.add(path);
   }
   return result;

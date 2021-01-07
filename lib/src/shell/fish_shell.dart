@@ -9,7 +9,7 @@ class FishShell with ShellMixin, PosixMixin {
   static const String shellName = 'fish';
 
   @override
-  final int pid;
+  final int? pid;
   FishShell.withPid(this.pid);
 
   @override
@@ -39,7 +39,7 @@ class FishShell with ShellMixin, PosixMixin {
   bool get isCompletionInstalled => false;
 
   @override
-  void installTabCompletion({bool quiet = false}) {
+  void installTabCompletion({bool? quiet = false}) {
     throw UnimplementedError();
   }
 

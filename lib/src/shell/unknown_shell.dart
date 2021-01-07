@@ -16,10 +16,10 @@ class UnknownShell with ShellMixin {
   static const String shellName = 'Unknown';
 
   @override
-  final int pid;
+  final int? pid;
 
   /// the name of the process
-  final String processName;
+  final String? processName;
 
   UnknownShell.withPid(this.pid, {this.processName});
 
@@ -83,7 +83,8 @@ class UnknownShell with ShellMixin {
   }
 
   @override
-  void installTabCompletion({bool quiet = false}) => throw UnimplementedError();
+  void installTabCompletion({bool? quiet = false}) =>
+      throw UnimplementedError();
 
   @override
   bool get isCompletionInstalled => false;
@@ -115,7 +116,7 @@ class UnknownShell with ShellMixin {
   bool get isPrivilegedUser => false;
 
   @override
-  String get loggedInUser => null;
+  String? get loggedInUser => null;
 
   @override
   String privilegesRequiredMessage(String app) {
@@ -136,7 +137,7 @@ class UnknownShell with ShellMixin {
   }
 
   @override
-  String checkInstallPreconditions() {
+  String? checkInstallPreconditions() {
     return null;
   }
 

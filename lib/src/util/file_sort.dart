@@ -33,12 +33,12 @@ class FileSort {
   final String _inputPath;
   final String _outputPath;
   final List<Column> _columns;
-  final String _fieldDelimiter;
-  final String _lineDelimiter;
+  final String? _fieldDelimiter;
+  final String? _lineDelimiter;
 
   ///
-  final bool verbose;
-  int _maxColumn = -1;
+  final bool? verbose;
+  int? _maxColumn = -1;
 
   /// Sort the file at [inputPath] and save the results to [outputPath]
   /// [_inputPath] is the path to the file to be sorted
@@ -50,7 +50,7 @@ class FileSort {
   /// [_lineDelimiter] is the delimiter to be used to separate each line.
   /// [verbose] caused FileSort to log debug level information as it sorts.
   FileSort(String inputPath, String outputPath, List<Column> columns,
-      String fieldDelimiter, String lineDelimiter,
+      String? fieldDelimiter, String? lineDelimiter,
       {this.verbose = false})
       : _inputPath = inputPath,
         _outputPath = outputPath,
@@ -58,7 +58,7 @@ class FileSort {
         _fieldDelimiter = fieldDelimiter,
         _lineDelimiter = lineDelimiter {
     for (final column in _columns) {
-      if (_maxColumn < column.ordinal) {
+      if (_maxColumn! < column.ordinal!) {
         _maxColumn = column.ordinal;
       }
     }
@@ -101,7 +101,7 @@ class FileSort {
         final phaseFuture = Completer<void>();
         phaseFutures.add(phaseFuture.future);
 
-        _savePhase(phaseDirectory, 1, instance, phaseList, _lineDelimiter);
+        _savePhase(phaseDirectory, 1, instance, phaseList, _lineDelimiter!);
         phaseFuture.complete(null);
       }
     });
@@ -111,7 +111,7 @@ class FileSort {
       _replaceFileWithSortedList(list);
     } else {
       if (list.isNotEmpty && list.length < _mergeSize) {
-        _savePhase(phaseDirectory, 1, ++instance, list, _lineDelimiter);
+        _savePhase(phaseDirectory, 1, ++instance, list, _lineDelimiter!);
       }
       await Future.wait(phaseFutures);
       _mergeSort(phaseDirectory);
@@ -138,15 +138,15 @@ class FileSort {
   /// Performs an insitu sort of the passed list.
   void _sortList(List<_Line> list) {
     list.sort((lhs, rhs) {
-      final lhsColumns = lhs.line.split(_fieldDelimiter);
-      final rhsColumns = rhs.line.split(_fieldDelimiter);
+      final lhsColumns = lhs.line!.split(_fieldDelimiter!);
+      final rhsColumns = rhs.line!.split(_fieldDelimiter!);
 
-      if (_maxColumn > lhsColumns.length) {
+      if (_maxColumn! > lhsColumns.length) {
         throw InvalidArguments(
             'Line $lhs does not have enough columns. Expected $_maxColumn, found ${lhsColumns.length}');
       }
 
-      if (_maxColumn > rhsColumns.length) {
+      if (_maxColumn! > rhsColumns.length) {
         throw InvalidArguments(
             'Line $rhs does not have enough columns. Expected $_maxColumn, found ${lhsColumns.length}');
       }
@@ -156,17 +156,17 @@ class FileSort {
       if (_maxColumn == 0) {
         // just compare the whole line.
         result =
-            _columns[0]._comparator.compareTo(_columns[0], lhs.line, rhs.line);
+            _columns[0]._comparator!.compareTo(_columns[0], lhs.line, rhs.line);
       } else {
         // compare the defined columns
         for (final column in _columns) {
           final direction =
               column._sortDirection == SortDirection.ascending ? 1 : -1;
 
-          result = column._comparator.compareTo(
+          result = column._comparator!.compareTo(
                   column,
-                  lhsColumns[column.ordinal - 1],
-                  rhsColumns[column.ordinal - 1]) *
+                  lhsColumns[column.ordinal! - 1],
+                  rhsColumns[column.ordinal! - 1]) *
               direction;
           if (result != 0) {
             break;
@@ -191,12 +191,12 @@ class FileSort {
   }
 
   void _saveSortedList(
-      String filename, List<_Line> list, String lineDelimiter) {
+      String filename, List<_Line> list, String? lineDelimiter) {
     final saveTo = d.FileSync(filename);
 
     saveTo.truncate();
     for (final line in list) {
-      saveTo.append(line.line, newline: lineDelimiter);
+      saveTo.append(line.line!, newline: lineDelimiter);
     }
   }
 
@@ -226,14 +226,14 @@ class FileSort {
         start._sortDirection = sortDirection;
 
         int index;
-        if (end.ordinal > start.ordinal) {
+        if (end.ordinal! > start.ordinal!) {
           index = 1;
         } else {
           index = -1;
         }
         columns.add(start);
 
-        for (var i = start.ordinal + index; i != end.ordinal; i += index) {
+        for (var i = start.ordinal! + index; i != end.ordinal; i += index) {
           final column = Column(i, comparator, sortDirection);
           columns.add(column);
         }
@@ -280,7 +280,7 @@ class FileSort {
 
     while (lines.isNotEmpty) {
       final line = lines.removeAt(0);
-      result.append(line.line);
+      result.append(line.line!);
 
       // a btree might give better performance as we wouldn't
       // have to resort.
@@ -311,28 +311,28 @@ class FileSort {
 }
 
 class _Line {
-  FileSync source;
-  String sourcePath;
-  String line;
+  FileSync? source;
+  late String sourcePath;
+  String? line;
 
   _Line(this.source) {
-    sourcePath = source.path;
-    line = source.readLine();
+    sourcePath = source!.path;
+    line = source!.readLine();
   }
 
   _Line.fromString(this.sourcePath, this.line);
 
   bool readNext() {
-    line = source.readLine();
+    line = source!.readLine();
     return line != null;
   }
 
   void close() {
-    source.close();
+    source!.close();
   }
 
   void delete() {
-    d.delete(source.path);
+    d.delete(source!.path);
   }
 
   @override
@@ -355,8 +355,8 @@ class CaseInsensitiveSort implements ColumnComparator {
   ///
   const CaseInsensitiveSort();
   @override
-  int compareTo(Column column, String lhs, String rhs) {
-    return lhs.toLowerCase().compareTo(rhs.toLowerCase());
+  int compareTo(Column column, String? lhs, String? rhs) {
+    return lhs!.toLowerCase().compareTo(rhs!.toLowerCase());
   }
 }
 
@@ -365,8 +365,8 @@ class CaseSensitiveSort implements ColumnComparator {
   ///
   const CaseSensitiveSort();
   @override
-  int compareTo(Column column, String lhs, String rhs) {
-    return lhs.compareTo(rhs);
+  int compareTo(Column column, String? lhs, String? rhs) {
+    return lhs!.compareTo(rhs!);
   }
 }
 
@@ -375,13 +375,13 @@ class NumericSort implements ColumnComparator {
   ///
   const NumericSort();
   @override
-  int compareTo(Column column, String lhs, String rhs) {
-    final numLhs = num.tryParse(lhs);
+  int compareTo(Column column, String? lhs, String? rhs) {
+    final numLhs = num.tryParse(lhs!);
     if (numLhs == null) {
       throw FormatException(
           'Column ${column.ordinal} contained a non-numeric value.', lhs);
     }
-    final numRhs = num.tryParse(rhs);
+    final numRhs = num.tryParse(rhs!);
 
     if (numRhs == null) {
       throw FormatException(
@@ -397,9 +397,9 @@ class MonthSort implements ColumnComparator {
   ///
   const MonthSort();
   @override
-  int compareTo(Column column, String lhs, String rhs) {
-    final mLhs = toMonthNo(lhs);
-    final mRhs = toMonthNo(rhs);
+  int compareTo(Column column, String? lhs, String? rhs) {
+    final mLhs = toMonthNo(lhs!)!;
+    final mRhs = toMonthNo(rhs!)!;
     return mLhs.compareTo(mRhs);
   }
 
@@ -423,7 +423,7 @@ class MonthSort implements ColumnComparator {
   /// from the monthName.
   /// checks are case insensitive and only the first three
   /// characters are considered.
-  int toMonthNo(String monthName) {
+  int? toMonthNo(String monthName) {
     var finalmonthName = monthName.trim();
     if (finalmonthName.length < 3) {
       throw InvalidArguments('Month in must be at least 3 characters long');
@@ -438,7 +438,7 @@ class MonthSort implements ColumnComparator {
 // ignore: one_member_abstracts
 abstract class ColumnComparator {
   ///
-  int compareTo(Column column, String lhs, String rhs);
+  int compareTo(Column column, String? lhs, String? rhs);
 }
 
 ///
@@ -464,9 +464,9 @@ class Column {
   /// [ordinal] is the column index using base 1
   /// An ordinal of 0 means that we are treating the entire
   /// line as a single column.
-  int ordinal;
-  ColumnComparator _comparator;
-  SortDirection _sortDirection;
+  int? ordinal;
+  ColumnComparator? _comparator;
+  SortDirection? _sortDirection;
 
   /// [ordinal] the (base 1) index of the column.
   /// The [_comparator] we will used to compare

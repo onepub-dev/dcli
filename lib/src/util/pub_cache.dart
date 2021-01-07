@@ -7,18 +7,19 @@ import '../../dcli.dart';
 /// https://dart.dev/tools/pub/environment-variables
 ///
 class PubCache {
-  static PubCache _self;
+  static PubCache? _self;
 
   /// The name of the pub cache directory (e.g. .pub-cache)
-  String _pubCacheDir;
+  late String _pubCacheDir;
 
-  String _pubCacheBinPath;
+  late String _pubCacheBinPath;
+
+  late String _pubCachePath;
 
   /// The name of the environment variable that can be
   /// set to change the location of the .pub-cache directory.
   /// You should change this path by calling [pathTo].
   static const String envVar = 'PUB_CACHE';
-  String _pubCachePath;
 
   ///
   factory PubCache() => _self ??= PubCache._internal();
@@ -29,22 +30,26 @@ class PubCache {
     // the standard location of the pub cache.
     final pubCacheEnv = env[envVar];
 
+    String? dir;
+
     /// determine pubCacheDir
     if (pubCacheEnv != null) {
-      _pubCacheDir = pubCacheEnv;
+      dir = pubCacheEnv;
     }
     if (Settings().isWindows) {
-      _pubCacheDir ??= join('Pub', 'Cache');
+      dir ??= join('Pub', 'Cache');
       // doco says this is AppData but some installers seem to use LocalAppData
-      _pubCachePath ??= truepath(join(env['AppData'], _pubCacheDir));
-      if (_pubCachePath != null && !exists(_pubCachePath)) {
-        _pubCachePath = truepath(join(env['LocalAppData'], _pubCacheDir));
+      _pubCachePath = truepath(join(env['AppData']!, _pubCacheDir));
+      if (!exists(_pubCachePath)) {
+        _pubCachePath = truepath(join(env['LocalAppData']!, _pubCacheDir));
       }
     } else {
-      _pubCacheDir ??= '.pub-cache';
+      dir ??= '.pub-cache';
       // determine pub-cache path
-      _pubCachePath ??= truepath(join(env['HOME'], _pubCacheDir));
+      _pubCachePath = truepath(join(env['HOME']!, dir));
     }
+
+    _pubCacheDir = dir;
 
     // determine pub-cache/bin
     _pubCacheBinPath = truepath(join(_pubCachePath, 'bin'));
@@ -85,7 +90,7 @@ class PubCache {
   /// PUB_CACHE.
   ///
   /// This method processes PUB_CACHE if it exists.
-  String get cacheDir => _pubCacheDir;
+  String? get cacheDir => _pubCacheDir;
 
   /// only to be used for unit tests.
   /// It resets the paths so that they can pick

@@ -50,7 +50,7 @@ class _MoveDir extends DCliFunction {
     try {
       Directory(from).renameSync(to);
     } on FileSystemException catch (e) {
-      if (e.osError != null && e.osError.errorCode == 18) {
+      if (e.osError != null && e.osError!.errorCode == 18) {
         /// Invalid cross-device link
         /// We can't move files across a partition so
         /// do a copy/delete.

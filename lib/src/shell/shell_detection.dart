@@ -32,7 +32,7 @@ import 'zsh_shell.dart';
 class ShellDetection {
   static final ShellDetection _shell = ShellDetection._internal();
 
-  final _shells = <String, Shell Function(int pid)>{
+  final _shells = <String, Shell Function(int? pid)>{
     AshShell.shellName: (pid) => AshShell.withPid(pid),
     CmdShell.shellName: (pid) => CmdShell.withPid(pid),
     DashShell.shellName: (pid) => DashShell.withPid(pid),
@@ -71,10 +71,10 @@ class ShellDetection {
   }
 
   Shell _searchProcessTree() {
-    Shell firstShell;
-    int firstPid;
-    Shell shell;
-    var childPID = pid;
+    Shell? firstShell;
+    int? firstPid;
+    Shell? shell;
+    int? childPID = pid;
 
     var firstPass = true;
     while (shell == null) {
@@ -135,13 +135,13 @@ class ShellDetection {
 
   /// Returns the shell with the name that matches [processName]
   /// If there is no match then [UnknownShell] is returned.
-  Shell _shellByName(String processName, int pid) {
-    Shell shell;
+  Shell _shellByName(String processName, int? pid) {
+    Shell? shell;
 
     final finalprocessName = processName.toLowerCase();
 
     if (_shells.containsKey(finalprocessName)) {
-      shell = _shells[finalprocessName].call(pid);
+      shell = _shells[finalprocessName]!.call(pid);
     }
 
     return shell ??= UnknownShell.withPid(pid, processName: finalprocessName);

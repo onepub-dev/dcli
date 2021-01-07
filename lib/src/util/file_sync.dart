@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
+// ignore: import_of_legacy_library_into_null_safe
 import 'package:uuid/uuid.dart';
 import '../../dcli.dart';
 
@@ -18,8 +19,8 @@ import 'wait_for_ex.dart';
 /// Note: the api to this class is considered EXPERIMENTAL
 /// and is subject to change.
 class FileSync {
-  File _file;
-  RandomAccessFile _raf;
+  late File _file;
+  late RandomAccessFile _raf;
 
   /// Generates a temporary filename in the system temp directory
   /// that is guaranteed to be unique.
@@ -29,7 +30,7 @@ class FileSync {
   /// The temp file name will be <uuid>.tmp
   /// unless you provide a [suffix] in which
   /// case the file name will be <uuid>.<suffix>
-  static String tempFile({String suffix}) {
+  static String tempFile({String? suffix}) {
     var finalsuffix = suffix ?? 'tmp';
 
     if (!finalsuffix.startsWith('.')) {
@@ -52,13 +53,15 @@ class FileSync {
     _raf = _file.openSync(mode: fileMode);
   }
 
-  /// Reads a single line from the file.
-  /// [lineDelimiter] the end of line delimiter.
-  /// May be one or two characters long.
+  /// Reads a single line from a file.
+  /// The [lineDelimiter] indicates the the end of line delimiter
+  /// and may be one or two characters long.
   /// Defaults to \n.
   ///
-  String readLine({String lineDelimiter = '\n'}) {
-    var line = StringBuffer();
+  /// Returns
+  ///
+  String? readLine({String lineDelimiter = '\n'}) {
+    final StringBuffer line = StringBuffer();
     int byte;
     var priorChar = '';
 
@@ -75,10 +78,8 @@ class FileSync {
       line.write(char);
       priorChar = char;
     }
-    if (line.isEmpty && foundDelimiter == false) {
-      line = null;
-    }
-    return line.toString();
+    final bool endOfFile = line.isEmpty && foundDelimiter == false;
+    return endOfFile ? null : line.toString();
   }
 
   ///
@@ -108,22 +109,20 @@ class FileSync {
 
     final stackTrace = StackTraceImpl();
 
-    Object exception;
+    Object? exception;
 
     final done = Completer<bool>();
 
-    StreamSubscription<String> subscription;
+    late StreamSubscription<String> subscription;
 
     subscription =
         utf8.decoder.bind(inputStream).transform(const LineSplitter()).listen(
             (line) {
-              if (lineAction != null) {
-                final cont = lineAction(line);
-                if (cont == false) {
-                  subscription
-                      .cancel()
-                      .then((dynamic finished) => done.complete(true));
-                }
+              final cont = lineAction(line);
+              if (cont == false) {
+                subscription
+                    .cancel()
+                    .then((dynamic finished) => done.complete(true));
               }
             },
             cancelOnError: true,
@@ -157,7 +156,7 @@ class FileSync {
   /// then writes the given text to the file.
   /// If [newline] is null then no line terminator will
   /// be added.
-  void write(String line, {String newline = '\n'}) {
+  void write(String line, {String? newline = '\n'}) {
     final finalline = line + (newline ?? '');
     _raf.truncateSync(0);
 
@@ -169,7 +168,7 @@ class FileSync {
 
   /// Appends the [line] to the file
   /// If [newline] is true then append a newline after the line.
-  void append(String line, {String newline = '\n'}) {
+  void append(String line, {String? newline = '\n'}) {
     final finalline = line + (newline ?? '');
 
     _raf.setPositionSync(_raf.lengthSync());

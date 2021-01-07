@@ -9,7 +9,7 @@ class ShShell with ShellMixin, PosixMixin {
   static const String shellName = 'sh';
 
   @override
-  final int pid;
+  final int? pid;
   ShShell.withPid(this.pid);
 
   @override
@@ -21,7 +21,7 @@ class ShShell with ShellMixin, PosixMixin {
   }
 
   @override
-  void installTabCompletion({bool quiet = false}) {
+  void installTabCompletion({bool? quiet = false}) {
     throw UnimplementedError;
   }
 

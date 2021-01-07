@@ -73,23 +73,23 @@ void main() {
 class Privileges {
   static final Privileges _self = Privileges._internal();
 
-  DynamicLibrary dylib;
+  DynamicLibrary? dylib;
 
   // the logged in user's original UID
-  int userUID;
+  int? userUID;
 
   /// true if we are running under sudo.
-  bool sudo;
+  bool? sudo;
 
   /// I'm confused.
-  int realUID;
+  int? realUID;
 
   /// The user's effective UID when the script started.
   /// If they are running as sudo then this will be root.
-  int originalEffectiveUID;
+  int? originalEffectiveUID;
 
   /// Used to track what UID is currently in effect.
-  int currentEffectiveUID;
+  int? currentEffectiveUID;
 
   factory Privileges() => _self;
 

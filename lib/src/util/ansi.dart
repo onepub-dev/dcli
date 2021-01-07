@@ -9,7 +9,7 @@ import 'dart:io';
 ///  ...
 class Ansi {
   static const _self = Ansi._internal();
-  static bool _emitAnsi;
+  static bool? _emitAnsi;
 
   /// Factory ctor
   factory Ansi() => _self;

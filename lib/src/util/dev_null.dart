@@ -10,4 +10,4 @@
 /// ```
 ///
 /// use this to consume the output.
-void devNull(String line) {}
+void devNull(String? line) {}

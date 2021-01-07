@@ -16,7 +16,7 @@ import 'runnable_process.dart';
 /// e.g.
 /// 'tail /var/log/syslog'.run;
 ///
-extension StringAsProcess on String {
+extension StringAsProcess on String? {
   /// Allows you to execute the contents of a dart string as a
   /// command line appliation.
   /// Any output from the command  (stderr and stdout) is displayed on the console.
@@ -33,7 +33,7 @@ extension StringAsProcess on String {
   ///
   /// Linux:
   /// DCli performs glob (wildcard) expansion on command arguments if it contains any one
-  /// of *, [ or ?  unless the argument is quoted.
+  /// of `* [ ?`  unless the argument is quoted.
   /// DCli uses the dart package Glob (https://pub.dev/packages/glob) to do the glob expansion.
   ///
   /// The following command will have the argument containing the wild card *.dart expanded to
@@ -64,7 +64,7 @@ extension StringAsProcess on String {
   ///     [parser] - returns a parser with the captured output ready to be interpreted
   ///                as one of several file types.
   void get run {
-    cmd.start(this,
+    cmd.start(this!,
         terminal: true, progress: Progress(print, stderr: printerr));
   }
 
@@ -98,7 +98,7 @@ extension StringAsProcess on String {
   ///     [parser] - returns a parser with the captured output ready to be interpreted
   ///                as one of several file types.
   @Deprecated('use start(runInShell: true)')
-  void get shell => cmd.run(this, runInShell: true);
+  void get shell => cmd.run(this!, runInShell: true);
 
   /// Runs the contents of this String as a command line application.
   ///
@@ -148,15 +148,15 @@ extension StringAsProcess on String {
   ///      [parser] - returns a parser with the captured output ready to be interpreted
   ///                as one of several file types.
   void start({
-    Progress progress,
+    Progress? progress,
     bool runInShell = false,
     bool detached = false,
     bool terminal = false,
     bool nothrow = false,
     bool privileged = false,
-    String workingDirectory,
+    String? workingDirectory,
   }) {
-    cmd.start(this,
+    cmd.start(this!,
         progress: progress ?? Progress(print, stderr: printerr),
         runInShell: runInShell,
         detached: detached,
@@ -198,8 +198,8 @@ extension StringAsProcess on String {
   ///     [parser] - returns a parser with the captured output ready to be interpreted
   ///                as one of several file types.
   void forEach(LineAction stdout,
-          {LineAction stderr, bool runInShell = false}) =>
-      cmd.start(this,
+          {LineAction? stderr, bool runInShell = false}) =>
+      cmd.start(this!,
           progress: Progress(stdout, stderr: stderr), runInShell: runInShell);
 
   /// [toList] runs the contents of this String as a cli command and
@@ -241,16 +241,16 @@ extension StringAsProcess on String {
   ///     [parser] - returns a parser with the captured output ready to be interpreted
   ///                as one of several file types.
 
-  List<String> toList(
+  List<String?> toList(
       {bool runInShell = false, int skipLines = 0, bool nothrow = false}) {
-    final list = <String>[];
+    final list = <String?>[];
 
     Progress progress;
 
     progress =
         Progress((line) => list.add(line), stderr: (line) => list.add(line));
 
-    progress = cmd.start(this,
+    progress = cmd.start(this!,
         runInShell: runInShell, progress: progress, nothrow: nothrow);
 
     return list.sublist(skipLines);
@@ -311,10 +311,10 @@ extension StringAsProcess on String {
   ///     [lastLine] - returns just the last line written to stdout or stderr.
   ///     [parser] - returns a parser with the captured output ready to be interpreted
   ///                as one of several file types.
-  String get firstLine {
+  String? get firstLine {
     final lines = toList();
 
-    String line;
+    String? line;
     if (lines.isNotEmpty) {
       line = lines[0];
     }
@@ -344,8 +344,8 @@ extension StringAsProcess on String {
   ///     [firstLine] - returns just the first line written to stdout.
   ///     [parser] - returns a parser with the captured output ready to be interpreted
   ///                as one of several file types.
-  String get lastLine {
-    String lastLine;
+  String? get lastLine {
+    String? lastLine;
 
     forEach((line) => lastLine = line, stderr: (line) => lastLine = line);
 
@@ -373,7 +373,7 @@ extension StringAsProcess on String {
     final rhsRunnable = RunnableProcess.fromCommandLine(rhs);
     rhsRunnable.start(waitForStart: false);
 
-    final lhsRunnable = RunnableProcess.fromCommandLine(this);
+    final lhsRunnable = RunnableProcess.fromCommandLine(this!);
     lhsRunnable.start(waitForStart: false);
 
     return Pipe(lhsRunnable, rhsRunnable);
@@ -395,14 +395,14 @@ extension StringAsProcess on String {
   //   runnable.run(runInShell: runInShell, nothrow: nothrow, terminal: false);
   //   return runnable.stream.transform(utf8.decoder);
   // }
-  Stream<String> stream(
+  Stream<String?> stream(
       {bool runInShell = false,
-      String workingDirectory,
+      String? workingDirectory,
       bool nothrow = false,
       bool includeStderr = true}) {
     final progress = Progress.stream(includeStderr: includeStderr);
 
-    cmd.startStreaming(this,
+    cmd.startStreaming(this!,
         runInShell: runInShell,
         progress: progress,
         workingDirectory: workingDirectory,
@@ -413,14 +413,14 @@ extension StringAsProcess on String {
 
   /// Experiemental - DO NOT USE
   Sink get sink {
-    final lhsRunnable = RunnableProcess.fromCommandLine(this);
+    final lhsRunnable = RunnableProcess.fromCommandLine(this!);
     lhsRunnable.start(waitForStart: false);
     return lhsRunnable.sink;
   }
 
   /// Experiemental - DO NOT USE
   RunnableProcess get process {
-    final process = RunnableProcess.fromCommandLine(this);
+    final process = RunnableProcess.fromCommandLine(this!);
     process.start(waitForStart: false);
 
     return process;
@@ -436,14 +436,14 @@ extension StringAsProcess on String {
   ///
   /// See [append] appends a line to an existing file.
   void write(String line, {String newline = '\n'}) {
-    final sink = FileSync(this);
+    final sink = FileSync(this!);
     sink.write(line, newline: newline);
     sink.close();
   }
 
   /// Truncates a file by setting its length to zero.
   void truncate() {
-    final sink = FileSync(this);
+    final sink = FileSync(this!);
     sink.truncate();
   }
 
@@ -459,7 +459,7 @@ extension StringAsProcess on String {
   /// ```
   ///
   void append(String line, {String newline = '\n'}) {
-    final sink = FileSync(this);
+    final sink = FileSync(this!);
     sink.append(line, newline: newline);
     sink.close();
   }
