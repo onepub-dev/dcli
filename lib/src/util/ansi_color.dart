@@ -326,11 +326,11 @@ class AnsiColor {
     String text, {
     AnsiColor background = none,
   }) {
-    String? output;
+    String output;
 
     if (Ansi.isSupported) {
       output =
-          '${_fg(color.code, bold: color.bold)}${_bg(background.code)}$text$_reset';
+          '${_fg(color.code, bold: color.bold)}${_bg(background?.code)}$text$_reset';
     } else {
       output = text;
     }

@@ -4,6 +4,8 @@ import 'dart:io';
 
 import 'dart:isolate';
 
+import 'package:meta/meta.dart';
+
 import '../../dcli.dart';
 import 'stack_trace_impl.dart';
 import 'wait_for_ex.dart';
@@ -36,11 +38,11 @@ class NamedLock {
   /// so its the perfect way to create a lock that works
   /// across processes and isolates.
   final int port = 63424;
-  late String _lockPath;
+  String _lockPath;
 
   /// The name of the lock.
   final String name;
-  final String _description;
+  String _description;
 
   /// We use this to allow a lock to be-reentrant within an isolate.
   /// A non-zero value means we have the lock.
@@ -77,14 +79,16 @@ class NamedLock {
   /// ```
   ///
   NamedLock({
-    required this.name,
-    String? lockPath,
-    String description = '',
-    Duration timeout = const Duration(seconds: 30),
-  })  : _timeout = timeout,
-        _description = description {
-    _lockPath =
-        lockPath ?? join(rootPath, Directory.systemTemp.path, 'dcli', 'locks');
+    @required this.name,
+    String lockPath,
+    String description,
+    Duration timeout,
+  })  : _timeout = timeout ??= const Duration(seconds: 30),
+        _lockPath = lockPath,
+        _description = description,
+        assert(name != null) {
+    _lockPath ??= join(rootPath, Directory.systemTemp.path, 'dcli', 'locks');
+    _description ??= '';
   }
 
   /// creates a lock file and then calls [fn]
@@ -93,7 +97,7 @@ class NamedLock {
   /// a log message to the console.
   void withLock(
     void Function() fn, {
-    String? waiting,
+    String waiting,
   }) {
     var lockHeld = false;
     runZonedGuarded(() {
@@ -174,22 +178,22 @@ class NamedLock {
     return join(_lockPath, '.$pid.$isolate.$name');
   }
 
-  _LockFileParts? _lockFileParts(String lockfilePath) {
+  _LockFileParts _lockFileParts(String lockfilePath) {
     final parts = basename(lockfilePath).split('.');
     // it can't actually be one of our lock files
     if (parts.length < 3) {
       return null;
     }
 
-    final pid = int.tryParse(parts[1]) ?? 0;
-    final isolateId = int.tryParse(parts[2]) ?? 0;
+    final pid = int.tryParse(parts[1]);
+    final isolateId = int.tryParse(parts[2]);
 
     return _LockFileParts(pid, isolateId);
   }
 
   int get _isolateID {
     var isolateString = Service.getIsolateID(Isolate.current);
-    int? isolateId;
+    int isolateId;
     if (isolateString != null) {
       isolateString = isolateString.replaceAll('/', '_');
       isolateString = isolateString.replaceAll(r'\', '_');
@@ -212,19 +216,20 @@ class NamedLock {
   /// If we find an existing lock file we check if the process
   /// that owns it is still running. If it isn't we
   /// take a lock and delete the orphaned lock.
-  bool _takeLock(String? waiting) {
+  bool _takeLock(String waiting) {
     var taken = false;
 
     var finalwaiting = waiting;
 
     // wait for the lock to release or the timeout to expire
     var waitCount = 1;
-
-    // we will be retrying every 100 ms.
-    waitCount = _timeout.inMilliseconds ~/ 10;
-    // ensure at least one retry
-    if (waitCount == 0) {
-      waitCount = 1;
+    if (_timeout != null) {
+      // we will be retrying every 100 ms.
+      waitCount = _timeout.inMilliseconds ~/ 100;
+      // ensure at least one retry
+      if (waitCount == 0) {
+        waitCount = 1;
+      }
     }
 
     while (!taken && waitCount > 0) {
@@ -278,7 +283,7 @@ class NamedLock {
     if (!taken) {
       if (waitCount == 0) {
         throw LockException(
-            'NamedLock timed out on $_description ${truepath(_lockPath)} as it is currently held');
+            'NamedLock timedout on $_description ${truepath(_lockPath)} as it is currently held');
       } else {
         throw LockException(
             'Unable to lock $_description ${truepath(_lockPath)} as it is currently held');
@@ -318,20 +323,22 @@ class NamedLock {
   }
 
   void _withHardLock({
-    required void Function() fn,
-    Duration timeout = const Duration(seconds: 30),
+    Duration timeout,
+    void Function() fn,
   }) {
-    RawServerSocket? socket;
+    RawServerSocket socket;
 
     var waitCount = -1;
 
-    waitCount = timeout.inMilliseconds ~/ 10;
-    // ensure at least one retry.
-    if (waitCount == 0) waitCount = 1;
+    if (timeout != null) {
+      waitCount = timeout.inMilliseconds ~/ 100;
+      // ensure at least one retry.
+      if (waitCount == 0) waitCount = 1;
+    }
 
     try {
       while (socket == null) {
-        socket = waitForEx<RawServerSocket?>(_bindSocket());
+        socket = waitForEx<RawServerSocket>(_bindSocket());
         if (waitCount > 0) {
           waitCount--;
         }
@@ -357,8 +364,8 @@ class NamedLock {
     }
   }
 
-  Future<RawServerSocket?> _bindSocket() async {
-    RawServerSocket? socket;
+  Future<RawServerSocket> _bindSocket() async {
+    RawServerSocket socket;
     try {
       socket = await RawServerSocket.bind(
         '127.0.0.1',

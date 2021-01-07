@@ -3,8 +3,6 @@
 import 'dart:io';
 import 'package:dcli/dcli.dart';
 import 'package:dcli/src/util/file_sort.dart';
-// ignore: import_of_legacy_library_into_null_safe
-import 'package:args/args.dart';
 
 /// dsort
 ///
@@ -40,10 +38,10 @@ void main(List<String> args) {
 
 void dsort(List<String> args)  {
   final columns = <Column>[];
-  String? fieldDelimiter;
-  String? lineDelimiter;
-  String? outputPath;
-  bool? verbose;
+  String fieldDelimiter;
+  String lineDelimiter;
+  String outputPath;
+  bool verbose;
 
   final parser = ArgParser()
     ..addFlag('verbose', abbr: 'v', callback: (value) => verbose = value)
@@ -84,7 +82,7 @@ void dsort(List<String> args)  {
     columns.add(Column(0, const CaseInsensitiveSort(), SortDirection.ascending));
   }
 
-  if (verbose!) {
+  if (verbose) {
     print('Columns: ${columns.join("\n")}');
     print('Input File: $inputPath, Output File: $outputPath');
     print("Field Delimiter: '$fieldDelimiter'");

@@ -22,7 +22,7 @@ void delete(String path, {bool ask = false}) =>
     _Delete().delete(path, ask: ask);
 
 class _Delete extends DCliFunction {
-  void delete(String path, {required bool ask}) {
+  void delete(String path, {bool ask}) {
     Settings().verbose('delete:  ${absolute(path)} ask: $ask');
 
     if (!exists(path)) {

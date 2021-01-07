@@ -26,6 +26,7 @@ void evaluate(String command) {
       break;
     case 'exit':
       exit(0);
+      break;
     default:
       if (which(parts[0]).found) {
         command.start(nothrow: true, progress: Progress.print());
@@ -39,11 +40,13 @@ void evaluate(String command) {
 /// our own implementation of the 'ls' command.
 void ls(List<String> patterns) {
   if (patterns.isEmpty) {
-    find('*', root: pwd, recursive: false, types: [Find.file, Find.directory]).forEach((file) => print('  $file'));
+    find('*', root: pwd, recursive: false, types: [Find.file, Find.directory])
+        .forEach((file) => print('  $file'));
   } else {
     for (final pattern in patterns) {
       find(pattern,
-              root: pwd, recursive: false, types: [Find.file, Find.directory]).forEach((file) => print('  $file'));
+              root: pwd, recursive: false, types: [Find.file, Find.directory])
+          .forEach((file) => print('  $file'));
     }
   }
 }

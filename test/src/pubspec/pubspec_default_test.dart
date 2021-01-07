@@ -99,7 +99,7 @@ dependencies:
   }, skip: false);
 }
 
-void runTest(TestFileSystem fs, String? annotation, String main,
+void runTest(TestFileSystem fs, String annotation, String main,
     List<Dependency> expected) {
   final scriptDirectory = p.join(fs.fsRoot, 'local');
   final scriptPath = p.join(scriptDirectory, 'test.dart');

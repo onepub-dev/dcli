@@ -23,7 +23,7 @@ abstract class Shell {
 
   /// Returns the path to the shell's start script or config file
   /// e.g /home/<user>/.bashrc
-  String? get pathToStartScript;
+  String get pathToStartScript;
 
   /// Returns true if the shells name matches
   /// the passed [name].
@@ -46,14 +46,14 @@ abstract class Shell {
   /// install it.
   /// If [quiet] is trie the suppress any console output except
   /// for errors.
-  void installTabCompletion({bool? quiet}) => throw UnimplementedError();
+  void installTabCompletion({bool quiet}) => throw UnimplementedError();
 
   /// Returns the username of the logged in user.
   ///
   /// Linux:
   /// If you are running sudo this will still return the actual
   /// username rather than root.
-  String? get loggedInUser;
+  String get loggedInUser;
 
   /// Returns true if the current user has esclated
   /// privileges.
@@ -74,11 +74,11 @@ abstract class Shell {
   ///
   /// This method returns a String describing those preconditions
   /// or null if there are no preconditions.
-  String? checkInstallPreconditions() => null;
+  String checkInstallPreconditions() => null;
 
-  int? get pid;
+  int get pid;
 
-  static Shell? _current;
+  static Shell _current;
 
   /// Returns the user shell that this script was launched from
   /// e.g. bash, powershell, ....

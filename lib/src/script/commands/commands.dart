@@ -28,7 +28,7 @@ class Commands {
       ];
 
   /// Find the command based on the [argument] passed
-  static Command? findCommand(String argument, Map<String, Command> commands) {
+  static Command findCommand(String argument, Map<String, Command> commands) {
     final command = commands[argument.toLowerCase()];
 
     return command;
@@ -55,7 +55,7 @@ abstract class Command {
   /// Returns the exitCode of the script that is run
   /// If a script isn't run then return 0 for success
   /// or thrown an exception on any error.
-  int? run(List<Flag> selectedFlags, List<String> subarguments);
+  int run(List<Flag> selectedFlags, List<String> subarguments);
 
   /// name of the command
   String get name => _name;

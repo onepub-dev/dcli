@@ -10,7 +10,7 @@ class BashShell with ShellMixin, PosixMixin {
   static const String shellName = 'bash';
 
   @override
-  final int? pid;
+  final int pid;
   BashShell.withPid(this.pid);
 
   @override
@@ -19,7 +19,7 @@ class BashShell with ShellMixin, PosixMixin {
   // adds bash cli completion for dcli
   // by adding a 'complete' command to ~/.bashrc
   @override
-  void installTabCompletion({bool? quiet = false}) {
+  void installTabCompletion({bool quiet = false}) {
     if (!isCompletionInstalled) {
       // Add cli completion
       /// -o nospace - after directory names
@@ -28,14 +28,20 @@ class BashShell with ShellMixin, PosixMixin {
 
       final startFile = pathToStartScript;
 
-      if (!exists(startFile)) {
-        touch(startFile, create: true);
-      }
-      startFile.append(command);
+      if (startFile != null) {
+        if (!exists(startFile)) {
+          touch(startFile, create: true);
+        }
+        startFile.append(command);
 
-      if (!quiet!) {
-        print(
-            'dcli tab completion installed. Restart your terminal to activate it.');
+        if (!quiet) {
+          print(
+              'dcli tab completion installed. Restart your terminal to activate it.');
+        }
+      } else {
+        printerr(red('Unable to install dcli tab completion'));
+        printerr(
+            "Add ${orange(command)} to your start up script to enable tab completion");
       }
     }
   }
@@ -63,14 +69,15 @@ class BashShell with ShellMixin, PosixMixin {
     var completeInstalled = false;
     final startFile = pathToStartScript;
 
-    if (exists(startFile)) {
-      read(startFile).forEach((line) {
-        if (line.contains('dcli_complete')) {
-          completeInstalled = true;
-        }
-      });
+    if (startFile != null) {
+      if (exists(startFile)) {
+        read(startFile).forEach((line) {
+          if (line.contains('dcli_complete')) {
+            completeInstalled = true;
+          }
+        });
+      }
     }
-
     return completeInstalled;
   }
 

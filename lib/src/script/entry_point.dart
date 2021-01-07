@@ -12,7 +12,7 @@ import 'commands/help.dart';
 
 /// the 'main' for running commands.
 class EntryPoint {
-  static EntryPoint? _self;
+  static EntryPoint _self;
 
   ///
   factory EntryPoint() => _self ??= EntryPoint._internal();
@@ -34,7 +34,7 @@ class EntryPoint {
   int _parseCmdLine(List<String> arguments, List<Command> availableCommands) {
     try {
       CommandLineRunner.init(availableCommands);
-      exitCode = CommandLineRunner().process(arguments)!;
+      exitCode = CommandLineRunner().process(arguments);
 
       Settings().verbose('Exiting with code $exitCode');
 

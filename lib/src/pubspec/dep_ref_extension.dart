@@ -1,21 +1,19 @@
-// ignore: import_of_legacy_library_into_null_safe
-// ignore: import_of_legacy_library_into_null_safe
 import 'package:pubspec/pubspec.dart';
 import '../script/command_line_runner.dart';
 import 'dependency.dart';
 
 /// adds rehydrate method to DependencyReference and friends.
-extension DependencyReferenceEx on DependencyReference? {
+extension DependencyReferenceEx on DependencyReference {
   /// expands the dependancy to its yaml form.
   String rehydrate(Dependency dependency) {
     if (dependency.reference is HostedReference) {
-      return (dependency.reference as HostedReference?)!.rehydrate(dependency);
+      return (dependency.reference as HostedReference).rehydrate(dependency);
     } else if (dependency.reference is GitReference) {
-      return (dependency.reference as GitReference?)!.rehydrate(dependency);
+      return (dependency.reference as GitReference).rehydrate(dependency);
     } else if (dependency.reference is PathReference) {
-      return (dependency.reference as PathReference?)!.rehydrate(dependency);
+      return (dependency.reference as PathReference).rehydrate(dependency);
     } else if (dependency.reference is ExternalHostedReference) {
-      return (dependency.reference as ExternalHostedReference?)!
+      return (dependency.reference as ExternalHostedReference)
           .rehydrate(dependency);
     }
 
@@ -28,14 +26,7 @@ extension DependencyReferenceEx on DependencyReference? {
 extension HostedReferenceExt on HostedReference {
   /// expands the dependancy to its yaml form.
   String rehydrate(Dependency dependency) {
-    String? constraint;
-    if (versionConstraint == null) {
-      constraint = 'any';
-    } else {
-      constraint = versionConstraint.toString();
-    }
-
-    return '${dependency.name}: $constraint';
+    return '${dependency.name}: ${versionConstraint.toString()}';
   }
 }
 

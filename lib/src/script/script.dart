@@ -41,11 +41,10 @@ class Script {
   /// ```dart
   /// var script = Script.fromFile(Platform.script.toFilePath());
   ///
-  Script.fromFile(String scriptPath, {DartProject? project})
+  Script.fromFile(String scriptPath, {DartProject project})
       : this._internal(scriptPath, create: false, project: project);
 
-  Script._internal(String scriptPath,
-      {required bool create, DartProject? project})
+  Script._internal(String scriptPath, {bool create, DartProject project})
       : _scriptname = _extractScriptname(scriptPath),
         _scriptDirectory = _extractScriptDirectory(scriptPath),
         _project = project {
@@ -157,7 +156,7 @@ class Script {
   /// then this will be the location of the script file.
   String get pathToProjectRoot => project.pathToProjectRoot;
 
-  static  Script? _current;
+  static Script _current;
 
   /// Returns the instance of the currently running script.
   ///
@@ -165,7 +164,7 @@ class Script {
   static Script get current =>
       _current ??= Script.fromFile(Settings().pathToScript);
 
-  DartProject? _project;
+  DartProject _project;
 
   DartProject get project =>
       _project ??= DartProject.fromPath(pathToScriptDirectory, search: true);
@@ -188,11 +187,11 @@ class Script {
   /// and returns it.
   PubSpec get pubSpec => project.pubSpec;
 
-  void compile({bool install = false, bool? overwrite = false}) {
+  void compile({bool install = false, bool overwrite = false}) {
     Settings().verbose(
         "\nCompiling with pubspec.yaml:\n${read(pathToPubSpec).toList().join('\n')}\n");
 
-    if (install && isInstalled && !overwrite!) {
+    if (install && isInstalled && !overwrite) {
       throw InvalidArguments(
           'You selected to install the compiled exe however an installed exe of that name already exists. Use overwrite=true');
     }
@@ -210,7 +209,7 @@ class Script {
   /// Runs the script passing in the given [args]
   ///
   /// Returns the processes exit code.
-  int? run(List<String> args) {
+  int run(List<String> args) {
     final sdk = DartSdk();
 
     final runner = ScriptRunner(sdk, this, args);

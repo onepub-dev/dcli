@@ -19,7 +19,7 @@ import 'is.dart';
 Progress head(String path, int lines) => _Head().head(path, lines);
 
 class _Head extends DCliFunction {
-  Progress head(String path, int lines, {Progress? progress}) {
+  Progress head(String path, int lines, {Progress progress}) {
     Settings().verbose('head ${absolute(path)} lines: $lines');
 
     if (!exists(path)) {
@@ -35,7 +35,7 @@ class _Head extends DCliFunction {
       var count = 0;
       final file = FileSync(path);
       file.read((line) {
-        progress!.addToStdout(line);
+        progress.addToStdout(line);
         count++;
         if (count >= lines) {
           return false;
@@ -48,7 +48,7 @@ class _Head extends DCliFunction {
       throw HeadException(
           'An error occured reading ${absolute(path)}. Error: $e');
     } finally {
-      progress!.close();
+      progress.close();
     }
 
     return progress;

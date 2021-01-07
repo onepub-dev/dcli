@@ -60,21 +60,19 @@ void copyTree(String from, String to,
         {bool overwrite = false,
         bool includeHidden = false,
         bool recursive = true,
-        bool Function(String file) filter = _allowAll}) =>
+        bool Function(String file) filter}) =>
     _CopyTree().copyTree(from, to,
         overwrite: overwrite,
         includeHidden: includeHidden,
         filter: filter,
         recursive: recursive);
 
-bool _allowAll(String file) => true;
-
 class _CopyTree extends DCliFunction {
   void copyTree(String from, String to,
       {bool overwrite = false,
-      bool Function(String file) filter = _allowAll,
-      bool includeHidden = false,
-      bool recursive = true}) {
+      bool Function(String file) filter,
+      bool includeHidden,
+      bool recursive}) {
     if (!isDirectory(from)) {
       throw CopyTreeException(
           'The [from] path ${truepath(from)} must be a directory.');
@@ -94,7 +92,9 @@ class _CopyTree extends DCliFunction {
     try {
       find('*', root: from, includeHidden: includeHidden, recursive: recursive)
           .forEach((file) {
-        if (filter(file)) {
+        var include = true;
+        if (filter != null) include = filter(file);
+        if (include) {
           final target = join(to, relative(file, from: from));
 
           if (recursive && !exists(dirname(target))) {

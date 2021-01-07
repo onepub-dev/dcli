@@ -1,14 +1,15 @@
 @Timeout(Duration(seconds: 600))
 import 'dart:io';
 import 'package:file/memory.dart';
+import 'package:meta/meta.dart';
 import 'package:test/test.dart';
 
 class TestZone {
-  late MemoryFileSystem _fs;
+  MemoryFileSystem _fs;
 
   TestZone({
     FileSystemStyle style = FileSystemStyle.posix,
-    MemoryFileSystem? fileSystem,
+    MemoryFileSystem fileSystem,
   }) {
     if (fileSystem == null) {
       _fs = MemoryFileSystem(style: style);
@@ -40,7 +41,7 @@ class TestZone {
     );
   }
 
-  FileSystemEntityType typeSync(String path, {required bool followLinks}) {
+  FileSystemEntityType typeSync(String path, {@required bool followLinks}) {
     var _path = path;
     _path = _path.substring(0, _path.length - 1);
 

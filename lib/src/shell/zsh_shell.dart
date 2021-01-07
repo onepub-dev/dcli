@@ -12,7 +12,7 @@ class ZshShell with ShellMixin, PosixMixin {
   static const String shellName = 'zsh';
 
   @override
-  final int? pid;
+  final int pid;
   ZshShell.withPid(this.pid);
 
   @override
@@ -22,7 +22,7 @@ class ZshShell with ShellMixin, PosixMixin {
   bool get isCompletionInstalled => false;
 
   @override
-  void installTabCompletion({bool? quiet = false}) {
+  void installTabCompletion({bool quiet = false}) {
     throw UnimplementedError();
   }
 

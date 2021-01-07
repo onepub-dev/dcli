@@ -2,12 +2,9 @@
 
 import 'dart:io';
 
-// ignore: import_of_legacy_library_into_null_safe
 import 'package:args/command_runner.dart';
 import 'package:dcli/dcli.dart';
 import 'package:dcli/src/pubspec/pubspec.dart';
-// ignore: import_of_legacy_library_into_null_safe
-import 'package:args/args.dart';
 
 ///
 /// Starts a docker shell with a full install

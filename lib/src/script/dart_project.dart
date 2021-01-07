@@ -11,8 +11,8 @@ import 'pub_get.dart';
 /// of a pubspec.yaml, dart files ....
 
 class DartProject {
-  late String _pathToProjectRoot;
-  String? _pathToPubSpec;
+  String _pathToProjectRoot;
+  String _pathToPubSpec;
 
   /// Load a dart project from the given directory.
   /// We search up the tree starting from [pathToSearchFrom]
@@ -27,7 +27,7 @@ class DartProject {
     _pathToProjectRoot = truepath(_pathToProjectRoot);
   }
 
-  static DartProject? _current;
+  static DartProject _current;
 
   /// Returns the instance of the currently running DartProject.
   ///
@@ -41,7 +41,7 @@ class DartProject {
   // ignore: prefer_constructors_over_static_methods
   static DartProject get current {
     final script = Script.current;
-    String startFrom = '.';
+    var startFrom = '.';
     if (!script.isCompiled) {
       startFrom = Settings().pathToScript;
     }
@@ -77,7 +77,7 @@ class DartProject {
     print('');
     _colprint('Dependencies', '');
     for (final name in pubSpec.dependencies.keys) {
-      _colprint(name, pubSpec.dependencies[name]!.rehydrate());
+      _colprint(name, pubSpec.dependencies[name].rehydrate());
     }
   }
 
@@ -106,7 +106,7 @@ class DartProject {
     return pathToSearchFrom;
   }
 
-  NamedLock? __lock;
+  NamedLock __lock;
   static const _lockName = 'script.lock';
 
   NamedLock get _lock =>
@@ -253,8 +253,7 @@ class DartProject {
 
   /// Creates a script located at [pathToScript] from the passed [templatePath].
   /// When the user runs 'dcli create <script>'
-  void _createFromTemplate(
-      {required String templatePath, required String pathToScript}) {
+  void _createFromTemplate({String templatePath, String pathToScript}) {
     copy(templatePath, pathToScript);
 
     replace(pathToScript, '%dcliName%', DCliPaths().dcliName);
@@ -266,12 +265,12 @@ class DartProject {
     }
   }
 
-  void _createAnalysisOptionsFromTemplate({bool? showWarnings}) {
+  void _createAnalysisOptionsFromTemplate({bool showWarnings}) {
     /// add pedantic to the project
 
     final analysisPath = join(pathToProjectRoot, 'analysis_options.yaml');
     if (!exists(analysisPath)) {
-      if (showWarnings!) {
+      if (showWarnings) {
         print(orange('Creating missing analysis_options.yaml.'));
       }
 
@@ -280,7 +279,7 @@ class DartProject {
     }
   }
 
-  void _createPubspecFromTemplate({required bool showWarnings}) {
+  void _createPubspecFromTemplate({bool showWarnings}) {
     if (showWarnings) {
       print(orange('Creating missing pubspec.yaml.'));
     }

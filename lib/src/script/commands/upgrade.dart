@@ -46,7 +46,7 @@ class UpgradeCommand extends Command {
   /// place holder which will be used to make any modifications
   /// required to the dcli directory structure or files
   /// as part of an upgrade.
-  void upgradeVersion(String? currentVersion) {}
+  void upgradeVersion(String currentVersion) {}
 
   @override
   String usage() => 'upgrade';

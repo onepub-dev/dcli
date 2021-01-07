@@ -134,5 +134,6 @@ void main() {
   catch (e) {
     // All errors are thrown as exceptions.
     print('An error occured: ${e.toString()}');
+    e.printStackTrace();
   }
 }

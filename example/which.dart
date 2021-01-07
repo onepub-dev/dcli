@@ -2,7 +2,6 @@
 
 import 'dart:io';
 import 'package:dcli/dcli.dart';
-// ignore: import_of_legacy_library_into_null_safe
 import 'package:args/args.dart';
 
 /// which appname
@@ -12,7 +11,7 @@ void main(List<String> args) {
 
   final results = parser.parse(args);
 
-  final verbose = results['verbose'] as bool?;
+  final verbose = results['verbose'] as bool;
 
   if (results.rest.length != 1) {
     print(red('You must pass the name of the executable to search for.'));
@@ -24,7 +23,7 @@ void main(List<String> args) {
   final command = results.rest[0];
 
   for (final path in PATH) {
-    if (verbose!) {
+    if (verbose) {
       print('Searching: ${canonicalize(path)}');
     }
     if (exists(join(path, command))) {

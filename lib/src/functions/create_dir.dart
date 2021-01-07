@@ -31,7 +31,7 @@ String createDir(String path, {bool recursive = false}) =>
     _CreateDir().createDir(path, recursive: recursive);
 
 class _CreateDir extends DCliFunction {
-  String createDir(String path, {required bool recursive}) {
+  String createDir(String path, {bool recursive}) {
     Settings().verbose('createDir:  ${absolute(path)} recursive: $recursive');
 
     try {

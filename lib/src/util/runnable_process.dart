@@ -2,6 +2,8 @@ import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
 
+import 'package:meta/meta.dart';
+
 import '../../dcli.dart';
 import '../functions/env.dart';
 import 'dcli_exception.dart';
@@ -14,8 +16,6 @@ import 'wait_for_ex.dart';
 typedef LineAction = void Function(String line);
 typedef CancelableLineAction = bool Function(String line);
 
-
-
 /// [printerr] provides the equivalent functionality to the
 /// standard Dart print function but instead writes
 /// the output to stderr rather than stdout.
@@ -24,17 +24,17 @@ typedef CancelableLineAction = bool Function(String line);
 /// out to stderr and expected output to stdout.
 ///
 /// [line] the line to write to stderr.
-void printerr(String? line) {
+void printerr(String line) {
   stderr.writeln(line);
   // waitForEx<dynamic>(stderr.flush());
 }
 
 ///
 class RunnableProcess {
-  late Future<Process> _fProcess;
+  Future<Process> _fProcess;
 
   /// The directory the process is running in.
-  final String? workingDirectory;
+  final String workingDirectory;
 
   final ParsedCliCommand _parsed;
 
@@ -43,7 +43,7 @@ class RunnableProcess {
 
   Completer<void> stdoutFlushed = Completer<void>();
   Completer<void> stderrFlushed = Completer<void>();
-  late Future<List<void>> streamsFlushed;
+  Future<List<void>> streamsFlushed;
 
   RunnableProcess._internal(this._parsed, this.workingDirectory) {
     streamsFlushed =
@@ -55,7 +55,7 @@ class RunnableProcess {
   ///
   /// Glob expansion is performed on each non-quoted argument.
   ///
-  RunnableProcess.fromCommandLine(String cmdLine, {String? workingDirectory})
+  RunnableProcess.fromCommandLine(String cmdLine, {String workingDirectory})
       : this._internal(
             ParsedCliCommand(cmdLine, workingDirectory), workingDirectory);
 
@@ -64,8 +64,8 @@ class RunnableProcess {
   ///
   /// Glob expansion is performed on each non-quoted argument.
   ///
-  RunnableProcess.fromCommandArgs(String? command, List<String?> args,
-      {String? workingDirectory})
+  RunnableProcess.fromCommandArgs(String command, List<String> args,
+      {String workingDirectory})
       : this._internal(
             ParsedCliCommand.fromParsed(command, args, workingDirectory),
             workingDirectory);
@@ -106,10 +106,10 @@ class RunnableProcess {
   /// Current [privileged] is only supported under Linux.
   ///
   Progress runStreaming(
-      {Progress? progress,
+      {Progress progress,
       bool runInShell = false,
       bool privileged = false,
-      bool? nothrow}) {
+      bool nothrow}) {
     progress ??= Progress.devNull();
 
     start(runInShell: runInShell, privileged: privileged);
@@ -133,12 +133,12 @@ class RunnableProcess {
   /// Current [privileged] is only supported under Linux.
   ///
   Progress run({
-    Progress? progress,
+    Progress progress,
     bool runInShell = false,
     bool detached = false,
-    required bool terminal,
+    bool terminal,
     bool privileged = false,
-    bool? nothrow,
+    bool nothrow,
   }) {
     progress ??= Progress.devNull();
 
@@ -215,8 +215,8 @@ class RunnableProcess {
           'The specified workingDirectory [$workdir] does not exist.');
     }
     _fProcess = Process.start(
-      _parsed.cmd!,
-      _parsed.args as List<String>,
+      _parsed.cmd,
+      _parsed.args,
       runInShell: runInShell,
       workingDirectory: workdir,
       mode: mode,
@@ -241,7 +241,7 @@ class RunnableProcess {
         .catchError((Object e, StackTrace s) {
       // 2 - No such file or directory
       if (e is ProcessException && e.errorCode == 2) {
-        final ep = e;
+        final ep = e as ProcessException;
         e = RunException.withArgs(
           ep.executable,
           ep.arguments,
@@ -260,7 +260,7 @@ class RunnableProcess {
   /// The main use is when using start(terminal:true).
   /// We don't have access to any IO so we just
   /// have to wait for things to finish.
-  int? _waitForExit() {
+  int _waitForExit() {
     final exited = Completer<int>();
     _fProcess.then((process) {
       final exitCode = waitForEx<int>(process.exitCode);
@@ -308,7 +308,7 @@ class RunnableProcess {
             // forget broken pipe after rhs terminates before lhs
           },
           test: (e) =>
-              e is SocketException && e.osError!.message == 'Broken pipe',
+              e is SocketException && e.osError.message == 'Broken pipe',
         );
       });
     });
@@ -318,9 +318,11 @@ class RunnableProcess {
   /// immediately.
   ///
   /// When the process exits it closes the [progress] streams.
-  void processStream(Progress progress, {required bool? nothrow}) {
+  void processStream(Progress progress, {@required bool nothrow}) {
+    final _progress = progress ?? Progress.devNull();
+
     _fProcess.then((process) {
-      _wireStreams(process, progress);
+      _wireStreams(process, _progress);
 
       // trap the process finishing
       process.exitCode.then((exitCode) {
@@ -328,18 +330,18 @@ class RunnableProcess {
         // If the start failed we don't want to rethrow
         // as the exception will be thrown async and it will
         // escape as an unhandled exception and stop the whole script
-        progress.exitCode = exitCode;
+        _progress.exitCode = exitCode;
         if (exitCode != 0 && nothrow == false) {
           final error = RunException.withArgs(
               _parsed.cmd,
               _parsed.args,
               exitCode,
               'The command ${red('[${_parsed.cmd}] with args [${_parsed.args.join(', ')}]')} failed with exitCode: $exitCode');
-          progress.onError(error);
-          progress.close();
+          _progress.onError(error);
+          _progress.close();
         } else {
           waitForEx<void>(streamsFlushed);
-          progress.close();
+          _progress.close();
         }
       });
     });
@@ -349,7 +351,7 @@ class RunnableProcess {
   // If a LineAction exists we call
   // line action each time the process emmits a line.
   /// The [nothrow] argument is EXPERIMENTAL
-  void processUntilExit(Progress? progress, {required bool? nothrow}) {
+  void processUntilExit(Progress progress, {@required bool nothrow}) {
     final done = Completer<bool>();
 
     final _progress = progress ?? Progress.devNull();
@@ -438,20 +440,20 @@ class RunException extends DCliException {
   String cmdLine;
 
   /// the exit code of the command.
-  int? exitCode;
+  int exitCode;
 
   /// the error.
   String reason;
 
   ///
   RunException(this.cmdLine, this.exitCode, this.reason,
-      {StackTraceImpl? stackTrace})
+      {StackTraceImpl stackTrace})
       : super(reason, stackTrace);
 
   ///
   RunException.withArgs(
-      String? cmd, List<String?> args, this.exitCode, this.reason,
-      {StackTraceImpl? stackTrace})
+      String cmd, List<String> args, this.exitCode, this.reason,
+      {StackTraceImpl stackTrace})
       : cmdLine = '$cmd ${args.join(' ')}',
         super(reason, stackTrace);
 

@@ -10,23 +10,21 @@ import 'package:dcli/src/util/stack_trace_impl.dart';
 import 'package:path/path.dart';
 import 'package:dcli/src/script/entry_point.dart';
 import 'package:dcli/src/util/named_lock.dart';
-// ignore: import_of_legacy_library_into_null_safe
 import 'package:pubspec/pubspec.dart' as ps;
 import 'package:test/test.dart';
-// ignore: import_of_legacy_library_into_null_safe
 import 'package:uuid/uuid.dart';
 
 import 'package:dcli/src/util/pub_cache.dart';
 
 class TestFileSystem {
-  late String uniquePath;
-  late String top;
-  late String thidden;
-  late String middle;
-  late String bottom;
-  late String hidden;
+  String uniquePath;
+  String top;
+  String thidden;
+  String middle;
+  String bottom;
+  String hidden;
 
-  static late String _testRoot;
+  static String _testRoot;
 
   /// directory under .dcli which we used to store compiled
   /// tests scripts that we need to add to the TestFileSystems
@@ -34,22 +32,22 @@ class TestFileSystem {
   static const String _testBin = 'test_bin';
   static const String testLinesFile = 'lines.txt';
 
-  String? home;
+  String home;
 
   String get fsRoot => join(TestFileSystem._testRoot, uniquePath);
 
   bool initialised = false;
 
-  bool? installDcli;
+  bool installDcli;
 
   /// The location of any temp scripts
   /// that need to be created during testing.
-  late String tmpScriptPath;
+  String tmpScriptPath;
 
   /// The location of the test_script directory
-  late String testScriptPath;
+  String testScriptPath;
 
-  static TestFileSystem? common;
+  static TestFileSystem common;
 
   /// The TestFileSystem allows you to run
   /// unit tests in a 'virtualised' filesystem.
@@ -82,7 +80,7 @@ class TestFileSystem {
   /// dcli's install.
   ///
   factory TestFileSystem({bool useCommonPath = true, bool installDcli = true}) {
-    TestFileSystem? use;
+    TestFileSystem use;
     if (useCommonPath) {
       print(orange('Re-using common TestFileSystem'));
       common ??= TestFileSystem._internal(installDcli: installDcli);
@@ -91,7 +89,7 @@ class TestFileSystem {
       use = TestFileSystem._internal(installDcli: installDcli);
     }
 
-    return use!;
+    return use;
   }
 
   TestFileSystem._internal({this.installDcli}) {
@@ -107,9 +105,9 @@ class TestFileSystem {
     testScriptPath = truepath(fsRoot, 'test_script');
   }
 
-  String tempFile({String? suffix}) => FileSync.tempFile(suffix: suffix);
+  String tempFile({String suffix}) => FileSync.tempFile(suffix: suffix);
 
-  String? originalPubCache;
+  String originalPubCache;
 
   void withinZone(
     void Function(TestFileSystem fs) callback,
@@ -177,7 +175,7 @@ class TestFileSystem {
       /// broken.
       copyPubCache(originalHome, HOME);
       copyTestScripts();
-      if (installDcli!) {
+      if (installDcli) {
         installDCli();
       }
       buildTestFileSystem();
@@ -268,22 +266,22 @@ class TestFileSystem {
 
   void installDCli() {
     /// run pub get and only display errors.
-    '${DartSdk.dartExeName} pub global activate --source path $pwd'
-        .start(progress: Progress((line) {}, stderr: (line) => print(line)));
+    '${DartSdk.dartExeName} pub global activate --source path $pwd'.start(
+        progress: Progress((line) => null, stderr: (line) => print(line)));
 
     EntryPoint().process(['install', '--nodart', '--quiet', '--noprivileges']);
   }
 
   void rebuildPath() {
-    final newPath = <String?>[];
+    final newPath = <String>[];
 
     // remove .pub-cache and .dcli... and replace with the test FS ones
 
-    if (PATH.isEmpty) {
+    if (PATH == null || PATH.isEmpty) {
       print(red('PATH is empty'));
     }
     for (final path in PATH) {
-      if (isWithin(originalPubCache!, path) || path.contains('.dcli')) {
+      if (isWithin(originalPubCache, path) || path.contains('.dcli')) {
         continue;
       }
 
@@ -310,7 +308,7 @@ class TestFileSystem {
       createDir(PubCache().pathTo, recursive: true);
     }
 
-    copyTree(originalPubCache!, PubCache().pathTo);
+    copyTree(originalPubCache, PubCache().pathTo);
 
     print('Reset ${PubCache.envVar} to ${env[PubCache.envVar]}');
 
@@ -343,7 +341,7 @@ class TestFileSystem {
   void _patchRelativeDependenciesAndWarmup(String testScriptPath) {
     find('pubspec.yaml', root: testScriptPath).forEach((pathToPubspec) {
       final pubspec = PubSpec.fromFile(pathToPubspec);
-      final dependency = pubspec.dependencies['dcli']!;
+      final dependency = pubspec.dependencies['dcli'];
 
       final dcliProject = DartProject.fromPath('.');
 

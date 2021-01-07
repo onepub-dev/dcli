@@ -7,7 +7,7 @@ import '../util/test_utils.dart';
 
 void main() {
   t.group('Piping with ForEach ', () {
-    final lines = <String?>[];
+    final lines = <String>[];
 
     t.test('For Each on string', () {
       TestFileSystem().withinZone((fs) {

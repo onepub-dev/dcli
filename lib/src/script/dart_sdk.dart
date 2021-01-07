@@ -1,10 +1,8 @@
 import 'dart:io';
 
-// ignore: import_of_legacy_library_into_null_safe
 import 'package:archive/archive.dart';
-// ignore: import_of_legacy_library_into_null_safe
+import 'package:meta/meta.dart';
 import 'package:pub_semver/pub_semver.dart';
-// ignore: import_of_legacy_library_into_null_safe
 import 'package:system_info/system_info.dart';
 
 import '../../dcli.dart';
@@ -17,15 +15,15 @@ import 'commands/install.dart';
 /// The [DartSdk] provides access to a number of the dart sdk tools
 /// as well as details on the active sdk instance.
 class DartSdk {
-  static DartSdk? _self;
+  static DartSdk _self;
 
   /// Path of Dart SDK
-  String? _sdkPath;
+  String _sdkPath;
 
   // Path the dart executable obtained by scanning the PATH
-  String? _exePath;
+  String _exePath;
 
-  String? _version;
+  String _version;
 
   ///
   factory DartSdk() => _self ??= DartSdk._internal();
@@ -63,27 +61,27 @@ class DartSdk {
   }
 
   /// The path to the dart exe.
-  String? get pathToDartExe => _exePath ??= which(dartExeName).path;
+  String get pathToDartExe => _exePath ??= which(dartExeName).path;
 
-  String? _pathToPubExe;
+  String _pathToPubExe;
 
   /// file path to the 'pub' command.
-  String? get pathToPubExe => _pathToPubExe ??= which(pubExeName).path;
+  String get pathToPubExe => _pathToPubExe ??= which(pubExeName).path;
 
-  String? _pathToDartToNativeExe;
+  String _pathToDartToNativeExe;
 
   /// file path to the 'dart2native' command.
-  String? get pathToDartToNativeExe =>
+  String get pathToDartToNativeExe =>
       _pathToDartToNativeExe ??= which(dart2NativeExeName).path;
 
   int get versionMajor {
-    final parts = version!.split('.');
+    final parts = version.split('.');
 
     return int.tryParse(parts[0]) ?? 2;
   }
 
   int get versionMinor {
-    final parts = version!.split('.');
+    final parts = version.split('.');
 
     return int.tryParse(parts[1]) ?? 9;
   }
@@ -100,7 +98,7 @@ class DartSdk {
   /// [script] is the path to the dcli script we are compiling.
   /// [pathToExe] is the path (including the filename) to write the compiled ex to .
   void runDartCompiler(Script script,
-      {required String pathToExe, Progress? progress}) {
+      {@required String pathToExe, Progress progress}) {
     final runArgs = <String>[];
 
     RunnableProcess process;
@@ -137,8 +135,8 @@ class DartSdk {
   }
 
   /// runs 'pub get'
-  void runPubGet(String? workingDirectory,
-      {Progress? progress, bool? compileExecutables}) {
+  void runPubGet(String workingDirectory,
+      {Progress progress, bool compileExecutables}) {
     RunnableProcess process;
     if (useDartCommand) {
       process = RunnableProcess.fromCommandArgs(
@@ -184,7 +182,7 @@ class DartSdk {
   }
 
   /// returns the version of dart.
-  String? get version {
+  String get version {
     if (_version == null) {
       /// extract the version out of the dumped line.
       final regx = RegExp(r'[0-9]*\.[0-9]*\.[0-9]*');

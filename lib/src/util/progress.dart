@@ -14,7 +14,7 @@ class Progress {
   bool _closed = false;
 
   /// The exist code of the completed process.
-  int? exitCode;
+  int exitCode;
 
   /// TODO: setting [includeStderr] or [includeStdout]
   /// to false stop methods like [toList] from working.
@@ -32,11 +32,11 @@ class Progress {
   final _stdoutCompleter = Completer<bool>();
   final _stderrCompleter = Completer<bool>();
 
-  final _stdoutController = StreamController<String?>();
+  final _stdoutController = StreamController<String>();
   final _stderrController = StreamController<String>();
 
   ///
-  Progress(LineAction stdout, {LineAction? stderr = devNull})
+  Progress(LineAction stdout, {LineAction stderr = devNull})
       : includeStdout = true,
         includeStderr = true {
     stderr ??= devNull;
@@ -110,11 +110,11 @@ class Progress {
   /// Returns a combined stream including stdout and stderr.
   /// You control whether stderr and/or stdout are inserted into the stream when you call
   /// [stream(includeStderr: true, includeStdout)]
-  Stream<String?> get stream =>
+  Stream<String> get stream =>
       StreamGroup.merge([_stdoutController.stream, _stderrController.stream]);
 
   /// adds the [line] to the stdout controller
-  void addToStdout(String? line) {
+  void addToStdout(String line) {
     if (!_closed) {
       if (includeStdout) {
         _stdoutController.sink.add(line);
@@ -141,7 +141,8 @@ class Progress {
 
   ///
   void forEach(LineAction stdout, {LineAction stderr = devNull}) {
-    _processUntilComplete(stdout, stderr: stderr);
+    final _stderr = stderr == null ? stderr : devNull;
+    _processUntilComplete(stdout, stderr: _stderr);
   }
 
   ///
@@ -158,8 +159,10 @@ class Progress {
   /// processes both streams until they complete
   ///
   void _wireStreams(LineAction stdout, LineAction stderr) {
+    assert(stdout != null);
+    assert(stderr != null);
     _stdoutController.stream.listen((line) {
-      stdout(line!);
+      stdout(line);
     },
         onDone: () => _stdoutCompleter.complete(true),
         //ignore: avoid_types_on_closure_parameters
@@ -205,8 +208,8 @@ class Progress {
 
   /// Returns the first line from the command or
   /// null if no lines where returned
-  String? get firstLine {
-    String? line;
+  String get firstLine {
+    String line;
     final lines = toList();
     if (lines.isNotEmpty) {
       line = lines[0];

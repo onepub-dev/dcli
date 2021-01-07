@@ -18,7 +18,7 @@ void main() {
 
       String command;
       command = 'ls *.txt';
-      final found = <String?>[];
+      final found = <String>[];
       start(command, workingDirectory: path).forEach((file) {
         found.add(file);
       });
@@ -43,6 +43,7 @@ void main() {
     final fprocess = Process.start(
       'tail',
       ['-f', '/var/log/syslog'],
+      mode: ProcessStartMode.normal,
     );
 
     fprocess.then((process) {

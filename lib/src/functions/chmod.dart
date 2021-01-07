@@ -35,7 +35,7 @@ class _ChMod extends DCliFunction {
 /// Thrown if the [chmod] function encounters an error.
 class ChModException extends DCliFunctionException {
   /// Thrown if the [chmod] function encounters an error.
-  ChModException(String reason, [StackTraceImpl? stacktrace])
+  ChModException(String reason, [StackTraceImpl stacktrace])
       : super(reason, stacktrace);
 
   @override

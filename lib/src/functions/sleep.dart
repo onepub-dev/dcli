@@ -36,7 +36,7 @@ enum Interval {
 class _Sleep extends DCliFunction {
   void sleep(int duration, {Interval interval = Interval.seconds}) {
     Settings().verbose('sleep: duration: $duration interval: $interval');
-    late Duration _duration;
+    Duration _duration;
     switch (interval) {
       case Interval.hours:
         _duration = Duration(hours: duration);

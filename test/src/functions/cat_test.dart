@@ -7,7 +7,7 @@ import 'package:test/test.dart';
 import '../util/test_file_system.dart';
 import '../util/test_utils.dart';
 
-late String testFile;
+String testFile;
 void main() {
   Settings().setVerbose(enabled: true);
   t.group('Cat', () {
@@ -19,7 +19,7 @@ void main() {
         testFile = join(fs.fsRoot, 'lines.txt');
         createLineFile(testFile, 10);
 
-        final lines = <String?>[];
+        final lines = <String>[];
         cat(testFile, stdout: (line) => lines.add(line));
         t.expect(lines.length, t.equals(10));
       });

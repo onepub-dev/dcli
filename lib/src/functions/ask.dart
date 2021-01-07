@@ -1,7 +1,6 @@
 import 'dart:convert';
 import 'dart:io';
 
-// ignore: import_of_legacy_library_into_null_safe
 import 'package:validators/validators.dart';
 
 import '../../dcli.dart';
@@ -34,7 +33,6 @@ import 'echo.dart';
 /// By default the ask [required] argument is true requiring the user to enter a non-empty string.
 /// All whitespace is trimmed from the string before the user input is validated so
 /// a single space is not an accepted input.
-///
 /// If you set the [required] argument to false then the user can just hit
 /// enter to skip past the ask prompt. If you use other validators when [required] = false
 /// then those validators will not be called if the entered value is empty (after it is trimmed).
@@ -45,7 +43,6 @@ import 'echo.dart';
 /// If [hidden] is true then the entered values will not be echoed to the
 /// console, instead '*' will be displayed. This is uesful for capturing
 /// passwords.
-///
 /// NOTE: if there is no terminal detected then this will fallback to
 /// a standard ask input in which case the hidden characters WILL BE DISPLAYED
 /// as they are typed.
@@ -65,11 +62,9 @@ import 'echo.dart';
 ///
 ///
 /// The [validator] is called each time the user hits enter.
-///
 /// The [validator] allows you to normalise and validate the user's
 /// input. The [validator] must return the normalised value which
 /// will be the value returned by [ask].
-///
 /// If the [validator] detects an invalid input then you MUST
 /// throw [AskValidatorException(error)]. The error will
 /// be displayed on the console and the user reprompted.
@@ -91,7 +86,7 @@ String ask(String prompt,
         {bool toLower = false,
         bool hidden = false,
         bool required = true,
-        String? defaultValue,
+        String defaultValue,
         AskValidator validator = Ask.dontCare}) =>
     Ask()._ask(prompt,
         toLower: toLower,
@@ -102,21 +97,11 @@ String ask(String prompt,
 
 /// [confirm] is a specialized version of ask that returns true or
 /// false based on the value entered.
-///
-/// The user must enter a valid value or, if a [defaultValue] is passed, the enter key.
-///
 /// Accepted values are y|t|true|yes and n|f|false|no (case insenstiive).
-///
 /// If the user enters an unknown value an error is printed
 /// and they are reprompted.
-///
-/// The [prompt] is displayed to the user with ' (y/n)' appended.
-///
-/// If a [defaultValue] is passed then either the y or n will be capitalised
-/// and if the user hits the enter key then the [defaultValue] will be returned.
-///
-bool confirm(String prompt, {bool? defaultValue}) {
-  bool result = false;
+bool confirm(String prompt, {bool defaultValue}) {
+  bool result;
   var matched = false;
   var finalPrompt = prompt;
 
@@ -164,11 +149,11 @@ class Ask extends DCliFunction {
   /// Reads user input from stdin and returns it as a string.
   /// [prompt]
   String _ask(String prompt,
-      {bool toLower = false,
-      required bool hidden,
-      required bool required,
-      required AskValidator validator,
-      String? defaultValue}) {
+      {bool toLower,
+      bool hidden,
+      bool required,
+      AskValidator validator,
+      String defaultValue}) {
     ArgumentError.checkNotNull(prompt);
     Settings().verbose(
         'ask:  $prompt toLower: $toLower hidden: $hidden required: $required defaultValue: ${hidden ? '******' : defaultValue}');
@@ -181,7 +166,7 @@ class Ask extends DCliFunction {
       finalPrompt = '$finalPrompt [${hidden ? '******' : defaultValue}]';
     }
 
-    String line = '';
+    String line;
     var valid = false;
     do {
       echo('$finalPrompt ');
@@ -189,8 +174,11 @@ class Ask extends DCliFunction {
       if (hidden == true && stdin.hasTerminal) {
         line = _readHidden();
       } else {
-        line = stdin.readLineSync(encoding: Encoding.getByName('utf-8')!) ?? '';
+        line = stdin.readLineSync(
+            encoding: Encoding.getByName('utf-8'), retainNewlines: false);
       }
+
+      line ??= '';
 
       if (line.isEmpty && defaultValue != null) {
         line = defaultValue;
@@ -254,7 +242,7 @@ class Ask extends DCliFunction {
     print('');
 
     // return the entered value as a String.
-    return Encoding.getByName('utf-8')!.decode(value);
+    return Encoding.getByName('utf-8').decode(value);
   }
 
   /// The default validator that considers any input as valid
@@ -287,8 +275,7 @@ class Ask extends DCliFunction {
   /// By default both v4 and v6 addresses are valid
   /// Pass a [version] to limit the input to one or the
   /// other. If passed [version] must be [_AskValidatorIPAddress.ipv4] or [_AskValidatorIPAddress.ipv6].
-  static AskValidator ipAddress(
-          {int version = _AskValidatorIPAddress.either}) =>
+  static AskValidator ipAddress({int version}) =>
       _AskValidatorIPAddress(version: version);
 
   /// Validates that the entered line is no longer
@@ -487,7 +474,6 @@ class _AskAlphaNumeric extends AskValidator {
 /// Pass a [version] to limit the input to one or the
 /// other. If passed [version] must be [ipv4] or [ipv6].
 class _AskValidatorIPAddress extends AskValidator {
-  static const int either = 0;
   static const int ipv4 = 4;
   static const int ipv6 = 6;
 
@@ -498,11 +484,11 @@ class _AskValidatorIPAddress extends AskValidator {
   /// By default both v4 and v6 addresses are valid
   /// Pass a [version] to limit the input to one or the
   /// other. If passed [version] must be 4 or 6.
-  const _AskValidatorIPAddress({this.version = either});
+  const _AskValidatorIPAddress({this.version});
 
   @override
   String validate(String line) {
-    assert(version == either || version == ipv4 || version == ipv6);
+    assert(version == null || version == ipv4 || version == ipv6);
 
     final finalline = line.trim();
 
@@ -559,7 +545,7 @@ class _AskValidatorMinLength extends AskValidator {
 // ignore: comment_references
 /// as at least [minLength] but no more than [maxLength].
 class _AskValidatorLength extends AskValidator {
-  late _AskValidatorAll _validator;
+  _AskValidatorAll _validator;
 
   /// Validates that the length of the entered text
   /// as at least [minLength] but no more than [maxLength].
@@ -674,7 +660,7 @@ class _AskValidatorAny extends AskValidator {
   String validate(String line) {
     var finalline = line.trim();
 
-    AskValidatorException? firstFailure;
+    AskValidatorException firstFailure;
 
     var onePassed = false;
 
@@ -687,7 +673,7 @@ class _AskValidatorAny extends AskValidator {
       }
     }
     if (!onePassed) {
-      throw firstFailure!;
+      throw firstFailure;
     }
     return finalline;
   }

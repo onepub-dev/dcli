@@ -9,7 +9,7 @@ import '../util/pub_cache.dart';
 
 class LinuxDCliInstaller {
   /// returns true if it needed to install dart.
-  bool install({required bool installDart}) {
+  bool install({bool installDart}) {
     const installedDart = false;
 
     if (installDart) _installDart();
@@ -95,7 +95,7 @@ class LinuxDCliInstaller {
   // So lets go find it
   // CONSIDER a way of identifying where dart has been installed to.
 
-  String? determinePubPath() {
+  String determinePubPath() {
     var pubPath = which('pub').path;
 
     if (pubPath == null) {

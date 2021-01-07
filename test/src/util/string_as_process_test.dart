@@ -6,7 +6,7 @@ import 'package:dcli/dcli.dart' hide equals;
 
 void main() {
   test('start with progress', () {
-    final result = <String?>[];
+    final result = <String>[];
     'echo hi'.start(
       runInShell: true,
       progress: Progress((line) => result.add(line),

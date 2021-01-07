@@ -8,7 +8,7 @@ import '../installers/windows_installer.dart';
 import '../script/commands/install.dart';
 
 mixin WindowsMixin {
-  String? checkInstallPreconditions() {
+  String checkInstallPreconditions() {
 //     if (!inDeveloperMode()) {
 //       return '''
 // You must be running in Windows Developer Mode to install DCli.
@@ -29,7 +29,7 @@ mixin WindowsMixin {
     final response =
         r'reg query "HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\AppModelUnlock" /v "AllowDevelopmentWithoutDevLicense"'
             .toList(runInShell: true, skipLines: 2)
-            .first!;
+            .first;
     final parts = response.trim().split(RegExp(r'\s+'));
     if (parts.length != 3) {
       throw InstallException('Unable to obtain development mode settings');
@@ -46,11 +46,11 @@ mixin WindowsMixin {
     return 'You need to be a privileged user to run $app';
   }
 
-  String? get loggedInUser => env['USERNAME'];
+  String get loggedInUser => env['USERNAME'];
 
   bool get isSudo => false;
 
-  static void setPath(List<String?> paths) {
+  static void setPath(List<String> paths) {
     // // TODO: impement notification so desktop apps update their environment.
     // // const char * what = "Environment";
     // // DWORD rv;

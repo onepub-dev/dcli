@@ -27,7 +27,7 @@ class Assets {
 
   factory Assets() => _self;
 
-  String? _packageName;
+  String _packageName;
 
   Assets._internal() {
     _packageName = Script.current.pubSpec.name;
@@ -70,7 +70,7 @@ class Assets {
   /// Specify [recursive] = true if you want the list command to recursively search all
   /// directories under [root].
   ///
-  List<String?> list(String pattern, {required String root, bool recursive = false}) {
+  List<String> list(String pattern, {String root, bool recursive = false}) {
     if (!root.startsWith('assets/')) {
       throw ArgumentError('The root must start with assets/');
     }
@@ -80,8 +80,8 @@ class Assets {
 
   /// loads an asset as a byte buffer.
   Uint8List loadBytes(String path) {
-    final resolvedUri = waitForEx<Uri?>(
-        Isolate.resolvePackageUri(Uri.file('lib/src/assets/templates')))!;
+    final resolvedUri = waitForEx<Uri>(
+        Isolate.resolvePackageUri(Uri.file('lib/src/assets/templates')));
 
     print('resolved: ${resolvedUri.toFilePath()}');
 
@@ -91,8 +91,8 @@ class Assets {
   /// Converts an asset path of the form assert/somepath/note/txt
   /// to the absolute file system path (usually in .pub-cache)
   String _resolveAssetPath(String path) {
-    final resolvedUri = waitForEx<Uri?>(Isolate.resolvePackageUri(
-        Uri(scheme: 'package', path: '$_packageName/src/$path')))!;
+    final resolvedUri = waitForEx<Uri>(Isolate.resolvePackageUri(
+        Uri(scheme: 'package', path: '$_packageName/src/$path')));
     return resolvedUri.toFilePath();
   }
 }

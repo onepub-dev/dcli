@@ -8,8 +8,6 @@ dependencies:
 
 import 'dart:io';
 import 'package:dcli/dcli.dart';
-// ignore: import_of_legacy_library_into_null_safe
-import 'package:args/args.dart';
 
 /// which appname
 void main(List<String> args) {
@@ -33,7 +31,7 @@ void main(List<String> args) {
   final paths = PATH;
 
   for (var path in paths) {
-    if (home != null && path.startsWith('~')) {
+    if (path.startsWith('~')) {
       path = path.replaceAll('~', home);
     }
     if (verbose) {

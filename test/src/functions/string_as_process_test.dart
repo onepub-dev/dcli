@@ -108,7 +108,7 @@ void main() {
 
     t.test('forEach', () {
       TestFileSystem().withinZone((fs) {
-        final lines = <String?>[];
+        final lines = <String>[];
 
         final linesFile = setup(fs);
 

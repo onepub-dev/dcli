@@ -1,9 +1,9 @@
 /// a circular buffer.
 class CircularBuffer<T> {
-  late List<T> _buf;
-  late int _start;
-  late int _end;
-  late int _count;
+  List<T> _buf;
+  int _start;
+  int _end;
+  int _count;
   final int capacity;
 
   /// create a circulare buffer with the ability
@@ -48,7 +48,7 @@ class CircularBuffer<T> {
   T get end => _buf[_end];
 
   /// the current lenght of the buffer
-  int? get len => _count;
+  int get len => _count;
 
   /// the max capacity of the buffer.
   int get cap => capacity;
@@ -64,7 +64,7 @@ class CircularBuffer<T> {
   /// buffer.
   void forEach(void Function(T) action) {
     for (var i = _start; i < _start + _count; i++) {
-      final val = _buf[i % len!];
+      final val = _buf[i % len];
       action(val);
     }
   }

@@ -8,7 +8,7 @@ class PowerShell with WindowsMixin, ShellMixin {
   static const String shellName = 'powershell.exe';
 
   @override
-  final int? pid;
+  final int pid;
   PowerShell.withPid(this.pid);
 
   @override
@@ -23,7 +23,7 @@ class PowerShell with WindowsMixin, ShellMixin {
   }
 
   @override
-  void installTabCompletion({bool? quiet = false}) {
+  void installTabCompletion({bool quiet = false}) {
     // not supported.
   }
 
@@ -35,7 +35,7 @@ class PowerShell with WindowsMixin, ShellMixin {
     Settings().verbose('currentPrinciple: $currentPrincipal');
     final isPrivileged =
         '$currentPrincipal.IsInRole([Security.Principal.WindowsBuiltInRole]::Administrator)'
-            .firstLine!;
+            .firstLine;
     Settings().verbose('isPrivileged: $isPrivileged');
 
     return isPrivileged.toLowerCase() == 'true';

@@ -9,7 +9,7 @@ import '../util/test_file_system.dart';
 void main() {
   test('Run dcli_complete c', () {
     TestFileSystem().withinZone((fs) {
-      final results = <String?>[];
+      final results = <String>[];
 
       // make dcli_complete executable
       //chmod(755, 'bin/dcli_complete');
@@ -28,7 +28,7 @@ void main() {
 
   test('Run dcli_complete cl', () {
     TestFileSystem().withinZone((fs) {
-      final results = <String?>[];
+      final results = <String>[];
 
       // make dcli_complete executable
       //chmod(755, 'bin/dcli_complete');
@@ -48,7 +48,7 @@ void main() {
   group('previous word', () {
     test('Run dcli_complete warmup _test_a', () {
       TestFileSystem(installDcli: false).withinZone((fs) {
-        final results = <String?>[];
+        final results = <String>[];
 
         touch(join(fs.fsRoot, '_test_a.dart'), create: true);
         touch(join(fs.fsRoot, '_test_ab.dart'), create: true);
@@ -80,7 +80,7 @@ void main() {
 
     test('Run dcli_complete warmup _test_ab', () {
       TestFileSystem().withinZone((fs) {
-        final results = <String?>[];
+        final results = <String>[];
 
         touch(join(fs.fsRoot, '_test_a.dart'), create: true);
         touch(join(fs.fsRoot, '_test_ab.dart'), create: true);

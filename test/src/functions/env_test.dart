@@ -10,7 +10,7 @@ import '../mocks/mock_settings.dart';
 void main() {
   t.group('Environment', () {
     t.test('PATH', () {
-      t.expect(env['PATH']!.length, t.greaterThan(0));
+      t.expect(env['PATH'].length, t.greaterThan(0));
     });
 
     t.test('addAll', () {
@@ -42,7 +42,7 @@ void main() {
         t.expect(env['APPDATA'], userDataPath);
         t.expect(env['AppData'], userDataPath);
 
-        final available = <String, String?>{};
+        final available = <String, String>{};
         available.putIfAbsent('APPDATA', () => env['APPDATA']);
         available.putIfAbsent('MixedCase', () => env['MixedCase']);
 

@@ -37,7 +37,7 @@ class PubGet {
     }
   }
 
-  void _println(String? line) {
+  void _println(String line) {
     Settings().verbose('pubget: $line');
     print(line);
   }
@@ -80,7 +80,7 @@ class PubGetResult {
 
 class PubGetException {
   /// the pub get exit code.
-  final int? exitCode;
+  final int exitCode;
 
   ///
   PubGetException(this.exitCode);

@@ -72,7 +72,7 @@ Map<String, String> get envs => Env()._envVars;
 class Env extends DCliFunction {
   static Env _self = Env._internal();
 
-  late Map<String, String> _envVars;
+  Map<String, String> _envVars;
 
   final bool _caseSensitive;
 
@@ -102,7 +102,7 @@ class Env extends DCliFunction {
     env = _self;
   }
 
-  String? _env(String name) {
+  String _env(String name) {
     Settings().verbose('env:  $name:${_envVars[name]}');
 
     return _envVars[_caseSensitive ? name : name.toUpperCase()];
@@ -124,13 +124,13 @@ class Env extends DCliFunction {
   /// The list is ordered Left to right of the paths in
   /// the PATH environment var.
   List<String> get _path {
-    final pathEnv = this['PATH'] ?? '';
+    final pathEnv = this['PATH'];
 
     return pathEnv.split(delimiterForPATH);
   }
 
-  String? operator [](String name) => _env(name);
-  void operator []=(String name, String? value) => _setEnv(name, value);
+  String operator [](String name) => _env(name);
+  void operator []=(String name, String value) => _setEnv(name, value);
 
   /// Appends [newPath] to the list of paths in the
   /// PATH environment variable.
@@ -196,7 +196,7 @@ class Env extends DCliFunction {
   /// using the enviornment var appropriate for the user's OS.
   //ignore: non_constant_identifier_names
   String get HOME {
-    String? home;
+    String home;
 
     if (Settings().isWindows) {
       home = _env('APPDATA');
@@ -232,7 +232,7 @@ class Env extends DCliFunction {
 
   /// Passing a null [value] will remove the key from the
   /// set of environment variables.
-  void _setEnv(String name, String? value) {
+  void _setEnv(String name, String value) {
     if (value == null) {
       _envVars.remove(name);
       Platform.environment.remove(name);
@@ -324,7 +324,7 @@ class Env extends DCliFunction {
         const JsonDecoder().convert(json) as Map<dynamic, dynamic>));
   }
 
-  String _toEncodable(Object? object) {
+  String _toEncodable(Object object) {
     return object.toString();
   }
 

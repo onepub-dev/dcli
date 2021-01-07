@@ -2,9 +2,7 @@ import 'dart:io';
 
 import 'package:collection/collection.dart';
 import 'package:dcli/src/util/wait_for_ex.dart';
-// ignore: import_of_legacy_library_into_null_safe
 import 'package:pub_semver/pub_semver.dart';
-// ignore: import_of_legacy_library_into_null_safe
 import 'package:pubspec/pubspec.dart' as pub;
 
 import '../../dcli.dart';
@@ -16,7 +14,7 @@ import 'dependency.dart';
 ///
 class PubSpec {
   /// the wrapped pubspec.
-  late pub.PubSpec pubspec;
+  pub.PubSpec pubspec;
 
   /// Returns the name field from the pubspec.yaml
   String get name => pubspec.name;
@@ -27,27 +25,26 @@ class PubSpec {
   /// Sets the version field for the pubspec.
   /// Call [saveToFile] to update the contents of the pubspec.yaml.
   set version(Version version) => pubspec = pubspec.copy(version: version);
-  List<Executable>? _executables;
+  List<Executable> _executables;
 
   /// Get the list of exectuables
   List<Executable> get executables {
     if (_executables == null) {
       _executables = <Executable>[];
       for (final key in pubspec.executables.keys) {
-        _executables!
-            .add(Executable(key, pubspec.executables[key]!.scriptPath));
+        _executables.add(Executable(key, pubspec.executables[key].scriptPath));
       }
     }
 
-    return List.unmodifiable(_executables!);
+    return List.unmodifiable(_executables);
   }
 
   /// Sets the map of dependencies for this pubspec.
   set dependencies(Map<String, Dependency> dependencies) {
-    final ref = <String, pub.DependencyReference?>{};
+    final ref = <String, pub.DependencyReference>{};
 
     for (final name in dependencies.keys) {
-      ref[name] = dependencies[name]!.reference;
+      ref[name] = dependencies[name].reference;
     }
 
     pubspec = pubspec.copy(dependencies: ref);
@@ -71,10 +68,10 @@ class PubSpec {
 
   /// Sets the list of dependencies for this pubspec.
   set dependencyOverrides(Map<String, Dependency> dependencies) {
-    final ref = <String, pub.DependencyReference?>{};
+    final ref = <String, pub.DependencyReference>{};
 
     for (final name in dependencies.keys) {
-      ref[name] = dependencies[name]!.reference;
+      ref[name] = dependencies[name].reference;
     }
 
     pubspec = pubspec.copy(dependencyOverrides: ref);

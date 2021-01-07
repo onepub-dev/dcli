@@ -19,8 +19,7 @@ Future<void> main() async {
     print('head exit: ${await head.exitCode}');
   },
           test: (e) =>
-              e is SocketException &&
-              e.osError!.errorCode == 32 // broken  pipe'
+              e is SocketException && e.osError.errorCode == 32 // broken  pipe'
           );
 
   await head.stdout
@@ -32,7 +31,7 @@ Future<void> main() async {
       //ignore: avoid_types_on_closure_parameters
       .catchError((Object e, StackTrace s) async {
     print('tail exit: ${await tail.exitCode}');
-  }, test: (e) => e is SocketException && e.osError!.message == 'Broken pipe');
+  }, test: (e) => e is SocketException && e.osError.message == 'Broken pipe');
 
   await tail.stdout.pipe(stdout);
 }

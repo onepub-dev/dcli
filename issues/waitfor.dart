@@ -29,14 +29,16 @@ void waitForMe(Future future) {
   try {
     future
         //ignore: avoid_types_on_closure_parameters
-        .catchError((Object e, StackTrace st) => print('onError: $e'))
+        .catchError((Object e, StackTrace st) => print('onErrr: $e'))
         .whenComplete(() => print('future completed'));
     // print(waitFor<Process>(future));
     print(waitFor(future));
   } // on AsyncError
   // ignore: avoid_catches_without_on_clauses
   catch (e) {
-    if (e is AsyncError) {
+    if (e.error is Exception) {
+      print(e.error);
+    } else if (e is AsyncError) {
       print('Rethrowing a non DCliException $e');
       rethrow;
     } else {
@@ -48,9 +50,9 @@ void waitForMe(Future future) {
   }
 }
 
-T? waitForEx<T>(Future<T> future) {
-  Object? exception;
-  T? value;
+T waitForEx<T>(Future<T> future) {
+  Object exception;
+  T value;
   try {
     // catch any unhandled exceptions
     //ignore: avoid_types_on_closure_parameters

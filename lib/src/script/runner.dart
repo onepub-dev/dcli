@@ -14,7 +14,7 @@ class ScriptRunner {
   ScriptRunner(this._sdk, this.script, this._scriptArguments);
 
   /// Run the script
-  int? run() {
+  int run() {
     // Prepare VM arguments
     final vmArgs = <String>[];
     vmArgs.add('--enable-asserts');
@@ -30,7 +30,7 @@ class ScriptRunner {
 
     // Execute the script
     final process = waitFor<Process>(Process.start(
-      _sdk.pathToDartExe!,
+      _sdk.pathToDartExe,
       vmArgs,
       mode: ProcessStartMode.inheritStdio,
     ));

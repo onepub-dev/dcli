@@ -7,8 +7,8 @@ import '../settings.dart';
 @immutable
 class Flags {
   /// Find the flag that matches [flagSwitch].
-  Flag? findFlag(String flagSwitch, List<Flag> flags) {
-    Flag? found;
+  Flag findFlag(String flagSwitch, List<Flag> flags) {
+    Flag found;
     var foundOption = false;
     var finalFlagSwitch = flagSwitch;
 
@@ -100,14 +100,14 @@ abstract class Flag {
 
   /// Override this method if your flag takes an optional argument after an = sign.
   ///
-  set option(String? value) {
+  set option(String value) {
     assert(
         !isOptionSupported, 'You must implement option setter for $_name flag');
   }
 
   /// override this method if your flag takes an optional argument after an = sign.
   /// this method should reutrn the value after the = sign.
-  String? get option => null;
+  String get option => null;
 }
 
 ///
@@ -115,10 +115,10 @@ class VerboseFlag extends Flag {
   static const _flagName = 'verbose';
   static final _self = VerboseFlag._internal();
 
-  String? _option;
+  String _option;
 
   @override
-  String get option => _option!;
+  String get option => _option;
 
   /// true if the flag has an option.
   bool get hasOption => _option != null;
@@ -134,10 +134,10 @@ class VerboseFlag extends Flag {
   bool get isOptionSupported => true;
 
   @override
-  set option(String? value) {
+  set option(String value) {
     // check that the value contains a path and that
     // the path exists.
-    if (!exists(dirname(value!))) {
+    if (!exists(dirname(value))) {
       throw InvalidFlagOption(
           "The log file's directory '${truepath(dirname(value))} does not exists. Create the directory first.");
     } else {

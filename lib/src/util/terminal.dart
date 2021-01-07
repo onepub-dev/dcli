@@ -98,7 +98,7 @@ class Terminal {
   }
 
   /// show/hide the cursor
-  void showCursor({required bool show}) {
+  void showCursor({bool show}) {
     if (show) {
       write('${Ansi.esc}?25h');
     } else {

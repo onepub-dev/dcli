@@ -62,12 +62,9 @@ void main(List<String> args) {
 
   Remote.scp(from: ['./*.dart'], toHost: fqdn, to: '/tmp', recursive: true);
 
-  var result = which('copy_secure_dir');
-  if (result.found) {
-    final copySecureDir = result.path!;
+  final copySecureDir = which('copy_secure_dir').path;
 
-    Remote.scp(from: [copySecureDir], to: '/tmp', toHost: fqdn);
-  }
+  Remote.scp(from: [copySecureDir], to: '/tmp', toHost: fqdn);
 
   // dart exe doesn't run on ubuntu 12.04
   // Remote.exec(

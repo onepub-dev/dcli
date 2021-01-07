@@ -43,14 +43,14 @@ import 'package:test/test.dart';
 class TestPaths {
   static final TestPaths _self = TestPaths._internal();
 
-  static late String testRoot;
+  static String testRoot;
 
-  String? home;
+  String home;
   //String scriptDir;
-  String? testScriptPath;
-  String? scriptName;
+  String testScriptPath;
+  String scriptName;
   //String projectPath;
-  String? testRootForPid;
+  String testRootForPid;
 
   factory TestPaths() {
     return _self;

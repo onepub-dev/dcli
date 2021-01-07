@@ -9,7 +9,7 @@ class HashesYaml {
   final String _fileName = 'hashes.yaml';
 
   /// ignore: unused_field
-  late final MyYaml _hashes;
+  MyYaml _hashes;
 
   ///
   HashesYaml(String scriptCachePath) {

@@ -73,11 +73,11 @@ import 'pwd.dart';
 ///     [start] or [startCommandLine] for methods that allow you to
 ///      process data rather than just outputing it to the cli.
 ///
-int? run(String commandLine,
+int run(String commandLine,
     {bool runInShell = false,
     bool nothrow = false,
     bool privileged = false,
-    String? workingDirectory}) {
+    String workingDirectory}) {
   workingDirectory ??= pwd;
 
   final runnable = RunnableProcess.fromCommandLine(commandLine,
@@ -132,13 +132,13 @@ int? run(String commandLine,
 Progress startFromArgs(
   String command,
   List<String> args, {
-  Progress? progress,
+  Progress progress,
   bool runInShell = false,
   bool detached = false,
   bool terminal = false,
   bool privileged = false,
   bool nothrow = false,
-  String? workingDirectory,
+  String workingDirectory,
 }) {
   progress ??= Progress.print();
   workingDirectory ??= pwd;
@@ -196,13 +196,13 @@ Progress startFromArgs(
 /// be run in a shell (e.g. bash).
 ///
 Progress start(String commandLine,
-    {Progress? progress,
+    {Progress progress,
     bool runInShell = false,
     bool detached = false,
     bool terminal = false,
     bool nothrow = false,
     bool privileged = false,
-    String? workingDirectory}) {
+    String workingDirectory}) {
   workingDirectory ??= pwd;
   final runnable = RunnableProcess.fromCommandLine(commandLine,
       workingDirectory: workingDirectory);
@@ -231,11 +231,11 @@ Progress start(String commandLine,
 /// Current [privileged] is only supported under Linux.
 ///
 Progress startStreaming(String commandLine,
-    {Progress? progress,
+    {Progress progress,
     bool runInShell = false,
     bool nothrow = false,
     bool privileged = false,
-    String? workingDirectory}) {
+    String workingDirectory}) {
   workingDirectory ??= pwd;
   final runnable = RunnableProcess.fromCommandLine(commandLine,
       workingDirectory: workingDirectory);
