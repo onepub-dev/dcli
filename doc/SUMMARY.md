@@ -54,7 +54,8 @@
 * [Upgrade DCli](dcli-tools-1/upgrade-dcli.md)
 * [Performance](dcli-tools-1/performance.md)
 * [Docker](dcli-tools-1/docker.md)
-* [Sudo](dcli-tools-1/sudo.md)
+* [Elevated Privileges](dcli-tools-1/elevated-privileges/README.md)
+  * [Sudo](dcli-tools-1/elevated-privileges/sudo.md)
 
 ## Internal Workings
 
