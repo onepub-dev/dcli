@@ -186,20 +186,18 @@ class DartSdk {
   /// returns the version of dart.
   String? get version {
     if (_version == null) {
-      final output = '$pathToDartExe --version'.firstLine!;
-
       /// extract the version out of the dumped line.
       final regx = RegExp(r'[0-9]*\.[0-9]*\.[0-9]*');
-      final parsed = regx.firstMatch(output);
+      final parsed = regx.firstMatch(Platform.version);
       if (parsed != null) {
         _version = parsed.group(0);
       }
 
-      Settings().verbose('Dart SDK Version  $_version, path: $pathToDartExe');
+      Settings().verbose('Dart SDK Version  $_version');
     }
 
     return _version;
-  }
+  }}
 
   /// Installs the latest version of DartSdk from the official google archives
   /// This is simply the process of downloading and extracting the
