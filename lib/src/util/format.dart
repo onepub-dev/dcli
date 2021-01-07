@@ -25,9 +25,7 @@ class Format {
   ///
   ///
   static String row(List<String?> cols,
-      {List<int>? widths,
-      List<TableAlignment>? alignments,
-      String? delimiter}) {
+      {List<int>? widths, List<TableAlignment>? alignments, String? delimiter}) {
     var row = '';
     var i = 0;
     widths ??= [20];

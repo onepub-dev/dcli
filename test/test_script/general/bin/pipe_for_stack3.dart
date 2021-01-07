@@ -28,8 +28,7 @@ void run(Stream<String> ls, Process head, Process tail) {
     print('head exit: ${await head.exitCode}');
   },
           test: (e) =>
-              e is SocketException &&
-              e.osError!.errorCode == 32 // broken  pipe'
+              e is SocketException && e.osError!.errorCode == 32 // broken  pipe'
           );
 
   final fhead = head.stdout

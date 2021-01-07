@@ -157,7 +157,7 @@ class Script {
   /// then this will be the location of the script file.
   String get pathToProjectRoot => project.pathToProjectRoot;
 
-  static Script? _current;
+  static  Script? _current;
 
   /// Returns the instance of the currently running script.
   ///

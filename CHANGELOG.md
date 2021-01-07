@@ -1,7 +1,3 @@
-# 0.50.0-nullsaftey.0
-First pass at nullsaftey.
-removed suffix as no longer supported.
-
 # 0.39.6
 Added method to check if the script is running from pub-cache.
 

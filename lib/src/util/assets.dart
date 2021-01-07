@@ -70,8 +70,7 @@ class Assets {
   /// Specify [recursive] = true if you want the list command to recursively search all
   /// directories under [root].
   ///
-  List<String?> list(String pattern,
-      {required String root, bool recursive = false}) {
+  List<String?> list(String pattern, {required String root, bool recursive = false}) {
     if (!root.startsWith('assets/')) {
       throw ArgumentError('The root must start with assets/');
     }
