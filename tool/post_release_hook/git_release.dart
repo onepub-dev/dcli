@@ -14,6 +14,6 @@ void main(List<String> args) {
   final owner = settings['owner'] as String;
   final repository = settings['repository'] as String;
 
-  'github_release -u $username --apiToken $apiToken --owner $owner --repository $repository'
+  'github_release -u $username --apiToken $apiToken --owner $owner --repository $repository --suffix linux'
       .start(workingDirectory: Script.current.pathToProjectRoot);
 }
