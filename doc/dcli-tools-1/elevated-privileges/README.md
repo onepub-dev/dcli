@@ -28,7 +28,9 @@ You should add a call to `Shell.current.isPrivilegedUser` at the start of the sc
 
 Under Linux/OSX privileged operations for more problematic.
 
-Read the page on [sudo](sudo.md) for additional details and some of the problems you will encounter.
+If you need the entire script to run escalated then use the above `isPrivilegedUser` method however often you will want to only use escalated privileges in some of your script in which case the `isPrivilegedUser` check doesn't make sense.
+
+Read the page on [sudo](sudo.md) for additional details and some of the problems you will encounter and how to solve them.
 
 
 
