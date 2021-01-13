@@ -1,3 +1,12 @@
+# 0.39.8
+Fixed unit testing bugs.
+Changed logic that obtains the scripts path to handle more scenarios.
+Updated the asset builder to change the dcli version in the pubspec.yaml template as it creates the expander.
+Moved docker files under tools as per the dart conventions.
+
+# 0.39.7
+Added additional checks for version nos.
+
 # 0.39.6
 Added method to check if the script is running from pub-cache.
 
