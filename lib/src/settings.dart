@@ -51,8 +51,6 @@ class Settings {
     return _scriptPath;
   }
 
-
-
   /// Used when unit testing and we are re-using
   /// the current process.
   @visibleForTesting
