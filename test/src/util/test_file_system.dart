@@ -391,7 +391,8 @@ class TestFileSystem {
 
         // copy it back to the dcli testbin so the next unit
         // test doesn't have to compile it.
-        copy(script.pathToExe, join(testbinPath, script.exeName));
+        /// not necessary as we compile directly into the test bin.
+        // copy(script.pathToExe, join(testbinPath, script.exeName));
       }
     }
   }

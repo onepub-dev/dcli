@@ -1,6 +1,8 @@
+@Timeout(Duration(seconds: 120))
 import 'package:dcli/src/util/file_sync.dart';
 import 'package:test/test.dart' as t;
 import 'package:dcli/dcli.dart';
+import 'package:test/test.dart';
 
 import '../util/test_file_system.dart';
 
