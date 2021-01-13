@@ -90,7 +90,11 @@ class Script {
   bool get isReadyToRun => project.isReadyToRun;
 
   /// True if the script is compiled.
-  bool get isCompiled => !scriptname.endsWith('.dart');
+  bool get isCompiled => _isCompiled;
+
+  static bool get _isCompiled =>
+      p.basename(Platform.resolvedExecutable) ==
+      p.basename(Platform.script.path);
 
   /// Checks if the Script has been compiled and installed into the ~/.dcli/bin path
   bool get isInstalled {
@@ -118,7 +122,11 @@ class Script {
 
       String _pathToScript;
       if (script.isScheme('file')) {
-        _pathToScript = Platform.script.toFilePath();
+        _pathToScript = Platform.script.path;
+
+        if (_isCompiled) {
+          _pathToScript = Platform.resolvedExecutable;
+        }
       } else {
         /// when running in a unit test we can end up with a 'data' scheme
         if (script.isScheme('data')) {
@@ -145,12 +153,10 @@ class Script {
     }
 
     if (!exists(scriptPath)) {
-      throw InvalidScript(
-          'The script ${truepath(scriptPath)} does not exist.');
+      throw InvalidScript('The script ${truepath(scriptPath)} does not exist.');
     }
     if (!FileSystemEntity.isFileSync(scriptPath)) {
-      throw InvalidScript(
-          'The script ${truepath(scriptPath)} is not a file.');
+      throw InvalidScript('The script ${truepath(scriptPath)} is not a file.');
     }
   }
 
