@@ -165,7 +165,7 @@ class Find extends DCliFunction {
       progress ??= Progress.devNull();
 
       Settings().verbose(
-          'find: pwd: $pwd root: ${absolute(finalroot)} pattern: $pattern caseSensitive: $caseSensitive recursive: $recursive types: $types ');
+          'find: pwd: $pwd root: ${truepath(finalroot)} pattern: $pattern caseSensitive: $caseSensitive recursive: $recursive types: $types ');
       final nextLevel = <FileSystemEntity>[]..length = 100;
       final singleDirectory = <FileSystemEntity>[]..length = 100;
       final childDirectories = <FileSystemEntity>[]..length = 100;

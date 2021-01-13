@@ -146,11 +146,11 @@ class Script {
 
     if (!exists(scriptPath)) {
       throw InvalidScript(
-          'The script ${p.absolute(scriptPath)} does not exist.');
+          'The script ${truepath(scriptPath)} does not exist.');
     }
     if (!FileSystemEntity.isFileSync(scriptPath)) {
       throw InvalidScript(
-          'The script ${p.absolute(scriptPath)} is not a file.');
+          'The script ${truepath(scriptPath)} is not a file.');
     }
   }
 

@@ -90,7 +90,7 @@ class DartProject {
   }
 
   String _findProjectRoot(String pathToSearchFrom) {
-    var current = absolute(pathToSearchFrom);
+    var current = truepath(pathToSearchFrom);
 
     final root = rootPrefix(current);
 

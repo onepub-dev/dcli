@@ -32,11 +32,11 @@ String createDir(String path, {bool recursive = false}) =>
 
 class _CreateDir extends DCliFunction {
   String createDir(String path, {bool recursive}) {
-    Settings().verbose('createDir:  ${absolute(path)} recursive: $recursive');
+    Settings().verbose('createDir:  ${truepath(path)} recursive: $recursive');
 
     try {
       if (exists(path)) {
-        throw CreateDirException('The path ${absolute(path)} already exists');
+        throw CreateDirException('The path ${truepath(path)} already exists');
       }
 
       Directory(path).createSync(recursive: recursive);
@@ -44,7 +44,7 @@ class _CreateDir extends DCliFunction {
     // ignore: avoid_catches_without_on_clauses
     catch (e) {
       throw CreateDirException(
-          'Unable to create the directory ${absolute(path)}. Error: $e');
+          'Unable to create the directory ${truepath(path)}. Error: $e');
     }
     return path;
   }

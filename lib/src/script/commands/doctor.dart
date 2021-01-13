@@ -245,7 +245,7 @@ class _Owner {
       final lsLine = 'ls -alFd $path'.firstLine;
 
       if (lsLine == null) {
-        throw DCliException('No file/directory matched ${absolute(path)}');
+        throw DCliException('No file/directory matched ${truepath(path)}');
       }
 
       final parts = lsLine.split(' ');

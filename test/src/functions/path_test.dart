@@ -10,39 +10,6 @@ import '../util/test_file_system.dart';
 String _testDir = 'path_test';
 void main() {
   t.group('Directory Path manipulation testing', () {
-    t.test('absolute', () {
-      TestFileSystem().withinZone((fs) {
-        final paths = setup(fs);
-        final cwd = pwd;
-        t.expect(absolute(paths.pathTestDir),
-            t.equals(join(cwd, paths.pathTestDir)));
-      });
-    });
-
-    t.test('parent', () {
-      TestFileSystem().withinZone((fs) {
-        final paths = setup(fs);
-        t.expect(
-            dirname(paths.pathTestDir), t.equals(join(fs.fsRoot, _testDir)));
-      });
-    });
-
-    t.test('extension', () {
-      TestFileSystem().withinZone((fs) {
-        final paths = setup(fs);
-        t.expect(extension(join(paths.pathTestDir, paths.testFile)),
-            t.equals(paths.testExtension));
-      });
-    });
-
-    t.test('basename', () {
-      TestFileSystem().withinZone((fs) {
-        final paths = setup(fs);
-        t.expect(basename(join(paths.pathTestDir, paths.testFile)),
-            t.equals(paths.testFile));
-      });
-    });
-
     t.test('PWD', () {
       TestFileSystem().withinZone((fs) {
         t.expect(pwd, t.equals(Directory.current.path));

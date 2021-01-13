@@ -17,7 +17,7 @@ class _ChMod extends DCliFunction {
 
   void _chmod(int permission, String path) {
     if (!exists(path)) {
-      throw ChModException('The file at ${absolute(path)} does not exists');
+      throw ChModException('The file at ${truepath(path)} does not exists');
     }
     'chmod $permission "$path"'.run;
   }

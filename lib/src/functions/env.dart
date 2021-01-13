@@ -219,10 +219,10 @@ class Env extends DCliFunction {
   /// returns true if the given [checkPath] is in the list
   /// of paths defined in the environment variable [PATH].
   bool isOnPATH(String checkPath) {
-    final canon = canonicalize(absolute(checkPath));
+    final canon = truepath(checkPath);
     var found = false;
     for (final path in _path) {
-      if (canonicalize(path) == canon) {
+      if (truepath(path) == canon) {
         found = true;
         break;
       }

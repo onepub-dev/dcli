@@ -1,6 +1,8 @@
 import 'dart:convert';
 import 'dart:io';
 
+import 'package:dcli/src/util/truepath.dart';
+
 import '../settings.dart';
 import '../util/dcli_exception.dart';
 import '../util/runnable_process.dart';
@@ -28,10 +30,10 @@ class Cat extends DCliFunction {
   void cat(String path, {LineAction stdout}) {
     final sourceFile = File(path);
 
-    Settings().verbose('cat:  ${absolute(path)}');
+    Settings().verbose('cat:  ${truepath(path)}');
 
     if (!exists(path)) {
-      throw CatException('The file at ${absolute(path)} does not exists');
+      throw CatException('The file at ${truepath(path)} does not exists');
     }
 
     waitForEx<void>(sourceFile

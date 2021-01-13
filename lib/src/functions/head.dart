@@ -1,3 +1,5 @@
+import 'package:dcli/src/util/truepath.dart';
+
 import '../settings.dart';
 
 import '../util/file_sync.dart';
@@ -20,14 +22,14 @@ Progress head(String path, int lines) => _Head().head(path, lines);
 
 class _Head extends DCliFunction {
   Progress head(String path, int lines, {Progress progress}) {
-    Settings().verbose('head ${absolute(path)} lines: $lines');
+    Settings().verbose('head ${truepath(path)} lines: $lines');
 
     if (!exists(path)) {
-      throw HeadException('The path ${absolute(path)} does not exist.');
+      throw HeadException('The path ${truepath(path)} does not exist.');
     }
 
     if (!isFile(path)) {
-      throw HeadException('The path ${absolute(path)} is not a file.');
+      throw HeadException('The path ${truepath(path)} is not a file.');
     }
 
     try {
@@ -46,7 +48,7 @@ class _Head extends DCliFunction {
     // ignore: avoid_catches_without_on_clauses
     catch (e) {
       throw HeadException(
-          'An error occured reading ${absolute(path)}. Error: $e');
+          'An error occured reading ${truepath(path)}. Error: $e');
     } finally {
       progress.close();
     }

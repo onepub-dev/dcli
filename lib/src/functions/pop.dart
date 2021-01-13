@@ -1,5 +1,5 @@
 import 'dart:io';
-import 'package:path/path.dart' as p;
+import 'package:dcli/src/util/truepath.dart';
 import '../settings.dart';
 import 'function.dart';
 
@@ -56,7 +56,7 @@ class _Pop extends DCliFunction {
     }
     final path = InternalSettings().pop().path;
 
-    Settings().verbose('pop:  new -> ${p.absolute(path)}');
+    Settings().verbose('pop:  new -> ${truepath(path)}');
 
     try {
       Directory.current = path;
@@ -64,7 +64,7 @@ class _Pop extends DCliFunction {
     // ignore: avoid_catches_without_on_clauses
     catch (e) {
       throw PopException(
-          'An error occured popping to ${absolute(path)}. Error $e');
+          'An error occured popping to ${truepath(path)}. Error $e');
     }
   }
 }

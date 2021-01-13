@@ -64,7 +64,7 @@ class Settings {
   /// The directory where we store all of dcli's
   /// configuration files such as the cache.
   /// This will normally be ~/.dcli
-  String get pathToDCli => _dcliPath ??= p.absolute(p.join(HOME, dcliDir));
+  String get pathToDCli => _dcliPath ??= truepath(p.join(HOME, dcliDir));
 
   /// When you run dcli compile -i <script> the compiled exe
   /// is moved to this path.
@@ -72,7 +72,7 @@ class Settings {
   /// allowing the installed scripts to be run from anywhere.
   /// This will normally be ~/.dcli/bin
   String get pathToDCliBin =>
-      _dcliBinPath ??= p.absolute(p.join(HOME, dcliDir, 'bin'));
+      _dcliBinPath ??= truepath(p.join(HOME, dcliDir, 'bin'));
 
   /// path to the dcli template directory.
   String get pathToTemplate => p.join(pathToDCli, templateDir);

@@ -68,14 +68,14 @@ void dsort(List<String> args)  {
     usageError('Expected an input_file to sort.');
   }
 
-  final inputPath = absolute(results.rest[0]);
+  final inputPath = truepath(results.rest[0]);
 
   if (results[outputOption] != null) {
     outputPath = results[outputOption].toString();
   }
   outputPath ??= inputPath;
 
-  outputPath = absolute(outputPath);
+  outputPath = truepath(outputPath);
 
   if (columns.isEmpty) {
     /// if no columns defined we sort by the whole line.

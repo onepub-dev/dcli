@@ -1,5 +1,7 @@
 import 'dart:io';
 
+import 'package:dcli/src/util/truepath.dart';
+
 import '../settings.dart';
 import 'function.dart';
 
@@ -16,7 +18,7 @@ class _FileList extends DCliFunction {
   List<String> get fileList {
     final files = <String>[];
 
-    Settings().verbose('fileList pwd: ${absolute(pwd)}');
+    Settings().verbose('fileList pwd: ${truepath(pwd)}');
 
     Directory.current.listSync().forEach((file) => files.add(file.path));
     return files;
