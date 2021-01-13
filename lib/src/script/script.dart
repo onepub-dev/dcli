@@ -30,32 +30,40 @@ class Script {
   /// Creates a script object from a scriptArg
   /// passed to a command.
   ///
-  /// The [scriptPath] may be a filename or
+  /// The [scriptPathTo] may be a filename or
   /// a filename with a path prefix (relative or absolute)
-  /// If the path is realtive then it will be joined
-  /// with the current working directory to form
-  /// a absolute path.
   ///
-  /// To obtain a [Script] instance for your cli application call:
+  /// To obtain a [Script] instance for your running application call:
   ///
   /// ```dart
-  /// var script = Script.fromFile(Platform.script.toFilePath());
+  /// var script = Script.current;
+  /// ```
   ///
-  Script.fromFile(String scriptPath, {DartProject project})
-      : this._internal(scriptPath, create: false, project: project);
+  Script.fromFile(String scriptPathTo, {DartProject project})
+      : this._internal(scriptPathTo, create: false, project: project);
 
-  Script._internal(String scriptPath, {bool create, DartProject project})
-      : _scriptname = _extractScriptname(scriptPath),
-        _scriptDirectory = _extractScriptDirectory(scriptPath),
+  Script._internal(String pathToScript, {bool create, DartProject project})
+      : _pathToScript = truepath(pathToScript),
+        _scriptname = p.basename(truepath(pathToScript)),
+        _scriptDirectory = dirname(truepath(pathToScript)),
         _project = project {
     {
-      assert(scriptPath.endsWith('.dart'));
+      assert(pathToScript.endsWith('.dart'));
       if (create) {
         final project = DartProject.fromPath(pathToProjectRoot);
         project.initFiles();
       }
     }
   }
+
+  String _pathToScript;
+
+  /// Absolute path to this script.
+  /// If this is a .dart file then its current location.
+  /// If this is a compiled script then the location of the compiled exe.
+  /// If the script was globally activated then this will be a path
+  /// to the script in the pub-cache.
+  String get pathToScript => _pathToScript;
 
   /// the file name of the script including the extension.
   /// If you are running in a compiled script then
@@ -67,9 +75,6 @@ class Script {
 
   /// the absolute path to the directory the script lives in
   String get pathToScriptDirectory => _scriptDirectory;
-
-  /// the absolute path of the script file.
-  String get pathToScript => p.join(pathToScriptDirectory, scriptname);
 
   /// the name of the script without its extension.
   /// this is used for the 'name' key in the pubspec.
@@ -96,31 +101,40 @@ class Script {
   /// and as such is running from the pub cache.
   bool get isPubGlobalActivated => pathToScript.startsWith(PubCache().pathTo);
 
-  // the scriptnameArg may contain a relative path: fred/home.dart
-  // we need to get the actually name and full path to the script file.
-  static String _extractScriptname(String scriptArg) {
-    final cwd = Directory.current.path;
+  /// The current script that is running.
+  static Script _current;
 
-    return p.basename(p.join(cwd, scriptArg));
-  }
+  /// Returns the instance of the currently running script.
+  ///
+  // ignore: prefer_constructors_over_static_methods
+  static Script get current =>
+      _current ??= Script.fromFile(_pathToCurrentScript);
 
-  // /// Returns true if the script has a pubspec.yaml in its directory.
-  // bool hasLocalPubspecYaml() {
-  //   // The virtual project pubspec.yaml file.
-  //   final pubSpecPath = p.join(_scriptDirectory, 'pubspec.yaml');
-  //   return exists(pubSpecPath);
-  // }
+  /// The absolute path to the dcli script which
+  /// is currently running.
+  static String get _pathToCurrentScript {
+    if (_current == null) {
+      final script = Platform.script;
 
-  // /// returns true if the script has a pubspec in anscestor directory.
-  // ///
-  // bool hasAncestorPubspecYaml() {
-  //   return pathToProjectRoot != _scriptDirectory;
-  // }
+      String _pathToScript;
+      if (script.isScheme('file')) {
+        _pathToScript = Platform.script.toFilePath();
+      } else {
+        /// when running in a unit test we can end up with a 'data' scheme
+        if (script.isScheme('data')) {
+          final start = script.path.indexOf('file:');
+          final end = script.path.lastIndexOf('.dart');
+          final fileUri = script.path.substring(start, end + 5);
 
-  static String _extractScriptDirectory(String scriptArg) {
-    final scriptDirectory = p.canonicalize(p.dirname(p.join(pwd, scriptArg)));
+          /// now parse the remaining uri to a path.
+          _pathToScript = Uri.parse(fileUri).toFilePath();
+        }
+      }
 
-    return scriptDirectory;
+      return _pathToScript;
+    } else {
+      return _current.pathToScript;
+    }
   }
 
   /// validate that the passed arguments points to a valid script
@@ -155,14 +169,6 @@ class Script {
   /// If the script is compiled or installed by pub global activate
   /// then this will be the location of the script file.
   String get pathToProjectRoot => project.pathToProjectRoot;
-
-  static Script _current;
-
-  /// Returns the instance of the currently running script.
-  ///
-  // ignore: prefer_constructors_over_static_methods
-  static Script get current =>
-      _current ??= Script.fromFile(Settings().pathToScript);
 
   DartProject _project;
 

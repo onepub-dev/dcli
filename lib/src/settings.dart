@@ -45,46 +45,13 @@ class Settings {
 
   /// The absolute path to the dcli script which
   /// is currently running.
+  @Deprecated('Use Script.current.pathToScript')
   String get pathToScript {
-    if (_scriptPath == null) {
-      final script = Platform.script;
-      String actual;
-      if (script.isScheme('file')) {
-        actual = Platform.script.toFilePath();
-      } else {
-        /// when running in a unit test we can end up with a 'data' scheme
-        if (script.isScheme('data')) {
-          final start = script.path.indexOf('file:');
-          final end = script.path.lastIndexOf('.dart');
-          final fileUri = script.path.substring(start, end + 5);
-
-          /// now find the pubsped
-          actual = Uri.parse(fileUri).toFilePath();
-        }
-      }
-      if (isWithin(pathToDCliCache, actual)) {
-        // This is a script being run from a virtual project so we
-        // need to reconstruct is original path.
-
-        // strip of the cache prefix
-        final rel = join(rootPath, relative(actual, from: pathToDCliCache));
-        //.dcli/cache/home/bsutton/git/dcli/tool/activate_local.project/activate_local.dart
-
-        // now remove the virtual project directory
-        _scriptPath = join(dirname(dirname(rel)), basename(rel));
-      } else {
-        _scriptPath = actual;
-      }
-    }
-
+    Script.current.pathToScript;
     return _scriptPath;
   }
 
-  /// This is an internal function called by the run
-  /// command and you should NOT be calling it!
-  set pathToScript(String scriptPath) {
-    _scriptPath = scriptPath;
-  }
+
 
   /// Used when unit testing and we are re-using
   /// the current process.

@@ -43,8 +43,6 @@ class RunCommand extends Command {
       }
     }
 
-    Settings().pathToScript = script.pathToScript;
-
     Settings().verbose('Running script ${script.pathToScript}');
 
     if (!script.isReadyToRun) {

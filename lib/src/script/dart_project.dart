@@ -43,7 +43,7 @@ class DartProject {
     final script = Script.current;
     var startFrom = '.';
     if (!script.isCompiled) {
-      startFrom = Settings().pathToScript;
+      startFrom = script.pathToScript;
     }
     return _current ??= DartProject.fromPath(startFrom, search: true);
   }
