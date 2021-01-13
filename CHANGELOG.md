@@ -1,3 +1,10 @@
+# 0.39.9
+Made the Script.isCompiled method more reliable. 
+Fixed the Script.pathToScript path when in a compiled exe. It was just returning the pwd.
+replaced calls to absolute with truepath
+Moved the verbose statement in the copy function up so we will see it even if an exception is thrown.
+removed the --suffix switch as no longer supported from git_release hook.
+
 # 0.39.8
 Fixed unit testing bugs.
 Changed logic that obtains the scripts path to handle more scenarios.
