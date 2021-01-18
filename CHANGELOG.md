@@ -1,3 +1,10 @@
+# 0.40.2
+Minor changes to progress messages.
+
+
+# 0.40.1
+Introduced isPrivilegedProcess so we can always tell if we started with privilegese. Changed isPrivilegedUser back to its original semantics in that it reflects the current effective user id. Fixed withPrivileges so it uses isPriviliegedProcess to correctly determine if privileges exist. Fix the 'start' function so that it interats correctly with wiithPrivileges and releasePrivileges.
+
 # 0.40.0
 BREAKING CHANGE. Accessing an environment key which doesn't exists now throws EnvironmentKeyNotFound rather than returning a null. This is in prepare for nnbd.
 Updated doco for Env.
