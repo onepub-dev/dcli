@@ -48,6 +48,20 @@ mixin WindowsMixin {
 
   String get loggedInUser => env['USERNAME'];
 
+  /// revert uid and gid to original user's id's
+  void releasePrivileges() {
+    /// NO OP under windows as its not possible and not needed.
+  }
+
+  /// Run [privilegedCallback] with root UID and gid
+  void withPrivileges(RunPrivileged privilegedCallback) {
+    if (!Shell.current.isPrivilegedUser) {
+      throw ShellException(
+          'You can only use withPrivileges when running as a privileged user.');
+    }
+    privilegedCallback();
+  }
+
   bool get isSudo => false;
 
   static void setPath(List<String> paths) {

@@ -1,5 +1,7 @@
 import 'dart:io';
 
+import 'package:posix/posix.dart';
+
 import '../../dcli.dart';
 import '../installers/linux_installer.dart';
 import '../installers/macosx_installer.dart';
@@ -27,6 +29,43 @@ mixin PosixMixin {
     final user = 'whoami'.firstLine;
     Settings().verbose('whoami: $user');
     return user;
+  }
+
+  /// revert uid and gid to original user's id's
+  void releasePrivileges() {
+    if (Shell.current.isPrivilegedUser) {
+      final sUID = env['SUDO_UID'];
+      final gUID = env['SUDO_GID'];
+
+      // convert id's to integers.
+      final originalUID = sUID != null ? int.tryParse(sUID) ?? 0 : 0;
+      final originalGID = gUID != null ? int.tryParse(gUID) ?? 0 : 0;
+
+      setegid(originalGID);
+      seteuid(originalUID);
+    }
+  }
+
+  /// Run [privilegedCallback] with root UID and gid
+  void withPrivileges(RunPrivileged privilegedCallback) {
+    if (!Shell.current.isPrivilegedUser) {
+      throw ShellException(
+          'You can only use withPrivileges when running as a privileged user.');
+    }
+    final privileged = Shell.current.isPrivilegedUser;
+
+    if (!privileged) {
+      setegid(0);
+      seteuid(0);
+    }
+
+    privilegedCallback();
+
+    /// If the code was originally running privileged then
+    /// we leave it as it was.
+    if (!privileged) {
+      releasePrivileges();
+    }
   }
 
   bool get isSudo => !Settings().isWindows && env['SUDO_USER'] != null;

@@ -142,4 +142,14 @@ class UnknownShell with ShellMixin {
 
   @override
   bool get isSudo => throw UnimplementedError();
+
+  @override
+  void releasePrivileges() {
+    throw UnimplementedError();
+  }
+
+  @override
+  void withPrivileges(RunPrivileged privilegedCallback) {
+    throw UnimplementedError();
+  }
 }

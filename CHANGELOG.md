@@ -1,3 +1,8 @@
+
+# 0.39.10
+
+Implemented Shell.current.releasePrivileges and Shell.current.withPriviliges 
+
 # 0.39.9
 Made the Script.isCompiled method more reliable. 
 Fixed the Script.pathToScript path when in a compiled exe. It was just returning the pwd.
