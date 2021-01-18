@@ -1,3 +1,8 @@
+# 0.40.0
+BREAKING CHANGE. Accessing an environment key which doesn't exists now throws EnvironmentKeyNotFound rather than returning a null. This is in prepare for nnbd.
+Updated doco for Env.
+Changed from using whoami to to using getuid for posix systems.
+
 
 # 0.39.10
 
