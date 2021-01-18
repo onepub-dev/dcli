@@ -10,10 +10,13 @@ import '../installers/macosx_installer.dart';
 /// when for posix based shells.
 mixin PosixMixin {
   bool get isPrivilegedUser {
-    final user = _whoami();
-    final privileged = user == 'root';
-    Settings().verbose('isPrivilegedUser: $privileged');
-    return privileged;
+    final uid = getuid();
+    Settings().verbose('isPrivilegedUser: $uid');
+    return uid == 0;
+    // final user = _whoami();
+    // final privileged = user == 'root';
+    // Settings().verbose('isPrivilegedUser: $privileged');
+    // return privileged;
   }
 
   String get loggedInUser {
@@ -26,6 +29,7 @@ mixin PosixMixin {
   }
 
   String _whoami() {
+    getlogin();
     final user = 'whoami'.firstLine;
     Settings().verbose('whoami: $user');
     return user;
@@ -52,7 +56,7 @@ mixin PosixMixin {
       throw ShellException(
           'You can only use withPrivileges when running as a privileged user.');
     }
-    final privileged = Shell.current.isPrivilegedUser;
+    final privileged = geteuid() == 0;
 
     if (!privileged) {
       setegid(0);
