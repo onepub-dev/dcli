@@ -9,21 +9,6 @@ import '../util/dcli_exception.dart';
 
 import 'dcli_function.dart';
 
-/// Returns the value of an environment variable.
-///
-/// name of the environment variable.
-///
-/// On posix systems name of the environment variable is case sensitive.
-///
-/// If the environment variable doesn't exists
-/// then null is returned.
-///
-///```dart
-///String path = env["PATH"];
-///```
-///
-// String env(String name) => Env()._env(name);
-
 Env env = Env();
 
 /// Tests if the given [path] is contained
@@ -105,7 +90,16 @@ class Env extends DCliFunction {
   String _env(String name) {
     Settings().verbose('env:  $name:${_envVars[name]}');
 
-    return _envVars[_caseSensitive ? name : name.toUpperCase()];
+    final key = _caseSensitive ? name : name.toUpperCase();
+
+    if (!_envVars.containsKey(key)) {
+      throw EnvironmentKeyNotFound(
+          'The environment variable $key does not exist');
+    }
+
+    final value = _envVars[key];
+
+    return value;
   }
 
   /// Returns the complete set of Environment variable entries.
@@ -129,7 +123,26 @@ class Env extends DCliFunction {
     return pathEnv.split(delimiterForPATH);
   }
 
+  /// Returns the value of an environment variable.
+  ///
+  /// name of the environment variable.
+  ///
+  /// On posix systems name of the environment variable is case sensitive.
+  ///
+  /// If the environment variable doesn't exists
+  /// then a [EnvironmentKeyNotFound] exception is thrown.
+  ///
+  ///```dart
+  ///String path = env["PATH"];
+  ///```
+  ///
   String operator [](String name) => _env(name);
+
+  /// Sets the value of an environment variable
+  /// ```dart
+  ///   env["PASS"] = 'mypassword';
+  /// ```
+  ///
   void operator []=(String name, String value) => _setEnv(name, value);
 
   /// Appends [newPath] to the list of paths in the
@@ -333,4 +346,15 @@ class Env extends DCliFunction {
   static set mock(Env mockEnv) {
     _self = mockEnv;
   }
+}
+
+/// Base class for all Environment variable related exceptions.
+class EnvironmentException extends DCliException {
+  EnvironmentException(String message) : super(message);
+}
+
+/// Thrown if you attempt to access an environment variable for
+/// which the key does not exists.
+class EnvironmentKeyNotFound extends EnvironmentException {
+  EnvironmentKeyNotFound(String message) : super(message);
 }
