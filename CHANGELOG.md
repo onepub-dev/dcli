@@ -1,3 +1,7 @@
+# 0.40.3
+reverted to returning null for a non-existing key as the changes were too destructive and end up with rather ugly code.
+Added logging of the pub-cache path.
+
 # 0.40.2
 Minor changes to progress messages.
 

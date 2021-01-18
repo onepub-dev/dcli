@@ -120,8 +120,6 @@ class Env extends DCliFunction {
   ///
   /// On posix systems name of the environment variable is case sensitive.
   ///
-  /// If the environment variable doesn't exists
-  /// then a [EnvironmentKeyNotFound] exception is thrown.
   ///
   ///```dart
   ///String path = env["PATH"];
