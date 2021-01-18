@@ -61,6 +61,9 @@ abstract class Shell {
   ///
   /// This method returns true even after [releasePrivileges]
   /// has been called.
+  ///
+  /// In Linux and osx terminology this method returns
+  /// true if the  real uid is root (uid == 0).
   bool get isPrivilegedUser => false;
 
   /// On Linux and osx systems makes the script run as
