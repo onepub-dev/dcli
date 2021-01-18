@@ -90,16 +90,7 @@ class Env extends DCliFunction {
   String _env(String name) {
     Settings().verbose('env:  $name:${_envVars[name]}');
 
-    final key = _caseSensitive ? name : name.toUpperCase();
-
-    if (!_envVars.containsKey(key)) {
-      throw EnvironmentKeyNotFound(
-          'The environment variable $key does not exist');
-    }
-
-    final value = _envVars[key];
-
-    return value;
+    return _envVars[_caseSensitive ? name : name.toUpperCase()];
   }
 
   /// Returns the complete set of Environment variable entries.
@@ -351,10 +342,4 @@ class Env extends DCliFunction {
 /// Base class for all Environment variable related exceptions.
 class EnvironmentException extends DCliException {
   EnvironmentException(String message) : super(message);
-}
-
-/// Thrown if you attempt to access an environment variable for
-/// which the key does not exists.
-class EnvironmentKeyNotFound extends EnvironmentException {
-  EnvironmentKeyNotFound(String message) : super(message);
 }
