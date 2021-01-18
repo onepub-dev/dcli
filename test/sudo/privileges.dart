@@ -61,4 +61,16 @@ void main() {
       print(st);
     }
   });
+
+  test('loggedInUsersHome ...', () async {
+    final home = join(rootPath, 'home', env['SUDO_USER']);
+    print('sudo logged in user home =$home');
+    expect((Shell.current as PosixShell).loggedInUsersHome, home);
+  });
+
+  test('pub-cache path ...', () async {
+    print(orange('pub-cache path =${PubCache().pathTo}'));
+    expect(PubCache().pathTo,
+        join((Shell.current as PosixShell).loggedInUsersHome, '.pub-cache'));
+  });
 }

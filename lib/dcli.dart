@@ -62,6 +62,7 @@ export 'src/script/dart_sdk.dart' show DartSdk;
 export 'src/script/script.dart' show Script;
 export 'src/settings.dart' show Settings;
 export 'src/shell/bash_shell.dart';
+export 'src/shell/posix_shell.dart';
 export 'src/shell/shell.dart';
 export 'src/shell/unknown_shell.dart';
 export 'src/shell/windows_mixin.dart';

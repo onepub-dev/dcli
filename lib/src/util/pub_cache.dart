@@ -1,5 +1,8 @@
+
 import 'package:meta/meta.dart';
 
+
+import 'package:dcli/src/shell/posix_shell.dart';
 import '../../dcli.dart';
 
 /// Used to locate and manipulate the dart pub cache
@@ -17,7 +20,7 @@ class PubCache {
   /// The name of the environment variable that can be
   /// set to change the location of the .pub-cache directory.
   /// You should change this path by calling [pathTo].
-  static const String envVar = 'PUB_CACHE';
+  static const String envVarPubCache = 'PUB_CACHE';
   String _pubCachePath;
 
   ///
@@ -27,7 +30,7 @@ class PubCache {
     // first check if an environment variable exists.
     // The PUB_CACHE env var allows a user to over-ride
     // the standard location of the pub cache.
-    final pubCacheEnv = env[envVar];
+    final pubCacheEnv = env[envVarPubCache];
 
     /// determine pubCacheDir
     if (pubCacheEnv != null) {
@@ -42,8 +45,18 @@ class PubCache {
       }
     } else {
       _pubCacheDir ??= '.pub-cache';
+
       // determine pub-cache path
-      _pubCachePath ??= truepath(join(env['HOME'], _pubCacheDir));
+      if (Shell.current.isSudo) {
+        /// I'm really not certain about this.
+        /// The logic is that if we are running under sudo then the pub-cache
+        /// we are using actually belongs to the original users so we
+        /// we get that user's home directory and pub cache.
+        final home = (Shell.current as PosixShell).loggedInUsersHome;
+        _pubCachePath ??= truepath(join(home, _pubCacheDir));
+      } else {
+        _pubCachePath ??= truepath(join(env['HOME'], _pubCacheDir));
+      }
     }
 
     Settings().verbose('pub-cache found in=$_pubCachePath');
@@ -68,7 +81,7 @@ class PubCache {
   /// This will only affect this script and any child processes spawned from
   /// this script.
   set pathTo(String pathToPubCache) {
-    env[envVar] = pathToPubCache;
+    env[envVarPubCache] = pathToPubCache;
     _pubCachePath = pathToPubCache;
     _pubCacheBinPath = truepath(join(_pubCachePath, 'bin'));
   }

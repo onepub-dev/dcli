@@ -1,14 +1,14 @@
 import 'package:dcli/src/functions/env.dart';
 import 'package:path/path.dart';
 
-import 'posix_mixin.dart';
+import 'posix_shell.dart';
 
 import 'shell_mixin.dart';
 
 /// Provides a number of helper functions
 /// when dcli needs to interact with the Bash shell.
 
-class DashShell with ShellMixin, PosixMixin {
+class DashShell with ShellMixin, PosixShell {
   /// Name of the shell
   static const String shellName = 'dash';
 
