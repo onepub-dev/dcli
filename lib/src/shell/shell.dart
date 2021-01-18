@@ -55,39 +55,52 @@ abstract class Shell {
   /// username rather than root.
   String get loggedInUser;
 
-  /// Returns true if the current user has esclated
-  /// privileges.
+  /// Returns true if the current user this process
+  /// is running as has esclated privileges.
+  ///
   /// e.g. root under posix, Administrator under windows.
   ///
-  /// This method returns true even after [releasePrivileges]
-  /// has been called.
+  /// If you have called [releasePrivileges] then
+  /// this method will return false unless you are within
+  /// a privileged block create by [withPrivileges].
+  ///
+  /// You can check if the process was launched with priviliges
+  /// via calling [isPrivilegedProcess].
   ///
   /// In Linux and osx terminology this method returns
-  /// true if the  real uid is root (uid == 0).
+  /// true if the  effective uid is root (uid == 0).
   bool get isPrivilegedUser => false;
+
+  /// Returns true if the process was launched as a priviliged process.
+  ///
+  /// Calling [releasePrivileges] has no affect on this call.
+  ///
+  /// Under Linux and OSX this means that the process's real uid is root (uid = 0).
+  /// Under Windows this means that the process was lauched via 'Run as Administrator'.
+  ///
+  bool get isPrivilegedProcess => false;
 
   /// On Linux and osx systems makes the script run as
   /// a non-privileged user even when started with sudo.
   ///
-  /// This method is to over come issues when running as sudo
+  /// This method is used to overcome issues when running as sudo
   /// where the script would change the ownership to root:root
   /// for any created/modified file.
   ///
   /// This method is normally called as the first line of your
   /// main() method.
   ///
-  /// Releasing privileges sets the uid and gid to the users original
+  /// Calling this method on Windows is unnecessary but harmless.
+  ///
+  /// On Linux and OSX releasing privileges sets the uid and gid to the user's original
   /// privileges so any files that are created/modified get the original
-  /// users uid/gid.
+  /// user's uid/gid.
   ///
   /// You should use this method in conjuctions with [withPrivileges]
   /// so that only specific parts of your code run with privileges.
   ///
-  /// On windows systems this method does nothing.
-  ///
   /// You must NEVER call [releasePrivileges] within a [withPrivileges]
   /// callback.
-
   ///
   /// ```dart
   /// void main(){
@@ -108,13 +121,13 @@ abstract class Shell {
 
   /// When a script is run under sudo on Linux and osx and you
   /// have previously called [releasePrivileges] then this method
-  /// will run [privilegedCallback] with sudo privileges.
+  /// will run [privilegedCallback] with root privileges.
   ///
   /// If you attempt to call [withPrivileges] when not running
-  /// as a privileged user a [ShellException] will be thrown.
+  /// as a privileged process a [ShellException] will be thrown.
   ///
-  /// Use [isPrivilegedUser] to check if your script is
-  /// running as a priviliged user.
+  /// Use [isPrivilegedProcess] to check if your script was started
+  /// as a priviliged process.
   ///
   /// Nesting [withPrivileges] blocks is allowed as a convenience.
   ///

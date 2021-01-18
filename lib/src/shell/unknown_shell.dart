@@ -152,4 +152,7 @@ class UnknownShell with ShellMixin {
   void withPrivileges(RunPrivileged privilegedCallback) {
     throw UnimplementedError();
   }
+
+  @override
+  bool get isPrivilegedProcess => throw UnimplementedError();
 }

@@ -9,14 +9,22 @@ import '../installers/macosx_installer.dart';
 /// Provides a number of helper functions
 /// when for posix based shells.
 mixin PosixMixin {
+  /// True if the processes effictive uid is root.
   bool get isPrivilegedUser {
-    final uid = getuid();
-    Settings().verbose('isPrivilegedUser: $uid');
-    return uid == 0;
+    final euid = geteuid();
+    Settings().verbose('isPrivilegedUser: euid=$euid');
+    return euid == 0;
     // final user = _whoami();
     // final privileged = user == 'root';
     // Settings().verbose('isPrivilegedUser: $privileged');
     // return privileged;
+  }
+
+  /// True if the processes real uid is root.
+  bool get isPrivilegedProcess {
+    final uid = getuid();
+    Settings().verbose('isPrivilegedProcess: uid=$uid');
+    return uid == 0;
   }
 
   String get loggedInUser {
@@ -52,7 +60,7 @@ mixin PosixMixin {
 
   /// Run [privilegedCallback] with root UID and gid
   void withPrivileges(RunPrivileged privilegedCallback) {
-    if (!Shell.current.isPrivilegedUser) {
+    if (!Shell.current.isPrivilegedProcess) {
       throw ShellException(
           'You can only use withPrivileges when running as a privileged user.');
     }

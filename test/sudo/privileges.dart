@@ -31,13 +31,22 @@ void main() {
         delete('test.txt');
       }
       touch('test.txt', create: true);
+      'ls -la test.txt'.run;
 
+      print('start a non-priviledge command');
+
+      'touch test.txt'.start(privileged: true);
       'ls -la test.txt'.run;
 
       Shell.current.withPrivileges(() {
         print(green('withPrivileges'));
         print('with privileges euid: ${geteuid()}');
         print('with privileges egid: ${getegid()}');
+
+        print('start a priviledge command');
+
+        'touch test.txt'.start(privileged: true);
+        'ls -la test.txt'.run;
 
         if (exists('test2.txt')) {
           delete('test2.txt');

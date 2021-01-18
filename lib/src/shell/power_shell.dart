@@ -42,6 +42,9 @@ class PowerShell with WindowsMixin, ShellMixin {
   }
 
   @override
+  bool get isPrivilegedProcess => isPrivilegedUser;
+
+  @override
   bool get isCompletionInstalled => false;
 
   @override
