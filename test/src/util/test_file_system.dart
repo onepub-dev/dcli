@@ -310,7 +310,8 @@ class TestFileSystem {
 
     copyTree(originalPubCache, PubCache().pathTo);
 
-    print('Reset ${PubCache.envVarPubCache} to ${env[PubCache.envVarPubCache]}');
+    print(
+        'Reset ${PubCache.envVarPubCache} to ${env[PubCache.envVarPubCache]}');
 
     Settings().setVerbose(enabled: verbose);
   }
