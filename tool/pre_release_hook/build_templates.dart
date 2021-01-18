@@ -2,9 +2,12 @@
 
 import 'package:dcli/dcli.dart';
 import 'package:pub_semver/pub_semver.dart';
-import 'package:dcli/src/version/version.g.dart';
 
-void main() {
+String newVersion;
+void main(List<String> args) {
+  newVersion = args[0];
+
+  print(green('Running build_templates with version: $newVersion'));
   final templatePath = join(
       Script.current.pathToProjectRoot, 'lib', 'src', 'assets', 'templates');
 
@@ -16,6 +19,8 @@ void main() {
   if (!exists(dirname(expanderPath))) {
     createDir(dirname(expanderPath));
   }
+
+  print('Writing assets to $expanderPath');
   expanderPath.write(content);
 }
 
@@ -47,7 +52,10 @@ class TemplateExpander {
 
 ''');
 
+  print('packing assets');
   find('*', root: templatePath).forEach((file) {
+    print('packing $file');
+
     /// Write the content of each asset into a method.
     content.write('''
 \t\t// ignore: non_constant_identifier_names
@@ -92,7 +100,7 @@ List<String> preprocess(String file, List<String> lines) {
   if (basename(file) == 'pubspec.yaml.template') {
     for (final line in lines) {
       if (line.contains('dcli:')) {
-        final version = Version.parse(packageVersion);
+        final version = Version.parse(newVersion);
         processed.add('  dcli: ^${version.major}.${version.minor}.0');
       } else {
         processed.add(line);
