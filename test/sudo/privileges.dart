@@ -7,6 +7,7 @@ import 'package:test/test.dart';
 void main() {
   test('isPriviliged', () {
     try {
+      Settings().setVerbose(enabled: true);
       print('isPriviliged: ${Shell.current.isPrivilegedUser}');
 
       print('uid: ${getuid()}');
@@ -26,16 +27,22 @@ void main() {
       print('post-descalation euid: ${geteuid()}');
       print('post-descalation user egid: ${getegid()}');
 
-      delete('test.txt');
+      if (exists('test.txt')) {
+        delete('test.txt');
+      }
       touch('test.txt', create: true);
 
       'ls -la test.txt'.run;
 
       Shell.current.withPrivileges(() {
+        print(green('withPrivileges'));
         print('with privileges euid: ${geteuid()}');
         print('with privileges egid: ${getegid()}');
 
-        delete('test2.txt');
+        if (exists('test2.txt')) {
+          delete('test2.txt');
+        }
+
         touch('test2.txt', create: true);
 
         'ls -la test2.txt'.run;
