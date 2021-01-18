@@ -46,6 +46,8 @@ class PubCache {
       _pubCachePath ??= truepath(join(env['HOME'], _pubCacheDir));
     }
 
+    Settings().verbose('pub-cache found in=$_pubCachePath');
+
     // determine pub-cache/bin
     _pubCacheBinPath = truepath(join(_pubCachePath, 'bin'));
   }
