@@ -1,3 +1,8 @@
+# 0.40.5
+Added release hook to activate published version of dcli.
+sorted dependencies.
+Fixed the isReadyToRun method as it was looking for .dart_code rather than .dart_tool
+
 # 0.40.4
 exposed the PosixShell.
 Added tests for loggedInUsersHome.
