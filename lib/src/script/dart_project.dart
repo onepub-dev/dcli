@@ -226,7 +226,7 @@ class DartProject {
     // we could improve this by checking that the .lock files date is after the .yamls date.
     /// there is a 'generated' date stamp in the .json file which might be more definitive.
     return exists(
-            join(pathToProjectRoot, '.dart_code', 'package_config.json')) &&
+            join(pathToProjectRoot, '.dart_tool', 'package_config.json')) &&
         exists(join(pathToProjectRoot, 'pubspec.lock')) &&
         hasPubSpec;
   }
