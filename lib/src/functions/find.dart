@@ -123,7 +123,8 @@ class Find extends DCliFunction {
     if (recursive == false && relativeDir != '.') {
       _workingDirectory = join(_workingDirectory, relativeDir);
       if (!exists(_workingDirectory)) {
-        throw FindException('The path ${truepath(_workingDirectory)} does not exists');
+        throw FindException(
+            'The path ${truepath(_workingDirectory)} does not exists');
       }
       finalpattern = basename(finalpattern);
     }
@@ -149,8 +150,8 @@ class Find extends DCliFunction {
     var _workingDirectory = workingDirectory;
     var finalIncludeHidden = includeHidden;
 
-    final matcher =
-        _PatternMatcher(pattern, caseSensitive: caseSensitive, workingDirectory: _workingDirectory);
+    final matcher = _PatternMatcher(pattern,
+        caseSensitive: caseSensitive, workingDirectory: _workingDirectory);
     if (_workingDirectory == '.') {
       _workingDirectory = pwd;
     } else {
@@ -169,8 +170,8 @@ class Find extends DCliFunction {
       final nextLevel = <FileSystemEntity>[]..length = 100;
       final singleDirectory = <FileSystemEntity>[]..length = 100;
       final childDirectories = <FileSystemEntity>[]..length = 100;
-      await _processDirectory(_workingDirectory, _workingDirectory, recursive, types, matcher,
-          finalIncludeHidden, progress, childDirectories);
+      await _processDirectory(_workingDirectory, _workingDirectory, recursive,
+          types, matcher, finalIncludeHidden, progress, childDirectories);
 
       while (childDirectories[0] != null) {
         _zeroElements(nextLevel);
@@ -178,8 +179,8 @@ class Find extends DCliFunction {
           if (directory == null) {
             break;
           }
-          await _processDirectory(_workingDirectory, directory.path, recursive, types,
-              matcher, finalIncludeHidden, progress, singleDirectory);
+          await _processDirectory(_workingDirectory, directory.path, recursive,
+              types, matcher, finalIncludeHidden, progress, singleDirectory);
           _appendTo(nextLevel, singleDirectory);
           _zeroElements(singleDirectory);
         }
@@ -200,7 +201,8 @@ class Find extends DCliFunction {
       bool includeHidden,
       Progress progress,
       List<FileSystemEntity> nextLevel) async {
-    final lister = Directory(currentDirectory).list(recursive: false);
+    final lister =
+        Directory(currentDirectory).list(recursive: false, followLinks: false);
     var nextLevelIndex = 0;
 
     final completer = Completer<void>();
@@ -241,9 +243,17 @@ class Find extends DCliFunction {
       // should also register onError
       onDone: () => completer.complete(null),
       onError: (Object e, StackTrace st) {
-        /// check for and ignore permission denied.
         if (e is FileSystemException && e.osError.errorCode == 13) {
+          /// check for and ignore permission denied.
           Settings().verbose('Permission denied: ${e.path}');
+        } else if (e is FileSystemException && e.osError.errorCode == 40) {
+          /// ignore recursive symbolic link problems.
+          Settings().verbose('Too many levels of symbolic links: ${e.path}');
+        } else if (e is FileSystemException && e.osError.errorCode == 2) {
+          /// The directory may have been deleted between us finding it and
+          /// processing it.
+          Settings().verbose(
+              'File or Directory deleted whilst we were processing it: ${e.path}');
         } else {
           throw e;
         }
