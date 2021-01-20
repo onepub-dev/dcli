@@ -20,6 +20,7 @@ export 'src/functions/ask.dart';
 export 'src/functions/cat.dart' show cat, CatException;
 export 'src/functions/cd.dart' show CDException;
 export 'src/functions/chmod.dart' show chmod, ChModException;
+export 'src/functions/chown.dart' show chown, ChOwnException;
 export 'src/functions/copy.dart' show copy, CopyException;
 export 'src/functions/copy_tree.dart' show copyTree, CopyTreeException;
 export 'src/functions/create_dir.dart' show createDir, CreateDirException;
