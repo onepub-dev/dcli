@@ -53,7 +53,7 @@ class TemplateExpander {
 ''');
 
   print('packing assets');
-  find('*', root: templatePath).forEach((file) {
+  find('*', workingDirectory: templatePath).forEach((file) {
     print('packing $file');
 
     /// Write the content of each asset into a method.

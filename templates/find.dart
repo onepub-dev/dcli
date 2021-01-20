@@ -17,14 +17,14 @@ import 'package:args/args.dart';
 
 ///
 /// Call this program using:
-/// dcli find.dart -v --root . ---recursive --pattern *.*
+/// dcli find.dart -v --workingDirectory . ---recursive --pattern *.*
 ///
 /// to see the usage run:
 ///
 /// dcli find.dart
 ///
 /// Find all files that match the given pattern.
-/// Starts from the current directory unless [--root]
+/// Starts from the current directory unless [--workingDirectory]
 /// is provided.
 void main(List<String> args) {
   final parser = ArgParser();
@@ -32,7 +32,7 @@ void main(List<String> args) {
   parser
     ..addFlag('verbose', abbr: 'v')
     ..addFlag('recursive', abbr: 'r', defaultsTo: true)
-    ..addOption('root',
+    ..addOption('workingDirectory',
         defaultsTo: '.',
         help: 'Specifies the directory to start searching from')
     ..addOption('pattern',
@@ -43,7 +43,7 @@ void main(List<String> args) {
   final results = parser.parse(args);
 
   final pattern = results['pattern'] as String;
-  final root = results['root'] as String;
+  final workingDirectory = results['workingDirectory'] as String;
   final verbose = results['verbose'] as bool;
   final recursive = results['recursive'] as bool;
 
@@ -56,7 +56,7 @@ void main(List<String> args) {
     print('Verbose is on, starting find');
   }
 
-  find(pattern, root: root, recursive: recursive).forEach(print);
+  find(pattern, workingDirectory: workingDirectory, recursive: recursive).forEach(print);
 
   if (verbose) {
     print('Verbose is on, completed find');

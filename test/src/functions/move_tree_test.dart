@@ -18,12 +18,12 @@ void main() {
           deleteDir(to);
         }
 
-        final source = find('*', root: from, recursive: false).toList();
+        final source = find('*', workingDirectory: from, recursive: false).toList();
         final expected = subname(source, 'top', 'new_top');
         createDir(to);
         moveTree(from, to);
 
-        final actual = find('*', root: to, recursive: false).toList();
+        final actual = find('*', workingDirectory: to, recursive: false).toList();
 
         t.expect(actual, t.unorderedEquals(expected));
 
@@ -40,13 +40,13 @@ void main() {
           deleteDir(to);
         }
 
-        final source = find('*', root: from, recursive: false).toList();
+        final source = find('*', workingDirectory: from, recursive: false).toList();
         final expected = subname(source, 'top', 'new_top');
         createDir(to);
         moveTree(from, to);
         moveTree(from, to, overwrite: true);
 
-        final actual = find('*', root: to, recursive: false).toList();
+        final actual = find('*', workingDirectory: to, recursive: false).toList();
 
         t.expect(actual, unorderedEquals(expected));
         t.expect(hasMoved(source), true);
@@ -62,12 +62,12 @@ void main() {
           deleteDir(to);
         }
 
-        final source = find('*.txt', root: from, recursive: false).toList();
+        final source = find('*.txt', workingDirectory: from, recursive: false).toList();
         final expected = subname(source, 'top', 'new_top');
         createDir(to);
         moveTree(from, to, filter: (file) => extension(file) == '.txt');
 
-        final actual = find('*.txt', root: to, recursive: false).toList();
+        final actual = find('*.txt', workingDirectory: to, recursive: false).toList();
 
         t.expect(actual, unorderedEquals(expected));
         t.expect(hasMoved(source), true);
@@ -83,12 +83,12 @@ void main() {
           deleteDir(to);
         }
 
-        final source = find('*.txt', root: from).toList();
+        final source = find('*.txt', workingDirectory: from).toList();
         final expected = subname(source, 'top', 'new_top');
         createDir(to);
         moveTree(from, to, filter: (file) => extension(file) == '.txt');
 
-        final actual = find('*.txt', root: to).toList();
+        final actual = find('*.txt', workingDirectory: to).toList();
 
         t.expect(actual, unorderedEquals(expected));
         t.expect(hasMoved(source), true);
@@ -104,12 +104,12 @@ void main() {
           deleteDir(to);
         }
 
-        final source = find('*', root: from).toList();
+        final source = find('*', workingDirectory: from).toList();
         final expected = subname(source, 'top', 'new_top');
         createDir(to);
         moveTree(from, to);
 
-        final actual = find('*', root: to).toList();
+        final actual = find('*', workingDirectory: to).toList();
 
         t.expect(actual, unorderedEquals(expected));
         t.expect(hasMoved(source), true);
@@ -125,13 +125,13 @@ void main() {
           deleteDir(to);
         }
 
-        final source = find('*', root: from).toList();
+        final source = find('*', workingDirectory: from).toList();
         final expected = subname(source, 'top', 'new_top');
         createDir(to);
         moveTree(from, to);
         moveTree(from, to, overwrite: true);
 
-        final actual = find('*', root: to).toList();
+        final actual = find('*', workingDirectory: to).toList();
 
         t.expect(actual, expected);
         t.expect(hasMoved(source), true);

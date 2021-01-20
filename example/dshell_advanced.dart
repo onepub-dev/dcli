@@ -43,12 +43,12 @@ void evaluate(String command) {
 /// our own implementation of the 'ls' command.
 void ls(List<String> patterns) {
   if (patterns.isEmpty) {
-    find('*', root: pwd, recursive: false, types: [Find.file, Find.directory])
+    find('*', workingDirectory: pwd, recursive: false, types: [Find.file, Find.directory])
         .forEach((file) => print('  $file'));
   } else {
     for (final pattern in patterns) {
       find(pattern,
-              root: pwd, recursive: false, types: [Find.file, Find.directory])
+              workingDirectory: pwd, recursive: false, types: [Find.file, Find.directory])
           .forEach((file) => print('  $file'));
     }
   }

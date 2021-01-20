@@ -154,17 +154,17 @@ class DartProject {
       find(
         '.packages',
         types: [Find.file],
-        root: pathToProjectRoot,
+        workingDirectory: pathToProjectRoot,
       ).forEach((file) => delete(file));
       find(
         '.dart_tool',
         types: [Find.directory],
-        root: pathToProjectRoot,
+        workingDirectory: pathToProjectRoot,
       ).forEach((file) => deleteDir(file));
-      find('pubspec.lock', root: pathToProjectRoot)
+      find('pubspec.lock', workingDirectory: pathToProjectRoot)
           .forEach((file) => delete(file));
 
-      find('*.dart', root: pathToProjectRoot).forEach((scriptPath) {
+      find('*.dart', workingDirectory: pathToProjectRoot).forEach((scriptPath) {
         final script = Script.fromFile(scriptPath);
         if (exists(script.pathToExe)) {
           delete(script.pathToExe);
@@ -183,7 +183,7 @@ class DartProject {
   /// [overwrite] defaults to false.
   ///
   void compile({bool install = false, bool overwrite = false}) {
-    find('*.dart', root: pathToProjectRoot).forEach((file) =>
+    find('*.dart', workingDirectory: pathToProjectRoot).forEach((file) =>
         Script.fromFile(file).compile(install: install, overwrite: overwrite));
   }
 

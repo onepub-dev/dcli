@@ -239,7 +239,7 @@ class DartSdk {
 
     if (Platform.isLinux || Platform.isMacOS) {
       /// make execs executable.
-      find('*', root: join(installDir, 'bin'), recursive: false)
+      find('*', workingDirectory: join(installDir, 'bin'), recursive: false)
           .forEach((file) => 'chmod +x, $file'.run);
     }
 

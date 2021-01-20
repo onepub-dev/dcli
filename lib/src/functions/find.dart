@@ -66,7 +66,7 @@ import 'function.dart';
 /// [types] allows you to specify the file types you want the find to return.
 /// By default [types] limits the results to files.
 ///
-/// [root] allows you to specify an alternate directory to seach within
+/// [workingDirectory] allows you to specify an alternate directory to seach within
 /// rather than the current work directory.
 ///
 /// [types] the list of types to search file. Defaults to [Find.file].
@@ -82,20 +82,20 @@ Progress find(
   bool caseSensitive = false,
   bool recursive = true,
   bool includeHidden = false,
-  String root = '.',
+  String workingDirectory = '.',
   Progress progress,
   List<FileSystemEntityType> types = const [Find.file],
 }) {
   ArgumentError.checkNotNull(caseSensitive, 'caseSensitive');
   ArgumentError.checkNotNull(recursive, 'recursive');
   ArgumentError.checkNotNull(includeHidden, 'includeHidden');
-  ArgumentError.checkNotNull(root, 'root');
+  ArgumentError.checkNotNull(workingDirectory, 'workingDirectory');
   ArgumentError.checkNotNull(types, 'types');
   return Find()._find(pattern,
       caseSensitive: caseSensitive,
       recursive: recursive,
       includeHidden: includeHidden,
-      root: root,
+      workingDirectory: workingDirectory,
       progress: progress,
       types: types);
 }
@@ -106,24 +106,24 @@ class Find extends DCliFunction {
     String pattern, {
     bool caseSensitive = false,
     bool recursive = true,
-    String root = '.',
+    String workingDirectory = '.',
     Progress progress,
     List<FileSystemEntityType> types = const [Find.file],
     bool includeHidden,
   }) {
-    var finalroot = root;
+    var _workingDirectory = workingDirectory;
     var finalpattern = pattern;
 
     /// If the pattern contains a relative path we need
-    /// to move it into the root as the user really
-    /// wants to search  in the directory root/relativepath.
+    /// to move it into the workingDirectory as the user really
+    /// wants to search  in the directory workingDirectory/relativepath.
     /// This only applies for non-recursive searches as
     /// when we do
     final relativeDir = dirname(finalpattern);
     if (recursive == false && relativeDir != '.') {
-      finalroot = join(finalroot, relativeDir);
-      if (!exists(finalroot)) {
-        throw FindException('The path ${truepath(finalroot)} does not exists');
+      _workingDirectory = join(_workingDirectory, relativeDir);
+      if (!exists(_workingDirectory)) {
+        throw FindException('The path ${truepath(_workingDirectory)} does not exists');
       }
       finalpattern = basename(finalpattern);
     }
@@ -131,7 +131,7 @@ class Find extends DCliFunction {
     return waitForEx<Progress>(_innerFind(finalpattern,
         caseSensitive: caseSensitive,
         recursive: recursive,
-        root: finalroot,
+        workingDirectory: _workingDirectory,
         progress: progress,
         types: types,
         includeHidden: includeHidden));
@@ -141,20 +141,20 @@ class Find extends DCliFunction {
     String pattern, {
     bool caseSensitive = false,
     bool recursive = true,
-    String root = '.',
+    String workingDirectory = '.',
     Progress progress,
     List<FileSystemEntityType> types = const [Find.file],
     bool includeHidden,
   }) async {
-    var finalroot = root;
+    var _workingDirectory = workingDirectory;
     var finalIncludeHidden = includeHidden;
 
     final matcher =
-        _PatternMatcher(pattern, caseSensitive: caseSensitive, root: finalroot);
-    if (finalroot == '.') {
-      finalroot = pwd;
+        _PatternMatcher(pattern, caseSensitive: caseSensitive, workingDirectory: _workingDirectory);
+    if (_workingDirectory == '.') {
+      _workingDirectory = pwd;
     } else {
-      finalroot = truepath(finalroot);
+      _workingDirectory = truepath(_workingDirectory);
     }
 
     if (pattern.startsWith('.')) {
@@ -165,11 +165,11 @@ class Find extends DCliFunction {
       progress ??= Progress.devNull();
 
       Settings().verbose(
-          'find: pwd: $pwd root: ${truepath(finalroot)} pattern: $pattern caseSensitive: $caseSensitive recursive: $recursive types: $types ');
+          'find: pwd: $pwd workingDirectory: ${truepath(_workingDirectory)} pattern: $pattern caseSensitive: $caseSensitive recursive: $recursive types: $types ');
       final nextLevel = <FileSystemEntity>[]..length = 100;
       final singleDirectory = <FileSystemEntity>[]..length = 100;
       final childDirectories = <FileSystemEntity>[]..length = 100;
-      await _processDirectory(finalroot, finalroot, recursive, types, matcher,
+      await _processDirectory(_workingDirectory, _workingDirectory, recursive, types, matcher,
           finalIncludeHidden, progress, childDirectories);
 
       while (childDirectories[0] != null) {
@@ -178,7 +178,7 @@ class Find extends DCliFunction {
           if (directory == null) {
             break;
           }
-          await _processDirectory(finalroot, directory.path, recursive, types,
+          await _processDirectory(_workingDirectory, directory.path, recursive, types,
               matcher, finalIncludeHidden, progress, singleDirectory);
           _appendTo(nextLevel, singleDirectory);
           _zeroElements(singleDirectory);
@@ -192,7 +192,7 @@ class Find extends DCliFunction {
   }
 
   Future<void> _processDirectory(
-      String root,
+      String workingDirectory,
       String currentDirectory,
       bool recursive,
       List<FileSystemEntityType> types,
@@ -211,7 +211,7 @@ class Find extends DCliFunction {
         if (types.contains(type) &&
             matcher.match(entity.path) &&
             _allowed(
-              root,
+              workingDirectory,
               entity,
               includeHidden: includeHidden,
             )) {
@@ -255,15 +255,15 @@ class Find extends DCliFunction {
 
   /// Checks if a hidden file is allowed.
   /// Non-hidden files are always allowed.
-  bool _allowed(String root, FileSystemEntity entity,
+  bool _allowed(String workingDirectory, FileSystemEntity entity,
       {@required bool includeHidden}) {
-    return includeHidden || !_isHidden(root, entity);
+    return includeHidden || !_isHidden(workingDirectory, entity);
   }
 
   // check if the entity is a hidden file (.xxx) or
   // if lives in a hidden directory.
-  bool _isHidden(String root, FileSystemEntity entity) {
-    final relativePath = relative(entity.path, from: root);
+  bool _isHidden(String workingDirectory, FileSystemEntity entity) {
+    final relativePath = relative(entity.path, from: workingDirectory);
 
     final parts = relativePath.split(separator);
 
@@ -345,7 +345,7 @@ class Find extends DCliFunction {
 
 class _PatternMatcher {
   String pattern;
-  String root;
+  String workingDirectory;
   RegExp regEx;
   bool caseSensitive;
 
@@ -353,7 +353,7 @@ class _PatternMatcher {
   int directoryParts;
 
   _PatternMatcher(this.pattern,
-      {@required this.root, @required this.caseSensitive}) {
+      {@required this.workingDirectory, @required this.caseSensitive}) {
     regEx = buildRegEx();
 
     final patternParts = split(dirname(pattern));
@@ -412,15 +412,15 @@ class _PatternMatcher {
   String _extractMatchPart(String path) {
     if (directoryParts == 0) return basename(path);
 
-    final pathParts = split(dirname(relative(path, from: root)));
+    final pathParts = split(dirname(relative(path, from: workingDirectory)));
 
     var partsCount = pathParts.length;
     if (pathParts.length == 1 && pathParts[0] == '.') partsCount = 0;
 
     /// If the path doesn't have enough parts then just
-    /// return the path relative to the root.
+    /// return the path relative to the workingDirectory.
     if (partsCount < directoryParts) {
-      return relative(path, from: root);
+      return relative(path, from: workingDirectory);
     }
 
     /// return just the required parts.
