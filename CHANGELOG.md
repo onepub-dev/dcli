@@ -1,3 +1,16 @@
+# 0.41.0
+BREAKING CHANGE: renamed the find argument 'root' to ' workingDirectory'. As I'm using the api I've found that I naturally go to use workingDirectory as its used everywhere else. So this feels more consistent.
+Implemented chown using the posix api via ffi.
+Added protection for a number of anomalies that can occur when scanning a full file system.
+
+# 0.40.6
+Implemented chown using the posix api via ffi.
+changed find's root to workingDirectory
+exposed chmod.
+Added protection for a number of anomoulies that can occur when scanning a full file system.
+BREAKING CHANGE: renamed the find argument 'root' to ' workingDirectory'. As I'm using the api I've found that I naturally go to use workingDirectory as its used everywhere else. So this feels more consistent.
+released 0.40.5
+
 # 0.40.5
 Added release hook to activate published version of dcli.
 sorted dependencies.

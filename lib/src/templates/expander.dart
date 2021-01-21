@@ -203,7 +203,7 @@ environment:
   sdk: '>=2.9.0 <3.0.0'
 dependencies: 
   args: ^1.0.0
-  dcli: ^0.40.0
+  dcli: ^0.41.0
   path: ^1.0.0
 
 dev_dependencies: 
