@@ -18,12 +18,14 @@ void main() {
           deleteDir(to);
         }
 
-        var expected = find('*', workingDirectory: from, recursive: false).toList();
+        var expected =
+            find('*', workingDirectory: from, recursive: false).toList();
         expected = subname(expected, 'top', 'new_top');
         createDir(to);
         copyTree(from, to);
 
-        final actual = find('*', workingDirectory: to, recursive: false).toList();
+        final actual =
+            find('*', workingDirectory: to, recursive: false).toList();
 
         t.expect(actual, unorderedEquals(expected));
       });
@@ -38,13 +40,15 @@ void main() {
           deleteDir(to);
         }
 
-        var expected = find('*', workingDirectory: from, recursive: false).toList();
+        var expected =
+            find('*', workingDirectory: from, recursive: false).toList();
         expected = subname(expected, 'top', 'new_top');
         createDir(to);
         copyTree(from, to);
         copyTree(from, to, overwrite: true);
 
-        final actual = find('*', workingDirectory: to, recursive: false).toList();
+        final actual =
+            find('*', workingDirectory: to, recursive: false).toList();
 
         t.expect(actual, unorderedEquals(expected));
       });
@@ -59,12 +63,14 @@ void main() {
           deleteDir(to);
         }
 
-        var expected = find('*.txt', workingDirectory: from, recursive: false).toList();
+        var expected =
+            find('*.txt', workingDirectory: from, recursive: false).toList();
         expected = subname(expected, 'top', 'new_top');
         createDir(to);
         copyTree(from, to, filter: (file) => extension(file) == '.txt');
 
-        final actual = find('*.txt', workingDirectory: to, recursive: false).toList();
+        final actual =
+            find('*.txt', workingDirectory: to, recursive: false).toList();
 
         t.expect(actual, unorderedEquals(expected));
       });

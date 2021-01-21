@@ -340,7 +340,8 @@ class TestFileSystem {
   /// we need to update any pubspec.yaml files that have a relative
   /// dependency to dcli after we move them to the test file system.
   void _patchRelativeDependenciesAndWarmup(String testScriptPath) {
-    find('pubspec.yaml', workingDirectory: testScriptPath).forEach((pathToPubspec) {
+    find('pubspec.yaml', workingDirectory: testScriptPath)
+        .forEach((pathToPubspec) {
       final pubspec = PubSpec.fromFile(pathToPubspec);
       final dependency = pubspec.dependencies['dcli'];
 

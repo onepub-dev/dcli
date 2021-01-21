@@ -240,7 +240,9 @@ class NamedLock {
         }
         // check for other lock files
         final locks = find('*.$name',
-                workingDirectory: _lockPath, includeHidden: true, recursive: false)
+                workingDirectory: _lockPath,
+                includeHidden: true,
+                recursive: false)
             .toList();
         _log(red('found $locks lock files'));
 

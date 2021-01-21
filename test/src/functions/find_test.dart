@@ -82,7 +82,9 @@ void main() {
     t.test('Search for *.txt files in top directory ', () {
       TestFileSystem().withinZone((fs) {
         final paths = TestFileSystem();
-        final found = find('*.txt', workingDirectory: paths.top, recursive: false).toList();
+        final found =
+            find('*.txt', workingDirectory: paths.top, recursive: false)
+                .toList();
         found.sort();
         final expected = [
           join(paths.top, 'one.txt'),
@@ -161,7 +163,8 @@ void main() {
       TestFileSystem().withinZone((fs) {
         final paths = TestFileSystem();
         final found =
-            find('*.txt', workingDirectory: paths.top, includeHidden: true).toList();
+            find('*.txt', workingDirectory: paths.top, includeHidden: true)
+                .toList();
 
         found.sort();
         final expected = [
@@ -206,7 +209,8 @@ void main() {
         touch(file, create: true);
       }
 
-      final found = find('*.txt', workingDirectory: tmp, includeHidden: true).toList();
+      final found =
+          find('*.txt', workingDirectory: tmp, includeHidden: true).toList();
 
       t.expect(found, t.unorderedEquals(paths));
     });
@@ -227,9 +231,9 @@ void main() {
         touch(file, create: true);
       }
 
-      final found =
-          find('middle/*.txt', workingDirectory: tmp, recursive: false, includeHidden: true)
-              .toList();
+      final found = find('middle/*.txt',
+              workingDirectory: tmp, recursive: false, includeHidden: true)
+          .toList();
 
       t.expect(found, t.unorderedEquals(paths));
     });
@@ -251,7 +255,8 @@ void main() {
       }
 
       final found =
-          find('middle/*.txt', workingDirectory: tmp, includeHidden: true).toList();
+          find('middle/*.txt', workingDirectory: tmp, includeHidden: true)
+              .toList();
 
       t.expect(found, t.unorderedEquals(paths));
     });

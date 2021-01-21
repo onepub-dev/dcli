@@ -43,7 +43,9 @@ List<String> completionExpandScripts(String word,
   // }
 
   final entries = find('$searchTerm*',
-          types: [Find.directory, Find.file], workingDirectory: _workingDirectory, recursive: false)
+          types: [Find.directory, Find.file],
+          workingDirectory: _workingDirectory,
+          recursive: false)
       .toList();
 
   final results = <String>[];

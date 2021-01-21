@@ -94,7 +94,8 @@ void checkInstallStructure(TestFileSystem fs) {
   expect(exists(truepath(HOME, '.dcli', 'templates')), equals(true));
 
   final templates =
-      find('*.*', workingDirectory: join('${fs.home}/.dcli', 'templates')).toList();
+      find('*.*', workingDirectory: join('${fs.home}/.dcli', 'templates'))
+          .toList();
 
   final base = join('${fs.home}/.dcli', 'templates');
 

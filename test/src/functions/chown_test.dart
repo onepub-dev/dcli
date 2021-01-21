@@ -7,6 +7,6 @@ void main() {
     touch(test, create: true);
     final user = Shell.current.loggedInUser;
 
-    chown(test, group: user, user:user);
+    chown(test, group: user, user: user);
   });
 }
