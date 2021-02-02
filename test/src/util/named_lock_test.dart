@@ -1,5 +1,4 @@
 #! /usr/bin/env dcli
-
 @Timeout(Duration(minutes: 10))
 
 import 'dart:async';
@@ -66,11 +65,11 @@ void main() {
 
   test('Thrash test', () {
     Settings().setVerbose(enabled: false);
-    if (exists(lockCheckPath)) {
-      deleteDir(lockCheckPath);
+    if (exists(_lockCheckPath)) {
+      deleteDir(_lockCheckPath);
     }
 
-    createDir(lockCheckPath, recursive: true);
+    createDir(_lockCheckPath, recursive: true);
 
     for (var i = 0; i < 20; i++) {
       print('spawning worker $i');
@@ -78,7 +77,7 @@ void main() {
     }
     sleep(59);
 
-    expect(exists(lockFailedPath), equals(false));
+    expect(exists(_lockFailedPath), equals(false));
   }, timeout: const Timeout(Duration(minutes: 2)));
 }
 
@@ -109,8 +108,8 @@ void takeLock(String message) {
   });
 }
 
-const lockCheckPath = '/tmp/lockcheck';
-final lockFailedPath = join(lockCheckPath, 'lock_failed');
+const _lockCheckPath = '/tmp/lockcheck';
+final _lockFailedPath = join(_lockCheckPath, 'lock_failed');
 
 /// must be a global function as we us it to spawn an isolate
 void worker(int instance) {
@@ -118,9 +117,9 @@ void worker(int instance) {
   print('starting worker instance $instance');
   NamedLock(name: 'gshared-compile').withLock(() {
     print('acquired lock worker $instance');
-    final inLockPath = join(lockCheckPath, 'inlock');
+    final inLockPath = join(_lockCheckPath, 'inlock');
     if (exists(inLockPath)) {
-      touch(lockFailedPath, create: true);
+      touch(_lockFailedPath, create: true);
       throw 'NamedLock for $instance failed as another lock is active';
     }
 
