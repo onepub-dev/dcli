@@ -1,15 +1,14 @@
 import 'package:dcli/dcli.dart';
-import 'package:stack_trace/stack_trace.dart';
 import 'package:test/test.dart';
 
 void main() {
   test('wait for ex ...', () async {
     try {
       waitForEx<void>(doAsyncThrow());
-    } catch (e, st) {
-      print('stacktrace $st');
+    } catch (e) {
+      print('stacktrace ${e.stackTrace}');
 
-      print('terse: ${Chain.current().terse}');
+      // print('terse: ${Chain.current().terse}');
     }
   });
 }
