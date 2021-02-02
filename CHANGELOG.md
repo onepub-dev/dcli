@@ -1,3 +1,8 @@
+# 0.41.1
+Improved documentation around waitForEx stack traces and added a test for same.
+Added test for wait_for_ex exceptions.
+Added cause to dcliexception.
+
 # 0.41.0
 BREAKING CHANGE: renamed the find argument 'root' to ' workingDirectory'. As I'm using the api I've found that I naturally go to use workingDirectory as its used everywhere else. So this feels more consistent.
 Implemented chown using the posix api via ffi.

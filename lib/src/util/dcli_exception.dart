@@ -5,7 +5,7 @@ class DCliException implements Exception {
   ///
   final String message;
 
-  /// If DCliException is wrapping another exception then this is the 
+  /// If DCliException is wrapping another exception then this is the
   /// exeception that is wrapped.
   final Object cause;
 
@@ -37,6 +37,5 @@ class DCliException implements Exception {
   }
 
   ///
-  DCliException.from(this.cause, this.stackTrace)
-      : message = cause.toString();
+  DCliException.from(this.cause, this.stackTrace) : message = cause.toString();
 }
