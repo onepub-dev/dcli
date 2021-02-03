@@ -1,5 +1,6 @@
 import '../../settings.dart';
 import '../../util/ansi_color.dart';
+import '../../version/version.g.dart';
 import '../command_line_runner.dart';
 import '../flags.dart';
 import 'commands.dart';
@@ -37,6 +38,8 @@ class HelpCommand extends Command {
   /// Print the help usage statement.
   static void printUsageHowTo() {
     final help = HelpCommand();
+    print('dcli version $packageVersion');
+    print('');
     print('For help with dcli options:');
     print('  ${Settings().appname} ${help.usage()}');
     print('    ${help.description()}');
