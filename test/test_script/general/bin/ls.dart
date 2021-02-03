@@ -1,5 +1,4 @@
 #! /usr/bin/env dcli
-
 import 'package:dcli/dcli.dart';
 
 /// Used by unit tests as a cross platform version of ls.
