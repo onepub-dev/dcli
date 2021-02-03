@@ -30,6 +30,7 @@ Eventually you will be able to run
     // ignore: unnecessary_raw_strings
     expandTo.write(r'''
 #! /usr/bin/env %dcliName%
+
 import 'dart:io';
 import 'package:dcli/dcli.dart';
 
@@ -135,6 +136,7 @@ void main() {
     // ignore: unnecessary_raw_strings
     expandTo.write(r'''
 #! /usr/bin/env %dcliName%
+
 import 'dart:io';
 import 'package:dcli/dcli.dart';
 

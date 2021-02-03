@@ -65,8 +65,20 @@ mixin PosixShell {
   }
 
   String _whoami() {
-    getlogin();
-    final user = 'whoami'.firstLine;
+    String user;
+    if (isPosixSupported) {
+      try {
+        user = getlogin();
+      } on PosixException catch (e) {
+        if (e.code == ENXIO) {
+          // no controlling terminal so we must be root.
+          user = 'root';
+        }
+      }
+    }
+
+    /// fall back to whoami if nothing else works.
+    user ??= 'whoami'.firstLine;
     Settings().verbose('whoami: $user');
     return user;
   }
