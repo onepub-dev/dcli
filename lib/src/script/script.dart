@@ -201,7 +201,7 @@ class Script {
 
   /// Compiles this script and optionally installs it to ~/.dcli/bin
   ///
-  /// The resulting executable is compiled into the scripts directory.
+  /// The resulting executable is compiled into the script's directory.
   ///
   /// If [install] is true (default = false) then the resulting executable will be moved into ~/.dcli/bin.
   ///
