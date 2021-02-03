@@ -1,3 +1,7 @@
+# 0.41.7
+Added documentation for compile method.
+Added version to help message.
+
 # 0.41.6
 Release due to bug in pub_release that was not updating the 'latest' tag
 
