@@ -1,4 +1,5 @@
 #! /usr/bin/env dcli
+
 import 'package:dcli/dcli.dart';
 import 'package:dcli/src/util/terminal.dart';
 

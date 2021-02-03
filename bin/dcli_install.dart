@@ -1,4 +1,5 @@
 #! /usr/bin/env dcli
+
 import 'package:dcli/src/script/entry_point.dart';
 
 void main(List<String> arguments) {
