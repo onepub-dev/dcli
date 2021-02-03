@@ -1,3 +1,8 @@
+# 0.41.6
+Release due to bug in pub_release that was not updating the 'latest' tag
+
+# 0.41.5
+Fixed bug in getlogin (Shell.loggedInUser) when running in docker. Now corretly returns 'root' as before it was seg faulting in the posix code. 
 # 0.41.4
 With pub_release fixed so it can upload assets this release is to take advantage of that
 # 0.41.3
