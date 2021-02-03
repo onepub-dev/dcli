@@ -1,3 +1,8 @@
+# 0.41.4
+With pub_release fixed so it can upload assets this release is to take advantage of that
+# 0.41.3
+Testing of pub_release uploading exes.
+
 # 0.41.1
 Improved documentation around waitForEx stack traces and added a test for same.
 Added test for wait_for_ex exceptions.
