@@ -199,6 +199,16 @@ class Script {
   /// and returns it.
   PubSpec get pubSpec => project.pubSpec;
 
+  /// Compiles this script and optionally installs it to ~/.dcli/bin
+  ///
+  /// The resulting executable is compiled into the scripts directory.
+  ///
+  /// If [install] is true (default = false) then the resulting executable will be moved into ~/.dcli/bin.
+  ///
+  /// If [install] is true and [overwrite] is true (default) it will overwrite any existing exe in ~/.dcli/bin.
+  /// If [install] is true and [overwrite] is false and an exe of the same name already exists in ~/.dcli/bin
+  /// the install will fail and a [MoveException] will be thrown.
+  ///
   void compile({bool install = false, bool overwrite = false}) {
     Settings().verbose(
         "\nCompiling with pubspec.yaml:\n${read(pathToPubSpec).toList().join('\n')}\n");
@@ -253,7 +263,7 @@ class PithyGreetings {
     "I'm a little tea pot.",
     'Are we there yet.',
     'Hurry up, says Mr Blackboard',
-    "Damed if you do, Damed if you don't, so just get the hell on with it.",
+    "Damned if you do, Damned if you don't, so just get the hell on with it.",
     'Yep, this is all of it.',
     "I don't like your curtains"
   ];
