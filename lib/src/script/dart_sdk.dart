@@ -135,8 +135,7 @@ class DartSdk {
   }
 
   /// runs 'pub get'
-  void runPubGet(String workingDirectory,
-      {Progress progress, bool compileExecutables}) {
+  void runPubGet(String workingDirectory, {Progress progress}) {
     RunnableProcess process;
     if (useDartCommand) {
       process = RunnableProcess.fromCommandArgs(

@@ -26,7 +26,6 @@ class PubGet {
     try {
       // pub get MUST be run from the directory which contains the pubspec.yaml file.
       DartSdk().runPubGet(_project.pathToProjectRoot,
-          compileExecutables: compileExecutables,
           progress:
               Progress((line) => result._processLine(line), stderr: _println));
 
@@ -38,7 +37,7 @@ class PubGet {
   }
 
   void _println(String line) {
-    Settings().verbose('pubget: $line');
+    Settings().verbose('pub get: $line');
     print(line);
   }
 }
