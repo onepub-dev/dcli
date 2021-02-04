@@ -1,3 +1,5 @@
+# 0.41.8
+
 # 0.41.7
 Added documentation for compile method.
 Added version to help message.
