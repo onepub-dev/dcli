@@ -237,13 +237,10 @@ class Env extends DCliFunction {
   void _setEnv(String name, String value) {
     if (value == null) {
       _envVars.remove(name);
-      Platform.environment.remove(name);
       if (Settings().isWindows) {
         if (name == 'HOME' || name == 'APPDATA') {
           _envVars.remove('HOME');
           _envVars.remove('APPDATA');
-          Platform.environment.remove('HOME');
-          Platform.environment.remove('APPDATA');
         }
       }
     } else {
