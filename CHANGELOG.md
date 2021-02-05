@@ -1,3 +1,6 @@
+# 0.41.9
+Removed code in env which tried to update the platform.environment settings which of course is impossible.
+
 # 0.41.8
 
 # 0.41.7
