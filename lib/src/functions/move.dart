@@ -63,6 +63,8 @@ void _improveError(Object e, String from, String to) {
   if (!exists(from)) {
     throw MoveException(
         'The Move of ${truepath(from)} failed as it does not exist.');
+  } else if (!exists(dirname(truepath(to)))) {
+    throw 'The Move of ${truepath(from)} failed as the target directory ${truepath(dirname(to))} does not exist.';
   } else {
     throw MoveException(
         'The Move of ${truepath(from)} to ${truepath(to)} failed. Error $e');
