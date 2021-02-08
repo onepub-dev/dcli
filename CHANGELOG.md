@@ -1,3 +1,6 @@
+# 0.41.11
+Exposed isXXX members that were being hidden for no good reason.
+
 # 0.41.10
 Improved the move error message when the target directory doesn't exist.
 grammar improvements in script.dart's doco.
