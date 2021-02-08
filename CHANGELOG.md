@@ -1,3 +1,7 @@
+# 0.41.10
+Improved the move error message when the target directory doesn't exist.
+grammar improvements in script.dart's doco.
+
 # 0.41.9
 Removed code in env which tried to update the platform.environment settings which of course is impossible.
 
