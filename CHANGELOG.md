@@ -1,3 +1,6 @@
+# 0.41.12
+Added verbose output when setting environment vars.
+
 # 0.41.11
 Exposed isXXX members that were being hidden for no good reason.
 
