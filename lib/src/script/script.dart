@@ -65,10 +65,10 @@ class Script {
   /// to the script in the pub-cache.
   String get pathToScript => _pathToScript;
 
-  /// the file name of the script including the extension.
+  /// The filename of the script including the extension.
   /// If you are running in a compiled script then
   /// [scriptname] won't have a '.dart' extension.
-  /// In an compiled script the extension generally depends on the OS but
+  /// In a compiled script the extension generally depends on the OS but
   /// it could in theory be anything (except for .dart).
   /// Common extensions are .exe for windows and no extension for Linux and OSx.
   String get scriptname => _scriptname;
@@ -239,7 +239,7 @@ class Script {
     return runner.run();
   }
 
-  /// returns the platform dependant name of the compiled scripts exe name.
+  /// Returns the platform dependant name of the compiled script's exe name.
   /// On Linux and OSX this is just the basename (script name without the extension)
   /// on Windows this is the 'basename.exe'.
   String get exeName => '$basename${Settings().isWindows ? '.exe' : ''}';
