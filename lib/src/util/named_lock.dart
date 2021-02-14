@@ -95,6 +95,8 @@ class NamedLock {
   /// once [fn] returns the lock is released.
   /// If [waiting] is passed it will be used to write
   /// a log message to the console.
+  ///
+  /// Throws a [DCliException] if the NamedLock times out.
   void withLock(
     void Function() fn, {
     String waiting,

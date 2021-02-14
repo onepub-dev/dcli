@@ -31,6 +31,8 @@ extension StringAsProcess on String {
   ///  'wc "fred nurk.text"'.run;
   ///```
   ///
+  /// Any environment variables you set via env['xxx'] will be passed to the new process.
+  ///
   /// Linux:
   /// DCli performs glob (wildcard) expansion on command arguments if it contains any one
   /// of *, [ or ?  unless the argument is quoted.
@@ -133,6 +135,8 @@ extension StringAsProcess on String {
   /// are running in the likes of a Docker container that doesn't implement sudo but
   /// in which you are already running as root.
   ///
+  /// Any environment variables you set via env['xxx'] will be passed to the new process.
+  ///
   ///
   /// If you need to pass an argument to your application that contains spaces then use nested quotes:
   ///e.g.
@@ -183,6 +187,7 @@ extension StringAsProcess on String {
   ///     , stderr: (line) => print(line));
   /// ```
   ///
+  /// Any environment variables you set via env['xxx'] will be passed to the new process.
   ///
   /// If you need to pass an argument to your application that contains spaces then use nested quotes:
   ///e.g.
@@ -220,6 +225,8 @@ extension StringAsProcess on String {
   /// RunException is thrown. The RunException includes the exit code
   /// and the cause contains all of the output the command wrote to
   /// stdout and stderr before it exited.
+  ///
+  /// Any environment variables you set via env['xxx'] will be passed to the new process.
   ///
   ///EXPERIMENTAL argument.
   /// If [nothrow] is set to true then an exception will not be thrown on
