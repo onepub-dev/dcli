@@ -1,3 +1,7 @@
+# 0.41.13
+Added logging for symlink related funcitons.
+Improvements to documentation.
+
 # 0.41.12
 Added verbose output when setting environment vars.
 
