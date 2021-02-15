@@ -10,7 +10,7 @@ dependencies:
   async: ^2.4.2
   collection: ^1.14.12
   csv: ^4.0.3
-  equatable: ^1.0.1
+  equatable: ^1.0.0
   glob: ^1.2.0
   ini: ^2.0.1
   intl: ^0.16.0
