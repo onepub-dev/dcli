@@ -208,6 +208,7 @@ void symlink(
   String existingPath,
   String linkPath,
 ) {
+  Settings().verbose('symlink existingPath: $existingPath linkPath $linkPath');
   final link = Link(linkPath);
   link.createSync(existingPath);
 }
@@ -226,6 +227,7 @@ void symlink(
 /// [Shell.current.isPrivileged]
 ///
 void deleteSymlink(String linkPath) {
+  Settings().verbose('deleteSymlink linkPath: $linkPath');
   final link = Link(linkPath);
   link.deleteSync();
 }
@@ -243,6 +245,7 @@ void deleteSymlink(String linkPath) {
 ///
 /// throws a FileSystemException if the target path does not exist.
 String resolveSymLink(String pathToLink) {
+  Settings().verbose('resolveSymLink pathToLink');
   final normalised = canonicalize(pathToLink);
 
   String resolved;
@@ -251,6 +254,8 @@ String resolveSymLink(String pathToLink) {
   } else {
     resolved = canonicalize(File(normalised).resolveSymbolicLinksSync());
   }
+
+  Settings().verbose('resolveSymLink $pathToLink resolved: $resolved');
   return resolved;
 }
 
