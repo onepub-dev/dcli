@@ -1,3 +1,7 @@
+# 0.41.14
+Upgraded dcli to latest version of equatable.
+removed unnecessary log statement in symlink.
+
 # 0.41.13
 Added logging for symlink related funcitons.
 Improvements to documentation.
