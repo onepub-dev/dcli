@@ -245,7 +245,6 @@ void deleteSymlink(String linkPath) {
 ///
 /// throws a FileSystemException if the target path does not exist.
 String resolveSymLink(String pathToLink) {
-  Settings().verbose('resolveSymLink pathToLink');
   final normalised = canonicalize(pathToLink);
 
   String resolved;
