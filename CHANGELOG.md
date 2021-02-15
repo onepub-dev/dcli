@@ -1,3 +1,6 @@
+# 0.41.15
+upgraded intl.
+
 # 0.41.14
 Upgraded dcli to latest version of equatable.
 removed unnecessary log statement in symlink.
