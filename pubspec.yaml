@@ -13,7 +13,7 @@ dependencies:
   equatable: ^1.0.0
   glob: ^1.2.0
   ini: ^2.0.1
-  intl: ^0.16.0
+  intl: ^0.17.0
   logger: ^0.9.4
   meta: ^1.1.8
   path: ^1.7.0
