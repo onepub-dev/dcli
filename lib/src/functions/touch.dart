@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:dcli/src/util/truepath.dart';
 import 'package:path/path.dart' as p;
 
 import '../settings.dart';
@@ -29,7 +30,7 @@ String touch(String path, {bool create = false}) =>
 
 class _Touch extends DCliFunction {
   String touch(String path, {bool create = false}) {
-    final absolutePath = p.absolute(path);
+    final absolutePath = truepath(path);
 
     Settings().verbose('touch: $absolutePath create: $create');
 

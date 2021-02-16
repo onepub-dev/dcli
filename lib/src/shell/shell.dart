@@ -44,9 +44,9 @@ abstract class Shell {
 
   /// If the shell supports tab completion then
   /// install it.
-  /// If [quiet] is trie the suppress any console output except
+  /// If [quiet] is true then suppress any console output except
   /// for errors.
-  void installTabCompletion({bool? quiet}) => throw UnimplementedError();
+  void installTabCompletion({bool quiet = true}) => throw UnimplementedError();
 
   /// Returns the username of the logged in user.
   ///
@@ -55,10 +55,86 @@ abstract class Shell {
   /// username rather than root.
   String? get loggedInUser;
 
-  /// Returns true if the current user has esclated
-  /// privileges.
+  /// Returns true if the current user this process
+  /// is running as has esclated privileges.
+  ///
   /// e.g. root under posix, Administrator under windows.
+  ///
+  /// If you have called [releasePrivileges] then
+  /// this method will return false unless you are within
+  /// a privileged block create by [withPrivileges].
+  ///
+  /// You can check if the process was launched with priviliges
+  /// via calling [isPrivilegedProcess].
+  ///
+  /// In Linux and osx terminology this method returns
+  /// true if the  effective uid is root (uid == 0).
   bool get isPrivilegedUser => false;
+
+  /// Returns true if the process was launched as a priviliged process.
+  ///
+  /// Calling [releasePrivileges] has no affect on this call.
+  ///
+  /// Under Linux and OSX this means that the process's real uid is root (uid = 0).
+  /// Under Windows this means that the process was lauched via 'Run as Administrator'.
+  ///
+  bool get isPrivilegedProcess => false;
+
+  /// On Linux and osx systems makes the script run as
+  /// a non-privileged user even when started with sudo.
+  ///
+  /// This method is used to overcome issues when running as sudo
+  /// where the script would change the ownership to root:root
+  /// for any created/modified file.
+  ///
+  /// This method is normally called as the first line of your
+  /// main() method.
+  ///
+  /// Calling this method on Windows is unnecessary but harmless.
+  ///
+  /// On Linux and OSX releasing privileges sets the uid and gid to the user's original
+  /// privileges so any files that are created/modified get the original
+  /// user's uid/gid.
+  ///
+  /// You should use this method in conjuctions with [withPrivileges]
+  /// so that only specific parts of your code run with privileges.
+  ///
+  /// You must NEVER call [releasePrivileges] within a [withPrivileges]
+  /// callback.
+  ///
+  /// ```dart
+  /// void main(){
+  ///
+  ///  ///  downgrade script to not run as sudo
+  ///  Shell.current.releasePrivileges();
+  ///
+  ///  /// ... do some non-sudo things
+  ///
+  ///  /// any code within the following code block will be run
+  ///  /// with sudo privileges.
+  ///  Shell.current.withPrivileges(() {
+  ///    copyTree('\etc\keys', '\some\insecure\location');
+  ///   });
+  ///}
+  ///```
+  void releasePrivileges();
+
+  /// When a script is run under sudo on Linux and osx and you
+  /// have previously called [releasePrivileges] then this method
+  /// will run [privilegedCallback] with root privileges.
+  ///
+  /// If you attempt to call [withPrivileges] when not running
+  /// as a privileged process a [ShellException] will be thrown.
+  ///
+  /// Use [isPrivilegedProcess] to check if your script was started
+  /// as a priviliged process.
+  ///
+  /// Nesting [withPrivileges] blocks is allowed as a convenience.
+  ///
+  /// You must NEVER call [releasePrivileges] within a [withPrivileges]
+  /// callback.
+  ///
+  void withPrivileges(RunPrivileged privilegedCallback);
 
   /// Returns a message informing the user that they need to run
   /// as a priviledged user to run an app.
@@ -85,4 +161,12 @@ abstract class Shell {
   /// If the shell can't be deteremined then the [UnknownShell] is returned.
   ///
   static Shell get current => _current ??= ShellDetection().identifyShell();
+}
+
+typedef RunPrivileged = void Function();
+
+/// Thrown when an exception occurs in the Shell detection and support methods.
+class ShellException extends DCliException {
+  /// Thrown when the [move] function encouters an error.
+  ShellException(String reason) : super(reason);
 }

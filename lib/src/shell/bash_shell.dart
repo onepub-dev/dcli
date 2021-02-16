@@ -1,11 +1,11 @@
 import '../../dcli.dart';
-import 'posix_mixin.dart';
+import 'posix_shell.dart';
 import 'shell_mixin.dart';
 
 /// Provides a number of helper functions
 /// when dcli needs to interact with the Bash shell.
 
-class BashShell with ShellMixin, PosixMixin {
+class BashShell with ShellMixin, PosixShell {
   /// Name of the shell
   static const String shellName = 'bash';
 
@@ -19,7 +19,7 @@ class BashShell with ShellMixin, PosixMixin {
   // adds bash cli completion for dcli
   // by adding a 'complete' command to ~/.bashrc
   @override
-  void installTabCompletion({bool? quiet = false}) {
+  void installTabCompletion({bool quiet = false}) {
     if (!isCompletionInstalled) {
       // Add cli completion
       /// -o nospace - after directory names
@@ -33,7 +33,7 @@ class BashShell with ShellMixin, PosixMixin {
       }
       startFile.append(command);
 
-      if (!quiet!) {
+      if (!quiet) {
         print(
             'dcli tab completion installed. Restart your terminal to activate it.');
       }

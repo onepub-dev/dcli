@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:dcli/src/util/truepath.dart';
 import 'package:path/path.dart';
 
 import '../settings.dart';
@@ -32,9 +33,11 @@ class _Copy extends DCliFunction {
       finalto = join(finalto, basename(from));
     }
 
+    Settings().verbose('copy ${truepath(from)} -> ${truepath(finalto)}');
+
     if (overwrite == false && exists(finalto)) {
       throw CopyException(
-          'The target file ${absolute(finalto)} already exists');
+          'The target file ${truepath(finalto)} already exists');
     }
 
     try {
@@ -43,10 +46,8 @@ class _Copy extends DCliFunction {
     // ignore: avoid_catches_without_on_clauses
     catch (e) {
       throw CopyException(
-          'An error occured copying ${absolute(from)} to ${absolute(finalto)}. Error: $e');
+          'An error occured copying ${truepath(from)} to ${truepath(finalto)}. Error: $e');
     }
-
-    Settings().verbose('copy ${absolute(from)} -> ${absolute(finalto)}');
   }
 }
 

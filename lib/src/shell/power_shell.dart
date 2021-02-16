@@ -23,7 +23,7 @@ class PowerShell with WindowsMixin, ShellMixin {
   }
 
   @override
-  void installTabCompletion({bool? quiet = false}) {
+  void installTabCompletion({bool quiet = false}) {
     // not supported.
   }
 
@@ -35,11 +35,15 @@ class PowerShell with WindowsMixin, ShellMixin {
     Settings().verbose('currentPrinciple: $currentPrincipal');
     final isPrivileged =
         '$currentPrincipal.IsInRole([Security.Principal.WindowsBuiltInRole]::Administrator)'
-            .firstLine!;
+                .firstLine ??
+            'false';
     Settings().verbose('isPrivileged: $isPrivileged');
 
     return isPrivileged.toLowerCase() == 'true';
   }
+
+  @override
+  bool get isPrivilegedProcess => isPrivilegedUser;
 
   @override
   bool get isCompletionInstalled => false;

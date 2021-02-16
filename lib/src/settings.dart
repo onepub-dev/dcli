@@ -45,45 +45,10 @@ class Settings {
 
   /// The absolute path to the dcli script which
   /// is currently running.
+  @Deprecated('Use Script.current.pathToScript')
   String get pathToScript {
-    if (_scriptPath == null) {
-      final script = Platform.script;
-      late String actual;
-      if (script.isScheme('file')) {
-        actual = Platform.script.toFilePath();
-      } else {
-        /// when running in a unit test we can end up with a 'data' scheme
-        if (script.isScheme('data')) {
-          final start = script.path.indexOf('file:');
-          final end = script.path.lastIndexOf('.dart');
-          final fileUri = script.path.substring(start, end + 5);
-
-          /// now find the pubsped
-          actual = Uri.parse(fileUri).toFilePath();
-        }
-      }
-      if (isWithin(pathToDCliCache, actual)) {
-        // This is a script being run from a virtual project so we
-        // need to reconstruct is original path.
-
-        // strip of the cache prefix
-        final rel = join(rootPath, relative(actual, from: pathToDCliCache));
-        //.dcli/cache/home/bsutton/git/dcli/tool/activate_local.project/activate_local.dart
-
-        // now remove the virtual project directory
-        _scriptPath = join(dirname(dirname(rel)), basename(rel));
-      } else {
-        _scriptPath = actual;
-      }
-    }
-
+    _scriptPath ??= Script.current.pathToScript;
     return _scriptPath!;
-  }
-
-  /// This is an internal function called by the run
-  /// command and you should NOT be calling it!
-  set pathToScript(String? scriptPath) {
-    _scriptPath = scriptPath;
   }
 
   /// Used when unit testing and we are re-using
@@ -99,7 +64,7 @@ class Settings {
   /// The directory where we store all of dcli's
   /// configuration files such as the cache.
   /// This will normally be ~/.dcli
-  String get pathToDCli => _dcliPath ??= p.absolute(p.join(HOME, dcliDir));
+  String get pathToDCli => _dcliPath ??= truepath(p.join(HOME, dcliDir));
 
   /// When you run dcli compile -i <script> the compiled exe
   /// is moved to this path.
@@ -107,7 +72,7 @@ class Settings {
   /// allowing the installed scripts to be run from anywhere.
   /// This will normally be ~/.dcli/bin
   String get pathToDCliBin =>
-      _dcliBinPath ??= p.absolute(p.join(HOME, dcliDir, 'bin'));
+      _dcliBinPath ??= truepath(p.join(HOME, dcliDir, 'bin'));
 
   /// path to the dcli template directory.
   String get pathToTemplate => p.join(pathToDCli, templateDir);

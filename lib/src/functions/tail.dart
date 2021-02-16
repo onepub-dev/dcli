@@ -1,3 +1,5 @@
+import 'package:dcli/src/util/truepath.dart';
+
 import '../settings.dart';
 import '../util/circular_buffer.dart';
 
@@ -21,14 +23,14 @@ Progress tail(String path, int lines) => _Tail().tail(path, lines);
 
 class _Tail extends DCliFunction {
   Progress tail(String path, int lines, {Progress? progress}) {
-    Settings().verbose('tail ${absolute(path)} lines: $lines');
+    Settings().verbose('tail ${truepath(path)} lines: $lines');
 
     if (!exists(path)) {
-      throw TailException('The path ${absolute(path)} does not exist.');
+      throw TailException('The path ${truepath(path)} does not exist.');
     }
 
     if (!isFile(path)) {
-      throw TailException('The path ${absolute(path)} is not a file.');
+      throw TailException('The path ${truepath(path)} is not a file.');
     }
 
     try {
@@ -48,7 +50,7 @@ class _Tail extends DCliFunction {
     // ignore: avoid_catches_without_on_clauses
     catch (e) {
       throw TailException(
-          'An error occured reading ${absolute(path)}. Error: $e');
+          'An error occured reading ${truepath(path)}. Error: $e');
     } finally {
       progress!.close();
     }

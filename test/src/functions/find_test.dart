@@ -12,7 +12,7 @@ void main() {
     t.test('manualRecursion', () async {
       TestFileSystem().withinZone((fs) {
         final foundDirs = find('*',
-                root: fs.testScriptPath,
+                workingDirectory: fs.testScriptPath,
                 recursive: false,
                 types: <FileSystemEntityType>[Find.directory],
                 includeHidden: true)
@@ -33,7 +33,7 @@ void main() {
       print(DateTime.now());
       find(
         '*',
-        root: '/',
+        workingDirectory: '/',
         types: <FileSystemEntityType>[Find.directory],
         includeHidden: true,
         // progress: Progress((line) {
@@ -82,7 +82,9 @@ void main() {
     t.test('Search for *.txt files in top directory ', () {
       TestFileSystem().withinZone((fs) {
         final paths = TestFileSystem();
-        final found = find('*.txt', root: paths.top, recursive: false).toList();
+        final found =
+            find('*.txt', workingDirectory: paths.top, recursive: false)
+                .toList();
         found.sort();
         final expected = [
           join(paths.top, 'one.txt'),
@@ -96,13 +98,13 @@ void main() {
     t.test('Search recursive for *.jpg ', () {
       TestFileSystem().withinZone((fs) {
         final paths = TestFileSystem();
-        final found = find('*.jpg', root: paths.top).toList();
+        final found = find('*.jpg', workingDirectory: paths.top).toList();
 
-        find('*.jpg', root: paths.top).forEach(print);
-        t.expect(find('one.jpg', root: paths.top).toList(),
+        find('*.jpg', workingDirectory: paths.top).forEach(print);
+        t.expect(find('one.jpg', workingDirectory: paths.top).toList(),
             t.equals([join(paths.top, 'one.jpg')]));
 
-        t.expect(find('two.jpg', root: paths.top).toList(),
+        t.expect(find('two.jpg', workingDirectory: paths.top).toList(),
             t.equals([join(paths.middle, 'two.jpg')]));
 
         find('*.jpg', progress: Progress(print));
@@ -122,7 +124,7 @@ void main() {
     t.test('Search recursive for *.txt ', () {
       TestFileSystem().withinZone((fs) {
         final paths = TestFileSystem();
-        final found = find('*.txt', root: paths.top).toList();
+        final found = find('*.txt', workingDirectory: paths.top).toList();
 
         found.sort();
         final expected = [
@@ -141,7 +143,7 @@ void main() {
     t.test('ignore hidden files *.txt  ', () {
       TestFileSystem().withinZone((fs) {
         final paths = TestFileSystem();
-        final found = find('*.txt', root: paths.top).toList();
+        final found = find('*.txt', workingDirectory: paths.top).toList();
 
         found.sort();
         final expected = [
@@ -161,7 +163,8 @@ void main() {
       TestFileSystem().withinZone((fs) {
         final paths = TestFileSystem();
         final found =
-            find('*.txt', root: paths.top, includeHidden: true).toList();
+            find('*.txt', workingDirectory: paths.top, includeHidden: true)
+                .toList();
 
         found.sort();
         final expected = [
@@ -206,7 +209,8 @@ void main() {
         touch(file, create: true);
       }
 
-      final found = find('*.txt', root: tmp, includeHidden: true).toList();
+      final found =
+          find('*.txt', workingDirectory: tmp, includeHidden: true).toList();
 
       t.expect(found, t.unorderedEquals(paths));
     });
@@ -227,9 +231,9 @@ void main() {
         touch(file, create: true);
       }
 
-      final found =
-          find('middle/*.txt', root: tmp, recursive: false, includeHidden: true)
-              .toList();
+      final found = find('middle/*.txt',
+              workingDirectory: tmp, recursive: false, includeHidden: true)
+          .toList();
 
       t.expect(found, t.unorderedEquals(paths));
     });
@@ -251,7 +255,8 @@ void main() {
       }
 
       final found =
-          find('middle/*.txt', root: tmp, includeHidden: true).toList();
+          find('middle/*.txt', workingDirectory: tmp, includeHidden: true)
+              .toList();
 
       t.expect(found, t.unorderedEquals(paths));
     });

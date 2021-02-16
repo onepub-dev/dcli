@@ -147,7 +147,7 @@ class InstallCommand extends Command {
 
     if (shell.isCompletionSupported) {
       if (!shell.isCompletionInstalled) {
-        shell.installTabCompletion(quiet: true);
+        shell.installTabCompletion();
       }
     }
 

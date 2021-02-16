@@ -103,7 +103,7 @@ class _MoveTree extends DCliFunction {
     try {
       find(
         '*',
-        root: from,
+        workingDirectory: from,
         includeHidden: includeHidden,
       ).forEach((file) {
         if (filter(file)) {

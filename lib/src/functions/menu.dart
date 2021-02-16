@@ -38,6 +38,8 @@ String _noFormat<T>(T option) => option.toString();
 /// var color = menu(prompt: 'Please select a color', options: colors, format: (color) => color.name);
 /// ```
 ///
+/// If [format] is not passed [option.toString()] will be used
+/// as the format for the menu option.
 ///
 /// When a [limit] is applied the menu will display the first [limit]
 /// options. If you specify [fromStart: false] then the menu will display the

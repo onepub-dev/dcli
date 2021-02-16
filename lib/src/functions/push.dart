@@ -1,6 +1,6 @@
 import 'dart:io';
 
-import 'package:path/path.dart' as p;
+import 'package:dcli/src/util/truepath.dart';
 
 import '../settings.dart';
 
@@ -32,14 +32,14 @@ class _Push extends DCliFunction {
   /// Push the pwd onto the stack and change the
   /// current directory to [path].
   void push(String path) {
-    Settings().verbose('push: path: $path new -> ${p.absolute(path)}');
+    Settings().verbose('push: path: $path new -> ${truepath(path)}');
 
     if (!exists(path)) {
-      throw PushException('The path ${absolute(path)} does not exist.');
+      throw PushException('The path ${truepath(path)} does not exist.');
     }
 
     if (!isDirectory(path)) {
-      throw PushException('The path ${absolute(path)} is not a directory.');
+      throw PushException('The path ${truepath(path)} is not a directory.');
     }
 
     InternalSettings().push(Directory.current);
@@ -50,7 +50,7 @@ class _Push extends DCliFunction {
     // ignore: avoid_catches_without_on_clauses
     catch (e) {
       throw PushException(
-          'An error occured pushing to ${absolute(path)}. Error $e');
+          'An error occured pushing to ${truepath(path)}. Error $e');
     }
   }
 }

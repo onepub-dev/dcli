@@ -55,7 +55,7 @@ void checkProjectStructure(TestFileSystem fs, String scriptName) {
   final files = <String>[];
   find(
     '*.*',
-    root: fs.runtimePath(scriptName),
+    workingDirectory: fs.runtimePath(scriptName),
     types: [Find.file],
     includeHidden: true,
   ).forEach(
@@ -83,7 +83,7 @@ void checkProjectStructure(TestFileSystem fs, String scriptName) {
 
   find('*',
           recursive: false,
-          root: fs.runtimePath(scriptName),
+          workingDirectory: fs.runtimePath(scriptName),
           types: [Find.directory],
           includeHidden: true)
       .forEach((line) => directories.add(p.basename(line)));

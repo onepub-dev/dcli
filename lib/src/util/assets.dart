@@ -75,7 +75,7 @@ class Assets {
     if (!root.startsWith('assets/')) {
       throw ArgumentError('The root must start with assets/');
     }
-    return find(pattern, root: _resolveAssetPath(root), recursive: recursive)
+    return find(pattern, workingDirectory: _resolveAssetPath(root), recursive: recursive)
         .toList();
   }
 

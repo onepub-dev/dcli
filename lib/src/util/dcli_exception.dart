@@ -5,12 +5,17 @@ class DCliException implements Exception {
   ///
   final String message;
 
+  /// If DCliException is wrapping another exception then this is the
+  /// exeception that is wrapped.
+  final Object? cause;
+
   ///
   final StackTraceImpl stackTrace;
 
   ///
   DCliException(this.message, [StackTraceImpl? stackTrace])
-      : stackTrace = stackTrace ?? StackTraceImpl(skipFrames: 2);
+      : cause = null,
+        stackTrace = stackTrace ?? StackTraceImpl(skipFrames: 2);
 
   ///
   DCliException copyWith(StackTraceImpl stackTrace) {
@@ -32,6 +37,5 @@ class DCliException implements Exception {
   }
 
   ///
-  DCliException.from(Object? exception, this.stackTrace)
-      : message = exception.toString();
+  DCliException.from(this.cause, this.stackTrace) : message = cause.toString();
 }

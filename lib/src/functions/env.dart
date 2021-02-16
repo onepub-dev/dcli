@@ -9,21 +9,6 @@ import '../util/dcli_exception.dart';
 
 import 'dcli_function.dart';
 
-/// Returns the value of an environment variable.
-///
-/// name of the environment variable.
-///
-/// On posix systems name of the environment variable is case sensitive.
-///
-/// If the environment variable doesn't exists
-/// then null is returned.
-///
-///```dart
-///String path = env["PATH"];
-///```
-///
-// String env(String name) => Env()._env(name);
-
 Env env = Env();
 
 /// Tests if the given [path] is contained
@@ -129,7 +114,24 @@ class Env extends DCliFunction {
     return pathEnv.split(delimiterForPATH);
   }
 
+  /// Returns the value of an environment variable.
+  ///
+  /// name of the environment variable.
+  ///
+  /// On posix systems name of the environment variable is case sensitive.
+  ///
+  ///
+  ///```dart
+  ///String path = env["PATH"];
+  ///```
+  ///
   String? operator [](String name) => _env(name);
+
+  /// Sets the value of an environment variable
+  /// ```dart
+  ///   env["PASS"] = 'mypassword';
+  /// ```
+  ///
   void operator []=(String name, String? value) => _setEnv(name, value);
 
   /// Appends [newPath] to the list of paths in the
@@ -219,10 +221,10 @@ class Env extends DCliFunction {
   /// returns true if the given [checkPath] is in the list
   /// of paths defined in the environment variable [PATH].
   bool isOnPATH(String checkPath) {
-    final canon = canonicalize(absolute(checkPath));
+    final canon = truepath(checkPath);
     var found = false;
     for (final path in _path) {
-      if (canonicalize(path) == canon) {
+      if (truepath(path) == canon) {
         found = true;
         break;
       }
@@ -233,15 +235,13 @@ class Env extends DCliFunction {
   /// Passing a null [value] will remove the key from the
   /// set of environment variables.
   void _setEnv(String name, String? value) {
+    Settings().verbose('env[$name] = $value');
     if (value == null) {
       _envVars.remove(name);
-      Platform.environment.remove(name);
       if (Settings().isWindows) {
         if (name == 'HOME' || name == 'APPDATA') {
           _envVars.remove('HOME');
           _envVars.remove('APPDATA');
-          Platform.environment.remove('HOME');
-          Platform.environment.remove('APPDATA');
         }
       }
     } else {
@@ -333,4 +333,9 @@ class Env extends DCliFunction {
   static set mock(Env mockEnv) {
     _self = mockEnv;
   }
+}
+
+/// Base class for all Environment variable related exceptions.
+class EnvironmentException extends DCliException {
+  EnvironmentException(String message) : super(message);
 }

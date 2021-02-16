@@ -312,7 +312,7 @@ class TestFileSystem {
 
     copyTree(originalPubCache!, PubCache().pathTo);
 
-    print('Reset ${PubCache.envVar} to ${env[PubCache.envVar]}');
+    print('Reset ${PubCache.envVarPubCache} to ${env[PubCache.envVarPubCache]}');
 
     Settings().setVerbose(enabled: verbose);
   }
@@ -341,7 +341,8 @@ class TestFileSystem {
   /// we need to update any pubspec.yaml files that have a relative
   /// dependency to dcli after we move them to the test file system.
   void _patchRelativeDependenciesAndWarmup(String testScriptPath) {
-    find('pubspec.yaml', root: testScriptPath).forEach((pathToPubspec) {
+    find('pubspec.yaml', workingDirectory: testScriptPath)
+        .forEach((pathToPubspec) {
       final pubspec = PubSpec.fromFile(pathToPubspec);
       final dependency = pubspec.dependencies['dcli']!;
 
@@ -393,7 +394,8 @@ class TestFileSystem {
 
         // copy it back to the dcli testbin so the next unit
         // test doesn't have to compile it.
-        copy(script.pathToExe, join(testbinPath, script.exeName));
+        /// not necessary as we compile directly into the test bin.
+        // copy(script.pathToExe, join(testbinPath, script.exeName));
       }
     }
   }

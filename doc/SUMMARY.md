@@ -54,7 +54,8 @@
 * [Upgrade DCli](dcli-tools-1/upgrade-dcli.md)
 * [Performance](dcli-tools-1/performance.md)
 * [Docker](dcli-tools-1/docker.md)
-* [Sudo](dcli-tools-1/sudo.md)
+* [Elevated Privileges](dcli-tools-1/elevated-privileges/README.md)
+  * [Sudo](dcli-tools-1/elevated-privileges/sudo.md)
 
 ## Internal Workings
 
@@ -79,6 +80,7 @@
   * [dshell](examples/overview/dshell.md)
   * [dwhich](examples/overview/dwhich.md)
   * [dipaddr](examples/overview/dipaddr.md)
+  * [gnome launcher](examples/overview/untitled.md)
 
 ## Articles
 

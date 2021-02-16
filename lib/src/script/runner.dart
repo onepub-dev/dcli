@@ -14,7 +14,7 @@ class ScriptRunner {
   ScriptRunner(this._sdk, this.script, this._scriptArguments);
 
   /// Run the script
-  int? run() {
+  int run() {
     Settings().setVerbose(enabled: true);
     // Prepare VM arguments
     final vmArgs = <String>[];

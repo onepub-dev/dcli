@@ -1,5 +1,7 @@
 import 'dart:io';
 
+import 'package:dcli/src/util/truepath.dart';
+
 import '../settings.dart';
 import 'ask.dart' as a;
 import 'dcli_function.dart';
@@ -23,21 +25,21 @@ void delete(String path, {bool ask = false}) =>
 
 class _Delete extends DCliFunction {
   void delete(String path, {required bool ask}) {
-    Settings().verbose('delete:  ${absolute(path)} ask: $ask');
+    Settings().verbose('delete:  ${truepath(path)} ask: $ask');
 
     if (!exists(path)) {
-      throw DeleteException('The path ${absolute(path)} does not exists.');
+      throw DeleteException('The path ${truepath(path)} does not exists.');
     }
 
     if (isDirectory(path)) {
-      throw DeleteException('The path ${absolute(path)} is a directory.');
+      throw DeleteException('The path ${truepath(path)} is a directory.');
     }
 
     var remove = true;
     if (ask) {
       remove = false;
       final response =
-          a.ask("delete: Delete the regular file '${absolute(path)}'? y/N");
+          a.ask("delete: Delete the regular file '${truepath(path)}'? y/N");
       final yes = response;
       if (yes == 'y') {
         remove = true;
@@ -51,7 +53,7 @@ class _Delete extends DCliFunction {
       // ignore: avoid_catches_without_on_clauses
       catch (e) {
         throw DeleteException(
-            'An error occured deleting ${absolute(path)}. Error: $e');
+            'An error occured deleting ${truepath(path)}. Error: $e');
       }
     }
   }

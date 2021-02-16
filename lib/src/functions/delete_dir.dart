@@ -1,5 +1,7 @@
 import 'dart:io';
 
+import 'package:dcli/src/util/truepath.dart';
+
 import '../settings.dart';
 import 'function.dart';
 
@@ -31,15 +33,15 @@ void deleteDir(String path, {bool recursive = true}) =>
 
 class _DeleteDir extends DCliFunction {
   void deleteDir(String path, {required bool recursive}) {
-    Settings().verbose('deleteDir:  ${absolute(path)} recursive: $recursive');
+    Settings().verbose('deleteDir:  ${truepath(path)} recursive: $recursive');
 
     if (!exists(path)) {
-      throw DeleteDirException('The path ${absolute(path)} does not exist.');
+      throw DeleteDirException('The path ${truepath(path)} does not exist.');
     }
 
     if (!isDirectory(path)) {
       throw DeleteDirException(
-          'The path ${absolute(path)} is not a directory.');
+          'The path ${truepath(path)} is not a directory.');
     }
 
     try {
@@ -48,7 +50,7 @@ class _DeleteDir extends DCliFunction {
     // ignore: avoid_catches_without_on_clauses
     catch (e) {
       throw DeleteDirException(
-          'Unable to delete the directory ${absolute(path)}. Error: $e');
+          'Unable to delete the directory ${truepath(path)}. Error: $e');
     }
   }
 }

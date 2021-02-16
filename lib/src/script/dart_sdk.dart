@@ -197,7 +197,7 @@ class DartSdk {
     }
 
     return _version;
-  }}
+  }
 
   /// Installs the latest version of DartSdk from the official google archives
   /// This is simply the process of downloading and extracting the
@@ -241,7 +241,7 @@ class DartSdk {
 
     if (Platform.isLinux || Platform.isMacOS) {
       /// make execs executable.
-      find('*', root: join(installDir, 'bin'), recursive: false)
+      find('*', workingDirectory: join(installDir, 'bin'), recursive: false)
           .forEach((file) => 'chmod +x, $file'.run);
     }
 

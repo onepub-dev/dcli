@@ -1,8 +1,8 @@
 #! /usr/bin/env dcli
 
-import 'package:dcli/dcli.dart';
 // ignore: import_of_legacy_library_into_null_safe
 import 'package:args/args.dart';
+import 'package:dcli/dcli.dart';
 
 ///
 /// Starts a docker cli to facilitate development on

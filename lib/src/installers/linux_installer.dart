@@ -112,7 +112,7 @@ class LinuxDCliInstaller {
     /// The performance of find essentially precludes this.
     // print('Searching for pub');
     // // pubPath =
-    // find('pub', root: '/', progress: Progress.print());
+    // find('pub', workingDirectory: '/', progress: Progress.print());
 
     return pubPath;
   }

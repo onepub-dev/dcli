@@ -38,7 +38,7 @@ void main(List<String> args) {
 
   final prompt = parsed['prompt'] as String?;
 
-  bool? valid = false;
+  bool valid = false;
   String? response;
   do {
     response = ask('$prompt:', validator: Ask.all([Ask.alpha, Ask.required]));

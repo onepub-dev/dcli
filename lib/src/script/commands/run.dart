@@ -23,7 +23,7 @@ class RunCommand extends Command {
   /// [arguments] - the arguments passed directly to the run command.
   /// Returns the called processes exitcode;
   @override
-  int? run(List<Flag> selectedFlags, List<String> arguments) {
+  int run(List<Flag> selectedFlags, List<String> arguments) {
     if (arguments.isEmpty) {
       throw InvalidArguments(
           'Expected a script or command. No arguments were found.');
@@ -42,8 +42,6 @@ class RunCommand extends Command {
         exit(1);
       }
     }
-
-    Settings().pathToScript = script.pathToScript;
 
     Settings().verbose('Running script ${script.pathToScript}');
 

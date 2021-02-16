@@ -23,7 +23,7 @@ class CmdShell with WindowsMixin, ShellMixin {
   }
 
   @override
-  void installTabCompletion({bool? quiet = false}) {
+  void installTabCompletion({bool quiet = false}) {
     // not supported.
   }
 
@@ -36,6 +36,9 @@ class CmdShell with WindowsMixin, ShellMixin {
 
     return true;
   }
+
+  @override
+  bool get isPrivilegedProcess => isPrivilegedUser;
 
   @override
   bool get isCompletionInstalled => false;

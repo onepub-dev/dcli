@@ -38,7 +38,7 @@ class PubGet {
   }
 
   void _println(String? line) {
-    Settings().verbose('pubget: $line');
+    Settings().verbose('pub get: $line');
     print(line);
   }
 }

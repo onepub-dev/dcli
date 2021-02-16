@@ -2,6 +2,113 @@
 First pass at nullsaftey.
 removed suffix as no longer supported.
 
+# 0.41.16
+Reverted posix and intl upgrades as they required 2.12.
+
+# 0.41.15
+upgraded intl.
+
+# 0.41.14
+Upgraded dcli to latest version of equatable.
+removed unnecessary log statement in symlink.
+
+# 0.41.13
+Added logging for symlink related funcitons.
+Improvements to documentation.
+
+# 0.41.12
+Added verbose output when setting environment vars.
+
+# 0.41.11
+Exposed isXXX members that were being hidden for no good reason.
+
+# 0.41.10
+Improved the move error message when the target directory doesn't exist.
+grammar improvements in script.dart's doco.
+
+# 0.41.9
+Removed code in env which tried to update the platform.environment settings which of course is impossible.
+
+# 0.41.8
+
+# 0.41.7
+Added documentation for compile method.
+Added version to help message.
+
+# 0.41.6
+Release due to bug in pub_release that was not updating the 'latest' tag
+
+# 0.41.5
+Fixed bug in getlogin (Shell.loggedInUser) when running in docker. Now corretly returns 'root' as before it was seg faulting in the posix code. 
+# 0.41.4
+With pub_release fixed so it can upload assets this release is to take advantage of that
+# 0.41.3
+Testing of pub_release uploading exes.
+
+# 0.41.1
+Improved documentation around waitForEx stack traces and added a test for same.
+Added test for wait_for_ex exceptions.
+Added cause to dcliexception.
+
+# 0.41.0
+BREAKING CHANGE: renamed the find argument 'root' to ' workingDirectory'. As I'm using the api I've found that I naturally go to use workingDirectory as its used everywhere else. So this feels more consistent.
+Implemented chown using the posix api via ffi.
+Added protection for a number of anomalies that can occur when scanning a full file system.
+
+# 0.40.6
+Implemented chown using the posix api via ffi.
+changed find's root to workingDirectory
+exposed chmod.
+Added protection for a number of anomoulies that can occur when scanning a full file system.
+BREAKING CHANGE: renamed the find argument 'root' to ' workingDirectory'. As I'm using the api I've found that I naturally go to use workingDirectory as its used everywhere else. So this feels more consistent.
+released 0.40.5
+
+# 0.40.5
+Added release hook to activate published version of dcli.
+sorted dependencies.
+Fixed the isReadyToRun method as it was looking for .dart_code rather than .dart_tool
+
+# 0.40.4
+exposed the PosixShell.
+Added tests for loggedInUsersHome.
+
+# 0.40.3
+reverted to returning null for a non-existing key as the changes were too destructive and end up with rather ugly code.
+Added logging of the pub-cache path.
+
+# 0.40.2
+Minor changes to progress messages.
+
+
+# 0.40.1
+Introduced isPrivilegedProcess so we can always tell if we started with privilegese. Changed isPrivilegedUser back to its original semantics in that it reflects the current effective user id. Fixed withPrivileges so it uses isPriviliegedProcess to correctly determine if privileges exist. Fix the 'start' function so that it interats correctly with wiithPrivileges and releasePrivileges.
+
+# 0.40.0
+BREAKING CHANGE. Accessing an environment key which doesn't exists now throws EnvironmentKeyNotFound rather than returning a null. This is in prepare for nnbd.
+Updated doco for Env.
+Changed from using whoami to to using getuid for posix systems.
+
+
+# 0.39.10
+
+Implemented Shell.current.releasePrivileges and Shell.current.withPriviliges 
+
+# 0.39.9
+Made the Script.isCompiled method more reliable. 
+Fixed the Script.pathToScript path when in a compiled exe. It was just returning the pwd.
+replaced calls to absolute with truepath
+Moved the verbose statement in the copy function up so we will see it even if an exception is thrown.
+removed the --suffix switch as no longer supported from git_release hook.
+
+# 0.39.8
+Fixed unit testing bugs.
+Changed logic that obtains the scripts path to handle more scenarios.
+Updated the asset builder to change the dcli version in the pubspec.yaml template as it creates the expander.
+Moved docker files under tools as per the dart conventions.
+
+# 0.39.7
+Added additional checks for version nos.
+
 # 0.39.6
 Added method to check if the script is running from pub-cache.
 

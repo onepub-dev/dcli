@@ -87,12 +87,12 @@ class DoctorCommand extends Command {
     if (shell.hasStartScript) {
       final startScriptPath = shell.pathToStartScript;
       if (startScriptPath == null) {
-        _colprint(['shell Start Script', privatePath(startScriptPath!)]);
+        _colprint(['Shell Start Script', privatePath(startScriptPath!)]);
       } else {
-        _colprint(['shell Start Script', 'not found']);
+        _colprint(['Shell Start Script', 'not found']);
       }
     } else {
-      _colprint(['shell Start Script', 'not supported by shell']);
+      _colprint(['Shell Start Script', 'not supported by shell']);
     }
   }
 
@@ -245,7 +245,7 @@ class _Owner {
       final lsLine = 'ls -alFd $path'.firstLine;
 
       if (lsLine == null) {
-        throw DCliException('No file/directory matched ${absolute(path)}');
+        throw DCliException('No file/directory matched ${truepath(path)}');
       }
 
       final parts = lsLine.split(' ');

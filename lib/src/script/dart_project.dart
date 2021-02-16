@@ -41,9 +41,9 @@ class DartProject {
   // ignore: prefer_constructors_over_static_methods
   static DartProject get current {
     final script = Script.current;
-    String startFrom = '.';
+    var startFrom = '.';
     if (!script.isCompiled) {
-      startFrom = Settings().pathToScript;
+      startFrom = script.pathToScript;
     }
     return _current ??= DartProject.fromPath(startFrom, search: true);
   }
@@ -90,7 +90,7 @@ class DartProject {
   }
 
   String _findProjectRoot(String pathToSearchFrom) {
-    var current = absolute(pathToSearchFrom);
+    var current = truepath(pathToSearchFrom);
 
     final root = rootPrefix(current);
 
@@ -154,17 +154,17 @@ class DartProject {
       find(
         '.packages',
         types: [Find.file],
-        root: pathToProjectRoot,
+        workingDirectory: pathToProjectRoot,
       ).forEach((file) => delete(file));
       find(
         '.dart_tool',
         types: [Find.directory],
-        root: pathToProjectRoot,
+        workingDirectory: pathToProjectRoot,
       ).forEach((file) => deleteDir(file));
-      find('pubspec.lock', root: pathToProjectRoot)
+      find('pubspec.lock', workingDirectory: pathToProjectRoot)
           .forEach((file) => delete(file));
 
-      find('*.dart', root: pathToProjectRoot).forEach((scriptPath) {
+      find('*.dart', workingDirectory: pathToProjectRoot).forEach((scriptPath) {
         final script = Script.fromFile(scriptPath);
         if (exists(script.pathToExe)) {
           delete(script.pathToExe);
@@ -183,7 +183,7 @@ class DartProject {
   /// [overwrite] defaults to false.
   ///
   void compile({bool install = false, bool overwrite = false}) {
-    find('*.dart', root: pathToProjectRoot).forEach((file) =>
+    find('*.dart', workingDirectory: pathToProjectRoot).forEach((file) =>
         Script.fromFile(file).compile(install: install, overwrite: overwrite));
   }
 
@@ -226,7 +226,7 @@ class DartProject {
     // we could improve this by checking that the .lock files date is after the .yamls date.
     /// there is a 'generated' date stamp in the .json file which might be more definitive.
     return exists(
-            join(pathToProjectRoot, '.dart_code', 'package_config.json')) &&
+            join(pathToProjectRoot, '.dart_tool', 'package_config.json')) &&
         exists(join(pathToProjectRoot, 'pubspec.lock')) &&
         hasPubSpec;
   }
@@ -242,36 +242,35 @@ class DartProject {
   /// the analysis_options.yaml file.
   void initFiles() {
     if (!hasPubSpec) {
-      _createPubspecFromTemplate(showWarnings: false);
+      _createPubspecFromTemplate();
     }
 
     if (!hasAnalysisOptions) {
       /// add pedantic to the project
-      _createAnalysisOptionsFromTemplate(showWarnings: false);
+      _createAnalysisOptionsFromTemplate();
     }
   }
 
   /// Creates a script located at [pathToScript] from the passed [templatePath].
   /// When the user runs 'dcli create <script>'
-  void _createFromTemplate(
-      {required String templatePath, required String pathToScript}) {
+  void _createFromTemplate({required String templatePath,required  String pathToScript}) {
     copy(templatePath, pathToScript);
 
     replace(pathToScript, '%dcliName%', DCliPaths().dcliName);
     replace(pathToScript, '%scriptname%', basename(pathToScript));
 
-    if (!hasPubSpec) _createPubspecFromTemplate(showWarnings: false);
+    if (!hasPubSpec) _createPubspecFromTemplate();
     if (!hasAnalysisOptions) {
-      _createAnalysisOptionsFromTemplate(showWarnings: false);
+      _createAnalysisOptionsFromTemplate();
     }
   }
 
-  void _createAnalysisOptionsFromTemplate({bool? showWarnings}) {
+  void _createAnalysisOptionsFromTemplate({bool showWarnings = false}) {
     /// add pedantic to the project
 
     final analysisPath = join(pathToProjectRoot, 'analysis_options.yaml');
     if (!exists(analysisPath)) {
-      if (showWarnings!) {
+      if (showWarnings) {
         print(orange('Creating missing analysis_options.yaml.'));
       }
 
@@ -280,7 +279,7 @@ class DartProject {
     }
   }
 
-  void _createPubspecFromTemplate({required bool showWarnings}) {
+  void _createPubspecFromTemplate({bool showWarnings = false}) {
     if (showWarnings) {
       print(orange('Creating missing pubspec.yaml.'));
     }

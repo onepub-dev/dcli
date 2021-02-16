@@ -91,6 +91,8 @@ class NamedLock {
   /// once [fn] returns the lock is released.
   /// If [waiting] is passed it will be used to write
   /// a log message to the console.
+  ///
+  /// Throws a [DCliException] if the NamedLock times out.
   void withLock(
     void Function() fn, {
     String? waiting,
@@ -221,7 +223,7 @@ class NamedLock {
     var waitCount = 1;
 
     // we will be retrying every 100 ms.
-    waitCount = _timeout.inMilliseconds ~/ 10;
+    waitCount = _timeout.inMilliseconds ~/ 100;
     // ensure at least one retry
     if (waitCount == 0) {
       waitCount = 1;
@@ -235,7 +237,9 @@ class NamedLock {
         }
         // check for other lock files
         final locks = find('*.$name',
-                root: _lockPath, includeHidden: true, recursive: false)
+                workingDirectory: _lockPath,
+                includeHidden: true,
+                recursive: false)
             .toList();
         _log(red('found $locks lock files'));
 
@@ -278,7 +282,7 @@ class NamedLock {
     if (!taken) {
       if (waitCount == 0) {
         throw LockException(
-            'NamedLock timed out on $_description ${truepath(_lockPath)} as it is currently held');
+            'NamedLock timedout on $_description ${truepath(_lockPath)} as it is currently held');
       } else {
         throw LockException(
             'Unable to lock $_description ${truepath(_lockPath)} as it is currently held');
@@ -318,14 +322,14 @@ class NamedLock {
   }
 
   void _withHardLock({
-    required void Function() fn,
     Duration timeout = const Duration(seconds: 30),
+    required void Function() fn,
   }) {
     RawServerSocket? socket;
 
     var waitCount = -1;
 
-    waitCount = timeout.inMilliseconds ~/ 10;
+    waitCount = timeout.inMilliseconds ~/ 100;
     // ensure at least one retry.
     if (waitCount == 0) waitCount = 1;
 

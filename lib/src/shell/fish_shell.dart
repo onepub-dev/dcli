@@ -1,10 +1,10 @@
-import 'posix_mixin.dart';
+import 'posix_shell.dart';
 
 import 'shell_mixin.dart';
 
 /// Provides a number of helper functions
 /// when dcli needs to interact with the Zsh shell.
-class FishShell with ShellMixin, PosixMixin {
+class FishShell with ShellMixin, PosixShell {
   /// Name of the shell
   static const String shellName = 'fish';
 
@@ -39,7 +39,7 @@ class FishShell with ShellMixin, PosixMixin {
   bool get isCompletionInstalled => false;
 
   @override
-  void installTabCompletion({bool? quiet = false}) {
+  void installTabCompletion({bool quiet = false}) {
     throw UnimplementedError();
   }
 

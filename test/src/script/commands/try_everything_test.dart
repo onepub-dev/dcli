@@ -34,7 +34,7 @@ void main() {
         for (final file in find(
           '*.jpg',
         ).toList()) {
-          print('Found jpg: ${absolute(file)}');
+          print('Found jpg: ${truepath(file)}');
         }
         echo('sleeping for 2 seconds');
         sleep(2);

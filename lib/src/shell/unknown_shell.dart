@@ -83,8 +83,7 @@ class UnknownShell with ShellMixin {
   }
 
   @override
-  void installTabCompletion({bool? quiet = false}) =>
-      throw UnimplementedError();
+  void installTabCompletion({bool quiet = false}) => throw UnimplementedError();
 
   @override
   bool get isCompletionInstalled => false;
@@ -143,4 +142,17 @@ class UnknownShell with ShellMixin {
 
   @override
   bool get isSudo => throw UnimplementedError();
+
+  @override
+  void releasePrivileges() {
+    throw UnimplementedError();
+  }
+
+  @override
+  void withPrivileges(RunPrivileged privilegedCallback) {
+    throw UnimplementedError();
+  }
+
+  @override
+  bool get isPrivilegedProcess => throw UnimplementedError();
 }

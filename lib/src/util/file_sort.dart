@@ -263,7 +263,7 @@ class FileSort {
   /// and the list is empty.
   void _mergeSort(Directory phaseDirectory) {
     final lines = <_Line>[];
-    final files = d.find('*', root: phaseDirectory.path).toList();
+    final files = d.find('*', workingDirectory: phaseDirectory.path).toList();
 
     // Open and read the first line from each file.
     for (final file in files) {

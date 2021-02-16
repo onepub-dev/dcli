@@ -33,22 +33,22 @@ void waitForMe(Future future) {
         .whenComplete(() => print('future completed'));
     // print(waitFor<Process>(future));
     print(waitFor(future));
-  } // on AsyncError
-  // ignore: avoid_catches_without_on_clauses
-  catch (e) {
-    if (e is AsyncError) {
-      print('Rethrowing a non DCliException $e');
-      rethrow;
-    } else {
-      print('Rethrowing a non DCliException $e');
-      rethrow;
-    }
+  }
+  // ignore: avoid_catching_errors
+  on AsyncError catch (e) {
+    print('Rethrowing a non DCliException $e');
+    rethrow;
+  } on Exception catch (e) {
+    print(e.toString());
+  } catch (e) {
+    print('Rethrowing a non DCliException $e');
+    rethrow;
   } finally {
     print('waitForEx finally');
   }
 }
 
-T? waitForEx<T>(Future<T> future) {
+T waitForEx<T>(Future<T> future) {
   Object? exception;
   T? value;
   try {
@@ -84,7 +84,7 @@ T? waitForEx<T>(Future<T> future) {
       throw DCliException.from(exception, stackTrace);
     }
   }
-  return value;
+  return value!;
 }
 
 Future<int> throwExceptionV3() {

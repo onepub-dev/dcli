@@ -1,5 +1,6 @@
 import 'package:meta/meta.dart';
 
+import 'package:dcli/src/shell/posix_shell.dart';
 import '../../dcli.dart';
 
 /// Used to locate and manipulate the dart pub cache
@@ -14,12 +15,11 @@ class PubCache {
 
   late String _pubCacheBinPath;
 
-  late String _pubCachePath;
-
   /// The name of the environment variable that can be
   /// set to change the location of the .pub-cache directory.
   /// You should change this path by calling [pathTo].
-  static const String envVar = 'PUB_CACHE';
+  static const String envVarPubCache = 'PUB_CACHE';
+  late String _pubCachePath;
 
   ///
   factory PubCache() => _self ??= PubCache._internal();
@@ -28,7 +28,7 @@ class PubCache {
     // first check if an environment variable exists.
     // The PUB_CACHE env var allows a user to over-ride
     // the standard location of the pub cache.
-    final pubCacheEnv = env[envVar];
+    final pubCacheEnv = env[envVarPubCache];
 
     String? dir;
 
@@ -39,17 +39,29 @@ class PubCache {
     if (Settings().isWindows) {
       dir ??= join('Pub', 'Cache');
       // doco says this is AppData but some installers seem to use LocalAppData
-      _pubCachePath = truepath(join(env['AppData']!, _pubCacheDir));
+      _pubCachePath = truepath(join(env['AppData']!, dir));
       if (!exists(_pubCachePath)) {
-        _pubCachePath = truepath(join(env['LocalAppData']!, _pubCacheDir));
+        _pubCachePath = truepath(join(env['LocalAppData']!, dir));
       }
     } else {
       dir ??= '.pub-cache';
+
       // determine pub-cache path
-      _pubCachePath = truepath(join(env['HOME']!, dir));
+      if (Shell.current.isSudo) {
+        /// I'm really not certain about this.
+        /// The logic is that if we are running under sudo then the pub-cache
+        /// we are using actually belongs to the original users so we
+        /// we get that user's home directory and pub cache.
+        final home = (Shell.current as PosixShell).loggedInUsersHome;
+        _pubCachePath = truepath(join(home, dir));
+      } else {
+        _pubCachePath = truepath(join(env['HOME']!, dir));
+      }
     }
 
     _pubCacheDir = dir;
+
+    Settings().verbose('pub-cache found in=$_pubCachePath');
 
     // determine pub-cache/bin
     _pubCacheBinPath = truepath(join(_pubCachePath, 'bin'));
@@ -71,7 +83,7 @@ class PubCache {
   /// This will only affect this script and any child processes spawned from
   /// this script.
   set pathTo(String pathToPubCache) {
-    env[envVar] = pathToPubCache;
+    env[envVarPubCache] = pathToPubCache;
     _pubCachePath = pathToPubCache;
     _pubCacheBinPath = truepath(join(_pubCachePath, 'bin'));
   }

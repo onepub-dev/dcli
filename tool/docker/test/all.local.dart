@@ -19,7 +19,7 @@ void main(List<String> args) {
     // mount the local dcli files from ..
     print(green('About to build docker'));
     final root = Script.current.pathToProjectRoot;
-    'sudo docker build -f docker/test/all.local.df -t dcli:all_local_test .'
+    'sudo docker build -f tool/docker/test/all.local.df -t dcli:all_local_test .'
         .start(workingDirectory: root);
   }
 

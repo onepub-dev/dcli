@@ -92,7 +92,7 @@ class _CopyTree extends DCliFunction {
     Settings().verbose('copyTree called ${truepath(from)} -> ${truepath(to)}');
 
     try {
-      find('*', root: from, includeHidden: includeHidden, recursive: recursive)
+      find('*',              workingDirectory: from,              includeHidden: includeHidden,              recursive: recursive)
           .forEach((file) {
         if (filter(file)) {
           final target = join(to, relative(file, from: from));

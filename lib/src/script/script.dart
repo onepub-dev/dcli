@@ -30,27 +30,29 @@ class Script {
   /// Creates a script object from a scriptArg
   /// passed to a command.
   ///
-  /// The [scriptPath] may be a filename or
+  /// The [scriptPathTo] may be a filename or
   /// a filename with a path prefix (relative or absolute)
   /// If the path is realtive then it will be joined
   /// with the current working directory to form
   /// a absolute path.
   ///
-  /// To obtain a [Script] instance for your cli application call:
+  /// To obtain a [Script] instance for your running application call:
   ///
   /// ```dart
-  /// var script = Script.fromFile(Platform.script.toFilePath());
+  /// var script = Script.current;
+  /// ```
   ///
-  Script.fromFile(String scriptPath, {DartProject? project})
-      : this._internal(scriptPath, create: false, project: project);
+  Script.fromFile(String scriptPathTo, {DartProject? project})
+      : this._internal(scriptPathTo, create: false, project: project);
 
-  Script._internal(String scriptPath,
+  Script._internal(String pathToScript,
       {required bool create, DartProject? project})
-      : _scriptname = _extractScriptname(scriptPath),
-        _scriptDirectory = _extractScriptDirectory(scriptPath),
+      : _pathToScript = truepath(pathToScript),
+        _scriptname = p.basename(truepath(pathToScript)),
+        _scriptDirectory = dirname(truepath(pathToScript)),
         _project = project {
     {
-      assert(scriptPath.endsWith('.dart'));
+      assert(pathToScript.endsWith('.dart'));
       if (create) {
         final project = DartProject.fromPath(pathToProjectRoot);
         project.initFiles();
@@ -58,19 +60,21 @@ class Script {
     }
   }
 
-  /// the file name of the script including the extension.
+  /// Path to the script loaded.
+  String _pathToScript;
+
+  String get pathToScript => _pathToScript;
+
+  /// The filename of the script including the extension.
   /// If you are running in a compiled script then
   /// [scriptname] won't have a '.dart' extension.
-  /// In an compiled script the extension generally depends on the OS but
+  /// In a compiled script the extension generally depends on the OS but
   /// it could in theory be anything (except for .dart).
   /// Common extensions are .exe for windows and no extension for Linux and OSx.
   String get scriptname => _scriptname;
 
   /// the absolute path to the directory the script lives in
   String get pathToScriptDirectory => _scriptDirectory;
-
-  /// the absolute path of the script file.
-  String get pathToScript => p.join(pathToScriptDirectory, scriptname);
 
   /// the name of the script without its extension.
   /// this is used for the 'name' key in the pubspec.
@@ -86,7 +90,11 @@ class Script {
   bool get isReadyToRun => project.isReadyToRun;
 
   /// True if the script is compiled.
-  bool get isCompiled => !scriptname.endsWith('.dart');
+  bool get isCompiled => _isCompiled;
+
+  static bool get _isCompiled =>
+      p.basename(Platform.resolvedExecutable) ==
+      p.basename(Platform.script.path);
 
   /// Checks if the Script has been compiled and installed into the ~/.dcli/bin path
   bool get isInstalled {
@@ -95,33 +103,51 @@ class Script {
 
   /// True if the script has been installed via 'dart pub global active'
   /// and as such is running from the pub cache.
-  bool get isPubGlobalActivated => pathToScript.startsWith(PubCache().pathTo);
+  bool get isPubGlobalActivated => _pathToScript.startsWith(PubCache().pathTo);
 
-  // the scriptnameArg may contain a relative path: fred/home.dart
-  // we need to get the actually name and full path to the script file.
-  static String _extractScriptname(String scriptArg) {
-    final cwd = Directory.current.path;
+  /// The current script that is running.
+  static Script? _current;
 
-    return p.basename(p.join(cwd, scriptArg));
-  }
+  /// Returns the instance of the currently running script.
+  ///
+  // ignore: prefer_constructors_over_static_methods
+  static Script get current =>
+      _current ??= Script.fromFile(_pathToCurrentScript);
 
-  // /// Returns true if the script has a pubspec.yaml in its directory.
-  // bool hasLocalPubspecYaml() {
-  //   // The virtual project pubspec.yaml file.
-  //   final pubSpecPath = p.join(_scriptDirectory, 'pubspec.yaml');
-  //   return exists(pubSpecPath);
-  // }
+  /// Path to the currently runnng script
+  static String? __pathToCurrentScript;
 
-  // /// returns true if the script has a pubspec in anscestor directory.
-  // ///
-  // bool hasAncestorPubspecYaml() {
-  //   return pathToProjectRoot != _scriptDirectory;
-  // }
+  /// Absolute path to 'this' script.
+  /// If this is a .dart file then its current location.
+  /// If this is a compiled script then the location of the compiled exe.
+  /// If the script was globally activated then this will be a path
+  /// to the script in the pub-cache.
+  static String get _pathToCurrentScript {
+    if (__pathToCurrentScript == null) {
+      final script = Platform.script;
 
-  static String _extractScriptDirectory(String scriptArg) {
-    final scriptDirectory = p.canonicalize(p.dirname(p.join(pwd, scriptArg)));
+      if (script.isScheme('file')) {
+        __pathToCurrentScript = Platform.script.path;
 
-    return scriptDirectory;
+        if (_isCompiled) {
+          __pathToCurrentScript = Platform.resolvedExecutable;
+        }
+      } else {
+        /// when running in a unit test we can end up with a 'data' scheme
+        if (script.isScheme('data')) {
+          final start = script.path.indexOf('file:');
+          final end = script.path.lastIndexOf('.dart');
+          final fileUri = script.path.substring(start, end + 5);
+
+          /// now parse the remaining uri to a path.
+          __pathToCurrentScript = Uri.parse(fileUri).toFilePath();
+        } else {
+          __pathToCurrentScript = pwd;
+        }
+      }
+    }
+
+    return __pathToCurrentScript!;
   }
 
   /// validate that the passed arguments points to a valid script
@@ -132,12 +158,10 @@ class Script {
     }
 
     if (!exists(scriptPath)) {
-      throw InvalidScript(
-          'The script ${p.absolute(scriptPath)} does not exist.');
+      throw InvalidScript('The script ${truepath(scriptPath)} does not exist.');
     }
     if (!FileSystemEntity.isFileSync(scriptPath)) {
-      throw InvalidScript(
-          'The script ${p.absolute(scriptPath)} is not a file.');
+      throw InvalidScript('The script ${truepath(scriptPath)} is not a file.');
     }
   }
 
@@ -156,14 +180,6 @@ class Script {
   /// If the script is compiled or installed by pub global activate
   /// then this will be the location of the script file.
   String get pathToProjectRoot => project.pathToProjectRoot;
-
-  static Script? _current;
-
-  /// Returns the instance of the currently running script.
-  ///
-  // ignore: prefer_constructors_over_static_methods
-  static Script get current =>
-      _current ??= Script.fromFile(Settings().pathToScript);
 
   DartProject? _project;
 
@@ -188,11 +204,21 @@ class Script {
   /// and returns it.
   PubSpec get pubSpec => project.pubSpec;
 
-  void compile({bool install = false, bool? overwrite = false}) {
+  /// Compiles this script and optionally installs it to ~/.dcli/bin
+  ///
+  /// The resulting executable is compiled into the script's directory.
+  ///
+  /// If [install] is true (default = false) then the resulting executable will be moved into ~/.dcli/bin.
+  ///
+  /// If [install] is true and [overwrite] is true (default) it will overwrite any existing exe in ~/.dcli/bin.
+  /// If [install] is true and [overwrite] is false and an exe of the same name already exists in ~/.dcli/bin
+  /// the install will fail and a [MoveException] will be thrown.
+  ///
+  void compile({bool install = false, bool overwrite = false}) {
     Settings().verbose(
         "\nCompiling with pubspec.yaml:\n${read(pathToPubSpec).toList().join('\n')}\n");
 
-    if (install && isInstalled && !overwrite!) {
+    if (install && isInstalled && !overwrite) {
       throw InvalidArguments(
           'You selected to install the compiled exe however an installed exe of that name already exists. Use overwrite=true');
     }
@@ -210,7 +236,7 @@ class Script {
   /// Runs the script passing in the given [args]
   ///
   /// Returns the processes exit code.
-  int? run(List<String> args) {
+  int run(List<String> args) {
     final sdk = DartSdk();
 
     final runner = ScriptRunner(sdk, this, args);
@@ -218,7 +244,7 @@ class Script {
     return runner.run();
   }
 
-  /// returns the platform dependant name of the compiled scripts exe name.
+  /// Returns the platform dependant name of the compiled script's exe name.
   /// On Linux and OSX this is just the basename (script name without the extension)
   /// on Windows this is the 'basename.exe'.
   String get exeName => '$basename${Settings().isWindows ? '.exe' : ''}';
@@ -242,7 +268,7 @@ class PithyGreetings {
     "I'm a little tea pot.",
     'Are we there yet.',
     'Hurry up, says Mr Blackboard',
-    "Damed if you do, Damed if you don't, so just get the hell on with it.",
+    "Damned if you do, Damned if you don't, so just get the hell on with it.",
     'Yep, this is all of it.',
     "I don't like your curtains"
   ];

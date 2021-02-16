@@ -74,10 +74,11 @@ void fetchMultiple({required List<FetchUrl> urls}) =>
     _Fetch().fetchMultiple(urls: urls);
 
 class _Fetch extends DCliFunction {
-  void fetch(
-      {required String url,
-      required String saveToPath,
-      OnFetchProgress progress = _devNull}) {
+  void fetch({
+    required String url,
+    required String saveToPath,
+    OnFetchProgress progress = _devNull,
+  }) {
     waitForEx<void>(download(
         FetchUrl(url: url, saveToPath: saveToPath, progress: progress)));
   }
@@ -231,8 +232,7 @@ class FetchUrl {
   final OnFetchProgress progress;
 
   /// ctor.
-  FetchUrl(
-      {required this.url, required this.saveToPath, this.progress = _devNull});
+  FetchUrl({required this.url, required this.saveToPath, this.progress = _devNull});
 }
 
 /// Passed to the [progress] method to indicate the current progress of

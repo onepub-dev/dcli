@@ -1,6 +1,8 @@
 import 'dart:convert';
 import 'dart:io';
 
+import 'package:dcli/src/util/truepath.dart';
+
 import '../settings.dart';
 import '../util/dcli_exception.dart';
 import '../util/progress.dart';
@@ -30,10 +32,10 @@ class _Read extends DCliFunction {
   Progress read(String path, {String delim = '\n', Progress? progress}) {
     final sourceFile = File(path);
 
-    Settings().verbose('read: ${absolute(path)}, delim: $delim');
+    Settings().verbose('read: ${truepath(path)}, delim: $delim');
 
     if (!exists(path)) {
-      throw ReadException('The file at ${absolute(path)} does not exists');
+      throw ReadException('The file at ${truepath(path)} does not exists');
     }
 
     progress ??= Progress.devNull();

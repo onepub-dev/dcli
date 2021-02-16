@@ -53,15 +53,13 @@ class FileSync {
     _raf = _file.openSync(mode: fileMode);
   }
 
-  /// Reads a single line from a file.
-  /// The [lineDelimiter] indicates the the end of line delimiter
-  /// and may be one or two characters long.
+  /// Reads a single line from the file.
+  /// [lineDelimiter] the end of line delimiter.
+  /// May be one or two characters long.
   /// Defaults to \n.
   ///
-  /// Returns
-  ///
   String? readLine({String lineDelimiter = '\n'}) {
-    final StringBuffer line = StringBuffer();
+    final  line = StringBuffer();
     int byte;
     var priorChar = '';
 
@@ -207,6 +205,7 @@ void symlink(
   String existingPath,
   String linkPath,
 ) {
+  Settings().verbose('symlink existingPath: $existingPath linkPath $linkPath');
   final link = Link(linkPath);
   link.createSync(existingPath);
 }
@@ -225,6 +224,7 @@ void symlink(
 /// [Shell.current.isPrivileged]
 ///
 void deleteSymlink(String linkPath) {
+  Settings().verbose('deleteSymlink linkPath: $linkPath');
   final link = Link(linkPath);
   link.deleteSync();
 }
@@ -250,6 +250,8 @@ String resolveSymLink(String pathToLink) {
   } else {
     resolved = canonicalize(File(normalised).resolveSymbolicLinksSync());
   }
+
+  Settings().verbose('resolveSymLink $pathToLink resolved: $resolved');
   return resolved;
 }
 

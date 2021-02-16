@@ -1,4 +1,3 @@
-// export 'package:args/args.dart';
 export 'package:path/path.dart'
     hide
         PathMap,
@@ -20,6 +19,7 @@ export 'src/functions/ask.dart';
 export 'src/functions/cat.dart' show cat, CatException;
 export 'src/functions/cd.dart' show CDException;
 export 'src/functions/chmod.dart' show chmod, ChModException;
+export 'src/functions/chown.dart' show chown, ChOwnException;
 export 'src/functions/copy.dart' show copy, CopyException;
 export 'src/functions/copy_tree.dart' show copyTree, CopyTreeException;
 export 'src/functions/create_dir.dart' show createDir, CreateDirException;
@@ -39,8 +39,7 @@ export 'src/functions/fetch.dart'
 export 'src/functions/file_list.dart' show fileList;
 export 'src/functions/find.dart' show find, Find;
 export 'src/functions/head.dart' show head;
-export 'src/functions/is.dart'
-    show isFile, isDirectory, exists, isWritable, isReadable, isExecutable;
+export 'src/functions/is.dart';
 export 'src/functions/menu.dart' show menu;
 export 'src/functions/move.dart' show move, MoveException;
 export 'src/functions/move_dir.dart' show moveDir, MoveDirException;
@@ -62,6 +61,7 @@ export 'src/script/dart_sdk.dart' show DartSdk;
 export 'src/script/script.dart' show Script;
 export 'src/settings.dart' show Settings;
 export 'src/shell/bash_shell.dart';
+export 'src/shell/posix_shell.dart';
 export 'src/shell/shell.dart';
 export 'src/shell/unknown_shell.dart';
 export 'src/shell/windows_mixin.dart';

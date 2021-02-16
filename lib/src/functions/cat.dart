@@ -1,7 +1,7 @@
 import 'dart:convert';
 import 'dart:io';
 
-import 'package:dcli/src/util/dev_null.dart';
+import 'package:dcli/src/util/truepath.dart';
 
 import '../settings.dart';
 import '../util/dcli_exception.dart';
@@ -21,7 +21,7 @@ import 'is.dart';
 ///
 /// If the file does not exists then a CatException is thrown.
 ///
-void cat(String path, {LineAction stdout = devNull}) =>
+void cat(String path, {LineAction stdout = print}) =>
     Cat().cat(path, stdout: stdout);
 
 /// Class for the [cat] function.
@@ -30,10 +30,10 @@ class Cat extends DCliFunction {
   void cat(String path, {LineAction stdout = print}) {
     final sourceFile = File(path);
 
-    Settings().verbose('cat:  ${absolute(path)}');
+    Settings().verbose('cat:  ${truepath(path)}');
 
     if (!exists(path)) {
-      throw CatException('The file at ${absolute(path)} does not exists');
+      throw CatException('The file at ${truepath(path)} does not exists');
     }
 
     waitForEx<void>(sourceFile

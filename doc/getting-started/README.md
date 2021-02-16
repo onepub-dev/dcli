@@ -45,7 +45,7 @@ This is still a work in progress but is intended to provide a three line script 
 {% tabs %}
 {% tab title="Linux" %}
 ```text
-wget https://github.com/bsutton/dcli/releases/download/latest-linux/dcli_install
+wget https://github.com/bsutton/dcli/releases/download/latest.linux/dcli_install
 chmod +x dcli_install
 ./dcli_install
 ```
@@ -53,7 +53,7 @@ chmod +x dcli_install
 
 {% tab title="Windows" %}
 ```text
-curl https://github.com/bsutton/dcli/releases/download/latest-windows/dcli_install.exe
+curl https://github.com/bsutton/dcli/releases/download/latest.windows/dcli_install.exe
 dcli_install.exe
 ```
 {% endtab %}
@@ -62,7 +62,7 @@ dcli_install.exe
 ```text
 Coming soon:
 
-curl https://github.com/bsutton/dcli/releases/download/latest-osx/dcli_install
+curl https://github.com/bsutton/dcli/releases/download/latest.osx/dcli_install
 dcli_install.exe
 ```
 {% endtab %}
