@@ -1,3 +1,6 @@
+# 0.41.16
+Reverted posix and intl upgrades as they required 2.12.
+
 # 0.41.15
 upgraded intl.
 
