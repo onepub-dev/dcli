@@ -37,7 +37,7 @@ class _ChOwn extends DCliFunction {
   void _chown(String path, {String? user, String? group, bool recursive = true}) {
     if (Platform.isWindows) return;
 
-    user ??= Shell.current.loggedInUser;
+    user ??= Shell.current.loggedInUser ?? '';
 
     group ??= user;
     if (!exists(path)) {

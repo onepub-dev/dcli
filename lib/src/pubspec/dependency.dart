@@ -11,7 +11,7 @@ class Dependency extends Equatable {
   final String name;
 
   /// reference to the package. Could be a version no., path, git rep....
-  final DependencyReference? reference;
+  final DependencyReference reference;
 
   /// ctor
   const Dependency(this.name, this.reference);
@@ -39,11 +39,11 @@ class Dependency extends Equatable {
 
   @override
   String toString() {
-    return reference!.rehydrate(this);
+    return reference.rehydrate(this);
   }
 
   ///
   String rehydrate() {
-    return reference!.rehydrate(this);
+    return reference.rehydrate(this);
   }
 }

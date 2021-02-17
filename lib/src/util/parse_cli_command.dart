@@ -1,5 +1,6 @@
 import 'dart:io';
 // ignore: import_of_legacy_library_into_null_safe
+import 'package:file/local.dart';
 import 'package:glob/glob.dart';
 import '../../dcli.dart';
 import '../script/command_line_runner.dart';
@@ -236,7 +237,8 @@ class _QArg {
 
     var files = <FileSystemEntity>[];
 
-    files = glob.listSync(root: workingDirectory);
+    files = glob.listFileSystemSync(const LocalFileSystem(),
+        root: workingDirectory);
 
     if (files.isEmpty) {
       // if no matches the bash spec says return

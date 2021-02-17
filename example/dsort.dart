@@ -38,12 +38,12 @@ void main(List<String> args) {
   dsort(args);
 }
 
-void dsort(List<String> args)  {
+void dsort(List<String> args) {
   final columns = <Column>[];
-  String? fieldDelimiter;
-  String? lineDelimiter;
-  String? outputPath;
-  bool? verbose;
+  late String fieldDelimiter;
+  late String lineDelimiter;
+  late String outputPath;
+  late bool verbose;
 
   final parser = ArgParser()
     ..addFlag('verbose', abbr: 'v', callback: (value) => verbose = value)
@@ -51,12 +51,12 @@ void dsort(List<String> args)  {
         abbr: 'f',
         defaultsTo: ',',
         //ignore: avoid_types_on_closure_parameters
-        callback: (String value) => fieldDelimiter = value)
+        callback: (String? value) => fieldDelimiter = value!)
     ..addOption(lineDelimiterOption,
         abbr: 'l',
         defaultsTo: '\n',
         //ignore: avoid_types_on_closure_parameters
-        callback: (String value) => lineDelimiter = value)
+        callback: (String? value) => lineDelimiter = value!)
     ..addMultiOption(sortkeyOption,
         abbr: 's',
         //ignore: avoid_types_on_closure_parameters
@@ -74,17 +74,19 @@ void dsort(List<String> args)  {
 
   if (results[outputOption] != null) {
     outputPath = results[outputOption].toString();
+  } else {
+    outputPath = inputPath;
   }
-  outputPath ??= inputPath;
 
   outputPath = absolute(outputPath);
 
   if (columns.isEmpty) {
     /// if no columns defined we sort by the whole line.
-    columns.add(Column(0, const CaseInsensitiveSort(), SortDirection.ascending));
+    columns
+        .add(Column(0, const CaseInsensitiveSort(), SortDirection.ascending));
   }
 
-  if (verbose!) {
+  if (verbose) {
     print('Columns: ${columns.join("\n")}');
     print('Input File: $inputPath, Output File: $outputPath');
     print("Field Delimiter: '$fieldDelimiter'");

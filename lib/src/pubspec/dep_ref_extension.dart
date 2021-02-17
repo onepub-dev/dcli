@@ -29,11 +29,8 @@ extension HostedReferenceExt on HostedReference {
   /// expands the dependancy to its yaml form.
   String rehydrate(Dependency dependency) {
     String? constraint;
-    if (versionConstraint == null) {
-      constraint = 'any';
-    } else {
-      constraint = versionConstraint.toString();
-    }
+
+    constraint = versionConstraint.toString();
 
     return '${dependency.name}: $constraint';
   }

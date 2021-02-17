@@ -96,7 +96,7 @@ class TestFileSystem {
 
   TestFileSystem._internal({this.installDcli}) {
     _testRoot = join(rootPath, 'tmp', 'dcli');
-    uniquePath = Uuid().v4();
+    uniquePath = const Uuid().v4();
 
     final isolateID = Service.getIsolateID(Isolate.current);
     print(
@@ -312,7 +312,8 @@ class TestFileSystem {
 
     copyTree(originalPubCache!, PubCache().pathTo);
 
-    print('Reset ${PubCache.envVarPubCache} to ${env[PubCache.envVarPubCache]}');
+    print(
+        'Reset ${PubCache.envVarPubCache} to ${env[PubCache.envVarPubCache]}');
 
     Settings().setVerbose(enabled: verbose);
   }

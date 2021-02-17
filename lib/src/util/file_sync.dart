@@ -36,7 +36,7 @@ class FileSync {
     if (!finalsuffix.startsWith('.')) {
       finalsuffix = '.$finalsuffix';
     }
-    final uuid = Uuid();
+    const uuid = Uuid();
     return '${join(Directory.systemTemp.path, uuid.v4())}$finalsuffix';
   }
 

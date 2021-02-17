@@ -19,14 +19,14 @@ class PubSpec {
   late pub.PubSpec pubspec;
 
   /// Returns the name field from the pubspec.yaml
-  String get name => pubspec.name;
+  String? get name => pubspec.name;
 
   /// Returns the version field from the pubspec.yaml
-  Version get version => pubspec.version;
+  Version? get version => pubspec.version;
 
   /// Sets the version field for the pubspec.
   /// Call [saveToFile] to update the contents of the pubspec.yaml.
-  set version(Version version) => pubspec = pubspec.copy(version: version);
+  set version(Version? version) => pubspec = pubspec.copy(version: version);
   List<Executable>? _executables;
 
   /// Get the list of exectuables
@@ -44,7 +44,7 @@ class PubSpec {
 
   /// Sets the map of dependencies for this pubspec.
   set dependencies(Map<String, Dependency> dependencies) {
-    final ref = <String, pub.DependencyReference?>{};
+    final ref = <String, pub.DependencyReference>{};
 
     for (final name in dependencies.keys) {
       ref[name] = dependencies[name]!.reference;
@@ -62,7 +62,7 @@ class PubSpec {
     final map = pubspec.dependencies;
 
     for (final name in map.keys) {
-      final reference = map[name];
+      final reference = map[name]!;
       depends.putIfAbsent(name, () => Dependency(name, reference));
     }
 
@@ -71,7 +71,7 @@ class PubSpec {
 
   /// Sets the list of dependencies for this pubspec.
   set dependencyOverrides(Map<String, Dependency> dependencies) {
-    final ref = <String, pub.DependencyReference?>{};
+    final ref = <String, pub.DependencyReference>{};
 
     for (final name in dependencies.keys) {
       ref[name] = dependencies[name]!.reference;
@@ -89,7 +89,7 @@ class PubSpec {
     final map = pubspec.dependencyOverrides;
 
     for (final name in map.keys) {
-      final reference = map[name];
+      final reference = map[name]!;
       depends.putIfAbsent(name, () => Dependency(name, reference));
     }
 
