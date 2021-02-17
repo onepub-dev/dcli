@@ -3,7 +3,7 @@ import 'dart:convert' as convert;
 // ignore: import_of_legacy_library_into_null_safe
 import 'package:csv/csv.dart';
 // ignore: import_of_legacy_library_into_null_safe
-import 'package:ini/ini.dart';
+//import 'package:ini/ini.dart';
 // ignore: import_of_legacy_library_into_null_safe
 import 'package:yaml/yaml.dart';
 
@@ -52,9 +52,9 @@ class Parser {
     return const CsvToListConverter().convert(_lines.join('\n'));
   }
 
-  /// Interprets the read lines as an ini file.
-  /// See https://pub.dev/packages/ini
-  Config iniDecode() {
-    return Config.fromStrings(_lines as List<String>);
-  }
+  // /// Interprets the read lines as an ini file.
+  // /// See https://pub.dev/packages/ini
+  // Config iniDecode() {
+  //   return Config.fromStrings(_lines as List<String>);
+  // }
 }
