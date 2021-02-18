@@ -55,7 +55,7 @@ class WindowsDCliInstaller {
 }
 
 // chocolaty for windows installs.
-// if (which('choco').firstLine == null) {
+// if (which('choco').notfound) {
 //         printerr(
 //             "DCli requires the 'Chocolatey' package manager to be installed to install dart");
 //         printerr('Please install Chocolatey and then try again');
