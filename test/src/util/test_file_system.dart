@@ -10,10 +10,9 @@ import 'package:dcli/src/util/stack_trace_impl.dart';
 import 'package:path/path.dart';
 import 'package:dcli/src/script/entry_point.dart';
 import 'package:dcli/src/util/named_lock.dart';
-// ignore: import_of_legacy_library_into_null_safe
-import 'package:pubspec/pubspec.dart' as ps;
+import 'package:pubspec2/pubspec2.dart' as ps;
 import 'package:test/test.dart';
-// ignore: import_of_legacy_library_into_null_safe
+
 import 'package:uuid/uuid.dart';
 
 import 'package:dcli/src/util/pub_cache.dart';

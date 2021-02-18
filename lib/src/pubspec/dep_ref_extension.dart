@@ -1,5 +1,3 @@
-// ignore: import_of_legacy_library_into_null_safe
-// ignore: import_of_legacy_library_into_null_safe
 import 'package:pubspec2/pubspec2.dart';
 import '../script/command_line_runner.dart';
 import 'dependency.dart';

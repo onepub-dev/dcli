@@ -1,7 +1,6 @@
 import 'dart:cli';
 import 'dart:io';
 
-// ignore: import_of_legacy_library_into_null_safe
 import 'package:yaml/yaml.dart' as y;
 import '../pubspec/dependency.dart';
 

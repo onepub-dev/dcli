@@ -3,7 +3,6 @@
 /// remove the next line
 /// ignore_for_file: unused_import
 
-// ignore: import_of_legacy_library_into_null_safe
 import 'package:args/args.dart';
 
 ///

@@ -1,5 +1,5 @@
 import 'dart:io';
-// ignore: import_of_legacy_library_into_null_safe
+
 import 'package:csv/csv.dart';
 import 'package:meta/meta.dart';
 import 'package:posix/posix.dart';

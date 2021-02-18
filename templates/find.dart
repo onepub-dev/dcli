@@ -13,7 +13,7 @@ dependencies:
 import 'dart:io';
 import 'package:dcli/dcli.dart';
 import 'package:path/path.dart' as p;
-// ignore: import_of_legacy_library_into_null_safe
+
 import 'package:args/args.dart';
 
 ///

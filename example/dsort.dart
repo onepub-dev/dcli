@@ -3,7 +3,7 @@
 import 'dart:io';
 import 'package:dcli/dcli.dart';
 import 'package:dcli/src/util/file_sort.dart';
-// ignore: import_of_legacy_library_into_null_safe
+
 import 'package:args/args.dart';
 
 /// dsort

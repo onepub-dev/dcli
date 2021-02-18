@@ -1,5 +1,5 @@
 import 'dart:io';
-// ignore: import_of_legacy_library_into_null_safe
+
 import 'package:posix/posix.dart' as posix;
 
 import '../../dcli.dart';
@@ -34,7 +34,8 @@ void chown(String path, {String? user, String? group, bool recursive = true}) =>
 class _ChOwn extends DCliFunction {
 // this.user, this.group, this.other, this.path
 
-  void _chown(String path, {String? user, String? group, bool recursive = true}) {
+  void _chown(String path,
+      {String? user, String? group, bool recursive = true}) {
     if (Platform.isWindows) return;
 
     user ??= Shell.current.loggedInUser ?? '';

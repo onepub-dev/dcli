@@ -2,9 +2,9 @@ import 'dart:io';
 
 import 'package:collection/collection.dart';
 import 'package:dcli/src/util/wait_for_ex.dart';
-// ignore: import_of_legacy_library_into_null_safe
+
 import 'package:pub_semver/pub_semver.dart';
-// ignore: import_of_legacy_library_into_null_safe
+
 import 'package:pubspec2/pubspec2.dart' as pub;
 
 import '../../dcli.dart';

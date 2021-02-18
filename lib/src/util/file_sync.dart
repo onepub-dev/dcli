@@ -1,7 +1,7 @@
 import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
-// ignore: import_of_legacy_library_into_null_safe
+
 import 'package:uuid/uuid.dart';
 import '../../dcli.dart';
 
@@ -59,7 +59,7 @@ class FileSync {
   /// Defaults to \n.
   ///
   String? readLine({String lineDelimiter = '\n'}) {
-    final  line = StringBuffer();
+    final line = StringBuffer();
     int byte;
     var priorChar = '';
 

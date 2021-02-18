@@ -1,7 +1,7 @@
 import 'package:equatable/equatable.dart';
-// ignore: import_of_legacy_library_into_null_safe
+
 import 'package:pub_semver/pub_semver.dart';
-// ignore: import_of_legacy_library_into_null_safe
+
 import 'package:pubspec2/pubspec2.dart';
 import '../../src/pubspec/dep_ref_extension.dart';
 
