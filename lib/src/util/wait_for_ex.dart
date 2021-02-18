@@ -24,12 +24,18 @@ T waitForEx<T>(Future<T> future) {
   }
   // ignore: avoid_catching_errors
   on AsyncError catch (e) {
-    exception = e;
-    stackTrace = e.stackTrace;
-  } catch (e, st) {
-    exception = e;
-    stackTrace = st;
-  }
+    if (e.error is Exception) {
+      exception = e.error;
+      stackTrace = e.stackTrace;
+    } else {
+      Settings().verbose('Rethrowing a non DCliException $e');
+      rethrow;
+    }
+  } 
+  // catch (e, st) {
+  //   exception = e;
+  //   stackTrace = st;
+  // }
 
   if (exception != null) {
     // see issue: https://github.com/dart-lang/sdk/issues/30741
