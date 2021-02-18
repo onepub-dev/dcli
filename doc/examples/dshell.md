@@ -38,7 +38,7 @@ void dispatch(String command) {
 
     /// run any other command that is on  the path.
     default:
-      if (which(parts[0]).firstLine != null) {
+      if (which(parts[0]).found) {
         command.run;
       } else {
         print(red('Unknown command: ${parts[0]}'));
