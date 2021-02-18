@@ -16,6 +16,9 @@ void main() {
         createDir(scriptParentPath, recursive: true);
       }
       final scriptPath = truepath(scriptParentPath, 'print_to_stdout.dart');
+      if (exists(scriptPath)) {
+        delete(scriptPath);
+      }
 
       // make certain our test script exists and is in a runnable state.
       '${DCliPaths().dcliName} -v create -fg $scriptPath'.run;
