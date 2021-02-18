@@ -20,9 +20,6 @@ void main() {
         delete(scriptPath);
       }
 
-      // make certain our test script exists and is in a runnable state.
-      '${DCliPaths().dcliName} -v create -fg $scriptPath'.run;
-
       final project = DartProject.fromPath(scriptParentPath);
       final script = project.createScript(basename(scriptPath),
           templateName: 'hello_world.dart');
