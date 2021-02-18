@@ -253,7 +253,8 @@ class DartProject {
 
   /// Creates a script located at [pathToScript] from the passed [templatePath].
   /// When the user runs 'dcli create <script>'
-  void _createFromTemplate({required String templatePath,required  String pathToScript}) {
+  void _createFromTemplate(
+      {required String templatePath, required String pathToScript}) {
     copy(templatePath, pathToScript);
 
     replace(pathToScript, '%dcliName%', DCliPaths().dcliName);
@@ -291,15 +292,22 @@ class DartProject {
         _replaceInvalidCharactersForName(basename(pathToProjectRoot)));
   }
 
-  /// Creates a script using the default template (basic.dart)
-  Script createScript(String pathToScript,
-      {String templateName = 'basic.dart'}) {
+  /// Creates a script in [pathToProjectRoot] with the name [scriptName] using the based [templateName] which defaults to (basic.dart)
+  ///
+  /// The [scriptName] MUST end in .dart otherwise a [DartProjectException] is thrown
+  ///
+  /// The [templateName] must be the name of a template file in the ~/.dcli/template directory.
+  ///
+  Script createScript(String scriptName, {String templateName = 'basic.dart'}) {
+    if (!scriptName.endsWith('.dart')) {
+      throw DartProjectException('scriptName must end with .dart');
+    }
     _createFromTemplate(
       templatePath: join(Settings().pathToTemplate, templateName),
-      pathToScript: pathToScript,
+      pathToScript: join(pathToProjectRoot, scriptName),
     );
 
-    return Script.fromFile(pathToScript, project: this);
+    return Script.fromFile(scriptName, project: this);
   }
 
   /// The name used in the pubspec.yaml must come from the character set [a-z0-9_]
@@ -307,4 +315,8 @@ class DartProject {
   String _replaceInvalidCharactersForName(String proposedName) {
     return proposedName.replaceAll(RegExp('[^a-zA-Z0-9_]'), '_');
   }
+}
+
+class DartProjectException extends DCliException {
+  DartProjectException(String message) : super(message);
 }
