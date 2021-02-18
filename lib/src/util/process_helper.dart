@@ -2,6 +2,7 @@ import 'dart:io';
 // ignore: import_of_legacy_library_into_null_safe
 import 'package:csv/csv.dart';
 import 'package:meta/meta.dart';
+import 'package:posix/posix.dart';
 import '../../dcli.dart';
 import 'runnable_process.dart';
 
@@ -40,6 +41,11 @@ class ProcessHelper {
     try {
       line = 'ps -q $lpid -o comm='.firstLine;
       Settings().verbose('ps: $line');
+    } on RunException catch (e) {
+      /// the pid is no longer running
+      if (e.exitCode == 1) {
+        Settings().verbose('pid $lpid is no longer running');
+      }
     } on ProcessException {
       // ps not supported on current OS
     }
@@ -71,18 +77,22 @@ class ProcessHelper {
     }
   }
 
-  /// returns the pid of the parent pid of -1 if the
+  /// returns the pid of the parent pid or -1 if the
   /// child doesn't have a parent.
-  int? _linuxGetParentPID(int? childPid) {
+  int _linuxGetParentPID(int? childPid) {
     String? line;
     try {
-      line = 'ps -p $childPid -o ppid='.firstLine;
-      Settings().verbose('ps: $line');
+      if (isPosixSupported) {
+        line = '$getppid()';
+      } else {
+        line = 'ps -p $childPid -o ppid='.firstLine;
+        Settings().verbose('ps: $line');
+      }
     } on ProcessException {
       // ps not supported on current OS
       line = '-1';
     }
-    return int.tryParse(line!.trim());
+    return int.tryParse(line!.trim()) ?? -1;
   }
 
   /// returns the pid of the parent pid of -1 if the
@@ -145,6 +155,10 @@ class ProcessHelper {
     String? line;
 
     try {
+      /// https://stackoverflow.com/questions/9152979/check-if-process-exists-given-its-pid
+      // if (isPosixSupported) {
+      //   kill(0);
+      // }
       line = 'ps -q $lpid -o comm='.firstLine;
       Settings().verbose('ps: $line');
       if (line != null) {
@@ -152,7 +166,7 @@ class ProcessHelper {
       }
     } on RunException {
       // ps not supported on current OS
-      // we have to assume the process running
+      // we have to assume the process is running
     }
 
     return isRunning;
