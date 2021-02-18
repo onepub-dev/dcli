@@ -6,17 +6,21 @@ environment:
   sdk: '>=2.12.0-259.9.beta <3.0.0'
 dependencies: 
   archive: ^3.0.0
+  async: ^2.5.0
   args: ^2.0.0
   csv: ^5.0.0-nullsafety.0
+  collection: ^1.15.0
   equatable: ^2.0.0-nullsafety.3
   file: ^6.1.0
   glob: ^2.0.0
+  meta: ^1.3.0
   path: ^1.8.0
   posix: ^2.0.0
   pedantic: ^1.10.0
   pub_semver: ^2.0.0
   pubspec2: ^1.0.0
   uuid: ^3.0.0-nullsafety.1
+  yaml: ^3.0.0
 dev_dependencies: 
   mockito: ^5.0.0-nullsafety.7
   settings_yaml: ^3.0.1
