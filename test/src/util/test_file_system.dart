@@ -117,7 +117,12 @@ class TestFileSystem {
     final stack = StackTraceImpl(skipFrames: 1);
 
     try {
-      NamedLock(name: 'test_file_system.lock').withLock(() {
+      /// it takes a while to setup the first test file system hence
+      /// 90 second timeout.
+      NamedLock(
+              name: 'test_file_system.lock',
+              timeout: const Duration(seconds: 90))
+          .withLock(() {
         final frame = stack.frames[0];
 
         print(red(
