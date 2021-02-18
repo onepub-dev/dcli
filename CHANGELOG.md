@@ -1,4 +1,7 @@
 # 0.50.0
+updated to stable nnbd version of packages.
+
+# 0.50.0
 First full nnbd release.
 
 Removed support for 32bit installs until system_info releases a nnbd version.
