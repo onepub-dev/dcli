@@ -20,9 +20,6 @@ class ScriptRunner {
     final vmArgs = <String>[];
     vmArgs.add('--enable-asserts');
 
-    /// TODO: remove once we get pass mix-mode null saftey.
-    vmArgs.add('--no-sound-null-safety');
-
     // vmArgs.add(
     //     '--packages=${join(script.pathToProjectRoot, DartSdk().pathToPackageConfig)}');
 
