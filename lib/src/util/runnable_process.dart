@@ -62,7 +62,7 @@ class RunnableProcess {
   ///
   /// Glob expansion is performed on each non-quoted argument.
   ///
-  RunnableProcess.fromCommandArgs(String? command, List<String?> args,
+  RunnableProcess.fromCommandArgs(String command, List<String> args,
       {String? workingDirectory})
       : this._internal(
             ParsedCliCommand.fromParsed(command, args, workingDirectory),
@@ -213,8 +213,8 @@ class RunnableProcess {
           'The specified workingDirectory [$workdir] does not exist.');
     }
     _fProcess = Process.start(
-      _parsed.cmd!,
-      _parsed.args as List<String>,
+      _parsed.cmd,
+      _parsed.args,
       runInShell: runInShell,
       workingDirectory: workdir,
       mode: mode,
@@ -414,7 +414,7 @@ class RunnableProcess {
       progress.addToStdout(line);
     }).onDone(() {
       stdoutFlushed.complete();
-      _stdoutCompleter.complete();
+      _stdoutCompleter.complete(true);
     });
 
     // handle stderr stream
@@ -425,7 +425,7 @@ class RunnableProcess {
       progress.addToStderr(line);
     }).onDone(() {
       stderrFlushed.complete();
-      _stderrCompleter.complete();
+      _stderrCompleter.complete(true);
     });
   }
 }
