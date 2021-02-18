@@ -136,5 +136,5 @@ mixin PosixShell {
   }
 
   /// at this point no posix system has any preconditions.
-  String checkInstallPreconditions() => '';
+  String? checkInstallPreconditions() => null;
 }
