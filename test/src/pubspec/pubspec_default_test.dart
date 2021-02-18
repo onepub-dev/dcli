@@ -37,15 +37,7 @@ dependencies:
 
   t.test('File - basic', () {
     TestFileSystem().withinZone((fs) {
-      final scriptDirectory = p.join(fs.fsRoot, 'local');
-      final scriptPath = p.join(scriptDirectory, 'test.dart');
-      final pubSpecScriptPath = p.join(scriptDirectory, 'pubspec.yaml');
-      if (exists(pubSpecScriptPath)) {
-        delete(pubSpecScriptPath);
-      }
-      if (!exists(dirname(scriptPath))) {
-        createDir(dirname(scriptPath));
-      }
+      final String pubSpecScriptPath = createPubspecPath(fs);
       final file = PubSpec.fromString(basic);
       file.saveToFile(pubSpecScriptPath);
 
@@ -58,12 +50,8 @@ dependencies:
 
   t.test('File - override', () {
     TestFileSystem().withinZone((fs) {
-      final scriptDirectory = p.join(fs.fsRoot, 'local');
-      final scriptPath = p.join(scriptDirectory, 'test.dart');
-      final pubSpecScriptPath = p.join(scriptDirectory, 'pubspec.yaml');
-      if (exists(pubSpecScriptPath)) {
-        delete(pubSpecScriptPath);
-      }
+      final String scriptPath = createScriptPath(fs);
+
       final file = PubSpec.fromString(overrides);
       file.saveToFile(scriptPath);
 
@@ -79,12 +67,7 @@ dependencies:
 
   t.test('File - local pubsec.yaml', () {
     TestFileSystem().withinZone((fs) {
-      final scriptDirectory = p.join(fs.fsRoot, 'local');
-      final scriptPath = p.join(scriptDirectory, 'test.dart');
-      final pubSpecScriptPath = p.join(scriptDirectory, 'pubspec.yaml');
-      if (exists(pubSpecScriptPath)) {
-        delete(pubSpecScriptPath);
-      }
+      final String scriptPath = createScriptPath(fs);
       final file = PubSpec.fromString(overrides);
       file.saveToFile(scriptPath);
 
@@ -99,16 +82,40 @@ dependencies:
   }, skip: false);
 }
 
+String createPubspecPath(TestFileSystem fs) {
+  final scriptDirectory = p.join(fs.fsRoot, 'local');
+
+  if (!exists(scriptDirectory)) {
+    createDir(scriptDirectory, recursive: true);
+  }
+
+  final pubSpecScriptPath = p.join(scriptDirectory, 'pubspec.yaml');
+
+  if (exists(pubSpecScriptPath)) {
+    delete(pubSpecScriptPath);
+  }
+
+  return pubSpecScriptPath;
+}
+
+String createScriptPath(TestFileSystem fs) {
+  final scriptDirectory = p.join(fs.fsRoot, 'local');
+
+  if (!exists(scriptDirectory)) {
+    createDir(scriptDirectory, recursive: true);
+  }
+  final scriptPath = p.join(scriptDirectory, 'test.dart');
+
+  if (!exists(dirname(scriptPath))) {
+    createDir(dirname(scriptPath));
+  }
+  return scriptPath;
+}
+
 void runTest(TestFileSystem fs, String? annotation, String main,
     List<Dependency> expected) {
-  final scriptDirectory = p.join(fs.fsRoot, 'local');
-  final scriptPath = p.join(scriptDirectory, 'test.dart');
+  final String scriptPath = createScriptPath(fs);
   final script = Script.fromFile(scriptPath);
-
-  // reset everything
-  if (exists(scriptPath)) {
-    delete(scriptPath);
-  }
 
   if (exists(Settings().pathToDCli)) {
     deleteDir(Settings().pathToDCli);
@@ -118,9 +125,6 @@ void runTest(TestFileSystem fs, String? annotation, String main,
     createDir(Settings().pathToDCli);
   }
 
-  if (!exists(scriptDirectory)) {
-    createDir(scriptDirectory, recursive: true);
-  }
   if (annotation != null) {
     scriptPath.append(annotation);
   }
