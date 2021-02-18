@@ -112,10 +112,10 @@ class DoctorCommand extends Command {
   }
 
   void printExePaths() {
-    final dcliPath = which('dcli').path;
+    final whichDcli = which('dcli');
     _colprint([
       'dcli path',
-      if (dcliPath == null) 'Not found' else privatePath(dcliPath)
+      if (whichDcli.notfound) 'Not found' else privatePath(whichDcli.path!)
     ]);
     _colprint(['dart exe path', privatePath(DartSdk().pathToDartExe!)]);
     final dartPath = which(DartSdk.dartExeName).path!;
