@@ -1,4 +1,3 @@
-
 import 'dart:io';
 
 import 'package:dcli/src/script/entry_point.dart';

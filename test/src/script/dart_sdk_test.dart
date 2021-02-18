@@ -26,7 +26,7 @@ void main() {
       final installPath = DartSdk().installFromArchive(defaultPath);
       setPathToDartSdk(installPath);
       print('installed To $installPath');
-     expect(
+      expect(
           DartSdk().pathToDartExe != null && exists(DartSdk().pathToDartExe!),
           equals(true));
     });

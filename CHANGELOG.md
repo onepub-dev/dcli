@@ -1,3 +1,17 @@
+# 0.50.0
+First full nnbd release.
+
+Removed support for 32bit installs until system_info releases a nnbd version.
+Changed to pubspec2 until pubspec is released with nnpd.
+changed createScript to expect a script name not a full path.
+Fixed the exception handling for dcli exceptions that I screwed up.
+Moved to using posix to get parent pid. Impoved exception handling.
+Used late final to do delayed initialisation. Added exceptions when pub get or dart not installed.
+updated doco
+removed ini support as the upstream package doesn't appear to be maintained.
+Finalised nnbd migration by bringing the validators class into the project.
+Fixed bug in version if dart not installed.
+
 # 0.50.0-nullsaftey.0
 First pass at nullsaftey.
 removed suffix as no longer supported.

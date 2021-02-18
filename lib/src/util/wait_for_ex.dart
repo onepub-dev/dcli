@@ -31,7 +31,7 @@ T waitForEx<T>(Future<T> future) {
       Settings().verbose('Rethrowing a non DCliException $e');
       rethrow;
     }
-  } 
+  }
   // catch (e, st) {
   //   exception = e;
   //   stackTrace = st;

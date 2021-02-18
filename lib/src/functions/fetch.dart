@@ -232,7 +232,8 @@ class FetchUrl {
   final OnFetchProgress progress;
 
   /// ctor.
-  FetchUrl({required this.url, required this.saveToPath, this.progress = _devNull});
+  FetchUrl(
+      {required this.url, required this.saveToPath, this.progress = _devNull});
 }
 
 /// Passed to the [progress] method to indicate the current progress of
