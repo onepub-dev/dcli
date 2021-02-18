@@ -1,3 +1,6 @@
+# 0.50.1
+re-added args as a transitive dependency. I'm still uncertain if this is a good idea.
+
 # 0.50.0
 First full nnbd release.
 
