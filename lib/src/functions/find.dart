@@ -1,7 +1,6 @@
 import 'dart:async';
 import 'dart:io';
 
-
 import '../../dcli.dart';
 
 import '../util/progress.dart';
@@ -160,9 +159,9 @@ class Find extends DCliFunction {
     try {
       Settings().verbose(
           'find: pwd: $pwd workingDirectory: ${truepath(_workingDirectory)} pattern: $pattern caseSensitive: $caseSensitive recursive: $recursive types: $types ');
-      final nextLevel = <FileSystemEntity>[]..length = 100;
-      final singleDirectory = <FileSystemEntity>[]..length = 100;
-      final childDirectories = <FileSystemEntity?>[]..length = 100;
+      final nextLevel = List<FileSystemEntity?>.filled(100, null);
+      final singleDirectory = List<FileSystemEntity?>.filled(100, null);
+      final childDirectories = List<FileSystemEntity?>.filled(100, null);
       await _processDirectory(_workingDirectory, _workingDirectory, recursive,
           types, matcher, finalIncludeHidden, _progress, childDirectories);
 
