@@ -7,20 +7,20 @@ environment:
 dependencies: 
   archive: ^3.0.0
   args: ^2.0.0
-  csv: ^5.0.0-0
+  csv: ^5.0.0-nullsafety.0
   equatable: ^2.0.0-nullsafety.3
-  file: ^6.0.0
+  file: ^6.1.0
   glob: ^2.0.0
   path: ^1.8.0
-  posix: ^2.0.0-0
-  pedantic: ^1.10.0-nullsaftey
+  posix: ^2.0.0
+  pedantic: ^1.10.0
   pub_semver: ^2.0.0
   pubspec2: ^1.0.0
   uuid: ^3.0.0-nullsafety.1
 dev_dependencies: 
-  mockito: ^5.0.0-nullsafety.1
-  settings_yaml: ^3.0.0-0
-  test: 1.16.2
+  mockito: ^5.0.0-nullsafety.7
+  settings_yaml: ^3.0.1
+  test: ^1.16.2
 executables: 
   dcli: dcli
   dcli_complete: dcli_complete
