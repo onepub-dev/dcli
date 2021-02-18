@@ -159,9 +159,12 @@ class Find extends DCliFunction {
     try {
       Settings().verbose(
           'find: pwd: $pwd workingDirectory: ${truepath(_workingDirectory)} pattern: $pattern caseSensitive: $caseSensitive recursive: $recursive types: $types ');
-      final nextLevel = List<FileSystemEntity?>.filled(100, null);
-      final singleDirectory = List<FileSystemEntity?>.filled(100, null);
-      final childDirectories = List<FileSystemEntity?>.filled(100, null);
+      final nextLevel =
+          List<FileSystemEntity?>.filled(100, null, growable: true);
+      final singleDirectory =
+          List<FileSystemEntity?>.filled(100, null, growable: true);
+      final childDirectories =
+          List<FileSystemEntity?>.filled(100, null, growable: true);
       await _processDirectory(_workingDirectory, _workingDirectory, recursive,
           types, matcher, finalIncludeHidden, _progress, childDirectories);
 
