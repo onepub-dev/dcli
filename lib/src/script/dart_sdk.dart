@@ -23,7 +23,7 @@ class DartSdk {
   String? _sdkPath;
 
   // Path the dart executable obtained by scanning the PATH
-  String? _exePath;
+  late final String? _exePath = which(dartExeName).path;
 
   String? _version;
 
@@ -63,18 +63,18 @@ class DartSdk {
   }
 
   /// The path to the dart exe.
-  String? get pathToDartExe => _exePath ??= which(dartExeName).path;
+  String? get pathToDartExe => _exePath;
 
-  String? _pathToPubExe;
+  late final String? _pathToPubExe = which(pubExeName).path;
 
   /// file path to the 'pub' command.
-  String? get pathToPubExe => _pathToPubExe ??= which(pubExeName).path;
+  String? get pathToPubExe => _pathToPubExe;
 
-  String? _pathToDartToNativeExe;
+  // @Deprecated('Use pathToDartExe and dart compile')
+  late final String? _pathToDartNativeExe = which(dart2NativeExeName).path;
 
   /// file path to the 'dart2native' command.
-  String? get pathToDartToNativeExe =>
-      _pathToDartToNativeExe ??= which(dart2NativeExeName).path;
+  String? get pathToDartToNativeExe => _pathToDartNativeExe;
 
   int get versionMajor {
     final parts = version!.split('.');
@@ -113,10 +113,16 @@ class DartSdk {
       process = RunnableProcess.fromCommandArgs(dartExeName, runArgs,
           workingDirectory: script.pathToScriptDirectory);
     } else {
+      if (pathToDartToNativeExe == null) {
+        throw DCliException(
+            'Unable to compile as the dart2native executable not found on your path.');
+      }
+
       /// use old dart2native
       runArgs.add(script.pathToScript);
       runArgs.add('--output=$pathToExe');
-      process = RunnableProcess.fromCommandArgs(pathToDartToNativeExe, runArgs,
+
+      process = RunnableProcess.fromCommandArgs(pathToDartToNativeExe!, runArgs,
           workingDirectory: script.pathToScriptDirectory);
     }
 
@@ -141,12 +147,21 @@ class DartSdk {
       {Progress? progress, bool? compileExecutables}) {
     RunnableProcess process;
     if (useDartCommand) {
+      if (pathToDartExe == null) {
+        throw DCliException(
+            "Unable to run 'dart pub get' as the dart exe is not on your path");
+      }
       process = RunnableProcess.fromCommandArgs(
-          pathToDartExe, ['pub', 'get', '--no-precompile'],
+          pathToDartExe!, ['pub', 'get', '--no-precompile'],
           workingDirectory: workingDirectory);
     } else {
+      if (pathToPubExe == null) {
+        throw DCliException(
+            "Unable to run ' pub get' as the pub exe is not on your path");
+      }
+
       process = RunnableProcess.fromCommandArgs(
-          pathToPubExe, ['get', '--no-precompile'],
+          pathToPubExe!, ['get', '--no-precompile'],
           workingDirectory: workingDirectory);
     }
 
@@ -158,10 +173,10 @@ class DartSdk {
 
   /// Attempts to detect the location of the dart sdk.
   static String _detect() {
-    final path = which(dartExeName).path;
+    final whichExe = which(dartExeName);
 
-    if (path != null) {
-      return dirname(dirname(File(path).resolveSymbolicLinksSync()));
+    if (whichExe.found) {
+      return dirname(dirname(File(whichExe.path!).resolveSymbolicLinksSync()));
     } else {
       final executable = Platform.resolvedExecutable;
 
