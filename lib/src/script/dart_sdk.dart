@@ -1,12 +1,7 @@
 import 'dart:io';
 
-// ignore: import_of_legacy_library_into_null_safe
 import 'package:archive/archive.dart';
-// ignore: import_of_legacy_library_into_null_safe
 import 'package:pub_semver/pub_semver.dart';
-// ignore: import_of_legacy_library_into_null_safe
-import 'package:system_info/system_info.dart';
-
 import '../../dcli.dart';
 import '../util/enum_helper.dart';
 import '../util/progress.dart';
@@ -223,7 +218,7 @@ class DartSdk {
   ///
   /// returns the directory where the dartSdk was installed.
   String installFromArchive(String defaultDartSdkPath, {bool askUser = true}) {
-    Settings().verbose('Architecture: ${SysInfo.kernelArchitecture}');
+    // Settings().verbose('Architecture: ${SysInfo.kernelArchitecture}');
     final zipRelease = _fetchDartSdk();
 
     var installDir = defaultDartSdkPath;
@@ -272,11 +267,11 @@ class DartSdk {
   // List<String> fetchVersions() {}
 
   String _fetchDartSdk() {
-    final bitness = SysInfo.kernelBitness;
+    // final bitness = SysInfo.kernelBitness;
     var architechture = 'x64';
-    if (bitness == 32) {
-      architechture = 'ia32';
-    }
+    // if (bitness == 32) {
+    //   architechture = 'ia32';
+    // }
     final platform = Platform.operatingSystem;
 
     final zipRelease = FileSync.tempFile(suffix: 'release.zip');
