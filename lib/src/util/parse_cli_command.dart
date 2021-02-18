@@ -10,10 +10,10 @@ import '../script/command_line_runner.dart';
 /// of arguments.
 class ParsedCliCommand {
   /// The commdand that we parsed from the command line
-  String? cmd;
+  late String cmd;
 
   /// The args that we parsed from the command line
-  List<String?> args = <String?>[];
+  List<String> args = <String>[];
 
   ///
   ParsedCliCommand(String command, String? workingDirectory) {
@@ -29,7 +29,7 @@ class ParsedCliCommand {
   /// when passed individual args we respect any quotes that are
   /// passed as they have been put there with intent.
   ParsedCliCommand.fromParsed(
-      this.cmd, List<String?> rawArgs, String? workingDirectory) {
+      this.cmd, List<String> rawArgs, String? workingDirectory) {
     workingDirectory ??= pwd;
     if (!exists(workingDirectory)) {
       throw RunException('$cmd ${rawArgs.join(' ')}', -1,
@@ -150,8 +150,8 @@ class ParsedCliCommand {
   /// be expanded.
   /// See https://github.com/bsutton/dcli/issues/56
   ///
-  List<String?> expandGlobs(List<_QArg> qargs, String? workingDirectory) {
-    final expanded = <String?>[];
+  List<String> expandGlobs(List<_QArg> qargs, String? workingDirectory) {
+    final expanded = <String>[];
 
     for (final qarg in qargs) {
       if (qarg.wasQuoted!) {
@@ -168,21 +168,21 @@ enum _ParseState { starting, inQuote, inWord }
 
 class _QArg {
   bool? wasQuoted;
-  String? arg;
+  late String arg;
 
   _QArg(String iarg) {
     wasQuoted = false;
     arg = iarg.trim();
 
-    if (arg!.startsWith('"') && arg!.endsWith('"')) {
+    if (arg.startsWith('"') && arg.endsWith('"')) {
       wasQuoted = true;
     }
-    if (arg!.startsWith("'") && arg!.endsWith("'")) {
+    if (arg.startsWith("'") && arg.endsWith("'")) {
       wasQuoted = true;
     }
 
     if (wasQuoted!) {
-      arg = arg!.substring(1, arg!.length - 1);
+      arg = arg.substring(1, arg.length - 1);
     }
   }
 
@@ -195,7 +195,7 @@ class _QArg {
   /// to supress glob expansion.
   bool get needsExpansion {
     return !Settings().isWindows &&
-        (arg!.contains('*') || arg!.contains('[') || arg!.contains('?'));
+        (arg.contains('*') || arg.contains('[') || arg.contains('?'));
   }
 
   static List<_QArg> translate(List<String?> args) {
@@ -207,10 +207,10 @@ class _QArg {
     return qargs;
   }
 
-  Iterable<String?> expandGlob(String? workingDirectory) {
-    final expanded = <String?>[];
-    if (arg!.contains('~')) {
-      arg = arg!.replaceAll('~', HOME);
+  Iterable<String> expandGlob(String? workingDirectory) {
+    final expanded = <String>[];
+    if (arg.contains('~')) {
+      arg = arg.replaceAll('~', HOME);
     }
     if (needsExpansion) {
       final files = _expandGlob(workingDirectory!);
@@ -229,11 +229,11 @@ class _QArg {
   }
 
   Iterable<String?> _expandGlob(String workingDirectory) {
-    final glob = Glob(arg!);
+    final glob = Glob(arg);
 
     /// we are interested in the last part of the arg.
     /// e.g. of  path/.* we want the .*
-    final includeHidden = basename(arg!).startsWith('.');
+    final includeHidden = basename(arg).startsWith('.');
 
     var files = <FileSystemEntity>[];
 
