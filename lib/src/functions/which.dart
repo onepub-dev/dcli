@@ -101,7 +101,9 @@ class _Which extends DCliFunction {
         if (exists(p.join(path, appname))) {
           final fullpath = truepath(p.join(path, appname));
           progress.addToStdout(fullpath);
-          results._path ??= fullpath;
+          if (!results._found) {
+            results._path = fullpath;
+          }
           results.paths.add(fullpath);
           results._found = true;
           if (first) {
