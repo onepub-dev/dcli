@@ -1,3 +1,6 @@
+# 0.50.2
+re-added ini support. Upgraded to latest packages.
+
 # 0.50.1
 re-added args as a transitive dependency. I'm still uncertain if this is a good idea.
 
