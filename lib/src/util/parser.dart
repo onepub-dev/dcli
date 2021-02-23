@@ -2,7 +2,7 @@ import 'dart:convert' as convert;
 
 import 'package:csv/csv.dart';
 
-//import 'package:ini/ini.dart';
+import 'package:ini/ini.dart';
 
 import 'package:yaml/yaml.dart';
 
@@ -51,9 +51,9 @@ class Parser {
     return const CsvToListConverter().convert(_lines.join('\n'));
   }
 
-  // /// Interprets the read lines as an ini file.
-  // /// See https://pub.dev/packages/ini
-  // Config iniDecode() {
-  //   return Config.fromStrings(_lines as List<String>);
-  // }
+  /// Interprets the read lines as an ini file.
+  /// See https://pub.dev/packages/ini
+  Config iniDecode() {
+    return Config.fromStrings(_lines as List<String>);
+  }
 }
