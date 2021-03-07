@@ -251,7 +251,7 @@ Now we have a basic shell let's extend it to implement a pipe.
 You take the _red_ pill—you stay in Wonderland, and I show you how deep the rabbit hole goes.
 {% endhint %}
 
-So lets just stop for a moment and consider this fact; **the terminal you are using is actually an app!**
+So let's just stop for a moment and consider this fact; **the terminal you are using is actually an app!**
 
 Like every other app it has stdin/stdout/stderr.
 
