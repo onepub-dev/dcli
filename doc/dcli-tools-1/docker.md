@@ -76,7 +76,7 @@ Add the following line just before the call to wget.
 If you want to force an upgrade of DCli just increment the no. and run docker build.
 
 ```text
-ARG PULL_LATEST_DSHELL_INSTALL=1
+ARG PULL_LATEST_DCLI_INSTALL=1
 ```
 
 ## Using the DCli docker image

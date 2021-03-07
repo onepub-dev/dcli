@@ -8,5 +8,5 @@ The Dart api has a single function which can only be used on cli applications wh
 
 The 'waitFor' function essentially removes Futures.
 
-DShell relies heavily on the 'waitFor' function to make writing cli apps easy.
+DCli relies heavily on the 'waitFor' function to make writing cli apps easy.
 
