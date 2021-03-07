@@ -186,7 +186,7 @@ chmod +x dwhich.dart
 
 Remember that the first time you run your script, dshell needs to do some housekeeping!
 
-## Make to faster <a id="6a03"></a>
+## Make it go faster <a id="6a03"></a>
 
 Let’s make our dwhich command go faster by compiling it.
 
