@@ -228,7 +228,7 @@ When dshell compiles a script it includes all of the scripts dependencies and a 
 
 **But wait there’s even more….**
 
-Now we have a compiled executable we can copy just the executable to any binary compatible machine and run it. There is no need to install Dart nor Dshell.
+Now we have a compiled executable we can copy just the executable to any binary compatible machine and run it. There is no need to install Dart nor DCli.
 
 Hopefully you are now starting to get a feel for how the pieces of Dshell fit together.
 
