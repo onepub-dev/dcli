@@ -1,7 +1,7 @@
 import 'dart:convert';
 import 'dart:io';
 
-import 'package:dcli/src/util/validators.dart';
+import 'package:validators2/validators.dart';
 
 import '../../dcli.dart';
 import '../settings.dart';
