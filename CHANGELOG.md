@@ -1,3 +1,6 @@
+# 0.51.0
+Moved to temporary validators2 which I published so dcli can be full nndb. Hopefully the validators authors will update their package shortly.
+
 # 0.50.2
 re-added ini support. Upgraded to latest packages.
 
