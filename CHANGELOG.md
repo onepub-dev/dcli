@@ -1,3 +1,6 @@
+# 0.51.2
+removed hard coded verbose:true statement
+
 # 0.51.1
 Fixed the toList String extensions so that it never returns nulls.
 
