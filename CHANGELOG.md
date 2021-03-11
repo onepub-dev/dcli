@@ -1,3 +1,6 @@
+# 0.51.1
+Fixed the toList String extensions so that it never returns nulls.
+
 # 0.51.0
 Extended version ranges for ini.
 
