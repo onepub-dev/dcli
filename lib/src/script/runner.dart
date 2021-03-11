@@ -15,7 +15,6 @@ class ScriptRunner {
 
   /// Run the script
   int run() {
-    Settings().setVerbose(enabled: true);
     // Prepare VM arguments
     final vmArgs = <String>[];
     vmArgs.add('--enable-asserts');
