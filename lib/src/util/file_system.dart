@@ -16,7 +16,7 @@ int availableSpace(String path) {
         "An error occured retrieving the device path: ${lines.join('\n')}");
   }
 
-  final line = lines[1]!;
+  final line = lines[1];
   final parts = line.split(RegExp(r'\s+'));
 
   if (parts.length != 6) {

@@ -29,7 +29,7 @@ mixin WindowsMixin {
     final response =
         r'reg query "HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\AppModelUnlock" /v "AllowDevelopmentWithoutDevLicense"'
             .toList(runInShell: true, skipLines: 2)
-            .first!;
+            .first;
     final parts = response.trim().split(RegExp(r'\s+'));
     if (parts.length != 3) {
       throw InstallException('Unable to obtain development mode settings');

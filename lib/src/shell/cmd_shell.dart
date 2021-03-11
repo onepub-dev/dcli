@@ -30,7 +30,7 @@ class CmdShell with WindowsMixin, ShellMixin {
   @override
   bool get isPrivilegedUser {
     final lines = 'net session'.toList(nothrow: true);
-    if (lines.isNotEmpty && lines[0]!.contains('System error 5 has occured.')) {
+    if (lines.isNotEmpty && lines[0].contains('System error 5 has occured.')) {
       return false;
     }
 

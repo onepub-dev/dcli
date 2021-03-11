@@ -61,7 +61,7 @@ class _Read extends DCliFunction {
       String? line;
 
       while ((line = stdin.readLineSync()) != null) {
-        progress.addToStdout(line);
+        progress.addToStdout(line!);
       }
     } finally {
       progress!.close();

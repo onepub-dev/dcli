@@ -32,14 +32,13 @@ class Progress {
   final _stdoutCompleter = Completer<bool>();
   final _stderrCompleter = Completer<bool>();
 
-  final _stdoutController = StreamController<String?>();
+  final _stdoutController = StreamController<String>();
   final _stderrController = StreamController<String>();
 
   ///
-  Progress(LineAction stdout, {LineAction? stderr = devNull})
+  Progress(LineAction stdout, {LineAction stderr = devNull})
       : includeStdout = true,
         includeStderr = true {
-    stderr ??= devNull;
     _wireStreams(stdout, stderr);
   }
 
@@ -110,11 +109,11 @@ class Progress {
   /// Returns a combined stream including stdout and stderr.
   /// You control whether stderr and/or stdout are inserted into the stream when you call
   /// [stream(includeStderr: true, includeStdout)]
-  Stream<String?> get stream =>
+  Stream<String> get stream =>
       StreamGroup.merge([_stdoutController.stream, _stderrController.stream]);
 
   /// adds the [line] to the stdout controller
-  void addToStdout(String? line) {
+  void addToStdout(String line) {
     if (!_closed) {
       if (includeStdout) {
         _stdoutController.sink.add(line);
@@ -159,7 +158,7 @@ class Progress {
   ///
   void _wireStreams(LineAction stdout, LineAction stderr) {
     _stdoutController.stream.listen((line) {
-      stdout(line!);
+      stdout(line);
     },
         onDone: () => _stdoutCompleter.complete(true),
         //ignore: avoid_types_on_closure_parameters

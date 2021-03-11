@@ -117,7 +117,7 @@ class ProcessHelper {
 
     for (var process in processes) {
       // Settings().verbose('wmic: $process');
-      process = process!.trim();
+      process = process.trim();
       process = process.replaceAll(RegExp(r'\s+'), ' ');
 
       final parts = process.split(' ');
