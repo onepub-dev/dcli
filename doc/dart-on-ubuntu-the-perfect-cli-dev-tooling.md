@@ -2,6 +2,10 @@
 
 If you haven't already heard it, Google and Canonical have released a [joint statement ](https://medium.com/flutter/announcing-flutter-linux-alpha-with-canonical-19eb824590a9)announcing Linux as a first-class Flutter platform.
 
+{% hint style="info" %}
+Dart is the perfect language for building CLI apps and scripts
+{% endhint %}
+
 You can now build Linux desktop applications using Dart and Flutter. The fact that Canonical is redeveloping the Ubuntu  installer in Flutter demonstrates their level of commitment to Flutter.
 
 {% hint style="info" %}
@@ -11,7 +15,7 @@ Canonical is redeveloping the Ubuntu installer in Flutter.
 If you are not familiar with Dart it is a new language released by Google and it is now the [fastest growing](https://www.linkedin.com/pulse/google-dart-tops-githubs-list-fastest-growing-2019-bill-detwiler#:~:text=According%20to%20GitHub's%20annual%20%22The,tagged%20with%20a%20primary%20language.) language on Github. Flutter is a cross platform graphical framework written in Dart supporting ios, android, windows, linux, osx along with linux arm support \(yes it runs on your raspberry pi\).
 
 {% hint style="info" %}
-Even if you have no intent of using Flutter you should look at Dart for building CLI apps.
+Even if you have no intent of using Flutter, you should look at Dart for building CLI apps.
 {% endhint %}
 
 As an old hack that started my career in C and has worked professionally with some dozen or more languages I like to say that 'Dart is Delightful'.  It's an elegant language that brings simple solutions to common programming problems.
