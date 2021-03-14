@@ -4,7 +4,7 @@
 * [What does DCli do?](what-does-dcli-do.md)
 * [Install DCli](getting-started/README.md)
   * [Installing on Windows](getting-started/installing-on-windows.md)
-* [Writing your first script](writing-your-first-script.md)
+* [Writing your first CLI app](writing-your-first-script.md)
 * [Add DCli to your project](added-dcli-to-your-project.md)
 * [pub.dev](pub.dev.md)
 * [github](github.md)

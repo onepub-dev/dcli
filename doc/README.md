@@ -43,7 +43,7 @@ DCli is based on Dart which is a modern programming language that has a set of f
 import 'dart:io';
 import 'package:dcli/dcli.dart';
 
-void main(List<String> args) {
+void main() {
   var name = ask('name:', required: true, validator: Ask.alpha);
   print('Hello $name');
 
