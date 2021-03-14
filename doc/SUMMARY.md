@@ -89,3 +89,7 @@
 * [build CLI apps in dart - part 2](articles/build-cli-apps-in-dart-part-2.md)
 * [Dealing with permissions](articles/dealing-with-permissions.md)
 
+---
+
+* [Dart on Ubuntu - the perfect CLI dev tooling](dart-on-ubuntu-the-perfect-cli-dev-tooling.md)
+
