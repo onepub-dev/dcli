@@ -1,4 +1,4 @@
-# Dart on Ubuntu - the perfect CLI dev tooling
+# Dart on Linux - the perfect CLI dev tooling
 
 If you haven't already heard it, Google and Canonical have released a [joint statement ](https://medium.com/flutter/announcing-flutter-linux-alpha-with-canonical-19eb824590a9)announcing Linux as a first-class Flutter platform.
 
@@ -10,6 +10,10 @@ Canonical is redeveloping the Ubuntu installer in Flutter.
 
 If you are not familiar with Dart it is a new language released by Google and it is now the [fastest growing](https://www.linkedin.com/pulse/google-dart-tops-githubs-list-fastest-growing-2019-bill-detwiler#:~:text=According%20to%20GitHub's%20annual%20%22The,tagged%20with%20a%20primary%20language.) language on Github. Flutter is a cross platform graphical framework written in Dart supporting ios, android, windows, linux, osx along with linux arm support \(yes it runs on your raspberry pi\).
 
+{% hint style="info" %}
+Even if you have no intent of using Flutter you should look at Dart for building CLI apps.
+{% endhint %}
+
 As an old hack that started my career in C and has worked professionally with some dozen or more languages I like to say that 'Dart is Delightful'.  It's an elegant language that brings simple solutions to common programming problems.
 
 {% hint style="info" %}
@@ -18,13 +22,13 @@ Dart is Delightful to work with.
 
 Dart is easy to learn and the development tooling is really easy to work with. It's often been called the love child of Java and Javascript.  It takes the best of these languages and removes the cruft.
 
-At Noojee \(the company I work for\) we have 10s of thousands of lines of CLI code we use to support our production environment.  This CLI code had been written in Bash, Perl, Ruby, Go, Rust, Python... In short it was a mess and hard to maintain.  
+At Noojee \(the company I work for\) we have 10s of thousands of lines of CLI code we use to support our production environment.  This CLI code had been written in Bash, Perl, Ruby, Go, Rust, Python... In short, it was a mess and hard to maintain.  
 
 When we started working on a Flutter project we fell in love with Dart and saw a path to solve our maintenance problems with our CLI code.
 
 Dart looked to be the perfect tool to replace all of our CLI apps and scripts. No more would we have to deal with archaic Bash and Perl scripts and no more magic Ruby code. We could convert all our scripts to Dart and use a single  language for our production GUI and management tooling.
 
-But the real pay off is that Dart is so simple to learn any of our development team could help maintain CLI scripts and apps with almost no ramp time, try doing that with a Perl script.
+But the real pay off is that Dart is so simple to learn that any of our development team could help maintain CLI scripts and apps with almost no ramp time, try doing that with a Perl script.
 
 Of course life is never as simple as it first looks.
 
@@ -47,7 +51,7 @@ The 'await' statement tells dart to 'wait' for the function to finish before exe
 
 Well, in a CLI application, just about every function call would need to be 'awaited' which is just tedious and gives zero benefits.
 
-In fact in our early experiments this was the cause of a multitude of disasters as it's very easy to forget to await each function \(the latest dart linter does resolve this issue but at the time it was a significant issue\).
+In fact in our early experiments with Dart, Futures were the cause of a multitude of disasters as it's very easy to forget to await each function \(the latest dart linter does resolve this issue but at the time it was a significant issue\).
 
 Imagine in the above example if we had forgotten to await the createDir call. The result would be that the touch call would fail as the /home/me directory wouldn't exist as yet.
 
@@ -95,7 +99,7 @@ Here are some samples
 
 ```dart
 'tail /var/log/syslog'.run;
-'tail syslog'.start(workingDirectory: '/var/log');
+'tail syslog'.start(workingDirectory: '/var/log', privileged: true);
 var top = 'tail syslog'.firstLine;
 ```
 
@@ -107,6 +111,30 @@ Over the past 18+ months the DCli library has grown into a sophisticated library
 
 DCli now consists of over 20K lines of code and internally Noojee now has over 100K lines of Dart/DCli  running our production systems.
 
+We have also developed a number of full blown apps using Dart and DCli:
+
+#### Nginx-LE
+
+A Docker container for Nginx with Lets Encrypt support baked in.
+
+{% embed url="https://github.com/bsutton/nginx-le" %}
+
+#### DSwitch
+
+Switch between Dart channels \(stable, beta, dev\).
+
+{% embed url="https://github.com/bsutton/dswitch" %}
+
+#### DCli Scripts
+
+A eclectic collection of scripts written in Dart and DCli
+
+[https://github.com/bsutton/dcli\_scripts](https://github.com/bsutton/dcli_scripts)
+
+## At the end of the day
+
+Dart is a fantastic language and paired with DCli ,it really is the perfect language for building CLI apps and scripts.
+
 Our dev and ops team love working with Dart and I think your team will too.
 
 Dart and DCli are able to deliver all the pieces you require from a CLI development tool with none of the compromises.
@@ -117,12 +145,12 @@ Together Dart and DCli deliver
 * Ease of learning - Dart is simple to learn, often described as the love child of Java and Javascript
 * JIT or compiled - A Dart file can be run directly \(JIT\) or it can be compiled into a stand alone exe.
 * Shebang support
-* Cross platform
-* Access to OS native system calls via [dart posix](https://pub.dev/packages/posix) and C libraries via [ffi](https://dart.dev/guides/libraries/c-interop)
 * Large ecosystem of third party libraries vi a [pub.dev](https://pub.dev)
+* Dart and DCli are Cross platform \(Linux, Windows and OSX\)
+* Access to OS native system calls via [dart posix](https://pub.dev/packages/posix) and C libraries via [ffi](https://dart.dev/guides/libraries/c-interop)
 * [Easy to install](https://dart.dev/get-dart)
 
-If you want to give Dart and DCli I would recommend:
+If you want to give Dart and DCli a go I would recommend the following reading:
 
 [https://dart.dev/get-dart](https://dart.dev/get-dart)
 
@@ -177,16 +205,21 @@ And to run the script.
 ./hello.dart
 ```
 
-Maybe you need some performance:
+Maybe you need better performance:
 
 ```dart
 dcli compile hello.dart
 ./hello
 ```
 
+Add hello to your path:
 
+```dart
+dcli compile --install --overwrite hello.dart
+hello
+```
 
-
+### 
 
 
 

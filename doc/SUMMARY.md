@@ -91,5 +91,5 @@
 
 ---
 
-* [Dart on Ubuntu - the perfect CLI dev tooling](dart-on-ubuntu-the-perfect-cli-dev-tooling.md)
+* [Dart on Linux - the perfect CLI dev tooling](dart-on-ubuntu-the-perfect-cli-dev-tooling.md)
 
