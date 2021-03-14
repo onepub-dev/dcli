@@ -40,7 +40,7 @@ Of course life is never as simple as it first looks.
 
 Dart supports the concept of Futures. Futures are like Javascript Promises. Essentially a future tells the Dart VM that I'm going to do some work that will take a little while, so go and do something else and I will let you know when I'm done.  Think of a Future as a super lightweight thread.  A function that returns a Future is an async function.
 
-Futures are great for a gui app, particularly a mobile app, in that you need the GUI to be responsive even when you are fetching data or doing some large calculations.
+Futures are great for a GUI app, particularly a mobile app, in that you need the GUI to be responsive even when you are fetching data or doing some large calculations.
 
 The problem is that when writing a CLI app you really don't need to have a responsive UI and in fact Futures just make your life harder. Imagine the following code:
 
@@ -84,9 +84,9 @@ One of the superpowers of Bash is that it makes it easy to call other CLI applic
 grep honda cars.txt | head > tophondas.txt
 ```
 
-Whilst personally I despise Bash and its less than elegant syntax, you have to give it due credit for its ability to interact with other cli apps.
+Whilst personally I despise Bash and its less than elegant syntax, you have to give it due credit for its ability to interact with other CLI apps.
 
-In order to be able to replace our Bash scripts without re-inventing every linux app, it was going to be important that we were able to call existing cli apps just as Bash does.
+In order to be able to replace our Bash scripts without re-inventing every linux app, it was going to be important that we were able to call existing CLI apps just as Bash does.
 
 ```dart
 var hondas = ('grep honda carts.txt' | 'head').toList();
@@ -172,8 +172,8 @@ Just in case you don't believe me regarding how easy it is. Here is a fully work
 sudo apt install dart
 pub global activate dcli
 dcli install
-mkdir hellow
-cd hellow
+mkdir hello
+cd hello
 dcli create hello.dart
 ```
 
