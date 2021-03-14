@@ -113,13 +113,18 @@ class InstallCommand extends Command {
     }
     qprint('');
 
+    qprint('');
+
     /// create the template directory.
     if (!exists(Settings().pathToTemplate)) {
-      qprint('');
       qprint(blue(
           'Creating Template directory in: ${Settings().pathToTemplate}.'));
-      initTemplates();
+    } else {
+      qprint(blue(
+          'Updating Template directory in: ${Settings().pathToTemplate}.'));
     }
+
+    initTemplates();
 
     /// create the cache directory.
     if (!exists(Settings().pathToDCliCache)) {
@@ -255,7 +260,7 @@ class InstallCommand extends Command {
     }
   }
 
-  /// Checks if the templates directory exists and .dcli and if not creates
+  /// Checks if the templates directory exists in ~/.dcli and if not creates
   /// the directory and copies the default scripts in.
   @visibleForTesting
   void initTemplates() {
