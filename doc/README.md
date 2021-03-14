@@ -10,7 +10,7 @@ DCli as featured on Jermaine Oppong package of the week vlog.
 
 {% embed url="https://youtu.be/z99IxxWmD1Q" %}
 
-But I call it D-cli not d.c.l.i ;\)
+But I call it D-cli, not d.c.l.i ;\)
 
 ## Overview
 
@@ -33,6 +33,7 @@ DCli is based on Dart which is a modern programming language that has a set of f
 * Fast
 * Great development environment using vs-code
 * Local and Remote development/debugging 
+* Cross platform supporting Linux/Windows/osx/arm
 
 ### Example:
 
@@ -59,27 +60,44 @@ To run the above script called hello.dart:
 
 DCli is based on the relatively new programming language; [Dart](https://dart.dev/).
 
-Dart is currently the fastest growing language on github and is the basis on which Flutter is built. If you have not heard of flutter then you should have a look, but I digress.
+Dart is currently the [fastest growing language on github](https://www.linkedin.com/pulse/google-dart-tops-githubs-list-fastest-growing-2019-bill-detwiler#:~:text=According%20to%20GitHub's%20annual%20%22The,tagged%20with%20a%20primary%20language) and is the basis on which Flutter is built.
 
-If you have used multiple languages you well know how the learning curve goes. Its usually doesn't take long to the get to the point where you love or hate a language. As you begin to discover the little nooks and crannies of a language you either despise the designer's solutions or fall in love with it.
+[Ubuntu has just announced](https://medium.com/flutter/announcing-flutter-linux-alpha-with-canonical-19eb824590a9) that Flutter will be the primary platform for building GUI's on Ubuntu and is currently working on replacing the Ubuntu installer using Flutter.
 
-For me at least, it was love at first sight.
+You can now use Dart to build GUI's on Android, IOS, Windows, OSX, Linux and the Web, server side applications and with DCli you can also target console apps.
 
-Dart is a simple to learn, and uses the all too familiar 'C' style syntax. I've heard Dart described as the love child of Java and JavaScript. If you come from either of these environments you will find dart easy to work with.
+Image the benefits of using a single language across you complete ecosystem.
+
+Dart is a simple to learn, and uses the all too familiar 'C' style syntax. I've heard Dart described as the love child of Java and JavaScript. If you come from either of these environments you will find Dart easy to work with.
 
 {% hint style="info" %}
 **Dart is the love child of Java and JavaScript. In short, Dart is delightful.**
 {% endhint %}
 
-Dart provides elegant solutions for common problems and from a scripting perspective hits all of the high notes.
+Being easy to learn also helps with the maintenance cycle of you CLI apps. You no longer need a specialised developer, as anyone that has even a vague familiarity with Java, Javascript or C, ... will be right at home with Dart in a couple of days.
 
-DCli excels in all of the functionality that you expect from Bash and then takes you to the next level.
+Dart and DCli are easy to install; DCli makes it a breeze to create simple scripts and provides the tools to manage a script that started out as 100 lines but somehow grew to 10,000 lines.
 
-DCli is easy to install; makes it a breeze to create simple scripts and provides the tools to manage a script that started out as 100 lines but somehow grew to 10,000 lines.
-
-Dart has is also a large and growing eco-system of [third party libraries](https://pub.dev) that you can included in your script with no more than an import statement and a dependency declaration.
+Dart has is also a large and growing ecosystem of [third party libraries](https://pub.dev) that you can include in your CLI app with no more than an import statement and a dependency declaration.
 
 Dart is fast and if you need even more speed it can be compiled to a single file executable that is portable between binary compatible machines.
+
+```text
+# compile, install to the local PATH and run hello.dart
+$> dcli compile --install hello.dart
+$> hello
+name: brett
+Hello brett
+
+# copy to a remote machine (where dart is NOT installed)
+$> scp hello remote.domain.com:
+
+# login to remote machine and run the app hello
+$> ssh remote.domain.com
+./hello
+name: brett
+Hello brett
+```
 
 You can use your favourite editor to create DCli scripts. Vi or VIM work fine but Visual Code is recommended.
 
@@ -87,11 +105,5 @@ You can use your favourite editor to create DCli scripts. Vi or VIM work fine bu
 **Use Visual Code for the best development experience with Dart.**
 {% endhint %}
 
-DCli and Dart also make it harder to make some of the common mistakes that Bash invites.
-
-With Dart and DCli you have the option to use static typing. This is a bit of a controversial issues \(particularly if you are coming from JavaScript\), so DCli doesn't force you to type your scripts but I ALWAYS use types and you should too.
-
-For a long time I've wanted to build a replacement tool that has the elegance of a modern language, with the power of Bash.
-
-DCli is hopefully that.
+Visual Code with the dart-code extension provide a great development an debugging experience including the ability to develop and debug code on a remote server.
 
