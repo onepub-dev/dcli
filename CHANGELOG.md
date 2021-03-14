@@ -1,3 +1,6 @@
+# 0.51.3
+Updated template pubspec.yaml to have the correct args package. Updated the installer so that it replaces the templates when a new version of dcli is installed.
+
 # 0.51.2
 removed hard coded verbose:true statement
 
