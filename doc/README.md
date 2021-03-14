@@ -6,7 +6,7 @@ DCli is an API and tooling for building cross platform command line \(CLI\) appl
 Looking for DShell? You are in the right place. DShell has been renamed DCli.
 {% endhint %}
 
-DCli has just been featured on Jermaine Oppong package of the week vlog.
+DCli as featured on Jermaine Oppong package of the week vlog.
 
 {% embed url="https://youtu.be/z99IxxWmD1Q" %}
 
@@ -14,13 +14,46 @@ But I call it D-cli not d.c.l.i ;\)
 
 ## Overview
 
-DCli is intended to provide a replacement for bash and similar shell scripting languages with a Dart based scripting tool.
+DCli is intended to to allow you to create Command  Line \(CLI\) Applications from simple scripts to full blown CLI apps. 
 
-DCli aims to allow you to do everything you currently do with bash while using a modern language.
+DCli is a great replacement for CLI apps that would have traditionally been built with Bash, C, python, ruby, Go, Rust ....
+
+Whether its a 5 line Bash script or a 100,000 line production management system \(like we run internally\) DCli is the right place to start building your CLI infrastructure.
 
 ### So why DCli?
 
-Bash is probably the most commonly used scripting tool for system maintenance. Bash has been around for a long time and wasn't so much designed as evolved. The problem now is that its old, has an archaic syntax and doesn't scale well.
+DCli is based on Dart which is a modern programming language that has a set of features that makes building CLI apps easy and reliable.
+
+* Dart and DCli are simple to learn
+* Compiled or JIT 
+* Shebag support \(run .dart scripts directly from the cli ./hellow.dart\)
+* Small transportable execs \(from 10MB\), Dart VM is NOT required on target system.
+* Typesafe language catches errors at compile time
+* Sound null safety reduces null pointer exceptions
+* Fast
+* Great development environment using vs-code
+* Local and Remote development/debugging 
+
+### Example:
+
+```text
+#! /usr/bin/env dcli
+
+import 'dart:io';
+import 'package:dcli/dcli.dart';
+
+void main(List<String> args) {
+  var name = ask('name:', required: true, validator: Ask.alpha);
+  print('Hello $name');
+
+}
+```
+
+To run the above script called hello.dart:
+
+```text
+./hello.dart
+```
 
 ### So why is DCli different?
 
