@@ -1,3 +1,7 @@
+# 0.51.4
+Updated to latest readme content from gitbooks
+Improved the Env documentation.
+
 # 0.51.3
 Updated template pubspec.yaml to have the correct args package. Updated the installer so that it replaces the templates when a new version of dcli is installed.
 

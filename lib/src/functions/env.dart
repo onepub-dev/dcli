@@ -57,8 +57,7 @@ Map<String, String> get envs => Env()._envVars;
 /// ```
 /// NOTE: this does NOT affect the parent
 /// processes environment.
-/// 
-
+///
 
 /// Implementation class for the functions [env[]] and [env[]=].
 class Env extends DCliFunction {
