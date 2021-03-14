@@ -37,21 +37,28 @@ String get HOME => Env().HOME;
 Map<String, String> get envs => Env()._envVars;
 
 ///
-/// Sets an environment variable for the current process.
+/// Sets gets an environment variable for the current process.
 ///
 /// Passing a null value will remove the key from the
 /// set of environment variables.
 ///
-/// Any child processes spawned will inherit these changes.
+/// Any child process spawned will inherit these changes.
 /// e.g.
 /// ```
+///   /// Set the environment variable 'XXX' to 'A Value'
 ///   env['XXX'] = 'A Value';
+///
 ///   // the echo command will display the value off XXX.
 ///   '''echo $XXX'''.run;
+///
+///   /// Get the current value of an environment variable
+///   var xxx = env['XXX'];
 ///
 /// ```
 /// NOTE: this does NOT affect the parent
 /// processes environment.
+/// 
+
 
 /// Implementation class for the functions [env[]] and [env[]=].
 class Env extends DCliFunction {
@@ -194,7 +201,7 @@ class Env extends DCliFunction {
   }
 
   ///
-  /// Gets the path to the users home directory
+  /// Gets the path to the user's home directory
   /// using the enviornment var appropriate for the user's OS.
   //ignore: non_constant_identifier_names
   String get HOME {
