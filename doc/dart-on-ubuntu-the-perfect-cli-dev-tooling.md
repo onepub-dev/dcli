@@ -1,4 +1,4 @@
-# Dart on Linux - the perfect CLI dev tooling
+# Dart on Linux - the perfect CLI tooling
 
 If you haven't already heard, Google and Canonical have released a [joint statement ](https://medium.com/flutter/announcing-flutter-linux-alpha-with-canonical-19eb824590a9)announcing Linux as a first-class Flutter platform.
 
