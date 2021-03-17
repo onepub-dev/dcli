@@ -197,6 +197,7 @@ class NamedLock {
       isolateString = Service.getIsolateID(Isolate.current);
     } catch (_) {
       /// hack until google fixes nndb problem with getIsolateID
+      /// https://github.com/dart-lang/sdk/issues/45347
     }
     int? isolateId;
     if (isolateString != null) {
