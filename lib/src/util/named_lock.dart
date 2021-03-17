@@ -97,6 +97,7 @@ class NamedLock {
     void Function() fn, {
     String? waiting,
   }) {
+    var callingStackTrace = StackTraceImpl();
     var lockHeld = false;
     runZonedGuarded(() {
       try {
@@ -116,12 +117,12 @@ class NamedLock {
       }
     }, (Object e, StackTrace st) {
       if (lockHeld) _releaseLock();
-      final stackTrace = StackTraceImpl.fromStackTrace(st);
+      // final stackTrace = StackTraceImpl.fromStackTrace(st);
 
       if (e is DCliException) {
-        throw e.copyWith(stackTrace);
+        throw e.copyWith(callingStackTrace);
       } else {
-        throw DCliException.from(e, stackTrace);
+        throw DCliException.from(e, callingStackTrace);
       }
     });
   }
@@ -190,7 +191,13 @@ class NamedLock {
   }
 
   int get _isolateID {
-    var isolateString = Service.getIsolateID(Isolate.current);
+    String? isolateString;
+
+    try {
+      isolateString = Service.getIsolateID(Isolate.current);
+    } catch (_) {
+      /// hack until google fixes nndb problem with getIsolateID
+    }
     int? isolateId;
     if (isolateString != null) {
       isolateString = isolateString.replaceAll('/', '_');
@@ -257,7 +264,7 @@ class NamedLock {
         }
 
         if (taken) {
-          final isolateID = Service.getIsolateID(Isolate.current);
+          final isolateID = _isolateID;
           Settings()
               .verbose('Taking lock ${basename(_lockFilePath)} for $isolateID');
 
