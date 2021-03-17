@@ -1,3 +1,6 @@
+# 0.51.5
+Hack to get around getIsolateID nndb bug.
+
 # 0.51.4
 Updated to latest readme content from gitbooks
 Improved the Env documentation.
