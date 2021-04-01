@@ -21,7 +21,7 @@ dependencies:
   pub_semver: ^2.0.0
   pubspec2: ^1.0.0
   uuid: ^3.0.0
-  validators2: ^3.0.0
+  validators: ^3.0.0
   yaml: ^3.0.0
 dev_dependencies: 
   mockito: ^5.0.0-0

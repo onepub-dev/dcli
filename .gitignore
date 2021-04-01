@@ -52,3 +52,5 @@ bin/dcli_complete
 bin/dshell_upgrade
 test/sudo/test.txt
 test/sudo/test2.txt
+test/test_script/general/.project
+test/test_script/traditional_project/.project
