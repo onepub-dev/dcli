@@ -2,7 +2,7 @@ import 'package:equatable/equatable.dart';
 
 import 'package:pub_semver/pub_semver.dart';
 
-import 'package:pubspec2/pubspec2.dart';
+import 'package:pubspec/pubspec.dart';
 import '../../src/pubspec/dep_ref_extension.dart';
 
 /// Defines a pubspec.yaml dependency.

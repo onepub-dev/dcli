@@ -5,7 +5,7 @@ import 'package:dcli/src/util/wait_for_ex.dart';
 
 import 'package:pub_semver/pub_semver.dart';
 
-import 'package:pubspec2/pubspec2.dart' as pub;
+import 'package:pubspec/pubspec.dart' as pub;
 
 import '../../dcli.dart';
 import '../script/script.dart';
