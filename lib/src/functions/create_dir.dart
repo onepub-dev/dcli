@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'package:uuid/uuid.dart';
 import '../../dcli.dart';
 import '../settings.dart';
 import 'function.dart';
@@ -29,6 +30,9 @@ import 'function.dart';
 
 String createDir(String path, {bool recursive = false}) =>
     _CreateDir().createDir(path, recursive: recursive);
+
+String createTempDir() =>
+    _CreateDir().createDir('${Directory.systemTemp}/${Uuid().v4()}');
 
 class _CreateDir extends DCliFunction {
   String createDir(String path, {bool recursive}) {
