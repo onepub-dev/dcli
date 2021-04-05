@@ -13,15 +13,14 @@ import 'commands.dart';
 
 /// implementation for the compile command.
 class CompileCommand extends Command {
+  ///
+  CompileCommand() : super(_commandName);
   static const String _commandName = 'compile';
 
   final _compileFlags = [NoWarmupFlag(), InstallFlag(), OverWriteFlag()];
 
   /// holds the set of flags passed to the compile command.
   Flags flagSet = Flags();
-
-  ///
-  CompileCommand() : super(_commandName);
 
   @override
   int run(List<Flag> selectedFlags, List<String> subarguments) {
@@ -174,27 +173,24 @@ Stops the compile from running 'dcli warmup' before compiling.
 
 ///
 class InstallFlag extends Flag {
-  static const _flagName = 'install';
-
   ///
   InstallFlag() : super(_flagName);
+
+  static const _flagName = 'install';
 
   @override
   String get abbreviation => 'i';
 
   @override
-  String description() =>
-     'Installs the compiled script into your path '
-        '${Settings().pathToDCliBin}';
-
+  String description() => 'Installs the compiled script into your path '
+      '${Settings().pathToDCliBin}';
 }
 
 ///
 class OverWriteFlag extends Flag {
-  static const _flagName = 'overwrite';
-
   ///
   OverWriteFlag() : super(_flagName);
+  static const _flagName = 'overwrite';
 
   @override
   String get abbreviation => 'o';

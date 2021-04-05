@@ -4,9 +4,7 @@ import 'dart:collection';
 /// A classic Stack of items with a push and pop method.
 ///
 class StackList<T> {
-  final _stack = Queue<T>();
-
-  ///
+    ///
   StackList();
 
   ///
@@ -18,6 +16,9 @@ class StackList<T> {
       push(item);
     }
   }
+
+  final _stack = Queue<T>();
+
 
   ///
   bool get isEmpty => _stack.isEmpty;

@@ -1,17 +1,17 @@
 /// a circular buffer.
 class CircularBuffer<T> {
-  late List<T> _buf;
-  late int _start;
-  late int _end;
-  late int _count;
-  final int capacity;
-
   /// create a circulare buffer with the ability
   /// to store at most [capacity] items.
   CircularBuffer(this.capacity) {
     _buf = <T>[];
     reset();
   }
+
+  late List<T> _buf;
+  late int _start;
+  late int _end;
+  late int _count;
+  final int capacity;
 
   /// empty the buffer.
   void reset() {

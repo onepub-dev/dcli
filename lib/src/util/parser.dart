@@ -9,15 +9,15 @@ import 'package:yaml/yaml.dart';
 /// Provides parsers for a number of common file formats.
 ///
 class Parser {
-  final List<String?> _lines;
-
   /// Creates a Parser with a set of lines that will be interpreted
   /// as a selected file type.
   /// The parser may only be used once.
   Parser(this._lines);
 
+  final List<String?> _lines;
+
   ///
-  /// Interprets the read lines as JSON strings and builds 
+  /// Interprets the read lines as JSON strings and builds
   /// the corresponding objects.
   ///
   /// See: https://api.flutter.dev/flutter/dart-convert/JsonDecoder-class.html
@@ -30,7 +30,7 @@ class Parser {
   /// If the string contains more than one document, this throws a
   /// [YamlException]. In future releases, this will become an [ArgumentError].
   ///
-  /// The return value is mostly normal Dart objects. However, 
+  /// The return value is mostly normal Dart objects. However,
   /// since YAML mappings
   /// support some key types that the default Dart map implementation doesn't
   /// (NaN, lists, and maps), all maps in the returned document are [YamlMap]s.

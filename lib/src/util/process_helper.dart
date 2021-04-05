@@ -12,14 +12,12 @@ import 'runnable_process.dart';
 /// This class is likely to change/replaced.
 @visibleForTesting
 class ProcessHelper {
-  static final ProcessHelper _self = ProcessHelper._internal();
-
   ///
-  factory ProcessHelper() {
-    return _self;
-  }
+  factory ProcessHelper() => _self;
 
   ProcessHelper._internal();
+
+  static final ProcessHelper _self = ProcessHelper._internal();
 
   /// returns the name of the process for the given pid.
   String? getProcessName(int? pid) {

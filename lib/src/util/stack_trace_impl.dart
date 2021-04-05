@@ -9,15 +9,6 @@ import 'truepath.dart';
 
 /// Provides dart stack frame handling.
 class StackTraceImpl implements core.StackTrace {
-  static final _stackTraceRegex = RegExp(r'#[0-9]+[\s]+(.+) \(([^\s]+)\)');
-  final core.StackTrace _stackTrace;
-
-  /// The working directory of the project (if provided)
-  final String? _workingDirectory;
-  final int _skipFrames;
-
-  List<Stackframe>? _frames;
-
   /// You can suppress call frames from showing
   /// by specifing a non-zero value for [skipFrames]
   /// If the [workingDirectory] is provided we will output
@@ -36,6 +27,15 @@ class StackTraceImpl implements core.StackTrace {
       _frames = (_stackTrace as StackTraceImpl).frames;
     }
   }
+
+  static final _stackTraceRegex = RegExp(r'#[0-9]+[\s]+(.+) \(([^\s]+)\)');
+  final core.StackTrace _stackTrace;
+
+  /// The working directory of the project (if provided)
+  final String? _workingDirectory;
+  final int _skipFrames;
+
+  List<Stackframe>? _frames;
 
   ///
   /// Returns a File instance for the current stackframe
@@ -236,6 +236,9 @@ bool isExcludedSource(Stackframe frame) {
 ///
 class Stackframe {
   ///
+  Stackframe(this.sourceFile, this.lineNo, this.column, this.details);
+
+  ///
   final File sourceFile;
 
   ///
@@ -246,7 +249,4 @@ class Stackframe {
 
   ///
   final String? details;
-
-  ///
-  Stackframe(this.sourceFile, this.lineNo, this.column, this.details);
 }

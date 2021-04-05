@@ -13,10 +13,11 @@ import 'commands.dart';
 /// If required a virtual project is created
 /// and built.
 class RunCommand extends Command {
+    ///
+  RunCommand() : super(_commandName);
+
   static const String _commandName = 'run';
 
-  ///
-  RunCommand() : super(_commandName);
 
   ///
   ///

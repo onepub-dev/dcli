@@ -31,26 +31,6 @@ import 'wait_for_ex.dart';
 /// On linux a traditional file lock will not block isolates
 /// in the same process from locking the same file hence we need
 class NamedLock {
-  /// The raw socket (udp) port we use to implement
-  /// a hard lock. A port can only be opened once
-  /// so its the perfect way to create a lock that works
-  /// across processes and isolates.
-  final int port = 63424;
-  late String _lockPath;
-
-  /// The name of the lock.
-  final String name;
-  final String _description;
-
-  /// We use this to allow a lock to be-reentrant within an isolate.
-  /// A non-zero value means we have the lock.
-  /// We maintain a lock count per
-  /// lock suffix to allow each suffix lock to be re-entrant.
-  static final Map<String, int> _lockCounts = {};
-
-  /// The duration to wait for a lock before timing out.
-  final Duration _timeout;
-
   /// [lockPath] is the path of the directory used
   /// to store the lock file.
   /// If no lockPath is given then [Directory.systemTemp]/dcli/locks is used
@@ -86,6 +66,26 @@ class NamedLock {
     _lockPath =
         lockPath ?? join(rootPath, Directory.systemTemp.path, 'dcli', 'locks');
   }
+
+  /// The raw socket (udp) port we use to implement
+  /// a hard lock. A port can only be opened once
+  /// so its the perfect way to create a lock that works
+  /// across processes and isolates.
+  final int port = 63424;
+  late String _lockPath;
+
+  /// The name of the lock.
+  final String name;
+  final String _description;
+
+  /// We use this to allow a lock to be-reentrant within an isolate.
+  /// A non-zero value means we have the lock.
+  /// We maintain a lock count per
+  /// lock suffix to allow each suffix lock to be re-entrant.
+  static final Map<String, int> _lockCounts = {};
+
+  /// The duration to wait for a lock before timing out.
+  final Duration _timeout;
 
   /// creates a lock file and then calls [fn]
   /// once [fn] returns the lock is released.
@@ -390,10 +390,10 @@ void _log(String message) {
 }
 
 class _LockFileParts {
+  _LockFileParts(this.pid, this.isolateId);
+
   int pid;
   int isolateId;
-
-  _LockFileParts(this.pid, this.isolateId);
 }
 
 ///

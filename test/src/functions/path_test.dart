@@ -52,12 +52,6 @@ void main() {
 }
 
 class Paths {
-  String? home;
-  String? pathTestDir;
-  String? testExtension;
-  String? testBaseName;
-  String? testFile;
-
   Paths(TestFileSystem fs) {
     home = HOME;
     pathTestDir = join(fs.fsRoot, _testDir, 'pathTestDir');
@@ -65,6 +59,12 @@ class Paths {
     testBaseName = 'fred';
     testFile = '$testBaseName$testExtension';
   }
+
+  String? home;
+  String? pathTestDir;
+  String? testExtension;
+  String? testBaseName;
+  String? testFile;
 }
 
 Paths setup(TestFileSystem fs) {

@@ -14,10 +14,10 @@ import 'dart_sdk.dart';
 ///
 
 class PubGet {
-  final DartProject _project;
-
   ///
   PubGet(this._project);
+
+  final DartProject _project;
 
   /// Runs the pub get command against
   /// the project working dir.
@@ -47,11 +47,11 @@ class PubGet {
 /// results from running pub get.
 /// we parse lines of interest.
 class PubGetResult {
-  final List<Dependency> _added = <Dependency>[];
-  final List<Dependency> _removed = <Dependency>[];
-
   ///
   PubGetResult();
+
+  final List<Dependency> _added = <Dependency>[];
+  final List<Dependency> _removed = <Dependency>[];
 
   void _processLine(String line) {
     print(line);
@@ -80,9 +80,9 @@ class PubGetResult {
 ///
 
 class PubGetException {
-  /// the pub get exit code.
-  final int? exitCode;
-
   ///
   PubGetException(this.exitCode);
+
+  /// the pub get exit code.
+  final int? exitCode;
 }

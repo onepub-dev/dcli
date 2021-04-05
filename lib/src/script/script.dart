@@ -20,13 +20,6 @@ import 'dart_project.dart';
 ///
 ///
 class Script {
-  /// The directory where the script file lives
-  /// stored as an absolute path.
-  final String _scriptDirectory;
-
-  /// Name of the dart script
-  final String _scriptname;
-
   /// Creates a script object from a scriptArg
   /// passed to a command.
   ///
@@ -59,6 +52,13 @@ class Script {
       }
     }
   }
+
+  /// The directory where the script file lives
+  /// stored as an absolute path.
+  final String _scriptDirectory;
+
+  /// Name of the dart script
+  final String _scriptname;
 
   /// Path to the script loaded.
   String _pathToScript;
@@ -255,7 +255,7 @@ class Script {
   /// its local directory (the default action of compile).
   String get pathToExe => join(pathToScriptDirectory, exeName);
 
-  /// Returns the path that the script would be installed to if 
+  /// Returns the path that the script would be installed to if
   /// compiled with install = true.
   String get pathToInstalledExe => join(Settings().pathToDCliBin, exeName);
 }

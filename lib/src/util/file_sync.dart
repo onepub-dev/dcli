@@ -19,6 +19,12 @@ import 'wait_for_ex.dart';
 /// Note: the api to this class is considered EXPERIMENTAL
 /// and is subject to change.
 class FileSync {
+  ///
+  FileSync(String path, {FileMode fileMode = FileMode.writeOnlyAppend}) {
+    _file = File(path);
+    _open(fileMode);
+  }
+
   late File _file;
   late RandomAccessFile _raf;
 
@@ -38,12 +44,6 @@ class FileSync {
     }
     const uuid = Uuid();
     return '${join(Directory.systemTemp.path, uuid.v4())}$finalsuffix';
-  }
-
-  ///
-  FileSync(String path, {FileMode fileMode = FileMode.writeOnlyAppend}) {
-    _file = File(path);
-    _open(fileMode);
   }
 
   /// The path to this file.

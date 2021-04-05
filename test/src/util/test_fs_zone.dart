@@ -4,8 +4,6 @@ import 'package:file/memory.dart';
 import 'package:test/test.dart';
 
 class TestZone {
-  late MemoryFileSystem _fs;
-
   TestZone({
     FileSystemStyle style = FileSystemStyle.posix,
     MemoryFileSystem? fileSystem,
@@ -16,6 +14,8 @@ class TestZone {
       _fs = fileSystem;
     }
   }
+
+  late MemoryFileSystem _fs;
 
   void run<R>(R Function() body) {
     IOOverrides.runZoned(

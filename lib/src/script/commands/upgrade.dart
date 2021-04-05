@@ -8,10 +8,11 @@ import 'commands.dart';
 /// pub global active dcli
 /// and then preparing all projects.
 class UpgradeCommand extends Command {
-  static const String _commandName = 'upgrade';
 
   ///
   UpgradeCommand() : super(_commandName);
+  static const String _commandName = 'upgrade';
+
 
   /// The upgrade command takes no arguments.
   /// current directory are upgradeed.

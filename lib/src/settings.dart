@@ -14,6 +14,20 @@ import 'version/version.g.dart';
 /// flags passed on the command line to DCli.
 ///
 class Settings {
+  /// Returns a singleton providing
+  /// access to DCli settings.
+  factory Settings() => _self ??= Settings.init();
+
+  /// Used internally be dcli to initialise
+  /// the settings.
+  ///
+  /// DO NOT CALL THIS METHOD!!!
+  Settings.init({
+    this.appname = 'dcli',
+  }) {
+    version = packageVersion;
+  }
+
   static Settings? _self;
 
   /// The directory name of the DCli templates.
@@ -102,20 +116,6 @@ class Settings {
     }
   }
 
-  /// Returns a singleton providing
-  /// access to DCli settings.
-  factory Settings() => _self ??= Settings.init();
-
-  /// Used internally be dcli to initialise
-  /// the settings.
-  ///
-  /// DO NOT CALL THIS METHOD!!!
-  Settings.init({
-    this.appname = 'dcli',
-  }) {
-    version = packageVersion;
-  }
-
   /// we consider dcli installed if the ~/.dcli directory
   /// exists.
   bool get isInstalled => exists(installCompletedIndicator);
@@ -181,18 +181,16 @@ class Settings {
 /// control the behaviour of the package.
 ///
 class InternalSettings {
+  ///
+  factory InternalSettings() => _self;
+
+  InternalSettings._internal();
+
   static final InternalSettings _self = InternalSettings._internal();
 
   final _directoryStack = StackList<Directory>();
 
   bool get _isStackEmpty => _directoryStack.isEmpty;
-
-  ///
-  factory InternalSettings() {
-    return _self;
-  }
-
-  InternalSettings._internal();
 
   /// Internal methods used to maintain the directory stack
   /// DO NOT use this method directly instead use the [push] command.

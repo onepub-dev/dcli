@@ -7,10 +7,10 @@ import 'commands.dart';
 
 ///
 class HelpCommand extends Command {
-  static const String _commandName = 'help';
-
   ///
   HelpCommand() : super(_commandName);
+
+  static const String _commandName = 'help';
 
   @override
   int run(List<Flag> selectedFlags, List<String> subarguments) {

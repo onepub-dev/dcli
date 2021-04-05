@@ -8,13 +8,13 @@ import 'dart:io';
 ///     [Terminal]
 ///  ...
 class Ansi {
-  static const _self = Ansi._internal();
-  static bool? _emitAnsi;
-
   /// Factory ctor
   factory Ansi() => _self;
 
   const Ansi._internal();
+
+  static const _self = Ansi._internal();
+  static bool? _emitAnsi;
 
   /// returns true of the terminal supports ansi escape characters.
   static bool get isSupported => _emitAnsi ??= stdin.supportsAnsiEscapes;

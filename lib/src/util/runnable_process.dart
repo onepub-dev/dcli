@@ -29,20 +29,6 @@ void printerr(String? line) {
 
 ///
 class RunnableProcess {
-  late Future<Process> _fProcess;
-
-  /// The directory the process is running in.
-  final String? workingDirectory;
-
-  final ParsedCliCommand _parsed;
-
-  /// Used when the process is exiting to ensure that we wait
-  /// for stdout and stderr to be flushed.
-
-  Completer<void> stdoutFlushed = Completer<void>();
-  Completer<void> stderrFlushed = Completer<void>();
-  late Future<List<void>> streamsFlushed;
-
   RunnableProcess._internal(this._parsed, this.workingDirectory) {
     streamsFlushed =
         Future.wait<void>([stdoutFlushed.future, stderrFlushed.future]);
@@ -67,6 +53,20 @@ class RunnableProcess {
       : this._internal(
             ParsedCliCommand.fromParsed(command, args, workingDirectory),
             workingDirectory);
+
+  late Future<Process> _fProcess;
+
+  /// The directory the process is running in.
+  final String? workingDirectory;
+
+  final ParsedCliCommand _parsed;
+
+  /// Used when the process is exiting to ensure that we wait
+  /// for stdout and stderr to be flushed.
+
+  Completer<void> stdoutFlushed = Completer<void>();
+  Completer<void> stderrFlushed = Completer<void>();
+  late Future<List<void>> streamsFlushed;
 
   /// returns the original command line that started this process.
   String get cmdLine => '${_parsed.cmd} ${_parsed.args.join(' ')}';
@@ -453,15 +453,6 @@ class RunnableProcess {
 
 ///
 class RunException extends DCliException {
-  /// The command line that was being run.
-  String cmdLine;
-
-  /// the exit code of the command.
-  int? exitCode;
-
-  /// the error.
-  String reason;
-
   ///
   RunException(this.cmdLine, this.exitCode, this.reason,
       {StackTraceImpl? stackTrace})
@@ -478,6 +469,15 @@ class RunException extends DCliException {
   RunException copyWith(StackTraceImpl stackTrace) {
     return RunException(cmdLine, exitCode, reason, stackTrace: stackTrace);
   }
+
+  /// The command line that was being run.
+  String cmdLine;
+
+  /// the exit code of the command.
+  int? exitCode;
+
+  /// the error.
+  String reason;
 
   @override
   String get message {

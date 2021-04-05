@@ -29,12 +29,12 @@ enum TerminalClearMode {
 
 /// Provides access to the Ansi Terminal.
 class Terminal {
-  static final _self = Terminal._internal();
-
   /// Factory ctor to get a Termainl
   factory Terminal() => _self;
 
   Terminal._internal();
+
+  static final _self = Terminal._internal();
 
   /// Returns true if ansi escape characters are supported.
   bool get isAnsi => Ansi.isSupported;

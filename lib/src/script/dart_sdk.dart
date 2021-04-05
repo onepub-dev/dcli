@@ -12,6 +12,10 @@ import 'commands/install.dart';
 /// The [DartSdk] provides access to a number of the dart sdk tools
 /// as well as details on the active sdk instance.
 class DartSdk {
+  ///
+  factory DartSdk() => _self ??= DartSdk._internal();
+
+  DartSdk._internal();
   static DartSdk? _self;
 
   /// Path of Dart SDK
@@ -21,11 +25,6 @@ class DartSdk {
   late final String? _exePath = which(dartExeName).path;
 
   String? _version;
-
-  ///
-  factory DartSdk() => _self ??= DartSdk._internal();
-
-  DartSdk._internal();
 
   /// The path to the dart 'bin' directory.
   String get pathToSdk => _sdkPath ??= _detect();
@@ -116,7 +115,7 @@ class DartSdk {
       }
 
       /// use old dart2native
-      runArgs.add(script.pathToScript)..add('--output=$pathToExe');
+      runArgs..add(script.pathToScript)..add('--output=$pathToExe');
 
       process = RunnableProcess.fromCommandArgs(pathToDartToNativeExe!, runArgs,
           workingDirectory: script.pathToScriptDirectory);

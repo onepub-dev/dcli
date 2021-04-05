@@ -61,16 +61,8 @@ Map<String, String> get envs => Env()._envVars;
 
 /// Implementation class for the functions [env[]] and [env[]=].
 class Env extends DCliFunction {
-  static Env _self = Env._internal();
-
-  late Map<String, String> _envVars;
-
-  final bool _caseSensitive;
-
   /// Implementation class for the functions [env[]] and [env[]=].
-  factory Env() {
-    return _self;
-  }
+  factory Env() => _self;
 
   Env._internal() : _caseSensitive = !Settings().isWindows {
     final platformVars = Platform.environment;
@@ -83,6 +75,12 @@ class Env extends DCliFunction {
       _envVars.putIfAbsent(entry.key, () => entry.value);
     }
   }
+
+  static Env _self = Env._internal();
+
+  late Map<String, String> _envVars;
+
+  final bool _caseSensitive;
 
   /// conveience method for unit tests.
   /// resets all environment variables to the state
@@ -176,8 +174,7 @@ class Env extends DCliFunction {
   /// Changing the path affects the current script
   /// and any children that it spawns.
   void removeFromPATH(String oldPath) {
-    final path = PATH
-    ..remove(oldPath);
+    final path = PATH..remove(oldPath);
     _setEnv('PATH', path.join(delimiterForPATH));
   }
 

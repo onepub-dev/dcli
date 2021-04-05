@@ -18,38 +18,6 @@ import 'package:uuid/uuid.dart';
 import 'package:dcli/src/util/pub_cache.dart';
 
 class TestFileSystem {
-  late String uniquePath;
-  late String top;
-  late String thidden;
-  late String middle;
-  late String bottom;
-  late String hidden;
-
-  static late String _testRoot;
-
-  /// directory under .dcli which we used to store compiled
-  /// tests scripts that we need to add to the TestFileSystems
-  /// path.
-  static const String _testBin = 'test_bin';
-  static const String testLinesFile = 'lines.txt';
-
-  String? home;
-
-  String get fsRoot => join(TestFileSystem._testRoot, uniquePath);
-
-  bool initialised = false;
-
-  bool? installDcli;
-
-  /// The location of any temp scripts
-  /// that need to be created during testing.
-  late String tmpScriptPath;
-
-  /// The location of the test_script directory
-  late String testScriptPath;
-
-  static TestFileSystem? common;
-
   /// The TestFileSystem allows you to run
   /// unit tests in a 'virtualised' filesystem.
   ///
@@ -105,6 +73,38 @@ class TestFileSystem {
     tmpScriptPath = truepath(fsRoot, 'scripts');
     testScriptPath = truepath(fsRoot, 'test_script');
   }
+
+  late String uniquePath;
+  late String top;
+  late String thidden;
+  late String middle;
+  late String bottom;
+  late String hidden;
+
+  static late String _testRoot;
+
+  /// directory under .dcli which we used to store compiled
+  /// tests scripts that we need to add to the TestFileSystems
+  /// path.
+  static const String _testBin = 'test_bin';
+  static const String testLinesFile = 'lines.txt';
+
+  String? home;
+
+  String get fsRoot => join(TestFileSystem._testRoot, uniquePath);
+
+  bool initialised = false;
+
+  bool? installDcli;
+
+  /// The location of any temp scripts
+  /// that need to be created during testing.
+  late String tmpScriptPath;
+
+  /// The location of the test_script directory
+  late String testScriptPath;
+
+  static TestFileSystem? common;
 
   String tempFile({String? suffix}) => FileSync.tempFile(suffix: suffix);
 

@@ -17,6 +17,8 @@ import 'commands.dart';
 
 ///
 class InstallCommand extends Command {
+  /// ctor.
+  InstallCommand() : super(_commandName);
   static const _commandName = 'install';
 
   final _installFlags = const [
@@ -37,9 +39,6 @@ class InstallCommand extends Command {
   bool _installDart = false;
 
   bool _requirePrivileges = false;
-
-  /// ctor.
-  InstallCommand() : super(_commandName);
 
   @override
   int run(List<Flag> selectedFlags, List<String> subarguments) {
@@ -273,25 +272,22 @@ class InstallCommand extends Command {
 }
 
 class _NoDartFlag extends Flag {
-  static const _flagName = 'nodart';
-
   const _NoDartFlag() : super(_flagName);
+
+  static const _flagName = 'nodart';
 
   @override
   String get abbreviation => 'nd';
 
   @override
-  String description() {
-    return '''
+  String description() => '''
 Stops the install from installing dart as part of the install.
       This option is for testing purposes.''';
-  }
 }
 
 class _QuietFlag extends Flag {
-  static const _flagName = 'quiet';
-
   const _QuietFlag() : super(_flagName);
+  static const _flagName = 'quiet';
 
   @override
   String get abbreviation => 'q';
@@ -303,9 +299,10 @@ class _QuietFlag extends Flag {
 }
 
 class _NoPrivilegesFlag extends Flag {
+    const _NoPrivilegesFlag() : super(_flagName);
   static const _flagName = 'noprivileges';
 
-  const _NoPrivilegesFlag() : super(_flagName);
+
 
   @override
   String get abbreviation => 'np';

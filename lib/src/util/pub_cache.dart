@@ -8,19 +8,6 @@ import '../../dcli.dart';
 /// https://dart.dev/tools/pub/environment-variables
 ///
 class PubCache {
-  static PubCache? _self;
-
-  /// The name of the pub cache directory (e.g. .pub-cache)
-  late String _pubCacheDir;
-
-  late String _pubCacheBinPath;
-
-  /// The name of the environment variable that can be
-  /// set to change the location of the .pub-cache directory.
-  /// You should change this path by calling [pathTo].
-  static const String envVarPubCache = 'PUB_CACHE';
-  late String _pubCachePath;
-
   ///
   factory PubCache() => _self ??= PubCache._internal();
 
@@ -66,6 +53,19 @@ class PubCache {
     // determine pub-cache/bin
     _pubCacheBinPath = truepath(join(_pubCachePath, 'bin'));
   }
+
+  /// The name of the environment variable that can be
+  /// set to change the location of the .pub-cache directory.
+  /// You should change this path by calling [pathTo].
+  static const String envVarPubCache = 'PUB_CACHE';
+  late String _pubCachePath;
+
+  static PubCache? _self;
+
+  /// The name of the pub cache directory (e.g. .pub-cache)
+  late String _pubCacheDir;
+
+  late String _pubCacheBinPath;
 
   /// The fully qualified path to the pub cache.
   ///

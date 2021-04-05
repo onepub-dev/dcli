@@ -286,6 +286,19 @@ String grey(
 ///     [orange]
 ///  ...
 class AnsiColor {
+  ///
+  const AnsiColor(
+    int code, {
+    bool bold = true,
+  })  : _code = code,
+        _bold = bold;
+
+  AnsiColor._grey({
+    double level = 0.5,
+    bool bold = true,
+  })  : _code = codeGrey + (level.clamp(0.0, 1.0) * 23).round(),
+        _bold = bold;
+
   /// resets the color scheme.
   static String reset() => _emit(_resetCode);
 
@@ -298,13 +311,6 @@ class AnsiColor {
   final int _code;
 
   final bool _bold;
-
-  ///
-  const AnsiColor(
-    int code, {
-    bool bold = true,
-  })  : _code = code,
-        _bold = bold;
 
   //
   static String _emit(String ansicode) {
@@ -409,11 +415,6 @@ class AnsiColor {
   static const AnsiColor cyan = AnsiColor(codeCyan);
   static const AnsiColor white = AnsiColor(codeWhite);
   static const AnsiColor orange = AnsiColor(codeOrange);
-  AnsiColor._grey({
-    double level = 0.5,
-    bool bold = true,
-  })  : _code = codeGrey + (level.clamp(0.0, 1.0) * 23).round(),
-        _bold = bold;
 
   /// passing this as the background color will cause
   /// the background code to be suppressed resulting

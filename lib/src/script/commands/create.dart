@@ -10,6 +10,8 @@ import 'commands.dart';
 
 /// implementation of the 'create' command
 class CreateCommand extends Command {
+  ///
+  CreateCommand() : super(_commandName);
   static const String _commandName = 'create';
 
   final _createFlags = [ForegroundFlag()];
@@ -18,9 +20,6 @@ class CreateCommand extends Command {
   Flags flagSet = Flags();
 
   late Script _script;
-
-  ///
-  CreateCommand() : super(_commandName);
 
   @override
   int run(List<Flag> selectedFlags, List<String> subarguments) {
@@ -121,10 +120,10 @@ class CreateCommand extends Command {
 
 ///
 class ForegroundFlag extends Flag {
-  static const _flagName = 'foreground';
-
   ///
   ForegroundFlag() : super(_flagName);
+
+  static const _flagName = 'foreground';
 
   @override
   String get abbreviation => 'fg';

@@ -10,8 +10,9 @@ import 'package:dcli/dcli.dart';
 /// GENERATED - GENERATED
 
 class TemplateExpander {
-  String targetPath;
   TemplateExpander(this.targetPath);
+
+  String targetPath;
 
   // ignore: non_constant_identifier_names
   void basic() {

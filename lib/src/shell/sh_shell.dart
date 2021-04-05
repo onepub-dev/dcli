@@ -5,12 +5,13 @@ import 'shell_mixin.dart';
 /// when dcli needs to interact with the Bash shell.
 
 class ShShell with ShellMixin, PosixShell {
+  ShShell.withPid(this.pid);
+
   /// Name of the shell
   static const String shellName = 'sh';
 
   @override
   final int? pid;
-  ShShell.withPid(this.pid);
 
   @override
   bool get isCompletionSupported => false;

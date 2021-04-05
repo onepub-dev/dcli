@@ -12,14 +12,14 @@ import 'commands/help.dart';
 
 /// the 'main' for running commands.
 class EntryPoint {
-  static EntryPoint? _self;
-
   ///
   factory EntryPoint() => _self ??= EntryPoint._internal();
 
   EntryPoint._internal() {
     _self = this;
   }
+
+  static EntryPoint? _self;
 
   ///
   static void init() {

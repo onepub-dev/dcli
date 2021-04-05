@@ -24,7 +24,7 @@ import 'package:test/test.dart';
 /// active .pub-cache.
 ///
 ///
-/// The result is that dcli is neither available in .pub-cache 
+/// The result is that dcli is neither available in .pub-cache
 /// nor installed into
 /// .dcli.
 ///
@@ -43,17 +43,6 @@ import 'package:test/test.dart';
 ///
 
 class TestPaths {
-  static final TestPaths _self = TestPaths._internal();
-
-  static late String testRoot;
-
-  String? home;
-  //String scriptDir;
-  String? testScriptPath;
-  String? scriptName;
-  //String projectPath;
-  String? testRootForPid;
-
   factory TestPaths() {
     return _self;
   }
@@ -117,6 +106,17 @@ Something went wrong, the dcli path or HOME for unit tests is NOT pointing to /t
 
     installDCli();
   }
+
+  static final TestPaths _self = TestPaths._internal();
+
+  static late String testRoot;
+
+  String? home;
+  //String scriptDir;
+  String? testScriptPath;
+  String? scriptName;
+  //String projectPath;
+  String? testRootForPid;
 
   void recreateDir(String path) {
     // if (exists(path)) {

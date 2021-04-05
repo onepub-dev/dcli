@@ -25,15 +25,15 @@ import '../../dcli.dart';
 /// Unlike flutter you don't need to create any entries in your pubspec.yaml.
 ///
 class Assets {
-  static final _self = Assets._internal();
-
+  ///
   factory Assets() => _self;
-
-  String? _packageName;
 
   Assets._internal() {
     _packageName = Script.current.pubSpec.name;
   }
+  static final _self = Assets._internal();
+
+  String? _packageName;
 
   /// Loads an asset as a string.
   ///
@@ -48,7 +48,7 @@ class Assets {
       File(_resolveAssetPath(path)).readAsStringSync();
 
   /// returns a list of assets located under the given [root] directory.
-  /// The [root] directory must be relative to the parent of 
+  /// The [root] directory must be relative to the parent of
   /// the 'asset' directory.
   ///
   /// .e.g.
@@ -69,7 +69,7 @@ class Assets {
   /// The [pattern] is a wildcard (glob) that controls what files are returned.
   /// The [root] is the directory to start searching from. It MUST start with assets/.
   /// If it doesn't start with assets/ an ArgumentError will be thrown.
-  /// Specify [recursive] = true if you want the list command to 
+  /// Specify [recursive] = true if you want the list command to
   /// recursively search all
   /// directories under [root].
   ///

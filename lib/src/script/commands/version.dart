@@ -13,10 +13,11 @@ import 'commands.dart';
 
 ///
 class VersionCommand extends Command {
+    ///
+  VersionCommand() : super(_commandName);
+
   static const String _commandName = 'version';
 
-  ///
-  VersionCommand() : super(_commandName);
 
   @override
   int run(List<Flag> selectedFlags, List<String> subarguments) {

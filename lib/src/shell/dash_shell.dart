@@ -9,12 +9,13 @@ import 'shell_mixin.dart';
 /// when dcli needs to interact with the Bash shell.
 
 class DashShell with ShellMixin, PosixShell {
+  DashShell.withPid(this.pid);
+
   /// Name of the shell
   static const String shellName = 'dash';
 
   @override
   final int? pid;
-  DashShell.withPid(this.pid);
 
   @override
   bool get isCompletionSupported => false;

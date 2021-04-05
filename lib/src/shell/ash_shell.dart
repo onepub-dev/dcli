@@ -9,9 +9,10 @@ import 'shell_mixin.dart';
 /// when dcli needs to interact with the Bash shell.
 
 class AshShell with ShellMixin, PosixShell {
+  AshShell.withPid(this.pid);
+
   @override
   final int? pid;
-  AshShell.withPid(this.pid);
 
   /// Name of the shell
   static const String shellName = 'ash';

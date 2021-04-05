@@ -61,10 +61,9 @@ class Flags {
 
 /// base class for command line flags (--name, -v ...)
 abstract class Flag {
-  final String _name;
-
   ///
   const Flag(this._name);
+  final String _name;
 
   /// name of the flag
   String get name => _name;
@@ -115,6 +114,12 @@ abstract class Flag {
 
 ///
 class VerboseFlag extends Flag {
+  ///
+  factory VerboseFlag() => _self;
+
+  ///
+  VerboseFlag._internal() : super(_flagName);
+
   static const _flagName = 'verbose';
   static final _self = VerboseFlag._internal();
 
@@ -125,13 +130,6 @@ class VerboseFlag extends Flag {
 
   /// true if the flag has an option.
   bool get hasOption => _option != null;
-
-  ///
-  factory VerboseFlag() {
-    return _self;
-  }
-
-  VerboseFlag._internal() : super(_flagName);
 
   @override
   bool get isOptionSupported => true;
@@ -167,8 +165,8 @@ If passed, turns on verbose logging to the console.
 /// throw if we found an invalid flag.
 class InvalidFlagOption implements Exception {
   ///
-  String message;
+  InvalidFlagOption(this.message);
 
   ///
-  InvalidFlagOption(this.message);
+  String message;
 }

@@ -30,6 +30,11 @@ import 'zsh_shell.dart';
 ///
 /// This class is considered EXPERIMENTAL and is likely to change.
 class ShellDetection {
+  /// obtain a singleton instance of Shell.
+  factory ShellDetection() => _shell;
+
+  ShellDetection._internal();
+  
   static final ShellDetection _shell = ShellDetection._internal();
 
   final _shells = <String, Shell Function(int? pid)>{
@@ -42,11 +47,6 @@ class ShellDetection {
     ZshShell.shellName: (pid) => ZshShell.withPid(pid),
     FishShell.shellName: (pid) => FishShell.withPid(pid),
   };
-
-  /// obtain a singleton instance of Shell.
-  factory ShellDetection() => _shell;
-
-  ShellDetection._internal();
 
   /// Attempts to identify the shell that
   /// DCli was run under.

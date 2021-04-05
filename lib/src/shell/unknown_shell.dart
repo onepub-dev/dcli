@@ -12,6 +12,10 @@ import 'shell_mixin.dart';
 /// This may simply be the parent process of the
 /// dart app so not a shell at all.
 class UnknownShell with ShellMixin {
+  UnknownShell.withPid(this.pid, {this.processName});
+
+  final String? processName;
+
   /// Name of the shell
   static const String shellName = 'Unknown';
 
@@ -19,9 +23,6 @@ class UnknownShell with ShellMixin {
   final int? pid;
 
   /// the name of the process
-  final String? processName;
-
-  UnknownShell.withPid(this.pid, {this.processName});
 
   @override
   bool addToPATH(String path) {

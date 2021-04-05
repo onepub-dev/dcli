@@ -4,9 +4,6 @@ import 'runnable_process.dart';
 
 /// used to pipe date from one proces to another.
 class Pipe {
-  final RunnableProcess _lhs;
-  final RunnableProcess _rhs;
-
   ///
   Pipe(this._lhs, this._rhs) {
     _lhs.pipeTo(_rhs);
@@ -18,6 +15,9 @@ class Pipe {
     pNext.start(waitForStart: false);
     return Pipe(_rhs, pNext);
   }
+
+  final RunnableProcess _lhs;
+  final RunnableProcess _rhs;
 
   ///
   void forEach(LineAction stdout, {LineAction stderr = _noOpAction}) {

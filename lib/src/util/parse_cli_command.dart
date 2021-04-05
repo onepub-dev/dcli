@@ -9,12 +9,6 @@ import '../script/command_line_runner.dart';
 /// into the dart Process.start method as a application name and a series
 /// of arguments.
 class ParsedCliCommand {
-  /// The commdand that we parsed from the command line
-  late String cmd;
-
-  /// The args that we parsed from the command line
-  List<String> args = <String>[];
-
   ///
   ParsedCliCommand(String command, String? workingDirectory) {
     workingDirectory ??= pwd;
@@ -39,6 +33,12 @@ class ParsedCliCommand {
     final qargs = _QArg.translate(rawArgs);
     args = expandGlobs(qargs, workingDirectory);
   }
+
+  /// The commdand that we parsed from the command line
+  late String cmd;
+
+  /// The args that we parsed from the command line
+  List<String> args = <String>[];
 
   /// parses the given command breaking them done into words
   List<_QArg> _parse(String commandLine) {
@@ -84,7 +84,7 @@ class ParsedCliCommand {
           break;
 
         case _ParseState.inWord:
-          // added ignore as lint has a bug for conditional in a 
+          // added ignore as lint has a bug for conditional in a
           // switch statement #27
           // ignore: invariant_booleans
           if (char == ' ') // && !escapeNext)
@@ -102,7 +102,7 @@ class ParsedCliCommand {
             matchingQuote = char;
             break;
             //             throw InvalidArguments(
-            //                 '''A command argument may not have a 
+            //                 '''A command argument may not have a
             // quote in the middle of a word.
             // Command: $command
             // ${' '.padRight(9 + i)}^''');
@@ -169,9 +169,6 @@ class ParsedCliCommand {
 enum _ParseState { starting, inQuote, inWord }
 
 class _QArg {
-  bool? wasQuoted;
-  late String arg;
-
   _QArg(String iarg) {
     wasQuoted = false;
     arg = iarg.trim();
@@ -189,6 +186,9 @@ class _QArg {
   }
 
   _QArg.fromParsed(this.arg, {required this.wasQuoted});
+
+  bool? wasQuoted;
+  late String arg;
 
   /// We only do glob expansion if the arg contains at least one of
   /// *, [, ?

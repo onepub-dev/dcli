@@ -7,15 +7,10 @@ import '../pubspec/dependency.dart';
 /// wrapper for the YamlDocument
 /// designed to make it easier to read yaml files.
 class MyYaml {
-  late y.YamlDocument _document;
-
   /// read yaml from string
   MyYaml.fromString(String content) {
     _document = _load(content);
   }
-
-  /// returns the raw content of the yaml file.
-  String get content => _document.toString();
 
   /// reads yaml from file.
   MyYaml.fromFile(String path) {
@@ -23,9 +18,12 @@ class MyYaml {
     _document = _load(contents);
   }
 
-  y.YamlDocument _load(String content) {
-    return y.loadYamlDocument(content);
-  }
+  y.YamlDocument _load(String content) => y.loadYamlDocument(content);
+
+  late y.YamlDocument _document;
+
+  /// returns the raw content of the yaml file.
+  String get content => _document.toString();
 
   /// reads the project name from the yaml file
   ///

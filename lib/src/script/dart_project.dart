@@ -11,9 +11,6 @@ import 'pub_get.dart';
 /// of a pubspec.yaml, dart files ....
 
 class DartProject {
-  late String _pathToProjectRoot;
-  String? _pathToPubSpec;
-
   /// Load a dart project from the given directory.
   /// We search up the tree starting from [pathToSearchFrom]
   /// until we find a pubspec.yaml and that becomes the
@@ -26,6 +23,8 @@ class DartProject {
     }
     _pathToProjectRoot = truepath(_pathToProjectRoot);
   }
+  late String _pathToProjectRoot;
+  String? _pathToPubSpec;
 
   static DartProject? _current;
 

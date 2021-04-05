@@ -5,12 +5,13 @@ import 'shell_mixin.dart';
 /// Provides a number of helper functions
 /// when dcli needs to interact with the Zsh shell.
 class FishShell with ShellMixin, PosixShell {
+  FishShell.withPid(this.pid);
+
   /// Name of the shell
   static const String shellName = 'fish';
 
   @override
   final int? pid;
-  FishShell.withPid(this.pid);
 
   @override
   String get name => shellName;

@@ -11,30 +11,6 @@ import 'wait_for_ex.dart';
 /// central class that provides progress information about a running
 /// process.
 class Progress {
-  bool _closed = false;
-
-  /// The exist code of the completed process.
-  int? exitCode;
-
-  /// TODO: setting [includeStderr] or [includeStdout]
-  /// to false stop methods like [toList] from working.
-  /// I've not quite got my head around why so for the minute
-  /// we only set this settings to false when using [Progress.stream].
-
-  /// If true then lines written to stderr will
-  /// be included in the stream.
-  final bool includeStderr;
-
-  /// If true then lines written to stdout will
-  /// be included in the stream.
-  final bool includeStdout;
-
-  final _stdoutCompleter = Completer<bool>();
-  final _stderrCompleter = Completer<bool>();
-
-  final _stdoutController = StreamController<String>();
-  final _stderrController = StreamController<String>();
-
   ///
   Progress(LineAction stdout, {LineAction stderr = devNull})
       : includeStdout = true,
@@ -103,9 +79,33 @@ class Progress {
   ///````
   ///
   Progress.stream({this.includeStdout = true, this.includeStderr = true}) {
-    /// we don't wire the stream but rather allow the user to 
+    /// we don't wire the stream but rather allow the user to
     /// obtain the stream directly
   }
+
+  bool _closed = false;
+
+  /// The exist code of the completed process.
+  int? exitCode;
+
+  /// TODO: setting [includeStderr] or [includeStdout]
+  /// to false stop methods like [toList] from working.
+  /// I've not quite got my head around why so for the minute
+  /// we only set this settings to false when using [Progress.stream].
+
+  /// If true then lines written to stderr will
+  /// be included in the stream.
+  final bool includeStderr;
+
+  /// If true then lines written to stdout will
+  /// be included in the stream.
+  final bool includeStdout;
+
+  final _stdoutCompleter = Completer<bool>();
+  final _stderrCompleter = Completer<bool>();
+
+  final _stdoutController = StreamController<String>();
+  final _stderrController = StreamController<String>();
 
   /// Returns a combined stream including stdout and stderr.
   /// You control whether stderr and/or stdout are inserted into the stream when you call

@@ -4,12 +4,13 @@ import 'windows_mixin.dart';
 
 /// Windows Power Shell
 class CmdShell with WindowsMixin, ShellMixin {
+  CmdShell.withPid(this.pid);
+
   /// Name of the shell
   static const String shellName = 'cmd.exe';
 
   @override
   final int? pid;
-  CmdShell.withPid(this.pid);
 
   @override
   bool addToPATH(String path) {
