@@ -160,7 +160,7 @@ class RunnableProcess {
         if (terminal == false) {
           processUntilExit(progress, nothrow: nothrow);
         } else {
-          _waitForExit();
+          _waitForExit(progress);
         }
       }
     } finally {
@@ -271,10 +271,11 @@ class RunnableProcess {
   /// The main use is when using start(terminal:true).
   /// We don't have access to any IO so we just
   /// have to wait for things to finish.
-  int? _waitForExit() {
+  int? _waitForExit(Progress progress) {
     final exited = Completer<int>();
     _fProcess.then((process) {
       final exitCode = waitForEx<int>(process.exitCode);
+      progress.exitCode = exitCode;
 
       if (exitCode != 0) {
         exited.completeError(RunException.withArgs(
