@@ -1,15 +1,23 @@
 # 0.51.6
+Added code to return the exit code even when running a process in a terminal. This is to resolve #100. However I'm not certain if the exit code will be meaningful as it might just be the terminals exit code.
+Updated release notes.
+formatting
 tweaked the template expander to remove any lint warnings. Updated the expander so that it updates the dcli and package versions.
 Remove the lock logic around creating as testfile system as its no longer needed and greatly  slows down testing.
 Change default shell detection expected as mostly we run it from the cli.
 Increased the timeout for the test filesystem as it can take some minutes to create.
 moved to only support 2.12 and not the beta.
+Added logic so that the template builder updates the dcli and dependency versions to match the current versions used by dcli.
+cleanup of remaining lints.
+lint: fixed cascades.
+lint: relative imports.
+lint; converted short methods to expression bodies.
+sorted constructors for lint.
+Migrated to full set of lint rules in lint package. First pass revert to 80chars.
 moved back to using pubspec now that nnbd version has been released.
 moved to official validators library.
+Added in issue id.
 
-Includes new method createTempDir submitted by @Reductions
-
-Improved performance of unit tests by removing unnecessary named lock around test files system.
 
 
 # 0.51.5
