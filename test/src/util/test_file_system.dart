@@ -117,10 +117,12 @@ class TestFileSystem {
 
     try {
       /// it takes a while to setup the first test file system hence
-      /// 90 second timeout.
+      /// 600 second timeout.
       NamedLock(
               name: 'test_file_system.lock',
-              timeout: const Duration(seconds: 90))
+
+              /// setup of the first tests can take a while
+              timeout: const Duration(seconds: 600))
           .withLock(() {
         final frame = stack.frames[0];
 
@@ -394,7 +396,7 @@ class TestFileSystem {
       } else {
         /// compile and install the command
         Script.fromFile('test/test_script/general/bin/$command.dart')
-          .compile(install: true);
+            .compile(install: true);
 
         // copy it back to the dcli testbin so the next unit
         // test doesn't have to compile it.
