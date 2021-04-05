@@ -1,8 +1,7 @@
 import 'dart:io';
 
-import 'package:dcli/src/util/truepath.dart';
-
 import '../settings.dart';
+import '../util/truepath.dart';
 import 'ask.dart' as a;
 import 'dcli_function.dart';
 import 'is.dart';

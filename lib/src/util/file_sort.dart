@@ -2,8 +2,7 @@ import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
 
-import 'package:dcli/dcli.dart';
-
+import '../../dcli.dart';
 import '../../dcli.dart' as d;
 import '../script/command_line_runner.dart';
 import 'file_sync.dart';

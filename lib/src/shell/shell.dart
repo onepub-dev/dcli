@@ -1,6 +1,7 @@
-import 'package:dcli/dcli.dart';
-import 'package:dcli/src/shell/shell_detection.dart';
 import 'package:meta/meta.dart';
+
+import '../../dcli.dart';
+import 'shell_detection.dart';
 
 /// an abstract class which allows each shell (bash, zsh)
 /// to provide specific implementation of features

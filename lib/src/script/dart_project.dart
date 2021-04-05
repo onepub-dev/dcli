@@ -1,10 +1,10 @@
 import 'dart:io';
 
-import 'package:dcli/src/functions/find.dart';
-import 'package:dcli/src/pubspec/pubspec.dart';
 import 'package:path/path.dart';
 
 import '../../dcli.dart';
+import '../functions/find.dart';
+import '../pubspec/pubspec.dart';
 import 'pub_get.dart';
 
 /// Encapsulates the idea of a dart project which is made up

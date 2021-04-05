@@ -1,16 +1,16 @@
 import 'dart:io';
 
-import 'package:dcli/src/templates/expander.dart';
-import 'package:dcli/src/version/version.g.dart';
 import 'package:meta/meta.dart';
 
 import '../../../dcli.dart';
 import '../../functions/env.dart';
 import '../../settings.dart';
 import '../../shell/shell.dart';
+import '../../templates/expander.dart';
 import '../../util/ansi_color.dart';
 import '../../util/dcli_paths.dart';
 import '../../util/pub_cache.dart';
+import '../../version/version.g.dart';
 import '../command_line_runner.dart';
 import '../flags.dart';
 import 'commands.dart';
@@ -289,14 +289,13 @@ class _QuietFlag extends Flag {
   String get abbreviation => 'q';
 
   @override
-  String description() => '''Runs the install in quiet mode. Only errors are displayed''';
+  String description() =>
+      '''Runs the install in quiet mode. Only errors are displayed''';
 }
 
 class _NoPrivilegesFlag extends Flag {
-    const _NoPrivilegesFlag() : super(_flagName);
+  const _NoPrivilegesFlag() : super(_flagName);
   static const _flagName = 'noprivileges';
-
-
 
   @override
   String get abbreviation => 'np';

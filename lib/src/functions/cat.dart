@@ -1,15 +1,12 @@
 import 'dart:convert';
 import 'dart:io';
 
-import 'package:dcli/src/util/truepath.dart';
-
 import '../settings.dart';
 import '../util/dcli_exception.dart';
 import '../util/runnable_process.dart';
-
 import '../util/stack_trace_impl.dart';
+import '../util/truepath.dart';
 import '../util/wait_for_ex.dart';
-
 import 'dcli_function.dart';
 import 'is.dart';
 

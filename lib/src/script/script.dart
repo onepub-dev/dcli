@@ -1,15 +1,15 @@
 import 'dart:io';
 import 'dart:math';
 
-import 'package:dcli/dcli.dart';
-import 'package:dcli/src/pubspec/pubspec.dart';
-import 'package:dcli/src/script/runner.dart';
-import 'package:dcli/src/settings.dart';
 import 'package:path/path.dart' as p;
 
+import '../../dcli.dart';
 import '../functions/is.dart';
+import '../pubspec/pubspec.dart';
+import '../settings.dart';
 import 'command_line_runner.dart';
 import 'dart_project.dart';
+import 'runner.dart';
 
 /// Used to manage a DCli script.
 ///

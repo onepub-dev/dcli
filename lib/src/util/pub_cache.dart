@@ -1,7 +1,7 @@
 import 'package:meta/meta.dart';
 
-import 'package:dcli/src/shell/posix_shell.dart';
 import '../../dcli.dart';
+import '../shell/posix_shell.dart';
 
 /// Used to locate and manipulate the dart pub cache
 ///

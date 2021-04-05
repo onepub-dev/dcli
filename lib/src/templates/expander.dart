@@ -1,4 +1,4 @@
-import 'package:dcli/dcli.dart';
+import '../../dcli.dart';
 
 /// GENERATED -- GENERATED
 ///

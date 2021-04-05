@@ -1,11 +1,10 @@
 import 'dart:io';
 
-import 'package:dcli/src/util/truepath.dart';
 import 'package:path/path.dart';
 
 import '../settings.dart';
+import '../util/truepath.dart';
 import 'function.dart';
-
 import 'is.dart';
 
 ///
