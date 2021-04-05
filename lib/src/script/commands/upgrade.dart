@@ -56,12 +56,8 @@ class UpgradeCommand extends Command {
   String description() => '''Upgrades dcli to the latest version.''';
 
   @override
-  List<String> completion(String word) {
-    return [];
-  }
+  List<String> completion(String word) => [];
 
   @override
-  List<Flag> flags() {
-    return [];
-  }
+  List<Flag> flags() => [];
 }

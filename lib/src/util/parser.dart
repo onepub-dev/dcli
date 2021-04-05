@@ -21,9 +21,7 @@ class Parser {
   /// the corresponding objects.
   ///
   /// See: https://api.flutter.dev/flutter/dart-convert/JsonDecoder-class.html
-  dynamic jsonDecode() {
-    return convert.jsonDecode(_lines.join('\n'));
-  }
+  dynamic jsonDecode() => convert.jsonDecode(_lines.join('\n'));
 
   /// Loads a single document from a YAML string.
   ///
@@ -39,9 +37,7 @@ class Parser {
   ///
   /// In future versions, maps will instead be HashMaps with a custom equality
   /// operation.
-  dynamic yamlDecode() {
-    return loadYaml(_lines.join('\n'));
-  }
+  dynamic yamlDecode() => loadYaml(_lines.join('\n'));
 
   /// Interprets the read lines as a csv file.
   ///
@@ -49,13 +45,9 @@ class Parser {
   /// of columns.
   ///
   /// See: https://pub.dev/packages/csv
-  List<List<dynamic>> csvDecode() {
-    return const CsvToListConverter().convert(_lines.join('\n'));
-  }
+  List<List<dynamic>> csvDecode() => const CsvToListConverter().convert(_lines.join('\n'));
 
   /// Interprets the read lines as an ini file.
   /// See https://pub.dev/packages/ini
-  Config iniDecode() {
-    return Config.fromStrings(_lines as List<String>);
-  }
+  Config iniDecode() => Config.fromStrings(_lines as List<String>);
 }

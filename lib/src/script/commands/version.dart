@@ -52,12 +52,8 @@ class VersionCommand extends Command {
   String usage() => 'version';
 
   @override
-  List<String> completion(String word) {
-    return <String>[];
-  }
+  List<String> completion(String word) => <String>[];
 
   @override
-  List<Flag> flags() {
-    return [];
-  }
+  List<Flag> flags() => [];
 }

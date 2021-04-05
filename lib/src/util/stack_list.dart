@@ -29,13 +29,9 @@ class StackList<T> {
   }
 
   /// return and remove an item from the stack.
-  T pop() {
-    return _stack.removeFirst();
-  }
+  T pop() => _stack.removeFirst();
 
   /// returns the item onf the top of the stack
   /// but does not remove the item.
-  T peek() {
-    return _stack.first;
-  }
+  T peek() => _stack.first;
 }

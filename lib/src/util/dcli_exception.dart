@@ -11,9 +11,7 @@ class DCliException implements Exception {
   DCliException.from(this.cause, this.stackTrace) : message = cause.toString();
 
   ///
-  DCliException copyWith(StackTraceImpl stackTrace) {
-    return DCliException(message, stackTrace);
-  }
+  DCliException copyWith(StackTraceImpl stackTrace) => DCliException(message, stackTrace);
 
   ///
   final String message;
@@ -30,9 +28,7 @@ class DCliException implements Exception {
   // }
 
   @override
-  String toString() {
-    return message;
-  }
+  String toString() => message;
 
   ///
   void printStackTrace() {

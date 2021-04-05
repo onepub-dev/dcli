@@ -122,6 +122,4 @@ void main() {
   });
 }
 
-String getExpected() {
-  return 'Hello World';
-}
+String getExpected() => 'Hello World';

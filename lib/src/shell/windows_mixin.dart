@@ -8,15 +8,7 @@ import '../installers/windows_installer.dart';
 import '../script/commands/install.dart';
 
 mixin WindowsMixin {
-  String? checkInstallPreconditions() {
-//     if (!inDeveloperMode()) {
-//       return '''
-// You must be running in Windows Developer Mode to install DCli.
-// Read additional details here:
-// https://bsutton.gitbook.io/dcli/getting-started/installing-on-windows''';
-//     }
-    return null;
-  }
+  String? checkInstallPreconditions() => null;
 
   /// Windows 10+ has a developer mode that needs to be enabled to create
   ///  symlinks without escalated prividedges.
@@ -39,13 +31,9 @@ mixin WindowsMixin {
     return parts[2] == '0x1';
   }
 
-  bool install({bool installDart = true}) {
-    return WindowsDCliInstaller().install(installDart: installDart);
-  }
+  bool install({bool installDart = true}) => WindowsDCliInstaller().install(installDart: installDart);
 
-  String privilegesRequiredMessage(String app) {
-    return 'You need to be a privileged user to run $app';
-  }
+  String privilegesRequiredMessage(String app) => 'You need to be a privileged user to run $app';
 
   String? get loggedInUser => env['USERNAME'];
 

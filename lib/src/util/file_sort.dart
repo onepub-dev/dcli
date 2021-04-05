@@ -336,9 +336,7 @@ class _Line {
   }
 
   @override
-  String toString() {
-    return 'File: $sourcePath : Line: $line';
-  }
+  String toString() => 'File: $sourcePath : Line: $line';
 }
 
 /// Sets the sort direction.
@@ -355,9 +353,7 @@ class CaseInsensitiveSort implements ColumnComparator {
   ///
   const CaseInsensitiveSort();
   @override
-  int compareTo(Column column, String? lhs, String? rhs) {
-    return lhs!.toLowerCase().compareTo(rhs!.toLowerCase());
-  }
+  int compareTo(Column column, String? lhs, String? rhs) => lhs!.toLowerCase().compareTo(rhs!.toLowerCase());
 }
 
 ///
@@ -365,9 +361,7 @@ class CaseSensitiveSort implements ColumnComparator {
   ///
   const CaseSensitiveSort();
   @override
-  int compareTo(Column column, String? lhs, String? rhs) {
-    return lhs!.compareTo(rhs!);
-  }
+  int compareTo(Column column, String? lhs, String? rhs) => lhs!.compareTo(rhs!);
 }
 
 ///
@@ -537,8 +531,7 @@ class Column {
     return digits;
   }
 
-  bool _isDigit(String c) {
-    return c == '0' ||
+  bool _isDigit(String c) => c == '0' ||
         c == '1' ||
         c == '2' ||
         c == '3' ||
@@ -548,5 +541,4 @@ class Column {
         c == '7' ||
         c == '8' ||
         c == '9';
-  }
 }

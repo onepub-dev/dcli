@@ -67,6 +67,4 @@ class Paths {
   String? testFile;
 }
 
-Paths setup(TestFileSystem fs) {
-  return Paths(fs);
-}
+Paths setup(TestFileSystem fs) => Paths(fs);

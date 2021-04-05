@@ -238,14 +238,10 @@ class InstallCommand extends Command {
   String usage() => 'install';
 
   @override
-  List<String> completion(String word) {
-    return <String>[];
-  }
+  List<String> completion(String word) => <String>[];
 
   @override
-  List<Flag> flags() {
-    return _installFlags;
-  }
+  List<Flag> flags() => _installFlags;
 
   void _fixPermissions(Shell shell) {
     if (shell.isPrivilegedUser) {
@@ -293,9 +289,7 @@ class _QuietFlag extends Flag {
   String get abbreviation => 'q';
 
   @override
-  String description() {
-    return '''Runs the install in quiet mode. Only errors are displayed''';
-  }
+  String description() => '''Runs the install in quiet mode. Only errors are displayed''';
 }
 
 class _NoPrivilegesFlag extends Flag {
@@ -308,11 +302,9 @@ class _NoPrivilegesFlag extends Flag {
   String get abbreviation => 'np';
 
   @override
-  String description() {
-    return '''
+  String description() => '''
 Allows the install to be run without privileges. This flag is primarily used for unit testing.
       Some features will not be available if you run in this mode.''';
-  }
 }
 
 /// Thrown if an error is encountered during an install

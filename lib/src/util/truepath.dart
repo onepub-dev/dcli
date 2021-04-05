@@ -26,10 +26,8 @@ String privatePath(String part1,
     String? part4,
     String? part5,
     String? part6,
-    String? part7]) {
-  return truepath(part1, part2, part3, part4, part5, part6, part7)
+    String? part7]) => truepath(part1, part2, part3, part4, part5, part6, part7)
       .replaceAll(HOME, '/<HOME>');
-}
 
 /// returns the root path this is '/' or '\\' depending on platform.
 String get rootPath => separator;

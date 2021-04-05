@@ -3,9 +3,7 @@ import 'shell.dart';
 
 mixin ShellMixin implements Shell {
   @override
-  bool operator ==(covariant Shell other) {
-    return name == other.name;
-  }
+  bool operator ==(covariant Shell other) => name == other.name;
 
   /// Attempts to determine the shell name from the SHELL environment variable.
   /// This will only work on posix systems.
@@ -21,7 +19,5 @@ mixin ShellMixin implements Shell {
   int get hashCode => name.hashCode;
 
   @override
-  bool matchByName(String name) {
-    return this.name == name.toLowerCase();
-  }
+  bool matchByName(String name) => this.name == name.toLowerCase();
 }

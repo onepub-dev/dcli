@@ -108,14 +108,10 @@ class CreateCommand extends Command {
   String usage() => 'create [--foreground] <script path.dart>';
 
   @override
-  List<String> completion(String word) {
-    return <String>[];
-  }
+  List<String> completion(String word) => <String>[];
 
   @override
-  List<Flag> flags() {
-    return _createFlags;
-  }
+  List<Flag> flags() => _createFlags;
 }
 
 ///
@@ -129,7 +125,5 @@ class ForegroundFlag extends Flag {
   String get abbreviation => 'fg';
 
   @override
-  String description() {
-    return '''Stops the create from running pub get in the background.''';
-  }
+  String description() => '''Stops the create from running pub get in the background.''';
 }

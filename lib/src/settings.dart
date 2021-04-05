@@ -138,9 +138,7 @@ class Settings {
   /// flag has been set.
   ///
   /// This is for interal useage.
-  bool isFlagSet(Flag flag) {
-    return _selectedFlags.containsValue(flag);
-  }
+  bool isFlagSet(Flag flag) => _selectedFlags.containsValue(flag);
 
   /// A method to set a global flag.
   void setFlag(Flag flag) {

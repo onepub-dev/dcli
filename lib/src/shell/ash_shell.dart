@@ -31,9 +31,7 @@ class AshShell with ShellMixin, PosixShell {
   String get name => shellName;
 
   @override
-  bool addToPATH(String path) {
-    return false;
-  }
+  bool addToPATH(String path) => false;
 
   @override
   bool get isCompletionInstalled => false;
@@ -42,9 +40,7 @@ class AshShell with ShellMixin, PosixShell {
   bool get hasStartScript => true;
 
   @override
-  String get startScriptName {
-    return '.ashrc';
-  }
+  String get startScriptName => '.ashrc';
 
   @override
   String get pathToStartScript => join(HOME, startScriptName);

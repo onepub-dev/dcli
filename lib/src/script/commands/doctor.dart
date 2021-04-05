@@ -189,9 +189,7 @@ Running 'dcli doctor' provides diagnostic information on your install
   String usage() => 'doctor [<script path.dart>]';
 
   @override
-  List<String> completion(String word) {
-    return completionExpandScripts(word);
-  }
+  List<String> completion(String word) => completionExpandScripts(word);
 
   void _showPermissions(String label, String path) {
     var finallabel = label;
@@ -227,9 +225,7 @@ Running 'dcli doctor' provides diagnostic information on your install
   }
 
   @override
-  List<Flag> flags() {
-    return [];
-  }
+  List<Flag> flags() => [];
 }
 
 class _Owner {
@@ -254,7 +250,5 @@ class _Owner {
   String? group;
 
   @override
-  String toString() {
-    return '$user:$group';
-  }
+  String toString() => '$user:$group';
 }

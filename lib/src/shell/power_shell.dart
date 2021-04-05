@@ -58,9 +58,7 @@ class PowerShell with WindowsMixin, ShellMixin {
   String get name => shellName;
 
   @override
-  bool operator ==(covariant PowerShell other) {
-    return name == other.name;
-  }
+  bool operator ==(covariant PowerShell other) => name == other.name;
 
   @override
   int get hashCode => name.hashCode;

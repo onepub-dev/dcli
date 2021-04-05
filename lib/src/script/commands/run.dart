@@ -84,12 +84,8 @@ class RunCommand extends Command {
   // }
 
   @override
-  List<String> completion(String word) {
-    return completionExpandScripts(word);
-  }
+  List<String> completion(String word) => completionExpandScripts(word);
 
   @override
-  List<Flag> flags() {
-    return [];
-  }
+  List<Flag> flags() => [];
 }

@@ -97,9 +97,7 @@ class Script {
       p.basename(Platform.script.path);
 
   /// Checks if the Script has been compiled and installed into the ~/.dcli/bin path
-  bool get isInstalled {
-    return exists(pathToInstalledExe);
-  }
+  bool get isInstalled => exists(pathToInstalledExe);
 
   /// True if the script has been installed via 'dart pub global active'
   /// and as such is running from the pub cache.
@@ -169,9 +167,7 @@ class Script {
   /// it as part of the virtual projects path.
   /// For linux this just removes any leading /
   /// For windows this removes c:\
-  static String sansRoot(String path) {
-    return path.substring(p.rootPrefix(path).length);
-  }
+  static String sansRoot(String path) => path.substring(p.rootPrefix(path).length);
 
   /// Determines the script project root.
   /// The project root is defined as the directory which contains

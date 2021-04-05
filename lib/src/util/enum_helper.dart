@@ -6,14 +6,10 @@ import 'recase.dart';
 ///
 class EnumHelper {
   /// returns an enum based on its index.
-  static T getByIndex<T>(List<T> values, int index) {
-    return values.elementAt(index - 1);
-  }
+  static T getByIndex<T>(List<T> values, int index) => values.elementAt(index - 1);
 
   /// returns the index of a enum value.
-  static int getIndexOf<T>(List<T> values, T value) {
-    return values.indexOf(value);
-  }
+  static int getIndexOf<T>(List<T> values, T value) => values.indexOf(value);
 
   ///
   /// Returns the Enum name without the enum class.

@@ -82,12 +82,8 @@ class BashShell with ShellMixin, PosixShell {
   bool get hasStartScript => true;
 
   @override
-  String get startScriptName {
-    return '.bashrc';
-  }
+  String get startScriptName => '.bashrc';
 
   @override
-  String get pathToStartScript {
-    return join(HOME, startScriptName);
-  }
+  String get pathToStartScript => join(HOME, startScriptName);
 }

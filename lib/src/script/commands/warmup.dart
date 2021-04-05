@@ -60,12 +60,8 @@ Runs pub upgrade on the given directory.
    If no directory is passed then the current directory is warmed up.''';
 
   @override
-  List<String> completion(String word) {
-    return completionExpandScripts(word);
-  }
+  List<String> completion(String word) => completionExpandScripts(word);
 
   @override
-  List<Flag> flags() {
-    return [];
-  }
+  List<Flag> flags() => [];
 }

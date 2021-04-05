@@ -43,9 +43,7 @@ import 'package:test/test.dart';
 ///
 
 class TestPaths {
-  factory TestPaths() {
-    return _self;
-  }
+  factory TestPaths() => _self;
 
   TestPaths._internal() {
     testRoot = join(rootPath, 'tmp', 'dcli');

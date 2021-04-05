@@ -313,9 +313,7 @@ class AnsiColor {
   final bool _bold;
 
   //
-  static String _emit(String ansicode) {
-    return '${Ansi.esc}${ansicode}m';
-  }
+  static String _emit(String ansicode) => '${Ansi.esc}${ansicode}m';
 
   /// ansi code for this color.
   int get code => _code;
@@ -343,9 +341,7 @@ class AnsiColor {
     return output;
   }
 
-  static String get _reset {
-    return '${Ansi.esc}${_resetCode}m';
-  }
+  static String get _reset => '${Ansi.esc}${_resetCode}m';
 
   static String _fg(
     int code, {

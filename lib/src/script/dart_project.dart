@@ -50,9 +50,7 @@ class DartProject {
   ///
   /// reads and returns the project's virtual pubspec
   /// and returns it.
-  PubSpec get pubSpec {
-    return PubSpec.fromFile(pathToPubSpec);
-  }
+  PubSpec get pubSpec => PubSpec.fromFile(pathToPubSpec);
 
   /// Returns the path to the project's root diretory.
   String get pathToProjectRoot => _pathToProjectRoot;
@@ -84,9 +82,7 @@ class DartProject {
     print('${label.padRight(pad)}: $value');
   }
 
-  String _makeSafe(String line) {
-    return line.replaceAll(HOME, '<HOME>');
-  }
+  String _makeSafe(String line) => line.replaceAll(HOME, '<HOME>');
 
   String _findProjectRoot(String pathToSearchFrom) {
     var current = truepath(pathToSearchFrom);
@@ -319,9 +315,7 @@ class DartProject {
   /// The name used in the pubspec.yaml must come from the character
   ///  set [a-z0-9_]
   /// so wer replace any invalid character with an '_'.
-  String _replaceInvalidCharactersForName(String proposedName) {
-    return proposedName.replaceAll(RegExp('[^a-zA-Z0-9_]'), '_');
-  }
+  String _replaceInvalidCharactersForName(String proposedName) => proposedName.replaceAll(RegExp('[^a-zA-Z0-9_]'), '_');
 }
 
 class DartProjectException extends DCliException {

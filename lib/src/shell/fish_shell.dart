@@ -17,9 +17,7 @@ class FishShell with ShellMixin, PosixShell {
   String get name => shellName;
 
   @override
-  bool operator ==(covariant FishShell other) {
-    return name == other.name;
-  }
+  bool operator ==(covariant FishShell other) => name == other.name;
 
   @override
   int get hashCode => name.hashCode;
@@ -45,8 +43,5 @@ class FishShell with ShellMixin, PosixShell {
   }
 
   @override
-  bool addToPATH(String path) {
-    /// todo implement.
-    return false;
-  }
+  bool addToPATH(String path) => false;
 }

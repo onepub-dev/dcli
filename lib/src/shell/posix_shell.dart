@@ -122,9 +122,7 @@ mixin PosixShell {
 
   bool get isSudo => !Settings().isWindows && env['SUDO_USER'] != null;
 
-  String privilegesRequiredMessage(String app) {
-    return 'Please run with: sudo $app';
-  }
+  String privilegesRequiredMessage(String app) => 'Please run with: sudo $app';
 
   bool install({bool installDart = false}) {
     if (Platform.isLinux) {

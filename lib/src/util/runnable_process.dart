@@ -466,9 +466,7 @@ class RunException extends DCliException {
         super(reason, stackTrace);
 
   @override
-  RunException copyWith(StackTraceImpl stackTrace) {
-    return RunException(cmdLine, exitCode, reason, stackTrace: stackTrace);
-  }
+  RunException copyWith(StackTraceImpl stackTrace) => RunException(cmdLine, exitCode, reason, stackTrace: stackTrace);
 
   /// The command line that was being run.
   String cmdLine;
@@ -480,10 +478,8 @@ class RunException extends DCliException {
   String reason;
 
   @override
-  String get message {
-    return '''
+  String get message => '''
 $cmdLine 
 exit: $exitCode
 reason: $reason''';
-  }
 }

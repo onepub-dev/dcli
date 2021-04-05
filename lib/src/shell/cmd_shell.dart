@@ -51,9 +51,7 @@ class CmdShell with WindowsMixin, ShellMixin {
   String get name => shellName;
 
   @override
-  bool operator ==(covariant CmdShell other) {
-    return name == other.name;
-  }
+  bool operator ==(covariant CmdShell other) => name == other.name;
 
   @override
   int get hashCode => name.hashCode;

@@ -96,9 +96,7 @@ class UnknownShell with ShellMixin {
   String get name => shellName;
 
   @override
-  bool operator ==(covariant UnknownShell other) {
-    return name == other.name;
-  }
+  bool operator ==(covariant UnknownShell other) => name == other.name;
 
   @override
   int get hashCode => name.hashCode;
@@ -119,9 +117,7 @@ class UnknownShell with ShellMixin {
   String? get loggedInUser => null;
 
   @override
-  String privilegesRequiredMessage(String app) {
-    return 'You need to be a privileged user to run $app';
-  }
+  String privilegesRequiredMessage(String app) => 'You need to be a privileged user to run $app';
 
   @override
   bool install({bool installDart = false}) {
@@ -137,9 +133,7 @@ class UnknownShell with ShellMixin {
   }
 
   @override
-  String? checkInstallPreconditions() {
-    return null;
-  }
+  String? checkInstallPreconditions() => null;
 
   @override
   bool get isSudo => throw UnimplementedError();

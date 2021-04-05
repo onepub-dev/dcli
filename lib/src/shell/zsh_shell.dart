@@ -31,9 +31,7 @@ class ZshShell with ShellMixin, PosixShell {
   String get name => shellName;
 
   @override
-  bool operator ==(covariant ZshShell other) {
-    return name == other.name;
-  }
+  bool operator ==(covariant ZshShell other) => name == other.name;
 
   @override
   int get hashCode => name.hashCode;
@@ -48,8 +46,5 @@ class ZshShell with ShellMixin, PosixShell {
   String get pathToStartScript => join(HOME, startScriptName);
 
   @override
-  bool addToPATH(String path) {
-    /// TODO: needs to be implemented.
-    return false;
-  }
+  bool addToPATH(String path) => false;
 }

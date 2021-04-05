@@ -100,7 +100,5 @@ class HelpCommand extends Command {
   }
 
   @override
-  List<Flag> flags() {
-    return [];
-  }
+  List<Flag> flags() => [];
 }

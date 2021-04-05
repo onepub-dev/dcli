@@ -40,9 +40,7 @@ class StackTraceImpl implements core.StackTrace {
   ///
   /// Returns a File instance for the current stackframe
   ///
-  File get sourceFile {
-    return frames[0].sourceFile;
-  }
+  File get sourceFile => frames[0].sourceFile;
 
   ///
   /// Returns the Filename for the current stackframe
@@ -57,14 +55,10 @@ class StackTraceImpl implements core.StackTrace {
   ///
   /// Returns the filename for the current stackframe
   ///
-  int get lineNo {
-    return frames[0].lineNo;
-  }
+  int get lineNo => frames[0].lineNo;
 
   @override
-  String toString() {
-    return formatStackTrace()!;
-  }
+  String toString() => formatStackTrace()!;
 
   /// Outputs a formatted string of the current stack_trace_nj
   /// showing upto [methodCount] methods in the trace.

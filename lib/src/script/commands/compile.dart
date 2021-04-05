@@ -164,11 +164,9 @@ class NoWarmupFlag extends Flag {
   String get abbreviation => 'nw';
 
   @override
-  String description() {
-    return '''
+  String description() => '''
 Stops the compile from running 'dcli warmup' before compiling.
       Use the nowarmup option to speed up compilation when you know your project structure is up to date.''';
-  }
 }
 
 ///

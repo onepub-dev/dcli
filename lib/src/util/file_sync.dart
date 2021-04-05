@@ -89,9 +89,7 @@ class FileSync {
   /// Returns the length of the file in bytes
   /// The file does NOT have to be open
   /// to determine its length.
-  int get length {
-    return _file.lengthSync();
-  }
+  int get length => _file.lengthSync();
 
   /// Close and flushes a file to disk.
   void close() {
@@ -146,9 +144,7 @@ class FileSync {
 
   /// This is just a wrapper for the method File.resolveSymbolicLinksSync.
   /// Returns the path the symbolic link links to.
-  String resolveSymLink() {
-    return _file.resolveSymbolicLinksSync();
-  }
+  String resolveSymLink() => _file.resolveSymbolicLinksSync();
 
   /// Truncates the file to zero bytes and
   /// then writes the given text to the file.
@@ -259,6 +255,4 @@ String resolveSymLink(String pathToLink) {
 /// Returns a FileStat instance describing the
 /// file or directory located by [path].
 ///
-FileStat stat(String path) {
-  return File(path).statSync();
-}
+FileStat stat(String path) => File(path).statSync();
