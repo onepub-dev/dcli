@@ -9,8 +9,7 @@ void writeToFile(String path, String content) {
 
   _file = File(path);
 
-  _raf = _file.openSync(mode: FileMode.write);
-  _raf.writeStringSync(content);
-
-  _raf.closeSync();
+  _raf = _file.openSync(mode: FileMode.write)
+    ..writeStringSync(content)
+    ..closeSync();
 }

@@ -129,10 +129,10 @@ class ProcessHelper {
       final parentPid = int.tryParse(parts[parts.length - 2]);
       final processPid = int.tryParse(parts[parts.length - 1]);
 
-      final parent = _WindowsParentProcess();
-      parent.path = exe;
-      parent.parentPid = parentPid;
-      parent.processPid = processPid;
+      final parent = _WindowsParentProcess()
+        ..path = exe
+        ..parentPid = parentPid
+        ..processPid = processPid;
       parents.add(parent);
     }
     return parents;
@@ -193,10 +193,9 @@ class ProcessHelper {
     final lines = const CsvToListConverter().convert(tasks.join('\r\n'));
     for (final line in lines) {
       //Settings().verbose('tasklist: $line');
-      final details = _PIDDetails();
-
-      details.processName = line[0] as String?;
-      details.pid = int.tryParse(line[1] as String);
+      final details = _PIDDetails()
+        ..processName = line[0] as String?
+        ..pid = int.tryParse(line[1] as String);
       // Settings().verbose('${details.processName} ${details.pid}');
 
       final memparts = (line[4] as String).split(' ');

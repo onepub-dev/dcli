@@ -47,8 +47,7 @@ class Script {
     {
       assert(pathToScript.endsWith('.dart'));
       if (create) {
-        final project = DartProject.fromPath(pathToProjectRoot);
-        project.initFiles();
+        DartProject.fromPath(pathToProjectRoot).initFiles();
       }
     }
   }
@@ -167,7 +166,8 @@ class Script {
   /// it as part of the virtual projects path.
   /// For linux this just removes any leading /
   /// For windows this removes c:\
-  static String sansRoot(String path) => path.substring(p.rootPrefix(path).length);
+  static String sansRoot(String path) =>
+      path.substring(p.rootPrefix(path).length);
 
   /// Determines the script project root.
   /// The project root is defined as the directory which contains

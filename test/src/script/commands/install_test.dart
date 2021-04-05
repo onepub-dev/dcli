@@ -11,9 +11,7 @@ import '../../util/test_file_system.dart';
 void main() {
   group('Install DCli', () {
     test('warmup install', () {
-      final groupFS = TestFileSystem(useCommonPath: false);
-
-      groupFS.withinZone((fs) {
+      TestFileSystem(useCommonPath: false).withinZone((fs) {
         try {
           Shell.current.install();
         } on DCliException catch (e) {

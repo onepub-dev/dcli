@@ -10,10 +10,9 @@ void main() {
     test('warmup ', () {
       TestFileSystem().withinZone((fs) {
         const projectPath = 'test/test_script/general';
-        final project = DartProject.fromPath(projectPath);
-
-        project.clean();
-        project.warmup();
+        DartProject.fromPath(projectPath)
+          ..clean()
+          ..warmup();
 
         expect(exists(join(projectPath, '.dart_tool')), equals(true));
         expect(exists(join(projectPath, '.packages')), equals(true));

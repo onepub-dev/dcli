@@ -121,9 +121,9 @@ class DartSdk {
           workingDirectory: script.pathToScriptDirectory);
     }
 
-    process.start();
-
-    process.processUntilExit(progress, nothrow: false);
+    process
+      ..start()
+      ..processUntilExit(progress, nothrow: false);
   }
 
   /// returns the relative path to the packges configuration file.
@@ -160,9 +160,9 @@ class DartSdk {
           workingDirectory: workingDirectory);
     }
 
-    process.start();
-
-    process.processUntilExit(progress, nothrow: false);
+    process
+      ..start()
+      ..processUntilExit(progress, nothrow: false);
     Settings().verbose('pub get finished');
   }
 
@@ -341,8 +341,9 @@ class DartSdk {
     final term = Terminal();
     final percentage = Format.percentage(progress.progress, 1);
     if (term.isAnsi) {
-      term.clearLine();
-      term.startOfLine();
+      term
+        ..clearLine()
+        ..startOfLine();
       echo(
           '${EnumHelper.getName(progress.status).padRight(15)}${Format.bytesAsReadable(progress.downloaded)}/${Format.bytesAsReadable(progress.length)} $percentage');
     } else {

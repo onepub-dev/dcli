@@ -64,8 +64,7 @@ class TestPaths {
     // add the unit test dcli/bin path to the front
     // of the PATH so that our test version of dcli tooling
     // will run when we spawn a dcli process.
-    final path = PATH;
-    path.insert(0, Settings().pathToDCliBin);
+    final path = PATH..insert(0, Settings().pathToDCliBin);
 
     // .pub-cache so we run the test version of dcli.
     // path.insert(0, pubCachePath);

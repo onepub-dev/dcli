@@ -21,9 +21,9 @@ void main() {
       }
 
       final project = DartProject.fromPath(scriptParentPath);
-      final script = project.createScript(basename(scriptPath),
-          templateName: 'hello_world.dart');
-      script.run([]);
+      project
+          .createScript(basename(scriptPath), templateName: 'hello_world.dart')
+          .run([]);
 
       deleteDir(scriptParentPath);
     });

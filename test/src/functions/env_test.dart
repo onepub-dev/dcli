@@ -42,14 +42,13 @@ void main() {
         t.expect(env['APPDATA'], userDataPath);
         t.expect(env['AppData'], userDataPath);
 
-        final available = <String, String?>{};
-        available.putIfAbsent('APPDATA', () => env['APPDATA']);
-        available.putIfAbsent('MixedCase', () => env['MixedCase']);
+        final available = <String, String?>{}
+          ..putIfAbsent('APPDATA', () => env['APPDATA'])
+          ..putIfAbsent('MixedCase', () => env['MixedCase']);
 
-        final expected = <String, String>{};
-
-        expected.putIfAbsent('APPDATA', () => userDataPath);
-        expected.putIfAbsent('MixedCase', () => 'mixed data');
+        final expected = <String, String>{}
+          ..putIfAbsent('APPDATA', () => userDataPath)
+          ..putIfAbsent('MixedCase', () => 'mixed data');
         t.expect(available, expected);
       } finally {
         Settings.reset();

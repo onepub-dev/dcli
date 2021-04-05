@@ -20,10 +20,10 @@ import 'package:dcli/src/pubspec/pubspec.dart';
 Future<void> main(List<String> args) async {
   Settings().setVerbose(enabled: false);
   final cmds = CommandRunner<void>(
-      'dcli_cli', 'Manage and run the dcli_cli docker container');
-  cmds.addCommand(RunCommand());
-  cmds.addCommand(BuildCommand());
-  cmds.addCommand(PushCommand());
+      'dcli_cli', 'Manage and run the dcli_cli docker container')
+    ..addCommand(RunCommand())
+    ..addCommand(BuildCommand())
+    ..addCommand(PushCommand());
 
   try {
     await cmds.run(args);
@@ -51,11 +51,9 @@ class RunCommand extends Command<void> {
     /// The volume will only be created if it doesn't already exist.
     'docker volume create dcli_scripts'
         .forEach(devNull, stderr: (line) => print(red(line)));
-    const cmd =
-        'docker run -v dcli_scripts:/home/scripts --network host -it dcli:dcli_cli /bin/bash';
 
-    // print(cmd);
-    cmd.run;
+    'docker run -v dcli_scripts:/home/scripts --network host -it dcli:dcli_cli /bin/bash'
+        .run;
   }
 }
 

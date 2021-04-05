@@ -152,12 +152,11 @@ class FileSync {
   /// be added.
   void write(String line, {String? newline = '\n'}) {
     final finalline = line + (newline ?? '');
-    _raf.truncateSync(0);
-
-    _raf.setPositionSync(0);
-    _raf.flushSync();
-
-    _raf.writeStringSync(finalline);
+    _raf
+      ..truncateSync(0)
+      ..setPositionSync(0)
+      ..flushSync()
+      ..writeStringSync(finalline);
   }
 
   /// Appends the [line] to the file
@@ -165,8 +164,9 @@ class FileSync {
   void append(String line, {String? newline = '\n'}) {
     final finalline = line + (newline ?? '');
 
-    _raf.setPositionSync(_raf.lengthSync());
-    _raf.writeStringSync(finalline);
+    _raf
+      ..setPositionSync(_raf.lengthSync())
+      ..writeStringSync(finalline);
   }
 
   /// Truncates the file to zero bytes in length.
@@ -202,8 +202,7 @@ void symlink(
   String linkPath,
 ) {
   Settings().verbose('symlink existingPath: $existingPath linkPath $linkPath');
-  final link = Link(linkPath);
-  link.createSync(existingPath);
+  final link = Link(linkPath).createSync(existingPath);
 }
 
 ///
@@ -221,8 +220,7 @@ void symlink(
 ///
 void deleteSymlink(String linkPath) {
   Settings().verbose('deleteSymlink linkPath: $linkPath');
-  final link = Link(linkPath);
-  link.deleteSync();
+  Link(linkPath).deleteSync();
 }
 
 ///

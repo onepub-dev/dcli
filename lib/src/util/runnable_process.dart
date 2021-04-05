@@ -351,8 +351,9 @@ class RunnableProcess {
               // ignore: lines_longer_than_80_chars
               '${red('[${_parsed.cmd}] with args [${_parsed.args.join(', ')}]')}'
               ' failed with exitCode: $exitCode');
-          progress.onError(error);
-          progress.close();
+          progress
+            ..onError(error)
+            ..close();
         } else {
           waitForEx<void>(streamsFlushed);
           progress.close();
@@ -466,7 +467,8 @@ class RunException extends DCliException {
         super(reason, stackTrace);
 
   @override
-  RunException copyWith(StackTraceImpl stackTrace) => RunException(cmdLine, exitCode, reason, stackTrace: stackTrace);
+  RunException copyWith(StackTraceImpl stackTrace) =>
+      RunException(cmdLine, exitCode, reason, stackTrace: stackTrace);
 
   /// The command line that was being run.
   String cmdLine;

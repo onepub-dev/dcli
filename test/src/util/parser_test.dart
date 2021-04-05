@@ -7,8 +7,7 @@ import 'test_file_system.dart';
 void main() {
   test('Parser', () {
     TestFileSystem().withinZone((fs) {
-      final jsonFile = join(fs.fsRoot, 'sample.json');
-      jsonFile.write('''
+      final jsonFile = join(fs.fsRoot, 'sample.json')..write('''
 { 
   "a": 456,
   "d": "yes"
@@ -16,12 +15,11 @@ void main() {
 
       expect('cat $jsonFile'.parser().jsonDecode()['a'], 456);
 
-      final csvFile = join(fs.fsRoot, 'sample.csv');
-      csvFile.write('''"a", 456,"d", "yes"''');
+      final csvFile = join(fs.fsRoot, 'sample.csv')
+        ..write('''"a", 456,"d", "yes"''');
       expect('cat $csvFile'.parser().csvDecode()[0][0], 'a');
 
-      final yamlFile = join(fs.fsRoot, 'sample.yaml');
-      yamlFile.write('''
+      final yamlFile = join(fs.fsRoot, 'sample.yaml')..write('''
 name: pubspec_local
 version: 1.0.0
 environment: 
@@ -30,8 +28,7 @@ dependencies:
   dcli: ^0.20.0''');
       expect('cat $yamlFile'.parser().yamlDecode()['name'], 'pubspec_local');
 
-      final iniFile = join(fs.fsRoot, 'sample.init');
-      iniFile.write('''
+      join(fs.fsRoot, 'sample.init').write('''
 [name]
 debug=true''');
       // expect('cat $iniFile'.parser().iniDecode().hasSection('name'), true);

@@ -294,8 +294,7 @@ class TestFileSystem {
       newPath.add(path);
     }
 
-    newPath.add(PubCache().pathToBin);
-    newPath.add(join(fsRoot, '.dcli', 'bin'));
+    newPath..add(PubCache().pathToBin)..add(join(fsRoot, '.dcli', 'bin'));
 
     env['PATH'] = newPath.join(Env().delimiterForPATH);
   }
@@ -364,8 +363,9 @@ class TestFileSystem {
 
         final newMap = Map<String, Dependency>.from(pubspec.dependencies);
         newMap['dcli'] = Dependency('dcli', newPath);
-        pubspec.dependencies = newMap;
-        pubspec.saveToFile(pathToPubspec);
+        pubspec
+          ..dependencies = newMap
+          ..saveToFile(pathToPubspec);
       }
 
       DartProject.fromPath(dirname(pathToPubspec)).warmup();
@@ -394,8 +394,8 @@ class TestFileSystem {
       } else {
         /// compile and install the command
         final script =
-            Script.fromFile('test/test_script/general/bin/$command.dart');
-        script.compile(install: true);
+            Script.fromFile('test/test_script/general/bin/$command.dart')
+              ..compile(install: true);
 
         // copy it back to the dcli testbin so the next unit
         // test doesn't have to compile it.

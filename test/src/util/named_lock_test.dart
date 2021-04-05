@@ -92,8 +92,9 @@ void takeHardLock() {
 Future<ReceivePort> spawn(String message) async {
   final back = await Isolate.spawn(takeLock, message, paused: true);
   final port = ReceivePort();
-  back.addOnExitListener(port.sendPort);
-  back.resume(back.pauseCapability!);
+  back
+    ..addOnExitListener(port.sendPort)
+    ..resume(back.pauseCapability!);
   return port;
 }
 

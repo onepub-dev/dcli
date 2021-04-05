@@ -147,8 +147,7 @@ class Env extends DCliFunction {
   /// Changing the path affects the current script
   /// and any children that it spawns.
   void appendToPATH(String newPath) {
-    final path = PATH;
-    path.add(newPath);
+    final path = PATH..add(newPath);
     _setEnv('PATH', path.join(delimiterForPATH));
   }
 
@@ -161,8 +160,7 @@ class Env extends DCliFunction {
   /// Changing the path affects the current script
   /// and any children that it spawns.
   void prependToPATH(String newPath) {
-    final path = PATH;
-    path.insert(0, newPath);
+    final path = PATH..insert(0, newPath);
     _setEnv('PATH', path.join(delimiterForPATH));
   }
 

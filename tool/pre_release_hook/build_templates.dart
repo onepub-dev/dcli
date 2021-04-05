@@ -81,11 +81,9 @@ ${preprocess(file, read(file).toList()).join('\n')}\'\'\');
   for (final expander in expanders) {
     content.write(expander);
   }
-  content.write('''
+  content..write('''
   }
-''');
-
-  content.write('''
+''')..write('''
 }''');
 
   return content.toString();

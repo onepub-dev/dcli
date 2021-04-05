@@ -32,20 +32,18 @@ void main() {
 
     stdout.writeln('Print to stdout using "stsdout.writeln"');
 
-    stderr.writeln('Print to stderr using "stderr.writeln"');
-
-    stderr.write('Print to stderr using "stderr.write"');
-    stderr.write('\n');
+    stderr
+      ..writeln('Print to stderr using "stderr.writeln"')
+      ..write('Print to stderr using "stderr.write"')
+      ..write('\n');
     printerr('Print to stderr using "printerr"');
   });
 
   test('Child process shutdown', () {
-    final fprocess = Process.start(
+    Process.start(
       'tail',
       ['-f', '/var/log/syslog'],
-    );
-
-    fprocess.then((process) {
+    ).then((process) {
       process.stdout
           .transform(utf8.decoder)
           .transform(const LineSplitter())

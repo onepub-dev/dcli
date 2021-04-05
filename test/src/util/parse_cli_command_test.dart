@@ -77,11 +77,11 @@ void main() {
       const command =
           'mkdir -p  /tmp/etc/openvpn; sudo cp -R /etc/openvpn/* /tmp/etc/openvpn';
 
-      final cmdArgs = <String>[];
-      cmdArgs.clear();
-      cmdArgs.add('-t');
-      cmdArgs.add('bilby.clouddialer.com.au');
-      cmdArgs.add("'echo abc123 | sudo -S  $command'");
+      final cmdArgs = <String>[]
+        ..clear()
+        ..add('-t')
+        ..add('bilby.clouddialer.com.au')
+        ..add("'echo abc123 | sudo -S  $command'");
 
       final parsed = ParsedCliCommand.fromParsed('ssh', cmdArgs, pwd);
 

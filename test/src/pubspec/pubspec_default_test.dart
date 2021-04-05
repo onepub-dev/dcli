@@ -38,45 +38,45 @@ dependencies:
   t.test('File - basic', () {
     TestFileSystem().withinZone((fs) {
       final String pubSpecScriptPath = createPubspecPath(fs);
-      final file = PubSpec.fromString(basic);
-      file.saveToFile(pubSpecScriptPath);
+      PubSpec.fromString(basic).saveToFile(pubSpecScriptPath);
 
-      final dependencies = <Dependency>[];
-      dependencies.add(Dependency.fromHosted('collection', '^1.14.12'));
-      dependencies.add(Dependency.fromHosted('file_utils', '^0.1.3'));
+      final dependencies = <Dependency>[
+        Dependency.fromHosted('collection', '^1.14.12'),
+        Dependency.fromHosted('file_utils', '^0.1.3')
+      ];
       runTest(fs, null, main, dependencies);
     });
   }, skip: false);
 
   t.test('File - override', () {
     TestFileSystem().withinZone((fs) {
-      final String scriptPath = createScriptPath(fs);
+      final scriptPath = createScriptPath(fs);
 
-      final file = PubSpec.fromString(overrides);
-      file.saveToFile(scriptPath);
+      PubSpec.fromString(overrides).saveToFile(scriptPath);
 
-      final dependencies = <Dependency>[];
-      dependencies.add(Dependency.fromHosted('dcli', '^2.0.0'));
-      dependencies.add(Dependency.fromHosted('args', '^2.0.1'));
-      dependencies.add(Dependency.fromHosted('path', '^2.0.2'));
-      dependencies.add(Dependency.fromHosted('collection', '^1.14.12'));
-      dependencies.add(Dependency.fromHosted('file_utils', '^0.1.3'));
+      final dependencies = <Dependency>[
+        Dependency.fromHosted('dcli', '^2.0.0'),
+        Dependency.fromHosted('args', '^2.0.1'),
+        Dependency.fromHosted('path', '^2.0.2'),
+        Dependency.fromHosted('collection', '^1.14.12'),
+        Dependency.fromHosted('file_utils', '^0.1.3')
+      ];
       runTest(fs, null, main, dependencies);
     });
   }, skip: false);
 
   t.test('File - local pubsec.yaml', () {
     TestFileSystem().withinZone((fs) {
-      final String scriptPath = createScriptPath(fs);
-      final file = PubSpec.fromString(overrides);
-      file.saveToFile(scriptPath);
+      final scriptPath = createScriptPath(fs);
+      PubSpec.fromString(overrides).saveToFile(scriptPath);
 
-      final dependencies = <Dependency>[];
-      dependencies.add(Dependency.fromHosted('dcli', '^2.0.0'));
-      dependencies.add(Dependency.fromHosted('args', '^2.0.1'));
-      dependencies.add(Dependency.fromHosted('path', '^2.0.2'));
-      dependencies.add(Dependency.fromHosted('collection', '^1.14.12'));
-      dependencies.add(Dependency.fromHosted('file_utils', '^0.1.3'));
+      final dependencies = <Dependency>[
+        Dependency.fromHosted('dcli', '^2.0.0'),
+        Dependency.fromHosted('args', '^2.0.1'),
+        Dependency.fromHosted('path', '^2.0.2'),
+        Dependency.fromHosted('collection', '^1.14.12'),
+        Dependency.fromHosted('file_utils', '^0.1.3')
+      ];
       runTest(fs, null, main, dependencies);
     });
   }, skip: false);

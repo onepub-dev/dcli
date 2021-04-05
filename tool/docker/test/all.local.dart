@@ -9,8 +9,8 @@ import 'package:args/args.dart';
 /// from the local files system at ..
 
 void main(List<String> args) {
-  final parser = ArgParser();
-  parser.addFlag('runOnly', abbr: 'r');
+  final parser = ArgParser()
+  ..addFlag('runOnly', abbr: 'r');
 
   final results = parser.parse(args);
   final runOnly = results['runOnly'] as bool;

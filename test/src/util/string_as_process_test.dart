@@ -17,12 +17,12 @@ void main() {
   });
 
   test('stream - using start', () {
-    const log = '/tmp/access.log';
-    log.write('Line 1/5');
-    log.append('Line 2/5');
-    log.append('Line 3/5');
-    log.append('Line 4/5');
-    log.append('Line 5/5');
+    '/tmp/access.log'
+      ..write('Line 1/5')
+      ..append('Line 2/5')
+      ..append('Line 3/5')
+      ..append('Line 4/5')
+      ..append('Line 5/5');
 
     final progress = Progress.stream();
     'tail /tmp/access.log'.start(
@@ -40,12 +40,12 @@ void main() {
   });
 
   test('stream', () {
-    const log = '/tmp/access.log';
-    log.write('Line 1/5');
-    log.append('Line 2/5');
-    log.append('Line 3/5');
-    log.append('Line 4/5');
-    log.append('Line 5/5');
+    '/tmp/access.log'
+      ..write('Line 1/5')
+      ..append('Line 2/5')
+      ..append('Line 3/5')
+      ..append('Line 4/5')
+      ..append('Line 5/5');
 
     final stream = 'tail /tmp/access.log'.stream(
       runInShell: true,
@@ -64,11 +64,14 @@ void main() {
     Settings().setVerbose(enabled: true);
 
     const log = '/tmp/access.log';
-    log.write('Line 1/5');
-    log.append('Line 2/5');
-    log.append('Line 3/5');
-    log.append('Line 4/5');
-    log.append('Line 5/5');
+
+    // ignore: cascade_invocations
+    log
+      ..write('Line 1/5')
+      ..append('Line 2/5')
+      ..append('Line 3/5')
+      ..append('Line 4/5')
+      ..append('Line 5/5');
 
     final stream = 'tail -f $log'.stream(
         // runInShell: true,
@@ -100,11 +103,12 @@ void main() {
 
   test('tail -n 100', () {
     const log = '/tmp/access.log';
-    log.write('Line 1/5');
-    log.append('Line 2/5');
-    log.append('Line 3/5');
-    log.append('Line 4/5');
-    log.append('Line 5/5');
+    // ignore: cascade_invocations
+    log..write('Line 1/5')
+    ..append('Line 2/5')
+    ..append('Line 3/5')
+    ..append('Line 4/5')
+    ..append('Line 5/5');
     Settings().setVerbose(enabled: true);
     final stream = 'tail -n 100 $log'.stream(
         // runInShell: true,

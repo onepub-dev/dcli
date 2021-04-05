@@ -20,9 +20,9 @@ void main() {
         if (exists(pathToScript)) {
           delete(pathToScript);
         }
-        final project = DartProject.fromPath(scriptPath);
-        project.createScript(pathToScript, templateName: 'hello_world.dart');
-        project.warmup();
+        DartProject.fromPath(scriptPath)
+          ..createScript(pathToScript, templateName: 'hello_world.dart')
+          ..warmup();
 
         checkProjectStructure(fs, pathToScript);
       });

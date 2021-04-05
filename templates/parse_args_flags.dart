@@ -10,9 +10,7 @@ import 'package:args/args.dart';
 /// dcli parse_args_flags.dart -v --name test and some more args
 ///
 void main(List<String> args) {
-  final parser = ArgParser();
-
-  parser
+  final parser = ArgParser()
     ..addFlag('verbose', abbr: 'v')
     ..addOption('name', abbr: 'n');
 

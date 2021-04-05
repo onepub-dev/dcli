@@ -61,7 +61,7 @@ extension StringAsProcess on String {
   /// ```
   ///
   /// Windows:
-  ///  On windows Glob expansion is suppressed as both Command and Powershell 
+  ///  On windows Glob expansion is suppressed as both Command and Powershell
   /// don't expand
   ///  globs.
   ///
@@ -71,7 +71,7 @@ extension StringAsProcess on String {
   ///     [start] - for more control over how the sub process is started.
   ///     [firstLine] - returns just the first line written to stdout or stderr.
   ///     [lastLine] - returns just the last line written to stdout or stderr.
-  ///     [parser] - returns a parser with the captured output ready 
+  ///     [parser] - returns a parser with the captured output ready
   /// to be interpreted
   ///                as one of several file types.
   void get run {
@@ -139,14 +139,14 @@ extension StringAsProcess on String {
   /// Use [workingDirectory] to specify the directory the process should
   /// be run from.
   ///
-  /// If you need to run a command with escalated privileged then set the 
+  /// If you need to run a command with escalated privileged then set the
   /// [privileged]
   /// argument to true. On Linux this equates to using the sudo command.
-  /// The advantage of using the 'privileged' option is that it will first 
+  /// The advantage of using the 'privileged' option is that it will first
   /// check if you are
   /// already running in a privileged environment. This is extremly useful
   ///  if you
-  /// are running in the likes of a Docker container that doesn't implement 
+  /// are running in the likes of a Docker container that doesn't implement
   /// sudo but
   /// in which you are already running as root.
   ///
@@ -154,7 +154,7 @@ extension StringAsProcess on String {
   ///  new process.
   ///
   ///
-  /// If you need to pass an argument to your application that contains spaces 
+  /// If you need to pass an argument to your application that contains spaces
   /// then use nested quotes:
   ///e.g.
   ///  ```dart
@@ -167,7 +167,7 @@ extension StringAsProcess on String {
   ///      [firstLine] - returns just the first line written to stdout
   ///  or stderr.
   ///      [lastLine] - returns just the last line written to stdout or stderr.
-  ///      [parser] - returns a parser with the captured output ready 
+  ///      [parser] - returns a parser with the captured output ready
   /// to be interpreted
   ///                as one of several file types.
   void start({
@@ -209,7 +209,7 @@ extension StringAsProcess on String {
   /// Any environment variables you set via env['xxx'] will be passed
   ///  to the new process.
   ///
-  /// If you need to pass an argument to your application that contains 
+  /// If you need to pass an argument to your application that contains
   /// spaces then use nested quotes:
   ///e.g.
   ///  ```dart
@@ -406,11 +406,11 @@ extension StringAsProcess on String {
   /// 'tail /var/log/syslog' | 'head -n 5' | 'tail -n 2'.forEach((line) => print(line));
   /// ```
   Pipe operator |(String rhs) {
-    final rhsRunnable = RunnableProcess.fromCommandLine(rhs);
-    rhsRunnable.start(waitForStart: false);
+    final rhsRunnable = RunnableProcess.fromCommandLine(rhs)
+      ..start(waitForStart: false);
 
-    final lhsRunnable = RunnableProcess.fromCommandLine(this);
-    lhsRunnable.start(waitForStart: false);
+    final lhsRunnable = RunnableProcess.fromCommandLine(this)
+      ..start(waitForStart: false);
 
     return Pipe(lhsRunnable, rhsRunnable);
   }
@@ -449,15 +449,15 @@ extension StringAsProcess on String {
 
   /// Experiemental - DO NOT USE
   Sink get sink {
-    final lhsRunnable = RunnableProcess.fromCommandLine(this);
-    lhsRunnable.start(waitForStart: false);
+    final lhsRunnable = RunnableProcess.fromCommandLine(this)
+      ..start(waitForStart: false);
     return lhsRunnable.sink;
   }
 
   /// Experiemental - DO NOT USE
   RunnableProcess get process {
-    final process = RunnableProcess.fromCommandLine(this);
-    process.start(waitForStart: false);
+    final process = RunnableProcess.fromCommandLine(this)
+      ..start(waitForStart: false);
 
     return process;
   } // Treat the [this]  as the name of a file and
@@ -472,15 +472,14 @@ extension StringAsProcess on String {
   ///
   /// See [append] appends a line to an existing file.
   void write(String line, {String newline = '\n'}) {
-    final sink = FileSync(this);
-    sink.write(line, newline: newline);
-    sink.close();
+    FileSync(this)
+      ..write(line, newline: newline)
+      ..close();
   }
 
   /// Truncates a file by setting its length to zero.
   void truncate() {
-    final sink = FileSync(this);
-    sink.truncate();
+    FileSync(this).truncate();
   }
 
   /// Treat the contents of this String  as the name of a file
@@ -496,9 +495,9 @@ extension StringAsProcess on String {
   /// ```
   ///
   void append(String line, {String newline = '\n'}) {
-    final sink = FileSync(this);
-    sink.append(line, newline: newline);
-    sink.close();
+    FileSync(this)
+      ..append(line, newline: newline)
+      ..close();
   }
 }
 

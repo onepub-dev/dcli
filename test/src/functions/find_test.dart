@@ -84,13 +84,12 @@ void main() {
         final paths = TestFileSystem();
         final found =
             find('*.txt', workingDirectory: paths.top, recursive: false)
-                .toList();
-        found.sort();
+                .toList()
+                  ..sort();
         final expected = [
           join(paths.top, 'one.txt'),
           join(paths.top, 'two.txt')
-        ];
-        expected.sort();
+        ]..sort();
         t.expect(found, t.equals(expected));
       });
     });
@@ -115,8 +114,7 @@ void main() {
           join(paths.top, 'one.jpg'),
           join(paths.middle, 'two.jpg'),
           join(paths.bottom, 'three.jpg')
-        ];
-        expected.sort();
+        ]..sort();
         t.expect(found, t.equals(expected));
       });
     });
@@ -124,9 +122,8 @@ void main() {
     t.test('Search recursive for *.txt ', () {
       TestFileSystem().withinZone((fs) {
         final paths = TestFileSystem();
-        final found = find('*.txt', workingDirectory: paths.top).toList();
-
-        found.sort();
+        final found = find('*.txt', workingDirectory: paths.top).toList()
+          ..sort();
         final expected = [
           join(paths.top, 'one.txt'),
           join(paths.top, 'two.txt'),
@@ -134,8 +131,7 @@ void main() {
           join(paths.middle, 'four.txt'),
           join(paths.bottom, 'five.txt'),
           join(paths.bottom, 'six.txt')
-        ];
-        expected.sort();
+        ]..sort();
         t.expect(found, t.equals(expected));
       });
     });
@@ -143,9 +139,8 @@ void main() {
     t.test('ignore hidden files *.txt  ', () {
       TestFileSystem().withinZone((fs) {
         final paths = TestFileSystem();
-        final found = find('*.txt', workingDirectory: paths.top).toList();
-
-        found.sort();
+        final found = find('*.txt', workingDirectory: paths.top).toList()
+          ..sort();
         final expected = [
           join(paths.top, 'one.txt'),
           join(paths.top, 'two.txt'),
@@ -153,8 +148,7 @@ void main() {
           join(paths.middle, 'four.txt'),
           join(paths.bottom, 'five.txt'),
           join(paths.bottom, 'six.txt'),
-        ];
-        expected.sort();
+        ]..sort();
         t.expect(found, t.equals(expected));
       });
     });
@@ -164,9 +158,8 @@ void main() {
         final paths = TestFileSystem();
         final found =
             find('*.txt', workingDirectory: paths.top, includeHidden: true)
-                .toList();
-
-        found.sort();
+                .toList()
+                  ..sort();
         final expected = [
           join(paths.thidden, 'fred.txt'),
           join(paths.top, 'one.txt'),
@@ -179,8 +172,7 @@ void main() {
           join(paths.bottom, 'six.txt'),
           join(paths.hidden, 'seven.txt'),
           join(paths.hidden, '.seven.txt'),
-        ];
-        expected.sort();
+        ]..sort();
         t.expect(found, t.equals(expected));
       });
     });

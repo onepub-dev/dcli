@@ -11,8 +11,8 @@ class Pipe {
 
   ///
   Pipe operator |(String next) {
-    final pNext = RunnableProcess.fromCommandLine(next);
-    pNext.start(waitForStart: false);
+    final pNext = RunnableProcess.fromCommandLine(next)
+      ..start(waitForStart: false);
     return Pipe(_rhs, pNext);
   }
 

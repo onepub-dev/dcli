@@ -191,9 +191,7 @@ class FileSort {
 
   void _saveSortedList(
       String filename, List<_Line> list, String? lineDelimiter) {
-    final saveTo = d.FileSync(filename);
-
-    saveTo.truncate();
+    final saveTo = d.FileSync(filename)..truncate();
     for (final line in list) {
       saveTo.append(line.line!, newline: lineDelimiter);
     }
@@ -220,9 +218,9 @@ class FileSort {
         final comparator = end._comparator;
         final sortDirection = end._sortDirection;
 
-        final start = Column.parse(parts[0], ordinalOnly: true);
-        start._comparator = comparator;
-        start._sortDirection = sortDirection;
+        final start = Column.parse(parts[0], ordinalOnly: true)
+          .._comparator = comparator
+          .._sortDirection = sortDirection;
 
         int index;
         if (end.ordinal! > start.ordinal!) {
@@ -289,8 +287,9 @@ class FileSort {
         lines.add(line);
         _sortList(lines);
       } else {
-        line.close();
-        line.delete();
+        line
+          ..close()
+          ..delete();
       }
     }
 
@@ -352,7 +351,8 @@ class CaseInsensitiveSort implements ColumnComparator {
   ///
   const CaseInsensitiveSort();
   @override
-  int compareTo(Column column, String? lhs, String? rhs) => lhs!.toLowerCase().compareTo(rhs!.toLowerCase());
+  int compareTo(Column column, String? lhs, String? rhs) =>
+      lhs!.toLowerCase().compareTo(rhs!.toLowerCase());
 }
 
 ///
@@ -360,7 +360,8 @@ class CaseSensitiveSort implements ColumnComparator {
   ///
   const CaseSensitiveSort();
   @override
-  int compareTo(Column column, String? lhs, String? rhs) => lhs!.compareTo(rhs!);
+  int compareTo(Column column, String? lhs, String? rhs) =>
+      lhs!.compareTo(rhs!);
 }
 
 ///
@@ -530,14 +531,15 @@ class Column {
     return digits;
   }
 
-  bool _isDigit(String c) => c == '0' ||
-        c == '1' ||
-        c == '2' ||
-        c == '3' ||
-        c == '4' ||
-        c == '5' ||
-        c == '6' ||
-        c == '7' ||
-        c == '8' ||
-        c == '9';
+  bool _isDigit(String c) =>
+      c == '0' ||
+      c == '1' ||
+      c == '2' ||
+      c == '3' ||
+      c == '4' ||
+      c == '5' ||
+      c == '6' ||
+      c == '7' ||
+      c == '8' ||
+      c == '9';
 }
