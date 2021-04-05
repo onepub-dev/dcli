@@ -76,7 +76,7 @@ class FileSync {
       line.write(char);
       priorChar = char;
     }
-    final bool endOfFile = line.isEmpty && foundDelimiter == false;
+    final endOfFile = line.isEmpty && foundDelimiter == false;
     return endOfFile ? null : line.toString();
   }
 
@@ -116,9 +116,7 @@ class FileSync {
             (line) {
               final cont = lineAction(line);
               if (cont == false) {
-                subscription
-                    .cancel()
-                    .then((dynamic finished) => done.complete(true));
+                subscription.cancel().then((finished) => done.complete(true));
               }
             },
             cancelOnError: true,
@@ -202,7 +200,7 @@ void symlink(
   String linkPath,
 ) {
   Settings().verbose('symlink existingPath: $existingPath linkPath $linkPath');
-  final link = Link(linkPath).createSync(existingPath);
+  Link(linkPath).createSync(existingPath);
 }
 
 ///

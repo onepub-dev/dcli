@@ -1,6 +1,7 @@
 import '../../dcli.dart';
 import 'shell.dart';
 
+/// Base class containing common code for all Shell implementations.
 mixin ShellMixin implements Shell {
   @override
   bool operator ==(covariant Shell other) => name == other.name;
@@ -10,7 +11,9 @@ mixin ShellMixin implements Shell {
   /// For Windows systems we will return null.
   static String? loginShell() {
     final shell = env['SHELL'];
-    if (Settings().isWindows || shell == null) return null;
+    if (Settings().isWindows || shell == null) {
+      return null;
+    }
 
     return basename(env['SHELL']!);
   }

@@ -273,7 +273,7 @@ class TestFileSystem {
   void installDCli() {
     /// run pub get and only display errors.
     '${DartSdk.dartExeName} pub global activate --source path $pwd'
-        .start(progress: Progress((line) {}, stderr: (line) => print(line)));
+        .start(progress: Progress((line) {}, stderr: print));
 
     EntryPoint().process(['install', '--nodart', '--quiet', '--noprivileges']);
   }
@@ -393,9 +393,8 @@ class TestFileSystem {
             join(Settings().pathToDCliBin, command));
       } else {
         /// compile and install the command
-        final script =
-            Script.fromFile('test/test_script/general/bin/$command.dart')
-              ..compile(install: true);
+        Script.fromFile('test/test_script/general/bin/$command.dart')
+          .compile(install: true);
 
         // copy it back to the dcli testbin so the next unit
         // test doesn't have to compile it.

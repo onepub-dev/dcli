@@ -32,7 +32,9 @@ List<String> completionExpandScripts(String word,
   }
 
   /// if the resulting path is invalid return an empty list.
-  if (!exists(_workingDirectory)) return <String>[];
+  if (!exists(_workingDirectory)) {
+    return <String>[];
+  }
 
   // /// if the work ends in a slash then we treat it as a directory
   // /// then we need to use the directory as the workingDirectory so we

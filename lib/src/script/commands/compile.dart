@@ -61,7 +61,9 @@ class CompileCommand extends Command {
     } else {
       for (final scriptPath in scriptList) {
         exitCode = compileScript(scriptPath);
-        if (exitCode != 0) break;
+        if (exitCode != 0) {
+          break;
+        }
       }
     }
 

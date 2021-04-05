@@ -45,7 +45,6 @@ class Script {
         _scriptDirectory = dirname(truepath(pathToScript)),
         _project = project {
     {
-      assert(pathToScript.endsWith('.dart'));
       if (create) {
         DartProject.fromPath(pathToProjectRoot).initFiles();
       }
@@ -62,6 +61,7 @@ class Script {
   /// Path to the script loaded.
   String _pathToScript;
 
+  /// path to the this script.
   String get pathToScript => _pathToScript;
 
   /// The filename of the script including the extension.
@@ -86,6 +86,7 @@ class Script {
   /// The pubspec.yaml is located in the project's root directory.
   String get pathToPubSpec => project.pathToPubSpec;
 
+  /// True if the script has been pre-compiled via a pub get.
   bool get isReadyToRun => project.isReadyToRun;
 
   /// True if the script is compiled.
@@ -179,6 +180,7 @@ class Script {
 
   DartProject? _project;
 
+  /// the project for this scrtipt.
   DartProject get project =>
       _project ??= DartProject.fromPath(pathToScriptDirectory, search: true);
 

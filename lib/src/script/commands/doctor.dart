@@ -36,25 +36,25 @@ class DoctorCommand extends Command {
     _colprint(['DCli version', Settings().version]);
     print('');
 
-    printPlatform();
+    _printPlatform();
     print('');
 
-    printExePaths();
+    _printExePaths();
     print('');
 
-    printPackageConfig();
+    _printPackageConfig();
     print('');
 
-    printPATH();
+    _printPATH();
     print('');
 
-    printShell();
+    _printShell();
     print('');
 
-    printDartLocations();
+    _printDartLocations();
     print('');
 
-    printPermissions();
+    _printPermissions();
     print('');
 
     if (showScriptDetails) {
@@ -63,12 +63,12 @@ class DoctorCommand extends Command {
     return 0;
   }
 
-  void printDartLocations() {
+  void _printDartLocations() {
     print('dart location(s)');
     which('dart').paths.forEach((line) => _colprint(['', line]));
   }
 
-  void printPermissions() {
+  void _printPermissions() {
     print('permissions');
     _showPermissions('HOME', HOME);
     _showPermissions('.dcli', Settings().pathToDCli);
@@ -77,7 +77,7 @@ class DoctorCommand extends Command {
     _showPermissions('templates', Settings().pathToTemplate);
   }
 
-  void printShell() {
+  void _printShell() {
     _colprint([r'$SHELL', env['SHELL'] ?? '']);
 
     final shell = Shell.current;
@@ -95,14 +95,14 @@ class DoctorCommand extends Command {
     }
   }
 
-  void printPATH() {
+  void _printPATH() {
     print('PATH');
     for (final path in PATH) {
       _colprint(['', privatePath(path)]);
     }
   }
 
-  void printPackageConfig() {
+  void _printPackageConfig() {
     if (Platform.packageConfig == null) {
       _colprint(['package Config', 'not passed']);
     } else {
@@ -110,7 +110,7 @@ class DoctorCommand extends Command {
     }
   }
 
-  void printExePaths() {
+  void _printExePaths() {
     final whichDcli = which('dcli');
     _colprint([
       'dcli path',
@@ -166,7 +166,7 @@ class DoctorCommand extends Command {
     }
   }
 
-  void printPlatform() {
+  void _printPlatform() {
     _colprint(['OS', Platform.operatingSystem]);
     print(Format.row(['OS Version', Platform.operatingSystemVersion],
         widths: [17, -1]));

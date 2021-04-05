@@ -27,7 +27,9 @@ int availableSpace(String path) {
 
   final havailable = parts[3];
 
-  if (havailable == '0') return 0;
+  if (havailable == '0') {
+    return 0;
+  }
 
   final factoryLetter = havailable.substring(havailable.length - 1);
   final hsize = havailable.substring(0, havailable.length - 1);

@@ -10,16 +10,18 @@ import '../../dcli.dart';
 /// GENERATED - GENERATED
 
 class TemplateExpander {
+  /// Creates a template expander that will expand its files int [targetPath]
   TemplateExpander(this.targetPath);
 
+  /// The path the templates will be expanded into.
   String targetPath;
 
   // ignore: non_constant_identifier_names
+  ///
   void basic() {
-    final expandTo = join(targetPath, 'basic.dart')
-      ..
-          // ignore: unnecessary_raw_strings
-          write(r'''
+    join(targetPath, 'basic.dart').
+        // ignore: unnecessary_raw_strings
+        write(r'''
 #! /usr/bin/env %dcliName%
 
 import 'dart:io';

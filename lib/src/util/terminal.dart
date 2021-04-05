@@ -42,7 +42,9 @@ class Terminal {
   ///
   void clearScreen({TerminalClearMode mode = TerminalClearMode.all}) {
     //print('clearing screen');
-    if (!Ansi.isSupported) return;
+    if (!Ansi.isSupported) {
+      return;
+    }
     switch (mode) {
       // case AnsiClearMode.scrollback:
       //   write('${esc}3J', newline: false);
@@ -63,7 +65,9 @@ class Terminal {
 
   ///
   void clearLine({TerminalClearMode mode = TerminalClearMode.all}) {
-    if (!Ansi.isSupported) return;
+    if (!Ansi.isSupported) {
+      return;
+    }
     switch (mode) {
       // case AnsiClearMode.scrollback:
       case TerminalClearMode.all:
@@ -106,5 +110,6 @@ class Terminal {
     }
   }
 
+  /// Writes [text] to stdout.
   static void write(String text) => stdout.write(text);
 }

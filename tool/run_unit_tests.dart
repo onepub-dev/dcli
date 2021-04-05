@@ -15,7 +15,9 @@ void main() {
 
   print(orange('cleaning old test and build artifacts'));
 
-  if (exists('/tmp/dcli')) deleteDir('/tmp/dcli');
+  if (exists('/tmp/dcli')) {
+    deleteDir('/tmp/dcli');
+  }
 
   /// remove all of the test artifacts from our test_script
   /// so we are in a clean state.
@@ -33,5 +35,7 @@ void main() {
       .start(nothrow: true, workingDirectory: root);
 
   // cleanup temp
-  if (exists('/tmp/dcli')) deleteDir('/tmp/dcli');
+  if (exists('/tmp/dcli')) {
+    deleteDir('/tmp/dcli');
+  }
 }

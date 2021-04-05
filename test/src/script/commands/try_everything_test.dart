@@ -40,9 +40,7 @@ void main() {
         sleep(2);
 
         echo('All files');
-        for (final file in fileList) {
-          print(file);
-        }
+        fileList.forEach(print);
 
         move(join(subdirPath, 'good.jpg'), join(subdirPath, 'bad.jpg'));
 

@@ -20,7 +20,7 @@ void main() {
         createLineFile(testFile, 10);
 
         final lines = <String?>[];
-        cat(testFile, stdout: (line) => lines.add(line));
+        cat(testFile, stdout: lines.add);
         t.expect(lines.length, t.equals(10));
       });
     });

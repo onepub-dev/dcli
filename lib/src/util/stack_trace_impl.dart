@@ -117,7 +117,9 @@ class StackTraceImpl implements core.StackTrace {
         continue;
       }
       final match = _stackTraceRegex.matchAsPrefix(line);
-      if (match == null) continue;
+      if (match == null) {
+        continue;
+      }
 
       // source is one of following formats
       /// Linux

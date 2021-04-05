@@ -77,7 +77,9 @@ void pipeTo(Future<Process> lhs, Future<Process> rhs) {
         print('listen: stderr written');
       }, onDone: () {
         print('done err');
-        if (!complete.isCompleted) complete.complete();
+        if (!complete.isCompleted) {
+          complete.complete();
+        }
       }, // stdoutCompleter.complete(true),
           //ignore: avoid_types_on_closure_parameters
           onError: (Object e, StackTrace s) =>

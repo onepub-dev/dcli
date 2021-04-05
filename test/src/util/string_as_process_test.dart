@@ -9,8 +9,8 @@ void main() {
     final result = <String?>[];
     'echo hi'.start(
       runInShell: true,
-      progress: Progress((line) => result.add(line),
-          stderr: (line) => result.add(line)),
+      progress: Progress(result.add,
+          stderr: result.add),
     );
 
     expect(result, orderedEquals(<String>['hi']));
@@ -33,7 +33,7 @@ void main() {
     final done = Completer<void>();
     progress.stream.listen((event) {
       print('stream: $event');
-    }).onDone(() => done.complete());
+    }).onDone(done.complete);
 
     waitForEx<void>(done.future);
     print('done');
@@ -54,7 +54,7 @@ void main() {
     final done = Completer<void>();
     stream.listen((event) {
       print('stream: $event');
-    }).onDone(() => done.complete());
+    }).onDone(done.complete);
 
     waitForEx<void>(done.future);
     print('done');
@@ -117,7 +117,7 @@ void main() {
     final done = Completer<void>();
     stream.listen((event) {
       print('stream: $event');
-    }).onDone(() => done.complete());
+    }).onDone(done.complete);
 
     waitForEx<void>(done.future);
     print('done');

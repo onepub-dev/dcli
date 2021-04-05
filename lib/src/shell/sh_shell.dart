@@ -5,6 +5,7 @@ import 'shell_mixin.dart';
 /// when dcli needs to interact with the Bash shell.
 
 class ShShell with ShellMixin, PosixShell {
+  /// Attached to the Sh shell with the given pid.
   ShShell.withPid(this.pid);
 
   /// Name of the shell
@@ -18,11 +19,13 @@ class ShShell with ShellMixin, PosixShell {
 
   @override
   bool get isCompletionInstalled {
+    // ignore: only_throw_errors
     throw UnimplementedError;
   }
 
   @override
   void installTabCompletion({bool quiet = false}) {
+    // ignore: only_throw_errors
     throw UnimplementedError;
   }
 
@@ -34,11 +37,13 @@ class ShShell with ShellMixin, PosixShell {
 
   @override
   String get startScriptName {
+    // ignore: only_throw_errors
     throw UnimplementedError;
   }
 
   @override
   String get pathToStartScript {
+    // ignore: only_throw_errors
     throw UnimplementedError;
   }
 

@@ -11,6 +11,8 @@ class ScriptRunner {
 
   final DartSdk _sdk;
   final List<String> _scriptArguments;
+
+  /// The script this runner exists for.
   final Script script;
 
   /// Run the script

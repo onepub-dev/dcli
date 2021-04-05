@@ -4,7 +4,7 @@ import 'dart:collection';
 /// A classic Stack of items with a push and pop method.
 ///
 class StackList<T> {
-    ///
+  ///
   StackList();
 
   ///
@@ -12,13 +12,10 @@ class StackList<T> {
   /// by pushing each element of the list
   /// onto the stack from first to last.
   StackList.fromList(List<T> initialStack) {
-    for (final item in initialStack) {
-      push(item);
-    }
+    initialStack.forEach(push);
   }
 
   final _stack = Queue<T>();
-
 
   ///
   bool get isEmpty => _stack.isEmpty;

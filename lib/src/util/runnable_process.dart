@@ -11,7 +11,10 @@ import 'stack_trace_impl.dart';
 
 import 'wait_for_ex.dart';
 
+/// Typedef for LineActions
 typedef LineAction = void Function(String line);
+
+/// Typedef for cancellable LineActions.
 typedef CancelableLineAction = bool Function(String line);
 
 /// [printerr] provides the equivalent functionality to the
@@ -30,8 +33,8 @@ void printerr(String? line) {
 ///
 class RunnableProcess {
   RunnableProcess._internal(this._parsed, this.workingDirectory) {
-    streamsFlushed =
-        Future.wait<void>([stdoutFlushed.future, stderrFlushed.future]);
+    _streamsFlushed =
+        Future.wait<void>([_stdoutFlushed.future, _stderrFlushed.future]);
   }
 
   /// Spawns a process to run the command contained in [cmdLine] along with
@@ -63,10 +66,9 @@ class RunnableProcess {
 
   /// Used when the process is exiting to ensure that we wait
   /// for stdout and stderr to be flushed.
-
-  Completer<void> stdoutFlushed = Completer<void>();
-  Completer<void> stderrFlushed = Completer<void>();
-  late Future<List<void>> streamsFlushed;
+  final Completer<void> _stdoutFlushed = Completer<void>();
+  final Completer<void> _stderrFlushed = Completer<void>();
+  late Future<List<void>> _streamsFlushed;
 
   /// returns the original command line that started this process.
   String get cmdLine => '${_parsed.cmd} ${_parsed.args.join(' ')}';
@@ -139,10 +141,10 @@ class RunnableProcess {
   /// Current [privileged] is only supported under Linux.
   ///
   Progress run({
+    required bool terminal,
     Progress? progress,
     bool runInShell = false,
     bool detached = false,
-    required bool terminal,
     bool privileged = false,
     bool? nothrow,
   }) {
@@ -245,9 +247,7 @@ class RunnableProcess {
   void _waitForStart() {
     final complete = Completer<Process>();
 
-    _fProcess.then((process) {
-      complete.complete(process);
-    })
+    _fProcess.then(complete.complete)
         //ignore: avoid_types_on_closure_parameters
         .catchError((Object e, StackTrace s) {
       // 2 - No such file or directory
@@ -355,7 +355,7 @@ class RunnableProcess {
             ..onError(error)
             ..close();
         } else {
-          waitForEx<void>(streamsFlushed);
+          waitForEx<void>(_streamsFlushed);
           progress.close();
         }
       });
@@ -403,6 +403,7 @@ class RunnableProcess {
         .catchError((Object e, StackTrace s) {
       Settings().verbose('${e.toString()} stacktrace: '
           '${StackTraceImpl.fromStackTrace(s).formatStackTrace()}');
+      // ignore: only_throw_errors
       throw e;
     }); // .whenComplete(() => print('start completed'));
 
@@ -435,7 +436,7 @@ class RunnableProcess {
         .listen((line) {
       progress.addToStdout(line);
     }).onDone(() {
-      stdoutFlushed.complete();
+      _stdoutFlushed.complete();
       _stdoutCompleter.complete(true);
     });
 
@@ -446,7 +447,7 @@ class RunnableProcess {
         .listen((line) {
       progress.addToStderr(line);
     }).onDone(() {
-      stderrFlushed.complete();
+      _stderrFlushed.complete();
       _stderrCompleter.complete(true);
     });
   }

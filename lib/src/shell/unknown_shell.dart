@@ -12,8 +12,10 @@ import 'shell_mixin.dart';
 /// This may simply be the parent process of the
 /// dart app so not a shell at all.
 class UnknownShell with ShellMixin {
+  /// Attached to the Unknown shell with the given pid.
   UnknownShell.withPid(this.pid, {this.processName});
 
+  /// The name of the shell process.
   final String? processName;
 
   /// Name of the shell
@@ -105,9 +107,11 @@ class UnknownShell with ShellMixin {
   bool get hasStartScript => true;
 
   @override
+  // ignore: only_throw_errors
   String get startScriptName => throw UnimplementedError;
 
   @override
+  // ignore: only_throw_errors
   String get pathToStartScript => throw UnimplementedError;
 
   @override
@@ -117,7 +121,8 @@ class UnknownShell with ShellMixin {
   String? get loggedInUser => null;
 
   @override
-  String privilegesRequiredMessage(String app) => 'You need to be a privileged user to run $app';
+  String privilegesRequiredMessage(String app) =>
+      'You need to be a privileged user to run $app';
 
   @override
   bool install({bool installDart = false}) {

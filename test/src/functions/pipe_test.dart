@@ -14,7 +14,7 @@ void main() {
         final linesFile = join(fs.fsRoot, TestFileSystem.testLinesFile);
         createLineFile(linesFile, 10);
 
-        'tail -n 100 $linesFile'.forEach((line) => lines.add(line));
+        'tail -n 100 $linesFile'.forEach(lines.add);
         t.expect(lines.length, t.equals(10));
       });
     });
@@ -26,7 +26,7 @@ void main() {
 
         lines.clear();
         ('tail -n 100 $linesFile' | 'head -n 5')
-            .forEach((line) => lines.add(line));
+            .forEach(lines.add);
 
         t.expect(lines.length, t.equals(5));
       });
@@ -39,7 +39,7 @@ void main() {
 
         lines.clear();
         ('tail $linesFile' | 'head -n 5' | 'tail -n 2')
-            .forEach((line) => lines.add(line));
+            .forEach(lines.add);
         t.expect(lines.length, t.equals(2));
       });
     });
@@ -51,7 +51,7 @@ void main() {
 
         lines.clear();
         ('tail $linesFile' | 'head -n 5' | 'head -n 3' | 'tail -n 2')
-            .forEach((line) => lines.add(line));
+            .forEach(lines.add);
         t.expect(lines.length, t.equals(2));
       });
     });

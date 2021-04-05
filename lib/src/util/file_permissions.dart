@@ -38,7 +38,9 @@ int _getPermissionBitIndex(
       return 10;
     case _FilePermission.sticky:
       return 9;
-    default:
+    case _FilePermission.read:
+    case _FilePermission.write:
+    case _FilePermission.execute:
       return (role.index * 3) + permission.index;
   }
 }

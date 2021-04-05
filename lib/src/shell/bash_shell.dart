@@ -6,6 +6,7 @@ import 'shell_mixin.dart';
 /// when dcli needs to interact with the Bash shell.
 
 class BashShell with ShellMixin, PosixShell {
+  /// Attached to a bash shell with the given pid.
   BashShell.withPid(this.pid);
 
   /// Name of the shell

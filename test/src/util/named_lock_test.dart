@@ -122,7 +122,8 @@ void worker(int instance) {
     final inLockPath = join(_lockCheckPath, 'inlock');
     if (exists(inLockPath)) {
       touch(_lockFailedPath, create: true);
-      throw 'NamedLock for $instance failed as another lock is active';
+      throw DCliException(
+          'NamedLock for $instance failed as another lock is active');
     }
 
     touch(inLockPath, create: true);

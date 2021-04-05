@@ -70,12 +70,14 @@ class DartSdk {
   /// file path to the 'dart2native' command.
   String? get pathToDartToNativeExe => _pathToDartNativeExe;
 
+  ///
   int get versionMajor {
     final parts = version!.split('.');
 
     return int.tryParse(parts[0]) ?? 2;
   }
 
+  ///
   int get versionMinor {
     final parts = version!.split('.');
 
@@ -223,7 +225,9 @@ class DartSdk {
 
     var installDir = defaultDartSdkPath;
 
-    if (askUser) installDir = _askForDartSdkInstallDir(defaultDartSdkPath);
+    if (askUser) {
+      installDir = _askForDartSdkInstallDir(defaultDartSdkPath);
+    }
 
     if (!exists(installDir)) {
       createDir(installDir, recursive: true);
@@ -281,7 +285,9 @@ class DartSdk {
     /// https://dart.dev/tools/sdk/archive
 
     final term = Terminal();
-    if (term.isAnsi) term.showCursor(show: false);
+    if (term.isAnsi) {
+      term.showCursor(show: false);
+    }
 
     fetch(
         url:
@@ -289,7 +295,9 @@ class DartSdk {
         saveToPath: zipRelease,
         fetchProgress: _showProgress);
 
-    if (term.isAnsi) term.showCursor(show: true);
+    if (term.isAnsi) {
+      term.showCursor(show: true);
+    }
     print('');
     return zipRelease;
   }
@@ -353,10 +361,13 @@ class DartSdk {
             '${EnumHelper.getName(progress.status).padRight(15)}${Format.bytesAsReadable(progress.downloaded)}/${Format.bytesAsReadable(progress.length)} $percentage');
       }
       _progressSuppressor++;
-      if (_progressSuppressor > 1000) _progressSuppressor = 0;
+      if (_progressSuppressor > 1000) {
+        _progressSuppressor = 0;
+      }
     }
   }
 
+  /// Run dart bpub global activate on the given [package].
   void globalActivate(String package) {
     if (useDartCommand) {
       '${DartSdk().pathToDartExe} pub global activate dcli'.run;

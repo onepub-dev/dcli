@@ -55,12 +55,12 @@ class DartProject {
   /// Returns the path to the project's root diretory.
   String get pathToProjectRoot => _pathToProjectRoot;
 
-  // Returns the pat to the project's pubspec.yaml
+  /// Returns the pat to the project's pubspec.yaml
   String get pathToPubSpec =>
       _pathToPubSpec ??= join(_pathToProjectRoot, 'pubspec.yaml');
 
-  // Used by the dcli doctor command to print
-  // out the DartProjects details.
+  /// Used by the dcli doctor command to print
+  /// out the DartProjects details.
   void doctor() {
     _colprint('Pubspec Path', privatePath(pathToPubSpec));
     print('');
@@ -152,14 +152,13 @@ class DartProject {
         '.packages',
         types: [Find.file],
         workingDirectory: pathToProjectRoot,
-      ).forEach((file) => delete(file));
+      ).forEach(delete);
       find(
         '.dart_tool',
         types: [Find.directory],
         workingDirectory: pathToProjectRoot,
-      ).forEach((file) => deleteDir(file));
-      find('pubspec.lock', workingDirectory: pathToProjectRoot)
-          .forEach((file) => delete(file));
+      ).forEach(deleteDir);
+      find('pubspec.lock', workingDirectory: pathToProjectRoot).forEach(delete);
 
       find('*.dart', workingDirectory: pathToProjectRoot).forEach((scriptPath) {
         final script = Script.fromFile(scriptPath);
@@ -260,7 +259,9 @@ class DartProject {
     replace(pathToScript, '%dcliName%', DCliPaths().dcliName);
     replace(pathToScript, '%scriptname%', basename(pathToScript));
 
-    if (!hasPubSpec) _createPubspecFromTemplate();
+    if (!hasPubSpec) {
+      _createPubspecFromTemplate();
+    }
     if (!hasAnalysisOptions) {
       _createAnalysisOptionsFromTemplate();
     }
@@ -315,9 +316,12 @@ class DartProject {
   /// The name used in the pubspec.yaml must come from the character
   ///  set [a-z0-9_]
   /// so wer replace any invalid character with an '_'.
-  String _replaceInvalidCharactersForName(String proposedName) => proposedName.replaceAll(RegExp('[^a-zA-Z0-9_]'), '_');
+  String _replaceInvalidCharactersForName(String proposedName) =>
+      proposedName.replaceAll(RegExp('[^a-zA-Z0-9_]'), '_');
 }
 
+/// Exception for issues with DartProjects.
 class DartProjectException extends DCliException {
+  /// Create a DartProject related exceptions
   DartProjectException(String message) : super(message);
 }

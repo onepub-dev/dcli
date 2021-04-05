@@ -49,6 +49,7 @@ void main(List<String> args) {
   print(orange('Your response was: $response'));
 }
 
+/// Show useage.
 void showUsage(ArgParser parser) {
   print('Usage: %scriptname% -v -prompt <a questions>');
   print(parser.usage);

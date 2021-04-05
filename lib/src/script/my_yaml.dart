@@ -31,7 +31,7 @@ class MyYaml {
     if (_document.contents.value == null) {
       return null;
     } else {
-      return _document.contents.value[key] as String?;
+      return (_document.contents.value as Map)[key] as String?;
     }
   }
 
@@ -40,7 +40,7 @@ class MyYaml {
     if (_document.contents.value == null) {
       return null;
     } else {
-      return _document.contents.value[key] as y.YamlList?;
+      return (_document.contents.value as Map)[key] as y.YamlList?;
     }
   }
 
@@ -49,12 +49,12 @@ class MyYaml {
     if (_document.contents.value == null) {
       return null;
     } else {
-      return _document.contents.value[key] as y.YamlMap?;
+      return (_document.contents.value as Map)[key] as y.YamlMap?;
     }
   }
 
   /// addes a list to the yaml.
   void setList(String key, List<Dependency> list) {
-    _document.contents.value[key] = list;
+    (_document.contents.value as Map)[key] = list;
   }
 }

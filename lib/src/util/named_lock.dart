@@ -110,13 +110,17 @@ class NamedLock {
           fn();
         }
       } finally {
-        if (lockHeld) _releaseLock();
+        if (lockHeld) {
+          _releaseLock();
+        }
         // just in case an async exception can be thrown
         // I'm uncertain if this is a reality.
         lockHeld = false;
       }
-    }, (Object e, StackTrace st) {
-      if (lockHeld) _releaseLock();
+    }, (e, st) {
+      if (lockHeld) {
+        _releaseLock();
+      }
       // final stackTrace = StackTraceImpl.fromStackTrace(st);
 
       if (e is DCliException) {
@@ -195,6 +199,7 @@ class NamedLock {
 
     try {
       isolateString = Service.getIsolateID(Isolate.current);
+    // ignore: avoid_catches_without_on_clauses
     } catch (_) {
       /// hack until google fixes nndb problem with getIsolateID
       /// https://github.com/dart-lang/sdk/issues/45347
@@ -332,8 +337,8 @@ class NamedLock {
   }
 
   void _withHardLock({
-    Duration timeout = const Duration(seconds: 30),
     required void Function() fn,
+    Duration timeout = const Duration(seconds: 30),
   }) {
     RawServerSocket? socket;
 
@@ -341,7 +346,9 @@ class NamedLock {
 
     waitCount = timeout.inMilliseconds ~/ 100;
     // ensure at least one retry.
-    if (waitCount == 0) waitCount = 1;
+    if (waitCount == 0) {
+      waitCount = 1;
+    }
 
     try {
       while (socket == null) {

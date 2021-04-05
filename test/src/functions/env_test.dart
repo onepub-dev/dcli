@@ -31,7 +31,7 @@ void main() {
         Env.reset();
         //var mockEnv = MockEnv();
 
-        const userDataPath = 'C:\\Windows\\Userdata';
+        const userDataPath = r'C:\Windows\Userdata';
 
         env['HOME'] = userDataPath;
         env['APPDATA'] = userDataPath;

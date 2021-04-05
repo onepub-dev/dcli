@@ -244,6 +244,7 @@ class Find extends DCliFunction {
               .verbose('File or Directory deleted whilst we were processing it:'
                   ' ${e.path}');
         } else {
+          // ignore: only_throw_errors
           throw e;
         }
       },

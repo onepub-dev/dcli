@@ -278,8 +278,7 @@ extension StringAsProcess on String {
 
     Progress progress;
 
-    progress =
-        Progress((line) => list.add(line), stderr: (line) => list.add(line));
+    progress = Progress(list.add, stderr: list.add);
 
     progress = cmd.start(this,
         runInShell: runInShell, progress: progress, nothrow: nothrow);
@@ -431,6 +430,8 @@ extension StringAsProcess on String {
   //   runnable.run(runInShell: runInShell, nothrow: nothrow, terminal: false);
   //   return runnable.stream.transform(utf8.decoder);
   // }
+  /// Experiemental - allows you to get a stream of the output written by the
+  /// called process.
   Stream<String> stream(
       {bool runInShell = false,
       String? workingDirectory,

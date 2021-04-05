@@ -19,9 +19,7 @@ void main() {
       String command;
       command = 'ls *.txt';
       final found = <String?>[];
-      start(command, workingDirectory: path).forEach((file) {
-        found.add(file);
-      });
+      start(command, workingDirectory: path).forEach(found.add);
 
       expect(found, <String>['one.txt', 'two.txt']);
     });

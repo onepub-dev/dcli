@@ -41,6 +41,7 @@ mixin PosixShell {
     return uid == 0;
   }
 
+  /// returns the username of the logged in user.
   String get loggedInUser {
     var user = _whoami();
     if (user == 'root') {
@@ -120,10 +121,13 @@ mixin PosixShell {
     }
   }
 
+  /// Returns true if we are currently running under sudo.
   bool get isSudo => !Settings().isWindows && env['SUDO_USER'] != null;
 
+  /// The message used during installation if it needs to be run with sudo.
   String privilegesRequiredMessage(String app) => 'Please run with: sudo $app';
 
+  /// Install dart/dcli
   bool install({bool installDart = false}) {
     if (Platform.isLinux) {
       return LinuxDCliInstaller().install(installDart: installDart);

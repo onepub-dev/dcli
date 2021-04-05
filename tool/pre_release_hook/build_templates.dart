@@ -48,8 +48,12 @@ import 'package:dcli/dcli.dart';
 /// GENERATED - GENERATED
 
 class TemplateExpander {
-    String targetPath;
+    
+    /// Creates a template expander that will expand its files int [targetPath]
     TemplateExpander(this.targetPath);
+
+    /// The path the templates will be expanded into.
+    String targetPath;
 
 ''');
 
@@ -60,10 +64,11 @@ class TemplateExpander {
     /// Write the content of each asset into a method.
     content.write('''
 \t\t// ignore: non_constant_identifier_names
+\t\t/// Expander for ${buildMethodName(file)}
 \t\tvoid ${buildMethodName(file)}() {
-      final expandTo = join(targetPath, '${basename(file)}');
+      join(targetPath, '${basename(file)}')
        // ignore: unnecessary_raw_strings
-       expandTo.write(r\'\'\'
+       .write(r\'\'\'
 ${preprocess(file, read(file).toList()).join('\n')}\'\'\');
     }
 
@@ -75,12 +80,11 @@ ${preprocess(file, read(file).toList()).join('\n')}\'\'\');
   /// Create the 'expand' method which when called will
   /// expanded each of the assets.
   content.write('''
+/// Expand all templates.
 \t\tvoid expand() {
 ''');
 
-  for (final expander in expanders) {
-    content.write(expander);
-  }
+  expanders.forEach(content.write);
   content..write('''
   }
 ''')..write('''

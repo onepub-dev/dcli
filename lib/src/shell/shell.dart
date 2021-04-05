@@ -41,6 +41,8 @@ abstract class Shell {
   ///
   bool get isCompletionInstalled => false;
 
+  /// A derived class should overload this method and return true
+  /// if the script is running under sudo.
   bool get isSudo => false;
 
   /// If the shell supports tab completion then
@@ -76,9 +78,9 @@ abstract class Shell {
   ///
   /// Calling [releasePrivileges] has no affect on this call.
   ///
-  /// Under Linux and OSX this means that the process's real uid 
+  /// Under Linux and OSX this means that the process's real uid
   /// is root (uid = 0).
-  /// Under Windows this means that the process was lauched via 
+  /// Under Windows this means that the process was lauched via
   /// 'Run as Administrator'.
   ///
   bool get isPrivilegedProcess => false;
@@ -95,7 +97,7 @@ abstract class Shell {
   ///
   /// Calling this method on Windows is unnecessary but harmless.
   ///
-  /// On Linux and OSX releasing privileges sets the uid and gid 
+  /// On Linux and OSX releasing privileges sets the uid and gid
   /// to the user's original
   /// privileges so any files that are created/modified get the original
   /// user's uid/gid.
@@ -156,6 +158,7 @@ abstract class Shell {
   /// or null if there are no preconditions.
   String? checkInstallPreconditions() => null;
 
+  /// The pid of the current shell
   int? get pid;
 
   static Shell? _current;
@@ -167,6 +170,7 @@ abstract class Shell {
   static Shell get current => _current ??= ShellDetection().identifyShell();
 }
 
+/// Typedef for the withPrivileges function.
 typedef RunPrivileged = void Function();
 
 /// Thrown when an exception occurs in the Shell detection and support methods.

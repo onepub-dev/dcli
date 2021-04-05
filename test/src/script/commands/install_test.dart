@@ -42,7 +42,7 @@ void main() {
         when(mockSettings.isMacOS).thenReturn(false);
         when(mockSettings.pathToDCliBin).thenReturn(settings.pathToDCliBin);
 
-        when(mockEnv.HOME).thenReturn('c:\\windows\\userdata');
+        when(mockEnv.HOME).thenReturn(r'C:\windows\userdata');
         when(mockEnv.isOnPATH(settings.pathToDCliBin)).thenReturn(false);
 
         Settings.mock = mockSettings;

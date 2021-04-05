@@ -45,7 +45,8 @@ class Parser {
   /// of columns.
   ///
   /// See: https://pub.dev/packages/csv
-  List<List<dynamic>> csvDecode() => const CsvToListConverter().convert(_lines.join('\n'));
+  List<List<dynamic>> csvDecode() =>
+      const CsvToListConverter().convert(_lines.join('\n'));
 
   /// Interprets the read lines as an ini file.
   /// See https://pub.dev/packages/ini

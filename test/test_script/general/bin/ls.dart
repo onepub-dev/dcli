@@ -11,9 +11,7 @@ void main(List<String> args) {
       if (files.isEmpty) {
         print("ls: cannot access '$arg': No such file or directory");
       } else {
-        for (final file in files) {
-          print(file);
-        }
+        files.forEach(print);
       }
     }
   } else {

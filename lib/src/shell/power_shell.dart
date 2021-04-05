@@ -4,6 +4,7 @@ import 'windows_mixin.dart';
 
 /// Windows Power Shell
 class PowerShell with WindowsMixin, ShellMixin {
+  /// Attached to the Powershell shell with the given pid.
   PowerShell.withPid(this.pid);
 
   /// Name of the shell
@@ -67,8 +68,10 @@ class PowerShell with WindowsMixin, ShellMixin {
   bool get hasStartScript => false;
 
   @override
+  // ignore: only_throw_errors
   String get startScriptName => throw UnimplementedError;
 
   @override
+  // ignore: only_throw_errors
   String get pathToStartScript => throw UnimplementedError;
 }

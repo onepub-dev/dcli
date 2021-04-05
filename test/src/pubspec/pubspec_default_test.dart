@@ -37,7 +37,7 @@ dependencies:
 
   t.test('File - basic', () {
     TestFileSystem().withinZone((fs) {
-      final String pubSpecScriptPath = createPubspecPath(fs);
+      final pubSpecScriptPath = createPubspecPath(fs);
       PubSpec.fromString(basic).saveToFile(pubSpecScriptPath);
 
       final dependencies = <Dependency>[
@@ -114,7 +114,7 @@ String createScriptPath(TestFileSystem fs) {
 
 void runTest(TestFileSystem fs, String? annotation, String main,
     List<Dependency> expected) {
-  final String scriptPath = createScriptPath(fs);
+  final scriptPath = createScriptPath(fs);
   final script = Script.fromFile(scriptPath);
 
   if (exists(Settings().pathToDCli)) {

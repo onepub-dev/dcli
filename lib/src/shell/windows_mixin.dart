@@ -7,7 +7,9 @@ import '../../dcli.dart';
 import '../installers/windows_installer.dart';
 import '../script/commands/install.dart';
 
+/// Common code for Windows shells.
 mixin WindowsMixin {
+  /// Check if the shell has any notes re: pre-isntallation conditions.
   String? checkInstallPreconditions() => null;
 
   /// Windows 10+ has a developer mode that needs to be enabled to create
@@ -31,10 +33,15 @@ mixin WindowsMixin {
     return parts[2] == '0x1';
   }
 
-  bool install({bool installDart = true}) => WindowsDCliInstaller().install(installDart: installDart);
+  /// Called to install the windows specific dart/dcli components.
+  bool install({bool installDart = true}) =>
+      WindowsDCliInstaller().install(installDart: installDart);
 
-  String privilegesRequiredMessage(String app) => 'You need to be a privileged user to run $app';
+  ///
+  String privilegesRequiredMessage(String app) =>
+      'You need to be a privileged user to run $app';
 
+  ///
   String? get loggedInUser => env['USERNAME'];
 
   /// revert uid and gid to original user's id's
@@ -51,9 +58,12 @@ mixin WindowsMixin {
     privilegedCallback();
   }
 
+  /// On Windows this is always false.
   bool get isSudo => false;
 
-  /// TODO: impement notification so desktop apps update their environment.
+  // TODO(bsutton): impement notification so desktop apps
+  // update their environment.
+  /// Updatest the PATH environment variable.
   static void setPath(List<String?> paths) {
     // // const char * what = "Environment";
     // // DWORD rv;

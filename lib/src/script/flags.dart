@@ -44,7 +44,8 @@ class Flags {
   static String abbrSwitch(Flag flag) => '-${flag.abbreviation}';
 
   /// true if the given argument starts with '-' or '--'.
-  static bool isFlag(String argument) => argument.startsWith('-') || argument.startsWith('--');
+  static bool isFlag(String argument) =>
+      argument.startsWith('-') || argument.startsWith('--');
 
   /// true if a global flag in the [Settings] class is set.
   bool isSet(Flag flag) => Settings().isFlagSet(flag);
@@ -77,7 +78,7 @@ abstract class Flag {
 
   @override
   //ignore: avoid_equals_and_hash_code_on_mutable_classes
-  bool operator ==(covariant Flag flag) => flag.name == _name;
+  bool operator ==(covariant Flag other) => other.name == _name;
 
   @override
   //ignore: avoid_equals_and_hash_code_on_mutable_classes

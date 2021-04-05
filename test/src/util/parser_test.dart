@@ -13,7 +13,8 @@ void main() {
   "d": "yes"
 }''');
 
-      expect('cat $jsonFile'.parser().jsonDecode()['a'], 456);
+      final parser = 'cat $jsonFile'.parser();
+      expect((parser.jsonDecode() as Map)['a'], 456);
 
       final csvFile = join(fs.fsRoot, 'sample.csv')
         ..write('''"a", 456,"d", "yes"''');
@@ -26,7 +27,9 @@ environment:
   sdk: '>=2.6.0 <3.0.0'
 dependencies: 
   dcli: ^0.20.0''');
-      expect('cat $yamlFile'.parser().yamlDecode()['name'], 'pubspec_local');
+
+      final yamlParser = 'cat $yamlFile'.parser();
+      expect((yamlParser.yamlDecode() as Map)['name'], 'pubspec_local');
 
       join(fs.fsRoot, 'sample.init').write('''
 [name]

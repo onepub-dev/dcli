@@ -89,9 +89,9 @@ class InstallCommand extends Command {
     if (_quiet) {
       print('Installing DCli v$packageVersion ...');
     }
-    qprint('Hang on a tick whilst we install DCli ${Settings().version}');
+    _qprint('Hang on a tick whilst we install DCli ${Settings().version}');
 
-    qprint('');
+    _qprint('');
 
     final conditions = shell.checkInstallPreconditions();
     if (conditions != null) {
@@ -105,21 +105,21 @@ class InstallCommand extends Command {
 
     // Create the ~/.dcli root.
     if (!exists(Settings().pathToDCli)) {
-      qprint(blue('Creating ${Settings().pathToDCli}'));
+      _qprint(blue('Creating ${Settings().pathToDCli}'));
       createDir(Settings().pathToDCli);
     } else {
-      qprint('Found existing install at: ${Settings().pathToDCli}.');
+      _qprint('Found existing install at: ${Settings().pathToDCli}.');
     }
-    qprint('');
+    _qprint('');
 
-    qprint('');
+    _qprint('');
 
     /// create the template directory.
     if (!exists(Settings().pathToTemplate)) {
-      qprint(blue(
+      _qprint(blue(
           'Creating Template directory in: ${Settings().pathToTemplate}.'));
     } else {
-      qprint(blue(
+      _qprint(blue(
           'Updating Template directory in: ${Settings().pathToTemplate}.'));
     }
 
@@ -127,8 +127,8 @@ class InstallCommand extends Command {
 
     /// create the cache directory.
     if (!exists(Settings().pathToDCliCache)) {
-      qprint('');
-      qprint(
+      _qprint('');
+      _qprint(
           blue('Creating Cache directory in: ${Settings().pathToDCliCache}.'));
       createDir(Settings().pathToDCliCache);
     }
@@ -136,18 +136,18 @@ class InstallCommand extends Command {
     // create the bin directory
     final binPath = Settings().pathToDCliBin;
     if (!exists(binPath)) {
-      qprint('');
-      qprint(blue('Creating bin directory in: $binPath.'));
+      _qprint('');
+      _qprint(blue('Creating bin directory in: $binPath.'));
       createDir(binPath);
 
       // check if shell can add a path.
       if (!shell.hasStartScript || !shell.addToPATH(binPath)) {
-        qprint(orange('If you want to use dcli compile -i to install scripts, '
+        _qprint(orange('If you want to use dcli compile -i to install scripts, '
             'add $binPath to your PATH.'));
       }
     }
 
-    qprint('');
+    _qprint('');
 
     if (shell.isCompletionSupported) {
       if (!shell.isCompletionInstalled) {
@@ -172,13 +172,13 @@ class InstallCommand extends Command {
       exit(1);
     } else {
       final dcliPath = dcliLocation;
-      qprint(blue('dcli found in : $dcliPath.'));
+      _qprint(blue('dcli found in : $dcliPath.'));
 
       if (_requirePrivileges) {
         symlinkDCli(shell, dcliPath);
       }
     }
-    qprint('');
+    _qprint('');
 
     _fixPermissions(shell);
 
@@ -188,29 +188,29 @@ class InstallCommand extends Command {
     touch(Settings().installCompletedIndicator, create: true);
 
     if (dartWasInstalled) {
-      qprint('');
-      qprint(
+      _qprint('');
+      _qprint(
           red('You need to restart your shell for the adjusted PATH to work.'));
-      qprint('');
+      _qprint('');
     }
 
-    qprint(red('*' * 80));
-    qprint('');
+    _qprint(red('*' * 80));
+    _qprint('');
     // if (quiet) {
     //   print('done.');
     // }
 
-    qprint('dcli installation complete.');
+    _qprint('dcli installation complete.');
 
-    qprint('');
-    qprint(red('*' * 80));
+    _qprint('');
+    _qprint(red('*' * 80));
 
-    qprint('');
-    qprint('Create your first dcli script using:');
-    qprint(blue('  dcli create <scriptname>.dart'));
-    qprint('');
-    qprint(blue('  Run your script by typing:'));
-    qprint(blue('  ./<scriptname>.dart'));
+    _qprint('');
+    _qprint('Create your first dcli script using:');
+    _qprint(blue('  dcli create <scriptname>.dart'));
+    _qprint('');
+    _qprint(blue('  Run your script by typing:'));
+    _qprint(blue('  ./<scriptname>.dart'));
 
     return 0;
   }
@@ -226,8 +226,11 @@ class InstallCommand extends Command {
     }
   }
 
-  void qprint(String? message) {
-    if (!_quiet) print(message);
+
+  void _qprint(String? message) {
+    if (!_quiet) {
+      print(message);
+    }
   }
 
   @override

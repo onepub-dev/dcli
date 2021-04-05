@@ -34,7 +34,7 @@ void main() {
 
       '${DCliPaths().dcliName} '
               '${join(fs.testScriptPath, 'general/bin/hello_world.dart')}'
-          .forEach((line) => results.add(line), stderr: printerr);
+          .forEach(results.add, stderr: printerr);
 
       // if warmup hasn't been run then we have the results of
       //  a pub get in the the output.

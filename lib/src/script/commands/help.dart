@@ -75,7 +75,9 @@ class HelpCommand extends Command {
       }
       var first = true;
       command.flags().forEach((flag) {
-        if (!first) print('');
+        if (!first) {
+          print('');
+        }
         first = false;
         print(blue('    ${flag.usage()}'));
         print('      ${flag.description()}');

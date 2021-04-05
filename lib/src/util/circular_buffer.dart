@@ -11,6 +11,9 @@ class CircularBuffer<T> {
   late int _start;
   late int _end;
   late int _count;
+
+  /// The no. of elements the buffer can hold.
+  /// Once this limit is reach the buffer rolls over to the start of the buffer.
   final int capacity;
 
   /// empty the buffer.

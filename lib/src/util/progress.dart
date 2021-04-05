@@ -221,6 +221,7 @@ class Progress {
     _closed = true;
   }
 
+  /// Sends or enqueues an error event.
   void onError(RunException error) {
     _stderrController.addError(error);
   }

@@ -79,7 +79,8 @@ class Format {
 
   /// returns a double as a percentage to the given [precision]
   /// e.g. 0.11 becomes 11% if [precision] is 0.
-  static String percentage(double progress, int precision) => '${(progress * 100).toStringAsFixed(precision)}%';
+  static String percentage(double progress, int precision) =>
+      '${(progress * 100).toStringAsFixed(precision)}%';
 
   /// returns the the number of [bytes] in a human readable
   /// form. e.g. 10G, 100M, 20K, 10B

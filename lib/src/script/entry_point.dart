@@ -27,7 +27,8 @@ class EntryPoint {
   }
 
   /// process the command line
-  int process(List<String> arguments) => _parseCmdLine(arguments, Commands.applicationCommands);
+  int process(List<String> arguments) =>
+      _parseCmdLine(arguments, Commands.applicationCommands);
 
   int _parseCmdLine(List<String> arguments, List<Command> availableCommands) {
     try {

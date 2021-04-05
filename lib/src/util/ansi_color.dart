@@ -78,7 +78,7 @@ String green(
   AnsiColor background = AnsiColor.none,
   bool bold = true,
 }) =>
-    AnsiColor._apply(AnsiColor(AnsiColor.codeGeen, bold: bold), text,
+    AnsiColor._apply(AnsiColor(AnsiColor.codeGreen, bold: bold), text,
         background: background);
 
 /// Wraps the passed text with the ANSI escape sequence for
@@ -390,26 +390,62 @@ class AnsiColor {
 // emit this code followed by a color code to set the fg color
   static const String _backgroundCode = '48;5;';
 
+  /// code for black
   static const int codeBlack = 30;
+
+  /// code for  red
   static const int codeRed = 31;
-  static const int codeGeen = 32;
+
+  /// code for green
+  static const int codeGreen = 32;
+
+  /// code for yellow
   static const int codeYellow = 33;
+
+  /// code for  blue
   static const int codeBlue = 34;
+
+  /// code for magenta
   static const int codeMagenta = 35;
+
+  /// code for cyan
   static const int codeCyan = 36;
+
+  /// code for white
   static const int codeWhite = 37;
+
+  /// code for orange
   static const int codeOrange = 208;
+
+  /// code for grey
   static const int codeGrey = 232;
 
   /// Colors
+  /// black
   static const AnsiColor black = AnsiColor(codeBlack);
+
+  /// red
   static const AnsiColor red = AnsiColor(codeRed);
-  static const AnsiColor green = AnsiColor(codeGeen);
+
+  /// green
+  static const AnsiColor green = AnsiColor(codeGreen);
+
+  /// yellow
   static const AnsiColor yellow = AnsiColor(codeYellow);
+
+  /// blue
   static const AnsiColor blue = AnsiColor(codeBlue);
+
+  /// magenta
   static const AnsiColor magenta = AnsiColor(codeMagenta);
+
+  /// cyan
   static const AnsiColor cyan = AnsiColor(codeCyan);
+
+  /// white
   static const AnsiColor white = AnsiColor(codeWhite);
+
+  /// orange
   static const AnsiColor orange = AnsiColor(codeOrange);
 
   /// passing this as the background color will cause

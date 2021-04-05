@@ -56,7 +56,9 @@ void main() {
       /// match word: doc which then return doc/
       test('two matching directories', () {
         final mid = join(root, 'mid');
-        if (!exists(mid)) createDir(mid);
+        if (!exists(mid)) {
+          createDir(mid);
+        }
         paths = completionExpandScripts('mid', workingDirectory: root);
         deleteDir(mid);
         expect(

@@ -28,8 +28,7 @@ class PubGet {
       //  the pubspec.yaml file.
       DartSdk().runPubGet(_project.pathToProjectRoot,
           compileExecutables: compileExecutables,
-          progress:
-              Progress((line) => result._processLine(line), stderr: _println));
+          progress: Progress(result._processLine, stderr: _println));
 
       return result;
     } on RunException catch (e) {
@@ -79,9 +78,9 @@ class PubGetResult {
 
 ///
 
-class PubGetException {
+class PubGetException extends DCliException {
   ///
-  PubGetException(this.exitCode);
+  PubGetException(this.exitCode) : super('dart pub get failed');
 
   /// the pub get exit code.
   final int? exitCode;

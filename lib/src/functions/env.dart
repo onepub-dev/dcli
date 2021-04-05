@@ -9,6 +9,7 @@ import '../util/dcli_exception.dart';
 
 import 'dcli_function.dart';
 
+/// Provides access to shell environment variables.
 Env env = Env();
 
 /// Tests if the given [path] is contained
@@ -334,5 +335,6 @@ class Env extends DCliFunction {
 
 /// Base class for all Environment variable related exceptions.
 class EnvironmentException extends DCliException {
+  /// Create an environment variable exception.
   EnvironmentException(String message) : super(message);
 }

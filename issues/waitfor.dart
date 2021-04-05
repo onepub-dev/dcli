@@ -38,6 +38,7 @@ void waitForMe(Future future) {
     rethrow;
   } on Exception catch (e) {
     print(e.toString());
+  // ignore: avoid_catches_without_on_clauses
   } catch (e) {
     print('Rethrowing a non DCliException $e');
     rethrow;

@@ -5,6 +5,7 @@ void main() {
   test('wait for ex ...', () async {
     try {
       waitForEx<void>(doAsyncThrow());
+    // ignore: avoid_catches_without_on_clauses
     } catch (e, st) {
       print('stacktrace $st');
 

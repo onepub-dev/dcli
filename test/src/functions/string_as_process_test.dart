@@ -114,9 +114,9 @@ void main() {
 
         print('pwd: $pwd');
 
-        assert(exists(linesFile));
+        assert(exists(linesFile), 'The linesfile must exist');
 
-        'tail -n 5 $linesFile'.forEach((line) => lines.add(line));
+        'tail -n 5 $linesFile'.forEach(lines.add);
 
         t.expect(lines.length, t.equals(5));
       });

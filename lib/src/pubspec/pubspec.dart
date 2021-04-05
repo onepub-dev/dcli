@@ -153,6 +153,7 @@ class PubSpec {
     return true;
   }
 
+  ///
   static pub.PathReference createPathReference(String path) =>
       pub.PathReference.fromJson(<String, String>{'path': path});
 }
