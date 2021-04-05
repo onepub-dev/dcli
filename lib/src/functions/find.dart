@@ -237,6 +237,11 @@ class Find extends DCliFunction {
         } else if (e is FileSystemException && e.osError!.errorCode == 40) {
           /// ignore recursive symbolic link problems.
           Settings().verbose('Too many levels of symbolic links: ${e.path}');
+        } else if (e is FileSystemException && e.osError!.errorCode == 22) {
+          /// Invalid argument - not really certain what this means but we get
+          /// it when processing a .steam folder that includes a windows
+          /// emulator.
+          Settings().verbose('Invalid argument: ${e.path}');
         } else if (e is FileSystemException && e.osError!.errorCode == 2) {
           /// The directory may have been deleted between us finding it and
           /// processing it.
