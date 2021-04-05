@@ -10,10 +10,10 @@ import 'commands.dart';
 /// including pubspec.lock, .packages, .dart_tools and
 /// any compiled exes.
 class CleanCommand extends Command {
-  static const String _commandName = 'clean';
-
   ///
   CleanCommand() : super(_commandName);
+
+  static const String _commandName = 'clean';
 
   /// [arguments] contains path to clean
   @override
@@ -24,7 +24,8 @@ class CleanCommand extends Command {
       targetPath = pwd;
     } else if (arguments.length != 1) {
       throw InvalidArguments(
-          'Expected a single project path or no project path. Found ${arguments.length} ');
+          'Expected a single project path or no project path. '
+          'Found ${arguments.length} ');
     } else {
       targetPath = arguments[0];
     }
@@ -59,12 +60,8 @@ Removes all build artfiacts.
    If no directory is passed then the current directory is cleaned''';
 
   @override
-  List<String> completion(String word) {
-    return completionExpandScripts(word);
-  }
+  List<String> completion(String word) => completionExpandScripts(word);
 
   @override
-  List<Flag> flags() {
-    return [];
-  }
+  List<Flag> flags() => [];
 }

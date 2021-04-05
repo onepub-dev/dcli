@@ -10,7 +10,8 @@ import 'stack_trace_impl.dart';
 /// but rethrows any exceptions with a repaired stacktrace.
 ///
 /// The exception is wrapped in a [DCliException] with the original exception
-/// in [DCliException.cause] and the repaired stacktrace in [DCliException.stackTrace];
+/// in [DCliException.cause] and the repaired stacktrace in 
+/// [DCliException.stackTrace];
 ///
 /// Exceptions would normally have a microtask
 /// stack which is useless the repaired stack replaces the exceptions stack
@@ -40,11 +41,13 @@ T waitForEx<T>(Future<T> future) {
   if (exception != null) {
     // see issue: https://github.com/dart-lang/sdk/issues/30741
     // We currently have now way to throw the repaired stack trace.
-    // The best we can do is store the repaired stack trace in the DCliException.
+    // The best we can do is store the repaired stack trace in the 
+    // DCliException.
     if (exception is DCliException) {
       throw exception.copyWith(StackTraceImpl.fromStackTrace(stackTrace));
     } else {
-      /// Ideally we would rather throw the original exception but currently there is no way to do this.
+      /// Ideally we would rather throw the original exception but currently
+      ///  there is no way to do this.
       throw DCliException.from(
           exception, StackTraceImpl.fromStackTrace(stackTrace));
     }

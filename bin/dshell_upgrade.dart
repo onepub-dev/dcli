@@ -23,14 +23,10 @@ void main() {
 }
 
 void upgradeProject() {
-  find('*.dart').forEach((file) {
-    upgradeDartLibrary(file);
-  });
+  find('*.dart').forEach(upgradeDartLibrary);
 
   /// upgrade pubspec.yaml if found
-  find('pubspec.yaml').forEach((file) {
-    upgradePubspec(file);
-  });
+  find('pubspec.yaml').forEach(upgradePubspec);
 
   /// upgrade pubspec.yaml if found
   find('lauch.json').forEach((file) {
@@ -92,7 +88,8 @@ void upgradeDependencies(String path) {
       final tmp = line.trim().replaceAll(' ', '');
       if (tmp.startsWith('dshell')) {
         if (tmp == 'dshell:') {
-          /// means its not a simple version and probably has a path on the next line.
+          /// means its not a simple version and probably has a path
+          /// on the next line.
           /// This will only happen if someone is doing dev on dshell.
           path.append('  dcli:');
         } else {

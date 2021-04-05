@@ -93,7 +93,8 @@ class DartSdk {
 
   /// Run the 'dart compiler' command.
   /// [script] is the path to the dcli script we are compiling.
-  /// [pathToExe] is the path (including the filename) to write the compiled ex to .
+  /// [pathToExe] is the path (including the filename) to write the
+  ///  compiled ex to .
   void runDartCompiler(Script script,
       {required String pathToExe, Progress? progress}) {
     final runArgs = <String>[];
@@ -101,21 +102,21 @@ class DartSdk {
     RunnableProcess process;
     if (useDartCommand) {
       /// use dart compile exe
-      runArgs.add('compile');
-      runArgs.add('exe');
-      runArgs.add(script.pathToScript);
-      runArgs.add('--output=$pathToExe');
+      runArgs
+        ..add('compile')
+        ..add('exe')
+        ..add(script.pathToScript)
+        ..add('--output=$pathToExe');
       process = RunnableProcess.fromCommandArgs(dartExeName, runArgs,
           workingDirectory: script.pathToScriptDirectory);
     } else {
       if (pathToDartToNativeExe == null) {
-        throw DCliException(
-            'Unable to compile as the dart2native executable not found on your path.');
+        throw DCliException('Unable to compile as the dart2native executable '
+            'not found on your path.');
       }
 
       /// use old dart2native
-      runArgs.add(script.pathToScript);
-      runArgs.add('--output=$pathToExe');
+      runArgs.add(script.pathToScript)..add('--output=$pathToExe');
 
       process = RunnableProcess.fromCommandArgs(pathToDartToNativeExe!, runArgs,
           workingDirectory: script.pathToScriptDirectory);
@@ -228,10 +229,11 @@ class DartSdk {
     if (!exists(installDir)) {
       createDir(installDir, recursive: true);
     } else {
-      print(
-          'The install directory $installDir already exists. If you proceed all files under $installDir will be deleted.');
+      print('The install directory $installDir already exists. '
+          'If you proceed all files under $installDir will be deleted.');
       if (confirm('Proceed to delete $installDir')) {
-        /// I've added this incase we have a failed install and need to do a restart.
+        /// I've added this incase we have a failed install and
+        /// need to do a restart.
         ///
         deleteDir(installDir);
       } else {
@@ -268,7 +270,7 @@ class DartSdk {
 
   String _fetchDartSdk() {
     // final bitness = SysInfo.kernelBitness;
-    var architechture = 'x64';
+    const architechture = 'x64';
     // if (bitness == 32) {
     //   architechture = 'ia32';
     // }
@@ -299,8 +301,8 @@ class DartSdk {
 
     /// ask for and confirm the install directory.
     while (!confirmed) {
-      final entered = ask(
-          'Install dart-sdk to (Enter for default [${truepath(finaldartToolDir)}]): ');
+      final entered = ask('Install dart-sdk to (Enter for default '
+          '[${truepath(finaldartToolDir)}]): ');
       if (entered.isNotEmpty) {
         finaldartToolDir = entered;
       }

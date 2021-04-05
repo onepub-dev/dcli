@@ -7,6 +7,16 @@ import 'flags.dart';
 
 /// Runs a dcli script.
 class CommandLineRunner {
+  ///
+  factory CommandLineRunner() {
+    if (_self == null) {
+      throw Exception('The CommandLineRunner has not been intialised');
+    }
+    return _self!;
+  }
+
+  CommandLineRunner._internal(this._availableCommands);
+
   static CommandLineRunner? _self;
 
   /// the list of flags set on the command line.
@@ -16,20 +26,10 @@ class CommandLineRunner {
   final Flags _flagsSet = Flags();
   Map<String, Command> _availableCommands;
 
-  ///
-  factory CommandLineRunner() {
-    if (_self == null) {
-      throw Exception('The CommandLineRunner has not been intialised');
-    }
-    return _self!;
-  }
-
   /// initialises the [CommandLineRunner]
   static void init(List<Command> availableCommands) {
     _self = CommandLineRunner._internal(Commands.asMap(availableCommands));
   }
-
-  CommandLineRunner._internal(this._availableCommands);
 
   /// Process the command line arguments to run the command.
   int? process(List<String> arguments) {
@@ -82,7 +82,8 @@ class CommandLineRunner {
     }
 
     if (success) {
-      // get the script name and remaning args as they are the arguments for the command to process.
+      // get the script name and remaning args as they are the arguments
+      // for the command to process.
       exitCode = command!.run(Settings().selectedFlags, cmdArguments);
     } else {
       throw InvalidArguments('Invalid arguments passed.');
@@ -134,8 +135,8 @@ class InvalidScript extends CommandLineException {
 class UnknownCommand extends CommandLineException {
   ///
   UnknownCommand(String command)
-      : super(
-            'The command $command was not recognised. Scripts must end with .dart!');
+      : super('The command $command was not recognised. '
+            'Scripts must end with .dart!');
 }
 
 /// Thrown when an unknown flag is passed to a command.

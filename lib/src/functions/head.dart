@@ -1,12 +1,8 @@
-import 'package:dcli/src/util/truepath.dart';
-
 import '../settings.dart';
-
 import '../util/file_sync.dart';
 import '../util/progress.dart';
-
+import '../util/truepath.dart';
 import 'function.dart';
-
 import 'is.dart';
 
 ///
@@ -35,8 +31,7 @@ class _Head extends DCliFunction {
     try {
       progress ??= Progress.printStdOut();
       var count = 0;
-      final file = FileSync(path);
-      file.read((line) {
+      FileSync(path).read((line) {
         progress!.addToStdout(line);
         count++;
         if (count >= lines) {

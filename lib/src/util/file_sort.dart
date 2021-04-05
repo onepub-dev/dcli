@@ -142,13 +142,13 @@ class FileSort {
       final rhsColumns = rhs.line!.split(_fieldDelimiter!);
 
       if (_maxColumn! > lhsColumns.length) {
-        throw InvalidArguments(
-            'Line $lhs does not have enough columns. Expected $_maxColumn, found ${lhsColumns.length}');
+        throw InvalidArguments('Line $lhs does not have enough columns. '
+            'Expected $_maxColumn, found ${lhsColumns.length}');
       }
 
       if (_maxColumn! > rhsColumns.length) {
-        throw InvalidArguments(
-            'Line $rhs does not have enough columns. Expected $_maxColumn, found ${lhsColumns.length}');
+        throw InvalidArguments('Line $rhs does not have enough columns. '
+            'Expected $_maxColumn, found ${lhsColumns.length}');
       }
 
       var result = 0;
@@ -457,9 +457,9 @@ class Column {
   };
 
   @override
-  String toString() {
-    return 'ordinal: $ordinal, comparator: ${_comparator.runtimeType}, sortDirection: $_sortDirection';
-  }
+  String toString() =>
+      'ordinal: $ordinal, comparator: ${_comparator.runtimeType}, '
+      ' sortDirection: $_sortDirection';
 
   /// [ordinal] is the column index using base 1
   /// An ordinal of 0 means that we are treating the entire

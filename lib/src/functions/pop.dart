@@ -1,6 +1,7 @@
 import 'dart:io';
-import 'package:dcli/src/util/truepath.dart';
+
 import '../settings.dart';
+import '../util/truepath.dart';
 import 'function.dart';
 
 ///
@@ -51,8 +52,8 @@ class _Pop extends DCliFunction {
   /// for all isolates.
   void pop() {
     if (Settings().isStackEmpty) {
-      throw PopException(
-          'Pop failed. You are already at the top of the stack. You need to be more pushy.');
+      throw PopException('Pop failed. You are already at the top of the stack. '
+          'You need to be more pushy.');
     }
     final path = InternalSettings().pop().path;
 

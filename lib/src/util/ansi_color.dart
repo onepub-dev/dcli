@@ -329,8 +329,8 @@ class AnsiColor {
     String? output;
 
     if (Ansi.isSupported) {
-      output =
-          '${_fg(color.code, bold: color.bold)}${_bg(background.code)}$text$_reset';
+      output = '${_fg(color.code, bold: color.bold)}'
+          '${_bg(background.code)}$text$_reset';
     } else {
       output = text;
     }

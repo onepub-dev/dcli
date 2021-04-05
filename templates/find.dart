@@ -28,9 +28,7 @@ import 'package:args/args.dart';
 /// Starts from the current directory unless [--workingDirectory]
 /// is provided.
 void main(List<String> args) {
-  final parser = ArgParser();
-
-  parser
+  final parser = ArgParser()
     ..addFlag('verbose', abbr: 'v')
     ..addFlag('recursive', abbr: 'r', defaultsTo: true)
     ..addOption('workingDirectory',
@@ -38,8 +36,9 @@ void main(List<String> args) {
         help: 'Specifies the directory to start searching from')
     ..addOption('pattern',
         abbr: 'p',
-        help:
-            'The search pattern to apply. e.g. *.txt. You need to quote the pattern to stop bash expanding it into a file list.');
+        help: 'The search pattern to apply. e.g. *.txt. '
+            'You need to quote the pattern to stop bash '
+            'expanding it into a file list.');
 
   final results = parser.parse(args);
 

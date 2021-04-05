@@ -53,6 +53,8 @@ Which which(String appname,
         {bool first = true, bool verbose = false, Progress? progress}) =>
     _Which().which(appname, first: first, verbose: verbose, progress: progress);
 
+/// Returned from the [which] funtion to provide the details we discovered
+/// about  appname.
 class Which {
   String? _path;
   final _paths = <String>[];

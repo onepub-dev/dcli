@@ -18,8 +18,8 @@ import 'package:dcli/src/script/commands/commands.dart';
 
 void main(List<String> args) {
   if (args.length < 2) {
-    print(
-        'dcli_complete provides tab completion from the bash command line for dcli');
+    print('dcli_complete provides tab completion '
+        'from the bash command line for dcli');
     print("You don't run dcli_complete directly");
     exit(-1);
   }
@@ -58,7 +58,5 @@ void main(List<String> args) {
       }
     }
   }
-  for (final result in results) {
-    print(result);
-  }
+  results.forEach(print);
 }

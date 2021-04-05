@@ -55,8 +55,8 @@ class HelpCommand extends Command {
     print('   dcli -v compile -nc hello_world.dart');
     print('');
     print(green('Usage:'));
-    print(
-        '  dcli [${blue('flag, flag...')}] [${blue('command')}] [arguments...]');
+    print('  dcli [${blue('flag, flag...')}] '
+        '[${blue('command')}] [arguments...]');
     print('');
     print(blue('global flags:'));
     for (final flag in CommandLineRunner.globalFlags) {

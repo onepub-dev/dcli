@@ -39,7 +39,6 @@ class ChModException extends DCliFunctionException {
       : super(reason, stacktrace);
 
   @override
-  DCliException copyWith(StackTraceImpl stackTrace) {
-    return ChModException(message, stackTrace);
-  }
+  DCliException copyWith(StackTraceImpl stackTrace) =>
+      ChModException(message, stackTrace);
 }

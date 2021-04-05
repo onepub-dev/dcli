@@ -12,7 +12,9 @@ class WindowsDCliInstaller {
   bool install({bool installDart = true}) {
     var installedDart = false;
 
-    if (installDart) installedDart = _installDart();
+    if (installDart) {
+      installedDart = _installDart();
+    }
 
     Env().addToPATHIfAbsent(Settings().pathToDCliBin);
 
@@ -46,8 +48,8 @@ class WindowsDCliInstaller {
       installedDart = true;
     } else {
       // nothing to do dart is already installed.
-      Settings().verbose(
-          "Found dart at: ${which('dart').path} and as such will not install dart.");
+      Settings().verbose("Found dart at: ${which('dart').path} "
+          'and as such will not install dart.');
     }
 
     return installedDart;
@@ -57,9 +59,11 @@ class WindowsDCliInstaller {
 // chocolaty for windows installs.
 // if (which('choco').notfound) {
 //         printerr(
-//             "DCli requires the 'Chocolatey' package manager to be installed to install dart");
+//             "DCli requires the 'Chocolatey' package manager to be
+//  installed to install dart");
 //         printerr('Please install Chocolatey and then try again');
-//         throw InstallException('The Chocolatey package manager was not found');
+//         throw InstallException('The Chocolatey package manager was
+//  not found');
 //       }
 
 // // refer to https://github.com/dart-lang/site-www/issues/1073

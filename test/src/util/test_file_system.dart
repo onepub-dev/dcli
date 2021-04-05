@@ -98,9 +98,9 @@ class TestFileSystem {
     uniquePath = const Uuid().v4();
 
     final isolateID = Service.getIsolateID(Isolate.current);
-    print(
-        red('${'+' * 20}${'Creating TestFileSystem $fsRoot for isolate $isolateID'}') +
-            '+' * 20);
+    print(red('${'+' * 20}'
+            '${'Creating TestFileSystem $fsRoot for isolate $isolateID'}') +
+        '+' * 20);
 
     tmpScriptPath = truepath(fsRoot, 'scripts');
     testScriptPath = truepath(fsRoot, 'test_script');
@@ -124,8 +124,8 @@ class TestFileSystem {
           .withLock(() {
         final frame = stack.frames[0];
 
-        print(red(
-            '${'*' * 40} Starting test ${frame.sourceFile}:${frame.lineNo} ${'*' * 80}'));
+        print(red('${'*' * 40} Starting test '
+            '${frame.sourceFile}:${frame.lineNo} ${'*' * 80}'));
         Settings.reset();
         Env.reset();
         PubCache.reset();
@@ -158,8 +158,8 @@ class TestFileSystem {
         } finally {
           env['HOME'] = originalHome;
           env['PATH'] = path;
-          print(green(
-              '${'-' * 40} Ending test ${frame.sourceFile}:${frame.lineNo} ${'-' * 80}'));
+          print(green('${'-' * 40} '
+              'Ending test ${frame.sourceFile}:${frame.lineNo} ${'-' * 80}'));
         }
       });
     } on DCliException catch (e) {

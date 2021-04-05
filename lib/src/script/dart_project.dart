@@ -128,7 +128,9 @@ class DartProject {
           // we run the clean in the background
           // by running another copy of dcli.
           print('DCli warmup started in the background.');
-          '${DCliPaths().dcliName} -v=${join(Directory.systemTemp.path, 'dcli.warmup.log')} warmup $pathToProjectRoot'
+          '${DCliPaths().dcliName} '
+                  '-v=${join(Directory.systemTemp.path, 'dcli.warmup.log')}'
+                  ' warmup $pathToProjectRoot'
               .start(detached: true, runInShell: true);
         } else {
           // print(orange('Running pub get...'));
@@ -213,7 +215,14 @@ class DartProject {
     });
   }
 
-  /// Returns true if the project is in state when any of its scripts can be run.
+  // TODO: this is still risky as pub get does a test to see if
+  // the versions have changed.
+  // we could improve this by checking that the .lock files date
+  //  is after the .yamls date.
+  /// there is a 'generated' date stamp in the .json file which
+  ///  might be more definitive.
+  /// Returns true if the project is in state when any of its
+  /// scripts can be run.
   ///
   /// This essentially means that pub get has been ran.
   ///
@@ -221,15 +230,11 @@ class DartProject {
   /// * pubspec.yaml
   /// * pubspec.lock
   /// *
-  bool get isReadyToRun {
-    // TODO: this is still risky as pub get does a test to see if the versions have changed.
-    // we could improve this by checking that the .lock files date is after the .yamls date.
-    /// there is a 'generated' date stamp in the .json file which might be more definitive.
-    return exists(
-            join(pathToProjectRoot, '.dart_tool', 'package_config.json')) &&
-        exists(join(pathToProjectRoot, 'pubspec.lock')) &&
-        hasPubSpec;
-  }
+  ///
+  bool get isReadyToRun =>
+      exists(join(pathToProjectRoot, '.dart_tool', 'package_config.json')) &&
+      exists(join(pathToProjectRoot, 'pubspec.lock')) &&
+      hasPubSpec;
 
   /// Returns true if the project contains a pubspec.yaml.
   bool get hasPubSpec => exists(join(pathToProjectRoot, 'pubspec.yaml'));
@@ -292,9 +297,11 @@ class DartProject {
         _replaceInvalidCharactersForName(basename(pathToProjectRoot)));
   }
 
-  /// Creates a script in [pathToProjectRoot] with the name [scriptName] using the based [templateName] which defaults to (basic.dart)
+  /// Creates a script in [pathToProjectRoot] with the name [scriptName]
+  /// using the based [templateName] which defaults to (basic.dart)
   ///
-  /// The [scriptName] MUST end in .dart otherwise a [DartProjectException] is thrown
+  /// The [scriptName] MUST end in .dart otherwise a [DartProjectException]
+  /// is thrown
   ///
   /// The [templateName] must be the name of a template file in the ~/.dcli/template directory.
   ///
@@ -310,7 +317,8 @@ class DartProject {
     return Script.fromFile(scriptName, project: this);
   }
 
-  /// The name used in the pubspec.yaml must come from the character set [a-z0-9_]
+  /// The name used in the pubspec.yaml must come from the character
+  ///  set [a-z0-9_]
   /// so wer replace any invalid character with an '_'.
   String _replaceInvalidCharactersForName(String proposedName) {
     return proposedName.replaceAll(RegExp('[^a-zA-Z0-9_]'), '_');

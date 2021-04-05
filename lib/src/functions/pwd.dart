@@ -14,7 +14,5 @@ import 'dcli_function.dart';
 String get pwd => _PWD().pwd;
 
 class _PWD extends DCliFunction {
-  String get pwd {
-    return Directory.current.path;
-  }
+  String get pwd => Directory.current.path;
 }

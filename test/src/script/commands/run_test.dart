@@ -32,10 +32,12 @@ void main() {
     TestFileSystem().withinZone((fs) {
       final results = <String?>[];
 
-      '${DCliPaths().dcliName} ${join(fs.testScriptPath, 'general/bin/hello_world.dart')}'
+      '${DCliPaths().dcliName} '
+              '${join(fs.testScriptPath, 'general/bin/hello_world.dart')}'
           .forEach((line) => results.add(line), stderr: printerr);
 
-      // if warmup hasn't been run then we have the results of a pub get in the the output.
+      // if warmup hasn't been run then we have the results of
+      //  a pub get in the the output.
 
       expect(results, anyOf([contains(getExpected()), equals(getExpected())]));
     });

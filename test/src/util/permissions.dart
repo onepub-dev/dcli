@@ -160,7 +160,8 @@ class Privileges {
   // }
 
   // set _realUID(int realUID) {
-  //   final setuidPointer = dylib.lookup<NativeFunction<setUID_func>>('setreuid');
+  //   final setuidPointer = dylib
+  //    .lookup<NativeFunction<setUID_func>>('setreuid');
   //   final setuid = setuidPointer.asFunction<setUID>();
 
   //   print(blue('settting realUID =$realUID'));

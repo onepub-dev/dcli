@@ -57,7 +57,8 @@ class CreateCommand extends Command {
 
       print(green('Creating script...'));
 
-      /// There is a question here about whether we should always create a pubspec.yaml
+      /// There is a question here about whether we should
+      /// always create a pubspec.yaml
       /// or do we search for a parent pubspec.yaml.
       /// For now we have decided to always create one.
       project = DartProject.fromPath(dirname(pathToScript));
@@ -82,13 +83,14 @@ class CreateCommand extends Command {
   /// returns the script path.
   String _validateArguments(List<Flag> selectedFlags, List<String> arguments) {
     if (arguments.length != 1) {
-      throw InvalidArguments(
-          'The create command takes only one argument. Found: ${arguments.join(',')}');
+      throw InvalidArguments('The create command takes only one argument. '
+          'Found: ${arguments.join(',')}');
     }
     final scriptPath = arguments[0];
     if (extension(scriptPath) != '.dart') {
       throw InvalidArguments(
-          "The create command expects a script path ending in '.dart'. Found: $scriptPath");
+          "The create command expects a script path ending in '.dart'. "
+          'Found: $scriptPath');
     }
 
     if (exists(scriptPath)) {
@@ -100,7 +102,8 @@ class CreateCommand extends Command {
 
   @override
   String description() =>
-      'Creates a script file with a default pubspec annotation and a main entry point.';
+      'Creates a script file with a default pubspec annotation '
+      'and a main entry point.';
 
   @override
   String usage() => 'create [--foreground] <script path.dart>';

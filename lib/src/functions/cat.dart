@@ -53,7 +53,6 @@ class CatException extends DCliFunctionException {
       : super(reason, stacktrace);
 
   @override
-  DCliException copyWith(StackTraceImpl stackTrace) {
-    return CatException(message, stackTrace);
-  }
+  DCliException copyWith(StackTraceImpl stackTrace) =>
+      CatException(message, stackTrace);
 }

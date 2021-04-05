@@ -8,8 +8,7 @@ void main(List<String> arguments) {
 
 class DCliInstall {
   void run(List<String> arguments) {
-    final mutableArgs = <String>[];
-    mutableArgs.addAll(arguments);
+    final mutableArgs = <String>[...arguments];
 
     if (!mutableArgs.contains('doctor')) {
       // We add the 'install' so we do the install

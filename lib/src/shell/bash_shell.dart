@@ -34,8 +34,8 @@ class BashShell with ShellMixin, PosixShell {
       startFile.append(command);
 
       if (!quiet) {
-        print(
-            'dcli tab completion installed. Restart your terminal to activate it.');
+        print('dcli tab completion installed. '
+            'Restart your terminal to activate it.');
       }
     }
   }

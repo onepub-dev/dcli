@@ -27,24 +27,31 @@ import 'pwd.dart';
 /// within a shell (e.g. bash). This may be necessary if you need to access
 /// a command builtin to the shell.
 ///
-/// The [privileged] argument attempts to escalate the priviledge that the command is run
+/// The [privileged] argument attempts to escalate the priviledge that
+///  the command is run
 /// at.
-/// If the script is already running in a priviledge environment this switch will have no
+/// If the script is already running in a priviledge environment this s
+/// witch will have no
 /// affect.
-/// Running a command with the [privileged] switch may cause the OS to prompt the user
+/// Running a command with the [privileged] switch may cause the OS to
+/// prompt the user
 /// for a password.
 ///
-/// For Linux passing the [privileged] argument will cause the command to be prefix
+/// For Linux passing the [privileged] argument will cause the command
+///  to be prefix
 /// vai the `sudo` command.
 ///
 /// Current [privileged] is only supported under Linux.
 ///
-/// DCli performs glob (wildcard) expansion on command arguments if it contains any one
+/// DCli performs glob (wildcard) expansion on command arguments if it
+/// contains any one
 /// of *, [ or ?  unless the argument is quoted.
 /// DCli uses the dart package Glob (https://pub.dev/packages/glob) to do the glob expansion.
 ///
-/// The following command will have the argument containing the wild card *.dart expanded to
-/// the list of files, in the current directory, that match the pattern *.dart. If no files match the pattern then the pattern
+/// The following command will have the argument containing the
+/// wild card *.dart expanded to
+/// the list of files, in the current directory, that match the
+/// pattern *.dart. If no files match the pattern then the pattern
 /// will be passed to the command unchanged:
 ///
 /// ```dart
@@ -101,7 +108,8 @@ int? run(String commandLine,
 /// over how the commmand is executed.
 ///
 /// DCli will do glob expansion on each passed argument (for Linux and OSx).
-/// You can stop glob expansion by adding a set of single or double quotes around the string.
+/// You can stop glob expansion by adding a set of single or double quotes
+///  around the string.
 /// DCli will remove the extra quotes and NOT perform glob expansion.
 ///
 /// e.g.
@@ -114,14 +122,18 @@ int? run(String commandLine,
 /// Pass in a [progress] to capture or suppress stdout and stderr.
 ///
 ///
-/// The [privileged] argument attempts to escalate the priviledge that the command is run
+/// The [privileged] argument attempts to escalate the priviledge that
+///  the command is run
 /// at.
-/// If the script is already running in a priviledge environment this switch will have no
+/// If the script is already running in a priviledge environment this 
+/// switch will have no
 /// affect.
-/// Running a command with the [privileged] switch may cause the OS to prompt the user
+/// Running a command with the [privileged] switch may cause the OS to 
+/// prompt the user
 /// for a password.
 ///
-/// For Linux passing the [privileged] argument will cause the command to be prefix
+/// For Linux passing the [privileged] argument will cause the command 
+/// to be prefix
 /// vai the `sudo` command.
 ///
 /// Current [privileged] is only supported under Linux.
@@ -180,14 +192,18 @@ Progress startFromArgs(
 /// if [nothrow] is false (the default for most methods that use run) then
 /// a non-zero exit code will result in an exception being thrown.
 ///
-/// The [privileged] argument attempts to escalate the priviledge that the command is run
+/// The [privileged] argument attempts to escalate the priviledge that 
+/// the command is run
 /// at.
-/// If the script is already running in a priviledge environment this switch will have no
+/// If the script is already running in a priviledge environment this
+///  switch will have no
 /// affect.
-/// Running a command with the [privileged] switch may cause the OS to prompt the user
+/// Running a command with the [privileged] switch may cause the OS to
+///  prompt the user
 /// for a password.
 ///
-/// For Linux passing the [privileged] argument will cause the command to be prefix
+/// For Linux passing the [privileged] argument will cause the command
+///  to be prefix
 /// vai the `sudo` command.
 ///
 /// Current [privileged] is only supported under Linux.
@@ -218,14 +234,18 @@ Progress start(String commandLine,
 }
 
 ///
-/// The [privileged] argument attempts to escalate the priviledge that the command is run
+/// The [privileged] argument attempts to escalate the priviledge that
+///  the command is run
 /// at.
-/// If the script is already running in a priviledge environment this switch will have no
+/// If the script is already running in a priviledge environment this
+///  switch will have no
 /// affect.
-/// Running a command with the [privileged] switch may cause the OS to prompt the user
+/// Running a command with the [privileged] switch may cause the OS to
+///  prompt the user
 /// for a password.
 ///
-/// For Linux passing the [privileged] argument will cause the command to be prefix
+/// For Linux passing the [privileged] argument will cause the command
+///  to be prefix
 /// vai the `sudo` command.
 ///
 /// Current [privileged] is only supported under Linux.

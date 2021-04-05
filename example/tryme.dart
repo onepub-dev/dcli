@@ -20,7 +20,7 @@ void main() {
   touch(join(dir, 'subdir', 'monkey.png'));
 
   // do a recursive find
-  find('*.png').forEach((file) => print(file));
+  find('*.png').forEach(print);
 
   // now cleanup
   delete(join(dir, 'icon.png'));

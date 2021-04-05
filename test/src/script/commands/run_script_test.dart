@@ -12,10 +12,12 @@ void main() {
     TestFileSystem().withinZone((fs) {
       final results = <String?>[];
 
-      '${DCliPaths().dcliName} -v ${join(fs.testScriptPath, 'general/bin/hello_world.dart')}'
-          .forEach((line) => results.add(line), stderr: printerr);
+      '${DCliPaths().dcliName} '
+              '-v ${join(fs.testScriptPath, 'general/bin/hello_world.dart')}'
+          .forEach(results.add, stderr: printerr);
 
-      // if warmup hasn't been run then we have the results of a pub get in the the output.
+      // if warmup hasn't been run then we have the results
+      //  of a pub get in the the output.
 
       expect(results, anyOf([contains(getExpected()), equals(getExpected())]));
     });

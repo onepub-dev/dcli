@@ -15,7 +15,8 @@ class Remote {
   ///   The user's account on the remote host must be in the sudoers file.
   /// The [command] to execute on the remote host.
   /// The optional [progress] allows you to control how the output
-  /// of the command is printed to the console. By default all output is supressed.
+  /// of the command is printed to the console. By default
+  /// all output is supressed.
   ///
   /// ```dart
   ///  // run mkdir on the remote host using sudo
@@ -46,7 +47,8 @@ class Remote {
 
   /// [execList] runs multiple commands in a single request to the host.
   ///
-  /// The commands are chained into a single command line with the bash command delimiter ';'
+  /// The commands are chained into a single command line with the
+  /// bash command delimiter ';'
   /// betwen each command.
   ///
   /// If you set [sudo] to true then each command is run under sudo.
@@ -84,7 +86,7 @@ class Remote {
       if (sudo) {
         // -S accept echoed password{
         // -k clear the sudo cached password so it expects a password
-        // -p ''  blank out the password prompt give we are echoing the password in.
+
         // We quote the [command] to stop glob expansion on the local system.
         if (password != null) {
           command = "echo $password | sudo -Skp '' $command";
@@ -202,7 +204,8 @@ class Remote {
 
   static const Map<int, String> _sshErrors = <int, String>{
     0: 'Operation was successful',
-    1: 'Generic error, usually because invalid command line options or malformed configuration',
+    1: 'Generic error, usually because invalid command line '
+        'options or malformed configuration',
     2: 'Connection failed',
     65: 'Host not allowed to connect',
     66: 'General error in ssh protocol',

@@ -76,6 +76,7 @@ void checkProjectStructure(TestFileSystem fs, String scriptName) {
         'pubspec.lock',
         'analysis_options.yaml',
         join('.dart_tool', 'package_config.json'),
+        // ignore: lines_longer_than_80_chars
         '.packages' // when dart 2.10 is released this will no longer be created.
       ]));
 

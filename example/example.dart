@@ -60,15 +60,13 @@ void main() {
     garish bettle will consume with glee the poor Aphid. 
     ''';
 
-    var restingPlace = join(poetryForReviews, poem);
-
-    // Write the verses to poem.txt
-    // in the review directory.
-
-    // write vs, truncating the file if required.
-    restingPlace.write(verse1);
-    restingPlace.append('');
-    restingPlace.append(verse2);
+    var restingPlace = join(poetryForReviews, poem)
+      // Write the verses to poem.txt
+      // in the review directory.
+      // write vs, truncating the file if required.
+      ..write(verse1)
+      ..append('')
+      ..append(verse2);
 
     // take a moments beauty sleep to bask in our own
     // glory for a couple of seconds because we are worth it.
@@ -77,9 +75,7 @@ void main() {
     echo('Find files matching *.txt');
     // Find all files that end with .jpg
     // in the current directory and any subdirectories
-    for (final file in find('*.txt').toList()) {
-      print(file);
-    }
+    find('*.txt').toList().forEach(print);
 
     // or use the forEach method which will
     // print each match as its found.

@@ -37,8 +37,8 @@ class VersionCommand extends Command {
     // expand symlink
     location = File(location).resolveSymbolicLinksSync();
 
-    print(green(
-        '${ReCase.titleCase(appname)} Version: ${Settings().version}, Located at: $location'));
+    print(green('${ReCase.titleCase(appname)} '
+        'Version: ${Settings().version}, Located at: $location'));
 
     return 0;
   }

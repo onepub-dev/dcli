@@ -35,8 +35,8 @@ class _Move extends DCliFunction {
     }
 
     if (!overwrite && exists(dest)) {
-      throw MoveException(
-          'The [to] path ${truepath(dest)} already exists. Use overwrite:true ');
+      throw MoveException('The [to] path ${truepath(dest)} already exists.'
+          ' Use overwrite:true ');
     }
     try {
       File(from).renameSync(dest);
@@ -64,7 +64,8 @@ void _improveError(Object e, String from, String to) {
     throw MoveException(
         'The Move of ${truepath(from)} failed as it does not exist.');
   } else if (!exists(dirname(truepath(to)))) {
-    throw 'The Move of ${truepath(from)} failed as the target directory ${truepath(dirname(to))} does not exist.';
+    throw 'The Move of ${truepath(from)} failed as the target directory '
+        '${truepath(dirname(to))} does not exist.';
   } else {
     throw MoveException(
         'The Move of ${truepath(from)} to ${truepath(to)} failed. Error $e');

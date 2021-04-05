@@ -20,7 +20,7 @@ class Pipe {
   }
 
   ///
-  void forEach(LineAction stdout, {LineAction stderr = _NoOpAction}) {
+  void forEach(LineAction stdout, {LineAction stderr = _noOpAction}) {
     final progress = Progress(stdout, stderr: stderr);
     _rhs.processUntilExit(progress, nothrow: false);
   }
@@ -35,11 +35,12 @@ class Pipe {
   }
 
   // void get run => rhs
-  //     .processUntilExit(Progress(Progress.devNull, stderr: Progress.devNull));
+  //     .processUntilExit(Progress(Progress.devNull
+  //  , stderr: Progress.devNull));
 
   /// pumps data trough the pipe.
   void get run =>
       _rhs.processUntilExit(Progress(print, stderr: print), nothrow: false);
 }
 
-void _NoOpAction(String line) {}
+void _noOpAction(String line) {}

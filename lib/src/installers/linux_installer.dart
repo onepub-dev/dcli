@@ -12,10 +12,12 @@ class LinuxDCliInstaller {
   bool install({required bool installDart}) {
     const installedDart = false;
 
-    if (installDart) _installDart();
+    if (installDart) {
+      _installDart();
+    }
 
     // now activate dcli.
-    final pubPath = determinePubPath();
+    final pubPath = _determinePubPath();
     '$pubPath global activate dcli'.start(progress: Progress.printStdErr());
 
     // // also need to install it for the root user
@@ -36,20 +38,20 @@ class LinuxDCliInstaller {
       // add dart to bash path
       if (!(isOnPATH('/usr/bin/dart') || isOnPATH('/usr/lib/bin/dart'))) {
         // we need to add it.
-        final bashrc = join(HOME, '.bashrc');
-        bashrc.append('''export PATH="\$PATH":"/usr/lib/dart/bin"''');
-        bashrc.append('''export PATH="\$PATH":"${PubCache().pathToBin}"''');
-        bashrc.append('''export PATH="\$PATH":"${Settings().pathToDCliBin}"''');
+        join(HOME, '.bashrc')
+          ..append(r'''export PATH="$PATH":"/usr/lib/dart/bin"''')
+          ..append('''export PATH="\$PATH":"${PubCache().pathToBin}"''')
+          ..append('''export PATH="\$PATH":"${Settings().pathToDCliBin}"''');
 
         final shell = ShellDetection().identifyShell();
         Settings().verbose('Found shell: shell');
         if (shell.loggedInUser != 'root') {
           // add dart to root path.
           // The tricks we have to play to get dart on the root users path.
-          'echo export PATH="\$PATH":/usr/lib/dart/bin | sudo tee -a /root/.bashrc'
+          r'echo export PATH="$PATH":/usr/lib/dart/bin | sudo tee -a /root/.bashrc'
               .run;
           // give root its own pub-cache
-          'echo export PATH="\$PATH":/root/.pub-cache/bin | sudo tee -a /root/.bashrc'
+          r'echo export PATH="$PATH":/root/.pub-cache/bin | sudo tee -a /root/.bashrc'
               .run;
         }
 
@@ -70,8 +72,9 @@ class LinuxDCliInstaller {
       installedDart = true;
     } else {
       // dart is already installed.
-      Settings().verbose(
-          "Found dart at: ${which('dart').path ?? "<not found>"} and as such will not install dart.");
+      Settings()
+          .verbose("Found dart at: ${which('dart').path ?? "<not found>"} "
+              'and as such will not install dart.');
     }
 
     return installedDart;
@@ -94,18 +97,21 @@ class LinuxDCliInstaller {
   // as dart may not be on the path
   // So lets go find it
   // CONSIDER a way of identifying where dart has been installed to.
-
-  String? determinePubPath() {
+  String? _determinePubPath() {
     var pubPath = which('pub').path;
 
     if (pubPath == null) {
       /// lets try some likely locations
 
       pubPath = '/usr/lib/dart/bin/pub';
-      if (exists(pubPath)) return pubPath;
+      if (exists(pubPath)) {
+        return pubPath;
+      }
 
       pubPath = '/usr/bin/pub';
-      if (exists(pubPath)) return pubPath;
+      if (exists(pubPath)) {
+        return pubPath;
+      }
     }
 
     /// radical - search everywhere

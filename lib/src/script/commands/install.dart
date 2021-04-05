@@ -143,8 +143,8 @@ class InstallCommand extends Command {
 
       // check if shell can add a path.
       if (!shell.hasStartScript || !shell.addToPATH(binPath)) {
-        qprint(orange(
-            'If you want to use dcli compile -i to install scripts, add $binPath to your PATH.'));
+        qprint(orange('If you want to use dcli compile -i to install scripts, '
+            'add $binPath to your PATH.'));
       }
     }
 

@@ -7,8 +7,7 @@ import 'package:args/args.dart';
 
 /// which appname
 void main(List<String> args) {
-  final parser = ArgParser();
-  parser.addFlag('verbose', abbr: 'v', negatable: false);
+  final parser = ArgParser()..addFlag('verbose', abbr: 'v', negatable: false);
 
   final results = parser.parse(args);
 

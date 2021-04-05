@@ -21,9 +21,11 @@ import 'is.dart';
 ///
 /// If the directory does not exists a [DeleteDirException] is thrown.
 ///
-/// If the directory cannot be delete (e.g. permissions) a [DeleteDirException] is thrown.
+/// If the directory cannot be delete (e.g. permissions) a
+/// [DeleteDirException] is thrown.
 ///
-/// If recursive is false the directory must be empty otherwise a [DeleteDirException] is thrown.
+/// If recursive is false the directory must be empty otherwise a
+/// [DeleteDirException] is thrown.
 ///
 /// See [isDirectory]
 ///     [exists]

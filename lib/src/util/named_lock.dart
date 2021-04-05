@@ -97,7 +97,7 @@ class NamedLock {
     void Function() fn, {
     String? waiting,
   }) {
-    var callingStackTrace = StackTraceImpl();
+    final callingStackTrace = StackTraceImpl();
     var lockHeld = false;
     runZonedGuarded(() {
       try {
@@ -257,7 +257,8 @@ class NamedLock {
           // no other lock exists so we have taken a lock.
           taken = true;
         } else {
-          // we have found another lock file so check if it is held be a running process
+          // we have found another lock file so check if it is held
+          // be a running process
           lockFiles = _clearStaleLocks(locks, lockFiles);
           if (lockFiles == 0) {
             taken = true;
@@ -269,8 +270,9 @@ class NamedLock {
           Settings()
               .verbose('Taking lock ${basename(_lockFilePath)} for $isolateID');
 
-          Settings().verbose(
-              'Lock Source: ${StackTraceImpl(skipFrames: 9).formatStackTrace(methodCount: 1)}');
+          Settings().verbose('Lock Source: '
+              // ignore: lines_longer_than_80_chars
+              '${StackTraceImpl(skipFrames: 9).formatStackTrace(methodCount: 1)}');
           touch(_lockFilePath, create: true);
           //  log(StackTraceImpl().formatStackTrace(methodCount: 100));
         }
@@ -289,11 +291,11 @@ class NamedLock {
 
     if (!taken) {
       if (waitCount == 0) {
-        throw LockException(
-            'NamedLock timedout on $_description ${truepath(_lockPath)} as it is currently held');
+        throw LockException('NamedLock timedout on $_description '
+            '${truepath(_lockPath)} as it is currently held');
       } else {
-        throw LockException(
-            'Unable to lock $_description ${truepath(_lockPath)} as it is currently held');
+        throw LockException('Unable to lock $_description '
+            '${truepath(_lockPath)} as it is currently held');
       }
     }
 

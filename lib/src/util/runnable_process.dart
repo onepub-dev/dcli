@@ -91,14 +91,18 @@ class RunnableProcess {
   /// This method is used to stream apps output via when
   /// using [Progress.stream].
   ///
-  /// The [privileged] argument attempts to escalate the priviledge that the command is run
+  /// The [privileged] argument attempts to escalate the priviledge
+  /// that the command is run
   /// at.
-  /// If the script is already running in a priviledge environment this switch will have no
+  /// If the script is already running in a priviledge environment
+  /// this switch will have no
   /// affect.
-  /// Running a command with the [privileged] switch may cause the OS to prompt the user
+  /// Running a command with the [privileged] switch may cause the
+  /// OS to prompt the user
   /// for a password.
   ///
-  /// For Linux passing the [privileged] argument will cause the command to be prefix
+  /// For Linux passing the [privileged] argument will cause the
+  /// command to be prefix
   /// vai the `sudo` command.
   ///
   /// Current [privileged] is only supported under Linux.
@@ -118,14 +122,18 @@ class RunnableProcess {
 
   /// runs the process.
   ///
-  /// The [privileged] argument attempts to escalate the priviledge that the command is run
+  /// The [privileged] argument attempts to escalate the priviledge
+  /// that the command is run
   /// at.
-  /// If the script is already running in a priviledge environment this switch will have no
+  /// If the script is already running in a priviledge environment
+  /// this switch will have no
   /// affect.
-  /// Running a command with the [privileged] switch may cause the OS to prompt the user
+  /// Running a command with the [privileged] switch may cause the
+  /// OS to prompt the user
   /// for a password.
   ///
-  /// For Linux passing the [privileged] argument will cause the command to be prefix
+  /// For Linux passing the [privileged] argument will cause the
+  /// command to be prefix
   /// vai the `sudo` command.
   ///
   /// Current [privileged] is only supported under Linux.
@@ -163,14 +171,18 @@ class RunnableProcess {
   /// provides additional options to [run].
   ///
   ///
-  /// The [privileged] argument attempts to escalate the priviledge that the command is run
+  /// The [privileged] argument attempts to escalate the priviledge
+  /// that the command is run
   /// at.
-  /// If the script is already running in a priviledge environment this switch will have no
+  /// If the script is already running in a priviledge environment
+  /// this switch will have no
   /// affect.
-  /// Running a command with the [privileged] switch may cause the OS to prompt the user
+  /// Running a command with the [privileged] switch may cause the
+  /// OS to prompt the user
   /// for a password.
   ///
-  /// For Linux passing the [privileged] argument will cause the command to be prefix
+  /// For Linux passing the [privileged] argument will cause the
+  ///  command to be prefix
   /// vai the `sudo` command.
   ///
   /// Current [privileged] is only supported under Linux.
@@ -203,8 +215,9 @@ class RunnableProcess {
     if (Settings().isVerbose) {
       final cmdLine = "${_parsed.cmd} ${_parsed.args.join(' ')}";
       Settings().verbose('Process.start: cmdLine ${green(cmdLine)}');
-      Settings().verbose(
-          'Process.start: runInShell: $runInShell workingDir: $workingDirectory mode: $mode cmd: ${_parsed.cmd} args: ${_parsed.args.join(', ')}');
+      Settings().verbose('Process.start: runInShell: $runInShell '
+          'workingDir: $workingDirectory mode: $mode '
+          'cmd: ${_parsed.cmd} args: ${_parsed.args.join(', ')}');
     }
 
     if (!exists(workdir)) {
@@ -268,7 +281,9 @@ class RunnableProcess {
             _parsed.cmd,
             _parsed.args,
             exitCode,
-            'The command ${red('[${_parsed.cmd}] with args [${_parsed.args.join(', ')}]')} failed with exitCode: $exitCode'));
+            'The command '
+            '${red('[${_parsed.cmd}] with args [${_parsed.args.join(', ')}]')} '
+            'failed with exitCode: $exitCode'));
       } else {
         exited.complete(exitCode);
       }
@@ -332,7 +347,10 @@ class RunnableProcess {
               _parsed.cmd,
               _parsed.args,
               exitCode,
-              'The command ${red('[${_parsed.cmd}] with args [${_parsed.args.join(', ')}]')} failed with exitCode: $exitCode');
+              'The command '
+              // ignore: lines_longer_than_80_chars
+              '${red('[${_parsed.cmd}] with args [${_parsed.args.join(', ')}]')}'
+              ' failed with exitCode: $exitCode');
           progress.onError(error);
           progress.close();
         } else {
@@ -371,7 +389,10 @@ class RunnableProcess {
               _parsed.cmd,
               _parsed.args,
               exitCode,
-              'The command ${red('[${_parsed.cmd}] with args [${_parsed.args.join(', ')}]')} failed with exitCode: $exitCode'));
+              'The command '
+              // ignore: lines_longer_than_80_chars
+              '${red('[${_parsed.cmd}] with args [${_parsed.args.join(', ')}]')}'
+              ' failed with exitCode: $exitCode'));
         } else {
           done.complete(true);
         }
@@ -379,8 +400,8 @@ class RunnableProcess {
     })
         //ignore: avoid_types_on_closure_parameters
         .catchError((Object e, StackTrace s) {
-      Settings().verbose(
-          '${e.toString()} stacktrace: ${StackTraceImpl.fromStackTrace(s).formatStackTrace()}');
+      Settings().verbose('${e.toString()} stacktrace: '
+          '${StackTraceImpl.fromStackTrace(s).formatStackTrace()}');
       throw e;
     }); // .whenComplete(() => print('start completed'));
 

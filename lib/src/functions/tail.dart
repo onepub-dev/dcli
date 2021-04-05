@@ -1,13 +1,9 @@
-import 'package:dcli/src/util/truepath.dart';
-
 import '../settings.dart';
 import '../util/circular_buffer.dart';
-
 import '../util/file_sync.dart';
 import '../util/progress.dart';
-
+import '../util/truepath.dart';
 import 'function.dart';
-
 import 'is.dart';
 
 ///
@@ -38,8 +34,7 @@ class _Tail extends DCliFunction {
 
       final buf = CircularBuffer<String>(lines);
 
-      final file = FileSync(path);
-      file.read((line) {
+      FileSync(path).read((line) {
         buf.insert(line);
 
         return true;

@@ -9,7 +9,7 @@ class ReCase {
   }
 
   /// first letter uppercase, rest lower case
-  static String properCase(String word) {
-    return '${word.substring(0, 1).toUpperCase()}${word.substring(1).toLowerCase()}';
-  }
+  static String properCase(String word) =>
+      '${word.substring(0, 1).toUpperCase()}'
+      '${word.substring(1).toLowerCase()}';
 }

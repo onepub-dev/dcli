@@ -45,7 +45,8 @@ import 'function.dart';
 ///
 /// [[!abc]] - matches one character that is not given in the bracket
 ///
-/// [[!a-z]] - matches one character that is not from the range given in the bracket
+/// [[!a-z]] - matches one character that is not from the range given
+///  in the bracket
 /// ```
 ///
 /// If [caseSensitive] is true then a case sensitive match is performed.
@@ -64,7 +65,8 @@ import 'function.dart';
 /// [types] allows you to specify the file types you want the find to return.
 /// By default [types] limits the results to files.
 ///
-/// [workingDirectory] allows you to specify an alternate directory to seach within
+/// [workingDirectory] allows you to specify an alternate d
+/// irectory to seach within
 /// rather than the current work directory.
 ///
 /// [types] the list of types to search file. Defaults to [Find.file].
@@ -83,15 +85,14 @@ Progress find(
   String workingDirectory = '.',
   Progress? progress,
   List<FileSystemEntityType> types = const [Find.file],
-}) {
-  return Find()._find(pattern,
-      caseSensitive: caseSensitive,
-      recursive: recursive,
-      includeHidden: includeHidden,
-      workingDirectory: workingDirectory,
-      progress: progress,
-      types: types);
-}
+}) =>
+    Find()._find(pattern,
+        caseSensitive: caseSensitive,
+        recursive: recursive,
+        includeHidden: includeHidden,
+        workingDirectory: workingDirectory,
+        progress: progress,
+        types: types);
 
 /// Implementation for the [_find] function.
 class Find extends DCliFunction {
@@ -155,10 +156,12 @@ class Find extends DCliFunction {
       finalIncludeHidden = true;
     }
 
-    final Progress _progress = progress ?? Progress.devNull();
+    final _progress = progress ?? Progress.devNull();
     try {
       Settings().verbose(
-          'find: pwd: $pwd workingDirectory: ${truepath(_workingDirectory)} pattern: $pattern caseSensitive: $caseSensitive recursive: $recursive types: $types ');
+          'find: pwd: $pwd workingDirectory: ${truepath(_workingDirectory)} '
+          'pattern: $pattern caseSensitive: $caseSensitive '
+          'recursive: $recursive types: $types ');
       final nextLevel =
           List<FileSystemEntity?>.filled(100, null, growable: true);
       final singleDirectory =
@@ -226,6 +229,7 @@ class Find extends DCliFunction {
       },
       // should also register onError
       onDone: () => completer.complete(null),
+      // ignore: avoid_types_on_closure_parameters
       onError: (Object e, StackTrace st) {
         if (e is FileSystemException && e.osError!.errorCode == 13) {
           /// check for and ignore permission denied.
@@ -236,8 +240,9 @@ class Find extends DCliFunction {
         } else if (e is FileSystemException && e.osError!.errorCode == 2) {
           /// The directory may have been deleted between us finding it and
           /// processing it.
-          Settings().verbose(
-              'File or Directory deleted whilst we were processing it: ${e.path}');
+          Settings()
+              .verbose('File or Directory deleted whilst we were processing it:'
+                  ' ${e.path}');
         } else {
           throw e;
         }
@@ -250,9 +255,8 @@ class Find extends DCliFunction {
   /// Checks if a hidden file is allowed.
   /// Non-hidden files are always allowed.
   bool _allowed(String workingDirectory, FileSystemEntity entity,
-      {required bool includeHidden}) {
-    return includeHidden || !_isHidden(workingDirectory, entity);
-  }
+          {required bool includeHidden}) =>
+      includeHidden || !_isHidden(workingDirectory, entity);
 
   // check if the entity is a hidden file (.xxx) or
   // if lives in a hidden directory.
@@ -331,6 +335,17 @@ class Find extends DCliFunction {
 }
 
 class _PatternMatcher {
+  _PatternMatcher(this.pattern,
+      {required this.workingDirectory, required this.caseSensitive}) {
+    regEx = buildRegEx();
+
+    final patternParts = split(dirname(pattern));
+    directoryParts = patternParts.length;
+    if (patternParts.length == 1 && patternParts[0] == '.') {
+      directoryParts = 0;
+    }
+  }
+
   String pattern;
   String workingDirectory;
   late RegExp regEx;
@@ -338,15 +353,6 @@ class _PatternMatcher {
 
   /// the no. of directories in the pattern
   int directoryParts = 0;
-
-  _PatternMatcher(this.pattern,
-      {required this.workingDirectory, required this.caseSensitive}) {
-    regEx = buildRegEx();
-
-    final patternParts = split(dirname(pattern));
-    directoryParts = patternParts.length;
-    if (patternParts.length == 1 && patternParts[0] == '.') directoryParts = 0;
-  }
 
   bool match(String path) {
     final matchPart = _extractMatchPart(path);
@@ -380,7 +386,7 @@ class _PatternMatcher {
           regEx += '^';
           break;
         case '.':
-          regEx += '\\.';
+          regEx += r'\.';
           break;
         default:
           regEx += char;
@@ -397,12 +403,16 @@ class _PatternMatcher {
   /// This method extracts the components of a absolute [path]
   /// that must be used when doing the pattern match.
   String _extractMatchPart(String path) {
-    if (directoryParts == 0) return basename(path);
+    if (directoryParts == 0) {
+      return basename(path);
+    }
 
     final pathParts = split(dirname(relative(path, from: workingDirectory)));
 
     var partsCount = pathParts.length;
-    if (pathParts.length == 1 && pathParts[0] == '.') partsCount = 0;
+    if (pathParts.length == 1 && pathParts[0] == '.') {
+      partsCount = 0;
+    }
 
     /// If the path doesn't have enough parts then just
     /// return the path relative to the workingDirectory.

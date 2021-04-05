@@ -24,7 +24,8 @@ import 'package:test/test.dart';
 /// active .pub-cache.
 ///
 ///
-/// The result is that dcli is neither available in .pub-cache nor installed into
+/// The result is that dcli is neither available in .pub-cache 
+/// nor installed into
 /// .dcli.
 ///
 /// This is not a problem for running most unit tests as the are using the
@@ -34,7 +35,8 @@ import 'package:test/test.dart';
 /// The first time TestPaths is called it will create the necessary paths
 /// and install dcli.
 ///
-/// To ensure that the install happens at the start of each test run (and then only once)
+/// To ensure that the install happens at the start of each test
+///  run (and then only once)
 /// we store the test runs PID into /tmp/dcli/PID.
 /// If the PID changes we know we need to recreate and reinstall everything.
 ///

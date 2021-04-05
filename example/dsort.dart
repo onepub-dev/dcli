@@ -9,7 +9,8 @@ import 'package:args/args.dart';
 /// dsort
 ///
 ///```
-/// dsort --field-delimiter=<FD> --linedelimiter=<LD> --key=<columns> --output output <file>
+/// dsort --field-delimiter=<FD> --linedelimiter=<LD> --key=<columns>
+///   --output output <file>
 ///
 /// <columns>=1[type][direction],3,7,1-7
 /// <type>=<s|n|m>
@@ -98,15 +99,14 @@ void dsort(List<String> args) {
   }
 
   if (exists(outputPath) && outputPath != inputPath) {
-    usageError(
-        'The output_file $outputPath already exist. Delete the file and try again.');
+    usageError('The output_file $outputPath already exist. '
+        'Delete the file and try again.');
   }
 
-  final sort = FileSort(
+   FileSort(
       inputPath, outputPath, columns, fieldDelimiter, lineDelimiter,
-      verbose: verbose);
-
-  sort.sort();
+      verbose: verbose)
+    .sort();
 }
 
 void usageError(String error) {

@@ -30,6 +30,6 @@ void main() {
       });
     });
   },
-      skip:
-          true); // calling head().toList() fails as we end up with two progressions.
+      // calling head().toList() fails as we end up with two progressions.
+      skip: true);
 }

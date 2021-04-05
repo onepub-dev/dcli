@@ -35,7 +35,8 @@ String _noFormat<T>(T option) => option.toString();
 /// ```dart
 ///
 /// var colors = [Color('Red'), Color('Green')];
-/// var color = menu(prompt: 'Please select a color', options: colors, format: (color) => color.name);
+/// var color = menu(prompt: 'Please select a color'
+///   , options: colors, format: (color) => color.name);
 /// ```
 ///
 /// If [format] is not passed [option.toString()] will be used
@@ -45,10 +46,13 @@ String _noFormat<T>(T option) => option.toString();
 /// options. If you specify [fromStart: false] then the menu will display the
 /// last [limit] options.
 ///
-/// If you pass a [defaultOption] the matching option is highlighted in green in the menu
-/// and if the user hits enter without entering a value the [defaultOption] is returned.
+/// If you pass a [defaultOption] the matching option is highlighted
+/// in green in the menu
+/// and if the user hits enter without entering a value the [defaultOption]
+/// is returned.
 ///
-/// If the [defaultOption] does not match any the supplied [options] then an ArgumentError is thrown.
+/// If the [defaultOption] does not match any the supplied [options]
+/// then an ArgumentError is thrown.
 ///
 T menu<T>(
     {required String prompt,
@@ -90,8 +94,8 @@ T menu<T>(
   }
 
   if (defaultOption != null && defaultIndex == null) {
-    throw ArgumentError(
-        "The [defaultOption] $defaultOption doesn't match any of the passed [options]."
+    throw ArgumentError("The [defaultOption] $defaultOption doesn't match any "
+        'of the passed [options].'
         ' Check the == operator for ${options[0].runtimeType}.');
   }
 
@@ -102,8 +106,10 @@ T menu<T>(
   // loop until the user enters a valid selection.
   while (!valid) {
     final selected =
-        ask(prompt, defaultValue: defaultIndex, validator: MenuRange(limit));
-    if (selected.isEmpty) continue;
+        ask(prompt, defaultValue: defaultIndex, validator: _MenuRange(limit));
+    if (selected.isEmpty) {
+      continue;
+    }
     valid = true;
     index = int.parse(selected);
   }
@@ -111,10 +117,9 @@ T menu<T>(
   return options[index - 1];
 }
 
-class MenuRange extends AskValidator {
-  final int limit;
 
-  const MenuRange(this.limit);
+class _MenuRange extends AskValidator {
+  const _MenuRange(this.limit);
   @override
   String validate(String line) {
     final finalline = line.trim();
@@ -130,4 +135,6 @@ class MenuRange extends AskValidator {
 
     return finalline;
   }
+
+  final int limit;
 }

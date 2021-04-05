@@ -47,7 +47,8 @@ void main() {
             ]));
       });
 
-      /// need a test where we enter a partial directory and two directories match
+      /// need a test where we enter a partial directory
+      ///  and two directories match
       /// the completion seems to auto complete to the first exact match.
       /// e.g.
       /// doc

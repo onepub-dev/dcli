@@ -46,7 +46,8 @@ class _Copy extends DCliFunction {
     // ignore: avoid_catches_without_on_clauses
     catch (e) {
       throw CopyException(
-          'An error occured copying ${truepath(from)} to ${truepath(finalto)}. Error: $e');
+          'An error occured copying ${truepath(from)} to ${truepath(finalto)}. '
+          'Error: $e');
     }
   }
 }

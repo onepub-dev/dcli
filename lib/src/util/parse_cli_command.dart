@@ -84,7 +84,8 @@ class ParsedCliCommand {
           break;
 
         case _ParseState.inWord:
-          // added ignore as lint has a bug for conditional in a switch statement #27
+          // added ignore as lint has a bug for conditional in a 
+          // switch statement #27
           // ignore: invariant_booleans
           if (char == ' ') // && !escapeNext)
           {
@@ -101,7 +102,8 @@ class ParsedCliCommand {
             matchingQuote = char;
             break;
             //             throw InvalidArguments(
-            //                 '''A command argument may not have a quote in the middle of a word.
+            //                 '''A command argument may not have a 
+            // quote in the middle of a word.
             // Command: $command
             // ${' '.padRight(9 + i)}^''');
           }

@@ -103,7 +103,8 @@ class Progress {
   ///````
   ///
   Progress.stream({this.includeStdout = true, this.includeStderr = true}) {
-    /// we don't wire the stream but rather allow the user to obtain the stream directly
+    /// we don't wire the stream but rather allow the user to 
+    /// obtain the stream directly
   }
 
   /// Returns a combined stream including stdout and stderr.

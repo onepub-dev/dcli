@@ -18,12 +18,10 @@ void main() {
   waitForEx(future);
 }
 
-Future<Process> startProcess() {
-  return Process.start(
-    'invalidcommandname',
-    [],
-  );
-}
+Future<Process> startProcess() => Process.start(
+      'invalidcommandname',
+      [],
+    );
 
 void waitForMe(Future future) {
   try {
@@ -50,7 +48,7 @@ void waitForMe(Future future) {
 
 T waitForEx<T>(Future<T> future) {
   Object? exception;
-  T? value;
+  late T value;
   try {
     // catch any unhandled exceptions
     //ignore: avoid_types_on_closure_parameters
@@ -61,7 +59,7 @@ T waitForEx<T>(Future<T> future) {
 
     runZonedGuarded(() {
       value = waitFor<T>(future);
-    }, (Object error, StackTrace st) {
+    }, (error, st) {
       exception = error;
     });
   }
@@ -69,7 +67,7 @@ T waitForEx<T>(Future<T> future) {
   on AsyncError catch (e) {
     exception = e.error;
   } finally {
-    print('existing try');
+    print('exiting try');
   }
 
   if (exception != null) {
@@ -79,7 +77,7 @@ T waitForEx<T>(Future<T> future) {
     final stackTrace = StackTraceImpl(skipFrames: 2);
 
     if (exception is DCliException) {
-      throw (exception as DCliException).copyWith(stackTrace);
+      throw (exception! as DCliException).copyWith(stackTrace);
     } else {
       throw DCliException.from(exception, stackTrace);
     }
@@ -90,10 +88,9 @@ T waitForEx<T>(Future<T> future) {
 Future<int> throwExceptionV3() {
   final complete = Completer<int>();
   try {
-    final future =
-        Future.delayed(const Duration(seconds: 2), () => throw Exception());
-    //ignore: avoid_types_on_closure_parameters
-    future.catchError((Object e) {
+    Future.delayed(const Duration(seconds: 2), () => throw Exception())
+        //ignore: avoid_types_on_closure_parameters
+        .catchError((Object e) {
       print('caught 1');
       complete.completeError('caught ');
     });

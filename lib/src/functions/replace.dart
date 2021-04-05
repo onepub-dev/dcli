@@ -9,7 +9,8 @@ import 'dcli_function.dart';
 /// of [existing] and replaces them with [replacement].
 ///
 /// By default we only replace the first occurance of [existing] on each line.
-/// To replace every (non-overlapping) occurance of [existing] on a line then set [all] to true;
+/// To replace every (non-overlapping) occurance of [existing] on a
+/// line then set [all] to true;
 ///
 /// The [replace] method returns the no. of lines modified.
 ///

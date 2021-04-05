@@ -7,12 +7,6 @@ import '../../src/pubspec/dep_ref_extension.dart';
 
 /// Defines a pubspec.yaml dependency.
 class Dependency extends Equatable {
-  /// name of the package.
-  final String name;
-
-  /// reference to the package. Could be a version no., path, git rep....
-  final DependencyReference reference;
-
   /// ctor
   const Dependency(this.name, this.reference);
 
@@ -22,6 +16,12 @@ class Dependency extends Equatable {
 
   ///
   Dependency.fromPath(this.name, String path) : reference = PathReference(path);
+
+  /// reference to the package. Could be a version no., path, git rep....
+  final DependencyReference reference;
+
+  /// name of the package.
+  final String name;
 
   ///
   static Dependency? fromLine(String line) {
@@ -38,12 +38,8 @@ class Dependency extends Equatable {
   List<Object?> get props => [name, reference];
 
   @override
-  String toString() {
-    return reference.rehydrate(this);
-  }
+  String toString() => reference.rehydrate(this);
 
   ///
-  String rehydrate() {
-    return reference.rehydrate(this);
-  }
+  String rehydrate() => reference.rehydrate(this);
 }

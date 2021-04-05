@@ -19,29 +19,36 @@ import 'runnable_process.dart';
 extension StringAsProcess on String {
   /// Allows you to execute the contents of a dart string as a
   /// command line appliation.
-  /// Any output from the command  (stderr and stdout) is displayed on the console.
+  /// Any output from the command  (stderr and stdout) is displayed
+  ///  on the console.
   ///
   /// ```dart
   /// 'zip regions.txt regions.zip'.run;
   /// ```
   ///
-  /// If you need to pass an argument to your application that contains spaces then use nested quotes:
+  /// If you need to pass an argument to your application that contains
+  /// spaces then use nested quotes:
   ///e.g.
   ///  ```dart
   ///  'wc "fred nurk.text"'.run;
   ///```
   ///
-  /// Any environment variables you set via env['xxx'] will be passed to the new process.
+  /// Any environment variables you set via env['xxx'] will be passed
+  /// to the new process.
   ///
   /// Linux:
-  /// DCli performs glob (wildcard) expansion on command arguments if it contains any one
+  /// DCli performs glob (wildcard) expansion on command arguments
+  /// if it contains any one
   /// of `*, [ or ?`  unless the argument is quoted.
   /// DCli uses the dart package Glob (https://pub.dev/packages/glob) to do the glob expansion.
   ///
-  /// The following command will have the argument containing the wild card *.dart expanded to
-  /// the list of files, in the current directory, that match the pattern *.dart.
+  /// The following command will have the argument containing the
+  /// wild card *.dart expanded to
+  /// the list of files, in the current directory, that match the
+  ///  pattern *.dart.
   ///
-  /// If no files match the pattern then the pattern will be passed to the command unchanged:
+  /// If no files match the pattern then the pattern will be passed
+  /// to the command unchanged:
   ///
   /// ```dart
   /// 'ls *.dart'.run;
@@ -54,7 +61,8 @@ extension StringAsProcess on String {
   /// ```
   ///
   /// Windows:
-  ///  On windows Glob expansion is suppressed as both Command and Powershell don't expand
+  ///  On windows Glob expansion is suppressed as both Command and Powershell 
+  /// don't expand
   ///  globs.
   ///
   ///
@@ -63,7 +71,8 @@ extension StringAsProcess on String {
   ///     [start] - for more control over how the sub process is started.
   ///     [firstLine] - returns just the first line written to stdout or stderr.
   ///     [lastLine] - returns just the last line written to stdout or stderr.
-  ///     [parser] - returns a parser with the captured output ready to be interpreted
+  ///     [parser] - returns a parser with the captured output ready 
+  /// to be interpreted
   ///                as one of several file types.
   void get run {
     cmd.start(this,
@@ -86,7 +95,8 @@ extension StringAsProcess on String {
   /// 'zip regions.txt regions.zip'.shell;
   /// ```
   ///
-  /// If you need to pass an argument to your application that contains spaces then use nested quotes:
+  /// If you need to pass an argument to your application that contains
+  ///  spaces then use nested quotes:
   ///e.g.
   ///  ```dart
   ///  'wc "fred nurk.text"'.shell;
@@ -97,7 +107,8 @@ extension StringAsProcess on String {
   ///     [toList] to capture stdout and stderr to [List<String>]
   ///     [firstLine] - returns just the first line written to stdout.
   ///     [lastLine] - returns just the last line written to stdout or stderr.
-  ///     [parser] - returns a parser with the captured output ready to be interpreted
+  ///     [parser] - returns a parser with the captured output ready
+  ///  to be interpreted
   ///                as one of several file types.
   @Deprecated('use start(runInShell: true)')
   void get shell => cmd.run(this, runInShell: true);
@@ -128,17 +139,23 @@ extension StringAsProcess on String {
   /// Use [workingDirectory] to specify the directory the process should
   /// be run from.
   ///
-  /// If you need to run a command with escalated privileged then set the [privileged]
+  /// If you need to run a command with escalated privileged then set the 
+  /// [privileged]
   /// argument to true. On Linux this equates to using the sudo command.
-  /// The advantage of using the 'privileged' option is that it will first check if you are
-  /// already running in a privileged environment. This is extremly useful if you
-  /// are running in the likes of a Docker container that doesn't implement sudo but
+  /// The advantage of using the 'privileged' option is that it will first 
+  /// check if you are
+  /// already running in a privileged environment. This is extremly useful
+  ///  if you
+  /// are running in the likes of a Docker container that doesn't implement 
+  /// sudo but
   /// in which you are already running as root.
   ///
-  /// Any environment variables you set via env['xxx'] will be passed to the new process.
+  /// Any environment variables you set via env['xxx'] will be passed to the
+  ///  new process.
   ///
   ///
-  /// If you need to pass an argument to your application that contains spaces then use nested quotes:
+  /// If you need to pass an argument to your application that contains spaces 
+  /// then use nested quotes:
   ///e.g.
   ///  ```dart
   ///  'wc "fred nurk.text"'.start(terminal: true);
@@ -147,9 +164,11 @@ extension StringAsProcess on String {
   /// See  [run] if you just need to run a process with all the defaults.
   ///      [forEach] to capture output to stdout and stderr
   ///      [toList] to capture stdout and stderr to [List<String>]
-  ///      [firstLine] - returns just the first line written to stdout or stderr.
+  ///      [firstLine] - returns just the first line written to stdout
+  ///  or stderr.
   ///      [lastLine] - returns just the last line written to stdout or stderr.
-  ///      [parser] - returns a parser with the captured output ready to be interpreted
+  ///      [parser] - returns a parser with the captured output ready 
+  /// to be interpreted
   ///                as one of several file types.
   void start({
     Progress? progress,
@@ -187,9 +206,11 @@ extension StringAsProcess on String {
   ///     , stderr: (line) => print(line));
   /// ```
   ///
-  /// Any environment variables you set via env['xxx'] will be passed to the new process.
+  /// Any environment variables you set via env['xxx'] will be passed
+  ///  to the new process.
   ///
-  /// If you need to pass an argument to your application that contains spaces then use nested quotes:
+  /// If you need to pass an argument to your application that contains 
+  /// spaces then use nested quotes:
   ///e.g.
   ///  ```dart
   ///  'wc "fred nurk.text"'.run;
@@ -200,10 +221,11 @@ extension StringAsProcess on String {
   ///     [start] - if you need to run a detached sub process.
   ///     [firstLine] - returns just the first line written to stdout or stderr.
   ///     [lastLine] - returns just the last line written to stdout or stderr.
-  ///     [parser] - returns a parser with the captured output ready to be interpreted
+  ///     [parser] - returns a parser with the captured output ready
+  ///  to be interpreted
   ///                as one of several file types.
   void forEach(LineAction stdout,
-          {LineAction stderr = _NoOpAction, bool runInShell = false}) =>
+          {LineAction stderr = _noOpAction, bool runInShell = false}) =>
       cmd.start(this,
           progress: Progress(stdout, stderr: stderr), runInShell: runInShell);
 
@@ -226,7 +248,8 @@ extension StringAsProcess on String {
   /// and the cause contains all of the output the command wrote to
   /// stdout and stderr before it exited.
   ///
-  /// Any environment variables you set via env['xxx'] will be passed to the new process.
+  /// Any environment variables you set via env['xxx'] will be passed
+  ///  to the new process.
   ///
   ///EXPERIMENTAL argument.
   /// If [nothrow] is set to true then an exception will not be thrown on
@@ -245,7 +268,8 @@ extension StringAsProcess on String {
   ///     [start] - to run the process fully detached.
   ///     [firstLine] - returns just the first line written to stdout or stderr.
   ///     [lastLine] - returns just the last line written to stdout or stderr.
-  ///     [parser] - returns a parser with the captured output ready to be interpreted
+  ///     [parser] - returns a parser with the captured output ready
+  /// to be interpreted
   ///                as one of several file types.
 
   List<String> toList(
@@ -263,13 +287,15 @@ extension StringAsProcess on String {
     return list.sublist(skipLines);
   }
 
-  /// [parser] runs the contents of this String as a cli command line reading all of the
+  /// [parser] runs the contents of this String as a cli command line
+  ///  reading all of the
   /// returned data and then passes the read lines to a [Parser]
   /// to be decoded as a specific file type.
   ///
   /// EXPERIMENTAL: we may rework the data structures the parser returns.
   ///
-  /// DCli performs Glob expansion on command line arguments. See [run] for details.
+  /// DCli performs Glob expansion on command line arguments.
+  /// See [run] for details.
   ///
   /// If [runInShell] is true (defaults to false) then the command will
   /// be run in a shell. This may be required if you are trying to run
@@ -316,7 +342,8 @@ extension StringAsProcess on String {
   ///     [start] - to run the process fully detached.
   ///     [toList] - returns a lines written to stdout and stderr as a list.
   ///     [lastLine] - returns just the last line written to stdout or stderr.
-  ///     [parser] - returns a parser with the captured output ready to be interpreted
+  ///     [parser] - returns a parser with the captured output ready
+  /// to be interpreted
   ///                as one of several file types.
   String? get firstLine {
     final lines = toList();
@@ -349,7 +376,8 @@ extension StringAsProcess on String {
   ///     [start] - to run the process fully detached.
   ///     [toList] - returns a lines written to stdout and stderr as a list.
   ///     [firstLine] - returns just the first line written to stdout.
-  ///     [parser] - returns a parser with the captured output ready to be interpreted
+  ///     [parser] - returns a parser with the captured output ready
+  ///  to be interpreted
   ///                as one of several file types.
   String? get lastLine {
     String? lastLine;
@@ -371,7 +399,8 @@ extension StringAsProcess on String {
   ///  - head returns the top 5 lines
   ///  - we pipe the 5 lines to tail
   ///  - tail returns the last 2 of those 5 line
-  ///  - We are then back in dart world with the forEach where we print the 2 lines.
+  ///  - We are then back in dart world with the forEach where we
+  /// print the 2 lines.
   ///
   /// ``` dart
   /// 'tail /var/log/syslog' | 'head -n 5' | 'tail -n 2'.forEach((line) => print(line));
@@ -457,7 +486,8 @@ extension StringAsProcess on String {
   /// Treat the contents of this String  as the name of a file
   /// and append [line] to the file.
   /// [newline] specifies the line termination character.
-  /// If you don't want a newline appended then pass an empty string to [newline].
+  /// If you don't want a newline appended then pass an empty
+  /// string to [newline].
   /// [newline] defaults to '\n'.
   ///
   /// e.g.
@@ -472,4 +502,4 @@ extension StringAsProcess on String {
   }
 }
 
-void _NoOpAction(String line) {}
+void _noOpAction(String line) {}

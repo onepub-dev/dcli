@@ -16,10 +16,11 @@ void main() {
 
       'dcli_complete dcli c'.start(
         workingDirectory: fs.fsRoot,
-        progress: Progress((line) => results.add(line)),
+        progress: Progress(results.add),
       );
 
-      // if warmup hasn't been run then we have the results of a pub get in the the output.
+      // if warmup hasn't been run then we have the results of a
+      //  pub get in the the output.
       final expected = ['clean', 'compile', 'create'];
 
       expect(results, equals(expected));
@@ -35,10 +36,11 @@ void main() {
 
       'dcli_complete dcli cl'.start(
         workingDirectory: fs.fsRoot,
-        progress: Progress((line) => results.add(line)),
+        progress: Progress(results.add),
       );
 
-      // if warmup hasn't been run then we have the results of a pub get in the the output.
+      // if warmup hasn't been run then we have the results of a
+      //  pub get in the the output.
       final expected = ['clean'];
 
       expect(results, equals(expected));
@@ -61,13 +63,14 @@ void main() {
         try {
           'dcli_complete dcli _test_a warmup'.start(
             workingDirectory: fs.fsRoot,
-            progress: Progress((line) => results.add(line)),
+            progress: Progress(results.add),
           );
         } on DCliException catch (_) {
           rethrow;
         }
 
-        // if warmup hasn't been run then we have the results of a pub get in the the output.
+        // if warmup hasn't been run then we have the results of 
+        // a pub get in the the output.
         final expected = ['_test_a.dart', '_test_ab.dart'];
 
         expect(results, unorderedEquals(expected));
@@ -91,10 +94,11 @@ void main() {
 
         'dcli_complete dcli _test_a warmup'.start(
           workingDirectory: fs.fsRoot,
-          progress: Progress((line) => results.add(line)),
+          progress: Progress(results.add),
         );
 
-        // if warmup hasn't been run then we have the results of a pub get in the the output.
+        // if warmup hasn't been run then we have the results of 
+        // a pub get in the the output.
         final expected = ['_test_a.dart', '_test_ab.dart'];
 
         expect(results, unorderedEquals(expected));

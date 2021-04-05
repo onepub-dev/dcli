@@ -23,7 +23,8 @@ class WarmupCommand extends Command {
       targetPath = pwd;
     } else if (arguments.length != 1) {
       throw InvalidArguments(
-          'Expected a single project path or no project path. Found ${arguments.length} ');
+          'Expected a single project path or no project path. '
+          'Found ${arguments.length} ');
     } else {
       targetPath = arguments[0];
     }

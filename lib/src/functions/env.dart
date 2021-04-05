@@ -176,8 +176,8 @@ class Env extends DCliFunction {
   /// Changing the path affects the current script
   /// and any children that it spawns.
   void removeFromPATH(String oldPath) {
-    final path = PATH;
-    path.remove(oldPath);
+    final path = PATH
+    ..remove(oldPath);
     _setEnv('PATH', path.join(delimiterForPATH));
   }
 
@@ -214,11 +214,11 @@ class Env extends DCliFunction {
 
     if (home == null) {
       if (Settings().isWindows) {
-        throw DCliException(
-            "Unable to find the 'APPDATA' enviroment variable. Please ensure it is set and try again.");
+        throw DCliException("Unable to find the 'APPDATA' enviroment variable. "
+            'Please ensure it is set and try again.');
       } else {
-        throw DCliException(
-            "Unable to find the 'HOME' enviroment variable. Please ensure it is set and try again.");
+        throw DCliException("Unable to find the 'HOME' enviroment variable. "
+            'Please ensure it is set and try again.');
       }
     }
     return home;
@@ -246,8 +246,7 @@ class Env extends DCliFunction {
       _envVars.remove(name);
       if (Settings().isWindows) {
         if (name == 'HOME' || name == 'APPDATA') {
-          _envVars.remove('HOME');
-          _envVars.remove('APPDATA');
+          _envVars..remove('HOME')..remove('APPDATA');
         }
       }
     } else {
@@ -312,8 +311,7 @@ class Env extends DCliFunction {
   /// }
   /// ```
   String toJson() {
-    final envMap = <String, String>{};
-    envMap.addEntries(env.entries.toSet());
+    final envMap = <String, String>{}..addEntries(env.entries.toSet());
     return JsonEncoder(_toEncodable).convert(envMap);
   }
 
@@ -330,9 +328,7 @@ class Env extends DCliFunction {
         const JsonDecoder().convert(json) as Map<dynamic, dynamic>));
   }
 
-  String _toEncodable(Object? object) {
-    return object.toString();
-  }
+  String _toEncodable(Object? object) => object.toString();
 
   /// Used in unit tests to mock the Env class.
   // ignore: avoid_setters_without_getters

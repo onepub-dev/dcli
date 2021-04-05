@@ -122,9 +122,7 @@ class _Is extends DCliFunction {
         FileSystemEntityType.notFound;
   }
 
-  DateTime lastModified(String path) {
-    return File(path).lastModifiedSync();
-  }
+  DateTime lastModified(String path) => File(path).lastModifiedSync();
 
   void setLastModifed(String path, DateTime lastModified) {
     File(path).setLastModifiedSync(lastModified);
@@ -132,21 +130,16 @@ class _Is extends DCliFunction {
 
   /// checks if the passed [path] (a file or directory) is
   /// writable by the user that owns this process
-  bool isWritable(String path) {
-    return _checkPermission(path, writeBitMask);
-  }
+  bool isWritable(String path) => _checkPermission(path, writeBitMask);
 
   /// checks if the passed [path] (a file or directory) is
   /// readable by the user that owns this process
-  bool isReadable(String path) {
-    return _checkPermission(path, readBitMask);
-  }
+  bool isReadable(String path) => _checkPermission(path, readBitMask);
 
   /// checks if the passed [path] (a file or directory) is
   /// executable by the user that owns this process
-  bool isExecutable(String path) {
-    return Settings().isWindows || _checkPermission(path, executeBitMask);
-  }
+  bool isExecutable(String path) =>
+      Settings().isWindows || _checkPermission(path, executeBitMask);
 
   static const readBitMask = 0x4;
   static const writeBitMask = 0x2;

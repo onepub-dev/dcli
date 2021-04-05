@@ -12,12 +12,14 @@ mixin WindowsMixin {
 //     if (!inDeveloperMode()) {
 //       return '''
 // You must be running in Windows Developer Mode to install DCli.
-// Read additional details here: https://bsutton.gitbook.io/dcli/getting-started/installing-on-windows''';
+// Read additional details here:
+// https://bsutton.gitbook.io/dcli/getting-started/installing-on-windows''';
 //     }
     return null;
   }
 
-  /// Windows 10+ has a developer mode that needs to be enabled to create symlinks without escalated prividedges.
+  /// Windows 10+ has a developer mode that needs to be enabled to create
+  ///  symlinks without escalated prividedges.
   /// For details on enabling dev mode on windows see:
   /// https://bsutton.gitbook.io/dcli/getting-started/installing-on-windows
   bool inDeveloperMode() {
@@ -25,7 +27,6 @@ mixin WindowsMixin {
     /// <blank line>
     /// HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\AppModelUnlock
     /// AllowDevelopmentWithoutDevLicense    REG_DWORD    0x1
-
     final response =
         r'reg query "HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\AppModelUnlock" /v "AllowDevelopmentWithoutDevLicense"'
             .toList(runInShell: true, skipLines: 2)
@@ -64,8 +65,8 @@ mixin WindowsMixin {
 
   bool get isSudo => false;
 
+  /// TODO: impement notification so desktop apps update their environment.
   static void setPath(List<String?> paths) {
-    // // TODO: impement notification so desktop apps update their environment.
     // // const char * what = "Environment";
     // // DWORD rv;
     // // SendMessageTimeout( HWND_BROADCAST, WM_SETTINGCHANGE, 0,
@@ -90,7 +91,8 @@ mixin WindowsMixin {
   //   final dataSize = allocate<Uint32>()..value = value.length + 1;
 
   //   try {
-  //     var result = RegOpenKeyEx(key, subKeyPtr, 0, REG_EXPAND_SZ, openKeyPtr);
+  //     var result = RegOpenKeyEx(key, subKeyPtr, 0
+  //      , REG_EXPAND_SZ, openKeyPtr);
   //     if (result == ERROR_SUCCESS) {
   //       result = RegSetValueEx(openKeyPtr.value, valueNamePtr, nullptr,
   //           dataType, valuePtr.cast(), dataSize);

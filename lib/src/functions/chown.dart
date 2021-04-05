@@ -24,8 +24,10 @@ import 'dcli_function.dart';
 /// [group] is the posix group that will own the file/directory. If no [group] is specified
 /// then [user] is used as the group name.
 ///
-/// If [recursive] is true (the default) then the change is applied to all subdirectories.
-/// If you pass [recursive] and [path] is a file then [recursive] will be ignored.
+/// If [recursive] is true (the default) then the change is applied to
+///  all subdirectories.
+/// If you pass [recursive] and [path] is a file then [recursive]
+/// will be ignored.
 ///
 void chown(String path, {String? user, String? group, bool recursive = true}) =>
     _ChOwn()._chown(path, user: user, group: group, recursive: recursive);
@@ -36,7 +38,9 @@ class _ChOwn extends DCliFunction {
 
   void _chown(String path,
       {String? user, String? group, bool recursive = true}) {
-    if (Platform.isWindows) return;
+    if (Platform.isWindows) {
+      return;
+    }
 
     user ??= Shell.current.loggedInUser ?? '';
 
@@ -64,7 +68,6 @@ class ChOwnException extends DCliFunctionException {
       : super(reason, stacktrace);
 
   @override
-  DCliException copyWith(StackTraceImpl stackTrace) {
-    return ChOwnException(message, stackTrace);
-  }
+  DCliException copyWith(StackTraceImpl stackTrace) =>
+      ChOwnException(message, stackTrace);
 }

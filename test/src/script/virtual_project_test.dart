@@ -49,7 +49,8 @@ void main() {
 
         'dcli create $scriptPath'.run;
 
-        /// move the script into a bin directory to mimic a traditional dart package layout.
+        /// move the script into a bin directory to mimic a
+        /// traditional dart package layout.
         final binDir = join(scriptDir, 'bin');
         createDir(binDir);
         move(scriptPath, binDir);

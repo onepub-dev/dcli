@@ -20,13 +20,14 @@ class ScriptRunner {
     vmArgs.add('--enable-asserts');
 
     // vmArgs.add(
-    //     '--packages=${join(script.pathToProjectRoot, DartSdk().pathToPackageConfig)}');
+    //     '--packages=${join(script.pathToProjectRoot,
+    // DartSdk().pathToPackageConfig)}');
 
     vmArgs.add(script.pathToScript);
     vmArgs.addAll(_scriptArguments);
 
-    Settings().verbose(
-        'Executing: ${DartSdk().pathToDartExe} $vmArgs, ${script.pathToScript}');
+    Settings().verbose('Executing: ${DartSdk().pathToDartExe} $vmArgs, '
+        '${script.pathToScript}');
 
     // Execute the script
     final process = waitFor<Process>(Process.start(

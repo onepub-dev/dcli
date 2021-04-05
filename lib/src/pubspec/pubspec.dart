@@ -1,20 +1,37 @@
 import 'dart:io';
 
 import 'package:collection/collection.dart';
-import 'package:dcli/src/util/wait_for_ex.dart';
-
 import 'package:pub_semver/pub_semver.dart';
-
 import 'package:pubspec/pubspec.dart' as pub;
 
 import '../../dcli.dart';
 import '../script/script.dart';
+import '../util/wait_for_ex.dart';
 import 'dependency.dart';
 
 ///
 ///Used to read a pubspec.yaml file
 ///
 class PubSpec {
+  PubSpec._internal();
+
+  /// Reads a pubspec.yaml from the path that  [script] is located in.
+  PubSpec.fromScript(Script script) {
+    _fromFile(script.pathToPubSpec);
+  }
+
+  /// Reads a pubspec.yaml located at [path]
+  PubSpec.fromFile(String path) {
+    _fromFile(path);
+  }
+
+  /// parses a pubspec from a yaml string.
+  factory PubSpec.fromString(String yamlString) {
+    final impl = PubSpec._internal()
+      ..pubspec = pub.PubSpec.fromYamlString(yamlString);
+    return impl;
+  }
+
   /// the wrapped pubspec.
   late pub.PubSpec pubspec;
 
@@ -96,25 +113,6 @@ class PubSpec {
     return Map.unmodifiable(depends);
   }
 
-  PubSpec._internal();
-
-  /// Reads a pubspec.yaml from the path that  [script] is located in.
-  PubSpec.fromScript(Script script) {
-    _fromFile(script.pathToPubSpec);
-  }
-
-  /// Reads a pubspec.yaml located at [path]
-  PubSpec.fromFile(String path) {
-    _fromFile(path);
-  }
-
-  /// parses a pubspec from a yaml string.
-  factory PubSpec.fromString(String yamlString) {
-    final impl = PubSpec._internal();
-    impl.pubspec = pub.PubSpec.fromYamlString(yamlString);
-    return impl;
-  }
-
   void _fromFile(String path) {
     final lines = read(path).toList();
 
@@ -130,11 +128,15 @@ class PubSpec {
 
   /// Compares two pubspec to see if they have the same content.
   static bool equals(PubSpec lhs, PubSpec rhs) {
-    if (lhs.name != rhs.name) return false;
+    if (lhs.name != rhs.name) {
+      return false;
+    }
 
     // if (lhs.author != rhs.author) return false;
 
-    if (lhs.version != rhs.version) return false;
+    if (lhs.version != rhs.version) {
+      return false;
+    }
 
     // if (lhs.homepage != rhs.homepage) return false;
 
@@ -144,21 +146,26 @@ class PubSpec {
     // if (lhs.environment != rhs.environment) return false;
 
     if (!const MapEquality<String, Dependency>()
-        .equals(lhs.dependencies, rhs.dependencies)) return false;
+        .equals(lhs.dependencies, rhs.dependencies)) {
+      return false;
+    }
 
     return true;
   }
 
-  static pub.PathReference createPathReference(String path) {
-    return pub.PathReference.fromJson(<String, String>{'path': path});
-  }
+  static pub.PathReference createPathReference(String path) =>
+      pub.PathReference.fromJson(<String, String>{'path': path});
 }
 
+/// Represents a path to an executable listed in the 'executables'
+/// section of the pubsec.yaml.
 class Executable {
+  /// Create an executable with a name and a path.
+  Executable(this.name, this.pathToScript);
+
+  /// Name of the executable.
   String name;
 
   /// path of the script relative to the pacakge root.
   String pathToScript;
-
-  Executable(this.name, this.pathToScript);
 }

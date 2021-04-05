@@ -38,7 +38,8 @@ class RunCommand extends Command {
       /// as we will end up with root permissions everywhere.
       if (!script.isReadyToRun) {
         printerr(red(
-            'The script is not ready to run, so cannot be run from sudo. Run dcli warmup $scriptPath'));
+            'The script is not ready to run, so cannot be run from sudo. '
+            'Run dcli warmup $scriptPath'));
         exit(1);
       }
     }
@@ -48,7 +49,8 @@ class RunCommand extends Command {
     if (!script.isReadyToRun) {
       if (Shell.current.isSudo) {
         printerr(red(
-            'The script is not ready to run, so cannot be run from sudo. Run dcli warmup $scriptPath'));
+            'The script is not ready to run, so cannot be run from sudo. '
+            'Run dcli warmup $scriptPath'));
         exit(1);
       }
     }

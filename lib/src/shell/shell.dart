@@ -75,8 +75,10 @@ abstract class Shell {
   ///
   /// Calling [releasePrivileges] has no affect on this call.
   ///
-  /// Under Linux and OSX this means that the process's real uid is root (uid = 0).
-  /// Under Windows this means that the process was lauched via 'Run as Administrator'.
+  /// Under Linux and OSX this means that the process's real uid 
+  /// is root (uid = 0).
+  /// Under Windows this means that the process was lauched via 
+  /// 'Run as Administrator'.
   ///
   bool get isPrivilegedProcess => false;
 
@@ -92,7 +94,8 @@ abstract class Shell {
   ///
   /// Calling this method on Windows is unnecessary but harmless.
   ///
-  /// On Linux and OSX releasing privileges sets the uid and gid to the user's original
+  /// On Linux and OSX releasing privileges sets the uid and gid 
+  /// to the user's original
   /// privileges so any files that are created/modified get the original
   /// user's uid/gid.
   ///

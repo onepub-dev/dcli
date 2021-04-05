@@ -17,7 +17,8 @@ class Parser {
   Parser(this._lines);
 
   ///
-  /// Interprets the read lines as JSON strings and builds the corresponding objects.
+  /// Interprets the read lines as JSON strings and builds 
+  /// the corresponding objects.
   ///
   /// See: https://api.flutter.dev/flutter/dart-convert/JsonDecoder-class.html
   dynamic jsonDecode() {
@@ -29,7 +30,8 @@ class Parser {
   /// If the string contains more than one document, this throws a
   /// [YamlException]. In future releases, this will become an [ArgumentError].
   ///
-  /// The return value is mostly normal Dart objects. However, since YAML mappings
+  /// The return value is mostly normal Dart objects. However, 
+  /// since YAML mappings
   /// support some key types that the default Dart map implementation doesn't
   /// (NaN, lists, and maps), all maps in the returned document are [YamlMap]s.
   /// These have a few small behavioral differences from the default Map

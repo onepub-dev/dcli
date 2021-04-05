@@ -86,8 +86,9 @@ class CompileCommand extends Command {
       /// we are running sudo, so we can't init a script
       /// as we will end up with root permissions everywhere.
       if (!script.isReadyToRun) {
-        printerr(red(
-            'The script is not ready to run, so cannot be run from sudo. Run dcli warmup $scriptPath'));
+        printerr(
+            red('The script is not ready to run, so cannot be run from sudo. '
+                'Run dcli warmup $scriptPath'));
         exit(1);
       }
     }
@@ -119,7 +120,8 @@ class CompileCommand extends Command {
             install = false;
 
             print(red(
-                'The target file ${script.pathToInstalledExe} already exists. Use the --overwrite flag to overwrite it.'));
+                'The target file ${script.pathToInstalledExe} already exists. '
+                'Use the --overwrite flag to overwrite it.'));
           }
         }
       }
@@ -140,28 +142,24 @@ class CompileCommand extends Command {
   @override
   String usage() {
     const description =
-        'compile [--nowarmup] [--install] [--overwrite] [<script path.dart>, <script path.dart>,...]';
+        'compile [--nowarmup] [--install] [--overwrite] [<script path.dart>, '
+        '<script path.dart>,...]';
 
     return description;
   }
 
   @override
-  List<String> completion(String word) {
-    return completionExpandScripts(word);
-  }
+  List<String> completion(String word) => completionExpandScripts(word);
 
   @override
-  List<Flag> flags() {
-    return _compileFlags;
-  }
+  List<Flag> flags() => _compileFlags;
 }
 
 ///
 class NoWarmupFlag extends Flag {
-  static const _flagName = 'nowarmup';
-
   ///
   NoWarmupFlag() : super(_flagName);
+  static const _flagName = 'nowarmup';
 
   @override
   String get abbreviation => 'nw';
@@ -185,9 +183,10 @@ class InstallFlag extends Flag {
   String get abbreviation => 'i';
 
   @override
-  String description() {
-    return 'Installs the compiled script into your path ${Settings().pathToDCliBin}';
-  }
+  String description() =>
+     'Installs the compiled script into your path '
+        '${Settings().pathToDCliBin}';
+
 }
 
 ///
@@ -201,7 +200,6 @@ class OverWriteFlag extends Flag {
   String get abbreviation => 'o';
 
   @override
-  String description() {
-    return 'If the installed executable already exists in ${Settings().pathToDCliBin} then it will overwritten.';
-  }
+  String description() => 'If the installed executable already exists in '
+      '${Settings().pathToDCliBin} then it will overwritten.';
 }

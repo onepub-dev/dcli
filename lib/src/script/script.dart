@@ -153,8 +153,8 @@ class Script {
   /// validate that the passed arguments points to a valid script
   static void validate(String scriptPath) {
     if (!scriptPath.endsWith('.dart')) {
-      throw InvalidArguments(
-          'Expected a script name (ending in .dart) instead found: $scriptPath');
+      throw InvalidArguments('Expected a script name (ending in .dart) '
+          'instead found: $scriptPath');
     }
 
     if (!exists(scriptPath)) {
@@ -215,12 +215,13 @@ class Script {
   /// the install will fail and a [MoveException] will be thrown.
   ///
   void compile({bool install = false, bool overwrite = false}) {
-    Settings().verbose(
-        "\nCompiling with pubspec.yaml:\n${read(pathToPubSpec).toList().join('\n')}\n");
+    Settings().verbose('\nCompiling with pubspec.yaml:\n'
+        "${read(pathToPubSpec).toList().join('\n')}\n");
 
     if (install && isInstalled && !overwrite) {
       throw InvalidArguments(
-          'You selected to install the compiled exe however an installed exe of that name already exists. Use overwrite=true');
+          'You selected to install the compiled exe however an installed '
+          'exe of that name already exists. Use overwrite=true');
     }
 
     DartSdk().runDartCompiler(this,
@@ -245,7 +246,8 @@ class Script {
   }
 
   /// Returns the platform dependant name of the compiled script's exe name.
-  /// On Linux and OSX this is just the basename (script name without the extension)
+  /// On Linux and OSX this is just the basename (script name
+  ///  without the extension)
   /// on Windows this is the 'basename.exe'.
   String get exeName => '$basename${Settings().isWindows ? '.exe' : ''}';
 
@@ -253,7 +255,8 @@ class Script {
   /// its local directory (the default action of compile).
   String get pathToExe => join(pathToScriptDirectory, exeName);
 
-  /// Returns the path that the script would be installed to if compiled with install = true.
+  /// Returns the path that the script would be installed to if 
+  /// compiled with install = true.
   String get pathToInstalledExe => join(Settings().pathToDCliBin, exeName);
 }
 

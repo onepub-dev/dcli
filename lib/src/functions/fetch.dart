@@ -1,16 +1,17 @@
 import 'dart:async';
 import 'dart:io';
 
-import 'package:dcli/src/util/format.dart';
 import 'package:pedantic/pedantic.dart';
 
 import '../settings.dart';
 import '../util/dcli_exception.dart';
+import '../util/format.dart';
 import '../util/wait_for_ex.dart';
 import 'function.dart';
 import 'is.dart';
 import 'touch.dart';
 
+/// Typedef for the progress call back used by the [fetch] function.
 typedef OnFetchProgress = void Function(FetchProgress progress);
 
 void _devNull(FetchProgress _) {}
@@ -25,15 +26,20 @@ void _devNull(FetchProgress _) {}
 /// The [saveToPath] may be an absolute (recommended) or relative path where to
 /// save the downloaded resource.
 ///
-/// The file at [saveToPath] must NOT exist. If it does a [FetchException] will be thrown.
+/// The file at [saveToPath] must NOT exist. If it does a [FetchException]
+///  will be thrown.
 ///
-/// You may optionally passing in a [fetchProgress] method which will be called each
+/// You may optionally passing in a [fetchProgress] method which will be
+/// called each
 /// time a chunk is downloaded with details on the download progress.
-/// We guarentee that you will recieve a final event with the [FetchProgress.progress]
+/// We guarentee that you will recieve a final event with the
+/// [FetchProgress.progress]
 /// containing a value of 1.0 and a status of 'complete'.
 ///
-/// In the future we MAY allow you to cancel the download part way through by returning false
-/// to the [fetchProgress] call. In the meantime ensure that you always return true from
+/// In the future we MAY allow you to cancel the download part way
+/// through by returning false
+/// to the [fetchProgress] call. In the meantime ensure that you
+///  always return true from
 /// the 'onProgress' callback.
 ///
 void fetch(
@@ -54,20 +60,24 @@ void fetch(
 /// ```
 /// The passed [urls] must be a http or https based resource.
 ///
-/// The [FetchUrl.saveToPath] contained in each [FetchUrl] may be an absolute (recommended) or relative path where to
+/// The [FetchUrl.saveToPath] contained in each [FetchUrl] may be an
+/// absolute (recommended) or relative path where to
 /// save the downloaded resource.
 ///
 ///
-/// You may optionally passing in a [FetchUrl.progress] method with each [FetchUrl] which will be called each
+/// You may optionally passing in a [FetchUrl.progress] method with
+/// each [FetchUrl] which will be called each
 /// time a chunk is downloaded with details on the download progress.
 ///
-/// We guarentee that you will recieve a final event with the [FetchProgress.progress]
+/// We guarentee that you will recieve a final event with the
+///  [FetchProgress.progress]
 /// containing a value of 1.0 and a status of 'complete' for each url requested.
 ///
 /// You can cancel the download part way through the download by returning false
 /// to the [FetchUrl.progress] call.
 ///
-/// You must call cancel on all downloads or the remaining downloads must complete before
+/// You must call cancel on all downloads or the remaining downloads
+/// must complete before
 /// [fetchMultiple] will return.
 ///
 void fetchMultiple({required List<FetchUrl> urls}) =>
@@ -196,7 +206,8 @@ class _Fetch extends DCliFunction {
 /// Used by [FetchProgress] to indicate the progress of a download.
 enum FetchStatus {
   /// we are preparing to download.
-  /// You will always see one and only one instance of this status in a FetchProgress event.
+  /// You will always see one and only one instance of this status
+  /// in a FetchProgress event.
   /// In most cases the fetch will only stay in this state for a moment.
   initialising,
 
@@ -221,6 +232,10 @@ enum FetchStatus {
 /// Used to describe a url that is being downloaded including
 /// the location where it is going to be stored.
 class FetchUrl {
+  /// ctor.
+  FetchUrl(
+      {required this.url, required this.saveToPath, this.progress = _devNull});
+
   /// the URL of the resource being downloaded
   final String url;
 
@@ -230,34 +245,11 @@ class FetchUrl {
   /// If provided this is the callback to allow the caller
   /// to monitor the download progress.
   final OnFetchProgress progress;
-
-  /// ctor.
-  FetchUrl(
-      {required this.url, required this.saveToPath, this.progress = _devNull});
 }
 
 /// Passed to the [progress] method to indicate the current progress of
 /// a download.
 class FetchProgress {
-  /// The current status of the downloader.
-  final FetchStatus status;
-
-  /// Details of the url that is being fetched
-  final FetchUrl fetch;
-
-  /// The length (in bytes) of the file being downloaded.
-  /// This isn't set until we get the initial response.
-  /// In some cases it still won't be set if the remote server
-  /// doesn't respond with a length.
-  final int length;
-
-  /// The number of bytes downloaded so far.
-  final int downloaded;
-
-  /// a value from 0.0 to 1.0 indicating the percentage progress.
-  /// You are guarneteed to get a final progress event with a value of 1.0
-  final double progress;
-
   const FetchProgress._initialising(this.fetch)
       : progress = 0.0,
         length = 0,
@@ -289,6 +281,25 @@ class FetchProgress {
         length = 0,
         downloaded = 0,
         status = FetchStatus.error;
+
+  /// The current status of the downloader.
+  final FetchStatus status;
+
+  /// Details of the url that is being fetched
+  final FetchUrl fetch;
+
+  /// The length (in bytes) of the file being downloaded.
+  /// This isn't set until we get the initial response.
+  /// In some cases it still won't be set if the remote server
+  /// doesn't respond with a length.
+  final int length;
+
+  /// The number of bytes downloaded so far.
+  final int downloaded;
+
+  /// a value from 0.0 to 1.0 indicating the percentage progress.
+  /// You are guarneteed to get a final progress event with a value of 1.0
+  final double progress;
 
   @override
   String toString() =>

@@ -10,10 +10,12 @@ import '../../dcli.dart';
 /// TO A POINT!
 ///
 /// Applications deployed using `dart pub global activate` or if you are just
-/// running from a local source directory then your app will have access to their
+/// running from a local source directory then your app will have
+///  access to their
 /// assets.
 ///
-/// If you have AOT compiled your application (e.g. dart compile or dcli compile)
+/// If you have AOT compiled your application (e.g. dart compile or
+/// dcli compile)
 /// then you will NOT have access to the assets as they are not deployed.
 ///
 /// To create an asset place it under:
@@ -42,12 +44,12 @@ class Assets {
   /// ```dart
   /// Assets().loadString('assets/mydir/notes.txt');
   /// ```
-  String loadString(String path) {
-    return File(_resolveAssetPath(path)).readAsStringSync();
-  }
+  String loadString(String path) =>
+      File(_resolveAssetPath(path)).readAsStringSync();
 
   /// returns a list of assets located under the given [root] directory.
-  /// The [root] directory must be relative to the parent of the 'asset' directory.
+  /// The [root] directory must be relative to the parent of 
+  /// the 'asset' directory.
   ///
   /// .e.g.
   /// Assets live under
@@ -67,7 +69,8 @@ class Assets {
   /// The [pattern] is a wildcard (glob) that controls what files are returned.
   /// The [root] is the directory to start searching from. It MUST start with assets/.
   /// If it doesn't start with assets/ an ArgumentError will be thrown.
-  /// Specify [recursive] = true if you want the list command to recursively search all
+  /// Specify [recursive] = true if you want the list command to 
+  /// recursively search all
   /// directories under [root].
   ///
   List<String?> list(String pattern,

@@ -61,7 +61,8 @@ class _MoveDir extends DCliFunction {
         delete(from);
       } else {
         throw MoveDirException(
-            'The Move of ${truepath(from)} to ${truepath(to)} failed. Error $e');
+            'The Move of ${truepath(from)} to ${truepath(to)} failed.'
+            ' Error $e');
       }
     }
     // ignore: avoid_catches_without_on_clauses

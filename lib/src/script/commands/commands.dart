@@ -47,10 +47,10 @@ class Commands {
 
 /// base class for all commands.
 abstract class Command {
-  final String _name;
-
   ///
   Command(this._name);
+
+  final String _name;
 
   /// Returns the exitCode of the script that is run
   /// If a script isn't run then return 0 for success

@@ -132,7 +132,8 @@ class _MoveTree extends DCliFunction {
     // ignore: avoid_catches_without_on_clauses
     catch (e) {
       throw MoveTreeException(
-          'An error occured copying directory ${truepath(from)} to ${truepath(to)}. Error: $e');
+          'An error occured copying directory ${truepath(from)} '
+          'to ${truepath(to)}. Error: $e');
     }
   }
 }
