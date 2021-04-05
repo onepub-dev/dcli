@@ -202,14 +202,15 @@ class DartProject {
 
         printerr('You must compile your script before running it under sudo');
 
-        /// TODO: should this be a throw?
+        // ignore: flutter_style_todos
+        /// TODO(bsutton): should this be a throw?
         exit(1);
       }
       pubGet.run(compileExecutables: false);
     });
   }
 
-  // TODO: this is still risky as pub get does a test to see if
+  // TODO(bsutton): this is still risky as pub get does a test to see if
   // the versions have changed.
   // we could improve this by checking that the .lock files date
   //  is after the .yamls date.

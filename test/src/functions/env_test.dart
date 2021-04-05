@@ -1,6 +1,6 @@
 @t.Timeout(Duration(seconds: 600))
 import 'package:dcli/src/functions/env.dart';
-import 'package:mockito/mockito.dart';
+import 'package:mocktail/mocktail.dart';
 
 import 'package:test/test.dart' as t;
 import 'package:dcli/dcli.dart';
@@ -27,7 +27,7 @@ void main() {
         Settings.reset();
         final mockSettings = MockSettings();
         Settings.mock = mockSettings;
-        when(mockSettings.isWindows).thenReturn(true);
+        when(() => mockSettings.isWindows).thenReturn(true);
         Env.reset();
         //var mockEnv = MockEnv();
 

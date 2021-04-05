@@ -1,7 +1,7 @@
 @Timeout(Duration(minutes: 10))
 import 'package:dcli/dcli.dart' hide equals;
 import 'package:dcli/src/functions/env.dart';
-import 'package:mockito/mockito.dart';
+import 'package:mocktail/mocktail.dart';
 import 'package:test/test.dart';
 
 import '../../mocks/mock_env.dart';
@@ -37,13 +37,14 @@ void main() {
         final mockEnv = MockEnv();
 
         // windows we can't add a path just expect user message.
-        when(mockSettings.isWindows).thenReturn(true);
-        when(mockSettings.isLinux).thenReturn(false);
-        when(mockSettings.isMacOS).thenReturn(false);
-        when(mockSettings.pathToDCliBin).thenReturn(settings.pathToDCliBin);
+        when(() => mockSettings.isWindows).thenReturn(true);
+        when(() => mockSettings.isLinux).thenReturn(false);
+        when(() => mockSettings.isMacOS).thenReturn(false);
+        when(() => mockSettings.pathToDCliBin)
+            .thenReturn(settings.pathToDCliBin);
 
-        when(mockEnv.HOME).thenReturn(r'C:\windows\userdata');
-        when(mockEnv.isOnPATH(settings.pathToDCliBin)).thenReturn(false);
+        when(() => mockEnv.HOME).thenReturn(r'C:\windows\userdata');
+        when(() => mockEnv.isOnPATH(settings.pathToDCliBin)).thenReturn(false);
 
         Settings.mock = mockSettings;
         Env.mock = mockEnv;
@@ -56,13 +57,14 @@ void main() {
         final mockSettings = MockSettings();
         final mockEnv = MockEnv();
 
-        when(mockSettings.isWindows).thenReturn(false);
-        when(mockSettings.isLinux).thenReturn(true);
-        when(mockSettings.isMacOS).thenReturn(false);
-        when(mockSettings.pathToDCliBin).thenReturn(settings.pathToDCliBin);
+        when(() => mockSettings.isWindows).thenReturn(false);
+        when(() => mockSettings.isLinux).thenReturn(true);
+        when(() => mockSettings.isMacOS).thenReturn(false);
+        when(() => mockSettings.pathToDCliBin)
+            .thenReturn(settings.pathToDCliBin);
 
-        when(mockEnv.HOME).thenReturn(HOME);
-        when(mockEnv.isOnPATH(settings.pathToDCliBin)).thenReturn(false);
+        when(() => mockEnv.HOME).thenReturn(HOME);
+        when(() => mockEnv.isOnPATH(settings.pathToDCliBin)).thenReturn(false);
 
         Settings.mock = mockSettings;
         Env.mock = mockEnv;

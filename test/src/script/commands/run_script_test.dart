@@ -85,6 +85,7 @@ void main() {
 
     /// this script no longer exists after changing the rules about how we
     /// locate pubspec.yaml files.
+    // ignore: flutter_style_todos
     /// TODO: do we still need a test like this one?
   }, skip: true);
 

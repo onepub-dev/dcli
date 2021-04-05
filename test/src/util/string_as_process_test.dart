@@ -9,8 +9,7 @@ void main() {
     final result = <String?>[];
     'echo hi'.start(
       runInShell: true,
-      progress: Progress(result.add,
-          stderr: result.add),
+      progress: Progress(result.add, stderr: result.add),
     );
 
     expect(result, orderedEquals(<String>['hi']));
@@ -84,7 +83,8 @@ void main() {
       print('stream: $event');
       linesRead++;
 
-      /// TODO: find some way of terminating a streaming process
+      // ignore: flutter_style_todos
+      /// TODO(bsutton): find some way of terminating a streaming process
       /// that doesn't naturally end (e.g. tail -f)
       ///
       if (linesRead == 15) {
@@ -104,11 +104,12 @@ void main() {
   test('tail -n 100', () {
     const log = '/tmp/access.log';
     // ignore: cascade_invocations
-    log..write('Line 1/5')
-    ..append('Line 2/5')
-    ..append('Line 3/5')
-    ..append('Line 4/5')
-    ..append('Line 5/5');
+    log
+      ..write('Line 1/5')
+      ..append('Line 2/5')
+      ..append('Line 3/5')
+      ..append('Line 4/5')
+      ..append('Line 5/5');
     Settings().setVerbose(enabled: true);
     final stream = 'tail -n 100 $log'.stream(
         // runInShell: true,

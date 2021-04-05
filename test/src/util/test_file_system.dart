@@ -9,7 +9,6 @@ import 'package:dcli/src/pubspec/dependency.dart';
 import 'package:dcli/src/util/stack_trace_impl.dart';
 import 'package:path/path.dart';
 import 'package:dcli/src/script/entry_point.dart';
-import 'package:dcli/src/util/named_lock.dart';
 import 'package:pubspec/pubspec.dart' as ps;
 import 'package:test/test.dart';
 
@@ -133,7 +132,8 @@ class TestFileSystem {
     // }
   }
 
-  void _runUnderLock(StackTraceImpl stack, void callback(TestFileSystem fs)) {
+  void _runUnderLock(
+      StackTraceImpl stack, void Function(TestFileSystem fs) callback) {
     final frame = stack.frames[0];
 
     print(red('${'*' * 40} Starting test '

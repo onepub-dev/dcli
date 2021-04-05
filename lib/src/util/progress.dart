@@ -88,6 +88,7 @@ class Progress {
   /// The exist code of the completed process.
   int? exitCode;
 
+  // ignore: flutter_style_todos
   /// TODO: setting [includeStderr] or [includeStdout]
   /// to false stop methods like [toList] from working.
   /// I've not quite got my head around why so for the minute
