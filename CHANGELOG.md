@@ -1,3 +1,17 @@
+# 0.51.6
+tweaked the template expander to remove any lint warnings. Updated the expander so that it updates the dcli and package versions.
+Remove the lock logic around creating as testfile system as its no longer needed and greatly  slows down testing.
+Change default shell detection expected as mostly we run it from the cli.
+Increased the timeout for the test filesystem as it can take some minutes to create.
+moved to only support 2.12 and not the beta.
+moved back to using pubspec now that nnbd version has been released.
+moved to official validators library.
+
+Includes new method createTempDir submitted by @Reductions
+
+Improved performance of unit tests by removing unnecessary named lock around test files system.
+
+
 # 0.51.5
 Hack to get around getIsolateID nndb bug.
 
