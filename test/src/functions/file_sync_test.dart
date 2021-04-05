@@ -38,8 +38,9 @@ void main() {
           file.append('Line $i is here');
         }
         const replacement = 'This is all that should be left';
-        file..write(replacement, newline: null)
-        ..close();
+        file
+          ..write(replacement, newline: null)
+          ..close();
 
         final fstat = stat(file.path);
 

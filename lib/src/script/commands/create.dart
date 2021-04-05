@@ -125,5 +125,6 @@ class ForegroundFlag extends Flag {
   String get abbreviation => 'fg';
 
   @override
-  String description() => '''Stops the create from running pub get in the background.''';
+  String description() =>
+      '''Stops the create from running pub get in the background.''';
 }

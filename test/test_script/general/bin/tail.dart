@@ -8,8 +8,7 @@ import 'package:args/args.dart';
 
 /// Used by unit tests as a cross platform version of cat
 void main(List<String> args) {
-  final parser = ArgParser()
-  ..addOption('n', abbr: 'n', defaultsTo: '10');
+  final parser = ArgParser()..addOption('n', abbr: 'n', defaultsTo: '10');
 
   final results = parser.parse(args);
 

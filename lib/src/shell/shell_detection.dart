@@ -34,7 +34,7 @@ class ShellDetection {
   factory ShellDetection() => _shell;
 
   ShellDetection._internal();
-  
+
   static final ShellDetection _shell = ShellDetection._internal();
 
   final _shells = <String, Shell Function(int? pid)>{

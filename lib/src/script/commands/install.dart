@@ -226,7 +226,6 @@ class InstallCommand extends Command {
     }
   }
 
-
   void _qprint(String? message) {
     if (!_quiet) {
       print(message);

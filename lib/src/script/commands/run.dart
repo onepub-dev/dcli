@@ -13,11 +13,10 @@ import 'commands.dart';
 /// If required a virtual project is created
 /// and built.
 class RunCommand extends Command {
-    ///
+  ///
   RunCommand() : super(_commandName);
 
   static const String _commandName = 'run';
-
 
   ///
   ///
@@ -38,9 +37,9 @@ class RunCommand extends Command {
       /// we are running sudo, so we can't init a script
       /// as we will end up with root permissions everywhere.
       if (!script.isReadyToRun) {
-        printerr(red(
-            'The script is not ready to run, so cannot be run from sudo. '
-            'Run dcli warmup $scriptPath'));
+        printerr(
+            red('The script is not ready to run, so cannot be run from sudo. '
+                'Run dcli warmup $scriptPath'));
         exit(1);
       }
     }
@@ -49,9 +48,9 @@ class RunCommand extends Command {
 
     if (!script.isReadyToRun) {
       if (Shell.current.isSudo) {
-        printerr(red(
-            'The script is not ready to run, so cannot be run from sudo. '
-            'Run dcli warmup $scriptPath'));
+        printerr(
+            red('The script is not ready to run, so cannot be run from sudo. '
+                'Run dcli warmup $scriptPath'));
         exit(1);
       }
     }

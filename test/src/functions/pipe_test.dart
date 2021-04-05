@@ -25,8 +25,7 @@ void main() {
         createLineFile(linesFile, 10);
 
         lines.clear();
-        ('tail -n 100 $linesFile' | 'head -n 5')
-            .forEach(lines.add);
+        ('tail -n 100 $linesFile' | 'head -n 5').forEach(lines.add);
 
         t.expect(lines.length, t.equals(5));
       });
@@ -38,8 +37,7 @@ void main() {
         createLineFile(linesFile, 10);
 
         lines.clear();
-        ('tail $linesFile' | 'head -n 5' | 'tail -n 2')
-            .forEach(lines.add);
+        ('tail $linesFile' | 'head -n 5' | 'tail -n 2').forEach(lines.add);
         t.expect(lines.length, t.equals(2));
       });
     });

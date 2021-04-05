@@ -117,7 +117,6 @@ T menu<T>(
   return options[index - 1];
 }
 
-
 class _MenuRange extends AskValidator {
   const _MenuRange(this.limit);
   @override

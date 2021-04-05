@@ -16,14 +16,13 @@ import 'package:args/args.dart';
 
 void main(List<String> args) {
   final parser = ArgParser()
-  ..addFlag(
-    'verbose',
-    abbr: 'v',
-    negatable: false,
-    help: 'Logs additional details to the cli',
-  )
-
-  ..addOption('prompt', abbr: 'p', help: 'The prompt to show the user.');
+    ..addFlag(
+      'verbose',
+      abbr: 'v',
+      negatable: false,
+      help: 'Logs additional details to the cli',
+    )
+    ..addOption('prompt', abbr: 'p', help: 'The prompt to show the user.');
 
   final parsed = parser.parse(args);
 

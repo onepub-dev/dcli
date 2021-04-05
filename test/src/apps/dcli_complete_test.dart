@@ -69,7 +69,7 @@ void main() {
           rethrow;
         }
 
-        // if warmup hasn't been run then we have the results of 
+        // if warmup hasn't been run then we have the results of
         // a pub get in the the output.
         final expected = ['_test_a.dart', '_test_ab.dart'];
 
@@ -97,7 +97,7 @@ void main() {
           progress: Progress(results.add),
         );
 
-        // if warmup hasn't been run then we have the results of 
+        // if warmup hasn't been run then we have the results of
         // a pub get in the the output.
         final expected = ['_test_a.dart', '_test_ab.dart'];
 

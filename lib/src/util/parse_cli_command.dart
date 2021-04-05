@@ -195,8 +195,9 @@ class _QArg {
   ///
   /// Note: under Windows powershell does perform glob expansion so we need
   /// to supress glob expansion.
-  bool get needsExpansion => !Settings().isWindows &&
-        (arg.contains('*') || arg.contains('[') || arg.contains('?'));
+  bool get needsExpansion =>
+      !Settings().isWindows &&
+      (arg.contains('*') || arg.contains('[') || arg.contains('?'));
 
   static List<_QArg> translate(List<String?> args) {
     final qargs = <_QArg>[];

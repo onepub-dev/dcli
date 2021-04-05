@@ -125,14 +125,14 @@ int? run(String commandLine,
 /// The [privileged] argument attempts to escalate the priviledge that
 ///  the command is run
 /// at.
-/// If the script is already running in a priviledge environment this 
+/// If the script is already running in a priviledge environment this
 /// switch will have no
 /// affect.
-/// Running a command with the [privileged] switch may cause the OS to 
+/// Running a command with the [privileged] switch may cause the OS to
 /// prompt the user
 /// for a password.
 ///
-/// For Linux passing the [privileged] argument will cause the command 
+/// For Linux passing the [privileged] argument will cause the command
 /// to be prefix
 /// vai the `sudo` command.
 ///
@@ -192,7 +192,7 @@ Progress startFromArgs(
 /// if [nothrow] is false (the default for most methods that use run) then
 /// a non-zero exit code will result in an exception being thrown.
 ///
-/// The [privileged] argument attempts to escalate the priviledge that 
+/// The [privileged] argument attempts to escalate the priviledge that
 /// the command is run
 /// at.
 /// If the script is already running in a priviledge environment this
