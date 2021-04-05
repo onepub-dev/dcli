@@ -1,3 +1,6 @@
+# 0.51.7
+Added work around for "Invalid Argument' when using the find command over a steam directory tree. We just log the path and keep on trucking.
+
 # 0.51.6
 Added code to return the exit code even when running a process in a terminal. This is to resolve #100. However I'm not certain if the exit code will be meaningful as it might just be the terminals exit code.
 
