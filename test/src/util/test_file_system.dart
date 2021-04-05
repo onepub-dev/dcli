@@ -115,59 +115,63 @@ class TestFileSystem {
   ) {
     final stack = StackTraceImpl(skipFrames: 1);
 
+    //try {
+    /// it takes a while to setup the first test file system hence
+    /// 600 second timeout.
+    // NamedLock(
+    //         name: 'test_file_system.lock',
+
+    //         /// setup of the first tests can take a while
+    //         timeout: const Duration(seconds: 600))
+//          .withLock(() {
+    _runUnderLock(stack, callback);
+    //});
+    // } on DCliException catch (e) {
+    //   print(e.toString());
+    //   e.printStackTrace();
+    //   rethrow;
+    // }
+  }
+
+  void _runUnderLock(StackTraceImpl stack, void callback(TestFileSystem fs)) {
+    final frame = stack.frames[0];
+
+    print(red('${'*' * 40} Starting test '
+        '${frame.sourceFile}:${frame.lineNo} ${'*' * 80}'));
+    Settings.reset();
+    Env.reset();
+    PubCache.reset();
+    originalPubCache = PubCache().pathTo;
+    // print('PATH: $PATH');
+    final originalHome = HOME;
+    final path = env['PATH'];
     try {
-      /// it takes a while to setup the first test file system hence
-      /// 600 second timeout.
-      NamedLock(
-              name: 'test_file_system.lock',
+      env['HOME'] = fsRoot;
+      home = fsRoot;
 
-              /// setup of the first tests can take a while
-              timeout: const Duration(seconds: 600))
-          .withLock(() {
-        final frame = stack.frames[0];
+      /// Force PubCache path to point at the new file system.
+      PubCache().pathTo = join(fsRoot, PubCache().cacheDir);
 
-        print(red('${'*' * 40} Starting test '
-            '${frame.sourceFile}:${frame.lineNo} ${'*' * 80}'));
-        Settings.reset();
-        Env.reset();
-        PubCache.reset();
-        originalPubCache = PubCache().pathTo;
-        // print('PATH: $PATH');
-        final originalHome = HOME;
-        final path = env['PATH'];
-        try {
-          env['HOME'] = fsRoot;
-          home = fsRoot;
+      rebuildPath();
 
-          /// Force PubCache path to point at the new file system.
-          PubCache().pathTo = join(fsRoot, PubCache().cacheDir);
+      final isolateID = Service.getIsolateID(Isolate.current);
+      print(green('Using TestFileSystem $fsRoot for Isolate: $isolateID'));
+      print('Reset dcliPath: ${Settings().pathToDCli}');
 
-          rebuildPath();
+      initFS(originalHome);
 
-          final isolateID = Service.getIsolateID(Isolate.current);
-          print(green('Using TestFileSystem $fsRoot for Isolate: $isolateID'));
-          print('Reset dcliPath: ${Settings().pathToDCli}');
-
-          initFS(originalHome);
-
-          callback(this);
-        }
-        // ignore: avoid_catches_without_on_clauses
-        catch (e, st) {
-          Settings().verbose(e.toString());
-          st.toString();
-          rethrow;
-        } finally {
-          env['HOME'] = originalHome;
-          env['PATH'] = path;
-          print(green('${'-' * 40} '
-              'Ending test ${frame.sourceFile}:${frame.lineNo} ${'-' * 80}'));
-        }
-      });
-    } on DCliException catch (e) {
-      print(e.toString());
-      e.printStackTrace();
+      callback(this);
+    }
+    // ignore: avoid_catches_without_on_clauses
+    catch (e, st) {
+      Settings().verbose(e.toString());
+      st.toString();
       rethrow;
+    } finally {
+      env['HOME'] = originalHome;
+      env['PATH'] = path;
+      print(green('${'-' * 40} '
+          'Ending test ${frame.sourceFile}:${frame.lineNo} ${'-' * 80}'));
     }
   }
 
