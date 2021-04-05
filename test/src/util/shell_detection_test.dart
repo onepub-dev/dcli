@@ -15,11 +15,14 @@ void main() {
     if (Settings().isWindows) {
       expected = CmdShell.shellName;
     } else if (Platform.isLinux) {
-      expected = ShShell.shellName;
+      expected = BashShell.shellName;
     } else if (Platform.isMacOS) {
       expected = ZshShell.shellName;
     }
 
+    /// This can fail if you run from the vscode  terminal rather than a
+    /// standard terminal  as under a vscode terminal it will return the
+    ///  sh shell on linux rather than bash.
     expect(shell.name, equals(expected));
   });
 //  }, skip: false);
