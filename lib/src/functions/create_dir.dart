@@ -30,6 +30,14 @@ import 'function.dart';
 String createDir(String path, {bool recursive = false}) =>
     _CreateDir().createDir(path, recursive: recursive);
 
+/// Creates a temporary directory under the system temp folder.
+/// The temporary directory name is formed from a uuid.
+/// It is your responsiblity to delete the directory once you have
+/// finsihed with it.
+String createTempDir() =>
+    _CreateDir().createDir('${Directory.systemTemp}/${const Uuid().v4()}',
+        recursive: false);
+
 class _CreateDir extends DCliFunction {
   String createDir(String path, {required bool recursive}) {
     Settings().verbose('createDir:  ${truepath(path)} recursive: $recursive');
