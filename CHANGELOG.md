@@ -1,4 +1,8 @@
 # 0.51.9
+Added createTempDir.
+Added a regex validator.
+
+# 0.51.9
 Merge branch 'nullsaftey' into master as nnbd migration is now complete.
 Added createTempDir.
 Added a regex validator.
