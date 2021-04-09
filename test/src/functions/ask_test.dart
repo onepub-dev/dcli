@@ -17,6 +17,18 @@ void main() {
     print('result: $result');
   }, skip: true);
 
+  test('regexp', () {
+    final validator = Ask.regExp(r'^[a-zA-Z0-9_\-]+');
+
+    expect(
+        () => validator.validate('!'),
+        throwsA(predicate<AskValidatorException>((e) =>
+            e is AskValidatorException &&
+            e.message == r'Input does not match: ^[a-zA-Z0-9_\-]+')));
+
+    expect(validator.validate('_'), '_');
+  }, skip: false);
+
   test('confirm no default', () {
     final result = confirm('Are you good?');
     print('result: $result');

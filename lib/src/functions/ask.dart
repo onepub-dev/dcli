@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'dart:io';
 
+import 'package:meta/meta.dart';
 import 'package:validators2/validators.dart';
 
 import '../../dcli.dart';
@@ -300,6 +301,13 @@ class Ask extends DCliFunction {
   static AskValidator ipAddress({int version = AskValidatorIPAddress.either}) =>
       AskValidatorIPAddress(version: version);
 
+  /// Validates the input against a regular expression
+  /// ```dart
+  /// ask('Variable Name:', validator: Ask.regExp(r'^[a-zA-Z_]+$'));
+  /// ```
+  static AskValidator regExp(String regExp, {String? error}) =>
+      _AskRegExp(regExp, error: error);
+
   /// Validates that the entered line is no longer
   /// than [maxLength].
   static AskValidator lengthMax(int maxLength) =>
@@ -372,6 +380,8 @@ abstract class AskValidator {
   /// It should throw an AskValidatorException if the input
   /// is invalid.
   /// The validate method is called when the user hits the enter key.
+  /// If the validation succeeds the validated line is returned.
+  @visibleForTesting
   String validate(String line);
 }
 
@@ -418,6 +428,34 @@ class _AskFQDN extends AskValidator {
 
     if (!isFQDN(finalLine)) {
       throw AskValidatorException(red('Invalid FQDN.'));
+    }
+    return finalLine;
+  }
+}
+
+/// Validates the input against a regular expression
+/// ```dart
+/// ask('Variable Name:', validator: Ask.regExp(r'^[a-zA-Z_]+$'));
+/// ```
+///
+class _AskRegExp extends AskValidator {
+  /// Creates a regular expression based validator.
+  /// You can customise the error message by providing a value for [error].
+  _AskRegExp(this.regexp, {String? error}) {
+    _regexp = RegExp(regexp);
+    _error = error ?? 'Input does not match: ${regexp.toString()}';
+  }
+
+  final String regexp;
+  late final RegExp _regexp;
+  late final String _error;
+
+  @override
+  String validate(String line) {
+    final finalLine = line.trim().toLowerCase();
+
+    if (!_regexp.hasMatch(finalLine)) {
+      throw AskValidatorException(red(_error));
     }
     return finalLine;
   }
