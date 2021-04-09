@@ -169,25 +169,20 @@ class RunnableProcess {
     return progress;
   }
 
-  /// starts the process
-  /// provides additional options to [run].
-  ///
+  /// starts a process  provides additional options to [run].
   ///
   /// The [privileged] argument attempts to escalate the priviledge
-  /// that the command is run
-  /// at.
+  /// that the command is run with.
   /// If the script is already running in a priviledge environment
-  /// this switch will have no
-  /// affect.
+  /// this switch will have no affect.
+  /// 
   /// Running a command with the [privileged] switch may cause the
-  /// OS to prompt the user
-  /// for a password.
+  /// OS to prompt the user for a password.
   ///
   /// For Linux passing the [privileged] argument will cause the
-  ///  command to be prefix
-  /// vai the `sudo` command.
+  ///  command to be prefix vai the `sudo` command.
   ///
-  /// Current [privileged] is only supported under Linux.
+  /// The [privileged] option is ignored under Windows.
   ///
   void start({
     bool runInShell = false,
@@ -207,7 +202,7 @@ class RunnableProcess {
       mode = ProcessStartMode.inheritStdio;
     }
 
-    if (privileged && Settings().isLinux) {
+    if (privileged && !Settings().isWindows) {
       if (!Shell.current.isPrivilegedUser) {
         _parsed.args.insert(0, _parsed.cmd);
         _parsed.cmd = 'sudo';
