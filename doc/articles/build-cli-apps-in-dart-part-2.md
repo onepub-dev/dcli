@@ -186,7 +186,7 @@ chmod +x dwhich.dart
 
 Remember that the first time you run your script, dshell needs to do some housekeeping!
 
-## Make to faster <a id="6a03"></a>
+## Make it go faster <a id="6a03"></a>
 
 Let’s make our dwhich command go faster by compiling it.
 
@@ -228,7 +228,7 @@ When dshell compiles a script it includes all of the scripts dependencies and a 
 
 **But wait there’s even more….**
 
-Now we have a compiled executable we can copy just the executable to any binary compatible machine and run it. There is no need to install Dart nor Dshell.
+Now we have a compiled executable we can copy just the executable to any binary compatible machine and run it. There is no need to install Dart nor DCli.
 
 Hopefully you are now starting to get a feel for how the pieces of Dshell fit together.
 

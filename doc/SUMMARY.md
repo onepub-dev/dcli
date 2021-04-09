@@ -4,7 +4,7 @@
 * [What does DCli do?](what-does-dcli-do.md)
 * [Install DCli](getting-started/README.md)
   * [Installing on Windows](getting-started/installing-on-windows.md)
-* [Writing your first script](writing-your-first-script.md)
+* [Writing your first CLI app](writing-your-first-script.md)
 * [Add DCli to your project](added-dcli-to-your-project.md)
 * [pub.dev](pub.dev.md)
 * [github](github.md)
@@ -87,4 +87,9 @@
 * [Video: package of the week](articles/package-of-the-week.md)
 * [build CLI apps in dart - part 1](articles/build-console-apps-in-dart.md)
 * [build CLI apps in dart - part 2](articles/build-cli-apps-in-dart-part-2.md)
+* [Dealing with permissions](articles/dealing-with-permissions.md)
+
+---
+
+* [Dart on Linux - the perfect CLI tooling](dart-on-ubuntu-the-perfect-cli-dev-tooling.md)
 

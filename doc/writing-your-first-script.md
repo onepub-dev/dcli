@@ -1,4 +1,4 @@
-# Writing your first script
+# Writing your first CLI app
 
 Let's start by going over the basic by writing the classic hello world program.
 
