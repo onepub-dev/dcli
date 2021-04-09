@@ -107,9 +107,11 @@ int? run(String commandLine,
 /// The start method provides additional controls (compared to the run method)
 /// over how the commmand is executed.
 ///
-/// DCli will do glob expansion on each passed argument (for Linux and OSx).
+/// DCli will do glob expansion (e.g. expand *.txt to a list of txt files)
+/// on each passed argument (for Linux and OSx).
 /// You can stop glob expansion by adding a set of single or double quotes
-///  around the string.
+///  around each argument.
+///
 /// DCli will remove the extra quotes and NOT perform glob expansion.
 ///
 /// e.g.
@@ -118,28 +120,27 @@ int? run(String commandLine,
 /// results in
 /// dontexpand.*
 ///
-/// By default [startFromArgs] will output both stdout and stderr.
+/// By default [startFromArgs] will output both stdout and stderr to
+/// the console.
+///
 /// Pass in a [progress] to capture or suppress stdout and stderr.
 ///
 ///
 /// The [privileged] argument attempts to escalate the priviledge that
-///  the command is run
-/// at.
+///  the command is run with.
+///
 /// If the script is already running in a priviledge environment this
-/// switch will have no
-/// affect.
+/// switch will have no affect.
+///
 /// Running a command with the [privileged] switch may cause the OS to
-/// prompt the user
-/// for a password.
+/// prompt the user for a password.
 ///
-/// For Linux passing the [privileged] argument will cause the command
-/// to be prefix
-/// vai the `sudo` command.
+/// For Linux/OSX passing the [privileged] argument will cause the command
+/// to be prefix vai the `sudo` command unless the script is already
+/// running as a privileged process.
 ///
-/// Current [privileged] is only supported under Linux.
-///
-///
-/// DCli performs Glob expansion on command arguments. See [run] for details.
+/// Currently [privileged] is not supported under Windows see withPrivileged as
+/// an alternative.
 ///
 Progress startFromArgs(
   String command,
