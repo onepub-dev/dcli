@@ -175,7 +175,7 @@ class RunnableProcess {
   /// that the command is run with.
   /// If the script is already running in a priviledge environment
   /// this switch will have no affect.
-  /// 
+  ///
   /// Running a command with the [privileged] switch may cause the
   /// OS to prompt the user for a password.
   ///

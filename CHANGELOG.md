@@ -1,3 +1,10 @@
+# 0.51.8
+Added class ProgessWithCapture thanks to @passsy for the contribution and suggestions.
+You can now use the start function and capture the output with a simple progress.
+Allowed the priviliged flag to work on osx as well as linux for the start function. 
+Improvements to documenation.
+Fixed the import path for dcli on the templates which I broke when fixing lints.
+
 # 0.51.7
 Added work around for "Invalid Argument' when using the find command over a steam directory tree. We just log the path and keep on trucking.
 
