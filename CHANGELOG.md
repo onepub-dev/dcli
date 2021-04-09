@@ -1,3 +1,8 @@
+# 0.51.9
+Merge branch 'nullsaftey' into master as nnbd migration is now complete.
+Added createTempDir.
+Added a regex validator.
+
 # 0.51.8
 Added class ProgessWithCapture thanks to @passsy for the contribution and suggestions.
 You can now use the start function and capture the output with a simple progress.
