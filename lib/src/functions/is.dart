@@ -116,10 +116,12 @@ class _Is extends DCliFunction {
       throw ArgumentError('path must not be empty');
     }
 
-    Settings().verbose('exists: $path followLinks: $followLinks');
-    //return FileSystemEntity.existsSync(path);
-    return FileSystemEntity.typeSync(path, followLinks: followLinks) !=
+    final _exists = FileSystemEntity.typeSync(path, followLinks: followLinks) !=
         FileSystemEntityType.notFound;
+
+    Settings().verbose('exists: $_exists $path followLinks: $followLinks');
+
+    return _exists;
   }
 
   DateTime lastModified(String path) => File(path).lastModifiedSync();

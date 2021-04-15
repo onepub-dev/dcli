@@ -21,13 +21,16 @@ class DartSdk {
   /// Path of Dart SDK
   String? _sdkPath;
 
-  // Path the dart executable obtained by scanning the PATH
-  late final String? _exePath = which(dartExeName).path;
-
   String? _version;
 
   /// The path to the dart 'bin' directory.
   String get pathToSdk => _sdkPath ??= _detect();
+
+  // Path the dart executable obtained by scanning the PATH
+  late final String? _pathToDartExe = _determineDartPath();
+
+  // Path the pub executable obtained by scanning the PATH
+  late final String? _pathToPubExe = _determinePubPath();
 
   /// platform specific name of the 'dart' executable
   static String get dartExeName {
@@ -57,9 +60,7 @@ class DartSdk {
   }
 
   /// The path to the dart exe.
-  String? get pathToDartExe => _exePath;
-
-  late final String? _pathToPubExe = which(pubExeName).path;
+  String? get pathToDartExe => _pathToDartExe;
 
   /// file path to the 'pub' command.
   String? get pathToPubExe => _pathToPubExe;
@@ -367,13 +368,75 @@ class DartSdk {
     }
   }
 
-  /// Run dart bpub global activate on the given [package].
+  /// Run dart pub global activate on the given [package].
   void globalActivate(String package) {
     if (useDartCommand) {
       '${DartSdk().pathToDartExe} pub global activate dcli'.run;
     } else {
       '${DartSdk().pathToPubExe} global activate dcli'.run;
     }
+  }
+
+  /// Run dart pub global activate for a packae located in [path]
+  /// relative to the current directory.
+  void globalActivateFromPath(String path) {
+    final pubArgs = 'global activate --source path $path';
+    if (useDartCommand) {
+      '${DartSdk().pathToDartExe} pub $pubArgs '
+          .start(progress: Progress.printStdErr());
+    } else {
+      '${DartSdk().pathToPubExe} $pubArgs'
+          .start(progress: Progress.printStdErr());
+    }
+  }
+
+  String? _determineDartPath() {
+    var _path = which(dartExeName).path;
+
+    if (_path == null) {
+      /// lets try some likely locations
+      _path = '/usr/lib/dart/bin/dart';
+      if (exists(_path)) {
+        return _path;
+      }
+
+      _path = '/usr/bin/dart';
+      if (exists(_path)) {
+        return _path;
+      }
+    }
+
+    return _path;
+  }
+
+  // The normal dart detection process may not work here
+  // as dart may not be on the path
+  // So lets go find it
+  // CONSIDER a way of identifying where dart has been installed to.
+  String? _determinePubPath() {
+    var pubPath = which(pubExeName).path;
+
+    if (pubPath == null) {
+      /// lets try some likely locations
+
+      pubPath = '/usr/lib/dart/bin/pub';
+      if (exists(pubPath)) {
+        return pubPath;
+      }
+
+      pubPath = '/usr/bin/pub';
+      if (exists(pubPath)) {
+        return pubPath;
+      }
+    }
+
+    /// radical - search everywhere
+    /// The performance of find essentially precludes this.
+    // print('Searching for pub');
+    // // pubPath =
+    // find('pub', workingDirectory: '/', progress: Progress.print());
+
+    return pubPath;
   }
 }
 

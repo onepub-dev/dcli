@@ -278,8 +278,7 @@ class TestFileSystem {
 
   void installDCli() {
     /// run pub get and only display errors.
-    '${DartSdk.dartExeName} pub global activate --source path $pwd'
-        .start(progress: Progress((line) {}, stderr: print));
+    DartSdk().globalActivateFromPath(pwd);
 
     EntryPoint().process(['install', '--nodart', '--quiet', '--noprivileges']);
   }

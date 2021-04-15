@@ -17,8 +17,7 @@ class LinuxDCliInstaller {
     }
 
     // now activate dcli.
-    final pubPath = _determinePubPath();
-    '$pubPath global activate dcli'.start(progress: Progress.printStdErr());
+    DartSdk().globalActivate('dcli');
 
     // // also need to install it for the root user
     // // as root must have its own copy of .pub-cache otherwise
@@ -93,33 +92,5 @@ class LinuxDCliInstaller {
     'apt install dart'.run;
   }
 
-  // The normal dart detection process may not work here
-  // as dart may not be on the path
-  // So lets go find it
-  // CONSIDER a way of identifying where dart has been installed to.
-  String? _determinePubPath() {
-    var pubPath = which('pub').path;
-
-    if (pubPath == null) {
-      /// lets try some likely locations
-
-      pubPath = '/usr/lib/dart/bin/pub';
-      if (exists(pubPath)) {
-        return pubPath;
-      }
-
-      pubPath = '/usr/bin/pub';
-      if (exists(pubPath)) {
-        return pubPath;
-      }
-    }
-
-    /// radical - search everywhere
-    /// The performance of find essentially precludes this.
-    // print('Searching for pub');
-    // // pubPath =
-    // find('pub', workingDirectory: '/', progress: Progress.print());
-
-    return pubPath;
-  }
+  
 }
