@@ -1,3 +1,6 @@
+# 0.51.10
+Fixed a bug ith the install when 'pub' command is not on the path. Now correctly uses dart pub.
+
 # 0.51.9
 Added createTempDir.
 Added a regex validator.

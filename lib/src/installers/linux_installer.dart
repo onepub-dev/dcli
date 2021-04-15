@@ -91,6 +91,4 @@ class LinuxDCliInstaller {
     'apt update'.run;
     'apt install dart'.run;
   }
-
-  
 }
