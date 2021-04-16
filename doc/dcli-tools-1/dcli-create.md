@@ -31,7 +31,7 @@ To run your script:
 ```
 
 {% hint style="info" %}
-vscode users: open the project by typing 'code .' on the command line.
+vscode users: edit the project by typing 'code .' on the command line.
 {% endhint %}
 
 As the sample script has a Shebang \#! added you can execute it directly:
