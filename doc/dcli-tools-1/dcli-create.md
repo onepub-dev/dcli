@@ -37,20 +37,20 @@ As the sample script has a Shebang \#! added you can execute it directly:
 ```
 
 {% hint style="info" %}
-If you run you script immediately after creating it, the background 'prepare' may still be running.
+If you run you script immediately after creating it, the background 'warmup' may still be running.
 {% endhint %}
 
 In which case you may see the message:
 
 ```text
 ./test.dart
-Waiting for prepare to complete...
+Waiting for warmup to complete...
 Hello World
 ```
 
-The prepare process is a once off process and only needs to be run again if you change your dependencies.
+The warmup process is a once off process and only needs to be run again if you change your dependencies.
 
-The first time you run a given DCli script \(created with dcli create\), DCli needs to resolve any dependencies by running a Dart `pub get` command and doing some other house keeping.
+The first time you run a given DCli script \(created with dcli create\), DCli needs to resolve any dependencies by running a Dart `pub get` command and doing some other housekeeping.
 
 If you run the same script a second time DCli has already resolved the dependencies and so it can run the script immediately.
 
@@ -60,7 +60,7 @@ The dcli create command accepts the following flags:
 
 -- foreground :
 
-If the foreground flag is passed the dcli prepare process will be ran in the foreground rather than the use background execution.
+If the foreground flag is passed the dcli warmup process will be ran in the foreground rather than the use background execution.
 
 Now lets create and run our first DCli script.
 
