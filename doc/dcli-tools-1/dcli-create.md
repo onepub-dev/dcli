@@ -30,6 +30,10 @@ To run your script:
   ./my_script.dart
 ```
 
+{% hint style="info" %}
+vscode users: open the project by typing 'code .' on the command line.
+{% endhint %}
+
 As the sample script has a Shebang \#! added you can execute it directly:
 
 ```text
