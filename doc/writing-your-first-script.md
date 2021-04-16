@@ -35,6 +35,10 @@ void main() {
 }
 ```
 
+{% hint style="info" %}
+If you are using vscode you can simply type `code hello.dart` to edit the file.
+{% endhint %}
+
 ## Running
 
 Now lets run your script:
@@ -82,7 +86,7 @@ Search [pub.dev](https://pub.dev/) for third party package. You can only use pac
 
 Dart uses a special file called `pubspec.yaml` to control the set of packages accessible to your application.
 
-Dart's pubspec.yaml is equivalent to a makefile, pom.xml, gradle.build or package.json in that it defines the set of dependencies for you application.
+Dart's pubspec.yaml is equivalent to a makefile, pom.xml, gradle.build or package.json, in that it defines the set of dependencies for you application.
 
 To use the DCli API or any other Dart package you need to add the dependency to your pubspec.yaml.
 
@@ -97,7 +101,7 @@ name: hello_world
 description: My first app that does bugger all.
 
 dependencies:
-  dcli: ^0.24.0
+  dcli: ^0.51.0
 ```
 
 {% hint style="info" %}

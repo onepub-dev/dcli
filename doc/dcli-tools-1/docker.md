@@ -1,7 +1,5 @@
 # Docker
 
-
-
 DCli is designed to work with Docker.
 
 DCli has a Docker image you can use directly or use in a Docker 'from' statement.
@@ -34,8 +32,6 @@ RUN wget wget https://github.com/bsutton/dcli/releases/download/latest-linux/dcl
 # TODO correct this path
 ENV PATH="${PATH}":/usr/lib/dart/bin:"${HOME}/.pub-cache/bin":"${HOME}/.dcli/bin"
 RUN ./dcli_install.exe
-
-
 ```
 
 Mac OSX path:
@@ -46,8 +42,6 @@ RUN chmod +x dcli_install
 # TODO correct this path
 ENV PATH="${PATH}":/usr/lib/dart/bin:"${HOME}/.pub-cache/bin":"${HOME}/.dcli/bin"
 RUN ./dcli_install
-
-
 ```
 
 ## Compiling a dart package
