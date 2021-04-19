@@ -1,3 +1,7 @@
+# 1.0.0
+No major changes. The api is now stable enough for us to consider this a 1.0 release :)
+upgraded to release version of ini package.
+
 # 0.51.10
 Fixed a bug ith the install when 'pub' command is not on the path. Now correctly uses dart pub.
 
