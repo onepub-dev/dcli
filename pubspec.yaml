@@ -9,8 +9,8 @@ dependencies:
   args: ^2.0.0
   async: ^2.5.0
   collection: ^1.15.0
-  csv: ^5.0.0-0
-  equatable: ^2.0.0-0
+  csv: ^5.0.0
+  equatable: ^2.0.0
   file: ^6.1.0
   glob: ^2.0.0
   ini: ^2.1.0
