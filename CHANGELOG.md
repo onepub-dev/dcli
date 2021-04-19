@@ -1,3 +1,6 @@
+# 1.0.1
+Replace now takes a Pattern so you can do a Regx replacement as well as a simple string replacement.
+
 # 1.0.0
 No major changes. The api is now stable enough for us to consider this a 1.0 release :)
 upgraded to release versions os csv,  equatable and ini package.
