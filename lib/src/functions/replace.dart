@@ -25,14 +25,12 @@ import 'dcli_function.dart';
 /// be impossible to loose your file. If replace does crash you may
 /// have to delete [path].tmp or [path].bak but this is highly unlikely.
 ///
-/// EXPERIMENTAL - this api may change. It is fairly likely to stay
-/// just that existing may change to support [Pattern]
-int replace(String path, String existing, String replacement,
+int replace(String path, Pattern existing, String replacement,
         {bool all = false}) =>
     _Replace().replace(path, existing, replacement, all: all);
 
 class _Replace extends DCliFunction {
-  int replace(String path, String existing, String replacement,
+  int replace(String path, Pattern existing, String replacement,
       {bool all = false}) {
     var changes = 0;
     final tmp = '$path.tmp';
