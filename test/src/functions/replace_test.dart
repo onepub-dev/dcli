@@ -20,5 +20,6 @@ xyz246''');
     expect(read(temp).toList().join('\n'), '''
 xyz123
 def246''');
+    delete(temp);
   });
 }
