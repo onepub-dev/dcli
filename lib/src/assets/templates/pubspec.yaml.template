@@ -5,8 +5,8 @@ environment:
   sdk: '>=2.12.0 <3.0.0'
 dependencies: 
   args: ^4.0.0
-  dcli: ^0.52.0
-  path: ^10.0.0
+  dcli: ^1.0.0
+  path: ^1.0.0
 
 dev_dependencies: 
   pedantic: ^1.0.0
