@@ -54,3 +54,4 @@ test/sudo/test.txt
 test/sudo/test2.txt
 test/test_script/general/.project
 test/test_script/traditional_project/.project
+tool/post_release_hook/.settings.yaml
