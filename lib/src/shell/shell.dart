@@ -74,6 +74,16 @@ abstract class Shell {
   /// true if the  effective uid is root (uid == 0).
   bool get isPrivilegedUser => false;
 
+  /// Returns true if running a privileged action would
+  /// cause a password to be requested.
+  ///
+  /// Linux/OSX: will return true if the sudo password is not currently
+  /// cached and we are not already running as a privileged user.
+  ///
+  /// Windows: This will always return false as Windows is never
+  /// able to escalate privileges.
+  bool get isPrivilegedPasswordRequired => true;
+
   /// Returns true if the process was launched as a priviliged process.
   ///
   /// Calling [releasePrivileges] has no affect on this call.

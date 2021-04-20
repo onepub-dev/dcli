@@ -34,6 +34,28 @@ mixin PosixShell {
     // return privileged;
   }
 
+  /// Returns true if running a privileged action would
+  /// cause a password to be requested.
+  ///
+  /// Linux/OSX: will return true if the sudo password is not currently
+  /// cached and we are not already running as a privileged user.
+  ///
+  /// Windows: This will always return false as Windows is never
+  /// able to escalate privileges.
+  bool get isPrivilegedPasswordRequired {
+    if (isPrivilegedUser) {
+      print('user is privileged');
+      return false;
+    }
+    final response = 'sudo -nv'.toList(nothrow: true);
+
+    print('sudo -nv return $response');
+    var result =
+        response.isNotEmpty && response.first == 'sudo: a password is required';
+    print('password $result');
+    return result;
+  }
+
   /// True if the processes real uid is root.
   bool get isPrivilegedProcess {
     final uid = getuid();

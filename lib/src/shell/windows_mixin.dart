@@ -41,6 +41,16 @@ mixin WindowsMixin {
   String privilegesRequiredMessage(String app) =>
       'You need to be a privileged user to run $app';
 
+  /// Returns true if running a privileged action would
+  /// cause a password to be requested.
+  ///
+  /// Linux/OSX: will return true if the sudo password is not currently
+  /// cached and we are not already running as a privileged user.
+  ///
+  /// Windows: This will always return false as Windows is never
+  /// able to escalate privileges.
+  bool get isPrivilegedPasswordRequired => false;
+
   ///
   String? get loggedInUser => env['USERNAME'];
 

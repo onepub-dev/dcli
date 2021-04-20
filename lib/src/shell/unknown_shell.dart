@@ -155,4 +155,7 @@ class UnknownShell with ShellMixin {
 
   @override
   bool get isPrivilegedProcess => throw UnimplementedError();
+
+  @override
+  bool get isPrivilegedPasswordRequired => throw UnimplementedError();
 }
