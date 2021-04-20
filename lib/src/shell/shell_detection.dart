@@ -53,7 +53,7 @@ class ShellDetection {
   /// Ignores the 'sh' instances used by #! to start
   /// a DCli script.
   ///
-  /// We we can't find a known shell we will return
+  /// If we can't find a known shell we will return
   /// [UnknownShell].
   /// If the 'sh' instance created by #! is the only
   /// known shell we detect then we will return that
