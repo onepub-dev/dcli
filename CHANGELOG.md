@@ -1,3 +1,6 @@
+# 1.0.2
+Fixed a bug in the shell detection logic.
+
 # 1.0.1
 Replace now takes a Pattern so you can do a Regx replacement as well as a simple string replacement.
 
