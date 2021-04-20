@@ -221,7 +221,11 @@ class InstallCommand extends Command {
   void symlinkDCli(Shell shell, String dcliPath) {
     if (!Platform.isWindows) {
       final linkPath = join(dirname(DartSdk().pathToDartExe!), 'dcli');
-      'ln -sf $dcliPath $linkPath'.start(privileged: true);
+      if (Shell.current.isPrivilegedPasswordRequired && !isWritable(linkPath)) {
+        print('Please enter the sudo password when prompted.');
+      }
+
+      'ln -sf $dcliPath $linkPath'.start(privileged: !isWritable(linkPath));
       // symlink(dcliPath, linkPath);
     }
   }
