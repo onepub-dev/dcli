@@ -46,8 +46,6 @@ class PowerShell with WindowsMixin, ShellMixin {
     return isPrivileged.toLowerCase() == 'true';
   }
 
-
-
   @override
   bool get isPrivilegedProcess => isPrivilegedUser;
 
