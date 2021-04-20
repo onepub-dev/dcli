@@ -1,3 +1,8 @@
+# 1.0.3
+Enhancements:
+Added method isPrivilegedPasswordRequired to test if the sudo password is currently cached.
+For the installer added logic to suppress the sudo requirement if the link path is already writable or we are already privileged. If we are going to prompt for the password we now warn the user.
+
 # 1.0.2
 Fixed a bug in the shell detection logic.
 
