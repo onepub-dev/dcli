@@ -36,14 +36,15 @@ class LinuxDCliInstaller {
 
       // add dart to bash path
       if (!(isOnPATH('/usr/bin/dart') || isOnPATH('/usr/lib/bin/dart'))) {
+        final shell = ShellDetection().identifyShell();
+        Settings().verbose('Found shell: $shell');
+
         // we need to add it.
         join(HOME, '.bashrc')
           ..append(r'''export PATH="$PATH":"/usr/lib/dart/bin"''')
           ..append('''export PATH="\$PATH":"${PubCache().pathToBin}"''')
           ..append('''export PATH="\$PATH":"${Settings().pathToDCliBin}"''');
 
-        final shell = ShellDetection().identifyShell();
-        Settings().verbose('Found shell: shell');
         if (shell.loggedInUser != 'root') {
           // add dart to root path.
           // The tricks we have to play to get dart on the root users path.
