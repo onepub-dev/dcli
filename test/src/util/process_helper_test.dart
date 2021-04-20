@@ -9,10 +9,14 @@ void main() {
     expect(ProcessHelper().getProcessName(pid), isNot(equals('unknown')));
   });
 
-  test('ProcessHelper', () {
+  test('ProcessHelper - parent pid', () {
     final parent = ProcessHelper().getParentPID(pid);
     expect(parent, isNot(equals(-1)));
     expect(parent, isNot(equals(pid)));
+  });
+
+  test('ProcessHelper - isRunning', () {
+    expect(ProcessHelper().isRunning(pid), equals(true));
   });
 
   // test('ProcessHelper', () {
