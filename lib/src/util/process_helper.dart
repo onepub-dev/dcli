@@ -2,7 +2,6 @@ import 'dart:io';
 
 import 'package:csv/csv.dart';
 import 'package:meta/meta.dart';
-import 'package:posix/posix.dart';
 import '../../dcli.dart';
 import 'runnable_process.dart';
 
@@ -80,12 +79,17 @@ class ProcessHelper {
   int _linuxGetParentPID(int? childPid) {
     String? line;
     try {
-      if (isPosixSupported) {
-        line = '$getppid()';
-      } else {
-        line = 'ps -p $childPid -o ppid='.firstLine;
-        Settings().verbose('ps: $line');
-      }
+      // ignore: flutter_style_todos
+      /// TODO: find a way to get the parent of a given pid
+      /// not the current pid.
+      /// The following will work on SOME linux platforms.
+      /// https://gist.github.com/fclairamb/a16a4237c46440bdb172
+      // if (isPosixSupported) {
+      //   line = '${getppid()}';
+      // } else {
+      line = 'ps -p $childPid -o ppid='.firstLine;
+      Settings().verbose('ps: $line');
+//      }
     } on ProcessException {
       // ps not supported on current OS
       line = '-1';
