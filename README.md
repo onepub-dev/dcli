@@ -3,7 +3,7 @@
 See the online [gitbook](https://bsutton.gitbook.io/dcli/) for Dcli
 
 
-If you enjoyed DCli maybe you could help out with a sponsorship.
+If you enjoyed DCli maybe you could help out with a sponsorship or just bye me a coffee.
 
 [:heart: Sponsor Me](https://github.com/sponsors/bsutton)
 
