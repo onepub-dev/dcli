@@ -2,7 +2,7 @@
 
 See the online [gitbook](https://bsutton.gitbook.io/dcli/) for Dcli
 
-[:heart: Sponsor](https://github.com/sponsors/bsutton)
+[:heart: Sponsor Me](https://github.com/sponsors/bsutton)
 
 
 DCli is an API and tooling for building cross platform command line \(CLI\) applications and scripts using the Dart programming language.
