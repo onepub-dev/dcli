@@ -1,3 +1,6 @@
+# 1.0.4
+Update README.md
+
 # 1.0.3
 Enhancements:
 Added method isPrivilegedPasswordRequired to test if the sudo password is currently cached.
