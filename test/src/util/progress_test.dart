@@ -1,5 +1,5 @@
 @Timeout(Duration(minutes: 5))
-import 'package:dcli/dcli.dart';
+import 'package:dcli/dcli.dart' hide equals;
 import 'package:test/test.dart';
 
 import 'test_file_system.dart';
@@ -16,4 +16,15 @@ void main() {
           throwsA(const TypeMatcher<DCliException>()));
     });
   }, skip: true);
+
+  test('toList', () {
+    expect(find('*', workingDirectory: HOME, recursive: false).toList().length,
+        isNot(equals(0)));
+  });
+
+  test('forEach', () {
+    final list = <String>[];
+    find('*', workingDirectory: HOME, recursive: false).forEach(list.add);
+    expect(list.length, isNot(equals(0)));
+  });
 }
