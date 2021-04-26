@@ -75,6 +75,8 @@ import 'function.dart';
 /// Passing a [progress] will allow you to process the results as the are
 /// produced rather than having to wait for the call to find to complete.
 /// The passed progress is also returned.
+/// If the [progress] doesn't output [stdout] then you will get no results
+/// back.
 ///
 
 Progress find(
@@ -156,7 +158,10 @@ class Find extends DCliFunction {
       finalIncludeHidden = true;
     }
 
+    // If we don't pass a progress that outputs stdout then
+    // methods like [Progress.forEach] won't return any files.
     final _progress = progress ?? Progress.devNull();
+
     try {
       Settings().verbose(
           'find: pwd: $pwd workingDirectory: ${truepath(_workingDirectory)} '
