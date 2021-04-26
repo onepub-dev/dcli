@@ -153,7 +153,7 @@ Progress startFromArgs(
   bool nothrow = false,
   String? workingDirectory,
 }) {
-  progress ??= Progress.print();
+  progress ??= Progress.devNull();
   workingDirectory ??= pwd;
   final runnable = RunnableProcess.fromCommandArgs(command, args,
       workingDirectory: workingDirectory);
