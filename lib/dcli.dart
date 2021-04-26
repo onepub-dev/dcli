@@ -79,7 +79,7 @@ export 'src/util/file_sync.dart';
 export 'src/util/format.dart' show Format, TableAlignment;
 export 'src/util/named_lock.dart' show NamedLock, LockException;
 export 'src/util/process_helper.dart' show ProcessHelper;
-export 'src/util/progress.dart' show Progress;
+export 'src/util/progress.dart' show Progress, ProgressWithCapture;
 export 'src/util/pub_cache.dart';
 export 'src/util/remote.dart' show Remote;
 export 'src/util/runnable_process.dart' show printerr, RunException;
