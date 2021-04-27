@@ -140,33 +140,52 @@ class DartSdk {
     }
   }
 
-  /// runs 'pub get'
-  void runPubGet(String? workingDirectory,
-      {Progress? progress, bool? compileExecutables}) {
-    RunnableProcess process;
+  /// runs the 'dart pub' command with the given arguments.
+  /// By default output is sent to stdout.
+  /// Pass in [progress] to control the output.
+  /// If [nothrow] == true (defaults to false) then if the
+  /// call to pub get fails an exit code will be returned in the
+  /// [Progress] rather than throwing an exception.
+  Progress runPub(
+      {required List<String> args,
+      String? workingDirectory,
+      Progress? progress,
+      bool nothrow = false}) {
+    progress ??= Progress.devNull();
+
     if (useDartCommand) {
       if (pathToDartExe == null) {
         throw DCliException(
-            "Unable to run 'dart pub get' as the dart exe is not on your path");
+            "Unable to run 'dart pub' as the dart exe is not on your path");
       }
-      process = RunnableProcess.fromCommandArgs(
-          pathToDartExe!, ['pub', 'get', '--no-precompile'],
+      startFromArgs(pathToDartExe!, ['pub', ...args],
+          nothrow: true,
+          progress: progress,
           workingDirectory: workingDirectory);
     } else {
       if (pathToPubExe == null) {
         throw DCliException(
-            "Unable to run ' pub get' as the pub exe is not on your path");
+            "Unable to run 'pub' as the pub exe is not on your path");
       }
 
-      process = RunnableProcess.fromCommandArgs(
-          pathToPubExe!, ['get', '--no-precompile'],
+      startFromArgs(pathToPubExe!, args,
+          nothrow: true,
+          progress: progress,
           workingDirectory: workingDirectory);
     }
+    Settings().verbose('dart pub ${args.toList().join(' ')} finished.');
 
-    process
-      ..start()
-      ..processUntilExit(progress, nothrow: false);
-    Settings().verbose('pub get finished');
+    return progress;
+  }
+
+  /// runs 'pub get'
+  void runPubGet(
+    String? workingDirectory, {
+    Progress? progress,
+    bool? compileExecutables,
+  }) {
+    runPub(
+        args: ['get', '--no-precompile'], workingDirectory: workingDirectory);
   }
 
   /// Attempts to detect the location of the dart sdk.
@@ -370,24 +389,16 @@ class DartSdk {
 
   /// Run dart pub global activate on the given [package].
   void globalActivate(String package) {
-    if (useDartCommand) {
-      '${DartSdk().pathToDartExe} pub global activate dcli'.run;
-    } else {
-      '${DartSdk().pathToPubExe} global activate dcli'.run;
-    }
+    runPub(
+        args: ['global', 'activate', 'dcli'], progress: Progress.printStdErr());
   }
 
   /// Run dart pub global activate for a packae located in [path]
   /// relative to the current directory.
   void globalActivateFromPath(String path) {
-    final pubArgs = 'global activate --source path $path';
-    if (useDartCommand) {
-      '${DartSdk().pathToDartExe} pub $pubArgs '
-          .start(progress: Progress.printStdErr());
-    } else {
-      '${DartSdk().pathToPubExe} $pubArgs'
-          .start(progress: Progress.printStdErr());
-    }
+    runPub(
+        args: ['global', 'activate', '--source', 'path', path],
+        progress: Progress.printStdErr());
   }
 
   String? _determineDartPath() {
