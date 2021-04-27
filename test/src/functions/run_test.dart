@@ -7,7 +7,7 @@ import 'package:test/test.dart';
 import '../util/test_file_system.dart';
 
 void main() {
-  t.group('.run', () {
+  t.group('String as Process', () {
     t.test('Basic .run', () {
       TestFileSystem().withinZone((fs) {
         final testFile = join(fs.fsRoot, 'test.text');
