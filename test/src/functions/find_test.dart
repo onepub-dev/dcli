@@ -10,21 +10,21 @@ import '../util/test_file_system.dart';
 void main() {
   t.group('Find', () {
     t.test('manualRecursion', () async {
-      TestFileSystem().withinZone((fs) {
-        final foundDirs = find('*',
-                workingDirectory: fs.testScriptPath,
-                recursive: false,
-                types: <FileSystemEntityType>[Find.directory],
-                includeHidden: true)
-            .toList();
+      final testScriptPath =
+          join(Script.current.pathToProjectRoot, 'test', 'test_script');
+      final foundDirs = find('*',
+              workingDirectory: testScriptPath,
+              recursive: false,
+              types: <FileSystemEntityType>[Find.directory],
+              includeHidden: true)
+          .toList();
 
-        final rootDirs = <String>[
-          join(fs.testScriptPath, 'general'),
-          join(fs.testScriptPath, 'traditional_project')
-        ];
+      final rootDirs = <String>[
+        join(testScriptPath, 'general'),
+        join(testScriptPath, 'traditional_project')
+      ];
 
-        expect(foundDirs, t.unorderedEquals(rootDirs));
-      });
+      expect(foundDirs, t.unorderedEquals(rootDirs));
     });
 
     test('Recurse entire filesystem', () {
