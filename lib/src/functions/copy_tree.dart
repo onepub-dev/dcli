@@ -89,8 +89,6 @@ class _CopyTree extends DCliFunction {
           'The [to] path ${truepath(to)} must be a directory.');
     }
 
-    Settings().verbose('copyTree called ${truepath(from)} -> ${truepath(to)}');
-
     try {
       find('*',
               workingDirectory: from,
@@ -110,10 +108,12 @@ class _CopyTree extends DCliFunction {
           }
 
           copy(file, target, overwrite: overwrite);
-          Settings().verbose(
-              'copyTree copying: ${truepath(from)} -> ${truepath(target)}');
         }
       });
+      Settings()
+          .verbose('copyTree copied: ${truepath(from)} -> ${truepath(to)}, '
+              'includeHidden: $includeHidden, recursive: $recursive, '
+              'overwrite: $overwrite');
     }
     // ignore: avoid_catches_without_on_clauses
     catch (e) {
