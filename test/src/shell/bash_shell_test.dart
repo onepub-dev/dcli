@@ -12,7 +12,7 @@ void main() {
     /// Force dcli to see the bash shell.
     env['SHELL'] = BashShell.shellName;
 
-    expect(Shell.current.isPrivilegedPasswordRequired, false);
+    expect(Shell.current.isPrivilegedPasswordRequired, true);
   }, skip: Platform.isWindows);
 
   // don't know how to automat this test as we need the sudo password.
