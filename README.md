@@ -12,6 +12,11 @@ DCli is an API and tooling for building cross platform command line \(CLI\) appl
 
 DCli - pronounced d-cli
 
+
+# Another Dart tool by Noojee
+
+![Noojee](https://github.com/bsutton/dcli/blob/main/images/noojee-logo.png?raw=true)
+
 ## Looking for DShell? You are in the right place.
 
 DShell has been renamed DCli to better reflect its intended purposes. 
