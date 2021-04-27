@@ -1,3 +1,6 @@
+# 1.0.5
+Deprecated ProgressWithCapture and moved the capture logic into the base Progress class. Use Progress.capture() instead.
+
 Modified startFromArgs to NOT print any output by default.
 This is to bring it in line with start.
 If you currently use startFromArgs and want to continue with the original behaviour you will need to change how you call startFromArgs
@@ -10,6 +13,13 @@ becomes
 startFromArgs('ls', ['-la'], progress: Progress.print);
 ```
 This change is in response to issue #134
+
+
+Switched to using critical_test package for running unit tests.
+Added method runPub to DartSdk.
+Improved the code doco for find
+Added unit tests for progress methods toList and forEach
+
 
 
 # 1.0.4
