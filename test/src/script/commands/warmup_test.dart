@@ -9,7 +9,8 @@ void main() {
   group('warmup using DCli', () {
     test('warmup ', () {
       TestFileSystem().withinZone((fs) {
-        const projectPath = 'test/test_script/general';
+        Settings().setVerbose(enabled: true);
+        final projectPath = join(fs.fsRoot, 'test_script/general');
         DartProject.fromPath(projectPath)
           ..clean()
           ..warmup();
