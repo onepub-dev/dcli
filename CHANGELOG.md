@@ -1,3 +1,6 @@
+# 1.0.6
+Updated readme.
+
 # 1.0.5
 Deprecated ProgressWithCapture and moved the capture logic into the base Progress class. Use Progress.capture() instead.
 
