@@ -1,3 +1,17 @@
+Modified startFromArgs to NOT print any output by default.
+This is to bring it in line with start.
+If you currently use startFromArgs and want to continue with the original behaviour you will need to change how you call startFromArgs
+
+```dart
+startFromArgs('ls', ['-la']);
+
+becomes
+
+startFromArgs('ls', ['-la'], progress: Progress.print);
+```
+This change is in response to issue #134
+
+
 # 1.0.4
 Update README.md
 
