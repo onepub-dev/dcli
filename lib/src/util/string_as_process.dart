@@ -273,16 +273,10 @@ extension StringAsProcess on String {
 
   List<String> toList(
       {bool runInShell = false, int skipLines = 0, bool nothrow = false}) {
-    final list = <String>[];
+    final progress = cmd.start(this,
+        runInShell: runInShell, progress: Progress.capture(), nothrow: nothrow);
 
-    Progress progress;
-
-    progress = Progress(list.add, stderr: list.add);
-
-    progress = cmd.start(this,
-        runInShell: runInShell, progress: progress, nothrow: nothrow);
-
-    return list.sublist(skipLines);
+    return progress.lines.sublist(skipLines);
   }
 
   /// [parser] runs the contents of this String as a cli command line
@@ -470,7 +464,7 @@ extension StringAsProcess on String {
   /// '/tmp/log'.write('Start of Log')
   /// ```
   ///
-  /// See [append] appends a line to an existing file.
+  /// See [truncate] and [append].
   void write(String line, {String newline = '\n'}) {
     FileSync(this)
       ..write(line, newline: newline)
@@ -478,12 +472,19 @@ extension StringAsProcess on String {
   }
 
   /// Truncates a file by setting its length to zero.
+  ///
+  /// e.g.
+  /// ```dart
+  /// '/tmp/log'.truncate()
+  /// '/tmp/log'.append('Start of Log')
+  /// ```
+  /// See [write] and [append]
   void truncate() {
     FileSync(this).truncate();
   }
 
-  /// Treat the contents of this String  as the name of a file
-  /// and append [line] to the file.
+  /// Treat the contents of 'this' String  as the name of a file
+  /// and appends [line] to the file.
   /// [newline] specifies the line termination character.
   /// If you don't want a newline appended then pass an empty
   /// string to [newline].
@@ -493,9 +494,9 @@ extension StringAsProcess on String {
   /// ```dart
   /// '.bashrc'.append('export FRED=ONE');
   /// ```
-  ///
+  /// See [write] and [truncate]
   void append(String line, {String newline = '\n'}) {
-    FileSync(this)
+    FileSync(this) // , fileMode: FileMode.append)
       ..append(line, newline: newline)
       ..close();
   }

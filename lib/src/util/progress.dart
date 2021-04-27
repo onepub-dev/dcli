@@ -12,38 +12,75 @@ import 'wait_for_ex.dart';
 /// central class that provides progress information about a running
 /// process.
 class Progress {
-  ///
-  Progress(LineAction stdout, {LineAction stderr = devNull})
-      : includeStdout = true,
-        includeStderr = true {
+  /// Creates a Progress that allows you to individually control
+  /// each aspect of how the [Progress] prints and captures output
+  /// to stdout and stderr. It usually easier to use one of the
+  /// pre-package [Progress] constructors such as [Progress.print].
+  Progress(LineAction stdout,
+      {LineAction stderr = devNull,
+      bool includeStdout = true,
+      bool includeStderr = false,
+      bool captureStdin = false,
+      bool captureStderr = false})
+      : _includeStdout = includeStdout,
+        _includeStderr = includeStderr,
+        _captureStdout = captureStdin,
+        _captureStderr = captureStderr {
     _wireStreams(stdout, stderr);
   }
 
   /// Use this progress to have both stdout and stderr output
   /// suppressed.
   Progress.devNull()
-      : includeStdout = true,
-        includeStderr = true;
+      : _includeStdout = false,
+        _includeStderr = false;
 
-  /// Use this progress to only output data sent to stdout
-  Progress.printStdOut()
-      : includeStdout = true,
-        includeStderr = true {
+  /// Use this progress to only output data sent to stdout.
+  /// If [capture] is true (defaults to false) the output to
+  /// stdout is also captured and will be available
+  /// in [lines] once the process completes.
+  Progress.printStdOut({bool capture = false})
+      : _includeStdout = true,
+        _includeStderr = false,
+        _captureStdout = capture {
     _wireStreams(print, devNull);
   }
 
-  /// Use this progress to only output data sent to stderr
-  Progress.printStdErr()
-      : includeStdout = true,
-        includeStderr = true {
+  /// Use this progress to only output data sent to stderr.
+  /// If [capture] is true (defaults to false) the output to
+  /// stderr is also captured and will be available
+  /// in [lines] once the process completes.
+  Progress.printStdErr({bool capture = false})
+      : _includeStdout = false,
+        _includeStderr = true,
+        _captureStderr = capture {
     _wireStreams(devNull, print);
   }
 
-  /// Use this progress to print both stdout and stderr
-  Progress.print()
-      : includeStdout = true,
-        includeStderr = true {
+  /// Use this progress to print both stdout and stderr.
+  /// If [capture] is true (defaults to false) the output to
+  /// stdout and stderr is also captured and will be available
+  /// in [lines] once the process completes.
+  Progress.print({bool capture = false})
+      : _includeStdout = true,
+        _includeStderr = true,
+        _captureStdout = capture,
+        _captureStderr = capture {
     _wireStreams(print, printerr);
+  }
+
+  /// Captures the output of the called process to a list which
+  /// can be obtained by calling [Progress.lines] once
+  /// the process completes.
+  /// By default both stdout and stderr are captured.
+  /// Set [captureStdout] to false to suppress capturing of stdout.
+  /// Set [captureStderr] to false to suppress capturing of stderr.
+  Progress.capture({bool captureStdout = true, bool captureStderr = true})
+      : _captureStdout = captureStdout,
+        _captureStderr = captureStderr,
+        _includeStdout = false,
+        _includeStderr = false {
+    _wireStreams(devNull, devNull);
   }
 
   /// EXPERIMENTAL
@@ -52,7 +89,7 @@ class Progress {
   /// to stdout and stderr.
   ///
   /// You can take control over whether both stdout and stderr are included
-  /// via the named args  [includeStderr] and [includeStdout].
+  /// via the named args  [includeStderr] and [_includeStdout].
   ///
   /// By default both are set to true.
   ///
@@ -79,7 +116,9 @@ class Progress {
   ///   print('done');
   ///````
   ///
-  Progress.stream({this.includeStdout = true, this.includeStderr = true}) {
+  Progress.stream({bool includeStdout = true, bool includeStderr = true})
+      : _includeStdout = includeStdout,
+        _includeStderr = includeStderr {
     /// we don't wire the stream but rather allow the user to
     /// obtain the stream directly
   }
@@ -89,25 +128,28 @@ class Progress {
   /// The exist code of the completed process.
   int? exitCode;
 
-  // ignore: flutter_style_todos
-  /// TODO: setting [includeStderr] or [includeStdout]
-  /// to false stop methods like [toList] from working.
-  /// I've not quite got my head around why so for the minute
-  /// we only set this settings to false when using [Progress.stream].
-
   /// If true then lines written to stderr will
   /// be included in the stream.
-  final bool includeStderr;
+  bool _includeStderr;
 
   /// If true then lines written to stdout will
   /// be included in the stream.
-  final bool includeStdout;
+  bool _includeStdout;
 
   final _stdoutCompleter = Completer<bool>();
   final _stderrCompleter = Completer<bool>();
 
   final _stdoutController = StreamController<String>();
   final _stderrController = StreamController<String>();
+
+  /// If true we store all output to stdout in [_lines]
+  bool _captureStdout = false;
+
+  /// If true we store all output to stderr in [_lines]
+  bool _captureStderr = false;
+
+  // final List<ProgressLine> _lines = [];
+  final List<String> _lines = [];
 
   /// Returns a combined stream including stdout and stderr.
   /// You control whether stderr and/or stdout are inserted into the stream when you call
@@ -118,11 +160,7 @@ class Progress {
   /// adds the [line] to the stdout controller
   void addToStdout(String line) {
     if (!_closed) {
-      if (includeStdout) {
-        _stdoutController.sink.add(line);
-      } else {
-        Settings().verbose('addToStdout excluded: line=$line');
-      }
+      _stdoutController.sink.add(line);
     } else {
       Settings().verbose('addToStdout called after stream closed: line=$line');
     }
@@ -131,26 +169,23 @@ class Progress {
   /// adds the [line] to the stderr controller
   void addToStderr(String line) {
     if (!_closed) {
-      if (includeStderr) {
-        _stderrController.sink.add(line);
-      } else {
-        Settings().verbose('addToStderr excluded: line=$line');
-      }
+      _stderrController.sink.add(line);
     } else {
       Settings().verbose('addToStderr called after stream closed: line=$line');
     }
   }
 
-  ///
-  void forEach(LineAction stdout, {LineAction stderr = devNull}) {
-    _processUntilComplete(stdout, stderr: stderr);
-  }
+  bool _wired = false;
 
   ///
   /// processes both streams until they complete
   ///
   void _processUntilComplete(LineAction stdout, {LineAction stderr = devNull}) {
-    _wireStreams(stdout, stderr);
+    /// We can get wired from one of the constructors
+    /// or from here.
+    if (!_wired) {
+      _wireStreams(stdout, stderr);
+    }
 
     // Wait for both streams to complete
     waitForEx(Future.wait([_stdoutCompleter.future, _stderrCompleter.future]));
@@ -160,8 +195,16 @@ class Progress {
   /// processes both streams until they complete
   ///
   void _wireStreams(LineAction stdout, LineAction stderr) {
+    _wired = true;
     _stdoutController.stream.listen((line) {
-      stdout(line);
+      if (_includeStdout) {
+        stdout(line);
+      } else {
+        Settings().verbose('addToStdout excluded: line=$line');
+      }
+      if (_captureStdout) {
+        _lines.add(line);
+      }
     },
         onDone: () => _stdoutCompleter.complete(true),
         //ignore: avoid_types_on_closure_parameters
@@ -169,12 +212,34 @@ class Progress {
         cancelOnError: true);
 
     _stderrController.stream.listen((line) {
-      stderr(line);
+      if (_includeStderr) {
+        stderr(line);
+      } else {
+        Settings().verbose('addToStdout excluded: line=$line');
+      }
+      if (_captureStderr) {
+        _lines.add(line);
+      }
     },
         onDone: () => _stderrCompleter.complete(true),
         //ignore: avoid_types_on_closure_parameters
         onError: (Object e, StackTrace s) => _stderrCompleter.completeError(e),
         cancelOnError: true);
+  }
+
+  ///
+  void forEach(LineAction stdout, {LineAction stderr = devNull}) {
+    /// This is somewhat dodgy as we essentially replace the progresses
+    /// stdout and stderr handlers that we setup when the
+    /// progress was originally created. We need to find
+    /// a more self consistent approach as this behavour can endup
+    /// with the user getting inconsistent results
+    /// e.g. they essentially pass stdout and stderr twice.
+    _includeStdout = true;
+    if (stderr != devNull) {
+      _includeStderr = true;
+    }
+    _processUntilComplete(stdout, stderr: stderr);
   }
 
   /// Returns stdout and stderr lines as a list.
@@ -187,23 +252,36 @@ class Progress {
   ///     [forEach]
   List<String> toList({final int skipLines = 0}) {
     var _skipLines = skipLines;
+
+    _captureStdout = true;
+    _captureStderr = true;
+
+    _processUntilComplete(devNull);
+
     final lines = <String>[];
 
-    forEach((line) {
+    for (final line in _lines) {
       if (_skipLines > 0) {
         _skipLines--;
       } else {
         lines.add(line);
       }
-    }, stderr: (line) {
-      if (_skipLines > 0) {
-        _skipLines--;
-      } else {
-        lines.add(line);
-      }
-    });
+    }
     return lines;
   }
+
+  /// If the [Progress] was created with captureStdout = true
+  /// or captureStderr = true
+  /// then [lines] will contain the captured lines.
+  /// If neither capture is true then lines will return an empty list.
+  ///
+  /// The simpliest way to caputure stdout is to pass in [Progress.capture()].
+  ///
+  /// ```dart
+  /// var lines = start('ls *', progress: Progress.capture()).lines;
+  /// ```
+  /// An [UnmodifiableListView] of the list is returned.
+  List<String> get lines => UnmodifiableListView(_lines);
 
   /// Returns the first line from the command or
   /// null if no lines where returned
@@ -234,46 +312,69 @@ class Progress {
 /// and stderr is printed.
 /// Once the process has completed you can call [lines] to obtain
 /// an unmodfiable view of the captured list.
+@Deprecated('Use Progress.xxx(captureStdout: true, captureStderr: true)')
 class ProgressWithCapture extends Progress {
   /// Use this ctor to capture lines output to stdout and stderr as
   /// well as being able to process the output as it occurs via the [stdout] and
   /// [stdout] [LineAction] parameters.
   /// Call [lines] to obtain the captured output.
-  ProgressWithCapture(LineAction stdout, {LineAction stderr = devNull})
-      : super(stdout, stderr: stderr);
+  ProgressWithCapture(LineAction stdout,
+      {LineAction stderr = devNull, bool capture = true})
+      : super(stdout, stderr: stderr, captureStdin: capture);
 
   /// Use this [ProgressWithCapture] to have both stdout and stderr output
   /// suppressed whilst capturing all output generated by the process.
   /// Call [lines] to obtain the captured output.
-  ProgressWithCapture.devNull() : super.devNull();
+  ProgressWithCapture.devNull()
+      : super((line) {}, captureStdin: true, captureStderr: true);
 
   /// Use this [ProgressWithCapture] to capture and print stdout.
   /// Call [lines] to obtain the captured output.
-  ProgressWithCapture.printStdOut() : super.printStdOut();
+  ProgressWithCapture.printStdOut({bool capture = true})
+      : super.printStdOut(capture: capture);
 
   /// Use this [ProgressWithCapture] to capture and print stderr.
   /// Call [lines] to obtain the captured output.
-  ProgressWithCapture.printStdErr() : super.printStdErr();
+  ProgressWithCapture.printStdErr({bool capture = true})
+      : super.printStdErr(capture: capture);
 
   /// Use this [ProgressWithCapture] to capture and print both stdout
   /// and stderr.
   /// Call [lines] to obtain the captured output.
-  ProgressWithCapture.print() : super.print();
-
-  final List<String> _lines = [];
-
-  /// get the list of captured lines.
-  List<String> get lines => UnmodifiableListView(_lines);
-
-  @override
-  void addToStdout(String line) {
-    _lines.add(line);
-    super.addToStdout(line);
-  }
-
-  @override
-  void addToStderr(String line) {
-    _lines.add(line);
-    super.addToStdout(line);
-  }
+  ProgressWithCapture.print({bool capture = true})
+      : super.print(capture: capture);
 }
+
+/*
+/// Used to store lines captured by a [Progress]
+/// Refer to [Progress.lines].
+class ProgressLine {
+  /// Constructs a [ProgressLine]
+  ProgressLine(this.type, this.content, this.lineNo);
+
+  /// The source of the line
+  ProgressLineType type;
+
+  /// The contents of the line.
+  String content;
+
+  /// The original line no.
+  /// The first lineNo is line 1.
+  /// If you are using the skipLines option
+  /// in the likes of toList then this will
+  /// still reflect the original lineNo and is NOT
+  /// adjusted to start after skipLines.
+  int lineNo;
+}
+
+/// The source of the [ProgressLine]
+enum ProgressLineType {
+  /// The line was capture as the result
+  /// of the program sending output to stdout.
+  stdout,
+
+  /// The line was capture as the result
+  /// of the program sending output to stderr.
+  stderr
+}
+*/
