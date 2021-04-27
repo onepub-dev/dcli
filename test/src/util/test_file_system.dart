@@ -4,6 +4,7 @@ import 'dart:io';
 import 'dart:isolate';
 
 import 'package:dcli/dcli.dart';
+import 'package:dcli/src/functions/create_dir.dart';
 import 'package:dcli/src/functions/env.dart';
 import 'package:dcli/src/pubspec/dependency.dart';
 import 'package:dcli/src/util/stack_trace_impl.dart';
@@ -277,8 +278,12 @@ class TestFileSystem {
   }
 
   void installDCli() {
-    /// run pub get and only display errors.
-    DartSdk().globalActivateFromPath(pwd);
+    if (!isDCliRunningFromSource()) {
+      printerr(red('You must global active dcli from a local '
+          'path before you can run unit tests'));
+      print('Run: dart pub global activate --source=path <path to dcli>');
+      exit(-1);
+    }
 
     EntryPoint().process(['install', '--nodart', '--quiet', '--noprivileges']);
   }
@@ -407,6 +412,16 @@ class TestFileSystem {
         // copy(script.pathToExe, join(testbinPath, script.exeName));
       }
     }
+  }
+
+  bool isDCliRunningFromSource() {
+    /// run pub global list to see if dcli is run from a local path.
+    final line = DartSdk()
+        .runPub(args: ['global', 'list'], progress: Progress.capture())
+        .lines
+        .firstWhere((line) => line.startsWith('dcli'), orElse: () => 'dcli');
+
+    return line.contains('at path');
   }
 }
 
