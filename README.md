@@ -1,6 +1,6 @@
 # README
 
-See the online [gitbook](https://bsutton.gitbook.io/dcli/) for Dcli
+See the online [gitbook](https://bsutton.gitbook.io/dcli/) for DCli
 
 
 If you enjoyed DCli maybe you could help out with a sponsorship or just buy me a coffee.
@@ -9,6 +9,8 @@ If you enjoyed DCli maybe you could help out with a sponsorship or just buy me a
 
 
 DCli is an API and tooling for building cross platform command line \(CLI\) applications and scripts using the Dart programming language.
+
+DCli - pronounced d-cli
 
 ## Looking for DShell? You are in the right place.
 
