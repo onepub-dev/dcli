@@ -15,7 +15,7 @@ DCli - pronounced d-cli
 
 # Another Dart tool by Noojee
 
-![Noojee](https://github.com/bsutton/dcli/blob/main/images/noojee-logo.png?raw=true)
+![Noojee](https://github.com/bsutton/dcli/blob/master/images/noojee-logo.png?raw=true)
 
 ## Looking for DShell? You are in the right place.
 
