@@ -37,7 +37,7 @@ String createDir(String path, {bool recursive = false}) =>
 /// It is your responsiblity to delete the directory once you have
 /// finsihed with it.
 String createTempDir() =>
-    _CreateDir().createDir('${Directory.systemTemp}/${const Uuid().v4()}',
+    _CreateDir().createDir('${Directory.systemTemp.path}/${const Uuid().v4()}',
         recursive: false);
 
 class _CreateDir extends DCliFunction {

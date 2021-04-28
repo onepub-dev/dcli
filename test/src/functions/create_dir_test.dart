@@ -64,5 +64,10 @@ void main() {
             t.throwsA(const t.TypeMatcher<CreateDirException>()));
       });
     });
+
+    t.test('createTempDir', () {
+      final tempDir = createTempDir();
+      expect(exists(tempDir), isTrue);
+    });
   });
 }
