@@ -1,3 +1,6 @@
+# 1.0.9
+Fixed a bug in the createTempDir method and added unit test for same.
+
 # 1.0.8
 Exposed method createTempDir.
 
