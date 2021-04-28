@@ -1,3 +1,6 @@
+# 1.0.7
+BUG: runPubGet was not passing down the Progress so you couldn't dump the output if so desired.
+
 # 1.0.6
 Updated readme.
 
