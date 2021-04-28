@@ -185,7 +185,9 @@ class DartSdk {
     bool? compileExecutables,
   }) {
     runPub(
-        args: ['get', '--no-precompile'], workingDirectory: workingDirectory);
+        args: ['get', '--no-precompile'],
+        workingDirectory: workingDirectory,
+        progress: progress);
   }
 
   /// Attempts to detect the location of the dart sdk.
