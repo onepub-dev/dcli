@@ -110,6 +110,18 @@ class Terminal {
     }
   }
 
+  /// The width of the terminal in columns.
+  /// Where a column is one character wide.
+  /// If no terminal is attached to stdout, a [StdoutException] is thrown.
+  /// This value can change if the users resizes the console window.
+  int get columns => stdout.terminalColumns;
+
+  /// The height of the terminal in rows.
+  /// Where a row is one character high.
+  /// If no terminal is attached to stdout, a [StdoutException] is thrown.
+  /// This value can change if the users resizes the console window.
+  int get lines => stdout.terminalLines;
+
   /// Writes [text] to stdout.
   static void write(String text) => stdout.write(text);
 }
