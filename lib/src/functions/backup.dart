@@ -23,7 +23,9 @@ void backupFile(String pathToFile) {
   if (exists(pathToBackupFile)) {
     delete(pathToBackupFile);
   }
-  createDir(dirname(pathToBackupFile));
+  if (!exists(dirname(pathToBackupFile))) {
+    createDir(dirname(pathToBackupFile));
+  }
 
   copy(pathToFile, pathToBackupFile);
 }
@@ -34,6 +36,9 @@ void backupFile(String pathToFile) {
 /// from the .bak/<filename>.bak file created when
 /// you called [backupFile].
 ///
+/// When the last .bak file is restore the .bak directory
+/// will be deleted. If you don't restore all files (you app crashes)
+/// then a .bak directory and files may be left hanging.
 /// If the backup file doesn't exists this function throws
 /// a [RestoreFileException] unless you pass the [ignoreMissing]
 /// flag.
@@ -46,6 +51,10 @@ void restoreFile(String pathToFile, {bool ignoreMissing = false}) {
     }
 
     move(pathToBackupFile, pathToFile);
+
+    if (isEmpty(dirname(pathToBackupFile))) {
+      deleteDir(dirname(pathToBackupFile));
+    }
   } else {
     if (ignoreMissing) {
       Settings().verbose('Missing restoreFile $pathToBackupFile ignored');
