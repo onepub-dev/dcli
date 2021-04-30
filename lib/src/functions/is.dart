@@ -79,6 +79,11 @@ void setLastModifed(String path, DateTime lastModified) {
   }
 }
 
+/// Returns true if the passed [pathToDirectory] is an
+/// empty directory.
+/// For large directories this operation can be expensive.
+bool isEmpty(String pathToDirectory) => _Is().isEmpty(pathToDirectory);
+
 /// checks if the passed [path] (a file or directory) is
 /// writable by the user that owns this process
 bool isWritable(String path) => _Is().isWritable(path);
@@ -110,10 +115,10 @@ class _Is extends DCliFunction {
 
   /// checks if the given [path] exists.
   ///
-  /// Throws [ArgumentError] if [path] is null or an empty string.
+  /// Throws [ArgumentError] if [path] is an empty string.
   bool exists(String path, {required bool followLinks}) {
     if (path.isEmpty) {
-      throw ArgumentError('path must not be empty');
+      throw ArgumentError('path must not be empty.');
     }
 
     final _exists = FileSystemEntity.typeSync(path, followLinks: followLinks) !=
@@ -130,18 +135,35 @@ class _Is extends DCliFunction {
     File(path).setLastModifiedSync(lastModified);
   }
 
+  /// Returns true if the passed [pathToDirectory] is an
+  /// empty directory.
+  /// For large directories this operation can be expensive.
+  bool isEmpty(String pathToDirectory) {
+    Settings().verbose('isEmpty: $pathToDirectory');
+
+    return Directory(pathToDirectory).listSync(followLinks: false).isEmpty;
+  }
+
   /// checks if the passed [path] (a file or directory) is
   /// writable by the user that owns this process
-  bool isWritable(String path) => _checkPermission(path, writeBitMask);
+  bool isWritable(String path) {
+    Settings().verbose('isWritable: $path');
+    return _checkPermission(path, writeBitMask);
+  }
 
   /// checks if the passed [path] (a file or directory) is
   /// readable by the user that owns this process
-  bool isReadable(String path) => _checkPermission(path, readBitMask);
+  bool isReadable(String path) {
+    Settings().verbose('isReadable: $path');
+    return _checkPermission(path, readBitMask);
+  }
 
   /// checks if the passed [path] (a file or directory) is
   /// executable by the user that owns this process
-  bool isExecutable(String path) =>
-      Settings().isWindows || _checkPermission(path, executeBitMask);
+  bool isExecutable(String path) {
+    Settings().verbose('isExecutable: $path');
+    return Settings().isWindows || _checkPermission(path, executeBitMask);
+  }
 
   static const readBitMask = 0x4;
   static const writeBitMask = 0x2;
@@ -150,6 +172,9 @@ class _Is extends DCliFunction {
   /// Checks if the user permission to act on the [path] (a file or directory)
   /// for the given permission bit mask. (read, write or execute)
   bool _checkPermission(String path, int permissionBitMask) {
+    Settings().verbose(
+        '_checkPermission: $path permissionBitMask: $permissionBitMask');
+
     if (Settings().isWindows) {
       throw UnsupportedError(
           'isMemberOfGroup is not Not currently supported on windows');
@@ -190,6 +215,8 @@ class _Is extends DCliFunction {
   /// Returns true if the owner of this process
   /// is a member of [group].
   bool isMemberOfGroup(String group) {
+    Settings().verbose('isMemberOfGroup: $group');
+
     if (Settings().isWindows) {
       throw UnsupportedError(
           'isMemberOfGroup is not Not currently supported on windows');

@@ -1,7 +1,7 @@
 @Timeout(Duration(minutes: 10))
 import 'dart:io';
 
-import 'package:test/test.dart';
+import 'package:test/test.dart' hide isEmpty;
 import 'package:dcli/dcli.dart' hide equals;
 
 import '../util/test_file_system.dart';
@@ -140,4 +140,16 @@ void main() {
       });
     });
   }, skip: Platform.isWindows);
+
+  group('isEmpty', () {
+    test('isEmpty - good', () {
+      final root = createTempDir();
+
+      expect(isEmpty(root), isTrue);
+
+      touch(join(root, 'a file'), create: true);
+
+      expect(isEmpty(root), isFalse);
+    });
+  });
 }
