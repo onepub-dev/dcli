@@ -28,7 +28,7 @@ void main() {
         delete(testFile);
 
         t.expect(() => delete(testFile),
-            t.throwsA(const t.TypeMatcher<DeleteException>()));
+            t.throwsA(isA<DeleteException>()));
       });
     });
   });

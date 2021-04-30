@@ -27,7 +27,7 @@ void main() {
           throw DCliException('fake exception');
         });
       });
-    }, throwsA(const TypeMatcher<DCliException>()));
+    }, throwsA(isA<DCliException>()));
   }, skip: true);
 
   test('withLock', () {

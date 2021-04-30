@@ -53,7 +53,7 @@ void main() {
       TestFileSystem().withinZone((fs) {
         final testDirectory = join(fs.fsRoot, 'tmp_test');
         t.expect(() => deleteDir(testDirectory),
-            t.throwsA(const t.TypeMatcher<DeleteDirException>()));
+            t.throwsA(isA<DeleteDirException>()));
       });
     });
 
@@ -61,7 +61,7 @@ void main() {
       TestFileSystem().withinZone((fs) {
         final testPath = join(fs.fsRoot, 'tmp_test/longer/and/longer');
         t.expect(() => createDir(testPath),
-            t.throwsA(const t.TypeMatcher<CreateDirException>()));
+            t.throwsA(isA<CreateDirException>()));
       });
     });
 

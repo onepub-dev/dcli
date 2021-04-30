@@ -12,8 +12,8 @@ void main() {
     TestFileSystem().withinZone((fs) {
       print(pwd);
       'bash ${join(fs.testScriptPath, 'general/bin/slow.sh')}'.forEach(print);
-      expect(() => 'tail -n 5 badfilename.txt'.run,
-          throwsA(const TypeMatcher<DCliException>()));
+      expect(
+          () => 'tail -n 5 badfilename.txt'.run, throwsA(isA<DCliException>()));
     });
   }, skip: true);
 

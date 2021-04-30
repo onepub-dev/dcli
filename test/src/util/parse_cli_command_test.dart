@@ -16,7 +16,7 @@ void main() {
       const test = '';
 
       expect(() => ParsedCliCommand(test, pwd),
-          throwsA(const TypeMatcher<InvalidArguments>()));
+          throwsA(isA<InvalidArguments>()));
     });
     test('a', () {
       const test = 'a';
@@ -135,7 +135,7 @@ void main() {
   test('invalid/.*', () {
     TestFileSystem().withinZone((fs) {
       expect(() => ParsedCliCommand('ls invalid/.*', fs.top),
-          throwsA(const TypeMatcher<FileSystemException>()));
+          throwsA(isA<FileSystemException>()));
     });
   }, onPlatform: <String, Skip>{
     'windows': const Skip("Powershell doesn't do glob expansion")
@@ -190,7 +190,7 @@ void main() {
   test('invalid absolute path/*', () {
     TestFileSystem().withinZone((fs) {
       expect(() => ParsedCliCommand('ls /git/dcli/*', fs.top),
-          throwsA(const TypeMatcher<FileSystemException>()));
+          throwsA(isA<FileSystemException>()));
     });
   });
 

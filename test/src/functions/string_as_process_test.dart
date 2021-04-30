@@ -157,7 +157,7 @@ void main() {
     t.test('toList - exception nothrow=false', () {
       TestFileSystem().withinZone((fs) {
         t.expect(() => 'ls *.abcdafe'.toList(),
-            t.throwsA(const t.TypeMatcher<RunException>()));
+            t.throwsA(isA<RunException>()));
       });
     });
 
