@@ -17,6 +17,7 @@ export 'package:path/path.dart'
         current;
 
 export 'src/functions/ask.dart';
+export 'src/functions/backup.dart';
 export 'src/functions/cat.dart' show cat, CatException;
 export 'src/functions/cd.dart' show CDException;
 export 'src/functions/chmod.dart' show chmod, ChModException;
