@@ -7,13 +7,14 @@ void main() {
     final root = createTempDir();
     const filename = 'test.txt';
     final file = join(root, filename);
+    final backupDir = join(root, '.bak');
 
     const content = 'Hellow World';
     file.write(content);
 
     backupFile(file);
 
-    final backupFilename = '${join(root, '.bak', filename)}.bak';
+    final backupFilename = '${join(backupDir, filename)}.bak';
 
     expect(exists(backupFilename), isTrue);
     expect(exists(file), isTrue);
@@ -29,6 +30,9 @@ void main() {
     expect(read(file).toList().join('\n').contains(secondline), isFalse);
 
     expect(exists(backupFilename), isFalse);
+
+    /// check .bak directory removed
+    expect(exists(backupDir), isFalse);
   });
 
   test('restore missing backup', () async {
@@ -60,5 +64,36 @@ void main() {
     delete(file);
 
     expect(() => backupFile(file), throwsA(isA<CopyException>()));
+  });
+
+  test('Existing .bak directory', () async {
+    final root = createTempDir();
+    const filename = 'test.txt';
+    final file = join(root, filename);
+
+    const content = 'Hellow World';
+    file.write(content);
+
+    final backupPath = join(root, '.bak');
+    createDir(backupPath);
+
+    backupFile(file);
+
+    final backupFilename = '${join(backupPath, filename)}.bak';
+
+    expect(exists(backupFilename), isTrue);
+    expect(exists(file), isTrue);
+
+    const secondline = 'Foo was here';
+
+    file.append(secondline);
+
+    expect(read(file).toList().join('\n').contains(secondline), isTrue);
+
+    restoreFile(file);
+
+    expect(read(file).toList().join('\n').contains(secondline), isFalse);
+
+    expect(exists(backupFilename), isFalse);
   });
 }
