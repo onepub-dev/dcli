@@ -36,7 +36,7 @@ class _Copy extends DCliFunction {
 
     if (overwrite == false && exists(finalto)) {
       throw CopyException(
-          'The target file ${truepath(finalto)} already exists');
+          'The target file ${truepath(finalto)} already exists.');
     }
 
     try {
@@ -44,6 +44,18 @@ class _Copy extends DCliFunction {
     }
     // ignore: avoid_catches_without_on_clauses
     catch (e) {
+      /// lets try and improve the message.
+      /// We do these checks only on failure
+      /// so in the most common case (everything is correct)
+      /// we don't waste cycles on unnecessary work.
+      if (!exists(from)) {
+        throw CopyException('The from file ${truepath(from)} does not exists.');
+      }
+      if (!exists(dirname(to))) {
+        throw CopyException(
+            'The to directory ${truepath(dirname(to))} does not exists.');
+      }
+
       throw CopyException(
           'An error occured copying ${truepath(from)} to ${truepath(finalto)}. '
           'Error: $e');
