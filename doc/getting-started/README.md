@@ -47,7 +47,7 @@ This is still a work in progress but is intended to provide a three line script 
 ```text
 wget https://github.com/bsutton/dcli/releases/download/latest.linux/dcli_install
 chmod +x dcli_install
-./dcli_install
+sudo ./dcli_install
 ```
 {% endtab %}
 
