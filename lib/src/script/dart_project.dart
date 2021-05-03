@@ -52,10 +52,22 @@ class DartProject {
   /// and returns it.
   PubSpec get pubSpec => PubSpec.fromFile(pathToPubSpec);
 
-  /// Returns the path to the project's root diretory.
+  /// Absolute path to the project's root diretory.
   String get pathToProjectRoot => _pathToProjectRoot;
 
-  /// Returns the pat to the project's pubspec.yaml
+  /// Absolute path to the project's 'tool' directory.
+  String get pathToToolDir => truepath(_pathToProjectRoot, 'tool');
+
+  /// Absolute path to the project's 'bin' directory.
+  String get pathToBinDir => truepath(_pathToProjectRoot, 'bin');
+
+  /// Absolute path to the project's 'test' directory.
+  String get pathToTestDir => truepath(_pathToProjectRoot, 'test');
+
+  /// Absolute path to the project's '.dart_tool' directory.
+  String get pathToDartToolDir => truepath(_pathToProjectRoot, '.dart_tool');
+
+  /// Absolute pathto the project's pubspec.yaml
   String get pathToPubSpec =>
       _pathToPubSpec ??= join(_pathToProjectRoot, 'pubspec.yaml');
 
