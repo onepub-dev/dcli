@@ -90,7 +90,7 @@ class RunnableProcess {
   /// runs the process and returns as soon as the process
   /// has started.
   ///
-  /// This method is used to stream apps output via when
+  /// This method is used to stream apps output when
   /// using [Progress.stream].
   ///
   /// The [privileged] argument attempts to escalate the priviledge
@@ -113,7 +113,7 @@ class RunnableProcess {
       {Progress? progress,
       bool runInShell = false,
       bool privileged = false,
-      bool? nothrow}) {
+      bool nothrow = false}) {
     progress ??= Progress.devNull();
 
     start(runInShell: runInShell, privileged: privileged);
@@ -123,6 +123,9 @@ class RunnableProcess {
   }
 
   /// runs the process.
+  ///
+  /// By default all output to stdout/stderr is suppressed.
+  /// Pass an appropriate [progress] if you want to print either of these.
   ///
   /// The [privileged] argument attempts to escalate the priviledge
   /// that the command is run
@@ -146,7 +149,7 @@ class RunnableProcess {
     bool runInShell = false,
     bool detached = false,
     bool privileged = false,
-    bool? nothrow,
+    bool nothrow = false,
   }) {
     progress ??= Progress.devNull();
 
@@ -157,10 +160,10 @@ class RunnableProcess {
           terminal: terminal,
           privileged: privileged);
       if (detached == false) {
-        if (terminal == false) {
-          processUntilExit(progress, nothrow: nothrow);
+        if (terminal == true) {
+          _waitForExit(progress, nothrow: nothrow);
         } else {
-          _waitForExit(progress);
+          processUntilExit(progress, nothrow: nothrow);
         }
       }
     } finally {
@@ -169,7 +172,11 @@ class RunnableProcess {
     return progress;
   }
 
-  /// starts a process  provides additional options to [run].
+  /// Starts a process  provides additional options to [run].
+  ///
+  /// This is an internal function and should not be exposed.
+  /// It requires addition logic to read stdout/stderr or
+  /// the running command can end up suspended.
   ///
   /// The [privileged] argument attempts to escalate the priviledge
   /// that the command is run with.
@@ -202,6 +209,9 @@ class RunnableProcess {
       mode = ProcessStartMode.inheritStdio;
     }
 
+    /// On linux/osx if this needs to be a privileged operation
+    /// and we are not a privileged user, then
+    /// we add 'sudo' in front of the command.
     if (privileged && !Settings().isWindows) {
       if (!Shell.current.isPrivilegedUser) {
         _parsed.args.insert(0, _parsed.cmd);
@@ -266,13 +276,13 @@ class RunnableProcess {
   /// The main use is when using start(terminal:true).
   /// We don't have access to any IO so we just
   /// have to wait for things to finish.
-  int? _waitForExit(Progress progress) {
+  int? _waitForExit(Progress progress, {bool nothrow = false}) {
     final exited = Completer<int>();
     _fProcess.then((process) {
       final exitCode = waitForEx<int>(process.exitCode);
       progress.exitCode = exitCode;
 
-      if (exitCode != 0) {
+      if (exitCode != 0 && nothrow == false) {
         exited.completeError(RunException.withArgs(
             _parsed.cmd,
             _parsed.args,
@@ -327,7 +337,7 @@ class RunnableProcess {
   /// immediately.
   ///
   /// When the process exits it closes the [progress] streams.
-  void processStream(Progress progress, {required bool? nothrow}) {
+  void processStream(Progress progress, {required bool nothrow}) {
     _fProcess.then((process) {
       _wireStreams(process, progress);
 
@@ -362,8 +372,8 @@ class RunnableProcess {
   // If a LineAction exists we call
   // line action each time the process emmits a line.
   /// The [nothrow] argument is EXPERIMENTAL
-  void processUntilExit(Progress? progress, {required bool? nothrow}) {
-    final done = Completer<bool>();
+  void processUntilExit(Progress? progress, {required bool nothrow}) {
+    final exited = Completer<bool>();
 
     final _progress = progress ?? Progress.devNull();
 
@@ -382,7 +392,7 @@ class RunnableProcess {
         /// contain data.
         _waitForStreams();
         if (exitCode != 0 && nothrow == false) {
-          done.completeError(RunException.withArgs(
+          exited.completeError(RunException.withArgs(
               _parsed.cmd,
               _parsed.args,
               exitCode,
@@ -391,7 +401,7 @@ class RunnableProcess {
               '${red('[${_parsed.cmd}] with args [${_parsed.args.join(', ')}]')}'
               ' failed with exitCode: $exitCode'));
         } else {
-          done.complete(true);
+          exited.complete(true);
         }
       });
     })
@@ -405,7 +415,7 @@ class RunnableProcess {
 
     try {
       // wait for the process to finish.
-      waitForEx<bool>(done.future);
+      waitForEx<bool>(exited.future);
     }
     // ignore: avoid_catches_without_on_clauses
     catch (e) {
