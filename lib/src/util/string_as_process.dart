@@ -115,6 +115,9 @@ extension StringAsProcess on String {
 
   /// Runs the contents of this String as a command line application.
   ///
+  /// Any output from the command (stderr and stdout) is displayed
+  ///  on the console.
+  ///
   /// DCli performs Glob expansion on command arguments. See [run] for details.
   ///
   /// Use [runInShell] if the command needs to be run inside
