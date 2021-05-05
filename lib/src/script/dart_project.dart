@@ -15,13 +15,17 @@ class DartProject {
   /// We search up the tree starting from [pathToSearchFrom]
   /// until we find a pubspec.yaml and that becomes the
   /// project root. directory.
-  DartProject.fromPath(String pathToSearchFrom, {bool search = false}) {
+  /// Set [search] to false if you don't want to search up the
+  /// directory tree for a pubspec.yaml.
+  DartProject.fromPath(String pathToSearchFrom, {bool search = true}) {
+    print("DartProject.fromPath: $pathToSearchFrom");
     if (search) {
       _pathToProjectRoot = _findProjectRoot(pathToSearchFrom);
     } else {
       _pathToProjectRoot = pathToSearchFrom;
     }
     _pathToProjectRoot = truepath(_pathToProjectRoot);
+    Settings().verbose('DartProject.fromPath: $_pathToProjectRoot');
   }
   late String _pathToProjectRoot;
   String? _pathToPubSpec;
@@ -100,10 +104,13 @@ class DartProject {
     var current = truepath(pathToSearchFrom);
 
     final root = rootPrefix(current);
+    print('findProjectroot $pathToSearchFrom');
 
     // traverse up the directory to find if we are in a traditional directory.
     while (current != root) {
+      print('checking $current');
       if (exists(join(current, 'pubspec.yaml'))) {
+        print('returning $current');
         return current;
       }
       current = dirname(current);

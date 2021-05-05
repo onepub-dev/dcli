@@ -60,7 +60,7 @@ class CreateCommand extends Command {
       /// always create a pubspec.yaml
       /// or do we search for a parent pubspec.yaml.
       /// For now we have decided to always create one.
-      project = DartProject.fromPath(dirname(pathToScript));
+      project = DartProject.fromPath(dirname(pathToScript), search: false);
       _script = project.createScript(pathToScript);
 
       break;
