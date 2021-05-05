@@ -112,9 +112,15 @@ class Terminal {
 
   /// The width of the terminal in columns.
   /// Where a column is one character wide.
-  /// If no terminal is attached to stdout, a [StdoutException] is thrown.
+  /// If no terminal is attached to a value of 80 is returned.
   /// This value can change if the users resizes the console window.
-  int get columns => stdout.terminalColumns;
+  int get columns {
+    try {
+      return stdout.terminalColumns;
+    } on StdoutException catch (e) {
+      return 80;
+    }
+  }
 
   /// The height of the terminal in rows.
   /// Where a row is one character high.
