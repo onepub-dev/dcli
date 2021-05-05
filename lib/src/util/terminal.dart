@@ -117,7 +117,7 @@ class Terminal {
   int get columns {
     try {
       return stdout.terminalColumns;
-    } on StdoutException catch (e) {
+    } on StdoutException catch (_) {
       return 80;
     }
   }

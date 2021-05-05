@@ -103,7 +103,7 @@ class CompileCommand extends Command {
 
       print('path: ${script.pathToScript}');
       final project =
-          DartProject.fromPath(script.pathToScriptDirectory, search: true);
+          DartProject.fromPath(script.pathToScriptDirectory);
 
       if (buildRequired) {
         project.warmup();

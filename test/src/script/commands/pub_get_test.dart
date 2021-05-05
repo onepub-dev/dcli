@@ -12,7 +12,7 @@ void main() {
       TestFileSystem().withinZone((fs) {
         final scriptPath =
             join(fs.testScriptPath, 'general/bin/hello_world.dart');
-        final project = DartProject.fromPath(dirname(scriptPath), search: true);
+        final project = DartProject.fromPath(dirname(scriptPath));
         PubGet(project).run();
       });
     });

@@ -42,7 +42,7 @@ class CleanCommand extends Command {
       throw InvalidArguments('The project path must be a directory.');
     }
 
-    final project = DartProject.fromPath(targetPath, search: true);
+    final project = DartProject.fromPath(targetPath);
 
     print('');
     print(orange('Cleaning ${project.pathToProjectRoot} ...'));

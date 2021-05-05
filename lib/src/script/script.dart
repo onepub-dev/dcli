@@ -182,7 +182,7 @@ class Script {
 
   /// the project for this scrtipt.
   DartProject get project =>
-      _project ??= DartProject.fromPath(pathToScriptDirectory, search: true);
+      _project ??= DartProject.fromPath(pathToScriptDirectory);
 
   /// used by the 'doctor' command to prints the details for this project.
   void get doctor {
