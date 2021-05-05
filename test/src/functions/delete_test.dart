@@ -27,8 +27,7 @@ void main() {
         touch(testFile, create: true);
         delete(testFile);
 
-        t.expect(() => delete(testFile),
-            t.throwsA(isA<DeleteException>()));
+        t.expect(() => delete(testFile), t.throwsA(isA<DeleteException>()));
       });
     });
   });

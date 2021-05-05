@@ -60,8 +60,8 @@ void main() {
     t.test('createDir createPath failure', () {
       TestFileSystem().withinZone((fs) {
         final testPath = join(fs.fsRoot, 'tmp_test/longer/and/longer');
-        t.expect(() => createDir(testPath),
-            t.throwsA(isA<CreateDirException>()));
+        t.expect(
+            () => createDir(testPath), t.throwsA(isA<CreateDirException>()));
       });
     });
 

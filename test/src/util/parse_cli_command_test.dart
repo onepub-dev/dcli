@@ -15,8 +15,8 @@ void main() {
     test('empty string', () {
       const test = '';
 
-      expect(() => ParsedCliCommand(test, pwd),
-          throwsA(isA<InvalidArguments>()));
+      expect(
+          () => ParsedCliCommand(test, pwd), throwsA(isA<InvalidArguments>()));
     });
     test('a', () {
       const test = 'a';

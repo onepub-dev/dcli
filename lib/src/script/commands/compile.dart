@@ -102,8 +102,7 @@ class CompileCommand extends Command {
           !flagSet.isSet(NoWarmupFlag()) || !script.isReadyToRun;
 
       print('path: ${script.pathToScript}');
-      final project =
-          DartProject.fromPath(script.pathToScriptDirectory);
+      final project = DartProject.fromPath(script.pathToScriptDirectory);
 
       if (buildRequired) {
         project.warmup();
