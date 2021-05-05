@@ -1,3 +1,23 @@
+# 1.1.0
+
+Breaking Change: 
+Change the 'search' argument on DartProject.fromPath to default to true rather than false.  
+  On looking at the documentation and the common usages the search logic is assumed to be on.
+  This should only affect a small no. of people as you would only want search off if you are creating a dart project from scratch.
+
+
+
+New:
+simple backup and restore methods backupFile and restoreFile.
+getters in DartProject for the common paths in a dart project folder.
+Added columns and lines methods to Terminal
+Unit tests for copy function. 
+
+Changes:
+Improved the exception  messages for the copy function when things go bad as the OS errors are ambiguous.
+Documentation improvements.
+
+
 # 1.0.9
 Fixed a bug in the createTempDir method and added unit test for same.
 
