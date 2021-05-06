@@ -13,19 +13,19 @@ class ScriptRunner {
   final List<String> _scriptArguments;
 
   /// The script this runner exists for.
-  final Script script;
+  final DartScript script;
 
   /// Run the script
   int run() {
     // Prepare VM arguments
     final vmArgs = <String>[
       '--enable-asserts',
-      script.pathToScript,
+      script.pathToDartLibrary,
       ..._scriptArguments
     ];
 
     Settings().verbose('Executing: ${DartSdk().pathToDartExe} $vmArgs, '
-        '${script.pathToScript}');
+        '${script.pathToDartLibrary}');
 
     // Execute the script
     final process = waitFor<Process>(Process.start(

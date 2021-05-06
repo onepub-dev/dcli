@@ -11,7 +11,7 @@ void main() {
   t.group('Find', () {
     t.test('manualRecursion', () async {
       final testScriptPath =
-          join(Script.current.pathToProjectRoot, 'test', 'test_script');
+          join(DartScript.current.pathToProjectRoot, 'test', 'test_script');
       final foundDirs = find('*',
               workingDirectory: testScriptPath,
               recursive: false,

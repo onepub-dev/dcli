@@ -97,7 +97,7 @@ class DartSdk {
   /// [script] is the path to the dcli script we are compiling.
   /// [pathToExe] is the path (including the filename) to write the
   ///  compiled ex to .
-  void runDartCompiler(Script script,
+  void runDartCompiler(DartScript script,
       {required String pathToExe, Progress? progress}) {
     final runArgs = <String>[];
 
@@ -107,10 +107,10 @@ class DartSdk {
       runArgs
         ..add('compile')
         ..add('exe')
-        ..add(script.pathToScript)
+        ..add(script.pathToDartLibrary)
         ..add('--output=$pathToExe');
       process = RunnableProcess.fromCommandArgs(dartExeName, runArgs,
-          workingDirectory: script.pathToScriptDirectory);
+          workingDirectory: script.pathToDartLibraryDirectory);
     } else {
       if (pathToDartToNativeExe == null) {
         throw DCliException('Unable to compile as the dart2native executable '
@@ -118,10 +118,10 @@ class DartSdk {
       }
 
       /// use old dart2native
-      runArgs..add(script.pathToScript)..add('--output=$pathToExe');
+      runArgs..add(script.pathToDartLibrary)..add('--output=$pathToExe');
 
       process = RunnableProcess.fromCommandArgs(pathToDartToNativeExe!, runArgs,
-          workingDirectory: script.pathToScriptDirectory);
+          workingDirectory: script.pathToDartLibraryDirectory);
     }
 
     process

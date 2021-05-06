@@ -18,7 +18,7 @@ void main(List<String> args) {
   if (!runOnly) {
     // mount the local dcli files from ..
     print(green('About to build docker'));
-    final root = Script.current.pathToProjectRoot;
+    final root = DartScript.current.pathToProjectRoot;
     'sudo docker build -f tool/docker/test/all.local.df -t dcli:all_local_test .'
         .start(workingDirectory: root);
   }

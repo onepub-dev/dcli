@@ -28,7 +28,7 @@ void main() {
       int? exit = -1;
       try {
         exit =
-            Script.fromFile(join(fs.testScriptPath, 'general/bin/which.dart'))
+            DartScript.fromFile(join(fs.testScriptPath, 'general/bin/which.dart'))
                 .run(['ls']);
       } on DCliException catch (e) {
         print(e);
@@ -43,7 +43,7 @@ void main() {
       try {
         print(pwd);
 
-        exit = Script.fromFile(
+        exit = DartScript.fromFile(
                 join(fs.testScriptPath, 'general/bin/hello_world.dart'))
             .run([]);
       } on DCliException catch (e) {
@@ -59,7 +59,7 @@ void main() {
       try {
         print(pwd);
 
-        exit = Script.fromFile(join(fs.testScriptPath,
+        exit = DartScript.fromFile(join(fs.testScriptPath,
                 'traditional_project/bin/nested/traditional.dart'))
             .run([]);
       } on DCliException catch (e) {
@@ -74,7 +74,7 @@ void main() {
       int? exit = -1;
       try {
         print(pwd);
-        exit = Script.fromFile(join(fs.testScriptPath,
+        exit = DartScript.fromFile(join(fs.testScriptPath,
                 'traditional_project/example/traditional.dart'))
             .run([]);
       } on DCliException catch (e) {
@@ -95,7 +95,7 @@ void main() {
       try {
         print(pwd);
 
-        exit = Script.fromFile(join(
+        exit = DartScript.fromFile(join(
                 fs.testScriptPath, 'traditional_project/tool/traditional.dart'))
             .run([]);
       } on DCliException catch (e) {

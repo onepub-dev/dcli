@@ -16,10 +16,10 @@ void main(List<String> args) {
   newVersion = args[0];
 
   print(green('Running build_templates with version: $newVersion'));
-  final templatePath = join(
-      Script.current.pathToProjectRoot, 'lib', 'src', 'assets', 'templates');
+  final templatePath = join(DartScript.current.pathToProjectRoot, 'lib', 'src',
+      'assets', 'templates');
 
-  final expanderPath = join(Script.current.pathToProjectRoot, 'lib', 'src',
+  final expanderPath = join(DartScript.current.pathToProjectRoot, 'lib', 'src',
       'templates', 'expander.dart');
 
   final content = packAssets(templatePath);
@@ -109,7 +109,7 @@ List<String> preprocess(String file, List<String> lines) {
 
   /// update the dcli version to match the version we are releasing.
   if (basename(file) == 'pubspec.yaml.template') {
-    final pubspec = PubSpec.fromScript(Script.current);
+    final pubspec = PubSpec.fromScript(DartScript.current);
 
     String? section;
     for (final line in lines) {

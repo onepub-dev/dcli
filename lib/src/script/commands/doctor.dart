@@ -6,9 +6,9 @@ import '../../util/format.dart';
 import '../../util/pub_cache.dart';
 import '../../util/truepath.dart';
 import '../command_line_runner.dart';
+import '../dart_library.dart';
 import '../dart_sdk.dart';
 import '../flags.dart';
-import '../script.dart';
 import 'commands.dart';
 
 /// implementst the 'doctor' command
@@ -21,12 +21,12 @@ class DoctorCommand extends Command {
   int run(List<Flag> selectedFlags, List<String> subarguments) {
     var showScriptDetails = false;
 
-    late Script script;
+    late DartScript script;
     if (subarguments.length == 1) {
       showScriptDetails = true;
       final scriptPath = subarguments[0];
-      Script.validate(scriptPath);
-      script = Script.fromFile(scriptPath);
+      DartScript.validate(scriptPath);
+      script = DartScript.fromFile(scriptPath);
     }
     if (subarguments.length > 1) {
       throw InvalidArguments(

@@ -30,7 +30,7 @@ void main() {
 
     test('Run hello world', () {
       TestFileSystem().withinZone((fs) {
-        Script.fromFile(pathToScript).run([]);
+        DartScript.fromFile(pathToScript).run([]);
       });
     });
 

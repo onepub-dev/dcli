@@ -13,35 +13,35 @@ import 'runner.dart';
 
 /// Used to manage a DCli script.
 ///
-/// This class is primarily for internal use.
-///
-/// We expose [Script] as it permits some self discovery
-/// of the script you are currently running.
+/// We expose [DartScript] as it permits some self discovery
+/// of the dart library you are currently running.
 ///
 ///
-class Script {
-  /// Creates a script object from a scriptArg
-  /// passed to a command.
+class DartScript {
+  /// Creates a [DartScript] object from a dart library
+  /// located at [scriptPathTo]. 
   ///
   /// The [scriptPathTo] may be a filename or
-  /// a filename with a path prefix (relative or absolute)
-  /// If the path is realtive then it will be joined
+  /// a filename with a path prefix (relative or absolute).
+  /// The [scriptPathTo] parameter MUST end with '.dart'
+  /// 
+  /// If the path is relative then it will be joined
   /// with the current working directory to form
   /// a absolute path.
   ///
-  /// To obtain a [Script] instance for your running application call:
+  /// To obtain a [DartScript] instance for your running application call:
   ///
   /// ```dart
-  /// var script = Script.current;
+  /// var script = DartScript.current;
   /// ```
   ///
-  Script.fromFile(String scriptPathTo, {DartProject? project})
+  DartScript.fromFile(String scriptPathTo, {DartProject? project})
       : this._internal(scriptPathTo, create: false, project: project);
 
-  Script._internal(String pathToScript,
+  DartScript._internal(String pathToScript,
       {required bool create, DartProject? project})
       : _pathToScript = truepath(pathToScript),
-        _scriptname = p.basename(truepath(pathToScript)),
+        _scriptName = p.basename(truepath(pathToScript)),
         _scriptDirectory = dirname(truepath(pathToScript)),
         _project = project {
     {
@@ -51,36 +51,36 @@ class Script {
     }
   }
 
-  /// The directory where the script file lives
+  /// The directory where the dart library file lives
   /// stored as an absolute path.
   final String _scriptDirectory;
 
-  /// Name of the dart script
-  final String _scriptname;
+  /// Name of the dart library
+  final String _scriptName;
 
-  /// Path to the script loaded.
+  /// Path to the dart library loaded.
   String _pathToScript;
 
-  /// path to the this script.
-  String get pathToScript => _pathToScript;
+  /// path to the this dart library.
+  String get pathToDartLibrary => _pathToScript;
 
   /// The filename of the script including the extension.
   /// If you are running in a compiled script then
-  /// [scriptname] won't have a '.dart' extension.
+  /// [scriptName] won't have a '.dart' extension.
   /// In a compiled script the extension generally depends on the OS but
   /// it could in theory be anything (except for .dart).
   /// Common extensions are .exe for windows and no extension for Linux and OSx.
-  String get scriptname => _scriptname;
+  String get scriptName => _scriptName;
 
   /// the absolute path to the directory the script lives in
-  String get pathToScriptDirectory => _scriptDirectory;
+  String get pathToDartLibraryDirectory => _scriptDirectory;
 
   /// the name of the script without its extension.
   /// this is used for the 'name' key in the pubspec.
-  String get pubsecNameKey => p.basenameWithoutExtension(scriptname);
+  String get pubsecNameKey => p.basenameWithoutExtension(scriptName);
 
   /// The scriptname without its '.dart' extension.
-  String get basename => p.basenameWithoutExtension(scriptname);
+  String get basename => p.basenameWithoutExtension(scriptName);
 
   /// Returns the path to a scripts pubspec.yaml.
   /// The pubspec.yaml is located in the project's root directory.
@@ -104,13 +104,13 @@ class Script {
   bool get isPubGlobalActivated => _pathToScript.startsWith(PubCache().pathTo);
 
   /// The current script that is running.
-  static Script? _current;
+  static DartScript? _current;
 
   /// Returns the instance of the currently running script.
   ///
   // ignore: prefer_constructors_over_static_methods
-  static Script get current =>
-      _current ??= Script.fromFile(_pathToCurrentScript);
+  static DartScript get current =>
+      _current ??= DartScript.fromFile(_pathToCurrentScript);
 
   /// Path to the currently runnng script
   static String? __pathToCurrentScript;
@@ -182,15 +182,15 @@ class Script {
 
   /// the project for this scrtipt.
   DartProject get project =>
-      _project ??= DartProject.fromPath(pathToScriptDirectory);
+      _project ??= DartProject.fromPath(pathToDartLibraryDirectory);
 
   /// used by the 'doctor' command to prints the details for this project.
   void get doctor {
     print('');
     print('');
-    print('Script Details');
-    _colprint('Name', scriptname);
-    _colprint('Directory', privatePath(pathToScriptDirectory));
+    print('Dart Script Details');
+    _colprint('Name', scriptName);
+    _colprint('Directory', privatePath(pathToDartLibraryDirectory));
   }
 
   void _colprint(String label, String value, {int pad = 25}) {
@@ -251,7 +251,7 @@ class Script {
 
   /// Returns the path to the executable if it was to be compiled into
   /// its local directory (the default action of compile).
-  String get pathToExe => join(pathToScriptDirectory, exeName);
+  String get pathToExe => join(pathToDartLibraryDirectory, exeName);
 
   /// Returns the path that the script would be installed to if
   /// compiled with install = true.

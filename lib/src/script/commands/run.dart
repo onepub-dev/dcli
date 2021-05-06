@@ -3,10 +3,9 @@ import 'dart:io';
 import '../../../dcli.dart';
 import '../../settings.dart';
 import '../../util/completion.dart';
-
 import '../command_line_runner.dart';
+import '../dart_library.dart';
 import '../flags.dart';
-import '../script.dart';
 import 'commands.dart';
 
 /// Runs a dart script.
@@ -29,9 +28,9 @@ class RunCommand extends Command {
           'Expected a script or command. No arguments were found.');
     }
     final scriptPath = arguments[0];
-    Script.validate(scriptPath);
+    DartScript.validate(scriptPath);
 
-    final script = Script.fromFile(scriptPath);
+    final script = DartScript.fromFile(scriptPath);
 
     if (Shell.current.isSudo) {
       /// we are running sudo, so we can't init a script
@@ -44,7 +43,7 @@ class RunCommand extends Command {
       }
     }
 
-    Settings().verbose('Running script ${script.pathToScript}');
+    Settings().verbose('Running script ${script.pathToDartLibrary}');
 
     if (!script.isReadyToRun) {
       if (Shell.current.isSudo) {

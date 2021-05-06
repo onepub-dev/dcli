@@ -6,9 +6,9 @@ import '../../util/ansi_color.dart';
 import '../../util/completion.dart';
 import '../../util/runnable_process.dart';
 import '../command_line_runner.dart';
+import '../dart_library.dart';
 import '../dart_project.dart';
 import '../flags.dart';
-import '../script.dart';
 import 'commands.dart';
 
 /// implementation for the compile command.
@@ -78,8 +78,8 @@ class CompileCommand extends Command {
     print(orange('Compiling $scriptPath...'));
     print('');
 
-    Script.validate(scriptPath);
-    final script = Script.fromFile(scriptPath);
+    DartScript.validate(scriptPath);
+    final script = DartScript.fromFile(scriptPath);
 
     final preparationAllowed = !Shell.current.isSudo;
 
@@ -101,8 +101,8 @@ class CompileCommand extends Command {
       final buildRequired =
           !flagSet.isSet(NoWarmupFlag()) || !script.isReadyToRun;
 
-      print('path: ${script.pathToScript}');
-      final project = DartProject.fromPath(script.pathToScriptDirectory);
+      print('path: ${script.pathToDartLibrary}');
+      final project = DartProject.fromPath(script.pathToDartLibraryDirectory);
 
       if (buildRequired) {
         project.warmup();

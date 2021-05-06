@@ -5,7 +5,7 @@ import 'package:pub_semver/pub_semver.dart';
 import 'package:pubspec/pubspec.dart' as pub;
 
 import '../../dcli.dart';
-import '../script/script.dart';
+import '../script/dart_library.dart';
 import '../util/wait_for_ex.dart';
 import 'dependency.dart';
 
@@ -16,7 +16,7 @@ class PubSpec {
   PubSpec._internal();
 
   /// Reads a pubspec.yaml from the path that  [script] is located in.
-  PubSpec.fromScript(Script script) {
+  PubSpec.fromScript(DartScript script) {
     _fromFile(script.pathToPubSpec);
   }
 

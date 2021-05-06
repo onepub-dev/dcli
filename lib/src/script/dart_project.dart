@@ -42,10 +42,10 @@ class DartProject {
   /// as there is no 'project root' for a compiled script.
   // ignore: prefer_constructors_over_static_methods
   static DartProject get current {
-    final script = Script.current;
+    final script = DartScript.current;
     var startFrom = '.';
     if (!script.isCompiled) {
-      startFrom = script.pathToScript;
+      startFrom = script.pathToDartLibrary;
     }
     return _current ??= DartProject.fromPath(startFrom);
   }
@@ -176,7 +176,7 @@ class DartProject {
       find('pubspec.lock', workingDirectory: pathToProjectRoot).forEach(delete);
 
       find('*.dart', workingDirectory: pathToProjectRoot).forEach((scriptPath) {
-        final script = Script.fromFile(scriptPath);
+        final script = DartScript.fromFile(scriptPath);
         if (exists(script.pathToExe)) {
           delete(script.pathToExe);
         }
@@ -195,7 +195,8 @@ class DartProject {
   ///
   void compile({bool install = false, bool overwrite = false}) {
     find('*.dart', workingDirectory: pathToProjectRoot).forEach((file) =>
-        Script.fromFile(file).compile(install: install, overwrite: overwrite));
+        DartScript.fromFile(file)
+            .compile(install: install, overwrite: overwrite));
   }
 
   /// Causes a pub get to be run against the project.
@@ -317,7 +318,8 @@ class DartProject {
   ///
   /// The [templateName] must be the name of a template file in the ~/.dcli/template directory.
   ///
-  Script createScript(String scriptName, {String templateName = 'basic.dart'}) {
+  DartScript createScript(String scriptName,
+      {String templateName = 'basic.dart'}) {
     if (!scriptName.endsWith('.dart')) {
       throw DartProjectException('scriptName must end with .dart');
     }
@@ -326,7 +328,7 @@ class DartProject {
       pathToScript: join(pathToProjectRoot, scriptName),
     );
 
-    return Script.fromFile(scriptName, project: this);
+    return DartScript.fromFile(scriptName, project: this);
   }
 
   /// The name used in the pubspec.yaml must come from the character

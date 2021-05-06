@@ -21,7 +21,7 @@ void compile(String pathToScript) {
       if (exists(exe)) {
         delete(exe);
       }
-      Script.fromFile(script).compile();
+      DartScript.fromFile(script).compile();
     } on DCliException catch (e) {
       print(e);
     }

@@ -66,7 +66,7 @@ class BuildCommand extends Command<void> {
 
   @override
   void run() {
-    final pubspec = PubSpec.fromScript(Script.current);
+    final pubspec = PubSpec.fromScript(DartScript.current);
     final version = pubspec.version.toString();
     // if (!argResults.wasParsed('version')) {
     //   printerr(red('You must pass a --version.'));
@@ -99,7 +99,7 @@ class PushCommand extends Command<void> {
     // }
     // var version = argResults['version'] as String;
 
-    final pubspec = PubSpec.fromScript(Script.current);
+    final pubspec = PubSpec.fromScript(DartScript.current);
     final version = pubspec.version.toString();
     print('Pushing version: $version');
     'sudo docker push bsuttonnoojee/dcli_cli:$version'.run;

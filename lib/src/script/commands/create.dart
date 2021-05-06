@@ -3,9 +3,9 @@ import 'package:path/path.dart' as p;
 import '../../../dcli.dart';
 import '../../functions/is.dart';
 import '../command_line_runner.dart';
+import '../dart_library.dart';
 import '../dart_project.dart';
 import '../flags.dart';
-import '../script.dart';
 import 'commands.dart';
 
 /// implementation of the 'create' command
@@ -19,7 +19,7 @@ class CreateCommand extends Command {
   /// holds the set of flags passed to the compile command.
   Flags flagSet = Flags();
 
-  late Script _script;
+  late DartScript _script;
 
   @override
   int run(List<Flag> selectedFlags, List<String> subarguments) {
@@ -69,12 +69,13 @@ class CreateCommand extends Command {
     project.warmup(background: !flagSet.isSet(ForegroundFlag()));
 
     if (!Settings().isWindows) {
-      chmod(755, p.join(_script.pathToScriptDirectory, _script.scriptname));
+      chmod(
+          755, p.join(_script.pathToDartLibraryDirectory, _script.scriptName));
     }
 
     print('');
 
-    print('To run your script:\n   ./${_script.scriptname}');
+    print('To run your script:\n   ./${_script.scriptName}');
 
     return 0;
   }

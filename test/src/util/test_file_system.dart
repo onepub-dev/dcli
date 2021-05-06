@@ -212,7 +212,7 @@ class TestFileSystem {
   }
 
   String runtimePath(String scriptName) {
-    final script = Script.fromFile(scriptName);
+    final script = DartScript.fromFile(scriptName);
     return script.pathToProjectRoot;
   }
 
@@ -343,7 +343,7 @@ class TestFileSystem {
       createDir(testScriptPath, recursive: true);
     }
 
-    copyTree(join(Script.current.pathToProjectRoot, 'test', 'test_script'),
+    copyTree(join(DartScript.current.pathToProjectRoot, 'test', 'test_script'),
         testScriptPath);
 
     _patchRelativeDependenciesAndWarmup(testScriptPath);
@@ -403,7 +403,7 @@ class TestFileSystem {
             join(Settings().pathToDCliBin, command));
       } else {
         /// compile and install the command
-        Script.fromFile('test/test_script/general/bin/$command.dart')
+        DartScript.fromFile('test/test_script/general/bin/$command.dart')
             .compile(install: true);
 
         // copy it back to the dcli testbin so the next unit

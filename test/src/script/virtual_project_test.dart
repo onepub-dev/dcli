@@ -17,7 +17,7 @@ void main() {
 
         'dcli create $scriptPath'.run;
 
-        Script.fromFile(scriptPath).doctor;
+        DartScript.fromFile(scriptPath).doctor;
       });
     });
 
@@ -31,7 +31,7 @@ void main() {
 
         'dcli create $scriptPath'.run;
 
-        Script.fromFile(scriptPath).doctor;
+        DartScript.fromFile(scriptPath).doctor;
       });
     });
 
@@ -52,7 +52,7 @@ void main() {
         move(scriptPath, binDir);
         scriptPath = join(binDir, scriptName);
 
-        Script.fromFile(scriptPath).doctor;
+        DartScript.fromFile(scriptPath).doctor;
       });
     });
 
@@ -79,7 +79,7 @@ void main(){
 ''';
         scriptPath.write(scriptContent);
 
-        Script.fromFile(scriptPath).doctor;
+        DartScript.fromFile(scriptPath).doctor;
       });
     });
   });
