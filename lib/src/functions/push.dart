@@ -53,10 +53,10 @@ class _Push extends DCliFunction {
   }
 }
 
-// ignore:deprecated_member_use
+// ignore: deprecated_member_use_from_same_package
 /// Thrown when the [push] function encouters an error.
 class PushException extends DCliFunctionException {
-  // ignore:deprecated_member_use
+  // ignore: deprecated_member_use_from_same_package
   /// Thrown when the [push] function encouters an error.
   PushException(String reason) : super(reason);
 }

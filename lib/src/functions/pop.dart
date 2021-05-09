@@ -70,10 +70,10 @@ class _Pop extends DCliFunction {
   }
 }
 
-// ignore:deprecated_member_use
+// ignore: deprecated_member_use_from_same_package
 /// Thrown when the [pop] function encouters an error.
 class PopException extends FunctionException {
-  // ignore:deprecated_member_use
+  // ignore: deprecated_member_use_from_same_package
   /// Thrown when the [pop] function encouters an error.
   PopException(String reason) : super(reason);
 }
