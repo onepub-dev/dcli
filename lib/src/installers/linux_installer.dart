@@ -81,15 +81,17 @@ class LinuxDCliInstaller {
   }
 
   void _installDartWithApt() {
-    'apt update'.run;
-    'apt install apt-transport-https'.run;
+    Shell.current.withPrivileges(() {
+      'apt update'.run;
+      'apt install apt-transport-https'.run;
 
-    "sh -c 'wget -qO- https://dl-ssl.google.com/linux/linux_signing_key.pub | apt-key add -'"
-        .run;
+      "sh -c 'wget -qO- https://dl-ssl.google.com/linux/linux_signing_key.pub | apt-key add -'"
+          .run;
 
-    "sh -c 'wget -qO- https://storage.googleapis.com/download.dartlang.org/linux/debian/dart_stable.list > /etc/apt/sources.list.d/dart_stable.list'"
-        .run;
-    'apt update'.run;
-    'apt install dart'.run;
+      "sh -c 'wget -qO- https://storage.googleapis.com/download.dartlang.org/linux/debian/dart_stable.list > /etc/apt/sources.list.d/dart_stable.list'"
+          .run;
+      'apt update'.run;
+      'apt install dart'.run;
+    });
   }
 }

@@ -77,11 +77,13 @@ class InstallCommand extends Command {
 
     _requirePrivileges = !flagSet.isSet(const _NoPrivilegesFlag());
 
-    // /// We need to be priviledged to create the dcli symlink
-    // if (requirePrivileges && !shell.isPrivilegedUser) {
-    //   qprint(red(shell.privilegesRequiredMessage('dcli_install')));
-    //   exit(1);
-    // }
+    /// We need to be priviledged to create the dcli symlink
+    if (_requirePrivileges && !shell.isPrivilegedUser) {
+      _qprint(red(shell.privilegesRequiredMessage('dcli_install')));
+      exit(1);
+    }
+
+    shell.releasePrivileges();
 
     _quiet = flagSet.isSet(const _QuietFlag());
     _installDart = !flagSet.isSet(const _NoDartFlag());

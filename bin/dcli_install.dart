@@ -12,8 +12,7 @@ class DCliInstall {
 
     if (!mutableArgs.contains('doctor')) {
       // We add the 'install' so we do the install
-      // by default.
-      // Unless they passed doctor.
+      // by default, unless they passed `doctor`.
       // We do an add so they can still pass global
       // switches such as -v
       mutableArgs.add('install');
