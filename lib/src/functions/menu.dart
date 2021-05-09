@@ -66,6 +66,8 @@ T menu<T>(
         'The list of [options] passed to menu(options: ) was empty.');
   }
   limit ??= options.length;
+  // ignore: parameter_assignments
+  limit = min(options.length, limit);
   format ??= _noFormat;
 
   var displayList = options;

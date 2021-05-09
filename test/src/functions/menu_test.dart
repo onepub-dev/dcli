@@ -29,4 +29,8 @@ void main() {
     }
     print('result: $result1');
   }, skip: true);
+
+  test('One entry', () {
+    menu(prompt: 'only one', options: ['One'], limit: 20);
+  });
 }
