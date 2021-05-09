@@ -44,10 +44,10 @@ class CD extends DCliFunction {
   }
 }
 
-/// ignore: deprecated_member_use_from_same_package
+// ignore: deprecated_member_use
 /// Throw when the [cd] function encounters an error.
 class CDException extends FunctionException {
-  /// ignore: deprecated_member_use_from_same_package
+  // ignore: deprecated_member_use
   /// Throw when the [cd] function encounters an error.
   CDException(String reason) : super(reason);
 }

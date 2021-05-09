@@ -1,3 +1,6 @@
+# 1.1.1
+Fixed a bug in the menu function when the passed 'limit' argument is greater than the no. of options.
+
 # 1.1.0
 
 Breaking Change: 
