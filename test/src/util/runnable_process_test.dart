@@ -1,11 +1,12 @@
 @Timeout(Duration(minutes: 5))
+import 'dart:async';
+
 import 'dart:cli';
 import 'dart:convert';
 import 'dart:io';
 
-import 'package:dcli/dcli.dart' hide sleep;
+import 'package:dcli/dcli.dart' hide sleep, equals;
 import 'package:dcli/src/functions/run.dart';
-import 'package:path/path.dart';
 import 'package:test/test.dart';
 
 import 'test_file_system.dart';
@@ -59,4 +60,23 @@ void main() {
     /// test in current form can't actually test for shutdown.
     /// needs to spawn another process then check the outcome.
   }, skip: true);
+
+  test('Process stderr and stdout', () {
+    // final progress =
+    //     'test/test_script/general/bin/print_to_both_with_error.dart'
+    //         .start(progress: Progress.capture(), nothrow: true);
+
+    final progress = 'pub publish'.start(
+        workingDirectory: '/tmp/test/top',
+        progress: Progress.print(capture: true),
+        nothrow: true);
+
+    // final progress =
+    //     'test/test_script/general/bin/print_to_both_with_error.dart'
+    //         .start(progress: Progress.print(capture: true), nothrow: true);
+    expect(progress.exitCode, equals(65));
+    final lines = progress.lines;
+    expect(lines.join('\n').contains('Hello World - StdOut'), isTrue);
+    expect(lines.join('\n').contains('Hello World - StdErr'), isTrue);
+  });
 }

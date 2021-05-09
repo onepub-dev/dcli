@@ -58,7 +58,10 @@ void main() {
         // that .run works.
         final results = '${DCliPaths().dcliName} $script'.toList(nothrow: true);
 
-        final expected = <String>['Hello World', 'Hello World - Error'];
+        final expected = <String>[
+          'Hello World - StdOut',
+          'Hello World - StdErr'
+        ];
 
         t.expect(results, t.equals(expected));
       });
@@ -78,7 +81,10 @@ void main() {
         // that .run works.
         final results = '${DCliPaths().dcliName} $script'.toList(nothrow: true);
 
-        final expected = <String>['Hello World', 'Hello World - Error'];
+        final expected = <String>[
+          'Hello World - StdOut',
+          'Hello World - StdErr'
+        ];
 
         t.expect(results, t.equals(expected));
       });

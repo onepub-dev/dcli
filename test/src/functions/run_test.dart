@@ -57,7 +57,10 @@ void main() {
         final script = truepath(scriptPath, 'print_to_both.dart');
         final results = runChild(script, fs);
 
-        final expected = <String>['Hello World', 'Hello World - Error'];
+        final expected = <String>[
+          'Hello World - StdOut',
+          'Hello World - StdErr'
+        ];
 
         t.expect(results, t.equals(expected));
       });
@@ -74,7 +77,10 @@ void main() {
 
         final results = runChild(script, fs);
 
-        final expected = <String>['Hello World', 'Hello World - Error'];
+        final expected = <String>[
+          'Hello World - StdOut',
+          'Hello World - StdErr'
+        ];
 
         t.expect(results, t.containsAll(expected));
       });

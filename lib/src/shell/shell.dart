@@ -107,6 +107,8 @@ abstract class Shell {
   ///
   /// Calling this method on Windows is unnecessary but harmless.
   ///
+  /// Calling this method for a non-privileged user has no affect.
+  ///
   /// On Linux and OSX releasing privileges sets the uid and gid
   /// to the user's original
   /// privileges so any files that are created/modified get the original
