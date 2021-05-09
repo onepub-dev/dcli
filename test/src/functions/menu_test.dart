@@ -32,5 +32,5 @@ void main() {
 
   test('One entry', () {
     menu(prompt: 'only one', options: ['One'], limit: 20);
-  });
+  }, skip: true, tags: ['console']);
 }
