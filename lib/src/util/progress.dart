@@ -18,12 +18,10 @@ class Progress {
   /// pre-package [Progress] constructors such as [Progress.print].
   Progress(LineAction stdout,
       {LineAction stderr = devNull,
-      bool includeStdout = true,
-      bool includeStderr = false,
       bool captureStdin = false,
       bool captureStderr = false})
-      : _includeStdout = includeStdout,
-        _includeStderr = includeStderr,
+      : _includeStdout = stdout != devNull,
+        _includeStderr = stderr != devNull,
         _captureStdout = captureStdin,
         _captureStderr = captureStderr {
     _wireStreams(stdout, stderr);
@@ -296,6 +294,18 @@ class Progress {
 
   /// closes the progress.
   void close() {
+    // /// If the stream is never wired
+    // /// then we have never listened to the stream.
+    // /// [devNull] is an example of a Progress that never
+    // /// wires the stream.
+    // /// In which case we won't get a done event so the
+    // /// completers won't complete.
+    // /// So we force them to here.
+    // if (!_wired) {
+    //   _stdoutCompleter.complete(true);
+    //   _stderrCompleter.complete(true);
+    // }
+
     _stderrController.close();
     _stdoutController.close();
     _closed = true;
