@@ -2,12 +2,10 @@ import 'package:dcli/dcli.dart';
 import 'package:test/test.dart';
 
 void main() {
+  /// This test need to be run under sudo
   test('isPrivligedUser', () {
     Shell.current.isPrivilegedUser;
-  });
-
-  /// reduce the scripts privileges
-  privileged(enabled: false);
+  }, tags: ['sudo']);
 
   /// we touch all of the dart files but don't change their ownership.
   // find('*.dart', root: '.').forEach((file) {
@@ -29,9 +27,9 @@ void main() {
 void privileged({required bool enabled}) {
   /// how do I changed from root back to the normal user.
   if (enabled) {
-    print('enabled root priviliges');
+    print('Enabled root priviliges');
   } else {
-    print('disable root priviliges');
+    print('Disabled root priviliges');
   }
 }
 
