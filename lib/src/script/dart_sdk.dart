@@ -159,7 +159,7 @@ class DartSdk {
             "Unable to run 'dart pub' as the dart exe is not on your path");
       }
       startFromArgs(pathToDartExe!, ['pub', ...args],
-          nothrow: true,
+          nothrow: nothrow,
           progress: progress,
           workingDirectory: workingDirectory);
     } else {
@@ -169,7 +169,7 @@ class DartSdk {
       }
 
       startFromArgs(pathToPubExe!, args,
-          nothrow: true,
+          nothrow: nothrow,
           progress: progress,
           workingDirectory: workingDirectory);
     }
