@@ -4,6 +4,7 @@ import 'dart:cli';
 
 import 'dart:io';
 
+import 'package:completer_ex/completer_ex.dart';
 import 'package:dcli/dcli.dart';
 import 'package:dcli/src/util/stack_trace_impl.dart';
 
@@ -87,7 +88,7 @@ T waitForEx<T>(Future<T> future) {
 }
 
 Future<int> throwExceptionV3() {
-  final complete = Completer<int>();
+  final complete = CompleterEx<int>();
   try {
     Future.delayed(const Duration(seconds: 2), () => throw Exception())
         //ignore: avoid_types_on_closure_parameters

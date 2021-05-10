@@ -142,6 +142,9 @@ int? run(String commandLine,
 /// Currently [privileged] is not supported under Windows see withPrivileged as
 /// an alternative.
 ///
+/// If you pass [detached] = true then the process is spawned but we don't wait
+/// for it to complete nor is any io available.
+///
 Progress startFromArgs(
   String command,
   List<String> args, {
@@ -211,6 +214,9 @@ Progress startFromArgs(
 ///
 /// if [runInShell] is set to true (default is false) then command will
 /// be run in a shell (e.g. bash).
+///
+/// If you pass [detached] = true then the process is spawned but we don't wait
+/// for it to complete nor is any io available.
 ///
 Progress start(String commandLine,
     {Progress? progress,
