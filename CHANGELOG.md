@@ -1,3 +1,12 @@
+# 1.1.2
+Now setting _includedStd(out, err) based on whether devNull is used or not. Previously _includeStderr wasn't  being enabled if a LineAction was passed.
+Improvements to detached processing.
+Added sudo tag to test.
+Fixed a bug where nothrow was not being passed down.
+Added doco on detached argument.
+Changed the installer (yet again) to require privileges to be run. We now releasePrivileges to and withPrivileges to provide more precise control over what we execute with privileges.
+renamed Script to DartScript to make way for cli_script class Script.
+
 # 1.1.1
 Fixed a bug in the menu function when the passed 'limit' argument is greater than the no. of options.
 
