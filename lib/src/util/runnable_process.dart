@@ -143,6 +143,8 @@ class RunnableProcess {
   ///
   /// Current [privileged] is only supported under Linux.
   ///
+  /// If you pass [detached] = true then the process is spawned but we
+  /// don't wait for it to complete nor is any io available.
   Progress run({
     required bool terminal,
     Progress? progress,
@@ -159,12 +161,16 @@ class RunnableProcess {
           detached: detached,
           terminal: terminal,
           privileged: privileged);
-      if (detached == false) {
-        if (terminal == true) {
-          _waitForExit(progress, nothrow: nothrow);
-        } else {
+      if (terminal == true) {
+        /// we can't process io as the terminal
+        // has inherited the IO so we dont' see it.
+        _waitForExit(progress, nothrow: nothrow);
+      } else {
+        if (detached == false) {
           processUntilExit(progress, nothrow: nothrow);
         }
+        // else we are detached and won't see the child exit
+        // so no point waiting.
       }
     } finally {
       progress.close();
@@ -191,6 +197,8 @@ class RunnableProcess {
   ///
   /// The [privileged] option is ignored under Windows.
   ///
+  /// If you pass [detached] = true then the process is spawned
+  /// but we don't wait for it to complete nor is any io available.
   void start({
     bool runInShell = false,
     bool detached = false,
@@ -276,7 +284,7 @@ class RunnableProcess {
   /// The main use is when using start(terminal:true).
   /// We don't have access to any IO so we just
   /// have to wait for things to finish.
-  int? _waitForExit(Progress progress, {bool nothrow = false}) {
+  int? _waitForExit(Progress progress, {required bool nothrow}) {
     final exited = Completer<int>();
     _fProcess.then((process) {
       final exitCode = waitForEx<int>(process.exitCode);
