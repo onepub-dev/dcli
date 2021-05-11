@@ -27,9 +27,9 @@ void main() {
     TestFileSystem().withinZone((fs) {
       int? exit = -1;
       try {
-        exit =
-            DartScript.fromFile(join(fs.testScriptPath, 'general/bin/which.dart'))
-                .run(['ls']);
+        exit = DartScript.fromFile(
+                join(fs.testScriptPath, 'general/bin/which.dart'))
+            .run(['ls']);
       } on DCliException catch (e) {
         print(e);
       }

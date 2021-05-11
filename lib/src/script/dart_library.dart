@@ -19,12 +19,12 @@ import 'runner.dart';
 ///
 class DartScript {
   /// Creates a [DartScript] object from a dart library
-  /// located at [scriptPathTo]. 
+  /// located at [scriptPathTo].
   ///
   /// The [scriptPathTo] may be a filename or
   /// a filename with a path prefix (relative or absolute).
   /// The [scriptPathTo] parameter MUST end with '.dart'
-  /// 
+  ///
   /// If the path is relative then it will be joined
   /// with the current working directory to form
   /// a absolute path.
