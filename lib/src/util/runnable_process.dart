@@ -124,7 +124,9 @@ class RunnableProcess {
 
   /// runs the process.
   ///
-  /// By default all output to stdout/stderr is suppressed.
+  /// Any output from the command (stderr and stdout) is displayed
+  ///  on the console.
+  ///
   /// Pass an appropriate [progress] if you want to print either of these.
   ///
   /// The [privileged] argument attempts to escalate the priviledge
@@ -153,7 +155,7 @@ class RunnableProcess {
     bool privileged = false,
     bool nothrow = false,
   }) {
-    progress ??= Progress.devNull();
+    progress ??= Progress.print();
 
     try {
       start(
