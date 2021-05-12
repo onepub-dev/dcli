@@ -92,7 +92,7 @@ int? run(String commandLine,
 
   return runnable
       .run(
-        progress: Progress(print, stderr: printerr),
+        progress: Progress.print(),
         runInShell: runInShell,
         terminal: false,
         privileged: privileged,
@@ -156,7 +156,7 @@ Progress startFromArgs(
   bool nothrow = false,
   String? workingDirectory,
 }) {
-  progress ??= Progress.devNull();
+  progress ??= Progress.print();
   workingDirectory ??= pwd;
   final runnable = RunnableProcess.fromCommandArgs(command, args,
       workingDirectory: workingDirectory);
