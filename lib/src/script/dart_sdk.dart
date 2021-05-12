@@ -140,8 +140,31 @@ class DartSdk {
     }
   }
 
-  /// runs the 'dart pub' command with the given arguments.
-  /// By default output is sent to stdout.
+  /// Run the dart exe with arguments.
+  Progress run(
+      {required List<String> args,
+      String? workingDirectory,
+      Progress? progress,
+      bool nothrow = false}) {
+    progress ??= Progress.print();
+
+    if (pathToDartExe == null) {
+      throw DCliException(
+          "Unable to run 'dart' as the dart exe is not on your path");
+    }
+    startFromArgs(pathToDartExe!, args,
+        nothrow: nothrow,
+        progress: progress,
+        workingDirectory: workingDirectory);
+    Settings().verbose('dart ${args.toList().join(' ')} finished.');
+
+    return progress;
+  }
+
+  /// Runs the 'dart pub' command with the given arguments.
+  ///
+  /// By default stdout and stderr are sent to the console.
+  ///
   /// Pass in [progress] to control the output.
   /// If [nothrow] == true (defaults to false) then if the
   /// call to pub get fails an exit code will be returned in the
@@ -151,7 +174,7 @@ class DartSdk {
       String? workingDirectory,
       Progress? progress,
       bool nothrow = false}) {
-    progress ??= Progress.devNull();
+    progress ??= Progress.print();
 
     if (useDartCommand) {
       if (pathToDartExe == null) {
