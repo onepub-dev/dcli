@@ -25,7 +25,8 @@ class DCliZone {
       }
     };
 
-    await runZonedGuarded(body, (e, st) {},
+    /// TODO: we need to some how await this.
+    runZonedGuarded(body, (e, st) {},
         zoneValues: zoneValues,
         zoneSpecification: ZoneSpecification(
             print: (self, parent, zone, line) => progress!.addToStdout(line)));
