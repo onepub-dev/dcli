@@ -44,9 +44,6 @@ class Ansi {
   /// This method is useful when logging messages
   /// or if you need to calculate the number of printable
   /// characters in a message.
-  static String strip(String line) {
-    line.replaceAll('\x1b\\[[0-9;]*[a-zA-Z]', '');
-
-    return line;
-  }
+  static String strip(String line) =>
+      line.replaceAll(RegExp('\x1b\\[[0-9;]+m'), '');
 }
