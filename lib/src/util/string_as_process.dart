@@ -132,10 +132,14 @@ extension StringAsProcess on String {
   /// exits. The detached process is also detached from the console
   /// and as such no output from the process will be visible.
   ///
-  /// Use [terminal] when you need the process attached to a terminal.
+  /// Use [terminal] = true when you need the process attached to a terminal.
   /// When attached to a terminal you will not be able to process
   /// any of the output from the child process.
   /// (e.g. forEach won't work.)
+  /// You need to set [terminal]=true if you want the called application
+  /// to be able to interact with the user (ask for input) or if you
+  /// want the application to be able to output ansi codes such
+  /// as colours and cursor movement or detect the window size.
   ///
   /// You can NOT use [terminal] and [detached] at the same time.
   ///
@@ -171,8 +175,7 @@ extension StringAsProcess on String {
   ///  or stderr.
   ///      [lastLine] - returns just the last line written to stdout or stderr.
   ///      [parser] - returns a parser with the captured output ready
-  /// to be interpreted
-  ///                as one of several file types.
+  /// to be interpreted as one of several file types.
   Progress start({
     Progress? progress,
     bool runInShell = false,

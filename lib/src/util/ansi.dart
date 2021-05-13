@@ -38,4 +38,15 @@ class Ansi {
   /// ANSI Control Sequence Introducer, signals the terminal for new settings.
   static const esc = '\x1b[';
   // static const esc = '\u001b[';
+
+  /// Strip all ansi escape sequences from [line].
+  ///
+  /// This method is useful when logging messages
+  /// or if you need to calculate the number of printable
+  /// characters in a message.
+  String strip(String line) {
+    line.replaceAll('\x1b\[[0-9;]*[a-zA-Z]', '');
+
+    return line;
+  }
 }

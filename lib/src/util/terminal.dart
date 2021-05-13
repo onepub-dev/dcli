@@ -1,5 +1,7 @@
 import 'dart:io';
 
+import 'package:dcli/src/functions/echo.dart';
+
 import 'ansi.dart';
 
 ///
@@ -39,7 +41,9 @@ class Terminal {
   /// Returns true if ansi escape characters are supported.
   bool get isAnsi => Ansi.isSupported;
 
-  ///
+  /// Clears the screen.
+  /// If ansi escape sequences are not supported this is a no op.
+  /// This call does not update the cursor position.
   void clearScreen({TerminalClearMode mode = TerminalClearMode.all}) {
     //print('clearing screen');
     if (!Ansi.isSupported) {
@@ -51,7 +55,6 @@ class Terminal {
       //   break;
 
       case TerminalClearMode.all:
-        // print('clearing screen');
         write('${Ansi.esc}2Jm');
         break;
       case TerminalClearMode.fromCursor:
@@ -63,7 +66,28 @@ class Terminal {
     }
   }
 
-  ///
+  /// Clears the current line, moves the cursor to column 1
+  /// and then prints [text] effectively overwriting the current
+  /// console line.
+  /// If the current console doesn't support ansi escape
+  /// sequences ([isAnsi] == false) then this call
+  /// will simply revert to calling [print].
+  void overwriteLine(String text) {
+    if (isAnsi) {
+      clearLine();
+      startOfLine();
+      echo(text);
+    } else {
+      print(text);
+    }
+  }
+
+  /// Clears the current console line leaving the cursor
+  /// at its current location.
+  /// If you want to write over the current line then
+  /// call [clearLine] followed by [startOfLine] and then
+  /// use [echo] rather than print.
+  /// Alternatively use [overwriteLine];
   void clearLine({TerminalClearMode mode = TerminalClearMode.all}) {
     if (!Ansi.isSupported) {
       return;
