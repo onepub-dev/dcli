@@ -1,3 +1,12 @@
+# 1.2.1
+Fixed accidentail breakage. renamed some methods to use 'library' rather than 'script'.
+Changed Ansi.strip to a static method to match convention used for other Ansi methods.
+Added overwriteLine to Terminal class. Added Ansi().strip method to stripout ansi escape sequences from a string.
+Changed run to print stdout and stderr to the console rather than devNull so it was consistent with other functions.
+Added run method to make it easy to run the dart exe. Change runPub to print stderr and stdout to the console rather than supress it.
+Changed startFromArgs to print stderr and stdout by default so it is consistent with outer functions.
+formatting.
+
 # 1.2.0
 Breaking Change:
   Renamed Script to DartScript to make way for integration with cli_script.
