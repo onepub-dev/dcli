@@ -14,11 +14,11 @@ import 'runner.dart';
 /// Used to manage a DCli script.
 ///
 /// We expose [DartScript] as it permits some self discovery
-/// of the dart library you are currently running.
+/// of the dart script you are currently running.
 ///
 ///
 class DartScript {
-  /// Creates a [DartScript] object from a dart library
+  /// Creates a [DartScript] object from a dart script
   /// located at [scriptPathTo].
   ///
   /// The [scriptPathTo] may be a filename or
@@ -51,18 +51,18 @@ class DartScript {
     }
   }
 
-  /// The directory where the dart library file lives
+  /// The directory where the dart script file lives
   /// stored as an absolute path.
   final String _scriptDirectory;
 
-  /// Name of the dart library
+  /// Name of the dart script
   final String _scriptName;
 
-  /// Path to the dart library loaded.
+  /// Path to the dart script loaded.
   String _pathToScript;
 
-  /// path to the this dart library.
-  String get pathToDartLibrary => _pathToScript;
+  /// path to the this dart script.
+  String get pathToDartScript => _pathToScript;
 
   /// The filename of the script including the extension.
   /// If you are running in a compiled script then
@@ -73,7 +73,7 @@ class DartScript {
   String get scriptName => _scriptName;
 
   /// the absolute path to the directory the script lives in
-  String get pathToDartLibraryDirectory => _scriptDirectory;
+  String get pathToDartScriptDirectory => _scriptDirectory;
 
   /// the name of the script without its extension.
   /// this is used for the 'name' key in the pubspec.
@@ -182,7 +182,7 @@ class DartScript {
 
   /// the project for this scrtipt.
   DartProject get project =>
-      _project ??= DartProject.fromPath(pathToDartLibraryDirectory);
+      _project ??= DartProject.fromPath(pathToDartScriptDirectory);
 
   /// used by the 'doctor' command to prints the details for this project.
   void get doctor {
@@ -190,7 +190,7 @@ class DartScript {
     print('');
     print('Dart Script Details');
     _colprint('Name', scriptName);
-    _colprint('Directory', privatePath(pathToDartLibraryDirectory));
+    _colprint('Directory', privatePath(pathToDartScriptDirectory));
   }
 
   void _colprint(String label, String value, {int pad = 25}) {
@@ -251,7 +251,7 @@ class DartScript {
 
   /// Returns the path to the executable if it was to be compiled into
   /// its local directory (the default action of compile).
-  String get pathToExe => join(pathToDartLibraryDirectory, exeName);
+  String get pathToExe => join(pathToDartScriptDirectory, exeName);
 
   /// Returns the path that the script would be installed to if
   /// compiled with install = true.

@@ -5,10 +5,10 @@ import 'dart:io';
 import '../../dcli.dart';
 import '../functions/env.dart';
 import 'dcli_exception.dart';
+import 'dcli_zone.dart';
 import 'parse_cli_command.dart';
 import 'progress.dart';
 import 'stack_trace_impl.dart';
-
 import 'wait_for_ex.dart';
 
 /// Typedef for LineActions
@@ -26,8 +26,13 @@ typedef CancelableLineAction = bool Function(String line);
 ///
 /// [line] the line to write to stderr.
 void printerr(String? line) {
-  stderr.writeln(line);
-  // waitForEx<dynamic>(stderr.flush());
+  /// Co-operate with runDCliZone
+  final overloaded = Zone.current[DCliZone.printerrKey] as DCliZonePrintErr?;
+  if (overloaded != null) {
+    overloaded(line);
+  } else {
+    stderr.writeln(line);
+  }
 }
 
 ///

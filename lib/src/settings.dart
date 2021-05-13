@@ -61,7 +61,7 @@ class Settings {
   /// is currently running.
   @Deprecated('Use Script.current.pathToScript')
   String get pathToScript {
-    _scriptPath ??= DartScript.current.pathToDartLibrary;
+    _scriptPath ??= DartScript.current.pathToDartScript;
     return _scriptPath!;
   }
 

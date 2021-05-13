@@ -6,8 +6,8 @@ import '../../util/ansi_color.dart';
 import '../../util/completion.dart';
 import '../../util/runnable_process.dart';
 import '../command_line_runner.dart';
-import '../dart_library.dart';
 import '../dart_project.dart';
+import '../dart_script.dart';
 import '../flags.dart';
 import 'commands.dart';
 
@@ -101,8 +101,8 @@ class CompileCommand extends Command {
       final buildRequired =
           !flagSet.isSet(NoWarmupFlag()) || !script.isReadyToRun;
 
-      print('path: ${script.pathToDartLibrary}');
-      final project = DartProject.fromPath(script.pathToDartLibraryDirectory);
+      print('path: ${script.pathToDartScript}');
+      final project = DartProject.fromPath(script.pathToDartScriptDirectory);
 
       if (buildRequired) {
         project.warmup();

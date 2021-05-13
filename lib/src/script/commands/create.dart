@@ -3,8 +3,8 @@ import 'package:path/path.dart' as p;
 import '../../../dcli.dart';
 import '../../functions/is.dart';
 import '../command_line_runner.dart';
-import '../dart_library.dart';
 import '../dart_project.dart';
+import '../dart_script.dart';
 import '../flags.dart';
 import 'commands.dart';
 
@@ -70,7 +70,7 @@ class CreateCommand extends Command {
 
     if (!Settings().isWindows) {
       chmod(
-          755, p.join(_script.pathToDartLibraryDirectory, _script.scriptName));
+          755, p.join(_script.pathToDartScriptDirectory, _script.scriptName));
     }
 
     print('');

@@ -4,7 +4,7 @@ import '../../../dcli.dart';
 import '../../settings.dart';
 import '../../util/completion.dart';
 import '../command_line_runner.dart';
-import '../dart_library.dart';
+import '../dart_script.dart';
 import '../flags.dart';
 import 'commands.dart';
 
@@ -43,7 +43,7 @@ class RunCommand extends Command {
       }
     }
 
-    Settings().verbose('Running script ${script.pathToDartLibrary}');
+    Settings().verbose('Running script ${script.pathToDartScript}');
 
     if (!script.isReadyToRun) {
       if (Shell.current.isSudo) {

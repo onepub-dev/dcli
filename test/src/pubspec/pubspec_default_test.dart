@@ -2,7 +2,7 @@
 import 'package:dcli/dcli.dart';
 import 'package:dcli/src/pubspec/pubspec.dart';
 import 'package:dcli/src/pubspec/dependency.dart';
-import 'package:dcli/src/script/dart_library.dart';
+import 'package:dcli/src/script/dart_script.dart';
 import 'package:path/path.dart' as p;
 import 'package:test/test.dart' as t;
 
