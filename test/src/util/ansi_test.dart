@@ -5,12 +5,12 @@ import 'package:test/test.dart';
 void main() {
   group('ansi', () {
     test('strip', () {
-      expect(Ansi().strip(red('red')), equals('red'));
+      expect(Ansi.strip(red('red')), equals('red'));
       expect(
-          Ansi().strip('${red('red')} ${green('green')}'), equals('red green'));
+          Ansi.strip('${red('red')} ${green('green')}'), equals('red green'));
 
-      expect(Ansi().strip(red('red', bold: false)), equals('red'));
-      expect(Ansi().strip(red('red', bold: false, background: AnsiColor.red)),
+      expect(Ansi.strip(red('red', bold: false)), equals('red'));
+      expect(Ansi.strip(red('red', bold: false, background: AnsiColor.red)),
           equals('red'));
     });
   });

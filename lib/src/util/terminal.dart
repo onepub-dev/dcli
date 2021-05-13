@@ -1,6 +1,6 @@
 import 'dart:io';
 
-import 'package:dcli/src/functions/echo.dart';
+import '../functions/echo.dart';
 
 import 'ansi.dart';
 
