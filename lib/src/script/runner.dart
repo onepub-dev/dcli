@@ -20,12 +20,12 @@ class ScriptRunner {
     // Prepare VM arguments
     final vmArgs = <String>[
       '--enable-asserts',
-      script.pathToDartScript,
+      script.pathToScript,
       ..._scriptArguments
     ];
 
     Settings().verbose('Executing: ${DartSdk().pathToDartExe} $vmArgs, '
-        '${script.pathToDartScript}');
+        '${script.pathToScript}');
 
     // Execute the script
     final process = waitFor<Process>(Process.start(

@@ -43,7 +43,7 @@ class RunCommand extends Command {
       }
     }
 
-    Settings().verbose('Running script ${script.pathToDartScript}');
+    Settings().verbose('Running script ${script.pathToScript}');
 
     if (!script.isReadyToRun) {
       if (Shell.current.isSudo) {

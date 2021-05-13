@@ -62,7 +62,7 @@ class DartScript {
   String _pathToScript;
 
   /// path to the this dart script.
-  String get pathToDartScript => _pathToScript;
+  String get pathToScript => _pathToScript;
 
   /// The filename of the script including the extension.
   /// If you are running in a compiled script then
@@ -73,7 +73,7 @@ class DartScript {
   String get scriptName => _scriptName;
 
   /// the absolute path to the directory the script lives in
-  String get pathToDartScriptDirectory => _scriptDirectory;
+  String get pathToScriptDirectory => _scriptDirectory;
 
   /// the name of the script without its extension.
   /// this is used for the 'name' key in the pubspec.
@@ -182,7 +182,7 @@ class DartScript {
 
   /// the project for this scrtipt.
   DartProject get project =>
-      _project ??= DartProject.fromPath(pathToDartScriptDirectory);
+      _project ??= DartProject.fromPath(pathToScriptDirectory);
 
   /// used by the 'doctor' command to prints the details for this project.
   void get doctor {
@@ -190,7 +190,7 @@ class DartScript {
     print('');
     print('Dart Script Details');
     _colprint('Name', scriptName);
-    _colprint('Directory', privatePath(pathToDartScriptDirectory));
+    _colprint('Directory', privatePath(pathToScriptDirectory));
   }
 
   void _colprint(String label, String value, {int pad = 25}) {
@@ -251,7 +251,7 @@ class DartScript {
 
   /// Returns the path to the executable if it was to be compiled into
   /// its local directory (the default action of compile).
-  String get pathToExe => join(pathToDartScriptDirectory, exeName);
+  String get pathToExe => join(pathToScriptDirectory, exeName);
 
   /// Returns the path that the script would be installed to if
   /// compiled with install = true.

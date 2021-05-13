@@ -107,10 +107,10 @@ class DartSdk {
       runArgs
         ..add('compile')
         ..add('exe')
-        ..add(script.pathToDartScript)
+        ..add(script.pathToScript)
         ..add('--output=$pathToExe');
       process = RunnableProcess.fromCommandArgs(dartExeName, runArgs,
-          workingDirectory: script.pathToDartScriptDirectory);
+          workingDirectory: script.pathToScriptDirectory);
     } else {
       if (pathToDartToNativeExe == null) {
         throw DCliException('Unable to compile as the dart2native executable '
@@ -118,10 +118,10 @@ class DartSdk {
       }
 
       /// use old dart2native
-      runArgs..add(script.pathToDartScript)..add('--output=$pathToExe');
+      runArgs..add(script.pathToScript)..add('--output=$pathToExe');
 
       process = RunnableProcess.fromCommandArgs(pathToDartToNativeExe!, runArgs,
-          workingDirectory: script.pathToDartScriptDirectory);
+          workingDirectory: script.pathToScriptDirectory);
     }
 
     process

@@ -69,8 +69,7 @@ class CreateCommand extends Command {
     project.warmup(background: !flagSet.isSet(ForegroundFlag()));
 
     if (!Settings().isWindows) {
-      chmod(
-          755, p.join(_script.pathToDartScriptDirectory, _script.scriptName));
+      chmod(755, p.join(_script.pathToScriptDirectory, _script.scriptName));
     }
 
     print('');
