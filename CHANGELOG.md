@@ -1,3 +1,6 @@
+# 1.2.2
+Reverted method names on DartScript from pathToDartScript to pathToScript and similar to reduce api breakage.
+
 # 1.2.1
 Fixed accidentail breakage. renamed some methods to use 'library' rather than 'script'.
 Changed Ansi.strip to a static method to match convention used for other Ansi methods.
