@@ -69,5 +69,15 @@ void main() {
       final tempDir = createTempDir();
       expect(exists(tempDir), isTrue);
     });
+
+    t.test('withTempDir', () {
+      String? dir;
+      withTempDir((tempDir) {
+        dir = tempDir;
+        expect(exists(tempDir), isTrue);
+      });
+
+      expect(exists(dir!), isFalse);
+    });
   });
 }
