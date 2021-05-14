@@ -16,9 +16,16 @@ import 'move.dart';
 /// the backupfile doesn't interfere with dev tools
 /// (e.g. we don't want an extra pubspec.yaml hanging about)
 ///
+/// If a file at [pathToFile] doesn't exist then a [BackupFileException]
+/// is thrown unless you pass the [ignoreMissing] flag.
+///
 /// See: restoreFile
 ///
-void backupFile(String pathToFile) {
+void backupFile(String pathToFile, {bool ignoreMissing = false}) {
+  if (!exists(pathToFile)) {
+    throw BackupFileException(
+        'The backup file ${truepath(pathToFile)} is missing');
+  }
   final pathToBackupFile = _backupFilePath(pathToFile);
   if (exists(pathToBackupFile)) {
     delete(pathToBackupFile);
@@ -27,7 +34,7 @@ void backupFile(String pathToFile) {
     createDir(dirname(pathToBackupFile));
   }
 
-  Settings().verbose('Backing up $pathToFile');
+  Settings().verbose('Backing up ${truepath(pathToFile)}');
   copy(pathToFile, pathToBackupFile);
 }
 
@@ -37,9 +44,9 @@ void backupFile(String pathToFile) {
 /// from the .bak/<filename>.bak file created when
 /// you called [backupFile].
 ///
-/// When the last .bak file is restore the .bak directory
+/// When the last .bak file is restored, the .bak directory
 /// will be deleted. If you don't restore all files (your app crashes)
-/// then a .bak directory and files may be left hanging and you may
+/// then a .bak directory and files may be left hanging around and you may
 /// need to manually restore these files.
 /// If the backup file doesn't exists this function throws
 /// a [RestoreFileException] unless you pass the [ignoreMissing]
@@ -57,13 +64,14 @@ void restoreFile(String pathToFile, {bool ignoreMissing = false}) {
     if (isEmpty(dirname(pathToBackupFile))) {
       deleteDir(dirname(pathToBackupFile));
     }
-    Settings().verbose('Restoring  $pathToFile');
+    Settings().verbose('Restoring  ${truepath(pathToFile)}');
   } else {
     if (ignoreMissing) {
-      Settings().verbose('Missing restoreFile $pathToBackupFile ignored');
+      Settings().verbose(
+          'Missing restoreFile ${truepath(pathToBackupFile)} ignored.');
     } else {
       throw RestoreFileException(
-          'The backup file $pathToBackupFile is missing');
+          'The backup file ${truepath(pathToBackupFile)} is missing');
     }
   }
 }
@@ -82,4 +90,12 @@ class RestoreFileException extends DCliException {
   /// Creates a [RestoreFileException] with the given
   /// message.
   RestoreFileException(String message) : super(message);
+}
+
+/// Thrown by the [backupFile] function when
+/// the file to be backed up is missing.
+class BackupFileException extends DCliException {
+  /// Creates a [BackupFileException] with the given
+  /// message.
+  BackupFileException(String message) : super(message);
 }
