@@ -179,7 +179,7 @@ class ProcessHelper {
     String? pidName;
     for (final details in _getWindowsProcesses()) {
       if (lpid == details.pid) {
-        pidName = details.processName;
+        pidName = details.name;
         break;
       }
     }
@@ -187,8 +187,23 @@ class ProcessHelper {
     return pidName;
   }
 
-  List<_PIDDetails> _getWindowsProcesses() {
-    final pids = <_PIDDetails>[];
+  /// Returns a list of running processes.
+  ///
+  /// Currently this is only supported on Windows and Linux.
+  List<ProcessDetails> getProcesses() {
+    if (Platform.isWindows) {
+      return _getWindowsProcesses();
+    }
+
+    if (Platform.isLinux) {
+      return _getLinuxProcesses();
+    }
+
+    throw UnsupportedError('Not supported on ${Platform.operatingSystem}');
+  }
+
+  List<ProcessDetails> _getWindowsProcesses() {
+    final pids = <ProcessDetails>[];
 
     // example:
     // "wininit.exe","584","Services","0","5,248 K"
@@ -197,13 +212,13 @@ class ProcessHelper {
     final lines = const CsvToListConverter().convert(tasks.join('\r\n'));
     for (final line in lines) {
       //Settings().verbose('tasklist: $line');
-      final details = _PIDDetails()
-        ..processName = line[0] as String?
-        ..pid = int.tryParse(line[1] as String);
+
       // Settings().verbose('${details.processName} ${details.pid}');
 
       final memparts = (line[4] as String).split(' ');
-      details.memory = memparts[0];
+
+      final details = ProcessDetails(
+          int.tryParse(line[1] as String) ?? 0, line[0] as String, memparts[0]);
       // details.memory can contain 'N/A' in which case their is no units.
       if (memparts.length == 2) {
         details.memoryUnits = memparts[1];
@@ -214,13 +229,111 @@ class ProcessHelper {
 
     return pids;
   }
+
+  List<ProcessDetails> _getLinuxProcesses() {
+    final entries = find('[0-9]*',
+            workingDirectory: '/proc',
+            types: [Find.directory],
+            recursive: false)
+        .toList();
+
+    final processes = <ProcessDetails>[];
+
+    for (final path in entries) {
+      final pid = basename(path);
+      // we are only interested in PID
+      if (RegExp('[0-9]+').stringMatch(pid) == pid) {
+        final pd = _extractProcessFromStatus(path, pid);
+        if (pd != null) {
+          processes.add(pd);
+        }
+      }
+    }
+    return processes;
+  }
+
+  ProcessDetails? _extractProcessFromStatus(String path, String spid) {
+    final pathToStatus = join(path, 'status');
+
+    final pid = int.parse(spid);
+    if (exists(pathToStatus)) {
+      /// this is a process, the directory could be deleted at any moment.
+      try {
+        final lines = read(pathToStatus).toList();
+
+        String? name;
+        var memory = '0';
+        var memoryUnits = 'kB';
+
+        for (final line in lines) {
+          final parts = line.split(':');
+          if (parts.length == 2) {
+            final key = parts[0].trim();
+            final value = parts[1].trim();
+
+            switch (key) {
+              case 'Name':
+                name = value;
+                break;
+              case 'VmSize':
+                final args = value.split(' ');
+                if (args.length == 2) {
+                  memory = args[0].trim();
+                  memoryUnits = args[1].trim();
+                }
+            }
+          }
+        }
+        return ProcessDetails(pid, name ?? 'Unknown', memory)
+          ..memoryUnits = memoryUnits;
+
+        // ignore: avoid_catches_without_on_clauses
+      } catch (e) {
+        /// no op. The process may have stopped
+      }
+    }
+
+    /// the process probably shutdown between us getting the list
+    /// and trying access its details.
+    return null;
+  }
 }
 
-class _PIDDetails {
-  int? pid;
-  String? processName;
-  String? memory;
-  String? memoryUnits;
+/// Represents a running Process.
+/// As processes are transitory by the time you access
+/// these details the process may no longer be running.
+@immutable
+class ProcessDetails {
+  /// Create a ProcessDetails object that represents
+  /// a running process.
+  ProcessDetails(this.pid, this.name, String memory) {
+    _memory = int.tryParse(memory) ?? 0;
+  }
+
+  /// The process id (pid) of this process
+  final int pid;
+
+  /// The process name.
+  final String name;
+
+  /// The amount of virtual memory the process is currently consuming
+  late final int _memory;
+
+  /// The units the [memory] is defined in the process is currently consuming
+  late final String? memoryUnits;
+
+  /// Get the virtual memory used by the processes.
+  /// May return zero if we are unable to determine the memory used.
+  int get memory => _memory;
+
+  /// Compares to [ProcessDetails] via their pid.
+  int compareTo(ProcessDetails other) => pid - other.pid;
+
+  @override
+  bool operator ==(covariant ProcessDetails other) => pid == other.pid;
+
+  @override
+  int get hashCode => pid.hashCode;
 }
 
 class _WindowsParentProcess {

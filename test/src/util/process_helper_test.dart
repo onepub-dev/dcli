@@ -19,6 +19,13 @@ void main() {
     expect(ProcessHelper().isRunning(pid), equals(true));
   });
 
+  test('Get running processes', () {
+    final processes = ProcessHelper().getProcesses();
+
+    /// the list should container our details.
+    expect(processes.contains(ProcessDetails(pid, '', '')), isTrue);
+  });
+
   // test('ProcessHelper', () {
   //   TestFileSystem().withinZone((fs) async {
 
