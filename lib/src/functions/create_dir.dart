@@ -32,6 +32,18 @@ import 'function.dart';
 String createDir(String path, {bool recursive = false}) =>
     _CreateDir().createDir(path, recursive: recursive);
 
+/// Creates a temp directory and then calls [callback].
+/// Once callback completes the temporary directory will be deleted.
+void withTempDir(void Function(String tempDir) callback) {
+  final dir = createTempDir();
+
+  try {
+    callback(dir);
+  } finally {
+    deleteDir(dir);
+  }
+}
+
 /// Creates a temporary directory under the system temp folder.
 /// The temporary directory name is formed from a uuid.
 /// It is your responsiblity to delete the directory once you have
