@@ -34,14 +34,19 @@ String createDir(String path, {bool recursive = false}) =>
 
 /// Creates a temp directory and then calls [callback].
 /// Once callback completes the temporary directory will be deleted.
-void withTempDir(void Function(String tempDir) callback) {
+///
+/// The callbacks return value [R] is returned from the [withTempDir]
+/// function.
+R withTempDir<R>(R Function(String tempDir) callback) {
   final dir = createTempDir();
 
+  R result;
   try {
-    callback(dir);
+    result = callback(dir);
   } finally {
     deleteDir(dir);
   }
+  return result;
 }
 
 /// Creates a temporary directory under the system temp folder.
