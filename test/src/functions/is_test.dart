@@ -8,56 +8,51 @@ import '../util/test_file_system.dart';
 
 void main() {
   group('iswritable', () {
-    TestFileSystem().withinZone((fs) {
+    withTempDir((fsRoot) {
+      TestFileSystem.buildDirectoryTree(fsRoot);
 // owner, group, world, read, write execute
 
       test('owner', () {
-        final one = fs.tempFile();
-        touch(one, create: true);
-        'chmod 200 $one'.run;
-        expect(isWritable(one), equals(true));
-        'chmod 000 $one'.run;
-        expect(isWritable(one), equals(false));
-        expect(isReadable(one), equals(false));
-        expect(isExecutable(one), equals(false));
-
-        delete(one);
+        withTempFile((one) {
+          touch(one, create: true);
+          'chmod 200 $one'.run;
+          expect(isWritable(one), equals(true));
+          'chmod 000 $one'.run;
+          expect(isWritable(one), equals(false));
+          expect(isReadable(one), equals(false));
+          expect(isExecutable(one), equals(false));
+        });
       });
 
       test('group', () {
-        final one = fs.tempFile();
-        touch(one, create: true);
-        'chmod 020 $one'.run;
-        expect(isWritable(one), equals(true));
-        'chmod 000 $one'.run;
-        expect(isWritable(one), equals(false));
-        expect(isReadable(one), equals(false));
-        expect(isExecutable(one), equals(false));
-
-        delete(one);
+        withTempFile((one) {
+          touch(one, create: true);
+          'chmod 020 $one'.run;
+          expect(isWritable(one), equals(true));
+          'chmod 000 $one'.run;
+          expect(isWritable(one), equals(false));
+          expect(isReadable(one), equals(false));
+          expect(isExecutable(one), equals(false));
+        });
       });
 
       test('world', () {
-        final one = fs.tempFile();
-        touch(one, create: true);
-        'chmod 002 $one'.run;
-        expect(isWritable(one), equals(true));
-        'chmod 000 $one'.run;
-        expect(isWritable(one), equals(false));
-        expect(isReadable(one), equals(false));
-        expect(isExecutable(one), equals(false));
-
-        delete(one);
+        withTempFile((one) {
+          touch(one, create: true);
+          'chmod 002 $one'.run;
+          expect(isWritable(one), equals(true));
+          'chmod 000 $one'.run;
+          expect(isWritable(one), equals(false));
+          expect(isReadable(one), equals(false));
+          expect(isExecutable(one), equals(false));
+        });
       });
     });
   }, skip: Platform.isWindows);
 
   group('isReadable', () {
-    TestFileSystem().withinZone((fs) {
-// owner, group, world, read, write execute
-
-      test('owner', () {
-        final one = fs.tempFile();
+    test('owner', () {
+      withTempFile((one) {
         touch(one, create: true);
         'chmod 400 $one'.run;
         expect(isReadable(one), equals(true));
@@ -65,12 +60,11 @@ void main() {
         expect(isReadable(one), equals(false));
         expect(isWritable(one), equals(false));
         expect(isExecutable(one), equals(false));
-
-        delete(one);
       });
+    });
 
-      test('group', () {
-        final one = fs.tempFile();
+    test('group', () {
+      withTempFile((one) {
         touch(one, create: true);
         'chmod 040 $one'.run;
         expect(isReadable(one), equals(true));
@@ -78,12 +72,11 @@ void main() {
         expect(isReadable(one), equals(false));
         expect(isWritable(one), equals(false));
         expect(isExecutable(one), equals(false));
-
-        delete(one);
       });
+    });
 
-      test('world', () {
-        final one = fs.tempFile();
+    test('world', () {
+      withTempFile((one) {
         touch(one, create: true);
         'chmod 004 $one'.run;
         expect(isReadable(one), equals(true));
@@ -91,18 +84,13 @@ void main() {
         expect(isReadable(one), equals(false));
         expect(isWritable(one), equals(false));
         expect(isExecutable(one), equals(false));
-
-        delete(one);
       });
     });
   }, skip: Platform.isWindows);
 
   group('isExecutable', () {
-    TestFileSystem().withinZone((fs) {
-// owner, group, world, read, write execute
-
-      test('owner', () {
-        final one = fs.tempFile();
+    test('owner', () {
+      withTempFile((one) {
         touch(one, create: true);
         'chmod 100 $one'.run;
         expect(isExecutable(one), equals(true));
@@ -110,12 +98,11 @@ void main() {
         expect(isExecutable(one), equals(false));
         expect(isWritable(one), equals(false));
         expect(isReadable(one), equals(false));
-
-        delete(one);
       });
+    });
 
-      test('group', () {
-        final one = fs.tempFile();
+    test('group', () {
+      withTempFile((one) {
         touch(one, create: true);
         'chmod 010 $one'.run;
         expect(isExecutable(one), equals(true));
@@ -123,12 +110,11 @@ void main() {
         expect(isExecutable(one), equals(false));
         expect(isWritable(one), equals(false));
         expect(isReadable(one), equals(false));
-
-        delete(one);
       });
+    });
 
-      test('world', () {
-        final one = fs.tempFile();
+    test('world', () {
+      withTempFile((one) {
         touch(one, create: true);
         'chmod 001 $one'.run;
         expect(isExecutable(one), equals(true));
@@ -136,20 +122,21 @@ void main() {
         expect(isExecutable(one), equals(false));
         expect(isWritable(one), equals(false));
         expect(isReadable(one), equals(false));
-        delete(one);
       });
     });
   }, skip: Platform.isWindows);
 
   group('isEmpty', () {
     test('isEmpty - good', () {
-      final root = createTempDir();
+      withTempDir((root) {
+        final root = createTempDir();
 
-      expect(isEmpty(root), isTrue);
+        expect(isEmpty(root), isTrue);
 
-      touch(join(root, 'a file'), create: true);
+        touch(join(root, 'a file'), create: true);
 
-      expect(isEmpty(root), isFalse);
+        expect(isEmpty(root), isFalse);
+      });
     });
   });
 }

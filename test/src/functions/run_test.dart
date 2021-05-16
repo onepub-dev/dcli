@@ -8,8 +8,8 @@ import '../util/test_file_system.dart';
 
 void main() {
   t.group('String as Process', () {
-    t.test('Basic .run', () {
-      TestFileSystem().withinZone((fs) {
+    TestFileSystem().withinZone((fs) {
+      t.test('Basic .run', () {
         final testFile = join(fs.fsRoot, 'test.text');
 
         if (exists(testFile)) {
@@ -19,10 +19,8 @@ void main() {
         'touch $testFile'.run;
         t.expect(exists(testFile), t.equals(true));
       });
-    });
 
-    t.test('print stdout', () {
-      TestFileSystem().withinZone((fs) {
+      t.test('print stdout', () {
         final scriptPath = truepath(join(fs.testScriptPath, 'general/bin'));
         final script = truepath(scriptPath, 'print_to_stdout.dart');
 
@@ -32,10 +30,8 @@ void main() {
 
         t.expect(results, t.equals(expected));
       });
-    });
 
-    t.test('print stderr', () {
-      TestFileSystem().withinZone((fs) {
+      t.test('print stderr', () {
         final scriptPath = truepath(join(fs.testScriptPath, 'general/bin'));
         final script = truepath(scriptPath, 'print_to_stderr.dart');
 
@@ -45,10 +41,8 @@ void main() {
 
         t.expect(results, t.equals(expected));
       });
-    });
 
-    t.test('print stdout and stderr', () {
-      TestFileSystem().withinZone((fs) {
+      t.test('print stdout and stderr', () {
         final scriptPath = truepath(join(fs.testScriptPath, 'general/bin'));
 
         if (!exists(scriptPath)) {
@@ -64,10 +58,8 @@ void main() {
 
         t.expect(results, t.equals(expected));
       });
-    });
 
-    t.test('print stdout and stderr with error', () {
-      TestFileSystem().withinZone((fs) {
+      t.test('print stdout and stderr with error', () {
         final scriptPath = truepath(join(fs.testScriptPath, 'general/bin'));
 
         if (!exists(scriptPath)) {

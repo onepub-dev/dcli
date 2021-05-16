@@ -10,9 +10,10 @@ String? testFile;
 void main() {
   t.group('moveTree', () {
     t.test('empty target ', () {
-      TestFileSystem().withinZone((fs) {
-        final from = join(fs.fsRoot, 'top');
-        final to = join(fs.fsRoot, 'new_top');
+      withTempDir((fsRoot) {
+        TestFileSystem.buildDirectoryTree(fsRoot);
+        final from = join(fsRoot, 'top');
+        final to = join(fsRoot, 'new_top');
 
         if (exists(to)) {
           deleteDir(to);
@@ -34,9 +35,10 @@ void main() {
     });
 
     t.test('empty target - overwrite', () {
-      TestFileSystem().withinZone((fs) {
-        final from = join(fs.fsRoot, 'top');
-        final to = join(fs.fsRoot, 'new_top');
+      withTempDir((fsRoot) {
+        TestFileSystem.buildDirectoryTree(fsRoot);
+        final from = join(fsRoot, 'top');
+        final to = join(fsRoot, 'new_top');
 
         if (exists(to)) {
           deleteDir(to);
@@ -58,9 +60,10 @@ void main() {
     });
 
     t.test('empty target - filter *.txt', () {
-      TestFileSystem().withinZone((fs) {
-        final from = join(fs.fsRoot, 'top');
-        final to = join(fs.fsRoot, 'new_top');
+      withTempDir((fsRoot) {
+        TestFileSystem.buildDirectoryTree(fsRoot);
+        final from = join(fsRoot, 'top');
+        final to = join(fsRoot, 'new_top');
 
         if (exists(to)) {
           deleteDir(to);
@@ -81,9 +84,10 @@ void main() {
     });
 
     t.test('empty target - recursive - filter *.txt', () {
-      TestFileSystem().withinZone((fs) {
-        final from = join(fs.fsRoot, 'top');
-        final to = join(fs.fsRoot, 'new_top');
+      withTempDir((fsRoot) {
+        TestFileSystem.buildDirectoryTree(fsRoot);
+        final from = join(fsRoot, 'top');
+        final to = join(fsRoot, 'new_top');
 
         if (exists(to)) {
           deleteDir(to);
@@ -102,9 +106,10 @@ void main() {
     });
 
     t.test('empty target - recursive ', () {
-      TestFileSystem().withinZone((fs) {
-        final from = join(fs.fsRoot, 'top');
-        final to = join(fs.fsRoot, 'new_top');
+      withTempDir((fsRoot) {
+        TestFileSystem.buildDirectoryTree(fsRoot);
+        final from = join(fsRoot, 'top');
+        final to = join(fsRoot, 'new_top');
 
         if (exists(to)) {
           deleteDir(to);
@@ -123,9 +128,10 @@ void main() {
     });
 
     t.test('empty target - recursive- overwrite', () {
-      TestFileSystem().withinZone((fs) {
-        final from = join(fs.fsRoot, 'top');
-        final to = join(fs.fsRoot, 'new_top');
+      withTempDir((fsRoot) {
+        TestFileSystem.buildDirectoryTree(fsRoot);
+        final from = join(fsRoot, 'top');
+        final to = join(fsRoot, 'new_top');
 
         if (exists(to)) {
           deleteDir(to);

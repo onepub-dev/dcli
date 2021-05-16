@@ -9,16 +9,14 @@ import '../util/test_file_system.dart';
 
 void main() {
   test('Detect Dart SDK', () {
-    TestFileSystem().withinZone((fs) {
-      print('Dart pathToDartExe: ${DartSdk().pathToDartExe}');
-      print('Dart pathToDartToNativeExe: ${DartSdk().pathToDartToNativeExe}');
-      print('Dart pathToPubExe: ${DartSdk().pathToPubExe}');
-      print('Dart Version: ${DartSdk().version}');
-      print('Dart Major: ${DartSdk().versionMajor}');
-      print('Dart Minor: ${DartSdk().versionMinor}');
+    print('Dart pathToDartExe: ${DartSdk().pathToDartExe}');
+    print('Dart pathToDartToNativeExe: ${DartSdk().pathToDartToNativeExe}');
+    print('Dart pathToPubExe: ${DartSdk().pathToPubExe}');
+    print('Dart Version: ${DartSdk().version}');
+    print('Dart Major: ${DartSdk().versionMajor}');
+    print('Dart Minor: ${DartSdk().versionMinor}');
 
-      which('dart').paths.forEach((line) => print('which: $line'));
-    });
+    which('dart').paths.forEach((line) => print('which: $line'));
   }, skip: false);
 
   test('Install Dart Sdk', () {

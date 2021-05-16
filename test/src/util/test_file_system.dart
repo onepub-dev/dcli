@@ -106,7 +106,7 @@ class TestFileSystem {
 
   static TestFileSystem? common;
 
-  String tempFile({String? suffix}) => FileSync.tempFile(suffix: suffix);
+  String tempFile({String? suffix}) => createTempFilename(suffix: suffix);
 
   String? originalPubCache;
 
@@ -191,7 +191,7 @@ class TestFileSystem {
       if (installDcli!) {
         installDCli();
       }
-      buildTestFileSystem();
+      buildTestFileSystem(fsRoot);
 
       installCrossPlatformTestScripts(originalHome);
     }
@@ -216,7 +216,7 @@ class TestFileSystem {
     return script.pathToProjectRoot;
   }
 
-  void buildTestFileSystem() {
+  void buildTestFileSystem(String fsRoot) {
     if (!exists(HOME)) {
       createDir(HOME, recursive: true);
     }
@@ -227,6 +227,22 @@ class TestFileSystem {
     bottom = join(middle, 'bottom');
     hidden = join(middle, '.hidden');
 
+    populateFileSystem(top, thidden, middle, bottom, hidden);
+  }
+
+  /// Used by third parties to build a well know diretory tree for testing.
+  static void buildDirectoryTree(String root) {
+    final top = join(root, 'top');
+    final thidden = join(top, '.hidden');
+    final middle = join(top, 'middle');
+    final bottom = join(middle, 'bottom');
+    final hidden = join(middle, '.hidden');
+
+    populateFileSystem(top, thidden, middle, bottom, hidden);
+  }
+
+  static void populateFileSystem(
+      String top, String thidden, String middle, String bottom, String hidden) {
     // Create some the test dirs.
     if (!exists(thidden)) {
       createDir(thidden, recursive: true);

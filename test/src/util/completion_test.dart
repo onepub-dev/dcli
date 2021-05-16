@@ -4,12 +4,11 @@ import 'package:dcli/dcli.dart';
 import 'package:dcli/src/util/completion.dart';
 import 'package:test/test.dart';
 
-import 'test_file_system.dart';
 
 void main() {
   group('completion ...', () {
-    TestFileSystem(installDcli: false).withinZone((fs) {
-      final root = join(fs.fsRoot, 'top');
+    withTempDir((fsRoot) {
+      final root = join(fsRoot, 'top');
 
       List<String> paths;
       test('empty word', () async {

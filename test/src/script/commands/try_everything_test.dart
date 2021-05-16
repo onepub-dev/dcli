@@ -7,7 +7,8 @@ import '../../util/test_file_system.dart';
 
 void main() {
   t.test('Try everything', () {
-    TestFileSystem().withinZone((fs) {
+    withTempDir((fsRoot) {
+      TestFileSystem.buildDirectoryTree(fsRoot);
       const shellPath = 'shell';
       final mainPath = join(shellPath, 'main');
       try {

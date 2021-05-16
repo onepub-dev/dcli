@@ -4,13 +4,11 @@ import 'package:test/test.dart' as t;
 import 'package:dcli/dcli.dart';
 import 'package:test/test.dart';
 
-import '../util/test_file_system.dart';
-
 void main() {
   t.group('FileSync', () {
     t.test('Append', () {
-      TestFileSystem().withinZone((fs) {
-        final testFile = join(fs.fsRoot, 'lines.txt');
+      withTempDir((fsRoot) {
+        final testFile = join(fsRoot, 'lines.txt');
 
         if (exists(testFile)) {
           delete(testFile);
@@ -28,8 +26,8 @@ void main() {
     });
 
     t.test('Write', () {
-      TestFileSystem().withinZone((fs) {
-        final testFile = join(fs.fsRoot, 'lines.txt');
+      withTempDir((fsRoot) {
+        final testFile = join(fsRoot, 'lines.txt');
         if (exists(testFile)) {
           delete(testFile);
         }

@@ -4,11 +4,10 @@ import 'dart:io';
 import 'package:dcli/dcli.dart';
 import 'package:test/test.dart';
 
-import 'test_file_system.dart';
 
 void main() {
   test('MemoryFileSystem', () {
-    TestFileSystem().withinZone((fs) {
+    withTempDir((fs) {
       // final fs = MemoryFileSystem();
 
       // fs.directory('/tmp').createSync();

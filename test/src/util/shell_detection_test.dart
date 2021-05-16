@@ -6,7 +6,6 @@ import 'package:test/test.dart';
 
 void main() {
   test('Detect Shell', () {
-    //TestFileSystem().withinZone((fs) {
     final shell = Shell.current;
     print(shell.name);
 
@@ -24,5 +23,4 @@ void main() {
     ///  sh shell on linux rather than bash.
     expect(shell.name, equals(expected));
   });
-//  }, skip: false);
 }

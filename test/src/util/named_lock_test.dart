@@ -10,7 +10,6 @@ import 'package:dcli/dcli.dart' hide equals;
 import 'package:dcli/src/util/named_lock.dart';
 import 'package:test/test.dart';
 
-import 'test_file_system.dart';
 
 const port = 63424;
 
@@ -22,17 +21,15 @@ void main() {
 
   test('timeout catch', () {
     expect(() {
-      TestFileSystem().withinZone((fs) async {
-        NamedLock(name: 'timeout').withLock(() {
-          throw DCliException('fake exception');
-        });
+      NamedLock(name: 'timeout').withLock(() {
+        throw DCliException('fake exception');
       });
     }, throwsA(isA<DCliException>()));
   }, skip: true);
 
   test('withLock', () {
-    TestFileSystem().withinZone((fs) async {
-      final logFile = fs.tempFile(suffix: 'log');
+    withTempDir((fs) async {
+      final logFile = createTempFile();
       print('logfile: $logFile');
       logFile.truncate();
 

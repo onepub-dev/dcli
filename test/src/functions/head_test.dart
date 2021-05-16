@@ -10,13 +10,14 @@ import '../util/test_file_system.dart';
 void main() {
   t.group('Head', () {
     t.test('head 5', () {
-      TestFileSystem().withinZone((fs) {
-        final testFile = join(fs.fsRoot, 'lines.txt');
+      withTempDir((fsRoot) {
+        TestFileSystem.buildDirectoryTree(fsRoot);
+        final testFile = join(fsRoot, 'lines.txt');
         if (exists(testFile)) {
           delete(testFile);
         }
-        if (!exists(fs.fsRoot)) {
-          createDir(fs.fsRoot, recursive: true);
+        if (!exists(fsRoot)) {
+          createDir(fsRoot, recursive: true);
         }
         final file = FileSync(testFile, fileMode: FileMode.write);
         for (var i = 0; i < 10; i++) {

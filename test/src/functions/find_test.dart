@@ -80,7 +80,8 @@ void main() {
 
   t.group('Find', () {
     t.test('Search for *.txt files in top directory ', () {
-      TestFileSystem().withinZone((fs) {
+      withTempDir((fsRoot) {
+        TestFileSystem.buildDirectoryTree(fsRoot);
         final paths = TestFileSystem();
         final found =
             find('*.txt', workingDirectory: paths.top, recursive: false)
@@ -95,7 +96,8 @@ void main() {
     });
 
     t.test('Search recursive for *.jpg ', () {
-      TestFileSystem().withinZone((fs) {
+       withTempDir((fsRoot) {
+        TestFileSystem.buildDirectoryTree(fsRoot);
         final paths = TestFileSystem();
         final found = find('*.jpg', workingDirectory: paths.top).toList();
 
@@ -120,7 +122,8 @@ void main() {
     });
 
     t.test('Search recursive for *.txt ', () {
-      TestFileSystem().withinZone((fs) {
+      withTempDir((fsRoot) {
+        TestFileSystem.buildDirectoryTree(fsRoot);
         final paths = TestFileSystem();
         final found = find('*.txt', workingDirectory: paths.top).toList()
           ..sort();
@@ -137,7 +140,8 @@ void main() {
     });
 
     t.test('ignore hidden files *.txt  ', () {
-      TestFileSystem().withinZone((fs) {
+       withTempDir((fsRoot) {
+        TestFileSystem.buildDirectoryTree(fsRoot);
         final paths = TestFileSystem();
         final found = find('*.txt', workingDirectory: paths.top).toList()
           ..sort();
@@ -154,7 +158,8 @@ void main() {
     });
 
     t.test('find hidden files *.txt  ', () {
-      TestFileSystem().withinZone((fs) {
+       withTempDir((fsRoot) {
+        TestFileSystem.buildDirectoryTree(fsRoot);
         final paths = TestFileSystem();
         final found =
             find('*.txt', workingDirectory: paths.top, includeHidden: true)

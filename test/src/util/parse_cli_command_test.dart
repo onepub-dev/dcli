@@ -103,7 +103,8 @@ void main() {
   });
 
   test('linux/macos', () {
-    TestFileSystem().withinZone((fs) {
+    withTempDir((fsRoot) {
+      final fs = TestFileSystem()..buildTestFileSystem(fsRoot);
       final parsed = ParsedCliCommand('ls *.jpg *.png', fs.top);
 
       expect(parsed.cmd, equals('ls'));
@@ -121,7 +122,8 @@ void main() {
   });
 
   test('.*', () {
-    TestFileSystem().withinZone((fs) {
+    withTempDir((fsRoot) {
+      final fs = TestFileSystem()..buildTestFileSystem(fsRoot);
       final parsed = ParsedCliCommand('ls .*', fs.top);
 
       expect(parsed.cmd, equals('ls'));
@@ -133,7 +135,9 @@ void main() {
   });
 
   test('invalid/.*', () {
-    TestFileSystem().withinZone((fs) {
+    withTempDir((fsRoot) {
+      final fs = TestFileSystem()..buildTestFileSystem(fsRoot);
+
       expect(() => ParsedCliCommand('ls invalid/.*', fs.top),
           throwsA(isA<FileSystemException>()));
     });
@@ -142,7 +146,9 @@ void main() {
   });
 
   test('valid/.*', () {
-    TestFileSystem().withinZone((fs) {
+    withTempDir((fsRoot) {
+      final fs = TestFileSystem()..buildTestFileSystem(fsRoot);
+
       final parsed = ParsedCliCommand('ls middle/.*', fs.top);
 
       expect(parsed.cmd, equals('ls'));
@@ -155,7 +161,9 @@ void main() {
   });
 
   test('alternate working directory', () {
-    TestFileSystem().withinZone((fs) {
+    withTempDir((fsRoot) {
+      final fs = TestFileSystem()..buildTestFileSystem(fsRoot);
+
       final parsed = ParsedCliCommand('ls *.txt *.jpg', fs.middle);
 
       expect(parsed.cmd, equals('ls'));
@@ -173,7 +181,9 @@ void main() {
   });
 
   test('valid non-local path', () {
-    TestFileSystem().withinZone((fs) {
+    withTempDir((fsRoot) {
+      final fs = TestFileSystem()..buildTestFileSystem(fsRoot);
+
       final parsed = ParsedCliCommand('ls middle/*.txt', fs.top);
 
       expect(parsed.cmd, equals('ls'));
@@ -188,14 +198,18 @@ void main() {
   });
 
   test('invalid absolute path/*', () {
-    TestFileSystem().withinZone((fs) {
+    withTempDir((fsRoot) {
+      final fs = TestFileSystem()..buildTestFileSystem(fsRoot);
+
       expect(() => ParsedCliCommand('ls /git/dcli/*', fs.top),
           throwsA(isA<FileSystemException>()));
     });
   });
 
   test('valid absolute path/*', () {
-    TestFileSystem().withinZone((fs) {
+    withTempDir((fsRoot) {
+      final fs = TestFileSystem()..buildTestFileSystem(fsRoot);
+
       final parsed = ParsedCliCommand('ls ${join(fs.top, '*.txt')}', fs.middle);
 
       expect(parsed.cmd, equals('ls'));
@@ -208,7 +222,9 @@ void main() {
   });
 
   test('windows', () {
-    TestFileSystem().withinZone((fs) {
+    withTempDir((fsRoot) {
+      final fs = TestFileSystem()..buildTestFileSystem(fsRoot);
+
       final parsed = ParsedCliCommand('ls *.jpg *.png', fs.top);
 
       expect(parsed.cmd, equals('ls'));

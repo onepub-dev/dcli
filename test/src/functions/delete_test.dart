@@ -3,13 +3,12 @@ import 'package:test/test.dart' as t;
 import 'package:dcli/dcli.dart';
 import 'package:test/test.dart';
 
-import '../util/test_file_system.dart';
 
 void main() {
   t.group('Delete', () {
     t.test('delete ', () {
-      TestFileSystem().withinZone((fs) {
-        final testFile = join(fs.fsRoot, 'lines.txt');
+      withTempDir((fsRoot) {
+        final testFile = join(fsRoot, 'lines.txt');
         if (!exists(dirname(testFile))) {
           createDir(dirname(testFile), recursive: true);
         }
@@ -22,8 +21,8 @@ void main() {
     });
 
     t.test('delete non-existing ', () {
-      TestFileSystem().withinZone((fs) {
-        final testFile = join(fs.fsRoot, 'lines.txt');
+      withTempDir((fsRoot) {
+        final testFile = join(fsRoot, 'lines.txt');
         touch(testFile, create: true);
         delete(testFile);
 

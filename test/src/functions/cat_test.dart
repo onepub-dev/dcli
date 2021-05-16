@@ -4,7 +4,6 @@ import 'package:test/test.dart' as t;
 import 'package:dcli/dcli.dart';
 import 'package:test/test.dart';
 
-import '../util/test_file_system.dart';
 import '../util/test_utils.dart';
 
 late String testFile;
@@ -14,9 +13,9 @@ void main() {
     // Don't know how to test this as it writes directly to stdout.
     // Need some way to hook Stdout
     t.test('Cat good ', () {
-      TestFileSystem().withinZone((fs) {
+      withTempDir((testRoot) {
         print('PWD $pwd');
-        testFile = join(fs.fsRoot, 'lines.txt');
+        testFile = join(testRoot, 'lines.txt');
         createLineFile(testFile, 10);
 
         final lines = <String?>[];
@@ -26,7 +25,7 @@ void main() {
     });
 
     t.test('cat non-existing ', () {
-      TestFileSystem().withinZone((fs) {
+      withTempDir((testRoot) {
         t.expect(() => cat('bad file.text'), t.throwsA(isA<CatException>()));
       });
     });

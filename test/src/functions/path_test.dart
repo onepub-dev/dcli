@@ -5,14 +5,13 @@ import 'package:dcli/src/functions/env.dart';
 import 'package:test/test.dart' as t;
 import 'package:dcli/dcli.dart';
 
-import '../util/test_file_system.dart';
 
 String _testDir = 'path_test';
 void main() {
   t.group('Directory Path manipulation testing', () {
     t.test('absolute', () {
-      TestFileSystem().withinZone((fs) {
-        final paths = setup(fs);
+      withTempDir((fsRoot) {
+        final paths = setup(fsRoot);
         final cwd = pwd;
         t.expect(absolute(paths.pathTestDir!),
             t.equals(join(cwd, paths.pathTestDir)));
@@ -20,31 +19,30 @@ void main() {
     });
 
     t.test('parent', () {
-      TestFileSystem().withinZone((fs) {
-        final paths = setup(fs);
-        t.expect(
-            dirname(paths.pathTestDir!), t.equals(join(fs.fsRoot, _testDir)));
+      withTempDir((fsRoot) {
+        final paths = setup(fsRoot);
+        t.expect(dirname(paths.pathTestDir!), t.equals(join(fsRoot, _testDir)));
       });
     });
 
     t.test('extension', () {
-      TestFileSystem().withinZone((fs) {
-        final paths = setup(fs);
+      withTempDir((fsRoot) {
+        final paths = setup(fsRoot);
         t.expect(extension(join(paths.pathTestDir!, paths.testFile)),
             t.equals(paths.testExtension));
       });
     });
 
     t.test('basename', () {
-      TestFileSystem().withinZone((fs) {
-        final paths = setup(fs);
+      withTempDir((fsRoot) {
+        final paths = setup(fsRoot);
         t.expect(basename(join(paths.pathTestDir!, paths.testFile)),
             t.equals(paths.testFile));
       });
     });
 
     t.test('PWD', () {
-      TestFileSystem().withinZone((fs) {
+      withTempDir((fsRoot) {
         t.expect(pwd, t.equals(Directory.current.path));
       });
     });
@@ -52,9 +50,9 @@ void main() {
 }
 
 class Paths {
-  Paths(TestFileSystem fs) {
+  Paths(String fsRoot) {
     home = HOME;
-    pathTestDir = join(fs.fsRoot, _testDir, 'pathTestDir');
+    pathTestDir = join(fsRoot, _testDir, 'pathTestDir');
     testExtension = '.jpg';
     testBaseName = 'fred';
     testFile = '$testBaseName$testExtension';
@@ -67,4 +65,4 @@ class Paths {
   String? testFile;
 }
 
-Paths setup(TestFileSystem fs) => Paths(fs);
+Paths setup(String fs) => Paths(fs);

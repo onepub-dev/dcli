@@ -10,9 +10,10 @@ String? testFile;
 void main() {
   t.group('moveDir', () {
     t.test('empty to ', () {
-      TestFileSystem().withinZone((fs) {
-        final from = join(fs.fsRoot, 'top');
-        final to = join(fs.fsRoot, 'new_top');
+      withTempDir((fsRoot) {
+        TestFileSystem.buildDirectoryTree(fsRoot);
+        final from = join(fsRoot, 'top');
+        final to = join(fsRoot, 'new_top');
 
         if (exists(to)) {
           deleteDir(to);
@@ -23,9 +24,10 @@ void main() {
     });
 
     t.test('existing to ', () {
-      TestFileSystem().withinZone((fs) {
-        final from = join(fs.fsRoot, 'top');
-        final to = join(fs.fsRoot, 'new_top');
+      withTempDir((fsRoot) {
+        TestFileSystem.buildDirectoryTree(fsRoot);
+        final from = join(fsRoot, 'top');
+        final to = join(fsRoot, 'new_top');
 
         if (!exists(from)) {
           createDir(from, recursive: true);
@@ -43,9 +45,10 @@ void main() {
     });
 
     t.test('from not a directory ', () {
-      TestFileSystem().withinZone((fs) {
-        final from = join(fs.fsRoot, 'top', 'file');
-        final to = join(fs.fsRoot, 'new_top');
+      withTempDir((fsRoot) {
+        TestFileSystem.buildDirectoryTree(fsRoot);
+        final from = join(fsRoot, 'top', 'file');
+        final to = join(fsRoot, 'new_top');
 
         if (!exists(dirname(from))) {
           createDir(dirname(from), recursive: true);
@@ -62,9 +65,10 @@ void main() {
     });
 
     t.test('from does not exist ', () {
-      TestFileSystem().withinZone((fs) {
-        final from = join(fs.fsRoot, 'random');
-        final to = join(fs.fsRoot, 'new_top');
+      withTempDir((fsRoot) {
+        TestFileSystem.buildDirectoryTree(fsRoot);
+        final from = join(fsRoot, 'random');
+        final to = join(fsRoot, 'new_top');
 
         t.expect(
             () => moveDir(from, to),
