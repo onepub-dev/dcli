@@ -8,7 +8,7 @@ import 'is.dart';
 ///
 /// Deletes the directory located at [path].
 ///
-/// If [recursive] is true then the directory and all child files
+/// If [recursive] is true (default true) then the directory and all child files
 /// and directories will be deleted.
 ///
 /// ```dart
