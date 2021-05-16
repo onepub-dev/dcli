@@ -36,15 +36,9 @@ class FileSync {
   /// The temp file name will be <uuid>.tmp
   /// unless you provide a [suffix] in which
   /// case the file name will be <uuid>.<suffix>
-  static String tempFile({String? suffix}) {
-    var finalsuffix = suffix ?? 'tmp';
-
-    if (!finalsuffix.startsWith('.')) {
-      finalsuffix = '.$finalsuffix';
-    }
-    const uuid = Uuid();
-    return '${join(Directory.systemTemp.path, uuid.v4())}$finalsuffix';
-  }
+  @Deprecated('Use createTempFilename')
+  static String tempFile({String? suffix}) =>
+      createTempFilename(suffix: suffix);
 
   /// The path to this file.
   String get path => _file.path;
@@ -248,7 +242,72 @@ String resolveSymLink(String pathToLink) {
 }
 
 ///
+///
 /// Returns a FileStat instance describing the
 /// file or directory located by [path].
 ///
 FileStat stat(String path) => File(path).statSync();
+
+/// Generates a temporary filename in the system temp directory
+/// that is guaranteed to be unique.
+///
+/// This method does NOT create the file.
+///
+/// The temp file name will be <uuid>.tmp
+/// unless you provide a [suffix] in which
+/// case the file name will be <uuid>.<suffix>
+String createTempFilename({String? suffix}) {
+  var finalsuffix = suffix ?? 'tmp';
+
+  if (!finalsuffix.startsWith('.')) {
+    finalsuffix = '.$finalsuffix';
+  }
+  const uuid = Uuid();
+  return '${join(Directory.systemTemp.path, uuid.v4())}$finalsuffix';
+}
+
+/// Generates a temporary filename in the system temp directory
+/// that is guaranteed to be unique.
+///
+/// This method does not create the file.
+///
+/// The temp file name will be <uuid>.tmp
+/// unless you provide a [suffix] in which
+/// case the file name will be <uuid>.<suffix>
+String createTempFile({String? suffix}) {
+  final filename = createTempFilename(suffix: suffix);
+  touch(filename, create: true);
+  return filename;
+}
+
+/// Creates a temp file and then calls [callback].
+///
+/// Once callback completes the temporary file will be deleted.
+///
+/// The callbacks return value [R] is returned from the [withTempDir]
+/// function.
+///
+/// If [create] is true (default true) then the temp file will be
+/// created. If [create] is false then just the name will be
+/// generated.
+///
+/// The temp file name will be <uuid>.tmp
+/// unless you provide a [suffix] in which
+/// case the file name will be <uuid>.<suffix>
+R withTempFile<R>(R Function(String tempFile) callback,
+    {String? suffix, bool create = true}) {
+  final tmp = createTempFilename(suffix: suffix);
+  if (create) {
+    touch(tmp, create: true);
+  }
+
+  R result;
+  try {
+    result = callback(tmp);
+  } finally {
+    if (exists(tmp)) {
+      delete(tmp);
+    }
+  }
+  return result;
+}

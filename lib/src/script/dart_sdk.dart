@@ -324,7 +324,7 @@ class DartSdk {
     // }
     final platform = Platform.operatingSystem;
 
-    final zipRelease = FileSync.tempFile(suffix: 'release.zip');
+    final zipRelease = createTempFilename(suffix: 'release.zip');
 
     // the sdk's can be found here:
     /// https://dart.dev/tools/sdk/archive
