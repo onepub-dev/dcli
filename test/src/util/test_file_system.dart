@@ -191,7 +191,7 @@ class TestFileSystem {
       if (installDcli!) {
         installDCli();
       }
-      buildTestFileSystem(fsRoot);
+      build(fsRoot);
 
       installCrossPlatformTestScripts(originalHome);
     }
@@ -216,7 +216,7 @@ class TestFileSystem {
     return script.pathToProjectRoot;
   }
 
-  void buildTestFileSystem(String fsRoot) {
+  void build(String fsRoot) {
     if (!exists(HOME)) {
       createDir(HOME, recursive: true);
     }

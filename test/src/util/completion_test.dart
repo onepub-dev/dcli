@@ -4,10 +4,12 @@ import 'package:dcli/dcli.dart';
 import 'package:dcli/src/util/completion.dart';
 import 'package:test/test.dart';
 
+import 'test_file_system.dart';
 
 void main() {
   group('completion ...', () {
     withTempDir((fsRoot) {
+      TestFileSystem().build(fsRoot);
       final root = join(fsRoot, 'top');
 
       List<String> paths;

@@ -63,7 +63,7 @@ void main() {
 
     delete(file);
 
-    expect(() => backupFile(file), throwsA(isA<CopyException>()));
+    expect(() => backupFile(file), throwsA(isA<BackupFileException>()));
   });
 
   test('Existing .bak directory', () async {
