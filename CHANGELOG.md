@@ -1,3 +1,22 @@
+# 1.2.3
+Added new methods:
+withTempDir - Allows you to run a callback with access to a temporary directory which is automatically cleaned up when the callback completes.
+withTempFile - Allows you to run a callback with access to a temporary file which is automatically cleaned up when the callback completes.
+createTempFilename
+
+Changes
+Deprecated FileSync.tempFile in favour of createTempFilename
+updated unit tests to reduce reliance of TestFileSystem to speed up the unit tests.
+depcrecated FileSync.tempFile in favour of creaeTempFilename updated to use teh new createTempFilename
+Added ignoreMissing arg to backupFile. Now throws a BackupFileException if the backup file is missing and ignoreMissing is not set.
+
+Fixes:
+Fixed the Ansi.strip command as the unit tests were falely reporting that they worked.
+
+Experimental:
+Added method to ProcessHelper to obtain a complete list of running processes. Not currently supported on osx.
+
+
 # 1.2.2
 Reverted method names on DartScript from pathToDartScript to pathToScript and similar to reduce api breakage.
 
