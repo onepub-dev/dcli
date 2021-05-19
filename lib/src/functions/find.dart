@@ -399,6 +399,9 @@ class _PatternMatcher {
         case '.':
           regEx += r'\.';
           break;
+        case r'\':
+          regEx += r'\\';
+          break;
         default:
           regEx += char;
           break;
