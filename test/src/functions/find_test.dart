@@ -10,8 +10,9 @@ import '../util/test_file_system.dart';
 void main() {
   t.group('Find', () {
     t.test('manualRecursion', () async {
-      final testScriptPath =
-          join(DartScript.current.pathToProjectRoot, 'test', 'test_script');
+      final testScriptPath = truepath(
+          DartProject.current.pathToProjectRoot, 'test', 'test_script');
+
       final foundDirs = find('*',
               workingDirectory: testScriptPath,
               recursive: false,
@@ -20,8 +21,8 @@ void main() {
           .toList();
 
       final rootDirs = <String>[
-        join(testScriptPath, 'general'),
-        join(testScriptPath, 'traditional_project')
+        truepath(testScriptPath, 'general'),
+        truepath(testScriptPath, 'traditional_project')
       ];
 
       expect(foundDirs, t.unorderedEquals(rootDirs));
@@ -87,8 +88,8 @@ void main() {
                 .toList()
                   ..sort();
         final expected = [
-          join(paths.top, 'one.txt'),
-          join(paths.top, 'two.txt')
+          truepath(paths.top, 'one.txt'),
+          truepath(paths.top, 'two.txt')
         ]..sort();
         t.expect(found, t.equals(expected));
       });
@@ -101,19 +102,19 @@ void main() {
 
         find('*.jpg', workingDirectory: paths.top).forEach(print);
         t.expect(find('one.jpg', workingDirectory: paths.top).toList(),
-            t.equals([join(paths.top, 'one.jpg')]));
+            t.equals([truepath(paths.top, 'one.jpg')]));
 
         t.expect(find('two.jpg', workingDirectory: paths.top).toList(),
-            t.equals([join(paths.middle, 'two.jpg')]));
+            t.equals([truepath(paths.middle, 'two.jpg')]));
 
         find('*.jpg', progress: Progress(print));
 
         found.sort();
         final expected = [
-          join(paths.top, 'fred.jpg'),
-          join(paths.top, 'one.jpg'),
-          join(paths.middle, 'two.jpg'),
-          join(paths.bottom, 'three.jpg')
+          truepath(paths.top, 'fred.jpg'),
+          truepath(paths.top, 'one.jpg'),
+          truepath(paths.middle, 'two.jpg'),
+          truepath(paths.bottom, 'three.jpg')
         ]..sort();
         t.expect(found, t.equals(expected));
       });
@@ -125,12 +126,12 @@ void main() {
         final found = find('*.txt', workingDirectory: paths.top).toList()
           ..sort();
         final expected = [
-          join(paths.top, 'one.txt'),
-          join(paths.top, 'two.txt'),
-          join(paths.middle, 'three.txt'),
-          join(paths.middle, 'four.txt'),
-          join(paths.bottom, 'five.txt'),
-          join(paths.bottom, 'six.txt')
+          truepath(paths.top, 'one.txt'),
+          truepath(paths.top, 'two.txt'),
+          truepath(paths.middle, 'three.txt'),
+          truepath(paths.middle, 'four.txt'),
+          truepath(paths.bottom, 'five.txt'),
+          truepath(paths.bottom, 'six.txt')
         ]..sort();
         t.expect(found, t.equals(expected));
       });
@@ -142,12 +143,12 @@ void main() {
         final found = find('*.txt', workingDirectory: paths.top).toList()
           ..sort();
         final expected = [
-          join(paths.top, 'one.txt'),
-          join(paths.top, 'two.txt'),
-          join(paths.middle, 'three.txt'),
-          join(paths.middle, 'four.txt'),
-          join(paths.bottom, 'five.txt'),
-          join(paths.bottom, 'six.txt'),
+          truepath(paths.top, 'one.txt'),
+          truepath(paths.top, 'two.txt'),
+          truepath(paths.middle, 'three.txt'),
+          truepath(paths.middle, 'four.txt'),
+          truepath(paths.bottom, 'five.txt'),
+          truepath(paths.bottom, 'six.txt'),
         ]..sort();
         t.expect(found, t.equals(expected));
       });
@@ -161,17 +162,17 @@ void main() {
                 .toList()
                   ..sort();
         final expected = [
-          join(paths.thidden, 'fred.txt'),
-          join(paths.top, 'one.txt'),
-          join(paths.top, 'two.txt'),
-          join(paths.top, '.two.txt'),
-          join(paths.middle, 'three.txt'),
-          join(paths.middle, 'four.txt'),
-          join(paths.middle, '.four.txt'),
-          join(paths.bottom, 'five.txt'),
-          join(paths.bottom, 'six.txt'),
-          join(paths.hidden, 'seven.txt'),
-          join(paths.hidden, '.seven.txt'),
+          truepath(paths.thidden, 'fred.txt'),
+          truepath(paths.top, 'one.txt'),
+          truepath(paths.top, 'two.txt'),
+          truepath(paths.top, '.two.txt'),
+          truepath(paths.middle, 'three.txt'),
+          truepath(paths.middle, 'four.txt'),
+          truepath(paths.middle, '.four.txt'),
+          truepath(paths.bottom, 'five.txt'),
+          truepath(paths.bottom, 'six.txt'),
+          truepath(paths.hidden, 'seven.txt'),
+          truepath(paths.hidden, '.seven.txt'),
         ]..sort();
         t.expect(found, t.equals(expected));
       });
@@ -181,17 +182,17 @@ void main() {
       final tmp = Directory('/tmp').createTempSync().path;
 
       final paths = <String>[
-        join(tmp, '.thidden' 'fred.txt'),
-        join(tmp, 'top', 'one.txt'),
-        join(tmp, 'top', 'two.txt'),
-        join(tmp, 'top', '.two.txt'),
-        join(tmp, 'middle', 'three.txt'),
-        join(tmp, 'middle', 'four.txt'),
-        join(tmp, 'middle', '.four.txt'),
-        join(tmp, 'bottom', 'five.txt'),
-        join(tmp, 'bottom', 'six.txt'),
-        join(tmp, '.hidden', 'seven.txt'),
-        join(tmp, '.hidden', '.seven.txt')
+        truepath(tmp, '.thidden' 'fred.txt'),
+        truepath(tmp, 'top', 'one.txt'),
+        truepath(tmp, 'top', 'two.txt'),
+        truepath(tmp, 'top', '.two.txt'),
+        truepath(tmp, 'middle', 'three.txt'),
+        truepath(tmp, 'middle', 'four.txt'),
+        truepath(tmp, 'middle', '.four.txt'),
+        truepath(tmp, 'bottom', 'five.txt'),
+        truepath(tmp, 'bottom', 'six.txt'),
+        truepath(tmp, '.hidden', 'seven.txt'),
+        truepath(tmp, '.hidden', '.seven.txt')
       ];
 
       for (final file in paths) {
@@ -211,9 +212,9 @@ void main() {
       final tmp = Directory('/tmp').createTempSync().path;
 
       final paths = <String>[
-        join(tmp, 'middle', 'three.txt'),
-        join(tmp, 'middle', 'four.txt'),
-        join(tmp, 'middle', '.four.txt'),
+        truepath(tmp, 'middle', 'three.txt'),
+        truepath(tmp, 'middle', 'four.txt'),
+        truepath(tmp, 'middle', '.four.txt'),
       ];
 
       for (final file in paths) {
@@ -234,9 +235,9 @@ void main() {
       final tmp = Directory('/tmp').createTempSync().path;
 
       final paths = <String>[
-        join(tmp, 'middle', 'three.txt'),
-        join(tmp, 'middle', 'four.txt'),
-        join(tmp, 'middle', '.four.txt'),
+        truepath(tmp, 'middle', 'three.txt'),
+        truepath(tmp, 'middle', 'four.txt'),
+        truepath(tmp, 'middle', '.four.txt'),
       ];
 
       for (final file in paths) {
@@ -246,9 +247,9 @@ void main() {
         touch(file, create: true);
       }
 
-      final found =
-          find('middle/*.txt', workingDirectory: tmp, includeHidden: true)
-              .toList();
+      final found = find(join('middle', '*.txt'),
+              workingDirectory: tmp, includeHidden: true)
+          .toList();
 
       t.expect(found, t.unorderedEquals(paths));
     });
