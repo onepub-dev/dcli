@@ -125,7 +125,7 @@ class DartScript {
       final script = Platform.script;
 
       if (script.isScheme('file')) {
-        __pathToCurrentScript = Platform.script.path;
+        __pathToCurrentScript = Platform.script.toFilePath();
 
         if (_isCompiled) {
           __pathToCurrentScript = Platform.resolvedExecutable;

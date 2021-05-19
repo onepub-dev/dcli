@@ -42,6 +42,15 @@ class DartProject {
   /// as there is no 'project root' for a compiled script.
   // ignore: prefer_constructors_over_static_methods
   static DartProject get current {
+    if (Platform.packageConfig != null) {
+      /// When running as a unit test we can't use DartScript.current
+      /// as it returns the the test runner.
+      /// The packageConfig is available if passed (which unit tests do)
+      /// and when passed is probably the most relable means of
+      /// determining the project directory.
+      return _current ??=
+          DartProject.fromPath(dirname(Platform.packageConfig!));
+    }
     final script = DartScript.current;
     var startFrom = '.';
     if (!script.isCompiled) {
