@@ -17,7 +17,7 @@ String truepath(String part1,
         String? part5,
         String? part6,
         String? part7]) =>
-    canonicalize(absolute(part1, part2, part3, part4, part5, part6, part7));
+    canonicalize(join(part1, part2, part3, part4, part5, part6, part7));
 
 /// Removes the users home directory from a path replacing it with ~
 String privatePath(String part1,
