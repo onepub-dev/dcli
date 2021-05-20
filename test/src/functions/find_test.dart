@@ -179,79 +179,102 @@ void main() {
     });
 
     t.test('non-recursive find', () async {
-      final tmp = Directory('/tmp').createTempSync().path;
+      withTempDir((tmp) {
+        final paths = <String>[
+          truepath(tmp, '.thidden' 'fred.txt'),
+          truepath(tmp, 'top', 'one.txt'),
+          truepath(tmp, 'top', 'two.txt'),
+          truepath(tmp, 'top', '.two.txt'),
+          truepath(tmp, 'middle', 'three.txt'),
+          truepath(tmp, 'middle', 'four.txt'),
+          truepath(tmp, 'middle', '.four.txt'),
+          truepath(tmp, 'bottom', 'five.txt'),
+          truepath(tmp, 'bottom', 'six.txt'),
+          truepath(tmp, '.hidden', 'seven.txt'),
+          truepath(tmp, '.hidden', '.seven.txt')
+        ];
 
-      final paths = <String>[
-        truepath(tmp, '.thidden' 'fred.txt'),
-        truepath(tmp, 'top', 'one.txt'),
-        truepath(tmp, 'top', 'two.txt'),
-        truepath(tmp, 'top', '.two.txt'),
-        truepath(tmp, 'middle', 'three.txt'),
-        truepath(tmp, 'middle', 'four.txt'),
-        truepath(tmp, 'middle', '.four.txt'),
-        truepath(tmp, 'bottom', 'five.txt'),
-        truepath(tmp, 'bottom', 'six.txt'),
-        truepath(tmp, '.hidden', 'seven.txt'),
-        truepath(tmp, '.hidden', '.seven.txt')
-      ];
-
-      for (final file in paths) {
-        if (!exists(dirname(file))) {
-          createDir(dirname(file));
+        for (final file in paths) {
+          if (!exists(dirname(file))) {
+            createDir(dirname(file));
+          }
+          touch(file, create: true);
         }
-        touch(file, create: true);
-      }
 
-      final found =
-          find('*.txt', workingDirectory: tmp, includeHidden: true).toList();
+        final found =
+            find('*.txt', workingDirectory: tmp, includeHidden: true).toList();
 
-      t.expect(found, t.unorderedEquals(paths));
+        t.expect(found, t.unorderedEquals(paths));
+      });
     });
 
     t.test('non-recursive find with path in pattern', () async {
-      final tmp = Directory('/tmp').createTempSync().path;
+      withTempDir((tmp) {
+        final paths = <String>[
+          truepath(tmp, 'middle', 'three.txt'),
+          truepath(tmp, 'middle', 'four.txt'),
+          truepath(tmp, 'middle', '.four.txt'),
+        ];
 
-      final paths = <String>[
-        truepath(tmp, 'middle', 'three.txt'),
-        truepath(tmp, 'middle', 'four.txt'),
-        truepath(tmp, 'middle', '.four.txt'),
-      ];
-
-      for (final file in paths) {
-        if (!exists(dirname(file))) {
-          createDir(dirname(file));
+        for (final file in paths) {
+          if (!exists(dirname(file))) {
+            createDir(dirname(file));
+          }
+          touch(file, create: true);
         }
-        touch(file, create: true);
-      }
 
-      final found = find('middle/*.txt',
-              workingDirectory: tmp, recursive: false, includeHidden: true)
-          .toList();
+        final found = find(join('middle', '*.txt'),
+                workingDirectory: tmp, recursive: false, includeHidden: true)
+            .toList();
 
-      t.expect(found, t.unorderedEquals(paths));
+        t.expect(found, t.unorderedEquals(paths));
+      });
     });
 
     t.test('recursive find with path in pattern', () async {
-      final tmp = Directory('/tmp').createTempSync().path;
+      withTempDir((tmp) {
+        final paths = <String>[
+          truepath(tmp, 'middle', 'three.txt'),
+          truepath(tmp, 'middle', 'four.txt'),
+          truepath(tmp, 'middle', '.four.txt'),
+        ];
 
-      final paths = <String>[
-        truepath(tmp, 'middle', 'three.txt'),
-        truepath(tmp, 'middle', 'four.txt'),
-        truepath(tmp, 'middle', '.four.txt'),
-      ];
-
-      for (final file in paths) {
-        if (!exists(dirname(file))) {
-          createDir(dirname(file));
+        for (final file in paths) {
+          if (!exists(dirname(file))) {
+            createDir(dirname(file));
+          }
+          touch(file, create: true);
         }
-        touch(file, create: true);
-      }
 
-      final found = find(join('middle', '*.txt'),
-              workingDirectory: tmp, includeHidden: true)
-          .toList();
+        final found = find(join('middle', '*.txt'),
+                workingDirectory: tmp, includeHidden: true)
+            .toList();
 
-      t.expect(found, t.unorderedEquals(paths));
+        t.expect(found, t.unorderedEquals(paths));
+      });
+    });
+
+     t.test('recursive find with absolute path in pattern', () async {
+      withTempDir((tmp) {
+        final paths = <String>[
+          truepath(tmp, 'middle', 'three.txt'),
+          truepath(tmp, 'middle', 'four.txt'),
+          truepath(tmp, 'middle', '.four.txt'),
+        ];
+
+        for (final file in paths) {
+          if (!exists(dirname(file))) {
+            createDir(dirname(file));
+          }
+          touch(file, create: true);
+        }
+
+        final found = find(join(tmp, 'middle', '*.txt'),
+                workingDirectory: tmp, includeHidden: true)
+            .toList();
+
+        t.expect(found, t.unorderedEquals(paths));
+      });
     });
   });
 }

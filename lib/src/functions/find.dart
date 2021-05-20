@@ -12,7 +12,7 @@ import 'function.dart';
 /// Returns the list of files in the current and child
 /// directories that match the passed glob pattern.
 ///
-/// Each file is returned as absolute path.
+/// Each file is returned as an absolute path.
 ///
 /// You can obtain a relative path by calling:
 /// ```dart
@@ -107,22 +107,23 @@ class Find extends DCliFunction {
     List<FileSystemEntityType> types = const [Find.file],
     bool includeHidden = false,
   }) {
-    var _workingDirectory = workingDirectory;
-    var finalpattern = pattern;
+    late final String _workingDirectory;
+    late final String finalpattern;
 
-    /// If the pattern contains a relative path we need
-    /// to move it into the workingDirectory as the user really
-    /// wants to search  in the directory workingDirectory/relativepath.
-    /// This only applies for non-recursive searches as
-    /// when we do
-    final relativeDir = dirname(finalpattern);
-    if (recursive == false && relativeDir != '.') {
-      _workingDirectory = join(_workingDirectory, relativeDir);
-      if (!exists(_workingDirectory)) {
-        throw FindException(
-            'The path ${truepath(_workingDirectory)} does not exists');
-      }
-      finalpattern = basename(finalpattern);
+    /// strip any path components out of the pattern
+    /// and add them to the working directory.
+    /// If there is no dirname component we get '.'
+    final directoryPart = dirname(pattern);
+    if (directoryPart != '.') {
+      _workingDirectory = join(workingDirectory, directoryPart);
+    } else {
+      _workingDirectory = workingDirectory;
+    }
+    finalpattern = basename(pattern);
+
+    if (!exists(_workingDirectory)) {
+      throw FindException(
+          'The path ${truepath(_workingDirectory)} does not exists');
     }
 
     return waitForEx<Progress>(_innerFind(finalpattern,
@@ -154,7 +155,7 @@ class Find extends DCliFunction {
       _workingDirectory = truepath(_workingDirectory);
     }
 
-    if (pattern.startsWith('.')) {
+    if (basename(pattern).startsWith('.')) {
       finalIncludeHidden = true;
     }
 
@@ -351,10 +352,11 @@ class _PatternMatcher {
     regEx = buildRegEx();
 
     final patternParts = split(dirname(pattern));
-    directoryParts = patternParts.length;
+    var count = patternParts.length;
     if (patternParts.length == 1 && patternParts[0] == '.') {
-      directoryParts = 0;
+      count = 0;
     }
+    directoryParts = count;
   }
 
   String pattern;
@@ -363,7 +365,7 @@ class _PatternMatcher {
   bool caseSensitive;
 
   /// the no. of directories in the pattern
-  int directoryParts = 0;
+  late final int directoryParts;
 
   bool match(String path) {
     final matchPart = _extractMatchPart(path);
