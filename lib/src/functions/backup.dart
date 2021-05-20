@@ -117,8 +117,13 @@ void restoreFile(String pathToFile, {bool ignoreMissing = false}) {
 /// This function can be useful for doing dry-run operations
 /// where you need to ensure the filesystem is restore to its
 /// prior state after the dry-run completes.
-R withFileProtection<R>(List<String> protected, R Function() action) {
-  final sourceDir = pwd;
+///
+// ignore: flutter_style_todos
+/// TODO: make this work for other than current drive under Windows
+///
+R withFileProtection<R>(List<String> protected, R Function() action,
+    {String? workingDirectory}) {
+  final sourceDir = workingDirectory ?? pwd;
   final result = withTempDir((backupDir) {
     print('backing up to $backupDir');
 
@@ -126,33 +131,37 @@ R withFileProtection<R>(List<String> protected, R Function() action) {
     /// to a backupDir
     for (final path in protected) {
       late final String target;
+      late final String source;
 
       /// we use two different directories for relative and absolute
       /// paths otherwise we can't differentiate when it comes time
       /// to restore.
       if (isRelative(path)) {
-        target = truepath(backupDir, 'relative', relative(path));
+        target = truepath(backupDir, 'relative', path);
+        source = join(sourceDir, path);
       } else {
-        target = join(backupDir, 'absolute',
-            _stripRootPrefix(_stripWindowsAbsolutePrefix(path)));
+        // ignore: flutter_style_todos
+        /// TODO: make this work for other than current drive under Windows
+        source = _stripWindowsAbsolutePrefix(path);
+        target = join(backupDir, 'absolute', _stripRootPrefix(source));
       }
-      if (isFile(path)) {
+      if (isFile(source)) {
         if (!exists(dirname(target))) {
           createDir(dirname(target), recursive: true);
         }
 
         /// the entity is a simple file.
-        copy(path, target);
-      } else if (isDirectory(path)) {
+        copy(source, target);
+      } else if (isDirectory(source)) {
         /// the entity is a directory so copy the whole tree
         /// recursively.
         if (!exists(target)) {
           createDir(target, recursive: true);
         }
-        copyTree(path, target);
+        copyTree(source, target, includeHidden: true);
       } else {
         /// Must be a glob.
-        for (final file in find(path, includeHidden: true).toList()) {
+        for (final file in find(source, includeHidden: true).toList()) {
           final target = join(backupDir, relative(file));
           if (!exists(dirname(target))) {
             createDir(dirname(target), recursive: true);
@@ -164,9 +173,16 @@ R withFileProtection<R>(List<String> protected, R Function() action) {
     final result = action();
 
     /// Find and restore all of the files we backed up.
-    for (final file
-        in find('*', workingDirectory: backupDir, includeHidden: true)
-            .toList()) {
+    for (final file in find('*',
+            workingDirectory: backupDir,
+            types: [Find.file, Find.directory],
+            includeHidden: true)
+        .toList()) {
+      /// We don't process these top level directories directly
+      if (file == join(backupDir, 'absolute') ||
+          file == join(backupDir, 'relative')) {
+        continue;
+      }
       withTempFile((dotBak) {
         final String originalPath;
         final relativeToBackupDir = relative(file, from: backupDir);
@@ -177,10 +193,25 @@ R withFileProtection<R>(List<String> protected, R Function() action) {
           originalPath =
               joinAll([sourceDir, ...split(relativeToBackupDir).sublist(1)]);
         }
+
+        /// For directories we just recreate them if necessary.
+        /// This allows us to restore empty directories.
+        /// The find command will return all of the nested files so
+        /// we don't need to restore them when we see the directory.
+        if (isDirectory(file)) {
+          if (!exists(originalPath)) {
+            createDir(originalPath, recursive: true);
+          }
+          return;
+        }
         try {
           if (exists(originalPath)) {
             move(originalPath, dotBak);
           }
+
+          // ignore: flutter_style_todos
+          /// TODO: consider only restoring the file if its last modified
+          /// time has changed.
           move(file, originalPath);
           if (exists(dotBak)) {
             delete(dotBak);
