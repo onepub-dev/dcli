@@ -6,8 +6,19 @@ import 'package:posix/posix.dart';
 import 'package:test/test.dart';
 
 void main() {
+  setUp(() {
+    Settings().setVerbose(enabled: true);
+    if (!Shell.current.isPrivilegedUser) {
+      printerr(red('You must run this script with sudo.'));
+      printerr(orange(
+          'To run this script with sudo you will first need to compile it.'));
+      exit(1);
+    }
+  });
+
   test('isPriviliged', () {
     try {
+      expect(Shell.current.isPrivilegedUser, isTrue);
       Settings().setVerbose(enabled: true);
       print('isPriviliged: ${Shell.current.isPrivilegedUser}');
 
@@ -28,40 +39,40 @@ void main() {
       print('post-descalation euid: ${geteuid()}');
       print('post-descalation user egid: ${getegid()}');
 
-      if (exists('test.txt')) {
-        delete('test.txt');
-      }
-      touch('test.txt', create: true);
-      'ls -la test.txt'.run;
+      withTempDir((testRoot) {
+        final testFile = join(testRoot, 'test.txt');
+        touch(testFile, create: true);
+        'ls -la $testFile'.run;
 
-      print('start a non-priviledge command');
+        print('start a non-priviledge command');
 
-      'touch test.txt'.start(privileged: true);
-      'ls -la test.txt'.run;
+        'touch $testFile'.start(privileged: true);
+        'ls -la $testFile'.run;
 
-      Shell.current.withPrivileges(() {
-        print(green('withPrivileges'));
-        print('with privileges euid: ${geteuid()}');
-        print('with privileges egid: ${getegid()}');
+        Shell.current.withPrivileges(() {
+          print(green('withPrivileges'));
+          print('with privileges euid: ${geteuid()}');
+          print('with privileges egid: ${getegid()}');
 
-        print('start a priviledge command');
+          print('start a priviledge command');
 
-        'touch test.txt'.start(privileged: true);
-        'ls -la test.txt'.run;
+          'touch $testFile'.start(privileged: true);
+          'ls -la $testFile'.run;
 
-        if (exists('test2.txt')) {
-          delete('test2.txt');
-        }
+          final testFile2 = join(testRoot, 'test2.txt');
 
-        touch('test2.txt', create: true);
+          touch(testFile2, create: true);
 
-        'ls -la test2.txt'.run;
+          'ls -la $testFile2'.run;
+        });
       });
+
+      Shell.current.restorePrivileges();
     } on PosixException catch (e, st) {
       print(e);
       print(st);
     }
-  });
+  }, tags: ['sudo']);
 
   test('loggedInUsersHome ...', () async {
     final home = join(rootPath, 'home', env['SUDO_USER']);
