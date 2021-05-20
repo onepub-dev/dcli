@@ -1,4 +1,5 @@
 export 'package:args/args.dart';
+export 'package:crypto/crypto.dart' show Digest;
 export 'package:path/path.dart'
     hide
         PathMap,

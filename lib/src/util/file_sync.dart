@@ -2,6 +2,8 @@ import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
 
+import 'package:crypto/crypto.dart';
+
 import 'package:uuid/uuid.dart';
 import '../../dcli.dart';
 
@@ -310,4 +312,46 @@ R withTempFile<R>(R Function(String tempFile) action,
     }
   }
   return result;
+}
+
+/// Calculates the sha256 hash of a file's
+/// content.
+///
+/// This is likely to be an expensive operation
+/// if the file is large.
+///
+/// You can use this method to check if a file
+/// has changes since the last time you took
+/// the files hash.
+///
+/// Throws [FileNotFoundException] if [path]
+/// doesn't exist.
+/// Throws [NotAFileException] if path is
+/// a directory.
+Digest calculateHash(String path) {
+  if (!exists(path)) {
+    throw FileNotFoundException(path);
+  }
+
+  if (isDirectory(path)) {
+    throw NotAFileException(path);
+  }
+  final input = File(path);
+
+  final hasher = sha256;
+  return waitForEx(hasher.bind(input.openRead()).first);
+}
+
+/// Thrown when a file doesn't exist
+class FileNotFoundException extends DCliException {
+  /// Thrown when a file doesn't exist
+  FileNotFoundException(String path)
+      : super('The file ${truepath(path)} does not exist.');
+}
+
+/// Thrown when a path is not a file.
+class NotAFileException extends DCliException {
+  /// Thrown when a path is not a file.
+  NotAFileException(String path)
+      : super('The path ${truepath(path)} is not a file.');
 }
