@@ -182,7 +182,7 @@ Progress startFromArgs(
 ///
 /// You may pass in a [progress] which allows you to process
 /// output as it is generated. If you pass in a [progress] the same
-/// [progress] is returned from the [run] method.
+/// [progress] is returned from the [start] method.
 ///
 /// If you don't passing in a [progress] then a default [progress] is created
 /// which suppresses output from both stdout and stderr.
