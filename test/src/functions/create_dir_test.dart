@@ -78,5 +78,15 @@ void main() {
 
       expect(exists(dir), isFalse);
     });
+
+    t.test('withTempDir - keep', () {
+      final dir = withTempDir((tempDir) {
+        expect(exists(tempDir), isTrue);
+
+        return tempDir;
+      }, keep: true);
+
+      expect(exists(dir), isTrue);
+    });
   });
 }
