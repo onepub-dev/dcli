@@ -58,3 +58,4 @@ tool/post_release_hook/.settings.yaml
 **/*.dart.vm.json
 **/*.lock
 .failed_tracker
+.git_old
