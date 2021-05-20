@@ -9,6 +9,9 @@ void main() {
   });
 
   test('isPrivilegedPasswordRequired', () {
+    /// ensure the sudo password has been flushed.
+    'sudo -K'.run;
+
     /// Force dcli to see the bash shell.
     env['SHELL'] = BashShell.shellName;
 
