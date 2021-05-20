@@ -8,21 +8,21 @@ import 'package:dcli/dcli.dart';
 ///
 
 // on systems with _POSIX_SAVED_IDS defined
-typedef setEffectiveUID_func = Int32 Function(Uint32 effectiveUID);
-typedef setEffectiveUID = int Function(int effectiveUID);
+typedef SetEffectiveUIDFunc = Int32 Function(Uint32 effectiveUID);
+typedef SetEffectiveUID = int Function(int effectiveUID);
 
 /// on other systems.
 /// sets the effective and real uids.
-typedef setUID_func = Int32 Function(Uint32 realUID, Uint32 effectiveUID);
-typedef setUID = int Function(int realUID, int effectiveUID);
+typedef SetUIDFunc = Int32 Function(Uint32 realUID, Uint32 effectiveUID);
+typedef SetUID = int Function(int realUID, int effectiveUID);
 
 /// geteuid
-typedef getEffectiveUID_func = Int32 Function();
-typedef getEffectiveUID = int Function();
+typedef GetEffectiveUIDFunc = Int32 Function();
+typedef GetEffectiveUID = int Function();
 
 /// getreuid.
-typedef getRealUID_func = Int32 Function();
-typedef getRealUID = int Function();
+typedef GetRealUIDFunc = Int32 Function();
+typedef GetRealUID = int Function();
 
 void main() {
   // var priv = Priviliges();
