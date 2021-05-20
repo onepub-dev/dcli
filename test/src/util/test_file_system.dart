@@ -75,13 +75,10 @@ class TestFileSystem {
   }
 
   late String uniquePath;
-  late String top;
-  late String thidden;
-  late String middle;
-  late String bottom;
-  late String hidden;
 
   static late String _testRoot;
+
+  TestDirectoryTree? testDirectoryTree;
 
   /// directory under .dcli which we used to store compiled
   /// tests scripts that we need to add to the TestFileSystems
@@ -111,7 +108,7 @@ class TestFileSystem {
   String? originalPubCache;
 
   void withinZone(
-    void Function(TestFileSystem fs) callback,
+    void Function(TestFileSystem fs) action,
   ) {
     final stack = StackTraceImpl(skipFrames: 1);
 
@@ -124,7 +121,7 @@ class TestFileSystem {
     //         /// setup of the first tests can take a while
     //         timeout: const Duration(seconds: 600))
 //          .withLock(() {
-    _runUnderLock(stack, callback);
+    _runUnderLock(stack, action);
     //});
     // } on DCliException catch (e) {
     //   print(e.toString());
@@ -134,7 +131,7 @@ class TestFileSystem {
   }
 
   void _runUnderLock(
-      StackTraceImpl stack, void Function(TestFileSystem fs) callback) {
+      StackTraceImpl stack, void Function(TestFileSystem fs) action) {
     final frame = stack.frames[0];
 
     print(red('${'*' * 40} Starting test '
@@ -161,7 +158,7 @@ class TestFileSystem {
 
       initFS(originalHome);
 
-      callback(this);
+      action(this);
     }
     // ignore: avoid_catches_without_on_clauses
     catch (e, st) {
@@ -191,7 +188,7 @@ class TestFileSystem {
       if (installDcli!) {
         installDCli();
       }
-      build(fsRoot);
+      testDirectoryTree = TestDirectoryTree(fsRoot);
 
       installCrossPlatformTestScripts(originalHome);
     }
@@ -216,21 +213,8 @@ class TestFileSystem {
     return script.pathToProjectRoot;
   }
 
-  void build(String fsRoot) {
-    if (!exists(HOME)) {
-      createDir(HOME, recursive: true);
-    }
-
-    top = join(fsRoot, 'top');
-    thidden = join(top, '.hidden');
-    middle = join(top, 'middle');
-    bottom = join(middle, 'bottom');
-    hidden = join(middle, '.hidden');
-
-    populateFileSystem(top, thidden, middle, bottom, hidden);
-  }
-
-  /// Used by third parties to build a well know diretory tree for testing.
+  /// Used by third parties to build a populated and
+  /// well know diretory tree for testing.
   static void buildDirectoryTree(String root) {
     final top = join(root, 'top');
     final thidden = join(top, '.hidden');
@@ -443,4 +427,107 @@ class TestFileSystem {
 
 class TestFileSystemException extends DCliException {
   TestFileSystemException(String message) : super(message);
+}
+
+class TestDirectoryTree {
+  TestDirectoryTree(this.root) {
+    _build();
+  }
+
+  String root;
+
+  late String top;
+  late String thidden;
+  late String middle;
+  late String bottom;
+  late String hidden;
+
+  late final String topFredJpg;
+  late final String topFredPng;
+  late final String thiddenFredTxt;
+  late final String topOneTxt ;
+  late final String topTwoTxt;
+  late final String topOneJpg ;
+  late final String topDotTwoTxt;
+  late final String middleThreeTxt;
+  late final String middleFourTxt ;
+  late final String middleTwoJpg ;
+  late final String middleDotFourTxt;
+  late final String bottomFiveTxt ;
+  late final String bottomSixTxt ;
+  late final String bottomThreeJpg;
+  late final String hiddenSevenTxt ;
+  late final String hiddenDotSevenTxt;
+
+  void _build() {
+    if (!exists(HOME)) {
+      createDir(HOME, recursive: true);
+    }
+
+    top = join(root, 'top');
+    thidden = join(top, '.hidden');
+    middle = join(top, 'middle');
+    bottom = join(middle, 'bottom');
+    hidden = join(middle, '.hidden');
+
+    topFredJpg = join(top, 'fred.jpg');
+    topFredPng = join(top, 'fred.png');
+    thiddenFredTxt = join(thidden, 'fred.txt');
+    topOneTxt = join(top, 'one.txt');
+    topTwoTxt = join(top, 'two.txt');
+    topOneJpg = join(top, 'one.jpg');
+    topDotTwoTxt = join(top, '.two.txt');
+    middleThreeTxt = join(middle, 'three.txt');
+    middleFourTxt = join(middle, 'four.txt');
+    middleTwoJpg = join(middle, 'two.jpg');
+    middleDotFourTxt = join(middle, '.four.txt');
+    bottomFiveTxt = join(bottom, 'five.txt');
+    bottomSixTxt = join(bottom, 'six.txt');
+    bottomThreeJpg = join(bottom, 'three.jpg');
+    hiddenSevenTxt = join(hidden, 'seven.txt');
+    hiddenDotSevenTxt = join(hidden, '.seven.txt');
+
+    populateFileSystem(top, thidden, middle, bottom, hidden);
+  }
+
+  static void populateFileSystem(
+      String top, String thidden, String middle, String bottom, String hidden) {
+    // Create some the test dirs.
+    if (!exists(thidden)) {
+      createDir(thidden, recursive: true);
+    }
+
+    // Create some the test dirs.
+    if (!exists(bottom)) {
+      createDir(bottom, recursive: true);
+    }
+
+    // Create some the test dirs.
+    if (!exists(hidden)) {
+      createDir(hidden, recursive: true);
+    }
+
+    // Create test files
+
+    touch(join(top, 'fred.jpg'), create: true);
+    touch(join(top, 'fred.png'), create: true);
+    touch(join(thidden, 'fred.txt'), create: true);
+
+    touch(join(top, 'one.txt'), create: true);
+    touch(join(top, 'two.txt'), create: true);
+    touch(join(top, 'one.jpg'), create: true);
+    touch(join(top, '.two.txt'), create: true);
+
+    touch(join(middle, 'three.txt'), create: true);
+    touch(join(middle, 'four.txt'), create: true);
+    touch(join(middle, 'two.jpg'), create: true);
+    touch(join(middle, '.four.txt'), create: true);
+
+    touch(join(bottom, 'five.txt'), create: true);
+    touch(join(bottom, 'six.txt'), create: true);
+    touch(join(bottom, 'three.jpg'), create: true);
+
+    touch(join(hidden, 'seven.txt'), create: true);
+    touch(join(hidden, '.seven.txt'), create: true);
+  }
 }
