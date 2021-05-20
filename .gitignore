@@ -14,20 +14,12 @@ doc/api/
 .vscode/
 test/data/shell/main/bad.jpg
 test/data/shell/main/subdir/goody.jpg
-test/tools/images/bad.jpg
+test/tools/images
 tmp/lines.txt
 test.text
 shell/main/good.jpg
 shell/main/subdir/goody.jpg
-tmp/top/one.jpg
-tmp/top/one.txt
-tmp/top/two.txt
-tmp/top/middle/four.txt
-tmp/top/middle/three.txt
-tmp/top/middle/two.jpg
-tmp/top/middle/bottom/five.txt
-tmp/top/middle/bottom/six.txt
-tmp/top/middle/bottom/three.jpg
+tmp
 test/test_scripts/bin/burp.dart
 test/test_scripts/bin/hello_world.dart
 test/test_scripts/bin/new_world.dart
@@ -60,3 +52,4 @@ tool/post_release_hook/.settings.yaml
 .failed_tracker
 .git_old
 .testing
+test/sudo/privileges
