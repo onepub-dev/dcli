@@ -13,7 +13,7 @@ import 'is.dart';
 /// The [to] path must exist.
 ///
 /// If any copied file already exists in the [to] path then
-/// an exeption is throw and a parital copyTree may occured.
+/// an exeption is throw and a parital copyTree may occur.
 ///
 /// You can force the copyTree to overwrite files in the [to]
 /// directory by setting [overwrite] to true (defaults to false).
