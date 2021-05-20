@@ -33,8 +33,8 @@ void privileged({required bool enabled}) {
   }
 }
 
-void withPrivileges(void Function() task) {
+void withPrivileges(void Function() action) {
   privileged(enabled: true);
-  task();
+  action();
   privileged(enabled: false);
 }
