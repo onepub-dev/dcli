@@ -49,5 +49,15 @@ void main() {
       }, suffix: 'dodo');
       expect(count, equals(5));
     });
+
+    test('withTempFile - keep', () async {
+      final tempFile = withTempFile((
+        tempFile,
+      ) {
+        expect(exists(tempFile), isTrue);
+        return tempFile;
+      }, suffix: 'dodo', keep: true);
+      expect(exists(tempFile), isTrue);
+    });
   });
 }

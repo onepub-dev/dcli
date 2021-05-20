@@ -280,11 +280,11 @@ String createTempFile({String? suffix}) {
   return filename;
 }
 
-/// Creates a temp file and then calls [callback].
+/// Creates a temp file and then calls [action].
 ///
-/// Once callback completes the temporary file will be deleted.
+/// Once [action] completes the temporary file will be deleted.
 ///
-/// The callbacks return value [R] is returned from the [withTempDir]
+/// The [action]s return value [R] is returned from the [withTempDir]
 /// function.
 ///
 /// If [create] is true (default true) then the temp file will be
@@ -294,8 +294,8 @@ String createTempFile({String? suffix}) {
 /// The temp file name will be <uuid>.tmp
 /// unless you provide a [suffix] in which
 /// case the file name will be <uuid>.<suffix>
-R withTempFile<R>(R Function(String tempFile) callback,
-    {String? suffix, bool create = true}) {
+R withTempFile<R>(R Function(String tempFile) action,
+    {String? suffix, bool create = true, bool keep = true}) {
   final tmp = createTempFilename(suffix: suffix);
   if (create) {
     touch(tmp, create: true);
@@ -303,9 +303,9 @@ R withTempFile<R>(R Function(String tempFile) callback,
 
   R result;
   try {
-    result = callback(tmp);
+    result = action(tmp);
   } finally {
-    if (exists(tmp)) {
+    if (exists(tmp) && !keep) {
       delete(tmp);
     }
   }
