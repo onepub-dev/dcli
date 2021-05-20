@@ -130,43 +130,36 @@ R withFileProtection<R>(List<String> protected, R Function() action,
     /// backup the protected files
     /// to a backupDir
     for (final path in protected) {
-      late final String target;
-      late final String source;
+      final paths = _determinePaths(
+          path: path, sourceDir: sourceDir, backupDir: backupDir);
 
-      /// we use two different directories for relative and absolute
-      /// paths otherwise we can't differentiate when it comes time
-      /// to restore.
-      if (isRelative(path)) {
-        target = truepath(backupDir, 'relative', path);
-        source = join(sourceDir, path);
-      } else {
-        // ignore: flutter_style_todos
-        /// TODO: make this work for other than current drive under Windows
-        source = _stripWindowsAbsolutePrefix(path);
-        target = join(backupDir, 'absolute', _stripRootPrefix(source));
-      }
-      if (isFile(source)) {
-        if (!exists(dirname(target))) {
-          createDir(dirname(target), recursive: true);
+      if (isFile(paths.source)) {
+        if (!exists(dirname(paths.target))) {
+          createDir(dirname(paths.target), recursive: true);
         }
 
         /// the entity is a simple file.
-        copy(source, target);
-      } else if (isDirectory(source)) {
+        copy(paths.source, paths.target);
+      } else if (isDirectory(paths.source)) {
         /// the entity is a directory so copy the whole tree
         /// recursively.
-        if (!exists(target)) {
-          createDir(target, recursive: true);
+        if (!exists(paths.target)) {
+          createDir(paths.target, recursive: true);
         }
-        copyTree(source, target, includeHidden: true);
+        copyTree(paths.source, paths.target, includeHidden: true);
       } else {
         /// Must be a glob.
-        for (final file in find(source, includeHidden: true).toList()) {
-          final target = join(backupDir, relative(file));
-          if (!exists(dirname(target))) {
-            createDir(dirname(target), recursive: true);
+        for (final file in find(paths.source, includeHidden: true).toList()) {
+          // we need to determine the paths for each [file]
+          // as the can have a different relative path as we
+          // do a recursive search.
+          final paths = _determinePaths(
+              path: file, sourceDir: sourceDir, backupDir: backupDir);
+
+          if (!exists(dirname(paths.target))) {
+            createDir(dirname(paths.target), recursive: true);
           }
-          copy(file, target);
+          copy(paths.source, paths.target);
         }
       }
     }
@@ -237,6 +230,36 @@ R withFileProtection<R>(List<String> protected, R Function() action,
   }, keep: true);
 
   return result;
+}
+
+_Paths _determinePaths(
+    {required String path,
+    required String sourceDir,
+    required String backupDir}) {
+  late final String source;
+  late final String target;
+
+  /// we use two different directories for relative and absolute
+  /// paths otherwise we can't differentiate when it comes time
+  /// to restore.
+  if (isRelative(path)) {
+    target = truepath(backupDir, 'relative', path);
+    source = join(sourceDir, path);
+  } else {
+    // ignore: flutter_style_todos
+    /// TODO: make this work for other than current drive under Windows
+    source = _stripWindowsAbsolutePrefix(path);
+    target = join(backupDir, 'absolute', _stripRootPrefix(source));
+  }
+
+  return _Paths(source, target);
+}
+
+class _Paths {
+  _Paths(this.source, this.target);
+
+  String source;
+  String target;
 }
 
 /// Removes the root prefix (/ or \) from an absolute path

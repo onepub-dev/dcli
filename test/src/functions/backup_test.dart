@@ -227,12 +227,15 @@ void main() {
 
         withFileProtection(['*.txt'], () {
           delete(tree.topDotTwoTxt);
-          delete(tree.bottomFiveTxt);
+          delete(tree.middleFourTxt);
           delete(tree.middleDotFourTxt);
+          deleteDir(tree.bottom);
         }, workingDirectory: tempDir);
         expect(exists(tree.topDotTwoTxt), isTrue);
-        expect(exists(tree.bottomFiveTxt), isTrue);
+        expect(exists(tree.middleFourTxt), isTrue);
         expect(exists(tree.middleDotFourTxt), isTrue);
+        expect(exists(tree.bottom), isTrue);
+        expect(exists(tree.bottomFiveTxt), isTrue);
       });
     });
   });
