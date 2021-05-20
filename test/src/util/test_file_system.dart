@@ -430,6 +430,7 @@ class TestFileSystemException extends DCliException {
 }
 
 class TestDirectoryTree {
+  /// Builds the test directory tree and populates it.
   TestDirectoryTree(this.root) {
     _build();
   }
