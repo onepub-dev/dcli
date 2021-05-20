@@ -20,11 +20,14 @@ void main() {
       String command;
       command = 'ls *.txt';
       final found = <String?>[];
-      start(command, workingDirectory: path).forEach(found.add);
+
+      // TODO(bsutton): the progress is a hack to get around the fact that for each is currently broken. https://github.com/bsutton/dcli/issues/144
+      start(command, workingDirectory: path, progress: Progress.capture())
+          .forEach(found.add);
 
       expect(found, <String>['one.txt', 'two.txt']);
     });
-  });
+  }, skip: true);
 
   test('runnable process Start - forEach', () {
     print('Print to stdout using "print');
@@ -62,19 +65,10 @@ void main() {
   }, skip: true);
 
   test('Process stderr and stdout', () {
-    // final progress =
-    //     'test/test_script/general/bin/print_to_both_with_error.dart'
-    //         .start(progress: Progress.capture(), nothrow: true);
-
-    final progress = 'pub publish'.start(
-        workingDirectory: '/tmp/test/top',
-        progress: Progress.print(capture: true),
-        nothrow: true);
-
-    // final progress =
-    //     'test/test_script/general/bin/print_to_both_with_error.dart'
-    //         .start(progress: Progress.print(capture: true), nothrow: true);
-    expect(progress.exitCode, equals(65));
+    final progress =
+        'test/test_script/general/bin/print_to_both_with_error.dart'
+            .start(progress: Progress.print(capture: true), nothrow: true);
+    expect(progress.exitCode, equals(25));
     final lines = progress.lines;
     expect(lines.join('\n').contains('Hello World - StdOut'), isTrue);
     expect(lines.join('\n').contains('Hello World - StdErr'), isTrue);
