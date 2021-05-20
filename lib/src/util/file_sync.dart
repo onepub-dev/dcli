@@ -297,7 +297,7 @@ String createTempFile({String? suffix}) {
 /// unless you provide a [suffix] in which
 /// case the file name will be <uuid>.<suffix>
 R withTempFile<R>(R Function(String tempFile) action,
-    {String? suffix, bool create = true, bool keep = true}) {
+    {String? suffix, bool create = true, bool keep = false}) {
   final tmp = createTempFilename(suffix: suffix);
   if (create) {
     touch(tmp, create: true);
