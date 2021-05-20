@@ -8,12 +8,12 @@ import 'test_file_system.dart';
 
 void main() {
   group('completion ...', () {
-    withTempDir((fsRoot) {
-      TestDirectoryTree(fsRoot);
-      final root = join(fsRoot, 'top');
+    List<String> paths;
+    test('empty word', () async {
+      withTempDir((fsRoot) {
+        TestDirectoryTree(fsRoot);
+        final root = join(fsRoot, 'top');
 
-      List<String> paths;
-      test('empty word', () async {
         final paths = completionExpandScripts('', workingDirectory: root);
         expect(
             paths,
@@ -26,8 +26,13 @@ void main() {
               'middle/'
             ]));
       });
+    });
 
-      test('single match', () async {
+    test('single match', () async {
+      withTempDir((fsRoot) {
+        TestDirectoryTree(fsRoot);
+        final root = join(fsRoot, 'top');
+
         paths = completionExpandScripts('middl', workingDirectory: root);
         expect(
             paths,
@@ -35,8 +40,13 @@ void main() {
               'middle/',
             ]));
       });
+    });
 
-      test('directory with trailing slash', () async {
+    test('directory with trailing slash', () async {
+      withTempDir((fsRoot) {
+        TestDirectoryTree(fsRoot);
+        final root = join(fsRoot, 'top');
+
         paths = completionExpandScripts('middle/', workingDirectory: root);
         expect(
             paths,
@@ -47,15 +57,20 @@ void main() {
               'middle/two.jpg',
             ]));
       });
+    });
 
-      /// need a test where we enter a partial directory
-      ///  and two directories match
-      /// the completion seems to auto complete to the first exact match.
-      /// e.g.
-      /// doc
-      /// docker
-      /// match word: doc which then return doc/
-      test('two matching directories', () {
+    /// need a test where we enter a partial directory
+    ///  and two directories match
+    /// the completion seems to auto complete to the first exact match.
+    /// e.g.
+    /// doc
+    /// docker
+    /// match word: doc which then return doc/
+    test('two matching directories', () {
+      withTempDir((fsRoot) {
+        TestDirectoryTree(fsRoot);
+        final root = join(fsRoot, 'top');
+
         final mid = join(root, 'mid');
         if (!exists(mid)) {
           createDir(mid);
@@ -69,8 +84,13 @@ void main() {
               'middle/',
             ]));
       });
+    });
 
-      test('directory as word', () async {
+    test('directory as word', () async {
+      withTempDir((fsRoot) {
+        TestDirectoryTree(fsRoot);
+        final root = join(fsRoot, 'top');
+
         paths = completionExpandScripts('middle', workingDirectory: root);
         expect(
             paths,
@@ -78,13 +98,23 @@ void main() {
               'middle/',
             ]));
       });
+    });
 
-      test('invalid directory', () async {
+    test('invalid directory', () async {
+      withTempDir((fsRoot) {
+        TestDirectoryTree(fsRoot);
+        final root = join(fsRoot, 'top');
+
         paths = completionExpandScripts('muddle/', workingDirectory: root);
         expect(paths, <String>[]);
       });
+    });
 
-      test('directory and letter', () async {
+    test('directory and letter', () async {
+      withTempDir((fsRoot) {
+        TestDirectoryTree(fsRoot);
+        final root = join(fsRoot, 'top');
+
         paths = completionExpandScripts('middle/t', workingDirectory: root);
         expect(paths,
             unorderedEquals(<String>['middle/two.jpg', 'middle/three.txt']));
