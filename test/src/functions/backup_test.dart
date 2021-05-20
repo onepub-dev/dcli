@@ -2,6 +2,8 @@ import 'package:dcli/dcli.dart';
 import 'package:path/path.dart';
 import 'package:test/test.dart';
 
+import '../util/test_file_system.dart';
+
 void main() {
   test('backup/restore good path', () async {
     final root = createTempDir();
@@ -95,5 +97,18 @@ void main() {
     expect(read(file).toList().join('\n').contains(secondline), isFalse);
 
     expect(exists(backupFilename), isFalse);
+  });
+
+  group('withFileProtection', () {
+    test('single file', () {
+      withTempDir((tempDir) {
+        final tree = TestDirectoryTree(tempDir);
+
+        withFileProtection([tree.bottomFiveTxt], () {
+          delete(tree.bottomFiveTxt);
+        });
+        expect(exists(tree.bottomFiveTxt), isTrue);
+      });
+    });
   });
 }

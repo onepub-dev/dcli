@@ -104,7 +104,7 @@ void main() {
 
   test('linux/macos', () {
     withTempDir((fsRoot) {
-      final fs = TestFileSystem()..build(fsRoot);
+      final fs = TestDirectoryTree(fsRoot);
       final parsed = ParsedCliCommand('ls *.jpg *.png', fs.top);
 
       expect(parsed.cmd, equals('ls'));
@@ -123,7 +123,7 @@ void main() {
 
   test('.*', () {
     withTempDir((fsRoot) {
-      final fs = TestFileSystem()..build(fsRoot);
+      final fs = TestDirectoryTree(fsRoot);
       final parsed = ParsedCliCommand('ls .*', fs.top);
 
       expect(parsed.cmd, equals('ls'));
@@ -136,7 +136,7 @@ void main() {
 
   test('invalid/.*', () {
     withTempDir((fsRoot) {
-      final fs = TestFileSystem()..build(fsRoot);
+      final fs = TestDirectoryTree(fsRoot);
 
       expect(() => ParsedCliCommand('ls invalid/.*', fs.top),
           throwsA(isA<FileSystemException>()));
@@ -147,7 +147,7 @@ void main() {
 
   test('valid/.*', () {
     withTempDir((fsRoot) {
-      final fs = TestFileSystem()..build(fsRoot);
+      final fs = TestDirectoryTree(fsRoot);
 
       final parsed = ParsedCliCommand('ls middle/.*', fs.top);
 
@@ -162,7 +162,7 @@ void main() {
 
   test('alternate working directory', () {
     withTempDir((fsRoot) {
-      final fs = TestFileSystem()..build(fsRoot);
+      final fs = TestDirectoryTree(fsRoot);
 
       final parsed = ParsedCliCommand('ls *.txt *.jpg', fs.middle);
 
@@ -182,7 +182,7 @@ void main() {
 
   test('valid non-local path', () {
     withTempDir((fsRoot) {
-      final fs = TestFileSystem()..build(fsRoot);
+      final fs = TestDirectoryTree(fsRoot);
 
       final parsed = ParsedCliCommand('ls middle/*.txt', fs.top);
 
@@ -199,7 +199,7 @@ void main() {
 
   test('invalid absolute path/*', () {
     withTempDir((fsRoot) {
-      final fs = TestFileSystem()..build(fsRoot);
+      final fs = TestDirectoryTree(fsRoot);
 
       expect(() => ParsedCliCommand('ls /git/dcli/*', fs.top),
           throwsA(isA<FileSystemException>()));
@@ -208,7 +208,7 @@ void main() {
 
   test('valid absolute path/*', () {
     withTempDir((fsRoot) {
-      final fs = TestFileSystem()..build(fsRoot);
+      final fs = TestDirectoryTree(fsRoot);
 
       final parsed = ParsedCliCommand('ls ${join(fs.top, '*.txt')}', fs.middle);
 
@@ -223,7 +223,7 @@ void main() {
 
   test('windows', () {
     withTempDir((fsRoot) {
-      final fs = TestFileSystem()..build(fsRoot);
+      final fs = TestDirectoryTree(fsRoot);
 
       final parsed = ParsedCliCommand('ls *.jpg *.png', fs.top);
 

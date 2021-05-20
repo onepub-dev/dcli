@@ -115,15 +115,15 @@ class Privileges {
   /// Used to track what UID is currently in effect.
   int? currentEffectiveUID;
 
-  /// If the script was started as sudo then any [task]
+  /// If the script was started as sudo then any [action]
   /// run within in the scope of this call will be
   /// run with escalated privileges.
   ///
   /// If the script wasn't run as sudo then there will
   /// be no changes to their privildege level.
-  // void withPrivileges(void Function() task) {
+  // void withPrivileges(void Function() action) {
   //   escalate();
-  //   task();
+  //   action();
   //   descalate();
   // }
 

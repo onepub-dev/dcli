@@ -7,7 +7,7 @@ import 'test_file_system.dart';
 void main() {
   test('Parser', () {
     withTempDir((fsRoot) {
-      TestFileSystem().build(fsRoot);
+      TestDirectoryTree(fsRoot);
 
       final jsonFile = join(fsRoot, 'sample.json')..write('''
 { 
