@@ -125,7 +125,7 @@ R withFileProtection<R>(List<String> protected, R Function() action,
     {String? workingDirectory}) {
   final sourceDir = workingDirectory ?? pwd;
   final result = withTempDir((backupDir) {
-    print('backing up to $backupDir');
+    Settings().verbose('withFileProtection: backing up to $backupDir');
 
     /// backup the protected files
     /// to a backupDir
