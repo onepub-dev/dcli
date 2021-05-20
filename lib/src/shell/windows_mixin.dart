@@ -54,8 +54,13 @@ mixin WindowsMixin {
   ///
   String? get loggedInUser => env['USERNAME'];
 
-  /// revert uid and gid to original user's id's
+  /// NO OP under windows
   void releasePrivileges() {
+    /// NO OP under windows as its not possible and not needed.
+  }
+
+  /// NO OP under windows
+  void restorePrivileges() {
     /// NO OP under windows as its not possible and not needed.
   }
 

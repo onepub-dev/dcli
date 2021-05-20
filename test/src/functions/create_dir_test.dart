@@ -70,7 +70,7 @@ void main() {
     t.test('withTempDir', () {
       final dir = withTempDir((tempDir) {
         expect(exists(tempDir), isTrue);
-        touch('test.txt', create: true);
+        touch(join(tempDir, 'test.txt'), create: true);
         createDir(join(tempDir, 'test2'));
 
         return tempDir;

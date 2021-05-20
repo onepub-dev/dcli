@@ -104,7 +104,7 @@ mixin PosixShell {
 
   /// revert uid and gid to original user's id's
   void releasePrivileges() {
-    if (Shell.current.isPrivilegedUser) {
+    if (Shell.current.isPrivilegedUser && !Platform.isWindows) {
       final sUID = env['SUDO_UID'];
       final gUID = env['SUDO_GID'];
 
@@ -117,6 +117,16 @@ mixin PosixShell {
     }
   }
 
+  /// If a prior call to [releasePrivileges] has
+  /// been made then this command will restore
+  /// those privileges
+  void restorePrivileges() {
+    if (!Platform.isWindows) {
+      setegid(0);
+      seteuid(0);
+    }
+  }
+
   /// Run [action] with root UID and gid
   void withPrivileges(RunPrivileged action) {
     if (!Shell.current.isPrivilegedProcess) {
@@ -126,8 +136,7 @@ mixin PosixShell {
     final privileged = geteuid() == 0;
 
     if (!privileged) {
-      setegid(0);
-      seteuid(0);
+      restorePrivileges();
     }
 
     action();

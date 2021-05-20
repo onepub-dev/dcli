@@ -149,6 +149,11 @@ class UnknownShell with ShellMixin {
   }
 
   @override
+  void restorePrivileges() {
+    throw UnimplementedError();
+  }
+
+  @override
   void withPrivileges(RunPrivileged action) {
     throw UnimplementedError();
   }
