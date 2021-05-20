@@ -59,13 +59,13 @@ mixin WindowsMixin {
     /// NO OP under windows as its not possible and not needed.
   }
 
-  /// Run [privilegedCallback] with root UID and gid
-  void withPrivileges(RunPrivileged privilegedCallback) {
+  /// Run [action] with root UID and gid
+  void withPrivileges(RunPrivileged action) {
     if (!Shell.current.isPrivilegedUser) {
       throw ShellException(
           'You can only use withPrivileges when running as a privileged user.');
     }
-    privilegedCallback();
+    action();
   }
 
   /// On Windows this is always false.

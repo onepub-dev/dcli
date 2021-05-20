@@ -118,7 +118,7 @@ abstract class Shell {
   /// so that only specific parts of your code run with privileges.
   ///
   /// You must NEVER call [releasePrivileges] within a [withPrivileges]
-  /// callback.
+  /// action.
   ///
   /// ```dart
   /// void main(){
@@ -139,7 +139,7 @@ abstract class Shell {
 
   /// When a script is run under sudo on Linux and osx and you
   /// have previously called [releasePrivileges] then this method
-  /// will run [privilegedCallback] with root privileges.
+  /// will run [action] with root privileges.
   ///
   /// If you attempt to call [withPrivileges] when not running
   /// as a privileged process a [ShellException] will be thrown.
@@ -150,9 +150,9 @@ abstract class Shell {
   /// Nesting [withPrivileges] blocks is allowed as a convenience.
   ///
   /// You must NEVER call [releasePrivileges] within a [withPrivileges]
-  /// callback.
+  /// action.
   ///
-  void withPrivileges(RunPrivileged privilegedCallback);
+  void withPrivileges(RunPrivileged action);
 
   /// Returns a message informing the user that they need to run
   /// as a priviledged user to run an app.

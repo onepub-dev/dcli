@@ -117,8 +117,8 @@ mixin PosixShell {
     }
   }
 
-  /// Run [privilegedCallback] with root UID and gid
-  void withPrivileges(RunPrivileged privilegedCallback) {
+  /// Run [action] with root UID and gid
+  void withPrivileges(RunPrivileged action) {
     if (!Shell.current.isPrivilegedProcess) {
       throw ShellException(
           'You can only use withPrivileges when running as a privileged user.');
@@ -130,7 +130,7 @@ mixin PosixShell {
       seteuid(0);
     }
 
-    privilegedCallback();
+    action();
 
     /// If the code was originally running privileged then
     /// we leave it as it was.

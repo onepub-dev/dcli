@@ -149,7 +149,7 @@ class UnknownShell with ShellMixin {
   }
 
   @override
-  void withPrivileges(RunPrivileged privilegedCallback) {
+  void withPrivileges(RunPrivileged action) {
     throw UnimplementedError();
   }
 
