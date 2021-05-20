@@ -129,18 +129,111 @@ void main() {
       });
     });
 
-     test('single file relative path that we delete', () {
-       final localDir = join(pwd, '.testing');
-        final tree = TestDirectoryTree(localDir);
+    test('single file relative path that we delete', () {
+      final localDir = join(pwd, '.testing');
+      final tree = TestDirectoryTree(localDir);
 
-        withFileProtection([tree.bottomFiveTxt], () {
+      withFileProtection([relative(tree.bottomFiveTxt)], () {
+        delete(tree.bottomFiveTxt);
+      });
+      expect(exists(tree.bottomFiveTxt), isTrue);
+
+      deleteDir(localDir);
+    });
+
+    test('single file relative path that we modify', () {
+      final localDir = join(pwd, '.testing');
+      final tree = TestDirectoryTree(localDir);
+
+      final pre = calculateHash(tree.bottomFiveTxt);
+
+      withFileProtection([relative(tree.bottomFiveTxt)], () {
+        final pre = calculateHash(tree.bottomFiveTxt);
+        tree.bottomFiveTxt.append('some dummy data');
+        final post = calculateHash(tree.bottomFiveTxt);
+        expect(pre, isNot(equals(post)));
+      });
+      expect(exists(tree.bottomFiveTxt), isTrue);
+      final post = calculateHash(tree.bottomFiveTxt);
+      expect(pre, equals(post));
+    });
+
+    test('multiple files absolute path that we delete', () {
+      withTempDir((tempDir) {
+        final tree = TestDirectoryTree(tempDir);
+
+        withFileProtection([tree.bottomFiveTxt, tree.bottomSixTxt], () {
           delete(tree.bottomFiveTxt);
+          delete(tree.bottomSixTxt);
         });
         expect(exists(tree.bottomFiveTxt), isTrue);
-
-        deleteDir(localDir);
+        expect(exists(tree.bottomSixTxt), isTrue);
       });
     });
 
+    test('multiple files relative path that we delete', () {
+      final localDir = join(pwd, '.testing');
+      final tree = TestDirectoryTree(localDir);
+
+      withFileProtection(
+          [relative(tree.bottomFiveTxt), relative(tree.bottomSixTxt)], () {
+        delete(tree.bottomFiveTxt);
+        delete(tree.bottomSixTxt);
+      });
+      expect(exists(tree.bottomFiveTxt), isTrue);
+      expect(exists(tree.bottomSixTxt), isTrue);
+    });
+
+    test('directory absolute path that we delete', () {
+      withTempDir((tempDir) {
+        final tree = TestDirectoryTree(tempDir);
+
+        withFileProtection([tree.top], () {
+          deleteDir(tree.top);
+        });
+        expect(exists(tree.top), isTrue);
+        expect(exists(tree.topDotTwoTxt), isTrue);
+        expect(exists(tree.topFredJpg), isTrue);
+        expect(exists(tree.topFredPng), isTrue);
+        expect(exists(tree.topOneJpg), isTrue);
+        expect(exists(tree.topOneTxt), isTrue);
+        expect(exists(tree.topTwoTxt), isTrue);
+        expect(exists(tree.bottom), isTrue);
+        expect(exists(tree.bottomFiveTxt), isTrue);
+      });
+    });
+
+    test('directory relative path that we delete', () {
+      final localDir = join(pwd, '.testing');
+      final tree = TestDirectoryTree(localDir);
+
+      withFileProtection([tree.top], () {
+        deleteDir(tree.top);
+      });
+      expect(exists(tree.top), isTrue);
+      expect(exists(tree.topDotTwoTxt), isTrue);
+      expect(exists(tree.topFredJpg), isTrue);
+      expect(exists(tree.topFredPng), isTrue);
+      expect(exists(tree.topOneJpg), isTrue);
+      expect(exists(tree.topOneTxt), isTrue);
+      expect(exists(tree.topTwoTxt), isTrue);
+      expect(exists(tree.bottom), isTrue);
+      expect(exists(tree.bottomFiveTxt), isTrue);
+    });
+
+    test('glob files that we delete', () {
+      withTempDir((tempDir) {
+        final tree = TestDirectoryTree(tempDir);
+
+        withFileProtection(['*.txt'], () {
+          delete(tree.topDotTwoTxt);
+          delete(tree.bottomFiveTxt);
+          delete(tree.middleDotFourTxt);
+        }, workingDirectory: tempDir);
+        expect(exists(tree.topDotTwoTxt), isTrue);
+        expect(exists(tree.bottomFiveTxt), isTrue);
+        expect(exists(tree.middleDotFourTxt), isTrue);
+      });
+    });
   });
 }
