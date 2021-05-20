@@ -129,7 +129,7 @@ void main() {
 
     t.test('empty target - recursive- overwrite', () {
       withTempDir((fsRoot) {
-        TestFileSystem().build(fsRoot);
+        TestDirectoryTree(fsRoot);
         final from = join(fsRoot, 'top');
         final to = join(fsRoot, 'new_top');
 

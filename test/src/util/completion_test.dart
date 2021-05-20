@@ -9,7 +9,7 @@ import 'test_file_system.dart';
 void main() {
   group('completion ...', () {
     withTempDir((fsRoot) {
-      TestFileSystem().build(fsRoot);
+      TestDirectoryTree(fsRoot);
       final root = join(fsRoot, 'top');
 
       List<String> paths;
