@@ -1,5 +1,5 @@
-import 'package:dcli/dcli.dart';
-import 'package:path/path.dart';
+@Timeout(Duration(minutes: 10))
+import 'package:dcli/dcli.dart' hide equals;
 import 'package:test/test.dart';
 
 import '../util/test_file_system.dart';
@@ -100,7 +100,7 @@ void main() {
   });
 
   group('withFileProtection', () {
-    test('single file', () {
+    test('single file absolute path that we delete', () {
       withTempDir((tempDir) {
         final tree = TestDirectoryTree(tempDir);
 
@@ -110,5 +110,37 @@ void main() {
         expect(exists(tree.bottomFiveTxt), isTrue);
       });
     });
+
+    test('single file absolute path that we modify', () {
+      withTempDir((tempDir) {
+        final tree = TestDirectoryTree(tempDir);
+
+        final pre = calculateHash(tree.bottomFiveTxt);
+
+        withFileProtection([tree.bottomFiveTxt], () {
+          final pre = calculateHash(tree.bottomFiveTxt);
+          tree.bottomFiveTxt.append('some dummy data');
+          final post = calculateHash(tree.bottomFiveTxt);
+          expect(pre, isNot(equals(post)));
+        });
+        expect(exists(tree.bottomFiveTxt), isTrue);
+        final post = calculateHash(tree.bottomFiveTxt);
+        expect(pre, equals(post));
+      });
+    });
+
+     test('single file relative path that we delete', () {
+       final localDir = join(pwd, '.testing');
+        final tree = TestDirectoryTree(localDir);
+
+        withFileProtection([tree.bottomFiveTxt], () {
+          delete(tree.bottomFiveTxt);
+        });
+        expect(exists(tree.bottomFiveTxt), isTrue);
+
+        deleteDir(localDir);
+      });
+    });
+
   });
 }

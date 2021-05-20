@@ -1,4 +1,3 @@
-
 import 'package:path/path.dart';
 
 import '../../dcli.dart';
@@ -121,14 +120,21 @@ void restoreFile(String pathToFile, {bool ignoreMissing = false}) {
 R withFileProtection<R>(List<String> protected, R Function() action) {
   final sourceDir = pwd;
   final result = withTempDir((backupDir) {
+    print('backing up to $backupDir');
+
     /// backup the protected files
     /// to a backupDir
     for (final path in protected) {
       late final String target;
+
+      /// we use two different directories for relative and absolute
+      /// paths otherwise we can't differentiate when it comes time
+      /// to restore.
       if (isRelative(path)) {
-        target = truepath(backupDir, relative(path));
+        target = truepath(backupDir, 'relative', relative(path));
       } else {
-        target = '$backupDir${_stripWindowsAbsolutePrefix(path)}';
+        target = join(backupDir, 'absolute',
+            _stripRootPrefix(_stripWindowsAbsolutePrefix(path)));
       }
       if (isFile(path)) {
         if (!exists(dirname(target))) {
@@ -162,12 +168,20 @@ R withFileProtection<R>(List<String> protected, R Function() action) {
         in find('*', workingDirectory: backupDir, includeHidden: true)
             .toList()) {
       withTempFile((dotBak) {
-        final originalFile = relative(file, from: sourceDir);
+        final String originalPath;
+        final relativeToBackupDir = relative(file, from: backupDir);
+        if (relativeToBackupDir.startsWith('absolute')) {
+          originalPath =
+              '$rootPath${joinAll(split(relativeToBackupDir).sublist(1))}';
+        } else {
+          originalPath =
+              joinAll([sourceDir, ...split(relativeToBackupDir).sublist(1)]);
+        }
         try {
-          if (exists(originalFile)) {
-            move(originalFile, dotBak);
+          if (exists(originalPath)) {
+            move(originalPath, dotBak);
           }
-          move(file, originalFile);
+          move(file, originalPath);
           if (exists(dotBak)) {
             delete(dotBak);
           }
@@ -179,25 +193,52 @@ R withFileProtection<R>(List<String> protected, R Function() action) {
             /// this should never happen as if we have the dotBak
             /// file then the originalFile should not exists.
             /// but just in case.
-            if (exists(originalFile)) {
-              delete(originalFile);
+            if (exists(originalPath)) {
+              delete(originalPath);
             }
-            move(dotBak, originalFile);
+            move(dotBak, originalPath);
           }
         }
-      });
+      }, create: false);
     }
 
     return result;
-  });
+  }, keep: true);
 
   return result;
+}
+
+/// Removes the root prefix (/ or \) from an absolute path
+/// If there is no root prefix the original [absolutePath]
+/// is returned untouched.
+/// If the [absolutePath] only contains the root prefix
+/// then a blank string is returned
+///
+///  /hellow -> hellow
+///  hellow -> hellow
+///  / ->
+///
+String? _stripRootPrefix(String absolutePath) {
+  if (absolutePath.startsWith(r'\') || absolutePath.startsWith('/')) {
+    if (absolutePath.length > 1) {
+      return absolutePath.substring(1);
+    } else {
+      // the path only contained the root prefix and nothing else.
+      return '';
+    }
+  }
+  return absolutePath;
 }
 
 /// Windows, an absolute path starts with `\\`, or a drive letter followed by
 /// `:/` or `:\`.
 /// This method will strip the prefix so the path start with a \ or /
 /// If this is a linux absolute path it is returned unchanged.
+///
+/// C:/abc -> /abc
+/// C:\abc -> \abc
+/// \\\abc -> \abc
+/// \\abc -> abc
 String _stripWindowsAbsolutePrefix(String absolutePath) {
   final parts = split(absolutePath);
   if (parts[0].contains(':')) {
