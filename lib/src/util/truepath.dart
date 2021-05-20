@@ -1,6 +1,6 @@
 import '../../dcli.dart';
 
-/// [truepath] creates an absolute and canonicalize path.
+/// [truepath] creates an absolute and normalized path.
 ///
 /// True path provides a safe and consistent manner for
 /// manipulating, accessing and displaying paths.
@@ -8,7 +8,7 @@ import '../../dcli.dart';
 /// Works like [join] in that it concatenates a set of directories
 /// into a path.
 /// [truepath] then goes on to create an absolute path which
-/// is then canonicalize to remove any segments (.. or .).
+/// is then normalize to remove any segments (.. or .).
 ///
 String truepath(String part1,
         [String? part2,
@@ -17,7 +17,7 @@ String truepath(String part1,
         String? part5,
         String? part6,
         String? part7]) =>
-    canonicalize(join(part1, part2, part3, part4, part5, part6, part7));
+    absolute(normalize(join(part1, part2, part3, part4, part5, part6, part7)));
 
 /// Removes the users home directory from a path replacing it with ~
 String privatePath(String part1,
