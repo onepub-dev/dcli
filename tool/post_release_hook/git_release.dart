@@ -17,5 +17,5 @@ void main(List<String> args) {
 
   'github_release -u $username --apiToken $personalAccessToken --owner $owner '
           '--repository $repository'
-      .start(workingDirectory: DartScript.current.pathToProjectRoot);
+      .start(workingDirectory: DartProject.current.pathToProjectRoot);
 }

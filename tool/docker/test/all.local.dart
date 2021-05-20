@@ -9,8 +9,7 @@ import 'package:args/args.dart';
 /// from the local files system at ..
 
 void main(List<String> args) {
-  final parser = ArgParser()
-  ..addFlag('runOnly', abbr: 'r');
+  final parser = ArgParser()..addFlag('runOnly', abbr: 'r');
 
   final results = parser.parse(args);
   final runOnly = results['runOnly'] as bool;
@@ -18,7 +17,7 @@ void main(List<String> args) {
   if (!runOnly) {
     // mount the local dcli files from ..
     print(green('About to build docker'));
-    final root = DartScript.current.pathToProjectRoot;
+    final root = DartProject.current.pathToProjectRoot;
     'sudo docker build -f tool/docker/test/all.local.df -t dcli:all_local_test .'
         .start(workingDirectory: root);
   }

@@ -343,7 +343,7 @@ class TestFileSystem {
       createDir(testScriptPath, recursive: true);
     }
 
-    copyTree(join(DartScript.current.pathToProjectRoot, 'test', 'test_script'),
+    copyTree(join(DartProject.current.pathToProjectRoot, 'test', 'test_script'),
         testScriptPath);
 
     _patchRelativeDependenciesAndWarmup(testScriptPath);

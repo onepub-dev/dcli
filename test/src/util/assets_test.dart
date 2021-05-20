@@ -9,7 +9,7 @@ void main() {
     expect(content, isNotNull);
 
     var actual =
-        read(join(DartScript.current.pathToProjectRoot, 'lib', 'src', path))
+        read(join(DartProject.current.pathToProjectRoot, 'lib', 'src', path))
             .toList()
             .join('\n');
 
@@ -23,7 +23,8 @@ void main() {
     const path = 'assets/templates/';
     final templates = Assets().list('*', root: path);
 
-    final base = join(DartScript.current.pathToProjectRoot, 'lib', 'src', path);
+    final base =
+        join(DartProject.current.pathToProjectRoot, 'lib', 'src', path);
 
     expect(
       templates,

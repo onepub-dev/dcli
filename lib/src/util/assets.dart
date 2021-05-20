@@ -29,7 +29,7 @@ class Assets {
   factory Assets() => _self;
 
   Assets._internal() {
-    _packageName = DartScript.current.pubSpec.name;
+    _packageName = DartProject.current.pubSpec.name;
   }
   static final _self = Assets._internal();
 
