@@ -32,19 +32,24 @@ import 'function.dart';
 String createDir(String path, {bool recursive = false}) =>
     _CreateDir().createDir(path, recursive: recursive);
 
-/// Creates a temp directory and then calls [callback].
-/// Once callback completes the temporary directory will be deleted.
+/// Creates a temp directory and then calls [action].
+/// Once action completes the temporary directory will be deleted.
 ///
-/// The callbacks return value [R] is returned from the [withTempDir]
+/// The actions return value [R] is returned from the [withTempDir]
 /// function.
-R withTempDir<R>(R Function(String tempDir) callback) {
+///
+/// If you pass [keep] = true then the temp directory won't be deleted.
+/// This can be useful when testing and you need to examine the temp directory.
+R withTempDir<R>(R Function(String tempDir) action, {bool keep = false}) {
   final dir = createTempDir();
 
   R result;
   try {
-    result = callback(dir);
+    result = action(dir);
   } finally {
-    deleteDir(dir);
+    if (!keep) {
+      deleteDir(dir);
+    }
   }
   return result;
 }
