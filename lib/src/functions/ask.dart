@@ -176,7 +176,7 @@ class Ask extends DCliFunction {
       bool toLower = false,
       String? defaultValue}) {
     ArgumentError.checkNotNull(prompt);
-    Settings().verbose('ask:  $prompt toLower: $toLower hidden: $hidden '
+    verbose(() => 'ask:  $prompt toLower: $toLower hidden: $hidden '
         'required: $required '
         'defaultValue: ${hidden ? '******' : defaultValue}');
 
@@ -212,15 +212,15 @@ class Ask extends DCliFunction {
         if (required) {
           const _AskRequired().validate(line);
         }
-        Settings().verbose('ask: pre validation "$line"');
+        verbose(() => 'ask: pre validation "$line"');
         line = validator.validate(line);
-        Settings().verbose('ask: post validation "$line"');
+        verbose(() => 'ask: post validation "$line"');
         valid = true;
       } on AskValidatorException catch (e) {
         print(e.message);
       }
 
-      Settings().verbose('ask: result $line');
+      verbose(() => 'ask: result $line');
     } while (!valid);
 
     return line;
@@ -479,7 +479,7 @@ class _AskInteger extends AskValidator {
   @override
   String validate(String line) {
     final finalLine = line.trim();
-    Settings().verbose('AskInteger: $finalLine');
+    verbose(() => 'AskInteger: $finalLine');
 
     if (!isInt(finalLine)) {
       throw AskValidatorException(red('Invalid integer.'));

@@ -1,4 +1,5 @@
 import '../../dcli.dart';
+import '../settings.dart';
 
 ///
 /// Installs dart on an apt base system.abstract
@@ -28,7 +29,7 @@ class MacOsxDCliInstaller {
     // first check that dart isn't already installed
     if (which('dart').found) {
       // nothing to do dart is already installed.
-      Settings().verbose("Found dart at: ${which('dart').path} and "
+      verbose(() => "Found dart at: ${which('dart').path} and "
           'as such will not install dart.');
       return false;
     }

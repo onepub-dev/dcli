@@ -45,7 +45,7 @@ class _MoveDir extends DCliFunction {
       throw MoveDirException('The [to] path ${truepath(to)} must NOT exist.');
     }
 
-    Settings().verbose('moveDir called ${truepath(from)} -> ${truepath(to)}');
+    verbose(() => 'moveDir called ${truepath(from)} -> ${truepath(to)}');
 
     try {
       Directory(from).renameSync(to);
@@ -54,7 +54,7 @@ class _MoveDir extends DCliFunction {
         /// Invalid cross-device link
         /// We can't move files across a partition so
         /// do a copy/delete.
-        Settings().verbose(
+        verbose(() =>
             'moveDir to is on a separate device so falling back to copy/delete: ${truepath(from)} -> ${truepath(to)}');
 
         copyTree(from, to, includeHidden: true);

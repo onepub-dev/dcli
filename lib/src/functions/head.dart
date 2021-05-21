@@ -18,7 +18,7 @@ Progress head(String path, int lines) => _Head().head(path, lines);
 
 class _Head extends DCliFunction {
   Progress head(String path, int lines, {Progress? progress}) {
-    Settings().verbose('head ${truepath(path)} lines: $lines');
+    verbose(() => 'head ${truepath(path)} lines: $lines');
 
     if (!exists(path)) {
       throw HeadException('The path ${truepath(path)} does not exist.');

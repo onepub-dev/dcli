@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:archive/archive.dart';
 import 'package:pub_semver/pub_semver.dart';
 import '../../dcli.dart';
+import '../settings.dart';
 import '../util/enum_helper.dart';
 import '../util/progress.dart';
 import '../util/runnable_process.dart';
@@ -156,7 +157,7 @@ class DartSdk {
         nothrow: nothrow,
         progress: progress,
         workingDirectory: workingDirectory);
-    Settings().verbose('dart ${args.toList().join(' ')} finished.');
+    verbose(() => 'dart ${args.toList().join(' ')} finished.');
 
     return progress;
   }
@@ -196,7 +197,7 @@ class DartSdk {
           progress: progress,
           workingDirectory: workingDirectory);
     }
-    Settings().verbose('dart pub ${args.toList().join(' ')} finished.');
+    verbose(() => 'dart pub ${args.toList().join(' ')} finished.');
 
     return progress;
   }
@@ -250,7 +251,7 @@ class DartSdk {
         _version = parsed.group(0);
       }
 
-      Settings().verbose('Dart SDK Version  $_version');
+      verbose(() => 'Dart SDK Version  $_version');
     }
 
     return _version;
@@ -265,7 +266,7 @@ class DartSdk {
   ///
   /// returns the directory where the dartSdk was installed.
   String installFromArchive(String defaultDartSdkPath, {bool askUser = true}) {
-    // Settings().verbose('Architecture: ${SysInfo.kernelArchitecture}');
+    // verbose(() => 'Architecture: ${SysInfo.kernelArchitecture}');
     final zipRelease = _fetchDartSdk();
 
     var installDir = defaultDartSdkPath;

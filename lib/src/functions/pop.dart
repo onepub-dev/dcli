@@ -57,7 +57,7 @@ class _Pop extends DCliFunction {
     }
     final path = InternalSettings().pop().path;
 
-    Settings().verbose('pop:  new -> ${truepath(path)}');
+    verbose(() => 'pop:  new -> ${truepath(path)}');
 
     try {
       Directory.current = path;

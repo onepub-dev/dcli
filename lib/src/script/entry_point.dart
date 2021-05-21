@@ -3,6 +3,7 @@ import 'dart:io';
 
 import '../../dcli.dart';
 
+import '../settings.dart';
 import '../util/ansi_color.dart';
 import '../util/stack_trace_impl.dart';
 
@@ -35,7 +36,7 @@ class EntryPoint {
       CommandLineRunner.init(availableCommands);
       exitCode = CommandLineRunner().process(arguments)!;
 
-      Settings().verbose('Exiting with code $exitCode');
+      verbose(() => 'Exiting with code $exitCode');
 
       waitFor<void>(stderr.flush());
 

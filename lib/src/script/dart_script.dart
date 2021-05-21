@@ -213,7 +213,7 @@ class DartScript {
   /// the install will fail and a [MoveException] will be thrown.
   ///
   void compile({bool install = false, bool overwrite = false}) {
-    Settings().verbose('\nCompiling with pubspec.yaml:\n'
+    verbose(() => '\nCompiling with pubspec.yaml:\n'
         "${read(pathToPubSpec).toList().join('\n')}\n");
 
     if (install && isInstalled && !overwrite) {

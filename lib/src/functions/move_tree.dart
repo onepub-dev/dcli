@@ -98,7 +98,7 @@ class _MoveTree extends DCliFunction {
           'The [to] path ${truepath(to)} must be a directory.');
     }
 
-    Settings().verbose('moveTree called ${truepath(from)} -> ${truepath(to)}');
+    verbose(() => 'moveTree called ${truepath(from)} -> ${truepath(to)}');
 
     try {
       find(
@@ -124,7 +124,7 @@ class _MoveTree extends DCliFunction {
           }
 
           move(file, target, overwrite: overwrite);
-          Settings().verbose(
+          verbose(() =>
               'moveTree copying: ${truepath(from)} -> ${truepath(target)}');
         }
       });

@@ -35,7 +35,7 @@ void cd(String path) => CD().cd(path);
 class CD extends DCliFunction {
   /// implements the [cd] (change dir) function.
   void cd(String path) {
-    Settings().verbose('cd $path -> ${p.canonicalize(path)}');
+    verbose(() => 'cd $path -> ${p.canonicalize(path)}');
 
     if (!exists(path)) {
       throw CDException('The path ${p.canonicalize(path)} does not exists.');

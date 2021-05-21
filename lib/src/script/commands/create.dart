@@ -2,6 +2,7 @@ import 'package:path/path.dart' as p;
 
 import '../../../dcli.dart';
 import '../../functions/is.dart';
+import '../../settings.dart';
 import '../command_line_runner.dart';
 import '../dart_project.dart';
 import '../dart_script.dart';
@@ -43,7 +44,7 @@ class CreateCommand extends Command {
             throw DuplicateOptionsException(subargument);
           }
           flagSet.set(flag);
-          Settings().verbose('Setting flag: ${flag.name}');
+          verbose(() => 'Setting flag: ${flag.name}');
           continue;
         } else {
           throw UnknownFlag(subargument);

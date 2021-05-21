@@ -93,7 +93,7 @@ class Env extends DCliFunction {
   }
 
   String? _env(String name) {
-    Settings().verbose('env:  $name:${_envVars[name]}');
+    verbose(() => 'env:  $name:${_envVars[name]}');
 
     return _envVars[_caseSensitive ? name : name.toUpperCase()];
   }
@@ -237,7 +237,7 @@ class Env extends DCliFunction {
   /// Passing a null [value] will remove the key from the
   /// set of environment variables.
   void _setEnv(String name, String? value) {
-    Settings().verbose('env[$name] = $value');
+    verbose(() => 'env[$name] = $value');
     if (value == null) {
       _envVars.remove(name);
       if (Settings().isWindows) {

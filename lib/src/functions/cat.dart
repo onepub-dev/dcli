@@ -27,7 +27,7 @@ class Cat extends DCliFunction {
   void cat(String path, {LineAction stdout = print}) {
     final sourceFile = File(path);
 
-    Settings().verbose('cat:  ${truepath(path)}');
+    verbose(() => 'cat:  ${truepath(path)}');
 
     if (!exists(path)) {
       throw CatException('The file at ${truepath(path)} does not exists');

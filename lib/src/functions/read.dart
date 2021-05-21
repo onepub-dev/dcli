@@ -29,7 +29,7 @@ class _Read extends DCliFunction {
   Progress read(String path, {String delim = '\n', Progress? progress}) {
     final sourceFile = File(path);
 
-    Settings().verbose('read: ${truepath(path)}, delim: $delim');
+    verbose(() => 'read: ${truepath(path)}, delim: $delim');
 
     if (!exists(path)) {
       throw ReadException('The file at ${truepath(path)} does not exists');
@@ -51,7 +51,7 @@ class _Read extends DCliFunction {
   }
 
   Progress _readStdin({Progress? progress}) {
-    Settings().verbose('readStdin');
+    verbose(() => 'readStdin');
 
     try {
       progress ??= Progress.devNull();

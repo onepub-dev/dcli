@@ -2,6 +2,7 @@ import 'dart:io';
 import 'package:path/path.dart' as p;
 
 import '../../dcli.dart';
+import '../settings.dart';
 import 'function.dart';
 
 ///
@@ -26,7 +27,7 @@ void move(String from, String to, {bool overwrite = false}) =>
 
 class _Move extends DCliFunction {
   void move(String from, String to, {bool overwrite = false}) {
-    Settings().verbose('move ${truepath(from)} -> ${truepath(to)}');
+    verbose(() => 'move ${truepath(from)} -> ${truepath(to)}');
 
     var dest = to;
 

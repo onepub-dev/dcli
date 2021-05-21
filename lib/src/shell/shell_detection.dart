@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import '../../dcli.dart';
+import '../settings.dart';
 import 'ash_shell.dart';
 import 'bash_shell.dart';
 import 'cmd_shell.dart';
@@ -88,7 +89,7 @@ class ShellDetection {
       var processName = ProcessHelper().getProcessName(possiblePid);
       if (processName != null) {
         processName = processName.toLowerCase();
-        Settings().verbose('found: $possiblePid $processName');
+        verbose(() => 'found: $possiblePid $processName');
         shell = _shellByName(processName, possiblePid);
       } else {
         Settings()
@@ -129,7 +130,7 @@ class ShellDetection {
 
     /// if things are really sad.
     shell ??= UnknownShell.withPid(childPID);
-    Settings().verbose(blue('Identified shell: ${shell.name}'));
+    verbose(() => blue('Identified shell: ${shell!.name}'));
     return shell;
   }
 

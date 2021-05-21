@@ -3,6 +3,7 @@ import 'dart:cli' as cli;
 
 import '../../dcli.dart';
 
+import '../settings.dart';
 import 'dcli_exception.dart';
 import 'stack_trace_impl.dart';
 
@@ -29,7 +30,7 @@ T waitForEx<T>(Future<T> future) {
       exception = e.error;
       stackTrace = e.stackTrace;
     } else {
-      Settings().verbose('Rethrowing a non DCliException $e');
+      verbose(() => 'Rethrowing a non DCliException $e');
       rethrow;
     }
   }

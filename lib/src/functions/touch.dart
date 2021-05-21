@@ -32,7 +32,7 @@ class _Touch extends DCliFunction {
   String touch(String path, {bool create = false}) {
     final absolutePath = truepath(path);
 
-    Settings().verbose('touch: $absolutePath create: $create');
+    verbose(() => 'touch: $absolutePath create: $create');
 
     if (!exists(p.dirname(absolutePath))) {
       throw TouchException(

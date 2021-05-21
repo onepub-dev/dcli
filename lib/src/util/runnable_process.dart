@@ -4,6 +4,7 @@ import 'dart:io';
 
 import '../../dcli.dart';
 import '../functions/env.dart';
+import '../settings.dart';
 import 'dcli_exception.dart';
 import 'dcli_zone.dart';
 import 'parse_cli_command.dart';
@@ -236,8 +237,8 @@ class RunnableProcess {
 
     if (Settings().isVerbose) {
       final cmdLine = "${_parsed.cmd} ${_parsed.args.join(' ')}";
-      Settings().verbose('Process.start: cmdLine ${green(cmdLine)}');
-      Settings().verbose('Process.start: runInShell: $runInShell '
+      verbose(() => 'Process.start: cmdLine ${green(cmdLine)}');
+      verbose(() => 'Process.start: runInShell: $runInShell '
           'workingDir: $workingDirectory mode: $mode '
           'cmd: ${_parsed.cmd} args: ${_parsed.args.join(', ')}');
     }
@@ -422,7 +423,7 @@ class RunnableProcess {
     })
         //ignore: avoid_types_on_closure_parameters
         .catchError((Object e, StackTrace s) {
-      Settings().verbose('${e.toString()} stacktrace: '
+      verbose(() => '${e.toString()} stacktrace: '
           '${StackTraceImpl.fromStackTrace(s).formatStackTrace()}');
       // ignore: only_throw_errors
       throw e;

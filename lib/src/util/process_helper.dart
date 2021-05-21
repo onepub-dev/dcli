@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:csv/csv.dart';
 import 'package:meta/meta.dart';
 import '../../dcli.dart';
+import '../settings.dart';
 import 'runnable_process.dart';
 
 ///
@@ -37,11 +38,11 @@ class ProcessHelper {
 
     try {
       line = 'ps -q $lpid -o comm='.firstLine;
-      Settings().verbose('ps: $line');
+      verbose(() => 'ps: $line');
     } on RunException catch (e) {
       /// the pid is no longer running
       if (e.exitCode == 1) {
-        Settings().verbose('pid $lpid is no longer running');
+        verbose(() => 'pid $lpid is no longer running');
       }
     } on ProcessException {
       // ps not supported on current OS
@@ -50,7 +51,7 @@ class ProcessHelper {
       processName = line.trim();
     }
 
-    Settings().verbose('_getLinuxProcessName $lpid $processName');
+    verbose(() => '_getLinuxProcessName $lpid $processName');
 
     return line;
   }
@@ -88,7 +89,7 @@ class ProcessHelper {
       //   line = '${getppid()}';
       // } else {
       line = 'ps -p $childPid -o ppid='.firstLine;
-      Settings().verbose('ps: $line');
+      verbose(() => 'ps: $line');
 //      }
     } on ProcessException {
       // ps not supported on current OS
@@ -118,7 +119,7 @@ class ProcessHelper {
             .toList(skipLines: 1);
 
     for (var process in processes) {
-      // Settings().verbose('wmic: $process');
+      // verbose(() => 'wmic: $process');
       process = process.trim();
       process = process.replaceAll(RegExp(r'\s+'), ' ');
 
@@ -162,7 +163,7 @@ class ProcessHelper {
       //   kill(0);
       // }
       line = 'ps -q $lpid -o comm='.firstLine;
-      Settings().verbose('ps: $line');
+      verbose(() => 'ps: $line');
       if (line != null) {
         isRunning = true;
       }
@@ -183,7 +184,7 @@ class ProcessHelper {
         break;
       }
     }
-    Settings().verbose('_getWindowsProcessName $lpid $pidName');
+    verbose(() => '_getWindowsProcessName $lpid $pidName');
     return pidName;
   }
 
@@ -211,9 +212,9 @@ class ProcessHelper {
 
     final lines = const CsvToListConverter().convert(tasks.join('\r\n'));
     for (final line in lines) {
-      //Settings().verbose('tasklist: $line');
+      //verbose(() => 'tasklist: $line');
 
-      // Settings().verbose('${details.processName} ${details.pid}');
+      // verbose(() => '${details.processName} ${details.pid}');
 
       final memparts = (line[4] as String).split(' ');
 

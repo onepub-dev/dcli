@@ -7,6 +7,7 @@ import 'package:crypto/crypto.dart';
 import 'package:uuid/uuid.dart';
 import '../../dcli.dart';
 
+import '../settings.dart';
 import 'dcli_exception.dart';
 import 'runnable_process.dart';
 import 'stack_trace_impl.dart';
@@ -195,7 +196,7 @@ void symlink(
   String existingPath,
   String linkPath,
 ) {
-  Settings().verbose('symlink existingPath: $existingPath linkPath $linkPath');
+  verbose(() => 'symlink existingPath: $existingPath linkPath $linkPath');
   Link(linkPath).createSync(existingPath);
 }
 
@@ -213,7 +214,7 @@ void symlink(
 /// [Shell.current.isPrivileged]
 ///
 void deleteSymlink(String linkPath) {
-  Settings().verbose('deleteSymlink linkPath: $linkPath');
+  verbose(() => 'deleteSymlink linkPath: $linkPath');
   Link(linkPath).deleteSync();
 }
 
@@ -239,7 +240,7 @@ String resolveSymLink(String pathToLink) {
     resolved = canonicalize(File(normalised).resolveSymbolicLinksSync());
   }
 
-  Settings().verbose('resolveSymLink $pathToLink resolved: $resolved');
+  verbose(() => 'resolveSymLink $pathToLink resolved: $resolved');
   return resolved;
 }
 

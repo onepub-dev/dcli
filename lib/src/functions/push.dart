@@ -30,7 +30,7 @@ class _Push extends DCliFunction {
   /// Push the pwd onto the stack and change the
   /// current directory to [path].
   void push(String path) {
-    Settings().verbose('push: path: $path new -> ${truepath(path)}');
+    verbose(() => 'push: path: $path new -> ${truepath(path)}');
 
     if (!exists(path)) {
       throw PushException('The path ${truepath(path)} does not exist.');

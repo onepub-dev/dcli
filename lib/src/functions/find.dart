@@ -3,6 +3,7 @@ import 'dart:io';
 
 import '../../dcli.dart';
 
+import '../settings.dart';
 import '../util/progress.dart';
 import '../util/wait_for_ex.dart';
 
@@ -164,7 +165,7 @@ class Find extends DCliFunction {
     final _progress = progress ?? Progress.devNull();
 
     try {
-      Settings().verbose(
+      verbose(() =>
           'find: pwd: $pwd workingDirectory: ${truepath(_workingDirectory)} '
           'pattern: $pattern caseSensitive: $caseSensitive '
           'recursive: $recursive types: $types ');
@@ -239,15 +240,15 @@ class Find extends DCliFunction {
       onError: (Object e, StackTrace st) {
         if (e is FileSystemException && e.osError!.errorCode == 13) {
           /// check for and ignore permission denied.
-          Settings().verbose('Permission denied: ${e.path}');
+          verbose(() => 'Permission denied: ${e.path}');
         } else if (e is FileSystemException && e.osError!.errorCode == 40) {
           /// ignore recursive symbolic link problems.
-          Settings().verbose('Too many levels of symbolic links: ${e.path}');
+          verbose(() => 'Too many levels of symbolic links: ${e.path}');
         } else if (e is FileSystemException && e.osError!.errorCode == 22) {
           /// Invalid argument - not really certain what this means but we get
           /// it when processing a .steam folder that includes a windows
           /// emulator.
-          Settings().verbose('Invalid argument: ${e.path}');
+          verbose(() => 'Invalid argument: ${e.path}');
         } else if (e is FileSystemException && e.osError!.errorCode == 2) {
           /// The directory may have been deleted between us finding it and
           /// processing it.

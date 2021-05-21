@@ -1,5 +1,6 @@
 import '../../../dcli.dart';
 
+import '../../settings.dart';
 import '../command_line_runner.dart';
 import '../flags.dart';
 import 'commands.dart';
@@ -26,7 +27,7 @@ class UpgradeCommand extends Command {
     print('Current version $currentVersion');
     DartSdk().globalActivate('dcli');
 
-    Settings().verbose('dart pub global activate dcli finished');
+    verbose(() => 'dart pub global activate dcli finished');
 
     upgradeVersion(currentVersion);
 

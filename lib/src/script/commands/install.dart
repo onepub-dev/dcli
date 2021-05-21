@@ -59,7 +59,7 @@ class InstallCommand extends Command {
             throw DuplicateOptionsException(subargument);
           }
           flagSet.set(flag);
-          Settings().verbose('Setting flag: ${flag.name}');
+          verbose(() => 'Setting flag: ${flag.name}');
           continue;
         } else {
           throw UnknownFlag(subargument);

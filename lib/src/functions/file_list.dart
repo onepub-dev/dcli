@@ -16,7 +16,7 @@ class _FileList extends DCliFunction {
   List<String> get fileList {
     final files = <String>[];
 
-    Settings().verbose('fileList pwd: ${truepath(pwd)}');
+    verbose(() => 'fileList pwd: ${truepath(pwd)}');
 
     Directory.current.listSync().forEach((file) => files.add(file.path));
     return files;

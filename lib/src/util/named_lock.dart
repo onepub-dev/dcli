@@ -5,6 +5,7 @@ import 'dart:io';
 import 'dart:isolate';
 
 import '../../dcli.dart';
+import '../settings.dart';
 import 'stack_trace_impl.dart';
 import 'wait_for_ex.dart';
 
@@ -139,7 +140,7 @@ class NamedLock {
       /// but the static analyser can't see this.
       // ignore: invariant_booleans
       if (_lockCountForName == 0) {
-        Settings().verbose('Releasing lock: $_lockFilePath');
+        verbose(() => 'Releasing lock: $_lockFilePath');
 
         _withHardLock(fn: () => delete(_lockFilePath));
       }
@@ -275,7 +276,7 @@ class NamedLock {
           Settings()
               .verbose('Taking lock ${basename(_lockFilePath)} for $isolateID');
 
-          Settings().verbose('Lock Source: '
+          verbose(() => 'Lock Source: '
               // ignore: lines_longer_than_80_chars
               '${StackTraceImpl(skipFrames: 9).formatStackTrace(methodCount: 1)}');
           touch(_lockFilePath, create: true);
@@ -393,7 +394,7 @@ class NamedLock {
 }
 
 void _log(String message) {
-  Settings().verbose(message);
+  verbose(() => message);
 }
 
 class _LockFileParts {

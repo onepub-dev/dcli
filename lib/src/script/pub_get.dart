@@ -1,5 +1,6 @@
 import '../../dcli.dart';
 import '../pubspec/dependency.dart';
+import '../settings.dart';
 import '../util/progress.dart';
 import '../util/runnable_process.dart';
 import 'dart_project.dart';
@@ -32,13 +33,13 @@ class PubGet {
 
       return result;
     } on RunException catch (e) {
-      Settings().verbose('pub get exeception: $e');
+      verbose(() => 'pub get exeception: $e');
       throw PubGetException(e.exitCode);
     }
   }
 
   void _println(String? line) {
-    Settings().verbose('pub get: $line');
+    verbose(() => 'pub get: $line');
     print(line);
   }
 }

@@ -5,6 +5,7 @@ import 'package:posix/posix.dart';
 import '../../dcli.dart';
 import '../installers/linux_installer.dart';
 import '../installers/macosx_installer.dart';
+import '../settings.dart';
 
 /// Provides a number of helper functions
 /// for posix based shells.
@@ -26,11 +27,11 @@ mixin PosixShell {
   /// True if the processes effictive uid is root.
   bool get isPrivilegedUser {
     final euid = geteuid();
-    Settings().verbose('isPrivilegedUser: euid=$euid');
+    verbose(() => 'isPrivilegedUser: euid=$euid');
     return euid == 0;
     // final user = _whoami();
     // final privileged = user == 'root';
-    // Settings().verbose('isPrivilegedUser: $privileged');
+    // verbose(() => 'isPrivilegedUser: $privileged');
     // return privileged;
   }
 
@@ -55,7 +56,7 @@ mixin PosixShell {
   /// True if the processes real uid is root.
   bool get isPrivilegedProcess {
     final uid = getuid();
-    Settings().verbose('isPrivilegedProcess: uid=$uid');
+    verbose(() => 'isPrivilegedProcess: uid=$uid');
     return uid == 0;
   }
 
@@ -65,7 +66,7 @@ mixin PosixShell {
     if (user == 'root') {
       user = env['SUDO_USER'] ?? 'root';
     }
-    Settings().verbose('loggedInUser: $user');
+    verbose(() => 'loggedInUser: $user');
     return user;
   }
 
@@ -98,7 +99,7 @@ mixin PosixShell {
 
     /// fall back to whoami if nothing else works.
     user ??= 'whoami'.firstLine;
-    Settings().verbose('whoami: $user');
+    verbose(() => 'whoami: $user');
     return user!;
   }
 

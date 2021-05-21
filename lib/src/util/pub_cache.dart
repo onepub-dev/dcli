@@ -1,6 +1,7 @@
 import 'package:meta/meta.dart';
 
 import '../../dcli.dart';
+import '../settings.dart';
 import '../shell/posix_shell.dart';
 
 /// Used to locate and manipulate the dart pub cache
@@ -48,7 +49,7 @@ class PubCache {
 
     _pubCacheDir = dir;
 
-    Settings().verbose('pub-cache found in=$_pubCachePath');
+    verbose(() => 'pub-cache found in=$_pubCachePath');
 
     // determine pub-cache/bin
     _pubCacheBinPath = truepath(join(_pubCachePath, 'bin'));

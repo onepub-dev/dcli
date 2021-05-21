@@ -7,6 +7,7 @@ import 'package:dcli/dcli.dart';
 import 'package:dcli/src/functions/create_dir.dart';
 import 'package:dcli/src/functions/env.dart';
 import 'package:dcli/src/pubspec/dependency.dart';
+import 'package:dcli/src/settings.dart';
 import 'package:dcli/src/util/stack_trace_impl.dart';
 import 'package:path/path.dart';
 import 'package:dcli/src/script/entry_point.dart';
@@ -162,7 +163,7 @@ class TestFileSystem {
     }
     // ignore: avoid_catches_without_on_clauses
     catch (e, st) {
-      Settings().verbose(e.toString());
+      verbose(e.toString);
       st.toString();
       rethrow;
     } finally {
@@ -268,11 +269,11 @@ class TestFileSystem {
 
   void deleteTestFileSystem() {
     if (exists(HOME)) {
-      Settings().verbose('Deleting $HOME');
+      verbose(() => 'Deleting $HOME');
       deleteDir(HOME);
     }
     if (exists(fsRoot)) {
-      Settings().verbose('Deleting $fsRoot');
+      verbose(() => 'Deleting $fsRoot');
       deleteDir(fsRoot);
     }
   }
@@ -446,18 +447,18 @@ class TestDirectoryTree {
   late final String topFredJpg;
   late final String topFredPng;
   late final String thiddenFredTxt;
-  late final String topOneTxt ;
+  late final String topOneTxt;
   late final String topTwoTxt;
-  late final String topOneJpg ;
+  late final String topOneJpg;
   late final String topDotTwoTxt;
   late final String middleThreeTxt;
-  late final String middleFourTxt ;
-  late final String middleTwoJpg ;
+  late final String middleFourTxt;
+  late final String middleTwoJpg;
   late final String middleDotFourTxt;
-  late final String bottomFiveTxt ;
-  late final String bottomSixTxt ;
+  late final String bottomFiveTxt;
+  late final String bottomSixTxt;
   late final String bottomThreeJpg;
-  late final String hiddenSevenTxt ;
+  late final String hiddenSevenTxt;
   late final String hiddenDotSevenTxt;
 
   void _build() {

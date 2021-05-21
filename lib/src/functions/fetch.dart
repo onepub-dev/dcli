@@ -110,7 +110,7 @@ class _Fetch extends DCliFunction {
 
   Future<void> download(FetchUrl fetchUrl) {
     // announce we are starting.
-    Settings().verbose('Started downloading: ${fetchUrl.url}');
+    verbose(() => 'Started downloading: ${fetchUrl.url}');
     final completer = Completer<void>();
     _sendProgressEvent(FetchProgress._initialising(fetchUrl));
 
@@ -174,7 +174,7 @@ class _Fetch extends DCliFunction {
           client.close();
           _sendProgressEvent(
               FetchProgress._complete(fetchUrl, contentLength, lengthReceived));
-          Settings().verbose('Completed downloading: ${fetchUrl.url}');
+          verbose(() => 'Completed downloading: ${fetchUrl.url}');
 
           completer.complete();
         },
@@ -182,8 +182,8 @@ class _Fetch extends DCliFunction {
         onError: (Object e, StackTrace st) async {
           // something went wrong.
           _sendProgressEvent(FetchProgress._error(fetchUrl));
-          Settings().verbose(
-            'Error downloading: ${fetchUrl.url}',
+          verbose(
+            () => 'Error downloading: ${fetchUrl.url}',
           );
           await raf.close();
           await subscription.cancel();

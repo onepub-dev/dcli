@@ -1,6 +1,7 @@
 import '../../dcli.dart';
 import '../functions/env.dart';
 import '../script/dart_sdk.dart';
+import '../settings.dart';
 import '../util/pub_cache.dart';
 
 ///
@@ -48,7 +49,7 @@ class WindowsDCliInstaller {
       installedDart = true;
     } else {
       // nothing to do dart is already installed.
-      Settings().verbose("Found dart at: ${which('dart').path} "
+      verbose(() => "Found dart at: ${which('dart').path} "
           'and as such will not install dart.');
     }
 

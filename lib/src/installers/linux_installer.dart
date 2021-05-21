@@ -1,5 +1,6 @@
 import 'package:path/path.dart';
 import '../../dcli.dart';
+import '../settings.dart';
 import '../shell/shell_detection.dart';
 import '../util/pub_cache.dart';
 
@@ -37,7 +38,7 @@ class LinuxDCliInstaller {
       // add dart to bash path
       if (!(isOnPATH('/usr/bin/dart') || isOnPATH('/usr/lib/bin/dart'))) {
         final shell = ShellDetection().identifyShell();
-        Settings().verbose('Found shell: $shell');
+        verbose(() => 'Found shell: $shell');
 
         // we need to add it.
         join(HOME, '.bashrc')
@@ -60,10 +61,10 @@ class LinuxDCliInstaller {
 
       /// check that apt is available.
       if (which('apt').found) {
-        Settings().verbose('Using the apt installer');
+        verbose(() => 'Using the apt installer');
         _installDartWithApt();
       } else {
-        Settings().verbose('Apt not found. Installing from archive');
+        verbose(() => 'Apt not found. Installing from archive');
         final dartInstallDir =
             DartSdk().installFromArchive('/usr/lib/dart', askUser: false);
         print('Installed dart to: $dartInstallDir');

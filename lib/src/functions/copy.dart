@@ -32,7 +32,7 @@ class _Copy extends DCliFunction {
       finalto = join(finalto, basename(from));
     }
 
-    Settings().verbose('copy ${truepath(from)} -> ${truepath(finalto)}');
+    verbose(() => 'copy ${truepath(from)} -> ${truepath(finalto)}');
 
     if (overwrite == false && exists(finalto)) {
       throw CopyException(

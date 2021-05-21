@@ -2,6 +2,7 @@ import 'dart:cli';
 import 'dart:io';
 
 import '../../dcli.dart';
+import '../settings.dart';
 import '../util/wait_for_ex.dart';
 
 /// Runs a Dart dscript
@@ -24,7 +25,7 @@ class ScriptRunner {
       ..._scriptArguments
     ];
 
-    Settings().verbose('Executing: ${DartSdk().pathToDartExe} $vmArgs, '
+    verbose(() => 'Executing: ${DartSdk().pathToDartExe} $vmArgs, '
         '${script.pathToScript}');
 
     // Execute the script

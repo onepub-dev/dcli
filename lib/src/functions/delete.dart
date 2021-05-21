@@ -24,7 +24,7 @@ void delete(String path, {bool ask = false}) =>
 
 class _Delete extends DCliFunction {
   void delete(String path, {required bool ask}) {
-    Settings().verbose('delete:  ${truepath(path)} ask: $ask');
+    verbose(() => 'delete:  ${truepath(path)} ask: $ask');
 
     if (!exists(path)) {
       throw DeleteException('The path ${truepath(path)} does not exists.');

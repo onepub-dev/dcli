@@ -1,4 +1,5 @@
 import '../../dcli.dart';
+import '../settings.dart';
 import 'shell_mixin.dart';
 import 'windows_mixin.dart';
 
@@ -35,13 +36,13 @@ class PowerShell with WindowsMixin, ShellMixin {
         // ignore: lines_longer_than_80_chars
         'New-Object Security.Principal.WindowsPrincipal([Security.Principal.WindowsIdentity]::GetCurrent())'
             .firstLine;
-    Settings().verbose('currentPrinciple: $currentPrincipal');
+    verbose(() => 'currentPrinciple: $currentPrincipal');
     final isPrivileged =
         // ignore: lines_longer_than_80_chars
         '$currentPrincipal.IsInRole([Security.Principal.WindowsBuiltInRole]::Administrator)'
                 .firstLine ??
             'false';
-    Settings().verbose('isPrivileged: $isPrivileged');
+    verbose(() => 'isPrivileged: $isPrivileged');
 
     return isPrivileged.toLowerCase() == 'true';
   }

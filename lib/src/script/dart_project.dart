@@ -5,6 +5,7 @@ import 'package:path/path.dart';
 import '../../dcli.dart';
 import '../functions/find.dart';
 import '../pubspec/pubspec.dart';
+import '../settings.dart';
 import 'pub_get.dart';
 
 /// Encapsulates the idea of a dart project which is made up
@@ -24,7 +25,7 @@ class DartProject {
       _pathToProjectRoot = pathToSearchFrom;
     }
     _pathToProjectRoot = truepath(_pathToProjectRoot);
-    Settings().verbose('DartProject.fromPath: $_pathToProjectRoot');
+    verbose(() => 'DartProject.fromPath: $_pathToProjectRoot');
   }
   late String _pathToProjectRoot;
   String? _pathToPubSpec;

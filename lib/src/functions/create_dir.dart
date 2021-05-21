@@ -64,7 +64,7 @@ String createTempDir() =>
 
 class _CreateDir extends DCliFunction {
   String createDir(String path, {required bool recursive}) {
-    Settings().verbose('createDir:  ${truepath(path)} recursive: $recursive');
+    verbose(() => 'createDir:  ${truepath(path)} recursive: $recursive');
 
     try {
       if (exists(path)) {

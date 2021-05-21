@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import '../../dcli.dart';
+import '../settings.dart';
 import '../util/dcli_exception.dart';
 import '../util/stack_trace_impl.dart';
 import 'function.dart';
@@ -124,7 +125,7 @@ class _Is extends DCliFunction {
     final _exists = FileSystemEntity.typeSync(path, followLinks: followLinks) !=
         FileSystemEntityType.notFound;
 
-    Settings().verbose('exists: $_exists $path followLinks: $followLinks');
+    verbose(() => 'exists: $_exists $path followLinks: $followLinks');
 
     return _exists;
   }
@@ -139,7 +140,7 @@ class _Is extends DCliFunction {
   /// empty directory.
   /// For large directories this operation can be expensive.
   bool isEmpty(String pathToDirectory) {
-    Settings().verbose('isEmpty: $pathToDirectory');
+    verbose(() => 'isEmpty: $pathToDirectory');
 
     return Directory(pathToDirectory).listSync(followLinks: false).isEmpty;
   }
@@ -147,21 +148,21 @@ class _Is extends DCliFunction {
   /// checks if the passed [path] (a file or directory) is
   /// writable by the user that owns this process
   bool isWritable(String path) {
-    Settings().verbose('isWritable: $path');
+    verbose(() => 'isWritable: $path');
     return _checkPermission(path, writeBitMask);
   }
 
   /// checks if the passed [path] (a file or directory) is
   /// readable by the user that owns this process
   bool isReadable(String path) {
-    Settings().verbose('isReadable: $path');
+    verbose(() => 'isReadable: $path');
     return _checkPermission(path, readBitMask);
   }
 
   /// checks if the passed [path] (a file or directory) is
   /// executable by the user that owns this process
   bool isExecutable(String path) {
-    Settings().verbose('isExecutable: $path');
+    verbose(() => 'isExecutable: $path');
     return Settings().isWindows || _checkPermission(path, executeBitMask);
   }
 
@@ -172,8 +173,8 @@ class _Is extends DCliFunction {
   /// Checks if the user permission to act on the [path] (a file or directory)
   /// for the given permission bit mask. (read, write or execute)
   bool _checkPermission(String path, int permissionBitMask) {
-    Settings().verbose(
-        '_checkPermission: $path permissionBitMask: $permissionBitMask');
+    verbose(
+        () => '_checkPermission: $path permissionBitMask: $permissionBitMask');
 
     if (Settings().isWindows) {
       throw UnsupportedError(
@@ -215,7 +216,7 @@ class _Is extends DCliFunction {
   /// Returns true if the owner of this process
   /// is a member of [group].
   bool isMemberOfGroup(String group) {
-    Settings().verbose('isMemberOfGroup: $group');
+    verbose(() => 'isMemberOfGroup: $group');
 
     if (Settings().isWindows) {
       throw UnsupportedError(

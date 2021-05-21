@@ -4,6 +4,7 @@ import 'package:async/async.dart';
 import 'package:collection/collection.dart';
 
 import '../../dcli.dart';
+import '../settings.dart';
 import 'dev_null.dart';
 
 import 'runnable_process.dart';
@@ -160,7 +161,7 @@ class Progress {
     if (!_closed) {
       _stdoutController.sink.add(line);
     } else {
-      Settings().verbose('addToStdout called after stream closed: line=$line');
+      verbose(() => 'addToStdout called after stream closed: line=$line');
     }
   }
 
@@ -169,7 +170,7 @@ class Progress {
     if (!_closed) {
       _stderrController.sink.add(line);
     } else {
-      Settings().verbose('addToStderr called after stream closed: line=$line');
+      verbose(() => 'addToStderr called after stream closed: line=$line');
     }
   }
 
@@ -198,7 +199,7 @@ class Progress {
       if (_includeStdout) {
         stdout(line);
       } else {
-        Settings().verbose('addToStdout excluded: line=$line');
+        verbose(() => 'addToStdout excluded: line=$line');
       }
       if (_captureStdout) {
         _lines.add(line);
@@ -213,7 +214,7 @@ class Progress {
       if (_includeStderr) {
         stderr(line);
       } else {
-        Settings().verbose('addToStdout excluded: line=$line');
+        verbose(() => 'addToStdout excluded: line=$line');
       }
       if (_captureStderr) {
         _lines.add(line);

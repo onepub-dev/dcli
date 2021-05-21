@@ -43,7 +43,7 @@ class RunCommand extends Command {
       }
     }
 
-    Settings().verbose('Running script ${script.pathToScript}');
+    verbose(() => 'Running script ${script.pathToScript}');
 
     if (!script.isReadyToRun) {
       if (Shell.current.isSudo) {
@@ -60,7 +60,7 @@ class RunCommand extends Command {
       scriptArguments = arguments.sublist(1);
     }
 
-    Settings().verbose('Script Arguments: ${scriptArguments.join(", ")}');
+    verbose(() => 'Script Arguments: ${scriptArguments.join(", ")}');
 
     final exitCode = script.run(scriptArguments);
 
