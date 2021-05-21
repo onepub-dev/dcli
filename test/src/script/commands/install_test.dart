@@ -30,7 +30,7 @@ void main() {
         checkInstallStructure(fs);
       });
     });
-    test('add ~/.dcli/bin to PATH Windows', () {
+    test('add ~/.dcli/bin to PATH on Windows', () {
       TestFileSystem().withinZone((fs) {
         final settings = Settings();
         final mockSettings = MockSettings();
@@ -40,6 +40,7 @@ void main() {
         when(() => mockSettings.isWindows).thenReturn(true);
         when(() => mockSettings.isLinux).thenReturn(false);
         when(() => mockSettings.isMacOS).thenReturn(false);
+        when(() => mockSettings.isVerbose).thenReturn(false);
         when(() => mockSettings.pathToDCliBin)
             .thenReturn(settings.pathToDCliBin);
 
@@ -60,6 +61,7 @@ void main() {
         when(() => mockSettings.isWindows).thenReturn(false);
         when(() => mockSettings.isLinux).thenReturn(true);
         when(() => mockSettings.isMacOS).thenReturn(false);
+        when(() => mockSettings.isVerbose).thenReturn(false);
         when(() => mockSettings.pathToDCliBin)
             .thenReturn(settings.pathToDCliBin);
 
