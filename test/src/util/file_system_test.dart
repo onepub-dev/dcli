@@ -4,7 +4,6 @@ import 'dart:io';
 import 'package:dcli/dcli.dart';
 import 'package:test/test.dart';
 
-
 void main() {
   test('MemoryFileSystem', () {
     withTempDir((fs) {

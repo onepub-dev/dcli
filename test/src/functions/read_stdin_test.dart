@@ -2,7 +2,6 @@
 import 'package:test/test.dart' as t;
 import 'package:dcli/dcli.dart';
 
-
 void main() {
   // can't be run from within vscode as it needs console input.
   t.group('Read from stdin', () {

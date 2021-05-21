@@ -34,7 +34,7 @@ void main() {
 
     t.test('empty target - overwrite', () {
       withTempDir((fsRoot) {
-         TestFileSystem.buildDirectoryTree(fsRoot);
+        TestFileSystem.buildDirectoryTree(fsRoot);
         final from = join(fsRoot, 'top');
         final to = join(fsRoot, 'new_top');
 

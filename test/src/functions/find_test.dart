@@ -254,7 +254,7 @@ void main() {
       });
     });
 
-     t.test('recursive find with absolute path in pattern', () async {
+    t.test('recursive find with absolute path in pattern', () async {
       withTempDir((tmp) {
         final paths = <String>[
           truepath(tmp, 'middle', 'three.txt'),

@@ -10,7 +10,6 @@ import 'package:dcli/dcli.dart' hide equals;
 import 'package:dcli/src/util/named_lock.dart';
 import 'package:test/test.dart';
 
-
 const port = 63424;
 
 void main() {

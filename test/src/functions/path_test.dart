@@ -5,7 +5,6 @@ import 'package:dcli/src/functions/env.dart';
 import 'package:test/test.dart' as t;
 import 'package:dcli/dcli.dart';
 
-
 String _testDir = 'path_test';
 void main() {
   t.group('Directory Path manipulation testing', () {

@@ -132,7 +132,7 @@ environment:
   sdk: '>=2.12.0 <3.0.0'
 dependencies: 
   args: ^2.0.0
-  dcli: ^1.2.0
+  dcli: ^1.3.0
   path: ^1.8.0
 
 dev_dependencies: 
