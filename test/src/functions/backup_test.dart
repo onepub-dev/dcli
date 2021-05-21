@@ -221,21 +221,48 @@ void main() {
       expect(exists(tree.bottomFiveTxt), isTrue);
     });
 
-    test('glob files that we delete', () {
+    // test('glob files that we delete', () {
+    //   withTempDir((tempDir) {
+    //     final tree = TestDirectoryTree(tempDir);
+
+    //     withFileProtection(['*.txt'], () {
+    //       delete(tree.topDotTwoTxt);
+    //       delete(tree.middleFourTxt);
+    //       delete(tree.middleDotFourTxt);
+    //       deleteDir(tree.bottom);
+    //     }, workingDirectory: tempDir);
+    //     expect(exists(tree.topDotTwoTxt), isTrue);
+    //     expect(exists(tree.middleFourTxt), isTrue);
+    //     expect(exists(tree.middleDotFourTxt), isTrue);
+    //     expect(exists(tree.bottom), isTrue);
+    //     expect(exists(tree.bottomFiveTxt), isTrue);
+    //   });
+    // });
+
+    test('single non-existent file', () {
       withTempDir((tempDir) {
         final tree = TestDirectoryTree(tempDir);
 
-        withFileProtection(['*.txt'], () {
-          delete(tree.topDotTwoTxt);
-          delete(tree.middleFourTxt);
-          delete(tree.middleDotFourTxt);
-          deleteDir(tree.bottom);
-        }, workingDirectory: tempDir);
-        expect(exists(tree.topDotTwoTxt), isTrue);
-        expect(exists(tree.middleFourTxt), isTrue);
-        expect(exists(tree.middleDotFourTxt), isTrue);
-        expect(exists(tree.bottom), isTrue);
-        expect(exists(tree.bottomFiveTxt), isTrue);
+        delete(tree.bottomFiveTxt);
+
+        withFileProtection([tree.bottomFiveTxt], () {
+          touch(tree.bottomFiveTxt, create: true);
+        });
+        expect(exists(tree.bottomFiveTxt), isFalse);
+      });
+    });
+
+    test('non-existent directory', () {
+      withTempDir((tempDir) {
+        final tree = TestDirectoryTree(tempDir);
+
+        deleteDir(tree.bottom);
+
+        withFileProtection([tree.bottom], () {
+          createDir(tree.bottom, recursive: true);
+          touch(tree.bottomFiveTxt, create: true);
+        });
+        expect(exists(tree.bottom), isFalse);
       });
     });
   });
