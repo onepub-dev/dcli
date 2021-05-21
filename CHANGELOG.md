@@ -1,3 +1,38 @@
+# 1.3.0
+Added new methods
+ - withFileProtection. Allows you to back a collection of files/directories run an action and then restore any changes to those files/directories. Handy when implementing dry run type features.
+ - restorePrivileges. Implemented to complement  restorePrivileges
+ - calculateHash. Generates an sha256 checksum on a file.
+
+
+Changes
+ - all internall calls to Settings().verbose have been changed to verbose to reduce logging overheads.
+ - Upgraded to dart 2.13 - google tells me that this still allows older packages to work with dcli.
+ - Added `keep` arguments to withTempFile and withTempDir to preseve the temp directories. Handy for examining problems with unit tests.
+ - Changed truepath to call normalize rather than canonicalize as canonicalize changes the case of paths on Windows. I believe this should be non-breaking.
+ - Added support for windows \ path separator in the find function.
+
+Fixes:
+ - Fixed a bug where `find` failed if an absolute path was prepended to the pattern. Now works for no path, a relative path and an absolute path prefixed to the pattern.
+ - Improvements to the DartProject and DartScript path detection when running unit tests under windows.
+
+
+Known Problems:
+
+Note we have found a problem using forEach with the start function.
+
+```dart
+start('ls *.txt').forEach( print);
+```
+
+Currently this works and look like it is going to have to be part of the process re-org we are working through.
+In the mean time you can use:
+
+```dart
+for (final line in start('ls *.txt', progress: Progress.capture().lines) {print(line);}
+```
+
+
 # 1.2.3
 Added new methods:
 - withTempDir - Allows you to run a callback with access to a temporary directory which is automatically cleaned up when the callback completes.
