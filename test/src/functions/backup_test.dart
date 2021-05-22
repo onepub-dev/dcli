@@ -306,21 +306,21 @@ void main() {
       expect(
           translateAbsolutePath('c:/',
               context: windowsContext, workingDirectory: r'D:\User'),
-          equals(r'\cDrive'));
+          equals(r'\CDrive'));
       expect(
           translateAbsolutePath('C:/abc',
               context: windowsContext, workingDirectory: r'D:\User'),
           equals(r'\CDrive\abc'));
       expect(translateAbsolutePath('c:/', context: windowsContext),
-          equals(r'\cDrive'));
+          equals(r'\CDrive'));
       expect(translateAbsolutePath('C:/', context: windowsContext),
           equals(r'\CDrive'));
       expect(translateAbsolutePath('c:/abc', context: windowsContext),
-          equals(r'\cDrive\abc'));
+          equals(r'\CDrive\abc'));
       expect(translateAbsolutePath('C:/abc', context: windowsContext),
           equals(r'\CDrive\abc'));
       expect(translateAbsolutePath(r'c:\', context: windowsContext),
-          equals(r'\cDrive'));
+          equals(r'\CDrive'));
       expect(translateAbsolutePath(r'C:\', context: windowsContext),
           equals(r'\CDrive'));
       expect(translateAbsolutePath('D:/', context: windowsContext),
@@ -328,7 +328,7 @@ void main() {
       expect(translateAbsolutePath('D:/', context: windowsContext),
           equals(r'\DDrive'));
       expect(translateAbsolutePath(r'\\c:/', context: windowsContext),
-          equals(r'\cDrive'));
+          equals(r'\CDrive'));
       expect(translateAbsolutePath(r'\\C:/', context: windowsContext),
           equals(r'\CDrive'));
       expect(translateAbsolutePath(r'\\C:\', context: windowsContext),

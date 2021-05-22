@@ -381,7 +381,7 @@ String translateAbsolutePath(String absolutePath,
   if (parts[0].contains(':')) {
     final index = parts[0].indexOf(':');
 
-    final drive = parts[0][index - 1];
+    final drive = parts[0][index - 1].toUpperCase();
     return context.joinAll(['\\${drive}Drive', ...parts.sublist(1)]);
   }
 
@@ -393,9 +393,9 @@ String translateAbsolutePath(String absolutePath,
   if (absolutePath.startsWith(r'\') || absolutePath.startsWith('/')) {
     String drive;
     if (workingDirectory.contains(':')) {
-      drive = workingDirectory[0];
+      drive = workingDirectory[0].toUpperCase();
     } else {
-      drive = pwd[0];
+      drive = pwd[0].toUpperCase();
     }
     return context.joinAll(['\\${drive}Drive', ...parts.sublist(1)]);
   }
