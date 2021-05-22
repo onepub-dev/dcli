@@ -58,9 +58,9 @@ R withTempDir<R>(R Function(String tempDir) action, {bool keep = false}) {
 /// The temporary directory name is formed from a uuid.
 /// It is your responsiblity to delete the directory once you have
 /// finsihed with it.
-String createTempDir() =>
-    _CreateDir().createDir('${Directory.systemTemp.path}/${const Uuid().v4()}',
-        recursive: false);
+String createTempDir() => _CreateDir().createDir(
+    join(Directory.systemTemp.path, const Uuid().v4()),
+    recursive: false);
 
 class _CreateDir extends DCliFunction {
   String createDir(String path, {required bool recursive}) {
