@@ -1,7 +1,11 @@
 @Timeout(Duration(minutes: 10))
 import 'package:dcli/dcli.dart' hide equals;
+import 'package:dcli/src/util/platform_wrapper.dart';
+import 'package:mocktail/mocktail.dart';
+import 'package:path/path.dart' hide equals;
 import 'package:test/test.dart';
 
+import '../mocks/mock_platform.dart';
 import '../util/test_file_system.dart';
 
 void main() {
@@ -264,6 +268,75 @@ void main() {
         });
         expect(exists(tree.bottom), isFalse);
       });
+    });
+
+    test('translateAbsolutePath', () {
+      final platformMock = PlatformMock();
+      PlatformWrapper().mock = platformMock;
+
+      when(() => platformMock.isWindows).thenReturn(false);
+
+      final linuxContext = Context(style: Style.posix);
+      expect(translateAbsolutePath(r'\', context: linuxContext), equals(r'\'));
+      expect(translateAbsolutePath('/', context: linuxContext), equals('/'));
+      expect(translateAbsolutePath(r'\abc', context: linuxContext),
+          equals(r'\abc'));
+      expect(
+          translateAbsolutePath('/abc', context: linuxContext), equals('/abc'));
+
+      when(() => platformMock.isWindows).thenReturn(true);
+      final windowsContext = Context(style: Style.windows);
+      expect(translateAbsolutePath(r'\', context: windowsContext),
+          equals(r'\CDrive'));
+      expect(translateAbsolutePath('/', context: windowsContext),
+          equals(r'\CDrive'));
+      expect(translateAbsolutePath(r'\abc', context: windowsContext),
+          equals(r'\CDrive\abc'));
+      expect(translateAbsolutePath('/abc', context: windowsContext),
+          equals(r'\CDrive\abc'));
+      expect(
+          translateAbsolutePath(r'\abc',
+              context: windowsContext, workingDirectory: r'C:\User'),
+          equals(r'\CDrive\abc'));
+      expect(
+          translateAbsolutePath('/abc',
+              context: windowsContext, workingDirectory: r'D:\User'),
+          equals(r'\DDrive\abc'));
+
+      expect(
+          translateAbsolutePath('c:/',
+              context: windowsContext, workingDirectory: r'D:\User'),
+          equals(r'\cDrive'));
+      expect(
+          translateAbsolutePath('C:/abc',
+              context: windowsContext, workingDirectory: r'D:\User'),
+          equals(r'\CDrive\abc'));
+      expect(translateAbsolutePath('c:/', context: windowsContext),
+          equals(r'\cDrive'));
+      expect(translateAbsolutePath('C:/', context: windowsContext),
+          equals(r'\CDrive'));
+      expect(translateAbsolutePath('c:/abc', context: windowsContext),
+          equals(r'\cDrive\abc'));
+      expect(translateAbsolutePath('C:/abc', context: windowsContext),
+          equals(r'\CDrive\abc'));
+      expect(translateAbsolutePath(r'c:\', context: windowsContext),
+          equals(r'\cDrive'));
+      expect(translateAbsolutePath(r'C:\', context: windowsContext),
+          equals(r'\CDrive'));
+      expect(translateAbsolutePath('D:/', context: windowsContext),
+          equals(r'\DDrive'));
+      expect(translateAbsolutePath('D:/', context: windowsContext),
+          equals(r'\DDrive'));
+      expect(translateAbsolutePath(r'\\c:/', context: windowsContext),
+          equals(r'\cDrive'));
+      expect(translateAbsolutePath(r'\\C:/', context: windowsContext),
+          equals(r'\CDrive'));
+      expect(translateAbsolutePath(r'\\C:\', context: windowsContext),
+          equals(r'\CDrive'));
+      expect(translateAbsolutePath(r'\\server', context: windowsContext),
+          equals(r'\UNC\server'));
+      expect(translateAbsolutePath(r'\\server\abc', context: windowsContext),
+          equals(r'\UNC\server\abc'));
     });
   });
 }

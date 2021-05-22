@@ -1,7 +1,9 @@
-import 'package:path/path.dart';
+import 'package:meta/meta.dart';
+import 'package:path/path.dart' as p;
 
 import '../../dcli.dart';
 import '../settings.dart';
+import '../util/platform_wrapper.dart';
 import 'copy.dart';
 import 'delete.dart';
 import 'is.dart';
@@ -136,7 +138,7 @@ R withFileProtection<R>(List<String> protected, R Function() action,
   // We only support searching for files by the glob pattern (not directories).
   // If the entry is a glob pattern then it is applied recusively.
 
-  final sourceDir = workingDirectory ?? pwd;
+  final _workingDirectory = workingDirectory ?? pwd;
   final result = withTempDir((backupDir) {
     verbose(() => 'withFileProtection: backing up to $backupDir');
 
@@ -144,7 +146,9 @@ R withFileProtection<R>(List<String> protected, R Function() action,
     /// to a backupDir
     for (final path in protected) {
       final paths = _determinePaths(
-          path: path, sourceDir: sourceDir, backupDir: backupDir);
+          path: path,
+          workingDirectory: _workingDirectory,
+          backupDir: backupDir);
 
       if (!exists(paths.sourcePath)) {
         /// the file/directory doesn't exist.
@@ -194,7 +198,9 @@ R withFileProtection<R>(List<String> protected, R Function() action,
     /// restore the protected entities
     for (final path in protected) {
       final paths = _determinePaths(
-          path: path, sourceDir: sourceDir, backupDir: backupDir);
+          path: path,
+          workingDirectory: _workingDirectory,
+          backupDir: backupDir);
       {
         if (!exists(paths.backupPath)) {
           /// If the protected entity didn't exist before we started
@@ -272,9 +278,28 @@ void _deleteEntity(String path) {
   }
 }
 
+/// Determine the paths to the source and backup directories
+///
+/// [path] is the relative or absolute path to the
+/// file that we are going to backup. If [path] is
+/// relative then it is relative to [workingDirectory].
+/// [backupDir] is the temporary directory that we
+/// are going to backup [path] to.
+///
+/// We use the following directory structure for the backup
+/// relative/<path to [path]>
+/// absolute/<path to [path]>
+///
+/// On Windows to accomodate drive letters we need a slightly
+/// different directory structure
+/// relative/<path to [path]>
+/// absolute/<XDrive>/<path to [path]>
+///
+/// Where 'X' is the drive letter that [path] is located on.
+///
 _Paths _determinePaths(
     {required String path,
-    required String sourceDir,
+    required String workingDirectory,
     required String backupDir}) {
   late final String sourcePath;
   late final String backupPath;
@@ -284,12 +309,12 @@ _Paths _determinePaths(
   /// to restore.
   if (isRelative(path)) {
     backupPath = truepath(backupDir, 'relative', path);
-    sourcePath = join(sourceDir, path);
+    sourcePath = join(workingDirectory, path);
   } else {
-    // ignore: flutter_style_todos
-    /// TODO: make this work for other than current drive under Windows
-    sourcePath = _stripWindowsAbsolutePrefix(path);
-    backupPath = join(backupDir, 'absolute', _stripRootPrefix(sourcePath));
+    sourcePath = truepath(path);
+    final translatedPath =
+        translateAbsolutePath(path, workingDirectory: workingDirectory);
+    backupPath = join(backupDir, 'absolute', _stripRootPrefix(translatedPath));
   }
 
   return _Paths(sourcePath, backupPath);
@@ -324,26 +349,58 @@ String? _stripRootPrefix(String absolutePath) {
   return absolutePath;
 }
 
+
 /// Windows, an absolute path starts with `\\`, or a drive letter followed by
 /// `:/` or `:\`.
 /// This method will strip the prefix so the path start with a \ or /
+/// and the prepend the drive letter so that it becomes a valid
+/// path. If the [absolutePath] doesn't contain a drive letter
+/// then we take the drive letter from the [workingDirectory].
 /// If this is a linux absolute path it is returned unchanged.
 ///
-/// C:/abc -> /abc
-/// C:\abc -> \abc
+/// C:/abc -> /CDrive/abc
+/// C:\abc -> /CDrive\abc
 /// \\\abc -> \abc
 /// \\abc -> abc
-String _stripWindowsAbsolutePrefix(String absolutePath) {
-  final parts = split(absolutePath);
+///
+/// The [context] is only used for unit testing so
+/// we can fake the platform separator.
+@visibleForTesting
+String translateAbsolutePath(String absolutePath,
+    {String? workingDirectory, p.Context? context}) {
+  if (!PlatformWrapper().isWindows) {
+    return absolutePath;
+  }
+
+  context ??= p.context;
+
+  // ignore: parameter_assignments
+  workingDirectory ??= pwd;
+
+  final parts = context.split(absolutePath);
   if (parts[0].contains(':')) {
-    return joinAll(parts.sublist(1));
+    final index = parts[0].indexOf(':');
+
+    final drive = parts[0][index - 1];
+    return context.joinAll(['\\${drive}Drive', ...parts.sublist(1)]);
   }
 
   if (parts[0].startsWith(r'\\')) {
-    return joinAll([r'\', ...parts.sublist(1)]);
+    final uncparts = parts[0].split(r'\\');
+    return context.joinAll([r'\UNC', ...uncparts.sublist(1)]);
   }
 
-  /// probably not a windows or not an absolute path
+  if (absolutePath.startsWith(r'\') || absolutePath.startsWith('/')) {
+    String drive;
+    if (workingDirectory.contains(':')) {
+      drive = workingDirectory[0];
+    } else {
+      drive = pwd[0];
+    }
+    return context.joinAll(['\\${drive}Drive', ...parts.sublist(1)]);
+  }
+
+  /// probably not an absolute path
   /// so just pass back what we were handed.
   return absolutePath;
 }
