@@ -1,7 +1,7 @@
-/// import 'dart:ffi';
+import 'dart:ffi';
 
-// import 'package:ffi/ffi.dart';
-// import 'package:win32/win32.dart';
+import 'package:ffi/ffi.dart';
+import 'package:win32/win32.dart';
 
 import '../../dcli.dart';
 import '../installers/windows_installer.dart';
@@ -78,52 +78,185 @@ mixin WindowsMixin {
 
   // TODO(bsutton): impement notification so desktop apps
   // update their environment.
-  /// Updatest the PATH environment variable.
-  static void setPath(List<String?> paths) {
-    // // const char * what = "Environment";
-    // // DWORD rv;
-    // // SendMessageTimeout( HWND_BROADCAST, WM_SETTINGCHANGE, 0,
-    // // 						(LPARAM) what, SMTO_ABORTIFHUNG, 5000, & rv );
-    // _setRegistryValue(HKEY_CURRENT_USER, "Environment", "PATH",
-    //     paths.join(Env().delimiterForPATH));
+  /// Appends [newPath] to the PATH environment variable.
+  static void appendToPath(String newPath) {
+    // const char * what = "Environment";
+    // DWORD rv;
+    // SendMessageTimeout( HWND_BROADCAST, WM_SETTINGCHANGE, 0,
+    // 						(LPARAM) what, SMTO_ABORTIFHUNG, 5000, & rv );
+
+    final paths = getRegistryList(HKEY_CURRENT_USER, 'Environment', 'PATH');
+    setRegistryString(HKEY_CURRENT_USER, 'Environment', 'PATH_A',
+        paths.join(Env().delimiterForPATH));
   }
 
-  // // Update a windows value.
-  // static void _setRegistryValue(
-  //     int key, String subKey, String valueName, String value) {
-  //   /// RegOpenKeyEx
-  //   final subKeyPtr = TEXT(subKey);
-  //   final openKeyPtr = allocate<IntPtr>();
+  static void replacePath(List<String> path)
+  {
 
-  //   // RegSetValueEx
-  //   final valueNamePtr = TEXT(valueName);
-  //   final valuePtr = TEXT(value);
-  //   final dataType = allocate<Uint32>()..value = REG_EXPAND_SZ;
+  }
 
-  //   final data = allocate<Uint8>(count: value.length + 1);
-  //   final dataSize = allocate<Uint32>()..value = value.length + 1;
+  /// Sets a Windodws registry key value
+  static void setRegistryString(
+      int hkey, String subKey, String valueName, String value,
+      {int accessRights = KEY_SET_VALUE}) {
+    final valueNamePtr = TEXT(valueName);
+    final valuePtr = TEXT(value);
 
-  //   try {
-  //     var result = RegOpenKeyEx(key, subKeyPtr, 0
-  //      , REG_EXPAND_SZ, openKeyPtr);
-  //     if (result == ERROR_SUCCESS) {
-  //       result = RegSetValueEx(openKeyPtr.value, valueNamePtr, nullptr,
-  //           dataType, valuePtr.cast(), dataSize);
+    try {
+      withRegKey(hkey, subKey, accessRights, (hkey, pSubKey) {
+        final result = RegSetValueEx(
+            hkey,
+            valueNamePtr,
+            0,
+            REG_EXPAND_SZ,
+            valuePtr.cast(),
+            // utf16 is 2 bytes per char so value.length * 2
+            value.length * 2 + 1);
 
-  //       // ignore: invariant_booleans
-  //       if (result != ERROR_SUCCESS) {
-  //         throw WindowsException(HRESULT_FROM_WIN32(result));
-  //       }
-  //     } else {
-  //       throw WindowsException(HRESULT_FROM_WIN32(result));
-  //     }
-  //   } finally {
-  //     free(subKeyPtr);
-  //     free(valueNamePtr);
-  //     free(openKeyPtr);
-  //     free(data);
-  //     free(dataSize);
-  //   }
-  //   RegCloseKey(openKeyPtr.value);
-  // }
+        // ignore: invariant_booleans
+        if (result != ERROR_SUCCESS) {
+          throw WindowsException(HRESULT_FROM_WIN32(result));
+        }
+      });
+    } finally {
+      calloc..free(valueNamePtr)..free(valuePtr);
+    }
+  }
+
+/// Sets a Windodws registry key value
+  static void setRegistryList(
+      int hkey, String subKey, String valueName, List<String> value,
+      {int accessRights = KEY_SET_VALUE}) {
+    final valueNamePtr = TEXT(valueName);
+    
+    final valuePtr = TEXT(value);
+
+    try {
+      withRegKey(hkey, subKey, accessRights, (hkey, pSubKey) {
+        final result = RegSetValueEx(
+            hkey,
+            valueNamePtr,
+            0,
+            REG_EXPAND_SZ,
+            valuePtr.cast(),
+            // utf16 is 2 bytes per char so value.length * 2
+            value.length * 2 + 1);
+
+        // ignore: invariant_booleans
+        if (result != ERROR_SUCCESS) {
+          throw WindowsException(HRESULT_FROM_WIN32(result));
+        }
+      });
+    } finally {
+      calloc..free(valueNamePtr)..free(valuePtr);
+    }
+  }
+
+  /// Gets a Windows registry value.
+  /// [hkey] is typically HKEY_CURRENT_USER or HKEY_LOCAL_MACHINE
+  ///
+  /// See the following link for additional values:
+  /// https://docs.microsoft.com/en-us/windows/win32/sysinfo/predefined-keys
+  ///
+  /// [subKey] is name of the registry key you want to open.
+  /// This is typically something like 'Environment'.
+  ///
+  /// [accessRights] defines what rights are requried for the opened key.
+  /// This is typically one of KEY_ALL_ACCESS, KEY_QUERY_VALUE,
+  /// KEY_READ, KEY_SET_VALUE
+  /// Refer to the following link for a full set of options.
+  /// https://docs.microsoft.com/en-us/windows/win32/sysinfo/registry-key-security-and-access-rights
+  ///
+  /// throws [WindowsException] if the get failes
+  static String getRegistryString(int hkey, String subKey, String valueName,
+      {int maxLength = 1024, int accessRights = KEY_QUERY_VALUE}) {
+    late final String value;
+    final valueNamePtr = TEXT(valueName);
+    final valuePtr = calloc<Utf16>(maxLength + 1);
+    final dataSizePtr = calloc<Uint32>()..value = maxLength + 1;
+
+    try {
+      withRegKey(hkey, subKey, accessRights, (hkey, pSubKey) {
+        final result = RegGetValue(hkey, pSubKey, valueNamePtr, REG_EXPAND_SZ,
+            nullptr, valuePtr.cast(), dataSizePtr);
+        if (result != ERROR_SUCCESS) {
+          throw WindowsException(HRESULT_FROM_WIN32(result));
+        }
+        value = valuePtr.toDartString();
+      });
+    } finally {
+      calloc..free(valueNamePtr)..free(valuePtr)..free(dataSizePtr);
+    }
+    return value;
+  }
+
+  static List<String> getRegistryList(int hkey, String subKey, String valueName,
+      {int accessRights = KEY_QUERY_VALUE}) {
+    late final List<String> value;
+    final valueNamePtr = TEXT(valueName);
+    final dataSizePtr = calloc<Uint32>();
+
+    try {
+      withRegKey(hkey, subKey, accessRights, (hkey, pSubKey) {
+        /// get the buffer size
+        final result = RegGetValue(hkey, pSubKey, valueNamePtr, REG_MULTI_SZ,
+            nullptr, nullptr, dataSizePtr);
+
+        if (result != ERROR_SUCCESS) {
+          throw WindowsException(HRESULT_FROM_WIN32(result));
+        }
+        final valuePtr = calloc<Utf16>(dataSizePtr.value);
+        try {
+          final result = RegGetValue(hkey, pSubKey, valueNamePtr, REG_MULTI_SZ,
+              nullptr, valuePtr.cast(), dataSizePtr);
+          if (result != ERROR_SUCCESS) {
+            throw WindowsException(HRESULT_FROM_WIN32(result));
+          }
+          value = valuePtr.unpackStringArray(dataSizePtr.value);
+        } finally {
+          calloc.free(valuePtr);
+        }
+      });
+    } finally {
+      calloc..free(valueNamePtr)..free(dataSizePtr);
+    }
+    return value;
+  }
+}
+
+/// [hkey] is typically HKEY_CURRENT_USER or HKEY_LOCAL_MACHINE
+///
+/// See the following link for additional values:
+/// https://docs.microsoft.com/en-us/windows/win32/sysinfo/predefined-keys
+///
+/// [subKey] is name of the registry key you want to open.
+/// This is typically something like 'Environment'.
+///
+/// [accessRights] defines what rights are requried for the opened key.
+/// This is typically one of KEY_ALL_ACCESS, KEY_QUERY_VALUE,
+/// KEY_READ, KEY_SET_VALUE
+/// Refer to the following link for a full set of options.
+/// https://docs.microsoft.com/en-us/windows/win32/sysinfo/registry-key-security-and-access-rights
+///
+R withRegKey<R>(int hkey, String subKey, int accessRights,
+    R Function(int hkey, Pointer<Utf16> pSubKey) action) {
+  R actionResult;
+  final pOpenKey = calloc<IntPtr>();
+  final pSubKey = TEXT(subKey);
+
+  try {
+    final result = RegOpenKeyEx(hkey, pSubKey, 0, accessRights, pOpenKey);
+    if (result == ERROR_SUCCESS) {
+      try {
+        actionResult = action(pOpenKey.value, pSubKey);
+      } finally {
+        RegCloseKey(pOpenKey.value);
+      }
+    } else {
+      throw WindowsException(HRESULT_FROM_WIN32(result));
+    }
+  } finally {
+    calloc..free(pOpenKey)..free(pSubKey);
+  }
+  return actionResult;
 }
