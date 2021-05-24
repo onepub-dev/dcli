@@ -19,7 +19,7 @@ class WindowsDCliInstaller {
 
     Env().addToPATHIfAbsent(Settings().pathToDCliBin);
 
-    WindowsMixin.replaceToPath(PATH);
+    WindowsMixin.replacePath(PATH);
 
     // 'setx PATH "${PATH.join(Env().delimiterForPATH)}"'.run;
 

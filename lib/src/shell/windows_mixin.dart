@@ -86,13 +86,26 @@ mixin WindowsMixin {
     // 						(LPARAM) what, SMTO_ABORTIFHUNG, 5000, & rv );
 
     final paths = getRegistryList(HKEY_CURRENT_USER, 'Environment', 'PATH');
-    setRegistryString(HKEY_CURRENT_USER, 'Environment', 'PATH_A',
+    setRegistryString(HKEY_CURRENT_USER, 'Environment', 'PATH',
         paths.join(Env().delimiterForPATH));
   }
 
-  static void replacePath(List<String> path)
-  {
+  // TODO(bsutton): impement notification so desktop apps
+  // update their environment.
+  /// Replaced the existing Windows PATH with [newPath].
+  ///
+  /// WARNING: becareful using this method. If you get it wrong
+  /// you can destroy your Windows PATH which will stop lots
+  /// (everything?) of things from working.
+  static void replacePath(List<String> newPath) {
+    // const char * what = "Environment";
+    // DWORD rv;
+    // SendMessageTimeout( HWND_BROADCAST, WM_SETTINGCHANGE, 0,
+    // 						(LPARAM) what, SMTO_ABORTIFHUNG, 5000, & rv );
 
+    final paths = getRegistryList(HKEY_CURRENT_USER, 'Environment', 'PATH');
+    setRegistryString(HKEY_CURRENT_USER, 'Environment', 'PATH_A',
+        paths.join(Env().delimiterForPATH));
   }
 
   /// Sets a Windodws registry key value
@@ -123,13 +136,13 @@ mixin WindowsMixin {
     }
   }
 
-/// Sets a Windodws registry key value
+  /// Sets a Windodws registry key value
   static void setRegistryList(
       int hkey, String subKey, String valueName, List<String> value,
       {int accessRights = KEY_SET_VALUE}) {
     final valueNamePtr = TEXT(valueName);
-    
-    final valuePtr = TEXT(value);
+
+    final valuePtr = packStringArray(value);
 
     try {
       withRegKey(hkey, subKey, accessRights, (hkey, pSubKey) {
@@ -221,6 +234,41 @@ mixin WindowsMixin {
       calloc..free(valueNamePtr)..free(dataSizePtr);
     }
     return value;
+  }
+
+  /// Packs a List of Dart Strings into a native memory block.
+  /// Each String is terminated by a null with a second
+  /// double null to represent the end of the list.
+  /// The resulting format is that required to write a list of values
+  /// to the registry.
+  ///
+  /// It is the responsibility of the caller to [free] the returned
+  /// pointer.
+  static Pointer<Utf16> packStringArray(List<String> values) {
+    var size = 0;
+
+    for (final value in values) {
+      size += value.length + 1;
+    }
+
+    /// trailing null after last value
+    size++;
+
+    final pArray = calloc<Utf16>(size);
+    final ptr = pArray.cast<Uint16>().asTypedList(size);
+
+    var index = 0;
+    for (final value in values) {
+      final units = value.codeUnits;
+
+      ptr.setAll(index, units);
+      ptr[index + units.length] = 0;
+
+      index += value.length + 1;
+    }
+    ptr[index] = 0;
+
+    return pArray;
   }
 }
 

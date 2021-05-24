@@ -16,7 +16,7 @@ void main() {
 
     print(PATH);
 
-    WindowsMixin.appendToPath(PATH);
+    WindowsMixin.replacePath(PATH);
 
     // 'setx PATH "${PATH.join(Env().delimiterForPATH)}"'.run;
   }, skip: !Platform.isWindows);
