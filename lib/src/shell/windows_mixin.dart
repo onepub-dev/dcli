@@ -185,7 +185,7 @@ mixin WindowsMixin {
       {int maxLength = 1024, int accessRights = KEY_QUERY_VALUE}) {
     late final String value;
     final valueNamePtr = TEXT(valueName);
-    final valuePtr = calloc<Utf16>(maxLength + 1);
+    final valuePtr = calloc<Uint16>(maxLength + 1);
     final dataSizePtr = calloc<Uint32>()..value = maxLength + 1;
 
     try {
@@ -195,7 +195,7 @@ mixin WindowsMixin {
         if (result != ERROR_SUCCESS) {
           throw WindowsException(HRESULT_FROM_WIN32(result));
         }
-        value = valuePtr.toDartString();
+        value = valuePtr.cast<Utf16>().toDartString();
       });
     } finally {
       calloc..free(valueNamePtr)..free(valuePtr)..free(dataSizePtr);
@@ -218,14 +218,14 @@ mixin WindowsMixin {
         if (result != ERROR_SUCCESS) {
           throw WindowsException(HRESULT_FROM_WIN32(result));
         }
-        final valuePtr = calloc<Utf16>(dataSizePtr.value);
+        final valuePtr = calloc<Uint16>(dataSizePtr.value);
         try {
           final result = RegGetValue(hkey, pSubKey, valueNamePtr, REG_MULTI_SZ,
               nullptr, valuePtr.cast(), dataSizePtr);
           if (result != ERROR_SUCCESS) {
             throw WindowsException(HRESULT_FROM_WIN32(result));
           }
-          value = valuePtr.unpackStringArray(dataSizePtr.value);
+          value = valuePtr.cast<Utf16>().unpackStringArray(dataSizePtr.value);
         } finally {
           calloc.free(valuePtr);
         }
@@ -254,7 +254,7 @@ mixin WindowsMixin {
     /// trailing null after last value
     size++;
 
-    final pArray = calloc<Utf16>(size);
+    final pArray = calloc<Uint16>(size);
     final ptr = pArray.cast<Uint16>().asTypedList(size);
 
     var index = 0;
@@ -268,7 +268,7 @@ mixin WindowsMixin {
     }
     ptr[index] = 0;
 
-    return pArray;
+    return pArray.cast();
   }
 }
 
