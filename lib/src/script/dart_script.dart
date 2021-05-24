@@ -1,6 +1,7 @@
 import 'dart:io';
 import 'dart:math';
 
+import 'package:meta/meta.dart';
 import 'package:path/path.dart' as p;
 
 import '../../dcli.dart';
@@ -41,10 +42,10 @@ class DartScript {
   DartScript._internal(String pathToScript,
       {required bool create, DartProject? project})
       : _pathToScript = truepath(pathToScript),
-        _scriptName = p.basename(truepath(pathToScript)),
         _scriptDirectory = dirname(truepath(pathToScript)),
         _project = project {
     {
+      _scriptName = p.basename(truepath(pathToScript));
       if (create) {
         DartProject.fromPath(pathToProjectRoot).initFiles();
       }
@@ -56,7 +57,7 @@ class DartScript {
   final String _scriptDirectory;
 
   /// Name of the dart script
-  final String _scriptName;
+  late final String _scriptName;
 
   /// Path to the dart script loaded.
   String _pathToScript;
@@ -126,6 +127,8 @@ class DartScript {
 
       if (script.isScheme('file')) {
         __pathToCurrentScript = Platform.script.toFilePath();
+
+        __pathToCurrentScript = stripDartVersionSuffix(__pathToCurrentScript!);
 
         if (_isCompiled) {
           __pathToCurrentScript = Platform.resolvedExecutable;
@@ -256,6 +259,25 @@ class DartScript {
   /// Returns the path that the script would be installed to if
   /// compiled with install = true.
   String get pathToInstalledExe => join(Settings().pathToDCliBin, exeName);
+
+  /// internal method do not use.
+  @visibleForTesting
+  static String stripDartVersionSuffix(String pathToCurrentScript) {
+    var result = pathToCurrentScript;
+
+    /// Not certain what is going on here.
+    /// If we use a pub global activated version then
+    /// Platform.script is returning a filename of the form:
+    /// pub_release.dart-2.13.0
+    /// So we look to strip of the suffix from the - onward.
+    if (pathToCurrentScript.contains('.dart-')) {
+      var index = pathToCurrentScript.indexOf('.dart-');
+      index += 5;
+      result = pathToCurrentScript.substring(0, index);
+    }
+
+    return result;
+  }
 }
 
 // ignore: avoid_classes_with_only_static_members
