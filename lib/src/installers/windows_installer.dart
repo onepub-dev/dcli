@@ -1,4 +1,5 @@
 import '../../dcli.dart';
+import '../../windows.dart';
 import '../functions/env.dart';
 import '../script/dart_sdk.dart';
 import '../settings.dart';
@@ -19,7 +20,7 @@ class WindowsDCliInstaller {
 
     Env().addToPATHIfAbsent(Settings().pathToDCliBin);
 
-    WindowsMixin.replacePath(PATH);
+    replacePath(PATH);
 
     // 'setx PATH "${PATH.join(Env().delimiterForPATH)}"'.run;
 

@@ -2,6 +2,7 @@
 import 'dart:io';
 import 'package:dcli/dcli.dart';
 import 'package:dcli/src/util/pub_cache.dart';
+import 'package:dcli/windows.dart';
 import 'package:path/path.dart';
 import 'package:test/test.dart';
 
@@ -16,7 +17,7 @@ void main() {
 
     print(PATH);
 
-    WindowsMixin.replacePath(PATH);
+    replacePath(PATH);
 
     // 'setx PATH "${PATH.join(Env().delimiterForPATH)}"'.run;
   }, skip: !Platform.isWindows);
