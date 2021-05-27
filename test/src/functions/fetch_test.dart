@@ -10,17 +10,18 @@ void main() {
     // Don't know how to test this as it writes directly to stdout.
     // Need some way to hook Stdout
     test('Fetch One', () {
+      Settings().setVerbose(enabled: true);
       withTempDir((testRoot) {
         withTempFile((sampleAac) {
           fetch(url: '$baseURl/sample.aac', saveToPath: sampleAac);
           expect(FileSync(sampleAac).length, equals(14951));
           delete(sampleAac);
+        }, create: false);
 
-          withTempFile((sampleWav) {
-            fetch(url: '$baseURl/sample.wav', saveToPath: sampleWav);
-            expect(FileSync(sampleWav).length, equals(212948));
-            delete(sampleWav);
-          }, create: false);
+        withTempFile((sampleWav) {
+          fetch(url: '$baseURl/sample.wav', saveToPath: sampleWav);
+          expect(FileSync(sampleWav).length, equals(212948));
+          delete(sampleWav);
         }, create: false);
       });
     });
