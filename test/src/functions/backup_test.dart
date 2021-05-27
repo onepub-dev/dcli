@@ -277,22 +277,22 @@ void main() {
       when(() => platformMock.isWindows).thenReturn(false);
 
       final linuxContext = Context(style: Style.posix);
-      expect(translateAbsolutePath(r'\', context: linuxContext), equals(r'\'));
-      expect(translateAbsolutePath('/', context: linuxContext), equals('/'));
-      expect(translateAbsolutePath(r'\abc', context: linuxContext),
+      expect(translateAbsolutePath(r'\', context: linuxContext, workingDirectory: '/'), equals(r'\'));
+      expect(translateAbsolutePath('/', context: linuxContext, workingDirectory: '/'), equals('/'));
+      expect(translateAbsolutePath(r'\abc', context: linuxContext, workingDirectory: '/'),
           equals(r'\abc'));
       expect(
-          translateAbsolutePath('/abc', context: linuxContext), equals('/abc'));
+          translateAbsolutePath('/abc', context: linuxContext, workingDirectory: '/'), equals('/abc'));
 
       when(() => platformMock.isWindows).thenReturn(true);
       final windowsContext = Context(style: Style.windows);
-      expect(translateAbsolutePath(r'\', context: windowsContext),
+      expect(translateAbsolutePath(r'\', context: windowsContext, workingDirectory: r'c:\'),
           equals(r'\CDrive'));
-      expect(translateAbsolutePath('/', context: windowsContext),
+      expect(translateAbsolutePath('/', context: windowsContext, workingDirectory: r'c:\'),
           equals(r'\CDrive'));
-      expect(translateAbsolutePath(r'\abc', context: windowsContext),
+      expect(translateAbsolutePath(r'\abc', context: windowsContext, workingDirectory: r'c:\'),
           equals(r'\CDrive\abc'));
-      expect(translateAbsolutePath('/abc', context: windowsContext),
+      expect(translateAbsolutePath('/abc', context: windowsContext, workingDirectory: r'c:\'),
           equals(r'\CDrive\abc'));
       expect(
           translateAbsolutePath(r'\abc',
