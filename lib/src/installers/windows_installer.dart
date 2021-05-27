@@ -1,4 +1,7 @@
+import 'package:win32/win32.dart';
+
 import '../../dcli.dart';
+import '../../windows.dart';
 import '../functions/env.dart';
 import '../script/dart_sdk.dart';
 import '../settings.dart';
@@ -19,7 +22,13 @@ class WindowsDCliInstaller {
 
     Env().addToPATHIfAbsent(Settings().pathToDCliBin);
 
-    WindowsMixin.replacePath(PATH);
+    // update the windows registry so the change sticks.
+    final path =
+        regGetExpandString(HKEY_CURRENT_USER, 'Environment', 'Path');
+
+    if (!path.contains(Settings().pathToDCliBin)) {
+      regAppendToPath(Settings().pathToDCliBin);
+    }
 
     // 'setx PATH "${PATH.join(Env().delimiterForPATH)}"'.run;
 
