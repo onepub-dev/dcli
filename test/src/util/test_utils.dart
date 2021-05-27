@@ -11,9 +11,9 @@ void createLineFile(String testFile, int lines) {
     createDir(dirname(testFile));
   }
 
-  final file = FileSync(testFile);
-  for (var i = 0; i < 10; i++) {
-    file.append('Line $i is here');
-  }
-  file.close();
+  withOpenFile(testFile, (file) {
+    for (var i = 0; i < 10; i++) {
+      file.append('Line $i is here');
+    }
+  });
 }

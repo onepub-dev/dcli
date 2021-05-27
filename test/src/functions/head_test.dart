@@ -1,5 +1,3 @@
-@t.Timeout(Duration(seconds: 600))
-import 'dart:io';
 
 import 'package:dcli/src/util/file_sync.dart';
 import 'package:test/test.dart' as t;
@@ -19,11 +17,12 @@ void main() {
         if (!exists(fsRoot)) {
           createDir(fsRoot, recursive: true);
         }
-        final file = FileSync(testFile, fileMode: FileMode.write);
-        for (var i = 0; i < 10; i++) {
-          file.append('Line $i is here');
-        }
-        file.close();
+        withOpenFile(testFile, (file) {
+          for (var i = 0; i < 10; i++) {
+            file.append('Line $i is here');
+          }
+          file.close();
+        });
 
         final lines = head(testFile, 5).toList();
 

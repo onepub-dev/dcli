@@ -232,9 +232,10 @@ void main() {
 String setup(TestFileSystem fs) {
   final linesFile = join(fs.fsRoot, TestFileSystem.testLinesFile);
 
-  final file = FileSync(linesFile);
-  for (var i = 0; i < 10; i++) {
-    file.append('Line $i');
-  }
+  withOpenFile(linesFile, (file) {
+    for (var i = 0; i < 10; i++) {
+      file.append('Line $i');
+    }
+  });
   return linesFile;
 }

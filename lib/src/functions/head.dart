@@ -31,13 +31,15 @@ class _Head extends DCliFunction {
     try {
       progress ??= Progress.printStdOut();
       var count = 0;
-      FileSync(path).read((line) {
-        progress!.addToStdout(line);
-        count++;
-        if (count >= lines) {
-          return false;
-        }
-        return true;
+      withOpenFile(path, (file) {
+        file.read((line) {
+          progress!.addToStdout(line);
+          count++;
+          if (count >= lines) {
+            return false;
+          }
+          return true;
+        });
       });
     }
     // ignore: avoid_catches_without_on_clauses

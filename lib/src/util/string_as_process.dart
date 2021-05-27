@@ -472,9 +472,9 @@ extension StringAsProcess on String {
   ///
   /// See [truncate] and [append].
   void write(String line, {String newline = '\n'}) {
-    FileSync(this)
-      ..write(line, newline: newline)
-      ..close();
+    withOpenFile(this, (file) {
+      file.write(line, newline: newline);
+    });
   }
 
   /// Truncates a file by setting its length to zero.
@@ -486,7 +486,9 @@ extension StringAsProcess on String {
   /// ```
   /// See [write] and [append]
   void truncate() {
-    FileSync(this).truncate();
+    withOpenFile(this, (file) {
+      file.truncate();
+    });
   }
 
   /// Treat the contents of 'this' String  as the name of a file
@@ -502,9 +504,9 @@ extension StringAsProcess on String {
   /// ```
   /// See [write] and [truncate]
   void append(String line, {String newline = '\n'}) {
-    FileSync(this) // , fileMode: FileMode.append)
-      ..append(line, newline: newline)
-      ..close();
+    withOpenFile(this, (file) {
+      file.append(line, newline: newline);
+    });
   }
 }
 

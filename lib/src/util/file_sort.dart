@@ -191,10 +191,12 @@ class FileSort {
 
   void _saveSortedList(
       String filename, List<_Line> list, String? lineDelimiter) {
-    final saveTo = d.FileSync(filename)..truncate();
-    for (final line in list) {
-      saveTo.append(line.line!, newline: lineDelimiter);
-    }
+    withOpenFile(filename, (saveTo) {
+      saveTo.truncate();
+      for (final line in list) {
+        saveTo.append(line.line!, newline: lineDelimiter);
+      }
+    });
   }
 
   /// Expands an list of columns defined as per [Column.parse]
@@ -264,8 +266,9 @@ class FileSort {
 
     // Open and read the first line from each file.
     for (final file in files) {
-      final fileSync = d.FileSync(file, fileMode: FileMode.read);
-      lines.add(_Line(fileSync));
+      withOpenFile(file, (fileSync) {
+        lines.add(_Line(fileSync));
+      }, fileMode: FileMode.read);
     }
 
     // Sort the set of first lines.
@@ -273,25 +276,25 @@ class FileSort {
 
     const mergedFilename = 'merged.txt';
     final mergedPath = d.join(phaseDirectory.path, mergedFilename);
-    final result = d.FileSync(mergedPath);
+    withOpenFile(mergedPath, (resultFile) {
+      while (lines.isNotEmpty) {
+        final line = lines.removeAt(0);
+        resultFile.append(line.line!);
 
-    while (lines.isNotEmpty) {
-      final line = lines.removeAt(0);
-      result.append(line.line!);
-
-      // a btree might give better performance as we wouldn't
-      // have to resort.
-      // If readNext returns false then the file is drained
-      // so we don't re-added to the list.
-      if (line.readNext()) {
-        lines.add(line);
-        _sortList(lines);
-      } else {
-        line
-          ..close()
-          ..delete();
+        // a btree might give better performance as we wouldn't
+        // have to resort.
+        // If readNext returns false then the file is drained
+        // so we don't re-added to the list.
+        if (line.readNext()) {
+          lines.add(line);
+          _sortList(lines);
+        } else {
+          line
+            ..close()
+            ..delete();
+        }
       }
-    }
+    });
 
     if (_inputPath == _outputPath) {
       final backup = '$_inputPath.bak';

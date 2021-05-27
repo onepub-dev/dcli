@@ -22,7 +22,10 @@ import 'wait_for_ex.dart';
 /// Note: the api to this class is considered EXPERIMENTAL
 /// and is subject to change.
 class FileSync {
+  /// If you instantiate FileSync you MUST call [close].
   ///
+  /// We rececommend that you use [withOpenFile] in prefernce to directly
+  /// calling this method.
   FileSync(String path, {FileMode fileMode = FileMode.writeOnlyAppend}) {
     _file = File(path);
     _open(fileMode);
@@ -86,9 +89,10 @@ class FileSync {
   /// Returns the length of the file in bytes
   /// The file does NOT have to be open
   /// to determine its length.
+  /// See [fileLength]
   int get length => _file.lengthSync();
 
-  /// Close and flushes a file to disk.
+  /// Close and flushes the file to disk.
   void close() {
     _raf.closeSync();
   }
@@ -176,6 +180,22 @@ class FileSync {
       return priorChar + char == lineDelimiter;
     }
   }
+}
+
+/// Opens a File and calls [action] passing in the open file.
+/// When action completes the file is closed.
+/// Use this method in preference to directly callling [FileSync()]
+R withOpenFile<R>(String pathToFile, R Function(FileSync) action,
+    {FileMode fileMode = FileMode.writeOnlyAppend}) {
+  final file = FileSync(pathToFile, fileMode: fileMode);
+
+  R result;
+  try {
+    result = action(file);
+  } finally {
+    file.close();
+  }
+  return result;
 }
 
 ///
@@ -282,6 +302,9 @@ String createTempFile({String? suffix}) {
   touch(filename, create: true);
   return filename;
 }
+
+/// Returns the length of the file at [pathToFile] in bytes.
+int fileLength(String pathToFile) => File(pathToFile).lengthSync();
 
 /// Creates a temp file and then calls [action].
 ///

@@ -13,13 +13,12 @@ void main() {
         if (exists(testFile)) {
           delete(testFile);
         }
-        final file = FileSync(testFile);
-        for (var i = 0; i < 10; i++) {
-          file.append('Line $i is here');
-        }
-        file.close();
-
-        final fstat = stat(file.path);
+        final fstat = withOpenFile(testFile, (file) {
+          for (var i = 0; i < 10; i++) {
+            file.append('Line $i is here');
+          }
+          return stat(file.path);
+        });
 
         t.expect(fstat.size, t.equals(150));
       });
@@ -31,16 +30,18 @@ void main() {
         if (exists(testFile)) {
           delete(testFile);
         }
-        final file = FileSync(testFile);
-        for (var i = 0; i < 10; i++) {
-          file.append('Line $i is here');
-        }
         const replacement = 'This is all that should be left';
-        file
-          ..write(replacement, newline: null)
-          ..close();
+        final fstat = withOpenFile(testFile, (file) {
+          for (var i = 0; i < 10; i++) {
+            file.append('Line $i is here');
+          }
 
-        final fstat = stat(file.path);
+          file
+            ..write(replacement, newline: null)
+            ..close();
+
+          return stat(file.path);
+        });
 
         t.expect(fstat.size, t.equals(replacement.length));
       });

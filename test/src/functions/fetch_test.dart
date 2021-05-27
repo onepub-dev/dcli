@@ -14,15 +14,15 @@ void main() {
       withTempDir((testRoot) {
         withTempFile((sampleAac) {
           fetch(url: '$baseURl/sample.aac', saveToPath: sampleAac);
-          expect(FileSync(sampleAac).length, equals(14951));
+          expect(fileLength(sampleAac), equals(14951));
           delete(sampleAac);
         }, create: false);
 
-        withTempFile((sampleWav) {
-          fetch(url: '$baseURl/sample.wav', saveToPath: sampleWav);
-          expect(FileSync(sampleWav).length, equals(212948));
-          delete(sampleWav);
-        }, create: false);
+        // withTempFile((sampleWav) {
+        //   fetch(url: '$baseURl/sample.wav', saveToPath: sampleWav);
+        //   expect(FileSync(sampleWav).length, equals(212948));
+        //   delete(sampleWav);
+        // }, create: false);
       });
     });
 
@@ -35,7 +35,7 @@ void main() {
               fetchProgress: (progress) async {
                 print('${progress.progress * 100} %');
               });
-          expect(FileSync(sampleAac).length, equals(14951));
+          expect(fileLength(sampleAac), equals(14951));
           delete(sampleAac);
 
           withTempFile((sampleWav) {
@@ -45,7 +45,7 @@ void main() {
                 fetchProgress: (progress) async {
                   print('${progress.progress * 100} %');
                 });
-            expect(FileSync(sampleWav).length, equals(212948));
+            expect(fileLength(sampleWav), equals(212948));
             delete(sampleWav);
           }, create: false);
         }, create: false);
@@ -65,8 +65,8 @@ void main() {
                   progress: showProgress),
               FetchUrl(url: '$baseURl/sample.wav', saveToPath: sampleWav)
             ]);
-            expect(FileSync(sampleAac).length, equals(14951));
-            expect(FileSync(sampleWav).length, equals(212948));
+            expect(fileLength(sampleAac), equals(14951));
+            expect(fileLength(sampleWav), equals(212948));
 
             delete(sampleAac);
             delete(sampleWav);
@@ -89,8 +89,8 @@ void main() {
                   saveToPath: sampleWav,
                   progress: showProgress)
             ]);
-            expect(FileSync(sampleAac).length, equals(14951));
-            expect(FileSync(sampleWav).length, equals(212948));
+            expect(fileLength(sampleAac), equals(14951));
+            expect(fileLength(sampleWav), equals(212948));
           }, create: false);
         }, create: false);
       });
@@ -107,7 +107,7 @@ void main() {
             echo('\r');
             echo('${progress.progress * 100} %');
           });
-      expect(FileSync(sampleAac).length, equals(14951));
+      expect(fileLength(sampleAac), equals(14951));
     }, suffix: 'acc', create: false);
 
     final temp = withTempFile((sampleWav) {
@@ -117,7 +117,7 @@ void main() {
           fetchProgress: (progress) async {
             print('${progress.progress * 100} %');
           });
-      expect(FileSync(sampleWav).length, equals(212948));
+      expect(fileLength(sampleWav), equals(212948));
       print('finished');
       return sampleWav;
     }, suffix: 'wav', create: false);

@@ -169,6 +169,7 @@ class _Fetch extends DCliFunction {
         },
         onDone: () async {
           /// down load is complete
+          raf.flushSync();
           await raf.close();
           await subscription.cancel();
           client.close();
@@ -185,6 +186,7 @@ class _Fetch extends DCliFunction {
           verbose(
             () => 'Error downloading: ${fetchUrl.url}',
           );
+          raf.flushSync();
           await raf.close();
           await subscription.cancel();
           client.close();

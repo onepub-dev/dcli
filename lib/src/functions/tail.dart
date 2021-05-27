@@ -34,10 +34,11 @@ class _Tail extends DCliFunction {
 
       final buf = CircularBuffer<String>(lines);
 
-      FileSync(path).read((line) {
-        buf.insert(line);
-
-        return true;
+      withOpenFile(path, (file) {
+        file.read((line) {
+          buf.insert(line);
+          return true;
+        });
       });
 
       buf.forEach((line) => progress!.addToStdout(line));
