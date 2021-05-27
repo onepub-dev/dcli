@@ -1,8 +1,8 @@
-
+import 'package:win32/win32.dart';
 
 import '../../dcli.dart';
 import '../installers/windows_installer.dart';
-import '../script/commands/install.dart';
+import '../platform/windows/registry.dart';
 
 /// Common code for Windows shells.
 mixin WindowsMixin {
@@ -14,20 +14,12 @@ mixin WindowsMixin {
   /// For details on enabling dev mode on windows see:
   /// https://bsutton.gitbook.io/dcli/getting-started/installing-on-windows
   bool inDeveloperMode() {
-    /// Example result:
-    /// <blank line>
-    /// HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\AppModelUnlock
-    /// AllowDevelopmentWithoutDevLicense    REG_DWORD    0x1
-    final response =
-        r'reg query "HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\AppModelUnlock" /v "AllowDevelopmentWithoutDevLicense"'
-            .toList(runInShell: true, skipLines: 2)
-            .first;
-    final parts = response.trim().split(RegExp(r'\s+'));
-    if (parts.length != 3) {
-      throw InstallException('Unable to obtain development mode settings');
-    }
+    final response = regGetDWORD(
+        HKEY_LOCAL_MACHINE,
+        r'SOFTWARE\Microsoft\Windows\CurrentVersion\AppModelUnlock',
+        'AllowDevelopmentWithoutDevLicense');
 
-    return parts[2] == '0x1';
+    return response == 1;
   }
 
   /// Called to install the windows specific dart/dcli components.
@@ -72,5 +64,4 @@ mixin WindowsMixin {
 
   /// On Windows this is always false.
   bool get isSudo => false;
-
 }
