@@ -27,6 +27,7 @@ void main() {
         Settings.reset();
         final mockSettings = MockSettings();
         Settings.mock = mockSettings;
+        when(() => mockSettings.isVerbose).thenReturn(true);
         when(() => mockSettings.isWindows).thenReturn(true);
         Env.reset();
         //var mockEnv = MockEnv();
