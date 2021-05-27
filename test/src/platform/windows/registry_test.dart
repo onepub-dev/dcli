@@ -1,4 +1,5 @@
 @Timeout(Duration(minutes: 5))
+@TestOn('windows')
 import 'dart:io';
 
 import 'package:dcli/dcli.dart' hide equals;
@@ -7,7 +8,7 @@ import 'package:dcli/windows.dart';
 import 'package:test/test.dart';
 import 'package:win32/win32.dart';
 
-@TestOn('windows')
+
 void main() {
   test('windows mixin ...', () async {
     regSetString(HKEY_CURRENT_USER, 'Environment', 'PATH_TEST', 'HI');
