@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:dcli/dcli.dart' hide equals;
 import 'package:test/test.dart';
 
@@ -6,12 +8,14 @@ void main() {
     const path = 'assets/templates/basic.dart';
     final content = Assets().loadString(path);
 
+    final lineDelimiter = Platform.isWindows ? '\r\n' : '\n';
+
     expect(content, isNotNull);
 
     var actual =
         read(join(DartProject.current.pathToProjectRoot, 'lib', 'src', path))
             .toList()
-            .join('\n');
+            .join(lineDelimiter);
 
     /// the join trims the last \n
     actual += '\n';
