@@ -1,8 +1,8 @@
 import 'package:meta/meta.dart';
+import 'package:pub_cache/pub_cache.dart' as pc;
 
 import '../../dcli.dart';
 import '../settings.dart';
-import '../shell/posix_shell.dart';
 
 /// Used to locate and manipulate the dart pub cache
 ///
@@ -13,41 +13,20 @@ class PubCache {
   factory PubCache() => _self ??= PubCache._internal();
 
   PubCache._internal() {
-    // first check if an environment variable exists.
-    // The PUB_CACHE env var allows a user to over-ride
-    // the standard location of the pub cache.
-    final pubCacheEnv = env[envVarPubCache];
+    _pubCachePath = pc.PubCache.getSystemCacheLocation().path;
+    _pubCacheDir = basename(_pubCachePath);
 
-    String? dir;
-
-    /// determine pubCacheDir
-    if (pubCacheEnv != null) {
-      dir = pubCacheEnv;
-    }
-    if (Settings().isWindows) {
-      dir ??= join('Pub', 'Cache');
-      // doco says this is AppData but some installers seem to use LocalAppData
-      _pubCachePath = truepath(join(env['AppData']!, dir));
-      if (!exists(_pubCachePath)) {
-        _pubCachePath = truepath(join(env['LocalAppData']!, dir));
-      }
-    } else {
-      dir ??= '.pub-cache';
-
-      // determine pub-cache path
-      if (Shell.current.isSudo) {
-        /// I'm really not certain about this.
-        /// The logic is that if we are running under sudo then the pub-cache
-        /// we are using actually belongs to the original users so we
-        /// we get that user's home directory and pub cache.
-        final home = (Shell.current as PosixShell).loggedInUsersHome;
-        _pubCachePath = truepath(join(home, dir));
-      } else {
-        _pubCachePath = truepath(join(env['HOME']!, dir));
-      }
-    }
-
-    _pubCacheDir = dir;
+    // // determine pub-cache path
+    // if (Shell.current.isSudo) {
+    //   /// I'm really not certain about this.
+    //   /// The logic is that if we are running under sudo then the pub-cache
+    //   /// we are using actually belongs to the original user so
+    //   /// we get that user's home directory and pub cache.
+    //   final home = (Shell.current as PosixShell).loggedInUsersHome;
+    //   _pubCachePath = truepath(join(home, dir));
+    // } else {
+    //   _pubCachePath = truepath(join(env['HOME']!, dir));
+    // }
 
     verbose(() => 'pub-cache found in=$_pubCachePath');
 
