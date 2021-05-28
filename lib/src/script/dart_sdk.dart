@@ -61,9 +61,11 @@ class DartSdk {
   }
 
   /// The path to the dart exe.
+  /// Returns null if the the path cannot be foun.d
   String? get pathToDartExe => _pathToDartExe;
 
   /// file path to the 'pub' command.
+  /// Returns null if the path cannot be found.
   String? get pathToPubExe => _pathToPubExe;
 
   // @Deprecated('Use pathToDartExe and dart compile')

@@ -23,8 +23,7 @@ class WindowsDCliInstaller {
     Env().addToPATHIfAbsent(Settings().pathToDCliBin);
 
     // update the windows registry so the change sticks.
-    final path =
-        regGetExpandString(HKEY_CURRENT_USER, 'Environment', 'Path');
+    final path = regGetExpandString(HKEY_CURRENT_USER, 'Environment', 'Path');
 
     if (!path.contains(Settings().pathToDCliBin)) {
       regAppendToPath(Settings().pathToDCliBin);
@@ -41,7 +40,7 @@ class WindowsDCliInstaller {
     var installedDart = false;
 
     // first check that dart isn't already installed
-    if (which('dart').notfound) {
+    if (DartSdk().pathToDartExe == null) {
       print('Installing Dart');
 
       const defaultDartToolDir = r'C:\tools\dart-sdk';

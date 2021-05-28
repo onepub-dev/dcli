@@ -1,3 +1,5 @@
+import '../functions/which.dart';
+
 import '../settings.dart';
 
 /// platform specific names of the dcli commands.
@@ -20,11 +22,24 @@ class DCliPaths {
   static DCliPaths? _self;
 
   /// platform specific name of the dcli command
-  late String dcliName;
+  late final String dcliName;
 
   /// platform specific name of the dcli install command
-  String? dcliInstallName;
+ late final  String dcliInstallName;
 
   /// platform specific name of the dcli auto complete command
-  String? dcliCompleteName;
+  late final String dcliCompleteName;
+
+  /// Returns the path to the DCli executable.
+  /// Returns null if DCli is not on the path.
+  String? get pathToDCli {
+    final result = which(dcliName);
+
+    if (result.found)
+    {
+      return result.path;
+    }
+    return null;
+
+  }
 }

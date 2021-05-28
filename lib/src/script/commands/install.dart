@@ -35,8 +35,8 @@ class InstallCommand extends Command {
   bool _quiet = false;
 
   /// set by the [_NoDartFlag].
-  /// If [_installDart] is true then we won't attempt to install dart.
-  bool _installDart = false;
+  /// If [_installDart] is false then we won't attempt to install dart.
+  bool _installDart = true;
 
   bool _requirePrivileges = false;
 
