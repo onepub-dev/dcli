@@ -45,7 +45,7 @@ class _Sleep extends DCliFunction {
         _duration = Duration(seconds: duration);
         break;
       case Interval.millseconds:
-        _duration = Duration(microseconds: duration);
+        _duration = Duration(milliseconds: duration);
         break;
       case Interval.minutes:
         _duration = Duration(minutes: duration);
