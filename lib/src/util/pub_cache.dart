@@ -1,5 +1,6 @@
+import 'dart:io';
+
 import 'package:meta/meta.dart';
-import 'package:pub_cache/pub_cache.dart' as pc;
 
 import '../../dcli.dart';
 import '../settings.dart';
@@ -13,7 +14,7 @@ class PubCache {
   factory PubCache() => _self ??= PubCache._internal();
 
   PubCache._internal() {
-    _pubCachePath = pc.PubCache.getSystemCacheLocation().path;
+    _pubCachePath = _getSystemCacheLocation();
     _pubCacheDir = basename(_pubCachePath);
 
     // // determine pub-cache path
@@ -32,6 +33,42 @@ class PubCache {
 
     // determine pub-cache/bin
     _pubCacheBinPath = truepath(join(_pubCachePath, 'bin'));
+  }
+
+  /// Method taken from the pub_cache package.
+  /// We can't use the pub_cache version as it directly
+  /// gets Platform.environment so any changes we make
+  /// are not visible.
+  String _getSystemCacheLocation() {
+    if (envs.containsKey('PUB_CACHE')) {
+      return envs['PUB_CACHE']!;
+    } else if (Platform.isWindows) {
+      // See https://github.com/dart-lang/pub/blob/master/lib/src/system_cache.dart.
+
+      // %LOCALAPPDATA% is preferred as the cache location over %APPDATA%,
+      // because the latter is synchronised between
+      // devices when the user roams between them, whereas the former is not.
+      // The default cache dir used to be in %APPDATA%, so to avoid breaking
+      //old installs,
+      // we use the old dir in %APPDATA% if it exists.
+      //   else, we use the new default location
+      // in %LOCALAPPDATA%.
+      if (envs.containsKey('APPDATA')) {
+        final appDataCacheDir = join(envs['APPDATA']!, 'Pub', 'Cache');
+        if (exists(appDataCacheDir)) {
+          return appDataCacheDir;
+        }
+      }
+      if (envs.containsKey('LOCALAPPDATA')) {
+        return join(envs['LOCALAPPDATA']!, 'Pub', 'Cache');
+      } else {
+        /// what else can we do.
+        return join(
+            envs['HOME'] ?? join(r'C:\Users', envs['USERNAME']), '.pub-cache');
+      }
+    } else {
+      return '${envs['HOME']}/.pub-cache';
+    }
   }
 
   /// The name of the environment variable that can be
