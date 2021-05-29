@@ -163,4 +163,9 @@ class UnknownShell with ShellMixin {
 
   @override
   bool get isPrivilegedPasswordRequired => throw UnimplementedError();
+
+  @override
+  void addFileAssocation(String dcliPath) {
+    /// no op
+  }
 }

@@ -149,6 +149,7 @@ class InstallCommand extends Command {
       }
     }
 
+    shell.addFileAssocation(binPath);
     _qprint('');
 
     if (shell.isCompletionSupported) {

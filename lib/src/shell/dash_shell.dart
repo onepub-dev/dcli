@@ -42,4 +42,10 @@ class DashShell with ShellMixin, PosixShell {
 
   @override
   String get pathToStartScript => env['ENV']!;
+
+    @override
+  void addFileAssocation(String dcliPath) {
+    /// no op
+  }
+
 }

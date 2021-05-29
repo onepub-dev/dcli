@@ -15,14 +15,18 @@ class PowerShell with WindowsMixin, ShellMixin {
   final int? pid;
 
   @override
-  bool addToPATH(String path) {
+  bool addToPATH(String path) => true;
+
+  @override
+  void addFileAssocation(String dcliPath) {
     /// These need to be run as admin
     /// not working correctly at this point.
     /// Looks like powershell ignores the file association.
+    /// We need to run as a priviliged user for this to work.
+    print(red('ADDING ftype '));
     'cmd /c assoc .dart=dcli'.run;
-    r'''cmd /c ftype dcli=`"C:\Users\User\dcli`" `"%1`" `"%2`" `"%3`" `"%4`" `"%5`" `"%6`" `"%7`" `"%8`" `"%9`"'''
+    '''cmd /c ftype dcli="${DCliPaths().pathToDCli}" "%1" "%2" "%3" "%4" "%5" "%6" "%7" "%8" "%9" "HI'''
         .run;
-    return true;
   }
 
   @override

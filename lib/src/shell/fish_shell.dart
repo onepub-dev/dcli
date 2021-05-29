@@ -45,4 +45,9 @@ class FishShell with ShellMixin, PosixShell {
 
   @override
   bool addToPATH(String path) => false;
+
+  @override
+  void addFileAssocation(String dcliPath) {
+    /// no op
+  }
 }

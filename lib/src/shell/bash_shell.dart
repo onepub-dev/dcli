@@ -87,4 +87,9 @@ class BashShell with ShellMixin, PosixShell {
 
   @override
   String get pathToStartScript => join(HOME, startScriptName);
+
+  @override
+  void addFileAssocation(String dcliPath) {
+    /// no op
+  }
 }

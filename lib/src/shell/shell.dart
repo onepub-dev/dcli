@@ -35,6 +35,13 @@ abstract class Shell {
   /// returns true if adding the path was successful
   bool addToPATH(String path) => false;
 
+  /// Called during the install so that an OS that needs
+  /// to create a file association between .dart and dcli
+  /// can create that association.
+  /// The implementor is responsible for not adding
+  /// the association if it already exists.
+  void addFileAssocation(String dcliPath);
+
   ///
   bool get isCompletionSupported => false;
 
