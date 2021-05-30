@@ -4,12 +4,14 @@ import 'package:test/test.dart';
 
 void main() {
   test('truepath ...', () async {
-    expect(truepath(join(rootPath, 'tmp')), equals(join(rootPath, 'tmp')));
+    expect(truepath(join(rootPath, 'tmp')), equals(absolute(rootPath, 'tmp')));
     expect(truepath(join(rootPath, 'tmp', '..', 'tmp')),
-        equals(join(rootPath, 'tmp')));
+        equals(absolute(rootPath, 'tmp')));
     expect(truepath(join(rootPath, 'tmp', '..', 'tmp', '.')),
-        equals(join(rootPath, 'tmp')));
-    expect(truepath(join(rootPath, 'tmp', '.')), equals(join(rootPath, 'tmp')));
-    expect(truepath(join(rootPath, 'Local')), equals(join(rootPath, 'Local')));
+        equals(absolute(rootPath, 'tmp')));
+    expect(truepath(join(rootPath, 'tmp', '.')),
+        equals(absolute(rootPath, 'tmp')));
+    expect(
+        truepath(join(rootPath, 'Local')), equals(absolute(rootPath, 'Local')));
   });
 }
