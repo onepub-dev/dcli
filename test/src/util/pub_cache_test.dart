@@ -12,10 +12,8 @@ void main() {
     /// we don't necessarily have a HOME env in the test environment.
     env['HOME'] = join('/home');
     if (Settings().isWindows) {
-      expect(
-          PubCache().pathToBin,
-          equals(
-              join(env['LocalAppData']!, 'Pub', 'Cache', 'bin').toLowerCase()));
+      expect(PubCache().pathToBin,
+          equals(join(env['LocalAppData']!, 'Pub', 'Cache', 'bin')));
     } else {
       expect(PubCache().pathToBin,
           equals(join(env['HOME']!, '.pub-cache', 'bin')));
@@ -30,8 +28,8 @@ void main() {
     env['HOME'] = join('/home');
     env['PUB_CACHE'] = join(Platform.pathSeparator, 'test_cache');
     if (Settings().isWindows) {
-      expect(PubCache().pathToBin,
-          equals(join(r'c:\test_cache', 'bin').toLowerCase()));
+      expect(PubCache().pathToBin, equals(join(r'C:\test_cache', 'bin')
+      ));
     } else {
       expect(PubCache().pathToBin,
           equals(join(Platform.pathSeparator, 'test_cache', 'bin')));
