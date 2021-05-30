@@ -8,7 +8,6 @@ import 'package:dcli/windows.dart';
 import 'package:test/test.dart';
 import 'package:win32/win32.dart';
 
-
 void main() {
   test('windows mixin ...', () async {
     regSetString(HKEY_CURRENT_USER, 'Environment', 'PATH_TEST', 'HI');
@@ -56,7 +55,7 @@ void main() {
           HKEY_LOCAL_MACHINE,
           r'SOFTWARE\Microsoft\Windows\CurrentVersion\AppModelUnlock',
           'AllowDevelopmentWithoutDevLicense',
-          1);
+          0);
 
       expect(shell.inDeveloperMode(), false);
 
