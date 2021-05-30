@@ -17,7 +17,20 @@ class Ansi {
   static bool? _emitAnsi;
 
   /// returns true of the terminal supports ansi escape characters.
-  static bool get isSupported => _emitAnsi ??= stdin.supportsAnsiEscapes;
+  static bool get isSupported {
+    if (_emitAnsi == null) {
+      if (!stdin.hasTerminal) {
+        _emitAnsi = false;
+      } else
+      // We don't trust [stdout.supportsAnsiEscapes] except on Windows.
+      // [stdout] relies on the TERM environment variable
+      // which has generates false negatives.
+      if (!Platform.isWindows) {
+        _emitAnsi = true;
+      }
+    }
+    return _emitAnsi ??= stdout.supportsAnsiEscapes;
+  }
 
   /// You can set [isSupported] to
   /// override the detected ansi settings.
