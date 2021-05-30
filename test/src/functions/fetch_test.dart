@@ -10,7 +10,7 @@ void main() {
     // Don't know how to test this as it writes directly to stdout.
     // Need some way to hook Stdout
     test('Fetch One', () {
-      Settings().setVerbose(enabled: true);
+      //Settings().setVerbose(enabled: true);
       withTempDir((testRoot) {
         withTempFile((sampleAac) {
           fetch(url: '$baseURl/sample.aac', saveToPath: sampleAac);
@@ -33,7 +33,7 @@ void main() {
               url: '$baseURl/sample.aac',
               saveToPath: sampleAac,
               fetchProgress: (progress) async {
-                print('${progress.progress * 100} %');
+                Terminal().overwriteLine('${progress.progress * 100} %');
               });
           expect(fileLength(sampleAac), equals(14951));
           delete(sampleAac);
@@ -43,7 +43,7 @@ void main() {
                 url: '$baseURl/sample.wav',
                 saveToPath: sampleWav,
                 fetchProgress: (progress) async {
-                  print('${progress.progress * 100} %');
+                  Terminal().overwriteLine('${progress.progress * 100} %');
                 });
             expect(fileLength(sampleWav), equals(212948));
             delete(sampleWav);
@@ -103,9 +103,7 @@ void main() {
           url: '$baseURl/sample.aac',
           saveToPath: sampleAac,
           fetchProgress: (progress) async {
-            Terminal().clearLine();
-            echo('\r');
-            echo('${progress.progress * 100} %');
+            Terminal().overwriteLine('${progress.progress * 100} %');
           });
       expect(fileLength(sampleAac), equals(14951));
     }, suffix: 'acc', create: false);
@@ -115,7 +113,7 @@ void main() {
           url: '$baseURl/sample.wav',
           saveToPath: sampleWav,
           fetchProgress: (progress) async {
-            print('${progress.progress * 100} %');
+            Terminal().overwriteLine('${progress.progress * 100} %');
           });
       expect(fileLength(sampleWav), equals(212948));
       print('finished');
@@ -126,5 +124,5 @@ void main() {
 }
 
 Future<void> showProgress(FetchProgress progress) async {
-  print('${progress.progress * 100} %');
+  Terminal().overwriteLine('${progress.progress * 100} %');
 }
