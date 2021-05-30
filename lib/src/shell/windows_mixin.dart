@@ -30,7 +30,7 @@ mixin WindowsMixin {
   String privilegesRequiredMessage(String app) =>
       'You need to be an Administrator to run $app';
 
-  /// Returns true if running a privileged action would
+  /// Returns true if running a privileged action woulduser
   /// cause a password to be requested.
   ///
   /// Linux/OSX: will return true if the sudo password is not currently
@@ -42,6 +42,14 @@ mixin WindowsMixin {
 
   ///
   String? get loggedInUser => env['USERNAME'];
+
+  /// Attempts to retrive the logged in user's home directory.
+  String get loggedInUsersHome {
+    final drive = env['HOMEDRIVE'];
+    final path = env['HOMEPATH'];
+
+    return '$drive$path';
+  }
 
   /// NO OP under windows
   void releasePrivileges() {
