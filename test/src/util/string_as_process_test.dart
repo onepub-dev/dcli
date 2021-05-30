@@ -15,111 +15,114 @@ void main() {
   });
 
   test('stream - using start', () {
-    '/tmp/access.log'
-      ..write('Line 1/5')
-      ..append('Line 2/5')
-      ..append('Line 3/5')
-      ..append('Line 4/5')
-      ..append('Line 5/5');
+    withTempFile((file) {
+      file
+        ..write('Line 1/5')
+        ..append('Line 2/5')
+        ..append('Line 3/5')
+        ..append('Line 4/5')
+        ..append('Line 5/5');
 
-    final progress = Progress.stream();
-    'tail /tmp/access.log'.start(
-      progress: progress,
-      runInShell: true,
-    );
+      final progress = Progress.stream();
+      'tail $file'.start(
+        progress: progress,
+        runInShell: true,
+      );
 
-    final done = Completer<void>();
-    progress.stream.listen((event) {
-      print('stream: $event');
-    }).onDone(done.complete);
+      final done = Completer<void>();
+      progress.stream.listen((event) {
+        print('stream: $event');
+      }).onDone(done.complete);
 
-    waitForEx<void>(done.future);
-    print('done');
+      waitForEx<void>(done.future);
+      print('done');
+    });
   });
 
   test('stream', () {
-    '/tmp/access.log'
-      ..write('Line 1/5')
-      ..append('Line 2/5')
-      ..append('Line 3/5')
-      ..append('Line 4/5')
-      ..append('Line 5/5');
+    withTempFile((file) {
+      file
+        ..write('Line 1/5')
+        ..append('Line 2/5')
+        ..append('Line 3/5')
+        ..append('Line 4/5')
+        ..append('Line 5/5');
 
-    final stream = 'tail /tmp/access.log'.stream(
-      runInShell: true,
-    );
+      final stream = 'tail $file'.stream(
+        runInShell: true,
+      );
 
-    final done = Completer<void>();
-    stream.listen((event) {
-      print('stream: $event');
-    }).onDone(done.complete);
+      final done = Completer<void>();
+      stream.listen((event) {
+        print('stream: $event');
+      }).onDone(done.complete);
 
-    waitForEx<void>(done.future);
-    print('done');
+      waitForEx<void>(done.future);
+      print('done');
+    });
   });
 
   test('tail -f', () {
     Settings().setVerbose(enabled: true);
 
-    const log = '/tmp/access.log';
+    withTempFile((file) {
+      file
+        ..write('Line 1/5')
+        ..append('Line 2/5')
+        ..append('Line 3/5')
+        ..append('Line 4/5')
+        ..append('Line 5/5');
 
-    // ignore: cascade_invocations
-    log
-      ..write('Line 1/5')
-      ..append('Line 2/5')
-      ..append('Line 3/5')
-      ..append('Line 4/5')
-      ..append('Line 5/5');
+      final stream = 'tail -f $file'.stream(
+          // runInShell: true,
+          );
 
-    final stream = 'tail -f $log'.stream(
-        // runInShell: true,
-        );
+      final done = Completer<void>();
+      var linesRead = 0;
+      print('have stream');
+      stream.listen((event) {
+        print('stream: $event');
+        linesRead++;
 
-    final done = Completer<void>();
-    var linesRead = 0;
-    print('have stream');
-    stream.listen((event) {
-      print('stream: $event');
-      linesRead++;
+        // ignore: flutter_style_todos
+        /// TODO(bsutton): find some way of terminating a streaming process
+        /// that doesn't naturally end (e.g. tail -f)
+        ///
+        if (linesRead == 15) {
+          done.complete();
+        }
+      });
 
-      // ignore: flutter_style_todos
-      /// TODO(bsutton): find some way of terminating a streaming process
-      /// that doesn't naturally end (e.g. tail -f)
-      ///
-      if (linesRead == 15) {
-        done.complete();
+      for (var i = 0; i < 15; i++) {
+        file.append('Line $i');
       }
+
+      waitForEx<void>(done.future);
+      print('done');
+      expect(linesRead, equals(15));
     });
-
-    for (var i = 0; i < 10; i++) {
-      log.append('Line $i');
-    }
-
-    waitForEx<void>(done.future);
-    print('done');
-    expect(linesRead, equals(15));
   });
 
   test('tail -n 100', () {
-    const log = '/tmp/access.log';
-    // ignore: cascade_invocations
-    log
-      ..write('Line 1/5')
-      ..append('Line 2/5')
-      ..append('Line 3/5')
-      ..append('Line 4/5')
-      ..append('Line 5/5');
-    Settings().setVerbose(enabled: true);
-    final stream = 'tail -n 100 $log'.stream(
-        // runInShell: true,
-        );
+    withTempFile((file) {
+      file
+        ..write('Line 1/5')
+        ..append('Line 2/5')
+        ..append('Line 3/5')
+        ..append('Line 4/5')
+        ..append('Line 5/5');
+      Settings().setVerbose(enabled: true);
+      final stream = 'tail -n 100 $file'.stream(
+          // runInShell: true,
+          );
 
-    final done = Completer<void>();
-    stream.listen((event) {
-      print('stream: $event');
-    }).onDone(done.complete);
+      final done = Completer<void>();
+      stream.listen((event) {
+        print('stream: $event');
+      }).onDone(done.complete);
 
-    waitForEx<void>(done.future);
-    print('done');
+      waitForEx<void>(done.future);
+      print('done');
+    });
   });
 }
