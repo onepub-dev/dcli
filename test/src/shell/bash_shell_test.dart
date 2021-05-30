@@ -1,3 +1,4 @@
+@TestOn('posix')
 import 'dart:io';
 
 import 'package:dcli/dcli.dart';
@@ -16,7 +17,7 @@ void main() {
     env['SHELL'] = BashShell.shellName;
 
     expect(Shell.current.isPrivilegedPasswordRequired, true);
-  }, skip: Platform.isWindows);
+  });
 
   // don't know how to automat this test as we need the sudo password.
   // test('bash shell loggedInUser under sudo', () async {
