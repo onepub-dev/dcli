@@ -96,21 +96,21 @@ void checkInstallStructure(TestFileSystem fs) {
   expect(exists(truepath(HOME, '.dcli', 'templates')), equals(true));
 
   final templates =
-      find('*.*', workingDirectory: join('${fs.home}/.dcli', 'templates'))
+      find('*.*', workingDirectory: join(fs.home!, '.dcli', 'templates'))
           .toList();
 
-  final base = join('${fs.home}/.dcli', 'templates');
+  final base = join(fs.home!, '.dcli', 'templates');
 
   expect(
     templates,
     unorderedEquals(
       <String>[
-        join(base, 'basic.dart'),
-        join(base, 'hello_world.dart'),
-        join(base, 'pubspec.yaml.template'),
-        join(base, 'README.md'),
-        join(base, 'analysis_options.yaml'),
-        join(base, 'cmd_args.dart'),
+        absolute(base, 'basic.dart'),
+        absolute(base, 'hello_world.dart'),
+        absolute(base, 'pubspec.yaml.template'),
+        absolute(base, 'README.md'),
+        absolute(base, 'analysis_options.yaml'),
+        absolute(base, 'cmd_args.dart'),
       ],
     ),
   );
