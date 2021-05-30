@@ -11,6 +11,7 @@ dependencies:
   collection: ^1.15.0
   crypto: ^3.0.0
   csv: ^5.0.0
+  dart_console: ^1.0.0
   equatable: ^2.0.0
   file: ^6.1.0
   glob: ^2.0.0
