@@ -5,7 +5,7 @@ import 'package:test/test.dart';
 
 void main() {
   test('Assets().toString', () async {
-    const path = 'assets/templates/basic.dart';
+    final path = join('assets', 'templates', 'basic.dart');
     final content = Assets().loadString(path);
 
     final lineDelimiter = Platform.isWindows ? '\r\n' : '\n';
@@ -18,13 +18,13 @@ void main() {
             .join(lineDelimiter);
 
     /// the join trims the last \n
-    actual += '\n';
+    actual += lineDelimiter;
 
     expect(content, equals(actual));
   });
 
   test('Assets().list', () async {
-    const path = 'assets/templates/';
+    final path = join('assets', 'templates');
     final templates = Assets().list('*', root: path);
 
     final base =
