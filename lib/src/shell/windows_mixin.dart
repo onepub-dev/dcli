@@ -28,7 +28,7 @@ mixin WindowsMixin {
 
   ///
   String privilegesRequiredMessage(String app) =>
-      'You need to be a privileged user to run $app';
+      'You need to be an Administrator to run $app';
 
   /// Returns true if running a privileged action would
   /// cause a password to be requested.
