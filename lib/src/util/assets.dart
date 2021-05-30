@@ -2,7 +2,10 @@ import 'dart:io';
 import 'dart:isolate';
 import 'dart:typed_data';
 
+import 'package:path/path.dart';
+
 import '../../dcli.dart';
+import '../settings.dart';
 
 ///
 /// This class provides access to 'assets' packaged in your application.
@@ -29,11 +32,11 @@ class Assets {
   factory Assets() => _self;
 
   Assets._internal() {
-    _packageName = DartProject.current.pubSpec.name;
+    _packageName = DartProject.current.pubSpec.name ?? 'unnamed';
   }
   static final _self = Assets._internal();
 
-  String? _packageName;
+  late final String _packageName;
 
   /// Loads an asset as a string.
   ///
@@ -73,22 +76,22 @@ class Assets {
   /// recursively search all
   /// directories under [root].
   ///
-  List<String?> list(String pattern,
+  List<String> list(String pattern,
       {required String root, bool recursive = false}) {
-    if (!root.startsWith('assets/')) {
-      throw ArgumentError('The root must start with assets/');
+    if (!root.startsWith('assets$separator')) {
+      throw ArgumentError('The root must start with assets$separator');
     }
-    return find(pattern,
-            workingDirectory: _resolveAssetPath(root), recursive: recursive)
+    final assetPath = _resolveAssetPath(root);
+    return find(pattern, workingDirectory: assetPath, recursive: recursive)
         .toList();
   }
 
   /// loads an asset as a byte buffer.
   Uint8List loadBytes(String path) {
-    final resolvedUri = waitForEx<Uri?>(
-        Isolate.resolvePackageUri(Uri.file('lib/src/assets/templates')))!;
+    final resolvedUri = waitForEx<Uri?>(Isolate.resolvePackageUri(Uri.file(
+        Context(style: Style.url).join('lib', 'src', 'assets', 'templates'))))!;
 
-    print('resolved: ${resolvedUri.toFilePath()}');
+    verbose(() => 'resolved: ${resolvedUri.toFilePath()}');
 
     return File(_resolveAssetPath(path)).readAsBytesSync();
   }
@@ -96,8 +99,28 @@ class Assets {
   /// Converts an asset path of the form assert/somepath/note/txt
   /// to the absolute file system path (usually in .pub-cache)
   String _resolveAssetPath(String path) {
-    final resolvedUri = waitForEx<Uri?>(Isolate.resolvePackageUri(
-        Uri(scheme: 'package', path: '$_packageName/src/$path')))!;
+    final uri = Uri(
+        scheme: 'package',
+        path: Context(style: Style.url)
+            .joinAll([_packageName, 'src', ...split(path)]));
+    final resolvedUri = waitForEx<Uri?>(Isolate.resolvePackageUri(uri));
+
+    if (resolvedUri == null) {
+      throw AssetNoFoundException(uri.path);
+    }
     return resolvedUri.toFilePath();
   }
+}
+
+/// Throw when trying to access an asset and something goes wrong.
+class AssetException extends DCliException {
+  /// Throw when trying to access an asset and something goes wrong.
+  AssetException(String message) : super(message);
+}
+
+/// Thrown if you try to load an asset that can't be found.
+class AssetNoFoundException extends AssetException {
+  /// Thrown if you try to load an asset that can't be found.
+  AssetNoFoundException(String path)
+      : super('The asset $path  cannot be found.');
 }
