@@ -34,6 +34,8 @@ class Terminal {
   /// Factory ctor to get a Termainl
   factory Terminal() => _self;
 
+  /// TODO: if we don't have a terminal or ansi isn't support we need to suppress any ansi codes being output.
+
   Terminal._internal();
 
   static final _self = Terminal._internal();
