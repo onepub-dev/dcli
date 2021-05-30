@@ -21,10 +21,9 @@ class CmdShell with WindowsMixin, ShellMixin {
     /// These need to be run as admin
     /// not working correctly at this point.
     /// Looks like powershell ignores the file association.
-    'cmd /c assoc .dart=dcli'.run;
-    '''cmd /c ftype dcli="${DCliPaths().pathToDCli}" "%1" "%2" "%3" "%4" "%5" "%6" "%7" "%8" "%9" "HI'''
-        .run;
-//    cmd /c ftype dcli=`"c:\users\brett\appdata\Local\pub\cache\bin\dcli.bat`" `"%1`" `"%2`" `"%3`" `"%4`" `"%5`" `"%6`" `"%7`" `"%8`" `"%9`"
+    'cmd /c assoc .dart=dcli'.start(progress: Progress.devNull());
+    '''cmd /c ftype dcli="${DCliPaths().pathToDCli}" "%1" "%2" "%3" "%4" "%5" "%6" "%7" "%8" "%9"'''
+        .start(progress: Progress.devNull());
   }
 
   @override

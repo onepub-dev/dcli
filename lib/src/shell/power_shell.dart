@@ -24,7 +24,7 @@ class PowerShell with WindowsMixin, ShellMixin {
     /// Looks like powershell ignores the file association.
     /// We need to run as a priviliged user for this to work.
     'cmd /c assoc .dart=dcli'.run;
-    '''cmd /c ftype dcli="${DCliPaths().pathToDCli}" "%1" "%2" "%3" "%4" "%5" "%6" "%7" "%8" "%9" "HI'''
+    '''cmd /c ftype dcli="${DCliPaths().pathToDCli}" "%1" "%2" "%3" "%4" "%5" "%6" "%7" "%8" "%9"'''
         .run;
   }
 
