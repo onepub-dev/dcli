@@ -14,14 +14,16 @@ void main() {
 
 void compile(String pathToScript) {
   TestFileSystem().withinZone((fs) {
-    final script = join(fs.testScriptPath, 'general/bin/hello_world.dart');
-    final exe = join(dirname(script), basenameWithoutExtension(script));
+    final pathToSript = join(fs.testScriptPath, 'general/bin/hello_world.dart');
+
+    final dartScript = DartScript.fromFile(pathToSript);
+    final exe = dartScript.exeName;
 
     try {
       if (exists(exe)) {
         delete(exe);
       }
-      DartScript.fromFile(script).compile();
+      DartScript.fromFile(pathToSript).compile();
     } on DCliException catch (e) {
       print(e);
     }
