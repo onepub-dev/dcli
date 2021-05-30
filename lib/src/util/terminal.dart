@@ -148,7 +148,7 @@ class Terminal {
   void cursorRight() => _console.cursorRight();
 
   /// Returns the column location of the cursor
-  int get column => _console.cursorPosition?.col ?? 0;
+  int get column => _cursor?.col ?? 0;
 
   /// moves the cursor to the given column
   /// 0 is the first column
@@ -170,13 +170,28 @@ class Terminal {
 
   /// Returns the row location of the cursor.
   /// The first row is row 0.
-  int get row => _console.cursorPosition?.row ?? 24;
+  int get row => _cursor?.row ?? 24;
 
   /// moves the cursor to the given row
   /// 0 is the first row
   set row(int row) {
     _console.cursorPosition = Coordinate(row, column);
   }
+
+  Coordinate? get _cursor {
+    /// attempting to get the cursor position if
+    /// we don't have a terminal will hang the app
+    /// as to obtain the cursor we must read from the
+    /// terminal.
+    if (hasTerminal && Ansi.isSupported) {
+      return _console.cursorPosition;
+    } else {
+      return null;
+    }
+  }
+
+  /// Whether a terminal is attached to stdin.
+  bool get hasTerminal => stdin.hasTerminal;
 
   /// The height of the terminal in rows.
   /// Where a row is one character high.
@@ -191,5 +206,4 @@ class Terminal {
   /// Returns the current console height in rows.
   @Deprecated('Use rows')
   int get lines => rows;
-
 }

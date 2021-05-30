@@ -27,6 +27,8 @@ void main() {
     term.write('did line clear ${term.row}');
     sleep(2);
     term.home();
+    print('hasTerminal: ${term.hasTerminal}');
+    print('isAnsi: ${term.isAnsi}');
     print('should be on line 1');
     print('should be on line 2');
     print('should be on line 3');
