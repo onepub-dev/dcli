@@ -7,5 +7,16 @@ void main() {
     expect(which('ls').found, equals(true));
     expect(which('ls').notfound, equals(false));
     expect(which('ls').paths.length, equals(1));
+  }, onPlatform: <String, dynamic>{
+    'windows': const Skip('ls is only on posix')
+  });
+
+  test('which ...', () async {
+    expect(which('regedit.exe').path, equals(r'C:\Windows\regedit.exe'));
+    expect(which('regedit.exe').found, equals(true));
+    expect(which('regedit.exe').notfound, equals(false));
+    expect(which('regedit.exe').paths.length, equals(1));
+  }, onPlatform: <String, dynamic>{
+    '!windows': [const Skip('regedit only on windows')]
   });
 }
