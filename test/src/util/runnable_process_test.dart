@@ -66,8 +66,10 @@ void main() {
 
   test('Process stderr and stdout', () {
     final progress =
-        'test/test_script/general/bin/print_to_both_with_error.dart'
-            .start(progress: Progress.print(capture: true), nothrow: true);
+        'dart test/test_script/general/bin/print_to_both_with_error.dart'.start(
+            runInShell: true,
+            progress: Progress.print(capture: true),
+            nothrow: true);
     expect(progress.exitCode, equals(25));
     final lines = progress.lines;
     expect(lines.join('\n').contains('Hello World - StdOut'), isTrue);
