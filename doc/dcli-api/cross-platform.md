@@ -6,7 +6,7 @@ Most of the API's in DCli can be used without consideration for which platform y
 
 ## Platform
 
-If you need to an OS specific operation the you can use the Dart `Platform` class:
+If you need to perform an OS specific operation the you can use the Dart `Platform` class:
 
 ```dart
 import 'dart:io';
@@ -50,7 +50,21 @@ On Windows `path` will be `C:\var\tmp` assuming that your current drive is the C
 
 On Linux and Mac OS the `path` will be `/var/tmp`.
 
-The [https://pub.dev/packages/path](https://pub.dev/packages/path)  package has a collection of functions for manipulating paths that will handle just about every circumstance you need.
+On Windows if you want to build a path that operates on the current drive without including the drive in the path then use:
+
+```dart
+var path = join(separator, 'var', tmp);
+```
+
+This will result in:
+
+Linux/MacOS: \`/var/tmp'
+
+Windows: r'\var\tmp'.
+
+Windows will interpret the above path to apply to whatever drive is current the active drive.
+
+ The [https://pub.dev/packages/path](https://pub.dev/packages/path)  package has a collection of functions for manipulating paths that will handle just about every circumstance you need.
 
 ## Launching Dart Scripts
 
