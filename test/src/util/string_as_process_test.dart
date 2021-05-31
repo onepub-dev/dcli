@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:async/async.dart';
 import 'package:test/test.dart';
 import 'package:dcli/dcli.dart' hide equals;
 
@@ -80,7 +81,8 @@ void main() {
       final done = Completer<void>();
       var linesRead = 0;
       print('have stream');
-      stream.listen((event) {
+      late final StreamSubscription<String> subscription;
+      subscription = stream.listen((event) {
         print('stream: $event');
         linesRead++;
 
@@ -90,6 +92,7 @@ void main() {
         ///
         if (linesRead == 15) {
           done.complete();
+          subscription.cancel();
         }
       });
 

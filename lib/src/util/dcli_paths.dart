@@ -25,7 +25,7 @@ class DCliPaths {
   late final String dcliName;
 
   /// platform specific name of the dcli install command
- late final  String dcliInstallName;
+  late final String dcliInstallName;
 
   /// platform specific name of the dcli auto complete command
   late final String dcliCompleteName;
@@ -35,11 +35,9 @@ class DCliPaths {
   String? get pathToDCli {
     final result = which(dcliName);
 
-    if (result.found)
-    {
+    if (result.found) {
       return result.path;
     }
     return null;
-
   }
 }

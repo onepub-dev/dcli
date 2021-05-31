@@ -1,3 +1,40 @@
+# 1.5.0
+This release largely focuses on fixes for Windows.
+
+Changes: 
+ - update dart version to 2.13 so we can use the latest win32.
+ - dcli install now updates the PATH registry settings and notifies all top level windows.
+
+Added:
+- A set of registry functions to set/get registry keys.
+- Added method loggedInUsersHome for WindowsMixin
+- Added new methods to Terminal() 
+ - writeline with text alignment.
+ - cursorUp/Down/Left/Right
+ - get/set current column/row cursor position.
+ - support for running .dart scripts from the command and power shell prompts. You can now rung `hello.dart` rather than `dart hello.dart`
+ - Created new function withOpenFile that opens a file for the duration of a callback.
+ - Created new function fileLength that returns the length of a file.
+
+Deprecated:
+    - Deprecated methods in Terminal
+      - previousUp in favor of cursorUp
+      - lines in favour of rows.
+
+Fixes:
+- numerous issues with ansi/terminal under windows. Now use the dart_console package to handle the windows setup.
+- Stopped the terminal trying to get the cursor position when we don't have a terminal as this just caused the app to hang.
+- a bug in Ansi.isSupported which was testing stdin for ansi support when we should have tested stdout. Ansi colors now work on windows.
+ - the uri construction for accessing assets so it works under windows.
+- a bug in sleep function. Was using microseconds when milliseconds was passed.
+- detection of pub_cache location. Should now work on all versions of windows.
+- the root prefix when privatising paths on windows.
+- bug where dcli doctor wasn't finding the dcli path as we were searching for the wrong name.
+- the cmd shell was incorrectly reporting that it had privileges.
+- Attempt to fix the problem with DartScript.scriptName when running globally activated. 
+    We have been getting a dart version no. in the scriptName which I'm now stripping out. Hopefully this is the correct action.
+- fixed path building so that createTempDir now works correctly on windows.
+
 # 1.3.0
 Added new methods
  - withFileProtection. Allows you to back a collection of files/directories run an action and then restore any changes to those files/directories. Handy when implementing dry run type features.

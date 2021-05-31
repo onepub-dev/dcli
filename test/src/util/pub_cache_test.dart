@@ -28,8 +28,7 @@ void main() {
     env['HOME'] = join('/home');
     env['PUB_CACHE'] = join(Platform.pathSeparator, 'test_cache');
     if (Settings().isWindows) {
-      expect(PubCache().pathToBin, equals(join(r'C:\test_cache', 'bin')
-      ));
+      expect(PubCache().pathToBin, equals(join(r'C:\test_cache', 'bin')));
     } else {
       expect(PubCache().pathToBin,
           equals(join(Platform.pathSeparator, 'test_cache', 'bin')));

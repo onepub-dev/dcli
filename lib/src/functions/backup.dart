@@ -349,7 +349,6 @@ String? _stripRootPrefix(String absolutePath) {
   return absolutePath;
 }
 
-
 /// Windows, an absolute path starts with `\\`, or a drive letter followed by
 /// `:/` or `:\`.
 /// This method will strip the prefix so the path start with a \ or /

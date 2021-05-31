@@ -12,7 +12,7 @@ void main(List<String> args) {
   print(orange('cleaning test artifacts'));
 
   if (exists('/tmp/dcli')) {
-    print('Deleting old test runs. This can take a while.');
+    print('Deleting old test runs. This can take a while...');
     deleteDir('/tmp/dcli');
   }
 }

@@ -18,15 +18,16 @@ void compile(String pathToScript) {
 
     final dartScript = DartScript.fromFile(pathToSript);
     final exe = dartScript.exeName;
+    final pathToExe = join(dirname(pathToScript), exe);
 
     try {
-      if (exists(exe)) {
-        delete(exe);
+      if (exists(pathToExe)) {
+        delete(pathToExe);
       }
       DartScript.fromFile(pathToSript).compile();
     } on DCliException catch (e) {
       print(e);
     }
-    expect(exists(exe), equals(true));
+    expect(exists(pathToExe), equals(true));
   });
 }

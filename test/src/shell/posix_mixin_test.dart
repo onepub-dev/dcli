@@ -10,5 +10,4 @@ void main() {
     final home = join(rootPath, 'home', env['USER']);
     expect((Shell.current as PosixShell).loggedInUsersHome, home);
   });
-
 }

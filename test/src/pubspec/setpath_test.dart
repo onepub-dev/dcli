@@ -8,8 +8,7 @@ import 'package:test/test.dart';
 import 'package:win32/win32.dart';
 
 void _appendIfAbsent(String newPath) {
-  final path =
-      regGetExpandString(HKEY_CURRENT_USER, 'Environment', 'Path');
+  final path = regGetExpandString(HKEY_CURRENT_USER, 'Environment', 'Path');
 
   if (!path.contains(newPath)) {
     regAppendToPath(newPath);

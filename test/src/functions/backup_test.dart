@@ -277,22 +277,40 @@ void main() {
       when(() => platformMock.isWindows).thenReturn(false);
 
       final linuxContext = Context(style: Style.posix);
-      expect(translateAbsolutePath(r'\', context: linuxContext, workingDirectory: '/'), equals(r'\'));
-      expect(translateAbsolutePath('/', context: linuxContext, workingDirectory: '/'), equals('/'));
-      expect(translateAbsolutePath(r'\abc', context: linuxContext, workingDirectory: '/'),
+      expect(
+          translateAbsolutePath(r'\',
+              context: linuxContext, workingDirectory: '/'),
+          equals(r'\'));
+      expect(
+          translateAbsolutePath('/',
+              context: linuxContext, workingDirectory: '/'),
+          equals('/'));
+      expect(
+          translateAbsolutePath(r'\abc',
+              context: linuxContext, workingDirectory: '/'),
           equals(r'\abc'));
       expect(
-          translateAbsolutePath('/abc', context: linuxContext, workingDirectory: '/'), equals('/abc'));
+          translateAbsolutePath('/abc',
+              context: linuxContext, workingDirectory: '/'),
+          equals('/abc'));
 
       when(() => platformMock.isWindows).thenReturn(true);
       final windowsContext = Context(style: Style.windows);
-      expect(translateAbsolutePath(r'\', context: windowsContext, workingDirectory: r'c:\'),
+      expect(
+          translateAbsolutePath(r'\',
+              context: windowsContext, workingDirectory: r'c:\'),
           equals(r'\CDrive'));
-      expect(translateAbsolutePath('/', context: windowsContext, workingDirectory: r'c:\'),
+      expect(
+          translateAbsolutePath('/',
+              context: windowsContext, workingDirectory: r'c:\'),
           equals(r'\CDrive'));
-      expect(translateAbsolutePath(r'\abc', context: windowsContext, workingDirectory: r'c:\'),
+      expect(
+          translateAbsolutePath(r'\abc',
+              context: windowsContext, workingDirectory: r'c:\'),
           equals(r'\CDrive\abc'));
-      expect(translateAbsolutePath('/abc', context: windowsContext, workingDirectory: r'c:\'),
+      expect(
+          translateAbsolutePath('/abc',
+              context: windowsContext, workingDirectory: r'c:\'),
           equals(r'\CDrive\abc'));
       expect(
           translateAbsolutePath(r'\abc',

@@ -205,18 +205,16 @@ void main() {
     withTempDir((fsRoot) {
       final fs = TestDirectoryTree(fsRoot);
 
-      if (Platform.isWindows)
-      {
-         final parsed = ParsedCliCommand('ls /git/dcli/*', fs.top);
+      if (Platform.isWindows) {
+        final parsed = ParsedCliCommand('ls /git/dcli/*', fs.top);
+
         /// on windows we don't expand wild cards so there is no
         /// validation of the path.
-         expect(parsed.cmd, equals('ls'));
-         expect(parsed.args, equals(['/git/dcli/*']));
-
-      }
-      else {
+        expect(parsed.cmd, equals('ls'));
+        expect(parsed.args, equals(['/git/dcli/*']));
+      } else {
         expect(() => ParsedCliCommand('ls /git/dcli/*', fs.top),
-          throwsA(isA<FileSystemException>()));
+            throwsA(isA<FileSystemException>()));
       }
     });
   });

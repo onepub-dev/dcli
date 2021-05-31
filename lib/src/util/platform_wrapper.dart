@@ -2,7 +2,6 @@ import 'dart:io';
 
 import 'package:meta/meta.dart';
 
-
 /// This class wraps Platform so we are able to mock the Platform class
 /// in unit tests.
 
