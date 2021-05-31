@@ -4,6 +4,28 @@ Dart and DCli are designed to be cross platform with support for Linux, Mac OS a
 
 Most of the API's in DCli can be used without consideration for which platform you are running on. There are however a number of issues that you should be aware of.
 
+## Platform
+
+If you need to an OS specific operation the you can use the Dart `Platform` class:
+
+```dart
+import 'dart:io';
+import 'package:dcli/dcli.dart;
+
+void main() {
+    if (Plaform.isWindows) {
+         // do windows stuff
+    }
+    else if (Platform.isLinux) {
+    /// do some linux stuff
+    } else if (Platform.isMacOS)
+    {
+    // do mac stuff.
+}
+```
+
+For the most part you will find little need to differentiate between Linux and Mac OS unless you are spawning an OS application.
+
 ## Paths
 
 One of the biggest headaches with building cross platform apps is the differences in paths.
@@ -69,7 +91,60 @@ The Windows Registry is unique to Windows so if you want to write cross platform
 In this case use the `Platform.isWindows` method to determine when to use the registery.
 
 ```dart
-import 'dart.io';
-Plaform
+import 'dart:io';
+import 'package:dcli/dcli.dart;
+
+void main() {
+    if (Plaform.isWindows) {
+         regSetString(HKEY_CURRENT_USER, 'Environment', 'PATH_TEST', 'HI');
+    }
+    else {
+    /// do some posix stuff.
+    }
+}
 ```
+
+## Built in OS Applications
+
+The set of application supplied by an OS varies considerably so you need to be careful when spawning an application.
+
+Even between Linux distributions there can be differences in what applications are installed by default.
+
+Before spawning an OS application you should check if it exists and whether it is on the PATH. The which function is the most convenient method to do this.
+
+```dart
+if (which('ls').found) {
+    'ls *.txt'.run;
+} else {
+    find('*.txt').forEach((file) => print(file);
+}
+```
+
+Depending on the complexity of the command it may be easier to simply implement it directly in Dart or find a Dart package on [https://pub.dev](https://pub.dev) that provides the required functionality.
+
+## Glob expansion
+
+When spawning a command DCli follows the rules of the OS on expanding globs.
+
+```dart
+'ls *.txt'.run;
+```
+
+In the above example '\*.txt' is a glob \(a file pattern\). On Linux and MacOS the expectation is that DCli will match the '\*.txt' expanding it into a list of files.  The `ls` command is then called with that list of files as command line arguments.
+
+```dart
+`ls *.txt'.run;
+
+becomes
+
+'ls fred.txt tom.txt'.run.
+```
+
+Windows however does not expect globs to be expanded as such we directly pass the glob to the called application.
+
+If you are calling into a native Windows application then everything will work as expected. However if you have written a Dart script which you are now calling you need to understand that the arguments passed to the Dart script will change dependant on which platform the script is running on.
+
+On Windows you will need to have your Dart script expand the glob.
+
+There is a [glob](https://pub.dev/packages/glob) package on pub.dev that will help you to do this.
 
