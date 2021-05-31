@@ -62,3 +62,14 @@ The best way to overcome this situation is to prefix the command with `dart` thi
 'dart hello.dart'.run
 ```
 
+## Windows Registry
+
+The Windows Registry is unique to Windows so if you want to write cross platform scripts then you should avoid using the Registry. However in some circumstances this simply isn't possible
+
+In this case use the `Platform.isWindows` method to determine when to use the registery.
+
+```dart
+import 'dart.io';
+Plaform
+```
+
