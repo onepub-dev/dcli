@@ -1,5 +1,6 @@
-import 'package:dcli/src/util/truepath.dart';
-import 'package:path/path.dart' hide equals;
+import 'dart:io';
+
+import 'package:dcli/dcli.dart' hide equals;
 import 'package:test/test.dart';
 
 void main() {
@@ -14,4 +15,13 @@ void main() {
     expect(
         truepath(join(rootPath, 'Local')), equals(absolute(rootPath, 'Local')));
   });
+
+  test('Posix rootPath', () {
+    expect(rootPath, equals('/'));
+  }, skip: Platform.isWindows);
+
+  test('Windows rootPath', () {
+    final drive = pwd[0];
+    expect(rootPath, equals('$drive:\\'));
+  }, skip: !Platform.isWindows);
 }

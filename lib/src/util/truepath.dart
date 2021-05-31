@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import '../../dcli.dart';
 
 /// [truepath] creates an absolute and normalized path.
@@ -32,5 +34,8 @@ String privatePath(String part1,
       .replaceAll(HOME, '$prefix<HOME>');
 }
 
-/// returns the root path this is '/' or '\\' depending on platform.
-String get rootPath => separator;
+/// returns the root path.
+/// On Linux and MacOS this will be '/'
+/// On Windows this will be r'C:\'. The drive letter will depend on the
+/// drive of your present working directory (pwd).
+String get rootPath => rootPrefix(pwd);
