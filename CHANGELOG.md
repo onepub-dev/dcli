@@ -17,9 +17,9 @@ Added:
  - Created new function fileLength that returns the length of a file.
 
 Deprecated:
-    - Deprecated methods in Terminal
-      - previousUp in favor of cursorUp
-      - lines in favour of rows.
+  - Deprecated methods in Terminal
+    - previousUp in favor of cursorUp
+    - lines in favour of rows.
 
 Fixes:
 - numerous issues with ansi/terminal under windows. Now use the dart_console package to handle the windows setup.
