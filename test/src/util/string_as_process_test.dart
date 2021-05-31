@@ -1,6 +1,5 @@
 import 'dart:async';
 
-import 'package:async/async.dart';
 import 'package:test/test.dart';
 import 'package:dcli/dcli.dart' hide equals;
 
