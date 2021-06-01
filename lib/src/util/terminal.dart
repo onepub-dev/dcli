@@ -169,7 +169,13 @@ class Terminal {
   /// Where a column is one character wide.
   /// If no terminal is attached to a value of 80 is returned.
   /// This value can change if the users resizes the console window.
-  int get columns => _console.windowWidth;
+  int get columns {
+    if (hasTerminal) {
+      return _console.windowWidth;
+    } else {
+      return 80;
+    }
+  }
 
   /// Returns the row location of the cursor.
   /// The first row is row 0.
@@ -200,7 +206,13 @@ class Terminal {
   /// Where a row is one character high.
   /// If no terminal is attached to stdout, a [StdoutException] is thrown.
   /// This value can change if the users resizes the console window.
-  int get rows => _console.windowHeight;
+  int get rows {
+    if (hasTerminal) {
+      return _console.windowHeight;
+    } else {
+      return 24;
+    }
+  }
 
   /// Sets the cursor to the top left corner
   /// of the screen (0,0)
