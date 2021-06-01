@@ -27,8 +27,7 @@ void main() {
     final path = join('assets', 'templates');
     final templates = Assets().list('*', root: path);
 
-    final base =
-        join(DartProject.self.pathToProjectRoot, 'lib', 'src', path);
+    final base = join(DartProject.self.pathToProjectRoot, 'lib', 'src', path);
 
     expect(
       templates,

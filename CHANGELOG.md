@@ -1,3 +1,11 @@
+# 1.5.1
+Deprecated DartProject.current in favour of DartProject.self and DartScript.current in favour of DartScript.self. 
+   Current was ambigous; for a project was it the current running project or the one in the current directory. Change DartScript to self for consistency.
+
+Fixed a bug caused by the dart_console. If you try to get the screen dimensions when no terminal is attached it causes the app to hang.
+
+Changed the rootPath so it returns 'C:\' on windows.
+
 # 1.5.0
 This release largely focuses on fixes for Windows.
 

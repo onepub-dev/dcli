@@ -10,8 +10,8 @@ import '../util/test_file_system.dart';
 void main() {
   t.group('Find', () {
     t.test('manualRecursion', () async {
-      final testScriptPath = truepath(
-          DartProject.self.pathToProjectRoot, 'test', 'test_script');
+      final testScriptPath =
+          truepath(DartProject.self.pathToProjectRoot, 'test', 'test_script');
 
       final foundDirs = find('*',
               workingDirectory: testScriptPath,
