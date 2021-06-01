@@ -107,10 +107,16 @@ class DartScript {
   /// The current script that is running.
   static DartScript? _current;
 
+  ///
+  @Deprecated('Use DartScript.self or DartScript.fromPath()')
+  static DartScript get current => self;
+
   /// Returns the instance of the currently running script.
   ///
+  /// If you are trying to load an instace of another script then
+  /// use [DartScript.fromFile];
   // ignore: prefer_constructors_over_static_methods
-  static DartScript get current =>
+  static DartScript get self =>
       _current ??= DartScript.fromFile(_pathToCurrentScript);
 
   /// Path to the currently runnng script

@@ -32,6 +32,10 @@ class DartProject {
 
   static DartProject? _current;
 
+  /// If you
+  @Deprecated('Use DartProject.self')
+  static DartProject get current => self;
+
   /// Returns the instance of the currently running DartProject.
   ///
   /// If you call this method from a non-compiled script
@@ -41,8 +45,12 @@ class DartProject {
   /// If you call this method from a compiled script
   /// then we will return the current working directory
   /// as there is no 'project root' for a compiled script.
+  ///
+  /// If you are looking to load the project from a directory
+  /// then use [DartProject.fromPath()]
+  ///
   // ignore: prefer_constructors_over_static_methods
-  static DartProject get current {
+  static DartProject get self {
     if (Platform.packageConfig != null) {
       /// When running as a unit test we can't use DartScript.current
       /// as it returns the the test runner.
@@ -52,7 +60,7 @@ class DartProject {
       return _current ??=
           DartProject.fromPath(dirname(Platform.packageConfig!));
     }
-    final script = DartScript.current;
+    final script = DartScript.self;
     var startFrom = '.';
     if (!script.isCompiled) {
       startFrom = script.pathToScript;

@@ -32,7 +32,7 @@ class Assets {
   factory Assets() => _self;
 
   Assets._internal() {
-    _packageName = DartProject.current.pubSpec.name ?? 'unnamed';
+    _packageName = DartProject.fromPath('.').pubSpec.name ?? 'unnamed';
   }
   static final _self = Assets._internal();
 

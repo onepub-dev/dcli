@@ -5,7 +5,7 @@ import 'package:dcli/dcli.dart';
 import 'package:settings_yaml/settings_yaml.dart';
 
 void main(List<String> args) {
-  final project = DartProject.current;
+  final project = DartProject.self;
 
   final pathToSettings = join(
       project.pathToProjectRoot, 'tool', 'post_release_hook', '.settings.yaml');
@@ -17,5 +17,5 @@ void main(List<String> args) {
 
   'github_release -u $username --apiToken $personalAccessToken --owner $owner '
           '--repository $repository'
-      .start(workingDirectory: DartProject.current.pathToProjectRoot);
+      .start(workingDirectory: DartProject.self.pathToProjectRoot);
 }

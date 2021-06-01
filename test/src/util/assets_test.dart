@@ -13,7 +13,7 @@ void main() {
     expect(content, isNotNull);
 
     var actual =
-        read(join(DartProject.current.pathToProjectRoot, 'lib', 'src', path))
+        read(join(DartProject.self.pathToProjectRoot, 'lib', 'src', path))
             .toList()
             .join(lineDelimiter);
 
@@ -28,7 +28,7 @@ void main() {
     final templates = Assets().list('*', root: path);
 
     final base =
-        join(DartProject.current.pathToProjectRoot, 'lib', 'src', path);
+        join(DartProject.self.pathToProjectRoot, 'lib', 'src', path);
 
     expect(
       templates,
