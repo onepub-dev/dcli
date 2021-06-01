@@ -60,4 +60,15 @@ void main() {
     // expect(line[0]
     // , equals('Publish the current package to pub.dartlang.org.'));
   });
+
+  test('Run dart script', () {
+    final projectRoot = DartProject.fromPath('.').pathToProjectRoot;
+    final hellow = join(projectRoot, 'test', 'test_script', 'general', 'bin',
+        'hello_world.dart');
+    DartSdk().run(args: [hellow]);
+    print('done 1');
+
+    hellow.run;
+    print('done 2');
+  });
 }
