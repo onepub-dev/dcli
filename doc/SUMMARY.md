@@ -34,6 +34,7 @@
 * [Fetch](dcli-api/fetch.md)
 * [The evils of CD](dcli-api/the-evils-of-cd.md)
 * [Assets](dcli-api/assets.md)
+* [Cross Platform](dcli-api/cross-platform.md)
 
 ## Dependency Management <a id="dependency-management-1"></a>
 
