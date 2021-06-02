@@ -62,7 +62,7 @@ class RunCommand extends Command {
 
     verbose(() => 'Script Arguments: ${scriptArguments.join(", ")}');
 
-    final exitCode = script.run(scriptArguments);
+    final exitCode = script.run(args: scriptArguments);
 
     return exitCode;
   }

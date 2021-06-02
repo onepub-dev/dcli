@@ -241,10 +241,13 @@ class DartScript {
     }
   }
 
-  /// Runs the script passing in the given [args]
+  /// Runs the dart script with an optional set of [args].
+  /// 
+  /// [args] is a list of command line arguments which will
+  /// be passed to the scsript.
   ///
   /// Returns the processes exit code.
-  int run(List<String> args) {
+  int run({List<String> args = const <String>[]}) {
     final sdk = DartSdk();
 
     final runner = ScriptRunner(sdk, this, args);
