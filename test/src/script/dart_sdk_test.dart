@@ -45,8 +45,7 @@ void main() {
 
   test('Run dart pub', () {
     final progress = DartSdk()
-        .
-        runPub(args: ['publish', '--help'], progress: Progress.capture());
+        .runPub(args: ['publish', '--help'], progress: Progress.capture());
     final line = progress.lines;
     expect(line.isNotEmpty, equals(true));
     expect(line[0], equals('Publish the current package to pub.dartlang.org.'));

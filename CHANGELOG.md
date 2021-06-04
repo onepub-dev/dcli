@@ -1,3 +1,16 @@
+# 1.5.2
+Added
+ - Added working directory option to DartScript.compile.
+ - Added method to instantiate a DartProject from .pub-cache.
+
+Fixed
+  - a bug were we throw if the template folder doesn't exist. We now print a message asking the user to install dcli.
+
+Removed the call to globally activate dcli. We are not currently supporting the standalone dcli_install exe and there appears to be a bug in dart that stops us form do a global activate whilst running under sudo. https://github.com/dart-lang/sdk/issues/46255
+
+Change the arguments to DartScript.run so that 'args' is an optional name paramter. 
+I don't think this is in regular usage as yet so shouldn't cause too many issues and it will result in a compile error which is easy to fix.
+
 # 1.5.1
 Deprecated DartProject.current in favour of DartProject.self and DartScript.current in favour of DartScript.self. 
    Current was ambigous; for a project was it the current running project or the one in the current directory. Change DartScript to self for consistency.

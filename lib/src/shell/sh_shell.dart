@@ -55,6 +55,6 @@ class ShShell with ShellMixin, PosixShell {
     /// no op
   }
 
-    @override
+  @override
   String get installInstructions => r'Run sudo env "PATH=$PATH" dcli_install';
 }
