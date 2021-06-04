@@ -162,3 +162,9 @@ On Windows you will need to have your Dart script expand the glob.
 
 There is a [glob](https://pub.dev/packages/glob) package on pub.dev that will help you to do this.
 
+## Executable Names
+
+Naming conventions for executables differ between Linux/Mac OS and Windows.
+
+On a linux system a executable normally doesn't have a file extension.
+
