@@ -119,7 +119,7 @@ class PubCache {
   /// PUB_CACHE.
   ///
   /// This method processes PUB_CACHE if it exists.
-  String? get cacheDir => _pubCacheDir;
+  String get cacheDir => _pubCacheDir;
 
   /// only to be used for unit tests.
   /// It resets the paths so that they can pick
@@ -128,4 +128,11 @@ class PubCache {
   static void reset() {
     _self = null;
   }
+
+  /// Returns the path to the package in .pub-cache for the dart
+  /// project named [name] for the version [version].
+  /// e.g.
+  /// ~/.pub-cache/hosted/pub.dartlang.org/dswitch-4.0.1
+  String pathToPackage(String name, String version) =>
+      join(_pubCachePath, 'hosted', 'pub.dartlang.org', '$name-$version');
 }

@@ -27,6 +27,13 @@ class DartProject {
     _pathToProjectRoot = truepath(_pathToProjectRoot);
     verbose(() => 'DartProject.fromPath: $_pathToProjectRoot');
   }
+
+  /// Loads the project from the dart pub cache
+  /// named [name] for the version [version].
+  /// e.g. ~/.pub-cache/hosted/pub.dartlang.org/dswitch-4.0.1
+  DartProject.fromCache(String name, String version) {
+    _pathToProjectRoot = truepath(PubCache().pathToPackage(name, version));
+  }
   late String _pathToProjectRoot;
   String? _pathToPubSpec;
 
