@@ -12,14 +12,15 @@ class MacOsxDCliInstaller {
       _installDart();
     }
 
-    if (which('dart').notfound) {
-      // The normal dart detection process won't work here
-      // as dart is not on the path so for the moment so we hard code it.
-      // CONSIDER a way of identifying where dart has been installed to.
-      '/usr/lib/dart/bin/dart pub global activate dcli'.run;
-    } else {
-      DartSdk().globalActivate('dcli');
-    }
+    // TODO(bsutton): I've had to remove this for the moment due to https://github.com/dart-lang/sdk/issues/46255
+    // if (which('dart').notfound) {
+    //   // The normal dart detection process won't work here
+    //   // as dart is not on the path so for the moment we hard code it.
+    //   // CONSIDER a way of identifying where dart has been installed to.
+    //   '/usr/lib/dart/bin/dart pub global activate dcli'.run;
+    // } else {
+    //   DartSdk().globalActivate('dcli');
+    // }
 
     // we currently never install dart.
     return false;

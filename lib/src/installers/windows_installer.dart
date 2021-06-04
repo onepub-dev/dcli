@@ -29,9 +29,8 @@ class WindowsDCliInstaller {
       regAppendToPath(Settings().pathToDCliBin);
     }
 
-    // 'setx PATH "${PATH.join(Env().delimiterForPATH)}"'.run;
-
-    DartSdk().globalActivate('dcli');
+    // TODO(bsutton): I've had to remove this for the moment due to https://github.com/dart-lang/sdk/issues/46255
+    // DartSdk().globalActivate('dcli');
 
     return installedDart;
   }
