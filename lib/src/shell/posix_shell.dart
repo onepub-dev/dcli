@@ -153,7 +153,7 @@ mixin PosixShell {
   bool get isSudo => !Settings().isWindows && env['SUDO_USER'] != null;
 
   /// The message used during installation if it needs to be run with sudo.
-  String privilegesRequiredMessage(String app) => 'Please run with: sudo $app';
+  String privilegesRequiredMessage(String app) => 'Please $installInstructions';
 
   /// Install dart/dcli
   bool install({bool installDart = false}) {
@@ -166,4 +166,7 @@ mixin PosixShell {
 
   /// at this point no posix system has any preconditions.
   String? checkInstallPreconditions() => null;
+
+  /// Returns the instructions to install DCli.
+  String get installInstructions => r'Run: sudo env "PATH=$PATH" dcli_install';
 }

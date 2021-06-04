@@ -54,4 +54,7 @@ class ShShell with ShellMixin, PosixShell {
   void addFileAssocation(String dcliPath) {
     /// no op
   }
+
+    @override
+  String get installInstructions => r'Run sudo env "PATH=$PATH" dcli_install';
 }

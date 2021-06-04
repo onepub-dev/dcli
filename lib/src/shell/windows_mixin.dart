@@ -72,4 +72,7 @@ mixin WindowsMixin {
 
   /// On Windows this is always false.
   bool get isSudo => false;
+
+  /// Returns the instructions to install DCli.
+  String get installInstructions => 'Run dcli install';
 }

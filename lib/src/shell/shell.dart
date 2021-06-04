@@ -177,6 +177,9 @@ abstract class Shell {
   /// as a priviledged user to run an app.
   String privilegesRequiredMessage(String appname);
 
+  /// Returns instructions on how to install DCli.
+  String get installInstructions;
+
   /// Installs dart and dcli.
   /// Returns true if dart was installed.
   /// Returns false if dart was already installed.

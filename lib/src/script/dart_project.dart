@@ -289,6 +289,9 @@ class DartProject {
   /// When the user runs 'dcli create <script>'
   void _createFromTemplate(
       {required String templatePath, required String pathToScript}) {
+    if (!exists(templatePath)) {
+      throw TemplateNotFoundException(templatePath);
+    }
     copy(templatePath, pathToScript);
 
     replace(pathToScript, '%dcliName%', DCliPaths().dcliName);
@@ -360,4 +363,11 @@ class DartProject {
 class DartProjectException extends DCliException {
   /// Create a DartProject related exceptions
   DartProjectException(String message) : super(message);
+}
+
+/// The requested DCli template does not exists.
+class TemplateNotFoundException extends DCliException {
+  /// The requested DCli template does not exists.
+  TemplateNotFoundException(String pathTo)
+      : super('The template $pathTo does not exist.');
 }

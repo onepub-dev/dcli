@@ -16,20 +16,19 @@ class Ansi {
   static const _self = Ansi._internal();
   static bool? _emitAnsi;
 
-  /// returns true of the terminal supports ansi escape characters.
+  /// returns true if stdout supports ansi escape characters.
   static bool get isSupported {
     if (_emitAnsi == null) {
-      if (!stdin.hasTerminal) {
-        _emitAnsi = false;
-      } else
       // We don't trust [stdout.supportsAnsiEscapes] except on Windows.
       // [stdout] relies on the TERM environment variable
-      // which has generates false negatives.
+      // which generates false negatives.
       if (!Platform.isWindows) {
         _emitAnsi = true;
+      } else {
+        _emitAnsi = stdout.supportsAnsiEscapes;
       }
     }
-    return _emitAnsi ??= stdout.supportsAnsiEscapes;
+    return _emitAnsi!;
   }
 
   /// You can set [isSupported] to

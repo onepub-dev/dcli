@@ -4,6 +4,7 @@ import '../../dcli.dart';
 import '../installers/linux_installer.dart';
 import '../installers/macosx_installer.dart';
 import '../installers/windows_installer.dart';
+import '../settings.dart';
 import 'shell_mixin.dart';
 
 /// Used by dcli to interacte with the shell
@@ -145,17 +146,20 @@ class UnknownShell with ShellMixin {
 
   @override
   void releasePrivileges() {
-    throw UnimplementedError();
+    // no op.
+    verbose(() => 'releasePrivileges called on UnknownShell. ignored');
   }
 
   @override
   void restorePrivileges() {
-    throw UnimplementedError();
+    // no op.
+    verbose(() => 'releasePrivileges called on UnknownShell. ignored');
   }
 
   @override
   void withPrivileges(RunPrivileged action) {
-    throw UnimplementedError();
+    // no op.
+    verbose(() => 'releasePrivileges called on UnknownShell. ignored');
   }
 
   @override
@@ -167,5 +171,14 @@ class UnknownShell with ShellMixin {
   @override
   void addFileAssocation(String dcliPath) {
     /// no op
+  }
+
+  @override
+  String get installInstructions {
+    if (Platform.isWindows) {
+      return 'Run dcli install';
+    } else {
+      return r'Run sudo env "PATH=$PATH" dcli_install';
+    }
   }
 }
