@@ -221,9 +221,14 @@ class DartScript {
   /// If [install] is true and [overwrite] is false and an exe of the same name already exists in ~/.dcli/bin
   /// the install will fail and a [MoveException] will be thrown.
   ///
-  void compile({bool install = false, bool overwrite = false}) {
+  void compile(
+      {bool install = false,
+      bool overwrite = false,
+      String? workingDirectory}) {
     verbose(() => '\nCompiling with pubspec.yaml:\n'
         "${read(pathToPubSpec).toList().join('\n')}\n");
+
+    workingDirectory ??= pwd;
 
     if (install && isInstalled && !overwrite) {
       throw InvalidArguments(
@@ -232,7 +237,9 @@ class DartScript {
     }
 
     DartSdk().runDartCompiler(this,
-        pathToExe: pathToExe, progress: Progress(print, stderr: print));
+        pathToExe: pathToExe,
+        progress: Progress(print, stderr: print),
+        workingDirectory: workingDirectory);
 
     if (install) {
       print('');
@@ -242,7 +249,7 @@ class DartScript {
   }
 
   /// Runs the dart script with an optional set of [args].
-  /// 
+  ///
   /// [args] is a list of command line arguments which will
   /// be passed to the scsript.
   ///

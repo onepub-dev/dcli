@@ -101,8 +101,12 @@ class DartSdk {
   /// [pathToExe] is the path (including the filename) to write the
   ///  compiled ex to .
   void runDartCompiler(DartScript script,
-      {required String pathToExe, Progress? progress}) {
+      {required String pathToExe,
+      Progress? progress,
+      String? workingDirectory}) {
     final runArgs = <String>[];
+
+    workingDirectory ??= script.pathToScriptDirectory;
 
     RunnableProcess process;
     if (useDartCommand) {
@@ -124,7 +128,7 @@ class DartSdk {
       runArgs..add(script.pathToScript)..add('--output=$pathToExe');
 
       process = RunnableProcess.fromCommandArgs(pathToDartToNativeExe!, runArgs,
-          workingDirectory: script.pathToScriptDirectory);
+          workingDirectory: workingDirectory);
     }
 
     process
@@ -208,10 +212,10 @@ class DartSdk {
   void runPubGet(
     String? workingDirectory, {
     Progress? progress,
-    bool? compileExecutables,
+    bool compileExecutables = false,
   }) {
     runPub(
-        args: ['get', '--no-precompile'],
+        args: ['get', if (!compileExecutables) '--no-precompile'],
         workingDirectory: workingDirectory,
         progress: progress);
   }
