@@ -20,7 +20,7 @@ class WindowsDCliInstaller {
       installedDart = _installDart();
     }
 
-    Env().addToPATHIfAbsent(Settings().pathToDCliBin);
+    Env().appendToPATH(Settings().pathToDCliBin);
 
     // update the windows registry so the change sticks.
     final path = regGetExpandString(HKEY_CURRENT_USER, 'Environment', 'Path');
@@ -48,8 +48,8 @@ class WindowsDCliInstaller {
           DartSdk().installFromArchive(defaultDartToolDir, askUser: false);
 
       /// add the dartsdk path to the windows path.
-      Env().addToPATHIfAbsent(join(dartToolDir, 'bin'));
-      Env().addToPATHIfAbsent(PubCache().pathToBin);
+      Env().appendToPATH(join(dartToolDir, 'bin'));
+      Env().appendToPATH(PubCache().pathToBin);
 
       print('Installed dart to: $dartToolDir');
 

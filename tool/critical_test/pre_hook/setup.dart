@@ -9,7 +9,7 @@ import 'package:dcli/dcli.dart';
 /// So this script forces the test to run serially via the -j1 option.
 ///
 void main(List<String> args) {
-  print(orange('cleaning old test and build artifacts'));
+  print(orange('Cleaning old test and build artifacts'));
 
   if (exists('/tmp/dcli')) {
     print('Deleting old test runs. This can take a while...');
@@ -17,7 +17,8 @@ void main(List<String> args) {
   }
 
   if (!isDCliRunningFromSource()) {
-    print('Acivating dcli from souce so we are testing against latest version');
+    print(
+        'Activating dcli from souce so we are testing against latest version');
 
     /// run pub get and only display errors.
     DartSdk()

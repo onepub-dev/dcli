@@ -166,7 +166,7 @@ class DartProject {
           '${DCliPaths().dcliName} '
                   '-v=${join(Directory.systemTemp.path, 'dcli.warmup.log')}'
                   ' warmup $pathToProjectRoot'
-              .start(detached: true, runInShell: true);
+              .start(detached: true, runInShell: true, extensionSearch: false);
         } else {
           // print(orange('Running pub get...'));
           _pubget();
@@ -351,12 +351,13 @@ class DartProject {
     if (!scriptName.endsWith('.dart')) {
       throw DartProjectException('scriptName must end with .dart');
     }
+    final pathToScript = join(pathToProjectRoot, scriptName);
     _createFromTemplate(
       templatePath: join(Settings().pathToTemplate, templateName),
-      pathToScript: join(pathToProjectRoot, scriptName),
+      pathToScript: pathToScript,
     );
 
-    return DartScript.fromFile(scriptName, project: this);
+    return DartScript.fromFile(pathToScript, project: this);
   }
 
   /// The name used in the pubspec.yaml must come from the character

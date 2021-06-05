@@ -40,6 +40,43 @@ mixin WindowsMixin {
   /// able to escalate privileges.
   bool get isPrivilegedPasswordRequired => false;
 
+  /// Adds a path to the start script
+  /// returns true if adding the path was successful
+  @Deprecated('Use appendToPATH')
+  bool addToPATH(String path) => appendToPATH(path);
+
+  /// Appends [path] to the end of the PATH
+  /// by updating the Windows Registry.
+  /// We update the user's PATH (HKEY_CURRENT_USER) rather
+  /// than the system path so this change will only
+  /// affect the logged in user.
+  ///
+  /// Note: this doesn't update current scripts
+  /// PATH.
+  ///
+  /// In almost all shells you will need to restart
+  /// the terminal in order for the path change to take affect.
+  bool appendToPATH(String path) {
+    regAppendToPath(path);
+    return true;
+  }
+
+  /// Prepend [path] to the end of the PATH
+  /// by updating the Windows Registry.
+  /// We update the user's PATH (HKEY_CURRENT_USER) rather
+  /// than the system path so this change will only
+  /// affect the logged in user.
+  ///
+  /// Note: this doesn't update current scripts
+  /// PATH.
+  ///
+  /// In almost all shells you will need to restart
+  /// the terminal in order for the path change to take affect.
+  bool prependToPATH(String path) {
+    regPrependToPath(path);
+    return true;
+  }
+
   ///
   String? get loggedInUser => env['USERNAME'];
 

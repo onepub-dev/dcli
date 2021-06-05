@@ -20,9 +20,9 @@ void main() {
     const dartToolDir = r'C:\tools\dart-sdk';
 
     /// add the dartsdk path to the windows path.
-    Env().addToPATHIfAbsent(join(dartToolDir, 'bin'));
-    Env().addToPATHIfAbsent(PubCache().pathToBin);
-    Env().addToPATHIfAbsent(Settings().pathToDCliBin);
+    Env().appendToPATH(join(dartToolDir, 'bin'));
+    Env().appendToPATH(PubCache().pathToBin);
+    Env().appendToPATH(Settings().pathToDCliBin);
 
     print(PATH);
     // update the windows registry so the change sticks.
@@ -37,9 +37,9 @@ void main() {
     const dartToolDir = r'C:\tools\dart-sdk';
 
     /// add the dartsdk path to the windows path.
-    Env().addToPATHIfAbsent(join(dartToolDir, 'bin'));
-    Env().addToPATHIfAbsent(PubCache().pathToBin);
-    Env().addToPATHIfAbsent(Settings().pathToDCliBin);
+    Env().appendToPATH(join(dartToolDir, 'bin'));
+    Env().appendToPATH(PubCache().pathToBin);
+    Env().appendToPATH(Settings().pathToDCliBin);
 
     print(PATH);
   }, skip: !Platform.isWindows);
@@ -48,9 +48,9 @@ void main() {
     const dartToolDir = '/tools/dart-sdk';
 
     /// add the dartsdk path to the windows path.
-    Env().addToPATHIfAbsent(join(dartToolDir, 'bin'));
-    Env().addToPATHIfAbsent(PubCache().pathToBin);
-    Env().addToPATHIfAbsent(Settings().pathToDCliBin);
+    Env().appendToPATH(join(dartToolDir, 'bin'));
+    Env().appendToPATH(PubCache().pathToBin);
+    Env().appendToPATH(Settings().pathToDCliBin);
 
     print(PATH);
   }, skip: !Platform.isLinux);

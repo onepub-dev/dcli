@@ -33,7 +33,24 @@ abstract class Shell {
 
   /// Adds a path to the start script
   /// returns true if adding the path was successful
-  bool addToPATH(String path) => false;
+  @Deprecated('Use appendToPATH')
+  bool addToPATH(String path) => appendToPATH(path);
+
+  /// Appends [path] to the end of the PATH
+  /// in a persistent manner.
+  /// Note: this doesn't update current scripts
+  /// path.
+  /// In almost all shells you will need to restart
+  /// the terminal in order for the path change to take affect.
+  bool appendToPATH(String path);
+
+  /// Prepends [path] to the start of the PATH
+  /// in a persistent manner.
+  /// Note: this doesn't update current scripts
+  /// path.
+  /// In almost all shells you will need to restart
+  /// the terminal in order for the path change to take affect.
+  bool prependToPATH(String path);
 
   /// Called during the install so that an OS that needs
   /// to create a file association between .dart and dcli

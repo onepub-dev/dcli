@@ -28,8 +28,15 @@ class DashShell with ShellMixin, PosixShell {
     throw UnimplementedError();
   }
 
+  @Deprecated('User appendToPATH')
   @override
-  bool addToPATH(String path) => false;
+  bool addToPATH(String path) => appendToPATH(path);
+
+  @override
+  bool appendToPATH(String path) => false;
+
+  @override
+  bool prependToPATH(String path) => false;
 
   @override
   bool get isCompletionInstalled => false;

@@ -118,6 +118,59 @@ void main() {
 }
 ```
 
+## Environment Variables
+
+Environment variables between Windows and posix systems differ significantly.
+
+DCli attempts to abstract some of these differences away.
+
+### HOME
+
+The 'HOME" environment variable works as expected on all platforms.
+
+### PATH
+
+The PATH environment variables at times need special handling on Windows.
+
+The dcli PATH global getter returns a String list of paths, so for simple operations use this function.
+
+For both Windows and posix systems you can't update the path of the parent process. This means that if you are running a DCli script from with in a shell \(bash, command, zsh etc\) that you cannot change the path of the that shell. This is a sensible security constraint imposed by all operating systems.
+
+You can however modify the PATH for any child process you launch from your DCli script. To modify the PATH of a child process use one of the DCli Env\(\) methods.  This rule also applies for any environment variable. If you change any environment variable with DCli then any child process launched \(after that point in time\) will also see the updated environment variable.
+
+You can change PATH environment in a persistent and DCli provides a number of helper methods.
+
+Using Shell you can update the PATH environment variable in a persistent manner:
+
+```dart
+Shell.current.appendToPATH("/usr/me");
+Shell.current.prependToPATH('C:\Users\Me\someapp');
+```
+
+NOTE: at this point in time not all implementations of Shell in DCli support these operations and they will return false if the operations isn't supported.
+
+Currently the following Shell are supported:
+
+* bash on linux
+* Mac OS \(append only\)
+* Windows - Power and Command shells
+
+#### Windows
+
+When updating the Windows PATH DCli will also send a notification to all top level applications that the PATH has been updated. You will however have to restart your Command or Powershell terminal as neither of these shells respond to the notification.
+
+If you need more fine grained control DCli also provides a number of registry functions to directly modify the registry. There are a number of functions like \`regAppendToPath\`  to assist. If you use one of the registry functions that include Path in the name then they will also send a Windows notification to all top level applications. Many application will respond to this notification and update their path. Unfortunately neither Command.exe nor Powershell respond to the notification so in both cases you will need to restart the terminal.
+
+#### Mac OS
+
+Only appending a path to the PATH is supported.
+
+#### Linux
+
+Bash is the only Shell with full support for the Shell path methods.
+
+On Linux and Mac OS things are trickier as each shell has its own 
+
 ## Built in OS Applications
 
 The set of application supplied by an OS varies considerably so you need to be careful when spawning an application.
@@ -166,5 +219,31 @@ There is a [glob](https://pub.dev/packages/glob) package on pub.dev that will he
 
 Naming conventions for executables differ between Linux/Mac OS and Windows.
 
-On a linux system a executable normally doesn't have a file extension.
+On a Linux system a executable normally doesn't have a file extension. On Windows the file extension is .exe.
+
+Further confusion is caused on Windows as when you enter a command such as 'regedit' on a terminal then Windows will search for regedit with a range of extensions such as .exe., .com, .bat, .msi ...
+
+Windows takes the list of extension from the PATHEX environment variable.
+
+To assist with finding the correct extension the DCli `which` function will search for a matching application with each of the extensions in PATHEX.
+
+```dart
+which('pub');
+> linux -> pub
+> windows -> pub.bat
+```
+
+This is intended to make it easier to run a command that may have different extensions on different OSs.
+
+You can disable this search behaviour by setting extensionSearch to false:
+
+```dart
+which('pub', extensionSearch: false);
+```
+
+You can also have Windows apply the the extension search by using the 'runInShell' option on the start command.
+
+```dart
+start('pub', runInShell: true);
+```
 

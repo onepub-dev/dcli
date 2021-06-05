@@ -49,8 +49,11 @@ void upgradePubspec(String file) {
   print('Upgrading pubspec: $file');
   upgradeDependencies(file);
 
-  'pub upgrade'
-      .start(workingDirectory: dirname(file), progress: Progress.printStdErr());
+  DartSdk().runPub(
+    args: ['upgrade'],
+    workingDirectory: dirname(file),
+    progress: Progress.printStdErr(),
+  );
 }
 
 void upgradeDotDshell() {
