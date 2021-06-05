@@ -18,7 +18,7 @@ void main(List<String> args) {
 
   if (!isDCliRunningFromSource()) {
     print(
-        'Activating dcli from souce so we are testing against latest version');
+        'Activating dcli from source so we are testing against latest version');
 
     /// run pub get and only display errors.
     DartSdk()
