@@ -1,4 +1,5 @@
-import 'package:path/path.dart' as p;
+import 'dart:io';
+
 import '../../dcli.dart';
 import '../util/progress.dart';
 
@@ -49,9 +50,24 @@ import 'env.dart';
 /// }
 /// ```
 ///
+/// if [extensionSearch] is true and the passed [appname]  doesn't have a file
+/// extension then when running on Windows the which  command will search
+/// for [appname] plus [appname] with each of the extensions listed
+/// in the Windows environment variable PATHEX.
+/// This feature is intended to make it easier to implement cross platform
+/// command search. In particular dart commands such as 'pub' will be 'pub'
+/// on Linux and 'pub.bat' on Windows. Using `which('pub')` will find `pub` on
+/// linux and `pub.bat` on Windows.
 Which which(String appname,
-        {bool first = true, bool verbose = false, Progress? progress}) =>
-    _Which().which(appname, first: first, verbose: verbose, progress: progress);
+        {bool first = true,
+        bool verbose = false,
+        bool extensionSearch = true,
+        Progress? progress}) =>
+    _Which().which(appname,
+        first: first,
+        verbose: verbose,
+        extensionSearch: extensionSearch,
+        progress: progress);
 
 /// Returned from the [which] funtion to provide the details we discovered
 /// about  appname.
@@ -90,7 +106,10 @@ class _Which extends DCliFunction {
   ///
   /// Searches the path for the given appname.
   Which which(String appname,
-      {bool first = true, bool verbose = false, Progress? progress}) {
+      {required bool extensionSearch,
+      bool first = true,
+      bool verbose = false,
+      Progress? progress}) {
     final results = Which();
     try {
       progress ??= Progress.devNull();
@@ -100,8 +119,9 @@ class _Which extends DCliFunction {
         if (verbose) {
           progress.addToStdout('Searching: ${truepath(path)}');
         }
-        if (exists(p.join(path, appname))) {
-          final fullpath = truepath(p.join(path, appname));
+        final fullpath =
+            _appExists(path, appname, extensionSearch: extensionSearch);
+        if (fullpath != null) {
           progress.addToStdout(fullpath);
           if (!results._found) {
             results._path = fullpath;
@@ -118,5 +138,33 @@ class _Which extends DCliFunction {
     }
 
     return results;
+  }
+
+  /// Checks if [appname] exists in [pathTo].
+  ///
+  /// On Windows if [extensionSearch] is true and [appname] doesn't
+  /// have an extension then we check each appname.extension variant
+  /// to see if it exists. We first check if just an file of [appname] with
+  /// no extension exits.
+  String? _appExists(String pathTo, String appname,
+      {required bool extensionSearch}) {
+    final pathToAppname = join(pathTo, appname);
+    if (exists(pathToAppname)) {
+      return pathToAppname;
+    }
+    if (Platform.isWindows && extensionSearch && extension(appname).isEmpty) {
+      final pathExt = env['PATHEXT'];
+
+      if (pathExt != null) {
+        final extensions = pathExt.split(';');
+        for (final extension in extensions) {
+          final fullname = '$pathToAppname$extension';
+          if (exists(fullname)) {
+            return fullname;
+          }
+        }
+      }
+    }
+    return null;
   }
 }
