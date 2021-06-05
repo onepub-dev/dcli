@@ -6,6 +6,7 @@ import 'dart:async';
 import 'dart:io';
 import 'dart:isolate';
 
+import 'package:async/async.dart';
 import 'package:dcli/dcli.dart' hide equals;
 import 'package:dcli/src/util/named_lock.dart';
 import 'package:test/test.dart';
@@ -60,7 +61,7 @@ void main() {
     });
   }, skip: false);
 
-  test('Thrash test', () {
+  test('Thrash test', () async {
     Settings().setVerbose(enabled: false);
     if (exists(_lockCheckPath)) {
       deleteDir(_lockCheckPath);
@@ -68,14 +69,22 @@ void main() {
 
     createDir(_lockCheckPath, recursive: true);
 
-    for (var i = 0; i < 20; i++) {
+    final group = FutureGroup<dynamic>();
+
+    final workers = <Worker>[];
+    for (var i = 0; i < 10; i++) {
       print('spawning worker $i');
-      Isolate.spawn(worker, i);
+      final workerIsolate = Isolate.spawn(worker, i, paused: true);
+      final iWorker = Worker(await workerIsolate);
+      workers.add(iWorker);
+      group.add(iWorker.waitForExit());
     }
-    sleep(59);
+    group.close();
+
+    await group.future;
 
     expect(exists(_lockFailedPath), equals(false));
-  }, timeout: const Timeout(Duration(minutes: 2)));
+  }, timeout: const Timeout(Duration(minutes: 3)));
 }
 
 void takeHardLock() {
@@ -116,6 +125,9 @@ void worker(int instance) {
   NamedLock(name: 'gshared-compile').withLock(() {
     print('acquired lock worker $instance');
     final inLockPath = join(_lockCheckPath, 'inlock');
+
+    /// If the [inLockPath] file exists
+    /// then the lock has been breached.
     if (exists(inLockPath)) {
       touch(_lockFailedPath, create: true);
       throw DCliException(
@@ -128,4 +140,16 @@ void worker(int instance) {
     print('finished work $instance');
     delete(inLockPath);
   });
+}
+
+class Worker {
+  Worker(this.isolate) : exitPort = ReceivePort() {
+    isolate
+      ..addOnExitListener(exitPort.sendPort)
+      ..resume(isolate.pauseCapability!);
+  }
+
+  Future<dynamic> waitForExit() async => exitPort.first;
+  Isolate isolate;
+  ReceivePort exitPort;
 }
