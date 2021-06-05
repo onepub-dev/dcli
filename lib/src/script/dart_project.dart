@@ -302,7 +302,8 @@ class DartProject {
     copy(templatePath, pathToScript);
 
     replace(pathToScript, '%dcliName%', DCliPaths().dcliName);
-    replace(pathToScript, '%scriptname%', basename(pathToScript));
+    replace(
+        pathToScript, '%scriptname%', basename(pathToScript));
 
     if (!hasPubSpec) {
       _createPubspecFromTemplate();

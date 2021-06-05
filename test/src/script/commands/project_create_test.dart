@@ -7,21 +7,15 @@ import 'package:path/path.dart' as p;
 import '../../util/test_file_system.dart';
 
 void main() {
-  final scriptPath = truepath(TestFileSystem().tmpScriptPath, 'create_test');
-
-  if (!exists(scriptPath)) {
-    createDir(scriptPath, recursive: true);
-  }
-  final pathToScript = truepath(scriptPath, 'hello_world.dart');
+  const scriptName = 'create_test.dart';
 
   group('Create Project', () {
     test('Create hello world', () {
-      TestFileSystem().withinZone((fs) {
-        if (exists(pathToScript)) {
-          delete(pathToScript);
-        }
-        DartProject.fromPath(scriptPath)
-          ..createScript(pathToScript, templateName: 'hello_world.dart')
+      withTempDir((fs) {
+        final pathToScript = truepath(fs, scriptName);
+
+        DartProject.fromPath(fs, search: false)
+          ..createScript(scriptName, templateName: 'hello_world.dart')
           ..warmup();
 
         checkProjectStructure(fs, pathToScript);
@@ -29,7 +23,8 @@ void main() {
     });
 
     test('Run hello world', () {
-      TestFileSystem().withinZone((fs) {
+      withTempDir((fs) {
+        final pathToScript = truepath(fs, 'hello_world.dart');
         DartScript.fromFile(pathToScript).run();
       });
     });
@@ -38,10 +33,11 @@ void main() {
   });
 }
 
-void checkProjectStructure(TestFileSystem fs, String scriptName) {
-  expect(exists(fs.runtimePath(scriptName)), equals(true));
+void checkProjectStructure(String rootPath, String scriptName) {
+  final scriptPath = join(rootPath, scriptName);
+  expect(exists(scriptPath), equals(true));
 
-  final pubspecPath = p.join(fs.runtimePath(scriptName), 'pubspec.yaml');
+  final pubspecPath = p.join(rootPath, 'pubspec.yaml');
   expect(exists(pubspecPath), equals(true));
 
   // There should be:
@@ -55,12 +51,12 @@ void checkProjectStructure(TestFileSystem fs, String scriptName) {
   final files = <String>[];
   find(
     '*.*',
-    workingDirectory: fs.runtimePath(scriptName),
+    workingDirectory: rootPath,
     types: [Find.file],
     includeHidden: true,
   ).forEach(
     (line) => files.add(
-      p.relative(line, from: fs.runtimePath(scriptName)),
+      p.relative(line, from: join(rootPath, scriptName)),
     ),
   );
 
@@ -84,7 +80,7 @@ void checkProjectStructure(TestFileSystem fs, String scriptName) {
 
   find('*',
           recursive: false,
-          workingDirectory: fs.runtimePath(scriptName),
+          workingDirectory: join(rootPath, scriptName),
           types: [Find.directory],
           includeHidden: true)
       .forEach((line) => directories.add(p.basename(line)));
