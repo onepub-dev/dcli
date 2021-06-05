@@ -145,15 +145,21 @@ class Env extends DCliFunction {
   /// Changing the PATH has no affect on the parent
   /// process (shell) that launched this script.
   ///
+  /// Changing the PATH has no affect on the parent
+  /// process (shell) that launched this script.
+  ///
   /// Changing the path affects the current script
   /// and any children that it spawns.
   void appendToPATH(String newPath) {
-    final path = PATH..add(newPath);
-    _setEnv('PATH', path.join(delimiterForPATH));
+    if (!isOnPATH(newPath)) {
+      final path = PATH..add(newPath);
+      _setEnv('PATH', path.join(delimiterForPATH));
+    }
   }
 
   /// Prepends [newPath] to the list of paths in the
-  /// PATH environment variable.
+  /// PATH environment variable provided the
+  /// path isn't already on the PATH.
   ///
   /// Changing the PATH has no affect on the parent
   /// process (shell) that launched this script.
@@ -161,8 +167,10 @@ class Env extends DCliFunction {
   /// Changing the path affects the current script
   /// and any children that it spawns.
   void prependToPATH(String newPath) {
-    final path = PATH..insert(0, newPath);
-    _setEnv('PATH', path.join(delimiterForPATH));
+    if (!isOnPATH(newPath)) {
+      final path = PATH..insert(0, newPath);
+      _setEnv('PATH', path.join(delimiterForPATH));
+    }
   }
 
   /// Removes the given [oldPath] from the PATH environment variable.
@@ -187,13 +195,8 @@ class Env extends DCliFunction {
   ///
   /// Changing the PATH affects the current script
   /// and any children that it spawns.
-  void addToPATHIfAbsent(String newPath) {
-    final path = PATH;
-    if (!path.contains(newPath)) {
-      path.add(newPath);
-      _setEnv('PATH', path.join(delimiterForPATH));
-    }
-  }
+  @Deprecated('Use appendToPATH')
+  void addToPATHIfAbsent(String newPath) => appendToPATH(newPath);
 
   ///
   /// Gets the path to the user's home directory
@@ -223,10 +226,10 @@ class Env extends DCliFunction {
   /// returns true if the given [checkPath] is in the list
   /// of paths defined in the environment variable [PATH].
   bool isOnPATH(String checkPath) {
-    final canon = truepath(checkPath);
+    final canon = canonicalize(truepath(checkPath));
     var found = false;
     for (final path in _path) {
-      if (truepath(path) == canon) {
+      if (canonicalize(truepath(path)) == canon) {
         found = true;
         break;
       }
