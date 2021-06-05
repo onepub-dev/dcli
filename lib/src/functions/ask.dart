@@ -66,6 +66,9 @@ import 'echo.dart';
 /// [ask] will throw an [AskValidatorException] if the defaultValue
 ///  doesn't match the given [validator].
 ///
+/// If the script is not attached to terminal [Terminal().hasTerminal]
+/// then ask returns immediatly with the [defaultValue]. If no [defaultValue]
+/// is passed then an empty string is returned.
 ///
 /// The [validator] is called each time the user hits enter.
 ///
@@ -121,9 +124,16 @@ String ask(String prompt,
 /// If a [defaultValue] is passed then either the y or n will be capitalised
 /// and if the user hits the enter key then the [defaultValue] will be returned.
 ///
+/// If the script is not attached to a terminal [Terminal().hasTerminal]
+/// then confirm returns immediately with the [defaultValue].
+/// If there is no [defaultValue] then true is returned.
 bool confirm(String prompt, {bool? defaultValue}) {
   var result = false;
   var matched = false;
+
+  if (!Terminal().hasTerminal) {
+    return defaultValue ?? true;
+  }
   var finalPrompt = prompt;
 
   if (defaultValue == null) {
@@ -180,6 +190,9 @@ class Ask extends DCliFunction {
         'required: $required '
         'defaultValue: ${hidden ? '******' : defaultValue}');
 
+    if (!Terminal().hasTerminal) {
+      return defaultValue ?? '';
+    }
     var finalPrompt = prompt;
 
     /// completely suppress the default value and the prompt if
