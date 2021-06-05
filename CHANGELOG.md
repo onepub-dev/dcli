@@ -1,3 +1,10 @@
+# 1.5.3
+performance improvements for unit tests.
+restricted the privileged requirements on install to windows.
+Merge branch 'master' of https://github.com/bsutton/dcli
+GitBook: [master] 67 pages modified
+Fixed the named lock trash test so it shuts down cleanly.
+
 # 1.6.0-beta.1
 unused import.
 improved performance of unit tests by removing unnecessary testfilesystem.
