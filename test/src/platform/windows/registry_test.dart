@@ -97,16 +97,79 @@ void main() {
   });
 
   test('append/replace  path', () {
-    const testDir = r'\TestDirB';
+    const testDir = 'TestDirB';
+    final testPath = join(rootPath, 'TestDirB');
     final original = regGetExpandString(
         HKEY_CURRENT_USER, 'Environment', 'Path',
         expand: false);
-    regAppendToPath(testDir);
-    final updated = regGetExpandString(HKEY_CURRENT_USER, 'Environment', 'Path',
-        expand: false);
-    expect(updated, equals('$original;$testDir'));
-    regReplacePath(original.split(';'));
 
+    /// Test appending a path
+    regAppendToPath(testPath);
+    final withPath = regGetExpandString(
+        HKEY_CURRENT_USER, 'Environment', 'Path',
+        expand: false);
+    expect(withPath, equals('$original;$testPath'));
+
+    /// test append of existing path doesn't change path
+    regAppendToPath(testPath);
+    final doubleAppend = regGetExpandString(
+        HKEY_CURRENT_USER, 'Environment', 'Path',
+        expand: false);
+
+    /// double append should not chnage path
+    expect(withPath, equals(doubleAppend));
+
+    /// test different paths which are cannonically the same
+    regAppendToPath(join(testPath, '..', testDir));
+    final cannonicalAppend = regGetExpandString(
+        HKEY_CURRENT_USER, 'Environment', 'Path',
+        expand: false);
+
+    /// double append should not chnage path
+    expect(withPath, equals(cannonicalAppend));
+
+    /// restore the original path
+    regReplacePath(original.split(';'));
+    final replaced = regGetExpandString(
+        HKEY_CURRENT_USER, 'Environment', 'Path',
+        expand: false);
+    expect(replaced, equals(original));
+  });
+
+  test('prepend  path', () {
+    const testDir = 'TestDirB';
+    final testPath = join(rootPath, 'TestDirB');
+    final original = regGetExpandString(
+        HKEY_CURRENT_USER, 'Environment', 'Path',
+        expand: false);
+
+    /// Test prepending a path
+    regPrependToPath(testPath);
+    final withPath = regGetExpandString(
+        HKEY_CURRENT_USER, 'Environment', 'Path',
+        expand: false);
+    expect(withPath, equals('$testPath;$original'));
+
+    /// test preppend of existing path doesn't change path
+    regPrependToPath(testPath);
+    final doublePrepend = regGetExpandString(
+        HKEY_CURRENT_USER, 'Environment', 'Path',
+        expand: false);
+
+    /// double prepend should not chnage path
+    expect(withPath, equals(doublePrepend));
+
+    /// test different paths which are cannonically the same
+    regPrependToPath(join(testPath, '..', testDir));
+    final cannonicalPrepend = regGetExpandString(
+        HKEY_CURRENT_USER, 'Environment', 'Path',
+        expand: false);
+
+    /// double prepend should not chnage path
+    expect(withPath, equals(cannonicalPrepend));
+
+    /// restore the original path
+    regReplacePath(original.split(';'));
     final replaced = regGetExpandString(
         HKEY_CURRENT_USER, 'Environment', 'Path',
         expand: false);

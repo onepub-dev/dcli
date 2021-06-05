@@ -1,6 +1,7 @@
 import 'dart:ffi';
 
 import 'package:ffi/ffi.dart';
+import 'package:path/path.dart';
 import 'package:win32/win32.dart';
 
 import '../../functions/env.dart';
@@ -11,16 +12,48 @@ const hrFileNotFound = -2147024894;
 
 /// Collection of Windows specific registry functions.
 
-// TODO(bsutton): impement notification so desktop apps
-// update their environment.
-/// Appends [newPath] to the Windows `PATH environment variable.
-/// A [WindowsException] is thrown the call falls.
+/// Appends [newPath] to the Windows PATH environment variable.
+/// A [WindowsException] is thrown if the call falls.
 void regAppendToPath(String newPath) {
+  final paths = _getPaths();
+  if (!_isOnUserPath(newPath, paths)) {
+    paths.add(newPath);
+    _replacePath(paths);
+  }
+}
+
+/// Returns true if the given [path] is on the user's
+/// path.
+/// Note: this does not check the system path.
+bool regIsOnUserPath(String path) {
+  final paths = _getPaths();
+  return _isOnUserPath(path, paths);
+}
+
+bool _isOnUserPath(String path, List<String> userPaths) {
+  final canonicalPath = canonicalize(path);
+  return userPaths.map(canonicalize).contains(canonicalPath);
+}
+
+/// Prepend [newPath] to the Windows PATH environment variable.
+/// A [WindowsException] is thrown if the call falls.
+void regPrependToPath(String newPath) {
+  final paths = _getPaths();
+
+  if (!_isOnUserPath(newPath, paths)) {
+    paths.insert(0, newPath);
+    _replacePath(paths);
+  }
+}
+
+List<String> _getPaths() {
   final paths = regGetExpandString(HKEY_CURRENT_USER, 'Environment', 'Path',
           expand: false)
-      .split(Env().delimiterForPATH)
-        ..add(newPath);
+      .split(Env().delimiterForPATH);
+  return paths;
+}
 
+void _replacePath(List<String> paths) {
   regSetExpandString(HKEY_CURRENT_USER, 'Environment', 'Path',
       paths.join(Env().delimiterForPATH));
 
