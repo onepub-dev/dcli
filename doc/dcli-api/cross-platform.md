@@ -241,3 +241,9 @@ You can disable this search behaviour by setting extensionSearch to false:
 which('pub', extensionSearch: false);
 ```
 
+You can also have Windows apply the the extension search by using the 'runInShell' option on the start command.
+
+```dart
+start('pub', runInShell: true);
+```
+
