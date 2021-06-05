@@ -1,3 +1,32 @@
+# 1.6.0-beta.1
+unused import.
+improved performance of unit tests by removing unnecessary testfilesystem.
+Fixed a bug in the new extensionSearch which was returning the full path to the found exe rather than just the basename as passed in.
+removed debugging code.
+Merge branch 'master' of https://github.com/bsutton/dcli
+Fixed a major bug in find. When a directory contained more than 100 child directories all child directories were returned but the contents of every second directory (after the first 100)  where not returned.
+ignored settings file
+correct instructions for dcl install
+colour
+spelling.
+Merge branch 'master' of github.com:bsutton/dcli
+color
+Merge branch 'master' of https://github.com/bsutton/dcli
+Added extensionSearch to start function.
+GitBook: [master] one page modified
+Fixed bug in createScript as it was ignore the project path.
+removed unused test.
+Changed ask and confirm to return immediately if no terminal is attached.
+added checks that we are running as a privliged users.
+spelling
+Merge branch 'master' of https://github.com/bsutton/dcli
+Depreccated Shell.addToPath in favour of appendToPath. Also added prependToPath. Windows now supports both Shell.appendToPath and Shell.prependToPath
+Added windows registry methods regIsOnUserPath and regPrependtoPath
+Added extensionSearch argument to which function. The argument only affects windows and causes the which command to search the set of possible extensions defined in PATHEXT.
+deprecated addToPATHIfAbsent in favour of appendToPath which now does a check before adding the path.
+GitBook: [master] one page modified
+GitBook: [master] 66 pages modified
+
 # 1.5.2
 Added
  - Added working directory option to DartScript.compile.

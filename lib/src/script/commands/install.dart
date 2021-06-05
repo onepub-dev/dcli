@@ -228,8 +228,7 @@ class InstallCommand extends Command {
         print('Please enter the sudo password when prompted.');
       }
 
-      'ln -sf $dcliPath $linkPath'
-          .start(privileged: !isWritable(linkPath));
+      'ln -sf $dcliPath $linkPath'.start(privileged: !isWritable(linkPath));
       // symlink(dcliPath, linkPath);
     }
   }

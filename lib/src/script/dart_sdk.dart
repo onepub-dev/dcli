@@ -148,12 +148,12 @@ class DartSdk {
   }
 
   /// Run the dart exe with arguments.
-  Progress run(
-      {required List<String> args,
-      String? workingDirectory,
-      Progress? progress,
-      bool nothrow = false,
-      }) {
+  Progress run({
+    required List<String> args,
+    String? workingDirectory,
+    Progress? progress,
+    bool nothrow = false,
+  }) {
     progress ??= Progress.print();
 
     if (pathToDartExe == null) {
