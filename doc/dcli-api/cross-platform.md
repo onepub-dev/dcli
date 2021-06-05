@@ -219,5 +219,25 @@ There is a [glob](https://pub.dev/packages/glob) package on pub.dev that will he
 
 Naming conventions for executables differ between Linux/Mac OS and Windows.
 
-On a linux system a executable normally doesn't have a file extension.
+On a Linux system a executable normally doesn't have a file extension. On Windows the file extension is .exe.
+
+Further confusion is caused on Windows as when you enter a command such as 'regedit' on a terminal then Windows will search for regedit with a range of extensions such as .exe., .com, .bat, .msi ...
+
+Windows takes the list of extension from the PATHEX environment variable.
+
+To assist with finding the correct extension the DCli `which` function will search for a matching application with each of the extensions in PATHEX.
+
+```dart
+which('pub');
+> linux -> pub
+> windows -> pub.bat
+```
+
+This is intended to make it easier to run a command that may have different extensions on different OSs.
+
+You can disable this search behaviour by setting extensionSearch to false:
+
+```dart
+which('pub', extensionSearch: false);
+```
 
