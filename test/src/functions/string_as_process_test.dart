@@ -1,6 +1,3 @@
-@Timeout(Duration(seconds: 600))
-
-import 'dart:io';
 
 import 'package:dcli/src/util/file_sync.dart';
 import 'package:dcli/src/util/runnable_process.dart';
