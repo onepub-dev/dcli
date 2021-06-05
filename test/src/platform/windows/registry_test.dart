@@ -28,6 +28,8 @@ void main() {
   });
 
   test('devmode', () {
+    expect(Shell.current.isPrivilegedUser, isTrue);
+
     if (Shell.current.isPrivilegedUser) {
       var original = 0;
 
