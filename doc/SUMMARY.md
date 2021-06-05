@@ -20,8 +20,8 @@
 
 * [Overview](dcli-api/overview.md)
 * [Using DCli functions](dcli-api/using-dcli-functions.md)
-* [User input](dcli-api/user-input.md)
-* [Ask Validators](dcli-api/ask-validators.md)
+* [User input](dcli-api/user-input/README.md)
+  * [Ask Validators](dcli-api/user-input/ask-validators.md)
 * [Displaying information](dcli-api/displaying-information.md)
 * [Managing Files And Directories](dcli-api/managing-files-and-directories.md)
 * [Environment variables](dcli-api/environment-variables.md)
@@ -66,9 +66,9 @@
 ---
 
 * [Contributing](contributing/README.md)
+  * [Creating a release](contributing/creating-a-release.md)
   * [Running Unit tests](contributing/running-unit-tests.md)
   * [Implemention support for a shell](contributing/implemention-support-for-a-shell.md)
-* [Creating a release](creating-a-release.md)
 * [References](references.md)
 
 ## Examples
