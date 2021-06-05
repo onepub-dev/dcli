@@ -91,7 +91,8 @@ void main() {
           delete(testFile);
         }
 
-        'touch $testFile'.start(detached: true, runInShell: true);
+        'touch $testFile'
+            .start(detached: true, runInShell: true);
 
         // we have ran a detached process. Wait for up to 10 seconds
         // for it to create the file.

@@ -80,11 +80,14 @@ import 'pwd.dart';
 ///     [start] or [startCommandLine] for methods that allow you to
 ///      process data rather than just outputing it to the cli.
 ///
-int? run(String commandLine,
-    {bool runInShell = false,
-    bool nothrow = false,
-    bool privileged = false,
-    String? workingDirectory}) {
+int? run(
+  String commandLine, {
+  bool runInShell = false,
+  bool nothrow = false,
+  bool privileged = false,
+  String? workingDirectory,
+  bool extensionSearch = true,
+}) {
   workingDirectory ??= pwd;
 
   final runnable = RunnableProcess.fromCommandLine(commandLine,
@@ -97,6 +100,7 @@ int? run(String commandLine,
         terminal: false,
         privileged: privileged,
         nothrow: nothrow,
+        extensionSearch: extensionSearch,
       )
       .exitCode;
 }
@@ -155,6 +159,7 @@ Progress startFromArgs(
   bool privileged = false,
   bool nothrow = false,
   String? workingDirectory,
+  bool extensionSearch = true,
 }) {
   progress ??= Progress.print();
   workingDirectory ??= pwd;
@@ -168,6 +173,7 @@ Progress startFromArgs(
     terminal: terminal,
     privileged: privileged,
     nothrow: nothrow,
+    extensionSearch: extensionSearch,
   );
 }
 
@@ -225,7 +231,8 @@ Progress start(String commandLine,
     bool terminal = false,
     bool nothrow = false,
     bool privileged = false,
-    String? workingDirectory}) {
+    String? workingDirectory,
+    bool extensionSearch = true}) {
   workingDirectory ??= pwd;
   final runnable = RunnableProcess.fromCommandLine(commandLine,
       workingDirectory: workingDirectory);
@@ -237,6 +244,7 @@ Progress start(String commandLine,
     terminal: terminal,
     privileged: privileged,
     nothrow: nothrow,
+    extensionSearch: extensionSearch,
   );
 }
 
@@ -257,12 +265,15 @@ Progress start(String commandLine,
 ///
 /// Current [privileged] is only supported under Linux.
 ///
-Progress startStreaming(String commandLine,
-    {Progress? progress,
-    bool runInShell = false,
-    bool nothrow = false,
-    bool privileged = false,
-    String? workingDirectory}) {
+Progress startStreaming(
+  String commandLine, {
+  Progress? progress,
+  bool runInShell = false,
+  bool nothrow = false,
+  bool privileged = false,
+  String? workingDirectory,
+  bool extensionSearch = true,
+}) {
   workingDirectory ??= pwd;
   final runnable = RunnableProcess.fromCommandLine(commandLine,
       workingDirectory: workingDirectory);
@@ -272,5 +283,6 @@ Progress startStreaming(String commandLine,
     runInShell: runInShell,
     privileged: privileged,
     nothrow: nothrow,
+    extensionSearch: extensionSearch,
   );
 }

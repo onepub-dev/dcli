@@ -7,9 +7,7 @@ void main() {
   test('start with progress', () {
     final result = <String?>[];
     'echo hi'.start(
-      runInShell: true,
-      progress: Progress(result.add, stderr: result.add),
-    );
+        runInShell: true, progress: Progress(result.add, stderr: result.add));
 
     expect(result, orderedEquals(<String>['hi']));
   });
@@ -24,10 +22,7 @@ void main() {
         ..append('Line 5/5');
 
       final progress = Progress.stream();
-      'tail $file'.start(
-        progress: progress,
-        runInShell: true,
-      );
+      'tail $file'.start(progress: progress, runInShell: true);
 
       final done = Completer<void>();
       progress.stream.listen((event) {
@@ -48,9 +43,7 @@ void main() {
         ..append('Line 4/5')
         ..append('Line 5/5');
 
-      final stream = 'tail $file'.stream(
-        runInShell: true,
-      );
+      final stream = 'tail $file'.stream(runInShell: true);
 
       final done = Completer<void>();
       stream.listen((event) {
@@ -73,9 +66,7 @@ void main() {
         ..append('Line 4/5')
         ..append('Line 5/5');
 
-      final stream = 'tail -f $file'.stream(
-          // runInShell: true,
-          );
+      final stream = 'tail -f $file'.stream();
 
       final done = Completer<void>();
       var linesRead = 0;
@@ -114,9 +105,7 @@ void main() {
         ..append('Line 4/5')
         ..append('Line 5/5');
       Settings().setVerbose(enabled: true);
-      final stream = 'tail -n 100 $file'.stream(
-          // runInShell: true,
-          );
+      final stream = 'tail -n 100 $file'.stream();
 
       final done = Completer<void>();
       stream.listen((event) {

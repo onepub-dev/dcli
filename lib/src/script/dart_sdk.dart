@@ -132,7 +132,7 @@ class DartSdk {
     }
 
     process
-      ..start()
+      ..start(extensionSearch: false)
       ..processUntilExit(progress, nothrow: false);
   }
 
@@ -152,7 +152,8 @@ class DartSdk {
       {required List<String> args,
       String? workingDirectory,
       Progress? progress,
-      bool nothrow = false}) {
+      bool nothrow = false,
+      }) {
     progress ??= Progress.print();
 
     if (pathToDartExe == null) {
@@ -162,7 +163,8 @@ class DartSdk {
     startFromArgs(pathToDartExe!, args,
         nothrow: nothrow,
         progress: progress,
-        workingDirectory: workingDirectory);
+        workingDirectory: workingDirectory,
+        extensionSearch: false);
     verbose(() => 'dart ${args.toList().join(' ')} finished.');
 
     return progress;
@@ -191,7 +193,8 @@ class DartSdk {
       startFromArgs(pathToDartExe!, ['pub', ...args],
           nothrow: nothrow,
           progress: progress,
-          workingDirectory: workingDirectory);
+          workingDirectory: workingDirectory,
+          extensionSearch: false);
     } else {
       if (pathToPubExe == null) {
         throw DCliException(
@@ -201,7 +204,8 @@ class DartSdk {
       startFromArgs(pathToPubExe!, args,
           nothrow: nothrow,
           progress: progress,
-          workingDirectory: workingDirectory);
+          workingDirectory: workingDirectory,
+          extensionSearch: false);
     }
     verbose(() => 'dart pub ${args.toList().join(' ')} finished.');
 

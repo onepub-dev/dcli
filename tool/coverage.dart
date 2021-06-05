@@ -14,11 +14,11 @@ import 'package:dcli/dcli.dart';
 void main() {
   print('Hello World');
 
-  'dart pub global run coverage:collect_coverage --out=coverage/coverage.json --resume-isolates --wait-paused'
-      .start(detached: true);
+  '${DartSdk().pathToDartExe} pub global run coverage:collect_coverage --out=coverage/coverage.json --resume-isolates --wait-paused'
+      .start(detached: true, extensionSearch: false);
 
-  'dart --observe test/.test_coverage.dart'.run;
+  '${DartSdk().pathToDartExe} --observe test/.test_coverage.dart'.run;
 
-  'dart pub global run coverage:format_coverage --packages=${DartSdk().pathToPackageConfig} --in=coverage/coverage.json --lcov --report-on=lib --out=coverage/lcov.info'
+  '${DartSdk().pathToDartExe} pub global run coverage:format_coverage --packages=${DartSdk().pathToPackageConfig} --in=coverage/coverage.json --lcov --report-on=lib --out=coverage/lcov.info'
       .run;
 }

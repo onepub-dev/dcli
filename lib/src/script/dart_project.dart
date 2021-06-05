@@ -166,7 +166,7 @@ class DartProject {
           '${DCliPaths().dcliName} '
                   '-v=${join(Directory.systemTemp.path, 'dcli.warmup.log')}'
                   ' warmup $pathToProjectRoot'
-              .start(detached: true, runInShell: true);
+              .start(detached: true, runInShell: true, extensionSearch: false);
         } else {
           // print(orange('Running pub get...'));
           _pubget();

@@ -22,8 +22,11 @@ void main() {
       final found = <String?>[];
 
       // TODO(bsutton): the progress is a hack to get around the fact that for each is currently broken. https://github.com/bsutton/dcli/issues/144
-      start(command, workingDirectory: path, progress: Progress.capture())
-          .forEach(found.add);
+      start(
+        command,
+        workingDirectory: path,
+        progress: Progress.capture(),
+      ).forEach(found.add);
 
       expect(found, <String>['one.txt', 'two.txt']);
     });
@@ -65,11 +68,14 @@ void main() {
   }, skip: true);
 
   test('Process stderr and stdout', () {
-    final progress =
-        'dart test/test_script/general/bin/print_to_both_with_error.dart'.start(
-            runInShell: true,
-            progress: Progress.print(capture: true),
-            nothrow: true);
+    final progress = DartSdk().run(
+      args: [
+        join('test', 'test_script', 'general', 'bin',
+            'print_to_both_with_error.dart')
+      ],
+      progress: Progress.print(capture: true),
+      nothrow: true,
+    );
     expect(progress.exitCode, equals(25));
     final lines = progress.lines;
     expect(lines.join('\n').contains('Hello World - StdOut'), isTrue);

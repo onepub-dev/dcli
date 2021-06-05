@@ -115,14 +115,19 @@ class RunnableProcess {
   ///
   /// Current [privileged] is only supported under Linux.
   ///
-  Progress runStreaming(
-      {Progress? progress,
-      bool runInShell = false,
-      bool privileged = false,
-      bool nothrow = false}) {
+  Progress runStreaming({
+    Progress? progress,
+    bool runInShell = false,
+    bool privileged = false,
+    bool nothrow = false,
+    bool extensionSearch = true,
+  }) {
     progress ??= Progress.devNull();
 
-    start(runInShell: runInShell, privileged: privileged);
+    start(
+        runInShell: runInShell,
+        privileged: privileged,
+        extensionSearch: extensionSearch);
     processStream(progress, nothrow: nothrow);
 
     return progress;
@@ -160,6 +165,7 @@ class RunnableProcess {
     bool detached = false,
     bool privileged = false,
     bool nothrow = false,
+    bool extensionSearch = true,
   }) {
     progress ??= Progress.print();
 
@@ -168,7 +174,8 @@ class RunnableProcess {
           runInShell: runInShell,
           detached: detached,
           terminal: terminal,
-          privileged: privileged);
+          privileged: privileged,
+          extensionSearch: extensionSearch);
       if (terminal == true) {
         /// we can't process io as the terminal
         // has inherited the IO so we dont' see it.
@@ -213,6 +220,7 @@ class RunnableProcess {
     bool waitForStart = true,
     bool terminal = false,
     bool privileged = false,
+    bool extensionSearch = true,
   }) {
     var workdir = workingDirectory;
     workdir ??= Directory.current.path;
@@ -223,6 +231,10 @@ class RunnableProcess {
     var mode = detached ? ProcessStartMode.detached : ProcessStartMode.normal;
     if (terminal) {
       mode = ProcessStartMode.inheritStdio;
+    }
+
+    if (Platform.isWindows && extensionSearch) {
+      _parsed.cmd = _searchForCommandExtension(_parsed.cmd, workingDirectory);
     }
 
     /// On linux/osx if this needs to be a privileged operation
@@ -472,6 +484,36 @@ class RunnableProcess {
       _stderrFlushed.complete();
       _stderrCompleter.complete(true);
     });
+  }
+
+  String _searchForCommandExtension(String cmd, String? workingDirectory) {
+    // if the cmd has an extension they we don't need to find
+    // its extension.
+    if (extension(cmd).isNotEmpty) {
+      return cmd;
+    }
+
+    // if the cmd has a path then
+    // we only search the cmd's directory
+    if (dirname(cmd) != '.') {
+      final resolvedPath = join(workingDirectory ?? '.', dirname(cmd));
+      return _findExtension(basename(cmd), resolvedPath);
+    }
+
+    // just the cmd so run which with searchExtension.
+    return which(cmd).path ?? cmd;
+  }
+
+  ///  Searches for a file in [workingDirectory] that matches [basename]
+  ///  with one of the defined Windows extensions
+  String _findExtension(String basename, String workingDirectory) {
+    for (final extension in env['PATHEXT']!.split(';')) {
+      final cmd = '$basename$extension';
+      if (exists(join(workingDirectory, cmd))) {
+        return cmd;
+      }
+    }
+    return basename;
   }
 }
 
