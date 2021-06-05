@@ -145,14 +145,12 @@ void main() {
     });
 
     t.test('toList - nothrow', () {
-      TestFileSystem().withinZone((fs) {
         final result = 'ls *.fasdafefe'.toList(nothrow: true);
         t.expect(
             result,
             t.equals([
               "ls: cannot access '*.fasdafefe': No such file or directory"
             ]));
-      });
     });
 
     t.test('toList - exception nothrow=false', () {

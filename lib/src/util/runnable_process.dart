@@ -501,7 +501,7 @@ class RunnableProcess {
     }
 
     // just the cmd so run which with searchExtension.
-    return which(cmd).path ?? cmd;
+    return basename(which(cmd).path ?? cmd);
   }
 
   ///  Searches for a file in [workingDirectory] that matches [basename]
