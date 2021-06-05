@@ -42,24 +42,44 @@ class BashShell with ShellMixin, PosixShell {
     }
   }
 
-  /// Adds the given path to the bash path if it isn't
-  /// already on teh path.
   @override
-  bool addToPATH(String path) {
+  @Deprecated('Use appendToPATH')
+  bool addToPATH(String path) => appendToPATH(path);
+
+  /// Appends the given path to the bash path if it isn't
+  /// already on the path.
+  @override
+  bool appendToPATH(String path) {
     if (!isOnPATH(path)) {
       final export = 'export PATH=\$PATH:$path';
-
-      final rcPath = pathToStartScript;
-
-      if (!exists(rcPath)) {
-        rcPath.write(export);
-      } else {
-        rcPath.append(export);
-      }
+      _updatePATH(export);
     }
     return true;
   }
 
+  /// Prepends the given path to the bash path if it isn't
+  /// already on the path.
+  @override
+  bool prependToPATH(String path) {
+    if (!isOnPATH(path)) {
+      final export = 'export PATH=$path:\$PATH';
+      _updatePATH(export);
+    }
+    return true;
+  }
+
+  void _updatePATH(String export) {
+    final rcPath = pathToStartScript;
+
+    if (!exists(rcPath)) {
+      rcPath.write(export);
+    } else {
+      rcPath.append(export);
+    }
+  }
+
+  /// Returns true if the dcil_complete has
+  /// been installed as a bash auto completer
   @override
   bool get isCompletionInstalled {
     var completeInstalled = false;

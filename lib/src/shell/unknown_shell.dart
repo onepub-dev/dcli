@@ -1,5 +1,7 @@
 import 'dart:io';
 
+import 'package:uuid/uuid.dart';
+
 import '../../dcli.dart';
 import '../installers/linux_installer.dart';
 import '../installers/macosx_installer.dart';
@@ -25,21 +27,34 @@ class UnknownShell with ShellMixin {
   @override
   final int? pid;
 
-  /// the name of the process
+  @override
+  @Deprecated('Use appendToPATH')
+  bool addToPATH(String path) => false;
 
   @override
-  bool addToPATH(String path) {
+  bool appendToPATH(String path) {
     if (Settings().isMacOS) {
-      return addPathToMacOsPathd(path);
+      return appendPathToMacOsPathd(path);
     } else if (Settings().isLinux) {
-      return _addPathToLinuxPATH(path);
+      return _appendToLinuxPath(path);
+    } else {
+      return false;
+    }
+  }
+
+  @override
+  bool prependToPATH(String path) {
+    if (Settings().isMacOS) {
+      return false;
+    } else if (Settings().isLinux) {
+      return _prependToLinuxPath(path);
     } else {
       return false;
     }
   }
 
   ///
-  bool addPathToMacOsPathd(String path) {
+  bool appendPathToMacOsPathd(String path) {
     var success = false;
     if (!isOnPATH(path)) {
       final macOSPathPath = join(rootPath, 'etc', 'path.d');
@@ -49,27 +64,36 @@ class UnknownShell with ShellMixin {
           createDir(macOSPathPath, recursive: true);
         }
         if (exists(macOSPathPath)) {
-          join(macOSPathPath, 'dcli').write(path);
+          join(macOSPathPath, 'dcli${const Uuid().v4()}').write(path);
         }
         success = true;
       }
       // ignore: avoid_catches_without_on_clauses
       catch (e) {
         // ignore write permission problems.
-        printerr(red(
-            "Unable to add dcli/bin to path as we couldn't write to $macOSPathPath"));
+        printerr(red("Unable to add $path to path as we couldn't write "
+            'to $macOSPathPath'));
       }
     }
     return success;
   }
 
-  bool _addPathToLinuxPATH(String path) {
+  bool _appendToLinuxPath(String newPath) {
+    final export = 'export PATH=\$PATH:$newPath';
+    return _updateLinuxPath(newPath, export);
+  }
+
+  bool _prependToLinuxPath(String newPath) {
+    final export = 'export PATH=\$PATH:$newPath';
+    return _updateLinuxPath(newPath, export);
+  }
+
+  bool _updateLinuxPath(String path, String export) {
     var success = false;
     if (!isOnPATH(path)) {
       final profile = join(HOME, '.profile');
       try {
         if (exists(profile)) {
-          final export = 'export PATH=\$PATH:$path';
           if (!read(profile).toList().contains(export)) {
             profile.append(export);
             success = true;

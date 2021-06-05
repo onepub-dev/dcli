@@ -46,7 +46,14 @@ class ZshShell with ShellMixin, PosixShell {
   String get pathToStartScript => join(HOME, startScriptName);
 
   @override
+  @Deprecated('Use appendToPATH')
   bool addToPATH(String path) => false;
+
+  @override
+  bool appendToPATH(String path) => false;
+
+  @override
+  bool prependToPATH(String path) => false;
 
   @override
   void addFileAssocation(String dcliPath) {

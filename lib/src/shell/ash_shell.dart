@@ -32,7 +32,14 @@ class AshShell with ShellMixin, PosixShell {
   String get name => shellName;
 
   @override
+  @Deprecated('Use appendToPATH')
   bool addToPATH(String path) => false;
+  
+  @override
+  bool appendToPATH(String path) => false;
+
+  @override
+  bool prependToPATH(String path) => false;
 
   @override
   bool get isCompletionInstalled => false;
