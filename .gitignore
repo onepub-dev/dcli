@@ -53,3 +53,4 @@ tool/post_release_hook/.settings.yaml
 .git_old
 .testing
 test/sudo/privileges
+tool/post_release_hook/settings.yaml

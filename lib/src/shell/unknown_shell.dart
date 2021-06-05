@@ -202,7 +202,7 @@ class UnknownShell with ShellMixin {
     if (Platform.isWindows) {
       return 'Run dcli install';
     } else {
-      return r'Run sudo env "PATH=$PATH" dcli_install';
+      return r'Run sudo env "PATH=$PATH" dcli install';
     }
   }
 }
