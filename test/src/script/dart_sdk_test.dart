@@ -67,8 +67,5 @@ void main() {
         'hello_world.dart');
     DartSdk().run(args: [hellow]);
     print('done 1');
-
-    hellow.run;
-    print('done 2');
   });
 }
