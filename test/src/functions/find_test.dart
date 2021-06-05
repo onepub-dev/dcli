@@ -28,6 +28,33 @@ void main() {
       expect(foundDirs, t.unorderedEquals(rootDirs));
     });
 
+    test('Large directory tree', () {
+      withTempDir((root) {
+        var expected = <String>[];
+        for (var i = 0; i < 110; i++) {
+          final path = join(root, '$i');
+          createDir(path, recursive: true);
+          final pathToLicense = join(path, 'LICENSE$i');
+          touch(pathToLicense, create: true);
+          expected..add(path)..add(pathToLicense);
+        }
+// /mnt/c/Users/Brett/AppData/Local/Pub/Cache/hosted/pub.dartlang.org'
+        expected = expected
+            //map((path) => join(rootPath, relative(path, from: '/mnt/c')))
+            .toList()
+              ..sort((lhs, rhs) => lhs.compareTo(rhs));
+
+        final actual = find('*',
+                includeHidden: true,
+                types: [Find.directory, Find.file],
+                workingDirectory: root,
+                recursive: true)
+            .toList()
+              ..sort((lhs, rhs) => lhs.compareTo(rhs));
+
+        expect(actual, t.orderedEquals(expected));
+      });
+    });
     test('Recurse entire filesystem', () {
       // var count = 1;
 

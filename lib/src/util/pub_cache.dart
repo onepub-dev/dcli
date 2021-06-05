@@ -109,6 +109,11 @@ class PubCache {
   /// where executables from installed packages are stored.
   String get pathToBin => _pubCacheBinPath;
 
+  /// Path to the pub cache hosted directory
+  /// hosted/pub.dartlang.org
+  String get pathToHosted =>
+      truepath(_pubCachePath, 'hosted', 'pub.dartlang.org');
+
   /// Returns the directory name of the pub cache.
   ///
   /// e.g.
