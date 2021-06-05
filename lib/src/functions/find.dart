@@ -197,7 +197,6 @@ class Find extends DCliFunction {
     return _progress;
   }
 
-  int count = 0;
   Future<void> _processDirectory(
       String workingDirectory,
       String currentDirectory,
@@ -211,16 +210,10 @@ class Find extends DCliFunction {
     var nextLevelIndex = 0;
 
     final completer = Completer<void>();
-    count = 0;
 
     lister.listen(
       (entity) async {
         final type = FileSystemEntity.typeSync(entity.path);
-        count++;
-        // if (entity.path.endsWith(r'_fe_analyzer_shared-12.0.0\LICENSE')) {
-        if (entity.path.contains(r'http-0.12.2')) {
-          print(entity.path);
-        }
         if (types.contains(type) &&
             matcher.match(entity.path) &&
             _allowed(

@@ -44,13 +44,13 @@ void main() {
             .toList()
               ..sort((lhs, rhs) => lhs.compareTo(rhs));
 
-        final actual = find('*',
-                includeHidden: true,
-                types: [Find.directory, Find.file],
-                workingDirectory: root,
-                recursive: true)
-            .toList()
-              ..sort((lhs, rhs) => lhs.compareTo(rhs));
+        final actual = find(
+          '*',
+          includeHidden: true,
+          types: [Find.directory, Find.file],
+          workingDirectory: root,
+        ).toList()
+          ..sort((lhs, rhs) => lhs.compareTo(rhs));
 
         expect(actual, t.orderedEquals(expected));
       });
