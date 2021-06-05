@@ -67,8 +67,8 @@ class CreateCommand extends Command {
         _script = project.createScript(pathToScript);
       } on TemplateNotFoundException catch (e) {
         printerr(red(e.message));
-        print(blue('Install DCli and try again.'));
-        print(Shell.current.installInstructions);
+        print('Install DCli and try again.');
+        print(blue(Shell.current.installInstructions));
         return 1;
       }
 
