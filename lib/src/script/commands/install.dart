@@ -78,7 +78,7 @@ class InstallCommand extends Command {
     _requirePrivileges = !flagSet.isSet(const _NoPrivilegesFlag());
 
     /// We need to be priviledged to create the dcli symlink
-    if (_requirePrivileges && !shell.isPrivilegedUser) {
+    if (_requirePrivileges && Platform.isWindows && !shell.isPrivilegedUser) {
       _qprint(red(shell.privilegesRequiredMessage('dcli_install')));
       exit(1);
     }
