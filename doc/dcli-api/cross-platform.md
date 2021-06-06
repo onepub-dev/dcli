@@ -92,10 +92,10 @@ On Linux/Mac OS you can simply run the script \(assuming it has a shebang at the
 
 On Windows this method won't work as the Dart file association on Windows will only work if you spawn the command via a shell. The problem with spawning the command from a shell is that Windows doesn't appear to return the return value from the spawned script.
 
-The best way to overcome this situation is to prefix the command with `dart` this will work on all of the supported OSs
+The best way to overcome this situation is create an instance of DartScript and run the script using its run method. This technique is guaranteed to be cross platform.
 
 ```dart
-'dart hello.dart'.run
+DartScript.fromFile('hello.dart'.run();
 ```
 
 ## Windows Registry
