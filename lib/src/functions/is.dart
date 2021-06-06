@@ -1,5 +1,7 @@
 import 'dart:io';
 
+import 'package:posix/posix.dart' as posix;
+
 import '../../dcli.dart';
 import '../settings.dart';
 import '../util/dcli_exception.dart';
@@ -183,29 +185,44 @@ class _Is extends DCliFunction {
 
     final user = Shell.current.loggedInUser;
 
-    //e.g 755 tomcat bsutton
-    final stat = 'stat -L -c "%a %G %U" "$path"'.firstLine!;
+    int permissions;
+    String group;
+    String owner;
+    bool otherWritable;
+    bool groupWritable;
+    bool ownerWritable;
 
-    final parts = stat.split(' ');
-
-    final permissions = int.parse(parts[0], radix: 8);
-    final group = parts[1];
-    final owner = parts[2];
-
-    // var group = mode.substring(8,16);
-    // var owner = mode.substring(16,24);
+    try {
+      final _stat = posix.stat(path);
+      group = posix.getgrgid(_stat.gid).name;
+      owner = posix.getUserNameByUID(_stat.uid);
+      final mode = _stat.mode;
+      otherWritable = mode.isOtherWritable;
+      groupWritable = mode.isGroupWritable;
+      ownerWritable = mode.isUserWritable;
+    } on posix.PosixException catch (_) {
+      //e.g 755 tomcat bsutton
+      final stat = 'stat -L -c "%a %G %U" "$path"'.firstLine!;
+      final parts = stat.split(' ');
+      permissions = int.parse(parts[0], radix: 8);
+      group = parts[1];
+      owner = parts[2];
+      //  if (( ($PERM & 0002) != 0 )); then
+      otherWritable = (permissions & permissionBitMask) != 0;
+      groupWritable = (permissions & (permissionBitMask << 3)) != 0;
+      ownerWritable = (permissions & (permissionBitMask << 6)) != 0;
+    }
 
     var access = false;
-    //  if (( ($PERM & 0002) != 0 )); then
-    if ((permissions & permissionBitMask) != 0) {
+    if (otherWritable) {
       // Everyone has write access
       access = true;
-    } else if ((permissions & (permissionBitMask << 3)) != 0) {
+    } else if (groupWritable) {
       // Some groups have write access
       if (isMemberOfGroup(group)) {
         access = true;
       }
-    } else if ((permissions & (permissionBitMask << 6)) != 0) {
+    } else if (ownerWritable) {
       if (user == owner) {
         access = true;
       }
