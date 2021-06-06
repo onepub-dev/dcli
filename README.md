@@ -66,7 +66,7 @@ Dart is currently the [fastest growing language](https://www.linkedin.com/pulse/
 
 You can now use Dart to build GUI's on Android, IOS, Windows, OSX, Linux and the Web, server side applications and with DCli you can also target console apps.
 
-Image the benefits of using a single language across you complete ecosystem.
+Imagine the benefits of using a single language across you complete ecosystem.
 
 Dart is a simple to learn, and uses the all too familiar 'C' style syntax. I've heard Dart described as the love child of Java and JavaScript. If you come from either of these environments you will find Dart easy to work with.
 
