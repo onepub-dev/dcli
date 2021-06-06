@@ -4,7 +4,6 @@ import 'package:test/test.dart';
 
 import 'package:path/path.dart' as p;
 
-import '../../util/test_file_system.dart';
 
 void main() {
   const scriptName = 'create_test.dart';
