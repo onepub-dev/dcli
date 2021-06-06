@@ -12,7 +12,7 @@ You can now build Linux desktop applications using Dart and Flutter. The fact th
 Canonical is redeveloping the Ubuntu installer in Flutter.
 {% endhint %}
 
-If you are not familiar with Dart, it is a new language released by Google and it is now the \[fastest growing\]\([https://www.linkedin.com/pulse/google-dart-tops-githubs-list-fastest-growing-2019-bill-detwiler\#:~:text=According to GitHub's annual %22The,tagged with a primary language](https://www.linkedin.com/pulse/google-dart-tops-githubs-list-fastest-growing-2019-bill-detwiler#:~:text=According%20to%20GitHub's%20annual%20%22The,tagged%20with%20a%20primary%20language).\) language on Github. Flutter is a cross platform graphical framework written in Dart supporting ios, android, windows, linux, osx along with linux arm support \(yes it runs on your raspberry pi\).
+If you are not familiar with Dart, it is a new language released by Google and it is now the [fastest growing ](https://www.linkedin.com/pulse/google-dart-tops-githubs-list-fastest-growing-2019-bill-detwiler)language on GitHub. Flutter is a cross platform graphical framework written in Dart supporting iOS, android, windows, Linux, Mac OS along with Linux arm support \(yes it runs on your raspberry pi\).
 
 {% hint style="info" %}
 Even if you have no intent of using Flutter you should look at Dart for building CLI apps.
@@ -24,7 +24,7 @@ As an old hack that started my career in C and 6502 assembler and has worked pro
 Dart is Delightful to work with.
 {% endhint %}
 
-Dart is easy to learn and the development tooling is really easy to work with. It's often been called the love child of Java and Javascript. It takes the best of these languages and removes the cruft.
+Dart is easy to learn and the development tooling is really easy to work with. It's often been called the love child of Java and JavaScript. It takes the best of these languages and removes the cruft.
 
 At Noojee \(the company I work for\) we have 10s of thousands of lines of CLI code we use to support our production environment. This CLI code had been written in Bash, Perl, Ruby, Go, Rust, Python... In short, it was a mess and hard to maintain.
 
