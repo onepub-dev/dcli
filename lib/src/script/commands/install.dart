@@ -177,9 +177,9 @@ class InstallCommand extends Command {
       final dcliPath = dcliLocation;
       _qprint(blue('dcli found in : $dcliPath.'));
 
-      if (_requirePrivileges) {
-        symlinkDCli(shell, dcliPath);
-      }
+      // if (_requirePrivileges) {
+      //   symlinkDCli(shell, dcliPath);
+      // }
     }
     _qprint('');
 
