@@ -33,6 +33,9 @@ dev_dependencies:
   mocktail: ^0.1.0
   settings_yaml: ^3.0.6
   test: ^1.0.0
+# dependency_overrides:
+#   posix:
+#     path: ../dart_posix
 executables: 
   dcli: dcli
   dcli_complete: dcli_complete
