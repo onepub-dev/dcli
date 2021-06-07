@@ -1,3 +1,6 @@
+# 1.5.4
+removed the dcli symlink for sudo as it just wasn't going to work. 
+
 # 1.5.3
 performance improvements for unit tests.
 restricted the privileged requirements on install to windows.
