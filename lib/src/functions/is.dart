@@ -1,6 +1,6 @@
 import 'dart:io';
 
-import 'package:posix/posix.dart' as posix;
+// import 'package:posix/posix.dart' as posix;
 
 import '../../dcli.dart';
 import '../settings.dart';
@@ -192,26 +192,26 @@ class _Is extends DCliFunction {
     bool groupWritable;
     bool ownerWritable;
 
-    try {
-      final _stat = posix.stat(path);
-      group = posix.getgrgid(_stat.gid).name;
-      owner = posix.getUserNameByUID(_stat.uid);
-      final mode = _stat.mode;
-      otherWritable = mode.isOtherWritable;
-      groupWritable = mode.isGroupWritable;
-      ownerWritable = mode.isUserWritable;
-    } on posix.PosixException catch (_) {
-      //e.g 755 tomcat bsutton
-      final stat = 'stat -L -c "%a %G %U" "$path"'.firstLine!;
-      final parts = stat.split(' ');
-      permissions = int.parse(parts[0], radix: 8);
-      group = parts[1];
-      owner = parts[2];
-      //  if (( ($PERM & 0002) != 0 )); then
-      otherWritable = (permissions & permissionBitMask) != 0;
-      groupWritable = (permissions & (permissionBitMask << 3)) != 0;
-      ownerWritable = (permissions & (permissionBitMask << 6)) != 0;
-    }
+    // try {
+    //   final _stat = posix.stat(path);
+    //   group = posix.getgrgid(_stat.gid).name;
+    //   owner = posix.getUserNameByUID(_stat.uid);
+    //   final mode = _stat.mode;
+    //   otherWritable = mode.isOtherWritable;
+    //   groupWritable = mode.isGroupWritable;
+    //   ownerWritable = mode.isOwnerWritable;
+    // } on posix.PosixException catch (_) {
+    //e.g 755 tomcat bsutton
+    final stat = 'stat -L -c "%a %G %U" "$path"'.firstLine!;
+    final parts = stat.split(' ');
+    permissions = int.parse(parts[0], radix: 8);
+    group = parts[1];
+    owner = parts[2];
+    //  if (( ($PERM & 0002) != 0 )); then
+    otherWritable = (permissions & permissionBitMask) != 0;
+    groupWritable = (permissions & (permissionBitMask << 3)) != 0;
+    ownerWritable = (permissions & (permissionBitMask << 6)) != 0;
+    // }
 
     var access = false;
     if (otherWritable) {
