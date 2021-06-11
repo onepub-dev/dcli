@@ -1,6 +1,6 @@
 # README
 
-See the online [gitbook](https://bsutton.gitbook.io/dcli/) for DCli
+See the online [documentation](https://dcli.noojee.dev) for DCli
 
 
 If you enjoyed DCli maybe you could help out with a sponsorship or just buy me a coffee.
@@ -15,7 +15,8 @@ DCli - pronounced d-cli
 
 # Another Dart tool by Noojee
 
-![Noojee](https://github.com/bsutton/dcli/blob/master/images/noojee-logo.png?raw=true)
+
+<a href="https://noojee.dev">![Noojee](https://github.com/bsutton/dcli/blob/master/images/noojee-logo.png?raw=true)</a>
 
 ## Looking for DShell? You are in the right place.
 
