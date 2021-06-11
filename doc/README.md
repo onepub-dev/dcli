@@ -12,6 +12,10 @@ DCli as featured on Jermaine Oppong package of the week vlog.
 
 But I call it D-cli, not d.c.l.i ;\)
 
+## Another Dart Tool by Noojee
+
+![](.gitbook/assets/noojee-logo.png)
+
 ## Overview
 
 DCli is intended to to allow you to create Command  Line \(CLI\) Applications from simple scripts to full blown CLI apps. 
