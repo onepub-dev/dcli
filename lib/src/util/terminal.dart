@@ -34,6 +34,7 @@ class Terminal {
   /// Factory ctor to get a Termainl
   factory Terminal() => _self;
 
+  // ignore: flutter_style_todos
   /// TODO(bsutton): if we don't have a terminal or ansi isn't support
   /// we need to suppress any ansi codes being output.
 
