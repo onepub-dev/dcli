@@ -116,7 +116,10 @@ class Env extends DCliFunction {
   List<String> get _path {
     final pathEnv = this['PATH'] ?? '';
 
-    return pathEnv.split(delimiterForPATH);
+    return pathEnv
+        .split(delimiterForPATH)
+        .where((value) => value.trim().isNotEmpty)
+        .toList();
   }
 
   /// Returns the value of an environment variable.
