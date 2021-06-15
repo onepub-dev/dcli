@@ -127,14 +127,6 @@ class InstallCommand extends Command {
 
     initTemplates();
 
-    /// create the cache directory.
-    if (!exists(Settings().pathToDCliCache)) {
-      _qprint('');
-      _qprint(
-          blue('Creating Cache directory in: ${Settings().pathToDCliCache}.'));
-      createDir(Settings().pathToDCliCache);
-    }
-
     // create the bin directory
     final binPath = Settings().pathToDCliBin;
     if (!exists(binPath)) {

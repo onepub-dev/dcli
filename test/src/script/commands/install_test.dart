@@ -94,8 +94,6 @@ void main() {
 void checkInstallStructure(TestFileSystem fs) {
   expect(exists(truepath(HOME, '.dcli')), equals(true));
 
-  expect(exists(truepath(HOME, '.dcli', 'cache')), equals(true));
-
   expect(exists(truepath(HOME, '.dcli', 'templates')), equals(true));
 
   final templates =

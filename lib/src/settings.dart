@@ -33,9 +33,6 @@ class Settings {
   /// The directory name of the DCli templates.
   static const templateDir = 'templates';
 
-  /// The directory name of the DCli cache.
-  static const dcliCacheDir = 'cache';
-
   final InternalSettings _settings = InternalSettings();
 
   /// The name of the DCli app. This will
@@ -76,7 +73,7 @@ class Settings {
   }
 
   /// The directory where we store all of dcli's
-  /// configuration files such as the cache.
+  /// configuration files.
   /// This will normally be ~/.dcli
   String get pathToDCli => _dcliPath ??= truepath(p.join(HOME, dcliDir));
 
@@ -90,10 +87,6 @@ class Settings {
 
   /// path to the dcli template directory.
   String get pathToTemplate => p.join(pathToDCli, templateDir);
-
-  /// Path to the dcli cache directory.
-  /// This will normally be ~/.dcli/cache
-  String get pathToDCliCache => p.join(pathToDCli, dcliCacheDir);
 
   /// the list of global flags selected via the cli when dcli
   /// was started.

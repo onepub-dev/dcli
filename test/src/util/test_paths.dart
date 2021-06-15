@@ -10,14 +10,10 @@ import 'package:test/test.dart';
 /// TestPaths sets up an isolated area for unit tests to run without
 /// interfering with your normal dcli install.
 ///
-/// To do this it modifies the folling environment variables:
+/// To do this it modifies the following environment variables:
 ///
 /// HOME = /tmp/dcli/home
 /// PUB_CACHE = /tmp/dcli/.pub_cache
-///
-/// The dcli cache is therefore located at:
-///
-/// /tmp/dcli/cache
 ///
 /// As the unit test suite creates an isolated .pub-cache it will be empty.
 /// As such when the unit tests start dcli is not actually installed in the
@@ -92,12 +88,6 @@ Something went wrong, the dcli path or HOME for unit tests is NOT pointing to /t
     recreateDir(Settings().pathToDCli);
 
     recreateDir(Settings().pathToDCliBin);
-
-    // the cache is normally in .dcliPath
-    // but just in case its not we create it directly
-    recreateDir(Settings().pathToDCliCache);
-
-    // recreateDir(pubCachePath);
 
     testScriptPath = truepath(testRoot, 'scripts');
 

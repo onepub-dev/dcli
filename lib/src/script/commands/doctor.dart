@@ -72,12 +72,12 @@ class DoctorCommand extends Command {
     print('permissions');
     _showPermissions('HOME', HOME);
     _showPermissions('.dcli', Settings().pathToDCli);
-    _showPermissions('cache', Settings().pathToDCliCache);
 
     _showPermissions('templates', Settings().pathToTemplate);
   }
 
   void _printShell() {
+    print('Shell Settings');
     _colprint([r'$SHELL', env['SHELL'] ?? '']);
 
     final shell = Shell.current;
@@ -86,12 +86,12 @@ class DoctorCommand extends Command {
     if (shell.hasStartScript) {
       final startScriptPath = shell.pathToStartScript;
       if (startScriptPath == null) {
-        _colprint(['Shell Start Script', privatePath(startScriptPath!)]);
+        _colprint(['Start Script', privatePath(startScriptPath!)]);
       } else {
-        _colprint(['Shell Start Script', 'not found']);
+        _colprint(['Start Script', 'not found']);
       }
     } else {
-      _colprint(['Shell Start Script', 'not supported by shell']);
+      _colprint(['Start Script', 'not supported by shell']);
     }
   }
 
