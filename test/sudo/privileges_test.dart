@@ -1,5 +1,7 @@
 #! /usr/bin/env dcli
 
+import 'dart:io';
+
 import 'package:dcli/dcli.dart';
 
 import 'package:posix/posix.dart';
@@ -72,17 +74,17 @@ void main() {
       print(e);
       print(st);
     }
-  }, tags: ['sudo']);
+  }, tags: ['sudo'], skip: Platform.isWindows);
 
   test('loggedInUsersHome ...', () async {
     final home = join(rootPath, 'home', env['SUDO_USER']);
     print('sudo logged in user home =$home');
     expect((Shell.current as PosixShell).loggedInUsersHome, home);
-  });
+  }, skip: Platform.isWindows);
 
   test('pub-cache path ...', () async {
     print(orange('pub-cache path =${PubCache().pathTo}'));
     expect(PubCache().pathTo,
         join((Shell.current as PosixShell).loggedInUsersHome, '.pub-cache'));
-  });
+  }, skip: Platform.isWindows);
 }
