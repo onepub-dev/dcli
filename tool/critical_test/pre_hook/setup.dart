@@ -1,5 +1,7 @@
 #! /usr/bin/env dcli
 
+import 'dart:io';
+
 import 'package:dcli/dcli.dart';
 
 ///
@@ -9,6 +11,11 @@ import 'package:dcli/dcli.dart';
 /// So this script forces the test to run serially via the -j1 option.
 ///
 void main(List<String> args) {
+  if (Platform.isWindows && !Shell.current.isPrivilegedUser) {
+    printerr(red('Unit tests must be run with Administrator '
+        'priviliges on Windows'));
+    exit(1);
+  }
   print(orange('Cleaning old test and build artifacts'));
 
   if (exists('/tmp/dcli')) {
@@ -16,25 +23,23 @@ void main(List<String> args) {
     deleteDir('/tmp/dcli');
   }
 
-    final projectRoot = DartProject.fromPath(pwd).pathToProjectRoot;
+  final projectRoot = DartProject.fromPath(pwd).pathToProjectRoot;
   if (!isDCliRunningFromSource()) {
     print(
         'Activating dcli from source so we are testing against latest version');
 
-
     /// run pub get and only display errors.
     DartSdk().globalActivateFromPath(projectRoot);
-
   }
-    /// warm up all test packages.
-    for (final pubspec
-        in find('pubspec.yaml', workingDirectory: projectRoot).toList()) {
-	if (DartSdk().isPubGetRequired(dirname(pubspec)))
-	{
-		print('Running pub get in ${dirname(pubspec)}');
-      		DartSdk().runPubGet(dirname(pubspec));
-	}
+
+  /// warm up all test packages.
+  for (final pubspec
+      in find('pubspec.yaml', workingDirectory: projectRoot).toList()) {
+    if (DartSdk().isPubGetRequired(dirname(pubspec))) {
+      print('Running pub get in ${dirname(pubspec)}');
+      DartSdk().runPubGet(dirname(pubspec));
     }
+  }
 }
 
 /// We need to have a single shared copy of the dcli source
