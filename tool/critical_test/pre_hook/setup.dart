@@ -20,9 +20,16 @@ void main(List<String> args) {
     print(
         'Activating dcli from source so we are testing against latest version');
 
+    final projectRoot = DartProject.fromPath(pwd).pathToProjectRoot;
+
     /// run pub get and only display errors.
-    DartSdk()
-        .globalActivateFromPath(DartProject.fromPath(pwd).pathToProjectRoot);
+    DartSdk().globalActivateFromPath(projectRoot);
+
+    /// warm up all test packages.
+    for (final pubspec
+        in find('pubspec.yaml', workingDirectory: projectRoot).toList()) {
+      DartSdk().runPubGet(dirname(pubspec));
+    }
   }
 }
 
