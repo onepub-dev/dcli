@@ -10,19 +10,21 @@ void main() {
   group('Create Project', () {
     test('Create hello world', () {
       withTempDir((fs) {
-        final pathToScript = truepath(fs, scriptName);
-
         DartProject.fromPath(fs, search: false)
           ..createScript(scriptName, templateName: 'hello_world.dart')
           ..warmup();
 
-        checkProjectStructure(fs, pathToScript);
+        checkProjectStructure(fs, scriptName);
       });
     });
 
     test('Run hello world', () {
       withTempDir((fs) {
-        final pathToScript = truepath(fs, 'hello_world.dart');
+        final pathToScript = truepath(fs, scriptName);
+        DartProject.fromPath(fs, search: false)
+          ..createScript(scriptName, templateName: 'hello_world.dart')
+          ..warmup();
+
         DartScript.fromFile(pathToScript).run();
       });
     });
@@ -54,7 +56,7 @@ void checkProjectStructure(String rootPath, String scriptName) {
     includeHidden: true,
   ).forEach(
     (line) => files.add(
-      p.relative(line, from: join(rootPath, scriptName)),
+      p.relative(line, from: rootPath),
     ),
   );
 
@@ -65,7 +67,7 @@ void checkProjectStructure(String rootPath, String scriptName) {
   expect(
       files,
       unorderedEquals(<String>[
-        'hello_world.dart',
+        scriptName,
         'pubspec.yaml',
         'pubspec.lock',
         'analysis_options.yaml',
@@ -78,7 +80,7 @@ void checkProjectStructure(String rootPath, String scriptName) {
 
   find('*',
           recursive: false,
-          workingDirectory: join(rootPath, scriptName),
+          workingDirectory: rootPath,
           types: [Find.directory],
           includeHidden: true)
       .forEach((line) => directories.add(p.basename(line)));
