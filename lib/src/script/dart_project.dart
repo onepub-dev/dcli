@@ -363,8 +363,15 @@ class DartProject {
   /// The name used in the pubspec.yaml must come from the character
   ///  set [a-z0-9_]
   /// so wer replace any invalid character with an '_'.
-  String _replaceInvalidCharactersForName(String proposedName) =>
-      proposedName.replaceAll(RegExp('[^a-zA-Z0-9_]'), '_');
+  String _replaceInvalidCharactersForName(String proposedName) {
+    var fixed = proposedName.replaceAll(RegExp('[^a-zA-Z0-9_]'), '_');
+
+    /// must start with an alpha.
+    if (RegExp('[a-zA-Z]').matchAsPrefix(fixed) == null) {
+      fixed = 'a$fixed';
+    }
+    return fixed;
+  }
 }
 
 /// Exception for issues with DartProjects.
