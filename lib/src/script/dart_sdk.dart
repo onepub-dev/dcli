@@ -152,6 +152,8 @@ class DartSdk {
     required List<String> args,
     String? workingDirectory,
     Progress? progress,
+    bool detached = false,
+    bool terminal = false,
     bool nothrow = false,
   }) {
     progress ??= Progress.print();
@@ -162,6 +164,8 @@ class DartSdk {
     }
     startFromArgs(pathToDartExe!, args,
         nothrow: nothrow,
+        detached: detached,
+        terminal: terminal,
         progress: progress,
         workingDirectory: workingDirectory,
         extensionSearch: false);
