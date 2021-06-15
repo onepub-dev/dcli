@@ -1,4 +1,6 @@
 @Timeout(Duration(minutes: 10))
+import 'dart:io';
+
 import 'package:dcli/dcli.dart' hide equals;
 import 'package:dcli/src/functions/env.dart';
 import 'package:mocktail/mocktail.dart';
@@ -11,7 +13,7 @@ import '../../util/test_file_system.dart';
 void main() {
   group('Install DCli', () {
     test('warmup install', () {
-      expect(Shell.current.isPrivilegedUser, isTrue);
+      expect(!Platform.isWindows || Shell.current.isPrivilegedUser, isTrue);
       TestFileSystem(useCommonPath: false).withinZone((fs) {
         try {
           Shell.current.install();
