@@ -16,21 +16,25 @@ void main(List<String> args) {
     deleteDir('/tmp/dcli');
   }
 
+    final projectRoot = DartProject.fromPath(pwd).pathToProjectRoot;
   if (!isDCliRunningFromSource()) {
     print(
         'Activating dcli from source so we are testing against latest version');
 
-    final projectRoot = DartProject.fromPath(pwd).pathToProjectRoot;
 
     /// run pub get and only display errors.
     DartSdk().globalActivateFromPath(projectRoot);
 
+  }
     /// warm up all test packages.
     for (final pubspec
         in find('pubspec.yaml', workingDirectory: projectRoot).toList()) {
-      DartSdk().runPubGet(dirname(pubspec));
+	if (DartSdk().isPubGetRequired(dirname(pubspec)))
+	{
+		print('Running pub get in ${dirname(pubspec)}');
+      		DartSdk().runPubGet(dirname(pubspec));
+	}
     }
-  }
 }
 
 /// We need to have a single shared copy of the dcli source
