@@ -72,7 +72,7 @@ class NamedLock {
   /// a hard lock. A port can only be opened once
   /// so its the perfect way to create a lock that works
   /// across processes and isolates.
-  final int port = 63424;
+  final int port = 9003;
   late String _lockPath;
 
   /// The name of the lock.
@@ -230,6 +230,7 @@ class NamedLock {
   /// take a lock and delete the orphaned lock.
   bool _takeLock(String? waiting) {
     var taken = false;
+    verbose(() => '_takeLock called');
 
     var finalwaiting = waiting;
 
@@ -244,6 +245,7 @@ class NamedLock {
     }
 
     while (!taken && waitCount > 0) {
+      verbose(() => 'entering withHardLock $waitCount');
       _withHardLock(fn: () {
         /// Ensure that that the lockfile directory exists.
         if (!exists(_lockPath)) {
@@ -339,33 +341,12 @@ class NamedLock {
 
   void _withHardLock({
     required void Function() fn,
-    Duration timeout = const Duration(seconds: 30),
   }) {
-    RawServerSocket? socket;
-
-    var waitCount = -1;
-
-    waitCount = timeout.inMilliseconds ~/ 100;
-    // ensure at least one retry.
-    if (waitCount == 0) {
-      waitCount = 1;
-    }
+    ServerSocket? socket;
 
     try {
-      while (socket == null) {
-        socket = waitForEx<RawServerSocket?>(_bindSocket());
-        if (waitCount > 0) {
-          waitCount--;
-        }
-
-        if (waitCount == 0) {
-          // we have timed out
-          break;
-        }
-        if (socket == null) {
-          waitForEx<void>(Future.delayed(const Duration(milliseconds: 100)));
-        }
-      }
+      verbose(() => 'attempt bindSocket');
+      socket = waitForEx<ServerSocket?>(_bindSocket());
 
       if (socket != null) {
         _log(blue('Hardlock taken'));
@@ -379,15 +360,16 @@ class NamedLock {
     }
   }
 
-  Future<RawServerSocket?> _bindSocket() async {
-    RawServerSocket? socket;
+  Future<ServerSocket?> _bindSocket() async {
+    ServerSocket? socket;
     try {
-      socket = await RawServerSocket.bind(
+      socket = await ServerSocket.bind(
         '127.0.0.1',
         port,
       );
-    } on SocketException catch (_) {
+    } on SocketException catch (e) {
       /// no op. We expect this if the hardlock is already held.
+      verbose(e.toString);
     }
     return socket;
   }
