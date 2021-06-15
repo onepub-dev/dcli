@@ -42,6 +42,9 @@ class DoctorCommand extends Command {
     _printExePaths();
     print('');
 
+    _printPubCache();
+    print('');
+
     _printPackageConfig();
     print('');
 
@@ -74,6 +77,8 @@ class DoctorCommand extends Command {
     _showPermissions('.dcli', Settings().pathToDCli);
 
     _showPermissions('templates', Settings().pathToTemplate);
+
+    _showPermissions('pub cache', PubCache().pathTo);
   }
 
   void _printShell() {
@@ -81,17 +86,17 @@ class DoctorCommand extends Command {
     _colprint([r'$SHELL', env['SHELL'] ?? '']);
 
     final shell = Shell.current;
-    _colprint(['detected SHELL', shell.name]);
+    _colprint(['detected', shell.name]);
 
     if (shell.hasStartScript) {
       final startScriptPath = shell.pathToStartScript;
       if (startScriptPath == null) {
-        _colprint(['Start Script', privatePath(startScriptPath!)]);
+        _colprint(['Start script', privatePath(startScriptPath!)]);
       } else {
-        _colprint(['Start Script', 'not found']);
+        _colprint(['Start script', 'not found']);
       }
     } else {
-      _colprint(['Start Script', 'not supported by shell']);
+      _colprint(['Start sript', 'not supported by shell']);
     }
   }
 
@@ -104,10 +109,18 @@ class DoctorCommand extends Command {
 
   void _printPackageConfig() {
     if (Platform.packageConfig == null) {
-      _colprint(['package Config', 'not passed']);
+      _colprint(['package config', 'not passed']);
     } else {
-      _colprint(['package Config', privatePath(Platform.packageConfig!)]);
+      _colprint(['package config', privatePath(Platform.packageConfig!)]);
     }
+  }
+
+  void _printPubCache() {
+    final pathToPubCache = PubCache().pathTo;
+    _colprint(['pub cache', privatePath(pathToPubCache)]);
+
+    _colprint(
+        ['PUB_CACHE Env', '${envs.containsKey(PubCache.envVarPubCache)}']);
   }
 
   void _printExePaths() {
@@ -168,7 +181,7 @@ class DoctorCommand extends Command {
 
   void _printPlatform() {
     _colprint(['OS', Platform.operatingSystem]);
-    print(Format.row(['OS Version', Platform.operatingSystemVersion],
+    print(Format.row(['OS version', Platform.operatingSystemVersion],
         widths: [17, -1]));
     _colprint(['path separator', Platform.pathSeparator]);
     print('');
