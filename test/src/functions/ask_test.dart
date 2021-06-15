@@ -24,7 +24,7 @@ void main() {
         () => validator.validate('!'),
         throwsA(predicate<AskValidatorException>((e) =>
             e is AskValidatorException &&
-            e.message == r'Input does not match: ^[a-zA-Z0-9_\-]+')));
+            e.message == red(r'Input does not match: ^[a-zA-Z0-9_\-]+'))));
 
     expect(validator.validate('_'), '_');
   }, skip: false);
@@ -86,9 +86,8 @@ void main() {
 
     expect(
         () => validator.validate('9'),
-        throwsA(isA<AskValidatorException>().having((e) =>
-            e.message, 'message', equals(
-            red('The number must be greater than or equal to 10.')))));
+        throwsA(isA<AskValidatorException>().having((e) => e.message, 'message',
+            equals(red('The number must be greater than or equal to 10.')))));
   });
 
   test('ask.integer - failure', () {
