@@ -104,6 +104,8 @@ class NamedLock {
       try {
         _log('lockcount = $_lockCountForName');
 
+        _createLockPath();
+
         if (_lockCountForName > 0 || _takeLock(waiting)) {
           lockHeld = true;
           incLockCount;
@@ -130,6 +132,17 @@ class NamedLock {
         throw DCliException.from(e, callingStackTrace);
       }
     });
+  }
+
+  void _createLockPath() {
+    if (!exists(_lockPath)) {
+      try {
+        createDir(_lockPath, recursive: true);
+      } on CreateDirException catch (_) {
+        /// we can get a race condition on the
+        /// create so just ignore it.
+      }
+    }
   }
 
   void _releaseLock() {
@@ -256,10 +269,6 @@ class NamedLock {
 
       if (!_validLockFileExists) {
         _withHardLock(fn: () {
-          /// Ensure that that the lockfile directory exists.
-          if (!exists(_lockPath)) {
-            createDir(_lockPath, recursive: true);
-          }
           // check for other lock files
           final locks = find('*.$name',
                   workingDirectory: _lockPath,
