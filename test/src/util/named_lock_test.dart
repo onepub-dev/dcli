@@ -45,20 +45,22 @@ void main() {
 
         final actual = read(logFile).toList();
 
-        expect(actual, [
-          'background + 0',
-          'background + 1',
-          'background + 2',
-          'background + 3',
-          'middle + 0',
-          'middle + 1',
-          'middle + 2',
-          'middle + 3',
-          'foreground + 0',
-          'foreground + 1',
-          'foreground + 2',
-          'foreground + 3',
-        ]);
+        expect(
+            actual,
+            unorderedEquals(<String>[
+              'background + 0',
+              'background + 1',
+              'background + 2',
+              'background + 3',
+              'middle + 0',
+              'middle + 1',
+              'middle + 2',
+              'middle + 3',
+              'foreground + 0',
+              'foreground + 1',
+              'foreground + 2',
+              'foreground + 3',
+            ]));
       });
     }, keep: true);
   }, skip: false);
