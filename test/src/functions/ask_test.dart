@@ -64,7 +64,7 @@ void main() {
     expect(
         () => validator.validate('abc'),
         throwsA(predicate<AskValidatorException>((e) =>
-            e is AskValidatorException && e.message == 'Invalid FQDN.')));
+            e is AskValidatorException && e.message == red('Invalid FQDN.'))));
   });
 
   test('ask.all - success', () {
@@ -86,10 +86,9 @@ void main() {
 
     expect(
         () => validator.validate('9'),
-        throwsA(predicate<AskValidatorException>((e) =>
-            e is AskValidatorException &&
-            e.message ==
-                red('The number must be greater than or equal to 10.'))));
+        throwsA(isA<AskValidatorException>().having((e) =>
+            e.message, 'message', equals(
+            red('The number must be greater than or equal to 10.')))));
   });
 
   test('ask.integer - failure', () {
