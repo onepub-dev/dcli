@@ -1,3 +1,3 @@
 tags:
   # Tests that need to be run as sudo or administrator..
-  isPrivileged:
+  privileged:
