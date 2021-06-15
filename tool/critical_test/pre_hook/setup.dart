@@ -13,7 +13,7 @@ import 'package:dcli/dcli.dart';
 void main(List<String> args) {
   if (Platform.isWindows && !Shell.current.isPrivilegedUser) {
     printerr(red('Unit tests must be run with Administrator '
-        'priviliges on Windows'));
+        'privileges on Windows'));
     exit(1);
   }
   print(orange('Cleaning old test and build artifacts'));
