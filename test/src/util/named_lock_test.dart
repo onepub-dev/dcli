@@ -11,7 +11,7 @@ import 'package:dcli/dcli.dart' hide equals;
 import 'package:dcli/src/util/named_lock.dart';
 import 'package:test/test.dart';
 
-const port = 63424;
+const port = 9003;
 
 void main() {
   test('lock path', () {
@@ -19,46 +19,48 @@ void main() {
     print(lockPath);
   });
 
-  test('timeout catch', () {
+  test('exception catch', () {
     expect(() {
-      NamedLock(name: 'timeout').withLock(() {
+      NamedLock(name: 'exception').withLock(() {
         throw DCliException('fake exception');
       });
     }, throwsA(isA<DCliException>()));
-  }, skip: true);
+  });
 
-  test('withLock', () {
-    withTempDir((fs) async {
-      final logFile = createTempFile();
-      print('logfile: $logFile');
-      logFile.truncate();
+  test('withLock', () async {
+    await withTempDir((fs) async {
+      await withTempFile((logFile) async {
+        print('logfile: $logFile');
+        logFile.truncate();
 
-      final portBack = await spawn('background');
-      final portMid = await spawn('middle');
-      final portFore = await spawn('foreground');
+        final portBack = await spawn('background', logFile);
+        final portMid = await spawn('middle', logFile);
+        final portFore = await spawn('foreground', logFile);
 
-      await portBack.first;
-      await portMid.first;
-      await portFore.first;
+        await portBack.first;
+        await portMid.first;
+        await portFore.first;
 
-      final actual = read(logFile).toList();
+        print('readling logfile');
 
-      expect(actual, [
-        'background + 0',
-        'background + 1',
-        'background + 2',
-        'background + 3',
-        'middle + 0',
-        'middle + 1',
-        'middle + 2',
-        'middle + 3',
-        'foreground + 0',
-        'foreground + 1',
-        'foreground + 2',
-        'foreground + 3',
-      ]);
-      delete(logFile);
-    });
+        final actual = read(logFile).toList();
+
+        expect(actual, [
+          'background + 0',
+          'background + 1',
+          'background + 2',
+          'background + 3',
+          'middle + 0',
+          'middle + 1',
+          'middle + 2',
+          'middle + 3',
+          'foreground + 0',
+          'foreground + 1',
+          'foreground + 2',
+          'foreground + 3',
+        ]);
+      });
+    }, keep: true);
   }, skip: false);
 
   test('Thrash test', () async {
@@ -84,18 +86,12 @@ void main() {
     await group.future;
 
     expect(exists(_lockFailedPath), equals(false));
-  }, timeout: const Timeout(Duration(minutes: 3)));
+  }, timeout: const Timeout(Duration(minutes: 30)));
 }
 
-void takeHardLock() {
-  waitForEx<RawServerSocket>(RawServerSocket.bind(
-    '127.0.0.1',
-    port,
-  ));
-}
-
-Future<ReceivePort> spawn(String message) async {
-  final back = await Isolate.spawn(takeLock, message, paused: true);
+Future<ReceivePort> spawn(String message, String logFile) async {
+  final back =
+      await Isolate.spawn(writeToLog, '$message;$logFile', paused: true);
   final port = ReceivePort();
   back
     ..addOnExitListener(port.sendPort)
@@ -103,16 +99,21 @@ Future<ReceivePort> spawn(String message) async {
   return port;
 }
 
-void takeLock(String message) {
+void writeToLog(String data) {
+  final parts = data.split(';');
+  final message = parts[0];
+  final log = parts[1];
   NamedLock(name: 'test.lock').withLock(() {
     var count = 0;
     for (var i = 0; i < 4; i++) {
       final l = '$message + ${count++}';
       print(l);
-      '$HOME/lock.log'.append(l);
+      log.append(l);
       sleep(1);
     }
   });
+
+  print('Finished Write to Log for $message');
 }
 
 const _lockCheckPath = '/tmp/lockcheck';
@@ -121,9 +122,9 @@ final _lockFailedPath = join(_lockCheckPath, 'lock_failed');
 /// must be a global function as we us it to spawn an isolate
 void worker(int instance) {
   Settings().setVerbose(enabled: false);
-  print('starting worker instance $instance');
+  print('starting worker instance $instance ${DateTime.now()}');
   NamedLock(name: 'gshared-compile').withLock(() {
-    print('acquired lock worker $instance');
+    print('acquired lock worker $instance  ${DateTime.now()}');
     final inLockPath = join(_lockCheckPath, 'inlock');
 
     /// If the [inLockPath] file exists
@@ -136,10 +137,11 @@ void worker(int instance) {
 
     touch(inLockPath, create: true);
 
-    sleep(5);
-    print('finished work $instance');
+    sleep(2);
+    print('finished work $instance  ${DateTime.now()}');
     delete(inLockPath);
   });
+  print('released lock $instance  ${DateTime.now()}');
 }
 
 class Worker {

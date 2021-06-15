@@ -143,6 +143,8 @@ class NamedLock {
         verbose(() => 'Releasing lock: $_lockFilePath');
 
         _withHardLock(fn: () => delete(_lockFilePath));
+
+        verbose(() => 'Releasing lock: $_lockFilePath');
       }
     }
   }
@@ -244,47 +246,55 @@ class NamedLock {
       waitCount = 1;
     }
 
+    /// If a valid lock file exists we don't even try to take
+    /// a hard lock.
+    /// This is to avoid a pseuod race condition under heavy load
+    /// where the lock owner can't get the hardlock as
+    /// all of the contenders constantly have it locked.
     while (!taken && waitCount > 0) {
       verbose(() => 'entering withHardLock $waitCount');
-      _withHardLock(fn: () {
-        /// Ensure that that the lockfile directory exists.
-        if (!exists(_lockPath)) {
-          createDir(_lockPath, recursive: true);
-        }
-        // check for other lock files
-        final locks = find('*.$name',
-                workingDirectory: _lockPath,
-                includeHidden: true,
-                recursive: false)
-            .toList();
-        _log(red('found $locks lock files'));
 
-        var lockFiles = locks.length;
-
-        if (lockFiles == 0) {
-          // no other lock exists so we have taken a lock.
-          taken = true;
-        } else {
-          // we have found another lock file so check if it is held
-          // be a running process
-          lockFiles = _clearStaleLocks(locks, lockFiles);
-          if (lockFiles == 0) {
-            taken = true;
+      if (!_validLockFileExists) {
+        _withHardLock(fn: () {
+          /// Ensure that that the lockfile directory exists.
+          if (!exists(_lockPath)) {
+            createDir(_lockPath, recursive: true);
           }
-        }
+          // check for other lock files
+          final locks = find('*.$name',
+                  workingDirectory: _lockPath,
+                  includeHidden: true,
+                  recursive: false)
+              .toList();
+          _log(red('found lock files $locks'));
 
-        if (taken) {
-          final isolateID = _isolateID;
-          Settings()
-              .verbose('Taking lock ${basename(_lockFilePath)} for $isolateID');
+          var lockFiles = locks.length;
 
-          verbose(() => 'Lock Source: '
-              // ignore: lines_longer_than_80_chars
-              '${StackTraceImpl(skipFrames: 9).formatStackTrace(methodCount: 1)}');
-          touch(_lockFilePath, create: true);
-          //  log(StackTraceImpl().formatStackTrace(methodCount: 100));
-        }
-      });
+          if (lockFiles == 0) {
+            // no other lock exists so we have taken a lock.
+            taken = true;
+          } else {
+            // we have found another lock file so check if it is held
+            // be a running process
+            lockFiles = _clearStaleLocks(locks, lockFiles);
+            if (lockFiles == 0) {
+              taken = true;
+            }
+          }
+
+          if (taken) {
+            final isolateID = _isolateID;
+            Settings().verbose(
+                'Taking lock ${basename(_lockFilePath)} for $isolateID');
+
+            verbose(() => 'Lock Source: '
+                // ignore: lines_longer_than_80_chars
+                '${StackTraceImpl(skipFrames: 9).formatStackTrace(methodCount: 1)}');
+            touch(_lockFilePath, create: true);
+            //  log(StackTraceImpl().formatStackTrace(methodCount: 100));
+          }
+        });
+      }
 
       /// sleep for 100ms and then we will try again.
       waitForEx<void>(Future.delayed(const Duration(milliseconds: 100)));
@@ -299,7 +309,7 @@ class NamedLock {
 
     if (!taken) {
       if (waitCount == 0) {
-        throw LockException('NamedLock timedout on $_description '
+        throw LockException('NamedLock timed out on $_description '
             '${truepath(_lockPath)} as it is currently held');
       } else {
         throw LockException('Unable to lock $_description '
@@ -310,6 +320,34 @@ class NamedLock {
     return taken;
   }
 
+  /// Check if there is a valid lock file and if so
+  /// if it has a live owner.
+  bool get _validLockFileExists {
+    // check for other lock files
+    final locks = find('*.$name',
+            workingDirectory: _lockPath, includeHidden: true, recursive: false)
+        .toList();
+
+    for (final lock in locks) {
+      final lockFileParts = _lockFileParts(lock);
+      if (lockFileParts == null) {
+        /// isn't a valid lock file so ignore.
+        continue;
+      }
+      if (_isSelf(lockFileParts.pid, lockFileParts.isolateId)) {
+        continue;
+      }
+
+      if (_isOwnerLive(lockFileParts.pid)) {
+        return true;
+      }
+    }
+    return false;
+  }
+
+  bool _isSelf(int lockPid, int lockIsolateId) =>
+      lockIsolateId == _isolateID && lockPid == pid;
+
   int _clearStaleLocks(List<String> locks, int lockFiles) {
     var _lockFiles = lockFiles;
     for (final lock in locks) {
@@ -318,15 +356,13 @@ class NamedLock {
         /// isn't a valid lock file so ignore.
         continue;
       }
-      final currentIsolateId = _isolateID;
-      if (lockFileParts.pid == pid &&
-          lockFileParts.isolateId == currentIsolateId) {
+      if (_isSelf(lockFileParts.pid, lockFileParts.isolateId)) {
         // ignore our own lock.
         _lockFiles--;
         continue;
       }
 
-      if (!ProcessHelper().isRunning(lockFileParts.pid)) {
+      if (!_isOwnerLive(lockFileParts.pid)) {
         // If the foreign lock file was left orphaned
         // then we delete it.
         if (exists(lock)) {
@@ -338,6 +374,9 @@ class NamedLock {
     }
     return _lockFiles;
   }
+
+  bool _isOwnerLive(int lockOwnerPid) =>
+      ProcessHelper().isRunning(lockOwnerPid);
 
   void _withHardLock({
     required void Function() fn,
