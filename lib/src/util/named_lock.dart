@@ -68,7 +68,7 @@ class NamedLock {
         lockPath ?? join(rootPath, Directory.systemTemp.path, 'dcli', 'locks');
   }
 
-  /// The raw socket (udp) port we use to implement
+  /// The tcp socket  port we use to implement
   /// a hard lock. A port can only be opened once
   /// so its the perfect way to create a lock that works
   /// across processes and isolates.
