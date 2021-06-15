@@ -68,4 +68,53 @@ void main() {
     DartSdk().run(args: [hellow]);
     print('done 1');
   });
+
+  test('isPubGetRequried', () {
+    withTempDir((tmpDir) {
+      final pubspec = join(tmpDir, 'pubspec.yaml');
+      final lock = join(tmpDir, 'pubspec.lock');
+      final config = join(tmpDir, '.dart_tool', 'package_config.json');
+
+      createDir(dirname(config), recursive: true);
+      touch(lock, create: true);
+      touch(config, create: true);
+      touch(pubspec, create: true);
+
+      /// all good
+      expect(DartSdk().isPubGetRequired(tmpDir), false);
+
+      /// missing lock
+      delete(lock);
+      expect(DartSdk().isPubGetRequired(tmpDir), true);
+      touch(lock, create: true);
+
+      // missing package_config.json
+      delete(config);
+      expect(DartSdk().isPubGetRequired(tmpDir), true);
+
+      // missing .dart_tool
+      deleteDir(dirname(config));
+      expect(DartSdk().isPubGetRequired(tmpDir), true);
+
+      createDir(dirname(config), recursive: true);
+      touch(lock, create: true);
+      touch(config, create: true);
+
+      // old lock
+      touch(lock, create: true);
+      // access times are only to nearest second so force a difference.
+      sleep(2);
+      touch(pubspec);
+      expect(DartSdk().isPubGetRequired(tmpDir), true);
+
+      // old package_config.json
+      touch(config, create: true);
+      // access times are only to nearest second so force a difference.
+      sleep(2);
+      touch(pubspec);
+      touch(lock, create: true);
+
+      expect(DartSdk().isPubGetRequired(tmpDir), true);
+    });
+  });
 }

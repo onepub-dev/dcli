@@ -212,6 +212,34 @@ class DartSdk {
     return progress;
   }
 
+  /// Returns true if you need to run pub get.
+  /// If there is no pubspec.yaml in the workingDirectory
+  /// then an [PubspecNotFoundException] will be thrown.
+  /// Running pub get is required if any of the following
+  /// are older (or don't exist) than your pubspec.yaml file:
+  ///  pubspec.lock
+  /// .dart_tool/package_config.json
+  ///
+  bool isPubGetRequired(String workingDirectory) {
+    if (!exists(join(workingDirectory, 'pubspec.yaml'))) {
+      throw PubspecNotFoundException(workingDirectory);
+    }
+
+    final modified = stat(join(workingDirectory, 'pubspec.yaml')).modified;
+
+    final lock = join(workingDirectory, 'pubspec.lock');
+    if (!exists(lock) || stat(lock).modified.isBefore(modified)) {
+      return true;
+    }
+
+    final config = join(workingDirectory, '.dart_tool', 'package_config.json');
+    if (!exists(config) || stat(config).modified.isBefore(modified)) {
+      return true;
+    }
+
+    return false;
+  }
+
   /// runs 'pub get'
   void runPubGet(
     String? workingDirectory, {
@@ -495,4 +523,11 @@ final Exception dartSdkNotFound = Exception('Dart SDK not found!');
 /// as its not on the system path.
 void setPathToDartSdk(String dartSdkPath) {
   DartSdk()._sdkPath = dartSdkPath;
+}
+
+/// Throw if pubspec.yaml was not found.
+class PubspecNotFoundException extends DCliException {
+  /// Throw if pubspec.yaml was not found in [workingDirectory]
+  PubspecNotFoundException(String workingDirectory)
+      : super('pubspec.yaml not found in $workingDirectory');
 }
