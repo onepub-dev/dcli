@@ -16,7 +16,7 @@ void main() {
     }
   });
 
-  test('isPriviliged', () {
+  test('isPrivileged', () {
     try {
       expect(Shell.current.isPrivilegedUser, isTrue);
       Settings().setVerbose(enabled: true);
