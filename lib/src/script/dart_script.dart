@@ -294,6 +294,11 @@ class DartScript {
 
     return result;
   }
+
+  /// Runs pub get in the script's DartProject folder.
+  void runPubGet() {
+    DartSdk().runPubGet(project.pathToProjectRoot);
+  }
 }
 
 // ignore: avoid_classes_with_only_static_members

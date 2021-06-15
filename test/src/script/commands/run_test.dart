@@ -20,10 +20,11 @@ void main() {
         delete(scriptPath);
       }
 
-      final project = DartProject.fromPath(scriptParentPath);
-      project
-          .createScript(basename(scriptPath), templateName: 'hello_world.dart')
-          .run();
+      final project = DartProject.fromPath(scriptParentPath, search: false);
+      project.createScript(basename(scriptPath),
+          templateName: 'hello_world.dart')
+        ..runPubGet()
+        ..run();
 
       deleteDir(scriptParentPath);
     });
