@@ -198,9 +198,10 @@ class Progress {
     _stdoutController.stream.listen((line) {
       if (_includeStdout) {
         stdout(line);
-      } else {
-        verbose(() => 'addToStdout excluded: line=$line');
       }
+      //  else {
+      //   verbose(() => 'addToStdout excluded: line=$line');
+      // }
       if (_captureStdout) {
         _lines.add(line);
       }
