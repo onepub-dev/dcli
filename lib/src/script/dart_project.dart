@@ -253,8 +253,6 @@ class DartProject {
 
   // TODO(bsutton): this is still risky as pub get does a test to see if
   // the versions have changed.
-  // we could improve this by checking that the .lock files date
-  //  is after the .yamls date.
   /// there is a 'generated' date stamp in the .json file which
   ///  might be more definitive.
   /// Returns true if the project is in state when any of its
@@ -268,9 +266,7 @@ class DartProject {
   /// *
   ///
   bool get isReadyToRun =>
-      exists(join(pathToProjectRoot, '.dart_tool', 'package_config.json')) &&
-      exists(join(pathToProjectRoot, 'pubspec.lock')) &&
-      hasPubSpec;
+      hasPubSpec && !DartSdk().isPubGetRequired(pathToProjectRoot);
 
   /// Returns true if the project contains a pubspec.yaml.
   bool get hasPubSpec => exists(join(pathToProjectRoot, 'pubspec.yaml'));
