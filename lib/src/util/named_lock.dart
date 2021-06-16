@@ -102,7 +102,7 @@ class NamedLock {
     var lockHeld = false;
     runZonedGuarded(() {
       try {
-        _log('lockcount = $_lockCountForName');
+        verbose(() => 'lockcount = $_lockCountForName');
 
         _createLockPath();
 
@@ -125,7 +125,7 @@ class NamedLock {
         _releaseLock();
       }
       // final stackTrace = StackTraceImpl.fromStackTrace(st);
-
+      verbose(() => 'Exception throw $e : ${e.toString()}');
       if (e is DCliException) {
         throw e.copyWith(callingStackTrace);
       } else {
@@ -173,7 +173,7 @@ class NamedLock {
     var _lockCount = _lockCountForName;
     _lockCount++;
     _lockCounts[name] = _lockCount;
-    _log('Incremented lock: $_lockCount');
+    verbose(() => 'Incremented lock: $_lockCount');
     return _lockCount;
   }
 
@@ -184,7 +184,7 @@ class NamedLock {
     _lockCount--;
     _lockCounts[name] = _lockCount;
 
-    _log('Decremented lock: $_lockCountForName');
+    verbose(() => 'Decremented lock: $_lockCountForName');
     return _lockCount;
   }
 
@@ -275,7 +275,7 @@ class NamedLock {
                   includeHidden: true,
                   recursive: false)
               .toList();
-          _log(red('found lock files $locks'));
+          verbose(() => red('found lock files $locks'));
 
           var lockFiles = locks.length;
 
@@ -375,7 +375,7 @@ class NamedLock {
         // If the foreign lock file was left orphaned
         // then we delete it.
         if (exists(lock)) {
-          _log(red('Clearing old lock file: $lock'));
+          verbose(() => red('Clearing old lock file: $lock'));
           delete(lock);
         }
         _lockFiles--;
@@ -397,13 +397,13 @@ class NamedLock {
       socket = waitForEx<ServerSocket?>(_bindSocket());
 
       if (socket != null) {
-        _log(blue('Hardlock taken'));
+        verbose(() => blue('Hardlock taken'));
         fn();
       }
     } finally {
       if (socket != null) {
         socket.close();
-        _log(blue('Hardlock released'));
+        verbose(() => blue('Hardlock released'));
       }
     }
   }
@@ -421,10 +421,6 @@ class NamedLock {
     }
     return socket;
   }
-}
-
-void _log(String message) {
-  verbose(() => message);
 }
 
 class _LockFileParts {
