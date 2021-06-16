@@ -1,3 +1,28 @@
+# 1.5.7
+FIXES: 
+ - Fixed a bug in the namedLock class. If a lot of threads where trying to get a hard lock then then thread with the  lock couldn't get a hard lock to release it. Threads without a lock now check for a valid file lock before trying to get a hard lock. Fixed lock tests so they now work every time.
+ - unit tests for project_create_test.dart now work correctly.
+ - Fixed the ask test. The message now is wrapped in ansi red encoding which is why it started failed.
+ - NamedLock - Fixed a bug with the wait loop for taking a hard lock that was waiting 30secs * 30secs rather than just 30 secs.
+suppressed lint.
+
+IMPROVEMENTS:
+ - Added verbose statement when exception is thrown in named lock. 
+ - Changed logging to directly use verbose to improve performance.
+ - removed an verbose logger in the progress as it was generating execessive logs.
+ - added detached and terminal options to DartSDK.run method.
+ - Added details on Pub Cache to doctor and some general formatting cleanup.
+ - removed refernces to the dcli cache as its no longer used.
+ - Improved the code the checks that a package name conforms to a dart indentifier.
+ - critical_tests setup hook now exists with a non-zero exit code if not running as a privilged user under windows.
+ - removed the isPriviliged requirement unless we are running on windows.
+ - Added method runPubGet to the DartScript class. Fixed the run_test.dart unit test which failed to run pub get after creating the script.
+ - added calls to pub get for each of the test packages to ensure they are ready to run
+ - Added method to check if pub get needs to be run DartScript.isPubGetRequired
+ - Added logic to critical_test startup prehook to run pub get on all test packages.
+ - NamedLock - Moved from a raw socket to a tcp socket and change the port no. to a value below 10000 (9003) as this is what is requierd to work on Windows. 
+ - Added logic to remove empty strings from the PATH which can occur if the path contains two adjacent delimiters;
+
 # 1.5.6
 updated documentation link.
 
@@ -15,33 +40,18 @@ GitBook: [master] 67 pages modified
 Fixed the named lock trash test so it shuts down cleanly.
 
 # 1.6.0-beta.1
-unused import.
-improved performance of unit tests by removing unnecessary testfilesystem.
-Fixed a bug in the new extensionSearch which was returning the full path to the found exe rather than just the basename as passed in.
-removed debugging code.
-Merge branch 'master' of https://github.com/bsutton/dcli
-Fixed a major bug in find. When a directory contained more than 100 child directories all child directories were returned but the contents of every second directory (after the first 100)  where not returned.
-ignored settings file
-correct instructions for dcl install
-colour
-spelling.
-Merge branch 'master' of github.com:bsutton/dcli
-color
-Merge branch 'master' of https://github.com/bsutton/dcli
-Added extensionSearch to start function.
-GitBook: [master] one page modified
-Fixed bug in createScript as it was ignore the project path.
-removed unused test.
-Changed ask and confirm to return immediately if no terminal is attached.
-added checks that we are running as a privliged users.
-spelling
-Merge branch 'master' of https://github.com/bsutton/dcli
-Depreccated Shell.addToPath in favour of appendToPath. Also added prependToPath. Windows now supports both Shell.appendToPath and Shell.prependToPath
-Added windows registry methods regIsOnUserPath and regPrependtoPath
-Added extensionSearch argument to which function. The argument only affects windows and causes the which command to search the set of possible extensions defined in PATHEXT.
-deprecated addToPATHIfAbsent in favour of appendToPath which now does a check before adding the path.
-GitBook: [master] one page modified
-GitBook: [master] 66 pages modified
+- improved performance of unit tests by removing unnecessary testfilesystem.
+- Fixed a bug in the new extensionSearch which was returning the full path to the found exe rather than just the basename as passed in.
+- removed debugging code.
+- Merge branch 'master' of https://github.com/bsutton/dcli
+- Fixed a major bug in find. When a directory contained more than 100 child directories all child directories were returned but the contents of every second directory (after the first 100)  where not returned.
+- Added extensionSearch to start function.
+- Fixed bug in createScript as it was ignore the project path.
+- Changed ask and confirm to return immediately if no terminal is attached.
+- added checks that we are running as a privliged users.
+- Added windows registry methods regIsOnUserPath and regPrependtoPath
+- Added extensionSearch argument to which function. The argument only affects windows and causes the which command to search the set of possible extensions defined in PATHEXT.
+- deprecated addToPATHIfAbsent in favour of appendToPath which now does a check before adding the path.
 
 # 1.5.2
 Added
