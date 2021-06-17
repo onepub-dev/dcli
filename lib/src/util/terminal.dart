@@ -194,7 +194,17 @@ class Terminal {
     /// as to obtain the cursor we must read from the
     /// terminal.
     if (hasTerminal && Ansi.isSupported) {
-      return _console.cursorPosition;
+      try {
+        return _console.cursorPosition;
+        // ignore: avoid_catching_errors
+      } on RangeError catch (_) {
+        // if stdin is closed (seems to be within docker)
+        // then the call to cursorPosition will fail.
+        //   RangeError: Invalid value: Not in inclusive range 0..1114111: -1
+        // new String.fromCharCode (dart:core-patch/string_patch.dart:45)
+        // Console.cursorPosition (package:dart_console/src/console.dart:304)
+        return null;
+      }
     } else {
       return null;
     }
