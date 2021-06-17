@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:archive/archive.dart';
+import 'package:meta/meta.dart';
 import 'package:pub_semver/pub_semver.dart';
 import '../../dcli.dart';
 import '../settings.dart';
@@ -381,7 +382,7 @@ class DartSdk {
         url:
             'https://storage.googleapis.com/dart-archive/channels/stable/release/latest/sdk/dartsdk-$platform-$architechture-release.zip',
         saveToPath: zipRelease,
-        fetchProgress: _showProgress);
+        fetchProgress: (p) => print('.'));
 
     if (term.isAnsi) {
       term.showCursor(show: true);
@@ -433,6 +434,7 @@ class DartSdk {
   }
 
   int _progressSuppressor = 0;
+  // ignore: unused_element
   Future<void> _showProgress(FetchProgress progress) async {
     final term = Terminal();
     final percentage = Format.percentage(progress.progress, 1);
@@ -525,6 +527,7 @@ final Exception dartSdkNotFound = Exception('Dart SDK not found!');
 /// This method is ONLY for use by the installer so that we can
 /// set the path during the install when it won't be detectable
 /// as its not on the system path.
+@visibleForTesting
 void setPathToDartSdk(String dartSdkPath) {
   DartSdk()._sdkPath = dartSdkPath;
 }

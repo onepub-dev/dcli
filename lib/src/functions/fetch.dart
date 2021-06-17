@@ -164,8 +164,7 @@ class _Fetch extends DCliFunction {
 
           subscription.resume();
 
-          Settings()
-              .verbose('Download progress: $lengthReceived / $contentLength ');
+          verbose(() => 'Download progress: $lengthReceived / $contentLength ');
         },
         onDone: () async {
           /// down load is complete
