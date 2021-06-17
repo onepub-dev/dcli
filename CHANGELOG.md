@@ -1,3 +1,7 @@
+# 1.5.11
+- Fixed a a path that we use to look for dart during installation.
+- Removed use of ansi chars to show dart sdk progress as having problems in a docker container. Now just print a '.' each time data arrives.
+
 # 1.5.10
 Added code to catch error if we attempt to read the cursorPosition if stdin is closed.
 
