@@ -17,9 +17,8 @@ class LinuxDCliInstaller {
       _installDart();
     }
 
-    // TODO(bsutton): I've had to remove this for the moment due to https://github.com/dart-lang/sdk/issues/46255
     // now activate dcli.
-    // DartSdk().globalActivate('dcli');
+    DartSdk().globalActivate('dcli');
 
     // // also need to install it for the root user
     // // as root must have its own copy of .pub-cache otherwise
