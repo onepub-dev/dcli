@@ -1,3 +1,6 @@
+# 1.5.10
+Added code to catch error if we attempt to read the cursorPosition if stdin is closed.
+
 # 1.5.9
 - Changed the installer so it no longer uses apt to install dart as the apt package
 is always stale. Now always install from the dart archives.
