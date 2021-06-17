@@ -1,3 +1,8 @@
+# 1.5.8
+Added back in the global activation of dcli as we have removed the sudo requirement which means that https://github.com/dart-lang/sdk/issues/46255 no longer applies.
+Added documenation on  using chmod. Added Windodws support by making the call a noop.
+Changed DartProject.isReadyToRun to use DartSdk.isPubGetRequired as this does a more complete check.
+
 # 1.5.7
 FIXES: 
  - Fixed a bug in the namedLock class. If a lot of threads where trying to get a hard lock then then thread with the  lock couldn't get a hard lock to release it. Threads without a lock now check for a valid file lock before trying to get a hard lock. Fixed lock tests so they now work every time.
