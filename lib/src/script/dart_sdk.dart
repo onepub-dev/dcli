@@ -346,7 +346,7 @@ class DartSdk {
     if (Platform.isLinux || Platform.isMacOS) {
       /// make execs executable.
       find('*', workingDirectory: join(installDir, 'bin'), recursive: false)
-          .forEach((file) => 'chmod +x, $file'.run);
+          .forEach((file) => chmod(500, file));
     }
 
     // The normal dart detection process won't work here
@@ -382,7 +382,7 @@ class DartSdk {
         url:
             'https://storage.googleapis.com/dart-archive/channels/stable/release/latest/sdk/dartsdk-$platform-$architechture-release.zip',
         saveToPath: zipRelease,
-        fetchProgress: (p) => print('.'));
+        fetchProgress: (p) => echo('.'));
 
     if (term.isAnsi) {
       term.showCursor(show: true);
