@@ -1,3 +1,8 @@
+# 1.5.9
+- Changed the installer so it no longer uses apt to install dart as the apt package
+is always stale. Now always install from the dart archives.
+- Also fixed a bug where the installer failed to install dart as it incorrected thought that dart was installed.
+
 # 1.5.8
 Added back in the global activation of dcli as we have removed the sudo requirement which means that https://github.com/dart-lang/sdk/issues/46255 no longer applies.
 Added documenation on  using chmod. Added Windodws support by making the call a noop.

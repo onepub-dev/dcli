@@ -32,7 +32,7 @@ class LinuxDCliInstaller {
   bool _installDart() {
     var installedDart = false;
     // first check that dart isn't already installed
-    if (DartSdk().pathToDartExe == null) {
+    if (which('dart').notfound) {
       print('Installing Dart');
 
       // add dart to bash path
@@ -60,15 +60,15 @@ class LinuxDCliInstaller {
       }
 
       /// check that apt is available.
-      if (which('apt').found) {
-        verbose(() => 'Using the apt installer');
-        _installDartWithApt();
-      } else {
-        verbose(() => 'Apt not found. Installing from archive');
-        final dartInstallDir =
-            DartSdk().installFromArchive('/usr/lib/dart', askUser: false);
-        print('Installed dart to: $dartInstallDir');
-      }
+      // if (which('apt').found) {
+      //   verbose(() => 'Using the apt installer');
+      //   _installDartWithApt();
+      // } else {
+      verbose(() => 'Apt not found. Installing from archive');
+      final dartInstallDir =
+          DartSdk().installFromArchive('/usr/lib/dart', askUser: false);
+      print('Installed dart to: $dartInstallDir');
+      // }
 
       installedDart = true;
     } else {
@@ -81,7 +81,8 @@ class LinuxDCliInstaller {
     return installedDart;
   }
 
-  void _installDartWithApt() {
+  /// Installs dart from the apt repos.
+  void installDartWithApt() {
     Shell.current.withPrivileges(() {
       'apt update'.run;
       'apt install apt-transport-https'.run;
