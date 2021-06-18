@@ -93,9 +93,7 @@ class DartScript {
   /// True if the script is compiled.
   bool get isCompiled => _isCompiled;
 
-  static bool get _isCompiled =>
-      p.basename(Platform.resolvedExecutable) ==
-      p.basename(Platform.script.path);
+  static bool get _isCompiled => p.extension(Platform.script.path) != '.dart';
 
   /// Checks if the Script has been compiled and installed into the ~/.dcli/bin path
   bool get isInstalled => exists(pathToInstalledExe);
