@@ -1,8 +1,9 @@
 import 'dart:ffi';
-import 'package:ffi/ffi.dart';
+
 import 'package:win32/win32.dart';
 
 import '../../dcli.dart';
+import '../ffi/with_memory.dart';
 import '../installers/windows_installer.dart';
 import '../platform/windows/registry.dart';
 
@@ -150,17 +151,7 @@ mixin WindowsMixin {
   /// e.g. Is running as an Administrator.
   bool get isPrivilegedProcess => isPrivilegedUser;
 
-  /// Allocates a chunk of native memory, calls [action] and
-  /// then frees the memory even if an exception is thrown.
-  R withMemory<R, T extends NativeType>(
-      int size, R Function(Pointer<T> memory) action) {
-    final memory = calloc<Int8>(size);
-    try {
-      return action(memory.cast());
-    } finally {
-      calloc.free(memory);
-    }
-  }
+
 }
 
 /// Native Windows stucture used to get the elevated

@@ -2,8 +2,10 @@ import 'dart:io';
 
 import 'package:csv/csv.dart';
 import 'package:meta/meta.dart';
+
 import '../../dcli.dart';
 import '../settings.dart';
+import '../windows/process_helper.dart';
 import 'runnable_process.dart';
 
 ///
@@ -20,9 +22,9 @@ class ProcessHelper {
   static final ProcessHelper _self = ProcessHelper._internal();
 
   /// returns the name of the process for the given pid.
-  String? getProcessName(int? pid) {
+  String? getProcessName(int pid) {
     if (Settings().isWindows) {
-      return _getWindowsProcessName(pid);
+      return getWindowsProcessName(pid);
     } else {
       return _getLinuxProcessName(pid);
     }
@@ -58,7 +60,7 @@ class ProcessHelper {
 
   /// Get the PID of the parent
   /// Returns -1 if a parent can't be obtained.
-  int? getParentPID(int? childPid) {
+  int getParentPID(int? childPid) {
     if (Settings().isWindows) {
       return _windowsGetParentPid(childPid);
     } else {
@@ -100,7 +102,7 @@ class ProcessHelper {
 
   /// returns the pid of the parent pid of -1 if the
   /// child doesn't have a parent.
-  int? _windowsGetParentPid(int? childPid) {
+  int _windowsGetParentPid(int? childPid) {
     final parents = _windowsParentProcessList();
 
     for (final parent in parents) {
@@ -131,20 +133,18 @@ class ProcessHelper {
 
       // we have to deal with files that contain spaces in their name.
       final exe = parts.sublist(0, parts.length - 3).join(' ');
-      final parentPid = int.tryParse(parts[parts.length - 2]);
-      final processPid = int.tryParse(parts[parts.length - 1]);
+      final parentPid = int.tryParse(parts[parts.length - 2]) ?? -1;
+      final processPid = int.tryParse(parts[parts.length - 1]) ?? -1;
 
-      final parent = _WindowsParentProcess()
-        ..path = exe
-        ..parentPid = parentPid
-        ..processPid = processPid;
+      final parent = _WindowsParentProcess(
+          path: exe, parentPid: parentPid, processPid: processPid);
       parents.add(parent);
     }
     return parents;
   }
 
   bool _windowsIsrunning(int? lpid) {
-    for (final details in _getWindowsProcesses()) {
+    for (final details in _getWindowsProcessesOld()) {
       if (details.pid == lpid) {
         return true;
       }
@@ -175,25 +175,25 @@ class ProcessHelper {
     return isRunning;
   }
 
-  /// completely untested as I don't have a windows box.
-  String? _getWindowsProcessName(int? lpid) {
-    String? pidName;
-    for (final details in _getWindowsProcesses()) {
-      if (lpid == details.pid) {
-        pidName = details.name;
-        break;
-      }
-    }
-    verbose(() => '_getWindowsProcessName $lpid $pidName');
-    return pidName;
-  }
+  // /// completely untested as I don't have a windows box.
+  // String? _getWindowsProcessName(int? lpid) {
+  //   String? pidName;
+  //   for (final details in _getWindowsProcessesOld()) {
+  //     if (lpid == details.pid) {
+  //       pidName = details.name;
+  //       break;
+  //     }
+  //   }
+  //   verbose(() => '_getWindowsProcessName $lpid $pidName');
+  //   return pidName;
+  // }
 
   /// Returns a list of running processes.
   ///
   /// Currently this is only supported on Windows and Linux.
   List<ProcessDetails> getProcesses() {
     if (Platform.isWindows) {
-      return _getWindowsProcesses();
+      return getWindowsProcesses();
     }
 
     if (Platform.isLinux) {
@@ -203,7 +203,7 @@ class ProcessHelper {
     throw UnsupportedError('Not supported on ${Platform.operatingSystem}');
   }
 
-  List<ProcessDetails> _getWindowsProcesses() {
+  List<ProcessDetails> _getWindowsProcessesOld() {
     final pids = <ProcessDetails>[];
 
     // example:
@@ -338,7 +338,9 @@ class ProcessDetails {
 }
 
 class _WindowsParentProcess {
-  String? path;
-  int? parentPid;
-  int? processPid;
+  _WindowsParentProcess(
+      {required this.path, required this.parentPid, required this.processPid});
+  String path;
+  int parentPid;
+  int processPid;
 }
