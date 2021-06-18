@@ -10,4 +10,8 @@ void main() {
     final home = '$drive$path';
     expect((Shell.current as WindowsMixin).loggedInUsersHome, home);
   });
+
+  test('isPrivileged', () {
+    expect(Shell.current.isPrivilegedUser, isFalse);
+  });
 }

@@ -1,3 +1,5 @@
+import 'dart:ffi';
+import 'package:ffi/ffi.dart';
 import 'package:win32/win32.dart';
 
 import '../../dcli.dart';
@@ -112,4 +114,60 @@ mixin WindowsMixin {
 
   /// Returns the instructions to install DCli.
   String get installInstructions => 'Run dcli install';
+
+  /// Returns true if the current process is running with elevated privileges
+  /// e.g. Is running as an Administrator.
+  bool get isPrivilegedUser {
+    var isElevated = false;
+
+    withMemory<void, Uint32>(sizeOf<Uint32>(), (phToken) {
+      withMemory<void, Uint32>(sizeOf<Uint32>(), (pReturnedSize) {
+        withMemory<void, _TokenElevation>(sizeOf<_TokenElevation>(),
+            (pElevation) {
+          if (OpenProcessToken(
+                  GetCurrentProcess(), TOKEN_QUERY, phToken.cast()) ==
+              1) {
+            if (GetTokenInformation(
+                    phToken.value,
+                    TOKEN_INFORMATION_CLASS.TokenElevation,
+                    pElevation,
+                    sizeOf<_TokenElevation>(),
+                    pReturnedSize) ==
+                1) {
+              isElevated = pElevation.ref.tokenIsElevated != 0;
+            }
+          }
+          if (phToken.value != 0) {
+            CloseHandle(phToken.value);
+          }
+        });
+      });
+    });
+    return isElevated;
+  }
+
+  /// Returns true if the current process is running with elevated privileges
+  /// e.g. Is running as an Administrator.
+  bool get isPrivilegedProcess => isPrivilegedUser;
+
+  /// Allocates a chunk of native memory, calls [action] and
+  /// then frees the memory even if an exception is thrown.
+  R withMemory<R, T extends NativeType>(
+      int size, R Function(Pointer<T> memory) action) {
+    final memory = calloc<Int8>(size);
+    try {
+      return action(memory.cast());
+    } finally {
+      calloc.free(memory);
+    }
+  }
+}
+
+/// Native Windows stucture used to get the elevated
+/// status of the current process.
+class _TokenElevation extends Struct {
+  /// A nonzero value if the token has elevated privileges;
+  /// otherwise, a zero value.
+  @Int32()
+  external int tokenIsElevated;
 }
