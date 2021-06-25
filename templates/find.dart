@@ -11,10 +11,10 @@ dependencies:
 */
 
 import 'dart:io';
-import 'package:dcli/dcli.dart';
-import 'package:path/path.dart' as p;
 
 import 'package:args/args.dart';
+import 'package:dcli/dcli.dart';
+import 'package:path/path.dart' as p;
 
 ///
 /// Call this program using:

@@ -1,6 +1,8 @@
-@t.Timeout(Duration(seconds: 600))
-import 'package:test/test.dart' as t;
+@Timeout(Duration(seconds: 600))
+
 import 'package:dcli/dcli.dart';
+import 'package:test/test.dart' as t;
+import 'package:test/test.dart';
 
 void main() {
   // can't be run from within vscode as it needs console input.

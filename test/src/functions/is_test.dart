@@ -1,8 +1,8 @@
 @Timeout(Duration(minutes: 10))
 import 'dart:io';
 
-import 'package:test/test.dart' hide isEmpty;
 import 'package:dcli/dcli.dart' hide equals;
+import 'package:test/test.dart' hide isEmpty;
 
 import '../util/test_file_system.dart';
 

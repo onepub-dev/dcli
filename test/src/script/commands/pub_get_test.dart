@@ -1,6 +1,7 @@
 @Timeout(Duration(minutes: 5))
-import 'package:dcli/src/script/pub_get.dart';
 import 'package:dcli/src/script/dart_project.dart';
+
+import 'package:dcli/src/script/pub_get.dart';
 import 'package:path/path.dart';
 import 'package:test/test.dart';
 

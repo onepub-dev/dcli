@@ -1,9 +1,9 @@
 @t.Timeout(Duration(seconds: 600))
 import 'dart:io';
 
+import 'package:dcli/dcli.dart';
 import 'package:dcli/src/functions/env.dart';
 import 'package:test/test.dart' as t;
-import 'package:dcli/dcli.dart';
 
 String _testDir = 'path_test';
 void main() {

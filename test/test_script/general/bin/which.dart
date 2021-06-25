@@ -7,9 +7,9 @@ dependencies:
 */
 
 import 'dart:io';
-import 'package:dcli/dcli.dart';
 
 import 'package:args/args.dart';
+import 'package:dcli/dcli.dart';
 
 /// which appname
 void main(List<String> args) {

@@ -1,8 +1,7 @@
 @Timeout(Duration(minutes: 5))
 import 'package:dcli/dcli.dart' hide equals;
-import 'package:test/test.dart';
-
 import 'package:path/path.dart' as p;
+import 'package:test/test.dart';
 
 void main() {
   const scriptName = 'create_test.dart';

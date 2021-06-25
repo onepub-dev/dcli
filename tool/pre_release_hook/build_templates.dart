@@ -3,9 +3,8 @@
 import 'dart:io';
 
 import 'package:dcli/dcli.dart';
-import 'package:pubspec/pubspec.dart' as pub;
-
 import 'package:pub_semver/pub_semver.dart';
+import 'package:pubspec/pubspec.dart' as pub;
 
 late String newVersion;
 void main(List<String> args) {
@@ -16,8 +15,8 @@ void main(List<String> args) {
   newVersion = args[0];
 
   print(green('Running build_templates with version: $newVersion'));
-  final templatePath = join(DartProject.self.pathToProjectRoot, 'lib', 'src',
-      'assets', 'templates');
+  final templatePath = join(
+      DartProject.self.pathToProjectRoot, 'lib', 'src', 'assets', 'templates');
 
   final expanderPath = join(DartProject.self.pathToProjectRoot, 'lib', 'src',
       'templates', 'expander.dart');

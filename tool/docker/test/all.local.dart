@@ -1,8 +1,7 @@
 #! /usr/bin/env dcli
 
-import 'package:dcli/dcli.dart';
-
 import 'package:args/args.dart';
+import 'package:dcli/dcli.dart';
 
 ///
 /// runs the unit tests using Dockerfile.local which pulls the code

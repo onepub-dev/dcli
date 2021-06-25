@@ -1,6 +1,6 @@
 @Timeout(Duration(seconds: 600))
-import 'package:test/test.dart' as t;
 import 'package:dcli/dcli.dart';
+import 'package:test/test.dart' as t;
 import 'package:test/test.dart';
 
 void main() {
