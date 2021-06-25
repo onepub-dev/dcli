@@ -14,7 +14,7 @@ The resource 'sample.aac' will be downloaded and saved to the temporary file 'sa
 
 ```dart
     String baseURl =
-    'https://raw.githubusercontent.com/bsutton/dcli/master/test/src/functions/fetch_downloads';
+    'https://raw.githubusercontent.com/noojee/dcli/master/test/src/functions/fetch_downloads';
     var sampleAac = fs.tempFile();
     fetch(url: '$baseURl/sample.aac', saveToPath: sampleAac);
 ```

@@ -45,7 +45,7 @@ This is still a work in progress but is intended to provide a three line script 
 {% tabs %}
 {% tab title="Linux" %}
 ```text
-wget https://github.com/bsutton/dcli/releases/download/latest.linux/dcli_install
+wget https://github.com/noojee/dcli/releases/download/latest.linux/dcli_install
 chmod +x dcli_install
 sudo ./dcli_install
 ```
