@@ -8,7 +8,7 @@ DCli provides tools to manage the environment variables within your DCli script 
 For complete API documentation refer to: [pub.dev](https://pub.dev/documentation/dcli/latest/dcli/dcli-library.html)
 {% endhint %}
 
-When a DCli script starts, it loads the set of environment variables from its parent process \(usually your shell\). The full set of environment variables are available via the `envs` function.
+When a DCli script starts, it loads the set of environment variables from its parent process \(usually your shell\). The full set of environment variables are available via the `envs` function which returns a map containing key/value pairs for all environment variables.
 
 To access an environment variable called 'COLORTERM':
 
@@ -50,7 +50,7 @@ print('Your working directory is $pwd);
 
 ### envs -&gt; Map&lt;String, String&gt;
 
-Returns a map of all the environment variables inherited from the parent as well as any changes made by calls to env\[\]=.
+Returns a map of all the environment variables inherited from the parent as well as any changes made by calls to \`env\[\]=\`.
 
 ### PATH
 
@@ -61,7 +61,6 @@ Methods to manipulate the path include:
 * appendToPATH
 * prependToPATH
 * removeFromPATH
-* addToPATHIfAbsent
 * isOnPATH
 * delimiterForPATH
 
