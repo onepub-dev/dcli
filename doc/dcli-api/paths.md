@@ -132,9 +132,19 @@ A normalised path is one which has had the '..' components resolved.
 
 A common mistake made by many CLI applications when reporting errors is to report relative paths.
 
+```dart
+/// if you pwd is /usr/home
+truepath('adirectory') == '/usr/home/adirectory';
+truepath('../adirectory') == '/usr/adirectory';
+truepath('/usr/home/adirectory') == 'usr/home/adirectory';
+
+```
+
 For the user of your application it can often be difficult to determine what the relative path is relative to. All DCli errors that contain a path call truepath so that the path is absolute and normalised, this gives your users the best chance of correctly identifying the file or path that caused the problem.
 
 You should also normalised any path that a user enters. Using '..' to bypass security checks is a common hacking trick.
+
+
 
 ## **canonicalize**
 
