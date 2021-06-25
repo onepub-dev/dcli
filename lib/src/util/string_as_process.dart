@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:io';
 
 import '../functions/run.dart' as cmd;
 import 'file_sync.dart';
@@ -68,6 +69,7 @@ extension StringAsProcess on String {
   ///
   /// See [forEach] to capture output to stdout and stderr
   ///     [toList] to capture stdout  and stderr to [List<String>]
+  ///     [toParagraph] to concatenating the return lines into a single string.
   ///     [start] - for more control over how the sub process is started.
   ///     [firstLine] - returns just the first line written to stdout or stderr.
   ///     [lastLine] - returns just the last line written to stdout or stderr.
@@ -108,6 +110,7 @@ extension StringAsProcess on String {
   ///
   /// See [forEach] to capture output to stdout and stderr
   ///     [toList] to capture stdout and stderr to [List<String>]
+  ///     [toParagraph] to concatenating the return lines into a single string.
   ///     [firstLine] - returns just the first line written to stdout.
   ///     [lastLine] - returns just the last line written to stdout or stderr.
   ///     [parser] - returns a parser with the captured output ready
@@ -174,6 +177,7 @@ extension StringAsProcess on String {
   /// See  [run] if you just need to run a process with all the defaults.
   ///      [forEach] to capture output to stdout and stderr
   ///      [toList] to capture stdout and stderr to [List<String>]
+  ///      [toParagraph] to concatenating the return lines into a single string.
   ///      [firstLine] - returns just the first line written to stdout
   ///  or stderr.
   ///      [lastLine] - returns just the last line written to stdout or stderr.
@@ -227,6 +231,7 @@ extension StringAsProcess on String {
   ///
   /// See [run] if you don't care about capturing output
   ///     [toList] to capture stdout and stderr as a String list.
+  ///     [toParagraph] to concatenating the return lines into a single string.
   ///     [start] - if you need to run a detached sub process.
   ///     [firstLine] - returns just the first line written to stdout or stderr.
   ///     [lastLine] - returns just the last line written to stdout or stderr.
@@ -277,10 +282,12 @@ extension StringAsProcess on String {
   /// ```
   ///
   /// See [forEach] to capture output to stdout and stderr interactively
+  ///     [toParagraph] to concatenating the return lines into a single string.
   ///     [run] to run the application without capturing its output
   ///     [start] - to run the process fully detached.
   ///     [firstLine] - returns just the first line written to stdout or stderr.
   ///     [lastLine] - returns just the last line written to stdout or stderr.
+  ///     [toParagraph] to concatenating the return lines into a single string.
   ///     [parser] - returns a parser with the captured output ready
   /// to be interpreted
   ///                as one of several file types.
@@ -298,6 +305,64 @@ extension StringAsProcess on String {
 
     return progress.lines.sublist(skipLines);
   }
+
+  /// [toParagraph] runs the contents of this String as a CLI command and
+  /// returns the lines written to stdout and stderr as
+  /// a single String by join the lines with the platform specific line
+  /// delimiter.
+  ///
+  /// On Windows the lines are joined via '\r\n' on posix systems '\n' is used.
+  ///
+  /// DCli performs Glob expansion on command arguments. See [run] for details.
+  ///
+  /// The [skipLines] argument tells [toParagraph] to not return the first
+  /// [skipLines] lines. This is useful if a command outputs a heading
+  /// and you want to skip over the heading.
+  ///
+  /// If [runInShell] is true (defaults to false) then the command will
+  /// be run in a shell. This may be required if you are trying to run
+  /// a command that is builtin to the shell.
+  ///
+  /// If the command completes with a non-zero exit code then a
+  /// RunException is thrown. The RunException includes the exit code
+  /// and the cause contains all of the output the command wrote to
+  /// stdout and stderr before it exited.
+  ///
+  /// Any environment variables you set via env['xxx'] will be passed
+  ///  to the new process.
+  ///
+  ///EXPERIMENTAL argument.
+  /// If [nothrow] is set to true then an exception will not be thrown on
+  /// a non-zero exit code. Many applications output to stdout/stderr
+  /// to display an error message when a non-zero exit code is returned.
+  /// If you need to process these error messages then pass [nothrow:true].
+  /// The default for nothrow is false - i.e. we throw an exception on a
+  /// non-zero exitCode.
+  ///
+  /// ```dart
+  /// String logLines = 'tail -n 10 /var/log/syslog'.toParagraph();
+  /// ```
+  ///
+  /// See [toList] to return a lines written to stdout and stderr as a list.
+  ///     [forEach] to capture output to stdout and stderr interactively
+  ///     [run] to run the application without capturing its output
+  ///     [start] - to run the process fully detached.
+  ///     [firstLine] - returns just the first line written to stdout or stderr.
+  ///     [lastLine] - returns just the last line written to stdout or stderr.
+  ///     [parser] - returns a parser with the captured output ready
+  /// to be interpreted
+  ///                as one of several file types.
+  String toParagraph(
+          {bool runInShell = false,
+          int skipLines = 0,
+          bool nothrow = false,
+          bool extensionSearch = true}) =>
+      toList(
+              runInShell: runInShell,
+              skipLines: skipLines,
+              nothrow: nothrow,
+              extensionSearch: extensionSearch)
+          .join(Platform.isWindows ? '\r\n' : '\n');
 
   /// [parser] runs the contents of this String as a cli command line
   ///  reading all of the
@@ -325,6 +390,7 @@ extension StringAsProcess on String {
   /// ```
   ///
   /// See [forEach] to capture output to stdout and stderr interactively
+  ///     [toParagraph] to concatenating the return lines into a single string.
   ///     [run] to run the application without capturing its output
   ///     [start] - to run the process fully detached.
   ///     [firstLine] - returns just the first line written to stdout or stderr.
@@ -350,6 +416,7 @@ extension StringAsProcess on String {
   /// ```
   ///
   /// See [forEach] to capture output to stdout and stderr interactively
+  ///     [toParagraph] to concatenating the return lines into a single string.
   ///     [run] to run the application without capturing its output
   ///     [start] - to run the process fully detached.
   ///     [toList] - returns a lines written to stdout and stderr as a list.
@@ -384,6 +451,7 @@ extension StringAsProcess on String {
   /// end backwards.
   ///
   /// See [forEach] to capture output to stdout and stderr interactively
+  ///     [toParagraph] to concatenating the return lines into a single string.
   ///     [run] to run the application without capturing its output
   ///     [start] - to run the process fully detached.
   ///     [toList] - returns a lines written to stdout and stderr as a list.
