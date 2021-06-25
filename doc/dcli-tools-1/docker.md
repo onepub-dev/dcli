@@ -19,7 +19,7 @@ Linux path
 ```text
 RUN apt-get -y update
 RUN apt-get install --no-install-recommends -y wget ca-certificates gnupg2 procps
-RUN wget https://github.com/bsutton/dcli/releases/download/latest.linux/dcli_install
+RUN wget https://github.com/noojee/dcli/releases/download/latest.linux/dcli_install
 RUN chmod +x dcli_install
 ENV PATH="${PATH}":/usr/lib/dart/bin:"${HOME}/.pub-cache/bin":"${HOME}/.dcli/bin"
 RUN ./dcli_install
@@ -28,7 +28,7 @@ RUN ./dcli_install
 ```text
 RUN apt-get -y update
 RUN apt-get install --no-install-recommends -y wget ca-certificates gnupg2 procps
-RUN wget https://github.com/bsutton/dcli/releases/download/latest-linux/dcli_install
+RUN wget https://github.com/noojee/dcli/releases/download/latest-linux/dcli_install
 RUN chmod +x dcli_install
 ENV PATH="${PATH}":/usr/lib/dart/bin:"${HOME}/.pub-cache/bin":"${HOME}/.dcli/bin"
 RUN ./dcli_install
@@ -37,7 +37,7 @@ RUN ./dcli_install
 Windows path:
 
 ```text
-RUN wget wget https://github.com/bsutton/dcli/releases/download/latest.windows/dcli_install.exe
+RUN wget wget https://github.com/noojee/dcli/releases/download/latest.windows/dcli_install.exe
 # TODO correct this path
 ENV PATH="${PATH}":/usr/lib/dart/bin:"${HOME}/.pub-cache/bin":"${HOME}/.dcli/bin"
 RUN ./dcli_install.exe
@@ -46,7 +46,7 @@ RUN ./dcli_install.exe
 ```
 
 ```text
-RUN wget wget https://github.com/bsutton/dcli/releases/download/latest-linux/dcli_install.exe
+RUN wget wget https://github.com/noojee/dcli/releases/download/latest-linux/dcli_install.exe
 # TODO correct this path
 ENV PATH="${PATH}":/usr/lib/dart/bin:"${HOME}/.pub-cache/bin":"${HOME}/.dcli/bin"
 RUN ./dcli_install.exe
@@ -55,7 +55,7 @@ RUN ./dcli_install.exe
 Mac OSX path:
 
 ```text
-RUN wget wget https://github.com/bsutton/dcli/releases/download/latest.osx/dcli_install -O dcli_install
+RUN wget wget https://github.com/noojee/dcli/releases/download/latest.osx/dcli_install -O dcli_install
 RUN chmod +x dcli_install
 # TODO correct this path
 ENV PATH="${PATH}":/usr/lib/dart/bin:"${HOME}/.pub-cache/bin":"${HOME}/.dcli/bin"
@@ -65,7 +65,7 @@ RUN ./dcli_install
 ```
 
 ```text
-RUN wget wget https://github.com/bsutton/dcli/releases/download/latest-osx/dcli_install -O dcli_install
+RUN wget wget https://github.com/noojee/dcli/releases/download/latest-osx/dcli_install -O dcli_install
 RUN chmod +x dcli_install
 # TODO correct this path
 ENV PATH="${PATH}":/usr/lib/dart/bin:"${HOME}/.pub-cache/bin":"${HOME}/.dcli/bin"
@@ -211,7 +211,7 @@ RUN apk add --update wget
 RUN apk add bash
 RUN apk add tar
 
-RUN wget https://github.com/bsutton/dcli/raw/master/bin/linux/dcli_install
+RUN wget https://github.com/noojee/dcli/raw/master/bin/linux/dcli_install
 RUN chmod +x dcli_install
 RUN ./dcli_install
 ENV PATH="${PATH}:/usr/bin/dart/bin:/root/.pub-cache/bin"
