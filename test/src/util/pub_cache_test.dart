@@ -2,6 +2,7 @@
 import 'dart:io';
 import 'package:dcli/dcli.dart' hide equals;
 import 'package:dcli/src/util/pub_cache.dart';
+import 'package:pub_semver/pub_semver.dart';
 import 'package:test/test.dart';
 
 void main() {
@@ -34,4 +35,25 @@ void main() {
           equals(join(Platform.pathSeparator, 'test_cache', 'bin')));
     }
   }, skip: false);
+
+  test('PubCache - primaryVersion', () {
+    withTempDir((tempDir) {
+      PubCache.reset();
+      Env.reset();
+
+      /// we don't necessarily have a HOME env in the test environment.
+      env['HOME'] = createDir(join(tempDir, 'home'));
+      env['PUB_CACHE'] = createDir(join(tempDir, 'test_cache'));
+
+      final pubCache = PubCache();
+      createDir(pubCache.pathToDartLang, recursive: true);
+      createDir(join(pubCache.pathToDartLang, 'dcli-1.0.0'));
+      createDir(join(pubCache.pathToDartLang, 'dcli-1.0.1'));
+      createDir(join(pubCache.pathToDartLang, 'dcli-2.0.0'));
+      createDir(join(pubCache.pathToDartLang, 'dcli-2.0.0-beta.1'));
+      final primary = PubCache().findPrimaryVersion('dcli');
+
+      expect(primary, equals(Version.parse('2.0.0')));
+    });
+  });
 }

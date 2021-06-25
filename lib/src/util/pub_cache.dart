@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:meta/meta.dart';
+import 'package:pub_semver/pub_semver.dart';
 
 import '../../dcli.dart';
 import '../settings.dart';
@@ -134,10 +135,29 @@ class PubCache {
     _self = null;
   }
 
+  /// Path to the PubCache's hosted/pub.dartlang.org directory
+  /// where all of the downloaded packages from pub.dev live.
+  String get pathToDartLang =>
+      join(_pubCachePath, 'hosted', 'pub.dartlang.org');
+
   /// Returns the path to the package in .pub-cache for the dart
   /// project named [name] for the version [version].
   /// e.g.
   /// ~/.pub-cache/hosted/pub.dartlang.org/dswitch-4.0.1
   String pathToPackage(String name, String version) =>
-      join(_pubCachePath, 'hosted', 'pub.dartlang.org', '$name-$version');
+      join(pathToDartLang, '$name-$version');
+
+  /// Finds and returns the latest (non-pre-release) version installed into pub
+  /// cache
+  /// for the given pacakge. If there are no stable versions then a pre-release
+  /// version may be returned if one exists.
+  Version findPrimaryVersion(String packageName) {
+    final versions = find('$packageName-*.*',
+            types: [Find.directory], workingDirectory: pathToDartLang)
+        .toList();
+
+    return Version.primary(versions
+        .map((version) => Version.parse(basename(version).split('-')[1]))
+        .toList());
+  }
 }
