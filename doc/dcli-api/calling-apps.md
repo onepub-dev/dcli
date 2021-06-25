@@ -68,6 +68,7 @@ These include:
 * start
 * forEach
 * toList
+* toParagraph
 * firstLine
 * lastLine
 * \| operator
@@ -131,35 +132,94 @@ One of the most commonly use options is the 'workingDirectory'.
 var results = 'wc "fred nurk.text"'.start(workingDirectory: '/home/me');
 ```
 
-If you have read the section on the evils of CD then you will understand the need for the 'workingDirectory'. When you pass a workingDirectory to the 'start' command it executes the command \('wc'\) in the given workingDirectory rather then the user's present working directory \(pwd\).
+If you have read the section on the evils of CD then you will understand the need for the 'workingDirectory'. When you pass a workingDirectory to the 'start' command it executes the command \('wc'\) in the given workingDirectory rather than the user's present working directory \(pwd\).
 
 #### privileged
 
-If you need to run a command with escalated privileged then set the \[privileged\] flag. argument to true.
+If you need to run a command with escalated privileged then set the \[privileged\] argument to true.
 
 On Linux this equates to using the sudo command. The advantage of using the 'privileged' option it is cross platform and it will first check if you are already running in a privileged environment.
 
 This is extremely useful if you are running in the likes of a Docker container that doesn't implement sudo but in which you are already running as root.
 
+On Windows setting the priviliged argument to true will cause an exception to be thrown unless you are running as an Administrator.
+
+Calling the 'isPrivileged' function returns true if you are running under sudo/root on posix systems and true if you are running as an Administrator on Windows.
+
 ### which
 
 While the 'which' function doesn't run an executable it can be invaluable as it searches your PATH for the location of an executable.
 
-To run an executable with any of the DCli methods you don't need to know its location \(provided its on the path\) but some times you want to know if an executable is installed before you try to run it.
+To run an executable with any of the DCli methods you DON'T need to know its location \(provided it's on the path\) but sometimes you want to know if an executable is installed before you try to run it.
 
 ```dart
-var grepPath = which('grep').first;
+if (which('grep').found) print('grep is installed');
+if (which('grep').notfound) print('grep is not installed');
+
+```
+
+To get the path to the 'grep' command:
+
+```dart
+var grepPath = which('grep').path;
 ```
 
 The 'which' function may find multiple copies of grep on your path in which case it will return each of them in an array in the order that they were found on the path.
 
-In the above example we use the 'first' function to return the first path found for the 'grep' command.
+In the above example we use the 'path' function to return the first path found for the 'grep' command.
 
-You can also use the 'which' function to determine if a particular progam is installed:
+To see all the locations of grep use:
+
+```dart
+List<String> where = which('grep').paths
+```
+
+You can also use the 'which' function to determine if a particular program is installed:
 
 ```dart
 if (which('grep').isEmpty) print('grep not installed');
 ```
 
 Of course in reality we are just seeing if grep is on the path. In theory it could be installed by not on the path.
+
+**Cross Platform which**
+
+The  `which` offers built in cross platform support.
+
+On posix systems \(Linux, Mac OS\) executables normally do not have a file extension. On Windows executables will have a file extension such as '.exe'.
+
+So on posix we have`grep` whilst on Windows we have `grep.exe`.
+
+Windows provides the list of executable extensions in the PATHEXT environment variable.
+
+The `which` funciton uses PATHEXT when searching for matching commands. So if you call:
+
+```dart
+which('grep')
+```
+
+On a Posix systems we might see:
+
+```dart
+which('grep').path == '/usr/bin/grep';
+```
+
+On Windows we might see one of:
+
+```dart
+which('grep').path == 'C:\Windows\grep.exe';
+which('grep').path == 'C:\Windows\grep.bat';
+```
+
+If you pass an extension to the which command then DCli will not search for alternate extensions:
+
+```dart
+which('grep.exe').path == 'C:\Windows\grep.exe';
+```
+
+You can stop which searching for alternate extension by passing `extensionsSearch: false`
+
+```dart
+which('grep', extensionSearch: false).notfound == true
+```
 

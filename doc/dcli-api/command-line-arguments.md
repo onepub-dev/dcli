@@ -1,6 +1,6 @@
 # Command Line Arguments
 
-A command line app is only so useful unless you can pass arguments to your app.
+A CLI app is only so useful unless you can pass arguments to your app.
 
 Like many languages Dart allows you to pass arguments to your main method..
 
@@ -28,7 +28,7 @@ dart test.dart one two three
 > arg[2] = three
 ```
 
-You can also stop the your app and return an exit code using the exit method.
+You can also stop your app and return an exit code using the exit method.
 
 ```dart
 import 'dart:io';
