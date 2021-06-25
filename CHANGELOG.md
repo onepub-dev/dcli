@@ -1,3 +1,5 @@
+# 1.6.2
+
 # 1.6.1
 organised imports.
 Added method to find the primary version of a package installed into pubcache.
