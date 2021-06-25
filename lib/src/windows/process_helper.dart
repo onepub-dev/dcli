@@ -69,8 +69,7 @@ List<ProcessDetails> getWindowsProcesses() {
   return processes;
 }
 
-
-// int getWindowsParentPid(int pid) 
+// int getWindowsParentPid(int pid)
 // {
 //     HANDLE h = CreateToolhelp32Snapshot(TH32CS_SNAPPROCESS, 0);
 //     PROCESSENTRY32 pe = { 0 };

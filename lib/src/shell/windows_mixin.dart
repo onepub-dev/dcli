@@ -150,8 +150,6 @@ mixin WindowsMixin {
   /// Returns true if the current process is running with elevated privileges
   /// e.g. Is running as an Administrator.
   bool get isPrivilegedProcess => isPrivilegedUser;
-
-
 }
 
 /// Native Windows stucture used to get the elevated

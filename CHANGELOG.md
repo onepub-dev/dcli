@@ -1,3 +1,13 @@
+# 1.6.1
+organised imports.
+Added method to find the primary version of a package installed into pubcache.
+Added skip when not running on windows for the windows process helper tests.
+Change the code which loads a list of processes to use windows api calls rather than spawning tasklist. There is a slight regression in that we can't get the memory used but I think thats not a feature that people will be using as yet.
+method to allocate/free memory for ffi calls.
+Released 1.6.0.
+Fixed the isCompiled method so it also works on windows.
+reimplemented isPrivilegedUser with ffi calls.
+
 # 1.5.12
 Fixed a bug in the call to chmod during the dart sdk install from archives.
 
