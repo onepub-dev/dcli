@@ -9,7 +9,7 @@ void main() {
         ..append('def246');
       replace(temp, RegExp('[a-z]*'), 'xyz');
 
-      expect(read(temp).toList().join('\n'), '''
+      expect(read(temp).toParagraph(), '''
 xyz123
 xyz246''');
 
@@ -18,7 +18,7 @@ xyz246''');
         ..append('def246');
       replace(temp, 'abc', 'xyz');
 
-      expect(read(temp).toList().join('\n'), '''
+      expect(read(temp).toParagraph(), '''
 xyz123
 def246''');
     });

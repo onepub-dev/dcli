@@ -29,11 +29,11 @@ void main() {
 
     file.append(secondline);
 
-    expect(read(file).toList().join('\n').contains(secondline), isTrue);
+    expect(read(file).toParagraph().contains(secondline), isTrue);
 
     restoreFile(file);
 
-    expect(read(file).toList().join('\n').contains(secondline), isFalse);
+    expect(read(file).toParagraph().contains(secondline), isFalse);
 
     expect(exists(backupFilename), isFalse);
 
@@ -94,11 +94,11 @@ void main() {
 
     file.append(secondline);
 
-    expect(read(file).toList().join('\n').contains(secondline), isTrue);
+    expect(read(file).toParagraph().contains(secondline), isTrue);
 
     restoreFile(file);
 
-    expect(read(file).toList().join('\n').contains(secondline), isFalse);
+    expect(read(file).toParagraph().contains(secondline), isFalse);
 
     expect(exists(backupFilename), isFalse);
   });

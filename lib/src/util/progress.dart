@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:io';
 
 import 'package:async/async.dart';
 import 'package:collection/collection.dart';
@@ -249,6 +250,7 @@ class Progress {
   /// [skipLines] must be +ve.
   ///
   /// See [firstLine]
+  ///     [toParagraph]
   ///     [forEach]
   List<String> toList({final int skipLines = 0}) {
     var _skipLines = skipLines;
@@ -269,6 +271,21 @@ class Progress {
     }
     return lines;
   }
+
+  /// [toParagraph] runs the contents of this String as a CLI command and
+  /// returns the lines written to stdout and stderr as
+  /// a single String by join the lines with the platform specific line
+  /// delimiter.
+  /// 
+  /// If you pass a non-zero value to [skipLines]
+  /// then the list will skip over the first [skipLines] count;
+  /// [skipLines] must be +ve.
+  ///
+  /// See [firstLine]
+  ///     [toList]
+  ///     [forEach]
+  String toParagraph({final int skipLines = 0}) =>
+      toList(skipLines: skipLines).join(Platform.isWindows ? '\r\n' : '\n');
 
   /// If the [Progress] was created with captureStdout = true
   /// or captureStderr = true

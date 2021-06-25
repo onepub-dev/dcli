@@ -208,9 +208,9 @@ class ProcessHelper {
 
     // example:
     // "wininit.exe","584","Services","0","5,248 K"
-    final tasks = 'tasklist /fo csv /nh'.toList();
+    final tasks = 'tasklist /fo csv /nh'.toParagraph();
 
-    final lines = const CsvToListConverter().convert(tasks.join('\r\n'));
+    final lines = const CsvToListConverter().convert(tasks);
     for (final line in lines) {
       //verbose(() => 'tasklist: $line');
 

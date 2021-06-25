@@ -17,8 +17,8 @@ void main() {
 
     expect(exists(to), isTrue);
 
-    final toContent = read(to).toList().join('\n');
-    final fromContent = read(from).toList().join('\n');
+    final toContent = read(to).toParagraph();
+    final fromContent = read(from).toParagraph();
 
     expect(fromContent, equals(toContent));
   });
@@ -39,8 +39,8 @@ void main() {
 
     expect(exists(toFilename), isTrue);
 
-    final toContent = read(toFilename).toList().join('\n');
-    final fromContent = read(from).toList().join('\n');
+    final toContent = read(toFilename).toParagraph();
+    final fromContent = read(from).toParagraph();
 
     expect(fromContent, equals(toContent));
   });
@@ -99,8 +99,8 @@ void main() {
 
     expect(exists(to), isTrue);
 
-    final toContent = read(to).toList().join('\n');
-    final fromContent = read(from).toList().join('\n');
+    final toContent = read(to).toParagraph();
+    final fromContent = read(from).toParagraph();
 
     expect(fromContent, equals(toContent));
   });

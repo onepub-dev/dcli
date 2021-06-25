@@ -224,7 +224,7 @@ class DartScript {
       bool overwrite = false,
       String? workingDirectory}) {
     verbose(() => '\nCompiling with pubspec.yaml:\n'
-        "${read(pathToPubSpec).toList().join('\n')}\n");
+        '${read(pathToPubSpec).toParagraph()}\n');
 
     workingDirectory ??= pwd;
 

@@ -77,8 +77,8 @@ void main() {
       nothrow: true,
     );
     expect(progress.exitCode, equals(25));
-    final lines = progress.lines;
-    expect(lines.join('\n').contains('Hello World - StdOut'), isTrue);
-    expect(lines.join('\n').contains('Hello World - StdErr'), isTrue);
+    final paragraph = progress.toParagraph();
+    expect(paragraph.contains('Hello World - StdOut'), isTrue);
+    expect(paragraph.contains('Hello World - StdErr'), isTrue);
   });
 }
