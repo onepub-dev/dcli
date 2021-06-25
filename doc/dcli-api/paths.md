@@ -135,6 +135,7 @@ A common mistake made by many CLI applications when reporting errors is to repor
 ```dart
 /// if you pwd is /usr/home
 truepath('adirectory') == '/usr/home/adirectory';
+truepath('..\adirectory') == '/usr/adirectory';
 truepath('..', 'adirectory') == '/usr/adirectory';
 truepath(rootPath, 'usr', 'home', 'adirectory') == '/usr/home/adirectory';
 
