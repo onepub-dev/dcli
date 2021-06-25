@@ -16,7 +16,7 @@
 * [Futures](dart-basics/futures.md)
 * [stdin/stdout/stderr a primer](dart-basics/stdin-stdout-stderr.md)
 
-## DCli API
+## Tour <a id="dcli-api"></a>
 
 * [Overview](dcli-api/overview.md)
 * [Using DCli functions](dcli-api/using-dcli-functions.md)

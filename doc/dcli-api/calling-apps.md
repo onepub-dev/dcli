@@ -6,7 +6,7 @@
 For complete API documentation refer to: [pub.dev](https://pub.dev/documentation/dcli/latest/dcli/dcli-library.html)
 {% endhint %}
 
-The DCli API can run any console application.
+The DCli API can run any console \(CLI\) application.
 
 DCli provides a extensive number of methods to run CLI applications.
 
@@ -36,7 +36,7 @@ void main()
 }
 ```
 
-One of the key consequences of this principle is that if you run an app from DCli and then application returns an non-zero exit code then DCli will throw an exception.
+One of the key consequences of this principle is that if you run an app from DCli and that application returns an non-zero exit code then DCli will throw an exception.
 
 In most cases this is the correct action to take.
 
@@ -44,13 +44,17 @@ However some application return a non-zero exit code to indicate something other
 
 Using the 'nothrow' option allows you to obtain the exit code as well as any output from the application.
 
+You also need to use the 'nothrow' option if you need to process any output that went to stderr when a non-zero exit code is returned.
+
 ### Treating Strings as commands
 
-DCli extends the String class to provide a simple mechanism for running other cli applications.
+DCli extends the String class to provide a simple mechanism for running other CLI applications.
 
-The aim of this somewhat unorthodox approach is to deliver the elegance that Bash achieves when calling cli applications.
+The aim of this somewhat unorthodox approach is to deliver the elegance that Bash achieves when calling CLI applications.
 
 The following example shows how we have added a `run` method to the String class. The `run` method treats the String as a command line that is to be executed.
+
+In this example we run the command 'wc' \(word count\) on the file 'fred.txt'. The output from the call to 'wc' will be displayed on the console.
 
 ```dart
  'wc fred.text'.run;
@@ -84,6 +88,9 @@ This is the resulting syntax:
     // run tail printing out stdout and stderr
     'tail fred.txt'.forEach((line) => print(line)
         , stderr: (line) => print(line)) ;
+    
+    // run the 'ls' command in the /tmp directory
+    'ls'.start(workingDirectory: '/tmp');
 ```
 
 If you need to pass an argument to your application that contains spaces then use quotes: e.g.
