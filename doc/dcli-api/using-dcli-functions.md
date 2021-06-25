@@ -39,9 +39,7 @@ void main() {
     // update the last modified time on an existing file
     touch(pathToGoodJpg);
 
-    // I think you know this one.
-    // print works just as well.
-    echo('Showing all files');
+    print('Showing all files');
 
     // print out all files in the current directory.
     // [file] is just a [String]
@@ -50,10 +48,10 @@ void main() {
     // take a nap for a couple of seconds.
     sleep(2);
 
-    echo('Find file matching *.jpg');
+    print('Find file matching *.jpg');
     // Find all files that end with .jpg
     // in the current directory and any subdirectories
-    for (var file in find('*.jpg', root: pathToImages).toList()) {
+    for (var file in find('*.jpg', workingDirectory: pathToImages).toList()) {
         print(file);
     }
 
