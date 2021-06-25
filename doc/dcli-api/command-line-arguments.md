@@ -55,7 +55,7 @@ For simple command argument processing you can process the args argument yoursel
 
 If you want to do more complex argument processing then its better to get some help.
 
-The Dart team has very kindly put together the [args](https://pub.dev/packages/args) package which provides advanced argument parsing. The DCli API includes the args package so you do NOT need to added it to your pubspec.yaml dependencies.
+The Dart team has very kindly put together the [args](https://pub.dev/packages/args) package which provides advanced argument parsing. The DCli API includes the args package so you do NOT need to add it to your pubspec.yaml dependencies.
 
 You can read all about using the [args](https://pub.dev/packages/args) package on [pub.dev](https://pub.dev/packages/args) but here is a little example of what you can do:
 
