@@ -50,6 +50,9 @@ class BashShell with ShellMixin, PosixShell {
   /// already on the path.
   @override
   bool appendToPATH(String path) {
+    // ignore: flutter_style_todos
+    /// TODO: check if there is already an export
+    /// for dcli path.
     if (!isOnPATH(path)) {
       final export = 'export PATH=\$PATH:$path';
       _updatePATH(export);

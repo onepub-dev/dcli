@@ -91,7 +91,8 @@ class InstallCommand extends Command {
     if (_quiet) {
       print('Installing DCli v$packageVersion ...');
     }
-    _qprint('Hang on a tick whilst we install DCli ${Settings().version}');
+    _qprint(
+        green('Hang on a tick whilst we install DCli ${Settings().version}'));
 
     _qprint('');
 
@@ -107,22 +108,21 @@ class InstallCommand extends Command {
 
     // Create the ~/.dcli root.
     if (!exists(Settings().pathToDCli)) {
-      _qprint(blue('Creating ${Settings().pathToDCli}'));
+      _qprint('${blue('Creating')} ${green('.dcli')} '
+          '${blue('directory: ${Settings().pathToDCli}')}');
       createDir(Settings().pathToDCli);
     } else {
-      _qprint('Found existing install at: ${Settings().pathToDCli}.');
+      _qprint(blue('Found existing install at: ${Settings().pathToDCli}.'));
     }
-    _qprint('');
-
     _qprint('');
 
     /// create the template directory.
     if (!exists(Settings().pathToTemplate)) {
-      _qprint(blue(
-          'Creating Template directory in: ${Settings().pathToTemplate}.'));
+      _qprint('${blue('Creating')} ${green('template')} '
+          '${blue('directory: ${Settings().pathToTemplate}.')}');
     } else {
-      _qprint(blue(
-          'Updating Template directory in: ${Settings().pathToTemplate}.'));
+      _qprint('${blue('Updating ${green('template')} ')}'
+          '${blue('directory: ${Settings().pathToTemplate}.')}');
     }
 
     initTemplates();
@@ -131,14 +131,21 @@ class InstallCommand extends Command {
     final binPath = Settings().pathToDCliBin;
     if (!exists(binPath)) {
       _qprint('');
-      _qprint(blue('Creating bin directory in: $binPath.'));
+      _qprint('${blue('Creating ${green('bin')} ')}'
+          '${blue('directory: $binPath.')}');
       createDir(binPath);
+    }
 
-      // check if shell can add a path.
-      if (!shell.hasStartScript || !shell.appendToPATH(binPath)) {
-        _qprint(orange('If you want to use dcli compile -i to install scripts, '
-            'add $binPath to your PATH.'));
+    final wasOnPath = Env().isOnPATH(binPath);
+    // check if shell can add a path.
+    if (shell.appendToPATH(binPath)) {
+      if (!wasOnPath) {
+        _qprint(orange('You will need to restart your terminal '
+            'for DCli to be on your PATH.'));
       }
+    } else {
+      _qprint(orange('If you want to use dcli compile -i to install scripts, '
+          'add $binPath to your PATH.'));
     }
 
     shell.addFileAssocation(binPath);
