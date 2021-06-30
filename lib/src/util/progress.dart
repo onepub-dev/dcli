@@ -276,7 +276,7 @@ class Progress {
   /// returns the lines written to stdout and stderr as
   /// a single String by join the lines with the platform specific line
   /// delimiter.
-  /// 
+  ///
   /// If you pass a non-zero value to [skipLines]
   /// then the list will skip over the first [skipLines] count;
   /// [skipLines] must be +ve.
