@@ -1,3 +1,6 @@
+# 1.7.1
+- Added verbose statement to DartScript.
+
 # 1.7.0
 - Changed findPrimaryVersion to run null if package doesn't exist in pub-cache. This makes error handling easier than when an exception was being throw. We previously through a StateError and this wasn't really an error.
 minor doco changes.
