@@ -59,7 +59,7 @@ class DartProject {
   // ignore: prefer_constructors_over_static_methods
   static DartProject get self {
     if (Platform.packageConfig != null) {
-      /// When running as a unit test we can't use DartScript.current
+      /// When running as a unit test we can't use DartScript.self
       /// as it returns the the test runner.
       /// The packageConfig is available if passed (which unit tests do)
       /// and when passed is probably the most relable means of
