@@ -1,3 +1,8 @@
+# 1.7.0
+- Changed findPrimaryVersion to run null if package doesn't exist in pub-cache. This makes error handling easier than when an exception was being throw. We previously through a StateError and this wasn't really an error.
+minor doco changes.
+- Added working directory to runexception to aid the user in diagnosing the cause of the run failure.
+
 # 1.6.3
 - improved the messaging when dcli isn't on the path. improved colour coding of installer.
 - Added toParagraph method to the progress. Returns the output as a single string joined by the platform specific line delimitier.
