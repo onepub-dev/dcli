@@ -45,6 +45,7 @@ class DartScript {
         _scriptDirectory = dirname(truepath(pathToScript)),
         _project = project {
     {
+      verbose(() => '_pathToScript: $_pathToScript');
       _scriptName = p.basename(truepath(pathToScript));
       if (create) {
         DartProject.fromPath(pathToProjectRoot).initFiles();
