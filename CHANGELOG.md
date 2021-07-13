@@ -10,38 +10,36 @@ minor doco changes.
 - improved the messaging when dcli isn't on the path. improved colour coding of installer.
 - Added toParagraph method to the progress. Returns the output as a single string joined by the platform specific line delimitier.
 
-
 # 1.6.2
 
 # 1.6.1
-organised imports.
-Added method to find the primary version of a package installed into pubcache.
-Added skip when not running on windows for the windows process helper tests.
-Change the code which loads a list of processes to use windows api calls rather than spawning tasklist. There is a slight regression in that we can't get the memory used but I think thats not a feature that people will be using as yet.
-method to allocate/free memory for ffi calls.
-Released 1.6.0.
-Fixed the isCompiled method so it also works on windows.
-reimplemented isPrivilegedUser with ffi calls.
+- organised imports.
+- Added method to find the primary version of a package installed into pubcache.
+- Added skip when not running on windows for the windows process helper tests.
+- Change the code which loads a list of processes to use windows api calls rather than spawning tasklist. There is a slight regression in that we can't get the memory used but I think thats not a feature that people will be using as yet.
+- method to allocate/free memory for ffi calls.
+- Released 1.6.0.
+- Fixed the isCompiled method so it also works on windows.
+- reimplemented isPrivilegedUser with ffi calls.
 
 # 1.5.12
-Fixed a bug in the call to chmod during the dart sdk install from archives.
+- Fixed a bug in the call to chmod during the dart sdk install from archives.
 
 # 1.5.11
 - Fixed a a path that we use to look for dart during installation.
 - Removed use of ansi chars to show dart sdk progress as having problems in a docker container. Now just print a '.' each time data arrives.
 
 # 1.5.10
-Added code to catch error if we attempt to read the cursorPosition if stdin is closed.
+- Added code to catch error if we attempt to read the cursorPosition if stdin is closed.
 
 # 1.5.9
-- Changed the installer so it no longer uses apt to install dart as the apt package
-is always stale. Now always install from the dart archives.
+- Changed the installer so it no longer uses apt to install dart as the apt package is always stale. Now always install from the dart archives.
 - Also fixed a bug where the installer failed to install dart as it incorrected thought that dart was installed.
 
 # 1.5.8
-Added back in the global activation of dcli as we have removed the sudo requirement which means that https://github.com/dart-lang/sdk/issues/46255 no longer applies.
-Added documenation on  using chmod. Added Windodws support by making the call a noop.
-Changed DartProject.isReadyToRun to use DartSdk.isPubGetRequired as this does a more complete check.
+- Added back in the global activation of dcli as we have removed the sudo requirement which means that https://github.com/dart-lang/sdk/issues/46255 no longer applies.
+- Added documenation on  using chmod. Added Windodws support by making the call a noop.
+- Changed DartProject.isReadyToRun to use DartSdk.isPubGetRequired as this does a more complete check.
 
 # 1.5.7
 FIXES: 
@@ -78,11 +76,11 @@ Updated the homepage.
 removed the dcli symlink for sudo as it just wasn't going to work. 
 
 # 1.5.3
-performance improvements for unit tests.
-restricted the privileged requirements on install to windows.
-Merge branch 'master' of https://github.com/bsutton/dcli
-GitBook: [master] 67 pages modified
-Fixed the named lock trash test so it shuts down cleanly.
+- performance improvements for unit tests.
+- restricted the privileged requirements on install to windows.
+- Merge branch 'master' of https://github.com/bsutton/dcli
+- GitBook: [master] 67 pages modified
+- Fixed the named lock trash test so it shuts down cleanly.
 
 # 1.6.0-beta.1
 - improved performance of unit tests by removing unnecessary testfilesystem.
