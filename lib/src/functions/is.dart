@@ -127,7 +127,8 @@ class _Is extends DCliFunction {
     final _exists = FileSystemEntity.typeSync(path, followLinks: followLinks) !=
         FileSystemEntityType.notFound;
 
-    verbose(() => 'exists: $_exists $path followLinks: $followLinks');
+    verbose(
+        () => 'exists: $_exists ${truepath(path)} followLinks: $followLinks');
 
     return _exists;
   }
@@ -142,7 +143,7 @@ class _Is extends DCliFunction {
   /// empty directory.
   /// For large directories this operation can be expensive.
   bool isEmpty(String pathToDirectory) {
-    verbose(() => 'isEmpty: $pathToDirectory');
+    verbose(() => 'isEmpty: ${truepath(pathToDirectory)}');
 
     return Directory(pathToDirectory).listSync(followLinks: false).isEmpty;
   }
@@ -150,21 +151,21 @@ class _Is extends DCliFunction {
   /// checks if the passed [path] (a file or directory) is
   /// writable by the user that owns this process
   bool isWritable(String path) {
-    verbose(() => 'isWritable: $path');
+    verbose(() => 'isWritable: ${truepath(path)}');
     return _checkPermission(path, writeBitMask);
   }
 
   /// checks if the passed [path] (a file or directory) is
   /// readable by the user that owns this process
   bool isReadable(String path) {
-    verbose(() => 'isReadable: $path');
+    verbose(() => 'isReadable: ${truepath(path)}');
     return _checkPermission(path, readBitMask);
   }
 
   /// checks if the passed [path] (a file or directory) is
   /// executable by the user that owns this process
   bool isExecutable(String path) {
-    verbose(() => 'isExecutable: $path');
+    verbose(() => 'isExecutable: ${truepath(path)}');
     return Settings().isWindows || _checkPermission(path, executeBitMask);
   }
 
@@ -175,8 +176,8 @@ class _Is extends DCliFunction {
   /// Checks if the user permission to act on the [path] (a file or directory)
   /// for the given permission bit mask. (read, write or execute)
   bool _checkPermission(String path, int permissionBitMask) {
-    verbose(
-        () => '_checkPermission: $path permissionBitMask: $permissionBitMask');
+    verbose(() => '_checkPermission: ${truepath(path)} '
+        'permissionBitMask: $permissionBitMask');
 
     if (Settings().isWindows) {
       throw UnsupportedError(
