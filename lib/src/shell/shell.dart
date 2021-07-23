@@ -40,6 +40,7 @@ abstract class Shell {
   /// in a persistent manner.
   /// Note: this doesn't update current scripts
   /// path.
+  /// Returns true if we successfully appended the path.
   /// In almost all shells you will need to restart
   /// the terminal in order for the path change to take affect.
   bool appendToPATH(String path);
@@ -48,6 +49,7 @@ abstract class Shell {
   /// in a persistent manner.
   /// Note: this doesn't update current scripts
   /// path.
+  /// Returns true if we successfully prepended the path.
   /// In almost all shells you will need to restart
   /// the terminal in order for the path change to take affect.
   bool prependToPATH(String path);

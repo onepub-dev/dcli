@@ -1,6 +1,6 @@
 # Command Line Arguments
 
-A command line app is only so useful unless you can pass arguments to your app.
+A CLI app is only so useful unless you can pass arguments to your app.
 
 Like many languages Dart allows you to pass arguments to your main method..
 
@@ -28,7 +28,7 @@ dart test.dart one two three
 > arg[2] = three
 ```
 
-You can also stop the your app and return an exit code using the exit method.
+You can also stop your app and return an exit code using the exit method.
 
 ```dart
 import 'dart:io';
@@ -55,7 +55,7 @@ For simple command argument processing you can process the args argument yoursel
 
 If you want to do more complex argument processing then its better to get some help.
 
-The Dart team has very kindly put together the [args](https://pub.dev/packages/args) package which provides advanced argument parsing. The DCli API includes the args package so you do NOT need to added it to your pubspec.yaml dependencies.
+The Dart team has very kindly put together the [args](https://pub.dev/packages/args) package which provides advanced argument parsing. The DCli API includes the args package so you do NOT need to add it to your pubspec.yaml dependencies.
 
 You can read all about using the [args](https://pub.dev/packages/args) package on [pub.dev](https://pub.dev/packages/args) but here is a little example of what you can do:
 

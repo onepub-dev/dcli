@@ -317,7 +317,8 @@ class RunnableProcess {
             exitCode,
             'The command '
             '${red('[${_parsed.cmd}] with args [${_parsed.args.join(', ')}]')} '
-            'failed with exitCode: $exitCode'));
+            'failed with exitCode: $exitCode '
+            'workingDirectory: $workingDirectory'));
       } else {
         exited.complete(exitCode);
       }
@@ -384,7 +385,8 @@ class RunnableProcess {
               'The command '
               // ignore: lines_longer_than_80_chars
               '${red('[${_parsed.cmd}] with args [${_parsed.args.join(', ')}]')}'
-              ' failed with exitCode: $exitCode');
+              ' failed with exitCode: $exitCode '
+              'workingDirectory: $workingDirectory');
           progress
             ..onError(error)
             ..close();
@@ -427,7 +429,8 @@ class RunnableProcess {
               'The command '
               // ignore: lines_longer_than_80_chars
               '${red('[${_parsed.cmd}] with args [${_parsed.args.join(', ')}]')}'
-              ' failed with exitCode: $exitCode'));
+              ' failed with exitCode: $exitCode '
+              'workingDirectory: $workingDirectory'));
         } else {
           exited.complete(true);
         }

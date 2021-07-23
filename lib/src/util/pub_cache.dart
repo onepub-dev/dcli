@@ -148,13 +148,20 @@ class PubCache {
       join(pathToDartLang, '$name-$version');
 
   /// Finds and returns the latest (non-pre-release) version installed into pub
-  /// cache
-  /// for the given pacakge. If there are no stable versions then a pre-release
+  /// cache for the given package.
+  ///
+  /// If there are no stable versions then a pre-release
   /// version may be returned if one exists.
-  Version findPrimaryVersion(String packageName) {
+  ///
+  /// If no versions are installed then null is returned.
+  Version? findPrimaryVersion(String packageName) {
     final versions = find('$packageName-*.*',
             types: [Find.directory], workingDirectory: pathToDartLang)
         .toList();
+
+    if (versions.isEmpty) {
+      return null;
+    }
 
     return Version.primary(versions
         .map((version) => Version.parse(basename(version).split('-')[1]))

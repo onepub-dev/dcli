@@ -13,7 +13,8 @@ The paths package includes a number of global functions that let us create and m
 * extension
 * basename
 * basenameWithoutExtension
-* truepath
+* truepath - this is actually a DCli provided method.
+* canonicalize
 
 The path package is included as part of DCli so you don't need to add a dependency to your pubspec.yaml.
 
@@ -31,7 +32,7 @@ print(tmp);
 > /tmp/abc/image.txt
 ```
 
-'rootPath' is a DCli property that is the root directory for your OS. On Linux and OSX this is '/' on Windows this is '\';
+'rootPath' is a DCli property that is the root directory for your OS. On Linux and Mac OS this is '/', on Windows this is 'C:\' \(dependent on your current working directory\).
 
 ```dart
 var apps = join(HOME, 'apps');
@@ -44,7 +45,7 @@ print(tmp);
 HOME is a DCli property which returns the value of the environment variable 'HOME' \(in this example /home/me\)
 {% endhint %}
 
-In the above example we can see that the join path combines two path fragments to form a complete path.
+In the above example we can see that the join function combines two path fragments to form a complete path.
 
 ## Dirname
 
@@ -58,7 +59,7 @@ print(dirname(tmp));
 > /tmp/abc
 ```
 
-The dirname function will also strip the last directory of a path is the passed path doesnt' have a filename.
+The dirname function will also strip the last directory of a path is the passed path doesn't have a filename.
 
 ```dart
 var tmp = join(rootPath, 'tmp', 'abc');
@@ -123,15 +124,43 @@ print(basenameWithoutExtension(tmp));
 
 Truepath is s DCli function rather than a 'path' function.
 
-The truepath combines a number of 'path' functions to return an absolute path that has been canonicalised.
+The truepath combines a number of 'path' functions to return an absolute path that has been normalised.
 
 {% hint style="info" %}
-A canonical path is one which has had the '..' components resolved.
+A normalised path is one which has had the '..' components resolved.
 {% endhint %}
 
-A common mistake made by many cli applications when reporting errors is to report relative paths.
+A common mistake made by many CLI applications when reporting errors is to report relative paths.
 
-For the user of your application it can often be difficult to determine what the relative path is relative to. All DCli errors that contain a path call truepath so that the path is absolute and canonicalised, this gives your users the best chance of correctly identifying the file or path that caused the problem.
+```dart
+/// if you pwd is /usr/home
+truepath('adirectory') == '/usr/home/adirectory';
+truepath('..\adirectory') == '/usr/adirectory';
+truepath('..', 'adirectory') == '/usr/adirectory';
+truepath(rootPath, 'usr', 'home', 'adirectory') == '/usr/home/adirectory';
 
-You should also canonicalise any path that a user enters. Using '..' to bypass security checks is a common hacking trick.
+// on windows
+truepath(rootPath, 'usr', 'home', 'adirectory') == 'C:\usr\home\adirectory';
+
+```
+
+For the user of your application it can often be difficult to determine what the relative path is relative to. All DCli errors that contain a path call truepath so that the path is absolute and normalised, this gives your users the best chance of correctly identifying the file or path that caused the problem.
+
+You should also normalised any path that a user enters. Using '..' to bypass security checks is a common hacking trick.
+
+## **canonicalize**
+
+If you need to compare to paths you need to both canonicalize your path. As Windows paths are case-insensitive the canonicalize operations returns a all lowercase version of the path which ensures to equivalent paths will return true when a string comparison is performed. The call to canonicalize will also normalize the path.
+
+The only safe way to compare two paths it to compare two absolute paths that have been canonicalized:
+
+```dart
+canonicalize(absolute('adirectory')) == '/current/dir/adirectory';
+```
+
+The `absolute` call assumes that `adirectory` is in the current working directory. To get the absolute path of a directory relative to some other directory use `relative`.
+
+```dart
+canonicalize(relative('adirectory', from: '/home/me')) == '/home/me/adirectory';
+```
 
