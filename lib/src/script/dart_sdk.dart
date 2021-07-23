@@ -460,7 +460,8 @@ class DartSdk {
   /// Run dart pub global activate on the given [package].
   void globalActivate(String package) {
     runPub(
-        args: ['global', 'activate', 'dcli'], progress: Progress.printStdErr());
+        args: ['global', 'activate', package],
+        progress: Progress.printStdErr());
   }
 
   /// Run dart pub global activate for a packae located in [path]
