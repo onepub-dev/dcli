@@ -1,3 +1,6 @@
+# 1.6.4
+- Fixed a bug in DartSdk.globalActivate - it was ignoring the passed package and always installing dcli :)
+
 # 1.7.1
 - Added verbose statement to DartScript.
 
