@@ -32,7 +32,7 @@ Whether its a 5 line Bash script or a 100,000 line production management system 
 DCli is based on Dart which is a modern programming language that has a set of features that makes building CLI apps easy and reliable.
 * Dart and DCli are simple to learn
 * Compiled or JIT 
-* Shebang support (run .dart scripts directly from the cli ./hellow.dart)
+* Shebang support (run .dart scripts directly from the cli ./hello.dart)
 * Small transportable execs (from 10MB), Dart VM is NOT required on target system.
 * Typesafe language catches errors at compile time
 * Sound null safety reduces null pointer exceptions
