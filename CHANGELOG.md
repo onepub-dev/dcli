@@ -1,3 +1,7 @@
+# 1.6.5
+- Added method isProcessRunning to the ProcessHelper class.
+- Fixed typo in doco - thanks to @whoizit
+
 # 1.6.4
 - Fixed a bug in DartSdk.globalActivate - it was ignoring the passed package and always installing dcli :)
 

@@ -31,11 +31,11 @@ enum TerminalClearMode {
 
 /// Provides access to the Ansi Terminal.
 class Terminal {
-  /// Factory ctor to get a Termainl
+  /// Factory ctor to get a Terminal
   factory Terminal() => _self;
 
   // ignore: flutter_style_todos
-  /// TODO(bsutton): if we don't have a terminal or ansi isn't support
+  /// TODO(bsutton): if we don't have a terminal or ansi isn't supported
   /// we need to suppress any ansi codes being output.
 
   Terminal._internal();
@@ -94,7 +94,7 @@ class Terminal {
 
   /// Writes [text] to the console followed by a newline.
   /// You can control the alignment of [text] by passing the optional
-  /// [alignment] argment which defaults to left alignment.
+  /// [alignment] argument which defaults to left alignment.
   /// The alignment is based on the current terminals width with
   /// spaces inserted to the left of the string to facilitate the alignment.
   /// Make certain the current line is clear and the cursor is at column 0
@@ -168,8 +168,8 @@ class Terminal {
 
   /// The width of the terminal in columns.
   /// Where a column is one character wide.
-  /// If no terminal is attached to a value of 80 is returned.
-  /// This value can change if the users resizes the console window.
+  /// If no terminal is attached, a value of 80 is returned.
+  /// This value can change if the user resizes the console window.
   int get columns {
     if (hasTerminal) {
       return _console.windowWidth;
@@ -188,11 +188,11 @@ class Terminal {
     _console.cursorPosition = Coordinate(row, column);
   }
 
+  /// Returns the current co-ordinates of the cursor.
+  /// If no terminal is attached we return null
+  /// as attempting to read from from stdin to
+  /// obtain the cursor will hang the app.
   Coordinate? get _cursor {
-    /// attempting to get the cursor position if
-    /// we don't have a terminal will hang the app
-    /// as to obtain the cursor we must read from the
-    /// terminal.
     if (hasTerminal && Ansi.isSupported) {
       try {
         return _console.cursorPosition;

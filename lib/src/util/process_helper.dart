@@ -77,6 +77,19 @@ class ProcessHelper {
     }
   }
 
+  /// Returns true a the process with the given [name]
+  /// is currently running.
+  ///
+  bool isProcessRunning(String name) {
+    for (final pd in getProcesses()) {
+      if (pd.name == name) {
+        return true;
+      }
+    }
+
+    return false;
+  }
+
   /// returns the pid of the parent pid or -1 if the
   /// child doesn't have a parent.
   int _linuxGetParentPID(int? childPid) {
