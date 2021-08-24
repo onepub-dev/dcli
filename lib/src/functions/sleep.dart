@@ -27,7 +27,7 @@ enum Interval {
   seconds,
 
   /// the duration argument is in seconds
-  millseconds,
+  milliseconds,
 
   /// the duration argument is in seconds
   minutes
@@ -44,7 +44,7 @@ class _Sleep extends DCliFunction {
       case Interval.seconds:
         _duration = Duration(seconds: duration);
         break;
-      case Interval.millseconds:
+      case Interval.milliseconds:
         _duration = Duration(milliseconds: duration);
         break;
       case Interval.minutes:
