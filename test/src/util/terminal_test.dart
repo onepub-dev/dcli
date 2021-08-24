@@ -34,7 +34,7 @@ void main() {
     print('should be on line 3');
     for (var i = 0; i < 20; i++) {
       term.overwriteLine('count $i');
-      sleep(300, interval: Interval.millseconds);
+      sleep(300, interval: Interval.milliseconds);
     }
     print('');
     print(red('and in red'));
