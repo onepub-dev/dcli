@@ -16,7 +16,7 @@ void main() {
           '''
 xyz123
 xyz246'''
-              .replaceAll('\n', Platform.isWindows ? '\r\n' : '\n'));
+              .replaceAll('\n', Platform().eol));
 
       temp
         ..write('abc123')
@@ -28,7 +28,7 @@ xyz246'''
           '''
 xyz123
 def246'''
-              .replaceAll('\n', Platform.isWindows ? '\r\n' : '\n'));
+              .replaceAll('\n', Platform().eol));
     });
   });
 }

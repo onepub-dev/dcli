@@ -8,17 +8,15 @@ void main() {
     final path = join('assets', 'templates', 'basic.dart');
     final content = Assets().loadString(path);
 
-    final lineDelimiter = Platform.isWindows ? '\r\n' : '\n';
-
     expect(content, isNotNull);
 
     var actual =
         read(join(DartProject.self.pathToProjectRoot, 'lib', 'src', path))
             .toList()
-            .join(lineDelimiter);
+            .join(Platform().eol);
 
     /// the join trims the last \n
-    actual += lineDelimiter;
+    actual += Platform().eol;
 
     expect(content, equals(actual));
   });
