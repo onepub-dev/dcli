@@ -9,6 +9,7 @@ import 'pipe.dart';
 import 'progress.dart';
 
 import 'runnable_process.dart';
+import 'platform.dart';
 
 ///
 /// A set of String extensions that lets you
@@ -362,7 +363,7 @@ extension StringAsProcess on String {
               skipLines: skipLines,
               nothrow: nothrow,
               extensionSearch: extensionSearch)
-          .join(Platform.isWindows ? '\r\n' : '\n');
+          .join(Platform().eol);
 
   /// [parser] runs the contents of this String as a cli command line
   ///  reading all of the

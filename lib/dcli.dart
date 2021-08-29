@@ -82,6 +82,7 @@ export 'src/util/file_sort.dart' show FileSort, Column, SortDirection;
 export 'src/util/file_sync.dart';
 export 'src/util/format.dart' show Format, TableAlignment;
 export 'src/util/named_lock.dart' show NamedLock, LockException;
+export 'src/util/platform.dart';
 export 'src/util/process_helper.dart' show ProcessHelper, ProcessDetails;
 export 'src/util/progress.dart' show Progress;
 export 'src/util/pub_cache.dart';

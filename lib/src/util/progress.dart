@@ -285,7 +285,7 @@ class Progress {
   ///     [toList]
   ///     [forEach]
   String toParagraph({final int skipLines = 0}) =>
-      toList(skipLines: skipLines).join(Platform.isWindows ? '\r\n' : '\n');
+      toList(skipLines: skipLines).join(Platform().eol);
 
   /// If the [Progress] was created with captureStdout = true
   /// or captureStderr = true

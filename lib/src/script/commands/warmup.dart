@@ -5,8 +5,8 @@ import '../dart_project.dart';
 import '../flags.dart';
 import 'commands.dart';
 
-/// implementation for the 'prepare' command
-/// which does any work necessary to prepare a projects
+/// implementation for the 'warmup' command
+/// which does any work necessary to prepare a project
 /// to be run. Essentially this equates to doing a pub get.
 class WarmupCommand extends Command {
   ///
