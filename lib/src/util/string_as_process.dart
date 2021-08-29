@@ -3,13 +3,11 @@ import 'dart:io';
 
 import '../functions/run.dart' as cmd;
 import 'file_sync.dart';
-
 import 'parser.dart';
 import 'pipe.dart';
-import 'progress.dart';
-
-import 'runnable_process.dart';
 import 'platform.dart';
+import 'progress.dart';
+import 'runnable_process.dart';
 
 ///
 /// A set of String extensions that lets you

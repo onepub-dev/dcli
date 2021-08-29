@@ -1,5 +1,6 @@
 #! /usr/bin/env dcli
 
+import 'dart:io';
 import 'package:dcli/dcli.dart';
 
 void main() {
@@ -87,7 +88,7 @@ void main() {
     // Review our good woork.
     cat(restingPlace);
 
-    read(restingPlace, delim: Platform.eol).forEach(print);
+    read(restingPlace, delim: Platform().eol).forEach(print);
 
     // ask the user if we are ready to publish.
     // But we can't do this in a vscode debug session
