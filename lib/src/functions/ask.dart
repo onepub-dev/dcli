@@ -248,7 +248,7 @@ class Ask extends DCliFunction {
       int char;
       do {
         char = stdin.readByteSync();
-        if (char != 10) {
+        if (char != 10 && char != 13) {
           if (char == _backspace) {
             if (value.isNotEmpty) {
               // move back a character,
@@ -266,10 +266,10 @@ class Ask extends DCliFunction {
             value.add(char);
           }
         }
-      } while (char != 10);
+      } while (char != 10 && char != 13);
     } finally {
-      stdin.echoMode = true;
       stdin.lineMode = true;
+      stdin.echoMode = true;
     }
 
     // output a newline as we have suppressed it.
