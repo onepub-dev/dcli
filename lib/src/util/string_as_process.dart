@@ -546,15 +546,19 @@ extension StringAsProcess on String {
   } // Treat the [this]  as the name of a file and
 
   /// Truncates and Writes [line] to the file terminated by [newline].
-  /// [newline] defaults to '\n'.
-  ///
+  /// If [newline] is null or isn't passed then the platform
+  /// end of line characters are appended as defined by
+  /// [Platform().eol].
+  /// Pass null or an '' to [newline] to not add a line terminator.///
   /// e.g.
   /// ```dart
   /// '/tmp/log'.write('Start of Log')
   /// ```
   ///
-  /// See [truncate] and [append].
-  void write(String line, {String newline = '\n'}) {
+  /// See [truncate], [append].
+  /// Use [withOpenFile] for better performance.
+  void write(String line, {String? newline}) {
+    newline ??= Platform().eol;
     withOpenFile(this, (file) {
       file.write(line, newline: newline);
     });
@@ -576,17 +580,18 @@ extension StringAsProcess on String {
 
   /// Treat the contents of 'this' String  as the name of a file
   /// and appends [line] to the file.
-  /// [newline] specifies the line termination character.
-  /// If you don't want a newline appended then pass an empty
-  /// string to [newline].
-  /// [newline] defaults to '\n'.
-  ///
+  /// If [newline] is null or isn't passed then the platform
+  /// end of line characters are appended as defined by
+  /// [Platform().eol].
+  /// Pass null or an '' to [newline] to not add a line terminator.  ///
   /// e.g.
   /// ```dart
   /// '.bashrc'.append('export FRED=ONE');
   /// ```
   /// See [write] and [truncate]
-  void append(String line, {String newline = '\n'}) {
+  /// Use [withOpenFile] for better performance.
+  void append(String line, {String? newline}) {
+    newline ??= Platform().eol;
     withOpenFile(this, (file) {
       file.append(line, newline: newline);
     });

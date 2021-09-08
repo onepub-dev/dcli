@@ -3,12 +3,12 @@ import 'dart:convert';
 import 'dart:io';
 
 import 'package:crypto/crypto.dart';
-
 import 'package:uuid/uuid.dart';
-import '../../dcli.dart';
 
+import '../../dcli.dart';
 import '../settings.dart';
 import 'dcli_exception.dart';
+import 'platform.dart';
 import 'runnable_process.dart';
 import 'stack_trace_impl.dart';
 import 'wait_for_ex.dart';
@@ -56,9 +56,11 @@ class FileSync {
   /// Reads a single line from the file.
   /// [lineDelimiter] the end of line delimiter.
   /// May be one or two characters long.
-  /// Defaults to \n.
+  /// Defaults to the platform specific delimiter as
+  /// defined by  [Platform().eol].
   ///
-  String? readLine({String lineDelimiter = '\n'}) {
+  String? readLine({String? lineDelimiter}) {
+    lineDelimiter ??= Platform().eol;
     final line = StringBuffer();
     int byte;
     var priorChar = '';
@@ -147,10 +149,12 @@ class FileSync {
 
   /// Truncates the file to zero bytes and
   /// then writes the given text to the file.
-  /// If [newline] is null then no line terminator will
-  /// be added.
-  void write(String line, {String? newline = '\n'}) {
-    final finalline = line + (newline ?? '');
+  /// If [newline] is null or isn't passed then the platform
+  /// end of line characters are appended as defined by
+  /// [Platform().eol].
+  /// Pass null or an '' to [newline] to not add a line terminator.
+  void write(String line, {String? newline}) {
+    final finalline = line + (newline ?? Platform().eol);
     _raf
       ..truncateSync(0)
       ..setPositionSync(0)
@@ -159,9 +163,13 @@ class FileSync {
   }
 
   /// Appends the [line] to the file
-  /// If [newline] is true then append a newline after the line.
-  void append(String line, {String? newline = '\n'}) {
-    final finalline = line + (newline ?? '');
+  /// Appends [newline] after the line.
+  /// If [newline] is null or isn't passed then the platform
+  /// end of line characters are appended as defined by
+  /// [Platform().eol].
+  /// Pass null or an '' to [newline] to not add a line terminator.
+  void append(String line, {String? newline}) {
+    final finalline = line + (newline ?? Platform().eol);
 
     _raf
       ..setPositionSync(_raf.lengthSync())
