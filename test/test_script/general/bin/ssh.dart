@@ -18,14 +18,14 @@ void main(List<String> args) {
   final password = args[1];
   //  ask( 'Password for target:', hidden: true);
 
-  Remote.scp(
+  Remote().scp(
     fromHost: fqdn,
     from: ['/tmp/*.dart'],
     recursive: true,
     to: '/tmp',
   );
 
-  Remote.exec(
+  Remote().exec(
     host: fqdn,
     command: 'ls  /home/bsutton/*',
     progress: Progress.print(),
@@ -55,18 +55,18 @@ void main(List<String> args) {
   //     sudo: true);
 
   // works
-  Remote.scp(fromHost: fqdn, from: ['/etc/asterisk/sip.d/*'], to: '/tmp');
+  Remote().scp(fromHost: fqdn, from: ['/etc/asterisk/sip.d/*'], to: '/tmp');
 
-  Remote.scp(
+  Remote().scp(
       fromUser: "env['USER']", fromHost: fqdn, from: ['/tmp/*.log'], to: '.');
 
-  Remote.scp(from: ['./*.dart'], toHost: fqdn, to: '/tmp', recursive: true);
+  Remote().scp(from: ['./*.dart'], toHost: fqdn, to: '/tmp', recursive: true);
 
   final result = which('copy_secure_dir');
   if (result.found) {
     final copySecureDir = result.path!;
 
-    Remote.scp(from: [copySecureDir], to: '/tmp', toHost: fqdn);
+    Remote().scp(from: [copySecureDir], to: '/tmp', toHost: fqdn);
   }
 
   // dart exe doesn't run on ubuntu 12.04
@@ -76,7 +76,7 @@ void main(List<String> args) {
   //     sudo: true,
   //     password: password);
 
-  Remote.scp(
+  Remote().scp(
       recursive: true,
       fromHost: fqdn,
       from: ['/tmp/slow.dart', '/tmp/parent.dart'],
@@ -85,14 +85,14 @@ void main(List<String> args) {
   final command =
       "mkdir -p  /tmp/etc/openvpn; echo $password  | sudo -Sp '' cp -R /etc/openvpn/* /tmp/etc/openvpn; echo hi; ls -l /tmp/etc/openvpn; echo $password | sudo -Sp ''  rm -rf /tmp/etc/openvpn ; echo ho; ls /tmp";
 
-  Remote.exec(
+  Remote().exec(
       host: fqdn,
       command: command,
       sudo: true,
       password: password,
       progress: Progress.print());
 
-  Remote.execList(
+  Remote().execList(
       host: fqdn,
       commands: [
         'mkdir -p  /tmp/etc/openvpn',
@@ -109,15 +109,15 @@ void main(List<String> args) {
       progress: Progress.print());
 
   touch('dcli.txt', create: true);
-  Remote.scp(from: ['dcli.txt'], toHost: fqdn, to: '/tmp');
+  Remote().scp(from: ['dcli.txt'], toHost: fqdn, to: '/tmp');
 
   //  "ssh -t bsutton@auditord.noojee.com.au '/home/bsutton/git/auditor/backup.sh nowString.sql'"
   final now = DateTime.now();
-  Remote.exec(
+  Remote().exec(
       host: 'bsutton@auditord.noojee.com.au',
       command: '/home/bsutton/git/auditor/backup.sh $now.sql');
 
-  Remote.scp(
+  Remote().scp(
       fromHost: 'auditord.noojee.com.au',
       from: ['/home/bsutton/git/auditor/$now.sql'],
       to: '.');

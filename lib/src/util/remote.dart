@@ -4,6 +4,13 @@ import '../../dcli.dart';
 /// Provides remote access methods for posix based systems.
 ///
 class Remote {
+  /// Factory constructor.
+  factory Remote() => _self;
+
+  Remote._internal();
+  static final _self = Remote._internal();
+
+
   /// EXPERIMENTAL
   ///
   /// executes command on a remote host over an ssh tunnel
@@ -29,7 +36,7 @@ class Remote {
   /// ```
   ///
   ///  EXPERIMENTAL
-  static void exec(
+  void exec(
       {required String host,
       required String command,
       bool agent = true,
@@ -63,7 +70,7 @@ class Remote {
   ///     progress: Progress.print());
   /// ```
   ///
-  static void execList(
+  void execList(
       {required String host,
       required List<String?> commands,
       bool agent = true,
@@ -78,7 +85,9 @@ class Remote {
       cmdArgs.add('-A');
     }
     // disable psuedo terminal
-    cmdArgs..add('-T')..add(host);
+    cmdArgs
+      ..add('-T')
+      ..add(host);
 
     final cmdLine = StringBuffer();
     for (var command in commands) {
@@ -130,7 +139,7 @@ class Remote {
   /// Set [recursive] to true to do a recursive copy from the
   /// [from] path. [recursive] defaults to false.
   /// EXPERIMENTAL
-  static void scp(
+   void scp(
       {required List<String> from,
       required String to,
       String? fromHost,
