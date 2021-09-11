@@ -27,12 +27,12 @@ class EnumHelper {
     final name = enumValue.toString();
     final period = name.indexOf('.');
 
-    return ReCase.titleCase(name.substring(period + 1));
+    return ReCase().titleCase(name.substring(period + 1));
   }
 
   /// returns a enum based on its name.
   T getEnum<T>(String enumName, List<T> values) {
-    final cleanedName = ReCase.titleCase(enumName);
+    final cleanedName = ReCase().titleCase(enumName);
     for (var i = 0; i < values.length; i++) {
       if (cleanedName == getName(values[i])) {
         return values[i];
