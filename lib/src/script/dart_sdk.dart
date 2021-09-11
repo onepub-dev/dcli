@@ -437,7 +437,7 @@ class DartSdk {
   // ignore: unused_element
   Future<void> _showProgress(FetchProgress progress) async {
     final term = Terminal();
-    final percentage = Format.percentage(progress.progress, 1);
+    final percentage = Format().percentage(progress.progress, 1);
     if (term.isAnsi) {
       term
         ..clearLine()

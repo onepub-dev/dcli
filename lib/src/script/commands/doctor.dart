@@ -181,7 +181,7 @@ class DoctorCommand extends Command {
 
   void _printPlatform() {
     _colprint(['OS', Platform.operatingSystem]);
-    print(Format.row(['OS version', Platform.operatingSystemVersion],
+    print(Format().row(['OS version', Platform.operatingSystemVersion],
         widths: [17, -1]));
     _colprint(['path separator', Platform.pathSeparator]);
     print('');
@@ -190,7 +190,7 @@ class DoctorCommand extends Command {
 
   void _colprint(List<String?> cols) {
     //cols[0] = green(cols[0]);
-    print(Format.row(cols, widths: [17, 55], delimiter: ' '));
+    print(Format().row(cols, widths: [17, 55], delimiter: ' '));
   }
 
   @override
@@ -215,7 +215,7 @@ Running 'dcli doctor' provides diagnostic information on your install
 
       final username = Shell.current.loggedInUser;
       if (username != null) {
-        print(Format.row([
+        print(Format().row([
           finallabel,
           fstat.modeString(),
           '<user>:${owner.group == owner.user ? '<user>' : owner.group}',
