@@ -443,12 +443,12 @@ class DartSdk {
         ..clearLine()
         ..startOfLine();
       echo(
-          '${EnumHelper.getName(progress.status).padRight(15)}${Format.bytesAsReadable(progress.downloaded)}/${Format.bytesAsReadable(progress.length)} $percentage');
+          '${EnumHelper().getName(progress.status).padRight(15)}${Format.bytesAsReadable(progress.downloaded)}/${Format.bytesAsReadable(progress.length)} $percentage');
     } else {
       if (_progressSuppressor % 1000 == 0 ||
           progress.status == FetchStatus.complete) {
         print(
-            '${EnumHelper.getName(progress.status).padRight(15)}${Format.bytesAsReadable(progress.downloaded)}/${Format.bytesAsReadable(progress.length)} $percentage');
+            '${EnumHelper().getName(progress.status).padRight(15)}${Format.bytesAsReadable(progress.downloaded)}/${Format.bytesAsReadable(progress.length)} $percentage');
       }
       _progressSuppressor++;
       if (_progressSuppressor > 1000) {
