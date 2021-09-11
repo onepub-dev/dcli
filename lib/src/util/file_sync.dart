@@ -162,6 +162,38 @@ class FileSync {
       ..writeStringSync(finalline);
   }
 
+  /// Exposed the RandomFileAccess method writeFromSync.
+  ///
+  /// Synchronously writes from a [buffer] to the file
+  /// at the current seek position and increments the seek position
+  /// by the no. of bytes written.
+  /// Will read the buffer from index [start] to index [end].
+  /// The [start] must be non-negative and no greater than [buffer].length.
+  /// If [end] is omitted, it defaults to [buffer].length.
+  /// Otherwise [end] must be no less than [start] and no
+  /// greater than [buffer].length.
+  /// Throws a [FileSystemException] if the operation fails.
+  void writeFromSync(List<int> buffer, [int start = 0, int? end]) {
+    _raf.writeFromSync(buffer, start, end);
+  }
+
+  /// Exposed the RandomFileAccess method readIntoSync
+  /// Synchronously reads into an existing [buffer].
+  ///
+  /// Reads bytes and writes then into the the range of [buffer] from [start]
+  /// to [end].
+  /// The [start] must be non-negative and no greater than [buffer].length.
+  /// If [end] is omitted, it defaults to [buffer].length.
+  /// Otherwise [end] must be no less than [start] and no greater
+  ///  than [buffer].length.
+  ///
+  /// Returns the number of bytes read. This maybe be less than end - start
+  ///  if the file doesn't have that many bytes to read.
+  ///
+  /// Throws a [FileSystemException] if the operation fails.
+  int readIntoSync(List<int> buffer, [int start = 0, int? end]) =>
+      _raf.readIntoSync(buffer, start, end);
+
   /// Appends the [line] to the file
   /// Appends [newline] after the line.
   /// If [newline] is null or isn't passed then the platform
@@ -354,18 +386,18 @@ R withTempFile<R>(R Function(String tempFile) action,
 ///
 /// You can use this method to check if a file
 /// has changes since the last time you took
-/// the files hash.
+/// the file's hash.
 ///
 /// Throws [FileNotFoundException] if [path]
 /// doesn't exist.
 /// Throws [NotAFileException] if path is
-/// a directory.
+/// not a file.
 Digest calculateHash(String path) {
   if (!exists(path)) {
     throw FileNotFoundException(path);
   }
 
-  if (isDirectory(path)) {
+  if (!isFile(path)) {
     throw NotAFileException(path);
   }
   final input = File(path);
