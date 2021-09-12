@@ -10,7 +10,6 @@ class Remote {
   Remote._internal();
   static final _self = Remote._internal();
 
-
   /// EXPERIMENTAL
   ///
   /// executes command on a remote host over an ssh tunnel
@@ -139,7 +138,7 @@ class Remote {
   /// Set [recursive] to true to do a recursive copy from the
   /// [from] path. [recursive] defaults to false.
   /// EXPERIMENTAL
-   void scp(
+  void scp(
       {required List<String> from,
       required String to,
       String? fromHost,

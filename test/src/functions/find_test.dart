@@ -37,13 +37,15 @@ void main() {
           createDir(path, recursive: true);
           final pathToLicense = join(path, 'LICENSE$i');
           touch(pathToLicense, create: true);
-          expected..add(path)..add(pathToLicense);
+          expected
+            ..add(path)
+            ..add(pathToLicense);
         }
 // /mnt/c/Users/Brett/AppData/Local/Pub/Cache/hosted/pub.dartlang.org'
         expected = expected
             //map((path) => join(rootPath, relative(path, from: '/mnt/c')))
             .toList()
-              ..sort((lhs, rhs) => lhs.compareTo(rhs));
+          ..sort((lhs, rhs) => lhs.compareTo(rhs));
 
         final actual = find(
           '*',
@@ -114,7 +116,7 @@ void main() {
         final found =
             find('*.txt', workingDirectory: paths.top, recursive: false)
                 .toList()
-                  ..sort();
+              ..sort();
         final expected = [
           truepath(paths.top, 'one.txt'),
           truepath(paths.top, 'two.txt')
@@ -188,7 +190,7 @@ void main() {
         final found =
             find('*.txt', workingDirectory: paths.top, includeHidden: true)
                 .toList()
-                  ..sort();
+              ..sort();
         final expected = [
           truepath(paths.thidden, 'fred.txt'),
           truepath(paths.top, 'one.txt'),

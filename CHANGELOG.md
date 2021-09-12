@@ -1,3 +1,23 @@
+# 1.8.0
+* upgraded to dart 2.14
+
+There are a number of minor breaking changes would should not affect most users.
+
+* Added new byte level read/write methods to FileSync
+
+* Changed Remote to have a factory Constructor and each method from a static to an instance method.
+* Changed Recase to have a factory Constructor and each method from a static to an instance method.
+* Changed EnumHelper to have a factory Constructor and each method from a static to an instance method.
+* Changed StdLog to have a factory Constructor and each method from a static to an instance method.* 
+* Change the Format methods from static to instance and added a factory constructor to Format.
+* Added extension to Platform Platform.eol
+* Replaced \n with Platform().eol so that the line terminators for append and write are now platform specific.
+Fixes:
+
+* ask(hidden: true) wasn't working on windows as windows generates 13 rather than 10 when the enter key is used.  Also we have to set the lineMode to true before echoMode on windows.
+* Spelling of milliseconds as millseconds on the sleep command thanks to whoizit
+
+
 # 1.7.3
 - Fixed the replace test to work correctly with windows line delimiters.
 - corrected version no.

@@ -303,7 +303,9 @@ class TestFileSystem {
       newPath.add(path);
     }
 
-    newPath..add(PubCache().pathToBin)..add(join(fsRoot, '.dcli', 'bin'));
+    newPath
+      ..add(PubCache().pathToBin)
+      ..add(join(fsRoot, '.dcli', 'bin'));
 
     env['PATH'] = newPath.join(Env().delimiterForPATH);
   }

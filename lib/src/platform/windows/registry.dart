@@ -348,7 +348,10 @@ _RegResults _regGetValue(int hkey, String subKey, String valueName,
       }
     });
   } finally {
-    calloc..free(pName)..free(pResultSize)..free(pType);
+    calloc
+      ..free(pName)
+      ..free(pResultSize)
+      ..free(pType);
   }
   // ignore: avoid_dynamic_calls
   return _RegResults(pResult, pResultSize.value, type);
@@ -411,7 +414,9 @@ R _withRegKey<R>(int hkey, String subKey, int accessRights,
       throw WindowsException(HRESULT_FROM_WIN32(result));
     }
   } finally {
-    calloc..free(pOpenKey)..free(pSubKey);
+    calloc
+      ..free(pOpenKey)
+      ..free(pSubKey);
   }
   return actionResult;
 }
