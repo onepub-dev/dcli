@@ -255,7 +255,7 @@ DateTime modified = lastModifed('/fred.txt');
 
 ### calculateHash
 
-Calculates the sha256 hash of a file's content generating essentially a unique signature for the file.
+Calculates the sha256 hash of a file's content generating essentially a unique signature or checksum for the file.
 
 This is likely to be an expensive operation if the file is large. You can use this method to check if a file has changes since the last time you took the file's hash. 
 
