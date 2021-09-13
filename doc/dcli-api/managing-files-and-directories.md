@@ -18,13 +18,14 @@ The getter 'pwd' returns the present working directory.
 
 ```dart
 print(pwd);
+> /home/me
 ```
 
 Whilst you can change your working directory we don't recommend it. Read the section on the [evils of cd](the-evils-of-cd.md).
 
 If you think you need to change your working directory check to see if the DCli function takes a 'workingDirectory' argument.
 
-If you need to spawn another cli application that needs to run in a specific directory use the '[start](calling-apps.md#start)' function.
+If you need to spawn another CLI application that needs to run in a specific directory use the '[start](calling-apps.md#start)' function.
 
 ```dart
 'ls'.start(workingDirectory: HOME);
@@ -251,4 +252,16 @@ Returns a DateTime reflecting the last modified date/time stamp of the given pat
 ```dart
 DateTime modified = lastModifed('/fred.txt');
 ```
+
+### calculateHash
+
+Calculates the sha256 hash of a file's content generating essentially a unique signature for the file.
+
+This is likely to be an expensive operation if the file is large. You can use this method to check if a file has changes since the last time you took the file's hash. 
+
+```dart
+var digest = calculateHash('/fred.txt');
+```
+
+
 
