@@ -168,7 +168,10 @@ class DartProject {
                     '-v=${join(Directory.systemTemp.path, 'dcli.warmup.log')}'
                     ' warmup $pathToProjectRoot'
                 .start(
-                    detached: true, runInShell: true, extensionSearch: false);
+              detached: true,
+              runInShell: true,
+              extensionSearch: false,
+            );
           } else {
             // print(orange('Running pub get...'));
             _pubget();
@@ -330,7 +333,7 @@ class DartProject {
       }
 
       copy(
-        join(Settings().pathToTemplate, 'analysis_options.yaml'),
+        join(Settings().pathToTemplate, 'analysis_options.yaml.template'),
         analysisPath,
       );
     }
