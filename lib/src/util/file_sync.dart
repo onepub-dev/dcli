@@ -311,22 +311,25 @@ String resolveSymLink(String pathToLink) {
 ///
 FileStat stat(String path) => File(path).statSync();
 
-/// Generates a temporary filename in the system temp directory
-/// that is guaranteed to be unique.
+/// Generates a temporary filename in [pathToTempDir]
+/// or if inTempDir os not passed then in
+/// the system temp directory.
+/// The generated filename is is guaranteed to be globally unique.
 ///
 /// This method does NOT create the file.
 ///
 /// The temp file name will be <uuid>.tmp
 /// unless you provide a [suffix] in which
 /// case the file name will be <uuid>.<suffix>
-String createTempFilename({String? suffix}) {
+String createTempFilename({String? suffix, String? pathToTempDir}) {
   var finalsuffix = suffix ?? 'tmp';
 
   if (!finalsuffix.startsWith('.')) {
     finalsuffix = '.$finalsuffix';
   }
+  pathToTempDir ??= Directory.systemTemp.path;
   const uuid = Uuid();
-  return '${join(Directory.systemTemp.path, uuid.v4())}$finalsuffix';
+  return '${join(pathToTempDir, uuid.v4())}$finalsuffix';
 }
 
 /// Generates a temporary filename in the system temp directory
@@ -350,19 +353,26 @@ int fileLength(String pathToFile) => File(pathToFile).lengthSync();
 ///
 /// Once [action] completes the temporary file will be deleted.
 ///
-/// The [action]s return value [R] is returned from the [withTempDir]
+/// The [action]s return value [R] is returned from the [withTempFile]
 /// function.
 ///
 /// If [create] is true (default true) then the temp file will be
 /// created. If [create] is false then just the name will be
 /// generated.
 ///
+/// if [pathToTempDir] is passed then the file will be created in that
+/// directory otherwise the file will be created in the system
+/// temp directory.
+///
 /// The temp file name will be <uuid>.tmp
 /// unless you provide a [suffix] in which
 /// case the file name will be <uuid>.<suffix>
 R withTempFile<R>(R Function(String tempFile) action,
-    {String? suffix, bool create = true, bool keep = false}) {
-  final tmp = createTempFilename(suffix: suffix);
+    {String? suffix,
+    String? pathToTempDir,
+    bool create = true,
+    bool keep = false}) {
+  final tmp = createTempFilename(suffix: suffix, pathToTempDir: pathToTempDir);
   if (create) {
     touch(tmp, create: true);
   }
