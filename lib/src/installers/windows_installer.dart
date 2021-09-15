@@ -56,8 +56,10 @@ class WindowsDCliInstaller {
       installedDart = true;
     } else {
       // nothing to do dart is already installed.
-      verbose(() => "Found dart at: ${which('dart').path} "
-          'and as such will not install dart.');
+      verbose(
+        () => "Found dart at: ${which('dart').path} "
+            'and as such will not install dart.',
+      );
     }
 
     return installedDart;

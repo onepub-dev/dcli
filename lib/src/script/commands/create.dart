@@ -91,19 +91,23 @@ class CreateCommand extends Command {
   /// returns the script path.
   String _validateArguments(List<Flag> selectedFlags, List<String> arguments) {
     if (arguments.length != 1) {
-      throw InvalidArguments('The create command takes only one argument. '
-          'Found: ${arguments.join(',')}');
+      throw InvalidArguments(
+        'The create command takes only one argument. '
+        'Found: ${arguments.join(',')}',
+      );
     }
     final scriptPath = arguments[0];
     if (extension(scriptPath) != '.dart') {
       throw InvalidArguments(
-          "The create command expects a script path ending in '.dart'. "
-          'Found: $scriptPath');
+        "The create command expects a script path ending in '.dart'. "
+        'Found: $scriptPath',
+      );
     }
 
     if (exists(scriptPath)) {
       throw InvalidArguments(
-          'The script ${truepath(scriptPath)} already exists.');
+        'The script ${truepath(scriptPath)} already exists.',
+      );
     }
     return arguments[0];
   }

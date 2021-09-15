@@ -36,7 +36,8 @@ class _Copy extends DCliFunction {
 
     if (overwrite == false && exists(finalto)) {
       throw CopyException(
-          'The target file ${truepath(finalto)} already exists.');
+        'The target file ${truepath(finalto)} already exists.',
+      );
     }
 
     try {
@@ -53,12 +54,14 @@ class _Copy extends DCliFunction {
       }
       if (!exists(dirname(to))) {
         throw CopyException(
-            'The to directory ${truepath(dirname(to))} does not exists.');
+          'The to directory ${truepath(dirname(to))} does not exists.',
+        );
       }
 
       throw CopyException(
-          'An error occured copying ${truepath(from)} to ${truepath(finalto)}. '
-          'Error: $e');
+        'An error occured copying ${truepath(from)} to ${truepath(finalto)}. '
+        'Error: $e',
+      );
     }
   }
 }

@@ -18,7 +18,8 @@ extension DependencyReferenceEx on DependencyReference? {
     }
 
     throw InvalidArguments(
-        'Unknown dependency type: ${dependency.runtimeType}');
+      'Unknown dependency type: ${dependency.runtimeType}',
+    );
   }
 }
 

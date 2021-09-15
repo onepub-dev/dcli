@@ -48,21 +48,27 @@ void dsort(List<String> args) {
 
   final parser = ArgParser()
     ..addFlag('verbose', abbr: 'v', callback: (value) => verbose = value)
-    ..addOption(fieldDelimiterOption,
-        abbr: 'f',
-        defaultsTo: ',',
-        //ignore: avoid_types_on_closure_parameters
-        callback: (String? value) => fieldDelimiter = value!)
-    ..addOption(lineDelimiterOption,
-        abbr: 'l',
-        defaultsTo: '\n',
-        //ignore: avoid_types_on_closure_parameters
-        callback: (String? value) => lineDelimiter = value!)
-    ..addMultiOption(sortkeyOption,
-        abbr: 's',
-        //ignore: avoid_types_on_closure_parameters
-        callback: (List<String> values) =>
-            columns.addAll(FileSort.expandColumns(values)))
+    ..addOption(
+      fieldDelimiterOption,
+      abbr: 'f',
+      defaultsTo: ',',
+      //ignore: avoid_types_on_closure_parameters
+      callback: (String? value) => fieldDelimiter = value!,
+    )
+    ..addOption(
+      lineDelimiterOption,
+      abbr: 'l',
+      defaultsTo: '\n',
+      //ignore: avoid_types_on_closure_parameters
+      callback: (String? value) => lineDelimiter = value!,
+    )
+    ..addMultiOption(
+      sortkeyOption,
+      abbr: 's',
+      //ignore: avoid_types_on_closure_parameters
+      callback: (List<String> values) =>
+          columns.addAll(FileSort.expandColumns(values)),
+    )
     ..addOption(outputOption, abbr: 'o');
 
   final results = parser.parse(args);
@@ -99,20 +105,27 @@ void dsort(List<String> args) {
   }
 
   if (exists(outputPath) && outputPath != inputPath) {
-    usageError('The output_file $outputPath already exist. '
-        'Delete the file and try again.');
+    usageError(
+      'The output_file $outputPath already exist. '
+      'Delete the file and try again.',
+    );
   }
 
-   FileSort(
-      inputPath, outputPath, columns, fieldDelimiter, lineDelimiter,
-      verbose: verbose)
-    .sort();
+  FileSort(
+    inputPath,
+    outputPath,
+    columns,
+    fieldDelimiter,
+    lineDelimiter,
+    verbose: verbose,
+  ).sort();
 }
 
 void usageError(String error) {
   print(red(error));
   print('');
-  print('''
+  print(
+    '''
 Example:
 
 dsort --sortkey=1n unsorted.txt
@@ -174,7 +187,8 @@ ${green("Examples:")}
   then Descending numeric sort on cols 5-7 inclusive
   using the column delimter ':'
  ${green("dsort -f=: --sortkey=1nd,2,3Sd,5-7nd unsorted.txt")}
-''');
+''',
+  );
 
   exit(-1);
 }

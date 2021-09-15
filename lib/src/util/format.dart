@@ -30,10 +30,12 @@ class Format {
   /// [widths].
   ///
   ///
-  String row(List<String?> cols,
-      {List<int>? widths,
-      List<TableAlignment>? alignments,
-      String? delimiter}) {
+  String row(
+    List<String?> cols, {
+    List<int>? widths,
+    List<TableAlignment>? alignments,
+    String? delimiter,
+  }) {
     var row = '';
     var i = 0;
     widths ??= [20];

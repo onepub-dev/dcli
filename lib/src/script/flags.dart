@@ -26,8 +26,9 @@ class Flags {
             flag.option = parts[1];
           } else {
             throw InvalidFlagOption(
-                'The flag $finalFlagSwitch was passed with an option but '
-                'it does not support options.');
+              'The flag $finalFlagSwitch was passed with an option but '
+              'it does not support options.',
+            );
           }
         }
         found = flag;
@@ -98,7 +99,9 @@ abstract class Flag {
   ///
   set option(String? value) {
     assert(
-        !isOptionSupported, 'You must implement option setter for $_name flag');
+      !isOptionSupported,
+      'You must implement option setter for $_name flag',
+    );
   }
 
   /// override this method if your flag takes an optional argument
@@ -135,9 +138,10 @@ class VerboseFlag extends Flag {
     // the path exists.
     if (!exists(dirname(value!))) {
       throw InvalidFlagOption(
-          "The log file's directory '${truepath(dirname(value))} "
-          'does not exists. '
-          'Create the directory first.');
+        "The log file's directory '${truepath(dirname(value))} "
+        'does not exists. '
+        'Create the directory first.',
+      );
     } else {
       _option = value;
       touch(value, create: true);

@@ -42,10 +42,11 @@ void _devNull(FetchProgress _) {}
 ///  always return true from
 /// the 'onProgress' callback.
 ///
-void fetch(
-        {required String url,
-        required String saveToPath,
-        OnFetchProgress fetchProgress = _devNull}) =>
+void fetch({
+  required String url,
+  required String saveToPath,
+  OnFetchProgress fetchProgress = _devNull,
+}) =>
     _Fetch().fetch(url: url, saveToPath: saveToPath, progress: fetchProgress);
 
 /// Fetches the list of of resources indicated by [urls];
@@ -89,8 +90,11 @@ class _Fetch extends DCliFunction {
     required String saveToPath,
     OnFetchProgress progress = _devNull,
   }) {
-    waitForEx<void>(download(
-        FetchUrl(url: url, saveToPath: saveToPath, progress: progress)));
+    waitForEx<void>(
+      download(
+        FetchUrl(url: url, saveToPath: saveToPath, progress: progress),
+      ),
+    );
   }
 
   void fetchMultiple({required List<FetchUrl> urls}) {
@@ -116,7 +120,8 @@ class _Fetch extends DCliFunction {
 
     if (exists(fetchUrl.saveToPath)) {
       throw FetchException(
-          'The file at saveToPath:${fetchUrl.saveToPath} already exists.');
+        'The file at saveToPath:${fetchUrl.saveToPath} already exists.',
+      );
     }
 
     touch(fetchUrl.saveToPath, create: true);
@@ -124,77 +129,87 @@ class _Fetch extends DCliFunction {
     _sendProgressEvent(FetchProgress._connecting(fetchUrl));
 
     final client = HttpClient();
-    unawaited(client.getUrl(Uri.parse(fetchUrl.url)).then((request) {
-      /// we have connected
-      _sendProgressEvent(FetchProgress._connected(fetchUrl));
+    unawaited(
+      client.getUrl(Uri.parse(fetchUrl.url)).then((request) {
+        /// we have connected
+        _sendProgressEvent(FetchProgress._connected(fetchUrl));
 
-      /// we can added headers here if we need.
-      /// send the request
-      return request.close();
-    }).then((response) async {
-      var lengthReceived = 0;
+        /// we can added headers here if we need.
+        /// send the request
+        return request.close();
+      }).then((response) async {
+        var lengthReceived = 0;
 
-      final contentLength = response.contentLength;
+        final contentLength = response.contentLength;
 
-      // we have a response.
-      _sendProgressEvent(
-          FetchProgress._downloading(fetchUrl, contentLength, 0));
+        // we have a response.
+        _sendProgressEvent(
+          FetchProgress._downloading(fetchUrl, contentLength, 0),
+        );
 
-      /// prep the save file.
-      final saveFile = File(fetchUrl.saveToPath);
-      final raf = await saveFile.open(mode: FileMode.append);
-      await raf.truncate(0);
+        /// prep the save file.
+        final saveFile = File(fetchUrl.saveToPath);
+        final raf = await saveFile.open(mode: FileMode.append);
+        await raf.truncate(0);
 
-      late StreamSubscription<List<int>> subscription;
-      subscription = response.listen(
-        (newBytes) async {
-          /// if we don't pause we get overlapping calls from listen
-          /// which causes the [writeFrom] to fail as you can't
-          /// do overlapping io.
-          subscription.pause();
+        late StreamSubscription<List<int>> subscription;
+        subscription = response.listen(
+          (newBytes) async {
+            /// if we don't pause we get overlapping calls from listen
+            /// which causes the [writeFrom] to fail as you can't
+            /// do overlapping io.
+            subscription.pause();
 
-          /// we have new data to save.
-          await raf.writeFrom(newBytes);
+            /// we have new data to save.
+            await raf.writeFrom(newBytes);
 
-          lengthReceived += newBytes.length;
+            lengthReceived += newBytes.length;
 
-          /// progres indicated to cancel the download.
-          _sendProgressEvent(FetchProgress._downloading(
-              fetchUrl, contentLength, lengthReceived));
+            /// progres indicated to cancel the download.
+            _sendProgressEvent(
+              FetchProgress._downloading(
+                fetchUrl,
+                contentLength,
+                lengthReceived,
+              ),
+            );
 
-          subscription.resume();
+            subscription.resume();
 
-          verbose(() => 'Download progress: $lengthReceived / $contentLength ');
-        },
-        onDone: () async {
-          /// down load is complete
-          raf.flushSync();
-          await raf.close();
-          await subscription.cancel();
-          client.close();
-          _sendProgressEvent(
-              FetchProgress._complete(fetchUrl, contentLength, lengthReceived));
-          verbose(() => 'Completed downloading: ${fetchUrl.url}');
+            verbose(
+                () => 'Download progress: $lengthReceived / $contentLength ');
+          },
+          onDone: () async {
+            /// down load is complete
+            raf.flushSync();
+            await raf.close();
+            await subscription.cancel();
+            client.close();
+            _sendProgressEvent(
+              FetchProgress._complete(fetchUrl, contentLength, lengthReceived),
+            );
+            verbose(() => 'Completed downloading: ${fetchUrl.url}');
 
-          completer.complete();
-        },
-        // ignore: avoid_types_on_closure_parameters
-        onError: (Object e, StackTrace st) async {
-          // something went wrong.
-          _sendProgressEvent(FetchProgress._error(fetchUrl));
-          verbose(
-            () => 'Error downloading: ${fetchUrl.url}',
-          );
-          raf.flushSync();
-          await raf.close();
-          await subscription.cancel();
-          client.close();
+            completer.complete();
+          },
+          // ignore: avoid_types_on_closure_parameters
+          onError: (Object e, StackTrace st) async {
+            // something went wrong.
+            _sendProgressEvent(FetchProgress._error(fetchUrl));
+            verbose(
+              () => 'Error downloading: ${fetchUrl.url}',
+            );
+            raf.flushSync();
+            await raf.close();
+            await subscription.cancel();
+            client.close();
 
-          completer.completeError(e, st);
-        },
-        cancelOnError: true,
-      );
-    }));
+            completer.completeError(e, st);
+          },
+          cancelOnError: true,
+        );
+      }),
+    );
 
     return completer.future;
   }
@@ -234,8 +249,11 @@ enum FetchStatus {
 /// the location where it is going to be stored.
 class FetchUrl {
   /// ctor.
-  FetchUrl(
-      {required this.url, required this.saveToPath, this.progress = _devNull});
+  FetchUrl({
+    required this.url,
+    required this.saveToPath,
+    this.progress = _devNull,
+  });
 
   /// the URL of the resource being downloaded
   final String url;

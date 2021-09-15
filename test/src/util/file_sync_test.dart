@@ -39,24 +39,31 @@ void main() {
     });
 
     test('withTempFile - suffix', () async {
-      final count = withTempFile((
-        tempFile,
-      ) {
-        expect(exists(tempFile), isTrue);
-        expect(tempFile.startsWith(Directory.systemTemp.path), isTrue);
-        expect(extension(tempFile), equals('.dodo'));
-        return 5;
-      }, suffix: 'dodo');
+      final count = withTempFile(
+        (
+          tempFile,
+        ) {
+          expect(exists(tempFile), isTrue);
+          expect(tempFile.startsWith(Directory.systemTemp.path), isTrue);
+          expect(extension(tempFile), equals('.dodo'));
+          return 5;
+        },
+        suffix: 'dodo',
+      );
       expect(count, equals(5));
     });
 
     test('withTempFile - keep', () async {
-      final tempFile = withTempFile((
-        tempFile,
-      ) {
-        expect(exists(tempFile), isTrue);
-        return tempFile;
-      }, suffix: 'dodo', keep: true);
+      final tempFile = withTempFile(
+        (
+          tempFile,
+        ) {
+          expect(exists(tempFile), isTrue);
+          return tempFile;
+        },
+        suffix: 'dodo',
+        keep: true,
+      );
       expect(exists(tempFile), isTrue);
     });
   });

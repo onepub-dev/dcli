@@ -7,13 +7,15 @@ import '../../dcli.dart';
 int availableSpace(String path) {
   if (!exists(path)) {
     throw FileSystemException(
-        "The given path ${truepath(path)} doesn't exists");
+      "The given path ${truepath(path)} doesn't exists",
+    );
   }
 
   final lines = 'df -h "$path"'.toList();
   if (lines.length != 2) {
     throw FileSystemException(
-        "An error occured retrieving the device path: ${lines.join('\n')}");
+      "An error occured retrieving the device path: ${lines.join('\n')}",
+    );
   }
 
   final line = lines[1];
@@ -37,7 +39,8 @@ int availableSpace(String path) {
   final factor = factors[factoryLetter];
   if (factor == null) {
     throw FileSystemException(
-        "Unrecognized size factor '$factoryLetter' in $havailable");
+      "Unrecognized size factor '$factoryLetter' in $havailable",
+    );
   }
 
   return int.tryParse(hsize)! * factor;

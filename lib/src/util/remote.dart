@@ -35,20 +35,22 @@ class Remote {
   /// ```
   ///
   ///  EXPERIMENTAL
-  void exec(
-      {required String host,
-      required String command,
-      bool agent = true,
-      bool sudo = false,
-      String? password,
-      Progress? progress}) {
+  void exec({
+    required String host,
+    required String command,
+    bool agent = true,
+    bool sudo = false,
+    String? password,
+    Progress? progress,
+  }) {
     execList(
-        host: host,
-        commands: [command],
-        agent: agent,
-        sudo: sudo,
-        password: password,
-        progress: progress);
+      host: host,
+      commands: [command],
+      agent: agent,
+      sudo: sudo,
+      password: password,
+      progress: progress,
+    );
   }
 
   /// [execList] runs multiple commands in a single request to the host.
@@ -69,13 +71,14 @@ class Remote {
   ///     progress: Progress.print());
   /// ```
   ///
-  void execList(
-      {required String host,
-      required List<String?> commands,
-      bool agent = true,
-      bool sudo = false,
-      String? password,
-      Progress? progress}) {
+  void execList({
+    required String host,
+    required List<String?> commands,
+    bool agent = true,
+    bool sudo = false,
+    String? password,
+    Progress? progress,
+  }) {
     final cmdArgs = <String>[];
 
     // enable agent forwarding only
@@ -117,8 +120,11 @@ class Remote {
     } on RunException catch (e) {
       final error = _sshErrors[e.exitCode!];
       throw RunException(
-          e.cmdLine, e.exitCode, red('ssh exit code: ${e.exitCode} - $error'),
-          stackTrace: e.stackTrace);
+        e.cmdLine,
+        e.exitCode,
+        red('ssh exit code: ${e.exitCode} - $error'),
+        stackTrace: e.stackTrace,
+      );
     }
   }
 
@@ -138,15 +144,16 @@ class Remote {
   /// Set [recursive] to true to do a recursive copy from the
   /// [from] path. [recursive] defaults to false.
   /// EXPERIMENTAL
-  void scp(
-      {required List<String> from,
-      required String to,
-      String? fromHost,
-      String? toHost,
-      String? fromUser,
-      String? toUser,
-      bool recursive = false,
-      Progress? progress}) {
+  void scp({
+    required List<String> from,
+    required String to,
+    String? fromHost,
+    String? toHost,
+    String? fromUser,
+    String? toUser,
+    bool recursive = false,
+    Progress? progress,
+  }) {
     // toUser is only valid if toHost is given
     if (toUser != null && toHost == null) {
       throw ScpException('[toUser] is only valid if toHost is also past');
@@ -204,8 +211,11 @@ class Remote {
     } on RunException catch (e) {
       final error = _scpErrors[e.exitCode!];
       throw RunException(
-          e.cmdLine, e.exitCode, red('scp exit code: ${e.exitCode} - $error'),
-          stackTrace: e.stackTrace);
+        e.cmdLine,
+        e.exitCode,
+        red('scp exit code: ${e.exitCode} - $error'),
+        stackTrace: e.stackTrace,
+      );
     }
   }
 

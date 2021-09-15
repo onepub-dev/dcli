@@ -20,7 +20,9 @@ import 'package:dcli/src/pubspec/pubspec.dart';
 Future<void> main(List<String> args) async {
   Settings().setVerbose(enabled: false);
   final cmds = CommandRunner<void>(
-      'dcli_cli', 'Manage and run the dcli_cli docker container')
+    'dcli_cli',
+    'Manage and run the dcli_cli docker container',
+  )
     ..addCommand(RunCommand())
     ..addCommand(BuildCommand())
     ..addCommand(PushCommand());
@@ -82,8 +84,10 @@ class BuildCommand extends Command<void> {
 
 class PushCommand extends Command<void> {
   PushCommand() {
-    argParser.addOption('version',
-        help: 'The version no. to tag this image with');
+    argParser.addOption(
+      'version',
+      help: 'The version no. to tag this image with',
+    );
   }
   @override
   String get description => 'Pushes the dcli_cli container to docker hub';

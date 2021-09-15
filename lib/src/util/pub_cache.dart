@@ -65,7 +65,9 @@ class PubCache {
       } else {
         /// what else can we do.
         return join(
-            envs['HOME'] ?? join(r'C:\Users', envs['USERNAME']), '.pub-cache');
+          envs['HOME'] ?? join(r'C:\Users', envs['USERNAME']),
+          '.pub-cache',
+        );
       }
     } else {
       return '${envs['HOME']}/.pub-cache';
@@ -155,16 +157,20 @@ class PubCache {
   ///
   /// If no versions are installed then null is returned.
   Version? findPrimaryVersion(String packageName) {
-    final versions = find('$packageName-*.*',
-            types: [Find.directory], workingDirectory: pathToDartLang)
-        .toList();
+    final versions = find(
+      '$packageName-*.*',
+      types: [Find.directory],
+      workingDirectory: pathToDartLang,
+    ).toList();
 
     if (versions.isEmpty) {
       return null;
     }
 
-    return Version.primary(versions
-        .map((version) => Version.parse(basename(version).split('-')[1]))
-        .toList());
+    return Version.primary(
+      versions
+          .map((version) => Version.parse(basename(version).split('-')[1]))
+          .toList(),
+    );
   }
 }

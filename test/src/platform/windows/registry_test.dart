@@ -27,47 +27,55 @@ void main() {
     regDeleteValue(HKEY_CURRENT_USER, 'DCLITestArea', 'count');
   });
 
-  test('devmode', () {
-    expect(Shell.current.isPrivilegedUser, isTrue);
+  test(
+    'devmode',
+    () {
+      expect(Shell.current.isPrivilegedUser, isTrue);
 
-    if (Shell.current.isPrivilegedUser) {
-      var original = 0;
+      if (Shell.current.isPrivilegedUser) {
+        var original = 0;
 
-      try {
-        original = regGetDWORD(
+        try {
+          original = regGetDWORD(
             HKEY_LOCAL_MACHINE,
             r'SOFTWARE\Microsoft\Windows\CurrentVersion\AppModelUnlock',
-            'AllowDevelopmentWithoutDevLicense');
-      } on WindowsException catch (e) {
-        if (e.hr != hrFileNotFound) {
-          rethrow;
+            'AllowDevelopmentWithoutDevLicense',
+          );
+        } on WindowsException catch (e) {
+          if (e.hr != hrFileNotFound) {
+            rethrow;
+          }
         }
+
+        regSetDWORD(
+          HKEY_LOCAL_MACHINE,
+          r'SOFTWARE\Microsoft\Windows\CurrentVersion\AppModelUnlock',
+          'AllowDevelopmentWithoutDevLicense',
+          1,
+        );
+
+        final shell = PowerShell.withPid(pid);
+        expect(shell.inDeveloperMode(), true);
+
+        regSetDWORD(
+          HKEY_LOCAL_MACHINE,
+          r'SOFTWARE\Microsoft\Windows\CurrentVersion\AppModelUnlock',
+          'AllowDevelopmentWithoutDevLicense',
+          0,
+        );
+
+        expect(shell.inDeveloperMode(), false);
+
+        regSetDWORD(
+          HKEY_LOCAL_MACHINE,
+          r'SOFTWARE\Microsoft\Windows\CurrentVersion\AppModelUnlock',
+          'AllowDevelopmentWithoutDevLicense',
+          original,
+        );
       }
-
-      regSetDWORD(
-          HKEY_LOCAL_MACHINE,
-          r'SOFTWARE\Microsoft\Windows\CurrentVersion\AppModelUnlock',
-          'AllowDevelopmentWithoutDevLicense',
-          1);
-
-      final shell = PowerShell.withPid(pid);
-      expect(shell.inDeveloperMode(), true);
-
-      regSetDWORD(
-          HKEY_LOCAL_MACHINE,
-          r'SOFTWARE\Microsoft\Windows\CurrentVersion\AppModelUnlock',
-          'AllowDevelopmentWithoutDevLicense',
-          0);
-
-      expect(shell.inDeveloperMode(), false);
-
-      regSetDWORD(
-          HKEY_LOCAL_MACHINE,
-          r'SOFTWARE\Microsoft\Windows\CurrentVersion\AppModelUnlock',
-          'AllowDevelopmentWithoutDevLicense',
-          original);
-    }
-  }, tags: ['privileged']);
+    },
+    tags: ['privileged'],
+  );
 
   // test('set/get lsit', (){
   //   setRegistryList(HKEY_CURRENT_USER, subKey, valueName, value)
@@ -75,8 +83,10 @@ void main() {
 
   test('set/get string', () {
     regSetString(HKEY_CURRENT_USER, 'Environment', 'TEST_KEY', 'Hellow World');
-    expect(regGetString(HKEY_CURRENT_USER, 'Environment', 'TEST_KEY'),
-        equals('Hellow World'));
+    expect(
+      regGetString(HKEY_CURRENT_USER, 'Environment', 'TEST_KEY'),
+      equals('Hellow World'),
+    );
 
     regDeleteValue(HKEY_CURRENT_USER, 'Environment', 'TEST_KEY');
   });
@@ -84,7 +94,11 @@ void main() {
   test('set/get expanding string', () {
     regSetString(HKEY_CURRENT_USER, 'Environment', 'TEST_KEY', 'Hellow World');
     regSetExpandString(
-        HKEY_CURRENT_USER, 'Environment', 'TEST_KEY2', '%USERPROFILE%2');
+      HKEY_CURRENT_USER,
+      'Environment',
+      'TEST_KEY2',
+      '%USERPROFILE%2',
+    );
 
     final testKey2 =
         regGetExpandString(HKEY_CURRENT_USER, 'Environment', 'TEST_KEY2');
@@ -92,9 +106,14 @@ void main() {
     expect(testKey2, endsWith('2'));
 
     expect(
-        regGetExpandString(HKEY_CURRENT_USER, 'Environment', 'TEST_KEY2',
-            expand: false),
-        equals('%USERPROFILE%2'));
+      regGetExpandString(
+        HKEY_CURRENT_USER,
+        'Environment',
+        'TEST_KEY2',
+        expand: false,
+      ),
+      equals('%USERPROFILE%2'),
+    );
     regDeleteValue(HKEY_CURRENT_USER, 'Environment', 'TEST_KEY2');
   });
 
@@ -102,21 +121,30 @@ void main() {
     const testDir = 'TestDirB';
     final testPath = join(rootPath, 'TestDirB');
     final original = regGetExpandString(
-        HKEY_CURRENT_USER, 'Environment', 'Path',
-        expand: false);
+      HKEY_CURRENT_USER,
+      'Environment',
+      'Path',
+      expand: false,
+    );
 
     /// Test appending a path
     regAppendToPath(testPath);
     final withPath = regGetExpandString(
-        HKEY_CURRENT_USER, 'Environment', 'Path',
-        expand: false);
+      HKEY_CURRENT_USER,
+      'Environment',
+      'Path',
+      expand: false,
+    );
     expect(withPath, equals('$original;$testPath'));
 
     /// test append of existing path doesn't change path
     regAppendToPath(testPath);
     final doubleAppend = regGetExpandString(
-        HKEY_CURRENT_USER, 'Environment', 'Path',
-        expand: false);
+      HKEY_CURRENT_USER,
+      'Environment',
+      'Path',
+      expand: false,
+    );
 
     /// double append should not chnage path
     expect(withPath, equals(doubleAppend));
@@ -124,8 +152,11 @@ void main() {
     /// test different paths which are cannonically the same
     regAppendToPath(join(testPath, '..', testDir));
     final cannonicalAppend = regGetExpandString(
-        HKEY_CURRENT_USER, 'Environment', 'Path',
-        expand: false);
+      HKEY_CURRENT_USER,
+      'Environment',
+      'Path',
+      expand: false,
+    );
 
     /// double append should not chnage path
     expect(withPath, equals(cannonicalAppend));
@@ -133,8 +164,11 @@ void main() {
     /// restore the original path
     regReplacePath(original.split(';'));
     final replaced = regGetExpandString(
-        HKEY_CURRENT_USER, 'Environment', 'Path',
-        expand: false);
+      HKEY_CURRENT_USER,
+      'Environment',
+      'Path',
+      expand: false,
+    );
     expect(replaced, equals(original));
   });
 
@@ -142,21 +176,30 @@ void main() {
     const testDir = 'TestDirB';
     final testPath = join(rootPath, 'TestDirB');
     final original = regGetExpandString(
-        HKEY_CURRENT_USER, 'Environment', 'Path',
-        expand: false);
+      HKEY_CURRENT_USER,
+      'Environment',
+      'Path',
+      expand: false,
+    );
 
     /// Test prepending a path
     regPrependToPath(testPath);
     final withPath = regGetExpandString(
-        HKEY_CURRENT_USER, 'Environment', 'Path',
-        expand: false);
+      HKEY_CURRENT_USER,
+      'Environment',
+      'Path',
+      expand: false,
+    );
     expect(withPath, equals('$testPath;$original'));
 
     /// test preppend of existing path doesn't change path
     regPrependToPath(testPath);
     final doublePrepend = regGetExpandString(
-        HKEY_CURRENT_USER, 'Environment', 'Path',
-        expand: false);
+      HKEY_CURRENT_USER,
+      'Environment',
+      'Path',
+      expand: false,
+    );
 
     /// double prepend should not chnage path
     expect(withPath, equals(doublePrepend));
@@ -164,8 +207,11 @@ void main() {
     /// test different paths which are cannonically the same
     regPrependToPath(join(testPath, '..', testDir));
     final cannonicalPrepend = regGetExpandString(
-        HKEY_CURRENT_USER, 'Environment', 'Path',
-        expand: false);
+      HKEY_CURRENT_USER,
+      'Environment',
+      'Path',
+      expand: false,
+    );
 
     /// double prepend should not chnage path
     expect(withPath, equals(cannonicalPrepend));
@@ -173,8 +219,11 @@ void main() {
     /// restore the original path
     regReplacePath(original.split(';'));
     final replaced = regGetExpandString(
-        HKEY_CURRENT_USER, 'Environment', 'Path',
-        expand: false);
+      HKEY_CURRENT_USER,
+      'Environment',
+      'Path',
+      expand: false,
+    );
     expect(replaced, equals(original));
   });
 }

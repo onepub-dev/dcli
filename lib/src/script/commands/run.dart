@@ -25,7 +25,8 @@ class RunCommand extends Command {
   int run(List<Flag> selectedFlags, List<String> arguments) {
     if (arguments.isEmpty) {
       throw InvalidArguments(
-          'Expected a script or command. No arguments were found.');
+        'Expected a script or command. No arguments were found.',
+      );
     }
     final scriptPath = arguments[0];
     DartScript.validate(scriptPath);
@@ -37,8 +38,11 @@ class RunCommand extends Command {
       /// as we will end up with root permissions everywhere.
       if (!script.isReadyToRun) {
         printerr(
-            red('The script is not ready to run, so cannot be run from sudo. '
-                'Run dcli warmup $scriptPath'));
+          red(
+            'The script is not ready to run, so cannot be run from sudo. '
+            'Run dcli warmup $scriptPath',
+          ),
+        );
         exit(1);
       }
     }
@@ -48,8 +52,11 @@ class RunCommand extends Command {
     if (!script.isReadyToRun) {
       if (Shell.current.isSudo) {
         printerr(
-            red('The script is not ready to run, so cannot be run from sudo. '
-                'Run dcli warmup $scriptPath'));
+          red(
+            'The script is not ready to run, so cannot be run from sudo. '
+            'Run dcli warmup $scriptPath',
+          ),
+        );
         exit(1);
       }
     }

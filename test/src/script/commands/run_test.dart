@@ -21,8 +21,10 @@ void main() {
       }
 
       final project = DartProject.fromPath(scriptParentPath, search: false);
-      project.createScript(basename(scriptPath),
-          templateName: 'hello_world.dart')
+      project.createScript(
+        basename(scriptPath),
+        templateName: 'hello_world.dart',
+      )
         ..runPubGet()
         ..run();
 
@@ -49,7 +51,8 @@ void main() {
       int? exit = -1;
       try {
         final script = DartScript.fromFile(
-            join(fs.testScriptPath, 'general/bin/which.dart'));
+          join(fs.testScriptPath, 'general/bin/which.dart'),
+        );
         exit = script.run(args: ['ls']);
       } on DCliException catch (e) {
         print(e);
@@ -64,8 +67,12 @@ void main() {
       try {
         print(pwd);
 
-        final script = DartScript.fromFile(join(
-            fs.testScriptPath, 'traditional_project/bin/traditional.dart'));
+        final script = DartScript.fromFile(
+          join(
+            fs.testScriptPath,
+            'traditional_project/bin/traditional.dart',
+          ),
+        );
         exit = script.run(args: ['-v']);
       } on DCliException catch (e) {
         print(e);
@@ -80,8 +87,12 @@ void main() {
       try {
         print(pwd);
 
-        final script = DartScript.fromFile(join(fs.testScriptPath,
-            'traditional_project/bin/nested/traditional.dart'));
+        final script = DartScript.fromFile(
+          join(
+            fs.testScriptPath,
+            'traditional_project/bin/nested/traditional.dart',
+          ),
+        );
         exit = script.run(args: ['-v']);
       } on DCliException catch (e) {
         print(e);
@@ -90,21 +101,29 @@ void main() {
     });
   });
 
-  test('run  with traditional dart project structure - example', () {
-    TestFileSystem().withinZone((fs) {
-      int? exit = -1;
-      try {
-        print(pwd);
+  test(
+    'run  with traditional dart project structure - example',
+    () {
+      TestFileSystem().withinZone((fs) {
+        int? exit = -1;
+        try {
+          print(pwd);
 
-        final script = DartScript.fromFile(join(
-            fs.testScriptPath, 'traditional_project/example/traditional.dart'));
-        exit = script.run(args: ['-v']);
-      } on DCliException catch (e) {
-        print(e);
-      }
-      expect(exit, equals(0));
-    });
-  }, skip: true);
+          final script = DartScript.fromFile(
+            join(
+              fs.testScriptPath,
+              'traditional_project/example/traditional.dart',
+            ),
+          );
+          exit = script.run(args: ['-v']);
+        } on DCliException catch (e) {
+          print(e);
+        }
+        expect(exit, equals(0));
+      });
+    },
+    skip: true,
+  );
 
   test('run  with traditional dart project structure - tool', () {
     TestFileSystem().withinZone((fs) {
@@ -112,8 +131,12 @@ void main() {
       try {
         print(pwd);
 
-        final script = DartScript.fromFile(join(
-            fs.testScriptPath, 'traditional_project/tool/traditional.dart'));
+        final script = DartScript.fromFile(
+          join(
+            fs.testScriptPath,
+            'traditional_project/tool/traditional.dart',
+          ),
+        );
         exit = script.run(args: ['-v']);
       } on DCliException catch (e) {
         print(e);

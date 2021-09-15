@@ -182,24 +182,27 @@ extension StringAsProcess on String {
   ///      [lastLine] - returns just the last line written to stdout or stderr.
   ///      [parser] - returns a parser with the captured output ready
   /// to be interpreted as one of several file types.
-  Progress start(
-          {Progress? progress,
-          bool runInShell = false,
-          bool detached = false,
-          bool terminal = false,
-          bool nothrow = false,
-          bool privileged = false,
-          String? workingDirectory,
-          bool extensionSearch = true}) =>
-      cmd.start(this,
-          progress: progress ?? Progress(print, stderr: printerr),
-          runInShell: runInShell,
-          detached: detached,
-          terminal: terminal,
-          nothrow: nothrow,
-          privileged: privileged,
-          workingDirectory: workingDirectory,
-          extensionSearch: extensionSearch);
+  Progress start({
+    Progress? progress,
+    bool runInShell = false,
+    bool detached = false,
+    bool terminal = false,
+    bool nothrow = false,
+    bool privileged = false,
+    String? workingDirectory,
+    bool extensionSearch = true,
+  }) =>
+      cmd.start(
+        this,
+        progress: progress ?? Progress(print, stderr: printerr),
+        runInShell: runInShell,
+        detached: detached,
+        terminal: terminal,
+        nothrow: nothrow,
+        privileged: privileged,
+        workingDirectory: workingDirectory,
+        extensionSearch: extensionSearch,
+      );
 
   /// forEach runs the contents of this String as a command line
   /// application.
@@ -237,14 +240,18 @@ extension StringAsProcess on String {
   ///     [parser] - returns a parser with the captured output ready
   ///  to be interpreted
   ///                as one of several file types.
-  void forEach(LineAction stdout,
-          {LineAction stderr = _noOpAction,
-          bool runInShell = false,
-          bool extensionSearch = true}) =>
-      cmd.start(this,
-          progress: Progress(stdout, stderr: stderr),
-          runInShell: runInShell,
-          extensionSearch: extensionSearch);
+  void forEach(
+    LineAction stdout, {
+    LineAction stderr = _noOpAction,
+    bool runInShell = false,
+    bool extensionSearch = true,
+  }) =>
+      cmd.start(
+        this,
+        progress: Progress(stdout, stderr: stderr),
+        runInShell: runInShell,
+        extensionSearch: extensionSearch,
+      );
 
   /// [toList] runs the contents of this String as a cli command and
   /// returns any output written to stdout and stderr as
@@ -291,16 +298,19 @@ extension StringAsProcess on String {
   /// to be interpreted
   ///                as one of several file types.
 
-  List<String> toList(
-      {bool runInShell = false,
-      int skipLines = 0,
-      bool nothrow = false,
-      bool extensionSearch = true}) {
-    final progress = cmd.start(this,
-        runInShell: runInShell,
-        progress: Progress.capture(),
-        nothrow: nothrow,
-        extensionSearch: extensionSearch);
+  List<String> toList({
+    bool runInShell = false,
+    int skipLines = 0,
+    bool nothrow = false,
+    bool extensionSearch = true,
+  }) {
+    final progress = cmd.start(
+      this,
+      runInShell: runInShell,
+      progress: Progress.capture(),
+      nothrow: nothrow,
+      extensionSearch: extensionSearch,
+    );
 
     return progress.lines.sublist(skipLines);
   }
@@ -351,17 +361,18 @@ extension StringAsProcess on String {
   ///     [parser] - returns a parser with the captured output ready
   /// to be interpreted
   ///                as one of several file types.
-  String toParagraph(
-          {bool runInShell = false,
-          int skipLines = 0,
-          bool nothrow = false,
-          bool extensionSearch = true}) =>
+  String toParagraph({
+    bool runInShell = false,
+    int skipLines = 0,
+    bool nothrow = false,
+    bool extensionSearch = true,
+  }) =>
       toList(
-              runInShell: runInShell,
-              skipLines: skipLines,
-              nothrow: nothrow,
-              extensionSearch: extensionSearch)
-          .join(Platform().eol);
+        runInShell: runInShell,
+        skipLines: skipLines,
+        nothrow: nothrow,
+        extensionSearch: extensionSearch,
+      ).join(Platform().eol);
 
   /// [parser] runs the contents of this String as a cli command line
   ///  reading all of the
@@ -512,20 +523,23 @@ extension StringAsProcess on String {
   // }
   /// Experiemental - allows you to get a stream of the output written by the
   /// called process.
-  Stream<String> stream(
-      {bool runInShell = false,
-      String? workingDirectory,
-      bool nothrow = false,
-      bool includeStderr = true,
-      bool extensionSearch = true}) {
+  Stream<String> stream({
+    bool runInShell = false,
+    String? workingDirectory,
+    bool nothrow = false,
+    bool includeStderr = true,
+    bool extensionSearch = true,
+  }) {
     final progress = Progress.stream(includeStderr: includeStderr);
 
-    cmd.startStreaming(this,
-        runInShell: runInShell,
-        progress: progress,
-        workingDirectory: workingDirectory,
-        nothrow: nothrow,
-        extensionSearch: extensionSearch);
+    cmd.startStreaming(
+      this,
+      runInShell: runInShell,
+      progress: progress,
+      workingDirectory: workingDirectory,
+      nothrow: nothrow,
+      extensionSearch: extensionSearch,
+    );
 
     return progress.stream;
   }

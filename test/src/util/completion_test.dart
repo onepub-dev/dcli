@@ -20,15 +20,16 @@ void main() {
 
         final paths = completionExpandScripts('', workingDirectory: root);
         expect(
-            paths,
-            unorderedEquals(<String>[
-              'fred.jpg',
-              'fred.png',
-              'one.txt',
-              'two.txt',
-              'one.jpg',
-              'middle/'
-            ]));
+          paths,
+          unorderedEquals(<String>[
+            'fred.jpg',
+            'fred.png',
+            'one.txt',
+            'two.txt',
+            'one.jpg',
+            'middle/'
+          ]),
+        );
       });
     });
 
@@ -39,10 +40,11 @@ void main() {
 
         paths = completionExpandScripts('middl', workingDirectory: root);
         expect(
-            paths,
-            unorderedEquals(<String>[
-              'middle/',
-            ]));
+          paths,
+          unorderedEquals(<String>[
+            'middle/',
+          ]),
+        );
       });
     });
 
@@ -53,13 +55,14 @@ void main() {
 
         paths = completionExpandScripts('middle/', workingDirectory: root);
         expect(
-            paths,
-            unorderedEquals(<String>[
-              'middle/bottom/',
-              'middle/four.txt',
-              'middle/three.txt',
-              'middle/two.jpg',
-            ]));
+          paths,
+          unorderedEquals(<String>[
+            'middle/bottom/',
+            'middle/four.txt',
+            'middle/three.txt',
+            'middle/two.jpg',
+          ]),
+        );
       });
     });
 
@@ -82,11 +85,12 @@ void main() {
         paths = completionExpandScripts('mid', workingDirectory: root);
         deleteDir(mid);
         expect(
-            paths,
-            unorderedEquals(<String>[
-              'mid/',
-              'middle/',
-            ]));
+          paths,
+          unorderedEquals(<String>[
+            'mid/',
+            'middle/',
+          ]),
+        );
       });
     });
 
@@ -97,10 +101,11 @@ void main() {
 
         paths = completionExpandScripts('middle', workingDirectory: root);
         expect(
-            paths,
-            unorderedEquals(<String>[
-              'middle/',
-            ]));
+          paths,
+          unorderedEquals(<String>[
+            'middle/',
+          ]),
+        );
       });
     });
 
@@ -120,8 +125,10 @@ void main() {
         final root = join(fsRoot, 'top');
 
         paths = completionExpandScripts('middle/t', workingDirectory: root);
-        expect(paths,
-            unorderedEquals(<String>['middle/two.jpg', 'middle/three.txt']));
+        expect(
+          paths,
+          unorderedEquals(<String>['middle/two.jpg', 'middle/three.txt']),
+        );
       });
     });
   });

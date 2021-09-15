@@ -13,8 +13,11 @@ class ParsedCliCommand {
   ParsedCliCommand(String command, String? workingDirectory) {
     workingDirectory ??= pwd;
     if (!exists(workingDirectory)) {
-      throw RunException(command, -1,
-          "The workingDirectory ${truepath(workingDirectory)} doesn't exists.");
+      throw RunException(
+        command,
+        -1,
+        "The workingDirectory ${truepath(workingDirectory)} doesn't exists.",
+      );
     }
     final qargs = _parse(command);
     args = expandGlobs(qargs, workingDirectory);
@@ -23,11 +26,17 @@ class ParsedCliCommand {
   /// when passed individual args we respect any quotes that are
   /// passed as they have been put there with intent.
   ParsedCliCommand.fromParsed(
-      this.cmd, List<String> rawArgs, String? workingDirectory) {
+    this.cmd,
+    List<String> rawArgs,
+    String? workingDirectory,
+  ) {
     workingDirectory ??= pwd;
     if (!exists(workingDirectory)) {
-      throw RunException('$cmd ${rawArgs.join(' ')}', -1,
-          "The workingDirectory ${truepath(workingDirectory)} doesn't exists.");
+      throw RunException(
+        '$cmd ${rawArgs.join(' ')}',
+        -1,
+        "The workingDirectory ${truepath(workingDirectory)} doesn't exists.",
+      );
     }
 
     final qargs = _QArg.translate(rawArgs);
@@ -238,8 +247,10 @@ class _QArg {
 
     var files = <FileSystemEntity>[];
 
-    files = glob.listFileSystemSync(const LocalFileSystem(),
-        root: workingDirectory);
+    files = glob.listFileSystemSync(
+      const LocalFileSystem(),
+      root: workingDirectory,
+    );
 
     if (files.isEmpty) {
       // if no matches the bash spec says return

@@ -22,7 +22,8 @@ class VersionCommand extends Command {
   int run(List<Flag> selectedFlags, List<String> subarguments) {
     if (subarguments.isNotEmpty) {
       throw InvalidArguments(
-          "'dcli version' does not take any arguments. Found $subarguments");
+        "'dcli version' does not take any arguments. Found $subarguments",
+      );
     }
 
     final appname = DCliPaths().dcliName;
@@ -37,8 +38,12 @@ class VersionCommand extends Command {
     // expand symlink
     location = File(location).resolveSymbolicLinksSync();
 
-    print(green('${ReCase().titleCase(appname)} '
-        'Version: ${Settings().version}, Located at: $location'));
+    print(
+      green(
+        '${ReCase().titleCase(appname)} '
+        'Version: ${Settings().version}, Located at: $location',
+      ),
+    );
 
     return 0;
   }

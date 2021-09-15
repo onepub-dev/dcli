@@ -101,10 +101,12 @@ class DartSdk {
   /// [script] is the path to the dcli script we are compiling.
   /// [pathToExe] is the path (including the filename) to write the
   ///  compiled ex to .
-  void runDartCompiler(DartScript script,
-      {required String pathToExe,
-      Progress? progress,
-      String? workingDirectory}) {
+  void runDartCompiler(
+    DartScript script, {
+    required String pathToExe,
+    Progress? progress,
+    String? workingDirectory,
+  }) {
     final runArgs = <String>[];
 
     workingDirectory ??= script.pathToScriptDirectory;
@@ -117,12 +119,17 @@ class DartSdk {
         ..add('exe')
         ..add(script.pathToScript)
         ..add('--output=$pathToExe');
-      process = RunnableProcess.fromCommandArgs(dartExeName, runArgs,
-          workingDirectory: script.pathToScriptDirectory);
+      process = RunnableProcess.fromCommandArgs(
+        dartExeName,
+        runArgs,
+        workingDirectory: script.pathToScriptDirectory,
+      );
     } else {
       if (pathToDartToNativeExe == null) {
-        throw DCliException('Unable to compile as the dart2native executable '
-            'not found on your path.');
+        throw DCliException(
+          'Unable to compile as the dart2native executable '
+          'not found on your path.',
+        );
       }
 
       /// use old dart2native
@@ -130,8 +137,11 @@ class DartSdk {
         ..add(script.pathToScript)
         ..add('--output=$pathToExe');
 
-      process = RunnableProcess.fromCommandArgs(pathToDartToNativeExe!, runArgs,
-          workingDirectory: workingDirectory);
+      process = RunnableProcess.fromCommandArgs(
+        pathToDartToNativeExe!,
+        runArgs,
+        workingDirectory: workingDirectory,
+      );
     }
 
     process
@@ -163,15 +173,19 @@ class DartSdk {
 
     if (pathToDartExe == null) {
       throw DCliException(
-          "Unable to run 'dart' as the dart exe is not on your path");
+        "Unable to run 'dart' as the dart exe is not on your path",
+      );
     }
-    startFromArgs(pathToDartExe!, args,
-        nothrow: nothrow,
-        detached: detached,
-        terminal: terminal,
-        progress: progress,
-        workingDirectory: workingDirectory,
-        extensionSearch: false);
+    startFromArgs(
+      pathToDartExe!,
+      args,
+      nothrow: nothrow,
+      detached: detached,
+      terminal: terminal,
+      progress: progress,
+      workingDirectory: workingDirectory,
+      extensionSearch: false,
+    );
     verbose(() => 'dart ${args.toList().join(' ')} finished.');
 
     return progress;
@@ -185,34 +199,43 @@ class DartSdk {
   /// If [nothrow] == true (defaults to false) then if the
   /// call to pub get fails an exit code will be returned in the
   /// [Progress] rather than throwing an exception.
-  Progress runPub(
-      {required List<String> args,
-      String? workingDirectory,
-      Progress? progress,
-      bool nothrow = false}) {
+  Progress runPub({
+    required List<String> args,
+    String? workingDirectory,
+    Progress? progress,
+    bool nothrow = false,
+  }) {
     progress ??= Progress.print();
 
     if (useDartCommand) {
       if (pathToDartExe == null) {
         throw DCliException(
-            "Unable to run 'dart pub' as the dart exe is not on your path");
+          "Unable to run 'dart pub' as the dart exe is not on your path",
+        );
       }
-      startFromArgs(pathToDartExe!, ['pub', ...args],
-          nothrow: nothrow,
-          progress: progress,
-          workingDirectory: workingDirectory,
-          extensionSearch: false);
+      startFromArgs(
+        pathToDartExe!,
+        ['pub', ...args],
+        nothrow: nothrow,
+        progress: progress,
+        workingDirectory: workingDirectory,
+        extensionSearch: false,
+      );
     } else {
       if (pathToPubExe == null) {
         throw DCliException(
-            "Unable to run 'pub' as the pub exe is not on your path");
+          "Unable to run 'pub' as the pub exe is not on your path",
+        );
       }
 
-      startFromArgs(pathToPubExe!, args,
-          nothrow: nothrow,
-          progress: progress,
-          workingDirectory: workingDirectory,
-          extensionSearch: false);
+      startFromArgs(
+        pathToPubExe!,
+        args,
+        nothrow: nothrow,
+        progress: progress,
+        workingDirectory: workingDirectory,
+        extensionSearch: false,
+      );
     }
     verbose(() => 'dart pub ${args.toList().join(' ')} finished.');
 
@@ -254,9 +277,10 @@ class DartSdk {
     bool compileExecutables = false,
   }) {
     runPub(
-        args: ['get', if (!compileExecutables) '--no-precompile'],
-        workingDirectory: workingDirectory,
-        progress: progress);
+      args: ['get', if (!compileExecutables) '--no-precompile'],
+      workingDirectory: workingDirectory,
+      progress: progress,
+    );
   }
 
   /// Attempts to detect the location of the dart sdk.
@@ -323,8 +347,10 @@ class DartSdk {
     if (!exists(installDir)) {
       createDir(installDir, recursive: true);
     } else {
-      print('The install directory $installDir already exists. '
-          'If you proceed all files under $installDir will be deleted.');
+      print(
+        'The install directory $installDir already exists. '
+        'If you proceed all files under $installDir will be deleted.',
+      );
       if (confirm('Proceed to delete $installDir')) {
         /// I've added this incase we have a failed install and
         /// need to do a restart.
@@ -381,10 +407,11 @@ class DartSdk {
     }
 
     fetch(
-        url:
-            'https://storage.googleapis.com/dart-archive/channels/stable/release/latest/sdk/dartsdk-$platform-$architechture-release.zip',
-        saveToPath: zipRelease,
-        fetchProgress: (p) => echo('.'));
+      url:
+          'https://storage.googleapis.com/dart-archive/channels/stable/release/latest/sdk/dartsdk-$platform-$architechture-release.zip',
+      saveToPath: zipRelease,
+      fetchProgress: (p) => echo('.'),
+    );
 
     if (term.isAnsi) {
       term.showCursor(show: true);
@@ -399,8 +426,10 @@ class DartSdk {
 
     /// ask for and confirm the install directory.
     while (!confirmed) {
-      final entered = ask('Install dart-sdk to (Enter for default '
-          '[${truepath(finaldartToolDir)}]): ');
+      final entered = ask(
+        'Install dart-sdk to (Enter for default '
+        '[${truepath(finaldartToolDir)}]): ',
+      );
       if (entered.isNotEmpty) {
         finaldartToolDir = entered;
       }
@@ -445,12 +474,14 @@ class DartSdk {
         ..clearLine()
         ..startOfLine();
       echo(
-          '${EnumHelper().getName(progress.status).padRight(15)}${Format.bytesAsReadable(progress.downloaded)}/${Format.bytesAsReadable(progress.length)} $percentage');
+        '${EnumHelper().getName(progress.status).padRight(15)}${Format.bytesAsReadable(progress.downloaded)}/${Format.bytesAsReadable(progress.length)} $percentage',
+      );
     } else {
       if (_progressSuppressor % 1000 == 0 ||
           progress.status == FetchStatus.complete) {
         print(
-            '${EnumHelper().getName(progress.status).padRight(15)}${Format.bytesAsReadable(progress.downloaded)}/${Format.bytesAsReadable(progress.length)} $percentage');
+          '${EnumHelper().getName(progress.status).padRight(15)}${Format.bytesAsReadable(progress.downloaded)}/${Format.bytesAsReadable(progress.length)} $percentage',
+        );
       }
       _progressSuppressor++;
       if (_progressSuppressor > 1000) {
@@ -462,16 +493,18 @@ class DartSdk {
   /// Run dart pub global activate on the given [package].
   void globalActivate(String package) {
     runPub(
-        args: ['global', 'activate', package],
-        progress: Progress.printStdErr());
+      args: ['global', 'activate', package],
+      progress: Progress.printStdErr(),
+    );
   }
 
   /// Run dart pub global activate for a packae located in [path]
   /// relative to the current directory.
   void globalActivateFromPath(String path) {
     runPub(
-        args: ['global', 'activate', '--source', 'path', path],
-        progress: Progress.printStdErr());
+      args: ['global', 'activate', '--source', 'path', path],
+      progress: Progress.printStdErr(),
+    );
   }
 
   String? _determineDartPath() {

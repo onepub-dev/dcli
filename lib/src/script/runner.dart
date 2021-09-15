@@ -25,15 +25,19 @@ class ScriptRunner {
       ..._scriptArguments
     ];
 
-    verbose(() => 'Executing: ${DartSdk().pathToDartExe} $vmArgs, '
-        '${script.pathToScript}');
+    verbose(
+      () => 'Executing: ${DartSdk().pathToDartExe} $vmArgs, '
+          '${script.pathToScript}',
+    );
 
     // Execute the script
-    final process = waitFor<Process>(Process.start(
-      _sdk.pathToDartExe!,
-      vmArgs,
-      mode: ProcessStartMode.inheritStdio,
-    ));
+    final process = waitFor<Process>(
+      Process.start(
+        _sdk.pathToDartExe!,
+        vmArgs,
+        mode: ProcessStartMode.inheritStdio,
+      ),
+    );
 
     final exitCode = waitForEx<int>(process.exitCode);
 

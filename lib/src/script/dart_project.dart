@@ -157,24 +157,28 @@ class DartProject {
   /// [background] defaults to false.
   ///
   void warmup({bool background = false}) {
-    _lock.withLock(() {
-      try {
-        if (background) {
-          // we run the clean in the background
-          // by running another copy of dcli.
-          print('DCli warmup started in the background.');
-          '${DCliPaths().dcliName} '
-                  '-v=${join(Directory.systemTemp.path, 'dcli.warmup.log')}'
-                  ' warmup $pathToProjectRoot'
-              .start(detached: true, runInShell: true, extensionSearch: false);
-        } else {
-          // print(orange('Running pub get...'));
-          _pubget();
+    _lock.withLock(
+      () {
+        try {
+          if (background) {
+            // we run the clean in the background
+            // by running another copy of dcli.
+            print('DCli warmup started in the background.');
+            '${DCliPaths().dcliName} '
+                    '-v=${join(Directory.systemTemp.path, 'dcli.warmup.log')}'
+                    ' warmup $pathToProjectRoot'
+                .start(
+                    detached: true, runInShell: true, extensionSearch: false);
+          } else {
+            // print(orange('Running pub get...'));
+            _pubget();
+          }
+        } on PubGetException {
+          print(red("\ndcli warmup failed due to the 'pub get' call failing."));
         }
-      } on PubGetException {
-        print(red("\ndcli warmup failed due to the 'pub get' call failing."));
-      }
-    }, waiting: 'Waiting for warmup to complete...');
+      },
+      waiting: 'Waiting for warmup to complete...',
+    );
   }
 
   /// Removes any of the dart build artifacts so you have a clean directory.
@@ -187,26 +191,31 @@ class DartProject {
   ///
   /// Any exes for scripts in the directory.
   void clean() {
-    _lock.withLock(() {
-      find(
-        '.packages',
-        types: [Find.file],
-        workingDirectory: pathToProjectRoot,
-      ).forEach(delete);
-      find(
-        '.dart_tool',
-        types: [Find.directory],
-        workingDirectory: pathToProjectRoot,
-      ).forEach(deleteDir);
-      find('pubspec.lock', workingDirectory: pathToProjectRoot).forEach(delete);
+    _lock.withLock(
+      () {
+        find(
+          '.packages',
+          types: [Find.file],
+          workingDirectory: pathToProjectRoot,
+        ).forEach(delete);
+        find(
+          '.dart_tool',
+          types: [Find.directory],
+          workingDirectory: pathToProjectRoot,
+        ).forEach(deleteDir);
+        find('pubspec.lock', workingDirectory: pathToProjectRoot)
+            .forEach(delete);
 
-      find('*.dart', workingDirectory: pathToProjectRoot).forEach((scriptPath) {
-        final script = DartScript.fromFile(scriptPath);
-        if (exists(script.pathToExe)) {
-          delete(script.pathToExe);
-        }
-      });
-    }, waiting: 'Waiting for clean to complete...');
+        find('*.dart', workingDirectory: pathToProjectRoot)
+            .forEach((scriptPath) {
+          final script = DartScript.fromFile(scriptPath);
+          if (exists(script.pathToExe)) {
+            delete(script.pathToExe);
+          }
+        });
+      },
+      waiting: 'Waiting for clean to complete...',
+    );
   }
 
   /// Compiles all dart scripts in the project.
@@ -219,9 +228,10 @@ class DartProject {
   /// [overwrite] defaults to false.
   ///
   void compile({bool install = false, bool overwrite = false}) {
-    find('*.dart', workingDirectory: pathToProjectRoot).forEach((file) =>
-        DartScript.fromFile(file)
-            .compile(install: install, overwrite: overwrite));
+    find('*.dart', workingDirectory: pathToProjectRoot).forEach(
+      (file) => DartScript.fromFile(file)
+          .compile(install: install, overwrite: overwrite),
+    );
   }
 
   /// Causes a pub get to be run against the project.
@@ -290,8 +300,10 @@ class DartProject {
 
   /// Creates a script located at [pathToScript] from the passed [templatePath].
   /// When the user runs 'dcli create <script>'
-  void _createFromTemplate(
-      {required String templatePath, required String pathToScript}) {
+  void _createFromTemplate({
+    required String templatePath,
+    required String pathToScript,
+  }) {
     if (!exists(templatePath)) {
       throw TemplateNotFoundException(templatePath);
     }
@@ -317,8 +329,10 @@ class DartProject {
         print(orange('Creating missing analysis_options.yaml.'));
       }
 
-      copy(join(Settings().pathToTemplate, 'analysis_options.yaml'),
-          analysisPath);
+      copy(
+        join(Settings().pathToTemplate, 'analysis_options.yaml'),
+        analysisPath,
+      );
     }
   }
 
@@ -328,10 +342,15 @@ class DartProject {
     }
     // no pubspec.yaml in scope so lets create one.
 
-    copy(join(Settings().pathToTemplate, 'pubspec.yaml.template'),
-        pathToPubSpec);
-    replace(pathToPubSpec, '%scriptname%',
-        _replaceInvalidCharactersForName(basename(pathToProjectRoot)));
+    copy(
+      join(Settings().pathToTemplate, 'pubspec.yaml.template'),
+      pathToPubSpec,
+    );
+    replace(
+      pathToPubSpec,
+      '%scriptname%',
+      _replaceInvalidCharactersForName(basename(pathToProjectRoot)),
+    );
   }
 
   /// Creates a script in [pathToProjectRoot] with the name [scriptName]
@@ -342,8 +361,10 @@ class DartProject {
   ///
   /// The [templateName] must be the name of a template file in the ~/.dcli/template directory.
   ///
-  DartScript createScript(String scriptName,
-      {String templateName = 'basic.dart'}) {
+  DartScript createScript(
+    String scriptName, {
+    String templateName = 'basic.dart',
+  }) {
     if (!scriptName.endsWith('.dart')) {
       throw DartProjectException('scriptName must end with .dart');
     }

@@ -88,8 +88,11 @@ class CompileCommand extends Command {
       /// as we will end up with root permissions everywhere.
       if (!script.isReadyToRun) {
         printerr(
-            red('The script is not ready to run, so cannot be run from sudo. '
-                'Run dcli warmup $scriptPath'));
+          red(
+            'The script is not ready to run, so cannot be run from sudo. '
+            'Run dcli warmup $scriptPath',
+          ),
+        );
         exit(1);
       }
     }
@@ -119,9 +122,12 @@ class CompileCommand extends Command {
           if (!overwrite) {
             install = false;
 
-            print(red(
+            print(
+              red(
                 'The target file ${script.pathToInstalledExe} already exists. '
-                'Use the --overwrite flag to overwrite it.'));
+                'Use the --overwrite flag to overwrite it.',
+              ),
+            );
           }
         }
       }

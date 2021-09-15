@@ -89,13 +89,15 @@ Progress find(
   Progress? progress,
   List<FileSystemEntityType> types = const [Find.file],
 }) =>
-    Find()._find(pattern,
-        caseSensitive: caseSensitive,
-        recursive: recursive,
-        includeHidden: includeHidden,
-        workingDirectory: workingDirectory,
-        progress: progress,
-        types: types);
+    Find()._find(
+      pattern,
+      caseSensitive: caseSensitive,
+      recursive: recursive,
+      includeHidden: includeHidden,
+      workingDirectory: workingDirectory,
+      progress: progress,
+      types: types,
+    );
 
 /// Implementation for the [_find] function.
 class Find extends DCliFunction {
@@ -124,16 +126,21 @@ class Find extends DCliFunction {
 
     if (!exists(_workingDirectory)) {
       throw FindException(
-          'The path ${truepath(_workingDirectory)} does not exists');
+        'The path ${truepath(_workingDirectory)} does not exists',
+      );
     }
 
-    return waitForEx<Progress>(_innerFind(finalpattern,
+    return waitForEx<Progress>(
+      _innerFind(
+        finalpattern,
         caseSensitive: caseSensitive,
         recursive: recursive,
         workingDirectory: _workingDirectory,
         progress: progress,
         types: types,
-        includeHidden: includeHidden));
+        includeHidden: includeHidden,
+      ),
+    );
   }
 
   Future<Progress> _innerFind(
@@ -148,8 +155,11 @@ class Find extends DCliFunction {
     var _workingDirectory = workingDirectory;
     var finalIncludeHidden = includeHidden;
 
-    final matcher = _PatternMatcher(pattern,
-        caseSensitive: caseSensitive, workingDirectory: _workingDirectory);
+    final matcher = _PatternMatcher(
+      pattern,
+      caseSensitive: caseSensitive,
+      workingDirectory: _workingDirectory,
+    );
     if (_workingDirectory == '.') {
       _workingDirectory = pwd;
     } else {
@@ -165,18 +175,28 @@ class Find extends DCliFunction {
     final _progress = progress ?? Progress.devNull();
 
     try {
-      verbose(() =>
-          'find: pwd: $pwd workingDirectory: ${truepath(_workingDirectory)} '
-          'pattern: $pattern caseSensitive: $caseSensitive '
-          'recursive: $recursive types: $types ');
+      verbose(
+        () =>
+            'find: pwd: $pwd workingDirectory: ${truepath(_workingDirectory)} '
+            'pattern: $pattern caseSensitive: $caseSensitive '
+            'recursive: $recursive types: $types ',
+      );
       final nextLevel =
           List<FileSystemEntity?>.filled(100, null, growable: true);
       final singleDirectory =
           List<FileSystemEntity?>.filled(100, null, growable: true);
       final childDirectories =
           List<FileSystemEntity?>.filled(100, null, growable: true);
-      await _processDirectory(_workingDirectory, _workingDirectory, recursive,
-          types, matcher, finalIncludeHidden, _progress, childDirectories);
+      await _processDirectory(
+        _workingDirectory,
+        _workingDirectory,
+        recursive,
+        types,
+        matcher,
+        finalIncludeHidden,
+        _progress,
+        childDirectories,
+      );
 
       while (childDirectories[0] != null) {
         _zeroElements(nextLevel);
@@ -184,8 +204,16 @@ class Find extends DCliFunction {
           if (directory == null) {
             break;
           }
-          await _processDirectory(_workingDirectory, directory.path, recursive,
-              types, matcher, finalIncludeHidden, _progress, singleDirectory);
+          await _processDirectory(
+            _workingDirectory,
+            directory.path,
+            recursive,
+            types,
+            matcher,
+            finalIncludeHidden,
+            _progress,
+            singleDirectory,
+          );
           _appendTo(nextLevel, singleDirectory);
           _zeroElements(singleDirectory);
         }
@@ -198,14 +226,15 @@ class Find extends DCliFunction {
   }
 
   Future<void> _processDirectory(
-      String workingDirectory,
-      String currentDirectory,
-      bool recursive,
-      List<FileSystemEntityType> types,
-      _PatternMatcher matcher,
-      bool includeHidden,
-      Progress progress,
-      List<FileSystemEntity?> nextLevel) async {
+    String workingDirectory,
+    String currentDirectory,
+    bool recursive,
+    List<FileSystemEntityType> types,
+    _PatternMatcher matcher,
+    bool includeHidden,
+    Progress progress,
+    List<FileSystemEntity?> nextLevel,
+  ) async {
     final lister = Directory(currentDirectory).list(followLinks: false);
     var nextLevelIndex = 0;
 
@@ -253,9 +282,10 @@ class Find extends DCliFunction {
         } else if (e is FileSystemException && e.osError!.errorCode == 2) {
           /// The directory may have been deleted between us finding it and
           /// processing it.
-          Settings()
-              .verbose('File or Directory deleted whilst we were processing it:'
-                  ' ${e.path}');
+          Settings().verbose(
+            'File or Directory deleted whilst we were processing it:'
+            ' ${e.path}',
+          );
         } else {
           // ignore: only_throw_errors
           throw e;
@@ -268,8 +298,11 @@ class Find extends DCliFunction {
 
   /// Checks if a hidden file is allowed.
   /// Non-hidden files are always allowed.
-  bool _allowed(String workingDirectory, FileSystemEntity entity,
-          {required bool includeHidden}) =>
+  bool _allowed(
+    String workingDirectory,
+    FileSystemEntity entity, {
+    required bool includeHidden,
+  }) =>
       includeHidden || !_isHidden(workingDirectory, entity);
 
   // check if the entity is a hidden file (.xxx) or
@@ -297,8 +330,10 @@ class Find extends DCliFunction {
     }
   }
 
-  void _copyInto(List<FileSystemEntity?> childDirectories,
-      List<FileSystemEntity?> nextLevel) {
+  void _copyInto(
+    List<FileSystemEntity?> childDirectories,
+    List<FileSystemEntity?> nextLevel,
+  ) {
     _zeroElements(childDirectories);
     for (var i = 0; i < nextLevel.length; i++) {
       if (childDirectories.length > i) {
@@ -309,8 +344,10 @@ class Find extends DCliFunction {
     }
   }
 
-  void _appendTo(List<FileSystemEntity?> nextLevel,
-      List<FileSystemEntity?> singleDirectory) {
+  void _appendTo(
+    List<FileSystemEntity?> nextLevel,
+    List<FileSystemEntity?> singleDirectory,
+  ) {
     var index = _firstAvailable(nextLevel);
 
     for (var i = 0; i < singleDirectory.length; i++) {
@@ -349,8 +386,11 @@ class Find extends DCliFunction {
 }
 
 class _PatternMatcher {
-  _PatternMatcher(this.pattern,
-      {required this.workingDirectory, required this.caseSensitive}) {
+  _PatternMatcher(
+    this.pattern, {
+    required this.workingDirectory,
+    required this.caseSensitive,
+  }) {
     regEx = buildRegEx();
 
     final patternParts = split(dirname(pattern));
@@ -440,7 +480,8 @@ class _PatternMatcher {
 
     /// return just the required parts.
     return joinAll(
-        [...pathParts.sublist(partsCount - directoryParts), basename(path)]);
+      [...pathParts.sublist(partsCount - directoryParts), basename(path)],
+    );
   }
 }
 

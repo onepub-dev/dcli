@@ -30,7 +30,8 @@ class DoctorCommand extends Command {
     }
     if (subarguments.length > 1) {
       throw InvalidArguments(
-          "'dcli doctor' takes zero or one arguments. Found $subarguments");
+        "'dcli doctor' takes zero or one arguments. Found $subarguments",
+      );
     }
 
     _colprint(['DCli version', Settings().version]);
@@ -120,7 +121,8 @@ class DoctorCommand extends Command {
     _colprint(['pub cache', privatePath(pathToPubCache)]);
 
     _colprint(
-        ['PUB_CACHE Env', '${envs.containsKey(PubCache.envVarPubCache)}']);
+      ['PUB_CACHE Env', '${envs.containsKey(PubCache.envVarPubCache)}'],
+    );
   }
 
   void _printExePaths() {
@@ -181,8 +183,12 @@ class DoctorCommand extends Command {
 
   void _printPlatform() {
     _colprint(['OS', Platform.operatingSystem]);
-    print(Format().row(['OS version', Platform.operatingSystemVersion],
-        widths: [17, -1]));
+    print(
+      Format().row(
+        ['OS version', Platform.operatingSystemVersion],
+        widths: [17, -1],
+      ),
+    );
     _colprint(['path separator', Platform.pathSeparator]);
     print('');
     _colprint(['dart version', DartSdk().version]);
@@ -215,22 +221,23 @@ Running 'dcli doctor' provides diagnostic information on your install
 
       final username = Shell.current.loggedInUser;
       if (username != null) {
-        print(Format().row([
-          finallabel,
-          fstat.modeString(),
-          '<user>:${owner.group == owner.user ? '<user>' : owner.group}',
-          '${privatePath(path)} '
-        ], widths: [
-          17,
-          9,
-          16,
-          -1
-        ], alignments: [
-          TableAlignment.left,
-          TableAlignment.left,
-          TableAlignment.middle,
-          TableAlignment.left
-        ]));
+        print(
+          Format().row(
+            [
+              finallabel,
+              fstat.modeString(),
+              '<user>:${owner.group == owner.user ? '<user>' : owner.group}',
+              '${privatePath(path)} '
+            ],
+            widths: [17, 9, 16, -1],
+            alignments: [
+              TableAlignment.left,
+              TableAlignment.left,
+              TableAlignment.middle,
+              TableAlignment.left
+            ],
+          ),
+        );
       }
     } else {
       _colprint([finallabel, '${privatePath(path)} does not exist']);

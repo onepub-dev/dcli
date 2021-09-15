@@ -118,9 +118,11 @@ void main() {
     t.test('toList - nothrow', () {
       final result = 'ls *.fasdafefe'.toList(nothrow: true);
       t.expect(
-          result,
-          t.equals(
-              ["ls: cannot access '*.fasdafefe': No such file or directory"]));
+        result,
+        t.equals(
+          ["ls: cannot access '*.fasdafefe': No such file or directory"],
+        ),
+      );
     });
 
     t.test('toList - exception nothrow=false', () {
@@ -132,8 +134,10 @@ void main() {
         'ls *.fasdafefe'.toList(nothrow: true);
       } on RunException catch (e) {
         t.expect(e.exitCode, 2);
-        t.expect(e.message,
-            "ls: cannot access '*.fasdafefe': No such file or directory");
+        t.expect(
+          e.message,
+          "ls: cannot access '*.fasdafefe': No such file or directory",
+        );
       }
     });
 
@@ -163,11 +167,14 @@ void main() {
 
   t.test('forEach using runInShell', () {
     var found = false;
-    'echo run test'.forEach((line) {
-      if (line.contains('run test')) {
-        found = true;
-      }
-    }, runInShell: true);
+    'echo run test'.forEach(
+      (line) {
+        if (line.contains('run test')) {
+          found = true;
+        }
+      },
+      runInShell: true,
+    );
     t.expect(found, t.equals(true));
   });
 

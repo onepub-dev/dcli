@@ -11,84 +11,94 @@ import '../../mocks/mock_settings.dart';
 import '../../util/test_file_system.dart';
 
 void main() {
-  group('Install DCli', () {
-    test('warmup install', () {
-      expect(!Platform.isWindows || Shell.current.isPrivilegedUser, isTrue);
-      TestFileSystem(useCommonPath: false).withinZone((fs) {
-        try {
-          Shell.current.install();
-        } on DCliException catch (e) {
-          print(e);
-        }
+  group(
+    'Install DCli',
+    () {
+      test(
+        'warmup install',
+        () {
+          expect(!Platform.isWindows || Shell.current.isPrivilegedUser, isTrue);
+          TestFileSystem(useCommonPath: false).withinZone((fs) {
+            try {
+              Shell.current.install();
+            } on DCliException catch (e) {
+              print(e);
+            }
 
-        checkInstallStructure(fs);
+            checkInstallStructure(fs);
 
-        // Now install over existing
-        try {
-          Shell.current.install();
-        } on DCliException catch (e) {
-          print(e);
-        }
+            // Now install over existing
+            try {
+              Shell.current.install();
+            } on DCliException catch (e) {
+              print(e);
+            }
 
-        checkInstallStructure(fs);
+            checkInstallStructure(fs);
+          });
+        },
+        tags: ['privileged'],
+      );
+      test('add ~/.dcli/bin to PATH on Windows', () {
+        TestFileSystem().withinZone((fs) {
+          final settings = Settings();
+          final mockSettings = MockSettings();
+          final mockEnv = MockEnv();
+
+          // windows we can't add a path just expect user message.
+          when(() => mockSettings.isWindows).thenReturn(true);
+          when(() => mockSettings.isLinux).thenReturn(false);
+          when(() => mockSettings.isMacOS).thenReturn(false);
+          when(() => mockSettings.isVerbose).thenReturn(false);
+          when(() => mockSettings.pathToDCliBin)
+              .thenReturn(settings.pathToDCliBin);
+
+          when(() => mockEnv.HOME).thenReturn(r'C:\windows\userdata');
+          when(() => mockEnv.isOnPATH(settings.pathToDCliBin))
+              .thenReturn(false);
+
+          Settings.mock = mockSettings;
+          Env.mock = mockEnv;
+        });
       });
-    }, tags: ['privileged']);
-    test('add ~/.dcli/bin to PATH on Windows', () {
-      TestFileSystem().withinZone((fs) {
-        final settings = Settings();
-        final mockSettings = MockSettings();
-        final mockEnv = MockEnv();
 
-        // windows we can't add a path just expect user message.
-        when(() => mockSettings.isWindows).thenReturn(true);
-        when(() => mockSettings.isLinux).thenReturn(false);
-        when(() => mockSettings.isMacOS).thenReturn(false);
-        when(() => mockSettings.isVerbose).thenReturn(false);
-        when(() => mockSettings.pathToDCliBin)
-            .thenReturn(settings.pathToDCliBin);
+      test('set env PATH Linux', () {
+        TestFileSystem().withinZone((fs) {
+          final settings = Settings();
+          final mockSettings = MockSettings();
+          final mockEnv = MockEnv();
 
-        when(() => mockEnv.HOME).thenReturn(r'C:\windows\userdata');
-        when(() => mockEnv.isOnPATH(settings.pathToDCliBin)).thenReturn(false);
+          when(() => mockSettings.isWindows).thenReturn(false);
+          when(() => mockSettings.isLinux).thenReturn(true);
+          when(() => mockSettings.isMacOS).thenReturn(false);
+          when(() => mockSettings.isVerbose).thenReturn(false);
+          when(() => mockSettings.pathToDCliBin)
+              .thenReturn(settings.pathToDCliBin);
 
-        Settings.mock = mockSettings;
-        Env.mock = mockEnv;
+          when(() => mockEnv.HOME).thenReturn(HOME);
+          when(() => mockEnv.isOnPATH(settings.pathToDCliBin))
+              .thenReturn(false);
+
+          Settings.mock = mockSettings;
+          Env.mock = mockEnv;
+
+          final export = 'export PATH=\$PATH:${settings.pathToDCliBin}';
+
+          final profilePath = join(HOME, '.profile');
+          if (exists(profilePath)) {
+            final exportLines = read(profilePath).toList()
+              ..retainWhere((line) => line.startsWith('export'));
+            expect(exportLines, contains(export));
+          }
+          Env.reset();
+          Settings.reset();
+        });
       });
-    });
 
-    test('set env PATH Linux', () {
-      TestFileSystem().withinZone((fs) {
-        final settings = Settings();
-        final mockSettings = MockSettings();
-        final mockEnv = MockEnv();
-
-        when(() => mockSettings.isWindows).thenReturn(false);
-        when(() => mockSettings.isLinux).thenReturn(true);
-        when(() => mockSettings.isMacOS).thenReturn(false);
-        when(() => mockSettings.isVerbose).thenReturn(false);
-        when(() => mockSettings.pathToDCliBin)
-            .thenReturn(settings.pathToDCliBin);
-
-        when(() => mockEnv.HOME).thenReturn(HOME);
-        when(() => mockEnv.isOnPATH(settings.pathToDCliBin)).thenReturn(false);
-
-        Settings.mock = mockSettings;
-        Env.mock = mockEnv;
-
-        final export = 'export PATH=\$PATH:${settings.pathToDCliBin}';
-
-        final profilePath = join(HOME, '.profile');
-        if (exists(profilePath)) {
-          final exportLines = read(profilePath).toList()
-            ..retainWhere((line) => line.startsWith('export'));
-          expect(exportLines, contains(export));
-        }
-        Env.reset();
-        Settings.reset();
-      });
-    });
-
-    test('With Lib', () {});
-  }, skip: false);
+      test('With Lib', () {});
+    },
+    skip: false,
+  );
 }
 
 void checkInstallStructure(TestFileSystem fs) {

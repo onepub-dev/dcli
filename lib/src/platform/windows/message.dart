@@ -15,8 +15,15 @@ void broadcastEnvironmentChange() {
 
   final pResult = calloc<Int32>(1);
   try {
-    SendMessageTimeout(HWND_BROADCAST, WM_SETTINGCHANGE, 0, what.address,
-        SMTO_ABORTIFHUNG, 5000, pResult.cast());
+    SendMessageTimeout(
+      HWND_BROADCAST,
+      WM_SETTINGCHANGE,
+      0,
+      what.address,
+      SMTO_ABORTIFHUNG,
+      5000,
+      pResult.cast(),
+    );
   } finally {
     calloc
       ..free(what)

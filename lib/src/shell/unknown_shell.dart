@@ -71,8 +71,12 @@ class UnknownShell with ShellMixin {
       // ignore: avoid_catches_without_on_clauses
       catch (e) {
         // ignore write permission problems.
-        printerr(red("Unable to add $path to path as we couldn't write "
-            'to $macOSPathPath'));
+        printerr(
+          red(
+            "Unable to add $path to path as we couldn't write "
+            'to $macOSPathPath',
+          ),
+        );
       }
     }
     return success;
@@ -103,8 +107,11 @@ class UnknownShell with ShellMixin {
       // ignore: avoid_catches_without_on_clauses
       catch (e) {
         // ignore write permission problems.
-        printerr(red(
-            "Unable to add dcli/bin to path as we couldn't write to $profile"));
+        printerr(
+          red(
+            "Unable to add dcli/bin to path as we couldn't write to $profile",
+          ),
+        );
       }
     }
     return success;

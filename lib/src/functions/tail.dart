@@ -46,7 +46,8 @@ class _Tail extends DCliFunction {
     // ignore: avoid_catches_without_on_clauses
     catch (e) {
       throw TailException(
-          'An error occured reading ${truepath(path)}. Error: $e');
+        'An error occured reading ${truepath(path)}. Error: $e',
+      );
     } finally {
       progress!.close();
     }

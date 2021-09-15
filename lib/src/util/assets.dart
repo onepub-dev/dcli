@@ -76,8 +76,11 @@ class Assets {
   /// recursively search all
   /// directories under [root].
   ///
-  List<String> list(String pattern,
-      {required String root, bool recursive = false}) {
+  List<String> list(
+    String pattern, {
+    required String root,
+    bool recursive = false,
+  }) {
     if (!root.startsWith('assets$separator')) {
       throw ArgumentError('The root must start with assets$separator');
     }
@@ -88,8 +91,13 @@ class Assets {
 
   /// loads an asset as a byte buffer.
   Uint8List loadBytes(String path) {
-    final resolvedUri = waitForEx<Uri?>(Isolate.resolvePackageUri(Uri.file(
-        Context(style: Style.url).join('lib', 'src', 'assets', 'templates'))))!;
+    final resolvedUri = waitForEx<Uri?>(
+      Isolate.resolvePackageUri(
+        Uri.file(
+          Context(style: Style.url).join('lib', 'src', 'assets', 'templates'),
+        ),
+      ),
+    )!;
 
     verbose(() => 'resolved: ${resolvedUri.toFilePath()}');
 
@@ -100,9 +108,10 @@ class Assets {
   /// to the absolute file system path (usually in .pub-cache)
   String _resolveAssetPath(String path) {
     final uri = Uri(
-        scheme: 'package',
-        path: Context(style: Style.url)
-            .joinAll([_packageName, 'src', ...split(path)]));
+      scheme: 'package',
+      path: Context(style: Style.url)
+          .joinAll([_packageName, 'src', ...split(path)]),
+    );
     final resolvedUri = waitForEx<Uri?>(Isolate.resolvePackageUri(uri));
 
     if (resolvedUri == null) {

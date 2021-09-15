@@ -11,8 +11,7 @@ import 'package:dcli/dcli.dart';
 /// dcli then use dcli_cli.df
 
 void main(List<String> args) {
-  final parser = ArgParser()
-  ..addFlag('runOnly', abbr: 'r');
+  final parser = ArgParser()..addFlag('runOnly', abbr: 'r');
 
   final results = parser.parse(args);
   final runOnly = results['runOnly'] as bool;

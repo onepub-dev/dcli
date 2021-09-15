@@ -35,11 +35,13 @@ class _MoveDir extends DCliFunction {
   void moveDir(String from, String to) {
     if (!exists(from)) {
       throw MoveDirException(
-          'The [from] path ${truepath(from)} does not exists.');
+        'The [from] path ${truepath(from)} does not exists.',
+      );
     }
     if (!isDirectory(from)) {
       throw MoveDirException(
-          'The [from] path ${truepath(from)} must be a directory.');
+        'The [from] path ${truepath(from)} must be a directory.,',
+      );
     }
     if (exists(to)) {
       throw MoveDirException('The [to] path ${truepath(to)} must NOT exist.');
@@ -54,21 +56,25 @@ class _MoveDir extends DCliFunction {
         /// Invalid cross-device link
         /// We can't move files across a partition so
         /// do a copy/delete.
-        verbose(() =>
-            'moveDir to is on a separate device so falling back to copy/delete: ${truepath(from)} -> ${truepath(to)}');
+        verbose(
+          () =>
+              'moveDir to is on a separate device so falling back to copy/delete: ${truepath(from)} -> ${truepath(to)}',
+        );
 
         copyTree(from, to, includeHidden: true);
         delete(from);
       } else {
         throw MoveDirException(
-            'The Move of ${truepath(from)} to ${truepath(to)} failed.'
-            ' Error $e');
+          'The Move of ${truepath(from)} to ${truepath(to)} failed.'
+          ' Error $e',
+        );
       }
     }
     // ignore: avoid_catches_without_on_clauses
     catch (e) {
       throw MoveDirException(
-          'The Move of ${truepath(from)} to ${truepath(to)} failed. Error $e');
+        'The Move of ${truepath(from)} to ${truepath(to)} failed. Error $e',
+      );
     }
   }
 }

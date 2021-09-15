@@ -52,7 +52,8 @@ class _Delete extends DCliFunction {
       // ignore: avoid_catches_without_on_clauses
       catch (e) {
         throw DeleteException(
-            'An error occured deleting ${truepath(path)}. Error: $e');
+          'An error occured deleting ${truepath(path)}. Error: $e',
+        );
       }
     }
   }

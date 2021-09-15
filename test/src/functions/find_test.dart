@@ -14,12 +14,13 @@ void main() {
       final testScriptPath =
           truepath(DartProject.self.pathToProjectRoot, 'test', 'test_script');
 
-      final foundDirs = find('*',
-              workingDirectory: testScriptPath,
-              recursive: false,
-              types: <FileSystemEntityType>[Find.directory],
-              includeHidden: true)
-          .toList();
+      final foundDirs = find(
+        '*',
+        workingDirectory: testScriptPath,
+        recursive: false,
+        types: <FileSystemEntityType>[Find.directory],
+        includeHidden: true,
+      ).toList();
 
       final rootDirs = <String>[
         truepath(testScriptPath, 'general'),
@@ -58,24 +59,28 @@ void main() {
         expect(actual, t.orderedEquals(expected));
       });
     });
-    test('Recurse entire filesystem', () {
-      // var count = 1;
+    test(
+      'Recurse entire filesystem',
+      () {
+        // var count = 1;
 
-      print(DateTime.now());
-      find(
-        '*',
-        workingDirectory: '/',
-        types: <FileSystemEntityType>[Find.directory],
-        includeHidden: true,
-        // progress: Progress((line) {
-        // if (count++ % 10000 == 0) print(count);
-        // if (count == 100000) {
-        //   //print(DateTime.now());
-        //  // exit(1);
-        // }
-        // }),
-      );
-    }, skip: true); // takes too long to run
+        print(DateTime.now());
+        find(
+          '*',
+          workingDirectory: '/',
+          types: <FileSystemEntityType>[Find.directory],
+          includeHidden: true,
+          // progress: Progress((line) {
+          // if (count++ % 10000 == 0) print(count);
+          // if (count == 100000) {
+          //   //print(DateTime.now());
+          //  // exit(1);
+          // }
+          // }),
+        );
+      },
+      skip: true,
+    ); // takes too long to run
 
     // test('hidden a', () {
     //   var count = 0;
@@ -131,11 +136,15 @@ void main() {
         final found = find('*.jpg', workingDirectory: paths.top).toList();
 
         find('*.jpg', workingDirectory: paths.top).forEach(print);
-        t.expect(find('one.jpg', workingDirectory: paths.top).toList(),
-            t.equals([truepath(paths.top, 'one.jpg')]));
+        t.expect(
+          find('one.jpg', workingDirectory: paths.top).toList(),
+          t.equals([truepath(paths.top, 'one.jpg')]),
+        );
 
-        t.expect(find('two.jpg', workingDirectory: paths.top).toList(),
-            t.equals([truepath(paths.middle, 'two.jpg')]));
+        t.expect(
+          find('two.jpg', workingDirectory: paths.top).toList(),
+          t.equals([truepath(paths.middle, 'two.jpg')]),
+        );
 
         find('*.jpg', progress: Progress(print));
 
@@ -253,9 +262,12 @@ void main() {
           touch(file, create: true);
         }
 
-        final found = find(join('middle', '*.txt'),
-                workingDirectory: tmp, recursive: false, includeHidden: true)
-            .toList();
+        final found = find(
+          join('middle', '*.txt'),
+          workingDirectory: tmp,
+          recursive: false,
+          includeHidden: true,
+        ).toList();
 
         t.expect(found, t.unorderedEquals(paths));
       });
@@ -276,9 +288,11 @@ void main() {
           touch(file, create: true);
         }
 
-        final found = find(join('middle', '*.txt'),
-                workingDirectory: tmp, includeHidden: true)
-            .toList();
+        final found = find(
+          join('middle', '*.txt'),
+          workingDirectory: tmp,
+          includeHidden: true,
+        ).toList();
 
         t.expect(found, t.unorderedEquals(paths));
       });
@@ -299,9 +313,11 @@ void main() {
           touch(file, create: true);
         }
 
-        final found = find(join(tmp, 'middle', '*.txt'),
-                workingDirectory: tmp, includeHidden: true)
-            .toList();
+        final found = find(
+          join(tmp, 'middle', '*.txt'),
+          workingDirectory: tmp,
+          includeHidden: true,
+        ).toList();
 
         t.expect(found, t.unorderedEquals(paths));
       });

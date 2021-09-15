@@ -19,9 +19,11 @@ class StackTraceImpl implements core.StackTrace {
         _workingDirectory = workingDirectory;
 
   ///
-  StackTraceImpl.fromStackTrace(this._stackTrace,
-      {String? workingDirectory, int skipFrames = 0})
-      : _skipFrames = skipFrames,
+  StackTraceImpl.fromStackTrace(
+    this._stackTrace, {
+    String? workingDirectory,
+    int skipFrames = 0,
+  })  : _skipFrames = skipFrames,
         _workingDirectory = workingDirectory {
     if (_stackTrace is StackTraceImpl) {
       _frames = (_stackTrace as StackTraceImpl).frames;
@@ -64,8 +66,11 @@ class StackTraceImpl implements core.StackTrace {
   /// showing upto [methodCount] methods in the trace.
   /// [methodCount] defaults to 10.
 
-  String? formatStackTrace(
-      {bool showPath = false, int methodCount = 10, int skipFrames = 0}) {
+  String? formatStackTrace({
+    bool showPath = false,
+    int methodCount = 10,
+    int skipFrames = 0,
+  }) {
     var _skipFrames = skipFrames;
     final formatted = <String>[];
     var count = 0;
@@ -174,7 +179,11 @@ class StackTraceImpl implements core.StackTrace {
       // sourcePath = sourcePath.replaceFirst('<package_name>', '/lib');
 
       frame = Stackframe(
-          File(sourcePath), int.parse(lineNo), int.parse(column), details);
+        File(sourcePath),
+        int.parse(lineNo),
+        int.parse(column),
+        details,
+      );
       stackFrames.add(frame);
     }
     return stackFrames;

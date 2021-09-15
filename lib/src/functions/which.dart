@@ -58,16 +58,20 @@ import 'env.dart';
 /// command search. In particular dart commands such as 'pub' will be 'pub'
 /// on Linux and 'pub.bat' on Windows. Using `which('pub')` will find `pub` on
 /// linux and `pub.bat` on Windows.
-Which which(String appname,
-        {bool first = true,
-        bool verbose = false,
-        bool extensionSearch = true,
-        Progress? progress}) =>
-    _Which().which(appname,
-        first: first,
-        verbose: verbose,
-        extensionSearch: extensionSearch,
-        progress: progress);
+Which which(
+  String appname, {
+  bool first = true,
+  bool verbose = false,
+  bool extensionSearch = true,
+  Progress? progress,
+}) =>
+    _Which().which(
+      appname,
+      first: first,
+      verbose: verbose,
+      extensionSearch: extensionSearch,
+      progress: progress,
+    );
 
 /// Returned from the [which] funtion to provide the details we discovered
 /// about  appname.
@@ -105,11 +109,13 @@ class Which {
 class _Which extends DCliFunction {
   ///
   /// Searches the path for the given appname.
-  Which which(String appname,
-      {required bool extensionSearch,
-      bool first = true,
-      bool verbose = false,
-      Progress? progress}) {
+  Which which(
+    String appname, {
+    required bool extensionSearch,
+    bool first = true,
+    bool verbose = false,
+    Progress? progress,
+  }) {
     final results = Which();
     try {
       progress ??= Progress.devNull();
@@ -146,8 +152,11 @@ class _Which extends DCliFunction {
   /// have an extension then we check each appname.extension variant
   /// to see if it exists. We first check if just an file of [appname] with
   /// no extension exits.
-  String? _appExists(String pathTo, String appname,
-      {required bool extensionSearch}) {
+  String? _appExists(
+    String pathTo,
+    String appname, {
+    required bool extensionSearch,
+  }) {
     final pathToAppname = join(pathTo, appname);
     if (exists(pathToAppname)) {
       return pathToAppname;

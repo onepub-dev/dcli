@@ -116,21 +116,22 @@ class FileSync {
 
     subscription =
         utf8.decoder.bind(inputStream).transform(const LineSplitter()).listen(
-            (line) {
-              final cont = lineAction(line);
-              if (cont == false) {
-                subscription.cancel().then((finished) => done.complete(true));
-              }
-            },
-            cancelOnError: true,
-            //ignore: avoid_types_on_closure_parameters
-            onError: (Object error) {
-              exception = error;
-              done.complete(false);
-            },
-            onDone: () {
-              done.complete(true);
-            });
+              (line) {
+                final cont = lineAction(line);
+                if (cont == false) {
+                  subscription.cancel().then((finished) => done.complete(true));
+                }
+              },
+              cancelOnError: true,
+              //ignore: avoid_types_on_closure_parameters
+              onError: (Object error) {
+                exception = error;
+                done.complete(false);
+              },
+              onDone: () {
+                done.complete(true);
+              },
+            );
 
     waitForEx(done.future);
 
@@ -225,8 +226,11 @@ class FileSync {
 /// Opens a File and calls [action] passing in the open file.
 /// When action completes the file is closed.
 /// Use this method in preference to directly callling [FileSync()]
-R withOpenFile<R>(String pathToFile, R Function(FileSync) action,
-    {FileMode fileMode = FileMode.writeOnlyAppend}) {
+R withOpenFile<R>(
+  String pathToFile,
+  R Function(FileSync) action, {
+  FileMode fileMode = FileMode.writeOnlyAppend,
+}) {
   final file = FileSync(pathToFile, fileMode: fileMode);
 
   R result;
@@ -367,11 +371,13 @@ int fileLength(String pathToFile) => File(pathToFile).lengthSync();
 /// The temp file name will be <uuid>.tmp
 /// unless you provide a [suffix] in which
 /// case the file name will be <uuid>.<suffix>
-R withTempFile<R>(R Function(String tempFile) action,
-    {String? suffix,
-    String? pathToTempDir,
-    bool create = true,
-    bool keep = false}) {
+R withTempFile<R>(
+  R Function(String tempFile) action, {
+  String? suffix,
+  String? pathToTempDir,
+  bool create = true,
+  bool keep = false,
+}) {
   final tmp = createTempFilename(suffix: suffix, pathToTempDir: pathToTempDir);
   if (create) {
     touch(tmp, create: true);

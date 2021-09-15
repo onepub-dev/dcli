@@ -24,8 +24,11 @@ String red(
   AnsiColor background = AnsiColor.none,
   bool bold = true,
 }) =>
-    AnsiColor._apply(AnsiColor(AnsiColor.codeRed, bold: bold), text,
-        background: background);
+    AnsiColor._apply(
+      AnsiColor(AnsiColor.codeRed, bold: bold),
+      text,
+      background: background,
+    );
 
 /// Wraps the passed text with the ANSI escape sequence for
 /// the color red.
@@ -51,8 +54,11 @@ String black(
   AnsiColor background = AnsiColor.white,
   bool bold = true,
 }) =>
-    AnsiColor._apply(AnsiColor(AnsiColor.codeBlack, bold: bold), text,
-        background: background);
+    AnsiColor._apply(
+      AnsiColor(AnsiColor.codeBlack, bold: bold),
+      text,
+      background: background,
+    );
 
 /// Wraps the passed text with the ANSI escape sequence for
 /// the color red.
@@ -78,8 +84,11 @@ String green(
   AnsiColor background = AnsiColor.none,
   bool bold = true,
 }) =>
-    AnsiColor._apply(AnsiColor(AnsiColor.codeGreen, bold: bold), text,
-        background: background);
+    AnsiColor._apply(
+      AnsiColor(AnsiColor.codeGreen, bold: bold),
+      text,
+      background: background,
+    );
 
 /// Wraps the passed text with the ANSI escape sequence for
 /// the color red.
@@ -105,8 +114,11 @@ String blue(
   AnsiColor background = AnsiColor.none,
   bool bold = true,
 }) =>
-    AnsiColor._apply(AnsiColor(AnsiColor.codeBlue, bold: bold), text,
-        background: background);
+    AnsiColor._apply(
+      AnsiColor(AnsiColor.codeBlue, bold: bold),
+      text,
+      background: background,
+    );
 
 /// Wraps the passed text with the ANSI escape sequence for
 /// the color red.
@@ -132,8 +144,11 @@ String yellow(
   AnsiColor background = AnsiColor.none,
   bool bold = true,
 }) =>
-    AnsiColor._apply(AnsiColor(AnsiColor.codeYellow, bold: bold), text,
-        background: background);
+    AnsiColor._apply(
+      AnsiColor(AnsiColor.codeYellow, bold: bold),
+      text,
+      background: background,
+    );
 
 /// Wraps the passed text with the ANSI escape sequence for
 /// the color red.
@@ -160,8 +175,11 @@ String magenta(
   AnsiColor background = AnsiColor.none,
   bool bold = true,
 }) =>
-    AnsiColor._apply(AnsiColor(AnsiColor.codeMagenta, bold: bold), text,
-        background: background);
+    AnsiColor._apply(
+      AnsiColor(AnsiColor.codeMagenta, bold: bold),
+      text,
+      background: background,
+    );
 
 /// Wraps the passed text with the ANSI escape sequence for
 /// the color red.
@@ -188,8 +206,11 @@ String cyan(
   AnsiColor background = AnsiColor.none,
   bool bold = true,
 }) =>
-    AnsiColor._apply(AnsiColor(AnsiColor.codeCyan, bold: bold), text,
-        background: background);
+    AnsiColor._apply(
+      AnsiColor(AnsiColor.codeCyan, bold: bold),
+      text,
+      background: background,
+    );
 
 /// Wraps the passed text with the ANSI escape sequence for
 /// the color red.
@@ -216,8 +237,11 @@ String white(
   AnsiColor background = AnsiColor.none,
   bool bold = true,
 }) =>
-    AnsiColor._apply(AnsiColor(AnsiColor.codeWhite, bold: bold), text,
-        background: background);
+    AnsiColor._apply(
+      AnsiColor(AnsiColor.codeWhite, bold: bold),
+      text,
+      background: background,
+    );
 
 /// Wraps the passed text with the ANSI escape sequence for
 /// the color red.
@@ -244,8 +268,11 @@ String orange(
   AnsiColor background = AnsiColor.none,
   bool bold = true,
 }) =>
-    AnsiColor._apply(AnsiColor(AnsiColor.codeOrange, bold: bold), text,
-        background: background);
+    AnsiColor._apply(
+      AnsiColor(AnsiColor.codeOrange, bold: bold),
+      text,
+      background: background,
+    );
 
 /// Wraps the passed text with the ANSI escape sequence for
 /// the color red.
@@ -273,8 +300,11 @@ String grey(
   AnsiColor background = AnsiColor.none,
   bool bold = true,
 }) =>
-    AnsiColor._apply(AnsiColor._grey(level: level, bold: bold), text,
-        background: background);
+    AnsiColor._apply(
+      AnsiColor._grey(level: level, bold: bold),
+      text,
+      background: background,
+    );
 
 /// Helper class to assist in printing text to the console with a color.
 ///

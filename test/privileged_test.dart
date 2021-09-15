@@ -3,13 +3,19 @@ import 'package:test/test.dart';
 
 void main() {
   /// This test need to be run under sudo
-  test('isPrivligedUser', () {
-    expect(Shell.current.isPrivilegedUser, isTrue);
-    Shell.current.releasePrivileges();
-    expect(Shell.current.isPrivilegedUser, isFalse);
-    Shell.current.restorePrivileges();
-    expect(Shell.current.isPrivilegedUser, isTrue);
-  }, tags: ['privileged']);
+  test(
+    'isPrivligedUser',
+    () {
+      expect(Shell.current.isPrivilegedUser, isTrue);
+      Shell.current.releasePrivileges();
+      expect(Shell.current.isPrivilegedUser, isFalse);
+      Shell.current.restorePrivileges();
+      expect(Shell.current.isPrivilegedUser, isTrue);
+    },
+    tags: [
+      'privileged',
+    ],
+  );
 
   /// we touch all of the dart files but don't change their ownership.
   // find('*.dart', root: '.').forEach((file) {

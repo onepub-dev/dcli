@@ -16,10 +16,20 @@ void main(List<String> args) {
 
   print(green('Running build_templates with version: $newVersion'));
   final templatePath = join(
-      DartProject.self.pathToProjectRoot, 'lib', 'src', 'assets', 'templates');
+    DartProject.self.pathToProjectRoot,
+    'lib',
+    'src',
+    'assets',
+    'templates',
+  );
 
-  final expanderPath = join(DartProject.self.pathToProjectRoot, 'lib', 'src',
-      'templates', 'expander.dart');
+  final expanderPath = join(
+    DartProject.self.pathToProjectRoot,
+    'lib',
+    'src',
+    'templates',
+    'expander.dart',
+  );
 
   final content = packAssets(templatePath);
 
@@ -41,7 +51,8 @@ void main(List<String> args) {
 String packAssets(String templatePath) {
   final expanders = <String>[];
 
-  final content = StringBuffer('''
+  final content = StringBuffer(
+    '''
 // ignore: prefer_relative_imports
 import 'package:dcli/dcli.dart';
 
@@ -62,40 +73,51 @@ class TemplateExpander {
     /// The path the templates will be expanded into.
     String targetPath;
 
-''');
+''',
+  );
 
   print('packing assets');
   find('*', workingDirectory: templatePath).forEach((file) {
     print('packing $file');
 
     /// Write the content of each asset into a method.
-    content.write('''
+    content.write(
+      '''
 \t\t/// Expander for ${buildMethodName(file)}
 \t\t// ignore: non_constant_identifier_names
 \t\tvoid ${buildMethodName(file)}() {
-      join(targetPath, '${basename(file)}')
-       // ignore: unnecessary_raw_strings
-       .write(r\'\'\'
-${preprocess(file, read(file).toList()).join('\n')}\'\'\');
+      join(targetPath, '${basename(file)}').write(
+          // ignore: unnecessary_raw_strings    
+         r\'\'\'
+${preprocess(file, read(file).toList()).join('\n')}\'\'\',);
     }
 
-''');
+''',
+    );
 
     expanders.add('\t\t\t${buildMethodName(file)}();\n');
   });
 
   /// Create the 'expand' method which when called will
   /// expanded each of the assets.
-  content.write('''
+  content.write(
+    '''
 /// Expand all templates.
 \t\tvoid expand() {
-''');
+''',
+  );
 
   expanders.forEach(content.write);
-  content..write('''
+  content
+    ..write(
+      '''
   }
-''')..write('''
-}''');
+''',
+    )
+    ..write(
+      '''
+}''',
+    );
 
   return content.toString();
 }

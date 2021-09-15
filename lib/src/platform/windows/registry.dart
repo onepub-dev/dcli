@@ -47,15 +47,22 @@ void regPrependToPath(String newPath) {
 }
 
 List<String> _getPaths() {
-  final paths = regGetExpandString(HKEY_CURRENT_USER, 'Environment', 'Path',
-          expand: false)
-      .split(Env().delimiterForPATH);
+  final paths = regGetExpandString(
+    HKEY_CURRENT_USER,
+    'Environment',
+    'Path',
+    expand: false,
+  ).split(Env().delimiterForPATH);
   return paths;
 }
 
 void _replacePath(List<String> paths) {
-  regSetExpandString(HKEY_CURRENT_USER, 'Environment', 'Path',
-      paths.join(Env().delimiterForPATH));
+  regSetExpandString(
+    HKEY_CURRENT_USER,
+    'Environment',
+    'Path',
+    paths.join(Env().delimiterForPATH),
+  );
 
   broadcastEnvironmentChange();
 }
@@ -83,21 +90,36 @@ void regReplacePath(List<String> newPaths) {
   // SendMessageTimeout( HWND_BROADCAST, WM_SETTINGCHANGE, 0,
   // 						(LPARAM) what, SMTO_ABORTIFHUNG, 5000, & rv );
 
-  regSetExpandString(HKEY_CURRENT_USER, 'Environment', 'Path',
-      newPaths.join(Env().delimiterForPATH));
+  regSetExpandString(
+    HKEY_CURRENT_USER,
+    'Environment',
+    'Path',
+    newPaths.join(Env().delimiterForPATH),
+  );
 
   broadcastEnvironmentChange();
 }
 
 /// Sets a Windows registry key to a string value of type REG_SZ
 /// A [WindowsException] is thrown the call falls.
-void regSetString(int hkey, String subKey, String valueName, String value,
-    {int accessRights = KEY_SET_VALUE}) {
+void regSetString(
+  int hkey,
+  String subKey,
+  String valueName,
+  String value, {
+  int accessRights = KEY_SET_VALUE,
+}) {
   final pValue = TEXT(value);
 
   try {
     _regSetValue(
-        hkey, subKey, valueName, pValue.cast(), (value.length + 1) * 2, REG_SZ);
+      hkey,
+      subKey,
+      valueName,
+      pValue.cast(),
+      (value.length + 1) * 2,
+      REG_SZ,
+    );
   } finally {
     calloc.free(pValue);
   }
@@ -119,8 +141,12 @@ void regSetString(int hkey, String subKey, String valueName, String value,
 /// https://docs.microsoft.com/en-us/windows/win32/sysinfo/registry-key-security-and-access-rights
 ///
 /// throws [WindowsException] if the get failes
-String regGetString(int hkey, String subKey, String valueName,
-    {int accessRights = KEY_QUERY_VALUE}) {
+String regGetString(
+  int hkey,
+  String subKey,
+  String valueName, {
+  int accessRights = KEY_QUERY_VALUE,
+}) {
   late final String value;
 
   final pResult =
@@ -135,13 +161,24 @@ String regGetString(int hkey, String subKey, String valueName,
 
 /// Sets a Windows registry key to a string value of type REG_SZ
 /// A [WindowsException] is thrown the call falls.
-void regSetDWORD(int hkey, String subKey, String valueName, int value,
-    {int accessRights = KEY_SET_VALUE}) {
+void regSetDWORD(
+  int hkey,
+  String subKey,
+  String valueName,
+  int value, {
+  int accessRights = KEY_SET_VALUE,
+}) {
   final pValue = calloc<Uint32>(1)..value = value;
 
   try {
     _regSetValue(
-        hkey, subKey, valueName, pValue.cast(), sizeOf<Uint32>(), REG_DWORD);
+      hkey,
+      subKey,
+      valueName,
+      pValue.cast(),
+      sizeOf<Uint32>(),
+      REG_DWORD,
+    );
   } finally {
     calloc.free(pValue);
   }
@@ -149,12 +186,21 @@ void regSetDWORD(int hkey, String subKey, String valueName, int value,
 
 /// Reads a DWORD from the registry
 /// A [WindowsException] is thrown the call falls.
-int regGetDWORD(int hkey, String subKey, String valueName,
-    {int accessRights = KEY_QUERY_VALUE}) {
+int regGetDWORD(
+  int hkey,
+  String subKey,
+  String valueName, {
+  int accessRights = KEY_QUERY_VALUE,
+}) {
   late final int value;
 
-  final pResult = _regGetValue(hkey, subKey, valueName,
-      accessRights: accessRights, flags: RRF_RT_DWORD);
+  final pResult = _regGetValue(
+    hkey,
+    subKey,
+    valueName,
+    accessRights: accessRights,
+    flags: RRF_RT_DWORD,
+  );
   try {
     value = pResult.toDWORD();
   } finally {
@@ -210,8 +256,13 @@ void regDeleteValue(
 /// If [expand] is true then any environment variables in the value
 /// are expanded. If [expand] is false then the value is returned un-expanded.
 /// A [WindowsException] is thrown the call falls.
-String regGetExpandString(int hkey, String subKey, String valueName,
-    {int accessRights = KEY_QUERY_VALUE, bool expand = true}) {
+String regGetExpandString(
+  int hkey,
+  String subKey,
+  String valueName, {
+  int accessRights = KEY_QUERY_VALUE,
+  bool expand = true,
+}) {
   late final String value;
 
   var flags = RRF_RT_REG_SZ;
@@ -221,8 +272,13 @@ String regGetExpandString(int hkey, String subKey, String valueName,
     flags = RRF_RT_REG_EXPAND_SZ | RRF_NOEXPAND;
   }
 
-  final pResult = _regGetValue(hkey, subKey, valueName,
-      flags: flags, accessRights: accessRights);
+  final pResult = _regGetValue(
+    hkey,
+    subKey,
+    valueName,
+    flags: flags,
+    accessRights: accessRights,
+  );
   try {
     value = pResult.toDartString();
   } finally {
@@ -234,12 +290,23 @@ String regGetExpandString(int hkey, String subKey, String valueName,
 /// Sets the [value] of the [hkey] located at [hkey]/[subKey] in the Windows
 /// Registry. The [value] is set to type REG_EXPAND_SZ
 /// A [WindowsException] is thrown the call falls.
-void regSetExpandString(int hkey, String subKey, String valueName, String value,
-    {int accessRights = KEY_SET_VALUE}) {
+void regSetExpandString(
+  int hkey,
+  String subKey,
+  String valueName,
+  String value, {
+  int accessRights = KEY_SET_VALUE,
+}) {
   final pValue = TEXT(value);
   try {
-    _regSetValue(hkey, subKey, valueName, pValue.cast(), (value.length + 1) * 2,
-        REG_EXPAND_SZ);
+    _regSetValue(
+      hkey,
+      subKey,
+      valueName,
+      pValue.cast(),
+      (value.length + 1) * 2,
+      REG_EXPAND_SZ,
+    );
   } finally {
     calloc.free(pValue);
   }
@@ -306,8 +373,13 @@ class _RegResults {
 
 /// You must free the returned value using calloc.free
 /// A [WindowsException] is thrown the call falls.
-_RegResults _regGetValue(int hkey, String subKey, String valueName,
-    {int flags = RRF_RT_REG_SZ, int accessRights = KEY_QUERY_VALUE}) {
+_RegResults _regGetValue(
+  int hkey,
+  String subKey,
+  String valueName, {
+  int flags = RRF_RT_REG_SZ,
+  int accessRights = KEY_QUERY_VALUE,
+}) {
   late final Pointer<Uint8> pResult;
   final pName = TEXT(valueName);
   // and somewhere to store the size of the result.
@@ -362,9 +434,15 @@ _RegResults _regGetValue(int hkey, String subKey, String valueName,
 /// [type] must be one of the standard registry types such as REG_SZ.
 /// [valueSize] is the size of pValue in bytes.
 /// A [WindowsException] is thrown the call falls.
-void _regSetValue(int hkey, String subKey, String valueName,
-    Pointer<Uint8> pValue, int valueSize, int type,
-    {int accessRights = KEY_SET_VALUE}) {
+void _regSetValue(
+  int hkey,
+  String subKey,
+  String valueName,
+  Pointer<Uint8> pValue,
+  int valueSize,
+  int type, {
+  int accessRights = KEY_SET_VALUE,
+}) {
   final pName = TEXT(valueName);
 
   try {
@@ -396,8 +474,12 @@ void _regSetValue(int hkey, String subKey, String valueName,
 /// https://docs.microsoft.com/en-us/windows/win32/sysinfo/registry-key-security-and-access-rights
 ///
 /// A [WindowsException] is thrown the call falls.
-R _withRegKey<R>(int hkey, String subKey, int accessRights,
-    R Function(int hkey, Pointer<Utf16> pSubKey) action) {
+R _withRegKey<R>(
+  int hkey,
+  String subKey,
+  int accessRights,
+  R Function(int hkey, Pointer<Utf16> pSubKey) action,
+) {
   R actionResult;
   final pOpenKey = calloc<IntPtr>(1);
   final pSubKey = TEXT(subKey);

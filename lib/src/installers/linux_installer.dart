@@ -71,8 +71,10 @@ class LinuxDCliInstaller {
     } else {
       // dart is already installed.
 
-      verbose(() => "Found dart at: ${which('dart').path ?? "<not found>"} "
-          'and as such will not install dart.');
+      verbose(
+        () => "Found dart at: ${which('dart').path ?? "<not found>"} "
+            'and as such will not install dart.',
+      );
     }
 
     return installedDart;

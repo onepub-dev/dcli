@@ -62,10 +62,13 @@ import 'is.dart';
 /// If an error occurs a [MoveTreeException] is thrown.
 ///
 /// EXPERIMENTAL
-void moveTree(String from, String to,
-        {bool overwrite = false,
-        bool includeHidden = false,
-        bool Function(String file) filter = _allowAll}) =>
+void moveTree(
+  String from,
+  String to, {
+  bool overwrite = false,
+  bool includeHidden = false,
+  bool Function(String file) filter = _allowAll,
+}) =>
     _MoveTree().moveTree(
       from,
       to,
@@ -86,16 +89,19 @@ class _MoveTree extends DCliFunction {
   }) {
     if (!isDirectory(from)) {
       throw MoveTreeException(
-          'The [from] path ${truepath(from)} must be a directory.');
+        'The [from] path ${truepath(from)} must be a directory.',
+      );
     }
     if (!exists(to)) {
       throw MoveTreeException(
-          'The [to] path ${truepath(to)} must already exist.');
+        'The [to] path ${truepath(to)} must already exist.',
+      );
     }
 
     if (!isDirectory(to)) {
       throw MoveTreeException(
-          'The [to] path ${truepath(to)} must be a directory.');
+        'The [to] path ${truepath(to)} must be a directory.',
+      );
     }
 
     verbose(() => 'moveTree called ${truepath(from)} -> ${truepath(to)}');
@@ -120,20 +126,23 @@ class _MoveTree extends DCliFunction {
 
           if (!overwrite && exists(target)) {
             throw MoveTreeException(
-                'The target file ${truepath(to)} already exists');
+              'The target file ${truepath(to)} already exists',
+            );
           }
 
           move(file, target, overwrite: overwrite);
-          verbose(() =>
-              'moveTree copying: ${truepath(from)} -> ${truepath(target)}');
+          verbose(
+            () => 'moveTree copying: ${truepath(from)} -> ${truepath(target)}',
+          );
         }
       });
     }
     // ignore: avoid_catches_without_on_clauses
     catch (e) {
       throw MoveTreeException(
-          'An error occured copying directory ${truepath(from)} '
-          'to ${truepath(to)}. Error: $e');
+        'An error occured copying directory ${truepath(from)} '
+        'to ${truepath(to)}. Error: $e',
+      );
     }
   }
 }
