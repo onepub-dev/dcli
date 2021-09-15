@@ -177,7 +177,8 @@ class _Fetch extends DCliFunction {
             subscription.resume();
 
             verbose(
-                () => 'Download progress: $lengthReceived / $contentLength ');
+              () => 'Download progress: $lengthReceived / $contentLength ',
+            );
           },
           onDone: () async {
             /// down load is complete
