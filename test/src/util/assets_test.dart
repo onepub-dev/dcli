@@ -34,7 +34,7 @@ void main() {
           join(base, 'basic.dart'),
           join(base, 'hello_world.dart'),
           join(base, 'README.md'),
-          join(base, 'analysis_options.yaml'),
+          join(base, 'analysis_options.yaml.template'),
           join(base, 'pubspec.yaml.template'),
           join(base, 'cmd_args.dart')
         ],
