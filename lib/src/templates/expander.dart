@@ -145,32 +145,6 @@ dev_dependencies:
     );
   }
 
-  /// Expander for analysis_options
-  // ignore: non_constant_identifier_names
-  void analysis_options() {
-    join(targetPath, 'analysis_options.yaml.template').write(
-      // ignore: unnecessary_raw_strings
-      r'''
-
-include: package:lints/recommended.yaml
-
-# For lint rules and documentation, see http://dart-lang.github.io/linter/lints.
-# Uncomment to specify additional rules.
-linter:
-  
-  rules:
-    lines_longer_than_80_chars: false
-    camel_case_types: true
-    always_declare_return_types: true
-  
-
-analyzer:
-  strong-mode:
-    implicit-casts: false
-    implicit-dynamic: false''',
-    );
-  }
-
   /// Expander for basic
   // ignore: non_constant_identifier_names
   void basic() {
@@ -238,13 +212,39 @@ void showUsage(ArgParser parser) {
     );
   }
 
+  /// Expander for analysis_options
+  // ignore: non_constant_identifier_names
+  void analysis_options() {
+    join(targetPath, 'analysis_options.yaml.template').write(
+      // ignore: unnecessary_raw_strings
+      r'''
+
+include: package:lints/recommended.yaml
+
+# For lint rules and documentation, see http://dart-lang.github.io/linter/lints.
+# Uncomment to specify additional rules.
+linter:
+  
+  rules:
+    lines_longer_than_80_chars: false
+    camel_case_types: true
+    always_declare_return_types: true
+  
+
+analyzer:
+  strong-mode:
+    implicit-casts: false
+    implicit-dynamic: false''',
+    );
+  }
+
   /// Expand all templates.
   void expand() {
     cmd_args();
     hello_world();
     README();
     pubspec();
-    analysis_options();
     basic();
+    analysis_options();
   }
 }
