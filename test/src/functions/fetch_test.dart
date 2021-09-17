@@ -12,11 +12,14 @@ void main() {
     test('Fetch One', () {
       //Settings().setVerbose(enabled: true);
       withTempDir((testRoot) {
-        withTempFile((sampleAac) {
-          fetch(url: '$baseURl/sample.aac', saveToPath: sampleAac);
-          expect(fileLength(sampleAac), equals(14951));
-          delete(sampleAac);
-        }, create: false);
+        withTempFile(
+          (sampleAac) {
+            fetch(url: '$baseURl/sample.aac', saveToPath: sampleAac);
+            expect(fileLength(sampleAac), equals(14951));
+            delete(sampleAac);
+          },
+          create: false,
+        );
 
         // withTempFile((sampleWav) {
         //   fetch(url: '$baseURl/sample.wav', saveToPath: sampleWav);
@@ -28,27 +31,35 @@ void main() {
 
     test('Fetch One with Progress', () {
       withTempDir((testRoot) {
-        withTempFile((sampleAac) {
-          fetch(
+        withTempFile(
+          (sampleAac) {
+            fetch(
               url: '$baseURl/sample.aac',
               saveToPath: sampleAac,
               fetchProgress: (progress) async {
                 Terminal().overwriteLine('${progress.progress * 100} %');
-              });
-          expect(fileLength(sampleAac), equals(14951));
-          delete(sampleAac);
+              },
+            );
+            expect(fileLength(sampleAac), equals(14951));
+            delete(sampleAac);
 
-          withTempFile((sampleWav) {
-            fetch(
-                url: '$baseURl/sample.wav',
-                saveToPath: sampleWav,
-                fetchProgress: (progress) async {
-                  Terminal().overwriteLine('${progress.progress * 100} %');
-                });
-            expect(fileLength(sampleWav), equals(212948));
-            delete(sampleWav);
-          }, create: false);
-        }, create: false);
+            withTempFile(
+              (sampleWav) {
+                fetch(
+                  url: '$baseURl/sample.wav',
+                  saveToPath: sampleWav,
+                  fetchProgress: (progress) async {
+                    Terminal().overwriteLine('${progress.progress * 100} %');
+                  },
+                );
+                expect(fileLength(sampleWav), equals(212948));
+                delete(sampleWav);
+              },
+              create: false,
+            );
+          },
+          create: false,
+        );
       });
     });
   });
@@ -56,69 +67,98 @@ void main() {
   group('Fetch Multi', () {
     test('Fetch  ', () {
       withTempDir((testRoot) {
-        withTempFile((sampleAac) {
-          withTempFile((sampleWav) {
-            fetchMultiple(urls: [
-              FetchUrl(
-                  url: '$baseURl/sample.aac',
-                  saveToPath: sampleAac,
-                  progress: showProgress),
-              FetchUrl(url: '$baseURl/sample.wav', saveToPath: sampleWav)
-            ]);
-            expect(fileLength(sampleAac), equals(14951));
-            expect(fileLength(sampleWav), equals(212948));
+        withTempFile(
+          (sampleAac) {
+            withTempFile(
+              (sampleWav) {
+                fetchMultiple(
+                  urls: [
+                    FetchUrl(
+                      url: '$baseURl/sample.aac',
+                      saveToPath: sampleAac,
+                      progress: showProgress,
+                    ),
+                    FetchUrl(url: '$baseURl/sample.wav', saveToPath: sampleWav),
+                  ],
+                );
+                expect(fileLength(sampleAac), equals(14951));
+                expect(fileLength(sampleWav), equals(212948));
 
-            delete(sampleAac);
-            delete(sampleWav);
-          }, create: false);
-        }, create: false);
+                delete(sampleAac);
+                delete(sampleWav);
+              },
+              create: false,
+            );
+          },
+          create: false,
+        );
       });
     });
 
     test('Fetch With Progress ', () {
       withTempDir((testRoot) {
-        withTempFile((sampleAac) {
-          withTempFile((sampleWav) {
-            fetchMultiple(urls: [
-              FetchUrl(
-                  url: '$baseURl/sample.aac',
-                  saveToPath: sampleAac,
-                  progress: showProgress),
-              FetchUrl(
-                  url: '$baseURl/sample.wav',
-                  saveToPath: sampleWav,
-                  progress: showProgress)
-            ]);
-            expect(fileLength(sampleAac), equals(14951));
-            expect(fileLength(sampleWav), equals(212948));
-          }, create: false);
-        }, create: false);
+        withTempFile(
+          (sampleAac) {
+            withTempFile(
+              (sampleWav) {
+                fetchMultiple(
+                  urls: [
+                    FetchUrl(
+                      url: '$baseURl/sample.aac',
+                      saveToPath: sampleAac,
+                      progress: showProgress,
+                    ),
+                    FetchUrl(
+                      url: '$baseURl/sample.wav',
+                      saveToPath: sampleWav,
+                      progress: showProgress,
+                    )
+                  ],
+                );
+                expect(fileLength(sampleAac), equals(14951));
+                expect(fileLength(sampleWav), equals(212948));
+              },
+              create: false,
+            );
+          },
+          create: false,
+        );
       });
     });
   });
 
   test('Fetch - shutdown bug', () {
-    withTempFile((sampleAac) {
-      fetch(
+    withTempFile(
+      (sampleAac) {
+        fetch(
           url: '$baseURl/sample.aac',
           saveToPath: sampleAac,
           fetchProgress: (progress) async {
             Terminal().overwriteLine('${progress.progress * 100} %');
-          });
-      expect(fileLength(sampleAac), equals(14951));
-    }, suffix: 'acc', create: false);
+          },
+        );
+        expect(fileLength(sampleAac), equals(14951));
+      },
+      suffix: 'acc',
+      create: false,
+    );
 
-    final temp = withTempFile((sampleWav) {
-      fetch(
+    final temp = withTempFile(
+      (sampleWav) {
+        fetch(
           url: '$baseURl/sample.wav',
           saveToPath: sampleWav,
           fetchProgress: (progress) async {
             Terminal().overwriteLine('${progress.progress * 100} %');
-          });
-      expect(fileLength(sampleWav), equals(212948));
-      print('finished');
-      return sampleWav;
-    }, suffix: 'wav', create: false);
+          },
+        );
+        expect(fileLength(sampleWav), equals(212948));
+        print('finished');
+        return sampleWav;
+      },
+      suffix: 'wav',
+      create: false,
+    );
     expect(exists(temp), isFalse);
   });
 }

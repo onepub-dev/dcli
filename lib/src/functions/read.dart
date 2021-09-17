@@ -37,13 +37,15 @@ class _Read extends DCliFunction {
 
     progress ??= Progress.devNull();
 
-    waitForEx<void>(sourceFile
-        .openRead()
-        .transform(utf8.decoder)
-        .transform(const LineSplitter())
-        .forEach((line) {
-      progress!.addToStdout(line);
-    }));
+    waitForEx<void>(
+      sourceFile
+          .openRead()
+          .transform(utf8.decoder)
+          .transform(const LineSplitter())
+          .forEach((line) {
+        progress!.addToStdout(line);
+      }),
+    );
 
     progress.close();
 

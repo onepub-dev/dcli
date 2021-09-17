@@ -18,9 +18,10 @@ mixin WindowsMixin {
   /// https://bsutton.gitbook.io/dcli/getting-started/installing-on-windows
   bool inDeveloperMode() {
     final response = regGetDWORD(
-        HKEY_LOCAL_MACHINE,
-        r'SOFTWARE\Microsoft\Windows\CurrentVersion\AppModelUnlock',
-        'AllowDevelopmentWithoutDevLicense');
+      HKEY_LOCAL_MACHINE,
+      r'SOFTWARE\Microsoft\Windows\CurrentVersion\AppModelUnlock',
+      'AllowDevelopmentWithoutDevLicense',
+    );
 
     return response == 1;
   }
@@ -105,7 +106,8 @@ mixin WindowsMixin {
   void withPrivileges(RunPrivileged action) {
     if (!Shell.current.isPrivilegedUser) {
       throw ShellException(
-          'You can only use withPrivileges when running as a privileged user.');
+        'You can only use withPrivileges when running as a privileged user.',
+      );
     }
     action();
   }
@@ -126,14 +128,18 @@ mixin WindowsMixin {
         withMemory<void, _TokenElevation>(sizeOf<_TokenElevation>(),
             (pElevation) {
           if (OpenProcessToken(
-                  GetCurrentProcess(), TOKEN_QUERY, phToken.cast()) ==
+                GetCurrentProcess(),
+                TOKEN_QUERY,
+                phToken.cast(),
+              ) ==
               1) {
             if (GetTokenInformation(
-                    phToken.value,
-                    TOKEN_INFORMATION_CLASS.TokenElevation,
-                    pElevation,
-                    sizeOf<_TokenElevation>(),
-                    pReturnedSize) ==
+                  phToken.value,
+                  TOKEN_INFORMATION_CLASS.TokenElevation,
+                  pElevation,
+                  sizeOf<_TokenElevation>(),
+                  pReturnedSize,
+                ) ==
                 1) {
               isElevated = pElevation.ref.tokenIsElevated != 0;
             }

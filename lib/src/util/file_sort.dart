@@ -38,10 +38,14 @@ class FileSort {
   /// line of the file into columns.
   /// [_lineDelimiter] is the delimiter to be used to separate each line.
   /// [verbose] caused FileSort to log debug level information as it sorts.
-  FileSort(String inputPath, String outputPath, List<Column> columns,
-      String? fieldDelimiter, String? lineDelimiter,
-      {this.verbose = false})
-      : _inputPath = inputPath,
+  FileSort(
+    String inputPath,
+    String outputPath,
+    List<Column> columns,
+    String? fieldDelimiter,
+    String? lineDelimiter, {
+    this.verbose = false,
+  })  : _inputPath = inputPath,
         _outputPath = outputPath,
         _columns = columns,
         _fieldDelimiter = fieldDelimiter,
@@ -141,13 +145,17 @@ class FileSort {
       final rhsColumns = rhs.line!.split(_fieldDelimiter!);
 
       if (_maxColumn! > lhsColumns.length) {
-        throw InvalidArguments('Line $lhs does not have enough columns. '
-            'Expected $_maxColumn, found ${lhsColumns.length}');
+        throw InvalidArguments(
+          'Line $lhs does not have enough columns. '
+          'Expected $_maxColumn, found ${lhsColumns.length}',
+        );
       }
 
       if (_maxColumn! > rhsColumns.length) {
-        throw InvalidArguments('Line $rhs does not have enough columns. '
-            'Expected $_maxColumn, found ${lhsColumns.length}');
+        throw InvalidArguments(
+          'Line $rhs does not have enough columns. '
+          'Expected $_maxColumn, found ${lhsColumns.length}',
+        );
       }
 
       var result = 0;
@@ -163,9 +171,10 @@ class FileSort {
               column._sortDirection == SortDirection.ascending ? 1 : -1;
 
           result = column._comparator!.compareTo(
-                  column,
-                  lhsColumns[column.ordinal! - 1],
-                  rhsColumns[column.ordinal! - 1]) *
+                column,
+                lhsColumns[column.ordinal! - 1],
+                rhsColumns[column.ordinal! - 1],
+              ) *
               direction;
           if (result != 0) {
             break;
@@ -176,8 +185,13 @@ class FileSort {
     });
   }
 
-  void _savePhase(Directory phaseDirectory, int phase, int instance,
-      List<_Line> list, String lineDelimiter) {
+  void _savePhase(
+    Directory phaseDirectory,
+    int phase,
+    int instance,
+    List<_Line> list,
+    String lineDelimiter,
+  ) {
     final instanceFile =
         File(d.join(phaseDirectory.path, 'phase$phase-$instance'));
 
@@ -185,12 +199,17 @@ class FileSort {
 
     final lines = list.map((line) => line.line).toList();
 
-    instanceFile.writeAsStringSync(lines.join(lineDelimiter) + lineDelimiter,
-        flush: true);
+    instanceFile.writeAsStringSync(
+      lines.join(lineDelimiter) + lineDelimiter,
+      flush: true,
+    );
   }
 
   void _saveSortedList(
-      String filename, List<_Line> list, String? lineDelimiter) {
+    String filename,
+    List<_Line> list,
+    String? lineDelimiter,
+  ) {
     withOpenFile(filename, (saveTo) {
       saveTo.truncate();
       for (final line in list) {
@@ -266,9 +285,13 @@ class FileSort {
 
     // Open and read the first line from each file.
     for (final file in files) {
-      withOpenFile(file, (fileSync) {
-        lines.add(_Line(fileSync));
-      }, fileMode: FileMode.read);
+      withOpenFile(
+        file,
+        (fileSync) {
+          lines.add(_Line(fileSync));
+        },
+        fileMode: FileMode.read,
+      );
     }
 
     // Sort the set of first lines.
@@ -376,13 +399,17 @@ class NumericSort implements ColumnComparator {
     final numLhs = num.tryParse(lhs!);
     if (numLhs == null) {
       throw FormatException(
-          'Column ${column.ordinal} contained a non-numeric value.', lhs);
+        'Column ${column.ordinal} contained a non-numeric value.',
+        lhs,
+      );
     }
     final numRhs = num.tryParse(rhs!);
 
     if (numRhs == null) {
       throw FormatException(
-          'Sort Column ${column.ordinal} contained a non-numeric value.', rhs);
+        'Sort Column ${column.ordinal} contained a non-numeric value.',
+        rhs,
+      );
     }
 
     return numLhs.compareTo(numRhs);

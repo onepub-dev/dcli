@@ -36,9 +36,13 @@ void main() {
     print(green('Hellow worlrd'));
     print(green('Hellow worlrd', bold: false));
 
-    print(red('hi',
+    print(
+      red(
+        'hi',
         bold: false,
-        background: const AnsiColor(AnsiColor.codeYellow, bold: false)));
+        background: const AnsiColor(AnsiColor.codeYellow, bold: false),
+      ),
+    );
     print(red('hi', bold: false, background: AnsiColor.yellow));
     print(red('hi', background: AnsiColor.yellow));
 

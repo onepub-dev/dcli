@@ -2,6 +2,12 @@
 /// EXPERIMENTAL
 ///
 class Format {
+  /// Factory constructor.
+  factory Format() => _self;
+  Format._internal();
+
+  static final _self = Format._internal();
+
   /// [cols] is a list of strings (the columns) that
   /// are to be formatted as a set of fixed with
   /// columns.
@@ -24,10 +30,12 @@ class Format {
   /// [widths].
   ///
   ///
-  static String row(List<String?> cols,
-      {List<int>? widths,
-      List<TableAlignment>? alignments,
-      String? delimiter}) {
+  String row(
+    List<String?> cols, {
+    List<int>? widths,
+    List<TableAlignment>? alignments,
+    String? delimiter,
+  }) {
     var row = '';
     var i = 0;
     widths ??= [20];
@@ -79,7 +87,7 @@ class Format {
 
   /// returns a double as a percentage to the given [precision]
   /// e.g. 0.11 becomes 11% if [precision] is 0.
-  static String percentage(double progress, int precision) =>
+  String percentage(double progress, int precision) =>
       '${(progress * 100).toStringAsFixed(precision)}%';
 
   /// returns the the number of [bytes] in a human readable

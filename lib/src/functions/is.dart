@@ -128,7 +128,8 @@ class _Is extends DCliFunction {
         FileSystemEntityType.notFound;
 
     verbose(
-        () => 'exists: $_exists ${truepath(path)} followLinks: $followLinks');
+      () => 'exists: $_exists ${truepath(path)} followLinks: $followLinks',
+    );
 
     return _exists;
   }
@@ -176,12 +177,15 @@ class _Is extends DCliFunction {
   /// Checks if the user permission to act on the [path] (a file or directory)
   /// for the given permission bit mask. (read, write or execute)
   bool _checkPermission(String path, int permissionBitMask) {
-    verbose(() => '_checkPermission: ${truepath(path)} '
-        'permissionBitMask: $permissionBitMask');
+    verbose(
+      () => '_checkPermission: ${truepath(path)} '
+          'permissionBitMask: $permissionBitMask',
+    );
 
     if (Settings().isWindows) {
       throw UnsupportedError(
-          'isMemberOfGroup is not Not currently supported on windows');
+        'isMemberOfGroup is not Not currently supported on windows',
+      );
     }
 
     final user = Shell.current.loggedInUser;
@@ -238,7 +242,8 @@ class _Is extends DCliFunction {
 
     if (Settings().isWindows) {
       throw UnsupportedError(
-          'isMemberOfGroup is not Not currently supported on windows');
+        'isMemberOfGroup is not Not currently supported on windows',
+      );
     }
     // get the list of groups this user belongs to.
     final groups = 'groups'.firstLine!.split(' ');

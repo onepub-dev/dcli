@@ -19,7 +19,7 @@ import 'package:dcli/src/script/commands/commands.dart';
 void main(List<String> args) {
   if (args.length < 2) {
     print('dcli_complete provides tab completion '
-        'from the bash command line for dcli');
+        'from the bash command line for dcli',);
     print("You don't run dcli_complete directly");
     exit(-1);
   }
@@ -39,7 +39,7 @@ void main(List<String> args) {
     //print('prior word: $priorWord');
     if (priorWord.isNotEmpty) {
       final priorCommand = Commands.findCommand(
-          priorWord, Commands.asMap(Commands.applicationCommands));
+          priorWord, Commands.asMap(Commands.applicationCommands),);
 
       if (priorCommand != null) {
         //print('priorCommand ${priorCommand.name}');

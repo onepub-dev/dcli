@@ -150,7 +150,10 @@ class ProcessHelper {
       final processPid = int.tryParse(parts[parts.length - 1]) ?? -1;
 
       final parent = _WindowsParentProcess(
-          path: exe, parentPid: parentPid, processPid: processPid);
+        path: exe,
+        parentPid: parentPid,
+        processPid: processPid,
+      );
       parents.add(parent);
     }
     return parents;
@@ -232,7 +235,10 @@ class ProcessHelper {
       final memparts = (line[4] as String).split(' ');
 
       final details = ProcessDetails(
-          int.tryParse(line[1] as String) ?? 0, line[0] as String, memparts[0]);
+        int.tryParse(line[1] as String) ?? 0,
+        line[0] as String,
+        memparts[0],
+      );
       // details.memory can contain 'N/A' in which case their is no units.
       if (memparts.length == 2) {
         details.memoryUnits = memparts[1];
@@ -245,11 +251,12 @@ class ProcessHelper {
   }
 
   List<ProcessDetails> _getLinuxProcesses() {
-    final entries = find('[0-9]*',
-            workingDirectory: '/proc',
-            types: [Find.directory],
-            recursive: false)
-        .toList();
+    final entries = find(
+      '[0-9]*',
+      workingDirectory: '/proc',
+      types: [Find.directory],
+      recursive: false,
+    ).toList();
 
     final processes = <ProcessDetails>[];
 
@@ -351,8 +358,11 @@ class ProcessDetails {
 }
 
 class _WindowsParentProcess {
-  _WindowsParentProcess(
-      {required this.path, required this.parentPid, required this.processPid});
+  _WindowsParentProcess({
+    required this.path,
+    required this.parentPid,
+    required this.processPid,
+  });
   String path;
   int parentPid;
   int processPid;

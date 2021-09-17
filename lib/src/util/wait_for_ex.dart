@@ -50,7 +50,9 @@ T waitForEx<T>(Future<T> future) {
       /// Ideally we would rather throw the original exception but currently
       ///  there is no way to do this.
       throw DCliException.from(
-          exception, StackTraceImpl.fromStackTrace(stackTrace));
+        exception,
+        StackTraceImpl.fromStackTrace(stackTrace),
+      );
     }
   }
   return value;

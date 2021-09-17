@@ -7,7 +7,9 @@ void main() {
   test('start with progress', () {
     final result = <String?>[];
     'echo hi'.start(
-        runInShell: true, progress: Progress(result.add, stderr: result.add));
+      runInShell: true,
+      progress: Progress(result.add, stderr: result.add),
+    );
 
     expect(result, orderedEquals(<String>['hi']));
   });

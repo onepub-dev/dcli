@@ -31,7 +31,8 @@ import 'move.dart';
 void backupFile(String pathToFile, {bool ignoreMissing = false}) {
   if (!exists(pathToFile)) {
     throw BackupFileException(
-        'The backup file ${truepath(pathToFile)} is missing');
+      'The backup file ${truepath(pathToFile)} is missing',
+    );
   }
   final pathToBackupFile = _backupFilePath(pathToFile);
   if (exists(pathToBackupFile)) {
@@ -77,10 +78,12 @@ void restoreFile(String pathToFile, {bool ignoreMissing = false}) {
   } else {
     if (ignoreMissing) {
       verbose(
-          () => 'Missing restoreFile ${truepath(pathToBackupFile)} ignored.');
+        () => 'Missing restoreFile ${truepath(pathToBackupFile)} ignored.',
+      );
     } else {
       throw RestoreFileException(
-          'The backup file ${truepath(pathToBackupFile)} is missing');
+        'The backup file ${truepath(pathToBackupFile)} is missing',
+      );
     }
   }
 }
@@ -125,8 +128,11 @@ void restoreFile(String pathToFile, {bool ignoreMissing = false}) {
 // ignore: flutter_style_todos
 /// TODO: make this work for other than current drive under Windows
 ///
-R withFileProtection<R>(List<String> protected, R Function() action,
-    {String? workingDirectory}) {
+R withFileProtection<R>(
+  List<String> protected,
+  R Function() action, {
+  String? workingDirectory,
+}) {
   // removed glob support for the moment.
   // This is because if one of the protected entriese is missing
   // then we are assuming its a glob.
@@ -139,120 +145,129 @@ R withFileProtection<R>(List<String> protected, R Function() action,
   // If the entry is a glob pattern then it is applied recusively.
 
   final _workingDirectory = workingDirectory ?? pwd;
-  final result = withTempDir((backupDir) {
-    verbose(() => 'withFileProtection: backing up to $backupDir');
+  final result = withTempDir(
+    (backupDir) {
+      verbose(() => 'withFileProtection: backing up to $backupDir');
 
-    /// backup the protected files
-    /// to a backupDir
-    for (final path in protected) {
-      final paths = _determinePaths(
+      /// backup the protected files
+      /// to a backupDir
+      for (final path in protected) {
+        final paths = _determinePaths(
           path: path,
           workingDirectory: _workingDirectory,
-          backupDir: backupDir);
+          backupDir: backupDir,
+        );
 
-      if (!exists(paths.sourcePath)) {
-        /// the file/directory doesn't exist.
-        /// During the restore process this path will be deleted
-        /// so that once again they don't exist.
-        continue;
-      }
-
-      if (isFile(paths.sourcePath)) {
-        if (!exists(dirname(paths.backupPath))) {
-          createDir(dirname(paths.backupPath), recursive: true);
+        if (!exists(paths.sourcePath)) {
+          /// the file/directory doesn't exist.
+          /// During the restore process this path will be deleted
+          /// so that once again they don't exist.
+          continue;
         }
 
-        /// the entity is a simple file.
-        copy(paths.sourcePath, paths.backupPath);
-      } else if (isDirectory(paths.sourcePath)) {
-        /// the entity is a directory so copy the whole tree
-        /// recursively.
-        if (!exists(paths.backupPath)) {
-          createDir(paths.backupPath, recursive: true);
-        }
-        copyTree(paths.sourcePath, paths.backupPath, includeHidden: true);
-      } else {
-        throw BackupFileException(
+        if (isFile(paths.sourcePath)) {
+          if (!exists(dirname(paths.backupPath))) {
+            createDir(dirname(paths.backupPath), recursive: true);
+          }
+
+          /// the entity is a simple file.
+          copy(paths.sourcePath, paths.backupPath);
+        } else if (isDirectory(paths.sourcePath)) {
+          /// the entity is a directory so copy the whole tree
+          /// recursively.
+          if (!exists(paths.backupPath)) {
+            createDir(paths.backupPath, recursive: true);
+          }
+          copyTree(paths.sourcePath, paths.backupPath, includeHidden: true);
+        } else {
+          throw BackupFileException(
             'Unsupported entity type for ${paths.sourcePath}. '
-            'Only files and directories are supported');
+            'Only files and directories are supported',
+          );
+        }
+        // else {
+        //   /// Must be a glob.
+        //   for (final file in find(paths.source, includeHidden: true)
+        //        .toList()) {
+        //     // we need to determine the paths for each [file]
+        //     // as the can have a different relative path as we
+        //     // do a recursive search.
+        //     final paths = _determinePaths(
+        //         path: file, sourceDir: sourceDir, backupDir: backupDir);
+
+        //     if (!exists(dirname(paths.target))) {
+        //       createDir(dirname(paths.target), recursive: true);
+        //     }
+        //     copy(paths.source, paths.target);
+        //   }
+        // }
       }
-      // else {
-      //   /// Must be a glob.
-      //   for (final file in find(paths.source, includeHidden: true)
-      //        .toList()) {
-      //     // we need to determine the paths for each [file]
-      //     // as the can have a different relative path as we
-      //     // do a recursive search.
-      //     final paths = _determinePaths(
-      //         path: file, sourceDir: sourceDir, backupDir: backupDir);
+      final result = action();
 
-      //     if (!exists(dirname(paths.target))) {
-      //       createDir(dirname(paths.target), recursive: true);
-      //     }
-      //     copy(paths.source, paths.target);
-      //   }
-      // }
-    }
-    final result = action();
-
-    /// restore the protected entities
-    for (final path in protected) {
-      final paths = _determinePaths(
+      /// restore the protected entities
+      for (final path in protected) {
+        final paths = _determinePaths(
           path: path,
           workingDirectory: _workingDirectory,
-          backupDir: backupDir);
-      {
-        if (!exists(paths.backupPath)) {
-          /// If the protected entity didn't exist before we started
-          /// the make certain it doesn't exist now.
-          _deleteEntity(paths.sourcePath);
-        }
+          backupDir: backupDir,
+        );
+        {
+          if (!exists(paths.backupPath)) {
+            /// If the protected entity didn't exist before we started
+            /// the make certain it doesn't exist now.
+            _deleteEntity(paths.sourcePath);
+          }
 
-        if (isFile(paths.backupPath)) {
-          _restoreFile(paths);
-        }
+          if (isFile(paths.backupPath)) {
+            _restoreFile(paths);
+          }
 
-        if (isDirectory(paths.backupPath)) {
-          _restoreDirectory(paths);
+          if (isDirectory(paths.backupPath)) {
+            _restoreDirectory(paths);
+          }
         }
       }
-    }
 
-    return result;
-  }, keep: true);
+      return result;
+    },
+    keep: true,
+  );
 
   return result;
 }
 
 void _restoreFile(_Paths paths) {
-  withTempFile((dotBak) {
-    try {
-      if (exists(paths.sourcePath)) {
-        move(paths.sourcePath, dotBak);
-      }
-
-      // ignore: flutter_style_todos
-      /// TODO: consider only restoring the file if its last modified
-      /// time has changed.
-      move(paths.backupPath, paths.sourcePath);
-      if (exists(dotBak)) {
-        delete(dotBak);
-      }
-      // ignore: avoid_catches_without_on_clauses
-    } catch (e) {
-      /// The restore failed so if the dotBak file
-      /// exists lets at least restore that.
-      if (exists(dotBak)) {
-        /// this should never happen as if we have the dotBak
-        /// file then the originalFile should not exists.
-        /// but just in case.
+  withTempFile(
+    (dotBak) {
+      try {
         if (exists(paths.sourcePath)) {
-          delete(paths.sourcePath);
+          move(paths.sourcePath, dotBak);
         }
-        move(dotBak, paths.sourcePath);
+
+        // ignore: flutter_style_todos
+        /// TODO: consider only restoring the file if its last modified
+        /// time has changed.
+        move(paths.backupPath, paths.sourcePath);
+        if (exists(dotBak)) {
+          delete(dotBak);
+        }
+        // ignore: avoid_catches_without_on_clauses
+      } catch (e) {
+        /// The restore failed so if the dotBak file
+        /// exists lets at least restore that.
+        if (exists(dotBak)) {
+          /// this should never happen as if we have the dotBak
+          /// file then the originalFile should not exists.
+          /// but just in case.
+          if (exists(paths.sourcePath)) {
+            delete(paths.sourcePath);
+          }
+          move(dotBak, paths.sourcePath);
+        }
       }
-    }
-  }, create: false);
+    },
+    create: false,
+  );
 }
 
 void _restoreDirectory(_Paths paths) {
@@ -297,10 +312,11 @@ void _deleteEntity(String path) {
 ///
 /// Where 'X' is the drive letter that [path] is located on.
 ///
-_Paths _determinePaths(
-    {required String path,
-    required String workingDirectory,
-    required String backupDir}) {
+_Paths _determinePaths({
+  required String path,
+  required String workingDirectory,
+  required String backupDir,
+}) {
   late final String sourcePath;
   late final String backupPath;
 
@@ -365,8 +381,11 @@ String? _stripRootPrefix(String absolutePath) {
 /// The [context] is only used for unit testing so
 /// we can fake the platform separator.
 @visibleForTesting
-String translateAbsolutePath(String absolutePath,
-    {String? workingDirectory, p.Context? context}) {
+String translateAbsolutePath(
+  String absolutePath, {
+  String? workingDirectory,
+  p.Context? context,
+}) {
   if (!PlatformWrapper().isWindows) {
     return absolutePath;
   }

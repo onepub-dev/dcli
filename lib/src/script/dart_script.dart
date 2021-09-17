@@ -39,9 +39,11 @@ class DartScript {
   DartScript.fromFile(String scriptPathTo, {DartProject? project})
       : this._internal(scriptPathTo, create: false, project: project);
 
-  DartScript._internal(String pathToScript,
-      {required bool create, DartProject? project})
-      : _pathToScript = truepath(pathToScript),
+  DartScript._internal(
+    String pathToScript, {
+    required bool create,
+    DartProject? project,
+  })  : _pathToScript = truepath(pathToScript),
         _scriptDirectory = dirname(truepath(pathToScript)),
         _project = project {
     {
@@ -159,8 +161,10 @@ class DartScript {
   /// validate that the passed arguments points to a valid script
   static void validate(String scriptPath) {
     if (!scriptPath.endsWith('.dart')) {
-      throw InvalidArguments('Expected a script name (ending in .dart) '
-          'instead found: $scriptPath');
+      throw InvalidArguments(
+        'Expected a script name (ending in .dart) '
+        'instead found: $scriptPath',
+      );
     }
 
     if (!exists(scriptPath)) {
@@ -220,25 +224,31 @@ class DartScript {
   /// If [install] is true and [overwrite] is false and an exe of the same name already exists in ~/.dcli/bin
   /// the install will fail and a [MoveException] will be thrown.
   ///
-  void compile(
-      {bool install = false,
-      bool overwrite = false,
-      String? workingDirectory}) {
-    verbose(() => '\nCompiling with pubspec.yaml:\n'
-        '${read(pathToPubSpec).toParagraph()}\n');
+  void compile({
+    bool install = false,
+    bool overwrite = false,
+    String? workingDirectory,
+  }) {
+    verbose(
+      () => '\nCompiling with pubspec.yaml:\n'
+          '${read(pathToPubSpec).toParagraph()}\n',
+    );
 
     workingDirectory ??= pwd;
 
     if (install && isInstalled && !overwrite) {
       throw InvalidArguments(
-          'You selected to install the compiled exe however an installed '
-          'exe of that name already exists. Use overwrite=true');
+        'You selected to install the compiled exe however an installed '
+        'exe of that name already exists. Use overwrite=true',
+      );
     }
 
-    DartSdk().runDartCompiler(this,
-        pathToExe: pathToExe,
-        progress: Progress(print, stderr: print),
-        workingDirectory: workingDirectory);
+    DartSdk().runDartCompiler(
+      this,
+      pathToExe: pathToExe,
+      progress: Progress(print, stderr: print),
+      workingDirectory: workingDirectory,
+    );
 
     if (install) {
       print('');

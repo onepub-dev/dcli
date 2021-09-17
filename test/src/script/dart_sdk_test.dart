@@ -8,28 +8,37 @@ import 'package:test/test.dart';
 import '../util/test_file_system.dart';
 
 void main() {
-  test('Detect Dart SDK', () {
-    print('Dart pathToDartExe: ${DartSdk().pathToDartExe}');
-    print('Dart pathToDartToNativeExe: ${DartSdk().pathToDartToNativeExe}');
-    print('Dart pathToPubExe: ${DartSdk().pathToPubExe}');
-    print('Dart Version: ${DartSdk().version}');
-    print('Dart Major: ${DartSdk().versionMajor}');
-    print('Dart Minor: ${DartSdk().versionMinor}');
+  test(
+    'Detect Dart SDK',
+    () {
+      print('Dart pathToDartExe: ${DartSdk().pathToDartExe}');
+      print('Dart pathToDartToNativeExe: ${DartSdk().pathToDartToNativeExe}');
+      print('Dart pathToPubExe: ${DartSdk().pathToPubExe}');
+      print('Dart Version: ${DartSdk().version}');
+      print('Dart Major: ${DartSdk().versionMajor}');
+      print('Dart Minor: ${DartSdk().versionMinor}');
 
-    which('dart').paths.forEach((line) => print('which: $line'));
-  }, skip: false);
+      which('dart').paths.forEach((line) => print('which: $line'));
+    },
+    skip: false,
+  );
 
-  test('Install Dart Sdk', () {
-    TestFileSystem().withinZone((fs) {
-      final defaultPath = join(fs.uniquePath, 'dart-sdk');
-      final installPath = DartSdk().installFromArchive(defaultPath);
-      setPathToDartSdk(installPath);
-      print('installed To $installPath');
-      expect(
+  test(
+    'Install Dart Sdk',
+    () {
+      TestFileSystem().withinZone((fs) {
+        final defaultPath = join(fs.uniquePath, 'dart-sdk');
+        final installPath = DartSdk().installFromArchive(defaultPath);
+        setPathToDartSdk(installPath);
+        print('installed To $installPath');
+        expect(
           DartSdk().pathToDartExe != null && exists(DartSdk().pathToDartExe!),
-          equals(true));
-    });
-  }, skip: true);
+          equals(true),
+        );
+      });
+    },
+    skip: true,
+  );
 
   test('Parse sdk version', () {
     final output = '${DartSdk().pathToDartExe} --version'.firstLine;
@@ -63,8 +72,14 @@ void main() {
 
   test('Run dart script', () {
     final projectRoot = DartProject.fromPath('.').pathToProjectRoot;
-    final hellow = join(projectRoot, 'test', 'test_script', 'general', 'bin',
-        'hello_world.dart');
+    final hellow = join(
+      projectRoot,
+      'test',
+      'test_script',
+      'general',
+      'bin',
+      'hello_world.dart',
+    );
     DartSdk().run(args: [hellow]);
     print('done 1');
   });

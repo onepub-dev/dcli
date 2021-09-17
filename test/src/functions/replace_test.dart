@@ -12,11 +12,12 @@ void main() {
       replace(temp, RegExp('[a-z]*'), 'xyz');
 
       expect(
-          read(temp).toParagraph(),
-          '''
+        read(temp).toParagraph(),
+        '''
 xyz123
 xyz246'''
-              .replaceAll('\n', Platform().eol));
+            .replaceAll('\n', Platform().eol),
+      );
 
       temp
         ..write('abc123')
@@ -24,11 +25,12 @@ xyz246'''
       replace(temp, 'abc', 'xyz');
 
       expect(
-          read(temp).toParagraph(),
-          '''
+        read(temp).toParagraph(),
+        '''
 xyz123
 def246'''
-              .replaceAll('\n', Platform().eol));
+            .replaceAll('\n', Platform().eol),
+      );
     });
   });
 }

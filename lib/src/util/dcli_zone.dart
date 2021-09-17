@@ -27,10 +27,14 @@ class DCliZone {
 
     // ignore: flutter_style_todos
     /// TODO: we need to some how await this.
-    runZonedGuarded(body, (e, st) {},
-        zoneValues: zoneValues,
-        zoneSpecification: ZoneSpecification(
-            print: (self, parent, zone, line) => progress!.addToStdout(line)));
+    runZonedGuarded(
+      body,
+      (e, st) {},
+      zoneValues: zoneValues,
+      zoneSpecification: ZoneSpecification(
+        print: (self, parent, zone, line) => progress!.addToStdout(line),
+      ),
+    );
 
     return progress;
   }

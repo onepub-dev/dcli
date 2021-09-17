@@ -64,24 +64,26 @@ void checkProjectStructure(String rootPath, String scriptName) {
   // ]).forEach((line) => files.add(p.basename(line)));
 
   expect(
-      files,
-      unorderedEquals(<String>[
-        scriptName,
-        'pubspec.yaml',
-        'pubspec.lock',
-        'analysis_options.yaml',
-        join('.dart_tool', 'package_config.json'),
-        // ignore: lines_longer_than_80_chars
-        '.packages' // when dart 2.10 is released this will no longer be created.
-      ]));
+    files,
+    unorderedEquals(<String>[
+      scriptName,
+      'pubspec.yaml',
+      'pubspec.lock',
+      'analysis_options.yaml',
+      join('.dart_tool', 'package_config.json'),
+      // ignore: lines_longer_than_80_chars
+      '.packages' // when dart 2.10 is released this will no longer be created.
+    ]),
+  );
 
   final directories = <String>[];
 
-  find('*',
-          recursive: false,
-          workingDirectory: rootPath,
-          types: [Find.directory],
-          includeHidden: true)
-      .forEach((line) => directories.add(p.basename(line)));
+  find(
+    '*',
+    recursive: false,
+    workingDirectory: rootPath,
+    types: [Find.directory],
+    includeHidden: true,
+  ).forEach((line) => directories.add(p.basename(line)));
   expect(directories, unorderedEquals(<String>['.dart_tool']));
 }

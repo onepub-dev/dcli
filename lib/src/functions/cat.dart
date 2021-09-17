@@ -33,13 +33,15 @@ class Cat extends DCliFunction {
       throw CatException('The file at ${truepath(path)} does not exists');
     }
 
-    waitForEx<void>(sourceFile
-        .openRead()
-        .transform(utf8.decoder)
-        .transform(const LineSplitter())
-        .forEach((line) {
-      stdout(line);
-    }));
+    waitForEx<void>(
+      sourceFile
+          .openRead()
+          .transform(utf8.decoder)
+          .transform(const LineSplitter())
+          .forEach((line) {
+        stdout(line);
+      }),
+    );
   }
 }
 

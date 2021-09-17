@@ -268,41 +268,47 @@ class NamedLock {
       verbose(() => 'entering withHardLock $waitCount');
 
       if (!_validLockFileExists) {
-        _withHardLock(fn: () {
-          // check for other lock files
-          final locks = find('*.$name',
-                  workingDirectory: _lockPath,
-                  includeHidden: true,
-                  recursive: false)
-              .toList();
-          verbose(() => red('found lock files $locks'));
+        _withHardLock(
+          fn: () {
+            // check for other lock files
+            final locks = find(
+              '*.$name',
+              workingDirectory: _lockPath,
+              includeHidden: true,
+              recursive: false,
+            ).toList();
+            verbose(() => red('found lock files $locks'));
 
-          var lockFiles = locks.length;
+            var lockFiles = locks.length;
 
-          if (lockFiles == 0) {
-            // no other lock exists so we have taken a lock.
-            taken = true;
-          } else {
-            // we have found another lock file so check if it is held
-            // be a running process
-            lockFiles = _clearStaleLocks(locks, lockFiles);
             if (lockFiles == 0) {
+              // no other lock exists so we have taken a lock.
               taken = true;
+            } else {
+              // we have found another lock file so check if it is held
+              // be a running process
+              lockFiles = _clearStaleLocks(locks, lockFiles);
+              if (lockFiles == 0) {
+                taken = true;
+              }
             }
-          }
 
-          if (taken) {
-            final isolateID = _isolateID;
-            Settings().verbose(
-                'Taking lock ${basename(_lockFilePath)} for $isolateID');
+            if (taken) {
+              final isolateID = _isolateID;
+              Settings().verbose(
+                'Taking lock ${basename(_lockFilePath)} for $isolateID',
+              );
 
-            verbose(() => 'Lock Source: '
-                // ignore: lines_longer_than_80_chars
-                '${StackTraceImpl(skipFrames: 9).formatStackTrace(methodCount: 1)}');
-            touch(_lockFilePath, create: true);
-            //  log(StackTraceImpl().formatStackTrace(methodCount: 100));
-          }
-        });
+              verbose(
+                () => 'Lock Source: '
+                    // ignore: lines_longer_than_80_chars
+                    '${StackTraceImpl(skipFrames: 9).formatStackTrace(methodCount: 1)}',
+              );
+              touch(_lockFilePath, create: true);
+              //  log(StackTraceImpl().formatStackTrace(methodCount: 100));
+            }
+          },
+        );
       }
 
       /// sleep for 100ms and then we will try again.
@@ -318,11 +324,15 @@ class NamedLock {
 
     if (!taken) {
       if (waitCount == 0) {
-        throw LockException('NamedLock timed out on $_description '
-            '${truepath(_lockPath)} as it is currently held');
+        throw LockException(
+          'NamedLock timed out on $_description '
+          '${truepath(_lockPath)} as it is currently held',
+        );
       } else {
-        throw LockException('Unable to lock $_description '
-            '${truepath(_lockPath)} as it is currently held');
+        throw LockException(
+          'Unable to lock $_description '
+          '${truepath(_lockPath)} as it is currently held',
+        );
       }
     }
 
@@ -333,9 +343,12 @@ class NamedLock {
   /// if it has a live owner.
   bool get _validLockFileExists {
     // check for other lock files
-    final locks = find('*.$name',
-            workingDirectory: _lockPath, includeHidden: true, recursive: false)
-        .toList();
+    final locks = find(
+      '*.$name',
+      workingDirectory: _lockPath,
+      includeHidden: true,
+      recursive: false,
+    ).toList();
 
     for (final lock in locks) {
       final lockFileParts = _lockFileParts(lock);

@@ -41,7 +41,8 @@ class _DeleteDir extends DCliFunction {
 
     if (!isDirectory(path)) {
       throw DeleteDirException(
-          'The path ${truepath(path)} is not a directory.');
+        'The path ${truepath(path)} is not a directory.',
+      );
     }
 
     try {
@@ -50,7 +51,8 @@ class _DeleteDir extends DCliFunction {
     // ignore: avoid_catches_without_on_clauses
     catch (e) {
       throw DeleteDirException(
-          'Unable to delete the directory ${truepath(path)}. Error: $e');
+        'Unable to delete the directory ${truepath(path)}. Error: $e',
+      );
     }
   }
 }

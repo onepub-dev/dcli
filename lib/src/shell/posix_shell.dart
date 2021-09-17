@@ -132,7 +132,8 @@ mixin PosixShell {
   void withPrivileges(RunPrivileged action) {
     if (!Shell.current.isPrivilegedProcess) {
       throw ShellException(
-          'You can only use withPrivileges when running as a privileged user.');
+        'You can only use withPrivileges when running as a privileged user.',
+      );
     }
     final privileged = geteuid() == 0;
 

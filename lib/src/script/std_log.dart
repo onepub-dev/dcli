@@ -13,6 +13,13 @@ enum LogLevel {
 
 ////
 class StdLog {
+  /// Factory Constructor.
+  factory StdLog() => _self;
+
+  StdLog._internal();
+
+  static final _self = StdLog._internal();
+
   /// Logs a message to stdout.
   static void stdout(String message, {LogLevel level = LogLevel.normal}) {
     if (level == LogLevel.normal ||

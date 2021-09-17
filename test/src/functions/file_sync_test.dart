@@ -38,7 +38,7 @@ void main() {
             file.append('Line $i is here');
           }
 
-          file.write(replacement, newline: null);
+          file.write(replacement, newline: '');
 
           return stat(file.path);
         });

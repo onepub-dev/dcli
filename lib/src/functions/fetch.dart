@@ -133,7 +133,8 @@ class _Fetch extends DCliFunction {
 
     if (exists(fetchUrl.saveToPath)) {
       throw FetchException(
-          'The file at saveToPath:${fetchUrl.saveToPath} already exists.');
+        'The file at saveToPath:${fetchUrl.saveToPath} already exists.',
+      );
     }
 
     touch(fetchUrl.saveToPath, create: true);

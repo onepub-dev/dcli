@@ -36,8 +36,12 @@ void chown(String path, {String? user, String? group, bool recursive = true}) =>
 class _ChOwn extends DCliFunction {
 // this.user, this.group, this.other, this.path
 
-  void _chown(String path,
-      {String? user, String? group, bool recursive = true}) {
+  void _chown(
+    String path, {
+    String? user,
+    String? group,
+    bool recursive = true,
+  }) {
     if (Platform.isWindows) {
       return;
     }
@@ -47,7 +51,8 @@ class _ChOwn extends DCliFunction {
     group ??= user;
     if (!exists(path)) {
       throw ChOwnException(
-          'The file/directory at ${truepath(path)} does not exists');
+        'The file/directory at ${truepath(path)} does not exists',
+      );
     }
 
     final passwd = posix.getpwnam(user);

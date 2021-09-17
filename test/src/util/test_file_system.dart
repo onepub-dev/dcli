@@ -65,9 +65,13 @@ class TestFileSystem {
     uniquePath = const Uuid().v4();
 
     final isolateID = Service.getIsolateID(Isolate.current);
-    print(red('${'+' * 20}'
-            '${'Creating TestFileSystem $fsRoot for isolate $isolateID'}') +
-        '+' * 20);
+    print(
+      red(
+            '${'+' * 20}'
+            '${'Creating TestFileSystem $fsRoot for isolate $isolateID'}',
+          ) +
+          '+' * 20,
+    );
 
     tmpScriptPath = truepath(fsRoot, 'scripts');
     testScriptPath = truepath(fsRoot, 'test_script');
@@ -130,11 +134,17 @@ class TestFileSystem {
   }
 
   void _runUnderLock(
-      StackTraceImpl stack, void Function(TestFileSystem fs) action) {
+    StackTraceImpl stack,
+    void Function(TestFileSystem fs) action,
+  ) {
     final frame = stack.frames[0];
 
-    print(red('${'*' * 40} Starting test '
-        '${frame.sourceFile}:${frame.lineNo} ${'*' * 80}'));
+    print(
+      red(
+        '${'*' * 40} Starting test '
+        '${frame.sourceFile}:${frame.lineNo} ${'*' * 80}',
+      ),
+    );
     Settings.reset();
     Env.reset();
     PubCache.reset();
@@ -167,8 +177,12 @@ class TestFileSystem {
     } finally {
       env['HOME'] = originalHome;
       env['PATH'] = path;
-      print(green('${'-' * 40} '
-          'Ending test ${frame.sourceFile}:${frame.lineNo} ${'-' * 80}'));
+      print(
+        green(
+          '${'-' * 40} '
+          'Ending test ${frame.sourceFile}:${frame.lineNo} ${'-' * 80}',
+        ),
+      );
     }
   }
 
@@ -225,7 +239,12 @@ class TestFileSystem {
   }
 
   static void populateFileSystem(
-      String top, String thidden, String middle, String bottom, String hidden) {
+    String top,
+    String thidden,
+    String middle,
+    String bottom,
+    String hidden,
+  ) {
     // Create some the test dirs.
     if (!exists(thidden)) {
       createDir(thidden, recursive: true);
@@ -278,8 +297,12 @@ class TestFileSystem {
 
   void installDCli() {
     if (!isDCliRunningFromSource()) {
-      printerr(red('You must global active dcli from a local '
-          'path before you can run unit tests'));
+      printerr(
+        red(
+          'You must global active dcli from a local '
+          'path before you can run unit tests',
+        ),
+      );
       print('Run: dart pub global activate --source=path <path to dcli>');
       exit(-1);
     }
@@ -303,7 +326,9 @@ class TestFileSystem {
       newPath.add(path);
     }
 
-    newPath..add(PubCache().pathToBin)..add(join(fsRoot, '.dcli', 'bin'));
+    newPath
+      ..add(PubCache().pathToBin)
+      ..add(join(fsRoot, '.dcli', 'bin'));
 
     env['PATH'] = newPath.join(Env().delimiterForPATH);
   }
@@ -325,7 +350,8 @@ class TestFileSystem {
     copyTree(originalPubCache!, PubCache().pathTo);
 
     print(
-        'Reset ${PubCache.envVarPubCache} to ${env[PubCache.envVarPubCache]}');
+      'Reset ${PubCache.envVarPubCache} to ${env[PubCache.envVarPubCache]}',
+    );
 
     Settings().setVerbose(enabled: verbose);
   }
@@ -342,8 +368,10 @@ class TestFileSystem {
       createDir(testScriptPath, recursive: true);
     }
 
-    copyTree(join(DartProject.self.pathToProjectRoot, 'test', 'test_script'),
-        testScriptPath);
+    copyTree(
+      join(DartProject.self.pathToProjectRoot, 'test', 'test_script'),
+      testScriptPath,
+    );
 
     _patchRelativeDependenciesAndWarmup(testScriptPath);
     DartProject.fromPath(join(testScriptPath, 'general')).warmup();
@@ -366,7 +394,11 @@ class TestFileSystem {
 
         final dir = relative(dirname(pathToPubspec), from: fsRoot);
         final absolutePathToDcli = truepath(
-            dcliProject.pathToProjectRoot, 'test', dir, pathDependency.path);
+          dcliProject.pathToProjectRoot,
+          'test',
+          dir,
+          pathDependency.path,
+        );
 
         final newPath = PubSpec.createPathReference(absolutePathToDcli);
 
@@ -398,8 +430,10 @@ class TestFileSystem {
     for (final command in required) {
       if (exists(join(testbinPath, command))) {
         // copy the existing command into the testzones .dcli/bin path
-        copy(join(testbinPath, command),
-            join(Settings().pathToDCliBin, command));
+        copy(
+          join(testbinPath, command),
+          join(Settings().pathToDCliBin, command),
+        );
       } else {
         /// compile and install the command
         DartScript.fromFile('test/test_script/general/bin/$command.dart')
@@ -491,7 +525,12 @@ class TestDirectoryTree {
   }
 
   static void populateFileSystem(
-      String top, String thidden, String middle, String bottom, String hidden) {
+    String top,
+    String thidden,
+    String middle,
+    String bottom,
+    String hidden,
+  ) {
     // Create some the test dirs.
     if (!exists(thidden)) {
       createDir(thidden, recursive: true);

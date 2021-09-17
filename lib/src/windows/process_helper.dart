@@ -13,19 +13,30 @@ String getWindowsProcessName(int processID) {
 
   // Get a handle to the process.
   final hProcess = OpenProcess(
-      PROCESS_QUERY_INFORMATION | PROCESS_VM_READ, FALSE, processID);
+    PROCESS_QUERY_INFORMATION | PROCESS_VM_READ,
+    FALSE,
+    processID,
+  );
   try {
     // Get the process name.
     if (NULL != hProcess) {
       withMemory<void, Uint32>(sizeOf<Uint32>(), (phMod) {
         withMemory<void, Uint32>(sizeOf<Uint32>(), (pcbNeeded) {
           if (EnumProcessModules(
-                  hProcess, phMod.cast(), sizeOf<Uint32>(), pcbNeeded) ==
+                hProcess,
+                phMod.cast(),
+                sizeOf<Uint32>(),
+                pcbNeeded,
+              ) ==
               1) {
             withMemory<void, Utf16>(MAX_PATH * sizeOf<Uint16>(),
                 (pszProcessName) {
               GetModuleBaseName(
-                  hProcess, phMod.value, pszProcessName, MAX_PATH);
+                hProcess,
+                phMod.value,
+                pszProcessName,
+                MAX_PATH,
+              );
 
               name = pszProcessName.toDartString();
             });
@@ -49,7 +60,10 @@ List<ProcessDetails> getWindowsProcesses() {
   withMemory<void, Uint32>(sizeOf<Uint32>() * 2048, (pProcesses) {
     withMemory<void, Uint32>(sizeOf<Uint32>(), (pReturned) {
       if (EnumProcesses(
-              pProcesses.cast(), sizeOf<Uint32>() * 2048, pReturned.cast()) ==
+            pProcesses.cast(),
+            sizeOf<Uint32>() * 2048,
+            pReturned.cast(),
+          ) ==
           0) {
         return;
       }

@@ -16,10 +16,13 @@ class HelpCommand extends Command {
   int run(List<Flag> selectedFlags, List<String> subarguments) {
     if (subarguments.isNotEmpty) {
       final command = Commands.findCommand(
-          subarguments[0], Commands.asMap(Commands.applicationCommands));
+        subarguments[0],
+        Commands.asMap(Commands.applicationCommands),
+      );
       if (command == null) {
         throw InvalidArguments(
-            'help expected a command name. Found $subarguments');
+          'help expected a command name. Found $subarguments',
+        );
       }
       print(command.usage());
     } else {
@@ -47,16 +50,21 @@ class HelpCommand extends Command {
 
   void _printUsage() {
     final appname = Settings().appname;
-    print(green(
-        '$appname: Executes Dart scripts.  Version: ${Settings().version}'));
+    print(
+      green(
+        '$appname: Executes Dart scripts.  Version: ${Settings().version}',
+      ),
+    );
     print('');
     print('Example: ');
     print('   dcli hello_world.dart');
     print('   dcli -v compile -nc hello_world.dart');
     print('');
     print(green('Usage:'));
-    print('  dcli [${blue('flag, flag...')}] '
-        '[${blue('command')}] [arguments...]');
+    print(
+      '  dcli [${blue('flag, flag...')}] '
+      '[${blue('command')}] [arguments...]',
+    );
     print('');
     print(blue('global flags:'));
     for (final flag in CommandLineRunner.globalFlags) {

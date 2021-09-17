@@ -20,75 +20,90 @@ void main() {
   });
 
   test('exception catch', () {
-    expect(() {
-      NamedLock(name: 'exception').withLock(() {
-        throw DCliException('fake exception');
-      });
-    }, throwsA(isA<DCliException>()));
+    expect(
+      () {
+        NamedLock(name: 'exception').withLock(() {
+          throw DCliException('fake exception');
+        });
+      },
+      throwsA(isA<DCliException>()),
+    );
   });
 
-  test('withLock', () async {
-    await withTempDir((fs) async {
-      await withTempFile((logFile) async {
-        print('logfile: $logFile');
-        logFile.truncate();
+  test(
+    'withLock',
+    () async {
+      await withTempDir(
+        (fs) async {
+          await withTempFile((logFile) async {
+            print('logfile: $logFile');
+            logFile.truncate();
 
-        final portBack = await spawn('background', logFile);
-        final portMid = await spawn('middle', logFile);
-        final portFore = await spawn('foreground', logFile);
+            final portBack = await spawn('background', logFile);
+            final portMid = await spawn('middle', logFile);
+            final portFore = await spawn('foreground', logFile);
 
-        await portBack.first;
-        await portMid.first;
-        await portFore.first;
+            await portBack.first;
+            await portMid.first;
+            await portFore.first;
 
-        print('readling logfile');
+            print('readling logfile');
 
-        final actual = read(logFile).toList();
+            final actual = read(logFile).toList();
 
-        expect(
-            actual,
-            unorderedEquals(<String>[
-              'background + 0',
-              'background + 1',
-              'background + 2',
-              'background + 3',
-              'middle + 0',
-              'middle + 1',
-              'middle + 2',
-              'middle + 3',
-              'foreground + 0',
-              'foreground + 1',
-              'foreground + 2',
-              'foreground + 3',
-            ]));
-      });
-    }, keep: true);
-  }, skip: false);
+            expect(
+              actual,
+              unorderedEquals(<String>[
+                'background + 0',
+                'background + 1',
+                'background + 2',
+                'background + 3',
+                'middle + 0',
+                'middle + 1',
+                'middle + 2',
+                'middle + 3',
+                'foreground + 0',
+                'foreground + 1',
+                'foreground + 2',
+                'foreground + 3',
+              ]),
+            );
+          });
+        },
+        keep: true,
+      );
+    },
+    skip: false,
+  );
 
-  test('Thrash test', () async {
-    Settings().setVerbose(enabled: false);
-    if (exists(_lockCheckPath)) {
-      deleteDir(_lockCheckPath);
-    }
+  test(
+    'Thrash test',
+    () async {
+      Settings().setVerbose(enabled: false);
+      if (exists(_lockCheckPath)) {
+        deleteDir(_lockCheckPath);
+      }
 
-    createDir(_lockCheckPath, recursive: true);
+      createDir(_lockCheckPath, recursive: true);
 
-    final group = FutureGroup<dynamic>();
+      final group = FutureGroup<dynamic>();
 
-    final workers = <Worker>[];
-    for (var i = 0; i < 10; i++) {
-      print('spawning worker $i');
-      final workerIsolate = Isolate.spawn(worker, i, paused: true);
-      final iWorker = Worker(await workerIsolate);
-      workers.add(iWorker);
-      group.add(iWorker.waitForExit());
-    }
-    group.close();
+      final workers = <Worker>[];
+      for (var i = 0; i < 10; i++) {
+        print('spawning worker $i');
+        final workerIsolate = Isolate.spawn(worker, i, paused: true);
+        final iWorker = Worker(await workerIsolate);
+        workers.add(iWorker);
+        group.add(iWorker.waitForExit());
+      }
+      group.close();
 
-    await group.future;
+      await group.future;
 
-    expect(exists(_lockFailedPath), equals(false));
-  }, timeout: const Timeout(Duration(minutes: 30)));
+      expect(exists(_lockFailedPath), equals(false));
+    },
+    timeout: const Timeout(Duration(minutes: 30)),
+  );
 }
 
 Future<ReceivePort> spawn(String message, String logFile) async {
@@ -134,7 +149,8 @@ void worker(int instance) {
     if (exists(inLockPath)) {
       touch(_lockFailedPath, create: true);
       throw DCliException(
-          'NamedLock for $instance failed as another lock is active');
+        'NamedLock for $instance failed as another lock is active',
+      );
     }
 
     touch(inLockPath, create: true);

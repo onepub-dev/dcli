@@ -12,8 +12,12 @@ import 'package:dcli/dcli.dart';
 ///
 void main(List<String> args) {
   if (Platform.isWindows && !Shell.current.isPrivilegedUser) {
-    printerr(red('Unit tests must be run with Administrator '
-        'privileges on Windows'));
+    printerr(
+      red(
+        'Unit tests must be run with Administrator '
+        'privileges on Windows',
+      ),
+    );
     exit(1);
   }
   print(orange('Cleaning old test and build artifacts'));
@@ -26,7 +30,8 @@ void main(List<String> args) {
   final projectRoot = DartProject.fromPath(pwd).pathToProjectRoot;
   if (!isDCliRunningFromSource()) {
     print(
-        'Activating dcli from source so we are testing against latest version');
+      'Activating dcli from source so we are testing against latest version',
+    );
 
     /// run pub get and only display errors.
     DartSdk().globalActivateFromPath(projectRoot);

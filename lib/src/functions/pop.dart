@@ -52,8 +52,10 @@ class _Pop extends DCliFunction {
   /// for all isolates.
   void pop() {
     if (Settings().isStackEmpty) {
-      throw PopException('Pop failed. You are already at the top of the stack. '
-          'You need to be more pushy.');
+      throw PopException(
+        'Pop failed. You are already at the top of the stack. '
+        'You need to be more pushy.',
+      );
     }
     final path = InternalSettings().pop().path;
 
@@ -65,7 +67,8 @@ class _Pop extends DCliFunction {
     // ignore: avoid_catches_without_on_clauses
     catch (e) {
       throw PopException(
-          'An error occured popping to ${truepath(path)}. Error $e');
+        'An error occured popping to ${truepath(path)}. Error $e',
+      );
     }
   }
 }

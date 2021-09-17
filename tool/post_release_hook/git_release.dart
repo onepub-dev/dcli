@@ -8,7 +8,11 @@ void main(List<String> args) {
   final project = DartProject.self;
 
   final pathToSettings = join(
-      project.pathToProjectRoot, 'tool', 'post_release_hook', '.settings.yaml');
+    project.pathToProjectRoot,
+    'tool',
+    'post_release_hook',
+    '.settings.yaml',
+  );
   final settings = SettingsYaml.load(pathToSettings: pathToSettings);
   final username = settings['username'] as String?;
   final personalAccessToken = settings['personalAccessToken'] as String?;

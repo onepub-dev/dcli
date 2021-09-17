@@ -50,18 +50,23 @@ class RunnableProcess {
   ///
   RunnableProcess.fromCommandLine(String cmdLine, {String? workingDirectory})
       : this._internal(
-            ParsedCliCommand(cmdLine, workingDirectory), workingDirectory);
+          ParsedCliCommand(cmdLine, workingDirectory),
+          workingDirectory,
+        );
 
   /// Spawns a process to run the command contained in [command] along with
   /// the args passed via the [args].
   ///
   /// Glob expansion is performed on each non-quoted argument.
   ///
-  RunnableProcess.fromCommandArgs(String command, List<String> args,
-      {String? workingDirectory})
-      : this._internal(
-            ParsedCliCommand.fromParsed(command, args, workingDirectory),
-            workingDirectory);
+  RunnableProcess.fromCommandArgs(
+    String command,
+    List<String> args, {
+    String? workingDirectory,
+  }) : this._internal(
+          ParsedCliCommand.fromParsed(command, args, workingDirectory),
+          workingDirectory,
+        );
 
   late Future<Process> _fProcess;
 
@@ -125,9 +130,10 @@ class RunnableProcess {
     progress ??= Progress.devNull();
 
     start(
-        runInShell: runInShell,
-        privileged: privileged,
-        extensionSearch: extensionSearch);
+      runInShell: runInShell,
+      privileged: privileged,
+      extensionSearch: extensionSearch,
+    );
     processStream(progress, nothrow: nothrow);
 
     return progress;
@@ -171,11 +177,12 @@ class RunnableProcess {
 
     try {
       start(
-          runInShell: runInShell,
-          detached: detached,
-          terminal: terminal,
-          privileged: privileged,
-          extensionSearch: extensionSearch);
+        runInShell: runInShell,
+        detached: detached,
+        terminal: terminal,
+        privileged: privileged,
+        extensionSearch: extensionSearch,
+      );
       if (terminal == true) {
         /// we can't process io as the terminal
         // has inherited the IO so we dont' see it.
@@ -225,8 +232,10 @@ class RunnableProcess {
     var workdir = workingDirectory;
     workdir ??= Directory.current.path;
 
-    assert(!(terminal == true && detached == true),
-        'You cannot enable terminal and detached at the same time.');
+    assert(
+      !(terminal == true && detached == true),
+      'You cannot enable terminal and detached at the same time.',
+    );
 
     var mode = detached ? ProcessStartMode.detached : ProcessStartMode.normal;
     if (terminal) {
@@ -250,15 +259,20 @@ class RunnableProcess {
     if (Settings().isVerbose) {
       final cmdLine = "${_parsed.cmd} ${_parsed.args.join(' ')}";
       verbose(() => 'Process.start: cmdLine ${green(cmdLine)}');
-      verbose(() => 'Process.start: runInShell: $runInShell '
-          'workingDir: $workingDirectory mode: $mode '
-          'cmd: ${_parsed.cmd} args: ${_parsed.args.join(', ')}');
+      verbose(
+        () => 'Process.start: runInShell: $runInShell '
+            'workingDir: $workingDirectory mode: $mode '
+            'cmd: ${_parsed.cmd} args: ${_parsed.args.join(', ')}',
+      );
     }
 
     if (!exists(workdir)) {
       final cmdLine = "${_parsed.cmd} ${_parsed.args.join(' ')}";
-      throw RunException(cmdLine, -1,
-          'The specified workingDirectory [$workdir] does not exist.');
+      throw RunException(
+        cmdLine,
+        -1,
+        'The specified workingDirectory [$workdir] does not exist.',
+      );
     }
     _fProcess = Process.start(
       _parsed.cmd,
@@ -311,14 +325,17 @@ class RunnableProcess {
       progress.exitCode = exitCode;
 
       if (exitCode != 0 && nothrow == false) {
-        exited.completeError(RunException.withArgs(
+        exited.completeError(
+          RunException.withArgs(
             _parsed.cmd,
             _parsed.args,
             exitCode,
             'The command '
             '${red('[${_parsed.cmd}] with args [${_parsed.args.join(', ')}]')} '
             'failed with exitCode: $exitCode '
-            'workingDirectory: $workingDirectory'));
+            'workingDirectory: $workingDirectory',
+          ),
+        );
       } else {
         exited.complete(exitCode);
       }
@@ -379,14 +396,15 @@ class RunnableProcess {
         progress.exitCode = exitCode;
         if (exitCode != 0 && nothrow == false) {
           final error = RunException.withArgs(
-              _parsed.cmd,
-              _parsed.args,
-              exitCode,
-              'The command '
-              // ignore: lines_longer_than_80_chars
-              '${red('[${_parsed.cmd}] with args [${_parsed.args.join(', ')}]')}'
-              ' failed with exitCode: $exitCode '
-              'workingDirectory: $workingDirectory');
+            _parsed.cmd,
+            _parsed.args,
+            exitCode,
+            'The command '
+            // ignore: lines_longer_than_80_chars
+            '${red('[${_parsed.cmd}] with args [${_parsed.args.join(', ')}]')}'
+            ' failed with exitCode: $exitCode '
+            'workingDirectory: $workingDirectory',
+          );
           progress
             ..onError(error)
             ..close();
@@ -422,7 +440,8 @@ class RunnableProcess {
         /// contain data.
         _waitForStreams();
         if (exitCode != 0 && nothrow == false) {
-          exited.completeError(RunException.withArgs(
+          exited.completeError(
+            RunException.withArgs(
               _parsed.cmd,
               _parsed.args,
               exitCode,
@@ -430,7 +449,9 @@ class RunnableProcess {
               // ignore: lines_longer_than_80_chars
               '${red('[${_parsed.cmd}] with args [${_parsed.args.join(', ')}]')}'
               ' failed with exitCode: $exitCode '
-              'workingDirectory: $workingDirectory'));
+              'workingDirectory: $workingDirectory',
+            ),
+          );
         } else {
           exited.complete(true);
         }
@@ -438,8 +459,10 @@ class RunnableProcess {
     })
         //ignore: avoid_types_on_closure_parameters
         .catchError((Object e, StackTrace s) {
-      verbose(() => '${e.toString()} stacktrace: '
-          '${StackTraceImpl.fromStackTrace(s).formatStackTrace()}');
+      verbose(
+        () => '${e.toString()} stacktrace: '
+            '${StackTraceImpl.fromStackTrace(s).formatStackTrace()}',
+      );
       // ignore: only_throw_errors
       throw e;
     }); // .whenComplete(() => print('start completed'));
@@ -523,15 +546,21 @@ class RunnableProcess {
 ///
 class RunException extends DCliException {
   ///
-  RunException(this.cmdLine, this.exitCode, this.reason,
-      {StackTraceImpl? stackTrace})
-      : super(reason, stackTrace);
+  RunException(
+    this.cmdLine,
+    this.exitCode,
+    this.reason, {
+    StackTraceImpl? stackTrace,
+  }) : super(reason, stackTrace);
 
   ///
   RunException.withArgs(
-      String? cmd, List<String?> args, this.exitCode, this.reason,
-      {StackTraceImpl? stackTrace})
-      : cmdLine = '$cmd ${args.join(' ')}',
+    String? cmd,
+    List<String?> args,
+    this.exitCode,
+    this.reason, {
+    StackTraceImpl? stackTrace,
+  })  : cmdLine = '$cmd ${args.join(' ')}',
         super(reason, stackTrace);
 
   @override

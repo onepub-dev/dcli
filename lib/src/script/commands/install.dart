@@ -72,7 +72,8 @@ class InstallCommand extends Command {
 
     if (subarguments.length != scriptIndex) {
       throw InvalidArguments(
-          "'dcli install' does not take any arguments. Found $subarguments");
+        "'dcli install' does not take any arguments. Found $subarguments",
+      );
     }
 
     _requirePrivileges = !flagSet.isSet(const _NoPrivilegesFlag());
@@ -92,7 +93,8 @@ class InstallCommand extends Command {
       print('Installing DCli v$packageVersion ...');
     }
     _qprint(
-        green('Hang on a tick whilst we install DCli ${Settings().version}'));
+      green('Hang on a tick whilst we install DCli ${Settings().version}'),
+    );
 
     _qprint('');
 
@@ -108,8 +110,10 @@ class InstallCommand extends Command {
 
     // Create the ~/.dcli root.
     if (!exists(Settings().pathToDCli)) {
-      _qprint('${blue('Creating')} ${green('.dcli')} '
-          '${blue('directory: ${Settings().pathToDCli}')}');
+      _qprint(
+        '${blue('Creating')} ${green('.dcli')} '
+        '${blue('directory: ${Settings().pathToDCli}')}',
+      );
       createDir(Settings().pathToDCli);
     } else {
       _qprint(blue('Found existing install at: ${Settings().pathToDCli}.'));
@@ -118,11 +122,15 @@ class InstallCommand extends Command {
 
     /// create the template directory.
     if (!exists(Settings().pathToTemplate)) {
-      _qprint('${blue('Creating')} ${green('template')} '
-          '${blue('directory: ${Settings().pathToTemplate}.')}');
+      _qprint(
+        '${blue('Creating')} ${green('template')} '
+        '${blue('directory: ${Settings().pathToTemplate}.')}',
+      );
     } else {
-      _qprint('${blue('Updating ${green('template')} ')}'
-          '${blue('directory: ${Settings().pathToTemplate}.')}');
+      _qprint(
+        '${blue('Updating ${green('template')} ')}'
+        '${blue('directory: ${Settings().pathToTemplate}.')}',
+      );
     }
 
     initTemplates();
@@ -131,8 +139,10 @@ class InstallCommand extends Command {
     final binPath = Settings().pathToDCliBin;
     if (!exists(binPath)) {
       _qprint('');
-      _qprint('${blue('Creating ${green('bin')} ')}'
-          '${blue('directory: $binPath.')}');
+      _qprint(
+        '${blue('Creating ${green('bin')} ')}'
+        '${blue('directory: $binPath.')}',
+      );
       createDir(binPath);
     }
 
@@ -140,12 +150,20 @@ class InstallCommand extends Command {
     // check if shell can add a path.
     if (shell.appendToPATH(binPath)) {
       if (!wasOnPath) {
-        _qprint(orange('You will need to restart your terminal '
-            'for DCli to be on your PATH.'));
+        _qprint(
+          orange(
+            'You will need to restart your terminal '
+            'for DCli to be on your PATH.',
+          ),
+        );
       }
     } else {
-      _qprint(orange('If you want to use dcli compile -i to install scripts, '
-          'add $binPath to your PATH.'));
+      _qprint(
+        orange(
+          'If you want to use dcli compile -i to install scripts, '
+          'add $binPath to your PATH.',
+        ),
+      );
     }
 
     shell.addFileAssocation(binPath);
@@ -192,7 +210,8 @@ class InstallCommand extends Command {
     if (dartWasInstalled) {
       _qprint('');
       _qprint(
-          red('You need to restart your shell for the adjusted PATH to work.'));
+        red('You need to restart your shell for the adjusted PATH to work.'),
+      );
       _qprint('');
     }
 

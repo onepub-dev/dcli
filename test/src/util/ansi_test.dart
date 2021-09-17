@@ -10,11 +10,15 @@ void main() {
       Ansi.isSupported = true;
       expect(Ansi.strip(red('red')), equals('red'));
       expect(
-          Ansi.strip('${red('red')} ${green('green')}'), equals('red green'));
+        Ansi.strip('${red('red')} ${green('green')}'),
+        equals('red green'),
+      );
 
       expect(Ansi.strip(red('red', bold: false)), equals('red'));
-      expect(Ansi.strip(red('red', bold: false, background: AnsiColor.red)),
-          equals('red'));
+      expect(
+        Ansi.strip(red('red', bold: false, background: AnsiColor.red)),
+        equals('red'),
+      );
 
       /// Create encoded string that we know is has ansi codes
       /// This string
@@ -29,8 +33,10 @@ void main() {
       print('original $ansi');
       print('replaced ${Ansi.strip(ansi)}');
 
-      expect(Ansi.strip(ansi),
-          equals('1:0:0:0 test/bad_test.dart: Tests completed.'));
+      expect(
+        Ansi.strip(ansi),
+        equals('1:0:0:0 test/bad_test.dart: Tests completed.'),
+      );
     });
   });
 

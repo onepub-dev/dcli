@@ -28,8 +28,8 @@ void main() {
       int? exit = -1;
       try {
         exit = DartScript.fromFile(
-                join(fs.testScriptPath, 'general/bin/which.dart'))
-            .run(args: ['ls']);
+          join(fs.testScriptPath, 'general/bin/which.dart'),
+        ).run(args: ['ls']);
       } on DCliException catch (e) {
         print(e);
       }
@@ -44,8 +44,8 @@ void main() {
         print(pwd);
 
         exit = DartScript.fromFile(
-                join(fs.testScriptPath, 'general/bin/hello_world.dart'))
-            .run();
+          join(fs.testScriptPath, 'general/bin/hello_world.dart'),
+        ).run();
       } on DCliException catch (e) {
         print(e);
       }
@@ -59,9 +59,12 @@ void main() {
       try {
         print(pwd);
 
-        exit = DartScript.fromFile(join(fs.testScriptPath,
-                'traditional_project/bin/nested/traditional.dart'))
-            .run();
+        exit = DartScript.fromFile(
+          join(
+            fs.testScriptPath,
+            'traditional_project/bin/nested/traditional.dart',
+          ),
+        ).run();
       } on DCliException catch (e) {
         print(e);
       }
@@ -69,25 +72,32 @@ void main() {
     });
   });
 
-  test('run  with traditional dart project structure - example', () {
-    TestFileSystem().withinZone((fs) {
-      int? exit = -1;
-      try {
-        print(pwd);
-        exit = DartScript.fromFile(join(fs.testScriptPath,
-                'traditional_project/example/traditional.dart'))
-            .run();
-      } on DCliException catch (e) {
-        print(e);
-      }
-      expect(exit, equals(0));
-    });
+  test(
+    'run  with traditional dart project structure - example',
+    () {
+      TestFileSystem().withinZone((fs) {
+        int? exit = -1;
+        try {
+          print(pwd);
+          exit = DartScript.fromFile(
+            join(
+              fs.testScriptPath,
+              'traditional_project/example/traditional.dart',
+            ),
+          ).run();
+        } on DCliException catch (e) {
+          print(e);
+        }
+        expect(exit, equals(0));
+      });
 
-    /// this script no longer exists after changing the rules about how we
-    /// locate pubspec.yaml files.
-    // ignore: flutter_style_todos
-    /// TODO: do we still need a test like this one?
-  }, skip: true);
+      /// this script no longer exists after changing the rules about how we
+      /// locate pubspec.yaml files.
+      // ignore: flutter_style_todos
+      /// TODO: do we still need a test like this one?
+    },
+    skip: true,
+  );
 
   test('run  with traditional dart project structure - tool', () {
     TestFileSystem().withinZone((fs) {
@@ -95,9 +105,12 @@ void main() {
       try {
         print(pwd);
 
-        exit = DartScript.fromFile(join(
-                fs.testScriptPath, 'traditional_project/tool/traditional.dart'))
-            .run();
+        exit = DartScript.fromFile(
+          join(
+            fs.testScriptPath,
+            'traditional_project/tool/traditional.dart',
+          ),
+        ).run();
       } on DCliException catch (e) {
         print(e);
       }

@@ -3,12 +3,12 @@ import 'dart:convert';
 import 'dart:io';
 
 import 'package:crypto/crypto.dart';
-
 import 'package:uuid/uuid.dart';
-import '../../dcli.dart';
 
+import '../../dcli.dart';
 import '../settings.dart';
 import 'dcli_exception.dart';
+import 'platform.dart';
 import 'runnable_process.dart';
 import 'stack_trace_impl.dart';
 import 'wait_for_ex.dart';
@@ -56,9 +56,11 @@ class FileSync {
   /// Reads a single line from the file.
   /// [lineDelimiter] the end of line delimiter.
   /// May be one or two characters long.
-  /// Defaults to \n.
+  /// Defaults to the platform specific delimiter as
+  /// defined by  [Platform().eol].
   ///
-  String? readLine({String lineDelimiter = '\n'}) {
+  String? readLine({String? lineDelimiter}) {
+    lineDelimiter ??= Platform().eol;
     final line = StringBuffer();
     int byte;
     var priorChar = '';
@@ -114,21 +116,22 @@ class FileSync {
 
     subscription =
         utf8.decoder.bind(inputStream).transform(const LineSplitter()).listen(
-            (line) {
-              final cont = lineAction(line);
-              if (cont == false) {
-                subscription.cancel().then((finished) => done.complete(true));
-              }
-            },
-            cancelOnError: true,
-            //ignore: avoid_types_on_closure_parameters
-            onError: (Object error) {
-              exception = error;
-              done.complete(false);
-            },
-            onDone: () {
-              done.complete(true);
-            });
+              (line) {
+                final cont = lineAction(line);
+                if (cont == false) {
+                  subscription.cancel().then((finished) => done.complete(true));
+                }
+              },
+              cancelOnError: true,
+              //ignore: avoid_types_on_closure_parameters
+              onError: (Object error) {
+                exception = error;
+                done.complete(false);
+              },
+              onDone: () {
+                done.complete(true);
+              },
+            );
 
     waitForEx(done.future);
 
@@ -147,10 +150,12 @@ class FileSync {
 
   /// Truncates the file to zero bytes and
   /// then writes the given text to the file.
-  /// If [newline] is null then no line terminator will
-  /// be added.
-  void write(String line, {String? newline = '\n'}) {
-    final finalline = line + (newline ?? '');
+  /// If [newline] is null or isn't passed then the platform
+  /// end of line characters are appended as defined by
+  /// [Platform().eol].
+  /// Pass null or an '' to [newline] to not add a line terminator.
+  void write(String line, {String? newline}) {
+    final finalline = line + (newline ?? Platform().eol);
     _raf
       ..truncateSync(0)
       ..setPositionSync(0)
@@ -158,10 +163,46 @@ class FileSync {
       ..writeStringSync(finalline);
   }
 
+  /// Exposed the RandomFileAccess method writeFromSync.
+  ///
+  /// Synchronously writes from a [buffer] to the file
+  /// at the current seek position and increments the seek position
+  /// by the no. of bytes written.
+  /// Will read the buffer from index [start] to index [end].
+  /// The [start] must be non-negative and no greater than [buffer].length.
+  /// If [end] is omitted, it defaults to [buffer].length.
+  /// Otherwise [end] must be no less than [start] and no
+  /// greater than [buffer].length.
+  /// Throws a [FileSystemException] if the operation fails.
+  void writeFromSync(List<int> buffer, [int start = 0, int? end]) {
+    _raf.writeFromSync(buffer, start, end);
+  }
+
+  /// Exposed the RandomFileAccess method readIntoSync
+  /// Synchronously reads into an existing [buffer].
+  ///
+  /// Reads bytes and writes then into the the range of [buffer] from [start]
+  /// to [end].
+  /// The [start] must be non-negative and no greater than [buffer].length.
+  /// If [end] is omitted, it defaults to [buffer].length.
+  /// Otherwise [end] must be no less than [start] and no greater
+  ///  than [buffer].length.
+  ///
+  /// Returns the number of bytes read. This maybe be less than end - start
+  ///  if the file doesn't have that many bytes to read.
+  ///
+  /// Throws a [FileSystemException] if the operation fails.
+  int readIntoSync(List<int> buffer, [int start = 0, int? end]) =>
+      _raf.readIntoSync(buffer, start, end);
+
   /// Appends the [line] to the file
-  /// If [newline] is true then append a newline after the line.
-  void append(String line, {String? newline = '\n'}) {
-    final finalline = line + (newline ?? '');
+  /// Appends [newline] after the line.
+  /// If [newline] is null or isn't passed then the platform
+  /// end of line characters are appended as defined by
+  /// [Platform().eol].
+  /// Pass null or an '' to [newline] to not add a line terminator.
+  void append(String line, {String? newline}) {
+    final finalline = line + (newline ?? Platform().eol);
 
     _raf
       ..setPositionSync(_raf.lengthSync())
@@ -185,8 +226,11 @@ class FileSync {
 /// Opens a File and calls [action] passing in the open file.
 /// When action completes the file is closed.
 /// Use this method in preference to directly callling [FileSync()]
-R withOpenFile<R>(String pathToFile, R Function(FileSync) action,
-    {FileMode fileMode = FileMode.writeOnlyAppend}) {
+R withOpenFile<R>(
+  String pathToFile,
+  R Function(FileSync) action, {
+  FileMode fileMode = FileMode.writeOnlyAppend,
+}) {
   final file = FileSync(pathToFile, fileMode: fileMode);
 
   R result;
@@ -271,22 +315,25 @@ String resolveSymLink(String pathToLink) {
 ///
 FileStat stat(String path) => File(path).statSync();
 
-/// Generates a temporary filename in the system temp directory
-/// that is guaranteed to be unique.
+/// Generates a temporary filename in [pathToTempDir]
+/// or if inTempDir os not passed then in
+/// the system temp directory.
+/// The generated filename is is guaranteed to be globally unique.
 ///
 /// This method does NOT create the file.
 ///
 /// The temp file name will be <uuid>.tmp
 /// unless you provide a [suffix] in which
 /// case the file name will be <uuid>.<suffix>
-String createTempFilename({String? suffix}) {
+String createTempFilename({String? suffix, String? pathToTempDir}) {
   var finalsuffix = suffix ?? 'tmp';
 
   if (!finalsuffix.startsWith('.')) {
     finalsuffix = '.$finalsuffix';
   }
+  pathToTempDir ??= Directory.systemTemp.path;
   const uuid = Uuid();
-  return '${join(Directory.systemTemp.path, uuid.v4())}$finalsuffix';
+  return '${join(pathToTempDir, uuid.v4())}$finalsuffix';
 }
 
 /// Generates a temporary filename in the system temp directory
@@ -310,19 +357,28 @@ int fileLength(String pathToFile) => File(pathToFile).lengthSync();
 ///
 /// Once [action] completes the temporary file will be deleted.
 ///
-/// The [action]s return value [R] is returned from the [withTempDir]
+/// The [action]s return value [R] is returned from the [withTempFile]
 /// function.
 ///
 /// If [create] is true (default true) then the temp file will be
 /// created. If [create] is false then just the name will be
 /// generated.
 ///
+/// if [pathToTempDir] is passed then the file will be created in that
+/// directory otherwise the file will be created in the system
+/// temp directory.
+///
 /// The temp file name will be <uuid>.tmp
 /// unless you provide a [suffix] in which
 /// case the file name will be <uuid>.<suffix>
-R withTempFile<R>(R Function(String tempFile) action,
-    {String? suffix, bool create = true, bool keep = false}) {
-  final tmp = createTempFilename(suffix: suffix);
+R withTempFile<R>(
+  R Function(String tempFile) action, {
+  String? suffix,
+  String? pathToTempDir,
+  bool create = true,
+  bool keep = false,
+}) {
+  final tmp = createTempFilename(suffix: suffix, pathToTempDir: pathToTempDir);
   if (create) {
     touch(tmp, create: true);
   }
@@ -346,18 +402,18 @@ R withTempFile<R>(R Function(String tempFile) action,
 ///
 /// You can use this method to check if a file
 /// has changes since the last time you took
-/// the files hash.
+/// the file's hash.
 ///
 /// Throws [FileNotFoundException] if [path]
 /// doesn't exist.
 /// Throws [NotAFileException] if path is
-/// a directory.
+/// not a file.
 Digest calculateHash(String path) {
   if (!exists(path)) {
     throw FileNotFoundException(path);
   }
 
-  if (isDirectory(path)) {
+  if (!isFile(path)) {
     throw NotAFileException(path);
   }
   final input = File(path);

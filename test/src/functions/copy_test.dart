@@ -55,10 +55,15 @@ void main() {
     createDir(to, recursive: true);
 
     expect(
-        () => copy(from, to),
-        throwsA(predicate((e) =>
-            e is CopyException &&
-            e.message == 'The from file ${truepath(from)} does not exists.')));
+      () => copy(from, to),
+      throwsA(
+        predicate(
+          (e) =>
+              e is CopyException &&
+              e.message == 'The from file ${truepath(from)} does not exists.',
+        ),
+      ),
+    );
   });
 
   test('copy filename -  to already exists', () async {
@@ -73,10 +78,15 @@ void main() {
     touch(to, create: true);
 
     expect(
-        () => copy(from, to),
-        throwsA(predicate((e) =>
-            e is CopyException &&
-            e.message == 'The target file ${truepath(to)} already exists.')));
+      () => copy(from, to),
+      throwsA(
+        predicate(
+          (e) =>
+              e is CopyException &&
+              e.message == 'The target file ${truepath(to)} already exists.',
+        ),
+      ),
+    );
   });
 
   test('copy with overwrite', () async {
@@ -115,11 +125,16 @@ void main() {
     final to = join(root, 'new', toFilename);
 
     expect(
-        () => copy(from, to),
-        throwsA(predicate((e) =>
-            e is CopyException &&
-            e.message ==
-                'The to directory ${truepath(dirname(to))} does not exists.')));
+      () => copy(from, to),
+      throwsA(
+        predicate(
+          (e) =>
+              e is CopyException &&
+              e.message ==
+                  'The to directory ${truepath(dirname(to))} does not exists.',
+        ),
+      ),
+    );
   });
 
   test("copy to directory -  to directory doesn't exist", () async {
@@ -131,10 +146,15 @@ void main() {
     final to = join(root, 'new', 'new');
 
     expect(
-        () => copy(from, to),
-        throwsA(predicate((e) =>
-            e is CopyException &&
-            e.message ==
-                'The to directory ${truepath(dirname(to))} does not exists.')));
+      () => copy(from, to),
+      throwsA(
+        predicate(
+          (e) =>
+              e is CopyException &&
+              e.message ==
+                  'The to directory ${truepath(dirname(to))} does not exists.',
+        ),
+      ),
+    );
   });
 }

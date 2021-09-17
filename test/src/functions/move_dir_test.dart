@@ -37,10 +37,15 @@ void main() {
         }
 
         t.expect(
-            () => moveDir(from, to),
-            throwsA(t.predicate<MoveDirException>((e) =>
-                e is MoveDirException &&
-                e.message == 'The [to] path ${truepath(to)} must NOT exist.')));
+          () => moveDir(from, to),
+          throwsA(
+            t.predicate<MoveDirException>(
+              (e) =>
+                  e is MoveDirException &&
+                  e.message == 'The [to] path ${truepath(to)} must NOT exist.',
+            ),
+          ),
+        );
       });
     });
 
@@ -56,11 +61,16 @@ void main() {
         touch(from, create: true);
 
         t.expect(
-            () => moveDir(from, to),
-            throwsA(t.predicate<MoveDirException>((e) =>
-                e is MoveDirException &&
-                e.message ==
-                    'The [from] path ${truepath(from)} must be a directory.')));
+          () => moveDir(from, to),
+          throwsA(
+            t.predicate<MoveDirException>(
+              (e) =>
+                  e is MoveDirException &&
+                  e.message ==
+                      'The [from] path ${truepath(from)} must be a directory.',
+            ),
+          ),
+        );
       });
     });
 
@@ -71,11 +81,16 @@ void main() {
         final to = join(fsRoot, 'new_top');
 
         t.expect(
-            () => moveDir(from, to),
-            throwsA(t.predicate<MoveDirException>((e) =>
-                e is MoveDirException &&
-                e.message ==
-                    'The [from] path ${truepath(from)} does not exists.')));
+          () => moveDir(from, to),
+          throwsA(
+            t.predicate<MoveDirException>(
+              (e) =>
+                  e is MoveDirException &&
+                  e.message ==
+                      'The [from] path ${truepath(from)} does not exists.',
+            ),
+          ),
+        );
       });
     });
   });

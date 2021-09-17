@@ -135,8 +135,10 @@ class InvalidScript extends CommandLineException {
 class UnknownCommand extends CommandLineException {
   ///
   UnknownCommand(String command)
-      : super('The command $command was not recognised. '
-            'Scripts must end with .dart!');
+      : super(
+          'The command $command was not recognised. '
+          'Scripts must end with .dart!',
+        );
 }
 
 /// Thrown when an unknown flag is passed to a command.

@@ -90,8 +90,10 @@ int? run(
 }) {
   workingDirectory ??= pwd;
 
-  final runnable = RunnableProcess.fromCommandLine(commandLine,
-      workingDirectory: workingDirectory);
+  final runnable = RunnableProcess.fromCommandLine(
+    commandLine,
+    workingDirectory: workingDirectory,
+  );
 
   return runnable
       .run(
@@ -163,8 +165,11 @@ Progress startFromArgs(
 }) {
   progress ??= Progress.print();
   workingDirectory ??= pwd;
-  final runnable = RunnableProcess.fromCommandArgs(command, args,
-      workingDirectory: workingDirectory);
+  final runnable = RunnableProcess.fromCommandArgs(
+    command,
+    args,
+    workingDirectory: workingDirectory,
+  );
 
   return runnable.run(
     progress: progress,
@@ -224,18 +229,22 @@ Progress startFromArgs(
 /// If you pass [detached] = true then the process is spawned but we don't wait
 /// for it to complete nor is any io available.
 ///
-Progress start(String commandLine,
-    {Progress? progress,
-    bool runInShell = false,
-    bool detached = false,
-    bool terminal = false,
-    bool nothrow = false,
-    bool privileged = false,
-    String? workingDirectory,
-    bool extensionSearch = true}) {
+Progress start(
+  String commandLine, {
+  Progress? progress,
+  bool runInShell = false,
+  bool detached = false,
+  bool terminal = false,
+  bool nothrow = false,
+  bool privileged = false,
+  String? workingDirectory,
+  bool extensionSearch = true,
+}) {
   workingDirectory ??= pwd;
-  final runnable = RunnableProcess.fromCommandLine(commandLine,
-      workingDirectory: workingDirectory);
+  final runnable = RunnableProcess.fromCommandLine(
+    commandLine,
+    workingDirectory: workingDirectory,
+  );
 
   return runnable.run(
     progress: progress,
@@ -275,8 +284,10 @@ Progress startStreaming(
   bool extensionSearch = true,
 }) {
   workingDirectory ??= pwd;
-  final runnable = RunnableProcess.fromCommandLine(commandLine,
-      workingDirectory: workingDirectory);
+  final runnable = RunnableProcess.fromCommandLine(
+    commandLine,
+    workingDirectory: workingDirectory,
+  );
 
   return runnable.runStreaming(
     progress: progress,

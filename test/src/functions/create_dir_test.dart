@@ -50,8 +50,10 @@ void main() {
     t.test('deleteDir failure', () {
       withTempDir((testRoot) {
         final testDirectory = join(testRoot, 'tmp_test');
-        t.expect(() => deleteDir(testDirectory),
-            t.throwsA(isA<DeleteDirException>()));
+        t.expect(
+          () => deleteDir(testDirectory),
+          t.throwsA(isA<DeleteDirException>()),
+        );
       });
     });
 
@@ -59,7 +61,9 @@ void main() {
       withTempDir((testRoot) {
         final testPath = join(testRoot, 'tmp_test/longer/and/longer');
         t.expect(
-            () => createDir(testPath), t.throwsA(isA<CreateDirException>()));
+          () => createDir(testPath),
+          t.throwsA(isA<CreateDirException>()),
+        );
       });
     });
 
@@ -81,11 +85,14 @@ void main() {
     });
 
     t.test('withTempDir - keep', () {
-      final dir = withTempDir((tempDir) {
-        expect(exists(tempDir), isTrue);
+      final dir = withTempDir(
+        (tempDir) {
+          expect(exists(tempDir), isTrue);
 
-        return tempDir;
-      }, keep: true);
+          return tempDir;
+        },
+        keep: true,
+      );
 
       expect(exists(dir), isTrue);
     });

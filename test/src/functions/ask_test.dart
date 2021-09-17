@@ -3,46 +3,79 @@ import 'package:dcli/dcli.dart' hide equals;
 import 'package:test/test.dart';
 
 void main() {
-  test('defaultValue', () {
-    Settings().setVerbose(enabled: false);
-    var result = ask('How old are you', defaultValue: '5');
-    print('result: $result');
-    result = ask('How old are you', defaultValue: '5', validator: Ask.integer);
-    print('result: $result');
-  }, skip: true);
+  test(
+    'defaultValue',
+    () {
+      Settings().setVerbose(enabled: false);
+      var result = ask('How old are you', defaultValue: '5');
+      print('result: $result');
+      result =
+          ask('How old are you', defaultValue: '5', validator: Ask.integer);
+      print('result: $result');
+    },
+    skip: true,
+  );
 
-  test('range', () {
-    final result = ask('Range Test: How old are you',
-        defaultValue: '5', validator: Ask.lengthRange(4, 7));
-    print('result: $result');
-  }, skip: true);
+  test(
+    'range',
+    () {
+      final result = ask(
+        'Range Test: How old are you',
+        defaultValue: '5',
+        validator: Ask.lengthRange(4, 7),
+      );
+      print('result: $result');
+    },
+    skip: true,
+  );
 
-  test('regexp', () {
-    final validator = Ask.regExp(r'^[a-zA-Z0-9_\-]+');
+  test(
+    'regexp',
+    () {
+      final validator = Ask.regExp(r'^[a-zA-Z0-9_\-]+');
 
-    expect(
+      expect(
         () => validator.validate('!'),
-        throwsA(predicate<AskValidatorException>((e) =>
-            e is AskValidatorException &&
-            e.message == red(r'Input does not match: ^[a-zA-Z0-9_\-]+'))));
+        throwsA(
+          predicate<AskValidatorException>(
+            (e) =>
+                e is AskValidatorException &&
+                e.message == red(r'Input does not match: ^[a-zA-Z0-9_\-]+'),
+          ),
+        ),
+      );
 
-    expect(validator.validate('_'), '_');
-  }, skip: false);
+      expect(validator.validate('_'), '_');
+    },
+    skip: false,
+  );
 
-  test('confirm no default', () {
-    final result = confirm('Are you good?');
-    print('result: $result');
-  }, skip: true);
+  test(
+    'confirm no default',
+    () {
+      final result = confirm('Are you good?');
+      print('result: $result');
+    },
+    skip: true,
+  );
 
-  test('confirm default=true', () {
-    final result = confirm('Are you good?', defaultValue: true);
-    print('result: $result');
-  }, skip: true);
+  test(
+    'confirm default=true',
+    () {
+      final result = confirm('Are you good?', defaultValue: true);
+      print('result: $result');
+    },
+    skip: true,
+  );
 
-  test('confirm default=false', () {
-    final result = confirm('Are you good?', defaultValue: false);
-    print('result: $result');
-  }, skip: true);
+  test(
+    'confirm default=false',
+    () {
+      final result = confirm('Are you good?', defaultValue: false);
+      print('result: $result');
+    },
+    skip: true,
+  );
 
   test('ask.any - success', () {
     final validator = Ask.any([
@@ -62,9 +95,14 @@ void main() {
     ]);
 
     expect(
-        () => validator.validate('abc'),
-        throwsA(predicate<AskValidatorException>((e) =>
-            e is AskValidatorException && e.message == red('Invalid FQDN.'))));
+      () => validator.validate('abc'),
+      throwsA(
+        predicate<AskValidatorException>(
+          (e) =>
+              e is AskValidatorException && e.message == red('Invalid FQDN.'),
+        ),
+      ),
+    );
   });
 
   test('ask.all - success', () {
@@ -85,19 +123,30 @@ void main() {
     ]);
 
     expect(
-        () => validator.validate('9'),
-        throwsA(isA<AskValidatorException>().having((e) => e.message, 'message',
-            equals(red('The number must be greater than or equal to 10.')))));
+      () => validator.validate('9'),
+      throwsA(
+        isA<AskValidatorException>().having(
+          (e) => e.message,
+          'message',
+          equals(red('The number must be greater than or equal to 10.')),
+        ),
+      ),
+    );
   });
 
   test('ask.integer - failure', () {
     const validator = Ask.integer;
 
     expect(
-        () => validator.validate('a'),
-        throwsA(predicate<AskValidatorException>((e) =>
-            e is AskValidatorException &&
-            e.message == red('Invalid integer.'))));
+      () => validator.validate('a'),
+      throwsA(
+        predicate<AskValidatorException>(
+          (e) =>
+              e is AskValidatorException &&
+              e.message == red('Invalid integer.'),
+        ),
+      ),
+    );
 
     expect(validator.validate('9'), equals('9'));
   });

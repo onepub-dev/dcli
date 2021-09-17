@@ -16,7 +16,9 @@ void main() {
       const test = '';
 
       expect(
-          () => ParsedCliCommand(test, pwd), throwsA(isA<InvalidArguments>()));
+        () => ParsedCliCommand(test, pwd),
+        throwsA(isA<InvalidArguments>()),
+      );
     });
     test('a', () {
       const test = 'a';
@@ -87,12 +89,13 @@ void main() {
 
       expect(parsed.cmd, equals('ssh'));
       expect(
-          parsed.args,
-          equals([
-            '-t',
-            'bilby.clouddialer.com.au',
-            'echo abc123 | sudo -S  $command'
-          ]));
+        parsed.args,
+        equals([
+          '-t',
+          'bilby.clouddialer.com.au',
+          'echo abc123 | sudo -S  $command'
+        ]),
+      );
     });
   });
 
@@ -102,83 +105,109 @@ void main() {
     });
   });
 
-  test('linux/macos', () {
-    withTempDir((fsRoot) {
-      final fs = TestDirectoryTree(fsRoot);
-      final parsed = ParsedCliCommand('ls *.jpg *.png', fs.top);
+  test(
+    'linux/macos',
+    () {
+      withTempDir((fsRoot) {
+        final fs = TestDirectoryTree(fsRoot);
+        final parsed = ParsedCliCommand('ls *.jpg *.png', fs.top);
 
-      expect(parsed.cmd, equals('ls'));
+        expect(parsed.cmd, equals('ls'));
 
-      expect(
+        expect(
           parsed.args,
           unorderedEquals(<String>[
             'fred.jpg',
             'one.jpg',
             'fred.png',
-          ]));
-    });
-  }, onPlatform: <String, Skip>{
-    'windows': const Skip("Powershell doesn't do glob expansion")
-  });
+          ]),
+        );
+      });
+    },
+    onPlatform: <String, Skip>{
+      'windows': const Skip("Powershell doesn't do glob expansion")
+    },
+  );
 
-  test('.*', () {
-    withTempDir((fsRoot) {
-      final fs = TestDirectoryTree(fsRoot);
-      final parsed = ParsedCliCommand('ls .*', fs.top);
+  test(
+    '.*',
+    () {
+      withTempDir((fsRoot) {
+        final fs = TestDirectoryTree(fsRoot);
+        final parsed = ParsedCliCommand('ls .*', fs.top);
 
-      expect(parsed.cmd, equals('ls'));
+        expect(parsed.cmd, equals('ls'));
 
-      expect(parsed.args, unorderedEquals(<String>['.hidden', '.two.txt']));
-    });
-  }, onPlatform: <String, Skip>{
-    'windows': const Skip("Powershell doesn't do glob expansion")
-  });
+        expect(parsed.args, unorderedEquals(<String>['.hidden', '.two.txt']));
+      });
+    },
+    onPlatform: <String, Skip>{
+      'windows': const Skip("Powershell doesn't do glob expansion")
+    },
+  );
 
-  test('invalid/.*', () {
-    withTempDir((fsRoot) {
-      final fs = TestDirectoryTree(fsRoot);
+  test(
+    'invalid/.*',
+    () {
+      withTempDir((fsRoot) {
+        final fs = TestDirectoryTree(fsRoot);
 
-      expect(() => ParsedCliCommand('ls invalid/.*', fs.top),
-          throwsA(isA<FileSystemException>()));
-    });
-  }, onPlatform: <String, Skip>{
-    'windows': const Skip("Powershell doesn't do glob expansion")
-  });
+        expect(
+          () => ParsedCliCommand('ls invalid/.*', fs.top),
+          throwsA(isA<FileSystemException>()),
+        );
+      });
+    },
+    onPlatform: <String, Skip>{
+      'windows': const Skip("Powershell doesn't do glob expansion")
+    },
+  );
 
-  test('valid/.*', () {
-    withTempDir((fsRoot) {
-      final fs = TestDirectoryTree(fsRoot);
+  test(
+    'valid/.*',
+    () {
+      withTempDir((fsRoot) {
+        final fs = TestDirectoryTree(fsRoot);
 
-      final parsed = ParsedCliCommand('ls middle/.*', fs.top);
+        final parsed = ParsedCliCommand('ls middle/.*', fs.top);
 
-      expect(parsed.cmd, equals('ls'));
+        expect(parsed.cmd, equals('ls'));
 
-      expect(parsed.args,
-          unorderedEquals(<String>['middle/.hidden', 'middle/.four.txt']));
-    });
-  }, onPlatform: <String, Skip>{
-    'windows': const Skip("Powershell doesn't do glob expansion")
-  });
+        expect(
+          parsed.args,
+          unorderedEquals(<String>['middle/.hidden', 'middle/.four.txt']),
+        );
+      });
+    },
+    onPlatform: <String, Skip>{
+      'windows': const Skip("Powershell doesn't do glob expansion")
+    },
+  );
 
-  test('alternate working directory', () {
-    withTempDir((fsRoot) {
-      final fs = TestDirectoryTree(fsRoot);
+  test(
+    'alternate working directory',
+    () {
+      withTempDir((fsRoot) {
+        final fs = TestDirectoryTree(fsRoot);
 
-      final parsed = ParsedCliCommand('ls *.txt *.jpg', fs.middle);
+        final parsed = ParsedCliCommand('ls *.txt *.jpg', fs.middle);
 
-      expect(parsed.cmd, equals('ls'));
+        expect(parsed.cmd, equals('ls'));
 
-      expect(
+        expect(
           parsed.args,
           unorderedEquals(<String>[
             'three.txt',
             'four.txt',
             'two.jpg',
-          ]));
-    });
-  }, onPlatform: <String, Skip>{
-    'windows': const Skip("Powershell doesn't do glob expansion")
-  });
+          ]),
+        );
+      });
+    },
+    onPlatform: <String, Skip>{
+      'windows': const Skip("Powershell doesn't do glob expansion"),
+    },
+  );
 
   test('valid non-local path', () {
     withTempDir((fsRoot) {
@@ -192,11 +221,12 @@ void main() {
         expect(parsed.args, unorderedEquals(<String>['middle/*.txt']));
       } else {
         expect(
-            parsed.args,
-            unorderedEquals(<String>[
-              'middle/three.txt',
-              'middle/four.txt',
-            ]));
+          parsed.args,
+          unorderedEquals(<String>[
+            'middle/three.txt',
+            'middle/four.txt',
+          ]),
+        );
       }
     });
   });
@@ -213,8 +243,10 @@ void main() {
         expect(parsed.cmd, equals('ls'));
         expect(parsed.args, equals(['/git/dcli/*']));
       } else {
-        expect(() => ParsedCliCommand('ls /git/dcli/*', fs.top),
-            throwsA(isA<FileSystemException>()));
+        expect(
+          () => ParsedCliCommand('ls /git/dcli/*', fs.top),
+          throwsA(isA<FileSystemException>()),
+        );
       }
     });
   });
@@ -231,26 +263,32 @@ void main() {
         expect(parsed.args, unorderedEquals(<String>[join(fs.top, '*.txt')]));
       } else {
         expect(
-            parsed.args,
-            unorderedEquals(
-                <String>[join(fs.top, 'one.txt'), join(fs.top, 'two.txt')]));
+          parsed.args,
+          unorderedEquals(
+            <String>[join(fs.top, 'one.txt'), join(fs.top, 'two.txt')],
+          ),
+        );
       }
     });
   });
 
-  test('windows', () {
-    withTempDir((fsRoot) {
-      final fs = TestDirectoryTree(fsRoot);
+  test(
+    'windows',
+    () {
+      withTempDir((fsRoot) {
+        final fs = TestDirectoryTree(fsRoot);
 
-      final parsed = ParsedCliCommand('ls *.jpg *.png', fs.top);
+        final parsed = ParsedCliCommand('ls *.jpg *.png', fs.top);
 
-      expect(parsed.cmd, equals('ls'));
+        expect(parsed.cmd, equals('ls'));
 
-      expect(parsed.args, equals(['*.jpg', '*.png']));
-    });
-  }, onPlatform: <String, Skip>{
-    'posix': const Skip('posix systems do glob expansion'),
-  });
+        expect(parsed.args, equals(['*.jpg', '*.png']));
+      });
+    },
+    onPlatform: <String, Skip>{
+      'posix': const Skip('posix systems do glob expansion'),
+    },
+  );
 
   test('Quote handling', () {
     const cmd = '''
@@ -281,8 +319,10 @@ docker
     expect(parsed.args[7], equals('''--port=3306'''));
     expect(parsed.args[8], equals('''-e'''));
     expect(
-        parsed.args[9],
-        equals(
-            '''CREATE USER 'me'@'localhost' IDENTIFIED BY 'mypassword'; GRANT ALL ON dcli.* TO 'me'@'slayer';'''));
+      parsed.args[9],
+      equals(
+        '''CREATE USER 'me'@'localhost' IDENTIFIED BY 'mypassword'; GRANT ALL ON dcli.* TO 'me'@'slayer';''',
+      ),
+    );
   });
 }

@@ -54,16 +54,18 @@ String _noFormat<T>(T option) => option.toString();
 /// If the [defaultOption] does not match any the supplied [options]
 /// then an ArgumentError is thrown.
 ///
-T menu<T>(
-    {required String prompt,
-    required List<T> options,
-    T? defaultOption,
-    int? limit,
-    String Function(T)? format,
-    bool fromStart = true}) {
+T menu<T>({
+  required String prompt,
+  required List<T> options,
+  T? defaultOption,
+  int? limit,
+  String Function(T)? format,
+  bool fromStart = true,
+}) {
   if (options.isEmpty) {
     throw ArgumentError(
-        'The list of [options] passed to menu(options: ) was empty.');
+      'The list of [options] passed to menu(options: ) was empty.',
+    );
   }
   limit ??= options.length;
   // ignore: parameter_assignments
@@ -96,9 +98,11 @@ T menu<T>(
   }
 
   if (defaultOption != null && defaultIndex == null) {
-    throw ArgumentError("The [defaultOption] $defaultOption doesn't match any "
-        'of the passed [options].'
-        ' Check the == operator for ${options[0].runtimeType}.');
+    throw ArgumentError(
+      "The [defaultOption] $defaultOption doesn't match any "
+      'of the passed [options].'
+      ' Check the == operator for ${options[0].runtimeType}.',
+    );
   }
 
   var valid = false;
@@ -127,7 +131,8 @@ class _MenuRange extends AskValidator {
     final value = num.tryParse(finalline);
     if (value == null) {
       throw AskValidatorException(
-          red('Value must be an integer from 1 to $limit'));
+        red('Value must be an integer from 1 to $limit'),
+      );
     }
 
     if (value < 1 || value > limit) {

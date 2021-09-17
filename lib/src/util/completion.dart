@@ -5,8 +5,10 @@ import '../../dcli.dart';
 /// Utility methods to aid the dcli_completion app.
 ///
 
-List<String> completionExpandScripts(String word,
-    {String workingDirectory = '.'}) {
+List<String> completionExpandScripts(
+  String word, {
+  String workingDirectory = '.',
+}) {
   var _workingDirectory = workingDirectory;
 
   var searchTerm = word;
@@ -25,8 +27,10 @@ List<String> completionExpandScripts(String word,
       searchTerm = parts.last;
 
       if (parts.length > 1) {
-        _workingDirectory = join(_workingDirectory,
-            parts.sublist(0, parts.length - 1).join(Platform.pathSeparator));
+        _workingDirectory = join(
+          _workingDirectory,
+          parts.sublist(0, parts.length - 1).join(Platform.pathSeparator),
+        );
       }
     }
   }
@@ -44,11 +48,12 @@ List<String> completionExpandScripts(String word,
   //   searchTerm = '';
   // }
 
-  final entries = find('$searchTerm*',
-          types: [Find.directory, Find.file],
-          workingDirectory: _workingDirectory,
-          recursive: false)
-      .toList();
+  final entries = find(
+    '$searchTerm*',
+    types: [Find.directory, Find.file],
+    workingDirectory: _workingDirectory,
+    recursive: false,
+  ).toList();
 
   final results = <String>[];
   for (final script in entries) {

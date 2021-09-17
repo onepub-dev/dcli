@@ -1,6 +1,6 @@
 name: dcli
-version: 1.7.3
-homepage: https://www.noojee.dev
+version: 1.9.0
+homepage: https://dcli.noojee.dev
 documentation: https://dcli.noojee.dev
 description: An API and dev environment for writing console (cli) apps/scripts using dart. e.g. allows you to build bash style scripts with dart.
 repository: https://github.com/noojee/dcli
@@ -14,6 +14,7 @@ dependencies:
   crypto: ^3.0.0
   csv: ^5.0.0
   dart_console: ^1.0.0
+  dcli_core: ^1.0.0
   equatable: ^2.0.0
   ffi: ^1.1.1
   file: ^6.1.0
@@ -31,11 +32,13 @@ dependencies:
   yaml: ^3.0.0
 dev_dependencies: 
   hex: ^0.2.0
-  lint: ^1.5.3
+  lint: ^1.7.1
   mocktail: ^0.1.0
   settings_yaml: ^3.0.6
   test: ^1.0.0
 dependency_overrides: 
+  dcli_core:
+    path: ../dcli_core
   posix: 
     path: ../dart_posix
 executables: 

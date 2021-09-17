@@ -12,8 +12,12 @@ void main() {
       withTempDir((fsRoot) {
         final paths = setup(fsRoot);
         final cwd = pwd;
-        t.expect(absolute(paths.pathTestDir!),
-            t.equals(join(cwd, paths.pathTestDir)));
+        t.expect(
+          absolute(paths.pathTestDir!),
+          t.equals(
+            join(cwd, paths.pathTestDir),
+          ),
+        );
       });
     });
 
@@ -27,16 +31,20 @@ void main() {
     t.test('extension', () {
       withTempDir((fsRoot) {
         final paths = setup(fsRoot);
-        t.expect(extension(join(paths.pathTestDir!, paths.testFile)),
-            t.equals(paths.testExtension));
+        t.expect(
+          extension(join(paths.pathTestDir!, paths.testFile)),
+          t.equals(paths.testExtension),
+        );
       });
     });
 
     t.test('basename', () {
       withTempDir((fsRoot) {
         final paths = setup(fsRoot);
-        t.expect(basename(join(paths.pathTestDir!, paths.testFile)),
-            t.equals(paths.testFile));
+        t.expect(
+          basename(join(paths.pathTestDir!, paths.testFile)),
+          t.equals(paths.testFile),
+        );
       });
     });
 

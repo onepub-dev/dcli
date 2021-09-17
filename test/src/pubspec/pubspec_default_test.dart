@@ -35,51 +35,63 @@ dependencies:
   path: ^2.0.2
 ''';
 
-  t.test('File - basic', () {
-    TestFileSystem().withinZone((fs) {
-      final pubSpecScriptPath = createPubspecPath(fs);
-      PubSpec.fromString(basic).saveToFile(pubSpecScriptPath);
+  t.test(
+    'File - basic',
+    () {
+      TestFileSystem().withinZone((fs) {
+        final pubSpecScriptPath = createPubspecPath(fs);
+        PubSpec.fromString(basic).saveToFile(pubSpecScriptPath);
 
-      final dependencies = <Dependency>[
-        Dependency.fromHosted('collection', '^1.14.12'),
-        Dependency.fromHosted('file_utils', '^0.1.3')
-      ];
-      runTest(fs, null, main, dependencies);
-    });
-  }, skip: false);
+        final dependencies = <Dependency>[
+          Dependency.fromHosted('collection', '^1.14.12'),
+          Dependency.fromHosted('file_utils', '^0.1.3')
+        ];
+        runTest(fs, null, main, dependencies);
+      });
+    },
+    skip: false,
+  );
 
-  t.test('File - override', () {
-    TestFileSystem().withinZone((fs) {
-      final scriptPath = createScriptPath(fs);
+  t.test(
+    'File - override',
+    () {
+      TestFileSystem().withinZone((fs) {
+        final scriptPath = createScriptPath(fs);
 
-      PubSpec.fromString(overrides).saveToFile(scriptPath);
+        PubSpec.fromString(overrides).saveToFile(scriptPath);
 
-      final dependencies = <Dependency>[
-        Dependency.fromHosted('dcli', '^2.0.0'),
-        Dependency.fromHosted('args', '^2.0.1'),
-        Dependency.fromHosted('path', '^2.0.2'),
-        Dependency.fromHosted('collection', '^1.14.12'),
-        Dependency.fromHosted('file_utils', '^0.1.3')
-      ];
-      runTest(fs, null, main, dependencies);
-    });
-  }, skip: false);
+        final dependencies = <Dependency>[
+          Dependency.fromHosted('dcli', '^2.0.0'),
+          Dependency.fromHosted('args', '^2.0.1'),
+          Dependency.fromHosted('path', '^2.0.2'),
+          Dependency.fromHosted('collection', '^1.14.12'),
+          Dependency.fromHosted('file_utils', '^0.1.3')
+        ];
+        runTest(fs, null, main, dependencies);
+      });
+    },
+    skip: false,
+  );
 
-  t.test('File - local pubsec.yaml', () {
-    TestFileSystem().withinZone((fs) {
-      final scriptPath = createScriptPath(fs);
-      PubSpec.fromString(overrides).saveToFile(scriptPath);
+  t.test(
+    'File - local pubsec.yaml',
+    () {
+      TestFileSystem().withinZone((fs) {
+        final scriptPath = createScriptPath(fs);
+        PubSpec.fromString(overrides).saveToFile(scriptPath);
 
-      final dependencies = <Dependency>[
-        Dependency.fromHosted('dcli', '^2.0.0'),
-        Dependency.fromHosted('args', '^2.0.1'),
-        Dependency.fromHosted('path', '^2.0.2'),
-        Dependency.fromHosted('collection', '^1.14.12'),
-        Dependency.fromHosted('file_utils', '^0.1.3')
-      ];
-      runTest(fs, null, main, dependencies);
-    });
-  }, skip: false);
+        final dependencies = <Dependency>[
+          Dependency.fromHosted('dcli', '^2.0.0'),
+          Dependency.fromHosted('args', '^2.0.1'),
+          Dependency.fromHosted('path', '^2.0.2'),
+          Dependency.fromHosted('collection', '^1.14.12'),
+          Dependency.fromHosted('file_utils', '^0.1.3')
+        ];
+        runTest(fs, null, main, dependencies);
+      });
+    },
+    skip: false,
+  );
 }
 
 String createPubspecPath(TestFileSystem fs) {
@@ -112,8 +124,12 @@ String createScriptPath(TestFileSystem fs) {
   return scriptPath;
 }
 
-void runTest(TestFileSystem fs, String? annotation, String main,
-    List<Dependency> expected) {
+void runTest(
+  TestFileSystem fs,
+  String? annotation,
+  String main,
+  List<Dependency> expected,
+) {
   final scriptPath = createScriptPath(fs);
   final script = DartScript.fromFile(scriptPath);
 

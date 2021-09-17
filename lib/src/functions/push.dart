@@ -48,7 +48,8 @@ class _Push extends DCliFunction {
     // ignore: avoid_catches_without_on_clauses
     catch (e) {
       throw PushException(
-          'An error occured pushing to ${truepath(path)}. Error $e');
+        'An error occured pushing to ${truepath(path)}. Error $e',
+      );
     }
   }
 }
