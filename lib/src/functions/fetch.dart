@@ -45,8 +45,13 @@ void _devNull(FetchProgress _) {}
 void fetch(
         {required String url,
         required String saveToPath,
+        HttpMethod method = Fetch.get,
         OnFetchProgress fetchProgress = _devNull}) =>
-    _Fetch().fetch(url: url, saveToPath: saveToPath, progress: fetchProgress);
+    _Fetch().fetch(
+        url: url,
+        saveToPath: saveToPath,
+        method: method,
+        progress: fetchProgress);
 
 /// Fetches the list of of resources indicated by [urls];
 ///
@@ -83,14 +88,26 @@ void fetch(
 void fetchMultiple({required List<FetchUrl> urls}) =>
     _Fetch().fetchMultiple(urls: urls);
 
+/// Http Methods used when calling [fetch]
+typedef HttpMethod = String;
+
+/// Types used by the [fetch] method.
+class Fetch {
+  /// peform an http GET when doing the fetch
+  static const HttpMethod get = 'GET';
+
+  /// perform an HTTP POST when doing the fetch.
+  static const HttpMethod post = 'POST';
+}
+
 class _Fetch extends DCliFunction {
-  void fetch({
-    required String url,
-    required String saveToPath,
-    OnFetchProgress progress = _devNull,
-  }) {
-    waitForEx<void>(download(
-        FetchUrl(url: url, saveToPath: saveToPath, progress: progress)));
+  void fetch(
+      {required String url,
+      required String saveToPath,
+      OnFetchProgress progress = _devNull,
+      HttpMethod method = Fetch.get}) {
+    waitForEx<void>(download(FetchUrl(
+        url: url, saveToPath: saveToPath, progress: progress, method: method)));
   }
 
   void fetchMultiple({required List<FetchUrl> urls}) {
@@ -124,7 +141,7 @@ class _Fetch extends DCliFunction {
     _sendProgressEvent(FetchProgress._connecting(fetchUrl));
 
     final client = HttpClient();
-    unawaited(client.getUrl(Uri.parse(fetchUrl.url)).then((request) {
+    unawaited(startCall(client, fetchUrl).then((request) {
       /// we have connected
       _sendProgressEvent(FetchProgress._connected(fetchUrl));
 
@@ -199,6 +216,19 @@ class _Fetch extends DCliFunction {
     return completer.future;
   }
 
+  Future<HttpClientRequest> startCall(HttpClient client, FetchUrl fetchUrl) {
+    switch (fetchUrl.method) {
+      case Fetch.get:
+        return client.getUrl(Uri.parse(fetchUrl.url));
+
+      case Fetch.post:
+        return client.postUrl(Uri.parse(fetchUrl.url));
+    }
+
+    throw ArgumentError(
+        'Unsupported HttpMethod ${fetchUrl.method} for url: ${fetchUrl.url}');
+  }
+
   static void _sendProgressEvent(FetchProgress progress) {
     progress.fetch.progress(progress);
   }
@@ -234,8 +264,12 @@ enum FetchStatus {
 /// the location where it is going to be stored.
 class FetchUrl {
   /// ctor.
-  FetchUrl(
-      {required this.url, required this.saveToPath, this.progress = _devNull});
+  FetchUrl({
+    required this.url,
+    required this.saveToPath,
+    this.method = Fetch.get,
+    this.progress = _devNull,
+  });
 
   /// the URL of the resource being downloaded
   final String url;
@@ -246,6 +280,10 @@ class FetchUrl {
   /// If provided this is the callback to allow the caller
   /// to monitor the download progress.
   final OnFetchProgress progress;
+
+  /// the HTTP method to use when sending the url
+  /// Defaults to get.
+  final HttpMethod method;
 }
 
 /// Passed to the [progress] method to indicate the current progress of
