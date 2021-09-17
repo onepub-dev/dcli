@@ -18,8 +18,9 @@ import 'echo.dart';
 /// String response = ask("Do you like me?");
 /// ```
 ///
-/// In most cases stdin is attached to the console
-/// allow you to ask the user to input a value.
+/// If the script is not attached to terminal [Terminal().hasTerminal]
+/// then ask returns immediatly with the [defaultValue]. If no [defaultValue]
+/// is passed then an empty string is returned. No validate will be applied.
 ///
 /// If [prompt] is set then the prompt will be printed
 /// to the console and the cursor placed immediately after the prompt.
@@ -65,10 +66,6 @@ import 'echo.dart';
 /// ```
 /// [ask] will throw an [AskValidatorException] if the defaultValue
 ///  doesn't match the given [validator].
-///
-/// If the script is not attached to terminal [Terminal().hasTerminal]
-/// then ask returns immediatly with the [defaultValue]. If no [defaultValue]
-/// is passed then an empty string is returned.
 ///
 /// The [validator] is called each time the user hits enter.
 ///
