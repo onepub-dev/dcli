@@ -1,16 +1,16 @@
 import 'dart:async';
 import 'dart:io';
 
+import 'package:dcli/src/util/enum_helper.dart';
 import 'package:dcli_core/dcli_core.dart' as core;
 import 'package:meta/meta.dart';
 import 'package:mime/mime.dart';
 
+import '../../dcli.dart';
 import '../settings.dart';
-import '../util/enum_helper.dart';
 import '../util/format.dart';
 import '../util/terminal.dart';
 import '../util/wait_for_ex.dart';
-import 'is.dart';
 import 'touch.dart';
 
 /// Typedef for the progress call back used by the [fetch] function.
@@ -111,7 +111,6 @@ void fetch({
 ///
 void fetchMultiple({required List<FetchUrl> urls}) =>
     _Fetch().fetchMultiple(urls: urls);
-
 
 /// Http Methods used when calling [fetch]
 enum FetchMethod {
