@@ -2,7 +2,6 @@ import '../../dcli.dart';
 import '../pubspec/dependency.dart';
 import '../settings.dart';
 import '../util/progress.dart';
-import '../util/runnable_process.dart';
 import 'dart_project.dart';
 import 'dart_sdk.dart';
 

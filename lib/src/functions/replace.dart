@@ -1,6 +1,6 @@
-import '../../dcli.dart';
+import 'package:dcli_core/dcli_core.dart' as core;
 
-import 'dcli_function.dart';
+import '../../dcli.dart';
 
 ///
 /// Does an insitu replacement on the file located at [path].
@@ -33,7 +33,7 @@ int replace(
 }) =>
     _Replace().replace(path, existing, replacement, all: all);
 
-class _Replace extends DCliFunction {
+class _Replace extends core.DCliFunction {
   int replace(
     String path,
     Pattern existing,

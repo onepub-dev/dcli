@@ -1,11 +1,10 @@
 import 'dart:io';
 
+import 'package:dcli_core/dcli_core.dart';
+
 import '../settings.dart';
-import '../util/truepath.dart';
 import 'cd.dart';
-import 'function.dart';
 import 'push.dart';
-import 'pwd.dart';
 
 ///
 /// Push and Pop work together to track a series
@@ -79,7 +78,7 @@ class _Pop extends DCliFunction {
 
 // ignore: deprecated_member_use_from_same_package
 /// Thrown when the [pop] function encouters an error.
-class PopException extends FunctionException {
+class PopException extends DCliFunctionException {
   // ignore: deprecated_member_use_from_same_package
   /// Thrown when the [pop] function encouters an error.
   PopException(String reason) : super(reason);

@@ -6,7 +6,6 @@ import 'package:args/args.dart';
 
 import 'package:args/command_runner.dart';
 import 'package:dcli/dcli.dart';
-import 'package:dcli/src/pubspec/pubspec.dart';
 
 ///
 /// Starts a docker shell with a full install

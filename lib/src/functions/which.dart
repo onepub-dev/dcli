@@ -1,10 +1,10 @@
 import 'dart:io';
 
-import '../../dcli.dart';
-import '../util/progress.dart';
+import 'package:dcli_core/dcli_core.dart' as core;
+import 'package:path/path.dart';
 
-import 'dcli_function.dart';
-import 'env.dart';
+import '../util/progress.dart';
+import 'is.dart';
 
 ///
 /// Searches the PATH for the location of the application
@@ -107,7 +107,7 @@ class Which {
   bool get notfound => !_found;
 }
 
-class _Which extends DCliFunction {
+class _Which extends core.DCliFunction {
   ///
   /// Searches the path for the given appname.
   Which which(
@@ -122,9 +122,9 @@ class _Which extends DCliFunction {
       progress ??= Progress.devNull();
       results.progress = progress;
 
-      for (final path in PATH) {
+      for (final path in core.PATH) {
         if (verbose) {
-          progress.addToStdout('Searching: ${truepath(path)}');
+          progress.addToStdout('Searching: ${core.truepath(path)}');
         }
         final fullpath =
             _appExists(path, appname, extensionSearch: extensionSearch);
@@ -163,7 +163,7 @@ class _Which extends DCliFunction {
       return pathToAppname;
     }
     if (Platform.isWindows && extensionSearch && extension(appname).isEmpty) {
-      final pathExt = env['PATHEXT'];
+      final pathExt = core.env['PATHEXT'];
 
       if (pathExt != null) {
         final extensions = pathExt.split(';');

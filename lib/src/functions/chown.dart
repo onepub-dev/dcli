@@ -1,11 +1,9 @@
 import 'dart:io';
 
+import 'package:dcli_core/dcli_core.dart' as core;
 import 'package:posix/posix.dart' as posix;
 
 import '../../dcli.dart';
-import '../util/stack_trace_impl.dart';
-
-import 'dcli_function.dart';
 
 /// Provides similar functionality to the posix chmod command.
 ///
@@ -32,7 +30,7 @@ void chown(String path, {String? user, String? group, bool recursive = true}) =>
     _ChOwn()._chown(path, user: user, group: group, recursive: recursive);
 
 /// Implementatio for [chmod] function.
-class _ChOwn extends DCliFunction {
+class _ChOwn extends core.DCliFunction {
 // this.user, this.group, this.other, this.path
 
   void _chown(
@@ -66,8 +64,12 @@ class _ChOwn extends DCliFunction {
 }
 
 /// Thrown if the [chown] function encounters an error.
-class ChOwnException extends DCliFunctionException {
+class ChOwnException extends core.DCliFunctionException {
   /// Thrown if the [chown] function encounters an error.
-  ChOwnException(String reason, [StackTraceImpl? stacktrace])
+  ChOwnException(String reason, [core.StackTraceImpl? stacktrace])
       : super(reason, stacktrace);
+
+  // @override
+  // DCliException copyWith(core.StackTraceImpl stackTrace) =>
+  //     ChOwnException(message, stackTrace);
 }

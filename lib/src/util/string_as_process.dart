@@ -1,11 +1,12 @@
 import 'dart:async';
 import 'dart:io';
 
+import 'package:dcli_core/dcli_core.dart' as core;
+
 import '../functions/run.dart' as cmd;
 import 'file_sync.dart';
 import 'parser.dart';
 import 'pipe.dart';
-import 'platform.dart';
 import 'progress.dart';
 import 'runnable_process.dart';
 
@@ -241,8 +242,8 @@ extension StringAsProcess on String {
   ///  to be interpreted
   ///                as one of several file types.
   void forEach(
-    LineAction stdout, {
-    LineAction stderr = _noOpAction,
+    core.LineAction stdout, {
+    core.LineAction stderr = _noOpAction,
     bool runInShell = false,
     bool extensionSearch = true,
   }) =>

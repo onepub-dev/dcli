@@ -1,13 +1,13 @@
 import 'dart:async';
 import 'dart:io';
 
+import 'package:dcli_core/dcli_core.dart' as core;
+
 import '../../dcli.dart';
 
 import '../settings.dart';
 import '../util/progress.dart';
 import '../util/wait_for_ex.dart';
-
-import 'function.dart';
 
 ///
 /// Returns the list of files in the current and child
@@ -104,7 +104,7 @@ Progress find(
     );
 
 /// Implementation for the [_find] function.
-class Find extends DCliFunction {
+class Find extends core.DCliFunction {
   Progress _find(
     String pattern, {
     bool caseSensitive = false,
@@ -490,7 +490,7 @@ class _PatternMatcher {
 }
 
 /// Thrown when the [find] function encouters an error.
-class FindException extends FunctionException {
+class FindException extends core.DCliFunctionException {
   /// Thrown when the [move] function encouters an error.
   FindException(String reason) : super(reason);
 }

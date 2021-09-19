@@ -1,5 +1,56 @@
 export 'package:args/args.dart';
 export 'package:crypto/crypto.dart' show Digest;
+export 'package:dcli_core/dcli_core.dart'
+    show
+        // BackupFileException,
+        // MoveDirException,
+        // TouchException,
+        // Which,
+        StackTraceImpl,
+        StackList,
+        DCliException,
+        // HeadException,
+        truepath,
+        env,
+        HOME,
+        PATH,
+        isOnPATH,
+        envs,
+        Env,
+        pwd,
+        PlatformEx,
+        PlatformWrapper,
+        LineAction,
+        CancelableLineAction,
+        rootPath,
+        privatePath,
+        // RestoreFileException,
+        translateAbsolutePath,
+        RunException
+    // CatException;
+    ;
+export 'package:dcli_core/src/util/dev_null.dart';
+export 'package:dcli_core/src/util/platform.dart';
+// hide
+//     backupFile,
+//     restoreFile,
+//     withFileProtection,
+//     translateAbsolutePath,
+//     copy,
+//     copyTree,
+//     createDir,
+//     createTempDir,
+//     withTempDir,
+//     delete,
+//     deleteDir,
+//     env,
+//     HOME,
+//     PATH,
+//     isOnPATH,
+//     envs,
+//     Env,
+//     isFile,
+//     isDirectory,;
 export 'package:path/path.dart'
     hide
         PathMap,
@@ -20,17 +71,15 @@ export 'package:path/path.dart'
 export 'src/functions/ask.dart';
 export 'src/functions/backup.dart';
 export 'src/functions/cat.dart' show cat, CatException;
-export 'src/functions/cd.dart' show CDException;
 export 'src/functions/chmod.dart' show chmod, ChModException;
 export 'src/functions/chown.dart' show chown, ChOwnException;
 export 'src/functions/copy.dart' show copy, CopyException;
-export 'src/functions/copy_tree.dart' show copyTree, CopyTreeException;
+export 'src/functions/copy_tree.dart' show copyTree;
 export 'src/functions/create_dir.dart'
     show createDir, createTempDir, withTempDir, CreateDirException;
 export 'src/functions/delete.dart' show delete, DeleteException;
 export 'src/functions/delete_dir.dart' show deleteDir, DeleteDirException;
 export 'src/functions/echo.dart' show echo;
-export 'src/functions/env.dart' show env, HOME, PATH, isOnPATH, envs, Env;
 export 'src/functions/fetch.dart'
     show
         fetch,
@@ -50,16 +99,13 @@ export 'src/functions/menu.dart' show menu;
 export 'src/functions/move.dart' show move, MoveException;
 export 'src/functions/move_dir.dart' show moveDir, MoveDirException;
 export 'src/functions/move_tree.dart' show moveTree, MoveTreeException;
-export 'src/functions/pop.dart' show PopException;
-export 'src/functions/push.dart' show PushException;
-export 'src/functions/pwd.dart' show pwd;
 export 'src/functions/read.dart' show read, readStdin, ReadException;
 export 'src/functions/replace.dart' show replace;
 export 'src/functions/run.dart' show run, start, startFromArgs;
 export 'src/functions/sleep.dart' show sleep, Interval;
 export 'src/functions/tail.dart' show tail;
-export 'src/functions/touch.dart' show touch, TouchException;
-export 'src/functions/which.dart' show which, Which;
+export 'src/functions/touch.dart' show touch;
+export 'src/functions/which.dart' show which;
 export 'src/pubspec/dependency.dart';
 export 'src/pubspec/pubspec.dart';
 export 'src/script/dart_project.dart';
@@ -74,22 +120,20 @@ export 'src/shell/zsh_shell.dart';
 export 'src/util/ansi.dart';
 export 'src/util/ansi_color.dart';
 export 'src/util/assets.dart';
-export 'src/util/dcli_exception.dart';
 export 'src/util/dcli_paths.dart' show DCliPaths;
 export 'src/util/dcli_zone.dart';
-export 'src/util/dev_null.dart' show devNull;
 export 'src/util/editor.dart' show showEditor;
 export 'src/util/file_sort.dart' show FileSort, Column, SortDirection;
 export 'src/util/file_sync.dart';
+export 'src/util/file_util.dart';
 export 'src/util/format.dart' show Format, TableAlignment;
 export 'src/util/named_lock.dart' show NamedLock, LockException;
-export 'src/util/platform.dart';
 export 'src/util/process_helper.dart' show ProcessHelper, ProcessDetails;
 export 'src/util/progress.dart' show Progress;
 export 'src/util/pub_cache.dart';
 export 'src/util/remote.dart' show Remote;
-export 'src/util/runnable_process.dart' show printerr, RunException;
+export 'src/util/runnable_process.dart' show printerr;
 export 'src/util/string_as_process.dart';
+export 'src/util/temp_file.dart';
 export 'src/util/terminal.dart';
-export 'src/util/truepath.dart' show truepath, rootPath, privatePath;
 export 'src/util/wait_for_ex.dart' show waitForEx;

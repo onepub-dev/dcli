@@ -1,9 +1,9 @@
-import 'dart:io';
-import 'package:uuid/uuid.dart';
+import 'package:dcli_core/dcli_core.dart' as core;
+import 'package:dcli_core/dcli_core.dart' show CreateDirException;
 
 import '../../dcli.dart';
-import '../settings.dart';
-import 'function.dart';
+
+export 'package:dcli_core/dcli_core.dart' show CreateDirException;
 
 /// Creates a directory as described by [path].
 /// Path may be a single path segment (e.g. bin)
@@ -30,7 +30,7 @@ import 'function.dart';
 ///
 
 String createDir(String path, {bool recursive = false}) =>
-    _CreateDir().createDir(path, recursive: recursive);
+    waitForEx(core.createDir(path, recursive: recursive));
 
 /// Creates a temp directory and then calls [action].
 /// Once action completes the temporary directory will be deleted.
@@ -40,52 +40,11 @@ String createDir(String path, {bool recursive = false}) =>
 ///
 /// If you pass [keep] = true then the temp directory won't be deleted.
 /// This can be useful when testing and you need to examine the temp directory.
-R withTempDir<R>(R Function(String tempDir) action, {bool keep = false}) {
-  final dir = createTempDir();
-
-  R result;
-  try {
-    result = action(dir);
-  } finally {
-    if (!keep) {
-      deleteDir(dir);
-    }
-  }
-  return result;
-}
+R withTempDir<R>(R Function(String tempDir) action, {bool keep = false}) =>
+    waitForEx(core.withTempDir(action, keep: keep));
 
 /// Creates a temporary directory under the system temp folder.
 /// The temporary directory name is formed from a uuid.
 /// It is your responsiblity to delete the directory once you have
 /// finsihed with it.
-String createTempDir() => _CreateDir().createDir(
-      join(Directory.systemTemp.path, const Uuid().v4()),
-      recursive: false,
-    );
-
-class _CreateDir extends DCliFunction {
-  String createDir(String path, {required bool recursive}) {
-    verbose(() => 'createDir:  ${truepath(path)} recursive: $recursive');
-
-    try {
-      if (exists(path)) {
-        throw CreateDirException('The path ${truepath(path)} already exists');
-      }
-
-      Directory(path).createSync(recursive: recursive);
-    }
-    // ignore: avoid_catches_without_on_clauses
-    catch (e) {
-      throw CreateDirException(
-        'Unable to create the directory ${truepath(path)}. Error: $e',
-      );
-    }
-    return path;
-  }
-}
-
-/// Thrown when the function [createDir] encounters an error
-class CreateDirException extends FunctionException {
-  /// Thrown when the function [createDir] encounters an error
-  CreateDirException(String reason) : super(reason);
-}
+String createTempDir() => waitForEx(core.createTempDir());

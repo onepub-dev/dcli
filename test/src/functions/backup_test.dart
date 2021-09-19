@@ -1,6 +1,5 @@
 @Timeout(Duration(minutes: 10))
 import 'package:dcli/dcli.dart' hide equals;
-import 'package:dcli/src/util/platform_wrapper.dart';
 import 'package:mocktail/mocktail.dart';
 import 'package:path/path.dart' hide equals;
 import 'package:test/test.dart';

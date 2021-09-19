@@ -2,7 +2,6 @@ import 'package:win32/win32.dart';
 
 import '../../dcli.dart';
 import '../../windows.dart';
-import '../functions/env.dart';
 import '../script/dart_sdk.dart';
 import '../settings.dart';
 import '../util/pub_cache.dart';

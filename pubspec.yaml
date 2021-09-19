@@ -14,6 +14,7 @@ dependencies:
   crypto: ^3.0.0
   csv: ^5.0.0
   dart_console: ^1.0.0
+  dcli_core: ^0.0.1
   equatable: ^2.0.0
   ffi: ^1.1.1
   file: ^6.1.0
@@ -29,6 +30,11 @@ dependencies:
   validators2: ^3.0.0
   win32: ^2.1.0
   yaml: ^3.0.0
+
+dependency_overrides:
+  dcli_core:
+    path: ../dcli_core
+
 dev_dependencies: 
   hex: ^0.2.0
   lints: ^1.0.1

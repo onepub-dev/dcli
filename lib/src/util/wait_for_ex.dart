@@ -1,11 +1,11 @@
 import 'dart:async';
 import 'dart:cli' as cli;
 
+import 'package:dcli_core/dcli_core.dart';
+
 import '../../dcli.dart';
 
 import '../settings.dart';
-import 'dcli_exception.dart';
-import 'stack_trace_impl.dart';
 
 /// Wraps the standard cli waitFor
 /// but rethrows any exceptions with a repaired stacktrace.

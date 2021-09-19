@@ -1,17 +1,15 @@
 import 'dart:async';
 import 'dart:io';
 
+import 'package:dcli_core/dcli_core.dart' as core;
 import 'package:meta/meta.dart';
 import 'package:mime/mime.dart';
 
 import '../settings.dart';
-import '../util/dcli_exception.dart';
 import '../util/enum_helper.dart';
 import '../util/format.dart';
 import '../util/terminal.dart';
-import '../util/truepath.dart';
 import '../util/wait_for_ex.dart';
-import 'function.dart';
 import 'is.dart';
 import 'touch.dart';
 
@@ -114,17 +112,6 @@ void fetch({
 void fetchMultiple({required List<FetchUrl> urls}) =>
     _Fetch().fetchMultiple(urls: urls);
 
-// /// Http Methods used when calling [fetch]
-// typedef FetchMethod = String;
-
-// /// Types used by the [fetch] method.
-// class Fetch {
-//   /// peform an http GET when doing the fetch
-//   static const FetchMethod get = 'GET';
-
-//   /// perform an HTTP POST when doing the fetch.
-//   static const FetchMethod post = 'POST';
-// }
 
 /// Http Methods used when calling [fetch]
 enum FetchMethod {
@@ -161,10 +148,10 @@ class FetchData {
         _type = _FetchDataType.path,
         _mimeType = mimeType ?? lookupMimeType(pathToData) ?? 'text/plain' {
     if (!exists(pathToData)) {
-      throw FetchException('${truepath(pathToData)} does not exist');
+      throw FetchException('${core.truepath(pathToData)} does not exist');
     }
     if (!isFile(pathToData)) {
-      throw FetchException('${truepath(pathToData)} is not a file');
+      throw FetchException('${core.truepath(pathToData)} is not a file');
     }
   }
 
@@ -218,7 +205,7 @@ class FetchData {
   }
 }
 
-class _Fetch extends DCliFunction {
+class _Fetch extends core.DCliFunction {
   void fetch(
       {required String url,
       required String saveToPath,
@@ -254,7 +241,7 @@ class _Fetch extends DCliFunction {
     try {
       /// wait for all downloads to complete.
       waitForEx<void>(Future.wait(futures));
-    } on DCliException catch (e, st) {
+    } on core.DCliException catch (e, st) {
       print(st);
     }
   }
@@ -731,7 +718,7 @@ class _ProgressByteUpdate {
 }
 
 /// Throw when an error occurs fetching a resource.
-class FetchException extends DCliException {
+class FetchException extends core.DCliException {
   /// ctor
   FetchException(String message)
       : errorCode = OSError.noErrorCode,

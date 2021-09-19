@@ -1,13 +1,12 @@
 import 'dart:convert';
 import 'dart:io';
 
+import 'package:dcli_core/dcli_core.dart' as core;
+
+import '../../dcli.dart';
 import '../settings.dart';
 import '../util/progress.dart';
-import '../util/stack_trace_impl.dart';
-import '../util/truepath.dart';
 import '../util/wait_for_ex.dart';
-import 'dcli_function.dart';
-import 'is.dart';
 
 /// Reads lines from the file at [path].
 /// ```dart
@@ -24,7 +23,7 @@ Progress read(String path, {String delim = '\n'}) =>
 /// Read lines from stdin
 Progress readStdin() => _Read()._readStdin();
 
-class _Read extends DCliFunction {
+class _Read extends core.DCliFunction {
   Progress read(String path, {String delim = '\n', Progress? progress}) {
     final sourceFile = File(path);
 
@@ -70,7 +69,7 @@ class _Read extends DCliFunction {
 }
 
 /// Thrown when the [read] function encouters an error.
-class ReadException extends DCliFunctionException {
+class ReadException extends core.DCliFunctionException {
   /// Thrown when the [read] function encouters an error.
   ReadException(String reason, [StackTraceImpl? stacktrace])
       : super(reason, stacktrace);

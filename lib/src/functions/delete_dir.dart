@@ -1,9 +1,9 @@
-import 'dart:io';
+import 'package:dcli_core/dcli_core.dart' as core;
+import 'package:dcli_core/dcli_core.dart' show DeleteDirException;
 
-import '../settings.dart';
-import '../util/truepath.dart';
-import 'function.dart';
-import 'is.dart';
+import '../../dcli.dart';
+
+export 'package:dcli_core/dcli_core.dart' show DeleteDirException;
 
 ///
 /// Deletes the directory located at [path].
@@ -30,36 +30,4 @@ import 'is.dart';
 ///  * [exists]
 ///
 void deleteDir(String path, {bool recursive = true}) =>
-    _DeleteDir().deleteDir(path, recursive: recursive);
-
-class _DeleteDir extends DCliFunction {
-  void deleteDir(String path, {required bool recursive}) {
-    verbose(() => 'deleteDir:  ${truepath(path)} recursive: $recursive');
-
-    if (!exists(path)) {
-      throw DeleteDirException('The path ${truepath(path)} does not exist.');
-    }
-
-    if (!isDirectory(path)) {
-      throw DeleteDirException(
-        'The path ${truepath(path)} is not a directory.',
-      );
-    }
-
-    try {
-      Directory(path).deleteSync(recursive: recursive);
-    }
-    // ignore: avoid_catches_without_on_clauses
-    catch (e) {
-      throw DeleteDirException(
-        'Unable to delete the directory ${truepath(path)}. Error: $e',
-      );
-    }
-  }
-}
-
-/// Throw when [deleteDir] function encounters an error
-class DeleteDirException extends FunctionException {
-  /// Throw when [deleteDir] function encounters an error
-  DeleteDirException(String reason) : super(reason);
-}
+    waitForEx(core.deleteDir(path, recursive: recursive));

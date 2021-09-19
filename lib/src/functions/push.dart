@@ -1,12 +1,11 @@
 import 'dart:io';
 
+import 'package:dcli_core/dcli_core.dart' as core;
+
 import '../settings.dart';
-import '../util/truepath.dart';
 import 'cd.dart';
-import 'dcli_function.dart';
 import 'is.dart';
 import 'pop.dart';
-import 'pwd.dart';
 
 ///
 /// Pushes the given [path] onto the stack
@@ -30,18 +29,19 @@ import 'pwd.dart';
 void push(String path) => _Push().push(path);
 
 @Deprecated('Use join')
-class _Push extends DCliFunction {
+class _Push extends core.DCliFunction {
   /// Push the pwd onto the stack and change the
   /// current directory to [path].
   void push(String path) {
-    verbose(() => 'push: path: $path new -> ${truepath(path)}');
+    verbose(() => 'push: path: $path new -> ${core.truepath(path)}');
 
     if (!exists(path)) {
-      throw PushException('The path ${truepath(path)} does not exist.');
+      throw PushException('The path ${core.truepath(path)} does not exist.');
     }
 
     if (!isDirectory(path)) {
-      throw PushException('The path ${truepath(path)} is not a directory.');
+      throw PushException(
+          'The path ${core.truepath(path)} is not a directory.');
     }
 
     InternalSettings().push(Directory.current);
@@ -52,7 +52,7 @@ class _Push extends DCliFunction {
     // ignore: avoid_catches_without_on_clauses
     catch (e) {
       throw PushException(
-        'An error occured pushing to ${truepath(path)}. Error $e',
+        'An error occured pushing to ${core.truepath(path)}. Error $e',
       );
     }
   }
@@ -60,7 +60,7 @@ class _Push extends DCliFunction {
 
 // ignore: deprecated_member_use_from_same_package
 /// Thrown when the [push] function encouters an error.
-class PushException extends DCliFunctionException {
+class PushException extends core.DCliFunctionException {
   // ignore: deprecated_member_use_from_same_package
   /// Thrown when the [push] function encouters an error.
   PushException(String reason) : super(reason);

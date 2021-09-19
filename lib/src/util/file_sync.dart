@@ -2,15 +2,10 @@ import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
 
-import 'package:crypto/crypto.dart';
-import 'package:uuid/uuid.dart';
+import 'package:dcli_core/dcli_core.dart' as core;
 
 import '../../dcli.dart';
-import '../settings.dart';
-import 'dcli_exception.dart';
-import 'platform.dart';
-import 'runnable_process.dart';
-import 'stack_trace_impl.dart';
+import 'temp_file.dart';
 import 'wait_for_ex.dart';
 
 ///
@@ -107,7 +102,7 @@ class FileSync {
   void read(CancelableLineAction lineAction) {
     final inputStream = _file.openRead();
 
-    final stackTrace = StackTraceImpl();
+    final stackTrace = core.StackTraceImpl();
 
     Object? exception;
 
@@ -117,10 +112,12 @@ class FileSync {
 
     subscription =
         utf8.decoder.bind(inputStream).transform(const LineSplitter()).listen(
-              (line) {
-                final cont = lineAction(line);
+              (line) async {
+                final cont = await lineAction(line);
                 if (cont == false) {
-                  subscription.cancel().then((finished) => done.complete(true));
+                  await subscription
+                      .cancel()
+                      .then((finished) => done.complete(true));
                 }
               },
               cancelOnError: true,
@@ -310,132 +307,4 @@ String resolveSymLink(String pathToLink) {
 
   verbose(() => 'resolveSymLink $pathToLink resolved: $resolved');
   return resolved;
-}
-
-///
-///
-/// Returns a FileStat instance describing the
-/// file or directory located by [path].
-///
-FileStat stat(String path) => File(path).statSync();
-
-/// Generates a temporary filename in [pathToTempDir]
-/// or if inTempDir os not passed then in
-/// the system temp directory.
-/// The generated filename is is guaranteed to be globally unique.
-///
-/// This method does NOT create the file.
-///
-/// The temp file name will be <uuid>.tmp
-/// unless you provide a [suffix] in which
-/// case the file name will be <uuid>.<suffix>
-String createTempFilename({String? suffix, String? pathToTempDir}) {
-  var finalsuffix = suffix ?? 'tmp';
-
-  if (!finalsuffix.startsWith('.')) {
-    finalsuffix = '.$finalsuffix';
-  }
-  pathToTempDir ??= Directory.systemTemp.path;
-  const uuid = Uuid();
-  return '${join(pathToTempDir, uuid.v4())}$finalsuffix';
-}
-
-/// Generates a temporary filename in the system temp directory
-/// that is guaranteed to be unique.
-///
-/// This method does not create the file.
-///
-/// The temp file name will be <uuid>.tmp
-/// unless you provide a [suffix] in which
-/// case the file name will be <uuid>.<suffix>
-String createTempFile({String? suffix}) {
-  final filename = createTempFilename(suffix: suffix);
-  touch(filename, create: true);
-  return filename;
-}
-
-/// Returns the length of the file at [pathToFile] in bytes.
-int fileLength(String pathToFile) => File(pathToFile).lengthSync();
-
-/// Creates a temp file and then calls [action].
-///
-/// Once [action] completes the temporary file will be deleted.
-///
-/// The [action]s return value [R] is returned from the [withTempFile]
-/// function.
-///
-/// If [create] is true (default true) then the temp file will be
-/// created. If [create] is false then just the name will be
-/// generated.
-///
-/// if [pathToTempDir] is passed then the file will be created in that
-/// directory otherwise the file will be created in the system
-/// temp directory.
-///
-/// The temp file name will be <uuid>.tmp
-/// unless you provide a [suffix] in which
-/// case the file name will be <uuid>.<suffix>
-R withTempFile<R>(
-  R Function(String tempFile) action, {
-  String? suffix,
-  String? pathToTempDir,
-  bool create = true,
-  bool keep = false,
-}) {
-  final tmp = createTempFilename(suffix: suffix, pathToTempDir: pathToTempDir);
-  if (create) {
-    touch(tmp, create: true);
-  }
-
-  R result;
-  try {
-    result = action(tmp);
-  } finally {
-    if (exists(tmp) && !keep) {
-      delete(tmp);
-    }
-  }
-  return result;
-}
-
-/// Calculates the sha256 hash of a file's
-/// content.
-///
-/// This is likely to be an expensive operation
-/// if the file is large.
-///
-/// You can use this method to check if a file
-/// has changes since the last time you took
-/// the file's hash.
-///
-/// Throws [FileNotFoundException] if [path]
-/// doesn't exist.
-/// Throws [NotAFileException] if path is
-/// not a file.
-Digest calculateHash(String path) {
-  if (!exists(path)) {
-    throw FileNotFoundException(path);
-  }
-
-  if (!isFile(path)) {
-    throw NotAFileException(path);
-  }
-  final input = File(path);
-
-  final hasher = sha256;
-  return waitForEx(hasher.bind(input.openRead()).first);
-}
-
-/// Thrown when a file doesn't exist
-class FileNotFoundException extends DCliException {
-  /// Thrown when a file doesn't exist
-  FileNotFoundException(String path)
-      : super('The file ${truepath(path)} does not exist.');
-}
-
-/// Thrown when a path is not a file.
-class NotAFileException extends DCliException {
-  /// Thrown when a path is not a file.
-  NotAFileException(String path)
-      : super('The path ${truepath(path)} is not a file.');
 }

@@ -1,7 +1,9 @@
 import 'dart:io';
 
+import 'package:dcli_core/dcli_core.dart';
+
+import '../../dcli.dart';
 import '../util/wait_for_ex.dart';
-import 'function.dart';
 
 /// Writes [text] to stdout including a newline.
 ///
