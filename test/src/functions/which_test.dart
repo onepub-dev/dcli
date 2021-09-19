@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:io';
 
 import 'package:dcli/dcli.dart' hide equals;
@@ -30,4 +31,12 @@ void main() {
     },
     skip: !Platform.isWindows,
   );
+
+  test('progress', () {
+    final controller = StreamController<String>();
+    controller.stream.listen((line) => print('listen $line'));
+    which('dart', progress: controller.sink, verbose: true).found;
+    print('done');
+    controller.close();
+  });
 }
