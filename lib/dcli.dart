@@ -17,6 +17,7 @@ export 'package:dcli_core/dcli_core.dart'
         isOnPATH,
         envs,
         Env,
+        FindItem,
         pwd,
         PlatformEx,
         PlatformWrapper,

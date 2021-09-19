@@ -3,7 +3,6 @@ import 'dart:async';
 import 'package:dcli_core/dcli_core.dart' as core;
 import 'package:dcli_core/dcli_core.dart';
 
-import '../util/progress.dart';
 import '../util/wait_for_ex.dart';
 
 ///
@@ -88,7 +87,7 @@ core.Which which(
       ),
     );
   } finally {
-    // controller.close();
+    controller.close();
   }
   return which;
 }
