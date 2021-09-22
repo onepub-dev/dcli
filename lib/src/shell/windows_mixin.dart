@@ -37,7 +37,7 @@ mixin WindowsMixin {
   /// Returns true if running a privileged action woulduser
   /// cause a password to be requested.
   ///
-  /// Linux/OSX: will return true if the sudo password is not currently
+  /// Linux/MacOS: will return true if the sudo password is not currently
   /// cached and we are not already running as a privileged user.
   ///
   /// Windows: This will always return false as Windows is never

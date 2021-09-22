@@ -4,7 +4,7 @@ import 'package:uuid/uuid.dart';
 
 import '../../dcli.dart';
 import '../installers/linux_installer.dart';
-import '../installers/macosx_installer.dart';
+import '../installers/mac_os_installer.dart';
 import '../installers/windows_installer.dart';
 import '../settings.dart';
 import 'shell_mixin.dart';
@@ -163,7 +163,7 @@ class UnknownShell with ShellMixin {
     } else if (Settings().isWindows) {
       return WindowsDCliInstaller().install(installDart: installDart);
     } else if (Platform.isMacOS) {
-      return MacOsxDCliInstaller().install(installDart: installDart);
+      return MacOSDCliInstaller().install(installDart: installDart);
     } else {
       throw UnsupportedError('Unsupported OS. ${Platform.operatingSystem}');
     }

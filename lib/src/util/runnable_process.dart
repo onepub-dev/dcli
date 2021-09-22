@@ -246,7 +246,7 @@ class RunnableProcess {
       _parsed.cmd = _searchForCommandExtension(_parsed.cmd, workingDirectory);
     }
 
-    /// On linux/osx if this needs to be a privileged operation
+    /// On linux/MacOS if this needs to be a privileged operation
     /// and we are not a privileged user, then
     /// we add 'sudo' in front of the command.
     if (privileged && !Settings().isWindows) {

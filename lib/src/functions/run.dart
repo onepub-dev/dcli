@@ -114,7 +114,7 @@ int? run(
 /// over how the commmand is executed.
 ///
 /// DCli will do glob expansion (e.g. expand *.txt to a list of txt files)
-/// on each passed argument (for Linux and OSx).
+/// on each passed argument (for Linux and MacOS).
 /// You can stop glob expansion by adding a set of single or double quotes
 ///  around each argument.
 ///
@@ -141,7 +141,7 @@ int? run(
 /// Running a command with the [privileged] switch may cause the OS to
 /// prompt the user for a password.
 ///
-/// For Linux/OSX passing the [privileged] argument will cause the command
+/// For Linux/MacOS passing the [privileged] argument will cause the command
 /// to be prefix vai the `sudo` command unless the script is already
 /// running as a privileged process.
 ///
