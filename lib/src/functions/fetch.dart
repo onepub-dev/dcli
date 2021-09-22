@@ -45,7 +45,7 @@ void _devNull(FetchProgress _) {}
 void fetch({
   required String url,
   required String saveToPath,
-  HttpMethod method = Fetch.get,
+  FetchMethod method = Fetch.get,
   OnFetchProgress fetchProgress = _devNull,
 }) =>
     _Fetch().fetch(
@@ -91,15 +91,15 @@ void fetchMultiple({required List<FetchUrl> urls}) =>
     _Fetch().fetchMultiple(urls: urls);
 
 /// Http Methods used when calling [fetch]
-typedef HttpMethod = String;
+typedef FetchMethod = String;
 
 /// Types used by the [fetch] method.
 class Fetch {
   /// peform an http GET when doing the fetch
-  static const HttpMethod get = 'GET';
+  static const FetchMethod get = 'GET';
 
   /// perform an HTTP POST when doing the fetch.
-  static const HttpMethod post = 'POST';
+  static const FetchMethod post = 'POST';
 }
 
 class _Fetch extends DCliFunction {
@@ -107,7 +107,8 @@ class _Fetch extends DCliFunction {
     required String url,
     required String saveToPath,
     OnFetchProgress progress = _devNull,
-    HttpMethod method = Fetch.get,
+    bool verboseProgress = false,
+    FetchMethod method = Fetch.get,
   }) {
     waitForEx<void>(
       download(
@@ -117,15 +118,19 @@ class _Fetch extends DCliFunction {
           progress: progress,
           method: method,
         ),
+        verboseProgress: verboseProgress,
       ),
     );
   }
 
-  void fetchMultiple({required List<FetchUrl> urls}) {
+  void fetchMultiple({
+    required List<FetchUrl> urls,
+    bool verboseProgress = false,
+  }) {
     final futures = <Future<void>>[];
 
     for (final url in urls) {
-      futures.add(download(url));
+      futures.add(download(url, verboseProgress: verboseProgress));
     }
 
     try {
@@ -136,7 +141,7 @@ class _Fetch extends DCliFunction {
     }
   }
 
-  Future<void> download(FetchUrl fetchUrl) {
+  Future<void> download(FetchUrl fetchUrl, {required bool verboseProgress}) {
     // announce we are starting.
     verbose(() => 'Started downloading: ${fetchUrl.url}');
     final completer = Completer<void>();
@@ -163,6 +168,15 @@ class _Fetch extends DCliFunction {
         return request.close();
       }).then((response) async {
         var lengthReceived = 0;
+
+        _sendProgressEvent(
+          FetchProgress._response(fetchUrl, response.statusCode),
+        );
+
+        final headers = <String, List<String>>{};
+        response.headers.forEach((name, values) => headers[name] = values);
+
+        _sendProgressEvent(FetchProgress._headers(fetchUrl, headers));
 
         final contentLength = response.contentLength;
 
@@ -272,6 +286,12 @@ enum FetchStatus {
   /// We have connected to the remote server.
   connected,
 
+  /// After connection we get a responseCode.
+  response,
+
+  /// Called when we recieve the headersafter we connect.
+  headers,
+
   /// we have connected and recieved our first chunk of data.
   downloading,
 
@@ -307,7 +327,7 @@ class FetchUrl {
 
   /// the HTTP method to use when sending the url
   /// Defaults to get.
-  final HttpMethod method;
+  final FetchMethod method;
 }
 
 /// Passed to the [progress] method to indicate the current progress of
@@ -317,33 +337,68 @@ class FetchProgress {
       : progress = 0.0,
         length = 0,
         downloaded = 0,
-        status = FetchStatus.initialising;
+        status = FetchStatus.initialising,
+        headers = null,
+        responseCode = null;
 
   const FetchProgress._connecting(this.fetch)
       : progress = 0.0,
         length = 0,
         downloaded = 0,
-        status = FetchStatus.connecting;
+        status = FetchStatus.connecting,
+        headers = null,
+        responseCode = null;
 
   const FetchProgress._connected(this.fetch)
       : progress = 0.0,
         length = 0,
         downloaded = 0,
-        status = FetchStatus.connected;
+        status = FetchStatus.connected,
+        headers = null,
+        responseCode = null;
 
   const FetchProgress._downloading(this.fetch, this.length, this.downloaded)
       : status = FetchStatus.downloading,
-        progress = length != 0 ? downloaded / length : 0;
+        progress = length != 0 ? downloaded / length : 0,
+        headers = null,
+        responseCode = null;
 
   const FetchProgress._complete(this.fetch, this.length, this.downloaded)
       : progress = 1.0,
-        status = FetchStatus.complete;
+        status = FetchStatus.complete,
+        headers = null,
+        responseCode = null;
 
   const FetchProgress._error(this.fetch)
       : progress = 0.0,
         length = 0,
         downloaded = 0,
-        status = FetchStatus.error;
+        status = FetchStatus.error,
+        headers = null,
+        responseCode = null;
+
+  const FetchProgress._headers(this.fetch, this.headers)
+      : status = FetchStatus.headers,
+        progress = 0,
+        length = 0,
+        downloaded = 0,
+        responseCode = null;
+
+  const FetchProgress._response(this.fetch, this.responseCode)
+      : status = FetchStatus.response,
+        progress = 0,
+        length = 0,
+        downloaded = 0,
+        headers = null;
+
+  /// When the [FetchStatus.headers] event is sent
+  /// this will contain the headers. At all
+  /// other times it will be null.
+  final Map<String, List<String>>? headers;
+
+  /// When the [FetchStatus.response] event is recieved
+  /// this value will containe the response code.
+  final int? responseCode;
 
   /// The current status of the downloader.
   final FetchStatus status;

@@ -40,7 +40,8 @@ export 'src/functions/fetch.dart'
         FetchStatus,
         FetchUrl,
         OnFetchProgress,
-        Fetch;
+        Fetch,
+        FetchMethod;
 export 'src/functions/file_list.dart' show fileList;
 export 'src/functions/find.dart' show find, Find;
 export 'src/functions/head.dart' show head;
