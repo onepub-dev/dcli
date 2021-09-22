@@ -73,7 +73,8 @@ class DartScript {
   /// [scriptName] won't have a '.dart' extension.
   /// In a compiled script the extension generally depends on the OS but
   /// it could in theory be anything (except for .dart).
-  /// Common extensions are .exe for windows and no extension for Linux and MacOS.
+  /// Common extensions are .exe for windows and no extension for Linux
+  /// and MacOS.
   String get scriptName => _scriptName;
 
   /// the absolute path to the directory the script lives in
