@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:io';
 
+import 'package:dcli/src/util/enum_helper.dart';
 import 'package:pedantic/pedantic.dart';
 
 import '../settings.dart';
@@ -446,11 +447,14 @@ class FetchProgress {
   }) {
     final message = format == null ? progress.toString() : format(progress);
     Terminal().overwriteLine(message);
+    if (progress.status == FetchStatus.complete) {
+      print('');
+    }
   }
 
   @override
   String toString() =>
-      '$status progress:${Format.bytesAsReadable(downloaded)}/${Format.bytesAsReadable(length)} ${fetch.url}';
+      '${EnumHelper().getName(status)}: ${Format.bytesAsReadable(downloaded)}/${Format.bytesAsReadable(length)} ${fetch.url}';
 }
 
 /// Throw when an error occurs fetching a resource.
