@@ -284,7 +284,7 @@ class DartProject {
   /// Returns true if the project contains a pubspec.yaml.
   bool get hasPubSpec => exists(join(pathToProjectRoot, 'pubspec.yaml'));
 
-  /// Returs true if the project has an 'analyssi_options.yaml' file.
+  /// Returns true if the project has an 'analysis_options.yaml' file.
   bool get hasAnalysisOptions =>
       exists(join(pathToProjectRoot, 'analysis_options.yaml'));
 

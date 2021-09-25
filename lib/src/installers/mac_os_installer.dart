@@ -5,7 +5,7 @@ import '../settings.dart';
 /// Installs dart on an apt base system.abstract
 ///
 
-class MacOsxDCliInstaller {
+class MacOSDCliInstaller {
   /// returns true if it needed to install dart.
   bool install({required bool installDart}) {
     if (installDart) {

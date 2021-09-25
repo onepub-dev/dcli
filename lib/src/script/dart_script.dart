@@ -73,7 +73,8 @@ class DartScript {
   /// [scriptName] won't have a '.dart' extension.
   /// In a compiled script the extension generally depends on the OS but
   /// it could in theory be anything (except for .dart).
-  /// Common extensions are .exe for windows and no extension for Linux and OSx.
+  /// Common extensions are .exe for windows and no extension for Linux
+  /// and MacOS.
   String get scriptName => _scriptName;
 
   /// the absolute path to the directory the script lives in
@@ -272,7 +273,7 @@ class DartScript {
   }
 
   /// Returns the platform dependant name of the compiled script's exe name.
-  /// On Linux and OSX this is just the basename (script name
+  /// On Linux and MacOS this is just the basename (script name
   ///  without the extension)
   /// on Windows this is the 'basename.exe'.
   String get exeName => '$basename${Settings().isWindows ? '.exe' : ''}';

@@ -4,7 +4,7 @@ import 'package:posix/posix.dart';
 
 import '../../dcli.dart';
 import '../installers/linux_installer.dart';
-import '../installers/macosx_installer.dart';
+import '../installers/mac_os_installer.dart';
 import '../settings.dart';
 
 /// Provides a number of helper functions
@@ -38,7 +38,7 @@ mixin PosixShell {
   /// Returns true if running a privileged action would
   /// cause a password to be requested.
   ///
-  /// Linux/OSX: will return true if the sudo password is not currently
+  /// Linux/MacOS: will return true if the sudo password is not currently
   /// cached and we are not already running as a privileged user.
   ///
   /// Windows: This will always return false as Windows is never
@@ -161,7 +161,7 @@ mixin PosixShell {
     if (Platform.isLinux) {
       return LinuxDCliInstaller().install(installDart: installDart);
     } else {
-      return MacOsxDCliInstaller().install(installDart: installDart);
+      return MacOSDCliInstaller().install(installDart: installDart);
     }
   }
 

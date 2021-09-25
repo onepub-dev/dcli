@@ -96,14 +96,14 @@ abstract class Shell {
   /// You can check if the process was launched with priviliges
   /// via calling [isPrivilegedProcess].
   ///
-  /// In Linux and osx terminology this method returns
+  /// In Linux and MacOS terminology this method returns
   /// true if the  effective uid is root (uid == 0).
   bool get isPrivilegedUser => false;
 
   /// Returns true if running a privileged action would
   /// cause a password to be requested.
   ///
-  /// Linux/OSX: will return true if the sudo password is not currently
+  /// Linux/MacOS: will return true if the sudo password is not currently
   /// cached and we are not already running as a privileged user.
   ///
   /// Windows: This will always return false as Windows is never
@@ -114,14 +114,14 @@ abstract class Shell {
   ///
   /// Calling [releasePrivileges] has no affect on this call.
   ///
-  /// Under Linux and OSX this means that the process's real uid
+  /// Under Linux and MacOS this means that the process's real uid
   /// is root (uid = 0).
   /// Under Windows this means that the process was lauched via
   /// 'Run as Administrator'.
   ///
   bool get isPrivilegedProcess => false;
 
-  /// On Linux and osx systems makes the script run as
+  /// On Linux and MacOS systems makes the script run as
   /// a non-privileged user even when started with sudo.
   ///
   /// This method is used to overcome issues when running as sudo
@@ -135,7 +135,7 @@ abstract class Shell {
   ///
   /// Calling this method for a non-privileged user has no affect.
   ///
-  /// On Linux and OSX releasing privileges sets the uid and gid
+  /// On Linux and MacOS releasing privileges sets the uid and gid
   /// to the user's original
   /// privileges so any files that are created/modified get the original
   /// user's uid/gid.
@@ -173,7 +173,7 @@ abstract class Shell {
   ///   [withPrivileges]
   void restorePrivileges();
 
-  /// When a script is run under sudo on Linux and osx and you
+  /// When a script is run under sudo on Linux and MacOS and you
   /// have previously called [releasePrivileges] then this method
   /// will run [action] with root privileges.
   ///

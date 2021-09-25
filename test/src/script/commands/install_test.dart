@@ -120,7 +120,7 @@ void checkInstallStructure(TestFileSystem fs) {
         absolute(base, 'hello_world.dart'),
         absolute(base, 'pubspec.yaml.template'),
         absolute(base, 'README.md'),
-        absolute(base, 'analysis_options.yaml'),
+        absolute(base, 'analysis_options.yaml.template'),
         absolute(base, 'cmd_args.dart'),
       ],
     ),
