@@ -27,11 +27,7 @@ class TailProgress extends InternalProgress {
     // waitForEx(
     //   core.tail(path, lines).listen((line) => action(line)).asFuture<String>(),
 
-    var tstream = core.tail(path, lines);
-
-    tstream.listen((line) => action(line)).asFuture<String>();
-
-    waitForEx<String>();
+    core.tail(path, lines).listen((line) => action(line));
   }
 }
 
