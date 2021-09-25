@@ -2,8 +2,10 @@ import 'dart:async';
 import 'dart:io';
 
 import 'package:dcli_core/dcli_core.dart' as core;
+import 'package:dcli_core/dcli_core.dart';
 
 import '../../dcli.dart';
+import 'internal_progress.dart';
 
 export 'package:dcli_core/dcli_core.dart' show Find;
 
@@ -84,7 +86,7 @@ export 'package:dcli_core/dcli_core.dart' show Find;
 /// back.
 ///
 
-Progress find(
+FindProgress find(
   String pattern, {
   bool caseSensitive = false,
   bool recursive = true,
@@ -95,22 +97,78 @@ Progress find(
 }) {
   progress ??= Progress.devNull();
 
-  final controller = StreamController<FindItem>();
-  controller.stream.listen((item) async {
-    progress!.addToStdout(item.pathTo);
-  });
+  // final controller = StreamController<FindItem>();
+  // try {
+  //   controller.stream.listen((item) => progress!.addToStdout(item.pathTo));
+  //   waitForEx(
+  //     core.find(
+  //       pattern,
+  //       caseSensitive: caseSensitive,
+  //       recursive: recursive,
+  //       includeHidden: includeHidden,
+  //       workingDirectory: workingDirectory,
+  //       progress: controller.sink,
+  //     ),
+  //   );
+  // } finally {
+  //   controller.close();
+  // }
 
-  try {
-    waitForEx(
-      core.find(pattern,
+  return FindProgress(
+    pattern,
+    caseSensitive: caseSensitive,
+    recursion: recursive,
+    includeHidden: includeHidden,
+    workingDirectory: workingDirectory,
+    types: types,
+  );
+}
+
+///
+class FindProgress extends InternalProgress {
+  ///
+  FindProgress(
+    this.pattern, {
+    required this.caseSensitive,
+    required this.recursion,
+    required this.includeHidden,
+    required this.workingDirectory,
+    required this.types,
+  });
+  String pattern;
+  bool caseSensitive;
+  bool recursion;
+  bool includeHidden;
+  String workingDirectory;
+  List<FileSystemEntityType> types;
+
+  /// If your [action] performas any asynchronous operations
+  /// then you MUST wrap it in a [waitForEx] otherwise
+  /// your some of your actions may end up being called
+  /// after [forEach] returns which is unlikely to be what you are expecting.
+  /// If you need to perform async operations you should use
+  ///  [core.find].
+  @override
+  void forEach(LineAction action) {
+    final controller = StreamController<FindItem>();
+    try {
+      controller.stream.listen((item) async {
+        action(item.pathTo);
+      });
+
+      waitForEx(
+        core.find(
+          pattern,
           caseSensitive: caseSensitive,
-          recursive: recursive,
+          recursive: recursion,
           includeHidden: includeHidden,
           workingDirectory: workingDirectory,
-          progress: controller.sink),
-    );
-  } finally {
-    controller.close();
+          progress: controller.sink,
+          types: types,
+        ),
+      );
+    } finally {
+      waitForEx<void>(controller.close());
+    }
   }
-  return progress;
 }

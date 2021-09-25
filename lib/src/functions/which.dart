@@ -1,8 +1,8 @@
 import 'dart:async';
 
 import 'package:dcli_core/dcli_core.dart' as core;
-import 'package:dcli_core/dcli_core.dart';
 
+import '../../dcli.dart';
 import '../util/wait_for_ex.dart';
 
 ///
@@ -65,7 +65,7 @@ core.Which which(
   Sink<String>? progress,
 }) {
   core.Which which;
-  final controller = StreamController<WhichSearch>();
+  final controller = StreamController<core.WhichSearch>();
 
   try {
     controller.stream.listen((whichSearch) {
@@ -87,7 +87,7 @@ core.Which which(
       ),
     );
   } finally {
-    controller.close();
+    waitForEx<void>(controller.close());
   }
   return which;
 }

@@ -1,20 +1,39 @@
-import 'package:dcli_core/dcli_core.dart' as core hide HeadException;
+
+import 'package:dcli_core/dcli_core.dart' as core;
 
 import '../../dcli.dart';
-
-export 'package:dcli_core/dcli_core.dart' show HeadException;
+import 'internal_progress.dart';
 
 ///
-/// Returns count [lines] from the file at [path].
+/// Prepares to read count [lines] from the file at [path].
+///
+/// The [head] function returns a [HeadProgress] which can
+/// then be used to read the configured lines via one of [HeadProgress]
+/// methods.
 ///
 /// ```dart
 /// head('/var/log/syslog', 10).forEach((line) => print(line));
 /// ```
 ///
-/// Throws a [HeadException] exception if [path] is not a file.
+/// Throws a [core.HeadException] exception if [path] is not a file.
 ///
-Progress head(String path, int lines) {
-  final capture = Progress.capture();
-  core.head(path, lines).then((stream) => stream.listen(capture.addToStdout));
-  return capture;
+HeadProgress head(String path, int lines) =>
+    HeadProgress._internal(path, lines);
+
+/// Used to access output from the head command.
+///
+class HeadProgress extends InternalProgress {
+  HeadProgress._internal(this._path, this._lines);
+  final String _path;
+  final int _lines;
+
+  /// Read lines from the head of the file.
+  @override
+  void forEach(LineAction action) {
+    waitForEx(
+      core
+          .head(_path, _lines)
+          .then((stream) => stream.listen((line) => action(line))),
+    );
+  }
 }

@@ -1,8 +1,7 @@
 import 'package:dcli_core/dcli_core.dart' as core;
 
 import '../../dcli.dart';
-import '../settings.dart';
-import '../util/progress.dart';
+import 'internal_progress.dart';
 
 ///
 /// Returns count [lines] from the end of the file at [path].
@@ -13,41 +12,26 @@ import '../util/progress.dart';
 ///
 /// Throws a [TailException] exception if [path] is not a file.
 ///
-Progress tail(String path, int lines) => _Tail().tail(path, lines);
+TailProgress tail(String path, int lines) =>
+    TailProgress._internal(path, lines);
 
-class _Tail extends core.DCliFunction {
-  Progress tail(String path, int lines, {Progress? progress}) {
-    verbose(() => 'tail ${truepath(path)} lines: $lines');
+class TailProgress extends InternalProgress {
+  TailProgress._internal(this.path, this.lines);
 
-    if (!exists(path)) {
-      throw TailException('The path ${truepath(path)} does not exist.');
-    }
+  String path;
+  int lines;
 
-    if (!isFile(path)) {
-      throw TailException('The path ${truepath(path)} is not a file.');
-    }
+  /// Read lines from the head of the file.
+  @override
+  void forEach(LineAction action) {
+    // waitForEx(
+    //   core.tail(path, lines).listen((line) => action(line)).asFuture<String>(),
 
-    try {
-      progress ??= Progress.printStdOut();
+    var tstream = core.tail(path, lines);
 
-      waitForEx(
-        core.withOpenLineFile(path, (file) async {
-          file.readAll().listen((line) async {
-            progress!.addToStdout(line);
-          });
-        }),
-      );
-    }
-    // ignore: avoid_catches_without_on_clauses
-    catch (e) {
-      throw TailException(
-        'An error occured reading ${truepath(path)}. Error: $e',
-      );
-    } finally {
-      progress!.close();
-    }
+    tstream.listen((line) => action(line)).asFuture<String>();
 
-    return progress;
+    waitForEx<String>();
   }
 }
 

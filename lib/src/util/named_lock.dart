@@ -315,7 +315,6 @@ class NamedLock {
       /// sleep for 100ms and then we will try again.
       waitForEx<void>(Future.delayed(const Duration(milliseconds: 100)));
       if (finalwaiting != null) {
-        print(finalwaiting);
         // only print waiting message once.
         finalwaiting = null;
       }
