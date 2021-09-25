@@ -6,6 +6,7 @@ import 'package:pedantic/pedantic.dart';
 import '../settings.dart';
 import '../util/dcli_exception.dart';
 import '../util/format.dart';
+import '../util/terminal.dart';
 import '../util/wait_for_ex.dart';
 import 'function.dart';
 import 'is.dart';
@@ -19,7 +20,12 @@ void _devNull(FetchProgress _) {}
 /// Fetches the given resource at the passed [url].
 ///
 /// ```dart
-/// fetch(url: 'https://some/resource/file.zip', saveToPath: '/tmp/file.zip');
+///  fetch(
+///      url:
+///          'https://some/resource/file.zip',
+///     saveToPath: pathToPiImage,
+///     fetchProgress: FetchProgress.show
+///         });
 /// ```
 /// The [url] must be a http or https based resource.
 ///
@@ -64,7 +70,6 @@ void fetch({
 /// The [FetchUrl.saveToPath] contained in each [FetchUrl] may be an
 /// absolute (recommended) or relative path where to
 /// save the downloaded resource.
-///
 ///
 /// You may optionally passing in a [FetchUrl.progress] method with
 /// each [FetchUrl] which will be called each
@@ -320,6 +325,30 @@ class FetchProgress {
   /// a value from 0.0 to 1.0 indicating the percentage progress.
   /// You are guarneteed to get a final progress event with a value of 1.0
   final double progress;
+
+  /// Shows the progress by replacing the console existing line with the
+  /// message:
+  /// XX/YY <url>
+  ///
+  /// Where XX is the bytes downloaded and YY is the total bytes to download.
+  /// You can control the format of the message by passing and argument to
+  /// the [format] parameter.
+  ///
+  /// ```dart
+  ///  fetch(
+  ///      url:
+  ///          'https://some/resource/file.zip',
+  ///     saveToPath: pathToPiImage,
+  ///     fetchProgress: FetchProgress.show
+  ///         });
+  /// ```
+  static void show(
+    FetchProgress progress, {
+    String Function(FetchProgress progress)? format,
+  }) {
+    final message = format == null ? progress.toString() : format(progress);
+    Terminal().overwriteLine(message);
+  }
 
   @override
   String toString() =>
