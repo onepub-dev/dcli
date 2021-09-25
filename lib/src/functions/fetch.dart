@@ -1,11 +1,11 @@
 import 'dart:async';
 import 'dart:io';
 
-import 'package:dcli/src/util/enum_helper.dart';
 import 'package:pedantic/pedantic.dart';
 
 import '../settings.dart';
 import '../util/dcli_exception.dart';
+import '../util/enum_helper.dart';
 import '../util/format.dart';
 import '../util/terminal.dart';
 import '../util/wait_for_ex.dart';
