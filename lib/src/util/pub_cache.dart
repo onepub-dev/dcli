@@ -157,20 +157,25 @@ class PubCache {
   ///
   /// If no versions are installed then null is returned.
   Version? findPrimaryVersion(String packageName) {
-    final versions = find(
+    final packages = find(
       '$packageName-*.*',
       types: [Find.directory],
       workingDirectory: pathToDartLang,
     ).toList();
 
-    if (versions.isEmpty) {
+    if (packages.isEmpty) {
       return null;
     }
 
     return Version.primary(
-      versions
-          .map((version) => Version.parse(basename(version).split('-')[1]))
-          .toList(),
+      packages.map((package) {
+        final filename = basename(package);
+        final firstHyphen = filename.indexOf('-');
+        assert(firstHyphen >= 0, 'should always be a hypen after the filename');
+        final version = filename.substring(firstHyphen + 1);
+
+        return Version.parse(version);
+      }).toList(),
     );
   }
 }
