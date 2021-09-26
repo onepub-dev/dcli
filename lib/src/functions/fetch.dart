@@ -25,7 +25,7 @@ void _devNull(FetchProgress _) {}
 ///      url:
 ///          'https://some/resource/file.zip',
 ///     saveToPath: pathToPiImage,
-///     fetchProgress: FetchProgress.show
+///     fetchProgress: FetchProgress.showBytes
 ///         });
 /// ```
 /// The [url] must be a http or https based resource.
@@ -52,7 +52,7 @@ void _devNull(FetchProgress _) {}
 void fetch({
   required String url,
   required String saveToPath,
-  FetchMethod method = Fetch.get,
+  FetchMethod method = FetchMethod.get,
   OnFetchProgress fetchProgress = _devNull,
 }) =>
     _Fetch().fetch(
@@ -96,16 +96,25 @@ void fetch({
 void fetchMultiple({required List<FetchUrl> urls}) =>
     _Fetch().fetchMultiple(urls: urls);
 
-/// Http Methods used when calling [fetch]
-typedef FetchMethod = String;
+// /// Http Methods used when calling [fetch]
+// typedef FetchMethod = String;
 
-/// Types used by the [fetch] method.
-class Fetch {
+// /// Types used by the [fetch] method.
+// class Fetch {
+//   /// peform an http GET when doing the fetch
+//   static const FetchMethod get = 'GET';
+
+//   /// perform an HTTP POST when doing the fetch.
+//   static const FetchMethod post = 'POST';
+// }
+
+/// Http Methods used when calling [fetch]
+enum FetchMethod {
   /// peform an http GET when doing the fetch
-  static const FetchMethod get = 'GET';
+  get,
 
   /// perform an HTTP POST when doing the fetch.
-  static const FetchMethod post = 'POST';
+  post
 }
 
 class _Fetch extends DCliFunction {
@@ -114,7 +123,7 @@ class _Fetch extends DCliFunction {
     required String saveToPath,
     OnFetchProgress progress = _devNull,
     bool verboseProgress = false,
-    FetchMethod method = Fetch.get,
+    FetchMethod method = FetchMethod.get,
   }) {
     waitForEx<void>(
       download(
@@ -261,16 +270,12 @@ class _Fetch extends DCliFunction {
 
   Future<HttpClientRequest> startCall(HttpClient client, FetchUrl fetchUrl) {
     switch (fetchUrl.method) {
-      case Fetch.get:
+      case FetchMethod.get:
         return client.getUrl(Uri.parse(fetchUrl.url));
 
-      case Fetch.post:
+      case FetchMethod.post:
         return client.postUrl(Uri.parse(fetchUrl.url));
     }
-
-    throw ArgumentError(
-      'Unsupported HttpMethod ${fetchUrl.method} for url: ${fetchUrl.url}',
-    );
   }
 
   static void _sendProgressEvent(FetchProgress progress) {
@@ -317,7 +322,7 @@ class FetchUrl {
   FetchUrl({
     required this.url,
     required this.saveToPath,
-    this.method = Fetch.get,
+    this.method = FetchMethod.get,
     this.progress = _devNull,
   });
 
@@ -438,10 +443,10 @@ class FetchProgress {
   ///      url:
   ///          'https://some/resource/file.zip',
   ///     saveToPath: pathToPiImage,
-  ///     fetchProgress: FetchProgress.show
+  ///     fetchProgress: FetchProgress.showBytes
   ///         });
   /// ```
-  static void show(
+  static void showBytes(
     FetchProgress progress, {
     String Function(FetchProgress progress)? format,
   }) {
