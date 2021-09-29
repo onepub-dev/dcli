@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:io';
 
+import 'package:meta/meta.dart';
 import 'package:pedantic/pedantic.dart';
 
 import '../settings.dart';
@@ -21,6 +22,7 @@ void _devNull(FetchProgress _) {}
 /// Fetches the given resource at the passed [url].
 ///
 /// ```dart
+///  print(''); // will be overwritten with progress messages.
 ///  fetch(
 ///      url:
 ///          'https://some/resource/file.zip',
@@ -160,7 +162,8 @@ class _Fetch extends DCliFunction {
     // announce we are starting.
     verbose(() => 'Started downloading: ${fetchUrl.url}');
     final completer = Completer<void>();
-    _sendProgressEvent(FetchProgress._initialising(fetchUrl));
+    var progress = FetchProgress.initialising(fetchUrl);
+    _sendProgressEvent(progress);
 
     if (exists(fetchUrl.saveToPath)) {
       throw FetchException(
@@ -170,13 +173,15 @@ class _Fetch extends DCliFunction {
 
     touch(fetchUrl.saveToPath, create: true);
 
-    _sendProgressEvent(FetchProgress._connecting(fetchUrl));
+    _sendProgressEvent(
+        progress = FetchProgress.connecting(fetchUrl, prior: progress));
 
     final client = HttpClient();
     unawaited(
       startCall(client, fetchUrl).then((request) {
         /// we have connected
-        _sendProgressEvent(FetchProgress._connected(fetchUrl));
+        _sendProgressEvent(
+            progress = FetchProgress.connected(fetchUrl, prior: progress));
 
         /// we can added headers here if we need.
         /// send the request
@@ -185,20 +190,23 @@ class _Fetch extends DCliFunction {
         var lengthReceived = 0;
 
         _sendProgressEvent(
-          FetchProgress._response(fetchUrl, response.statusCode),
+          progress = FetchProgress.response(fetchUrl, response.statusCode,
+              prior: progress),
         );
 
         final headers = <String, List<String>>{};
         response.headers.forEach((name, values) => headers[name] = values);
 
-        _sendProgressEvent(FetchProgress._headers(fetchUrl, headers));
+        _sendProgressEvent(progress = FetchProgress.forHeaders(
+            fetchUrl, headers,
+            prior: FetchProgress.initialising(fetchUrl)));
 
         final contentLength = response.contentLength;
 
         // we have a response.
-        _sendProgressEvent(
-          FetchProgress._downloading(fetchUrl, contentLength, 0),
-        );
+        _sendProgressEvent(progress = FetchProgress.downloading(
+            fetchUrl, contentLength, 0,
+            prior: progress));
 
         /// prep the save file.
         final saveFile = File(fetchUrl.saveToPath);
@@ -220,11 +228,9 @@ class _Fetch extends DCliFunction {
 
             /// progres indicated to cancel the download.
             _sendProgressEvent(
-              FetchProgress._downloading(
-                fetchUrl,
-                contentLength,
-                lengthReceived,
-              ),
+              progress = FetchProgress.downloading(
+                  fetchUrl, contentLength, lengthReceived,
+                  prior: progress),
             );
 
             subscription.resume();
@@ -240,7 +246,9 @@ class _Fetch extends DCliFunction {
             await subscription.cancel();
             client.close();
             _sendProgressEvent(
-              FetchProgress._complete(fetchUrl, contentLength, lengthReceived),
+              progress = FetchProgress.complete(
+                  fetchUrl, contentLength, lengthReceived,
+                  prior: progress),
             );
             verbose(() => 'Completed downloading: ${fetchUrl.url}');
 
@@ -249,7 +257,8 @@ class _Fetch extends DCliFunction {
           // ignore: avoid_types_on_closure_parameters
           onError: (Object e, StackTrace st) async {
             // something went wrong.
-            _sendProgressEvent(FetchProgress._error(fetchUrl));
+            _sendProgressEvent(
+                progress = FetchProgress.error(fetchUrl, prior: progress));
             verbose(
               () => 'Error downloading: ${fetchUrl.url}',
             );
@@ -344,15 +353,18 @@ class FetchUrl {
 /// Passed to the [progress] method to indicate the current progress of
 /// a download.
 class FetchProgress {
-  const FetchProgress._initialising(this.fetch)
+  @visibleForTesting
+  const FetchProgress.initialising(this.fetch)
       : progress = 0.0,
         length = 0,
         downloaded = 0,
         status = FetchStatus.initialising,
         headers = null,
-        responseCode = null;
+        responseCode = null,
+        prior = null;
 
-  const FetchProgress._connecting(this.fetch)
+  @visibleForTesting
+  const FetchProgress.connecting(this.fetch, {required this.prior})
       : progress = 0.0,
         length = 0,
         downloaded = 0,
@@ -360,7 +372,8 @@ class FetchProgress {
         headers = null,
         responseCode = null;
 
-  const FetchProgress._connected(this.fetch)
+  @visibleForTesting
+  const FetchProgress.connected(this.fetch, {required this.prior})
       : progress = 0.0,
         length = 0,
         downloaded = 0,
@@ -368,19 +381,24 @@ class FetchProgress {
         headers = null,
         responseCode = null;
 
-  const FetchProgress._downloading(this.fetch, this.length, this.downloaded)
+  @visibleForTesting
+  const FetchProgress.downloading(this.fetch, this.length, this.downloaded,
+      {required this.prior})
       : status = FetchStatus.downloading,
         progress = length != 0 ? downloaded / length : 0,
         headers = null,
         responseCode = null;
 
-  const FetchProgress._complete(this.fetch, this.length, this.downloaded)
+  @visibleForTesting
+  const FetchProgress.complete(this.fetch, this.length, this.downloaded,
+      {required this.prior})
       : progress = 1.0,
         status = FetchStatus.complete,
         headers = null,
         responseCode = null;
 
-  const FetchProgress._error(this.fetch)
+  @visibleForTesting
+  const FetchProgress.error(this.fetch, {required this.prior})
       : progress = 0.0,
         length = 0,
         downloaded = 0,
@@ -388,14 +406,18 @@ class FetchProgress {
         headers = null,
         responseCode = null;
 
-  const FetchProgress._headers(this.fetch, this.headers)
+  @visibleForTesting
+  const FetchProgress.forHeaders(this.fetch, this.headers,
+      {required this.prior})
       : status = FetchStatus.headers,
         progress = 0,
         length = 0,
         downloaded = 0,
         responseCode = null;
 
-  const FetchProgress._response(this.fetch, this.responseCode)
+  @visibleForTesting
+  const FetchProgress.response(this.fetch, this.responseCode,
+      {required this.prior})
       : status = FetchStatus.response,
         progress = 0,
         length = 0,
@@ -430,6 +452,8 @@ class FetchProgress {
   /// You are guarneteed to get a final progress event with a value of 1.0
   final double progress;
 
+  final FetchProgress? prior;
+
   /// Shows the progress by replacing the console existing line with the
   /// message:
   /// XX/YY <url>
@@ -446,7 +470,63 @@ class FetchProgress {
   ///     fetchProgress: FetchProgress.showBytes
   ///         });
   /// ```
-  static void showBytes(
+  static void showBytes(FetchProgress progress) {
+    final update = formatByteLine(progress);
+    if (update.newline) {
+      print('\n${update.value}');
+    } else {
+      Terminal()
+        ..column = update.offset
+        ..write(update.value);
+    }
+  }
+
+  @visibleForTesting
+  static ProgressByteUpdate formatByteLine(FetchProgress progress) {
+    ProgressByteUpdate update;
+    final status = _fixedWidthStatus(progress.status);
+    final downloaded = Format.bytesAsReadable(progress.downloaded);
+    final total = Format.bytesAsReadable(progress.length, pad: false);
+
+    final url = constrain(progress.fetch.url);
+    switch (progress.status) {
+      case FetchStatus.initialising:
+        update = ProgressByteUpdate(0, '$status      ?/?      $url');
+        break;
+
+      case FetchStatus.connected:
+      case FetchStatus.connecting:
+      case FetchStatus.headers:
+      case FetchStatus.response:
+      case FetchStatus.error:
+        update = ProgressByteUpdate(0, '$status      ?/?      $url');
+        break;
+      case FetchStatus.downloading:
+        if (progress.prior?.status == FetchStatus.downloading) {
+          update = ProgressByteUpdate(14, '$downloaded/$total');
+        } else {
+          update = ProgressByteUpdate(0, '$status $downloaded/$total');
+        }
+        break;
+      case FetchStatus.complete:
+        update =
+            ProgressByteUpdate(0, '$status $downloaded/$total', newline: true);
+        break;
+    }
+
+    return update;
+  }
+
+  static String constrain(String url, {int width = 40}) {
+    final partLength = width ~/ 2 - 3;
+    return '${url.substring(0, partLength)}...${url.substring(url.length - partLength)}';
+  }
+
+  // status right padded to 12 chars
+  static String _fixedWidthStatus(FetchStatus status) =>
+      '${EnumHelper().getName(status)}:'.padRight(13);
+
+  static void show(
     FetchProgress progress, {
     String Function(FetchProgress progress)? format,
   }) {
@@ -460,6 +540,13 @@ class FetchProgress {
   @override
   String toString() =>
       '${EnumHelper().getName(status)}: ${Format.bytesAsReadable(downloaded)}/${Format.bytesAsReadable(length)} ${fetch.url}';
+}
+
+class ProgressByteUpdate {
+  ProgressByteUpdate(this.offset, this.value, {bool this.newline = false});
+  int offset;
+  String value;
+  bool newline;
 }
 
 /// Throw when an error occurs fetching a resource.
