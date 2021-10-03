@@ -19,6 +19,45 @@ import 'runner.dart';
 ///
 ///
 class DartScript {
+  /// Path to the currently runnng script
+  // static String? __pathToCurrentScript;
+
+  /// Absolute path to 'this' script.
+  /// If this is a .dart file then its current location.
+  /// If this is a compiled script then the location of the compiled exe.
+  /// If the script was globally activated then this will be a path
+  /// to the script in the pub-cache.
+  DartScript._self() {
+    final script = Platform.script;
+
+    String pathToScript;
+
+    if (script.isScheme('file')) {
+      pathToScript = Platform.script.toFilePath();
+
+      pathToScript = stripDartVersionSuffix(pathToScript);
+
+      if (_isCompiled && !_isPubGlobalActivated(pathToScript)) {
+        pathToScript = Platform.resolvedExecutable;
+      }
+    } else {
+      /// when running in a unit test we can end up with a 'data' scheme
+      if (script.isScheme('data')) {
+        final start = script.path.indexOf('file:');
+        final end = script.path.lastIndexOf('.dart');
+        final fileUri = script.path.substring(start, end + 5);
+
+        /// now parse the remaining uri to a path.
+        pathToScript = Uri.parse(fileUri).toFilePath();
+      } else {
+        pathToScript = pwd;
+      }
+    }
+
+    _pathToScript = truepath(pathToScript);
+    _scriptDirectory = dirname(truepath(pathToScript));
+  }
+
   /// Creates a [DartScript] object from a dart script
   /// located at [scriptPathTo].
   ///
@@ -55,15 +94,23 @@ class DartScript {
     }
   }
 
-  /// The directory where the dart script file lives
-  /// stored as an absolute path.
-  final String _scriptDirectory;
+  /// Returns the instance of the currently running script.
+  ///
+  /// If you are trying to load an instace of another script then
+  /// use [DartScript.fromFile];
+  /// TODO: for v2 change this to a ctor to aid with unit testing.
+  // ignore: prefer_constructors_over_static_methods
+  static DartScript get self => _current ??= DartScript._self();
 
   /// Name of the dart script
   late final String _scriptName;
 
   /// Path to the dart script loaded.
-  String _pathToScript;
+  late final String _pathToScript;
+
+  /// The directory where the dart script file lives
+  /// stored as an absolute path.
+  late final String _scriptDirectory;
 
   /// path to the this dart script.
   String get pathToScript => _pathToScript;
@@ -97,14 +144,18 @@ class DartScript {
   /// True if the script is compiled.
   bool get isCompiled => _isCompiled;
 
-  static bool get _isCompiled => p.extension(Platform.script.path) != '.dart';
+  static bool get _isCompiled =>
+      p.extension(Platform.script.toFilePath()) != '.dart';
 
   /// Checks if the Script has been compiled and installed into the ~/.dcli/bin path
   bool get isInstalled => exists(pathToInstalledExe);
 
   /// True if the script has been installed via 'dart pub global active'
   /// and as such is running from the pub cache.
-  bool get isPubGlobalActivated => _pathToScript.startsWith(PubCache().pathTo);
+  bool get isPubGlobalActivated => _isPubGlobalActivated(_pathToScript);
+
+  static bool _isPubGlobalActivated(String pathToScript) =>
+      pathToScript.startsWith(PubCache().pathTo);
 
   /// The current script that is running.
   static DartScript? _current;
@@ -112,52 +163,6 @@ class DartScript {
   ///
   @Deprecated('Use DartScript.self or DartScript.fromPath()')
   static DartScript get current => self;
-
-  /// Returns the instance of the currently running script.
-  ///
-  /// If you are trying to load an instace of another script then
-  /// use [DartScript.fromFile];
-  // ignore: prefer_constructors_over_static_methods
-  static DartScript get self =>
-      _current ??= DartScript.fromFile(_pathToCurrentScript);
-
-  /// Path to the currently runnng script
-  static String? __pathToCurrentScript;
-
-  /// Absolute path to 'this' script.
-  /// If this is a .dart file then its current location.
-  /// If this is a compiled script then the location of the compiled exe.
-  /// If the script was globally activated then this will be a path
-  /// to the script in the pub-cache.
-  static String get _pathToCurrentScript {
-    if (__pathToCurrentScript == null) {
-      final script = Platform.script;
-
-      if (script.isScheme('file')) {
-        __pathToCurrentScript = Platform.script.toFilePath();
-
-        __pathToCurrentScript = stripDartVersionSuffix(__pathToCurrentScript!);
-
-        if (_isCompiled) {
-          __pathToCurrentScript = Platform.resolvedExecutable;
-        }
-      } else {
-        /// when running in a unit test we can end up with a 'data' scheme
-        if (script.isScheme('data')) {
-          final start = script.path.indexOf('file:');
-          final end = script.path.lastIndexOf('.dart');
-          final fileUri = script.path.substring(start, end + 5);
-
-          /// now parse the remaining uri to a path.
-          __pathToCurrentScript = Uri.parse(fileUri).toFilePath();
-        } else {
-          __pathToCurrentScript = pwd;
-        }
-      }
-    }
-
-    return __pathToCurrentScript!;
-  }
 
   /// validate that the passed arguments points to a valid script
   static void validate(String scriptPath) {
@@ -225,6 +230,9 @@ class DartScript {
   /// If [install] is true and [overwrite] is false and an exe of the same name already exists in ~/.dcli/bin
   /// the install will fail and a [MoveException] will be thrown.
   ///
+  /// If [workingDirectory] is not passed then the current working directory is
+  /// used. The [workingDirectory] should contain the pubspec.yaml that is used
+  /// to compile the script.
   void compile({
     bool install = false,
     bool overwrite = false,
@@ -294,7 +302,7 @@ class DartScript {
     /// Not certain what is going on here.
     /// If we use a pub global activated version then
     /// Platform.script is returning a filename of the form:
-    /// pub_release.dart-2.13.0
+    /// pub_release.dart-2.13.0.snapshot
     /// So we look to strip of the suffix from the - onward.
     if (pathToCurrentScript.contains('.dart-')) {
       var index = pathToCurrentScript.indexOf('.dart-');
