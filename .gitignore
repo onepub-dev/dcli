@@ -53,3 +53,6 @@ tool/post_release_hook/.settings.yaml
 .testing
 test/sudo/privileges
 tool/post_release_hook/settings.yaml
+test/test_script/script/bin/dart_script
+test/test_script/dcli_unit_tester/bin/dcli_unit_tester.exe
+test/test_script/dcli_unit_tester/bin/dcli_unit_tester
