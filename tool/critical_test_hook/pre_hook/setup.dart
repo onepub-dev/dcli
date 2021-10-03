@@ -33,8 +33,14 @@ void main(List<String> args) {
       'Activating dcli from source so we are testing against latest version',
     );
 
-    /// run pub get and only display errors.
-    DartSdk().globalActivateFromPath(projectRoot);
+    final sdk = DartSdk()
+
+      /// run pub get and only display errors.
+      ..globalActivateFromPath(projectRoot);
+
+    if (sdk.isPackageGloballyActivated('dcli_unit_tester')) {
+      sdk.globalActivate('dcli_unit_tester');
+    }
   }
 
   /// warm up all test packages.
