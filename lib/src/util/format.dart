@@ -1,3 +1,5 @@
+import 'dart:math';
+
 /// provides a random collection of formatters
 /// EXPERIMENTAL
 ///
@@ -91,24 +93,54 @@ class Format {
       '${(progress * 100).toStringAsFixed(precision)}%';
 
   /// returns the the number of [bytes] in a human readable
-  /// form. e.g. 10G, 100M, 20K, 10B
-  static String bytesAsReadable(int bytes) {
+  /// form. e.g. 1e+5 3.000T, 10.00G, 100.0M, 20.00K, 10B
+  ///
+  /// Except for absurdly large no. (> 10^20)
+  /// the return is guarenteed to be 6 characters long.
+  /// For no. < 1000K we right pad the no. with spaces.
+  static String bytesAsReadable(int bytes, {bool pad = true}) {
     String human;
 
-    final svalue = '$bytes';
-    if (bytes > 1000000000) {
-      human = svalue.substring(0, svalue.length - 9);
-      human += 'G';
-    } else if (bytes > 1000000) {
-      human = svalue.substring(0, svalue.length - 6);
-      human += 'M';
-    } else if (bytes > 1000) {
-      human = svalue.substring(0, svalue.length - 3);
-      human += 'K';
+    if (bytes < 1000) {
+      human = _fiveDigits(bytes, 0, 'B', pad: pad);
+    } else if (bytes < 1000000) {
+      human = _fiveDigits(bytes, 3, 'K', pad: pad);
+    } else if (bytes < 1000000000) {
+      human = _fiveDigits(bytes, 6, 'M', pad: pad);
+    } else if (bytes < 1000000000000) {
+      human = _fiveDigits(bytes, 9, 'G', pad: pad);
+    } else if (bytes < 1000000000000000) {
+      human = _fiveDigits(bytes, 12, 'T', pad: pad);
     } else {
-      human = '${svalue}B';
+      human = bytes.toStringAsExponential(0);
     }
     return human;
+  }
+
+  static String _fiveDigits(int bytes, int exponent, String letter,
+      {bool pad = true}) {
+    final num result;
+    String human;
+    if (bytes < 1000) {
+      // less than 1K we display integers only
+      result = bytes ~/ pow(10, exponent);
+      human = '$result'.padLeft(pad ? 5 : 0);
+    } else {
+      // greater than 1K we display decimals
+      result = bytes / pow(10, exponent);
+      human = '$result';
+
+      if (human.length > 5) {
+        human = human.substring(0, 5);
+      } else {
+        /// add trailing zeros to maintain a fixed width of 5 chars.
+        if (pad) {
+          human = human.padRight(5, '0');
+        }
+      }
+    }
+
+    return '$human$letter';
   }
 
   // ///

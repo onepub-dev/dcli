@@ -161,7 +161,53 @@ void main() {
     );
     expect(exists(temp), isFalse);
   });
+
+  group('progress', () {
+    test('showBytes', () {
+      const url =
+          'http://test.comeing.com.au/long/123456789012345678901234567890';
+
+      final fetchUrl = FetchUrl(url: url, saveToPath: '/tmp/me');
+
+      const constrained = 'http://test.comei...45678901234567890';
+      final initializing = FetchProgress.initialising(fetchUrl);
+      final downloading =
+          FetchProgress.downloading(fetchUrl, 100, 100, prior: initializing);
+      final downloading2 =
+          FetchProgress.downloading(fetchUrl, 100, 100, prior: downloading);
+
+      final complete =
+          FetchProgress.complete(fetchUrl, 100, 100, prior: downloading);
+      expect(FetchProgress.formatByteLine(initializing).value,
+          'Initialising:      ?/?      $constrained');
+      expect(FetchProgress.formatByteLine(downloading).value,
+          'Downloading:    100B/100B');
+      final downloadUpdate = FetchProgress.formatByteLine(downloading2);
+      expect(downloadUpdate.value, '  100B/100B');
+      expect(downloadUpdate.offset, 14);
+      expect(FetchProgress.formatByteLine(complete).value,
+          'Complete:       100B/100B');
+    });
+
+    test('Progress showBytes', () {
+      withTempDir((testRoot) {
+        withTempFile(
+          (sampleAac) {
+            fetch(
+                url: '$baseURl/sample.aac',
+                saveToPath: sampleAac,
+                fetchProgress: FetchProgress.showBytes);
+            expect(fileLength(sampleAac), equals(14951));
+            delete(sampleAac);
+          },
+          create: false,
+        );
+      });
+    });
+  });
 }
+
+
 
 Future<void> showProgress(FetchProgress progress) async {
   Terminal().overwriteLine('${progress.progress * 100} %');
