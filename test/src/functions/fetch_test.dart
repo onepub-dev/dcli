@@ -207,8 +207,6 @@ void main() {
   });
 }
 
-
-
 Future<void> showProgress(FetchProgress progress) async {
   Terminal().overwriteLine('${progress.progress * 100} %');
 }

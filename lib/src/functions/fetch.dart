@@ -354,7 +354,9 @@ class FetchUrl {
 /// a download.
 class FetchProgress {
   @visibleForTesting
-  const FetchProgress.initialising(this.fetch)
+
+  /// Fetch is preparing to connect
+  FetchProgress.initialising(this.fetch)
       : progress = 0.0,
         length = 0,
         downloaded = 0,
@@ -364,65 +366,87 @@ class FetchProgress {
         prior = null;
 
   @visibleForTesting
-  const FetchProgress.connecting(this.fetch, {required this.prior})
+
+  /// Fetch is connecting
+  FetchProgress.connecting(this.fetch, {required this.prior})
       : progress = 0.0,
         length = 0,
         downloaded = 0,
         status = FetchStatus.connecting,
         headers = null,
-        responseCode = null;
+        responseCode = null {
+    prior?.prior = null;
+  }
 
   @visibleForTesting
-  const FetchProgress.connected(this.fetch, {required this.prior})
+
+  /// Fetch connected
+  FetchProgress.connected(this.fetch, {required this.prior})
       : progress = 0.0,
         length = 0,
         downloaded = 0,
         status = FetchStatus.connected,
         headers = null,
-        responseCode = null;
+        responseCode = null {
+    prior?.prior = null;
+  }
 
+  /// Fetch is downloading. You will get multiples of this event.
   @visibleForTesting
-  const FetchProgress.downloading(this.fetch, this.length, this.downloaded,
+  FetchProgress.downloading(this.fetch, this.length, this.downloaded,
       {required this.prior})
       : status = FetchStatus.downloading,
         progress = length != 0 ? downloaded / length : 0,
         headers = null,
-        responseCode = null;
+        responseCode = null {
+    prior?.prior = null;
+  }
 
+  /// Fetch completed downloading the file
   @visibleForTesting
-  const FetchProgress.complete(this.fetch, this.length, this.downloaded,
+  FetchProgress.complete(this.fetch, this.length, this.downloaded,
       {required this.prior})
       : progress = 1.0,
         status = FetchStatus.complete,
         headers = null,
-        responseCode = null;
+        responseCode = null {
+    prior?.prior = null;
+  }
 
+  /// An error occured whilst downloading the file.
   @visibleForTesting
-  const FetchProgress.error(this.fetch, {required this.prior})
+  FetchProgress.error(this.fetch, {required this.prior})
       : progress = 0.0,
         length = 0,
         downloaded = 0,
         status = FetchStatus.error,
         headers = null,
-        responseCode = null;
+        responseCode = null {
+    prior?.prior = null;
+  }
 
+  /// Fech has retrieved the HTTP headers
   @visibleForTesting
-  const FetchProgress.forHeaders(this.fetch, this.headers,
-      {required this.prior})
+  FetchProgress.forHeaders(this.fetch, this.headers, {required this.prior})
       : status = FetchStatus.headers,
         progress = 0,
         length = 0,
         downloaded = 0,
-        responseCode = null;
+        responseCode = null {
+    prior?.prior = null;
+  }
 
   @visibleForTesting
-  const FetchProgress.response(this.fetch, this.responseCode,
-      {required this.prior})
+
+  /// Fetch has recieved the HTTP response code
+  FetchProgress.response(this.fetch, this.responseCode, {required this.prior})
       : status = FetchStatus.response,
         progress = 0,
         length = 0,
         downloaded = 0,
-        headers = null;
+        headers = null {
+    prior?.prior = null;
+  }
 
   /// When the [FetchStatus.headers] event is sent
   /// this will contain the headers. At all
@@ -452,15 +476,17 @@ class FetchProgress {
   /// You are guarneteed to get a final progress event with a value of 1.0
   final double progress;
 
-  final FetchProgress? prior;
+  /// The prior [FetchProgress].
+  /// This is provided so you can compare the start between the existing
+  /// and prior state which may be useful when outputting progress
+  /// messages.
+  FetchProgress? prior;
 
   /// Shows the progress by replacing the console existing line with the
   /// message:
-  /// XX/YY <url>
+  /// <Status> XX/YY <url>
   ///
   /// Where XX is the bytes downloaded and YY is the total bytes to download.
-  /// You can control the format of the message by passing and argument to
-  /// the [format] parameter.
   ///
   /// ```dart
   ///  fetch(
@@ -481,17 +507,18 @@ class FetchProgress {
     }
   }
 
+  /// Formatter for [showBytes]
   @visibleForTesting
-  static ProgressByteUpdate formatByteLine(FetchProgress progress) {
-    ProgressByteUpdate update;
+  static _ProgressByteUpdate formatByteLine(FetchProgress progress) {
+    _ProgressByteUpdate update;
     final status = _fixedWidthStatus(progress.status);
     final downloaded = Format.bytesAsReadable(progress.downloaded);
     final total = Format.bytesAsReadable(progress.length, pad: false);
 
-    final url = constrain(progress.fetch.url);
+    final url = Format().limitString(progress.fetch.url);
     switch (progress.status) {
       case FetchStatus.initialising:
-        update = ProgressByteUpdate(0, '$status      ?/?      $url');
+        update = _ProgressByteUpdate(0, '$status      ?/?      $url');
         break;
 
       case FetchStatus.connected:
@@ -499,33 +526,41 @@ class FetchProgress {
       case FetchStatus.headers:
       case FetchStatus.response:
       case FetchStatus.error:
-        update = ProgressByteUpdate(0, '$status      ?/?      $url');
+        update = _ProgressByteUpdate(0, '$status      ?/?      $url');
         break;
       case FetchStatus.downloading:
         if (progress.prior?.status == FetchStatus.downloading) {
-          update = ProgressByteUpdate(14, '$downloaded/$total');
+          update = _ProgressByteUpdate(14, '$downloaded/$total');
         } else {
-          update = ProgressByteUpdate(0, '$status $downloaded/$total');
+          update = _ProgressByteUpdate(0, '$status $downloaded/$total');
         }
         break;
       case FetchStatus.complete:
         update =
-            ProgressByteUpdate(0, '$status $downloaded/$total', newline: true);
+            _ProgressByteUpdate(0, '$status $downloaded/$total', newline: true);
         break;
     }
 
     return update;
   }
 
-  static String constrain(String url, {int width = 40}) {
-    final partLength = width ~/ 2 - 3;
-    return '${url.substring(0, partLength)}...${url.substring(url.length - partLength)}';
-  }
-
   // status right padded to 12 chars
   static String _fixedWidthStatus(FetchStatus status) =>
       '${EnumHelper().getName(status)}:'.padRight(13);
 
+  /// Shows the progress by overwritting the existing console line with the
+  /// string returned from [format].
+  /// Once the download is complete a final newline will be sent to the console
+  /// so that subsequent output from your script will go on a separate line.
+  ///
+  /// ```dart
+  ///  fetch(
+  ///      url:
+  ///          'https://some/resource/file.zip',
+  ///     saveToPath: pathToPiImage,
+  ///     fetchProgress: (progress) => 'So far: progress.download')
+  ///         });
+  /// ```
   static void show(
     FetchProgress progress, {
     String Function(FetchProgress progress)? format,
@@ -542,8 +577,8 @@ class FetchProgress {
       '${EnumHelper().getName(status)}: ${Format.bytesAsReadable(downloaded)}/${Format.bytesAsReadable(length)} ${fetch.url}';
 }
 
-class ProgressByteUpdate {
-  ProgressByteUpdate(this.offset, this.value, {bool this.newline = false});
+class _ProgressByteUpdate {
+  _ProgressByteUpdate(this.offset, this.value, {this.newline = false});
   int offset;
   String value;
   bool newline;
