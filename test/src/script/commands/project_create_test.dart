@@ -3,6 +3,8 @@ import 'package:dcli/dcli.dart' hide equals;
 import 'package:path/path.dart' as p;
 import 'package:test/test.dart';
 
+import '../../util/test_file_system.dart';
+
 void main() {
   const scriptName = 'create_test.dart';
 
@@ -18,13 +20,15 @@ void main() {
     });
 
     test('Run hello world', () {
-      withTempDir((fs) {
-        final pathToScript = truepath(fs, scriptName);
-        DartProject.fromPath(fs, search: false)
-          ..createScript(scriptName, templateName: 'hello_world.dart')
-          ..warmup();
+      TestFileSystem.common.withinZone((fs) {
+        withTempDir((fs) {
+          final pathToScript = truepath(fs, scriptName);
+          DartProject.fromPath(fs, search: false)
+            ..createScript(scriptName, templateName: 'hello_world.dart')
+            ..warmup();
 
-        DartScript.fromFile(pathToScript).run();
+          DartScript.fromFile(pathToScript).run();
+        });
       });
     });
 
