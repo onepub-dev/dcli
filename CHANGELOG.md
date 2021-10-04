@@ -1,3 +1,7 @@
+# 1.9.3
+- fixed a bug in DartScript().self.scriptName. ScriptName which wasn't being initialised.
+
+
 # 1.9.2
 - Add method ProcessHelper().getProcessesByName 
 
