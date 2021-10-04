@@ -55,6 +55,7 @@ class DartScript {
     }
 
     _pathToScript = truepath(pathToScript);
+    _scriptName = p.basename(truepath(pathToScript));
     _scriptDirectory = dirname(truepath(pathToScript));
   }
 

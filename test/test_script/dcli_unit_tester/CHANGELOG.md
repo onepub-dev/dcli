@@ -1,3 +1,5 @@
+# 0.0.5
+ - updated to latest dcli to fix a bug in DartScript().scriptName where it wasn't being initialised.
 # 0.0.3
 added --script switch to print all of the DartScript class properties.
 
