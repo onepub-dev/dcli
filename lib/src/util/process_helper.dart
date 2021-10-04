@@ -219,6 +219,25 @@ class ProcessHelper {
     throw UnsupportedError('Not supported on ${Platform.operatingSystem}');
   }
 
+  /// Returns the list of [ProcessDetails] with [name].
+  /// It is quite common for there to be multiple processes
+  /// with the same name running.
+  /// If there are no processes with the given [name] then
+  /// an empty list is returned.
+  /// Remember that a process may shutdown at any moment so
+  /// just because this method returns a process does not
+  /// mean that the process is still running.
+  List<ProcessDetails> getProcessesByName(String name) {
+    final processes = getProcesses();
+    final matching = <ProcessDetails>[];
+    for (final process in processes) {
+      if (process.name == name) {
+        matching.add(process);
+      }
+    }
+    return matching;
+  }
+
   List<ProcessDetails> _getWindowsProcessesOld() {
     final pids = <ProcessDetails>[];
 

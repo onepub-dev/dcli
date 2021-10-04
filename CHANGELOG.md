@@ -1,3 +1,10 @@
+# 1.9.1
+Improvements to the Fetch command progress options.
+Work on getting DartScript to return the correct paths for each mode
+that the script can exist in (local, compiled, pub global).
+
+
+
 # 1.8.23
 'command'.start() now returns a progress.
 
