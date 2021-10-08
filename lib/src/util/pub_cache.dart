@@ -164,10 +164,11 @@ class PubCache {
     ).toList();
 
     if (packages.isEmpty) {
+      verbose(() => 'No installed packages for $packageName found');
       return null;
     }
 
-    return Version.primary(
+    final primary = Version.primary(
       packages.map((package) {
         final filename = basename(package);
         final firstHyphen = filename.indexOf('-');
@@ -177,5 +178,7 @@ class PubCache {
         return Version.parse(version);
       }).toList(),
     );
+    verbose(() => 'Found primary version $primary for $packageName');
+    return primary;
   }
 }
