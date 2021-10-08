@@ -87,6 +87,19 @@ class Format {
     return row;
   }
 
+  /// Limits the string length to [width] by removing the centre
+  /// components of the string and replacing them with '...'
+  ///
+  /// Example:
+  /// var long = 'http://www.noojee.com.au/some/long/url';
+  /// print(limitString(long, width: 20))
+  /// > http://...ong/url
+  String limitString(String url, {int width = 40}) {
+    final partLength = width ~/ 2 - 3;
+    // ignore: lines_longer_than_80_chars
+    return '${url.substring(0, partLength)}...${url.substring(url.length - partLength)}';
+  }
+
   /// returns a double as a percentage to the given [precision]
   /// e.g. 0.11 becomes 11% if [precision] is 0.
   String percentage(double progress, int precision) =>

@@ -101,6 +101,9 @@ class DartSdk {
   /// [script] is the path to the dcli script we are compiling.
   /// [pathToExe] is the path (including the filename) to write the
   ///  compiled ex to .
+  /// If [workingDirectory] is not passed then the current working directory is
+  /// used. The [workingDirectory] should contain the pubspec.yaml that is used
+  /// to compile the script.
   void runDartCompiler(
     DartScript script, {
     required String pathToExe,
@@ -497,6 +500,10 @@ class DartSdk {
       progress: Progress.printStdErr(),
     );
   }
+
+  /// returns true if the given package has been globally activated
+  bool isPackageGloballyActivated(String package) =>
+      exists(join(PubCache().pathToBin, package));
 
   /// Run dart pub global activate for a packae located in [path]
   /// relative to the current directory.

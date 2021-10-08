@@ -28,7 +28,7 @@ class TestFileSystem {
   /// The virtualised file system is created by altering the
   /// 'HOME' environment variable and by providing a
   /// 'root' path [TestFileSystem.fsRoot]
-  /// You MUST prefix all of your paths of either [fsRoot] or
+  /// You MUST prefix all of your paths with either [fsRoot] or
   /// [HOME] to ensure that you code runs within the 'virtuallised'
   /// files system.
   ///
@@ -51,13 +51,13 @@ class TestFileSystem {
     TestFileSystem? use;
     if (useCommonPath) {
       print(orange('Re-using common TestFileSystem'));
-      common ??= TestFileSystem._internal(installDcli: installDcli);
+
       use = common;
     } else {
       use = TestFileSystem._internal(installDcli: installDcli);
     }
 
-    return use!;
+    return use;
   }
 
   TestFileSystem._internal({this.installDcli}) {
@@ -104,7 +104,8 @@ class TestFileSystem {
   /// The location of the test_script directory
   late String testScriptPath;
 
-  static TestFileSystem? common;
+  static late final TestFileSystem common =
+      TestFileSystem._internal(installDcli: true);
 
   String tempFile({String? suffix}) => createTempFilename(suffix: suffix);
 
