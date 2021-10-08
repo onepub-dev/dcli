@@ -1,3 +1,7 @@
+# 1.9.4
+- Added additional verbose statements to findPrimaryVersion.
+- exposed the verbose function so dcli users can use the same logging mechanism as dcli.
+
 # 1.9.3
 - fixed a bug in DartScript().self.scriptName. ScriptName which wasn't being initialised.
 
