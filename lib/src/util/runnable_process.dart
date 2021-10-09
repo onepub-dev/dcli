@@ -563,10 +563,6 @@ class RunException extends DCliException {
   })  : cmdLine = '$cmd ${args.join(' ')}',
         super(reason, stackTrace);
 
-  @override
-  RunException copyWith(StackTraceImpl stackTrace) =>
-      RunException(cmdLine, exitCode, reason, stackTrace: stackTrace);
-
   /// The command line that was being run.
   String cmdLine;
 

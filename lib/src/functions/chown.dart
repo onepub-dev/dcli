@@ -3,7 +3,6 @@ import 'dart:io';
 import 'package:posix/posix.dart' as posix;
 
 import '../../dcli.dart';
-import '../util/dcli_exception.dart';
 import '../util/stack_trace_impl.dart';
 
 import 'dcli_function.dart';
@@ -71,8 +70,4 @@ class ChOwnException extends DCliFunctionException {
   /// Thrown if the [chown] function encounters an error.
   ChOwnException(String reason, [StackTraceImpl? stacktrace])
       : super(reason, stacktrace);
-
-  @override
-  DCliException copyWith(StackTraceImpl stackTrace) =>
-      ChOwnException(message, stackTrace);
 }

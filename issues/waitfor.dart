@@ -38,7 +38,7 @@ void waitForMe(Future future) {
     rethrow;
   } on Exception catch (e) {
     print(e.toString());
-  // ignore: avoid_catches_without_on_clauses
+    // ignore: avoid_catches_without_on_clauses
   } catch (e) {
     print('Rethrowing a non DCliException $e');
     rethrow;
@@ -78,7 +78,7 @@ T waitForEx<T>(Future<T> future) {
     final stackTrace = StackTraceImpl(skipFrames: 2);
 
     if (exception is DCliException) {
-      throw (exception! as DCliException).copyWith(stackTrace);
+      throw (exception! as DCliException)..stackTrace = stackTrace;
     } else {
       throw DCliException.from(exception, stackTrace);
     }

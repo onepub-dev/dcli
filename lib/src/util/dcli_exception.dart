@@ -11,8 +11,21 @@ class DCliException implements Exception {
   DCliException.from(this.cause, this.stackTrace) : message = cause.toString();
 
   ///
-  DCliException copyWith(StackTraceImpl stackTrace) =>
-      DCliException(message, stackTrace);
+  DCliException.fromException(this.cause)
+      : message = cause.toString(),
+        stackTrace = StackTraceImpl(skipFrames: 2);
+
+  // /// Used by waitForEx to repair the stack trace
+  // /// by removing the microtask stack from the
+  // /// exception.
+  // void repairStackTrace(StackTraceImpl stackTraceImpl) {
+  //   stackTrace = stackTraceImpl;
+  // }
+
+  // DCliException copyWith(StackTraceImpl stackTrace) {
+  //   this.stackTrace = stackTrace;
+  //   return this;
+  // }
 
   ///
   final String message;
@@ -22,7 +35,7 @@ class DCliException implements Exception {
   final Object? cause;
 
   ///
-  final StackTraceImpl stackTrace;
+  StackTraceImpl stackTrace;
 
   //  {
   //   return DCliException(this.message, stackTrace);

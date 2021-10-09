@@ -1,7 +1,6 @@
 import 'dart:io';
 
 import '../../dcli.dart';
-import '../util/dcli_exception.dart';
 import '../util/stack_trace_impl.dart';
 
 import 'dcli_function.dart';
@@ -64,8 +63,4 @@ class ChModException extends DCliFunctionException {
   /// Thrown if the [chmod] function encounters an error.
   ChModException(String reason, [StackTraceImpl? stacktrace])
       : super(reason, stacktrace);
-
-  @override
-  DCliException copyWith(StackTraceImpl stackTrace) =>
-      ChModException(message, stackTrace);
 }

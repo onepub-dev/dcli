@@ -2,7 +2,6 @@ import 'dart:convert';
 import 'dart:io';
 
 import '../settings.dart';
-import '../util/dcli_exception.dart';
 import '../util/progress.dart';
 import '../util/stack_trace_impl.dart';
 import '../util/truepath.dart';
@@ -75,8 +74,4 @@ class ReadException extends DCliFunctionException {
   /// Thrown when the [read] function encouters an error.
   ReadException(String reason, [StackTraceImpl? stacktrace])
       : super(reason, stacktrace);
-
-  @override
-  DCliException copyWith(StackTraceImpl stackTrace) =>
-      ReadException(message, stackTrace);
 }

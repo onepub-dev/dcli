@@ -11,7 +11,7 @@ class DCliFunctionException extends DCliException {
   DCliFunctionException(String message, [StackTraceImpl? stackTrace])
       : super(message, stackTrace);
 
-  @override
-  DCliException copyWith(StackTraceImpl stackTrace) =>
-      DCliFunctionException(message, stackTrace);
+  // @override
+  // DCliException copyWith(StackTraceImpl stackTrace) =>
+  //     DCliFunctionException(message, stackTrace);
 }

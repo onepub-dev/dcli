@@ -45,7 +45,7 @@ T waitForEx<T>(Future<T> future) {
     // The best we can do is store the repaired stack trace in the
     // DCliException.
     if (exception is DCliException) {
-      throw exception.copyWith(StackTraceImpl.fromStackTrace(stackTrace));
+      throw exception..stackTrace = StackTraceImpl.fromStackTrace(stackTrace);
     } else {
       /// Ideally we would rather throw the original exception but currently
       ///  there is no way to do this.

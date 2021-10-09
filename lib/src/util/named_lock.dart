@@ -127,7 +127,7 @@ class NamedLock {
       // final stackTrace = StackTraceImpl.fromStackTrace(st);
       verbose(() => 'Exception throw $e : ${e.toString()}');
       if (e is DCliException) {
-        throw e.copyWith(callingStackTrace);
+        throw e..stackTrace = callingStackTrace;
       } else {
         throw DCliException.from(e, callingStackTrace);
       }

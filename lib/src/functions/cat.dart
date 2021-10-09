@@ -2,7 +2,6 @@ import 'dart:convert';
 import 'dart:io';
 
 import '../settings.dart';
-import '../util/dcli_exception.dart';
 import '../util/runnable_process.dart';
 import '../util/stack_trace_impl.dart';
 import '../util/truepath.dart';
@@ -50,8 +49,4 @@ class CatException extends DCliFunctionException {
   /// Thrown if the [cat] function encouters an error.
   CatException(String reason, [StackTraceImpl? stacktrace])
       : super(reason, stacktrace);
-
-  @override
-  DCliException copyWith(StackTraceImpl stackTrace) =>
-      CatException(message, stackTrace);
 }
