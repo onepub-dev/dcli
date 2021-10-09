@@ -162,6 +162,45 @@ void main() {
     expect(exists(temp), isFalse);
   });
 
+  group('error handling', () {
+    test('host not found', () {
+      withTempFile((file) {
+        const url =
+            'http://test.comeing.com.au/long/123456789012345678901234567890';
+
+        expect(
+          () => fetch(url: url, saveToPath: file),
+          throwsA(
+            predicate<FetchException>(
+              (e) =>
+                  e is FetchException &&
+                  e.message.contains('No such host is known.') &&
+                  e.errorCode == 11001,
+            ),
+          ),
+        );
+      }, create: false);
+    });
+
+    test('404', () {
+      withTempFile((file) {
+        const url = 'https://www.noojee.com.au/notfound';
+
+        expect(
+          () => fetch(url: url, saveToPath: file),
+          throwsA(
+            predicate<FetchException>(
+              (e) =>
+                  e is FetchException &&
+                  e.message.contains('Not Found') &&
+                  e.errorCode == 404,
+            ),
+          ),
+        );
+      }, create: false);
+    });
+  });
+
   group('progress', () {
     test('showBytes', () {
       const url =

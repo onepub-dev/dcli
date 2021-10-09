@@ -2,7 +2,6 @@ import 'dart:async';
 import 'dart:io';
 
 import 'package:meta/meta.dart';
-import 'package:pedantic/pedantic.dart';
 
 import '../settings.dart';
 import '../util/dcli_exception.dart';
@@ -50,7 +49,10 @@ void _devNull(FetchProgress _) {}
 /// to the [fetchProgress] call. In the meantime ensure that you
 ///  always return true from
 /// the 'onProgress' callback.
-///
+/// Throws a [FetchException] if something goes wrong.
+/// In the event of a HTTP error we will still try to download
+/// the body and save it to [saveToPath] as often the body
+/// contains additional information about the error.
 void fetch({
   required String url,
   required String saveToPath,
@@ -158,10 +160,10 @@ class _Fetch extends DCliFunction {
     }
   }
 
-  Future<void> download(FetchUrl fetchUrl, {required bool verboseProgress}) {
+  Future<void> download(FetchUrl fetchUrl,
+      {required bool verboseProgress}) async {
     // announce we are starting.
     verbose(() => 'Started downloading: ${fetchUrl.url}');
-    final completer = Completer<void>();
     var progress = FetchProgress.initialising(fetchUrl);
     _sendProgressEvent(progress);
 
@@ -177,113 +179,133 @@ class _Fetch extends DCliFunction {
         progress = FetchProgress.connecting(fetchUrl, prior: progress));
 
     final client = HttpClient();
-    unawaited(
-      startCall(client, fetchUrl).then((request) {
-        /// we have connected
-        _sendProgressEvent(
-            progress = FetchProgress.connected(fetchUrl, prior: progress));
+    final request = await startCall(client, fetchUrl);
 
-        /// we can added headers here if we need.
-        /// send the request
-        return request.close();
-      }).then((response) async {
-        var lengthReceived = 0;
+    /// we have connected
+    _sendProgressEvent(
+        progress = FetchProgress.connected(fetchUrl, prior: progress));
 
+    /// we can added headers here if we need.
+    /// send the request
+
+    final response = await request.close();
+
+    _sendProgressEvent(
+      progress = FetchProgress.response(fetchUrl, response.statusCode,
+          prior: progress),
+    );
+
+    /// extract headers
+    extractHeaders(response, fetchUrl);
+
+    /// download the body and save it to the saveToFile.
+    await _processData(fetchUrl, response, client);
+
+    if (response.statusCode != 200) {
+      throw FetchException.fromHttpError(
+          response.statusCode, response.reasonPhrase);
+    }
+  }
+
+  Future<void> _processData(
+      FetchUrl fetchUrl, HttpClientResponse response, HttpClient client) async {
+    final completer = Completer<void>();
+
+    var lengthReceived = 0;
+    final contentLength = response.contentLength;
+    FetchProgress progress;
+    // we have a response.
+    _sendProgressEvent(progress =
+        FetchProgress.downloading(fetchUrl, contentLength, 0, prior: null));
+
+    /// prep the save file.
+    final saveFile = File(fetchUrl.saveToPath);
+    final raf = await saveFile.open(mode: FileMode.append);
+    await raf.truncate(0);
+
+    late StreamSubscription<List<int>> subscription;
+    subscription = response.listen(
+      (newBytes) async {
+        /// if we don't pause we get overlapping calls from listen
+        /// which causes the [writeFrom] to fail as you can't
+        /// do overlapping io.
+        subscription.pause();
+
+        /// we have new data to save.
+        await raf.writeFrom(newBytes);
+
+        lengthReceived += newBytes.length;
+
+        /// progres indicated to cancel the download.
         _sendProgressEvent(
-          progress = FetchProgress.response(fetchUrl, response.statusCode,
+          progress = FetchProgress.downloading(
+              fetchUrl, contentLength, lengthReceived,
               prior: progress),
         );
 
-        final headers = <String, List<String>>{};
-        response.headers.forEach((name, values) => headers[name] = values);
+        subscription.resume();
 
-        _sendProgressEvent(progress = FetchProgress.forHeaders(
-            fetchUrl, headers,
-            prior: FetchProgress.initialising(fetchUrl)));
-
-        final contentLength = response.contentLength;
-
-        // we have a response.
-        _sendProgressEvent(progress = FetchProgress.downloading(
-            fetchUrl, contentLength, 0,
-            prior: progress));
-
-        /// prep the save file.
-        final saveFile = File(fetchUrl.saveToPath);
-        final raf = await saveFile.open(mode: FileMode.append);
-        await raf.truncate(0);
-
-        late StreamSubscription<List<int>> subscription;
-        subscription = response.listen(
-          (newBytes) async {
-            /// if we don't pause we get overlapping calls from listen
-            /// which causes the [writeFrom] to fail as you can't
-            /// do overlapping io.
-            subscription.pause();
-
-            /// we have new data to save.
-            await raf.writeFrom(newBytes);
-
-            lengthReceived += newBytes.length;
-
-            /// progres indicated to cancel the download.
-            _sendProgressEvent(
-              progress = FetchProgress.downloading(
-                  fetchUrl, contentLength, lengthReceived,
-                  prior: progress),
-            );
-
-            subscription.resume();
-
-            verbose(
-              () => 'Download progress: $lengthReceived / $contentLength ',
-            );
-          },
-          onDone: () async {
-            /// down load is complete
-            raf.flushSync();
-            await raf.close();
-            await subscription.cancel();
-            client.close();
-            _sendProgressEvent(
-              progress = FetchProgress.complete(
-                  fetchUrl, contentLength, lengthReceived,
-                  prior: progress),
-            );
-            verbose(() => 'Completed downloading: ${fetchUrl.url}');
-
-            completer.complete();
-          },
-          // ignore: avoid_types_on_closure_parameters
-          onError: (Object e, StackTrace st) async {
-            // something went wrong.
-            _sendProgressEvent(
-                progress = FetchProgress.error(fetchUrl, prior: progress));
-            verbose(
-              () => 'Error downloading: ${fetchUrl.url}',
-            );
-            raf.flushSync();
-            await raf.close();
-            await subscription.cancel();
-            client.close();
-
-            completer.completeError(e, st);
-          },
-          cancelOnError: true,
+        verbose(
+          () => 'Download progress: $lengthReceived / $contentLength ',
         );
-      }),
+      },
+      onDone: () async {
+        /// down load is complete
+        raf.flushSync();
+        await raf.close();
+        await subscription.cancel();
+        client.close();
+        _sendProgressEvent(
+          progress = FetchProgress.complete(
+              fetchUrl, contentLength, lengthReceived,
+              prior: progress),
+        );
+        verbose(() => 'Completed downloading: ${fetchUrl.url}');
+
+        completer.complete();
+      },
+      // ignore: avoid_types_on_closure_parameters
+      onError: (Object e, StackTrace st) async {
+        // something went wrong.
+        _sendProgressEvent(
+            progress = FetchProgress.error(fetchUrl, prior: progress));
+        verbose(
+          () => 'Error downloading: ${fetchUrl.url}',
+        );
+        raf.flushSync();
+        await raf.close();
+        await subscription.cancel();
+        client.close();
+
+        completer.completeError(e, st);
+      },
+      cancelOnError: true,
     );
 
     return completer.future;
   }
 
-  Future<HttpClientRequest> startCall(HttpClient client, FetchUrl fetchUrl) {
-    switch (fetchUrl.method) {
-      case FetchMethod.get:
-        return client.getUrl(Uri.parse(fetchUrl.url));
+  Map<String, List<String>> extractHeaders(
+      HttpClientResponse response, FetchUrl fetchUrl) {
+    final headers = <String, List<String>>{};
+    response.headers.forEach((name, values) => headers[name] = values);
+    _sendProgressEvent(FetchProgress.forHeaders(fetchUrl, headers,
+        prior: FetchProgress.initialising(fetchUrl)));
+    return headers;
+  }
 
-      case FetchMethod.post:
-        return client.postUrl(Uri.parse(fetchUrl.url));
+  Future<HttpClientRequest> startCall(
+      HttpClient client, FetchUrl fetchUrl) async {
+    try {
+      switch (fetchUrl.method) {
+        case FetchMethod.get:
+          return await client.getUrl(Uri.parse(fetchUrl.url));
+
+        case FetchMethod.post:
+          return await client.postUrl(Uri.parse(fetchUrl.url));
+      }
+    } on SocketException catch (e) {
+      throw FetchException.fromException(e);
     }
   }
 
@@ -587,5 +609,21 @@ class _ProgressByteUpdate {
 /// Throw when an error occurs fetching a resource.
 class FetchException extends DCliException {
   /// ctor
-  FetchException(String message) : super(message);
+  FetchException(String message)
+      : errorCode = OSError.noErrorCode,
+        super(message);
+
+  /// Create an exception from a SocketException
+  FetchException.fromException(SocketException e)
+      : errorCode = e.osError?.errorCode,
+        super.fromException(e);
+
+  /// Create a FetchException as the result of a
+  /// HTTP error.
+  FetchException.fromHttpError(this.errorCode, String reasonPhrase)
+      : super(reasonPhrase);
+
+  /// If this [FetchException] occured due to an [OSError] then
+  /// this contains the underlying error.
+  int? errorCode;
 }
