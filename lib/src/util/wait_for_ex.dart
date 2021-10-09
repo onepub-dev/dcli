@@ -41,7 +41,7 @@ T waitForEx<T>(Future<T> future) {
 
   if (exception != null) {
     // see issue: https://github.com/dart-lang/sdk/issues/30741
-    // We currently have now way to throw the repaired stack trace.
+    // We currently have no way to throw the repaired stack trace.
     // The best we can do is store the repaired stack trace in the
     // DCliException.
     if (exception is DCliException) {
