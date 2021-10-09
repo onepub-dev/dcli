@@ -25,7 +25,7 @@ import 'function.dart';
 /// that it was passed.
 ///
 /// ```dart
-///  var path = createDir('/tmp/new_home'));
+///  var path = createDir('/tmp/new_home');
 /// ```
 ///
 
