@@ -60,7 +60,7 @@ void main() {
         predicate(
           (e) =>
               e is CopyException &&
-              e.message == 'The from file ${truepath(from)} does not exists.',
+              e.message == "The 'from' file ${truepath(from)} does not exists.",
         ),
       ),
     );
@@ -131,7 +131,7 @@ void main() {
           (e) =>
               e is CopyException &&
               e.message ==
-                  'The to directory ${truepath(dirname(to))} does not exists.',
+                  "The 'to' directory ${truepath(dirname(to))} does not exists.",
         ),
       ),
     );
@@ -148,13 +148,24 @@ void main() {
     expect(
       () => copy(from, to),
       throwsA(
-        predicate(
-          (e) =>
-              e is CopyException &&
-              e.message ==
-                  'The to directory ${truepath(dirname(to))} does not exists.',
-        ),
+        predicate((e) =>
+            e is CopyException &&
+            e.message ==
+                "The 'to' directory ${truepath(dirname(to))} does not exists."),
       ),
     );
+  });
+
+  test('copy symlink', () {
+    final pathToLink = join('test', 'test_files', 'link_to_target.md');
+    final pathToCopyOfLink = join('test', 'test_files', 'copy_of_link.md');
+
+    if (exists(pathToCopyOfLink)) {
+      delete(pathToCopyOfLink);
+    }
+
+    copy(pathToLink, pathToCopyOfLink);
+    expect(exists(pathToCopyOfLink), isTrue);
+    expect(exists(pathToLink), isTrue);
   });
 }
