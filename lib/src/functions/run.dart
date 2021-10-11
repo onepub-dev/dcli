@@ -78,7 +78,7 @@ import 'pwd.dart';
 ///
 /// See:
 ///  * [start]
-///  * [startCommandLine]
+///  * [startFromArgs]
 ///  for methods that allow you to process data rather
 /// than just outputing it to the cli.
 ///
