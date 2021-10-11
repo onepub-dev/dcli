@@ -67,4 +67,62 @@ void main() {
       expect(exists(tempFile), isTrue);
     });
   });
+
+  group('symlinks', () {
+    test('resolveSymlink', () {
+      withTempDir((dir) {
+        expect(isDirectory(dir), isTrue);
+
+        withTempFile((file) {
+          file.write('Hello World');
+          expect(exists(file), isTrue);
+          final pathToLink = join(dir, 'link');
+          symlink(file, pathToLink);
+          expect(exists(pathToLink), isTrue);
+          expect(isLink(pathToLink), isTrue);
+
+          expect(resolveSymLink(pathToLink), equals(canonicalize(file)));
+        }, pathToTempDir: dir);
+      });
+    });
+
+    test('missing target', () {
+      withTempDir((dir) {
+        expect(isDirectory(dir), isTrue);
+
+        withTempFile((file) {
+          file.write('Hello World');
+          expect(exists(file), isTrue);
+          final pathToLink = join(dir, 'link');
+          symlink(file, pathToLink);
+          expect(exists(pathToLink), isTrue);
+          expect(isLink(pathToLink), isTrue);
+
+          delete(file);
+
+          /// target is misisng so should throw an exception.
+          expect(() => resolveSymLink(pathToLink),
+              throwsA(isA<FileSystemException>()));
+        }, pathToTempDir: dir);
+      });
+    });
+
+    test('delete symlink', () {
+      withTempDir((dir) {
+        expect(isDirectory(dir), isTrue);
+
+        withTempFile((file) {
+          file.write('Hello World');
+          expect(exists(file), isTrue);
+          final pathToLink = join(dir, 'link');
+          symlink(file, pathToLink);
+          expect(exists(pathToLink), isTrue);
+          expect(isLink(pathToLink), isTrue);
+
+          deleteSymlink(pathToLink);
+          expect(exists(pathToLink), isFalse);
+        }, pathToTempDir: dir);
+      });
+    });
+  });
 }
