@@ -151,4 +151,33 @@ void main() {
       });
     });
   });
+
+  group('isFileType', () {
+    test('isFile', () {
+      withTempFile((file) {
+        expect(isFile(file), isTrue);
+      });
+    });
+
+    test('isDirectory', () {
+      withTempDir((dir) {
+        expect(isDirectory(dir), isTrue);
+      });
+    });
+
+    test('isLink', () {
+      withTempDir((dir) {
+        expect(isDirectory(dir), isTrue);
+
+        withTempFile((file) {
+          file.write('Hello World');
+          expect(exists(file), isTrue);
+          final pathToLink = join(dir, 'link');
+          symlink(file, pathToLink);
+          expect(exists(pathToLink), isTrue);
+          expect(isLink(pathToLink), isTrue);
+        }, pathToTempDir: dir);
+      });
+    });
+  });
 }
