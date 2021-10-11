@@ -10,6 +10,8 @@ import 'function.dart';
 
 ///
 /// Returns true if the given [path] points to a file.
+/// If [path] is a link the link will be followed and
+/// we report on the resolved path.
 ///
 /// ```dart
 /// isFile("~/fred.jpg");
@@ -17,6 +19,9 @@ import 'function.dart';
 bool isFile(String path) => _Is().isFile(path);
 
 /// Returns true if the given [path] is a directory.
+///
+/// If [path] is a link the link will be followed and
+/// we report on the resolved path.
 /// ```dart
 /// isDirectory("/tmp");
 ///
@@ -34,10 +39,11 @@ bool isLink(String path) => _Is().isLink(path);
 /// It may be a file, directory or link.
 ///
 /// If [followLinks] is true (the default) then [exists]
-/// will return true if the resolved path exists.
+/// follows any links and returns true/false based on
+/// whether the resolved path exists.
 ///
 /// If [followLinks] is false then [exists] will return
-/// true if path exist, whether its a link or not.
+/// true if [path] exist.
 ///
 /// ```dart
 /// if (exists("/fred.txt"))
@@ -113,12 +119,12 @@ class _Is extends DCliFunction {
   }
 
   bool isLink(String path) {
-    final fromType = FileSystemEntity.typeSync(path);
+    final fromType = FileSystemEntity.typeSync(path, followLinks: false);
     return fromType == FileSystemEntityType.link;
   }
 
   /// checks if the given [path] exists.
-  ///
+  /// If [followLinks] is true
   /// Throws [ArgumentError] if [path] is an empty string.
   bool exists(String path, {required bool followLinks}) {
     if (path.isEmpty) {
