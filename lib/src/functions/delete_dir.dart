@@ -25,8 +25,9 @@ import 'is.dart';
 /// If recursive is false the directory must be empty otherwise a
 /// [DeleteDirException] is thrown.
 ///
-/// See [isDirectory]
-///     [exists]
+/// See:
+///  * [isDirectory]
+///  * [exists]
 ///
 void deleteDir(String path, {bool recursive = true}) =>
     _DeleteDir().deleteDir(path, recursive: recursive);

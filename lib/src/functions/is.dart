@@ -45,9 +45,10 @@ bool isLink(String path) => _Is().isLink(path);
 ///
 /// Throws [ArgumentError] if [path] is null or an empty string.
 ///
-/// See [isLink]
-///     [isDirectory]
-///     [isFile]
+/// See:
+///  * [isLink]
+///  * [isDirectory]
+///  * [isFile]
 bool exists(String path, {bool followLinks = true}) =>
     _Is().exists(path, followLinks: followLinks);
 

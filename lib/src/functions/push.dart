@@ -2,8 +2,11 @@ import 'dart:io';
 
 import '../settings.dart';
 import '../util/truepath.dart';
+import 'cd.dart';
 import 'dcli_function.dart';
 import 'is.dart';
+import 'pop.dart';
+import 'pwd.dart';
 
 ///
 /// Pushes the given [path] onto the stack
@@ -19,9 +22,10 @@ import 'is.dart';
 /// Note: change the directory changes the directory
 /// for all isolates.
 ///
-/// See cd
-///     [pop]
-///     [pwd]
+/// See:
+///  * [cd]
+///  * [pop]
+///  * [pwd]
 @Deprecated('Use join')
 void push(String path) => _Push().push(path);
 

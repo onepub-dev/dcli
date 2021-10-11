@@ -1,11 +1,15 @@
 import 'dart:io';
 
+import 'ansi_color.dart';
+import 'terminal.dart';
+
 /// Helper class to assist in printing text to the console with a color.
 ///
 /// Use one of the color functions instead of this class.
 ///
-/// See AnsiColor
-///     [Terminal]
+/// See:
+///  * [AnsiColor]
+///  * [Terminal]
 ///  ...
 class Ansi {
   /// Factory ctor

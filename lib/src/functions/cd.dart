@@ -1,6 +1,6 @@
 import 'dart:io';
 
-import 'package:path/path.dart' as p;
+import 'package:path/path.dart';
 import '../settings.dart';
 import 'function.dart';
 
@@ -21,12 +21,8 @@ import 'is.dart';
 ///
 /// Instead use absolute or relative paths.
 ///
-/// See push
-///     [pop]
-///     [pwd]
-///     [join]
-///
-///     use join in prefrence to cd/push/pop
+/// See:
+///  * [join] in prefrence to cd/push/pop
 @Deprecated('Use join')
 void cd(String path) => CD().cd(path);
 
@@ -35,12 +31,12 @@ void cd(String path) => CD().cd(path);
 class CD extends DCliFunction {
   /// implements the [cd] (change dir) function.
   void cd(String path) {
-    verbose(() => 'cd $path -> ${p.canonicalize(path)}');
+    verbose(() => 'cd $path -> ${canonicalize(path)}');
 
     if (!exists(path)) {
-      throw CDException('The path ${p.canonicalize(path)} does not exists.');
+      throw CDException('The path ${canonicalize(path)} does not exists.');
     }
-    Directory.current = p.join(Directory.current.path, path);
+    Directory.current = join(Directory.current.path, path);
   }
 }
 

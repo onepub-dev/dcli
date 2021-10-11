@@ -71,7 +71,11 @@ import 'function.dart';
 /// rather than the current work directory.
 ///
 /// [types] the list of types to search file. Defaults to [Find.file].
-///   See [Find.file], [Find.directory], [Find.link].
+/// 
+/// See:
+///  * [Find.file]
+///  * [Find.directory]
+///  * [Find.link].
 ///
 /// Passing a [progress] will allow you to process the results as the are
 /// produced rather than having to wait for the call to find to complete.

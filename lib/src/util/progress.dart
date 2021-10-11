@@ -254,9 +254,10 @@ class Progress {
   /// then the list will skip over the first [skipLines] count;
   /// [skipLines] must be +ve.
   ///
-  /// See [firstLine]
-  ///     [toParagraph]
-  ///     [forEach]
+  /// See:
+  ///  * [firstLine]
+  ///  * [toParagraph]
+  ///  * [forEach]
   List<String> toList({final int skipLines = 0}) {
     var _skipLines = skipLines;
 

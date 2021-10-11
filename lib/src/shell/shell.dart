@@ -161,16 +161,19 @@ abstract class Shell {
   ///   });
   ///}
   ///```
-  /// See: [restorePrivileges]
-  ///   [withPrivileges]
+  /// See:
+  ///  * [restorePrivileges]
+  ///  * [withPrivileges]
   void releasePrivileges();
 
   /// If [releasePrivileges] has been called
   /// then this method will restore those privileges
-  /// See [releasePrivileges] for details
+  /// See
+  ///  * [releasePrivileges] for details
   ///
-  /// See: [releasePrivileges]
-  ///   [withPrivileges]
+  /// See:
+  ///  * [releasePrivileges]
+  ///  * [withPrivileges]
   void restorePrivileges();
 
   /// When a script is run under sudo on Linux and MacOS and you
@@ -188,8 +191,9 @@ abstract class Shell {
   /// You must NEVER call [releasePrivileges] within a [withPrivileges]
   /// action.
   ///
-  /// See: [restorePrivileges]
-  ///   [releasePrivileges]
+  /// See: 
+  ///  * [restorePrivileges]
+  ///  * [releasePrivileges]
   void withPrivileges(RunPrivileged action);
 
   /// Returns a message informing the user that they need to run

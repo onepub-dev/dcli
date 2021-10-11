@@ -33,8 +33,9 @@ String get HOME => Env().HOME;
 /// inherited from the parent as well as any changes
 /// made by calls to [env[]=].
 ///
-/// See [env[]]
-///     [env[]=]
+/// See:
+///  * [env[]]
+///  * [env[]=]
 Map<String, String> get envs => Env()._envVars;
 
 ///

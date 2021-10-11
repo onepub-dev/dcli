@@ -91,7 +91,8 @@ class FileSync {
   /// Returns the length of the file in bytes
   /// The file does NOT have to be open
   /// to determine its length.
-  /// See [fileLength]
+  /// See:
+  ///  * [fileLength]
   int get length => _file.lengthSync();
 
   /// Close and flushes the file to disk.
@@ -256,6 +257,9 @@ R withOpenFile<R>(
 ///
 /// [Shell.current.isPrivileged]
 ///
+/// See:
+///  * [deleteSymlink]
+///  * [resolveSymLink]
 void symlink(
   String existingPath,
   String linkPath,

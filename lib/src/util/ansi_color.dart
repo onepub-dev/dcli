@@ -310,10 +310,11 @@ String grey(
 ///
 /// Use one of the color functions instead of this class.
 ///
-/// See [black]
-///     [white]
-///     [green]
-///     [orange]
+/// See: 
+///  * [black]
+///  * [white]
+///  * [green]
+///  * [orange]
 ///  ...
 class AnsiColor {
   ///

@@ -1,5 +1,7 @@
 import 'dart:io';
 
+import 'package:path/path.dart';
+
 import 'dcli_function.dart';
 
 ///
@@ -9,7 +11,8 @@ import 'dcli_function.dart';
 /// print(pwd);
 /// ```
 ///
-/// See join
+/// See:
+///  * [join]
 ///
 String get pwd => _PWD().pwd;
 

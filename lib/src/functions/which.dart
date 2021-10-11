@@ -89,7 +89,8 @@ class Which {
 
   /// The first path found containing appname
   ///
-  /// See [paths] for a list of all paths that contained appname
+  /// See:
+  ///  * [paths] for a list of all paths that contained appname
   String? get path => _path;
 
   /// Contains the list of paths that contain appname.

@@ -77,8 +77,10 @@ import 'pwd.dart';
 /// The [nothrow] argument is EXPERIMENTAL
 ///
 /// See:
-///     [start] or [startCommandLine] for methods that allow you to
-///      process data rather than just outputing it to the cli.
+///  * [start]
+///  * [startCommandLine]
+///  for methods that allow you to process data rather
+/// than just outputing it to the cli.
 ///
 int? run(
   String commandLine, {

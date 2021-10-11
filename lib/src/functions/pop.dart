@@ -2,7 +2,10 @@ import 'dart:io';
 
 import '../settings.dart';
 import '../util/truepath.dart';
+import 'cd.dart';
 import 'function.dart';
+import 'push.dart';
+import 'pwd.dart';
 
 ///
 /// Push and Pop work together to track a series
@@ -35,9 +38,10 @@ import 'function.dart';
 /// If you pop and there are no more directories
 /// on the stack then a [PopException] is thrown.
 ///
-/// See push
-///     [pwd]
-///     [cd]
+/// See:
+///  * [push]
+///  * [pwd]
+///  * [cd]
 ///
 @Deprecated('Use join')
 void pop() => _Pop().pop();
