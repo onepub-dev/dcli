@@ -28,11 +28,13 @@ void main() {
 
   group('getProcessByName', () {
     test('process exists', () {
+      final exeName = DartSdk.dartExeName;
+
       /// as we are in a dart unit test dart should be running.
-      final darts = ProcessHelper().getProcessesByName('dart');
+      final darts = ProcessHelper().getProcessesByName(exeName);
       expect(darts.isNotEmpty, isTrue);
       for (final process in darts) {
-        expect(process.name, equals('dart'));
+        expect(process.name, equals(exeName));
       }
     });
 
