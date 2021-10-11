@@ -28,4 +28,18 @@ void main() {
     expect(Format.bytesAsReadable(11000000000000000), '1e+16');
     expect(Format.bytesAsReadable(121000000000000000), '1e+17');
   });
+
+  test('limitString', () {
+    expect(Format().limitString('0123456789', width: 11), '0123456789');
+    expect(Format().limitString('0123456789', width: 10), '0123456789');
+    expect(Format().limitString('0123456789', width: 9), '012...789');
+    expect(Format().limitString('0123456789', width: 8), '01...89');
+    expect(Format().limitString('0123456789', width: 7), '01...89');
+    expect(Format().limitString('0123456789', width: 6), '0...9');
+    expect(Format().limitString('0123456789', width: 5), '0...9');
+    expect(Format().limitString('0123456789', width: 4), '...');
+    expect(Format().limitString('0123456789', width: 3), '...');
+    expect(Format().limitString('0123456789', width: 2), '.');
+    expect(Format().limitString('0123456789', width: 1), '.');
+  });
 }

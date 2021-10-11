@@ -87,17 +87,21 @@ class Format {
     return row;
   }
 
-  /// Limits the string length to [width] by removing the centre
+  /// Limits the [display] string's length to [width] by removing the centre
   /// components of the string and replacing them with '...'
   ///
   /// Example:
   /// var long = 'http://www.noojee.com.au/some/long/url';
   /// print(limitString(long, width: 20))
   /// > http://...ong/url
-  String limitString(String url, {int width = 40}) {
-    final partLength = width ~/ 2 - 3;
+  String limitString(String display, {int width = 40}) {
+    if (display.length <= width) {
+      return display;
+    }
+    final elipses = width <= 2 ? 1 : 3;
+    final partLength = (width - elipses) ~/ 2;
     // ignore: lines_longer_than_80_chars
-    return '${url.substring(0, partLength)}...${url.substring(url.length - partLength)}';
+    return '${display.substring(0, partLength)}${'.' * elipses}${display.substring(display.length - partLength)}';
   }
 
   /// returns a double as a percentage to the given [precision]
