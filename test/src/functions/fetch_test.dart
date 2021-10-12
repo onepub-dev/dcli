@@ -208,7 +208,7 @@ void main() {
 
       final fetchUrl = FetchUrl(url: url, saveToPath: '/tmp/me');
 
-      const constrained = 'http://test.comei...45678901234567890';
+      const constrained = 'http://test.comein...345678901234567890';
       final initializing = FetchProgress.initialising(fetchUrl);
       final downloading =
           FetchProgress.downloading(fetchUrl, 100, 100, prior: initializing);
