@@ -71,7 +71,7 @@ import 'function.dart';
 /// rather than the current work directory.
 ///
 /// [types] the list of types to search file. Defaults to [Find.file].
-/// 
+///
 /// See:
 ///  * [Find.file]
 ///  * [Find.directory]

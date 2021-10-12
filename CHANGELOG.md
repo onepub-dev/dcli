@@ -1,3 +1,16 @@
+# 1.9.5
+- Fixes to a number of unit test
+- Improved Format.limitString and added unit tests.
+- Added unit tests for the collection of symlink functions.
+- Corrected documentation for the run method.
+- Added additional unit tests for the isXXX collection of functions.
+- Fixed a bug in isLink as it was resolving the link and checking if the resolved path was a link rather than the passed link.
+- Fixed a bug under Windows where the copy command would fail if we try to copy a link. We now check for a link and create a new symlink rather than trying to copy it.
+- Improved formating of comments that include a 'See:' section.
+- Fetch now throws a FetchException if a HTTP error occurs. Previously it would complete normally.  Even if an error occurs we try to download the body as many http errors also provide a body.
+- removed pedantic as we have moved to lints.
+- removed the need for exceptions derived from DCliExceptions to overload copyFrom. waitForEx can now repair the stacktrace without using copyFrom.
+
 # 1.9.4
 - Added additional verbose statements to findPrimaryVersion.
 - exposed the verbose function so dcli users can use the same logging mechanism as dcli.

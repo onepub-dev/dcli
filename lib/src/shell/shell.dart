@@ -191,7 +191,7 @@ abstract class Shell {
   /// You must NEVER call [releasePrivileges] within a [withPrivileges]
   /// action.
   ///
-  /// See: 
+  /// See:
   ///  * [restorePrivileges]
   ///  * [releasePrivileges]
   void withPrivileges(RunPrivileged action);
