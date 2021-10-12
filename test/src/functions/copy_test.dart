@@ -160,12 +160,23 @@ void main() {
     final pathToLink = join('test', 'test_files', 'link_to_target.md');
     final pathToCopyOfLink = join('test', 'test_files', 'copy_of_link.md');
 
-    if (exists(pathToCopyOfLink)) {
+    if (exists(pathToCopyOfLink, followLinks: false)) {
       delete(pathToCopyOfLink);
     }
 
     copy(pathToLink, pathToCopyOfLink);
-    expect(exists(pathToCopyOfLink), isTrue);
-    expect(exists(pathToLink), isTrue);
+    expect(exists(pathToCopyOfLink, followLinks: false), isTrue);
+    expect(
+        exists(
+          pathToCopyOfLink,
+        ),
+        isTrue);
+
+    expect(exists(pathToLink, followLinks: false), isTrue);
+    expect(
+        exists(
+          pathToLink,
+        ),
+        isTrue);
   });
 }
