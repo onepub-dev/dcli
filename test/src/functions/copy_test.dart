@@ -127,12 +127,10 @@ void main() {
     expect(
       () => copy(from, to),
       throwsA(
-        predicate(
-          (e) =>
-              e is CopyException &&
-              e.message ==
-                  "The 'to' directory ${truepath(dirname(to))} does not exists.",
-        ),
+        predicate((e) =>
+            e is CopyException &&
+            e.message ==
+                "The 'to' directory ${truepath(dirname(to))} does not exists."),
       ),
     );
   });

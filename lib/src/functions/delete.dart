@@ -1,8 +1,7 @@
 import 'dart:io';
 
-import '../util/file_sync.dart';
-
 import '../settings.dart';
+import '../util/file_sync.dart';
 import '../util/truepath.dart';
 import 'ask.dart' as a;
 import 'dcli_function.dart';
