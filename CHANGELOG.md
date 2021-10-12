@@ -1,13 +1,14 @@
-# 1.9.5
+# 1.9.6
+- Fetch now throws a FetchException if a HTTP error occurs. Previously it would complete normally.  Even if an error occurs we try to download the body as many http errors also provide a body.
+- Fixed a bug in isLink as it was resolving the link and checking if the resolved path was a symlink rather than the passed path.
+- Fixed a bug where the copy command would fail if we tried to copy a symlink. We now check for a symlink and create a new symlink rather than trying to copy it.
+- Added unit tests for the collection of symlink functions.
+- Fixed problems with copying and deleting symlinks. Logic was manipulating the target file rather than the actual symlink.
 - Fixes to a number of unit test
 - Improved Format.limitString and added unit tests.
-- Added unit tests for the collection of symlink functions.
 - Corrected documentation for the run method.
 - Added additional unit tests for the isXXX collection of functions.
-- Fixed a bug in isLink as it was resolving the link and checking if the resolved path was a link rather than the passed link.
-- Fixed a bug under Windows where the copy command would fail if we try to copy a link. We now check for a link and create a new symlink rather than trying to copy it.
 - Improved formating of comments that include a 'See:' section.
-- Fetch now throws a FetchException if a HTTP error occurs. Previously it would complete normally.  Even if an error occurs we try to download the body as many http errors also provide a body.
 - removed pedantic as we have moved to lints.
 - removed the need for exceptions derived from DCliExceptions to overload copyFrom. waitForEx can now repair the stacktrace without using copyFrom.
 
