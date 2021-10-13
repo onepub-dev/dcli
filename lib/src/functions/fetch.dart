@@ -37,6 +37,8 @@ void _devNull(FetchProgress _) {}
 /// The file at [saveToPath] must NOT exist. If it does a [FetchException]
 ///  will be thrown.
 ///
+/// Any [headers] that you pass are sent as HTTP headers along with their value.
+///
 /// You may optionally passing in a [fetchProgress] method which will be
 /// called each
 /// time a chunk is downloaded with details on the download progress.
