@@ -10,6 +10,10 @@ import 'message.dart';
 /// The system cannot find the file specified.
 const hrFileNotFound = -2147024894;
 
+/// Use this key when adding a value to a default (Default) registry
+/// key.
+const defaultRegistryKey = '';
+
 /// Collection of Windows specific registry functions.
 
 /// Appends [newPath] to the Windows PATH environment variable.
@@ -113,16 +117,24 @@ void regSetString(
 
   try {
     _regSetValue(
-      hkey,
-      subKey,
-      valueName,
-      pValue.cast(),
-      (value.length + 1) * 2,
-      REG_SZ,
-    );
+        hkey, subKey, valueName, pValue.cast(), (value.length + 1) * 2, REG_SZ,
+        accessRights: accessRights);
   } finally {
     calloc.free(pValue);
   }
+}
+
+/// Sets a Windows registry valueName with a type REG_NONE.
+/// No value is set.
+/// A [WindowsException] is thrown the call falls.
+void regSetNone(
+  int hkey,
+  String subKey,
+  String valueName, {
+  int accessRights = KEY_SET_VALUE,
+}) {
+  _regSetValue(hkey, subKey, valueName, nullptr, 0, REG_NONE,
+      accessRights: accessRights);
 }
 
 /// Gets a Windows registry value o0f type REG_SZ
@@ -172,13 +184,8 @@ void regSetDWORD(
 
   try {
     _regSetValue(
-      hkey,
-      subKey,
-      valueName,
-      pValue.cast(),
-      sizeOf<Uint32>(),
-      REG_DWORD,
-    );
+        hkey, subKey, valueName, pValue.cast(), sizeOf<Uint32>(), REG_DWORD,
+        accessRights: accessRights);
   } finally {
     calloc.free(pValue);
   }
@@ -299,14 +306,9 @@ void regSetExpandString(
 }) {
   final pValue = TEXT(value);
   try {
-    _regSetValue(
-      hkey,
-      subKey,
-      valueName,
-      pValue.cast(),
-      (value.length + 1) * 2,
-      REG_EXPAND_SZ,
-    );
+    _regSetValue(hkey, subKey, valueName, pValue.cast(), (value.length + 1) * 2,
+        REG_EXPAND_SZ,
+        accessRights: accessRights);
   } finally {
     calloc.free(pValue);
   }
