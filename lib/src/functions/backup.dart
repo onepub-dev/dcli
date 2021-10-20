@@ -25,7 +25,7 @@ import 'move.dart';
 /// If a file at [pathToFile] doesn't exist then a [BackupFileException]
 /// is thrown unless you pass the [ignoreMissing] flag.
 ///
-/// See: 
+/// See:
 ///  * [restoreFile]
 ///  * [withFileProtection]
 ///

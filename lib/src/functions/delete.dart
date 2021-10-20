@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import '../settings.dart';
+import '../util/file_sync.dart';
 import '../util/truepath.dart';
 import 'ask.dart' as a;
 import 'dcli_function.dart';
@@ -26,7 +27,7 @@ class _Delete extends DCliFunction {
   void delete(String path, {required bool ask}) {
     verbose(() => 'delete:  ${truepath(path)} ask: $ask');
 
-    if (!exists(path)) {
+    if (!exists(path, followLinks: false)) {
       throw DeleteException('The path ${truepath(path)} does not exists.');
     }
 
@@ -47,7 +48,11 @@ class _Delete extends DCliFunction {
 
     if (remove == true) {
       try {
-        File(path).deleteSync();
+        if (isLink(path)) {
+          deleteSymlink(path);
+        } else {
+          File(path).deleteSync();
+        }
       }
       // ignore: avoid_catches_without_on_clauses
       catch (e) {

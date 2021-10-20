@@ -310,7 +310,7 @@ String grey(
 ///
 /// Use one of the color functions instead of this class.
 ///
-/// See: 
+/// See:
 ///  * [black]
 ///  * [white]
 ///  * [green]

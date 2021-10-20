@@ -99,7 +99,8 @@ class DartScript {
   ///
   /// If you are trying to load an instace of another script then
   /// use [DartScript.fromFile];
-  /// TODO: for v2 change this to a ctor to aid with unit testing.
+  // ignore: flutter_style_todos
+  /// TODO(bsutton): for v2 change this to a ctor to aid with unit testing.
   // ignore: prefer_constructors_over_static_methods
   static DartScript get self => _current ??= DartScript._self();
 

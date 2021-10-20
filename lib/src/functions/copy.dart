@@ -35,39 +35,26 @@ class _Copy extends DCliFunction {
 
     verbose(() => 'copy ${truepath(from)} -> ${truepath(finalto)}');
 
-    if (overwrite == false && exists(finalto)) {
+    if (overwrite == false && exists(finalto, followLinks: false)) {
       throw CopyException(
         'The target file ${truepath(finalto)} already exists.',
       );
     }
 
     try {
-      File(from).copySync(finalto);
+      /// if we copy a symlink it actually copies the file rather than
+      /// the symlink.
+      if (isLink(from)) {
+        final target = resolveSymLink(from);
+
+        /// we use a relative path for the symlink as its safer
+        symlink(relative(target, from: dirname(finalto)), finalto);
+      } else {
+        File(from).copySync(finalto);
+      }
     }
     // ignore: avoid_catches_without_on_clauses
     catch (e) {
-      var e1 = e;
-      try {
-        /// The copy command will fail if we try to copy
-        /// a symlink (at least under windows).
-        /// Symlinks are rare so we only check
-        /// for a symlink after a copy fails to
-        /// help with performance.
-        if (e is FileSystemException &&
-            Platform.isWindows &&
-            e.osError?.errorCode == 2 &&
-            isLink(from)) {
-          // to copy a symlink on windows we just create
-          // the new symlink.
-          final target = resolveSymLink(from);
-          symlink(target, finalto);
-          return;
-        }
-        // ignore: avoid_catches_without_on_clauses
-      } catch (e2) {
-        e1 = e2;
-      }
-
       /// lets try and improve the message.
       /// We do these checks only on failure
       /// so in the most common case (everything is correct)
@@ -84,7 +71,7 @@ class _Copy extends DCliFunction {
 
       throw CopyException(
         'An error occured copying ${truepath(from)} to ${truepath(finalto)}. '
-        'Error: $e1',
+        'Error: $e',
       );
     }
   }

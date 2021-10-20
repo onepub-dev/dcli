@@ -1,5 +1,6 @@
 @Timeout(Duration(seconds: 600))
 import 'package:dcli/dcli.dart' hide equals;
+import 'package:dcli/src/util/parser.dart';
 import 'package:test/test.dart';
 
 String baseURl =
@@ -60,6 +61,40 @@ void main() {
           },
           create: false,
         );
+      });
+    });
+
+    test('Fetch with Headers', () {
+      //Settings().setVerbose(enabled: true);
+      withTempDir((testRoot) {
+        withTempFile(
+          (result) {
+            final headers = {'Head1': 'value1', 'Head2': 'value2'};
+
+            /// httpbin echos the headers we pass.
+            /// However it capitalises the first letter of the header key.
+            /// So we pre-empt it by sending them capitialised.
+            fetch(
+                url: 'https://httpbin.org/headers',
+                saveToPath: result,
+                headers: headers);
+            final lines = read(result).toList();
+            final jsonMap = Parser(lines).jsonDecode() as Map<String, dynamic>;
+
+            final resultHeaders = jsonMap['headers'] as Map<String, dynamic>;
+            expect(resultHeaders.containsKey('Head1'), isTrue);
+            expect(resultHeaders['Head1'], equals('value1'));
+            expect(resultHeaders.containsKey('Head2'), isTrue);
+            expect(resultHeaders['Head2'], equals('value2'));
+          },
+          create: false,
+        );
+
+        // withTempFile((sampleWav) {
+        //   fetch(url: '$baseURl/sample.wav', saveToPath: sampleWav);
+        //   expect(FileSync(sampleWav).length, equals(212948));
+        //   delete(sampleWav);
+        // }, create: false);
       });
     });
   });

@@ -37,6 +37,8 @@ void _devNull(FetchProgress _) {}
 /// The file at [saveToPath] must NOT exist. If it does a [FetchException]
 ///  will be thrown.
 ///
+/// Any [headers] that you pass are sent as HTTP headers along with their value.
+///
 /// You may optionally passing in a [fetchProgress] method which will be
 /// called each
 /// time a chunk is downloaded with details on the download progress.
@@ -57,14 +59,18 @@ void fetch({
   required String url,
   required String saveToPath,
   FetchMethod method = FetchMethod.get,
+  Map<String, String>? headers,
   OnFetchProgress fetchProgress = _devNull,
-}) =>
-    _Fetch().fetch(
-      url: url,
-      saveToPath: saveToPath,
-      method: method,
-      progress: fetchProgress,
-    );
+}) {
+  headers ??= <String, String>{};
+  _Fetch().fetch(
+    url: url,
+    saveToPath: saveToPath,
+    method: method,
+    headers: headers,
+    progress: fetchProgress,
+  );
+}
 
 /// Fetches the list of of resources indicated by [urls];
 ///
@@ -125,6 +131,7 @@ class _Fetch extends DCliFunction {
   void fetch({
     required String url,
     required String saveToPath,
+    required Map<String, String> headers,
     OnFetchProgress progress = _devNull,
     bool verboseProgress = false,
     FetchMethod method = FetchMethod.get,
@@ -136,6 +143,7 @@ class _Fetch extends DCliFunction {
           saveToPath: saveToPath,
           progress: progress,
           method: method,
+          headers: headers,
         ),
         verboseProgress: verboseProgress,
       ),
@@ -179,14 +187,17 @@ class _Fetch extends DCliFunction {
         progress = FetchProgress.connecting(fetchUrl, prior: progress));
 
     final client = HttpClient();
+
     final request = await startCall(client, fetchUrl);
 
     /// we have connected
     _sendProgressEvent(
         progress = FetchProgress.connected(fetchUrl, prior: progress));
 
-    /// we can added headers here if we need.
-    /// send the request
+    /// added any headers to the request before we send it.
+    for (final header in fetchUrl.headers.entries) {
+      request.headers.add(header.key, header.value, preserveHeaderCase: true);
+    }
 
     final response = await request.close();
 
@@ -353,9 +364,12 @@ class FetchUrl {
   FetchUrl({
     required this.url,
     required this.saveToPath,
+    Map<String, String>? headers,
     this.method = FetchMethod.get,
     this.progress = _devNull,
-  });
+  }) {
+    this.headers = headers ?? <String, String>{};
+  }
 
   /// the URL of the resource being downloaded
   final String url;
@@ -370,6 +384,9 @@ class FetchUrl {
   /// the HTTP method to use when sending the url
   /// Defaults to get.
   final FetchMethod method;
+
+  /// The set of HTTP headers to send with the request.
+  late final Map<String, String> headers;
 }
 
 /// Passed to the [progress] method to indicate the current progress of
