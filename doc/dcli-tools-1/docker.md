@@ -10,13 +10,13 @@ You can also add DCli to an existing Dockerfile.
 
 You can add DCli to your own Dockerfile. This will allow you to run DCli scripts as part of the Docker deployment process as well as running DCli scripts within the final docker container.
 
-DCli is installed into the root user \(as is normal for a Docker container\). Installers exist for Linux, Windows and Mac OSX.
+DCli is installed into the root user (as is normal for a Docker container). Installers exist for Linux, Windows and Mac OSX.
 
 Just change the wget path to obtain the correct installer:
 
 Linux path
 
-```text
+```
 RUN apt-get -y update
 RUN apt-get install --no-install-recommends -y wget ca-certificates gnupg2 procps
 RUN wget https://github.com/noojee/dcli/releases/download/latest.linux/dcli_install
@@ -25,7 +25,7 @@ ENV PATH="${PATH}":/usr/lib/dart/bin:"${HOME}/.pub-cache/bin":"${HOME}/.dcli/bin
 RUN ./dcli_install
 ```
 
-```text
+```
 RUN apt-get -y update
 RUN apt-get install --no-install-recommends -y wget ca-certificates gnupg2 procps
 RUN wget https://github.com/noojee/dcli/releases/download/latest-linux/dcli_install
@@ -36,16 +36,15 @@ RUN ./dcli_install
 
 Windows path:
 
-```text
+```
 RUN wget wget https://github.com/noojee/dcli/releases/download/latest.windows/dcli_install.exe
 # TODO correct this path
 ENV PATH="${PATH}":/usr/lib/dart/bin:"${HOME}/.pub-cache/bin":"${HOME}/.dcli/bin"
 RUN ./dcli_install.exe
 
-
 ```
 
-```text
+```
 RUN wget wget https://github.com/noojee/dcli/releases/download/latest-linux/dcli_install.exe
 # TODO correct this path
 ENV PATH="${PATH}":/usr/lib/dart/bin:"${HOME}/.pub-cache/bin":"${HOME}/.dcli/bin"
@@ -54,17 +53,16 @@ RUN ./dcli_install.exe
 
 Mac OSX path:
 
-```text
+```
 RUN wget wget https://github.com/noojee/dcli/releases/download/latest.osx/dcli_install -O dcli_install
 RUN chmod +x dcli_install
 # TODO correct this path
 ENV PATH="${PATH}":/usr/lib/dart/bin:"${HOME}/.pub-cache/bin":"${HOME}/.dcli/bin"
 RUN ./dcli_install
 
-
 ```
 
-```text
+```
 RUN wget wget https://github.com/noojee/dcli/releases/download/latest-osx/dcli_install -O dcli_install
 RUN chmod +x dcli_install
 # TODO correct this path
@@ -76,7 +74,7 @@ RUN ./dcli_install
 
 Now you have dart and dcli in your container you will want to import a project and compile it.
 
-```text
+```
 # now lets compile a script.
 RUN mkdir -p /build/bin
 RUN mkdir -p /build/lib
@@ -91,13 +89,13 @@ dcli compile --install bin/<your script>
 
 After building your docker image you may need to force an upgrade of the DCli version.
 
-You can simply recreate your docker image or to save time you can just up use this one trick \(sorry\) to force docker to just rebuild the DCli install \(and subsequent steps in your docker file\).
+You can simply recreate your docker image or to save time you can just up use this one trick (sorry) to force docker to just rebuild the DCli install (and subsequent steps in your docker file).
 
 Add the following line just before the call to wget.
 
 If you want to force an upgrade of DCli just increment the no. and run docker build.
 
-```text
+```
 ARG PULL_LATEST_DSHELL_INSTALL=1
 ```
 
@@ -111,13 +109,13 @@ To use the container:
 
 Create a volume so that your scripts are persistent:
 
-```text
+```
 docker volume create dcli_scripts
 ```
 
 Attach to the DCli cli.
 
-```text
+```
 docker run -v dcli_scripts:/home/scripts --network host -it dclifordart/dcli /bin/bash
 bash:/> cd /home/scripts
 bash:/home/scripts> dcli create hellow.dart
@@ -135,7 +133,7 @@ dart allows you to include dependencies which are pulled from a git repo.
 
 e.g.
 
-```text
+```
 dependencies:
   gcloud_lib: 
     git: 
@@ -155,7 +153,7 @@ This blog article provide a details on how to achieve this.
 
 The shorter summary is:
 
-```text
+```
   var repo = 'yourdockerrepo';
   var image = 'yourimage';
   var version = '1.0.0';
@@ -165,7 +163,7 @@ The shorter summary is:
 
 With in your docker file your FIRST line MUST be:
 
-```text
+```
 # syntax=docker/dockerfile:1.0.0-experimental
 ...
 
@@ -187,9 +185,9 @@ RUN --mount=type=ssh  dcli compile bin/cmd_dispatcher.dart -o  /home/build/targe
 
 If you are using an Alpine based Docker image then you will need to install gclibc.
 
-WARNING: There appear to be some issues around using alpine. I'm seeing network errors \(error 69\) running pub get. These generally happen toward the end of the process but occur about 80% of the time. You can reproduce them easily by running `pub cache repair`. My suspicion is that its because we are installing glibc when alpine uses mu libc.
+WARNING: There appear to be some issues around using alpine. I'm seeing network errors (error 69) running pub get. These generally happen toward the end of the process but occur about 80% of the time. You can reproduce them easily by running `pub cache repair`. My suspicion is that its because we are installing glibc when alpine uses mu libc.
 
-```text
+```
 ENV GLIBC_VERSION 2.31-r0
 
 # Download and install glibc
@@ -216,4 +214,3 @@ RUN chmod +x dcli_install
 RUN ./dcli_install
 ENV PATH="${PATH}:/usr/bin/dart/bin:/root/.pub-cache/bin"
 ```
-
