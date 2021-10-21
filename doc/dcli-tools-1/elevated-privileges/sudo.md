@@ -108,7 +108,9 @@ he safest way to do this is to:
 
 Create a script to ask the user for the sudo password
 
-Name the following script something like sudo\_ask.dar
+Name the following script something like sudo\_ask.dart
+
+In the real world creation of the password file would happen in another part of your code base.
 
 ```dart
 void main() {
@@ -121,40 +123,36 @@ void main() {
 }
 ```
 
+Create a script to be called by sudo when it needs the password:
+
+Call this script sudo\_askpass.dart
+
+```
+void main()
+{
+    var pathToPassword = 'sudo.p';
+    var password = pathToPassword.read().first;
+    print(password);
+    /// clean up the password file unless you need it again 
+    /// during this run.
+    delete(pathToPassword);
+}
+```
+
 Create and compile the DCli script that you want to run under sudo.
 
 as well as the sudo\_ask.dart script.
 
 ```
-dcli compile sudo_ask.dart
-```
-
-kGitBookLater today![Teammate profile](https://js.intercomcdn.com/images/attention.6a6e4cbc.png)We may not be able to reply as fast as usually, but we are working on fixing issues and will get back to you eventually.I need help from Support![GitBook profile](https://static.intercomassets.com/avatars/3797458/square\_128/custom\_avatar-1619024365.png?1619024365)😀 Please note we have launched a major update. We are working on fixing a few issues.Please check [https://www.gitbookstatus.com](https://www.gitbookstatus.com) to see if any open incident may be affecting you. You can also subscribe to get updates.**A member of the team will read your message soon**. Please share as much detail as possible. Screenshots, along with your **'app.gitbook.com/...'** account or space link may help.\
-\
-We usually try to respond within a business day, and we're aiming to provide our usual quick responses. However, we may be dealing with a higher volume of questions, so **it could take us a little longer to get back to you.**I've just logged into see the major update.My problem is that code blocks are completely broken.The problem seems to be around cursor management. After creating a code block and the leaving it the cursor placement is broken. As I type the cursor seems to jump to some previous location that the cursor had been on. Not certain if the auto save plays a part in this because as soon as a type a character it starts saving.As it stands I can't edit a page with code blocks in it.Just now. Not seen yet
-
-```
-```
-
-\
-GitBookLater today![Teammate profile](https://js.intercomcdn.com/images/attention.6a6e4cbc.png)We may not be able to reply as fast as usually, but we are working on fixing issues and will get back to you eventually.I need help from Support![GitBook profile](https://static.intercomassets.com/avatars/3797458/square\_128/custom\_avatar-1619024365.png?1619024365)😀 Please note we have launched a major update. We are working on fixing a few issues.Please check [https://www.gitbookstatus.com](https://www.gitbookstatus.com) to see if any open incident may be affecting you. You can also subscribe to get updates.**A member of the team will read your message soon**. Please share as much detail as possible. Screenshots, along with your **'app.gitbook.com/...'** account or space link may help.\
-\
-We usually try to respond within a business day, and we're aiming to provide our usual quick responses. However, we may be dealing with a higher volume of questions, so **it could take us a little longer to get back to you.**I've just logged into see the major update.My problem is that code blocks are completely broken.The problem seems to be around cursor management. After creating a code block and the leaving it the cursor placement is broken. As I type the cursor seems to jump to some previous location that the cursor had been on. Not certain if the auto save plays a part in this because as soon as a type a character it starts saving.As it stands I can't edit a page with code blocks in it.Just now. Not seen yet
-
-```
-```
-
-\
-
-
-```bash
-dcli compile sudo_work.dart
+dcli compile sudo_askpass.dart
+dcli compile worker.dart
 ```
 
 Run the script under sudo
 
 ```
-SUDO_ASKPASS=
+./sudo_ask.dart
+SUDO_ASKPASS=sudo_ask && sudo -A worker
 ```
 
-**xport SUDO\_ASKPASS=/home/$username/asker.sh && SUDO\_PASSWORD=$sudoPassword sudo -A**
+****
