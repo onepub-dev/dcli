@@ -1,6 +1,6 @@
 # Introduction
 
-DCli is an API and tooling for building cross platform command line \(CLI\) applications and scripts using the Dart programming language.
+DCli is an API and tooling for building cross platform command line (CLI) applications and scripts using the Dart programming language.
 
 {% hint style="info" %}
 Looking for DShell? You are in the right place. DShell has been renamed DCli.
@@ -10,38 +10,38 @@ DCli as featured on Jermaine Oppong package of the week vlog.
 
 {% embed url="https://youtu.be/z99IxxWmD1Q" %}
 
-But I call it D-cli, not d.c.l.i ;\)
+But I call it D-cli, not d.c.l.i ;)
 
 ## Another Dart Tool by Noojee
 
-![](.gitbook/assets/noojee-logo.png)
+![](<.gitbook/assets/noojee-logo (1).png>)
 
 ## Overview
 
-DCli is intended to to allow you to create Command  Line \(CLI\) Applications from simple scripts to full blown CLI apps. 
+DCli is intended to to allow you to create Command Line (CLI) Applications from simple scripts to full blown CLI apps.
 
 DCli is a great replacement for CLI apps that would have traditionally been built with Bash, C, python, ruby, Go, Rust ....
 
-Whether its a 5 line Bash script or a 100,000 line production management system \(like we run internally\) DCli is the right place to start building your CLI infrastructure.
+Whether its a 5 line Bash script or a 100,000 line production management system (like we run internally) DCli is the right place to start building your CLI infrastructure.
 
 ### So why DCli?
 
 DCli is based on Dart which is a modern programming language that has a set of features that makes building CLI apps easy and reliable.
 
 * Dart and DCli are simple to learn
-* Compiled or JIT 
-* Shebag support \(run .dart scripts directly from the cli ./hellow.dart\)
-* Small transportable execs \(from 10MB\), Dart VM is NOT required on target system.
+* Compiled or JIT
+* Shebag support (run .dart scripts directly from the cli ./hellow.dart)
+* Small transportable execs (from 10MB), Dart VM is NOT required on target system.
 * Typesafe language catches errors at compile time
 * Sound null safety reduces null pointer exceptions
 * Fast
 * Great development environment using vs-code
-* Local and Remote development/debugging 
+* Local and Remote development/debugging
 * Cross platform supporting Linux/Windows/osx/arm
 
 ### Example:
 
-```text
+```
 #! /usr/bin/env dcli
 
 import 'dart:io';
@@ -56,15 +56,15 @@ void main() {
 
 To run the above script called hello.dart:
 
-```text
+```
 ./hello.dart
 ```
 
 ### So why is DCli different?
 
-DCli is based on the relatively new programming language; [Dart](https://dart.dev/).
+DCli is based on the relatively new programming language; [Dart](https://dart.dev).
 
-Dart is currently the [fastest growing language on github](https://www.linkedin.com/pulse/google-dart-tops-githubs-list-fastest-growing-2019-bill-detwiler#:~:text=According%20to%20GitHub's%20annual%20%22The,tagged%20with%20a%20primary%20language) and is the basis on which Flutter is built.
+Dart is currently the [fastest growing language on github](https://www.linkedin.com/pulse/google-dart-tops-githubs-list-fastest-growing-2019-bill-detwiler#:\~:text=According%20to%20GitHub's%20annual%20%22The,tagged%20with%20a%20primary%20language) and is the basis on which Flutter is built.
 
 [Ubuntu has just announced](https://medium.com/flutter/announcing-flutter-linux-alpha-with-canonical-19eb824590a9) that Flutter will be the primary platform for building GUI's on Ubuntu and is currently working on replacing the Ubuntu installer using Flutter.
 
@@ -86,7 +86,7 @@ Dart has is also a large and growing ecosystem of [third party libraries](https:
 
 Dart is fast and if you need even more speed it can be compiled to a single file executable that is portable between binary compatible machines.
 
-```text
+```
 # compile, install to the local PATH and run hello.dart
 $> dcli compile --install hello.dart
 $> hello
@@ -110,4 +110,3 @@ You can use your favourite editor to create DCli scripts. Vi or VIM work fine bu
 {% endhint %}
 
 Visual Code with the dart-code extension provide a great development an debugging experience including the ability to develop and debug code on a remote server.
-
