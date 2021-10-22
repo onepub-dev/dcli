@@ -1,4 +1,6 @@
 @Timeout(Duration(seconds: 600))
+import 'dart:io';
+
 import 'package:dcli/dcli.dart' hide equals;
 import 'package:dcli/src/util/parser.dart';
 import 'package:test/test.dart';
@@ -73,11 +75,13 @@ void main() {
 
             /// httpbin echos the headers we pass.
             /// However it capitalises the first letter of the header key.
-            /// So we pre-empt it by sending them capitialised.
+            /// So we preempt it by sending them capitialised.
             fetch(
-                url: 'https://httpbin.org/headers',
+                url: 'https://httpbin.org/post',
                 saveToPath: result,
-                headers: headers);
+                method: FetchMethod.post,
+                headers: headers,
+                data: FetchData.fromString('Hello World'));
             final lines = read(result).toList();
             final jsonMap = Parser(lines).jsonDecode() as Map<String, dynamic>;
 
@@ -276,6 +280,195 @@ void main() {
           },
           create: false,
         );
+      });
+    });
+  });
+
+  group('post data', () {
+    // example of data returned from https://httpbin.org/post
+    // '{\r\n'
+    //     '  "args": {}, \r\n'
+    //     '  "data": "Hellow World", \r\n'
+    //     '  "files": {}, \r\n'
+    //     '  "form": {}, \r\n'
+    //     '  "headers": {\r\n'
+    //     '    "Accept-Encoding": "gzip", \r\n'
+    //     '    "Content-Length": "12", \r\n'
+    //     '    "Content-Type": "text/plain", \r\n'
+    //     '    "Host": "httpbin.org", \r\n'
+    //     '    "User-Agent": "Dart/2.14 (dart:io)", \r\n'
+    //     '    "X-Amzn-Trace-Id": "Root=1-6171cf8b-615d216f4bae3846659b6697"\r\n'
+    //     '  }, \r\n'
+    //     '  "json": null, \r\n'
+    //     '  "origin": "14.201.92.199", \r\n'
+    //     '  "url": "https://httpbin.org/post"\r\n'
+    //     '}'
+    test('send string', () {
+      withTempFile((file) {
+        const content = 'Hellow World';
+        fetch(
+            url: 'https://httpbin.org/post',
+            method: FetchMethod.post,
+            data: FetchData.fromString(content),
+            saveToPath: file);
+        final map =
+            Parser(read(file).toList()).jsonDecode() as Map<String, dynamic>;
+        expect(map['data'] as String, equals(content));
+        expect(
+            (map['headers'] as Map<String, dynamic>)['Content-Type'] as String,
+            equals('text/plain'));
+      }, create: false);
+    });
+
+    test('send file', () {
+      withTempFile((pathToData) {
+        withTempFile((file) {
+          const content = 'Hellow World2';
+          pathToData.write(content);
+
+          fetch(
+              url: 'https://httpbin.org/post',
+              method: FetchMethod.post,
+              data: FetchData.fromFile(pathToData),
+              saveToPath: file);
+          final map =
+              Parser(read(file).toList()).jsonDecode() as Map<String, dynamic>;
+          expect(map['data'] as String, equals('$content${Platform().eol}'));
+          expect(
+              (map['headers'] as Map<String, dynamic>)['Content-Type']
+                  as String,
+              equals('text/plain'));
+        }, create: false);
+      });
+    });
+
+    test('send stream', () {
+      withTempFile((pathToData) {
+        withTempFile((file) {
+          const content = 'Hellow World2';
+          pathToData.write(content);
+
+          fetch(
+              url: 'https://httpbin.org/post',
+              method: FetchMethod.post,
+              data: FetchData.fromStream(File(pathToData).openRead()),
+              saveToPath: file);
+          final map =
+              Parser(read(file).toList()).jsonDecode() as Map<String, dynamic>;
+          expect(map['data'] as String, equals('$content${Platform().eol}'));
+          expect(
+              (map['headers'] as Map<String, dynamic>)['Content-Type']
+                  as String,
+              equals('application/octet-stream'));
+        }, create: false);
+      });
+    });
+
+    test('send bytes', () {
+      withTempFile((pathToData) {
+        withTempFile((file) {
+          const bytes = <int>[0, 1, 2, 3, 4, 5];
+
+          fetch(
+              url: 'https://httpbin.org/post',
+              method: FetchMethod.post,
+              data: FetchData.fromBytes(bytes),
+              saveToPath: file);
+          final map =
+              Parser(read(file).toList()).jsonDecode() as Map<String, dynamic>;
+          expect((map['data'] as String).codeUnits, equals(bytes));
+          expect(
+              (map['headers'] as Map<String, dynamic>)['Content-Type']
+                  as String,
+              equals('application/octet-stream'));
+        }, create: false);
+      });
+    });
+
+    /// you can't use data with get.
+    test('bad data', () {
+      withTempFile((pathToData) {
+        withTempFile((file) {
+          const content = 'Hellow World2';
+          pathToData.write(content);
+
+          expect(
+              () => fetch(
+                  url: 'https://httpbin.org/get',
+                  data: FetchData.fromFile(pathToData),
+                  saveToPath: file),
+              throwsA(predicate<FetchException>(
+                (e) =>
+                    e is FetchException &&
+                    e.message.contains(
+                        'FetchData is not supported for the FetchMethod:'),
+              )));
+        }, create: false);
+      });
+    });
+
+    test('custom headers', () {
+      withTempFile((file) {
+        fetch(
+            url: 'https://httpbin.org/get',
+            headers: {'X-Test-Header1': 'Value1', 'X-Test-Header2': 'Value2'},
+            saveToPath: file);
+        final map =
+            Parser(read(file).toList()).jsonDecode() as Map<String, dynamic>;
+        expect(
+            (map['headers'] as Map<String, dynamic>)['X-Test-Header1']
+                as String,
+            equals('Value1'));
+        expect(
+            (map['headers'] as Map<String, dynamic>)['X-Test-Header2']
+                as String,
+            equals('Value2'));
+      }, create: false);
+    });
+  });
+
+  group('FetchData', () {
+    group('mime-type', () {
+      test('by extension - png', () {
+        withTempFile((pathToData) {
+          expect(FetchData.fromFile(pathToData).mimeType, 'image/png');
+        }, suffix: 'png');
+      });
+      test('explicity', () {
+        withTempFile((pathToData) {
+          expect(
+              FetchData.fromFile(pathToData, mimeType: 'alphabet/soup')
+                  .mimeType,
+              'alphabet/soup');
+        }, suffix: 'png');
+      });
+      test('by extension - csv', () {
+        withTempFile((pathToData) {
+          expect(FetchData.fromFile(pathToData).mimeType, 'text/csv');
+        }, suffix: 'csv');
+      });
+      test('default', () {
+        withTempFile((pathToData) {
+          expect(FetchData.fromFile(pathToData).mimeType, 'text/plain');
+        });
+      });
+    });
+
+    test('FetchData.fromFile - missing file', () {
+      expect(
+          () => FetchData.fromFile(join('/tmp/path/to/nowhere')),
+          throwsA(predicate<FetchException>(
+            (e) => e is FetchException && e.message.contains('does not exist'),
+          )));
+    });
+
+    test('FetchData.fromFile - not a file', () {
+      withTempDir((tmpDir) {
+        expect(
+            () => FetchData.fromFile(tmpDir),
+            throwsA(predicate<FetchException>(
+              (e) => e is FetchException && e.message.contains('is not a file'),
+            )));
       });
     });
   });

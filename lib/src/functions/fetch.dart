@@ -1,7 +1,9 @@
 import 'dart:async';
 import 'dart:io';
 
+import 'package:dcli/src/util/truepath.dart';
 import 'package:meta/meta.dart';
+import 'package:mime/mime.dart';
 
 import '../settings.dart';
 import '../util/dcli_exception.dart';
@@ -39,6 +41,10 @@ void _devNull(FetchProgress _) {}
 ///
 /// Any [headers] that you pass are sent as HTTP headers along with their value.
 ///
+/// When using the [FetchMethod.post] you provide a [data] argument which
+/// supplies the data to be sent.
+/// If you set [data] for any other [method] then a
+///
 /// You may optionally passing in a [fetchProgress] method which will be
 /// called each
 /// time a chunk is downloaded with details on the download progress.
@@ -51,6 +57,7 @@ void _devNull(FetchProgress _) {}
 /// to the [fetchProgress] call. In the meantime ensure that you
 ///  always return true from
 /// the 'onProgress' callback.
+///
 /// Throws a [FetchException] if something goes wrong.
 /// In the event of a HTTP error we will still try to download
 /// the body and save it to [saveToPath] as often the body
@@ -61,15 +68,16 @@ void fetch({
   FetchMethod method = FetchMethod.get,
   Map<String, String>? headers,
   OnFetchProgress fetchProgress = _devNull,
+  FetchData? data,
 }) {
   headers ??= <String, String>{};
   _Fetch().fetch(
-    url: url,
-    saveToPath: saveToPath,
-    method: method,
-    headers: headers,
-    progress: fetchProgress,
-  );
+      url: url,
+      saveToPath: saveToPath,
+      method: method,
+      headers: headers,
+      progress: fetchProgress,
+      data: data);
 }
 
 /// Fetches the list of of resources indicated by [urls];
@@ -127,24 +135,107 @@ enum FetchMethod {
   post
 }
 
+enum _FetchDataType { string, path, bytes, stream }
+
+/// Used with the [fetch] function to send data for
+/// the likes of a POST command.
+class FetchData {
+  /// Use a String as the source of the [FetchData]
+  /// The [mimeType] defaults to text/plain.
+  FetchData.fromString(String string, {String mimeType = 'text/plain'})
+      : _string = string,
+        _type = _FetchDataType.string,
+        _mimeType = mimeType;
+
+  /// Read the [FetchData] from a file where
+  /// [pathToData] is the path to the file
+  /// containing the data to send.
+  /// [pathToData] may be relative or absolute.
+  /// If the mimeType isn't passed then we use the file
+  /// extension to determine the [mimeType] if that fails
+  /// we revert to text/plain.
+  /// throws [FetchException] if the file at [pathToData]
+  /// does not exist or it is not a file.
+  FetchData.fromFile(String pathToData, {String? mimeType})
+      : _pathToDataFile = pathToData,
+        _type = _FetchDataType.path,
+        _mimeType = mimeType ?? lookupMimeType(pathToData) ?? 'text/plain' {
+    if (!exists(pathToData)) {
+      throw FetchException('${truepath(pathToData)} does not exist');
+    }
+    if (!isFile(pathToData)) {
+      throw FetchException('${truepath(pathToData)} is not a file');
+    }
+  }
+
+  /// Use the passed [bytes] as the source
+  /// of the [FetchData].
+  ///
+  /// The [mimeType] defaults to application/octet-stream
+  FetchData.fromBytes(List<int> bytes,
+      {String mimeType = 'application/octet-stream'})
+      : _bytes = bytes,
+        _type = _FetchDataType.bytes,
+        _mimeType = mimeType;
+
+  /// Use the [stream] as the source of the [FetchData]
+  /// to send.
+  /// The [mimeType] defaults to application/octet-stream
+  FetchData.fromStream(Stream<List<int>> stream,
+      {String mimeType = 'application/octet-stream'})
+      : _stream = stream,
+        _type = _FetchDataType.stream,
+        _mimeType = mimeType;
+
+  final _FetchDataType _type;
+  final String _mimeType;
+
+  /// Returns the mime type of the data.
+  String get mimeType => _mimeType;
+
+  String? _string;
+  String? _pathToDataFile;
+  List<int>? _bytes;
+  Stream<List<int>>? _stream;
+
+  Future<void> _write(HttpClientRequest request) async {
+    switch (_type) {
+      case _FetchDataType.string:
+        request.write(_string);
+        break;
+      case _FetchDataType.path:
+        final file = File(_pathToDataFile!);
+        final stream = file.openRead();
+        await request.addStream(stream);
+        break;
+      case _FetchDataType.bytes:
+        request.add(_bytes!);
+        break;
+      case _FetchDataType.stream:
+        await request.addStream(_stream!);
+        break;
+    }
+  }
+}
+
 class _Fetch extends DCliFunction {
-  void fetch({
-    required String url,
-    required String saveToPath,
-    required Map<String, String> headers,
-    OnFetchProgress progress = _devNull,
-    bool verboseProgress = false,
-    FetchMethod method = FetchMethod.get,
-  }) {
+  void fetch(
+      {required String url,
+      required String saveToPath,
+      required Map<String, String> headers,
+      OnFetchProgress progress = _devNull,
+      bool verboseProgress = false,
+      FetchMethod method = FetchMethod.get,
+      FetchData? data}) {
     waitForEx<void>(
       download(
         FetchUrl(
-          url: url,
-          saveToPath: saveToPath,
-          progress: progress,
-          method: method,
-          headers: headers,
-        ),
+            url: url,
+            saveToPath: saveToPath,
+            progress: progress,
+            method: method,
+            headers: headers,
+            data: data),
         verboseProgress: verboseProgress,
       ),
     );
@@ -197,6 +288,11 @@ class _Fetch extends DCliFunction {
     /// added any headers to the request before we send it.
     for (final header in fetchUrl.headers.entries) {
       request.headers.add(header.key, header.value, preserveHeaderCase: true);
+    }
+
+    if (fetchUrl.data != null) {
+      request.headers.add('Content-Type', fetchUrl.data!._mimeType);
+      await fetchUrl.data!._write(request);
     }
 
     final response = await request.close();
@@ -307,13 +403,14 @@ class _Fetch extends DCliFunction {
 
   Future<HttpClientRequest> startCall(
       HttpClient client, FetchUrl fetchUrl) async {
+    final uri = Uri.parse(fetchUrl.url);
     try {
       switch (fetchUrl.method) {
         case FetchMethod.get:
-          return await client.getUrl(Uri.parse(fetchUrl.url));
+          return await client.getUrl(uri);
 
         case FetchMethod.post:
-          return await client.postUrl(Uri.parse(fetchUrl.url));
+          return await client.postUrl(uri);
       }
     } on SocketException catch (e) {
       throw FetchException.fromException(e);
@@ -361,14 +458,19 @@ enum FetchStatus {
 /// the location where it is going to be stored.
 class FetchUrl {
   /// ctor.
-  FetchUrl({
-    required this.url,
-    required this.saveToPath,
-    Map<String, String>? headers,
-    this.method = FetchMethod.get,
-    this.progress = _devNull,
-  }) {
+  FetchUrl(
+      {required this.url,
+      required this.saveToPath,
+      Map<String, String>? headers,
+      this.method = FetchMethod.get,
+      this.progress = _devNull,
+      this.data}) {
     this.headers = headers ?? <String, String>{};
+
+    if (data != null && method != FetchMethod.post) {
+      throw FetchException('FetchData is not supported for the FetchMethod:'
+          '${EnumHelper().getName(method)}');
+    }
   }
 
   /// the URL of the resource being downloaded
@@ -387,6 +489,11 @@ class FetchUrl {
 
   /// The set of HTTP headers to send with the request.
   late final Map<String, String> headers;
+
+  /// For [FetchMethod]s that allow you to send data
+  /// such as [FetchMethod.post] this holds the data
+  /// that is to be sent.
+  FetchData? data;
 }
 
 /// Passed to the [progress] method to indicate the current progress of

@@ -40,7 +40,8 @@ export 'src/functions/fetch.dart'
         FetchStatus,
         FetchUrl,
         OnFetchProgress,
-        FetchMethod;
+        FetchMethod,
+        FetchData;
 export 'src/functions/file_list.dart' show fileList;
 export 'src/functions/find.dart' show find, Find;
 export 'src/functions/head.dart' show head;
@@ -69,7 +70,6 @@ export 'src/shell/bash_shell.dart';
 export 'src/shell/posix_shell.dart';
 export 'src/shell/shell.dart';
 export 'src/shell/unknown_shell.dart';
-export 'src/shell/windows_mixin.dart';
 export 'src/shell/zsh_shell.dart';
 export 'src/util/ansi.dart';
 export 'src/util/ansi_color.dart';
