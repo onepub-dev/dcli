@@ -20,7 +20,7 @@ The DCli Ask command allows you to combine multiple validators with the Ask.any 
 
 The Ask.all validator takes an array of validators.
 
-All validators must succeed for the input to be considered valid. The validators are processed in the order they are passed \(left to right\). The error from the first validator that fails is displayed.
+All validators must succeed for the input to be considered valid. The validators are processed in the order they are passed (left to right). The error from the first validator that fails is displayed.
 
 The Ask.all validator is the equivalent of a boolean AND operator.
 
@@ -37,7 +37,7 @@ The password must be composed of alphanumeric characters **and** be between 10 a
 
 The Ask.any validator takes an array of validators.
 
-Only one of the validators must succeed for the input to be considered valid. The validators are processed in the order they are passed \(left to right\). In no validators pass, then the error from the first validator is displayed.
+Only one of the validators must succeed for the input to be considered valid. The validators are processed in the order they are passed (left to right). In no validators pass, then the error from the first validator is displayed.
 
 The Ask.any validator is the equivalent of a boolean OR operator.
 
@@ -124,7 +124,7 @@ var email = ask( 'Email Address?', validator: Ask.email));
 
 ### Ask.fqdn
 
-Validates that the user input is a valid Fully Qualified Domain Name \(www.noojee.com.au\) address.
+Validates that the user input is a valid Fully Qualified Domain Name (www.noojee.com.au) address.
 
 ```dart
 var email = ask( 'FQDN?', validator: Ask.fqdn));
@@ -134,7 +134,7 @@ var email = ask( 'FQDN?', validator: Ask.fqdn));
 
 Validates that the user input is a valid integer.
 
-The integer is returned as a string. 
+The integer is returned as a string.
 
 ```dart
 var ageAsString = ask( 'Age?', validator: Ask.integer));
@@ -143,9 +143,9 @@ var age = int.parse(ageAsString);
 
 ### Ask.valueRange
 
-Validates that an entered number is within the provided range \(inclusive\). Can be used with both integer and decimal no.s
+Validates that an entered number is within the provided range (inclusive). Can be used with both integer and decimal no.s
 
-The value is returned as a string. 
+The value is returned as a string.
 
 ```dart
 var age = ask('Age?', 
@@ -156,7 +156,7 @@ var age = ask('Age?',
 
 Validates that the user input is a valid decimal number.
 
-The decimal is returned as a string. 
+The decimal is returned as a string.
 
 ```dart
 var age = ask( 'Age?', validator: Ask.decimal));
@@ -164,7 +164,7 @@ var age = ask( 'Age?', validator: Ask.decimal));
 
 ### Ask.alpha
 
-Validates that the user input is a alpha string with every character in the range \[a-zA-Z\].
+Validates that the user input is a alpha string with every character in the range \[a-zA-Z].
 
 ```dart
 var name = ask( 'name?', validator: Ask.alpha));
@@ -172,7 +172,7 @@ var name = ask( 'name?', validator: Ask.alpha));
 
 ### Ask.alphaNumeric
 
-Validates that the user input is a alphaNumeric string with every character in the range \[a-zA-Z0-9\].
+Validates that the user input is a alphaNumeric string with every character in the range \[a-zA-Z0-9].
 
 ```dart
 var name = ask( 'name?', validator: Ask.alpha));
@@ -187,10 +187,10 @@ All validators must inherit from the AskValidator class and implement the valida
 The validator method must return the passed line, but may alter the line before returning it. The altered results is what will be returned from the ask function.
 
 {% hint style="warning" %}
- a validator MUST not include the value of the 'line' in an error message as you risk exposing a password that the user is entering.
+a validator MUST not include the value of the 'line' in an error message as you risk exposing a password that the user is entering.
 {% endhint %}
 
-If the ask function uses one of the combination validators \(Ask.all, Ask.any\) then the line input by the user will be passed to each validator in turn. Each validator may change the line and that altered value will be passed to the next validator. In this way the entered value may go through multiple transformations before being returned to the caller.
+If the ask function uses one of the combination validators (Ask.all, Ask.any) then the line input by the user will be passed to each validator in turn. Each validator may change the line and that altered value will be passed to the next validator. In this way the entered value may go through multiple transformations before being returned to the caller.
 
 ```dart
 class AskGoodOrBad extends AskValidator {
@@ -214,3 +214,26 @@ var getsPresent = ask('Have you been good or bad'
     , validator:  AskGoodOrBad());
 ```
 
+### Async Validators
+
+An Ask validator must return a synchronous type. If you need to make an async call from within validator then you need to use the waitForEx function to strip the async nature of the call.
+
+```dart
+class AskAsync extends AskValidator {
+  const AskAsync ();
+  @override
+  String validate(String line) {
+    line = line.trim();
+    
+    if (waitForEx(checkInput(line)) == false)
+    {
+      throw AskValidatorException(red("The entered line wasn't valid"));
+    }
+    return line;
+  }
+  
+  Future<bool> checkInput(String line) async {
+    // make some async call to check [line]
+  }
+}
+```
