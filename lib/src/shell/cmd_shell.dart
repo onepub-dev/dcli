@@ -1,4 +1,3 @@
-import '../../dcli.dart';
 import 'shell_mixin.dart';
 import 'windows_mixin.dart';
 
@@ -18,12 +17,7 @@ class CmdShell with WindowsMixin, ShellMixin {
 
   @override
   void addFileAssocation(String dcliPath) {
-    /// These need to be run as admin
-    /// not working correctly at this point.
-    /// Looks like powershell ignores the file association.
-    'cmd /c assoc .dart=dcli'.start(progress: Progress.devNull());
-    '''cmd /c ftype dcli="${DCliPaths().pathToDCli}" "%1" "%2" "%3" "%4" "%5" "%6" "%7" "%8" "%9"'''
-        .start(progress: Progress.devNull());
+    super.addFileAssociation(dcliPath);
   }
 
   @override

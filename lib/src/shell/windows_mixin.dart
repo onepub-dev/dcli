@@ -153,6 +153,132 @@ mixin WindowsMixin {
     return isElevated;
   }
 
+  /// Add a file association so that typing the name of a dart
+  /// script on the cli launches dcli which in turn launches the script.
+  ///
+  /// ```bash
+  /// main.dart
+  /// > hello world
+  /// ```
+  /// https://docs.microsoft.com/en-us/windows/win32/shell/fa-file-types
+  void addFileAssociation(String dcliPath) {
+    const progIdPath = r'Software\Classes\.dart\OpenWithProgids';
+
+    if (regKeyExists(HKEY_CURRENT_USER, progIdPath)) {
+      regDeleteKey(HKEY_CURRENT_USER, progIdPath);
+    }
+
+    regCreateKey(HKEY_CURRENT_USER, progIdPath);
+
+    regSetString(HKEY_CURRENT_USER, progIdPath, 'noojee.dcli', '');
+
+    const commandPath = r'Software\Classes\noojee.dcli\shell\open\command';
+    if (regKeyExists(HKEY_CURRENT_USER, commandPath)) {
+      regDeleteKey(HKEY_CURRENT_USER, commandPath);
+    }
+
+    regCreateKey(HKEY_CURRENT_USER, commandPath);
+    regSetString(
+        HKEY_CURRENT_USER,
+        commandPath,
+        defaultRegistryValueName,
+        '"${DCliPaths().pathToDCli}" '
+        // the %* is meant to represent all parameters even if more than
+        // 9 are passed. In my experiments it doesn't appear to pass more than
+        // 8 (as %1 is already consumed)  and if fact makes no difference
+        // to just using %1 in the following line. I have left it
+        // in for now and may follow up later.
+        '"%1"%*');
+  }
+
+  /// Add a file association so that typing the name of a dart
+  /// script on the cli launches dcli which in turn launches the script.
+  ///
+  /// ```bash
+  /// main.dart
+  /// > hello world
+  /// ```
+  /// https://docs.microsoft.com/en-us/windows/win32/shell/fa-file-types
+  void addFileAssociationv2() {
+    // create a ProgID for dcli 'noojee.dcli'
+    regSetString(HKEY_CLASSES_ROOT, '.dart', defaultRegistryValueName, 'dcli');
+
+    // When you create or change a file association, it is important to notify
+    //the system that you have made a change. Do so by calling SHChangeNotify
+    // and specifying the SHCNE_ASSOCCHANGED event. If you do not call
+    //SHChangeNotify, the change may not be recognized until after the system
+    //is rebooted.
+    // computer\hkey_classes_root\.dart\OpenWithProgids => default (not set),
+    // VSCode.dart
+
+    // create a ProgID for dcli 'noojee.dcli'
+    regSetString(HKEY_CURRENT_USER, r'\Software\Classes\noojee.dcli',
+        defaultRegistryValueName, 'dcli');
+
+    // associate the .dart extension with dcli's prog id
+    regSetString(HKEY_CURRENT_USER, r'\Software\Classes\.dart',
+        defaultRegistryValueName, 'noojee.dcli');
+
+    // regSetString(HKEY_CLASSES_ROOT, r'.dart\OpenWithProgids', 'dcli.bat', '');
+
+    // computer\hkey_current_user\software\classes\.dart -> default (not set)
+    regSetString(HKEY_CURRENT_USER, r'SOFTWARE\Classes\.dart\OpenWithProgids',
+        'noojee.dcli.dart', '');
+
+// computer\hkey_current_user\software\classes\.dart -> default (not set)
+    regSetString(HKEY_LOCAL_MACHINE, r'SOFTWARE\Classes\.dart',
+        defaultRegistryValueName, 'dcli');
+
+    //computer\hkey_classes_root\dcli\shell\open\command
+    //   -> Default C:\Users\Brett\AppData\Local\Pub\Cache\bin\dcli.bat %1 %2 %3 %4 %5 %6 %7 %8 %9
+    regSetExpandString(
+        HKEY_CURRENT_USER,
+        r'dcli\shell\open\command',
+        defaultRegistryValueName,
+        '${DCliPaths().pathToDCli}  %1 %2 %3 %4 %5 %6 %7 %8 %9');
+
+    // computer\hkey_classes_root\.dart => dcli
+    // regSetString(HKEY_CURRENT_USER, '.dart', defaultRegistryValueName
+    //, 'dcli');
+
+    // [HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\FileExts\.dart\OpenWithList]
+    regSetString(
+        HKEY_CURRENT_USER,
+        r'SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\FileExts\.dart\OpenWithList',
+        'a',
+        'dcli.bat');
+
+    /// to do check if there is any existing MRUentries
+    /// and move them down unless
+    /// they are for dcli
+    regSetString(
+        HKEY_CURRENT_USER,
+        r'SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\FileExts\.dart',
+        'MRUList',
+        'a');
+
+    // [HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\FileExts\.dart\OpenWithProgids]
+    // "dcli"
+    regSetNone(
+        HKEY_CURRENT_USER,
+        r'SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\FileExts\.dart\OpenWithProgids',
+        'dcli');
+  }
+
+// Computer\HKEY_CURRENT_USER\SOFTWARE\Microsoft\Windows\CurrentVersion\ApplicationAssociationToasts
+//   -> Applications\Code.exe_.dart
+
+// Computer\HKEY_CURRENT_USER\SOFTWARE\Microsoft\Windows\CurrentVersion\ApplicationAssociationToasts
+//  -> dcli_.dart
+//  -> VSCode.dart_.dart
+
+// Computer\HKEY_LOCAL_MACHINE\SOFTWARE\Classes\.dart -> default not set
+
+// https://stackoverflow.com/questions/69761/how-to-associate-a-file-extension-to-the-current-executable-in-c-sharp
+
+// computer\hkey_classes_root\dcli\shell\open\command
+//   -> Default C:\Users\Brett\AppData\Local\Pub\Cache\bin\dcli.bat %1 %2 %3 %4 %5 %6 %7 %8 %9
+
   /// Returns true if the current process is running with elevated privileges
   /// e.g. Is running as an Administrator.
   bool get isPrivilegedProcess => isPrivilegedUser;

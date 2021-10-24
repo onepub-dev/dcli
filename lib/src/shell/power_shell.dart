@@ -1,4 +1,3 @@
-import '../../dcli.dart';
 import 'shell_mixin.dart';
 import 'windows_mixin.dart';
 
@@ -17,19 +16,13 @@ class PowerShell with WindowsMixin, ShellMixin {
   bool addToPATH(String path) => true;
 
   @override
-  void addFileAssocation(String dcliPath) {
-    /// These need to be run as admin
-    /// not working correctly at this point.
-    /// Looks like powershell ignores the file association.
-    /// We need to run as a priviliged user for this to work.
-    'cmd /c assoc .dart=dcli'.run;
-    '''cmd /c ftype dcli="${DCliPaths().pathToDCli}" "%1" "%2" "%3" "%4" "%5" "%6" "%7" "%8" "%9"'''
-        .run;
+  void installTabCompletion({bool quiet = false}) {
+    // not supported.
   }
 
   @override
-  void installTabCompletion({bool quiet = false}) {
-    // not supported.
+  void addFileAssocation(String dcliPath) {
+    super.addFileAssociation(dcliPath);
   }
 
   @override
