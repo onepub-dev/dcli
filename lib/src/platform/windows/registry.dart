@@ -12,7 +12,7 @@ const hrFileNotFound = -2147024894;
 
 /// Use this key when adding a value to a default (Default) registry
 /// key.
-const defaultRegistryKey = '';
+const defaultRegistryValueName = '';
 
 /// Collection of Windows specific registry functions.
 
@@ -503,6 +503,70 @@ R _withRegKey<R>(
       ..free(pSubKey);
   }
   return actionResult;
+}
+
+/// Tests if a registry key exists.
+///
+/// [hkey] is typically HKEY_CURRENT_USER or HKEY_LOCAL_MACHINE
+///
+/// See the following link for additional values:
+/// https://docs.microsoft.com/en-us/windows/win32/sysinfo/predefined-keys
+///
+/// [subKey] is name of the registry key you want to open.
+/// This is typically something like 'Environment'.
+///
+/// A [WindowsException] is thrown the call falls.
+bool regKeyExists(
+  int hkey,
+  String subKey,
+) {
+  var exists = false;
+  final pOpenKey = calloc<IntPtr>(1);
+  final pSubKey = TEXT(subKey);
+
+  try {
+    final result = RegOpenKeyEx(hkey, pSubKey, 0, KEY_QUERY_VALUE, pOpenKey);
+    if (result == ERROR_SUCCESS) {
+      exists = true;
+      RegCloseKey(pOpenKey.value);
+    }
+  } finally {
+    calloc
+      ..free(pOpenKey)
+      ..free(pSubKey);
+  }
+  return exists;
+}
+
+/// Creates a registry key
+/// Throws a [WindowsException] if the key cannot be created.
+void regCreateKey(
+  int hKey,
+  String subKey,
+) {
+  final pOpenKey = calloc<IntPtr>(1);
+  final pSubKey = TEXT(subKey);
+  try {
+    final result = RegCreateKeyEx(
+        hKey,
+        pSubKey,
+        0,
+        nullptr,
+        0,
+        KEY_QUERY_VALUE,
+        nullptr, // not inheritable
+        pOpenKey,
+        nullptr);
+
+    if (result != ERROR_SUCCESS) {
+      throw WindowsException(HRESULT_FROM_WIN32(result));
+    }
+    RegCloseKey(pOpenKey.value);
+  } finally {
+    calloc
+      ..free(pOpenKey)
+      ..free(pSubKey);
+  }
 }
 
 /// Packs a List of Dart Strings into a native memory block.
