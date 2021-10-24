@@ -1,7 +1,6 @@
 import 'dart:async';
 import 'dart:io';
 
-import 'package:dcli/src/util/truepath.dart';
 import 'package:meta/meta.dart';
 import 'package:mime/mime.dart';
 
@@ -10,6 +9,7 @@ import '../util/dcli_exception.dart';
 import '../util/enum_helper.dart';
 import '../util/format.dart';
 import '../util/terminal.dart';
+import '../util/truepath.dart';
 import '../util/wait_for_ex.dart';
 import 'function.dart';
 import 'is.dart';
