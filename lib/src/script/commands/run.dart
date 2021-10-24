@@ -9,8 +9,6 @@ import '../flags.dart';
 import 'commands.dart';
 
 /// Runs a dart script.
-/// If required a virtual project is created
-/// and built.
 class RunCommand extends Command {
   ///
   RunCommand() : super(_commandName);
@@ -48,18 +46,6 @@ class RunCommand extends Command {
     }
 
     verbose(() => 'Running script ${script.pathToScript}');
-
-    if (!script.isReadyToRun) {
-      if (Shell.current.isSudo) {
-        printerr(
-          red(
-            'The script is not ready to run, so cannot be run from sudo. '
-            'Run dcli warmup $scriptPath',
-          ),
-        );
-        exit(1);
-      }
-    }
 
     var scriptArguments = <String>[];
 
