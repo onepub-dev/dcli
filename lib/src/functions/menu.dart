@@ -54,6 +54,11 @@ String _noFormat<T>(T option) => option.toString();
 /// If the [defaultOption] does not match any the supplied [options]
 /// then an ArgumentError is thrown.
 ///
+/// If the app is not attached to a terminal then the menu will not be
+/// displayed and the [defaultOption] will be returned.
+/// If there is no [defaultOption] then an [ArgumentError]
+/// will be thrown.
+///
 T menu<T>({
   required String prompt,
   required List<T> options,
@@ -71,6 +76,15 @@ T menu<T>({
   // ignore: parameter_assignments
   limit = min(options.length, limit);
   format ??= _noFormat;
+
+  if (!Terminal().hasTerminal) {
+    if (defaultOption == null) {
+      throw ArgumentError(
+          'As no Terminal was detected you must supply a [defaultOption]'
+          ' which will be returned.');
+    }
+    return defaultOption;
+  }
 
   var displayList = options;
   if (fromStart == false) {
