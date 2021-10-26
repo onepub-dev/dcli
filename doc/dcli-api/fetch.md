@@ -17,23 +17,39 @@ DCli allows you to fetch a single web resource with progress information or to s
 The resource 'sample.aac' will be downloaded and saved to the temporary file 'sample.aac'.
 
 ```dart
-    withTempFile((sampleAac) {
+withTempFile((sampleAac) {
+  try {
         String baseURl =
 'https://raw.githubusercontent.com/noojee/dcli/master/test/src/functions/fetch_downloads';
         fetch(url: '$baseURl/sample.aac', saveToPath: sampleAac);
-    }, create: false
-    , suffix: 'acc');
+    } on FetchException catch (e) {
+      print('Exception Thrown: ${e.errorCode} ${e.message}');
+    }
+    /// print the returned data including any errors.
+    if (exists(tmp)) {
+      print(read(tmp).toParagraph());
+    }
+}, create: false
+, suffix: 'acc');
 ```
 
 ## Fetch as single resource and show progress
 
 ```dart
   withTempFile((sampleAac) {
+   try {
        fetch(url: '$baseURl/sample.aac',
             saveToPath: sampleAac,
             onProgress: (progress) {
             print(progress);
        });
+    } on FetchException catch (e) {
+      print('Exception Thrown: ${e.errorCode} ${e.message}');
+    }
+    /// print the returned data including any errors.
+    if (exists(tmp)) {
+      print(read(tmp).toParagraph());
+    }
  }, create: false
  , suffix: 'acc');
 ```
@@ -62,6 +78,8 @@ Send the data contained in the 'content' variable to httpbin.org.
 
 ```dart
  withTempFile((file) {
+     try
+     {
         const content = 'Hellow World';
         fetch(
             url: 'https://httpbin.org/post',
@@ -75,7 +93,15 @@ Send the data contained in the 'content' variable to httpbin.org.
         expect(
             (map['headers'] as Map<String, dynamic>)['Content-Type'] as String,
             equals('text/plain'));
-      }, create: false);
+    } on FetchException catch (e) {
+      print('Exception Thrown: ${e.errorCode} ${e.message}');
+    }
+    /// print the returned data including any errors.
+    if (exists(file)) {
+      print(read(file).toParagraph());
+    }
+  }, create: false);
+      
 ```
 
 ## FetchData
