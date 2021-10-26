@@ -56,8 +56,7 @@ String _noFormat<T>(T option) => option.toString();
 ///
 /// If the app is not attached to a terminal then the menu will not be
 /// displayed and the [defaultOption] will be returned.
-/// If there is no [defaultOption] then an [ArgumentError]
-/// will be thrown.
+/// If there is no [defaultOption] then the first [options] will be returned.
 ///
 T menu<T>({
   required String prompt,
@@ -79,9 +78,7 @@ T menu<T>({
 
   if (!Terminal().hasTerminal) {
     if (defaultOption == null) {
-      throw ArgumentError(
-          'As no Terminal was detected you must supply a [defaultOption]'
-          ' which will be returned.');
+      return options.first;
     }
     return defaultOption;
   }
