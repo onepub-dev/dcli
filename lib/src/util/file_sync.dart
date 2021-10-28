@@ -113,7 +113,7 @@ class FileSync {
     subscription =
         utf8.decoder.bind(inputStream).transform(const LineSplitter()).listen(
               (line) async {
-                final cont = await lineAction(line);
+                final cont =  lineAction(line);
                 if (cont == false) {
                   await subscription
                       .cancel()
