@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:dcli_core/dcli_core.dart' as core;
 
+import '../../dcli.dart';
 import '../settings.dart';
 import 'cd.dart';
 import 'is.dart';
