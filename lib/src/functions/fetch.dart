@@ -1,13 +1,13 @@
 import 'dart:async';
 import 'dart:io';
 
-import 'package:dcli/src/util/enum_helper.dart';
 import 'package:dcli_core/dcli_core.dart' as core;
 import 'package:meta/meta.dart';
 import 'package:mime/mime.dart';
 
 import '../../dcli.dart';
 import '../settings.dart';
+import '../util/enum_helper.dart';
 import '../util/format.dart';
 import '../util/terminal.dart';
 import '../util/wait_for_ex.dart';
