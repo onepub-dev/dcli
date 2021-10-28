@@ -15,20 +15,25 @@ import 'internal_progress.dart';
 TailProgress tail(String path, int lines) =>
     TailProgress._internal(path, lines);
 
+/// Returned from the [tail] function.
+/// The tail function performs no work except to
+/// create the [TailProgress]. You call one of the
+/// methods on the [TailProgress] to start the tail
+/// running.
 class TailProgress extends InternalProgress {
-  TailProgress._internal(this.path, this.lines);
+  TailProgress._internal(this.pathTo, this.lines);
 
-  String path;
+  /// Path to the file we will tail.
+  String pathTo;
+
+  /// The no. of lines at the end of the file that we
+  /// will return.
   int lines;
 
   /// Read lines from the head of the file.
   @override
-  void forEach(LineAction action) {
-    // waitForEx(
-    //   core.tail(path, lines).listen((line) => action(line)).asFuture<String>(),
-
-    core.tail(path, lines).listen((line) => action(line));
-  }
+  void forEach(LineAction action) =>
+      core.tail(pathTo, lines).listen((line) => action(line));
 }
 
 /// thrown when the [tail] function encounters an exception
