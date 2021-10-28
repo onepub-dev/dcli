@@ -1,3 +1,5 @@
+import 'package:dcli_core/dcli_core.dart';
+
 import 'progress.dart';
 
 import 'runnable_process.dart';

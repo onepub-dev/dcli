@@ -1,10 +1,7 @@
-import '../settings.dart';
-import '../util/circular_buffer.dart';
-import '../util/file_sync.dart';
-import '../util/progress.dart';
-import '../util/truepath.dart';
-import 'function.dart';
-import 'is.dart';
+import 'package:dcli_core/dcli_core.dart' as core;
+
+import '../../dcli.dart';
+import 'internal_progress.dart';
 
 ///
 /// Returns count [lines] from the end of the file at [path].
@@ -15,49 +12,32 @@ import 'is.dart';
 ///
 /// Throws a [TailException] exception if [path] is not a file.
 ///
-Progress tail(String path, int lines) => _Tail().tail(path, lines);
+TailProgress tail(String path, int lines) =>
+    TailProgress._internal(path, lines);
 
-class _Tail extends DCliFunction {
-  Progress tail(String path, int lines, {Progress? progress}) {
-    verbose(() => 'tail ${truepath(path)} lines: $lines');
+/// Returned from the [tail] function.
+/// The tail function performs no work except to
+/// create the [TailProgress]. You call one of the
+/// methods on the [TailProgress] to start the tail
+/// running.
+class TailProgress extends InternalProgress {
+  TailProgress._internal(this.pathTo, this.lines);
 
-    if (!exists(path)) {
-      throw TailException('The path ${truepath(path)} does not exist.');
-    }
+  /// Path to the file we will tail.
+  String pathTo;
 
-    if (!isFile(path)) {
-      throw TailException('The path ${truepath(path)} is not a file.');
-    }
+  /// The no. of lines at the end of the file that we
+  /// will return.
+  int lines;
 
-    try {
-      progress ??= Progress.printStdOut();
-
-      final buf = CircularBuffer<String>(lines);
-
-      withOpenFile(path, (file) {
-        file.read((line) {
-          buf.insert(line);
-          return true;
-        });
-      });
-
-      buf.forEach((line) => progress!.addToStdout(line));
-    }
-    // ignore: avoid_catches_without_on_clauses
-    catch (e) {
-      throw TailException(
-        'An error occured reading ${truepath(path)}. Error: $e',
-      );
-    } finally {
-      progress!.close();
-    }
-
-    return progress;
-  }
+  /// Read lines from the head of the file.
+  @override
+  void forEach(LineAction action) =>
+      core.tail(pathTo, lines).listen((line) => action(line));
 }
 
 /// thrown when the [tail] function encounters an exception
-class TailException extends FunctionException {
+class TailException extends core.DCliFunctionException {
   /// thrown when the [tail] function encounters an exception
   TailException(String reason) : super(reason);
 }

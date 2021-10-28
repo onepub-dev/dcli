@@ -5,7 +5,20 @@ environment:
 dependencies:
   dcli: 
     path: ../../../
+  dcli_core:
+    path: ../../../../dcli_core
+  
 
 dev_dependencies:
   lints: ^1.0.1
+
+dependency_overrides:
+  dcli:
+    path:
+      ../../..
+  dcli_core:
+    path:  ../../../../dcli_core
+  
+     
+
 

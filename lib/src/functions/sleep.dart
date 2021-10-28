@@ -1,7 +1,8 @@
+import 'package:dcli_core/dcli_core.dart';
+
+import '../../dcli.dart';
 import '../settings.dart';
 import '../util/wait_for_ex.dart';
-
-import 'dcli_function.dart';
 
 /// sleeps for the provided [duration] of the given [interval].
 ///

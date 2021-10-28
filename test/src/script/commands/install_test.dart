@@ -2,7 +2,6 @@
 import 'dart:io';
 
 import 'package:dcli/dcli.dart' hide equals;
-import 'package:dcli/src/functions/env.dart';
 import 'package:mocktail/mocktail.dart';
 import 'package:test/test.dart';
 

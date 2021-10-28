@@ -1,9 +1,9 @@
 import 'dart:io';
 
-import '../../dcli.dart';
-import '../util/stack_trace_impl.dart';
+import 'package:dcli_core/dcli_core.dart' as core;
+import 'package:dcli_core/dcli_core.dart' hide exists;
 
-import 'dcli_function.dart';
+import '../../dcli.dart';
 
 /// Wrapper for the linux `chmod` command.
 ///
@@ -61,6 +61,10 @@ class _ChMod extends DCliFunction {
 /// Thrown if the [chmod] function encounters an error.
 class ChModException extends DCliFunctionException {
   /// Thrown if the [chmod] function encounters an error.
-  ChModException(String reason, [StackTraceImpl? stacktrace])
+  ChModException(String reason, [core.StackTraceImpl? stacktrace])
       : super(reason, stacktrace);
+
+  // @override
+  // DCliException copyWith(core.StackTraceImpl stackTrace) =>
+  //     ChModException(message, stackTrace);
 }

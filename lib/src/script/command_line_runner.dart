@@ -1,5 +1,5 @@
+import '../../dcli.dart';
 import '../settings.dart';
-import '../util/dcli_exception.dart';
 
 import 'commands/commands.dart';
 import 'commands/run.dart';

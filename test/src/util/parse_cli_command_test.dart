@@ -2,7 +2,6 @@
 import 'dart:io';
 
 import 'package:dcli/dcli.dart' hide equals;
-import 'package:dcli/src/functions/pwd.dart';
 
 import 'package:dcli/src/script/command_line_runner.dart';
 import 'package:dcli/src/util/parse_cli_command.dart';

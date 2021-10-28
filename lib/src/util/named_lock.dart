@@ -4,9 +4,10 @@ import 'dart:io';
 
 import 'dart:isolate';
 
+import 'package:dcli_core/dcli_core.dart' show StackTraceImpl;
+
 import '../../dcli.dart';
 import '../settings.dart';
-import 'stack_trace_impl.dart';
 import 'wait_for_ex.dart';
 
 /// A [NamedLock] can be used to control access to a resource
@@ -314,7 +315,6 @@ class NamedLock {
       /// sleep for 100ms and then we will try again.
       waitForEx<void>(Future.delayed(const Duration(milliseconds: 100)));
       if (finalwaiting != null) {
-        print(finalwaiting);
         // only print waiting message once.
         finalwaiting = null;
       }

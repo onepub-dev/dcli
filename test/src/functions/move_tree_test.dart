@@ -23,7 +23,9 @@ void main() {
             find('*', workingDirectory: from, recursive: false).toList();
         final expected = subname(source, 'top', 'new_top');
         createDir(to);
+
         moveTree(from, to);
+        print('moveTree done');
 
         final actual =
             find('*', workingDirectory: to, recursive: false).toList();
@@ -34,121 +36,121 @@ void main() {
       });
     });
 
-    t.test('empty target - overwrite', () {
-      withTempDir((fsRoot) {
-        TestFileSystem.buildDirectoryTree(fsRoot);
-        final from = join(fsRoot, 'top');
-        final to = join(fsRoot, 'new_top');
+      t.test('empty target - overwrite', () {
+        withTempDir((fsRoot) {
+          TestFileSystem.buildDirectoryTree(fsRoot);
+          final from = join(fsRoot, 'top');
+          final to = join(fsRoot, 'new_top');
 
-        if (exists(to)) {
-          deleteDir(to);
-        }
+          if (exists(to)) {
+            deleteDir(to);
+          }
 
-        final source =
-            find('*', workingDirectory: from, recursive: false).toList();
-        final expected = subname(source, 'top', 'new_top');
-        createDir(to);
-        moveTree(from, to);
-        moveTree(from, to, overwrite: true);
+          final source =
+              find('*', workingDirectory: from, recursive: false).toList();
+          final expected = subname(source, 'top', 'new_top');
+          createDir(to);
+          moveTree(from, to);
+          moveTree(from, to, overwrite: true);
 
-        final actual =
-            find('*', workingDirectory: to, recursive: false).toList();
+          final actual =
+              find('*', workingDirectory: to, recursive: false).toList();
 
-        t.expect(actual, unorderedEquals(expected));
-        t.expect(hasMoved(source), true);
+          t.expect(actual, unorderedEquals(expected));
+          t.expect(hasMoved(source), true);
+        });
       });
-    });
 
-    t.test('empty target - filter *.txt', () {
-      withTempDir((fsRoot) {
-        TestFileSystem.buildDirectoryTree(fsRoot);
-        final from = join(fsRoot, 'top');
-        final to = join(fsRoot, 'new_top');
+      t.test('empty target - filter *.txt', () {
+        withTempDir((fsRoot) {
+          TestFileSystem.buildDirectoryTree(fsRoot);
+          final from = join(fsRoot, 'top');
+          final to = join(fsRoot, 'new_top');
 
-        if (exists(to)) {
-          deleteDir(to);
-        }
+          if (exists(to)) {
+            deleteDir(to);
+          }
 
-        final source =
-            find('*.txt', workingDirectory: from, recursive: false).toList();
-        final expected = subname(source, 'top', 'new_top');
-        createDir(to);
-        moveTree(from, to, filter: (file) => extension(file) == '.txt');
+          final source =
+              find('*.txt', workingDirectory: from, recursive: false).toList();
+          final expected = subname(source, 'top', 'new_top');
+          createDir(to);
+          moveTree(from, to, filter: (file) => extension(file) == '.txt');
 
-        final actual =
-            find('*.txt', workingDirectory: to, recursive: false).toList();
+          final actual =
+              find('*.txt', workingDirectory: to, recursive: false).toList();
 
-        t.expect(actual, unorderedEquals(expected));
-        t.expect(hasMoved(source), true);
+          t.expect(actual, unorderedEquals(expected));
+          t.expect(hasMoved(source), true);
+        });
       });
-    });
 
-    t.test('empty target - recursive - filter *.txt', () {
-      withTempDir((fsRoot) {
-        TestFileSystem.buildDirectoryTree(fsRoot);
-        final from = join(fsRoot, 'top');
-        final to = join(fsRoot, 'new_top');
+      t.test('empty target - recursive - filter *.txt', () {
+        withTempDir((fsRoot) {
+          TestFileSystem.buildDirectoryTree(fsRoot);
+          final from = join(fsRoot, 'top');
+          final to = join(fsRoot, 'new_top');
 
-        if (exists(to)) {
-          deleteDir(to);
-        }
+          if (exists(to)) {
+            deleteDir(to);
+          }
 
-        final source = find('*.txt', workingDirectory: from).toList();
-        final expected = subname(source, 'top', 'new_top');
-        createDir(to);
-        moveTree(from, to, filter: (file) => extension(file) == '.txt');
+          final source = find('*.txt', workingDirectory: from).toList();
+          final expected = subname(source, 'top', 'new_top');
+          createDir(to);
+          moveTree(from, to, filter: (file) => extension(file) == '.txt');
 
-        final actual = find('*.txt', workingDirectory: to).toList();
+          final actual = find('*.txt', workingDirectory: to).toList();
 
-        t.expect(actual, unorderedEquals(expected));
-        t.expect(hasMoved(source), true);
+          t.expect(actual, unorderedEquals(expected));
+          t.expect(hasMoved(source), true);
+        });
       });
-    });
 
-    t.test('empty target - recursive ', () {
-      withTempDir((fsRoot) {
-        TestFileSystem.buildDirectoryTree(fsRoot);
-        final from = join(fsRoot, 'top');
-        final to = join(fsRoot, 'new_top');
+      t.test('empty target - recursive ', () {
+        withTempDir((fsRoot) {
+          TestFileSystem.buildDirectoryTree(fsRoot);
+          final from = join(fsRoot, 'top');
+          final to = join(fsRoot, 'new_top');
 
-        if (exists(to)) {
-          deleteDir(to);
-        }
+          if (exists(to)) {
+            deleteDir(to);
+          }
 
-        final source = find('*', workingDirectory: from).toList();
-        final expected = subname(source, 'top', 'new_top');
-        createDir(to);
-        moveTree(from, to);
+          final source = find('*', workingDirectory: from).toList();
+          final expected = subname(source, 'top', 'new_top');
+          createDir(to);
+          moveTree(from, to);
 
-        final actual = find('*', workingDirectory: to).toList();
+          final actual = find('*', workingDirectory: to).toList();
 
-        t.expect(actual, unorderedEquals(expected));
-        t.expect(hasMoved(source), true);
+          t.expect(actual, unorderedEquals(expected));
+          t.expect(hasMoved(source), true);
+        });
       });
-    });
 
-    t.test('empty target - recursive- overwrite', () {
-      withTempDir((fsRoot) {
-        TestDirectoryTree(fsRoot);
-        final from = join(fsRoot, 'top');
-        final to = join(fsRoot, 'new_top');
+      t.test('empty target - recursive- overwrite', () {
+        withTempDir((fsRoot) {
+          TestDirectoryTree(fsRoot);
+          final from = join(fsRoot, 'top');
+          final to = join(fsRoot, 'new_top');
 
-        if (exists(to)) {
-          deleteDir(to);
-        }
+          if (exists(to)) {
+            deleteDir(to);
+          }
 
-        final source = find('*', workingDirectory: from).toList();
-        final expected = subname(source, 'top', 'new_top');
-        createDir(to);
-        moveTree(from, to);
-        moveTree(from, to, overwrite: true);
+          final source = find('*', workingDirectory: from).toList();
+          final expected = subname(source, 'top', 'new_top');
+          createDir(to);
+          moveTree(from, to);
+          moveTree(from, to, overwrite: true);
 
-        final actual = find('*', workingDirectory: to).toList();
+          final actual = find('*', workingDirectory: to).toList();
 
-        t.expect(actual, unorderedEquals(expected));
-        t.expect(hasMoved(source), true);
+          t.expect(actual, unorderedEquals(expected));
+          t.expect(hasMoved(source), true);
+        });
       });
-    });
   });
 }
 

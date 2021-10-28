@@ -1,11 +1,9 @@
-import 'dart:io';
+import 'package:dcli_core/dcli_core.dart' as core;
+import 'package:dcli_core/dcli_core.dart';
 
-import '../settings.dart';
-import '../util/file_sync.dart';
-import '../util/truepath.dart';
-import 'ask.dart' as a;
-import 'dcli_function.dart';
-import 'is.dart';
+import '../../dcli.dart' as dcli;
+
+export 'package:dcli_core/dcli_core.dart' show DeleteException;
 
 ///
 /// Deletes the file at [path].
@@ -25,21 +23,11 @@ void delete(String path, {bool ask = false}) =>
 
 class _Delete extends DCliFunction {
   void delete(String path, {required bool ask}) {
-    verbose(() => 'delete:  ${truepath(path)} ask: $ask');
-
-    if (!exists(path, followLinks: false)) {
-      throw DeleteException('The path ${truepath(path)} does not exists.');
-    }
-
-    if (isDirectory(path)) {
-      throw DeleteException('The path ${truepath(path)} is a directory.');
-    }
-
     var remove = true;
     if (ask) {
       remove = false;
-      final response =
-          a.ask("delete: Delete the regular file '${truepath(path)}'? y/N");
+      final response = dcli
+          .ask("delete: Delete the regular file '${dcli.truepath(path)}'? y/N");
       final yes = response;
       if (yes == 'y') {
         remove = true;
@@ -47,25 +35,9 @@ class _Delete extends DCliFunction {
     }
 
     if (remove == true) {
-      try {
-        if (isLink(path)) {
-          deleteSymlink(path);
-        } else {
-          File(path).deleteSync();
-        }
-      }
-      // ignore: avoid_catches_without_on_clauses
-      catch (e) {
-        throw DeleteException(
-          'An error occured deleting ${truepath(path)}. Error: $e',
-        );
-      }
+      dcli.waitForEx(core.delete(path));
     }
   }
 }
 
 /// Thrown when the [delete] function encounters an error
-class DeleteException extends DCliFunctionException {
-  /// Thrown when the [delete] function encounters an error
-  DeleteException(String reason) : super(reason);
-}

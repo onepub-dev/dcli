@@ -1,12 +1,12 @@
 import 'dart:io';
 
+import 'package:dcli_core/dcli_core.dart' as core;
 import 'package:meta/meta.dart';
 import 'package:path/path.dart' as p;
 
 import '../dcli.dart';
-import 'functions/env.dart';
+import 'script/dart_script.dart';
 import 'script/flags.dart';
-import 'util/stack_list.dart';
 import 'version/version.g.dart';
 
 /// Holds all of the global settings for DCli
@@ -203,7 +203,7 @@ class InternalSettings {
 
   static final InternalSettings _self = InternalSettings._internal();
 
-  final _directoryStack = StackList<Directory>();
+  final _directoryStack = core.StackList<Directory>();
 
   bool get _isStackEmpty => _directoryStack.isEmpty;
 

@@ -3,7 +3,6 @@ import 'dart:io';
 import 'package:meta/meta.dart';
 
 import '../../../dcli.dart';
-import '../../functions/env.dart';
 import '../../settings.dart';
 import '../../shell/shell.dart';
 import '../../templates/expander.dart';

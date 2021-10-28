@@ -1,7 +1,7 @@
 @Timeout(Duration(seconds: 600))
 
+import 'package:dcli/dcli.dart' hide equals;
 import 'package:dcli/src/script/entry_point.dart';
-import 'package:dcli/src/util/dcli_exception.dart';
 import 'package:test/test.dart';
 
 import '../../util/test_file_system.dart';

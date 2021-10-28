@@ -2,7 +2,6 @@
 import 'dart:io';
 
 import 'package:dcli/dcli.dart';
-import 'package:dcli/src/functions/env.dart';
 import 'package:test/test.dart' as t;
 
 String _testDir = 'path_test';

@@ -5,7 +5,6 @@ import 'dart:cli';
 import 'dart:io';
 
 import 'package:dcli/dcli.dart';
-import 'package:dcli/src/util/stack_trace_impl.dart';
 
 void main() {
   var future = startProcess();

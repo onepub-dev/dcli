@@ -6,7 +6,6 @@ import 'package:meta/meta.dart';
 import '../../dcli.dart';
 import '../settings.dart';
 import '../windows/process_helper.dart';
-import 'runnable_process.dart';
 
 ///
 /// EXPERIMENTAL

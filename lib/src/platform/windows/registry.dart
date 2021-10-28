@@ -4,7 +4,7 @@ import 'package:ffi/ffi.dart';
 import 'package:path/path.dart';
 import 'package:win32/win32.dart';
 
-import '../../functions/env.dart';
+import '../../../dcli.dart';
 import 'message.dart';
 
 /// The system cannot find the file specified.

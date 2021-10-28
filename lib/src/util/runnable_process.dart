@@ -2,21 +2,14 @@ import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
 
+import 'package:dcli_core/dcli_core.dart' show StackTraceImpl;
+
 import '../../dcli.dart';
-import '../functions/env.dart';
 import '../settings.dart';
-import 'dcli_exception.dart';
 import 'dcli_zone.dart';
 import 'parse_cli_command.dart';
 import 'progress.dart';
-import 'stack_trace_impl.dart';
 import 'wait_for_ex.dart';
-
-/// Typedef for LineActions
-typedef LineAction = void Function(String line);
-
-/// Typedef for cancellable LineActions.
-typedef CancelableLineAction = bool Function(String line);
 
 /// [printerr] provides the equivalent functionality to the
 /// standard Dart print function but instead writes
@@ -541,40 +534,4 @@ class RunnableProcess {
     }
     return basename;
   }
-}
-
-///
-class RunException extends DCliException {
-  ///
-  RunException(
-    this.cmdLine,
-    this.exitCode,
-    this.reason, {
-    StackTraceImpl? stackTrace,
-  }) : super(reason, stackTrace);
-
-  ///
-  RunException.withArgs(
-    String? cmd,
-    List<String?> args,
-    this.exitCode,
-    this.reason, {
-    StackTraceImpl? stackTrace,
-  })  : cmdLine = '$cmd ${args.join(' ')}',
-        super(reason, stackTrace);
-
-  /// The command line that was being run.
-  String cmdLine;
-
-  /// the exit code of the command.
-  int? exitCode;
-
-  /// the error.
-  String reason;
-
-  @override
-  String get message => '''
-$cmdLine 
-exit: $exitCode
-reason: $reason''';
 }

@@ -6,7 +6,6 @@ import 'package:collection/collection.dart';
 
 import '../../dcli.dart';
 import '../settings.dart';
-import 'dev_null.dart';
 
 import 'runnable_process.dart';
 import 'wait_for_ex.dart';

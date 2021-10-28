@@ -1,13 +1,13 @@
 import 'dart:convert';
 import 'dart:io';
 
+import 'package:dcli_core/dcli_core.dart';
 import 'package:meta/meta.dart';
 import 'package:validators2/validators.dart';
 
 import '../../dcli.dart';
 import '../settings.dart';
 import '../util/wait_for_ex.dart';
-import 'dcli_function.dart';
 import 'echo.dart';
 
 ///

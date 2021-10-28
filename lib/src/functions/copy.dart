@@ -1,12 +1,9 @@
-import 'dart:io';
+import 'package:dcli_core/dcli_core.dart' as core;
+import 'package:dcli_core/dcli_core.dart' show CopyException;
 
-import 'package:path/path.dart';
+import '../util/wait_for_ex.dart';
 
-import '../settings.dart';
-import '../util/file_sync.dart';
-import '../util/truepath.dart';
-import 'function.dart';
-import 'is.dart';
+export 'package:dcli_core/dcli_core.dart' show CopyException;
 
 ///
 /// Copies the file [from] to the path [to].
@@ -24,61 +21,4 @@ import 'is.dart';
 ///
 /// If an error occurs a [CopyException] is thrown.
 void copy(String from, String to, {bool overwrite = false}) =>
-    _Copy().copy(from, to, overwrite: overwrite);
-
-class _Copy extends DCliFunction {
-  void copy(String from, String to, {bool overwrite = false}) {
-    var finalto = to;
-    if (isDirectory(finalto)) {
-      finalto = join(finalto, basename(from));
-    }
-
-    verbose(() => 'copy ${truepath(from)} -> ${truepath(finalto)}');
-
-    if (overwrite == false && exists(finalto, followLinks: false)) {
-      throw CopyException(
-        'The target file ${truepath(finalto)} already exists.',
-      );
-    }
-
-    try {
-      /// if we copy a symlink it actually copies the file rather than
-      /// the symlink.
-      if (isLink(from)) {
-        final target = resolveSymLink(from);
-
-        /// we use a relative path for the symlink as its safer
-        symlink(relative(target, from: dirname(finalto)), finalto);
-      } else {
-        File(from).copySync(finalto);
-      }
-    }
-    // ignore: avoid_catches_without_on_clauses
-    catch (e) {
-      /// lets try and improve the message.
-      /// We do these checks only on failure
-      /// so in the most common case (everything is correct)
-      /// we don't waste cycles on unnecessary work.
-      if (!exists(from)) {
-        throw CopyException(
-            "The 'from' file ${truepath(from)} does not exists.");
-      }
-      if (!exists(dirname(to))) {
-        throw CopyException(
-          "The 'to' directory ${truepath(dirname(to))} does not exists.",
-        );
-      }
-
-      throw CopyException(
-        'An error occured copying ${truepath(from)} to ${truepath(finalto)}. '
-        'Error: $e',
-      );
-    }
-  }
-}
-
-/// Throw when the [copy] function encounters an error.
-class CopyException extends FunctionException {
-  /// Throw when the [copy] function encounters an error.
-  CopyException(String reason) : super(reason);
-}
+    waitForEx(core.copy(from, to, overwrite: overwrite));

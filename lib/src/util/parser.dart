@@ -2,12 +2,11 @@ import 'dart:convert' as convert;
 import 'dart:io';
 
 import 'package:csv/csv.dart';
+import 'package:dcli_core/dcli_core.dart';
 
 import 'package:ini/ini.dart';
 
 import 'package:yaml/yaml.dart';
-
-import 'platform.dart';
 
 /// Provides parsers for a number of common file formats.
 ///

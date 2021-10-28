@@ -1,10 +1,7 @@
-import 'package:path/path.dart';
+import 'package:dcli_core/dcli_core.dart' as core;
+import 'package:dcli_core/dcli_core.dart' show CopyTreeException;
 
 import '../../dcli.dart';
-import '../settings.dart';
-import 'function.dart';
-
-import 'is.dart';
 
 ///
 /// Copies the contents of the [from] directory to the
@@ -64,85 +61,15 @@ void copyTree(
   bool recursive = true,
   bool Function(String file) filter = _allowAll,
 }) =>
-    _CopyTree().copyTree(
-      from,
-      to,
-      overwrite: overwrite,
-      includeHidden: includeHidden,
-      filter: filter,
-      recursive: recursive,
+    waitForEx(
+      core.copyTree(
+        from,
+        to,
+        overwrite: overwrite,
+        includeHidden: includeHidden,
+        recursive: recursive,
+        filter: filter,
+      ),
     );
 
 bool _allowAll(String file) => true;
-
-class _CopyTree extends DCliFunction {
-  void copyTree(
-    String from,
-    String to, {
-    bool overwrite = false,
-    bool Function(String file) filter = _allowAll,
-    bool includeHidden = false,
-    bool recursive = true,
-  }) {
-    if (!isDirectory(from)) {
-      throw CopyTreeException(
-        'The [from] path ${truepath(from)} must be a directory.',
-      );
-    }
-    if (!exists(to)) {
-      throw CopyTreeException(
-        'The [to] path ${truepath(to)} must already exist.',
-      );
-    }
-
-    if (!isDirectory(to)) {
-      throw CopyTreeException(
-        'The [to] path ${truepath(to)} must be a directory.',
-      );
-    }
-
-    try {
-      find(
-        '*',
-        workingDirectory: from,
-        includeHidden: includeHidden,
-        recursive: recursive,
-      ).forEach((file) {
-        if (filter(file)) {
-          final target = join(to, relative(file, from: from));
-
-          if (recursive && !exists(dirname(target))) {
-            createDir(dirname(target), recursive: true);
-          }
-
-          if (!overwrite && exists(target)) {
-            throw CopyTreeException(
-              'The target file ${truepath(target)} already exists.',
-            );
-          }
-
-          copy(file, target, overwrite: overwrite);
-        }
-      });
-      Settings().verbose(
-        'copyTree copied: ${truepath(from)} -> ${truepath(to)}, '
-        'includeHidden: $includeHidden, recursive: $recursive, '
-        'overwrite: $overwrite',
-      );
-    }
-    // ignore: avoid_catches_without_on_clauses
-    catch (e) {
-      throw CopyTreeException(
-        'An error occured copying directory'
-        ' ${truepath(from)} to ${truepath(to)}. '
-        'Error: $e',
-      );
-    }
-  }
-}
-
-/// Throw when the [copy] function encounters an error.
-class CopyTreeException extends FunctionException {
-  /// Throw when the [copy] function encounters an error.
-  CopyTreeException(String reason) : super(reason);
-}
