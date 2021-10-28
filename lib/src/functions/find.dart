@@ -135,11 +135,23 @@ class FindProgress extends InternalProgress {
     required this.workingDirectory,
     required this.types,
   });
+
+  /// The glob pattern we are searching for matches on
   String pattern;
+
+  /// If true then we do a case sensitive match on filenames.
   bool caseSensitive;
+
+  /// recurse into subdirectories
   bool recursion;
+
+  /// include hidden files and directories in the search
   bool includeHidden;
+
+  /// The directory to start searching from and below (if [recursion] is true)
   String workingDirectory;
+
+  /// The list of file system entity types to search file.
   List<FileSystemEntityType> types;
 
   /// If your [action] performas any asynchronous operations
