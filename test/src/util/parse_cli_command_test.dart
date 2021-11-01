@@ -71,7 +71,31 @@ void main() {
       final parsed = ParsedCliCommand(test, pwd);
 
       expect(parsed.cmd, equals('git'));
-      expect(parsed.args, equals(['log', '--pretty=format:%s', 'v1.0.45']));
+      expect(parsed.args, equals(['log', '--pretty=format:"%s"', 'v1.0.45']));
+    });
+
+    test('git commit --message="foo bar"', () {
+      const test = 'git commit --message="foo bar"';
+      final parsed = ParsedCliCommand(test, pwd);
+
+      expect(parsed.cmd, equals('git'));
+      expect(parsed.args, equals(['commit', '--message="foo bar"']));
+    });
+
+    test('escape git commit --message=foo^ bar', () {
+      const test = 'git commit --message=foo^ bar';
+      final parsed = ParsedCliCommand(test, pwd);
+
+      expect(parsed.cmd, equals('git'));
+      expect(parsed.args, equals(['commit', '--message=foo bar']));
+    });
+
+    test('double escape git commit --message=foo^^bar', () {
+      const test = 'git commit --message=foo^^bar';
+      final parsed = ParsedCliCommand(test, pwd);
+
+      expect(parsed.cmd, equals('git'));
+      expect(parsed.args, equals(['commit', '--message=foo^bar']));
     });
 
     test('ssh with quoted args', () {
