@@ -6,17 +6,17 @@
 For complete API documentation refer to: [pub.dev](https://pub.dev/documentation/dcli/latest/dcli/dcli-library.html)
 {% endhint %}
 
-The DCli API can run any console \(CLI\) application.
+The DCli API can run any console (CLI) application.
 
 DCli provides a extensive number of methods to run CLI applications.
 
-DCLI is also  being able to process the output of any  application it runs.
+DCLI is also being able to process the output of any application it runs.
 
 The importance of this ability is clearly reflected in the no. of ways that the DCli API gives you to run other apps.
 
 ### nothrow
 
-DCli has a philosophy of explicit directives. By this we mean;  if something doesn't work as explicitly stated then we throw an exception.
+DCli has a philosophy of explicit directives. By this we mean; if something doesn't work as explicitly stated then we throw an exception.
 
 For example if you try to delete an directory that doesn't exist then DCli will throw an exception.
 
@@ -54,7 +54,7 @@ The aim of this somewhat unorthodox approach is to deliver the elegance that Bas
 
 The following example shows how we have added a `run` method to the String class. The `run` method treats the String as a command line that is to be executed.
 
-In this example we run the command 'wc' \(word count\) on the file 'fred.txt'. The output from the call to 'wc' will be displayed on the console.
+In this example we run the command 'wc' (word count) on the file 'fred.txt'. The output from the call to 'wc' will be displayed on the console.
 
 ```dart
  'wc fred.text'.run;
@@ -132,11 +132,11 @@ One of the most commonly use options is the 'workingDirectory'.
 var results = 'wc "fred nurk.text"'.start(workingDirectory: '/home/me');
 ```
 
-If you have read the section on the evils of CD then you will understand the need for the 'workingDirectory'. When you pass a workingDirectory to the 'start' command it executes the command \('wc'\) in the given workingDirectory rather than the user's present working directory \(pwd\).
+If you have read the section on the evils of CD then you will understand the need for the 'workingDirectory'. When you pass a workingDirectory to the 'start' command it executes the command ('wc') in the given workingDirectory rather than the user's present working directory (pwd).
 
 #### privileged
 
-If you need to run a command with escalated privileged then set the \[privileged\] argument to true.
+If you need to run a command with escalated privileged then set the \[privileged] argument to true.
 
 On Linux this equates to using the sudo command. The advantage of using the 'privileged' option it is cross platform and it will first check if you are already running in a privileged environment.
 
@@ -150,12 +150,11 @@ Calling the 'isPrivileged' function returns true if you are running under sudo/r
 
 While the 'which' function doesn't run an executable it can be invaluable as it searches your PATH for the location of an executable.
 
-To run an executable with any of the DCli methods you DON'T need to know its location \(provided it's on the path\) but sometimes you want to know if an executable is installed before you try to run it.
+To run an executable with any of the DCli methods you DON'T need to know its location (provided it's on the path) but sometimes you want to know if an executable is installed before you try to run it.
 
 ```dart
 if (which('grep').found) print('grep is installed');
 if (which('grep').notfound) print('grep is not installed');
-
 ```
 
 To get the path to the 'grep' command:
@@ -184,9 +183,9 @@ Of course in reality we are just seeing if grep is on the path. In theory it cou
 
 **Cross Platform which**
 
-The  `which` offers built in cross platform support.
+The `which` offers built in cross platform support.
 
-On posix systems \(Linux, Mac OS\) executables normally do not have a file extension. On Windows executables will have a file extension such as '.exe'.
+On posix systems (Linux, Mac OS) executables normally do not have a file extension. On Windows executables will have a file extension such as '.exe'.
 
 So on posix we have`grep` whilst on Windows we have `grep.exe`.
 
@@ -222,4 +221,42 @@ You can stop which searching for alternate extension by passing `extensionsSearc
 ```dart
 which('grep', extensionSearch: false).notfound == true
 ```
+
+## Escaping
+
+Prior to DCli 1.10, DCli did not support escaping of command arguments.
+
+DCli provides a number of methods to call an external process. Commands such as `start` and `run` allow you to pass a full command line.
+
+One common problem when passing a full command line is escaping.
+
+Traditionally the backslash character '\\' has been used to escape special characters however DCli aims to be cross platform and this causes problems when running under Windows as the backslash '\\' character is used as a path separator.
+
+Dart also use the the backslash '\\' character to escape which further confuses issues.
+
+To avoid these issues DCli uses the '^' character for command line escaping.
+
+As with all escaping schemes to insert a '^' escape it with a double hat '^^'.
+
+In bash you might write something like:
+
+```bash
+cat hello\ world.txt
+```
+
+To run the above command using DCli you would write
+
+```dart
+'cat hello^ world.txt'.run;
+```
+
+Of course a better alternative is to avoid escaping whenever possible. The above command could be written as:
+
+```dart
+'cat "hello world.txt"'.run
+```
+
+The intent of this command is (imho)  much clearer.
+
+
 
