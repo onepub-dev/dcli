@@ -1,5 +1,7 @@
 @Timeout(Duration(seconds: 120))
 
+import 'dart:io';
+
 import 'package:dcli/dcli.dart';
 
 import 'package:dcli/src/util/file_sync.dart';
@@ -22,7 +24,8 @@ void main() {
           return stat(file.path);
         });
 
-        t.expect(fstat.size, t.equals(150));
+        // windows us \r\n vs posix \n
+        t.expect(fstat.size, t.equals(Platform.isWindows ? 160 : 150));
       });
     });
 
