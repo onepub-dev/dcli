@@ -31,4 +31,7 @@ class StackList<T> {
   /// returns the item onf the top of the stack
   /// but does not remove the item.
   T peek() => _stack.first;
+
+  /// returns list of stack frames.
+  List<T> asList() => _stack.toList();
 }
