@@ -1,3 +1,8 @@
+# 1.10.0
+- Implemented support for escaping in command lines as well as support for command words that contain quotes. Previously we separated out the quoted section into a separate word which doesn't match what bash does. --arg="quote me" is no treated as a single word.
+- Fixed file_sync unit test to work on windows. the \r\n on windows caused a different file size to be returned.
+- added asList method to stack_list.
+
 # 1.9.6
 - Fetch now throws a FetchException if a HTTP error occurs. Previously it would complete normally.  Even if an error occurs we try to download the body as many http errors also provide a body.
 - Fixed a bug in isLink as it was resolving the link and checking if the resolved path was a symlink rather than the passed path.
