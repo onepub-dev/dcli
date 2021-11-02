@@ -155,6 +155,7 @@ void main() {
   });
 
   test('copy symlink', () {
+    /// path of test symlink that exists as part of test package.
     final pathToLink = join('test', 'test_files', 'link_to_target.md');
     final pathToCopyOfLink = join('test', 'test_files', 'copy_of_link.md');
 
@@ -169,6 +170,8 @@ void main() {
           pathToCopyOfLink,
         ),
         isTrue);
+    expect(isFile(pathToCopyOfLink), isTrue);
+    expect(isLink(pathToCopyOfLink), isFalse);
 
     expect(exists(pathToLink, followLinks: false), isTrue);
     expect(
@@ -176,5 +179,6 @@ void main() {
           pathToLink,
         ),
         isTrue);
+    expect(isLink(pathToLink), isTrue);
   });
 }

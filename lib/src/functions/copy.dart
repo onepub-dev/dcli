@@ -16,6 +16,11 @@ export 'package:dcli_core/dcli_core.dart' show CopyException;
 /// used to construct the [to] files full path.
 ///
 /// The [to] file must not exists unless [overwrite] is set to true.
+/// 
+/// If [from] is a symlink we copy the file it links to rather than
+/// the symlink. This mimics the behaviour of gnu 'cp' command.
+/// 
+/// If you need to copy the actualy symlink see [symlink].
 ///
 /// The default for [overwrite] is false.
 ///
