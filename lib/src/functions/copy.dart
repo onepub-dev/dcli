@@ -19,6 +19,11 @@ import 'is.dart';
 /// used to construct the [to] files full path.
 ///
 /// The [to] file must not exists unless [overwrite] is set to true.
+/// 
+/// If [from] is a symlink we copy the file it links to rather than
+/// the symlink. This mimics the behaviour of gnu 'cp' command.
+/// 
+/// If you need to copy the actualy symlink see [symlink].
 ///
 /// The default for [overwrite] is false.
 ///
@@ -42,13 +47,11 @@ class _Copy extends DCliFunction {
     }
 
     try {
-      /// if we copy a symlink it actually copies the file rather than
-      /// the symlink.
+      /// if we are copying a symlink then we copy the file rather than
+      /// the symlink as this mimicks gnu 'cp'.
       if (isLink(from)) {
-        final target = resolveSymLink(from);
-
-        /// we use a relative path for the symlink as its safer
-        symlink(relative(target, from: dirname(finalto)), finalto);
+        final resolvedFrom = resolveSymLink(from);
+        File(resolvedFrom).copySync(finalto);
       } else {
         File(from).copySync(finalto);
       }
