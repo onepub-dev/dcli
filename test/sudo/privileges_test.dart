@@ -8,22 +8,19 @@ import 'package:posix/posix.dart';
 import 'package:test/test.dart';
 
 void main() {
-  setUp(() {
-    Settings().setVerbose(enabled: true);
-    if (!Shell.current.isPrivilegedUser) {
-      printerr(red('You must run this script with sudo.'));
-      printerr(
-        orange(
-          'To run this script with sudo you will first need to compile it.',
-        ),
-      );
-      exit(1);
-    }
-  });
-
   test(
     'isPrivileged',
     () {
+      if (!Shell.current.isPrivilegedUser) {
+        printerr(red('You must run this script with sudo.'));
+        printerr(
+          orange(
+            'To run this script with sudo you will first need to compile it.',
+          ),
+        );
+        exit(1);
+      }
+
       try {
         expect(Shell.current.isPrivilegedUser, isTrue);
         Settings().setVerbose(enabled: true);
