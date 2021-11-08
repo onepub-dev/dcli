@@ -1,3 +1,13 @@
+# 1.11.0
+- Fixed the command line parsing to retrain nested quotes. We had stripped out all quotes but it turns out that a bash retains nested quotes so we need to as well.
+- Fixed a bug in the copy command when copying symlinks. It was copying the symlink when it should have been copying the file that the symlink pointed to.  This is in keeping with the gnu 'cp' command.
+- Fetch - added specific tests  for host not found under linux as the error is different to windows.
+- Added method to DartScript inUnitTest wich can be used to detect if a dart script is being run within a unit test.
+- Added logic to StackTraceImpl to pick up the source type of the frame (package or file based). This help fixed the isUnitTest method and allows us to get the correct script path when running in a unit test.
+- Fixed critical test hook paths.
+- Added default exclusion of sudo test for critical_test.
+- Moved the logic for whether the test was compiled from the setup method into the isPrivilged test as it was shutting down the entire testsuite even when the sudo tests where excluded.
+
 # 1.10.0
 - Implemented support for escaping in command lines as well as support for command words that contain quotes. Previously we separated out the quoted section into a separate word which doesn't match what bash does. --arg="quote me" is no treated as a single word.
 - Fixed file_sync unit test to work on windows. the \r\n on windows caused a different file size to be returned.
