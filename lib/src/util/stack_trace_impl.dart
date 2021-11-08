@@ -141,7 +141,14 @@ class StackTraceImpl implements core.StackTrace {
       var column = '0';
       var lineNo = '0';
       var sourcePath = sourceParts[1];
-      if (Settings().isWindows && source.startsWith('file:')) {
+
+      final sourceType = source.contains('file:')
+          ? FrameSourceType.file
+          : source.contains('package:')
+              ? FrameSourceType.package
+              : FrameSourceType.other;
+
+      if (Settings().isWindows && sourceType == FrameSourceType.file) {
         switch (sourceParts.length) {
           case 3:
             sourcePath = _getWindowsPath(sourceParts);
@@ -179,10 +186,11 @@ class StackTraceImpl implements core.StackTrace {
       // sourcePath = sourcePath.replaceFirst('<package_name>', '/lib');
 
       frame = Stackframe(
-        File(sourcePath),
-        int.parse(lineNo),
-        int.parse(column),
-        details,
+        sourceType: sourceType,
+        sourceFile: File(sourcePath),
+        lineNo: int.parse(lineNo),
+        column: int.parse(column),
+        details: details,
       );
       stackFrames.add(frame);
     }
@@ -214,6 +222,18 @@ class StackTraceImpl implements core.StackTrace {
   }
 }
 
+/// Indicates where the source file came from
+///
+enum FrameSourceType {
+  /// located in a package.
+  package,
+
+  /// on the local disk
+  file,
+
+  /// unknown
+  other
+}
 List<String> _excludedSource = [
   join(rootPath, 'flutter'),
   join(rootPath, 'ui'),
@@ -241,7 +261,14 @@ bool isExcludedSource(Stackframe frame) {
 ///
 class Stackframe {
   ///
-  Stackframe(this.sourceFile, this.lineNo, this.column, this.details);
+  Stackframe(
+      {required this.sourceType,
+      required this.sourceFile,
+      required this.lineNo,
+      required this.column,
+      required this.details});
+
+  final FrameSourceType sourceType;
 
   ///
   final File sourceFile;

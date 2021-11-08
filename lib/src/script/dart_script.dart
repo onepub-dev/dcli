@@ -8,6 +8,7 @@ import '../../dcli.dart';
 import '../functions/is.dart';
 import '../pubspec/pubspec.dart';
 import '../settings.dart';
+import '../util/stack_trace_impl.dart';
 import 'command_line_runner.dart';
 import 'dart_project.dart';
 import 'runner.dart';
@@ -32,7 +33,9 @@ class DartScript {
 
     String pathToScript;
 
-    if (script.isScheme('file')) {
+    if (inUnitTest) {
+      pathToScript = _unitTestPath ?? '';
+    } else if (script.isScheme('file')) {
       pathToScript = Platform.script.toFilePath();
 
       pathToScript = stripDartVersionSuffix(pathToScript);
@@ -140,8 +143,8 @@ class DartScript {
   /// The pubspec.yaml is located in the project's root directory.
   String get pathToPubSpec => project.pathToPubSpec;
 
-  /// True if the script has been pre-compiled via a pub get.
-  bool get isReadyToRun => project.isReadyToRun;
+  /// True if the script has been compiled or pre-compiled via a pub get.
+  bool get isReadyToRun => _isCompiled || project.isReadyToRun;
 
   /// True if the script is compiled.
   bool get isCompiled => _isCompiled;
@@ -149,12 +152,31 @@ class DartScript {
   static bool get _isCompiled =>
       p.extension(Platform.script.toFilePath()) != '.dart';
 
+  String? _unitTestPath;
+
   /// Returns true if we are running in a unit test.
-  /// Consider doing a stack inspection for specific unit tests
-  /// stack frames as I'm not certain the current tests are enough.
-  bool get inUnitTest =>
-      p.extension(Platform.script.toFilePath()) == '.dill' &&
-      p.basename(Platform.script.toFilePath()) == 'test';
+  /// We do this by inspecting the stack looking for the test_api package
+  /// so this method has very limited use and is intended for
+  /// internal dcli testing.
+  @visibleForTesting
+  bool get inUnitTest {
+    Stackframe? scriptFrame;
+    for (final frame in StackTraceImpl().frames) {
+      if (frame.sourceType == FrameSourceType.package &&
+          frame.sourceFile.path.startsWith('test_api')) {
+        if (scriptFrame != null) {
+          _unitTestPath = truepath(scriptFrame.sourceFile.path);
+        }
+        return true;
+      }
+      scriptFrame = frame;
+    }
+
+    return false;
+    // p.extension(Platform.script.toFilePath()) == '.dill' &&
+    //     p.basenameWithoutExtension(Platform.script.toFilePath()) ==
+    //         'test.dart_1';
+  }
 
   /// Checks if the Script has been compiled and installed into the ~/.dcli/bin path
   bool get isInstalled => exists(pathToInstalledExe);
@@ -300,7 +322,7 @@ class DartScript {
   String get pathToExe => join(pathToScriptDirectory, exeName);
 
   /// Returns the path that the script would be installed to if
-  /// compiled with install = true.
+  /// compiled with dcli with the --install switch.
   String get pathToInstalledExe => join(Settings().pathToDCliBin, exeName);
 
   /// internal method do not use.
