@@ -1,12 +1,12 @@
 import 'dart:io';
 
-import 'package:dcli/src/util/stack_list.dart';
 import 'package:file/local.dart';
 import 'package:glob/glob.dart';
 
 import '../../dcli.dart';
 import '../script/command_line_runner.dart';
 import 'enum_helper.dart';
+import 'stack_list.dart';
 
 /// Class to parse a OS command, contained in a string, which we need to pass
 /// into the dart Process.start method as a application name and a series
@@ -143,12 +143,14 @@ class ParsedCliCommand {
           }
 
           /// quoted text in a word is treated as
-          /// part of the same word.
+          /// part of the same word but we still
+          /// strip the quotes to match bash
           if (char == '"' || char == "'") {
             stateStack.push(currentState);
             currentState = _ParseFrame.forQuote(stateStack, i, char);
+          } else {
+            currentWord += char;
           }
-          currentWord += char;
           break;
 
         /// we are in a quote so just suck in
@@ -175,12 +177,11 @@ class ParsedCliCommand {
             currentState = stateStack.pop();
             final state = currentState.state;
 
-            // If we are searching or inWord then this will end the word
+            // If we were searching or inWord then this will end the word
             if (state == _ParseState.searching || state == _ParseState.inWord) {
               /// If we are in a word then the quote also ends the word.
               if (state == _ParseState.inWord) {
                 currentState = stateStack.pop();
-                currentWord += char;
               }
 
               parts.add(_QArg.fromParsed(currentWord, wasQuoted: true));
@@ -200,17 +201,20 @@ class ParsedCliCommand {
         /// we are in a quote so just suck in
         /// characters until we see a matching quote.
         case _ParseState.nestedQuote:
+
+          // ignore: invariant_booleans
           if (char == currentState.matchingQuote) {
+            // We have a matching closing quote
             currentState = stateStack.pop();
             currentWord += char;
             break;
           }
-          // we just hit a nested quote
+
           if (char == "'" || char == '"') {
+            // we just hit a nested quote
             stateStack.push(currentState);
             currentState = _ParseFrame.forQuote(stateStack, i, char);
           }
-
           currentWord += char;
           break;
       }
