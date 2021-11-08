@@ -149,6 +149,13 @@ class DartScript {
   static bool get _isCompiled =>
       p.extension(Platform.script.toFilePath()) != '.dart';
 
+  /// Returns true if we are running in a unit test.
+  /// Consider doing a stack inspection for specific unit tests
+  /// stack frames as I'm not certain the current tests are enough.
+  bool get inUnitTest =>
+      p.extension(Platform.script.toFilePath()) == '.dill' &&
+      p.basename(Platform.script.toFilePath()) == 'test';
+
   /// Checks if the Script has been compiled and installed into the ~/.dcli/bin path
   bool get isInstalled => exists(pathToInstalledExe);
 
