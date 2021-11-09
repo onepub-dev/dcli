@@ -1,3 +1,5 @@
+import 'pack.dart';
+
 import '../flags.dart';
 import 'clean.dart';
 import 'compile.dart';
@@ -20,6 +22,7 @@ class Commands {
         CreateCommand(),
         DoctorCommand(),
         InstallCommand(),
+        PackCommand(),
         RunCommand(),
         UpgradeCommand(),
         VersionCommand(),

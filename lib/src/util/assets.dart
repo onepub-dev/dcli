@@ -14,8 +14,7 @@ import '../settings.dart';
 ///
 /// Applications deployed using `dart pub global activate` or if you are just
 /// running from a local source directory then your app will have
-///  access to their
-/// assets.
+/// access to their assets.
 ///
 /// If you have AOT compiled your application (e.g. dart compile or
 /// dcli compile)
@@ -27,6 +26,11 @@ import '../settings.dart';
 ///
 /// Unlike flutter you don't need to create any entries in your pubspec.yaml.
 ///
+/// See: The 'dcli pack' command provides method
+/// of delivering assets to the target environment
+/// even if your application is compiled.
+///
+@Deprecated('Use dcli pack')
 class Assets {
   ///
   factory Assets() => _self;
@@ -104,7 +108,7 @@ class Assets {
     return File(_resolveAssetPath(path)).readAsBytesSync();
   }
 
-  /// Converts an asset path of the form assert/somepath/note/txt
+  /// Converts an asset path of the form assert/somepath/note.txt
   /// to the absolute file system path (usually in .pub-cache)
   String _resolveAssetPath(String path) {
     final uri = Uri(
