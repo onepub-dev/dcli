@@ -135,7 +135,7 @@ environment:
   sdk: '>=2.14.1 <3.0.0'
 dependencies: 
   args: ^2.0.0
-  dcli: ^1.11.0
+  dcli: ^1.12.0
   path: ^1.8.0
 
 dev_dependencies:

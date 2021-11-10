@@ -37,7 +37,7 @@ import 'commands.dart';
 /// The contents of the 'resources/generated/resource_registry.g.dart' are of the form.
 ///
 /// ```text
-/// 
+///
 /// static const Map<String, PackedResource> resources = {
 /// 'images/photo.png': PackedResource('images/photo.png', <library_name>),
 /// 'data/zips/installer.zip': PackedResource('data/zips/installer.zip', '<library_name>)

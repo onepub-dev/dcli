@@ -1,3 +1,5 @@
+import 'package:dcli/dcli.dart' hide equals;
+import 'package:dcli/src/dcli/resources/generated/resource_registry.g.dart';
 import 'package:dcli/src/util/resources.dart';
 import 'package:test/test.dart';
 
@@ -10,17 +12,17 @@ void main() {
 
   /// TODO: how do we test the pack command.
   test('unpack', () {
-    // final jpegResource = ResourceRegistry.resources[filename];
-    // expect(jpegResource, isNotNull);
+    final jpegResource = ResourceRegistry.resources[filename];
+    expect(jpegResource, isNotNull);
 
-    // withTempFile((file) {
-    //   final root = Resources().resourceRoot;
-    //   final pathTo = join(root, filename);
-    //   final originalHash = calculateHash(pathTo);
-    //   jpegResource!.unpack(file);
-    //   final unpackedHash = calculateHash(file);
-    //   expect(originalHash, equals(unpackedHash));
-    // });
+    withTempFile((file) {
+      final root = Resources().resourceRoot;
+      final pathTo = join(root, filename);
+      final originalHash = calculateHash(pathTo);
+      jpegResource!.unpack(file);
+      final unpackedHash = calculateHash(file);
+      expect(originalHash, equals(unpackedHash));
+    });
 
     // for (var resource in ResourceRegistry.resources)
     // {

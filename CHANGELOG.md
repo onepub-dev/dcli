@@ -1,3 +1,8 @@
+# 1.12.0
+- Added the ability for dcli to 'pack' resource files into an application.
+- Fixed waitForEx exception handling. It wasn't letting non DCliExceptions through.
+- Fixed a bug where find was following symlinks.
+
 # 1.11.0
 - Fixed the command line parsing to retrain nested quotes. We had stripped out all quotes but it turns out that a bash retains nested quotes so we need to as well.
 - Fixed a bug in the copy command when copying symlinks. It was copying the symlink when it should have been copying the file that the symlink pointed to.  This is in keeping with the gnu 'cp' command.
