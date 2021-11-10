@@ -1,120 +1,136 @@
-# Assets
+# Assets/Resources
 
-Assets are coming soon!
-
-Flutter allows you to bundle assets \(graphics, sounds, ...\) along with your flutter application however dart cli applications do not have this ability.
+Flutter allows you to bundle assets (graphics, sounds, config files...) along with your flutter application however dart cli applications do not have this ability.
 
 DCli provides a set of asset management tools and an api to work around this limitation.
 
+DCli refers to assets as 'resources' to differentiate them from flutter assets.
+
 {% hint style="info" %}
-If you use assets in a package that will be publish to pub.dev, remember there is a 10MB limit on the entire dart package.
+If you use resources in a package that will be publish to pub.dev, remember there is a 10MB limit on the entire dart package.
 {% endhint %}
 
-DCli does this by packaging an asset into a .dart library and then providing an api that allows you to unpack the assets at runtime.
+DCli does this by packaging an resource into a .dart library and then providing an api that allows you to unpack the resources at runtime.
 
-DCli expects all assets to located within your dart project under:
+DCli expects all resources to located within your dart project under:
 
-```text
-<project root>/asset
+```
+<project root>/resources
 ```
 
-## Pack assets
+## Packing resources
 
-To package your assets you run:
+To pack your resources you run:
 
-```text
+```
 dcli pack
 ```
 
-The 'pack' command will scan the 'asset' directory and all subdirectories. Each file that it finds will be converted to a dart library under:
+The 'pack' command will scan the '\<project root>/resources' directory and all subdirectories. Each file that it finds will be converted to a dart library under:
 
-```text
-<project root>/lib/src/asset
+```
+<project root>/lib/src/dcli/resources/generated
 ```
 
-So the following assets:
+Each library name is generated using a uuid of the form \<uuid>.g.dart
 
-```text
-<project root>/asset
+So the following resources:
+
+```
+<project root>/resources
                     /images/photo.png
                     /data/zips/installer.zip
 ```
 
-Will be converted to:
-
-```text
-<project root>/lib/src/asset
-                            /images/photo.png.dart
-                            /data/zips/installer.zip.dart
-```
-
-The contents of each asset are base64 encoded into a multi-line string. So the photo.png.dart file will look like:
-
-```text
-/// photo.png.dart
-stat const name = 'photo.png';
-static const content = '''ASFASF97AA09723NASDHASDH
-
-...
-''';
+Will result in to:
 
 ```
-
-## Asset listing
-
-As part of the packing process DCli also creates a registry of the assets packed. This is done by creating a dart library called 'asset\_registry.dart'. The contents of the 'asset\_registry.dart' are of the form.
-
-```text
-// asset_registry.dart
-
-static const directories = [
-'images',
-'data/zips'
-];
-
-static const files = [
-'images/photo.png',
-'data/zips/installer.zip'
-];
-
+<project root>/lib/src/dcli/resources/generated
+                            /resource_registry.g.dart
+                            /aadafaasdf.g.dart
+                            /aalwhkciyge.g.dart
 ```
 
-## Unpacking assets
+The contents of each resource is base64 encoded into a multi-line string. So the photo.png.dart file will something look like:
 
-DCli provides an api that allows your script to unpack its assets at run time.
-
-```text
-Asset().unpack({required String assetPath, String localPath})
 ```
+class Bcaaebbbbefe extends PackedResource {
 
-e.g.
-
-```text
-Asset().unpack(assetPath: 'images/photo.png', localPath: join(HOME, 'images/photo.png'))
-```
-
-You can also 'directories' and ' files' constants defined in 'asset\_registry.dart' to determine exactly what assets were shipped. So to unpack all of the images you can:
-
-```text
-import 'asset_registry.dart';
-
-void unpackImages()
-{
-    for (var file in files)
-    {
-        if (dirname(file) == 'images')
-        {
-            Asset().unpack(assetPath: file, localPath: join(HOME, file));
-        }
-    }
+  // PackedResource
+  const Bcaaebbbbefe() : super(
+    '''
+/9j/4aE0RXhpZgAASUkqAAgAAAANAAABAwABAAAAwA8AAAEBAwABAAAA0AsAAA8BAgAHAAAAqgAAABAB
+AgAIAAAAsQAAABIBAwABAAAAAQAAABoBBQABAAAAuQAAABsBBQABAAAAwQAAACgBAwABAAAAAgAAADEB
+AgAVAAAAyQAAADIBAgAUAAAA3gAAABMCAwABAAAAAQAAAGmHBAABAAAA8gAAACWIBAABAAAAgwMAAGQE
+AABHb29nbGUAUGl4ZWwgNQBIAAAAAQAAAEgAAAABAAAASERSKyAxLjAuMzg4Nzg0NzYyemQAMjAyMTox
+  ''');
 }
 ```
 
-## 
+## Resource Registry
 
-## Automating packing of assets
+As part of the packing process DCli also creates a registry of the packed resources. This is done by creating a dart library called:
 
-If you use pub\_release to publish to pub.dev then you can create a pre-release hook to have pub\_release package your assets.
+&#x20;`<project root>/lib/src/dcli/resources/generated/resource_registry.g.dart`
 
+The contents of the 'resource\_registry.dart' are of the form.
 
+````
+import 'package:dcli/dcli.dart';
+import 'Bdcdfbdfdfa.g.dart';
+import 'Bffeaaac.g.dart';
 
+/// GENERATED -- GENERATED
+/// 
+/// DO NOT MODIFIY
+/// 
+/// This script is generated via [Resource.pack()].
+/// 
+/// GENERATED - GENERATED
+
+class ResourceRegistry {
+
+  /// Map of the packed files.
+  /// Use the path of a packed file (relative to the resource directory)
+  /// to access the packed resource and then call [PackedResource].unpack()
+  /// to unpack the file.
+  /// ```dart
+  /// ResourceRegistry.resources['rules.yaml'].unpack(join(HOME, '.mysettings', 'rules.yaml'));
+  /// ```
+  static const Map<String, PackedResource> resources = {
+      'test.me' : Bdcdfbdfdfa(),
+      'PXL_20211104_224740653.jpg' : Bffeaaac(),
+    };
+  }
+  
+````
+
+## Unpacking resources
+
+DCli provides an api that allows your script to unpack its resources at run time.
+
+```
+ResourceRegistry().resources['<relative filename>'].unpack(String localPath)
+```
+
+The `resources` field is a map and the key to the map is the original path to the packed file 'relative' to the resources directory.
+
+e.g.
+
+```
+  const filename = 'PXL_20211104_224740653.jpg';
+  
+  final jpegResource = ResourceRegistry.resources[filename];
+  
+  final pathToConfigs = join(HOME, '.myapp');
+  if (!exists(pathToConfigs)
+  {
+    createDir(pathToConfigs);
+  }
+  jpegResource!.unpack(join(pathToConfigs, filename);
+
+```
+
+## Automating packing of resources
+
+If you use pub\_release to publish to pub.dev then you can create a pre-release hook to have pub\_release package your resources.

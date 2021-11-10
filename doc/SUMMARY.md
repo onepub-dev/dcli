@@ -16,7 +16,7 @@
 * [Futures](dart-basics/futures.md)
 * [stdin/stdout/stderr a primer](dart-basics/stdin-stdout-stderr.md)
 
-## Tour <a id="dcli-api"></a>
+## Tour <a href="dcli-api" id="dcli-api"></a>
 
 * [Overview](dcli-api/overview.md)
 * [Using DCli functions](dcli-api/using-dcli-functions.md)
@@ -33,18 +33,18 @@
 * [Locking](dcli-api/locking.md)
 * [Fetch](dcli-api/fetch.md)
 * [The evils of CD](dcli-api/the-evils-of-cd.md)
-* [Assets](dcli-api/assets.md)
+* [Assets/Resources](dcli-api/assets.md)
 * [Cross Platform](dcli-api/cross-platform.md)
 
-## Dependency Management <a id="dependency-management-1"></a>
+## Dependency Management <a href="dependency-management-1" id="dependency-management-1"></a>
 
 * [Dependency Management](dependency-management-1/dependency-management.md)
 * [Pubspec Managment](dependency-management-1/pubspec-managment.md)
 
-## DCli Tools <a id="dcli-tools-1"></a>
+## DCli Tools <a href="dcli-tools-1" id="dcli-tools-1"></a>
 
 * [DCli tools](dcli-tools-1/dcli-tools.md)
-* [Use a shebang \#!](dcli-tools-1/use-a-shebang.md)
+* [Use a shebang #!](dcli-tools-1/use-a-shebang.md)
 * [DCli Compile](dcli-tools-1/dcli-compile.md)
 * [DCli Clean](dcli-tools-1/dcli-clean-1.md)
 * [DCli Create](dcli-tools-1/dcli-create.md)
@@ -63,7 +63,7 @@
 * [Internal Workings](internal-workings/internal-workings.md)
 * [waitForEx](internal-workings/waitforex.md)
 
----
+***
 
 * [Contributing](contributing/README.md)
   * [Creating a release](contributing/creating-a-release.md)
@@ -90,7 +90,6 @@
 * [build CLI apps in dart - part 2](articles/build-cli-apps-in-dart-part-2.md)
 * [Dealing with permissions](articles/dealing-with-permissions.md)
 
----
+***
 
 * [Dart on Linux - the perfect CLI tooling](dart-on-ubuntu-the-perfect-cli-dev-tooling.md)
-
