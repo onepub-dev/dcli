@@ -246,7 +246,7 @@ class Find extends DCliFunction {
 
     lister.listen(
       (entity) async {
-        final type = FileSystemEntity.typeSync(entity.path);
+        final type = FileSystemEntity.typeSync(entity.path, followLinks: false);
         if (types.contains(type) &&
             matcher.match(entity.path) &&
             _allowed(
