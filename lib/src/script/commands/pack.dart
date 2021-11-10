@@ -33,12 +33,11 @@ import 'commands.dart';
 ///
 /// As part of the packing process DCli also creates a registry of the
 /// resources packed.
-/// This is done by creating a dart library called 'lib/src/dcli/resources/generated/resource_registry.dart'.
-/// The contents of the 'resources/generated/resource_registry.dart' are of the form.
+/// This is done by creating a dart library called 'lib/src/dcli/resources/generated/resource_registry.g.dart'.
+/// The contents of the 'resources/generated/resource_registry.g.dart' are of the form.
 ///
 /// ```text
-/// resources/generated/resource_registry.dart
-///
+/// 
 /// static const Map<String, PackedResource> resources = {
 /// 'images/photo.png': PackedResource('images/photo.png', <library_name>),
 /// 'data/zips/installer.zip': PackedResource('data/zips/installer.zip', '<library_name>)

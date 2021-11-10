@@ -37,7 +37,7 @@ void main() {
     });
   });
 
-  test('run  with traditional dart project structure - bin', () {
+  test('run with traditional dart project structure - bin', () {
     TestFileSystem().withinZone((fs) {
       int? exit = -1;
       try {
@@ -53,7 +53,7 @@ void main() {
     });
   });
 
-  test('run  with traditional dart project structure - nested bin', () {
+  test('run with traditional dart project structure - nested bin', () {
     TestFileSystem().withinZone((fs) {
       int? exit = -1;
       try {
@@ -73,7 +73,7 @@ void main() {
   });
 
   test(
-    'run  with traditional dart project structure - example',
+    'run with traditional dart project structure - example',
     () {
       TestFileSystem().withinZone((fs) {
         int? exit = -1;
@@ -99,7 +99,7 @@ void main() {
     skip: true,
   );
 
-  test('run  with traditional dart project structure - tool', () {
+  test('run with traditional dart project structure - tool', () {
     TestFileSystem().withinZone((fs) {
       int? exit = -1;
       try {

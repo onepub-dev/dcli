@@ -29,7 +29,7 @@ class Resources {
   static final String _generatedRoot =
       join('lib', 'src', 'dcli', 'resources', 'generated');
   static final String _pathToRegistry =
-      join(_generatedRoot, 'resource_registry.dart');
+      join(_generatedRoot, 'resource_registry.g.dart');
 
   /// Directory where will look for resources to pack
   late final String resourceRoot =
@@ -43,7 +43,7 @@ class Resources {
   /// Each resources is packed into a separate dart library
   /// and placed in the [generatedRoot] directory.
   ///
-  /// A registry file will be generated in generated/resource_registry.dart
+  /// A registry file will be generated in generated/resource_registry.g.dart
   /// which you can include to unpack the files onto the
   /// production system.
   ///
