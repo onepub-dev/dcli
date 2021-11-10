@@ -18,7 +18,7 @@ import 'stack_trace_impl.dart';
 /// stack which is useless the repaired stack replaces the exceptions stack
 /// with a full stack.
 T waitForEx<T>(Future<T> future) {
-  Object? exception;
+  DCliException? exception;
   late StackTrace stackTrace;
   late T value;
   try {
@@ -26,13 +26,17 @@ T waitForEx<T>(Future<T> future) {
   }
   // ignore: avoid_catching_errors
   on AsyncError catch (e) {
-    if (e.error is Exception) {
-      exception = e.error;
+    if (e.error is DCliException) {
+      exception = e.error as DCliException;
       stackTrace = e.stackTrace;
     } else {
       verbose(() => 'Rethrowing a non DCliException $e');
-      rethrow;
+      // ignore: only_throw_errors
+      throw e.error;
     }
+    // ignore: avoid_catches_without_on_clauses
+  } catch (e) {
+    rethrow;
   }
   // catch (e, st) {
   //   exception = e;
@@ -44,16 +48,8 @@ T waitForEx<T>(Future<T> future) {
     // We currently have no way to throw the repaired stack trace.
     // The best we can do is store the repaired stack trace in the
     // DCliException.
-    if (exception is DCliException) {
-      throw exception..stackTrace = StackTraceImpl.fromStackTrace(stackTrace);
-    } else {
-      /// Ideally we would rather throw the original exception but currently
-      ///  there is no way to do this.
-      throw DCliException.from(
-        exception,
-        StackTraceImpl.fromStackTrace(stackTrace),
-      );
-    }
+    assert(exception is DCliException, 'Expected on DCliExceptions');
+    throw exception..stackTrace = StackTraceImpl.fromStackTrace(stackTrace);
   }
   return value;
 }
