@@ -15,7 +15,8 @@ class ResourceRegistry {
   /// to access the packed resource and then call [PackedResource].unpack()
   /// to unpack the file.
   /// ```dart
-  /// ResourceRegistry.resources['rules.yaml'].unpack(join(HOME, '.mysettings', 'rules.yaml'));
+  /// ResourceRegistry.resources['rules.yaml'].unpack(join(HOME, '.mysettings'
+  /// , 'rules.yaml'));
   /// ```
   static const Map<String, PackedResource> resources = {};
 }
