@@ -6,6 +6,7 @@ import 'package:test/test.dart';
 void main() {
   test('Assets().toString', () async {
     final path = join('assets', 'templates', 'basic.dart');
+    // ignore: deprecated_member_use_from_same_package
     final content = Assets().loadString(path);
 
     expect(content, isNotNull);
@@ -23,6 +24,7 @@ void main() {
 
   test('Assets().list', () async {
     final path = join('assets', 'templates');
+    // ignore: deprecated_member_use_from_same_package
     final templates = Assets().list('*', root: path);
 
     final base = join(DartProject.self.pathToProjectRoot, 'lib', 'src', path);

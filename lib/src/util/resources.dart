@@ -23,32 +23,40 @@ import '../../dcli.dart';
 ///
 ///
 class Resources {
-  static final String _resourceRoot = join('lib', 'src', 'dcli', 'resources');
+  /// the directory where we expect to find the resources
+  /// we are going to pack.
+  static final String _resourceRoot = join('resources');
   static final String _generatedRoot =
       join('lib', 'src', 'dcli', 'resources', 'generated');
   static final String _pathToRegistry =
-      join('lib', 'src', 'dcli', 'resources', 'generated', 'registry.dart');
+      join(_generatedRoot, 'resource_registry.dart');
 
+  /// Directory where will look for resources to pack
   late final String resourceRoot =
       join(DartProject.self.pathToProjectRoot, _resourceRoot);
 
+  /// directory where we save the packed resources.
   late final String generatedRoot =
       join(DartProject.self.pathToProjectRoot, _generatedRoot);
 
-  /// Packs the set of [pathToResources] files.
-  /// Each passed path must exist and be a file otherwise a [ResourceException]
-  /// will be thrown.
-  /// The resources are packed into the dart library file [pathToDartLibrary]
-  /// which must be the name of a '.dart' library.
-  /// If [overwrite] is false and the dart library exists
-  /// then a [ResourceException] will be thrown.
+  /// Packs the set of files located under [resourceRoot]
+  /// Each resources is packed into a separate dart library
+  /// and placed in the [generatedRoot] directory.
   ///
-  /// The resulting library will contain a single class whose name
-  /// is derived from the [pathToDartLibrary] (my_resource.dart -> MyResource).
-  /// The class contains a single method 'unpack' which when called will
-  /// unpack each resource file
+  /// A registry file will be generated in generated/resource_registry.dart
+  /// which you can include to unpack the files onto the
+  /// production system.
+  ///
   void pack() {
     final resources = find('*', workingDirectory: resourceRoot).toList();
+
+    /// clear out an old generated files
+    /// as we use UUIDs if we didn't do this the
+    /// directory would keep growing.
+    if (exists(_generatedRoot)) {
+      deleteDir(_generatedRoot);
+    }
+    createDir(_generatedRoot, recursive: true);
 
     final packedResources = _packResources(resources);
 
@@ -73,7 +81,8 @@ class Resources {
 
     for (final pathToResouce in pathToResources) {
       final className = _generateClassName;
-      final pathToGeneratedLibrary = '$className.g.dart';
+      final pathToGeneratedLibrary = join(_generatedRoot, '$className.g.dart');
+
       final resource =
           _packResource(pathToResouce, pathToGeneratedLibrary, className);
       resources.add(resource);
@@ -101,8 +110,10 @@ import 'package:dcli/dcli.dart';
 /// GENERATED - GENERATED
 
 class $className extends PackedResource {
-    
-    String content = \'''
+
+  /// PackedResource
+  const $className() : super(
+     \'''
 ''',
       );
 
@@ -112,17 +123,22 @@ class $className extends PackedResource {
       /// ignore: literal_only_boolean_expressions
       while (true) {
         final data = waitForEx(reader.readChunk(60));
-        to.write(base64.encode(data));
+        to
+          ..write(base64.encode(data))
+          ..writeln();
         if (data.length < 60) {
           break;
         }
       }
 
       /// Write the tail
-      to.write('''
-  \''';
+      to.write(
+        '''
+  \'\'\');
 }
-    ''');
+    ''',
+      );
+      waitForEx<dynamic>(to.flush());
     } finally {
       to.close();
     }
@@ -144,7 +160,13 @@ class $className extends PackedResource {
       final uuid = const Uuid().v4();
       for (final char in uuid.codeUnits) {
         if (_isAlpha(char)) {
-          className += char.toString();
+          var alpha = String.fromCharCode(char);
+
+          if (className.isEmpty) {
+            /// make the class name camelcase.
+            alpha = alpha.toUpperCase();
+          }
+          className += alpha;
         }
       }
       if (exists(join(generatedRoot, '$className.g.dart'))) {
@@ -158,12 +180,24 @@ class $className extends PackedResource {
   void _writeRegistry(List<_Resource> resources) {
     final registryFile = File(_pathToRegistry).openWrite();
     try {
+      // import 'package:dcli/src/dcli/resources/generated/Bbcded.g.dart';
       /// Write the header
       ///
-      registryFile.write(
-        '''
+      registryFile.write('''
 // ignore: prefer_relative_imports
 import 'package:dcli/dcli.dart';
+''');
+
+      /// sort the resources so the imports are sorted.
+      for (final resource in resources
+        ..sort((a, b) => a.className.compareTo(b.className))) {
+        registryFile
+            .writeln("import '${basename(resource.pathToGeneratedLibrary)}';");
+      }
+
+      {
+        registryFile.write(
+          '''
 
 /// GENERATED -- GENERATED
 /// 
@@ -173,29 +207,34 @@ import 'package:dcli/dcli.dart';
 /// 
 /// GENERATED - GENERATED
 
-class Registry {
+class ResourceRegistry {
 
+  /// Map of the packed files.
+  /// Use the path of a packed file (relative to the resource directory)
+  /// to access the packed resource and then call [PackedResource].unpack()
+  /// to unpack the file.
+  /// ```dart
+  /// ResourceRegistry.resources['rules.yaml'].unpack(join(HOME, '.mysettings', 'rules.yaml'));
+  /// ```
   static const Map<String, PackedResource> resources = {
 ''',
-      );
+        );
+      }
 
       /// Write each resource into the map
-      var firstpass = true;
       for (final resource in resources) {
-        if (!firstpass) {
-          firstpass = false;
-          registryFile.write(',');
-        }
         registryFile.write('''
-      '${resource.pathToSource}' : ${resource.className}()
+      '${relative(resource.pathToSource, from: resourceRoot)}' : ${resource.className}(),
       ''');
       }
 
       /// Write tail
       registryFile.write('''
+    };
   }
   ''');
     } finally {
+      waitForEx<dynamic>(registryFile.flush());
       registryFile.close();
     }
   }
@@ -361,24 +400,46 @@ class Registry {
 
 /// Base class used by all [PackedResource]s.
 // ignore: one_member_abstracts
-abstract class PackedResource {
+class PackedResource {
+  /// Create a [PackedResource] with
+  /// the given b64encoded content.
+  const PackedResource(this._content);
+
+  final String _content;
+
   /// Unpacks a resource saving it
   /// to [pathTo]
-  void unpack(String pathTo);
+  void unpack(String pathTo) {
+    final file = waitForEx(File(pathTo).open(mode: FileMode.write));
+
+    try {
+      for (final line in _content.split('\n')) {
+        if (line.trim().isNotEmpty) {
+          waitForEx(file.writeFrom(base64.decode(line)));
+        }
+      }
+    } finally {
+      waitForEx<dynamic>(file.flush());
+      file.close();
+    }
+  }
 }
 
 class _Resource {
-  _Resource(this.pathToSource, this.pathToGeneratedLibrary, this.className);
+  _Resource(this.pathToSource, String pathToGeneratedLibrary, this.className) {
+    this.pathToGeneratedLibrary = relative(pathToGeneratedLibrary,
+        from: join(DartProject.self.pathToProjectRoot, 'lib'));
+  }
 
   /// Path to the original file we are packing.
-  String pathToSource;
+  final String pathToSource;
 
   /// The path to the dart library we generated to hold
   /// the encoded resource
-  String pathToGeneratedLibrary;
+  late final String pathToGeneratedLibrary;
 
   /// the generated class name used for this resource.
-  String className;
+  final String className;
 }
 
 /// Thrown when an error occurs trying to pack or unpack a resource file

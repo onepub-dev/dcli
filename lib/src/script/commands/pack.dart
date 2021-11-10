@@ -1,4 +1,8 @@
+import 'package:path/path.dart';
+
+import '../../functions/is.dart';
 import '../../util/resources.dart';
+import '../command_line_runner.dart';
 import '../flags.dart';
 import 'commands.dart';
 
@@ -29,11 +33,11 @@ import 'commands.dart';
 ///
 /// As part of the packing process DCli also creates a registry of the
 /// resources packed.
-/// This is done by creating a dart library called 'lib/src/dcli/resources/generated/registry.dart'.
-/// The contents of the 'resources/generated/registry.dart' are of the form.
+/// This is done by creating a dart library called 'lib/src/dcli/resources/generated/resource_registry.dart'.
+/// The contents of the 'resources/generated/resource_registry.dart' are of the form.
 ///
 /// ```text
-/// resources/generated/registry.dart
+/// resources/generated/resource_registry.dart
 ///
 /// static const Map<String, PackedResource> resources = {
 /// 'images/photo.png': PackedResource('images/photo.png', <library_name>),
@@ -54,6 +58,12 @@ class PackCommand extends Command {
   /// [arguments] contains path to clean
   @override
   int run(List<Flag> selectedFlags, List<String> arguments) {
+    if (!exists(Resources().resourceRoot)) {
+      throw InvalidArguments(
+          'An able to pack resources as the resource directory at '
+          '${Resources().resourceRoot}'
+          " doesn't exist.");
+    }
     Resources().pack();
     return 0;
   }
@@ -63,8 +73,8 @@ class PackCommand extends Command {
 
   @override
   String description() => '''
-Pack any files under <project root/lib/src/assets into a dart
-library which can be unpacked at install time.''';
+Pack all files under the '${relative(Resources().resourceRoot)}' directory into a set of dart
+   libraries which can be unpacked at install time.''';
 
   @override
   List<String> completion(String word) => [word];

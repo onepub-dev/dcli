@@ -324,4 +324,9 @@ void main() {
       });
     });
   });
+
+  test('do not follow links', () {
+    expect(isLink('/usr/bin/X11'), isTrue);
+    find('*', workingDirectory: '/usr/bin').forEach(print);
+  });
 }

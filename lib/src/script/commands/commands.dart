@@ -1,5 +1,3 @@
-import 'pack.dart';
-
 import '../flags.dart';
 import 'clean.dart';
 import 'compile.dart';
@@ -7,6 +5,7 @@ import 'create.dart';
 import 'doctor.dart';
 import 'help.dart';
 import 'install.dart';
+import 'pack.dart';
 import 'run.dart';
 import 'upgrade.dart';
 import 'version.dart';

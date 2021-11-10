@@ -268,6 +268,7 @@ class Stackframe {
       required this.column,
       required this.details});
 
+  /// The source of the file for this stack frame.
   final FrameSourceType sourceType;
 
   ///
