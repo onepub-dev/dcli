@@ -115,7 +115,7 @@ import 'package:dcli/dcli.dart';
 
 class $className extends PackedResource {
 
-  /// PackedResource
+  /// PackedResource - ${relative(pathToResource, from: 'resources')}
   const $className() : super(
      \'''
 ''',
