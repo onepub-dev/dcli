@@ -60,7 +60,9 @@ class Resources {
 
     final packedResources = _packResources(resources);
 
+    print(' - generating registry');
     _writeRegistry(packedResources);
+    print(green('Pack complete'));
 
     // if (!overwrite && exists(pathToDartLibrary)) {
     //   throw ResourceException(
@@ -81,7 +83,9 @@ class Resources {
 
     for (final pathToResouce in pathToResources) {
       final className = _generateClassName;
+
       final pathToGeneratedLibrary = join(_generatedRoot, '$className.g.dart');
+      print(' - packing: $pathToResouce into $pathToGeneratedLibrary');
 
       final resource =
           _packResource(pathToResouce, pathToGeneratedLibrary, className);
