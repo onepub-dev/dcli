@@ -1,8 +1,7 @@
 import 'package:dcli_core/dcli_core.dart' as core;
-import 'package:dcli_core/dcli_core.dart' show CopyException;
+import 'package:dcli_core/dcli_core.dart' show CopyException, symlink;
 
 import '../util/wait_for_ex.dart';
-
 export 'package:dcli_core/dcli_core.dart' show CopyException;
 
 ///
