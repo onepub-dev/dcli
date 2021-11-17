@@ -158,11 +158,28 @@ mixin PosixShell {
 
   /// Install dart/dcli
   bool install({bool installDart = false}) {
+    var installed = false;
     if (Platform.isLinux) {
-      return LinuxDCliInstaller().install(installDart: installDart);
+      installed = LinuxDCliInstaller().install(installDart: installDart);
     } else {
-      return MacOSDCliInstaller().install(installDart: installDart);
+      installed = MacOSDCliInstaller().install(installDart: installDart);
     }
+
+    // DartProject.self.compile(install: true, overwrite: true);
+
+    // addFileAssocation(binPath);
+
+    // if (isCompletionSupported) {
+    //   if (!isCompletionInstalled) {
+    //     installTabCompletion();
+    //   }
+    // }
+
+    // if (isPrivilegedUser) {
+    //   _symlinkDCli(dcliPath);
+    // }
+
+    return installed;
   }
 
   /// at this point no posix system has any preconditions.
@@ -170,4 +187,19 @@ mixin PosixShell {
 
   /// Returns the instructions to install DCli.
   String get installInstructions => r'Run: sudo env "PATH=$PATH" dcli install';
+
+  /// Symlink so dcli works under sudo.
+  /// We use the location of dart exe and add dcli symlink
+  /// to the same location.
+  void _symlinkDCli(String dcliPath) {
+    if (!Platform.isWindows) {
+      final linkPath = join(dirname(DartSdk().pathToDartExe!), 'dcli');
+      if (isPrivilegedPasswordRequired && !isWritable(linkPath)) {
+        print('Please enter the sudo password when prompted.');
+      }
+
+      'ln -sf $dcliPath $linkPath'.start(privileged: !isWritable(linkPath));
+      // symlink(dcliPath, linkPath);
+    }
+  }
 }
