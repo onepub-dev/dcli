@@ -3,7 +3,6 @@ import 'dart:io';
 import 'package:dcli_core/dcli_core.dart' as core;
 
 import '../../dcli.dart';
-import '../settings.dart';
 
 ///
 /// returns the list of files and directories

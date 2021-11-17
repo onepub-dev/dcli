@@ -5,8 +5,6 @@ import 'dart:io';
 import 'package:dcli_core/dcli_core.dart' as core;
 
 import '../../dcli.dart';
-import 'temp_file.dart';
-import 'wait_for_ex.dart';
 
 ///
 /// Provides a set of methods to read/write
@@ -113,7 +111,7 @@ class FileSync {
     subscription =
         utf8.decoder.bind(inputStream).transform(const LineSplitter()).listen(
               (line) async {
-                final cont =  lineAction(line);
+                final cont = lineAction(line);
                 if (cont == false) {
                   await subscription
                       .cancel()

@@ -2,7 +2,6 @@
 import 'dart:io';
 
 import 'package:dcli/dcli.dart';
-import 'package:dcli/src/util/progress.dart';
 import 'package:test/test.dart' as t;
 import 'package:test/test.dart';
 

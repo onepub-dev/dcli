@@ -8,7 +8,6 @@ import 'dart:isolate';
 
 import 'package:async/async.dart';
 import 'package:dcli/dcli.dart' hide equals;
-import 'package:dcli/src/util/named_lock.dart';
 import 'package:test/test.dart';
 
 const port = 9003;

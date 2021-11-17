@@ -5,7 +5,6 @@ import 'package:meta/meta.dart';
 import 'package:path/path.dart' as p;
 
 import '../dcli.dart';
-import 'script/dart_script.dart';
 import 'script/flags.dart';
 import 'version/version.g.dart';
 

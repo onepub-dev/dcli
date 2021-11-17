@@ -1,11 +1,9 @@
+// ignore_for_file: deprecated_member_use
+
 import 'dart:async';
 import 'dart:cli' as cli;
 
-import 'package:dcli_core/dcli_core.dart';
-
 import '../../dcli.dart';
-
-import '../settings.dart';
 
 /// Wraps the standard cli waitFor
 /// but rethrows any exceptions with a repaired stacktrace.
@@ -48,7 +46,6 @@ T waitForEx<T>(Future<T> future) {
     // We currently have no way to throw the repaired stack trace.
     // The best we can do is store the repaired stack trace in the
     // DCliException.
-    assert(exception is DCliException, 'Expected on DCliExceptions');
     throw exception..stackTrace = StackTraceImpl.fromStackTrace(stackTrace);
   }
   return value;

@@ -1,5 +1,4 @@
 import 'package:dcli/dcli.dart';
-import 'package:dcli/src/util/file_sync.dart';
 import 'package:test/test.dart' as t;
 
 import '../util/test_file_system.dart';

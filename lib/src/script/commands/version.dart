@@ -1,12 +1,7 @@
 import 'dart:io';
 
 import '../../../dcli.dart';
-import '../../functions/which.dart';
-import '../../settings.dart';
-import '../../util/ansi_color.dart';
-import '../../util/dcli_paths.dart';
 import '../../util/recase.dart';
-import '../../util/runnable_process.dart';
 import '../command_line_runner.dart';
 import '../flags.dart';
 import 'commands.dart';

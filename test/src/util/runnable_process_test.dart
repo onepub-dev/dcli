@@ -1,3 +1,5 @@
+// ignore_for_file: deprecated_member_use
+
 @Timeout(Duration(minutes: 5))
 import 'dart:async';
 
@@ -6,7 +8,6 @@ import 'dart:convert';
 import 'dart:io';
 
 import 'package:dcli/dcli.dart' hide sleep, equals;
-import 'package:dcli/src/functions/run.dart';
 import 'package:test/test.dart';
 
 import 'test_file_system.dart';

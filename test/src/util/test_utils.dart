@@ -1,5 +1,4 @@
 import 'package:dcli/dcli.dart';
-import 'package:dcli/src/util/file_sync.dart';
 
 // Creates text file with the given no. of lines.
 void createLineFile(String testFile, int lines) {

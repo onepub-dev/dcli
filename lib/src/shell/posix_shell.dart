@@ -5,7 +5,6 @@ import 'package:posix/posix.dart';
 import '../../dcli.dart';
 import '../installers/linux_installer.dart';
 import '../installers/mac_os_installer.dart';
-import '../settings.dart';
 
 /// Provides a number of helper functions
 /// for posix based shells.

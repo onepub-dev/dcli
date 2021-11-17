@@ -1,7 +1,6 @@
 @Timeout(Duration(seconds: 600))
 @TestOn('!windows')
 import 'package:dcli/dcli.dart' hide equals;
-import 'package:dcli/src/util/progress.dart';
 import 'package:test/test.dart';
 
 import '../util/test_file_system.dart';

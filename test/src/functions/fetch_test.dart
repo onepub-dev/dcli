@@ -212,16 +212,15 @@ void main() {
           throwsA(
             predicate<FetchException>(
               (e) =>
-                  e is FetchException &&
 
                   /// we get different errors on windows and linux
                   /// windows
-                  ((e.message.contains('No such host is known.') &&
-                          e.errorCode == 11001) ||
+                  (e.message.contains('No such host is known.') &&
+                      e.errorCode == 11001) ||
 
-                      ///linux
-                      (e.message.contains('Name or service not known') &&
-                          e.errorCode == -2)),
+                  ///linux
+                  (e.message.contains('Name or service not known') &&
+                      e.errorCode == -2),
             ),
           ),
         );
@@ -236,10 +235,7 @@ void main() {
           () => fetch(url: url, saveToPath: file),
           throwsA(
             predicate<FetchException>(
-              (e) =>
-                  e is FetchException &&
-                  e.message.contains('Not Found') &&
-                  e.errorCode == 404,
+              (e) => e.message.contains('Not Found') && e.errorCode == 404,
             ),
           ),
         );
@@ -405,10 +401,8 @@ void main() {
                   data: FetchData.fromFile(pathToData),
                   saveToPath: file),
               throwsA(predicate<FetchException>(
-                (e) =>
-                    e is FetchException &&
-                    e.message.contains(
-                        'FetchData is not supported for the FetchMethod:'),
+                (e) => e.message.contains(
+                    'FetchData is not supported for the FetchMethod:'),
               )));
         }, create: false);
       });
@@ -465,7 +459,7 @@ void main() {
       expect(
           () => FetchData.fromFile(join('/tmp/path/to/nowhere')),
           throwsA(predicate<FetchException>(
-            (e) => e is FetchException && e.message.contains('does not exist'),
+            (e) => e.message.contains('does not exist'),
           )));
     });
 
@@ -474,7 +468,7 @@ void main() {
         expect(
             () => FetchData.fromFile(tmpDir),
             throwsA(predicate<FetchException>(
-              (e) => e is FetchException && e.message.contains('is not a file'),
+              (e) => e.message.contains('is not a file'),
             )));
       });
     });

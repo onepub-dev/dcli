@@ -5,9 +5,6 @@ import 'package:pub_semver/pub_semver.dart';
 import 'package:pubspec/pubspec.dart' as pub;
 
 import '../../dcli.dart';
-import '../script/dart_script.dart';
-import '../util/wait_for_ex.dart';
-import 'dependency.dart';
 
 ///
 ///Used to read a pubspec.yaml file

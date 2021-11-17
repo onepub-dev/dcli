@@ -1,10 +1,6 @@
-import 'package:win32/win32.dart';
 
 import '../../dcli.dart';
 import '../../windows.dart';
-import '../script/dart_sdk.dart';
-import '../settings.dart';
-import '../util/pub_cache.dart';
 
 ///
 /// Installs dart on an apt base system.abstract

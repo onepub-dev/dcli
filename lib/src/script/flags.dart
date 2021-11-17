@@ -1,8 +1,6 @@
 import 'package:meta/meta.dart';
-import 'package:path/path.dart';
 
 import '../../dcli.dart';
-import '../settings.dart';
 
 /// helper flass for manageing flags.
 @immutable

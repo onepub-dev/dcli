@@ -1,7 +1,5 @@
 @Timeout(Duration(seconds: 600))
 import 'package:dcli/dcli.dart';
-import 'package:dcli/src/util/ansi.dart';
-import 'package:dcli/src/util/ansi_color.dart';
 
 import 'package:test/test.dart';
 

@@ -38,9 +38,7 @@ void main() {
         () => validator.validate('!'),
         throwsA(
           predicate<AskValidatorException>(
-            (e) =>
-                e is AskValidatorException &&
-                e.message == red(r'Input does not match: ^[a-zA-Z0-9_\-]+'),
+            (e) => e.message == red(r'Input does not match: ^[a-zA-Z0-9_\-]+'),
           ),
         ),
       );
@@ -98,8 +96,7 @@ void main() {
       () => validator.validate('abc'),
       throwsA(
         predicate<AskValidatorException>(
-          (e) =>
-              e is AskValidatorException && e.message == red('Invalid FQDN.'),
+          (e) => e.message == red('Invalid FQDN.'),
         ),
       ),
     );
@@ -142,7 +139,6 @@ void main() {
       throwsA(
         predicate<AskValidatorException>(
           (e) =>
-              e is AskValidatorException &&
               e.message == red('Invalid integer.'),
         ),
       ),

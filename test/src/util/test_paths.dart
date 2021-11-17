@@ -2,7 +2,6 @@
 import 'dart:io';
 
 import 'package:dcli/dcli.dart';
-import 'package:path/path.dart';
 import 'package:test/test.dart';
 
 /// TestPaths sets up an isolated area for unit tests to run without

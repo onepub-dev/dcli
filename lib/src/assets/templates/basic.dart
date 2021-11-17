@@ -2,7 +2,6 @@
 
 import 'dart:io';
 
-import 'package:args/args.dart';
 
 // ignore: prefer_relative_imports
 import 'package:dcli/dcli.dart';

@@ -1,9 +1,4 @@
 import '../../dcli.dart';
-import '../pubspec/dependency.dart';
-import '../settings.dart';
-import '../util/progress.dart';
-import 'dart_project.dart';
-import 'dart_sdk.dart';
 
 ///
 /// runs and retrives the results of calling

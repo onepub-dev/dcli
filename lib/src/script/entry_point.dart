@@ -1,12 +1,11 @@
+// ignore_for_file: deprecated_member_use
+
 import 'dart:cli';
 import 'dart:io';
 
-import 'package:dcli_core/dcli_core.dart';
 
 import '../../dcli.dart';
 
-import '../settings.dart';
-import '../util/ansi_color.dart';
 
 import 'command_line_runner.dart';
 import 'commands/commands.dart';

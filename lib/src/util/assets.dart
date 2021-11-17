@@ -5,7 +5,6 @@ import 'dart:typed_data';
 import 'package:path/path.dart';
 
 import '../../dcli.dart';
-import '../settings.dart';
 
 ///
 /// This class provides access to 'assets' packaged in your application.

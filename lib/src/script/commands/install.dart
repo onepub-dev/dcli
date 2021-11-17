@@ -3,12 +3,7 @@ import 'dart:io';
 import 'package:meta/meta.dart';
 
 import '../../../dcli.dart';
-import '../../settings.dart';
-import '../../shell/shell.dart';
 import '../../templates/expander.dart';
-import '../../util/ansi_color.dart';
-import '../../util/dcli_paths.dart';
-import '../../util/pub_cache.dart';
 import '../../version/version.g.dart';
 import '../command_line_runner.dart';
 import '../flags.dart';

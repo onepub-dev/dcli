@@ -1,10 +1,8 @@
 import 'dart:io';
 
 import '../../../dcli.dart';
-import '../../settings.dart';
 import '../../util/completion.dart';
 import '../command_line_runner.dart';
-import '../dart_script.dart';
 import '../flags.dart';
 import 'commands.dart';
 

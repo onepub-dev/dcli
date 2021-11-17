@@ -1,6 +1,5 @@
 #! /usr/bin/env dcli
 
-import 'package:args/args.dart';
 import 'package:dcli/dcli.dart';
 
 ///

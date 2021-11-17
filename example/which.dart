@@ -2,7 +2,6 @@
 
 import 'dart:io';
 
-import 'package:args/args.dart';
 import 'package:dcli/dcli.dart';
 
 /// which appname

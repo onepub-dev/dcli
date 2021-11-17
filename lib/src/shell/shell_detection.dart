@@ -1,17 +1,13 @@
 import 'dart:io';
 
 import '../../dcli.dart';
-import '../settings.dart';
 import 'ash_shell.dart';
-import 'bash_shell.dart';
 import 'cmd_shell.dart';
 import 'dash_shell.dart';
 import 'fish_shell.dart';
 import 'power_shell.dart';
 import 'sh_shell.dart';
 import 'shell_mixin.dart';
-import 'unknown_shell.dart';
-import 'zsh_shell.dart';
 
 /// The project:
 /// https://github.com/sarugaku/shellingham

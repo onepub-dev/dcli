@@ -1,7 +1,6 @@
 @Timeout(Duration(minutes: 5))
 
 import 'package:dcli/dcli.dart';
-import 'package:dcli/src/util/dcli_paths.dart';
 import 'package:test/test.dart' as t;
 import 'package:test/test.dart';
 

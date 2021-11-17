@@ -2,11 +2,7 @@ import 'dart:io';
 
 import '../../../dcli.dart';
 import '../../util/completion.dart';
-import '../../util/format.dart';
-import '../../util/pub_cache.dart';
 import '../command_line_runner.dart';
-import '../dart_script.dart';
-import '../dart_sdk.dart';
 import '../flags.dart';
 import 'commands.dart';
 

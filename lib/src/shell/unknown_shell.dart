@@ -6,7 +6,6 @@ import '../../dcli.dart';
 import '../installers/linux_installer.dart';
 import '../installers/mac_os_installer.dart';
 import '../installers/windows_installer.dart';
-import '../settings.dart';
 import 'shell_mixin.dart';
 
 /// Used by dcli to interacte with the shell

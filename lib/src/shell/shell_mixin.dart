@@ -1,5 +1,4 @@
 import '../../dcli.dart';
-import 'shell.dart';
 
 /// Base class containing common code for all Shell implementations.
 mixin ShellMixin implements Shell {

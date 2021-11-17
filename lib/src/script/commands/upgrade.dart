@@ -1,6 +1,5 @@
 import '../../../dcli.dart';
 
-import '../../settings.dart';
 import '../command_line_runner.dart';
 import '../flags.dart';
 import 'commands.dart';

@@ -4,7 +4,6 @@ import 'package:dcli_core/dcli_core.dart' as core;
 import 'package:dcli_core/dcli_core.dart';
 
 import '../../dcli.dart';
-import '../settings.dart';
 
 ///
 /// Returns true if the given [path] points to a file.

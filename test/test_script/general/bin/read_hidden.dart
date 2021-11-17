@@ -4,7 +4,6 @@ import 'dart:convert';
 import 'dart:io';
 
 import 'package:dcli/dcli.dart';
-import 'package:dcli/src/util/wait_for_ex.dart';
 
 void main() {
   print('child: has terminal: ${stdin.hasTerminal}');

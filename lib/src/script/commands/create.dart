@@ -1,10 +1,7 @@
 import 'package:path/path.dart' as p;
 
 import '../../../dcli.dart';
-import '../../settings.dart';
 import '../command_line_runner.dart';
-import '../dart_project.dart';
-import '../dart_script.dart';
 import '../flags.dart';
 import 'commands.dart';
 

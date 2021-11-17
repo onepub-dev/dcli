@@ -1,8 +1,6 @@
 @Timeout(Duration(seconds: 610))
 
 import 'package:dcli/dcli.dart' hide equals;
-import 'package:dcli/src/util/dcli_paths.dart';
-import 'package:dcli/src/util/runnable_process.dart';
 import 'package:test/test.dart';
 
 import '../../util/test_file_system.dart';

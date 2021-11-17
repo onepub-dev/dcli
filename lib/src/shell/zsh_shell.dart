@@ -1,7 +1,4 @@
-import 'package:path/path.dart';
-
 import '../../dcli.dart';
-import 'posix_shell.dart';
 import 'shell_mixin.dart';
 
 /// Provides a number of helper functions

@@ -4,9 +4,6 @@ import 'dart:io';
 import 'package:dcli_core/dcli_core.dart' as core;
 
 import '../../dcli.dart';
-import '../settings.dart';
-import '../util/progress.dart';
-import '../util/wait_for_ex.dart';
 
 /// Reads lines from the file at [path].
 /// ```dart

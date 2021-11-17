@@ -4,7 +4,6 @@ import 'package:meta/meta.dart';
 import 'package:pub_semver/pub_semver.dart';
 
 import '../../dcli.dart';
-import '../settings.dart';
 
 /// Used to locate and manipulate the dart pub cache
 ///

@@ -6,12 +6,7 @@ import 'package:meta/meta.dart';
 import 'package:mime/mime.dart';
 
 import '../../dcli.dart';
-import '../settings.dart';
 import '../util/enum_helper.dart';
-import '../util/format.dart';
-import '../util/terminal.dart';
-import '../util/wait_for_ex.dart';
-import 'touch.dart';
 
 /// Typedef for the progress call back used by the [fetch] function.
 typedef OnFetchProgress = void Function(FetchProgress progress);

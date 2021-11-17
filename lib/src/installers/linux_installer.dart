@@ -1,8 +1,5 @@
-import 'package:path/path.dart';
 import '../../dcli.dart';
-import '../settings.dart';
 import '../shell/shell_detection.dart';
-import '../util/pub_cache.dart';
 
 ///
 /// Installs dart on an apt base system.abstract

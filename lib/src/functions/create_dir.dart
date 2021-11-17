@@ -1,5 +1,4 @@
 import 'package:dcli_core/dcli_core.dart' as core;
-import 'package:dcli_core/dcli_core.dart' show CreateDirException;
 
 import '../../dcli.dart';
 

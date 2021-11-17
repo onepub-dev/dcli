@@ -5,7 +5,6 @@ import 'package:meta/meta.dart';
 import 'package:posix/posix.dart' hide read;
 
 import '../../dcli.dart';
-import '../settings.dart';
 import '../windows/process_helper.dart';
 
 ///

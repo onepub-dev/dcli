@@ -1,7 +1,6 @@
 @Timeout(Duration(minutes: 5))
 import 'dart:io';
 import 'package:dcli/dcli.dart' hide equals;
-import 'package:dcli/src/util/pub_cache.dart';
 import 'package:pub_semver/pub_semver.dart';
 import 'package:test/test.dart';
 

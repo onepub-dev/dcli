@@ -1,9 +1,9 @@
+// ignore_for_file: deprecated_member_use
+
 import 'dart:cli';
 import 'dart:io';
 
 import '../../dcli.dart';
-import '../settings.dart';
-import '../util/wait_for_ex.dart';
 
 /// Runs a Dart dscript
 class ScriptRunner {

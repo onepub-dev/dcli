@@ -5,8 +5,6 @@ import 'dart:io';
 import '../../dcli.dart';
 import '../../dcli.dart' as d;
 import '../script/command_line_runner.dart';
-import 'file_sync.dart';
-import 'wait_for_ex.dart';
 
 /// FileSort provides the ability to sort files
 /// based on their columns.

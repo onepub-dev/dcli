@@ -3,7 +3,6 @@ import 'dart:async';
 import 'package:dcli_core/dcli_core.dart' as core;
 
 import '../../dcli.dart';
-import '../util/wait_for_ex.dart';
 
 ///
 /// Searches the PATH for the location of the application

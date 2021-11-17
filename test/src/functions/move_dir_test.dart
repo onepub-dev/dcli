@@ -41,7 +41,6 @@ void main() {
           throwsA(
             t.predicate<MoveDirException>(
               (e) =>
-                  e is MoveDirException &&
                   e.message == 'The [to] path ${truepath(to)} must NOT exist.',
             ),
           ),
@@ -65,9 +64,8 @@ void main() {
           throwsA(
             t.predicate<MoveDirException>(
               (e) =>
-                  e is MoveDirException &&
                   e.message ==
-                      'The [from] path ${truepath(from)} must be a directory.',
+                  'The [from] path ${truepath(from)} must be a directory.',
             ),
           ),
         );
@@ -85,9 +83,8 @@ void main() {
           throwsA(
             t.predicate<MoveDirException>(
               (e) =>
-                  e is MoveDirException &&
                   e.message ==
-                      'The [from] path ${truepath(from)} does not exists.',
+                  'The [from] path ${truepath(from)} does not exists.',
             ),
           ),
         );

@@ -1,5 +1,4 @@
 import '../../dcli.dart';
-import '../settings.dart';
 
 ///
 /// Installs dart on an apt base system.abstract

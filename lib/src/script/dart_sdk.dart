@@ -5,12 +5,8 @@ import 'package:meta/meta.dart';
 import 'package:pub_semver/pub_semver.dart';
 
 import '../../dcli.dart';
-import '../settings.dart';
 import '../util/enum_helper.dart';
-import '../util/progress.dart';
 import '../util/runnable_process.dart';
-import '../util/temp_file.dart';
-import '../util/terminal.dart';
 import 'commands/install.dart';
 
 /// The [DartSdk] provides access to a number of the dart sdk tools

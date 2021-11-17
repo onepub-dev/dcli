@@ -2,7 +2,6 @@
 import 'dart:io';
 
 import 'package:dcli/dcli.dart';
-import 'package:dcli/src/platform/windows/registry.dart';
 import 'package:dcli/src/shell/cmd_shell.dart';
 import 'package:dcli/src/shell/windows_mixin.dart';
 import 'package:dcli/windows.dart';

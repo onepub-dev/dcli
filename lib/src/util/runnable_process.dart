@@ -2,14 +2,8 @@ import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
 
-import 'package:dcli_core/dcli_core.dart' show StackTraceImpl;
-
 import '../../dcli.dart';
-import '../settings.dart';
-import 'dcli_zone.dart';
 import 'parse_cli_command.dart';
-import 'progress.dart';
-import 'wait_for_ex.dart';
 
 /// [printerr] provides the equivalent functionality to the
 /// standard Dart print function but instead writes

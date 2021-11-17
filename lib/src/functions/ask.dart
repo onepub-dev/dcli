@@ -6,9 +6,6 @@ import 'package:meta/meta.dart';
 import 'package:validators2/validators.dart';
 
 import '../../dcli.dart';
-import '../settings.dart';
-import '../util/wait_for_ex.dart';
-import 'echo.dart';
 
 ///
 /// Reads a line of text from stdin with an optional prompt.
