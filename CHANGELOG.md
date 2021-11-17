@@ -1,3 +1,6 @@
+# 1.12.4
+- FIXED: stopped indentifyShell looping endlessly on docker when no shell is in the process tree.
+
 # 1.12.3
 - Fixed a bug when running under docker with no shell. loggedInUser was returning null. We now return 'root'. Hopefull this doesn't cause problems in other scenarios. If it does I think we can just add more shell types for specific scenarios.
 
