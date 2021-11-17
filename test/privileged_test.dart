@@ -13,7 +13,7 @@ void main() {
       expect(Shell.current.isPrivilegedUser, isTrue);
     },
     tags: [
-      'sudo',
+      'privileged',
     ],
   );
 

@@ -91,7 +91,7 @@ void main() {
       // we should never end up here.
       expect(true, isFalse);
     }
-  });
+  }, skip: Platform.isWindows);
 
   test(
     'loggedInUsersHome ...',

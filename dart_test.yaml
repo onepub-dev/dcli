@@ -1,3 +1,6 @@
 tags:
   # Tests that need to be run as sudo or administrator..
   privileged:
+
+  # Tests that need sudo to run
+  sudo: 
