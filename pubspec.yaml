@@ -28,6 +28,7 @@ dependencies:
   posix: ^2.2.1
   pub_semver: ^2.0.0
   pubspec: ^2.0.0
+  stacktrace_impl: ^2.0.1
   uuid: ^3.0.0
   validators2: ^3.0.0
   win32: ^2.1.0

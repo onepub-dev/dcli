@@ -3,11 +3,11 @@ import 'dart:math';
 
 import 'package:meta/meta.dart';
 import 'package:path/path.dart' as p;
+import 'package:stacktrace_impl/stacktrace_impl.dart';
 
 import '../../dcli.dart';
 import '../pubspec/pubspec.dart';
 import '../settings.dart';
-import '../util/stack_trace_impl.dart';
 import 'command_line_runner.dart';
 import 'dart_project.dart';
 import 'runner.dart';

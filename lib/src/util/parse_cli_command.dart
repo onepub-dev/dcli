@@ -6,7 +6,6 @@ import 'package:glob/glob.dart';
 import '../../dcli.dart';
 import '../script/command_line_runner.dart';
 import 'enum_helper.dart';
-import 'stack_list.dart';
 
 /// Class to parse a OS command, contained in a string, which we need to pass
 /// into the dart Process.start method as a application name and a series
