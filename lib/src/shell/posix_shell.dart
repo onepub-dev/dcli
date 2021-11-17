@@ -129,15 +129,16 @@ mixin PosixShell {
   }
 
   /// Run [action] with root UID and gid
-  void withPrivileges(RunPrivileged action) {
-    if (!Shell.current.isPrivilegedProcess) {
+  void withPrivileges(RunPrivileged action, {bool allowUnprivileged = false}) {
+    final startedPriviledged = Shell.current.isPrivilegedProcess;
+    if (!allowUnprivileged && !startedPriviledged) {
       throw ShellException(
         'You can only use withPrivileges when running as a privileged user.',
       );
     }
-    final privileged = geteuid() == 0;
+    final isprivileged = geteuid() == 0;
 
-    if (!privileged) {
+    if (!isprivileged && startedPriviledged) {
       restorePrivileges();
     }
 
@@ -145,7 +146,7 @@ mixin PosixShell {
 
     /// If the code was originally running privileged then
     /// we leave it as it was.
-    if (!privileged) {
+    if (!isprivileged && startedPriviledged) {
       releasePrivileges();
     }
   }

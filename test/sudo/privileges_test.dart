@@ -81,6 +81,18 @@ void main() {
     skip: Platform.isWindows,
   );
 
+  test('withPriviliges - allowUnpriviliged', () {
+    expect(() => Shell.current.withPrivileges(() {}),
+        throwsA(isA<ShellException>()));
+
+    try {
+      Shell.current.withPrivileges(() {}, allowUnprivileged: true);
+    } on ShellException catch (_) {
+      // we should never end up here.
+      expect(true, isFalse);
+    }
+  });
+
   test(
     'loggedInUsersHome ...',
     () async {

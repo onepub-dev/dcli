@@ -181,7 +181,8 @@ abstract class Shell {
   /// will run [action] with root privileges.
   ///
   /// If you attempt to call [withPrivileges] when not running
-  /// as a privileged process a [ShellException] will be thrown.
+  /// as a privileged process a [ShellException] will be thrown
+  /// unless the [allowUnprivileged] flag is set.
   ///
   /// Use [isPrivilegedProcess] to check if your script was started
   /// as a priviliged process.
@@ -194,7 +195,7 @@ abstract class Shell {
   /// See:
   ///  * [restorePrivileges]
   ///  * [releasePrivileges]
-  void withPrivileges(RunPrivileged action);
+  void withPrivileges(RunPrivileged action, {bool allowUnprivileged = false});
 
   /// Returns a message informing the user that they need to run
   /// as a priviledged user to run an app.
