@@ -1,3 +1,6 @@
+# 1.12.3
+- Fixed a bug when running under docker with no shell. loggedInUser was returning null. We now return 'root'. Hopefull this doesn't cause problems in other scenarios. If it does I think we can just add more shell types for specific scenarios.
+
 # 1.12.2
 - upgraded posix 2.2.1 for a bug fix.
 - Added option to withPriviliged to allow it to be called even when we aren't priviliged. This is to allow apps that can run with and without priviliges to run without complicated code paths.
