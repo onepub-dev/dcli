@@ -5,6 +5,7 @@ import 'create.dart';
 import 'doctor.dart';
 import 'help.dart';
 import 'install.dart';
+import 'pack.dart';
 import 'run.dart';
 import 'upgrade.dart';
 import 'version.dart';
@@ -20,6 +21,7 @@ class Commands {
         CreateCommand(),
         DoctorCommand(),
         InstallCommand(),
+        PackCommand(),
         RunCommand(),
         UpgradeCommand(),
         VersionCommand(),

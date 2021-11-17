@@ -91,9 +91,13 @@ void main() {
       final config = join(tmpDir, '.dart_tool', 'package_config.json');
 
       createDir(dirname(config), recursive: true);
+
+      touch(pubspec, create: true);
+
+      /// make certain the lock and config arn't created in the same millsecond.
+      sleep(10, interval: Interval.milliseconds);
       touch(lock, create: true);
       touch(config, create: true);
-      touch(pubspec, create: true);
 
       /// all good
       expect(DartSdk().isPubGetRequired(tmpDir), false);
@@ -117,15 +121,14 @@ void main() {
 
       // old lock
       touch(lock, create: true);
-      // access times are only to nearest second so force a difference.
-      sleep(2);
+      sleep(1000, interval: Interval.milliseconds);
       touch(pubspec);
       expect(DartSdk().isPubGetRequired(tmpDir), true);
 
       // old package_config.json
       touch(config, create: true);
       // access times are only to nearest second so force a difference.
-      sleep(2);
+      sleep(1000, interval: Interval.milliseconds);
       touch(pubspec);
       touch(lock, create: true);
 

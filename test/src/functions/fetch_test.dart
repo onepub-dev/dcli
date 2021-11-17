@@ -213,8 +213,15 @@ void main() {
             predicate<FetchException>(
               (e) =>
                   e is FetchException &&
-                  e.message.contains('No such host is known.') &&
-                  e.errorCode == 11001,
+
+                  /// we get different errors on windows and linux
+                  /// windows
+                  ((e.message.contains('No such host is known.') &&
+                          e.errorCode == 11001) ||
+
+                      ///linux
+                      (e.message.contains('Name or service not known') &&
+                          e.errorCode == -2)),
             ),
           ),
         );

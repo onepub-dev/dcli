@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:csv/csv.dart';
 import 'package:meta/meta.dart';
+import 'package:posix/posix.dart' hide read;
 
 import '../../dcli.dart';
 import '../settings.dart';
@@ -29,7 +30,7 @@ class ProcessHelper {
     }
   }
 
-  /// Gest the process name for the given pid
+  /// Get the process name for the given pid
   ///
   /// Throws an RunException exception if the name can't
   /// be obtained.
@@ -99,12 +100,12 @@ class ProcessHelper {
       /// not the current pid.
       /// The following will work on SOME linux platforms.
       /// https://gist.github.com/fclairamb/a16a4237c46440bdb172
-      // if (isPosixSupported) {
-      //   line = '${getppid()}';
-      // } else {
-      line = 'ps -p $childPid -o ppid='.firstLine;
-      verbose(() => 'ps: $line');
-//      }
+      if (isPosixSupported) {
+        line = '${getppid()}';
+      } else {
+        line = 'ps -p $childPid -o ppid='.firstLine;
+        verbose(() => 'ps: $line');
+      }
     } on ProcessException {
       // ps not supported on current OS
       line = '-1';

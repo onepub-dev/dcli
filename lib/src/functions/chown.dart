@@ -5,7 +5,7 @@ import 'package:posix/posix.dart' as posix;
 
 import '../../dcli.dart';
 
-/// Provides similar functionality to the posix chmod command.
+/// Provides similar functionality to the posix chown command.
 ///
 /// Changes the user or group ownership of [path].
 ///

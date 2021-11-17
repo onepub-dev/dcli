@@ -8,22 +8,19 @@ import 'package:posix/posix.dart';
 import 'package:test/test.dart';
 
 void main() {
-  setUp(() {
-    Settings().setVerbose(enabled: true);
-    if (!Shell.current.isPrivilegedUser) {
-      printerr(red('You must run this script with sudo.'));
-      printerr(
-        orange(
-          'To run this script with sudo you will first need to compile it.',
-        ),
-      );
-      exit(1);
-    }
-  });
-
   test(
     'isPrivileged',
     () {
+      if (!Shell.current.isPrivilegedUser) {
+        printerr(red('You must run this script with sudo.'));
+        printerr(
+          orange(
+            'To run this script with sudo you will first need to compile it.',
+          ),
+        );
+        exit(1);
+      }
+
       try {
         expect(Shell.current.isPrivilegedUser, isTrue);
         Settings().setVerbose(enabled: true);
@@ -84,6 +81,18 @@ void main() {
     skip: Platform.isWindows,
   );
 
+  test('withPriviliges - allowUnpriviliged', () {
+    expect(() => Shell.current.withPrivileges(() {}),
+        throwsA(isA<ShellException>()));
+
+    try {
+      Shell.current.withPrivileges(() {}, allowUnprivileged: true);
+    } on ShellException catch (_) {
+      // we should never end up here.
+      expect(true, isFalse);
+    }
+  });
+
   test(
     'loggedInUsersHome ...',
     () async {
@@ -91,6 +100,7 @@ void main() {
       print('sudo logged in user home =$home');
       expect((Shell.current as PosixShell).loggedInUsersHome, home);
     },
+    tags: ['sudo'],
     skip: Platform.isWindows,
   );
 
@@ -103,6 +113,7 @@ void main() {
         join((Shell.current as PosixShell).loggedInUsersHome, '.pub-cache'),
       );
     },
+    tags: ['sudo'],
     skip: Platform.isWindows,
   );
 }

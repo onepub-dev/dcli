@@ -71,15 +71,15 @@ void main() {
       final parsed = ParsedCliCommand(test, pwd);
 
       expect(parsed.cmd, equals('git'));
-      expect(parsed.args, equals(['log', '--pretty=format:"%s"', 'v1.0.45']));
+      expect(parsed.args, equals(['log', '--pretty=format:%s', 'v1.0.45']));
     });
 
     test('git commit --message="foo bar"', () {
-      const test = 'git commit --message="foo bar"';
+      const test = 'git commit --message="foo bar" "me"';
       final parsed = ParsedCliCommand(test, pwd);
 
       expect(parsed.cmd, equals('git'));
-      expect(parsed.args, equals(['commit', '--message="foo bar"']));
+      expect(parsed.args, equals(['commit', '--message=foo bar', 'me']));
     });
 
     test('escape git commit --message=foo^ bar', () {
@@ -101,6 +101,8 @@ void main() {
     test('ssh with quoted args', () {
       const command =
           'mkdir -p  /tmp/etc/openvpn; sudo cp -R /etc/openvpn/* /tmp/etc/openvpn';
+
+      // ignore: unnecessary_statements
 
       final cmdArgs = <String>[]
         ..clear()

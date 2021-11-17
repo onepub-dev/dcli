@@ -222,7 +222,7 @@ class DartProject {
   }
 
   /// Compiles all dart scripts in the project.
-  /// If you set[install] to true then each compiled script
+  /// If you set [install] to true then each compiled script
   /// is added to your PATH by copying it into ~/.dcli/bin.
   /// [install] defaults to false.
   ///

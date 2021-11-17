@@ -150,7 +150,8 @@ class UnknownShell with ShellMixin {
   bool get isPrivilegedUser => false;
 
   @override
-  String? get loggedInUser => null;
+  String? get loggedInUser =>
+      'root'; // handles running in Docker with no shell.
 
   @override
   String privilegesRequiredMessage(String app) =>
@@ -188,9 +189,13 @@ class UnknownShell with ShellMixin {
   }
 
   @override
-  void withPrivileges(RunPrivileged action) {
-    // no op.
-    verbose(() => 'releasePrivileges called on UnknownShell. ignored');
+  void withPrivileges(RunPrivileged action, {bool allowUnprivileged = false}) {
+    verbose(() => 'withPrivileges called on UnknownShell. '
+        'action called with no privilege changes.');
+
+    restorePrivileges();
+    action();
+    releasePrivileges();
   }
 
   @override
