@@ -1,3 +1,8 @@
+# 1.12.2
+- upgraded posix 2.2.1 for a bug fix.
+- Added option to withPriviliged to allow it to be called even when we aren't priviliged. This is to allow apps that can run with and without priviliges to run without complicated code paths.
+- Added progress messages to pack command.
+
 # 1.12.1
 - upgaded to posix 2.2.0
 - started using the posix getppid to get the parent pid so we less reliant 
