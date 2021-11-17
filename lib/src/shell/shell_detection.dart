@@ -77,8 +77,10 @@ class ShellDetection {
     Shell? shell;
     int? childPID = pid;
 
+    int? priorPID = -1;
+
     var firstPass = true;
-    while (shell == null) {
+    while (shell == null && childPID != priorPID) {
       final possiblePid = ProcessHelper().getParentPID(childPID);
 
       /// Check if we ran into the root process or we
@@ -121,6 +123,7 @@ class ShellDetection {
         shell = null;
       }
 
+      priorPID = childPID;
       childPID = possiblePid;
     }
 
