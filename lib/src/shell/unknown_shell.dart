@@ -190,8 +190,12 @@ class UnknownShell with ShellMixin {
 
   @override
   void withPrivileges(RunPrivileged action, {bool allowUnprivileged = false}) {
-    // no op.
-    verbose(() => 'releasePrivileges called on UnknownShell. ignored');
+    verbose(() => 'withPrivileges called on UnknownShell. '
+        'action called with no privilege changes.');
+
+    restorePrivileges();
+    action();
+    releasePrivileges();
   }
 
   @override
