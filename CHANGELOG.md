@@ -1,3 +1,8 @@
+# 1.12.1
+- upgaded to posix 2.2.0
+- started using the posix getppid to get the parent pid so we less reliant 
+  on the 'ps' command being installed.
+
 # 1.12.0
 - Added the ability for dcli to 'pack' resource files into an application.
 - Fixed waitForEx exception handling. It wasn't letting non DCliExceptions through.

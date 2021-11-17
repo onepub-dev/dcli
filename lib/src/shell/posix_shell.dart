@@ -191,6 +191,7 @@ mixin PosixShell {
   /// Symlink so dcli works under sudo.
   /// We use the location of dart exe and add dcli symlink
   /// to the same location.
+  // ignore: unused_element
   void _symlinkDCli(String dcliPath) {
     if (!Platform.isWindows) {
       final linkPath = join(dirname(DartSdk().pathToDartExe!), 'dcli');
