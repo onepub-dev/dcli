@@ -53,7 +53,7 @@ R withTempFile<R>(
 }) =>
     waitForEx(
       core.withTempFile(
-        action,
+        (f) async => action(f),
         suffix: suffix,
         pathToTempDir: pathToTempDir,
         create: create,
