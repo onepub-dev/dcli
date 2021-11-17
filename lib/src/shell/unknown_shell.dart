@@ -150,7 +150,8 @@ class UnknownShell with ShellMixin {
   bool get isPrivilegedUser => false;
 
   @override
-  String? get loggedInUser => null;
+  String? get loggedInUser =>
+      'root'; // handles running in Docker with no shell.
 
   @override
   String privilegesRequiredMessage(String app) =>
