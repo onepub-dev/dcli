@@ -1,0 +1,100 @@
+import '../../dcli.dart';
+import 'shell_mixin.dart';
+
+/// When running on Docker we are often proc1
+/// i.e. the one and only process running docker.
+/// There may not even be a shell present in the image.
+class DockerShell with ShellMixin, PosixShell {
+  /// Attached to a bash shell with the given pid.
+  DockerShell.withPid(this.pid);
+
+  /// Returns true if we are running in a docker shell
+  static late final bool inDocker = exists('/.dockerenv');
+
+  /// Name of the shell
+  static const String shellName = 'docker';
+
+  /// only user in docker is root.
+  @override
+  bool get isPrivilegedUser => true;
+
+  /// only user in docker is root.
+  @override
+  bool get isPrivilegedProcess => true;
+
+  @override
+  String get loggedInUser => 'root';
+
+  @override
+  String get loggedInUsersHome => '/root';
+
+  /// no op on docker as we are always root.
+  @override
+  void releasePrivileges() {}
+
+  /// no op on docker as we are always root.
+  @override
+  void restorePrivileges() {}
+
+  /// Run [action]
+  /// On docker we don't have to manipulate the privlieges as we
+  /// are aways root.
+  @override
+  void withPrivileges(RunPrivileged action, {bool allowUnprivileged = false}) {
+    action();
+  }
+
+  @override
+  String get installInstructions => 'Run: dcli install';
+
+  @override
+  final int? pid;
+
+  @override
+  bool get isCompletionSupported => false;
+
+  // no shell so no tab completion
+  @override
+  void installTabCompletion({bool quiet = false}) =>
+      throw UnsupportedError('Not supported in docker');
+
+  @override
+  @Deprecated('Use appendToPATH')
+  bool addToPATH(String path) => appendToPATH(path);
+
+  /// Appends the given path to the bash path if it isn't
+  /// already on the path.
+  @override
+  bool appendToPATH(String path) =>
+      throw UnsupportedError('Not supported in docker');
+
+  /// Prepends the given path to the bash path if it isn't
+  /// already on the path.
+  @override
+  bool prependToPATH(String path) =>
+      throw UnsupportedError('Not supported in docker');
+
+  /// Returns true if the dcil_complete has
+  /// been installed as a bash auto completer
+  @override
+  bool get isCompletionInstalled => false;
+
+  @override
+  String get name => shellName;
+
+  @override
+  bool get hasStartScript => false;
+
+  @override
+  String get startScriptName =>
+      throw UnsupportedError('Not supported in docker');
+
+  @override
+  String get pathToStartScript =>
+      throw UnsupportedError('Not supported in docker');
+
+  @override
+  void addFileAssocation(String dcliPath) {
+    /// no op
+  }
+}

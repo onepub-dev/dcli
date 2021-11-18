@@ -4,6 +4,7 @@ import '../../dcli.dart';
 import 'ash_shell.dart';
 import 'cmd_shell.dart';
 import 'dash_shell.dart';
+import 'docker_shell.dart';
 import 'fish_shell.dart';
 import 'power_shell.dart';
 import 'sh_shell.dart';
@@ -43,6 +44,7 @@ class ShellDetection {
     ShShell.shellName: (pid) => ShShell.withPid(pid),
     ZshShell.shellName: (pid) => ZshShell.withPid(pid),
     FishShell.shellName: (pid) => FishShell.withPid(pid),
+    DockerShell.shellName: (pid) => DockerShell.withPid(pid),
   };
 
   /// Attempts to identify the shell that
@@ -126,6 +128,13 @@ class ShellDetection {
     /// If we didn't find a shell then use firstShell.
     shell ??= firstShell;
     childPID ??= firstPid;
+
+    /// are we running docker?
+    /// We leave this check until then end as we may find an actual
+    /// shell even on Docker.
+    if (DockerShell.inDocker) {
+      shell = DockerShell.withPid(pid);
+    }
 
     /// if things are really sad.
     shell ??= UnknownShell.withPid(childPID);
