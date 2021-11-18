@@ -5,7 +5,7 @@ documentation: https://dcli.noojee.dev
 description: An API and dev environment for writing console (cli) apps/scripts using dart. e.g. allows you to build bash style scripts with dart.
 repository: https://github.com/noojee/dcli
 environment: 
-  sdk: '>=2.16.0-15.0.dev <3.0.0'
+  sdk: '>=2.14.0 <3.0.0'
 dependencies: 
   archive: ^3.0.0
   args: ^2.0.0
@@ -37,8 +37,8 @@ dependencies:
 dependency_overrides:
   dcli_core:
     path: ../dcli_core
-  posix: 
-    path: ../dart_posix
+  # posix: 
+  #   path: ../dart_posix
 
 
 dev_dependencies: 
