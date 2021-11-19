@@ -18,7 +18,6 @@ void main() {
             'To run this script with sudo you will first need to compile it.',
           ),
         );
-        exit(1);
       }
 
       try {

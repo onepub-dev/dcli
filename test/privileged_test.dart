@@ -12,6 +12,7 @@ void main() {
       Shell.current.restorePrivileges();
       expect(Shell.current.isPrivilegedUser, isTrue);
     },
+    skip: true,
     tags: [
       'privileged',
     ],

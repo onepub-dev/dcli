@@ -1,3 +1,41 @@
+# 1.13.0
+Dispite the version no. this is a major update to dcli.
+
+Whilst there are few changes to the dcli api this is the first version that relies on dcli_core.
+
+DCli Core is a new library that now holds asynchronous version of many of the functions exposed by DCli as synchrouns functions.
+
+The original premise behind dcli was that the api should be fully synchronous to avoid developers having to deal with futures and awaits which in CLI apps offered little advantage and lots of pain.
+
+A number of user however have asked for async version of some of the functions we expose hence the creation of DCli Core.
+
+DCli Core is fully async and does not use waitFor.
+This means that it can be used in any dart project that supports dart:io.
+
+This means that you can now use DCli Core in a flutter app.
+
+As flutter web doesn't support dart:io you can't use DCli core in a flutter web app.
+
+This version of DCli includes a very early version of DCli core so some caution is advised.
+
+As result of work done to create DCli Core we have achived significant performance improvements with the find function which previously was unable to scan a full disk without running out of ram. This is no longer an issue.
+
+- Added in shell detection for a fake docker shell to handle when we are running as proc 1 in docker and no shell actually exists. The DockerShell provides sensible defaults.
+- Moved to using the stacktrace_impl package.
+- FIXED: the unknownShell was not calling the action on withPrivileges. It can do anything about the priviliges but there is no reason to not call the action.  This issue came up within docker that calls the exe without a shell.
+- Added support for an escape character '^' in command lines as well as bringing the treament of quotes in line with how bash treats quotes that appear in a word. --name="fred" is now parsed as a single word rather than three separate words.
+- Documented TailProgress methods.
+- Documented FetchProgress members.
+- experiment changing which to use a Stream rather than a callback.
+- Given we require at least one option to be passed, change the menu function to return the first option (when no terminal attached) and no defaultOption provided rather than throwing an ArgumentError as in most cases the first option is probably the most common one to be selected.
+- exposed win32.dart from windows.dart 
+- Change to directly altering the Windows registry for the dart file association for dcli rather than using ftype and assoc.
+- Added regKeyExists and regKeyCreate to registry.dart.
+- Added the ability for the fetch command to 'post' data using a FetchData object to descrirbe the data to be sent.
+- Fixed bug where a no. of registry methods were failing to pass down the accessRights. Added 'defaultRegistryKey' to facilitate adding values to the (Default) valueName. Added method to set a value using REG_NONE.
+- Documented the fetch headers.
+- Added support for sending headers to fetch.
+
 # 1.12.4
 - FIXED: stopped indentifyShell looping endlessly on docker when no shell is in the process tree.
 

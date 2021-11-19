@@ -138,8 +138,7 @@ void main() {
       () => validator.validate('a'),
       throwsA(
         predicate<AskValidatorException>(
-          (e) =>
-              e.message == red('Invalid integer.'),
+          (e) => e.message == red('Invalid integer.'),
         ),
       ),
     );

@@ -2,21 +2,20 @@
 import 'package:dcli/dcli.dart';
 
 /// GENERATED -- GENERATED
-/// 
+///
 /// DO NOT MODIFIY
-/// 
+///
 /// This script is generated via tool/build_templates.dart which is
 /// called by pub_release (whicih runs any scripts in the  tool/pre_release_hook directory)
-/// 
+///
 /// GENERATED - GENERATED
 
 class TemplateExpander {
-    
-    /// Creates a template expander that will expand its files int [targetPath]
-    TemplateExpander(this.targetPath);
+  /// Creates a template expander that will expand its files int [targetPath]
+  TemplateExpander(this.targetPath);
 
-    /// The path the templates will be expanded into.
-    String targetPath;
+  /// The path the templates will be expanded into.
+  String targetPath;
 
   /// Expander for cmd_args
   // ignore: non_constant_identifier_names
@@ -28,7 +27,6 @@ class TemplateExpander {
 
 import 'dart:io';
 
-import 'package:args/args.dart';
 // ignore: prefer_relative_imports
 import 'package:dcli/dcli.dart';
 
@@ -136,7 +134,7 @@ environment:
   sdk: '>=2.14.1 <3.0.0'
 dependencies: 
   args: ^2.0.0
-  dcli: ^1.12.0
+  dcli: ^1.13.0
   path: ^1.8.0
 
 dev_dependencies:
@@ -156,7 +154,6 @@ dev_dependencies:
 
 import 'dart:io';
 
-import 'package:args/args.dart';
 
 // ignore: prefer_relative_imports
 import 'package:dcli/dcli.dart';
