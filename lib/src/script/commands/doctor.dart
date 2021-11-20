@@ -86,11 +86,7 @@ class DoctorCommand extends Command {
 
     if (shell.hasStartScript) {
       final startScriptPath = shell.pathToStartScript;
-      if (startScriptPath == null) {
-        _colprint(['Start script', privatePath(startScriptPath!)]);
-      } else {
-        _colprint(['Start script', 'not found']);
-      }
+      _colprint(['Start script', privatePath(startScriptPath ?? 'not found')]);
     } else {
       _colprint(['Start sript', 'not supported by shell']);
     }
@@ -104,11 +100,10 @@ class DoctorCommand extends Command {
   }
 
   void _printPackageConfig() {
-    if (Platform.packageConfig == null) {
-      _colprint(['package config', 'not passed']);
-    } else {
-      _colprint(['package config', privatePath(Platform.packageConfig!)]);
-    }
+    _colprint([
+      'package config',
+      privatePath(Platform.packageConfig ?? 'not passed')
+    ]);
   }
 
   void _printPubCache() {
@@ -126,12 +121,14 @@ class DoctorCommand extends Command {
       'dcli path',
       if (pathToDCli == null) 'Not found' else privatePath(pathToDCli)
     ]);
-    _colprint(['dart exe path', privatePath(DartSdk().pathToDartExe!)]);
-    final dartPath = which(DartSdk.dartExeName).path!;
+    _colprint(
+        ['dart exe path', privatePath(DartSdk().pathToDartExe ?? 'not found')]);
+
+    final dartPath = which(DartSdk.dartExeName).path;
     _colprint([
       'dart path',
-      privatePath(DartSdk().pathToDartExe!),
-      'which: ${privatePath(dartPath)}'
+      privatePath(DartSdk().pathToDartExe ?? 'not found'),
+      'which: ${privatePath(dartPath ?? 'not found')}'
     ]);
 
     if (DartSdk().useDartCommand) {
@@ -143,7 +140,7 @@ class DoctorCommand extends Command {
       if (dart2NativePath != null) {
         _colprint([
           'dart2Native path',
-          privatePath(DartSdk().pathToDartToNativeExe!),
+          privatePath(DartSdk().pathToDartToNativeExe ?? 'not found'),
           'which: ${privatePath(dart2NativePath)}'
         ]);
       } else {
@@ -163,7 +160,7 @@ class DoctorCommand extends Command {
       if (pubPath != null) {
         _colprint([
           'pub path',
-          privatePath(DartSdk().pathToPubExe!),
+          privatePath(DartSdk().pathToPubExe ?? 'not found'),
           'which: ${privatePath(pubPath)}'
         ]);
       } else {

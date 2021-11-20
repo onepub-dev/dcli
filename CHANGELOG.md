@@ -1,3 +1,6 @@
+# 1.13.1
+- Fixes: 171 CastError running dcli doctor
+
 # 1.13.0
 Dispite the version no. this is a major update to dcli.
 
