@@ -97,6 +97,8 @@ class Resources {
   /// Encode and write the resource into a dart library.
   _Resource _packResource(
       String pathToResource, String pathToGeneratedLibrary, String className) {
+    final resource =
+        _Resource(pathToResource, pathToGeneratedLibrary, className);
     final to = File(pathToGeneratedLibrary).openWrite();
     try {
       /// write the header
@@ -136,18 +138,44 @@ class $className extends PackedResource {
       }
 
       /// Write the tail
-      to.write(
-        '''
+      to
+        ..write('''
   \'\'\');
+  ''')
+        // write the checksum
+        ..write('''
+
+  /// A hash of the resource (pre packed) calculated by
+  /// [calculateHash].
+  /// This hash can be used to check if the resource needs to
+  /// be updated on the target system.
+  /// Use :
+  /// ```dart
+  ///   calculateHash(pathToResource).hexEncode() == packResource.checksum
+  /// ```
+  /// to compare the checksum of the local file with 
+  /// this checksum
+  static const checksum 
+    = '${resource.checksum}';
+  ''')
+        ..write('''
+  
+  /// <package>/resources relative path to the original resource.
+  static const originalPath = '${relative(resource.pathToSource, from: resourceRoot)}';
+  ''')
+
+        /// close the class
+        ..write('''
+
 }
-    ''',
-      );
+''');
+
       waitForEx<dynamic>(to.flush());
     } finally {
       to.close();
     }
 
-    return _Resource(pathToResource, pathToGeneratedLibrary, className);
+    return resource;
   }
 
   bool _isAlpha(int char) =>
@@ -221,7 +249,7 @@ class ResourceRegistry {
   /// ResourceRegistry.resources['rules.yaml']
   ///     .unpack(join(HOME, '.mysettings', 'rules.yaml'));
   /// ```
-  static const Map<String, PackedResource> resources = {
+  static const resources = <String, PackedResource>{
 ''',
         );
       }
@@ -431,7 +459,8 @@ class PackedResource {
 }
 
 class _Resource {
-  _Resource(this.pathToSource, String pathToGeneratedLibrary, this.className) {
+  _Resource(this.pathToSource, String pathToGeneratedLibrary, this.className)
+      : checksum = calculateHash(pathToSource).hexEncode() {
     this.pathToGeneratedLibrary = relative(pathToGeneratedLibrary,
         from: join(DartProject.self.pathToProjectRoot, 'lib'));
   }
@@ -445,6 +474,14 @@ class _Resource {
 
   /// the generated class name used for this resource.
   final String className;
+
+  /// A hash of the resource (pre packed) calculated by
+  /// [calculateHash].
+  /// This has can be used to check if the resource needs to
+  /// be updated on the target system.
+  /// Use calculateHash(pathToResource).hexEncode()
+  /// to compare the checksum
+  final String checksum;
 }
 
 /// Thrown when an error occurs trying to pack or unpack a resource file
