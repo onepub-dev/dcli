@@ -1,3 +1,6 @@
+# 1.13.2
+- FIX: #173  move wasn't passing the overwrite flag down.
+
 # 1.13.1
 - Fixes: 171 CastError running dcli doctor
 
