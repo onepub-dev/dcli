@@ -6,7 +6,7 @@ import 'package:crypto/crypto.dart';
 /// to provide hex encoder/decoder
 extension DigestHelper on Digest {
   /// Encode a digest to a hex string.
-  String hexEncode(List<int> bytes) => hex.encode(bytes);
+  String hexEncode() => hex.encode(bytes);
 
   /// Decodes a string that contains a hexidecimal value
   /// into a digest.
