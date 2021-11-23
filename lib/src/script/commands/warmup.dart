@@ -54,7 +54,7 @@ class WarmupCommand extends Command {
 
   @override
   String description() => '''
-Runs pub upgrade on the given directory.
+Runs pub get on the given project.
    If no directory is passed then the current directory is warmed up.''';
 
   @override
