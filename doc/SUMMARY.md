@@ -74,7 +74,8 @@
 
 ## Examples
 
-* [Index](examples/overview/README.md)
+* [Projects](examples/projects.md)
+* [Code](examples/overview/README.md)
   * [hello world.](examples/overview/hello-world..md)
   * [dcompress](examples/overview/dcompress.md)
   * [dpath](examples/overview/dpath.md)
