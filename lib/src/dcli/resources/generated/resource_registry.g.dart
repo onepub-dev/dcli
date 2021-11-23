@@ -1,7 +1,7 @@
 // ignore: prefer_relative_imports
 import 'package:dcli/dcli.dart';
-import 'Aaaacaabfeed.g.dart';
-import 'Fbcbcbebbbbfbcdff.g.dart';
+import 'Bcdcbfcfdbeee.g.dart';
+import 'Dfcbdefdf.g.dart';
 
 /// GENERATED -- GENERATED
 /// 
@@ -22,8 +22,8 @@ class ResourceRegistry {
   ///     .unpack(join(HOME, '.mysettings', 'rules.yaml'));
   /// ```
   static const resources = <String, PackedResource>{
-      'test.me' : Aaaacaabfeed(),
-            'PXL_20211104_224740653.jpg' : Fbcbcbebbbbfbcdff(),
+      'PXL_20211104_224740653.jpg' : Bcdcbfcfdbeee(),
+            'test.me' : Dfcbdefdf(),
           };
   }
   
