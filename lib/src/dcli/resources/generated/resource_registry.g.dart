@@ -1,7 +1,6 @@
 // ignore: prefer_relative_imports
 import 'package:dcli/dcli.dart';
-import 'Bcdcbfcfdbeee.g.dart';
-import 'Dfcbdefdf.g.dart';
+import 'Becaddcadee.g.dart';
 
 /// GENERATED -- GENERATED
 /// 
@@ -22,8 +21,7 @@ class ResourceRegistry {
   ///     .unpack(join(HOME, '.mysettings', 'rules.yaml'));
   /// ```
   static const resources = <String, PackedResource>{
-      'PXL_20211104_224740653.jpg' : Bcdcbfcfdbeee(),
-            'test.me' : Dfcbdefdf(),
+      'test.me' : Becaddcadee(),
           };
   }
   
