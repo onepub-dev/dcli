@@ -1,3 +1,8 @@
+# 1.13.4
+- Fixed: #178 when creating a project with a script that contains a path we were doubling up the path name.
+- documented each of the PackedResource fields.
+- re-ordered the fields in the generated packed resource libraries so that the checksum and the resourcepath are at the top and therefor easier to find.
+
 # 1.13.3
 - Fix: #172 Changed the doco on warmup to indicate that it does a pub get. For the moment I've left the warmup command intact but will consider removing it.
 - Fix: #178 when creating a script which include a directory in the path. If the path didn't exist an exception would be thrown. We now test if the dir exists and print an appropriate error.
