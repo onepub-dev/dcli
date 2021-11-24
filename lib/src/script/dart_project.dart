@@ -302,6 +302,7 @@ class DartProject {
     required String templatePath,
     required String pathToScript,
   }) {
+    verbose(() => '_createFromTemplate $templatePath $pathToScript');
     if (!exists(templatePath)) {
       throw TemplateNotFoundException(templatePath);
     }
@@ -363,10 +364,14 @@ class DartProject {
     String scriptName, {
     String templateName = 'basic.dart',
   }) {
+    verbose(() =>
+        'createScript scriptName: $scriptName projectRoot: $pathToProjectRoot');
     if (!scriptName.endsWith('.dart')) {
       throw DartProjectException('scriptName must end with .dart');
     }
-    final pathToScript = join(pathToProjectRoot, scriptName);
+    final pathToScript = join(pathToProjectRoot, basename(scriptName));
+    verbose(() => 'pathToScript $pathToScript');
+
     _createFromTemplate(
       templatePath: join(Settings().pathToTemplate, templateName),
       pathToScript: pathToScript,
