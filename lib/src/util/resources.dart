@@ -300,10 +300,20 @@ abstract class PackedResource {
   /// the given b64encoded content.
   const PackedResource();
 
+  /// The base64 encoded contents of the packed file.
   String get content;
 
+  /// The checksum of the original file.
+  /// You can use this value to see if packed file
+  /// is different to a local file without having to unpack
+  /// it.
+  /// ```dart
+  /// calculateHash('/path/to/local/file') == checksum
+  /// ```
   String get checksum;
 
+  /// The path to the original file relative to the
+  /// packages resource directory.
   String get originalPath;
 
   /// Unpacks a resource saving it
