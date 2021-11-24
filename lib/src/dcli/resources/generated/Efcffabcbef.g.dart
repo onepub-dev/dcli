@@ -2,18 +2,17 @@
 import 'package:dcli/dcli.dart';
 
 /// GENERATED -- GENERATED
-///
+/// 
 /// DO NOT MODIFIY
-///
+/// 
 /// This script is generated via [Resource.pack()].
-///
+/// 
 /// GENERATED - GENERATED
 
-class Aaaacaabfeed extends PackedResource {
+class Efcffabcbef extends PackedResource {
+
   /// PackedResource - test.me
-  const Aaaacaabfeed() : super('''
-SGVsbG93IHdvcmxkLgo=
-  ''');
+  const Efcffabcbef();
 
   /// A hash of the resource (pre packed) calculated by
   /// [calculateHash].
@@ -23,11 +22,20 @@ SGVsbG93IHdvcmxkLgo=
   /// ```dart
   ///   calculateHash(pathToResource).hexEncode() == packResource.checksum
   /// ```
-  /// to compare the checksum of the local file with
+  /// to compare the checksum of the local file with 
   /// this checksum
-  static const checksum =
-      '9f75827b045ab3b3263fc817e9153abbff2389a68a01703da7ffea9f088e4bca';
-
-  /// package relative path to the original resource.
-  static const originalPath = 'test.me';
+  @override
+  String get checksum 
+    => 'daa10f035dfc5291ae7c76bcbd44d17deb9a1304fb9d9894cb945ed2b43ab072';
+    
+  /// <package>/resources relative path to the original resource.
+  @override
+  String get originalPath => 'test.me';
+  
+  @override
+  String get content => 
+     '''
+SGVsbG93IHdvcmxkLg0K
+  ''';
+  
 }
