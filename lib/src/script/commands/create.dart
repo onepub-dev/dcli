@@ -107,10 +107,9 @@ class CreateCommand extends Command {
     }
 
     /// check the script directory exists
-    if (!exists(dirname(scriptPath)))
-    {
+    if (!exists(dirname(scriptPath))) {
       throw InvalidArguments('The script directory '
-      '${truepath(dirname(scriptPath))} must already exist.');
+          '${truepath(dirname(scriptPath))} must already exist.');
     }
     return arguments[0];
   }
