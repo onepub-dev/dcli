@@ -1,3 +1,10 @@
+# 1.13.3
+- Fix: #172 Changed the doco on warmup to indicate that it does a pub get. For the moment I've left the warmup command intact but will consider removing it.
+- Fix: #178 when creating a script which include a directory in the path. If the path didn't exist an exception would be thrown. We now test if the dir exists and print an appropriate error.
+- Added a file checksum and original path to the PackedResource. The checksum allows the user to easily determine of the unpacked resource needs to be updated. Added the name of the original resource to the packed resource to make it easy to identify the origin of the packed resource.
+- Fixed the signature on the DigestHelper.hexEncode method as we do not need to pass a byte list as the Digets already has it.
+- reduced generated line to < 80 chars.
+
 # 1.13.2
 - FIX: #173  move wasn't passing the overwrite flag down.
 
