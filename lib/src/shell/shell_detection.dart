@@ -2,10 +2,8 @@ import 'dart:io';
 
 import '../../dcli.dart';
 import '../../posix.dart';
-import 'cmd_shell.dart';
+import '../../windows.dart';
 import 'docker_shell.dart';
-import 'fish_shell.dart';
-import 'power_shell.dart';
 import 'shell_mixin.dart';
 
 /// The project:

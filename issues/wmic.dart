@@ -1,5 +1,4 @@
 import 'package:dcli/dcli.dart';
-import 'package:dcli/src/util/string_as_process.dart';
 
 void main(List<String> args) {
   Settings().setVerbose(enabled: true);

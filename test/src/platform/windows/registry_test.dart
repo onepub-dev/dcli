@@ -3,7 +3,6 @@
 import 'dart:io';
 
 import 'package:dcli/dcli.dart' hide equals;
-import 'package:dcli/src/shell/power_shell.dart';
 import 'package:dcli/windows.dart';
 import 'package:test/test.dart';
 
