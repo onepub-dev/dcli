@@ -72,8 +72,6 @@ export 'package:path/path.dart'
 export 'src/functions/ask.dart';
 export 'src/functions/backup.dart';
 export 'src/functions/cat.dart' show cat, CatException;
-export 'src/functions/chmod.dart' show chmod, ChModException;
-export 'src/functions/chown.dart' show chown, ChOwnException;
 export 'src/functions/copy.dart' show copy, CopyException;
 export 'src/functions/copy_tree.dart' show copyTree;
 export 'src/functions/create_dir.dart'
@@ -113,11 +111,8 @@ export 'src/script/dart_project.dart';
 export 'src/script/dart_script.dart' show DartScript;
 export 'src/script/dart_sdk.dart' show DartSdk;
 export 'src/settings.dart' show Settings, verbose;
-export 'src/shell/bash_shell.dart';
-export 'src/shell/posix_shell.dart';
 export 'src/shell/shell.dart';
 export 'src/shell/unknown_shell.dart';
-export 'src/shell/zsh_shell.dart';
 export 'src/util/ansi.dart';
 export 'src/util/ansi_color.dart';
 export 'src/util/assets.dart';

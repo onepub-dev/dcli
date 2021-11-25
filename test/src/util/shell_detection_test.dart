@@ -1,6 +1,7 @@
 @Timeout(Duration(minutes: 5))
 import 'dart:io';
 import 'package:dcli/dcli.dart' hide equals;
+import 'package:dcli/posix.dart';
 import 'package:dcli/src/shell/cmd_shell.dart';
 import 'package:test/test.dart';
 

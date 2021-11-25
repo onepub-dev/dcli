@@ -3,6 +3,7 @@
 import 'dart:io';
 
 import 'package:dcli/dcli.dart';
+import 'package:dcli/posix.dart';
 
 import 'package:posix/posix.dart';
 import 'package:test/test.dart';

@@ -1,5 +1,5 @@
 import '../../dcli.dart';
-
+import '../../posix.dart';
 import 'shell_mixin.dart';
 
 /// Provides a number of helper functions

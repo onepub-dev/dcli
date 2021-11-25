@@ -1,4 +1,5 @@
 import 'package:dcli/dcli.dart' hide equals;
+import 'package:dcli/posix.dart';
 import 'package:path/path.dart' as p;
 import 'package:test/test.dart';
 

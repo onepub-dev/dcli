@@ -1,4 +1,5 @@
 import '../../dcli.dart';
+import 'posix_shell.dart';
 import 'shell_mixin.dart';
 
 /// When running on Docker we are often proc1

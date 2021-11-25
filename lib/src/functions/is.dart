@@ -129,7 +129,7 @@ class _Is extends DCliFunction {
 
     if (Platform.isWindows) {
       throw UnsupportedError(
-        'isMemberOfGroup is not Not currently supported on windows',
+        'permission checks are not Not currently supported on windows',
       );
     }
 

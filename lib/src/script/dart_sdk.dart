@@ -5,6 +5,7 @@ import 'package:meta/meta.dart';
 import 'package:pub_semver/pub_semver.dart';
 
 import '../../dcli.dart';
+import '../../posix.dart';
 import '../util/enum_helper.dart';
 import '../util/runnable_process.dart';
 import 'commands/install.dart';

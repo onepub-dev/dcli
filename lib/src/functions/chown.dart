@@ -1,7 +1,7 @@
 import 'dart:io';
 
 import 'package:dcli_core/dcli_core.dart' as core;
-import 'package:posix/posix.dart' as posix;
+import 'package:posix/posix.dart' as _posix;
 
 import '../../dcli.dart';
 
@@ -29,7 +29,7 @@ import '../../dcli.dart';
 void chown(String path, {String? user, String? group, bool recursive = true}) =>
     _ChOwn()._chown(path, user: user, group: group, recursive: recursive);
 
-/// Implementatio for [chmod] function.
+/// Implementatio for [chown] function.
 class _ChOwn extends core.DCliFunction {
 // this.user, this.group, this.other, this.path
 
@@ -52,13 +52,13 @@ class _ChOwn extends core.DCliFunction {
       );
     }
 
-    final passwd = posix.getpwnam(user);
-    final pgroup = posix.getgrnam(group);
+    final passwd = _posix.getpwnam(user);
+    final pgroup = _posix.getgrnam(group);
     if (isDirectory(path) && recursive) {
       find('*', includeHidden: true, workingDirectory: path)
-          .forEach((file) => posix.chown(path, passwd.uid, pgroup.gid));
+          .forEach((file) => _posix.chown(path, passwd.uid, pgroup.gid));
     } else {
-      posix.chown(path, passwd.uid, pgroup.gid);
+      _posix.chown(path, passwd.uid, pgroup.gid);
     }
   }
 }

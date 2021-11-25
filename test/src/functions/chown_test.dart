@@ -1,4 +1,5 @@
 import 'package:dcli/dcli.dart';
+import 'package:dcli/posix.dart';
 import 'package:test/test.dart';
 
 void main() {
