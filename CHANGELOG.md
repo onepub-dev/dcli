@@ -1,3 +1,7 @@
+# 1.13.5
+- Added windows specific shells to windows.dart barrel file.
+- Move posix specific methods into separate barrel file posix.dart so that users are concious of the fact they are using a posix specific method.
+
 # 1.13.4
 - Fixed: #178 when creating a project with a script that contains a path we were doubling up the path name.
 - documented each of the PackedResource fields.
