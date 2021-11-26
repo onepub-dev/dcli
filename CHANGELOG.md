@@ -1,3 +1,6 @@
+# 1.13.6
+- Added firstLine to FindProgress for backward compatiblity with the original Progress.
+
 # 1.13.5
 - Added windows specific shells to windows.dart barrel file.
 - Move posix specific methods into separate barrel file posix.dart so that users are concious of the fact they are using a posix specific method.
