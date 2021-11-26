@@ -160,11 +160,20 @@ class FindProgress extends InternalProgress {
   /// If you need to perform async operations you should use
   ///  [core.find].
   @override
-  void forEach(LineAction action) {
+  void forEach(LineAction action) => _forEach((line) {
+        action(line);
+        return true;
+      });
+
+  /// Internal method so we can cancel the stream.
+  void _forEach(CancelableLineAction action) {
     final controller = StreamController<FindItem>();
     try {
-      controller.stream.listen((item) async {
-        action(item.pathTo);
+      late StreamSubscription<FindItem> sub;
+      sub = controller.stream.listen((item) async {
+        if (!action(item.pathTo)) {
+          await sub.cancel();
+        }
       });
 
       waitForEx(
@@ -181,5 +190,16 @@ class FindProgress extends InternalProgress {
     } finally {
       waitForEx<void>(controller.close());
     }
+  }
+
+  /// Returns the first line from the command or
+  /// null if no lines where returned
+  String? get firstLine {
+    String? first;
+    _forEach((line) {
+      first ??= line;
+      return false;
+    });
+    return first;
   }
 }
