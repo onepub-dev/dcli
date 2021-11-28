@@ -19,7 +19,7 @@ import 'runnable_process.dart';
 ///
 extension StringAsProcess on String {
   /// Allows you to execute the contents of a dart string as a
-  /// command line appliation.
+  /// command line application.
   /// Any output from the command  (stderr and stdout) is displayed
   ///  on the console.
   ///
@@ -88,7 +88,7 @@ extension StringAsProcess on String {
   /// Runs the given string as a command in the OS shell.
   ///
   /// Allows you to execute the contents of a dart string as a
-  /// command line appliation within an OS shell (e.g. bash).
+  /// command line application within an OS shell (e.g. bash).
   /// The application is run as a fully attached child process.
   ///
   /// DCli performs Glob expansion on command arguments. See [run] for details.
@@ -157,7 +157,7 @@ extension StringAsProcess on String {
   /// argument to true. On Linux this equates to using the sudo command.
   /// The advantage of using the 'privileged' option is that it will first
   /// check if you are
-  /// already running in a privileged environment. This is extremly useful
+  /// already running in a privileged environment. This is extremely useful
   ///  if you
   /// are running in the likes of a Docker container that doesn't implement
   /// sudo but
@@ -479,7 +479,7 @@ extension StringAsProcess on String {
   }
 
   /// The classic bash style pipe operator.
-  /// Allows you to chain mulitple processes by piping the output
+  /// Allows you to chain multiple processes by piping the output
   /// of the left hand process to the input of the right hand process.
   ///
   /// DCli performs Glob expansion on command arguments. See [run] for details.
@@ -506,7 +506,7 @@ extension StringAsProcess on String {
     return Pipe(lhsRunnable, rhsRunnable);
   }
 
-  // // /// Experiemental - DO NOT USE
+  // // /// Experimental - DO NOT USE
   // // Stream<String> get stream {
   // //   var lhsRunnable = RunnableProcess.fromCommandLine(this);
   // //   lhsRunnable.start(waitForStart: false);
@@ -522,7 +522,7 @@ extension StringAsProcess on String {
   //   runnable.run(runInShell: runInShell, nothrow: nothrow, terminal: false);
   //   return runnable.stream.transform(utf8.decoder);
   // }
-  /// Experiemental - allows you to get a stream of the output written by the
+  /// Experimental - allows you to get a stream of the output written by the
   /// called process.
   Stream<String> stream({
     bool runInShell = false,
@@ -545,14 +545,14 @@ extension StringAsProcess on String {
     return progress.stream;
   }
 
-  /// Experiemental - DO NOT USE
+  /// Experimental - DO NOT USE
   Sink get sink {
     final lhsRunnable = RunnableProcess.fromCommandLine(this)
       ..start(waitForStart: false);
     return lhsRunnable.sink;
   }
 
-  /// Experiemental - DO NOT USE
+  /// Experimental - DO NOT USE
   RunnableProcess get process {
     final process = RunnableProcess.fromCommandLine(this)
       ..start(waitForStart: false);
