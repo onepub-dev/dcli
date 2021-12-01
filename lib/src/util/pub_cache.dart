@@ -142,11 +142,11 @@ class PubCache {
       join(_pubCachePath, 'hosted', 'pub.dartlang.org');
 
   /// Returns the path to the package in .pub-cache for the dart
-  /// project named [name] for the version [version].
+  /// project named [packageName] for the version [version].
   /// e.g.
   /// ~/.pub-cache/hosted/pub.dartlang.org/dswitch-4.0.1
-  String pathToPackage(String name, String version) =>
-      join(pathToDartLang, '$name-$version');
+  String pathToPackage(String packageName, String version) =>
+      join(pathToDartLang, '$packageName-$version');
 
   /// Finds and returns the latest (non-pre-release) version installed into pub
   /// cache for the given package.
@@ -181,10 +181,10 @@ class PubCache {
     return primary;
   }
 
-  /// Run dart pub global activate on the given [package].
-  void globalActivate(String package) {
+  /// Run dart pub global activate on the given [packageName].
+  void globalActivate(String packageName) {
     DartSdk().runPub(
-      args: ['global', 'activate', package],
+      args: ['global', 'activate', packageName],
       progress: Progress.printStdErr(),
     );
   }
@@ -198,17 +198,27 @@ class PubCache {
     );
   }
 
-  /// Run dart pub global deactivate on the given [package].
-  void globalDeactivate(String package) {
+  /// Run dart pub global deactivate on the given [packageName].
+  void globalDeactivate(String packageName) {
     DartSdk().runPub(
-      args: ['global', 'deactivate', package],
+      args: ['global', 'deactivate', packageName],
       progress: Progress.printStdErr(),
     );
   }
 
   /// returns true if the given package has been globally activated
-  bool isGloballyActivated(String package) =>
-      exists(join(PubCache().pathToBin, package));
+  bool isGloballyActivated(String packageName) {
+    const notFound = r'123!!23172@@#$!@!#';
+
+    /// run pub global list to see if dcli is run from a local path.
+    final line = DartSdk()
+        .runPub(args: ['global', 'list'], progress: Progress.capture())
+        .lines
+        .firstWhere((line) => line.startsWith(packageName),
+            orElse: () => notFound);
+
+    return line.contains(packageName);
+  }
 
   /// Returns true if the the dart project [packageName]
   /// is running from local source.
