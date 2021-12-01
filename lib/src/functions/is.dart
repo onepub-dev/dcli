@@ -13,7 +13,7 @@ import '../../dcli.dart';
 /// ```dart
 /// isFile("~/fred.jpg");
 /// ```
-bool isFile(String path) => waitForEx(core.isFile(path));
+bool isFile(String path) => core.isFile(path);
 
 /// Returns true if the given [path] is a directory.
 ///
@@ -23,14 +23,14 @@ bool isFile(String path) => waitForEx(core.isFile(path));
 /// isDirectory("/tmp");
 ///
 /// ```
-bool isDirectory(String path) => waitForEx(core.isDirectory(path));
+bool isDirectory(String path) => core.isDirectory(path);
 
 /// Returns true if the given [path] is a symlink
 ///
 /// // ```dart
 /// isLink("~/fred.jpg");
 /// ```
-bool isLink(String path) => waitForEx(core.isLink(path));
+bool isLink(String path) => core.isLink(path);
 
 /// Returns true if the given path exists.
 /// It may be a file, directory or link.
@@ -53,7 +53,7 @@ bool isLink(String path) => waitForEx(core.isLink(path));
 ///  * [isDirectory]
 ///  * [isFile]
 bool exists(String path, {bool followLinks = true}) =>
-    waitForEx(core.exists(path, followLinks: followLinks));
+    core.exists(path, followLinks: followLinks);
 
 /// Returns the datetime the path was last modified
 ///
@@ -62,7 +62,7 @@ bool exists(String path, {bool followLinks = true}) =>
 /// Throws a [DCliException] with a nested
 /// [FileSystemException] if the file does not
 /// exist or the operation fails.
-DateTime lastModified(String path) => waitForEx(core.lastModified(path));
+DateTime lastModified(String path) => core.lastModified(path);
 
 /// Sets the last modified datetime on the given the path.
 ///
@@ -73,7 +73,7 @@ DateTime lastModified(String path) => waitForEx(core.lastModified(path));
 /// exist or the operation fails.
 
 void setLastModifed(String path, DateTime lastModified) =>
-    waitForEx(core.setLastModifed(path, lastModified));
+    core.setLastModifed(path, lastModified);
 
 /// Returns true if the passed [pathToDirectory] is an
 /// empty directory.
