@@ -17,11 +17,4 @@ void main() {
     expect(DartProject.fromPath(pwd).pathToTestDir, equals(truepath('test')));
   });
 
-  test('isRunning from Source', () {
-    PubCache().globalDeactivate('general');
-    expect(PubCache().isGloballyActivatedFromSource('general'), isFalse);
-    PubCache().globalActivateFromSource(
-        join('test', 'test_script', 'general'));
-    expect(PubCache().isGloballyActivatedFromSource('general'), isTrue);
-  });
 }

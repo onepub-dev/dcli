@@ -88,4 +88,20 @@ void main() {
       expect(primary!.isPreRelease, isFalse);
     });
   });
+
+  test('isRunning from Source', () {
+    if (PubCache().isGloballyActivated('general')) {
+      PubCache().globalDeactivate('general');
+    }
+    expect(PubCache().isGloballyActivatedFromSource('general'), isFalse);
+    PubCache().globalActivateFromSource(join('test', 'test_script', 'general'));
+    expect(PubCache().isGloballyActivatedFromSource('general'), isTrue);
+
+    /// cleanup
+    PubCache().globalDeactivate('general');
+  });
+
+  test('DCli running from source', () {
+    expect(PubCache().isGloballyActivatedFromSource('dcli'), isTrue);
+  });
 }
