@@ -18,10 +18,10 @@ void main() {
   });
 
   test('isRunning from Source', () {
-    DartProject.globalDeactivate('general');
-    expect(DartProject.isGloballyActivatedFromSource('general'), isFalse);
-    DartProject.globalActivateFromSource(
+    PubCache().globalDeactivate('general');
+    expect(PubCache().isGloballyActivatedFromSource('general'), isFalse);
+    PubCache().globalActivateFromSource(
         join('test', 'test_script', 'general'));
-    expect(DartProject.isGloballyActivatedFromSource('general'), isTrue);
+    expect(PubCache().isGloballyActivatedFromSource('general'), isTrue);
   });
 }

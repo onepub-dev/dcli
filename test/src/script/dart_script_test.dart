@@ -73,7 +73,7 @@ void main() {
     });
 
     test('globally activated script', () {
-      DartProject.globalActivate(packageName);
+      PubCache().globalActivate(packageName);
 
       final result = packageName.start(progress: Progress.capture()).toList();
 

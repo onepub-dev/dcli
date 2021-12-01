@@ -442,7 +442,7 @@ class TestFileSystem {
   }
 
   bool isDCliRunningFromSource() =>
-      DartProject.isGloballyActivatedFromSource('dcli');
+      PubCache().isGloballyActivatedFromSource('dcli');
 }
 
 class TestFileSystemException extends DCliException {

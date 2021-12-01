@@ -503,33 +503,24 @@ class DartSdk {
 
   /// Run dart pub global activate for a package located in [path]
   /// relative to the current directory.
-  @Deprecated('Use DartProject.globalActivateFromSource')
+  @Deprecated('Use PubCache().globalActivateFromSource')
   void globalActivateFromPath(String path) =>
-      DartProject.globalActivateFromSource(path);
+      PubCache().globalActivateFromSource(path);
 
   /// Run dart pub global deactivate on the given [package].
-  @Deprecated('Use DartProject.globalDeactivate')
-  void globalDeactivate(String package) {
-    runPub(
-      args: ['global', 'deactivate', package],
-      progress: Progress.printStdErr(),
-    );
-  }
+  @Deprecated('Use PubCache().globalDeactivate')
+  void globalDeactivate(String package) => PubCache().globalDeactivate(package);
 
   /// returns true if the given package has been globally activated
-  @Deprecated('Use DartProject.isGloballyActivated')
+  @Deprecated('Use PubCache().isGloballyActivated')
   bool isPackageGloballyActivated(String package) =>
-      exists(join(PubCache().pathToBin, package));
+      PubCache().isGloballyActivated(package);
 
   /// Run dart pub global activate for a package located in [path]
   /// relative to the current directory.
-  @Deprecated('Use DartProject.isGloballyActivatedFromSource')
-  void isPackageGlobalActivateFromPath(String path) {
-    runPub(
-      args: ['global', 'activate', '--source', 'path', path],
-      progress: Progress.printStdErr(),
-    );
-  }
+  @Deprecated('Use PubCache().isGloballyActivatedFromSource')
+  void isPackageGlobalActivateFromPath(String path) =>
+      PubCache().isGloballyActivatedFromSource(path);
 
   String? _determineDartPath() {
     var _path = which(dartExeName).path;

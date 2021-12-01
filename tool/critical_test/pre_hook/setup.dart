@@ -33,13 +33,13 @@ void main(List<String> args) {
       'Activating dcli from source so we are testing against latest version',
     );
 
-    DartProject
+    PubCache()
 
         /// run pub get and only display errors.
         .globalActivateFromSource(projectRoot);
 
-    if (DartProject.isGloballyActivated('dcli_unit_tester')) {
-      DartProject.globalActivate('dcli_unit_tester');
+    if (PubCache().isGloballyActivated('dcli_unit_tester')) {
+      PubCache().globalActivate('dcli_unit_tester');
     }
   }
 
