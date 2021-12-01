@@ -1,3 +1,6 @@
+# 1.14.1
+Fixed dependency issue with csv library.
+
 # 1.14.0
 - upgraded to dcli_core 0.0.3
 - Fix: large memory consumption when using find. Now expect the controller not just the sink so we can pase the source.
