@@ -59,3 +59,5 @@ test/test_script/dcli_unit_tester/bin/dcli_unit_tester
 .failed_tracker.bak
 test/test_files/copy_of_link.md
 
+tool/unpub/.env
+two.txt
