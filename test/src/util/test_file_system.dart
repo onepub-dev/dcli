@@ -441,15 +441,8 @@ class TestFileSystem {
     }
   }
 
-  bool isDCliRunningFromSource() {
-    /// run pub global list to see if dcli is run from a local path.
-    final line = DartSdk()
-        .runPub(args: ['global', 'list'], progress: Progress.capture())
-        .lines
-        .firstWhere((line) => line.startsWith('dcli'), orElse: () => 'dcli');
-
-    return line.contains('at path');
-  }
+  bool isDCliRunningFromSource() =>
+      DartProject.isGloballyActivatedFromSource('dcli');
 }
 
 class TestFileSystemException extends DCliException {

@@ -16,4 +16,12 @@ void main() {
     expect(DartProject.fromPath(pwd).pathToBinDir, equals(truepath('bin')));
     expect(DartProject.fromPath(pwd).pathToTestDir, equals(truepath('test')));
   });
+
+  test('isRunning from Source', () {
+    DartProject.globalDeactivate('general');
+    expect(DartProject.isGloballyActivatedFromSource('general'), isFalse);
+    DartProject.globalActivateFromSource(
+        join('test', 'test_script', 'general'));
+    expect(DartProject.isGloballyActivatedFromSource('general'), isTrue);
+  });
 }

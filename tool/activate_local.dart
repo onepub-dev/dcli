@@ -7,7 +7,7 @@ import 'package:dcli/dcli.dart';
 ///
 void main(List<String> args) {
   final root = DartProject.self.pathToProjectRoot;
-  DartSdk().globalActivateFromPath(dirname(root));
+  DartProject.globalActivateFromSource(dirname(root));
   'dcli install'.start();
-  DartSdk().globalActivateFromPath(dirname(root));
+  DartProject.globalActivateFromSource(dirname(root));
 }

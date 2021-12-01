@@ -392,6 +392,52 @@ class DartProject {
     }
     return fixed;
   }
+
+  /// Run dart pub global activate on the given [package].
+  static void globalActivate(String package) {
+    DartSdk().runPub(
+      args: ['global', 'activate', package],
+      progress: Progress.printStdErr(),
+    );
+  }
+
+  /// Run dart pub global activate for a package located in [path]
+  /// relative to the current directory.
+  static void globalActivateFromSource(String path) {
+    DartSdk().runPub(
+      args: ['global', 'activate', '--source', 'path', path],
+      progress: Progress.printStdErr(),
+    );
+  }
+
+  /// Run dart pub global deactivate on the given [package].
+  static void globalDeactivate(String package) {
+    DartSdk().runPub(
+      args: ['global', 'deactivate', package],
+      progress: Progress.printStdErr(),
+    );
+  }
+
+  /// returns true if the given package has been globally activated
+  static bool isGloballyActivated(String package) =>
+      exists(join(PubCache().pathToBin, package));
+
+  /// Returns true if the the dart project [packageName]
+  /// is running from local source.
+  /// This means that the package has been activated via
+  /// ```bash
+  /// dart pub global activate --source path <path to package>
+  /// ```
+  static bool isGloballyActivatedFromSource(String packageName) {
+    /// run pub global list to see if dcli is run from a local path.
+    final line = DartSdk()
+        .runPub(args: ['global', 'list'], progress: Progress.capture())
+        .lines
+        .firstWhere((line) => line.startsWith(packageName),
+            orElse: () => packageName);
+
+    return line.contains('at path');
+  }
 }
 
 /// Exception for issues with DartProjects.

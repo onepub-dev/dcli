@@ -15,7 +15,7 @@ class LinuxDCliInstaller {
     }
 
     // now activate dcli.
-    DartSdk().globalActivate('dcli');
+    DartProject.globalActivate('dcli');
 
     // // also need to install it for the root user
     // // as root must have its own copy of .pub-cache otherwise
