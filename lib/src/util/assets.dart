@@ -97,7 +97,7 @@ class Assets {
     final resolvedUri = waitForEx<Uri?>(
       Isolate.resolvePackageUri(
         Uri.file(
-          Context(style: Style.url).join('lib', 'src', 'assets', 'templates'),
+          Context(style: Style.url).join('lib', 'src', 'assets', 'template'),
         ),
       ),
     )!;

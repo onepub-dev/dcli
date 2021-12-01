@@ -5,7 +5,7 @@ import 'package:test/test.dart';
 
 void main() {
   test('Assets().toString', () async {
-    final path = join('assets', 'templates', 'basic.dart');
+    final path = join('assets', 'template', 'basic.dart');
     // ignore: deprecated_member_use_from_same_package
     final content = Assets().loadString(path);
 
@@ -23,7 +23,7 @@ void main() {
   });
 
   test('Assets().list', () async {
-    final path = join('assets', 'templates');
+    final path = join('assets', 'template');
     // ignore: deprecated_member_use_from_same_package
     final templates = Assets().list('*', root: path);
 

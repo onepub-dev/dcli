@@ -6,7 +6,7 @@ import 'package:test/test.dart';
 const filename = 'PXL_20211104_224740653.jpg';
 
 void main() {
-  test('resources ...', () async {
+  test('resource ...', () async {
     Resources().pack();
   });
 

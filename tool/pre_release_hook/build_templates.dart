@@ -20,14 +20,14 @@ void main(List<String> args) {
     'lib',
     'src',
     'assets',
-    'templates',
+    'template',
   );
 
   final expanderPath = join(
     DartProject.self.pathToProjectRoot,
     'lib',
     'src',
-    'templates',
+    'template',
     'expander.dart',
   );
 

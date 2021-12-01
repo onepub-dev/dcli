@@ -72,7 +72,7 @@ class DoctorCommand extends Command {
     _showPermissions('HOME', HOME);
     _showPermissions('.dcli', Settings().pathToDCli);
 
-    _showPermissions('templates', Settings().pathToTemplate);
+    _showPermissions('template', Settings().pathToTemplate);
 
     _showPermissions('pub cache', PubCache().pathTo);
   }

@@ -30,7 +30,7 @@ class Settings {
   static Settings? _self;
 
   /// The directory name of the DCli templates.
-  static const templateDir = 'templates';
+  static const templateDir = 'template';
 
   final InternalSettings _settings = InternalSettings();
 

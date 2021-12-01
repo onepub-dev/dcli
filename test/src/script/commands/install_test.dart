@@ -103,13 +103,13 @@ void main() {
 void checkInstallStructure(TestFileSystem fs) {
   expect(exists(truepath(HOME, '.dcli')), equals(true));
 
-  expect(exists(truepath(HOME, '.dcli', 'templates')), equals(true));
+  expect(exists(truepath(HOME, '.dcli', 'template')), equals(true));
 
   final templates =
-      find('*.*', workingDirectory: join(fs.home!, '.dcli', 'templates'))
+      find('*.*', workingDirectory: join(fs.home!, '.dcli', 'template'))
           .toList();
 
-  final base = join(fs.home!, '.dcli', 'templates');
+  final base = join(fs.home!, '.dcli', 'template');
 
   expect(
     templates,

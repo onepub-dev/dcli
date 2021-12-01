@@ -7,7 +7,7 @@ import '../flags.dart';
 import 'commands.dart';
 
 /// Implementation for the 'pack' command.
-/// The 'pack' command will scan the 'resources' directory under
+/// The 'pack' command will scan the 'resource' directory under
 /// your project root and  all subdirectories.
 /// Each file that it finds is base64 encoded
 /// and placed into dart library under:
@@ -34,7 +34,7 @@ import 'commands.dart';
 /// As part of the packing process DCli also creates a registry of the
 /// resources packed.
 /// This is done by creating a dart library called 'lib/src/dcli/resources/generated/resource_registry.g.dart'.
-/// The contents of the 'resources/generated/resource_registry.g.dart' are of the form.
+/// The contents of the 'resource/generated/resource_registry.g.dart' are of the form.
 ///
 /// ```text
 ///

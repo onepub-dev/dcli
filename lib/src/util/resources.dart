@@ -25,9 +25,9 @@ import '../../dcli.dart';
 class Resources {
   /// the directory where we expect to find the resources
   /// we are going to pack.
-  static final String _resourceRoot = join('resources');
+  static final String _resourceRoot = join('resource');
   static final String _generatedRoot =
-      join('lib', 'src', 'dcli', 'resources', 'generated');
+      join('lib', 'src', 'dcli', 'resource', 'generated');
   static final String _pathToRegistry =
       join(_generatedRoot, 'resource_registry.g.dart');
 
@@ -116,7 +116,7 @@ import 'package:dcli/dcli.dart';
 
 class $className extends PackedResource {
 
-  /// PackedResource - ${relative(pathToResource, from: 'resources')}
+  /// PackedResource - ${relative(pathToResource, from: 'resource')}
   const $className();
 ''');
 
