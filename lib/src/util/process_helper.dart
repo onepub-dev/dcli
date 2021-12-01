@@ -244,17 +244,17 @@ class ProcessHelper {
     // "wininit.exe","584","Services","0","5,248 K"
     final tasks = 'tasklist /fo csv /nh'.toParagraph();
 
-    final lines = const CsvToListConverter().convert(tasks);
+    final lines = const CsvToListConverter().convert<String>(tasks);
     for (final line in lines) {
       //verbose(() => 'tasklist: $line');
 
       // verbose(() => '${details.processName} ${details.pid}');
 
-      final memparts = (line[4] as String).split(' ');
+      final memparts = (line[4]).split(' ');
 
       final details = ProcessDetails(
-        int.tryParse(line[1] as String) ?? 0,
-        line[0] as String,
+        int.tryParse(line[1]) ?? 0,
+        line[0],
         memparts[0],
       );
       // details.memory can contain 'N/A' in which case their is no units.

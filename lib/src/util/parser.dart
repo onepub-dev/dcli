@@ -49,7 +49,7 @@ class Parser {
   /// See: https://pub.dev/packages/csv
   List<List<dynamic>> csvDecode() =>
       CsvToListConverter(eol: Platform().eol, shouldParseNumbers: false)
-          .convert(_lines.join('\n'));
+          .convert<String>(_lines.join('\n'));
 
   /// Interprets the read lines as an ini file.
   /// See https://pub.dev/packages/ini
