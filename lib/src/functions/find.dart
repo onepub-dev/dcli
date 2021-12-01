@@ -183,7 +183,7 @@ class FindProgress extends InternalProgress {
           recursive: recursion,
           includeHidden: includeHidden,
           workingDirectory: workingDirectory,
-          progress: controller.sink,
+          progress: controller,
           types: types,
         ),
       );
