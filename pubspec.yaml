@@ -44,3 +44,7 @@ executables:
   dcli_complete: dcli_complete
   dcli_install: dcli_install
   dshell_upgrade: dshell_upgrade
+
+dependency_overrides:
+  dcli_core:
+    path: ../dcli_core  
