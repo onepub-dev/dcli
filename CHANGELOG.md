@@ -1,3 +1,12 @@
+# 1.14.0
+- upgraded to dcli_core 0.0.3
+- Fix: large memory consumption when using find. Now expect the controller not just the sink so we can pase the source.
+- Made the 'is' methods synchronous based on lint advice.
+- Fixed for the tail command deadlocking on the stream.
+- improved isGloballyActivated by checking the global list rather than just relying on the presence of the exe which could have been deleted but the package is still considered active.
+- Moved the package activation related methods into PubCache
+- Merge pull request #179 from AdnanAlshami/master
+
 # 1.13.6
 - Added firstLine to FindProgress for backward compatiblity with the original Progress.
 

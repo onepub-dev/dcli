@@ -16,5 +16,4 @@ void main() {
     expect(DartProject.fromPath(pwd).pathToBinDir, equals(truepath('bin')));
     expect(DartProject.fromPath(pwd).pathToTestDir, equals(truepath('test')));
   });
-
 }

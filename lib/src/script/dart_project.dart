@@ -392,7 +392,6 @@ class DartProject {
     }
     return fixed;
   }
-
 }
 
 /// Exception for issues with DartProjects.
