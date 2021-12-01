@@ -141,8 +141,8 @@ class TestFileSystem {
     );
     Settings.reset();
     Env.reset();
-    PubCache.reset();
-    originalPubCache = PubCache().pathTo;
+    // PubCache.reset();
+    // originalPubCache = PubCache().pathTo;
     // print('PATH: $PATH');
     final originalHome = HOME;
     final path = env['PATH'];
@@ -151,9 +151,9 @@ class TestFileSystem {
       home = fsRoot;
 
       /// Force PubCache path to point at the new file system.
-      PubCache().pathTo = join(fsRoot, PubCache().cacheDir);
+      // PubCache().pathTo = join(fsRoot, PubCache().cacheDir);
 
-      rebuildPath();
+      // rebuildPath();
 
       final isolateID = Service.getIsolateID(Isolate.current);
       print(green('Using TestFileSystem $fsRoot for Isolate: $isolateID'));
@@ -190,11 +190,11 @@ class TestFileSystem {
       /// If we are creating/destroying pub-caches and sharing
       /// the tests scripts the paths to pub-cache keep getting
       /// broken.
-      copyPubCache(originalHome, HOME);
+      // copyPubCache(originalHome, HOME);
       copyTestScripts();
-      if (installDcli!) {
-        installDCli();
-      }
+      // if (installDcli!) {
+      //   installDCli();
+      // }
       testDirectoryTree = TestDirectoryTree(fsRoot);
 
       installCrossPlatformTestScripts(originalHome);
@@ -291,22 +291,21 @@ class TestFileSystem {
 
   void installDCli() {
     if (!isDCliRunningFromSource()) {
-      printerr(
-        red(
-          'You must global active dcli from a local '
-          'path before you can run unit tests',
-        ),
-      );
-      print('Run: dart pub global activate --source=path <path to dcli>');
-      exit(-1);
+      PubCache().globalActivateFromSource(DartProject.self.pathToProjectRoot);
+      // printerr(
+      //   red(
+      //     'You must global active dcli from a local '
+      //     'path before you can run unit tests',
+      //   ),
+      // );
+      // print('Run: dart pub global activate --source=path <path to dcli>');
+      // exit(-1);
     }
 
     EntryPoint().process(['install', '--nodart', '--quiet', '--noprivileges']);
   }
 
   void rebuildPath() {
-    final newPath = <String?>[];
-
     // remove .pub-cache and .dcli... and replace with the test FS ones
 
     if (PATH.isEmpty) {
@@ -317,14 +316,11 @@ class TestFileSystem {
         continue;
       }
 
-      newPath.add(path);
+      Env().appendToPATH(path);
     }
 
-    newPath
-      ..add(PubCache().pathToBin)
-      ..add(join(fsRoot, '.dcli', 'bin'));
-
-    env['PATH'] = newPath.join(Env().delimiterForPATH);
+    Env().appendToPATH(PubCache().pathToBin);
+    Env().appendToPATH(join(fsRoot, '.dcli', 'bin'));
   }
 
   void copyPubCache(String originalHome, String newHome) {
@@ -341,6 +337,7 @@ class TestFileSystem {
       createDir(PubCache().pathTo, recursive: true);
     }
 
+    /// Do we need to alter pub cache?
     copyTree(originalPubCache!, PubCache().pathTo);
 
     print(
