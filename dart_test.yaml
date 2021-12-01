@@ -4,3 +4,7 @@ tags:
 
   # Tests that need sudo to run
   sudo: 
+
+
+  # requires a terminal to run.
+  console:
