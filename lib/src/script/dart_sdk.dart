@@ -376,7 +376,7 @@ class DartSdk {
     if (Platform.isLinux || Platform.isMacOS) {
       /// make execs executable.
       find('*', workingDirectory: join(installDir, 'bin'), recursive: false)
-          .forEach((file) => chmod(500, file));
+          .forEach((file) => chmod(file, permission:'500'));
     }
 
     // The normal dart detection process won't work here

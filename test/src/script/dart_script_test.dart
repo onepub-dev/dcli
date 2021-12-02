@@ -47,7 +47,7 @@ void main() {
     });
 
     test('jit script', () {
-      chmod(740, pathToTestScript);
+      chmod(pathToTestScript, permission:'740');
       final result = 'dart $pathToTestScript'
           .start(progress: Progress.capture(), nothrow: true)
           .toList();
