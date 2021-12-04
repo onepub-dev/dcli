@@ -1,5 +1,5 @@
 import 'package:dcli/dcli.dart' hide equals;
-import 'package:dcli/src/dcli/resources/generated/resource_registry.g.dart';
+import 'package:dcli/src/dcli/resource/generated/resource_registry.g.dart';
 import 'package:dcli/src/util/resources.dart';
 import 'package:test/test.dart';
 
@@ -10,7 +10,6 @@ void main() {
     Resources().pack();
   });
 
-  /// TODO: how do we test the pack command.
   test('unpack', () {
     final jpegResource = ResourceRegistry.resources[filename];
     expect(jpegResource, isNotNull);

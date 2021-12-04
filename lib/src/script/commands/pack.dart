@@ -13,12 +13,12 @@ import 'commands.dart';
 /// and placed into dart library under:
 ///
 /// ```
-/// <project root>/lib/src/dcli/resources
+/// <project root>/lib/src/dcli/resource
 /// ```
 ///
 /// So the following resources:
 /// ```text
-/// <project root>/resources/
+/// <project root>/resource/
 ///             images/photo.png
 ///             data/zips/installer.zip
 /// ```
@@ -26,14 +26,14 @@ import 'commands.dart';
 /// Will be converted to:
 ///
 /// ```text
-/// <project root>/lib/src/resources/
+/// <project root>/lib/src/resource/
 ///             images/photo_png.dart
 ///             data/zips/installer_zip.dart
 /// ```
 ///
 /// As part of the packing process DCli also creates a registry of the
 /// resources packed.
-/// This is done by creating a dart library called 'lib/src/dcli/resources/generated/resource_registry.g.dart'.
+/// This is done by creating a dart library called 'lib/src/dcli/resource/generated/resource_registry.g.dart'.
 /// The contents of the 'resource/generated/resource_registry.g.dart' are of the form.
 ///
 /// ```text
@@ -44,7 +44,7 @@ import 'commands.dart';
 /// };
 ///
 /// Each of the resouces will be placed in a generated dart library of the form
-/// lib/src/dcli/resources/generated/<uuid>.g.dart
+/// lib/src/dcli/resource/generated/<uuid>.g.dart
 ///
 /// ```
 
