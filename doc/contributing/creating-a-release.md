@@ -13,6 +13,7 @@ Commit and push all of you code changes.
 pub\_release performs the following tasks
 
 * Incrementing the version no.
+* runs 'dcli pack' to pack the templates.
 * formatting code
 * generating release notes
 * checking that all code is committed

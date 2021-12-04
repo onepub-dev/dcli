@@ -71,6 +71,7 @@
   * [Creating a release](contributing/creating-a-release.md)
   * [Running Unit tests](contributing/running-unit-tests.md)
   * [Implemention support for a shell](contributing/implemention-support-for-a-shell.md)
+  * [Templates](contributing/templates.md)
 * [References](references.md)
 
 ## Examples
