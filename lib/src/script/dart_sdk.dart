@@ -376,7 +376,7 @@ class DartSdk {
     if (Platform.isLinux || Platform.isMacOS) {
       /// make execs executable.
       find('*', workingDirectory: join(installDir, 'bin'), recursive: false)
-          .forEach((file) => chmod(file, permission:'500'));
+          .forEach((file) => chmod(file, permission: '500'));
     }
 
     // The normal dart detection process won't work here
@@ -493,7 +493,7 @@ class DartSdk {
   }
 
   /// Run dart pub global activate on the given [package].
-  @Deprecated('Use DartProject.globalActivate')
+  @Deprecated('Use PubCache().globalActivate')
   void globalActivate(String package) {
     runPub(
       args: ['global', 'activate', package],
