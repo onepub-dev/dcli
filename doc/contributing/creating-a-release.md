@@ -1,10 +1,10 @@
 # Creating a release
 
-DCli uses the package [pub\_release](https://pub.dev/packages/pub_release#-analysis-tab-) \(written in DCli\) to create releases.
+DCli uses the package [pub\_release](https://pub.dev/packages/pub\_release#-analysis-tab-) (written in DCli) to create releases.
 
 Start by installing pub\_release.
 
-```text
+```
 pub global activate pub_release
 ```
 
@@ -22,12 +22,11 @@ pub\_release performs the following tasks
 
 Run pub\_release
 
-```text
-cd ..../dcli
+```
+cd dcli
 pub_release
 ```
 
 Answer the questions asked.
 
 Job done.
-

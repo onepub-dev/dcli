@@ -16,7 +16,7 @@
 * [Futures](dart-basics/futures.md)
 * [stdin/stdout/stderr a primer](dart-basics/stdin-stdout-stderr.md)
 
-## Tour <a href="dcli-api" id="dcli-api"></a>
+## Tour <a href="#dcli-api" id="dcli-api"></a>
 
 * [Overview](dcli-api/overview.md)
 * [Using DCli functions](dcli-api/using-dcli-functions.md)
@@ -36,12 +36,12 @@
 * [Assets/Resources](dcli-api/assets.md)
 * [Cross Platform](dcli-api/cross-platform.md)
 
-## Dependency Management <a href="dependency-management-1" id="dependency-management-1"></a>
+## Dependency Management <a href="#dependency-management-1" id="dependency-management-1"></a>
 
 * [Dependency Management](dependency-management-1/dependency-management.md)
 * [Pubspec Managment](dependency-management-1/pubspec-managment.md)
 
-## DCli Tools <a href="dcli-tools-1" id="dcli-tools-1"></a>
+## DCli Tools <a href="#dcli-tools-1" id="dcli-tools-1"></a>
 
 * [DCli tools](dcli-tools-1/dcli-tools.md)
 * [Use a shebang #!](dcli-tools-1/use-a-shebang.md)
@@ -52,7 +52,7 @@
 * [DCli Install](dcli-tools-1/dcli-install.md)
 * [DCli run](dcli-tools-1/dcli-run.md)
 * [DCli Warmup](dcli-tools-1/dcli-clean.md)
-* [dcli pack](dcli-tools-1/dcli-pack.md)
+* [DCli pack](dcli-tools-1/dcli-pack.md)
 * [Upgrade DCli](dcli-tools-1/upgrade-dcli.md)
 * [Performance](dcli-tools-1/performance.md)
 * [Docker](dcli-tools-1/docker.md)
