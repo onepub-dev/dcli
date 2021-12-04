@@ -2,24 +2,15 @@
 
 ### Running unit tests.
 
-{% hint style="info" %}
-I recommend running units test from a Docker container as described below.
-{% endhint %}
+Running DCli unit tests can be a little tricky as they perform write operations on your file system. In particular the 'install' unit tests will delete your dcli installation which is rather inconvenient.
 
-Running DCli unit tests can be a little tricky as they perform write operations on your file system. In particular the install unit tests will delete your dcli installation which is rather inconvenient.
+Dcli uses the dart critical test package for running unit tests.
 
-DCli ships with a number of tools to help you manage this problem.
+pub global activate critical\_test
 
-DCli unit tests are split into two folders. `dcli/tests` is the standard location for unit tests. You can run these unit tests from within vscode using the standard unit test tools.
+Whilst you can run most tests from the vs code unit test framework there are number of tests that require pre-setup as well as sudo/admin privileges. The critical test package has the ability to run pre/post hooks to establish the environment to run these tests.
 
-These unit tests all write to your `/tmp` folder and are safe to run.
 
-You can also run the unit tests from the cli by running:
-
-```text
-cd ~/dcli
-tool/run_unit_tests.dart
-```
 
 ## Docker
 
@@ -44,7 +35,7 @@ Use the local source is safe and slightly faster so is the preferred option.
 
 The install.local pair allow you to run the unit tests using your local dcli source. To run the install unit tests run:
 
-```text
+```
 cd dcli/docker/test
 ./install.local.dart
 ```
@@ -59,8 +50,7 @@ The docker file pulls the repo from the main dcli github site. You may want to m
 
 To run the dcli install unit tests from the cloned git repo run:
 
-```text
+```
 cd dcli/docker
 ./install.clone.dart
 ```
-

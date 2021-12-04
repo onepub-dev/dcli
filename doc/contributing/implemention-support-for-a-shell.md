@@ -1,6 +1,6 @@
 # Implemention support for a shell
 
-DCli attempts to provide access to an abstracted interface to a shell's underlying functions through the Shell class.
+DCli provide access to an abstracted interface to a shell's underlying functions through the Shell class.
 
 DCli provides various levels of support for a number of shells including:
 
@@ -46,7 +46,7 @@ DCli attempts to automate as much of the DCli and dart installation process as p
 
 Ideally your shell should support configuring DCli and dart. There are standard implementations for both of these actions that you should normally be able to use.
 
-The platform specific implementation for windows is in windows\_mixin.dart and for linux and osx in posix mixin.dart. 
+The platform specific implementation for Windows is in windows\_mixin.dart and for Linux and MacOS in posix mixin.dart.
 
 These mixins should work for any shell so normally your shell should just 'with' the appropriate mixin.
 
@@ -58,7 +58,7 @@ You will most likely need to implement a custom implementation of Shell.addToPat
 
 ### Completion Support
 
-Some shells offer tab completion. 
+Some shells offer tab completion.
 
 At the time of this writing DCli only supports tab completion for bash.
 
@@ -77,8 +77,3 @@ For bash DCli ships the executable bin/dcli\_complete.
 If your Shell's completion tooling allows/expects the use of an executable to provide the tab completion support you may modify the dcli\_complete.dart library to also provide completion for you shell.
 
 You can use the `Shell.current` method to determine if you shell is being run when the dcli\_complete is executed.
-
-
-
-
-

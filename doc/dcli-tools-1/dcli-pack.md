@@ -1,4 +1,4 @@
-# dcli pack
+# DCli pack
 
 The dcli pack command allows you to pack resources (images, config files etc) into your cli app.
 
@@ -14,11 +14,11 @@ Run `dcli pack`.
 
 The pack command base64 encodes each file and writes them as a multi-line string into a dart library under src/dcli/resources. The name of the dart library is randomly generated.
 
-The pack command also creates a register of the packed libraries in src/dcli/resources/resource\_registry.g.dart.
+The pack command also creates a register of the packed libraries in src/dcli/resource/generated/resource\_registry.g.dart.
 
 To unpack the resources on the target system use the ResourceRegistry class.
 
-The `resources` field is a map of the packed resources. The key is the path of the original resource file relative to the `resources` directory.&#x20;
+The `resources` field is a map of the packed resources. The key is the path of the original resource file relative to the `resource` directory.&#x20;
 
 ```dart
 ResourceRegistry.resources['rules.yaml']
