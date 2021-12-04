@@ -5,6 +5,7 @@ import '../../util/completion.dart';
 import '../command_line_runner.dart';
 import '../flags.dart';
 import 'commands.dart';
+import 'incremental_compiler.dart';
 
 /// implementation for the compile command.
 class CompileCommand extends Command {
@@ -12,7 +13,12 @@ class CompileCommand extends Command {
   CompileCommand() : super(_commandName);
   static const String _commandName = 'compile';
 
-  final _compileFlags = [NoWarmupFlag(), InstallFlag(), OverWriteFlag()];
+  final _compileFlags = [
+    NoWarmupFlag(),
+    InstallFlag(),
+    OverWriteFlag(),
+    //WatchFlag()
+  ];
 
   /// holds the set of flags passed to the compile command.
   Flags flagSet = Flags();
@@ -54,10 +60,17 @@ class CompileCommand extends Command {
     if (scriptList.isEmpty) {
       throw InvalidArguments('There are no scripts to compile.');
     } else {
-      for (final scriptPath in scriptList) {
-        exitCode = compileScript(scriptPath);
-        if (exitCode != 0) {
-          break;
+      if (flagSet.isSet(WatchFlag())) {
+        if (scriptList.length != 1) {
+          throw InvalidArguments('You may only watch a single script');
+        }
+        waitForEx(IncrementalCompiler(scriptList.first).watch());
+      } else {
+        for (final scriptPath in scriptList) {
+          exitCode = compileScript(scriptPath);
+          if (exitCode != 0) {
+            break;
+          }
         }
       }
     }
@@ -198,4 +211,21 @@ class OverWriteFlag extends Flag {
   @override
   String description() => 'If the installed executable already exists in '
       '${Settings().pathToDCliBin} then it will overwritten.';
+}
+
+/// watch the package for file changes and do
+/// incremental compile on the selected scripts.
+class WatchFlag extends Flag {
+  ///
+  WatchFlag() : super(_flagName);
+  static const _flagName = 'watch';
+
+  @override
+  String get abbreviation => 'w';
+
+  @override
+  String description() => '''
+Experimental
+Places the compiler into increment compilation mode. 
+dcli will watch for changes in the script and project automatically re-compiling.''';
 }
