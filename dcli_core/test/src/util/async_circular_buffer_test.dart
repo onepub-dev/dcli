@@ -1,0 +1,142 @@
+import 'dart:async';
+
+import 'package:dcli_core/src/util/async_circular_buffer.dart';
+import 'package:synchronized/synchronized.dart';
+import 'package:test/test.dart';
+
+void main() {
+  test('async circular buffer fill and empty', () async {
+    final buf = AsyncCircularBuffer<String>(5);
+
+    await fill(buf, 5);
+
+    await empty(buf, 5);
+  });
+
+  test('async circular buffer fill and empty x 2', () async {
+    final buf = AsyncCircularBuffer<String>(5);
+
+    await fill(buf, 5);
+    await empty(buf, 5);
+    await fill(buf, 5);
+    await empty(buf, 5);
+    expect(buf.length, equals(0));
+  });
+
+  test('async circular buffer overflow small theshold', () async {
+    final buf = AsyncCircularBuffer<String>(4);
+
+    Future<void>.delayed(const Duration(seconds: 2), buf.drain);
+
+    /// try to over-fill
+    await fill(buf, 5);
+
+    /// should be 1 element as the drain will have run.
+    expect(buf.length, equals(1));
+  });
+
+  test('async circular buffer underflow small threshold', () async {
+    final buf = AsyncCircularBuffer<String>(4);
+
+    Future<void>.delayed(const Duration(seconds: 2), () async {
+      await fill(buf, 5);
+    });
+
+    /// try to read too many.
+    await empty(buf, 5);
+
+    /// should be zero element as the delayed add will have run.
+    expect(buf.length, equals(0));
+  });
+
+  test('async circular buffer thrash', () async {
+    final buf = AsyncCircularBuffer<String>(4);
+
+    final addCompleter = Completer<bool>();
+    var addLoop = 20;
+    Timer.periodic(const Duration(seconds: 1), (t) async {
+      await fill(buf, 5);
+      addLoop--;
+      if (addLoop == 0) {
+        t.cancel();
+        addCompleter.complete(true);
+      }
+    });
+
+    final getCompleter = Completer<bool>();
+    var getLoop = 20;
+    Timer.periodic(const Duration(seconds: 1), (t) async {
+      /// try to read too many.
+      await empty(buf, 5);
+      getLoop--;
+      if (getLoop == 0) {
+        t.cancel();
+        getCompleter.complete(true);
+      }
+    });
+
+    await Future.wait<bool>([addCompleter.future, getCompleter.future]);
+
+    /// should be zero element as the delayed add will have run.
+    expect(buf.length, equals(0));
+  });
+
+  test('async circular buffer fast add slow get', () async {
+    final buf = AsyncCircularBuffer<String>(100);
+
+    final addCompleter = Completer<bool>();
+    var addLoop = 20;
+    final lock = Lock();
+    Timer.periodic(const Duration(milliseconds: 1), (t) async {
+      await lock.synchronized(() async {
+        if (addLoop > 0) {
+          await fill(buf, 100, (e) => print('add $addLoop $e'));
+          addLoop--;
+          if (addLoop == 0) {
+            t.cancel();
+            print('cancelled add');
+            addCompleter.complete(true);
+          }
+        }
+      });
+    });
+
+    final getCompleter = Completer<bool>();
+    var getLoop = 20;
+    Timer.periodic(const Duration(seconds: 1), (t) async {
+      /// try to read too many.
+      await empty(buf, 100, (e) => print('get $getLoop $e'));
+      getLoop--;
+      if (getLoop == 0) {
+        t.cancel();
+        getCompleter.complete(true);
+      }
+    });
+
+    await Future.wait<bool>([addCompleter.future, getCompleter.future]);
+
+    /// should be zero element as the delayed add will have run.
+    expect(buf.length, equals(0));
+  });
+}
+
+Future<void> empty(AsyncCircularBuffer<String> buf, int count,
+    [void Function(String e)? callback]) async {
+  for (var i = 0; i < count; i++) {
+    final val = await buf.get();
+    expect(int.parse(val), equals(i));
+    if (callback != null) {
+      callback(val);
+    }
+  }
+}
+
+Future<void> fill(AsyncCircularBuffer<String> buf, int count,
+    [void Function(String e)? callback]) async {
+  for (var i = 0; i < count; i++) {
+    await buf.add('$i');
+    if (callback != null) {
+      callback('$i');
+    }
+  }
+}
