@@ -22,7 +22,11 @@ import 'dart:math';
 /// buffer.add(4);
 /// print(buffer.first); // 4
 /// ```
-class AsyncCircularBuffer<T> with ListMixin<T> {
+class AsyncCircularBuffer<T>
+    with IterableMixin<Future<T>>
+    implements Iterable<Future<T>>
+// with ListMixin<T>
+{
   /// Creates a [AsyncCircularBuffer] with a `capacity`
   AsyncCircularBuffer(int capacity)
       : assert(capacity > 1, 'capacity must be at least 1'),
@@ -47,6 +51,10 @@ class AsyncCircularBuffer<T> with ListMixin<T> {
 
   final int _threshold;
 
+  /// indicates that the buffer has been closed by the provider.
+  /// We complete the future once the buffer closes.
+  final _closed = Completer<bool>();
+
   int _start = 0;
   int _end;
   int _count;
@@ -60,12 +68,26 @@ class AsyncCircularBuffer<T> with ListMixin<T> {
 
   var _spaceAvailable = Completer<bool>();
 
-  final _elementsAvailable = Completer<bool>();
+  var _elementsAvailable = Completer<bool>();
 
-  @override
+  /// Close the circular buffer indicating no more values will be added.
+  /// Calls to get will throw with an underflow exception if called
+  /// when there are no more elements in the buffer and [close] has bee
+  /// called.
+  void close() => _closed.complete(true);
+
+  /// Adds [element] to the buffer.
+  /// This method will wait if the buffer is full.
+  /// An [BadStateException]  will be thrown if the buffer
+  /// has been closed.
   Future<void> add(T element) async {
+    if (_closed.isCompleted) {
+      throw BadStateException('Buffer has been closed');
+    }
     if (isFilled) {
       /// wait until we have more space available.
+      /// If the buffer was closed after we start waiting
+      /// we still allow this last add to continue.
       await _spaceAvailable.future;
     }
 
@@ -102,10 +124,20 @@ class AsyncCircularBuffer<T> with ListMixin<T> {
     }
   }
 
-  ///
+  /// Returns the next element in the buffer.
+  /// If the buffer is closed and empty then returns null.
+  /// If the buffer is empty [get] waits until a new
+  /// element arrives before returning.
   Future<T> get() async {
-    if (isEmpty) {
-      await _elementsAvailable.future;
+    if (_isEmpty) {
+      if (_closed.isCompleted) {
+        return throw UnderflowException();
+      } else {
+        await Future.any<bool>([_elementsAvailable.future, _closed.future]);
+        if (_closed.isCompleted && _isEmpty) {
+          return throw UnderflowException();
+        }
+      }
     }
     final element = this[0];
     _incStart();
@@ -117,13 +149,15 @@ class AsyncCircularBuffer<T> with ListMixin<T> {
       _spaceAvailable.complete(true);
     }
 
-    if (isEmpty) {
-      /// no space available so block add.
-      _spaceAvailable = Completer<bool>();
+    if (_isEmpty) {
+      /// no elements available so block futher gets.
+      _elementsAvailable = Completer<bool>();
     }
 
     return element;
   }
+
+  Iterator<Future<T>> get iterator => CircularBufferIterator(this);
 
   /// Number of elements of [AsyncCircularBuffer]
   @override
@@ -139,6 +173,10 @@ class AsyncCircularBuffer<T> with ListMixin<T> {
   /// The [AsyncCircularBuffer] `isUnfilled`  if the `length` is
   /// is less than the `capacity`
   bool get isUnfilled => _count < _capacity;
+
+  bool get _isEmpty => _count == 0;
+
+  bool get _isNotEmpty => _count > 0;
 
   @override
   T operator [](int index) {
@@ -163,10 +201,63 @@ class AsyncCircularBuffer<T> with ListMixin<T> {
     throw UnsupportedError('Cannot resize immutable CircularBuffer.');
   }
 
+  @override
+  String toString() {
+    final sb = StringBuffer()..write('[');
+    for (var i = 0; i < length; i++) {
+      if (sb.length != 1) {
+        sb.write(',');
+      }
+      sb.write('${this[i]}');
+    }
+    sb.write(']');
+    return sb.toString();
+  }
+
   /// empties the buffer, discarding all elements.
   void drain() {
-    while (!isEmpty) {
+    while (_isNotEmpty) {
       get();
     }
   }
+}
+
+class CircularBufferIterator<T> implements Iterator<Future<T>> {
+  ///
+  CircularBufferIterator(this._buffer);
+  // Iterate over odd numbers
+  AsyncCircularBuffer<T> _buffer;
+
+  ///
+  @override
+  bool moveNext() => !(_buffer._closed.isCompleted && _buffer._isEmpty);
+
+  /// will throw an [UnderflowException] if the buffer is
+  /// empty and closed.
+  @override
+  Future<T> get current async {
+    final element = await _buffer.get();
+
+    if (element == null) {
+      throw UnderflowException();
+    }
+
+    return element;
+  }
+}
+
+class BadStateException implements Exception {
+  BadStateException(this.message);
+
+  String message;
+
+  String toString() => message;
+}
+
+class UnderflowException implements Exception {
+  UnderflowException();
+
+  String get message => 'The buffer is closed and empty';
+  @override
+  String toString() => message;
 }

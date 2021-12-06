@@ -39,11 +39,20 @@ void main() {
     final buf = AsyncCircularBuffer<String>(4);
 
     Future<void>.delayed(const Duration(seconds: 2), () async {
-      await fill(buf, 5);
+      await fill(buf, 4);
     });
 
     /// try to read too many.
-    await empty(buf, 5);
+    await empty(buf, 4);
+
+    /// Do it again to ensure state has been reset correctly
+    /// after we drained the queue
+    Future<void>.delayed(const Duration(seconds: 2), () async {
+      await fill(buf, 4);
+    });
+
+    /// try to read too many.
+    await empty(buf, 4);
 
     /// should be zero element as the delayed add will have run.
     expect(buf.length, equals(0));
@@ -118,6 +127,21 @@ void main() {
     /// should be zero element as the delayed add will have run.
     expect(buf.length, equals(0));
   });
+
+  test('close when adding', () {
+    final buf = AsyncCircularBuffer<String>(5)
+      ..add('1')
+      ..close();
+    expect(() => buf.add('2'), throwsA(isA<BadStateException>()));
+  });
+
+  test('close when getting', () {
+    final buf = AsyncCircularBuffer<String>(5)
+      ..add('1')
+      ..close()
+      ..get();
+    expect(buf.get, throwsA(isA<UnderflowException>()));
+  });
 }
 
 Future<void> empty(AsyncCircularBuffer<String> buf, int count,
@@ -135,6 +159,7 @@ Future<void> fill(AsyncCircularBuffer<String> buf, int count,
     [void Function(String e)? callback]) async {
   for (var i = 0; i < count; i++) {
     await buf.add('$i');
+    buf.toString();
     if (callback != null) {
       callback('$i');
     }
