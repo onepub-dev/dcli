@@ -3,3 +3,4 @@ dcli/lib/src/dcli/resource/generated
 
 templates/main/.history
 dcli_core/.packages
+dcli_core/.dart_tool
