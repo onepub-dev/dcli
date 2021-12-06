@@ -31,6 +31,21 @@ import 'commands.dart';
 ///             data/zips/installer_zip.dart
 /// ```
 ///
+/// You can also add in file external to your project by creating
+/// <your project>/tool/dcli/pack.yaml
+/// The pack.yaml declares a number of external directories to be packed
+/// and how they are to be mounted under the resource directory.
+///
+/// ```yaml
+/// externals:
+///   - external:
+///     path: ../template/basic
+///     mount: template/basic
+///   - external:
+///     path: ../template/cmd_args
+///     mount: template/cmd_args
+/// ```
+///
 /// As part of the packing process DCli also creates a registry of the
 /// resources packed.
 /// This is done by creating a dart library called 'lib/src/dcli/resource/generated/resource_registry.g.dart'.

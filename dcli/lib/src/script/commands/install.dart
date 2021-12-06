@@ -3,7 +3,7 @@ import 'dart:io';
 import 'package:meta/meta.dart';
 
 import '../../../dcli.dart';
-import '../../templates/expander.dart';
+import '../../dcli/resource/generated/resource_registry.g.dart';
 import '../../version/version.g.dart';
 import '../command_line_runner.dart';
 import '../flags.dart';
@@ -276,7 +276,7 @@ class InstallCommand extends Command {
     }
   }
 
-  /// Checks if the templates directory exists in ~/.dcli and if not creates
+  /// Checks if the template directory exists in ~/.dcli and if not creates
   /// the directory and copies the default scripts in.
   @visibleForTesting
   void initTemplates() {
@@ -284,7 +284,11 @@ class InstallCommand extends Command {
       createDir(Settings().pathToTemplate, recursive: true);
     }
 
-    TemplateExpander(Settings().pathToTemplate).expand();
+    for (final resource in ResourceRegistry.resources.values) {
+      if (resource.originalPath.startsWith('template')) {
+        resource.unpack(join(Settings().pathToDCli, resource.originalPath));
+      }
+    }
   }
 }
 

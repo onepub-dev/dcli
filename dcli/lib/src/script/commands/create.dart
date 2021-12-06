@@ -22,7 +22,6 @@ class CreateCommand extends Command {
   @override
   int run(List<Flag> selectedFlags, List<String> subarguments) {
     var scriptIndex = 0;
-    late DartProject project;
 
     if (Shell.current.isSudo) {
       printerr('You cannot create a script as sudo.');
@@ -51,6 +50,20 @@ class CreateCommand extends Command {
 
       final pathToScript =
           _validateArguments(selectedFlags, subarguments.sublist(scriptIndex));
+
+      late DartProject? project;
+
+      if (pathToScript.endsWith('.dart')) {
+        final project =
+            DartProject.findProject(dirname(pathToScript), search: false);
+
+        if (project == null) {
+          printerr(red('The current directory is not a Dart Project. '
+              'Use dcli create <projectname> to create a project.'));
+          return 1;
+        }
+        //  DartProje
+      }
 
       print(green('Creating script...'));
 

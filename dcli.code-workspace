@@ -8,6 +8,9 @@
 		},
 		{
 			"path": "templates\\main"
+		},
+		{
+			"path": "."
 		}
 	]
 }

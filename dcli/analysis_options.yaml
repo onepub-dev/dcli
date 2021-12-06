@@ -183,7 +183,7 @@ linter:
     
 
 analyzer:
-  exclude: lib/templates/*.dart
+  exclude: lib/template/*.dart
   strong-mode:
     implicit-casts: false
     implicit-dynamic: false

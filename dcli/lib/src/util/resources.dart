@@ -4,6 +4,7 @@ import 'dart:convert';
 import 'dart:io';
 
 import 'package:async/async.dart';
+import 'package:settings_yaml/settings_yaml.dart';
 import 'package:uuid/uuid.dart';
 
 import '../../dcli.dart';
@@ -59,23 +60,10 @@ class Resources {
     createDir(_generatedRoot, recursive: true);
 
     final packedResources = _packResources(resources);
-
+    _checkForDuplicates(packedResources);
     print(' - generating registry');
     _writeRegistry(packedResources);
     print(green('Pack complete'));
-
-    // if (!overwrite && exists(pathToDartLibrary)) {
-    //   throw ResourceException(
-    //       'The target dart libarary ${truepath(pathToDartLibrary)}'
-    //       ' already exists.');
-    // }
-    // for (final pathToResource in pathToResources) {
-    //   if (!exists(pathToResource)) {
-    //     throw ResourceException(
-    //         'The resource file $pathToResource does not exist');
-    //   }
-    //   _packAssets(pathToDartLibrary, pathToResources);
-    // }
   }
 
   List<_Resource> _packResources(List<String> pathToResources) {
@@ -91,14 +79,19 @@ class Resources {
           _packResource(pathToResouce, pathToGeneratedLibrary, className);
       resources.add(resource);
     }
+
+    resources.addAll(_packExternalResources());
     return resources;
   }
 
   /// Encode and write the resource into a dart library.
   _Resource _packResource(
-      String pathToResource, String pathToGeneratedLibrary, String className) {
-    final resource =
-        _Resource(pathToResource, pathToGeneratedLibrary, className);
+      String pathToResource, String pathToGeneratedLibrary, String className,
+      {String? mount}) {
+    mount ??= relative(pathToResource, from: resourceRoot);
+    final resource = _Resource(
+        pathToResource, pathToGeneratedLibrary, className,
+        pathToMount: mount);
     final to = File(pathToGeneratedLibrary).openWrite();
     try {
       /// write the header
@@ -115,14 +108,12 @@ import 'package:dcli/dcli.dart';
 /// GENERATED - GENERATED
 
 class $className extends PackedResource {
-
   /// PackedResource - ${relative(pathToResource, from: 'resource')}
   const $className();
 ''');
 
       _writeChecksum(to, resource.checksum);
-      _writePath(to, resource.pathToSource);
-
+      _writePath(to, resource.pathToMount);
       _writeContent(to, pathToResource);
 
       /// close the class
@@ -218,7 +209,7 @@ class ResourceRegistry {
       /// Write each resource into the map
       for (final resource in resources) {
         registryFile.write('''
-      '${relative(resource.pathToSource, from: resourceRoot)}' : ${resource.className}(),
+      '${resource.pathToMount.replaceAll(r'\', '/')}' : ${resource.className}(),
       ''');
       }
 
@@ -239,7 +230,7 @@ class ResourceRegistry {
 
   @override
   String get content => 
-     \'''
+      \'''
 ''',
     );
 
@@ -278,18 +269,91 @@ class ResourceRegistry {
   /// to compare the checksum of the local file with 
   /// this checksum
   @override
-  String get checksum 
-    => '$checksum';
+  String get checksum => 
+      '$checksum';
   ''');
   }
 
-  void _writePath(IOSink to, String pathToSource) {
+  void _writePath(IOSink to, String pathToMount) {
     to.write('''
-  
+
   /// <package>/resources relative path to the original resource.
   @override
-  String get originalPath => '${relative(pathToSource, from: resourceRoot)}';
+  String get originalPath => '${pathToMount.replaceAll(r'\', '/')}';
   ''');
+  }
+
+  List<_Resource> _packExternalResources() {
+    final resources = <_Resource>[];
+
+    final pathToPackYaml =
+        join(DartProject.self.pathToToolDir, 'dcli', 'pack.yaml');
+    if (!exists(pathToPackYaml)) {
+      print(orange('No $pathToPackYaml found'));
+      return resources;
+    }
+    final yaml = SettingsYaml.load(pathToSettings: pathToPackYaml);
+    final externals = yaml.selectAsList('externals');
+    if (externals == null) {
+      print(orange('No externals key found in pack.yaml'));
+      return resources;
+    }
+
+    for (final external in externals) {
+      // ignore: avoid_dynamic_calls
+      final path = external['path'] as String;
+      // ignore: avoid_dynamic_calls
+      final mount = external['mount'] as String;
+      resources.addAll(_packExternalResource(path, mount));
+    }
+    return resources;
+  }
+
+  List<_Resource> _packExternalResource(String path, String mount) {
+    final resources = <_Resource>[];
+
+    if (isDirectory(path)) {
+      resources.addAll(_packExternalDirectory(path, mount));
+    } else {
+      resources.add(_packExternalFile(path, mount));
+    }
+    return resources;
+  }
+
+  _Resource _packExternalFile(String path, String mount) {
+    final className = _generateClassName;
+
+    final pathToGeneratedLibrary = join(_generatedRoot, '$className.g.dart');
+    print(' - packing: $path into $pathToGeneratedLibrary');
+
+    final resource =
+        _packResource(path, pathToGeneratedLibrary, className, mount: mount);
+    return resource;
+  }
+
+  Iterable<_Resource> _packExternalDirectory(String path, String mount) {
+    final resources = <_Resource>[];
+
+    find('*', workingDirectory: path).forEach((file) {
+      if (isFile(file)) {
+        final fileMount = join(mount, relative(file, from: path));
+        resources.add(_packExternalFile(file, fileMount));
+      }
+    });
+
+    return resources;
+  }
+
+  void _checkForDuplicates(List<_Resource> packedResources) {
+    final paths = <String>{};
+    for (final resource in packedResources) {
+      if (paths.contains(resource.pathToMount)) {
+        printerr(
+            red('Duplicate resource at mount point: ${resource.pathToMount}'));
+        exit(1);
+      }
+      paths.add(resource.pathToMount);
+    }
   }
 }
 
@@ -319,7 +383,12 @@ abstract class PackedResource {
   /// Unpacks a resource saving it
   /// to [pathTo]
   void unpack(String pathTo) {
-    final file = waitForEx(File(pathTo).open(mode: FileMode.write));
+    final normalized = normalize(pathTo);
+    if (!exists(dirname(normalized))) {
+      createDir(dirname(normalized), recursive: true);
+    }
+
+    final file = waitForEx(File(normalized).open(mode: FileMode.write));
 
     try {
       for (final line in content.split('\n')) {
@@ -335,7 +404,8 @@ abstract class PackedResource {
 }
 
 class _Resource {
-  _Resource(this.pathToSource, String pathToGeneratedLibrary, this.className)
+  _Resource(this.pathToSource, String pathToGeneratedLibrary, this.className,
+      {required this.pathToMount})
       : checksum = calculateHash(pathToSource).hexEncode() {
     this.pathToGeneratedLibrary = relative(pathToGeneratedLibrary,
         from: join(DartProject.self.pathToProjectRoot, 'lib'));
@@ -343,6 +413,14 @@ class _Resource {
 
   /// Path to the original file we are packing.
   final String pathToSource;
+
+  /// The path to use when adding the resource to the
+  /// registry. For files under the resource directory
+  /// this is the same as [pathToSource].
+  /// For external resources defined in pack.yaml this
+  /// allows them to be mounted into the registry
+  /// without collisions.
+  final String pathToMount;
 
   /// The path to the dart library we generated to hold
   /// the encoded resource

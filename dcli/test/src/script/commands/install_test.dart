@@ -2,6 +2,7 @@
 import 'dart:io';
 
 import 'package:dcli/dcli.dart' hide equals;
+import 'package:dcli/src/script/commands/install.dart';
 import 'package:mocktail/mocktail.dart';
 import 'package:test/test.dart';
 
@@ -98,6 +99,10 @@ void main() {
     },
     skip: false,
   );
+
+  test('initTemplates', () {
+    InstallCommand().initTemplates();
+  });
 }
 
 void checkInstallStructure(TestFileSystem fs) {

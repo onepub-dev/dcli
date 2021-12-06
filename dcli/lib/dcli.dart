@@ -115,7 +115,6 @@ export 'src/shell/shell.dart';
 export 'src/shell/unknown_shell.dart';
 export 'src/util/ansi.dart';
 export 'src/util/ansi_color.dart';
-export 'src/util/assets.dart';
 export 'src/util/dcli_paths.dart' show DCliPaths;
 export 'src/util/dcli_zone.dart';
 export 'src/util/digest_helper.dart';

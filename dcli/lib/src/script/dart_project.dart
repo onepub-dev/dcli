@@ -14,13 +14,9 @@ class DartProject {
   /// Set [search] to false if you don't want to search up the
   /// directory tree for a pubspec.yaml.
   DartProject.fromPath(String pathToSearchFrom, {bool search = true}) {
-    if (search) {
-      _pathToProjectRoot = _findProjectRoot(pathToSearchFrom);
-    } else {
-      _pathToProjectRoot = pathToSearchFrom;
-    }
-    _pathToProjectRoot = truepath(_pathToProjectRoot);
-    verbose(() => 'DartProject.fromPath: $_pathToProjectRoot');
+    _pathToProjectRoot =
+        _findProject(pathToSearchFrom, search: search) ?? pathToSearchFrom;
+    verbose(() => 'DartProject.fromPath: $pathToProjectRoot');
   }
 
   /// Loads the project from the dart pub cache
@@ -37,6 +33,32 @@ class DartProject {
   /// If you
   @Deprecated('Use DartProject.self')
   static DartProject get current => self;
+
+  /// Looks for a pubspec.yaml and if found returns a [DartProject].
+  /// 
+  /// If [search] is true then it will search from [pathToSearchFrom]
+  /// up the tree.
+  static DartProject? findProject(String pathToSearchFrom,
+      {bool search = true}) {
+    final path = _findProject(pathToSearchFrom, search: search);
+
+    return path == null ? null : DartProject.fromPath(path);
+  }
+
+  static String? _findProject(String pathToSearchFrom, {bool search = true}) {
+    String? pathToProjectRoot;
+    if (search) {
+      pathToProjectRoot = _findProjectRoot(pathToSearchFrom);
+    } else {
+      if (exists(join(pathToSearchFrom, 'pubspec.yaml'))) {
+        pathToProjectRoot = pathToSearchFrom;
+      }
+    }
+    if (pathToProjectRoot != null) {
+      pathToProjectRoot = truepath(pathToProjectRoot);
+    }
+    return pathToProjectRoot;
+  }
 
   /// Returns the instance of the currently running DartProject.
   ///
@@ -119,7 +141,10 @@ class DartProject {
 
   String _makeSafe(String line) => line.replaceAll(HOME, '<HOME>');
 
-  String _findProjectRoot(String pathToSearchFrom) {
+  /// Searches up the directory tree from [pathToSearchFrom]
+  /// for a dart package by looking for a pubspec.yaml.
+  /// If no pubspec.yaml if found we return null.
+  static String? _findProjectRoot(String pathToSearchFrom) {
     var current = truepath(pathToSearchFrom);
 
     final root = rootPrefix(current);
@@ -132,8 +157,7 @@ class DartProject {
       current = dirname(current);
     }
 
-    /// no pubspec.yaml found so the project root is the passed directory.
-    return pathToSearchFrom;
+    return null;
   }
 
   NamedLock? __lock;
@@ -308,8 +332,7 @@ class DartProject {
     }
     copy(templatePath, pathToScript);
 
-    replace(pathToScript, '%dcliName%', DCliPaths().dcliName);
-    replace(pathToScript, '%scriptname%', basename(pathToScript));
+    replace(pathToScript, 'scriptname', basename(pathToScript));
 
     if (!hasPubSpec) {
       _createPubspecFromTemplate();
@@ -346,10 +369,10 @@ class DartProject {
       pathToPubSpec,
     );
     replace(
-      pathToPubSpec,
-      '%scriptname%',
-      _replaceInvalidCharactersForName(basename(pathToProjectRoot)),
-    );
+        pathToPubSpec,
+        'name: scriptname',
+        'name: '
+            '${_replaceInvalidCharactersForName(basename(pathToProjectRoot))}');
   }
 
   /// Creates a script in [pathToProjectRoot] with the name [scriptName]
