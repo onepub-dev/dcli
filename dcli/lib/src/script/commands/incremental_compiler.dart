@@ -12,7 +12,7 @@ import '../../../dcli.dart';
 const String _platformDill = 'lib/_internal/vm_platform_strong.dill';
 
 /// Incremental compiler used
-/// by dcli compile --watch 
+/// by dcli compile --watch
 class IncrementalCompiler {
   ///
   IncrementalCompiler(this._pathToLibrary) {

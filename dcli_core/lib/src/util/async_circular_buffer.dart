@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'dart:math';
 
+
 /// A [AsyncCircularBuffer] with a fixed capacity supporting
 /// all [List] operations
 ///
@@ -94,10 +95,10 @@ class AsyncCircularBuffer<T>
   void close() {
     if (!_closed.isCompleted) {
       _closed.complete(true);
+    }
 
-      if (_isEmpty) {
-        _done.complete(true);
-      }
+    if (_isEmpty && !_done.isCompleted) {
+      _done.complete(true);
     }
   }
 
@@ -235,7 +236,6 @@ class AsyncCircularBuffer<T>
     } on UnderflowException catch (_) {
       // if we are closed whilst waiting for get we get an [UnderFlowException]
       // Nothing to do here as the stream will just end naturally.
-      print('circular buffer done');
     }
   }
 
@@ -294,6 +294,7 @@ class BadStateException implements Exception {
 
   String message;
 
+  @override
   String toString() => message;
 }
 

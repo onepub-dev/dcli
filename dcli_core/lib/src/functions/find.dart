@@ -1,11 +1,10 @@
 import 'dart:async';
 import 'dart:io';
 
-import 'package:dcli_core/src/util/limited_stream_controller.dart';
 import 'package:path/path.dart';
 
 import '../../dcli_core.dart';
-import '../util/limited_stream_controller_original.dart';
+import '../util/limited_stream_controller.dart';
 import '../util/logging.dart';
 
 typedef FindController<T> = LimitedStreamController<T>;
@@ -193,13 +192,13 @@ class Find extends DCliFunction {
         progress,
         childDirectories,
       );
-
       while (childDirectories[0] != null) {
         _zeroElements(nextLevel);
         for (final directory in childDirectories) {
           if (directory == null) {
             break;
           }
+          // print('calling _processDirectory ${count++}');
           await _processDirectory(
             _workingDirectory,
             directory.path,
@@ -220,6 +219,8 @@ class Find extends DCliFunction {
     }
   }
 
+  int dircount = 0;
+
   Future<void> _processDirectory(
     String workingDirectory,
     String currentDirectory,
@@ -230,6 +231,7 @@ class Find extends DCliFunction {
     FindController<FindItem> progress,
     List<FileSystemEntity?> nextLevel,
   ) async {
+    // print('process Directory ${dircount++}');
     final lister = Directory(currentDirectory).list(followLinks: false);
 
     var nextLevelIndex = 0;
@@ -244,28 +246,30 @@ class Find extends DCliFunction {
         // before the last onData completes due to the
         // following await.
         sub.pause();
-        final type = FileSystemEntity.typeSync(entity.path, followLinks: false);
+        late final FileSystemEntityType type;
+        try {
+          type = FileSystemEntity.typeSync(entity.path, followLinks: false);
 
-        if (types.contains(type) &&
-            matcher.match(entity.path) &&
-            _allowed(
-              workingDirectory,
-              entity,
-              includeHidden: includeHidden,
-            )) {
-          if (_closed) {
-            await sub.cancel();
-            return;
+          if (types.contains(type) &&
+              matcher.match(entity.path) &&
+              _allowed(
+                workingDirectory,
+                entity,
+                includeHidden: includeHidden,
+              )) {
+            if (_closed) {
+              await sub.cancel();
+              return;
+            }
+
+            /// If the controller has been paused or hasn't yet been
+            /// listened to then we don't want to add files to
+            /// it otherwise we may run out of memory.
+            await progress.asyncAdd(FindItem(entity.path, type));
           }
-
-          /// If the controller has been paused or hasn't yet been
-          /// listened to then we don't want to add files to
-          /// it otherwise we may run out of memory.
-          await progress.asyncAdd(FindItem(entity.path, type));
-          //  progress.add(FindItem(entity.path, type));
+        } finally {
+          sub.resume();
         }
-
-        sub.resume();
 
         /// If we are recursing then we need to add any directories
         /// to the list of childDirectories that need to be recursed.
@@ -402,12 +406,7 @@ class Find extends DCliFunction {
   /// to select links to be found
   static const link = FileSystemEntityType.link;
 
-
-
- 
   FutureOr<void> _onCancel() => _closed = true;
-
-
 }
 
 class _PatternMatcher {

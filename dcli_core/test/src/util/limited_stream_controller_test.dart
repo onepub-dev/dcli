@@ -2,7 +2,6 @@ import 'dart:async';
 import 'dart:io';
 
 import 'package:dcli_core/dcli_core.dart';
-import 'package:dcli_core/src/util/limited_stream_controller_original.dart';
 import 'package:dcli_core/src/util/limited_stream_controller.dart';
 import 'package:synchronized/synchronized.dart';
 import 'package:test/test.dart';
@@ -37,8 +36,6 @@ void main() {
 
   test('async circular buffer fast add slow get', () async {
     final controller = LimitedStreamController<String>(100);
-
-    
 
     final addCompleter = Completer<bool>();
     var addLoop = 20;
@@ -111,5 +108,3 @@ Future<void> fill(LimitedStreamController<String> buf, int count,
     }
   }
 }
-
-

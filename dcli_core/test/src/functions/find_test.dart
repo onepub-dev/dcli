@@ -1,27 +1,31 @@
+import 'dart:async';
+
 import 'package:dcli_core/dcli_core.dart';
-import 'package:dcli_core/src/util/limited_stream_controller_original.dart';
 import 'package:dcli_core/src/util/limited_stream_controller.dart';
 import 'package:test/test.dart';
 
-void main() async {
-  // test('find stream', () async {
+void main() {
+  test('find stream', () async {
+    var count = 0;
     final controller = LimitedStreamController<FindItem>(100);
     try {
-      controller.stream
-          .listen((item) => print(replaceNonPrintable(item.pathTo)));
+      late StreamSubscription? sub;
+      sub = controller.stream.listen(
+          (item) => count++); // print(replaceNonPrintable(item.pathTo)));
       await find(
         '*',
         includeHidden: true,
-        workingDirectory:
-            // DartProject
-            //     .self.pathToProjectRoot,
-            rootPath,
+        workingDirectory: pwd,
         progress: controller,
       );
+      await sub.cancel();
+      sub = null;
     } finally {
       await controller.close();
     }
-  // });
+    print('Count $count Files and Directories found');
+    expect(count, greaterThan(0));
+  });
 }
 
 /// Replaces all non-printable characters in value with a space.

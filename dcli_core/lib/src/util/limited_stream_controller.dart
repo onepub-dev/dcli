@@ -1,22 +1,29 @@
 import 'dart:async';
 
-import 'async_circular_buffer.dart';
 
 class LimitedStreamController<T> implements StreamController<T> {
-  /// Creates a new [LazyStreamController] that will be a non-broadcast
-  /// controller.
-  LimitedStreamController(int limit,
+  /// Creates a new [LimitedStreamController] that limits the no.
+  /// of elements that can be in the queue.
+  LimitedStreamController(this._limit,
       {void Function()? onListen, void Function()? onCancel, bool sync = false})
       : _streamController = StreamController<T>(
-            onListen: onListen, onCancel: onCancel, sync: sync),
-        _buffer = AsyncCircularBuffer(limit);
+            onListen: onListen, onCancel: onCancel, sync: sync);
+  // _buffer = AsyncCircularBuffer(limit);
 
-  final AsyncCircularBuffer<T> _buffer;
+  // final AsyncCircularBuffer<T> _buffer;
 
   final StreamController<T> _streamController;
 
+  final int _limit;
+
+  /// Tracks the no. of elements in the stream.
+  var _count = 0;
+
+  /// Used to indicate when the stream is full
+  var _spaceAvailable = Completer<bool>();
+
   /// Returns the no. of elements waiting in the stream.
-  int get length => _buffer.length;
+  int get length => _count; // _buffer.length;
 
   @override
   bool get isClosed => _streamController.isClosed;
@@ -33,9 +40,34 @@ class LimitedStreamController<T> implements StreamController<T> {
     throw UnsupportedError('Use asyncAdd');
   }
 
-  ///
+  /// Add an event to the stream. If the
+  /// stream is full then this method will
+  /// wait until there is room.
   Future<void> asyncAdd(T event) async {
-    await _buffer.add(event);
+    if (_count >= _limit) {
+      await _spaceAvailable.future;
+    }
+    _count++;
+    _streamController.add(event);
+
+    if (_count >= _limit) {
+      _spaceAvailable = Completer<bool>();
+    }
+  }
+
+  @override
+  // ignore: prefer_expression_function_bodies
+  Stream<T> get stream async* {
+    /// return _buffer.stream();
+    await for (final element in _streamController.stream) {
+      _count--;
+
+      if (_count < _limit && !_spaceAvailable.isCompleted) {
+        /// notify that we have space available
+        _spaceAvailable.complete(true);
+      }
+      yield element;
+    }
   }
 
   @override
@@ -50,10 +82,7 @@ class LimitedStreamController<T> implements StreamController<T> {
   }
 
   @override
-  Future<dynamic> close() {
-    _buffer.close();
-    return _streamController.close();
-  }
+  Future<dynamic> close() => _streamController.close();
 
   @override
   Future get done => _streamController.done;
@@ -63,13 +92,6 @@ class LimitedStreamController<T> implements StreamController<T> {
 
   @override
   StreamSink<T> get sink => throw UnsupportedError('Use asyncAdd');
-
-  @override
-  // ignore: prefer_expression_function_bodies
-  Stream<T> get stream {
-    return _buffer.stream();
-    // return _streamController.stream;
-  }
 
   @override
   set onListen(void Function()? onListenHandler) {

@@ -1,4 +1,4 @@
-#! /usr/bin/env %dcliName%
+#! /usr/bin/env dcli
 
 import 'dart:io';
 
