@@ -1,0 +1,66 @@
+{
+    // Use IntelliSense to learn about possible attributes.
+    // Hover to view descriptions of existing attributes.
+    // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "name": "dcli",
+            "cwd": "dcli",
+            "request": "launch",
+            "type": "dart"
+        },
+        {
+            "name": "dcli_core",
+            "cwd": "dcli_core",
+            "request": "launch",
+            "type": "dart"
+        },
+
+        {
+            "name": "dcli_core",
+            "cwd": "dcli_core",
+            "request": "launch",
+            "type": "dart"
+        },
+
+        {
+            "name": "dcli_core",
+            "cwd": "dcli_core",
+            "request": "launch",
+            "type": "dart"
+        },
+
+            {
+                "name": "limitedstream",
+                "request": "launch",
+                "type": "dart",
+                "mode": "profile"
+            },
+
+        {
+            "name": "basic",
+            "cwd": "template\\basic",
+            "request": "launch",
+            "type": "dart"
+        },
+        {
+            "name": "cmd_args",
+            "cwd": "template\\cmd_args",
+            "request": "launch",
+            "type": "dart"
+        },
+        {
+            "name": "find",
+            "cwd": "template\\find",
+            "request": "launch",
+            "type": "dart"
+        },
+        {
+            "name": "hello_world",
+            "cwd": "template\\hello_world",
+            "request": "launch",
+            "type": "dart"
+        }
+    ]
+}

@@ -1,0 +1,16 @@
+externals:
+  - external:
+    path: ../template/basic
+    mount: template/basic
+  - external:
+    path: ../template/cmd_args
+    mount: template/cmd_args
+  - external:
+    path: ../template/find
+    mount: template/find
+  - external:
+    path: ../template/hello_world
+    mount: template/hello_world
+
+        
+  

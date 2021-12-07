@@ -1,0 +1,16 @@
+{
+	"folders": [
+		{
+			"path": "dcli"
+		},
+		{
+			"path": "dcli_core"
+		},
+		{
+			"path": "templates\\main"
+		},
+		{
+			"path": "."
+		}
+	]
+}
