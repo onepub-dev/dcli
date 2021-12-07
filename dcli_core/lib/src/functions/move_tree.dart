@@ -1,8 +1,10 @@
 import 'dart:async';
 
+import 'package:dcli_core/src/util/limited_stream_controller.dart';
 import 'package:path/path.dart';
 
 import '../../dcli_core.dart';
+import '../util/limited_stream_controller_original.dart';
 import '../util/logging.dart';
 
 /// Recursively moves the contents of the [from] directory to the
@@ -107,7 +109,7 @@ class _MoveTree extends DCliFunction {
 
     late StreamSubscription<FindItem>? sub;
     try {
-      final controller = StreamController<FindItem>();
+      final controller = LimitedStreamController<FindItem>(100);
 
       try {
         sub = controller.stream.listen((item) async {

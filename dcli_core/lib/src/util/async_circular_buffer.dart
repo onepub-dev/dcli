@@ -1,7 +1,5 @@
 import 'dart:async';
 
-import 'dart:collection';
-
 import 'dart:math';
 
 /// A [AsyncCircularBuffer] with a fixed capacity supporting
@@ -23,8 +21,8 @@ import 'dart:math';
 /// print(buffer.first); // 4
 /// ```
 class AsyncCircularBuffer<T>
-    with IterableMixin<Future<T>>
-    implements Iterable<Future<T>>
+// with IterableMixin<Future<T>>
+// implements Iterable<Future<T>>
 // with ListMixin<T>
 {
   /// Creates a [AsyncCircularBuffer] with a `capacity`
@@ -51,30 +49,57 @@ class AsyncCircularBuffer<T>
 
   final int _threshold;
 
+  /// Space is available in the buffer.
+  /// Each time the buffer fills we won't mark
+  /// space available until the buffer has
+  /// bee read down to the [_threshold].
+  var _spaceAvailable = Completer<bool>();
+
+  /// Elements are available in the buffer.
+  var _elementsAvailable = Completer<bool>();
+
   /// indicates that the buffer has been closed by the provider.
   /// We complete the future once the buffer closes.
   final _closed = Completer<bool>();
+
+  /// indicates that the buffer has been closed and
+  /// all elements read.
+  final _done = Completer<bool>();
 
   int _start = 0;
   int _end;
   int _count;
 
+  /// Completes when the buffer has been closed
+  /// and all elements read.
+  Future get isDone => _done.future;
+
   /// The [AsyncCircularBuffer] is `reset`
   void reset() {
+    if (_closed.isCompleted) {
+      throw BadStateException('Buffer has been closed');
+    }
     _start = 0;
     _end = -1;
     _count = 0;
+
+    _spaceAvailable.complete(true);
+    _elementsAvailable = Completer<bool>();
   }
-
-  var _spaceAvailable = Completer<bool>();
-
-  var _elementsAvailable = Completer<bool>();
 
   /// Close the circular buffer indicating no more values will be added.
   /// Calls to get will throw with an underflow exception if called
   /// when there are no more elements in the buffer and [close] has bee
   /// called.
-  void close() => _closed.complete(true);
+  void close() {
+    if (!_closed.isCompleted) {
+      _closed.complete(true);
+
+      if (_isEmpty) {
+        _done.complete(true);
+      }
+    }
+  }
 
   /// Adds [element] to the buffer.
   /// This method will wait if the buffer is full.
@@ -152,6 +177,11 @@ class AsyncCircularBuffer<T>
     if (_isEmpty) {
       /// no elements available so block futher gets.
       _elementsAvailable = Completer<bool>();
+
+      /// we are closed and empty.
+      if (_closed.isCompleted) {
+        _done.complete(true);
+      }
     }
 
     return element;
@@ -160,7 +190,6 @@ class AsyncCircularBuffer<T>
   Iterator<Future<T>> get iterator => CircularBufferIterator(this);
 
   /// Number of elements of [AsyncCircularBuffer]
-  @override
   int get length => _count;
 
   /// Maximum number of elements of [AsyncCircularBuffer]
@@ -174,11 +203,14 @@ class AsyncCircularBuffer<T>
   /// is less than the `capacity`
   bool get isUnfilled => _count < _capacity;
 
+  /// True if the buffer is closed and will not
+  /// accept any more calls to [add]
+  bool get isClosed => _closed.isCompleted;
+
   bool get _isEmpty => _count == 0;
 
   bool get _isNotEmpty => _count > 0;
 
-  @override
   T operator [](int index) {
     if (index >= 0 && index < _count) {
       return _buf[(_start + index) % _buf.length]!;
@@ -186,7 +218,6 @@ class AsyncCircularBuffer<T>
     throw RangeError.index(index, this);
   }
 
-  @override
   void operator []=(int index, T value) {
     if (index >= 0 && index < _count) {
       _buf[(_start + index) % _buf.length] = value;
@@ -195,8 +226,20 @@ class AsyncCircularBuffer<T>
     }
   }
 
+  Stream<T> stream() async* {
+    try {
+      while (!_closed.isCompleted) {
+        final element = await get();
+        yield element;
+      }
+    } on UnderflowException catch (_) {
+      // if we are closed whilst waiting for get we get an [UnderFlowException]
+      // Nothing to do here as the stream will just end naturally.
+      print('circular buffer done');
+    }
+  }
+
   /// The `length` mutation is forbidden
-  @override
   set length(int newLength) {
     throw UnsupportedError('Cannot resize immutable CircularBuffer.');
   }
@@ -226,7 +269,7 @@ class CircularBufferIterator<T> implements Iterator<Future<T>> {
   ///
   CircularBufferIterator(this._buffer);
   // Iterate over odd numbers
-  AsyncCircularBuffer<T> _buffer;
+  final AsyncCircularBuffer<T> _buffer;
 
   ///
   @override

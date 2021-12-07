@@ -1,12 +1,11 @@
-@Timeout(Duration(minutes: 20))
-import 'dart:async';
-
 import 'package:dcli_core/dcli_core.dart';
+import 'package:dcli_core/src/util/limited_stream_controller_original.dart';
+import 'package:dcli_core/src/util/limited_stream_controller.dart';
 import 'package:test/test.dart';
 
-void main() {
-  test('find stream', () async {
-    final controller = StreamController<FindItem>();
+void main() async {
+  // test('find stream', () async {
+    final controller = LimitedStreamController<FindItem>(100);
     try {
       controller.stream
           .listen((item) => print(replaceNonPrintable(item.pathTo)));
@@ -16,13 +15,13 @@ void main() {
         workingDirectory:
             // DartProject
             //     .self.pathToProjectRoot,
-            pwd,
+            rootPath,
         progress: controller,
       );
     } finally {
       await controller.close();
     }
-  });
+  // });
 }
 
 /// Replaces all non-printable characters in value with a space.

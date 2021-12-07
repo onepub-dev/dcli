@@ -77,9 +77,9 @@ void main() {
           //  // exit(1);
           // }
           // }),
-        );
+        ).forEach(print);
       },
-      skip: true,
+      skip: false,
     ); // takes too long to run
 
     // test('hidden a', () {
@@ -327,5 +327,5 @@ void main() {
   test('do not follow links', () {
     expect(isLink('/usr/bin/X11'), isTrue);
     find('*', workingDirectory: '/usr/bin').forEach(print);
-  });
+  }, skip: Platform.isWindows);
 }

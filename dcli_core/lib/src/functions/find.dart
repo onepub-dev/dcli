@@ -1,10 +1,14 @@
 import 'dart:async';
 import 'dart:io';
 
+import 'package:dcli_core/src/util/limited_stream_controller.dart';
 import 'package:path/path.dart';
 
 import '../../dcli_core.dart';
+import '../util/limited_stream_controller_original.dart';
 import '../util/logging.dart';
+
+typedef FindController<T> = LimitedStreamController<T>;
 
 ///
 /// Returns the list of files in the current and child
@@ -78,7 +82,7 @@ import '../util/logging.dart';
 ///
 Future<void> find(
   String pattern, {
-  required StreamController<FindItem> progress,
+  required FindController<FindItem> progress,
   bool caseSensitive = false,
   bool recursive = true,
   bool includeHidden = false,
@@ -98,11 +102,10 @@ Future<void> find(
 /// Implementation for the [_find] function.
 class Find extends DCliFunction {
   bool _closed = false;
-  Completer<bool> _running = Completer<bool>();
 
   Future<void> _find(
     String pattern, {
-    required StreamController<FindItem> progress,
+    required FindController<FindItem> progress,
     bool caseSensitive = false,
     bool recursive = true,
     String workingDirectory = '.',
@@ -111,16 +114,6 @@ class Find extends DCliFunction {
   }) async {
     late final String _workingDirectory;
     late final String finalpattern;
-
-    /// The listener may have been established before find is called.
-    if (progress.hasListener) {
-      _running.complete(true);
-    }
-    progress
-      ..onListen = _onListen
-      ..onPause = _onPause
-      ..onResume = _onResume
-      ..onCancel = _onCancel;
 
     /// strip any path components out of the pattern
     /// and add them to the working directory.
@@ -152,7 +145,7 @@ class Find extends DCliFunction {
 
   Future<void> _innerFind(
     String pattern, {
-    required Sink<FindItem> progress,
+    required FindController<FindItem> progress,
     bool caseSensitive = false,
     bool recursive = true,
     String workingDirectory = '.',
@@ -223,7 +216,7 @@ class Find extends DCliFunction {
         _copyInto(childDirectories, nextLevel);
       }
     } finally {
-      progress.close();
+      await progress.close();
     }
   }
 
@@ -234,7 +227,7 @@ class Find extends DCliFunction {
     List<FileSystemEntityType> types,
     _PatternMatcher matcher,
     bool includeHidden,
-    Sink<FindItem> progress,
+    FindController<FindItem> progress,
     List<FileSystemEntity?> nextLevel,
   ) async {
     final lister = Directory(currentDirectory).list(followLinks: false);
@@ -268,8 +261,8 @@ class Find extends DCliFunction {
           /// If the controller has been paused or hasn't yet been
           /// listened to then we don't want to add files to
           /// it otherwise we may run out of memory.
-          await _running.future;
-          progress.add(FindItem(entity.path, type));
+          await progress.asyncAdd(FindItem(entity.path, type));
+          //  progress.add(FindItem(entity.path, type));
         }
 
         sub.resume();
@@ -409,17 +402,12 @@ class Find extends DCliFunction {
   /// to select links to be found
   static const link = FileSystemEntityType.link;
 
-  void _onListen() {
-    _running.complete(true);
-  }
 
-  void _onPause() {
-    _running = Completer<bool>();
-  }
 
+ 
   FutureOr<void> _onCancel() => _closed = true;
 
-  void _onResume() => _running.complete(true);
+
 }
 
 class _PatternMatcher {

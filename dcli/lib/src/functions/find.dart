@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:io';
 
 import 'package:dcli_core/dcli_core.dart' as core;
+import 'package:dcli_core/dcli_core.dart';
 
 import '../../dcli.dart';
 import 'internal_progress.dart';
@@ -167,7 +168,7 @@ class FindProgress extends InternalProgress {
 
   /// Internal method so we can cancel the stream.
   void _forEach(CancelableLineAction action) {
-    final controller = StreamController<FindItem>();
+    final controller = LimitedStreamController<FindItem>(100);
     try {
       late StreamSubscription<FindItem> sub;
       sub = controller.stream.listen((item) async {
@@ -188,7 +189,8 @@ class FindProgress extends InternalProgress {
         ),
       );
     } finally {
-      waitForEx<void>(controller.close());
+      /// under normal circumstances core.find closes the controller.
+      if (!controller.isClosed) waitForEx<void>(controller.close());
     }
   }
 

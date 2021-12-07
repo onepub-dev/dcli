@@ -23,6 +23,7 @@ export 'src/functions/which.dart' show which, Which, WhichSearch;
 export 'src/util/dcli_exception.dart';
 export 'src/util/dev_null.dart';
 export 'src/util/file.dart';
+export 'src/util/limited_stream_controller.dart';
 export 'src/util/line_action.dart';
 export 'src/util/line_file.dart';
 export 'src/util/platform.dart';

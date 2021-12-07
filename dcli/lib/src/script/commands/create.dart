@@ -85,7 +85,7 @@ class CreateCommand extends Command {
       break;
     }
 
-    project.warmup(background: !flagSet.isSet(ForegroundFlag()));
+    //project.warmup(background: !flagSet.isSet(ForegroundFlag()));
 
     if (!Settings().isWindows) {
       chmod(p.join(_script.pathToScriptDirectory, _script.scriptName),

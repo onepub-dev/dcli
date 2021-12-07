@@ -2,89 +2,32 @@ import 'dart:async';
 
 import 'async_circular_buffer.dart';
 
-// Stream<T> _stream<T>(AsyncCircularBuffer<T> buff) async* {
-//   try {
-//   await for  (final element in buff) {
-//     yield await element;
-//   }
-//   } on UnderflowException catch (_)
-//   {
-//     /// this is expected as buff.current throws to indicate that
-//     /// the buf is empty and closed.
-//     /// This is done to overcome the fact that a
-//   }
-// }
-
-/// A stream that tightly controls the producer to ensure that the producer
-/// doesn't get significantly ahead of the consumer.
-///
-/// If you have a slow consumer and a fast producer you can get situations where
-/// the producer generates large nos of unprocessed events that need to be
-///  buffered in the stream which consumes large amounts of memory.
-///
-/// The [LimitedStream] aims to reduce the amount of buffering that occurs in
-/// the stream by tightly controlling the producer.
-// class LimitedStream<T> extends Stream<T> {
-//   ///
-//   LimitedStream(this._buffer, this._controller);
-
-//   ///
-//   final AsyncCircularBuffer<T> _buffer;
-
-//   final StreamController<T> _controller;
-
-//   ///
-//   @override
-//   StreamSubscription<T> listen(void Function(T event)? onData,
-//       {Function? onError, void Function()? onDone, bool? cancelOnError})  {
-
-//    final done = Completer<bool>();
-//     late final StreamSubscription<T> sub;
-//     sub = _controller.stream.listen((e) async {
-//       sub.pause();
-//       final element = await _buffer.get();
-//       if (onData != null) {
-//         onData(element);
-//       }
-//       sub.resume();
-//     }, onError: onError, onDone: () {
-
-//       if (onDone != null){
-//       onDone();
-//       }
-//       done.complete(true);
-
-//     }, cancelOnError: cancelOnError);
-
-//     await done.future;
-//     // ignore: cascade_invocations
-//     sub.cancel();
-//     return sub;
-//   }
-// }
-
-///
 class LimitedStreamController<T> implements StreamController<T> {
-  ///
-  LimitedStreamController(int limit) : _buffer = AsyncCircularBuffer(limit);
+  /// Creates a new [LazyStreamController] that will be a non-broadcast
+  /// controller.
+  LimitedStreamController(int limit,
+      {void Function()? onListen, void Function()? onCancel, bool sync = false})
+      : _streamController = StreamController<T>(
+            onListen: onListen, onCancel: onCancel, sync: sync),
+        _buffer = AsyncCircularBuffer(limit);
 
-  final _controller = StreamController<T>();
   final AsyncCircularBuffer<T> _buffer;
 
-  @override
-  late FutureOr<void> Function()? onCancel = _controller.onCancel;
+  final StreamController<T> _streamController;
 
-  @override
-  late void Function()? onListen = _controller.onListen;
-
-  @override
-  late void Function()? onPause = _controller.onPause;
-
-  @override
-  late void Function()? onResume = _controller.onResume;
-
+  /// Returns the no. of elements waiting in the stream.
   int get length => _buffer.length;
 
+  @override
+  bool get isClosed => _streamController.isClosed;
+
+  @override
+  bool get hasListener => _streamController.hasListener;
+
+  @override
+  bool get isPaused => _streamController.isPaused;
+
+  @Deprecated('Use asyncAdd')
   @override
   void add(T event) {
     throw UnsupportedError('Use asyncAdd');
@@ -92,40 +35,71 @@ class LimitedStreamController<T> implements StreamController<T> {
 
   ///
   Future<void> asyncAdd(T event) async {
-    _controller.sink.add(event);
-    return _buffer.add(event);
+    await _buffer.add(event);
   }
 
   @override
   void addError(Object error, [StackTrace? stackTrace]) {
-    _controller.addError(error, stackTrace);
+    _streamController.addError(error, stackTrace);
   }
 
   @override
-  Future addStream(Stream<T> source, {bool? cancelOnError}) =>
-      _controller.addStream(source, cancelOnError: cancelOnError);
+  Future addStream(Stream<T> source, {bool? cancelOnError = true}) {
+    throw UnsupportedError('Use asyncAdd');
+    // return _streamController.addStream(source, cancelOnError: cancelOnError);
+  }
 
   @override
-  Future close() {
+  Future<dynamic> close() {
     _buffer.close();
-    return _controller.close();
+    return _streamController.close();
   }
 
   @override
-  Future get done => _controller.done;
+  Future get done => _streamController.done;
 
-  @override
-  bool get hasListener => _controller.hasListener;
-
-  @override
-  bool get isClosed => _controller.isClosed;
-
-  @override
-  bool get isPaused => _controller.isPaused;
+  // @override
+  // StreamSink<T> get sink => _streamController.sink;
 
   @override
   StreamSink<T> get sink => throw UnsupportedError('Use asyncAdd');
 
   @override
-  Stream<T> get stream => _buffer.stream();
+  // ignore: prefer_expression_function_bodies
+  Stream<T> get stream {
+    return _buffer.stream();
+    // return _streamController.stream;
+  }
+
+  @override
+  set onListen(void Function()? onListenHandler) {
+    _streamController.onListen = onListenHandler;
+  }
+
+  @override
+  ControllerCallback? get onListen => _streamController.onListen;
+
+  @override
+  set onPause(void Function()? onPauseHandler) {
+    _streamController.onPause = onPauseHandler;
+  }
+
+  @override
+  ControllerCallback? get onPause => _streamController.onPause;
+
+  @override
+  set onResume(void Function()? onResumeHandler) {
+    _streamController.onResume = onResumeHandler;
+  }
+
+  @override
+  ControllerCallback? get onResume => _streamController.onResume;
+
+  @override
+  set onCancel(void Function()? onCancelHandler) {
+    _streamController.onCancel = onCancelHandler;
+  }
+
+  @override
+  ControllerCancelCallback? get onCancel => _streamController.onCancel;
 }

@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import '../util/limited_stream_controller.dart';
 import 'package:path/path.dart';
 
 import '../../dcli_core.dart';
@@ -100,7 +101,7 @@ class _CopyTree extends DCliFunction {
       );
     }
 
-    final controller = StreamController<FindItem>();
+    final controller = LimitedStreamController<FindItem>(100);
     late final StreamSubscription<FindItem> sub;
     sub = controller.stream.listen((item) async => _process(
         item.pathTo, filter, from, to,
