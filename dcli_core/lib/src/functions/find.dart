@@ -7,6 +7,7 @@ import '../../dcli_core.dart';
 import '../util/limited_stream_controller.dart';
 import '../util/logging.dart';
 
+///
 typedef FindController<T> = LimitedStreamController<T>;
 
 ///
@@ -79,6 +80,8 @@ typedef FindController<T> = LimitedStreamController<T>;
 /// If the [progress] doesn't output [stdout] then you will get no results
 /// back.
 ///
+///TODO(bsutton): consider having find return a Stream and eliminate passing
+/// a controller in.
 Future<void> find(
   String pattern, {
   required FindController<FindItem> progress,
@@ -100,7 +103,7 @@ Future<void> find(
 
 /// Implementation for the [_find] function.
 class Find extends DCliFunction {
-  bool _closed = false;
+  final bool _closed = false;
 
   Future<void> _find(
     String pattern, {
@@ -218,8 +221,6 @@ class Find extends DCliFunction {
       await progress.close();
     }
   }
-
-  int dircount = 0;
 
   Future<void> _processDirectory(
     String workingDirectory,
@@ -405,8 +406,6 @@ class Find extends DCliFunction {
   /// pass as a value to the final types argument
   /// to select links to be found
   static const link = FileSystemEntityType.link;
-
-  FutureOr<void> _onCancel() => _closed = true;
 }
 
 class _PatternMatcher {

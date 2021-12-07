@@ -2,7 +2,6 @@ import 'dart:async';
 
 import 'dart:math';
 
-
 /// A [AsyncCircularBuffer] with a fixed capacity supporting
 /// all [List] operations
 ///
@@ -188,7 +187,8 @@ class AsyncCircularBuffer<T>
     return element;
   }
 
-  Iterator<Future<T>> get iterator => CircularBufferIterator(this);
+  /// iterator over the list of elements.
+  Iterator<Future<T>> get iterator => _CircularBufferIterator(this);
 
   /// Number of elements of [AsyncCircularBuffer]
   int get length => _count;
@@ -212,6 +212,7 @@ class AsyncCircularBuffer<T>
 
   bool get _isNotEmpty => _count > 0;
 
+  /// Access element at [index]
   T operator [](int index) {
     if (index >= 0 && index < _count) {
       return _buf[(_start + index) % _buf.length]!;
@@ -219,6 +220,7 @@ class AsyncCircularBuffer<T>
     throw RangeError.index(index, this);
   }
 
+  /// Assign an element at [index]
   void operator []=(int index, T value) {
     if (index >= 0 && index < _count) {
       _buf[(_start + index) % _buf.length] = value;
@@ -227,6 +229,7 @@ class AsyncCircularBuffer<T>
     }
   }
 
+  /// Returns a stream of the contained elements.
   Stream<T> stream() async* {
     try {
       while (!_closed.isCompleted) {
@@ -265,9 +268,9 @@ class AsyncCircularBuffer<T>
   }
 }
 
-class CircularBufferIterator<T> implements Iterator<Future<T>> {
+class _CircularBufferIterator<T> implements Iterator<Future<T>> {
   ///
-  CircularBufferIterator(this._buffer);
+  _CircularBufferIterator(this._buffer);
   // Iterate over odd numbers
   final AsyncCircularBuffer<T> _buffer;
 
@@ -289,18 +292,26 @@ class CircularBufferIterator<T> implements Iterator<Future<T>> {
   }
 }
 
+/// An attempt was made to access the buffer when it was closed.
 class BadStateException implements Exception {
+  /// An attempt was made to access the buffer when it was closed.
   BadStateException(this.message);
 
+  /// The message.
   String message;
 
   @override
   String toString() => message;
 }
 
+/// An attempt was made to access the buffer when
+/// it was closed and empty.
 class UnderflowException implements Exception {
+  /// An attempt was made to access the buffer when
+  /// it was closed and empty.
   UnderflowException();
 
+  /// the error message.
   String get message => 'The buffer is closed and empty';
   @override
   String toString() => message;

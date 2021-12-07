@@ -1,6 +1,7 @@
 import 'dart:async';
 
-
+/// A specialized StreamController that limits the no.
+/// of elements that can be in the stream.
 class LimitedStreamController<T> implements StreamController<T> {
   /// Creates a new [LimitedStreamController] that limits the no.
   /// of elements that can be in the queue.
@@ -8,9 +9,6 @@ class LimitedStreamController<T> implements StreamController<T> {
       {void Function()? onListen, void Function()? onCancel, bool sync = false})
       : _streamController = StreamController<T>(
             onListen: onListen, onCancel: onCancel, sync: sync);
-  // _buffer = AsyncCircularBuffer(limit);
-
-  // final AsyncCircularBuffer<T> _buffer;
 
   final StreamController<T> _streamController;
 
@@ -56,7 +54,6 @@ class LimitedStreamController<T> implements StreamController<T> {
   }
 
   @override
-  // ignore: prefer_expression_function_bodies
   Stream<T> get stream async* {
     /// return _buffer.stream();
     await for (final element in _streamController.stream) {
@@ -78,7 +75,6 @@ class LimitedStreamController<T> implements StreamController<T> {
   @override
   Future addStream(Stream<T> source, {bool? cancelOnError = true}) {
     throw UnsupportedError('Use asyncAdd');
-    // return _streamController.addStream(source, cancelOnError: cancelOnError);
   }
 
   @override
@@ -86,9 +82,6 @@ class LimitedStreamController<T> implements StreamController<T> {
 
   @override
   Future get done => _streamController.done;
-
-  // @override
-  // StreamSink<T> get sink => _streamController.sink;
 
   @override
   StreamSink<T> get sink => throw UnsupportedError('Use asyncAdd');
