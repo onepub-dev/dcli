@@ -18,30 +18,28 @@ import '../../dcli.dart';
 T waitForEx<T>(Future<T> future) {
   final stackTrace = StackTraceImpl();
   DCliException? exception;
-  // When dart 2.16 is released we can use this which fixes the stack
-  // properly
-  // late StackTrace microTaskStackTrace;
+  late StackTrace microTaskStackTrace;
   late T value;
   try {
     value = cli.waitFor<T>(future);
   }
   // ignore: avoid_catching_errors
-  on AsyncError catch (e, st) {
+  on AsyncError catch (e) {
+    microTaskStackTrace = e.stackTrace;
+
     if (e.error is DCliException) {
       exception = e.error as DCliException;
-      // When dart 2.16 is released we can use this which fixes the stack
-      // properly
-      // microTaskStackTrace = e.stackTrace;
     } else {
+      final merged = stackTrace.merge(microTaskStackTrace);
       verbose(() => '''
 Rethrowing a non DCliException $e 
-$st''');
+$merged''');
 
       // When dart 2.16 is released we can use this which fixes the stack
       // properly
-      // final merged = stacktrace.merge(e.stackTrace);
       // Error.throwWithStackTrace(e.error, merged);
 
+      // 2.15
       // ignore: only_throw_errors
       throw e.error;
     }
@@ -57,13 +55,14 @@ $st''');
     // The best we can do is store the repaired stack trace in the
     // DCliException.
 
+    final merged = stackTrace.merge(microTaskStackTrace);
+
     /// When dart 2.16 is released we can use this which fixes the stack
     /// properly
-    // final merged = stackTrace.merge(microTaskStackTrace);
-    // Error.throwWithStackTrace(exception, merged);
-    throw exception..stackTrace = StackTraceImpl.fromStackTrace(stackTrace);
 
-    // throw exception..stackTrace = StackTraceImpl.fromStackTrace(stackTrace);
+    /// Error.throwWithStackTrace(exception, merged);
+    // 2.15
+    throw exception..stackTrace = merged;
   }
   return value;
 }
