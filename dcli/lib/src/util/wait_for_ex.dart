@@ -26,14 +26,16 @@ T waitForEx<T>(Future<T> future) {
     value = cli.waitFor<T>(future);
   }
   // ignore: avoid_catching_errors
-  on AsyncError catch (e) {
+  on AsyncError catch (e, st) {
     if (e.error is DCliException) {
       exception = e.error as DCliException;
       // When dart 2.16 is released we can use this which fixes the stack
       // properly
       // microTaskStackTrace = e.stackTrace;
     } else {
-      verbose(() => 'Rethrowing a non DCliException $e');
+      verbose(() => '''
+Rethrowing a non DCliException $e 
+$st''');
 
       // When dart 2.16 is released we can use this which fixes the stack
       // properly
