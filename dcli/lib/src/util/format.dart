@@ -115,7 +115,7 @@ class Format {
   /// Except for absurdly large no. (> 10^20)
   /// the return is guarenteed to be 6 characters long.
   /// For no. < 1000K we right pad the no. with spaces.
-  static String bytesAsReadable(int bytes, {bool pad = true}) {
+  String bytesAsReadable(int bytes, {bool pad = true}) {
     String human;
 
     if (bytes < 1000) {
@@ -134,7 +134,7 @@ class Format {
     return human;
   }
 
-  static String _fiveDigits(int bytes, int exponent, String letter,
+  String _fiveDigits(int bytes, int exponent, String letter,
       {bool pad = true}) {
     final num result;
     String human;

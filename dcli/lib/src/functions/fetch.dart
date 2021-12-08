@@ -639,8 +639,8 @@ class FetchProgress {
   static _ProgressByteUpdate formatByteLine(FetchProgress progress) {
     _ProgressByteUpdate update;
     final status = _fixedWidthStatus(progress.status);
-    final downloaded = Format.bytesAsReadable(progress.downloaded);
-    final total = Format.bytesAsReadable(progress.length, pad: false);
+    final downloaded = Format().bytesAsReadable(progress.downloaded);
+    final total = Format().bytesAsReadable(progress.length, pad: false);
 
     final url = Format().limitString(progress.fetch.url);
     switch (progress.status) {
@@ -701,7 +701,7 @@ class FetchProgress {
 
   @override
   String toString() =>
-      '${EnumHelper().getName(status)}: ${Format.bytesAsReadable(downloaded)}/${Format.bytesAsReadable(length)} ${fetch.url}';
+      '${EnumHelper().getName(status)}: ${Format().bytesAsReadable(downloaded)}/${Format().bytesAsReadable(length)} ${fetch.url}';
 }
 
 class _ProgressByteUpdate {
