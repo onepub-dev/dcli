@@ -61,6 +61,12 @@
             "cwd": "template\\hello_world",
             "request": "launch",
             "type": "dart"
+        },
+        {
+            "name": "find_memory",
+            "program": "dcli/test/src/functions/find_memory.dart",
+            "request": "launch",
+            "type": "dart"
         }
     ]
 }
