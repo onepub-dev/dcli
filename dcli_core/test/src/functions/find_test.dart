@@ -1,7 +1,6 @@
 import 'dart:async';
 
 import 'package:dcli_core/dcli_core.dart';
-import 'package:dcli_core/src/util/limited_stream_controller.dart';
 import 'package:test/test.dart';
 
 void main() {

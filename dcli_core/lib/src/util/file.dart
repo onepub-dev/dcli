@@ -202,7 +202,7 @@ Future<Digest> calculateHash(String path) async {
   }
   final input = File(path);
 
-  final hasher = sha256;
+  const hasher = sha256;
   return hasher.bind(input.openRead()).first;
 }
 
