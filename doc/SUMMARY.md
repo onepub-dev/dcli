@@ -52,7 +52,7 @@
 * [DCli Install](dcli-tools-1/dcli-install.md)
 * [DCli run](dcli-tools-1/dcli-run.md)
 * [DCli Warmup](dcli-tools-1/dcli-clean.md)
-* [DCli pack](dcli-tools-1/dcli-pack.md)
+* [DCli Pack](dcli-tools-1/dcli-pack.md)
 * [Upgrade DCli](dcli-tools-1/upgrade-dcli.md)
 * [Performance](dcli-tools-1/performance.md)
 * [Docker](dcli-tools-1/docker.md)
@@ -89,7 +89,6 @@
 
 ## Articles
 
-* [Video: package of the week](articles/package-of-the-week.md)
 * [build CLI apps in dart - part 1](articles/build-console-apps-in-dart.md)
 * [build CLI apps in dart - part 2](articles/build-cli-apps-in-dart-part-2.md)
 * [Dealing with permissions](articles/dealing-with-permissions.md)
@@ -97,3 +96,5 @@
 ***
 
 * [Dart on Linux - the perfect CLI tooling](dart-on-ubuntu-the-perfect-cli-dev-tooling.md)
+* [Olivier Revial - CLI apps made easy](olivier-revial-cli-apps-made-easy.md)
+* [Video: package of the week](package-of-the-week.md)
