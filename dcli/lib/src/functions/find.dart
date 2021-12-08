@@ -172,9 +172,11 @@ class FindProgress extends InternalProgress {
     try {
       late StreamSubscription<FindItem> sub;
       sub = controller.stream.listen((item) async {
+        sub.pause();
         if (!action(item.pathTo)) {
           await sub.cancel();
         }
+        sub.resume();
       });
 
       waitForEx(
