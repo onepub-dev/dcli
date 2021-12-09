@@ -4,10 +4,12 @@ import '../../dcli.dart';
 
 /// Utility methods to aid the dcli_completion app.
 ///
-
+/// If [extension] is passed then only files that
+/// end with [extension] are returned (plus directories)
 List<String> completionExpandScripts(
   String word, {
   String workingDirectory = '.',
+  String? extension,
 }) {
   var _workingDirectory = workingDirectory;
 
@@ -65,6 +67,11 @@ List<String> completionExpandScripts(
         // its a directory add trailing slash and returning.
         filePath = '${relative(script, from: workingDirectory)}/';
       } else {
+        // its a file
+        // If extension is passed we only return files that match the extension.
+        if (extension != null && !script.endsWith(extension)) {
+          continue;
+        }
         filePath = relative(script, from: workingDirectory);
       }
       if (filePath.contains(' ')) {
