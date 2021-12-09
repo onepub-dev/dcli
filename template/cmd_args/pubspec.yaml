@@ -8,6 +8,6 @@ dependencies:
   path: ^1.0.0
 
 dev_dependencies:
-  lints: ^1.0.0
+  lint_hard: ^1.0.0
 
 

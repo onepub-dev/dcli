@@ -163,7 +163,8 @@ class CompileCommand extends Command {
   }
 
   @override
-  List<String> completion(String word) => completionExpandScripts(word, extension: '.dart');
+  List<String> completion(String word) =>
+      completionExpandScripts(word, extension: '.dart');
 
   @override
   List<Flag> flags() => _compileFlags;
