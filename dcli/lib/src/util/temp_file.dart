@@ -9,9 +9,9 @@ import 'wait_for_ex.dart';
 ///
 /// This method does NOT create the file.
 ///
-/// The temp file name will be <uuid>.tmp
+/// The temp file name will be uuid.tmp
 /// unless you provide a [suffix] in which
-/// case the file name will be <uuid>.<suffix>
+/// case the file name will be uuid.suffix
 String createTempFilename({String? suffix, String? pathToTempDir}) =>
     core.createTempFilename(suffix: suffix, pathToTempDir: pathToTempDir);
 
@@ -20,9 +20,9 @@ String createTempFilename({String? suffix, String? pathToTempDir}) =>
 ///
 /// This method does not create the file.
 ///
-/// The temp file name will be <uuid>.tmp
+/// The temp file name will be uuid.tmp
 /// unless you provide a [suffix] in which
-/// case the file name will be <uuid>.<suffix>
+/// case the file name will be uuid.suffix
 String createTempFile({String? suffix}) =>
     waitForEx(core.createTempFile(suffix: suffix));
 
@@ -41,9 +41,9 @@ String createTempFile({String? suffix}) =>
 /// directory otherwise the file will be created in the system
 /// temp directory.
 ///
-/// The temp file name will be <uuid>.tmp
+/// The temp file name will be uuid.tmp
 /// unless you provide a [suffix] in which
-/// case the file name will be <uuid>.<suffix>
+/// case the file name will be uuid.suffix
 R withTempFile<R>(
   R Function(String tempFile) action, {
   String? suffix,

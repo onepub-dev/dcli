@@ -15,9 +15,11 @@ import '../../dcli.dart';
 /// Note: the api to this class is considered EXPERIMENTAL
 /// and is subject to change.
 class FileSync {
+  /// Opens a file for synchronous IO.
+  ///
   /// If you instantiate FileSync you MUST call [close].
   ///
-  /// We rececommend that you use [withOpenFile] in prefernce to directly
+  /// We rececommend that you use [withOpenFile] in preference to directly
   /// calling this method.
   FileSync(String path, {FileMode fileMode = FileMode.writeOnlyAppend}) {
     _file = File(path);
