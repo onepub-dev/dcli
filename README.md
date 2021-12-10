@@ -8,22 +8,17 @@ If you enjoyed DCli maybe you could help out with a sponsorship or just buy me a
 [:heart: Sponsor Me](https://github.com/sponsors/bsutton)
 
 
-DCli is an API and tooling for building cross platform command line \(CLI\) applications and scripts using the Dart programming language.
+DCli is Dart Console SDK for building cross platform command line \(CLI\) applications and scripts using the Dart programming language.
 
-DCli - pronounced d-cli
+DCli - pronounced d-klie
 
 
 # Another Dart tool by Noojee
 
-
 <a href="https://noojee.dev">![Noojee](https://github.com/bsutton/dcli/blob/master/images/noojee-logo.png?raw=true)</a>
 
-## Looking for DShell? You are in the right place.
-
-DShell has been renamed DCli to better reflect its intended purposes. 
-
 # Overview
-DCli is intended to to allow you to create Command  Line (CLI) Applications from simple scripts to full blown CLI apps. 
+DCli is a complete SDK for building Command  Line (CLI) Applications from simple scripts to full blown CLI apps. 
 
 DCli is a great replacement for CLI apps that would have traditionally been built with Bash, C, python, ruby, Go, Rust ....
 
