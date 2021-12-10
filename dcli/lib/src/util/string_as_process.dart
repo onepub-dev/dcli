@@ -303,6 +303,7 @@ extension StringAsProcess on String {
     bool runInShell = false,
     int skipLines = 0,
     bool nothrow = false,
+    String? workingDirectory,
     bool extensionSearch = true,
   }) {
     final progress = cmd.start(
@@ -310,6 +311,7 @@ extension StringAsProcess on String {
       runInShell: runInShell,
       progress: Progress.capture(),
       nothrow: nothrow,
+      workingDirectory: workingDirectory,
       extensionSearch: extensionSearch,
     );
 
@@ -366,12 +368,14 @@ extension StringAsProcess on String {
     bool runInShell = false,
     int skipLines = 0,
     bool nothrow = false,
+    String? workingDirectory,
     bool extensionSearch = true,
   }) =>
       toList(
         runInShell: runInShell,
         skipLines: skipLines,
         nothrow: nothrow,
+        workingDirectory: workingDirectory,
         extensionSearch: extensionSearch,
       ).join(Platform().eol);
 
