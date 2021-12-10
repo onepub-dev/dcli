@@ -1,3 +1,20 @@
+# 1.15.0
+- simplified the basic template.
+- add workingDirectory support to toParagraph and toList
+- improved dcli tab completion for the compile command by only showing files that end in .dart.
+- Improved the stacktrack logging when using waitForEx. If verbose is on we now log a fully merged stack trace.
+- Added a tool to make it easy to launch a script in profile mode.
+- Fixed a memory consumption problem caused by find.forEach not pausing the stream.
+- Made the bytesAsReadable static method of Format into a instance method for consistency.
+- Cleaned up the top level directory post dcli_core merge.
+- Implemented LimitStreamController to stop the find command causing us to rum out of memory.
+- restructured templates to be in a separate package and now use dcli pack to ship them.
+- modified activate_local so you can run it from within the project.
+- experiements in incremental compilation. Unfortunately you can only incrementally compile to a dill.
+- BREAKING: chmod now calls the posix chmod if posix is available. Change the order of the chmod args and made permission a named argument  to match chown args.
+- renamed the resources directory to resource and the templates directory to template in keeping with the dart directory naming conventions.
+
+
 # 1.14.1
 Fixed dependency issue with csv library.
 

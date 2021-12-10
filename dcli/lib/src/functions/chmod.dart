@@ -34,10 +34,7 @@ import '../../dcli.dart';
 ///
 /// On Windows a call to this method is a noop.
 ///
-void chmod(
-  String path,
-  {required String permission}
-) =>
+void chmod(String path, {required String permission}) =>
     _ChMod()._chmod(path, permission);
 
 /// Implementatio for [chmod] function.

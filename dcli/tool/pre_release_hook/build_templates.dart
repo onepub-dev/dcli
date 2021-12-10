@@ -1,6 +1,5 @@
 #! /usr/bin/env dcli
-
-import 'dart:io';
+// import 'dart:io';
 
 import 'package:dcli/dcli.dart';
 import 'package:pub_semver/pub_semver.dart';
@@ -8,37 +7,42 @@ import 'package:pubspec/pubspec.dart' as pub;
 
 late String newVersion;
 void main(List<String> args) {
-  if (args.isEmpty) {
-    print('Please provide the new version no.');
-    exit(-1);
-  }
-  newVersion = args[0];
+  printerr('TODO: redo templates using dcli pack');
+  'dcli pack'.run;
 
-  print(green('Running build_templates with version: $newVersion'));
-  final templatePath = join(
-    DartProject.self.pathToProjectRoot,
-    'lib',
-    'src',
-    'assets',
-    'template',
-  );
+  return;
 
-  final expanderPath = join(
-    DartProject.self.pathToProjectRoot,
-    'lib',
-    'src',
-    'template',
-    'expander.dart',
-  );
+  // if (args.isEmpty) {
+  //   print('Please provide the new version no.');
+  //   exit(-1);
+  // }
+  // newVersion = args[0];
 
-  final content = packAssets(templatePath);
+  // print(green('Running build_templates with version: $newVersion'));
+  // final templatePath = join(
+  //   DartProject.self.pathToProjectRoot,
+  //   'lib',
+  //   'src',
+  //   'assets',
+  //   'template',
+  // );
 
-  if (!exists(dirname(expanderPath))) {
-    createDir(dirname(expanderPath));
-  }
+  // final expanderPath = join(
+  //   DartProject.self.pathToProjectRoot,
+  //   'lib',
+  //   'src',
+  //   'template',
+  //   'expander.dart',
+  // );
 
-  print('Writing assets to $expanderPath');
-  expanderPath.write(content);
+  // final content = packAssets(templatePath);
+
+  // if (!exists(dirname(expanderPath))) {
+  //   createDir(dirname(expanderPath));
+  // }
+
+  // print('Writing assets to $expanderPath');
+  // expanderPath.write(content);
 }
 
 /// We create a dart library with a single class TemplateExpander which contains

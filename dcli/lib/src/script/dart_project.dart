@@ -35,7 +35,7 @@ class DartProject {
   static DartProject get current => self;
 
   /// Looks for a pubspec.yaml and if found returns a [DartProject].
-  /// 
+  ///
   /// If [search] is true then it will search from [pathToSearchFrom]
   /// up the tree.
   static DartProject? findProject(String pathToSearchFrom,
