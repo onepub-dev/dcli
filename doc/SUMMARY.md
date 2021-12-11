@@ -50,7 +50,7 @@
 * [DCli Create](dcli-tools-1/dcli-create.md)
 * [DCli Doctor](dcli-tools-1/dcli-doctor.md)
 * [DCli Install](dcli-tools-1/dcli-install.md)
-* [DCli run](dcli-tools-1/dcli-run.md)
+* [DCli Run](dcli-tools-1/dcli-run.md)
 * [DCli Warmup](dcli-tools-1/dcli-clean.md)
 * [DCli Pack](dcli-tools-1/dcli-pack.md)
 * [Upgrade DCli](dcli-tools-1/upgrade-dcli.md)

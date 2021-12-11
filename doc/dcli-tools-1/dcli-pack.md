@@ -38,6 +38,34 @@ if (calculateHash(pathToResource).hexEncode() != packResource.checksum)
 }
 ```
 
+## External Resources
+
+You can also pack resources that are external to your project by creating a pack.yaml file under your project's tool/dcli director.
+
+The pack.yaml file allows you to specify a number of files and/or directories and their virtual mount point within the resource directory.
+
+```yaml
+externals:
+  - external:
+    path: ../template/basic
+    mount: template/basic
+  - external:
+    path: ../template/cmd_args
+    mount: template/cmd_args
+  - external:
+    path: ../template/find
+    mount: template/find
+  - external:
+    path: ../template/hello_world
+    mount: template/hello_world
+```
+
+The path for each external may be a file or a directory. If path is a directory then the directory is included recursively.
+
+The mount point is a virtual location within the resource directory. It may not overlap any actual files/paths in the resource directory.
+
+To unpack external resources you use the mount point as the key into the ResourceRegistry.
+
 ## Limits
 
 If you plan on publishing your project to pub.dev be aware that pub.dev has a maximum package size of 10MB.
