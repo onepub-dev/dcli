@@ -34,7 +34,19 @@
 * [Fetch](dcli-api/fetch.md)
 * [The evils of CD](dcli-api/the-evils-of-cd.md)
 * [Assets/Resources](dcli-api/assets.md)
-* [Cross Platform](dcli-api/cross-platform.md)
+* [Cross Platform](dcli-api/cross-platform/README.md)
+  * [Posix](dcli-api/cross-platform/posix.md)
+  * [Windows](dcli-api/cross-platform/windows.md)
+  * [Docker](dcli-api/cross-platform/docker/README.md)
+    * [Detecting Docker](dcli-api/cross-platform/docker/detecting-docker.md)
+    * [Add DCli to a Docker Container](dcli-api/cross-platform/docker/add-dcli-to-a-docker-container.md)
+    * [Example DCli app in Docker](dcli-api/cross-platform/docker/ship-a-dcli-app-in-docker.md)
+
+***
+
+* [Elevated Privileges](elevated-privileges/README.md)
+  * [Sudo](elevated-privileges/sudo.md)
+* [Performance](performance.md)
 
 ## Dependency Management <a href="#dependency-management-1" id="dependency-management-1"></a>
 
@@ -54,13 +66,6 @@
 * [DCli Warmup](dcli-tools-1/dcli-clean.md)
 * [DCli Pack](dcli-tools-1/dcli-pack.md)
 * [Upgrade DCli](dcli-tools-1/upgrade-dcli.md)
-* [Performance](dcli-tools-1/performance.md)
-* [Docker](dcli-tools-1/docker.md)
-  * [Detecting Docker](dcli-tools-1/docker/detecting-docker.md)
-  * [Add DCli to a Docker Container](dcli-tools-1/docker/add-dcli-to-a-docker-container.md)
-  * [Example DCli app in Docker](dcli-tools-1/docker/ship-a-dcli-app-in-docker.md)
-* [Elevated Privileges](dcli-tools-1/elevated-privileges/README.md)
-  * [Sudo](dcli-tools-1/elevated-privileges/sudo.md)
 
 ## Internal Workings
 

@@ -156,26 +156,6 @@ The best way to overcome this situation is create an instance of DartScript and 
 DartScript.fromFile('hello.dart'.run();
 ```
 
-## Windows Registry
-
-The Windows Registry is unique to Windows so if you want to write cross platform scripts then you should avoid using the Registry. However in some circumstances this simply isn't possible
-
-In this case use the `Platform.isWindows` method to determine when to use the registery.
-
-```dart
-import 'dart:io';
-import 'package:dcli/dcli.dart;
-
-void main() {
-    if (Plaform.isWindows) {
-         regSetString(HKEY_CURRENT_USER, 'Environment', 'PATH_TEST', 'HI');
-    }
-    else {
-    /// do some posix stuff.
-    }
-}
-```
-
 ## Environment Variables
 
 Environment variables between Windows and posix systems differ significantly.
@@ -227,7 +207,7 @@ Only appending a path to the PATH is supported.
 
 Bash is the only Shell with full support for the Shell path methods.
 
-On Linux and Mac OS things are trickier as each shell has its own
+On Linux and Mac OS things are trickier as each shell has its own method of management the PATH environment.
 
 ## Built in OS Applications
 
