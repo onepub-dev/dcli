@@ -76,7 +76,8 @@
 //     try {
 //       print('generated $pathToDill');
 
-//       final result = await Process.run(DartSdk().pathToDartExe!, [pathToDill]);
+//       final result = await Process.run(DartSdk().pathToDartExe!, 
+//          [pathToDill]);
 
 //       if (result.stdout != null) {
 //         print(result.stdout.toString().trimRight());
