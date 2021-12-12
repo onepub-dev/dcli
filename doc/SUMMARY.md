@@ -96,5 +96,9 @@
 ***
 
 * [Dart on Linux - the perfect CLI tooling](dart-on-ubuntu-the-perfect-cli-dev-tooling.md)
+* [Improving your build environment](improving-your-build-environment/README.md)
+  * [Existing tooling](improving-your-build-environment/existing-tooling.md)
+  * [Building with Dart](improving-your-build-environment/building-with-dart.md)
+  * [A home for your build tools](improving-your-build-environment/a-home-for-your-build-tools.md)
 * [Olivier Revial - CLI apps made easy](olivier-revial-cli-apps-made-easy.md)
 * [Video: package of the week](package-of-the-week.md)
