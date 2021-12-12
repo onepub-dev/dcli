@@ -56,7 +56,9 @@
 * [Upgrade DCli](dcli-tools-1/upgrade-dcli.md)
 * [Performance](dcli-tools-1/performance.md)
 * [Docker](dcli-tools-1/docker.md)
-  * [Ship a DCli app in Docker](dcli-tools-1/docker/ship-a-dcli-app-in-docker.md)
+  * [Detecting Docker](dcli-tools-1/docker/detecting-docker.md)
+  * [Add DCli to a Docker Container](dcli-tools-1/docker/add-dcli-to-a-docker-container.md)
+  * [Example DCli app in Docker](dcli-tools-1/docker/ship-a-dcli-app-in-docker.md)
 * [Elevated Privileges](dcli-tools-1/elevated-privileges/README.md)
   * [Sudo](dcli-tools-1/elevated-privileges/sudo.md)
 
