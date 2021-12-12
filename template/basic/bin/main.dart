@@ -1,6 +1,5 @@
 #! /usr/bin/env dcli
 
-import 'dart:io';
 
 // ignore: prefer_relative_imports
 import 'package:dcli/dcli.dart';
@@ -15,7 +14,8 @@ import 'package:dcli/dcli.dart';
 ///
 
 void main(List<String> args) {
-  var response = ask('$prompt:', validator: Ask.all([Ask.alpha, Ask.required]));
+  final response =
+      ask('say somthing:', validator: Ask.all([Ask.alpha, Ask.required]));
 
   print(orange('Your response was: $response'));
 }
