@@ -6,7 +6,7 @@ import 'package:posix/posix.dart' as posix;
 
 import '../../dcli.dart';
 
-/// Wrapper for the linux `chmod` command.
+/// Sets the permissions on a file on posix systems.
 ///
 /// [permission] is an octal string as used by the cli commandchmod e.g. 777
 /// [path] is the path to the file that we are changing the
