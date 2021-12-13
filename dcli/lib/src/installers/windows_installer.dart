@@ -1,3 +1,5 @@
+import 'package:win32/win32.dart';
+
 import '../../dcli.dart';
 import '../../windows.dart';
 
