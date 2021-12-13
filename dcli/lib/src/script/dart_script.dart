@@ -19,11 +19,7 @@ class DartScript {
   /// Path to the currently runnng script
   // static String? __pathToCurrentScript;
 
-  /// Absolute path to 'this' script.
-  /// If this is a .dart file then its current location.
-  /// If this is a compiled script then the location of the compiled exe.
-  /// If the script was globally activated then this will be a path
-  /// to the script in the pub-cache.
+
   DartScript._self() {
     final script = Platform.script;
 
@@ -113,7 +109,12 @@ class DartScript {
   /// stored as an absolute path.
   late final String _scriptDirectory;
 
-  /// path to the this dart script.
+  /// Absolute path to 'this' script including the script name
+  /// 
+  /// If this is a .dart file then its current location.
+  /// If this is a compiled script then the location of the compiled exe.
+  /// If the script was globally activated then this will be a path
+  /// to the script in the pub-cache.
   String get pathToScript => _pathToScript;
 
   /// The filename of the script including the extension.

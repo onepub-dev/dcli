@@ -8,9 +8,14 @@ import 'pub_get.dart';
 
 class DartProject {
   /// Load a dart project from the given directory.
+  ///
   /// We search up the tree starting from [pathToSearchFrom]
   /// until we find a pubspec.yaml and that becomes the
-  /// project root. directory.
+  /// project root directory.
+  /// If we don't find a pubspec.yaml then [pathToSearchFrom] is returned
+  /// as the project root.
+  /// If you want to test whether you are in a Dart project then use
+  /// [findProject].
   /// Set [search] to false if you don't want to search up the
   /// directory tree for a pubspec.yaml.
   DartProject.fromPath(String pathToSearchFrom, {bool search = true}) {
