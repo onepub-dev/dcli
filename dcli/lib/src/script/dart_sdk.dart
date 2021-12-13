@@ -5,7 +5,7 @@ import 'package:meta/meta.dart';
 import 'package:pub_semver/pub_semver.dart';
 
 import '../../dcli.dart';
-import '../../posix.dart';
+import '../../posix.dart' as posix;
 import '../util/enum_helper.dart';
 import '../util/runnable_process.dart';
 import 'commands/install.dart';
@@ -376,7 +376,7 @@ class DartSdk {
     if (Platform.isLinux || Platform.isMacOS) {
       /// make execs executable.
       find('*', workingDirectory: join(installDir, 'bin'), recursive: false)
-          .forEach((file) => chmod(file, permission: '500'));
+          .forEach((file) => posix.chmod(file, permission: '500'));
     }
 
     // The normal dart detection process won't work here
