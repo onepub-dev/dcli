@@ -389,8 +389,11 @@ abstract class PackedResource {
   String get originalPath;
 
   /// Unpacks a resource saving it
-  /// to [pathTo]
+  /// to the file at [pathTo].
   void unpack(String pathTo) {
+    if (exists(pathTo) && !isFile(pathTo)) {
+      throw ResourceException('The unpack target $pathTo must be a file');
+    }
     final normalized = normalize(pathTo);
     if (!exists(dirname(normalized))) {
       createDir(dirname(normalized), recursive: true);
