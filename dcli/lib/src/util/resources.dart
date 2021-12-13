@@ -27,10 +27,18 @@ class Resources {
   /// the directory where we expect to find the resources
   /// we are going to pack.
   static final String _resourceRoot = join('resource');
+
+  /// relative path to generated root.
   static final String _generatedRoot =
       join('lib', 'src', 'dcli', 'resource', 'generated');
+
+  /// relative path to registry
   static final String _pathToRegistry =
       join(_generatedRoot, 'resource_registry.g.dart');
+
+  /// Path to the registry library
+  late final String pathToRegistry =
+      join(DartProject.self.pathToProjectRoot, _pathToRegistry);
 
   /// Directory where will look for resources to pack
   late final String resourceRoot =
@@ -54,10 +62,10 @@ class Resources {
     /// clear out an old generated files
     /// as we use UUIDs if we didn't do this the
     /// directory would keep growing.
-    if (exists(_generatedRoot)) {
-      deleteDir(_generatedRoot);
+    if (exists(generatedRoot)) {
+      deleteDir(generatedRoot);
     }
-    createDir(_generatedRoot, recursive: true);
+    createDir(generatedRoot, recursive: true);
 
     final packedResources = _packResources(resources);
     _checkForDuplicates(packedResources);
@@ -72,7 +80,7 @@ class Resources {
     for (final pathToResouce in pathToResources) {
       final className = _generateClassName;
 
-      final pathToGeneratedLibrary = join(_generatedRoot, '$className.g.dart');
+      final pathToGeneratedLibrary = join(generatedRoot, '$className.g.dart');
       print(' - packing: $pathToResouce into $pathToGeneratedLibrary');
 
       final resource =
@@ -162,7 +170,7 @@ class $className extends PackedResource {
   }
 
   void _writeRegistry(List<_Resource> resources) {
-    final registryFile = File(_pathToRegistry).openWrite();
+    final registryFile = File(pathToRegistry).openWrite();
     try {
       // import 'package:dcli/src/dcli/resources/generated/Bbcded.g.dart';
       /// Write the imports
@@ -323,7 +331,7 @@ class ResourceRegistry {
   _Resource _packExternalFile(String path, String mount) {
     final className = _generateClassName;
 
-    final pathToGeneratedLibrary = join(_generatedRoot, '$className.g.dart');
+    final pathToGeneratedLibrary = join(generatedRoot, '$className.g.dart');
     print(' - packing: $path into $pathToGeneratedLibrary');
 
     final resource =
