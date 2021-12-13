@@ -1,10 +1,4 @@
-# Docker
-
-DCli is designed to work with Docker.
-
-DCli has a Docker image you can use directly or use in a Docker 'from' statement.
-
-You can also add DCli to an existing Dockerfile.
+# Add DCli to a Docker Container
 
 ## Adding DCli to your Dockerfile
 
@@ -16,59 +10,35 @@ Just change the wget path to obtain the correct installer:
 
 Linux path
 
-```
-RUN apt-get -y update
-RUN apt-get install --no-install-recommends -y wget ca-certificates gnupg2 procps
-RUN wget https://github.com/noojee/dcli/releases/download/latest.linux/dcli_install
-RUN chmod +x dcli_install
-ENV PATH="${PATH}":/usr/lib/dart/bin:"${HOME}/.pub-cache/bin":"${HOME}/.dcli/bin"
-RUN ./dcli_install
-```
-
-```
-RUN apt-get -y update
-RUN apt-get install --no-install-recommends -y wget ca-certificates gnupg2 procps
-RUN wget https://github.com/noojee/dcli/releases/download/latest-linux/dcli_install
-RUN chmod +x dcli_install
-ENV PATH="${PATH}":/usr/lib/dart/bin:"${HOME}/.pub-cache/bin":"${HOME}/.dcli/bin"
-RUN ./dcli_install
-```
-
-Windows path:
-
+{% tabs %}
+{% tab title="Linux" %}
 ```
 RUN wget wget https://github.com/noojee/dcli/releases/download/latest.windows/dcli_install.exe
 # TODO correct this path
 ENV PATH="${PATH}":/usr/lib/dart/bin:"${HOME}/.pub-cache/bin":"${HOME}/.dcli/bin"
 RUN ./dcli_install.exe
-
 ```
+{% endtab %}
 
+{% tab title="Windows" %}
 ```
-RUN wget wget https://github.com/noojee/dcli/releases/download/latest-linux/dcli_install.exe
+RUN wget wget https://github.com/noojee/dcli/releases/download/latest.windows/dcli_install.exe
 # TODO correct this path
 ENV PATH="${PATH}":/usr/lib/dart/bin:"${HOME}/.pub-cache/bin":"${HOME}/.dcli/bin"
 RUN ./dcli_install.exe
 ```
+{% endtab %}
 
-Mac OSX path:
-
+{% tab title="MacOS" %}
 ```
 RUN wget wget https://github.com/noojee/dcli/releases/download/latest.osx/dcli_install -O dcli_install
 RUN chmod +x dcli_install
 # TODO correct this path
 ENV PATH="${PATH}":/usr/lib/dart/bin:"${HOME}/.pub-cache/bin":"${HOME}/.dcli/bin"
 RUN ./dcli_install
-
 ```
-
-```
-RUN wget wget https://github.com/noojee/dcli/releases/download/latest-osx/dcli_install -O dcli_install
-RUN chmod +x dcli_install
-# TODO correct this path
-ENV PATH="${PATH}":/usr/lib/dart/bin:"${HOME}/.pub-cache/bin":"${HOME}/.dcli/bin"
-RUN ./dcli_install
-```
+{% endtab %}
+{% endtabs %}
 
 ## Compiling a dart package
 
