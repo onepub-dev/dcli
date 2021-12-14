@@ -76,7 +76,7 @@ class Bbbcdcbeeff extends PackedResource {
   String get checksum =>
       '14189a469cf7f78af8cd8d4e03815ea72412cea6cbe94779a8db9f736e147300';
 
-  /// <package>/resources relative path to the original resource.
+  /// <package>/resource relative path to the original resource.
   @override
   String get originalPath => 'lphoto.png';
 
