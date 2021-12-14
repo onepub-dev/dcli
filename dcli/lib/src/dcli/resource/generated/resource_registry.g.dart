@@ -1,33 +1,32 @@
 // ignore: prefer_relative_imports
 import 'package:dcli/dcli.dart';
-import 'Aabfbfacbebbd.g.dart';
-import 'Abeafebdcbeccbf.g.dart';
-import 'Accfeadadbbfaeb.g.dart';
-import 'Acfcbcaeaaeecaefc.g.dart';
-import 'Adafefaaeedcca.g.dart';
-import 'Bbebdadaedeeadc.g.dart';
-import 'Bbfccbecdfad.g.dart';
-import 'Cbfdcdeaaccbfece.g.dart';
-import 'Cfbcceacffca.g.dart';
-import 'Dbccdecaacbb.g.dart';
-import 'Dceaecbeeacdbf.g.dart';
-import 'Ecaeafccd.g.dart';
-import 'Eecefdecec.g.dart';
-import 'Effdbaebdfcdb.g.dart';
-import 'Fafcffcbb.g.dart';
-import 'Febbbabebcf.g.dart';
-import 'Ffeceeddaaae.g.dart';
+import 'Acdfbabdffc.g.dart';
+import 'Acfcbbefaccaccb.g.dart';
+import 'Addceaeadfcefc.g.dart';
+import 'Aeeffbdcd.g.dart';
+import 'Affaeee.g.dart';
+import 'Bacbdfbbbeacfc.g.dart';
+import 'Bdeccbbcaf.g.dart';
+import 'Ccdbeecbba.g.dart';
+import 'Cdefaebeade.g.dart';
+import 'Dbbfbddaea.g.dart';
+import 'Ecffbdabebedaebbdb.g.dart';
+import 'Edfaeaceee.g.dart';
+import 'Fbdceeeafeddcaf.g.dart';
+import 'Fceeaffa.g.dart';
+import 'Fcfaabdfd.g.dart';
+import 'Fdabafbefeb.g.dart';
+import 'Fffddddfdae.g.dart';
 
 /// GENERATED -- GENERATED
-/// 
+///
 /// DO NOT MODIFIY
-/// 
+///
 /// This script is generated via [Resource.pack()].
-/// 
+///
 /// GENERATED - GENERATED
 
 class ResourceRegistry {
-
   /// Map of the packed files.
   /// Use the path of a packed file (relative to the resource directory)
   /// to access the packed resource and then call [PackedResource].unpack()
@@ -37,23 +36,22 @@ class ResourceRegistry {
   ///     .unpack(join(HOME, '.mysettings', 'rules.yaml'));
   /// ```
   static const resources = <String, PackedResource>{
-      'template/basic/pubspec.yaml' : Aabfbfacbebbd(),
-            'template/hello_world/pubspec.lock' : Abeafebdcbeccbf(),
-            'template/find/pubspec.yaml' : Accfeadadbbfaeb(),
-            'template/basic/analysis_options.yaml' : Acfcbcaeaaeecaefc(),
-            'template/cmd_args/pubspec.lock' : Adafefaaeedcca(),
-            'template/basic/bin/main.dart' : Bbebdadaedeeadc(),
-            'template/cmd_args/pubspec.yaml' : Bbfccbecdfad(),
-            'template/hello_world/pubspec.yaml' : Cbfdcdeaaccbfece(),
-            'template/cmd_args/analysis_options.yaml' : Cfbcceacffca(),
-            'template/find/pubspec.lock' : Dbccdecaacbb(),
-            'template/cmd_args/bin/main.dart' : Dceaecbeeacdbf(),
-            'template/hello_world/analysis_options.yaml' : Ecaeafccd(),
-            'template/basic/pubspec.lock' : Eecefdecec(),
-            'template/find/analysis_options.yaml' : Effdbaebdfcdb(),
-            'template/find/bin/find.dart' : Fafcffcbb(),
-            'template/hello_world/bin/main.dart' : Febbbabebcf(),
-            'template/find/bin/main.dart' : Ffeceeddaaae(),
-          };
-  }
-  
+    'template/cmd_args/pubspec.lock': Acdfbabdffc(),
+    'template/find/analysis_options.yaml': Acfcbbefaccaccb(),
+    'template/cmd_args/pubspec.yaml': Addceaeadfcefc(),
+    'template/find/pubspec.lock': Aeeffbdcd(),
+    'template/hello_world/pubspec.yaml': Affaeee(),
+    'template/hello_world/analysis_options.yaml': Bacbdfbbbeacfc(),
+    'template/find/pubspec.yaml': Bdeccbbcaf(),
+    'template/cmd_args/bin/main.dart': Ccdbeecbba(),
+    'template/find/bin/main.dart': Cdefaebeade(),
+    'template/basic/bin/main.dart': Dbbfbddaea(),
+    'template/hello_world/pubspec.lock': Ecffbdabebedaebbdb(),
+    'template/cmd_args/analysis_options.yaml': Edfaeaceee(),
+    'template/basic/analysis_options.yaml': Fbdceeeafeddcaf(),
+    'template/find/bin/find.dart': Fceeaffa(),
+    'template/basic/pubspec.yaml': Fcfaabdfd(),
+    'template/hello_world/bin/main.dart': Fdabafbefeb(),
+    'template/basic/pubspec.lock': Fffddddfdae(),
+  };
+}

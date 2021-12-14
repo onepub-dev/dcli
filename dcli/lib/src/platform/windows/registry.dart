@@ -385,7 +385,7 @@ class _RegResults {
 }
 
 /// You must free the returned value using calloc.free
-/// 
+///
 /// A [WindowsException] is thrown the call falls.
 _RegResults _regGetValue(
   int hkey,
@@ -445,7 +445,7 @@ _RegResults _regGetValue(
 
 /// Sets a Windows registry key to the value pointed to by [pValue]
 /// which is of [valueSize] and type [type].
-/// 
+///
 /// [type] must be one of the standard registry types such as REG_SZ.
 /// [valueSize] is the size of pValue in bytes.
 /// A [WindowsException] is thrown the call falls.

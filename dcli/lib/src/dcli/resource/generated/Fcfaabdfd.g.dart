@@ -2,16 +2,16 @@
 import 'package:dcli/dcli.dart';
 
 /// GENERATED -- GENERATED
-/// 
+///
 /// DO NOT MODIFIY
-/// 
+///
 /// This script is generated via [Resource.pack()].
-/// 
+///
 /// GENERATED - GENERATED
 
-class Accfeadadbbfaeb extends PackedResource {
-  /// PackedResource - ../../template/find/pubspec.yaml
-  const Accfeadadbbfaeb();
+class Fcfaabdfd extends PackedResource {
+  /// PackedResource - ../../template/basic/pubspec.yaml
+  const Fcfaabdfd();
 
   /// A hash of the resource (pre packed) calculated by
   /// [calculateHash].
@@ -21,23 +21,21 @@ class Accfeadadbbfaeb extends PackedResource {
   /// ```dart
   ///   calculateHash(pathToResource).hexEncode() == packResource.checksum
   /// ```
-  /// to compare the checksum of the local file with 
+  /// to compare the checksum of the local file with
   /// this checksum
   @override
-  String get checksum => 
+  String get checksum =>
       'a81841a0d8e7334e6f990149703ac9c8ecd76715168d8a2b22d8ef2c6d9b0ffd';
-  
+
   /// <package>/resources relative path to the original resource.
   @override
-  String get originalPath => 'template/find/pubspec.yaml';
-  
+  String get originalPath => 'template/basic/pubspec.yaml';
+
   @override
-  String get content => 
-      '''
+  String get content => '''
 bmFtZTogc2NyaXB0bmFtZQp2ZXJzaW9uOiAwLjAuMQpkZXNjcmlwdGlvbjogQSBzY3JpcHQgZ2VuZXJh
 dGVkIGJ5IGRjbGkuCmVudmlyb25tZW50OiAKICBzZGs6ICc+PTIuMTQuMSA8My4wLjAnCmRlcGVuZGVu
 Y2llczogCiAgZGNsaTogXjEuMC4wCiAgcGF0aDogXjEuMC4wCgpkZXZfZGVwZW5kZW5jaWVzOgogIGxp
 bnRfaGFyZDogXjEuMC4wCgoK
   ''';
-  
 }

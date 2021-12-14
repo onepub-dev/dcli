@@ -9,7 +9,7 @@ dependencies:
   dcli: ^1.9.2
   path: ^1.8.0
 dev_dependencies: 
-  lints: ^1.0.0
+  lint_hard: ^1.0.0
 dependency_overrides: 
   dcli: 
     path: ../../..

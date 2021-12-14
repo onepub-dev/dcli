@@ -2,16 +2,16 @@
 import 'package:dcli/dcli.dart';
 
 /// GENERATED -- GENERATED
-/// 
+///
 /// DO NOT MODIFIY
-/// 
+///
 /// This script is generated via [Resource.pack()].
-/// 
+///
 /// GENERATED - GENERATED
 
-class Dbccdecaacbb extends PackedResource {
-  /// PackedResource - ../../template/find/pubspec.lock
-  const Dbccdecaacbb();
+class Ecffbdabebedaebbdb extends PackedResource {
+  /// PackedResource - ../../template/hello_world/pubspec.lock
+  const Ecffbdabebedaebbdb();
 
   /// A hash of the resource (pre packed) calculated by
   /// [calculateHash].
@@ -21,19 +21,18 @@ class Dbccdecaacbb extends PackedResource {
   /// ```dart
   ///   calculateHash(pathToResource).hexEncode() == packResource.checksum
   /// ```
-  /// to compare the checksum of the local file with 
+  /// to compare the checksum of the local file with
   /// this checksum
   @override
-  String get checksum => 
+  String get checksum =>
       'a40f9ff1f394b8ed361ed3c042fb86f814bcc090f42715eb4b120427352c34f5';
-  
+
   /// <package>/resources relative path to the original resource.
   @override
-  String get originalPath => 'template/find/pubspec.lock';
-  
+  String get originalPath => 'template/hello_world/pubspec.lock';
+
   @override
-  String get content => 
-      '''
+  String get content => '''
 IyBHZW5lcmF0ZWQgYnkgcHViCiMgU2VlIGh0dHBzOi8vZGFydC5kZXYvdG9vbHMvcHViL2dsb3NzYXJ5
 I2xvY2tmaWxlCnBhY2thZ2VzOgogIGFyY2hpdmU6CiAgICBkZXBlbmRlbmN5OiB0cmFuc2l0aXZlCiAg
 ICBkZXNjcmlwdGlvbjoKICAgICAgbmFtZTogYXJjaGl2ZQogICAgICB1cmw6ICJodHRwczovL3B1Yi5k
@@ -159,5 +158,4 @@ dmUKICAgIGRlc2NyaXB0aW9uOgogICAgICBuYW1lOiB5YW1sCiAgICAgIHVybDogImh0dHBzOi8vcHVi
 LmRhcnRsYW5nLm9yZyIKICAgIHNvdXJjZTogaG9zdGVkCiAgICB2ZXJzaW9uOiAiMy4xLjAiCnNka3M6
 CiAgZGFydDogIj49Mi4xNC4xIDwzLjAuMCIK
   ''';
-  
 }
