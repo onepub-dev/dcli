@@ -305,6 +305,11 @@ class DartProject {
   bool get isReadyToRun =>
       hasPubSpec && !DartSdk().isPubGetRequired(pathToProjectRoot);
 
+  /// Returns true if this project is a flutter projects.
+  ///
+  /// We check to see if flutter is a project dependency.
+  bool get isFlutterProject => pubSpec.dependencies.containsKey('flutter');
+
   /// Returns true if the project contains a pubspec.yaml.
   bool get hasPubSpec => exists(join(pathToProjectRoot, 'pubspec.yaml'));
 
