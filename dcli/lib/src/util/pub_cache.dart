@@ -148,6 +148,10 @@ class PubCache {
   String pathToPackage(String packageName, String version) =>
       join(pathToDartLang, '$packageName-$version');
 
+  /// Returns true if the package is installed in pub-cache
+  bool isInstalled(String packageName) =>
+      findPrimaryVersion(packageName) != null;
+
   /// Finds and returns the latest (non-pre-release) version installed into pub
   /// cache for the given package.
   ///
