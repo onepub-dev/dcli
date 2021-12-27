@@ -119,6 +119,8 @@ DCli supports the following templates:
 
 * console-simple
 * console-full
+* cmd\_args
+* find
 
 You can custom templates by copying a dart package into `$HOME/.dcli/template/custom`
 
