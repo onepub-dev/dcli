@@ -98,21 +98,21 @@ class _Is extends DCliFunction {
   /// checks if the passed [path] (a file or directory) is
   /// writable by the user that owns this process
   bool isWritable(String path) {
-    verbose(() => 'isWritable: ${truepath(path)}');
+    core.verbose(() => 'isWritable: ${truepath(path)}');
     return _checkPermission(path, writeBitMask);
   }
 
   /// checks if the passed [path] (a file or directory) is
   /// readable by the user that owns this process
   bool isReadable(String path) {
-    verbose(() => 'isReadable: ${truepath(path)}');
+    core.verbose(() => 'isReadable: ${truepath(path)}');
     return _checkPermission(path, readBitMask);
   }
 
   /// checks if the passed [path] (a file or directory) is
   /// executable by the user that owns this process
   bool isExecutable(String path) {
-    verbose(() => 'isExecutable: ${truepath(path)}');
+    core.verbose(() => 'isExecutable: ${truepath(path)}');
     return Platform.isWindows || _checkPermission(path, executeBitMask);
   }
 
@@ -123,7 +123,7 @@ class _Is extends DCliFunction {
   /// Checks if the user permission to act on the [path] (a file or directory)
   /// for the given permission bit mask. (read, write or execute)
   bool _checkPermission(String path, int permissionBitMask) {
-    verbose(
+    core.verbose(
       () => '_checkPermission: ${truepath(path)} '
           'permissionBitMask: $permissionBitMask',
     );
@@ -184,7 +184,7 @@ class _Is extends DCliFunction {
   /// Returns true if the owner of this process
   /// is a member of [group].
   bool isMemberOfGroup(String group) {
-    verbose(() => 'isMemberOfGroup: $group');
+    core.verbose(() => 'isMemberOfGroup: $group');
 
     if (Platform.isWindows) {
       throw UnsupportedError(
