@@ -1,10 +1,9 @@
 @t.Timeout(Duration(seconds: 600))
 import 'package:dcli/dcli.dart';
 
-import 'package:mocktail/mocktail.dart';
 import 'package:test/test.dart' as t;
 
-import '../mocks/mock_settings.dart';
+import '../util/test_scope.dart';
 
 void main() {
   t.group('Environment', () {
@@ -22,14 +21,13 @@ void main() {
     });
 
     t.test('Windows case-insensitive env vars', () {
-      try {
-        Settings.reset();
-        final mockSettings = MockSettings();
-        Settings.mock = mockSettings;
-        when(() => mockSettings.isVerbose).thenReturn(true);
-        when(() => mockSettings.isWindows).thenReturn(true);
-        Env.reset();
-        //var mockEnv = MockEnv();
+      withTestScope((testDir) {
+        // final mockSettings = MockSettings();
+        // Settings.mock = mockSettings;
+        // when(() => mockSettings.isVerbose).thenReturn(true);
+        // when(() => mockSettings.isWindows).thenReturn(true);
+        // Env.reset();
+        // //var mockEnv = MockEnv();
 
         const userDataPath = r'C:\Windows\Userdata';
 
@@ -50,10 +48,7 @@ void main() {
           ..putIfAbsent('APPDATA', () => userDataPath)
           ..putIfAbsent('MixedCase', () => 'mixed data');
         t.expect(available, expected);
-      } finally {
-        Settings.reset();
-        Env.reset();
-      }
+      });
     });
   });
 }

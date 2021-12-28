@@ -73,8 +73,9 @@ class Settings {
   /// This will normally be ~/.dcli
   String get pathToDCli => _dcliPath ??= truepath(p.join(HOME, dcliDir));
 
-  /// When you run dcli compile -i <script> the compiled exe
+  /// When you run dcli compile -i `<script>` the compiled exe
   /// is moved to this path.
+  /// 
   /// The dcliBinPath is added to the OS's path
   /// allowing the installed scripts to be run from anywhere.
   /// This will normally be ~/.dcli/bin

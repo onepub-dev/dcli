@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:di_zone2/di_zone2.dart';
 import 'package:meta/meta.dart';
 import 'package:pub_semver/pub_semver.dart';
 
@@ -11,7 +12,18 @@ import '../../dcli.dart';
 ///
 class PubCache {
   ///
-  factory PubCache() => _self ??= PubCache._internal();
+  factory PubCache() {
+    if (Scope.hasScopeKey(scopeKey)) {
+      return Scope.use(scopeKey);
+    } else {
+      return _self ??= PubCache._internal();
+    }
+  }
+
+  /// Use this ctor for injecting an altered Environment
+  /// into a Scope.
+  /// The main use for this ctor is for testing.
+  factory PubCache.forScope() => PubCache._internal();
 
   PubCache._internal() {
     _pubCachePath = _getSystemCacheLocation();
@@ -34,6 +46,8 @@ class PubCache {
     // determine pub-cache/bin
     _pubCacheBinPath = truepath(join(_pubCachePath, 'bin'));
   }
+
+  static ScopeKey<PubCache> scopeKey = ScopeKey<PubCache>();
 
   /// Method taken from the pub_cache package.
   /// We can't use the pub_cache version as it directly

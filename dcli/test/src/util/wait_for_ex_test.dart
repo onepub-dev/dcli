@@ -78,6 +78,23 @@ void main() {
       expect(frame.details, equals('_MoveDir.moveDir'));
 
       frame = sti.frames[index++];
+      expect(basename(frame.sourceFile.path), equals('move_dir.dart'));
+      expect(frame.details, equals('moveDir'));
+
+      frame = sti.frames[index++];
+      expect(basename(frame.sourceFile.path), equals('move_dir.dart'));
+      expect(frame.details, equals('moveDir'));
+
+      frame = sti.frames[index++];
+      expect(basename(frame.sourceFile.path), equals('wait_for_ex_test.dart'));
+      expect(frame.details,
+          equals('main.<anonymous closure>.<anonymous closure>'));
+
+      frame = sti.frames[index++];
+      expect(basename(frame.sourceFile.path), equals('create_dir.dart'));
+      expect(frame.details, equals('withTempDir'));
+
+      frame = sti.frames[index++];
       expect(basename(frame.sourceFile.path), equals('wait_for.dart'));
       expect(frame.details, equals('waitFor.<anonymous closure>'));
 
