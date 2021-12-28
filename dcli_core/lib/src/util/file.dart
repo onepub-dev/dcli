@@ -5,7 +5,6 @@ import 'package:path/path.dart';
 import 'package:uuid/uuid.dart';
 
 import '../../dcli_core.dart';
-import 'logging.dart';
 
 /// Opens a File and calls [action] passing in the open file.
 /// When action completes the file is closed.

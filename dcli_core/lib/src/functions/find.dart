@@ -4,7 +4,6 @@ import 'dart:io';
 import 'package:path/path.dart';
 
 import '../../dcli_core.dart';
-import '../util/logging.dart';
 
 ///
 typedef FindController<T> = LimitedStreamController<T>;

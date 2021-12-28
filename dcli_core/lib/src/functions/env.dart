@@ -5,8 +5,8 @@ import 'package:collection/collection.dart';
 import 'package:meta/meta.dart';
 import 'package:path/path.dart';
 
+import '../settings.dart';
 import '../util/dcli_exception.dart';
-import '../util/logging.dart';
 import '../util/truepath.dart';
 import 'dcli_function.dart';
 

@@ -1,7 +1,6 @@
 import 'dart:io';
 
 import '../../dcli_core.dart';
-import '../util/logging.dart';
 
 ///
 /// Deletes the file at [path].

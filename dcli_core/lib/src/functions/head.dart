@@ -1,5 +1,4 @@
 import '../../dcli_core.dart';
-import '../util/logging.dart';
 
 ///
 /// Returns count [lines] from the file at [path].

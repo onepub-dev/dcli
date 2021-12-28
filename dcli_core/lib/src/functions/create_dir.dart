@@ -4,7 +4,6 @@ import 'package:path/path.dart';
 import 'package:uuid/uuid.dart';
 
 import '../../dcli_core.dart';
-import '../util/logging.dart';
 
 /// Creates a directory as described by [path].
 /// Path may be a single path segment (e.g. bin)
