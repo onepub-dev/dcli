@@ -1,8 +1,8 @@
 import 'dart:io';
 
 import 'package:dcli_core/dcli_core.dart' as core;
+import 'package:di_zone2/di_zone2.dart';
 import 'package:logging/logging.dart';
-import 'package:meta/meta.dart';
 import 'package:path/path.dart' as p;
 
 import '../dcli.dart';
@@ -16,13 +16,23 @@ import 'version/version.g.dart';
 class Settings {
   /// Returns a singleton providing
   /// access to DCli settings.
-  factory Settings() => _self ??= Settings._init();
+  factory Settings() {
+    if (Scope.hasScopeKey(scopeKey)) {
+      return Scope.use(scopeKey);
+    } else {
+      return _self ??= Settings._internal();
+    }
+  }
 
-  Settings._init({
+  factory Settings.forScope() => Settings._internal();
+
+  Settings._internal({
     this.appname = 'dcli',
   }) {
     version = packageVersion;
   }
+
+  static ScopeKey<Settings> scopeKey = ScopeKey<Settings>();
 
   static Settings? _self;
 
@@ -56,16 +66,6 @@ class Settings {
   String get pathToScript {
     _scriptPath ??= DartScript.current.pathToScript;
     return _scriptPath!;
-  }
-
-  /// Used when unit testing and we are re-using
-  /// the current process.
-  @visibleForTesting
-  static void reset() {
-    _self = Settings._init();
-    _self!.selectedFlags.clear();
-    _self!._dcliPath = null;
-    _self!._dcliBinPath = null;
   }
 
   /// The directory where we store all of dcli's
