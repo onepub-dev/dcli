@@ -105,7 +105,7 @@ void dsort(List<String> args) {
 
   if (exists(outputPath) && outputPath != inputPath) {
     usageError(
-      'The output_file $outputPath already exist. '
+      'The output_file $outputPath already exists. '
       'Delete the file and try again.',
     );
   }
