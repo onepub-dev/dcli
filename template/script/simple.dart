@@ -1,6 +1,5 @@
 #! /usr/bin/env dcli
 
-
 // ignore: prefer_relative_imports
 import 'package:dcli/dcli.dart';
 
@@ -12,10 +11,9 @@ import 'package:dcli/dcli.dart';
 ///
 /// For details on installing dcli.
 ///
-
 void main(List<String> args) {
   final response =
-      ask('say somthing:', validator: Ask.all([Ask.alpha, Ask.required]));
+      ask('say something:', validator: Ask.all([Ask.alpha, Ask.required]));
 
   print(orange('Your response was: $response'));
 }
