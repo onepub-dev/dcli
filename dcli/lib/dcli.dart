@@ -27,7 +27,8 @@ export 'package:dcli_core/dcli_core.dart'
         privatePath,
         // RestoreFileException,
         translateAbsolutePath,
-        RunException
+        RunException,
+        withEnvironment
     // CatException;
     ;
 export 'package:dcli_core/src/util/dev_null.dart';
