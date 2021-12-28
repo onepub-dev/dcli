@@ -72,7 +72,7 @@ class FileSort {
   }
 
   static const _mergeSize = 1000;
-  Future _sort() async {
+  Future<void> _sort() async {
     final completer = Completer<void>();
     var instance = 0;
     var lineCount = _mergeSize;

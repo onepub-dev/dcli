@@ -550,7 +550,7 @@ extension StringAsProcess on String {
   }
 
   /// Experimental - DO NOT USE
-  Sink get sink {
+  Sink<List<int>> get sink {
     final lhsRunnable = RunnableProcess.fromCommandLine(this)
       ..start(waitForStart: false);
     return lhsRunnable.sink;
