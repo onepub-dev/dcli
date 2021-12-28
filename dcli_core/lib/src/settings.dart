@@ -22,11 +22,12 @@ class Settings {
   void setVerbose({required bool enabled}) {
     _verbose = enabled;
 
+    // ignore: flutter_style_todos
+    /// TODO(bsutton): this affects everyones logging so
+    /// I'm uncertain if this is a problem.
+    hierarchicalLoggingEnabled = true;
+
     if (enabled) {
-      // ignore: flutter_style_todos
-      /// TODO(bsutton): this affects everyones logging so
-      /// I'm uncertain if this is a problem.
-      hierarchicalLoggingEnabled = true;
       logger.level = Level.INFO;
       logger.onRecord.listen((record) {
         print('${record.level.name}: ${record.time}: ${record.message}');
