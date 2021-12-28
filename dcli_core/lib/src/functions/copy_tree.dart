@@ -3,7 +3,6 @@ import 'dart:async';
 import 'package:path/path.dart';
 
 import '../../dcli_core.dart';
-import '../util/logging.dart';
 
 ///
 /// Copies the contents of the [from] directory to the
@@ -83,6 +82,8 @@ class _CopyTree extends DCliFunction {
     bool includeHidden = false,
     bool recursive = true,
   }) async {
+    verbose(() => 'copyTree: from: $from, to: $to, overwrite: $overwrite '
+        'includeHidden: $includeHidden recursive: $recursive ');
     if (!isDirectory(from)) {
       throw CopyTreeException(
         'The [from] path ${truepath(from)} must be a directory.',
@@ -102,33 +103,39 @@ class _CopyTree extends DCliFunction {
 
     final controller = LimitedStreamController<FindItem>(100);
     late final StreamSubscription<FindItem> sub;
-    sub = controller.stream.listen((item) async => _process(
-        item.pathTo, filter, from, to,
-        overwrite: overwrite, recursive: recursive));
     try {
-      sub.pause();
-      await find('*',
-          workingDirectory: from,
-          includeHidden: includeHidden,
-          recursive: recursive,
-          progress: controller);
-      verbose(
-        () => 'copyTree copied: ${truepath(from)} -> ${truepath(to)}, '
-            'includeHidden: $includeHidden, recursive: $recursive, '
-            'overwrite: $overwrite',
-      );
-      sub.resume();
+      sub = controller.stream.listen((item) async {
+        sub.pause();
+        await _process(item.pathTo, filter, from, to,
+            overwrite: overwrite, recursive: recursive);
+        sub.resume();
+      });
+      try {
+        await find('*',
+            workingDirectory: from,
+            includeHidden: includeHidden,
+            recursive: recursive,
+            progress: controller);
+        verbose(
+          () => 'copyTree copied: ${truepath(from)} -> ${truepath(to)}, '
+              'includeHidden: $includeHidden, recursive: $recursive, '
+              'overwrite: $overwrite',
+        );
+      }
+      // ignore: avoid_catches_without_on_clauses
+      catch (e) {
+        throw CopyTreeException(
+          'An error occured copying directory'
+          ' ${truepath(from)} to ${truepath(to)}. '
+          'Error: $e',
+        );
+      }
+    } finally {
+      if (!controller.isClosed) {
+        await controller.close();
+      }
+      await sub.cancel();
     }
-    // ignore: avoid_catches_without_on_clauses
-    catch (e) {
-      throw CopyTreeException(
-        'An error occured copying directory'
-        ' ${truepath(from)} to ${truepath(to)}. '
-        'Error: $e',
-      );
-    }
-    await controller.close();
-    await sub.cancel();
   }
 
   Future<void> _process(
