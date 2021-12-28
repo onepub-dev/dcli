@@ -40,15 +40,21 @@ Future<String> createDir(String path, {bool recursive = false}) async =>
 ///
 /// If you pass [keep] = true then the temp directory won't be deleted.
 /// This can be useful when testing and you need to examine the temp directory.
+///
+/// You can optionally pass in your own tempDir via [pathToTempDir].
+/// This can be useful when sometimes you need to control the [tempDir]
+/// and sometimes you want it created.
+/// If you pass in [pathToTempDir] it will NOT be deleted regardless
+/// of the value of [keep].
 Future<R> withTempDir<R>(R Function(String tempDir) action,
-    {bool keep = false}) async {
-  final dir = await createTempDir();
+    {bool keep = false, String? pathToTempDir}) async {
+  final dir = pathToTempDir ?? await createTempDir();
 
   R result;
   try {
     result = action(dir);
   } finally {
-    if (!keep) {
+    if (!keep && pathToTempDir == null) {
       await deleteDir(dir);
     }
   }
