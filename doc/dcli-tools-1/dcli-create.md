@@ -140,7 +140,7 @@ When DCli creates a project from a template it:
 * If the template's `bin` directory contains a `main.dart` then that script is renamed to \<project name>.dart
 * If the template's bin directory doesn't contain a `main.dart` then the first .dart script it finds will be renamed \<project name>.dart.
 
-#### Scripts Templates
+#### Script Templates
 
 DCli creates scripts from a set of templates located in `$HOME/.dcli/template/script`
 
@@ -158,11 +158,7 @@ When DCli creates a script from a template it will:
 * rename main.dart to the script name you passed to the `dcli create` command.
 * If the template project doesn't contain a main.dart it will copy the first .dart script it finds and applies the same process.
 
-
-
-##
-
-## Flags
+### Flags
 
 The dcli create command accepts the following flags:
 
