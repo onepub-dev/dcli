@@ -2,7 +2,7 @@
 
 The `dcli create` command makes it easier to create new scripts and templates.
 
-The `dcli create` command can create a project or add a script  to an existing Dart project.
+The `dcli create` command can add a script to an existing Dart project or create create a simple DCli script using the given script file name.
 
 When creating a script the Dart project must already exist.
 
@@ -105,30 +105,26 @@ If you run the same script a second time DCli has already resolved the dependenc
 
 ## Templates
 
-#### Project Templates
-
-DCli creates projects from a set of templates located in `$HOME/.dcli/template/project`
+DCli creates projects and scripts from a set of templates located in `$HOME/.dcli/template`
 
 When you create a project you can specify a template:
 
 ```bash
-dcli create --template=simple snake 
+dcli create --template=console-simple snake 
 ```
 
-If you don't specify a template name then DCli will use `simple` by default.
+If you don't specify a template name then DCli will use `console-simple` by default.
 
 DCli supports the following templates:
 
-* simple - simple dart project with a single script in bin
-* full - include a lib, test and script in bin
-* cmd\_args - example parsing command line args
-* find - example using the find function.
+* console-simple
+* console-full
+* cmd\_args
+* find
 
-You can create custom project templates by copying a dart package into `$HOME/.dcli/template/project/custom`
+You can custom templates by copying a dart package into `$HOME/.dcli/template/custom`
 
 Each template should be in its own directory under `custom`.
-
-If a custom template has the same name as a standard DCli template then the custom template is used. This allows you to override the standard templates that DCli ships with.
 
 The directory name is used as the template name in the `--template` switch.
 
@@ -138,19 +134,6 @@ When DCli creates a project from a template it:
 * copies all files from the given template into the new project directory
 * updates the name in the pubspec.yaml file to be the project name passed to `dcli create`
 * If the template's `bin` directory contains a `main.dart` then that script is renamed to \<project name>.dart
-* If the template's bin directory doesn't contain a `main.dart` then the first .dart script it finds will be renamed \<project name>.dart.
-
-#### Script Templates
-
-DCli creates scripts from a set of templates located in `$HOME/.dcli/template/script`
-
-When you create a script you can specify a template:
-
-```bash
-dcli create --template=simple snake.dart 
-```
-
-If you don't specify a template name then DCli will use `simple` by default.
 
 When DCli creates a script from a template it will:
 
@@ -158,7 +141,11 @@ When DCli creates a script from a template it will:
 * rename main.dart to the script name you passed to the `dcli create` command.
 * If the template project doesn't contain a main.dart it will copy the first .dart script it finds and applies the same process.
 
-### Flags
+
+
+##
+
+## Flags
 
 The dcli create command accepts the following flags:
 
