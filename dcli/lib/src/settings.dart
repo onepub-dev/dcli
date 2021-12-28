@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:dcli_core/dcli_core.dart' as core;
+import 'package:logging/logging.dart';
 import 'package:meta/meta.dart';
 import 'package:path/path.dart' as p;
 
@@ -15,13 +16,9 @@ import 'version/version.g.dart';
 class Settings {
   /// Returns a singleton providing
   /// access to DCli settings.
-  factory Settings() => _self ??= Settings.init();
+  factory Settings() => _self ??= Settings._init();
 
-  /// Used internally be dcli to initialise
-  /// the settings.
-  ///
-  /// DO NOT CALL THIS METHOD!!!
-  Settings.init({
+  Settings._init({
     this.appname = 'dcli',
   }) {
     version = packageVersion;
@@ -65,7 +62,7 @@ class Settings {
   /// the current process.
   @visibleForTesting
   static void reset() {
-    _self = Settings.init();
+    _self = Settings._init();
     _self!.selectedFlags.clear();
     _self!._dcliPath = null;
     _self!._dcliBinPath = null;
@@ -85,7 +82,23 @@ class Settings {
       _dcliBinPath ??= truepath(p.join(HOME, dcliDir, 'bin'));
 
   /// path to the dcli template directory.
+  @Deprecated('Use pathToTemplateScript or pathToTemplateProject')
   String get pathToTemplate => p.join(pathToDCli, templateDir);
+
+  /// path to the dcli template directory.
+  String get pathToTemplateProject =>
+      p.join(pathToDCli, templateDir, 'project');
+
+  /// Path to the directory where users can store their own custom templates
+  String get pathToTemplateProjectCustom =>
+      p.join(pathToDCli, templateDir, 'project', 'custom');
+
+  /// path to the dcli template directory.
+  String get pathToTemplateScript => p.join(pathToDCli, templateDir, 'script');
+
+  /// Path to the directory where users can store their own custom templates
+  String get pathToTemplateScriptCustom =>
+      p.join(pathToDCli, templateDir, 'script', 'custom');
 
   /// the list of global flags selected via the cli when dcli
   /// was started.
@@ -95,17 +108,19 @@ class Settings {
   /// dcli command line.
   /// e.g.
   /// dcli -v clean
-  bool get isVerbose => isFlagSet(VerboseFlag());
+  bool get isVerbose => core.Settings().isVerbose;
+
+  Logger get logger => Logger('dcli');
 
   /// Turns on verbose logging.
   void setVerbose({required bool enabled}) {
-    if (enabled) {
-      if (!isVerbose) {
-        setFlag(VerboseFlag());
-      }
-    } else {
-      _selectedFlags.remove(VerboseFlag().name);
-    }
+    core.Settings().setVerbose(enabled: enabled);
+  }
+
+  /// Logs a message to the console if the verbose
+  /// settings are on.
+  void verbose(String? string) {
+    core.Settings().verbose(string);
   }
 
   /// we consider dcli installed if the ~/.dcli directory
@@ -146,18 +161,6 @@ class Settings {
   @Deprecated('use join')
   bool get isStackEmpty => _settings._isStackEmpty;
 
-  /// Logs a message to the console if the verbose
-  /// settings are on.
-  void verbose(String? string) {
-    if (isVerbose) {
-      if (VerboseFlag().hasOption) {
-        VerboseFlag().option.append(string!);
-      } else {
-        print(string);
-      }
-    }
-  }
-
   /// Used for unit testing dcli.
   /// Please look away.
   // ignore: avoid_setters_without_getters
@@ -181,12 +184,7 @@ class Settings {
 ///
 void verbose(String Function() callback) {
   if (Settings().isVerbose) {
-    final string = callback();
-    if (VerboseFlag().hasOption) {
-      VerboseFlag().option.append(string);
-    } else {
-      print(string);
-    }
+    Settings().verbose(callback());
   }
 }
 

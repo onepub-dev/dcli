@@ -20,6 +20,7 @@ export 'src/functions/pwd.dart' show pwd;
 export 'src/functions/tail.dart';
 export 'src/functions/touch.dart';
 export 'src/functions/which.dart' show which, Which, WhichSearch;
+export 'src/settings.dart';
 export 'src/util/dcli_exception.dart';
 export 'src/util/dev_null.dart';
 export 'src/util/file.dart';
