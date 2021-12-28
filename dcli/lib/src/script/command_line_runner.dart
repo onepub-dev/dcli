@@ -1,3 +1,4 @@
+import 'package:dcli_core/dcli_core.dart' as core;
 import '../../dcli.dart';
 
 import 'commands/commands.dart';
@@ -53,7 +54,15 @@ class CommandLineRunner {
           _flagsSet.set(flag);
           verbose(() => 'Setting flag: ${flag.name}');
           if (flag == VerboseFlag()) {
+            Settings().setVerbose(enabled: true);
             verbose(() => 'DCli Version: ${Settings().version}');
+            final verboseFlag = flag as VerboseFlag;
+            if (verboseFlag.hasOption) {
+              core.Settings().captureLogOutput().listen((record) {
+                verboseFlag.option.append(
+                    '${record.level.name}: ${record.time}: ${record.message}');
+              });
+            }
           }
           continue;
         } else {
