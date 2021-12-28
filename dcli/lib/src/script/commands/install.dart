@@ -114,19 +114,6 @@ class InstallCommand extends Command {
     }
     _qprint('');
 
-    /// create the template directory.
-    if (!exists(Settings().pathToTemplate)) {
-      _qprint(
-        '${blue('Creating')} ${green('template')} '
-        '${blue('directory: ${Settings().pathToTemplate}.')}',
-      );
-    } else {
-      _qprint(
-        '${blue('Updating ${green('template')} ')}'
-        '${blue('directory: ${Settings().pathToTemplate}.')}',
-      );
-    }
-
     initTemplates();
 
     // create the bin directory
@@ -280,14 +267,59 @@ class InstallCommand extends Command {
   /// the directory and copies the default scripts in.
   @visibleForTesting
   void initTemplates() {
-    if (!exists(Settings().pathToTemplate)) {
-      createDir(Settings().pathToTemplate, recursive: true);
-    }
+    initProjectTemplates();
+    initScriptTemplates();
 
     for (final resource in ResourceRegistry.resources.values) {
       if (resource.originalPath.startsWith('template')) {
         resource.unpack(join(Settings().pathToDCli, resource.originalPath));
       }
+    }
+  }
+
+  void initProjectTemplates() {
+    /// create the template directory.
+    if (!exists(Settings().pathToTemplateProject)) {
+      _qprint(
+        '${blue('Creating')} ${green('project templates')} '
+        '${blue('directory: ${Settings().pathToTemplateProject}.')}',
+      );
+    } else {
+      _qprint(
+        '${blue('Updating ${green('project templates')} ')}'
+        '${blue('directory: ${Settings().pathToTemplateProject}.')}',
+      );
+    }
+
+    if (!exists(Settings().pathToTemplateProject)) {
+      createDir(Settings().pathToTemplateProject, recursive: true);
+    }
+
+    if (!exists(Settings().pathToTemplateProjectCustom)) {
+      createDir(Settings().pathToTemplateProjectCustom, recursive: true);
+    }
+  }
+
+  void initScriptTemplates() {
+    /// create the template directory.
+    if (!exists(Settings().pathToTemplateProject)) {
+      _qprint(
+        '${blue('Creating')} ${green('script templates')} '
+        '${blue('directory: ${Settings().pathToTemplateScript}.')}',
+      );
+    } else {
+      _qprint(
+        '${blue('Updating ${green('script template')} ')}'
+        '${blue('directory: ${Settings().pathToTemplateScript}.')}',
+      );
+    }
+
+    if (!exists(Settings().pathToTemplateScript)) {
+      createDir(Settings().pathToTemplateScript, recursive: true);
+    }
+
+    if (!exists(Settings().pathToTemplateScriptCustom)) {
+      createDir(Settings().pathToTemplateScriptCustom, recursive: true);
     }
   }
 }
