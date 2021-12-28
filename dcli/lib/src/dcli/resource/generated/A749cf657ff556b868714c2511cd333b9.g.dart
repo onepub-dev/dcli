@@ -2,16 +2,16 @@
 import 'package:dcli/dcli.dart';
 
 /// GENERATED -- GENERATED
-///
+/// 
 /// DO NOT MODIFIY
-///
+/// 
 /// This script is generated via [Resource.pack()].
-///
+/// 
 /// GENERATED - GENERATED
 
-class Bacbdfbbbeacfc extends PackedResource {
-  /// PackedResource - ../../template/hello_world/analysis_options.yaml
-  const Bacbdfbbbeacfc();
+class A749cf657ff556b868714c2511cd333b9 extends PackedResource {
+  /// PackedResource - ../../template/project/full/README.md
+  const A749cf657ff556b868714c2511cd333b9();
 
   /// A hash of the resource (pre packed) calculated by
   /// [calculateHash].
@@ -21,18 +21,21 @@ class Bacbdfbbbeacfc extends PackedResource {
   /// ```dart
   ///   calculateHash(pathToResource).hexEncode() == packResource.checksum
   /// ```
-  /// to compare the checksum of the local file with
+  /// to compare the checksum of the local file with 
   /// this checksum
   @override
-  String get checksum =>
-      'bad7510ad9e8dc8a2603760fbbc17b35e881ba6f8a6f94582748f6fe2c52db34';
-
+  String get checksum => 
+      '1483589035305299b306b388956219102eedaa2e401e65c54aca9e1be1e0afa5';
+  
   /// <package>/resources relative path to the original resource.
   @override
-  String get originalPath => 'template/hello_world/analysis_options.yaml';
-
+  String get originalPath => 'template/project/full/README.md';
+  
   @override
-  String get content => '''
-CmluY2x1ZGU6IHBhY2thZ2U6bGludF9oYXJkL2FsbC55YW1sCg==
+  String get content => 
+      '''
+QSBzYW1wbGUgY29tbWFuZC1saW5lIGFwcGxpY2F0aW9uIHdpdGggYW4gZW50cnlwb2ludCBpbiBgYmlu
+L2AsIGxpYnJhcnkgY29kZQppbiBgbGliL2AsIGFuZCBhIHVuaXQgdGVzdCBpbiBgdGVzdC9gLgo=
   ''';
+  
 }
