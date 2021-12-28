@@ -36,7 +36,7 @@ class _MoveDir extends DCliFunction {
     }
     if (!isDirectory(from)) {
       throw MoveDirException(
-        'The [from] path ${truepath(from)} must be a directory.,',
+        'The [from] path ${truepath(from)} must be a directory.',
       );
     }
     if (exists(to)) {
