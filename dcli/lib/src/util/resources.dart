@@ -4,8 +4,8 @@ import 'dart:convert';
 import 'dart:io';
 
 import 'package:async/async.dart';
+import 'package:crypto/crypto.dart';
 import 'package:settings_yaml/settings_yaml.dart';
-import 'package:uuid/uuid.dart';
 
 import '../../dcli.dart';
 
@@ -78,7 +78,10 @@ class Resources {
     final resources = <_Resource>[];
 
     for (final pathToResouce in pathToResources) {
-      final className = _generateClassName;
+      if (isDirectory(pathToResouce)) {
+        continue;
+      }
+      final className = _generateClassName(pathToResouce);
 
       final pathToGeneratedLibrary = join(generatedRoot, '$className.g.dart');
       print(' - packing: $pathToResouce into $pathToGeneratedLibrary');
@@ -138,36 +141,21 @@ class $className extends PackedResource {
     return resource;
   }
 
-  bool _isAlpha(int char) =>
-      (char >= 'a'.codeUnits[0] && char <= 'z'.codeUnits[0]) ||
-      (char >= 'A'.codeUnits[0] && char <= 'Z'.codeUnits[0]);
+  // bool _isAlpha(int char) =>
+  //     (char >= 'a'.codeUnits[0] && char <= 'z'.codeUnits[0]) ||
+  //     (char >= 'A'.codeUnits[0] && char <= 'Z'.codeUnits[0]);
 
-  /// generates a random class name
-  String get _generateClassName {
-    var className = '';
-
-    // keep generating uuids until we get one that contains at least one
-    // alpha character
-    while (className.isEmpty) {
-      final uuid = const Uuid().v4();
-      for (final char in uuid.codeUnits) {
-        if (_isAlpha(char)) {
-          var alpha = String.fromCharCode(char);
-
-          if (className.isEmpty) {
-            /// make the class name camelcase.
-            alpha = alpha.toUpperCase();
-          }
-          className += alpha;
-        }
-      }
-      if (exists(join(generatedRoot, '$className.g.dart'))) {
-        // start again.
-        className = '';
-      }
-    }
-    return className;
-  }
+  /// generates an md5 hash of the file path so we have a unique
+  /// name for each resource that is consistent each time we generated it
+  /// This helps us manage the resources in git as their name
+  /// doesn't change each time we generate them.
+  /// For must projects the generated files shouldn't be in git
+  /// but for dcli that is impractical as dcli won't run without
+  /// them so we have a bootstrapping problem.
+  /// We prefix the md5 hash with the letter 'A' so that it can
+  /// be used as a valid class name.
+  String _generateClassName(String pathToResource) =>
+      'A${md5.convert(utf8.encode(pathToResource)).toString()}';
 
   void _writeRegistry(List<_Resource> resources) {
     final registryFile = File(pathToRegistry).openWrite();
@@ -312,6 +300,10 @@ class ResourceRegistry {
       final path = external['path'] as String;
       // ignore: avoid_dynamic_calls
       final mount = external['mount'] as String;
+      if (!exists(path)) {
+        throw ResourceException('The path ${truepath(path)} in '
+            '$pathToPackYaml does not exist.');
+      }
       resources.addAll(_packExternalResource(path, mount));
     }
     return resources;
@@ -329,7 +321,7 @@ class ResourceRegistry {
   }
 
   _Resource _packExternalFile(String path, String mount) {
-    final className = _generateClassName;
+    final className = _generateClassName(path);
 
     final pathToGeneratedLibrary = join(generatedRoot, '$className.g.dart');
     print(' - packing: $path into $pathToGeneratedLibrary');

@@ -1,3 +1,4 @@
+import '../../../dcli.dart';
 import 'package:path/path.dart';
 
 import '../../functions/is.dart';
@@ -78,7 +79,13 @@ class PackCommand extends Command {
           '${Resources().resourceRoot}'
           " doesn't exist.");
     }
-    Resources().pack();
+
+    try {
+      Resources().pack();
+    } on ResourceException catch (e) {
+      printerr(red(e.message));
+      return 1;
+    }
     return 0;
   }
 
