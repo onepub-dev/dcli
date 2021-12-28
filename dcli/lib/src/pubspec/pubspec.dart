@@ -35,6 +35,9 @@ class PubSpec {
   /// Returns the name field from the pubspec.yaml
   String? get name => pubspec.name;
 
+  /// updates the pubspec.yaml 'name' key. You must call [saveToFile].
+  set name(String? name) => pubspec = pubspec.copy(name: name);
+
   /// Returns the version field from the pubspec.yaml
   Version? get version => pubspec.version;
 
