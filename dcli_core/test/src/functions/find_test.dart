@@ -8,7 +8,7 @@ void main() {
     var count = 0;
     final controller = LimitedStreamController<FindItem>(100);
     try {
-      late StreamSubscription? sub;
+      late StreamSubscription<FindItem>? sub;
       sub = controller.stream.listen(
           (item) => count++); // print(replaceNonPrintable(item.pathTo)));
       await find(
