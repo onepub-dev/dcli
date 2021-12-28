@@ -5,7 +5,9 @@ import '../../dcli.dart';
 /// helper flass for manageing flags.
 @immutable
 class Flags {
-  /// Find the flag that matches [flagSwitch].
+  /// Find the flag that matches the name part of [flagSwitch].
+  /// 
+  /// e.g --flagname=value
   Flag? findFlag(String flagSwitch, List<Flag> flags) {
     Flag? found;
     var foundOption = false;
@@ -123,6 +125,7 @@ class VerboseFlag extends Flag {
   String? _option;
 
   @override
+  // Path to the logfile to write verbose log messages to.
   String get option => _option!;
 
   /// true if the flag has an option.
