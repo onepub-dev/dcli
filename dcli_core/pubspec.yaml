@@ -1,5 +1,5 @@
 name: dcli_core
-version: 0.0.6-dev.2
+version: 0.0.6-beta.1
 homepage: https://dcli.noojee.dev
 documentation: https://dcli.noojee.dev
 description: The core asyncronous functions used by dcli. DCli uses waitFor to eliminate async code in the DCli libraries which precludes DCli's usage in non-cli apps (e.g. you can't use it in flutter). The aim of dcli_core is to expose a significant set of the core dcli functions as async version so that dcli_core can be used in any project. DCli will then rely on dcli_core for core parts of its implemenation to avoid duplicating code between the two packages.

@@ -1,3 +1,6 @@
+# 0.0.6-beta.1
+- release candidate for 0.0.6
+
 # 0.0.6-dev.2
 - Fixed the isRead/write/owner methods which broke after moving to posix.
 - Fixed a bug in settings where hierarchicalLoggingEnabled logging was not always been enabled.
