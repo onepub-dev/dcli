@@ -432,9 +432,11 @@ class TestFileSystem {
         createDir(Settings().pathToDCliBin, recursive: true);
       }
 
+      DartProject.fromPath('pathToTools').warmup();
       for (final command in required) {
         if (!exists(join(pathToTools, command))) {
           /// compile and install the command into the tool path
+
           final script =
               DartScript.fromFile('test/test_script/general/bin/$command.dart')
                 ..compile();

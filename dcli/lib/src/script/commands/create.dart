@@ -57,7 +57,8 @@ class CreateCommand extends Command {
 
     try {
       if (target.endsWith('.dart')) {
-        final project = DartProject.findProject(dirname(target), search: false);
+        /// create a script
+        final project = DartProject.findProject(dirname(target));
 
         if (project == null) {
           printerr(red('The current directory is not a Dart Project. '
@@ -68,7 +69,7 @@ class CreateCommand extends Command {
         DartScript.createScript(
             project: project, scriptName: target, templateName: templateName);
       } else {
-        /// create a template
+        /// create a project
         DartProject.create(pathTo: target, templateName: templateName);
       }
     } on TemplateNotFoundException catch (e) {

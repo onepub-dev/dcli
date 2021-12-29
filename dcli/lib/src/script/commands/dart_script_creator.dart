@@ -1,5 +1,8 @@
+import 'dart:io';
+
 import '../../../dcli.dart';
 import '../../../posix.dart';
+import '../command_line_runner.dart';
 import '../flags.dart';
 
 /// Creates a script in [project] with the name [scriptName]
@@ -16,31 +19,80 @@ DartScript scriptCreator(
     required String templateName}) {
   final pathToProjectRoot = project.pathToProjectRoot;
 
-  final pathToTemplate = _resolveTemplatePath(templateName);
+  final pathToScript = join(pwd, scriptName);
+  verbose(() => 'pathToScript $pathToScript');
 
-  print('Creating $scriptName from $pathToTemplate');
-  verbose(() => 'createScript $scriptName: $scriptName '
-      'projectRoot: $pathToProjectRoot');
+  if (exists(pathToScript)) {
+    throw ScriptExistsException('The script $pathToScript already exists');
+  }
+  final pathToTemplate = _resolveTemplatePath(templateName);
+  verbose(() => 'pathToTemplate $pathToTemplate');
+
+  _printCreating(scriptName, pathToTemplate, pathToProjectRoot);
+
   if (!scriptName.endsWith('.dart')) {
     throw DartProjectException('scriptName must end with .dart');
   }
-  final pathToScript = join(pathToProjectRoot, basename(scriptName));
-  verbose(() => 'pathToScript $pathToScript');
 
-  copy(pathToTemplate, join(pathToProjectRoot, scriptName));
+  _createFromTemplate(pathToTemplate, pathToScript, templateName,
+      pathToProjectRoot, scriptName);
+
+  _applyTransforms(
+      pathToScript: pathToScript,
+      scriptName: scriptName,
+      templateName: templateName);
+
+  DartSdk().runPubGet(pathToProjectRoot, progress: Progress.printStdErr());
 
   /// mark the script as exectuable
   if (!Settings().isWindows) {
     chmod(pathToScript, permission: '755');
   }
 
-  //project.warmup(background: !flagSet.isSet(ForegroundFlag()));
-
-  print('');
-
-  print('To run your script:\n   ./$scriptName');
+  _printCreated(scriptName, project);
 
   return DartScript.fromFile(pathToScript, project: project);
+}
+
+void _createFromTemplate(String pathToTemplate, String pathToScript,
+    String templateName, String pathToProjectRoot, String scriptName) {
+  final mainScript = join(pathToTemplate, 'main.dart');
+  if (exists(mainScript)) {
+    copy(mainScript, pathToScript);
+  } else {
+    /// we copy the first script we find in the script template dir
+    final scripts = find('*.dart', workingDirectory: pathToTemplate).toList();
+
+    if (scripts.isEmpty) {
+      throw InvalidTemplateException(
+          'The template $templateName does not contain a dart script.');
+    }
+    copy(scripts.first, join(pathToProjectRoot, scriptName));
+  }
+}
+
+void _printCreated(String scriptName, DartProject project) {
+  final runPath = scriptName.contains(Platform.pathSeparator)
+      ? scriptName
+      : join('.', scriptName);
+  print('''
+  
+  Created script $scriptName in ${truepath(project.pathToProjectRoot)}.
+  
+  To run your script:
+  
+    $runPath
+  
+  ''');
+}
+
+void _printCreating(
+    String scriptName, String pathToTemplate, String pathToProjectRoot) {
+  print('');
+  print('Creating $scriptName from $pathToTemplate.');
+  print('');
+  verbose(() => 'createScript $scriptName: $scriptName '
+      'projectRoot: $pathToProjectRoot');
 }
 
 String _resolveTemplatePath(String templateName) {
@@ -58,9 +110,25 @@ String _resolveTemplatePath(String templateName) {
     found = true;
   }
   if (!found) {
-    throw InvalidFlagOption('The template $templateName does not exist in '
-        '${Settings().pathToTemplateProject}'
-        ' or ${Settings().pathToTemplateProjectCustom}.');
+    throw InvalidFlagOptionException(
+        "The template '$templateName' does not exist in "
+        '${Settings().pathToTemplateScript}'
+        ' or ${Settings().pathToTemplateScriptCustom}.');
   }
   return pathToTemplate!;
+}
+
+void _applyTransforms(
+    {required String pathToScript,
+    required String scriptName,
+    required String templateName}) {
+  /// Apply some crude transformations to the templates
+  /// ignore: flutter_style_todos
+  /// TODO(bsutton): we need to allow a template to define a set of transforms
+  /// such as file renames and string substitutions.
+  replace(pathToScript, templateName, scriptName, all: true);
+}
+
+class ScriptExistsException extends CommandLineException {
+  ScriptExistsException(String message) : super(message);
 }

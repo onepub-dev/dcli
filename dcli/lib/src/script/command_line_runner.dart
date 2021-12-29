@@ -139,6 +139,12 @@ class InvalidScript extends CommandLineException {
   InvalidScript(String message) : super(message);
 }
 
+
+class InvalidTemplateException extends CommandLineException {
+  /// Thrown when an invalid template is selected
+  InvalidTemplateException(String message) : super(message);
+}
+
 /// Thrown when an invalid command  is passed.
 class UnknownCommand extends CommandLineException {
   ///

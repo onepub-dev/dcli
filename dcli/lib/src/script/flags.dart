@@ -1,12 +1,13 @@
 import 'package:meta/meta.dart';
 
 import '../../dcli.dart';
+import 'command_line_runner.dart';
 
 /// helper flass for manageing flags.
 @immutable
 class Flags {
   /// Find the flag that matches the name part of [flagSwitch].
-  /// 
+  ///
   /// e.g --flagname=value
   Flag? findFlag(String flagSwitch, List<Flag> flags) {
     Flag? found;
@@ -26,7 +27,7 @@ class Flags {
           if (flag.isOptionSupported) {
             flag.option = parts[1];
           } else {
-            throw InvalidFlagOption(
+            throw InvalidFlagOptionException(
               'The flag $finalFlagSwitch was passed with an option but '
               'it does not support options.',
             );
@@ -139,7 +140,7 @@ class VerboseFlag extends Flag {
     // check that the value contains a path and that
     // the path exists.
     if (!exists(dirname(value!))) {
-      throw InvalidFlagOption(
+      throw InvalidFlagOptionException(
         "The log file's directory '${truepath(dirname(value))} "
         'does not exists. '
         'Create the directory first.',
@@ -164,10 +165,7 @@ If passed, turns on verbose logging to the console.
 }
 
 /// throw if we found an invalid flag.
-class InvalidFlagOption implements Exception {
+class InvalidFlagOptionException extends CommandLineException {
   ///
-  InvalidFlagOption(this.message);
-
-  ///
-  String message;
+  InvalidFlagOptionException(String message) : super(message);
 }

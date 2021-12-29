@@ -4,31 +4,17 @@ void _createProject(String pathToProject, String templateName) {
   verbose(() => '_createProject $pathToProject from $templateName');
 
   final pathToTemplate = _resolveTemplatePath(templateName);
+  verbose(() => 'pathToTemplate $pathToTemplate');
 
   final projectName = basename(pathToProject);
 
   _validateProjectName(projectName);
 
-  print('Creating $projectName from template $pathToTemplate ');
+  _printCreating(projectName, pathToTemplate);
 
-  if (!exists(pathToTemplate)) {
-    /// should never be thrown as the [TemplateFlag] checks the
-    /// path exists.
-    throw TemplateNotFoundException(pathToTemplate);
-  }
   createDir(pathToProject, recursive: true);
-  print('');
 
-  final prefix = '$pathToTemplate${Platform.pathSeparator}';
-  copyTree(pathToTemplate, pathToProject, includeHidden: true, filter: (file) {
-    print('    ${file.replaceAll(prefix, '')}');
-    return true;
-  });
-
-  _applyTransforms(
-      projectName: projectName,
-      pathToProject: pathToProject,
-      templateName: templateName);
+  _createFromTemplate(pathToTemplate, pathToProject, projectName, templateName);
 
   final project = DartProject.fromPath(pathToProject, search: false);
 
@@ -44,6 +30,21 @@ void _createProject(String pathToProject, String templateName) {
     ..saveToFile(project.pathToPubSpec);
 
   /// rename main.dart from the template to <projectname>.dart
+  final projectScript = _renameMain(project, projectName);
+
+  if (!Settings().isWindows) {
+    chmod(projectScript, permission: '755');
+  }
+
+  print('');
+  DartSdk()
+      .runPubGet(project.pathToProjectRoot, progress: Progress.printStdErr());
+
+  _printCreated(projectName, project);
+}
+
+String _renameMain(DartProject project, String projectName) {
+  /// rename main.dart from the template to <projectname>.dart
   final mainScript = join(project.pathToBinDir, 'main.dart');
   final projectScript = join(project.pathToBinDir, '$projectName.dart');
   if (exists(mainScript)) {
@@ -56,14 +57,24 @@ void _createProject(String pathToProject, String templateName) {
       move(scripts.first, projectScript);
     }
   }
-  if (!Settings().isWindows) {
-    chmod(projectScript, permission: '755');
-  }
+  return projectScript;
+}
 
-  print('');
-  DartSdk()
-      .runPubGet(project.pathToProjectRoot, progress: Progress.printStdErr());
+void _createFromTemplate(String pathToTemplate, String pathToProject,
+    String projectName, String templateName) {
+  final prefix = '$pathToTemplate${Platform.pathSeparator}';
+  copyTree(pathToTemplate, pathToProject, includeHidden: true, filter: (file) {
+    print('    ${file.replaceAll(prefix, '')}');
+    return true;
+  });
 
+  _applyTransforms(
+      projectName: projectName,
+      pathToProject: pathToProject,
+      templateName: templateName);
+}
+
+void _printCreated(String projectName, DartProject project) {
   print('');
   print('Created project $projectName in '
       '${truepath(project.pathToProjectRoot)}.');
@@ -72,6 +83,11 @@ void _createProject(String pathToProject, String templateName) {
   print('');
   print('  cd $projectName');
   print('  bin/$projectName.dart');
+  print('');
+}
+
+void _printCreating(String projectName, String pathToTemplate) {
+  print('Creating $projectName from template $pathToTemplate.');
   print('');
 }
 
@@ -119,7 +135,8 @@ String _resolveTemplatePath(String templateName) {
     found = true;
   }
   if (!found) {
-    throw InvalidFlagOption('The template $templateName does not exist in '
+    throw InvalidFlagOptionException(
+        'The template $templateName does not exist in '
         '${Settings().pathToTemplateProject}'
         ' or ${Settings().pathToTemplateProjectCustom}.');
   }
