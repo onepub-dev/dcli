@@ -2,6 +2,7 @@ import 'package:dcli_core/dcli_core.dart' as core;
 import '../../dcli.dart';
 
 import 'commands/commands.dart';
+import 'commands/help.dart';
 import 'commands/run.dart';
 import 'flags.dart';
 
@@ -20,7 +21,7 @@ class CommandLineRunner {
   static CommandLineRunner? _self;
 
   /// the list of flags set on the command line.
-  static List<Flag> globalFlags = [VerboseFlag()];
+  static List<Flag> globalFlags = [VerboseFlag(), HelpFlag()];
 
   // Tracks the set of flags the users set on the command line.
   final Flags _flagsSet = Flags();
@@ -52,18 +53,14 @@ class CommandLineRunner {
             throw DuplicateOptionsException(argument);
           }
           _flagsSet.set(flag);
-          verbose(() => 'Setting flag: ${flag.name}');
           if (flag == VerboseFlag()) {
-            Settings().setVerbose(enabled: true);
-            verbose(() => 'DCli Version: ${Settings().version}');
-            final verboseFlag = flag as VerboseFlag;
-            if (verboseFlag.hasOption) {
-              core.Settings().captureLogOutput().listen((record) {
-                verboseFlag.option.append(
-                    '${record.level.name}: ${record.time}: ${record.message}');
-              });
-            }
+            _configVerbose(flag);
+          } else if (flag == HelpFlag()) {
+            command = HelpCommand();
+            success = true;
+            break;
           }
+
           continue;
         } else {
           throw UnknownFlag(argument);
@@ -97,6 +94,19 @@ class CommandLineRunner {
       throw InvalidArgumentsException('Invalid arguments passed.');
     }
     return exitCode;
+  }
+
+  void _configVerbose(Flag flag) {
+    verbose(() => 'Setting flag: ${flag.name}');
+    Settings().setVerbose(enabled: true);
+    verbose(() => 'DCli Version: ${Settings().version}');
+    final verboseFlag = flag as VerboseFlag;
+    if (verboseFlag.hasOption) {
+      core.Settings().captureLogOutput().listen((record) {
+        verboseFlag.option
+            .append('${record.level.name}: ${record.time}: ${record.message}');
+      });
+    }
   }
 }
 
@@ -138,7 +148,6 @@ class InvalidScript extends CommandLineException {
   /// Thrown when an invalid script name is passed to the  command line.
   InvalidScript(String message) : super(message);
 }
-
 
 class InvalidTemplateException extends CommandLineException {
   /// Thrown when an invalid template is selected

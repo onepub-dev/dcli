@@ -363,7 +363,7 @@ class _NoDartFlag extends Flag {
 
   @override
   String description() => '''
-Stops the install from installing dart as part of the install.
+      Stops the install from installing dart as part of the install.
       This option is for testing purposes.''';
 }
 
@@ -376,7 +376,8 @@ class _QuietFlag extends Flag {
 
   @override
   String description() =>
-      '''Runs the install in quiet mode. Only errors are displayed''';
+      '''
+      Runs the install in quiet mode. Only errors are displayed''';
 }
 
 class _NoPrivilegesFlag extends Flag {
@@ -388,7 +389,7 @@ class _NoPrivilegesFlag extends Flag {
 
   @override
   String description() => '''
-Allows the install to be run without privileges. This flag is primarily used for unit testing.
+      Allows the install to be run without privileges. This flag is primarily used for unit testing.
       Some features will not be available if you run in this mode.''';
 }
 

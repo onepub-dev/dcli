@@ -9,7 +9,10 @@ class CreateCommand extends Command {
   CreateCommand() : super(_commandName);
   static const String _commandName = 'create';
 
-  final _createFlags = [ForegroundFlag(), TemplateFlag()];
+  final _createFlags = [
+    TemplateFlag(),
+    TemplateListFlag()
+  ]; // ForegroundFlag(),
 
   /// holds the set of flags passed to the compile command.
   Flags flagSet = Flags();
@@ -48,6 +51,11 @@ class CreateCommand extends Command {
       scriptIndex = i;
 
       break;
+    }
+
+    if (flagSet.isSet(TemplateListFlag())) {
+      _printTemplates();
+      return 0;
     }
 
     final target = _retrieveTarget(subarguments.sublist(scriptIndex));
@@ -120,18 +128,65 @@ class CreateCommand extends Command {
   }
 
   @override
-  String description() =>
-      'Creates a script file with a default pubspec annotation '
-      'and a main entry point.';
+  String description() => 'Creates a script or project from a template.';
 
   @override
-  String usage() => 'create [--foreground] <script path.dart>';
+  String usage() => 'create --list | '
+      'create [--template=<template name>] '
+      '<script path.dart | project path>';
 
   @override
   List<String> completion(String word) => <String>[];
 
   @override
   List<Flag> flags() => _createFlags;
+
+  /// print a list of project and script templates
+  void _printTemplates() {
+    print('');
+    print(green('Project templates'));
+    find('*',
+            types: [Find.directory],
+            workingDirectory: Settings().pathToTemplateProject,
+            recursive: false)
+        .forEach((templateDir) {
+      if (templateDir != Settings().pathToTemplateProjectCustom) {
+        print('  ${basename(templateDir)}');
+      }
+    });
+
+    print('');
+    print(green('Custom Project templates'));
+    find('*',
+            types: [Find.directory],
+            workingDirectory: Settings().pathToTemplateProjectCustom,
+            recursive: false)
+        .forEach((templateDir) {
+      print('  ${basename(templateDir)}');
+    });
+
+    print('');
+    print(green('Script templates'));
+    find('*',
+            types: [Find.directory],
+            workingDirectory: Settings().pathToTemplateScript,
+            recursive: false)
+        .forEach((templateDir) {
+      if (templateDir != Settings().pathToTemplateScriptCustom) {
+        print('  ${basename(templateDir)}');
+      }
+    });
+    print('');
+    print(green('Custom Script templates'));
+    find('*',
+            types: [Find.directory],
+            workingDirectory: Settings().pathToTemplateScriptCustom,
+            recursive: false)
+        .forEach((templateDir) {
+      print('  ${basename(templateDir)}');
+    });
+    print('');
+  }
 }
 
 ///

@@ -230,18 +230,53 @@ class TemplateFlag extends Flag {
   }
 
   @override
-  String get abbreviation => 'v';
+  String get abbreviation => 't';
 
   @override
   String usage() =>
-      '--$flagName[=<template name>] | -$abbreviation[=<template name>]';
+      '--$flagName=<template name> | -$abbreviation=<template name>';
 
   @override
   String description() => '''
-If passed, turns on verbose logging to the console.
-      If you provide a log path then logging is written to the given logfile.''';
+      Defines the name of the template to create the script or project from.
+      If not passed the 'simple' template is used.''';
 }
 
 class InvalidProjectTemplateException extends DCliException {
   InvalidProjectTemplateException(String message) : super(message);
+}
+
+/// Prints a list of the templates and exists
+class TemplateListFlag extends Flag {
+  ///
+  factory TemplateListFlag() => _self;
+
+  ///
+  TemplateListFlag._internal() : super(flagName);
+
+  static const flagName = 'list';
+  static final _self = TemplateListFlag._internal();
+
+  @override
+  String get option => '';
+
+  /// true if the flag has an option.
+  bool get hasOption => false;
+
+  @override
+  bool get isOptionSupported => false;
+
+  @override
+  set option(String? _value) {}
+
+  @override
+  String get abbreviation => 'l';
+
+  @override
+  String usage() => '--$flagName';
+
+  @override
+  String description() => '''
+      Prints a list of project and script templates then exits.
+''';
 }

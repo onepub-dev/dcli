@@ -160,8 +160,45 @@ class VerboseFlag extends Flag {
 
   @override
   String description() => '''
-If passed, turns on verbose logging to the console.
+      If passed, turns on verbose logging to the console.
       If you provide a log path then logging is written to the given logfile.''';
+}
+
+class HelpFlag extends Flag {
+  ///
+  factory HelpFlag() => _self;
+
+  ///
+  HelpFlag._internal() : super(_flagName);
+
+  static const _flagName = 'help';
+  static final _self = HelpFlag._internal();
+
+  String? _option;
+
+  @override
+  // Path to the logfile to write verbose log messages to.
+  String get option => _option!;
+
+  /// true if the flag has an option.
+  bool get hasOption => _option != null;
+
+  @override
+  bool get isOptionSupported => false;
+
+  @override
+  set option(String? value) {}
+
+  @override
+  String get abbreviation => 'v';
+
+  @override
+  String usage() => '--$_flagName';
+
+  @override
+  String description() => '''
+      Displays this help message.
+''';
 }
 
 /// throw if we found an invalid flag.

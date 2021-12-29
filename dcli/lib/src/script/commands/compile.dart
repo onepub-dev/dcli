@@ -139,7 +139,7 @@ class CompileCommand extends Command {
 
   @override
   String description() => '''
-  Compiles the given list of scripts using dart's native compiler. 
+Compiles the given list of scripts using dart's native compiler. 
    Only required if you want super fast execution.
    If no scripts are passed then all scripts in the current directory are compiled.''';
 
@@ -236,7 +236,7 @@ class NoWarmupFlag extends Flag {
 
   @override
   String description() => '''
-Stops the compile from running 'dcli warmup' before compiling.
+      Stops the compile from running 'dcli warmup' before compiling.
       Use the nowarmup option to speed up compilation when you know your project structure is up to date.''';
 }
 
@@ -251,7 +251,8 @@ class InstallFlag extends Flag {
   String get abbreviation => 'i';
 
   @override
-  String description() => 'Installs the compiled script into your path '
+  String description() => '''
+      Installs the compiled script into your path '''
       '${Settings().pathToDCliBin}';
 }
 
@@ -265,8 +266,9 @@ class OverWriteFlag extends Flag {
   String get abbreviation => 'o';
 
   @override
-  String description() => 'If the installed executable already exists in '
-      '${Settings().pathToDCliBin} then it will overwritten.';
+  String description() => '''
+      If the installed executable already exists in '
+      '${Settings().pathToDCliBin} then it will overwritten.''';
 }
 
 /// watch the package for file changes and do
@@ -281,7 +283,7 @@ class WatchFlag extends Flag {
 
   @override
   String description() => '''
-Experimental
-Places the compiler into increment compilation mode. 
-dcli will watch for changes in the script and project automatically re-compiling.''';
+      Experimental
+      Places the compiler into increment compilation mode. 
+     dcli will watch for changes in the script and project automatically re-compiling.''';
 }
