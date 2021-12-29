@@ -39,11 +39,11 @@ $merged''');
 
       // When dart 2.16 is released we can use this which fixes the stack
       // properly
-      Error.throwWithStackTrace(e.error, merged);
+      // Error.throwWithStackTrace(e.error, merged);
 
       // 2.15
       // ignore: only_throw_errors
-      //  throw e.error;
+      throw e.error;
     }
     // ignore: avoid_catches_without_on_clauses
   } catch (e) {
@@ -61,10 +61,10 @@ $merged''');
 
     /// When dart 2.16 is released we can use this which fixes the stack
     /// properly
+    // Error.throwWithStackTrace(exception, merged);
 
-    Error.throwWithStackTrace(exception, merged);
     // 2.15
-    // throw exception..stackTrace = merged;
+    throw exception..stackTrace = merged;
   }
   return value;
 }
