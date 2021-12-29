@@ -1,3 +1,6 @@
+# 0.0.6-beta.3
+- reverted to dart 2.12 
+
 # 0.0.6-beta.1
 - release candidate for 0.0.6
 
