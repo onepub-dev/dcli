@@ -159,11 +159,11 @@ class UnknownShell with ShellMixin {
 
   @override
   bool install({bool installDart = false}) {
-    if (core.DCliPlatform().isLinux) {
+    if (core.Settings().isLinux) {
       return LinuxDCliInstaller().install(installDart: installDart);
     } else if (Settings().isWindows) {
       return WindowsDCliInstaller().install(installDart: installDart);
-    } else if (core.DCliPlatform().isMacOS) {
+    } else if (core.Settings().isMacOS) {
       return MacOSDCliInstaller().install(installDart: installDart);
     } else {
       throw UnsupportedError('Unsupported OS. ${Platform.operatingSystem}');
@@ -211,7 +211,7 @@ class UnknownShell with ShellMixin {
 
   @override
   String get installInstructions {
-    if (core.DCliPlatform().isWindows) {
+    if (core.Settings().isWindows) {
       return 'Run dcli install';
     } else {
       return r'Run sudo env "PATH=$PATH" dcli install';

@@ -1,5 +1,3 @@
-import 'dart:io';
-
 import 'package:path/path.dart';
 
 import '../../dcli_core.dart';
@@ -174,7 +172,7 @@ class _Which extends DCliFunction {
     if (exists(pathToAppname)) {
       return pathToAppname;
     }
-    if (Platform.isWindows && extensionSearch && extension(appname).isEmpty) {
+    if (Settings().isWindows && extensionSearch && extension(appname).isEmpty) {
       final pathExt = env['PATHEXT'];
 
       if (pathExt != null) {

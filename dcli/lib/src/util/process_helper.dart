@@ -208,11 +208,11 @@ class ProcessHelper {
   ///
   /// Currently this is only supported on Windows and Linux.
   List<ProcessDetails> getProcesses() {
-    if (core.DCliPlatform().isWindows) {
+    if (core.Settings().isWindows) {
       return getWindowsProcesses();
     }
 
-    if (core.DCliPlatform().isLinux) {
+    if (core.Settings().isLinux) {
       return _getLinuxProcesses();
     }
 

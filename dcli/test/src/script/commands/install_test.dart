@@ -1,8 +1,6 @@
-@Timeout(Duration(minutes: 10))
-import 'dart:io';
-
 import 'package:dcli/dcli.dart' hide equals;
 import 'package:dcli/src/script/commands/install.dart';
+import 'package:dcli_core/dcli_core.dart' as core;
 import 'package:test/test.dart';
 
 import '../../util/test_scope.dart';
@@ -15,8 +13,8 @@ void main() {
         'warmup install',
         () {
           withTestScope((testDir) {
-            expect(
-                !Platform.isWindows || Shell.current.isPrivilegedUser, isTrue);
+            expect(!core.Settings().isWindows || Shell.current.isPrivilegedUser,
+                isTrue);
             //TestFileSystem(useCommonPath: false).withinZone((fs) {
 
             try {

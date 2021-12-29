@@ -1,9 +1,7 @@
-@t.Timeout(Duration(seconds: 600))
-import 'package:dcli/dcli.dart';
+import 'package:dcli_core/dcli_core.dart';
+import 'package:di_zone2/di_zone2.dart';
 
 import 'package:test/test.dart' as t;
-
-import '../util/test_scope.dart';
 
 void main() {
   t.group('Environment', () {
@@ -21,34 +19,42 @@ void main() {
     });
 
     t.test('Windows case-insensitive env vars', () {
-      withTestScope((testDir) {
-        // final mockSettings = MockSettings();
-        // Settings.mock = mockSettings;
-        // when(() => mockSettings.isVerbose).thenReturn(true);
-        // when(() => mockSettings.isWindows).thenReturn(true);
-        // Env.reset();
-        // //var mockEnv = MockEnv();
+      Scope()
+        ..value(DCliPlatform.scopeKey,
+            DCliPlatform.forScope(overriddenPlatform: DCliPlatformOS.windows))
+        ..run(() {
+          ///  We need to run with an environment that thinks its running
+          /// under windows.
+          withEnvironment(() {
+            //withTestScope((testDir) {
+            // final mockSettings = MockSettings();
+            // Settings.mock = mockSettings;
+            // when(() => mockSettings.isVerbose).thenReturn(true);
+            // when(() => mockSettings.isWindows).thenReturn(true);
+            // MockEnv();
 
-        const userDataPath = r'C:\Windows\Userdata';
+            const userDataPath = r'C:\Windows\Userdata';
 
-        env['HOME'] = userDataPath;
-        env['APPDATA'] = userDataPath;
-        env['MixedCase'] = 'mixed data';
+            env['HOME'] = userDataPath;
+            env['APPDATA'] = userDataPath;
+            env['MixedCase'] = 'mixed data';
 
-        // test that env
-        t.expect(env['HOME'], userDataPath);
-        t.expect(env['APPDATA'], userDataPath);
-        t.expect(env['AppData'], userDataPath);
+            // test that env
+            t.expect(env['HOME'], userDataPath);
+            t.expect(env['APPDATA'], userDataPath);
+            t.expect(env['AppData'], userDataPath);
 
-        final available = <String, String?>{}
-          ..putIfAbsent('APPDATA', () => env['APPDATA'])
-          ..putIfAbsent('MixedCase', () => env['MixedCase']);
+            final available = <String, String?>{}
+              ..putIfAbsent('APPDATA', () => env['APPDATA'])
+              ..putIfAbsent('MixedCase', () => env['MixedCase']);
 
-        final expected = <String, String>{}
-          ..putIfAbsent('APPDATA', () => userDataPath)
-          ..putIfAbsent('MixedCase', () => 'mixed data');
-        t.expect(available, expected);
-      });
+            final expected = <String, String>{}
+              ..putIfAbsent('APPDATA', () => userDataPath)
+              ..putIfAbsent('MixedCase', () => 'mixed data');
+            t.expect(available, expected);
+          }, environment: {});
+        });
     });
+    //  });
   });
 }

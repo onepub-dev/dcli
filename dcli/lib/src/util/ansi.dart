@@ -27,7 +27,7 @@ class Ansi {
       // We don't trust [stdout.supportsAnsiEscapes] except on Windows.
       // [stdout] relies on the TERM environment variable
       // which generates false negatives.
-      if (!core.DCliPlatform().isWindows) {
+      if (!core.Settings().isWindows) {
         _emitAnsi = true;
       } else {
         _emitAnsi = stdout.supportsAnsiEscapes;

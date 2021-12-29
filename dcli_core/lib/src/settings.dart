@@ -1,5 +1,7 @@
 import 'package:logging/logging.dart';
 
+import 'util/dcli_platform.dart';
+
 class Settings {
   /// Returns a singleton providing
   /// access to DCli settings.
@@ -53,6 +55,15 @@ class Settings {
   void clearLogCapture() {
     logger.clearListeners();
   }
+
+  /// True if you are running on a Mac.
+  bool get isMacOS => DCliPlatform().isMacOS;
+
+  /// True if you are running on a Linux system.
+  bool get isLinux => DCliPlatform().isLinux;
+
+  /// True if you are running on a Window system.
+  bool get isWindows => DCliPlatform().isWindows;
 }
 
 ///

@@ -1,27 +1,16 @@
 #! /usr/bin/env dcli
-// remove the next line
-// ignore_for_file: unused_import
-/*
-@pubspec
-name: find.dart
-dependencies:
-  dcli: ^0.20.0
-  args: ^1.5.2
-  path: ^1.6.4
-*/
 
 import 'dart:io';
 
 import 'package:dcli/dcli.dart';
-import 'package:path/path.dart' as p;
 
 ///
 /// Call this program using:
-/// dcli find.dart -v --workingDirectory . ---recursive --pattern *.*
+/// dcli find.dart -v --workingDirectory . ---recursive  *.*
 ///
 /// to see the usage run:
 ///
-/// dcli find.dart
+/// bin/find.dart
 ///
 /// Find all files that match the given pattern.
 /// Starts from the current directory unless [--workingDirectory]
@@ -34,18 +23,19 @@ void main(List<String> args) {
       'workingDirectory',
       defaultsTo: '.',
       help: 'Specifies the directory to start searching from',
-    )
-    ..addOption(
-      'pattern',
-      abbr: 'p',
-      help: 'The search pattern to apply. e.g. *.txt. '
-          'You need to quote the pattern to stop bash '
-          'expanding it into a file list.',
     );
 
-  final results = parser.parse(args);
+  final ArgResults results;
 
-  final pattern = results['pattern'] as String;
+  try {
+    results = parser.parse(args);
+  } on FormatException catch (e) {
+    print('');
+    printerr(red(e.message));
+    showUsage(parser);
+    exit(1);
+  }
+
   final workingDirectory = results['workingDirectory'] as String;
   final verbose = results['verbose'] as bool;
   final recursive = results['recursive'] as bool;
@@ -54,10 +44,32 @@ void main(List<String> args) {
     print('Verbose is on, starting find');
   }
 
+  if (results.rest.length != 1) {
+    print('');
+    printerr(red('${DartScript.self.basename} requires a single argument. '
+        'Found: ${results.rest.join(',')}'));
+
+    showUsage(parser);
+    exit(1);
+  }
+  final pattern = results.rest[0];
+
   find(pattern, workingDirectory: workingDirectory, recursive: recursive)
       .forEach(print);
 
   if (verbose) {
     print('Verbose is on, completed find');
   }
+}
+
+void showUsage(ArgParser parser) {
+  print('''
+
+${green('Usage')}
+${DartScript.self.basename} [options] <pattern> 
+pattern - The glob search pattern to apply. e.g. *.txt. 
+    On posix systems need to quote the pattern to stop bash expanding it into a file list.
+
+${parser.usage}
+''');
 }

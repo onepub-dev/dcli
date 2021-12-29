@@ -8,25 +8,23 @@ import '../../util/test_file_system.dart';
 void main() {
   test('Create and run a script', () {
     TestFileSystem().withinZone((fs) {
-      final scriptParentPath = truepath(fs.tmpScriptPath, 'run_test');
+      final projectPath = truepath(fs.tmpScriptPath, 'run_test');
 
-      if (!exists(scriptParentPath)) {
-        createDir(scriptParentPath, recursive: true);
+      if (!exists(projectPath)) {
+        createDir(projectPath, recursive: true);
       }
-      final scriptPath = truepath(scriptParentPath, 'print_to_stdout.dart');
+      final scriptPath = truepath(projectPath, 'print_to_stdout.dart');
       if (exists(scriptPath)) {
         delete(scriptPath);
       }
 
-      final project = DartProject.fromPath(scriptParentPath, search: false);
-      project.createScript(
-        basename(scriptPath),
-        templateName: 'hello_world.dart',
-      )
+      DartProject.create(pathTo: projectPath, templateName: 'simple');
+
+      DartScript.fromFile(join(projectPath, 'bin', 'simple.dart'))
         ..runPubGet()
         ..run();
 
-      deleteDir(scriptParentPath);
+      deleteDir(projectPath);
     });
   });
   test('Run hello world', () {

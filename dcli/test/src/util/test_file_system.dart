@@ -5,6 +5,7 @@ import 'dart:isolate';
 
 import 'package:dcli/dcli.dart';
 import 'package:dcli/src/script/entry_point.dart';
+import 'package:di_zone2/di_zone2.dart';
 import 'package:pubspec/pubspec.dart' as ps;
 import 'package:test/test.dart';
 import 'package:uuid/uuid.dart';
@@ -131,7 +132,7 @@ class TestFileSystem {
     // PubCache.reset();
     // originalPubCache = PubCache().pathTo;
     // print('PATH: $PATH');
-    final originalHome = HOME;
+    final originalHome = Scope.use(originalHomeKey);
     final path = env['PATH'];
     try {
       env['HOME'] = fsRoot;

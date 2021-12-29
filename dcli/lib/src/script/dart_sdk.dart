@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:archive/archive.dart';
+import 'package:dcli_core/dcli_core.dart' as core;
 import 'package:meta/meta.dart';
 import 'package:pub_semver/pub_semver.dart';
 
@@ -35,7 +36,7 @@ class DartSdk {
 
   /// platform specific name of the 'dart' executable
   static String get dartExeName {
-    if (Settings().isWindows) {
+    if (core.Settings().isWindows) {
       return 'dart.exe';
     } else {
       return 'dart';
@@ -44,7 +45,7 @@ class DartSdk {
 
   /// platform specific name of the 'pub' executable
   static String get pubExeName {
-    if (Settings().isWindows) {
+    if (core.Settings().isWindows) {
       return 'pub.bat';
     } else {
       return 'pub';
@@ -53,7 +54,7 @@ class DartSdk {
 
   /// platform specific name of the 'dart2native' executable
   static String get dart2NativeExeName {
-    if (Settings().isWindows) {
+    if (core.Settings().isWindows) {
       return 'dart2native.bat';
     } else {
       return 'dart2native';
@@ -373,7 +374,7 @@ class DartSdk {
     moveTree(join(installDir, 'dart-sdk'), installDir, includeHidden: true);
     deleteDir(join(installDir, 'dart-sdk'));
 
-    if (Platform.isLinux || Platform.isMacOS) {
+    if (core.Settings().isLinux || core.Settings().isMacOS) {
       /// make execs executable.
       find('*', workingDirectory: join(installDir, 'bin'), recursive: false)
           .forEach((file) => posix.chmod(file, permission: '500'));

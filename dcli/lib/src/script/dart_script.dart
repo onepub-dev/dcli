@@ -7,6 +7,7 @@ import 'package:stacktrace_impl/stacktrace_impl.dart';
 
 import '../../dcli.dart';
 import 'command_line_runner.dart';
+import 'commands/dart_script_creator.dart';
 import 'runner.dart';
 
 /// Used to manage a DCli script.
@@ -16,6 +17,16 @@ import 'runner.dart';
 ///
 ///
 class DartScript {
+  factory DartScript.createScript(
+      {required DartProject project,
+      required String scriptName,
+      required String templateName}) {
+    scriptCreator(
+        project: project, scriptName: scriptName, templateName: templateName);
+
+    return DartScript.fromFile(join(project.pathToProjectRoot, scriptName));
+  }
+
   /// Path to the currently runnng script
   // static String? __pathToCurrentScript;
 
@@ -71,11 +82,10 @@ class DartScript {
   /// ```
   ///
   DartScript.fromFile(String scriptPathTo, {DartProject? project})
-      : this._internal(scriptPathTo, create: false, project: project);
+      : this._internal(scriptPathTo, project: project);
 
   DartScript._internal(
     String pathToScript, {
-    required bool create,
     DartProject? project,
   })  : _pathToScript = truepath(pathToScript),
         _scriptDirectory = dirname(truepath(pathToScript)),
@@ -83,9 +93,6 @@ class DartScript {
     {
       verbose(() => '_pathToScript: $_pathToScript');
       _scriptName = p.basename(truepath(pathToScript));
-      if (create) {
-        DartProject.fromPath(pathToProjectRoot).initFiles();
-      }
     }
   }
 
@@ -194,7 +201,7 @@ class DartScript {
   /// validate that the passed arguments points to a valid script
   static void validate(String scriptPath) {
     if (!scriptPath.endsWith('.dart')) {
-      throw InvalidArguments(
+      throw InvalidArgumentsException(
         'Expected a script name (ending in .dart) '
         'instead found: $scriptPath',
       );
@@ -273,7 +280,7 @@ class DartScript {
     workingDirectory ??= pwd;
 
     if (install && isInstalled && !overwrite) {
-      throw InvalidArguments(
+      throw InvalidArgumentsException(
         'You selected to install the compiled exe however an installed '
         'exe of that name already exists. Use overwrite=true',
       );

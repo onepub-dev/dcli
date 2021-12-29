@@ -143,14 +143,14 @@ class FileSort {
       final rhsColumns = rhs.line!.split(_fieldDelimiter!);
 
       if (_maxColumn! > lhsColumns.length) {
-        throw InvalidArguments(
+        throw InvalidArgumentsException(
           'Line $lhs does not have enough columns. '
           'Expected $_maxColumn, found ${lhsColumns.length}',
         );
       }
 
       if (_maxColumn! > rhsColumns.length) {
-        throw InvalidArguments(
+        throw InvalidArgumentsException(
           'Line $rhs does not have enough columns. '
           'Expected $_maxColumn, found ${lhsColumns.length}',
         );
@@ -256,7 +256,7 @@ class FileSort {
 
         columns.add(end);
       } else {
-        throw InvalidArguments('The column format is invalid: $value');
+        throw InvalidArgumentsException('The column format is invalid: $value');
       }
     }
 
@@ -448,7 +448,8 @@ class MonthSort implements ColumnComparator {
   int? toMonthNo(String monthName) {
     var finalmonthName = monthName.trim();
     if (finalmonthName.length < 3) {
-      throw InvalidArguments('Month in must be at least 3 characters long');
+      throw InvalidArgumentsException(
+          'Month in must be at least 3 characters long');
     }
     finalmonthName = finalmonthName.substring(0, 3).toLowerCase();
 
@@ -497,7 +498,8 @@ class Column {
     ordinal = int.parse(column.substring(0, digits));
 
     if (ordinalOnly && digits < column.length) {
-      throw InvalidArguments('Expected only a column no but found: $column');
+      throw InvalidArgumentsException(
+          'Expected only a column no but found: $column');
     }
 
     var type = 's';
@@ -509,7 +511,7 @@ class Column {
     _comparator = _typeMap[type];
 
     if (_comparator == null) {
-      throw InvalidArguments('The sort type $type is not valid');
+      throw InvalidArgumentsException('The sort type $type is not valid');
     }
 
     var direction = 'a';
@@ -520,7 +522,8 @@ class Column {
     _sortDirection = _directionMap[direction];
 
     if (_sortDirection == null) {
-      throw InvalidArguments('The sort direction $direction is not valid');
+      throw InvalidArgumentsException(
+          'The sort direction $direction is not valid');
     }
   }
 

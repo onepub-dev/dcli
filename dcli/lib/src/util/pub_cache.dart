@@ -55,7 +55,7 @@ class PubCache {
   String _getSystemCacheLocation() {
     if (envs.containsKey('PUB_CACHE')) {
       return envs['PUB_CACHE']!;
-    } else if (core.DCliPlatform().isWindows) {
+    } else if (core.Settings().isWindows) {
       // See https://github.com/dart-lang/pub/blob/master/lib/src/system_cache.dart.
 
       // %LOCALAPPDATA% is preferred as the cache location over %APPDATA%,

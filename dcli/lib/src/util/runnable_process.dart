@@ -230,7 +230,7 @@ class RunnableProcess {
       mode = ProcessStartMode.inheritStdio;
     }
 
-    if (core.DCliPlatform().isWindows && extensionSearch) {
+    if (core.Settings().isWindows && extensionSearch) {
       _parsed.cmd = _searchForCommandExtension(_parsed.cmd, workingDirectory);
     }
 

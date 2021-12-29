@@ -315,7 +315,7 @@ class Find extends DCliFunction {
     await sub.cancel();
   }
 
-  int get _accessDenied => Platform.isWindows ? 5 : 13;
+  int get _accessDenied => Settings().isWindows ? 5 : 13;
 
   /// Checks if a hidden file is allowed.
   /// Non-hidden files are always allowed.

@@ -1,10 +1,8 @@
 #! /usr/bin/env dcli
 
-import 'dart:io';
-
 import 'package:dcli/dcli.dart';
 import 'package:dcli/posix.dart';
-
+import 'package:dcli_core/dcli_core.dart' as core;
 import 'package:posix/posix.dart';
 import 'package:test/test.dart';
 
@@ -78,7 +76,7 @@ void main() {
       }
     },
     tags: ['sudo'],
-    skip: Platform.isWindows,
+    skip: core.Settings().isWindows,
   );
 
   test('withPriviliges - allowUnpriviliged', () {
@@ -91,7 +89,7 @@ void main() {
       // we should never end up here.
       expect(true, isFalse);
     }
-  }, skip: Platform.isWindows);
+  }, skip: core.Settings().isWindows);
 
   test(
     'loggedInUsersHome ...',
@@ -101,7 +99,7 @@ void main() {
       expect((Shell.current as PosixShell).loggedInUsersHome, home);
     },
     tags: ['sudo'],
-    skip: Platform.isWindows,
+    skip: core.Settings().isWindows,
   );
 
   test(
@@ -114,6 +112,6 @@ void main() {
       );
     },
     tags: ['sudo'],
-    skip: Platform.isWindows,
+    skip: core.Settings().isWindows,
   );
 }

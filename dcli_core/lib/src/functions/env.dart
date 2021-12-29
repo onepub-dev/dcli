@@ -11,7 +11,7 @@ import '../util/truepath.dart';
 import 'dcli_function.dart';
 
 /// Provides access to shell environment variables.
-Env env = Env();
+Env get env => Env();
 
 /// Tests if the given [path] is contained
 /// in the OS's PATH environment variable.
@@ -86,7 +86,7 @@ class Env extends DCliFunction {
     return env;
   }
 
-  Env._internal() : _caseSensitive = !Platform.isWindows {
+  Env._internal() : _caseSensitive = !Settings().isWindows {
     final platformVars = Platform.environment;
 
     _envVars =
@@ -236,14 +236,14 @@ class Env extends DCliFunction {
   String get HOME {
     String? home;
 
-    if (Platform.isWindows) {
+    if (Settings().isWindows) {
       home = _env('APPDATA');
     } else {
       home = _env('HOME');
     }
 
     if (home == null) {
-      if (Platform.isWindows) {
+      if (Settings().isWindows) {
         throw DCliException(
           "Unable to find the 'APPDATA' enviroment variable. "
           'Please ensure it is set and try again.',
@@ -278,7 +278,7 @@ class Env extends DCliFunction {
     verbose(() => 'env[$name] = $value');
     if (value == null) {
       _envVars.remove(name);
-      if (Platform.isWindows) {
+      if (Settings().isWindows) {
         if (name == 'HOME' || name == 'APPDATA') {
           _envVars
             ..remove('HOME')
@@ -288,7 +288,7 @@ class Env extends DCliFunction {
     } else {
       _envVars[name] = value;
 
-      if (Platform.isWindows) {
+      if (Settings().isWindows) {
         if (name == 'HOME' || name == 'APPDATA') {
           _envVars['HOME'] = value;
           _envVars['APPDATA'] = value;
@@ -306,7 +306,7 @@ class Env extends DCliFunction {
   String get delimiterForPATH {
     var separator = ':';
 
-    if (Platform.isWindows) {
+    if (Settings().isWindows) {
       separator = ';';
     }
     return separator;

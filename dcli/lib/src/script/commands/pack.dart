@@ -72,7 +72,7 @@ class PackCommand extends Command {
   @override
   int run(List<Flag> selectedFlags, List<String> arguments) {
     if (!exists(Resources().resourceRoot)) {
-      throw InvalidArguments(
+      throw InvalidArgumentsException(
           'Unable to pack resources as the resource directory at '
           '${Resources().resourceRoot}'
           " doesn't exist.");

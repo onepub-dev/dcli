@@ -6,14 +6,12 @@ import 'package:test/test.dart';
 import '../../util/test_file_system.dart';
 
 void main() {
-  const scriptName = 'create_test.dart';
+  const scriptName = 'simple.dart';
 
   group('Create Project', () {
     test('Create hello world', () {
       withTempDir((fs) {
-        DartProject.fromPath(fs, search: false)
-          ..createScript(scriptName, templateName: 'hello_world.dart')
-          ..warmup();
+        DartProject.create(pathTo: fs, templateName: 'simple').warmup();
 
         checkProjectStructure(fs, scriptName);
       });
@@ -22,10 +20,8 @@ void main() {
     test('Run hello world', () {
       TestFileSystem.common.withinZone((fs) {
         withTempDir((fs) {
-          final pathToScript = truepath(fs, scriptName);
-          DartProject.fromPath(fs, search: false)
-            ..createScript(scriptName, templateName: 'hello_world.dart')
-            ..warmup();
+          final pathToScript = truepath(fs, 'bin', scriptName);
+          DartProject.create(pathTo: fs, templateName: 'simple').warmup();
 
           DartScript.fromFile(pathToScript).run();
         });

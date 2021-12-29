@@ -42,7 +42,7 @@ Future<String> createDir(String path, {bool recursive = false}) async =>
 /// This can be useful when testing and you need to examine the temp directory.
 ///
 /// You can optionally pass in your own tempDir via [pathToTempDir].
-/// This can be useful when sometimes you need to control the [tempDir]
+/// This can be useful when sometimes you need to control the tempDir
 /// and sometimes you want it created.
 /// If you pass in [pathToTempDir] it will NOT be deleted regardless
 /// of the value of [keep].

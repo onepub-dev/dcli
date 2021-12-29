@@ -1,5 +1,4 @@
 import 'dart:async';
-import 'dart:io';
 
 import 'package:dcli/dcli.dart' hide equals;
 import 'package:test/test.dart';
@@ -13,7 +12,7 @@ void main() {
       expect(which('ls').notfound, equals(false));
       expect(which('ls').paths.length, equals(1));
     },
-    skip: Platform.isWindows,
+    skip: Settings().isWindows,
   );
 
   test(
@@ -29,7 +28,7 @@ void main() {
         equals(r'C:\Windows\regedit.exe'.toLowerCase()),
       );
     },
-    skip: !Platform.isWindows,
+    skip: !Settings().isWindows,
   );
 
   test('progress', () {

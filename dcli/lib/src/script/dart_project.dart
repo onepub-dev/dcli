@@ -1,10 +1,17 @@
+library dart_project;
+
 import 'dart:io';
 
 import '../../dcli.dart';
+import '../../posix.dart';
+import 'command_line_runner.dart';
+import 'flags.dart';
 import 'pub_get.dart';
 
 /// Encapsulates the idea of a dart project which is made up
 /// of a pubspec.yaml, dart files ....
+///
+part 'dart_project_creator.dart';
 
 class DartProject {
   /// Load a dart project from the given directory.
@@ -30,6 +37,15 @@ class DartProject {
   DartProject.fromCache(String name, String version) {
     _pathToProjectRoot = truepath(PubCache().pathToPackage(name, version));
   }
+
+  /// Create a dart project on the file system at
+  /// [pathTo] from the template named [templateName].
+  factory DartProject.create(
+      {required String pathTo, required String templateName}) {
+    _createProject(pathTo, templateName);
+    return DartProject.fromPath(pathTo, search: false);
+  }
+
   late String _pathToProjectRoot;
   String? _pathToPubSpec;
 
@@ -317,114 +333,50 @@ class DartProject {
   bool get hasAnalysisOptions =>
       exists(join(pathToProjectRoot, 'analysis_options.yaml'));
 
-  /// Prepares the project by creating a pubspec.yaml and
-  /// the analysis_options.yaml file.
-  void initFiles() {
-    if (!hasPubSpec) {
-      _createPubspecFromTemplate();
-    }
+  // /// Prepares the project by creating a pubspec.yaml and
+  // /// the analysis_options.yaml file.
+  // void initFiles() {
+  //   if (!hasPubSpec) {
+  //     _createPubspecFromTemplate(
+  //         pathToProjectRoot: pathToProjectRoot, pathToPubSpec:
+  // pathToPubSpec);
+  //   }
 
-    if (!hasAnalysisOptions) {
-      /// add pedantic to the project
-      _createAnalysisOptionsFromTemplate();
-    }
-  }
+  //   if (!hasAnalysisOptions) {
+  //     /// add pedantic to the project
+  //     _createAnalysisOptionsFromTemplate(
+  //         pathToProjectRoot: pathToProjectRoot, pathToPubSpec:
+  // pathToPubSpec);
+  //   }
+  // }
 
-  /// Creates a script located at [pathToScript] from the passed [templatePath].
-  /// When the user runs 'dcli create <script>'
-  void _createFromTemplate({
-    required String templatePath,
-    required String pathToScript,
-  }) {
-    verbose(() => '_createFromTemplate $templatePath $pathToScript');
-    if (!exists(templatePath)) {
-      throw TemplateNotFoundException(templatePath);
-    }
-    copy(templatePath, pathToScript);
+//   /// Creates a project located at [pathToProject] from the
+//passed [templatePath].
+//   /// When the user runs 'dcli create <project>'
+//   void _createFromTemplate({
+//     required String templatePath,
+//     required String pathToProject,
+//   }) {
+//     verbose(() => '_createFromTemplate $templatePath $pathToProject');
+//     if (!exists(templatePath)) {
+//       throw TemplateNotFoundException(templatePath);
+//     }
+//     copy(templatePath, pathToProject);
 
-    replace(pathToScript, 'scriptname', basename(pathToScript));
+//     replace(pathToProject, 'scriptname', basename(pathToProject));
 
-    if (!hasPubSpec) {
-      _createPubspecFromTemplate();
-    }
-    if (!hasAnalysisOptions) {
-      _createAnalysisOptionsFromTemplate();
-    }
-  }
-
-  void _createAnalysisOptionsFromTemplate({bool showWarnings = false}) {
-    /// add pedantic to the project
-
-    final analysisPath = join(pathToProjectRoot, 'analysis_options.yaml');
-    if (!exists(analysisPath)) {
-      if (showWarnings) {
-        print(orange('Creating missing analysis_options.yaml.'));
-      }
-
-      copy(
-        join(Settings().pathToTemplate, 'analysis_options.yaml.template'),
-        analysisPath,
-      );
-    }
-  }
-
-  void _createPubspecFromTemplate({bool showWarnings = false}) {
-    if (showWarnings) {
-      print(orange('Creating missing pubspec.yaml.'));
-    }
-    // no pubspec.yaml in scope so lets create one.
-
-    copy(
-      join(Settings().pathToTemplate, 'pubspec.yaml.template'),
-      pathToPubSpec,
-    );
-    replace(
-        pathToPubSpec,
-        'name: scriptname',
-        'name: '
-            '${_replaceInvalidCharactersForName(basename(pathToProjectRoot))}');
-  }
-
-  /// Creates a script in [pathToProjectRoot] with the name [scriptName]
-  /// using the based [templateName] which defaults to (basic.dart)
-  ///
-  /// The [scriptName] MUST end in .dart otherwise a [DartProjectException]
-  /// is thrown
-  ///
-  /// The [templateName] must be the name of a template file in the ~/.dcli/template directory.
-  ///
-  DartScript createScript(
-    String scriptName, {
-    String templateName = 'basic.dart',
-  }) {
-    verbose(() =>
-        'createScript scriptName: $scriptName projectRoot: $pathToProjectRoot');
-    if (!scriptName.endsWith('.dart')) {
-      throw DartProjectException('scriptName must end with .dart');
-    }
-    final pathToScript = join(pathToProjectRoot, basename(scriptName));
-    verbose(() => 'pathToScript $pathToScript');
-
-    _createFromTemplate(
-      templatePath: join(Settings().pathToTemplate, templateName),
-      pathToScript: pathToScript,
-    );
-
-    return DartScript.fromFile(pathToScript, project: this);
-  }
-
-  /// The name used in the pubspec.yaml must come from the character
-  ///  set [a-z0-9_]
-  /// so wer replace any invalid character with an '_'.
-  String _replaceInvalidCharactersForName(String proposedName) {
-    var fixed = proposedName.replaceAll(RegExp('[^a-zA-Z0-9_]'), '_');
-
-    /// must start with an alpha.
-    if (RegExp('[a-zA-Z]').matchAsPrefix(fixed) == null) {
-      fixed = 'a$fixed';
-    }
-    return fixed;
-  }
+//     if (!hasPubSpec) {
+//       _createPubspecFromTemplate(
+//           pathToProjectRoot: pathToProjectRoot,
+// pathToPubSpec: pathToPubSpec);
+//     }
+//     if (!hasAnalysisOptions) {
+//       _createAnalysisOptionsFromTemplate(
+//           pathToProjectRoot: pathToProjectRoot,
+// pathToPubSpec: pathToPubSpec);
+//     }
+//   }
+// }
 }
 
 /// Exception for issues with DartProjects.

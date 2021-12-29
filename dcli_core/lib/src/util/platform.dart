@@ -1,5 +1,7 @@
 import 'dart:io';
 
+import '../../dcli_core.dart';
+
 /// Extensions for the Platform class
 extension PlatformEx on Platform {
   /// Returns the OS specific End Of Line (eol) character.
@@ -12,5 +14,5 @@ extension PlatformEx on Platform {
   /// import 'dart:io';
   /// import 'package:dcli/dcli.dart';
   /// ```
-  String get eol => Platform.isWindows ? '\r\n' : '\n';
+  String get eol => DCliPlatform().isWindows ? '\r\n' : '\n';
 }

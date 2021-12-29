@@ -2,6 +2,7 @@
 import 'dart:io';
 
 import 'package:dcli/dcli.dart';
+import 'package:dcli_core/dcli_core.dart' as core;
 import 'package:test/test.dart' as t;
 import 'package:test/test.dart';
 
@@ -327,5 +328,5 @@ void main() {
   test('do not follow links', () {
     expect(isLink('/usr/bin/X11'), isTrue);
     find('*', workingDirectory: '/usr/bin').forEach(print);
-  }, skip: Platform.isWindows);
+  }, skip: core.Settings().isWindows);
 }

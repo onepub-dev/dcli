@@ -66,7 +66,7 @@ class InstallCommand extends Command {
     scriptIndex = i;
 
     if (subarguments.length != scriptIndex) {
-      throw InvalidArguments(
+      throw InvalidArgumentsException(
         "'dcli install' does not take any arguments. Found $subarguments",
       );
     }
@@ -75,7 +75,7 @@ class InstallCommand extends Command {
 
     /// We need to be priviledged to create the dcli symlink
     if (_requirePrivileges &&
-        core.DCliPlatform().isWindows &&
+        core.Settings().isWindows &&
         !shell.isPrivilegedUser) {
       _qprint(red(shell.privilegesRequiredMessage('dcli_install')));
       exit(1);
@@ -224,7 +224,7 @@ class InstallCommand extends Command {
   /// We use the location of dart exe and add dcli symlink
   /// to the same location.
   void symlinkDCli(Shell shell, String dcliPath) {
-    if (!core.DCliPlatform().isWindows) {
+    if (!core.Settings().isWindows) {
       final linkPath = join(dirname(DartSdk().pathToDartExe!), 'dcli');
       if (Shell.current.isPrivilegedPasswordRequired && !isWritable(linkPath)) {
         print('Please enter the sudo password when prompted.');
@@ -256,7 +256,7 @@ class InstallCommand extends Command {
 
   void _fixPermissions(Shell shell) {
     if (shell.isPrivilegedUser) {
-      if (!core.DCliPlatform().isWindows) {
+      if (!core.Settings().isWindows) {
         final user = shell.loggedInUser;
         if (user != 'root') {
           'chown -R $user:$user ${Settings().pathToDCli}'.run;
@@ -281,6 +281,21 @@ class InstallCommand extends Command {
   }
 
   void initProjectTemplates() {
+    /// delete all non-custom project templates
+    find('*',
+            types: [Find.directory],
+            workingDirectory: Settings().pathToTemplateProject)
+        .forEach((dir) {
+      // dont' delete anything under custom.
+      if (!dir.startsWith(Settings().pathToTemplateProjectCustom)) {
+        /// as we are doing recursive delete we may have already
+        /// deleted this directory.
+        if (exists(dir)) {
+          deleteDir(dir);
+        }
+      }
+    });
+
     /// create the template directory.
     if (!exists(Settings().pathToTemplateProject)) {
       _qprint(
@@ -304,6 +319,17 @@ class InstallCommand extends Command {
   }
 
   void initScriptTemplates() {
+    /// delete all non-custom script templates
+    find('*',
+            types: [Find.directory],
+            workingDirectory: Settings().pathToTemplateScript)
+        .forEach((dir) {
+      // dont' delete anything under custom.
+      if (!dir.startsWith(Settings().pathToTemplateScriptCustom)) {
+        deleteDir(dir);
+      }
+    });
+
     /// create the template directory.
     if (!exists(Settings().pathToTemplateProject)) {
       _qprint(

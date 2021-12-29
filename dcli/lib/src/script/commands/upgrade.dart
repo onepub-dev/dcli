@@ -17,7 +17,8 @@ class UpgradeCommand extends Command {
   @override
   int run(List<Flag> selectedFlags, List<String> arguments) {
     if (arguments.isNotEmpty) {
-      throw InvalidArguments('dcli upgrade does not take any arguments.');
+      throw InvalidArgumentsException(
+          'dcli upgrade does not take any arguments.');
     }
 
     final currentVersion = Settings().version;

@@ -94,7 +94,7 @@ class CommandLineRunner {
       // for the command to process.
       exitCode = command!.run(Settings().selectedFlags, cmdArguments);
     } else {
-      throw InvalidArguments('Invalid arguments passed.');
+      throw InvalidArgumentsException('Invalid arguments passed.');
     }
     return exitCode;
   }
@@ -159,7 +159,7 @@ class UnknownFlag extends CommandLineException {
 }
 
 /// Thrown when an invalid argument is passed to a command.
-class InvalidArguments extends CommandLineException {
+class InvalidArgumentsException extends CommandLineException {
   ///
-  InvalidArguments(String message) : super(message);
+  InvalidArgumentsException(String message) : super(message);
 }

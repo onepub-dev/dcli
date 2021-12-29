@@ -20,7 +20,6 @@ export 'package:dcli_core/dcli_core.dart'
         FindItem,
         pwd,
         PlatformEx,
-        PlatformWrapper,
         LineAction,
         CancelableLineAction,
         rootPath,

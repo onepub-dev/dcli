@@ -1,6 +1,5 @@
-import 'dart:io';
-
 import 'package:dcli/src/windows/process_helper.dart';
+import 'package:dcli_core/dcli_core.dart' as core;
 import 'package:test/test.dart';
 
 void main() {
@@ -11,6 +10,6 @@ void main() {
 
       expect(processes.map((process) => process.name), contains('dart.exe'));
     },
-    skip: !Platform.isWindows,
+    skip: !core.Settings().isWindows,
   );
 }
