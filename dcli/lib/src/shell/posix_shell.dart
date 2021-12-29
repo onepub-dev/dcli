@@ -156,12 +156,14 @@ mixin PosixShell {
   String privilegesRequiredMessage(String app) => 'Please $installInstructions';
 
   /// Install dart/dcli
-  bool install({bool installDart = false}) {
+  bool install({bool installDart = false, bool activate = true}) {
     var installed = false;
     if (core.Settings().isLinux) {
-      installed = LinuxDCliInstaller().install(installDart: installDart);
+      installed = LinuxDCliInstaller()
+          .install(installDart: installDart, activate: activate);
     } else {
-      installed = MacOSDCliInstaller().install(installDart: installDart);
+      installed = MacOSDCliInstaller()
+          .install(installDart: installDart, activate: activate);
     }
 
     // DartProject.self.compile(install: true, overwrite: true);

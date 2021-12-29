@@ -7,15 +7,17 @@ import '../shell/shell_detection.dart';
 
 class LinuxDCliInstaller {
   /// returns true if it needed to install dart.
-  bool install({required bool installDart}) {
-    const installedDart = false;
+  bool install({required bool installDart, bool activate = true}) {
+    var installedDart = false;
 
     if (installDart) {
-      _installDart();
+      installedDart = _installDart();
     }
 
     // now activate dcli.
-    PubCache().globalActivate('dcli');
+    if (activate) {
+      PubCache().globalActivate('dcli');
+    }
 
     // // also need to install it for the root user
     // // as root must have its own copy of .pub-cache otherwise

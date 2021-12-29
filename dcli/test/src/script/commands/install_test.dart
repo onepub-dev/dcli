@@ -27,7 +27,7 @@ void main() {
 
             // Now install over existing
             try {
-              Shell.current.install();
+              Shell.current.install(activate: false);
             } on DCliException catch (e) {
               print(e);
             }

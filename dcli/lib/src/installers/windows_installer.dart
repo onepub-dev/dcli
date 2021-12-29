@@ -9,7 +9,7 @@ import '../../windows.dart';
 
 class WindowsDCliInstaller {
   /// returns true if it needed to install dart.
-  bool install({bool installDart = true}) {
+  bool install({bool installDart = true, bool activate = true}) {
     var installedDart = false;
 
     if (installDart) {
@@ -24,9 +24,10 @@ class WindowsDCliInstaller {
     if (!path.contains(Settings().pathToDCliBin)) {
       regAppendToPath(Settings().pathToDCliBin);
     }
-
-    // TODO(bsutton): I've had to remove this for the moment due to https://github.com/dart-lang/sdk/issues/46255
-    // DartSdk().globalActivate('dcli');
+    // now activate dcli.
+    if (activate) {
+      PubCache().globalActivate('dcli');
+    }
 
     return installedDart;
   }

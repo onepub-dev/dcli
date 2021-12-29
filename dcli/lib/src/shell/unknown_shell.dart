@@ -158,13 +158,16 @@ class UnknownShell with ShellMixin {
       'You need to be a privileged user to run $app';
 
   @override
-  bool install({bool installDart = false}) {
+  bool install({bool installDart = false, bool activate = true}) {
     if (core.Settings().isLinux) {
-      return LinuxDCliInstaller().install(installDart: installDart);
+      return LinuxDCliInstaller()
+          .install(installDart: installDart, activate: activate);
     } else if (Settings().isWindows) {
-      return WindowsDCliInstaller().install(installDart: installDart);
+      return WindowsDCliInstaller()
+          .install(installDart: installDart, activate: activate);
     } else if (core.Settings().isMacOS) {
-      return MacOSDCliInstaller().install(installDart: installDart);
+      return MacOSDCliInstaller()
+          .install(installDart: installDart, activate: activate);
     } else {
       throw UnsupportedError('Unsupported OS. ${Platform.operatingSystem}');
     }
