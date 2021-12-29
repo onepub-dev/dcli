@@ -8,6 +8,7 @@ import 'A24b157b256371f847aea599d100adb7f.g.dart';
 import 'A3452b0f16c2b6821fd6c22320b4ed6e9.g.dart';
 import 'A3a93770e3a74e1b14dd06078ea242957.g.dart';
 import 'A3ad36e7b3c78c22949aae56295c148fe.g.dart';
+import 'A4347a8ff639ee7df6728f1c36d4bd16c.g.dart';
 import 'A46e6f81236dd31931b47d5df66e7e20e.g.dart';
 import 'A49bc9b7e40a7f3042a5bbb3e476b4dc4.g.dart';
 import 'A62681f367be07503c61a07c06bf6c721.g.dart';
@@ -57,6 +58,7 @@ class ResourceRegistry {
             'template/README.md' : A3452b0f16c2b6821fd6c22320b4ed6e9(),
             'template/project/find/analysis_options.yaml' : A3a93770e3a74e1b14dd06078ea242957(),
             'template/project/simple/analysis_options.yaml' : A3ad36e7b3c78c22949aae56295c148fe(),
+            'template/script/custom/README.md' : A4347a8ff639ee7df6728f1c36d4bd16c(),
             'template/project/full/lib/console_full.dart' : A46e6f81236dd31931b47d5df66e7e20e(),
             'template/project/full/pubspec.lock' : A49bc9b7e40a7f3042a5bbb3e476b4dc4(),
             'template/project/custom/README.md' : A62681f367be07503c61a07c06bf6c721(),
