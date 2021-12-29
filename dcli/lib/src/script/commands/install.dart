@@ -281,6 +281,10 @@ class InstallCommand extends Command {
   }
 
   void initProjectTemplates() {
+    if (!exists(Settings().pathToTemplateProjectCustom)) {
+      createDir(Settings().pathToTemplateProjectCustom, recursive: true);
+    }
+
     /// delete all non-custom project templates
     find('*',
             types: [Find.directory],
@@ -319,6 +323,10 @@ class InstallCommand extends Command {
   }
 
   void initScriptTemplates() {
+    if (!exists(Settings().pathToTemplateScriptCustom)) {
+      createDir(Settings().pathToTemplateScriptCustom, recursive: true);
+    }
+
     /// delete all non-custom script templates
     find('*',
             types: [Find.directory],
@@ -375,8 +383,7 @@ class _QuietFlag extends Flag {
   String get abbreviation => 'q';
 
   @override
-  String description() =>
-      '''
+  String description() => '''
       Runs the install in quiet mode. Only errors are displayed''';
 }
 

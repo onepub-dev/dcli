@@ -51,8 +51,14 @@ class PubSpec {
     if (_executables == null) {
       _executables = <Executable>[];
       for (final key in pubspec.executables.keys) {
-        _executables!
-            .add(Executable(key, pubspec.executables[key]!.scriptPath));
+        final String scriptPath;
+        if (pubspec.executables[key]!.script == null) {
+          scriptPath = join('bin', '$key.dart');
+        } else {
+          scriptPath = pubspec.executables[key]!.script!;
+        }
+
+        _executables!.add(Executable(key, scriptPath));
       }
     }
 

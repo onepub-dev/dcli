@@ -90,7 +90,6 @@ void checkInstallStructure(String home) {
   checkProjectStructure(home, 'simple');
   checkProjectStructure(home, 'cmd_args');
   checkProjectStructure(home, 'find');
-  checkProjectStructure(home, 'full');
   checkProjectStructure(home, 'simple');
 
   checkScriptStructure(home);
@@ -100,7 +99,7 @@ void checkScriptStructure(String home) {
   expect(exists(truepath(home, '.dcli', 'template', 'script')), equals(true));
   expect(exists(truepath(home, '.dcli', 'template', 'script', 'custom')),
       equals(true));
-  expect(exists(truepath(home, '.dcli', 'template', 'script', 'simple.dart')),
+  expect(exists(truepath(home, '.dcli', 'template', 'script', 'simple')),
       equals(true));
   expect(
       exists(truepath(
@@ -124,12 +123,12 @@ void checkProjectStructure(String home, String projectName) {
     templates,
     unorderedEquals(
       <String>[
-        truepath(projectPath, 'bin', 'main.dart'),
-        truepath(projectPath, 'analysis_options.yaml'),
-        truepath(projectPath, 'pubspec.lock'),
-        truepath(projectPath, 'pubspec.yaml'),
-        truepath(projectPath, 'README.md'),
         truepath(projectPath, 'CHANGELOG.md'),
+        truepath(projectPath, 'pubspec.lock'),
+        truepath(projectPath, 'analysis_options.yaml'),
+        truepath(projectPath, 'README.md'),
+        truepath(projectPath, 'pubspec.yaml'),
+        truepath(projectPath, 'bin', 'main.dart'),
       ],
     ),
   );

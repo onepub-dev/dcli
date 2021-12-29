@@ -9,9 +9,9 @@ import 'package:dcli/dcli.dart';
 /// 
 /// GENERATED - GENERATED
 
-class A5fae0217029e4974bcf2fe9f2c4a1393 extends PackedResource {
-  /// PackedResource - ../../template/script/simple/main.dart
-  const A5fae0217029e4974bcf2fe9f2c4a1393();
+class A806335d3c77a5513fc6bf6d3f97b8d1b extends PackedResource {
+  /// PackedResource - ../../template/project/find/README.md
+  const A806335d3c77a5513fc6bf6d3f97b8d1b();
 
   /// A hash of the resource (pre packed) calculated by
   /// [calculateHash].
@@ -25,20 +25,16 @@ class A5fae0217029e4974bcf2fe9f2c4a1393 extends PackedResource {
   /// this checksum
   @override
   String get checksum => 
-      'b630b832f695f4c237a3ddca0f0ad42e100f7100c29ef76be3576549d6e36761';
+      'bb1265a8f87a3487741679ae31cb020bfd1ab392e53112c9e0d376dd4eeaf7ed';
   
   /// <package>/resources relative path to the original resource.
   @override
-  String get originalPath => 'template/script/simple/main.dart';
+  String get originalPath => 'template/project/find/README.md';
   
   @override
   String get content => 
       '''
-IyEgL3Vzci9iaW4vZW52IGRjbGkKCi8vIGlnbm9yZTogdW51c2VkX2ltcG9ydAppbXBvcnQgJ3BhY2th
-Z2U6ZGNsaS9kY2xpLmRhcnQnOwoKLy8vIGRjbGkgc2NyaXB0IGdlbmVyYXRlZCBieToKLy8vIGRjbGkg
-Y3JlYXRlICVzY3JpcHRuYW1lJQovLy8KLy8vIFNlZQovLy8gaHR0cHM6Ly9wdWIuZGV2L3BhY2thZ2Vz
-L2RjbGkjLWluc3RhbGxpbmctdGFiLQovLy8KLy8vIEZvciBkZXRhaWxzIG9uIGluc3RhbGxpbmcgZGNs
-aS4KLy8vCnZvaWQgbWFpbihMaXN0PFN0cmluZz4gYXJncykge30K
+QSBzaW1wbGUgY29tbWFuZC1saW5lIGFwcGxpY2F0aW9uIGNyZWF0ZWQgYnkgRENsaS4K
   ''';
   
 }

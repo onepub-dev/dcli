@@ -9,9 +9,9 @@ import 'package:dcli/dcli.dart';
 /// 
 /// GENERATED - GENERATED
 
-class A5fae0217029e4974bcf2fe9f2c4a1393 extends PackedResource {
-  /// PackedResource - ../../template/script/simple/main.dart
-  const A5fae0217029e4974bcf2fe9f2c4a1393();
+class A9502ca6e2cf5f28bb6659d96ea3caf7c extends PackedResource {
+  /// PackedResource - ../../template/project/cmd_args/CHANGELOG.md
+  const A9502ca6e2cf5f28bb6659d96ea3caf7c();
 
   /// A hash of the resource (pre packed) calculated by
   /// [calculateHash].
@@ -25,20 +25,16 @@ class A5fae0217029e4974bcf2fe9f2c4a1393 extends PackedResource {
   /// this checksum
   @override
   String get checksum => 
-      'b630b832f695f4c237a3ddca0f0ad42e100f7100c29ef76be3576549d6e36761';
+      '90691bccf156a7175de63a71919d8aa3d279e7ea6cc91dc529decacdfff092e2';
   
   /// <package>/resources relative path to the original resource.
   @override
-  String get originalPath => 'template/script/simple/main.dart';
+  String get originalPath => 'template/project/cmd_args/CHANGELOG.md';
   
   @override
   String get content => 
       '''
-IyEgL3Vzci9iaW4vZW52IGRjbGkKCi8vIGlnbm9yZTogdW51c2VkX2ltcG9ydAppbXBvcnQgJ3BhY2th
-Z2U6ZGNsaS9kY2xpLmRhcnQnOwoKLy8vIGRjbGkgc2NyaXB0IGdlbmVyYXRlZCBieToKLy8vIGRjbGkg
-Y3JlYXRlICVzY3JpcHRuYW1lJQovLy8KLy8vIFNlZQovLy8gaHR0cHM6Ly9wdWIuZGV2L3BhY2thZ2Vz
-L2RjbGkjLWluc3RhbGxpbmctdGFiLQovLy8KLy8vIEZvciBkZXRhaWxzIG9uIGluc3RhbGxpbmcgZGNs
-aS4KLy8vCnZvaWQgbWFpbihMaXN0PFN0cmluZz4gYXJncykge30K
+IyMgMS4wLjAKCi0gSW5pdGlhbCB2ZXJzaW9uLgo=
   ''';
   
 }
