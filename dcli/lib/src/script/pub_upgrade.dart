@@ -3,21 +3,21 @@ import '../../dcli.dart';
 ///
 /// runs and retrives the results of calling
 /// ```
-/// pub get
+/// pub upgrade
 /// ```
 /// For the given [DartProject]
 ///
 
-class PubGet {
+class PubUpgrade {
   ///
-  PubGet(this._project);
+  PubUpgrade(this._project);
 
   final DartProject _project;
 
   /// Runs the pub get command against
   /// the project working dir.
-  PubGetResult run({bool compileExecutables = true}) {
-    final result = PubGetResult();
+  PubUpgradeResult run({bool compileExecutables = true}) {
+    final result = PubUpgradeResult();
     try {
       // pub get MUST be run from the directory which contains
       //  the pubspec.yaml file.
@@ -29,8 +29,8 @@ class PubGet {
 
       return result;
     } on RunException catch (e) {
-      verbose(() => 'pub get exeception: $e');
-      throw PubGetException(e.exitCode);
+      verbose(() => 'pub upgrade exeception: $e');
+      throw PubUpgradeException(e.exitCode);
     }
   }
 
@@ -42,9 +42,9 @@ class PubGet {
 
 /// results from running pub get.
 /// we parse lines of interest.
-class PubGetResult {
+class PubUpgradeResult {
   ///
-  PubGetResult();
+  PubUpgradeResult();
 
   final List<Dependency> _added = <Dependency>[];
   final List<Dependency> _removed = <Dependency>[];
@@ -75,9 +75,9 @@ class PubGetResult {
 
 ///
 
-class PubGetException extends DCliException {
+class PubUpgradeException extends DCliException {
   ///
-  PubGetException(this.exitCode) : super('dart pub get failed');
+  PubUpgradeException(this.exitCode) : super('dart pub upgrade failed');
 
   /// the pub get exit code.
   final int? exitCode;

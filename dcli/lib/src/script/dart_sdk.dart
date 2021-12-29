@@ -273,7 +273,7 @@ class DartSdk {
     return false;
   }
 
-  /// runs 'pub get'
+  /// runs 'dart pub get'
   void runPubGet(
     String? workingDirectory, {
     Progress? progress,
@@ -281,6 +281,19 @@ class DartSdk {
   }) {
     runPub(
       args: ['get', if (!compileExecutables) '--no-precompile'],
+      workingDirectory: workingDirectory,
+      progress: progress,
+    );
+  }
+
+  /// runs 'dart pub upgrade'
+  void runPubUpgrade(
+    String? workingDirectory, {
+    Progress? progress,
+    bool compileExecutables = false,
+  }) {
+    runPub(
+      args: ['upgrade', if (!compileExecutables) '--no-precompile'],
       workingDirectory: workingDirectory,
       progress: progress,
     );

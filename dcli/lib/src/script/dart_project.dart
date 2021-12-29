@@ -7,6 +7,7 @@ import '../../posix.dart';
 import 'command_line_runner.dart';
 import 'flags.dart';
 import 'pub_get.dart';
+import 'pub_upgrade.dart';
 
 /// Encapsulates the idea of a dart project which is made up
 /// of a pubspec.yaml, dart files ....
@@ -196,7 +197,10 @@ class DartProject {
   /// run the build as a background process.
   /// [background] defaults to false.
   ///
-  void warmup({bool background = false}) {
+  /// If [upgrade] is true then a pub upgrade is ran rather than
+  /// pub get.
+  ///
+  void warmup({bool background = false, bool upgrade = false}) {
     _lock.withLock(
       () {
         try {
@@ -214,7 +218,11 @@ class DartProject {
             );
           } else {
             // print(orange('Running pub get...'));
-            _pubget();
+            if (upgrade) {
+              _pubupgrade();
+            } else {
+              _pubget();
+            }
           }
         } on PubGetException {
           print(red("\ndcli warmup failed due to the 'pub get' call failing."));
@@ -301,6 +309,33 @@ class DartProject {
         exit(1);
       }
       pubGet.run(compileExecutables: false);
+    });
+  }
+
+  /// Causes a pub upgrade to be run against the project.
+  ///
+  /// The projects cache must already exist and be
+  /// in a consistent state.
+  ///
+  /// This is normally done when the project cache is first
+  /// created and when a script's pubspec changes.
+  void _pubupgrade() {
+    NamedLock(
+      name: _lockName,
+      lockPath: pathToProjectRoot,
+    ).withLock(() {
+      final pubUpgrade = PubUpgrade(this);
+      if (Shell.current.isSudo) {
+        /// bugger we just screwed the cache permissions so lets fix them.
+//         'chmod -R ${env['USER']}:${env['USER']} ${PubCache().pathTo}'.run;
+
+        printerr('You must compile your script before running it under sudo');
+
+        // ignore: flutter_style_todos
+        /// TODO(bsutton): should this be a throw?
+        exit(1);
+      }
+      pubUpgrade.run(compileExecutables: false);
     });
   }
 

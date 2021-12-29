@@ -353,7 +353,6 @@ class TestFileSystem {
     );
 
     _patchRelativeDependenciesAndWarmup(testScriptPath);
-    DartProject.fromPath(join(testScriptPath, 'general')).warmup();
 
     Settings().setVerbose(enabled: verbose);
   }
@@ -401,7 +400,7 @@ class TestFileSystem {
         ..dependencyOverrides = <String, Dependency>{}
         ..saveToFile(pathToPubspec);
 
-      DartProject.fromPath(dirname(pathToPubspec)).warmup();
+      DartProject.fromPath(dirname(pathToPubspec)).warmup(upgrade: true);
     });
   }
 
