@@ -24,7 +24,7 @@ DCli expects all resources to located within your dart project under:
 
 ## Packing resources
 
-To pack your resources you run:
+To pack your resources run:
 
 ```
 dcli pack
@@ -36,7 +36,7 @@ The 'pack' command will scan the '\<project root>/resource' directory and all su
 <project root>/lib/src/dcli/resource/generated
 ```
 
-Each library name is generated using a uuid of the form \<uuid>.g.dart
+Each library name is generated using a md5 hash prefixed with the letter 'A' to make a valid class name. The library name is of the form A\<md5hash>.g.dart
 
 So the following resources:
 
@@ -51,16 +51,16 @@ Will result in to:
 ```
 <project root>/lib/src/dcli/resource/generated
                             /resource_registry.g.dart
-                            /aadafaasdf.g.dart
-                            /aalwhkciyge.g.dart
+                            /A21302b1b380201578fc8ce748f5d9ac8.g.dart
+                            /A49bc9b7e40a7f3042a5bbb3e476b4dc4.g.dart
 ```
 
 The contents of each resource is base64 encoded into a multi-line string. So the photo.png.dart file will something look like:
 
 ````dart
-class Bbbcdcbeeff extends PackedResource {
+class A21302b1b380201578fc8ce748f5d9ac8 extends PackedResource {
   /// PackedResource - local_batman.yaml
-  const Bbbcdcbeeff();
+  const A21302b1b380201578fc8ce748f5d9ac8();
 
   /// A hash of the resource (pre packed) calculated by
   /// [calculateHash].
@@ -118,8 +118,8 @@ class ResourceRegistry {
   ///     .unpack(join(HOME, '.mysettings', 'batman.yaml'));
   /// ```
   static const resources = <String, PackedResource>{
-    'local_batman.yaml': Bbbcdcbeeff(),
-    'docker_batman.yaml': Bfbbcabcfec(),
+    'local_batman.yaml': A21302b1b380201578fc8ce748f5d9ac8(),
+    'docker_batman.yaml': A49bc9b7e40a7f3042a5bbb3e476b4dc4(),
   };
 }
 
@@ -175,7 +175,7 @@ if (calculateHash(pathToResource).hexEncode() != packResource.checksum)
 
 ## External Resources
 
-You can also pack resources that are external to your project by creating a pack.yaml file under your project's tool/dcli director.
+You can also pack resources that are external to your project by creating a pack.yaml file under your project's tool/dcli directory.
 
 The pack.yaml file allows you to specify a number of files and/or directories and their virtual mount point within the resource directory.
 
@@ -197,7 +197,7 @@ externals:
 
 The path for each external may be a file or a directory. If path is a directory then the directory is included recursively.
 
-The mount point is a virtual location within the resource directory. It may not overlap any actual files/paths in the resource directory.
+The mount point is a virtual location within the project resource directory. It may not overlap any actual files/paths in the project resource directory.
 
 To unpack external resources you use the mount point as the key into the ResourceRegistry.
 
