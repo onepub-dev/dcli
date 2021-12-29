@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:dcli_core/dcli_core.dart' as core;
 import 'package:meta/meta.dart';
 
 import '../../../dcli.dart';
@@ -73,7 +74,9 @@ class InstallCommand extends Command {
     _requirePrivileges = !flagSet.isSet(const _NoPrivilegesFlag());
 
     /// We need to be priviledged to create the dcli symlink
-    if (_requirePrivileges && Platform.isWindows && !shell.isPrivilegedUser) {
+    if (_requirePrivileges &&
+        core.DCliPlatform().isWindows &&
+        !shell.isPrivilegedUser) {
       _qprint(red(shell.privilegesRequiredMessage('dcli_install')));
       exit(1);
     }
@@ -221,7 +224,7 @@ class InstallCommand extends Command {
   /// We use the location of dart exe and add dcli symlink
   /// to the same location.
   void symlinkDCli(Shell shell, String dcliPath) {
-    if (!Platform.isWindows) {
+    if (!core.DCliPlatform().isWindows) {
       final linkPath = join(dirname(DartSdk().pathToDartExe!), 'dcli');
       if (Shell.current.isPrivilegedPasswordRequired && !isWritable(linkPath)) {
         print('Please enter the sudo password when prompted.');
@@ -253,7 +256,7 @@ class InstallCommand extends Command {
 
   void _fixPermissions(Shell shell) {
     if (shell.isPrivilegedUser) {
-      if (!Platform.isWindows) {
+      if (!core.DCliPlatform().isWindows) {
         final user = shell.loggedInUser;
         if (user != 'root') {
           'chown -R $user:$user ${Settings().pathToDCli}'.run;

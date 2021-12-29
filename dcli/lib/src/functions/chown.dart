@@ -1,5 +1,3 @@
-import 'dart:io';
-
 import 'package:dcli_core/dcli_core.dart' as core;
 import 'package:posix/posix.dart' as _posix;
 
@@ -39,7 +37,7 @@ class _ChOwn extends core.DCliFunction {
     String? group,
     bool recursive = true,
   }) {
-    if (Platform.isWindows) {
+    if (Settings().isWindows) {
       return;
     }
 

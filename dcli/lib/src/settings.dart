@@ -24,6 +24,8 @@ class Settings {
     }
   }
 
+  /// To use this method create a [Scope] and inject this
+  /// as a value into the scope.
   factory Settings.forScope() => Settings._internal();
 
   Settings._internal({
@@ -40,6 +42,15 @@ class Settings {
   static const templateDir = 'template';
 
   final InternalSettings _settings = InternalSettings();
+
+  /// True if you are running on a Mac.
+  bool get isMacOS => core.Settings().isMacOS;
+
+  /// True if you are running on a Linux system.
+  bool get isLinux => core.Settings().isLinux;
+
+  /// True if you are running on a Window system.
+  bool get isWindows => core.Settings().isWindows;
 
   /// The name of the DCli app. This will
   /// always be 'dcli'.
@@ -75,7 +86,7 @@ class Settings {
 
   /// When you run dcli compile -i `<script>` the compiled exe
   /// is moved to this path.
-  /// 
+  ///
   /// The dcliBinPath is added to the OS's path
   /// allowing the installed scripts to be run from anywhere.
   /// This will normally be ~/.dcli/bin
@@ -131,16 +142,6 @@ class Settings {
   /// returns the path to the file that we use to indicated
   /// that the install completed succesfully.
   String get installCompletedIndicator => join(pathToDCli, 'install_completed');
-
-  /// True if you are running on a Mac.
-  /// I'm so sorry.
-  bool get isMacOS => Platform.isMacOS;
-
-  /// True if you are running on a Linux system.
-  bool get isLinux => Platform.isLinux;
-
-  /// True if you are running on a Window system.
-  bool get isWindows => Platform.isWindows;
 
   /// A method to test with a specific global
   /// flag has been set.

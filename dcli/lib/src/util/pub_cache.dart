@@ -1,5 +1,4 @@
-import 'dart:io';
-
+import 'package:dcli_core/dcli_core.dart' as core;
 import 'package:di_zone2/di_zone2.dart';
 import 'package:meta/meta.dart';
 import 'package:pub_semver/pub_semver.dart';
@@ -56,7 +55,7 @@ class PubCache {
   String _getSystemCacheLocation() {
     if (envs.containsKey('PUB_CACHE')) {
       return envs['PUB_CACHE']!;
-    } else if (Platform.isWindows) {
+    } else if (core.DCliPlatform().isWindows) {
       // See https://github.com/dart-lang/pub/blob/master/lib/src/system_cache.dart.
 
       // %LOCALAPPDATA% is preferred as the cache location over %APPDATA%,

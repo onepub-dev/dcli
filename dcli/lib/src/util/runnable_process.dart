@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
+import 'package:dcli_core/dcli_core.dart' as core;
 
 import '../../dcli.dart';
 import 'parse_cli_command.dart';
@@ -229,7 +230,7 @@ class RunnableProcess {
       mode = ProcessStartMode.inheritStdio;
     }
 
-    if (Platform.isWindows && extensionSearch) {
+    if (core.DCliPlatform().isWindows && extensionSearch) {
       _parsed.cmd = _searchForCommandExtension(_parsed.cmd, workingDirectory);
     }
 

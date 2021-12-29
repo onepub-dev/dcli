@@ -9,9 +9,9 @@ import 'package:dcli/dcli.dart';
 /// 
 /// GENERATED - GENERATED
 
-class A46e6f81236dd31931b47d5df66e7e20e extends PackedResource {
-  /// PackedResource - ../../template/project/full/lib/console_full.dart
-  const A46e6f81236dd31931b47d5df66e7e20e();
+class A75b809639a441726d085372c4ee3d9e9 extends PackedResource {
+  /// PackedResource - ../../template/project/full/lib/full.dart
+  const A75b809639a441726d085372c4ee3d9e9();
 
   /// A hash of the resource (pre packed) calculated by
   /// [calculateHash].
@@ -29,7 +29,7 @@ class A46e6f81236dd31931b47d5df66e7e20e extends PackedResource {
   
   /// <package>/resources relative path to the original resource.
   @override
-  String get originalPath => 'template/project/full/lib/console_full.dart';
+  String get originalPath => 'template/project/full/lib/full.dart';
   
   @override
   String get content => 

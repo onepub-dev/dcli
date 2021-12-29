@@ -1,7 +1,5 @@
-import 'dart:io';
-
 import 'package:dcli_core/dcli_core.dart' as core;
-import 'package:dcli_core/dcli_core.dart' hide exists;
+import 'package:dcli_core/dcli_core.dart' hide exists, Settings;
 import 'package:posix/posix.dart' as posix;
 
 import '../../dcli.dart';
@@ -45,7 +43,7 @@ class _ChMod extends DCliFunction {
     if (!exists(path)) {
       throw ChModException('The file at ${truepath(path)} does not exists');
     }
-    if (!Platform.isWindows) {
+    if (!Settings().isWindows) {
       if (posix.isPosixSupported) {
         posix.chmod(path, permission);
       } else {
