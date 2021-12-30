@@ -1,6 +1,5 @@
 import 'package:dcli_core/dcli_core.dart' as core;
 import 'package:di_zone2/di_zone2.dart';
-import 'package:meta/meta.dart';
 import 'package:pub_semver/pub_semver.dart';
 
 import '../../dcli.dart';
@@ -19,9 +18,8 @@ class PubCache {
     }
   }
 
-  /// Use this ctor for injecting an altered Environment
-  /// into a Scope.
-  /// The main use for this ctor is for testing.
+  /// Use this ctor to alter the location of .pub-cache
+  /// during testing.
   factory PubCache.forScope() => PubCache._internal();
 
   PubCache._internal() {
@@ -82,7 +80,7 @@ class PubCache {
         );
       }
     } else {
-      return '${envs['HOME']}/.pub-cache';
+      return join(envs['HOME']!, '.pub-cache');
     }
   }
 
@@ -140,14 +138,6 @@ class PubCache {
   ///
   /// This method processes PUB_CACHE if it exists.
   String get cacheDir => _pubCacheDir;
-
-  /// only to be used for unit tests.
-  /// It resets the paths so that they can pick
-  /// up changes to HOME made by the unit tests.
-  @visibleForTesting
-  static void reset() {
-    _self = null;
-  }
 
   /// Path to the PubCache's hosted/pub.dartlang.org directory
   /// where all of the downloaded packages from pub.dev live.

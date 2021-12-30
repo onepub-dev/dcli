@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:dcli_core/dcli_core.dart' as core;
+import 'package:di_zone2/di_zone2.dart';
 import 'package:meta/meta.dart';
 
 import '../../../dcli.dart';
@@ -21,6 +22,9 @@ class InstallCommand extends Command {
     _QuietFlag(),
     _NoPrivilegesFlag()
   ];
+
+  /// During testing we want to install dcli from source.
+  static final activateFromSourceKey = ScopeKey<bool>();
 
   /// holds the set of flags passed to the compile command.
   Flags flagSet = Flags();

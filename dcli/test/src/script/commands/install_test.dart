@@ -27,7 +27,7 @@ void main() {
 
             // Now install over existing
             try {
-              Shell.current.install(activate: false);
+              Shell.current.install();
             } on DCliException catch (e) {
               print(e);
             }
@@ -39,25 +39,6 @@ void main() {
       );
 
       test('set env PATH Linux', () {
-        // TestFileSystem().withinZone((fs) {
-        //   final settings = Settings();
-        //   final mockSettings = MockSettings();
-        //   final mockEnv = MockEnv();
-
-        //   when(() => mockSettings.isWindows).thenReturn(false);
-        //   when(() => mockSettings.isLinux).thenReturn(true);
-        //   when(() => mockSettings.isMacOS).thenReturn(false);
-        //   when(() => mockSettings.isVerbose).thenReturn(false);
-        //   when(() => mockSettings.pathToDCliBin)
-        //       .thenReturn(settings.pathToDCliBin);
-
-        //   when(() => mockEnv.HOME).thenReturn(HOME);
-        //   when(() => mockEnv.isOnPATH(settings.pathToDCliBin))
-        //       .thenReturn(false);
-
-        //   Settings.mock = mockSettings;
-        //   Env.mock = mockEnv;
-
         withTestScope((testDir) {
           final export = 'export PATH=\$PATH:${Settings().pathToDCliBin}';
 

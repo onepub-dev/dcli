@@ -5,76 +5,87 @@ import 'package:test/test.dart' as t;
 import 'package:test/test.dart';
 
 import '../util/test_file_system.dart';
+import '../util/test_scope.dart';
 
 void main() {
   t.group('String as Process', () {
     TestFileSystem().withinZone((fs) {
       t.test('Basic .run', () {
-        final testFile = join(fs.fsRoot, 'test.text');
+        withTestScope((tmpDir) {
+          final testFile = join(fs.fsRoot, 'test.text');
 
-        if (exists(testFile)) {
-          delete(testFile);
-        }
+          if (exists(testFile)) {
+            delete(testFile);
+          }
 
-        'touch $testFile'.run;
-        t.expect(exists(testFile), t.equals(true));
+          'touch $testFile'.run;
+          t.expect(exists(testFile), t.equals(true));
+        });
       });
 
       t.test('print stdout', () {
-        final scriptPath = truepath(join(fs.testScriptPath, 'general/bin'));
-        final script = truepath(scriptPath, 'print_to_stdout.dart');
+        withTestScope((tmpDir) {
+          final scriptPath = truepath(join(fs.testScriptPath, 'general/bin'));
+          final script = truepath(scriptPath, 'print_to_stdout.dart');
 
-        final results = runChild(script, fs);
+          final results = runChild(script, fs);
 
-        final expected = <String>['Hello World'];
+          final expected = <String>['Hello World'];
 
-        t.expect(results, t.equals(expected));
+          t.expect(results, t.equals(expected));
+        });
       });
 
       t.test('print stderr', () {
-        final scriptPath = truepath(join(fs.testScriptPath, 'general/bin'));
-        final script = truepath(scriptPath, 'print_to_stderr.dart');
+        withTestScope((tmpDir) {
+          final scriptPath = truepath(join(fs.testScriptPath, 'general/bin'));
+          final script = truepath(scriptPath, 'print_to_stderr.dart');
 
-        final results = runChild(script, fs);
+          final results = runChild(script, fs);
 
-        final expected = <String>['Hello World - Error'];
+          final expected = <String>['Hello World - Error'];
 
-        t.expect(results, t.equals(expected));
+          t.expect(results, t.equals(expected));
+        });
       });
 
       t.test('print stdout and stderr', () {
-        final scriptPath = truepath(join(fs.testScriptPath, 'general/bin'));
+        withTestScope((tmpDir) {
+          final scriptPath = truepath(join(fs.testScriptPath, 'general/bin'));
 
-        if (!exists(scriptPath)) {
-          createDir(scriptPath, recursive: true);
-        }
-        final script = truepath(scriptPath, 'print_to_both.dart');
-        final results = runChild(script, fs);
+          if (!exists(scriptPath)) {
+            createDir(scriptPath, recursive: true);
+          }
+          final script = truepath(scriptPath, 'print_to_both.dart');
+          final results = runChild(script, fs);
 
-        final expected = <String>[
-          'Hello World - StdOut',
-          'Hello World - StdErr'
-        ];
+          final expected = <String>[
+            'Hello World - StdOut',
+            'Hello World - StdErr'
+          ];
 
-        t.expect(results, t.equals(expected));
+          t.expect(results, t.equals(expected));
+        });
       });
 
       t.test('print stdout and stderr with error', () {
-        final scriptPath = truepath(join(fs.testScriptPath, 'general/bin'));
+        withTestScope((tmpDir) {
+          final scriptPath = truepath(join(fs.testScriptPath, 'general/bin'));
 
-        if (!exists(scriptPath)) {
-          createDir(scriptPath, recursive: true);
-        }
-        final script = truepath(scriptPath, 'print_to_both_with_error.dart');
+          if (!exists(scriptPath)) {
+            createDir(scriptPath, recursive: true);
+          }
+          final script = truepath(scriptPath, 'print_to_both_with_error.dart');
 
-        final results = runChild(script, fs);
+          final results = runChild(script, fs);
 
-        final expected = <String>[
-          'Hello World - StdOut',
-          'Hello World - StdErr'
-        ];
+          final expected = <String>[
+            'Hello World - StdOut',
+            'Hello World - StdErr'
+          ];
 
-        t.expect(results, t.containsAll(expected));
+          t.expect(results, t.containsAll(expected));
+        });
       });
     });
   });

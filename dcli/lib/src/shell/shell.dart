@@ -207,7 +207,7 @@ abstract class Shell {
   /// Installs dart and dcli.
   /// Returns true if dart was installed.
   /// Returns false if dart was already installed.
-  bool install({bool installDart = false, bool activate = true}) => false;
+  bool install({bool installDart = false}) => false;
 
   /// Some OS/Shell combinations have some preconditions that must
   /// be met before dcli can be installed.

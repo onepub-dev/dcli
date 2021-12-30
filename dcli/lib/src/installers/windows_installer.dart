@@ -1,7 +1,9 @@
+import 'package:di_zone2/di_zone2.dart';
 import 'package:win32/win32.dart';
 
 import '../../dcli.dart';
 import '../../windows.dart';
+import '../script/commands/install.dart';
 
 ///
 /// Installs dart on an apt base system.abstract
@@ -9,7 +11,7 @@ import '../../windows.dart';
 
 class WindowsDCliInstaller {
   /// returns true if it needed to install dart.
-  bool install({bool installDart = true, bool activate = true}) {
+  bool install({bool installDart = true}) {
     var installedDart = false;
 
     if (installDart) {
@@ -25,10 +27,14 @@ class WindowsDCliInstaller {
       regAppendToPath(Settings().pathToDCliBin);
     }
     // now activate dcli.
-    if (activate) {
+    if (Scope.hasScopeKey(InstallCommand.activateFromSourceKey) &&
+        Scope.use(InstallCommand.activateFromSourceKey) == true) {
+      // If we are called from a unit test we do it from source
+      PubCache().globalActivateFromSource(DartProject.self.pathToProjectRoot);
+    } else {
+      /// activate from pub.dev
       PubCache().globalActivate('dcli');
     }
-
     return installedDart;
   }
 

@@ -4,8 +4,6 @@ import 'dart:io';
 import 'dart:isolate';
 
 import 'package:dcli/dcli.dart';
-import 'package:dcli/src/script/entry_point.dart';
-import 'package:di_zone2/di_zone2.dart';
 import 'package:pubspec/pubspec.dart' as ps;
 import 'package:test/test.dart';
 import 'package:uuid/uuid.dart';
@@ -28,9 +26,6 @@ class TestFileSystem {
   /// [HOME] to ensure that you code runs within the 'virtuallised'
   /// files system.
   ///
-  /// Each virtualised file system has its own copy of dcli installed.
-  ///
-  ///
   /// Any test which is non-desctructive
   /// can use a common TestFileSystem by setting [useCommonPath] to
   /// true which is the default.
@@ -43,20 +38,20 @@ class TestFileSystem {
   /// copy of dcli. This should be used if you are testing
   /// dcli's install.
   ///
-  factory TestFileSystem({bool useCommonPath = true, bool installDcli = true}) {
+  factory TestFileSystem({bool useCommonPath = true}) {
     TestFileSystem? use;
     if (useCommonPath) {
       print(orange('Re-using common TestFileSystem'));
 
       use = common;
     } else {
-      use = TestFileSystem._internal(installDcli: installDcli);
+      use = TestFileSystem._internal();
     }
 
     return use;
   }
 
-  TestFileSystem._internal({this.installDcli}) {
+  TestFileSystem._internal() {
     _testRoot = join(rootPath, 'tmp', 'dcli');
     uniquePath = const Uuid().v4();
 
@@ -90,8 +85,6 @@ class TestFileSystem {
 
   bool initialised = false;
 
-  bool? installDcli;
-
   /// The location of any temp scripts
   /// that need to be created during testing.
   late String tmpScriptPath;
@@ -99,8 +92,7 @@ class TestFileSystem {
   /// The location of the test_script directory
   late String testScriptPath;
 
-  static late final TestFileSystem common =
-      TestFileSystem._internal(installDcli: true);
+  static late TestFileSystem common = TestFileSystem._internal();
 
   String tempFile({String? suffix}) => createTempFilename(suffix: suffix);
 
@@ -129,11 +121,6 @@ class TestFileSystem {
       ),
     );
 
-    // PubCache.reset();
-    // originalPubCache = PubCache().pathTo;
-    // print('PATH: $PATH');
-    final originalHome = Scope.use(originalHomeKey);
-    final path = env['PATH'];
     try {
       env['HOME'] = fsRoot;
       home = fsRoot;
@@ -145,9 +132,8 @@ class TestFileSystem {
 
       final isolateID = Service.getIsolateID(Isolate.current);
       print(green('Using TestFileSystem $fsRoot for Isolate: $isolateID'));
-      print('Reset dcliPath: ${Settings().pathToDCli}');
 
-      initFS(originalHome);
+      initFS();
 
       action(this);
     }
@@ -157,8 +143,6 @@ class TestFileSystem {
       st.toString();
       rethrow;
     } finally {
-      env['HOME'] = originalHome;
-      env['PATH'] = path;
       print(
         green(
           '${'-' * 40} '
@@ -168,7 +152,7 @@ class TestFileSystem {
     }
   }
 
-  void initFS(String originalHome) {
+  void initFS() {
     if (!initialised) {
       initialised = true;
 
@@ -180,12 +164,9 @@ class TestFileSystem {
       /// broken.
       // copyPubCache(originalHome, HOME);
       copyTestScripts();
-      // if (installDcli!) {
-      //   installDCli();
-      // }
       testDirectoryTree = TestDirectoryTree(fsRoot);
 
-      installCrossPlatformTestScripts(originalHome);
+      installCrossPlatformTestScripts();
     }
   }
 
@@ -277,22 +258,6 @@ class TestFileSystem {
     }
   }
 
-  void installDCli() {
-    if (!isDCliRunningFromSource()) {
-      PubCache().globalActivateFromSource(DartProject.self.pathToProjectRoot);
-      // printerr(
-      //   red(
-      //     'You must global active dcli from a local '
-      //     'path before you can run unit tests',
-      //   ),
-      // );
-      // print('Run: dart pub global activate --source=path <path to dcli>');
-      // exit(-1);
-    }
-
-    EntryPoint().process(['install', '--nodart', '--quiet', '--noprivileges']);
-  }
-
   void rebuildPath() {
     // remove .pub-cache and .dcli... and replace with the test FS ones
 
@@ -310,30 +275,6 @@ class TestFileSystem {
     Env().appendToPATH(PubCache().pathToBin);
     Env().appendToPATH(join(fsRoot, '.dcli', 'bin'));
   }
-
-  // void copyPubCache(String originalHome, String newHome) {
-  //   print('Copying pub cache into TestFileSystem... ');
-
-  //   final verbose = Settings().isVerbose;
-
-  //   Settings().setVerbose(enabled: false);
-
-  //   /// tell the world where to find the new pubache.
-  //   //  PubCache().pathTo = join(newHome, PubCache().cacheDir);
-
-  //   if (!exists(PubCache().pathTo)) {
-  //     createDir(PubCache().pathTo, recursive: true);
-  //   }
-
-  //   /// Do we need to alter pub cache?
-  //   copyTree(originalPubCache!, PubCache().pathTo);
-
-  //   print(
-  //     'Reset ${PubCache.envVarPubCache} to ${env[PubCache.envVarPubCache]}',
-  //   );
-
-  //   Settings().setVerbose(enabled: verbose);
-  // }
 
   //
   void copyTestScripts() {
@@ -415,7 +356,7 @@ class TestFileSystem {
   /// As these tools are quite static and the tool path is
   /// in /tmp (so deleted after every reboot) we only
   /// recompile the tools if they are missing.
-  void installCrossPlatformTestScripts(String originalHome) {
+  void installCrossPlatformTestScripts() {
     if (!exists(pathToTools)) {
       createDir(pathToTools, recursive: true);
     }

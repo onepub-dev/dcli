@@ -26,13 +26,6 @@ void main() {
           ///  We need to run with an environment that thinks its running
           /// under windows.
           withEnvironment(() {
-            //withTestScope((testDir) {
-            // final mockSettings = MockSettings();
-            // Settings.mock = mockSettings;
-            // when(() => mockSettings.isVerbose).thenReturn(true);
-            // when(() => mockSettings.isWindows).thenReturn(true);
-            // MockEnv();
-
             const userDataPath = r'C:\Windows\Userdata';
 
             env['HOME'] = userDataPath;

@@ -13,7 +13,6 @@ void main() {
     // Don't know how to test this as it writes directly to stdout.
     // Need some way to hook Stdout
     test('Fetch One', () {
-      //Settings().setVerbose(enabled: true);
       withTempDir((testRoot) {
         withTempFile(
           (sampleAac) {

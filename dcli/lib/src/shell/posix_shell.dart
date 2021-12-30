@@ -159,11 +159,9 @@ mixin PosixShell {
   bool install({bool installDart = false, bool activate = true}) {
     var installed = false;
     if (core.Settings().isLinux) {
-      installed = LinuxDCliInstaller()
-          .install(installDart: installDart, activate: activate);
+      installed = LinuxDCliInstaller().install(installDart: installDart);
     } else {
-      installed = MacOSDCliInstaller()
-          .install(installDart: installDart, activate: activate);
+      installed = MacOSDCliInstaller().install(installDart: installDart);
     }
 
     // DartProject.self.compile(install: true, overwrite: true);
