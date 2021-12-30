@@ -1,3 +1,8 @@
+# 1.16.0
+- rewrite of the dcli create command. Now supports creating scripts and projects from a templates.
+- added dcli create --list switch to list available templates.
+- fixed all unit tests.
+
 # 1.15.5
 - Add test to the resource unpack command to throw if the target exists but isn't a file.
 - Change the isXX set of functions to call the posix stat function rather than spawning the stat command. If the posix call fails we fall back to spawning stat.
