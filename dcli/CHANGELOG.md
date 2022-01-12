@@ -1,3 +1,6 @@
+# 1.16.2
+- Cleaned up the logic around how we get the DartSdk version. DartSdk().version no longer returns null but will throw a DCliException if it can parse the dart sdk version - which should never happen.
+
 # 1.16.0
 - rewrite of the dcli create command. Now supports creating scripts and projects from a templates.
 - added dcli create --list switch to list available templates.
