@@ -50,7 +50,11 @@ class FileSync {
 
   /// Reads a single line from the file.
   /// [lineDelimiter] the end of line delimiter.
-  /// May be one or two characters long.
+  ///
+  /// You can read the entire file by calling [readLine]
+  /// repeatedly until it returns null.
+  ///
+  /// The [lineDelimiter] may be one or two characters long.
   /// Defaults to the platform specific delimiter as
   /// defined by  [Platform().eol].
   ///
