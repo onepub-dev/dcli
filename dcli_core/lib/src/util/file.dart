@@ -202,7 +202,10 @@ Future<Digest> calculateHash(String path) async {
   final input = File(path);
 
   const hasher = sha256;
-  return hasher.bind(input.openRead()).first;
+  final digest = hasher.bind(input.openRead()).first;
+
+  verbose(() => 'calculateHash($path) = {digest.toString()}');
+  return digest;
 }
 
 /// Thrown when a file doesn't exist
