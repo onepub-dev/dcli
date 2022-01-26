@@ -1,6 +1,7 @@
 @Timeout(Duration(seconds: 610))
 
 import 'package:dcli/dcli.dart' hide equals;
+import 'package:dcli/src/script/commands/install.dart';
 import 'package:test/test.dart';
 
 import '../../util/test_file_system.dart';
@@ -8,25 +9,14 @@ import '../../util/test_file_system.dart';
 void main() {
   test('Create and run a script', () {
     TestFileSystem().withinZone((fs) {
-      final scriptParentPath = truepath(fs.tmpScriptPath, 'run_test');
+      InstallCommand().initTemplates();
+      final projectPath = truepath(fs.tmpScriptPath, 'run_test');
 
-      if (!exists(scriptParentPath)) {
-        createDir(scriptParentPath, recursive: true);
-      }
-      final scriptPath = truepath(scriptParentPath, 'print_to_stdout.dart');
-      if (exists(scriptPath)) {
-        delete(scriptPath);
-      }
+      DartProject.create(pathTo: projectPath, templateName: 'simple');
 
-      final project = DartProject.fromPath(scriptParentPath, search: false);
-      project.createScript(
-        basename(scriptPath),
-        templateName: 'hello_world.dart',
-      )
-        ..runPubGet()
-        ..run();
-
-      deleteDir(scriptParentPath);
+      final exitCode =
+          DartScript.fromFile(join(projectPath, 'bin', 'run_test.dart')).run();
+      expect(exitCode, equals(0));
     });
   });
   test('Run hello world', () {

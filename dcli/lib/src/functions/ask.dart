@@ -1,7 +1,7 @@
 import 'dart:convert';
 import 'dart:io';
 
-import 'package:dcli_core/dcli_core.dart';
+import 'package:dcli_core/dcli_core.dart' as core;
 import 'package:meta/meta.dart';
 import 'package:validators2/validators.dart';
 
@@ -174,7 +174,7 @@ bool confirm(String prompt, {bool? defaultValue}) {
 }
 
 /// Class for [ask] and related code.
-class Ask extends DCliFunction {
+class Ask extends core.DCliFunction {
   static const int _backspace = 127;
   static const int _space = 32;
   static const int _ = 8;
@@ -191,7 +191,7 @@ class Ask extends DCliFunction {
     String? defaultValue,
   }) {
     ArgumentError.checkNotNull(prompt);
-    verbose(
+    core.verbose(
       () => 'ask:  $prompt toLower: $toLower hidden: $hidden '
           'required: $required '
           'defaultValue: ${hidden ? '******' : defaultValue}',

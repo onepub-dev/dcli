@@ -2,8 +2,8 @@ import 'dart:async';
 
 import 'package:circular_buffer/circular_buffer.dart';
 
+import '../settings.dart';
 import '../util/line_file.dart';
-import '../util/logging.dart';
 import '../util/truepath.dart';
 import 'dcli_function.dart';
 import 'is.dart';

@@ -1,4 +1,4 @@
-import 'package:dcli_core/dcli_core.dart';
+import 'package:dcli_core/dcli_core.dart' as core;
 
 import '../../dcli.dart';
 
@@ -32,7 +32,7 @@ enum Interval {
   minutes
 }
 
-class _Sleep extends DCliFunction {
+class _Sleep extends core.DCliFunction {
   void sleep(int duration, {Interval interval = Interval.seconds}) {
     verbose(() => 'sleep: duration: $duration interval: $interval');
     late Duration _duration;

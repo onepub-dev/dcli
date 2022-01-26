@@ -1,0 +1,13 @@
+name: console_simple
+description: A simple command-line application created by dcli
+version: 0.0.1
+# repository: https://github.com/noojee/dcli
+
+environment:
+  sdk: '>=2.15.1 <3.0.0'
+
+dependencies:
+  dcli: ^1.15.5
+
+dev_dependencies:
+  lint_hard: ^1.0.0

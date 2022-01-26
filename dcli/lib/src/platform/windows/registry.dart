@@ -16,6 +16,7 @@ const defaultRegistryValueName = '';
 /// Collection of Windows specific registry functions.
 
 /// Appends [newPath] to the Windows PATH environment variable.
+///
 /// A [WindowsException] is thrown if the call falls.
 void regAppendToPath(String newPath) {
   final paths = _getPaths();
@@ -27,6 +28,7 @@ void regAppendToPath(String newPath) {
 
 /// Returns true if the given [path] is on the user's
 /// path.
+///
 /// Note: this does not check the system path.
 bool regIsOnUserPath(String path) {
   final paths = _getPaths();
@@ -39,6 +41,7 @@ bool _isOnUserPath(String path, List<String> userPaths) {
 }
 
 /// Prepend [newPath] to the Windows PATH environment variable.
+///
 /// A [WindowsException] is thrown if the call falls.
 void regPrependToPath(String newPath) {
   final paths = _getPaths();
@@ -72,6 +75,7 @@ void _replacePath(List<String> paths) {
 
 /// Gets the User's Path (as opposed to the system path)
 /// as a list.
+///
 /// If [expand] is set to true (the default) then any embedded
 /// enironment variables are expanded out.
 /// A [WindowsException] is thrown the call falls.
@@ -103,7 +107,8 @@ void regReplacePath(List<String> newPaths) {
   broadcastEnvironmentChange();
 }
 
-/// Sets a Windows registry key to a string value of type REG_SZ
+/// Sets a Windows registry key to a string value of type REG_SZ.
+///
 /// A [WindowsException] is thrown the call falls.
 void regSetString(
   int hkey,
@@ -124,6 +129,7 @@ void regSetString(
 }
 
 /// Sets a Windows registry valueName with a type REG_NONE.
+///
 /// No value is set.
 /// A [WindowsException] is thrown the call falls.
 void regSetNone(
@@ -137,7 +143,7 @@ void regSetNone(
 }
 
 /// Gets a Windows registry value o0f type REG_SZ
-/// [hkey] is typically HKEY_CURRENT_USER or HKEY_LOCAL_MACHINE
+/// [hkey] is typically HKEY_CURRENT_USER or HKEY_LOCAL_MACHINE.
 ///
 /// See the following link for additional values:
 /// https://docs.microsoft.com/en-us/windows/win32/sysinfo/predefined-keys
@@ -170,7 +176,8 @@ String regGetString(
   return value;
 }
 
-/// Sets a Windows registry key to a string value of type REG_SZ
+/// Sets a Windows registry key to a string value of type REG_SZ.
+///
 /// A [WindowsException] is thrown the call falls.
 void regSetDWORD(
   int hkey,
@@ -190,7 +197,8 @@ void regSetDWORD(
   }
 }
 
-/// Reads a DWORD from the registry
+/// Reads a DWORD from the registry.
+///
 /// A [WindowsException] is thrown the call falls.
 int regGetDWORD(
   int hkey,
@@ -216,6 +224,7 @@ int regGetDWORD(
 }
 
 /// Deletes an registry key.
+///
 /// [subKey] maybe be a path such as Microsoft/Windows
 /// A [WindowsException] is thrown if the delete fails.
 void regDeleteKey(
@@ -235,6 +244,7 @@ void regDeleteKey(
 }
 
 /// Deletes an registry key.
+///
 /// [subKey] maybe be a path such as Microsoft/Windows
 /// [valueName] is the name of the value stored under [subKey]
 /// A [WindowsException] is thrown if the delete fails.
@@ -259,6 +269,7 @@ void regDeleteValue(
 
 /// Retrieves a registry value located at [hkey]/[subKey]/[valueName]
 /// that is of type REG_EXPAND_SZ.
+///
 /// If [expand] is true then any environment variables in the value
 /// are expanded. If [expand] is false then the value is returned un-expanded.
 /// A [WindowsException] is thrown the call falls.
@@ -294,7 +305,8 @@ String regGetExpandString(
 }
 
 /// Sets the [value] of the [hkey] located at [hkey]/[subKey] in the Windows
-/// Registry. The [value] is set to type REG_EXPAND_SZ
+/// Registry. The [value] is set to type REG_EXPAND_SZ.
+///
 /// A [WindowsException] is thrown the call falls.
 void regSetExpandString(
   int hkey,
@@ -373,6 +385,7 @@ class _RegResults {
 }
 
 /// You must free the returned value using calloc.free
+///
 /// A [WindowsException] is thrown the call falls.
 _RegResults _regGetValue(
   int hkey,
@@ -432,6 +445,7 @@ _RegResults _regGetValue(
 
 /// Sets a Windows registry key to the value pointed to by [pValue]
 /// which is of [valueSize] and type [type].
+///
 /// [type] must be one of the standard registry types such as REG_SZ.
 /// [valueSize] is the size of pValue in bytes.
 /// A [WindowsException] is thrown the call falls.
@@ -537,7 +551,8 @@ bool regKeyExists(
   return exists;
 }
 
-/// Creates a registry key
+/// Creates a registry key.
+///
 /// Throws a [WindowsException] if the key cannot be created.
 void regCreateKey(
   int hKey,

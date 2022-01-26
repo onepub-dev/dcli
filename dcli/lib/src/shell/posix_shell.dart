@@ -1,5 +1,4 @@
-import 'dart:io';
-
+import 'package:dcli_core/dcli_core.dart' as core;
 import 'package:posix/posix.dart';
 
 import '../../dcli.dart';
@@ -104,7 +103,7 @@ mixin PosixShell {
 
   /// revert uid and gid to original user's id's
   void releasePrivileges() {
-    if (Shell.current.isPrivilegedUser && !Platform.isWindows) {
+    if (Shell.current.isPrivilegedUser && !core.Settings().isWindows) {
       final sUID = env['SUDO_UID'];
       final gUID = env['SUDO_GID'];
 
@@ -121,7 +120,7 @@ mixin PosixShell {
   /// been made then this command will restore
   /// those privileges
   void restorePrivileges() {
-    if (!Platform.isWindows) {
+    if (!core.Settings().isWindows) {
       setegid(0);
       seteuid(0);
     }
@@ -157,9 +156,9 @@ mixin PosixShell {
   String privilegesRequiredMessage(String app) => 'Please $installInstructions';
 
   /// Install dart/dcli
-  bool install({bool installDart = false}) {
+  bool install({bool installDart = false, bool activate = true}) {
     var installed = false;
-    if (Platform.isLinux) {
+    if (core.Settings().isLinux) {
       installed = LinuxDCliInstaller().install(installDart: installDart);
     } else {
       installed = MacOSDCliInstaller().install(installDart: installDart);
@@ -193,7 +192,7 @@ mixin PosixShell {
   /// to the same location.
   // ignore: unused_element
   void _symlinkDCli(String dcliPath) {
-    if (!Platform.isWindows) {
+    if (!core.Settings().isWindows) {
       final linkPath = join(dirname(DartSdk().pathToDartExe!), 'dcli');
       if (isPrivilegedPasswordRequired && !isWritable(linkPath)) {
         print('Please enter the sudo password when prompted.');

@@ -6,7 +6,7 @@ DCli provides a number of methods to display information to a user:
 
 Dart provides the built in function 'print' which prints a line of text including a new line.
 
-```text
+```
 print('hello world');
 ```
 
@@ -14,7 +14,7 @@ print('hello world');
 
 The standard Dart 'print' function prints to stdout, DCli's 'printerr' function is identical except that it prints to stderr.
 
-```text
+```
 printerr('something bad happened.');
 ```
 
@@ -42,7 +42,7 @@ You can also control the background colour:
 print(orange('hello world', background: AnsiColor.white));
 ```
 
-The following colours are supported for both the foreground \(text\) and background colours.
+The following colours are supported for both the foreground (text) and background colours.
 
 * red
 * black
@@ -57,25 +57,25 @@ The following colours are supported for both the foreground \(text\) and backgro
 
 By default the bold attribute is attached to each of the above builtin colours. You can suppress the bold attribute:
 
-```text
+```
  print(red('a dark message', bold: false));
 ```
 
-## Format.row
+## Format().row
 
 This method is considered experimental. Use at your own peril.
 
 The row method allows you to output a row of fixed with columns with controlled alignment.
 
-```text
-print(Format.row(['OS Version', '${Platform.operatingSystemVersion}'],
+```
+print(Format().row(['OS Version', '${Platform.operatingSystemVersion}'],
         widths: [17, -1]));
 ```
 
 Outputs a row with two columns. The first is 17 characters wide, the second expands as needed.
 
-```text
-print(Format.row([
+```
+print(Format().row([
           '$label',
           '${fstat.modeString()}',
           '<user>:${(owner.group == owner.user ? '<user>' : owner.group)}',
@@ -99,7 +99,7 @@ Outputs a row with four columns of widths 17, 9, 16 and infinite. The columns ar
 
 Clears the console.
 
-```text
+```
 clearScreen();
 ```
 
@@ -107,7 +107,7 @@ clearScreen();
 
 Clears the current line.
 
-```text
+```
 clearLine();
 ```
 
@@ -115,7 +115,7 @@ clearLine();
 
 Moves the cursor to the start of the current line.
 
-```text
+```
 startOfLine;
 ```
 
@@ -127,11 +127,10 @@ Moves the cursor to the start of the previous line.
 
 Shows or hides the cursor.
 
-```text
+```
 showCursor(show: true);
 ```
 
 ## column
 
 Moves the cursor to the given column on the current line.
-

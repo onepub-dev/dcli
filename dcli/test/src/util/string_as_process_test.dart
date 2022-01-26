@@ -118,4 +118,17 @@ void main() {
       print('done');
     });
   });
+
+  test('append only', () {
+    withTempFile((file) {
+      file
+        ..append('Line 1/5')
+        ..append('Line 2/5')
+        ..append('Line 3/5')
+        ..append('Line 4/5')
+        ..append('Line 5/5');
+      Settings().setVerbose(enabled: true);
+      expect(read(file).toList().length, equals(5));
+    });
+  });
 }

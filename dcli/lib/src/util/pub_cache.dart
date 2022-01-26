@@ -1,6 +1,5 @@
-import 'dart:io';
-
-import 'package:meta/meta.dart';
+import 'package:dcli_core/dcli_core.dart' as core;
+import 'package:di_zone2/di_zone2.dart';
 import 'package:pub_semver/pub_semver.dart';
 
 import '../../dcli.dart';
@@ -11,7 +10,17 @@ import '../../dcli.dart';
 ///
 class PubCache {
   ///
-  factory PubCache() => _self ??= PubCache._internal();
+  factory PubCache() {
+    if (Scope.hasScopeKey(scopeKey)) {
+      return Scope.use(scopeKey);
+    } else {
+      return _self ??= PubCache._internal();
+    }
+  }
+
+  /// Use this ctor to alter the location of .pub-cache
+  /// during testing.
+  factory PubCache.forScope() => PubCache._internal();
 
   PubCache._internal() {
     _pubCachePath = _getSystemCacheLocation();
@@ -35,6 +44,8 @@ class PubCache {
     _pubCacheBinPath = truepath(join(_pubCachePath, 'bin'));
   }
 
+  static ScopeKey<PubCache> scopeKey = ScopeKey<PubCache>();
+
   /// Method taken from the pub_cache package.
   /// We can't use the pub_cache version as it directly
   /// gets Platform.environment so any changes we make
@@ -42,7 +53,7 @@ class PubCache {
   String _getSystemCacheLocation() {
     if (envs.containsKey('PUB_CACHE')) {
       return envs['PUB_CACHE']!;
-    } else if (Platform.isWindows) {
+    } else if (core.Settings().isWindows) {
       // See https://github.com/dart-lang/pub/blob/master/lib/src/system_cache.dart.
 
       // %LOCALAPPDATA% is preferred as the cache location over %APPDATA%,
@@ -69,7 +80,7 @@ class PubCache {
         );
       }
     } else {
-      return '${envs['HOME']}/.pub-cache';
+      return join(envs['HOME']!, '.pub-cache');
     }
   }
 
@@ -128,14 +139,6 @@ class PubCache {
   /// This method processes PUB_CACHE if it exists.
   String get cacheDir => _pubCacheDir;
 
-  /// only to be used for unit tests.
-  /// It resets the paths so that they can pick
-  /// up changes to HOME made by the unit tests.
-  @visibleForTesting
-  static void reset() {
-    _self = null;
-  }
-
   /// Path to the PubCache's hosted/pub.dartlang.org directory
   /// where all of the downloaded packages from pub.dev live.
   String get pathToDartLang =>
@@ -147,6 +150,10 @@ class PubCache {
   /// ~/.pub-cache/hosted/pub.dartlang.org/dswitch-4.0.1
   String pathToPackage(String packageName, String version) =>
       join(pathToDartLang, '$packageName-$version');
+
+  /// Returns true if the package is installed in pub-cache
+  bool isInstalled(String packageName) =>
+      findPrimaryVersion(packageName) != null;
 
   /// Finds and returns the latest (non-pre-release) version installed into pub
   /// cache for the given package.

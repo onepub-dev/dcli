@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:csv/csv.dart';
+import 'package:dcli_core/dcli_core.dart' as core;
 import 'package:meta/meta.dart';
 import 'package:posix/posix.dart' hide read;
 
@@ -207,11 +208,11 @@ class ProcessHelper {
   ///
   /// Currently this is only supported on Windows and Linux.
   List<ProcessDetails> getProcesses() {
-    if (Platform.isWindows) {
+    if (core.Settings().isWindows) {
       return getWindowsProcesses();
     }
 
-    if (Platform.isLinux) {
+    if (core.Settings().isLinux) {
       return _getLinuxProcesses();
     }
 

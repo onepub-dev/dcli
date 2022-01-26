@@ -39,8 +39,12 @@ String privatePath(
       .replaceAll(HOME, '$prefix<HOME>');
 }
 
-/// returns the root path.
-/// On Linux and MacOS this will be '/'
-/// On Windows this will be r'C:\'. The drive letter will depend on the
+/// Returns the root path of your file system.
+///
+/// On Linux and MacOS this will be `/`
+///
+/// On Windows this will be `'C:\`
+///
+/// The drive letter will depend on the
 /// drive of your present working directory (pwd).
 String get rootPath => rootPrefix(pwd);

@@ -48,7 +48,7 @@ void main() {
 
   group('previous word', () {
     test('Run dcli_complete warmup _test_a', () {
-      TestFileSystem(installDcli: false).withinZone((fs) {
+      TestFileSystem().withinZone((fs) {
         final results = <String?>[];
 
         touch(join(fs.fsRoot, '_test_a.dart'), create: true);

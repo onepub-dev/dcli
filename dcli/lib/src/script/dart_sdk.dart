@@ -1,11 +1,12 @@
 import 'dart:io';
 
 import 'package:archive/archive.dart';
+import 'package:dcli_core/dcli_core.dart' as core;
 import 'package:meta/meta.dart';
 import 'package:pub_semver/pub_semver.dart';
 
 import '../../dcli.dart';
-import '../../posix.dart';
+import '../../posix.dart' as posix;
 import '../util/enum_helper.dart';
 import '../util/runnable_process.dart';
 import 'commands/install.dart';
@@ -22,7 +23,7 @@ class DartSdk {
   /// Path of Dart SDK
   String? _sdkPath;
 
-  String? _version;
+  Version? _version;
 
   /// The path to the dart 'bin' directory.
   String get pathToSdk => _sdkPath ??= _detect();
@@ -35,7 +36,7 @@ class DartSdk {
 
   /// platform specific name of the 'dart' executable
   static String get dartExeName {
-    if (Settings().isWindows) {
+    if (core.Settings().isWindows) {
       return 'dart.exe';
     } else {
       return 'dart';
@@ -44,7 +45,7 @@ class DartSdk {
 
   /// platform specific name of the 'pub' executable
   static String get pubExeName {
-    if (Settings().isWindows) {
+    if (core.Settings().isWindows) {
       return 'pub.bat';
     } else {
       return 'pub';
@@ -53,7 +54,7 @@ class DartSdk {
 
   /// platform specific name of the 'dart2native' executable
   static String get dart2NativeExeName {
-    if (Settings().isWindows) {
+    if (core.Settings().isWindows) {
       return 'dart2native.bat';
     } else {
       return 'dart2native';
@@ -75,26 +76,40 @@ class DartSdk {
   String? get pathToDartToNativeExe => _pathToDartNativeExe;
 
   ///
-  int get versionMajor {
-    final parts = version!.split('.');
-
-    return int.tryParse(parts[0]) ?? 2;
-  }
+  int get versionMajor => getVersion().major;
 
   ///
-  int get versionMinor {
-    final parts = version!.split('.');
-
-    return int.tryParse(parts[1]) ?? 9;
-  }
+  int get versionMinor => getVersion().minor;
 
   /// From 2.10 onwards we use the dart compile option rather than dart2native.
-  bool get useDartCommand {
-    final platform = Platform.version;
-    final parts = platform.split(' ');
-    final dartVersion = Version.parse(parts[0]);
-    return dartVersion.compareTo(Version.parse('2.10.0')) >= 0;
+  bool get useDartCommand =>
+      getVersion().compareTo(Version.parse('2.10.0')) >= 0;
+
+  /// Returns the DartSdk's version
+  Version getVersion() {
+    if (_version == null) {
+      final platform = Platform.version;
+      final parts = platform.split(' ');
+
+      if (parts.isEmpty) {
+        throw core.DCliException('Failed to parse dart version: $platform');
+      }
+
+      final versionPart = parts[0];
+      try {
+        _version = Version.parse(versionPart);
+      } on FormatException {
+        throw core.DCliException('Failed to parse dart version: $versionPart');
+      }
+
+      verbose(() => 'Dart SDK Version  $_version');
+    }
+
+    return _version!;
   }
+
+  /// Returns the DartSdk's version
+  String get version => getVersion().toString();
 
   /// Run the 'dart compiler' command.
   /// [script] is the path to the dcli script we are compiling.
@@ -272,7 +287,7 @@ class DartSdk {
     return false;
   }
 
-  /// runs 'pub get'
+  /// runs 'dart pub get'
   void runPubGet(
     String? workingDirectory, {
     Progress? progress,
@@ -280,6 +295,19 @@ class DartSdk {
   }) {
     runPub(
       args: ['get', if (!compileExecutables) '--no-precompile'],
+      workingDirectory: workingDirectory,
+      progress: progress,
+    );
+  }
+
+  /// runs 'dart pub upgrade'
+  void runPubUpgrade(
+    String? workingDirectory, {
+    Progress? progress,
+    bool compileExecutables = false,
+  }) {
+    runPub(
+      args: ['upgrade', if (!compileExecutables) '--no-precompile'],
       workingDirectory: workingDirectory,
       progress: progress,
     );
@@ -310,22 +338,6 @@ class DartSdk {
 
       return sdkPath;
     }
-  }
-
-  /// returns the version of dart.
-  String? get version {
-    if (_version == null) {
-      /// extract the version out of the dumped line.
-      final regx = RegExp(r'[0-9]*\.[0-9]*\.[0-9]*');
-      final parsed = regx.firstMatch(Platform.version);
-      if (parsed != null) {
-        _version = parsed.group(0);
-      }
-
-      verbose(() => 'Dart SDK Version  $_version');
-    }
-
-    return _version;
   }
 
   /// Installs the latest version of DartSdk from the official google archives
@@ -373,10 +385,10 @@ class DartSdk {
     moveTree(join(installDir, 'dart-sdk'), installDir, includeHidden: true);
     deleteDir(join(installDir, 'dart-sdk'));
 
-    if (Platform.isLinux || Platform.isMacOS) {
+    if (core.Settings().isLinux || core.Settings().isMacOS) {
       /// make execs executable.
       find('*', workingDirectory: join(installDir, 'bin'), recursive: false)
-          .forEach((file) => chmod(file, permission: '500'));
+          .forEach((file) => posix.chmod(file, permission: '500'));
     }
 
     // The normal dart detection process won't work here

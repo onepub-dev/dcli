@@ -3,6 +3,7 @@
 import 'dart:io';
 
 import 'package:dcli/dcli.dart';
+import 'package:dcli_core/dcli_core.dart' as core;
 
 ///
 /// running unit tests from vs-code doesn't seem to work as it spawns
@@ -11,7 +12,7 @@ import 'package:dcli/dcli.dart';
 /// So this script forces the test to run serially via the -j1 option.
 ///
 void main(List<String> args) {
-  if (Platform.isWindows && !Shell.current.isPrivilegedUser) {
+  if (core.Settings().isWindows && !Shell.current.isPrivilegedUser) {
     printerr(
       red(
         'Unit tests must be run with Administrator '
@@ -28,19 +29,17 @@ void main(List<String> args) {
   }
 
   final projectRoot = DartProject.fromPath(pwd).pathToProjectRoot;
-  if (!isDCliRunningFromSource()) {
+  if (!PubCache().isGloballyActivatedFromSource('dcli')) {
     print(
       'Activating dcli from source so we are testing against latest version',
     );
 
-    PubCache()
+    /// run pub get and only display errors.
+    PubCache().globalActivateFromSource(projectRoot);
+  }
 
-        /// run pub get and only display errors.
-        .globalActivateFromSource(projectRoot);
-
-    if (PubCache().isGloballyActivated('dcli_unit_tester')) {
-      PubCache().globalActivate('dcli_unit_tester');
-    }
+  if (!PubCache().isGloballyActivated('dcli_unit_tester')) {
+    PubCache().globalActivate('dcli_unit_tester');
   }
 
   /// warm up all test packages.
@@ -82,14 +81,4 @@ DateTime lastChangeToDcli() {
   });
 
   return lastChange;
-}
-
-bool isDCliRunningFromSource() {
-  /// run pub global list to see if dcli is run from a local path.
-  final line = DartSdk()
-      .runPub(args: ['global', 'list'], progress: Progress.capture())
-      .lines
-      .firstWhere((line) => line.startsWith('dcli'), orElse: () => 'dcli');
-
-  return line.contains('at path');
 }

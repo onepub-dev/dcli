@@ -1,3 +1,8 @@
+[![pub package](https://img.shields.io/pub/v/dcli.svg)](https://pub.dev/packages/dcli)
+[![likes](https://badges.bar/dcli/likes)](https://pub.dev/packages/dcli/score)
+[![popularity](https://badges.bar/dcli/popularity)](https://pub.dev/packages/dcli/score)
+[![pub points](https://badges.bar/dcli/pub%20points)](https://pub.dev/packages/dcli/score)
+
 # README
 
 See the online [documentation](https://dcli.noojee.dev) for DCli

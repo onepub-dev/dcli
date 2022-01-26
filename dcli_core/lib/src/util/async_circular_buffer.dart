@@ -72,7 +72,7 @@ class AsyncCircularBuffer<T>
 
   /// Completes when the buffer has been closed
   /// and all elements read.
-  Future get isDone => _done.future;
+  Future<bool> get isDone => _done.future;
 
   /// The [AsyncCircularBuffer] is `reset`
   void reset() {

@@ -1,6 +1,5 @@
-import 'dart:io';
-
 import 'package:dcli/dcli.dart' hide equals;
+import 'package:dcli_core/dcli_core.dart' as core;
 import 'package:test/test.dart';
 
 void main() {
@@ -29,7 +28,7 @@ void main() {
     () {
       expect(rootPath, equals('/'));
     },
-    skip: Platform.isWindows,
+    skip: core.Settings().isWindows,
   );
 
   test(
@@ -38,6 +37,6 @@ void main() {
       final drive = pwd[0];
       expect(rootPath, equals('$drive:\\'));
     },
-    skip: !Platform.isWindows,
+    skip: !core.Settings().isWindows,
   );
 }

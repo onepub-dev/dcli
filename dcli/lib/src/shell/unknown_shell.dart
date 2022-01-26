@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:dcli_core/dcli_core.dart' as core;
 import 'package:uuid/uuid.dart';
 
 import '../../dcli.dart';
@@ -157,12 +158,12 @@ class UnknownShell with ShellMixin {
       'You need to be a privileged user to run $app';
 
   @override
-  bool install({bool installDart = false}) {
-    if (Platform.isLinux) {
+  bool install({bool installDart = false, bool activate = true}) {
+    if (core.Settings().isLinux) {
       return LinuxDCliInstaller().install(installDart: installDart);
     } else if (Settings().isWindows) {
       return WindowsDCliInstaller().install(installDart: installDart);
-    } else if (Platform.isMacOS) {
+    } else if (core.Settings().isMacOS) {
       return MacOSDCliInstaller().install(installDart: installDart);
     } else {
       throw UnsupportedError('Unsupported OS. ${Platform.operatingSystem}');
@@ -210,7 +211,7 @@ class UnknownShell with ShellMixin {
 
   @override
   String get installInstructions {
-    if (Platform.isWindows) {
+    if (core.Settings().isWindows) {
       return 'Run dcli install';
     } else {
       return r'Run sudo env "PATH=$PATH" dcli install';

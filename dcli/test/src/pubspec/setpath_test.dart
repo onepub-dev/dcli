@@ -1,8 +1,8 @@
-@Timeout(Duration(minutes: 5))
-import 'dart:io';
 import 'package:dcli/dcli.dart';
 import 'package:dcli/windows.dart';
+import 'package:dcli_core/dcli_core.dart' as core;
 import 'package:test/test.dart';
+import 'package:win32/win32.dart';
 
 void _appendIfAbsent(String newPath) {
   final path = regGetExpandString(HKEY_CURRENT_USER, 'Environment', 'Path');
@@ -31,7 +31,7 @@ void main() {
 
       // 'setx PATH "${PATH.join(Env().delimiterForPATH)}"'.run;
     },
-    skip: !Platform.isWindows,
+    skip: !core.Settings().isWindows,
   );
 
   test(
@@ -46,7 +46,7 @@ void main() {
 
       print(PATH);
     },
-    skip: !Platform.isWindows,
+    skip: !core.Settings().isWindows,
   );
 
   test(
@@ -61,6 +61,6 @@ void main() {
 
       print(PATH);
     },
-    skip: !Platform.isLinux,
+    skip: !core.Settings().isLinux,
   );
 }

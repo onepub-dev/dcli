@@ -14,3 +14,7 @@ test/test_script/dcli_unit_tester/bin/dcli_unit_tester
 test/test_script/dcli_unit_tester/pubspec.lock
 test/test_script/general/pubspec.lock
 test/test_script/traditional_project/pubspec.lock
+dcli/test/test_script/general/bin/head
+dcli/test/test_script/general/bin/ls
+dcli/test/test_script/general/bin/tail
+dcli/test/test_script/general/bin/touch

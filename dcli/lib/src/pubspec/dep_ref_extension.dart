@@ -17,7 +17,7 @@ extension DependencyReferenceEx on DependencyReference? {
           .rehydrate(dependency);
     }
 
-    throw InvalidArguments(
+    throw InvalidArgumentsException(
       'Unknown dependency type: ${dependency.runtimeType}',
     );
   }

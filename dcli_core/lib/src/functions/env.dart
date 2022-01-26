@@ -2,16 +2,16 @@ import 'dart:convert';
 import 'dart:io';
 
 import 'package:collection/collection.dart';
-import 'package:meta/meta.dart';
+import 'package:di_zone2/di_zone2.dart';
 import 'package:path/path.dart';
 
+import '../settings.dart';
 import '../util/dcli_exception.dart';
-import '../util/logging.dart';
 import '../util/truepath.dart';
 import 'dcli_function.dart';
 
 /// Provides access to shell environment variables.
-Env env = Env();
+Env get env => Env();
 
 /// Tests if the given [path] is contained
 /// in the OS's PATH environment variable.
@@ -64,9 +64,29 @@ Map<String, String> get envs => Env()._envVars;
 /// Implementation class for the functions [env[]] and [env[]=].
 class Env extends DCliFunction {
   /// Implementation class for the functions [env[]] and [env[]=].
-  factory Env() => _self;
+  /// Returns a singleton unless we are running in a [Scope]
+  /// and a [scopeKey] for [Env] has been placed into the scope.
+  factory Env() {
+    if (Scope.hasScopeKey(scopeKey)) {
+      return Scope.use(scopeKey);
+    } else {
+      return _self ??= Env._internal();
+    }
+  }
 
-  Env._internal() : _caseSensitive = !Platform.isWindows {
+  /// Use this ctor for injecting an altered Environment
+  /// into a Scope.
+  /// The main use for this ctor is for testing.
+  factory Env.forScope(Map<String, String> map) {
+    final env = Env._internal();
+
+    map.forEach((key, value) {
+      env[key] = value;
+    });
+    return env;
+  }
+
+  Env._internal() : _caseSensitive = !Settings().isWindows {
     final platformVars = Platform.environment;
 
     _envVars =
@@ -78,20 +98,12 @@ class Env extends DCliFunction {
     }
   }
 
-  static Env _self = Env._internal();
+  static ScopeKey<Env> scopeKey = ScopeKey<Env>();
+  static Env? _self = Env._internal();
 
   late Map<String, String> _envVars;
 
   final bool _caseSensitive;
-
-  /// conveience method for unit tests.
-  /// resets all environment variables to the state
-  /// we inheritied from the parent process.
-  @visibleForTesting
-  static void reset() {
-    _self = Env._internal();
-    env = _self;
-  }
 
   String? _env(String name) {
     verbose(() => 'env:  $name:${_envVars[name]}');
@@ -224,14 +236,14 @@ class Env extends DCliFunction {
   String get HOME {
     String? home;
 
-    if (Platform.isWindows) {
+    if (Settings().isWindows) {
       home = _env('APPDATA');
     } else {
       home = _env('HOME');
     }
 
     if (home == null) {
-      if (Platform.isWindows) {
+      if (Settings().isWindows) {
         throw DCliException(
           "Unable to find the 'APPDATA' enviroment variable. "
           'Please ensure it is set and try again.',
@@ -266,7 +278,7 @@ class Env extends DCliFunction {
     verbose(() => 'env[$name] = $value');
     if (value == null) {
       _envVars.remove(name);
-      if (Platform.isWindows) {
+      if (Settings().isWindows) {
         if (name == 'HOME' || name == 'APPDATA') {
           _envVars
             ..remove('HOME')
@@ -276,7 +288,7 @@ class Env extends DCliFunction {
     } else {
       _envVars[name] = value;
 
-      if (Platform.isWindows) {
+      if (Settings().isWindows) {
         if (name == 'HOME' || name == 'APPDATA') {
           _envVars['HOME'] = value;
           _envVars['APPDATA'] = value;
@@ -294,7 +306,7 @@ class Env extends DCliFunction {
   String get delimiterForPATH {
     var separator = ':';
 
-    if (Platform.isWindows) {
+    if (Settings().isWindows) {
       separator = ';';
     }
     return separator;
@@ -363,6 +375,23 @@ class Env extends DCliFunction {
     _self = mockEnv;
   }
 }
+
+/// Creates a environment that is contained to the scope
+/// of the [callback] method.
+///
+/// The [environment] map is merged with the current [env] and
+/// injected into the [callback]'s scope.
+///
+/// Any changes to [env] within the scope of the callback
+/// are only visible inside that scope and revert once [callback]
+/// returns.
+/// This is particularly useful for unit tests and running
+/// a process that requires specific environment variables.
+R withEnvironment<R>(R Function() callback,
+        {required Map<String, String> environment}) =>
+    (Scope()
+          ..value(Env.scopeKey, Env.forScope(environment)..addAll(environment)))
+        .run(() => callback());
 
 /// Base class for all Environment variable related exceptions.
 class EnvironmentException extends DCliException {

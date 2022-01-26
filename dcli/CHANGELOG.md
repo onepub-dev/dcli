@@ -1,3 +1,20 @@
+# 1.16.2
+- Cleaned up the logic around how we get the DartSdk version. DartSdk().version no longer returns null but will throw a DCliException if it can parse the dart sdk version - which should never happen.
+
+# 1.16.0
+- rewrite of the dcli create command. Now supports creating scripts and projects from a templates.
+- added dcli create --list switch to list available templates.
+- fixed all unit tests.
+
+# 1.15.5
+- Add test to the resource unpack command to throw if the target exists but isn't a file.
+- Change the isXX set of functions to call the posix stat function rather than spawning the stat command. If the posix call fails we fall back to spawning stat.
+- improved the doco on DartProject and DartScript.
+- Removed win32 from the windows barrel file as it polluted the api documenation. Formatting improvements to the windows registry.dart
+- Created a separate barrel file for docker.
+- Fixed a bug when packing resources. If the pack wasn't done from the package root the resources would end up under the current directory.
+- Fixed the basic tempate.
+
 # 1.15.0
 - simplified the basic template.
 - add workingDirectory support to toParagraph and toList

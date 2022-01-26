@@ -2,7 +2,6 @@ import 'dart:convert';
 import 'dart:io';
 
 import '../../dcli_core.dart';
-import '../util/logging.dart';
 
 /// Prints the contents of the file located at [path] to stdout.
 ///

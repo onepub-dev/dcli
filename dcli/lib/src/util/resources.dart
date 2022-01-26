@@ -4,8 +4,8 @@ import 'dart:convert';
 import 'dart:io';
 
 import 'package:async/async.dart';
+import 'package:crypto/crypto.dart';
 import 'package:settings_yaml/settings_yaml.dart';
-import 'package:uuid/uuid.dart';
 
 import '../../dcli.dart';
 
@@ -27,10 +27,18 @@ class Resources {
   /// the directory where we expect to find the resources
   /// we are going to pack.
   static final String _resourceRoot = join('resource');
+
+  /// relative path to generated root.
   static final String _generatedRoot =
       join('lib', 'src', 'dcli', 'resource', 'generated');
+
+  /// relative path to registry
   static final String _pathToRegistry =
       join(_generatedRoot, 'resource_registry.g.dart');
+
+  /// Path to the registry library
+  late final String pathToRegistry =
+      join(DartProject.self.pathToProjectRoot, _pathToRegistry);
 
   /// Directory where will look for resources to pack
   late final String resourceRoot =
@@ -54,10 +62,10 @@ class Resources {
     /// clear out an old generated files
     /// as we use UUIDs if we didn't do this the
     /// directory would keep growing.
-    if (exists(_generatedRoot)) {
-      deleteDir(_generatedRoot);
+    if (exists(generatedRoot)) {
+      deleteDir(generatedRoot);
     }
-    createDir(_generatedRoot, recursive: true);
+    createDir(generatedRoot, recursive: true);
 
     final packedResources = _packResources(resources);
     _checkForDuplicates(packedResources);
@@ -70,9 +78,12 @@ class Resources {
     final resources = <_Resource>[];
 
     for (final pathToResouce in pathToResources) {
-      final className = _generateClassName;
+      if (isDirectory(pathToResouce)) {
+        continue;
+      }
+      final className = _generateClassName(pathToResouce);
 
-      final pathToGeneratedLibrary = join(_generatedRoot, '$className.g.dart');
+      final pathToGeneratedLibrary = join(generatedRoot, '$className.g.dart');
       print(' - packing: $pathToResouce into $pathToGeneratedLibrary');
 
       final resource =
@@ -130,39 +141,24 @@ class $className extends PackedResource {
     return resource;
   }
 
-  bool _isAlpha(int char) =>
-      (char >= 'a'.codeUnits[0] && char <= 'z'.codeUnits[0]) ||
-      (char >= 'A'.codeUnits[0] && char <= 'Z'.codeUnits[0]);
+  // bool _isAlpha(int char) =>
+  //     (char >= 'a'.codeUnits[0] && char <= 'z'.codeUnits[0]) ||
+  //     (char >= 'A'.codeUnits[0] && char <= 'Z'.codeUnits[0]);
 
-  /// generates a random class name
-  String get _generateClassName {
-    var className = '';
-
-    // keep generating uuids until we get one that contains at least one
-    // alpha character
-    while (className.isEmpty) {
-      final uuid = const Uuid().v4();
-      for (final char in uuid.codeUnits) {
-        if (_isAlpha(char)) {
-          var alpha = String.fromCharCode(char);
-
-          if (className.isEmpty) {
-            /// make the class name camelcase.
-            alpha = alpha.toUpperCase();
-          }
-          className += alpha;
-        }
-      }
-      if (exists(join(generatedRoot, '$className.g.dart'))) {
-        // start again.
-        className = '';
-      }
-    }
-    return className;
-  }
+  /// generates an md5 hash of the file path so we have a unique
+  /// name for each resource that is consistent each time we generated it
+  /// This helps us manage the resources in git as their name
+  /// doesn't change each time we generate them.
+  /// For must projects the generated files shouldn't be in git
+  /// but for dcli that is impractical as dcli won't run without
+  /// them so we have a bootstrapping problem.
+  /// We prefix the md5 hash with the letter 'A' so that it can
+  /// be used as a valid class name.
+  String _generateClassName(String pathToResource) =>
+      'A${md5.convert(utf8.encode(pathToResource)).toString()}';
 
   void _writeRegistry(List<_Resource> resources) {
-    final registryFile = File(_pathToRegistry).openWrite();
+    final registryFile = File(pathToRegistry).openWrite();
     try {
       // import 'package:dcli/src/dcli/resources/generated/Bbcded.g.dart';
       /// Write the imports
@@ -304,6 +300,10 @@ class ResourceRegistry {
       final path = external['path'] as String;
       // ignore: avoid_dynamic_calls
       final mount = external['mount'] as String;
+      if (!exists(path)) {
+        throw ResourceException('The path ${truepath(path)} in '
+            '$pathToPackYaml does not exist.');
+      }
       resources.addAll(_packExternalResource(path, mount));
     }
     return resources;
@@ -321,9 +321,9 @@ class ResourceRegistry {
   }
 
   _Resource _packExternalFile(String path, String mount) {
-    final className = _generateClassName;
+    final className = _generateClassName(path);
 
-    final pathToGeneratedLibrary = join(_generatedRoot, '$className.g.dart');
+    final pathToGeneratedLibrary = join(generatedRoot, '$className.g.dart');
     print(' - packing: $path into $pathToGeneratedLibrary');
 
     final resource =
@@ -381,8 +381,11 @@ abstract class PackedResource {
   String get originalPath;
 
   /// Unpacks a resource saving it
-  /// to [pathTo]
+  /// to the file at [pathTo].
   void unpack(String pathTo) {
+    if (exists(pathTo) && !isFile(pathTo)) {
+      throw ResourceException('The unpack target $pathTo must be a file');
+    }
     final normalized = normalize(pathTo);
     if (!exists(dirname(normalized))) {
       createDir(dirname(normalized), recursive: true);

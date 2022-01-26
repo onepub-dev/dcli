@@ -1,3 +1,22 @@
+# 0.0.6-beta.3
+- reverted to dart 2.12 
+
+# 0.0.6-beta.1
+- release candidate for 0.0.6
+
+# 0.0.6-dev.2
+- Fixed the isRead/write/owner methods which broke after moving to posix.
+- Fixed a bug in settings where hierarchicalLoggingEnabled logging was not always been enabled.
+- Fix: copyTree was hanging since the update to dcli_core.
+- Added new argument to withTempDir to allow the caller to provide the temp dir.
+- ENH: Added method withEnvironment allow users to create a scoped environment
+- Moved log related settings from dcli to dcli_core.Settings
+- added setter for Pubspec.name.
+- moved to importing dcli_core with as core.
+
+# 0.0.6-dev.1
+- ENH: Moved to using logging package for log output.
+
 # 0.0.5
 - simplified the basic template.
 - add workingDirectory support to toParagraph and toList

@@ -1,7 +1,5 @@
-@Timeout(Duration(minutes: 10))
-import 'dart:io';
-
 import 'package:dcli/dcli.dart' hide equals;
+import 'package:dcli_core/dcli_core.dart' as core;
 import 'package:test/test.dart' hide isEmpty;
 
 import '../util/test_file_system.dart';
@@ -51,7 +49,7 @@ void main() {
         });
       });
     },
-    skip: Platform.isWindows,
+    skip: core.Settings().isWindows,
   );
 
   group(
@@ -93,7 +91,7 @@ void main() {
         });
       });
     },
-    skip: Platform.isWindows,
+    skip: core.Settings().isWindows,
   );
 
   group(
@@ -135,7 +133,7 @@ void main() {
         });
       });
     },
-    skip: Platform.isWindows,
+    skip: core.Settings().isWindows,
   );
 
   group('isEmpty', () {

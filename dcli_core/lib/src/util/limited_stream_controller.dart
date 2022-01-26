@@ -73,7 +73,7 @@ class LimitedStreamController<T> implements StreamController<T> {
   }
 
   @override
-  Future addStream(Stream<T> source, {bool? cancelOnError = true}) {
+  Future<bool> addStream(Stream<T> source, {bool? cancelOnError = true}) {
     throw UnsupportedError('Use asyncAdd');
   }
 
@@ -81,7 +81,7 @@ class LimitedStreamController<T> implements StreamController<T> {
   Future<dynamic> close() => _streamController.close();
 
   @override
-  Future get done => _streamController.done;
+  Future<dynamic> get done => _streamController.done;
 
   @override
   StreamSink<T> get sink => throw UnsupportedError('Use asyncAdd');

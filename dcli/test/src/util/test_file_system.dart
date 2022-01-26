@@ -4,10 +4,11 @@ import 'dart:io';
 import 'dart:isolate';
 
 import 'package:dcli/dcli.dart';
-import 'package:dcli/src/script/entry_point.dart';
 import 'package:pubspec/pubspec.dart' as ps;
 import 'package:test/test.dart';
 import 'package:uuid/uuid.dart';
+
+import 'test_scope.dart';
 
 class TestFileSystem {
   /// The TestFileSystem allows you to run
@@ -25,9 +26,6 @@ class TestFileSystem {
   /// [HOME] to ensure that you code runs within the 'virtuallised'
   /// files system.
   ///
-  /// Each virtualised file system has its own copy of dcli installed.
-  ///
-  ///
   /// Any test which is non-desctructive
   /// can use a common TestFileSystem by setting [useCommonPath] to
   /// true which is the default.
@@ -40,20 +38,20 @@ class TestFileSystem {
   /// copy of dcli. This should be used if you are testing
   /// dcli's install.
   ///
-  factory TestFileSystem({bool useCommonPath = true, bool installDcli = true}) {
+  factory TestFileSystem({bool useCommonPath = true}) {
     TestFileSystem? use;
     if (useCommonPath) {
       print(orange('Re-using common TestFileSystem'));
 
       use = common;
     } else {
-      use = TestFileSystem._internal(installDcli: installDcli);
+      use = TestFileSystem._internal();
     }
 
     return use;
   }
 
-  TestFileSystem._internal({this.installDcli}) {
+  TestFileSystem._internal() {
     _testRoot = join(rootPath, 'tmp', 'dcli');
     uniquePath = const Uuid().v4();
 
@@ -79,7 +77,6 @@ class TestFileSystem {
   /// directory under .dcli which we used to store compiled
   /// tests scripts that we need to add to the TestFileSystems
   /// path.
-  static const String _testBin = 'test_bin';
   static const String testLinesFile = 'lines.txt';
 
   String? home;
@@ -88,8 +85,6 @@ class TestFileSystem {
 
   bool initialised = false;
 
-  bool? installDcli;
-
   /// The location of any temp scripts
   /// that need to be created during testing.
   late String tmpScriptPath;
@@ -97,8 +92,7 @@ class TestFileSystem {
   /// The location of the test_script directory
   late String testScriptPath;
 
-  static late final TestFileSystem common =
-      TestFileSystem._internal(installDcli: true);
+  static late TestFileSystem common = TestFileSystem._internal();
 
   String tempFile({String? suffix}) => createTempFilename(suffix: suffix);
 
@@ -109,22 +103,9 @@ class TestFileSystem {
   ) {
     final stack = StackTraceImpl(skipFrames: 1);
 
-    //try {
-    /// it takes a while to setup the first test file system hence
-    /// 600 second timeout.
-    // NamedLock(
-    //         name: 'test_file_system.lock',
-
-    //         /// setup of the first tests can take a while
-    //         timeout: const Duration(seconds: 600))
-//          .withLock(() {
-    _runUnderLock(stack, action);
-    //});
-    // } on DCliException catch (e) {
-    //   print(e.toString());
-    //   e.printStackTrace();
-    //   rethrow;
-    // }
+    withTestScope((testDir) {
+      _runUnderLock(stack, action);
+    }, pathToTestDir: fsRoot);
   }
 
   void _runUnderLock(
@@ -139,13 +120,7 @@ class TestFileSystem {
         '${frame.sourceFile}:${frame.lineNo} ${'*' * 80}',
       ),
     );
-    Settings.reset();
-    Env.reset();
-    // PubCache.reset();
-    // originalPubCache = PubCache().pathTo;
-    // print('PATH: $PATH');
-    final originalHome = HOME;
-    final path = env['PATH'];
+
     try {
       env['HOME'] = fsRoot;
       home = fsRoot;
@@ -157,9 +132,8 @@ class TestFileSystem {
 
       final isolateID = Service.getIsolateID(Isolate.current);
       print(green('Using TestFileSystem $fsRoot for Isolate: $isolateID'));
-      print('Reset dcliPath: ${Settings().pathToDCli}');
 
-      initFS(originalHome);
+      initFS();
 
       action(this);
     }
@@ -169,8 +143,6 @@ class TestFileSystem {
       st.toString();
       rethrow;
     } finally {
-      env['HOME'] = originalHome;
-      env['PATH'] = path;
       print(
         green(
           '${'-' * 40} '
@@ -180,7 +152,7 @@ class TestFileSystem {
     }
   }
 
-  void initFS(String originalHome) {
+  void initFS() {
     if (!initialised) {
       initialised = true;
 
@@ -192,12 +164,9 @@ class TestFileSystem {
       /// broken.
       // copyPubCache(originalHome, HOME);
       copyTestScripts();
-      // if (installDcli!) {
-      //   installDCli();
-      // }
       testDirectoryTree = TestDirectoryTree(fsRoot);
 
-      installCrossPlatformTestScripts(originalHome);
+      installCrossPlatformTestScripts();
     }
   }
 
@@ -289,22 +258,6 @@ class TestFileSystem {
     }
   }
 
-  void installDCli() {
-    if (!isDCliRunningFromSource()) {
-      PubCache().globalActivateFromSource(DartProject.self.pathToProjectRoot);
-      // printerr(
-      //   red(
-      //     'You must global active dcli from a local '
-      //     'path before you can run unit tests',
-      //   ),
-      // );
-      // print('Run: dart pub global activate --source=path <path to dcli>');
-      // exit(-1);
-    }
-
-    EntryPoint().process(['install', '--nodart', '--quiet', '--noprivileges']);
-  }
-
   void rebuildPath() {
     // remove .pub-cache and .dcli... and replace with the test FS ones
 
@@ -321,30 +274,6 @@ class TestFileSystem {
 
     Env().appendToPATH(PubCache().pathToBin);
     Env().appendToPATH(join(fsRoot, '.dcli', 'bin'));
-  }
-
-  void copyPubCache(String originalHome, String newHome) {
-    print('Copying pub cache into TestFileSystem... ');
-
-    final verbose = Settings().isVerbose;
-
-    Settings().setVerbose(enabled: false);
-
-    /// tell the world where to find the new pubache.
-    //  PubCache().pathTo = join(newHome, PubCache().cacheDir);
-
-    if (!exists(PubCache().pathTo)) {
-      createDir(PubCache().pathTo, recursive: true);
-    }
-
-    /// Do we need to alter pub cache?
-    copyTree(originalPubCache!, PubCache().pathTo);
-
-    print(
-      'Reset ${PubCache.envVarPubCache} to ${env[PubCache.envVarPubCache]}',
-    );
-
-    Settings().setVerbose(enabled: verbose);
   }
 
   //
@@ -365,7 +294,6 @@ class TestFileSystem {
     );
 
     _patchRelativeDependenciesAndWarmup(testScriptPath);
-    DartProject.fromPath(join(testScriptPath, 'general')).warmup();
 
     Settings().setVerbose(enabled: verbose);
   }
@@ -379,6 +307,7 @@ class TestFileSystem {
       final dependency = pubspec.dependencies['dcli']!;
 
       final dcliProject = DartProject.fromPath('.');
+      // final dcliCoreProject = DartProject.fromPath(join('..', 'dcli_core'));
 
       if (dependency.reference is ps.PathReference) {
         final pathDependency = dependency.reference as ps.PathReference;
@@ -391,50 +320,71 @@ class TestFileSystem {
           pathDependency.path,
         );
 
-        final newPath = PubSpec.createPathReference(absolutePathToDcli);
+        // final absolutePathToDcliCore = truepath(
+        //   dcliCoreProject.pathToProjectRoot,
+        //   'test',
+        //   dir,
+        //   pathDependency.path,
+        // );
+
+        final pathToTmpDCli = PubSpec.createPathReference(absolutePathToDcli);
+        // final pathToTmpDCliCore =
+        //     PubSpec.createPathReference(absolutePathToDcliCore);
 
         final newMap = Map<String, Dependency>.from(pubspec.dependencies);
-        newMap['dcli'] = Dependency('dcli', newPath);
-        pubspec
-          ..dependencies = newMap
-          ..saveToFile(pathToPubspec);
+        newMap['dcli'] = Dependency('dcli', pathToTmpDCli);
+        //newMap['dcli_core'] = Dependency('dcli_core', pathToTmpDCliCore);
+        pubspec.dependencies = newMap;
       }
 
-      DartProject.fromPath(dirname(pathToPubspec)).warmup();
+      pubspec
+        ..dependencyOverrides = <String, Dependency>{}
+        ..saveToFile(pathToPubspec);
+
+      DartProject.fromPath(dirname(pathToPubspec)).warmup(upgrade: true);
     });
   }
 
-  void installCrossPlatformTestScripts(String originalHome) {
-    final required = ['head', 'tail', 'ls', 'touch'];
+  static String pathToTools = join(rootPath, 'tmp', 'dcli', 'tool');
+  static String pathToToolPubspec = join(pathToTools, 'pubspec.yaml');
 
-    final testbinPath = join(originalHome, '.dcli', _testBin);
-
-    if (!exists(testbinPath)) {
-      createDir(testbinPath, recursive: true);
+  /// We install the cross platform tools into a tool directory
+  /// shared by all of the test file systems.
+  /// Each time a new test file system is instantiated this method
+  /// is called. We check if the tools are missing
+  /// and build them if necessary.
+  /// As these tools are quite static and the tool path is
+  /// in /tmp (so deleted after every reboot) we only
+  /// recompile the tools if they are missing.
+  void installCrossPlatformTestScripts() {
+    if (!exists(pathToTools)) {
+      createDir(pathToTools, recursive: true);
     }
 
-    // may not exists on the first pass through.
-    if (!exists(Settings().pathToDCliBin)) {
-      createDir(Settings().pathToDCliBin, recursive: true);
-    }
+    if (!exists(join(pathToTools, 'head')) ||
+        !exists(join(pathToTools, 'tail')) ||
+        !exists(join(pathToTools, 'ls')) ||
+        !exists(join(pathToTools, 'touch'))) {
+      final required = ['head', 'tail', 'ls', 'touch'];
 
-    for (final command in required) {
-      if (exists(join(testbinPath, command))) {
-        // copy the existing command into the testzones .dcli/bin path
-        copy(
-          join(testbinPath, command),
-          join(Settings().pathToDCliBin, command),
-        );
-      } else {
-        /// compile and install the command
-        DartScript.fromFile('test/test_script/general/bin/$command.dart')
-            .compile(install: true);
-
-        // copy it back to the dcli testbin so the next unit
-        // test doesn't have to compile it.
-        /// not necessary as we compile directly into the test bin.
-        // copy(script.pathToExe, join(testbinPath, script.exeName));
+      // may not exists on the first pass through.
+      if (!exists(Settings().pathToDCliBin)) {
+        createDir(Settings().pathToDCliBin, recursive: true);
       }
+
+      DartProject.fromPath('pathToTools').warmup();
+      NamedLock(name: 'compile').withLock(() {
+        for (final command in required) {
+          if (!exists(join(pathToTools, command))) {
+            /// compile and install the command into the tool path
+
+            final script = DartScript.fromFile(
+                'test/test_script/general/bin/$command.dart')
+              ..compile();
+            copy(script.pathToExe, pathToTools);
+          }
+        }
+      });
     }
   }
 

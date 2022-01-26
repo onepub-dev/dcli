@@ -1,16 +1,29 @@
+library dart_project;
+
 import 'dart:io';
 
 import '../../dcli.dart';
+import '../../posix.dart';
+import 'command_line_runner.dart';
+import 'flags.dart';
 import 'pub_get.dart';
+import 'pub_upgrade.dart';
 
 /// Encapsulates the idea of a dart project which is made up
 /// of a pubspec.yaml, dart files ....
+///
+part 'dart_project_creator.dart';
 
 class DartProject {
   /// Load a dart project from the given directory.
+  ///
   /// We search up the tree starting from [pathToSearchFrom]
   /// until we find a pubspec.yaml and that becomes the
-  /// project root. directory.
+  /// project root directory.
+  /// If we don't find a pubspec.yaml then [pathToSearchFrom] is returned
+  /// as the project root.
+  /// If you want to test whether you are in a Dart project then use
+  /// [findProject].
   /// Set [search] to false if you don't want to search up the
   /// directory tree for a pubspec.yaml.
   DartProject.fromPath(String pathToSearchFrom, {bool search = true}) {
@@ -25,6 +38,15 @@ class DartProject {
   DartProject.fromCache(String name, String version) {
     _pathToProjectRoot = truepath(PubCache().pathToPackage(name, version));
   }
+
+  /// Create a dart project on the file system at
+  /// [pathTo] from the template named [templateName].
+  factory DartProject.create(
+      {required String pathTo, required String templateName}) {
+    _createProject(pathTo, templateName);
+    return DartProject.fromPath(pathTo, search: false);
+  }
+
   late String _pathToProjectRoot;
   String? _pathToPubSpec;
 
@@ -175,7 +197,10 @@ class DartProject {
   /// run the build as a background process.
   /// [background] defaults to false.
   ///
-  void warmup({bool background = false}) {
+  /// If [upgrade] is true then a pub upgrade is ran rather than
+  /// pub get.
+  ///
+  void warmup({bool background = false, bool upgrade = false}) {
     _lock.withLock(
       () {
         try {
@@ -193,7 +218,11 @@ class DartProject {
             );
           } else {
             // print(orange('Running pub get...'));
-            _pubget();
+            if (upgrade) {
+              _pubupgrade();
+            } else {
+              _pubget();
+            }
           }
         } on PubGetException {
           print(red("\ndcli warmup failed due to the 'pub get' call failing."));
@@ -283,6 +312,33 @@ class DartProject {
     });
   }
 
+  /// Causes a pub upgrade to be run against the project.
+  ///
+  /// The projects cache must already exist and be
+  /// in a consistent state.
+  ///
+  /// This is normally done when the project cache is first
+  /// created and when a script's pubspec changes.
+  void _pubupgrade() {
+    NamedLock(
+      name: _lockName,
+      lockPath: pathToProjectRoot,
+    ).withLock(() {
+      final pubUpgrade = PubUpgrade(this);
+      if (Shell.current.isSudo) {
+        /// bugger we just screwed the cache permissions so lets fix them.
+//         'chmod -R ${env['USER']}:${env['USER']} ${PubCache().pathTo}'.run;
+
+        printerr('You must compile your script before running it under sudo');
+
+        // ignore: flutter_style_todos
+        /// TODO(bsutton): should this be a throw?
+        exit(1);
+      }
+      pubUpgrade.run(compileExecutables: false);
+    });
+  }
+
   // TODO(bsutton): this is still risky as pub get does a test to see if
   // the versions have changed.
   /// there is a 'generated' date stamp in the .json file which
@@ -300,6 +356,11 @@ class DartProject {
   bool get isReadyToRun =>
       hasPubSpec && !DartSdk().isPubGetRequired(pathToProjectRoot);
 
+  /// Returns true if this project is a flutter projects.
+  ///
+  /// We check to see if flutter is a project dependency.
+  bool get isFlutterProject => pubSpec.dependencies.containsKey('flutter');
+
   /// Returns true if the project contains a pubspec.yaml.
   bool get hasPubSpec => exists(join(pathToProjectRoot, 'pubspec.yaml'));
 
@@ -307,114 +368,50 @@ class DartProject {
   bool get hasAnalysisOptions =>
       exists(join(pathToProjectRoot, 'analysis_options.yaml'));
 
-  /// Prepares the project by creating a pubspec.yaml and
-  /// the analysis_options.yaml file.
-  void initFiles() {
-    if (!hasPubSpec) {
-      _createPubspecFromTemplate();
-    }
+  // /// Prepares the project by creating a pubspec.yaml and
+  // /// the analysis_options.yaml file.
+  // void initFiles() {
+  //   if (!hasPubSpec) {
+  //     _createPubspecFromTemplate(
+  //         pathToProjectRoot: pathToProjectRoot, pathToPubSpec:
+  // pathToPubSpec);
+  //   }
 
-    if (!hasAnalysisOptions) {
-      /// add pedantic to the project
-      _createAnalysisOptionsFromTemplate();
-    }
-  }
+  //   if (!hasAnalysisOptions) {
+  //     /// add pedantic to the project
+  //     _createAnalysisOptionsFromTemplate(
+  //         pathToProjectRoot: pathToProjectRoot, pathToPubSpec:
+  // pathToPubSpec);
+  //   }
+  // }
 
-  /// Creates a script located at [pathToScript] from the passed [templatePath].
-  /// When the user runs 'dcli create <script>'
-  void _createFromTemplate({
-    required String templatePath,
-    required String pathToScript,
-  }) {
-    verbose(() => '_createFromTemplate $templatePath $pathToScript');
-    if (!exists(templatePath)) {
-      throw TemplateNotFoundException(templatePath);
-    }
-    copy(templatePath, pathToScript);
+//   /// Creates a project located at [pathToProject] from the
+//passed [templatePath].
+//   /// When the user runs 'dcli create <project>'
+//   void _createFromTemplate({
+//     required String templatePath,
+//     required String pathToProject,
+//   }) {
+//     verbose(() => '_createFromTemplate $templatePath $pathToProject');
+//     if (!exists(templatePath)) {
+//       throw TemplateNotFoundException(templatePath);
+//     }
+//     copy(templatePath, pathToProject);
 
-    replace(pathToScript, 'scriptname', basename(pathToScript));
+//     replace(pathToProject, 'scriptname', basename(pathToProject));
 
-    if (!hasPubSpec) {
-      _createPubspecFromTemplate();
-    }
-    if (!hasAnalysisOptions) {
-      _createAnalysisOptionsFromTemplate();
-    }
-  }
-
-  void _createAnalysisOptionsFromTemplate({bool showWarnings = false}) {
-    /// add pedantic to the project
-
-    final analysisPath = join(pathToProjectRoot, 'analysis_options.yaml');
-    if (!exists(analysisPath)) {
-      if (showWarnings) {
-        print(orange('Creating missing analysis_options.yaml.'));
-      }
-
-      copy(
-        join(Settings().pathToTemplate, 'analysis_options.yaml.template'),
-        analysisPath,
-      );
-    }
-  }
-
-  void _createPubspecFromTemplate({bool showWarnings = false}) {
-    if (showWarnings) {
-      print(orange('Creating missing pubspec.yaml.'));
-    }
-    // no pubspec.yaml in scope so lets create one.
-
-    copy(
-      join(Settings().pathToTemplate, 'pubspec.yaml.template'),
-      pathToPubSpec,
-    );
-    replace(
-        pathToPubSpec,
-        'name: scriptname',
-        'name: '
-            '${_replaceInvalidCharactersForName(basename(pathToProjectRoot))}');
-  }
-
-  /// Creates a script in [pathToProjectRoot] with the name [scriptName]
-  /// using the based [templateName] which defaults to (basic.dart)
-  ///
-  /// The [scriptName] MUST end in .dart otherwise a [DartProjectException]
-  /// is thrown
-  ///
-  /// The [templateName] must be the name of a template file in the ~/.dcli/template directory.
-  ///
-  DartScript createScript(
-    String scriptName, {
-    String templateName = 'basic.dart',
-  }) {
-    verbose(() =>
-        'createScript scriptName: $scriptName projectRoot: $pathToProjectRoot');
-    if (!scriptName.endsWith('.dart')) {
-      throw DartProjectException('scriptName must end with .dart');
-    }
-    final pathToScript = join(pathToProjectRoot, basename(scriptName));
-    verbose(() => 'pathToScript $pathToScript');
-
-    _createFromTemplate(
-      templatePath: join(Settings().pathToTemplate, templateName),
-      pathToScript: pathToScript,
-    );
-
-    return DartScript.fromFile(pathToScript, project: this);
-  }
-
-  /// The name used in the pubspec.yaml must come from the character
-  ///  set [a-z0-9_]
-  /// so wer replace any invalid character with an '_'.
-  String _replaceInvalidCharactersForName(String proposedName) {
-    var fixed = proposedName.replaceAll(RegExp('[^a-zA-Z0-9_]'), '_');
-
-    /// must start with an alpha.
-    if (RegExp('[a-zA-Z]').matchAsPrefix(fixed) == null) {
-      fixed = 'a$fixed';
-    }
-    return fixed;
-  }
+//     if (!hasPubSpec) {
+//       _createPubspecFromTemplate(
+//           pathToProjectRoot: pathToProjectRoot,
+// pathToPubSpec: pathToPubSpec);
+//     }
+//     if (!hasAnalysisOptions) {
+//       _createAnalysisOptionsFromTemplate(
+//           pathToProjectRoot: pathToProjectRoot,
+// pathToPubSpec: pathToPubSpec);
+//     }
+//   }
+// }
 }
 
 /// Exception for issues with DartProjects.

@@ -5,7 +5,7 @@ import '../../dcli.dart';
 /// ```
 /// pub get
 /// ```
-/// for the virtual package we build for the script we are going to run.
+/// For the given [DartProject]
 ///
 
 class PubGet {

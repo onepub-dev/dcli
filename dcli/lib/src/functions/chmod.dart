@@ -1,12 +1,10 @@
-import 'dart:io';
-
 import 'package:dcli_core/dcli_core.dart' as core;
-import 'package:dcli_core/dcli_core.dart' hide exists;
+import 'package:dcli_core/dcli_core.dart' hide exists, Settings;
 import 'package:posix/posix.dart' as posix;
 
 import '../../dcli.dart';
 
-/// Wrapper for the linux `chmod` command.
+/// Sets the permissions on a file on posix systems.
 ///
 /// [permission] is an octal string as used by the cli commandchmod e.g. 777
 /// [path] is the path to the file that we are changing the
@@ -45,7 +43,7 @@ class _ChMod extends DCliFunction {
     if (!exists(path)) {
       throw ChModException('The file at ${truepath(path)} does not exists');
     }
-    if (!Platform.isWindows) {
+    if (!Settings().isWindows) {
       if (posix.isPosixSupported) {
         posix.chmod(path, permission);
       } else {

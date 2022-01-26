@@ -1,11 +1,7 @@
-@Timeout(Duration(seconds: 120))
-
-import 'dart:io';
-
 import 'package:dcli/dcli.dart';
+import 'package:dcli_core/dcli_core.dart' as core;
 
 import 'package:test/test.dart' as t;
-import 'package:test/test.dart';
 
 void main() {
   t.group('FileSync', () {
@@ -24,7 +20,7 @@ void main() {
         });
 
         // windows us \r\n vs posix \n
-        t.expect(fstat.size, t.equals(Platform.isWindows ? 160 : 150));
+        t.expect(fstat.size, t.equals(core.Settings().isWindows ? 160 : 150));
       });
     });
 

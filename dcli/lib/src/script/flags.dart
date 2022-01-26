@@ -1,11 +1,14 @@
 import 'package:meta/meta.dart';
 
 import '../../dcli.dart';
+import 'command_line_runner.dart';
 
 /// helper flass for manageing flags.
 @immutable
 class Flags {
-  /// Find the flag that matches [flagSwitch].
+  /// Find the flag that matches the name part of [flagSwitch].
+  ///
+  /// e.g --flagname=value
   Flag? findFlag(String flagSwitch, List<Flag> flags) {
     Flag? found;
     var foundOption = false;
@@ -24,7 +27,7 @@ class Flags {
           if (flag.isOptionSupported) {
             flag.option = parts[1];
           } else {
-            throw InvalidFlagOption(
+            throw InvalidFlagOptionException(
               'The flag $finalFlagSwitch was passed with an option but '
               'it does not support options.',
             );
@@ -123,6 +126,7 @@ class VerboseFlag extends Flag {
   String? _option;
 
   @override
+  // Path to the logfile to write verbose log messages to.
   String get option => _option!;
 
   /// true if the flag has an option.
@@ -136,7 +140,7 @@ class VerboseFlag extends Flag {
     // check that the value contains a path and that
     // the path exists.
     if (!exists(dirname(value!))) {
-      throw InvalidFlagOption(
+      throw InvalidFlagOptionException(
         "The log file's directory '${truepath(dirname(value))} "
         'does not exists. '
         'Create the directory first.',
@@ -156,15 +160,49 @@ class VerboseFlag extends Flag {
 
   @override
   String description() => '''
-If passed, turns on verbose logging to the console.
+      If passed, turns on verbose logging to the console.
       If you provide a log path then logging is written to the given logfile.''';
 }
 
-/// throw if we found an invalid flag.
-class InvalidFlagOption implements Exception {
+class HelpFlag extends Flag {
   ///
-  InvalidFlagOption(this.message);
+  factory HelpFlag() => _self;
 
   ///
-  String message;
+  HelpFlag._internal() : super(_flagName);
+
+  static const _flagName = 'help';
+  static final _self = HelpFlag._internal();
+
+  String? _option;
+
+  @override
+  // Path to the logfile to write verbose log messages to.
+  String get option => _option!;
+
+  /// true if the flag has an option.
+  bool get hasOption => _option != null;
+
+  @override
+  bool get isOptionSupported => false;
+
+  @override
+  set option(String? value) {}
+
+  @override
+  String get abbreviation => 'v';
+
+  @override
+  String usage() => '--$_flagName';
+
+  @override
+  String description() => '''
+      Displays this help message.
+''';
+}
+
+/// throw if we found an invalid flag.
+class InvalidFlagOptionException extends CommandLineException {
+  ///
+  InvalidFlagOptionException(String message) : super(message);
 }

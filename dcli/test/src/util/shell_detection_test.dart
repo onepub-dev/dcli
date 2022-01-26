@@ -1,8 +1,7 @@
-@Timeout(Duration(minutes: 5))
-import 'dart:io';
 import 'package:dcli/dcli.dart' hide equals;
 import 'package:dcli/posix.dart';
 import 'package:dcli/src/shell/cmd_shell.dart';
+import 'package:dcli_core/dcli_core.dart' as core;
 import 'package:test/test.dart';
 
 void main() {
@@ -13,9 +12,9 @@ void main() {
     String? expected;
     if (Settings().isWindows) {
       expected = CmdShell.shellName;
-    } else if (Platform.isLinux) {
+    } else if (core.Settings().isLinux) {
       expected = BashShell.shellName;
-    } else if (Platform.isMacOS) {
+    } else if (core.Settings().isMacOS) {
       expected = ZshShell.shellName;
     }
 

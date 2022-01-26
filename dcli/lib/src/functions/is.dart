@@ -1,7 +1,7 @@
 import 'dart:io';
 
 import 'package:dcli_core/dcli_core.dart' as core;
-import 'package:dcli_core/dcli_core.dart';
+import 'package:posix/posix.dart' as posix;
 
 import '../../dcli.dart';
 
@@ -93,26 +93,26 @@ bool isReadable(String path) => _Is().isReadable(path);
 /// executable by the user that owns this process
 bool isExecutable(String path) => _Is().isExecutable(path);
 
-class _Is extends DCliFunction {
+class _Is extends core.DCliFunction {
   /// checks if the passed [path] (a file or directory) is
   /// writable by the user that owns this process
   bool isWritable(String path) {
-    verbose(() => 'isWritable: ${truepath(path)}');
+    core.verbose(() => 'isWritable: ${truepath(path)}');
     return _checkPermission(path, writeBitMask);
   }
 
   /// checks if the passed [path] (a file or directory) is
   /// readable by the user that owns this process
   bool isReadable(String path) {
-    verbose(() => 'isReadable: ${truepath(path)}');
+    core.verbose(() => 'isReadable: ${truepath(path)}');
     return _checkPermission(path, readBitMask);
   }
 
   /// checks if the passed [path] (a file or directory) is
   /// executable by the user that owns this process
   bool isExecutable(String path) {
-    verbose(() => 'isExecutable: ${truepath(path)}');
-    return Platform.isWindows || _checkPermission(path, executeBitMask);
+    core.verbose(() => 'isExecutable: ${truepath(path)}');
+    return Settings().isWindows || _checkPermission(path, executeBitMask);
   }
 
   static const readBitMask = 0x4;
@@ -122,58 +122,70 @@ class _Is extends DCliFunction {
   /// Checks if the user permission to act on the [path] (a file or directory)
   /// for the given permission bit mask. (read, write or execute)
   bool _checkPermission(String path, int permissionBitMask) {
-    verbose(
+    core.verbose(
       () => '_checkPermission: ${truepath(path)} '
           'permissionBitMask: $permissionBitMask',
     );
 
-    if (Platform.isWindows) {
+    if (Settings().isWindows) {
       throw UnsupportedError(
-        'permission checks are not Not currently supported on windows',
+        'permission checks are not currently supported on windows',
       );
     }
 
     final user = Shell.current.loggedInUser;
 
     int permissions;
-    String group;
-    String owner;
-    bool otherWritable;
-    bool groupWritable;
-    bool ownerWritable;
+    String groupName;
+    String ownerName;
+    bool other;
+    bool group;
+    bool owner;
 
-    // try {
-    //   final _stat = posix.stat(path);
-    //   group = posix.getgrgid(_stat.gid).name;
-    //   owner = posix.getUserNameByUID(_stat.uid);
-    //   final mode = _stat.mode;
-    //   otherWritable = mode.isOtherWritable;
-    //   groupWritable = mode.isGroupWritable;
-    //   ownerWritable = mode.isOwnerWritable;
-    // } on posix.PosixException catch (_) {
-    //e.g 755 tomcat bsutton
-    final stat = 'stat -L -c "%a %G %U" "$path"'.firstLine!;
-    final parts = stat.split(' ');
-    permissions = int.parse(parts[0], radix: 8);
-    group = parts[1];
-    owner = parts[2];
-    //  if (( ($PERM & 0002) != 0 )); then
-    otherWritable = (permissions & permissionBitMask) != 0;
-    groupWritable = (permissions & (permissionBitMask << 3)) != 0;
-    ownerWritable = (permissions & (permissionBitMask << 6)) != 0;
-    // }
+    try {
+      final _stat = posix.stat(path);
+      groupName = posix.getgrgid(_stat.gid).name;
+      ownerName = posix.getUserNameByUID(_stat.uid);
+      final mode = _stat.mode;
+      if (permissionBitMask == writeBitMask) {
+        other = mode.isOtherWritable;
+        group = mode.isGroupWritable;
+        owner = mode.isOwnerWritable;
+      } else if (permissionBitMask == readBitMask) {
+        other = mode.isOtherReadable;
+        group = mode.isGroupReadable;
+        owner = mode.isOwnerReadable;
+      } else if (permissionBitMask == executeBitMask) {
+        other = mode.isOtherExecutable;
+        group = mode.isGroupExecutable;
+        owner = mode.isOwnerExecutable;
+      } else {
+        throw posix.PosixException('Unexpected bitMask', -1);
+      }
+    } on posix.PosixException catch (_) {
+      //e.g 755 tomcat bsutton
+      final stat = 'stat -L -c "%a %G %U" "$path"'.firstLine!;
+      final parts = stat.split(' ');
+      permissions = int.parse(parts[0], radix: 8);
+      groupName = parts[1];
+      ownerName = parts[2];
+      //  if (( ($PERM & 0002) != 0 )); then
+      other = (permissions & permissionBitMask) != 0;
+      group = (permissions & (permissionBitMask << 3)) != 0;
+      owner = (permissions & (permissionBitMask << 6)) != 0;
+    }
 
     var access = false;
-    if (otherWritable) {
+    if (other) {
       // Everyone has write access
       access = true;
-    } else if (groupWritable) {
+    } else if (group) {
       // Some groups have write access
-      if (isMemberOfGroup(group)) {
+      if (isMemberOfGroup(groupName)) {
         access = true;
       }
-    } else if (ownerWritable) {
-      if (user == owner) {
+    } else if (owner) {
+      if (user == ownerName) {
         access = true;
       }
     }
@@ -183,9 +195,9 @@ class _Is extends DCliFunction {
   /// Returns true if the owner of this process
   /// is a member of [group].
   bool isMemberOfGroup(String group) {
-    verbose(() => 'isMemberOfGroup: $group');
+    core.verbose(() => 'isMemberOfGroup: $group');
 
-    if (Platform.isWindows) {
+    if (Settings().isWindows) {
       throw UnsupportedError(
         'isMemberOfGroup is not Not currently supported on windows',
       );

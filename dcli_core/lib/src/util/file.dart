@@ -5,7 +5,6 @@ import 'package:path/path.dart';
 import 'package:uuid/uuid.dart';
 
 import '../../dcli_core.dart';
-import 'logging.dart';
 
 /// Opens a File and calls [action] passing in the open file.
 /// When action completes the file is closed.
@@ -203,7 +202,10 @@ Future<Digest> calculateHash(String path) async {
   final input = File(path);
 
   const hasher = sha256;
-  return hasher.bind(input.openRead()).first;
+  final digest = await hasher.bind(input.openRead()).first;
+
+  verbose(() => 'calculateHash($path) = ${digest.toString()}');
+  return digest;
 }
 
 /// Thrown when a file doesn't exist

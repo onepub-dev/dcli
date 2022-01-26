@@ -1,31 +1,35 @@
 @Timeout(Duration(minutes: 5))
 import 'package:dcli/dcli.dart' hide equals;
+import 'package:dcli/src/script/commands/install.dart';
 import 'package:path/path.dart' as p;
 import 'package:test/test.dart';
 
 import '../../util/test_file_system.dart';
+import '../../util/test_scope.dart';
 
 void main() {
-  const scriptName = 'create_test.dart';
+  const scriptName = 'test.dart';
 
   group('Create Project', () {
     test('Create hello world', () {
-      withTempDir((fs) {
-        DartProject.fromPath(fs, search: false)
-          ..createScript(scriptName, templateName: 'hello_world.dart')
-          ..warmup();
+      withTestScope((fs) {
+        _installTemplates();
+        final pathToTemplate = join(fs, 'test');
+        DartProject.create(pathTo: pathToTemplate, templateName: 'simple')
+            .warmup();
 
-        checkProjectStructure(fs, scriptName);
+        checkProjectStructure(pathToTemplate, scriptName);
       });
     });
 
     test('Run hello world', () {
       TestFileSystem.common.withinZone((fs) {
         withTempDir((fs) {
-          final pathToScript = truepath(fs, scriptName);
-          DartProject.fromPath(fs, search: false)
-            ..createScript(scriptName, templateName: 'hello_world.dart')
-            ..warmup();
+          _installTemplates();
+          final pathToScript = truepath(fs, 'test', 'bin', scriptName);
+          final pathToTemplate = join(fs, 'test');
+          DartProject.create(pathTo: pathToTemplate, templateName: 'simple')
+              .warmup();
 
           DartScript.fromFile(pathToScript).run();
         });
@@ -36,8 +40,12 @@ void main() {
   });
 }
 
+void _installTemplates() {
+  InstallCommand().initTemplates();
+}
+
 void checkProjectStructure(String rootPath, String scriptName) {
-  final scriptPath = join(rootPath, scriptName);
+  final scriptPath = join(rootPath, 'bin', scriptName);
   expect(exists(scriptPath), equals(true));
 
   final pubspecPath = p.join(rootPath, 'pubspec.yaml');
@@ -70,13 +78,15 @@ void checkProjectStructure(String rootPath, String scriptName) {
   expect(
     files,
     unorderedEquals(<String>[
-      scriptName,
-      'pubspec.yaml',
-      'pubspec.lock',
-      'analysis_options.yaml',
-      join('.dart_tool', 'package_config.json'),
       // ignore: lines_longer_than_80_chars
-      '.packages' // when dart 2.10 is released this will no longer be created.
+      '.packages', // when dart 2.10 is released this will no longer be created.
+      'README.md',
+      'pubspec.yaml',
+      'analysis_options.yaml',
+      'CHANGELOG.md',
+      'pubspec.lock',
+      join('.dart_tool', 'package_config.json'),
+      join('bin', scriptName),
     ]),
   );
 
@@ -89,5 +99,5 @@ void checkProjectStructure(String rootPath, String scriptName) {
     types: [Find.directory],
     includeHidden: true,
   ).forEach((line) => directories.add(p.basename(line)));
-  expect(directories, unorderedEquals(<String>['.dart_tool']));
+  expect(directories, unorderedEquals(<String>['.dart_tool', 'bin']));
 }

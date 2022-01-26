@@ -6,14 +6,13 @@ import 'package:dcli/src/util/parser.dart';
 import 'package:test/test.dart';
 
 String baseURl =
-    'https://raw.githubusercontent.com/bsutton/dcli/master/test/src/functions/fetch_downloads';
+    'https://github.com/noojee/dcli/raw/master/dcli/test/src/functions/fetch_downloads';
 String? testFile;
 void main() {
   group('Fetch Single', () {
     // Don't know how to test this as it writes directly to stdout.
     // Need some way to hook Stdout
     test('Fetch One', () {
-      //Settings().setVerbose(enabled: true);
       withTempDir((testRoot) {
         withTempFile(
           (sampleAac) {

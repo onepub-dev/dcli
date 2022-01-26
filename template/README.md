@@ -1,4 +1,5 @@
 This directory contains the templates used by dcli create
 
-Eventually you will be able to run
- dcli create --template cli_args.dart snake.dart
+To create a dcli project from a template use:
+
+dcli create --template=console-simple.dart snake.dart

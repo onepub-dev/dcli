@@ -1,5 +1,7 @@
 import 'dart:io';
 
+import 'package:dcli_core/dcli_core.dart' as core;
+import 'package:di_zone2/di_zone2.dart';
 import 'package:meta/meta.dart';
 
 import '../../../dcli.dart';
@@ -20,6 +22,9 @@ class InstallCommand extends Command {
     _QuietFlag(),
     _NoPrivilegesFlag()
   ];
+
+  /// During testing we want to install dcli from source.
+  static final activateFromSourceKey = ScopeKey<bool>();
 
   /// holds the set of flags passed to the compile command.
   Flags flagSet = Flags();
@@ -65,7 +70,7 @@ class InstallCommand extends Command {
     scriptIndex = i;
 
     if (subarguments.length != scriptIndex) {
-      throw InvalidArguments(
+      throw InvalidArgumentsException(
         "'dcli install' does not take any arguments. Found $subarguments",
       );
     }
@@ -73,7 +78,9 @@ class InstallCommand extends Command {
     _requirePrivileges = !flagSet.isSet(const _NoPrivilegesFlag());
 
     /// We need to be priviledged to create the dcli symlink
-    if (_requirePrivileges && Platform.isWindows && !shell.isPrivilegedUser) {
+    if (_requirePrivileges &&
+        core.Settings().isWindows &&
+        !shell.isPrivilegedUser) {
       _qprint(red(shell.privilegesRequiredMessage('dcli_install')));
       exit(1);
     }
@@ -113,19 +120,6 @@ class InstallCommand extends Command {
       _qprint(blue('Found existing install at: ${Settings().pathToDCli}.'));
     }
     _qprint('');
-
-    /// create the template directory.
-    if (!exists(Settings().pathToTemplate)) {
-      _qprint(
-        '${blue('Creating')} ${green('template')} '
-        '${blue('directory: ${Settings().pathToTemplate}.')}',
-      );
-    } else {
-      _qprint(
-        '${blue('Updating ${green('template')} ')}'
-        '${blue('directory: ${Settings().pathToTemplate}.')}',
-      );
-    }
 
     initTemplates();
 
@@ -234,7 +228,7 @@ class InstallCommand extends Command {
   /// We use the location of dart exe and add dcli symlink
   /// to the same location.
   void symlinkDCli(Shell shell, String dcliPath) {
-    if (!Platform.isWindows) {
+    if (!core.Settings().isWindows) {
       final linkPath = join(dirname(DartSdk().pathToDartExe!), 'dcli');
       if (Shell.current.isPrivilegedPasswordRequired && !isWritable(linkPath)) {
         print('Please enter the sudo password when prompted.');
@@ -266,7 +260,7 @@ class InstallCommand extends Command {
 
   void _fixPermissions(Shell shell) {
     if (shell.isPrivilegedUser) {
-      if (!Platform.isWindows) {
+      if (!core.Settings().isWindows) {
         final user = shell.loggedInUser;
         if (user != 'root') {
           'chown -R $user:$user ${Settings().pathToDCli}'.run;
@@ -280,14 +274,93 @@ class InstallCommand extends Command {
   /// the directory and copies the default scripts in.
   @visibleForTesting
   void initTemplates() {
-    if (!exists(Settings().pathToTemplate)) {
-      createDir(Settings().pathToTemplate, recursive: true);
-    }
+    initProjectTemplates();
+    initScriptTemplates();
 
     for (final resource in ResourceRegistry.resources.values) {
       if (resource.originalPath.startsWith('template')) {
         resource.unpack(join(Settings().pathToDCli, resource.originalPath));
       }
+    }
+  }
+
+  void initProjectTemplates() {
+    if (!exists(Settings().pathToTemplateProjectCustom)) {
+      createDir(Settings().pathToTemplateProjectCustom, recursive: true);
+    }
+
+    /// delete all non-custom project templates
+    find('*',
+            types: [Find.directory],
+            workingDirectory: Settings().pathToTemplateProject)
+        .forEach((dir) {
+      // dont' delete anything under custom.
+      if (!dir.startsWith(Settings().pathToTemplateProjectCustom)) {
+        /// as we are doing recursive delete we may have already
+        /// deleted this directory.
+        if (exists(dir)) {
+          deleteDir(dir);
+        }
+      }
+    });
+
+    /// create the template directory.
+    if (!exists(Settings().pathToTemplateProject)) {
+      _qprint(
+        '${blue('Creating')} ${green('project templates')} '
+        '${blue('directory: ${Settings().pathToTemplateProject}.')}',
+      );
+    } else {
+      _qprint(
+        '${blue('Updating ${green('project templates')} ')}'
+        '${blue('directory: ${Settings().pathToTemplateProject}.')}',
+      );
+    }
+
+    if (!exists(Settings().pathToTemplateProject)) {
+      createDir(Settings().pathToTemplateProject, recursive: true);
+    }
+
+    if (!exists(Settings().pathToTemplateProjectCustom)) {
+      createDir(Settings().pathToTemplateProjectCustom, recursive: true);
+    }
+  }
+
+  void initScriptTemplates() {
+    if (!exists(Settings().pathToTemplateScriptCustom)) {
+      createDir(Settings().pathToTemplateScriptCustom, recursive: true);
+    }
+
+    /// delete all non-custom script templates
+    find('*',
+            types: [Find.directory],
+            workingDirectory: Settings().pathToTemplateScript)
+        .forEach((dir) {
+      // dont' delete anything under custom.
+      if (!dir.startsWith(Settings().pathToTemplateScriptCustom)) {
+        deleteDir(dir);
+      }
+    });
+
+    /// create the template directory.
+    if (!exists(Settings().pathToTemplateProject)) {
+      _qprint(
+        '${blue('Creating')} ${green('script templates')} '
+        '${blue('directory: ${Settings().pathToTemplateScript}.')}',
+      );
+    } else {
+      _qprint(
+        '${blue('Updating ${green('script template')} ')}'
+        '${blue('directory: ${Settings().pathToTemplateScript}.')}',
+      );
+    }
+
+    if (!exists(Settings().pathToTemplateScript)) {
+      createDir(Settings().pathToTemplateScript, recursive: true);
+    }
+
+    if (!exists(Settings().pathToTemplateScriptCustom)) {
+      createDir(Settings().pathToTemplateScriptCustom, recursive: true);
     }
   }
 }
@@ -302,7 +375,7 @@ class _NoDartFlag extends Flag {
 
   @override
   String description() => '''
-Stops the install from installing dart as part of the install.
+      Stops the install from installing dart as part of the install.
       This option is for testing purposes.''';
 }
 
@@ -314,8 +387,8 @@ class _QuietFlag extends Flag {
   String get abbreviation => 'q';
 
   @override
-  String description() =>
-      '''Runs the install in quiet mode. Only errors are displayed''';
+  String description() => '''
+      Runs the install in quiet mode. Only errors are displayed''';
 }
 
 class _NoPrivilegesFlag extends Flag {
@@ -327,7 +400,7 @@ class _NoPrivilegesFlag extends Flag {
 
   @override
   String description() => '''
-Allows the install to be run without privileges. This flag is primarily used for unit testing.
+      Allows the install to be run without privileges. This flag is primarily used for unit testing.
       Some features will not be available if you run in this mode.''';
 }
 

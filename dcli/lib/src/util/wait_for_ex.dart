@@ -3,6 +3,8 @@
 import 'dart:async';
 import 'dart:cli' as cli;
 
+import 'package:logging/logging.dart';
+
 import '../../dcli.dart';
 
 /// Wraps the standard cli waitFor
@@ -31,7 +33,7 @@ T waitForEx<T>(Future<T> future) {
       exception = e.error as DCliException;
     } else {
       final merged = stackTrace.merge(microTaskStackTrace);
-      verbose(() => '''
+      Logger('dcli').severe(() => '''
 Rethrowing a non DCliException $e 
 $merged''');
 
@@ -59,8 +61,8 @@ $merged''');
 
     /// When dart 2.16 is released we can use this which fixes the stack
     /// properly
+    // Error.throwWithStackTrace(exception, merged);
 
-    /// Error.throwWithStackTrace(exception, merged);
     // 2.15
     throw exception..stackTrace = merged;
   }

@@ -1,4 +1,7 @@
+import 'package:di_zone2/di_zone2.dart';
+
 import '../../dcli.dart';
+import '../script/commands/install.dart';
 
 ///
 /// Installs dart on an apt base system.abstract
@@ -7,22 +10,23 @@ import '../../dcli.dart';
 class MacOSDCliInstaller {
   /// returns true if it needed to install dart.
   bool install({required bool installDart}) {
+    var installedDart = false;
+
     if (installDart) {
-      _installDart();
+      installedDart = _installDart();
     }
 
-    // TODO(bsutton): I've had to remove this for the moment due to https://github.com/dart-lang/sdk/issues/46255
-    // if (which('dart').notfound) {
-    //   // The normal dart detection process won't work here
-    //   // as dart is not on the path so for the moment we hard code it.
-    //   // CONSIDER a way of identifying where dart has been installed to.
-    //   '/usr/lib/dart/bin/dart pub global activate dcli'.run;
-    // } else {
-    //   DartSdk().globalActivate('dcli');
-    // }
+    // now activate dcli.
+    if (Scope.hasScopeKey(InstallCommand.activateFromSourceKey) &&
+        Scope.use(InstallCommand.activateFromSourceKey) == true) {
+      // If we are called from a unit test we do it from source
+      PubCache().globalActivateFromSource(DartProject.self.pathToProjectRoot);
+    } else {
+      /// activate from pub.dev
+      PubCache().globalActivate('dcli');
+    }
 
-    // we currently never install dart.
-    return false;
+    return installedDart;
   }
 
   bool _installDart() {

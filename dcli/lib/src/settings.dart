@@ -1,7 +1,8 @@
 import 'dart:io';
 
 import 'package:dcli_core/dcli_core.dart' as core;
-import 'package:meta/meta.dart';
+import 'package:di_zone2/di_zone2.dart';
+import 'package:logging/logging.dart';
 import 'package:path/path.dart' as p;
 
 import '../dcli.dart';
@@ -15,17 +16,25 @@ import 'version/version.g.dart';
 class Settings {
   /// Returns a singleton providing
   /// access to DCli settings.
-  factory Settings() => _self ??= Settings.init();
+  factory Settings() {
+    if (Scope.hasScopeKey(scopeKey)) {
+      return Scope.use(scopeKey);
+    } else {
+      return _self ??= Settings._internal();
+    }
+  }
 
-  /// Used internally be dcli to initialise
-  /// the settings.
-  ///
-  /// DO NOT CALL THIS METHOD!!!
-  Settings.init({
+  /// To use this method create a [Scope] and inject this
+  /// as a value into the scope.
+  factory Settings.forScope() => Settings._internal();
+
+  Settings._internal({
     this.appname = 'dcli',
   }) {
     version = packageVersion;
   }
+
+  static ScopeKey<Settings> scopeKey = ScopeKey<Settings>();
 
   static Settings? _self;
 
@@ -33,6 +42,15 @@ class Settings {
   static const templateDir = 'template';
 
   final InternalSettings _settings = InternalSettings();
+
+  /// True if you are running on a Mac.
+  bool get isMacOS => core.Settings().isMacOS;
+
+  /// True if you are running on a Linux system.
+  bool get isLinux => core.Settings().isLinux;
+
+  /// True if you are running on a Window system.
+  bool get isWindows => core.Settings().isWindows;
 
   /// The name of the DCli app. This will
   /// always be 'dcli'.
@@ -61,23 +79,14 @@ class Settings {
     return _scriptPath!;
   }
 
-  /// Used when unit testing and we are re-using
-  /// the current process.
-  @visibleForTesting
-  static void reset() {
-    _self = Settings.init();
-    _self!.selectedFlags.clear();
-    _self!._dcliPath = null;
-    _self!._dcliBinPath = null;
-  }
-
   /// The directory where we store all of dcli's
   /// configuration files.
   /// This will normally be ~/.dcli
   String get pathToDCli => _dcliPath ??= truepath(p.join(HOME, dcliDir));
 
-  /// When you run dcli compile -i <script> the compiled exe
+  /// When you run dcli compile -i `<script>` the compiled exe
   /// is moved to this path.
+  ///
   /// The dcliBinPath is added to the OS's path
   /// allowing the installed scripts to be run from anywhere.
   /// This will normally be ~/.dcli/bin
@@ -85,7 +94,23 @@ class Settings {
       _dcliBinPath ??= truepath(p.join(HOME, dcliDir, 'bin'));
 
   /// path to the dcli template directory.
+  @Deprecated('Use pathToTemplateScript or pathToTemplateProject')
   String get pathToTemplate => p.join(pathToDCli, templateDir);
+
+  /// path to the dcli template directory.
+  String get pathToTemplateProject =>
+      p.join(pathToDCli, templateDir, 'project');
+
+  /// Path to the directory where users can store their own custom templates
+  String get pathToTemplateProjectCustom =>
+      p.join(pathToDCli, templateDir, 'project', 'custom');
+
+  /// path to the dcli template directory.
+  String get pathToTemplateScript => p.join(pathToDCli, templateDir, 'script');
+
+  /// Path to the directory where users can store their own custom templates
+  String get pathToTemplateScriptCustom =>
+      p.join(pathToDCli, templateDir, 'script', 'custom');
 
   /// the list of global flags selected via the cli when dcli
   /// was started.
@@ -95,17 +120,19 @@ class Settings {
   /// dcli command line.
   /// e.g.
   /// dcli -v clean
-  bool get isVerbose => isFlagSet(VerboseFlag());
+  bool get isVerbose => core.Settings().isVerbose;
+
+  Logger get logger => Logger('dcli');
 
   /// Turns on verbose logging.
   void setVerbose({required bool enabled}) {
-    if (enabled) {
-      if (!isVerbose) {
-        setFlag(VerboseFlag());
-      }
-    } else {
-      _selectedFlags.remove(VerboseFlag().name);
-    }
+    core.Settings().setVerbose(enabled: enabled);
+  }
+
+  /// Logs a message to the console if the verbose
+  /// settings are on.
+  void verbose(String? string) {
+    core.Settings().verbose(string);
   }
 
   /// we consider dcli installed if the ~/.dcli directory
@@ -115,16 +142,6 @@ class Settings {
   /// returns the path to the file that we use to indicated
   /// that the install completed succesfully.
   String get installCompletedIndicator => join(pathToDCli, 'install_completed');
-
-  /// True if you are running on a Mac.
-  /// I'm so sorry.
-  bool get isMacOS => Platform.isMacOS;
-
-  /// True if you are running on a Linux system.
-  bool get isLinux => Platform.isLinux;
-
-  /// True if you are running on a Window system.
-  bool get isWindows => Platform.isWindows;
 
   /// A method to test with a specific global
   /// flag has been set.
@@ -145,18 +162,6 @@ class Settings {
   /// ```
   @Deprecated('use join')
   bool get isStackEmpty => _settings._isStackEmpty;
-
-  /// Logs a message to the console if the verbose
-  /// settings are on.
-  void verbose(String? string) {
-    if (isVerbose) {
-      if (VerboseFlag().hasOption) {
-        VerboseFlag().option.append(string!);
-      } else {
-        print(string);
-      }
-    }
-  }
 
   /// Used for unit testing dcli.
   /// Please look away.
@@ -181,12 +186,7 @@ class Settings {
 ///
 void verbose(String Function() callback) {
   if (Settings().isVerbose) {
-    final string = callback();
-    if (VerboseFlag().hasOption) {
-      VerboseFlag().option.append(string);
-    } else {
-      print(string);
-    }
+    Settings().verbose(callback());
   }
 }
 

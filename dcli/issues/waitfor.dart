@@ -24,7 +24,7 @@ Future<Process> startProcess() => Process.start(
       [],
     );
 
-void waitForMe(Future future) {
+void waitForMe(Future<void> future) {
   try {
     future
         //ignore: avoid_types_on_closure_parameters

@@ -3,7 +3,6 @@ import 'dart:io';
 import 'package:path/path.dart';
 
 import '../../dcli_core.dart';
-import '../util/logging.dart';
 
 ///
 /// Copies the file [from] to the path [to].
@@ -15,7 +14,10 @@ import '../util/logging.dart';
 /// [to] may be a directory in which case the [from] filename is
 /// used to construct the [to] files full path.
 ///
-/// The [to] file must not exists unless [overwrite] is set to true.
+/// If [to] is a file then the  file must not exist unless [overwrite]
+///  is set to true.
+///
+/// If [to] is a directory then the directory must exist.
 ///
 /// If [from] is a symlink we copy the file it links to rather than
 /// the symlink. This mimics the behaviour of gnu 'cp' command.

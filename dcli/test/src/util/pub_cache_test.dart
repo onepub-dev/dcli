@@ -1,18 +1,14 @@
-@Timeout(Duration(minutes: 5))
-import 'dart:io';
 import 'package:dcli/dcli.dart' hide equals;
+import 'package:di_zone2/di_zone2.dart';
 import 'package:pub_semver/pub_semver.dart';
 import 'package:test/test.dart';
+
+import 'test_scope.dart';
 
 void main() {
   test(
     'PubCache',
     () {
-      PubCache.reset();
-      Env.reset();
-
-      /// we don't necessarily have a HOME env in the test environment.
-      env['HOME'] = join('/home');
       if (Settings().isWindows) {
         expect(
           PubCache().pathToBin,
@@ -31,61 +27,69 @@ void main() {
   test(
     'PubCache - from ENV',
     () {
-      PubCache.reset();
-      Env.reset();
-
-      /// we don't necessarily have a HOME env in the test environment.
-      env['HOME'] = join('/home');
-      env['PUB_CACHE'] = join(Platform.pathSeparator, 'test_cache');
-      if (Settings().isWindows) {
-        expect(PubCache().pathToBin, equals(join(r'C:\test_cache', 'bin')));
-      } else {
-        expect(
-          PubCache().pathToBin,
-          equals(join(Platform.pathSeparator, 'test_cache', 'bin')),
-        );
-      }
+      withTestScope((outerTempDir) {
+        withEnvironment(() {
+          /// create a pub-cache using the test scope's HOME
+          Scope()
+            ..value(PubCache.scopeKey, PubCache.forScope())
+            ..run(() {
+              if (Settings().isWindows) {
+                expect(
+                    PubCache().pathToBin,
+                    equals(
+                        join(outerTempDir, 'test_cache', '.pub_cache', 'bin')));
+              } else {
+                expect(
+                  PubCache().pathToBin,
+                  equals(join(outerTempDir, 'test_cache', '.pub_cache', 'bin')),
+                );
+              }
+            });
+        }, environment: {
+          'PUB_CACHE': join(outerTempDir, 'test_cache', '.pub_cache')
+        });
+      });
     },
     skip: false,
   );
 
   test('PubCache - primaryVersion', () {
-    withTempDir((tempDir) {
-      PubCache.reset();
-      Env.reset();
+    withTestScope((tempDir) {
+      withEnvironment(() {
+        /// create a pub-cache using the test scope's HOME
+        Scope()
+          ..value(PubCache.scopeKey, PubCache.forScope())
+          ..run(() {
+            final pubCache = PubCache();
+            createDir(pubCache.pathToDartLang, recursive: true);
+            createDir(join(pubCache.pathToDartLang, 'dcli-1.0.0-beta.1'));
 
-      /// we don't necessarily have a HOME env in the test environment.
-      env['HOME'] = createDir(join(tempDir, 'home'));
-      env['PUB_CACHE'] = createDir(join(tempDir, 'test_cache'));
+            var primary = PubCache().findPrimaryVersion('dcli');
+            expect(primary, isNotNull);
+            expect(primary, equals(Version.parse('1.0.0-beta.1')));
+            expect(primary!.isPreRelease, isTrue);
 
-      final pubCache = PubCache();
-      createDir(pubCache.pathToDartLang, recursive: true);
-      createDir(join(pubCache.pathToDartLang, 'dcli-1.0.0-beta.1'));
+            createDir(join(pubCache.pathToDartLang, 'dcli-1.0.0'));
 
-      var primary = PubCache().findPrimaryVersion('dcli');
-      expect(primary, isNotNull);
-      expect(primary, equals(Version.parse('1.0.0-beta.1')));
-      expect(primary!.isPreRelease, isTrue);
+            primary = PubCache().findPrimaryVersion('dcli');
+            expect(primary, isNotNull);
+            expect(primary, equals(Version.parse('1.0.0')));
+            expect(primary!.isPreRelease, isFalse);
 
-      createDir(join(pubCache.pathToDartLang, 'dcli-1.0.0'));
+            createDir(join(pubCache.pathToDartLang, 'dcli-1.0.1'));
+            primary = PubCache().findPrimaryVersion('dcli');
+            expect(primary, isNotNull);
+            expect(primary, equals(Version.parse('1.0.1')));
+            expect(primary!.isPreRelease, isFalse);
 
-      primary = PubCache().findPrimaryVersion('dcli');
-      expect(primary, isNotNull);
-      expect(primary, equals(Version.parse('1.0.0')));
-      expect(primary!.isPreRelease, isFalse);
+            createDir(join(pubCache.pathToDartLang, 'dcli-2.0.0'));
+            createDir(join(pubCache.pathToDartLang, 'dcli-2.0.0-beta.1'));
+            primary = PubCache().findPrimaryVersion('dcli');
 
-      createDir(join(pubCache.pathToDartLang, 'dcli-1.0.1'));
-      primary = PubCache().findPrimaryVersion('dcli');
-      expect(primary, isNotNull);
-      expect(primary, equals(Version.parse('1.0.1')));
-      expect(primary!.isPreRelease, isFalse);
-
-      createDir(join(pubCache.pathToDartLang, 'dcli-2.0.0'));
-      createDir(join(pubCache.pathToDartLang, 'dcli-2.0.0-beta.1'));
-      primary = PubCache().findPrimaryVersion('dcli');
-
-      expect(primary, equals(Version.parse('2.0.0')));
-      expect(primary!.isPreRelease, isFalse);
+            expect(primary, equals(Version.parse('2.0.0')));
+            expect(primary!.isPreRelease, isFalse);
+          });
+      }, environment: {'PUB_CACHE': join(tempDir, '.pub-cache')});
     });
   });
 
@@ -99,9 +103,5 @@ void main() {
 
     /// cleanup
     PubCache().globalDeactivate('general');
-  });
-
-  test('DCli running from source', () {
-    expect(PubCache().isGloballyActivatedFromSource('dcli'), isTrue);
   });
 }

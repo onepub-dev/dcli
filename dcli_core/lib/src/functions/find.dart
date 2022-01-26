@@ -4,10 +4,9 @@ import 'dart:io';
 import 'package:path/path.dart';
 
 import '../../dcli_core.dart';
-import '../util/logging.dart';
 
-///
-typedef FindController<T> = LimitedStreamController<T>;
+/// TODO: restore after 2.16 is released.
+// typedef FindController<T> = LimitedStreamController<T>;
 
 ///
 /// Returns the list of files in the current and child
@@ -83,7 +82,7 @@ typedef FindController<T> = LimitedStreamController<T>;
 /// a controller in.
 Future<void> find(
   String pattern, {
-  required FindController<FindItem> progress,
+  required LimitedStreamController<FindItem> progress,
   bool caseSensitive = false,
   bool recursive = true,
   bool includeHidden = false,
@@ -106,7 +105,7 @@ class Find extends DCliFunction {
 
   Future<void> _find(
     String pattern, {
-    required FindController<FindItem> progress,
+    required LimitedStreamController<FindItem> progress,
     bool caseSensitive = false,
     bool recursive = true,
     String workingDirectory = '.',
@@ -146,7 +145,7 @@ class Find extends DCliFunction {
 
   Future<void> _innerFind(
     String pattern, {
-    required FindController<FindItem> progress,
+    required LimitedStreamController<FindItem> progress,
     bool caseSensitive = false,
     bool recursive = true,
     String workingDirectory = '.',
@@ -228,7 +227,7 @@ class Find extends DCliFunction {
     List<FileSystemEntityType> types,
     _PatternMatcher matcher,
     bool includeHidden,
-    FindController<FindItem> progress,
+    LimitedStreamController<FindItem> progress,
     List<FileSystemEntity?> nextLevel,
   ) async {
     // print('process Directory ${dircount++}');
@@ -316,7 +315,7 @@ class Find extends DCliFunction {
     await sub.cancel();
   }
 
-  int get _accessDenied => Platform.isWindows ? 5 : 13;
+  int get _accessDenied => Settings().isWindows ? 5 : 13;
 
   /// Checks if a hidden file is allowed.
   /// Non-hidden files are always allowed.

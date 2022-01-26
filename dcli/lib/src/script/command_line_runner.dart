@@ -1,6 +1,8 @@
+import 'package:dcli_core/dcli_core.dart' as core;
 import '../../dcli.dart';
 
 import 'commands/commands.dart';
+import 'commands/help.dart';
 import 'commands/run.dart';
 import 'flags.dart';
 
@@ -19,7 +21,7 @@ class CommandLineRunner {
   static CommandLineRunner? _self;
 
   /// the list of flags set on the command line.
-  static List<Flag> globalFlags = [VerboseFlag()];
+  static List<Flag> globalFlags = [VerboseFlag(), HelpFlag()];
 
   // Tracks the set of flags the users set on the command line.
   final Flags _flagsSet = Flags();
@@ -51,10 +53,14 @@ class CommandLineRunner {
             throw DuplicateOptionsException(argument);
           }
           _flagsSet.set(flag);
-          verbose(() => 'Setting flag: ${flag.name}');
           if (flag == VerboseFlag()) {
-            verbose(() => 'DCli Version: ${Settings().version}');
+            _configVerbose(flag);
+          } else if (flag == HelpFlag()) {
+            command = HelpCommand();
+            success = true;
+            break;
           }
+
           continue;
         } else {
           throw UnknownFlag(argument);
@@ -85,9 +91,22 @@ class CommandLineRunner {
       // for the command to process.
       exitCode = command!.run(Settings().selectedFlags, cmdArguments);
     } else {
-      throw InvalidArguments('Invalid arguments passed.');
+      throw InvalidArgumentsException('Invalid arguments passed.');
     }
     return exitCode;
+  }
+
+  void _configVerbose(Flag flag) {
+    verbose(() => 'Setting flag: ${flag.name}');
+    Settings().setVerbose(enabled: true);
+    verbose(() => 'DCli Version: ${Settings().version}');
+    final verboseFlag = flag as VerboseFlag;
+    if (verboseFlag.hasOption) {
+      core.Settings().captureLogOutput().listen((record) {
+        verboseFlag.option
+            .append('${record.level.name}: ${record.time}: ${record.message}');
+      });
+    }
   }
 }
 
@@ -130,6 +149,11 @@ class InvalidScript extends CommandLineException {
   InvalidScript(String message) : super(message);
 }
 
+class InvalidTemplateException extends CommandLineException {
+  /// Thrown when an invalid template is selected
+  InvalidTemplateException(String message) : super(message);
+}
+
 /// Thrown when an invalid command  is passed.
 class UnknownCommand extends CommandLineException {
   ///
@@ -150,7 +174,7 @@ class UnknownFlag extends CommandLineException {
 }
 
 /// Thrown when an invalid argument is passed to a command.
-class InvalidArguments extends CommandLineException {
+class InvalidArgumentsException extends CommandLineException {
   ///
-  InvalidArguments(String message) : super(message);
+  InvalidArgumentsException(String message) : super(message);
 }

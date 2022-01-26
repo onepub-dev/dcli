@@ -1,11 +1,9 @@
-import 'dart:io';
-
 import 'package:dcli_core/dcli_core.dart' as core;
 import 'package:posix/posix.dart' as _posix;
 
 import '../../dcli.dart';
 
-/// Provides similar functionality to the posix chown command.
+/// Sets the owner of a file on posix systems.
 ///
 /// Changes the user or group ownership of [path].
 ///
@@ -39,7 +37,7 @@ class _ChOwn extends core.DCliFunction {
     String? group,
     bool recursive = true,
   }) {
-    if (Platform.isWindows) {
+    if (Settings().isWindows) {
       return;
     }
 

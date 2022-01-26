@@ -20,7 +20,7 @@ class HelpCommand extends Command {
         Commands.asMap(Commands.applicationCommands),
       );
       if (command == null) {
-        throw InvalidArguments(
+        throw InvalidArgumentsException(
           'help expected a command name. Found $subarguments',
         );
       }
@@ -62,14 +62,14 @@ class HelpCommand extends Command {
     print('');
     print(green('Usage:'));
     print(
-      '  dcli [${blue('flag, flag...')}] '
-      '[${blue('command')}] [arguments...]',
+      '  ${orange('dcli')} [${blue('flag.')}..] '
+      '[${orange('command')}] [${blue('flag')}...] [arguments...]',
     );
     print('');
     print(blue('global flags:'));
     for (final flag in CommandLineRunner.globalFlags) {
       print('  ${blue(flag.usage())}');
-      print('      ${flag.description()}');
+      print(flag.description());
     }
 
     print('');
@@ -88,7 +88,7 @@ class HelpCommand extends Command {
         }
         first = false;
         print(blue('    ${flag.usage()}'));
-        print('      ${flag.description()}');
+        print(flag.description());
       });
       print('');
     }

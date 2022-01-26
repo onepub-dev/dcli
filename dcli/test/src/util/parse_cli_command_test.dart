@@ -2,9 +2,9 @@
 import 'dart:io';
 
 import 'package:dcli/dcli.dart' hide equals;
-
 import 'package:dcli/src/script/command_line_runner.dart';
 import 'package:dcli/src/util/parse_cli_command.dart';
+import 'package:dcli_core/dcli_core.dart' as core;
 import 'package:test/test.dart';
 
 import 'test_file_system.dart';
@@ -16,7 +16,7 @@ void main() {
 
       expect(
         () => ParsedCliCommand(test, pwd),
-        throwsA(isA<InvalidArguments>()),
+        throwsA(isA<InvalidArgumentsException>()),
       );
     });
     test('a', () {
@@ -242,7 +242,7 @@ void main() {
 
       expect(parsed.cmd, equals('ls'));
 
-      if (Platform.isWindows) {
+      if (core.Settings().isWindows) {
         expect(parsed.args, unorderedEquals(<String>['middle/*.txt']));
       } else {
         expect(
@@ -260,7 +260,7 @@ void main() {
     withTempDir((fsRoot) {
       final fs = TestDirectoryTree(fsRoot);
 
-      if (Platform.isWindows) {
+      if (core.Settings().isWindows) {
         final parsed = ParsedCliCommand('ls /git/dcli/*', fs.top);
 
         /// on windows we don't expand wild cards so there is no
@@ -284,7 +284,7 @@ void main() {
 
       expect(parsed.cmd, equals('ls'));
 
-      if (Platform.isWindows) {
+      if (core.Settings().isWindows) {
         expect(parsed.args, unorderedEquals(<String>[join(fs.top, '*.txt')]));
       } else {
         expect(

@@ -27,7 +27,7 @@ mixin WindowsMixin {
   }
 
   /// Called to install the windows specific dart/dcli components.
-  bool install({bool installDart = true}) =>
+  bool install({bool installDart = true, bool activate = true}) =>
       WindowsDCliInstaller().install(installDart: installDart);
 
   ///

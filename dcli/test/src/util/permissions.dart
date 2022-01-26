@@ -75,8 +75,8 @@ class Privileges {
 
   Privileges._internal() {
     // var path = 'libc.so.6';
-    // if (Platform.isMacOS) path = '/usr/lib/libSystem.dylib';
-    // if (Platform.isWindows) path = r'primitives_library\Debug\primitives.dll';
+    // if (Settings().isMacOS) path = '/usr/lib/libSystem.dylib';
+    // if (Settings().isWindows) path = r'primitives_library\Debug\primitives.dll';
     // dylib = DynamicLibrary.open(path);
 
     // realUID = _realUID;

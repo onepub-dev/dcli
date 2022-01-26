@@ -1,11 +1,8 @@
-import 'dart:io';
-
 import 'package:meta/meta.dart';
 import 'package:path/path.dart' as p;
 import 'package:path/path.dart';
 
 import '../../dcli_core.dart';
-import '../util/logging.dart';
 
 /// Provide a very simple mechanism to backup a single file.
 ///
@@ -386,7 +383,8 @@ String translateAbsolutePath(
   String? workingDirectory,
   p.Context? context,
 }) {
-  if (!Platform.isWindows) {
+  final windowsStyle = context != null && context.style == Style.windows;
+  if (!windowsStyle && !Settings().isWindows) {
     return absolutePath;
   }
 

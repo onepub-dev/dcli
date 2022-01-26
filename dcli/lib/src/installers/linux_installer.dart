@@ -1,4 +1,7 @@
+import 'package:di_zone2/di_zone2.dart';
+
 import '../../dcli.dart';
+import '../script/commands/install.dart';
 import '../shell/shell_detection.dart';
 
 ///
@@ -8,15 +11,21 @@ import '../shell/shell_detection.dart';
 class LinuxDCliInstaller {
   /// returns true if it needed to install dart.
   bool install({required bool installDart}) {
-    const installedDart = false;
+    var installedDart = false;
 
     if (installDart) {
-      _installDart();
+      installedDart = _installDart();
     }
 
     // now activate dcli.
-    PubCache().globalActivate('dcli');
-
+    if (Scope.hasScopeKey(InstallCommand.activateFromSourceKey) &&
+        Scope.use(InstallCommand.activateFromSourceKey) == true) {
+      // If we are called from a unit test we do it from source
+      PubCache().globalActivateFromSource(DartProject.self.pathToProjectRoot);
+    } else {
+      /// activate from pub.dev
+      PubCache().globalActivate('dcli');
+    }
     // // also need to install it for the root user
     // // as root must have its own copy of .pub-cache otherwise
     // // if it updates .pub-cache of a user the user won't be able
