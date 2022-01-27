@@ -4,6 +4,7 @@ import 'package:archive/archive.dart';
 import 'package:dcli_core/dcli_core.dart' as core;
 import 'package:meta/meta.dart';
 import 'package:pub_semver/pub_semver.dart';
+import 'package:system_info2/system_info2.dart';
 
 import '../../dcli.dart';
 import '../../posix.dart' as posix;
@@ -403,8 +404,13 @@ class DartSdk {
   // List<String> fetchVersions() {}
 
   String _fetchDartSdk() {
+    var architechture = SysInfo.kernelArchitecture.toLowerCase();
+
+    if (architechture == 'amd64' || architechture == 'x86_64') {
+      architechture = 'x64';
+    }
+
     // final bitness = SysInfo.kernelBitness;
-    const architechture = 'x64';
     // if (bitness == 32) {
     //   architechture = 'ia32';
     // }

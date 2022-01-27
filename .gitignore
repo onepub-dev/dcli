@@ -18,3 +18,4 @@ dcli/test/test_script/general/bin/head
 dcli/test/test_script/general/bin/ls
 dcli/test/test_script/general/bin/tail
 dcli/test/test_script/general/bin/touch
+template/basic/.packages
