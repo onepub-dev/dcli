@@ -1,8 +1,8 @@
 import 'dart:io';
 
 import 'package:dcli_core/dcli_core.dart' as core;
-import 'package:di_zone2/di_zone2.dart';
 import 'package:meta/meta.dart';
+import 'package:scope/scope.dart';
 
 import '../../../dcli.dart';
 import '../../dcli/resource/generated/resource_registry.g.dart';
@@ -246,7 +246,7 @@ class InstallCommand extends Command {
   }
 
   @override
-  String description() =>
+  String description({bool extended = false}) =>
       """Running 'dcli install' completes the installation of dcli.""";
 
   @override

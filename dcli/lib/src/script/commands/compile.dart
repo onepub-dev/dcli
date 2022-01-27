@@ -138,7 +138,7 @@ class CompileCommand extends Command {
   }
 
   @override
-  String description() => '''
+  String description({bool extended = false}) => '''
 Compiles the given list of scripts using dart's native compiler. 
    Only required if you want super fast execution.
    If no scripts are passed then all scripts in the current directory are compiled.''';

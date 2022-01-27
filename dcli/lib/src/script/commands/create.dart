@@ -128,7 +128,8 @@ class CreateCommand extends Command {
   }
 
   @override
-  String description() => 'Creates a script or project from a template.';
+  String description({bool extended = false}) =>
+      'Creates a script or project from a template.';
 
   @override
   String usage() => 'create --list | '

@@ -54,7 +54,7 @@ class WarmupCommand extends Command {
   String usage() => 'warmup [<project path>]';
 
   @override
-  String description() => '''
+  String description({bool extended = false}) => '''
 Runs pub get on the given project.
    If no directory is passed then the current directory is warmed up.''';
 

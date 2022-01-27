@@ -44,7 +44,7 @@ class VersionCommand extends Command {
   }
 
   @override
-  String description() =>
+  String description({bool extended = false}) =>
       """Running 'dcli version' displays the dcli version and path.""";
 
   @override
