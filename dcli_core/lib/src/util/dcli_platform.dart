@@ -1,6 +1,6 @@
 import 'dart:io';
 
-import 'package:di_zone2/di_zone2.dart';
+import 'package:scope/scope.dart';
 
 /// [DCliPlatform] exists so we can scope
 /// Platform in unit tests to return non-standard results

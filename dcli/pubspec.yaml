@@ -17,7 +17,6 @@ dependencies:
   csv: ^5.0.1
   dart_console: ^1.0.0
   dcli_core: 0.0.6
-  di_zone2: ^1.0.1
   equatable: ^2.0.0
   ffi: ^1.1.1
   file: ^6.1.0
@@ -30,8 +29,10 @@ dependencies:
   posix: ^3.0.0
   pub_semver: ^2.0.0
   pubspec: ^2.0.0
+  scope: ^2.2.1
   settings_yaml: ^3.3.1
   stacktrace_impl: ^2.3.0
+  system_info2: ^2.0.3
   uuid: ^3.0.0
   validators2: ^3.0.0
   win32: ^2.1.0

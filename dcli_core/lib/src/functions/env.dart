@@ -2,8 +2,8 @@ import 'dart:convert';
 import 'dart:io';
 
 import 'package:collection/collection.dart';
-import 'package:di_zone2/di_zone2.dart';
 import 'package:path/path.dart';
+import 'package:scope/scope.dart';
 
 import '../settings.dart';
 import '../util/dcli_exception.dart';

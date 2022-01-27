@@ -1,5 +1,5 @@
 import 'package:dcli_core/dcli_core.dart';
-import 'package:di_zone2/di_zone2.dart';
+import 'package:scope/scope.dart';
 
 import 'package:test/test.dart' as t;
 

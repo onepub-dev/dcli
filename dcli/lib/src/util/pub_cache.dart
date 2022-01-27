@@ -1,6 +1,6 @@
 import 'package:dcli_core/dcli_core.dart' as core;
-import 'package:di_zone2/di_zone2.dart';
 import 'package:pub_semver/pub_semver.dart';
+import 'package:scope/scope.dart';
 
 import '../../dcli.dart';
 
