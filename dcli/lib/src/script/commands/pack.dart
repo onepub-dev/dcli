@@ -66,16 +66,24 @@ class PackCommand extends Command {
   ///
   PackCommand() : super(_commandName);
 
+  static late final pathToPackYaml =
+      join(DartProject.self.pathToToolDir, 'dcli', 'pack.yaml');
+
   static const String _commandName = 'pack';
 
   /// [arguments] contains path to clean
   @override
   int run(List<Flag> selectedFlags, List<String> arguments) {
-    if (!exists(Resources().resourceRoot)) {
+    if (!exists(Resources().resourceRoot) && !exists(pathToPackYaml)) {
       throw InvalidArgumentsException(
-          'Unable to pack resources as the resource directory at '
+          'Unable to pack resources as neither a resource directory at '
           '${Resources().resourceRoot}'
-          " doesn't exist.");
+          ' nor $pathToPackYaml exists.');
+    }
+
+    if (!exists(Resources().resourceRoot)) {
+      print(orange('${Resources().resourceRoot} not found. '
+          'Only external resources will be packed'));
     }
 
     try {
@@ -88,12 +96,22 @@ class PackCommand extends Command {
   }
 
   @override
-  String usage() => 'pack';
+  String usage() => '''pack''';
 
   @override
-  String description() => '''
+  String description({bool extended = false}) {
+    var desc = '''
 Pack all files under the '${relative(Resources().resourceRoot)}' directory into a set of dart
    libraries which can be unpacked at install time.''';
+    if (extended) {
+      desc += '''
+      
+To include resources located outside of you package directory create tool/pack.yaml.
+https://dcli.noojee.dev/dcli-api/assets#external-resources
+''';
+    }
+    return desc;
+  }
 
   @override
   List<String> completion(String word) => [word];
