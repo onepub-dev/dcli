@@ -7,6 +7,7 @@ import 'package:async/async.dart';
 import 'package:crypto/crypto.dart';
 import 'package:settings_yaml/settings_yaml.dart';
 
+import '../../dcli.dart';
 import '../script/commands/pack.dart';
 
 /// Packages a file as a dart library so it can be expanded
