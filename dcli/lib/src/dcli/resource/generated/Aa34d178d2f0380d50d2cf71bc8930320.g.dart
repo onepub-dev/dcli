@@ -2,11 +2,11 @@
 import 'package:dcli/dcli.dart';
 
 /// GENERATED -- GENERATED
-/// 
+///
 /// DO NOT MODIFIY
-/// 
+///
 /// This script is generated via [Resource.pack()].
-/// 
+///
 /// GENERATED - GENERATED
 
 class Aa34d178d2f0380d50d2cf71bc8930320 extends PackedResource {
@@ -21,20 +21,18 @@ class Aa34d178d2f0380d50d2cf71bc8930320 extends PackedResource {
   /// ```dart
   ///   calculateHash(pathToResource).hexEncode() == packResource.checksum
   /// ```
-  /// to compare the checksum of the local file with 
+  /// to compare the checksum of the local file with
   /// this checksum
   @override
-  String get checksum => 
+  String get checksum =>
       'ca7cb1fe6e78b2fac4f92eb6066941b0a105eae49dc30aca469ab9459dc333d7';
-  
+
   /// <package>/resources relative path to the original resource.
   @override
   String get originalPath => 'template/project/full/CHANGELOG.md';
-  
+
   @override
-  String get content => 
-      '''
+  String get content => '''
 IyAwLjAuMQ0KDQotIEluaXRpYWwgdmVyc2lvbi4NCg==
   ''';
-  
 }

@@ -1,3 +1,15 @@
+# 1.16.3-beta.1
+- attempted fix so that fetchsdk works on mac arm.
+- improved the pack command error messages when the resouce and/or pack.yaml files don't exist. Fixed a bug where the pack command wouldn't run if there were only external resources to pack and the resource directory didn't exist.
+- added extended description option for when user gets details command help.
+- moved from di_zone2 to scope.
+- Removed Env.mock as we are now using Scopes.
+- Added verbose statement to calculateHash
+- Improved doco on FileSync
+- Added versbose statement to calculateHash
+- Tweaked the menu defaultOption error when it can't find a match to call toString on the default option.
+- moved chmod and chown libraries into posix directory.
+
 # 1.16.2
 - Cleaned up the logic around how we get the DartSdk version. DartSdk().version no longer returns null but will throw a DCliException if it can parse the dart sdk version - which should never happen.
 
