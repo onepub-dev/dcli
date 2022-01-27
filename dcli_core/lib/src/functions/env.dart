@@ -368,12 +368,6 @@ class Env extends DCliFunction {
   }
 
   String _toEncodable(Object? object) => object.toString();
-
-  /// Used in unit tests to mock the Env class.
-  // ignore: avoid_setters_without_getters
-  static set mock(Env mockEnv) {
-    _self = mockEnv;
-  }
 }
 
 /// Creates a environment that is contained to the scope
