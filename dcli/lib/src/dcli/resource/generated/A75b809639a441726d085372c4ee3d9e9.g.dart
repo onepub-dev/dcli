@@ -2,11 +2,11 @@
 import 'package:dcli/dcli.dart';
 
 /// GENERATED -- GENERATED
-///
+/// 
 /// DO NOT MODIFIY
-///
+/// 
 /// This script is generated via [Resource.pack()].
-///
+/// 
 /// GENERATED - GENERATED
 
 class A75b809639a441726d085372c4ee3d9e9 extends PackedResource {
@@ -21,19 +21,21 @@ class A75b809639a441726d085372c4ee3d9e9 extends PackedResource {
   /// ```dart
   ///   calculateHash(pathToResource).hexEncode() == packResource.checksum
   /// ```
-  /// to compare the checksum of the local file with
+  /// to compare the checksum of the local file with 
   /// this checksum
   @override
-  String get checksum =>
+  String get checksum => 
       '62687f26ffcd319b9828ce1672265e2e62233fac362b1f2049e6a959c6ad01dd';
-
+  
   /// <package>/resources relative path to the original resource.
   @override
   String get originalPath => 'template/project/full/lib/full.dart';
-
+  
   @override
-  String get content => '''
+  String get content => 
+      '''
 aW1wb3J0ICdwYWNrYWdlOmRjbGkvZGNsaS5kYXJ0JzsKClN0cmluZyBnZXROYW1lKCkgPT4gYXNrKCdF
 bnRlciB5b3VyIG5hbWUnLCBkZWZhdWx0VmFsdWU6ICdkY2xpJyk7Cg==
   ''';
+  
 }
