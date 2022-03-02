@@ -1,9 +1,9 @@
 import 'dart:io';
 
 import 'package:dcli_core/dcli_core.dart' as core;
-import 'package:di_zone2/di_zone2.dart';
 import 'package:logging/logging.dart';
 import 'package:path/path.dart' as p;
+import 'package:scope/scope.dart';
 
 import '../dcli.dart';
 import 'script/flags.dart';

@@ -1,8 +1,8 @@
 /// barrel file for posix specific functions.
 library posix;
 
-export 'src/functions/chmod.dart' show chmod, ChModException;
-export 'src/functions/chown.dart' show chown, ChOwnException;
+export 'src/posix/chmod.dart' show chmod, ChModException;
+export 'src/posix/chown.dart' show chown, ChOwnException;
 export 'src/shell/ash_shell.dart';
 export 'src/shell/bash_shell.dart';
 export 'src/shell/dash_shell.dart';
