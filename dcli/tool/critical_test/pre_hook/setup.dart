@@ -42,6 +42,9 @@ void main(List<String> args) {
     PubCache().globalActivate('dcli_unit_tester');
   }
 
+  // warm up the dcli project
+  DartProject.self.warmup();
+
   /// warm up all test packages.
   for (final pubspec
       in find('pubspec.yaml', workingDirectory: projectRoot).toList()) {
