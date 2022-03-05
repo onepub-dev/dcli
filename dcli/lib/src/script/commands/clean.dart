@@ -56,7 +56,7 @@ class CleanCommand extends Command {
   String usage() => 'clean [<project path>]';
 
   @override
-  String description() => '''
+  String description({bool extended = false}) => '''
 Removes all build artfiacts.
    If no directory is passed then the current directory is cleaned''';
 

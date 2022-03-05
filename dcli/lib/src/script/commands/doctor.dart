@@ -193,7 +193,7 @@ class DoctorCommand extends Command {
   }
 
   @override
-  String description() => """
+  String description({bool extended = false}) => """
 Running 'dcli doctor' provides diagnostic information on your install 
    and optionally a specific script.""";
 

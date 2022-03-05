@@ -71,7 +71,7 @@ abstract class Command {
   /// returns detailed description of what the command does
   /// which may be formatted across multiple lines.
   /// Each line of the text should be indented by four spaces.
-  String description();
+  String description({bool extended});
 
   /// Returns the list of flags supported by this command
   List<Flag> flags();

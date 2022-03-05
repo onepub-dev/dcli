@@ -8,6 +8,7 @@ import 'package:crypto/crypto.dart';
 import 'package:settings_yaml/settings_yaml.dart';
 
 import '../../dcli.dart';
+import '../script/commands/pack.dart';
 
 /// Packages a file as a dart library so it can be expanded
 /// during the install process.
@@ -57,8 +58,6 @@ class Resources {
   /// production system.
   ///
   void pack() {
-    final resources = find('*', workingDirectory: resourceRoot).toList();
-
     /// clear out an old generated files
     /// as we use UUIDs if we didn't do this the
     /// directory would keep growing.
@@ -66,6 +65,11 @@ class Resources {
       deleteDir(generatedRoot);
     }
     createDir(generatedRoot, recursive: true);
+    var resources = <String>[];
+
+    if (exists(resourceRoot)) {
+      resources = find('*', workingDirectory: resourceRoot).toList();
+    }
 
     final packedResources = _packResources(resources);
     _checkForDuplicates(packedResources);
@@ -282,8 +286,7 @@ class ResourceRegistry {
   List<_Resource> _packExternalResources() {
     final resources = <_Resource>[];
 
-    final pathToPackYaml =
-        join(DartProject.self.pathToToolDir, 'dcli', 'pack.yaml');
+    final pathToPackYaml = PackCommand.pathToPackYaml;
     if (!exists(pathToPackYaml)) {
       print(orange('No $pathToPackYaml found'));
       return resources;

@@ -24,7 +24,8 @@ class HelpCommand extends Command {
           'help expected a command name. Found $subarguments',
         );
       }
-      print(command.usage());
+      print(green('dcli ${command.usage()}'));
+      print(command.description(extended: true));
     } else {
       _printUsage();
     }
@@ -32,7 +33,7 @@ class HelpCommand extends Command {
   }
 
   @override
-  String description() =>
+  String description({bool extended = false}) =>
       "Displays the usage message | Display the command's usage message.";
 
   @override
