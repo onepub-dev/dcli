@@ -115,11 +115,11 @@ class Resources {
 import 'package:dcli/dcli.dart';
 
 /// GENERATED -- GENERATED
-/// 
+///
 /// DO NOT MODIFIY
-/// 
+///
 /// This script is generated via [Resource.pack()].
-/// 
+///
 /// GENERATED - GENERATED
 
 class $className extends PackedResource {
@@ -192,7 +192,6 @@ import 'package:dcli/dcli.dart';
 /// GENERATED - GENERATED
 
 class ResourceRegistry {
-
   /// Map of the packed files.
   /// Use the path of a packed file (relative to the resource directory)
   /// to access the packed resource and then call [PackedResource].unpack()
@@ -201,7 +200,7 @@ class ResourceRegistry {
   /// ResourceRegistry.resources['rules.yaml']
   ///     .unpack(join(HOME, '.mysettings', 'rules.yaml'));
   /// ```
-  static const resources = <String, PackedResource>{
+  static const resources = <String, PackedResource> {
 ''',
         );
       }
@@ -209,8 +208,8 @@ class ResourceRegistry {
       /// Write each resource into the map
       for (final resource in resources) {
         registryFile.write('''
-      '${resource.pathToMount.replaceAll(r'\', '/')}' : ${resource.className}(),
-      ''');
+    '${resource.pathToMount.replaceAll(r'\', '/')}' : ${resource.className}(),
+''');
       }
 
       /// Write tail
@@ -229,8 +228,7 @@ class ResourceRegistry {
       '''
 
   @override
-  String get content => 
-      \'''
+  String get content => \'''
 ''',
     );
 
@@ -250,8 +248,7 @@ class ResourceRegistry {
 
     /// Close the base64 encoded content string
     to.write('''
-  \'\'\';
-  ''');
+  \'\'\';''');
   }
 
   void _writeChecksum(IOSink to, String checksum) {
@@ -271,7 +268,7 @@ class ResourceRegistry {
   @override
   String get checksum =>
       '$checksum';
-  ''');
+''');
   }
 
   void _writePath(IOSink to, String pathToMount) {
@@ -280,7 +277,7 @@ class ResourceRegistry {
   /// <package>/resources relative path to the original resource.
   @override
   String get originalPath => '${pathToMount.replaceAll(r'\', '/')}';
-  ''');
+''');
   }
 
   List<_Resource> _packExternalResources() {
