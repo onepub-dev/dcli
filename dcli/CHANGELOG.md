@@ -1,3 +1,14 @@
+# 1.17.1-beta.1
+- BREAKING: moved sdk to a minimum of 2.16 to fix long outstanding issue with curtailed stack
+  traces when throwing through waitForEx.
+- BREAKING: moved chmod and chown to posix package.
+- added method to run dart doc to the DartSdk.
+- the unit test setup now runs pub get on dcli.
+- fixed a dependency in the compile test.
+- Added extended details to command line help messages. Improved pack error messages.
+- moved from di_zone2 to scoped package.
+- setup dcli up as a multi package project for pub_release.
+
 # 1.16.3-beta.1
 - attempted fix so that fetchsdk works on mac arm.
 - improved the pack command error messages when the resouce and/or pack.yaml files don't exist. Fixed a bug where the pack command wouldn't run if there were only external resources to pack and the resource directory didn't exist.

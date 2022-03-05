@@ -31,7 +31,6 @@ void main() {
       expect(basename(frame.sourceFile.path), equals('declarer.dart'));
       expect(frame.details,
           equals('Declarer.test.<anonymous closure>.<anonymous closure>'));
-
     }
   });
 

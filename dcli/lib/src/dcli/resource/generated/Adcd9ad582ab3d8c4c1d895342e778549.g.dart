@@ -2,11 +2,11 @@
 import 'package:dcli/dcli.dart';
 
 /// GENERATED -- GENERATED
-/// 
+///
 /// DO NOT MODIFIY
-/// 
+///
 /// This script is generated via [Resource.pack()].
-/// 
+///
 /// GENERATED - GENERATED
 
 class Adcd9ad582ab3d8c4c1d895342e778549 extends PackedResource {
@@ -21,19 +21,18 @@ class Adcd9ad582ab3d8c4c1d895342e778549 extends PackedResource {
   /// ```dart
   ///   calculateHash(pathToResource).hexEncode() == packResource.checksum
   /// ```
-  /// to compare the checksum of the local file with 
+  /// to compare the checksum of the local file with
   /// this checksum
   @override
-  String get checksum => 
+  String get checksum =>
       '635c6893891dc86b1d1ba615a01c027a4d4889c23035f7b93058076092cfc2e2';
-  
+
   /// <package>/resources relative path to the original resource.
   @override
   String get originalPath => 'template/script/pubspec.lock';
-  
+
   @override
-  String get content => 
-      '''
+  String get content => '''
 IyBHZW5lcmF0ZWQgYnkgcHViCiMgU2VlIGh0dHBzOi8vZGFydC5kZXYvdG9vbHMvcHViL2dsb3NzYXJ5
 I2xvY2tmaWxlCnBhY2thZ2VzOgogIGFyY2hpdmU6CiAgICBkZXBlbmRlbmN5OiB0cmFuc2l0aXZlCiAg
 ICBkZXNjcmlwdGlvbjoKICAgICAgbmFtZTogYXJjaGl2ZQogICAgICB1cmw6ICJodHRwczovL3B1Yi5k
@@ -162,5 +161,4 @@ OgogICAgICBuYW1lOiB5YW1sCiAgICAgIHVybDogImh0dHBzOi8vcHViLmRhcnRsYW5nLm9yZyIKICAg
 IHNvdXJjZTogaG9zdGVkCiAgICB2ZXJzaW9uOiAiMy4xLjAiCnNka3M6CiAgZGFydDogIj49Mi4xNS4x
 IDwzLjAuMCIK
   ''';
-  
 }
