@@ -3,8 +3,6 @@ import 'package:dcli/dcli.dart' hide equals;
 import 'package:dcli/src/script/dart_sdk.dart';
 import 'package:test/test.dart';
 
-import '../util/test_file_system.dart';
-
 void main() {
   test(
     'Detect Dart SDK',
@@ -24,18 +22,19 @@ void main() {
   test(
     'Install Dart Sdk',
     () {
-      TestFileSystem().withinZone((fs) {
-        final defaultPath = join(fs.uniquePath, 'dart-sdk');
+      withTempDir((tempPath) {
+        final defaultPath = join(tempPath, 'dart-sdk');
         final installPath = DartSdk().installFromArchive(defaultPath);
         setPathToDartSdk(installPath);
         print('installed To $installPath');
+        expect(exists(join(defaultPath, 'bin', DartSdk.dartExeName)), isTrue);
         expect(
           DartSdk().pathToDartExe != null && exists(DartSdk().pathToDartExe!),
           equals(true),
         );
       });
     },
-    skip: true,
+    skip: false,
   );
 
   test('Parse sdk version', () {
