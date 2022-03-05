@@ -4,6 +4,7 @@ import 'package:archive/archive.dart';
 import 'package:dcli_core/dcli_core.dart' as core;
 import 'package:meta/meta.dart';
 import 'package:pub_semver/pub_semver.dart';
+import 'package:system_info2/system_info2.dart';
 
 import '../../dcli.dart';
 import '../../posix.dart' as posix;
@@ -84,6 +85,10 @@ class DartSdk {
   /// From 2.10 onwards we use the dart compile option rather than dart2native.
   bool get useDartCommand =>
       getVersion().compareTo(Version.parse('2.10.0')) >= 0;
+
+  // from 2.16 onward the doc command was migrated into dart.
+  bool get useDartDocCommand =>
+      getVersion().compareTo(Version.parse('2.16.0')) < 0;
 
   /// Returns the DartSdk's version
   Version getVersion() {
@@ -259,6 +264,77 @@ class DartSdk {
     return progress;
   }
 
+  /// Runs the 'dart doc' command with the given arguments.
+  ///
+  /// [pathToProject] is the location of the dart project.
+  /// If [pathToProject] is not supplied the current working
+  /// directory is used.
+  ///
+  /// [pathToDoc] is the path where the generated docs
+  /// are to be saved. If not supplied then it is placed
+  /// under a 'doc/api' directory in [pathToProject].
+  /// [pathToDoc] may be an absolute or relative path.
+  /// A relative path is assumed to be relative to [pathToProject]
+  ///
+  /// By default stdout and stderr are sent to the console.
+  ///
+  /// Pass in [progress] to control the output.
+  /// If [nothrow] == true (defaults to false) then if the
+  /// call to pub get fails an exit code will be returned in the
+  /// [Progress] rather than throwing an exception.
+  Progress runDartDoc({
+    String? pathToProject,
+    String? pathToDoc,
+    List<String> args = const [],
+    Progress? progress,
+    bool nothrow = false,
+  }) {
+    pathToProject ??= pwd;
+    pathToDoc ??= join(pathToProject, 'doc/api');
+
+    progress ??= Progress.print();
+
+    // if [pathToDoc] is absolute then it will be used
+    // other wise it is treated as relative to pathToProject
+    final docPath = join(pathToProject, pathToDoc);
+
+    // ignore: parameter_assignments
+    args = ['--output-dir', docPath, ...args];
+
+    if (useDartDocCommand) {
+      final w = which('dartdoc');
+      if (w.notfound) {
+        throw DCliException(
+            "Unable to run 'dartdoc' as the exe is not on your path");
+      }
+      startFromArgs(
+        w.path!,
+        args,
+        nothrow: nothrow,
+        progress: progress,
+        workingDirectory: pathToProject,
+        extensionSearch: false,
+      );
+    } else {
+      if (pathToDartExe == null) {
+        throw DCliException(
+          "Unable to run 'dart doc' as the dart exe is not on your path",
+        );
+      }
+      startFromArgs(
+        pathToDartExe!,
+        ['doc', ...args, '.'],
+        nothrow: nothrow,
+        progress: progress,
+        workingDirectory: pathToProject,
+        extensionSearch: false,
+      );
+    }
+    verbose(() => 'dart doc ${args.toList().join(' ')} finished.');
+
+    return progress;
+  }
+
   /// Returns true if you need to run pub get.
   /// If there is no pubspec.yaml in the workingDirectory
   /// then an [PubspecNotFoundException] will be thrown.
@@ -403,8 +479,13 @@ class DartSdk {
   // List<String> fetchVersions() {}
 
   String _fetchDartSdk() {
+    var architechture = SysInfo.kernelArchitecture.toLowerCase();
+
+    if (architechture == 'amd64' || architechture == 'x86_64') {
+      architechture = 'x64';
+    }
+
     // final bitness = SysInfo.kernelBitness;
-    const architechture = 'x64';
     // if (bitness == 32) {
     //   architechture = 'ia32';
     // }
