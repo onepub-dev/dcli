@@ -184,11 +184,11 @@ import 'package:dcli/dcli.dart';
           '''
 
 /// GENERATED -- GENERATED
-/// 
+///
 /// DO NOT MODIFIY
-/// 
+///
 /// This script is generated via [Resource.pack()].
-/// 
+///
 /// GENERATED - GENERATED
 
 class ResourceRegistry {
@@ -266,10 +266,10 @@ class ResourceRegistry {
   /// ```dart
   ///   calculateHash(pathToResource).hexEncode() == packResource.checksum
   /// ```
-  /// to compare the checksum of the local file with 
+  /// to compare the checksum of the local file with
   /// this checksum
   @override
-  String get checksum => 
+  String get checksum =>
       '$checksum';
   ''');
   }

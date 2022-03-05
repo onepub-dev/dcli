@@ -1,3 +1,7 @@
+# 0.0.7
+changed to using scope package.
+
+
 # 0.0.6-beta.3
 - reverted to dart 2.12 
 
