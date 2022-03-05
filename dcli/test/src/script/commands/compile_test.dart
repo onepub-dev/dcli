@@ -14,7 +14,7 @@ void main() {
   });
 
   test('compile package ', () {
-    CompileCommand().compilePackage('onepub');
+    CompileCommand().compilePackage('dcli_unit_tester');
   });
 }
 
