@@ -1,6 +1,6 @@
 import 'package:dcli/dcli.dart' hide equals;
-import 'package:di_zone2/di_zone2.dart';
 import 'package:pub_semver/pub_semver.dart';
+import 'package:scope/scope.dart';
 import 'package:test/test.dart';
 
 import 'test_scope.dart';

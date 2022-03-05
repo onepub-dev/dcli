@@ -1,4 +1,4 @@
-import 'package:di_zone2/di_zone2.dart';
+import 'package:scope/scope.dart';
 
 import '../../../dcli.dart';
 import '../command_line_runner.dart';
@@ -61,7 +61,8 @@ class UpgradeCommand extends Command {
   String usage() => 'upgrade';
 
   @override
-  String description() => '''Upgrades dcli to the latest version.''';
+  String description({bool extended = false}) =>
+      '''Upgrades dcli to the latest version.''';
 
   @override
   List<String> completion(String word) => [];
