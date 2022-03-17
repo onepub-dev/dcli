@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:io';
 
 import 'package:crypto/crypto.dart';
@@ -155,7 +156,7 @@ Future<int> fileLength(String pathToFile) => File(pathToFile).length();
 /// unless you provide a [suffix] in which
 /// case the file name will be <uuid>.<suffix>
 Future<R> withTempFile<R>(
-  Future<R> Function(String tempFile) action, {
+  FutureOr<R> Function(String tempFile) action, {
   String? suffix,
   String? pathToTempDir,
   bool create = true,
