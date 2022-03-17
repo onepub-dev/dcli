@@ -67,7 +67,7 @@ Future<R> withTempDir<R>(R Function(String tempDir) action,
 /// finsihed with it.
 Future<String> createTempDir() async => _CreateDir().createDir(
       join(Directory.systemTemp.path, const Uuid().v4()),
-      recursive: false,
+      recursive: true,
     );
 
 class _CreateDir extends DCliFunction {
