@@ -1,3 +1,6 @@
+# 1.17.3
+- updated the dcli_crore dependency
+
 # 1.17.2
 - fixed createTempDir as it assumed that /tmp always exists which isn't the case in a docker container.
 
