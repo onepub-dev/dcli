@@ -1,3 +1,6 @@
+# 1.17.5
+- Fixed a bug in withTempDir in dcli_core. If the action was async withTempDir wouldn't wait for the action to complete.
+
 # 1.17.4
 - improved the doco formatting for createTempDir.
 
