@@ -62,6 +62,7 @@ Future<R> withTempDir<R>(R Function(String tempDir) action,
 }
 
 /// Creates a temporary directory under the system temp folder.
+///
 /// The temporary directory name is formed from a uuid.
 /// It is your responsiblity to delete the directory once you have
 /// finsihed with it.
