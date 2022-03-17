@@ -1,3 +1,6 @@
+# 1.17.2
+- fixed createTempDir as it assumed that /tmp always exists which isn't the case in a docker container.
+
 # 1.17.1-beta.1
 - BREAKING: moved sdk to a minimum of 2.16 to fix long outstanding issue with curtailed stack
   traces when throwing through waitForEx.
