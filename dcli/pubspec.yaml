@@ -9,7 +9,7 @@ environment:
 platforms: 
   linux:
   macos:
-  winows:
+  windows:
 dependencies: 
   archive: ^3.0.0
   args: ^2.0.0
