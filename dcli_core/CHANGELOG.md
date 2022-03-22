@@ -1,3 +1,9 @@
+# 1.18.0
+- Fixed a bug with the install when running in a docker container as it assumed it could alter the paths and we don't support that in a docker container.
+- minor improvements to the test docker cli. Added dart into the container
+- Added new method Shell.canModifyPath so you can check if a given shell supports modifying the PATH environment var. If you call any of the PATH related methods on a shel they will now all throw UnsupportedError if canModifyPath returns false so check that first.
+- Bump minDartSdk constraint to 2.16
+
 # 1.17.5
 - Fixed a bug in withTempDir. If the action was async withTempDir wouldn't wait for the action to complete.
 
