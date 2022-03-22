@@ -1,3 +1,6 @@
+# 1.18.0
+- Bump minDartSdk constraint to 2.16
+- Added platforms spec as pub.dev has it wrong.
 # 1.17.5
 - Fixed a bug in withTempDir in dcli_core. If the action was async withTempDir wouldn't wait for the action to complete.
 
