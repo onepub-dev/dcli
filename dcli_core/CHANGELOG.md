@@ -1,3 +1,6 @@
+# 1.18.1
+- second atttempt at a 1.18 release
+
 # 1.18.0
 - Fixed a bug with the install when running in a docker container as it assumed it could alter the paths and we don't support that in a docker container.
 - minor improvements to the test docker cli. Added dart into the container
