@@ -43,15 +43,22 @@ class ZshShell with ShellMixin, PosixShell {
   @override
   String get pathToStartScript => join(HOME, startScriptName);
 
+  /// Returns true if this shell supports
+  /// modifying the shell's PATH
+  @override
+  bool get canModifyPath => false;
+
   @override
   @Deprecated('Use appendToPATH')
-  bool addToPATH(String path) => false;
+  bool addToPATH(String path) => throw UnsupportedError('Not supported in zsh');
 
   @override
-  bool appendToPATH(String path) => false;
+  bool appendToPATH(String path) =>
+      throw UnsupportedError('Not supported in zsh');
 
   @override
-  bool prependToPATH(String path) => false;
+  bool prependToPATH(String path) =>
+      throw UnsupportedError('Not supported in zsh');
 
   @override
   void addFileAssocation(String dcliPath) {

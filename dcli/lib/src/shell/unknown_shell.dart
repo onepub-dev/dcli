@@ -27,6 +27,11 @@ class UnknownShell with ShellMixin {
   @override
   final int? pid;
 
+  /// Returns true if this shell supports
+  /// modifying the shell's PATH
+  @override
+  bool get canModifyPath => true;
+
   @override
   @Deprecated('Use appendToPATH')
   bool addToPATH(String path) => false;

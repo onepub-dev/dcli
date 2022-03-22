@@ -44,6 +44,10 @@ mixin WindowsMixin {
   /// able to escalate privileges.
   bool get isPrivilegedPasswordRequired => false;
 
+  /// Returns true if this shell supports
+  /// modifying the shell's PATH
+  bool get canModifyPath => true;
+
   /// Adds a path to the start script
   /// returns true if adding the path was successful
   @Deprecated('Use appendToPATH')

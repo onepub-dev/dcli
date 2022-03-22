@@ -44,6 +44,11 @@ class BashShell with ShellMixin, PosixShell {
     }
   }
 
+  /// Returns true if this shell supports
+  /// modifying the shell's PATH
+  @override
+  bool get canModifyPath => true;
+
   @override
   @Deprecated('Use appendToPATH')
   bool addToPATH(String path) => appendToPATH(path);

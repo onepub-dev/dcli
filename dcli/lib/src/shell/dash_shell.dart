@@ -26,15 +26,23 @@ class DashShell with ShellMixin, PosixShell {
     throw UnimplementedError();
   }
 
-  @Deprecated('User appendToPATH')
+  /// Returns true if this shell supports
+  /// modifying the shell's PATH
   @override
-  bool addToPATH(String path) => appendToPATH(path);
+  bool get canModifyPath => false;
 
   @override
-  bool appendToPATH(String path) => false;
+  @Deprecated('Use appendToPATH')
+  bool addToPATH(String path) =>
+      throw UnsupportedError('Not supported in dash');
 
   @override
-  bool prependToPATH(String path) => false;
+  bool appendToPATH(String path) =>
+      throw UnsupportedError('Not supported in dash');
+
+  @override
+  bool prependToPATH(String path) =>
+      throw UnsupportedError('Not supported in dash');
 
   @override
   bool get isCompletionInstalled => false;

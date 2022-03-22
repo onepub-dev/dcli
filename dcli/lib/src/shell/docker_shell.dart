@@ -59,6 +59,11 @@ class DockerShell with ShellMixin, PosixShell {
   void installTabCompletion({bool quiet = false}) =>
       throw UnsupportedError('Not supported in docker');
 
+  /// Returns true if this shell supports
+  /// modifying the shell's PATH
+  @override
+  bool get canModifyPath => false;
+
   @override
   @Deprecated('Use appendToPATH')
   bool addToPATH(String path) => appendToPATH(path);

@@ -31,6 +31,10 @@ abstract class Shell {
   /// The comparison is case insensitive.
   bool matchByName(String name);
 
+  /// Returns true if this shell supports
+  /// modifying the shell's PATH
+  bool get canModifyPath;
+
   /// Adds a path to the start script
   /// returns true if adding the path was successful
   @Deprecated('Use appendToPATH')
