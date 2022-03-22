@@ -136,7 +136,7 @@ class InstallCommand extends Command {
 
     final wasOnPath = Env().isOnPATH(binPath);
     // check if shell can add a path.
-    if (shell.appendToPATH(binPath)) {
+    if (shell.canModifyPath && shell.appendToPATH(binPath)) {
       if (!wasOnPath) {
         _qprint(
           orange(
