@@ -16,8 +16,10 @@ void main(List<String> args) {
   final runOnly = results['runOnly'] as bool;
 
   if (!runOnly) {
+    final dockerFilePath =
+        join(DartProject.self.pathToToolDir, 'docker', 'dev_dcli_cli.df');
     // mount the local dcli files from ..
-    'sudo docker build -f ./dev_dcli_cli.df -t dcli:dev_dcli_cli ..'.run;
+    'sudo docker build -f $dockerFilePath -t dcli:dev_dcli_cli .'.run;
   }
 
   'sudo docker run -it dcli:dev_dcli_cli /bin/bash'.run;
