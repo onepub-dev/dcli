@@ -1,3 +1,6 @@
+# 1.18.1
+- second atttempt at a 1.18 release
+
 # 1.18.0
 - Bump minDartSdk constraint to 2.16
 - Added platforms spec as pub.dev has it wrong.

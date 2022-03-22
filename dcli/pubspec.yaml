@@ -1,12 +1,11 @@
 name: dcli
-version: 1.18.0
+version: 1.18.1
 homepage: https://dcli.noojee.dev
 documentation: https://dcli.noojee.dev
 description: Dart console SDK - write console (cli) apps/scripts using dart.
 repository: https://github.com/noojee/dcli
 environment: 
   sdk: '>=2.16.0 <3.0.0'
-
 dependencies: 
   archive: ^3.0.0
   args: ^2.0.0
@@ -48,4 +47,3 @@ executables:
   dcli_complete: dcli_complete
   dcli_install: dcli_install
   dshell_upgrade: dshell_upgrade
-
