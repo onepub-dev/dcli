@@ -20,6 +20,19 @@ class PubCache {
 
   /// Use this ctor to alter the location of .pub-cache
   /// during testing.
+  /// ```dart
+  ///     withEnvironment(() {
+  ///   /// create a pub-cache using the test scope's HOME
+  ///   Scope()
+  ///     ..value(PubCache.scopeKey, PubCache.forScope())
+  ///     ..run(() {
+  ///         // do stuff
+  ///       });
+  ///     });
+  /// }, environment: {
+  ///   'PUB_CACHE': join(outerTempDir, 'test_cache', '.pub_cache')
+  /// });
+  ///
   factory PubCache.forScope() => PubCache._internal();
 
   PubCache._internal() {
