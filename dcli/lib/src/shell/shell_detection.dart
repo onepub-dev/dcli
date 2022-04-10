@@ -32,15 +32,15 @@ class ShellDetection {
   static final ShellDetection _shell = ShellDetection._internal();
 
   final _shells = <String, Shell Function(int? pid)>{
-    AshShell.shellName: (pid) => AshShell.withPid(pid),
-    CmdShell.shellName: (pid) => CmdShell.withPid(pid),
-    DashShell.shellName: (pid) => DashShell.withPid(pid),
-    BashShell.shellName: (pid) => BashShell.withPid(pid),
-    PowerShell.shellName: (pid) => PowerShell.withPid(pid),
-    ShShell.shellName: (pid) => ShShell.withPid(pid),
-    ZshShell.shellName: (pid) => ZshShell.withPid(pid),
-    FishShell.shellName: (pid) => FishShell.withPid(pid),
-    DockerShell.shellName: (pid) => DockerShell.withPid(pid),
+    AshShell.shellName: AshShell.withPid,
+    CmdShell.shellName: CmdShell.withPid,
+    DashShell.shellName: DashShell.withPid,
+    BashShell.shellName: BashShell.withPid,
+    PowerShell.shellName: PowerShell.withPid,
+    ShShell.shellName: ShShell.withPid,
+    ZshShell.shellName: ZshShell.withPid,
+    FishShell.shellName: FishShell.withPid,
+    DockerShell.shellName: DockerShell.withPid,
   };
 
   /// Attempts to identify the shell that
