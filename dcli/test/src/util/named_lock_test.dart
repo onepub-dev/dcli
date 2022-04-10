@@ -8,6 +8,7 @@ import 'dart:isolate';
 
 import 'package:async/async.dart';
 import 'package:dcli/dcli.dart' hide equals;
+import 'package:dcli_core/dcli_core.dart' as core;
 import 'package:test/test.dart';
 
 const port = 9003;
@@ -32,9 +33,9 @@ void main() {
   test(
     'withLock',
     () async {
-      await withTempDir(
+      await core.withTempDir(
         (fs) async {
-          await withTempFile((logFile) async {
+          await core.withTempFile((logFile) async {
             print('logfile: $logFile');
             logFile.truncate();
 
