@@ -1,3 +1,7 @@
+# 1.19.2
+- relaxed the posix dependency range.
+- fix for broken dependency between dcli and dcli_core due to bug in pub_release.
+
 # 1.19.1
 - Reverted to 2.12 base sdk to fix the FU with 17.14 stating it supports 2.12 when it doesn't.
 - Changes to dcli_unit_tester so it will run under dart 2.12
