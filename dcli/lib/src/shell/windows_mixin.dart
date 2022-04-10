@@ -124,38 +124,55 @@ mixin WindowsMixin {
 
   /// Returns true if the current process is running with elevated privileges
   /// e.g. Is running as an Administrator.
+  /// Revert to the lower version for 2.16
   bool get isPrivilegedUser {
-    var isElevated = false;
+    final currentPrincipal =
+        // ignore: lines_longer_than_80_chars
+        'New-Object Security.Principal.WindowsPrincipal([Security.Principal.WindowsIdentity]::GetCurrent())'
+            .firstLine;
+    verbose(() => 'currentPrinciple: $currentPrincipal');
+    final isPrivileged =
+        // ignore: lines_longer_than_80_chars
+        '$currentPrincipal.IsInRole([Security.Principal.WindowsBuiltInRole]::Administrator)'
+                .firstLine ??
+            'false';
+    verbose(() => 'isPrivileged: $isPrivileged');
 
-    withMemory<void, Uint32>(sizeOf<Uint32>(), (phToken) {
-      withMemory<void, Uint32>(sizeOf<Uint32>(), (pReturnedSize) {
-        withMemory<void, _TokenElevation>(sizeOf<_TokenElevation>(),
-            (pElevation) {
-          if (OpenProcessToken(
-                GetCurrentProcess(),
-                TOKEN_QUERY,
-                phToken.cast(),
-              ) ==
-              1) {
-            if (GetTokenInformation(
-                  phToken.value,
-                  TOKEN_INFORMATION_CLASS.TokenElevation,
-                  pElevation,
-                  sizeOf<_TokenElevation>(),
-                  pReturnedSize,
-                ) ==
-                1) {
-              isElevated = pElevation.ref.tokenIsElevated != 0;
-            }
-          }
-          if (phToken.value != 0) {
-            CloseHandle(phToken.value);
-          }
-        });
-      });
-    });
-    return isElevated;
+    return isPrivileged.toLowerCase() == 'true';
   }
+
+  // bool get isPrivilegedUser {
+  //   var isElevated = false;
+
+  //   withMemory<void, Uint32>(sizeOf<Uint32>(), (phToken) {
+  //     withMemory<void, Uint32>(sizeOf<Uint32>(), (pReturnedSize) {
+  //       withMemory<void, _TokenElevation>(sizeOf<_TokenElevation>(),
+  //           (pElevation) {
+  //         if (OpenProcessToken(
+  //               GetCurrentProcess(),
+  //               TOKEN_QUERY,
+  //               phToken.cast(),
+  //             ) ==
+  //             1) {
+  //           if (GetTokenInformation(
+  //                 phToken.value,
+  //                 TOKEN_INFORMATION_CLASS.TokenElevation,
+  //                 pElevation,
+  //                 sizeOf<_TokenElevation>(),
+  //                 pReturnedSize,
+  //               ) ==
+  //               1) {
+  //             isElevated = pElevation.ref.tokenIsElevated != 0;
+  //           }
+  //         }
+  //         if (phToken.value != 0) {
+  //           CloseHandle(phToken.value);
+  //         }
+  //       });
+  //     });
+  //   });
+  //   return isElevated;
+  // }
 
   /// Add a file association so that typing the name of a dart
   /// script on the cli launches dcli which in turn launches the script.

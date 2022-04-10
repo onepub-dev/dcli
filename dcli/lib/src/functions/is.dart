@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:dcli_core/dcli_core.dart' as core;
 import 'package:posix/posix.dart' as posix;
+import 'package:posix/src/simplified.dart' as posix;
 
 import '../../dcli.dart';
 
@@ -119,8 +120,48 @@ class _Is extends core.DCliFunction {
   static const writeBitMask = 0x2;
   static const executeBitMask = 0x1;
 
+  static const READ_BIT_MASK = 0x4;
+  static const WRITE_BIT_MASK = 0x2;
+  static const EXECUTE_BIT_MASK = 0x1;
+
   /// Checks if the user permission to act on the [path] (a file or directory)
   /// for the given permission bit mask. (read, write or execute)
+  // bool _checkPermission(String path, int permissionBitMask) {
+  //   var user = envs['USER'];
+
+  //   stat(path);
+  //   //e.g 755 tomcat bsutton
+  //  //  var stat = 'stat -L -c "%a %G %U" "$path"'.firstLine ?? '777 root root';
+
+  //   var parts = stat.split(' ');
+
+  //   var permissions = int.parse(parts[0], radix: 8);
+  //   var group = parts[1];
+  //   var owner = parts[2];
+
+  //   // var group = mode.substring(8,16);
+  //   // var owner = mode.substring(16,24);
+  //   var access = false;
+  //   //  if (( ($PERM & 0002) != 0 )); then
+  //   if ((permissions & permissionBitMask) != 0) {
+  //     // Everyone has write access
+  //     access = true;
+  //   } else if ((permissions & (permissionBitMask << 3)) != 0) {
+  //     // Some groups have write access
+  //     if (isMemberOfGroup(group)) {
+  //       access = true;
+  //     }
+  //   } else if ((permissions & (permissionBitMask << 6)) != 0) {
+  //     if (user == owner) {
+  //       access = true;
+  //     }
+  //   }
+  //   return access;
+  // }
+
+  // Checks if the user permission to act on the [path] (a file or directory)
+  // for the given permission bit mask. (read, write or execute)
+  // Requires Dart 2.16
   bool _checkPermission(String path, int permissionBitMask) {
     core.verbose(
       () => '_checkPermission: ${truepath(path)} '
@@ -142,27 +183,7 @@ class _Is extends core.DCliFunction {
     bool group;
     bool owner;
 
-    try {
-      final _stat = posix.stat(path);
-      groupName = posix.getgrgid(_stat.gid).name;
-      ownerName = posix.getUserNameByUID(_stat.uid);
-      final mode = _stat.mode;
-      if (permissionBitMask == writeBitMask) {
-        other = mode.isOtherWritable;
-        group = mode.isGroupWritable;
-        owner = mode.isOwnerWritable;
-      } else if (permissionBitMask == readBitMask) {
-        other = mode.isOtherReadable;
-        group = mode.isGroupReadable;
-        owner = mode.isOwnerReadable;
-      } else if (permissionBitMask == executeBitMask) {
-        other = mode.isOtherExecutable;
-        group = mode.isGroupExecutable;
-        owner = mode.isOwnerExecutable;
-      } else {
-        throw posix.PosixException('Unexpected bitMask', -1);
-      }
-    } on posix.PosixException catch (_) {
+    
       //e.g 755 tomcat bsutton
       final stat = 'stat -L -c "%a %G %U" "$path"'.firstLine!;
       final parts = stat.split(' ');
@@ -173,8 +194,7 @@ class _Is extends core.DCliFunction {
       other = (permissions & permissionBitMask) != 0;
       group = (permissions & (permissionBitMask << 3)) != 0;
       owner = (permissions & (permissionBitMask << 6)) != 0;
-    }
-
+  
     var access = false;
     if (other) {
       // Everyone has write access

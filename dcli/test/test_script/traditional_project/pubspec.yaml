@@ -1,20 +1,22 @@
 name: traditional_project
 environment: 
-  sdk: '>=2.14.0 <3.0.0'
+  sdk: '>=2.12.0 <3.0.0'
 
 dependencies:
   dcli: 
     path: ../../../
-  
+  # dcli_core:
+  #   path: ../../../../dcli_core
+
 
 dev_dependencies:
   lint_hard: ^1.0.0
 
-dependency_overrides:
-  dcli:
-    path:
-      ../../..
-  
-     
+
+# dcli: 
+#   path: ../../../
+# dcli_core:
+#   path: ../../../../dcli_core
+
 
 

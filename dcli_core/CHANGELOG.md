@@ -1,3 +1,7 @@
+# 1.19.0
+- Release to fix an early FU where dcli was marked as supporting 2.12 when it required 2.16.
+ This version identifies as supporting 2.12 and acually supports 2.12. This is a transient release designed to fix
+ the package for users running dart prior to 2.16. A new version 1.20 will follow shortly after which reverts to requiring 2.16.
 # 1.18.1
 - second atttempt at a 1.18 release
 

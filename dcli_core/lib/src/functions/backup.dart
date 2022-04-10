@@ -2,9 +2,19 @@ import 'package:meta/meta.dart';
 import 'package:path/path.dart' as p;
 import 'package:path/path.dart';
 
-import '../../dcli_core.dart';
+import '../settings.dart';
+import '../util/dcli_exception.dart';
+import '../util/file.dart';
+import '../util/truepath.dart';
 import 'copy.dart';
+import 'copy_tree.dart';
+import 'create_dir.dart';
+import 'delete.dart';
+import 'delete_dir.dart';
+import 'is.dart';
 import 'move.dart';
+import 'move_tree.dart';
+import 'pwd.dart';
 
 /// Provide a very simple mechanism to backup a single file.
 ///

@@ -10,23 +10,24 @@ const int SMTO_ABORTIFHUNG = 0x0002;
 
 /// Send a message to all top level windows that an environment variable
 /// has changed.
+// Not available until 2.16
 void broadcastEnvironmentChange() {
-  final what = TEXT('Environment');
+//   final what = TEXT('Environment');
 
-  final pResult = calloc<Int32>(1);
-  try {
-    SendMessageTimeout(
-      HWND_BROADCAST,
-      WM_SETTINGCHANGE,
-      0,
-      what.address,
-      SMTO_ABORTIFHUNG,
-      5000,
-      pResult.cast(),
-    );
-  } finally {
-    calloc
-      ..free(what)
-      ..free(pResult);
-  }
+//   final pResult = calloc<Int32>(1);
+//   try {
+//     SendMessageTimeout(
+//       HWND_BROADCAST,
+//       WM_SETTINGCHANGE,
+//       0,
+//       what.address,
+//       SMTO_ABORTIFHUNG,
+//       5000,
+//       pResult.cast(),
+//     );
+//   } finally {
+//     calloc
+//       ..free(what)
+//       ..free(pResult);
+//   }
 }

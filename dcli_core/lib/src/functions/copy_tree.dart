@@ -2,8 +2,14 @@ import 'dart:async';
 
 import 'package:path/path.dart';
 
-import '../../dcli_core.dart';
+import '../settings.dart';
+import '../util/limited_stream_controller.dart';
+import '../util/truepath.dart';
 import 'copy.dart';
+import 'create_dir.dart';
+import 'dcli_function.dart';
+import 'find.dart';
+import 'is.dart';
 
 ///
 /// Copies the contents of the [from] directory to the
