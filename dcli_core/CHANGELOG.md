@@ -1,3 +1,6 @@
+# 1.20.1
+- second try at getting a working 2.12.0+ release
+
 # 1.19.2
 - relaxed the posix dependency range.
 - fix for broken dependency between dcli and dcli_core due to bug in pub_release.
