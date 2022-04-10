@@ -1,9 +1,6 @@
-import 'dart:ffi';
-
 import 'package:win32/win32.dart';
 
 import '../../dcli.dart';
-import '../ffi/with_memory.dart';
 import '../installers/windows_installer.dart';
 import '../platform/windows/registry.dart';
 
@@ -307,9 +304,9 @@ mixin WindowsMixin {
 
 /// Native Windows stucture used to get the elevated
 /// status of the current process.
-class _TokenElevation extends Struct {
-  /// A nonzero value if the token has elevated privileges;
-  /// otherwise, a zero value.
-  @Int32()
-  external int tokenIsElevated;
-}
+// class _TokenElevation extends Struct {
+//   /// A nonzero value if the token has elevated privileges;
+//   /// otherwise, a zero value.
+//   @Int32()
+//   external int tokenIsElevated;
+// }

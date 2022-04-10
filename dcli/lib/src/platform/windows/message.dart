@@ -1,7 +1,3 @@
-import 'dart:ffi';
-import 'package:ffi/ffi.dart';
-import 'package:win32/win32.dart';
-
 // ignore: public_member_api_docs,constant_identifier_names
 const int HWND_BROADCAST = 0xffff;
 

@@ -1,8 +1,6 @@
 import 'dart:io';
 
 import 'package:dcli_core/dcli_core.dart' as core;
-import 'package:posix/posix.dart' as posix;
-import 'package:posix/src/simplified.dart' as posix;
 
 import '../../dcli.dart';
 
@@ -119,10 +117,6 @@ class _Is extends core.DCliFunction {
   static const readBitMask = 0x4;
   static const writeBitMask = 0x2;
   static const executeBitMask = 0x1;
-
-  static const READ_BIT_MASK = 0x4;
-  static const WRITE_BIT_MASK = 0x2;
-  static const EXECUTE_BIT_MASK = 0x1;
 
   /// Checks if the user permission to act on the [path] (a file or directory)
   /// for the given permission bit mask. (read, write or execute)
