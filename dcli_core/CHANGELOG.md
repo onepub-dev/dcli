@@ -1,3 +1,11 @@
+# 1.19.1
+- Reverted to 2.12 base sdk to fix the FU with 17.14 stating it supports 2.12 when it doesn't.
+- Changes to dcli_unit_tester so it will run under dart 2.12
+- moved listen_issue into test where it belongs.
+- Improved doco on pub_cache forScope ctor.
+- Fixed import statements so they are compatible with dart 2.12 import requirements (2.12 doesn't support transitive imports).
+- Fixed dcli_core export statements so that they are compatible with dart 2.12 wrequirements.
+
 # 1.19.0
 - Release to fix an early FU where dcli was marked as supporting 2.12 when it required 2.16.
  This version identifies as supporting 2.12 and acually supports 2.12. This is a transient release designed to fix
