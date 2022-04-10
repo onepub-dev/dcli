@@ -200,27 +200,43 @@ class ResourceRegistry {
   /// ResourceRegistry.resources['rules.yaml']
   ///     .unpack(join(HOME, '.mysettings', 'rules.yaml'));
   /// ```
-  static const resources = <String, PackedResource> {
+  static const resources = <String, PackedResource>{
 ''',
         );
       }
 
       /// Write each resource into the map
       for (final resource in resources) {
+        final line = buildMapping(resource);
         registryFile.write('''
-    '${resource.pathToMount.replaceAll(r'\', '/')}' : ${resource.className}(),
+$line
 ''');
       }
 
       /// Write tail
       registryFile.write('''
-    };
-  }
-  ''');
+  };
+}
+''');
     } finally {
       waitForEx<dynamic>(registryFile.flush());
       registryFile.close();
     }
+  }
+
+  String buildMapping(_Resource resource) {
+    final oneline = "    '${resource.pathToMount.replaceAll(r'\', '/')}':"
+        ' ${resource.className}(),';
+
+    String line;
+    if (oneline.length <= 80) {
+      line = oneline;
+    } else {
+      line = '''
+    '${resource.pathToMount.replaceAll(r'\', '/')}':
+        ${resource.className}(),''';
+    }
+    return line;
   }
 
   void _writeContent(IOSink to, String pathToResource) {
