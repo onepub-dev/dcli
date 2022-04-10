@@ -1,3 +1,9 @@
+# 1.20.0
+- Cleaned up the resource_registry so the generated file matches the dart source formatter. This stops git seeing a change every time we release and run pack.
+- restored the 2.16 throwsWithStackTrace in wait_for_ex now we have fixed the 2.12 based release.
+- fixed the named_lock test by using the core withTempDir which is actually async.
+
+
 # 1.18.1
 - second atttempt at a 1.18 release
 
