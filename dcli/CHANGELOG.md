@@ -1,3 +1,6 @@
+# 1.20.1
+- second try at getting a working 2.12.0+ release
+
 # 1.19.2
 - corrected the dcli_core import version due to bug in pub_release. updated dlci_unit_tester to use latest version of dcli.
 
