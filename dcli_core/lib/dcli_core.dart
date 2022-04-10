@@ -1,10 +1,8 @@
 export 'package:stacktrace_impl/stacktrace_impl.dart';
 
-export '/src/functions/copy.dart' show copy, CopyException;
-export '/src/functions/move.dart' show move, MoveException;
-export '/src/functions/move_dir.dart' show moveDir, MoveDirException;
 export 'src/functions/backup.dart';
 export 'src/functions/cat.dart';
+export 'src/functions/copy.dart'; //  show copy, CopyException;
 export 'src/functions/copy_tree.dart' show copyTree, CopyTreeException;
 export 'src/functions/create_dir.dart'
     show createDir, createTempDir, withTempDir, CreateDirException;
@@ -16,6 +14,8 @@ export 'src/functions/env.dart'
 export 'src/functions/find.dart';
 export 'src/functions/head.dart';
 export 'src/functions/is.dart';
+export 'src/functions/move.dart' show move, MoveException;
+export 'src/functions/move_dir.dart' show moveDir, MoveDirException;
 export 'src/functions/move_tree.dart';
 export 'src/functions/pwd.dart' show pwd;
 export 'src/functions/tail.dart';
