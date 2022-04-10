@@ -3,6 +3,8 @@ import 'package:path/path.dart' as p;
 import 'package:path/path.dart';
 
 import '../../dcli_core.dart';
+import 'copy.dart';
+import 'move.dart';
 
 /// Provide a very simple mechanism to backup a single file.
 ///

@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:path/path.dart';
 
 import '../../dcli_core.dart';
+import 'copy.dart';
 
 ///
 /// Copies the contents of the [from] directory to the
