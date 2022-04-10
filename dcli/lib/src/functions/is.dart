@@ -183,18 +183,17 @@ class _Is extends core.DCliFunction {
     bool group;
     bool owner;
 
-    
-      //e.g 755 tomcat bsutton
-      final stat = 'stat -L -c "%a %G %U" "$path"'.firstLine!;
-      final parts = stat.split(' ');
-      permissions = int.parse(parts[0], radix: 8);
-      groupName = parts[1];
-      ownerName = parts[2];
-      //  if (( ($PERM & 0002) != 0 )); then
-      other = (permissions & permissionBitMask) != 0;
-      group = (permissions & (permissionBitMask << 3)) != 0;
-      owner = (permissions & (permissionBitMask << 6)) != 0;
-  
+    //e.g 755 tomcat bsutton
+    final stat = 'stat -L -c "%a %G %U" "$path"'.firstLine!;
+    final parts = stat.split(' ');
+    permissions = int.parse(parts[0], radix: 8);
+    groupName = parts[1];
+    ownerName = parts[2];
+    //  if (( ($PERM & 0002) != 0 )); then
+    other = (permissions & permissionBitMask) != 0;
+    group = (permissions & (permissionBitMask << 3)) != 0;
+    owner = (permissions & (permissionBitMask << 6)) != 0;
+
     var access = false;
     if (other) {
       // Everyone has write access
