@@ -192,7 +192,9 @@ class FindProgress extends InternalProgress {
       );
     } finally {
       /// under normal circumstances core.find closes the controller.
-      if (!controller.isClosed) waitForEx<void>(controller.close());
+      if (!controller.isClosed) {
+        waitForEx<void>(controller.close());
+      }
     }
   }
 
