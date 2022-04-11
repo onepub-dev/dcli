@@ -1,3 +1,6 @@
+# 1.30.1
+- Fixed for releasePriviliges/restorePriviliges/withPriviliges as they were not correctly  setting HOME, SHELL, USER or LOGNAME when transitioning between modes.
+
 # 1.30.0
 - Correctly set the base sdk to 2.16
 - restored the 2.16 throwsWithStackTrace in wait_for_ex now we have fixed the 2.12 based release.
