@@ -102,8 +102,11 @@ mixin PosixShell {
   }
 
   /// revert uid and gid to original user's id's
+  /// You should note that your PATH will still be
+  /// the SUDO PATH not your original user's PATH.
   void releasePrivileges() {
-    if (Shell.current.isPrivilegedUser && !core.Settings().isWindows) {
+    if (Shell.current.isPrivilegedUser) {
+      // get the user details pre-sudo starting.
       final sUID = env['SUDO_UID'];
       final gUID = env['SUDO_GID'];
 
@@ -111,8 +114,17 @@ mixin PosixShell {
       final originalUID = sUID != null ? int.tryParse(sUID) ?? 0 : 0;
       final originalGID = gUID != null ? int.tryParse(gUID) ?? 0 : 0;
 
+      // CONSIDER: throw an exception we can determin originalUser?
+      final originalUser = env['SUDO_USER'] ?? env['USER'] ?? '';
+
+      _resetUserEnvironment(originalUser, originalGID, originalUID);
+
+      initgroups(originalUser);
       setegid(originalGID);
       seteuid(originalUID);
+
+      verbose(() => 'gid: $originalGID ${getegid()}');
+      verbose(() => 'uid: $originalUID ${geteuid()}');
     }
   }
 
@@ -120,10 +132,20 @@ mixin PosixShell {
   /// been made then this command will restore
   /// those privileges
   void restorePrivileges() {
-    if (!core.Settings().isWindows) {
-      setegid(0);
-      seteuid(0);
-    }
+    _resetUserEnvironment('root', 0, 0);
+    setegid(0);
+    seteuid(0);
+    initgroups('root');
+  }
+
+  void _resetUserEnvironment(
+      String originalUser, int originalGID, int originalUID) {
+    final passwd = getPassword(originalUser);
+    env['HOME'] = passwd.homePathTo;
+    env['SHELL'] = passwd.shellPathTo;
+
+    env['USER'] = originalUser;
+    env['LOGNAME'] = originalUser;
   }
 
   /// Run [action] with root UID and gid
