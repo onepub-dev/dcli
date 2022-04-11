@@ -4,7 +4,6 @@ import 'package:path/path.dart' as p;
 import 'package:path/path.dart';
 
 import '../../dcli_core.dart';
-import 'copy.dart';
 
 ///
 /// Moves the file [from] to the location [to].
