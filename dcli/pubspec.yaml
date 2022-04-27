@@ -4,6 +4,12 @@ homepage: https://dcli.noojee.dev
 documentation: https://dcli.noojee.dev
 description: Dart console SDK - write console (cli) apps/scripts using dart.
 repository: https://github.com/noojee/dcli
+
+platform: 
+  linux:
+  macos:
+  windows:
+
 environment: 
   sdk: '>=2.16.0 <3.0.0'
 dependencies: 
