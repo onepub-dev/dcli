@@ -42,7 +42,7 @@ DCli is based on Dart which is a modern programming language that has a set of f
 * Cross platform supporting Linux/Windows/osx/arm
 
 # Example:
-```
+```dart
 #! /usr/bin/env dcli
 
 import 'dart:io';
