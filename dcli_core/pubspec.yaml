@@ -1,19 +1,11 @@
 name: dcli_core
-version: 1.30.0
+version: 1.30.2
 homepage: https://dcli.noojee.dev
 documentation: https://dcli.noojee.dev
 description: The core asyncronous functions used by dcli. DCli uses waitFor to eliminate async code in the DCli libraries which precludes DCli's usage in non-cli apps (e.g. you can't use it in flutter). The aim of dcli_core is to expose a significant set of the core dcli functions as async version so that dcli_core can be used in any project. DCli will then rely on dcli_core for core parts of its implemenation to avoid duplicating code between the two packages.
 repository: https://github.com/noojee/dcli_core
 environment: 
   sdk: '>=2.16.0 <3.0.0'
-
-platform: 
-  android:
-  ios:
-  linux:
-  macos:
-  windows:
-
 dependencies: 
   async: ^2.5.0
   circular_buffer: ^0.10.0
@@ -29,3 +21,9 @@ dev_dependencies:
   lint_hard: ^1.0.0
   synchronized: ^3.0.0
   test: ^1.0.0
+platform: 
+  android: null
+  ios: null
+  linux: null
+  macos: null
+  windows: null

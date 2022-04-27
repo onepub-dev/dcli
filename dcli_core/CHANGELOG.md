@@ -1,3 +1,9 @@
+# 1.30.2
+- Merge branch 'master' of github.com:bsutton/dcli
+- dart sdk version issue.
+- added platform tag into pubspec.yaml
+- Update README.md
+
 # 1.30.0
 - Correctly set the base sdk to 2.16
 - restored the 2.16 throwsWithStackTrace in wait_for_ex now we have fixed the 2.12 based release.
