@@ -47,7 +47,7 @@ executables:
   dcli_complete: dcli_complete
   dcli_install: dcli_install
   dshell_upgrade: dshell_upgrade
-platform: 
+platforms: 
   linux: null
   macos: null
   windows: null
