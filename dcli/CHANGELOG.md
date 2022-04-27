@@ -1,3 +1,5 @@
+# 1.30.2
+
 # 1.30.1
 - Fixed for releasePriviliges/restorePriviliges/withPriviliges as they were not correctly  setting HOME, SHELL, USER or LOGNAME when transitioning between modes.
 
