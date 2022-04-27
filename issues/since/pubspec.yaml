@@ -1,0 +1,10 @@
+name: since
+version: 0.0.1
+description: A since command-line application created by dcli
+environment: 
+  sdk: '>=2.12.0 <3.0.0'
+dependencies: 
+  dcli: ^1.15.5
+  stack_trace: ^1.10.0
+dev_dependencies: 
+  lint_hard: ^1.0.0
