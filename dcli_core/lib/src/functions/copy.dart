@@ -61,6 +61,11 @@ class _Copy extends DCliFunction {
       /// We do these checks only on failure
       /// so in the most common case (everything is correct)
       /// we don't waste cycles on unnecessary work.
+      if (isDirectory(from)) {
+        throw CopyException(
+            "The 'from' argument ${truepath(from)} is a directory. "
+            'Use copyTree instead.');
+      }
       if (!exists(from)) {
         throw CopyException(
             "The 'from' file ${truepath(from)} does not exists.");
