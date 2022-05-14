@@ -125,7 +125,7 @@ class _MoveTree extends DCliFunction {
     // ignore: avoid_catches_without_on_clauses
     catch (e) {
       throw MoveTreeException(
-        'An error occured copying directory ${truepath(from)} '
+        'An error occured moving directory ${truepath(from)} '
         'to ${truepath(to)}. Error: $e',
       );
     } finally {
@@ -134,7 +134,7 @@ class _MoveTree extends DCliFunction {
       }
     }
 
-    return Future.value(null);
+    return Future.value();
   }
 
   Future<void> _process(String pathToFile, bool Function(String file) filter,
@@ -160,7 +160,7 @@ class _MoveTree extends DCliFunction {
 
       await move(pathToFile, target, overwrite: overwrite);
       verbose(
-        () => 'moveTree copying: ${truepath(from)} -> ${truepath(target)}',
+        () => 'moveTree moving: ${truepath(from)} -> ${truepath(target)}',
       );
     }
   }
