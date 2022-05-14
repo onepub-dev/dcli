@@ -14,7 +14,14 @@ import '../../dcli_core.dart';
 ///
 /// The [replace] method returns the no. of lines modified.
 ///
-/// During the process a tempory file called [path].tmp is created
+/// The [existing] argument can be a simple String which or a regex.
+///
+/// ```dart
+/// replace(pathToFile, 'change me', 'changed');
+/// replace(pathToFile, RegExp(r'change \w+'), 'changed');
+/// ```
+///
+/// During the process a temporary file called [path].tmp is created
 /// in the directory of [path].
 /// The modified file is written to [path].tmp.
 /// Once the replacement completes successfully the file at [path]
