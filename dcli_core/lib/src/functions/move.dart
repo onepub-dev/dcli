@@ -60,7 +60,7 @@ class _Move extends DCliFunction {
     catch (e) {
       await _improveError(e, from, to);
     }
-    return Future.value(null);
+    return Future.value();
   }
 }
 
