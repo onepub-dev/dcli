@@ -45,12 +45,12 @@ class HelpCommand extends Command {
     print('dcli version $packageVersion');
     print('');
     print('For help with dcli options:');
-    print('  ${Settings().appname} ${help.usage()}');
+    print('  ${Settings.dcliAppName} ${help.usage()}');
     print('    ${help.description()}');
   }
 
   void _printUsage() {
-    final appname = Settings().appname;
+    const appname = Settings.dcliAppName;
     print(
       green(
         '$appname: Executes Dart scripts.  Version: ${Settings().version}',

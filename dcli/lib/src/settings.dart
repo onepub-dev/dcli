@@ -28,9 +28,7 @@ class Settings {
   /// as a value into the scope.
   factory Settings.forScope() => Settings._internal();
 
-  Settings._internal({
-    this.appname = 'dcli',
-  }) {
+  Settings._internal() {
     version = packageVersion;
   }
 
@@ -54,7 +52,7 @@ class Settings {
 
   /// The name of the DCli app. This will
   /// always be 'dcli'.
-  final String appname;
+  static const String dcliAppName = 'dcli';
 
   /// The DCli version you are running
   String? version;

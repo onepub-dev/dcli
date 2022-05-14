@@ -64,7 +64,7 @@ class RunCommand extends Command {
   @override
   String description({bool extended = false}) => '''
 Runs the given script. This command is provided for the sake of symmetry. 
-   The recommended method is to use the simplier form ${Settings().appname} <script path.dart>''';
+   The recommended method is to use the simplier form ${Settings.dcliAppName} <script path.dart>''';
 
   // CommandRun.fromScriptArg(String argument) {
   //   Script.validate(argument);
