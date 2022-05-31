@@ -18,8 +18,11 @@ OnePub allows you to privately share dart packages between your own projects or 
 
 Try it for free and publish your first private package in seconds.
 
-| <p>dart pub global activate onepub</p><p>onepub login</p><p>cd <code>&#x3C;my package></code></p><p>onepub private </p><p>dart pub publish</p> | ![](<.gitbook/assets/OnePub.dev Logo – reversed FA (1).svg>) |
-| ---------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------ |
+| <p>```dart pub global activate onepub</p><p>onepub login</p><p>cd <code>&#x3C;my package></code></p><p>onepub private </p><p>dart pub publish```</p> | ![](<.gitbook/assets/OnePub.dev Logo – reversed FA (1).svg>) |
+| ---------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------ |
+|                                                                                                                                                      |                                                              |
+|                                                                                                                                                      |                                                              |
+|                                                                                                                                                      |                                                              |
 
 
 
