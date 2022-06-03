@@ -4,6 +4,7 @@ import 'dart:io';
 
 import '../../dcli.dart';
 import '../../posix.dart';
+import '../version/version.g.dart';
 import 'command_line_runner.dart';
 import 'flags.dart';
 import 'pub_get.dart';
