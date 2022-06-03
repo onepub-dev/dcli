@@ -5,6 +5,7 @@ import 'dart:io';
 
 // ignore: unused_field
 enum _FilePermission { read, write, execute, setUid, setGid, sticky }
+
 // ignore: unused_field
 enum _FilePermissionRole { world, group, user }
 

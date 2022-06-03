@@ -1,4 +1,17 @@
+# 1.30.3
+- updated win32 version as causing compatibitlity problems on older sdks.
+- improved the project create from template logic so that we update the dcli version dependency to match the version of dcli the user is running.
+- experiemental work on delete_tree. Untested!
+- removed redundant argument.
+- corrected messages in move_tree that used the word copy instenad of move. Truely a 'copy' paste bug.
+- renamed Settings.appname to Settings.dcliAppName
+- improved the doco for replace.
+- Added a better error message for the copy command if the from path is a directory.
+
 # 1.30.2
+- dart sdk version issue.
+- added platform tag into pubspec.yaml
+- Update README.md
 
 # 1.30.1
 - Fixed for releasePriviliges/restorePriviliges/withPriviliges as they were not correctly  setting HOME, SHELL, USER or LOGNAME when transitioning between modes.
