@@ -1,9 +1,9 @@
 name: dcli
 version: 1.30.2
-homepage: https://dcli.noojee.dev
-documentation: https://dcli.noojee.dev
+homepage: https://dcli.onepub.dev
+documentation: https://dcli.onepub.dev
 description: Dart console SDK - write console (cli) apps/scripts using dart.
-repository: https://github.com/noojee/dcli
+repository: https://github.com/onepub-dev/dcli
 environment: 
   sdk: '>=2.16.0 <3.0.0'
 dependencies: 
@@ -35,7 +35,7 @@ dependencies:
   system_info2: ^2.0.3
   uuid: ^3.0.0
   validators2: ^3.0.0
-  win32: ^2.1.0
+  win32: ^2.6.1
   yaml: ^3.0.0
 dev_dependencies: 
   hex: ^0.2.0
