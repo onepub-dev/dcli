@@ -24,7 +24,8 @@ void main() {
         command = 'ls *.txt';
         final found = <String?>[];
 
-        // TODO(bsutton): the progress is a hack to get around the fact that for each is currently broken. https://github.com/bsutton/dcli/issues/144
+        // TODO(bsutton): the progress is a hack to get around the fact that
+        //for each is currently broken. https://github.com/onepub.dev/dcli/issues/144
         start(
           command,
           workingDirectory: path,

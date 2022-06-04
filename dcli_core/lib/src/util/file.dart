@@ -34,7 +34,7 @@ R withOpenFile<R>(
 /// to create a symlink.
 ///
 /// To enable developer mode see:
-/// https://bsutton.gitbook.io/dcli/getting-started/installing-on-windows
+/// https://dcli.onepub.dev/getting-started/installing-on-windows
 ///
 /// To check if your script is running as an administrator use:
 ///
@@ -55,7 +55,7 @@ Future<void> symlink(
 /// to delete a symlink.
 ///
 /// To enable developer mode see:
-/// https://bsutton.gitbook.io/dcli/getting-started/installing-on-windows
+/// https://dcli.onepub.dev/getting-started/installing-on-windows
 ///
 /// To check if your script is running as an administrator use:
 ///

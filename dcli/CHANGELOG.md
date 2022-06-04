@@ -1,3 +1,6 @@
+# 1.31.1
+- Fixed links to doco in readme
+
 # 1.31.0
 - upgraded to pubspec 2.2.0 to get the latest bug fixes.
 - excluded tests that require sudo.

@@ -240,7 +240,7 @@ class ParsedCliCommand {
   /// globs.
   /// Any argument that contains *, ? or [ will
   /// be expanded.
-  /// See https://github.com/bsutton/dcli/issues/56
+  /// See https://github.com/onepub-dev/dcli/issues/56
   ///
   List<String> expandGlobs(List<_QArg> qargs, String? workingDirectory) {
     final expanded = <String>[];
