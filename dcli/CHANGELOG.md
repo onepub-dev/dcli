@@ -1,3 +1,9 @@
+# 1.31.0
+- upgraded to pubspec 2.2.0 to get the latest bug fixes.
+- excluded tests that require sudo.
+- regenerated packed templates.
+- updated the template pubspec.yaml so the sdk contstraint matches dcli's.
+
 # 1.30.3
 - updated win32 version as causing compatibitlity problems on older sdks.
 - improved the project create from template logic so that we update the dcli version dependency to match the version of dcli the user is running.
