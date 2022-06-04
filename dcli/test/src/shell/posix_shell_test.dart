@@ -44,9 +44,6 @@ void main() {
                 runInShell: true,
                 terminal: true);
 
-            print('docker-compose running');
-            'docker-compose pull'.start(workingDirectory: '/opt/test');
-
             expect(eq(sudoGroups, userGroups), false);
 
             shell.withPrivileges(() {
@@ -65,7 +62,7 @@ void main() {
         //'groupdel $group'.run;
       }
     }, create: false);
-  });
+  }, tags: ['sudo']);
 }
 
 String name(String fileBasedName) =>

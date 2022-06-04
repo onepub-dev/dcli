@@ -9,5 +9,5 @@ void main() {
 
       chown(test, group: user, user: user);
     });
-  });
+  }, tags: ['sudo']);
 }
