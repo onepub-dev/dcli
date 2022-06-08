@@ -1,3 +1,7 @@
+# 1.31.2
+- Fixed a bug in the Settings.setVerbose(true) method. Each time setVerbose was called it added an additional logger resulting in multiple log lines per logging event. 
+- Fixed a bug in Settings.setVerbose(false) - it was cancelling all loggers even ones we hadn't created.
+
 # 1.31.0
 - upgraded to pubspec 2.2.0 to get the latest bug fixes.
 - excluded tests that require sudo.
