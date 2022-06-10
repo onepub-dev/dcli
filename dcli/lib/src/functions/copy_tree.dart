@@ -4,7 +4,6 @@
  * Written by Brett Sutton <bsutton@onepub.dev>, Jan 2022
  */
 
-
 import 'package:dcli_core/dcli_core.dart' as core;
 import 'package:dcli_core/dcli_core.dart' show CopyTreeException;
 
@@ -34,11 +33,14 @@ import '../../dcli.dart';
 /// be processed set [includeHidden] to true.
 ///
 /// You can select which files are to be copied by passing a [filter].
+/// To allow a file/directory be copyied the filter returns true.
+///
 /// If a [filter] isn't passed then all files are copied as per
 /// the [includeHidden] state.
 ///
 /// ```dart
 /// copyTree("/tmp/", "/tmp/new_dir", overwrite:true, includeHidden:true
+///    // allow only .dart files to be copied
 ///   , filter: (file) => extension(file) == 'dart');
 /// ```
 ///

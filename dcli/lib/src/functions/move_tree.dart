@@ -4,7 +4,6 @@
  * Written by Brett Sutton <bsutton@onepub.dev>, Jan 2022
  */
 
-
 import 'package:dcli_core/dcli_core.dart' as core;
 
 import '../../dcli.dart';
@@ -39,11 +38,15 @@ export 'package:dcli_core/dcli_core.dart' show MoveTreeException;
 /// be passed set [includeHidden] to true.
 ///
 /// You can select which files/directories are to be moved by passing a [filter].
+///
+/// If the filter returns true then the file/directory will be copied.
+///
 /// If a [filter] isn't passed then all files/directories are copied as per
 /// the [includeHidden] state.
 ///
 /// ```dart
 /// moveTree("/tmp/", "/tmp/new_dir", overwrite: true
+///    // allow only files ending in dart to be copied.
 ///   , filter: (file) => extension(file) == 'dart');
 /// ```
 ///
