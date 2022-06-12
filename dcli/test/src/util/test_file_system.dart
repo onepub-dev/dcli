@@ -5,8 +5,6 @@
  * Written by Brett Sutton <bsutton@onepub.dev>, Jan 2022
  */
 
-
-
 import 'dart:developer';
 import 'dart:io';
 import 'dart:isolate';
@@ -100,7 +98,7 @@ class TestFileSystem {
   /// The location of the test_script directory
   late String testScriptPath;
 
-  static late TestFileSystem common = TestFileSystem._internal();
+  static TestFileSystem common = TestFileSystem._internal();
 
   String tempFile({String? suffix}) => createTempFilename(suffix: suffix);
 

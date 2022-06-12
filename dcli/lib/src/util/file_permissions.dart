@@ -11,10 +11,10 @@ library has_permission;
 import 'dart:io';
 
 // ignore: unused_field
-enum _FilePermission { read, write, execute, setUid, setGid, sticky }
+enum FilePermission { read, write, execute, setUid, setGid, sticky }
 
 // ignore: unused_field
-enum _FilePermissionRole { world, group, user }
+enum FilePermissionRole { world, group, user }
 
 /// Checks if the given file or directory at [path]
 /// has the give permission for the given [role].
@@ -24,8 +24,8 @@ enum _FilePermissionRole { world, group, user }
 /// If the path doesn't exist then false is returned.
 bool hasPermission(
   String path,
-  _FilePermission permission, {
-  _FilePermissionRole role = _FilePermissionRole.world,
+  FilePermission permission, {
+  FilePermissionRole role = FilePermissionRole.world,
 }) {
   final stat = FileStat.statSync(path);
 
@@ -36,27 +36,27 @@ bool hasPermission(
 
 bool _hasPermission(
   FileStat stat,
-  _FilePermission permission, {
-  _FilePermissionRole role = _FilePermissionRole.world,
+  FilePermission permission, {
+  FilePermissionRole role = FilePermissionRole.world,
 }) {
   final bitIndex = _getPermissionBitIndex(permission, role);
   return (stat.mode & (1 << bitIndex)) != 0;
 }
 
 int _getPermissionBitIndex(
-  _FilePermission permission,
-  _FilePermissionRole role,
+  FilePermission permission,
+  FilePermissionRole role,
 ) {
   switch (permission) {
-    case _FilePermission.setUid:
+    case FilePermission.setUid:
       return 11;
-    case _FilePermission.setGid:
+    case FilePermission.setGid:
       return 10;
-    case _FilePermission.sticky:
+    case FilePermission.sticky:
       return 9;
-    case _FilePermission.read:
-    case _FilePermission.write:
-    case _FilePermission.execute:
+    case FilePermission.read:
+    case FilePermission.write:
+    case FilePermission.execute:
       return (role.index * 3) + permission.index;
   }
 }

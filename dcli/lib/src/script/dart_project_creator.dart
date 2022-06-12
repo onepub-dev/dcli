@@ -4,7 +4,6 @@
  * Written by Brett Sutton <bsutton@onepub.dev>, Jan 2022
  */
 
-
 part of dart_project;
 
 void _createProject(String pathToProject, String templateName) {
@@ -236,7 +235,7 @@ class TemplateFlag extends Flag {
   static const flagName = 'template';
   static final _self = TemplateFlag._internal();
 
-  static late final String defaultTemplatePath =
+  static final String defaultTemplatePath =
       join(Settings().pathToTemplateProject, defaultTemplateName);
 
   String? _templateName;

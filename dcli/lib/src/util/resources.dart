@@ -211,7 +211,7 @@ class ResourceRegistry {
 
       /// Write each resource into the map
       for (final resource in resources) {
-        final line = buildMapping(resource);
+        final line = _buildMapping(resource);
         registryFile.write('''
 $line
 ''');
@@ -228,7 +228,7 @@ $line
     }
   }
 
-  String buildMapping(_Resource resource) {
+  String _buildMapping(_Resource resource) {
     final oneline = "    '${resource.pathToMount.replaceAll(r'\', '/')}':"
         ' ${resource.className}(),';
 

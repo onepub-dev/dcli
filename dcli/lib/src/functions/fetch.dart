@@ -4,7 +4,6 @@
  * Written by Brett Sutton <bsutton@onepub.dev>, Jan 2022
  */
 
-
 import 'dart:async';
 import 'dart:io';
 
@@ -643,6 +642,7 @@ class FetchProgress {
 
   /// Formatter for [showBytes]
   @visibleForTesting
+  // ignore: library_private_types_in_public_api
   static _ProgressByteUpdate formatByteLine(FetchProgress progress) {
     _ProgressByteUpdate update;
     final status = _fixedWidthStatus(progress.status);

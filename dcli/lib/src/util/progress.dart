@@ -4,7 +4,6 @@
  * Written by Brett Sutton <bsutton@onepub.dev>, Jan 2022
  */
 
-
 import 'dart:async';
 import 'dart:io';
 
@@ -260,7 +259,7 @@ class Progress {
   ///  * [firstLine]
   ///  * [toParagraph]
   ///  * [forEach]
-  List<String> toList({final int skipLines = 0}) {
+  List<String> toList({int skipLines = 0}) {
     var _skipLines = skipLines;
 
     _captureStdout = true;
@@ -292,7 +291,7 @@ class Progress {
   /// See [firstLine]
   ///     [toList]
   ///     [forEach]
-  String toParagraph({final int skipLines = 0}) =>
+  String toParagraph({int skipLines = 0}) =>
       toList(skipLines: skipLines).join(Platform().eol);
 
   /// If the [Progress] was created with captureStdout = true

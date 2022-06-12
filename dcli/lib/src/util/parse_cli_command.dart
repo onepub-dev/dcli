@@ -29,7 +29,7 @@ class ParsedCliCommand {
       );
     }
     final qargs = _parse(command);
-    args = expandGlobs(qargs, workingDirectory);
+    args = _expandGlobs(qargs, workingDirectory);
   }
 
   /// when passed individual args we respect any quotes that are
@@ -49,7 +49,7 @@ class ParsedCliCommand {
     }
 
     final qargs = _QArg.translate(rawArgs);
-    args = expandGlobs(qargs, workingDirectory);
+    args = _expandGlobs(qargs, workingDirectory);
   }
 
   /// The commdand that we parsed from the command line
@@ -249,7 +249,7 @@ class ParsedCliCommand {
   /// be expanded.
   /// See https://github.com/onepub-dev/dcli/issues/56
   ///
-  List<String> expandGlobs(List<_QArg> qargs, String? workingDirectory) {
+  List<String> _expandGlobs(List<_QArg> qargs, String? workingDirectory) {
     final expanded = <String>[];
 
     for (final qarg in qargs) {
