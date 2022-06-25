@@ -1,3 +1,10 @@
+/* Copyright (C) S. Brett Sutton - All Rights Reserved
+ * Unauthorized copying of this file, via any medium is strictly prohibited
+ * Proprietary and confidential
+ * Written by Brett Sutton <bsutton@onepub.dev>, Jan 2022
+ */
+
+
 import 'dart:ffi';
 
 import 'package:win32/win32.dart';
@@ -15,7 +22,7 @@ mixin WindowsMixin {
   /// Windows 10+ has a developer mode that needs to be enabled to create
   ///  symlinks without escalated prividedges.
   /// For details on enabling dev mode on windows see:
-  /// https://bsutton.gitbook.io/dcli/getting-started/installing-on-windows
+  /// https://dcli.onepub.dev/getting-started/installing-on-windows
   bool inDeveloperMode() {
     final response = regGetDWORD(
       HKEY_LOCAL_MACHINE,

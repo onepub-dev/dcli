@@ -1,3 +1,10 @@
+/* Copyright (C) S. Brett Sutton - All Rights Reserved
+ * Unauthorized copying of this file, via any medium is strictly prohibited
+ * Proprietary and confidential
+ * Written by Brett Sutton <bsutton@onepub.dev>, Jan 2022
+ */
+
+
 part of dart_project;
 
 void _createProject(String pathToProject, String templateName) {
@@ -25,9 +32,7 @@ void _createProject(String pathToProject, String templateName) {
         'is not valid as it does not contain a pubspec.yaml');
   }
 
-  project.pubSpec
-    ..name = _replaceInvalidCharactersForName(projectName)
-    ..saveToFile(project.pathToPubSpec);
+  _fixPubspec(projectName, project.pubSpec, project.pathToPubSpec);
 
   /// rename main.dart from the template to <projectname>.dart
   final projectScript = _renameMain(project, projectName);
@@ -41,6 +46,28 @@ void _createProject(String pathToProject, String templateName) {
       .runPubGet(project.pathToProjectRoot, progress: Progress.printStdErr());
 
   _printCreated(projectName, project);
+}
+
+/// update the templates dcli version to match the dcli version
+/// the user is running.
+void _fixPubspec(String projectName, PubSpec pubSpec, String pathToPubSpec) {
+  final current = pubSpec.dependencies;
+
+  final replacement = <String, Dependency>{};
+
+  for (final key in current.keys) {
+    if (key == 'dcli') {
+      replacement.putIfAbsent(
+          'dcli', () => Dependency.fromHosted('dcli', packageVersion));
+    } else {
+      replacement.putIfAbsent(key, () => current[key]!);
+    }
+  }
+
+  pubSpec
+    ..name = _replaceInvalidCharactersForName(projectName)
+    ..dependencies = replacement
+    ..saveToFile(pathToPubSpec);
 }
 
 String _renameMain(DartProject project, String projectName) {

@@ -1,3 +1,10 @@
+/* Copyright (C) S. Brett Sutton - All Rights Reserved
+ * Unauthorized copying of this file, via any medium is strictly prohibited
+ * Proprietary and confidential
+ * Written by Brett Sutton <bsutton@onepub.dev>, Jan 2022
+ */
+
+
 import 'dart:async';
 import 'dart:io';
 
@@ -34,7 +41,7 @@ R withOpenFile<R>(
 /// to create a symlink.
 ///
 /// To enable developer mode see:
-/// https://bsutton.gitbook.io/dcli/getting-started/installing-on-windows
+/// https://dcli.onepub.dev/getting-started/installing-on-windows
 ///
 /// To check if your script is running as an administrator use:
 ///
@@ -55,7 +62,7 @@ Future<void> symlink(
 /// to delete a symlink.
 ///
 /// To enable developer mode see:
-/// https://bsutton.gitbook.io/dcli/getting-started/installing-on-windows
+/// https://dcli.onepub.dev/getting-started/installing-on-windows
 ///
 /// To check if your script is running as an administrator use:
 ///

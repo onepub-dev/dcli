@@ -1,26 +1,12 @@
 # README
 
-See the online [documentation](https://dcli.noojee.dev) for DCli
-
-
-If you enjoyed DCli maybe you could help out with a sponsorship or just buy me a coffee.
-
-[:heart: Sponsor Me](https://github.com/sponsors/bsutton)
+See the online [documentation](https://dcli.onepub.dev) for DCli
 
 
 DCli is an API and tooling for building cross platform command line \(CLI\) applications and scripts using the Dart programming language.
 
 DCli - pronounced d-cli
 
-
-# Another Dart tool by Noojee
-
-
-<a href="https://noojee.dev">![Noojee](https://github.com/bsutton/dcli/blob/master/images/noojee-logo.png?raw=true)</a>
-
-## Looking for DShell? You are in the right place.
-
-DShell has been renamed DCli to better reflect its intended purposes. 
 
 # Overview
 DCli is intended to to allow you to create Command  Line (CLI) Applications from simple scripts to full blown CLI apps. 
@@ -108,4 +94,4 @@ Visual Code with the dart-code extension provide a great development an debuggin
 # Contributing
 Read the contributing guide for details on how to get involved.
 
-https://dcli.noojee.dev/contributing
+https://dcli.onepub.dev/contributing

@@ -1,3 +1,13 @@
+/* Copyright (C) S. Brett Sutton - All Rights Reserved
+ * Unauthorized copying of this file, via any medium is strictly prohibited
+ * Proprietary and confidential
+ * Written by Brett Sutton <bsutton@onepub.dev>, Jan 2022
+ */
+
+
+
+import 'dart:async';
+
 import 'package:logging/logging.dart';
 
 import 'util/dcli_platform.dart';
@@ -20,6 +30,9 @@ class Settings {
   /// dcli -v clean
   bool get isVerbose => _verbose;
 
+  // ignore: cancel_subscriptions
+  static StreamSubscription<LogRecord>? listener;
+
   /// Turns on verbose logging.
   void setVerbose({required bool enabled}) {
     _verbose = enabled;
@@ -31,13 +44,15 @@ class Settings {
 
     if (enabled) {
       logger.level = Level.INFO;
-      logger.onRecord.listen((record) {
+      listener ??= logger.onRecord.listen((record) {
         print('${record.level.name}: ${record.time}: ${record.message}');
       });
     } else {
-      logger
-        ..level = Level.OFF
-        ..clearListeners();
+      logger.level = Level.OFF;
+      if (listener != null) {
+        listener!.cancel();
+        listener = null;
+      }
     }
   }
 

@@ -1,3 +1,10 @@
+/* Copyright (C) S. Brett Sutton - All Rights Reserved
+ * Unauthorized copying of this file, via any medium is strictly prohibited
+ * Proprietary and confidential
+ * Written by Brett Sutton <bsutton@onepub.dev>, Jan 2022
+ */
+
+
 import 'package:dcli_core/dcli_core.dart' as core;
 
 import 'wait_for_ex.dart';
@@ -10,7 +17,7 @@ import 'wait_for_ex.dart';
 /// to create a symlink.
 ///
 /// To enable developer mode see:
-/// https://bsutton.gitbook.io/dcli/getting-started/installing-on-windows
+/// https://dcli.onepub.dev/getting-started/installing-on-windows
 ///
 /// To check if your script is running as an administrator use:
 ///
@@ -29,7 +36,7 @@ void symlink(
 /// to delete a symlink.
 ///
 /// To enable developer mode see:
-/// https://bsutton.gitbook.io/dcli/getting-started/installing-on-windows
+/// https://dcli.onepub.dev/getting-started/installing-on-windows
 ///
 /// To check if your script is running as an administrator use:
 ///

@@ -1,3 +1,10 @@
+/* Copyright (C) S. Brett Sutton - All Rights Reserved
+ * Unauthorized copying of this file, via any medium is strictly prohibited
+ * Proprietary and confidential
+ * Written by Brett Sutton <bsutton@onepub.dev>, Jan 2022
+ */
+
+
 import 'package:collection/collection.dart';
 import 'package:dcli/dcli.dart' hide equals;
 import 'package:posix/posix.dart';
@@ -44,9 +51,6 @@ void main() {
                 runInShell: true,
                 terminal: true);
 
-            print('docker-compose running');
-            'docker-compose pull'.start(workingDirectory: '/opt/test');
-
             expect(eq(sudoGroups, userGroups), false);
 
             shell.withPrivileges(() {
@@ -65,7 +69,7 @@ void main() {
         //'groupdel $group'.run;
       }
     }, create: false);
-  });
+  }, tags: ['sudo']);
 }
 
 String name(String fileBasedName) =>

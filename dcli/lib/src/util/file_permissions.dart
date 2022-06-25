@@ -1,3 +1,10 @@
+/* Copyright (C) S. Brett Sutton - All Rights Reserved
+ * Unauthorized copying of this file, via any medium is strictly prohibited
+ * Proprietary and confidential
+ * Written by Brett Sutton <bsutton@onepub.dev>, Jan 2022
+ */
+
+
 /// See http://dartbug.com/22036
 library has_permission;
 
@@ -5,6 +12,7 @@ import 'dart:io';
 
 // ignore: unused_field
 enum _FilePermission { read, write, execute, setUid, setGid, sticky }
+
 // ignore: unused_field
 enum _FilePermissionRole { world, group, user }
 

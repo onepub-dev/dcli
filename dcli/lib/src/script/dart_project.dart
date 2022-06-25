@@ -1,9 +1,17 @@
+/* Copyright (C) S. Brett Sutton - All Rights Reserved
+ * Unauthorized copying of this file, via any medium is strictly prohibited
+ * Proprietary and confidential
+ * Written by Brett Sutton <bsutton@onepub.dev>, Jan 2022
+ */
+
+
 library dart_project;
 
 import 'dart:io';
 
 import '../../dcli.dart';
 import '../../posix.dart';
+import '../version/version.g.dart';
 import 'command_line_runner.dart';
 import 'flags.dart';
 import 'pub_get.dart';

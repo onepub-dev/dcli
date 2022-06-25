@@ -1,4 +1,12 @@
 // ignore_for_file: deprecated_member_use
+/* Copyright (C) S. Brett Sutton - All Rights Reserved
+ * Unauthorized copying of this file, via any medium is strictly prohibited
+ * Proprietary and confidential
+ * Written by Brett Sutton <bsutton@onepub.dev>, Jan 2022
+ */
+
+
+
 
 import 'dart:cli';
 import 'dart:io';

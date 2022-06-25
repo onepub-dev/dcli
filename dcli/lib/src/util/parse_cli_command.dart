@@ -1,3 +1,10 @@
+/* Copyright (C) S. Brett Sutton - All Rights Reserved
+ * Unauthorized copying of this file, via any medium is strictly prohibited
+ * Proprietary and confidential
+ * Written by Brett Sutton <bsutton@onepub.dev>, Jan 2022
+ */
+
+
 import 'dart:io';
 
 import 'package:file/local.dart';
@@ -240,7 +247,7 @@ class ParsedCliCommand {
   /// globs.
   /// Any argument that contains *, ? or [ will
   /// be expanded.
-  /// See https://github.com/bsutton/dcli/issues/56
+  /// See https://github.com/onepub-dev/dcli/issues/56
   ///
   List<String> expandGlobs(List<_QArg> qargs, String? workingDirectory) {
     final expanded = <String>[];

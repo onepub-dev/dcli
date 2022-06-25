@@ -4,19 +4,24 @@ DCli is an SDK for for building cross platform command line (CLI) applications a
 
 The DCli (pronounced d-cli) SDK is includes command line tools and an extensive api for for building cli apps.
 
-{% hint style="info" %}
-Looking for DShell? You are in the right place. DShell has been renamed DCli.
-{% endhint %}
-
 The DCli SDK as featured on Jermaine Oppong package of the week vlog.
 
 {% embed url="https://youtu.be/z99IxxWmD1Q" %}
 
 
 
-## Another Dart Tool by Noojee
+## Sponsored by OnePub
 
-![](<.gitbook/assets/noojee-logo (1).png>)
+Help support DCli by supporting [OnePub](https://onepub.dev), the private dart repository.&#x20;
+
+OnePub allows you to privately share dart packages between your own projects or with colleagues.
+
+Try it for free and publish your first private package in seconds.
+
+| ![](<.gitbook/assets/OnePub.dev Logo – reversed FA (1).svg>) | <p>Publish a private package in five commands:</p><p><mark style="color:green;"><code>dart pub global activate onepub</code></mark></p><p><mark style="color:green;"><code>onepub login</code></mark></p><p><mark style="color:green;"><code>cd &#x3C;my package></code></mark></p><p><mark style="color:green;"><code>onepub private</code></mark> </p><p><mark style="color:green;"><code>dart pub publish</code></mark></p> |
+| ------------------------------------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+
+
 
 ## Overview
 
@@ -64,9 +69,9 @@ To run the above script called hello.dart:
 
 ### So why is DCli different?
 
-DCli is based on the relatively new programming language; [Dart](https://dart.dev).
+DCli is based on the relatively new programming language; [Dart](https://dart.dev/).
 
-Dart is currently the [fastest growing language on github](https://www.linkedin.com/pulse/google-dart-tops-githubs-list-fastest-growing-2019-bill-detwiler#:\~:text=According%20to%20GitHub's%20annual%20%22The,tagged%20with%20a%20primary%20language) and is the basis on which Flutter is built.
+Dart is currently the [fastest growing language on github](https://www.linkedin.com/pulse/google-dart-tops-githubs-list-fastest-growing-2019-bill-detwiler) and is the basis on which Flutter is built.
 
 [Ubuntu has just announced](https://medium.com/flutter/announcing-flutter-linux-alpha-with-canonical-19eb824590a9) that Flutter will be the primary platform for building GUI's on Ubuntu and is currently working on replacing the Ubuntu installer using Flutter.
 

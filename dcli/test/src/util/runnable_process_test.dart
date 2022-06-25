@@ -1,6 +1,14 @@
 // ignore_for_file: deprecated_member_use
 
 @Timeout(Duration(minutes: 5))
+/* Copyright (C) S. Brett Sutton - All Rights Reserved
+ * Unauthorized copying of this file, via any medium is strictly prohibited
+ * Proprietary and confidential
+ * Written by Brett Sutton <bsutton@onepub.dev>, Jan 2022
+ */
+
+
+
 import 'dart:async';
 
 import 'dart:cli';
@@ -24,7 +32,8 @@ void main() {
         command = 'ls *.txt';
         final found = <String?>[];
 
-        // TODO(bsutton): the progress is a hack to get around the fact that for each is currently broken. https://github.com/bsutton/dcli/issues/144
+        // TODO(bsutton): the progress is a hack to get around the fact that
+        //for each is currently broken. https://github.com/onepub.dev/dcli/issues/144
         start(
           command,
           workingDirectory: path,
