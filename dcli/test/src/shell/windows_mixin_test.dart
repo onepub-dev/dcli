@@ -21,7 +21,8 @@ void main() {
   });
 
   test('isPrivileged', () {
-    expect(Shell.current.isPrivilegedUser, isFalse);
+    expect(
+        Shell.current.isPrivilegedUser, Platform.isWindows ? isTrue : isFalse);
   });
 
   test('Add .dart Associations', () {
