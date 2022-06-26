@@ -5,8 +5,6 @@
  * Written by Brett Sutton <bsutton@onepub.dev>, Jan 2022
  */
 
-
-
 import 'dart:developer';
 import 'dart:io';
 import 'dart:isolate';
@@ -383,12 +381,11 @@ class TestFileSystem {
       DartProject.fromPath('pathToTools').warmup();
       NamedLock(name: 'compile').withLock(() {
         for (final command in required) {
-          if (!exists(join(pathToTools, command))) {
+          final script =
+              DartScript.fromFile('test/test_script/general/bin/$command.dart');
+          if (!exists(join(pathToTools, script.pathToExe))) {
             /// compile and install the command into the tool path
-
-            final script = DartScript.fromFile(
-                'test/test_script/general/bin/$command.dart')
-              ..compile();
+            script.compile();
             copy(script.pathToExe, pathToTools);
           }
         }
