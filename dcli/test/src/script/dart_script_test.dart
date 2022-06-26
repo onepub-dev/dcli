@@ -4,6 +4,7 @@
  * Written by Brett Sutton <bsutton@onepub.dev>, Jan 2022
  */
 
+import 'dart:io';
 
 import 'package:dcli/dcli.dart' hide equals;
 import 'package:dcli/posix.dart';
@@ -55,6 +56,7 @@ void main() {
 
     test('jit script', () {
       chmod(pathToTestScript, permission: '740');
+      DartScript.fromFile(pathToTestScript).runPubGet();
       final result = 'dart $pathToTestScript'
           .start(progress: Progress.capture(), nothrow: true)
           .toList();
@@ -63,20 +65,32 @@ void main() {
     });
 
     test('compiled script', () {
-      DartScript.fromFile(pathToTestScript)
-          .compile(workingDirectory: dirname(pathToTestScript));
+      final script = DartScript.fromFile(pathToTestScript)
+        ..runPubGet()
+        ..compile(workingDirectory: dirname(pathToTestScript));
 
       final pathToCompiledScript = join(dirname(pathToTestScript),
           basenameWithoutExtension(pathToTestScript));
 
-      expect(exists(pathToCompiledScript), isTrue);
+      /// check that the path and scrript name are what we expect.
+      expect(dirname(pathToCompiledScript), equals(dirname(script.pathToExe)));
+      // on windows we add .exe as the extension so compare compiled script
+      // name sans the extension.
+      expect(basenameWithoutExtension(pathToCompiledScript),
+          equals(basenameWithoutExtension(script.exeName)));
+
+      if (Platform.isWindows) {
+        expect('.exe', equals(extension(script.exeName)));
+      }
+
+      expect(exists(script.pathToExe), isTrue);
 
       // run compiled script
       final result =
-          pathToCompiledScript.start(progress: Progress.capture()).toList();
+          script.pathToExe.start(progress: Progress.capture()).toList();
 
       expect(result.length, equals(1));
-      expect(result[0], equals(pathToCompiledScript));
+      expect(result[0], equals(script.pathToExe));
     });
 
     test('globally activated script', () {
