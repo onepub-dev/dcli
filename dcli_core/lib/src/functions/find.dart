@@ -4,7 +4,6 @@
  * Written by Brett Sutton <bsutton@onepub.dev>, Jan 2022
  */
 
-
 import 'dart:async';
 import 'dart:io';
 
@@ -304,7 +303,8 @@ class Find extends DCliFunction {
           /// it when processing a .steam folder that includes a windows
           /// emulator.
           verbose(() => 'Invalid argument: ${e.path}');
-        } else if (e is FileSystemException && e.osError!.errorCode == 2) {
+        } else if (e is FileSystemException &&
+            e.osError!.errorCode == _directoryNotFound) {
           /// The directory may have been deleted between us finding it and
           /// processing it.
           verbose(
@@ -323,6 +323,7 @@ class Find extends DCliFunction {
   }
 
   int get _accessDenied => Settings().isWindows ? 5 : 13;
+  int get _directoryNotFound => Settings().isWindows ? 3 : 2;
 
   /// Checks if a hidden file is allowed.
   /// Non-hidden files are always allowed.
