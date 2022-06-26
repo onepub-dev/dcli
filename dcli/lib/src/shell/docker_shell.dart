@@ -4,7 +4,6 @@
  * Written by Brett Sutton <bsutton@onepub.dev>, Jan 2022
  */
 
-
 import '../../dcli.dart';
 import 'posix_shell.dart';
 import 'shell_mixin.dart';
@@ -17,7 +16,7 @@ class DockerShell with ShellMixin, PosixShell {
   DockerShell.withPid(this.pid);
 
   /// Returns true if we are running in a docker shell
-  static late final bool inDocker = exists('/.dockerenv');
+  static final bool inDocker = exists('/.dockerenv');
 
   /// Name of the shell
   static const String shellName = 'docker';

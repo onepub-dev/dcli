@@ -39,7 +39,7 @@ dependencies:
   yaml: ^3.0.0
 dev_dependencies: 
   hex: ^0.2.0
-  lint_hard: ^1.0.0
+  lint_hard: ^2.0.0
   mocktail: ^0.2.0
   test: ^1.0.0
 executables: 
@@ -51,3 +51,7 @@ platforms:
   linux: null
   macos: null
   windows: null
+
+dependency_overrides:
+  dcli_core:
+    path: ../dcli_core

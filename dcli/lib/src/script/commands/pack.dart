@@ -4,7 +4,6 @@
  * Written by Brett Sutton <bsutton@onepub.dev>, Jan 2022
  */
 
-
 import '../../../dcli.dart';
 
 import '../../util/resources.dart';
@@ -73,7 +72,7 @@ class PackCommand extends Command {
   ///
   PackCommand() : super(_commandName);
 
-  static late final pathToPackYaml =
+  static final pathToPackYaml =
       join(DartProject.self.pathToToolDir, 'dcli', 'pack.yaml');
 
   static const String _commandName = 'pack';

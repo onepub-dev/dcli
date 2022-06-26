@@ -6,7 +6,7 @@
 
 
 import 'package:dcli_core/dcli_core.dart' as core;
-import 'package:posix/posix.dart' as _posix;
+import 'package:posix/posix.dart' as posix;
 
 import '../../dcli.dart';
 
@@ -57,13 +57,13 @@ class _ChOwn extends core.DCliFunction {
       );
     }
 
-    final passwd = _posix.getpwnam(user);
-    final pgroup = _posix.getgrnam(group);
+    final passwd = posix.getpwnam(user);
+    final pgroup = posix.getgrnam(group);
     if (isDirectory(path) && recursive) {
       find('*', includeHidden: true, workingDirectory: path)
-          .forEach((file) => _posix.chown(path, passwd.uid, pgroup.gid));
+          .forEach((file) => posix.chown(path, passwd.uid, pgroup.gid));
     } else {
-      _posix.chown(path, passwd.uid, pgroup.gid);
+      posix.chown(path, passwd.uid, pgroup.gid);
     }
   }
 }
