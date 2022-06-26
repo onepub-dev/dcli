@@ -4,7 +4,6 @@
  * Written by Brett Sutton <bsutton@onepub.dev>, Jan 2022
  */
 
-
 library dart_project;
 
 import 'dart:io';
@@ -257,11 +256,17 @@ class DartProject {
           types: [Find.file],
           workingDirectory: pathToProjectRoot,
         ).forEach(delete);
+
+        /// we cant delete directories whilst recusively scanning them.
+        final toBeDeleted = <String>[];
         find(
           '.dart_tool',
           types: [Find.directory],
           workingDirectory: pathToProjectRoot,
-        ).forEach(deleteDir);
+        ).forEach(toBeDeleted.add);
+
+        _deleteDirs(toBeDeleted);
+
         find('pubspec.lock', workingDirectory: pathToProjectRoot)
             .forEach(delete);
 
@@ -375,6 +380,14 @@ class DartProject {
   /// Returns true if the project has an 'analysis_options.yaml' file.
   bool get hasAnalysisOptions =>
       exists(join(pathToProjectRoot, 'analysis_options.yaml'));
+
+  void _deleteDirs(List<String> toBeDeleted) {
+    for (final dir in toBeDeleted) {
+      if (exists(dir)) {
+        deleteDir(dir);
+      }
+    }
+  }
 
   // /// Prepares the project by creating a pubspec.yaml and
   // /// the analysis_options.yaml file.
