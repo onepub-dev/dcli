@@ -4,7 +4,6 @@
  * Written by Brett Sutton <bsutton@onepub.dev>, Jan 2022
  */
 
-
 import 'dart:io';
 
 import 'package:dcli_core/dcli_core.dart' as core;
@@ -295,8 +294,6 @@ class InstallCommand extends Command {
     if (!exists(Settings().pathToTemplateProjectCustom)) {
       createDir(Settings().pathToTemplateProjectCustom, recursive: true);
     }
-
-    var pathsToDelete = <String>[];
 
     /// delete all non-custom project templates
     find('*',
