@@ -4,7 +4,6 @@
  * Written by Brett Sutton <bsutton@onepub.dev>, Jan 2022
  */
 
-
 import 'package:dcli/dcli.dart' hide equals;
 import 'package:test/test.dart';
 
@@ -163,29 +162,32 @@ void main() {
 
   test('copy symlink', () {
     /// path of test symlink that exists as part of test package.
-    final pathToLink = join('test', 'test_files', 'link_to_target.md');
-    final pathToCopyOfLink = join('test', 'test_files', 'copy_of_link.md');
+    withTempDir((testDir) {
+      final pathToTestFiles = join('test', 'test_files');
 
-    if (exists(pathToCopyOfLink, followLinks: false)) {
-      delete(pathToCopyOfLink);
-    }
+      copyTree(pathToTestFiles, testDir);
+      final pathToTestMd = join(testDir, 'target.md');
+      final pathToLink = join(testDir, 'link_to_target.md');
+      final pathToCopyOfLink = join(testDir, 'copy_of_link.md');
+      symlink(pathToTestMd, pathToLink);
 
-    copy(pathToLink, pathToCopyOfLink);
-    expect(exists(pathToCopyOfLink, followLinks: false), isTrue);
-    expect(
-        exists(
-          pathToCopyOfLink,
-        ),
-        isTrue);
-    expect(isFile(pathToCopyOfLink), isTrue);
-    expect(isLink(pathToCopyOfLink), isFalse);
+      copy(pathToLink, pathToCopyOfLink);
+      expect(exists(pathToCopyOfLink, followLinks: false), isTrue);
+      expect(
+          exists(
+            pathToCopyOfLink,
+          ),
+          isTrue);
+      expect(isFile(pathToCopyOfLink), isTrue);
+      expect(isLink(pathToCopyOfLink), isFalse);
 
-    expect(exists(pathToLink, followLinks: false), isTrue);
-    expect(
-        exists(
-          pathToLink,
-        ),
-        isTrue);
-    expect(isLink(pathToLink), isTrue);
+      expect(exists(pathToLink, followLinks: false), isTrue);
+      expect(
+          exists(
+            pathToLink,
+          ),
+          isTrue);
+      expect(isLink(pathToLink), isTrue);
+    });
   });
 }

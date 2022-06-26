@@ -21,3 +21,4 @@ dcli/test/test_script/general/bin/touch
 template/basic/.packages
 issues/since/since.zip
 issues/since/.packages
+dcli/test/test_script/general/bin/*.exe

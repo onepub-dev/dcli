@@ -244,6 +244,7 @@ class ProcessHelper {
     return matching;
   }
 
+  // ignore: unused_element
   List<ProcessDetails> _getWindowsProcessesOld() {
     final pids = <ProcessDetails>[];
 
