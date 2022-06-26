@@ -4,7 +4,6 @@
  * Written by Brett Sutton <bsutton@onepub.dev>, Jan 2022
  */
 
-
 @TestOn('windows')
 import 'dart:io';
 
@@ -26,10 +25,20 @@ void main() {
   });
 
   test('Add .dart Associations', () {
-    regDeleteKey(HKEY_CURRENT_USER, r'Software\Classes\.dart\OpenWithProgids');
-    regDeleteKey(
-        HKEY_CURRENT_USER, r'\Software\Classes\noojee.dcli\shell\open\command');
+    const progIds = r'Software\Classes\.dart\OpenWithProgids';
+
+    if (regKeyExists(HKEY_CURRENT_USER, progIds)) {
+      regDeleteKey(HKEY_CURRENT_USER, progIds);
+    }
+    const command = r'Software\Classes\noojee.dcli\shell\open\command';
+
+    if (regKeyExists(HKEY_CURRENT_USER, command)) {
+      regDeleteKey(HKEY_CURRENT_USER, command);
+    }
 
     CmdShell.withPid(pid).addFileAssociation(Settings().pathToDCliBin);
+
+    expect(regKeyExists(HKEY_CURRENT_USER, progIds), isTrue);
+    expect(regKeyExists(HKEY_CURRENT_USER, command), isTrue);
   });
 }
