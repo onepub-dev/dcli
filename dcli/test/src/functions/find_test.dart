@@ -1,11 +1,9 @@
-@Timeout(Duration(seconds: 600))
+@Timeout(Duration(seconds: 1200))
 /* Copyright (C) S. Brett Sutton - All Rights Reserved
  * Unauthorized copying of this file, via any medium is strictly prohibited
  * Proprietary and confidential
  * Written by Brett Sutton <bsutton@onepub.dev>, Jan 2022
  */
-
-
 
 import 'dart:io';
 
@@ -71,7 +69,7 @@ void main() {
     test(
       'Recurse entire filesystem',
       () {
-        // var count = 1;
+        var count = 1;
 
         print(DateTime.now());
         find(
@@ -86,7 +84,12 @@ void main() {
           //  // exit(1);
           // }
           // }),
-        ).forEach(print);
+        ).forEach((line) {
+          if (count++ % 10000 == 0) {
+            print(count);
+          }
+        });
+        expect(true, isTrue);
       },
       skip: false,
     ); // takes too long to run
