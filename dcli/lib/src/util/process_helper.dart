@@ -4,7 +4,6 @@
  * Written by Brett Sutton <bsutton@onepub.dev>, Jan 2022
  */
 
-
 import 'dart:io';
 
 import 'package:csv/csv.dart';
@@ -167,7 +166,7 @@ class ProcessHelper {
   }
 
   bool _windowsIsrunning(int? lpid) {
-    for (final details in _getWindowsProcessesOld()) {
+    for (final details in getWindowsProcesses()) {
       if (details.pid == lpid) {
         return true;
       }
@@ -252,7 +251,8 @@ class ProcessHelper {
     // "wininit.exe","584","Services","0","5,248 K"
     final tasks = 'tasklist /fo csv /nh'.toParagraph();
 
-    final lines = const CsvToListConverter().convert<String>(tasks);
+    final lines = const CsvToListConverter(shouldParseNumbers: false)
+        .convert<String>(tasks);
     for (final line in lines) {
       //verbose(() => 'tasklist: $line');
 
