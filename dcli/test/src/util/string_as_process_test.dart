@@ -118,7 +118,6 @@ void main() {
         ..append('Line 3/5')
         ..append('Line 4/5')
         ..append('Line 5/5');
-      Settings().setVerbose(enabled: true);
       final stream = 'tail -n 100 $file'.stream();
 
       final done = Completer<void>();
@@ -139,7 +138,6 @@ void main() {
         ..append('Line 3/5')
         ..append('Line 4/5')
         ..append('Line 5/5');
-      Settings().setVerbose(enabled: true);
       expect(read(file).toList().length, equals(5));
     });
   });

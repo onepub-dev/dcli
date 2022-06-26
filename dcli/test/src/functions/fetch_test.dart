@@ -74,7 +74,6 @@ void main() {
     });
 
     test('Fetch with Headers', () {
-      //Settings().setVerbose(enabled: true);
       withTempDir((testRoot) {
         withTempFile(
           (result) {

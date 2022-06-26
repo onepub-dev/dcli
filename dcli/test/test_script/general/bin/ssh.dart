@@ -20,7 +20,6 @@ import 'package:dcli/dcli.dart';
 ///
 
 void main(List<String> args) {
-  Settings().setVerbose(enabled: true);
   final fqdn = args[0];
   // ask( "FQDN of test target:");
   final password = args[1];

@@ -18,7 +18,6 @@ void main() {
         ..append('Line 3/5')
         ..append('Line 4/5')
         ..append('Line 5/5');
-      Settings().setVerbose(enabled: true);
       expect(read(file).toList().length, equals(5));
     });
   });
@@ -33,7 +32,6 @@ void main() {
         ..append('Line 3/5')
         ..append('Line 4/5')
         ..append('Line 5/5');
-      Settings().setVerbose(enabled: true);
       expect(read(file).lines.length, equals(5));
     });
   }, skip: true);
@@ -46,7 +44,6 @@ void main() {
         ..append('Line 3/5')
         ..append('Line 4/5')
         ..append('Line 5/5');
-      Settings().setVerbose(enabled: true);
       expect(read(file).firstLine, equals('Line 1/5'));
     });
   });
@@ -59,7 +56,6 @@ void main() {
         ..append('Line 3/5')
         ..append('Line 4/5')
         ..append('Line 5/5');
-      Settings().setVerbose(enabled: true);
       expect(
           read(file).toParagraph(),
           equals('''
@@ -80,7 +76,6 @@ Line 5/5'''
         ..append('Line 3/5')
         ..append('Line 4/5')
         ..append('Line 5/5');
-      Settings().setVerbose(enabled: true);
       final lines = <String>[];
       read(file).forEach(lines.add);
       expect(lines.length, equals(5));
