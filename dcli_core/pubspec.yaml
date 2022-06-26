@@ -18,7 +18,7 @@ dependencies:
   stacktrace_impl: ^2.3.0
   uuid: ^3.0.0
 dev_dependencies: 
-  lint_hard: ^1.0.0
+  lint_hard: ^2.0.0
   synchronized: ^3.0.0
   test: ^1.0.0
 platforms: 
