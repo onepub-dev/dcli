@@ -16,8 +16,12 @@ import 'flags.dart';
 import 'pub_get.dart';
 import 'pub_upgrade.dart';
 
-/// Encapsulates the idea of a dart project which is made up
-/// of a pubspec.yaml, dart files ....
+/// Used to managed a Dart project.
+///
+/// Provides access to a Dart Project's resources such as
+/// of a pubspec.yaml, dart files, directory structure
+/// as well as performing some basic operations on the
+/// Dart Project.
 ///
 part 'dart_project_creator.dart';
 
