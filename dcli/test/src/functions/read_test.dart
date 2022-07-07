@@ -4,7 +4,6 @@
  * Written by Brett Sutton <bsutton@onepub.dev>, Jan 2022
  */
 
-
 import 'dart:io';
 
 import 'package:dcli/dcli.dart' hide equals;
@@ -19,7 +18,6 @@ void main() {
         ..append('Line 3/5')
         ..append('Line 4/5')
         ..append('Line 5/5');
-      Settings().setVerbose(enabled: true);
       expect(read(file).toList().length, equals(5));
     });
   });
@@ -34,7 +32,6 @@ void main() {
         ..append('Line 3/5')
         ..append('Line 4/5')
         ..append('Line 5/5');
-      Settings().setVerbose(enabled: true);
       expect(read(file).lines.length, equals(5));
     });
   }, skip: true);
@@ -47,7 +44,6 @@ void main() {
         ..append('Line 3/5')
         ..append('Line 4/5')
         ..append('Line 5/5');
-      Settings().setVerbose(enabled: true);
       expect(read(file).firstLine, equals('Line 1/5'));
     });
   });
@@ -60,13 +56,15 @@ void main() {
         ..append('Line 3/5')
         ..append('Line 4/5')
         ..append('Line 5/5');
-      Settings().setVerbose(enabled: true);
-      expect(read(file).toParagraph(), equals('''
+      expect(
+          read(file).toParagraph(),
+          equals('''
 Line 1/5
 Line 2/5
 Line 3/5
 Line 4/5
-Line 5/5'''));
+Line 5/5'''
+              .replaceAll('\n', Platform().eol)));
     });
   });
 
@@ -78,16 +76,18 @@ Line 5/5'''));
         ..append('Line 3/5')
         ..append('Line 4/5')
         ..append('Line 5/5');
-      Settings().setVerbose(enabled: true);
       final lines = <String>[];
       read(file).forEach(lines.add);
       expect(lines.length, equals(5));
-      expect(lines.join(Platform().eol), equals('''
+      expect(
+          lines.join(Platform().eol),
+          equals('''
 Line 1/5
 Line 2/5
 Line 3/5
 Line 4/5
-Line 5/5'''));
+Line 5/5'''
+              .replaceAll('\n', Platform().eol)));
     });
   });
 }

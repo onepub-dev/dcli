@@ -5,8 +5,6 @@
  * Written by Brett Sutton <bsutton@onepub.dev>, Jan 2022
  */
 
-
-
 import 'package:dcli/dcli.dart';
 import 'package:test/test.dart';
 
@@ -14,8 +12,6 @@ void main() {
   test(
     'menu - defaultValue',
     () {
-      Settings().setVerbose(enabled: true);
-
       final options = ['public', 'private'];
 
       var result = menu(

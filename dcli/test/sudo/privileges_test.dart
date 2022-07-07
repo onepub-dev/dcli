@@ -29,7 +29,6 @@ void main() {
 
       try {
         expect(Shell.current.isPrivilegedUser, isTrue);
-        Settings().setVerbose(enabled: true);
         print('isPriviliged: ${Shell.current.isPrivilegedUser}');
 
         print('uid: ${getuid()}');

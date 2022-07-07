@@ -23,7 +23,6 @@ void main(List<String> args) {
     printerr('Expected at least one file');
     exit(1);
   }
-  Settings().setVerbose(enabled: true);
 
   for (final path in paths) {
     if (Settings().isWindows) {
