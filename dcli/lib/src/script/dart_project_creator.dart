@@ -40,6 +40,11 @@ void _createProject(String pathToProject, String templateName) {
     chmod(projectScript, permission: '755');
   }
 
+  find('*.*', workingDirectory: pathToProject, includeHidden: true)
+      .forEach((file) {
+    print('    $file');
+  });
+
   print('');
   DartSdk()
       .runPubGet(project.pathToProjectRoot, progress: Progress.printStdErr());
@@ -88,11 +93,7 @@ String _renameMain(DartProject project, String projectName) {
 
 void _createFromTemplate(String pathToTemplate, String pathToProject,
     String projectName, String templateName) {
-  final prefix = '$pathToTemplate${Platform.pathSeparator}';
-  copyTree(pathToTemplate, pathToProject, includeHidden: true, filter: (file) {
-    print('    ${file.replaceAll(prefix, '')}');
-    return true;
-  });
+  copyTree(pathToTemplate, pathToProject, includeHidden: true);
 
   _applyTransforms(
       projectName: projectName,
