@@ -15,11 +15,14 @@ jobs:
       
     - name: Install dependencies
       run: |
-        pub get
         echo pwd
         echo $PWD
         export PATH="$PATH":"$HOME/.pub-cache/bin"
         echo PATH=$PATH
+        cd dcli_core
+        dart pub get
+        cd ../dcli
+        dart pub get
         # find . 
         cd ..
         pwd
@@ -31,8 +34,7 @@ jobs:
         ls
         cd ..
         pwd
-        pub global activate dcli --source path
-        # dart ./tool/activate_local.dart --path=. 
+        dart pub global activate dcli -spath .
         
     - name: install dcli
       run: |
@@ -47,7 +49,9 @@ jobs:
       run: |
         pwd
         export PATH="$PATH":"$HOME/.pub-cache/bin"
-        pub run test/src/pubspec/pubspec_default_test.dart
+        echo $PATH
+        cd dcli
+        dart test
         
     #- name: Run tests
      # run: |
