@@ -24,12 +24,12 @@ jobs:
       run:  git clone https://github.com/bsutton/pub_release.git
       working-directory: ..
     - name: pub get for pub_release
-      run: pub get
+      run: dart pub get
       working-directory: ../pub_release
       
 #      working-directory: ../pub_release
     - name: Pub dependencies
-      run: pub get
+      run: dart pub get
     - name: Create release
       env:
         APITOKEN:  ${{ secrets.APITOKEN }}
