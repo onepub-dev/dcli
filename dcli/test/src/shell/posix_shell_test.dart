@@ -4,7 +4,6 @@
  * Written by Brett Sutton <bsutton@onepub.dev>, Jan 2022
  */
 
-
 import 'package:collection/collection.dart';
 import 'package:dcli/dcli.dart' hide equals;
 import 'package:posix/posix.dart';

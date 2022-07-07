@@ -4,7 +4,6 @@
  * Written by Brett Sutton <bsutton@onepub.dev>, Jan 2022
  */
 
-
 import 'shell_mixin.dart';
 import 'windows_mixin.dart';
 

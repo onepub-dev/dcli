@@ -4,7 +4,6 @@
  * Written by Brett Sutton <bsutton@onepub.dev>, Jan 2022
  */
 
-
 import 'package:equatable/equatable.dart';
 
 import 'package:pub_semver/pub_semver.dart';

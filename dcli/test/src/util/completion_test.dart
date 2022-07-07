@@ -5,9 +5,6 @@
  * Written by Brett Sutton <bsutton@onepub.dev>, Jan 2022
  */
 
-
-
-
 /// command line completion for dcli
 /// is only supported on lunix.
 @TestOn('!windows')

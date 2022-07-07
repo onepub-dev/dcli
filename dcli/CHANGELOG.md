@@ -1,3 +1,27 @@
+# 1.31.4
+- Fix: added check in find for missing directory when running under windows.
+- Fix: the project create code was printing out the wrong script name (main.dart) when we actually create a script called <projectname>.dart.
+- Fix: a bug in the start with progress unit test on windows. The echo psuedo command was being treated as a command so was failing to run.
+- Fix: a startup bug in the windows mixin test.
+- Fix: a windows bug on the test_file_system which didn't account for the different exe extension of .exe.
+- Fix: the read_test for windows. It wasn't taking into account the different line endings.
+- Fix: bug in dart_project warmup on windows. We try to recursivly delete dirs in a find which just doesn't work on windows.
+- Fix: the dart_script_test so it works on windows. The .exe extension was causing tests to fail.
+- Fix: on window dcli install was failing as we were deleting directories whilst doing a recursive find when re-installing the templates.
+- set the dcli version to ^1.0.0 for the templates as dart will find the most recent compatible version.
+- Changed _windowsIsRunning to use the win32 version of getWindowsProcesses. Fixed a bug in _getWindowsProcessesOld caused by change in the cvs library we use.
+- relaxed the dcli version in the project templates.
+- removed some nulls from  platforms in pubspec.yaml
+- relaxed the ffi version.  Upgraded mocktail version. Removed the dshell_upgrade exe.
+- upgraded to latest version of circular_buffer.
+- upgraded to latest version of pubspec package.
+- upgraded to latest version of lint_hard
+- Updated the DartProject documentation.
+- changed windows_mixin_test to assume it is running in a privildged session.
+- Change the symlink copy test to create the symlinks as on windows when pulling from git we get files not symlinks.
+- improvements to documentation.
+- added copyright notices.
+
 # 1.31.2
 - Fixed a bug in the Settings.setVerbose(true) method. Each time setVerbose was called it added an additional logger resulting in multiple log lines per logging event. 
 - Fixed a bug in Settings.setVerbose(false) - it was cancelling all loggers even ones we hadn't created.

@@ -4,7 +4,6 @@
  * Written by Brett Sutton <bsutton@onepub.dev>, Jan 2022
  */
 
-
 /// See http://dartbug.com/22036
 library has_permission;
 

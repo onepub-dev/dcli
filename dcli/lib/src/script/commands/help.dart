@@ -4,7 +4,6 @@
  * Written by Brett Sutton <bsutton@onepub.dev>, Jan 2022
  */
 
-
 import '../../settings.dart';
 import '../../util/ansi_color.dart';
 import '../../version/version.g.dart';

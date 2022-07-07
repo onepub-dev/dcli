@@ -4,7 +4,6 @@
  * Written by Brett Sutton <bsutton@onepub.dev>, Jan 2022
  */
 
-
 import 'package:dcli/src/windows/process_helper.dart';
 import 'package:dcli_core/dcli_core.dart' as core;
 import 'package:test/test.dart';

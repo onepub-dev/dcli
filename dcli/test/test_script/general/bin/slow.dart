@@ -5,9 +5,6 @@ import 'package:dcli/dcli.dart';
  * Written by Brett Sutton <bsutton@onepub.dev>, Jan 2022
  */
 
-
-
-
 void main() {
   for (var i = 0; i < 1000; i++) {
     print('hello $i');

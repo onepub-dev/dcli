@@ -4,7 +4,6 @@
  * Written by Brett Sutton <bsutton@onepub.dev>, Jan 2022
  */
 
-
 import 'package:dcli/src/util/ansi.dart';
 import 'package:dcli/src/util/ansi_color.dart';
 import 'package:hex/hex.dart';

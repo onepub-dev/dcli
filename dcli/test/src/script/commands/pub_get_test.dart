@@ -5,8 +5,6 @@
  * Written by Brett Sutton <bsutton@onepub.dev>, Jan 2022
  */
 
-
-
 import 'package:dcli/src/script/dart_project.dart';
 
 import 'package:dcli/src/script/pub_get.dart';

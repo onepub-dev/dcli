@@ -50,4 +50,4 @@ executables:
 platforms: 
   linux: 
   macos: 
-  windows:
+  windows: 

@@ -4,7 +4,6 @@
  * Written by Brett Sutton <bsutton@onepub.dev>, Jan 2022
  */
 
-
 import 'package:dcli/dcli.dart';
 
 // Creates text file with the given no. of lines.

@@ -4,7 +4,6 @@
  * Written by Brett Sutton <bsutton@onepub.dev>, Jan 2022
  */
 
-
 import 'package:pubspec/pubspec.dart';
 import '../script/command_line_runner.dart';
 import 'dependency.dart';

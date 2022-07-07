@@ -4,7 +4,6 @@
  * Written by Brett Sutton <bsutton@onepub.dev>, Jan 2022
  */
 
-
 import 'package:dcli_core/dcli_core.dart';
 
 /// Base class for functions that return some type

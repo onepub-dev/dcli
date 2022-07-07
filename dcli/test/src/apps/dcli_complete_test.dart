@@ -5,8 +5,6 @@
  * Written by Brett Sutton <bsutton@onepub.dev>, Jan 2022
  */
 
-
-
 @TestOn('!windows')
 import 'package:dcli/dcli.dart' hide equals;
 import 'package:test/test.dart';

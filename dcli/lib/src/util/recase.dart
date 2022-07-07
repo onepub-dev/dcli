@@ -4,7 +4,6 @@
  * Written by Brett Sutton <bsutton@onepub.dev>, Jan 2022
  */
 
-
 // ignore: avoid_classes_with_only_static_members
 /// provides methods to change the case of a sentence or word.
 class ReCase {

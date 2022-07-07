@@ -4,7 +4,6 @@
  * Written by Brett Sutton <bsutton@onepub.dev>, Jan 2022
  */
 
-
 import '../../dcli.dart';
 
 /// Base class containing common code for all Shell implementations.

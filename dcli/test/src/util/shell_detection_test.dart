@@ -4,7 +4,6 @@
  * Written by Brett Sutton <bsutton@onepub.dev>, Jan 2022
  */
 
-
 import 'package:dcli/dcli.dart' hide equals;
 import 'package:dcli/posix.dart';
 import 'package:dcli/src/shell/cmd_shell.dart';

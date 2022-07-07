@@ -5,9 +5,6 @@
  * Written by Brett Sutton <bsutton@onepub.dev>, Jan 2022
  */
 
-
-
-
 import 'package:dcli/dcli.dart' hide equals;
 import 'package:dcli/src/script/entry_point.dart';
 import 'package:test/test.dart';

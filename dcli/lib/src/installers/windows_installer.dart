@@ -4,7 +4,6 @@
  * Written by Brett Sutton <bsutton@onepub.dev>, Jan 2022
  */
 
-
 import 'package:scope/scope.dart';
 import 'package:win32/win32.dart';
 

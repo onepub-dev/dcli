@@ -4,7 +4,6 @@
  * Written by Brett Sutton <bsutton@onepub.dev>, Jan 2022
  */
 
-
 //import 'package:dcli/src/dcli/resource/generated/resource_registry.g.dart';
 import 'package:dcli/src/util/resources.dart';
 import 'package:test/test.dart';

@@ -5,8 +5,6 @@
  * Written by Brett Sutton <bsutton@onepub.dev>, Jan 2022
  */
 
-
-
 import 'package:dcli/dcli.dart';
 import 'package:dcli/src/script/command_line_runner.dart';
 import 'package:dcli/src/script/commands/create.dart';

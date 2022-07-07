@@ -4,7 +4,6 @@
  * Written by Brett Sutton <bsutton@onepub.dev>, Jan 2022
  */
 
-
 import 'ansi.dart';
 
 /// Wraps the passed text with the ANSI escape sequence for
