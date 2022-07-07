@@ -25,7 +25,7 @@ jobs:
       - name: run unit tests
         run: |
           cd dcli
-          dart pub global activate dcli -spath .
+          dart pub global activate -spath .
           dart test
           
           
