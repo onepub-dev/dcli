@@ -3,56 +3,29 @@ name: tool/run_unit_tests.dart
 on: [push]
 
 jobs:
-  build:
-
-    runs-on: ubuntu-latest
-
-    container:
-      image:  google/dart:latest
+  test:
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        os: [ubuntu-latest, macos-latest, windows-latest]
+        sdk: [stable, beta, dev, 2.16.0, 2.17.0]
 
     steps:
-    - uses: actions/checkout@v1
-      
-    - name: Install dependencies
-      run: |
-        echo pwd
-        echo $PWD
-        export PATH="$PATH":"$HOME/.pub-cache/bin"
-        echo PATH=$PATH
-        cd dcli_core
-        dart pub get
-        cd ../dcli
-        dart pub get
-        # find . 
-        cd ..
-        pwd
-        apt update -y
-        apt install -y procps ca-certificates gnupg2
-       
-    - name: activate dcli
-      run: |
-        ls
-        cd ..
-        pwd
-        dart pub global activate dcli -spath .
-        
-    - name: install dcli
-      run: |
-        echo $PWD
-        export PATH="$PATH":"$HOME/.pub-cache/bin"
-        echo $PATH
-        ls "$HOME/.pub-cache/bin"
-        dcli install
-                
-        
-    - name: Run pubspec_default_tesets
-      run: |
-        pwd
-        export PATH="$PATH":"$HOME/.pub-cache/bin"
-        echo $PATH
-        cd dcli
-        dart test
-        
-    #- name: Run tests
-     # run: |
-      #  dart ./tool/run_unit_tests.dart
+      - uses: actions/checkout@v2
+      - uses: dart-lang/setup-dart@v1.3
+
+      - name: Install dependencies
+        run: |
+          cd dcli_core
+          dart pub get
+          cd ../dcli
+          dart pub get
+          cd ..
+
+      - name: run unit tests
+        run: |
+          cd dcli
+          dart pub global activate dcli -spath .
+          dart test
+          
+          
