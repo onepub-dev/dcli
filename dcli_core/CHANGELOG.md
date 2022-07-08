@@ -1,3 +1,6 @@
+# 1.31.3
+- Fixed a failed release.
+
 # 1.31.2
 - Fixed a bug in the Settings.setVerbose(true) method. Each time setVerbose was called it added an additional logger resulting in multiple log lines per logging event. 
 - Fixed a bug in Settings.setVerbose(false) - it was cancelling all loggers even ones we hadn't created.

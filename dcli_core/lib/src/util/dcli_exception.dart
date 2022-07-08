@@ -4,7 +4,6 @@
  * Written by Brett Sutton <bsutton@onepub.dev>, Jan 2022
  */
 
-
 import 'package:stacktrace_impl/stacktrace_impl.dart';
 
 /// Base class for all DCli exceptions.

@@ -4,7 +4,6 @@
  * Written by Brett Sutton <bsutton@onepub.dev>, Jan 2022
  */
 
-
 /// Typedef for LineActions
 typedef LineAction = void Function(String line);
 

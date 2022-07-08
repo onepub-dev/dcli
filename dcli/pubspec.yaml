@@ -1,5 +1,5 @@
 name: dcli
-version: 1.31.4
+version: 1.31.3
 homepage: https://dcli.onepub.dev
 documentation: https://dcli.onepub.dev
 publish_to: https://onepub.dev/api/jjbxpsdavu/
@@ -17,7 +17,7 @@ dependencies:
   crypto: ^3.0.0
   csv: ^5.0.1
   dart_console: ^1.0.0
-  dcli_core: ^1.31.2
+  dcli_core: ^1.31.3
   equatable: ^2.0.0
   ffi: ^1.0.0
   file: ^6.1.0

@@ -4,7 +4,6 @@
  * Written by Brett Sutton <bsutton@onepub.dev>, Jan 2022
  */
 
-
 ///
 /// devNull is a convenience function which you can use
 /// if you want to ignore the output of a LineAction.

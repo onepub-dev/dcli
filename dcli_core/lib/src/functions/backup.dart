@@ -4,7 +4,6 @@
  * Written by Brett Sutton <bsutton@onepub.dev>, Jan 2022
  */
 
-
 import 'package:meta/meta.dart';
 import 'package:path/path.dart' as p;
 import 'package:path/path.dart';
