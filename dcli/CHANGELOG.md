@@ -1,7 +1,4 @@
 # 1.31.3
-- Fixed a failed relase.
-
-# 1.31.4
 - Fix: added check in find for missing directory when running under windows.
 - Fix: the project create code was printing out the wrong script name (main.dart) when we actually create a script called <projectname>.dart.
 - Fix: a bug in the start with progress unit test on windows. The echo psuedo command was being treated as a command so was failing to run.
