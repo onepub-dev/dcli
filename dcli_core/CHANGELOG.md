@@ -1,3 +1,8 @@
+# 1.32.0
+- Upgraded to posix 4.0, ffi 2.0, dart_console 2.0.0
+- moved to dart_console2 util dart_console gets an upgrade.
+- Fixed a bug on copy_test that wasn't checking for an existing file.
+
 # 1.31.3
 - Fixed a failed release.
 
