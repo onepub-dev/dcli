@@ -168,8 +168,12 @@ void main() {
       copyTree(pathToTestFiles, testDir);
       final pathToTestMd = join(testDir, 'target.md');
       final pathToLink = join(testDir, 'link_to_target.md');
-      final pathToCopyOfLink = join(testDir, 'copy_of_link.md');
       symlink(pathToTestMd, pathToLink);
+
+      final pathToCopyOfLink = join(testDir, 'copy_of_link.md');
+      if (exists(pathToCopyOfLink)) {
+        delete(pathToCopyOfLink);
+      }
 
       copy(pathToLink, pathToCopyOfLink);
       expect(exists(pathToCopyOfLink, followLinks: false), isTrue);
