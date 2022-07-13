@@ -133,21 +133,42 @@ class DartProject {
   /// Absolute path to the project's root diretory.
   String get pathToProjectRoot => _pathToProjectRoot;
 
-  /// Absolute path to the project's 'tool' directory.
-  String get pathToToolDir => truepath(_pathToProjectRoot, 'tool');
+  /// Absolute path to the project's '.dart_tool' directory.
+  String get pathToDartToolDir => truepath(_pathToProjectRoot, '.dart_tool');
+
+  /// Absolute path to the project's '.dart_tool/package_config.json' directory.
+  String get pathToDartToolPackageConfig =>
+      truepath(pathToDartToolDir, 'package_config.json');
 
   /// Absolute path to the project's 'bin' directory.
   String get pathToBinDir => truepath(_pathToProjectRoot, 'bin');
 
+  /// Absolute path to the project's 'example' directory.
+  String get pathToExampleDir => truepath(_pathToProjectRoot, 'example');
+
+  /// Absolute path to the project's 'lib' directory.
+  String get pathToLibDir => truepath(_pathToProjectRoot, 'lib');
+
+  /// Absolute path to the project's 'lib/src' directory.
+  String get pathToLibSrcDir => truepath(pathToLibDir, 'src');
+
   /// Absolute path to the project's 'test' directory.
   String get pathToTestDir => truepath(_pathToProjectRoot, 'test');
 
-  /// Absolute path to the project's '.dart_tool' directory.
-  String get pathToDartToolDir => truepath(_pathToProjectRoot, '.dart_tool');
+  /// Absolute path to the project's 'tool' directory.
+  String get pathToToolDir => truepath(_pathToProjectRoot, 'tool');
+
+  /// Absolute pathto the project's analysis_options.yaml
+  String get pathToAnalysisOptions =>
+      _pathToPubSpec ??= join(_pathToProjectRoot, 'analysis_options.yaml');
 
   /// Absolute pathto the project's pubspec.yaml
   String get pathToPubSpec =>
       _pathToPubSpec ??= join(_pathToProjectRoot, 'pubspec.yaml');
+
+  /// Absolute pathto the project's pubspec.lock
+  String get pathToPubSpecLock =>
+      _pathToPubSpec ??= join(_pathToProjectRoot, 'pubspec.lock');
 
   /// Used by the dcli doctor command to print
   /// out the DartProjects details.
