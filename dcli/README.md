@@ -92,6 +92,4 @@ Use Visual Code for the best development experience with Dart.
 Visual Code with the dart-code extension provide a great development an debugging experience including the ability to develop and debug code on a remote server.
 
 # Contributing
-Read the contributing guide for details on how to get involved.
-
-https://dcli.onepub.dev/contributing
+Read the [contributing guide](https://dcli.onepub.dev/contributing) for details on how to get involved.
