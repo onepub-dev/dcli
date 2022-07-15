@@ -116,7 +116,7 @@ int? run(
 /// Allows you to execute a command by passing a [command]
 /// and a list of args in [args].
 ///
-/// The [startFromArgs] method provides additional controls 
+/// The [startFromArgs] method provides additional controls
 /// (compared to the run method) over how the commmand is executed.
 ///
 /// DCli will do glob expansion (e.g. expand *.txt to a list of txt files)
