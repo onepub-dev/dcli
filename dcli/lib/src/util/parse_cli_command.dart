@@ -194,6 +194,19 @@ class ParsedCliCommand {
             }
             break;
           }
+
+          /// The escape character so put us into
+          /// escape mode so the escaped character will
+          /// be treated as a normal char.
+          // added ignore as lint has a bug for conditional in a
+          // switch statement #27
+          // ignore: invariant_booleans
+          if (char == escapeCharacter) {
+            stateStack.push(currentState);
+            currentState = _ParseFrame(_ParseState.escaped, i);
+            break;
+          }
+
           // we just hit a nested quote
           if (char == "'" || char == '"') {
             stateStack.push(currentState);
@@ -212,6 +225,18 @@ class ParsedCliCommand {
             // We have a matching closing quote
             currentState = stateStack.pop();
             currentWord += char;
+            break;
+          }
+
+          /// The escape character so put us into
+          /// escape mode so the escaped character will
+          /// be treated as a normal char.
+          // added ignore as lint has a bug for conditional in a
+          // switch statement #27
+          // ignore: invariant_booleans
+          if (char == escapeCharacter) {
+            stateStack.push(currentState);
+            currentState = _ParseFrame(_ParseState.escaped, i);
             break;
           }
 

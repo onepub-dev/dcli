@@ -128,6 +128,64 @@ void main() {
         ]),
       );
     });
+
+    test('ssh with quoted args', () {
+      const command =
+          '''op-scp.dart 'onepub:"OnePub.dev Logo – reversed FA.png"' .''';
+
+      final parsed = ParsedCliCommand(command, pwd);
+      expect(parsed.cmd, equals('op-scp.dart'));
+
+      expect(
+        parsed.args,
+        equals([
+          'onepub:"OnePub.dev Logo – reversed FA.png"',
+          '.',
+        ]),
+      );
+    });
+
+    test('ssh with escaped quoted args', () {
+      const command =
+          '''op-scp.dart "onepub:^"OnePub.dev Logo – reversed FA.png^"" .''';
+
+      final parsed = ParsedCliCommand(command, pwd);
+      expect(parsed.cmd, equals('op-scp.dart'));
+
+      expect(
+        parsed.args,
+        equals([
+          'onepub:"OnePub.dev Logo – reversed FA.png"',
+          '.',
+        ]),
+      );
+    });
+
+    test('nested quotes with escaped quoted args', () {
+      var from = 'onepub:"OnePub.dev Logo – reversed FA.png"';
+      var to = '.';
+
+      from = from.replaceAll('"', '^"');
+      to = to.replaceAll('"', '^"');
+
+      final command = 'gcloud compute scp --zone=us-west1-b '
+          '--project=onepub-dev "$from" "$to"';
+
+      final parsed = ParsedCliCommand(command, pwd);
+      expect(parsed.cmd, equals('gcloud'));
+
+      expect(
+        parsed.args,
+        equals([
+          'compute',
+          'scp',
+          '--zone=us-west1-b',
+          '--project=onepub-dev',
+          'onepub:"OnePub.dev Logo – reversed FA.png"',
+          '.',
+        ]),
+      );
+    });
   });
 
   group('Glob expansion', () {
