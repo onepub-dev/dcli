@@ -1,3 +1,9 @@
+# 1.32.1
+- The glob parser now supports the escape character ^ inside nested quotes.
+- Correct name used in documenation for run.
+- Fixed the link to the contributing guide on the readme page.
+- Added additional pathToXXX to DartProject so we cover each of the standard directories and files.
+
 # 1.32.0
 - Upgraded to posix 4.0, ffi 2.0, dart_console 2.0.0
 - moved to dart_console2 util dart_console gets an upgrade.
