@@ -1,3 +1,10 @@
+# 1.33.0
+- BREAKING: the Exectuable class has had a name change from pathToscript to scriptPath. This is
+  because we are using the actual Executable class from pubspec2 rather than wrapping it.
+- BREAKING: migrated to the pubsec2 package as the pubspec package was not releasing frequently enough.  Imports of 'package:pubspec/pubspec.dar' should now be 'package:pubpsec/pubspec2.dart'.
+ We don't plan on reverting back.
+- Upgraded to pubspec 2.4.1 as 2.3 would clear out executable values in the pubspec.yaml.
+
 # 1.32.1
 - The glob parser now supports the escape character ^ inside nested quotes.
 - Correct name used in documenation for run.

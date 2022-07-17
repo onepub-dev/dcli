@@ -1,7 +1,5 @@
 # 1.33.0
-- BREAKING: the Exectuable class has had a name change from pathToscript to scriptPath. This is
-  because we are using the actual Executable class from pubspec2 rather than wrapping it.
-- Upgraded to pubspec 2.4.1 as 2.3 would clear out executable values in the pubspec.yaml.
+Synchronous release with dcli.
 
 # 1.32.1
 - The glob parser now supports the escape character ^ inside nested quotes.
