@@ -8,7 +8,7 @@ import 'dart:io';
 
 import 'package:collection/collection.dart';
 import 'package:pub_semver/pub_semver.dart';
-import 'package:pubspec2/pubspec.dart' as pub;
+import 'package:pubspec2/pubspec2.dart' as pub;
 
 import '../../dcli.dart';
 
@@ -50,26 +50,10 @@ class PubSpec {
   /// Sets the version field for the pubspec.
   /// Call [saveToFile] to update the contents of the pubspec.yaml.
   set version(Version? version) => pubspec = pubspec.copy(version: version);
-  List<Executable>? _executables;
 
   /// Get the list of exectuables
-  List<Executable> get executables {
-    if (_executables == null) {
-      _executables = <Executable>[];
-      for (final key in pubspec.executables.keys) {
-        final String scriptPath;
-        if (pubspec.executables[key]!.script == null) {
-          scriptPath = join('bin', '$key.dart');
-        } else {
-          scriptPath = pubspec.executables[key]!.script!;
-        }
-
-        _executables!.add(Executable(key, scriptPath));
-      }
-    }
-
-    return List.unmodifiable(_executables!);
-  }
+  List<pub.Executable> get executables =>
+      List.unmodifiable(pubspec.executables.values);
 
   /// Sets the map of dependencies for this pubspec.
   set dependencies(Map<String, Dependency> dependencies) {
@@ -168,17 +152,4 @@ class PubSpec {
   ///
   static pub.PathReference createPathReference(String path) =>
       pub.PathReference.fromJson(<String, String>{'path': path});
-}
-
-/// Represents a path to an executable listed in the 'executables'
-/// section of the pubsec.yaml.
-class Executable {
-  /// Create an executable with a name and a path.
-  Executable(this.name, this.pathToScript);
-
-  /// Name of the executable.
-  String name;
-
-  /// path of the script relative to the pacakge root.
-  String pathToScript;
 }

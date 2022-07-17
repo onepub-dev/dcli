@@ -217,10 +217,10 @@ Compiles the given list of scripts using dart's native compiler.
 
       for (final exe in pubspec.executables) {
         final pathToOutput =
-            join(pathToTempPackage, dirname(exe.pathToScript), exe.name);
+            join(pathToTempPackage, dirname(exe.scriptPath), exe.name);
         print(green('Compiling ${exe.name}...'));
         DartSdk().runDartCompiler(
-          DartScript.fromFile(join(pathToTempPackage, exe.pathToScript)),
+          DartScript.fromFile(join(pathToTempPackage, exe.scriptPath)),
           pathToExe: pathToOutput,
           progress: Progress(print, stderr: print),
           workingDirectory: pathToTempPackage,

@@ -10,7 +10,7 @@ import 'dart:io';
 import 'dart:isolate';
 
 import 'package:dcli/dcli.dart';
-import 'package:pubspec2/pubspec.dart' as ps;
+import 'package:pubspec2/pubspec2.dart' as ps;
 import 'package:test/test.dart';
 import 'package:uuid/uuid.dart';
 
