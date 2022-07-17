@@ -28,7 +28,7 @@ dependencies:
   path: ^1.8.0
   posix: ^4.0.0
   pub_semver: ^2.0.0
-  pubspec: ^2.3.0
+  pubspec2: ^2.4.0
   scope: ^2.2.1
   settings_yaml: ^3.3.1
   stacktrace_impl: ^2.3.0
