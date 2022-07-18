@@ -1,3 +1,6 @@
+# 1.33.1
+- Synchronous release with dcli.
+
 # 1.33.0
 Synchronous release with dcli.
 
