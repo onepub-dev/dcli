@@ -29,6 +29,7 @@ test/test_scripts/bin/help
 test/test_scripts/bin/which
 bin/dcli_install
 bin/dcli
+bin/dcli_complete
 example/dsort
 shell/main/subdir/good.jpg
 test/test_scripts/bin/local_pubspec/hello_world
@@ -39,7 +40,6 @@ dcli.code-workspace
 .release.notes.tmp.swp
 release.notes.tmp
 github_credentials.yaml
-bin/dcli_complete
 bin/dshell_upgrade
 test/sudo/test.txt
 test/sudo/test2.txt
