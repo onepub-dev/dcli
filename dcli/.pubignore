@@ -1,1 +1,10 @@
+bin/dcli_install
+bin/dcli
+bin/dcli_complete
+doc
+example
+issues
+images
+test
+tool
 tool/post_release_hook/git_release.dart
