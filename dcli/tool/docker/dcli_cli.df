@@ -9,12 +9,11 @@ RUN touch /home/.profile
 RUN apt -y update && apt -y upgrade && apt -y install vim procps coreutils wget
 
 
-RUN pub global activate dcli 
+RUN dart pub global activate dcli 
 RUN dcli install
 
 RUN mkdir /home/dcli
 WORKDIR /home/dcli
-ADD READ.ME /home/dcli
 
 # set the cli prompt.
 RUN echo "PS1='\e[32mdcli\e[0m:\e[34m`pwd`#\e[0m '" >> /home/.bashrc
