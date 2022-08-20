@@ -8,20 +8,16 @@ The DCli SDK as featured on Jermaine Oppong package of the week vlog.
 
 {% embed url="https://youtu.be/z99IxxWmD1Q" %}
 
-
-
 ## Sponsored by OnePub
 
-Help support DCli by supporting [OnePub](https://onepub.dev), the private dart repository.&#x20;
+Help support DCli by supporting [OnePub](https://onepub.dev/drive/a50d4f6f-e0fb-40bd-af7b-2dcc295b0332), the private dart repository.
 
 OnePub allows you to privately share dart packages between your own projects or with colleagues.
 
 Try it for free and publish your first private package in seconds.
 
-| ![](<.gitbook/assets/OnePub.dev Logo – reversed FA (1).svg>) | <p>Publish a private package in five commands:</p><p><mark style="color:green;"><code>dart pub global activate onepub</code></mark></p><p><mark style="color:green;"><code>onepub login</code></mark></p><p><mark style="color:green;"><code>cd &#x3C;my package></code></mark></p><p><mark style="color:green;"><code>onepub private</code></mark> </p><p><mark style="color:green;"><code>dart pub publish</code></mark></p> |
-| ------------------------------------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
-
-
+| ![](<.gitbook/assets/OnePub.dev Logo – reversed FA (1).svg>) | <p>Publish a private package in five commands:</p><p><mark style="color:green;"><code>dart pub global activate onepub</code></mark></p><p><mark style="color:green;"><code>onepub login</code></mark></p><p><mark style="color:green;"><code>cd &#x3C;my package></code></mark></p><p><mark style="color:green;"><code>onepub pub private</code></mark></p><p><mark style="color:green;"><code>dart pub publish</code></mark></p> |
+| ------------------------------------------------------------ | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 
 ## Overview
 

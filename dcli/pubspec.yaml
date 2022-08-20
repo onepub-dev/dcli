@@ -35,7 +35,7 @@ dependencies:
   system_info2: ^2.0.3
   uuid: ^3.0.0
   validators2: ^3.0.0
-  win32: ^2.6.1
+  win32: ^2.7.0
   yaml: ^3.0.0
 dev_dependencies: 
   hex: ^0.2.0
