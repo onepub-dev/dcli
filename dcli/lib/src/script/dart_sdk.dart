@@ -440,22 +440,25 @@ class DartSdk {
       installDir = _askForDartSdkInstallDir(defaultDartSdkPath);
     }
 
-    if (!exists(installDir)) {
-      createDir(installDir, recursive: true);
-    } else {
-      print(
-        'The install directory $installDir already exists. '
-        'If you proceed all files under $installDir will be deleted.',
-      );
-      if (confirm('Proceed to delete $installDir')) {
-        /// I've added this incase we have a failed install and
-        /// need to do a restart.
-        ///
-        deleteDir(installDir);
+    Shell.current.withPrivileges(() {
+      if (!exists(installDir)) {
+        createDir(installDir, recursive: true);
       } else {
-        throw InstallException('Install Directory $installDir already exists.');
+        print(
+          'The install directory $installDir already exists. '
+          'If you proceed all files under $installDir will be deleted.',
+        );
+        if (confirm('Proceed to delete $installDir')) {
+          /// I've added this incase we have a failed install and
+          /// need to do a restart.
+          ///
+          deleteDir(installDir);
+        } else {
+          throw InstallException(
+              'Install Directory $installDir already exists.');
+        }
       }
-    }
+    });
 
     // Read the Zip file from disk.
     _extractDartSdk(zipRelease, installDir);
