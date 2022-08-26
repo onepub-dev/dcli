@@ -173,7 +173,7 @@ class DoctorCommand extends Command {
       } else {
         _colprint([
           'pub path',
-          'Not Found',
+          'not Found',
         ]);
       }
       _colprint(['Pub cache', privatePath(PubCache().pathTo)]);
@@ -181,10 +181,10 @@ class DoctorCommand extends Command {
   }
 
   void _printPlatform() {
-    _colprint(['OS', Platform.operatingSystem]);
+    _colprint(['os', Platform.operatingSystem]);
     print(
       Format().row(
-        ['OS version', Platform.operatingSystemVersion],
+        ['os version', Platform.operatingSystemVersion],
         widths: [17, -1],
       ),
     );
