@@ -29,8 +29,7 @@ class A591893b0b02f8ff52bbf042b810b7567 extends PackedResource {
 
   /// <package>/resources relative path to the original resource.
   @override
-  String get originalPath =>
-      'template/project/full/lib/src/mailhog_settings.dart';
+  String get originalPath => 'template/project/full/lib/src/mailhog_settings.dart';
 
   @override
   String get content => '''

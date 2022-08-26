@@ -29,8 +29,7 @@ class A8891d57fd45764c01e81806443c53e15 extends PackedResource {
 
   /// <package>/resources relative path to the original resource.
   @override
-  String get originalPath =>
-      'template/project/full/lib/src/mailhog_exception.dart';
+  String get originalPath => 'template/project/full/lib/src/mailhog_exception.dart';
 
   @override
   String get content => '''

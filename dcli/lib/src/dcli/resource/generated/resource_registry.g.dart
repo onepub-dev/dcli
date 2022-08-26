@@ -12,7 +12,6 @@ import 'A3452b0f16c2b6821fd6c22320b4ed6e9.g.dart';
 import 'A3a93770e3a74e1b14dd06078ea242957.g.dart';
 import 'A3ad36e7b3c78c22949aae56295c148fe.g.dart';
 import 'A4347a8ff639ee7df6728f1c36d4bd16c.g.dart';
-import 'A43886e45b63309243e8acbdd12bbe68e.g.dart';
 import 'A49bc9b7e40a7f3042a5bbb3e476b4dc4.g.dart';
 import 'A53ff2f6487cb4ecbe3ed84f8e1fc9d6b.g.dart';
 import 'A591893b0b02f8ff52bbf042b810b7567.g.dart';
@@ -41,6 +40,7 @@ import 'Ab686eb0fc49de41419af858be7a2111c.g.dart';
 import 'Acd70c5b2dd99ab9fc42418fc57b36539.g.dart';
 import 'Ace1455e143acffbe3a67ba40dbcd836b.g.dart';
 import 'Acef1af485956d6b0c8c663597e6d42ca.g.dart';
+import 'Ad2b9965f8478220f2d69889c70ea9428.g.dart';
 import 'Adcd9ad582ab3d8c4c1d895342e778549.g.dart';
 import 'Ae2e016dc5589a132d3f8d42daa4b3ceb.g.dart';
 import 'Af621a8bd8d9680d9847c1d0246fa9ffe.g.dart';
@@ -79,8 +79,6 @@ class ResourceRegistry {
     'template/project/simple/analysis_options.yaml':
         A3ad36e7b3c78c22949aae56295c148fe(),
     'template/script/custom/README.md': A4347a8ff639ee7df6728f1c36d4bd16c(),
-    'template/project/full/bin/dmailhog.dart':
-        A43886e45b63309243e8acbdd12bbe68e(),
     'template/project/full/pubspec.lock': A49bc9b7e40a7f3042a5bbb3e476b4dc4(),
     'template/script/find/main.dart': A53ff2f6487cb4ecbe3ed84f8e1fc9d6b(),
     'template/project/full/lib/src/mailhog_settings.dart':
@@ -121,6 +119,7 @@ class ResourceRegistry {
         Ace1455e143acffbe3a67ba40dbcd836b(),
     'template/project/cmd_args/analysis_options.yaml':
         Acef1af485956d6b0c8c663597e6d42ca(),
+    'template/project/full/bin/full.dart': Ad2b9965f8478220f2d69889c70ea9428(),
     'template/script/pubspec.lock': Adcd9ad582ab3d8c4c1d895342e778549(),
     'template/project/full/lib/src/commands/args.dart':
         Ae2e016dc5589a132d3f8d42daa4b3ceb(),
