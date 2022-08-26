@@ -1,3 +1,11 @@
+# 1.33.2
+- replaced the full project template with a complete working example.
+- change the labels using doctor to all lower case.
+- corrected the chmod doc example for execute permission.
+- For the install found additional cirumstances when we must run as priviledged on linux so remove the check that we are running on windows to require priviledged operation.
+- If the install dir doesn't exist we may need to be privilged to create it so we now run withPrivileges.
+- upgrraded win32 version to 2.7.0
+
 # 1.33.0
 - BREAKING: the Exectuable class has had a name change from pathToscript to scriptPath. This is
   because we are using the actual Executable class from pubspec2 rather than wrapping it.
