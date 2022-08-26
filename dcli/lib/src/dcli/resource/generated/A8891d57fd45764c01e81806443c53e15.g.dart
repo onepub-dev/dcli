@@ -9,9 +9,9 @@ import 'package:dcli/dcli.dart';
 ///
 /// GENERATED - GENERATED
 
-class Addb36e7e92f45c8211c8280546a6a1dd extends PackedResource {
-  /// PackedResource - ../../template/project/full/bin/main.dart
-  const Addb36e7e92f45c8211c8280546a6a1dd();
+class A8891d57fd45764c01e81806443c53e15 extends PackedResource {
+  /// PackedResource - ../../template/project/full/lib/src/mailhog_exception.dart
+  const A8891d57fd45764c01e81806443c53e15();
 
   /// A hash of the resource (pre packed) calculated by
   /// [calculateHash].
@@ -25,15 +25,16 @@ class Addb36e7e92f45c8211c8280546a6a1dd extends PackedResource {
   /// this checksum
   @override
   String get checksum =>
-      'c1fa268ca6a0802bbea01f878588b137134caa1195db523f5adbdad22736e825';
+      'd8f2e4b7e26fd83d1e19679d34fd0bfbcf5074ff3ea7f1a0a6891053d141086e';
 
   /// <package>/resources relative path to the original resource.
   @override
-  String get originalPath => 'template/project/full/bin/main.dart';
+  String get originalPath => 'template/project/full/lib/src/mailhog_exception.dart';
 
   @override
   String get content => '''
-IyEgL3Vzci9iaW4vZW52IGRjbGkKCmltcG9ydCAncGFja2FnZTpmdWxsL2Z1bGwuZGFydCc7Cgp2b2lk
-IG1haW4oTGlzdDxTdHJpbmc+IGFyZ3VtZW50cykgewogIHByaW50KGdldE5hbWUoKSk7Cn0K
+Y2xhc3MgTWFpbEhvZ0V4Y2VwdGlvbiBpbXBsZW1lbnRzIEV4Y2VwdGlvbiB7CiAgTWFpbEhvZ0V4Y2Vw
+dGlvbih0aGlzLmV4aXRDb2RlLCB0aGlzLm1lc3NhZ2UsIHtyZXF1aXJlZCB0aGlzLnNob3dVc2FnZX0p
+OwoKICBpbnQgZXhpdENvZGU7CiAgU3RyaW5nIG1lc3NhZ2U7CiAgYm9vbCBzaG93VXNhZ2U7Cn0K
   ''';
 }
