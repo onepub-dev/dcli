@@ -32,7 +32,7 @@ import '../../dcli.dart';
 ///
 /// To set give the owner execution privileges use:
 /// ```dart
-/// chmod('/path/to/exe', '100');
+/// chmod('/path/to/exe', permission: '100');
 /// ```
 /// If [path] doesn't exist a ChModException] is thrown.
 ///
