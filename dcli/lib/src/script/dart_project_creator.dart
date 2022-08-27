@@ -78,6 +78,10 @@ String _renameMain(DartProject project, String projectName) {
   /// rename main.dart from the template to <projectname>.dart
   final mainScript = join(project.pathToBinDir, 'main.dart');
   final projectScript = join(project.pathToBinDir, '$projectName.dart');
+
+  if (exists(projectScript)) {
+    return projectScript;
+  }
   if (exists(mainScript)) {
     move(mainScript, projectScript);
   } else {
@@ -139,9 +143,10 @@ void _applyTransforms(
   /// such as file renames and string substitutions.
   find('*', workingDirectory: pathToProject).forEach((file) {
     if (templateName != projectName) {
-      replace(file, templateName, projectName, all: true);
-      if (basenameWithoutExtension(file) == templateName) {
-        move(file, join(dirname(file), '$projectName.dart'));
+      //replace(file, templateName, projectName, all: true);
+
+      if (extension(file) == '.dart') {
+        replace(file, 'package:$templateName/', 'package:$projectName/');
       }
     }
   });
