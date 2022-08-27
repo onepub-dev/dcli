@@ -315,29 +315,63 @@ $line
       return resources;
     }
 
+    var index = 0;
     for (final external in externals) {
       // ignore: avoid_dynamic_calls
-      final path = external['path'] as String;
+      var path = external['path'] as String? ?? '';
+
+      if (path.isEmpty) {
+        throw ResourceException('external entry in $pathToPackYaml '
+            'is missing a "path" key.');
+      }
+      // convert to absolute path.
+      path = truepath(path);
+
       // ignore: avoid_dynamic_calls
-      final mount = external['mount'] as String;
+      final mount = external['mount'] as String? ?? '';
+
+      if (mount.isEmpty) {
+        throw ResourceException('external entry in $pathToPackYaml '
+            'is missing a "mount" key.');
+      }
+
+      // list of files/directories to exclude
+      // relative to [path]
+      final excludes = getExcludedPaths(yaml, path, index);
+
       if (!exists(path)) {
         throw ResourceException('The path ${truepath(path)} in '
             '$pathToPackYaml does not exist.');
       }
-      resources.addAll(_packExternalResource(path, mount));
+      resources.addAll(_packExternalResource(path, mount, excludes));
+      index++;
     }
     return resources;
   }
 
-  List<_Resource> _packExternalResource(String path, String mount) {
+  List<_Resource> _packExternalResource(
+      String path, String mount, List<String> excludes) {
     final resources = <_Resource>[];
 
+    if (isExcluded(path, excludes)) {
+      return [];
+    }
+
     if (isDirectory(path)) {
-      resources.addAll(_packExternalDirectory(path, mount));
+      resources.addAll(_packExternalDirectory(path, mount, excludes));
     } else {
       resources.add(_packExternalFile(path, mount));
     }
     return resources;
+  }
+
+  bool isExcluded(String path, List<String> excludes) {
+    final exclude = excludes.contains(path);
+    Settings().verbose('checking esclusion $path $excludes');
+    if (exclude) {
+      print(orange(' - excluded: $path'));
+    }
+    return exclude;
   }
 
   _Resource _packExternalFile(String path, String mount) {
@@ -351,13 +385,17 @@ $line
     return resource;
   }
 
-  Iterable<_Resource> _packExternalDirectory(String path, String mount) {
+  Iterable<_Resource> _packExternalDirectory(
+      String path, String mount, List<String> excludes) {
     final resources = <_Resource>[];
 
-    find('*', workingDirectory: path).forEach((file) {
-      if (isFile(file)) {
-        final fileMount = join(mount, relative(file, from: path));
-        resources.add(_packExternalFile(file, fileMount));
+    find('*', workingDirectory: path).forEach((entity) {
+      if (!isExcluded(entity, excludes)) {
+        if (isFile(entity)) {
+          final fileMount = join(mount, relative(entity, from: path));
+
+          resources.add(_packExternalFile(entity, fileMount));
+        }
       }
     });
 
@@ -374,6 +412,18 @@ $line
       }
       paths.add(resource.pathToMount);
     }
+  }
+
+  List<String> getExcludedPaths(SettingsYaml yaml, String path, int index) {
+    final relativeExcludes =
+        yaml.selectAsList('externals.external[$index].exclude') ?? <dynamic>[];
+
+    final absoluteExcludes = <String>[];
+
+    for (final exclude in relativeExcludes) {
+      absoluteExcludes.add(truepath(path, exclude as String));
+    }
+    return absoluteExcludes;
   }
 }
 
