@@ -12,15 +12,17 @@ If you use resources in a package that will be publish to pub.dev, remember ther
 
 DCli does this by packaging a resource into a .dart library and then providing an api that allows you to unpack the resources at runtime.
 
-The `dcli pack` command base64 encodes each file and writes them as a multi-line string into a dart library under src/dcli/resource. The name of the dart library is randomly generated.
+The `dcli pack` command, base64 encodes each file and writes them as a multi-line string into a dart library under src/dcli/resource. The name of the dart library is randomly generated.
 
 The pack command also creates a register of the packed libraries in src/dcli/resource/generated/resource\_registry.g.dart.
 
-DCli expects all resources to located within your dart project under:
+DCli expects all resources to located within your dart project  under:
 
 ```
 <project root>/resource
 ```
+
+You can also pack external resources by creating a [pack.yaml](assets.md#external-resources) file.
 
 ## Packing resources
 
@@ -90,7 +92,13 @@ bWFpbF9zZXJ2ZXJfcG9ydDogMjUKZW1haW
 
 As part of the packing process DCli also creates a registry of the packed resources. This is done by creating a dart library called:
 
-&#x20;`<project root>/lib/src/dcli/resource/generated/resource_registry.g.dart`
+`<project root>/lib/src/dcli/resource/generated/resource_registry.g.dart`
+
+Each of the packed resource is listed in the register with as a map with the 'mount point' as the key.
+
+The `mount point` is the path of the packed resource relative to the `<project root>/resource` directory.
+
+For external resources you specify a mount point to the project's resource directory that must not collide with any actual resource names under the \<project root>/resource directory.
 
 The contents of the 'resource\_registry.dart' are of the form.
 
@@ -122,7 +130,6 @@ class ResourceRegistry {
     'docker_batman.yaml': A49bc9b7e40a7f3042a5bbb3e476b4dc4(),
   };
 }
-
 ````
 
 ## Unpacking resources
@@ -148,12 +155,11 @@ e.g.
     createDir(pathToConfigs);
   }
   jpegResource!.unpack(join(pathToConfigs, filename);
-
 ```
 
 To unpack the resources on the target system use the `ResourceRegistry` class.
 
-The `ResourceRegistory.resources` field is a map of the packed resources. The key is the path of the original resource file relative to the `resource` directory.&#x20;
+The `ResourceRegistory.resources` field is a map of the packed resources. The key is the path of the original resource file relative to the `resource` directory.
 
 Use the `.unpack` method to unpack your resource to a local path on the target system.
 
@@ -163,8 +169,6 @@ ResourceRegistry.resources['rules.yaml']
 ```
 
 The values in the resources map is a `PackedResources`. The `PackedResource` includes a `checksum` field. The checksum can be used to see if the expanded resource is the same as the packed resource. You can use this to determine if you need to upgrade the unpacked resource with the latest packed one.
-
-
 
 ```dart
 if (calculateHash(pathToResource).hexEncode() != packResource.checksum)
@@ -177,7 +181,7 @@ if (calculateHash(pathToResource).hexEncode() != packResource.checksum)
 
 You can also pack resources that are external to your project by creating a pack.yaml file under your project's tool/dcli directory.
 
-The pack.yaml file allows you to specify a number of files and/or directories and their virtual mount point within the resource directory.
+The pack.yaml file allows you to specify a number of files and/or directories.
 
 ```yaml
 externals:
@@ -195,11 +199,41 @@ externals:
     mount: template/hello_world
 ```
 
-The path for each external may be a file or a directory. If path is a directory then the directory is included recursively.
+### path
 
-The mount point is a virtual location within the project resource directory. It may not overlap any actual files/paths in the project resource directory.
+The path is a path to an resource which lives outside the projects 'resource' folder.
 
-To unpack external resources you use the mount point as the key into the ResourceRegistry.
+This is normally used for resources that live outside the projects directory structure but can also specifiy a file/directory that lives within the project but outside the 'resource' folder.
+
+The path may be relative to the project root or an absolute path.
+
+The path can be a file or a directory.&#x20;
+
+If path is a directory then the directory is included recursively.
+
+### mount
+
+When a file is packed an entry is added to the resource registry.&#x20;
+
+To unpack a file you need a key to the file in the registry.&#x20;
+
+The mount is the key into the resource registry.
+
+For files under the \<project root>/resource directory the mount is their relative path to the resource directory.
+
+So for:
+
+\<project root>/resource/myfile.dart
+
+The mount is `myfile.dart`.
+
+For files and directories specified in the pack.yaml you must specify a mount .
+
+The mount is a virtual path and can be any path you wish provided that it does NOT collide with any other mount specified in pack.yaml or used by any file physically under the \<project root>/resource directory.
+
+**A mount is always a relative path.**
+
+To unpack external resources you use the mount  as the key into the ResourceRegistry.
 
 ## Limits
 
@@ -208,8 +242,6 @@ If you plan on publishing your project to pub.dev be aware that pub.dev has a ma
 The base64 encoding process increases the file size by about 33%.
 
 For apps that you deploy locally the limits are not documented but are probably constrained by your systems memory - so fairly large.
-
-&#x20;
 
 ## Automating packing of resources
 
