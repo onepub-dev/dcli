@@ -1,12 +1,13 @@
 import 'dart:async';
+import 'dart:io';
 
 import 'package:args/command_runner.dart';
 import 'package:dcli/dcli.dart';
 import 'package:dcli/posix.dart';
 
-import '../mailhog_exception.dart';
-import '../mailhog_settings.dart';
-import 'args.dart';
+import '../args/global_args.dart';
+import '../exceptions/app_exception.dart';
+import '../settings/app_settings.dart';
 
 class InstallCommand extends Command<void> {
   InstallCommand() {
@@ -23,14 +24,15 @@ class InstallCommand extends Command<void> {
   static const pathOption = 'path';
   static const overwriteOption = 'overwrite';
 
+  /// name of the command. The user uses this name to run the command.
+  @override
+  String get name => 'install';
+
   @override
   String get description => '''
 Installs mailhog into $HOME/apps/mailhog.
 Use the $pathOption to select an alternate install path.
 ''';
-
-  @override
-  String get name => 'install';
 
   /// run the installation.
   @override
@@ -48,9 +50,10 @@ Use the $pathOption to select an alternate install path.
         url:
             'https://github.com/mailhog/MailHog/releases/download/v1.0.0/MailHog_linux_amd64',
         saveToPath: args.pathToMailHogApp);
-    chmod(permission: '100', args.pathToMailHogApp);
+    // make the app executable.
+    chmod(permission: '755', args.pathToMailHogApp);
     print('Installation complete.');
-    print('run dmailhog run');
+    print('To start mailhog:  ${basename(Platform.script.path)} run');
   }
 
   /// create the mailhog install directory.
@@ -60,7 +63,7 @@ Use the $pathOption to select an alternate install path.
     if (exists(pathToMailHogDir)) {
       if (!args.overwrite) {
         /// the directory exists but we don't have permission to overwrite it.
-        throw MailHogException(
+        throw ExitException(
             1,
             '''
 The install directory ${truepath(pathToMailHogDir)} exists.
@@ -82,8 +85,9 @@ or --path to specify an alternate directory.''',
   static String get mailHogAppname => 'mailhog';
 }
 
-// Parse the install args.
-class InstallArgs extends Args {
+/// Parse the command line args specific to the install command
+/// including any global arguments.
+class InstallArgs extends GlobalArgs {
   InstallArgs.parse(ArgResults? results, ArgResults? globalResults)
       : super(globalResults) {
     /// get the --path option if provided.
@@ -91,9 +95,9 @@ class InstallArgs extends Args {
       pathToMailHogApp = join(results[InstallCommand.pathOption] as String,
           InstallCommand.mailHogAppname);
     } else {
-      pathToMailHogApp = MailHogSettings().pathToApp;
+      pathToMailHogApp = AppSettings().pathToMailHogApp;
     }
-    MailHogSettings().pathToApp =
+    AppSettings().pathToMailHogApp =
         join(pathToMailHogApp, InstallCommand.mailHogAppname);
 
     /// get the overwrite option.

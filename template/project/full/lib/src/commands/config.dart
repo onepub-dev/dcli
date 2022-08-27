@@ -3,9 +3,9 @@ import 'dart:async';
 import 'package:args/command_runner.dart';
 import 'package:dcli/dcli.dart';
 
-import '../mailhog_exception.dart';
-import '../mailhog_settings.dart';
-import 'args.dart';
+import '../args/global_args.dart';
+import '../exceptions/app_exception.dart';
+import '../settings/app_settings.dart';
 
 class ConfigCommand extends Command<void> {
   ConfigCommand() {
@@ -23,6 +23,11 @@ class ConfigCommand extends Command<void> {
   }
   static const smtpPortOption = 'smtp-port';
   static const httpPortOption = 'http-port';
+
+  /// name of the command. The user uses this name to run the command.
+  @override
+  String get name => 'config';
+
   @override
   String get description => '''
 Configures the mailhog ports.
@@ -36,13 +41,10 @@ arguments to update them without user interaction.
 .''';
 
   @override
-  String get name => 'config';
-
-  @override
   Future<void> run() async {
     final args = ConfigArgs.parse(argResults, globalResults);
 
-    final settings = MailHogSettings();
+    final settings = AppSettings();
 
     if (args.ask) {
       // ask the user to configure each setting and save it.
@@ -60,7 +62,7 @@ arguments to update them without user interaction.
     }
 
     if (settings.smtpPort == settings.httpPort) {
-      throw MailHogException(
+      throw ExitException(
           1, 'The SMTP Port and the HTTP Port may not be the same value.',
           showUsage: false);
     }
@@ -68,20 +70,22 @@ arguments to update them without user interaction.
   }
 }
 
-/// Class used to parse the command line args passed to the
-/// config command.
-class ConfigArgs extends Args {
+/// Parse the command line args specific to the config command
+/// including any global arguments.
+class ConfigArgs extends GlobalArgs {
   ConfigArgs.parse(ArgResults? results, ArgResults? globalResults)
       : super(globalResults) {
-    final settings = MailHogSettings();
+    final settings = AppSettings();
 
     var _smtpPort = settings.smtpPort;
     var _httpPort = settings.httpPort;
     var _ask = true;
 
     if (results!.rest.isNotEmpty) {
-      throw MailHogException(1,
-          'config does not take any positional arguments. Found ${results.rest}',
+      throw ExitException(
+          1,
+          'config does not take any positional arguments. '
+          'Found ${results.rest}',
           showUsage: true);
     }
     // smtp port
@@ -90,7 +94,7 @@ class ConfigArgs extends Args {
       final port =
           int.tryParse(results[ConfigCommand.smtpPortOption] as String);
       if (port == null) {
-        throw MailHogException(
+        throw ExitException(
             1, 'Invalid integer passed for ${ConfigCommand.smtpPortOption}',
             showUsage: false);
       }
@@ -103,7 +107,7 @@ class ConfigArgs extends Args {
       final port =
           int.tryParse(results[ConfigCommand.httpPortOption] as String);
       if (port == null) {
-        throw MailHogException(
+        throw ExitException(
             1, 'Invalid integer passed for ${ConfigCommand.httpPortOption}',
             showUsage: false);
       }

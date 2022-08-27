@@ -1,4 +1,4 @@
-name: dmailhog
+name: full
 version: 0.0.1
 description: A sample command-line application that installs and runs mailhog
 environment: 

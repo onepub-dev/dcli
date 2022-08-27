@@ -9,12 +9,14 @@ import 'package:dcli/dcli.dart';
 /// dcli create <scriptname>
 ///
 /// See
-/// https://pub.dev/packages/dcli#-installing-tab-
+/// https://onepub.dev/packages/dcli
 ///
 /// For details on installing dcli.
 ///
 
 void main(List<String> args) {
+
+  /// Add global command args
   final parser = ArgParser()
     ..addFlag(
       'verbose',
