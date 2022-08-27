@@ -2,6 +2,8 @@ externals:
   - external:
     path: ../template
     mount: template
+    exclude: 
+      - project/full/settings.yaml
   # - external:
   #   path: ../template/cmd_args
   #   mount: template/cmd_args
@@ -12,5 +14,3 @@ externals:
   #   path: ../template/hello_world
   #   mount: template/hello_world
 
-        
-  
