@@ -292,7 +292,11 @@ class Find extends DCliFunction {
       },
       // ignore: avoid_types_on_closure_parameters
       onError: (Object e, StackTrace st) {
-        if (e is FileSystemException && e.osError!.errorCode == _accessDenied) {
+        if (_isGeneralIOError(e)) {
+          /// can mean a corrupt disk, problems with virtualisation
+          /// I've seen this when gdrive.
+        } else if (e is FileSystemException &&
+            e.osError!.errorCode == _accessDenied) {
           /// check for and ignore permission denied.
           verbose(() => 'Permission denied: ${e.path}');
         } else if (e is FileSystemException && e.osError!.errorCode == 40) {
@@ -412,6 +416,19 @@ class Find extends DCliFunction {
   /// pass as a value to the final types argument
   /// to select links to be found
   static const link = FileSystemEntityType.link;
+
+  bool _isGeneralIOError(Object e) {
+    var error = false;
+    error = e is FileSystemException &&
+        !Platform.isWindows &&
+        e.osError!.errorCode == 5;
+
+    if (error) {
+      verbose(() => 'General IO Error(5) accessing: ${e.path}');
+    }
+
+    return error;
+  }
 }
 
 class _PatternMatcher {
