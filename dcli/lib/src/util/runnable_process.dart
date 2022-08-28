@@ -10,6 +10,7 @@ import 'dart:io';
 import 'package:dcli_core/dcli_core.dart' as core;
 
 import '../../dcli.dart';
+import 'capture.dart';
 import 'parse_cli_command.dart';
 
 /// [printerr] provides the equivalent functionality to the
@@ -22,7 +23,7 @@ import 'parse_cli_command.dart';
 /// [line] the line to write to stderr.
 void printerr(String? line) {
   /// Co-operate with runDCliZone
-  final overloaded = Zone.current[DCliZone.printerrKey] as DCliZonePrintErr?;
+  final overloaded = Zone.current[capturePrinterrKey] as CaptureZonePrintErr?;
   if (overloaded != null) {
     overloaded(line);
   } else {

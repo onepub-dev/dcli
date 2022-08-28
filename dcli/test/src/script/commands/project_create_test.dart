@@ -19,25 +19,31 @@ void main() {
   group('Create Project', () {
     test('Create hello world', () {
       withTestScope((fs) {
-        _installTemplates();
-        final pathToTemplate = join(fs, 'test');
-        DartProject.create(pathTo: pathToTemplate, templateName: 'simple')
-            .warmup();
-
-        checkProjectStructure(pathToTemplate, scriptName);
-      });
-    });
-
-    test('Run hello world', () {
-      TestFileSystem.common.withinZone((fs) {
-        withTempDir((fs) {
+        capture(() {
           _installTemplates();
-          final pathToScript = truepath(fs, 'test', 'bin', scriptName);
           final pathToTemplate = join(fs, 'test');
           DartProject.create(pathTo: pathToTemplate, templateName: 'simple')
               .warmup();
 
-          DartScript.fromFile(pathToScript).run();
+          checkProjectStructure(pathToTemplate, scriptName);
+        });
+      });
+    });
+
+    test('Run hello world', () {
+      capture(() {
+        TestFileSystem.common.withinZone((fs) {
+          withTempDir((fs) {
+            _installTemplates();
+            final pathToScript = truepath(fs, 'test', 'bin', scriptName);
+            final pathToTemplate = join(fs, 'test');
+            DartProject.create(pathTo: pathToTemplate, templateName: 'simple')
+                .warmup();
+
+            final progress = DartScript.fromFile(pathToScript).start();
+            expect(progress.exitCode! == 0, isTrue);
+            expect(exists(pathToScript), isTrue);
+          });
         });
       });
     });

@@ -5,11 +5,6 @@
  * Written by Brett Sutton <bsutton@onepub.dev>, Jan 2022
  */
 
-
-
-
-import 'dart:io';
-
 import 'package:dcli/dcli.dart';
 import 'package:dcli_core/dcli_core.dart' as core;
 
@@ -27,7 +22,7 @@ void main(List<String> args) {
         'privileges on Windows',
       ),
     );
-    exit(1);
+    dcliExit(1);
   }
   print(orange('Cleaning old test and build artifacts'));
 
@@ -42,23 +37,31 @@ void main(List<String> args) {
       'Activating dcli from source so we are testing against latest version',
     );
 
-    /// run pub get and only display errors.
-    PubCache().globalActivateFromSource(projectRoot);
+    capture(() {
+      /// globally activate dcli from source.
+      PubCache().globalActivateFromSource(projectRoot);
+    }, progress: Progress.printStdErr());
   }
 
   if (!PubCache().isGloballyActivated('dcli_unit_tester')) {
-    PubCache().globalActivate('dcli_unit_tester');
+    capture(() {
+      PubCache().globalActivate('dcli_unit_tester');
+    }, progress: Progress.printStdErr());
   }
 
-  // warm up the dcli project
-  DartProject.self.warmup();
+  capture(() {
+    // warm up the dcli project
+    DartProject.self.warmup();
+  }, progress: Progress.printStdErr());
 
   /// warm up all test packages.
   for (final pubspec
       in find('pubspec.yaml', workingDirectory: projectRoot).toList()) {
     if (DartSdk().isPubGetRequired(dirname(pubspec))) {
       print('Running pub get in ${dirname(pubspec)}');
-      DartSdk().runPubGet(dirname(pubspec));
+      capture(() {
+        DartSdk().runPubGet(dirname(pubspec));
+      }, progress: Progress.printStdErr());
     }
   }
 }
@@ -66,7 +69,7 @@ void main(List<String> args) {
 /// We need to have a single shared copy of the dcli source
 /// If we use the actual dcli dev directory then we contaminate
 /// the .packages/.dart_tool config with paths into the
-/// /tmp .pub_cache we use during testing.
+/// /tmp .pub-cache we use during testing.
 // void copyDCil() {
 //   final dcliTargetPath = join(Directory.systemTemp.path, '.dcli', 'source');
 
