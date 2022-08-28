@@ -1,3 +1,19 @@
+# 1.34.0
+- Added start() method to DartScript.
+- renamed dclizone to capture and remove the 'experiemental' comment.
+- Added additional error test for the find function - errno 5 on linux with can occur when running in a vm or with fuse.
+- improved the project creation from template code. We now more tightly target package name updates.
+- Added support for excluding resources when packing.
+- Improved the full sample template.
+
+## Unit test improvements
+- Added code to the test_file_system to activate dcli into the file system. reduced supurfluous unit test output.
+- Added unit_test scope to work with the dcliExit code so it knows when we are in a unit test.
+- fixed unit test where they named the temp .pub-cache directory inconsistenty.
+- Wrapped parts of unit tests in capture to reduce extraneous output.
+- replaced calls to exit with dcliExit to stop calls to exit() shutting down the unit test framework.
+- change the test tag 'sudo' to 'priviliged'
+
 # 1.33.2
 - replaced the full project template with a complete working example.
 - change the labels using doctor to all lower case.
