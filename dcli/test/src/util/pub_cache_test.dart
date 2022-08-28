@@ -43,16 +43,16 @@ void main() {
                 expect(
                     PubCache().pathToBin,
                     equals(
-                        join(outerTempDir, 'test_cache', '.pub_cache', 'bin')));
+                        join(outerTempDir, 'test_cache', '.pub-cache', 'bin')));
               } else {
                 expect(
                   PubCache().pathToBin,
-                  equals(join(outerTempDir, 'test_cache', '.pub_cache', 'bin')),
+                  equals(join(outerTempDir, 'test_cache', '.pub-cache', 'bin')),
                 );
               }
             });
         }, environment: {
-          'PUB_CACHE': join(outerTempDir, 'test_cache', '.pub_cache')
+          'PUB_CACHE': join(outerTempDir, 'test_cache', '.pub-cache')
         });
       });
     },

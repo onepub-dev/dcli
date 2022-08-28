@@ -36,7 +36,7 @@ class PubCache {
   ///       });
   ///     });
   /// }, environment: {
-  ///   'PUB_CACHE': join(outerTempDir, 'test_cache', '.pub_cache')
+  ///   'PUB_CACHE': join(outerTempDir, 'test_cache', '.pub-cache')
   /// });
   ///
   factory PubCache.forScope() => PubCache._internal();
@@ -254,11 +254,11 @@ class PubCache {
   /// ```
   bool isGloballyActivatedFromSource(String packageName) {
     /// run pub global list to see if dcli is run from a local path.
-    final line = DartSdk()
-        .runPub(args: ['global', 'list'], progress: Progress.capture())
-        .lines
-        .firstWhere((line) => line.startsWith(packageName),
-            orElse: () => packageName);
+    final lines = DartSdk()
+        .runPub(args: ['global', 'list'], progress: Progress.capture()).lines;
+
+    final line = lines.firstWhere((line) => line.startsWith(packageName),
+        orElse: () => packageName);
 
     return line.contains('at path');
   }

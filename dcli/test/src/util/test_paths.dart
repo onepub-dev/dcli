@@ -16,7 +16,7 @@ import 'package:test/test.dart';
 /// To do this it modifies the following environment variables:
 ///
 /// HOME = /tmp/dcli/home
-/// PUB_CACHE = /tmp/dcli/.pub_cache
+/// PUB_CACHE = /tmp/dcli/.pub-cache
 ///
 /// As the unit test suite creates an isolated .pub-cache it will be empty.
 /// As such when the unit tests start dcli is not actually installed in the
