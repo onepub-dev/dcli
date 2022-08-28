@@ -72,7 +72,7 @@ void main() {
       });
     });
 
-    t.test('Check .toList captures stderr and stdout when non-xero exit occurs',
+    t.test('Check .toList captures stderr and stdout when non-zero exit occurs',
         () {
       TestFileSystem().withinZone((fs) {
         final scriptPath = truepath(join(fs.testScriptPath, 'general/bin'));

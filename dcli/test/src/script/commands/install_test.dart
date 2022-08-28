@@ -16,7 +16,7 @@ void main() {
     'Install DCli',
     () {
       test(
-        'warmup install',
+        'warmup',
         () {
           withTestScope((testDir) {
             expect(!core.Settings().isWindows || Shell.current.isPrivilegedUser,
