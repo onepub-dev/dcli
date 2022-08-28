@@ -91,6 +91,8 @@ class TestFileSystem {
 
   bool initialised = false;
 
+  bool dcliActivated = false;
+
   /// The location of any temp scripts
   /// that need to be created during testing.
   late String tmpScriptPath;
@@ -104,6 +106,8 @@ class TestFileSystem {
 
   String? originalPubCache;
 
+  /// Run the passed callback [action] within the scope
+  /// of the [TestFileSystem].
   void withinZone(
     void Function(TestFileSystem fs) action,
   ) {
@@ -140,6 +144,15 @@ class TestFileSystem {
       print(green('Using TestFileSystem $fsRoot for Isolate: $isolateID'));
 
       initFS();
+
+      if (!dcliActivated) {
+        print(blue('Globally activating DCli into test file system'));
+        capture(() {
+          PubCache()
+              .globalActivateFromSource(DartProject.self.pathToProjectRoot);
+        }, progress: Progress.printStdErr());
+        dcliActivated = true;
+      }
 
       action(this);
     }
@@ -347,7 +360,9 @@ class TestFileSystem {
         ..dependencyOverrides = <String, Dependency>{}
         ..saveToFile(pathToPubspec);
 
-      DartProject.fromPath(dirname(pathToPubspec)).warmup(upgrade: true);
+      capture(() {
+        DartProject.fromPath(dirname(pathToPubspec)).warmup(upgrade: true);
+      }, progress: Progress.printStdErr());
     });
   }
 
@@ -378,7 +393,9 @@ class TestFileSystem {
         createDir(Settings().pathToDCliBin, recursive: true);
       }
 
-      DartProject.fromPath('pathToTools').warmup();
+      capture(() {
+        DartProject.fromPath('pathToTools').warmup();
+      }, progress: Progress.printStdErr());
       NamedLock(name: 'compile').withLock(() {
         for (final command in required) {
           final script =
