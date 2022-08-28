@@ -4,8 +4,6 @@
  * Written by Brett Sutton <bsutton@onepub.dev>, Jan 2022
  */
 
-import 'dart:io';
-
 import 'package:dcli_core/dcli_core.dart' as core;
 import 'package:meta/meta.dart';
 import 'package:scope/scope.dart';
@@ -86,7 +84,7 @@ class InstallCommand extends Command {
     /// We need to be priviledged for a number of operations
     if (_requirePrivileges && !shell.isPrivilegedUser) {
       _qprint(red(shell.privilegesRequiredMessage('dcli_install')));
-      exit(1);
+      dcliExit(1);
     }
 
     shell.releasePrivileges();
@@ -108,7 +106,7 @@ class InstallCommand extends Command {
       printerr(red('*' * 80));
       printerr(red(conditions));
       printerr(red('*' * 80));
-      exit(1);
+      dcliExit(1);
     }
     // install dart and dcli
     final dartWasInstalled = shell.install(installDart: _installDart);
@@ -181,7 +179,7 @@ class InstallCommand extends Command {
       if (!PATH.contains(PubCache().pathToBin)) {
         print('Your path does not contain ${PubCache().pathToBin}');
       }
-      exit(1);
+      dcliExit(1);
     } else {
       final dcliPath = dcliLocation;
       _qprint(blue('dcli found in : $dcliPath.'));

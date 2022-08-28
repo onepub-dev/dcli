@@ -68,7 +68,7 @@ void main() {
         //'groupdel $group'.run;
       }
     }, create: false);
-  }, tags: ['sudo']);
+  }, tags: ['privileged']);
 }
 
 String name(String fileBasedName) =>

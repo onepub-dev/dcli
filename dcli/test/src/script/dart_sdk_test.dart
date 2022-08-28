@@ -25,23 +25,19 @@ void main() {
     skip: false,
   );
 
-  test(
-    'Install Dart Sdk',
-    () {
-      withTempDir((tempPath) {
-        final defaultPath = join(tempPath, 'dart-sdk');
-        final installPath = DartSdk().installFromArchive(defaultPath);
-        setPathToDartSdk(installPath);
-        print('installed To $installPath');
-        expect(exists(join(defaultPath, 'bin', DartSdk.dartExeName)), isTrue);
-        expect(
-          DartSdk().pathToDartExe != null && exists(DartSdk().pathToDartExe!),
-          equals(true),
-        );
-      });
-    },
-    skip: false,
-  );
+  test('Install Dart Sdk', () {
+    withTempDir((tempPath) {
+      final defaultPath = join(tempPath, 'dart-sdk');
+      final installPath = DartSdk().installFromArchive(defaultPath);
+      setPathToDartSdk(installPath);
+      print('installed To $installPath');
+      expect(exists(join(defaultPath, 'bin', DartSdk.dartExeName)), isTrue);
+      expect(
+        DartSdk().pathToDartExe != null && exists(DartSdk().pathToDartExe!),
+        equals(true),
+      );
+    });
+  }, skip: false, tags: ['privileged']);
 
   test('Parse sdk version', () {
     final output = '${DartSdk().pathToDartExe} --version'.firstLine;

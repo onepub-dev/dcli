@@ -79,7 +79,7 @@ void main() {
         print(st);
       }
     },
-    tags: ['sudo'],
+    tags: ['privileged'],
     skip: core.Settings().isWindows,
   );
 
@@ -102,7 +102,7 @@ void main() {
       print('sudo logged in user home =$home');
       expect((Shell.current as PosixShell).loggedInUsersHome, home);
     },
-    tags: ['sudo'],
+    tags: ['privileged'],
     skip: core.Settings().isWindows,
   );
 
@@ -115,7 +115,7 @@ void main() {
         join((Shell.current as PosixShell).loggedInUsersHome, '.pub-cache'),
       );
     },
-    tags: ['sudo'],
+    tags: ['privileged'],
     skip: core.Settings().isWindows,
   );
 }
