@@ -4,9 +4,8 @@
  * Written by Brett Sutton <bsutton@onepub.dev>, Jan 2022
  */
 
-import 'dart:io';
-
 import 'package:dcli/src/script/commands/commands.dart';
+import 'package:dcli/src/util/exit.dart';
 
 /// provides command line tab completion for bash users.
 ///
@@ -29,7 +28,7 @@ void main(List<String> args) {
       'from the bash command line for dcli',
     );
     print("You don't run dcli_complete directly");
-    exit(-1);
+    dcliExit(-1);
   }
 
   //var appname = args[0];

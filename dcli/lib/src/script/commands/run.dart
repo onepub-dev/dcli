@@ -4,8 +4,6 @@
  * Written by Brett Sutton <bsutton@onepub.dev>, Jan 2022
  */
 
-import 'dart:io';
-
 import '../../../dcli.dart';
 import '../../util/completion.dart';
 import '../command_line_runner.dart';
@@ -45,7 +43,7 @@ class RunCommand extends Command {
             'Run dcli warmup $scriptPath',
           ),
         );
-        exit(1);
+        dcliExit(1);
       }
     }
 

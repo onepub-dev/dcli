@@ -5,11 +5,6 @@
  * Written by Brett Sutton <bsutton@onepub.dev>, Jan 2022
  */
 
-
-
-
-import 'dart:io';
-
 import 'package:dcli/dcli.dart';
 import 'package:dcli/src/util/file_sort.dart';
 
@@ -197,5 +192,5 @@ ${green("Examples:")}
 ''',
   );
 
-  exit(-1);
+  dcliExit(-1);
 }

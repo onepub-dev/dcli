@@ -97,7 +97,7 @@ class CompileCommand extends Command {
             'Run dcli warmup $scriptPath',
           ),
         );
-        exit(1);
+        dcliExit(1);
       }
     }
 

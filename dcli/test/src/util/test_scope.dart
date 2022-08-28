@@ -6,6 +6,7 @@
 
 import 'package:dcli/dcli.dart';
 import 'package:dcli/src/script/commands/install.dart';
+import 'package:dcli/src/util/unit_test.dart';
 import 'package:dcli_core/dcli_core.dart' as core;
 import 'package:scope/scope.dart';
 
@@ -25,33 +26,37 @@ void withTestScope(void Function(String testDir) callback,
     core.DCliPlatformOS? overridePlatformOS}) {
   // final originalHome = HOME;
 
-  withTempDir((testDir) {
-    withEnvironment(() {
-      Scope()
-        ..value(InstallCommand.activateFromSourceKey, true)
-        ..value(core.DCliPlatform.scopeKey,
-            core.DCliPlatform.forScope(overriddenPlatform: overridePlatformOS))
-        ..run(() {
-          Scope()
-            ..value(Settings.scopeKey, Settings.forScope())
-            ..value(PubCache.scopeKey, PubCache.forScope())
-            // ..value(originalHomeKey, originalHome)
-            ..run(() {
-              callback(testDir);
-            });
-        });
-    }, environment: {
-      'HOME': testDir,
+  withUnitTest(() {
+    withTempDir((testDir) {
+      withEnvironment(() {
+        Scope()
+          ..value(InstallCommand.activateFromSourceKey, true)
+          ..value(
+              core.DCliPlatform.scopeKey,
+              core.DCliPlatform.forScope(
+                  overriddenPlatform: overridePlatformOS))
+          ..run(() {
+            Scope()
+              ..value(Settings.scopeKey, Settings.forScope())
+              ..value(PubCache.scopeKey, PubCache.forScope())
+              // ..value(originalHomeKey, originalHome)
+              ..run(() {
+                callback(testDir);
+              });
+          });
+      }, environment: {
+        'HOME': testDir,
 
-      /// add our pub-cache to the front of the path so dcli is run from there.
-      'PATH': [join(commonTestPubCache, 'bin'), ...PATH]
-          .join(Env().delimiterForPATH),
+        /// add our pub-cache to the front of the path so dcli is run from there.
+        'PATH': [join(commonTestPubCache, 'bin'), ...PATH]
+            .join(Env().delimiterForPATH),
 
-      /// we need to force the pub cache to use a shared test cache
-      /// as the above change to HOME will cause the pub-cache to
-      /// be moved to the tests test file system causing it to be
-      /// re-downloaded for each test run.
-      'PUB_CACHE': commonTestPubCache
-    });
-  }, pathToTempDir: pathToTestDir);
+        /// we need to force the pub cache to use a shared test cache
+        /// as the above change to HOME will cause the pub-cache to
+        /// be moved to the tests test file system causing it to be
+        /// re-downloaded for each test run.
+        'PUB_CACHE': commonTestPubCache
+      });
+    }, pathToTempDir: pathToTestDir);
+  });
 }

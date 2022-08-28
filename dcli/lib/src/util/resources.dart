@@ -408,7 +408,7 @@ $line
       if (paths.contains(resource.pathToMount)) {
         printerr(
             red('Duplicate resource at mount point: ${resource.pathToMount}'));
-        exit(1);
+        dcliExit(1);
       }
       paths.add(resource.pathToMount);
     }

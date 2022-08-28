@@ -5,9 +5,6 @@
  * Written by Brett Sutton <bsutton@onepub.dev>, Jan 2022
  */
 
-
-
-
 import 'dart:io';
 import 'package:dcli/dcli.dart';
 
@@ -33,7 +30,8 @@ void evaluate(String command) {
       Directory.current = join(pwd, parts[1]);
       break;
     case 'exit':
-      exit(0);
+      dcliExit(0);
+      break;
     default:
       if (which(parts[0]).found) {
         command.start(nothrow: true, progress: Progress.print());

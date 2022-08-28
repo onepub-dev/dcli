@@ -344,7 +344,7 @@ class DartProject {
 
         // ignore: flutter_style_todos
         /// TODO(bsutton): should this be a throw?
-        exit(1);
+        dcliExit(1);
       }
       pubGet.run(compileExecutables: false);
     });
@@ -371,7 +371,7 @@ class DartProject {
 
         // ignore: flutter_style_todos
         /// TODO(bsutton): should this be a throw?
-        exit(1);
+        dcliExit(1);
       }
       pubUpgrade.run(compileExecutables: false);
     });
