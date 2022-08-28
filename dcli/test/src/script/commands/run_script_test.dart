@@ -16,7 +16,7 @@ void main() {
       final results = <String?>[];
 
       '${DCliPaths().dcliName} '
-              '-v ${join(fs.testScriptPath, 'general/bin/hello_world.dart')}'
+              '${join(fs.testScriptPath, 'general/bin/hello_world.dart')}'
           .forEach(results.add, stderr: printerr);
 
       // if warmup hasn't been run then we have the results
