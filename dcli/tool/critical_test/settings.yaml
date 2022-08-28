@@ -1,2 +1,2 @@
-  exclude-tags: [sudo]
+  exclude-tags: [privileged]
   hooks: true
