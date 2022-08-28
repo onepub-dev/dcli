@@ -320,6 +320,38 @@ class DartScript {
     return runner.run();
   }
 
+  /// Runs the dart script with an optional set of [args].
+  ///
+  /// [args] is a list of command line arguments which will
+  /// be passed to the scsript.
+  ///
+  /// Returns the processes exit code.
+  Progress start({
+    List<String> args = const <String>[],
+    Progress? progress,
+    bool runInShell = false,
+    bool detached = false,
+    bool terminal = false,
+    bool privileged = false,
+    bool nothrow = false,
+    String? workingDirectory,
+    bool extensionSearch = true,
+  }) {
+    final sdk = DartSdk();
+
+    final runner = ScriptRunner(sdk, this, args);
+
+    return runner.start(
+        progress: progress,
+        runInShell: runInShell,
+        detached: detached,
+        terminal: terminal,
+        privileged: privileged,
+        nothrow: nothrow,
+        workingDirectory: workingDirectory,
+        extensionSearch: extensionSearch);
+  }
+
   /// Returns the platform dependant name of the compiled script's exe name.
   /// On Linux and MacOS this is just the basename (script name
   ///  without the extension)

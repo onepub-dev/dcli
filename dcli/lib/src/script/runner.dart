@@ -6,9 +6,6 @@
 
 // ignore_for_file: deprecated_member_use
 
-import 'dart:cli';
-import 'dart:io';
-
 import '../../dcli.dart';
 
 /// Runs a Dart dscript
@@ -31,22 +28,47 @@ class ScriptRunner {
       ..._scriptArguments
     ];
 
-    verbose(
-      () => 'Executing: ${DartSdk().pathToDartExe} $vmArgs, '
-          '${script.pathToScript}',
-    );
+    verbose(() => 'Executing: ${DartSdk().pathToDartExe} $vmArgs');
 
-    // Execute the script
-    final process = waitFor<Process>(
-      Process.start(
-        _sdk.pathToDartExe!,
-        vmArgs,
-        mode: ProcessStartMode.inheritStdio,
-      ),
-    );
+    final progress = startFromArgs(_sdk.pathToDartExe!, vmArgs, terminal: true);
+    return progress.exitCode!;
+  }
 
-    final exitCode = waitForEx<int>(process.exitCode);
+  /// Run the script.
+  /// If no [progress] is passed then both stdout and stderr are pritned.
+  /// If no [workingDirectory] is passed then the current working directory
+  /// is used.
+  Progress start({
+    Progress? progress,
+    bool runInShell = false,
+    bool detached = false,
+    bool terminal = false,
+    bool privileged = false,
+    bool nothrow = false,
+    String? workingDirectory,
+    bool extensionSearch = true,
+  }) {
+    progress ??= Progress.print();
 
-    return exitCode;
+    // Prepare VM arguments
+    final vmArgs = <String>[
+      '--enable-asserts',
+      script.pathToScript,
+      ..._scriptArguments
+    ];
+
+    verbose(() => 'Executing: ${DartSdk().pathToDartExe} $vmArgs');
+
+    startFromArgs(_sdk.pathToDartExe!, vmArgs,
+        progress: progress,
+        runInShell: runInShell,
+        detached: detached,
+        terminal: terminal,
+        privileged: privileged,
+        nothrow: nothrow,
+        workingDirectory: workingDirectory,
+        extensionSearch: extensionSearch);
+
+    return progress;
   }
 }
