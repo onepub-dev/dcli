@@ -50,3 +50,7 @@ platforms:
   linux: 
   macos: 
   windows: 
+
+dependency_overrides:
+  dcli_core:
+    path: ../dcli_core

@@ -30,7 +30,8 @@ class ScriptRunner {
 
     verbose(() => 'Executing: ${DartSdk().pathToDartExe} $vmArgs');
 
-    final progress = startFromArgs(_sdk.pathToDartExe!, vmArgs, terminal: true);
+    final progress = startFromArgs(_sdk.pathToDartExe!, vmArgs,
+        terminal: true, nothrow: true);
     return progress.exitCode!;
   }
 

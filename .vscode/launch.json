@@ -35,7 +35,6 @@
                 "name": "limitedstream",
                 "request": "launch",
                 "type": "dart",
-                "mode": "profile"
             },
 
         {
@@ -67,6 +66,12 @@
             "program": "dcli/test/src/functions/find_memory.dart",
             "request": "launch",
             "type": "dart"
-        }
+        },
+        {
+            "name": "test run_script_test",
+            "program": "dcli/test/src/script/commands/run_script_test.dart",
+            "request": "launch",
+            "type": "dart"
+        },
     ]
 }
