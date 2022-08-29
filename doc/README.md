@@ -16,8 +16,8 @@ OnePub allows you to privately share dart packages between your own projects or 
 
 Try it for free and publish your first private package in seconds.
 
-| ![](<.gitbook/assets/OnePub.dev Logo – reversed FA (1).svg>) | <p>Publish a private package in five commands:</p><p><mark style="color:green;"><code>dart pub global activate onepub</code></mark></p><p><mark style="color:green;"><code>onepub login</code></mark></p><p><mark style="color:green;"><code>cd &#x3C;my package></code></mark></p><p><mark style="color:green;"><code>onepub pub private</code></mark></p><p><mark style="color:green;"><code>dart pub publish</code></mark></p> |
-| ------------------------------------------------------------ | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| ![](<.gitbook/assets/OnePub.dev Logo – reversed FA (2) (1) (1).svg>) | <p>Publish a private package in five commands:</p><p><mark style="color:green;"><code>dart pub global activate onepub</code></mark></p><p><mark style="color:green;"><code>onepub login</code></mark></p><p><mark style="color:green;"><code>cd &#x3C;my package></code></mark></p><p><mark style="color:green;"><code>onepub pub private</code></mark></p><p><mark style="color:green;"><code>dart pub publish</code></mark></p> |
+| -------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 
 ## Overview
 

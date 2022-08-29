@@ -27,7 +27,7 @@ Dennis Ritchie ; 9th Sept 1944 - 12th Oct 2011\
 Kenneth Lane Thompson February 4, 1943
 {% endhint %}
 
-![My first bible.](<../.gitbook/assets/image (1) (1) (1) (1) (1).png>)
+![My first bible.](<../.gitbook/assets/image (1) (1) (1) (1) (2).png>)
 
 Unix is the direct ancestor of Linux, OSX and to a lesser extent Windows. You might more correctly say that 'C' is the common ancestor of all three OSs as their kernels are all written in C.
 
@@ -343,7 +343,7 @@ More correctly we say that we write data to stdout and read data from stdin.
 So if we want to capture what the user is typing into the terminal then we need to 'read' from stdin.
 
 ```
- user -&gt; hello -&gt; terminal -&gt; stdin -&gt; read
+ user -> hello -> terminal -> stdin -> read
 ```
 
 Dart actually provides low level methods to directly read from stdin but their a little bit painful to work with.
