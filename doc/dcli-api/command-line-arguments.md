@@ -1,6 +1,6 @@
 # Command Line Arguments
 
-A CLI app is only so useful unless you can pass arguments to your app.
+A CLI app is only so useful, unless you can pass arguments to your app.
 
 {% hint style="info" %}
 Use `dcli create --template=full myproject` to create an example cli app that demonstrates best practices when parsing arguments.

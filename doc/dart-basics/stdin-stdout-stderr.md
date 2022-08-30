@@ -20,6 +20,13 @@ stdout -  lets you show information to the user
 
 stderr - lets you show errors to the user.
 
+As a visual add you can think of the files as:
+
+```
+[stdin -> app -> stdout
+              -> stderr]
+```
+
 But these files are anything but basic.
 
 ## In the beginning
@@ -125,6 +132,17 @@ Most languages provide a specific wrapper for each these file handles. In Dart w
 * stdout
 * stderr
 
+As a visual add you can think of the files as:
+
+```
+[stdin -> app -> stdout
+              -> stderr]
+```
+
+
+
+
+
 > The 'C' programming language has the same three properties and many other languages use the same names.
 
 ## And on this rock I will build my app
@@ -147,7 +165,7 @@ Any peg can go into any hole.
 
 You might now have guessed that you can connect stdout from one program to stdin on another program:
 
-\[myapp -> stdout] -> \[stdin -> yourapp]
+\[myapp -> stdout] => \[stdin -> yourapp]
 
 If you are familiar with Bash you may have even seen one of the common ways to connect two apps.
 
@@ -189,11 +207,13 @@ When we run an app in a terminal window the app's:
 
 So let's look what happens when our app prints something.
 
-> \[print('hello') -> stdout] -> \[stdin -> terminal -> font] -> \[graphics card ] -> \[eye -> brain]
+> \[print('hello') -> stdout] => \[stdin -> terminal  font] => \[graphics card ] => \[eye -> brain]
 
-When we call `print('hello')` our app writes 'hello' to stdout, this arrives in the terminal app via its stdin.
+When we call `print('hello')` our app writes 'hello' to stdout, this arrives in the terminal app via the terminals stdin.
 
-The terminal app then takes the ASCII characters we sent (hello), translates them to pixels and sends them to our graphics card. These pixel form, what many people like to call, a 'font'. Somehow, rather magically, your brain translates this little pixels into characters and you see the word 'hello'.
+The terminal app then takes the ASCII characters we sent (hello), translates them to pixels and sends them to our graphics card.&#x20;
+
+These pixel form, what many people like to call, a 'font'. Somehow, rather magically, your brain translates this little pixels into characters and you see the word 'hello'.
 
 {% hint style="info" %}
 In the beginning was the Word, and the Word was 'hello world'.
@@ -214,15 +234,31 @@ void print(String message)
 And you will know the truth, and the truth will set you free.”
 {% endhint %}
 
-## Turtles also have shells
+## It's turtles all the way down!
 
 So I lied. But it was a honest lie...
 
 When we launch a terminal it typically doesn't directly attached to our app as there is almost always a middle man.  That middle man is the shell.
 
-The shell, as I'm sure you known, provides an interactive&#x20;
+The shell, as I'm sure you known, provides an interactive prompt allowing you to launch applications.
 
+So my (small) lie can be fixed by adding the shell into the pipe line:
 
+Instead of:
+
+\[print('hello') -> stdout] => \[stdin -> terminal -> font] => \[graphics card ] => \[eye -> brain]
+
+What we really happens is:
+
+\[print('hello') -> stdout]&#x20;
+
+&#x20;   \=> \[stdin -> shell -> stdout]&#x20;
+
+&#x20;       \=> \[stdin -> terminal -> font]&#x20;
+
+&#x20;           \=> \[graphics card ]&#x20;
+
+&#x20;               \=> \[eye -> brain]
 
 Examples of shells are:&#x20;
 
@@ -238,48 +274,72 @@ Sheldon's Mother
 
 > OK, so let's do the maths and implement a basic shell.
 
+You can find the complete code on github:  [https://github.com/onepub-dev/dshell](https://github.com/onepub-dev/dshell)
+
+#### dshell.dart
+
 ```dart
 #! /usr/bin/env dcli
 
 import 'dart:io';
 
 import 'package:dcli/dcli.dart';
+import 'package:dshell/src/app_with_args.dart';
+import 'package:dshell/src/pipe.dart';
 
-void main(List<String> args) {
+void main(List<String> args) async {
   // Loop, asking for user input and evaluating it
   for (;;) {
     // print a > as a prompt
     stdout.write('${green(basename(pwd))}${blue('>')}');
-    final line = stdin.readLineSync() ?? '';
-    if (line.isNotEmpty) {
-      evaluate(line);
+    final commandLine = stdin.readLineSync() ?? '';
+    if (commandLine.isNotEmpty) {
+      await evaluate(commandLine);
     }
   }
 }
 
-// Evaluate the users input
-void evaluate(String command) {
-  final parts = command.split(' ');
-  switch (parts[0]) {
+// Evaluate the user's input
+Future<void> evaluate(String commandLine) async {
+  // use the | to split out multiple commands
+  final apps = commandLine.split('|');
+  // just a single app, so run it.
+  if (apps.length == 1) {
+    runApp(AppWithArgs(apps[0]));
+    return;
+  }
+  // if we see two apps use pipe 
+  if (apps.length == 2) {
+    final app1 = AppWithArgs(apps[0]);
+    final app2 = AppWithArgs(apps[1]);
+
+    await simplePipe(app1, app2);
+  } else {
+    stderr.writeln('We only support piping 2 apps');
+  }
+}
+
+void runApp(AppWithArgs appWithArgs) {
+  switch (appWithArgs.app) {
     // list files in the current directory
     case 'ls':
-      ls(parts.sublist(1));
+      ls(appWithArgs.args);
       break;
 
     // change directories
     case 'cd':
-      Directory.current = join(pwd, parts[1]);
+      Directory.current = join(pwd, appWithArgs.args[0]);
       break;
 
     // treat the first word as the name of an app
     // and run it.
     default:
-      if (which(parts[0]).found) {
+      if (which(appWithArgs.app).found) {
         // The run command is part of DCli and does all of the
         // plumbing for stding/stdout/stderr.
-        run(command);
+        run(appWithArgs.cmdLine);
       } else {
-        print(red('Unknown command: ${parts[0]}'));
+        stdout.writeln(red('Unknown command: ${appWithArgs.app}'));
       }
       break;
   }
@@ -289,18 +349,65 @@ void evaluate(String command) {
 void ls(List<String> patterns) {
   if (patterns.isEmpty) {
     find('*',
-        workingDirectory: pwd,
-        recursive: false,
-        types: [Find.file, Find.directory]).forEach((file) => print('  $file'));
+            workingDirectory: pwd,
+            recursive: false,
+            types: [Find.file, Find.directory])
+        .forEach((file) => stdout.writeln('  $file'));
   } else {
     for (final pattern in patterns) {
       find(pattern,
               workingDirectory: pwd,
               recursive: false,
               types: [Find.file, Find.directory])
-          .forEach((file) => print('  $file'));
+          .forEach((file) => stdout.writeln('  $file'));
     }
   }
+}
+
+
+```
+
+#### `pipe.dart`
+
+The pipe function is where the funky stuff happens.
+
+The simplePipe function runs each app and then wires their output together using dart's built in pipe command. The pipe command simple reads `stdout` of the first app and writes that data into the `stdin` of the second app.
+
+\[app1 -> stdout] => \[stdin -> app2]
+
+Finally, the call to pipeNoClose  wires the output of the app2 to our shells own `stdout`. The result is, any data that app2 writes is displayed on the console (because the console is reading the shell's stdout).
+
+This is essentially the same process used by any shell.
+
+```dart
+import 'dart:io';
+
+import 'app_with_args.dart';
+
+Future<void> simplePipe(AppWithArgs app1, AppWithArgs app2) async {
+  final app1Process = await Process.start(app1.app, app1.args);
+  final app2Process = await Process.start(app2.app, app2.args);
+
+  // the output from app1 is sent to the input of app2
+  await app1Process.stdout.pipe(app2Process.stdin).catchError(
+    // ignore: avoid_types_on_closure_parameters
+    (Object e) {
+      // ignore broken pipe after app2 process exit
+    },
+    test: (e) =>
+        e is SocketException &&
+        (e.osError!.message == 'Broken pipe' ||
+            e.osError!.message == 'StreamSink is closed'),
+  );
+
+  /// the output of app2 is sent to the console.
+  /// We can't use the normal pipe command is it close the consumer (stdout)
+  /// would would stop our app from outputing any further
+  await pipeNoClose(app2Process.stdout, stdout);
+}
+
+Future<void> pipeNoClose(Stream<List<int>> stdout, IOSink stdin) async {
+  await stdin.addStream(stdout);
 }
 
 ```
@@ -320,10 +427,12 @@ tmp> cd ..
 example> ls
   dshell.dart
   tmp
-example>
+example> cat bin/dshell.dart | grep pipe
+   import 'package:dshell/src/pipe.dart';
+   await pipe(app1, app2);
 ```
 
-You can find the complete code on github:  [https://github.com/onepub-dev/dshell](https://github.com/onepub-dev/dshell)
+
 
 ### Its turtles all the way down
 
