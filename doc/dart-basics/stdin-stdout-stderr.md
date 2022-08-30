@@ -20,14 +20,14 @@ stdout -  lets you show information to the user
 
 stderr - lets you show errors to the user.
 
-As a visual add you can think of the files as:
+As a visual aid, you can think of the files as:
 
 ```
 [stdin -> app -> stdout
               -> stderr]
 ```
 
-But these files are anything but basic.
+But these files are anything but basic and it's not just a user that we can communicate with.
 
 ## In the beginning
 
@@ -38,9 +38,9 @@ Way back in the dark ages (circa 1970) the computer gods got together and create
 {% hint style="info" %}
 And Dennis said, let there be 'C'. And Denis looked upon 'C' and said it was good and the people agreed.
 
-But Dennis did not rest on the seventh day, instead he called upon Kenneth and over lunch and a nice red, they doth created Unix.
+But Dennis did not rest on the seventh day, instead, he called upon Kenneth and over lunch and a nice red, they doth created Unix.
 
-Dennis Ritchie ; 9th Sept 1944 - 12th Oct 2011\
+Dennis Ritchie; 9th Sept 1944 - 12th Oct 2011\
 Kenneth Lane Thompson February 4, 1943
 {% endhint %}
 
@@ -48,11 +48,11 @@ Kenneth Lane Thompson February 4, 1943
 
 Unix is the direct ancestor of Linux, MacOS and to a lesser extent Windows. You might more correctly say that 'C' is the common ancestor of all three OSs, as their kernels are all written in C.
 
-The concept of stdin/stdout and stderr proliferated across the OS world as C was taken up as the primary language for writing Operating Systems.
+As C was taken up as the primary language for writing Operating Systems, the concept of stdin/stdout and stderr proliferated across the OS world.
 
 The result is today that a large no. of operating systems support stdin/stdout and stderr.
 
-The majority of people reading this primer will be working with Linux, MacOS or Windows and in each of these cases the Holy Trinity (stdin/stdout/stderr) are available in every app they use or write.
+The majority of people reading this primer will be working with Linux, MacOS or Windows and in each of these cases, the Holy Trinity (stdin/stdout/stderr) is available in every app they use or write.
 
 The following examples are presented using the Dart programming language, but the concepts and even most of the details are correct across multiple OSs and languages.
 
@@ -61,18 +61,18 @@ The following examples are presented using the Dart programming language, but th
 In the Unix world, EVERYTHING is a file. Even devices and processes are treated as files.
 
 {% hint style="info" %}
-If you know where to look, processes and devices are actually visible in the Linux/MacOS directory tree as files.
+If you know where to look, processes and devices are visible in the Linux/MacOS directory tree as files.
 {% endhint %}
 
 So if everything is a file, does that mean we can directly read/write to a device/process/directory?
 
 The simple answer is, yes.
 
-If we want to read/write to a file we need to open the file. In the Unix world (and virtually every other OS) when we open a file we get a 'file descriptor' or FD for short. Once we have an FD we can read/write to the file. The FD may be presented differently in your language of choice but under the hood its still an FD. (**In Dart we have the File class that wraps an FD**).
+If we want to read/write to a file we need to open the file. In the Unix world (and virtually every other OS) when we open a file we get a 'file descriptor' or FD for short. Once we have an FD we can read and write to the file. The FD may be presented differently in your language of choice but under the hood, it's still an FD. (**In Dart we have the File class that wraps an FD**).
 
 > The terms 'file descriptor' and 'file handle' are often used interchangeably.
 
-So what exactly is an FD? Under the hood an FD is just an integer that acts as an index to an array of open files. The FD array contains information such as the path to the file, the size of the file, the current seek position and more.
+So what exactly is an FD? Under the hood, an FD is just an integer that acts as an index to an array of open files. The FD array contains information such as the path to the file, the size of the file, the current seek position and more.
 
 ## The Holy Trinity
 
@@ -108,11 +108,11 @@ You can't get much more obtuse than the above line, but now we know about FD's i
 Bash was not created by the gods. I think the other bloke had a hand in this one.
 {% endhint %}
 
-The `>out.txt` section is actually a shorthand for `1>out.txt` . It instructs Bash to take anything that `find` writes to FD =1 (stdout) and and re-write it to the file called 'out.txt'.
+The `>out.txt` section is actually a shorthand for `1>out.txt` . It instructs Bash to take anything that `find` writes to FD =1 (stdout) and re-write it to the file called 'out.txt'.
 
 The `2> &1` section instructs Bash to take anything `find` writes to FD=2 (stderr) and re-write it to FD=1.&#x20;
 
-i.e. anything written to stderr (FD=2) then re-write it to stdout (FD=1) which in turn is written to `out.txt`.  &#x20;
+i.e. anything written to stderr (FD=2) is re-written to stdout (FD=1) which in turn is written to `out.txt`.  &#x20;
 
 The result of the above command is that both stdout and stderr are written to the file called 'out.txt'.
 
@@ -122,32 +122,21 @@ It would have been less obtuse to write:
 find . '*.png' 1>out.txt 2>out.txt
 ```
 
-But of course we are talking about Bash here and apparently more obtuse is always better :)
+But of course, we are talking about Bash here and apparently more obtuse is always better :D
 
 > Many other shells use a similar syntax.
 
-Most languages provide a specific wrapper for each these file handles. In Dart we have the global properties:
+Most languages provide a specific wrapper for each f these file handles. In Dart we have the global properties:
 
 * stdin
 * stdout
 * stderr
 
-As a visual add you can think of the files as:
-
-```
-[stdin -> app -> stdout
-              -> stderr]
-```
-
-
-
-
-
 > The 'C' programming language has the same three properties and many other languages use the same names.
 
-## And on this rock I will build my app
+## And on this rock, I will build my app
 
-I like to think of the Unix philosophy as programming by Lego.
+I like to think of the Unix philosophy as programming by Lego (but Meccano is superior).
 
 {% hint style="info" %}
 Unix was all about Lego - build lots of little bricks (apps) that can be connected.
@@ -170,18 +159,20 @@ You might now have guessed that you can connect stdout from one program to stdin
 If you are familiar with Bash you may have even seen one of the common ways to connect two apps.
 
 ```
-ls "*.png" | grep "penguins"
+ls "*.png" | grep "turtles"
 ```
 
-In the above example the `ls` command will write a list of files that end in `.png`. The grep command will receive that list and then output a line each time it sees a filename that contains the word `penguins`.
+In the above example, the `ls` command will write a list of files that end in `.png`. The grep command will receive that list and then output a line each time it sees a filename that contains the word `turtles`.
 
-The '|' pipe operator connects the stdout of 'ls' to the stdin of 'grep'.
+The Bash  '|' pipe operator connects the stdout of 'ls' to the stdin of 'grep'.
 
 If you like, the 'pipe' command is the plumbing and Bash is the plumber.
 
 Any data `ls` writes to it's stdout, is written to 'grep's stdin. We say that the two apps are  connected via a 'pipe'.
 
-> A 'pipe' is just a program that reads from one FD and writes to another. In this case Bash is acting as the pipe. When Bash sees the '|' character it takes it as an instruction to launch the two applications (ls and grep), read stdout from ls and write that data to stdin of grep.&#x20;
+> **A 'pipe' is just a program that reads from one FD and writes to another.**&#x20;
+>
+> In this case Bash is acting as the pipe. When Bash sees the '|' character it takes it as an instruction to launch the two applications (ls and grep), read stdout from ls and write that data to grep's stdin.&#x20;
 
 A couple of other interesting things happened here.
 
@@ -197,7 +188,7 @@ You take the _red_ pill—you stay in Wonderland, and I show you how deep the ra
 
 So let's just stop for a moment and consider this fact; **the terminal you are using is actually an app!**
 
-Like every other app it has stdin/stdout/stderr.
+Like every other app, it has stdin/stdout/stderr.
 
 When we run an app in a terminal window the app's:
 
@@ -205,50 +196,60 @@ When we run an app in a terminal window the app's:
 * stdout is attached to the terminal's stdin.
 * stderr is attached to the terminal's stdin.
 
-So let's look what happens when our app prints something.
+\[terminal -> stdout] => \[stdin -> app -> stdout, stderr] => \[stdin -> terminal]
+
+{% hint style="info" %}
+And so we are all connected in the great Circle of Life.
+
+Mafasa, The Lion King.
+{% endhint %}
+
+So let's look at what happens when our app prints something.
 
 > \[print('hello') -> stdout] => \[stdin -> terminal  font] => \[graphics card ] => \[eye -> brain]
 
-When we call `print('hello')` our app writes 'hello' to stdout, this arrives in the terminal app via the terminals stdin.
+When we call `print('hello')` our app writes 'hello' to stdout, this arrives in the terminal app via the terminal's stdin.
 
 The terminal app then takes the ASCII characters we sent (hello), translates them to pixels and sends them to our graphics card.&#x20;
 
-These pixel form, what many people like to call, a 'font'. Somehow, rather magically, your brain translates this little pixels into characters and you see the word 'hello'.
+These pixel form, what many people like to call, a 'font'. Somehow, rather magically, your brain translates these little pixels into characters and you see the word 'hello'.
 
 {% hint style="info" %}
-In the beginning was the Word, and the Word was 'hello world'.
+In the beginning, was the Word, and the Word was 'hello world'.
 {% endhint %}
 
 The above example uses `print` to write to stdout. Print is a common function for writing to stdout and `print` or similar exists in most languages. Under the hood `print` literally writes to stdout:
 
-The Dart implementation of `print` now makes sense:
+If we look at the Dart implementation of `print,` the truth of this is self evident.
 
 ```
 void print(String message)
 {
-    stdout.write('$message\n');
+    stdout.writeln(message);
 }
 ```
 
 {% hint style="info" %}
-And you will know the truth, and the truth will set you free.”
+And you will know the truth, and the truth will set you free.
+
+Some bloke.
 {% endhint %}
 
-## It's turtles all the way down!
+## It's turtles, all the way down!
 
-So I lied. But it was a honest lie...
+So I lied. But it was an honest lie...
 
-When we launch a terminal it typically doesn't directly attached to our app as there is almost always a middle man.  That middle man is the shell.
+Launching a terminal doesn't directly attach to our app as there is almost always a middleman.  That middleman is the shell.
 
-The shell, as I'm sure you known, provides an interactive prompt allowing you to launch applications.
+The shell, as I'm sure you know, provides an interactive prompt allowing you to launch applications.
 
-So my (small) lie can be fixed by adding the shell into the pipe line:
+So my (small) lie can be fixed by adding the shell into the pipeline:
 
 Instead of:
 
 \[print('hello') -> stdout] => \[stdin -> terminal -> font] => \[graphics card ] => \[eye -> brain]
 
-What we really happens is:
+What really happens is:
 
 \[print('hello') -> stdout]&#x20;
 
@@ -264,15 +265,15 @@ Examples of shells are:&#x20;
 
 Bash, Zsh, Powershell, CMD, Ash, Bourne, Korn, Hamilton...&#x20;
 
-and of course you could build your own.
+and of course, you could build your own.
 
 {% hint style="info" %}
-Is that a rhetorical point, you would you like to do the maths?&#x20;
+Is that a rhetorical point, or would you like to do the maths?&#x20;
 
 Sheldon's Mother
 {% endhint %}
 
-> OK, so let's do the maths and implement a basic shell.
+OK, so let's do the maths and implement a basic shell.
 
 You can find the complete code on github:  [https://github.com/onepub-dev/dshell](https://github.com/onepub-dev/dshell)
 
@@ -288,9 +289,9 @@ import 'package:dshell/src/app_with_args.dart';
 import 'package:dshell/src/pipe.dart';
 
 void main(List<String> args) async {
-  // Loop, asking for user input and evaluating it
+  // Loop, asking for user input and evaluate it
   for (;;) {
-    // print a > as a prompt
+    // print pwd> as a prompt
     stdout.write('${green(basename(pwd))}${blue('>')}');
     final commandLine = stdin.readLineSync() ?? '';
     if (commandLine.isNotEmpty) {
@@ -371,11 +372,15 @@ void ls(List<String> patterns) {
 
 The pipe function is where the funky stuff happens.
 
-The simplePipe function runs each app and then wires their output together using dart's built in pipe command. The pipe command simple reads `stdout` of the first app and writes that data into the `stdin` of the second app.
+The simplePipe function runs each app and then wires their output together using dart's built-in pipe command. The pipe command simply reads `stdout` of the first app and writes that data into  `stdin` of the second app.
 
 \[app1 -> stdout] => \[stdin -> app2]
 
-Finally, the call to pipeNoClose  wires the output of the app2 to our shells own `stdout`. The result is, any data that app2 writes is displayed on the console (because the console is reading the shell's stdout).
+Finally, the call to pipeNoClose  wires the output of the app2 is written directly to our shell's own `stdout`.&#x20;
+
+\[app1 -> stdout] => \[stdin -> app2] => \[stdout(shell)]  => \[stdin -> terminal ....] => brain
+
+The result is, that the data that app2 writes is displayed on the console (because the console is reading the shell's stdout).
 
 This is essentially the same process used by any shell.
 
@@ -401,8 +406,8 @@ Future<void> simplePipe(AppWithArgs app1, AppWithArgs app2) async {
   );
 
   /// the output of app2 is sent to the console.
-  /// We can't use the normal pipe command is it close the consumer (stdout)
-  /// would would stop our app from outputing any further
+  /// We can't use the normal pipe command is it closes the consumer (stdout)
+  /// would would stop our app from outputting any further
   await pipeNoClose(app2Process.stdout, stdout);
 }
 
@@ -412,9 +417,11 @@ Future<void> pipeNoClose(Stream<List<int>> stdout, IOSink stdin) async {
 
 ```
 
-If you save and run the above Dart script, you get an interactive shell. Here is a sample session:
+If you clone and run the above Dart script, you get an interactive shell. Here is a sample session:
 
 ```bash
+git clone https://github.com/onepub-dev/dshell.git
+cd dshell
 dart bin/dshell.dart 
 example> ls
   dshell.dart
@@ -432,106 +439,88 @@ example> cat bin/dshell.dart | grep pipe
    await pipe(app1, app2);
 ```
 
+## And a word from our sponsors
 
+This Blog and DCli are sponsored by [OnePub](https://onepub.dev/drive/3aacb2de-3eb5-4cc5-90f3-60347aa2dc11).
+
+OnePub is a private package repository for Dart.
+
+If you want to try OnePub, you can publish our sample shell application in a few lines:
+
+```bash
+dart pub global activate onepub
+onepub login
+git clone https://github.com/onepub-dev/dshell.git
+cd dshell
+onepub pub private
+dart pub publish
+```
+
+You can now install your own shell anywhere you have Dart.
+
+```bash
+onepub pub global activate dshell
+```
+
+OnePub is currently in beta (as of Aug 2022). Whilst in Beta, anyone that publishes a package to OnePub will receive a free lifetime subscription.
 
 ### Its turtles all the way down
 
-So lets look at what actually happens when you launch a terminal window or connect to a console.
+So let's look at what actually happens when you launch a terminal window or connect to a console.
 
-When the terminal window launches it creates a canvas to display text  and starts listening to keystrokes. If the terminal window has the focus then the OS will send keystrokes to it, otherwise it gets nothing. The terminal launches your default shell as a child process. Let's call this shell `Bash` but it could be called `Powershell`.
+When the terminal window launches it creates a canvas to display text and starts listening to keystrokes. If the terminal window has the focus then the OS will send keystrokes to it, otherwise, it gets nothing. The terminal launches your default shell as a child process. Let's call this shell `Bash` but it could be called `Powershell`.
 
 When Bash is launched, it, like every other app, receives three file descriptors stdin/stdout and stderr.
 
 The terminal window, being an app, also has its own stdin/stdout and stderr.
 
-When we launch a CLI app it's stdin is attached to the Terminal.
+When we launch a CLI app its stdin is attached to the Terminal (via the shell).
 
 It's actually the terminal app that is responsible for interacting with the keyboard.
 
-The terminal app is attached to a system message queue and the terminal app writes characters to our CLI app's stdin.
+When the terminal app gains focus it is attached to the system message queue (allowing it to receive keystrokes) and the terminal app writes characters to our CLI app's stdin (via the shell).
 
-\[brain -> fingers] -> \[keyboard -> system queue] -> \[terminal app] -> \[stdin of our CLI app]
+\[brain -> fingers] -> \[keyboard -> system queue] -> \[terminal app] -> \[shell] -> \[stdin of our CLI app]
 
-In the above example when we call `stdin.readLineSync()` we are reading characters written to our stdin via the terminal.
+### Stdin
 
-### Reading from stdin
+Let's recap.
 
-```
-import 'dart:io';
+* Stdin allows an app to take input from the user or another app.
+* Because it's a standard, tools like Bash can reliably use it to wire apps together.
+* You can't assume that your app's stdin is only taking data from the keyboard it could be another app.
+* Many apps provide an interactive and non-interactive mode to cater for the different ways that it can be launched.
+* This doesn't mean that you have to handle data coming from a user or another app. If those modes don't suit the purpose of your app you can just ignore stdin.
+* Whilst not discussed here, stdin usually operates in line mode with the shell echoing all typed characters to the console. In most languages, you can switch off echo mode (for password capture etc)  as well as switching to non-line mode.
+* You can't use a 'seek' on stdin to change the file read position.
 
-void main() {
-  stdout.writeln('Type something');
-  String input = stdin.readLineSync();
-  stdout.writeln('You typed: $input');
-}
-```
+{% hint style="info" %}
+In DCli we use the `ask` function which provides a high-level wrapper for readLineSync.
 
-
-
-Of course someone could just as easily add our app to a pipe line:
-
-```bash
-find *.txt | ourapp
-```
-
-In this case when our app calls `stdin.readLineSync()` it is reading the data that `find` writes its stdout which the pipe command attaches to our stdin.
-
-If you recall earlier we mentioned that most classes provide a wrapper for each of the holy trinity.
-
-You can however separate stderr and stdout and read them independently.
-
-So when we call:
-
-```
-printerr('An error occured');
-```
-
-A program reading our stderr can process this separately.
+var name = ask('Enter your name:');
+{% endhint %}
 
 ## Stdout
 
-Stdout is the easiest to understand so let's start here.
+Most languages provide a **print** and often a **println** function, both of which write to stdout.
 
-In the classic hello world program, exactly how is the 'hello world' displayed to the user?
+Normally, print will print without a terminating newline, whilst println includes a terminating newline.
 
-To put it simply; when you 'print' the string 'hello world', the print function writes 'hello world' to the file handle 'stdout'.
+In Dart, we only have the print function (which includes a terminating newline) but DCli adds an 'echo' function that allows you to control if a newline is added.
 
-```
-print('hello world');
-```
-
-## Stdin
-
-If stdout is used to send data to the terminal, then stdin is used to receive data from the terminal.
-
-More correctly we say that we write data to stdout and read data from stdin.
-
-So if we want to capture what the user is typing into the terminal then we need to 'read' from stdin.
-
-```
- user -> hello -> terminal -> stdin -> read
-```
-
-Dart actually provides low level methods to directly read from stdin but their a little bit painful to work with.
-
-As DCli likes to make things easy we provide the 'ask' function which does the hard work of reading from stdin.
-
-```
-String username = ask('username:');
-```
-
-The 'ask' function prints 'username:' to stdout, then sits in a loop reading from 'stdin' until the user hits the enter key. When the user hits the enter key we return the anything they typed (and we read from stdin) and it is assigned to the variable 'String username';
+You can of course write directly to stdout.
 
 ## Stderr
 
-So stderr is both simple and complex.
+Most languages don't provide a method to easily write to stderr. You will generally need to write something like:
 
-Its simple in that by default it works just like stdout. If you write to stderr then it will appear on the console just the same as stdout. If fact a user can't tell the difference.
+`stderr.write('bad times, where had by all');`
 
-DCli provides a function to let you write to stderr:
+The DCli package adds the `printerr` function which works exactly like print does, but prints to stderr.
 
-```
-printerr('hello world');
-```
+## Conclusion
 
-So if it looks the same to the user why do we have both stdout and stderr?
+Well, that was quite a trip. Hopefully, it fills some gaps and puts you on a path to building better CLI tooling.
+
+The OnePub Blog - [The Dart Side](https://onepub.dev/drive/9a6ed12b-5ae2-4299-b182-e97f078dd689) has additional articles on CLI programming
+
