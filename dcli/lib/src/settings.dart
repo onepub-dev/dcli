@@ -130,13 +130,15 @@ class Settings {
 
   /// Turns on verbose logging.
   void setVerbose({required bool enabled}) {
-    core.Settings().setVerbose(enabled: enabled);
+    // ignore: discarded_futures
+    waitForEx(core.Settings().setVerbose(enabled: enabled));
   }
 
   /// Logs a message to the console if the verbose
   /// settings are on.
   void verbose(String? string) {
-    core.Settings().verbose(string);
+    final frame = StackTraceImpl().frames[2];
+    core.Settings().verbose(string, frame: frame);
   }
 
   /// we consider dcli installed if the ~/.dcli directory
@@ -190,7 +192,8 @@ class Settings {
 ///
 void verbose(String Function() callback) {
   if (Settings().isVerbose) {
-    Settings().verbose(callback());
+    final frame = StackTraceImpl().frames[1];
+    core.Settings().verbose(callback(), frame: frame);
   }
 }
 
