@@ -83,8 +83,8 @@ void dumpPlatform() {
   print(Format().row(
       ['operatingSystemVersion:', (Platform.operatingSystemVersion)],
       widths: widths));
-  print(Format()
-      .row(['packageConfig:', '${Platform.packageConfig}'], widths: widths));
+  print(
+      Format().row(['packageConfig:', Platform.packageConfig], widths: widths));
   print(Format()
       .row(['pathSeparator:', (Platform.pathSeparator)], widths: widths));
   print(Format().row(['script:', '${Platform.script}'], widths: widths));
