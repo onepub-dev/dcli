@@ -449,7 +449,7 @@ class FetchUrl {
     this.headers = headers ?? <String, String>{};
 
     if (data != null && method != FetchMethod.post) {
-      throw FetchException('FetchData is not supported for the FetchMethod:'
+      throw FetchException('FetchData is not supported for the FetchMethod: '
           '${EnumHelper().getName(method)}');
     }
   }
