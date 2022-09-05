@@ -13,5 +13,7 @@ dev_dependencies:
 dependency_overrides: 
   dcli: 
     path: ../../..
+  dcli_core: 
+    path: ../../../../dcli_core    
 executables: 
   dcli_unit_tester: 
