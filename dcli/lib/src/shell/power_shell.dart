@@ -1,3 +1,5 @@
+import '../../dcli.dart';
+import '../settings.dart';
 import 'shell_mixin.dart';
 import 'windows_mixin.dart';
 
@@ -19,6 +21,26 @@ class PowerShell with WindowsMixin, ShellMixin {
   void installTabCompletion({bool quiet = false}) {
     // not supported.
   }
+
+  @override
+  bool get isPrivilegedUser {
+    final currentPrincipal =
+        // ignore: lines_longer_than_80_chars
+        'New-Object Security.Principal.WindowsPrincipal([Security.Principal.WindowsIdentity]::GetCurrent())'
+            .firstLine;
+    verbose(() => 'currentPrinciple: $currentPrincipal');
+    final isPrivileged =
+        // ignore: lines_longer_than_80_chars
+        '$currentPrincipal.IsInRole([Security.Principal.WindowsBuiltInRole]::Administrator)'
+                .firstLine ??
+            'false';
+    verbose(() => 'isPrivileged: $isPrivileged');
+
+    return isPrivileged.toLowerCase() == 'true';
+  }
+
+  @override
+  bool get isPrivilegedProcess => isPrivilegedUser;
 
   @override
   void addFileAssocation(String dcliPath) {

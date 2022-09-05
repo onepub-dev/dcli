@@ -1,9 +1,6 @@
-import 'dart:ffi';
-
 import 'package:win32/win32.dart';
 
 import '../../dcli.dart';
-import '../ffi/with_memory.dart';
 import '../installers/windows_installer.dart';
 import '../platform/windows/registry.dart';
 
@@ -121,41 +118,6 @@ mixin WindowsMixin {
 
   /// Returns the instructions to install DCli.
   String get installInstructions => 'Run dcli install';
-
-  /// Returns true if the current process is running with elevated privileges
-  /// e.g. Is running as an Administrator.
-  bool get isPrivilegedUser {
-    var isElevated = false;
-
-    withMemory<void, Uint32>(sizeOf<Uint32>(), (phToken) {
-      withMemory<void, Uint32>(sizeOf<Uint32>(), (pReturnedSize) {
-        withMemory<void, _TokenElevation>(sizeOf<_TokenElevation>(),
-            (pElevation) {
-          if (OpenProcessToken(
-                GetCurrentProcess(),
-                TOKEN_QUERY,
-                phToken.cast(),
-              ) ==
-              1) {
-            if (GetTokenInformation(
-                  phToken.value,
-                  TOKEN_INFORMATION_CLASS.TokenElevation,
-                  pElevation,
-                  sizeOf<_TokenElevation>(),
-                  pReturnedSize,
-                ) ==
-                1) {
-              isElevated = pElevation.ref.tokenIsElevated != 0;
-            }
-          }
-          if (phToken.value != 0) {
-            CloseHandle(phToken.value);
-          }
-        });
-      });
-    });
-    return isElevated;
-  }
 
   /// Add a file association so that typing the name of a dart
   /// script on the cli launches dcli which in turn launches the script.
@@ -283,16 +245,4 @@ mixin WindowsMixin {
 // computer\hkey_classes_root\dcli\shell\open\command
 //   -> Default C:\Users\Brett\AppData\Local\Pub\Cache\bin\dcli.bat %1 %2 %3 %4 %5 %6 %7 %8 %9
 
-  /// Returns true if the current process is running with elevated privileges
-  /// e.g. Is running as an Administrator.
-  bool get isPrivilegedProcess => isPrivilegedUser;
-}
-
-/// Native Windows stucture used to get the elevated
-/// status of the current process.
-class _TokenElevation extends Struct {
-  /// A nonzero value if the token has elevated privileges;
-  /// otherwise, a zero value.
-  @Int32()
-  external int tokenIsElevated;
 }
