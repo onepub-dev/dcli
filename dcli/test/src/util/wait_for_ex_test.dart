@@ -30,10 +30,6 @@ void main() {
       expect(frame.details, equals('main.<anonymous closure>'));
 
       frame = sti.frames[index++];
-      expect(basename(frame.sourceFile.path), equals('wait_for_ex_test.dart'));
-      expect(frame.details, equals('main.<anonymous closure>'));
-
-      frame = sti.frames[index++];
       expect(basename(frame.sourceFile.path), equals('declarer.dart'));
       expect(frame.details,
           equals('Declarer.test.<anonymous closure>.<anonymous closure>'));
@@ -61,10 +57,6 @@ void main() {
       expect(frame.details, equals('main.<anonymous closure>'));
 
       frame = sti.frames[index++];
-      expect(basename(frame.sourceFile.path), equals('wait_for_ex_test.dart'));
-      expect(frame.details, equals('main.<anonymous closure>'));
-
-      frame = sti.frames[index++];
       expect(basename(frame.sourceFile.path), equals('declarer.dart'));
       expect(frame.details,
           equals('Declarer.test.<anonymous closure>.<anonymous closure>'));
@@ -85,10 +77,6 @@ void main() {
       frame = sti.frames[index++];
       expect(basename(frame.sourceFile.path), equals('wait_for_ex_test.dart'));
       expect(frame.details, equals('doThrowDCliException'));
-
-      frame = sti.frames[index++];
-      expect(basename(frame.sourceFile.path), equals('wait_for_ex_test.dart'));
-      expect(frame.details, equals('main.<anonymous closure>'));
 
       frame = sti.frames[index++];
       expect(basename(frame.sourceFile.path), equals('wait_for_ex_test.dart'));
