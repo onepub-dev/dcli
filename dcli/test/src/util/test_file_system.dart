@@ -4,7 +4,8 @@ import 'dart:io';
 import 'dart:isolate';
 
 import 'package:dcli/dcli.dart';
-import 'package:pubspec/pubspec.dart' as ps;
+import 'package:dcli/src/pubspec/dependency.dart';
+// import 'package:pubspec/pubspec.dart' as ps;
 import 'package:test/test.dart';
 import 'package:uuid/uuid.dart';
 
@@ -304,41 +305,40 @@ class TestFileSystem {
     find('pubspec.yaml', workingDirectory: testScriptPath)
         .forEach((pathToPubspec) {
       final pubspec = PubSpec.fromFile(pathToPubspec);
-      final dependency = pubspec.dependencies['dcli']!;
+      // final dependency = pubspec.dependencies['dcli']!;
 
-      final dcliProject = DartProject.fromPath('.');
+      // final dcliProject = DartProject.fromPath('.');
       // final dcliCoreProject = DartProject.fromPath(join('..', 'dcli_core'));
 
-      if (dependency.reference is ps.PathReference) {
-        final pathDependency = dependency.reference as ps.PathReference;
+      // if (dependency.reference is ps.PathReference) {
+      // final pathDependency = dependency.reference as ps.PathReference;
 
-        final dir = relative(dirname(pathToPubspec), from: fsRoot);
-        final absolutePathToDcli = truepath(
-          dcliProject.pathToProjectRoot,
-          'test',
-          dir,
-          pathDependency.path,
-        );
+      // final dir = relative(dirname(pathToPubspec), from: fsRoot);
+      // final absolutePathToDcli = truepath(
+      //   dcliProject.pathToProjectRoot,
+      //   'test',
+      //   dir,
+      //   pathDependency.path,
+      // );
 
-        // final absolutePathToDcliCore = truepath(
-        //   dcliCoreProject.pathToProjectRoot,
-        //   'test',
-        //   dir,
-        //   pathDependency.path,
-        // );
+      // final absolutePathToDcliCore = truepath(
+      //   dcliCoreProject.pathToProjectRoot,
+      //   'test',
+      //   dir,
+      //   pathDependency.path,
+      // );
 
-        final pathToTmpDCli = PubSpec.createPathReference(absolutePathToDcli);
-        // final pathToTmpDCliCore =
-        //     PubSpec.createPathReference(absolutePathToDcliCore);
+      final pathToTmpDCli =
+          PubSpec.createPathReference(DartProject.self.pathToProjectRoot);
+      final pathToTmpDCliCore = PubSpec.createPathReference(
+          join(DartProject.self.pathToProjectRoot, '..', 'dcli_core'));
 
-        final newMap = Map<String, Dependency>.from(pubspec.dependencies);
-        newMap['dcli'] = Dependency('dcli', pathToTmpDCli);
-        //newMap['dcli_core'] = Dependency('dcli_core', pathToTmpDCliCore);
-        pubspec.dependencies = newMap;
-      }
+      final pathOverrides = <String, Dependency>{};
+      pathOverrides['dcli'] = Dependency('dcli', pathToTmpDCli);
+      pathOverrides['dcli_core'] = Dependency('dcli_core', pathToTmpDCliCore);
 
       pubspec
-        ..dependencyOverrides = <String, Dependency>{}
+        ..dependencyOverrides = pathOverrides
         ..saveToFile(pathToPubspec);
 
       DartProject.fromPath(dirname(pathToPubspec)).warmup(upgrade: true);

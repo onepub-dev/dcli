@@ -9,9 +9,9 @@ import 'package:dcli/dcli.dart';
 ///
 /// GENERATED - GENERATED
 
-class Af621a8bd8d9680d9847c1d0246fa9ffe extends PackedResource {
-  /// PackedResource - ../../template/project/cmd_args/pubspec.yaml
-  const Af621a8bd8d9680d9847c1d0246fa9ffe();
+class A7291151e2bbdd1dbc591d50f969cf3d7 extends PackedResource {
+  /// PackedResource - ../../template/project/full/settings.yaml
+  const A7291151e2bbdd1dbc591d50f969cf3d7();
 
   /// A hash of the resource (pre packed) calculated by
   /// [calculateHash].
@@ -25,17 +25,17 @@ class Af621a8bd8d9680d9847c1d0246fa9ffe extends PackedResource {
   /// this checksum
   @override
   String get checksum =>
-      '7430446dbbf34e55121877e09f523004349802d17d1e690547b4e4142f13ea2d';
+      '0fe448678af45789e79a3b6b603c4c4bf15d132b0ada516041aefa6f1d26ebeb';
 
   /// <package>/resources relative path to the original resource.
   @override
-  String get originalPath => 'template/project/cmd_args/pubspec.yaml';
+  String get originalPath => 'template/project/full/settings.yaml';
 
   @override
   String get content => '''
-bmFtZTogc2NyaXB0bmFtZQp2ZXJzaW9uOiAwLjAuMQpkZXNjcmlwdGlvbjogQSBzY3JpcHQgZ2VuZXJh
-dGVkIGJ5IGRjbGkuCmVudmlyb25tZW50OiAKICBzZGs6ICc+PTIuMTIuMSA8My4wLjAnCmRlcGVuZGVu
-Y2llczogCiAgZGNsaTogXjEuMjAuMAogIHBhdGg6IF4xLjAuMAoKZGV2X2RlcGVuZGVuY2llczoKICBs
-aW50X2hhcmQ6IF4xLjAuMAoKCg==
+IyBvYXV0aCBjbGllbnQgZGV0YWlscyBmb3JtIGNvbnNvbGUuY2xvdWQuZ29vZ2xlLmNvbSAoZGV2ZWxv
+cGVyIGNvbnNvbGUpCm5hbWU6IGdkcml2ZQpjbGllbnRJRDogMTM1ODM3OTMxMTM2LTR2ZmZnMWswbGhm
+dTFnMmY3Z2VvbzFmYWo5MjFkc2ZsLmFwcHMuZ29vZ2xldXNlcmNvbnRlbnQuY29tCmNsaWVudFNlY3Jl
+dDogR09DU1BYLW1xSzg1LThrV2dTcTJzZDE0Qy15QnlfTFB0SDg=
   ''';
 }

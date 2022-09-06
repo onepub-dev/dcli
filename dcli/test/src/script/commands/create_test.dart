@@ -5,30 +5,37 @@ import 'package:dcli/src/script/commands/create.dart';
 import 'package:dcli/src/script/flags.dart';
 import 'package:test/test.dart';
 
+import '../../util/test_file_system.dart';
+
 void main() {
   test('create no args', () async {
-    withTempDir((dir) {
-      /// no args
-      expect(
-          () => CreateCommand()..run([], []),
-          throwsA(predicate((e) =>
-              e is InvalidArgumentsException &&
-              e.message.startsWith('The create command takes one argument'))));
+    TestFileSystem.common.withinZone((fs) {
+      withTempDir((dir) {
+        /// no args
+        expect(
+            () => CreateCommand()..run([], []),
+            throwsA(predicate((e) =>
+                e is InvalidArgumentsException &&
+                e.message
+                    .startsWith('The create command takes one argument'))));
+      });
     });
   });
   test('create project', () async {
-    withTempDir((dir) {
-      final pathToProject = join(dir, 'simple_project');
+    TestFileSystem.common.withinZone((fs) {
+      withTempDir((dir) {
+        final pathToProject = join(dir, 'simple_project');
 
-      /// default simple project
-      CreateCommand().run([VerboseFlag()], [pathToProject]);
-      expect(exists(pathToProject), isTrue);
+        /// default simple project
+        CreateCommand().run([VerboseFlag()], [pathToProject]);
+        expect(exists(pathToProject), isTrue);
 
-      expect(
-          () => CreateCommand()..run([], [pathToProject]),
-          throwsA(predicate((e) =>
-              e is InvalidArgumentsException &&
-              e.message.endsWith('already exists.'))));
+        expect(
+            () => CreateCommand()..run([], [pathToProject]),
+            throwsA(predicate((e) =>
+                e is InvalidArgumentsException &&
+                e.message.endsWith('already exists.'))));
+      });
     });
   });
   test('create non-existant directory', () async {

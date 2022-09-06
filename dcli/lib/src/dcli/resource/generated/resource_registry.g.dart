@@ -15,6 +15,7 @@ import 'A53ff2f6487cb4ecbe3ed84f8e1fc9d6b.g.dart';
 import 'A5fae0217029e4974bcf2fe9f2c4a1393.g.dart';
 import 'A62681f367be07503c61a07c06bf6c721.g.dart';
 import 'A6dc531f8de13e7a6b9da61f26d3d4b0c.g.dart';
+import 'A7291151e2bbdd1dbc591d50f969cf3d7.g.dart';
 import 'A749cf657ff556b868714c2511cd333b9.g.dart';
 import 'A75b809639a441726d085372c4ee3d9e9.g.dart';
 import 'A806335d3c77a5513fc6bf6d3f97b8d1b.g.dart';
@@ -73,6 +74,7 @@ class ResourceRegistry {
     'template/project/custom/README.md': A62681f367be07503c61a07c06bf6c721(),
     'template/project/simple/bin/main.dart':
         A6dc531f8de13e7a6b9da61f26d3d4b0c(),
+    'template/project/full/settings.yaml': A7291151e2bbdd1dbc591d50f969cf3d7(),
     'template/project/full/README.md': A749cf657ff556b868714c2511cd333b9(),
     'template/project/full/lib/full.dart': A75b809639a441726d085372c4ee3d9e9(),
     'template/project/find/README.md': A806335d3c77a5513fc6bf6d3f97b8d1b(),
