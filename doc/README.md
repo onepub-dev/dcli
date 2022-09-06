@@ -1,10 +1,12 @@
 # Introduction
 
-DCli is an SDK for for building cross platform command line (CLI) applications and scripts using the Dart programming language.
+DCli is the console SDK for Dart.
 
-The DCli (pronounced d-cli) SDK is includes command line tools and an extensive api for for building cli apps.
+Use the DCli console SDK to  build cross platform, command line (CLI) applications and scripts using the Dart programming language.
 
-The DCli SDK as featured on Jermaine Oppong package of the week vlog.
+The DCli  (pronounced d-cli) console SDK includes command line tools and an extensive API for building CLI apps.
+
+The DCli console SDK as featured on Jermaine Oppong package of the week vlog.
 
 {% embed url="https://youtu.be/z99IxxWmD1Q" %}
 
@@ -16,12 +18,12 @@ OnePub allows you to privately share dart packages between your own projects or 
 
 Try it for free and publish your first private package in seconds.
 
-| ![](<.gitbook/assets/OnePub.dev Logo – reversed FA (1).svg>) | <p>Publish a private package in five commands:</p><p><mark style="color:green;"><code>dart pub global activate onepub</code></mark></p><p><mark style="color:green;"><code>onepub login</code></mark></p><p><mark style="color:green;"><code>cd &#x3C;my package></code></mark></p><p><mark style="color:green;"><code>onepub pub private</code></mark></p><p><mark style="color:green;"><code>dart pub publish</code></mark></p> |
-| ------------------------------------------------------------ | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| ![](<.gitbook/assets/OnePub.dev Logo – reversed FA (2) (1) (1).svg>) | <p>Publish a private package in five commands:</p><p><mark style="color:green;"><code>dart pub global activate onepub</code></mark></p><p><mark style="color:green;"><code>onepub login</code></mark></p><p><mark style="color:green;"><code>cd &#x3C;my package></code></mark></p><p><mark style="color:green;"><code>onepub pub private</code></mark></p><p><mark style="color:green;"><code>dart pub publish</code></mark></p> |
+| -------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 
 ## Overview
 
-The DCli SDK is intended to to allow you to create Command Line (CLI) Applications from simple scripts to full blown CLI apps.
+The DCli console SDK is intended to to allow you to create Command Line (CLI) Applications from simple scripts to full blown CLI apps.
 
 DCli is a great replacement for CLI apps that would have traditionally been built with Bash, C, python, ruby, Go, Rust ....
 
@@ -44,7 +46,7 @@ DCli is based on Dart which is a modern programming language that has a set of f
 
 ### Example:
 
-```
+```dart
 #! /usr/bin/env dcli
 
 import 'dart:io';
@@ -53,7 +55,14 @@ import 'package:dcli/dcli.dart';
 void main() {
   var name = ask('name:', required: true, validator: Ask.alpha);
   print('Hello $name');
-
+  
+  print('Here is a list of your files');
+  find('*').forEach(print);
+  
+  print('let me copy your files to a temp directory');
+  withTempDir((pathToTempDir) {
+      moveTree(pwd, pathToTempDir);
+  });
 }
 ```
 
