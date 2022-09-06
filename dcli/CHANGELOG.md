@@ -1,3 +1,14 @@
+# 1.20.2
+- It appears that when 1.20 was originally released we were running a version of dart post 2.12. 
+    So even though the lower constraint was set to 2.12 the build allows us to use features from > 2.12. 
+    Tese changes are being made so that 1.20 actually runs under dart 2.12 as advertised.
+- Updated template projects and ssripts to work correctly under dart 2.12.
+- updated the tests scripts so the depend on the correct version of dcli and have the correct sdk constraints.
+- Added missing dep override in dcli_unit_test for dcli_core.
+- back ported fixes to setVerbose which was producing duplicated logging output.
+- moved circular buffer back to 0.9.1 as 0.10.0 isn't compatible with 2.12
+
+
 # 1.20.0
 - Cleaned up the resource_registry so the generated file matches the dart source formatter. This stops git seeing a change every time we release and run pack.
 - restored the 2.16 throwsWithStackTrace in wait_for_ex now we have fixed the 2.12 based release.
