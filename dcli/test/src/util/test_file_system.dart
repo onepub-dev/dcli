@@ -4,7 +4,6 @@ import 'dart:io';
 import 'dart:isolate';
 
 import 'package:dcli/dcli.dart';
-import 'package:dcli/src/pubspec/dependency.dart';
 // import 'package:pubspec/pubspec.dart' as ps;
 import 'package:test/test.dart';
 import 'package:uuid/uuid.dart';

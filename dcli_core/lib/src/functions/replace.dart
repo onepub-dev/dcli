@@ -1,7 +1,6 @@
 import 'dart:async';
 
 import '../../dcli_core.dart';
-import 'move.dart';
 
 ///
 /// Does an insitu replacement on the file located at [path].

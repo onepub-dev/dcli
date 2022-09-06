@@ -61,7 +61,7 @@ void main() {
     try {
       waitForEx<void>(doThrowDCliException());
       // ignore: avoid_catches_without_on_clauses
-    } on DCliException catch (e, st) {
+    } on DCliException catch (e) {
       final sti = StackTraceImpl.fromStackTrace(e.stackTrace);
       var index = 0;
       var frame = sti.frames[index++];
@@ -93,7 +93,7 @@ void main() {
         moveDir(join(dir, 'notadir'), 'dir');
       });
       // ignore: avoid_catches_without_on_clauses
-    } on DCliException catch (e, st) {
+    } on DCliException catch (e) {
       final sti = StackTraceImpl.fromStackTrace(e.stackTrace);
 
       var index = 0;

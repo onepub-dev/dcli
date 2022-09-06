@@ -186,7 +186,7 @@ void regSetDWORD(
   int value, {
   int accessRights = KEY_SET_VALUE,
 }) {
-  final pValue = calloc<Uint32>(1)..value = value;
+  final pValue = calloc<Uint32>()..value = value;
 
   try {
     _regSetValue(
@@ -496,7 +496,7 @@ R _withRegKey<R>(
   R Function(int hkey, Pointer<Utf16> pSubKey) action,
 ) {
   R actionResult;
-  final pOpenKey = calloc<IntPtr>(1);
+  final pOpenKey = calloc<IntPtr>();
   final pSubKey = TEXT(subKey);
 
   try {
@@ -534,7 +534,7 @@ bool regKeyExists(
   String subKey,
 ) {
   var exists = false;
-  final pOpenKey = calloc<IntPtr>(1);
+  final pOpenKey = calloc<IntPtr>();
   final pSubKey = TEXT(subKey);
 
   try {
@@ -558,7 +558,7 @@ void regCreateKey(
   int hKey,
   String subKey,
 ) {
-  final pOpenKey = calloc<IntPtr>(1);
+  final pOpenKey = calloc<IntPtr>();
   final pSubKey = TEXT(subKey);
   try {
     final result = RegCreateKeyEx(

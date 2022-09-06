@@ -3,7 +3,6 @@ import 'dart:async';
 import 'package:path/path.dart';
 
 import '../../dcli_core.dart';
-import 'move.dart';
 
 /// Recursively moves the contents of the [from] directory to the
 /// to the [to] path with an optional filter.
@@ -135,7 +134,7 @@ class _MoveTree extends DCliFunction {
       }
     }
 
-    return Future.value(null);
+    return Future.value();
   }
 
   Future<void> _process(String pathToFile, bool Function(String file) filter,

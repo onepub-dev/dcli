@@ -1,5 +1,4 @@
 import '../../dcli.dart';
-import '../settings.dart';
 import 'shell_mixin.dart';
 import 'windows_mixin.dart';
 
