@@ -43,12 +43,12 @@ void main() {
             final pathToScript = truepath(fs, 'test', 'bin', scriptName);
             final pathToTemplate = join(fs, 'test');
 
-          withEnvironment(() {
-            DartProject.create(pathTo: pathToTemplate, templateName: 'simple')
-                .warmup();
-          }, environment: {
-            'DCLI_OVERRIDE_PATH': DartProject.self.pathToProjectRoot
-          });
+            withEnvironment(() {
+              DartProject.create(pathTo: pathToTemplate, templateName: 'simple')
+                  .warmup();
+            }, environment: {
+              'DCLI_OVERRIDE_PATH': DartProject.self.pathToProjectRoot
+            });
 
             final progress = DartScript.fromFile(pathToScript).start();
             expect(progress.exitCode! == 0, isTrue);
