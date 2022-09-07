@@ -1,3 +1,13 @@
+# 2.0.0-beta.1
+- Added the ability to customise the prompt for ask, confirm and menu.
+- removed the package stacktrace_impl and replaced it with googles stack_trace package.
+- upgraded code base to dart 2.18 and fixed a mirid of async call issues.
+- Fixed a bug in withOpenFile as it it was making async calls but wasn't declared as async.
+- Fixed a bug in withOpenFile as it it was making async calls but wasn't declared as async.
+- rationalized the waitForEx code as we no longer support pre 2.16 so the logic is now much simpler.
+- The settings .verbose  and the verbose function now both output the file and line number that invoked the verbose command.
+
+
 # 1.34.0
 - Added start() method to DartScript.
 - renamed dclizone to capture and remove the 'experiemental' comment.
