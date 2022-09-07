@@ -8,6 +8,8 @@ library dart_project;
 
 import 'dart:io';
 
+import 'package:meta/meta.dart';
+
 import '../../dcli.dart';
 import '../../posix.dart';
 import '../version/version.g.dart';
@@ -26,6 +28,21 @@ import 'pub_upgrade.dart';
 part 'dart_project_creator.dart';
 
 class DartProject {
+  /// Create a dart project on the file system at
+  /// [pathTo] from the template named [templateName].
+  factory DartProject.create(
+      {required String pathTo, required String templateName}) {
+    _createProject(pathTo, templateName);
+    return DartProject.fromPath(pathTo, search: false);
+  }
+
+  /// Loads the project from the dart pub cache
+  /// named [name] for the version [version].
+  /// e.g. ~/.pub-cache/hosted/pub.dartlang.org/dswitch-4.0.1
+  DartProject.fromCache(String name, String version) {
+    _pathToProjectRoot = truepath(PubCache().pathToPackage(name, version));
+  }
+
   /// Load a dart project from the given directory.
   ///
   /// We search up the tree starting from [pathToSearchFrom]
@@ -43,20 +60,13 @@ class DartProject {
     verbose(() => 'DartProject.fromPath: $pathToProjectRoot');
   }
 
-  /// Loads the project from the dart pub cache
-  /// named [name] for the version [version].
-  /// e.g. ~/.pub-cache/hosted/pub.dartlang.org/dswitch-4.0.1
-  DartProject.fromCache(String name, String version) {
-    _pathToProjectRoot = truepath(PubCache().pathToPackage(name, version));
-  }
-
-  /// Create a dart project on the file system at
-  /// [pathTo] from the template named [templateName].
-  factory DartProject.create(
-      {required String pathTo, required String templateName}) {
-    _createProject(pathTo, templateName);
-    return DartProject.fromPath(pathTo, search: false);
-  }
+  /// Used for unit testing.
+  /// When this environment variable exists the [DartProject.create] method
+  /// will add a `pubspec_overrides.yaml` file in the created project
+  /// with overrides for dcli and dcli_core which point
+  /// to our dev source tree.
+  @visibleForTesting
+  static const String dcliOverridePathKey = 'DCLI_OVERRIDE_PATH';
 
   late String _pathToProjectRoot;
   String? _pathToPubSpec;
@@ -463,7 +473,7 @@ class DartProject {
 /// Exception for issues with DartProjects.
 class DartProjectException extends DCliException {
   /// Create a DartProject related exceptions
-  DartProjectException(String message) : super(message);
+  DartProjectException(super.message);
 }
 
 /// The requested DCli template does not exists.

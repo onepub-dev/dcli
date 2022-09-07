@@ -16,13 +16,13 @@ String _noFormat<T>(T option) => option.toString();
 /// e.g.
 /// ```dart
 /// var colors = [Color('Red'), Color('Green')];
-/// var color = menu( 'Please select a color', options: colors);
+/// var color = menu( 'Select a color', options: colors);
 /// ```
 /// Results in:
 ///```
 /// 1) Red
 /// 2) Green
-/// Please select a color:
+/// Select a color:
 /// ```
 ///
 /// [menu] will display an error if the user enters a non-valid
@@ -41,7 +41,7 @@ String _noFormat<T>(T option) => option.toString();
 /// ```dart
 ///
 /// var colors = [Color('Red'), Color('Green')];
-/// var color = menu(prompt: 'Please select a color'
+/// var color = menu(prompt: 'Select a color'
 ///   , options: colors, format: (color) => color.name);
 /// ```
 ///

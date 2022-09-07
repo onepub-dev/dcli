@@ -10,6 +10,7 @@ import 'package:dcli_core/dcli_core.dart' as core;
 import 'package:logging/logging.dart';
 import 'package:path/path.dart' as p;
 import 'package:scope/scope.dart';
+import 'package:stack_trace/stack_trace.dart';
 
 import '../dcli.dart';
 import 'script/flags.dart';
@@ -131,13 +132,13 @@ class Settings {
   /// Turns on verbose logging.
   void setVerbose({required bool enabled}) {
     // ignore: discarded_futures
-    waitForEx(core.Settings().setVerbose(enabled: enabled));
+    core.Settings().setVerbose(enabled: enabled);
   }
 
   /// Logs a message to the console if the verbose
   /// settings are on.
   void verbose(String? string) {
-    final frame = StackTraceImpl().frames[2];
+    final frame = Trace.current().frames[1];
     core.Settings().verbose(string, frame: frame);
   }
 
@@ -192,7 +193,7 @@ class Settings {
 ///
 void verbose(String Function() callback) {
   if (Settings().isVerbose) {
-    final frame = StackTraceImpl().frames[1];
+    final frame = Trace.current().frames[1];
     core.Settings().verbose(callback(), frame: frame);
   }
 }

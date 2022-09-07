@@ -278,6 +278,7 @@ class Ask extends core.DCliFunction {
             stdout.write('*');
             // we must wait for flush as only one flush can
             // be outstanding at a time.
+            // ignore: discarded_futures
             waitForEx<void>(stdout.flush());
             value.add(char);
           }
@@ -397,7 +398,7 @@ class Ask extends core.DCliFunction {
 /// Thrown when an [AskValidator] detects an invalid input.
 class AskValidatorException extends DCliException {
   /// validator with a [message] indicating the error.
-  AskValidatorException(String message) : super(message);
+  AskValidatorException(super.message);
 }
 
 /// Base class for all [AskValidator]s.

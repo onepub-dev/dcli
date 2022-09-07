@@ -4,14 +4,14 @@
  * Written by Brett Sutton <bsutton@onepub.dev>, Jan 2022
  */
 
-import 'package:stacktrace_impl/stacktrace_impl.dart';
+import 'package:stack_trace/stack_trace.dart';
 
 /// Base class for all DCli exceptions.
 class DCliException implements Exception {
   ///
-  DCliException(this.message, [StackTraceImpl? stackTrace])
+  DCliException(this.message, [Trace? stackTrace])
       : cause = null,
-        stackTrace = stackTrace ?? StackTraceImpl(skipFrames: 2);
+        stackTrace = stackTrace ?? Trace.current(2);
 
   ///
   DCliException.from(this.cause, this.stackTrace) : message = cause.toString();
@@ -19,11 +19,7 @@ class DCliException implements Exception {
   ///
   DCliException.fromException(this.cause)
       : message = cause.toString(),
-        stackTrace = StackTraceImpl(skipFrames: 2);
-
-  // ///
-  // DCliException copyWith(StackTraceImpl stackTrace) =>
-  //     DCliException(message, stackTrace);
+        stackTrace = Trace.current(2);
 
   ///
   final String message;
@@ -33,7 +29,7 @@ class DCliException implements Exception {
   final Object? cause;
 
   ///
-  StackTraceImpl stackTrace;
+  Trace stackTrace;
 
   //  {
   //   return DCliException(this.message, stackTrace);
@@ -44,6 +40,6 @@ class DCliException implements Exception {
 
   ///
   void printStackTrace() {
-    print(stackTrace.formatStackTrace());
+    print(stackTrace.terse);
   }
 }

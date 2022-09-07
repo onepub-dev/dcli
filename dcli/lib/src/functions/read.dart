@@ -43,6 +43,7 @@ class _Read extends core.DCliFunction {
           .openRead()
           .transform(utf8.decoder)
           .transform(const LineSplitter())
+          // ignore: discarded_futures
           .forEach((line) {
         progress!.addToStdout(line);
       }),
@@ -74,6 +75,5 @@ class _Read extends core.DCliFunction {
 /// Thrown when the [read] function encouters an error.
 class ReadException extends core.DCliFunctionException {
   /// Thrown when the [read] function encouters an error.
-  ReadException(String reason, [StackTraceImpl? stacktrace])
-      : super(reason, stacktrace);
+  ReadException(super.reason, [super.stacktrace]);
 }

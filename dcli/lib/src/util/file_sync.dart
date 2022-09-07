@@ -9,6 +9,7 @@ import 'dart:convert';
 import 'dart:io';
 
 import 'package:dcli_core/dcli_core.dart' as core;
+import 'package:stack_trace/stack_trace.dart';
 
 import '../../dcli.dart';
 
@@ -112,7 +113,7 @@ class FileSync {
   void read(CancelableLineAction lineAction) {
     final inputStream = _file.openRead();
 
-    final stackTrace = core.StackTraceImpl();
+    final stackTrace = Trace.current();
 
     Object? exception;
 

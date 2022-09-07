@@ -7,6 +7,7 @@
 import 'dart:async';
 
 import 'package:logging/logging.dart';
+import 'package:stack_trace/stack_trace.dart';
 
 import '../dcli_core.dart';
 
@@ -20,20 +21,20 @@ class Settings {
   final logger = Logger('dcli');
   static Settings? _self;
 
-  bool _verbose = false;
+  bool _verboseEnabled = false;
 
   /// returns true if the -v (verbose) flag was set on the
   /// dcli command line.
   /// e.g.
   /// dcli -v clean
-  bool get isVerbose => _verbose;
+  bool get isVerbose => _verboseEnabled;
 
   // ignore: cancel_subscriptions
   static StreamSubscription<LogRecord>? listener;
 
   /// Turns on verbose logging.
   Future<void> setVerbose({required bool enabled}) async {
-    _verbose = enabled;
+    _verboseEnabled = enabled;
 
     // ignore: flutter_style_todos
     /// TODO(bsutton): this affects everyones logging so
@@ -56,11 +57,11 @@ class Settings {
 
   /// Logs a message to the console if the verbose
   /// settings are on.
-  void verbose(String? message, {Stackframe? frame}) {
-    final Stackframe calledBy;
+  void verbose(String? message, {Frame? frame}) {
+    final Frame calledBy;
     if (frame == null) {
-      final st = StackTraceImpl();
-      calledBy = st.frames[2];
+      final st = Trace.current();
+      calledBy = st.frames[1];
     } else {
       calledBy = frame;
     }
@@ -68,7 +69,7 @@ class Settings {
     /// We log at info level (as that is logger's default)
     /// so that verbose messages will print when verbose
     /// is enabled.
-    Logger('dcli').info('${calledBy.sourceFile}:${calledBy.lineNo} $message');
+    Logger('dcli').info('${calledBy.library}:${calledBy.line} $message');
   }
 
   Stream<LogRecord> captureLogOutput() => logger.onRecord;
@@ -102,6 +103,6 @@ class Settings {
 ///
 void verbose(String Function() callback) {
   if (Settings().isVerbose) {
-    Settings().verbose(callback());
+    Settings().verbose(callback(), frame: Trace.current().frames[1]);
   }
 }

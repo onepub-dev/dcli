@@ -181,7 +181,7 @@ mixin PosixShell {
   bool get isSudo => !Settings().isWindows && env['SUDO_USER'] != null;
 
   /// The message used during installation if it needs to be run with sudo.
-  String privilegesRequiredMessage(String app) => 'Please $installInstructions';
+  String privilegesRequiredMessage(String app) => installInstructions;
 
   /// Install dart/dcli
   bool install({bool installDart = false, bool activate = true}) {
@@ -213,7 +213,9 @@ mixin PosixShell {
   String? checkInstallPreconditions() => null;
 
   /// Returns the instructions to install DCli.
-  String get installInstructions => r'Run: sudo env "PATH=$PATH" dcli install';
+  String get installInstructions => r'''
+Run: 
+sudo env "PATH=$PATH" dcli install''';
 
   /// Symlink so dcli works under sudo.
   /// We use the location of dart exe and add dcli symlink
@@ -223,7 +225,7 @@ mixin PosixShell {
     if (!core.Settings().isWindows) {
       final linkPath = join(dirname(DartSdk().pathToDartExe!), 'dcli');
       if (isPrivilegedPasswordRequired && !isWritable(linkPath)) {
-        print('Please enter the sudo password when prompted.');
+        print('Enter the sudo password when prompted.');
       }
 
       'ln -sf $dcliPath $linkPath'.start(privileged: !isWritable(linkPath));

@@ -252,12 +252,12 @@ class Env extends DCliFunction {
       if (Settings().isWindows) {
         throw DCliException(
           "Unable to find the 'APPDATA' enviroment variable. "
-          'Please ensure it is set and try again.',
+          'Ensure it is set and try again.',
         );
       } else {
         throw DCliException(
           "Unable to find the 'HOME' enviroment variable. "
-          'Please ensure it is set and try again.',
+          'Ensure it is set and try again.',
         );
       }
     }

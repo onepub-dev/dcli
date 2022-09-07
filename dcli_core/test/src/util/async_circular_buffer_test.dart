@@ -134,18 +134,18 @@ void main() {
     expect(buf.length, equals(0));
   });
 
-  test('close when adding', () {
-    final buf = AsyncCircularBuffer<String>(5)
-      ..add('1')
-      ..close();
+  test('close when adding', () async {
+    final buf = AsyncCircularBuffer<String>(5);
+    await buf.add('1');
+    buf.close();
     expect(() => buf.add('2'), throwsA(isA<BadStateException>()));
   });
 
-  test('close when getting', () {
-    final buf = AsyncCircularBuffer<String>(5)
-      ..add('1')
-      ..close()
-      ..get();
+  test('close when getting', () async {
+    final buf = AsyncCircularBuffer<String>(5);
+    await buf.add('1');
+    buf.close();
+    await buf.get();
     expect(buf.get, throwsA(isA<UnderflowException>()));
   });
 }

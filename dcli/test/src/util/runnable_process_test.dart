@@ -58,8 +58,8 @@ void main() {
 
   test(
     'Child process shutdown',
-    () {
-      Process.start(
+    () async {
+      await Process.start(
         'tail',
         ['-f', '/var/log/syslog'],
       ).then((process) {

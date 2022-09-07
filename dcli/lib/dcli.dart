@@ -12,7 +12,6 @@ export 'package:dcli_core/dcli_core.dart'
         // MoveDirException,
         // TouchException,
         // Which,
-        StackTraceImpl,
         StackList,
         DCliException,
         // HeadException,

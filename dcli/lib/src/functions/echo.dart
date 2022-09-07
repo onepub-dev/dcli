@@ -30,6 +30,7 @@ class _Echo extends DCliFunction {
     } else {
       stdout.write(text);
     }
+    // ignore: discarded_futures
     waitForEx<dynamic>(stdout.flush());
   }
 }

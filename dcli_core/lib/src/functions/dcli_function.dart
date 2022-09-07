@@ -4,7 +4,7 @@
  * Written by Brett Sutton <bsutton@onepub.dev>, Jan 2022
  */
 
-import 'package:stacktrace_impl/stacktrace_impl.dart';
+import 'package:stack_trace/stack_trace.dart';
 
 import '../util/dcli_exception.dart';
 
@@ -15,10 +15,6 @@ class DCliFunction {}
 /// Base class for all dcli function exceptions.
 class DCliFunctionException extends DCliException {
   /// Base class for all dcli function exceptions.
-  DCliFunctionException(String message, [StackTraceImpl? stackTrace])
+  DCliFunctionException(String message, [Trace? stackTrace])
       : super(message, stackTrace);
-
-  // @override
-  // DCliException copyWith(StackTraceImpl stackTrace) =>
-  //     DCliFunctionException(message, stackTrace);
 }

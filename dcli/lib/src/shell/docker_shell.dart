@@ -52,7 +52,9 @@ class DockerShell with ShellMixin, PosixShell {
   }
 
   @override
-  String get installInstructions => 'Run: dcli install';
+  String get installInstructions => '''
+Run: 
+dcli install''';
 
   @override
   final int? pid;

@@ -9,7 +9,7 @@ import 'dart:math';
 
 import 'package:meta/meta.dart';
 import 'package:path/path.dart' as p;
-import 'package:stacktrace_impl/stacktrace_impl.dart';
+import 'package:stack_trace/stack_trace.dart';
 
 import '../../dcli.dart';
 import 'command_line_runner.dart';
@@ -169,12 +169,11 @@ class DartScript {
   /// internal dcli testing.
   @visibleForTesting
   bool get inUnitTest {
-    Stackframe? scriptFrame;
-    for (final frame in StackTraceImpl().frames) {
-      if (frame.sourceType == FrameSourceType.package &&
-          frame.sourceFile.path.startsWith('test_api')) {
+    Frame? scriptFrame;
+    for (final frame in Trace.current().frames) {
+      if (frame.package != null && frame.package == 'test_api') {
         if (scriptFrame != null) {
-          _unitTestPath = truepath(scriptFrame.sourceFile.path);
+          _unitTestPath = truepath(scriptFrame.library);
         }
         return true;
       }

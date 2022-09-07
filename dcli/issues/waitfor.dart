@@ -1,9 +1,10 @@
+// ignore_for_file: avoid_types_on_closure_parameters
+
 /* Copyright (C) S. Brett Sutton - All Rights Reserved
  * Unauthorized copying of this file, via any medium is strictly prohibited
  * Proprietary and confidential
  * Written by Brett Sutton <bsutton@onepub.dev>, Jan 2022
  */
-
 
 // ignore_for_file: deprecated_member_use
 
@@ -14,8 +15,9 @@ import 'dart:cli';
 import 'dart:io';
 
 import 'package:dcli/dcli.dart';
+import 'package:stack_trace/stack_trace.dart';
 
-void main() {
+Future<void> main() async {
   var future = startProcess();
 
   print('****************waitforMe *****************');
@@ -23,7 +25,7 @@ void main() {
 
   future = startProcess();
 
-  waitForEx(future);
+  await waitForEx(future);
 }
 
 Future<Process> startProcess() => Process.start(
@@ -34,8 +36,9 @@ Future<Process> startProcess() => Process.start(
 void waitForMe(Future<void> future) {
   try {
     future
-        //ignore: avoid_types_on_closure_parameters
+        // ignore: discarded_futures
         .catchError((Object e, StackTrace st) => print('onError: $e'))
+        // ignore: discarded_futures
         .whenComplete(() => print('future completed'));
     // print(waitFor<Process>(future));
     print(waitFor(future));
@@ -55,13 +58,12 @@ void waitForMe(Future<void> future) {
   }
 }
 
-T waitForEx<T>(Future<T> future) {
+Future<T> waitForEx<T>(Future<T> future) async {
   Object? exception;
   late T value;
   try {
     // catch any unhandled exceptions
-    //ignore: avoid_types_on_closure_parameters
-    future.catchError((Object e, StackTrace st) {
+    await future.catchError((Object e, StackTrace st) {
       print('catchError called');
       exception = e;
     }).whenComplete(() => print('future completed'));
@@ -83,7 +85,7 @@ T waitForEx<T>(Future<T> future) {
     // recreate the exception so we have a full
     // stacktrace rather than the microtask
     // stacktrace the future leaves us with.
-    final stackTrace = StackTraceImpl(skipFrames: 2);
+    final stackTrace = Trace.current(2);
 
     if (exception is DCliException) {
       throw (exception! as DCliException)..stackTrace = stackTrace;
@@ -98,7 +100,6 @@ Future<int> throwExceptionV3() {
   final complete = Completer<int>();
   try {
     Future.delayed(const Duration(seconds: 2), () => throw Exception())
-        //ignore: avoid_types_on_closure_parameters
         .catchError((Object e) {
       print('caught 1');
       complete.completeError('caught ');

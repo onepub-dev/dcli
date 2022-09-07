@@ -210,5 +210,5 @@ class HelpFlag extends Flag {
 /// throw if we found an invalid flag.
 class InvalidFlagOptionException extends CommandLineException {
   ///
-  InvalidFlagOptionException(String message) : super(message);
+  InvalidFlagOptionException(super.message);
 }

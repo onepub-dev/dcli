@@ -25,12 +25,11 @@ class A3fdab27388188732f2327c4661480284 extends PackedResource {
   /// this checksum
   @override
   String get checksum =>
-      '7178b473a92b25476dd94aa20a487cb1f9e71c2a5c920ada33513275001a3c83';
+      '49311ac6be285720b9102c3aed020178497c413cbfb534cf22ab7a4d0cda8ca1';
 
   /// <package>/resources relative path to the original resource.
   @override
-  String get originalPath =>
-      'template/project/full/lib/src/settings/app_settings.dart';
+  String get originalPath => 'template/project/full/lib/src/settings/app_settings.dart';
 
   @override
   String get content => '''
@@ -70,7 +69,7 @@ dGhlIG1haWxob2cgYXBwLgogIHNldCBwYXRoVG9NYWlsSG9nQXBwKFN0cmluZyBwYXRoVG9NYWlsSG9n
 QXBwKSB7CiAgICBzZXR0aW5nc1tBcHBTZXR0aW5ncy5wYXRoVG9NYWlsSG9nQXBwT3B0aW9uXSA9IHBh
 dGhUb01haWxIb2dBcHA7CiAgICBfcGF0aFRvTWFpbEhvZ0FwcCA9IHBhdGhUb01haWxIb2dBcHA7CiAg
 fQoKICBTdHJpbmcgZ2V0IHBhdGhUb01haWxIb2dBcHAgPT4gX3BhdGhUb01haWxIb2dBcHA7CgogIC8v
-LyBTYXZlIHRoZSBzZXR0aW5ncyBmaWxlLgogIHZvaWQgc2F2ZSgpIHsKICAgIHNldHRpbmdzLnNhdmUo
-KTsKICB9Cn0K
+LyBTYXZlIHRoZSBzZXR0aW5ncyBmaWxlLgogIHZvaWQgc2F2ZSgpIHsKICAgIC8vIGlnbm9yZTogZGlz
+Y2FyZGVkX2Z1dHVyZXMKICAgIHdhaXRGb3JFeChzZXR0aW5ncy5zYXZlKCkpOwogIH0KfQo=
   ''';
 }

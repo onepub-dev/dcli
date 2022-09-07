@@ -10,7 +10,7 @@ import 'dart:io';
 import 'dart:isolate';
 
 import 'package:dcli/dcli.dart';
-import 'package:pubspec2/pubspec2.dart' as ps;
+import 'package:stack_trace/stack_trace.dart';
 import 'package:test/test.dart';
 import 'package:uuid/uuid.dart';
 
@@ -111,7 +111,7 @@ class TestFileSystem {
   void withinZone(
     void Function(TestFileSystem fs) action,
   ) {
-    final stack = StackTraceImpl(skipFrames: 1);
+    final stack = Trace.current(1);
 
     withTestScope((testDir) {
       _runUnderLock(stack, action);
@@ -119,7 +119,7 @@ class TestFileSystem {
   }
 
   void _runUnderLock(
-    StackTraceImpl stack,
+    Trace stack,
     void Function(TestFileSystem fs) action,
   ) {
     final frame = stack.frames[0];
@@ -127,7 +127,7 @@ class TestFileSystem {
     print(
       red(
         '${'*' * 40} Starting test '
-        '${frame.sourceFile}:${frame.lineNo} ${'*' * 80}',
+        '${frame.library}:${frame.line} ${'*' * 80}',
       ),
     );
 
@@ -165,7 +165,7 @@ class TestFileSystem {
       print(
         green(
           '${'-' * 40} '
-          'Ending test ${frame.sourceFile}:${frame.lineNo} ${'-' * 80}',
+          'Ending test ${frame.library}:${frame.line} ${'-' * 80}',
         ),
       );
     }
@@ -322,43 +322,19 @@ class TestFileSystem {
   void _patchRelativeDependenciesAndWarmup(String testScriptPath) {
     find('pubspec.yaml', workingDirectory: testScriptPath)
         .forEach((pathToPubspec) {
-      final pubspec = PubSpec.fromFile(pathToPubspec);
-      final dependency = pubspec.dependencies['dcli']!;
-
       final dcliProject = DartProject.fromPath('.');
-      // final dcliCoreProject = DartProject.fromPath(join('..', 'dcli_core'));
+      final dcliCoreProject = DartProject.fromPath(join('..', 'dcli_core'));
 
-      if (dependency.reference is ps.PathReference) {
-        final pathDependency = dependency.reference as ps.PathReference;
+      final pathToDCli = join(dcliProject.pathToProjectRoot);
+      final pathToCore = join(dcliCoreProject.pathToProjectRoot);
 
-        final dir = relative(dirname(pathToPubspec), from: fsRoot);
-        final absolutePathToDcli = truepath(
-          dcliProject.pathToProjectRoot,
-          'test',
-          dir,
-          pathDependency.path,
-        );
-
-        // final absolutePathToDcliCore = truepath(
-        //   dcliCoreProject.pathToProjectRoot,
-        //   'test',
-        //   dir,
-        //   pathDependency.path,
-        // );
-
-        final pathToTmpDCli = PubSpec.createPathReference(absolutePathToDcli);
-        // final pathToTmpDCliCore =
-        //     PubSpec.createPathReference(absolutePathToDcliCore);
-
-        final newMap = Map<String, Dependency>.from(pubspec.dependencies);
-        newMap['dcli'] = Dependency('dcli', pathToTmpDCli);
-        //newMap['dcli_core'] = Dependency('dcli_core', pathToTmpDCliCore);
-        pubspec.dependencies = newMap;
-      }
-
-      pubspec
-        ..dependencyOverrides = <String, Dependency>{}
-        ..saveToFile(pathToPubspec);
+      join(dirname(pathToPubspec), 'pubspec_overrides.yaml').write('''
+dependency_overrides: 
+  dcli: 
+    path: $pathToDCli
+  dcli_core: 
+    path: $pathToCore
+        ''');
 
       capture(() {
         DartProject.fromPath(dirname(pathToPubspec)).warmup(upgrade: true);
@@ -415,7 +391,7 @@ class TestFileSystem {
 }
 
 class TestFileSystemException extends DCliException {
-  TestFileSystemException(String message) : super(message);
+  TestFileSystemException(super.message);
 }
 
 class TestDirectoryTree {

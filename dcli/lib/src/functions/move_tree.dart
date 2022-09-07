@@ -78,6 +78,7 @@ void moveTree(
   bool Function(String file) filter = _allowAll,
 }) =>
     waitForEx(
+      // ignore: discarded_futures
       core.moveTree(
         from,
         to,

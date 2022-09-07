@@ -20,7 +20,7 @@ const String capturePrinterrKey = 'printerr';
 
 /// Run code in a zone which traps calls to [print] and [printerr]
 /// redirecting them to the passed progress.
-Future<Progress> capture<R>(R Function() action, {Progress? progress}) async {
+Progress capture<R>(R Function() action, {Progress? progress}) {
   progress ??= Progress.devNull();
 
   /// overload printerr so we can trap it.
@@ -32,8 +32,6 @@ Future<Progress> capture<R>(R Function() action, {Progress? progress}) async {
     }
   };
 
-  // ignore: flutter_style_todos
-  /// TODO: we need to some how await this.
   runZonedGuarded(
     action,
     (e, st) {},

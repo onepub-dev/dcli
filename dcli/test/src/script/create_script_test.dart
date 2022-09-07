@@ -21,9 +21,13 @@ void main() {
         const scriptName = 'extra.dart';
         final scriptPath = join(scriptDir, 'bin', scriptName);
 
-        'dcli create $scriptDir'.run;
+        withEnvironment(() {
+          'dcli create $scriptDir'.run;
 
-        'dcli create $scriptPath'.run;
+          'dcli create $scriptPath'.run;
+        }, environment: {
+          'DCLI_OVERRIDE_PATH': DartProject.self.pathToProjectRoot
+        });
 
         DartScript.fromFile(scriptPath).doctor;
       });
@@ -37,9 +41,13 @@ void main() {
         const scriptName = 'extra.dart';
         final scriptPath = join(scriptDir, 'bin', scriptName);
 
-        'dcli create $scriptDir'.run;
+        withEnvironment(() {
+          'dcli create $scriptDir'.run;
 
-        'dcli create --template=cmd_args $scriptPath'.run;
+          'dcli create --template=cmd_args $scriptPath'.run;
+        }, environment: {
+          'DCLI_OVERRIDE_PATH': DartProject.self.pathToProjectRoot
+        });
 
         DartScript.fromFile(scriptPath).doctor;
       });

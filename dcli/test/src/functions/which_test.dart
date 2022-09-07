@@ -37,11 +37,11 @@ void main() {
     skip: !Settings().isWindows,
   );
 
-  test('progress', () {
+  test('progress', () async {
     final controller = StreamController<String>();
     controller.stream.listen((line) => print('listen $line'));
     which('dart', progress: controller.sink, verbose: true).found;
     print('done');
-    controller.close();
+    await controller.close();
   });
 }

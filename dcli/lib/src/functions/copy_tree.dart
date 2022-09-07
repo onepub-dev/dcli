@@ -71,6 +71,7 @@ void copyTree(
   bool Function(String file) filter = _allowAll,
 }) =>
     waitForEx(
+      // ignore: discarded_futures
       core.copyTree(
         from,
         to,

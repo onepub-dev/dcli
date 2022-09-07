@@ -12,12 +12,14 @@ void main() {
   print('parent hasTerminal=${stdin.hasTerminal}');
 
   print('run child.dart');
+  // ignore: discarded_futures
   var process = waitFor<Process>(Process.start('dart', ['./child.dart'],
       mode: ProcessStartMode.inheritStdio));
   waitFor<int>(process.exitCode);
 
   print('run child exe');
   process = waitFor<Process>(
+      // ignore: discarded_futures
       Process.start('child', [], mode: ProcessStartMode.inheritStdio));
 
   waitFor<int>(process.exitCode);

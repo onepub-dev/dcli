@@ -10,6 +10,8 @@ import 'dart:io';
 
 import 'dart:isolate';
 
+import 'package:stack_trace/stack_trace.dart';
+
 import '../../dcli.dart';
 
 /// A [NamedLock] can be used to control access to a resource
@@ -101,7 +103,7 @@ class NamedLock {
     void Function() fn, {
     String? waiting,
   }) {
-    final callingStackTrace = StackTraceImpl();
+    final callingStackTrace = Trace.current();
     var lockHeld = false;
     runZonedGuarded(() {
       try {
@@ -127,7 +129,6 @@ class NamedLock {
       if (lockHeld) {
         _releaseLock();
       }
-      // final stackTrace = StackTraceImpl.fromStackTrace(st);
       verbose(() => 'Exception throw $e : ${e.toString()}');
       if (e is DCliException) {
         throw e..stackTrace = callingStackTrace;
@@ -305,10 +306,9 @@ class NamedLock {
               verbose(
                 () => 'Lock Source: '
                     // ignore: lines_longer_than_80_chars
-                    '${StackTraceImpl(skipFrames: 9).formatStackTrace(methodCount: 1)}',
+                    '${Trace.current(9).frames[0].toString()}',
               );
               touch(_lockFilePath, create: true);
-              //  log(StackTraceImpl().formatStackTrace(methodCount: 100));
             }
           },
         );
@@ -409,6 +409,7 @@ class NamedLock {
 
     try {
       verbose(() => 'attempt bindSocket');
+      // ignore: discarded_futures
       socket = waitForEx<ServerSocket?>(_bindSocket());
 
       if (socket != null) {
@@ -417,7 +418,8 @@ class NamedLock {
       }
     } finally {
       if (socket != null) {
-        socket.close();
+        // ignore: discarded_futures
+        waitForEx(socket.close());
         verbose(() => blue('Hardlock released'));
       }
     }
@@ -448,5 +450,5 @@ class _LockFileParts {
 ///
 class LockException extends DCliException {
   ///
-  LockException(String message) : super(message);
+  LockException(super.message);
 }

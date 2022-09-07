@@ -6,6 +6,8 @@
 
 import 'dart:io';
 
+import 'package:stack_trace/stack_trace.dart';
+
 import '../../dcli_core.dart';
 
 // import 'package:posix/posix.dart' as posix;
@@ -64,7 +66,7 @@ DateTime lastModified(String path) {
   try {
     return File(path).lastModifiedSync();
   } on FileSystemException catch (e) {
-    throw DCliException.from(e, StackTraceImpl());
+    throw DCliException.from(e, Trace.current());
   }
 }
 
@@ -80,7 +82,7 @@ void setLastModifed(String path, DateTime lastModified) {
   try {
     File(path).setLastModifiedSync(lastModified);
   } on FileSystemException catch (e) {
-    throw DCliException.from(e, StackTraceImpl());
+    throw DCliException.from(e, Trace.current());
   }
 }
 

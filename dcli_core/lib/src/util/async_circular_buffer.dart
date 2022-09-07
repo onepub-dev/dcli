@@ -267,9 +267,9 @@ class AsyncCircularBuffer<T>
   }
 
   /// empties the buffer, discarding all elements.
-  void drain() {
+  Future<void> drain() async {
     while (_isNotEmpty) {
-      get();
+      await get();
     }
   }
 }

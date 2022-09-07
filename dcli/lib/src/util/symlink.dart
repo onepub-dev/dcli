@@ -26,7 +26,8 @@ void symlink(
   String existingPath,
   String linkPath,
 ) =>
-    core.symlink(existingPath, linkPath);
+    // ignore: discarded_futures
+    waitForEx(core.symlink(existingPath, linkPath));
 
 ///
 /// Deletes the symlink at [linkPath]
@@ -41,6 +42,7 @@ void symlink(
 ///
 /// [Shell.current.isPrivileged]
 ///
+// ignore: discarded_futures
 void deleteSymlink(String linkPath) => waitForEx(core.deleteSymlink(linkPath));
 
 ///
@@ -56,4 +58,5 @@ void deleteSymlink(String linkPath) => waitForEx(core.deleteSymlink(linkPath));
 ///
 /// throws a FileSystemException if the target path does not exist.
 String resolveSymLink(String pathToLink) =>
+    // ignore: discarded_futures
     waitForEx(core.resolveSymLink(pathToLink));

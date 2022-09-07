@@ -8,6 +8,7 @@ import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
 import 'package:dcli_core/dcli_core.dart' as core;
+import 'package:stack_trace/stack_trace.dart';
 
 import '../../dcli.dart';
 import 'capture.dart';
@@ -35,6 +36,7 @@ void printerr(String? line) {
 class RunnableProcess {
   RunnableProcess._internal(this._parsed, this.workingDirectory) {
     _streamsFlushed =
+        // ignore: discarded_futures
         Future.wait<void>([_stdoutFlushed.future, _stderrFlushed.future]);
   }
 
@@ -269,6 +271,7 @@ class RunnableProcess {
         'The specified workingDirectory [$workdir] does not exist.',
       );
     }
+    // ignore: discarded_futures
     _fProcess = Process.start(
       _parsed.cmd,
       _parsed.args,
@@ -289,7 +292,7 @@ class RunnableProcess {
   void _waitForStart() {
     final complete = Completer<Process>();
 
-    _fProcess.then(complete.complete)
+    unawaited(_fProcess.then(complete.complete)
         //ignore: avoid_types_on_closure_parameters
         .catchError((Object e, StackTrace s) {
       // 2 - No such file or directory
@@ -303,7 +306,7 @@ class RunnableProcess {
         );
       }
       complete.completeError(e);
-    });
+    }));
     waitForEx<Process>(complete.future);
   }
 
@@ -315,7 +318,7 @@ class RunnableProcess {
   /// have to wait for things to finish.
   int? _waitForExit(Progress progress, {required bool nothrow}) {
     final exited = Completer<int>();
-    _fProcess.then((process) {
+    unawaited(_fProcess.then((process) {
       final exitCode = waitForEx<int>(process.exitCode);
       progress.exitCode = exitCode;
 
@@ -334,7 +337,7 @@ class RunnableProcess {
       } else {
         exited.complete(exitCode);
       }
-    });
+    }));
     return waitForEx<int>(exited.future);
   }
 
@@ -346,7 +349,7 @@ class RunnableProcess {
 
     // });
 
-    _fProcess.then((lhsProcess) {
+    unawaited(_fProcess.then((lhsProcess) {
       stdin._fProcess.then<void>((rhsProcess) {
         // lhs.stdout -> rhs.stdin
         lhsProcess.stdout.listen(rhsProcess.stdin.add);
@@ -371,7 +374,7 @@ class RunnableProcess {
               e is SocketException && e.osError!.message == 'Broken pipe',
         );
       });
-    });
+    }));
   }
 
   /// Unlike [processUntilExit] this method wires the streams and then returns
@@ -379,7 +382,7 @@ class RunnableProcess {
   ///
   /// When the process exits it closes the [progress] streams.
   void processStream(Progress progress, {required bool nothrow}) {
-    _fProcess.then((process) {
+    unawaited(_fProcess.then((process) {
       _wireStreams(process, progress);
 
       // trap the process finishing
@@ -408,7 +411,7 @@ class RunnableProcess {
           progress.close();
         }
       });
-    });
+    }));
   }
 
   // Monitors the process until it exists.
@@ -420,7 +423,7 @@ class RunnableProcess {
 
     final _progress = progress ?? Progress.devNull();
 
-    _fProcess.then((process) {
+    unawaited(_fProcess.then((process) {
       _wireStreams(process, _progress);
 
       // trap the process finishing
@@ -456,11 +459,11 @@ class RunnableProcess {
         .catchError((Object e, StackTrace s) {
       verbose(
         () => '${e.toString()} stacktrace: '
-            '${StackTraceImpl.fromStackTrace(s).formatStackTrace()}',
+            '${Trace.from(s).terse}',
       );
       // ignore: only_throw_errors
       throw e;
-    }); // .whenComplete(() => print('start completed'));
+    })); // .whenComplete(() => print('start completed'));
 
     try {
       // wait for the process to finish.
@@ -477,6 +480,7 @@ class RunnableProcess {
   ///
   void _waitForStreams() {
     // Wait for both streams to complete
+    // ignore: discarded_futures
     waitForEx(Future.wait([_stdoutCompleter.future, _stderrCompleter.future]));
   }
 

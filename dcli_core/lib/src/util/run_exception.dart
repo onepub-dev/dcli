@@ -4,7 +4,7 @@
  * Written by Brett Sutton <bsutton@onepub.dev>, Jan 2022
  */
 
-import 'package:stacktrace_impl/stacktrace_impl.dart';
+import 'package:stack_trace/stack_trace.dart';
 
 import 'dcli_exception.dart';
 
@@ -16,7 +16,7 @@ class RunException extends DCliException {
     this.cmdLine,
     this.exitCode,
     this.reason, {
-    StackTraceImpl? stackTrace,
+    Trace? stackTrace,
   }) : super(reason, stackTrace);
 
   ///
@@ -25,13 +25,9 @@ class RunException extends DCliException {
     List<String?> args,
     this.exitCode,
     this.reason, {
-    StackTraceImpl? stackTrace,
+    Trace? stackTrace,
   })  : cmdLine = '$cmd ${args.join(' ')}',
         super(reason, stackTrace);
-
-  // @override
-  // RunException copyWith(StackTraceImpl stackTrace) =>
-  //     RunException(cmdLine, exitCode, reason, stackTrace: stackTrace);
 
   /// The command line that was being run.
   String cmdLine;

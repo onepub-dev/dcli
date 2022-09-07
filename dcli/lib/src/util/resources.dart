@@ -141,9 +141,11 @@ class $className extends PackedResource {
 }
 ''');
 
+      // ignore: discarded_futures
       waitForEx<dynamic>(to.flush());
     } finally {
-      to.close();
+      // ignore: discarded_futures
+      waitForEx<dynamic>(to.close());
     }
 
     return resource;
@@ -223,8 +225,10 @@ $line
 }
 ''');
     } finally {
+      // ignore: discarded_futures
       waitForEx<dynamic>(registryFile.flush());
-      registryFile.close();
+      // ignore: discarded_futures
+      waitForEx<dynamic>(registryFile.close());
     }
   }
 
@@ -257,6 +261,7 @@ $line
 
     /// ignore: literal_only_boolean_expressions
     while (true) {
+      // ignore: discarded_futures
       final data = waitForEx(reader.readChunk(60));
       to
         ..write(base64.encode(data))
@@ -461,17 +466,21 @@ abstract class PackedResource {
       createDir(dirname(normalized), recursive: true);
     }
 
+    // ignore: discarded_futures
     final file = waitForEx(File(normalized).open(mode: FileMode.write));
 
     try {
       for (final line in content.split('\n')) {
         if (line.trim().isNotEmpty) {
+          // ignore: discarded_futures
           waitForEx(file.writeFrom(base64.decode(line)));
         }
       }
     } finally {
-      waitForEx<dynamic>(file.flush());
-      file.close();
+      // ignore: discarded_futures
+      waitForEx(file.flush());
+      // ignore: discarded_futures
+      waitForEx(file.close());
     }
   }
 }
@@ -514,5 +523,5 @@ class _Resource {
 /// Thrown when an error occurs trying to pack or unpack a resource file
 class ResourceException extends DCliException {
   /// Thrown when an error occurs trying to pack or unpack a resource file
-  ResourceException(String message) : super(message);
+  ResourceException(super.message);
 }

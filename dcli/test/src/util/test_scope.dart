@@ -47,7 +47,8 @@ void withTestScope(void Function(String testDir) callback,
       }, environment: {
         'HOME': testDir,
 
-        /// add our pub-cache to the front of the path so dcli is run from there.
+        /// add our pub-cache to the front of the path so dcli is
+        /// run from there.
         'PATH': [join(commonTestPubCache, 'bin'), ...PATH]
             .join(Env().delimiterForPATH),
 

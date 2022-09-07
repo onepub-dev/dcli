@@ -261,19 +261,12 @@ packages:
     source: hosted
     version: "1.8.1"
   stack_trace:
-    dependency: transitive
+    dependency: "direct main"
     description:
       name: stack_trace
       url: "https://pub.dartlang.org"
     source: hosted
     version: "1.10.0"
-  stacktrace_impl:
-    dependency: "direct main"
-    description:
-      name: stacktrace_impl
-      url: "https://pub.dartlang.org"
-    source: hosted
-    version: "2.3.0"
   stream_channel:
     dependency: transitive
     description:

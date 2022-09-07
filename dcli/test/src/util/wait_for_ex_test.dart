@@ -5,6 +5,7 @@
  */
 
 import 'package:dcli/dcli.dart' hide equals;
+import 'package:stack_trace/stack_trace.dart';
 import 'package:test/test.dart';
 
 void main() {
@@ -13,25 +14,25 @@ void main() {
       waitForEx<void>(doAsyncThrowException());
       // ignore: avoid_catches_without_on_clauses
     } catch (e, st) {
-      final sti = StackTraceImpl.fromStackTrace(st);
+      final sti = Trace.from(st);
 
       var index = 0;
 
       var frame = sti.frames[index++];
-      expect(basename(frame.sourceFile.path), equals('wait_for_ex_test.dart'));
-      expect(frame.details, equals('_doAsyncThrowException1'));
+      expect(basename(frame.library), equals('wait_for_ex_test.dart'));
+      expect(frame.location, equals('_doAsyncThrowException1'));
 
       frame = sti.frames[index++];
-      expect(basename(frame.sourceFile.path), equals('wait_for_ex_test.dart'));
-      expect(frame.details, equals('doAsyncThrowException'));
+      expect(basename(frame.library), equals('wait_for_ex_test.dart'));
+      expect(frame.location, equals('doAsyncThrowException'));
 
       frame = sti.frames[index++];
-      expect(basename(frame.sourceFile.path), equals('wait_for_ex_test.dart'));
-      expect(frame.details, equals('main.<anonymous closure>'));
+      expect(basename(frame.library), equals('wait_for_ex_test.dart'));
+      expect(frame.location, equals('main.<anonymous closure>'));
 
       frame = sti.frames[index++];
-      expect(basename(frame.sourceFile.path), equals('declarer.dart'));
-      expect(frame.details,
+      expect(basename(frame.library), equals('declarer.dart'));
+      expect(frame.location,
           equals('Declarer.test.<anonymous closure>.<anonymous closure>'));
     }
   });
@@ -41,24 +42,24 @@ void main() {
       waitForEx<void>(doAsyncThrowError());
       // ignore: avoid_catches_without_on_clauses
     } catch (e, st) {
-      final sti = StackTraceImpl.fromStackTrace(st);
+      final sti = Trace.from(st);
 
       var index = 0;
       var frame = sti.frames[index++];
-      expect(basename(frame.sourceFile.path), equals('wait_for_ex_test.dart'));
-      expect(frame.details, equals('_doAsyncThrowError1'));
+      expect(basename(frame.library), equals('wait_for_ex_test.dart'));
+      expect(frame.location, equals('_doAsyncThrowError1'));
 
       frame = sti.frames[index++];
-      expect(basename(frame.sourceFile.path), equals('wait_for_ex_test.dart'));
-      expect(frame.details, equals('doAsyncThrowError'));
+      expect(basename(frame.library), equals('wait_for_ex_test.dart'));
+      expect(frame.location, equals('doAsyncThrowError'));
 
       frame = sti.frames[index++];
-      expect(basename(frame.sourceFile.path), equals('wait_for_ex_test.dart'));
-      expect(frame.details, equals('main.<anonymous closure>'));
+      expect(basename(frame.library), equals('wait_for_ex_test.dart'));
+      expect(frame.location, equals('main.<anonymous closure>'));
 
       frame = sti.frames[index++];
-      expect(basename(frame.sourceFile.path), equals('declarer.dart'));
-      expect(frame.details,
+      expect(basename(frame.library), equals('declarer.dart'));
+      expect(frame.location,
           equals('Declarer.test.<anonymous closure>.<anonymous closure>'));
     }
   });
@@ -68,23 +69,23 @@ void main() {
       waitForEx<void>(doThrowDCliException());
       // ignore: avoid_catches_without_on_clauses
     } catch (e, st) {
-      final sti = StackTraceImpl.fromStackTrace(st);
+      final sti = Trace.from(st);
       var index = 0;
       var frame = sti.frames[index++];
-      expect(basename(frame.sourceFile.path), equals('wait_for_ex_test.dart'));
-      expect(frame.details, equals('_doThrowDCliException1'));
+      expect(basename(frame.library), equals('wait_for_ex_test.dart'));
+      expect(frame.location, equals('_doThrowDCliException1'));
 
       frame = sti.frames[index++];
-      expect(basename(frame.sourceFile.path), equals('wait_for_ex_test.dart'));
-      expect(frame.details, equals('doThrowDCliException'));
+      expect(basename(frame.library), equals('wait_for_ex_test.dart'));
+      expect(frame.location, equals('doThrowDCliException'));
 
       frame = sti.frames[index++];
-      expect(basename(frame.sourceFile.path), equals('wait_for_ex_test.dart'));
-      expect(frame.details, equals('main.<anonymous closure>'));
+      expect(basename(frame.library), equals('wait_for_ex_test.dart'));
+      expect(frame.location, equals('main.<anonymous closure>'));
 
       frame = sti.frames[index++];
-      expect(basename(frame.sourceFile.path), equals('declarer.dart'));
-      expect(frame.details,
+      expect(basename(frame.library), equals('declarer.dart'));
+      expect(frame.location,
           equals('Declarer.test.<anonymous closure>.<anonymous closure>'));
     }
   });
@@ -96,44 +97,44 @@ void main() {
       });
       // ignore: avoid_catches_without_on_clauses
     } catch (e, st) {
-      final sti = StackTraceImpl.fromStackTrace(st);
+      final sti = Trace.from(st);
 
       var index = 0;
 
       var frame = sti.frames[index++];
 
       frame = sti.frames[index++];
-      expect(basename(frame.sourceFile.path), equals('move_dir.dart'));
-      expect(frame.details, equals('moveDir'));
+      expect(basename(frame.library), equals('move_dir.dart'));
+      expect(frame.location, equals('moveDir'));
 
       frame = sti.frames[index++];
-      expect(basename(frame.sourceFile.path), equals('move_dir.dart'));
-      expect(frame.details, equals('moveDir'));
+      expect(basename(frame.library), equals('move_dir.dart'));
+      expect(frame.location, equals('moveDir'));
 
       frame = sti.frames[index++];
-      expect(basename(frame.sourceFile.path), equals('wait_for_ex_test.dart'));
-      expect(frame.details,
+      expect(basename(frame.library), equals('wait_for_ex_test.dart'));
+      expect(frame.location,
           equals('main.<anonymous closure>.<anonymous closure>'));
 
       frame = sti.frames[index++];
-      expect(basename(frame.sourceFile.path), equals('create_dir.dart'));
-      expect(frame.details, equals('withTempDir'));
+      expect(basename(frame.library), equals('create_dir.dart'));
+      expect(frame.location, equals('withTempDir'));
 
       frame = sti.frames[index++];
-      expect(basename(frame.sourceFile.path), equals('wait_for.dart'));
-      expect(frame.details, equals('waitFor.<anonymous closure>'));
+      expect(basename(frame.library), equals('wait_for.dart'));
+      expect(frame.location, equals('waitFor.<anonymous closure>'));
 
       frame = sti.frames[index++];
-      expect(basename(frame.sourceFile.path), equals('wait_for_ex.dart'));
-      expect(frame.details, equals('waitForEx'));
+      expect(basename(frame.library), equals('wait_for_ex.dart'));
+      expect(frame.location, equals('waitForEx'));
 
       frame = sti.frames[index++];
-      expect(basename(frame.sourceFile.path), equals('move_dir.dart'));
-      expect(frame.details, equals('moveDir'));
+      expect(basename(frame.library), equals('move_dir.dart'));
+      expect(frame.location, equals('moveDir'));
 
       frame = sti.frames[index++];
-      expect(basename(frame.sourceFile.path), equals('wait_for_ex_test.dart'));
-      expect(frame.details,
+      expect(basename(frame.library), equals('wait_for_ex_test.dart'));
+      expect(frame.location,
           equals('main.<anonymous closure>.<anonymous closure>'));
     }
   });

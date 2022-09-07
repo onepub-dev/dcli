@@ -103,7 +103,7 @@ Future<String> resolveSymLink(String pathToLink) async {
 /// Returns a FileStat instance describing the
 /// file or directory located by [path].
 ///
-Future<FileStat> stat(String path) async => File(path).stat();
+FileStat stat(String path) => File(path).statSync();
 
 /// Generates a temporary filename in [pathToTempDir]
 /// or if inTempDir os not passed then in

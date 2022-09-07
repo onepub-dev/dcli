@@ -4,8 +4,6 @@
  * Written by Brett Sutton <bsutton@onepub.dev>, Jan 2022
  */
 
-export 'package:stacktrace_impl/stacktrace_impl.dart';
-
 export 'src/functions/backup.dart';
 export 'src/functions/cat.dart';
 export 'src/functions/copy.dart'; //  show copy, CopyException;

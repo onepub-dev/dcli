@@ -41,6 +41,7 @@ class _Delete extends DCliFunction {
     }
 
     if (remove == true) {
+      // ignore: discarded_futures
       dcli.waitForEx(core.delete(path));
     }
   }

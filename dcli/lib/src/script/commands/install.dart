@@ -83,7 +83,7 @@ class InstallCommand extends Command {
 
     /// We need to be priviledged for a number of operations
     if (_requirePrivileges && !shell.isPrivilegedUser) {
-      _qprint(red(shell.privilegesRequiredMessage('dcli_install')));
+      _qprint(shell.privilegesRequiredMessage('dcli_install'));
       dcliExit(1);
     }
 
@@ -233,7 +233,7 @@ class InstallCommand extends Command {
     if (!core.Settings().isWindows) {
       final linkPath = join(dirname(DartSdk().pathToDartExe!), 'dcli');
       if (Shell.current.isPrivilegedPasswordRequired && !isWritable(linkPath)) {
-        print('Please enter the sudo password when prompted.');
+        print('Enter the sudo password when prompted.');
       }
 
       'ln -sf $dcliPath $linkPath'.start(privileged: !isWritable(linkPath));
@@ -409,5 +409,5 @@ class _NoPrivilegesFlag extends Flag {
 /// Thrown if an error is encountered during an install
 class InstallException extends DCliException {
   /// Thrown if an error is encountered during an install
-  InstallException(String message) : super(message);
+  InstallException(super.message);
 }

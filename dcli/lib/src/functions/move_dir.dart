@@ -32,4 +32,5 @@ export 'package:dcli_core/dcli_core.dart' show MoveDirException;
 ///   the [from] path isn't a directory
 ///   the [to] path already exists.
 ///
+// ignore: discarded_futures
 void moveDir(String from, String to) => waitForEx(core.moveDir(from, to));

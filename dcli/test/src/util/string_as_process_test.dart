@@ -64,7 +64,7 @@ void main() {
     });
   });
 
-  test('tail -f', () {
+  test('tail -f', () async {
     Settings().setVerbose(enabled: false);
 
     withTempFile((file) {
@@ -81,17 +81,16 @@ void main() {
       var linesRead = 0;
       print('have stream');
       late final StreamSubscription<String> subscription;
-      subscription = stream.listen((event) {
+      subscription = stream.listen((event) async {
         print('stream: $event');
         linesRead++;
 
         // ignore: flutter_style_todos
         /// TODO(bsutton): find some way of terminating a streaming process
         /// that doesn't naturally end (e.g. tail -f)
-        ///
         if (linesRead == 15) {
           done.complete();
-          subscription.cancel();
+          await subscription.cancel();
         }
       });
 

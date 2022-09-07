@@ -40,6 +40,24 @@ void _createProject(String pathToProject, String templateName) {
     chmod(projectScript, permission: '755');
   }
 
+  if (env.exists(DartProject.dcliOverridePathKey)) {
+    /// we are running in a unit test so
+    /// we need to add pubspec overrides so that the
+    /// newly created project will from the dev source
+    /// for dcli and dcli_core rather than looking to pub.dev.
+    final pathToDCli = DartProject.self.pathToProjectRoot;
+    final pathToDCliCore = join(pathToDCli, '..', 'dcli_core');
+
+    join(pathToProject, 'pubspec_overrides.yaml').write('''
+dependency_overrides:
+  dcli:
+    path: $pathToDCli
+  dcli_core:
+    path: $pathToDCliCore
+
+''');
+  }
+
   find('*.*', workingDirectory: pathToProject, includeHidden: true)
       .forEach((file) {
     print('    $file');
@@ -275,7 +293,7 @@ class TemplateFlag extends Flag {
 }
 
 class InvalidProjectTemplateException extends DCliException {
-  InvalidProjectTemplateException(String message) : super(message);
+  InvalidProjectTemplateException(super.message);
 }
 
 /// Prints a list of the templates and exists

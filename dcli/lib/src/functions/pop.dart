@@ -87,5 +87,5 @@ class _Pop extends core.DCliFunction {
 class PopException extends core.DCliFunctionException {
   // ignore: deprecated_member_use_from_same_package
   /// Thrown when the [pop] function encouters an error.
-  PopException(String reason) : super(reason);
+  PopException(super.reason);
 }

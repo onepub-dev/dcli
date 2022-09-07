@@ -15,14 +15,14 @@ Future<void> main() async {
 
   final head = await start('echo', ['-n', '10']);
   final tail = await start('tail', ['-n', '3']);
-  run(
+  await run(
     generateLines(1000),
     head,
     tail,
   );
 }
 
-void run(Stream<String> ls, Process head, Process tail) {
+Future<void> run(Stream<String> ls, Process head, Process tail) async {
   var cnt = 0;
   final fls = ls
       .transform(const LineSplitter())
@@ -51,7 +51,7 @@ void run(Stream<String> ls, Process head, Process tail) {
 
   final ftail = tail.stdout.pipe(stdout);
 
-  Future.wait<void>([fls, fhead, ftail]);
+  await Future.wait<void>([fls, fhead, ftail]);
 }
 
 Future<Process> start(String command, List<String> args) async {

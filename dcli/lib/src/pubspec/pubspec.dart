@@ -119,6 +119,7 @@ class PubSpec {
   /// [path].
   /// The [path] must be a directory not a file name.
   void saveToFile(String path) {
+    // ignore: discarded_futures
     waitForEx<dynamic>(pubspec.save(Directory(dirname(path))));
   }
 

@@ -61,7 +61,9 @@ void pipeTo(Future<Process> lhs, Future<Process> rhs) {
   // wait for the lhs process to
   // start and then start piping its
   // output to the rhs process.
+  // ignore: discarded_futures
   lhs.then((lhsProcess) {
+    // ignore: discarded_futures
     rhs.then<void>((rhsProcess) {
       // write stdout from lhs to stdin of rhs
       lhsProcess.stdout.listen((datum) {
@@ -93,10 +95,12 @@ void pipeTo(Future<Process> lhs, Future<Process> rhs) {
               print('onError $e'), // stdoutCompleter.completeError(e),
           cancelOnError: true);
 
+      // ignore: discarded_futures
       lhsProcess.exitCode.then((exitCode) {
         print('lhs exitCode=$exitCode');
       });
 
+      // ignore: discarded_futures
       rhsProcess.exitCode.then((exitCode) {
         print('rhs exitCode=$exitCode');
       });

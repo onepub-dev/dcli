@@ -136,5 +136,5 @@ void _applyTransforms(
 }
 
 class ScriptExistsException extends CommandLineException {
-  ScriptExistsException(String message) : super(message);
+  ScriptExistsException(super.message);
 }

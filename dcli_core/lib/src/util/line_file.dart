@@ -8,7 +8,7 @@ import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
 
-import 'package:stacktrace_impl/stacktrace_impl.dart';
+import 'package:stack_trace/stack_trace.dart';
 
 import '../../dcli_core.dart' as core;
 import 'dcli_exception.dart';
@@ -49,7 +49,7 @@ class LineFile {
   Stream<String> readAll() {
     final controller = StreamController<String>();
     final inputStream = _file.openRead();
-    final stackTrace = StackTraceImpl();
+    final stackTrace = Trace.current();
     Object? exception;
 
     utf8.decoder.bind(inputStream).transform(const LineSplitter()).listen(

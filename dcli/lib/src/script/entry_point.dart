@@ -9,6 +9,8 @@
 import 'dart:cli';
 import 'dart:io';
 
+import 'package:stack_trace/stack_trace.dart';
+
 import '../../dcli.dart';
 
 import 'command_line_runner.dart';
@@ -42,6 +44,7 @@ class EntryPoint {
 
       verbose(() => 'Exiting with code $exitCode');
 
+      // ignore: discarded_futures
       waitFor<void>(stderr.flush());
 
       return exitCode;
@@ -53,9 +56,9 @@ class EntryPoint {
     }
     // ignore: avoid_catches_without_on_clauses
     catch (e, stackTrace) {
-      final impl = StackTraceImpl.fromStackTrace(stackTrace);
+      final impl = Trace.from(stackTrace);
       printerr('${e.runtimeType}: $e ');
-      printerr('Stacktrace: ${impl.formatStackTrace()}');
+      printerr('Stacktrace: ${impl.terse}');
       return 1;
     }
   }

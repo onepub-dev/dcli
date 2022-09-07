@@ -32,6 +32,7 @@ export 'package:dcli_core/dcli_core.dart'
 ///  * [withFileProtection]
 ///
 void backupFile(String pathToFile, {bool ignoreMissing = false}) =>
+    // ignore: discarded_futures
     waitForEx(core.backupFile(pathToFile, ignoreMissing: ignoreMissing));
 
 /// Designed to work with [backupFile] to restore
@@ -50,6 +51,7 @@ void backupFile(String pathToFile, {bool ignoreMissing = false}) =>
 /// a [RestoreFileException] unless you pass the [ignoreMissing]
 /// flag.
 void restoreFile(String pathToFile, {bool ignoreMissing = false}) =>
+    // ignore: discarded_futures
     waitForEx(core.restoreFile(pathToFile, ignoreMissing: ignoreMissing));
 
 /// EXPERIMENTAL - use with caution and the api may change.
@@ -98,6 +100,7 @@ R withFileProtection<R>(
   String? workingDirectory,
 }) =>
     waitForEx(
+      // ignore: discarded_futures
       core.withFileProtection(
         protected,
         action,

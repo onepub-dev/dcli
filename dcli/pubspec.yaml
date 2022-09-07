@@ -1,11 +1,11 @@
 name: dcli
-version: 1.34.0
+version: 2.0.0-beta.1
 homepage: https://dcli.onepub.dev
 documentation: https://dcli.onepub.dev
 description: Dart console SDK - write console (cli) apps/scripts using dart.
 repository: https://github.com/onepub-dev/dcli
 environment: 
-  sdk: '>=2.16.0 <3.0.0'
+  sdk: '>=2.18.0 <3.0.0'
 dependencies: 
   archive: ^3.0.0
   args: ^2.0.0
@@ -16,7 +16,7 @@ dependencies:
   crypto: ^3.0.0
   csv: ^5.0.1
   dart_console2: ^2.0.0
-  dcli_core: ^1.34.0
+  dcli_core: ^2.0.0-beta.1
   equatable: ^2.0.0
   ffi: ^2.0.0
   file: ^6.1.0
@@ -31,7 +31,7 @@ dependencies:
   pubspec2: ^2.4.1
   scope: ^2.2.1
   settings_yaml: ^3.4.2
-  stacktrace_impl: ^2.3.0
+  stack_trace: ^1.10.0
   system_info2: ^2.0.3
   uuid: ^3.0.0
   validators2: ^3.0.0

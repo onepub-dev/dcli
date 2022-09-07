@@ -83,6 +83,7 @@ core.Which which(
     });
 
     which = waitForEx(
+      // ignore: discarded_futures
       core.which(
         appname,
         first: first,
@@ -92,6 +93,7 @@ core.Which which(
       ),
     );
   } finally {
+    // ignore: discarded_futures
     waitForEx<void>(controller.close());
   }
   return which;

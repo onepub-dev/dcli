@@ -80,7 +80,7 @@ class WindowsDCliInstaller {
 //         printerr(
 //             "DCli requires the 'Chocolatey' package manager to be
 //  installed to install dart");
-//         printerr('Please install Chocolatey and then try again');
+//         printerr('Install Chocolatey and then try again');
 //         throw InstallException('The Chocolatey package manager was
 //  not found');
 //       }
