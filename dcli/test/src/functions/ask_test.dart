@@ -9,6 +9,16 @@ import 'package:dcli/dcli.dart' hide equals;
 import 'package:test/test.dart';
 
 void main() {
+  test('ask.custom prompt', () {
+    Settings().setVerbose(enabled: false);
+    ask(
+      'How old are you',
+      defaultValue: '5',
+      customPrompt: (prompt, defaultValue, {hidden = false}) =>
+          'AAA$prompt:$defaultValue',
+    );
+  }, skip: true);
+
   test(
     'defaultValue',
     () {

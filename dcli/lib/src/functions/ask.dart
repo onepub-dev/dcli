@@ -13,6 +13,12 @@ import 'package:validators2/validators.dart';
 
 import '../../dcli.dart';
 
+typedef CustomAskPrompt = String Function(String prompt, String? defaultValue,
+    {bool hidden});
+
+typedef CustomConfirmPrompt = String Function(String prompt,
+    {bool? defaultValue});
+
 ///
 /// Reads a line of text from stdin with an optional prompt.
 ///
@@ -101,6 +107,7 @@ String ask(
   bool hidden = false,
   bool required = true,
   String? defaultValue,
+  CustomAskPrompt customPrompt = Ask.defaultPrompt,
   AskValidator validator = Ask.dontCare,
 }) =>
     Ask()._ask(
@@ -109,6 +116,7 @@ String ask(
       hidden: hidden,
       required: required,
       defaultValue: defaultValue,
+      customPrompt: customPrompt,
       validator: validator,
     );
 
@@ -131,31 +139,24 @@ String ask(
 /// If the script is not attached to a terminal [Terminal().hasTerminal]
 /// then confirm returns immediately with the [defaultValue].
 /// If there is no [defaultValue] then true is returned.
-bool confirm(String prompt, {bool? defaultValue}) {
+bool confirm(String prompt,
+    {bool? defaultValue,
+    CustomConfirmPrompt customPrompt = Confirm.defaultPrompt}) {
   var result = false;
   var matched = false;
 
   if (!Terminal().hasTerminal) {
     return defaultValue ?? true;
   }
-  var finalPrompt = prompt;
-
-  if (defaultValue == null) {
-    finalPrompt += ' (y/n):';
-  } else {
-    if (defaultValue == true) {
-      finalPrompt += ' (Y/n):';
-    } else {
-      finalPrompt += ' (y/N):';
-    }
-  }
 
   while (!matched) {
     final entered = Ask()._ask(
-      finalPrompt,
+      prompt,
       toLower: true,
       hidden: false,
       required: false,
+      customPrompt: (_, __, {hidden = false}) =>
+          customPrompt(prompt, defaultValue: defaultValue),
       validator: Ask.dontCare,
     );
     var lower = entered.trim().toLowerCase();
@@ -179,6 +180,24 @@ bool confirm(String prompt, {bool? defaultValue}) {
   return result;
 }
 
+// ignore: avoid_classes_with_only_static_members
+class Confirm {
+  static String defaultPrompt(String prompt, {bool? defaultValue}) {
+    var finalPrompt = prompt;
+
+    if (defaultValue == null) {
+      finalPrompt += ' (y/n):';
+    } else {
+      if (defaultValue == true) {
+        finalPrompt += ' (Y/n):';
+      } else {
+        finalPrompt += ' (y/N):';
+      }
+    }
+    return finalPrompt;
+  }
+}
+
 /// Class for [ask] and related code.
 class Ask extends core.DCliFunction {
   static const int _backspace = 127;
@@ -193,6 +212,7 @@ class Ask extends core.DCliFunction {
     required bool hidden,
     required bool required,
     required AskValidator validator,
+    required CustomAskPrompt customPrompt,
     bool toLower = false,
     String? defaultValue,
   }) {
@@ -206,14 +226,7 @@ class Ask extends core.DCliFunction {
     if (!Terminal().hasTerminal) {
       return defaultValue ?? '';
     }
-    var finalPrompt = prompt;
-
-    /// completely suppress the default value and the prompt if
-    /// the prompt is empty.
-    if (defaultValue != null && finalPrompt.isNotEmpty) {
-      /// don't display the default value if hidden is true.
-      finalPrompt = '$finalPrompt [${hidden ? '******' : defaultValue}]';
-    }
+    final finalPrompt = customPrompt(prompt, defaultValue, hidden: hidden);
 
     var line = '';
     var valid = false;
@@ -294,6 +307,19 @@ class Ask extends core.DCliFunction {
 
     // return the entered value as a String.
     return Encoding.getByName('utf-8')!.decode(value);
+  }
+
+  static String defaultPrompt(String prompt, String? defaultValue,
+      {bool hidden = false}) {
+    var result = prompt;
+
+    /// completely suppress the default value and the prompt if
+    /// the prompt is empty.
+    if (defaultValue != null && prompt.isNotEmpty) {
+      /// don't display the default value if hidden is true.
+      result = '$prompt [${hidden ? '******' : defaultValue}]';
+    }
+    return result;
   }
 
   /// The default validator that considers any input as valid

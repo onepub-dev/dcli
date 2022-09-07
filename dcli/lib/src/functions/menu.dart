@@ -10,19 +10,21 @@ import '../../dcli.dart';
 
 String _noFormat<T>(T option) => option.toString();
 
+typedef CustomMenuPrompt = String Function(String prompt, String? defaultValue);
+
 /// Displays a menu with each of the provided [options], prompts
 /// the user to select an option and returns the selected option.
 ///
 /// e.g.
 /// ```dart
 /// var colors = [Color('Red'), Color('Green')];
-/// var color = menu( 'Select a color', options: colors);
+/// var color = menu( 'Please select a color', options: colors);
 /// ```
 /// Results in:
 ///```
 /// 1) Red
 /// 2) Green
-/// Select a color:
+/// Please select a color:
 /// ```
 ///
 /// [menu] will display an error if the user enters a non-valid
@@ -41,7 +43,7 @@ String _noFormat<T>(T option) => option.toString();
 /// ```dart
 ///
 /// var colors = [Color('Red'), Color('Green')];
-/// var color = menu(prompt: 'Select a color'
+/// var color = menu(prompt: 'Please select a color'
 ///   , options: colors, format: (color) => color.name);
 /// ```
 ///
@@ -68,6 +70,7 @@ T menu<T>({
   required String prompt,
   required List<T> options,
   T? defaultOption,
+  CustomMenuPrompt customPrompt = Menu.defaultPrompt,
   int? limit,
   String Function(T)? format,
   bool fromStart = true,
@@ -95,14 +98,14 @@ T menu<T>({
     displayList = options.sublist(min(options.length, options.length - limit));
   }
 
-  // on the way in we check that the default value acutally exists in the list.
-  String? defaultIndex;
+  // on the way in we check that the default value actually exists in the list.
+  String? defaultAsString;
   // display each option.
   for (var i = 1; i <= limit; i++) {
     final option = displayList[i - 1];
 
     if (option == defaultOption) {
-      defaultIndex = i.toString();
+      defaultAsString = i.toString();
     }
     final desc = format(option);
     final no = '$i'.padLeft(3);
@@ -114,7 +117,7 @@ T menu<T>({
     }
   }
 
-  if (defaultOption != null && defaultIndex == null) {
+  if (defaultOption != null && defaultAsString == null) {
     throw ArgumentError(
       "The [defaultOption] ${defaultOption.toString()} doesn't match any "
       'of the passed [options].'
@@ -128,8 +131,11 @@ T menu<T>({
 
   // loop until the user enters a valid selection.
   while (!valid) {
-    final selected =
-        ask(prompt, defaultValue: defaultIndex, validator: _MenuRange(limit));
+    final selected = ask(prompt,
+        defaultValue: defaultAsString,
+        validator: _MenuRange(limit),
+        customPrompt: (_, __, {hidden = false}) =>
+            customPrompt(prompt, defaultAsString));
     if (selected.isEmpty) {
       continue;
     }
@@ -138,6 +144,20 @@ T menu<T>({
   }
 
   return options[index - 1];
+}
+
+// ignore: avoid_classes_with_only_static_members
+class Menu {
+  static String defaultPrompt<T>(String prompt, T? defaultValue) {
+    var result = prompt;
+
+    /// completely suppress the default value and the prompt if
+    /// the prompt is empty.
+    if (defaultValue != null && prompt.isNotEmpty) {
+      result = '$prompt [$defaultValue]';
+    }
+    return result;
+  }
 }
 
 class _MenuRange extends AskValidator {
