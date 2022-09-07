@@ -8,7 +8,7 @@ import 'dart:async';
 
 import 'package:logging/logging.dart';
 
-import 'util/dcli_platform.dart';
+import '../dcli_core.dart';
 
 class Settings {
   /// Returns a singleton providing
@@ -32,7 +32,7 @@ class Settings {
   static StreamSubscription<LogRecord>? listener;
 
   /// Turns on verbose logging.
-  void setVerbose({required bool enabled}) {
+  Future<void> setVerbose({required bool enabled}) async {
     _verbose = enabled;
 
     // ignore: flutter_style_todos
@@ -48,7 +48,7 @@ class Settings {
     } else {
       logger.level = Level.OFF;
       if (listener != null) {
-        listener!.cancel();
+        await listener!.cancel();
         listener = null;
       }
     }
@@ -56,11 +56,19 @@ class Settings {
 
   /// Logs a message to the console if the verbose
   /// settings are on.
-  void verbose(String? string) {
+  void verbose(String? message, {Stackframe? frame}) {
+    final Stackframe calledBy;
+    if (frame == null) {
+      final st = StackTraceImpl();
+      calledBy = st.frames[2];
+    } else {
+      calledBy = frame;
+    }
+
     /// We log at info level (as that is logger's default)
     /// so that verbose messages will print when verbose
     /// is enabled.
-    Logger('dcli').info(string);
+    Logger('dcli').info('${calledBy.sourceFile}:${calledBy.lineNo} $message');
   }
 
   Stream<LogRecord> captureLogOutput() => logger.onRecord;
