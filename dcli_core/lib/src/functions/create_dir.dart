@@ -74,7 +74,7 @@ Future<R> withTempDir<R>(FutureOr<R> Function(String tempDir) action,
 /// It is your responsiblity to delete the directory once you have
 /// finsihed with it.
 Future<String> createTempDir() async => _CreateDir().createDir(
-      join(Directory.systemTemp.path, const Uuid().v4()),
+      join(Directory.systemTemp.path, '.dclitmp', const Uuid().v4()),
       recursive: true,
     );
 
