@@ -1,8 +1,12 @@
 [![pub package](https://img.shields.io/pub/v/dcli.svg)](https://pub.dev/packages/dcli)
-[![pub package](https://img.shields.io/pub/v/dcli.svg)](https://pub.dev/packages/dcli/score)
-[![likes](https://badges.bar/dcli/likes)](https://pub.dev/packages/dcli/score)
-[![popularity](https://badges.bar/dcli/popularity)](https://pub.dev/packages/dcli/score)
-[![pub points](https://badges.bar/dcli/pub%20points)](https://pub.dev/packages/dcli/score)
+![Pub Version (including pre-releases)](https://img.shields.io/pub/v/dcli?include_prereleases)
+[![pub publisher](https://img.shields.io/pub/publisher/dcli)](https://pub.dev/packages/dcli)
+![Pub Likes](https://img.shields.io/pub/likes/dcli)
+![Pub Popularity](https://img.shields.io/pub/popularity/dcli)
+![Pub Points](https://img.shields.io/pub/points/dcli)
+
+
+
 
 # README
 
@@ -34,7 +38,7 @@ DCli is based on Dart which is a modern programming language that has a set of f
 * Cross platform supporting Linux/Windows/osx/arm
 
 # Example:
-```
+```dart
 #! /usr/bin/env dcli
 
 import 'dart:io';
@@ -72,7 +76,7 @@ Dart has is also a large and growing ecosystem of [third party libraries](https:
 
 Dart is fast and if you need even more speed it can be compiled to a single file executable that is portable between binary compatible machines.
 
-```
+```bash
 # compile, install to the local PATH and run hello.dart
 
 $> dcli compile --install hello.dart
@@ -91,11 +95,11 @@ name: brett
 Hello brett
 ```
 
-You can use your favourite editor to create DCli scripts. Vi or VIM work fine but Visual Code is recommended.
+You can use your favourite editor to create DCli scripts. Vi or VIM work fine but Visual Studio Code is recommended.
 
-Use Visual Code for the best development experience with Dart.
+Use Visual Studio Code for the best development experience with Dart.
 
-Visual Code with the dart-code extension provide a great development an debugging experience including the ability to develop and debug code on a remote server.
+Visual Studio Code with the dart-code extension provide a great development an debugging experience including the ability to develop and debug code on a remote server.
 
 # Contributing
 Read the [contributing guide](https://dcli.onepub.dev/contributing) for details on how to get involved.
