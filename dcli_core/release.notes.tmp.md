@@ -1,5 +1,7 @@
-# 2.0.0-beta.4
-- updated to settings_yaml 4.0.0
+# 2.0.0-beta.3
+- As we are publishing dcli to onepub the dcli_core dependency must have  hosted clause.
+- changed createTempDir to create all the temp files under /tmp/.dclitmp to make clean up easier after a app crashes. A user can just delete /tmp/.dclitmp/*
+
 # 2.0.0-beta.2
 Fixed failed release.
 
