@@ -396,5 +396,5 @@ R withEnvironment<R>(R Function() callback,
 /// Base class for all Environment variable related exceptions.
 class EnvironmentException extends DCliException {
   /// Create an environment variable exception.
-  EnvironmentException(String message) : super(message);
+  EnvironmentException(super.message);
 }

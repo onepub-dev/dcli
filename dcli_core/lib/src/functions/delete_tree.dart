@@ -146,5 +146,5 @@ class _DeleteTree extends DCliFunction {
 /// Thrown when the [deleteTree] function encouters an error.
 class DeleteTreeException extends DCliFunctionException {
   /// Thrown when the [deleteTree] function encouters an error.
-  DeleteTreeException(String reason) : super(reason);
+  DeleteTreeException(super.reason);
 }

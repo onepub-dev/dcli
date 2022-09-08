@@ -7,8 +7,6 @@
 import 'dart:convert';
 import 'dart:io';
 
-import 'package:stack_trace/stack_trace.dart';
-
 import '../../dcli_core.dart';
 
 /// Prints the contents of the file located at [path] to stdout.
@@ -47,5 +45,5 @@ class Cat extends DCliFunction {
 /// Thrown if the [cat] function encouters an error.
 class CatException extends DCliFunctionException {
   /// Thrown if the [cat] function encouters an error.
-  CatException(String reason, [Trace? stacktrace]) : super(reason, stacktrace);
+  CatException(super.reason, [super.stacktrace]);
 }

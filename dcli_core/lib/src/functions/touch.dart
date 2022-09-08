@@ -72,5 +72,5 @@ class _Touch extends DCliFunction {
 /// thrown when the [touch] function encounters an exception
 class TouchException extends DCliFunctionException {
   /// thrown when the [touch] function encounters an exception
-  TouchException(String reason) : super(reason);
+  TouchException(super.reason);
 }

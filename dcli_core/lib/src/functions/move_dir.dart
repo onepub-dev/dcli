@@ -84,5 +84,5 @@ class _MoveDir extends DCliFunction {
 /// Thrown when the [moveDir] function encouters an error.
 class MoveDirException extends DCliFunctionException {
   /// Thrown when the [moveDir] function encouters an error.
-  MoveDirException(String reason) : super(reason);
+  MoveDirException(super.reason);
 }

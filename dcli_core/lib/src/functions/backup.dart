@@ -440,7 +440,7 @@ String _backupFilePath(String pathToFile) {
 class RestoreFileException extends DCliException {
   /// Creates a [RestoreFileException] with the given
   /// message.
-  RestoreFileException(String message) : super(message);
+  RestoreFileException(super.message);
 }
 
 /// Thrown by the [backupFile] function when
@@ -448,5 +448,5 @@ class RestoreFileException extends DCliException {
 class BackupFileException extends DCliException {
   /// Creates a [BackupFileException] with the given
   /// message.
-  BackupFileException(String message) : super(message);
+  BackupFileException(super.message);
 }
