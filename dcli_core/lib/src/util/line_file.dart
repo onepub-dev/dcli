@@ -58,9 +58,9 @@ class LineFile {
           },
           cancelOnError: true,
           //ignore: avoid_types_on_closure_parameters
-          onError: (Object error) {
+          onError: (Object error) async {
             exception = error;
-            controller.close();
+            await controller.close();
           },
           onDone: controller.close,
         );
