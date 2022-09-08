@@ -1,3 +1,6 @@
+# 2.0.0-beta.2
+Fixed failed release.
+
 # 2.0.0-beta.1
 - Added the ability to customise the prompt for ask, confirm and menu.
 - removed the package stacktrace_impl and replaced it with googles stack_trace package.
