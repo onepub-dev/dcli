@@ -16,7 +16,7 @@ dependencies:
   crypto: ^3.0.0
   csv: ^5.0.1
   dart_console2: ^2.0.0
-  dcli_core: ^2.0.0-beta.4
+  dcli_core: ^2.0.0-beta.5
   equatable: ^2.0.0
   ffi: ^2.0.0
   file: ^6.1.0

@@ -1,3 +1,6 @@
+# 2.0.0-beta.5
+- pre to publish to pub.dev
+
 # 2.0.0-beta.4
 - updated to settings_yaml 4.0.0
 # 2.0.0-beta.2
