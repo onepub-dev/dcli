@@ -1,3 +1,6 @@
+# 2.0.0-beta.6
+- upgraded to settings_yaml 5.0.0-beta.1. This had to be done stepwise.
+
 # 2.0.0-beta.5
 - changed createTempDir to create all the temp files under /tmp/.dclitmp to make clean up easier after a app crashes. A user can just delete /tmp/.dclitmp/*
 - updated settings_yaml version.
