@@ -43,7 +43,6 @@ dev_dependencies:
   lint_hard: ^2.0.0
   mocktail: ^0.3.0
   test: ^1.0.0
-
 executables: 
   dcli: 
   dcli_complete: 
