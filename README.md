@@ -48,7 +48,7 @@ Publish a private package in six commands:
 ```bash
 dart pub global activate onepub
 onepub login
-dcli create --template full myclipackage
+dcli create --template=full myclipackage
 cd myclipackage
 onepub pub private
 dart pub publish
