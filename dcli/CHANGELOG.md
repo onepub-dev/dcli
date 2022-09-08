@@ -1,3 +1,8 @@
+# 2.0.0-beta.7
+- change the release process to update all of the templates we ship, with the latest dcli version and sdk constraint.
+- deprecated pubspec.saveToFile creating a new method 'save'. saveToFile was unnecessarily verbose.
+- removed ExitException from the public interface as it is only intended for unit tests.
+
 # 2.0.0-beta.6
 - upgraded to settings_yaml 5.0.0-beta.1. This had to be done stepwise.
 
