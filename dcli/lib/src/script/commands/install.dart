@@ -10,6 +10,7 @@ import 'package:scope/scope.dart';
 
 import '../../../dcli.dart';
 import '../../dcli/resource/generated/resource_registry.g.dart';
+import '../../util/exit.dart';
 import '../../version/version.g.dart';
 import '../command_line_runner.dart';
 import '../flags.dart';

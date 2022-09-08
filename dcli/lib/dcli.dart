@@ -124,7 +124,6 @@ export 'src/util/capture.dart' show capture;
 export 'src/util/dcli_paths.dart' show DCliPaths;
 export 'src/util/digest_helper.dart';
 export 'src/util/editor.dart' show showEditor;
-export 'src/util/exit.dart';
 export 'src/util/file_sort.dart' show FileSort, Column, SortDirection;
 export 'src/util/file_sync.dart';
 export 'src/util/file_util.dart';

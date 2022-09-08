@@ -6,6 +6,7 @@
  */
 
 import 'package:dcli/dcli.dart';
+import 'package:dcli/src/util/exit.dart';
 import 'package:dcli/src/util/file_sort.dart';
 
 /// dsort

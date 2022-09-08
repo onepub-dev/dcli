@@ -5,8 +5,8 @@
  * Written by Brett Sutton <bsutton@onepub.dev>, Jan 2022
  */
 
-import 'package:dcli/dcli.dart';
 import 'package:dcli/src/script/entry_point.dart';
+import 'package:dcli/src/util/exit.dart';
 
 void main(List<String> arguments) {
   DCli().run(arguments);
