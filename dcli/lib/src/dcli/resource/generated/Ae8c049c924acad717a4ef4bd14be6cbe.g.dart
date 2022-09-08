@@ -9,9 +9,9 @@ import 'package:dcli/dcli.dart';
 ///
 /// GENERATED - GENERATED
 
-class Ab3d3a29275d9f1652f2de5c6e4115a24 extends PackedResource {
-  /// PackedResource - ../../template/script/pubspec.yaml
-  const Ab3d3a29275d9f1652f2de5c6e4115a24();
+class Ae8c049c924acad717a4ef4bd14be6cbe extends PackedResource {
+  /// PackedResource - ../../template/project/full/pubspec_overrides.yaml
+  const Ae8c049c924acad717a4ef4bd14be6cbe();
 
   /// A hash of the resource (pre packed) calculated by
   /// [calculateHash].
@@ -25,17 +25,15 @@ class Ab3d3a29275d9f1652f2de5c6e4115a24 extends PackedResource {
   /// this checksum
   @override
   String get checksum =>
-      '331c76ec25bcc13e305be2d42e981fd738d34c10aafba0f9c4729a1d2048db1c';
+      'daf165b309a90da74b391fc2569447fec401debb79c07c7c497bbfd1cbbad298';
 
   /// <package>/resources relative path to the original resource.
   @override
-  String get originalPath => 'template/script/pubspec.yaml';
+  String get originalPath => 'template/project/full/pubspec_overrides.yaml';
 
   @override
   String get content => '''
-bmFtZTogY29uc29sZV9zaW1wbGUKdmVyc2lvbjogMC4wLjEKZGVzY3JpcHRpb246IEEgc2ltcGxlIGNv
-bW1hbmQtbGluZSBhcHBsaWNhdGlvbiBjcmVhdGVkIGJ5IGRjbGkKZW52aXJvbm1lbnQ6IAogIHNkazog
-Jz49Mi4xOC4wIDwzLjAuMCcKZGVwZW5kZW5jaWVzOiAKICBkY2xpOiBeMi4wLjAtYmV0YS42CiAgZGNs
-aV9jb3JlOiBeMi4wLjAtYmV0YS42Cg==
+ZGVwZW5kZW5jeV9vdmVycmlkZXM6CiAgZGNsaTogCiAgICBwYXRoOiAuLi8uLi8uLi9kY2xpCiAgZGNs
+aV9jb3JlOgogICAgcGF0aDogLi4vLi4vLi4vZGNsaV9jb3JlCg==
   ''';
 }

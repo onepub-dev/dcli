@@ -95,17 +95,17 @@ packages:
   dcli:
     dependency: "direct main"
     description:
-      name: dcli
-      url: "https://pub.dartlang.org"
-    source: hosted
-    version: "1.33.0"
+      path: "../../../dcli"
+      relative: true
+    source: path
+    version: "2.0.0-beta.6"
   dcli_core:
-    dependency: transitive
+    dependency: "direct main"
     description:
-      name: dcli_core
-      url: "https://pub.dartlang.org"
-    source: hosted
-    version: "1.33.1"
+      path: "../../../dcli_core"
+      relative: true
+    source: path
+    version: "2.0.0-beta.6"
   equatable:
     dependency: transitive
     description:
@@ -191,7 +191,7 @@ packages:
     source: hosted
     version: "4.4.0"
   lint_hard:
-    dependency: "direct main"
+    dependency: "direct dev"
     description:
       name: lint_hard
       url: "https://pub.dartlang.org"
@@ -287,7 +287,7 @@ packages:
       name: settings_yaml
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "3.4.2"
+    version: "5.0.0-beta.1"
   source_span:
     dependency: transitive
     description:
@@ -302,13 +302,6 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "1.10.0"
-  stacktrace_impl:
-    dependency: transitive
-    description:
-      name: stacktrace_impl
-      url: "https://pub.dartlang.org"
-    source: hosted
-    version: "2.3.0"
   string_scanner:
     dependency: transitive
     description:
@@ -380,4 +373,4 @@ packages:
     source: hosted
     version: "3.1.0"
 sdks:
-  dart: ">=2.17.0 <3.0.0"
+  dart: ">=2.18.0 <3.0.0"

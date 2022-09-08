@@ -42,6 +42,7 @@ import 'Ace1455e143acffbe3a67ba40dbcd836b.g.dart';
 import 'Acef1af485956d6b0c8c663597e6d42ca.g.dart';
 import 'Ad2b9965f8478220f2d69889c70ea9428.g.dart';
 import 'Adcd9ad582ab3d8c4c1d895342e778549.g.dart';
+import 'Ae8c049c924acad717a4ef4bd14be6cbe.g.dart';
 import 'Af621a8bd8d9680d9847c1d0246fa9ffe.g.dart';
 
 /// GENERATED -- GENERATED
@@ -121,6 +122,8 @@ class ResourceRegistry {
         Acef1af485956d6b0c8c663597e6d42ca(),
     'template/project/full/bin/full.dart': Ad2b9965f8478220f2d69889c70ea9428(),
     'template/script/pubspec.lock': Adcd9ad582ab3d8c4c1d895342e778549(),
+    'template/project/full/pubspec_overrides.yaml':
+        Ae8c049c924acad717a4ef4bd14be6cbe(),
     'template/project/cmd_args/pubspec.yaml':
         Af621a8bd8d9680d9847c1d0246fa9ffe(),
   };
