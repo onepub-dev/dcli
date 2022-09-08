@@ -5,12 +5,12 @@
  * Written by Brett Sutton <bsutton@onepub.dev>, Jan 2022
  */
 
-
-
-
 import 'package:dcli/dcli.dart';
+import 'package:dcli/src/version/version.g.dart';
 
 /// Activate the latest version of dcli as part of the publishing the package.
 void main(List<String> args) {
-  'dart pub global activate dcli'.run;
+  /// we pass the version so that we can activate pre-relase version
+  /// (e.g. -beta.1) which the activate command will usually ignore.
+  'dart pub global activate dcli $packageVersion'.run;
 }
