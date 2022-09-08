@@ -1,6 +1,10 @@
 # Command Line Arguments
 
-A CLI app is only so useful unless you can pass arguments to your app.
+A CLI app is only so useful, unless you can pass arguments to your app.
+
+{% hint style="info" %}
+Use `dcli create --template=full myproject` to create an example cli app that demonstrates best practices when parsing arguments.
+{% endhint %}
 
 Like many languages Dart allows you to pass arguments to your main method..
 
@@ -19,7 +23,7 @@ void main(List<String> args)
 
 If you DCli script is called test.dart:
 
-```text
+```
 dart test.dart one two three
 > Found 3 arguments.
 > The arguments are:
@@ -113,4 +117,3 @@ dart which.dart ls
 Found at: /usr/bin/ls
 Found at: /bin/ls
 ```
-
