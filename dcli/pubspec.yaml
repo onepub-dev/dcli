@@ -43,9 +43,7 @@ dev_dependencies:
   lint_hard: ^2.0.0
   mocktail: ^0.3.0
   test: ^1.0.0
-dependency_overrides: 
-  dcli_core: 
-    path: ../dcli_core
+
 executables: 
   dcli: 
   dcli_complete: 
