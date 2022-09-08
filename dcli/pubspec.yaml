@@ -1,5 +1,5 @@
 name: dcli
-version: 2.0.0-beta.1
+version: 2.0.0-beta.2
 homepage: https://dcli.onepub.dev
 documentation: https://dcli.onepub.dev
 publish_to: https://beta.onepub.dev/api/jbbxpsdavu/
@@ -17,7 +17,7 @@ dependencies:
   crypto: ^3.0.0
   csv: ^5.0.1
   dart_console2: ^2.0.0
-  dcli_core: ^2.0.0-beta.1
+  dcli_core: ^2.0.0-beta.2
   equatable: ^2.0.0
   ffi: ^2.0.0
   file: ^6.1.0
