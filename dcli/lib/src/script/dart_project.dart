@@ -12,6 +12,7 @@ import 'package:meta/meta.dart';
 
 import '../../dcli.dart';
 import '../../posix.dart';
+import '../util/exit.dart';
 import '../version/version.g.dart';
 import 'command_line_runner.dart';
 import 'flags.dart';

@@ -41,14 +41,14 @@ class PubSpec {
   /// Returns the name field from the pubspec.yaml
   String? get name => pubspec.name;
 
-  /// updates the pubspec.yaml 'name' key. You must call [saveToFile].
+  /// updates the pubspec.yaml 'name' key. You must call [save].
   set name(String? name) => pubspec = pubspec.copy(name: name);
 
   /// Returns the version field from the pubspec.yaml
   Version? get version => pubspec.version;
 
   /// Sets the version field for the pubspec.
-  /// Call [saveToFile] to update the contents of the pubspec.yaml.
+  /// Call [save] to update the contents of the pubspec.yaml.
   set version(Version? version) => pubspec = pubspec.copy(version: version);
 
   /// Get the list of exectuables
@@ -118,7 +118,16 @@ class PubSpec {
   /// Saves this [PubSpec] to a pubspec.yaml at the given
   /// [path].
   /// The [path] must be a directory not a file name.
+  @Deprecated('Use save()')
   void saveToFile(String path) {
+    // ignore: discarded_futures
+    waitForEx<dynamic>(pubspec.save(Directory(dirname(path))));
+  }
+
+  /// Saves this [PubSpec] to a pubspec.yaml at the given
+  /// [path].
+  /// The [path] must be a directory not a file name.
+  void save(String path) {
     // ignore: discarded_futures
     waitForEx<dynamic>(pubspec.save(Directory(dirname(path))));
   }

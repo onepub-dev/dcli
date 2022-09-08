@@ -89,7 +89,7 @@ void _fixPubspec(String projectName, PubSpec pubSpec, String pathToPubSpec) {
   pubSpec
     ..name = _replaceInvalidCharactersForName(projectName)
     ..dependencies = replacement
-    ..saveToFile(pathToPubSpec);
+    ..save(pathToPubSpec);
 }
 
 String _renameMain(DartProject project, String projectName) {

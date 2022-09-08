@@ -43,7 +43,7 @@ dependencies:
     () {
       TestFileSystem().withinZone((fs) {
         final pubSpecScriptPath = createPubspecPath(fs);
-        PubSpec.fromString(basic).saveToFile(pubSpecScriptPath);
+        PubSpec.fromString(basic).save(pubSpecScriptPath);
 
         final dependencies = <Dependency>[
           Dependency.fromHosted('collection', '^1.14.12'),
@@ -61,7 +61,7 @@ dependencies:
       TestFileSystem().withinZone((fs) {
         final scriptPath = createScriptPath(fs);
 
-        PubSpec.fromString(overrides).saveToFile(scriptPath);
+        PubSpec.fromString(overrides).save(scriptPath);
 
         final dependencies = <Dependency>[
           Dependency.fromHosted('dcli', '^2.0.0'),
@@ -81,7 +81,7 @@ dependencies:
     () {
       TestFileSystem().withinZone((fs) {
         final scriptPath = createScriptPath(fs);
-        PubSpec.fromString(overrides).saveToFile(scriptPath);
+        PubSpec.fromString(overrides).save(scriptPath);
 
         final dependencies = <Dependency>[
           Dependency.fromHosted('dcli', '^2.0.0'),
