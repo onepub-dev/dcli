@@ -1,29 +1,21 @@
 [![pub package](https://img.shields.io/pub/v/dcli.svg)](https://pub.dev/packages/dcli)
+[![pub package](https://img.shields.io/pub/v/dcli.svg)](https://pub.dev/packages/dcli/score)
 [![likes](https://badges.bar/dcli/likes)](https://pub.dev/packages/dcli/score)
 [![popularity](https://badges.bar/dcli/popularity)](https://pub.dev/packages/dcli/score)
 [![pub points](https://badges.bar/dcli/pub%20points)](https://pub.dev/packages/dcli/score)
 
 # README
 
-See the online [documentation](https://dcli.noojee.dev) for DCli
+See the online [documentation](https://dcli.onepub.dev) for DCli
 
 
-If you enjoyed DCli maybe you could help out with a sponsorship or just buy me a coffee.
+DCli is an API and tooling for building cross platform command line \(CLI\) applications and scripts using the Dart programming language.
 
-[:heart: Sponsor Me](https://github.com/sponsors/bsutton)
+DCli - pronounced d-cli
 
-
-DCli is Dart Console SDK for building cross platform command line \(CLI\) applications and scripts using the Dart programming language.
-
-DCli - pronounced d-klie
-
-
-# Another Dart tool by Noojee
-
-<a href="https://noojee.dev">![Noojee](https://github.com/bsutton/dcli/blob/master/images/noojee-logo.png?raw=true)</a>
 
 # Overview
-DCli is a complete SDK for building Command  Line (CLI) Applications from simple scripts to full blown CLI apps. 
+DCli is intended to to allow you to create Command  Line (CLI) Applications from simple scripts to full blown CLI apps. 
 
 DCli is a great replacement for CLI apps that would have traditionally been built with Bash, C, python, ruby, Go, Rust ....
 
@@ -42,7 +34,7 @@ DCli is based on Dart which is a modern programming language that has a set of f
 * Cross platform supporting Linux/Windows/osx/arm
 
 # Example:
-```dart
+```
 #! /usr/bin/env dcli
 
 import 'dart:io';
@@ -50,7 +42,7 @@ import 'package:dcli/dcli.dart';
 
 void main() {
   var name = ask('name:', required: true, validator: Ask.alpha);
-  print(green('Hello $name'));
+  print('Hello $name');
 
 }
 ```
@@ -106,6 +98,4 @@ Use Visual Code for the best development experience with Dart.
 Visual Code with the dart-code extension provide a great development an debugging experience including the ability to develop and debug code on a remote server.
 
 # Contributing
-Read the contributing guide for details on how to get involved.
-
-https://dcli.noojee.dev/contributing
+Read the [contributing guide](https://dcli.onepub.dev/contributing) for details on how to get involved.
