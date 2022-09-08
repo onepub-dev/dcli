@@ -37,6 +37,29 @@ DCli is based on Dart which is a modern programming language that has a set of f
 * Local and Remote development/debugging 
 * Cross platform supporting Linux/Windows/osx/arm
 
+# Sponsored by OnePub
+Help support DCli by supporting [OnePub](https://onepub.dev), the private dart repository.
+OnePub allows you to privately share dart packages between your own projects or with colleagues.
+Try it for free and publish your first private package in seconds.
+
+https://onepub.dev
+
+Publish a private package in six commands:
+```bash
+dart pub global activate onepub
+onepub login
+dcli create --template full myclipackage
+cd myclipackage
+onepub pub private
+dart pub publish
+```
+You can now activate your dcli script from any system with dart installed
+```bash
+dart pub global activate onepub
+onepub login
+onepub pub global activate myclipackage
+```
+
 # Example:
 ```dart
 #! /usr/bin/env dcli
