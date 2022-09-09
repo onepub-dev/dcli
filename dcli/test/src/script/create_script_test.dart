@@ -26,14 +26,14 @@ void main() {
 
           'dcli create $scriptPath'.run;
         }, environment: {
-          'DCLI_OVERRIDE_PATH': DartProject.self.pathToProjectRoot
+          DartProject.overrideDCliPathKey: DartProject.self.pathToProjectRoot
         });
 
         DartScript.fromFile(scriptPath).doctor;
       });
     });
 
-    test('Create scrip with --template', () {
+    test('Create script with --template', () {
       TestFileSystem().withinZone((fs) {
         InstallCommand().initTemplates();
         final scriptDir = join(fs.unitTestWorkingDir, 'traditional');
@@ -46,7 +46,7 @@ void main() {
 
           'dcli create --template=cmd_args $scriptPath'.run;
         }, environment: {
-          'DCLI_OVERRIDE_PATH': DartProject.self.pathToProjectRoot
+          DartProject.overrideDCliPathKey: DartProject.self.pathToProjectRoot
         });
 
         DartScript.fromFile(scriptPath).doctor;

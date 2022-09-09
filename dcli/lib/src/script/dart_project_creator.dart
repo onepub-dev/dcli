@@ -34,28 +34,19 @@ void _createProject(String pathToProject, String templateName) {
   _fixPubspec(projectName, project.pubSpec, project.pathToPubSpec);
 
   /// rename main.dart from the template to <projectname>.dart
-  final projectScript = _renameMain(project, projectName);
+  // ignore: discarded_futures
+  final projectScript = waitForEx(_renameMain(project, projectName));
 
   if (!Settings().isWindows) {
     chmod(projectScript, permission: '755');
   }
 
-  if (env.exists(DartProject.dcliOverridePathKey)) {
+  if (env.exists(DartProject.overrideDCliPathKey)) {
     /// we are running in a unit test so
     /// we need to add pubspec overrides so that the
     /// newly created project will from the dev source
     /// for dcli and dcli_core rather than looking to pub.dev.
-    final pathToDCli = DartProject.self.pathToProjectRoot;
-    final pathToDCliCore = join(pathToDCli, '..', 'dcli_core');
-
-    join(pathToProject, 'pubspec_overrides.yaml').write('''
-dependency_overrides:
-  dcli:
-    path: $pathToDCli
-  dcli_core:
-    path: $pathToDCliCore
-
-''');
+    addUnitTestOverrides(pathToProject);
   }
 
   find('*.*', workingDirectory: pathToProject, includeHidden: true)
@@ -68,6 +59,24 @@ dependency_overrides:
       .runPubGet(project.pathToProjectRoot, progress: Progress.printStdErr());
 
   _printCreated(projectName, project);
+}
+
+void addUnitTestOverrides(String pathToProject) {
+  /// we are running in a unit test so
+  /// we need to add pubspec overrides so that the
+  /// newly created project will from the dev source
+  /// for dcli and dcli_core rather than looking to pub.dev.
+  final pathToDCli = DartProject.self.pathToProjectRoot;
+  final pathToDCliCore = join(pathToDCli, '..', 'dcli_core');
+
+  join(pathToProject, 'pubspec_overrides.yaml').write('''
+  dependency_overrides:
+    dcli:
+  path: $pathToDCli
+    dcli_core:
+  path: $pathToDCliCore
+  
+  ''');
 }
 
 /// update the templates dcli version to match the dcli version
@@ -92,7 +101,8 @@ void _fixPubspec(String projectName, PubSpec pubSpec, String pathToPubSpec) {
     ..save(pathToPubSpec);
 }
 
-String _renameMain(DartProject project, String projectName) {
+/// Returns the name of the main project script.
+Future<String> _renameMain(DartProject project, String projectName) async {
   /// rename main.dart from the template to <projectname>.dart
   final mainScript = join(project.pathToBinDir, 'main.dart');
   final projectScript = join(project.pathToBinDir, '$projectName.dart');
@@ -100,7 +110,11 @@ String _renameMain(DartProject project, String projectName) {
   if (exists(projectScript)) {
     return projectScript;
   }
+
+  String? orginalScriptName;
+
   if (exists(mainScript)) {
+    orginalScriptName = mainScript;
     move(mainScript, projectScript);
   } else {
     /// no main.dart so find the first script in bin and rename it
@@ -108,8 +122,28 @@ String _renameMain(DartProject project, String projectName) {
         find('*.dart', workingDirectory: project.pathToBinDir).toList();
     if (scripts.isNotEmpty) {
       move(scripts.first, projectScript);
+      orginalScriptName = scripts.first;
     }
   }
+
+  /// If the pubspec includes an executables clause that
+  /// reference the script we just changed the name of,
+  /// then update the pubpsec to reflect the new name.
+  final pubspec = await ps.PubSpec.loadFile(project.pathToPubSpec);
+  final executables = pubspec.executables;
+  if (orginalScriptName != null) {
+    final originalScriptKey = basenameWithoutExtension(orginalScriptName);
+    if (executables.containsKey(originalScriptKey)) {
+      final updatedExecutables = <String, ps.Executable>{}
+        ..addAll(executables)
+        ..remove(originalScriptKey);
+      final execName = basenameWithoutExtension(projectScript);
+      updatedExecutables.addAll({execName: ps.Executable(execName, null)});
+      final updatedPubspec = pubspec.copy(executables: updatedExecutables);
+      await updatedPubspec.save(Directory(project.pathToProjectRoot));
+    }
+  }
+
   return projectScript;
 }
 

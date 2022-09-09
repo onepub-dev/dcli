@@ -9,6 +9,7 @@ library dart_project;
 import 'dart:io';
 
 import 'package:meta/meta.dart';
+import 'package:pubspec2/pubspec2.dart' as ps;
 
 import '../../dcli.dart';
 import '../../posix.dart';
@@ -67,7 +68,7 @@ class DartProject {
   /// with overrides for dcli and dcli_core which point
   /// to our dev source tree.
   @visibleForTesting
-  static const String dcliOverridePathKey = 'DCLI_OVERRIDE_PATH';
+  static const String overrideDCliPathKey = 'DCLI_OVERRIDE_PATH';
 
   late String _pathToProjectRoot;
   String? _pathToPubSpec;
