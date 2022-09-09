@@ -6,8 +6,7 @@
 
 import 'dart:async';
 
-import 'progress.dart';
-import 'runnable_process.dart';
+import '../../dcli.dart';
 
 /// callback used when overloadin [printerr] in a DCliZone.
 typedef CaptureZonePrintErr = void Function(String?);
@@ -20,6 +19,8 @@ const String capturePrinterrKey = 'printerr';
 
 /// Run code in a zone which traps calls to [print] and [printerr]
 /// redirecting them to the passed progress.
+/// If no [progress] is passed then then both print and printerr
+/// output is surpressed.
 Progress capture<R>(R Function() action, {Progress? progress}) {
   progress ??= Progress.devNull();
 
@@ -40,6 +41,9 @@ Progress capture<R>(R Function() action, {Progress? progress}) {
       print: (self, parent, zone, line) => progress!.addToStdout(line),
     ),
   );
+
+  // give the stream listeners a chance to run.
+  waitForEx(Future.value(1));
 
   return progress;
 }
