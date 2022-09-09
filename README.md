@@ -1,29 +1,25 @@
 [![pub package](https://img.shields.io/pub/v/dcli.svg)](https://pub.dev/packages/dcli)
-[![likes](https://badges.bar/dcli/likes)](https://pub.dev/packages/dcli/score)
-[![popularity](https://badges.bar/dcli/popularity)](https://pub.dev/packages/dcli/score)
-[![pub points](https://badges.bar/dcli/pub%20points)](https://pub.dev/packages/dcli/score)
+![Pub Version (including pre-releases)](https://img.shields.io/pub/v/dcli?include_prereleases)
+[![pub publisher](https://img.shields.io/pub/publisher/dcli)](https://pub.dev/packages/dcli)
+![Pub Likes](https://img.shields.io/pub/likes/dcli)
+![Pub Popularity](https://img.shields.io/pub/popularity/dcli)
+![Pub Points](https://img.shields.io/pub/points/dcli)
+
+
+
 
 # README
 
-See the online [documentation](https://dcli.noojee.dev) for DCli
+See the online [documentation](https://dcli.onepub.dev) for DCli
 
 
-If you enjoyed DCli maybe you could help out with a sponsorship or just buy me a coffee.
+DCli is an API and tooling for building cross platform command line \(CLI\) applications and scripts using the Dart programming language.
 
-[:heart: Sponsor Me](https://github.com/sponsors/bsutton)
+DCli - pronounced d-cli
 
-
-DCli is Dart Console SDK for building cross platform command line \(CLI\) applications and scripts using the Dart programming language.
-
-DCli - pronounced d-klie
-
-
-# Another Dart tool by Noojee
-
-<a href="https://noojee.dev">![Noojee](https://github.com/bsutton/dcli/blob/master/images/noojee-logo.png?raw=true)</a>
 
 # Overview
-DCli is a complete SDK for building Command  Line (CLI) Applications from simple scripts to full blown CLI apps. 
+DCli is intended to to allow you to create Command  Line (CLI) Applications from simple scripts to full blown CLI apps. 
 
 DCli is a great replacement for CLI apps that would have traditionally been built with Bash, C, python, ruby, Go, Rust ....
 
@@ -41,6 +37,29 @@ DCli is based on Dart which is a modern programming language that has a set of f
 * Local and Remote development/debugging 
 * Cross platform supporting Linux/Windows/osx/arm
 
+# Sponsored by OnePub
+Help support DCli by supporting [OnePub](https://onepub.dev), the private dart repository.
+OnePub allows you to privately share dart packages between your own projects or with colleagues.
+Try it for free and publish your first private package in seconds.
+
+https://onepub.dev
+
+Publish a private package in six commands:
+```bash
+dart pub global activate onepub
+onepub login
+dcli create --template=full myclipackage
+cd myclipackage
+onepub pub private
+dart pub publish
+```
+You can now activate your dcli script from any system with dart installed
+```bash
+dart pub global activate onepub
+onepub login
+onepub pub global activate myclipackage
+```
+
 # Example:
 ```dart
 #! /usr/bin/env dcli
@@ -50,7 +69,7 @@ import 'package:dcli/dcli.dart';
 
 void main() {
   var name = ask('name:', required: true, validator: Ask.alpha);
-  print(green('Hello $name'));
+  print('Hello $name');
 
 }
 ```
@@ -80,7 +99,7 @@ Dart has is also a large and growing ecosystem of [third party libraries](https:
 
 Dart is fast and if you need even more speed it can be compiled to a single file executable that is portable between binary compatible machines.
 
-```
+```bash
 # compile, install to the local PATH and run hello.dart
 
 $> dcli compile --install hello.dart
@@ -99,13 +118,11 @@ name: brett
 Hello brett
 ```
 
-You can use your favourite editor to create DCli scripts. Vi or VIM work fine but Visual Code is recommended.
+You can use your favourite editor to create DCli scripts. Vi or VIM work fine but Visual Studio Code is recommended.
 
-Use Visual Code for the best development experience with Dart.
+Use Visual Studio Code for the best development experience with Dart.
 
-Visual Code with the dart-code extension provide a great development an debugging experience including the ability to develop and debug code on a remote server.
+Visual Studio Code with the dart-code extension provide a great development an debugging experience including the ability to develop and debug code on a remote server.
 
 # Contributing
-Read the contributing guide for details on how to get involved.
-
-https://dcli.noojee.dev/contributing
+Read the [contributing guide](https://dcli.onepub.dev/contributing) for details on how to get involved.
