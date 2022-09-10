@@ -1,3 +1,9 @@
+# 2.0.0-beta.8
+- Added lint_hard to the script template.
+- Fixed a bug in the pack command which would fail if the pack.yaml was missing an excluded section.
+- Fixed a bug in capture. If you passed a progress the captured output wasn't being given a chance to flush through the system.
+- Added logic to the project creation to update the executables: key in the generated pubspec.yaml to reflect the main script name. 
+
 # 2.0.0-beta.7
 - change the release process to update all of the templates we ship, with the latest dcli version and sdk constraint.
 - deprecated pubspec.saveToFile creating a new method 'save'. saveToFile was unnecessarily verbose.

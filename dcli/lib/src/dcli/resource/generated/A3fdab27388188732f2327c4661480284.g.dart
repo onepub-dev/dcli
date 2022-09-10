@@ -29,7 +29,8 @@ class A3fdab27388188732f2327c4661480284 extends PackedResource {
 
   /// <package>/resources relative path to the original resource.
   @override
-  String get originalPath => 'template/project/full/lib/src/settings/app_settings.dart';
+  String get originalPath =>
+      'template/project/full/lib/src/settings/app_settings.dart';
 
   @override
   String get content => '''

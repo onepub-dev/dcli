@@ -9,7 +9,6 @@ void main() {
       printerr('ho');
     }, progress: myprogress);
 
-
     expect(progress.lines.length, equals(2));
     expect(progress.lines.first, equals('hi'));
     expect(progress.lines[1], equals('ho'));
