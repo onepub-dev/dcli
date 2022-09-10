@@ -5,6 +5,7 @@
  */
 
 //import 'package:dcli/src/dcli/resource/generated/resource_registry.g.dart';
+import 'package:dcli/dcli.dart';
 import 'package:dcli/src/util/resources.dart';
 import 'package:test/test.dart';
 
@@ -12,7 +13,11 @@ const filename = 'PXL_20211104_224740653.jpg';
 
 void main() {
   test('resource ...', () async {
-    Resources().pack();
+    final progress = capture(() {
+      Resources().pack();
+    }, progress: Progress.capture());
+
+    expect(progress.lines.contains(green('Pack complete')), isTrue);
   });
 
   // test('unpack', () {

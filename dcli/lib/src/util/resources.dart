@@ -421,6 +421,12 @@ $line
   }
 
   List<String> getExcludedPaths(SettingsYaml yaml, String path, int index) {
+    final yamlPathToExluded = 'externals.external[$index].exclude';
+
+    if (!yaml.selectorExists(yamlPathToExluded)) {
+      return [];
+    }
+
     final relativeExcludes =
         yaml.selectAsList('externals.external[$index].exclude') ?? <dynamic>[];
 

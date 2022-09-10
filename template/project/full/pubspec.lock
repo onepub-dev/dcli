@@ -95,17 +95,17 @@ packages:
   dcli:
     dependency: "direct main"
     description:
-      path: "../../../dcli"
-      relative: true
-    source: path
-    version: "2.0.0-beta.6"
+      name: dcli
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "2.0.0-beta.7"
   dcli_core:
     dependency: "direct main"
     description:
-      path: "../../../dcli_core"
-      relative: true
-    source: path
-    version: "2.0.0-beta.6"
+      name: dcli_core
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "2.0.0-beta.7"
   equatable:
     dependency: transitive
     description:
