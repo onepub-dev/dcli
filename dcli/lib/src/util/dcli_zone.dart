@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'progress.dart';
 import 'runnable_process.dart';
+import 'wait_for_ex.dart';
 
 /// callback used when overloadin [printerr] in a DCliZone.
 typedef DCliZonePrintErr = void Function(String?);
@@ -35,6 +36,9 @@ class DCliZone {
         print: (self, parent, zone, line) => progress!.addToStdout(line),
       ),
     );
+
+    // give the stream listeners a chance to run.
+    waitForEx(Future.value(1));
 
     return progress;
   }
