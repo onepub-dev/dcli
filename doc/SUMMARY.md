@@ -99,6 +99,7 @@
 * [build CLI apps in dart - part 1](articles/build-console-apps-in-dart.md)
 * [build CLI apps in dart - part 2](articles/build-cli-apps-in-dart-part-2.md)
 * [Dealing with permissions](articles/dealing-with-permissions.md)
+* [3rd Party console packages](articles/3rd-party-console-packages.md)
 
 ***
 
