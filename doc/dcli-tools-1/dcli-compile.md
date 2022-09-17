@@ -4,7 +4,7 @@ The compile command will compile your DCli script(s) into a native executable an
 
 The resulting native application can be copied to any binary compatible OS and run without requiring Dart or DCli to be installed.
 
-Dart complied applications are also super fast.
+Dart compiled applications are also super fast.
 
 Usage: `dcli compile [-nc, -i, -o] [<script path.dart>, <script path.dart>,...]`
 
@@ -66,11 +66,19 @@ dcli compile --package critical_test
 critical_test
 ```
 
+The compiled package will be automatically copied into the \~/.dcli/bin directory which is on your PATH.
+
 Compiling a globally activated package has a number of uses:
 
 * faster startup time
 * you are able to copy the resulting executable to any binary compatible machine and run it without installing Dart
 * If you switch Dart versions then the executable will still run even if the package isn't compatible with the installed Dart version. This can be useful if you need to run an old version of dart but want access to the latest version of a Dart CLI package.
+
+When compiling a package DCli will create an executable for each of the scripts listed in the packages pubspec.yaml `executables` section.
+
+{% hint style="info" %}
+Ensure that \~/.dcli/bin is on your PATH and is before \~/.pub-cache or the globally activate version will run rather than you compiled version.
+{% endhint %}
 
 ## Flags:
 

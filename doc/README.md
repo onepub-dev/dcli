@@ -4,7 +4,7 @@ DCli is the console SDK for Dart.
 
 Use the DCli console SDK to  build cross platform, command line (CLI) applications and scripts using the Dart programming language.
 
-The DCli  (pronounced d-kleye) console SDK includes command line tools and an extensive API for building CLI apps.
+The DCli  (pronounced d-cli) console SDK includes command line tools and an extensive API for building CLI apps.
 
 The DCli console SDK as featured on Jermaine Oppong package of the week vlog.
 
@@ -18,8 +18,8 @@ OnePub allows you to privately share dart packages between your own projects or 
 
 Try it for free and publish your first private package in seconds.
 
-| ![](<.gitbook/assets/OnePub.dev Logo – reversed FA (1) (1) (1) (1).svg>) | <p>Publish a private package in six commands:</p><p><mark style="color:green;"><code>dart pub global activate onepub</code></mark></p><p><mark style="color:green;"><code>onepub login</code></mark></p><p><mark style="color:green;"><code>dcli create --template=full mytool</code></mark></p><p><mark style="color:green;"><code>cd mytool</code></mark></p><p><mark style="color:green;"><code>onepub pub private</code></mark></p><p><mark style="color:green;"><code>dart pub publish</code></mark></p> |
-| ------------------------------------------------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| ![](<.gitbook/assets/OnePub.dev Logo – reversed FA (1) (1).svg>) | <p>Publish a private package in six commands:</p><p><mark style="color:green;"><code>dart pub global activate onepub</code></mark></p><p><mark style="color:green;"><code>onepub login</code></mark></p><p><mark style="color:green;"><code>dcli create --template=full mytool</code></mark></p><p><mark style="color:green;"><code>cd mytool</code></mark></p><p><mark style="color:green;"><code>onepub pub private</code></mark></p><p><mark style="color:green;"><code>dart pub publish</code></mark></p> |
+| ---------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 
 You can now install `mytool` on any system with dart installed:
 
