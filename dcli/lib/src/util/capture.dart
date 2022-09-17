@@ -5,8 +5,11 @@
  */
 
 import 'dart:async';
+import 'dart:io';
 
 import '../../dcli.dart';
+import '../puppet/stdin.dart';
+import '../puppet/stdout.dart';
 
 /// callback used when overloadin [printerr] in a DCliZone.
 typedef CaptureZonePrintErr = void Function(String?);
@@ -46,4 +49,51 @@ Progress capture<R>(R Function() action, {Progress? progress}) {
   waitForEx(Future.value(1));
 
   return progress;
+}
+
+// void interact(String expected, void Function() action) {
+
+//   var inStream = StreamController<List<int>>(); // StreamConsumer
+//   var outStream = StreamController<List<int>>(); // Stream
+//   var errStream = StreamController<List<int>>();
+
+//   stdin;
+
+//   IOOverrides.runZoned(() => action,
+//   stdin: () => Stdin._(inStream.stream),
+//   stdout: ,
+//   stderr: );
+
+// }
+
+void test() {
+  Puppet(spawn: () {
+    final age = ask(
+      'How old are you',
+      defaultValue: '5',
+      customPrompt: (prompt, defaultValue, {hidden = false}) =>
+          'AAA$prompt:$defaultValue',
+    );
+    print('You are $age years old');
+  })
+    ..expect('AAAHow old ar you:5')
+    ..send('6')
+    ..expect('You are 6 years old');
+}
+
+// or Interact
+class Puppet<T> {
+  Puppet({required this.spawn});
+  T Function() spawn;
+
+  void _run() {
+    IOOverrides.runZoned(() => spawn,
+        stdin: PuppetStdin.new,
+        stdout: () => PuppetStdout(stdout),
+        stderr: () => PuppetStdout(stderr));
+  }
+
+  void expect(String expected) {}
+
+  void send(String s) {}
 }
