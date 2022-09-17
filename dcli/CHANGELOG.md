@@ -1,3 +1,6 @@
+# 1.20.3
+- Fixed a bug in DCliZone.run. If you passed a Progress.capture to the run method the capture would be empty. Added a call to waitForEx to give the progress listeners a chance to run.
+- Back ported changes to verbose so that it reports the file and line number of each verbose statement.
 # 1.20.2
 - It appears that when 1.20 was originally released we were running a version of dart post 2.12. 
     So even though the lower constraint was set to 2.12 the build allows us to use features from > 2.12. 
