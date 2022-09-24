@@ -44,7 +44,11 @@ class DartSdk {
   /// platform specific name of the 'dart' executable
   static String get dartExeName {
     if (core.Settings().isWindows) {
-      return 'dart.exe';
+      if (isUsingDartFromFlutter) {
+        return 'dart.bat';
+      } else {
+        return 'dart.exe';
+      }
     } else {
       return 'dart';
     }
@@ -625,22 +629,38 @@ class DartSdk {
       PubCache().isGloballyActivatedFromSource(path);
 
   String? _determineDartPath() {
-    var _path = which(dartExeName).path;
+    var path = which('dart').path;
 
-    if (_path == null) {
+    if (path == null) {
       /// lets try some likely locations
-      _path = '/usr/lib/dart/bin/dart';
-      if (exists(_path)) {
-        return _path;
+      path = '/usr/lib/dart/bin/dart';
+      if (exists(path)) {
+        return path;
       }
 
-      _path = '/usr/bin/dart';
-      if (exists(_path)) {
-        return _path;
+      path = '/usr/bin/dart';
+      if (exists(path)) {
+        return path;
       }
     }
 
-    return _path;
+    if (Platform.isWindows) {
+      final dartbat = join(dirname(path), 'dart.bat');
+      if (exists(dartbat)) {
+        path = dartbat;
+      }
+    }
+
+    return path;
+  }
+
+  static bool get isUsingDartFromFlutter {
+    final _path = which('dart').path;
+
+    if (_path == null) {
+      return false;
+    }
+    return dirname(dirname(_path)).endsWith('flutter');
   }
 
   // The normal dart detection process may not work here
@@ -661,6 +681,13 @@ class DartSdk {
       pubPath = '/usr/bin/pub';
       if (exists(pubPath)) {
         return pubPath;
+      }
+    }
+
+    if (Platform.isWindows) {
+      final dartbat = join(dirname(pubPath), 'pub.bat');
+      if (exists(dartbat)) {
+        pubPath = dartbat;
       }
     }
 
