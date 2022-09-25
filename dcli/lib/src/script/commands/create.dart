@@ -140,7 +140,7 @@ class CreateCommand extends Command {
   @override
   String usage() => 'create --list | '
       'create [--template=<template name>] '
-      '<script path.dart | project path>';
+      '<script path.dart> | <project path>';
 
   @override
   List<String> completion(String word) => <String>[];
