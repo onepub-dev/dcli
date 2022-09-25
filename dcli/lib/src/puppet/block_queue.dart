@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:collection';
 import 'dart:convert';
 import 'dart:io';
@@ -7,8 +8,17 @@ import '../util/circular_buffer.dart';
 
 class BlockQueue {
   BlockQueue(this.stream) {
-    stream.listen(_blockQueue.addFirst);
+    stream.listen((block) {
+      _blockQueue.addFirst(block);
+      if (!dataLoaded.isCompleted) {
+        dataLoaded.complete(true);
+      }
+    });
   }
+
+  bool closed = false;
+
+  Completer<bool> dataLoaded = Completer<bool>();
 
   static const _cr = 13;
   static const _lf = 10;
@@ -23,23 +33,28 @@ class BlockQueue {
 
   Future<int> readByte() async {
     if (_blockBuffer.isEmpty) {
-      await Future.delayed(const Duration(seconds: 1), () {});
+      // pump the event loop so it can deliver more data.
+      // await Future.delayed(const Duration(seconds: 1), () {});
+
+      if (_blockQueue.isEmpty) {
+        // wait for new data to arrive
+        await dataLoaded.future;
+        dataLoaded = Completer<bool>();
+
+        if (_blockQueue.isEmpty && closed) {
+          return -1;
+        }
+      }
 
       /// move a block from the queue into the block buffer.
-      if (_blockQueue.isEmpty) {
-        only do this if the sink has closed
-        maybe we need to make this an async call
-        return -1;
-      }
       final block = _blockQueue.removeLast();
-
       final line = <int>[];
 
       block.forEach(line.add);
       _blockBuffer = CircularBuffer.fromList(line);
     }
 
-    return _blockBuffer.isEmpty ? -1 : _blockBuffer.next();
+    return _blockBuffer.next();
   }
 
   // ignore: discarded_futures
@@ -116,6 +131,7 @@ class BlockQueue {
             }
 
             line.add(_cr);
+            // ignore: invariant_booleans
           } while (byte == _cr);
           // Fall through and handle non-CR character.
         }
@@ -134,4 +150,10 @@ class BlockQueue {
   // On Windows, if lineMode is disabled, only CR is received.
   bool _crIsNewline(StdioType stdioType, bool lineMode) =>
       Platform.isWindows && (stdioType == StdioType.terminal) && !lineMode;
+
+  void close() {
+    closed = true;
+    // we need to wake up the reader
+    dataLoaded.complete(true);
+  }
 }
