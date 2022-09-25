@@ -57,6 +57,7 @@ class Puppet<T> {
   }
 }
 
+// ignore: one_member_abstracts
 abstract class _Action {
   void run();
 }
