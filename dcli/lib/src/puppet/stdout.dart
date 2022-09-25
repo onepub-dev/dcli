@@ -116,11 +116,15 @@ class PuppetStdout implements Stdout {
   }
 
   @override
+  // ignore: strict_raw_type
   Future addStream(Stream<List<int>> stream) => _sink.addStream(stream);
   @override
+  // ignore: strict_raw_type
   Future flush() => _sink.flush();
   @override
+  // ignore: strict_raw_type
   Future close() => _sink.close();
   @override
+  // ignore: strict_raw_type
   Future get done => _sink.done;
 }
