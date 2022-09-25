@@ -10,7 +10,8 @@ import '../../dcli.dart';
 
 String _noFormat<T>(T option) => option.toString();
 
-typedef CustomMenuPrompt = String Function(String prompt, String? defaultValue);
+typedef CustomMenuPrompt = String Function(
+    String prompt, String? defaultOption);
 
 /// Displays a menu with each of the provided [options], prompts
 /// the user to select an option and returns the selected option.
