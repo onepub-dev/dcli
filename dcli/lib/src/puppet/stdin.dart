@@ -51,6 +51,11 @@ class PuppetStdin extends Stream<List<int>> implements Stdin {
     _sink.add([_lf]);
   }
 
+// TODO: is this needed as it currently doesn't seem tobe used.
+  void close() {
+    _blockQueue.close();
+  }
+
   @override
   // ignore: discarded_futures
   int readByteSync() => _blockQueue.readByteSync();
