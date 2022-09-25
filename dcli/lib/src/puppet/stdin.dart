@@ -2,13 +2,26 @@ import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
 
+import 'block_queue.dart';
+
 class PuppetStdin extends Stream<List<int>> implements Stdin {
   PuppetStdin(
       {this.echoMode = true,
       this.echoNewlineMode = true,
-      this.lineMode = true});
+      this.lineMode = true,
+      this.stdioType = StdioType.terminal}) {
+    _blockQueue = BlockQueue(controller.stream);
+    _sink = controller.sink;
+  }
+
+  static const _cr = 13;
+  static const _lf = 10;
 
   StreamController<List<int>> controller = StreamController();
+  late final StreamSink<List<int>> _sink;
+
+  late final BlockQueue _blockQueue;
+
   @override
   bool echoMode;
 
@@ -17,6 +30,8 @@ class PuppetStdin extends Stream<List<int>> implements Stdin {
 
   @override
   bool lineMode;
+
+  StdioType stdioType;
 
   @override
   bool get hasTerminal => stdin.hasTerminal;
@@ -27,13 +42,31 @@ class PuppetStdin extends Stream<List<int>> implements Stdin {
     throw UnimplementedError();
   }
 
+  void writeLineSync(String line) {
+    _sink.add(utf8.encode(line));
+
+    if (_crIsNewline) {
+      _sink.add([_cr]);
+    }
+    _sink.add([_lf]);
+  }
+
   @override
-  int readByteSync() => stdin.readByteSync();
+  // ignore: discarded_futures
+  int readByteSync() => _blockQueue.readByteSync();
 
   @override
   String? readLineSync(
           {Encoding encoding = systemEncoding, bool retainNewlines = false}) =>
-      stdin.readLineSync(encoding: encoding, retainNewlines: retainNewlines);
+      _blockQueue.readLineSync(
+          stdioType: stdioType,
+          encoding: encoding,
+          retainNewlines: retainNewlines,
+          lineMode: lineMode);
+
+  // On Windows, if lineMode is disabled, only CR is received.
+  bool get _crIsNewline =>
+      Platform.isWindows && (stdioType == StdioType.terminal) && !lineMode;
 
   @override
   bool get supportsAnsiEscapes => stdin.supportsAnsiEscapes;

@@ -1,29 +1,46 @@
+import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
 
-class PuppetStdout implements Stdout {
-  PuppetStdout(this.stdout);
+import 'block_queue.dart';
 
-  Stdout stdout;
+class PuppetStdout implements Stdout {
+  PuppetStdout(
+      {this.hasTerminal = true,
+      this.terminalColumns = 80,
+      this.terminalLines = 24,
+      this.supportsAnsiEscapes = true,
+      Encoding encoding = utf8}) {
+    _stream = controller.stream;
+    _sink = IOSink(controller.sink, encoding: encoding);
+
+    _blockQueue = BlockQueue(_stream);
+  }
+
+  StreamController<List<int>> controller = StreamController();
+  late final IOSink _sink;
+  late final Stream<List<int>> _stream;
+  late final BlockQueue _blockQueue;
+
   IOSink? _nonBlocking;
 
   /// Whether there is a terminal attached to stdout.
   @override
-  bool get hasTerminal => stdout.hasTerminal;
+  bool hasTerminal;
 
   /// The number of columns of the terminal.
   ///
   /// If no terminal is attached to stdout, a [StdoutException] is thrown. See
   /// [hasTerminal] for more info.
   @override
-  int get terminalColumns => stdout.terminalColumns;
+  int terminalColumns;
 
   /// The number of lines of the terminal.
   ///
   /// If no terminal is attached to stdout, a [StdoutException] is thrown. See
   /// [hasTerminal] for more info.
   @override
-  int get terminalLines => stdout.terminalLines;
+  int terminalLines;
 
   /// Whether connected to a terminal that supports ANSI escape sequences.
   ///
@@ -46,64 +63,64 @@ class PuppetStdout implements Stdout {
   /// Update", OS build 14393) will be detected as supporting the input of
   /// ANSI escape sequences.
   @override
-  bool get supportsAnsiEscapes => stdout.supportsAnsiEscapes;
+  bool supportsAnsiEscapes;
 
   /// A non-blocking `IOSink` for the same output.
   @override
   IOSink get nonBlocking => _nonBlocking ??= stdout.nonBlocking;
 
   @override
-  Encoding get encoding => stdout.encoding;
+  Encoding get encoding => _sink.encoding;
 
   @override
   set encoding(Encoding encoding) {
-    stdout.encoding = encoding;
+    _sink.encoding = encoding;
   }
 
-  @override
-  void add(List<int> data) {
-    stdout.add(data);
-  }
-
-  @override
-  void addError(Object error, [StackTrace? stackTrace]) {
-    stdout.addError(error, stackTrace);
-  }
-
-  @override
-  // ignore: strict_raw_type
-  Future addStream(Stream<List<int>> stream) => stdout.addStream(stream);
-
-  @override
-  // ignore: strict_raw_type
-  Future close() => stdout.close();
-
-  @override
-  // ignore: strict_raw_type
-  Future get done => stdout.done;
-
-  @override
-  // ignore: strict_raw_type
-  Future flush() => stdout.flush();
-
+  /// TODO: I'm uncertain what the default values should be here
+  /// when calling _blockQueue.readLineSync as they are
+  /// taken from the requirements of stdio.
+  String? readLineSync() => _blockQueue.readLineSync(
+      stdioType: StdioType.terminal,
+      encoding: encoding,
+      retainNewlines: true,
+      lineMode: true);
   @override
   void write(Object? object) {
-    stdout.write(object);
-  }
-
-  @override
-  // ignore: strict_raw_type
-  void writeAll(Iterable objects, [String sep = '']) {
-    stdout.writeAll(objects, sep);
-  }
-
-  @override
-  void writeCharCode(int charCode) {
-    stdout.writeCharCode(charCode);
+    _sink.write(object);
   }
 
   @override
   void writeln([Object? object = '']) {
-    stdout.writeln(object);
+    _sink.writeln(object);
   }
+
+  @override
+  void writeAll(covariant Iterable<Object> objects, [String sep = '']) {
+    _sink.writeAll(objects, sep);
+  }
+
+  @override
+  void add(List<int> data) {
+    _sink.add(data);
+  }
+
+  @override
+  void addError(Object error, [StackTrace? stackTrace]) {
+    _sink.addError(error, stackTrace);
+  }
+
+  @override
+  void writeCharCode(int charCode) {
+    _sink.writeCharCode(charCode);
+  }
+
+  @override
+  Future addStream(Stream<List<int>> stream) => _sink.addStream(stream);
+  @override
+  Future flush() => _sink.flush();
+  @override
+  Future close() => _sink.close();
+  @override
+  Future get done => _sink.done;
 }
