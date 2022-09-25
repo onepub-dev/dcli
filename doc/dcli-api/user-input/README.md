@@ -146,7 +146,7 @@ class Car
 var selected = menu('Choose your preferred car:'
    , options: [Car('Ford', 'Falcon'), Car('Holden', 'Capree'), Car('BMW', 'M3')]
    , format: (car) => '${car.make} ${car.model}'
-   , defaultOption: 'beer');
+   , defaultOption: 'Ford Falcon');
 print(green('You chose $selected'));
 ```
 
