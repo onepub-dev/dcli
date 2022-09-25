@@ -1,0 +1,78 @@
+// ignore: prefer_relative_imports
+import 'package:dcli/dcli.dart';
+
+/// GENERATED -- GENERATED
+///
+/// DO NOT MODIFIY
+///
+/// This script is generated via [Resource.pack()].
+///
+/// GENERATED - GENERATED
+
+class Ae31401c216f274568d2af1a3b05d4750 extends PackedResource {
+  /// PackedResource - ..\..\template\project\full\lib\src\settings\app_settings.dart
+  const Ae31401c216f274568d2af1a3b05d4750();
+
+  /// A hash of the resource (pre packed) calculated by
+  /// [calculateHash].
+  /// This hash can be used to check if the resource needs to
+  /// be updated on the target system.
+  /// Use :
+  /// ```dart
+  ///   calculateHash(pathToResource).hexEncode() == packResource.checksum
+  /// ```
+  /// to compare the checksum of the local file with
+  /// this checksum
+  @override
+  String get checksum =>
+      'bd89aff978da432c3b52fca75adba1816e6512b8d1a35997a7704a2cb871f351';
+
+  /// <package>/resources relative path to the original resource.
+  @override
+  String get originalPath =>
+      'template/project/full/lib/src/settings/app_settings.dart';
+
+  @override
+  String get content => '''
+aW1wb3J0ICdwYWNrYWdlOmRjbGkvZGNsaS5kYXJ0JzsNCmltcG9ydCAncGFja2FnZTpzZXR0aW5nc195
+YW1sL3NldHRpbmdzX3lhbWwuZGFydCc7DQoNCmltcG9ydCAnLi4vY29tbWFuZHMvY29uZmlnLmRhcnQn
+Ow0KaW1wb3J0ICcuLi9jb21tYW5kcy9pbnN0YWxsLmRhcnQnOw0KDQpjbGFzcyBBcHBTZXR0aW5ncyB7
+DQogIEFwcFNldHRpbmdzKCkgew0KICAgIC8vLyBzdG9yZSB0aGUgc2V0dGluZ3MgaW4gfi8uZnVsbC9z
+ZXR0aW5ncy55YW1sDQogICAgLy8vIE5PVEU6IHJlbmFtZSAuZnVsbCB0byBtYXRjaCB5b3VyIGFwcCBu
+YW1lLg0KICAgIGZpbmFsIHBhdGhUb0FwcFNldHRpbmdzRGlyID0gam9pbigNCiAgICAgIEhPTUUsDQog
+ICAgICAnLmZ1bGwnLA0KICAgICk7DQoNCiAgICBmaW5hbCBwYXRoVG9BcHBTZXR0aW5ncyA9IGpvaW4o
+cGF0aFRvQXBwU2V0dGluZ3NEaXIsIGZpbGVuYW1lKTsNCg0KICAgIF9jcmVhdGVTZXR0aW5nc0Rpcihw
+YXRoVG9BcHBTZXR0aW5nc0Rpcik7DQoNCiAgICAvLy8gcmVhZCBjdXJyZW50IHNldHRpbmdzLg0KICAg
+IHNldHRpbmdzID0gU2V0dGluZ3NZYW1sLmxvYWQocGF0aFRvU2V0dGluZ3M6IHBhdGhUb0FwcFNldHRp
+bmdzKTsNCg0KICAgIC8vLyByZWFkIGVhY2ggb2YgdGhlIGN1cnJlbnQgY29uZmlnIG9wdGlvbnMgZnJv
+bSB0aGUgc2V0dGluZ3MgZmlsZQ0KICAgIC8vLyBwcm92aWRpbmcgYSBkZWZhdWx0IGluY2FzZSBpdCBo
+YXNuJ3QgYmVlbiBpbml0aWFsaXNlZC4NCiAgICBodHRwUG9ydCA9IHNldHRpbmdzLmFzSW50KENvbmZp
+Z0NvbW1hbmQuaHR0cFBvcnRPcHRpb24sIGRlZmF1bHRWYWx1ZTogODAyNSk7DQogICAgc210cFBvcnQg
+PSBzZXR0aW5ncy5hc0ludChDb25maWdDb21tYW5kLnNtdHBQb3J0T3B0aW9uLCBkZWZhdWx0VmFsdWU6
+IDEwMjUpOw0KICAgIHBhdGhUb01haWxIb2dBcHAgPSBzZXR0aW5ncy5hc1N0cmluZyhwYXRoVG9NYWls
+SG9nQXBwT3B0aW9uLA0KICAgICAgICBkZWZhdWx0VmFsdWU6IEluc3RhbGxDb21tYW5kLmRlZmF1bHRN
+YWlsSG9nQXBwUGF0aCk7DQogIH0NCg0KICBzdGF0aWMgY29uc3QgZmlsZW5hbWUgPSAnc2V0dGluZ3Mu
+eWFtbCc7DQoNCiAgLy8vIGtleSBmb3IgdGhlIHNldHRpbmdzIGZpbGUNCiAgc3RhdGljIGNvbnN0IHBh
+dGhUb01haWxIb2dBcHBPcHRpb24gPSAncGF0aC10by1hcHAnOw0KDQogIC8vLyBDcmVhdGUgdGhlIHNl
+dHRpbmdzIGRpcmVjdG9yeS4NCiAgdm9pZCBfY3JlYXRlU2V0dGluZ3NEaXIoU3RyaW5nIHBhdGhUb0Fw
+cFNldHRpbmdzRGlyKSB7DQogICAgaWYgKCFleGlzdHMocGF0aFRvQXBwU2V0dGluZ3NEaXIpKSB7DQog
+ICAgICBjcmVhdGVEaXIocGF0aFRvQXBwU2V0dGluZ3NEaXIpOw0KICAgIH0NCiAgfQ0KDQogIC8vLyBE
+b2VzIHRoZSBoZWF2eSBsaWZ0aW5nIG9mIHJlYWRpbmcvd3JpdGluZyBzZXR0aW5ncy4NCiAgbGF0ZSBm
+aW5hbCBTZXR0aW5nc1lhbWwgc2V0dGluZ3M7DQogIGxhdGUgaW50IF9odHRwUG9ydDsNCiAgbGF0ZSBp
+bnQgX3NtdHBQb3J0Ow0KICBsYXRlIFN0cmluZyBfcGF0aFRvTWFpbEhvZ0FwcDsNCg0KICAvLyBodHRw
+UG9ydCBmb3IgbWFpbGhvZyB0byBsaXN0ZW4gb24uDQogIHNldCBodHRwUG9ydChpbnQgaHR0cFBvcnQp
+IHsNCiAgICBfaHR0cFBvcnQgPSBodHRwUG9ydDsNCiAgICBzZXR0aW5nc1tDb25maWdDb21tYW5kLmh0
+dHBQb3J0T3B0aW9uXSA9IGh0dHBQb3J0Ow0KICB9DQoNCiAgaW50IGdldCBodHRwUG9ydCA9PiBfaHR0
+cFBvcnQ7DQoNCiAgLy8gc210cFBvcnQgZm8gcm1haWwgaG9nIHRvIGxpc3RlbiBvbg0KICBzZXQgc210
+cFBvcnQoaW50IHNtdHBwb3J0KSB7DQogICAgX3NtdHBQb3J0ID0gc210cHBvcnQ7DQogICAgc2V0dGlu
+Z3NbQ29uZmlnQ29tbWFuZC5zbXRwUG9ydE9wdGlvbl0gPSBzbXRwcG9ydDsNCiAgfQ0KDQogIGludCBn
+ZXQgc210cFBvcnQgPT4gX3NtdHBQb3J0Ow0KDQogIC8vIHBhdGggdG8gd2hlcmUgd2Ugd2lsbCBpbnN0
+YWxsIHRoZSBtYWlsaG9nIGFwcC4NCiAgc2V0IHBhdGhUb01haWxIb2dBcHAoU3RyaW5nIHBhdGhUb01h
+aWxIb2dBcHApIHsNCiAgICBzZXR0aW5nc1tBcHBTZXR0aW5ncy5wYXRoVG9NYWlsSG9nQXBwT3B0aW9u
+XSA9IHBhdGhUb01haWxIb2dBcHA7DQogICAgX3BhdGhUb01haWxIb2dBcHAgPSBwYXRoVG9NYWlsSG9n
+QXBwOw0KICB9DQoNCiAgU3RyaW5nIGdldCBwYXRoVG9NYWlsSG9nQXBwID0+IF9wYXRoVG9NYWlsSG9n
+QXBwOw0KDQogIC8vLyBTYXZlIHRoZSBzZXR0aW5ncyBmaWxlLg0KICB2b2lkIHNhdmUoKSB7DQogICAg
+Ly8gaWdub3JlOiBkaXNjYXJkZWRfZnV0dXJlcw0KICAgIHdhaXRGb3JFeChzZXR0aW5ncy5zYXZlKCkp
+Ow0KICB9DQp9DQo=
+  ''';
+}

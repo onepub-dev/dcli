@@ -77,6 +77,7 @@ export 'package:path/path.dart'
 export 'src/functions/ask.dart';
 export 'src/functions/backup.dart';
 export 'src/functions/cat.dart' show cat, CatException;
+export 'src/functions/confirm.dart';
 export 'src/functions/copy.dart' show copy, CopyException;
 export 'src/functions/copy_tree.dart' show copyTree;
 export 'src/functions/create_dir.dart'

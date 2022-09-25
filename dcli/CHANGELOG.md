@@ -1,3 +1,6 @@
+# 2.0.0-beta.9
+ - Fix for detection of the dart.bat exe on Windows.
+
 # 2.0.0-beta.8
 - Added lint_hard to the script template.
 - Fixed a bug in the pack command which would fail if the pack.yaml was missing an excluded section.
