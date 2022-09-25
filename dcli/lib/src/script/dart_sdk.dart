@@ -645,6 +645,9 @@ class DartSdk {
     }
 
     if (Platform.isWindows) {
+      // flutter ships with both a dart and a dart.bat
+      // we must target the dart.bat as the dart version
+      // is actually an unusable (on windows) bash shell.
       final dartbat = join(dirname(path), 'dart.bat');
       if (exists(dartbat)) {
         path = dartbat;
