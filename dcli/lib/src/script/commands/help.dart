@@ -30,8 +30,17 @@ class HelpCommand extends Command {
           'help expected a command name. Found $subarguments',
         );
       }
-      print(green('dcli ${command.usage()}'));
-      print(command.description(extended: true));
+      print('''
+${green('dcli ${command.usage()}')}
+
+${command.description(extended: true)}
+''');
+      command.flags().forEach((flag) {
+        print('''
+${blue('    ${flag.usage()}')}
+${flag.description()}
+''');
+      });
     } else {
       _printUsage();
     }

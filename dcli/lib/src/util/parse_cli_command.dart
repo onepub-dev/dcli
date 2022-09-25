@@ -344,6 +344,8 @@ class _ParseFrame {
   }
 }
 
+/// TODO: consider replacing with code from the dart sdk:
+/// https://github.com/dart-lang/io/blob/master/lib/src/shell_words.dart
 class _QArg {
   _QArg(String iarg) {
     wasQuoted = false;

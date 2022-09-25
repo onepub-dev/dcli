@@ -13,6 +13,13 @@ class CircularBuffer<T> {
     reset();
   }
 
+  CircularBuffer.fromList(List<T> initialList) {
+    reset();
+    _buf = [...initialList];
+    capacity = initialList.length;
+    _count = capacity;
+  }
+
   late List<T> _buf;
   late int _start;
   late int _end;
@@ -20,7 +27,7 @@ class CircularBuffer<T> {
 
   /// The no. of elements the buffer can hold.
   /// Once this limit is reach the buffer rolls over to the start of the buffer.
-  final int capacity;
+  late final int capacity;
 
   /// empty the buffer.
   void reset() {
@@ -30,13 +37,17 @@ class CircularBuffer<T> {
   }
 
   /// insert a value at the curent location.
-  void insert(T el) {
+  void add(T el) {
     // Inserting the next value
     _end++;
     if (_end == capacity) {
       _end = 0;
     }
-    _buf[_end] = el;
+    if (_end >= _buf.length) {
+      _buf.add(el);
+    } else {
+      _buf[_end] = el;
+    }
 
     // updating the start
     if (_count < capacity) {
@@ -56,17 +67,19 @@ class CircularBuffer<T> {
   /// the last value in the buffer.
   T get end => _buf[_end];
 
-  /// the current lenght of the buffer
+  /// the current length of the buffer
   int? get len => _count;
 
   /// the max capacity of the buffer.
   int get cap => capacity;
 
+  bool get isEmpty => _count == 0;
+
   /// true if the buffer is filled
-  bool get filled => _count == capacity;
+  bool get isFilled => _count == capacity;
 
   /// false if the buffer is not a capacity.
-  bool get unfilled => _count < capacity;
+  bool get hasRoom => _count < capacity;
 
   /// Allows you to iterate over the contents of the buffer
   /// The [action] callback is called for each item in the
@@ -77,4 +90,24 @@ class CircularBuffer<T> {
       action(val);
     }
   }
+
+  /// returns the next value in the buffer
+  /// incrementing the current location;
+  T next() {
+    if (isEmpty) {
+      throw BadStateError('The buffer is empty');
+    }
+    final next = start;
+    _start++;
+    if (_start == capacity) {
+      _start = 0;
+    }
+    _count--;
+    return next;
+  }
+}
+
+class BadStateError extends Error {
+  BadStateError(this.message);
+  String message;
 }

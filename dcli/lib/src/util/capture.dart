@@ -47,3 +47,18 @@ Progress capture<R>(R Function() action, {Progress? progress}) {
 
   return progress;
 }
+
+// void interact(String expected, void Function() action) {
+
+//   var inStream = StreamController<List<int>>(); // StreamConsumer
+//   var outStream = StreamController<List<int>>(); // Stream
+//   var errStream = StreamController<List<int>>();
+
+//   stdin;
+
+//   IOOverrides.runZoned(() => action,
+//   stdin: () => Stdin._(inStream.stream),
+//   stdout: ,
+//   stderr: );
+
+// }

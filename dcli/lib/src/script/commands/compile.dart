@@ -1,9 +1,3 @@
-/* Copyright (C) S. Brett Sutton - All Rights Reserved
- * Unauthorized copying of this file, via any medium is strictly prohibited
- * Proprietary and confidential
- * Written by Brett Sutton <bsutton@onepub.dev>, Jan 2022
- */
-
 import 'dart:io';
 
 import '../../../dcli.dart';
@@ -23,6 +17,7 @@ class CompileCommand extends Command {
     NoWarmupFlag(),
     InstallFlag(),
     OverWriteFlag(),
+    PackageFlag(),
     //WatchFlag()
   ];
 
@@ -59,15 +54,14 @@ class CompileCommand extends Command {
 
     final scriptList = subarguments.sublist(scriptIndex);
 
-    if (scriptList.isNotEmpty && scriptList[0] == 'package') {
+    if (flagSet.isSet(PackageFlag())) {
       // we are compiling a globally activated package.
-      if (scriptList.length != 2) {
+      if (scriptList.length != 1) {
         throw InvalidArgumentsException(
-            'The "package" command must be followed by '
-            'the name of the package');
+            'The "--package" flag must be followed by the name of the package');
       }
 
-      compilePackage(scriptList[1]);
+      compilePackage(scriptList[0]);
     } else {
       compileScripts(scriptList);
     }
@@ -146,15 +140,15 @@ class CompileCommand extends Command {
 
   @override
   String description({bool extended = false}) => '''
-Compiles the given list of scripts using dart's native compiler. 
+Compiles the given list of scripts using dart's native compiler or a a
+globally activated package.
    Only required if you want super fast execution.
    If no scripts are passed then all scripts in the current directory are compiled.''';
 
   @override
   String usage() {
-    const description =
-        'compile [--nowarmup] [--install] [--overwrite] [<script path.dart>, '
-        '<script path.dart>,...]';
+    const description = '''
+compile [--nowarmup] [--install] [--overwrite] [<script path.dart>, <script path.dart>,...] | --package <globally activate package name>''';
 
     return description;
   }
@@ -276,6 +270,22 @@ class OverWriteFlag extends Flag {
   String description() => '''
       If the installed executable already exists in '
       '${Settings().pathToDCliBin} then it will overwritten.''';
+}
+
+///
+class PackageFlag extends Flag {
+  ///
+  PackageFlag() : super(_flagName);
+  static const _flagName = 'package';
+
+  @override
+  String get abbreviation => 'p';
+
+  @override
+  String description() => '''
+      Compile a globally installed dart package and adds it to your path '${Settings().pathToDCliBin}'.
+      Run 'dart pub global activate <x>' 
+      Then 'dcli compile --package <x>.' ''';
 }
 
 /// watch the package for file changes and do

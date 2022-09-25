@@ -13,12 +13,15 @@ import 'package:test/test.dart';
 void main() {
   test('ask.custom prompt', () {
     Settings().setVerbose(enabled: false);
+
+    // expect("AAAHow old ar you:5", () {
     ask(
       'How old are you',
       defaultValue: '5',
       customPrompt: (prompt, defaultValue, hidden) =>
           'AAA$prompt:$defaultValue',
     );
+    // }).send("6");
   }, skip: true);
 
   test(

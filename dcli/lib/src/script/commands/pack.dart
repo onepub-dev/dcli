@@ -107,8 +107,8 @@ class PackCommand extends Command {
   @override
   String description({bool extended = false}) {
     var desc = '''
-Pack all files under the '${relative(Resources().resourceRoot)}' directory into a set of dart
-   libraries which can be unpacked at install time.''';
+Pack all files under the '${relative(Resources().resourceRoot)}' directory or 
+   those listed in pack.yaml which can be unpacked at install time.''';
     if (extended) {
       desc += '''
       
