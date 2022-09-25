@@ -39,7 +39,7 @@ dependencies:
   yaml: ^3.0.0
 dev_dependencies: 
   hex: ^0.2.0
-  lint_hard: ^2.0.0
+  lint_hard: ^2.1.1
   mocktail: ^0.3.0
   test: ^1.0.0
 executables: 
