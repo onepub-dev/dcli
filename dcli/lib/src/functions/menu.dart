@@ -134,8 +134,7 @@ T menu<T>({
     final selected = ask(prompt,
         defaultValue: defaultAsString,
         validator: _MenuRange(limit),
-        customPrompt: (_, __, {hidden = false}) =>
-            customPrompt(prompt, defaultAsString));
+        customPrompt: (_, __, ___) => customPrompt(prompt, defaultAsString));
     if (selected.isEmpty) {
       continue;
     }

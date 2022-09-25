@@ -5,7 +5,9 @@
  * Written by Brett Sutton <bsutton@onepub.dev>, Jan 2022
  */
 
-import 'package:dcli/dcli.dart' hide equals;
+import 'package:dcli/src/functions/ask.dart';
+import 'package:dcli/src/settings.dart';
+import 'package:dcli/src/util/ansi_color.dart';
 import 'package:test/test.dart';
 
 void main() {
@@ -14,7 +16,7 @@ void main() {
     ask(
       'How old are you',
       defaultValue: '5',
-      customPrompt: (prompt, defaultValue, {hidden = false}) =>
+      customPrompt: (prompt, defaultValue, hidden) =>
           'AAA$prompt:$defaultValue',
     );
   }, skip: true);
@@ -62,33 +64,6 @@ void main() {
       expect(validator.validate('_'), '_');
     },
     skip: false,
-  );
-
-  test(
-    'confirm no default',
-    () {
-      final result = confirm('Are you good?');
-      print('result: $result');
-    },
-    skip: true,
-  );
-
-  test(
-    'confirm default=true',
-    () {
-      final result = confirm('Are you good?', defaultValue: true);
-      print('result: $result');
-    },
-    skip: true,
-  );
-
-  test(
-    'confirm default=false',
-    () {
-      final result = confirm('Are you good?', defaultValue: false);
-      print('result: $result');
-    },
-    skip: true,
   );
 
   test('ask.any - success', () {
