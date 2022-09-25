@@ -15,14 +15,14 @@ void main() {
       final options = ['public', 'private'];
 
       var result = menu(
-        prompt: 'How old are you',
+        'How old are you',
         defaultOption: null,
         options: options,
       );
       print('result: $result');
 
       result = menu(
-        prompt: 'How old are you',
+        'How old are you',
         defaultOption: 'public',
         options: options,
       );
@@ -30,14 +30,14 @@ void main() {
 
       final numoptions = [3.14, 8.9];
       final result1 = menu(
-        prompt: 'How old are you',
+        'How old are you',
         defaultOption: 8.9,
         options: numoptions,
       );
       print('result: $result1');
 
       try {
-        menu(prompt: 'How old are you', defaultOption: 9, options: numoptions);
+        menu('How old are you', defaultOption: 9, options: numoptions);
         // ignore: avoid_catching_errors
       } on ArgumentError catch (e) {
         print('Expected Argument error ${e.toString()}');
@@ -50,7 +50,7 @@ void main() {
   test(
     'One entry',
     () {
-      menu(prompt: 'only one', options: ['One'], limit: 20);
+      menu('only one', options: ['One'], limit: 20);
     },
     skip: true,
     tags: ['console'],

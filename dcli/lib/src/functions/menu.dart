@@ -66,8 +66,8 @@ typedef CustomMenuPrompt = String Function(String prompt, String? defaultValue);
 /// displayed and the [defaultOption] will be returned.
 /// If there is no [defaultOption] then the first [options] will be returned.
 ///
-T menu<T>({
-  required String prompt,
+T menu<T>(
+  String prompt, {
   required List<T> options,
   T? defaultOption,
   CustomMenuPrompt customPrompt = Menu.defaultPrompt,
