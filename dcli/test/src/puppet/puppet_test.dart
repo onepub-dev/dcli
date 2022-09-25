@@ -42,7 +42,7 @@ void main() {
       final age = ask(
         'How old are you',
         defaultValue: '5',
-        customPrompt: (prompt, defaultValue, {hidden = false}) =>
+        customPrompt: (prompt, defaultValue, hidden) =>
             'AAA$prompt:$defaultValue',
       );
       print('You are $age years old');
@@ -61,7 +61,7 @@ void main() {
       final age = ask(
         'How old are you',
         defaultValue: '5',
-        customPrompt: (prompt, defaultValue, {hidden = false}) =>
+        customPrompt: (prompt, defaultValue, hidden) =>
             'AAA$prompt:$defaultValue',
       );
       print('You are $age years old');
