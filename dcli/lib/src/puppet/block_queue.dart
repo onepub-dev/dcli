@@ -10,8 +10,10 @@ class BlockQueue {
   BlockQueue(this.stream) {
     stream.listen((block) {
       _blockQueue.addFirst(block);
+      //  print('added  ${block.length}');
       if (!dataLoaded.isCompleted) {
         dataLoaded.complete(true);
+        print('completed');
       }
     });
   }
@@ -34,20 +36,24 @@ class BlockQueue {
   Future<int> readByte() async {
     if (_blockBuffer.isEmpty) {
       // pump the event loop so it can deliver more data.
-      // await Future.delayed(const Duration(seconds: 1), () {});
+      await Future.delayed(Duration.zero, () {});
 
       if (_blockQueue.isEmpty) {
-        // wait for new data to arrive
-        await dataLoaded.future;
-        dataLoaded = Completer<bool>();
-
-        if (_blockQueue.isEmpty && closed) {
+        if (closed) {
           return -1;
         }
+        // wait for new data to arrive
+        await dataLoaded.future;
+        print('loaded');
       }
 
       /// move a block from the queue into the block buffer.
       final block = _blockQueue.removeLast();
+      if (_blockQueue.isEmpty) {
+        dataLoaded = Completer<bool>();
+        print('empty');
+      }
+      print('blocksize ${block.length}');
       final line = <int>[];
 
       block.forEach(line.add);

@@ -43,21 +43,18 @@ class PuppetStdin extends Stream<List<int>> implements Stdin {
   }
 
   void writeLineSync(String line) {
-    _sink.add(utf8.encode(line));
+    final terminator = _crIsRequired ? [_cr, _lf] : [_lf];
 
-    if (_crIsNewline) {
-      _sink.add([_cr]);
-    }
-    _sink.add([_lf]);
+    _sink
+      ..add(utf8.encode(line))
+      ..add(terminator);
   }
 
-// TODO: is this needed as it currently doesn't seem tobe used.
   void close() {
     _blockQueue.close();
   }
 
   @override
-  // ignore: discarded_futures
   int readByteSync() => _blockQueue.readByteSync();
 
   @override
@@ -70,7 +67,7 @@ class PuppetStdin extends Stream<List<int>> implements Stdin {
           lineMode: lineMode);
 
   // On Windows, if lineMode is disabled, only CR is received.
-  bool get _crIsNewline =>
+  bool get _crIsRequired =>
       Platform.isWindows && (stdioType == StdioType.terminal) && !lineMode;
 
   @override

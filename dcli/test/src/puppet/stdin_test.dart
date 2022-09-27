@@ -26,4 +26,24 @@ void main() {
       expect(line, equals('$value $i'));
     }
   });
+
+  test('stdin - eof', () async {
+    final puppet = PuppetStdin();
+    const value = 'Hello World';
+
+    for (var i = 0; i < 100; i++) {
+      puppet.writeLineSync('$value $i');
+    }
+    puppet.close();
+
+    var i = 0;
+    String? line;
+    while ((line = puppet.readLineSync()) != null) {
+      expect(line, equals('$value $i'));
+      i++;
+    }
+    expect(i, equals(100));
+  });
+
+ 
 }
