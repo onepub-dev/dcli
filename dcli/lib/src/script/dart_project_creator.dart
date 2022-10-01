@@ -90,6 +90,9 @@ void _fixPubspec(String projectName, PubSpec pubSpec, String pathToPubSpec) {
     if (key == 'dcli') {
       replacement.putIfAbsent(
           'dcli', () => Dependency.fromHosted('dcli', packageVersion));
+    } else if (key == 'dcli_core') {
+      replacement.putIfAbsent('dcli_core',
+          () => Dependency.fromHosted('dcli_core', packageVersion));
     } else {
       replacement.putIfAbsent(key, () => current[key]!);
     }
