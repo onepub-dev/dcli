@@ -1,3 +1,21 @@
+# 2.0.0-beta.10
+- BREAKING: renamed the menu arg defaultValue to defaultOption to reflect that we are selecting an option.
+- BREAKING: change the prompt argument for the menu function from a named argument to a positional argument for consistency with ask and confirm.
+- BREAKING: Changed the signature to the customPrompts so that the hidden field is positional rather than named as this makes using them more intuitive.
+- BREAKING: improved the compile from package option. It's now a switch and visible in the help.
+- FIX: the project creation code so it updates dcli_core version as well as the dcli version.
+- FIX: a bug on Windows when we are using dart from the flutter install. flutter ships both dart and dart.bat. The dart version is actually a bash script that isn't used but which confused our path detection process.
+- FIX: Upgraded to dart_posix 4.0.1 to fix a bug #202 dcli install fails on macos - thanks to @RandalSchwartz 
+- split confirm out into its own library. 
+- Changed sudo dcli install  instructions after hint from @RandalSchwartz that -E does the same as env "PATH=$PATH"
+- moved pubspec overrides into their own file.
+- improvements to the DartScript  unit tests.
+- moved puppet/minion code into its own project.
+- improved the help for the create command.
+- improved the command help
+- improved the pack command description.
+- upgraded to latest version of lint_hard
+
 # 2.0.0-beta.8
 - Added lint_hard to the script template.
 - Fixed a bug in the pack command which would fail if the pack.yaml was missing an excluded section.
