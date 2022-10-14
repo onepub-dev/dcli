@@ -85,7 +85,7 @@ class DoctorCommand extends Command {
   }
 
   void _printShell() {
-    print('Shell Settings');
+    print('shell settings');
     _colprint([r'$SHELL', env['SHELL'] ?? '']);
 
     final shell = Shell.current;
@@ -93,9 +93,9 @@ class DoctorCommand extends Command {
 
     if (shell.hasStartScript) {
       final startScriptPath = shell.pathToStartScript;
-      _colprint(['Start script', privatePath(startScriptPath ?? 'not found')]);
+      _colprint(['start script', privatePath(startScriptPath ?? 'not found')]);
     } else {
-      _colprint(['Start sript', 'not supported by shell']);
+      _colprint(['start sript', 'not supported by shell']);
     }
   }
 
