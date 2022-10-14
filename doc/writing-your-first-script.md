@@ -13,14 +13,14 @@ cd dcli_scripts
 {% endtab %}
 
 {% tab title="Windows" %}
-```text
+```
 mkdir dcli_scripts
 cd dcli_scripts
 ```
 {% endtab %}
 
 {% tab title="OSx" %}
-```text
+```
 mkdir dcli_scripts
 cd dcli_scripts
 ```
@@ -51,7 +51,7 @@ dart hello.dart
 When we run our script using the `dart` command, dart performs JIT compilation of our script which slows down the startup time a little but makes for fast test iteration.
 
 {% hint style="info" %}
-In vscode you should see 'Run \| Debug' just above main\(\). Click Debug to start your app.
+In vscode you should see 'Run | Debug' just above main(). Click Debug to start your app.
 {% endhint %}
 
 ## Compiling
@@ -81,7 +81,7 @@ The exe is 5MB in size and does NOT require Dart to be installed.
 So far we haven't actually used the DCli API in our hello.dart program. Let's now setup dependency management so we can use the DCli API and any other Dart package.
 
 {% hint style="info" %}
-Search [pub.dev](https://pub.dev/) for third party package. You can only use packages labelled 'DART \| NATIVE'
+Search [pub.dev](https://pub.dev/) for third party package. You can only use packages labelled 'DART | NATIVE'
 {% endhint %}
 
 Dart uses a special file called `pubspec.yaml` to control the set of packages accessible to your application.
@@ -101,7 +101,7 @@ name: hello_world
 description: My first app that does bugger all.
 
 dependencies:
-  dcli: ^0.51.0
+  dcli: ^1.34.0
 ```
 
 {% hint style="info" %}
@@ -205,5 +205,4 @@ Should I delete 'tmp'? (y/n): (y/n): y
 
 You are now officially a DCli guru.
 
-Go forth young man \(or gal\) and create.
-
+Go forth young man (or gal) and create.
