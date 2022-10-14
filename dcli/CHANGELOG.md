@@ -1,3 +1,7 @@
+# 1.34.1
+- Changed sudo dcli install  instructions after hint from @RandalSchwartz that -E does the same as env "PATH=$PATH"
+- Upgraded to dart_posix 4.0.1 to fix #202 dcli install fails on macos.
+
 # 1.34.0
 - Added start() method to DartScript.
 - renamed dclizone to capture and remove the 'experiemental' comment.
