@@ -6,8 +6,8 @@ environment:
   sdk: '>=2.18.0 <3.0.0'
 dependencies: 
   args: ^2.3.1
-  dcli: ^2.0.0-beta.9
-  dcli_core: ^2.0.0-beta.9
+  dcli: ^2.0.0-beta.10
+  dcli_core: ^2.0.0-beta.10
   http: ^0.13.4
   settings_yaml: ^5.0.0-beta.1
 dev_dependencies: 
