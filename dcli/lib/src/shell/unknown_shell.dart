@@ -225,7 +225,7 @@ class UnknownShell with ShellMixin {
     if (core.Settings().isWindows) {
       return 'Run dcli install';
     } else {
-      return r'Run sudo env "PATH=$PATH" dcli install';
+      return 'Run sudo -E dcli install';
     }
   }
 }
