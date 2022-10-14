@@ -213,7 +213,9 @@ mixin PosixShell {
   String? checkInstallPreconditions() => null;
 
   /// Returns the instructions to install DCli.
-  String get installInstructions => r'Run: sudo env "PATH=$PATH" dcli install';
+  String get installInstructions => '''
+Run: 
+sudo -E dcli install''';
 
   /// Symlink so dcli works under sudo.
   /// We use the location of dart exe and add dcli symlink
