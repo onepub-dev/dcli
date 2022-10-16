@@ -32,8 +32,7 @@ export 'package:dcli_core/dcli_core.dart'
         privatePath,
         // RestoreFileException,
         translateAbsolutePath,
-        RunException,
-        withEnvironment
+        RunException
     // CatException;
     ;
 export 'package:dcli_core/src/util/dev_null.dart';
@@ -85,6 +84,7 @@ export 'src/functions/create_dir.dart'
 export 'src/functions/delete.dart' show delete, DeleteException;
 export 'src/functions/delete_dir.dart' show deleteDir, DeleteDirException;
 export 'src/functions/echo.dart' show echo;
+export 'src/functions/env.dart';
 export 'src/functions/fetch.dart'
     show
         fetch,

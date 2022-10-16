@@ -5,7 +5,7 @@ documentation: https://dcli.onepub.dev
 description: Dart console SDK - write console (cli) apps/scripts using dart.
 repository: https://github.com/onepub-dev/dcli
 environment: 
-  sdk: '>=2.16.0 <3.0.0'
+  sdk: '>=2.17.0 <3.0.0'
 dependencies: 
   archive: ^3.0.0
   args: ^2.0.0
@@ -29,7 +29,7 @@ dependencies:
   posix: ^4.0.1
   pub_semver: ^2.0.0
   pubspec2: ^2.4.1
-  scope: ^2.2.1
+  scope: ^3.0.0
   settings_yaml: ^3.4.2
   stacktrace_impl: ^2.3.0
   system_info2: ^2.0.3

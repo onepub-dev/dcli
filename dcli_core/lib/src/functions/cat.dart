@@ -45,8 +45,7 @@ class Cat extends DCliFunction {
 /// Thrown if the [cat] function encouters an error.
 class CatException extends DCliFunctionException {
   /// Thrown if the [cat] function encouters an error.
-  CatException(String reason, [StackTraceImpl? stacktrace])
-      : super(reason, stacktrace);
+  CatException(super.reason, [super.stacktrace]);
 
   // @override
   // DCliException copyWith(StackTraceImpl stackTrace) =>

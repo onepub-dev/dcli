@@ -91,5 +91,5 @@ Future<void> _improveError(Object e, String from, String to) async {
 /// Thrown when the [move] function encouters an error.
 class MoveException extends DCliFunctionException {
   /// Thrown when the [move] function encouters an error.
-  MoveException(String reason) : super(reason);
+  MoveException(super.reason);
 }

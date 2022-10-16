@@ -409,5 +409,5 @@ class _NoPrivilegesFlag extends Flag {
 /// Thrown if an error is encountered during an install
 class InstallException extends DCliException {
   /// Thrown if an error is encountered during an install
-  InstallException(String message) : super(message);
+  InstallException(super.message);
 }

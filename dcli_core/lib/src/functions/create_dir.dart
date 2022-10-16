@@ -102,5 +102,5 @@ class _CreateDir extends DCliFunction {
 /// Thrown when the function [createDir] encounters an error
 class CreateDirException extends DCliFunctionException {
   /// Thrown when the function [createDir] encounters an error
-  CreateDirException(String reason) : super(reason);
+  CreateDirException(super.reason);
 }

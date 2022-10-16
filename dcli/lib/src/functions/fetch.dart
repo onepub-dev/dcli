@@ -721,14 +721,12 @@ class _ProgressByteUpdate {
 /// Throw when an error occurs fetching a resource.
 class FetchException extends core.DCliException {
   /// ctor
-  FetchException(String message)
-      : errorCode = OSError.noErrorCode,
-        super(message);
+  FetchException(super.message) : errorCode = OSError.noErrorCode;
 
   /// Create an exception from a SocketException
-  FetchException.fromException(SocketException e)
+  FetchException.fromException(SocketException super.e)
       : errorCode = e.osError?.errorCode,
-        super.fromException(e);
+        super.fromException();
 
   /// Create a FetchException as the result of a
   /// HTTP error.

@@ -35,19 +35,20 @@ void withTestScope(void Function(String testDir) callback,
               core.DCliPlatform.scopeKey,
               core.DCliPlatform.forScope(
                   overriddenPlatform: overridePlatformOS))
-          ..run(() {
+          ..runSync(() {
             Scope()
               ..value(Settings.scopeKey, Settings.forScope())
               ..value(PubCache.scopeKey, PubCache.forScope())
               // ..value(originalHomeKey, originalHome)
-              ..run(() {
+              ..runSync(() {
                 callback(testDir);
               });
           });
       }, environment: {
         'HOME': testDir,
 
-        /// add our pub-cache to the front of the path so dcli is run from there.
+        /// add our pub-cache to the front of the path so dcli
+        /// is run from there.
         'PATH': [join(commonTestPubCache, 'bin'), ...PATH]
             .join(Env().delimiterForPATH),
 

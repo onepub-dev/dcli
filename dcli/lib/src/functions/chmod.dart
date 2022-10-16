@@ -4,7 +4,6 @@
  * Written by Brett Sutton <bsutton@onepub.dev>, Jan 2022
  */
 
-import 'package:dcli_core/dcli_core.dart' as core;
 import 'package:dcli_core/dcli_core.dart' hide exists, Settings;
 import 'package:posix/posix.dart' as posix;
 
@@ -71,8 +70,7 @@ class _ChMod extends DCliFunction {
 /// Thrown if the [chmod] function encounters an error.
 class ChModException extends DCliFunctionException {
   /// Thrown if the [chmod] function encounters an error.
-  ChModException(String reason, [core.StackTraceImpl? stacktrace])
-      : super(reason, stacktrace);
+  ChModException(super.reason, [super.stacktrace]);
 
   // @override
   // DCliException copyWith(core.StackTraceImpl stackTrace) =>

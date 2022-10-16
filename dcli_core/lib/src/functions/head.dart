@@ -49,5 +49,5 @@ class _Head extends DCliFunction {
 /// Thrown if the [head] function encounters an error.
 class HeadException extends DCliFunctionException {
   /// Thrown if the [head] function encounters an error.
-  HeadException(String reason) : super(reason);
+  HeadException(super.reason);
 }

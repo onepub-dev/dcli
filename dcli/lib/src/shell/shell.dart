@@ -244,5 +244,5 @@ typedef RunPrivileged = void Function();
 /// Thrown when an exception occurs in the Shell detection and support methods.
 class ShellException extends DCliException {
   /// Thrown when the [move] function encouters an error.
-  ShellException(String reason) : super(reason);
+  ShellException(super.reason);
 }

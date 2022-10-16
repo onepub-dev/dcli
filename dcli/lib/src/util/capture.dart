@@ -33,7 +33,7 @@ Future<Progress> capture<R>(R Function() action, {Progress? progress}) async {
   };
 
   // ignore: flutter_style_todos
-  /// TODO: we need to some how await this.
+  /// TODO: we need to somehow await this.
   runZonedGuarded(
     action,
     (e, st) {},

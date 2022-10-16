@@ -63,5 +63,5 @@ class _DeleteDir extends DCliFunction {
 /// Throw when [deleteDir] function encounters an error
 class DeleteDirException extends DCliFunctionException {
   /// Throw when [deleteDir] function encounters an error
-  DeleteDirException(String reason) : super(reason);
+  DeleteDirException(super.reason);
 }

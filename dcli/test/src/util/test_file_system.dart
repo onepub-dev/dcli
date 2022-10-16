@@ -415,7 +415,7 @@ class TestFileSystem {
 }
 
 class TestFileSystemException extends DCliException {
-  TestFileSystemException(String message) : super(message);
+  TestFileSystemException(super.message);
 }
 
 class TestDirectoryTree {

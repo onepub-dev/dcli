@@ -74,6 +74,5 @@ class _Read extends core.DCliFunction {
 /// Thrown when the [read] function encouters an error.
 class ReadException extends core.DCliFunctionException {
   /// Thrown when the [read] function encouters an error.
-  ReadException(String reason, [StackTraceImpl? stacktrace])
-      : super(reason, stacktrace);
+  ReadException(super.reason, [super.stacktrace]);
 }

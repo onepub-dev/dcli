@@ -121,13 +121,13 @@ class CommandLineRunner {
 /// your own extending from this exception.
 abstract class CommandLineException extends DCliException {
   ///
-  CommandLineException(String message) : super(message);
+  CommandLineException(super.message);
 }
 
 /// Thrown when an invalid command line option is passed.
 class OptionsException extends CommandLineException {
   ///
-  OptionsException(String message) : super(message);
+  OptionsException(super.message);
 }
 
 /// Thrown when an duplicate command line option is passed.
@@ -152,12 +152,12 @@ class UnknownOption extends OptionsException {
 /// Thrown when an invalid script name is passed to the  command line.
 class InvalidScript extends CommandLineException {
   /// Thrown when an invalid script name is passed to the  command line.
-  InvalidScript(String message) : super(message);
+  InvalidScript(super.message);
 }
 
 class InvalidTemplateException extends CommandLineException {
   /// Thrown when an invalid template is selected
-  InvalidTemplateException(String message) : super(message);
+  InvalidTemplateException(super.message);
 }
 
 /// Thrown when an invalid command  is passed.
@@ -182,5 +182,5 @@ class UnknownFlag extends CommandLineException {
 /// Thrown when an invalid argument is passed to a command.
 class InvalidArgumentsException extends CommandLineException {
   ///
-  InvalidArgumentsException(String message) : super(message);
+  InvalidArgumentsException(super.message);
 }

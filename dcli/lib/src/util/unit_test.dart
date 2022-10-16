@@ -14,5 +14,5 @@ final unitTestingKey =
 void withUnitTest(void Function() action) {
   Scope()
     ..value(unitTestingKey, true)
-    ..run(() => action());
+    ..runSync(() => action());
 }

@@ -448,5 +448,5 @@ class _LockFileParts {
 ///
 class LockException extends DCliException {
   ///
-  LockException(String message) : super(message);
+  LockException(super.message);
 }

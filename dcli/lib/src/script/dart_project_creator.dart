@@ -275,7 +275,7 @@ class TemplateFlag extends Flag {
 }
 
 class InvalidProjectTemplateException extends DCliException {
-  InvalidProjectTemplateException(String message) : super(message);
+  InvalidProjectTemplateException(super.message);
 }
 
 /// Prints a list of the templates and exists

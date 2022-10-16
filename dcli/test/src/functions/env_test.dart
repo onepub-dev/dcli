@@ -4,7 +4,8 @@
  * Written by Brett Sutton <bsutton@onepub.dev>, Jan 2022
  */
 
-import 'package:dcli_core/dcli_core.dart';
+import 'package:dcli/dcli.dart';
+import 'package:dcli_core/dcli_core.dart' hide withEnvironment;
 import 'package:scope/scope.dart';
 
 import 'package:test/test.dart' as t;
@@ -28,7 +29,7 @@ void main() {
       Scope()
         ..value(DCliPlatform.scopeKey,
             DCliPlatform.forScope(overriddenPlatform: DCliPlatformOS.windows))
-        ..run(() {
+        ..runSync(() {
           ///  We need to run with an environment that thinks its running
           /// under windows.
           withEnvironment(() {

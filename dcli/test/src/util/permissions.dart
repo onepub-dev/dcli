@@ -213,5 +213,5 @@ class Privileges {
 }
 
 class PriviligesException extends DCliException {
-  PriviligesException(String message) : super(message);
+  PriviligesException(super.message);
 }

@@ -514,5 +514,5 @@ class _Resource {
 /// Thrown when an error occurs trying to pack or unpack a resource file
 class ResourceException extends DCliException {
   /// Thrown when an error occurs trying to pack or unpack a resource file
-  ResourceException(String message) : super(message);
+  ResourceException(super.message);
 }

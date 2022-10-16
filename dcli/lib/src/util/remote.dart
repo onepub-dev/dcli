@@ -280,11 +280,11 @@ class Remote {
 ///
 class ScpException extends RemoteException {
   ///
-  ScpException(String message) : super(message);
+  ScpException(super.message);
 }
 
 ///
 class RemoteException extends DCliException {
   ///
-  RemoteException(String message) : super(message);
+  RemoteException(super.message);
 }

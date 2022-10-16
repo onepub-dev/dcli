@@ -551,5 +551,5 @@ class FindItem {
 /// Thrown when the [find] function encouters an error.
 class FindException extends DCliFunctionException {
   /// Thrown when the [move] function encouters an error.
-  FindException(String reason) : super(reason);
+  FindException(super.reason);
 }

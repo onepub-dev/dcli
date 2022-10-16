@@ -463,12 +463,12 @@ class DartProject {
 /// Exception for issues with DartProjects.
 class DartProjectException extends DCliException {
   /// Create a DartProject related exceptions
-  DartProjectException(String message) : super(message);
+  DartProjectException(super.message);
 }
 
 /// The requested DCli template does not exists.
 class TemplateNotFoundException extends DCliException {
   /// The requested DCli template does not exists.
   TemplateNotFoundException(String pathTo)
-      : super('The template $pathTo does not exist.');
+      : super('The template $pathTo dsoes not exist.');
 }

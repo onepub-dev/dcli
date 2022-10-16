@@ -50,5 +50,5 @@ class CD extends core.DCliFunction {
 class CDException extends core.DCliFunctionException {
   // ignore: deprecated_member_use_from_same_package
   /// Throw when the [cd] function encounters an error.
-  CDException(String reason) : super(reason);
+  CDException(super.reason);
 }

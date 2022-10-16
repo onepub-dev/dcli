@@ -93,5 +93,5 @@ class _Copy extends DCliFunction {
 /// Throw when the [copy] function encounters an error.
 class CopyException extends DCliFunctionException {
   /// Throw when the [copy] function encounters an error.
-  CopyException(String reason) : super(reason);
+  CopyException(super.reason);
 }
