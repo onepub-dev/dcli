@@ -87,9 +87,7 @@ class Remote {
       cmdArgs.add('-A');
     }
     // disable psuedo terminal
-    cmdArgs
-      ..add('-T')
-      ..add(host);
+    cmdArgs..add('-T')..add(host);
 
     final cmdLine = StringBuffer();
     for (var command in commands) {
