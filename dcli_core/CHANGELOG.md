@@ -1,3 +1,6 @@
+# 1.21.0
+- Upgraded to scope 3.0. Fixed a bug in withEnvironment as we need two version, a sync and async version.
+
 # 1.20.3
 - Fixed a bug in DCliZone.run. If you passed a Progress.capture to the run method the capture would be empty. Added a call to waitForEx to give the progress listeners a chance to run.
 - Back ported changes to verbose so that it reports the file and line number of each verbose statement.
