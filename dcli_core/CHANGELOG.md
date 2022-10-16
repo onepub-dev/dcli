@@ -1,3 +1,154 @@
+# 1.35.0
+- moved min sdk to 2.17 as required to support the current set of dependencies. Upgraded to scope 3.0.0 to fix sync/async bug in withEnvironment.
+- Released 1.34.1.
+- Released 1.34.1.
+- Changed sudo dcli install  instructions after hint from @RandalSchwartz that -E does the same as env "PATH=$PATH"
+- Upgraded to dart_posix 4.0.1 to fix a bug #202 dcli install fails on macos.
+- Released 1.34.0.
+- Released 1.34.0.
+- Add missing nothrow after changin the ScriptRunner run command to using start internally.
+- change the test tag 'sudo' to 'priviliged'
+- Added code to the test_file_system to activate dcli into the file system. reduced supurfluous unit test output.
+- remove a verbose setting from the run hello world tests.
+- Added unit_test scope to work with the dcliExit code so it knows when we are in a unit test.
+- repack the full/install.dart.
+- spelling.
+- Added start method to DartScript.
+- fixed unit test where they named the temp .pub-cache directory inconsistenty.
+- Change the test tag sudo to privileged to reflect how we us it.
+- replaced calls to exit with dcliExit to stop calls to exit() shutting down the unit test framework.
+- renamed dclizone to capture. Wrapped parts of unit tests in capture to reduce extraneous output.
+- Added additional error test for the find function - errno 5 on linux with can occur when running in a vm or with fuse.
+- Merge branch 'master' of github.com:onepub-dev/dcli
+- improved the project creation from template code. We now more tightly target package name updates.
+- excluded the settings.yaml from the template.
+- Added support for excluding resources when packing.
+- Improved the full sample template.
+- GitBook: [#176] No subject
+- updated full template
+- Released 1.33.2.
+- Released 1.33.2.
+- replaced the full project template with a complete working example.
+- change the labels using doctor to all lower case.
+- corrected the chmod doc example for execute permission.
+- Merge branch 'master' of github.com:onepub-dev/dcli
+- Added additional files to not publish.
+- removed the creation of read.me in the docker dcli_cli.df.
+- Found additional cirumstances when we must run as priviledged on linux so remove the check that we are running on windows to require priviledged operation.
+- If the install dir doesn't exist we may need to be privildged to create it so we now run withPrivileges.
+- GitBook: [#175] No subject
+- GitBook: [#174] No subject
+- upgrraded win32 version to 2.7.0
+- released 1.33.1
+- Released 1.33.1.
+- upgraded to settingsyaml 3.4.2 to get the latest bug fixes.
+- Released 1.33.0.
+- Released 1.33.0.
+- updated to pubspec2 2.4.1.
+- Upgraded to pubspec 2.4 as 2.3 would clear out executable values in the pubspec.yaml.
+- Released 1.32.1.
+- Released 1.32.1.
+- The glob parser now supports the escape character ^ inside nested quotes.
+- Correct name used in documenation for run.
+- Fixed the link to the contributing guide on the readme page.
+- Added additional pathToXXX to DartProject so we cover each of the standard directories and files.
+- Released 1.32.0.
+- Released 1.32.0.
+- Fixed a bug on copy_test that wasn't checking for an existing file.
+- moved to dart_console2 util dart_console gets an upgrade.
+- Upgraded to posix 4.0, ffi 2.0, dart_console 2.0.0
+- removed redundant template code as we now use our own 'dart pack' command to pack assets.
+- Released 1.31.3.
+- Released 1.31.3.
+- Released 1.31.3.
+- Released 1.31.3.
+- Released 1.31.4.
+- updated pub to dart pub
+- updated pub to dart pub
+- Fixed the global activate command syntax.
+- add os matrix
+- updated pub to dart pub
+- re-packed templates
+- Merge branch 'master' of github.com:onepub-dev/dcli
+- relaxed the dcli version in the project templates.
+- removed some nulls from  platforms in pubspec.yaml
+- relaxed the ffi version.  Upgraded mocktail version. Removed the dshell_upgrade exe.
+- Fix: the project create code was printing out the wrong script name (main.dart) when we actually create a script called <projectname>.dart.
+- upgraded to the lates version of circular_buffer.
+- Updated the DartProject documentation.
+- repacked resources after updating the lint_hard version.
+- ignored all .packages directories.
+- upgrade to lint_hard 2.0 for dcli_core
+-  removed verbose output for the purge tool.
+- disabled verbose output on unit tests.
+- change find_test to just output counts rather than every filename.
+- Fix: added check in find for missing directory when running under windows.
+- upgraded to lint_hard 2.x
+- changed windows_mixin_test to assume it is running in a privildged session.
+- Fixed a bug in the start with progress unit test on windows. The echo psuedo command was being treated as a command so was failing to run.
+- Fixed a startup bug in the windows mixin test.
+- Fixed a windows bug on the test_file_system which didn't account for the different exe extension of .exe.
+- Fixed the read_test for windows. It wasn't taking into account the different line endings.
+- Fixed bug in dart_project warmup on windows. We try to recursivly delete dirs in a find which just doesn't work on windows.
+- Fixed the dart_script_test so it works on windows. The .exe extension was causing tests to fail.
+- Change the symlink copy test to create the symlinks as on windows when pulling from git we get files not symlinks.
+- Changed _windowsIsRunning to use the win32 vesrion of getWindowsProcesses. Fixed a bug in _getWindowsProcessesOld caused by change in the cvs library we use.
+- removed unused var.
+- set the dcli version to ^1.0.0 for the templates as dart will find the most recent compatible version.
+- Merge branch 'master' of https://github.com/noojee/dcli
+- Fix: on window dcli install was failing as we were deleting directories whilst doing a recursive find when re-installing the templates.
+- upgraded to latest version of pubspec.
+- repacked resources.
+- applied updated version of lint_hard
+- improvements to documentation.
+- added copyright notices.
+- Released 1.31.2.
+- Released 1.31.2.
+- Fixed a bug in the Settings.setVerbose(true) method. Each time setVerbose was called it added an additional logger resulting in multiple log lines per logging event. Fixed a bug in Settings.setVerbose(false) - it was cancelling all loggers even ones we hadn't created.
+- Released 1.31.1.
+- Released 1.31.0.
+- Released 1.31.0.
+- upgraded to pubspec 2.2.0 to get the latest bug fixes.
+- excluded tests that require sudo.
+- regenerated packed templates.
+- updated the template pubspec.yaml so the sdk contstraint matches dcli's.
+- Released 1.30.3.
+- Released 1.30.3.
+- Merge branch 'master' of github.com:bsutton/dcli
+- updated win32 version as causing compatibitlity problems on older sdks.
+- improved the project create from template logic so that we update the dcli version dependency to match the version of dcli the user is running.
+- GitBook: [#168] No subject
+- GitBook: [#167] No subject
+- GitBook: [#166] No subject
+- GitBook: [#164] No subject
+- GitBook: [#163] No subject
+- GitBook: [#161] No subject
+- GitBook: [#160] No subject
+- GitBook: [#159] No subject
+- experiemental work on delete_tree. Untested!
+- removed redundant argument.
+- corrected messages in move_tree that used the word copy instenad of move. Truely a 'copy' paste bug.
+- renamed Settings.appname to Settings.dcliAppName
+- improved the doco for replace.
+- Added a better error message for the copy command if the from path is a directory.
+- Released 1.30.2.
+- corrected platform to platforms in pubspec.yaml
+- Released 1.30.2.
+- Merge branch 'master' of github.com:bsutton/dcli
+- dart sdk version issue.
+- added platform tag into pubspec.yaml
+- Update README.md
+- Released 1.30.1.
+- upgraded to latest version of posix for the new group related functions.
+- removed unused vars.
+- removed redundant imports.
+- Fixed for releasePriviliges as it wasn't correctly  setting HOME, SHELL, USER or LOGNAME when transitioning between modes.
+- Released 1.30.0.
+- Released 1.30.0.
+- Correctly set the base sdk to 2.16
+- Fixed lint warnings re tear offs.
+- formatting.
+
 # 1.34.1
 - Changed sudo dcli install  instructions after hint from @RandalSchwartz that -E does the same as env "PATH=$PATH"
 - Upgraded to dart_posix 4.0.1 to fix #202 dcli install fails on macos.
