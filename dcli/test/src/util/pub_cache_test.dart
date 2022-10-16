@@ -32,7 +32,7 @@ void main() {
           /// create a pub-cache using the test scope's HOME
           Scope()
             ..value(PubCache.scopeKey, PubCache.forScope())
-            ..run(() {
+            ..runSync(() {
               if (Settings().isWindows) {
                 expect(
                     PubCache().pathToBin,
@@ -59,7 +59,7 @@ void main() {
         /// create a pub-cache using the test scope's HOME
         Scope()
           ..value(PubCache.scopeKey, PubCache.forScope())
-          ..run(() {
+          ..runSync(() {
             final pubCache = PubCache();
             createDir(pubCache.pathToDartLang, recursive: true);
             createDir(join(pubCache.pathToDartLang, 'dcli-1.0.0-beta.1'));

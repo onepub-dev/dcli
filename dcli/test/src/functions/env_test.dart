@@ -1,4 +1,6 @@
-import 'package:dcli_core/dcli_core.dart';
+import 'package:dcli/dcli.dart';
+import 'package:dcli_core/dcli_core.dart' as core;
+import 'package:dcli_core/dcli_core.dart' hide withEnvironment;
 import 'package:scope/scope.dart';
 
 import 'package:test/test.dart' as t;
@@ -6,40 +8,40 @@ import 'package:test/test.dart' as t;
 void main() {
   t.group('Environment', () {
     t.test('PATH', () {
-      t.expect(env['PATH']!.length, t.greaterThan(0));
+      t.expect(core.env['PATH']!.length, t.greaterThan(0));
     });
 
     t.test('addAll', () {
-      final count = env.entries.length;
-      env.addAll({'hi': 'there'});
-      t.expect(env.entries.length, t.equals(count + 1));
+      final count = core.env.entries.length;
+      core.env.addAll({'hi': 'there'});
+      t.expect(core.env.entries.length, t.equals(count + 1));
 
-      env.addAll({'hi': 'there', 'ho': 'there'});
-      t.expect(env.entries.length, t.equals(count + 2));
+      core.env.addAll({'hi': 'there', 'ho': 'there'});
+      t.expect(core.env.entries.length, t.equals(count + 2));
     });
 
     t.test('Windows case-insensitive env vars', () {
       Scope()
         ..value(DCliPlatform.scopeKey,
             DCliPlatform.forScope(overriddenPlatform: DCliPlatformOS.windows))
-        ..run(() {
+        ..runSync(() {
           ///  We need to run with an environment that thinks its running
           /// under windows.
           withEnvironment(() {
             const userDataPath = r'C:\Windows\Userdata';
 
-            env['HOME'] = userDataPath;
-            env['APPDATA'] = userDataPath;
-            env['MixedCase'] = 'mixed data';
+            core.env['HOME'] = userDataPath;
+            core.env['APPDATA'] = userDataPath;
+            core.env['MixedCase'] = 'mixed data';
 
             // test that env
-            t.expect(env['HOME'], userDataPath);
-            t.expect(env['APPDATA'], userDataPath);
-            t.expect(env['AppData'], userDataPath);
+            t.expect(core.env['HOME'], userDataPath);
+            t.expect(core.env['APPDATA'], userDataPath);
+            t.expect(core.env['AppData'], userDataPath);
 
             final available = <String, String?>{}
-              ..putIfAbsent('APPDATA', () => env['APPDATA'])
-              ..putIfAbsent('MixedCase', () => env['MixedCase']);
+              ..putIfAbsent('APPDATA', () => core.env['APPDATA'])
+              ..putIfAbsent('MixedCase', () => core.env['MixedCase']);
 
             final expected = <String, String>{}
               ..putIfAbsent('APPDATA', () => userDataPath)

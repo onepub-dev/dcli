@@ -29,7 +29,7 @@ dependencies:
   posix: ^2.2.3
   pub_semver: ^2.0.0
   pubspec: ^2.0.0
-  scope: ^2.2.1
+  scope: ^3.0.0
   settings_yaml: ^3.3.1
   stacktrace_impl: ^2.3.0
   system_info2: ^2.0.3
@@ -42,9 +42,9 @@ dev_dependencies:
   lint_hard: ^1.0.0
   mocktail: ^0.2.0
   test: ^1.0.0
-# dependency_overrides: 
-#   dcli_core: 
-#     path: ../dcli_core
+dependency_overrides: 
+  dcli_core: 
+    path: ../dcli_core
 executables: 
   dcli: dcli
   dcli_complete: dcli_complete

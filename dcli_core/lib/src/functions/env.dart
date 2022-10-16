@@ -280,9 +280,7 @@ class Env extends DCliFunction {
       _envVars.remove(name);
       if (Settings().isWindows) {
         if (name == 'HOME' || name == 'APPDATA') {
-          _envVars
-            ..remove('HOME')
-            ..remove('APPDATA');
+          _envVars..remove('HOME')..remove('APPDATA');
         }
       }
     } else {
@@ -381,11 +379,12 @@ class Env extends DCliFunction {
 /// returns.
 /// This is particularly useful for unit tests and running
 /// a process that requires specific environment variables.
-R withEnvironment<R>(R Function() callback,
-        {required Map<String, String> environment}) =>
-    (Scope()
-          ..value(Env.scopeKey, Env.forScope(environment)..addAll(environment)))
-        .run(() => callback());
+Future<R> withEnvironment<R>(Future<R> Function() callback,
+    {required Map<String, String> environment}) async {
+  final scope = Scope()
+    ..value(Env.scopeKey, Env.forScope(environment)..addAll(environment));
+  return scope.run(() => callback());
+}
 
 /// Base class for all Environment variable related exceptions.
 class EnvironmentException extends DCliException {
