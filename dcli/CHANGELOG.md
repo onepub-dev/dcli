@@ -1,3 +1,7 @@
+# 2.0.0-beta.12
+- FIX: bug in ask regex validator that was pushing results to lowercase.
+- change capitalisation for the dcli doctor output for consistency.
+
 # 2.0.0-beta.10
 - BREAKING: renamed the menu arg defaultValue to defaultOption to reflect that we are selecting an option.
 - BREAKING: change the prompt argument for the menu function from a named argument to a positional argument for consistency with ask and confirm.
