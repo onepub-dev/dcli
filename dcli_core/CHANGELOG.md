@@ -1,3 +1,8 @@
+# 1.35.1
+- Fixed a bug in the ask regex validator that was forcing results to lowercase.
+- Released 1.35.0.
+- moved min sdk to 2.17 as required to support the current set of dependencies. Upgraded to scope 3.0.0 to fix sync/async bug in withEnvironment.
+
 # 1.35.0
 - moved min sdk to 2.17 as required to support the current set of dependencies. Upgraded to scope 3.0.0 to fix sync/async bug in withEnvironment.
 - Released 1.34.1.
