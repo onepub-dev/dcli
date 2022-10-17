@@ -1,4 +1,4 @@
-# 2.0.0-beta.11
+# 2.0.0-beta.12
 - FIX: bug in ask regex validator that was pushing results to lowercase.
 - change capitalisation for the dcli doctor output for consistency.
 
