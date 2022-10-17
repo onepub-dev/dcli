@@ -391,7 +391,7 @@ class Ask extends core.DCliFunction {
 /// Thrown when an [AskValidator] detects an invalid input.
 class AskValidatorException extends DCliException {
   /// validator with a [message] indicating the error.
-  AskValidatorException(super.message);
+  AskValidatorException(String message) : super(message);
 }
 
 /// Base class for all [AskValidator]s.
