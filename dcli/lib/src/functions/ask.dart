@@ -262,7 +262,10 @@ class Ask extends core.DCliFunction {
               // print a space an move back again.
               // required to clear the current character
               // move back one space.
-              stdout..writeCharCode(_)..writeCharCode(_space)..writeCharCode(_);
+              stdout
+                ..writeCharCode(_)
+                ..writeCharCode(_space)
+                ..writeCharCode(_);
               value.removeLast();
             }
           } else {
@@ -388,7 +391,7 @@ class Ask extends core.DCliFunction {
 /// Thrown when an [AskValidator] detects an invalid input.
 class AskValidatorException extends DCliException {
   /// validator with a [message] indicating the error.
-  AskValidatorException(String message) : super(message);
+  AskValidatorException(super.message);
 }
 
 /// Base class for all [AskValidator]s.
@@ -474,7 +477,7 @@ class _AskRegExp extends AskValidator {
 
   @override
   String validate(String line) {
-    final finalLine = line.trim().toLowerCase();
+    final finalLine = line.trim();
 
     if (!_regexp.hasMatch(finalLine)) {
       throw AskValidatorException(red(_error));
