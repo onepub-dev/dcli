@@ -1,3 +1,7 @@
+# 1.21.1
+- reverted a change made by the ide.
+- Fixed a bug in the Ask RegEx validator which was pushing the response to lower case.
+
 # 1.21.0
 - Upgraded to scope 3.0. Fixed a bug in withEnvironment as we need two version, a sync and async version.
 
