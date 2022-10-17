@@ -483,7 +483,7 @@ class _AskRegExp extends AskValidator {
 
   @override
   String validate(String line) {
-    final finalLine = line.trim().toLowerCase();
+    final finalLine = line.trim();
 
     if (!_regexp.hasMatch(finalLine)) {
       throw AskValidatorException(red(_error));
