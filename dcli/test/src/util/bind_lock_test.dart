@@ -10,8 +10,8 @@ import 'package:dcli/dcli.dart';
 
 const port = 63424;
 
-void main() {
-  _bindSocket();
+void main() async {
+  await _bindSocket();
 }
 
 Future<RawServerSocket?> _bindSocket() async {

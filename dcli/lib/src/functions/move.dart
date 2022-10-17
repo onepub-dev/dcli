@@ -28,5 +28,6 @@ export 'package:dcli_core/dcli_core.dart' show MoveException;
 ///
 /// If the move fails for any reason a [MoveException] is thrown.
 ///
-void move(String from, String to, {bool overwrite = false}) =>
-    waitForEx(core.move(from, to, overwrite: overwrite));
+void move(String from, String to, {bool overwrite = false}) => waitForEx(
+    // ignore: discarded_futures
+    core.move(from, to, overwrite: overwrite));

@@ -190,6 +190,7 @@ class Progress {
     }
 
     // Wait for both streams to complete
+    // ignore: discarded_futures
     waitForEx(Future.wait([_stdoutCompleter.future, _stderrCompleter.future]));
   }
 
@@ -332,8 +333,8 @@ class Progress {
     //   _stderrCompleter.complete(true);
     // }
 
-    _stderrController.close();
-    _stdoutController.close();
+    unawaited(_stderrController.close());
+    unawaited(_stdoutController.close());
     _closed = true;
   }
 

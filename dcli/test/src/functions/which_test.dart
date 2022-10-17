@@ -42,6 +42,6 @@ void main() {
     controller.stream.listen((line) => print('listen $line'));
     which('dart', progress: controller.sink, verbose: true).found;
     print('done');
-    controller.close();
+    unawaited(controller.close());
   });
 }

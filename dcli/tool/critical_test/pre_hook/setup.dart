@@ -37,6 +37,7 @@ void main(List<String> args) {
       'Activating dcli from source so we are testing against latest version',
     );
 
+    // ignore: discarded_futures
     capture(() {
       /// globally activate dcli from source.
       PubCache().globalActivateFromSource(projectRoot);
@@ -44,11 +45,13 @@ void main(List<String> args) {
   }
 
   if (!PubCache().isGloballyActivated('dcli_unit_tester')) {
+    // ignore: discarded_futures
     capture(() {
       PubCache().globalActivate('dcli_unit_tester');
     }, progress: Progress.printStdErr());
   }
 
+  // ignore: discarded_futures
   capture(() {
     // warm up the dcli project
     DartProject.self.warmup();
@@ -59,6 +62,7 @@ void main(List<String> args) {
       in find('pubspec.yaml', workingDirectory: projectRoot).toList()) {
     if (DartSdk().isPubGetRequired(dirname(pubspec))) {
       print('Running pub get in ${dirname(pubspec)}');
+      // ignore: discarded_futures
       capture(() {
         DartSdk().runPubGet(dirname(pubspec));
       }, progress: Progress.printStdErr());

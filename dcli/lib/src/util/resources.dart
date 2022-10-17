@@ -4,6 +4,7 @@
  * Written by Brett Sutton <bsutton@onepub.dev>, Jan 2022
  */
 
+import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
 
@@ -141,8 +142,10 @@ class $className extends PackedResource {
 }
 ''');
 
+      // ignore: discarded_futures
       waitForEx<dynamic>(to.flush());
     } finally {
+      // ignore: discarded_futures
       to.close();
     }
 
@@ -223,8 +226,9 @@ $line
 }
 ''');
     } finally {
+      // ignore: discarded_futures
       waitForEx<dynamic>(registryFile.flush());
-      registryFile.close();
+      unawaited(registryFile.close());
     }
   }
 
@@ -257,6 +261,7 @@ $line
 
     /// ignore: literal_only_boolean_expressions
     while (true) {
+      // ignore: discarded_futures
       final data = waitForEx(reader.readChunk(60));
       to
         ..write(base64.encode(data))
@@ -461,17 +466,20 @@ abstract class PackedResource {
       createDir(dirname(normalized), recursive: true);
     }
 
+    // ignore: discarded_futures
     final file = waitForEx(File(normalized).open(mode: FileMode.write));
 
     try {
       for (final line in content.split('\n')) {
         if (line.trim().isNotEmpty) {
+          // ignore: discarded_futures
           waitForEx(file.writeFrom(base64.decode(line)));
         }
       }
     } finally {
+      // ignore: discarded_futures
       waitForEx<dynamic>(file.flush());
-      file.close();
+      unawaited(file.close());
     }
   }
 }

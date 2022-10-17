@@ -19,7 +19,7 @@ const int SMTO_ABORTIFHUNG = 0x0002;
 void broadcastEnvironmentChange() {
   final what = TEXT('Environment');
 
-  final pResult = calloc<Int32>(1);
+  final pResult = calloc<Int32>();
   try {
     SendMessageTimeout(
       HWND_BROADCAST,

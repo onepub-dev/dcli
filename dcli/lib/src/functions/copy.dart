@@ -34,4 +34,5 @@ export 'package:dcli_core/dcli_core.dart' show CopyException;
 ///
 /// If an error occurs a [CopyException] is thrown.
 void copy(String from, String to, {bool overwrite = false}) =>
+// ignore: discarded_futures
     waitForEx(core.copy(from, to, overwrite: overwrite));

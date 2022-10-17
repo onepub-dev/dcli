@@ -147,6 +147,7 @@ class TestFileSystem {
 
       if (!dcliActivated) {
         print(blue('Globally activating DCli into test file system'));
+        // ignore: discarded_futures
         capture(() {
           PubCache()
               .globalActivateFromSource(DartProject.self.pathToProjectRoot);
@@ -360,6 +361,7 @@ class TestFileSystem {
         ..dependencyOverrides = <String, Dependency>{}
         ..saveToFile(pathToPubspec);
 
+      // ignore: discarded_futures
       capture(() {
         DartProject.fromPath(dirname(pathToPubspec)).warmup(upgrade: true);
       }, progress: Progress.printStdErr());
@@ -393,6 +395,7 @@ class TestFileSystem {
         createDir(Settings().pathToDCliBin, recursive: true);
       }
 
+      // ignore: discarded_futures
       capture(() {
         DartProject.fromPath('pathToTools').warmup();
       }, progress: Progress.printStdErr());

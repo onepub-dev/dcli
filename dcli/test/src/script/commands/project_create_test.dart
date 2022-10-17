@@ -18,8 +18,8 @@ void main() {
 
   group('Create Project', () {
     test('Create hello world', () {
-      withTestScope((fs) {
-        capture(() {
+      withTestScope((fs) async {
+        await capture(() {
           _installTemplates();
           final pathToTemplate = join(fs, 'test');
           DartProject.create(pathTo: pathToTemplate, templateName: 'simple')
@@ -30,8 +30,8 @@ void main() {
       });
     });
 
-    test('Run hello world', () {
-      capture(() {
+    test('Run hello world', () async {
+      await capture(() {
         TestFileSystem.common.withinZone((fs) {
           withTempDir((fs) {
             _installTemplates();

@@ -278,6 +278,7 @@ class Ask extends core.DCliFunction {
             stdout.write('*');
             // we must wait for flush as only one flush can
             // be outstanding at a time.
+            // ignore: discarded_futures
             waitForEx<void>(stdout.flush());
             value.add(char);
           }

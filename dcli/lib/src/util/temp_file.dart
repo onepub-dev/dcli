@@ -30,6 +30,7 @@ String createTempFilename({String? suffix, String? pathToTempDir}) =>
 /// unless you provide a [suffix] in which
 /// case the file name will be uuid.suffix
 String createTempFile({String? suffix}) =>
+    // ignore: discarded_futures
     waitForEx(core.createTempFile(suffix: suffix));
 
 /// Creates a temp file and then calls [action].
@@ -58,6 +59,7 @@ R withTempFile<R>(
   bool keep = false,
 }) =>
     waitForEx(
+      // ignore: discarded_futures
       core.withTempFile(
         (f) async => action(f),
         suffix: suffix,

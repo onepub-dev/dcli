@@ -43,6 +43,7 @@ class _Read extends core.DCliFunction {
           .openRead()
           .transform(utf8.decoder)
           .transform(const LineSplitter())
+          // ignore: discarded_futures
           .forEach((line) {
         progress!.addToStdout(line);
       }),

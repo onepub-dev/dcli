@@ -409,6 +409,7 @@ class NamedLock {
 
     try {
       verbose(() => 'attempt bindSocket');
+      // ignore: discarded_futures
       socket = waitForEx<ServerSocket?>(_bindSocket());
 
       if (socket != null) {
@@ -417,7 +418,7 @@ class NamedLock {
       }
     } finally {
       if (socket != null) {
-        socket.close();
+        unawaited(socket.close());
         verbose(() => blue('Hardlock released'));
       }
     }

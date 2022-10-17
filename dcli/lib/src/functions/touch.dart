@@ -28,4 +28,5 @@ import '../util/wait_for_ex.dart';
 /// As a convenience the touch function returns the [path] variable
 /// that was passed in.
 String touch(String path, {bool create = false}) =>
+    // ignore: discarded_futures
     waitForEx(core.touch(path, create: create));

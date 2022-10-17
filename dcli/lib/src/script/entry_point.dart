@@ -42,6 +42,7 @@ class EntryPoint {
 
       verbose(() => 'Exiting with code $exitCode');
 
+      // ignore: discarded_futures
       waitFor<void>(stderr.flush());
 
       return exitCode;

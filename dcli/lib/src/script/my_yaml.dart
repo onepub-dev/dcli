@@ -22,6 +22,7 @@ class MyYaml {
 
   /// reads yaml from file.
   MyYaml.fromFile(String path) {
+    // ignore: discarded_futures
     final contents = waitFor<String>(File(path).readAsString());
     _document = _load(contents);
   }

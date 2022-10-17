@@ -37,7 +37,9 @@ class HeadProgress extends InternalProgress {
   void forEach(LineAction action) {
     waitForEx(
       core
+          // ignore: discarded_futures
           .head(_path, _lines)
+          // ignore: discarded_futures
           .then((stream) => stream.listen((line) => action(line))),
     );
   }

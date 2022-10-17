@@ -186,6 +186,7 @@ class FindProgress extends InternalProgress {
       });
 
       waitForEx(
+        // ignore: discarded_futures
         core.find(
           pattern,
           caseSensitive: caseSensitive,
@@ -199,6 +200,7 @@ class FindProgress extends InternalProgress {
     } finally {
       /// under normal circumstances core.find closes the controller.
       if (!controller.isClosed) {
+        // ignore: discarded_futures
         waitForEx<void>(controller.close());
       }
     }

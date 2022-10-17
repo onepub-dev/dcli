@@ -74,6 +74,7 @@ class FileSort {
   ///
   /// call this method to start the sort.
   void sort() {
+    // ignore: discarded_futures
     waitForEx<void>(_sort());
   }
 

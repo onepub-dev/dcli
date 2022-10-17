@@ -215,6 +215,7 @@ class _Fetch extends core.DCliFunction {
       FetchMethod method = FetchMethod.get,
       FetchData? data}) {
     waitForEx<void>(
+      // ignore: discarded_futures
       download(
         FetchUrl(
             url: url,
@@ -235,11 +236,13 @@ class _Fetch extends core.DCliFunction {
     final futures = <Future<void>>[];
 
     for (final url in urls) {
+      // ignore: discarded_futures
       futures.add(download(url, verboseProgress: verboseProgress));
     }
 
     try {
       /// wait for all downloads to complete.
+      // ignore: discarded_futures
       waitForEx<void>(Future.wait(futures));
     } on core.DCliException catch (e, st) {
       print(st);

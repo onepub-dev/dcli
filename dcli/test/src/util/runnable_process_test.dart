@@ -59,9 +59,11 @@ void main() {
   test(
     'Child process shutdown',
     () {
+      // ignore: discarded_futures
       Process.start(
         'tail',
         ['-f', '/var/log/syslog'],
+      // ignore: discarded_futures
       ).then((process) {
         process.stdout
             .transform(utf8.decoder)
@@ -70,6 +72,7 @@ void main() {
           print('stdout: $line');
         });
 
+        // ignore: discarded_futures
         process.exitCode.then((exitCode) {
           print('tail exited with $exitCode');
         });

@@ -91,7 +91,7 @@ void main() {
         ///
         if (linesRead == 15) {
           done.complete();
-          subscription.cancel();
+          unawaited(subscription.cancel());
         }
       });
 

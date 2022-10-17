@@ -15,10 +15,14 @@ import 'wait_for_ex.dart';
 /// Returns a FileStat instance describing the
 /// file or directory located by [path].
 ///
-FileStat stat(String path) => waitForEx(core.stat(path));
+FileStat stat(String path) => waitForEx(
+    // ignore: discarded_futures
+    core.stat(path));
 
 /// Returns the length of the file at [pathToFile] in bytes.
-int fileLength(String pathToFile) => waitForEx(core.fileLength(pathToFile));
+int fileLength(String pathToFile) => waitForEx(
+    // ignore: discarded_futures
+    core.fileLength(pathToFile));
 
 /// Calculates the sha256 hash of a file's
 /// content.
@@ -34,7 +38,9 @@ int fileLength(String pathToFile) => waitForEx(core.fileLength(pathToFile));
 /// doesn't exist.
 /// Throws [NotAFileException] if path is
 /// not a file.
-Digest calculateHash(String path) => waitForEx(core.calculateHash(path));
+Digest calculateHash(String path) => waitForEx(
+  // ignore: discarded_futures
+  core.calculateHash(path));
 
 /// Thrown when a file doesn't exist
 class FileNotFoundException extends core.DCliException {
