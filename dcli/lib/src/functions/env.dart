@@ -14,7 +14,7 @@ import '../util/wait_for_ex.dart';
 /// a process that requires specific environment variables.
 R withEnvironment<R>(R Function() callback,
     {required Map<String, String> environment}) {
-      // ignore: discarded_futures
+  // ignore: discarded_futures
   final result = core.withEnvironment<R>(() => Future.value(callback()),
       environment: environment);
 

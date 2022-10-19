@@ -63,7 +63,7 @@ void main() {
       Process.start(
         'tail',
         ['-f', '/var/log/syslog'],
-      // ignore: discarded_futures
+        // ignore: discarded_futures
       ).then((process) {
         process.stdout
             .transform(utf8.decoder)

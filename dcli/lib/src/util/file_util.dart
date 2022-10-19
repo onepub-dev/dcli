@@ -39,8 +39,8 @@ int fileLength(String pathToFile) => waitForEx(
 /// Throws [NotAFileException] if path is
 /// not a file.
 Digest calculateHash(String path) => waitForEx(
-  // ignore: discarded_futures
-  core.calculateHash(path));
+    // ignore: discarded_futures
+    core.calculateHash(path));
 
 /// Thrown when a file doesn't exist
 class FileNotFoundException extends core.DCliException {

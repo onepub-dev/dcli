@@ -1,3 +1,6 @@
+# 1.35.2
+- second attempt at 1.35 release as the original publish attempt failed.
+
 # 1.34.1
 - Changed sudo dcli install  instructions after hint from @RandalSchwartz that -E does the same as env "PATH=$PATH"
 - Upgraded to dart_posix 4.0.1 to fix #202 dcli install fails on macos.
