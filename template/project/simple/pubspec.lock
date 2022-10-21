@@ -98,14 +98,14 @@ packages:
       name: dcli
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "2.0.0-beta.8"
+    version: "2.0.0-beta.12"
   dcli_core:
     dependency: "direct main"
     description:
       name: dcli_core
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "2.0.0-beta.8"
+    version: "2.0.0-beta.12"
   equatable:
     dependency: transitive
     description:
@@ -245,7 +245,7 @@ packages:
       name: posix
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "4.0.0"
+    version: "4.1.0"
   pub_semver:
     dependency: transitive
     description:
