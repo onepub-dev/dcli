@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:dcli_core/dcli_core.dart';
 import 'package:logging/logging.dart';
+import 'package:path/path.dart' hide equals;
 import 'package:test/test.dart';
 
 void main() {
@@ -20,12 +21,13 @@ void main() {
     verbose(() => 'test callback');
     await logged.future;
     expect(lines.length == 1, isTrue);
-    expect(lines[0], equals('settings.dart:13 test callback'));
+    final pathToMe = join('test', 'src', 'settings_test.dart');
+    expect(lines[0], equals('$pathToMe:21 test callback'));
 
     logged = Completer<bool>();
     Settings().verbose('test message');
     await logged.future;
     expect(lines.length == 2, isTrue);
-    expect(lines[2], equals('settings.dart:13 test message'));
+    expect(lines[1], equals('$pathToMe:28 test message'));
   });
 }
