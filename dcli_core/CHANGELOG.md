@@ -1,3 +1,5 @@
+# 1.35.4
+- release after failed 1.35.3 multi release
 # 1.35.3
 - Upgraded to posix 4.1.0 to fix macos gecos npe.
 - fixed lint warnings about incorrect use of async.
