@@ -60,7 +60,7 @@ class LineFile {
           //ignore: avoid_types_on_closure_parameters
           onError: (Object error) {
             exception = error;
-            controller.close();
+            unawaited(controller.close());
           },
           onDone: controller.close,
         );

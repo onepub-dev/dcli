@@ -48,7 +48,7 @@ class Settings {
     } else {
       logger.level = Level.OFF;
       if (listener != null) {
-        listener!.cancel();
+        unawaited(listener!.cancel());
         listener = null;
       }
     }

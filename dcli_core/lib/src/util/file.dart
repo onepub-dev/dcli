@@ -16,18 +16,18 @@ import '../../dcli_core.dart';
 /// Opens a File and calls [action] passing in the open file.
 /// When action completes the file is closed.
 /// Use this method in preference to directly callling [FileSync()]
-R withOpenFile<R>(
+Future<R> withOpenFile<R>(
   String pathToFile,
   R Function(RandomAccessFile) action, {
   FileMode fileMode = FileMode.writeOnlyAppend,
-}) {
+}) async {
   final _raf = File(pathToFile).openSync(mode: fileMode);
 
   R result;
   try {
     result = action(_raf);
   } finally {
-    _raf.close();
+    await _raf.close();
   }
   return result;
 }
