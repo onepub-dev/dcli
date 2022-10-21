@@ -23,3 +23,4 @@ issues/since/since.zip
 issues/since/.packages
 dcli/test/test_script/general/bin/*.exe
 **/.packages
+.vscode/settings.json
