@@ -81,6 +81,10 @@ mixin PosixShell {
   String get loggedInUsersHome {
     final user = loggedInUser;
 
+    // TODO:
+    // Use this to find the user's home directory dscl . -read /users/$user | grep NFSHomeDirectory
+    // getent passwd doesn't work on macos.
+
     final parts = 'getent passwd $user'.firstLine!.split(':');
 
     final pathToHome = parts[5];
