@@ -116,6 +116,7 @@ mixin PosixShell {
   /// You should note that your PATH will still be
   /// the SUDO PATH not your original user's PATH.
   void releasePrivileges() {
+    verbose(() => 'releasePrivileges called');
     if (Shell.current.isPrivilegedUser) {
       // get the user details pre-sudo starting.
       final sUID = env['SUDO_UID'];
@@ -148,8 +149,8 @@ mixin PosixShell {
 
       verbose(() => 'egid: $originalGID ${getegid()}');
       verbose(() => 'euid: $originalUID ${geteuid()}');
-      verbose(() => 'gid: $originalGID $_rgid');
-      verbose(() => 'uid: $originalUID $_ruid');
+      verbose(() => 'gid:  $_rgid');
+      verbose(() => 'uid:  $_ruid');
     }
   }
 
@@ -157,6 +158,7 @@ mixin PosixShell {
   /// been made then this command will restore
   /// those privileges
   void restorePrivileges() {
+    verbose(() => 'restorePrivileges called rguid: $_rgid ruid: $_ruid');
     _resetUserEnvironment('root', 0, 0);
     setegid(0);
     seteuid(0);
