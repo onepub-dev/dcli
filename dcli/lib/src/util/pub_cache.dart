@@ -208,9 +208,11 @@ class PubCache {
   }
 
   /// Run dart pub global activate on the given [packageName].
-  void globalActivate(String packageName) {
+  /// The [verbose] option is for debugging activation problems
+  /// and does a full dump to console of the dart pub log.
+  void globalActivate(String packageName, {bool verbose = false}) {
     DartSdk().runPub(
-      args: ['global', 'activate', packageName],
+      args: ['global', 'activate', if (verbose) '--verbose', packageName],
       progress: Progress.printStdErr(),
     );
   }
