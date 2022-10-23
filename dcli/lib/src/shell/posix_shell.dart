@@ -131,8 +131,6 @@ mixin PosixShell {
       _resetUserEnvironment(originalUser, originalGID, originalUID);
 
       initgroups(originalUser);
-      setegid(originalGID);
-      seteuid(originalUID);
 
       // shells like bash/zsh reset the euid to the uid
       // to descalate priviliges.
@@ -144,6 +142,9 @@ mixin PosixShell {
       // appear to not have been run as sudo.
       setgid(originalGID);
       setuid(originalUID);
+
+      setegid(originalGID);
+      seteuid(originalUID);
 
       verbose(() => 'egid: $originalGID ${getegid()}');
       verbose(() => 'euid: $originalUID ${geteuid()}');
@@ -160,8 +161,8 @@ mixin PosixShell {
     setegid(0);
     seteuid(0);
 
-    setgid(_rgid!);
-    setuid(_ruid!);
+    setgid(_rgid);
+    setuid(_ruid);
     initgroups('root');
   }
 
