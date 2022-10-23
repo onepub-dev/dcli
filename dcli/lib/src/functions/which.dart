@@ -96,5 +96,9 @@ core.Which which(
     // ignore: discarded_futures
     waitForEx<void>(controller.close());
   }
+  core.verbose(() => 'appname: $appname first: $first verbose: $verbose, '
+      'extensionSearch: $extensionSearch '
+      'found: ${which.found} path: ${which.path}');
+
   return which;
 }
