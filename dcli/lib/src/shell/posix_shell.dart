@@ -107,6 +107,11 @@ mixin PosixShell {
     return user!;
   }
 
+  /// we cache the real uid and gid
+  /// when we release privileges so we can restore them.
+  late final int? _rgid;
+  late final int? _ruid;
+
   /// revert uid and gid to original user's id's
   /// You should note that your PATH will still be
   /// the SUDO PATH not your original user's PATH.
@@ -120,8 +125,11 @@ mixin PosixShell {
       final originalUID = sUID != null ? int.tryParse(sUID) ?? 0 : 0;
       final originalGID = gUID != null ? int.tryParse(gUID) ?? 0 : 0;
 
-      // CONSIDER: throw an exception we can determin originalUser?
+      // CONSIDER: throw an exception if we can't determine originalUser?
       final originalUser = env['SUDO_USER'] ?? env['USER'] ?? '';
+
+      _rgid ??= getgid();
+      _ruid ??= getuid();
 
       _resetUserEnvironment(originalUser, originalGID, originalUID);
 
@@ -129,8 +137,21 @@ mixin PosixShell {
       setegid(originalGID);
       seteuid(originalUID);
 
-      verbose(() => 'gid: $originalGID ${getegid()}');
-      verbose(() => 'uid: $originalUID ${geteuid()}');
+      // shells like bash/zsh reset the euid to the uid
+      // to descalate priviliges.
+      // This results in the euid being reset to sudo (0)
+      // so to stop this we need to ensure a real uid/gid
+      // are actually the original user not sudo.
+      // This fits nicely with our principle that when a user
+      // calls [releasePrivileges] the script should fully
+      // appear to not have been run as sudo.
+      setgid(originalGID);
+      setuid(originalUID);
+
+      verbose(() => 'egid: $originalGID ${getegid()}');
+      verbose(() => 'euid: $originalUID ${geteuid()}');
+      verbose(() => 'gid: $originalGID $_rgid');
+      verbose(() => 'uid: $originalUID $_ruid');
     }
   }
 
@@ -141,6 +162,13 @@ mixin PosixShell {
     _resetUserEnvironment('root', 0, 0);
     setegid(0);
     seteuid(0);
+
+    if (_rgid != null) {
+      setgid(_rgid!);
+    }
+    if (_ruid != null) {
+      setuid(_ruid!);
+    }
     initgroups('root');
   }
 
