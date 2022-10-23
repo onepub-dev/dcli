@@ -37,8 +37,8 @@ class MacOSDCliInstaller {
 
   bool _installDart() {
     // first check that dart isn't already installed
-    if (DartSdk().pathToDartExe == null) {
-      // nothing to do dart is already installed.
+    if (DartSdk().pathToDartExe != null) {
+      // nothing to do, dart is already installed.
       verbose(
         () => "Found dart at: ${which('dart').path} and "
             'as such will not install dart.',
@@ -49,6 +49,8 @@ class MacOSDCliInstaller {
     print('You must first install dart.');
     print('See the install instructions at: https://dart.dev/get-dart');
 
-    return false;
+    print('PATH:$PATH');
+
+    throw InstallException('You must first install Dart');
   }
 }
