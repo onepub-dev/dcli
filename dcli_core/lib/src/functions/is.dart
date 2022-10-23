@@ -121,7 +121,8 @@ class _Is extends DCliFunction {
         FileSystemEntityType.notFound;
 
     verbose(
-      () => 'exists: $_exists ${truepath(path)} followLinks: $followLinks',
+      () =>
+          'exists: found: $_exists ${truepath(path)} followLinks: $followLinks',
     );
 
     return _exists;
