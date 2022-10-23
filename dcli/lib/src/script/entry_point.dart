@@ -12,10 +12,10 @@ import 'dart:io';
 import 'package:stack_trace/stack_trace.dart';
 
 import '../../dcli.dart';
-
 import 'command_line_runner.dart';
 import 'commands/commands.dart';
 import 'commands/help.dart';
+import 'commands/install.dart';
 
 /// the 'main' for running commands.
 class EntryPoint {
@@ -52,6 +52,10 @@ class EntryPoint {
       printerr(red(e.toString()));
       print('');
       HelpCommand.printUsageHowTo();
+      return 1;
+    } on InstallException catch (e) {
+      printerr(red(e.toString()));
+      print('');
       return 1;
     }
     // ignore: avoid_catches_without_on_clauses
