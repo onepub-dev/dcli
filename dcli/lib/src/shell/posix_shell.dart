@@ -109,8 +109,8 @@ mixin PosixShell {
 
   /// we cache the real uid and gid
   /// when we release privileges so we can restore them.
-  late final int? _rgid;
-  late final int? _ruid;
+  late final int _rgid = getgid();
+  late final int _ruid = getuid();
 
   /// revert uid and gid to original user's id's
   /// You should note that your PATH will still be
@@ -127,9 +127,6 @@ mixin PosixShell {
 
       // CONSIDER: throw an exception if we can't determine originalUser?
       final originalUser = env['SUDO_USER'] ?? env['USER'] ?? '';
-
-      _rgid ??= getgid();
-      _ruid ??= getuid();
 
       _resetUserEnvironment(originalUser, originalGID, originalUID);
 
@@ -163,12 +160,8 @@ mixin PosixShell {
     setegid(0);
     seteuid(0);
 
-    if (_rgid != null) {
-      setgid(_rgid!);
-    }
-    if (_ruid != null) {
-      setuid(_ruid!);
-    }
+    setgid(_rgid!);
+    setuid(_ruid!);
     initgroups('root');
   }
 
