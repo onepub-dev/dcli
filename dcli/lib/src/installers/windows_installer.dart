@@ -9,7 +9,7 @@ import 'package:win32/win32.dart';
 
 import '../../dcli.dart';
 import '../../windows.dart';
-import '../script/commands/install.dart';
+import '../commands/install.dart';
 
 ///
 /// Installs dart on an apt base system.abstract

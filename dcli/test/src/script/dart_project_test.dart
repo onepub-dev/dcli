@@ -6,7 +6,7 @@
  */
 
 import 'package:dcli/dcli.dart' hide equals, PubSpec;
-import 'package:dcli/src/script/commands/install.dart';
+import 'package:dcli/src/commands/install.dart';
 import 'package:pubspec2/pubspec2.dart';
 import 'package:test/test.dart';
 

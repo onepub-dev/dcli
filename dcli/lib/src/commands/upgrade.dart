@@ -6,9 +6,9 @@
 
 import 'package:scope/scope.dart';
 
-import '../../../dcli.dart';
-import '../command_line_runner.dart';
-import '../flags.dart';
+import '../../dcli.dart';
+import '../script/command_line_runner.dart';
+import '../script/flags.dart';
 import 'commands.dart';
 import 'install.dart';
 

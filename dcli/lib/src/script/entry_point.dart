@@ -12,10 +12,10 @@ import 'dart:io';
 import 'package:stack_trace/stack_trace.dart';
 
 import '../../dcli.dart';
+import '../commands/commands.dart';
+import '../commands/help.dart';
+import '../commands/install.dart';
 import 'command_line_runner.dart';
-import 'commands/commands.dart';
-import 'commands/help.dart';
-import 'commands/install.dart';
 
 /// the 'main' for running commands.
 class EntryPoint {

@@ -14,9 +14,9 @@ import 'package:system_info2/system_info2.dart';
 
 import '../../dcli.dart';
 import '../../posix.dart' as posix;
+import '../commands/install.dart';
 import '../util/enum_helper.dart';
 import '../util/runnable_process.dart';
-import 'commands/install.dart';
 
 /// The [DartSdk] provides access to a number of the dart sdk tools
 /// as well as details on the active sdk instance.

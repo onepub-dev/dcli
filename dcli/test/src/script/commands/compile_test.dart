@@ -6,7 +6,7 @@
  */
 
 import 'package:dcli/dcli.dart' hide equals;
-import 'package:dcli/src/script/commands/compile.dart';
+import 'package:dcli/src/commands/compile.dart';
 
 import 'package:test/test.dart';
 

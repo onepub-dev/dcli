@@ -6,8 +6,8 @@
  */
 
 import 'package:dcli/dcli.dart';
+import 'package:dcli/src/commands/create.dart';
 import 'package:dcli/src/script/command_line_runner.dart';
-import 'package:dcli/src/script/commands/create.dart';
 import 'package:dcli/src/script/flags.dart';
 import 'package:test/test.dart';
 

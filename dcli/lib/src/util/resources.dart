@@ -12,7 +12,7 @@ import 'package:crypto/crypto.dart';
 import 'package:settings_yaml/settings_yaml.dart';
 
 import '../../dcli.dart';
-import '../script/commands/pack.dart';
+import '../commands/pack.dart';
 import 'exit.dart';
 
 /// Packages a file as a dart library so it can be expanded

@@ -5,7 +5,7 @@
  */
 
 import 'package:dcli/dcli.dart' hide equals;
-import 'package:dcli/src/script/commands/install.dart';
+import 'package:dcli/src/commands/install.dart';
 import 'package:dcli_core/dcli_core.dart' as core;
 import 'package:test/test.dart';
 

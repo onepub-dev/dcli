@@ -4,7 +4,7 @@
  * Written by Brett Sutton <bsutton@onepub.dev>, Jan 2022
  */
 
-import 'package:dcli/src/script/commands/commands.dart';
+import 'package:dcli/src/commands/commands.dart';
 import 'package:dcli/src/util/exit.dart';
 
 /// provides command line tab completion for bash users.

@@ -8,12 +8,12 @@ import 'package:dcli_core/dcli_core.dart' as core;
 import 'package:meta/meta.dart';
 import 'package:scope/scope.dart';
 
-import '../../../dcli.dart';
-import '../../dcli/resource/generated/resource_registry.g.dart';
-import '../../util/exit.dart';
-import '../../version/version.g.dart';
-import '../command_line_runner.dart';
-import '../flags.dart';
+import '../../dcli.dart';
+import '../dcli/resource/generated/resource_registry.g.dart';
+import '../script/command_line_runner.dart';
+import '../script/flags.dart';
+import '../util/exit.dart';
+import '../version/version.g.dart';
 import 'commands.dart';
 
 ///

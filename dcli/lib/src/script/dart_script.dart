@@ -12,8 +12,8 @@ import 'package:path/path.dart' as p;
 import 'package:stack_trace/stack_trace.dart';
 
 import '../../dcli.dart';
+import '../commands/dart_script_creator.dart';
 import 'command_line_runner.dart';
-import 'commands/dart_script_creator.dart';
 import 'runner.dart';
 
 /// Used to manage a DCli script.

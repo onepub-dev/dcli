@@ -6,10 +6,10 @@
 
 import 'dart:io';
 
-import '../../../dcli.dart';
-import '../../../posix.dart';
-import '../command_line_runner.dart';
-import '../flags.dart';
+import '../../dcli.dart';
+import '../../posix.dart';
+import '../script/command_line_runner.dart';
+import '../script/flags.dart';
 
 /// Creates a script in [project] with the name [scriptName]
 /// using the template [templateName] which defaults to (simple.dart)

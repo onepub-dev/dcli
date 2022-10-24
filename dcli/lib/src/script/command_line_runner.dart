@@ -7,9 +7,9 @@
 import 'package:dcli_core/dcli_core.dart' as core;
 import '../../dcli.dart';
 
-import 'commands/commands.dart';
-import 'commands/help.dart';
-import 'commands/run.dart';
+import '../commands/commands.dart';
+import '../commands/help.dart';
+import '../commands/run.dart';
 import 'flags.dart';
 
 /// Runs a dcli script.

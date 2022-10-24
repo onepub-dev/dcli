@@ -7,7 +7,7 @@
 import 'package:scope/scope.dart';
 
 import '../../dcli.dart';
-import '../script/commands/install.dart';
+import '../commands/install.dart';
 import '../shell/shell_detection.dart';
 
 ///

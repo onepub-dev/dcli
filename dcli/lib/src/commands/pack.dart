@@ -4,11 +4,10 @@
  * Written by Brett Sutton <bsutton@onepub.dev>, Jan 2022
  */
 
-import '../../../dcli.dart';
-
-import '../../util/resources.dart';
-import '../command_line_runner.dart';
-import '../flags.dart';
+import '../../dcli.dart';
+import '../script/command_line_runner.dart';
+import '../script/flags.dart';
+import '../util/resources.dart';
 import 'commands.dart';
 
 /// Implementation for the 'pack' command.

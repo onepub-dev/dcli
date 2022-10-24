@@ -4,11 +4,11 @@
  * Written by Brett Sutton <bsutton@onepub.dev>, Jan 2022
  */
 
-import '../../settings.dart';
-import '../../util/ansi_color.dart';
-import '../../version/version.g.dart';
-import '../command_line_runner.dart';
-import '../flags.dart';
+import '../script/command_line_runner.dart';
+import '../script/flags.dart';
+import '../settings.dart';
+import '../util/ansi_color.dart';
+import '../version/version.g.dart';
 import 'commands.dart';
 
 ///

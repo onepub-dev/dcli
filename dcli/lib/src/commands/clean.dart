@@ -4,21 +4,23 @@
  * Written by Brett Sutton <bsutton@onepub.dev>, Jan 2022
  */
 
-import '../../../dcli.dart';
-import '../../util/completion.dart';
-import '../command_line_runner.dart';
-import '../flags.dart';
+import '../../dcli.dart';
+import '../script/command_line_runner.dart';
+import '../script/flags.dart';
+import '../util/completion.dart';
 import 'commands.dart';
 
-/// implementation for the 'warmup' command
-/// which does any work necessary to prepare a project
-/// to be run. Essentially this equates to doing a pub get.
-class WarmupCommand extends Command {
+/// Implementation for the 'clean' command.
+/// The clean command removes all build artifiacts
+/// including pubspec.lock, .packages, .dart_tools and
+/// any compiled exes.
+class CleanCommand extends Command {
   ///
-  WarmupCommand() : super(_commandName);
-  static const String _commandName = 'warmup';
+  CleanCommand() : super(_commandName);
 
-  /// [arguments] contains path to prepare
+  static const String _commandName = 'clean';
+
+  /// [arguments] contains path to clean
   @override
   int run(List<Flag> selectedFlags, List<String> arguments) {
     String targetPath;
@@ -34,11 +36,11 @@ class WarmupCommand extends Command {
       targetPath = arguments[0];
     }
 
-    _prepareProject(targetPath);
+    _cleanProject(targetPath);
     return 0;
   }
 
-  void _prepareProject(String targetPath) {
+  void _cleanProject(String targetPath) {
     if (!exists(targetPath)) {
       throw InvalidArgumentsException(
           'The project path $targetPath does not exists.');
@@ -50,19 +52,19 @@ class WarmupCommand extends Command {
     final project = DartProject.fromPath(targetPath);
 
     print('');
-    print(orange('Preparing ${project.pathToProjectRoot} ...'));
+    print(orange('Cleaning ${project.pathToProjectRoot} ...'));
     print('');
 
-    project.warmup();
+    project.clean();
   }
 
   @override
-  String usage() => 'warmup [<project path>]';
+  String usage() => 'clean [<project path>]';
 
   @override
   String description({bool extended = false}) => '''
-Runs pub get on the given project.
-   If no directory is passed then the current directory is warmed up.''';
+Removes all build artfiacts.
+   If no directory is passed then the current directory is cleaned''';
 
   @override
   List<String> completion(String word) => completionExpandScripts(word);

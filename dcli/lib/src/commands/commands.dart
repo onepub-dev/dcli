@@ -4,7 +4,7 @@
  * Written by Brett Sutton <bsutton@onepub.dev>, Jan 2022
  */
 
-import '../flags.dart';
+import '../script/flags.dart';
 import 'clean.dart';
 import 'compile.dart';
 import 'create.dart';
