@@ -57,7 +57,7 @@ class CompileCommand extends Command {
     if (flagSet.isSet(PackageFlag())) {
       // we are compiling a globally activated package.
       if (scriptList.length != 1) {
-        throw InvalidArgumentsException(
+        throw InvalidArgumentException(
             'The "--package" flag must be followed by the name of the package');
       }
 
@@ -167,7 +167,7 @@ compile [--nowarmup] [--install] [--overwrite] [<script path.dart>, <script path
     }
 
     if (_scriptList.isEmpty) {
-      throw InvalidArgumentsException('There are no scripts to compile.');
+      throw InvalidArgumentException('There are no scripts to compile.');
     } else {
       // if (flagSet.isSet(WatchFlag())) {
       //   if (scriptList.length != 1) {
@@ -187,10 +187,16 @@ compile [--nowarmup] [--install] [--overwrite] [<script path.dart>, <script path
 
   /// Compiles a globally activted
   void compilePackage(String packageName) {
+    if (packageName.contains(separator)) {
+      throw InvalidArgumentException('The package must not include a path.');
+    }
     if (!PubCache().isInstalled(packageName) ||
         !PubCache().isGloballyActivated(packageName)) {
-      throw ArgumentError('To compile the package $packageName '
-          'it must first be installed. Run pub global activate $packageName');
+      throw InvalidArgumentException('''
+To compile the package $packageName it must first be installed. 
+Run:
+  dart pub global activate $packageName
+  ''');
     }
 
     /// Find all the the exectuables the package exposes
