@@ -102,7 +102,7 @@ class CreateCommand extends Command {
   /// <script.dart> | <project path>
   String _retrieveTarget(List<String> arguments) {
     if (arguments.length != 1) {
-      throw InvalidArgumentsException(
+      throw InvalidArgumentException(
         'The create command takes one argument. '
         'Found: ${arguments.join(',')}',
       );
@@ -111,21 +111,21 @@ class CreateCommand extends Command {
     if (extension(target) == '.dart') {
       /// create a single dart script within an existing project
       if (exists(target)) {
-        throw InvalidArgumentsException(
+        throw InvalidArgumentException(
           'The script ${truepath(target)} already exists.',
         );
       }
 
       /// check the script directory exists
       if (!exists(dirname(target))) {
-        throw InvalidArgumentsException('The script directory '
+        throw InvalidArgumentException('The script directory '
             '${truepath(dirname(target))} must already exists.');
       }
     } else {
       /// Create a new dart project
       /// check the project directory doesn't exists
       if (exists(target)) {
-        throw InvalidArgumentsException('The project directory '
+        throw InvalidArgumentException('The project directory '
             '${truepath(target)} already exists.');
       }
     }

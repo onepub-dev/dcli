@@ -5,6 +5,7 @@
  */
 
 import 'package:pubspec2/pubspec2.dart';
+
 import '../script/command_line_runner.dart';
 import 'dependency.dart';
 
@@ -23,7 +24,7 @@ extension DependencyReferenceEx on DependencyReference? {
           .rehydrate(dependency);
     }
 
-    throw InvalidArgumentsException(
+    throw InvalidArgumentException(
       'Unknown dependency type: ${dependency.runtimeType}',
     );
   }

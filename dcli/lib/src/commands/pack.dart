@@ -80,7 +80,7 @@ class PackCommand extends Command {
   @override
   int run(List<Flag> selectedFlags, List<String> arguments) {
     if (!exists(Resources().resourceRoot) && !exists(pathToPackYaml)) {
-      throw InvalidArgumentsException(
+      throw InvalidArgumentException(
           'Unable to pack resources as neither a resource directory at '
           '${Resources().resourceRoot}'
           ' nor $pathToPackYaml exists.');

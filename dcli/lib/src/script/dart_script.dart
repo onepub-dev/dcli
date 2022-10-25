@@ -206,7 +206,7 @@ class DartScript {
   /// validate that the passed arguments points to a valid script
   static void validate(String scriptPath) {
     if (!scriptPath.endsWith('.dart')) {
-      throw InvalidArgumentsException(
+      throw InvalidArgumentException(
         'Expected a script name (ending in .dart) '
         'instead found: $scriptPath',
       );
@@ -285,7 +285,7 @@ class DartScript {
     workingDirectory ??= pwd;
 
     if (install && isInstalled && !overwrite) {
-      throw InvalidArgumentsException(
+      throw InvalidArgumentException(
         'You selected to install the compiled exe however an installed '
         'exe of that name already exists. Use overwrite=true',
       );

@@ -25,7 +25,7 @@ class RunCommand extends Command {
   @override
   int run(List<Flag> selectedFlags, List<String> arguments) {
     if (arguments.isEmpty) {
-      throw InvalidArgumentsException(
+      throw InvalidArgumentException(
         'Expected a script or command. No arguments were found.',
       );
     }

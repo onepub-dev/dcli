@@ -30,7 +30,7 @@ class DoctorCommand extends Command {
       script = DartScript.fromFile(scriptPath);
     }
     if (subarguments.length > 1) {
-      throw InvalidArgumentsException(
+      throw InvalidArgumentException(
         "'dcli doctor' takes zero or one arguments. Found $subarguments",
       );
     }

@@ -22,7 +22,7 @@ class VersionCommand extends Command {
   @override
   int run(List<Flag> selectedFlags, List<String> subarguments) {
     if (subarguments.isNotEmpty) {
-      throw InvalidArgumentsException(
+      throw InvalidArgumentException(
         "'dcli version' does not take any arguments. Found $subarguments",
       );
     }
