@@ -6,6 +6,7 @@
 
 import 'dart:io';
 
+import 'package:path/path.dart';
 import 'package:pub_semver/pub_semver.dart';
 import 'package:pubspec2/pubspec2.dart';
 import 'package:pubspec_lock/pubspec_lock.dart';

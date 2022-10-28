@@ -4,7 +4,6 @@
  * Written by Brett Sutton <bsutton@onepub.dev>, Jan 2022
  */
 
-export 'package:args/args.dart';
 export 'package:crypto/crypto.dart' show Digest;
 export 'package:dcli_core/dcli_core.dart'
     show
@@ -37,42 +36,6 @@ export 'package:dcli_core/dcli_core.dart'
     ;
 export 'package:dcli_core/src/util/dev_null.dart';
 export 'package:dcli_core/src/util/platform.dart';
-// hide
-//     backupFile,
-//     restoreFile,
-//     withFileProtection,
-//     translateAbsolutePath,
-//     copy,
-//     copyTree,
-//     createDir,
-//     createTempDir,
-//     withTempDir,
-//     delete,
-//     deleteDir,
-//     env,
-//     HOME,
-//     PATH,
-//     isOnPATH,
-//     envs,
-//     Env,
-//     isFile,
-//     isDirectory,;
-export 'package:path/path.dart'
-    hide
-        PathMap,
-        PathSet,
-        Style,
-        Context,
-        context,
-        posix,
-        style,
-        url,
-        windows,
-        hash,
-        prettyUri,
-        toUri,
-        fromUri,
-        current;
 
 export 'src/functions/ask.dart';
 export 'src/functions/backup.dart';

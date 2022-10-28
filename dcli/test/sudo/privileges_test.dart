@@ -8,6 +8,7 @@
 import 'package:dcli/dcli.dart';
 import 'package:dcli/posix.dart';
 import 'package:dcli_core/dcli_core.dart' as core;
+import 'package:path/path.dart';
 import 'package:posix/posix.dart';
 import 'package:test/test.dart';
 

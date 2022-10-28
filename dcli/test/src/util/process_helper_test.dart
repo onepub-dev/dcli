@@ -7,7 +7,7 @@
 
 import 'dart:io';
 
-import 'package:dcli/dcli.dart' hide equals;
+import 'package:dcli/dcli.dart';
 import 'package:test/test.dart';
 
 void main() {

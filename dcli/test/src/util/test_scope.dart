@@ -8,6 +8,7 @@ import 'package:dcli/dcli.dart';
 import 'package:dcli/src/commands/install.dart';
 import 'package:dcli/src/util/unit_test.dart';
 import 'package:dcli_core/dcli_core.dart' as core;
+import 'package:path/path.dart';
 import 'package:scope/scope.dart';
 
 final commonTestPubCache = join(rootPath, 'tmp', '.dcli', '.pub-cache');

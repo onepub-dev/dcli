@@ -9,6 +9,7 @@ library dart_project;
 import 'dart:io';
 
 import 'package:meta/meta.dart';
+import 'package:path/path.dart';
 import 'package:pubspec2/pubspec2.dart' as ps;
 
 import '../../dcli.dart';

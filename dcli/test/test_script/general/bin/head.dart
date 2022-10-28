@@ -7,6 +7,7 @@
 
 import 'dart:io';
 
+import 'package:args/args.dart';
 import 'package:dcli/dcli.dart';
 
 /// Used by unit tests as a cross platform version of cat

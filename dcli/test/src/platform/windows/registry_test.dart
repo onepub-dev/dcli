@@ -8,8 +8,9 @@
 @TestOn('windows')
 import 'dart:io';
 
-import 'package:dcli/dcli.dart' hide equals;
+import 'package:dcli/dcli.dart';
 import 'package:dcli/windows.dart';
+import 'package:path/path.dart' hide equals;
 import 'package:test/test.dart';
 import 'package:win32/win32.dart';
 

@@ -8,12 +8,12 @@
  */
 
 import 'dart:async';
-
 import 'dart:cli';
 import 'dart:convert';
 import 'dart:io';
 
-import 'package:dcli/dcli.dart' hide sleep, equals;
+import 'package:dcli/dcli.dart' hide sleep;
+import 'package:path/path.dart' hide equals;
 import 'package:test/test.dart';
 
 import 'test_file_system.dart';

@@ -8,6 +8,7 @@ import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
 import 'package:dcli_core/dcli_core.dart' as core;
+import 'package:path/path.dart';
 import 'package:stack_trace/stack_trace.dart';
 
 import '../../dcli.dart';

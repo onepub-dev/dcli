@@ -7,6 +7,7 @@
 
 import 'package:dcli/dcli.dart';
 import 'package:dcli/src/commands/install.dart';
+import 'package:path/path.dart';
 import 'package:test/test.dart';
 
 import '../util/test_file_system.dart';

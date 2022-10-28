@@ -9,6 +9,7 @@ import 'dart:io';
 import 'package:csv/csv.dart';
 import 'package:dcli_core/dcli_core.dart' as core;
 import 'package:meta/meta.dart';
+import 'package:path/path.dart';
 import 'package:posix/posix.dart' hide read;
 
 import '../../dcli.dart';

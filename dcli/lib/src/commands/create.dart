@@ -4,6 +4,8 @@
  * Written by Brett Sutton <bsutton@onepub.dev>, Jan 2022
  */
 
+import 'package:path/path.dart';
+
 import '../../dcli.dart';
 import '../script/command_line_runner.dart';
 import '../script/flags.dart';

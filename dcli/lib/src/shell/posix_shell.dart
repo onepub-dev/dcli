@@ -5,6 +5,7 @@
  */
 
 import 'package:dcli_core/dcli_core.dart' as core;
+import 'package:path/path.dart';
 import 'package:posix/posix.dart';
 
 import '../../dcli.dart';

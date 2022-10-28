@@ -6,9 +6,10 @@
 
 import 'dart:io';
 
-import 'package:dcli/dcli.dart' hide equals;
+import 'package:dcli/dcli.dart';
 import 'package:dcli/posix.dart';
 import 'package:path/path.dart' as p;
+import 'package:path/path.dart' hide equals;
 import 'package:test/test.dart';
 
 void main() {

@@ -7,6 +7,7 @@
 import 'dart:io';
 
 import 'package:dcli_core/dcli_core.dart' as core;
+import 'package:path/path.dart';
 import 'package:uuid/uuid.dart';
 
 import '../../dcli.dart';

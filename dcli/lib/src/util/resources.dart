@@ -9,6 +9,7 @@ import 'dart:io';
 
 import 'package:async/async.dart';
 import 'package:crypto/crypto.dart';
+import 'package:path/path.dart';
 import 'package:settings_yaml/settings_yaml.dart';
 
 import '../../dcli.dart';

@@ -8,6 +8,7 @@ import 'dart:io';
 
 import 'package:file/local.dart';
 import 'package:glob/glob.dart';
+import 'package:path/path.dart';
 
 import '../../dcli.dart';
 import '../script/command_line_runner.dart';

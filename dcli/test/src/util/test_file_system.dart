@@ -10,6 +10,7 @@ import 'dart:io';
 import 'dart:isolate';
 
 import 'package:dcli/dcli.dart';
+import 'package:path/path.dart';
 import 'package:stack_trace/stack_trace.dart';
 import 'package:test/test.dart';
 import 'package:uuid/uuid.dart';

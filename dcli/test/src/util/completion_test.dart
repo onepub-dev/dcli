@@ -11,6 +11,7 @@
 
 import 'package:dcli/dcli.dart';
 import 'package:dcli/src/util/completion.dart';
+import 'package:path/path.dart';
 import 'package:test/test.dart';
 
 import 'test_file_system.dart';

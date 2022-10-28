@@ -6,7 +6,8 @@
  */
 
 @TestOn('!windows')
-import 'package:dcli/dcli.dart' hide equals;
+import 'package:dcli/dcli.dart';
+import 'package:path/path.dart' hide equals;
 import 'package:test/test.dart';
 
 import '../util/test_file_system.dart';

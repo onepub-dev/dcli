@@ -12,8 +12,9 @@ import 'dart:io';
 import 'dart:isolate';
 
 import 'package:async/async.dart';
-import 'package:dcli/dcli.dart' hide equals;
+import 'package:dcli/dcli.dart';
 import 'package:dcli_core/dcli_core.dart' as core;
+import 'package:path/path.dart' hide equals;
 import 'package:test/test.dart';
 
 const port = 9003;

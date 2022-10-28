@@ -6,6 +6,7 @@
 
 import 'package:dcli_core/dcli_core.dart' as core;
 import 'package:meta/meta.dart';
+import 'package:path/path.dart';
 import 'package:scope/scope.dart';
 
 import '../../dcli.dart';

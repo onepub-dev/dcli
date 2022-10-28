@@ -8,6 +8,8 @@ import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
 
+import 'package:path/path.dart';
+
 import '../../dcli.dart';
 import '../../dcli.dart' as d;
 import '../script/command_line_runner.dart';
@@ -198,7 +200,7 @@ class FileSort {
     String lineDelimiter,
   ) {
     final instanceFile =
-        File(d.join(phaseDirectory.path, 'phase$phase-$instance'));
+        File(join(phaseDirectory.path, 'phase$phase-$instance'));
 
     _sortList(list);
 
@@ -303,7 +305,7 @@ class FileSort {
     _sortList(lines);
 
     const mergedFilename = 'merged.txt';
-    final mergedPath = d.join(phaseDirectory.path, mergedFilename);
+    final mergedPath = join(phaseDirectory.path, mergedFilename);
     withOpenFile(mergedPath, (resultFile) {
       while (lines.isNotEmpty) {
         final line = lines.removeAt(0);

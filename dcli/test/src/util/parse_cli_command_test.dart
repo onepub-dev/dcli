@@ -7,10 +7,11 @@
 
 import 'dart:io';
 
-import 'package:dcli/dcli.dart' hide equals;
+import 'package:dcli/dcli.dart';
 import 'package:dcli/src/script/command_line_runner.dart';
 import 'package:dcli/src/util/parse_cli_command.dart';
 import 'package:dcli_core/dcli_core.dart' as core;
+import 'package:path/path.dart' hide equals;
 import 'package:test/test.dart';
 
 import 'test_file_system.dart';

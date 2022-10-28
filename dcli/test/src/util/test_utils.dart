@@ -5,6 +5,7 @@
  */
 
 import 'package:dcli/dcli.dart';
+import 'package:path/path.dart';
 
 // Creates text file with the given no. of lines.
 void createLineFile(String testFile, int lines) {

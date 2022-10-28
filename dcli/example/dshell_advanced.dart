@@ -11,6 +11,7 @@
 import 'dart:io';
 
 import 'package:dcli/dcli.dart';
+import 'package:path/path.dart';
 
 /// A toy REPL shell to replace your bash command line in just 50 lines of dart.
 ///

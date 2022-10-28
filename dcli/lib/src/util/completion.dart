@@ -6,6 +6,8 @@
 
 import 'dart:io';
 
+import 'package:path/path.dart';
+
 import '../../dcli.dart';
 
 /// Utility methods to aid the dcli_completion app.

@@ -5,8 +5,9 @@
  * Written by Brett Sutton <bsutton@onepub.dev>, Jan 2022
  */
 
-import 'package:dcli/dcli.dart' hide equals, PubSpec;
+import 'package:dcli/dcli.dart' hide PubSpec;
 import 'package:dcli/src/commands/install.dart';
+import 'package:path/path.dart' hide equals;
 import 'package:pubspec2/pubspec2.dart';
 import 'package:test/test.dart';
 

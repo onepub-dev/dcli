@@ -9,7 +9,7 @@
 
 
 import 'package:dcli/dcli.dart';
-// ignore: import_of_legacy_library_into_null_safe
+import 'package:path/path.dart';
 import 'package:settings_yaml/settings_yaml.dart';
 
 void main(List<String> args) {

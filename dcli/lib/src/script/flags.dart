@@ -5,6 +5,7 @@
  */
 
 import 'package:meta/meta.dart';
+import 'package:path/path.dart';
 
 import '../../dcli.dart';
 import 'command_line_runner.dart';

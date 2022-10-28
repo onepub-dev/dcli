@@ -7,6 +7,7 @@
 import 'dart:ffi';
 
 import 'package:ffi/ffi.dart';
+import 'package:path/path.dart';
 import 'package:win32/win32.dart';
 
 import '../../../dcli.dart';

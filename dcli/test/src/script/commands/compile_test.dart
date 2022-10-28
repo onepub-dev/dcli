@@ -5,9 +5,9 @@
  * Written by Brett Sutton <bsutton@onepub.dev>, Jan 2022
  */
 
-import 'package:dcli/dcli.dart' hide equals;
+import 'package:dcli/dcli.dart';
 import 'package:dcli/src/commands/compile.dart';
-
+import 'package:path/path.dart' hide equals;
 import 'package:test/test.dart';
 
 import '../../util/test_file_system.dart';
