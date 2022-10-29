@@ -29,7 +29,8 @@ class A07aa86cf4c4246ad598cd362ee228bc4 extends PackedResource {
 
   /// <package>/resources relative path to the original resource.
   @override
-  String get originalPath => 'template/project/full/lib/src/exceptions/app_exception.dart';
+  String get originalPath =>
+      'template/project/full/lib/src/exceptions/app_exception.dart';
 
   @override
   String get content => '''

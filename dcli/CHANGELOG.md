@@ -1,3 +1,24 @@
+# 2.0.0-beta.13
+- BREAKING: removed the args and path package exports from the dcli lib. This doesn't feel like the correct approach and does add to namespace pollution.
+- FIX: mac os install issue. core problem is that the home directory wasn't being set correctly as the mac getpwd command doesn't reutrn the users home directory.
+- FIX: a bug in macosinstall. It had the logic on testing if dart was installed backward but this was protected by a second bug that allowed the install to continue even when dart isn't installed.
+- Fix: a  late final error in posix_shell.
+- Added ability to pass a specific version to the global activate command.
+- Added better error handling for the package compile option.
+- Added experimental command to lock the pubspec versions to ensure released code always runs.
+- Moved the command package up to the root of src.
+- Added additional logging to the release and restorePrivileges functions.
+- Added a verbose flag to the PubCache.globalActivate function to aid debugging.
+- Added verbose logging to the which funciton.
+- Added exception handler at top level for install exceptions so we get clean errors out.
+- Improved the logging of the exists function.
+- renamed InvalidArgumentsException to InvalidArgumentException
+- re-ordered the seteuid calls so that we are still privileged when we call them.
+- reverted the sudo install instructions as sudo -E doesn't seem to work in all cases. The PATH doesn't seem to work in findling dcli.
+- repackaged templates.
+- Fixed to settings_test, now that logger is more verbose.
+- upgraded to dart_posix 4.1.0 to fix macos gecos issue.
+
 # 2.0.0-beta.12
 - FIX: bug in ask regex validator that was pushing results to lowercase.
 - change capitalisation for the dcli doctor output for consistency.

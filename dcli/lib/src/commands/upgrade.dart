@@ -41,7 +41,7 @@ class UpgradeCommand extends Command {
       PubCache().globalActivateFromSource(DartProject.self.pathToProjectRoot);
     } else {
       /// activate from pub.dev
-       PubCache().globalActivate('dcli', version: packageVersion);
+      PubCache().globalActivate('dcli', version: packageVersion);
     }
     verbose(() => 'dart pub global activate dcli finished');
 

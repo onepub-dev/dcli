@@ -9,7 +9,7 @@ import 'dart:io';
 
 import 'package:dcli/dcli.dart';
 import 'package:dcli/src/util/parser.dart';
-import 'package:path/path.dart'  hide equals;
+import 'package:path/path.dart' hide equals;
 import 'package:test/test.dart';
 
 String baseURl =

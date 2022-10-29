@@ -75,7 +75,7 @@ void main() {
     final shell = Shell.current;
 
     expect(shell.isPrivilegedUser, isTrue);
-    
+
     // 'useradd -g $group $username'.run;
 
     final sudoGroups = getGroups();
