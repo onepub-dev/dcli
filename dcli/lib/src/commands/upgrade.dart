@@ -9,6 +9,7 @@ import 'package:scope/scope.dart';
 import '../../dcli.dart';
 import '../script/command_line_runner.dart';
 import '../script/flags.dart';
+import '../version/version.g.dart';
 import 'commands.dart';
 import 'install.dart';
 
@@ -40,7 +41,7 @@ class UpgradeCommand extends Command {
       PubCache().globalActivateFromSource(DartProject.self.pathToProjectRoot);
     } else {
       /// activate from pub.dev
-      PubCache().globalActivate('dcli');
+       PubCache().globalActivate('dcli', version: packageVersion);
     }
     verbose(() => 'dart pub global activate dcli finished');
 

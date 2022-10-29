@@ -11,6 +11,7 @@ import 'package:win32/win32.dart';
 import '../../dcli.dart';
 import '../../windows.dart';
 import '../commands/install.dart';
+import '../version/version.g.dart';
 
 ///
 /// Installs dart on an apt base system.abstract
@@ -40,7 +41,7 @@ class WindowsDCliInstaller {
       PubCache().globalActivateFromSource(DartProject.self.pathToProjectRoot);
     } else {
       /// activate from pub.dev
-      PubCache().globalActivate('dcli');
+      PubCache().globalActivate('dcli', version: packageVersion);
     }
     return installedDart;
   }

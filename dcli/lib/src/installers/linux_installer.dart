@@ -10,6 +10,7 @@ import 'package:scope/scope.dart';
 import '../../dcli.dart';
 import '../commands/install.dart';
 import '../shell/shell_detection.dart';
+import '../version/version.g.dart';
 
 ///
 /// Installs dart on an apt base system.abstract
@@ -31,7 +32,7 @@ class LinuxDCliInstaller {
       PubCache().globalActivateFromSource(DartProject.self.pathToProjectRoot);
     } else {
       /// activate from pub.dev
-      PubCache().globalActivate('dcli');
+      PubCache().globalActivate('dcli', version: packageVersion);
     }
     // // also need to install it for the root user
     // // as root must have its own copy of .pub-cache otherwise

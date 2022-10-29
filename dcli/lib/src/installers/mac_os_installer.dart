@@ -8,6 +8,7 @@ import 'package:scope/scope.dart';
 
 import '../../dcli.dart';
 import '../commands/install.dart';
+import '../version/version.g.dart';
 
 ///
 /// Installs dart on an apt base system.abstract
@@ -29,7 +30,7 @@ class MacOSDCliInstaller {
       PubCache().globalActivateFromSource(DartProject.self.pathToProjectRoot);
     } else {
       /// activate from pub.dev
-      PubCache().globalActivate('dcli');
+      PubCache().globalActivate('dcli', version: packageVersion);
     }
 
     return installedDart;

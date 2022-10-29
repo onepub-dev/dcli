@@ -209,11 +209,20 @@ class PubCache {
   }
 
   /// Run dart pub global activate on the given [packageName].
+  /// If [version] is passed then we activate the specific version otherwise
+  /// we activate the latest version from  the packages stable channel.
   /// The [verbose] option is for debugging activation problems
   /// and does a full dump to console of the dart pub log.
-  void globalActivate(String packageName, {bool verbose = false}) {
+  void globalActivate(String packageName,
+      {String? version, bool verbose = false}) {
     DartSdk().runPub(
-      args: ['global', 'activate', if (verbose) '--verbose', packageName],
+      args: [
+        'global',
+        'activate',
+        if (verbose) '--verbose',
+        packageName,
+        if (version != null) version,
+      ],
       progress: Progress.printStdErr(),
     );
   }

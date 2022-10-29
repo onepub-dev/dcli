@@ -23,3 +23,5 @@ issues/since/since.zip
 issues/since/.packages
 dcli/test/test_script/general/bin/*.exe
 **/.packages
+dcli/test/privileged_test
+dcli/test/privileged_test
