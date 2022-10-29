@@ -4,13 +4,17 @@
  * Written by Brett Sutton <bsutton@onepub.dev>, Jan 2022
  */
 
+import 'dart:io';
+
 import 'package:dcli_core/dcli_core.dart' as core;
 import 'package:path/path.dart';
 import 'package:posix/posix.dart';
+import 'package:stack_trace/stack_trace.dart';
 
 import '../../dcli.dart';
 import '../installers/linux_installer.dart';
 import '../installers/mac_os_installer.dart';
+import 'macos_utils.dart';
 
 /// Provides a number of helper functions
 /// for posix based shells.
@@ -82,36 +86,20 @@ mixin PosixShell {
   String get loggedInUsersHome {
     final user = loggedInUser;
 
-    final parts = 'getent passwd $user'.firstLine!.split(':');
+    final String pathToHome;
 
-    final pathToHome = parts[5];
+    if (Platform.isMacOS) {
+      pathToHome = MacOSUtils.loggedInUsersHome(user);
+    } else {
+      final parts = 'getent passwd $user'.firstLine!.split(':');
 
+      pathToHome = parts[5];
+    }
     return pathToHome;
   }
 
-  String _whoami() {
-    String? user;
-    if (isPosixSupported) {
-      try {
-        user = getlogin();
-      } on PosixException catch (e) {
-        if (e.code == ENXIO) {
-          // no controlling terminal so we must be root.
-          user = 'root';
-        }
-      }
-    }
-
-    /// fall back to whoami if nothing else works.
-    user ??= 'whoami'.firstLine;
-    verbose(() => 'whoami: $user');
-    return user!;
-  }
-
-  /// we cache the real uid and gid
-  /// when we release privileges so we can restore them.
-  late final int _rgid = getgid();
-  late final int _ruid = getuid();
+  late final Immutable<UserEnvironment> priviledgedUser = Immutable();
+  late final Immutable<UserEnvironment> nonPriviledgedUser = Immutable();
 
   /// revert uid and gid to original user's id's
   /// You should note that your PATH will still be
@@ -119,64 +107,30 @@ mixin PosixShell {
   void releasePrivileges() {
     verbose(() => 'releasePrivileges called');
     if (Shell.current.isPrivilegedUser) {
-      // get the user details pre-sudo starting.
-      final sUID = env['SUDO_UID'];
-      final gUID = env['SUDO_GID'];
+      priviledgedUser.setIf(UserEnvironment.save);
 
-      // convert id's to integers.
-      final originalUID = sUID != null ? int.tryParse(sUID) ?? 0 : 0;
-      final originalGID = gUID != null ? int.tryParse(gUID) ?? 0 : 0;
-
-      // CONSIDER: throw an exception if we can't determine originalUser?
-      final originalUser = env['SUDO_USER'] ?? env['USER'] ?? '';
-
-      _resetUserEnvironment(originalUser, originalGID, originalUID);
-
-      initgroups(originalUser);
-
-      // shells like bash/zsh reset the euid to the uid
-      // to descalate priviliges.
-      // This results in the euid being reset to sudo (0)
-      // so to stop this we need to ensure a real uid/gid
-      // are actually the original user not sudo.
-      // This fits nicely with our principle that when a user
-      // calls [releasePrivileges] the script should fully
-      // appear to not have been run as sudo.
-      setgid(originalGID);
-      setuid(originalUID);
-
-      setegid(originalGID);
-      seteuid(originalUID);
-
-      verbose(() => 'egid: $originalGID ${getegid()}');
-      verbose(() => 'euid: $originalUID ${geteuid()}');
-      verbose(() => 'gid:  $_rgid');
-      verbose(() => 'uid:  $_ruid');
+      nonPriviledgedUser
+        ..setIf(() => UserEnvironment.preSudo(pathToHome: loggedInUsersHome))
+        ..runIf((user) {
+          verbose(() => 'release - builer');
+          initgroups(user.username);
+          user.build();
+        });
     }
   }
 
   /// If a prior call to [releasePrivileges] has
   /// been made then this command will restore
   /// those privileges
+  /// If releasePrivileges hasn't been called then
+  /// this method does nothing.
   void restorePrivileges() {
-    verbose(() => 'restorePrivileges called rguid: $_rgid ruid: $_ruid');
-    _resetUserEnvironment('root', 0, 0);
-    setegid(0);
-    seteuid(0);
-
-    setgid(_rgid);
-    setuid(_ruid);
-    initgroups('root');
-  }
-
-  void _resetUserEnvironment(
-      String originalUser, int originalGID, int originalUID) {
-    final passwd = getPassword(originalUser);
-    env['HOME'] = passwd.homePathTo;
-    env['SHELL'] = passwd.shellPathTo;
-
-    env['USER'] = originalUser;
-    env['LOGNAME'] = originalUser;
+    verbose(() => 'restorePrivileges called');
+    priviledgedUser.runIf((user) {
+      verbose(() => 'restore - builer');
+      user.build();
+      initgroups(user.username);
+    });
   }
 
   /// Run [action] with root UID and gid
@@ -256,6 +210,136 @@ sudo env PATH="$PATH" dcli install
 
       'ln -sf $dcliPath $linkPath'.start(privileged: !isWritable(linkPath));
       // symlink(dcliPath, linkPath);
+    }
+  }
+}
+
+class UserEnvironment {
+  // Save the details of the current user environment
+  UserEnvironment.save() {
+    username = _whoami();
+    gid = getgid();
+    uid = getuid();
+    pathToHome = HOME;
+    pathToShell = env['SHELL'];
+  }
+
+  /// Creates a [UserEnvironment] from the SUDO env args
+  /// that describe the pre-sudo user.
+  UserEnvironment.preSudo({required this.pathToHome}) {
+    // get the details of the user, pre-sudo starting.
+    final sUID = env['SUDO_UID'];
+    final gUID = env['SUDO_GID'];
+
+    // convert id's to integers.
+    gid = gUID != null ? int.tryParse(gUID) ?? 0 : 0;
+    uid = sUID != null ? int.tryParse(sUID) ?? 0 : 0;
+
+    // CONSIDER: throw an exception if we can't determine the opre-sudo
+    // user?
+    username = env['SUDO_USER'] ?? env['USER'] ?? '';
+
+    pathToShell = env['SHELL'];
+  }
+
+  late final String username;
+
+  /// we cache the real uid and gid
+  /// when we release privileges so we can restore them.
+  late final int gid;
+  late final int uid;
+
+  /// The path to the original privileged users home dir.
+  late final String pathToHome;
+
+  // path to the active shell e.g. /bin/bash
+  late final String? pathToShell;
+
+  /// Build the user environment
+  void build() {
+    // // [initgroups] can only be called when we are root
+    // // so depending on which direction we are moving the
+    // // users privilieges we need to call this before
+    // // or after changing the uid.
+    // if (uid == 0) {
+    //   initgroups(username);
+    // }
+
+    // shells like bash/zsh reset the euid to the uid
+    // to descalate priviliges.
+    // This results in the euid being reset to sudo (0)
+    // so to stop this we need to ensure a real uid/gid
+    // are actually the original user not sudo.
+    // This fits nicely with our principle that when a user
+    // calls [releasePrivileges] the script should fully
+    // appear to not have been run as sudo.
+    verbose(() => '''
+Building user enviroment
+username: $username
+HOME: $pathToHome
+USER: $username
+LOGNAME: $username
+SHELL: ${env['SHELL']}
+gid:  $gid
+uid:  $uid''');
+
+    // reorder(() => uid == 0, () => setuid(uid), () => setgid(gid));
+
+    reorder(() => uid == 0, () => seteuid(uid), () => setegid(gid));
+
+    env['HOME'] = pathToHome;
+    env['USER'] = username;
+    env['LOGNAME'] = username;
+    env['SHELL'] = pathToShell;
+  }
+
+  void reorder(
+      bool Function() condition, void Function() one, void Function() two) {
+    if (condition() == true) {
+      one();
+      two();
+    } else {
+      two();
+      one();
+    }
+  }
+}
+
+String _whoami() {
+  String? user;
+  if (isPosixSupported) {
+    try {
+      user = getlogin();
+    } on PosixException catch (e) {
+      if (e.code == ENXIO) {
+        // no controlling terminal so we must be root.
+        user = 'root';
+      }
+    }
+  }
+
+  /// fall back to whoami if nothing else works.
+  user ??= 'whoami'.firstLine;
+  verbose(() => 'whoami: $user');
+  return user!;
+}
+
+class Immutable<T> {
+  Immutable();
+
+  T? wrapped;
+
+  // stores [wrapped] if [setIf] hasn't already been called
+  void setIf(T Function() wrapped) {
+    this.wrapped ??= wrapped();
+  }
+
+  /// Runs [action] if [setIf] has been called
+  void runIf(void Function(T wrapped) action) {
+    final stack = Trace.current();
+    verbose(() => 'runIf $stack');
+    if (wrapped != null) {
+      action(wrapped as T);
     }
   }
 }

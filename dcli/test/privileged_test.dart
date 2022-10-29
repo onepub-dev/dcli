@@ -5,6 +5,7 @@
  */
 
 import 'package:dcli/dcli.dart';
+import 'package:posix/posix.dart';
 import 'package:test/test.dart';
 
 void main() {
@@ -12,13 +13,34 @@ void main() {
   test(
     'isPrivligedUser',
     () {
+      Settings().setVerbose(enabled: true);
       expect(Shell.current.isPrivilegedUser, isTrue);
       Shell.current.releasePrivileges();
       expect(Shell.current.isPrivilegedUser, isFalse);
       Shell.current.restorePrivileges();
       expect(Shell.current.isPrivilegedUser, isTrue);
     },
-    skip: true,
+    skip: false,
+    tags: [
+      'privileged',
+    ],
+  );
+
+  test(
+    'EUID',
+    () {
+      final ruid = getuid();
+      expect(ruid == 0, isTrue);
+      expect(Shell.current.isPrivilegedUser, isTrue);
+      expect(geteuid(), equals(0));
+      Shell.current.releasePrivileges();
+      expect(Shell.current.isPrivilegedUser, isFalse);
+      expect(geteuid() != ruid, isTrue);
+      Shell.current.restorePrivileges();
+      expect(Shell.current.isPrivilegedUser, isTrue);
+      expect(geteuid(), equals(0));
+    },
+    skip: false,
     tags: [
       'privileged',
     ],

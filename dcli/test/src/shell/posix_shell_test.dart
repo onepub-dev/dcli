@@ -70,6 +70,44 @@ void main() {
       }
     }, create: false);
   }, tags: ['privileged']);
+
+  test('release env ...', () async {
+    final shell = Shell.current;
+
+    expect(shell.isPrivilegedUser, isTrue);
+    
+    // 'useradd -g $group $username'.run;
+
+    final sudoGroups = getGroups();
+    print(sudoGroups);
+
+    shell.releasePrivileges();
+    final userGroups = getGroups();
+    // print(userGroups);
+
+    final eq = const ListEquality<Group>().equals;
+
+    // print('user: ${env['USER']}');
+
+    // print('gid:  ${getegid()} ${getgid()}');
+    // print('uid:  ${geteuid()} ${getuid()}');
+
+    // setregid(1000, 1000);
+    // setreuid(1000, 1000);
+    // print('gid:  ${getegid()} ${getgid()}');
+    // print('uid:  ${geteuid()} ${getuid()}');
+
+    'bash -c env'.start(
+        workingDirectory: '/opt/onepub', runInShell: true, terminal: true);
+
+    expect(eq(sudoGroups, userGroups), false);
+
+    shell.withPrivileges(() {
+      final currentGroups = getGroups();
+      print(currentGroups);
+      expect(sudoGroups, orderedEquals(currentGroups));
+    });
+  }, tags: ['privileged']);
 }
 
 String name(String fileBasedName) =>
