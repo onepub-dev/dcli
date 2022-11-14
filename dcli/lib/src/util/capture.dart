@@ -1,9 +1,3 @@
-/* Copyright (C) S. Brett Sutton - All Rights Reserved
- * Unauthorized copying of this file, via any medium is strictly prohibited
- * Proprietary and confidential
- * Written by Brett Sutton <bsutton@onepub.dev>, Jan 2022
- */
-
 import 'dart:async';
 
 import '../../dcli.dart';
@@ -15,50 +9,67 @@ typedef CaptureZonePrintErr = void Function(String?);
 /// It is designed to capture any output to print or printerr
 /// within the scope of the callback.
 /// Key to the overloading [printerr] function.
+
+/// Key to the overloading [printerr] function.
 const String capturePrinterrKey = 'printerr';
 
-/// Run code in a zone which traps calls to [print] and [printerr]
-/// redirecting them to the passed progress.
-/// If no [progress] is passed then then both print and printerr
+  /// Run code in a zone which traps calls to [print] and [printerr]
+  /// redirecting them to the passed progress.
+  /// If no [progress] is passed then then both print and printerr
 /// output is surpressed.
-Progress capture<R>(R Function() action, {Progress? progress}) {
-  progress ??= Progress.devNull();
+  Future<Progress> capture<R>(Future<R> Function() action, {Progress? progress}) async {
+    progress ??= Progress.devNull();
 
-  /// overload printerr so we can trap it.
-  final zoneValues = <String, CaptureZonePrintErr>{
-    'printerr': (line) {
-      if (line != null) {
-        progress!.addToStderr(line);
+    /// overload printerr so we can trap it.
+    final zoneValues = <String, CaptureZonePrintErr>{
+      'printerr': (line) {
+        if (line != null) {
+          progress!.addToStderr(line);
+        }
       }
+    };
+
+    final zoneCompleter = Completer<R>();
+    runZonedGuarded(
+      /// runZone takes a sync method but we need
+      /// an async body s we can await the real [body]
+      /// method in [_body]
+      /// We then use the zoneCompleter to wait for the body to complete.
+      () => _unawaited(_body(action, zoneCompleter)),
+      (e, st) {
+        if (!zoneCompleter.isCompleted) {
+          zoneCompleter.complete(null);
+        }
+      },
+      zoneValues: zoneValues,
+      zoneSpecification: ZoneSpecification(
+        print: (self, parent, zone, line) => progress!.addToStdout(line),
+      ),
+    );
+
+    await zoneCompleter.future;
+
+    // give the stream listeners a chance to run.
+    // may not be necessary not that we have the
+    // above waitForEx but until then...
+    await Future.value(1);
+
+    return progress;
+  }
+
+  Future<void> _body<R>(
+      Future<R> Function() body, Completer<R> zoneCompleter) async {
+    R r;
+    try {
+      r = await body();
+      zoneCompleter.complete(r);
+      // ignore: avoid_catches_without_on_clauses
+    } catch (_, __) {
+      zoneCompleter.complete(null);
+      rethrow;
     }
-  };
+  }
 
-  runZonedGuarded(
-    action,
-    (e, st) {},
-    zoneValues: zoneValues,
-    zoneSpecification: ZoneSpecification(
-      print: (self, parent, zone, line) => progress!.addToStdout(line),
-    ),
-  );
-
-  // give the stream listeners a chance to run.
-  waitForEx(Future.value(1));
-
-  return progress;
+  // saves importing pedantic.
+  void _unawaited(Future<void>? future) {}
 }
-
-// void interact(String expected, void Function() action) {
-
-//   var inStream = StreamController<List<int>>(); // StreamConsumer
-//   var outStream = StreamController<List<int>>(); // Stream
-//   var errStream = StreamController<List<int>>();
-
-//   stdin;
-
-//   IOOverrides.runZoned(() => action,
-//   stdin: () => Stdin._(inStream.stream),
-//   stdout: ,
-//   stderr: );
-
-// }
