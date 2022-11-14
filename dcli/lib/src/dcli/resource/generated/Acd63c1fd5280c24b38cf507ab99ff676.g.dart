@@ -25,23 +25,23 @@ class Acd63c1fd5280c24b38cf507ab99ff676 extends PackedResource {
   /// this checksum
   @override
   String get checksum =>
-      '28048f6e09c3b79c2f4b8c81f5c3e5c4b488f3fbeed897f56308be7111509d0a';
+      '82cc4a1487414f9f0d55ed8ec38f272dc8f3fe565673cc8ccf50ad293eb64b0b';
 
   /// <package>/resources relative path to the original resource.
   @override
-  String get originalPath =>
-      'template/project/full/lib/src/args/global_args.dart';
+  String get originalPath => 'template/project/full/lib/src/args/global_args.dart';
 
   @override
   String get content => '''
-aW1wb3J0ICdwYWNrYWdlOmRjbGkvZGNsaS5kYXJ0JzsKCmNsYXNzIEdsb2JhbEFyZ3MgewogIC8vLyBX
-ZSBwYXJzZSBhbnkgZ2xvYmFsIEFyZ3MgaGVyZQogIC8vLyBFYWNoIGFyZ3VtZW50IHBhcnNlZCBoZXJl
-IG11c3QgYmUgYWRkZWQgdG8gdGhlIENvbW1hbmRSdW5uZXIKICAvLy8gaW4gbWFpbi5kYXJ0LgogIC8v
-LyBUaGUgYXJncyBwYXJzZXIgZm9yIGVhY2ggY29tbWFuZCB0aGF0IHlvdSBpbXBsbWVudCBtdXN0IGRl
-cml2ZQogIC8vLyBmcm9tIHRoaXMgY2xhc3Mgc28gdGhhdCB0aGUgZ2xvYmFsIGFyZ3MgYXJlIGF2YWls
-YWJsZSB0bwogIC8vLyBlYWNoIGNvbW1hbmQuCiAgR2xvYmFsQXJncyhBcmdSZXN1bHRzPyBhcmdSZXN1
-bHRzKSB7CiAgICAvLy8gSWYgdGhlIC0tZGVidWcgZmxhZyB3YXMgcGFzc2VkIHRoZW4gZW5hYmxlIERD
-bGkncyB2ZXJib3NlIG1vZGUuCiAgICBTZXR0aW5ncygpLnNldFZlcmJvc2UoZW5hYmxlZDogYXJnUmVz
-dWx0cyFbJ2RlYnVnJ10gYXMgYm9vbCk7CiAgfQp9Cg==
+aW1wb3J0ICdwYWNrYWdlOmFyZ3MvYXJncy5kYXJ0JzsKaW1wb3J0ICdwYWNrYWdlOmRjbGkvZGNsaS5k
+YXJ0JzsKCmNsYXNzIEdsb2JhbEFyZ3MgewogIC8vLyBXZSBwYXJzZSBhbnkgZ2xvYmFsIEFyZ3MgaGVy
+ZQogIC8vLyBFYWNoIGFyZ3VtZW50IHBhcnNlZCBoZXJlIG11c3QgYmUgYWRkZWQgdG8gdGhlIENvbW1h
+bmRSdW5uZXIKICAvLy8gaW4gbWFpbi5kYXJ0LgogIC8vLyBUaGUgYXJncyBwYXJzZXIgZm9yIGVhY2gg
+Y29tbWFuZCB0aGF0IHlvdSBpbXBsbWVudCBtdXN0IGRlcml2ZQogIC8vLyBmcm9tIHRoaXMgY2xhc3Mg
+c28gdGhhdCB0aGUgZ2xvYmFsIGFyZ3MgYXJlIGF2YWlsYWJsZSB0bwogIC8vLyBlYWNoIGNvbW1hbmQu
+CiAgR2xvYmFsQXJncyhBcmdSZXN1bHRzPyBhcmdSZXN1bHRzKSB7CiAgICAvLy8gSWYgdGhlIC0tZGVi
+dWcgZmxhZyB3YXMgcGFzc2VkIHRoZW4gZW5hYmxlIERDbGkncyB2ZXJib3NlIG1vZGUuCiAgICBTZXR0
+aW5ncygpLnNldFZlcmJvc2UoZW5hYmxlZDogYXJnUmVzdWx0cyFbJ2RlYnVnJ10gYXMgYm9vbCk7CiAg
+fQp9Cg==
   ''';
 }

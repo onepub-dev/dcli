@@ -4,6 +4,11 @@ externals:
     mount: template
     exclude: 
       - project/full/settings.yaml
+      - project/cmd_args/pubspec_overrides.yaml
+      - project/find/pubspec_overrides.yaml
+      - project/full/pubspec_overrides.yaml
+      - project/simple/pubspec_overrides.yaml
+      - script/pubspec_overrides.yaml
   # - external:
   #   path: ../template/cmd_args
   #   mount: template/cmd_args
