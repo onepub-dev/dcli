@@ -44,7 +44,7 @@ Dennis Ritchie; 9th Sept 1944 - 12th Oct 2011\
 Kenneth Lane Thompson February 4, 1943
 {% endhint %}
 
-![My first bible.](<../.gitbook/assets/image (1) (1) (1) (1) (1) (1) (1) (1).png>)
+![My first bible.](<../.gitbook/assets/image (1) (1) (1) (1) (1) (1) (1) (1) (1).png>)
 
 Unix is the direct ancestor of Linux, MacOS and to a lesser extent Windows. You might more correctly say that 'C' is the common ancestor of all three OSs, as their kernels are all written in C.
 
