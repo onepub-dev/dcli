@@ -1,7 +1,5 @@
 import 'dart:async';
 
-import 'package:pedantic/pedantic.dart';
-
 import '../../dcli.dart';
 
 /// callback used when overloadin [printerr] in a DCliZone.
@@ -33,7 +31,7 @@ class DCliZone {
       /// an async body s we can await the real [body]
       /// method in [_body]
       /// We then use the zoneCompleter to wait for the body to complete.
-      () => unawaited(_body(body, zoneCompleter)),
+      () => _unawaited(_body(body, zoneCompleter)),
       (e, st) {
         if (!zoneCompleter.isCompleted) {
           zoneCompleter.complete(null);
@@ -67,4 +65,7 @@ class DCliZone {
       rethrow;
     }
   }
+
+  // saves importing pedantic.
+  void _unawaited(Future<void>? future) {}
 }
