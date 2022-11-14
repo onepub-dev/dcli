@@ -1,42 +1,41 @@
 // ignore: prefer_relative_imports
 import 'package:dcli/dcli.dart';
-import 'A06d49b67b870c49c422343065070f397.g.dart';
-import 'A117670ecffdae99646ec89b9fac5f34f.g.dart';
-import 'A11add8376c80bbf88e645723e11f097a.g.dart';
-import 'A14b86d52a29d3cd56e9e8d54e66dfef2.g.dart';
-import 'A167f5142b43ae331132efb64caa22da9.g.dart';
-import 'A21302b1b380201578fc8ce748f5d9ac8.g.dart';
-import 'A3452b0f16c2b6821fd6c22320b4ed6e9.g.dart';
-import 'A3a93770e3a74e1b14dd06078ea242957.g.dart';
-import 'A3ad36e7b3c78c22949aae56295c148fe.g.dart';
-import 'A4347a8ff639ee7df6728f1c36d4bd16c.g.dart';
-import 'A49bc9b7e40a7f3042a5bbb3e476b4dc4.g.dart';
-import 'A53ff2f6487cb4ecbe3ed84f8e1fc9d6b.g.dart';
-import 'A5fae0217029e4974bcf2fe9f2c4a1393.g.dart';
-import 'A62681f367be07503c61a07c06bf6c721.g.dart';
-import 'A6dc531f8de13e7a6b9da61f26d3d4b0c.g.dart';
-import 'A7291151e2bbdd1dbc591d50f969cf3d7.g.dart';
-import 'A749cf657ff556b868714c2511cd333b9.g.dart';
-import 'A75b809639a441726d085372c4ee3d9e9.g.dart';
-import 'A806335d3c77a5513fc6bf6d3f97b8d1b.g.dart';
-import 'A8f9ed6d57562e1967f67d1a9697caf52.g.dart';
-import 'A8fb85d403c773975ab0c6a51aa292397.g.dart';
-import 'A948c89e5be4af016866aa4b64bc6da46.g.dart';
-import 'A9502ca6e2cf5f28bb6659d96ea3caf7c.g.dart';
-import 'Aa6e896e630fbe9be21256bf7febdf8fa.g.dart';
-import 'Aa7dae926759ce3943763ff0320f34736.g.dart';
-import 'Ab188eed16c130862b5e2f76eebc0945f.g.dart';
-import 'Ab3d3a29275d9f1652f2de5c6e4115a24.g.dart';
-import 'Ab594fe6c95083c4574250b58b47d7f19.g.dart';
-import 'Ab5c58f3351ae7910ec399398e6ad8b5a.g.dart';
-import 'Ab686eb0fc49de41419af858be7a2111c.g.dart';
-import 'Acd70c5b2dd99ab9fc42418fc57b36539.g.dart';
-import 'Ace1455e143acffbe3a67ba40dbcd836b.g.dart';
-import 'Acef1af485956d6b0c8c663597e6d42ca.g.dart';
-import 'Adcd9ad582ab3d8c4c1d895342e778549.g.dart';
-import 'Addb36e7e92f45c8211c8280546a6a1dd.g.dart';
-import 'Af621a8bd8d9680d9847c1d0246fa9ffe.g.dart';
-import 'Afce07da1fe3e3c1b48101c1f7bf147b3.g.dart';
+import 'A055558247845ceaf292c562cf682e33e.g.dart';
+import 'A0940ad525f453b1b80655a21422ae31e.g.dart';
+import 'A1cf9758842022a74b73cd28985a68c02.g.dart';
+import 'A2006f6bbcd5a7fbf5fc7282eb8bd611f.g.dart';
+import 'A2ec73cca042e8fee5ade51b8fa2fbae5.g.dart';
+import 'A322fbf85b3c827cba7a97f7b06817844.g.dart';
+import 'A367c82f187428e94fc596020358e5894.g.dart';
+import 'A39b348c4e5cf39baf159c47a52a3b082.g.dart';
+import 'A3c6aa80abb9e0fd19333573d2671efa3.g.dart';
+import 'A3d176e8ffc89708878f9107f65c16898.g.dart';
+import 'A43f1facd6c60f4d777f71d0312a19135.g.dart';
+import 'A455e5baee4fe4dfd4ea671e61c34c0b0.g.dart';
+import 'A4954f6f172819553bd869cfe1a79d782.g.dart';
+import 'A51b4a6d53e1e7b226f864ac375785fb1.g.dart';
+import 'A54b4cb96bb46a6f915868913d2ec7bd3.g.dart';
+import 'A5a43b838ce92a49d6b6ac173a5b3618a.g.dart';
+import 'A5da4a8f043d2ef55e41ebd74ee60beed.g.dart';
+import 'A5e231ffdeff4cf767c85bec348381005.g.dart';
+import 'A654f829f96c83bb6c77beae2eb1dd37e.g.dart';
+import 'A755c2f09a8da6ed4526f8d59e710f03a.g.dart';
+import 'A75a839e1d3392256b6851b78cfcc86e5.g.dart';
+import 'A765729200d1db781c081426267e978c0.g.dart';
+import 'A7ac7bb2d3cf48849aefabbb83f68f4be.g.dart';
+import 'A7f4ec5ae7159435c9ff1fe80f6a5c8e1.g.dart';
+import 'A85cce6ff86d2f0fc44750f5031869f84.g.dart';
+import 'A8aef608d89a39b38c279793ff5babece.g.dart';
+import 'A9792f9b73ea6760085a6dbaf77589db2.g.dart';
+import 'Aa01b8cb65aba45b7794a35c90618a892.g.dart';
+import 'Aaa28232362a15e7510d10387a38e65b6.g.dart';
+import 'Ab341680d0179a67075dca18684a5ecb3.g.dart';
+import 'Ac8efeadaf944028efc5ce947f1025b72.g.dart';
+import 'Acb74ba602c84c371db7deba3b54b38ab.g.dart';
+import 'Ad68874eb9d33258c597d856a8b4539db.g.dart';
+import 'Aed8935056c3e182b6c05c57e1fd87205.g.dart';
+import 'Aef5c6453930cc2ff9bf3d27841646182.g.dart';
+import 'Afbce6e0e87ebe45fa19029ccb5dd84b9.g.dart';
 
 /// GENERATED -- GENERATED
 ///
@@ -56,53 +55,52 @@ class ResourceRegistry {
   ///     .unpack(join(HOME, '.mysettings', 'rules.yaml'));
   /// ```
   static const resources = <String, PackedResource>{
-    'template/project/find/pubspec.yaml': A06d49b67b870c49c422343065070f397(),
-    'template/project/simple/pubspec.yaml': A117670ecffdae99646ec89b9fac5f34f(),
-    'template/project/full/pubspec.yaml': A11add8376c80bbf88e645723e11f097a(),
-    'template/project/cmd_args/README.md': A14b86d52a29d3cd56e9e8d54e66dfef2(),
-    'template/project/find/CHANGELOG.md': A167f5142b43ae331132efb64caa22da9(),
-    'template/project/find/bin/main.dart': A21302b1b380201578fc8ce748f5d9ac8(),
-    'template/README.md': A3452b0f16c2b6821fd6c22320b4ed6e9(),
-    'template/project/find/analysis_options.yaml':
-        A3a93770e3a74e1b14dd06078ea242957(),
-    'template/project/simple/analysis_options.yaml':
-        A3ad36e7b3c78c22949aae56295c148fe(),
-    'template/script/custom/README.md': A4347a8ff639ee7df6728f1c36d4bd16c(),
-    'template/project/full/pubspec.lock': A49bc9b7e40a7f3042a5bbb3e476b4dc4(),
-    'template/script/find/main.dart': A53ff2f6487cb4ecbe3ed84f8e1fc9d6b(),
-    'template/script/simple/main.dart': A5fae0217029e4974bcf2fe9f2c4a1393(),
-    'template/project/custom/README.md': A62681f367be07503c61a07c06bf6c721(),
-    'template/project/simple/bin/main.dart':
-        A6dc531f8de13e7a6b9da61f26d3d4b0c(),
-    'template/project/full/settings.yaml': A7291151e2bbdd1dbc591d50f969cf3d7(),
-    'template/project/full/README.md': A749cf657ff556b868714c2511cd333b9(),
-    'template/project/full/lib/full.dart': A75b809639a441726d085372c4ee3d9e9(),
-    'template/project/find/README.md': A806335d3c77a5513fc6bf6d3f97b8d1b(),
-    'template/project/full/CHANGELOG.md': A8f9ed6d57562e1967f67d1a9697caf52(),
-    'template/script/README.md': A8fb85d403c773975ab0c6a51aa292397(),
-    'template/project/find/pubspec.lock': A948c89e5be4af016866aa4b64bc6da46(),
-    'template/project/cmd_args/CHANGELOG.md':
-        A9502ca6e2cf5f28bb6659d96ea3caf7c(),
-    'template/project/simple/CHANGELOG.md': Aa6e896e630fbe9be21256bf7febdf8fa(),
-    'template/script/cmd_args/main.dart': Aa7dae926759ce3943763ff0320f34736(),
-    'template/project/simple/README.md': Ab188eed16c130862b5e2f76eebc0945f(),
-    'template/script/pubspec.yaml': Ab3d3a29275d9f1652f2de5c6e4115a24(),
-    'template/project/simple/pubspec.lock': Ab594fe6c95083c4574250b58b47d7f19(),
-    'template/script/analysis_options.yaml':
-        Ab5c58f3351ae7910ec399398e6ad8b5a(),
-    'template/project/cmd_args/bin/main.dart':
-        Ab686eb0fc49de41419af858be7a2111c(),
-    'template/project/full/analysis_options.yaml':
-        Acd70c5b2dd99ab9fc42418fc57b36539(),
-    'template/project/cmd_args/pubspec.lock':
-        Ace1455e143acffbe3a67ba40dbcd836b(),
-    'template/project/cmd_args/analysis_options.yaml':
-        Acef1af485956d6b0c8c663597e6d42ca(),
-    'template/script/pubspec.lock': Adcd9ad582ab3d8c4c1d895342e778549(),
-    'template/project/full/bin/main.dart': Addb36e7e92f45c8211c8280546a6a1dd(),
     'template/project/cmd_args/pubspec.yaml':
-        Af621a8bd8d9680d9847c1d0246fa9ffe(),
+        A055558247845ceaf292c562cf682e33e(),
+    'template/script/pubspec.lock': A0940ad525f453b1b80655a21422ae31e(),
+    'template/project/find/CHANGELOG.md': A1cf9758842022a74b73cd28985a68c02(),
+    'template/project/simple/README.md': A2006f6bbcd5a7fbf5fc7282eb8bd611f(),
+    'template/script/cmd_args/main.dart': A2ec73cca042e8fee5ade51b8fa2fbae5(),
+    'template/script/custom/README.md': A322fbf85b3c827cba7a97f7b06817844(),
+    'template/script/analysis_options.yaml':
+        A367c82f187428e94fc596020358e5894(),
+    'template/project/cmd_args/pubspec.lock':
+        A39b348c4e5cf39baf159c47a52a3b082(),
+    'template/README.md': A3c6aa80abb9e0fd19333573d2671efa3(),
+    'template/project/simple/pubspec.yaml': A3d176e8ffc89708878f9107f65c16898(),
+    'template/project/full/pubspec.lock': A43f1facd6c60f4d777f71d0312a19135(),
+    'template/script/simple/main.dart': A455e5baee4fe4dfd4ea671e61c34c0b0(),
+    'template/project/cmd_args/README.md': A4954f6f172819553bd869cfe1a79d782(),
+    'template/script/find/main.dart': A51b4a6d53e1e7b226f864ac375785fb1(),
+    'template/project/cmd_args/analysis_options.yaml':
+        A54b4cb96bb46a6f915868913d2ec7bd3(),
+    'template/project/simple/pubspec.lock': A5a43b838ce92a49d6b6ac173a5b3618a(),
+    'template/project/full/CHANGELOG.md': A5da4a8f043d2ef55e41ebd74ee60beed(),
+    'template/project/simple/CHANGELOG.md': A5e231ffdeff4cf767c85bec348381005(),
+    'template/project/full/lib/full.dart': A654f829f96c83bb6c77beae2eb1dd37e(),
+    'template/project/simple/analysis_options.yaml':
+        A755c2f09a8da6ed4526f8d59e710f03a(),
+    'template/project/find/bin/main.dart': A75a839e1d3392256b6851b78cfcc86e5(),
+    'template/script/README.md': A765729200d1db781c081426267e978c0(),
     'template/project/full/test/full_test.dart':
-        Afce07da1fe3e3c1b48101c1f7bf147b3(),
+        A7ac7bb2d3cf48849aefabbb83f68f4be(),
+    'template/project/cmd_args/bin/main.dart':
+        A7f4ec5ae7159435c9ff1fe80f6a5c8e1(),
+    'template/project/simple/bin/main.dart':
+        A85cce6ff86d2f0fc44750f5031869f84(),
+    'template/project/find/pubspec.lock': A8aef608d89a39b38c279793ff5babece(),
+    'template/script/pubspec.yaml': A9792f9b73ea6760085a6dbaf77589db2(),
+    'template/project/find/pubspec.yaml': Aa01b8cb65aba45b7794a35c90618a892(),
+    'template/project/full/README.md': Aaa28232362a15e7510d10387a38e65b6(),
+    'template/project/custom/README.md': Ab341680d0179a67075dca18684a5ecb3(),
+    'template/project/full/pubspec.yaml': Ac8efeadaf944028efc5ce947f1025b72(),
+    'template/project/cmd_args/CHANGELOG.md':
+        Acb74ba602c84c371db7deba3b54b38ab(),
+    'template/project/full/analysis_options.yaml':
+        Ad68874eb9d33258c597d856a8b4539db(),
+    'template/project/full/bin/main.dart': Aed8935056c3e182b6c05c57e1fd87205(),
+    'template/project/find/README.md': Aef5c6453930cc2ff9bf3d27841646182(),
+    'template/project/find/analysis_options.yaml':
+        Afbce6e0e87ebe45fa19029ccb5dd84b9(),
   };
 }
