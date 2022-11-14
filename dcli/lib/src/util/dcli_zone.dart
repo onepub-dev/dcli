@@ -1,8 +1,6 @@
 import 'dart:async';
 
-import 'progress.dart';
-import 'runnable_process.dart';
-import 'wait_for_ex.dart';
+import '../../dcli.dart';
 
 /// callback used when overloadin [printerr] in a DCliZone.
 typedef DCliZonePrintErr = void Function(String?);
@@ -14,7 +12,8 @@ class DCliZone {
 
   /// Run dcli code in a zone which traps calls to [print] and [printerr]
   /// redirecting them to the passed progress.
-  Future<Progress> run<R>(R Function() body, {Progress? progress}) async {
+  Future<Progress> run<R>(Future<R> Function() body,
+      {Progress? progress}) async {
     progress ??= Progress.devNull();
 
     /// overload printerr so we can trap it.
@@ -26,10 +25,9 @@ class DCliZone {
       }
     };
 
-    // ignore: flutter_style_todos
-    /// TODO: we need to some how await this.
+    final zoneCompleter = Completer<R>();
     runZonedGuarded(
-      body,
+      () => _body(body, zoneCompleter),
       (e, st) {},
       zoneValues: zoneValues,
       zoneSpecification: ZoneSpecification(
@@ -37,9 +35,19 @@ class DCliZone {
       ),
     );
 
+    await zoneCompleter.future;
+
     // give the stream listeners a chance to run.
-    waitForEx(Future.value(1));
+    // may not be necessary not that we have the
+    // above waitForEx but until then...
+    await Future.value(1);
 
     return progress;
+  }
+
+  void _body<R>(R Function() body, Completer<R> zoneCompleter) {
+    final r = body();
+
+    zoneCompleter.complete(r);
   }
 }
