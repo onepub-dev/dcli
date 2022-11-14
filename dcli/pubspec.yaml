@@ -10,7 +10,7 @@ dependencies:
   _fe_analyzer_shared: 26.0.0
   analyzer: 2.3.0
   archive: 3.2.2
-  args: 2.3.0
+  args: 2.3.1
   async: 2.8.2
   basic_utils: 3.8.0
   boolean_selector: 2.1.0
@@ -34,7 +34,7 @@ dependencies:
   functional_data: 1.0.0
   glob: 2.0.1
   globbing: 1.0.0
-  http: 0.13.3
+  http: 0.13.4
   http_multi_server: 3.2.0
   http_parser: 4.0.0
   ini: 2.1.0
