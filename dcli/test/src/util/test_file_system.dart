@@ -109,12 +109,12 @@ class TestFileSystem {
 
   /// Run the passed callback [action] within the scope
   /// of the [TestFileSystem].
-  void withinZone(
+  Future<void> withinZone(
     void Function(TestFileSystem fs) action,
-  ) {
+  ) async {
     final stack = Trace.current(1);
 
-    withTestScope((testDir) {
+    await withTestScope((testDir) async {
       _runUnderLock(stack, action);
     }, pathToTestDir: fsRoot);
   }
@@ -148,10 +148,12 @@ class TestFileSystem {
 
       if (!dcliActivated) {
         print(blue('Globally activating DCli into test file system'));
-        capture(() {
+        // ignore: discarded_futures
+        final activate = capture(() async {
           PubCache()
               .globalActivateFromSource(DartProject.self.pathToProjectRoot);
         }, progress: Progress.printStdErr());
+        waitForEx(activate);
         dcliActivated = true;
       }
 
@@ -337,9 +339,10 @@ dependency_overrides:
     path: $pathToCore
         ''');
 
-      capture(() {
+      // ignore: discarded_futures
+      waitForEx(capture(() async {
         DartProject.fromPath(dirname(pathToPubspec)).warmup(upgrade: true);
-      }, progress: Progress.printStdErr());
+      }, progress: Progress.printStdErr()));
     });
   }
 
@@ -370,9 +373,10 @@ dependency_overrides:
         createDir(Settings().pathToDCliBin, recursive: true);
       }
 
-      capture(() {
+      // ignore: discarded_futures
+      waitForEx(capture(() async {
         DartProject.fromPath('pathToTools').warmup();
-      }, progress: Progress.printStdErr());
+      }, progress: Progress.printStdErr()));
       NamedLock(name: 'compile').withLock(() {
         for (final command in required) {
           final script =

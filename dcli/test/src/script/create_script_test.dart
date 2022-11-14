@@ -14,8 +14,8 @@ import '../util/test_file_system.dart';
 
 void main() {
   group('Create Script ', () {
-    test('Create script', () {
-      TestFileSystem().withinZone((fs) {
+    test('Create script', () async {
+      await TestFileSystem().withinZone((fs) async {
         InstallCommand().initTemplates();
         final scriptDir = join(fs.unitTestWorkingDir, 'traditional');
 
@@ -34,8 +34,8 @@ void main() {
       });
     });
 
-    test('Create script with --template', () {
-      TestFileSystem().withinZone((fs) {
+    test('Create script with --template', () async {
+      await TestFileSystem().withinZone((fs) async {
         InstallCommand().initTemplates();
         final scriptDir = join(fs.unitTestWorkingDir, 'traditional');
 

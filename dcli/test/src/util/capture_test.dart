@@ -4,7 +4,7 @@ import 'package:test/test.dart';
 void main() {
   test('capture ...', () async {
     final myprogress = Progress.capture();
-    final progress = capture(() async {
+    final progress = await capture(() async {
       print('hi');
       printerr('ho');
     }, progress: myprogress);

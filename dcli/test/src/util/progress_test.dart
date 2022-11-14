@@ -17,8 +17,8 @@ void main() {
   // moment this test is disabled.
   test(
     'Slow',
-    () {
-      TestFileSystem().withinZone((fs) {
+    () async {
+      await TestFileSystem().withinZone((fs) async {
         print(pwd);
         'bash ${join(fs.testScriptPath, 'general/bin/slow.sh')}'.forEach(print);
         expect(

@@ -9,13 +9,14 @@ import 'package:dcli/dcli.dart';
 import 'package:dcli/src/commands/create.dart';
 import 'package:dcli/src/script/command_line_runner.dart';
 import 'package:dcli/src/script/flags.dart';
+import 'package:dcli_core/dcli_core.dart' as core;
 import 'package:path/path.dart';
 import 'package:test/test.dart';
 
 void main() {
   test('create no args', () async {
-    withTempDir((dir) {
-      capture(() {
+    await core.withTempDir((dir) async {
+      await capture(() async {
         /// no args
         expect(
             () => CreateCommand()..run([], []),
@@ -27,10 +28,10 @@ void main() {
     });
   });
   test('create project', () async {
-    withTempDir((dir) {
+    await core.withTempDir((dir) async {
       final pathToProject = join(dir, 'simple_project');
 
-      capture(() {
+      await capture(() async {
         /// default simple project
         CreateCommand().run([VerboseFlag()], [pathToProject]);
         expect(exists(pathToProject), isTrue);
@@ -44,10 +45,10 @@ void main() {
     });
   });
   test('create non-existant directory', () async {
-    withTempDir((dir) {
+    await core.withTempDir((dir) async {
       final pathToSpawnScript = join(dir, 'bin/spawn.dart');
 
-      capture(() {
+      await capture(() async {
         /// now args
         expect(
             () => CreateCommand()..run([], []),

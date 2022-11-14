@@ -13,8 +13,8 @@ import 'package:test/test.dart';
 import '../../util/test_file_system.dart';
 
 void main() {
-  test('Create and run a script', () {
-    TestFileSystem().withinZone((fs) {
+  test('Create and run a script', () async {
+    await TestFileSystem().withinZone((fs) async {
       InstallCommand().initTemplates();
       final projectPath = truepath(fs.tmpScriptPath, 'run_test');
 
@@ -25,8 +25,8 @@ void main() {
       expect(exitCode, equals(0));
     });
   });
-  test('Run hello world', () {
-    TestFileSystem().withinZone((fs) {
+  test('Run hello world', () async {
+    await TestFileSystem().withinZone((fs) async {
       final results = <String?>[];
 
       '${DCliPaths().dcliName} '
@@ -40,8 +40,8 @@ void main() {
     });
   });
 
-  test('run with virtual pubspec', () {
-    TestFileSystem().withinZone((fs) {
+  test('run with virtual pubspec', () async {
+    await TestFileSystem().withinZone((fs) async {
       int? exit = -1;
       try {
         final script = DartScript.fromFile(
@@ -55,8 +55,8 @@ void main() {
     });
   });
 
-  test('run  with traditional dart project structure - bin', () {
-    TestFileSystem().withinZone((fs) {
+  test('run  with traditional dart project structure - bin', () async {
+    await TestFileSystem().withinZone((fs) async {
       int? exit = -1;
       try {
         print(pwd);
@@ -75,8 +75,8 @@ void main() {
     });
   });
 
-  test('run  with traditional dart project structure - nested bin', () {
-    TestFileSystem().withinZone((fs) {
+  test('run  with traditional dart project structure - nested bin', () async {
+    await TestFileSystem().withinZone((fs) async {
       int? exit = -1;
       try {
         print(pwd);
@@ -97,8 +97,8 @@ void main() {
 
   test(
     'run  with traditional dart project structure - example',
-    () {
-      TestFileSystem().withinZone((fs) {
+    () async {
+      await TestFileSystem().withinZone((fs) async {
         int? exit = -1;
         try {
           print(pwd);
@@ -119,8 +119,8 @@ void main() {
     skip: true,
   );
 
-  test('run  with traditional dart project structure - tool', () {
-    TestFileSystem().withinZone((fs) {
+  test('run  with traditional dart project structure - tool', () async {
+    await TestFileSystem().withinZone((fs) async {
       int? exit = -1;
       try {
         print(pwd);

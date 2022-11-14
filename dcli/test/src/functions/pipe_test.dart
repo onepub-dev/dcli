@@ -7,17 +7,16 @@
 
 import 'package:dcli/dcli.dart';
 import 'package:path/path.dart';
-
 import 'package:test/test.dart' as t;
 
 import '../util/test_file_system.dart';
 import '../util/test_utils.dart';
 
 void main() {
-  t.group('Piping with ForEach ', () {
+  t.group('Piping with ForEach ', () async {
     final lines = <String?>[];
 
-    TestFileSystem().withinZone((fs) {
+    await TestFileSystem().withinZone((fs) async {
       t.test('For Each on string', () {
         final linesFile = join(fs.fsRoot, TestFileSystem.testLinesFile);
         createLineFile(linesFile, 10);

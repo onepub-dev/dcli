@@ -16,7 +16,7 @@ import 'package:path/path.dart';
 /// Given we are actively modifying the file system this is a bad idea.
 /// So this script forces the test to run serially via the -j1 option.
 ///
-void main(List<String> args) {
+Future<void> main(List<String> args) async {
   if (core.Settings().isWindows && !Shell.current.isPrivilegedUser) {
     printerr(
       red(
@@ -39,31 +39,34 @@ void main(List<String> args) {
       'Activating dcli from source so we are testing against latest version',
     );
 
-    capture(() {
+    // ignore: discarded_futures
+    waitForEx(capture(() async {
       /// globally activate dcli from source.
       PubCache().globalActivateFromSource(projectRoot);
-    }, progress: Progress.printStdErr());
+    }, progress: Progress.printStdErr()));
   }
 
   if (!PubCache().isGloballyActivated('dcli_unit_tester')) {
-    capture(() {
+    // ignore: discarded_futures
+    waitForEx(capture(() async {
       PubCache().globalActivate('dcli_unit_tester');
-    }, progress: Progress.printStdErr());
+    }, progress: Progress.printStdErr()));
   }
 
-  capture(() {
+  // ignore: discarded_futures
+  waitForEx(capture(() async {
     // warm up the dcli project
     DartProject.self.warmup();
-  }, progress: Progress.printStdErr());
+  }, progress: Progress.printStdErr()));
 
   /// warm up all test packages.
   for (final pubspec
       in find('pubspec.yaml', workingDirectory: projectRoot).toList()) {
     if (DartSdk().isPubGetRequired(dirname(pubspec))) {
       print('Running pub get in ${dirname(pubspec)}');
-      capture(() {
+      waitForEx(capture(() async {
         DartSdk().runPubGet(dirname(pubspec));
-      }, progress: Progress.printStdErr());
+      }, progress: Progress.printStdErr()));
     }
   }
 }

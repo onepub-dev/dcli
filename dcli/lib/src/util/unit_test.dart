@@ -11,8 +11,7 @@ final unitTestingKey =
 /// when run within a unit test.
 /// The rely on this scope to determine if they are
 /// in a unit test.
-void withUnitTest(void Function() action) {
-  Scope()
-    ..value(unitTestingKey, true)
-    ..run(() => action());
+Future<void> withUnitTest(void Function() action) async {
+  final scope = Scope()..value(unitTestingKey, true);
+  await scope.run(() async => action());
 }

@@ -13,8 +13,8 @@ import '../../util/test_file_system.dart';
 
 void main() {
   group('warmup using DCli', () {
-    test('warmup ', () {
-      TestFileSystem().withinZone((fs) {
+    test('warmup ', () async {
+      await TestFileSystem().withinZone((fs) async {
         final projectPath = join(fs.fsRoot, 'test_script/general');
         DartProject.fromPath(projectPath)
           ..clean()

@@ -18,9 +18,9 @@ void main() {
   const scriptName = 'test.dart';
 
   group('Create Project', () {
-    test('Create hello world', () {
-      withTestScope((fs) {
-        capture(() {
+    test('Create hello world', () async {
+      await withTestScope((fs) async {
+        await capture(() async {
           _installTemplates();
           final pathToTemplate = join(fs, 'test');
 
@@ -36,9 +36,9 @@ void main() {
       });
     });
 
-    test('Run hello world', () {
-      capture(() {
-        TestFileSystem.common.withinZone((fs) {
+    test('Run hello world', () async {
+      await capture(() async {
+        await TestFileSystem.common.withinZone((fs) async {
           withTempDir((fs) {
             _installTemplates();
             final pathToScript = truepath(fs, 'test', 'bin', scriptName);

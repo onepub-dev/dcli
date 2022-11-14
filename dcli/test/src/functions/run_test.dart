@@ -7,7 +7,6 @@
 
 import 'package:dcli/dcli.dart';
 import 'package:path/path.dart';
-
 import 'package:test/test.dart' as t;
 import 'package:test/test.dart';
 
@@ -15,10 +14,10 @@ import '../util/test_file_system.dart';
 import '../util/test_scope.dart';
 
 void main() {
-  t.group('String as Process', () {
-    TestFileSystem().withinZone((fs) {
-      t.test('Basic .run', () {
-        withTestScope((tmpDir) {
+  t.group('String as Process', () async {
+    await TestFileSystem().withinZone((fs) async {
+      t.test('Basic .run', () async {
+        await withTestScope((tmpDir) async {
           final testFile = join(fs.fsRoot, 'test.text');
 
           if (exists(testFile)) {
@@ -30,8 +29,8 @@ void main() {
         });
       });
 
-      t.test('print stdout', () {
-        withTestScope((tmpDir) {
+      t.test('print stdout', () async {
+        await withTestScope((tmpDir) async {
           final scriptPath = truepath(join(fs.testScriptPath, 'general/bin'));
           final script = truepath(scriptPath, 'print_to_stdout.dart');
 
@@ -43,8 +42,8 @@ void main() {
         });
       });
 
-      t.test('print stderr', () {
-        withTestScope((tmpDir) {
+      t.test('print stderr', () async {
+        await withTestScope((tmpDir) async {
           final scriptPath = truepath(join(fs.testScriptPath, 'general/bin'));
           final script = truepath(scriptPath, 'print_to_stderr.dart');
 
@@ -56,8 +55,8 @@ void main() {
         });
       });
 
-      t.test('print stdout and stderr', () {
-        withTestScope((tmpDir) {
+      t.test('print stdout and stderr', () async {
+        await withTestScope((tmpDir) async {
           final scriptPath = truepath(join(fs.testScriptPath, 'general/bin'));
 
           if (!exists(scriptPath)) {
@@ -75,8 +74,8 @@ void main() {
         });
       });
 
-      t.test('print stdout and stderr with error', () {
-        withTestScope((tmpDir) {
+      t.test('print stdout and stderr with error', () async {
+        await withTestScope((tmpDir) async {
           final scriptPath = truepath(join(fs.testScriptPath, 'general/bin'));
 
           if (!exists(scriptPath)) {

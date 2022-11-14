@@ -13,8 +13,8 @@ import 'package:test/test.dart';
 import '../util/test_file_system.dart';
 
 void main() {
-  test('Run dcli_complete c', () {
-    TestFileSystem().withinZone((fs) {
+  test('Run dcli_complete c', () async {
+    await TestFileSystem().withinZone((fs) async {
       final results = <String?>[];
 
       // make dcli_complete executable
@@ -33,8 +33,8 @@ void main() {
     });
   });
 
-  test('Run dcli_complete cl', () {
-    TestFileSystem().withinZone((fs) {
+  test('Run dcli_complete cl', () async {
+    await TestFileSystem().withinZone((fs) async {
       final results = <String?>[];
 
       // make dcli_complete executable
@@ -54,8 +54,8 @@ void main() {
   });
 
   group('previous word', () {
-    test('Run dcli_complete warmup _test_a', () {
-      TestFileSystem().withinZone((fs) {
+    test('Run dcli_complete warmup _test_a', () async {
+      await TestFileSystem().withinZone((fs) async {
         final results = <String?>[];
 
         touch(join(fs.fsRoot, '_test_a.dart'), create: true);
@@ -87,8 +87,8 @@ void main() {
       });
     });
 
-    test('Run dcli_complete warmup _test_ab', () {
-      TestFileSystem().withinZone((fs) {
+    test('Run dcli_complete warmup _test_ab', () async {
+      await TestFileSystem().withinZone((fs) async {
         final results = <String?>[];
 
         touch(join(fs.fsRoot, '_test_a.dart'), create: true);

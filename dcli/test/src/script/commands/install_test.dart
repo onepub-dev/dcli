@@ -18,8 +18,8 @@ void main() {
     () {
       test(
         'warmup',
-        () {
-          withTestScope((testDir) {
+        () async {
+          await withTestScope((testDir) async {
             expect(!core.Settings().isWindows || Shell.current.isPrivilegedUser,
                 isTrue);
             //TestFileSystem(useCommonPath: false).withinZone((fs) {
@@ -45,8 +45,8 @@ void main() {
         tags: ['privileged'],
       );
 
-      test('set env PATH Linux', () {
-        withTestScope((testDir) {
+      test('set env PATH Linux', () async {
+        await withTestScope((testDir) async {
           final export = 'export PATH=\$PATH:${Settings().pathToDCliBin}';
 
           final profilePath = join(HOME, '.profile');

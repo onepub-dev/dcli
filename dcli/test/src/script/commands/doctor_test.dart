@@ -12,8 +12,8 @@ import 'package:test/test.dart';
 import '../../util/test_file_system.dart';
 
 void main() {
-  test('dcli doctor', () {
-    TestFileSystem().withinZone((fs) {
+  test('dcli doctor', () async {
+    await TestFileSystem().withinZone((fs) async {
       var exit = -1;
       try {
         exit = EntryPoint().process(['doctor']);

@@ -12,8 +12,8 @@ import 'package:test/test.dart';
 import '../util/test_file_system.dart';
 
 void main() {
-  test('Project Name', () {
-    TestFileSystem().withinZone((fs) {
+  test('Project Name', () async {
+    await TestFileSystem().withinZone((fs) async {
       print(pwd);
       final yaml = MyYaml.fromFile('pubspec.yaml');
       final projectName = yaml.getValue('name');

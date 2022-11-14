@@ -41,8 +41,8 @@ dependencies:
 
   t.test(
     'File - basic',
-    () {
-      TestFileSystem().withinZone((fs) {
+    () async {
+      await TestFileSystem().withinZone((fs) async {
         final pubSpecScriptPath = createPubspecPath(fs);
         PubSpec.fromString(basic).save(pubSpecScriptPath);
 
@@ -58,8 +58,8 @@ dependencies:
 
   t.test(
     'File - override',
-    () {
-      TestFileSystem().withinZone((fs) {
+    () async {
+      await TestFileSystem().withinZone((fs) async {
         final scriptPath = createScriptPath(fs);
 
         PubSpec.fromString(overrides).save(scriptPath);
@@ -79,8 +79,8 @@ dependencies:
 
   t.test(
     'File - local pubsec.yaml',
-    () {
-      TestFileSystem().withinZone((fs) {
+    () async {
+      await TestFileSystem().withinZone((fs) async {
         final scriptPath = createScriptPath(fs);
         PubSpec.fromString(overrides).save(scriptPath);
 

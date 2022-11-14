@@ -31,7 +31,7 @@ void main() {
 
   group('Create Project ', () {
     test('Create project full with --template', () async {
-      TestFileSystem().withinZone((fs) async {
+      await TestFileSystem().withinZone((fs) async {
         InstallCommand().initTemplates();
         final pathToProject = fs.unitTestWorkingDir;
 

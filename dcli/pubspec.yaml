@@ -59,7 +59,7 @@ dependencies:
   pubspec_lock: 3.0.1
   quiver: 3.0.1+1
   random_string: 2.3.1
-  scope: 2.2.1
+  scope: 3.0.0
   settings_yaml: 5.0.0-beta.2
   shelf: 1.2.0
   shelf_packages_handler: 3.0.0

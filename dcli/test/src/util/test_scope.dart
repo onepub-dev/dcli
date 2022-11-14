@@ -21,30 +21,31 @@ final commonTestPubCache = join(rootPath, 'tmp', '.dcli', '.pub-cache');
 /// Platform OS
 /// Settings initialised with the provided environment and OS
 /// PubCache initialised with the Environment.
-void withTestScope(void Function(String testDir) callback,
+Future<void> withTestScope(Future<void> Function(String testDir) callback,
     {Map<String, String> environment = const <String, String>{},
     String? pathToTestDir,
-    core.DCliPlatformOS? overridePlatformOS}) {
+    core.DCliPlatformOS? overridePlatformOS}) async {
   // final originalHome = HOME;
 
-  withUnitTest(() {
-    withTempDir((testDir) {
-      withEnvironment(() {
-        Scope()
+  await withUnitTest(() async {
+    await core.withTempDir((testDir) async {
+      await core.withEnvironment(() async {
+        final scope = Scope()
           ..value(InstallCommand.activateFromSourceKey, true)
           ..value(
               core.DCliPlatform.scopeKey,
               core.DCliPlatform.forScope(
-                  overriddenPlatform: overridePlatformOS))
-          ..run(() {
-            Scope()
-              ..value(Settings.scopeKey, Settings.forScope())
-              ..value(PubCache.scopeKey, PubCache.forScope())
-              // ..value(originalHomeKey, originalHome)
-              ..run(() {
-                callback(testDir);
-              });
+                  overriddenPlatform: overridePlatformOS));
+
+        await scope.run(() async {
+          final innerScope = Scope()
+            ..value(Settings.scopeKey, Settings.forScope())
+            ..value(PubCache.scopeKey, PubCache.forScope());
+          // ..value(originalHomeKey, originalHome)
+          await innerScope.run(() async {
+            await callback(testDir);
           });
+        });
       }, environment: {
         'HOME': testDir,
 

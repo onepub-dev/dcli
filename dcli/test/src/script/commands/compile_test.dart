@@ -13,9 +13,9 @@ import 'package:test/test.dart';
 import '../../util/test_file_system.dart';
 
 void main() {
-  test('compile ', () {
-    TestFileSystem().withinZone((fs) {
-      compile(join(fs.testScriptPath, 'general/bin/hello_world.dart'));
+  test('compile ', () async {
+    await TestFileSystem().withinZone((fs) async {
+      await compile(join(fs.testScriptPath, 'general/bin/hello_world.dart'));
     });
   });
 
@@ -24,8 +24,8 @@ void main() {
   });
 }
 
-void compile(String pathToScript) {
-  TestFileSystem().withinZone((fs) {
+Future<void> compile(String pathToScript) async {
+  await TestFileSystem().withinZone((fs) async {
     final pathToSript = join(fs.testScriptPath, 'general/bin/hello_world.dart');
 
     final dartScript = DartScript.fromFile(pathToSript);

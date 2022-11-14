@@ -14,8 +14,8 @@ import '../util/test_file_system.dart';
 
 void main() {
   t.group('toList', () {
-    t.test('Check .toList captures stdout', () {
-      TestFileSystem().withinZone((fs) {
+    t.test('Check .toList captures stdout', () async {
+      await TestFileSystem().withinZone((fs) async {
         final scriptPath = truepath(join(fs.testScriptPath, 'general/bin'));
 
         final script = truepath(scriptPath, 'print_to_stdout.dart');
@@ -32,8 +32,8 @@ void main() {
       });
     });
 
-    t.test('Check .toList captures stderr', () {
-      TestFileSystem().withinZone((fs) {
+    t.test('Check .toList captures stderr', () async {
+      await TestFileSystem().withinZone((fs) async {
         final scriptPath = truepath(join(fs.testScriptPath, 'general/bin'));
 
         final script = truepath(scriptPath, 'print_to_stderr.dart');
@@ -51,8 +51,8 @@ void main() {
       });
     });
 
-    t.test('Check .toList captures stderr and stdout', () {
-      TestFileSystem().withinZone((fs) {
+    t.test('Check .toList captures stderr and stdout', () async {
+      await TestFileSystem().withinZone((fs) async {
         final scriptPath = truepath(join(fs.testScriptPath, 'general/bin'));
 
         final script = truepath(scriptPath, 'print_to_both.dart');
@@ -74,8 +74,8 @@ void main() {
     });
 
     t.test('Check .toList captures stderr and stdout when non-zero exit occurs',
-        () {
-      TestFileSystem().withinZone((fs) {
+        () async {
+      await TestFileSystem().withinZone((fs) async {
         final scriptPath = truepath(join(fs.testScriptPath, 'general/bin'));
 
         final script = truepath(scriptPath, 'print_to_both_with_error.dart');

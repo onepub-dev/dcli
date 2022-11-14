@@ -21,8 +21,8 @@ import 'test_file_system.dart';
 void main() {
   test(
     'runnable process Start - forEach',
-    () {
-      TestFileSystem().withinZone((fs) async {
+    () async {
+      await TestFileSystem().withinZone((fs) async {
         final path = join(fs.fsRoot, 'top');
         print('starting ls in $path');
 

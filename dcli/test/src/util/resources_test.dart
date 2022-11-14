@@ -13,7 +13,7 @@ const filename = 'PXL_20211104_224740653.jpg';
 
 void main() {
   test('resource ...', () async {
-    final progress = capture(() {
+    final progress = await capture(() async {
       Resources().pack();
     }, progress: Progress.capture());
 

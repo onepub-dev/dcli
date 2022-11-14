@@ -13,63 +13,63 @@ typedef CaptureZonePrintErr = void Function(String?);
 /// Key to the overloading [printerr] function.
 const String capturePrinterrKey = 'printerr';
 
-  /// Run code in a zone which traps calls to [print] and [printerr]
-  /// redirecting them to the passed progress.
-  /// If no [progress] is passed then then both print and printerr
+/// Run code in a zone which traps calls to [print] and [printerr]
+/// redirecting them to the passed progress.
+/// If no [progress] is passed then then both print and printerr
 /// output is surpressed.
-  Future<Progress> capture<R>(Future<R> Function() action, {Progress? progress}) async {
-    progress ??= Progress.devNull();
+Future<Progress> capture<R>(Future<R> Function() action,
+    {Progress? progress}) async {
+  progress ??= Progress.devNull();
 
-    /// overload printerr so we can trap it.
-    final zoneValues = <String, CaptureZonePrintErr>{
-      'printerr': (line) {
-        if (line != null) {
-          progress!.addToStderr(line);
-        }
+  /// overload printerr so we can trap it.
+  final zoneValues = <String, CaptureZonePrintErr>{
+    'printerr': (line) {
+      if (line != null) {
+        progress!.addToStderr(line);
       }
-    };
-
-    final zoneCompleter = Completer<R>();
-    runZonedGuarded(
-      /// runZone takes a sync method but we need
-      /// an async body s we can await the real [body]
-      /// method in [_body]
-      /// We then use the zoneCompleter to wait for the body to complete.
-      () => _unawaited(_body(action, zoneCompleter)),
-      (e, st) {
-        if (!zoneCompleter.isCompleted) {
-          zoneCompleter.complete(null);
-        }
-      },
-      zoneValues: zoneValues,
-      zoneSpecification: ZoneSpecification(
-        print: (self, parent, zone, line) => progress!.addToStdout(line),
-      ),
-    );
-
-    await zoneCompleter.future;
-
-    // give the stream listeners a chance to run.
-    // may not be necessary not that we have the
-    // above waitForEx but until then...
-    await Future.value(1);
-
-    return progress;
-  }
-
-  Future<void> _body<R>(
-      Future<R> Function() body, Completer<R> zoneCompleter) async {
-    R r;
-    try {
-      r = await body();
-      zoneCompleter.complete(r);
-      // ignore: avoid_catches_without_on_clauses
-    } catch (_, __) {
-      zoneCompleter.complete(null);
-      rethrow;
     }
-  }
+  };
 
-  // saves importing pedantic.
-  void _unawaited(Future<void>? future) {}
+  final zoneCompleter = Completer<R>();
+  runZonedGuarded(
+    /// runZone takes a sync method but we need
+    /// an async body s we can await the real [body]
+    /// method in [_body]
+    /// We then use the zoneCompleter to wait for the body to complete.
+    () => _unawaited(_body(action, zoneCompleter)),
+    (e, st) {
+      if (!zoneCompleter.isCompleted) {
+        zoneCompleter.complete(null);
+      }
+    },
+    zoneValues: zoneValues,
+    zoneSpecification: ZoneSpecification(
+      print: (self, parent, zone, line) => progress!.addToStdout(line),
+    ),
+  );
+
+  await zoneCompleter.future;
+
+  // give the stream listeners a chance to run.
+  // may not be necessary not that we have the
+  // above waitForEx but until then...
+  await Future.value(1);
+
+  return progress;
 }
+
+Future<void> _body<R>(
+    Future<R> Function() body, Completer<R> zoneCompleter) async {
+  R r;
+  try {
+    r = await body();
+    zoneCompleter.complete(r);
+    // ignore: avoid_catches_without_on_clauses
+  } catch (_, __) {
+    zoneCompleter.complete(null);
+    rethrow;
+  }
+}
+
+// saves importing pedantic.
+void _unawaited(Future<void>? future) {}
