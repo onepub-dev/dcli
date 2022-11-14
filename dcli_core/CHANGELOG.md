@@ -1,3 +1,6 @@
+# 1.21.3
+- multi-package released failed.
+
 # 1.21.2
 - Fix: bug in dcli_zone as it was failing to await the body completing before it returned.
 - Added catch block DCliZone to ensure the zone completes in the face of an error.
