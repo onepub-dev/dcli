@@ -9,6 +9,7 @@ dependencies:
   dcli: ^2.0.0-beta.13
   dcli_core: ^2.0.0-beta.13
   http: ^0.13.4
+  path: ^1.8.1
   settings_yaml: ^5.0.0-beta.1
 dev_dependencies: 
   lint_hard: ^2.0.0
