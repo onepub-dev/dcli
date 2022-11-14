@@ -16,7 +16,7 @@ The `dcli pack` command, base64 encodes each file and writes them as a multi-lin
 
 The pack command also creates a register of the packed libraries in src/dcli/resource/generated/resource\_registry.g.dart.
 
-DCli expects all resources to located within your dart project  under:
+DCli expects all resources to located within your dart project under:
 
 ```
 <project root>/resource
@@ -207,15 +207,37 @@ This is normally used for resources that live outside the projects directory str
 
 The path may be relative to the project root or an absolute path.
 
-The path can be a file or a directory.&#x20;
+The path can be a file or a directory.
 
 If path is a directory then the directory is included recursively.
 
+
+
+### exclude
+
+When the above `path` key specifies a directory, you may want to selectively excludes some files under the specified directory.
+
+To exclude paths under the `path` key add an exclude section:
+
+```yaml
+externals:
+  - external:
+    mount: template
+    path: ../template
+    exclude: 
+      - project/full/settings.yaml
+      - project/full/pubspec_overrides.yaml
+```
+
+The list of excluded paths may be a path relative to the root of the `path` directory or an absolute path.
+
+An excluded path may be a file or a directory.
+
 ### mount
 
-When a file is packed an entry is added to the resource registry.&#x20;
+When a file is packed an entry is added to the resource registry.
 
-To unpack a file you need a key to the file in the registry.&#x20;
+To unpack a file you need a key to the file in the registry.
 
 The mount is the key into the resource registry.
 
@@ -233,7 +255,7 @@ The mount is a virtual path and can be any path you wish provided that it does N
 
 **A mount is always a relative path.**
 
-To unpack external resources you use the mount  as the key into the ResourceRegistry.
+To unpack external resources you use the mount as the key into the ResourceRegistry.
 
 ## Limits
 
