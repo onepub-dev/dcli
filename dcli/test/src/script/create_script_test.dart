@@ -23,7 +23,7 @@ void main() {
       });
     });
 
-    test('Create scrip with --template', () {
+    test('Create script with --template', () {
       TestFileSystem().withinZone((fs) {
         InstallCommand().initTemplates();
         final scriptDir = join(fs.unitTestWorkingDir, 'traditional');
