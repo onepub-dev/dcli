@@ -1,3 +1,6 @@
+# 1.21.4
+- Fix: the dcli_zone was not always flushing the last items captured.  Added unit test for same.
+
 # 1.21.3
 - multi-package released failed.
 
