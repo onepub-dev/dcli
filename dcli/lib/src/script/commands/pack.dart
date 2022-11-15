@@ -5,7 +5,6 @@
  */
 
 import '../../../dcli.dart';
-
 import '../../util/resources.dart';
 import '../command_line_runner.dart';
 import '../flags.dart';
@@ -72,19 +71,17 @@ class PackCommand extends Command {
   ///
   PackCommand() : super(_commandName);
 
-  static final pathToPackYaml =
-      join(DartProject.self.pathToToolDir, 'dcli', 'pack.yaml');
-
   static const String _commandName = 'pack';
 
   /// [arguments] contains path to clean
   @override
   int run(List<Flag> selectedFlags, List<String> arguments) {
-    if (!exists(Resources().resourceRoot) && !exists(pathToPackYaml)) {
+    if (!exists(Resources().resourceRoot) &&
+        !exists(Resources.pathToPackYaml)) {
       throw InvalidArgumentsException(
           'Unable to pack resources as neither a resource directory at '
           '${Resources().resourceRoot}'
-          ' nor $pathToPackYaml exists.');
+          ' nor ${Resources.pathToPackYaml} exists.');
     }
 
     if (!exists(Resources().resourceRoot)) {
@@ -107,8 +104,8 @@ class PackCommand extends Command {
   @override
   String description({bool extended = false}) {
     var desc = '''
-Pack all files under the '${relative(Resources().resourceRoot)}' directory into a set of dart
-   libraries which can be unpacked at install time.''';
+Pack all files under the '${relative(Resources().resourceRoot)}' directory or 
+   those listed in pack.yaml which can be unpacked at install time.''';
     if (extended) {
       desc += '''
       

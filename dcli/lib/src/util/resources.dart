@@ -4,16 +4,15 @@
  * Written by Brett Sutton <bsutton@onepub.dev>, Jan 2022
  */
 
-import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
 
 import 'package:async/async.dart';
 import 'package:crypto/crypto.dart';
+import 'package:scope/scope.dart';
 import 'package:settings_yaml/settings_yaml.dart';
 
 import '../../dcli.dart';
-import '../script/commands/pack.dart';
 
 /// Packages a file as a dart library so it can be expanded
 /// during the install process.
@@ -43,16 +42,22 @@ class Resources {
       join(_generatedRoot, 'resource_registry.g.dart');
 
   /// Path to the registry library
-  late final String pathToRegistry =
-      join(DartProject.self.pathToProjectRoot, _pathToRegistry);
+  late final String pathToRegistry = join(projectRoot, _pathToRegistry);
 
   /// Directory where will look for resources to pack
-  late final String resourceRoot =
-      join(DartProject.self.pathToProjectRoot, _resourceRoot);
+  late final String resourceRoot = join(projectRoot, _resourceRoot);
 
   /// directory where we save the packed resources.
-  late final String generatedRoot =
-      join(DartProject.self.pathToProjectRoot, _generatedRoot);
+  late final String generatedRoot = join(projectRoot, _generatedRoot);
+
+  // path to the locatio of the pack.yaml file.
+  static final pathToPackYaml = join(projectRoot, 'tool', 'dcli', 'pack.yaml');
+
+  /// Inject this scope key to overload the projectRoot for unit testing.
+  static final scopeKeyProjectRoot =
+      ScopeKey<String>.withDefault(DartProject.self.pathToProjectRoot);
+
+  static String get projectRoot => Scope.use(scopeKeyProjectRoot);
 
   /// Packs the set of files located under [resourceRoot]
   /// Each resources is packed into a separate dart library
@@ -146,7 +151,7 @@ class $className extends PackedResource {
       waitForEx<dynamic>(to.flush());
     } finally {
       // ignore: discarded_futures
-      to.close();
+      waitForEx<dynamic>(to.close());
     }
 
     return resource;
@@ -228,7 +233,8 @@ $line
     } finally {
       // ignore: discarded_futures
       waitForEx<dynamic>(registryFile.flush());
-      unawaited(registryFile.close());
+      // ignore: discarded_futures
+      waitForEx<dynamic>(registryFile.close());
     }
   }
 
@@ -308,7 +314,7 @@ $line
   List<_Resource> _packExternalResources() {
     final resources = <_Resource>[];
 
-    final pathToPackYaml = PackCommand.pathToPackYaml;
+    final pathToPackYaml = Resources.pathToPackYaml;
     if (!exists(pathToPackYaml)) {
       print(orange('No $pathToPackYaml found'));
       return resources;
@@ -420,6 +426,12 @@ $line
   }
 
   List<String> getExcludedPaths(SettingsYaml yaml, String path, int index) {
+    final yamlPathToExluded = 'externals.external[$index].exclude';
+
+    if (!yaml.selectorExists(yamlPathToExluded)) {
+      return [];
+    }
+
     final relativeExcludes =
         yaml.selectAsList('externals.external[$index].exclude') ?? <dynamic>[];
 
@@ -478,8 +490,9 @@ abstract class PackedResource {
       }
     } finally {
       // ignore: discarded_futures
-      waitForEx<dynamic>(file.flush());
-      unawaited(file.close());
+      waitForEx(file.flush());
+      // ignore: discarded_futures
+      waitForEx(file.close());
     }
   }
 }
@@ -489,7 +502,7 @@ class _Resource {
       {required this.pathToMount})
       : checksum = calculateHash(pathToSource).hexEncode() {
     this.pathToGeneratedLibrary = relative(pathToGeneratedLibrary,
-        from: join(DartProject.self.pathToProjectRoot, 'lib'));
+        from: join(Resources.projectRoot, 'lib'));
   }
 
   /// Path to the original file we are packing.
