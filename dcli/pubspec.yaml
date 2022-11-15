@@ -31,6 +31,7 @@ dependencies:
   pubspec2: ^2.4.1
   scope: ^3.0.0
   settings_yaml: ^3.4.2
+  stack_trace: ^1.11.0
   stacktrace_impl: ^2.3.0
   system_info2: ^2.0.3
   uuid: ^3.0.0
