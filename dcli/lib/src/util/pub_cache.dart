@@ -176,6 +176,9 @@ class PubCache {
   ///
   /// If no versions are installed then null is returned.
   Version? findPrimaryVersion(String packageName) {
+    if (!exists(pathToDartLang)) {
+      return null;
+    }
     final packages = find(
       '$packageName-*.*',
       types: [Find.directory],
