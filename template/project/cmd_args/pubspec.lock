@@ -133,14 +133,14 @@ packages:
       path: "../../../dcli"
       relative: true
     source: path
-    version: "2.0.0-beta.13"
+    version: "2.0.0-beta.14"
   dcli_core:
     dependency: "direct main"
     description:
       path: "../../../dcli_core"
       relative: true
     source: path
-    version: "2.0.0-beta.13"
+    version: "2.0.0-beta.14"
   equatable:
     dependency: transitive
     description:
@@ -385,7 +385,7 @@ packages:
       name: scope
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "2.2.1"
+    version: "3.0.0"
   settings_yaml:
     dependency: transitive
     description:
