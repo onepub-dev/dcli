@@ -128,7 +128,7 @@ void _validateProjectName(String projectName) {
   final regExp = RegExp(r'^[A-Za-z_$][A-Za-z0-9_$]*');
   final match = regExp.stringMatch(projectName);
   if (match != projectName) {
-    throw InvalidArgumentsException(
+    throw InvalidArgumentException(
         'The project name $projectName is not a valid dart indentifier.');
   }
 }

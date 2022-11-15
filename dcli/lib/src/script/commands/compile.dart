@@ -61,7 +61,7 @@ class CompileCommand extends Command {
     if (scriptList.isNotEmpty && scriptList[0] == 'package') {
       // we are compiling a globally activated package.
       if (scriptList.length != 2) {
-        throw InvalidArgumentsException(
+        throw InvalidArgumentException(
             'The "package" command must be followed by '
             'the name of the package');
       }
@@ -172,7 +172,7 @@ Compiles the given list of scripts using dart's native compiler.
     }
 
     if (_scriptList.isEmpty) {
-      throw InvalidArgumentsException('There are no scripts to compile.');
+      throw InvalidArgumentException('There are no scripts to compile.');
     } else {
       // if (flagSet.isSet(WatchFlag())) {
       //   if (scriptList.length != 1) {

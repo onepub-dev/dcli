@@ -78,7 +78,7 @@ class PackCommand extends Command {
   int run(List<Flag> selectedFlags, List<String> arguments) {
     if (!exists(Resources().resourceRoot) &&
         !exists(Resources.pathToPackYaml)) {
-      throw InvalidArgumentsException(
+      throw InvalidArgumentException(
           'Unable to pack resources as neither a resource directory at '
           '${Resources().resourceRoot}'
           ' nor ${Resources.pathToPackYaml} exists.');

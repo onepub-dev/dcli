@@ -255,7 +255,7 @@ class ParsedCliCommand {
     }
 
     if (parts.isEmpty) {
-      throw InvalidArgumentsException('The string did not contain a command.');
+      throw InvalidArgumentException('The string did not contain a command.');
     }
     cmd = parts[0].arg;
 

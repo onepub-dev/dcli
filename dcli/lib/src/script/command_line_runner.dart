@@ -5,8 +5,8 @@
  */
 
 import 'package:dcli_core/dcli_core.dart' as core;
-import '../../dcli.dart';
 
+import '../../dcli.dart';
 import 'commands/commands.dart';
 import 'commands/help.dart';
 import 'commands/run.dart';
@@ -97,7 +97,7 @@ class CommandLineRunner {
       // for the command to process.
       exitCode = command!.run(Settings().selectedFlags, cmdArguments);
     } else {
-      throw InvalidArgumentsException('Invalid arguments passed.');
+      throw InvalidArgumentException('Invalid arguments passed.');
     }
     return exitCode;
   }
@@ -180,7 +180,7 @@ class UnknownFlag extends CommandLineException {
 }
 
 /// Thrown when an invalid argument is passed to a command.
-class InvalidArgumentsException extends CommandLineException {
+class InvalidArgumentException extends CommandLineException {
   ///
-  InvalidArgumentsException(super.message);
+  InvalidArgumentException(super.message);
 }
