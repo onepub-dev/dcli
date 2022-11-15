@@ -1,3 +1,7 @@
+# 1.35.6
+- Fix: pack command fails when no 'excluded' clauses.
+- renamed InvalidArgumentsException to to InvalidArgumentException.
+
 # 1.35.5
 - Fix: back ported mac_os install fix.
 - Fix: PubCache.findPrimaryVersion fails if the .pub-cache/hosted/pub.dartlang.org doesn't exist.
