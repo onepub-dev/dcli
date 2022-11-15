@@ -35,23 +35,22 @@ void main() {
     'PubCache - from ENV',
     () async {
       await withTestScope((outerTempDir) async {
-        withEnvironment(() {
+        await withEnvironment(() async {
           /// create a pub-cache using the test scope's HOME
-          Scope()
-            ..value(PubCache.scopeKey, PubCache.forScope())
-            ..run(() async {
-              if (Settings().isWindows) {
-                expect(
-                    PubCache().pathToBin,
-                    equals(
-                        join(outerTempDir, 'test_cache', '.pub-cache', 'bin')));
-              } else {
-                expect(
+          final scope = Scope()..value(PubCache.scopeKey, PubCache.forScope());
+          await scope.run(() async {
+            if (Settings().isWindows) {
+              expect(
                   PubCache().pathToBin,
-                  equals(join(outerTempDir, 'test_cache', '.pub-cache', 'bin')),
-                );
-              }
-            });
+                  equals(
+                      join(outerTempDir, 'test_cache', '.pub-cache', 'bin')));
+            } else {
+              expect(
+                PubCache().pathToBin,
+                equals(join(outerTempDir, 'test_cache', '.pub-cache', 'bin')),
+              );
+            }
+          });
         }, environment: {
           'PUB_CACHE': join(outerTempDir, 'test_cache', '.pub-cache')
         });

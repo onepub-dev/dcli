@@ -39,7 +39,7 @@ void main() {
         const mainScriptName = '$projectName.dart';
         final scriptPath = join(pathToProject, 'bin', mainScriptName);
 
-        withEnvironment(() {
+        await withEnvironment(() async {
           'dcli create --template=full $projectName'
               .start(workingDirectory: pathToProject);
         }, environment: {

@@ -30,7 +30,7 @@ void main() {
       await scope.run(() async {
         ///  We need to run with an environment that thinks its running
         /// under windows.
-        withEnvironment(() {
+        await withEnvironment(() async {
           const userDataPath = r'C:\Windows\Userdata';
 
           env['HOME'] = userDataPath;

@@ -24,7 +24,7 @@ void main() {
           _installTemplates();
           final pathToTemplate = join(fs, 'test');
 
-          withEnvironment(() {
+          await withEnvironment(() async {
             DartProject.create(pathTo: pathToTemplate, templateName: 'simple')
                 .warmup();
           }, environment: {
@@ -39,12 +39,12 @@ void main() {
     test('Run hello world', () async {
       await capture(() async {
         await TestFileSystem.common.withinZone((fs) async {
-          withTempDir((fs) {
+          await withTempDir((fs) async {
             _installTemplates();
             final pathToScript = truepath(fs, 'test', 'bin', scriptName);
             final pathToTemplate = join(fs, 'test');
 
-            withEnvironment(() {
+            await withEnvironment(() async {
               DartProject.create(pathTo: pathToTemplate, templateName: 'simple')
                   .warmup();
             }, environment: {
