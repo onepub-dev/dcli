@@ -30,7 +30,7 @@ dependencies:
   pub_semver: ^2.0.0
   pubspec: ^2.0.0
   scope: ^3.0.0
-  settings_yaml: ^3.3.1
+  settings_yaml: ^3.5.1
   stacktrace_impl: ^2.3.0
   system_info2: ^2.0.3
   uuid: ^3.0.0
