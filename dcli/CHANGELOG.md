@@ -1,3 +1,8 @@
+# 1.35.5
+- Fix: back ported mac_os install fix.
+- Fix: PubCache.findPrimaryVersion fails if the .pub-cache/hosted/pub.dartlang.org doesn't exist.
+- reverted the dcli install instructions to use sudo env as suod -E doesn't seem to work in some instances.
+
 # 1.35.4
 - release after failed 1.35.3 multi release
 - Upgraded to posix 4.1.0 to fix macos gecos npe.
