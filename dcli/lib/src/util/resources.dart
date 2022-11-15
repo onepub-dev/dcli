@@ -10,10 +10,10 @@ import 'dart:io';
 import 'package:async/async.dart';
 import 'package:crypto/crypto.dart';
 import 'package:path/path.dart';
+import 'package:scope/scope.dart';
 import 'package:settings_yaml/settings_yaml.dart';
 
 import '../../dcli.dart';
-import '../commands/pack.dart';
 import 'exit.dart';
 
 /// Packages a file as a dart library so it can be expanded
@@ -44,16 +44,22 @@ class Resources {
       join(_generatedRoot, 'resource_registry.g.dart');
 
   /// Path to the registry library
-  late final String pathToRegistry =
-      join(DartProject.self.pathToProjectRoot, _pathToRegistry);
+  late final String pathToRegistry = join(projectRoot, _pathToRegistry);
 
   /// Directory where will look for resources to pack
-  late final String resourceRoot =
-      join(DartProject.self.pathToProjectRoot, _resourceRoot);
+  late final String resourceRoot = join(projectRoot, _resourceRoot);
 
   /// directory where we save the packed resources.
-  late final String generatedRoot =
-      join(DartProject.self.pathToProjectRoot, _generatedRoot);
+  late final String generatedRoot = join(projectRoot, _generatedRoot);
+
+  // path to the locatio of the pack.yaml file.
+  static final pathToPackYaml = join(projectRoot, 'tool', 'dcli', 'pack.yaml');
+
+  /// Inject this scope key to overload the projectRoot for unit testing.
+  static final scopeKeyProjectRoot =
+      ScopeKey<String>.withDefault(DartProject.self.pathToProjectRoot);
+
+  static String get projectRoot => Scope.use(scopeKeyProjectRoot);
 
   /// Packs the set of files located under [resourceRoot]
   /// Each resources is packed into a separate dart library
@@ -310,7 +316,7 @@ $line
   List<_Resource> _packExternalResources() {
     final resources = <_Resource>[];
 
-    final pathToPackYaml = PackCommand.pathToPackYaml;
+    final pathToPackYaml = Resources.pathToPackYaml;
     if (!exists(pathToPackYaml)) {
       print(orange('No $pathToPackYaml found'));
       return resources;
@@ -498,7 +504,7 @@ class _Resource {
       {required this.pathToMount})
       : checksum = calculateHash(pathToSource).hexEncode() {
     this.pathToGeneratedLibrary = relative(pathToGeneratedLibrary,
-        from: join(DartProject.self.pathToProjectRoot, 'lib'));
+        from: join(Resources.projectRoot, 'lib'));
   }
 
   /// Path to the original file we are packing.

@@ -73,19 +73,17 @@ class PackCommand extends Command {
   ///
   PackCommand() : super(_commandName);
 
-  static final pathToPackYaml =
-      join(DartProject.self.pathToToolDir, 'dcli', 'pack.yaml');
-
   static const String _commandName = 'pack';
 
   /// [arguments] contains path to clean
   @override
   int run(List<Flag> selectedFlags, List<String> arguments) {
-    if (!exists(Resources().resourceRoot) && !exists(pathToPackYaml)) {
+    if (!exists(Resources().resourceRoot) &&
+        !exists(Resources.pathToPackYaml)) {
       throw InvalidArgumentException(
           'Unable to pack resources as neither a resource directory at '
           '${Resources().resourceRoot}'
-          ' nor $pathToPackYaml exists.');
+          ' nor ${Resources.pathToPackYaml} exists.');
     }
 
     if (!exists(Resources().resourceRoot)) {

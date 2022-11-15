@@ -7,6 +7,8 @@
 //import 'package:dcli/src/dcli/resource/generated/resource_registry.g.dart';
 import 'package:dcli/dcli.dart';
 import 'package:dcli/src/util/resources.dart';
+import 'package:path/path.dart';
+import 'package:scope/scope.dart';
 import 'package:test/test.dart';
 
 const filename = 'PXL_20211104_224740653.jpg';
@@ -18,6 +20,25 @@ void main() {
     }, progress: Progress.capture());
 
     expect(progress.lines.contains(green('Pack complete')), isTrue);
+  });
+
+  test('resource no exclude', () async {
+    withTempDir((tempDir) {
+      Scope()
+        ..value(Resources.scopeKeyProjectRoot, tempDir)
+        ..runSync(() {
+          createDir(dirname(Resources.pathToPackYaml), recursive: true);
+          // ignore: cascade_invocations
+          Resources.pathToPackYaml.write('''
+externals:
+  - external:
+    path: ../template
+    mount: template
+''');
+
+          Resources().pack();
+        });
+    });
   });
 
   // test('unpack', () {
