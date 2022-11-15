@@ -1,3 +1,7 @@
+# 1.21.5
+- Fix: back ported fix for PubCache.findPrimaryVersion which failed if the hosted directory didn't exist.
+- improvements to the docker file.
+
 # 1.21.4
 - Fix: the dcli_zone was not always flushing the last items captured.  Added unit test for same.
 
