@@ -1,3 +1,6 @@
+# 1.21.12
+- fixed release process.
+
 # 1.21.3
 - multi-package released failed.
 
