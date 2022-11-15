@@ -1,3 +1,6 @@
+# 1.21.12
+- upgraded to latest version of settings.yaml
+
 # 1.21.11
 - fifth
 
