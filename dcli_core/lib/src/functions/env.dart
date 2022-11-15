@@ -280,9 +280,7 @@ class Env extends DCliFunction {
       _envVars.remove(name);
       if (Settings().isWindows) {
         if (name == 'HOME' || name == 'APPDATA') {
-          _envVars
-            ..remove('HOME')
-            ..remove('APPDATA');
+          _envVars..remove('HOME')..remove('APPDATA');
         }
       }
     } else {
