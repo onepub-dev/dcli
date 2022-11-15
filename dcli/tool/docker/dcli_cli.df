@@ -1,9 +1,9 @@
-FROM google/dart
+FROM google/dart:2.18.4
 
 WORKDIR /
 
 ENV HOME=/home
-ENV PATH="$PATH":"/home/.pub-cache/bin":"home/.dcli/bin"
+ENV PATH="$PATH":"/home/.pub-cache/bin":"home/.dcli/bin":"home/.dswitch/active"
 RUN touch /home/.profile
 
 RUN apt -y update && apt -y upgrade && apt -y install vim procps coreutils wget
@@ -12,8 +12,13 @@ RUN apt -y update && apt -y upgrade && apt -y install vim procps coreutils wget
 RUN dart pub global activate dcli 
 RUN dcli install
 
+RUN dart pub global activate dswitch
+RUN dswitch install
+
 RUN mkdir /home/dcli
 WORKDIR /home/dcli
+
+COPY . /home/dcli
 
 # set the cli prompt.
 RUN echo "PS1='\e[32mdcli\e[0m:\e[34m`pwd`#\e[0m '" >> /home/.bashrc
