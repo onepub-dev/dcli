@@ -1,3 +1,15 @@
+# 2.0.0-beta.14
+- brought the dcli_cli docker container up to date.
+- Fix: bug in pub_cache.dart when .pub-cache/hosted/pub.dartlang.org doesn't exist. We now just return null form findPrimaryVersion of the directory doesn't exit.
+- change withEnvironment to async so you can pass in an async callback.
+- Fixed: capture was failing to flush the streams and the last two lines where not be captured.
+- changed capture() to be async and dealt with the ripple affect up through the unit tests.
+- Fix: caputure wasn't reliably waiting for the action to complete.
+- explicitly added path to pubspec.yaml as dcli no longer exports.
+- upgraded args package to 2.3.1
+- explicitly included the args and path package into template projects now that we no longer ship it.
+- Added an pubspec_override.yaml to each template so that they compile clean in develoment mode. Excluded the pubspec_overrides.yaml from the packed resources as they are for local dev only.
+
 # 2.0.0-beta.13
 - BREAKING: removed the args and path package exports from the dcli lib. This doesn't feel like the correct approach and does add to namespace pollution.
 - FIX: mac os install issue. core problem is that the home directory wasn't being set correctly as the mac getpwd command doesn't reutrn the users home directory.
