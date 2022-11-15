@@ -50,10 +50,8 @@ Future<Progress> capture<R>(Future<R> Function() action,
 
   await zoneCompleter.future;
 
-  // give the stream listeners a chance to run.
-  // may not be necessary not that we have the
-  // above waitForEx but until then...
-  await Future.value(1);
+  // give the stream listeners a chance to flush.
+  await _flush(progress);
 
   return progress;
 }
@@ -73,3 +71,12 @@ Future<void> _body<R>(
 
 // saves importing pedantic.
 void _unawaited(Future<void>? future) {}
+
+Future<void> _flush(Progress progress) async {
+  /// give the event queue a chance to run.
+  await Future.value(1);
+  // scheduleMicrotask(() {});
+  progress.close();
+  // scheduleMicrotask(() {});
+  await Future.value(1);
+}
