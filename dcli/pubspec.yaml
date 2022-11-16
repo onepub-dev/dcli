@@ -15,7 +15,7 @@ dependencies:
   convert: ^3.0.1
   crypto: ^3.0.0
   csv: ^5.0.1
-  dart_console2: ^2.0.0
+  dart_console2: ^2.0.1
   dcli_core: ^1.35.6
   equatable: ^2.0.0
   ffi: ^2.0.0
@@ -36,7 +36,7 @@ dependencies:
   system_info2: ^2.0.3
   uuid: ^3.0.0
   validators2: ^3.0.0
-  win32: ^2.7.0
+  win32: ^3.0.0
   yaml: ^3.0.0
 dev_dependencies: 
   hex: ^0.2.0
