@@ -57,13 +57,7 @@ class CompileCommand extends Command {
     final scriptList = subarguments.sublist(scriptIndex);
 
     if (flagSet.isSet(PackageFlag())) {
-      // we are compiling a globally activated package.
-      if (scriptList.length != 1) {
-        throw InvalidArgumentException(
-            'The "--package" flag must be followed by the name of the package');
-      }
-
-      compilePackage(scriptList[0]);
+      _compilePackage(scriptList);
     } else {
       compileScripts(scriptList);
     }
@@ -187,8 +181,27 @@ compile [--nowarmup] [--install] [--overwrite] [<script path.dart>, <script path
     }
   }
 
+  /// Compiles a globally activted taking the package name
+  /// and optionally the version from [scriptList].
+  void _compilePackage(List<String> scriptList) {
+    // we are compiling a globally activated package
+    // we must be passed the package name and optionally a version
+    if (scriptList.length != 1 && scriptList.length != 2) {
+      throw InvalidArgumentException('The "--package" flag must be followed by '
+          'the name of the package and optionally a version');
+    }
+
+    final packageName = scriptList[0];
+    String? versionString;
+    if (scriptList.length == 2) {
+      versionString = scriptList[1];
+    }
+
+    compilePackage(packageName, version: versionString);
+  }
+
   /// Compiles a globally activted
-  void compilePackage(String packageName) {
+  void compilePackage(String packageName, {String? version}) {
     if (packageName.contains(separator)) {
       throw InvalidArgumentException('The package must not include a path.');
     }
@@ -201,19 +214,31 @@ Run:
   ''');
     }
 
-    /// Find all the the exectuables the package exposes
-    final version = PubCache().findPrimaryVersion(packageName);
-    assert(version != null, 'If a package exists there must be a version');
+    late final String pathToPackage;
 
-    final pathToPackage =
-        PubCache().pathToPackage(packageName, version.toString());
+    /// Find all the the exectuables the package exposes
+    if (version == null) {
+      late final version = PubCache().findPrimaryVersion(packageName);
+      pathToPackage = PubCache().pathToPackage(packageName, version.toString());
+    } else {
+      final pathTo = PubCache().findVersion(packageName, version);
+      if (pathTo == null) {
+        throw InvalidArgumentException(
+            'The requested version $version does not exist');
+      }
+      pathToPackage = pathTo;
+    }
 
     withTempDir((pathToTempPackage) {
       /// we copy the package to a temp area so we don't
       /// contaminate the cache. Don't know if this is actually
       /// a problem..
-      print('Creating temp copy of package');
-      copyTree(pathToPackage, pathToTempPackage);
+      print('Creating temp copy of package $packageName ${version ?? ""}');
+      copyTree(pathToPackage, pathToTempPackage,
+
+          /// dart allows a user to publish the override even though it should
+          /// never be published and breaks build from cache if it exists.
+          filter: (file) => basename(file) != 'pubspec_overrides.yaml');
       DartProject.fromPath(pathToTempPackage).warmup();
 
       final pubspec = PubSpec.fromFile(join(pathToTempPackage, 'pubspec.yaml'));
@@ -292,8 +317,9 @@ class PackageFlag extends Flag {
   @override
   String description() => '''
       Compile a globally installed dart package and adds it to your path '${Settings().pathToDCliBin}'.
-      Run 'dart pub global activate <x>' 
-      Then 'dcli compile --package <x>.' ''';
+      If a version isn't passed then we compile the most recent stable version.
+      Run 'dart pub global activate <package name>' 
+      Then 'dcli compile --package <package name> [<version>]' ''';
 }
 
 /// watch the package for file changes and do
