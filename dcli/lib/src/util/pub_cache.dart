@@ -211,6 +211,40 @@ class PubCache {
     return primary;
   }
 
+  /// Searches for [requestedVersion] of [packageName] in pub-cache
+  /// and returns the fully qualified path to that version.
+  /// If the version is not found then null is returned;
+  String? findVersion(String packageName, String requestedVersion) {
+    if (!exists(pathToDartLang)) {
+      return null;
+    }
+    final packages = find(
+      '$packageName-*.*',
+      types: [Find.directory],
+      workingDirectory: pathToDartLang,
+    ).toList();
+
+    if (packages.isEmpty) {
+      verbose(() => 'No installed packages for $packageName found');
+      return null;
+    }
+
+    for (final pathToPackage in packages) {
+      final fullPackageName = basename(pathToPackage);
+      final firstHyphen = fullPackageName.indexOf('-');
+      assert(firstHyphen >= 0, 'should always be a hypen after the filename');
+
+      final packageVersion = fullPackageName.substring(firstHyphen + 1);
+
+      if (packageVersion.compareTo(requestedVersion) == 0) {
+        verbose(() => 'Found  version $packageVersion for $packageName '
+            'at $pathToPackage');
+        return pathToPackage;
+      }
+    }
+    return null;
+  }
+
   /// Run dart pub global activate on the given [packageName].
   /// If [version] is passed then we activate the specific version otherwise
   /// we activate the latest version from  the packages stable channel.
