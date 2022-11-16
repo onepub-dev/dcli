@@ -1,6 +1,4 @@
-# 3.0.0
-
-# 2.0.0-beta.16
+# 2.0.0-beta.17
 - upgraded to dart_console 2.0.1 to fix a bug retriving the cursor position in a docker container.
 
 # 2.0.0-beta.15
