@@ -24,7 +24,7 @@ dependencies:
   coverage: 1.0.3
   crypto: 3.0.1
   csv: 5.0.1
-  dart_console2: 2.0.0
+  dart_console2: 2.0.1
   dcli_core: ^2.0.0-beta.15
   equatable: 2.0.3
   ffi: 2.0.1
