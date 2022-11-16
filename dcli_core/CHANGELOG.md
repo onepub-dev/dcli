@@ -1,3 +1,6 @@
+# 1.35.7
+- Upgraded to dart_console2 2.0.1 to fix bug on when running in docker.
+
 # 1.35.6
 - Fix: pack command fails when no 'excluded' clauses.
 - renamed InvalidArgumentsException to to InvalidArgumentException.
