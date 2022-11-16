@@ -1,3 +1,6 @@
+# 2.0.0-beta.16
+- upgraded to dart_console 2.0.1 to fix a bug retriving the cursor position in a docker container.
+
 # 2.0.0-beta.15
 - Fixed: dart pub publish incorrectly allows the pubspec_override.yaml to be published which breaks compiles from pub-cache. We now explicitly exclude the override file from the temp compile directory.
 - Add: new method to PubCache.findVersion to find the path to a specific  version of an installed package.
