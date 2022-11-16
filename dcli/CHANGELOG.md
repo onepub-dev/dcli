@@ -1,3 +1,9 @@
+# 2.0.0-beta.15
+- Fixed: dart pub publish incorrectly allows the pubspec_override.yaml to be published which breaks compiles from pub-cache. We now explicitly exclude the override file from the temp compile directory.
+- Add: new method to PubCache.findVersion to find the path to a specific  version of an installed package.
+- Added: Added support for selecting a specific version to compile from pub-cache. 
+
+
 # 2.0.0-beta.14
 - brought the dcli_cli docker container up to date.
 - Fix: bug in pub_cache.dart when .pub-cache/hosted/pub.dartlang.org doesn't exist. We now just return null form findPrimaryVersion of the directory doesn't exit.
