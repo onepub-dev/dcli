@@ -1,3 +1,7 @@
+# 1.36.0
+- back ported the dcli lock command.
+- added pubspec_lock to deps.
+
 # 1.35.7
 - Upgraded to dart_console2 2.0.1 to fix bug on when running in docker.
 
