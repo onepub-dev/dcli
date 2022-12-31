@@ -150,10 +150,10 @@ class _Is extends core.DCliFunction {
     bool owner;
 
     try {
-      final _stat = posix.stat(path);
-      groupName = posix.getgrgid(_stat.gid).name;
-      ownerName = posix.getUserNameByUID(_stat.uid);
-      final mode = _stat.mode;
+      final stat0 = posix.stat(path);
+      groupName = posix.getgrgid(stat0.gid).name;
+      ownerName = posix.getUserNameByUID(stat0.uid);
+      final mode = stat0.mode;
       if (permissionBitMask == writeBitMask) {
         other = mode.isOtherWritable;
         group = mode.isGroupWritable;

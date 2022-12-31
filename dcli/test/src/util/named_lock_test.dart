@@ -1,6 +1,8 @@
 #! /usr/bin/env dcli
 
 @Timeout(Duration(minutes: 10))
+library;
+
 /* Copyright (C) S. Brett Sutton - All Rights Reserved
  * Unauthorized copying of this file, via any medium is strictly prohibited
  * Proprietary and confidential
@@ -17,7 +19,7 @@ import 'package:dcli_core/dcli_core.dart' as core;
 import 'package:path/path.dart' hide equals;
 import 'package:test/test.dart';
 
-const port = 9003;
+// const port = 9003;
 
 void main() {
   test('lock path', () {

@@ -1,4 +1,6 @@
 @Timeout(Duration(seconds: 600))
+library;
+
 /* Copyright (C) S. Brett Sutton - All Rights Reserved
  * Unauthorized copying of this file, via any medium is strictly prohibited
  * Proprietary and confidential
@@ -6,6 +8,7 @@
  */
 
 import 'dart:io';
+
 import 'package:file/memory.dart';
 import 'package:test/test.dart';
 
@@ -47,9 +50,9 @@ class TestZone {
   }
 
   FileSystemEntityType typeSync(String path, {required bool followLinks}) {
-    var _path = path;
-    _path = _path.substring(0, _path.length - 1);
+    var path0 = path;
+    path0 = path0.substring(0, path0.length - 1);
 
-    return _fs.typeSync(_path, followLinks: followLinks);
+    return _fs.typeSync(path0, followLinks: followLinks);
   }
 }

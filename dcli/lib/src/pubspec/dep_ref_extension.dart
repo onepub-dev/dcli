@@ -80,7 +80,7 @@ ${dependency.name}:
 hosted:
   name: $name
   url: $url
-version: ${versionConstraint.toString()}''';
+version: $versionConstraint''';
 
     return expanded;
   }

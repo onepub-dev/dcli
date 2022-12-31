@@ -1,4 +1,6 @@
 @Timeout(Duration(seconds: 600))
+library;
+
 /* Copyright (C) S. Brett Sutton - All Rights Reserved
  * Unauthorized copying of this file, via any medium is strictly prohibited
  * Proprietary and confidential
@@ -12,7 +14,6 @@ import 'package:test/test.dart';
 
 import '../util/test_file_system.dart';
 
-String? testFile;
 void main() {
   t.group('moveDir', () {
     t.test('empty to ', () {
@@ -99,25 +100,25 @@ void main() {
   });
 }
 
-/// checks that the given list of files no longer exists.
-bool hasMoved(List<String> files) {
-  var moved = true;
-  for (final file in files) {
-    if (exists(file)) {
-      printerr('The file $file was not moved');
-      moved = false;
-      break;
-    }
-  }
-  return moved;
-}
+// /// checks that the given list of files no longer exists.
+// bool hasMoved(List<String> files) {
+//   var moved = true;
+//   for (final file in files) {
+//     if (exists(file)) {
+//       printerr('The file $file was not moved');
+//       moved = false;
+//       break;
+//     }
+//   }
+//   return moved;
+// }
 
-List<String> subname(List<String> expected, String from, String replace) {
-  final result = <String>[];
+// List<String> subname(List<String> expected, String from, String replace) {
+//   final result = <String>[];
 
-  for (var path in expected) {
-    path = path.replaceAll(from, replace);
-    result.add(path);
-  }
-  return result;
-}
+//   for (var path in expected) {
+//     path = path.replaceAll(from, replace);
+//     result.add(path);
+//   }
+//   return result;
+// }

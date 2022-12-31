@@ -1,4 +1,6 @@
 @Timeout(Duration(seconds: 600))
+library;
+
 /* Copyright (C) S. Brett Sutton - All Rights Reserved
  * Unauthorized copying of this file, via any medium is strictly prohibited
  * Proprietary and confidential
@@ -14,7 +16,6 @@ import 'package:test/test.dart';
 
 String baseURl =
     'https://github.com/noojee/dcli/raw/master/dcli/test/src/functions/fetch_downloads';
-String? testFile;
 void main() {
   group('Fetch Single', () {
     // Don't know how to test this as it writes directly to stdout.

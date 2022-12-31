@@ -173,7 +173,7 @@ class $className extends PackedResource {
   /// We prefix the md5 hash with the letter 'A' so that it can
   /// be used as a valid class name.
   String _generateClassName(String pathToResource) =>
-      'A${md5.convert(utf8.encode(pathToResource)).toString()}';
+      'A${md5.convert(utf8.encode(pathToResource))}';
 
   void _writeRegistry(List<_Resource> resources) {
     final registryFile = File(pathToRegistry).openWrite();

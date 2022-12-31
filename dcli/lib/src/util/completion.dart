@@ -19,13 +19,13 @@ List<String> completionExpandScripts(
   String workingDirectory = '.',
   String? extension,
 }) {
-  var _workingDirectory = workingDirectory;
+  var workingDirectory0 = workingDirectory;
 
   var searchTerm = word;
 
   // a trailing slash and we treat the word as a directory.
   if (word.endsWith(Platform.pathSeparator)) {
-    _workingDirectory = join(_workingDirectory, word);
+    workingDirectory0 = join(workingDirectory0, word);
     searchTerm = '';
   } else {
     // no trailing slash but the word may contain a directory path
@@ -37,8 +37,8 @@ List<String> completionExpandScripts(
       searchTerm = parts.last;
 
       if (parts.length > 1) {
-        _workingDirectory = join(
-          _workingDirectory,
+        workingDirectory0 = join(
+          workingDirectory0,
           parts.sublist(0, parts.length - 1).join(Platform.pathSeparator),
         );
       }
@@ -46,7 +46,7 @@ List<String> completionExpandScripts(
   }
 
   /// if the resulting path is invalid return an empty list.
-  if (!exists(_workingDirectory)) {
+  if (!exists(workingDirectory0)) {
     return <String>[];
   }
 
@@ -61,7 +61,7 @@ List<String> completionExpandScripts(
   final entries = find(
     '$searchTerm*',
     types: [Find.directory, Find.file],
-    workingDirectory: _workingDirectory,
+    workingDirectory: workingDirectory0,
     recursive: false,
   ).toList();
 
@@ -69,7 +69,7 @@ List<String> completionExpandScripts(
   for (final script in entries) {
     if (word.isEmpty ||
         relative(script, from: workingDirectory).startsWith(word)) {
-      final matchPath = join(_workingDirectory, script);
+      final matchPath = join(workingDirectory0, script);
       String filePath;
       if (isDirectory(matchPath)) {
         // its a directory add trailing slash and returning.

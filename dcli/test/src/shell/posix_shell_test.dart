@@ -6,7 +6,6 @@
 
 import 'package:collection/collection.dart';
 import 'package:dcli/dcli.dart';
-import 'package:path/path.dart' hide equals;
 import 'package:posix/posix.dart';
 import 'package:test/test.dart';
 
@@ -109,6 +108,3 @@ void main() {
     });
   }, tags: ['privileged']);
 }
-
-String name(String fileBasedName) =>
-    basenameWithoutExtension(fileBasedName).replaceAll('-', '');

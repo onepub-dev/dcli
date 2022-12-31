@@ -65,15 +65,16 @@ void main() {
   // });
 }
 
-int count = 0;
-void doIt(String ansi, RegExp regex) {
-  count++;
+// int count = 0;
+// void doIt(String ansi, RegExp regex) {
+//   count++;
 
-  print('$count $ansi');
-  print('$count encoded ${HEX.encode(ansi.codeUnits)}');
-  print('$count hasMatch ${regex.hasMatch(ansi)}');
+//   print('$count $ansi');
+//   print('$count encoded ${HEX.encode(ansi.codeUnits)}');
+//   print('$count hasMatch ${regex.hasMatch(ansi)}');
 
-  print('$count replaced ${ansi.replaceAll(regex, '')}');
-  // ignore: lines_longer_than_80_chars
-  print('$count encoded ${HEX.encode(ansi.replaceAll(regex, '').codeUnits)}');
-}
+//   print('$count replaced ${ansi.replaceAll(regex, '')}');
+//   // ignore: lines_longer_than_80_chars
+//   print('$count encoded ${HEX.encode(ansi.replaceAll(regex, '')
+//    .codeUnits)}');
+// }

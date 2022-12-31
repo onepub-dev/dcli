@@ -1,4 +1,6 @@
 @Timeout(Duration(seconds: 600))
+library;
+
 /* Copyright (C) S. Brett Sutton - All Rights Reserved
  * Unauthorized copying of this file, via any medium is strictly prohibited
  * Proprietary and confidential
@@ -13,7 +15,6 @@ import 'package:test/test.dart';
 
 import '../util/test_file_system.dart';
 
-String? testFile;
 void main() {
   t.group('moveTree', () {
     t.test('empty target ', () {

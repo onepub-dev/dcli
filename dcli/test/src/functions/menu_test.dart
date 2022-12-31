@@ -1,4 +1,6 @@
 @Timeout(Duration(minutes: 5))
+library;
+
 /* Copyright (C) S. Brett Sutton - All Rights Reserved
  * Unauthorized copying of this file, via any medium is strictly prohibited
  * Proprietary and confidential
@@ -40,7 +42,7 @@ void main() {
         menu('How old are you', defaultOption: 9, options: numoptions);
         // ignore: avoid_catching_errors
       } on ArgumentError catch (e) {
-        print('Expected Argument error ${e.toString()}');
+        print('Expected Argument error $e');
       }
       print('result: $result1');
     },

@@ -5,9 +5,6 @@
  * Written by Brett Sutton <bsutton@onepub.dev>, Jan 2022
  */
 
-
-
-
 import 'dart:io';
 
 import 'package:dcli/dcli.dart';
@@ -142,6 +139,6 @@ void main() {
   // ignore: avoid_catches_without_on_clauses
   catch (e) {
     // All errors are thrown as exceptions.
-    print('An error occured: ${e.toString()}');
+    print('An error occured: $e)}');
   }
 }

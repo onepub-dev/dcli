@@ -659,12 +659,12 @@ class DartSdk {
   }
 
   static bool get isUsingDartFromFlutter {
-    final _path = which('dart').path;
+    final path = which('dart').path;
 
-    if (_path == null) {
+    if (path == null) {
       return false;
     }
-    return dirname(dirname(_path)).endsWith('flutter');
+    return dirname(dirname(path)).endsWith('flutter');
   }
 
   // The normal dart detection process may not work here

@@ -51,12 +51,12 @@ T waitForEx<T>(Future<T> wrapped) {
 /// merges two stack traces. Used when handling futures and you want
 /// combine a futures stack exception with the original calls stack
 Trace _merge(Trace caller, StackTrace wrapped) {
-  final _microImpl = Trace.from(wrapped);
+  final microImpl = Trace.from(wrapped);
 
   final merged = <Frame>[...caller.frames];
 
   var index = 0;
-  for (final frame in _microImpl.frames) {
+  for (final frame in microImpl.frames) {
     // best we can do is exclude any files that are in the flutter src tree.
     if (isExcludedSource(frame)) {
       continue;

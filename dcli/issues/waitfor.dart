@@ -9,9 +9,7 @@
 // ignore_for_file: deprecated_member_use
 
 import 'dart:async';
-
 import 'dart:cli';
-
 import 'dart:io';
 
 import 'package:dcli/dcli.dart';
@@ -48,7 +46,7 @@ void waitForMe(Future<void> future) {
     print('Rethrowing a non DCliException $e');
     rethrow;
   } on Exception catch (e) {
-    print(e.toString());
+    print(e);
     // ignore: avoid_catches_without_on_clauses
   } catch (e) {
     print('Rethrowing a non DCliException $e');
@@ -63,6 +61,7 @@ Future<T> waitForEx<T>(Future<T> future) async {
   late T value;
   try {
     // catch any unhandled exceptions
+    // ignore: body_might_complete_normally_catch_error
     await future.catchError((Object e, StackTrace st) {
       print('catchError called');
       exception = e;
@@ -94,20 +93,4 @@ Future<T> waitForEx<T>(Future<T> future) async {
     }
   }
   return value!;
-}
-
-Future<int> throwExceptionV3() {
-  final complete = Completer<int>();
-  try {
-    Future.delayed(const Duration(seconds: 2), () => throw Exception())
-        .catchError((Object e) {
-      print('caught 1');
-      complete.completeError('caught ');
-    });
-  }
-  // ignore: avoid_catches_without_on_clauses
-  catch (e) {
-    print('e');
-  }
-  return complete.future;
 }

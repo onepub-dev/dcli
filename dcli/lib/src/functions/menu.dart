@@ -120,7 +120,7 @@ T menu<T>(
 
   if (defaultOption != null && defaultAsString == null) {
     throw ArgumentError(
-      "The [defaultOption] ${defaultOption.toString()} doesn't match any "
+      "The [defaultOption] $defaultOption doesn't match any "
       'of the passed [options].'
       ' Check the == operator for ${options[0].runtimeType}.',
     );

@@ -312,8 +312,8 @@ class TemplateFlag extends Flag {
   bool get isOptionSupported => true;
 
   @override
-  set option(String? _value) {
-    _templateName = _value ?? defaultTemplateName;
+  set option(String? value) {
+    _templateName = value ?? defaultTemplateName;
   }
 
   @override
@@ -354,7 +354,7 @@ class TemplateListFlag extends Flag {
   bool get isOptionSupported => false;
 
   @override
-  set option(String? _value) {}
+  set option(String? value) {}
 
   @override
   String get abbreviation => 'l';

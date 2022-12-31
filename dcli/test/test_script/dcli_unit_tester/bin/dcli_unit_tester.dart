@@ -67,7 +67,7 @@ void dumpScript() {
 }
 
 void dump(String label, Object value, {required List<int> widths}) {
-  print('$label, ${value.toString()}');
+  print('$label, $value');
 }
 
 void dumpPlatform() {

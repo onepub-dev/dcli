@@ -157,12 +157,12 @@ compile [--nowarmup] [--install] [--overwrite] [<script path.dart>, <script path
   List<Flag> flags() => _compileFlags;
 
   void compileScripts(List<String> scriptList) {
-    var _scriptList = scriptList;
-    if (_scriptList.isEmpty) {
-      _scriptList = find('*.dart', recursive: false).toList();
+    var scriptList0 = scriptList;
+    if (scriptList0.isEmpty) {
+      scriptList0 = find('*.dart', recursive: false).toList();
     }
 
-    if (_scriptList.isEmpty) {
+    if (scriptList0.isEmpty) {
       throw InvalidArgumentException('There are no scripts to compile.');
     } else {
       // if (flagSet.isSet(WatchFlag())) {
@@ -171,7 +171,7 @@ compile [--nowarmup] [--install] [--overwrite] [<script path.dart>, <script path
       //   }
       //   waitForEx(IncrementalCompiler(scriptList.first).watch());
       // } else {
-      for (final scriptPath in _scriptList) {
+      for (final scriptPath in scriptList0) {
         exitCode = compileScript(scriptPath);
         if (exitCode != 0) {
           break;

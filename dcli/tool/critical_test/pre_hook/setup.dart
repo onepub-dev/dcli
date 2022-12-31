@@ -88,16 +88,16 @@ Future<void> main(List<String> args) async {
 //   }
 // }
 
-DateTime lastChangeToDcli() {
-  var lastChange = DateTime.now().subtract(const Duration(days: 365));
+// DateTime lastChangeToDcli() {
+//   var lastChange = DateTime.now().subtract(const Duration(days: 365));
 
-  find('*', workingDirectory: DartProject.fromPath(pwd).pathToProjectRoot)
-      .forEach((line) {
-    final modified = stat(line).modified;
-    if (modified.isAfter(lastChange)) {
-      lastChange = modified;
-    }
-  });
+//   find('*', workingDirectory: DartProject.fromPath(pwd).pathToProjectRoot)
+//       .forEach((line) {
+//     final modified = stat(line).modified;
+//     if (modified.isAfter(lastChange)) {
+//       lastChange = modified;
+//     }
+//   });
 
-  return lastChange;
-}
+//   return lastChange;
+// }

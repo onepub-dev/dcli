@@ -261,7 +261,7 @@ class Progress {
   ///  * [toParagraph]
   ///  * [forEach]
   List<String> toList({int skipLines = 0}) {
-    var _skipLines = skipLines;
+    var skipLines0 = skipLines;
 
     _captureStdout = true;
     _captureStderr = true;
@@ -271,8 +271,8 @@ class Progress {
     final lines = <String>[];
 
     for (final line in _lines) {
-      if (_skipLines > 0) {
-        _skipLines--;
+      if (skipLines0 > 0) {
+        skipLines0--;
       } else {
         lines.add(line);
       }
