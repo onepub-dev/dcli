@@ -32,6 +32,7 @@ String readHidden() {
       char = stdin.readByteSync();
       if (char != 10) {
         stdout.write('*');
+        // ignore: discarded_futures
         waitForEx<void>(stdout.flush());
         line.add(char);
       }

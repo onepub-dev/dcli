@@ -10,4 +10,4 @@ dependencies:
   dcli: ^1.15.5
 
 dev_dependencies:
-  lint_hard: ^1.0.0
+  lint_hard: ^3.0.0-beta.1

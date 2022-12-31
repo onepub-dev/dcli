@@ -40,7 +40,7 @@ void main() {
         menu(prompt: 'How old are you', defaultOption: 9, options: numoptions);
         // ignore: avoid_catching_errors
       } on ArgumentError catch (e) {
-        print('Expected Argument error ${e.toString()}');
+        print('Expected Argument error $e');
       }
       print('result: $result1');
     },

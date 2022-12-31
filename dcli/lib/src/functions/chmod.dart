@@ -4,7 +4,7 @@
  * Written by Brett Sutton <bsutton@onepub.dev>, Jan 2022
  */
 
-import 'package:dcli_core/dcli_core.dart' hide exists, Settings;
+import 'package:dcli_core/dcli_core.dart' hide Settings, exists;
 import 'package:posix/posix.dart' as posix;
 
 import '../../dcli.dart';

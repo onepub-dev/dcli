@@ -63,9 +63,9 @@ class ShellDetection {
   /// Currently this isn't very reliable.
   Shell identifyShell() {
     /// on posix systems this MAY give us the login shell name.
-    final _loginShell = ShellMixin.loginShell();
-    if (_loginShell != null) {
-      return _shellByName(_loginShell, -1);
+    final loginShell = ShellMixin.loginShell();
+    if (loginShell != null) {
+      return _shellByName(loginShell, -1);
     } else {
       return _searchProcessTree();
     }

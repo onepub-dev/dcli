@@ -9,7 +9,7 @@ import 'package:dcli_core/dcli_core.dart' as core;
 import '../../dcli.dart';
 
 export 'package:dcli_core/dcli_core.dart'
-    show RestoreFileException, BackupFileException;
+    show BackupFileException, RestoreFileException;
 
 /// Provide a very simple mechanism to backup a single file.
 ///

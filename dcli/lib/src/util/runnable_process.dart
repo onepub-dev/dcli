@@ -7,6 +7,7 @@
 import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
+
 import 'package:dcli_core/dcli_core.dart' as core;
 
 import '../../dcli.dart';
@@ -291,8 +292,8 @@ class RunnableProcess {
   void _waitForStart() {
     final complete = Completer<Process>();
 
-    // ignore: discarded_futures
-    _fProcess.then(complete.complete)
+    unawaited(_fProcess
+        .then(complete.complete)
         //ignore: avoid_types_on_closure_parameters, discarded_futures
         .catchError((Object e, StackTrace s) {
       // 2 - No such file or directory
@@ -306,7 +307,7 @@ class RunnableProcess {
         );
       }
       complete.completeError(e);
-    });
+    }));
     waitForEx<Process>(complete.future);
   }
 
@@ -428,11 +429,11 @@ class RunnableProcess {
   void processUntilExit(Progress? progress, {required bool nothrow}) {
     final exited = Completer<bool>();
 
-    final _progress = progress ?? Progress.devNull();
+    final progress0 = progress ?? Progress.devNull();
 
     // ignore: discarded_futures
     _fProcess.then((process) {
-      _wireStreams(process, _progress);
+      _wireStreams(process, progress0);
 
       // trap the process finishing
       // ignore: discarded_futures
@@ -441,7 +442,7 @@ class RunnableProcess {
         // If the start failed we don't want to rethrow
         // as the exception will be thrown async and it will
         // escape as an unhandled exception and stop the whole script
-        _progress.exitCode = exitCode;
+        progress0.exitCode = exitCode;
 
         /// the process may have exited by the streams are likely to still
         /// contain data.
@@ -467,7 +468,7 @@ class RunnableProcess {
         //ignore: avoid_types_on_closure_parameters, discarded_futures
         .catchError((Object e, StackTrace s) {
       verbose(
-        () => '${e.toString()} stacktrace: '
+        () => '$e stacktrace: '
             '${StackTraceImpl.fromStackTrace(s).formatStackTrace()}',
       );
       // ignore: only_throw_errors

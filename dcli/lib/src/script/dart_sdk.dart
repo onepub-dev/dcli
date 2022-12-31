@@ -625,22 +625,22 @@ class DartSdk {
       PubCache().isGloballyActivatedFromSource(path);
 
   String? _determineDartPath() {
-    var _path = which(dartExeName).path;
+    var path = which(dartExeName).path;
 
-    if (_path == null) {
+    if (path == null) {
       /// lets try some likely locations
-      _path = '/usr/lib/dart/bin/dart';
-      if (exists(_path)) {
-        return _path;
+      path = '/usr/lib/dart/bin/dart';
+      if (exists(path)) {
+        return path;
       }
 
-      _path = '/usr/bin/dart';
-      if (exists(_path)) {
-        return _path;
+      path = '/usr/bin/dart';
+      if (exists(path)) {
+        return path;
       }
     }
 
-    return _path;
+    return path;
   }
 
   // The normal dart detection process may not work here

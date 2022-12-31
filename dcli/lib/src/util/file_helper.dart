@@ -10,11 +10,11 @@ import 'dart:io';
 /// The file is trunctated and then written to.
 ///
 void writeToFile(String path, String content) {
-  File _file;
+  File file;
 
-  _file = File(path);
+  file = File(path);
 
-  _file.openSync(mode: FileMode.write)
+  file.openSync(mode: FileMode.write)
     ..writeStringSync(content)
     ..closeSync();
 }

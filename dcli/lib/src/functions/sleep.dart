@@ -41,22 +41,22 @@ enum Interval {
 class _Sleep extends core.DCliFunction {
   void sleep(int duration, {Interval interval = Interval.seconds}) {
     verbose(() => 'sleep: duration: $duration interval: $interval');
-    late Duration _duration;
+    late Duration duration0;
     switch (interval) {
       case Interval.hours:
-        _duration = Duration(hours: duration);
+        duration0 = Duration(hours: duration);
         break;
       case Interval.seconds:
-        _duration = Duration(seconds: duration);
+        duration0 = Duration(seconds: duration);
         break;
       case Interval.milliseconds:
-        _duration = Duration(milliseconds: duration);
+        duration0 = Duration(milliseconds: duration);
         break;
       case Interval.minutes:
-        _duration = Duration(minutes: duration);
+        duration0 = Duration(minutes: duration);
         break;
     }
 
-    waitForEx<void>(Future.delayed(_duration));
+    waitForEx<void>(Future.delayed(duration0));
   }
 }

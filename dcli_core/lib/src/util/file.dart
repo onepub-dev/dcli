@@ -211,7 +211,7 @@ Future<Digest> calculateHash(String path) async {
   const hasher = sha256;
   final digest = await hasher.bind(input.openRead()).first;
 
-  verbose(() => 'calculateHash($path) = ${digest.toString()}');
+  verbose(() => 'calculateHash($path) = $digest');
   return digest;
 }
 

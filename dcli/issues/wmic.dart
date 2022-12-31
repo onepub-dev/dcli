@@ -4,8 +4,6 @@
  * Written by Brett Sutton <bsutton@onepub.dev>, Jan 2022
  */
 
-
-
 import 'package:dcli/dcli.dart';
 
 void main(List<String> args) {
@@ -24,7 +22,7 @@ void main(List<String> args) {
     print(st);
     // ignore: avoid_catches_without_on_clauses
   } catch (e, st) {
-    print(e.toString());
+    print(e);
     print(st);
   }
 }

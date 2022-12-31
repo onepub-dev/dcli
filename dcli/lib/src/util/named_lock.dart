@@ -7,7 +7,6 @@
 import 'dart:async';
 import 'dart:developer';
 import 'dart:io';
-
 import 'dart:isolate';
 
 import '../../dcli.dart';
@@ -128,7 +127,7 @@ class NamedLock {
         _releaseLock();
       }
       // final stackTrace = StackTraceImpl.fromStackTrace(st);
-      verbose(() => 'Exception throw $e : ${e.toString()}');
+      verbose(() => 'Exception throw $e : $e');
       if (e is DCliException) {
         throw e..stackTrace = callingStackTrace;
       } else {
@@ -166,29 +165,29 @@ class NamedLock {
   }
 
   int get _lockCountForName {
-    var _lockCount = _lockCounts[name];
-    return _lockCount ??= 0;
+    var lockCount0 = _lockCounts[name];
+    return lockCount0 ??= 0;
   }
 
   /// increments the lock count and returns
   /// the new lock count.
   int get incLockCount {
-    var _lockCount = _lockCountForName;
-    _lockCount++;
-    _lockCounts[name] = _lockCount;
-    verbose(() => 'Incremented lock: $_lockCount');
-    return _lockCount;
+    var lockCount0 = _lockCountForName;
+    lockCount0++;
+    _lockCounts[name] = lockCount0;
+    verbose(() => 'Incremented lock: $lockCount0');
+    return lockCount0;
   }
 
   /// decrements the lock count and returns
   /// the new lock count.
   int get decLockCount {
-    var _lockCount = _lockCountForName;
-    _lockCount--;
-    _lockCounts[name] = _lockCount;
+    var lockCount0 = _lockCountForName;
+    lockCount0--;
+    _lockCounts[name] = lockCount0;
 
     verbose(() => 'Decremented lock: $_lockCountForName');
-    return _lockCount;
+    return lockCount0;
   }
 
   String get _lockFilePath {
@@ -373,7 +372,7 @@ class NamedLock {
       lockIsolateId == _isolateID && lockPid == pid;
 
   int _clearStaleLocks(List<String> locks, int lockFiles) {
-    var _lockFiles = lockFiles;
+    var lockFiles0 = lockFiles;
     for (final lock in locks) {
       final lockFileParts = _lockFileParts(lock);
       if (lockFileParts == null) {
@@ -382,7 +381,7 @@ class NamedLock {
       }
       if (_isSelf(lockFileParts.pid, lockFileParts.isolateId)) {
         // ignore our own lock.
-        _lockFiles--;
+        lockFiles0--;
         continue;
       }
 
@@ -393,10 +392,10 @@ class NamedLock {
           verbose(() => red('Clearing old lock file: $lock'));
           delete(lock);
         }
-        _lockFiles--;
+        lockFiles0--;
       }
     }
-    return _lockFiles;
+    return lockFiles0;
   }
 
   bool _isOwnerLive(int lockOwnerPid) =>

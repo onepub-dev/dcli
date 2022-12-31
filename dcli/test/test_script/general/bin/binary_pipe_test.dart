@@ -61,7 +61,7 @@ void pipeTo(Future<Process> lhs, Future<Process> rhs) {
   // wait for the lhs process to
   // start and then start piping its
   // output to the rhs process.
-  lhs.then((lhsProcess) {
+  unawaited(lhs.then((lhsProcess) {
     rhs.then<void>((rhsProcess) {
       // write stdout from lhs to stdin of rhs
       lhsProcess.stdout.listen((datum) {
@@ -101,7 +101,7 @@ void pipeTo(Future<Process> lhs, Future<Process> rhs) {
         print('rhs exitCode=$exitCode');
       });
     });
-  });
+  }));
 
   waitFor(complete.future);
 }

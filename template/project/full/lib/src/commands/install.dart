@@ -2,7 +2,7 @@ import 'dart:async';
 import 'dart:io';
 
 import 'package:args/command_runner.dart';
-import 'package:dcli/dcli.dart';
+import 'package:dcli/dcli.dart' hide ExitException;
 import 'package:dcli/posix.dart';
 
 import '../args/global_args.dart';

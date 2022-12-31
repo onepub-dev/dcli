@@ -1,7 +1,7 @@
 import 'dart:async';
 
 import 'package:args/command_runner.dart';
-import 'package:dcli/dcli.dart';
+import 'package:dcli/dcli.dart' hide ExitException;
 
 import '../args/global_args.dart';
 import '../exceptions/app_exception.dart';
@@ -77,9 +77,9 @@ class ConfigArgs extends GlobalArgs {
       : super(globalResults) {
     final settings = AppSettings();
 
-    var _smtpPort = settings.smtpPort;
-    var _httpPort = settings.httpPort;
-    var _ask = true;
+    var smtpPort = settings.smtpPort;
+    var httpPort = settings.httpPort;
+    var ask = true;
 
     if (results!.rest.isNotEmpty) {
       throw ExitException(
@@ -90,7 +90,7 @@ class ConfigArgs extends GlobalArgs {
     }
     // smtp port
     if (results.wasParsed(ConfigCommand.smtpPortOption)) {
-      _ask = false;
+      ask = false;
       final port =
           int.tryParse(results[ConfigCommand.smtpPortOption] as String);
       if (port == null) {
@@ -98,12 +98,12 @@ class ConfigArgs extends GlobalArgs {
             1, 'Invalid integer passed for ${ConfigCommand.smtpPortOption}',
             showUsage: false);
       }
-      _smtpPort = port;
+      smtpPort = port;
     }
 
     // http port
     if (results.wasParsed(ConfigCommand.httpPortOption)) {
-      _ask = false;
+      ask = false;
       final port =
           int.tryParse(results[ConfigCommand.httpPortOption] as String);
       if (port == null) {
@@ -111,13 +111,13 @@ class ConfigArgs extends GlobalArgs {
             1, 'Invalid integer passed for ${ConfigCommand.httpPortOption}',
             showUsage: false);
       }
-      _httpPort = port;
+      httpPort = port;
     }
 
-    smtpPort = _smtpPort;
-    httpPort = _httpPort;
+    smtpPort = smtpPort;
+    httpPort = httpPort;
 
-    ask = _ask;
+    ask = ask;
   }
 
   late final int smtpPort;

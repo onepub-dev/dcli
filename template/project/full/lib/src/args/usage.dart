@@ -29,7 +29,7 @@ void showException<T>(CommandRunner<T> runner, Object e) {
     }
   } else {
     // ignore: avoid_catches_without_on_clauses
-    printerr(red('Error: ${e.toString()}'));
+    printerr(red('Error: $e'));
     showUsage(runner);
   }
 }
