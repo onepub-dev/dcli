@@ -1,3 +1,7 @@
+# 2.0.0-beta.18
+- upgraded to file 6.1.4 for dart 2.19 compatability.
+- updated to lint_hard 3.x
+
 # 2.0.0-beta.17
 - upgraded to dart_console 2.0.1 to fix a bug retriving the cursor position in a docker container.
 

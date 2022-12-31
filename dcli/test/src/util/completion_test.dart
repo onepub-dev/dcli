@@ -10,7 +10,6 @@ library;
 /// command line completion for dcli
 /// is only supported on lunix.
 @TestOn('!windows')
-
 import 'package:dcli/dcli.dart';
 import 'package:dcli/src/util/completion.dart';
 import 'package:path/path.dart';
