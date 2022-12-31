@@ -21,13 +21,13 @@ Future<R> withOpenFile<R>(
   R Function(RandomAccessFile) action, {
   FileMode fileMode = FileMode.writeOnlyAppend,
 }) async {
-  final _raf = File(pathToFile).openSync(mode: fileMode);
+  final raf = File(pathToFile).openSync(mode: fileMode);
 
   R result;
   try {
-    result = action(_raf);
+    result = action(raf);
   } finally {
-    await _raf.close();
+    await raf.close();
   }
   return result;
 }

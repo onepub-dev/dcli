@@ -117,15 +117,15 @@ class _Is extends DCliFunction {
       throw ArgumentError('path must not be empty.');
     }
 
-    final _exists = FileSystemEntity.typeSync(path, followLinks: followLinks) !=
+    final exists = FileSystemEntity.typeSync(path, followLinks: followLinks) !=
         FileSystemEntityType.notFound;
 
     verbose(
       () =>
-          'exists: found: $_exists ${truepath(path)} followLinks: $followLinks',
+          'exists: found: $exists ${truepath(path)} followLinks: $followLinks',
     );
 
-    return _exists;
+    return exists;
   }
 
   DateTime lastModified(String path) => File(path).lastModifiedSync();

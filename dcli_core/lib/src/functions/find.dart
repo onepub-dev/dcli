@@ -118,7 +118,7 @@ class Find extends DCliFunction {
     List<FileSystemEntityType> types = const [Find.file],
     bool includeHidden = false,
   }) async {
-    late final String _workingDirectory;
+    late final String workingDirectory0;
     late final String finalpattern;
 
     /// strip any path components out of the pattern
@@ -126,15 +126,15 @@ class Find extends DCliFunction {
     /// If there is no dirname component we get '.'
     final directoryPart = dirname(pattern);
     if (directoryPart != '.') {
-      _workingDirectory = join(workingDirectory, directoryPart);
+      workingDirectory0 = join(workingDirectory, directoryPart);
     } else {
-      _workingDirectory = workingDirectory;
+      workingDirectory0 = workingDirectory;
     }
     finalpattern = basename(pattern);
 
-    if (!exists(_workingDirectory)) {
+    if (!exists(workingDirectory0)) {
       throw FindException(
-        'The path ${truepath(_workingDirectory)} does not exists',
+        'The path ${truepath(workingDirectory0)} does not exists',
       );
     }
 
@@ -142,7 +142,7 @@ class Find extends DCliFunction {
       finalpattern,
       caseSensitive: caseSensitive,
       recursive: recursive,
-      workingDirectory: _workingDirectory,
+      workingDirectory: workingDirectory0,
       progress: progress,
       types: types,
       includeHidden: includeHidden,
@@ -158,18 +158,18 @@ class Find extends DCliFunction {
     List<FileSystemEntityType> types = const [Find.file],
     bool includeHidden = false,
   }) async {
-    var _workingDirectory = workingDirectory;
+    var workingDirectory0 = workingDirectory;
     var finalIncludeHidden = includeHidden;
 
     final matcher = _PatternMatcher(
       pattern,
       caseSensitive: caseSensitive,
-      workingDirectory: _workingDirectory,
+      workingDirectory: workingDirectory0,
     );
-    if (_workingDirectory == '.') {
-      _workingDirectory = pwd;
+    if (workingDirectory0 == '.') {
+      workingDirectory0 = pwd;
     } else {
-      _workingDirectory = truepath(_workingDirectory);
+      workingDirectory0 = truepath(workingDirectory0);
     }
 
     if (basename(pattern).startsWith('.')) {
@@ -179,7 +179,7 @@ class Find extends DCliFunction {
     try {
       verbose(
         () =>
-            'find: pwd: $pwd workingDirectory: ${truepath(_workingDirectory)} '
+            'find: pwd: $pwd workingDirectory: ${truepath(workingDirectory0)} '
             'pattern: $pattern caseSensitive: $caseSensitive '
             'recursive: $recursive types: $types ',
       );
@@ -190,8 +190,8 @@ class Find extends DCliFunction {
       final childDirectories =
           List<FileSystemEntity?>.filled(100, null, growable: true);
       await _processDirectory(
-        _workingDirectory,
-        _workingDirectory,
+        workingDirectory0,
+        workingDirectory0,
         recursive,
         types,
         matcher,
@@ -207,7 +207,7 @@ class Find extends DCliFunction {
           }
           // print('calling _processDirectory ${count++}');
           await _processDirectory(
-            _workingDirectory,
+            workingDirectory0,
             directory.path,
             recursive,
             types,

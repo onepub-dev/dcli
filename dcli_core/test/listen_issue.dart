@@ -42,11 +42,11 @@ Future<void> _doSomethingAsync(String item) async {
   await Future<void>.delayed(const Duration(milliseconds: 100));
 }
 
-/// test summing a stream.
-Future<int> sumStream(Stream<int> stream) async {
-  var sum = 0;
-  await for (final value in stream) {
-    sum += value;
-  }
-  return sum;
-}
+// /// test summing a stream.
+// Future<int> sumStream(Stream<int> stream) async {
+//   var sum = 0;
+//   await for (final value in stream) {
+//     sum += value;
+//   }
+//   return sum;
+// }

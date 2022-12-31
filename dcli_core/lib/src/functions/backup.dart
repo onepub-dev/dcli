@@ -146,7 +146,7 @@ Future<R> withFileProtection<R>(
   // We only support searching for files by the glob pattern (not directories).
   // If the entry is a glob pattern then it is applied recusively.
 
-  final _workingDirectory = workingDirectory ?? pwd;
+  final workingDirectory0 = workingDirectory ?? pwd;
   final result = await withTempDir(
     (backupDir) async {
       verbose(() => 'withFileProtection: backing up to $backupDir');
@@ -156,7 +156,7 @@ Future<R> withFileProtection<R>(
       for (final path in protected) {
         final paths = _determinePaths(
           path: path,
-          workingDirectory: _workingDirectory,
+          workingDirectory: workingDirectory0,
           backupDir: backupDir,
         );
 
@@ -211,7 +211,7 @@ Future<R> withFileProtection<R>(
       for (final path in protected) {
         final paths = _determinePaths(
           path: path,
-          workingDirectory: _workingDirectory,
+          workingDirectory: workingDirectory0,
           backupDir: backupDir,
         );
         {
