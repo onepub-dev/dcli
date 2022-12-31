@@ -41,7 +41,7 @@ dependencies:
   yaml: ^3.0.0
 dev_dependencies: 
   hex: ^0.2.0
-  lint_hard: ^3.0.0-beta.1
+  lint_hard: ^2.0.0
   mocktail: ^0.3.0
   test: ^1.0.0
 dependency_overrides: 
