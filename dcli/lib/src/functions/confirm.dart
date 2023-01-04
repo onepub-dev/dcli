@@ -7,6 +7,7 @@
 import '../../dcli.dart';
 
 typedef CustomConfirmPrompt = String Function(
+    // ignore: avoid_positional_boolean_parameters
     String prompt, bool? defaultValue);
 
 /// [confirm] is a specialized version of ask that returns true or

@@ -14,6 +14,7 @@ import 'package:validators2/validators.dart';
 import '../../dcli.dart';
 
 typedef CustomAskPrompt = String Function(
+    // ignore: avoid_positional_boolean_parameters
     String prompt, String? defaultValue, bool hidden);
 
 ///
