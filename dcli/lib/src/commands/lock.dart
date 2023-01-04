@@ -86,7 +86,7 @@ class LockCommand extends Command {
       }
     }
 
-    // excluded dev depen
+    // excluded dev dependencies
     pubspec = pubspec.copy(dependencies: dependencies);
 
     // ignore: discarded_futures
@@ -151,5 +151,6 @@ We recommend that you lock each CLI package before you release it.
   @override
   List<Flag> flags() => [];
 
-  bool isPubDev(String url) => url == 'https://pub.dartlang.org';
+  bool isPubDev(String url) =>
+      url == 'https://pub.dartlang.org' || url == 'https://pub.dev';
 }
