@@ -1,3 +1,6 @@
+# used by the `dcli pack` command to control what files we packed when
+# we do a release. dcli pack is called from the pre_release_hook used
+# by pub_release.
 externals:
   - external:
     path: ../template

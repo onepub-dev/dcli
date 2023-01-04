@@ -259,7 +259,7 @@ class ProcessHelper {
 
       // verbose(() => '${details.processName} ${details.pid}');
 
-      final memparts = (line[4]).split(' ');
+      final memparts = line[4].split(' ');
 
       final details = ProcessDetails(
         int.tryParse(line[1]) ?? 0,

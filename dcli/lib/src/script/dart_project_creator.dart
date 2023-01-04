@@ -4,7 +4,7 @@
  * Written by Brett Sutton <bsutton@onepub.dev>, Jan 2022
  */
 
-part of dart_project;
+part of 'dart_project.dart';
 
 void _createProject(String pathToProject, String templateName) {
   verbose(() => '_createProject $pathToProject from $templateName');

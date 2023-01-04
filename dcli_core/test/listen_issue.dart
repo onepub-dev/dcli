@@ -43,10 +43,10 @@ Future<void> _doSomethingAsync(String item) async {
 }
 
 /// test summing a stream.
-Future<int> sumStream(Stream<int> stream) async {
-  var sum = 0;
-  await for (final value in stream) {
-    sum += value;
-  }
-  return sum;
-}
+// Future<int> sumStream(Stream<int> stream) async {
+//   var sum = 0;
+//   await for (final value in stream) {
+//     sum += value;
+//   }
+//   return sum;
+// }
