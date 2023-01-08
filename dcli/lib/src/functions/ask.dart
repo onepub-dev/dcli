@@ -15,7 +15,9 @@ import '../../dcli.dart';
 
 typedef CustomAskPrompt = String Function(
     // ignore: avoid_positional_boolean_parameters
-    String prompt, String? defaultValue, bool hidden);
+    String prompt,
+    String? defaultValue,
+    bool hidden);
 
 ///
 /// Reads a line of text from stdin with an optional prompt.
