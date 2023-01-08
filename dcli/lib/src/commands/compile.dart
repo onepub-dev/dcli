@@ -214,6 +214,11 @@ Run:
   ''');
     }
 
+    if (!exists(Settings().pathToDCli)) {
+      throw DCliNotInstalledException(
+          "You must first install DCli by running 'dcli install'");
+    }
+
     late final String pathToPackage;
 
     /// Find all the the exectuables the package exposes

@@ -184,3 +184,9 @@ class InvalidArgumentException extends CommandLineException {
   ///
   InvalidArgumentException(super.message);
 }
+
+/// You can't run this command without first installing dcli.
+class DCliNotInstalledException extends CommandLineException {
+  /// You can't run this command without first installing dcli.
+  DCliNotInstalledException(super.message);
+}
