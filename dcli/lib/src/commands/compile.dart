@@ -205,7 +205,7 @@ compile [--nowarmup] [--install] [--overwrite] [<script path.dart>, <script path
     if (packageName.contains(separator)) {
       throw InvalidArgumentException('The package must not include a path.');
     }
-    if (!PubCache().isInstalled(packageName) ||
+    if (!PubCache().isInstalled(packageName) &&
         !PubCache().isGloballyActivated(packageName)) {
       throw InvalidArgumentException('''
 To compile the package $packageName it must first be installed. 
@@ -224,7 +224,8 @@ Run:
     /// Find all the the exectuables the package exposes
     if (version == null) {
       late final version = PubCache().findPrimaryVersion(packageName);
-      pathToPackage = PubCache().pathToPackage(packageName, version.toString());
+      pathToPackage =
+          PubCache().pathToPackage(packageName, version?.toString() ?? '');
     } else {
       final pathTo = PubCache().findVersion(packageName, version);
       if (pathTo == null) {
