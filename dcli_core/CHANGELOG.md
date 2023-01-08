@@ -1,3 +1,6 @@
+# 2.0.0-beta.20
+- due to failed .19 release
+
 # 2.0.0-beta.19
 - Added test for dcli compile --package
 - Fixed a bug in the pub cache path as with dart 2.19 google has renamed it from pub.dartlang.org to pub.dev
