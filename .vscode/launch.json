@@ -73,5 +73,13 @@
             "request": "launch",
             "type": "dart"
         },
+        {
+            "program": "dcli/bin/dcli.dart",
+            "name": "compile package",
+            "request": "launch",
+            "type": "dart",
+            "args": ["compile", "--package", "pigation"]
+
+        },
     ]
 }
