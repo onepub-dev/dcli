@@ -1,3 +1,11 @@
+# 2.0.0-beta.19
+- Added test for dcli compile --package
+- Fixed a bug in the pub cache path as with dart 2.19 google has renamed it from pub.dartlang.org to pub.dev
+- Fixed a bug in compile --package that incorrectly reported that the package wasn't installed.
+- Added a check to the compile --package command to ensure that dcli has been installed as we expect that the ~/.dcli directory exists and is on the path.
+- moved to latest version of lint_hard and fixed lints.
+- updated dcli as in dart 2.19 the hosted url has change from pub.dartlang.org to pub.dev
+
 # 2.0.0-beta.18
 - upgraded to file 6.1.4 for dart 2.19 compatability.
 - updated to lint_hard 3.x
