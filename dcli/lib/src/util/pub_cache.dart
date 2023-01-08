@@ -161,8 +161,7 @@ class PubCache {
 
   /// Path to the PubCache's hosted/pub.dartlang.org directory
   /// where all of the downloaded packages from pub.dev live.
-  String get pathToDartLang =>
-      join(_pubCachePath, 'hosted', 'pub.dartlang.org');
+  String get pathToDartLang => join(_pubCachePath, 'hosted', 'pub.dev');
 
   /// Returns the path to the package in .pub-cache for the dart
   /// project named [packageName] for the version [version].
