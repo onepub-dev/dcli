@@ -1,4 +1,4 @@
-FROM google/dart
+FROM dart:2.18
 
 WORKDIR /
 
@@ -9,16 +9,39 @@ RUN touch /home/.profile
 RUN apt -y update && apt -y upgrade && apt -y install vim procps coreutils wget
 
 
-RUN dart pub global activate dcli 
-RUN dcli install
-
 RUN dart pub global activate dswitch
 RUN dswitch_install
+
+RUN dart pub global activate dcli 2.0.0-beta.17
+RUN dcli install
+RUN dcli compile --package dcli 2.0.0-beta.17
+
+RUN dart pub global activate critical_test 7.0.1
+RUN dcli compile --package critical_test
+
+RUN dart pub global activate pub_release
+RUN dcli compile --package pub_release
+
+RUN dswitch stable pin 2.12.4 --force
+
+RUN dswitch doctor
+
+RUN dart --version
 
 RUN mkdir /home/dcli
 WORKDIR /home/dcli
 
 COPY . /home/dcli
+
+WORKDIR /home/dcli/dcli
+
+RUN dart pub global activate onepub
+
+# onepub 2.0.4 should no longer need this.
+RUN mkdir -p /home/.config/dart
+RUN onepub login
+
+RUN critical_test
 
 # set the cli prompt.
 RUN echo "PS1='\e[32mdcli\e[0m:\e[34m`pwd`#\e[0m '" >> /home/.bashrc
@@ -26,5 +49,3 @@ RUN echo "PS1='\e[32mdcli\e[0m:\e[34m`pwd`#\e[0m '" >> /home/.bashrc
 CMD []
 
 ENTRYPOINT ["/bin/bash", "-c", "bash"] 
-
-
