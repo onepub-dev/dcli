@@ -1,3 +1,7 @@
+# 1.22.0
+- moved form pubspec to pubspec2 to remove the uri as a dependency as was causing
+ problems with upstream packages.
+
 # 1.21.12
 - upgraded to latest version of settings.yaml
 
