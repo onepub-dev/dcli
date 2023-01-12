@@ -3,7 +3,7 @@
 
 import 'package:dcli/dcli.dart';
 import 'package:pub_semver/pub_semver.dart';
-import 'package:pubspec/pubspec.dart' as pub;
+import 'package:pubspec2/pubspec2.dart' as pub;
 
 late String newVersion;
 void main(List<String> args) {
