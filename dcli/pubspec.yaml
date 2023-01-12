@@ -28,7 +28,7 @@ dependencies:
   path: ^1.8.0
   posix: ^2.2.3
   pub_semver: ^2.0.0
-  pubspec: ^2.0.0
+  pubspec2: ^2.0.0
   scope: ^3.0.0
   settings_yaml: ^3.5.1
   stacktrace_impl: ^2.3.0
@@ -47,3 +47,7 @@ executables:
   dcli_complete: dcli_complete
   dcli_install: dcli_install
   dshell_upgrade: dshell_upgrade
+
+dependency_overrides:
+  dcli_core:
+    path: ../dcli_core

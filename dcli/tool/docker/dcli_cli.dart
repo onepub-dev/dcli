@@ -1,4 +1,9 @@
 #! /usr/bin/env dcli
+/* Copyright (C) S. Brett Sutton - All Rights Reserved
+ * Unauthorized copying of this file, via any medium is strictly prohibited
+ * Proprietary and confidential
+ * Written by Brett Sutton <bsutton@onepub.dev>, Jan 2022
+ */
 
 import 'dart:io';
 
@@ -37,6 +42,8 @@ void showUsage(ArgParser parser) {
   exit(1);
 }
 
+const imageName = 'onepub-dev/dcli_cli';
+
 class RunCommand extends Command<void> {
   @override
   String get description =>
@@ -51,12 +58,18 @@ class RunCommand extends Command<void> {
     'docker volume create dcli_scripts'
         .forEach(devNull, stderr: (line) => print(red(line)));
 
-    'docker run -v dcli_scripts:/home/scripts --network host -it dcli:dcli_cli /bin/bash'
+    final pubspec = PubSpec.fromFile(DartProject.self.pathToPubSpec);
+    final version = pubspec.version.toString();
+
+    'docker run -v dcli_scripts:/home/scripts --network host -it $imageName:$version /bin/bash'
         .run;
   }
 }
 
 class BuildCommand extends Command<void> {
+  BuildCommand() {
+    argParser.addFlag('clean', help: 'force a clean build');
+  }
   @override
   String get description => 'Builds the dcli_cli image';
 
@@ -67,14 +80,19 @@ class BuildCommand extends Command<void> {
   void run() {
     final pubspec = PubSpec.fromFile(DartProject.self.pathToPubSpec);
     final version = pubspec.version.toString();
+    final projectRoot = DartProject.self.pathToProjectRoot;
+
+    final pathToDockerFile = join(projectRoot, 'tool', 'docker', 'dcli_cli.df');
     // if (!argResults.wasParsed('version')) {
     //   printerr(red('You must pass a --version.'));
     //   showUsage(argParser);
     // }
     // var version = argResults['version'] as String;
     // mount the local dcli files from ..
+    final clean = argResults!['clean'] as bool;
     print('Building version: $version');
-    'sudo docker build -f ./dcli_cli.df -t bsuttonnoojee/dcli_cli:$version .'
+    'sudo docker build  ${clean == true ? '--no-cache' : ''} '
+            '-f $pathToDockerFile -t $imageName:$version .'
         .run;
   }
 }
@@ -103,6 +121,6 @@ class PushCommand extends Command<void> {
     final pubspec = PubSpec.fromFile(DartProject.self.pathToPubSpec);
     final version = pubspec.version.toString();
     print('Pushing version: $version');
-    'sudo docker push bsuttonnoojee/dcli_cli:$version'.run;
+    'sudo docker push $imageName:$version'.run;
   }
 }
