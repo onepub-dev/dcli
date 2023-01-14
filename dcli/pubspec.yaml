@@ -32,7 +32,7 @@ dependencies:
   scope: ^3.0.0
   settings_yaml: ^3.5.1
   stacktrace_impl: ^2.3.0
-  system_info2: ^2.0.3
+  system_info2: ^3.0.0
   uuid: ^3.0.0
   validators2: ^3.0.0
   win32: ^2.0.5
