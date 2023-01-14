@@ -1,3 +1,6 @@
+# 1.22.3
+- Improvements to the DartSdk.installFromArchive method. In some scenarios it was selecting the wrong archive.
+
 # 1.22.2
 - updated to system_info2 v3.x
 
