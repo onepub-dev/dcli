@@ -155,7 +155,9 @@ class DartSdk {
       }
 
       /// use old dart2native
-      runArgs..add(script.pathToScript)..add('--output=$pathToExe');
+      runArgs
+        ..add(script.pathToScript)
+        ..add('--output=$pathToExe');
 
       process = RunnableProcess.fromCommandArgs(
         pathToDartToNativeExe!,

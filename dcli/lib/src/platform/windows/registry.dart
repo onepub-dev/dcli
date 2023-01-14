@@ -434,7 +434,10 @@ _RegResults _regGetValue(
       }
     });
   } finally {
-    calloc..free(pName)..free(pResultSize)..free(pType);
+    calloc
+      ..free(pName)
+      ..free(pResultSize)
+      ..free(pType);
   }
   // ignore: avoid_dynamic_calls
   return _RegResults(pResult, pResultSize.value, type);
@@ -508,7 +511,9 @@ R _withRegKey<R>(
       throw WindowsException(HRESULT_FROM_WIN32(result));
     }
   } finally {
-    calloc..free(pOpenKey)..free(pSubKey);
+    calloc
+      ..free(pOpenKey)
+      ..free(pSubKey);
   }
   return actionResult;
 }
@@ -539,7 +544,9 @@ bool regKeyExists(
       RegCloseKey(pOpenKey.value);
     }
   } finally {
-    calloc..free(pOpenKey)..free(pSubKey);
+    calloc
+      ..free(pOpenKey)
+      ..free(pSubKey);
   }
   return exists;
 }
@@ -570,7 +577,9 @@ void regCreateKey(
     }
     RegCloseKey(pOpenKey.value);
   } finally {
-    calloc..free(pOpenKey)..free(pSubKey);
+    calloc
+      ..free(pOpenKey)
+      ..free(pSubKey);
   }
 }
 

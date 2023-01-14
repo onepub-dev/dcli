@@ -262,7 +262,10 @@ class Ask extends core.DCliFunction {
               // print a space an move back again.
               // required to clear the current character
               // move back one space.
-              stdout..writeCharCode(_)..writeCharCode(_space)..writeCharCode(_);
+              stdout
+                ..writeCharCode(_)
+                ..writeCharCode(_space)
+                ..writeCharCode(_);
               value.removeLast();
             }
           } else {
