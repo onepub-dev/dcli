@@ -1,3 +1,9 @@
+# 2.0.0-beta.21
+- upgraded to latest 2.19 beta.
+- Fixe for DartSdk.installFromArchive as it was choosing the wrong archive in 
+some circumstances -e.g. ripi.
+
+
 # 2.0.0-beta.20
 - due to failed .19 release
 

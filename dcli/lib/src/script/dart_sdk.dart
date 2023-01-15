@@ -489,7 +489,7 @@ class DartSdk {
     return installDir;
   }
 
- /// Fetchs the list of available dart versions from
+  /// Fetchs the list of available dart versions from
   // List<String> fetchVersions() {}
   String _fetchDartSdk() {
     final architechture = resolveArchitecture();
