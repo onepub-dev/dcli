@@ -1,3 +1,6 @@
+# 1.22.5
+- rectified failed publish attemp of 1.22.4
+
 # 1.22.2
 - updated to system_info2 v3.x
 
