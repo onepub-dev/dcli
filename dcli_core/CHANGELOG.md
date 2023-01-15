@@ -1,4 +1,4 @@
-# 1.22.3
+# 1.22.4
 - Improvements to the DartSdk.installFromArchive method. In some scenarios it was selecting the wrong archive.
 
 # 1.22.2
