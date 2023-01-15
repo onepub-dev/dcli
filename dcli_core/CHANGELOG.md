@@ -1,3 +1,6 @@
+# 1.22.5
+- rectified failed publish attemp of 1.22.4
+
 # 1.22.4
 - Improvements to the DartSdk.installFromArchive method. In some scenarios it was selecting the wrong archive.
 
