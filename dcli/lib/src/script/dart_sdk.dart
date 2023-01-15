@@ -489,20 +489,10 @@ class DartSdk {
     return installDir;
   }
 
-  /// Fetchs the list of available dart versions from
+ /// Fetchs the list of available dart versions from
   // List<String> fetchVersions() {}
-
   String _fetchDartSdk() {
-    var architechture = SysInfo.kernelArchitecture.toLowerCase();
-
-    if (architechture == 'amd64' || architechture == 'x86_64') {
-      architechture = 'x64';
-    }
-
-    // final bitness = SysInfo.kernelBitness;
-    // if (bitness == 32) {
-    //   architechture = 'ia32';
-    // }
+    final architechture = resolveArchitecture();
     final platform = Platform.operatingSystem;
 
     final zipRelease = createTempFilename(suffix: 'release.zip');
@@ -527,6 +517,39 @@ class DartSdk {
     }
     print('');
     return zipRelease;
+  }
+
+  /// Converts the kernel architecture into one of the architecture names use
+  /// by:
+  /// https://dart.dev/tools/sdk/archive
+  String resolveArchitecture() {
+    if (Platform.isMacOS) {
+      return 'x64';
+    } else if (Platform.isWindows) {
+      if (SysInfo.kernelBitness == 32) {
+        return 'ia32';
+      } else {
+        return 'x64';
+      }
+    } else // linux
+    {
+      final architecture = SysInfo.kernelArchitecture;
+      if (architecture == ProcessorArchitecture.arm64) {
+        return 'ARMv8';
+      } else if (architecture == ProcessorArchitecture.arm) {
+        return 'ARMv7';
+      } else if (architecture == ProcessorArchitecture.ia64) {
+        return 'X64';
+      } else if (architecture == ProcessorArchitecture.mips) {
+        throw const OSError('Mips is not a supported architecture.');
+      } else if (architecture == ProcessorArchitecture.x86) {
+        return 'ia32';
+      } else if (architecture == ProcessorArchitecture.x86_64) {
+        return 'x64';
+      }
+      throw OSError(
+          '${SysInfo.rawKernelArchitecture} is not a supported architecture.');
+    }
   }
 
   String _askForDartSdkInstallDir(String dartToolDir) {
