@@ -1,3 +1,6 @@
+# 2.0.0-beta.21
+- upgraded to latest 2.19 beta.
+
 # 2.0.0-beta.20
 - due to failed .19 release
 
