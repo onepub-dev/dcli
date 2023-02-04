@@ -127,6 +127,11 @@ void main() {
     });
 
     test('globally activated script', () {
+      /// Make certain its not on the PATH as a compiled exe already
+      final script = which(packageName);
+      if (script.found) {
+        delete(script.path!);
+      }
       PubCache().globalActivate(packageName);
 
       final result =
