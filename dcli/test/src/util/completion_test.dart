@@ -1,4 +1,8 @@
 @Timeout(Duration(seconds: 600))
+
+/// command line completion for dcli
+/// is only supported on lunix.
+@TestOn('!windows')
 library;
 
 /* Copyright (C) S. Brett Sutton - All Rights Reserved
@@ -7,9 +11,6 @@ library;
  * Written by Brett Sutton <bsutton@onepub.dev>, Jan 2022
  */
 
-/// command line completion for dcli
-/// is only supported on lunix.
-@TestOn('!windows')
 import 'package:dcli/dcli.dart';
 import 'package:dcli/src/util/completion.dart';
 import 'package:path/path.dart';

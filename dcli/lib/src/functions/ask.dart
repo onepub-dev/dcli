@@ -9,7 +9,7 @@ import 'dart:io';
 
 import 'package:dcli_core/dcli_core.dart' as core;
 import 'package:meta/meta.dart';
-import 'package:validators2/validators.dart';
+import 'package:validators2/validators2.dart';
 
 import '../../dcli.dart';
 
@@ -544,7 +544,17 @@ class AskValidatorIPAddress extends AskValidator {
 
     final finalline = line.trim();
 
-    if (!isIP(finalline, version)) {
+    var validatorsVersion = IPVersion.any;
+    switch (version) {
+      case ipv4:
+        validatorsVersion = IPVersion.ipV4;
+        break;
+      case ipv6:
+        validatorsVersion = IPVersion.ipV6;
+        break;
+    }
+
+    if (!isIP(finalline, version: validatorsVersion)) {
       throw AskValidatorException(red('Invalid IP Address.'));
     }
     return finalline;

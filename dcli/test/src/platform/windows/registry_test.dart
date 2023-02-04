@@ -1,4 +1,5 @@
 @Timeout(Duration(minutes: 5))
+@TestOn('windows')
 library;
 
 /* Copyright (C) S. Brett Sutton - All Rights Reserved
@@ -7,7 +8,6 @@ library;
  * Written by Brett Sutton <bsutton@onepub.dev>, Jan 2022
  */
 
-@TestOn('windows')
 import 'dart:io';
 
 import 'package:dcli/dcli.dart';

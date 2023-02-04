@@ -5,6 +5,8 @@
  */
 
 @TestOn('windows')
+library;
+
 import 'dart:io';
 
 import 'package:dcli/dcli.dart';
