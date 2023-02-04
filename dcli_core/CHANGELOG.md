@@ -1,3 +1,6 @@
+# 2.0.1
+- Fixed the sdk version range on dcli_core.
+
 # 2.0.0-beta.21
 - upgraded to latest 2.19 beta.
 
