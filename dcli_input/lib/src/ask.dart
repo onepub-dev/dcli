@@ -9,7 +9,7 @@ import 'dart:io';
 
 import 'package:dcli_core/dcli_core.dart' as core;
 import 'package:dcli_core/dcli_core.dart';
-import 'package:dcli_terminal/terminal.dart';
+import 'package:dcli_terminal/dcli_terminal.dart';
 import 'package:meta/meta.dart';
 import 'package:validators2/validators2.dart';
 
@@ -174,10 +174,10 @@ class Ask extends core.DCliFunction {
 
       try {
         if (required) {
-          const _AskRequired().validate(line);
+          await const _AskRequired().validate(line);
         }
         verbose(() => 'ask: pre validation "$line"');
-        line = validator.validate(line);
+        line = await validator.validate(line);
         verbose(() => 'ask: post validation "$line"');
         valid = true;
       } on AskValidatorException catch (e) {
@@ -368,14 +368,14 @@ abstract class AskValidator {
   /// The validate method is called when the user hits the enter key.
   /// If the validation succeeds the validated line is returned.
   @visibleForTesting
-  String validate(String line);
+  Future<String> validate(String line);
 }
 
 /// The default validator that considers any input as valid
 class _AskDontCare extends AskValidator {
   const _AskDontCare();
   @override
-  String validate(String line) => line;
+  Future<String> validate(String line) async => line;
 }
 
 /// The user must enter a non-empty string.
@@ -384,7 +384,7 @@ class _AskDontCare extends AskValidator {
 class _AskRequired extends AskValidator {
   const _AskRequired();
   @override
-  String validate(String line) {
+  Future<String> validate(String line) async {
     final finalLine = line.trim();
     if (finalLine.isEmpty) {
       throw AskValidatorException(red('You must enter a value.'));
@@ -396,7 +396,7 @@ class _AskRequired extends AskValidator {
 class _AskEmail extends AskValidator {
   const _AskEmail();
   @override
-  String validate(String line) {
+  Future<String> validate(String line) async {
     final finalLine = line.trim();
 
     if (!isEmail(finalLine)) {
@@ -409,7 +409,7 @@ class _AskEmail extends AskValidator {
 class _AskFQDN extends AskValidator {
   const _AskFQDN();
   @override
-  String validate(String line) {
+  Future<String> validate(String line) async {
     final finalLine = line.trim().toLowerCase();
 
     if (!isFQDN(finalLine)) {
@@ -437,7 +437,7 @@ class _AskRegExp extends AskValidator {
   late final String _error;
 
   @override
-  String validate(String line) {
+  Future<String> validate(String line) async {
     final finalLine = line.trim();
 
     if (!_regexp.hasMatch(finalLine)) {
@@ -450,7 +450,7 @@ class _AskRegExp extends AskValidator {
 class _AskDate extends AskValidator {
   const _AskDate();
   @override
-  String validate(String line) {
+  Future<String> validate(String line) async {
     final finalLine = line.trim();
 
     if (!isDate(finalLine)) {
@@ -463,7 +463,7 @@ class _AskDate extends AskValidator {
 class _AskInteger extends AskValidator {
   const _AskInteger();
   @override
-  String validate(String line) {
+  Future<String> validate(String line) async {
     final finalLine = line.trim();
     verbose(() => 'AskInteger: $finalLine');
 
@@ -477,7 +477,7 @@ class _AskInteger extends AskValidator {
 class _AskDecimal extends AskValidator {
   const _AskDecimal();
   @override
-  String validate(String line) {
+  Future<String> validate(String line) async {
     final finalline = line.trim();
 
     if (!isFloat(finalline)) {
@@ -490,7 +490,7 @@ class _AskDecimal extends AskValidator {
 class _AskAlpha extends AskValidator {
   const _AskAlpha();
   @override
-  String validate(String line) {
+  Future<String> validate(String line) async {
     final finalline = line.trim();
 
     if (!isAlpha(finalline)) {
@@ -503,7 +503,7 @@ class _AskAlpha extends AskValidator {
 class _AskAlphaNumeric extends AskValidator {
   const _AskAlphaNumeric();
   @override
-  String validate(String line) {
+  Future<String> validate(String line) async {
     final finalline = line.trim();
 
     if (!isAlphanumeric(finalline)) {
@@ -537,7 +537,7 @@ class AskValidatorIPAddress extends AskValidator {
   final int version;
 
   @override
-  String validate(String line) {
+  Future<String> validate(String line) async {
     assert(
       version == either || version == ipv4 || version == ipv6,
       'The version nmust be AskValidatorIPAddress.either or '
@@ -570,7 +570,7 @@ class _AskValidatorMaxLength extends AskValidator {
   /// than [maxLength].
   const _AskValidatorMaxLength(this.maxLength);
   @override
-  String validate(String line) {
+  Future<String> validate(String line) async {
     final finalline = line.trim();
 
     if (finalline.length > maxLength) {
@@ -594,7 +594,7 @@ class _AskValidatorMinLength extends AskValidator {
   /// than [minLength].
   const _AskValidatorMinLength(this.minLength);
   @override
-  String validate(String line) {
+  Future<String> validate(String line) async {
     final finalline = line.trim();
 
     if (finalline.length < minLength) {
@@ -624,7 +624,7 @@ class _AskValidatorLength extends AskValidator {
   late _AskValidatorAll _validator;
 
   @override
-  String validate(String line) {
+  Future<String> validate(String line) async {
     final finalline = line.trim();
 
     return _validator.validate(finalline);
@@ -638,7 +638,7 @@ class _AskValidatorValueRange extends AskValidator {
   final num maxValue;
 
   @override
-  String validate(String line) {
+  Future<String> validate(String line) async {
     final finalline = line.trim();
 
     final value = num.tryParse(finalline);
@@ -690,11 +690,11 @@ class _AskValidatorAll extends AskValidator {
   final List<AskValidator> _validators;
 
   @override
-  String validate(String line) {
+  Future<String> validate(String line) async {
     var finalline = line.trim();
 
     for (final validator in _validators) {
-      finalline = validator.validate(finalline);
+      finalline = await validator.validate(finalline);
     }
     return finalline;
   }
@@ -731,7 +731,7 @@ class _AskValidatorAny extends AskValidator {
   final List<AskValidator> _validators;
 
   @override
-  String validate(String line) {
+  Future<String> validate(String line) async {
     var finalline = line.trim();
 
     AskValidatorException? firstFailure;
@@ -740,7 +740,7 @@ class _AskValidatorAny extends AskValidator {
 
     for (final validator in _validators) {
       try {
-        finalline = validator.validate(finalline);
+        finalline = await validator.validate(finalline);
         onePassed = true;
       } on AskValidatorException catch (e) {
         firstFailure ??= e;
@@ -770,7 +770,7 @@ class _AskValidatorList extends AskValidator {
   final bool caseSensitive;
 
   @override
-  String validate(String line) {
+  Future<String> validate(String line) async {
     var finalline = line.trim();
 
     if (caseSensitive) {

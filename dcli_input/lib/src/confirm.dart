@@ -4,7 +4,7 @@
  * Written by Brett Sutton <bsutton@onepub.dev>, Jan 2022
  */
 
-import 'package:dcli_terminal/terminal.dart';
+import 'package:dcli_terminal/dcli_terminal.dart';
 
 import 'ask.dart';
 

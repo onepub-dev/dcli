@@ -6,7 +6,7 @@
 
 import 'dart:math';
 
-import 'package:dcli_terminal/terminal.dart';
+import 'package:dcli_terminal/dcli_terminal.dart';
 
 import 'ask.dart';
 
@@ -165,7 +165,7 @@ class Menu {
 class _MenuRange extends AskValidator {
   const _MenuRange(this.limit);
   @override
-  String validate(String line) {
+  Future<String> validate(String line) async {
     final finalline = line.trim();
     final value = num.tryParse(finalline);
     if (value == null) {
