@@ -26,7 +26,7 @@ packages:
     source: hosted
     version: "3.3.6"
   args:
-    dependency: "direct main"
+    dependency: transitive
     description:
       name: args
       sha256: b003c3098049a51720352d219b0bb5f219b60fbfb68e7a4748139a06a5676515
@@ -45,10 +45,10 @@ packages:
     dependency: transitive
     description:
       name: basic_utils
-      sha256: "9d3dcb8eaba8b1578a720c23988e98fde2ef21da40ae34e9e8f6fe84cee86a65"
+      sha256: "3e86a17d2aafbd52ef69c0dc8936b1bc7bd91bcd8fa1c0d222d13ca2f6d000bb"
       url: "https://pub.dev"
     source: hosted
-    version: "5.5.1"
+    version: "5.4.2"
   boolean_selector:
     dependency: transitive
     description:
@@ -156,16 +156,18 @@ packages:
   dcli:
     dependency: "direct main"
     description:
-      path: "../../../dcli"
-      relative: true
-    source: path
+      name: dcli
+      sha256: "8b6adedc2c3e459173f5893aa35e761606d983483d742cdee8b037b2446f177b"
+      url: "https://pub.dev"
+    source: hosted
     version: "2.0.1"
   dcli_core:
     dependency: "direct main"
     description:
-      path: "../../../dcli_core"
-      relative: true
-    source: path
+      name: dcli_core
+      sha256: "07352d8ca9d589a804d2d270d233a8d5ed2cc885511eed517bb97d8fa03c7310"
+      url: "https://pub.dev"
+    source: hosted
     version: "2.0.1"
   equatable:
     dependency: transitive
@@ -232,7 +234,7 @@ packages:
     source: hosted
     version: "1.0.0"
   http:
-    dependency: "direct main"
+    dependency: transitive
     description:
       name: http
       sha256: "6aa2946395183537c8b880962d935877325d6a09a2867c3970c05c0fed6ac482"
@@ -360,7 +362,7 @@ packages:
     source: hosted
     version: "2.1.0"
   path:
-    dependency: "direct main"
+    dependency: transitive
     description:
       name: path
       sha256: "8829d8a55c13fc0e37127c29fedf290c102f4e40ae94ada574091fe0ff96c917"
@@ -440,7 +442,7 @@ packages:
     source: hosted
     version: "3.0.0"
   settings_yaml:
-    dependency: "direct main"
+    dependency: transitive
     description:
       name: settings_yaml
       sha256: "5ce20a93353ad7075a9d0e4e691008c9b411e7494fc8fc837dc314ce8eed179f"
@@ -491,10 +493,10 @@ packages:
     dependency: transitive
     description:
       name: source_maps
-      sha256: "708b3f6b97248e5781f493b765c3337db11c5d2c81c3094f10904bfa8004c703"
+      sha256: "490098075234dcedb83c5d949b4c93dad5e6b7702748de000be2b57b8e6b2427"
       url: "https://pub.dev"
     source: hosted
-    version: "0.10.12"
+    version: "0.10.11"
   source_span:
     dependency: transitive
     description:

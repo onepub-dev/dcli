@@ -19,7 +19,9 @@ void main(List<String> args) async {
   /// NOTE: update args/global_args.dart to parse any flags/options
   /// you add here.
   runner.argParser.addFlag('debug',
-      abbr: 'd', help: 'Output verbose debugging information');
+      abbr: 'd',
+      help: 'Output verbose debugging information',
+      negatable: false);
 
   try {
     // parse the cli options passed and run the selected command.

@@ -36,6 +36,7 @@ Future<void> main() async {
   //Future.wait([dart.])
 }
 
+// ignore: unreachable_from_main
 Future<void> pipeTo2(Future<Process> lhs, Future<Process> rhs) async {
   final lhsProcess = await lhs;
   final rhsProcess = await rhs;
@@ -55,6 +56,7 @@ Future<void> pipeTo2(Future<Process> lhs, Future<Process> rhs) async {
   }, test: (e) => e is SocketException && e.osError!.message == 'Broken pipe');
 }
 
+// ignore: unreachable_from_main
 void pipeTo(Future<Process> lhs, Future<Process> rhs) {
   final complete = Completer<void>();
   print('pipeTo called');
@@ -110,6 +112,7 @@ void pipeTo(Future<Process> lhs, Future<Process> rhs) {
   waitFor(complete.future);
 }
 
+// ignore: unreachable_from_main
 Future<Process> start(String command, List<String> args) async {
   final process = Process.start(
     command,

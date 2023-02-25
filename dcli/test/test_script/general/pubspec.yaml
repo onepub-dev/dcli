@@ -13,7 +13,7 @@ dependencies:
   
 
 dev_dependencies:
-  lint_hard: ^2.0.0
+  lint_hard: ^3.0.0
 
 dependency_overrides: 
   dcli: 
