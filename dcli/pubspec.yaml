@@ -69,7 +69,7 @@ dependencies:
   stream_channel: ^2.1.1
   string_scanner: ^1.2.0
   sum_types: ^0.3.4
-  system_info2: 3.0.1
+  system_info2: 3.0.2
   term_glyph: ^1.2.1
   test_api: ^0.4.18
   test_core: ^0.4.22
