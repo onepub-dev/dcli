@@ -1,3 +1,8 @@
+# 2.1.0
+- Updated to system_info2 3.0.2
+- modified withTempFile and withTempDir to take an action that returns a Future rather than FutureOr. Now we are moving to a fully async model Futue catches more errors for the library user.
+- upgraded to lint_hard 3.0. Cleaned up lints.
+
 # 2.0.1
 - stable release now that 2.19 has been released.
 
