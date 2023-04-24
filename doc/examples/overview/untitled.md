@@ -2,9 +2,7 @@
 
 ## gnome launcher
 
-The following dcli script creates a gnome launcher. You can use this to launch any dcli script \(or any app in general\) from the gnome menu.
-
-
+The following dcli script creates a gnome launcher. You can use this to launch any dcli script (or any app in general) from the gnome menu.
 
 ```dart
 #! /usr/bin/env dcli
@@ -161,10 +159,4 @@ Name=$name
 
   cat(path);
 }
-
 ```
-
-
-
-
-

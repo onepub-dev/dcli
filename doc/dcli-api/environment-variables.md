@@ -66,11 +66,11 @@ Methods to manipulate the path include:
 
 ### withEnvironment
 
-The `withEnvironment` function allows you to modify environment variables within the scope of a  call.
+The `withEnvironment` function allows you to modify environment variables within the scope of a call.
 
 This can be used to configure a set of environment variables when you run a process that has specific requirements or simply nested code that uses environment variables.
 
-It is particularly  useful when writing unit tests as you can set alternate environment variables for each unit test.
+It is particularly useful when writing unit tests as you can set alternate environment variables for each unit test.
 
 ```dart
  withEnvironment(() {
@@ -78,7 +78,6 @@ It is particularly  useful when writing unit tests as you can set alternate envi
      /// any functions called from directly or indirectly from here
      /// will see this scoped environment.
     }, environment: {'HOME': testDir});
-
 ```
 
 The `environment` argument is merged with the existing `env` map. Any environment variables passed in via `environment` will replace existing keys in `env`.

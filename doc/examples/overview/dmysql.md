@@ -6,7 +6,7 @@ dmysql allows you to save the connection details and then each time you want to 
 
 ## To see the command line options:
 
-```text
+```
 dart dmysql.dart 
 You must provide the database name
 Connects you to a mysql cli pulling settings (username/password...) from a local settings file.
@@ -18,7 +18,6 @@ To connfigure settings for a db:
   dmysql --config <dbname>
   
 -c, --[no-]config    starts dmysql in configuration mode so you can enter the settings for the given db
-
 ```
 
 ## To configure your database:
@@ -33,7 +32,7 @@ password: [] <root password>
 
 ## To connect to your db:
 
-```text
+```
 dart dmysql.dart mydb
 Reading table information for completion of table and column names
 You can turn off this feature to get a quicker startup with -A
@@ -51,7 +50,7 @@ MariaDB [mydb]>
 
 ## dmysql.dart
 
-```text
+```
 #! /usr/bin/env dcli
 
 import 'dart:io';
@@ -151,12 +150,11 @@ ${green('To connfigure settings for a db:')}
   print(parser.usage);
   exit(1);
 }
-
 ```
 
 ## pubspec.yaml
 
-```text
+```
 name: dmysql
 version: 1.0.0
 description: Saves db connection settings and connects to a db cli
@@ -170,6 +168,4 @@ dependencies:
 
 dev_dependencies: 
   pedantic: ^1.0.0
-
 ```
-

@@ -1,8 +1,8 @@
 # dshell
 
-The dshell example demonstrates building a toy command line shell \(just like Bash\).
+The dshell example demonstrates building a toy command line shell (just like Bash).
 
-It has three built in commands \(ls,  cd and exit\) and allows you to run any other CLI application that's on your PATH.
+It has three built in commands (ls, cd and exit) and allows you to run any other CLI application that's on your PATH.
 
 To run this script you need to [install dart](../../dcli-tools-1/dcli-install.md)
 
@@ -69,16 +69,14 @@ void ls(List<String> patterns) {
     }
   }
 }
-
 ```
 
 The required pubspec.yaml
 
-pubspec.yaml 
+pubspec.yaml
 
 ```yaml
 name: dshell
 dependencies: 
   dcli: ^0.32.0
 ```
-

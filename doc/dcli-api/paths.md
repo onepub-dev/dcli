@@ -32,7 +32,7 @@ print(tmp);
 > /tmp/abc/image.txt
 ```
 
-'rootPath' is a DCli property that is the root directory for your OS. On Linux and Mac OS this is '/', on Windows this is 'C:\' \(dependent on your current working directory\).
+'rootPath' is a DCli property that is the root directory for your OS. On Linux and Mac OS this is '/', on Windows this is 'C:' (dependent on your current working directory).
 
 ```dart
 var apps = join(HOME, 'apps');
@@ -42,7 +42,7 @@ print(tmp);
 ```
 
 {% hint style="info" %}
-HOME is a DCli property which returns the value of the environment variable 'HOME' \(in this example /home/me\)
+HOME is a DCli property which returns the value of the environment variable 'HOME' (in this example /home/me)
 {% endhint %}
 
 In the above example we can see that the join function combines two path fragments to form a complete path.
@@ -141,7 +141,6 @@ truepath(rootPath, 'usr', 'home', 'adirectory') == '/usr/home/adirectory';
 
 // on windows
 truepath(rootPath, 'usr', 'home', 'adirectory') == 'C:\usr\home\adirectory';
-
 ```
 
 For the user of your application it can often be difficult to determine what the relative path is relative to. All DCli errors that contain a path call truepath so that the path is absolute and normalised, this gives your users the best chance of correctly identifying the file or path that caused the problem.
@@ -163,4 +162,3 @@ The `absolute` call assumes that `adirectory` is in the current working director
 ```dart
 canonicalize(relative('adirectory', from: '/home/me')) == '/home/me/adirectory';
 ```
-

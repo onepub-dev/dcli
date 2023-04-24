@@ -31,7 +31,6 @@ ENTRYPOINT ["/batman", "--quiet", "--no-colour", "cron", "--baseline", "30 22 * 
 
 # remove the ENTRYPOINT and uncomment this line to enable interactive debugging.
 # CMD ["bash"]
-
 ```
 
 The above example use the `batman` project to show the steps required to run a DCli app in docker.
@@ -64,7 +63,7 @@ docker run -it <imagename> /bin/bash
 
 ### Publish your docker image
 
-The following DCli script is from the dcli\_scripts project and automates pushing your app into docker hub.&#x20;
+The following DCli script is from the dcli\_scripts project and automates pushing your app into docker hub.
 
 You will need a docker hub account.
 
@@ -124,5 +123,4 @@ String findDockerFilePath() {
   }
   return '.';
 }
-
 ```

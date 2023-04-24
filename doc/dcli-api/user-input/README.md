@@ -136,7 +136,7 @@ final response = ask('say something:', defaultValue: 'my default'
 
 Becareful to suppress displaying the default value when `hidden` is true, otherwise you may end up displaying a password.
 
-``
+
 
 ## Confirm
 
