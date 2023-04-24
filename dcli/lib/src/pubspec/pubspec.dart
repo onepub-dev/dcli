@@ -122,15 +122,15 @@ class PubSpec {
   @Deprecated('Use save()')
   void saveToFile(String path) {
     // ignore: discarded_futures
-    waitForEx<dynamic>(pubspec.save(Directory(dirname(path))));
+    save(path);
   }
 
   /// Saves this [PubSpec] to a pubspec.yaml at the given
   /// [path].
   /// The [path] must be a directory not a file name.
   void save(String path) {
-    // ignore: discarded_futures
-    waitForEx<dynamic>(pubspec.save(Directory(dirname(path))));
+    File(join(dirname(path), 'pubspec.yaml')).writeAsStringSync(
+        const pub.YamlToString().toYamlString(pubspec.toJson()));
   }
 
   /// Compares two pubspec to see if they have the same content.

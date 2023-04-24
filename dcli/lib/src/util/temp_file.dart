@@ -56,13 +56,10 @@ R withTempFile<R>(
   bool create = true,
   bool keep = false,
 }) =>
-    waitForEx(
-      // ignore: discarded_futures
-      core.withTempFile(
-        (f) async => action(f),
-        suffix: suffix,
-        pathToTempDir: pathToTempDir,
-        create: create,
-        keep: keep,
-      ),
+    core.withTempFile(
+      (f) => action(f),
+      suffix: suffix,
+      pathToTempDir: pathToTempDir,
+      create: create,
+      keep: keep,
     );

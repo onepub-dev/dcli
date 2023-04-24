@@ -6,6 +6,8 @@
 
 import 'dart:convert';
 import 'dart:io';
+import 'dart:math' as math;
+import 'dart:typed_data';
 
 import 'package:async/async.dart';
 import 'package:crypto/crypto.dart';
@@ -119,10 +121,10 @@ class Resources {
     final resource = _Resource(
         pathToResource, pathToGeneratedLibrary, className,
         pathToMount: mount);
-    final to = File(pathToGeneratedLibrary).openWrite();
+    final to = File(pathToGeneratedLibrary).openSync(mode: FileMode.write);
     try {
       /// write the header
-      to.write('''
+      to.writeStringSync('''
 // ignore: prefer_relative_imports
 import 'package:dcli/dcli.dart';
 
@@ -144,16 +146,14 @@ class $className extends PackedResource {
       _writeContent(to, pathToResource);
 
       /// close the class
-      to.write('''
+      to.writeStringSync('''
 
 }
 ''');
 
-      // ignore: discarded_futures
-      waitForEx<dynamic>(to.flush());
+      to.flushSync();
     } finally {
-      // ignore: discarded_futures
-      waitForEx<dynamic>(to.close());
+      to.closeSync();
     }
 
     return resource;
@@ -176,12 +176,12 @@ class $className extends PackedResource {
       'A${md5.convert(utf8.encode(pathToResource))}';
 
   void _writeRegistry(List<_Resource> resources) {
-    final registryFile = File(pathToRegistry).openWrite();
+    final registryFile = File(pathToRegistry).openSync(mode: FileMode.write);
     try {
       // import 'package:dcli/src/dcli/resources/generated/Bbcded.g.dart';
       /// Write the imports
       ///
-      registryFile.write('''
+      registryFile.writeStringSync('''
 // ignore: prefer_relative_imports
 import 'package:dcli/dcli.dart';
 ''');
@@ -189,12 +189,12 @@ import 'package:dcli/dcli.dart';
       /// sort the resources so the imports are sorted.
       for (final resource in resources
         ..sort((a, b) => a.className.compareTo(b.className))) {
-        registryFile
-            .writeln("import '${basename(resource.pathToGeneratedLibrary)}';");
+        registryFile.writeStringSync(
+            "import '${basename(resource.pathToGeneratedLibrary)}';\n");
       }
 
       {
-        registryFile.write(
+        registryFile.writeStringSync(
           '''
 
 /// GENERATED -- GENERATED
@@ -222,21 +222,19 @@ class ResourceRegistry {
       /// Write each resource into the map
       for (final resource in resources) {
         final line = _buildMapping(resource);
-        registryFile.write('''
+        registryFile.writeStringSync('''
 $line
 ''');
       }
 
       /// Write tail
-      registryFile.write('''
+      registryFile.writeStringSync('''
   };
 }
 ''');
     } finally {
-      // ignore: discarded_futures
-      waitForEx<dynamic>(registryFile.flush());
-      // ignore: discarded_futures
-      waitForEx<dynamic>(registryFile.close());
+      registryFile.flushSync();
+      registryFile.closeSync();
     }
   }
 
@@ -255,8 +253,8 @@ $line
     return line;
   }
 
-  void _writeContent(IOSink to, String pathToResource) {
-    to.write(
+  void _writeContent(RandomAccessFile to, String pathToResource) {
+    to.writeStringSync(
       '''
 
   @override
@@ -265,28 +263,31 @@ $line
     );
 
     /// Write the content
-    final reader = ChunkedStreamReader(File(pathToResource).openRead());
+    final reader = File(pathToResource).openSync();
 
-    /// ignore: literal_only_boolean_expressions
     while (true) {
-      // ignore: discarded_futures
-      final data = waitForEx(reader.readChunk(60));
-      to
-        ..write(base64.encode(data))
-        ..writeln();
-      if (data.length < 60) {
+      final data = reader.readSync(16 * 1024);
+      if (data.isEmpty) {
         break;
+      }
+
+      for (var i = 0; i < data.length; i += 60) {
+        final chunk =
+            Uint8List.view(data.buffer, i, math.min(data.length - i, 60));
+        to
+          ..writeStringSync(base64.encode(chunk))
+          ..writeStringSync('\n');
       }
     }
 
     /// Close the base64 encoded content string
-    to.write('''
+    to.writeStringSync('''
   \'\'\';''');
   }
 
-  void _writeChecksum(IOSink to, String checksum) {
+  void _writeChecksum(RandomAccessFile to, String checksum) {
     // write the checksum
-    to.write('''
+    to.writeStringSync('''
 
   /// A hash of the resource (pre packed) calculated by
   /// [calculateHash].
@@ -304,8 +305,8 @@ $line
 ''');
   }
 
-  void _writePath(IOSink to, String pathToMount) {
-    to.write('''
+  void _writePath(RandomAccessFile to, String pathToMount) {
+    to.writeStringSync('''
 
   /// <package>/resources relative path to the original resource.
   @override
@@ -480,21 +481,17 @@ abstract class PackedResource {
       createDir(dirname(normalized), recursive: true);
     }
 
-    // ignore: discarded_futures
-    final file = waitForEx(File(normalized).open(mode: FileMode.write));
+    final file = File(normalized).openSync(mode: FileMode.write);
 
     try {
       for (final line in content.split('\n')) {
         if (line.trim().isNotEmpty) {
-          // ignore: discarded_futures
-          waitForEx(file.writeFrom(base64.decode(line)));
+          file.writeFromSync(base64.decode(line));
         }
       }
     } finally {
-      // ignore: discarded_futures
-      waitForEx(file.flush());
-      // ignore: discarded_futures
-      waitForEx(file.close());
+      file.flushSync();
+      file.closeSync();
     }
   }
 }

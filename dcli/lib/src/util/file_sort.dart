@@ -4,8 +4,6 @@
  * Written by Brett Sutton <bsutton@onepub.dev>, Jan 2022
  */
 
-import 'dart:async';
-import 'dart:convert';
 import 'dart:io';
 
 import 'package:path/path.dart';
@@ -77,12 +75,11 @@ class FileSort {
   /// call this method to start the sort.
   void sort() {
     // ignore: discarded_futures
-    waitForEx<void>(_sort());
+    _sort();
   }
 
   static const _mergeSize = 1000;
-  Future<void> _sort() async {
-    final completer = Completer<void>();
+  void _sort() {
     var instance = 0;
     var lineCount = _mergeSize;
 
@@ -92,13 +89,7 @@ class FileSort {
 
     var sentToPhase = false;
 
-    final phaseFutures = <Future<void>>[];
-
-    await File(_inputPath)
-        .openRead()
-        .map(utf8.decode)
-        .transform(const LineSplitter())
-        .forEach((l) {
+    d.FileSync(_inputPath).read((l) {
       list.add(_Line.fromString(_inputPath, l));
       lineCount--;
 
@@ -108,12 +99,10 @@ class FileSort {
         list = [];
         instance++;
         sentToPhase = true;
-        final phaseFuture = Completer<void>();
-        phaseFutures.add(phaseFuture.future);
 
         _savePhase(phaseDirectory, 1, instance, phaseList, _lineDelimiter!);
-        phaseFuture.complete(null);
       }
+      return true;
     });
 
     if (!sentToPhase) {
@@ -123,12 +112,8 @@ class FileSort {
       if (list.isNotEmpty && list.length < _mergeSize) {
         _savePhase(phaseDirectory, 1, ++instance, list, _lineDelimiter!);
       }
-      await Future.wait(phaseFutures);
       _mergeSort(phaseDirectory);
     }
-    completer.complete();
-
-    return completer.future;
   }
 
   void _replaceFileWithSortedList(List<_Line> sorted) {

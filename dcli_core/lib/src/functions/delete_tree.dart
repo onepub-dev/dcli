@@ -4,7 +4,6 @@
  * Written by Brett Sutton <bsutton@onepub.dev>, Jan 2022
  */
 
-import 'dart:async';
 import 'dart:io';
 
 import '../../dcli_core.dart';
@@ -45,10 +44,10 @@ import '../../dcli_core.dart';
 /// If an error occurs a [DeleteTreeException] is thrown.
 ///
 /// EXPERIMENTAL
-Future<void> deleteTree(
+void deleteTree(
   String path, {
   bool Function(FileSystemEntityType type, String file) filter = _deleteAll,
-}) async =>
+}) =>
     _DeleteTree().deleteTree(
       path,
       filter: filter,
@@ -57,10 +56,10 @@ Future<void> deleteTree(
 bool _deleteAll(FileSystemEntityType type, String file) => true;
 
 class _DeleteTree extends DCliFunction {
-  Future<void> deleteTree(
+  void deleteTree(
     String path, {
     bool Function(FileSystemEntityType type, String file) filter = _deleteAll,
-  }) async {
+  }) {
     if (!exists(path)) {
       throw DeleteTreeException(
         'The [path] ${truepath(path)} does not exist.',
@@ -73,25 +72,14 @@ class _DeleteTree extends DCliFunction {
     }
 
     verbose(() => 'deleteTree called ${truepath(path)}');
-
-    late StreamSubscription<FindItem>? sub;
     try {
-      final controller = LimitedStreamController<FindItem>(100);
-
-      try {
-        sub = controller.stream.listen((item) async {
-          sub!.pause();
-          await _process(item.pathTo, filter, item.type);
-          sub.resume();
-        }, onDone: () {});
-        await find('*',
-            workingDirectory: path,
-            includeHidden: true,
-            types: [Find.file, Find.directory, Find.link],
-            progress: controller);
-      } finally {
-        await controller.close();
-      }
+      find('*',
+          workingDirectory: path,
+          includeHidden: true,
+          types: [Find.file, Find.directory, Find.link], progress: (item) {
+        _process(item.pathTo, filter, item.type);
+        return true;
+      });
     }
     // ignore: avoid_catches_without_on_clauses
     catch (e) {
@@ -99,20 +87,14 @@ class _DeleteTree extends DCliFunction {
         'An error occured deleting directory ${truepath(path)}. '
         'Error: $e',
       );
-    } finally {
-      if (sub != null) {
-        await sub.cancel();
-      }
     }
-
-    return Future.value();
   }
 
-  Future<void> _process(
+  void _process(
     String pathToFile,
     bool Function(FileSystemEntityType type, String file) filter,
     FileSystemEntityType type,
-  ) async {
+  ) {
     if (filter(type, pathToFile)) {
       // we create directories as we go.
       // only directories that contain a file that is to be
@@ -121,17 +103,17 @@ class _DeleteTree extends DCliFunction {
       switch (type) {
         case FileSystemEntityType.directory:
           {
-            await deleteDir(pathToFile);
+            deleteDir(pathToFile);
             break;
           }
         case FileSystemEntityType.file:
           {
-            await delete(pathToFile);
+            delete(pathToFile);
             break;
           }
         case FileSystemEntityType.link:
           {
-            await deleteSymlink(pathToFile);
+            deleteSymlink(pathToFile);
             break;
           }
       }
