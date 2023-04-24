@@ -5,22 +5,18 @@
  * Written by Brett Sutton <bsutton@onepub.dev>, Jan 2022
  */
 
-import 'dart:cli';
 import 'dart:io';
 
-void main() {
+void main() async {
   print('parent hasTerminal=${stdin.hasTerminal}');
 
   print('run child.dart');
-  // ignore: discarded_futures
-  var process = waitFor<Process>(Process.start('dart', ['./child.dart'],
-      mode: ProcessStartMode.inheritStdio));
-  waitFor<int>(process.exitCode);
+  var process = await Process.start('dart', ['./child.dart'],
+      mode: ProcessStartMode.inheritStdio);
+  await process.exitCode;
 
   print('run child exe');
-  process = waitFor<Process>(
-      // ignore: discarded_futures
-      Process.start('child', [], mode: ProcessStartMode.inheritStdio));
-
-  waitFor<int>(process.exitCode);
+  process =
+      await Process.start('child', [], mode: ProcessStartMode.inheritStdio);
+  await process.exitCode;
 }

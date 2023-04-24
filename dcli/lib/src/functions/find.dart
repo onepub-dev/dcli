@@ -102,24 +102,6 @@ FindProgress find(
   List<FileSystemEntityType> types = const [Find.file],
 }) {
   progress ??= Progress.devNull();
-
-  // final controller = StreamController<FindItem>();
-  // try {
-  //   controller.stream.listen((item) => progress!.addToStdout(item.pathTo));
-  //   waitForEx(
-  //     core.find(
-  //       pattern,
-  //       caseSensitive: caseSensitive,
-  //       recursive: recursive,
-  //       includeHidden: includeHidden,
-  //       workingDirectory: workingDirectory,
-  //       progress: controller.sink,
-  //     ),
-  //   );
-  // } finally {
-  //   controller.close();
-  // }
-
   return FindProgress(
     pattern,
     caseSensitive: caseSensitive,

@@ -35,7 +35,7 @@ void _createProject(String pathToProject, String templateName) {
 
   /// rename main.dart from the template to <projectname>.dart
   // ignore: discarded_futures
-  final projectScript = waitForEx(_renameMain(project, projectName));
+  final projectScript = _renameMain(project, projectName);
 
   if (!Settings().isWindows) {
     chmod(projectScript, permission: '755');
@@ -75,7 +75,7 @@ void addUnitTestOverrides(String pathToProject) {
   path: $pathToDCli
     dcli_core:
   path: $pathToDCliCore
-  
+
   ''');
 }
 
@@ -105,7 +105,7 @@ void _fixPubspec(String projectName, PubSpec pubSpec, String pathToPubSpec) {
 }
 
 /// Returns the name of the main project script.
-Future<String> _renameMain(DartProject project, String projectName) async {
+String _renameMain(DartProject project, String projectName) {
   /// rename main.dart from the template to <projectname>.dart
   final mainScript = join(project.pathToBinDir, 'main.dart');
   final projectScript = join(project.pathToBinDir, '$projectName.dart');
@@ -143,7 +143,8 @@ Future<String> _renameMain(DartProject project, String projectName) async {
       final execName = basenameWithoutExtension(projectScript);
       updatedExecutables.addAll({execName: ps.Executable(execName, null)});
       final updatedPubspec = pubspec.copy(executables: updatedExecutables);
-      await updatedPubspec.save(Directory(project.pathToProjectRoot));
+      File(join(project.pathToProjectRoot, 'pubspec.yaml')).writeAsStringSync(
+          const ps.YamlToString().toYamlString(updatedPubspec.toJson()));
     }
   }
 
