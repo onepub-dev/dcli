@@ -80,7 +80,6 @@ void copyTree(
 bool _allowAll(String file) => true;
 
 class _CopyTree extends DCliFunction {
-  // TODO(mraleph) we need to replace this code with a different version.
   void copyTree(
     String from,
     String to, {
@@ -108,8 +107,6 @@ class _CopyTree extends DCliFunction {
       );
     }
 
-    final controller = LimitedStreamController<FindItem>(100);
-    late final StreamSubscription<FindItem> sub;
     try {
       find('*',
           workingDirectory: from,
