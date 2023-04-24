@@ -66,8 +66,8 @@ class LockCommand extends Command {
     print('');
 
     final projectDir = Directory(pathToProjectRoot);
-    // ignore: discarded_futures
-    var pubspec = waitForEx(PubSpec.load(projectDir));
+    final pubspecFile = File(join(pathToProjectRoot, 'pubspec.yaml'));
+    var pubspec = PubSpec.fromYamlString(pubspecFile.readAsStringSync());
 
     final file = File(join(pathToProjectRoot, 'pubspec.lock'));
     final pubspecLock = file.readAsStringSync().loadPubspecLockFromYaml();
@@ -89,8 +89,8 @@ class LockCommand extends Command {
     // excluded dev dependencies
     pubspec = pubspec.copy(dependencies: dependencies);
 
-    // ignore: discarded_futures
-    waitForEx<void>(pubspec.save(projectDir));
+    pubspecFile
+        .writeAsStringSync(const YamlToString().toYamlString(pubspec.toJson()));
 
     print('Updated ${dependencies.length} packages');
   }
@@ -137,10 +137,10 @@ class LockCommand extends Command {
 Updates the pubspec.yaml with all package versions constrained to a single version
 based on the current pubspec.lock versions.
 The update includes transitive dependencies.
-   
+
 The lock method is used to ensure that your CLI app will work even if incompatible
 versions of a dependency is released which doesn't conformm to semantic versioning
-which is very common. 
+which is very common.
 
 We recommend that you lock each CLI package before you release it.
 ''';

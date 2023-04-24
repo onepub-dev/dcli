@@ -28,13 +28,13 @@ import '../../dcli_core.dart';
 ///   the [from] path isn't a directory
 ///   the [to] path already exists.
 ///
-Future<void> moveDir(String from, String to) async => _MoveDir().moveDir(
+void moveDir(String from, String to) => _MoveDir().moveDir(
       from,
       to,
     );
 
 class _MoveDir extends DCliFunction {
-  Future<void> moveDir(String from, String to) async {
+  void moveDir(String from, String to) {
     if (!exists(from)) {
       throw MoveDirException(
         'The [from] path ${truepath(from)} does not exists.',
@@ -52,7 +52,7 @@ class _MoveDir extends DCliFunction {
     verbose(() => 'moveDir called ${truepath(from)} -> ${truepath(to)}');
 
     try {
-      await Directory(from).rename(to);
+      Directory(from).renameSync(to);
     } on FileSystemException catch (e) {
       if (e.osError != null && e.osError!.errorCode == 18) {
         /// Invalid cross-device link
@@ -63,8 +63,8 @@ class _MoveDir extends DCliFunction {
               'moveDir to is on a separate device so falling back to copy/delete: ${truepath(from)} -> ${truepath(to)}',
         );
 
-        await copyTree(from, to, includeHidden: true);
-        await delete(from);
+        copyTree(from, to, includeHidden: true);
+        delete(from);
       } else {
         throw MoveDirException(
           'The Move of ${truepath(from)} to ${truepath(to)} failed.'

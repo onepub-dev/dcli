@@ -35,8 +35,7 @@ export 'package:dcli_core/dcli_core.dart' show CreateDirException;
 ///
 
 String createDir(String path, {bool recursive = false}) =>
-    // ignore: discarded_futures
-    waitForEx(core.createDir(path, recursive: recursive));
+    core.createDir(path, recursive: recursive);
 
 /// Creates a temp directory and then calls [action].
 /// Once action completes the temporary directory will be deleted.
@@ -53,16 +52,12 @@ String createDir(String path, {bool recursive = false}) =>
 /// If you pass in [pathToTempDir] it will NOT be deleted regardless
 /// of the value of [keep].
 R withTempDir<R>(R Function(String tempDir) action,
-    {bool keep = false, String? pathToTempDir}) {
-  final result =
-      // ignore: discarded_futures
-      core.withTempDir<R>((x) => Future.value(action(x)), keep: keep);
-  return waitForEx(result);
-}
+        {bool keep = false, String? pathToTempDir}) =>
+    core.withTempDir<R>((x) => action(x), keep: keep);
 
 /// Creates a temporary directory under the system temp folder.
 /// The temporary directory name is formed from a uuid.
 /// It is your responsiblity to delete the directory once you have
 /// finsihed with it.
 // ignore: discarded_futures
-String createTempDir() => waitForEx(core.createTempDir());
+String createTempDir() => core.createTempDir();

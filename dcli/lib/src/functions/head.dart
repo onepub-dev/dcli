@@ -35,12 +35,6 @@ class HeadProgress extends InternalProgress {
   /// Read lines from the head of the file.
   @override
   void forEach(LineAction action) {
-    waitForEx(
-      core
-          // ignore: discarded_futures
-          .head(_path, _lines)
-          // ignore: discarded_futures
-          .then((stream) => stream.listen((line) => action(line))),
-    );
+    core.head(_path, _lines).forEach(action);
   }
 }

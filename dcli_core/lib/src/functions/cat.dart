@@ -17,13 +17,13 @@ import '../../dcli_core.dart';
 ///
 /// If the file does not exists then a CatException is thrown.
 ///
-Future<void> cat(String path, {LineAction stdout = print}) async =>
+void cat(String path, {LineAction stdout = print}) =>
     Cat().cat(path, stdout: stdout);
 
 /// Class for the [cat] function.
 class Cat extends DCliFunction {
   /// implementation for the [cat] function.
-  Future<void> cat(String path, {LineAction stdout = print}) async {
+  void cat(String path, {LineAction stdout = print}) {
     final sourceFile = File(path);
 
     verbose(() => 'cat:  ${truepath(path)}');
@@ -32,13 +32,9 @@ class Cat extends DCliFunction {
       throw CatException('The file at ${truepath(path)} does not exists');
     }
 
-    await sourceFile
-        .openRead()
-        .transform(utf8.decoder)
-        .transform(const LineSplitter())
-        .forEach((line) {
-      stdout(line);
-    });
+    // TODO(mraleph): this could be more effecient. Currently loads the
+    // the whole file into memory.
+    sourceFile.readAsLinesSync().forEach(stdout);
   }
 }
 

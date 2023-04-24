@@ -29,7 +29,7 @@ import '../../dcli_core.dart';
 /// See: [restoreFile]
 ///   [withFileProtection]
 ///
-Future<void> backupFile(String pathToFile, {bool ignoreMissing = false}) async {
+void backupFile(String pathToFile, {bool ignoreMissing = false}) {
   if (!exists(pathToFile)) {
     throw BackupFileException(
       'The backup file ${truepath(pathToFile)} is missing',
@@ -37,14 +37,14 @@ Future<void> backupFile(String pathToFile, {bool ignoreMissing = false}) async {
   }
   final pathToBackupFile = _backupFilePath(pathToFile);
   if (exists(pathToBackupFile)) {
-    await delete(pathToBackupFile);
+    delete(pathToBackupFile);
   }
   if (!exists(dirname(pathToBackupFile))) {
-    await createDir(dirname(pathToBackupFile));
+    createDir(dirname(pathToBackupFile));
   }
 
   verbose(() => 'Backing up ${truepath(pathToFile)}');
-  await copy(pathToFile, pathToBackupFile);
+  copy(pathToFile, pathToBackupFile);
 }
 
 /// Designed to work with [backupFile] to restore
@@ -62,19 +62,18 @@ Future<void> backupFile(String pathToFile, {bool ignoreMissing = false}) async {
 /// If the backup file doesn't exists this function throws
 /// a [RestoreFileException] unless you pass the [ignoreMissing]
 /// flag.
-Future<void> restoreFile(String pathToFile,
-    {bool ignoreMissing = false}) async {
+void restoreFile(String pathToFile, {bool ignoreMissing = false}) {
   final pathToBackupFile = _backupFilePath(pathToFile);
 
   if (exists(pathToBackupFile)) {
     if (exists(pathToFile)) {
-      await delete(pathToFile);
+      delete(pathToFile);
     }
 
-    await move(pathToBackupFile, pathToFile);
+    move(pathToBackupFile, pathToFile);
 
-    if (await isEmpty(dirname(pathToBackupFile))) {
-      await deleteDir(dirname(pathToBackupFile));
+    if (isEmpty(dirname(pathToBackupFile))) {
+      deleteDir(dirname(pathToBackupFile));
     }
     verbose(() => 'Restoring  ${truepath(pathToFile)}');
   } else {
@@ -130,11 +129,11 @@ Future<void> restoreFile(String pathToFile,
 // ignore: flutter_style_todos
 /// TODO: make this work for other than current drive under Windows
 ///
-Future<R> withFileProtection<R>(
+R withFileProtection<R>(
   List<String> protected,
   R Function() action, {
   String? workingDirectory,
-}) async {
+}) {
   // removed glob support for the moment.
   // This is because if one of the protected entriese is missing
   // then we are assuming its a glob.
@@ -147,8 +146,8 @@ Future<R> withFileProtection<R>(
   // If the entry is a glob pattern then it is applied recusively.
 
   final workingDirectory0 = workingDirectory ?? pwd;
-  final result = await withTempDir(
-    (backupDir) async {
+  final result = withTempDir(
+    (backupDir) {
       verbose(() => 'withFileProtection: backing up to $backupDir');
 
       /// backup the protected files
@@ -169,19 +168,18 @@ Future<R> withFileProtection<R>(
 
         if (isFile(paths.sourcePath)) {
           if (!exists(dirname(paths.backupPath))) {
-            await createDir(dirname(paths.backupPath), recursive: true);
+            createDir(dirname(paths.backupPath), recursive: true);
           }
 
           /// the entity is a simple file.
-          await copy(paths.sourcePath, paths.backupPath);
+          copy(paths.sourcePath, paths.backupPath);
         } else if (isDirectory(paths.sourcePath)) {
           /// the entity is a directory so copy the whole tree
           /// recursively.
           if (!exists(paths.backupPath)) {
-            await createDir(paths.backupPath, recursive: true);
+            createDir(paths.backupPath, recursive: true);
           }
-          await copyTree(paths.sourcePath, paths.backupPath,
-              includeHidden: true);
+          copyTree(paths.sourcePath, paths.backupPath, includeHidden: true);
         } else {
           throw BackupFileException(
             'Unsupported entity type for ${paths.sourcePath}. '
@@ -218,15 +216,15 @@ Future<R> withFileProtection<R>(
           if (!exists(paths.backupPath)) {
             /// If the protected entity didn't exist before we started
             /// the make certain it doesn't exist now.
-            await _deleteEntity(paths.sourcePath);
+            _deleteEntity(paths.sourcePath);
           }
 
           if (isFile(paths.backupPath)) {
-            await _restoreFile(paths);
+            _restoreFile(paths);
           }
 
           if (isDirectory(paths.backupPath)) {
-            await _restoreDirectory(paths);
+            _restoreDirectory(paths);
           }
         }
       }
@@ -239,20 +237,20 @@ Future<R> withFileProtection<R>(
   return result;
 }
 
-Future<void> _restoreFile(_Paths paths) async {
-  await withTempFile(
-    (dotBak) async {
+void _restoreFile(_Paths paths) {
+  withTempFile<void>(
+    (dotBak) {
       try {
         if (exists(paths.sourcePath)) {
-          await move(paths.sourcePath, dotBak);
+          move(paths.sourcePath, dotBak);
         }
 
         // ignore: flutter_style_todos
         /// TODO: consider only restoring the file if its last modified
         /// time has changed.
-        await move(paths.backupPath, paths.sourcePath);
+        move(paths.backupPath, paths.sourcePath);
         if (exists(dotBak)) {
-          await delete(dotBak);
+          delete(dotBak);
         }
         // ignore: avoid_catches_without_on_clauses
       } catch (e) {
@@ -263,9 +261,9 @@ Future<void> _restoreFile(_Paths paths) async {
           /// file then the originalFile should not exists.
           /// but just in case.
           if (exists(paths.sourcePath)) {
-            await delete(paths.sourcePath);
+            delete(paths.sourcePath);
           }
-          await move(dotBak, paths.sourcePath);
+          move(dotBak, paths.sourcePath);
         }
       }
     },
@@ -273,24 +271,24 @@ Future<void> _restoreFile(_Paths paths) async {
   );
 }
 
-Future<void> _restoreDirectory(_Paths paths) async {
+void _restoreDirectory(_Paths paths) {
   /// For directories we just recreate them if necessary.
   /// This allows us to restore empty directories.
   if (exists(paths.sourcePath)) {
-    await deleteDir(paths.sourcePath);
+    deleteDir(paths.sourcePath);
   }
-  await createDir(paths.sourcePath, recursive: true);
+  createDir(paths.sourcePath, recursive: true);
 
   /// The find command will return all of the nested files so
   /// we don't need to restore them when we see the directory.
-  await moveTree(paths.backupPath, paths.sourcePath, includeHidden: true);
+  moveTree(paths.backupPath, paths.sourcePath, includeHidden: true);
 }
 
-Future<void> _deleteEntity(String path) async {
+void _deleteEntity(String path) {
   if (isFile(path)) {
-    await delete(path);
+    delete(path);
   } else if (isDirectory(path)) {
-    await deleteDir(path);
+    deleteDir(path);
   } else {
     verbose(() => 'Path is of unsuported type');
   }

@@ -20,4 +20,4 @@ export 'package:dcli_core/dcli_core.dart' show CatException;
 ///
 void cat(String path, {LineAction stdout = print}) =>
     // ignore: discarded_futures
-    waitForEx(core.cat(path, stdout: stdout));
+    core.cat(path, stdout: stdout);

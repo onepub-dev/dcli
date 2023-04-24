@@ -294,8 +294,7 @@ class RunnableProcess {
   void _waitForStart() {
     final complete = Completer<Process>();
 
-    unawaited(_fProcess
-        .then(complete.complete)
+    unawaited(_fProcess.then(complete.complete)
         //ignore: avoid_types_on_closure_parameters
         .catchError((Object e, StackTrace s) {
       // 2 - No such file or directory

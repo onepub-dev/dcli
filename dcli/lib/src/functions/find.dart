@@ -174,36 +174,17 @@ class FindProgress extends InternalProgress {
 
   /// Internal method so we can cancel the stream.
   void _forEach(CancelableLineAction action) {
-    final controller = LimitedStreamController<FindItem>(100);
-    try {
-      late StreamSubscription<FindItem> sub;
-      sub = controller.stream.listen((item) async {
-        sub.pause();
-        if (!action(item.pathTo)) {
-          await sub.cancel();
-        }
-        sub.resume();
-      });
-
-      waitForEx(
-        // ignore: discarded_futures
-        core.find(
-          pattern,
-          caseSensitive: caseSensitive,
-          recursive: recursion,
-          includeHidden: includeHidden,
-          workingDirectory: workingDirectory,
-          progress: controller,
-          types: types,
-        ),
-      );
-    } finally {
-      /// under normal circumstances core.find closes the controller.
-      if (!controller.isClosed) {
-        // ignore: discarded_futures
-        waitForEx<void>(controller.close());
-      }
-    }
+    core.find(
+      pattern,
+      caseSensitive: caseSensitive,
+      recursive: recursion,
+      includeHidden: includeHidden,
+      workingDirectory: workingDirectory,
+      progress: (item) {
+        return action(item.pathTo);
+      },
+      types: types,
+    );
   }
 
   /// Returns the first line from the command or

@@ -31,11 +31,11 @@ import '../../dcli_core.dart';
 /// See [isDirectory]
 ///     [exists]
 ///
-Future<void> deleteDir(String path, {bool recursive = true}) async =>
+void deleteDir(String path, {bool recursive = true}) =>
     _DeleteDir().deleteDir(path, recursive: recursive);
 
 class _DeleteDir extends DCliFunction {
-  Future<void> deleteDir(String path, {required bool recursive}) async {
+  void deleteDir(String path, {required bool recursive}) {
     verbose(() => 'deleteDir:  ${truepath(path)} recursive: $recursive');
 
     if (!exists(path)) {
@@ -49,7 +49,7 @@ class _DeleteDir extends DCliFunction {
     }
 
     try {
-      await Directory(path).delete(recursive: recursive);
+      Directory(path).deleteSync(recursive: recursive);
     }
     // ignore: avoid_catches_without_on_clauses
     catch (e) {

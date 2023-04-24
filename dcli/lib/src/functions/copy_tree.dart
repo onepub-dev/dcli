@@ -70,16 +70,13 @@ void copyTree(
   bool recursive = true,
   bool Function(String file) filter = _allowAll,
 }) =>
-    waitForEx(
-      // ignore: discarded_futures
-      core.copyTree(
-        from,
-        to,
-        overwrite: overwrite,
-        includeHidden: includeHidden,
-        recursive: recursive,
-        filter: filter,
-      ),
+    core.copyTree(
+      from,
+      to,
+      overwrite: overwrite,
+      includeHidden: includeHidden,
+      recursive: recursive,
+      filter: filter,
     );
 
 bool _allowAll(String file) => true;

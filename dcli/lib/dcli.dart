@@ -102,4 +102,3 @@ export 'src/util/runnable_process.dart' show printerr;
 export 'src/util/string_as_process.dart';
 export 'src/util/temp_file.dart';
 export 'src/util/terminal.dart';
-export 'src/util/wait_for_ex.dart' show waitForEx;

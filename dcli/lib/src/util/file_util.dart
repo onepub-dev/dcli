@@ -20,7 +20,7 @@ FileStat stat(String path) => core.stat(path);
 
 /// Returns the length of the file at [pathToFile] in bytes.
 // ignore: discarded_futures
-int fileLength(String pathToFile) => waitForEx(core.fileLength(pathToFile));
+int fileLength(String pathToFile) => core.fileLength(pathToFile);
 
 /// Calculates the sha256 hash of a file's
 /// content.
@@ -37,7 +37,7 @@ int fileLength(String pathToFile) => waitForEx(core.fileLength(pathToFile));
 /// Throws [NotAFileException] if path is
 /// not a file.
 // ignore: discarded_futures
-Digest calculateHash(String path) => waitForEx(core.calculateHash(path));
+Digest calculateHash(String path) => core.calculateHash(path);
 
 /// Thrown when a file doesn't exist
 class FileNotFoundException extends core.DCliException {

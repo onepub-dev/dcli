@@ -41,13 +41,7 @@ class TailProgress extends InternalProgress {
   /// Read lines from the head of the file.
   @override
   void forEach(LineAction action) {
-    final stream = core.tail(pathTo, lines);
-
-    final done = Completer<bool>();
-
-    stream.listen((line) => action(line), onDone: () => done.complete(true));
-
-    waitForEx(done.future);
+    core.tail(pathTo, lines).forEach(action);
   }
 }
 

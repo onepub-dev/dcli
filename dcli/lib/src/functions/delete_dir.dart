@@ -35,5 +35,4 @@ export 'package:dcli_core/dcli_core.dart' show DeleteDirException;
 ///  * [exists]
 ///
 void deleteDir(String path, {bool recursive = true}) =>
-    // ignore: discarded_futures
-    waitForEx(core.deleteDir(path, recursive: recursive));
+    core.deleteDir(path, recursive: recursive);

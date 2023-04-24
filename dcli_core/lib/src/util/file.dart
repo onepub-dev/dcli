@@ -5,6 +5,7 @@
  */
 
 import 'dart:async';
+import 'dart:convert';
 import 'dart:io';
 
 import 'package:crypto/crypto.dart';
@@ -46,12 +47,12 @@ Future<R> withOpenFile<R>(
 ///
 /// [Shell.current.isPrivileged]
 ///
-Future<void> symlink(
+void symlink(
   String existingPath,
   String linkPath,
-) async {
+) {
   verbose(() => 'symlink existingPath: $existingPath linkPath $linkPath');
-  await Link(linkPath).create(existingPath);
+  Link(linkPath).createSync(existingPath);
 }
 
 ///
@@ -67,9 +68,9 @@ Future<void> symlink(
 ///
 /// [Shell.current.isPrivileged]
 ///
-Future<void> deleteSymlink(String linkPath) async {
+void deleteSymlink(String linkPath) {
   verbose(() => 'deleteSymlink linkPath: $linkPath');
-  await Link(linkPath).delete();
+  Link(linkPath).deleteSync();
 }
 
 ///
@@ -84,7 +85,7 @@ Future<void> deleteSymlink(String linkPath) async {
 /// ```
 ///
 /// throws a FileSystemException if the target path does not exist.
-Future<String> resolveSymLink(String pathToLink) async {
+String resolveSymLink(String pathToLink) {
   final normalised = canonicalize(pathToLink);
 
   String resolved;
@@ -134,14 +135,14 @@ String createTempFilename({String? suffix, String? pathToTempDir}) {
 /// The temp file name will be <uuid>.tmp
 /// unless you provide a [suffix] in which
 /// case the file name will be <uuid>.<suffix>
-Future<String> createTempFile({String? suffix}) async {
+String createTempFile({String? suffix}) {
   final filename = createTempFilename(suffix: suffix);
-  await touch(filename, create: true);
+  touch(filename, create: true);
   return filename;
 }
 
 /// Returns the length of the file at [pathToFile] in bytes.
-Future<int> fileLength(String pathToFile) => File(pathToFile).length();
+int fileLength(String pathToFile) => File(pathToFile).lengthSync();
 
 /// Creates a temp file and then calls [action].
 ///
@@ -161,24 +162,24 @@ Future<int> fileLength(String pathToFile) => File(pathToFile).length();
 /// The temp file name will be <uuid>.tmp
 /// unless you provide a [suffix] in which
 /// case the file name will be <uuid>.<suffix>
-Future<R> withTempFile<R>(
-  Future<R> Function(String tempFile) action, {
+R withTempFile<R>(
+  R Function(String tempFile) action, {
   String? suffix,
   String? pathToTempDir,
   bool create = true,
   bool keep = false,
-}) async {
+}) {
   final tmp = createTempFilename(suffix: suffix, pathToTempDir: pathToTempDir);
   if (create) {
-    await touch(tmp, create: true);
+    touch(tmp, create: true);
   }
 
   R result;
   try {
-    result = await action(tmp);
+    result = action(tmp);
   } finally {
     if (exists(tmp) && !keep) {
-      await delete(tmp);
+      delete(tmp);
     }
   }
   return result;
@@ -198,7 +199,7 @@ Future<R> withTempFile<R>(
 /// doesn't exist.
 /// Throws [NotAFileException] if path is
 /// not a file.
-Future<Digest> calculateHash(String path) async {
+Digest calculateHash(String path) {
   if (!exists(path)) {
     throw FileNotFoundException(path);
   }
@@ -208,8 +209,24 @@ Future<Digest> calculateHash(String path) async {
   }
   final input = File(path);
 
-  const hasher = sha256;
-  final digest = await hasher.bind(input.openRead()).first;
+  late Digest digest;
+  final hasher =
+      sha256.startChunkedConversion(ChunkedConversionSink.withCallback((items) {
+    digest = items.first;
+  }));
+
+  try {
+    final stream = input.openSync();
+    while (true) {
+      final bytes = stream.readSync(16 * 1024);
+      if (bytes.isEmpty) {
+        break;
+      }
+      hasher.add(bytes);
+    }
+  } finally {
+    hasher.close();
+  }
 
   verbose(() => 'calculateHash($path) = $digest');
   return digest;
