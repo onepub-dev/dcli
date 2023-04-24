@@ -24,17 +24,16 @@ void cat(String path, {LineAction stdout = print}) =>
 class Cat extends DCliFunction {
   /// implementation for the [cat] function.
   void cat(String path, {LineAction stdout = print}) {
-    final sourceFile = File(path);
-
     verbose(() => 'cat:  ${truepath(path)}');
 
     if (!exists(path)) {
       throw CatException('The file at ${truepath(path)} does not exists');
     }
 
-    // TODO(mraleph): this could be more effecient. Currently loads the
-    // the whole file into memory.
-    sourceFile.readAsLinesSync().forEach(stdout);
+    LineFile(path).readAll((line) {
+      stdout(line);
+      return true;
+    });
   }
 }
 
