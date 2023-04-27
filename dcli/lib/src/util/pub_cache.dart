@@ -137,8 +137,15 @@ class PubCache {
 
   /// Path to the pub cache hosted directory
   /// hosted/pub.dartlang.org
-  String get pathToHosted =>
-      truepath(_pubCachePath, 'hosted', 'pub.dartlang.org');
+  String get pathToHosted {
+    final pubDev = truepath(_pubCachePath, 'hosted', 'pub.dev');
+    // 2.19.5/6 changes the path to hosted files in pub-cache.
+    // If pub.dev exists then we are running from 2.19.x so use that path.
+    if (exists(pubDev)) {
+      return pubDev;
+    }
+    return truepath(_pubCachePath, 'hosted', 'pub.dartlang.org');
+  }
 
   /// Returns the directory name of the pub cache.
   ///
@@ -154,15 +161,15 @@ class PubCache {
 
   /// Path to the PubCache's hosted/pub.dartlang.org directory
   /// where all of the downloaded packages from pub.dev live.
-  String get pathToDartLang =>
-      join(_pubCachePath, 'hosted', 'pub.dartlang.org');
+  @Deprecated('Used pathToHosted')
+  String get pathToDartLang => pathToHosted;
 
   /// Returns the path to the package in .pub-cache for the dart
   /// project named [packageName] for the version [version].
   /// e.g.
   /// ~/.pub-cache/hosted/pub.dartlang.org/dswitch-4.0.1
   String pathToPackage(String packageName, String version) =>
-      join(pathToDartLang, '$packageName-$version');
+      join(pathToHosted, '$packageName-$version');
 
   /// Returns true if the package is installed in pub-cache
   bool isInstalled(String packageName) =>
@@ -176,14 +183,14 @@ class PubCache {
   ///
   /// If no versions are installed then null is returned.
   Version? findPrimaryVersion(String packageName) {
-    if (!exists(pathToDartLang)) {
+    if (!exists(pathToHosted)) {
       return null;
     }
 
     final packages = find(
       '$packageName-*.*',
       types: [Find.directory],
-      workingDirectory: pathToDartLang,
+      workingDirectory: pathToHosted,
     ).toList();
 
     if (packages.isEmpty) {
