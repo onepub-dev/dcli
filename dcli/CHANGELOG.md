@@ -1,3 +1,6 @@
+# 1.36.2
+- updated the pubcach pathToHosted to deal with working in 2.19 environments as the hosted path in pub-cache changed locations.
+
 # 1.36.0
 - Upgraded to dart_console2 2.0.1 to fix bug on when running in docker.
 
