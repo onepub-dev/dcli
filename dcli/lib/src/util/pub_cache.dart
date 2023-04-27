@@ -143,8 +143,15 @@ class PubCache {
 
   /// Path to the pub cache hosted directory
   /// hosted/pub.dartlang.org
-  String get pathToHosted =>
-      truepath(_pubCachePath, 'hosted', 'pub.dartlang.org');
+  String get pathToHosted {
+    final pubDev = truepath(_pubCachePath, 'hosted', 'pub.dev');
+    // 2.19.5/6 changes the path to hosted files in pub-cache.
+    // If pub.dev exists then we are running from 2.19.x so use that path.
+    if (exists(pubDev)) {
+      return pubDev;
+    }
+    return truepath(_pubCachePath, 'hosted', 'pub.dartlang.org');
+  }
 
   /// Returns the directory name of the pub cache.
   ///
@@ -160,8 +167,8 @@ class PubCache {
 
   /// Path to the PubCache's hosted/pub.dartlang.org directory
   /// where all of the downloaded packages from pub.dev live.
-  String get pathToDartLang =>
-      join(_pubCachePath, 'hosted', 'pub.dartlang.org');
+  /// @deprecated use pathToHosted
+  String get pathToDartLang => pathToHosted;
 
   /// Returns the path to the package in .pub-cache for the dart
   /// project named [packageName] for the version [version].

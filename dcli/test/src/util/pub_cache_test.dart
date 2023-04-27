@@ -67,7 +67,7 @@ void main() {
           ..value(PubCache.scopeKey, PubCache.forScope())
           ..runSync(() {
             final pubCache = PubCache();
-            createDir(pubCache.pathToDartLang, recursive: true);
+            createDir(pubCache.pathToHosted, recursive: true);
             createDir(join(pubCache.pathToDartLang, 'dcli-1.0.0-beta.1'));
 
             var primary = PubCache().findPrimaryVersion('dcli');
@@ -75,21 +75,21 @@ void main() {
             expect(primary, equals(Version.parse('1.0.0-beta.1')));
             expect(primary!.isPreRelease, isTrue);
 
-            createDir(join(pubCache.pathToDartLang, 'dcli-1.0.0'));
+            createDir(join(pubCache.pathToHosted, 'dcli-1.0.0'));
 
             primary = PubCache().findPrimaryVersion('dcli');
             expect(primary, isNotNull);
             expect(primary, equals(Version.parse('1.0.0')));
             expect(primary!.isPreRelease, isFalse);
 
-            createDir(join(pubCache.pathToDartLang, 'dcli-1.0.1'));
+            createDir(join(pubCache.pathToHosted, 'dcli-1.0.1'));
             primary = PubCache().findPrimaryVersion('dcli');
             expect(primary, isNotNull);
             expect(primary, equals(Version.parse('1.0.1')));
             expect(primary!.isPreRelease, isFalse);
 
-            createDir(join(pubCache.pathToDartLang, 'dcli-2.0.0'));
-            createDir(join(pubCache.pathToDartLang, 'dcli-2.0.0-beta.1'));
+            createDir(join(pubCache.pathToHosted, 'dcli-2.0.0'));
+            createDir(join(pubCache.pathToHosted, 'dcli-2.0.0-beta.1'));
             primary = PubCache().findPrimaryVersion('dcli');
 
             expect(primary, equals(Version.parse('2.0.0')));
