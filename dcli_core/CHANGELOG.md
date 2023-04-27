@@ -1,3 +1,6 @@
+# 1.22.7
+- failed release
+
 # 1.22.6
 - 2.19 has changed the path to the pub-cache hosted path. This update detects if the new version is in use.
 
