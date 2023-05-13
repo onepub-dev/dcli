@@ -60,6 +60,11 @@ void main() {
       final dcliProjectRoot = DartProject.self.pathToProjectRoot;
       final projectRoot =
           join(dcliProjectRoot, 'test', 'test_script', 'dcli_unit_tester');
+
+      var exeName = 'dcli_unit_tester';
+      if (Platform.isWindows) {
+        exeName += '.exe';
+      }
       chmod(pathToTestScript, permission: '740');
       DartScript.fromFile(pathToTestScript).runPubGet();
       final result = 'dart $pathToTestScript --script'
@@ -68,7 +73,7 @@ void main() {
       expect(result.length, equals(13));
       var line = 0;
       expect(result[line++], equals('basename, dcli_unit_tester'));
-      expect(result[line++], equals('exeName, dcli_unit_tester'));
+      expect(result[line++], equals('exeName, $exeName'));
       expect(result[line++], equals('isCompiled, false'));
       expect(result[line++], equals('isInstalled, false'));
       expect(result[line++], equals('isPubGlobalActivated, false'));
@@ -76,11 +81,11 @@ void main() {
       expect(
           result[line++],
           equals('pathToExe, '
-              '${join(projectRoot, 'bin', 'dcli_unit_tester')}'));
+              '${join(projectRoot, 'bin', exeName)}'));
       expect(
           result[line++],
           equals('pathToInstalledExe, '
-              '${join(HOME, '.dcli', 'bin', 'dcli_unit_tester')}'));
+              '${join(HOME, '.dcli', 'bin', exeName)}'));
       expect(result[line++], equals('pathToProjectRoot, $projectRoot'));
       expect(
           result[line++],
