@@ -59,7 +59,7 @@ void main() {
         .runPub(args: ['publish', '--help'], progress: Progress.capture());
     final line = progress.lines;
     expect(line.isNotEmpty, equals(true));
-    expect(line[0], equals('Publish the current package to pub.dartlang.org.'));
+    expect(line[0], equals('Publish the current package to pub.dev.'));
   });
 
   test('Run dart pub', () {
@@ -69,7 +69,7 @@ void main() {
     // final line = progress.lines;
     // expect(line.isNotEmpty, equals(true));
     // expect(line[0]
-    // , equals('Publish the current package to pub.dartlang.org.'));
+    // , equals('Publish the current package to pub.dev.'));
   });
 
   test('Run dart script', () {
