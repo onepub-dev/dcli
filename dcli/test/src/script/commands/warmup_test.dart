@@ -23,7 +23,6 @@ void main() {
           ..warmup();
 
         expect(exists(join(projectPath, '.dart_tool')), equals(true));
-        expect(exists(join(projectPath, '.packages')), equals(true));
         expect(exists(join(projectPath, 'pubspec.lock')), equals(true));
       });
     });
