@@ -159,14 +159,14 @@ packages:
       path: "../../dcli"
       relative: true
     source: path
-    version: "2.0.1"
+    version: "2.1.0"
   dcli_core:
     dependency: "direct main"
     description:
       path: "../../dcli_core"
       relative: true
     source: path
-    version: "2.0.1"
+    version: "2.1.0"
   equatable:
     dependency: transitive
     description:
@@ -387,10 +387,10 @@ packages:
     dependency: transitive
     description:
       name: posix
-      sha256: "203e3ad9df376927118dc662e1724dde1f64e2c3292cd59a8082d4a2de84bb70"
+      sha256: "3ad26924254fd2354b0e2b95fc8b45ac392ad87434f8e64807b3a1ac077f2256"
       url: "https://pub.dev"
     source: hosted
-    version: "4.1.0"
+    version: "5.0.0"
   pub_semver:
     dependency: transitive
     description:
@@ -539,10 +539,10 @@ packages:
     dependency: transitive
     description:
       name: system_info2
-      sha256: e9a8b4286571b8e9836adb3b5be247f6be0f404601c0a611c3c8f6879c6b7704
+      sha256: af2f948e3f31a3367a049932a8ad59faf0063ecf836a020d975b9f41566d8bc9
       url: "https://pub.dev"
     source: hosted
-    version: "3.0.1"
+    version: "3.0.2"
   term_glyph:
     dependency: transitive
     description:
