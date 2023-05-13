@@ -24,7 +24,8 @@ void main() {
   test(
     'which ...',
     () async {
-      expect(which('regedit.exe').path, equals(r'C:\Windows\regedit.exe'));
+      expect(which('regedit.exe').path,
+          equalsIgnoringCase(r'C:\Windows\regedit.exe'));
       expect(which('regedit.exe').found, equals(true));
       expect(which('regedit.exe').notfound, equals(false));
       expect(which('regedit.exe').paths.length, equals(1));
