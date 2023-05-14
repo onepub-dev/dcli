@@ -1,3 +1,10 @@
+# 2.2.0
+- upgraded to dart 3.
+- updated script_test to reflect windows exe names end with .exe.
+- updated the dart sdk test to reflect the directory name change in .pub-cache.
+- made which_test case insensitive on windows.
+- removed expect for the .packages directory as dart 3.x no longer creates it.
+
 # 2.1.0
 - Updated to system_info2 3.0.2
 - modified withTempFile and withTempDir to take an action that returns a Future rather than FutureOr. Now we are moving to a fully async model Futue catches more errors for the library user.
