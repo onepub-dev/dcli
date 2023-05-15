@@ -157,18 +157,18 @@ packages:
     dependency: "direct main"
     description:
       name: dcli
-      sha256: "8892054b04efc0d3b8f0850a2687fef44d5916b2d9e6856f4809109388cc77d7"
+      sha256: "0df4098fe0faa3e55ee98cf9028bed1b856c1909f534aa1709a3db55fdde93bc"
       url: "https://pub.dev"
     source: hosted
-    version: "2.2.0"
+    version: "2.2.1"
   dcli_core:
     dependency: "direct main"
     description:
       name: dcli_core
-      sha256: "6ea72b6a5ac699ce6e33bed71458e1514208c1fca97f990f136535cce639f3cf"
+      sha256: d11bc46942d203e52f224ea3af0d35976bf3e4241d629f7e10231606a22959e2
       url: "https://pub.dev"
     source: hosted
-    version: "2.2.0"
+    version: "2.2.1"
   equatable:
     dependency: transitive
     description:
@@ -309,10 +309,10 @@ packages:
     dependency: "direct dev"
     description:
       name: lint_hard
-      sha256: d9cb96856a6c08f9d9d012de17bd45a9aa3950738c7bb6e01676a1c29625a4aa
+      sha256: "44d15ec309b1a8e1aff99069df9dcb1597f49d5f588f32811ca28fb7b38c32fe"
       url: "https://pub.dev"
     source: hosted
-    version: "3.0.1"
+    version: "4.0.0"
   logging:
     dependency: transitive
     description:
@@ -445,10 +445,10 @@ packages:
     dependency: transitive
     description:
       name: settings_yaml
-      sha256: "5ce20a93353ad7075a9d0e4e691008c9b411e7494fc8fc837dc314ce8eed179f"
+      sha256: "7b24fabf8595da060cb98d72541d594c3d3c706272b4d7bec70b251473257909"
       url: "https://pub.dev"
     source: hosted
-    version: "5.0.0"
+    version: "6.0.0"
   shelf:
     dependency: transitive
     description:
