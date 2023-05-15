@@ -1,3 +1,6 @@
+# 2.2.1
+- upgraded to settings_yaml 6.0
+
 # 2.2.0
 - upgraded to dart 3.
 - updated script_test to reflect windows exe names end with .exe.
