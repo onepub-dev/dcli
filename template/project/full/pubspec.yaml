@@ -10,7 +10,7 @@ dependencies:
   dcli_core: ^2.2.0
   http: ^0.13.4
   path: ^1.8.1
-  settings_yaml: ^5.0.0
+  settings_yaml: ^6.0.0
 dev_dependencies: 
   lint_hard: ^3.0.0
 executables: 

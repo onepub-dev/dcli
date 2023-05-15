@@ -57,7 +57,7 @@ dependencies:
   quiver: ^3.2.1
   random_string: 2.3.1
   scope: 3.0.0
-  settings_yaml: ^5.0.0
+  settings_yaml: ^6.0.0
   shelf: ^1.4.0
   shelf_packages_handler: ^3.0.1
   shelf_static: ^1.1.1
