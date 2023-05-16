@@ -1,3 +1,6 @@
+# 2.2.2
+- upgraded all package dependencies to the latest.
+
 # 2.2.1
 - upgraded to settings_yaml 6.0
 
