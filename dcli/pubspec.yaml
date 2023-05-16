@@ -7,27 +7,27 @@ repository: https://github.com/onepub-dev/dcli
 environment: 
   sdk: '>=2.19.0 <4.0.0'
 dependencies: 
-  _fe_analyzer_shared: ^52.0.0
+  _fe_analyzer_shared: ^60.0.0
   analyzer: ^5.4.0
   archive: ^3.3.5
-  args: 2.3.1
+  args: ^2.4.1
   async: ^2.10.0
   basic_utils: ^5.4.2
   boolean_selector: ^2.1.1
   charcode: 1.3.1
-  chunked_stream: 1.4.1
+  chunked_stream: ^1.4.2
   circular_buffer: 0.11.0
-  cli_util: 0.3.5
+  cli_util: ^0.4.0
   clock: 1.1.1
   collection: ^1.17.0
   convert: ^3.1.1
   coverage: ^1.6.2
   crypto: ^3.0.2
-  csv: 5.0.1
+  csv: ^5.0.2
   dart_console2: ^3.0.0-beta.1
   dcli_core: ^2.2.1
   equatable: ^2.0.5
-  ffi: 2.0.1
+  ffi: ^2.0.2
   file: 6.1.4
   frontend_server_client: ^3.2.0
   functional_data: 1.0.0
@@ -36,16 +36,16 @@ dependencies:
   http_multi_server: ^3.2.1
   http_parser: ^4.0.2
   ini: 2.1.0
-  intl: 0.18.0
-  io: 1.0.3
+  intl: ^0.18.1
+  io: ^1.0.4
   js: ^0.6.6
-  json2yaml: 3.0.0
+  json2yaml: ^3.0.1
   json_annotation: ^4.7.0
   logging: ^1.1.0
   matcher: ^0.12.14
   meta: ^1.8.0
   mime: ^1.0.4
-  node_preamble: 2.0.1
+  node_preamble: ^2.0.2
   package_config: ^2.1.0
   path: ^1.8.3
   pointycastle: ^3.6.2
@@ -53,7 +53,7 @@ dependencies:
   posix: ^5.0.0
   pub_semver: ^2.1.3
   pubspec2: ^2.4.2
-  pubspec_lock: 3.0.1
+  pubspec_lock: ^3.0.2
   quiver: ^3.2.1
   random_string: 2.3.1
   scope: 3.0.0
@@ -69,15 +69,15 @@ dependencies:
   stream_channel: ^2.1.1
   string_scanner: ^1.2.0
   sum_types: ^0.3.4
-  system_info2: 3.0.2
+  system_info2: ^4.0.0
   term_glyph: ^1.2.1
-  test_api: ^0.4.18
-  test_core: ^0.4.22
+  test_api: ^0.5.2
+  test_core: ^0.5.2
   typed_data: ^1.3.1
   uri: 1.0.0
   uuid: ^3.0.7
-  validators2: 4.0.0
-  vm_service: ^10.0.0
+  validators2: ^5.0.0
+  vm_service: ^11.6.0
   watcher: ^1.0.2
   web_socket_channel: ^2.3.0
   webkit_inspection_protocol: ^1.2.0
@@ -85,7 +85,7 @@ dependencies:
   yaml: ^3.1.1
 dev_dependencies: 
   hex: ^0.2.0
-  lint_hard: ^3.0.0-beta.2
+  lint_hard: ^4.0.0
   mocktail: ^0.3.0
   test: ^1.0.0
 executables: 
