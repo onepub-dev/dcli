@@ -25,7 +25,7 @@ class A117670ecffdae99646ec89b9fac5f34f extends PackedResource {
   /// this checksum
   @override
   String get checksum =>
-      '1d6dc915024c6d6e53e3952fd88ed2db63f4543d2f8684c5fe85ae98b9d8715d';
+      'a3aa905a5cb4dd9e01fc3752a06ce201e3e29252add766cfae71a84c8f12375d';
 
   /// <package>/resources relative path to the original resource.
   @override
@@ -35,7 +35,7 @@ class A117670ecffdae99646ec89b9fac5f34f extends PackedResource {
   String get content => '''
 bmFtZTogY29uc29sZV9zaW1wbGUKdmVyc2lvbjogMC4wLjEKZGVzY3JpcHRpb246IEEgc2ltcGxlIGNv
 bW1hbmQtbGluZSBhcHBsaWNhdGlvbiBjcmVhdGVkIGJ5IGRjbGkKZW52aXJvbm1lbnQ6IAogIHNkazog
-Jz49Mi4xOS4wIDw0LjAuMCcKZGVwZW5kZW5jaWVzOiAKICBkY2xpOiBeMi4yLjIKICBkY2xpX2NvcmU6
-IF4yLjIuMgpkZXZfZGVwZW5kZW5jaWVzOiAKICBsaW50X2hhcmQ6IF4zLjAuMAo=
+Jz49Mi4xOS4wIDw0LjAuMCcKZGVwZW5kZW5jaWVzOiAKICBkY2xpOiBeMi4yLjMKICBkY2xpX2NvcmU6
+IF4yLjIuMwpkZXZfZGVwZW5kZW5jaWVzOiAKICBsaW50X2hhcmQ6IF4zLjAuMAo=
   ''';
 }
