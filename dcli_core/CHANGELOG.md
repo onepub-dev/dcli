@@ -1,3 +1,6 @@
+# 2.2.3
+- change the path to the pub-cache to reflect the new path at hosted/pub.dev which changed from 2.19
+
 # 2.2.2
 - upgraded all package dependency versions to latest.
 
