@@ -144,8 +144,7 @@ class PubCache {
 
   /// Path to the pub cache hosted directory
   /// hosted/pub.dartlang.org
-  String get pathToHosted =>
-      truepath(_pubCachePath, 'hosted', 'pub.dartlang.org');
+  String get pathToHosted => truepath(_pubCachePath, 'hosted', 'pub.dev');
 
   /// Returns the directory name of the pub cache.
   ///
