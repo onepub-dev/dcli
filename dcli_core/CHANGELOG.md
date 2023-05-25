@@ -1,3 +1,6 @@
+# 2.2.4
+- upgraded to scope 4.0
+
 # 2.2.3
 - change the path to the pub-cache to reflect the new path at hosted/pub.dev which changed from 2.19
 
