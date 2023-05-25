@@ -1,3 +1,6 @@
+# 2.2.4
+- upgraded to latest package versions
+- updated min sdk to 3.x for all sub packages.
 # 2.2.3
 - change the path to the pub-cache to reflect the new path at hosted/pub.dev which changed from 2.19
 
