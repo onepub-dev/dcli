@@ -5,7 +5,7 @@ documentation: https://dcli.onepub.dev
 description: Dart console SDK - write console (cli) apps/scripts using dart.
 repository: https://github.com/onepub-dev/dcli
 environment: 
-  sdk: '>=2.19.0 <4.0.0'
+  sdk: '>=3.0.0 <4.0.0'
 dependencies: 
   _fe_analyzer_shared: ^60.0.0
   analyzer: ^5.4.0
@@ -14,28 +14,28 @@ dependencies:
   async: ^2.10.0
   basic_utils: ^5.4.2
   boolean_selector: ^2.1.1
-  charcode: 1.3.1
+  charcode: ^1.3.1
   chunked_stream: ^1.4.2
-  circular_buffer: 0.11.0
+  circular_buffer: ^0.11.0
   cli_util: ^0.4.0
-  clock: 1.1.1
+  clock: ^1.1.1
   collection: ^1.17.0
   convert: ^3.1.1
   coverage: ^1.6.2
   crypto: ^3.0.2
   csv: ^5.0.2
-  dart_console2: ^3.0.0-beta.1
+  dart_console2: ^3.0.0
   dcli_core: ^2.2.4
   equatable: ^2.0.5
   ffi: ^2.0.2
-  file: 6.1.4
+  file: ^6.1.4
   frontend_server_client: ^3.2.0
-  functional_data: 1.0.0
+  functional_data: ^1.0.0
   glob: ^2.1.1
   http: ^0.13.5
   http_multi_server: ^3.2.1
   http_parser: ^4.0.2
-  ini: 2.1.0
+  ini: ^2.1.0
   intl: ^0.18.1
   io: ^1.0.4
   js: ^0.6.6
@@ -55,7 +55,7 @@ dependencies:
   pubspec2: ^2.4.2
   pubspec_lock: ^3.0.2
   quiver: ^3.2.1
-  random_string: 2.3.1
+  random_string: ^2.3.1
   scope: ^4.0.0
   settings_yaml: ^6.0.0
   shelf: ^1.4.0
@@ -74,7 +74,7 @@ dependencies:
   test_api: ^0.5.2
   test_core: ^0.5.2
   typed_data: ^1.3.1
-  uri: 1.0.0
+  uri: ^1.0.0
   uuid: ^3.0.7
   validators2: ^5.0.0
   vm_service: ^11.6.0

@@ -3,15 +3,15 @@ version: 0.0.1
 publish_to: https://beta.onepub.dev/api/jbbxpsdavu/
 description: A sample command-line application that installs and runs mailhog
 environment: 
-  sdk: '>=2.19.0 <4.0.0'
+  sdk: '>=3.0.0 <4.0.0'
 dependencies: 
   args: ^2.3.1
-  dcli: ^2.2.3
-  dcli_core: ^2.2.3
+  dcli: ^2.2.0
+  dcli_core: ^2.2.0
   http: ^0.13.4
   path: ^1.8.1
   settings_yaml: ^6.0.0
 dev_dependencies: 
-  lint_hard: ^3.0.0
+  lint_hard: ^4.0.0
 executables: 
   full: 
