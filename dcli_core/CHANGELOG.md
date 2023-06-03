@@ -1,3 +1,8 @@
+# 3.0.0
+- no changes from prior release. This release is to fix a whole in the release resulting in  missing support dart 2.19.
+- this release will be followed by a final 2.x release that will provide dart 2.19 support.
+  
+
 # 2.2.4
 - upgraded to scope 4.0
 
