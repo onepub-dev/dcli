@@ -1,3 +1,5 @@
+# 2.3.0
+- Final release of dcli for dart 2.x
 # 3.0.2
 - second attempt at a 3.x release
 
