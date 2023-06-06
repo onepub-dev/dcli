@@ -1,3 +1,6 @@
+# 2.3.0
+- final version of dcli for dart 2.x
+
 # 3.0.3
 - Fixed a bug in withEnvironment. It wasn't possible to access environment vars from a parent scope when it is documented as doing so.
 
