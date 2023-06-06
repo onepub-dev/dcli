@@ -82,7 +82,7 @@ class Env extends DCliFunction {
 
   /// Use this ctor for injecting an altered Environment
   /// into a Scope.
-  /// The main use for this ctor is for testing.
+  /// The main use for this ctor is for unit testing.
   factory Env.forScope(Map<String, String> map) {
     final env = Env._internal();
 
@@ -388,10 +388,12 @@ class Env extends DCliFunction {
 /// This is particularly useful for unit tests and running
 /// a process that requires specific environment variables.
 Future<R> withEnvironment<R>(Future<R> Function() callback,
-        {required Map<String, String> environment}) async =>
-    (Scope()
-          ..value(Env.scopeKey, Env.forScope(environment)..addAll(environment)))
-        .run(() => callback());
+    {required Map<String, String> environment}) async {
+  final existing = Env()._envVars;
+  return (Scope()
+        ..value(Env.scopeKey, Env.forScope(existing)..addAll(environment)))
+      .run(() => callback());
+}
 
 /// Base class for all Environment variable related exceptions.
 class EnvironmentException extends DCliException {
