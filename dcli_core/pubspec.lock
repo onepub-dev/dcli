@@ -221,10 +221,10 @@ packages:
     dependency: "direct main"
     description:
       name: scope
-      sha256: "5e777fa2dcdf31e09ad0b0034b965d75ea2f0b0a77fab8ef340d9478f9df755c"
+      sha256: e0c880d8f0db2ffd2accd63eeb02396748f3b8a2f71bce4b7d3f8dab75fc8a74
       url: "https://pub.dev"
     source: hosted
-    version: "4.0.1"
+    version: "3.0.0"
   shelf:
     dependency: transitive
     description:
@@ -373,10 +373,10 @@ packages:
     dependency: transitive
     description:
       name: watcher
-      sha256: "3d2ad6751b3c16cf07c7fca317a1413b3f26530319181b37e3b9039b84fc01d8"
+      sha256: "6a7f46926b01ce81bfc339da6a7f20afbe7733eff9846f6d6a5466aa4c6667c0"
       url: "https://pub.dev"
     source: hosted
-    version: "1.1.0"
+    version: "1.0.2"
   web_socket_channel:
     dependency: transitive
     description:
@@ -402,4 +402,4 @@ packages:
     source: hosted
     version: "3.1.2"
 sdks:
-  dart: ">=3.0.0 <4.0.0"
+  dart: ">=2.19.0 <4.0.0"

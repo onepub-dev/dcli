@@ -296,7 +296,7 @@ mixin WindowsMixin {
 
 /// Native Windows stucture used to get the elevated
 /// status of the current process.
-sealed class _TokenElevation extends Struct {
+class _TokenElevation extends Struct {
   /// A nonzero value if the token has elevated privileges;
   /// otherwise, a zero value.
   @Int32()
