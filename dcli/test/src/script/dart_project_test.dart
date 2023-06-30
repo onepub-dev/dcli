@@ -51,7 +51,7 @@ void main() {
         expect(exists(scriptPath), isTrue);
         final project = DartProject.fromPath(pathToProject);
         expect(project.hasPubSpec, isTrue);
-        final pubspec = await PubSpec.loadFile(project.pathToPubSpec);
+        final pubspec = PubSpec.loadFile(project.pathToPubSpec);
         final executables = pubspec.executables;
         final mainScriptKey = basename(mainScriptName);
         expect(executables.containsKey(mainScriptKey), isTrue);
