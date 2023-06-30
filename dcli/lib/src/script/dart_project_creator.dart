@@ -132,7 +132,7 @@ Future<String> _renameMain(DartProject project, String projectName) async {
   /// If the pubspec includes an executables clause that
   /// reference the script we just changed the name of,
   /// then update the pubpsec to reflect the new name.
-  final pubspec = await ps.PubSpec.loadFile(project.pathToPubSpec);
+  final pubspec = ps.PubSpec.loadFile(project.pathToPubSpec);
   final executables = pubspec.executables;
   if (orginalScriptName != null) {
     final originalScriptKey = basenameWithoutExtension(orginalScriptName);

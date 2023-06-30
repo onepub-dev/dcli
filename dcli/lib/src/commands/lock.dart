@@ -67,7 +67,7 @@ class LockCommand extends Command {
 
     final projectDir = Directory(pathToProjectRoot);
     // ignore: discarded_futures
-    var pubspec = waitForEx(PubSpec.load(projectDir));
+    var pubspec = PubSpec.load(projectDir);
 
     final file = File(join(pathToProjectRoot, 'pubspec.lock'));
     final pubspecLock = file.readAsStringSync().loadPubspecLockFromYaml();
