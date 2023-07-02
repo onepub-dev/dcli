@@ -1,7 +1,3 @@
 dependency_overrides: 
   dcli_core: 
     path: ../dcli_core
-  # lint_hard:
-  #   path: ../../lint_hard
-  posix:
-    path: ../../dart_posix

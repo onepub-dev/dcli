@@ -9,6 +9,6 @@ import 'package:test/test.dart';
 
 void main() {
   test('entry point ...', () async {
-    EntryPoint().process(['--verbose', 'create']);
+    await EntryPoint().process(['--verbose', 'create']);
   });
 }

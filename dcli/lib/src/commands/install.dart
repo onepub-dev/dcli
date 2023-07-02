@@ -46,7 +46,7 @@ class InstallCommand extends Command {
   bool _requirePrivileges = false;
 
   @override
-  int run(List<Flag> selectedFlags, List<String> subarguments) {
+  Future<int> run(List<Flag> selectedFlags, List<String> subarguments) async {
     var scriptIndex = 0;
 
     final shell = Shell.current;

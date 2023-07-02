@@ -65,7 +65,7 @@ abstract class Command {
   /// Returns the exitCode of the script that is run
   /// If a script isn't run then return 0 for success
   /// or thrown an exception on any error.
-  int? run(List<Flag> selectedFlags, List<String> subarguments);
+  Future<int> run(List<Flag> selectedFlags, List<String> subarguments);
 
   /// name of the command
   String get name => _name;

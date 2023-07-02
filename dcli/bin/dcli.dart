@@ -8,13 +8,13 @@
 import 'package:dcli/src/script/entry_point.dart';
 import 'package:dcli/src/util/exit.dart';
 
-void main(List<String> arguments) {
-  DCli().run(arguments);
+void main(List<String> arguments) async {
+  await DCli().run(arguments);
 }
 
 class DCli {
-  void run(List<String> arguments) {
-    final exitCode = EntryPoint().process(arguments);
+  Future<void> run(List<String> arguments) async {
+    final exitCode = await EntryPoint().process(arguments);
 
     dcliExit(exitCode);
   }

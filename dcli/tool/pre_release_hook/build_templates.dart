@@ -28,13 +28,13 @@ Future<void> prepareTemplates() async {
   final dcliProject = DartProject.self;
   final pathToTemplates = join(dcliProject.pathToProjectRoot, '..', 'template');
 
-  final pubspec = PubSpec.loadFile(dcliProject.pathToPubSpec);
+  final pubspec = await PubSpec.loadFile(dcliProject.pathToPubSpec);
   final environment = pubspec.environment;
 
   find('pubspec.yaml', workingDirectory: pathToTemplates)
       .forEach((pathToTemplate) async {
     print(pathToTemplate);
-    final pubspec = PubSpec.loadFile(pathToTemplate);
+    final pubspec = await PubSpec.loadFile(pathToTemplate);
     final existing = pubspec.dependencies;
 
     /// need a mutable map

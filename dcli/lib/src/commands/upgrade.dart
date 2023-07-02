@@ -24,7 +24,7 @@ class UpgradeCommand extends Command {
   /// The upgrade command takes no arguments.
   /// current directory are upgradeed.
   @override
-  int run(List<Flag> selectedFlags, List<String> arguments) {
+  Future<int> run(List<Flag> selectedFlags, List<String> arguments) async {
     if (arguments.isNotEmpty) {
       throw InvalidArgumentException(
           'dcli upgrade does not take any arguments.');

@@ -27,7 +27,7 @@ class CompileCommand extends Command {
   Flags flagSet = Flags();
 
   @override
-  int run(List<Flag> selectedFlags, List<String> subarguments) {
+  Future<int> run(List<Flag> selectedFlags, List<String> subarguments) async {
     const exitCode = 0;
 
     var scriptIndex = 0;
