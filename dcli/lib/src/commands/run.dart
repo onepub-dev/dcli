@@ -23,7 +23,7 @@ class RunCommand extends Command {
   /// [arguments] - the arguments passed directly to the run command.
   /// Returns the called processes exitcode;
   @override
-  int run(List<Flag> selectedFlags, List<String> arguments) {
+  Future<int> run(List<Flag> selectedFlags, List<String> arguments) async {
     if (arguments.isEmpty) {
       throw InvalidArgumentException(
         'Expected a script or command. No arguments were found.',

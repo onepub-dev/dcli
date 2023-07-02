@@ -25,7 +25,7 @@ void main() {
             //TestFileSystem(useCommonPath: false).withinZone((fs) {
 
             try {
-              InstallCommand().run([], []);
+              await InstallCommand().run([], []);
             } on DCliException catch (e) {
               print(e);
             }

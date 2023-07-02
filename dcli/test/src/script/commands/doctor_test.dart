@@ -18,7 +18,7 @@ void main() {
     await TestFileSystem().withinZone((fs) async {
       var exit = -1;
       try {
-        exit = EntryPoint().process(['doctor']);
+        exit = await EntryPoint().process(['doctor']);
       } on DCliException catch (e) {
         print(e);
       }

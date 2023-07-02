@@ -7,12 +7,12 @@
 
 import 'package:dcli/src/script/entry_point.dart';
 
-void main(List<String> arguments) {
-  DCliInstall().run(arguments);
+void main(List<String> arguments) async {
+  await DCliInstall().run(arguments);
 }
 
 class DCliInstall {
-  void run(List<String> arguments) {
+  Future<void> run(List<String> arguments) async {
     final mutableArgs = <String>[...arguments];
 
     if (!mutableArgs.contains('doctor')) {
@@ -22,6 +22,6 @@ class DCliInstall {
       // switches such as -v
       mutableArgs.add('install');
     }
-    EntryPoint().process(mutableArgs);
+    await EntryPoint().process(mutableArgs);
   }
 }

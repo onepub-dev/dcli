@@ -22,7 +22,7 @@ class CleanCommand extends Command {
 
   /// [arguments] contains path to clean
   @override
-  int run(List<Flag> selectedFlags, List<String> arguments) {
+  Future<int> run(List<Flag> selectedFlags, List<String> arguments) async {
     String targetPath;
 
     if (arguments.isEmpty) {

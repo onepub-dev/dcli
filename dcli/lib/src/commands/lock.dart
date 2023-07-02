@@ -31,7 +31,7 @@ class LockCommand extends Command {
 
   /// [arguments] contains path to prepare
   @override
-  int run(List<Flag> selectedFlags, List<String> arguments) {
+  Future<int> run(List<Flag> selectedFlags, List<String> arguments) async {
     String targetPath;
 
     if (arguments.isEmpty) {
@@ -45,11 +45,11 @@ class LockCommand extends Command {
       targetPath = arguments[0];
     }
 
-    _lock(targetPath);
+    await _lock(targetPath);
     return 0;
   }
 
-  void _lock(String targetPath) {
+  Future<void> _lock(String targetPath) async {
     if (!exists(targetPath)) {
       throw InvalidArgumentException(
           'The project path $targetPath does not exists.');
@@ -67,7 +67,7 @@ class LockCommand extends Command {
 
     final projectDir = Directory(pathToProjectRoot);
     // ignore: discarded_futures
-    var pubspec = waitForEx(PubSpec.load(projectDir));
+    var pubspec = await PubSpec.load(projectDir);
 
     final file = File(join(pathToProjectRoot, 'pubspec.lock'));
     final pubspecLock = file.readAsStringSync().loadPubspecLockFromYaml();
@@ -119,8 +119,9 @@ class LockCommand extends Command {
       return {hosted.package: HostedReference(constrainedVersion)};
     } else {
       return {
-        hosted.package:
-            ExternalHostedReference(hosted.package, hosted.url, version, false)
+        hosted.package: ExternalHostedReference(
+            hosted.package, hosted.url, version,
+            verboseFormat: false)
       };
     }
   }

@@ -19,7 +19,7 @@ class DoctorCommand extends Command {
   static const String _commandName = 'doctor';
 
   @override
-  int run(List<Flag> selectedFlags, List<String> subarguments) {
+  Future<int> run(List<Flag> selectedFlags, List<String> subarguments) async {
     var showScriptDetails = false;
 
     late DartScript script;

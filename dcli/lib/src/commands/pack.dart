@@ -77,7 +77,7 @@ class PackCommand extends Command {
 
   /// [arguments] contains path to clean
   @override
-  int run(List<Flag> selectedFlags, List<String> arguments) {
+  Future<int> run(List<Flag> selectedFlags, List<String> arguments) async {
     if (!exists(Resources().resourceRoot) &&
         !exists(Resources.pathToPackYaml)) {
       throw InvalidArgumentException(

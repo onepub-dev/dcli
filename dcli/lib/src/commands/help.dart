@@ -19,7 +19,7 @@ class HelpCommand extends Command {
   static const String _commandName = 'help';
 
   @override
-  int run(List<Flag> selectedFlags, List<String> subarguments) {
+  Future<int> run(List<Flag> selectedFlags, List<String> subarguments) async {
     if (subarguments.isNotEmpty) {
       final command = Commands.findCommand(
         subarguments[0],

@@ -39,7 +39,7 @@ class CommandLineRunner {
   }
 
   /// Process the command line arguments to run the command.
-  int? process(List<String> arguments) {
+  Future<int> process(List<String> arguments) async {
     int? exitCode;
 
     var success = false;
@@ -95,7 +95,7 @@ class CommandLineRunner {
     if (success) {
       // get the script name and remaning args as they are the arguments
       // for the command to process.
-      exitCode = command!.run(Settings().selectedFlags, cmdArguments);
+      exitCode = await command!.run(Settings().selectedFlags, cmdArguments);
     } else {
       throw InvalidArgumentException('Invalid arguments passed.');
     }

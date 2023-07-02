@@ -16,7 +16,7 @@ void main() {
   group('Show Help', () {
     test('Help', () async {
       await TestFileSystem().withinZone((fs) async {
-        EntryPoint().process(['help']);
+        await EntryPoint().process(['help']);
       });
     });
   });

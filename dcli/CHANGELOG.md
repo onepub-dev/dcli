@@ -1,3 +1,8 @@
+# 3.0.3
+- upgraded to pubspec2 2.5
+- Fixed a bug in dcli_core where you couldn't access the parent scope in
+withEnvironment.
+
 # 3.0.2
 - second attempt at a 3.x release
 

@@ -34,13 +34,14 @@ class EntryPoint {
   }
 
   /// process the command line
-  int process(List<String> arguments) =>
+  Future<int> process(List<String> arguments) async =>
       _parseCmdLine(arguments, Commands.applicationCommands);
 
-  int _parseCmdLine(List<String> arguments, List<Command> availableCommands) {
+  Future<int> _parseCmdLine(
+      List<String> arguments, List<Command> availableCommands) async {
     try {
       CommandLineRunner.init(availableCommands);
-      exitCode = CommandLineRunner().process(arguments)!;
+      exitCode = await CommandLineRunner().process(arguments);
 
       verbose(() => 'Exiting with code $exitCode');
 

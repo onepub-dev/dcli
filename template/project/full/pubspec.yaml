@@ -1,17 +1,1 @@
-name: full
-version: 0.0.1
-publish_to: https://beta.onepub.dev/api/jbbxpsdavu/
-description: A sample command-line application that installs and runs mailhog
-environment: 
-  sdk: '>=3.0.0 <4.0.0'
-dependencies: 
-  args: ^2.3.1
-  dcli: ^3.0.2
-  dcli_core: ^3.0.2
-  http: ^0.13.4
-  path: ^1.8.1
-  settings_yaml: ^7.0.0
-dev_dependencies: 
-  lint_hard: ^4.0.0
-executables: 
-  full: 
+{name: full, version: 0.0.1, publish_to: https://beta.onepub.dev/api/jbbxpsdavu/, environment: {sdk: >=3.0.0 <4.0.0}, description: A sample command-line application that installs and runs mailhog, dependencies: {args: {version: ^2.3.1}, dcli: {version: ^3.0.3}, dcli_core: {version: ^3.0.3}, http: {version: ^0.13.4}, path: {version: ^1.8.1}, settings_yaml: {version: ^7.0.0}}, dev_dependencies: {lint_hard: {version: ^4.0.0}}, dependency_overrides: null, executables: {full: {full: }}, platforms: null}

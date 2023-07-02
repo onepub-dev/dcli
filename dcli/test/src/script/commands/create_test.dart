@@ -35,7 +35,7 @@ void main() {
 
       await capture(() async {
         /// default simple project
-        CreateCommand().run([VerboseFlag()], [pathToProject]);
+        await CreateCommand().run([VerboseFlag()], [pathToProject]);
         expect(exists(pathToProject), isTrue);
 
         expect(
