@@ -111,7 +111,31 @@ Clears the current line.
 clearLine();
 ```
 
-## startOfLine
+### writeLine
+
+Writes \[text] to the console followed by a newline.&#x20;
+
+You can control the alignment of \[text] by passing the optional \[alignment] argument which defaults to left alignment. The alignment is based on the current terminals width with spaces inserted to the left of the string to facilitate the alignment. Make certain the current line is clear and the cursor is at column 0  before calling this method otherwise the alignment will not work as expected.
+
+## Cursors
+
+Ansi terminals support the concept of a cursor.
+
+Characters printed to the terminal a displayed in a grid of rows and columns.
+
+Historically terminals were generally 24 rows x 80 columns but modern terminals can be any size.
+
+The number of rows and columns is determined by the size of the terminal window.
+
+A cursor describes a location on the terminal within the grid.
+
+You can move the cursor to any location and then print text at that location.
+
+Cursors allow you to build advanced user interfaces in a terminal window including form based input.
+
+
+
+### startOfLine
 
 Moves the cursor to the start of the current line.
 
@@ -119,11 +143,11 @@ Moves the cursor to the start of the current line.
 startOfLine;
 ```
 
-## previousLine
+### previousLine
 
 Moves the cursor to the start of the previous line.
 
-## showCursor
+### showCursor
 
 Shows or hides the cursor.
 
@@ -131,6 +155,45 @@ Shows or hides the cursor.
 showCursor(show: true);
 ```
 
-## column
+### column
 
 Moves the cursor to the given column on the current line.
+
+### columns
+
+Returns the number of columns currently displayed by the terminal.
+
+This value can change at any time if the user resizes the terminal window.
+
+### cursorUp
+
+Moves the cursor up one row
+
+### cursorDown
+
+Moves the cursor down one row
+
+### cursorLeft
+
+Moves the cursor to the left one column
+
+### cursorRight
+
+Moves the cursor to the right one column
+
+### home
+
+Sets the cursor to the top left hand corner (column = 0, row = 0)
+
+### row
+
+Moves the cursor to the given row.
+
+### rows
+
+Returns the number of rows currently displayed by the terminal.
+
+This value can change at any time if the user resizes the terminal window.
+
+###
+

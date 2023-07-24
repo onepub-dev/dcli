@@ -155,4 +155,3 @@ Run the script under sudo
 SUDO_ASKPASS=sudo_ask && sudo -A worker
 ```
 
-****
