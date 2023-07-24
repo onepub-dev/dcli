@@ -1,4 +1,4 @@
-# 3.0.5
+# 3.0.6
 - upgraded to pubspec2 3.x
 
 # 3.0.3
