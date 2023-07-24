@@ -1,3 +1,6 @@
+# 3.0.4
+- upgraded to pubspec2 3.x
+
 # 3.0.3
 - Fixed a bug in withEnvironment. It wasn't possible to access environment vars from a parent scope when it is documented as doing so.
 
