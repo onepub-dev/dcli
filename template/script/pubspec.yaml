@@ -1,1 +1,10 @@
-{name: console_simple, version: 0.0.1, environment: {sdk: >=3.0.0 <4.0.0}, description: A simple command-line application created by dcli, dependencies: {args: {version: ^2.3.1}, dcli: {version: ^3.0.3}, dcli_core: {version: ^3.0.3}, lint_hard: {version: ^3.0.0}}, dev_dependencies: null, dependency_overrides: null, executables: null, platforms: null}
+name: console_simple
+version: 0.0.1
+description: A simple command-line application created by dcli
+environment: 
+  sdk: '>=3.0.0 <4.0.0'
+dependencies: 
+  args: ^2.3.1
+  dcli: ^3.0.2
+  dcli_core: ^3.0.2
+  lint_hard: ^3.0.0
