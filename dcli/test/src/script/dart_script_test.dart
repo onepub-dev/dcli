@@ -46,8 +46,8 @@ void main() {
 
   group('pathToScript', () {
     const packageName = 'dcli_unit_tester';
-    final pathToTestScript = truepath(
-        'test', 'test_script', packageName, 'bin', 'dcli_unit_tester.dart');
+    final pathToTestScript = truepath(DartProject.self.pathToProjectRoot, '..',
+        packageName, 'bin', 'dcli_unit_tester.dart');
 
     test('within unit test', () {
       // within a unit test
@@ -57,8 +57,7 @@ void main() {
 
     test('jit script', () {
       final dcliProjectRoot = DartProject.self.pathToProjectRoot;
-      final projectRoot =
-          join(dcliProjectRoot, 'test', 'test_script', 'dcli_unit_tester');
+      final projectRoot = truepath(dcliProjectRoot, '..', 'dcli_unit_tester');
 
       var exeName = 'dcli_unit_tester';
       if (Platform.isWindows) {
@@ -142,8 +141,7 @@ void main() {
           '$packageName --script'.start(progress: Progress.capture()).toList();
 
       final dcliProjectRoot = DartProject.self.pathToProjectRoot;
-      final projectRoot =
-          join(dcliProjectRoot, 'test', 'test_script', 'dcli_unit_tester');
+      final projectRoot = join(dcliProjectRoot, '..', 'dcli_unit_tester');
 
       expect(result.length, equals(13));
       var line = 0;
