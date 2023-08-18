@@ -30,7 +30,7 @@ void main(List<String> args) {
   try {
     parsed = parser.parse(args);
   } on FormatException catch (e) {
-    printerr(red('Invalid command lineargument: ${e.message}'));
+    printerr(red('Invalid command line argument: ${e.message}'));
     print(parser.usage);
     exit(1);
   }
