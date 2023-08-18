@@ -160,7 +160,8 @@ class DartScript {
   bool get isCompiled => _isCompiled;
 
   static bool get _isCompiled =>
-      p.extension(Platform.script.toFilePath()) != '.dart';
+      p.extension(Platform.script.toFilePath()) != '.dart' &&
+      !_isPubGlobalActivated(Platform.script.toFilePath());
 
   String? _unitTestPath;
 

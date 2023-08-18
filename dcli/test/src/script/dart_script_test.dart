@@ -44,7 +44,6 @@ void main() {
     );
   });
 
-  group('basename', () {});
   group('pathToScript', () {
     const packageName = 'dcli_unit_tester';
     final pathToTestScript = truepath(
