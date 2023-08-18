@@ -3,5 +3,6 @@ version: 0.0.1
 description: A simple command-line application created by dcli
 environment: 
   sdk: '>=3.0.0 <4.0.0'
-dependencies: 
-  args
+dependencies:
+  args: ^2.4.2 
+  dcli: ^3.0.6
