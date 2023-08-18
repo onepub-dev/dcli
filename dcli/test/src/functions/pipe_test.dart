@@ -7,6 +7,8 @@ library;
  * Written by Brett Sutton <bsutton@onepub.dev>, Jan 2022
  */
 
+import 'dart:async';
+
 import 'package:dcli/dcli.dart';
 import 'package:path/path.dart';
 import 'package:test/test.dart' as t;
@@ -15,10 +17,12 @@ import '../util/test_file_system.dart';
 import '../util/test_utils.dart';
 
 void main() {
-  t.group('Piping with ForEach ', () async {
+  t.group('Piping with ForEach ', () {
+
+    
     final lines = <String?>[];
 
-    await TestFileSystem().withinZone((fs) async {
+    unawaited(TestFileSystem().withinZone((fs) async {
       t.test('For Each on string', () {
         final linesFile = join(fs.fsRoot, TestFileSystem.testLinesFile);
         createLineFile(linesFile, 10);
@@ -55,7 +59,7 @@ void main() {
             .forEach(lines.add);
         t.expect(lines.length, t.equals(2));
       });
-    });
+    }));
 
     t.group('Piping with run ', () {
       final lines = <String>[];

@@ -7,6 +7,8 @@ library;
  * Written by Brett Sutton <bsutton@onepub.dev>, Jan 2022
  */
 
+import 'dart:async';
+
 import 'package:dcli/dcli.dart';
 import 'package:path/path.dart';
 import 'package:test/test.dart' as t;
@@ -16,8 +18,8 @@ import '../util/test_file_system.dart';
 import '../util/test_scope.dart';
 
 void main() {
-  t.group('String as Process', () async {
-    await TestFileSystem().withinZone((fs) async {
+  t.group('String as Process', ()  {
+     unawaited(TestFileSystem().withinZone((fs) async {
       t.test('Basic .run', () async {
         await withTestScope((tmpDir) async {
           final testFile = join(fs.fsRoot, 'test.text');
@@ -95,7 +97,7 @@ void main() {
           t.expect(results, t.containsAll(expected));
         });
       });
-    });
+    }));
   });
 }
 
