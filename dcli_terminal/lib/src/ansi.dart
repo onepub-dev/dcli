@@ -5,7 +5,6 @@
  */
 
 import 'dart:io';
-import 'package:dcli_core/dcli_core.dart' as core;
 
 import 'ansi_color.dart';
 import 'terminal.dart';
@@ -33,7 +32,7 @@ class Ansi {
       // We don't trust [stdout.supportsAnsiEscapes] except on Windows.
       // [stdout] relies on the TERM environment variable
       // which generates false negatives.
-      if (!core.Settings().isWindows) {
+      if (!Platform.isWindows) {
         _emitAnsi = true;
       } else {
         _emitAnsi = stdout.supportsAnsiEscapes;

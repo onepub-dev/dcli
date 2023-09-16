@@ -4,7 +4,7 @@ description: A simple command-line application created by dcli
 environment: 
   sdk: '>=3.0.0 <4.0.0'
 dependencies: 
-  dcli: ^3.0.2
-  dcli_core: ^3.0.2
+  dcli: ^3.0.6
+  dcli_core: ^3.0.6
 dev_dependencies: 
   lint_hard: ^3.0.0

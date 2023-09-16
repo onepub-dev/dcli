@@ -99,7 +99,7 @@ class CreateCommand extends Command {
   }
 
   /// Extracts the target from the args. This will either be a
-  /// dart file or a diretory if the user wants to create an
+  /// dart file or a directory if the user wants to create an
   /// entire project.
   /// <script.dart> | <project path>
   String _retrieveTarget(List<String> arguments) {
