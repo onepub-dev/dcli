@@ -1,3 +1,6 @@
+# 3.1.0
+- upgraded to uuid 4.x
+
 # 3.0.7
 - udpated to the new pubspec load/save api. Moved Platform.eol to global function as you can't attach extension to Platform anymore.
 - removed incorrect copy right.
