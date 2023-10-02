@@ -7,87 +7,44 @@ repository: https://github.com/onepub-dev/dcli
 environment: 
   sdk: '>=3.0.0 <4.0.0'
 dependencies: 
-  _fe_analyzer_shared: ^61.0.0
-  analyzer: ^5.4.0
-  archive: ^3.3.5
-  args: ^2.4.1
-  async: ^2.10.0
-  basic_utils: ^5.5.0
-  boolean_selector: ^2.1.1
-  charcode: ^1.3.1
-  chunked_stream: ^1.4.2
-  circular_buffer: ^0.11.0
-  cli_util: ^0.4.0
-  clock: ^1.1.1
-  collection: ^1.17.0
-  convert: ^3.1.1
-  coverage: ^1.6.2
-  crypto: ^3.0.2
-  csv: ^5.0.2
+  archive: ^3.0.0
+  args: ^2.0.0
+  async: ^2.5.0
+  chunked_stream: ^1.4.1
+  collection: ^1.15.0
+  convert: ^3.0.1
+  crypto: ^3.0.0
+  csv: ^5.0.1
   dart_console2: ^3.0.0
-  dcli_core: ^3.0.6
-  equatable: ^2.0.5
-  ffi: ^2.0.2
+  dcli_core: ^3.0.0
+  equatable: ^2.0.0
+  ffi: ^2.0.0
   file: ^7.0.0
-  frontend_server_client: ^3.2.0
-  functional_data: ^1.0.0
-  glob: ^2.1.1
-  http: ^0.13.5
-  http_multi_server: ^3.2.1
-  http_parser: ^4.0.2
+  glob: ^2.0.0
   ini: ^2.1.0
-  intl: ^0.18.1
-  io: ^1.0.4
-  js: ^0.6.6
-  json2yaml: ^3.0.1
-  json_annotation: ^4.7.0
-  logging: ^1.1.0
-  matcher: ^0.12.14
-  meta: ^1.8.0
-  mime: ^1.0.4
-  node_preamble: ^2.0.2
-  package_config: ^2.1.0
-  path: ^1.8.3
-  pointycastle: ^3.6.2
-  pool: ^1.5.1
+  logging: ^1.0.2
+  meta: ^1.3.0
+  mime: ^1.0.1
+  path: ^1.8.0
   posix: ^5.0.0
-  pub_semver: ^2.1.3
-  pubspec2: ^3.0.0
-  pubspec_lock: ^3.0.2
-  quiver: ^3.2.1
-  random_string: ^2.3.1
-  scope: ^4.0.0
+  pub_semver: ^2.0.0
+  pubspec2: ^4.0.0
+  pubspec_lock: ^3.0.1
+  scope: ^4.1.0
   settings_yaml: ^7.0.0
-  shelf: ^1.4.0
-  shelf_packages_handler: ^3.0.1
-  shelf_static: ^1.1.1
-  shelf_web_socket: ^1.0.3
-  source_map_stack_trace: ^2.1.1
-  source_maps: ^0.10.11
-  source_span: ^1.9.1
-  stack_trace: ^1.11.0
-  stream_channel: ^2.1.1
-  string_scanner: ^1.2.0
-  sum_types: ^0.3.4
+  stack_trace: ^1.10.0
   system_info2: ^4.0.0
-  term_glyph: ^1.2.1
-  test_api: ^0.6.0
-  test_core: ^0.5.2
-  typed_data: ^1.3.1
-  uri: ^1.0.0
-  uuid: ^3.0.7
+  uuid: ^3.0.0
   validators2: ^5.0.0
-  vm_service: ^11.6.0
-  watcher: ^1.0.2
-  web_socket_channel: ^2.3.0
-  webkit_inspection_protocol: ^1.2.0
-  win32: ^4.1.0
-  yaml: ^3.1.1
+  win32: ^4.1.4
+  yaml: ^3.0.0
 dev_dependencies: 
   hex: ^0.2.0
   lint_hard: ^4.0.0
-  mocktail: ^0.3.0
+  mocktail: ^1.0.0
   test: ^1.0.0
+  test_api: ^0.6.0
+  test_core: ^0.5.2
 executables: 
   dcli: 
   dcli_complete: 
