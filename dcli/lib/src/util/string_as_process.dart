@@ -5,7 +5,6 @@
  */
 
 import 'dart:async';
-import 'dart:io';
 
 import 'package:dcli_core/dcli_core.dart' as core;
 
@@ -383,7 +382,7 @@ extension StringAsProcess on String {
         nothrow: nothrow,
         workingDirectory: workingDirectory,
         extensionSearch: extensionSearch,
-      ).join(Platform().eol);
+      ).join(core.eol);
 
   /// [parser] runs the contents of this String as a cli command line
   ///  reading all of the
@@ -583,7 +582,7 @@ extension StringAsProcess on String {
   /// See [truncate], [append].
   /// Use [withOpenFile] for better performance.
   void write(String line, {String? newline}) {
-    newline ??= Platform().eol;
+    newline ??= core.eol;
     withOpenFile(this, (file) {
       file.write(line, newline: newline);
     });
@@ -616,7 +615,7 @@ extension StringAsProcess on String {
   /// See [write] and [truncate]
   /// Use [withOpenFile] for better performance.
   void append(String line, {String? newline}) {
-    newline ??= Platform().eol;
+    newline ??= core.eol;
     withOpenFile(this, (file) {
       file.append(line, newline: newline);
     });

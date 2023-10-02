@@ -8,7 +8,6 @@ import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
 
-import 'package:dcli_core/dcli_core.dart' as core;
 import 'package:path/path.dart';
 import 'package:stack_trace/stack_trace.dart';
 
@@ -67,7 +66,7 @@ class FileSync {
   /// defined by  [Platform().eol].
   ///
   String? readLine({String? lineDelimiter}) {
-    lineDelimiter ??= Platform().eol;
+    lineDelimiter ??= eol;
     final line = StringBuffer();
     int byte;
     var priorChar = '';
@@ -165,7 +164,7 @@ class FileSync {
   /// [Platform().eol].
   /// Pass null or an '' to [newline] to not add a line terminator.
   void write(String line, {String? newline}) {
-    final finalline = line + (newline ?? Platform().eol);
+    final finalline = line + (newline ?? eol);
     _raf
       ..truncateSync(0)
       ..setPositionSync(0)
@@ -212,8 +211,7 @@ class FileSync {
   /// [Platform().eol].
   /// Pass null or an '' to [newline] to not add a line terminator.
   void append(String line, {String? newline}) {
-    final finalline = line + (newline ?? Platform().eol);
-
+    final finalline = line + (newline ?? eol);
     _raf
       ..setPositionSync(_raf.lengthSync())
       ..writeStringSync(finalline);

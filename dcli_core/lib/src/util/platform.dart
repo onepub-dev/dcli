@@ -22,3 +22,5 @@ extension PlatformEx on Platform {
   /// ```
   String get eol => DCliPlatform().isWindows ? '\r\n' : '\n';
 }
+
+String get eol => DCliPlatform().isWindows ? '\r\n' : '\n';

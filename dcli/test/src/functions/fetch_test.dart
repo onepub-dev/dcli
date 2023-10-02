@@ -342,7 +342,7 @@ void main() {
               saveToPath: file);
           final map =
               Parser(read(file).toList()).jsonDecode() as Map<String, dynamic>;
-          expect(map['data'] as String, equals('$content${Platform().eol}'));
+          expect(map['data'] as String, equals('$content$eol'));
           expect(
               (map['headers'] as Map<String, dynamic>)['Content-Type']
                   as String,
@@ -364,7 +364,7 @@ void main() {
               saveToPath: file);
           final map =
               Parser(read(file).toList()).jsonDecode() as Map<String, dynamic>;
-          expect(map['data'] as String, equals('$content${Platform().eol}'));
+          expect(map['data'] as String, equals('$content$eol'));
           expect(
               (map['headers'] as Map<String, dynamic>)['Content-Type']
                   as String,

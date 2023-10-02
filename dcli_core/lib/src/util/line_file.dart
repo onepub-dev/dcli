@@ -10,8 +10,8 @@ import 'dart:io';
 
 import 'package:stack_trace/stack_trace.dart';
 
-import '../../dcli_core.dart' as core;
 import 'dcli_exception.dart';
+import 'platform.dart';
 
 /// Provide s collection of methods to make it easy
 /// to read/write a file line by line.
@@ -82,7 +82,7 @@ class LineFile {
   /// [Platform().eol].
   /// Pass null or an '' to [newline] to not add a line terminator.
   Future<void> write(String line, {String? newline}) async {
-    final finalline = line + (newline ?? Platform().eol);
+    final finalline = line + (newline ?? eol);
     final r = await _raf;
 
     r
@@ -99,7 +99,7 @@ class LineFile {
   /// [Platform().eol].
   /// Pass null or an '' to [newline] to not add a line terminator.
   Future<void> append(String line, {String? newline}) async {
-    final finalline = line + (newline ?? Platform().eol);
+    final finalline = line + (newline ?? eol);
 
     (await _raf)
       ..setPositionSync((await _raf).lengthSync())
@@ -113,7 +113,7 @@ class LineFile {
   /// defined by  [Platform().eol].
   ///
   Future<String?> read({String? lineDelimiter}) async {
-    lineDelimiter ??= Platform().eol;
+    lineDelimiter ??= eol;
     final line = StringBuffer();
     int byte;
     var priorChar = '';

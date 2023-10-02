@@ -143,7 +143,7 @@ Future<String> _renameMain(DartProject project, String projectName) async {
       final execName = basenameWithoutExtension(projectScript);
       updatedExecutables.addAll({execName: ps.Executable(execName, null)});
       final updatedPubspec = pubspec.copy(executables: updatedExecutables);
-      await updatedPubspec.save(Directory(project.pathToProjectRoot));
+      await updatedPubspec.save(project.pathToProjectRoot);
     }
   }
 

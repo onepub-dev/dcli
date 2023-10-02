@@ -5,13 +5,10 @@
  */
 
 import 'dart:convert' as convert;
-import 'dart:io';
 
 import 'package:csv/csv.dart';
 import 'package:dcli_core/dcli_core.dart';
-
 import 'package:ini/ini.dart';
-
 import 'package:yaml/yaml.dart';
 
 /// Provides parsers for a number of common file formats.
@@ -54,7 +51,7 @@ class Parser {
   ///
   /// See: https://pub.dev/packages/csv
   List<List<dynamic>> csvDecode() =>
-      CsvToListConverter(eol: Platform().eol, shouldParseNumbers: false)
+      CsvToListConverter(eol: eol, shouldParseNumbers: false)
           .convert<String>(_lines.join('\n'));
 
   /// Interprets the read lines as an ini file.

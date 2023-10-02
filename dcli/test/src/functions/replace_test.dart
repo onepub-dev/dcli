@@ -4,8 +4,6 @@
  * Written by Brett Sutton <bsutton@onepub.dev>, Jan 2022
  */
 
-import 'dart:io';
-
 import 'package:dcli/dcli.dart';
 import 'package:test/test.dart';
 
@@ -22,7 +20,7 @@ void main() {
         '''
 xyz123
 xyz246'''
-            .replaceAll('\n', Platform().eol),
+            .replaceAll('\n', eol),
       );
 
       temp
@@ -35,7 +33,7 @@ xyz246'''
         '''
 xyz123
 def246'''
-            .replaceAll('\n', Platform().eol),
+            .replaceAll('\n', eol),
       );
     });
   });

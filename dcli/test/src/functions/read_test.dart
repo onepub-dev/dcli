@@ -4,8 +4,6 @@
  * Written by Brett Sutton <bsutton@onepub.dev>, Jan 2022
  */
 
-import 'dart:io';
-
 import 'package:dcli/dcli.dart';
 import 'package:test/test.dart';
 
@@ -64,7 +62,7 @@ Line 2/5
 Line 3/5
 Line 4/5
 Line 5/5'''
-              .replaceAll('\n', Platform().eol)));
+              .replaceAll('\n', eol)));
     });
   });
 
@@ -80,14 +78,14 @@ Line 5/5'''
       read(file).forEach(lines.add);
       expect(lines.length, equals(5));
       expect(
-          lines.join(Platform().eol),
+          lines.join(eol),
           equals('''
 Line 1/5
 Line 2/5
 Line 3/5
 Line 4/5
 Line 5/5'''
-              .replaceAll('\n', Platform().eol)));
+              .replaceAll('\n', eol)));
     });
   });
 }

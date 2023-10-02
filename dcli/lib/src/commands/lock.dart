@@ -65,9 +65,8 @@ class LockCommand extends Command {
     print(orange('Locking $pathToProjectRoot ...'));
     print('');
 
-    final projectDir = Directory(pathToProjectRoot);
     // ignore: discarded_futures
-    var pubspec = await PubSpec.load(projectDir);
+    var pubspec = await PubSpec.load(pathToProjectRoot);
 
     final file = File(join(pathToProjectRoot, 'pubspec.lock'));
     final pubspecLock = file.readAsStringSync().loadPubspecLockFromYaml();
@@ -90,7 +89,7 @@ class LockCommand extends Command {
     pubspec = pubspec.copy(dependencies: dependencies);
 
     // ignore: discarded_futures
-    waitForEx<void>(pubspec.save(projectDir));
+    waitForEx<void>(pubspec.save(pathToProjectRoot));
 
     print('Updated ${dependencies.length} packages');
   }

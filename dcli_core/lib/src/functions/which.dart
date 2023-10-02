@@ -157,7 +157,7 @@ class _Which extends DCliFunction {
         }
       }
     } finally {
-      progress!.close();
+      progress?.close();
     }
 
     return results;

@@ -16,9 +16,9 @@ dependencies:
   path: ^1.8.0
   scope: ^4.0.0
   stack_trace: ^1.10.0
-  uuid: ^3.0.0
+  uuid: ^4.1.0
 dev_dependencies: 
-  lint_hard: ^3.0.0
+  lint_hard: ^4.0.0
   synchronized: ^3.0.0
   test: ^1.0.0
 platforms: 

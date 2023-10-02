@@ -4,8 +4,6 @@
  * Written by Brett Sutton <bsutton@onepub.dev>, Jan 2022
  */
 
-import 'dart:io';
-
 import 'package:collection/collection.dart';
 import 'package:path/path.dart';
 import 'package:pub_semver/pub_semver.dart';
@@ -122,7 +120,7 @@ class PubSpec {
   @Deprecated('Use save()')
   void saveToFile(String path) {
     // ignore: discarded_futures
-    waitForEx<dynamic>(pubspec.save(Directory(dirname(path))));
+    waitForEx<dynamic>(pubspec.save(dirname(path)));
   }
 
   /// Saves this [PubSpec] to a pubspec.yaml at the given
@@ -130,7 +128,7 @@ class PubSpec {
   /// The [path] must be a directory not a file name.
   void save(String path) {
     // ignore: discarded_futures
-    waitForEx<dynamic>(pubspec.save(Directory(dirname(path))));
+    waitForEx<dynamic>(pubspec.save(dirname(path)));
   }
 
   /// Compares two pubspec to see if they have the same content.

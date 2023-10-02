@@ -1,5 +1,3 @@
 dependency_overrides: 
   dcli_core: 
     path: ../dcli_core
-  pubspec2:
-    path: ../../pubspec

@@ -18,8 +18,6 @@ import '../util/test_utils.dart';
 
 void main() {
   t.group('Piping with ForEach ', () {
-
-    
     final lines = <String?>[];
 
     unawaited(TestFileSystem().withinZone((fs) async {
@@ -61,9 +59,9 @@ void main() {
       });
     }));
 
-    t.group('Piping with run ', () {
+    t.group('Piping with run ', () async {
       final lines = <String>[];
-      TestFileSystem().withinZone((fs) {
+      await TestFileSystem().withinZone((fs) {
         t.test('run on string', () {
           final linesFile = join(fs.fsRoot, TestFileSystem.testLinesFile);
           createLineFile(linesFile, 10);

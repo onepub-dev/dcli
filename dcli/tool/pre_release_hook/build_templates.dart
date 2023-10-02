@@ -8,7 +8,6 @@
 // import 'dart:io';
 
 import 'dart:collection';
-import 'dart:io';
 
 import 'package:dcli/dcli.dart' hide PubSpec;
 import 'package:dcli/src/version/version.g.dart';
@@ -51,6 +50,6 @@ Future<void> prepareTemplates() async {
     final updated =
         pubspec.copy(dependencies: newdeps, environment: environment);
 
-    await updated.save(Directory(dirname(pathToTemplate)));
+    await updated.save(dirname(pathToTemplate));
   });
 }
