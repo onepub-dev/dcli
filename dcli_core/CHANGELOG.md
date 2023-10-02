@@ -1,3 +1,8 @@
+# 3.0.7
+- udpated to the new pubspec load/save api. Moved Platform.eol to global function as you can't attach extension to Platform anymore.
+- removed incorrect copy right.
+- unlocked the pubspec dependencies as we had mixed test deps in with dev deps causing downstream problems. Will relock once we get eric complete and the fix the pack command.
+
 # 3.0.6
 - upgraded to pubspec2 3.x
 
