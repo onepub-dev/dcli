@@ -1,3 +1,6 @@
+# 3.1.0
+Fixed for broken dart 3.x release.
+
 # 3.0.3
 - upgraded to pubspec2 2.5
 - Fixed a bug in dcli_core where you couldn't access the parent scope in
