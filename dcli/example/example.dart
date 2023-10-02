@@ -1,11 +1,4 @@
 #! /usr/bin/env dcli
-/* Copyright (C) S. Brett Sutton - All Rights Reserved
- * Unauthorized copying of this file, via any medium is strictly prohibited
- * Proprietary and confidential
- * Written by Brett Sutton <bsutton@onepub.dev>, Jan 2022
- */
-
-import 'dart:io';
 
 import 'package:dcli/dcli.dart';
 import 'package:path/path.dart';
@@ -97,7 +90,7 @@ void main() {
     // Review our good woork.
     cat(restingPlace);
 
-    read(restingPlace, delim: Platform().eol).forEach(print);
+    read(restingPlace, delim: eol).forEach(print);
 
     // ask the user if we are ready to publish.
     // But we can't do this in a vscode debug session
