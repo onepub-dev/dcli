@@ -17,6 +17,11 @@ import 'package:test/test.dart';
 import 'package:win32/win32.dart';
 
 void main() {
+  const dcliTestSubKey = 'DCLITestArea';
+  setUp(() async {
+    regCreateKey(HKEY_CURRENT_USER, dcliTestSubKey);
+  });
+
   test('windows mixin ...', () async {
     regSetString(HKEY_CURRENT_USER, 'Environment', 'PATH_TEST', 'HI');
 
@@ -26,13 +31,13 @@ void main() {
   });
 
   test('set/get dword', () {
-    regSetDWORD(HKEY_CURRENT_USER, 'DCLITestArea', 'count', 5);
+    regSetDWORD(HKEY_CURRENT_USER, dcliTestSubKey, 'count', 5);
 
-    final value = regGetDWORD(HKEY_CURRENT_USER, 'DCLITestArea', 'count');
+    final value = regGetDWORD(HKEY_CURRENT_USER, dcliTestSubKey, 'count');
 
     expect(value, equals(5));
 
-    regDeleteValue(HKEY_CURRENT_USER, 'DCLITestArea', 'count');
+    regDeleteValue(HKEY_CURRENT_USER, dcliTestSubKey, 'count');
   });
 
   test(
