@@ -41,8 +41,11 @@ String privatePath(
   String? part7,
 ]) {
   final prefix = rootPrefix(HOME);
-  return truepath(part1, part2, part3, part4, part5, part6, part7)
-      .replaceAll(HOME, '$prefix<HOME>');
+  var tp = truepath(part1, part2, part3, part4, part5, part6, part7);
+  if (HOME != '.') {
+    tp = tp.replaceAll(HOME, '$prefix<HOME>');
+  }
+  return tp;
 }
 
 /// Returns the root path of your file system.
