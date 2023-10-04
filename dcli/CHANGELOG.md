@@ -1,3 +1,8 @@
+# 4.0.0
+- BREAKING - removed the PubSpec class. We now recommend that you use the
+package pubspec_manager which provide similar (better) functionality
+We have also migrated dcli from using pubspec2 to pubspec_manager.
+
 # 3.1.0
 Fixed for broken dart 3.x release.
 

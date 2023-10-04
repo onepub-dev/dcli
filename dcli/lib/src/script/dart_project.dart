@@ -10,7 +10,7 @@ import 'dart:io';
 
 import 'package:meta/meta.dart';
 import 'package:path/path.dart';
-import 'package:pubspec2/pubspec2.dart' as ps;
+import 'package:pubspec_manager/pubspec_manager.dart';
 
 import '../../dcli.dart';
 import '../../posix.dart';
@@ -141,7 +141,7 @@ class DartProject {
   ///
   /// reads and returns the project's virtual pubspec
   /// and returns it.
-  PubSpec get pubSpec => PubSpec.fromFile(pathToPubSpec);
+  Pubspec get pubSpec => Pubspec.loadFile(pathToPubSpec);
 
   /// Absolute path to the project's root diretory.
   String get pathToProjectRoot => _pathToProjectRoot;
@@ -197,8 +197,8 @@ class DartProject {
 
     print('');
     _colprint('Dependencies', '');
-    for (final name in pubSpec.dependencies.keys) {
-      _colprint(name, pubSpec.dependencies[name]!.rehydrate());
+    for (final dependency in pubSpec.dependencies) {
+      _colprint(dependency.name, dependency.toString());
     }
   }
 
@@ -206,7 +206,8 @@ class DartProject {
     print('${label.padRight(pad)}: $value');
   }
 
-  String _makeSafe(String line) => line.replaceAll(HOME, '<HOME>');
+  String _makeSafe(String line) =>
+      HOME == '.' ? HOME : line.replaceAll(HOME, '<HOME>');
 
   /// Searches up the directory tree from [pathToSearchFrom]
   /// for a dart package by looking for a pubspec.yaml.
@@ -410,7 +411,7 @@ class DartProject {
   /// Returns true if this project is a flutter projects.
   ///
   /// We check to see if flutter is a project dependency.
-  bool get isFlutterProject => pubSpec.dependencies.containsKey('flutter');
+  bool get isFlutterProject => pubSpec.dependencies.exists('flutter');
 
   /// Returns true if the project contains a pubspec.yaml.
   bool get hasPubSpec => exists(join(pathToProjectRoot, 'pubspec.yaml'));

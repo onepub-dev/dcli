@@ -10,6 +10,7 @@ import 'dart:math';
 import 'package:meta/meta.dart';
 import 'package:path/path.dart' as p;
 import 'package:path/path.dart';
+import 'package:pubspec_manager/pubspec_manager.dart';
 import 'package:stack_trace/stack_trace.dart';
 
 import '../../dcli.dart';
@@ -259,7 +260,7 @@ class DartScript {
   ///
   /// reads and returns the project's virtual pubspec
   /// and returns it.
-  PubSpec get pubSpec => project.pubSpec;
+  Pubspec get pubSpec => project.pubSpec;
 
   /// Compiles this script and optionally installs it to ~/.dcli/bin
   ///

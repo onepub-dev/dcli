@@ -16,7 +16,13 @@ import 'package:test/test.dart';
 void main() {
   test('resource ...', () async {
     final progress = await capture(() async {
-      Resources().pack();
+      withTempDir((tempDir) {
+        Scope()
+          ..value(Resources.scopeKeyProjectRoot, tempDir)
+          ..runSync(() {
+            Resources().pack();
+          });
+      });
     }, progress: Progress.capture());
 
     expect(progress.lines.contains(green('Pack complete')), isTrue);

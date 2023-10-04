@@ -25,3 +25,4 @@ dcli/test/test_script/general/bin/*.exe
 **/.packages
 dcli/test/privileged_test
 dcli/test/privileged_test
+dcli_unit_tester/bin/dcli_unit_tester

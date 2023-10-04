@@ -72,36 +72,37 @@ void addUnitTestOverrides(String pathToProject) {
   join(pathToProject, 'pubspec_overrides.yaml').write('''
   dependency_overrides:
     dcli:
-  path: $pathToDCli
+      path: $pathToDCli
     dcli_core:
-  path: $pathToDCliCore
+      path: $pathToDCliCore
   
   ''');
 }
 
 /// update the templates dcli version to match the dcli version
 /// the user is running.
-void _fixPubspec(String projectName, PubSpec pubSpec, String pathToPubSpec) {
+void _fixPubspec(String projectName, Pubspec pubSpec, String pathToPubSpec) {
   final current = pubSpec.dependencies;
 
-  final replacement = <String, Dependency>{};
+  if (current.exists('dcli')) {
+    final dcli = current['dcli'];
 
-  for (final key in current.keys) {
-    if (key == 'dcli') {
-      replacement.putIfAbsent(
-          'dcli', () => Dependency.fromHosted('dcli', packageVersion));
-    } else if (key == 'dcli_core') {
-      replacement.putIfAbsent('dcli_core',
-          () => Dependency.fromHosted('dcli_core', packageVersion));
-    } else {
-      replacement.putIfAbsent(key, () => current[key]!);
+    if (dcli is DependencyVersioned) {
+      (dcli! as DependencyVersioned).version = packageVersion;
+    }
+  }
+
+  if (current.exists('dcli_core')) {
+    final dcliCore = current['dcli_core'];
+
+    if (dcliCore is DependencyVersioned) {
+      (dcliCore! as DependencyVersioned).version = packageVersion;
     }
   }
 
   pubSpec
-    ..name = _replaceInvalidCharactersForName(projectName)
-    ..dependencies = replacement
-    ..save(pathToPubSpec);
+    ..name.value = _replaceInvalidCharactersForName(projectName)
+    ..saveTo(pathToPubSpec);
 }
 
 /// Returns the name of the main project script.
@@ -132,18 +133,16 @@ Future<String> _renameMain(DartProject project, String projectName) async {
   /// If the pubspec includes an executables clause that
   /// reference the script we just changed the name of,
   /// then update the pubpsec to reflect the new name.
-  final pubspec = await ps.PubSpec.loadFile(project.pathToPubSpec);
-  final executables = pubspec.executables;
+  final pubspec = Pubspec.loadFile(project.pathToPubSpec);
   if (orginalScriptName != null) {
+    final executables = pubspec.executables;
     final originalScriptKey = basenameWithoutExtension(orginalScriptName);
-    if (executables.containsKey(originalScriptKey)) {
-      final updatedExecutables = <String, ps.Executable>{}
-        ..addAll(executables)
-        ..remove(originalScriptKey);
+
+    if (executables.exists(originalScriptKey)) {
       final execName = basenameWithoutExtension(projectScript);
-      updatedExecutables.addAll({execName: ps.Executable(execName, null)});
-      final updatedPubspec = pubspec.copy(executables: updatedExecutables);
-      await updatedPubspec.save(project.pathToProjectRoot);
+      executables[originalScriptKey]!.name = execName;
+
+      pubspec.save();
     }
   }
 

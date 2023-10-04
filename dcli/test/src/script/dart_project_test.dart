@@ -7,10 +7,10 @@ library;
  * Written by Brett Sutton <bsutton@onepub.dev>, Jan 2022
  */
 
-import 'package:dcli/dcli.dart' hide PubSpec;
+import 'package:dcli/dcli.dart';
 import 'package:dcli/src/commands/install.dart';
 import 'package:path/path.dart' hide equals;
-import 'package:pubspec2/pubspec2.dart';
+import 'package:pubspec_manager/pubspec_manager.dart';
 import 'package:test/test.dart';
 
 import '../util/test_file_system.dart';
@@ -51,10 +51,10 @@ void main() {
         expect(exists(scriptPath), isTrue);
         final project = DartProject.fromPath(pathToProject);
         expect(project.hasPubSpec, isTrue);
-        final pubspec = await PubSpec.loadFile(project.pathToPubSpec);
+        final pubspec = Pubspec.loadFile(project.pathToPubSpec);
         final executables = pubspec.executables;
         final mainScriptKey = basename(mainScriptName);
-        expect(executables.containsKey(mainScriptKey), isTrue);
+        expect(executables.exists(mainScriptKey), isTrue);
       });
     });
   });

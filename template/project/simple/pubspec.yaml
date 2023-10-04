@@ -1,1 +1,11 @@
 name: console_simple
+version: 0.0.1
+description: A simple command-line application created by dcli
+environment: 
+  sdk: '>=3.0.0 <4.0.0'
+
+dependencies:
+  dcli: ^3.0.0
+
+dev_dependencies:
+  lint_hard: ^4.0.0  

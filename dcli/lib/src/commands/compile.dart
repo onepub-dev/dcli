@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:path/path.dart';
+import 'package:pubspec_manager/pubspec_manager.dart';
 
 import '../../dcli.dart';
 import '../script/command_line_runner.dart';
@@ -247,7 +248,7 @@ Run:
           filter: (file) => basename(file) != 'pubspec_overrides.yaml');
       DartProject.fromPath(pathToTempPackage).warmup();
 
-      final pubspec = PubSpec.fromFile(join(pathToTempPackage, 'pubspec.yaml'));
+      final pubspec = Pubspec.fromFile(directory: pathToTempPackage);
 
       for (final exe in pubspec.executables) {
         final pathToOutput =

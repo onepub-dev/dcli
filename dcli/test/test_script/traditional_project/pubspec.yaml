@@ -1,11 +1,11 @@
 name: traditional_project
 
 environment: 
-  sdk: '>=2.19.0 <4.0.0'
+  sdk: '>=3.0.0 <4.0.0'
 
 dependencies:
-  dcli: ^2.0.0
-  dcli_core: ^2.0.0
+  dcli: ^3.0.0
+  dcli_core: ^3.0.0
   path: ^1.8.0
   
 

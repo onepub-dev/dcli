@@ -8,10 +8,10 @@ import 'dart:io';
 
 import 'package:path/path.dart';
 import 'package:pub_semver/pub_semver.dart';
-import 'package:pubspec2/pubspec2.dart';
 import 'package:pubspec_lock/pubspec_lock.dart';
+import 'package:pubspec_manager/pubspec_manager.dart';
 
-import '../../dcli.dart' hide PubSpec;
+import '../../dcli.dart';
 import '../script/command_line_runner.dart';
 import '../script/flags.dart';
 import '../util/completion.dart';
@@ -66,19 +66,20 @@ class LockCommand extends Command {
     print('');
 
     // ignore: discarded_futures
-    var pubspec = await PubSpec.load(pathToProjectRoot);
+    final pubspec = Pubspec.fromFile(directory: pathToProjectRoot);
 
     final file = File(join(pathToProjectRoot, 'pubspec.lock'));
     final pubspecLock = file.readAsStringSync().loadPubspecLockFromYaml();
 
-    final dependencies = <String, DependencyReference>{};
     for (final package in pubspecLock.packages) {
       final name = packageName(package);
 
       /// we exclude dev dependencies.
-      if (!pubspec.devDependencies.containsKey(name)) {
-        dependencies.addAll(package.iswitch(
-            sdk: buildSdk,
+      if (!pubspec.devDependencies.exists(name)) {
+        pubspec.dependencies.append(package.iswitch(
+            // we should never see an sdk dep
+            sdk: (sdk) => throw DCliException(
+                'Unexpected sdk version in package dependency'),
             hosted: buildHosted,
             git: buildGit,
             path: buildPath));
@@ -86,12 +87,12 @@ class LockCommand extends Command {
     }
 
     // excluded dev dependencies
-    pubspec = pubspec.copy(dependencies: dependencies);
+    //  pubspec = pubspec.copy(dependencies: dependencies);
 
     // ignore: discarded_futures
-    waitForEx<void>(pubspec.save(pathToProjectRoot));
+    pubspec.save();
 
-    print('Updated ${dependencies.length} packages');
+    print('Updated ${pubspec.dependencies.length} packages');
   }
 
   String packageName(PackageDependency dep) => dep.iswitch(
@@ -101,33 +102,29 @@ class LockCommand extends Command {
         path: (d) => d.package,
       );
 
-  // map sdk
-  Map<String, DependencyReference> buildSdk(SdkPackageDependency sdk) =>
-      {sdk.package: SdkReference(sdk.package)};
-
   // map git
-  Map<String, DependencyReference> buildGit(GitPackageDependency git) =>
-      {git.package: GitReference(git.url, git.ref, git.path)};
+  GitDependency buildGit(GitPackageDependency git) => GitDependency(
+      name: git.package, url: git.url, ref: git.ref, path: git.path);
 
   // map hosted
-  Map<String, DependencyReference> buildHosted(HostedPackageDependency hosted) {
+  Dependency buildHosted(HostedPackageDependency hosted) {
     final version = VersionConstraint.parse(hosted.version) as VersionRange;
     final constrainedVersion =
         version.max ?? version.min ?? VersionConstraint.any;
     if (hosted.url.isEmpty || isPubDev(hosted.url)) {
-      return {hosted.package: HostedReference(constrainedVersion)};
+      return PubHostedDependency(
+          name: hosted.name, version: constrainedVersion.toString());
     } else {
-      return {
-        hosted.package: ExternalHostedReference(
-            hosted.package, hosted.url, version,
-            verboseFormat: false)
-      };
+      return HostedDependency(
+          name: hosted.package,
+          hosted: hosted.url,
+          version: version.toString());
     }
   }
 
   // map path
-  Map<String, DependencyReference> buildPath(PathPackageDependency path) =>
-      {path.package: PathReference(path.path)};
+  Dependency buildPath(PathPackageDependency path) =>
+      PathDependency(name: path.package, path: path.path);
 
   @override
   String usage() => 'lock [<project path>]';

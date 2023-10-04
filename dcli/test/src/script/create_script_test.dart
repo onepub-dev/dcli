@@ -18,6 +18,8 @@ void main() {
   group('Create Script ', () {
     test('Create script', () async {
       await TestFileSystem().withinZone((fs) async {
+        /// make certain you have run 'dcli pack' before running this
+        /// test if any templates have changed.
         InstallCommand().initTemplates();
         final scriptDir = join(fs.unitTestWorkingDir, 'traditional');
 
@@ -25,9 +27,9 @@ void main() {
         final scriptPath = join(scriptDir, 'bin', scriptName);
 
         await withEnvironment(() async {
-          'dcli create $scriptDir'.run;
+          'dcli -v create $scriptDir'.run;
 
-          'dcli create $scriptPath'.run;
+          'dcli -v create $scriptPath'.run;
         }, environment: {
           DartProject.overrideDCliPathKey: DartProject.self.pathToProjectRoot
         });
