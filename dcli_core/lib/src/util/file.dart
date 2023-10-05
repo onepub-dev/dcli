@@ -46,12 +46,12 @@ Future<R> withOpenFile<R>(
 ///
 /// [Shell.current.isPrivileged]
 ///
-Future<void> symlink(
+void symlink(
   String existingPath,
   String linkPath,
-) async {
+) {
   verbose(() => 'symlink existingPath: $existingPath linkPath $linkPath');
-  await Link(linkPath).create(existingPath);
+  Link(linkPath).createSync(existingPath);
 }
 
 ///
@@ -67,9 +67,9 @@ Future<void> symlink(
 ///
 /// [Shell.current.isPrivileged]
 ///
-Future<void> deleteSymlink(String linkPath) async {
+void deleteSymlink(String linkPath) {
   verbose(() => 'deleteSymlink linkPath: $linkPath');
-  await Link(linkPath).delete();
+  Link(linkPath).deleteSync();
 }
 
 ///
@@ -84,7 +84,7 @@ Future<void> deleteSymlink(String linkPath) async {
 /// ```
 ///
 /// throws a FileSystemException if the target path does not exist.
-Future<String> resolveSymLink(String pathToLink) async {
+String resolveSymLink(String pathToLink) {
   final normalised = canonicalize(pathToLink);
 
   String resolved;
@@ -134,14 +134,14 @@ String createTempFilename({String? suffix, String? pathToTempDir}) {
 /// The temp file name will be <uuid>.tmp
 /// unless you provide a [suffix] in which
 /// case the file name will be <uuid>.<suffix>
-Future<String> createTempFile({String? suffix}) async {
+String createTempFile({String? suffix}) {
   final filename = createTempFilename(suffix: suffix);
-  await touch(filename, create: true);
+  touch(filename, create: true);
   return filename;
 }
 
 /// Returns the length of the file at [pathToFile] in bytes.
-Future<int> fileLength(String pathToFile) => File(pathToFile).length();
+int fileLength(String pathToFile) => File(pathToFile).lengthSync();
 
 /// Creates a temp file and then calls [action].
 ///
@@ -170,7 +170,7 @@ Future<R> withTempFile<R>(
 }) async {
   final tmp = createTempFilename(suffix: suffix, pathToTempDir: pathToTempDir);
   if (create) {
-    await touch(tmp, create: true);
+    touch(tmp, create: true);
   }
 
   R result;
@@ -178,7 +178,7 @@ Future<R> withTempFile<R>(
     result = await action(tmp);
   } finally {
     if (exists(tmp) && !keep) {
-      await delete(tmp);
+      delete(tmp);
     }
   }
   return result;

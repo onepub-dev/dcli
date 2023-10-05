@@ -89,8 +89,7 @@ void setLastModifed(String path, DateTime lastModified) {
 /// Returns true if the passed [pathToDirectory] is an
 /// empty directory.
 /// For large directories this operation can be expensive.
-Future<bool> isEmpty(String pathToDirectory) async =>
-    _Is().isEmpty(pathToDirectory);
+bool isEmpty(String pathToDirectory) => _Is().isEmpty(pathToDirectory);
 
 class _Is extends DCliFunction {
   bool isFile(String path) {
@@ -128,6 +127,25 @@ class _Is extends DCliFunction {
     return exists;
   }
 
+  /// checks if the given [path] exists.
+  ///
+  /// Throws [ArgumentError] if [path] is an empty string.
+  bool existsSync(String path, {required bool followLinks}) {
+    if (path.isEmpty) {
+      throw ArgumentError('path must not be empty.');
+    }
+
+    final exists = FileSystemEntity.typeSync(path, followLinks: followLinks) !=
+        FileSystemEntityType.notFound;
+
+    verbose(
+      () =>
+          'exists: found: $exists ${truepath(path)} followLinks: $followLinks',
+    );
+
+    return exists;
+  }
+
   DateTime lastModified(String path) => File(path).lastModifiedSync();
 
   void setLastModifed(String path, DateTime lastModified) {
@@ -137,9 +155,9 @@ class _Is extends DCliFunction {
   /// Returns true if the passed [pathToDirectory] is an
   /// empty directory.
   /// For large directories this operation can be expensive.
-  Future<bool> isEmpty(String pathToDirectory) async {
+  bool isEmpty(String pathToDirectory) {
     verbose(() => 'isEmpty: ${truepath(pathToDirectory)}');
 
-    return Directory(pathToDirectory).list(followLinks: false).isEmpty;
+    return Directory(pathToDirectory).listSync(followLinks: false).isEmpty;
   }
 }

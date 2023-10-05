@@ -112,7 +112,7 @@ class _CopyTree extends DCliFunction {
     try {
       sub = controller.stream.listen((item) async {
         sub.pause();
-        await _process(item.pathTo, filter, from, to,
+        _process(item.pathTo, filter, from, to,
             overwrite: overwrite, recursive: recursive);
         sub.resume();
       });
@@ -144,14 +144,14 @@ class _CopyTree extends DCliFunction {
     }
   }
 
-  Future<void> _process(
+  void _process(
       String file, bool Function(String file) filter, String from, String to,
-      {required bool overwrite, required bool recursive}) async {
+      {required bool overwrite, required bool recursive}) {
     if (filter(file)) {
       final target = join(to, relative(file, from: from));
 
       if (recursive && !exists(dirname(target))) {
-        await createDir(dirname(target), recursive: true);
+        createDir(dirname(target), recursive: true);
       }
 
       if (!overwrite && exists(target)) {
@@ -160,7 +160,7 @@ class _CopyTree extends DCliFunction {
         );
       }
 
-      await copy(file, target, overwrite: overwrite);
+      copy(file, target, overwrite: overwrite);
     }
   }
 }

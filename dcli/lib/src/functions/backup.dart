@@ -33,7 +33,7 @@ export 'package:dcli_core/dcli_core.dart'
 ///
 void backupFile(String pathToFile, {bool ignoreMissing = false}) =>
     // ignore: discarded_futures
-    waitForEx(core.backupFile(pathToFile, ignoreMissing: ignoreMissing));
+    core.backupFile(pathToFile, ignoreMissing: ignoreMissing);
 
 /// Designed to work with [backupFile] to restore
 /// a file from backup.

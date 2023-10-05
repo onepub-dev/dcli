@@ -33,11 +33,11 @@ import '../../dcli_core.dart';
 /// The default for [overwrite] is false.
 ///
 /// If an error occurs a [CopyException] is thrown.
-Future<void> copy(String from, String to, {bool overwrite = false}) async =>
+void copy(String from, String to, {bool overwrite = false}) =>
     _Copy().copy(from, to, overwrite: overwrite);
 
 class _Copy extends DCliFunction {
-  Future<void> copy(String from, String to, {bool overwrite = false}) async {
+  void copy(String from, String to, {bool overwrite = false}) {
     var finalto = to;
     if (isDirectory(finalto)) {
       finalto = join(finalto, basename(from));
@@ -55,10 +55,10 @@ class _Copy extends DCliFunction {
       /// if we are copying a symlink then we copy the file rather than
       /// the symlink as this mimicks gnu 'cp'.
       if (isLink(from)) {
-        final resolvedFrom = await resolveSymLink(from);
-        await File(resolvedFrom).copy(finalto);
+        final resolvedFrom = resolveSymLink(from);
+        File(resolvedFrom).copySync(finalto);
       } else {
-        await File(from).copy(finalto);
+        File(from).copySync(finalto);
       }
     }
     // ignore: avoid_catches_without_on_clauses

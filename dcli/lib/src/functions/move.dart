@@ -5,9 +5,7 @@
  */
 
 import 'package:dcli_core/dcli_core.dart' as core;
-
 import 'package:dcli_core/dcli_core.dart' show MoveException;
-import '../util/wait_for_ex.dart';
 
 export 'package:dcli_core/dcli_core.dart' show MoveException;
 
@@ -29,5 +27,4 @@ export 'package:dcli_core/dcli_core.dart' show MoveException;
 /// If the move fails for any reason a [MoveException] is thrown.
 ///
 void move(String from, String to, {bool overwrite = false}) =>
-    // ignore: discarded_futures
-    waitForEx(core.move(from, to, overwrite: overwrite));
+    core.move(from, to, overwrite: overwrite);

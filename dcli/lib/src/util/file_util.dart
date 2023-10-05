@@ -20,7 +20,7 @@ FileStat stat(String path) => core.stat(path);
 
 /// Returns the length of the file at [pathToFile] in bytes.
 // ignore: discarded_futures
-int fileLength(String pathToFile) => waitForEx(core.fileLength(pathToFile));
+int fileLength(String pathToFile) => core.fileLength(pathToFile);
 
 /// Calculates the sha256 hash of a file's
 /// content.

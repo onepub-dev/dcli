@@ -117,7 +117,7 @@ class _MoveTree extends DCliFunction {
       try {
         sub = controller.stream.listen((item) async {
           sub!.pause();
-          await _process(item.pathTo, filter, to, from, overwrite: overwrite);
+          _process(item.pathTo, filter, to, from, overwrite: overwrite);
           sub.resume();
         }, onDone: () {});
         await find('*',
@@ -143,9 +143,9 @@ class _MoveTree extends DCliFunction {
     return Future.value();
   }
 
-  Future<void> _process(String pathToFile, bool Function(String file) filter,
-      String to, String from,
-      {required bool overwrite}) async {
+  void _process(String pathToFile, bool Function(String file) filter, String to,
+      String from,
+      {required bool overwrite}) {
     if (filter(pathToFile)) {
       final target = join(to, relative(pathToFile, from: from));
 
@@ -154,7 +154,7 @@ class _MoveTree extends DCliFunction {
       // moved will be created.
       if (isDirectory(dirname(pathToFile))) {
         if (!exists(dirname(target))) {
-          await createDir(dirname(target), recursive: true);
+          createDir(dirname(target), recursive: true);
         }
       }
 
@@ -164,7 +164,7 @@ class _MoveTree extends DCliFunction {
         );
       }
 
-      await move(pathToFile, target, overwrite: overwrite);
+      move(pathToFile, target, overwrite: overwrite);
       verbose(
         () => 'moveTree moving: ${truepath(from)} -> ${truepath(target)}',
       );

@@ -56,9 +56,9 @@ class _Replace extends DCliFunction {
     var changes = 0;
     final tmp = '$path.tmp';
     if (exists(tmp)) {
-      await delete(tmp);
+      delete(tmp);
     }
-    await touch(tmp, create: true);
+    touch(tmp, create: true);
     await withOpenLineFile(tmp, (tmpFile) async {
       await withOpenLineFile(path, (file) async {
         late final StreamSubscription<String>? sub;
@@ -87,11 +87,11 @@ class _Replace extends DCliFunction {
     });
 
     if (changes != 0) {
-      await move(path, '$path.bak');
-      await move(tmp, path);
-      await delete('$path.bak');
+      move(path, '$path.bak');
+      move(tmp, path);
+      delete('$path.bak');
     } else {
-      await delete(tmp);
+      delete(tmp);
     }
     return changes;
   }

@@ -7,7 +7,6 @@
 import 'package:dcli_core/dcli_core.dart' as core;
 import 'package:dcli_core/dcli_core.dart' show CopyException, symlink;
 
-import '../util/wait_for_ex.dart';
 export 'package:dcli_core/dcli_core.dart' show CopyException;
 
 ///
@@ -34,5 +33,4 @@ export 'package:dcli_core/dcli_core.dart' show CopyException;
 ///
 /// If an error occurs a [CopyException] is thrown.
 void copy(String from, String to, {bool overwrite = false}) =>
-    // ignore: discarded_futures
-    waitForEx(core.copy(from, to, overwrite: overwrite));
+    core.copy(from, to, overwrite: overwrite);

@@ -86,7 +86,7 @@ void setLastModifed(String path, DateTime lastModified) =>
 /// For large directories this operation can be expensive.
 bool isEmpty(String pathToDirectory) =>
     // ignore: discarded_futures
-    waitForEx(core.isEmpty(pathToDirectory));
+    core.isEmpty(pathToDirectory);
 
 /// checks if the passed [path] (a file or directory) is
 /// writable by the user that owns this process

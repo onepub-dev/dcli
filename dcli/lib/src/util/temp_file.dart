@@ -31,7 +31,7 @@ String createTempFilename({String? suffix, String? pathToTempDir}) =>
 /// case the file name will be uuid.suffix
 String createTempFile({String? suffix}) =>
     // ignore: discarded_futures
-    waitForEx(core.createTempFile(suffix: suffix));
+    core.createTempFile(suffix: suffix);
 
 /// Creates a temp file and then calls [action].
 ///

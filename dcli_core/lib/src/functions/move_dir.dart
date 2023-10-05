@@ -52,7 +52,7 @@ class _MoveDir extends DCliFunction {
     verbose(() => 'moveDir called ${truepath(from)} -> ${truepath(to)}');
 
     try {
-      await Directory(from).rename(to);
+      Directory(from).renameSync(to);
     } on FileSystemException catch (e) {
       if (e.osError != null && e.osError!.errorCode == 18) {
         /// Invalid cross-device link
@@ -64,7 +64,7 @@ class _MoveDir extends DCliFunction {
         );
 
         await copyTree(from, to, includeHidden: true);
-        await delete(from);
+        delete(from);
       } else {
         throw MoveDirException(
           'The Move of ${truepath(from)} to ${truepath(to)} failed.'

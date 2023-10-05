@@ -28,11 +28,11 @@ import '../../dcli_core.dart';
 ///
 /// As a convenience the touch function returns the [path] variable
 /// that was passed in.
-Future<String> touch(String path, {bool create = false}) async =>
+String touch(String path, {bool create = false}) =>
     _Touch().touch(path, create: create);
 
 class _Touch extends DCliFunction {
-  Future<String> touch(String path, {bool create = false}) async {
+  String touch(String path, {bool create = false}) {
     final absolutePath = truepath(path);
 
     verbose(() => 'touch: $absolutePath create: $create');
@@ -55,11 +55,12 @@ class _Touch extends DCliFunction {
 
       if (file.existsSync()) {
         final now = DateTime.now();
-        await file.setLastAccessed(now);
-        await file.setLastModified(now);
+        file
+          ..setLastAccessedSync(now)
+          ..setLastModifiedSync(now);
       } else {
         if (create) {
-          await file.create();
+          file.createSync();
         }
       }
     } on FileSystemException catch (e) {

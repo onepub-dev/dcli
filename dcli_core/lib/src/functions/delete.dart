@@ -18,10 +18,10 @@ import '../../dcli_core.dart';
 /// ```
 ///
 /// If the [path] is a directory a DeleteException is thrown.
-Future<void> delete(String path) async => _Delete().delete(path);
+void delete(String path) => _Delete().delete(path);
 
 class _Delete extends DCliFunction {
-  Future<void> delete(String path) async {
+  void delete(String path) {
     verbose(() => 'delete:  ${truepath(path)}');
 
     if (!exists(path)) {
@@ -33,7 +33,7 @@ class _Delete extends DCliFunction {
     }
 
     try {
-      await File(path).delete();
+      File(path).deleteSync();
     }
     // ignore: avoid_catches_without_on_clauses
     catch (e) {

@@ -81,7 +81,7 @@ class _DeleteTree extends DCliFunction {
       try {
         sub = controller.stream.listen((item) async {
           sub!.pause();
-          await _process(item.pathTo, filter, item.type);
+          _process(item.pathTo, filter, item.type);
           sub.resume();
         }, onDone: () {});
         await find('*',
@@ -108,11 +108,11 @@ class _DeleteTree extends DCliFunction {
     return Future.value();
   }
 
-  Future<void> _process(
+  void _process(
     String pathToFile,
     bool Function(FileSystemEntityType type, String file) filter,
     FileSystemEntityType type,
-  ) async {
+  ) {
     if (filter(type, pathToFile)) {
       // we create directories as we go.
       // only directories that contain a file that is to be
@@ -121,17 +121,17 @@ class _DeleteTree extends DCliFunction {
       switch (type) {
         case FileSystemEntityType.directory:
           {
-            await deleteDir(pathToFile);
+            deleteDir(pathToFile);
             break;
           }
         case FileSystemEntityType.file:
           {
-            await delete(pathToFile);
+            delete(pathToFile);
             break;
           }
         case FileSystemEntityType.link:
           {
-            await deleteSymlink(pathToFile);
+            deleteSymlink(pathToFile);
             break;
           }
       }

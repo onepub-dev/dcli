@@ -36,7 +36,7 @@ import '../../dcli_core.dart';
 /// ```
 ///
 
-Future<String> createDir(String path, {bool recursive = false}) async =>
+String createDir(String path, {bool recursive = false}) =>
     _CreateDir().createDir(path, recursive: recursive);
 
 /// Creates a temp directory and then calls [action].
@@ -55,14 +55,14 @@ Future<String> createDir(String path, {bool recursive = false}) async =>
 /// of the value of [keep].
 Future<R> withTempDir<R>(Future<R> Function(String tempDir) action,
     {bool keep = false, String? pathToTempDir}) async {
-  final dir = pathToTempDir ?? await createTempDir();
+  final dir = pathToTempDir ?? createTempDir();
 
   R result;
   try {
     result = await action(dir);
   } finally {
     if (!keep && pathToTempDir == null) {
-      await deleteDir(dir);
+      deleteDir(dir);
     }
   }
   return result;
@@ -73,13 +73,13 @@ Future<R> withTempDir<R>(Future<R> Function(String tempDir) action,
 /// The temporary directory name is formed from a uuid.
 /// It is your responsiblity to delete the directory once you have
 /// finsihed with it.
-Future<String> createTempDir() async => _CreateDir().createDir(
+String createTempDir() => _CreateDir().createDir(
       join(Directory.systemTemp.path, '.dclitmp', const Uuid().v4()),
       recursive: true,
     );
 
 class _CreateDir extends DCliFunction {
-  Future<String> createDir(String path, {required bool recursive}) async {
+  String createDir(String path, {required bool recursive}) {
     verbose(() => 'createDir:  ${truepath(path)} recursive: $recursive');
 
     try {
@@ -87,7 +87,7 @@ class _CreateDir extends DCliFunction {
         throw CreateDirException('The path ${truepath(path)} already exists');
       }
 
-      await Directory(path).create(recursive: recursive);
+      Directory(path).createSync(recursive: recursive);
     }
     // ignore: avoid_catches_without_on_clauses
     catch (e) {
