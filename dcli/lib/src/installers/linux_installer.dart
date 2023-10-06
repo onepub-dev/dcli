@@ -8,8 +8,6 @@ import 'package:path/path.dart';
 import 'package:scope/scope.dart';
 
 import '../../dcli.dart';
-import '../commands/install.dart';
-import '../shell/shell_detection.dart';
 import '../version/version.g.dart';
 
 ///
@@ -18,21 +16,24 @@ import '../version/version.g.dart';
 
 class LinuxDCliInstaller {
   /// returns true if it needed to install dart.
-  bool install({required bool installDart}) {
+  Future<bool> install({required bool installDart}) async {
     var installedDart = false;
 
     if (installDart) {
-      installedDart = _installDart();
+      installedDart = await _installDart();
     }
 
     // now activate dcli.
-    if (Scope.hasScopeKey(InstallCommand.activateFromSourceKey) &&
-        Scope.use(InstallCommand.activateFromSourceKey) == true) {
+    // ignore: invalid_use_of_visible_for_testing_member
+    if (Scope.hasScopeKey(installFromSourceKey) &&
+        // ignore: invalid_use_of_visible_for_testing_member
+        Scope.use(installFromSourceKey) == true) {
       // If we are called from a unit test we do it from source
-      PubCache().globalActivateFromSource(DartProject.self.pathToProjectRoot);
+      PubCache().globalActivateFromSource(
+          join(DartProject.self.pathToProjectRoot, '..', 'dcli_sdk'));
     } else {
       /// activate from pub.dev
-      PubCache().globalActivate('dcli', version: packageVersion);
+      PubCache().globalActivate('dcli_sdk', version: packageVersion);
     }
     // // also need to install it for the root user
     // // as root must have its own copy of .pub-cache otherwise
@@ -43,7 +44,7 @@ class LinuxDCliInstaller {
     return installedDart;
   }
 
-  bool _installDart() {
+  Future<bool> _installDart() async {
     var installedDart = false;
     // first check that dart isn't already installed
     if (which('dart').notfound) {
@@ -74,7 +75,7 @@ class LinuxDCliInstaller {
       }
 
       final dartInstallDir =
-          DartSdk().installFromArchive('/usr/lib/dart', askUser: false);
+          await DartSdk().installFromArchive('/usr/lib/dart', askUser: false);
       print('Installed Dart to: $dartInstallDir');
 
       if (pathUpdated) {

@@ -76,8 +76,8 @@ void main() {
   });
 
   group('symlinks', () {
-    test('resolveSymlink', () {
-      withTempDir((dir) {
+    test('resolveSymlink', () async {
+      await withTempDir((dir) async {
         expect(isDirectory(dir), isTrue);
 
         withTempFile((file) {
@@ -93,8 +93,8 @@ void main() {
       });
     });
 
-    test('missing target', () {
-      withTempDir((dir) {
+    test('missing target', () async {
+      await withTempDir((dir) async {
         expect(isDirectory(dir), isTrue);
 
         withTempFile((file) {
@@ -114,8 +114,8 @@ void main() {
       });
     });
 
-    test('delete symlink', () {
-      withTempDir((dir) {
+    test('delete symlink', () async {
+      await withTempDir((dir) async {
         expect(isDirectory(dir), isTrue);
 
         withTempFile((file) {

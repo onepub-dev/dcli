@@ -15,7 +15,6 @@ import 'package:system_info2/system_info2.dart';
 
 import '../../dcli.dart';
 import '../../posix.dart' as posix;
-import '../commands/install.dart';
 import '../util/enum_helper.dart';
 import '../util/runnable_process.dart';
 
@@ -435,9 +434,10 @@ class DartSdk {
   /// install path and can modifiy it if desired.
   ///
   /// returns the directory where the dartSdk was installed.
-  String installFromArchive(String defaultDartSdkPath, {bool askUser = true}) {
+  Future<String> installFromArchive(String defaultDartSdkPath,
+      {bool askUser = true}) async {
     // verbose(() => 'Architecture: ${SysInfo.kernelArchitecture}');
-    final zipRelease = _fetchDartSdk();
+    final zipRelease = await _fetchDartSdk();
 
     var installDir = defaultDartSdkPath;
 
@@ -491,7 +491,7 @@ class DartSdk {
 
   /// Fetchs the list of available dart versions from
   // List<String> fetchVersions() {}
-  String _fetchDartSdk() {
+  Future<String> _fetchDartSdk() async {
     final architechture = resolveArchitecture();
     final platform = Platform.operatingSystem;
 
@@ -505,7 +505,7 @@ class DartSdk {
       term.showCursor(show: false);
     }
 
-    fetch(
+    await fetch(
       url:
           'https://storage.googleapis.com/dart-archive/channels/stable/release/latest/sdk/dartsdk-$platform-$architechture-release.zip',
       saveToPath: zipRelease,

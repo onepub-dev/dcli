@@ -4,7 +4,6 @@
  * Written by Brett Sutton <bsutton@onepub.dev>, Jan 2022
  */
 
-import 'dart:async';
 import 'dart:io';
 
 import 'package:path/path.dart';
@@ -13,6 +12,7 @@ import '../../dcli_core.dart';
 
 /// TODO: restore after 2.16 is released.
 // typedef FindController<T> = LimitedStreamController<T>;
+typedef ProgressCallback = bool Function(FindItem item);
 
 ///
 /// Returns the list of files in the current and child
@@ -86,15 +86,15 @@ import '../../dcli_core.dart';
 ///
 ///TODO(bsutton): consider having find return a Stream and eliminate passing
 /// a controller in.
-Future<void> find(
+void find(
   String pattern, {
-  required LimitedStreamController<FindItem> progress,
+  required ProgressCallback progress,
   bool caseSensitive = false,
   bool recursive = true,
   bool includeHidden = false,
   String workingDirectory = '.',
   List<FileSystemEntityType> types = const [Find.file],
-}) async =>
+}) =>
     Find()._find(
       pattern,
       caseSensitive: caseSensitive,
@@ -109,15 +109,15 @@ Future<void> find(
 class Find extends DCliFunction {
   final bool _closed = false;
 
-  Future<void> _find(
+  void _find(
     String pattern, {
-    required LimitedStreamController<FindItem> progress,
+    required ProgressCallback progress,
     bool caseSensitive = false,
     bool recursive = true,
     String workingDirectory = '.',
     List<FileSystemEntityType> types = const [Find.file],
     bool includeHidden = false,
-  }) async {
+  }) {
     late final String workingDirectory0;
     late final String finalpattern;
 
@@ -138,7 +138,7 @@ class Find extends DCliFunction {
       );
     }
 
-    await _innerFind(
+    _innerFind(
       finalpattern,
       caseSensitive: caseSensitive,
       recursive: recursive,
@@ -149,15 +149,15 @@ class Find extends DCliFunction {
     );
   }
 
-  Future<void> _innerFind(
+  void _innerFind(
     String pattern, {
-    required LimitedStreamController<FindItem> progress,
+    required ProgressCallback progress,
     bool caseSensitive = false,
     bool recursive = true,
     String workingDirectory = '.',
     List<FileSystemEntityType> types = const [Find.file],
     bool includeHidden = false,
-  }) async {
+  }) {
     var workingDirectory0 = workingDirectory;
     var finalIncludeHidden = includeHidden;
 
@@ -176,104 +176,91 @@ class Find extends DCliFunction {
       finalIncludeHidden = true;
     }
 
-    try {
-      verbose(
-        () =>
-            'find: pwd: $pwd workingDirectory: ${truepath(workingDirectory0)} '
-            'pattern: $pattern caseSensitive: $caseSensitive '
-            'recursive: $recursive types: $types ',
-      );
-      final nextLevel =
-          List<FileSystemEntity?>.filled(100, null, growable: true);
-      final singleDirectory =
-          List<FileSystemEntity?>.filled(100, null, growable: true);
-      final childDirectories =
-          List<FileSystemEntity?>.filled(100, null, growable: true);
-      await _processDirectory(
-        workingDirectory0,
-        workingDirectory0,
-        recursive,
-        types,
-        matcher,
-        finalIncludeHidden,
-        progress,
-        childDirectories,
-      );
-      while (childDirectories[0] != null) {
-        _zeroElements(nextLevel);
-        for (final directory in childDirectories) {
-          if (directory == null) {
-            break;
-          }
-          // print('calling _processDirectory ${count++}');
-          await _processDirectory(
-            workingDirectory0,
-            directory.path,
-            recursive,
-            types,
-            matcher,
-            finalIncludeHidden,
-            progress,
-            singleDirectory,
-          );
-          _appendTo(nextLevel, singleDirectory);
-          _zeroElements(singleDirectory);
+    verbose(
+      () => 'find: pwd: $pwd workingDirectory: ${truepath(workingDirectory0)} '
+          'pattern: $pattern caseSensitive: $caseSensitive '
+          'recursive: $recursive types: $types ',
+    );
+    final nextLevel = List<FileSystemEntity?>.filled(100, null, growable: true);
+    final singleDirectory =
+        List<FileSystemEntity?>.filled(100, null, growable: true);
+    final childDirectories =
+        List<FileSystemEntity?>.filled(100, null, growable: true);
+    if (!_processDirectory(
+      workingDirectory0,
+      workingDirectory0,
+      recursive,
+      types,
+      matcher,
+      finalIncludeHidden,
+      progress,
+      childDirectories,
+    )) {
+      return;
+    }
+    while (childDirectories[0] != null) {
+      _zeroElements(nextLevel);
+      for (final directory in childDirectories) {
+        if (directory == null) {
+          break;
         }
-        _copyInto(childDirectories, nextLevel);
+        // print('calling _processDirectory ${count++}');
+        if (!_processDirectory(
+          workingDirectory0,
+          directory.path,
+          recursive,
+          types,
+          matcher,
+          finalIncludeHidden,
+          progress,
+          singleDirectory,
+        )) {
+          break;
+        }
+        _appendTo(nextLevel, singleDirectory);
+        _zeroElements(singleDirectory);
       }
-    } finally {
-      await progress.close();
+      _copyInto(childDirectories, nextLevel);
     }
   }
 
-  Future<void> _processDirectory(
+  bool _processDirectory(
     String workingDirectory,
     String currentDirectory,
     bool recursive,
     List<FileSystemEntityType> types,
     _PatternMatcher matcher,
     bool includeHidden,
-    LimitedStreamController<FindItem> progress,
+    ProgressCallback progress,
     List<FileSystemEntity?> nextLevel,
-  ) async {
+  ) {
     // print('process Directory ${dircount++}');
-    final lister = Directory(currentDirectory).list(followLinks: false);
+    final list = Directory(currentDirectory).listSync(followLinks: false);
 
     var nextLevelIndex = 0;
 
-    final completer = Completer<void>();
-
-    late final StreamSubscription<FileSystemEntity> sub;
-
-    sub = lister.listen(
-      (entity) async {
-        // if we don't pause then await causes onDone to be called
-        // before the last onData completes due to the
-        // following await.
-        sub.pause();
+    for (final entity in list) {
+      try {
         late final FileSystemEntityType type;
-        try {
-          type = FileSystemEntity.typeSync(entity.path, followLinks: false);
+        type = FileSystemEntity.typeSync(entity.path, followLinks: false);
 
-          if (types.contains(type) &&
-              matcher.match(entity.path) &&
-              _allowed(
-                workingDirectory,
-                entity,
-                includeHidden: includeHidden,
-              )) {
-            if (_closed) {
-              await sub.cancel();
-              return;
-            }
-
-            /// If the controller has been paused or hasn't yet been
-            /// listened to then we don't want to add files to
-            /// it otherwise we may run out of memory.
-            await progress.asyncAdd(FindItem(entity.path, type));
+        if (types.contains(type) &&
+            matcher.match(entity.path) &&
+            _allowed(
+              workingDirectory,
+              entity,
+              includeHidden: includeHidden,
+            )) {
+          if (_closed) {
+            return false;
           }
-        } finally {
-          sub.resume();
+
+          /// If the controller has been paused or hasn't yet been
+          /// listened to then we don't want to add files to
+          /// it otherwise we may run out of memory.
+          if (!progress(FindItem(entity.path, type))) {
+            return false;
+          }
         }
 
         /// If we are recursing then we need to add any directories
@@ -286,12 +273,8 @@ class Find extends DCliFunction {
           }
           nextLevelIndex++;
         }
-      },
-      onDone: () {
-        completer.complete(null);
-      },
-      // ignore: avoid_types_on_closure_parameters
-      onError: (Object e, StackTrace st) {
+        // ignore: avoid_catches_without_on_clauses
+      } catch (e) {
         if (_isGeneralIOError(e)) {
           /// can mean a corrupt disk, problems with virtualisation
           /// I've seen this when gdrive.
@@ -317,13 +300,11 @@ class Find extends DCliFunction {
           );
         } else {
           // ignore: only_throw_errors
-          throw e;
+          rethrow;
         }
-      },
-    );
-
-    await completer.future;
-    await sub.cancel();
+      }
+    }
+    return true;
   }
 
   int get _accessDenied => Settings().isWindows ? 5 : 13;

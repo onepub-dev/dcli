@@ -8,16 +8,15 @@ library;
  */
 
 import 'package:dcli/dcli.dart';
+import 'package:dcli_test/dcli_test.dart';
 import 'package:path/path.dart';
 import 'package:test/test.dart' as t;
 import 'package:test/test.dart';
 
-import '../util/test_file_system.dart';
-
 void main() {
   t.group('copyTree', () {
-    t.test('empty target ', () {
-      withTempDir((testRoot) {
+    t.test('empty target ', () async {
+      await withTempDir((testRoot) async {
         TestFileSystem.buildDirectoryTree(testRoot);
         final from = join(testRoot, 'top');
         final to = join(testRoot, 'new_top');
@@ -39,8 +38,8 @@ void main() {
       });
     });
 
-    t.test('empty target - overwrite', () {
-      withTempDir((fsRoot) {
+    t.test('empty target - overwrite', () async {
+      await withTempDir((fsRoot) async {
         TestFileSystem.buildDirectoryTree(fsRoot);
         final from = join(fsRoot, 'top');
         final to = join(fsRoot, 'new_top');
@@ -63,8 +62,8 @@ void main() {
       });
     });
 
-    t.test('empty target - filter *.txt', () {
-      withTempDir((fsRoot) {
+    t.test('empty target - filter *.txt', () async {
+      await withTempDir((fsRoot) async {
         TestFileSystem.buildDirectoryTree(fsRoot);
         final from = join(fsRoot, 'top');
         final to = join(fsRoot, 'new_top');
@@ -86,8 +85,8 @@ void main() {
       });
     });
 
-    t.test('empty target - recursive - filter *.txt', () {
-      withTempDir((fsRoot) {
+    t.test('empty target - recursive - filter *.txt', () async {
+      await withTempDir((fsRoot) async {
         TestFileSystem.buildDirectoryTree(fsRoot);
         final from = join(fsRoot, 'top');
         final to = join(fsRoot, 'new_top');
@@ -107,8 +106,8 @@ void main() {
       });
     });
 
-    t.test('empty target - recursive ', () {
-      withTempDir((fsRoot) {
+    t.test('empty target - recursive ', () async {
+      await withTempDir((fsRoot) async {
         TestFileSystem.buildDirectoryTree(fsRoot);
         final from = join(fsRoot, 'top');
         final to = join(fsRoot, 'new_top');
@@ -128,8 +127,8 @@ void main() {
       });
     });
 
-    t.test('empty target - recursive- overwrite', () {
-      withTempDir((fsRoot) {
+    t.test('empty target - recursive- overwrite', () async {
+      await withTempDir((fsRoot) async {
         TestFileSystem.buildDirectoryTree(fsRoot);
         final from = join(fsRoot, 'top');
         final to = join(fsRoot, 'new_top');

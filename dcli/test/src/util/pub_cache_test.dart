@@ -5,12 +5,11 @@
  */
 
 import 'package:dcli/dcli.dart';
+import 'package:dcli_test/src/test_scope.dart';
 import 'package:path/path.dart' hide equals;
 import 'package:pub_semver/pub_semver.dart';
 import 'package:scope/scope.dart';
 import 'package:test/test.dart';
-
-import 'test_scope.dart';
 
 void main() {
   test(

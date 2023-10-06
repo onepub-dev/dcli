@@ -3,3 +3,5 @@ dependency_overrides:
     path: ../../../dcli
   dcli_core: 
     path: ../../../dcli_core
+  settings_yaml: 
+    path: ../../../../settings_yaml

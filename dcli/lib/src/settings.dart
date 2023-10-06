@@ -14,7 +14,6 @@ import 'package:scope/scope.dart';
 import 'package:stack_trace/stack_trace.dart';
 
 import '../dcli.dart';
-import 'script/flags.dart';
 import 'version/version.g.dart';
 
 /// Holds all of the global settings for DCli
@@ -65,7 +64,7 @@ class Settings {
   /// The DCli version you are running
   String? version;
 
-  final _selectedFlags = <String, Flag>{};
+
 
   String? _dcliPath;
 
@@ -118,9 +117,6 @@ class Settings {
   String get pathToTemplateScriptCustom =>
       p.join(pathToDCli, templateDir, 'script', 'custom');
 
-  /// the list of global flags selected via the cli when dcli
-  /// was started.
-  List<Flag> get selectedFlags => _selectedFlags.values.toList();
 
   /// returns true if the -v (verbose) flag was set on the
   /// dcli command line.
@@ -150,17 +146,6 @@ class Settings {
   /// returns the path to the file that we use to indicated
   /// that the install completed succesfully.
   String get installCompletedIndicator => join(pathToDCli, 'install_completed');
-
-  /// A method to test with a specific global
-  /// flag has been set.
-  ///
-  /// This is for interal useage.
-  bool isFlagSet(Flag flag) => _selectedFlags.containsValue(flag);
-
-  /// A method to set a global flag.
-  void setFlag(Flag flag) {
-    _selectedFlags[flag.name] = flag;
-  }
 
   /// Returns true if the directory stack
   /// maintained by push and pop has

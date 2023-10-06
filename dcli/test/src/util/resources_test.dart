@@ -6,7 +6,6 @@
 
 //import 'package:dcli/src/dcli/resource/generated/resource_registry.g.dart';
 import 'package:dcli/dcli.dart';
-import 'package:dcli/src/util/resources.dart';
 import 'package:path/path.dart';
 import 'package:scope/scope.dart';
 import 'package:test/test.dart';
@@ -16,7 +15,7 @@ import 'package:test/test.dart';
 void main() {
   test('resource ...', () async {
     final progress = await capture(() async {
-      withTempDir((tempDir) {
+      await withTempDir((tempDir) async {
         Scope()
           ..value(Resources.scopeKeyProjectRoot, tempDir)
           ..runSync(() {
@@ -29,7 +28,7 @@ void main() {
   });
 
   test('resource no exclude', () async {
-    withTempDir((tempDir) {
+    await withTempDir((tempDir) async {
       Scope()
         ..value(Resources.scopeKeyProjectRoot, tempDir)
         ..runSync(() {

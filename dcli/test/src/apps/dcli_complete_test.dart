@@ -9,10 +9,10 @@ library;
  */
 
 import 'package:dcli/dcli.dart';
+import 'package:dcli_test/dcli_test.dart';
 import 'package:path/path.dart' hide equals;
 import 'package:test/test.dart';
 
-import '../util/test_file_system.dart';
 
 void main() {
   test('Run dcli_complete c', () async {

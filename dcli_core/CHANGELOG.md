@@ -1,3 +1,8 @@
+#4.0.0
+- BREAKING - Moved a number of functions from being async to sync as part of the process of removing waitFor in the main dcli library.
+  These changes largely affect the dcli_core library so if you don't use it directly you shouldn't see any affects.
+  This was done by usimg the available dart sync version of functions where available (e.g. close() becomes closeSync()).
+  Most of these changes should be evident at compile time and should just require to remove 'await' from calls to methods which are now sync.
 # 3.1.0
 - upgraded to uuid 4.x
 

@@ -4,6 +4,8 @@
  * Written by Brett Sutton <bsutton@onepub.dev>, Jan 2022
  */
 
+import 'dart:io' as io;
+
 import 'package:dcli_core/dcli_core.dart' as core;
 
 import '../../dcli.dart';
@@ -57,6 +59,6 @@ class _Sleep extends core.DCliFunction {
         break;
     }
 
-    waitForEx<void>(Future.delayed(duration0));
+    io.sleep(duration0);
   }
 }

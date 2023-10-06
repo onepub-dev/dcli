@@ -73,7 +73,6 @@ class AppSettings {
 
   /// Save the settings file.
   void save() {
-    // ignore: discarded_futures
-    waitForEx(settings.save());
+    settings.save();
   }
 }

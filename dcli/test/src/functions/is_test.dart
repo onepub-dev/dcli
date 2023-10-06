@@ -6,16 +6,15 @@
 
 import 'package:dcli/dcli.dart';
 import 'package:dcli_core/dcli_core.dart' as core;
+import 'package:dcli_test/dcli_test.dart';
 import 'package:path/path.dart' hide equals;
 import 'package:test/test.dart' hide isEmpty;
-
-import '../util/test_file_system.dart';
 
 void main() {
   group(
     'iswritable',
-    () {
-      withTempDir((fsRoot) {
+    () async {
+      await withTempDir((fsRoot) async {
         TestFileSystem.buildDirectoryTree(fsRoot);
 // owner, group, world, read, write execute
 
@@ -144,8 +143,8 @@ void main() {
   );
 
   group('isEmpty', () {
-    test('isEmpty - good', () {
-      withTempDir((root) {
+    test('isEmpty - good', () async {
+      await withTempDir((root) async {
         final root = createTempDir();
 
         expect(isEmpty(root), isTrue);
@@ -164,14 +163,14 @@ void main() {
       });
     });
 
-    test('isDirectory', () {
-      withTempDir((dir) {
+    test('isDirectory', () async {
+      await withTempDir((dir) async {
         expect(isDirectory(dir), isTrue);
       });
     });
 
-    test('isLink', () {
-      withTempDir((dir) {
+    test('isLink', () async {
+      await withTempDir((dir) async {
         expect(isDirectory(dir), isTrue);
 
         withTempFile((file) {

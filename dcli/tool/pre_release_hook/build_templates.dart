@@ -23,13 +23,13 @@ Future<void> prepareTemplates() async {
   final dcliProject = DartProject.self;
   final pathToTemplates = join(dcliProject.pathToProjectRoot, '..', 'template');
 
-  final pubspec = Pubspec.loadFile(dcliProject.pathToPubSpec);
+  final pubspec = PubSpec.loadFromPath(dcliProject.pathToPubSpec);
   final environment = pubspec.environment;
 
   find('pubspec.yaml', workingDirectory: pathToTemplates)
       .forEach((pathToTemplate) async {
     print(pathToTemplate);
-    final pubspec = Pubspec.loadFile(pathToTemplate);
+    final pubspec = PubSpec.loadFromPath(pathToTemplate);
     final dependencies = pubspec.dependencies;
 
     if (dependencies.exists('dcli')) {

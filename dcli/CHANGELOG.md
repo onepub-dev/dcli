@@ -2,6 +2,16 @@
 - BREAKING - removed the PubSpec class. We now recommend that you use the
 package pubspec_manager which provide similar (better) functionality
 We have also migrated dcli from using pubspec2 to pubspec_manager.
+- withTempDir is now async. The sync version was dangerous because
+  if the callback was async dart didn't warn you and we could delete
+  the temp dir before the action completed.
+- core.which is now synchronous.
+- core.restoreFile is now synchronous
+- core.tail now returns a List<String> rather than a stream.
+- fetch is now async 
+
+Special thanks to Vyacheslav Egorov for contributing most of the work
+required to remove waitFor.
 
 # 3.1.0
 Fixed for broken dart 3.x release.

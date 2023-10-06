@@ -28,10 +28,10 @@ void main() {
     skip: false,
   );
 
-  test('Install Dart Sdk', () {
-    withTempDir((tempPath) {
+  test('Install Dart Sdk', () async {
+    await withTempDir((tempPath) async {
       final defaultPath = join(tempPath, 'dart-sdk');
-      final installPath = DartSdk().installFromArchive(defaultPath);
+      final installPath = await DartSdk().installFromArchive(defaultPath);
       setPathToDartSdk(installPath);
       print('installed To $installPath');
       expect(exists(join(defaultPath, 'bin', DartSdk.dartExeName)), isTrue);
@@ -72,22 +72,22 @@ void main() {
     // , equals('Publish the current package to pub.dev.'));
   });
 
-  test('Run dart script', () {
-    final projectRoot = DartProject.fromPath('.').pathToProjectRoot;
-    final hellow = join(
-      projectRoot,
-      'test',
-      'test_script',
-      'general',
-      'bin',
-      'hello_world.dart',
-    );
-    DartSdk().run(args: [hellow]);
-    print('done 1');
-  });
+  test('isPubGetRequried', () async {
+    test('Run dart script', () {
+      final projectRoot = DartProject.fromPath('.').pathToProjectRoot;
+      final hellow = join(
+        projectRoot,
+        'test',
+        'test_script',
+        'general',
+        'bin',
+        'hello_world.dart',
+      );
+      DartSdk().run(args: [hellow]);
+      print('done 1');
+    });
 
-  test('isPubGetRequried', () {
-    withTempDir((tmpDir) {
+    await withTempDir((tmpDir) async {
       final pubspec = join(tmpDir, 'pubspec.yaml');
       final lock = join(tmpDir, 'pubspec.lock');
       final config = join(tmpDir, '.dart_tool', 'package_config.json');

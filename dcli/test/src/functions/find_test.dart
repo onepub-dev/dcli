@@ -11,11 +11,10 @@ import 'dart:io';
 
 import 'package:dcli/dcli.dart';
 import 'package:dcli_core/dcli_core.dart' as core;
+import 'package:dcli_test/dcli_test.dart';
 import 'package:path/path.dart';
 import 'package:test/test.dart' as t;
 import 'package:test/test.dart';
-
-import '../util/test_file_system.dart';
 
 void main() {
   t.group('Find', () {
@@ -32,7 +31,7 @@ void main() {
       ).toList();
 
       final rootDirs = <String>[
-        truepath(DartProject.self.pathToProjectRoot, '..', 'dcli_unit_tester'),
+        truepath(testScriptPath, 'dcli_unit_tester'),
         truepath(testScriptPath, 'general'),
         truepath(testScriptPath, 'traditional_project')
       ];

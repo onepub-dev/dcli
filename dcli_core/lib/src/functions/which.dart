@@ -60,13 +60,13 @@ import '../../dcli_core.dart';
 /// command search. For example the dart  will be 'dart'
 /// on Linux and 'dart.bat' on Windows. Using `which('dart')` will find `dart`
 ///  on linux and `dart.bat` on Windows.
-Future<Which> which(
+Which which(
   String appname, {
   bool first = true,
   bool verbose = false,
   bool extensionSearch = true,
-  Sink<WhichSearch>? progress,
-}) async =>
+  void Function(WhichSearch)? progress,
+}) =>
     _Which().which(
       appname,
       first: first,
@@ -129,35 +129,31 @@ class WhichSearch {
 class _Which extends DCliFunction {
   ///
   /// Searches the path for the given appname.
-  Future<Which> which(
+  Which which(
     String appname, {
     required bool extensionSearch,
     bool first = true,
     bool verbose = false,
-    Sink<WhichSearch>? progress,
-  }) async {
+    void Function(WhichSearch)? progress,
+  }) {
     final results = Which();
-    try {
-      for (final path in PATH) {
-        final fullpath =
-            await _appExists(path, appname, extensionSearch: extensionSearch);
-        if (fullpath == null) {
-          progress?.add(WhichSearch.notfound(path));
-        } else {
-          progress?.add(WhichSearch.found(path, fullpath));
+    for (final path in PATH) {
+      final fullpath =
+          _appExists(path, appname, extensionSearch: extensionSearch);
+      if (fullpath == null) {
+        progress?.call(WhichSearch.notfound(path));
+      } else {
+        progress?.call(WhichSearch.found(path, fullpath));
 
-          if (!results._found) {
-            results._path = fullpath;
-          }
-          results.paths.add(fullpath);
-          results._found = true;
-          if (first) {
-            break;
-          }
+        if (!results._found) {
+          results._path = fullpath;
+        }
+        results.paths.add(fullpath);
+        results._found = true;
+        if (first) {
+          break;
         }
       }
-    } finally {
-      progress?.close();
     }
 
     return results;
@@ -169,11 +165,11 @@ class _Which extends DCliFunction {
   /// have an extension then we check each appname.extension variant
   /// to see if it exists. We first check if just an file of [appname] with
   /// no extension exits.
-  Future<String?> _appExists(
+  String? _appExists(
     String pathTo,
     String appname, {
     required bool extensionSearch,
-  }) async {
+  }) {
     final pathToAppname = join(pathTo, appname);
     if (exists(pathToAppname)) {
       return pathToAppname;

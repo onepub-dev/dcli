@@ -8,12 +8,11 @@ library;
  */
 
 import 'package:dcli/dcli.dart';
+import 'package:dcli_test/dcli_test.dart';
 import 'package:path/path.dart' as p;
 import 'package:path/path.dart';
 import 'package:pubspec_manager/pubspec_manager.dart';
 import 'package:test/test.dart' as t;
-
-import '../util/test_file_system.dart';
 
 void main() {
   const main = '''
@@ -47,7 +46,7 @@ dependencies:
     () async {
       await TestFileSystem().withinZone((fs) async {
         final pubSpecScriptPath = createPubspecPath(fs);
-        Pubspec.fromString(basic).saveTo(pubSpecScriptPath);
+        PubSpec.fromString(basic).saveTo(pubSpecScriptPath);
 
         final dependencies = <Dependency>[
           PubHostedDependency(name: 'collection', version: '^1.14.12'),
@@ -65,7 +64,7 @@ dependencies:
       await TestFileSystem().withinZone((fs) async {
         final scriptPath = createScriptPath(fs);
 
-        Pubspec.fromString(overrides).saveTo(scriptPath);
+        PubSpec.fromString(overrides).saveTo(scriptPath);
 
         final dependencies = <Dependency>[
           PubHostedDependency(name: 'dcli', version: '^2.0.0'),
@@ -85,7 +84,7 @@ dependencies:
     () async {
       await TestFileSystem().withinZone((fs) async {
         final scriptPath = createScriptPath(fs);
-        Pubspec.fromString(overrides).saveTo(scriptPath);
+        PubSpec.fromString(overrides).saveTo(scriptPath);
 
         final dependencies = <Dependency>[
           PubHostedDependency(name: 'dcli', version: '^2.0.0'),

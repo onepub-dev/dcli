@@ -8,15 +8,14 @@ library;
  */
 
 import 'package:dcli/dcli.dart';
+import 'package:dcli_test/dcli_test.dart';
 import 'package:path/path.dart';
 import 'package:test/test.dart' as t;
 import 'package:test/test.dart';
 
-import '../../util/test_file_system.dart';
-
 void main() {
-  t.test('Try everything', () {
-    withTempDir((fsRoot) {
+  t.test('Try everything', () async {
+    await withTempDir((fsRoot) async {
       TestFileSystem.buildDirectoryTree(fsRoot);
       const shellPath = 'shell';
       final mainPath = join(shellPath, 'main');

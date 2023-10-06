@@ -4,7 +4,6 @@
  * Written by Brett Sutton <bsutton@onepub.dev>, Jan 2022
  */
 
-import 'dart:async';
 import 'dart:io';
 
 import 'package:dcli_core/dcli_core.dart';
@@ -12,30 +11,20 @@ import 'package:test/test.dart';
 
 void main() {
   test('line file ...', () async {
-    await withTempFile<void>((file) async {
+    await withTempFile((file) async {
       final buffer = <String>[];
-      final done = Completer<bool>();
 
-      final src = File(file).openWrite();
+      final src = File(file).openSync(mode: FileMode.write);
       for (var i = 0; i < 1000; i++) {
-        src.writeln('line $i');
+        src.writeStringSync('line $i\n');
       }
-      await src.close();
+      src.closeSync();
 
-      await withOpenLineFile(file, (file) async {
-        late final StreamSubscription<String>? sub;
-        try {
-          sub = file.readAll().listen((line) async {
-            sub!.pause();
-            buffer.add(line);
-            sub.resume();
-          }, onDone: () => done.complete(true));
-          await done.future;
-        } finally {
-          if (sub != null) {
-            await sub.cancel();
-          }
-        }
+      withOpenLineFile(file, (file) {
+        file.readAll((line) {
+          buffer.add(line);
+          return true;
+        });
       });
 
       expect(buffer.length, equals(1000));

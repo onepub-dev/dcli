@@ -51,8 +51,7 @@ void backupFile(String pathToFile, {bool ignoreMissing = false}) =>
 /// a [RestoreFileException] unless you pass the [ignoreMissing]
 /// flag.
 void restoreFile(String pathToFile, {bool ignoreMissing = false}) =>
-    // ignore: discarded_futures
-    waitForEx(core.restoreFile(pathToFile, ignoreMissing: ignoreMissing));
+    core.restoreFile(pathToFile, ignoreMissing: ignoreMissing);
 
 /// EXPERIMENTAL - use with caution and the api may change.
 ///
@@ -94,16 +93,13 @@ void restoreFile(String pathToFile, {bool ignoreMissing = false}) =>
 // ignore: flutter_style_todos
 /// TODO: make this work for other than current drive under Windows
 ///
-R withFileProtection<R>(
+void withFileProtection(
   List<String> protected,
-  R Function() action, {
+  void Function() action, {
   String? workingDirectory,
 }) =>
-    waitForEx(
-      // ignore: discarded_futures
-      core.withFileProtection(
-        protected,
-        action,
-        workingDirectory: workingDirectory,
-      ),
+    core.withFileProtection(
+      protected,
+      action,
+      workingDirectory: workingDirectory,
     );

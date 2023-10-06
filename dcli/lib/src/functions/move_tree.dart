@@ -77,15 +77,12 @@ void moveTree(
   bool includeHidden = false,
   bool Function(String file) filter = _allowAll,
 }) =>
-    waitForEx(
-      // ignore: discarded_futures
-      core.moveTree(
-        from,
-        to,
-        overwrite: overwrite,
-        includeHidden: includeHidden,
-        filter: filter,
-      ),
+    core.moveTree(
+      from,
+      to,
+      overwrite: overwrite,
+      includeHidden: includeHidden,
+      filter: filter,
     );
 
 bool _allowAll(String file) => true;

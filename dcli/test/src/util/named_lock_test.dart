@@ -27,10 +27,10 @@ void main() {
     print(lockPath);
   });
 
-  test('exception catch', () {
+  test('exception catch', () async {
     expect(
       () {
-        NamedLock(name: 'exception').withLock(() {
+        NamedLock(suffix: 'exception').withLock(() {
           throw DCliException('fake exception');
         });
       },
@@ -124,11 +124,11 @@ Future<ReceivePort> spawn(String message, String logFile) async {
   return port;
 }
 
-void writeToLog(String data) {
+Future<void> writeToLog(String data) async {
   final parts = data.split(';');
   final message = parts[0];
   final log = parts[1];
-  NamedLock(name: 'test.lock').withLock(() {
+  await NamedLock(suffix: 'test.lock').withLock(() {
     var count = 0;
     for (var i = 0; i < 4; i++) {
       final l = '$message + ${count++}';
@@ -145,10 +145,10 @@ const _lockCheckPath = '/tmp/lockcheck';
 final _lockFailedPath = join(_lockCheckPath, 'lock_failed');
 
 /// must be a global function as we us it to spawn an isolate
-void worker(int instance) {
+Future<void> worker(int instance) async {
   Settings().setVerbose(enabled: false);
   print('starting worker instance $instance ${DateTime.now()}');
-  NamedLock(name: 'gshared-compile').withLock(() {
+  await NamedLock(suffix: 'gshared-compile').withLock(() {
     print('acquired lock worker $instance  ${DateTime.now()}');
     final inLockPath = join(_lockCheckPath, 'inlock');
 

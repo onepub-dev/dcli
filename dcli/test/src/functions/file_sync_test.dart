@@ -7,13 +7,12 @@
 import 'package:dcli/dcli.dart';
 import 'package:dcli_core/dcli_core.dart' as core;
 import 'package:path/path.dart';
-
 import 'package:test/test.dart' as t;
 
 void main() {
   t.group('FileSync', () {
-    t.test('Append', () {
-      withTempDir((fsRoot) {
+    t.test('Append', () async {
+      await withTempDir((fsRoot) async {
         final testFile = join(fsRoot, 'lines.txt');
 
         if (exists(testFile)) {
@@ -31,8 +30,8 @@ void main() {
       });
     });
 
-    t.test('Write', () {
-      withTempDir((fsRoot) {
+    t.test('Write', () async {
+      await withTempDir((fsRoot) async {
         final testFile = join(fsRoot, 'lines.txt');
         if (exists(testFile)) {
           delete(testFile);

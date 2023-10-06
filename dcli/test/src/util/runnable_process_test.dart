@@ -15,10 +15,10 @@ import 'dart:convert';
 import 'dart:io';
 
 import 'package:dcli/dcli.dart' hide sleep;
+import 'package:dcli_test/dcli_test.dart';
 import 'package:path/path.dart' hide equals;
 import 'package:test/test.dart';
 
-import 'test_file_system.dart';
 
 void main() {
   test(

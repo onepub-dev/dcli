@@ -6,8 +6,8 @@
  */
 
 import 'dart:io';
+
 import 'package:dcli/dcli.dart';
-import 'package:dcli/src/util/exit.dart';
 import 'package:path/path.dart';
 
 /// A toy REPL shell to replace your bash command line in just 50 lines of dart.
@@ -32,8 +32,7 @@ void evaluate(String command) {
       Directory.current = join(pwd, parts[1]);
       break;
     case 'exit':
-      dcliExit(0);
-      break;
+      exit(0);
     default:
       if (which(parts[0]).found) {
         command.start(nothrow: true, progress: Progress.print());

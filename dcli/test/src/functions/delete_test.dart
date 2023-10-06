@@ -14,8 +14,8 @@ import 'package:test/test.dart';
 
 void main() {
   t.group('Delete', () {
-    t.test('delete ', () {
-      withTempDir((fsRoot) {
+    t.test('delete ', () async {
+      await withTempDir((fsRoot) async {
         final testFile = join(fsRoot, 'lines.txt');
         if (!exists(dirname(testFile))) {
           createDir(dirname(testFile), recursive: true);
@@ -28,8 +28,8 @@ void main() {
       });
     });
 
-    t.test('delete non-existing ', () {
-      withTempDir((fsRoot) {
+    t.test('delete non-existing ', () async {
+      await withTempDir((fsRoot) async {
         final testFile = join(fsRoot, 'lines.txt');
         touch(testFile, create: true);
         delete(testFile);

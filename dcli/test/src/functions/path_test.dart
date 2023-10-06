@@ -16,8 +16,8 @@ import 'package:test/test.dart' as t;
 String _testDir = 'path_test';
 void main() {
   t.group('Directory Path manipulation testing', () {
-    t.test('absolute', () {
-      withTempDir((fsRoot) {
+    t.test('absolute', () async {
+      await withTempDir((fsRoot) async {
         final paths = setup(fsRoot);
         final cwd = pwd;
         t.expect(
@@ -29,15 +29,15 @@ void main() {
       });
     });
 
-    t.test('parent', () {
-      withTempDir((fsRoot) {
+    t.test('parent', () async {
+      await withTempDir((fsRoot) async {
         final paths = setup(fsRoot);
         t.expect(dirname(paths.pathTestDir!), t.equals(join(fsRoot, _testDir)));
       });
     });
 
-    t.test('extension', () {
-      withTempDir((fsRoot) {
+    t.test('extension', () async {
+      await withTempDir((fsRoot) async {
         final paths = setup(fsRoot);
         t.expect(
           extension(join(paths.pathTestDir!, paths.testFile)),
@@ -46,8 +46,8 @@ void main() {
       });
     });
 
-    t.test('basename', () {
-      withTempDir((fsRoot) {
+    t.test('basename', () async {
+      await withTempDir((fsRoot) async {
         final paths = setup(fsRoot);
         t.expect(
           basename(join(paths.pathTestDir!, paths.testFile)),
@@ -56,8 +56,8 @@ void main() {
       });
     });
 
-    t.test('PWD', () {
-      withTempDir((fsRoot) {
+    t.test('PWD', () async {
+      await withTempDir((fsRoot) async {
         t.expect(pwd, t.equals(Directory.current.path));
       });
     });

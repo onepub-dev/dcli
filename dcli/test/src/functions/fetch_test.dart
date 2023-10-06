@@ -20,8 +20,8 @@ void main() {
   group('Fetch Single', () {
     // Don't know how to test this as it writes directly to stdout.
     // Need some way to hook Stdout
-    test('Fetch One', () {
-      withTempDir((testRoot) {
+    test('Fetch One', () async {
+      await withTempDir((testRoot) async {
         withTempFile(
           (sampleAac) {
             fetch(url: '$baseURl/sample.aac', saveToPath: sampleAac);
@@ -39,8 +39,8 @@ void main() {
       });
     });
 
-    test('Fetch One with Progress', () {
-      withTempDir((testRoot) {
+    test('Fetch One with Progress', () async {
+      await withTempDir((testRoot) async {
         withTempFile(
           (sampleAac) {
             fetch(
@@ -73,8 +73,8 @@ void main() {
       });
     });
 
-    test('Fetch with Headers', () {
-      withTempDir((testRoot) {
+    test('Fetch with Headers', () async {
+      await withTempDir((testRoot) async {
         withTempFile(
           (result) {
             final headers = {'Head1': 'value1', 'Head2': 'value2'};
@@ -110,8 +110,8 @@ void main() {
   });
 
   group('Fetch Multi', () {
-    test('Fetch  ', () {
-      withTempDir((testRoot) {
+    test('Fetch  ', () async {
+      await withTempDir((testRoot) async {
         withTempFile(
           (sampleAac) {
             withTempFile(
@@ -140,8 +140,8 @@ void main() {
       });
     });
 
-    test('Fetch With Progress ', () {
-      withTempDir((testRoot) {
+    test('Fetch With Progress ', () async {
+      await withTempDir((testRoot) async {
         withTempFile(
           (sampleAac) {
             withTempFile(
@@ -172,10 +172,10 @@ void main() {
     });
   });
 
-  test('Fetch - shutdown bug', () {
-    withTempFile(
-      (sampleAac) {
-        fetch(
+  test('Fetch - shutdown bug', () async {
+    await withTempFile(
+      (sampleAac) async {
+        await fetch(
           url: '$baseURl/sample.aac',
           saveToPath: sampleAac,
           fetchProgress: (progress) async {
@@ -207,14 +207,14 @@ void main() {
     expect(exists(temp), isFalse);
   });
 
-  group('error handling', () {
-    test('host not found', () {
+  group('error handling', () async {
+    test('host not found', () async {
       withTempFile((file) {
         const url =
             'http://test.comeing.com.au/long/123456789012345678901234567890';
 
         expect(
-          () => fetch(url: url, saveToPath: file),
+          () async => fetch(url: url, saveToPath: file),
           throwsA(
             predicate<FetchException>(
               (e) =>
@@ -233,8 +233,8 @@ void main() {
       }, create: false);
     });
 
-    test('404', () {
-      withTempFile((file) {
+    test('404', () async {
+      await withTempFile((file) async {
         const url = 'https://www.noojee.com.au/notfound';
 
         expect(
@@ -276,8 +276,8 @@ void main() {
           'Complete:       100B/100B');
     });
 
-    test('Progress showBytes', () {
-      withTempDir((testRoot) {
+    test('Progress showBytes', () async {
+      await withTempDir((testRoot) async {
         withTempFile(
           (sampleAac) {
             fetch(
@@ -312,10 +312,10 @@ void main() {
     //     '  "origin": "14.201.92.199", \r\n'
     //     '  "url": "https://httpbin.org/post"\r\n'
     //     '}'
-    test('send string', () {
-      withTempFile((file) {
+    test('send string', () async {
+      await withTempFile((file) async {
         const content = 'Hellow World';
-        fetch(
+        await fetch(
             url: 'https://httpbin.org/post',
             method: FetchMethod.post,
             data: FetchData.fromString(content),
@@ -329,13 +329,13 @@ void main() {
       }, create: false);
     });
 
-    test('send file', () {
-      withTempFile((pathToData) {
-        withTempFile((file) {
+    test('send file', () async {
+      await withTempFile((pathToData) async {
+        await withTempFile((file) async {
           const content = 'Hellow World2';
           pathToData.write(content);
 
-          fetch(
+          await fetch(
               url: 'https://httpbin.org/post',
               method: FetchMethod.post,
               data: FetchData.fromFile(pathToData),
@@ -351,13 +351,13 @@ void main() {
       });
     });
 
-    test('send stream', () {
-      withTempFile((pathToData) {
-        withTempFile((file) {
+    test('send stream', () async {
+      await withTempFile((pathToData) async {
+        await withTempFile((file) async {
           const content = 'Hellow World2';
           pathToData.write(content);
 
-          fetch(
+          await fetch(
               url: 'https://httpbin.org/post',
               method: FetchMethod.post,
               data: FetchData.fromStream(File(pathToData).openRead()),
@@ -373,12 +373,12 @@ void main() {
       });
     });
 
-    test('send bytes', () {
-      withTempFile((pathToData) {
-        withTempFile((file) {
+    test('send bytes', () async {
+      await withTempFile((pathToData) async {
+        await withTempFile((file) async {
           const bytes = <int>[0, 1, 2, 3, 4, 5];
 
-          fetch(
+          await fetch(
               url: 'https://httpbin.org/post',
               method: FetchMethod.post,
               data: FetchData.fromBytes(bytes),
@@ -395,14 +395,14 @@ void main() {
     });
 
     /// you can't use data with get.
-    test('bad data', () {
-      withTempFile((pathToData) {
-        withTempFile((file) {
+    test('bad data', () async {
+      await withTempFile((pathToData) async {
+        await withTempFile((file) async {
           const content = 'Hellow World2';
           pathToData.write(content);
 
           expect(
-              () => fetch(
+              () async => fetch(
                   url: 'https://httpbin.org/get',
                   data: FetchData.fromFile(pathToData),
                   saveToPath: file),
@@ -414,9 +414,9 @@ void main() {
       });
     });
 
-    test('custom headers', () {
-      withTempFile((file) {
-        fetch(
+    test('custom headers', () async {
+      await withTempFile((file) async {
+        await fetch(
             url: 'https://httpbin.org/get',
             headers: {'X-Test-Header1': 'Value1', 'X-Test-Header2': 'Value2'},
             saveToPath: file);
@@ -469,8 +469,8 @@ void main() {
           )));
     });
 
-    test('FetchData.fromFile - not a file', () {
-      withTempDir((tmpDir) {
+    test('FetchData.fromFile - not a file', () async {
+      await withTempDir((tmpDir) async {
         expect(
             () => FetchData.fromFile(tmpDir),
             throwsA(predicate<FetchException>(

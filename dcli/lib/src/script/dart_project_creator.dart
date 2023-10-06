@@ -6,6 +6,14 @@
 
 part of dart_project;
 
+/// Used for unit testing.
+/// When this environment variable exists the [DartProject.create] method
+/// will add a `pubspec_overrides.yaml` file in the created project
+/// with overrides for dcli and dcli_core which point
+/// to our dev source tree.
+@visibleForTesting
+const String overrideDCliPathKey = 'DCLI_OVERRIDE_PATH';
+
 void _createProject(String pathToProject, String templateName) {
   verbose(() => '_createProject $pathToProject from $templateName');
 
@@ -35,13 +43,13 @@ void _createProject(String pathToProject, String templateName) {
 
   /// rename main.dart from the template to <projectname>.dart
   // ignore: discarded_futures
-  final projectScript = waitForEx(_renameMain(project, projectName));
+  final projectScript = _renameMain(project, projectName);
 
   if (!Settings().isWindows) {
     chmod(projectScript, permission: '755');
   }
 
-  if (env.exists(DartProject.overrideDCliPathKey)) {
+  if (env.exists(overrideDCliPathKey)) {
     /// we are running in a unit test so
     /// we need to add pubspec overrides so that the
     /// newly created project will from the dev source
@@ -81,7 +89,7 @@ void addUnitTestOverrides(String pathToProject) {
 
 /// update the templates dcli version to match the dcli version
 /// the user is running.
-void _fixPubspec(String projectName, Pubspec pubSpec, String pathToPubSpec) {
+void _fixPubspec(String projectName, PubSpec pubSpec, String pathToPubSpec) {
   final current = pubSpec.dependencies;
 
   if (current.exists('dcli')) {
@@ -106,7 +114,7 @@ void _fixPubspec(String projectName, Pubspec pubSpec, String pathToPubSpec) {
 }
 
 /// Returns the name of the main project script.
-Future<String> _renameMain(DartProject project, String projectName) async {
+String _renameMain(DartProject project, String projectName) {
   /// rename main.dart from the template to <projectname>.dart
   final mainScript = join(project.pathToBinDir, 'main.dart');
   final projectScript = join(project.pathToBinDir, '$projectName.dart');
@@ -133,7 +141,7 @@ Future<String> _renameMain(DartProject project, String projectName) async {
   /// If the pubspec includes an executables clause that
   /// reference the script we just changed the name of,
   /// then update the pubpsec to reflect the new name.
-  final pubspec = Pubspec.loadFile(project.pathToPubSpec);
+  final pubspec = PubSpec.loadFromPath(project.pathToPubSpec);
   if (orginalScriptName != null) {
     final executables = pubspec.executables;
     final originalScriptKey = basenameWithoutExtension(orginalScriptName);
@@ -221,8 +229,7 @@ String _resolveTemplatePath(String templateName) {
     found = true;
   }
   if (!found) {
-    throw InvalidFlagOptionException(
-        'The template $templateName does not exist in '
+    throw DartProjectException('The template $templateName does not exist in '
         '${Settings().pathToTemplateProject}'
         ' or ${Settings().pathToTemplateProjectCustom}.');
   }
@@ -282,87 +289,6 @@ String _replaceInvalidCharactersForName(String proposedName) {
   return fixed;
 }
 
-/// Allows a user to select which template to use when
-/// creating a project.
-class TemplateFlag extends Flag {
-  ///
-  factory TemplateFlag() => _self;
-
-  ///
-  TemplateFlag._internal() : super(flagName);
-
-  static const defaultTemplateName = 'simple';
-  static const flagName = 'template';
-  static final _self = TemplateFlag._internal();
-
-  static final String defaultTemplatePath =
-      join(Settings().pathToTemplateProject, defaultTemplateName);
-
-  String? _templateName;
-
-  @override
-  // Returns the templateName
-  String get option => _templateName!;
-
-  /// true if the flag has an option.
-  bool get hasOption => _templateName != null;
-
-  @override
-  bool get isOptionSupported => true;
-
-  @override
-  set option(String? value) {
-    _templateName = value ?? defaultTemplateName;
-  }
-
-  @override
-  String get abbreviation => 't';
-
-  @override
-  String usage() =>
-      '--$flagName=<template name> | -$abbreviation=<template name>';
-
-  @override
-  String description() => '''
-      Defines the name of the template to create the script or project from.
-      If not passed the 'simple' template is used.''';
-}
-
 class InvalidProjectTemplateException extends DCliException {
   InvalidProjectTemplateException(super.message);
-}
-
-/// Prints a list of the templates and exists
-class TemplateListFlag extends Flag {
-  ///
-  factory TemplateListFlag() => _self;
-
-  ///
-  TemplateListFlag._internal() : super(flagName);
-
-  static const flagName = 'list';
-  static final _self = TemplateListFlag._internal();
-
-  @override
-  String get option => '';
-
-  /// true if the flag has an option.
-  bool get hasOption => false;
-
-  @override
-  bool get isOptionSupported => false;
-
-  @override
-  set option(String? value) {}
-
-  @override
-  String get abbreviation => 'l';
-
-  @override
-  String usage() => '--$flagName';
-
-  @override
-  String description() => '''
-      Prints a list of project and script templates then exits.
-''';
 }

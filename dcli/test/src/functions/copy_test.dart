@@ -161,9 +161,9 @@ void main() {
     );
   });
 
-  test('copy symlink', () {
+  test('copy symlink', () async {
     /// path of test symlink that exists as part of test package.
-    withTempDir((testDir) {
+    await withTempDir((testDir) async {
       final pathToTestFiles = join('test', 'test_files');
 
       copyTree(pathToTestFiles, testDir);

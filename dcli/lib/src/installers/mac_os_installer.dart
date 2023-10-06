@@ -4,10 +4,10 @@
  * Written by Brett Sutton <bsutton@onepub.dev>, Jan 2022
  */
 
+import 'package:path/path.dart';
 import 'package:scope/scope.dart';
 
 import '../../dcli.dart';
-import '../commands/install.dart';
 import '../version/version.g.dart';
 
 ///
@@ -24,13 +24,16 @@ class MacOSDCliInstaller {
     }
 
     // now activate dcli.
-    if (Scope.hasScopeKey(InstallCommand.activateFromSourceKey) &&
-        Scope.use(InstallCommand.activateFromSourceKey) == true) {
+    // ignore: invalid_use_of_visible_for_testing_member
+    if (Scope.hasScopeKey(installFromSourceKey) &&
+        // ignore: invalid_use_of_visible_for_testing_member
+        Scope.use(installFromSourceKey) == true) {
       // If we are called from a unit test we do it from source
-      PubCache().globalActivateFromSource(DartProject.self.pathToProjectRoot);
+      PubCache().globalActivateFromSource(
+          join(DartProject.self.pathToProjectRoot, '..', 'dcli_sdk'));
     } else {
       /// activate from pub.dev
-      PubCache().globalActivate('dcli', version: packageVersion);
+      PubCache().globalActivate('dcli_sdk', version: packageVersion);
     }
 
     return installedDart;

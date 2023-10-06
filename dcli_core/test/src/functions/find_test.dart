@@ -4,30 +4,21 @@
  * Written by Brett Sutton <bsutton@onepub.dev>, Jan 2022
  */
 
-import 'dart:async';
-
 import 'package:dcli_core/dcli_core.dart';
 import 'package:test/test.dart';
 
 void main() {
   test('find stream', () async {
     var count = 0;
-    final controller = LimitedStreamController<FindItem>(100);
-    try {
-      late StreamSubscription<FindItem>? sub;
-      sub = controller.stream.listen(
-          (item) => count++); // print(replaceNonPrintable(item.pathTo)));
-      await find(
-        '*',
-        includeHidden: true,
-        workingDirectory: pwd,
-        progress: controller,
-      );
-      await sub.cancel();
-      sub = null;
-    } finally {
-      await controller.close();
-    }
+    find(
+      '*',
+      includeHidden: true,
+      workingDirectory: pwd,
+      progress: (_) {
+        count++;
+        return true;
+      },
+    );
     print('Count $count Files and Directories found');
     expect(count, greaterThan(0));
   });

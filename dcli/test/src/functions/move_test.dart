@@ -9,7 +9,7 @@ import 'package:test/test.dart';
 
 void main() {
   test('move ...', () async {
-    withTempDir((dir) {
+    await withTempDir((dir) async {
       touch('one.txt', create: true);
       touch('two.txt', create: true);
 

@@ -8,19 +8,18 @@ library;
  */
 
 import 'package:dcli/dcli.dart';
+import 'package:dcli_test/dcli_test.dart';
 import 'package:path/path.dart' hide equals;
 import 'package:test/test.dart';
-
-import '../../util/test_file_system.dart';
 
 void main() {
   group('warmup using DCli', () {
     test('warmup ', () async {
       await TestFileSystem().withinZone((fs) async {
         final projectPath = join(fs.fsRoot, 'test_script/general');
-        DartProject.fromPath(projectPath)
-          ..clean()
-          ..warmup();
+        final project = DartProject.fromPath(projectPath);
+        await project.clean();
+        await project.warmup();
 
         expect(exists(join(projectPath, '.dart_tool')), equals(true));
         expect(exists(join(projectPath, 'pubspec.lock')), equals(true));

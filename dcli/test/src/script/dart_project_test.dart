@@ -8,12 +8,10 @@ library;
  */
 
 import 'package:dcli/dcli.dart';
-import 'package:dcli/src/commands/install.dart';
+import 'package:dcli_core/dcli_core.dart' as core;
 import 'package:path/path.dart' hide equals;
 import 'package:pubspec_manager/pubspec_manager.dart';
 import 'package:test/test.dart';
-
-import '../util/test_file_system.dart';
 
 void main() {
   test('dart project directories', () async {
@@ -33,29 +31,33 @@ void main() {
 
   group('Create Project ', () {
     test('Create project full with --template', () async {
-      await TestFileSystem().withinZone((fs) async {
-        InstallCommand().initTemplates();
-        final pathToProject = fs.unitTestWorkingDir;
+      //    await TestFileSystem().withinZone((fs) async {
+//        InstallCommand().initTemplates();
 
+      await core.withTempDir((tempDir) async {
         const projectName = 'full_test';
+        final pathToProject = join(tempDir, projectName);
+
         const mainScriptName = '$projectName.dart';
         final scriptPath = join(pathToProject, 'bin', mainScriptName);
 
         await withEnvironment(() async {
-          'dcli create --template=full $projectName'
-              .start(workingDirectory: pathToProject);
+          DartProject.create(pathTo: pathToProject, templateName: 'full');
         }, environment: {
-          DartProject.overrideDCliPathKey: DartProject.self.pathToProjectRoot
+          overrideDCliPathKey: DartProject.self.pathToProjectRoot
         });
 
         expect(exists(scriptPath), isTrue);
         final project = DartProject.fromPath(pathToProject);
         expect(project.hasPubSpec, isTrue);
-        final pubspec = Pubspec.loadFile(project.pathToPubSpec);
+        final pubspec = PubSpec.loadFromPath(project.pathToPubSpec);
         final executables = pubspec.executables;
-        final mainScriptKey = basename(mainScriptName);
+        final mainScriptKey = basenameWithoutExtension(mainScriptName);
         expect(executables.exists(mainScriptKey), isTrue);
+        expect(executables[mainScriptKey]!.scriptPath,
+            equals(join('bin', '$mainScriptKey.dart')));
       });
     });
+    // });
   });
 }

@@ -170,7 +170,7 @@ class UnknownShell with ShellMixin {
       'You need to be a privileged user to run $app';
 
   @override
-  bool install({bool installDart = false, bool activate = true}) {
+  Future<bool> install({bool installDart = false, bool activate = true}) async {
     if (core.Settings().isLinux) {
       return LinuxDCliInstaller().install(installDart: installDart);
     } else if (Settings().isWindows) {

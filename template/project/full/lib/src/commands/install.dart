@@ -42,13 +42,13 @@ Use the $pathOption to select an alternate install path.
     final args = InstallArgs.parse(argResults, globalResults);
 
     _createDir(args);
-    _download(args);
+    await _download(args);
   }
 
-  void _download(InstallArgs args) {
+  Future<void> _download(InstallArgs args) async {
     print(orange('Downloading mailhog'));
     delete(args.pathToMailHogApp);
-    fetch(
+    await fetch(
         url:
             'https://github.com/mailhog/MailHog/releases/download/v1.0.0/MailHog_linux_amd64',
         saveToPath: args.pathToMailHogApp);

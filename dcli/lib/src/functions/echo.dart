@@ -8,9 +8,6 @@ import 'dart:io';
 
 import 'package:dcli_core/dcli_core.dart';
 
-import '../../dcli.dart';
-import '../util/wait_for_ex.dart';
-
 /// Writes [text] to stdout including a newline.
 ///
 /// ```dart
@@ -30,7 +27,5 @@ class _Echo extends DCliFunction {
     } else {
       stdout.write(text);
     }
-    // ignore: discarded_futures
-    waitForEx<dynamic>(stdout.flush());
   }
 }

@@ -4,8 +4,6 @@
  * Written by Brett Sutton <bsutton@onepub.dev>, Jan 2022
  */
 
-import 'dart:async';
-
 import '../../dcli_core.dart';
 
 ///
@@ -38,51 +36,43 @@ import '../../dcli_core.dart';
 /// be impossible to loose your file. If replace does crash you may
 /// have to delete [path].tmp or [path].bak but this is highly unlikely.
 ///
-Future<int> replace(
+int replace(
   String path,
   Pattern existing,
   String replacement, {
   bool all = false,
-}) async =>
+}) =>
     _Replace().replace(path, existing, replacement, all: all);
 
 class _Replace extends DCliFunction {
-  Future<int> replace(
+  int replace(
     String path,
     Pattern existing,
     String replacement, {
     bool all = false,
-  }) async {
+  }) {
     var changes = 0;
     final tmp = '$path.tmp';
     if (exists(tmp)) {
       delete(tmp);
     }
     touch(tmp, create: true);
-    await withOpenLineFile(tmp, (tmpFile) async {
-      await withOpenLineFile(path, (file) async {
-        late final StreamSubscription<String>? sub;
-        try {
-          sub = file.readAll().listen((line) async {
-            sub!.pause();
-            String newline;
-            if (all) {
-              newline = line.replaceAll(existing, replacement);
-            } else {
-              newline = line.replaceFirst(existing, replacement);
-            }
-            if (newline != line) {
-              changes++;
-            }
-
-            await tmpFile.append(newline);
-            sub.resume();
-          });
-        } finally {
-          if (sub != null) {
-            await sub.cancel();
+    withOpenLineFile(tmp, (tmpFile) {
+      withOpenLineFile(path, (file) {
+        file.readAll((line) {
+          String newline;
+          if (all) {
+            newline = line.replaceAll(existing, replacement);
+          } else {
+            newline = line.replaceFirst(existing, replacement);
           }
-        }
+          if (newline != line) {
+            changes++;
+          }
+
+          tmpFile.append(newline);
+          return true;
+        });
       });
     });
 

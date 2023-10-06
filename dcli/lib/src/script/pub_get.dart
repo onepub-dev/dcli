@@ -5,6 +5,7 @@
  */
 
 import '../../dcli.dart';
+import '../pubspec/dependency.dart';
 
 ///
 /// runs and retrives the results of calling

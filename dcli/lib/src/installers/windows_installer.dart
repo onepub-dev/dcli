@@ -10,7 +10,6 @@ import 'package:win32/win32.dart';
 
 import '../../dcli.dart';
 import '../../windows.dart';
-import '../commands/install.dart';
 import '../version/version.g.dart';
 
 ///
@@ -19,11 +18,11 @@ import '../version/version.g.dart';
 
 class WindowsDCliInstaller {
   /// returns true if it needed to install dart.
-  bool install({bool installDart = true}) {
+  Future<bool> install({bool installDart = true}) async {
     var installedDart = false;
 
     if (installDart) {
-      installedDart = _installDart();
+      installedDart = await _installDart();
     }
 
     Env().appendToPATH(Settings().pathToDCliBin);
@@ -35,18 +34,21 @@ class WindowsDCliInstaller {
       regAppendToPath(Settings().pathToDCliBin);
     }
     // now activate dcli.
-    if (Scope.hasScopeKey(InstallCommand.activateFromSourceKey) &&
-        Scope.use(InstallCommand.activateFromSourceKey) == true) {
+    // ignore: invalid_use_of_visible_for_testing_member
+    if (Scope.hasScopeKey(installFromSourceKey) &&
+        // ignore: invalid_use_of_visible_for_testing_member
+        Scope.use(installFromSourceKey) == true) {
       // If we are called from a unit test we do it from source
-      PubCache().globalActivateFromSource(DartProject.self.pathToProjectRoot);
+      PubCache().globalActivateFromSource(
+          join(DartProject.self.pathToProjectRoot, '..', 'dcli_sdk'));
     } else {
       /// activate from pub.dev
-      PubCache().globalActivate('dcli', version: packageVersion);
+      PubCache().globalActivate('dcli_sdk', version: packageVersion);
     }
     return installedDart;
   }
 
-  bool _installDart() {
+  Future<bool> _installDart() async {
     var installedDart = false;
 
     // first check that dart isn't already installed
@@ -55,8 +57,8 @@ class WindowsDCliInstaller {
 
       const defaultDartToolDir = r'C:\tools\dart-sdk';
 
-      final dartToolDir =
-          DartSdk().installFromArchive(defaultDartToolDir, askUser: false);
+      final dartToolDir = await DartSdk()
+          .installFromArchive(defaultDartToolDir, askUser: false);
 
       /// add the dartsdk path to the windows path.
       Env().appendToPATH(join(dartToolDir, 'bin'));

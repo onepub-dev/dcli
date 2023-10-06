@@ -10,13 +10,11 @@ library;
 import 'dart:io';
 
 import 'package:dcli/dcli.dart';
-import 'package:dcli/src/script/command_line_runner.dart';
 import 'package:dcli/src/util/parse_cli_command.dart';
 import 'package:dcli_core/dcli_core.dart' as core;
+import 'package:dcli_test/dcli_test.dart';
 import 'package:path/path.dart' hide equals;
 import 'package:test/test.dart';
-
-import 'test_file_system.dart';
 
 void main() {
   group('ParseCLICommand', () {
@@ -199,8 +197,8 @@ void main() {
 
   test(
     'linux/macos',
-    () {
-      withTempDir((fsRoot) {
+    () async {
+      await withTempDir((fsRoot) async {
         final fs = TestDirectoryTree(fsRoot);
         final parsed = ParsedCliCommand('ls *.jpg *.png', fs.top);
 
@@ -223,8 +221,8 @@ void main() {
 
   test(
     '.*',
-    () {
-      withTempDir((fsRoot) {
+    () async {
+      await withTempDir((fsRoot) async {
         final fs = TestDirectoryTree(fsRoot);
         final parsed = ParsedCliCommand('ls .*', fs.top);
 
@@ -240,8 +238,8 @@ void main() {
 
   test(
     'invalid/.*',
-    () {
-      withTempDir((fsRoot) {
+    () async {
+      await withTempDir((fsRoot) async {
         final fs = TestDirectoryTree(fsRoot);
 
         expect(
@@ -257,8 +255,8 @@ void main() {
 
   test(
     'valid/.*',
-    () {
-      withTempDir((fsRoot) {
+    () async {
+      await withTempDir((fsRoot) async {
         final fs = TestDirectoryTree(fsRoot);
 
         final parsed = ParsedCliCommand('ls middle/.*', fs.top);
@@ -278,8 +276,8 @@ void main() {
 
   test(
     'alternate working directory',
-    () {
-      withTempDir((fsRoot) {
+    () async {
+      await withTempDir((fsRoot) async {
         final fs = TestDirectoryTree(fsRoot);
 
         final parsed = ParsedCliCommand('ls *.txt *.jpg', fs.middle);
@@ -301,8 +299,8 @@ void main() {
     },
   );
 
-  test('valid non-local path', () {
-    withTempDir((fsRoot) {
+  test('valid non-local path', () async {
+    await withTempDir((fsRoot) async {
       final fs = TestDirectoryTree(fsRoot);
 
       final parsed = ParsedCliCommand('ls middle/*.txt', fs.top);
@@ -323,8 +321,8 @@ void main() {
     });
   });
 
-  test('invalid absolute path/*', () {
-    withTempDir((fsRoot) {
+  test('invalid absolute path/*', () async {
+    await withTempDir((fsRoot) async {
       final fs = TestDirectoryTree(fsRoot);
 
       if (core.Settings().isWindows) {
@@ -343,8 +341,8 @@ void main() {
     });
   });
 
-  test('valid absolute path/*', () {
-    withTempDir((fsRoot) {
+  test('valid absolute path/*', () async {
+    await withTempDir((fsRoot) async {
       final fs = TestDirectoryTree(fsRoot);
 
       final parsed = ParsedCliCommand('ls ${join(fs.top, '*.txt')}', fs.middle);
@@ -366,8 +364,8 @@ void main() {
 
   test(
     'windows',
-    () {
-      withTempDir((fsRoot) {
+    () async {
+      await withTempDir((fsRoot) async {
         final fs = TestDirectoryTree(fsRoot);
 
         final parsed = ParsedCliCommand('ls *.jpg *.png', fs.top);

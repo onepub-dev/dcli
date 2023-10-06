@@ -5,17 +5,16 @@
  */
 
 import 'package:dcli/dcli.dart';
+import 'package:dcli_test/dcli_test.dart';
 import 'package:path/path.dart';
 import 'package:test/test.dart' as t;
-
-import '../util/test_file_system.dart';
 
 void main() {
   t.group(
     'Head',
     () {
-      t.test('head 5', () {
-        withTempDir((fsRoot) {
+      t.test('head 5', () async {
+        await withTempDir((fsRoot) async {
           TestFileSystem.buildDirectoryTree(fsRoot);
           final testFile = join(fsRoot, 'lines.txt');
           if (exists(testFile)) {

@@ -4,7 +4,6 @@
  * Written by Brett Sutton <bsutton@onepub.dev>, Jan 2022
  */
 
-import 'dart:convert';
 import 'dart:io';
 
 import 'package:dcli_core/dcli_core.dart' as core;
@@ -28,8 +27,6 @@ Progress readStdin() => _Read()._readStdin();
 
 class _Read extends core.DCliFunction {
   Progress read(String path, {String delim = '\n', Progress? progress}) {
-    final sourceFile = File(path);
-
     verbose(() => 'read: ${truepath(path)}, delim: $delim');
 
     if (!exists(path)) {
@@ -37,18 +34,10 @@ class _Read extends core.DCliFunction {
     }
 
     progress ??= Progress.devNull();
-
-    waitForEx<void>(
-      sourceFile
-          .openRead()
-          .transform(utf8.decoder)
-          .transform(const LineSplitter())
-          // ignore: discarded_futures
-          .forEach((line) {
-        progress!.addToStdout(line);
-      }),
-    );
-
+    core.LineFile(path).readAll((line) {
+      progress!.addToStdout(line);
+      return true;
+    });
     progress.close();
 
     return progress;

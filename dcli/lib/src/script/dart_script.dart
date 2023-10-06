@@ -14,8 +14,7 @@ import 'package:pubspec_manager/pubspec_manager.dart';
 import 'package:stack_trace/stack_trace.dart';
 
 import '../../dcli.dart';
-import '../commands/dart_script_creator.dart';
-import 'command_line_runner.dart';
+import 'dart_script_creator.dart';
 import 'runner.dart';
 
 /// Used to manage a DCli script.
@@ -206,23 +205,6 @@ class DartScript {
   @Deprecated('Use DartScript.self or DartScript.fromPath()')
   static DartScript get current => self;
 
-  /// validate that the passed arguments points to a valid script
-  static void validate(String scriptPath) {
-    if (!scriptPath.endsWith('.dart')) {
-      throw InvalidArgumentException(
-        'Expected a script name (ending in .dart) '
-        'instead found: $scriptPath',
-      );
-    }
-
-    if (!exists(scriptPath)) {
-      throw InvalidScript('The script ${truepath(scriptPath)} does not exist.');
-    }
-    if (!FileSystemEntity.isFileSync(scriptPath)) {
-      throw InvalidScript('The script ${truepath(scriptPath)} is not a file.');
-    }
-  }
-
   /// Strips the root prefix of a path so we can use
   /// it as part of the virtual projects path.
   /// For linux this just removes any leading /
@@ -260,7 +242,7 @@ class DartScript {
   ///
   /// reads and returns the project's virtual pubspec
   /// and returns it.
-  Pubspec get pubSpec => project.pubSpec;
+  PubSpec get pubSpec => project.pubSpec;
 
   /// Compiles this script and optionally installs it to ~/.dcli/bin
   ///

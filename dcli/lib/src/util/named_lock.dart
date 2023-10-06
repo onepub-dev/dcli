@@ -27,15 +27,17 @@ import '../../dcli.dart';
 ///
 /// To ensure that [NamedLock]s hold across processes and isolates
 /// we use a two part locking mechanism.
-/// The first part is a UDP socket (on port 63424) that we
-/// refere to a hard lock.  The same hard lock is used for all
+/// The first part is a TCP socket (on port 9003) that we
+/// refer to as a hard lock.  The same hard lock is used for all
 /// [NamedLock]s and as such is a potential bottle neck. To limit
 /// this bottle neck we hold the hard lock for as short a period as possible.
 /// The hard lock is only used to create and delete the file based lock.
-/// As soon as a file based lock transition completes the hard lock is released.
+/// As soon as a file based lock transition completes,
+///  the hard lock is released.
 ///
 /// On linux a traditional file lock will not block isolates
-/// in the same process from locking the same file hence we need
+/// in the same process from locking the same file hence we need to use
+/// a NamedLock between isolates as well as processes.
 class NamedLock {
   /// [lockPath] is the path of the directory used
   /// to store the lock file.
@@ -45,7 +47,7 @@ class NamedLock {
   /// same [lockPath]. It is recommended that you
   /// pass an absolute path to ensure that the
   /// same path is used.
-  /// The [name] is used as the suffix of the lockfile.
+  /// The [suffix] is used as the suffix of the lockfile name.
   /// The suffix allows multiple locks to share a single
   /// lockPath.
   /// The [description], if passed, is used in error messages
@@ -63,7 +65,7 @@ class NamedLock {
   /// ```
   ///
   NamedLock({
-    required this.name,
+    required this.suffix,
     String? lockPath,
     String description = '',
     Duration timeout = const Duration(seconds: 30),
@@ -78,56 +80,58 @@ class NamedLock {
   /// so its the perfect way to create a lock that works
   /// across processes and isolates.
   final int port = 9003;
+
+  /// Path to the directory where the lock files are stored.
   late String _lockPath;
 
   /// The name of the lock.
-  final String name;
+  final String suffix;
   final String _description;
 
-  /// We use this to allow a lock to be-reentrant within an isolate.
-  /// A non-zero value means we have the lock.
   /// We maintain a lock count per
-  /// lock suffix to allow each suffix lock to be re-entrant.
+  /// lock suffix to allow each suffix lock to be re-entrant
+  /// within a single isolate.
   static final Map<String, int> _lockCounts = {};
 
   /// The duration to wait for a lock before timing out.
   final Duration _timeout;
 
-  /// creates a lock file and then calls [fn]
-  /// once [fn] returns the lock is released.
+  /// creates a lock file and then calls [action]
+  /// once [action] returns the lock is released.
   /// If [waiting] is passed it will be used to write
   /// a log message to the console.
   ///
   /// Throws a [DCliException] if the NamedLock times out.
-  void withLock(
-    void Function() fn, {
+  Future<void> withLock(
+    void Function() action, {
     String? waiting,
-  }) {
+  }) async {
     final callingStackTrace = Trace.current();
     var lockHeld = false;
-    runZonedGuarded(() {
+    return runZonedGuarded(() async {
       try {
         verbose(() => 'lockcount = $_lockCountForName');
 
         _createLockPath();
 
-        if (_lockCountForName > 0 || _takeLock(waiting)) {
+        if (_lockCountForName > 0 || await _takeLock(waiting)) {
           lockHeld = true;
           incLockCount;
 
-          fn();
+          action();
         }
       } finally {
         if (lockHeld) {
-          _releaseLock();
+          await _releaseLock();
         }
         // just in case an async exception can be thrown
         // I'm uncertain if this is a reality.
         lockHeld = false;
       }
-    }, (e, st) {
+      return;
+    }, (e, st) async {
       if (lockHeld) {
-        _releaseLock();
+        await _releaseLock();
       }
       verbose(() => 'Exception throw $e : $e');
       if (e is DCliException) {
@@ -149,7 +153,7 @@ class NamedLock {
     }
   }
 
-  void _releaseLock() {
+  Future<void> _releaseLock() async {
     if (_lockCountForName > 0) {
       decLockCount;
 
@@ -159,7 +163,7 @@ class NamedLock {
       if (_lockCountForName == 0) {
         verbose(() => 'Releasing lock: $_lockFilePath');
 
-        _withHardLock(fn: () => delete(_lockFilePath));
+        await _withHardLock(fn: () => delete(_lockFilePath));
 
         verbose(() => 'Releasing lock: $_lockFilePath');
       }
@@ -167,7 +171,7 @@ class NamedLock {
   }
 
   int get _lockCountForName {
-    var lockCount = _lockCounts[name];
+    var lockCount = _lockCounts[suffix];
     return lockCount ??= 0;
   }
 
@@ -176,7 +180,7 @@ class NamedLock {
   int get incLockCount {
     var lockCount = _lockCountForName;
     lockCount++;
-    _lockCounts[name] = lockCount;
+    _lockCounts[suffix] = lockCount;
     verbose(() => 'Incremented lock: $lockCount');
     return lockCount;
   }
@@ -186,7 +190,7 @@ class NamedLock {
   int get decLockCount {
     var lockCount = _lockCountForName;
     lockCount--;
-    _lockCounts[name] = lockCount;
+    _lockCounts[suffix] = lockCount;
 
     verbose(() => 'Decremented lock: $_lockCountForName');
     return lockCount;
@@ -198,7 +202,7 @@ class NamedLock {
 
     final isolate = _isolateID;
 
-    return join(_lockPath, '.$pid.$isolate.$name');
+    return join(_lockPath, '.$pid.$isolate.$suffix');
   }
 
   _LockFileParts? _lockFileParts(String lockfilePath) {
@@ -247,7 +251,7 @@ class NamedLock {
   /// If we find an existing lock file we check if the process
   /// that owns it is still running. If it isn't we
   /// take a lock and delete the orphaned lock.
-  bool _takeLock(String? waiting) {
+  Future<bool> _takeLock(String? waiting) async {
     var taken = false;
     verbose(() => '_takeLock called');
 
@@ -265,18 +269,18 @@ class NamedLock {
 
     /// If a valid lock file exists we don't even try to take
     /// a hard lock.
-    /// This is to avoid a pseuod race condition under heavy load
+    /// This is to avoid a pseudo race condition under heavy load
     /// where the lock owner can't get the hardlock as
     /// all of the contenders constantly have it locked.
     while (!taken && waitCount > 0) {
       verbose(() => 'entering withHardLock $waitCount');
 
       if (!_validLockFileExists) {
-        _withHardLock(
+        await _withHardLock(
           fn: () {
             // check for other lock files
             final locks = find(
-              '*.$name',
+              '*.$suffix',
               workingDirectory: _lockPath,
               includeHidden: true,
               recursive: false,
@@ -315,7 +319,7 @@ class NamedLock {
       }
 
       /// sleep for 100ms and then we will try again.
-      waitForEx<void>(Future.delayed(const Duration(milliseconds: 100)));
+      sleep(100, interval: Interval.milliseconds);
       if (finalwaiting != null) {
         // only print waiting message once.
         finalwaiting = null;
@@ -346,7 +350,7 @@ class NamedLock {
   bool get _validLockFileExists {
     // check for other lock files
     final locks = find(
-      '*.$name',
+      '*.$suffix',
       workingDirectory: _lockPath,
       includeHidden: true,
       recursive: false,
@@ -402,24 +406,21 @@ class NamedLock {
   bool _isOwnerLive(int lockOwnerPid) =>
       ProcessHelper().isRunning(lockOwnerPid);
 
-  void _withHardLock({
+  Future<void> _withHardLock({
     required void Function() fn,
-  }) {
+  }) async {
     ServerSocket? socket;
 
     try {
       verbose(() => 'attempt bindSocket');
       // ignore: discarded_futures
-      socket = waitForEx<ServerSocket?>(_bindSocket());
+      socket = await _bindSocket();
 
-      if (socket != null) {
-        verbose(() => blue('Hardlock taken'));
-        fn();
-      }
+      verbose(() => blue('Hardlock taken'));
+      fn();
     } finally {
       if (socket != null) {
-        // ignore: discarded_futures
-        waitForEx(socket.close());
+        await socket.close();
         verbose(() => blue('Hardlock released'));
       }
     }

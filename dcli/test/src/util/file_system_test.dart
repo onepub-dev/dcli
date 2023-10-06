@@ -16,8 +16,8 @@ import 'package:test/test.dart';
 void main() {
   test(
     'MemoryFileSystem',
-    () {
-      withTempDir((fs) {
+    () async {
+      await withTempDir((fs) async {
         // final fs = MemoryFileSystem();
 
         // fs.directory('/tmp').createSync();

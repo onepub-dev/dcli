@@ -63,7 +63,7 @@ class _MoveDir extends DCliFunction {
               'moveDir to is on a separate device so falling back to copy/delete: ${truepath(from)} -> ${truepath(to)}',
         );
 
-        await copyTree(from, to, includeHidden: true);
+        copyTree(from, to, includeHidden: true);
         delete(from);
       } else {
         throw MoveDirException(

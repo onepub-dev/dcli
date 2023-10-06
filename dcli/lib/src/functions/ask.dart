@@ -211,11 +211,8 @@ class Ask extends core.DCliFunction {
               value.removeLast();
             }
           } else {
+            // apparently flush isn't need - dispite the doc.
             stdout.write('*');
-            // we must wait for flush as only one flush can
-            // be outstanding at a time.
-            // ignore: discarded_futures
-            waitForEx<void>(stdout.flush());
             value.add(char);
           }
         }

@@ -9,11 +9,9 @@ library;
 
 import 'package:dcli/dcli.dart';
 import 'package:dcli_core/dcli_core.dart' as core;
+import 'package:dcli_test/dcli_test.dart';
 import 'package:path/path.dart' hide equals;
 import 'package:test/test.dart';
-
-import '../util/test_file_system.dart';
-import '../util/test_scope.dart';
 
 void main() {
   test('backup/restore good path', () async {
@@ -111,8 +109,8 @@ void main() {
   });
 
   group('withFileProtection', () {
-    test('single file absolute path that we delete', () {
-      withTempDir((tempDir) {
+    test('single file absolute path that we delete', () async {
+      await withTempDir((tempDir) async {
         final tree = TestDirectoryTree(tempDir);
 
         withFileProtection([tree.bottomFiveTxt], () {
@@ -122,8 +120,8 @@ void main() {
       });
     });
 
-    test('single file absolute path that we modify', () {
-      withTempDir((tempDir) {
+    test('single file absolute path that we modify', () async {
+      await withTempDir((tempDir) async {
         final tree = TestDirectoryTree(tempDir);
 
         final pre = calculateHash(tree.bottomFiveTxt);
@@ -169,8 +167,8 @@ void main() {
       expect(pre, equals(post));
     });
 
-    test('multiple files absolute path that we delete', () {
-      withTempDir((tempDir) {
+    test('multiple files absolute path that we delete', () async {
+      await withTempDir((tempDir) async {
         final tree = TestDirectoryTree(tempDir);
 
         withFileProtection([tree.bottomFiveTxt, tree.bottomSixTxt], () {
@@ -195,8 +193,8 @@ void main() {
       expect(exists(tree.bottomSixTxt), isTrue);
     });
 
-    test('directory absolute path that we delete', () {
-      withTempDir((tempDir) {
+    test('directory absolute path that we delete', () async {
+      await withTempDir((tempDir) async {
         final tree = TestDirectoryTree(tempDir);
 
         withFileProtection([tree.top], () {
@@ -250,8 +248,8 @@ void main() {
     //   });
     // });
 
-    test('single non-existent file', () {
-      withTempDir((tempDir) {
+    test('single non-existent file', () async {
+      await withTempDir((tempDir) async {
         final tree = TestDirectoryTree(tempDir);
 
         delete(tree.bottomFiveTxt);
@@ -263,8 +261,8 @@ void main() {
       });
     });
 
-    test('non-existent directory', () {
-      withTempDir((tempDir) {
+    test('non-existent directory', () async {
+      await withTempDir((tempDir) async {
         final tree = TestDirectoryTree(tempDir);
 
         deleteDir(tree.bottom);

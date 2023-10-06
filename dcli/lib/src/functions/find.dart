@@ -4,7 +4,6 @@
  * Written by Brett Sutton <bsutton@onepub.dev>, Jan 2022
  */
 
-import 'dart:async';
 import 'dart:io';
 
 import 'package:dcli_core/dcli_core.dart' as core;
@@ -102,24 +101,6 @@ FindProgress find(
   List<FileSystemEntityType> types = const [Find.file],
 }) {
   progress ??= Progress.devNull();
-
-  // final controller = StreamController<FindItem>();
-  // try {
-  //   controller.stream.listen((item) => progress!.addToStdout(item.pathTo));
-  //   waitForEx(
-  //     core.find(
-  //       pattern,
-  //       caseSensitive: caseSensitive,
-  //       recursive: recursive,
-  //       includeHidden: includeHidden,
-  //       workingDirectory: workingDirectory,
-  //       progress: controller.sink,
-  //     ),
-  //   );
-  // } finally {
-  //   controller.close();
-  // }
-
   return FindProgress(
     pattern,
     caseSensitive: caseSensitive,
@@ -160,10 +141,6 @@ class FindProgress extends InternalProgress {
   /// The list of file system entity types to search file.
   List<FileSystemEntityType> types;
 
-  /// If your [action] performas any asynchronous operations
-  /// then you MUST wrap it in a [waitForEx] otherwise
-  /// your some of your actions may end up being called
-  /// after [forEach] returns which is unlikely to be what you are expecting.
   /// If you need to perform async operations you should use
   ///  [core.find].
   @override
@@ -174,36 +151,15 @@ class FindProgress extends InternalProgress {
 
   /// Internal method so we can cancel the stream.
   void _forEach(CancelableLineAction action) {
-    final controller = LimitedStreamController<FindItem>(100);
-    try {
-      late StreamSubscription<FindItem> sub;
-      sub = controller.stream.listen((item) async {
-        sub.pause();
-        if (!action(item.pathTo)) {
-          await sub.cancel();
-        }
-        sub.resume();
-      });
-
-      waitForEx(
-        // ignore: discarded_futures
-        core.find(
-          pattern,
-          caseSensitive: caseSensitive,
-          recursive: recursion,
-          includeHidden: includeHidden,
-          workingDirectory: workingDirectory,
-          progress: controller,
-          types: types,
-        ),
-      );
-    } finally {
-      /// under normal circumstances core.find closes the controller.
-      if (!controller.isClosed) {
-        // ignore: discarded_futures
-        waitForEx<void>(controller.close());
-      }
-    }
+    core.find(
+      pattern,
+      caseSensitive: caseSensitive,
+      recursive: recursion,
+      includeHidden: includeHidden,
+      workingDirectory: workingDirectory,
+      progress: (item) => action(item.pathTo),
+      types: types,
+    );
   }
 
   /// Returns the first line from the command or

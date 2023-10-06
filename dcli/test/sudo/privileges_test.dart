@@ -15,7 +15,7 @@ import 'package:test/test.dart';
 void main() {
   test(
     'isPrivileged',
-    () {
+    () async {
       if (!Shell.current.isPrivilegedUser) {
         printerr(red('You must run this script with sudo.'));
         printerr(
@@ -46,7 +46,7 @@ void main() {
         print('post-descalation euid: ${geteuid()}');
         print('post-descalation user egid: ${getegid()}');
 
-        withTempDir((testRoot) {
+        await withTempDir((testRoot) async {
           final testFile = join(testRoot, 'test.txt');
           touch(testFile, create: true);
           'ls -la $testFile'.run;

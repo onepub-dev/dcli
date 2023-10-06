@@ -5,9 +5,6 @@
  * Written by Brett Sutton <bsutton@onepub.dev>, Jan 2022
  */
 
-
-
-
 import 'dart:io';
 
 import 'package:dcli/dcli.dart';
@@ -69,26 +66,3 @@ void ls(List<String> patterns) {
     }
   }
 }
-
-// void buildPipe(String line) {
-//   var commands = line.split('|');
-
-//   for (var command in commands)
-
-//   var progress = Progress.stream();
-//   parts[0].start(
-//     progress: progress,
-//     runInShell: true,
-//   );
-
-//   RunnableProcess();
-
-//   var done = Completer<void>();
-//   progress.stream.listen((event) {
-//     print('stream: $event');
-//   }).onDone(() => done.complete());
-//   waitForEx<void>(done.future);
-//   print('done');
-
-//   parts[0].stream;
-// }

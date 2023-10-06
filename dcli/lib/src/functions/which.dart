@@ -4,8 +4,6 @@
  * Written by Brett Sutton <bsutton@onepub.dev>, Jan 2022
  */
 
-import 'dart:async';
-
 import 'package:dcli_core/dcli_core.dart' as core;
 
 import '../../dcli.dart';
@@ -70,32 +68,22 @@ core.Which which(
   Sink<String>? progress,
 }) {
   core.Which which;
-  final controller = StreamController<core.WhichSearch>();
 
-  try {
-    controller.stream.listen((whichSearch) {
+  which = core.which(
+    appname,
+    first: first,
+    verbose: verbose,
+    extensionSearch: extensionSearch,
+    progress: (whichSearch) {
       if (verbose) {
         progress?.add('Searching: ${truepath(whichSearch.path)}');
       }
       if (whichSearch.found) {
         progress?.add(whichSearch.exePath!);
       }
-    });
+    },
+  );
 
-    which = waitForEx(
-      // ignore: discarded_futures
-      core.which(
-        appname,
-        first: first,
-        verbose: verbose,
-        extensionSearch: extensionSearch,
-        progress: controller.sink,
-      ),
-    );
-  } finally {
-    // ignore: discarded_futures
-    waitForEx<void>(controller.close());
-  }
   core.verbose(() => 'appname: $appname first: $first verbose: $verbose, '
       'extensionSearch: $extensionSearch '
       'found: ${which.found} path: ${which.path}');

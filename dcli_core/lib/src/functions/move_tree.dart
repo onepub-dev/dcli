@@ -4,8 +4,6 @@
  * Written by Brett Sutton <bsutton@onepub.dev>, Jan 2022
  */
 
-import 'dart:async';
-
 import 'package:path/path.dart';
 
 import '../../dcli_core.dart';
@@ -66,13 +64,13 @@ import '../../dcli_core.dart';
 /// If an error occurs a [MoveTreeException] is thrown.
 ///
 /// EXPERIMENTAL
-Future<void> moveTree(
+void moveTree(
   String from,
   String to, {
   bool overwrite = false,
   bool includeHidden = false,
   bool Function(String file) filter = _allowAll,
-}) async =>
+}) =>
     _MoveTree().moveTree(
       from,
       to,
@@ -84,13 +82,13 @@ Future<void> moveTree(
 bool _allowAll(String file) => true;
 
 class _MoveTree extends DCliFunction {
-  Future<void> moveTree(
+  void moveTree(
     String from,
     String to, {
     bool overwrite = false,
     bool Function(String file) filter = _allowAll,
     bool includeHidden = false,
-  }) async {
+  }) {
     if (!isDirectory(from)) {
       throw MoveTreeException(
         'The [from] path ${truepath(from)} must be a directory.',
@@ -110,23 +108,12 @@ class _MoveTree extends DCliFunction {
 
     verbose(() => 'moveTree called ${truepath(from)} -> ${truepath(to)}');
 
-    late StreamSubscription<FindItem>? sub;
     try {
-      final controller = LimitedStreamController<FindItem>(100);
-
-      try {
-        sub = controller.stream.listen((item) async {
-          sub!.pause();
-          _process(item.pathTo, filter, to, from, overwrite: overwrite);
-          sub.resume();
-        }, onDone: () {});
-        await find('*',
-            workingDirectory: from,
-            includeHidden: includeHidden,
-            progress: controller);
-      } finally {
-        await controller.close();
-      }
+      find('*', workingDirectory: from, includeHidden: includeHidden,
+          progress: (item) {
+        _process(item.pathTo, filter, to, from, overwrite: overwrite);
+        return true;
+      });
     }
     // ignore: avoid_catches_without_on_clauses
     catch (e) {
@@ -134,13 +121,7 @@ class _MoveTree extends DCliFunction {
         'An error occured moving directory ${truepath(from)} '
         'to ${truepath(to)}. Error: $e',
       );
-    } finally {
-      if (sub != null) {
-        await sub.cancel();
-      }
     }
-
-    return Future.value();
   }
 
   void _process(String pathToFile, bool Function(String file) filter, String to,

@@ -4,9 +4,6 @@
  * Written by Brett Sutton <bsutton@onepub.dev>, Jan 2022
  */
 
-import 'dart:convert';
-import 'dart:io';
-
 import '../../dcli_core.dart';
 
 /// Prints the contents of the file located at [path] to stdout.
@@ -17,27 +14,22 @@ import '../../dcli_core.dart';
 ///
 /// If the file does not exists then a CatException is thrown.
 ///
-Future<void> cat(String path, {LineAction stdout = print}) async =>
+void cat(String path, {LineAction stdout = print}) =>
     Cat().cat(path, stdout: stdout);
 
 /// Class for the [cat] function.
 class Cat extends DCliFunction {
   /// implementation for the [cat] function.
-  Future<void> cat(String path, {LineAction stdout = print}) async {
-    final sourceFile = File(path);
-
+  void cat(String path, {LineAction stdout = print}) {
     verbose(() => 'cat:  ${truepath(path)}');
 
     if (!exists(path)) {
       throw CatException('The file at ${truepath(path)} does not exists');
     }
 
-    await sourceFile
-        .openRead()
-        .transform(utf8.decoder)
-        .transform(const LineSplitter())
-        .forEach((line) {
+    LineFile(path).readAll((line) {
       stdout(line);
+      return true;
     });
   }
 }

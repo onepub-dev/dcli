@@ -4,12 +4,11 @@
  * Written by Brett Sutton <bsutton@onepub.dev>, Jan 2022
  */
 
-import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
 
+import 'package:dcli_core/dcli_core.dart' as core;
 import 'package:path/path.dart';
-import 'package:stack_trace/stack_trace.dart';
 
 import '../../dcli.dart';
 
@@ -111,46 +110,7 @@ class FileSync {
   /// if you return false from a [lineAction] call then
   /// the read returns and no more lines are read.
   void read(CancelableLineAction lineAction) {
-    final inputStream = _file.openRead();
-
-    final stackTrace = Trace.current();
-
-    Object? exception;
-
-    final done = Completer<bool>();
-
-    late StreamSubscription<String> subscription;
-
-    subscription =
-        utf8.decoder.bind(inputStream).transform(const LineSplitter()).listen(
-              (line) async {
-                final cont = lineAction(line);
-                if (cont == false) {
-                  await subscription
-                      .cancel()
-                      .then((finished) => done.complete(true));
-                }
-              },
-              cancelOnError: true,
-              //ignore: avoid_types_on_closure_parameters
-              onError: (Object error) {
-                exception = error;
-                done.complete(false);
-              },
-              onDone: () {
-                done.complete(true);
-              },
-            );
-
-    waitForEx(done.future);
-
-    if (exception != null) {
-      if (exception is DCliException) {
-        // not an exception, the user just doesn't want to continue.
-      } else {
-        throw DCliException.from(exception, stackTrace);
-      }
-    }
+    core.LineFile(path).readAll(lineAction);
   }
 
   /// This is just a wrapper for the method File.resolveSymbolicLinksSync.

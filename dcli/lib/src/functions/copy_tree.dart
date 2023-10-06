@@ -7,8 +7,6 @@
 import 'package:dcli_core/dcli_core.dart' as core;
 import 'package:dcli_core/dcli_core.dart' show CopyTreeException;
 
-import '../../dcli.dart';
-
 ///
 /// Copies the contents of the [from] directory to the
 /// [to] path with an optional filter.
@@ -70,16 +68,10 @@ void copyTree(
   bool recursive = true,
   bool Function(String file) filter = _allowAll,
 }) =>
-    waitForEx(
-      // ignore: discarded_futures
-      core.copyTree(
-        from,
-        to,
+    core.copyTree(from, to,
         overwrite: overwrite,
         includeHidden: includeHidden,
         recursive: recursive,
-        filter: filter,
-      ),
-    );
+        filter: filter);
 
 bool _allowAll(String file) => true;

@@ -5,8 +5,9 @@
  * Written by Brett Sutton <bsutton@onepub.dev>, Jan 2022
  */
 
+import 'dart:io';
+
 import 'package:dcli/dcli.dart';
-import 'package:dcli/src/util/exit.dart';
 import 'package:dcli_core/dcli_core.dart' as core;
 import 'package:path/path.dart';
 
@@ -24,7 +25,7 @@ Future<void> main(List<String> args) async {
         'privileges on Windows',
       ),
     );
-    dcliExit(1);
+    exit(1);
   }
   print(orange('Cleaning old test and build artifacts'));
 
@@ -40,33 +41,33 @@ Future<void> main(List<String> args) async {
     );
 
     // ignore: discarded_futures
-    waitForEx(capture(() async {
+    await capture(() async {
       /// globally activate dcli from source.
       PubCache().globalActivateFromSource(projectRoot);
-    }, progress: Progress.printStdErr()));
+    }, progress: Progress.printStdErr());
   }
 
   if (!PubCache().isGloballyActivated('dcli_unit_tester')) {
     // ignore: discarded_futures
-    waitForEx(capture(() async {
+    await capture(() async {
       PubCache().globalActivate('dcli_unit_tester');
-    }, progress: Progress.printStdErr()));
+    }, progress: Progress.printStdErr());
   }
 
   // ignore: discarded_futures
-  waitForEx(capture(() async {
+  await capture(() async {
     // warm up the dcli project
-    DartProject.self.warmup();
-  }, progress: Progress.printStdErr()));
+    await DartProject.self.warmup();
+  }, progress: Progress.printStdErr());
 
   /// warm up all test packages.
   for (final pubspec
       in find('pubspec.yaml', workingDirectory: projectRoot).toList()) {
     if (DartSdk().isPubGetRequired(dirname(pubspec))) {
       print('Running pub get in ${dirname(pubspec)}');
-      waitForEx(capture(() async {
+      await capture(() async {
         DartSdk().runPubGet(dirname(pubspec));
-      }, progress: Progress.printStdErr()));
+      }, progress: Progress.printStdErr());
     }
   }
 }

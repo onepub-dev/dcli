@@ -52,12 +52,8 @@ String createDir(String path, {bool recursive = false}) =>
 /// If you pass in [pathToTempDir] it will NOT be deleted regardless
 /// of the value of [keep].
 R withTempDir<R>(R Function(String tempDir) action,
-    {bool keep = false, String? pathToTempDir}) {
-  final result =
-      // ignore: discarded_futures
-      core.withTempDir<R>((x) => Future.value(action(x)), keep: keep);
-  return waitForEx(result);
-}
+        {bool keep = false, String? pathToTempDir}) =>
+    core.withTempDir<R>((x) => action(x), keep: keep);
 
 /// Creates a temporary directory under the system temp folder.
 /// The temporary directory name is formed from a uuid.

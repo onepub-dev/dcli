@@ -9,9 +9,8 @@ library;
 
 import 'package:dcli/dcli.dart';
 import 'package:dcli/src/script/my_yaml.dart';
+import 'package:dcli_test/dcli_test.dart';
 import 'package:test/test.dart';
-
-import '../util/test_file_system.dart';
 
 void main() {
   test('Project Name', () async {

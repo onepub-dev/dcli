@@ -15,14 +15,13 @@ import '../../dcli_core.dart';
 ///
 /// Throws a [HeadException] exception if [path] is not a file.
 ///
-Future<Stream<String>> head(String path, int lines) async =>
-    _Head().head(path, lines);
+List<String> head(String path, int lines) => _Head().head(path, lines);
 
 class _Head extends DCliFunction {
-  Future<Stream<String>> head(
+  List<String> head(
     String path,
     int lines,
-  ) async {
+  ) {
     verbose(() => 'head ${truepath(path)} lines: $lines');
 
     if (!exists(path)) {
@@ -35,7 +34,14 @@ class _Head extends DCliFunction {
 
     try {
       const count = 0;
-      return withOpenLineFile(path, (file) async => file.readAll().take(count));
+      return withOpenLineFile(path, (file) {
+        final result = <String>[];
+        file.readAll((line) {
+          result.add(line);
+          return result.length < count;
+        });
+        return result;
+      });
     }
     // ignore: avoid_catches_without_on_clauses
     catch (e) {

@@ -61,7 +61,7 @@ class RunCommand extends Command<void> {
     'docker volume create dcli_scripts'
         .forEach(devNull, stderr: (line) => print(red(line)));
 
-    final pubspec = Pubspec.loadFile(DartProject.self.pathToPubSpec);
+    final pubspec = PubSpec.loadFromPath(DartProject.self.pathToPubSpec);
     final version = pubspec.version.toString();
 
     'docker run -v dcli_scripts:/home/scripts --network host -it $imageName:$version /bin/bash'
@@ -78,7 +78,7 @@ class BuildCommand extends Command<void> {
 
   @override
   void run() {
-    final pubspec = Pubspec.loadFile(DartProject.self.pathToPubSpec);
+    final pubspec = PubSpec.loadFromPath(DartProject.self.pathToPubSpec);
     final version = pubspec.version.toString();
     final projectRoot = DartProject.self.pathToProjectRoot;
 
@@ -115,7 +115,7 @@ class PushCommand extends Command<void> {
     // }
     // var version = argResults['version'] as String;
 
-    final pubspec = Pubspec.loadFile(DartProject.self.pathToPubSpec);
+    final pubspec = PubSpec.loadFromPath(DartProject.self.pathToPubSpec);
     final version = pubspec.version.toString();
     print('Pushing version: $version');
     'sudo docker push $imageName:$version'.run;

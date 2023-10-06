@@ -6,7 +6,7 @@
 
 import 'package:dcli_core/dcli_core.dart' as core;
 
-import 'wait_for_ex.dart';
+import '../../dcli.dart';
 
 /// Generates a temporary filename in [pathToTempDir]
 /// or if inTempDir os not passed then in
@@ -51,20 +51,28 @@ String createTempFile({String? suffix}) =>
 /// The temp file name will be uuid.tmp
 /// unless you provide a [suffix] in which
 /// case the file name will be uuid.suffix
+///
+/// NOTE: [action] must NOT be async.
+/// @ see core.withTempFile if you meed to use an async action.
 R withTempFile<R>(
   R Function(String tempFile) action, {
   String? suffix,
   String? pathToTempDir,
   bool create = true,
   bool keep = false,
-}) =>
-    waitForEx(
-      // ignore: discarded_futures
-      core.withTempFile(
-        (f) async => action(f),
-        suffix: suffix,
-        pathToTempDir: pathToTempDir,
-        create: create,
-        keep: keep,
-      ),
-    );
+}) {
+  final tmp = createTempFilename(suffix: suffix, pathToTempDir: pathToTempDir);
+  if (create) {
+    touch(tmp, create: true);
+  }
+
+  R result;
+  try {
+    result = action(tmp);
+  } finally {
+    if (exists(tmp) && !keep) {
+      delete(tmp);
+    }
+  }
+  return result;
+}

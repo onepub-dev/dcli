@@ -163,10 +163,10 @@ mixin PosixShell {
   String privilegesRequiredMessage(String app) => installInstructions;
 
   /// Install dart/dcli
-  bool install({bool installDart = false, bool activate = true}) {
+  Future<bool> install({bool installDart = false, bool activate = true}) async {
     var installed = false;
     if (core.Settings().isLinux) {
-      installed = LinuxDCliInstaller().install(installDart: installDart);
+      installed = await LinuxDCliInstaller().install(installDart: installDart);
     } else {
       installed = MacOSDCliInstaller().install(installDart: installDart);
     }

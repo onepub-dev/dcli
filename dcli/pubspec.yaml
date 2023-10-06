@@ -29,9 +29,9 @@ dependencies:
   posix: ^5.0.0
   pub_semver: ^2.0.0
   pubspec_lock: ^3.0.1
-  pubspec_manager: 1.0.0-alpha.5
+  pubspec_manager: 1.0.0-alpha.6
   scope: ^4.1.0
-  settings_yaml: ^7.0.0
+  settings_yaml: ^8.0.0
   stack_trace: ^1.10.0
   system_info2: ^4.0.0
   uuid: ^4.1.0
@@ -39,6 +39,7 @@ dependencies:
   win32: ^4.1.4
   yaml: ^3.0.0
 dev_dependencies: 
+  dcli_test:
   hex: ^0.2.0
   lint_hard: ^4.0.0
   mocktail: ^1.0.0

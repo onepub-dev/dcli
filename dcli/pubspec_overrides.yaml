@@ -1,5 +1,11 @@
 dependency_overrides: 
   dcli_core: 
     path: ../dcli_core
+  dcli_test:
+    path: ../dcli_test
+    
   pubspec_manager:
     path: ../../pubspec_manager
+
+  settings_yaml:
+    path: ../../settings_yaml

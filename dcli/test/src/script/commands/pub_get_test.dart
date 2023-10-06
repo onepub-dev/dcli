@@ -9,10 +9,10 @@ library;
 
 import 'package:dcli/src/script/dart_project.dart';
 import 'package:dcli/src/script/pub_get.dart';
+import 'package:dcli_test/dcli_test.dart';
 import 'package:path/path.dart';
 import 'package:test/test.dart';
 
-import '../../util/test_file_system.dart';
 
 void main() {
   group('Pub Get', () {

@@ -336,13 +336,13 @@ class Env extends DCliFunction {
   /// environment variables.
   ///
   /// ```dart
-  ///void startIsolate() {
-  ///   var iso = waitForEx<IsolateRunner>(IsolateRunner.spawn());
+  /// Future<void> startIsolate() async {
+  ///   var iso = await IsolateRunner.spawn();
   ///
   ///   try {
   ///      iso.run(scheduler, Env().toJson());
   ///   } finally {
-  ///     waitForEx(iso.close());
+  ///     await iso.close();
   ///   }
   ///}
   ///

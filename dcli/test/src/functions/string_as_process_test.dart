@@ -5,16 +5,15 @@
  */
 
 import 'package:dcli/dcli.dart';
+import 'package:dcli_test/dcli_test.dart';
 import 'package:path/path.dart';
 import 'package:test/test.dart' as t;
 import 'package:test/test.dart';
 
-import '../util/test_file_system.dart';
-
 void main() {
   t.group('StringAsProcess', () {
-    t.test('Check .run executes', () {
-      withTempDir((fs) {
+    t.test('Check .run executes', () async {
+      await withTempDir((fs) async {
         final testFile = join(fs, 'test.text');
 
         'touch $testFile'.run;
@@ -22,8 +21,8 @@ void main() {
       });
     });
 
-    t.test('Check .start executes - attached, not in shell', () {
-      withTempDir((fs) {
+    t.test('Check .start executes - attached, not in shell', () async {
+      await withTempDir((fs) async {
         final testFile = join(fs, 'test.text');
 
         'touch $testFile'.start();
@@ -31,8 +30,8 @@ void main() {
       });
     });
 
-    t.test('Check .start executes - attached,  in shell', () {
-      withTempDir((fs) {
+    t.test('Check .start executes - attached,  in shell', () async {
+      await withTempDir((fs) async {
         final testFile = join(fs, 'test.text');
 
         'touch $testFile'.start(runInShell: true);
@@ -49,8 +48,8 @@ void main() {
       });
     });
 
-    t.test('Check .start executes - detached, not in shell', () {
-      withTempDir((fs) {
+    t.test('Check .start executes - detached, not in shell', () async {
+      await withTempDir((fs) async {
         final testFile = join(fs, 'test.text');
 
         'touch $testFile'.start(detached: true);
@@ -68,8 +67,8 @@ void main() {
       });
     });
 
-    t.test('Check .start executes - detached,  in shell', () {
-      withTempDir((fs) {
+    t.test('Check .start executes - detached,  in shell', () async {
+      await withTempDir((fs) async {
         final testFile = join(fs, 'test.text');
 
         'touch $testFile'.start(detached: true, runInShell: true);
@@ -87,8 +86,8 @@ void main() {
       });
     });
 
-    t.test('forEach', () {
-      withTempDir((fs) {
+    t.test('forEach', () async {
+      await withTempDir((fs) async {
         final lines = <String?>[];
 
         final linesFile = setup(fs);
@@ -103,8 +102,8 @@ void main() {
       });
     });
 
-    t.test('toList', () {
-      withTempDir((fs) {
+    t.test('toList', () async {
+      await withTempDir((fs) async {
         final path = join(fs, 'log/syslog');
 
         createDir(dirname(path), recursive: true);
@@ -146,8 +145,8 @@ void main() {
       }
     });
 
-    t.test('toList - skipLines', () {
-      withTempDir((root) {
+    t.test('toList - skipLines', () async {
+      await withTempDir((root) async {
         final path = join(rootPath, 'tmp', 'log', 'syslog');
 
         if (exists(path)) {
@@ -183,8 +182,8 @@ void main() {
     t.expect(found, t.equals(true));
   });
 
-  t.test('firstLine', () {
-    withTempDir((root) {
+  t.test('firstLine', () async {
+    await withTempDir((root) async {
       final file = setup(root);
       t.expect('cat $file'.firstLine, 'Line 0');
     });
@@ -194,8 +193,8 @@ void main() {
     t.expect('dart --version'.firstLine, t.contains('version'));
   });
 
-  t.test('lastLine', () {
-    withTempDir((fs) {
+  t.test('lastLine', () async {
+    await withTempDir((fs) async {
       final file = setup(fs);
       t.expect('cat $file'.lastLine, 'Line 9');
     });

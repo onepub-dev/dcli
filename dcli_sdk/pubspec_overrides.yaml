@@ -1,0 +1,11 @@
+dependency_overrides:
+  dcli:
+    path: ../dcli
+  dcli_core:
+    path: ../dcli_core
+
+  dcli_test:
+    path: ../dcli_test
+
+  settings_yaml:
+    path: ../../settings_yaml

@@ -4,8 +4,6 @@
  * Written by Brett Sutton <bsutton@onepub.dev>, Jan 2022
  */
 
-import 'dart:async';
-
 import 'package:path/path.dart';
 
 import '../../dcli_core.dart';
@@ -60,14 +58,14 @@ import '../../dcli_core.dart';
 /// The default for [overwrite] is false.
 ///
 /// If an error occurs a [CopyTreeException] is thrown.
-Future<void> copyTree(
+void copyTree(
   String from,
   String to, {
   bool overwrite = false,
   bool includeHidden = false,
   bool recursive = true,
   bool Function(String file) filter = _allowAll,
-}) async =>
+}) =>
     _CopyTree().copyTree(
       from,
       to,
@@ -80,14 +78,14 @@ Future<void> copyTree(
 bool _allowAll(String file) => true;
 
 class _CopyTree extends DCliFunction {
-  Future<void> copyTree(
+  void copyTree(
     String from,
     String to, {
     bool overwrite = false,
     bool Function(String file) filter = _allowAll,
     bool includeHidden = false,
     bool recursive = true,
-  }) async {
+  }) {
     verbose(() => 'copyTree: from: $from, to: $to, overwrite: $overwrite '
         'includeHidden: $includeHidden recursive: $recursive ');
     if (!isDirectory(from)) {
@@ -107,40 +105,28 @@ class _CopyTree extends DCliFunction {
       );
     }
 
-    final controller = LimitedStreamController<FindItem>(100);
-    late final StreamSubscription<FindItem> sub;
     try {
-      sub = controller.stream.listen((item) async {
-        sub.pause();
+      find('*',
+          workingDirectory: from,
+          includeHidden: includeHidden,
+          recursive: recursive, progress: (item) {
         _process(item.pathTo, filter, from, to,
             overwrite: overwrite, recursive: recursive);
-        sub.resume();
+        return true;
       });
-      try {
-        await find('*',
-            workingDirectory: from,
-            includeHidden: includeHidden,
-            recursive: recursive,
-            progress: controller);
-        verbose(
-          () => 'copyTree copied: ${truepath(from)} -> ${truepath(to)}, '
-              'includeHidden: $includeHidden, recursive: $recursive, '
-              'overwrite: $overwrite',
-        );
-      }
-      // ignore: avoid_catches_without_on_clauses
-      catch (e) {
-        throw CopyTreeException(
-          'An error occured copying directory'
-          ' ${truepath(from)} to ${truepath(to)}. '
-          'Error: $e',
-        );
-      }
-    } finally {
-      if (!controller.isClosed) {
-        await controller.close();
-      }
-      await sub.cancel();
+      verbose(
+        () => 'copyTree copied: ${truepath(from)} -> ${truepath(to)}, '
+            'includeHidden: $includeHidden, recursive: $recursive, '
+            'overwrite: $overwrite',
+      );
+    }
+    // ignore: avoid_catches_without_on_clauses
+    catch (e) {
+      throw CopyTreeException(
+        'An error occured copying directory'
+        ' ${truepath(from)} to ${truepath(to)}. '
+        'Error: $e',
+      );
     }
   }
 

@@ -7,7 +7,6 @@
 import 'package:meta/meta.dart';
 
 import '../../dcli.dart';
-import 'shell_detection.dart';
 
 /// an abstract class which allows each shell (bash, zsh)
 /// to provide specific implementation of features
@@ -217,7 +216,7 @@ abstract class Shell {
   /// Installs dart and dcli.
   /// Returns true if dart was installed.
   /// Returns false if dart was already installed.
-  bool install({bool installDart = false}) => false;
+  Future<bool> install({bool installDart = false}) async => false;
 
   /// Some OS/Shell combinations have some preconditions that must
   /// be met before dcli can be installed.

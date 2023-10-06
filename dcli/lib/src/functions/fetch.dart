@@ -61,16 +61,16 @@ void _devNull(FetchProgress _) {}
 /// In the event of a HTTP error we will still try to download
 /// the body and save it to [saveToPath] as often the body
 /// contains additional information about the error.
-void fetch({
+Future<void> fetch({
   required String url,
   required String saveToPath,
   FetchMethod method = FetchMethod.get,
   Map<String, String>? headers,
   OnFetchProgress fetchProgress = _devNull,
   FetchData? data,
-}) {
+}) async {
   headers ??= <String, String>{};
-  _Fetch().fetch(
+  await _Fetch().fetch(
       url: url,
       saveToPath: saveToPath,
       method: method,
@@ -110,7 +110,7 @@ void fetch({
 /// must complete before
 /// [fetchMultiple] will return.
 ///
-void fetchMultiple({required List<FetchUrl> urls}) =>
+Future<void> fetchMultiple({required List<FetchUrl> urls}) async =>
     _Fetch().fetchMultiple(urls: urls);
 
 /// Http Methods used when calling [fetch]
@@ -206,33 +206,30 @@ class FetchData {
 }
 
 class _Fetch extends core.DCliFunction {
-  void fetch(
+  Future<void> fetch(
       {required String url,
       required String saveToPath,
       required Map<String, String> headers,
       OnFetchProgress progress = _devNull,
       bool verboseProgress = false,
       FetchMethod method = FetchMethod.get,
-      FetchData? data}) {
-    waitForEx<void>(
-      // ignore: discarded_futures
-      download(
-        FetchUrl(
-            url: url,
-            saveToPath: saveToPath,
-            progress: progress,
-            method: method,
-            headers: headers,
-            data: data),
-        verboseProgress: verboseProgress,
-      ),
+      FetchData? data}) async {
+    await download(
+      FetchUrl(
+          url: url,
+          saveToPath: saveToPath,
+          progress: progress,
+          method: method,
+          headers: headers,
+          data: data),
+      verboseProgress: verboseProgress,
     );
   }
 
-  void fetchMultiple({
+  Future<void> fetchMultiple({
     required List<FetchUrl> urls,
     bool verboseProgress = false,
-  }) {
+  }) async {
     final futures = <Future<void>>[];
 
     for (final url in urls) {
@@ -242,8 +239,7 @@ class _Fetch extends core.DCliFunction {
 
     try {
       /// wait for all downloads to complete.
-      // ignore: discarded_futures
-      waitForEx<void>(Future.wait(futures));
+      await Future.wait(futures);
     } on core.DCliException catch (e, st) {
       print(st);
     }

@@ -1,0 +1,5 @@
+dependency_overrides:
+  dcli: 
+    path: ../dcli
+  settings_yaml:
+    path: ../../settings_yaml

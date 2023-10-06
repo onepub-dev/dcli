@@ -4,7 +4,6 @@
  * Written by Brett Sutton <bsutton@onepub.dev>, Jan 2022
  */
 
-import 'dart:async';
 import 'dart:io';
 
 import 'package:path/path.dart';
@@ -53,13 +52,13 @@ String createDir(String path, {bool recursive = false}) =>
 /// and sometimes you want it created.
 /// If you pass in [pathToTempDir] it will NOT be deleted regardless
 /// of the value of [keep].
-Future<R> withTempDir<R>(Future<R> Function(String tempDir) action,
-    {bool keep = false, String? pathToTempDir}) async {
+R withTempDir<R>(R Function(String tempDir) action,
+    {bool keep = false, String? pathToTempDir}) {
   final dir = pathToTempDir ?? createTempDir();
 
   R result;
   try {
-    result = await action(dir);
+    result = action(dir);
   } finally {
     if (!keep && pathToTempDir == null) {
       deleteDir(dir);

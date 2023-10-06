@@ -11,7 +11,6 @@ import 'package:glob/glob.dart';
 import 'package:path/path.dart';
 
 import '../../dcli.dart';
-import '../script/command_line_runner.dart';
 import 'enum_helper.dart';
 
 /// Class to parse a OS command, contained in a string, which we need to pass

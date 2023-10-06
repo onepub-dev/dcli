@@ -8,16 +8,15 @@ library;
  */
 
 import 'package:dcli/dcli.dart';
+import 'package:dcli_test/dcli_test.dart';
 import 'package:path/path.dart';
 import 'package:test/test.dart' as t;
 import 'package:test/test.dart';
 
-import '../util/test_file_system.dart';
-
 void main() {
   t.group('moveDir', () {
-    t.test('empty to ', () {
-      withTempDir((fsRoot) {
+    t.test('empty to ', () async {
+      await withTempDir((fsRoot) async {
         TestFileSystem.buildDirectoryTree(fsRoot);
         final from = join(fsRoot, 'top');
         final to = join(fsRoot, 'new_top');
@@ -30,8 +29,8 @@ void main() {
       });
     });
 
-    t.test('existing to ', () {
-      withTempDir((fsRoot) {
+    t.test('existing to ', () async {
+      await withTempDir((fsRoot) async {
         TestFileSystem.buildDirectoryTree(fsRoot);
         final from = join(fsRoot, 'top');
         final to = join(fsRoot, 'new_top');
@@ -55,8 +54,8 @@ void main() {
       });
     });
 
-    t.test('from not a directory ', () {
-      withTempDir((fsRoot) {
+    t.test('from not a directory ', () async {
+      await withTempDir((fsRoot) async {
         TestFileSystem.buildDirectoryTree(fsRoot);
         final from = join(fsRoot, 'top', 'file');
         final to = join(fsRoot, 'new_top');
@@ -79,8 +78,8 @@ void main() {
       });
     });
 
-    t.test('from does not exist ', () {
-      withTempDir((fsRoot) {
+    t.test('from does not exist ', () async {
+      await withTempDir((fsRoot) async {
         TestFileSystem.buildDirectoryTree(fsRoot);
         final from = join(fsRoot, 'random');
         final to = join(fsRoot, 'new_top');

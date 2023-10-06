@@ -4,13 +4,9 @@
  * Written by Brett Sutton <bsutton@onepub.dev>, Jan 2022
  */
 
-import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
 
-import 'package:stack_trace/stack_trace.dart';
-
-import 'dcli_exception.dart';
 import 'platform.dart';
 
 /// Provide s collection of methods to make it easy
@@ -27,52 +23,48 @@ class LineFile {
 
   final FileMode _fileMode;
   late final File _file;
-  late final Future<RandomAccessFile> _raf = _open(_fileMode);
+  late final RandomAccessFile _raf = _open(_fileMode);
 
-  Future<RandomAccessFile> _open(FileMode fileMode) async =>
-      _file.open(mode: fileMode);
+  RandomAccessFile _open(FileMode fileMode) => _file.openSync(mode: fileMode);
 
   ///
   /// Flushes the contents of the file to disk.
-  Future<void> flush() async => (await _raf).flush();
+  void flush() => _raf.flushSync();
 
   /// Returns the length of the file in bytes
   /// The file does NOT have to be open
   /// to determine its length.
-  Future<int> get length async => _file.length();
+  int get length => _file.lengthSync();
 
   /// Close and flushes the file to disk.
-  Future<void> close() async => (await _raf).close();
+  void close() => _raf.closeSync();
 
-  /// Returns a [Stream] with the contents of the file
-  /// as Strings.
-  Stream<String> readAll() {
-    final controller = StreamController<String>();
-    final inputStream = _file.openRead();
-    final stackTrace = Trace.current();
-    Object? exception;
+  /// Read file line by line.
+  void readAll(bool Function(String) handleLine) {
+    final stream = _file.openSync();
+    try {
+      final splitter = const LineSplitter()
+          .startChunkedConversion(_CallbackStringSync((str) {
+        if (!handleLine(str)) {
+          throw const _StopIteration();
+        }
+      }));
 
-    utf8.decoder.bind(inputStream).transform(const LineSplitter()).listen(
-          (line) async {
-            controller.add(line);
-          },
-          cancelOnError: true,
-          //ignore: avoid_types_on_closure_parameters
-          onError: (Object error) async {
-            exception = error;
-            await controller.close();
-          },
-          onDone: controller.close,
-        );
+      final decoder = const Utf8Decoder().startChunkedConversion(splitter);
 
-    if (exception != null) {
-      if (exception is DCliException) {
-        // not an exception, the user just doesn't want to continue.
-      } else {
-        throw DCliException.from(exception, stackTrace);
+      while (true) {
+        final bytes = stream.readSync(16 * 1024);
+        if (bytes.isEmpty) {
+          break;
+        }
+        decoder.add(bytes);
       }
+      decoder.close();
+    } on _StopIteration catch (_) {
+      // Ignore.
+    } finally {
+      stream.closeSync();
     }
-    return controller.stream;
   }
 
   /// Truncates the file to zero bytes and
@@ -81,11 +73,9 @@ class LineFile {
   /// end of line characters are appended as defined by
   /// [Platform().eol].
   /// Pass null or an '' to [newline] to not add a line terminator.
-  Future<void> write(String line, {String? newline}) async {
+  void write(String line, {String? newline}) {
     final finalline = line + (newline ?? eol);
-    final r = await _raf;
-
-    r
+    _raf
       ..truncateSync(0)
       ..setPositionSync(0)
       ..writeStringSync(finalline)
@@ -98,11 +88,11 @@ class LineFile {
   /// end of line characters are appended as defined by
   /// [Platform().eol].
   /// Pass null or an '' to [newline] to not add a line terminator.
-  Future<void> append(String line, {String? newline}) async {
+  void append(String line, {String? newline}) {
     final finalline = line + (newline ?? eol);
 
-    (await _raf)
-      ..setPositionSync((await _raf).lengthSync())
+    _raf
+      ..setPositionSync(_raf.lengthSync())
       ..writeStringSync(finalline);
   }
 
@@ -112,7 +102,7 @@ class LineFile {
   /// Defaults to the platform specific delimiter as
   /// defined by  [Platform().eol].
   ///
-  Future<String?> read({String? lineDelimiter}) async {
+  String? read({String? lineDelimiter}) {
     lineDelimiter ??= eol;
     final line = StringBuffer();
     int byte;
@@ -120,7 +110,7 @@ class LineFile {
 
     var foundDelimiter = false;
 
-    while ((byte = await (await _raf).readByte()) != -1) {
+    while ((byte = _raf.readByteSync()) != -1) {
       final char = utf8.decode([byte]);
 
       if (_isLineDelimiter(priorChar, char, lineDelimiter)) {
@@ -136,7 +126,7 @@ class LineFile {
   }
 
   /// Truncates the file to zero bytes in length.
-  Future<void> truncate() async => (await _raf).truncate(0);
+  void truncate() => _raf.truncateSync(0);
 
   bool _isLineDelimiter(String priorChar, String char, String lineDelimiter) {
     if (lineDelimiter.length == 1) {
@@ -147,29 +137,48 @@ class LineFile {
   }
 
   /// Opens the file for random access.
-  Future<void> open() async {
+  void open() {
     /// accessing raf causes the file to open.
-    await _raf;
+    // ignore: unnecessary_statements
+    _raf;
   }
 }
 
 /// Opens a File and calls [action] passing in the open [LineFile].
 /// When action completes the file is closed.
 /// Use this method in preference to directly callling [FileSync()]
-Future<R> withOpenLineFile<R>(
+R withOpenLineFile<R>(
   String pathToFile,
-  Future<R> Function(LineFile) action, {
+  R Function(LineFile) action, {
   FileMode fileMode = FileMode.writeOnlyAppend,
-}) async {
-  final file = LineFile(pathToFile, fileMode: fileMode);
+}) {
+  final file = LineFile(pathToFile, fileMode: fileMode)..open();
 
-  await file.open();
-  R result;
+  late R result;
   try {
-    result = await action(file);
+    result = action(file);
   } finally {
-    await file.flush();
-    await file.close();
+    file
+      ..flush()
+      ..close();
   }
   return result;
+}
+
+class _StopIteration implements Exception {
+  const _StopIteration();
+}
+
+class _CallbackStringSync implements Sink<String> {
+  _CallbackStringSync(this.callback);
+
+  final void Function(String) callback;
+
+  @override
+  void add(String data) {
+    callback(data);
+  }
+
+  @override
+  void close() {}
 }

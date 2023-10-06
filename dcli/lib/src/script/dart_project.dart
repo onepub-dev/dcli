@@ -14,10 +14,7 @@ import 'package:pubspec_manager/pubspec_manager.dart';
 
 import '../../dcli.dart';
 import '../../posix.dart';
-import '../util/exit.dart';
 import '../version/version.g.dart';
-import 'command_line_runner.dart';
-import 'flags.dart';
 import 'pub_get.dart';
 import 'pub_upgrade.dart';
 
@@ -62,14 +59,6 @@ class DartProject {
         _findProject(pathToSearchFrom, search: search) ?? pathToSearchFrom;
     verbose(() => 'DartProject.fromPath: $pathToProjectRoot');
   }
-
-  /// Used for unit testing.
-  /// When this environment variable exists the [DartProject.create] method
-  /// will add a `pubspec_overrides.yaml` file in the created project
-  /// with overrides for dcli and dcli_core which point
-  /// to our dev source tree.
-  @visibleForTesting
-  static const String overrideDCliPathKey = 'DCLI_OVERRIDE_PATH';
 
   late String _pathToProjectRoot;
   String? _pathToPubSpec;
@@ -141,7 +130,7 @@ class DartProject {
   ///
   /// reads and returns the project's virtual pubspec
   /// and returns it.
-  Pubspec get pubSpec => Pubspec.loadFile(pathToPubSpec);
+  PubSpec get pubSpec => PubSpec.loadFromPath(pathToPubSpec);
 
   /// Absolute path to the project's root diretory.
   String get pathToProjectRoot => _pathToProjectRoot;
@@ -232,7 +221,7 @@ class DartProject {
   static const _lockName = 'script.lock';
 
   NamedLock get _lock =>
-      __lock ??= NamedLock(name: _lockName, lockPath: pathToProjectRoot);
+      __lock ??= NamedLock(suffix: _lockName, lockPath: pathToProjectRoot);
 
   ///
   /// Prepare the project so it can be run.
@@ -246,9 +235,9 @@ class DartProject {
   /// If [upgrade] is true then a pub upgrade is ran rather than
   /// pub get.
   ///
-  void warmup({bool background = false, bool upgrade = false}) {
-    _lock.withLock(
-      () {
+  Future<void> warmup({bool background = false, bool upgrade = false}) async {
+    await _lock.withLock(
+      () async {
         try {
           if (background) {
             // we run the clean in the background
@@ -265,9 +254,9 @@ class DartProject {
           } else {
             // print(orange('Running pub get...'));
             if (upgrade) {
-              _pubupgrade();
+              await _pubupgrade();
             } else {
-              _pubget();
+              await _pubget();
             }
           }
         } on PubGetException {
@@ -287,9 +276,9 @@ class DartProject {
   /// .dart_tools
   ///
   /// Any exes for scripts in the directory.
-  void clean() {
-    _lock.withLock(
-      () {
+  Future<void> clean() async {
+    await _lock.withLock(
+      () async {
         find(
           '.packages',
           types: [Find.file],
@@ -344,21 +333,17 @@ class DartProject {
   ///
   /// This is normally done when the project cache is first
   /// created and when a script's pubspec changes.
-  void _pubget() {
-    NamedLock(
-      name: _lockName,
+  Future<void> _pubget() async {
+    await NamedLock(
+      suffix: _lockName,
       lockPath: pathToProjectRoot,
     ).withLock(() {
       final pubGet = PubGet(this);
       if (Shell.current.isSudo) {
         /// bugger we just screwed the cache permissions so lets fix them.
 //         'chmod -R ${env['USER']}:${env['USER']} ${PubCache().pathTo}'.run;
-
-        printerr('You must compile your script before running it under sudo');
-
-        // ignore: flutter_style_todos
-        /// TODO(bsutton): should this be a throw?
-        dcliExit(1);
+        throw DartProjectException(
+            'You must compile your script before running it under sudo');
       }
       pubGet.run(compileExecutables: false);
     });
@@ -371,9 +356,9 @@ class DartProject {
   ///
   /// This is normally done when the project cache is first
   /// created and when a script's pubspec changes.
-  void _pubupgrade() {
-    NamedLock(
-      name: _lockName,
+  Future<void> _pubupgrade() async {
+    await NamedLock(
+      suffix: _lockName,
       lockPath: pathToProjectRoot,
     ).withLock(() {
       final pubUpgrade = PubUpgrade(this);
@@ -381,11 +366,8 @@ class DartProject {
         /// bugger we just screwed the cache permissions so lets fix them.
 //         'chmod -R ${env['USER']}:${env['USER']} ${PubCache().pathTo}'.run;
 
-        printerr('You must compile your script before running it under sudo');
-
-        // ignore: flutter_style_todos
-        /// TODO(bsutton): should this be a throw?
-        dcliExit(1);
+        throw DartProjectException(
+            'You must compile your script before running it under sudo');
       }
       pubUpgrade.run(compileExecutables: false);
     });
