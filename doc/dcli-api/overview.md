@@ -8,5 +8,4 @@ For complete API documentation refer to: [pub.dev](https://pub.dev/documentation
 
 DCli exposes a significant no. of global functions and most of your interaction with the DCli API will be via these global functions.
 
-DCli also exposes a number of Dart Classes which generally provide more specialised functionality.
-
+DCli also exposes a number of Dart Classes which generally provide more specialized functionality.

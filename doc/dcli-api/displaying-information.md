@@ -131,13 +131,13 @@ A cursor describes a location on the terminal within the grid.
 
 You can move the cursor to any location and then print text at that location.
 
-Cursors allow you to build advanced user interfaces in a terminal window including form based input.
+Cursors allow you to build advanced user interfaces in a terminal window including form-based input.
 
 
 
 ### startOfLine
 
-Moves the cursor to the start of the current line.
+Move the cursor to the start of the current line.
 
 ```
 startOfLine;
@@ -145,7 +145,7 @@ startOfLine;
 
 ### previousLine
 
-Moves the cursor to the start of the previous line.
+Move the cursor to the start of the previous line.
 
 ### showCursor
 
@@ -157,7 +157,7 @@ showCursor(show: true);
 
 ### column
 
-Moves the cursor to the given column on the current line.
+Move the cursor to the given column on the current line.
 
 ### columns
 
@@ -167,27 +167,27 @@ This value can change at any time if the user resizes the terminal window.
 
 ### cursorUp
 
-Moves the cursor up one row
+Move the cursor up one row
 
 ### cursorDown
 
-Moves the cursor down one row
+Move the cursor down one row
 
 ### cursorLeft
 
-Moves the cursor to the left one column
+Move the cursor to the left one column
 
 ### cursorRight
 
-Moves the cursor to the right one column
+Move the cursor to the right one column
 
 ### home
 
-Sets the cursor to the top left hand corner (column = 0, row = 0)
+Sets the cursor to the top left-hand corner (column = 0, row = 0)
 
 ### row
 
-Moves the cursor to the given row.
+Move the cursor to the given row.
 
 ### rows
 

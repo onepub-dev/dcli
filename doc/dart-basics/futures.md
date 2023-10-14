@@ -2,7 +2,7 @@
 
 ## DCli and futures
 
-if your not a Dart programmer \(yet\) one of the most difficult things about Dart are Futures. If you are familiar with Javascript then a Future is the equivalent of a Promise.
+if your not a Dart programmer (yet) one of the most difficult things about Dart are Futures. If you are familiar with Javascript then a Future is the equivalent of a Promise.
 
 ### Just ignore Futures
 
@@ -20,17 +20,16 @@ Until then, you can just skip this section.
 
 ### How DCli manages futures
 
-DCli does not stop you using `await`, `Futures`, `Isolates` or any other Dart functionality. Its all yours to use and abuse as you will.
+DCli does not stop you from using `await`, `Futures`, `Isolates` or any other Dart functionality. It's all yours to use and abuse as you will.
 
 DClis global functions however intentionally avoid `Futures`.
 
-They aim of DCli is to create a Bash like simplicity cli apps. `Futures` are great and all but they do make the code more complex and harder to read.
+The aim of DCli is to create a Bash-like simplicity to building CLI apps. `Futures` are great and all but they do make the code more complex and harder to read.
 
-Futures also can make your scripts a little dangerous. If you copy a file and then want to append to the copied file, you had better be certain that the copy command has completed before you start the append. DCli's global functions remove those complications.
+Futures also can make your scripts a little dangerous. If you copy a file and then want to append to the copied file, you had better be certain that the copy command has been completed before you start the append. DCli's global functions remove those complications.
 
 If you are interested in how we avoid using `Futures` read up on `waitFor` and check out DCli's own `waitForEx` function that does stacktrace repair when an exception is thrown.
 
 When you need to use futures you can read up on them in the Dart language Tour:
 
 [https://dart.dev/guides/language/language-tour](https://dart.dev/guides/language/language-tour)
-

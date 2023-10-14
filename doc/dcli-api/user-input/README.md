@@ -16,17 +16,17 @@ Asking the user to input data into a CLI application should be simple. DCli prov
 
 The 'ask' function provides a simple but flexible means of requesting information from the user.
 
-In its simplest form you can ask the user for an input string.
+In its simplest form, you can ask the user for an input string.
 
 {% hint style="info" %}
-Any user input has **whitespace** stripped before it is validated or returned.
+Any user input **whitespace** is stripped before it is validated or returned.
 {% endhint %}
 
 ### Arguments
 
 #### prompt
 
-The prompt is the only positional argument that ask takes. Ask will display the prompt verbatim.
+The prompt is the only positional argument that `ask` takes. Ask will display the prompt verbatim.
 
 ```dart
 var username = ask('Username:');
@@ -98,7 +98,7 @@ See the section on [validators](ask-validators.md) for more details.
 
 #### required
 
-By default the ask function requires the user to enter a non-blank line (whitespace is stripped from user input before it is evaluated).
+By default, the ask function requires the user to enter a non-blank line (whitespace is stripped from user input before it is evaluated).
 
 If you want to make a user value optional either pass in a defaultValue or pass required: false
 
@@ -134,7 +134,7 @@ final response = ask('say something:', defaultValue: 'my default'
   });
 ```
 
-Becareful to suppress displaying the default value when `hidden` is true, otherwise you may end up displaying a password.
+Be careful to suppress displaying the default value when `hidden` is true, otherwise, you may end up displaying a password.
 
 
 
@@ -150,7 +150,7 @@ bool allowed = confirm('Are you over 18', defaultValue: false);
 
 #### prompt
 
-The prompt is the only positional argument that confirm takes. Confirm will display the prompt verbatim.
+The prompt is the only positional argument that `confirm` takes. Confirm will display the prompt verbatim.
 
 ```dart
 var alive = confirm('Are you alive:');
@@ -170,7 +170,7 @@ You can provide a default value. If the user hits enter without entering any tex
 var confirmed = confirm('Are you sure:', defaultValue: true);
 ```
 
-The default value is capitalised.
+The default value is capitalized.
 
 ```bash
 Are you sure: (Y/n):
@@ -261,7 +261,7 @@ The list can be a list of Strings or a list of Dart objects (all of the same typ
 
 Specifies the defaultOption from the list of `options`. The `defaultOption` must be of the same type as the items in the `options` list.
 
-The default option will be coloured coded in the list if your terminal supports ansi escape codes.
+The default option will be colored-coded in the list if your terminal supports ANSI escape codes.
 
 The default option will be displayed as an index after the prompt.
 
@@ -279,7 +279,7 @@ format: (Car car) => '${car.make} ${car.model}'
 
 Since: 2.0.0
 
-The customPrompt allows you modify the selection prompt.
+The customPrompt allows you to modify the selection prompt.
 
 ```dart
 customPrompt: (prompt, defaultOption) {

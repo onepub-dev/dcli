@@ -6,17 +6,18 @@
 For complete API documentation refer to: [pub.dev](https://pub.dev/documentation/dcli/latest/dcli/dcli-library.html)
 {% endhint %}
 
-Lets start by looking at the some of the built in functions that DCli supports.
+Let's start by looking at some of the built-in functions that DCli supports.
 
 DCli exposes a range of built-in functions that are exposed as Dart global functions.
 
-These functions are the core of how DCli provides a very Bash like feel to writing DCli scripts.
+These functions are the core of how DCli provides a very Bash-like feel to writing DCli scripts.
 
 These functions make strong use of named arguments with intelligent defaults so mostly you can use the minimal form of the function.
 
 Take note, there are no `Futures` or `await`s here. Each function runs synchronously.
 
 ```dart
+import 'package:path/path.dart';
 import 'package:dcli/dcli.dart';
 
 void main() {
@@ -33,7 +34,7 @@ void main() {
 
   
     var pathToGoodJpg = join(pathToImages, 'good.jpg');
-    // create a file (its empty)
+    // create a file (it's empty)
     touch(pathToGoodJpg, create: true);
 
     // update the last modified time on an existing file
@@ -71,4 +72,3 @@ void main() {
 ```
 
 As you can see we have achieved much of the power of Bash without any of the ugly grammar, and what's more we only used one type of quote!
-
