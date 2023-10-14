@@ -1,6 +1,6 @@
 # What does DCli do?
 
-DCli has a singular focus: 
+DCli has a singular focus:
 
 {% hint style="info" %}
 make it easy to build command line apps using the Dart programming language.
@@ -12,7 +12,6 @@ DCli has the following aims:
 * fully utilise the expressiveness of Dart.
 * works seamlessly with the core Dart libraries.
 * provide a cross platform API for Windows, OSx and Linux.
-* create a completely synchronously API \(no futures and no async\).
 * call any CLI app.
 * make debugging CLI apps easy.
 * generate error messages that make it easy to resolve problems.
@@ -22,7 +21,7 @@ DCli has the following aims:
 
 ## User input
 
-Asking the user to input data into a CLI application should be simple. DCli provide a number of functions to facilitate user input.
+Asking the user to input data into a CLI application should be simple. DCli provides a number of functions to facilitate user input.
 
 * ask
 * confirm
@@ -36,19 +35,19 @@ void main(){
        print(orange('Welcome to the club'));
    }
    
-   var selected = menu('Select your poision', options: ['beer', 'wine', 'spirits']
+   var selected = menu('Select your poison', options: ['beer', 'wine', 'spirits']
       defaultOption: 'beer');
    print(green('You choice was: $selected'));
 }
 ```
 
 {% hint style="info" %}
-**DCli provide an extensive API designed specifically for building command line apps.**
+**DCli provides an extensive API designed specifically for building command-line apps.**
 {% endhint %}
 
 ## Displaying information
 
-Out of the box dart provides the basic 'print' statement which DCli extends to provide common features.
+Out-of-the-box Dart provides the basic 'print' statement which DCli extends to provide common features.
 
 * print
 * printerr - prints to stderr.
@@ -82,7 +81,7 @@ A fundamental task of most CLI applications is the management of files and direc
 * lastModified
 
 {% hint style="info" %}
-DCli ships with the excellent [paths](https://pub.dev/packages/path) package that lets you easily manipulate file paths.
+Dart has a large ecosystem of packages that you can use to extend the DCli such as the excellent [paths](https://pub.dev/packages/path) package that lets you easily manipulate file paths.
 {% endhint %}
 
 ```dart
@@ -138,7 +137,7 @@ A core feature of DCli is the ability to call other CLI apps and process their o
 * forEach
 * firstLine
 * lastLine
-* \| \(pipe\)
+* \| (pipe)
 * stream
 
 Run mysql with all output being displayed to the console.
@@ -149,7 +148,7 @@ var password = ask('password', hidden:true);
 'mysql -u $user --password=$password customerdb -e "select 1"'.run;
 ```
 
-Run a mysql command and store the results in a list \(users\).
+Run a mysql command and store the results in a list (users).
 
 ```dart
 var users = 'mysql customerdb -e "select fname, sname from user"'
@@ -184,12 +183,11 @@ And the ability to explore the Dart environment.
 
 ```dart
 /// Get details of the current dart script that is running.
-Script.current;
+DartScript.current;
 DartSdk().pathToDartExe;
 PubCache().pathTo
 ```
 
 {% hint style="info" %}
-You can explore the complete api [here](https://pub.dev/documentation/dcli/latest/).
+You can explore the complete API [here](https://pub.dev/documentation/dcli/latest/).
 {% endhint %}
-
