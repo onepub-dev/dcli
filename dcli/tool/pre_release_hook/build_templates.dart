@@ -33,11 +33,13 @@ Future<void> prepareTemplates() async {
     final dependencies = pubspec.dependencies;
 
     if (dependencies.exists('dcli')) {
-      (dependencies['dcli']! as HostedDependency).version = packageVersion;
+      (dependencies['dcli']! as PubHostedDependencyAttached).version =
+          packageVersion;
     }
 
     if (dependencies.exists('dcli_core')) {
-      (dependencies['dcli_core']! as HostedDependency).version = packageVersion;
+      (dependencies['dcli_core']! as PubHostedDependencyAttached).version =
+          packageVersion;
     }
     pubspec
       ..environment.sdk = environment.sdk

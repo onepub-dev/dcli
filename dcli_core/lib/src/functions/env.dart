@@ -11,6 +11,7 @@ import 'package:collection/collection.dart';
 import 'package:path/path.dart';
 import 'package:scope/scope.dart';
 
+// ignore: unused_import
 import '../settings.dart';
 import '../util/dcli_exception.dart';
 import '../util/truepath.dart';
@@ -110,6 +111,10 @@ class Env extends DCliFunction {
   late Map<String, String> _envVars;
 
   final bool _caseSensitive;
+
+  /// Returns true if environment variable keys are case sensitive.
+  /// All OSs are case sensitive except for Windows
+  bool get caseSensitive => _caseSensitive;
 
   String? _env(String name) {
     verbose(() => 'env:  $name:${_envVars[name]}');

@@ -67,7 +67,7 @@ arguments to update them without user interaction.
           1, 'The SMTP Port and the HTTP Port may not be the same value.',
           showUsage: false);
     }
-    settings.save();
+    await settings.save();
   }
 }
 

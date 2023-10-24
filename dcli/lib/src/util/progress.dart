@@ -11,6 +11,7 @@ import 'package:async/async.dart';
 import 'package:collection/collection.dart';
 
 import '../../dcli.dart';
+import 'wait_for_ex.dart';
 
 /// central class that provides progress information about a running
 /// process.

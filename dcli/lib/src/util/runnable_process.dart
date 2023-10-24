@@ -13,8 +13,10 @@ import 'package:path/path.dart';
 import 'package:stack_trace/stack_trace.dart';
 
 import '../../dcli.dart';
+import '../process/process/settings.dart';
 import 'capture.dart';
 import 'parse_cli_command.dart';
+import 'wait_for_ex.dart';
 
 /// [printerr] provides the equivalent functionality to the
 /// standard Dart print function but instead writes
@@ -199,6 +201,43 @@ class RunnableProcess {
     return progress;
   }
 
+  Progress runV2({
+    required bool terminal,
+    Progress? progress,
+    bool runInShell = false,
+    bool detached = false,
+    bool privileged = false,
+    bool nothrow = false,
+    bool extensionSearch = true,
+  }) {
+    progress ??= Progress.print();
+
+    try {
+      ProcessSettings(
+        cmdLine,
+        runInShell: runInShell,
+        detached: detached,
+        terminal: terminal,
+        privileged: privileged,
+        extensionSearch: extensionSearch,
+      );
+      if (terminal == true) {
+        /// we can't process io as the terminal
+        // has inherited the IO so we dont' see it.
+        _waitForExit(progress, nothrow: nothrow);
+      } else {
+        if (detached == false) {
+          processUntilExit(progress, nothrow: nothrow);
+        }
+        // else we are detached and won't see the child exit
+        // so no point waiting.
+      }
+    } finally {
+      progress.close();
+    }
+    return progress;
+  }
+
   /// Starts a process  provides additional options to [run].
   ///
   /// This is an internal function and should not be exposed.
@@ -242,7 +281,7 @@ class RunnableProcess {
     }
 
     if (core.Settings().isWindows && extensionSearch) {
-      _parsed.cmd = _searchForCommandExtension(_parsed.cmd, workingDirectory);
+      _parsed.cmd = searchForCommandExtension(_parsed.cmd, workingDirectory);
     }
 
     /// On linux/MacOS if this needs to be a privileged operation
@@ -513,34 +552,34 @@ class RunnableProcess {
       _stderrCompleter.complete(true);
     });
   }
+}
 
-  String _searchForCommandExtension(String cmd, String? workingDirectory) {
-    // if the cmd has an extension they we don't need to find
-    // its extension.
-    if (extension(cmd).isNotEmpty) {
+String searchForCommandExtension(String cmd, String? workingDirectory) {
+  // if the cmd has an extension they we don't need to find
+  // its extension.
+  if (extension(cmd).isNotEmpty) {
+    return cmd;
+  }
+
+  // if the cmd has a path then
+  // we only search the cmd's directory
+  if (dirname(cmd) != '.') {
+    final resolvedPath = join(workingDirectory ?? '.', dirname(cmd));
+    return findExtension(basename(cmd), resolvedPath);
+  }
+
+  // just the cmd so run which with searchExtension.
+  return basename(which(cmd).path ?? cmd);
+}
+
+///  Searches for a file in [workingDirectory] that matches [basename]
+///  with one of the defined Windows extensions
+String findExtension(String basename, String workingDirectory) {
+  for (final extension in env['PATHEXT']!.split(';')) {
+    final cmd = '$basename$extension';
+    if (exists(join(workingDirectory, cmd))) {
       return cmd;
     }
-
-    // if the cmd has a path then
-    // we only search the cmd's directory
-    if (dirname(cmd) != '.') {
-      final resolvedPath = join(workingDirectory ?? '.', dirname(cmd));
-      return _findExtension(basename(cmd), resolvedPath);
-    }
-
-    // just the cmd so run which with searchExtension.
-    return basename(which(cmd).path ?? cmd);
   }
-
-  ///  Searches for a file in [workingDirectory] that matches [basename]
-  ///  with one of the defined Windows extensions
-  String _findExtension(String basename, String workingDirectory) {
-    for (final extension in env['PATHEXT']!.split(';')) {
-      final cmd = '$basename$extension';
-      if (exists(join(workingDirectory, cmd))) {
-        return cmd;
-      }
-    }
-    return basename;
-  }
+  return basename;
 }

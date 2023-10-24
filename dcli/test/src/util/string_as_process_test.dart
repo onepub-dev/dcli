@@ -9,6 +9,8 @@ import 'dart:async';
 import 'package:dcli/dcli.dart';
 import 'package:test/test.dart';
 
+import '../../../issues/waitfor.dart';
+
 void main() {
   test('start with progress', () {
     final result = <String?>[];
@@ -21,8 +23,8 @@ void main() {
     expect(result, orderedEquals(<String>['hi']));
   });
 
-  test('stream - using start', () {
-    withTempFile((file) {
+  test('stream - using start', () async {
+    await withTempFile((file) async {
       file
         ..write('Line 1/5')
         ..append('Line 2/5')
@@ -38,13 +40,13 @@ void main() {
         print('stream: $event');
       }).onDone(done.complete);
 
-      waitForEx<void>(done.future);
+      await done.future;
       print('done');
     });
   });
 
-  test('stream', () {
-    withTempFile((file) {
+  test('stream', () async {
+    await withTempFile((file) async {
       file
         ..write('Line 1/5')
         ..append('Line 2/5')
@@ -59,7 +61,7 @@ void main() {
         print('stream: $event');
       }).onDone(done.complete);
 
-      waitForEx<void>(done.future);
+      await done.future;
       print('done');
     });
   });
@@ -109,8 +111,8 @@ void main() {
     });
   });
 
-  test('tail -n 100', () {
-    withTempFile((file) {
+  test('tail -n 100', () async {
+    await withTempFile((file) async {
       file
         ..write('Line 1/5')
         ..append('Line 2/5')
@@ -124,7 +126,7 @@ void main() {
         print('stream: $event');
       }).onDone(done.complete);
 
-      waitForEx<void>(done.future);
+      await done.future;
       print('done');
     });
   });

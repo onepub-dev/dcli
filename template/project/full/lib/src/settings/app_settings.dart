@@ -72,7 +72,7 @@ class AppSettings {
   String get pathToMailHogApp => _pathToMailHogApp;
 
   /// Save the settings file.
-  void save() {
-    settings.save();
+  Future<void> save() async {
+    await settings.save();
   }
 }
