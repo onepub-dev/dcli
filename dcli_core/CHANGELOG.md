@@ -1,3 +1,6 @@
+# 3.2.0-alpha.1
+- migrated code to pubspec_manager and back ported some of the DCli 4.x code to help (as it had already been migrated).
+
 # 3.1.0
 - upgraded to uuid 4.x
 
