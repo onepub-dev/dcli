@@ -32,7 +32,6 @@ void main() {
       ).toList();
 
       final rootDirs = <String>[
-        truepath(DartProject.self.pathToProjectRoot, '..', 'dcli_unit_tester'),
         truepath(testScriptPath, 'general'),
         truepath(testScriptPath, 'traditional_project')
       ];
