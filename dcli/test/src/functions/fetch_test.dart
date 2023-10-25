@@ -226,7 +226,11 @@ void main() {
 
                   ///linux
                   (e.message.contains('Name or service not known') &&
-                      e.errorCode == -2),
+                      e.errorCode == -2) ||
+
+                  ///linux
+                  (e.message.contains('Failed host lookup') &&
+                      e.errorCode == -5),
             ),
           ),
         );
