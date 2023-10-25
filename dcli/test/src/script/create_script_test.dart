@@ -8,7 +8,7 @@ library;
  */
 
 import 'package:dcli/dcli.dart';
-import 'package:dcli/src/commands/install.dart';
+import 'package:dcli/src/templates.dart';
 import 'package:path/path.dart';
 import 'package:test/test.dart';
 
@@ -18,18 +18,20 @@ void main() {
   group('Create Script ', () {
     test('Create script', () async {
       await TestFileSystem().withinZone((fs) async {
-        InstallCommand().initTemplates();
+        /// make certain you have run 'dcli pack' before running this
+        /// test if any templates have changed.
+        initTemplates(print);
         final scriptDir = join(fs.unitTestWorkingDir, 'traditional');
 
         const scriptName = 'extra.dart';
         final scriptPath = join(scriptDir, 'bin', scriptName);
 
         await withEnvironment(() async {
-          'dcli create $scriptDir'.run;
+          'dcli -v create $scriptDir'.run;
 
-          'dcli create $scriptPath'.run;
+          'dcli -v create $scriptPath'.run;
         }, environment: {
-          DartProject.overrideDCliPathKey: DartProject.self.pathToProjectRoot
+          overrideDCliPathKey: DartProject.self.pathToProjectRoot
         });
 
         DartScript.fromFile(scriptPath).doctor;
@@ -38,7 +40,7 @@ void main() {
 
     test('Create script with --template', () async {
       await TestFileSystem().withinZone((fs) async {
-        InstallCommand().initTemplates();
+        initTemplates((line) {});
         final scriptDir = join(fs.unitTestWorkingDir, 'traditional');
 
         const scriptName = 'extra.dart';
@@ -49,7 +51,7 @@ void main() {
 
           'dcli create --template=cmd_args $scriptPath'.run;
         }, environment: {
-          DartProject.overrideDCliPathKey: DartProject.self.pathToProjectRoot
+          overrideDCliPathKey: DartProject.self.pathToProjectRoot
         });
 
         DartScript.fromFile(scriptPath).doctor;

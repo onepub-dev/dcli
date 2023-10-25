@@ -23,7 +23,7 @@ void main() {
         expect(
             () => CreateCommand()..run([], []),
             throwsA(predicate((e) =>
-                e is InvalidArgumentException &&
+                e is InvalidCommandArgumentException &&
                 e.message
                     .startsWith('The create command takes one argument'))));
       });
@@ -41,7 +41,7 @@ void main() {
         expect(
             () => CreateCommand()..run([], [pathToProject]),
             throwsA(predicate((e) =>
-                e is InvalidArgumentException &&
+                e is InvalidCommandArgumentException &&
                 e.message.endsWith('already exists.'))));
       });
     });
@@ -55,7 +55,7 @@ void main() {
         expect(
             () => CreateCommand()..run([], []),
             throwsA(predicate((e) =>
-                e is InvalidArgumentException &&
+                e is InvalidCommandArgumentException &&
                 e.message
                     .startsWith('The create command takes one argument'))));
 
@@ -63,13 +63,13 @@ void main() {
         expect(
             () => CreateCommand()..run([], [pathToSpawnScript]),
             throwsA(predicate((e) =>
-                e is InvalidArgumentException &&
+                e is InvalidCommandArgumentException &&
                 e.message.startsWith('The script directory'))));
 
         expect(
             () => CreateCommand()..run([], [pathToSpawnScript]),
             throwsA(predicate((e) =>
-                e is InvalidArgumentException &&
+                e is InvalidCommandArgumentException &&
                 e.message.endsWith('already exists.'))));
 
         createDir(dirname(pathToSpawnScript), recursive: true);
@@ -77,7 +77,7 @@ void main() {
         expect(
             () => CreateCommand()..run([], [pathToSpawnScript]),
             throwsA(predicate((e) =>
-                e is InvalidArgumentException &&
+                e is InvalidCommandArgumentException &&
                 e.message.endsWith('already exists.'))));
       });
     });

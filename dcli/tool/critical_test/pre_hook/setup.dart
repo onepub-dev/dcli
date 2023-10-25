@@ -56,7 +56,7 @@ Future<void> main(List<String> args) async {
   // ignore: discarded_futures
   waitForEx(capture(() async {
     // warm up the dcli project
-    DartProject.self.warmup();
+    await DartProject.self.warmup();
   }, progress: Progress.printStdErr()));
 
   /// warm up all test packages.

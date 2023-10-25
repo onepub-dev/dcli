@@ -25,7 +25,7 @@ class RunCommand extends Command {
   @override
   Future<int> run(List<Flag> selectedFlags, List<String> arguments) async {
     if (arguments.isEmpty) {
-      throw InvalidArgumentException(
+      throw InvalidCommandArgumentException(
         'Expected a script or command. No arguments were found.',
       );
     }

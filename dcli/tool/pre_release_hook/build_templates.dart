@@ -5,15 +5,10 @@
  * Written by Brett Sutton <bsutton@onepub.dev>, Jan 2022
  */
 
-// import 'dart:io';
-
-import 'dart:collection';
-
-import 'package:dcli/dcli.dart' hide PubSpec;
+import 'package:dcli/dcli.dart';
 import 'package:dcli/src/version/version.g.dart';
 import 'package:path/path.dart';
-import 'package:pub_semver/pub_semver.dart';
-import 'package:pubspec2/pubspec2.dart';
+import 'package:pubspec_manager/pubspec_manager.dart';
 
 void main(List<String> args) async {
   print('Updating templates');
@@ -22,34 +17,32 @@ void main(List<String> args) async {
 }
 
 /// Update each of the project templates (used by dcli create)
-/// to reference the latest version of dcli.
+/// to reference the latest version of dcli
+/// and update the sdk constraints.
 Future<void> prepareTemplates() async {
   final dcliProject = DartProject.self;
   final pathToTemplates = join(dcliProject.pathToProjectRoot, '..', 'template');
 
-  final pubspec = await PubSpec.loadFile(dcliProject.pathToPubSpec);
+  final pubspec = PubSpec.loadFromPath(dcliProject.pathToPubSpec);
   final environment = pubspec.environment;
 
   find('pubspec.yaml', workingDirectory: pathToTemplates)
       .forEach((pathToTemplate) async {
     print(pathToTemplate);
-    final pubspec = await PubSpec.loadFile(pathToTemplate);
-    final existing = pubspec.dependencies;
+    final pubspec = PubSpec.loadFromPath(pathToTemplate);
+    final dependencies = pubspec.dependencies;
 
-    /// need a mutable map
-    final newdeps = SplayTreeMap<String, DependencyReference>()
-      ..addAll(existing)
-      ..remove('dcli')
-      ..remove('dcli_core')
-      ..addAll({
-        'dcli': HostedReference(VersionConstraint.parse('^$packageVersion')),
-        'dcli_core':
-            HostedReference(VersionConstraint.parse('^$packageVersion'))
-      });
+    if (dependencies.exists('dcli')) {
+      (dependencies['dcli']! as PubHostedDependency).version = packageVersion;
+    }
 
-    final updated =
-        pubspec.copy(dependencies: newdeps, environment: environment);
-
-    await updated.save(dirname(pathToTemplate));
+    if (dependencies.exists('dcli_core')) {
+      (dependencies['dcli_core']! as PubHostedDependency).version =
+          packageVersion;
+    }
+    pubspec
+      ..environment.sdk = environment.sdk
+      ..environment.flutter = environment.flutter
+      ..save();
   });
 }

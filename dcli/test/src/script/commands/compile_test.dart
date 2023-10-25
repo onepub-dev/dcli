@@ -21,8 +21,8 @@ void main() {
     });
   });
 
-  test('compile package ', () {
-    CompileCommand().compilePackage('dcli_unit_tester');
+  test('compile package ', () async {
+    await CompileCommand().compilePackage('dcli_unit_tester');
   });
 }
 

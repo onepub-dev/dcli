@@ -26,7 +26,7 @@ class UpgradeCommand extends Command {
   @override
   Future<int> run(List<Flag> selectedFlags, List<String> arguments) async {
     if (arguments.isNotEmpty) {
-      throw InvalidArgumentException(
+      throw InvalidCommandArgumentException(
           'dcli upgrade does not take any arguments.');
     }
 

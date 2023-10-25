@@ -97,7 +97,7 @@ class CommandLineRunner {
       // for the command to process.
       exitCode = await command!.run(Settings().selectedFlags, cmdArguments);
     } else {
-      throw InvalidArgumentException('Invalid arguments passed.');
+      throw InvalidCommandArgumentException('Invalid arguments passed.');
     }
     return exitCode;
   }
@@ -180,9 +180,9 @@ class UnknownFlag extends CommandLineException {
 }
 
 /// Thrown when an invalid argument is passed to a command.
-class InvalidArgumentException extends CommandLineException {
+class InvalidCommandArgumentException extends CommandLineException {
   ///
-  InvalidArgumentException(super.message);
+  InvalidCommandArgumentException(super.message);
 }
 
 /// You can't run this command without first installing dcli.

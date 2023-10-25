@@ -22,7 +22,7 @@ class VersionCommand extends Command {
   @override
   Future<int> run(List<Flag> selectedFlags, List<String> subarguments) async {
     if (subarguments.isNotEmpty) {
-      throw InvalidArgumentException(
+      throw InvalidCommandArgumentException(
         "'dcli version' does not take any arguments. Found $subarguments",
       );
     }

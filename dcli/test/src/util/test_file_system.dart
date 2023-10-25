@@ -343,7 +343,8 @@ dependency_overrides:
 
       // ignore: discarded_futures
       waitForEx(capture(() async {
-        DartProject.fromPath(dirname(pathToPubspec)).warmup(upgrade: true);
+        await DartProject.fromPath(dirname(pathToPubspec))
+            .warmup(upgrade: true);
       }, progress: Progress.printStdErr()));
     });
   }
@@ -377,7 +378,7 @@ dependency_overrides:
 
       // ignore: discarded_futures
       waitForEx(capture(() async {
-        DartProject.fromPath('pathToTools').warmup();
+        await DartProject.fromPath('pathToTools').warmup();
       }, progress: Progress.printStdErr()));
       NamedLock(name: 'compile').withLock(() {
         for (final command in required) {

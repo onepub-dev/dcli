@@ -80,7 +80,7 @@ class PackCommand extends Command {
   Future<int> run(List<Flag> selectedFlags, List<String> arguments) async {
     if (!exists(Resources().resourceRoot) &&
         !exists(Resources.pathToPackYaml)) {
-      throw InvalidArgumentException(
+      throw InvalidCommandArgumentException(
           'Unable to pack resources as neither a resource directory at '
           '${Resources().resourceRoot}'
           ' nor ${Resources.pathToPackYaml} exists.');

@@ -10,7 +10,6 @@ import 'dart:cli';
 import 'dart:io';
 
 import 'package:yaml/yaml.dart' as y;
-import '../pubspec/dependency.dart';
 
 /// wrapper for the YamlDocument
 /// designed to make it easier to read yaml files.
@@ -60,10 +59,5 @@ class MyYaml {
     } else {
       return (_document.contents.value as Map)[key] as y.YamlMap?;
     }
-  }
-
-  /// addes a list to the yaml.
-  void setList(String key, List<Dependency> list) {
-    (_document.contents.value as Map)[key] = list;
   }
 }

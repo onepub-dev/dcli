@@ -26,7 +26,7 @@ class HelpCommand extends Command {
         Commands.asMap(Commands.applicationCommands),
       );
       if (command == null) {
-        throw InvalidArgumentException(
+        throw InvalidCommandArgumentException(
           'help expected a command name. Found $subarguments',
         );
       }

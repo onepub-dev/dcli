@@ -26,7 +26,7 @@ class WarmupCommand extends Command {
     if (arguments.isEmpty) {
       targetPath = pwd;
     } else if (arguments.length != 1) {
-      throw InvalidArgumentException(
+      throw InvalidCommandArgumentException(
         'Expected a single project path or no project path. '
         'Found ${arguments.length} ',
       );
@@ -34,17 +34,18 @@ class WarmupCommand extends Command {
       targetPath = arguments[0];
     }
 
-    _prepareProject(targetPath);
+    await _prepareProject(targetPath);
     return 0;
   }
 
-  void _prepareProject(String targetPath) {
+  Future<void> _prepareProject(String targetPath) async {
     if (!exists(targetPath)) {
-      throw InvalidArgumentException(
+      throw InvalidCommandArgumentException(
           'The project path $targetPath does not exists.');
     }
     if (!isDirectory(targetPath)) {
-      throw InvalidArgumentException('The project path must be a directory.');
+      throw InvalidCommandArgumentException(
+          'The project path must be a directory.');
     }
 
     final project = DartProject.fromPath(targetPath);
@@ -53,7 +54,7 @@ class WarmupCommand extends Command {
     print(orange('Preparing ${project.pathToProjectRoot} ...'));
     print('');
 
-    project.warmup();
+    await project.warmup();
   }
 
   @override

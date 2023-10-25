@@ -27,7 +27,8 @@ void main() {
           final pathToTemplate = join(fs, 'test');
 
           await withEnvironment(() async {
-            DartProject.create(pathTo: pathToTemplate, templateName: 'simple')
+            await DartProject.create(
+                    pathTo: pathToTemplate, templateName: 'simple')
                 .warmup();
           }, environment: {
             'DCLI_OVERRIDE_PATH': DartProject.self.pathToProjectRoot
@@ -47,7 +48,8 @@ void main() {
             final pathToTemplate = join(fs, 'test');
 
             await withEnvironment(() async {
-              DartProject.create(pathTo: pathToTemplate, templateName: 'simple')
+              await DartProject.create(
+                      pathTo: pathToTemplate, templateName: 'simple')
                   .warmup();
             }, environment: {
               'DCLI_OVERRIDE_PATH': DartProject.self.pathToProjectRoot

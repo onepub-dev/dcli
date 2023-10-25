@@ -76,7 +76,7 @@ class InstallCommand extends Command {
     scriptIndex = i;
 
     if (subarguments.length != scriptIndex) {
-      throw InvalidArgumentException(
+      throw InvalidCommandArgumentException(
         "'dcli install' does not take any arguments. Found $subarguments",
       );
     }

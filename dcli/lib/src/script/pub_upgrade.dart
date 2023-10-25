@@ -52,20 +52,20 @@ class PubUpgradeResult {
   ///
   PubUpgradeResult();
 
-  final List<Dependency> _added = <Dependency>[];
-  final List<Dependency> _removed = <Dependency>[];
+  final List<DependencyLine> _added = <DependencyLine>[];
+  final List<DependencyLine> _removed = <DependencyLine>[];
 
   void _processLine(String line) {
     print(line);
     if (line.startsWith('+ ')) {
-      final dep = Dependency.fromLine(line);
+      final dep = DependencyLine.fromLine(line);
       if (dep != null) {
         _added.add(dep);
       }
     }
 
     if (line.startsWith('- ')) {
-      final dep = Dependency.fromLine(line);
+      final dep = DependencyLine.fromLine(line);
       if (dep != null) {
         _removed.add(dep);
       }
@@ -73,10 +73,10 @@ class PubUpgradeResult {
   }
 
   /// list of dependency that pub get added
-  List<Dependency> get added => _added;
+  List<DependencyLine> get added => _added;
 
   /// list of dependency that pub get removed
-  List<Dependency> get removed => _removed;
+  List<DependencyLine> get removed => _removed;
 }
 
 ///

@@ -10,6 +10,7 @@ import 'dart:math';
 import 'package:meta/meta.dart';
 import 'package:path/path.dart' as p;
 import 'package:path/path.dart';
+import 'package:pubspec_manager/pubspec_manager.dart';
 import 'package:stack_trace/stack_trace.dart';
 
 import '../../dcli.dart';
@@ -208,7 +209,7 @@ class DartScript {
   /// validate that the passed arguments points to a valid script
   static void validate(String scriptPath) {
     if (!scriptPath.endsWith('.dart')) {
-      throw InvalidArgumentException(
+      throw InvalidCommandArgumentException(
         'Expected a script name (ending in .dart) '
         'instead found: $scriptPath',
       );
@@ -287,7 +288,7 @@ class DartScript {
     workingDirectory ??= pwd;
 
     if (install && isInstalled && !overwrite) {
-      throw InvalidArgumentException(
+      throw InvalidCommandArgumentException(
         'You selected to install the compiled exe however an installed '
         'exe of that name already exists. Use overwrite=true',
       );

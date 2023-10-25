@@ -25,7 +25,7 @@ void main() {
 
       expect(
         () => ParsedCliCommand(test, pwd),
-        throwsA(isA<InvalidArgumentException>()),
+        throwsA(isA<InvalidCommandArgumentException>()),
       );
     });
     test('a', () {
