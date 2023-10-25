@@ -1,3 +1,7 @@
+# 3.2.0-alpha.3
+- moved to pubspec_manager
+- removed pubspec2 - you can either add a direct dependency to pubspec2 or 
+ migrate to pubspec_manager (recommended).
 # 3.0.3
 - upgraded to pubspec2 2.5
 - Fixed a bug in dcli_core where you couldn't access the parent scope in
