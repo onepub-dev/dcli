@@ -1,3 +1,6 @@
+# 3.2.0-alpha.2
+- fixes for pubspec_manager
+
 # 3.2.0-alpha.1
 - migrated code to pubspec_manager and back ported some of the DCli 4.x code to help (as it had already been migrated).
 
