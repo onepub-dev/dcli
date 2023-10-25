@@ -202,7 +202,7 @@ compile [--nowarmup] [--install] [--overwrite] [<script path.dart>, <script path
     await compilePackage(packageName, version: versionString);
   }
 
-  /// Compiles a globally activted
+  /// Compiles a globally activated package
   Future<void> compilePackage(String packageName, {String? version}) async {
     if (packageName.contains(separator)) {
       throw InvalidCommandArgumentException(
