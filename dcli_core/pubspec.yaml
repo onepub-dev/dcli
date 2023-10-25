@@ -1,5 +1,5 @@
 name: dcli_core
-version: 3.2.0-alpha.2
+version: 3.2.0-alpha.3
 homepage: https://dcli.onepub.dev
 documentation: https://dcli.onepub.dev
 description: The core asyncronous functions used by dcli. DCli uses waitFor to eliminate async code in the DCli libraries which precludes DCli's usage in non-cli apps (e.g. you can't use it in flutter). The aim of dcli_core is to expose a significant set of the core dcli functions as async version so that dcli_core can be used in any project. DCli will then rely on dcli_core for core parts of its implemenation to avoid duplicating code between the two packages.

@@ -1,3 +1,6 @@
+# 3.2.0-alpha.3
+- updated pubspec_manager - again.
+
 # 3.2.0-alpha.2
 - fixes for pubspec_manager
 
