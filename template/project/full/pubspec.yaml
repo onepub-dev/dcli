@@ -4,10 +4,11 @@ publish_to: https://beta.onepub.dev/api/jbbxpsdavu/
 description: A sample command-line application that installs and runs mailhog
 environment: 
   sdk: '>=3.0.0 <4.0.0'
+  flutter: 
 dependencies: 
   args: ^2.3.1
-  dcli: ^3.0.6
-  dcli_core: ^3.0.6
+  dcli: 3.2.0-alpha.1
+  dcli_core: 3.2.0-alpha.1
   http: ^0.13.4
   path: ^1.8.1
   settings_yaml: ^7.0.0

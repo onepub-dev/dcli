@@ -244,6 +244,8 @@ void main() {
       withTempDir((fsRoot) {
         final fs = TestDirectoryTree(fsRoot);
 
+        // TODO(bsutton): glob no longer throws if the directory is invalid
+        // but ls gives an error. Not certain of the correct course.
         expect(
           () => ParsedCliCommand('ls invalid/.*', fs.top),
           throwsA(isA<FileSystemException>()),

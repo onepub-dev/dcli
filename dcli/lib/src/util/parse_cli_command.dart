@@ -65,7 +65,7 @@ class ParsedCliCommand {
   List<_QArg> _parse(String commandLine) {
     final parts = <_QArg>[];
 
-    /// The stack helps us deal with nest quotes.
+    /// The stack helps us deal with nested quotes.
     final stateStack = StackList<_ParseFrame>();
     var currentState = _ParseFrame(_ParseState.searching, -1);
 
