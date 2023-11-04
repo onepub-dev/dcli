@@ -164,7 +164,7 @@ class Terminal {
   /// 0 is the first column
   // ignore: avoid_setters_without_getters
   set column(int column) {
-    _console.cursorPosition = Coordinate(row, 0);
+    _console.cursorPosition = Coordinate(row, column);
   }
 
   /// Moves the cursor to the start of line.
