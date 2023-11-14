@@ -19,14 +19,14 @@ dependencies:
   dcli_core: ^3.2.0
   equatable: ^2.0.0
   ffi: ^2.0.0
-  file: ^7.0.0
+  file: ^6.0.0
   glob: ^2.0.0
   ini: ^2.1.0
   logging: ^1.0.2
   meta: ^1.3.0
   mime: ^1.0.1
   path: ^1.8.0
-  posix: ^5.0.0
+  posix: ^6.0.1
   pub_semver: ^2.0.0
   pubspec_lock: ^3.0.1
   pubspec_manager: ^1.0.0-alpha.11
