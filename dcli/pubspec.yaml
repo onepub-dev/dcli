@@ -19,7 +19,7 @@ dependencies:
   dcli_core: ^4.0.0-alpha.1
   equatable: ^2.0.0
   ffi: ^2.0.0
-  file: ^7.0.0
+  file: ^6.1.4
   glob: ^2.0.0
   ini: ^2.1.0
   logging: ^1.0.2
