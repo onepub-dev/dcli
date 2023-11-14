@@ -1,3 +1,7 @@
+# 3.2.1
+- downgraded to file ^6.0.0 so that we are compatible with flutter_integration.
+- upgraded to posix 6.0.0 to further reduce dependency conflicts.
+
 # 3.2.0-alpha.3
 - moved to pubspec_manager
 - removed pubspec2 - you can either add a direct dependency to pubspec2 or 
