@@ -1,3 +1,6 @@
+# 3.2.2
+- Fixed a bug in the pack command caused by DartProject.self incorrectly returning a pub-cache path when dcli is run from a global activation. Exposed the Resources class so users can pack files programatially.
+
 # 3.2.1
 - downgraded to file ^6.0.0 so that we are compatible with flutter_integration.
 - upgraded to posix 6.0.0 to further reduce dependency conflicts.
