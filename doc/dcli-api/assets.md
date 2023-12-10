@@ -183,9 +183,15 @@ You can unpack all resources by interating over the resource values:
 
 ````dart
 ```dart
-  for (final resource in ResourceRegistry.resources.values) {
-    resource.unpack(join(localTargetPath, resource.originalPath));
+import 'package:path/path.dart';
+
+ final localTargetDir = join('some', 'local', 'folder');
+ for (final resource in ResourceRegistry.resources.values) {
+    final localPathTo = join(localTargetDir, resource.originalPath);
+    createDir(dirname(localPathTo), recursive: true);
+    resource.unpack(localPathTo);
   }
+
 ```
 ````
 
