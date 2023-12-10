@@ -5,7 +5,7 @@ environment:
   sdk: '>=3.0.0 <4.0.0'
   flutter: 
 dependencies: 
-  dcli: 3.2.1
-  dcli_core: 3.2.1
+  dcli: 3.2.2
+  dcli_core: 3.2.2
 dev_dependencies: 
   lint_hard: ^3.0.0
