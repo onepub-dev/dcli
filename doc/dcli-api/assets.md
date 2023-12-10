@@ -94,11 +94,11 @@ As part of the packing process DCli also creates a registry of the packed resour
 
 `<project root>/lib/src/dcli/resource/generated/resource_registry.g.dart`
 
-Each of the packed resource is listed in the register with as a map with the 'mount point' as the key.
+Each of the packed resources is listed in the register as a map with the 'mount point' as the key.
 
 The `mount point` is the path of the packed resource relative to the `<project root>/resource` directory.
 
-For external resources you specify a mount point to the project's resource directory that must not collide with any actual resource names under the \<project root>/resource directory.
+For external resources, you specify a mount point to the project's resource directory that must not collide with any actual resource names under the \<project root>/resource directory.
 
 The contents of the 'resource\_registry.dart' are of the form.
 
@@ -134,7 +134,7 @@ class ResourceRegistry {
 
 ## Unpacking resources
 
-DCli provides an api that allows your script to unpack its resources at run time.
+DCli provides an API that allows your script to unpack its resources at run time.
 
 ```
 ResourceRegistry().resources['<relative filename>'].unpack(String localPath)
@@ -176,6 +176,18 @@ if (calculateHash(pathToResource).hexEncode() != packResource.checksum)
     /// unpack the latest version of the resource.
 }
 ```
+
+## Unpack all resources
+
+You can unpack all resources by interating over the resource values:
+
+````dart
+```dart
+  for (final resource in ResourceRegistry.resources.values) {
+    resource.unpack(join(localTargetPath, resource.originalPath));
+  }
+```
+````
 
 ## External Resources
 
