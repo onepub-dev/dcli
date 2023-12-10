@@ -96,7 +96,8 @@ export 'src/util/process_helper.dart' show ProcessDetails, ProcessHelper;
 export 'src/util/progress.dart' show Progress;
 export 'src/util/pub_cache.dart';
 export 'src/util/remote.dart' show Remote;
-export 'src/util/resources.dart' show PackedResource;
+export 'src/util/resources.dart'
+    show PackedResource, ResourceException, Resources;
 export 'src/util/runnable_process.dart' show printerr;
 export 'src/util/string_as_process.dart';
 export 'src/util/temp_file.dart';

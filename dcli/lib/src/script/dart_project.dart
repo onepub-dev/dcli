@@ -122,7 +122,7 @@ class DartProject {
     }
     final script = DartScript.self;
     var startFrom = '.';
-    if (!script.isCompiled) {
+    if (!script.isCompiled && !script.isPubGlobalActivated) {
       startFrom = script.pathToScript;
     }
     return _current ??= DartProject.fromPath(startFrom);
