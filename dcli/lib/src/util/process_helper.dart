@@ -315,22 +315,18 @@ class ProcessHelper {
         var memoryUnits = 'kB';
 
         for (final line in lines) {
-          final parts = line.split(':');
-          if (parts.length == 2) {
-            final key = parts[0].trim();
-            final value = parts[1].trim();
+          final (key, value) = parseProcessLine(line);
 
-            switch (key) {
-              case 'Name':
-                name = value;
-                break;
-              case 'VmSize':
-                final args = value.split(' ');
-                if (args.length == 2) {
-                  memory = args[0].trim();
-                  memoryUnits = args[1].trim();
-                }
-            }
+          switch (key) {
+            case 'Name':
+              name = value;
+              break;
+            case 'VmSize':
+              final args = value.split(' ');
+              if (args.length == 2) {
+                memory = args[0].trim();
+                memoryUnits = args[1].trim();
+              }
           }
         }
         return ProcessDetails(pid, name ?? 'Unknown', memory)
@@ -346,6 +342,26 @@ class ProcessHelper {
     /// and trying access its details.
     return null;
   }
+}
+
+@visibleForTesting
+(String key, String value) parseProcessLine(String line) {
+  var key = 'unknown';
+  var value = '';
+
+  final colon = line.indexOf(':');
+
+  if (colon != -1) {
+    key = line.substring(0, colon);
+    if (colon + 1 == line.length) {
+      value = '';
+    } else {
+      value = line.substring(colon + 1).trim();
+    }
+  } else {
+    key = line;
+  }
+  return (key, value);
 }
 
 /// Represents a running Process.
