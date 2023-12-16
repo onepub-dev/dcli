@@ -6,7 +6,6 @@
 
 //import 'package:dcli/src/dcli/resource/generated/resource_registry.g.dart';
 import 'package:dcli/dcli.dart';
-import 'package:dcli/src/util/resources.dart';
 import 'package:path/path.dart';
 import 'package:scope/scope.dart';
 import 'package:test/test.dart';

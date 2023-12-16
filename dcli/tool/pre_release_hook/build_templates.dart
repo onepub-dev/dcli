@@ -6,7 +6,6 @@
  */
 
 import 'package:dcli/dcli.dart';
-import 'package:dcli/src/util/resources.dart';
 import 'package:dcli/src/version/version.g.dart';
 import 'package:path/path.dart';
 import 'package:pubspec_manager/pubspec_manager.dart';

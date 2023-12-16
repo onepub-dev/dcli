@@ -8,8 +8,6 @@ import 'package:path/path.dart';
 
 import '../../dcli.dart';
 import '../script/command_line_runner.dart';
-import '../script/flags.dart';
-import '../util/resources.dart';
 import 'commands.dart';
 
 /// Implementation for the 'pack' command.

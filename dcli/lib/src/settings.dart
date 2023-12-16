@@ -14,7 +14,6 @@ import 'package:scope/scope.dart';
 import 'package:stack_trace/stack_trace.dart';
 
 import '../dcli.dart';
-import 'script/flags.dart';
 import 'version/version.g.dart';
 
 /// Holds all of the global settings for DCli

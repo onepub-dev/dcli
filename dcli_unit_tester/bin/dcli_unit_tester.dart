@@ -79,20 +79,20 @@ void dumpPlatform() {
   print(Format().row(['isLinux: ', '${Platform.isLinux}'], widths: widths));
   print(Format().row(['isWindows: ', '${Platform.isWindows}'], widths: widths));
   print(Format().row(['isMacOS:', '${Platform.isMacOS}'], widths: widths));
-  print(Format().row(['localeName: ', (Platform.localeName)], widths: widths));
-  print(Format()
-      .row(['localHostname:', (Platform.localHostname)], widths: widths));
+  print(Format().row(['localeName: ', Platform.localeName], widths: widths));
+  print(
+      Format().row(['localHostname:', Platform.localHostname], widths: widths));
   print(Format().row(['numberOfProcessors: ', '${Platform.numberOfProcessors}'],
       widths: widths));
   print(Format()
-      .row(['operatingSystem: ', (Platform.operatingSystem)], widths: widths));
+      .row(['operatingSystem: ', Platform.operatingSystem], widths: widths));
   print(Format().row(
-      ['operatingSystemVersion:', (Platform.operatingSystemVersion)],
+      ['operatingSystemVersion:', Platform.operatingSystemVersion],
       widths: widths));
   print(Format()
       .row(['packageConfig:', '${Platform.packageConfig}'], widths: widths));
-  print(Format()
-      .row(['pathSeparator:', (Platform.pathSeparator)], widths: widths));
+  print(
+      Format().row(['pathSeparator:', Platform.pathSeparator], widths: widths));
   print(Format().row(['script:', '${Platform.script}'], widths: widths));
-  print(Format().row(['version:', (Platform.version)], widths: widths));
+  print(Format().row(['version:', Platform.version], widths: widths));
 }

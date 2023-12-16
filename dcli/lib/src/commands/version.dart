@@ -8,7 +8,6 @@ import 'dart:io';
 
 import '../../dcli.dart';
 import '../script/command_line_runner.dart';
-import '../script/flags.dart';
 import '../util/recase.dart';
 import 'commands.dart';
 

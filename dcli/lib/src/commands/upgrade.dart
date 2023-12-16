@@ -8,7 +8,6 @@ import 'package:scope/scope.dart';
 
 import '../../dcli.dart';
 import '../script/command_line_runner.dart';
-import '../script/flags.dart';
 import '../version/version.g.dart';
 import 'commands.dart';
 import 'install.dart';
