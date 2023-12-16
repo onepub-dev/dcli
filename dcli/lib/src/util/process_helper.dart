@@ -329,8 +329,11 @@ class ProcessHelper {
               }
           }
         }
-        return ProcessDetails(pid, name ?? 'Unknown', memory)
+        final process = ProcessDetails(pid, name ?? 'Unknown', memory)
           ..memoryUnits = memoryUnits;
+
+        verbose(() => 'found process ${process.name} with pid: ${process.pid}');
+        return process;
 
         // ignore: avoid_catches_without_on_clauses
       } catch (e) {
