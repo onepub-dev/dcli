@@ -78,6 +78,7 @@ export 'src/pubspec/dependency.dart';
 export 'src/script/dart_project.dart';
 export 'src/script/dart_script.dart' show DartScript;
 export 'src/script/dart_sdk.dart' show DartSdk;
+export 'src/script/flags.dart' show Flag;
 export 'src/settings.dart' show Settings, verbose;
 export 'src/shell/shell.dart';
 export 'src/shell/unknown_shell.dart';
