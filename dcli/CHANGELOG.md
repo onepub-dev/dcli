@@ -1,3 +1,9 @@
+# 3.2.3
+- added verbose logging to process helper.
+- unit tests for process_helper_test
+- Fixed for process helper when the process name includes a colon.
+- exported the Flag class as it is used by a public method in the Settings class.
+
 # 3.2.2
 - Fixed a bug in the pack command caused by DartProject.self incorrectly returning a pub-cache path when dcli is run from a global activation. Exposed the Resources class so users can pack files programatially.
 
