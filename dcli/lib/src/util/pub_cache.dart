@@ -143,7 +143,8 @@ class PubCache {
   String get pathToBin => _pubCacheBinPath;
 
   /// Path to the pub cache hosted directory
-  /// hosted/pub.dartlang.org
+  /// Prior to Dart 2.19: hosted/pub.dartlang.org
+  /// From Dart 2.19: this changed to hosted/pub.dev
   String get pathToHosted => truepath(_pubCachePath, 'hosted', 'pub.dev');
 
   /// Returns the directory name of the pub cache.
