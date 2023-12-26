@@ -31,11 +31,11 @@ onepub pub global activate mytool
 
 ## Overview
 
-The DCli console SDK is intended to to allow you to create Command Line (CLI) Applications from simple scripts to full blown CLI apps.
+The DCli console SDK is intended to to allow you to create Command Line (CLI) Applications from simple scripts to full-blown CLI apps.
 
-DCli is a great replacement for CLI apps that would have traditionally been built with Bash, C, python, ruby, Go, Rust ....
+DCli is a great replacement for CLI apps that would have traditionally been built with Bash, C, Python, Ruby, Go, Rust ....
 
-Whether its a 5 line Bash script or a 100,000 line production management system (like we run internally) DCli is the right place to start building your CLI infrastructure.
+Whether it's a 5 line Bash script or a 100,000 line production management system (like we run internally) DCli is the right place to start building your CLI infrastructure.
 
 ### So why DCli?
 
@@ -43,14 +43,14 @@ DCli is based on Dart which is a modern programming language that has a set of f
 
 * Dart and DCli are simple to learn
 * Compiled or JIT
-* Shebag support (run .dart scripts directly from the cli ./hellow.dart)
+* Shebag support (run .dart scripts directly from the terminal ./hellow.dart)
 * Small transportable execs (from 10MB) and the Dart VM is NOT required on the target system.
 * Typesafe language catches errors at compile time
 * Sound null safety reduces null pointer exceptions
 * Fast
 * Great development environment using vs-code
 * Local and Remote development/debugging
-* Cross platform supporting Linux/Windows/MacOS/arm
+* Cross-platform supporting Linux/Windows/MacOS/ARM
 
 ### Example:
 
@@ -86,7 +86,7 @@ DCli is based on the relatively new programming language; [Dart](https://dart.de
 
 Dart is currently the [fastest growing language on github](https://www.linkedin.com/pulse/google-dart-tops-githubs-list-fastest-growing-2019-bill-detwiler) and is the basis on which Flutter is built.
 
-[Ubuntu has just announced](https://medium.com/flutter/announcing-flutter-linux-alpha-with-canonical-19eb824590a9) that Flutter will be the primary platform for building GUI's on Ubuntu and the installer on Ubuntu 23.04 is written in Flutter.
+The [Ubuntu](https://medium.com/flutter/announcing-flutter-linux-alpha-with-canonical-19eb824590a9) installer is now based on Flutter and Flutter will be the primary platform for building GUI's on Ubuntu.
 
 You can now use Dart to build GUI's on Android, IOS, Windows, OSX, Linux. Dart is also suitable for building Web Servers and server-side applications and of course, with DCli you can also target console apps.
 

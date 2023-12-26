@@ -26,6 +26,7 @@
 * [Managing Files And Directories](dcli-api/managing-files-and-directories.md)
 * [Environment variables](dcli-api/environment-variables.md)
 * [Calling apps](dcli-api/calling-apps.md)
+* [Redirecting output](dcli-api/redirecting-output.md)
 * [Command Line Arguments](dcli-api/command-line-arguments.md)
 * [Paths](dcli-api/paths.md)
 * [Glob Expansion](dcli-api/glob-expansion.md)
