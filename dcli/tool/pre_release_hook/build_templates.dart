@@ -13,7 +13,7 @@ import 'package:pubspec_manager/pubspec_manager.dart';
 void main(List<String> args) async {
   print('Updating templates');
   await prepareTemplates();
-  'dcli pack'.run;
+  Resources().pack();
 }
 
 /// Update each of the project templates (used by dcli create)
@@ -33,12 +33,11 @@ Future<void> prepareTemplates() async {
     final dependencies = pubspec.dependencies;
 
     if (dependencies.exists('dcli')) {
-      (dependencies['dcli']! as PubHostedDependencyAttached).version =
-          packageVersion;
+      (dependencies['dcli']! as PubHostedDependency).version = packageVersion;
     }
 
     if (dependencies.exists('dcli_core')) {
-      (dependencies['dcli_core']! as PubHostedDependencyAttached).version =
+      (dependencies['dcli_core']! as PubHostedDependency).version =
           packageVersion;
     }
     pubspec

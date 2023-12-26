@@ -46,11 +46,11 @@ dependencies:
     () async {
       await TestFileSystem().withinZone((fs) async {
         final pubSpecScriptPath = createPubspecPath(fs);
-        PubSpec.fromString(basic).saveTo(pubSpecScriptPath);
+        PubSpec.loadFromString(basic).saveTo(pubSpecScriptPath);
 
-        final dependencies = <Dependency>[
-          PubHostedDependency(name: 'collection', version: '^1.14.12'),
-          PubHostedDependency(name: 'file_utils', version: '^0.1.3')
+        final dependencies = <DependencyBuilder>[
+          PubHostedDependencyBuilder(name: 'collection', version: '^1.14.12'),
+          PubHostedDependencyBuilder(name: 'file_utils', version: '^0.1.3')
         ];
         runTest(fs, null, main, dependencies);
       });
@@ -64,14 +64,14 @@ dependencies:
       await TestFileSystem().withinZone((fs) async {
         final scriptPath = createScriptPath(fs);
 
-        PubSpec.fromString(overrides).saveTo(scriptPath);
+        PubSpec.loadFromString(overrides).saveTo(scriptPath);
 
-        final dependencies = <Dependency>[
-          PubHostedDependency(name: 'dcli', version: '^2.0.0'),
-          PubHostedDependency(name: 'args', version: '^2.0.1'),
-          PubHostedDependency(name: 'path', version: '^2.0.2'),
-          PubHostedDependency(name: 'collection', version: '^1.14.12'),
-          PubHostedDependency(name: 'file_utils', version: '^0.1.3')
+        final dependencies = <DependencyBuilder>[
+          PubHostedDependencyBuilder(name: 'dcli', version: '^2.0.0'),
+          PubHostedDependencyBuilder(name: 'args', version: '^2.0.1'),
+          PubHostedDependencyBuilder(name: 'path', version: '^2.0.2'),
+          PubHostedDependencyBuilder(name: 'collection', version: '^1.14.12'),
+          PubHostedDependencyBuilder(name: 'file_utils', version: '^0.1.3')
         ];
         runTest(fs, null, main, dependencies);
       });
@@ -84,14 +84,14 @@ dependencies:
     () async {
       await TestFileSystem().withinZone((fs) async {
         final scriptPath = createScriptPath(fs);
-        PubSpec.fromString(overrides).saveTo(scriptPath);
+        PubSpec.loadFromString(overrides).saveTo(scriptPath);
 
-        final dependencies = <Dependency>[
-          PubHostedDependency(name: 'dcli', version: '^2.0.0'),
-          PubHostedDependency(name: 'args', version: '^2.0.1'),
-          PubHostedDependency(name: 'path', version: '^2.0.2'),
-          PubHostedDependency(name: 'collection', version: '^1.14.12'),
-          PubHostedDependency(name: 'file_utils', version: '^0.1.3')
+        final dependencies = <DependencyBuilder>[
+          PubHostedDependencyBuilder(name: 'dcli', version: '^2.0.0'),
+          PubHostedDependencyBuilder(name: 'args', version: '^2.0.1'),
+          PubHostedDependencyBuilder(name: 'path', version: '^2.0.2'),
+          PubHostedDependencyBuilder(name: 'collection', version: '^1.14.12'),
+          PubHostedDependencyBuilder(name: 'file_utils', version: '^0.1.3')
         ];
         runTest(fs, null, main, dependencies);
       });
@@ -134,7 +134,7 @@ void runTest(
   TestFileSystem fs,
   String? annotation,
   String main,
-  List<Dependency> expected,
+  List<DependencyBuilder> expected,
 ) {
   final scriptPath = createScriptPath(fs);
   final script = DartScript.fromFile(scriptPath);

@@ -8,7 +8,7 @@ import 'dart:io';
 
 import 'package:dcli/dcli.dart';
 import 'package:path/path.dart';
-import 'package:pub_semver/pub_semver.dart';
+import 'package:pub_semver/pub_semver.dart' as sm;
 import 'package:pubspec_lock/pubspec_lock.dart';
 import 'package:pubspec_manager/pubspec_manager.dart';
 
@@ -55,7 +55,8 @@ class LockCommand extends Command {
           'The project path $targetPath does not exists.');
     }
     if (!isDirectory(targetPath)) {
-      throw InvalidCommandArgumentException('The project path must be a directory.');
+      throw InvalidCommandArgumentException(
+          'The project path must be a directory.');
     }
 
     final project = DartProject.fromPath(targetPath);
@@ -103,19 +104,21 @@ class LockCommand extends Command {
       );
 
   // map git
-  GitDependency buildGit(GitPackageDependency git) => GitDependency(
-      name: git.package, url: git.url, ref: git.ref, path: git.path);
+  GitDependencyBuilder buildGit(GitPackageDependency git) =>
+      GitDependencyBuilder(
+          name: git.package, url: git.url, ref: git.ref, path: git.path);
 
   // map hosted
-  Dependency buildHosted(HostedPackageDependency hosted) {
-    final version = VersionConstraint.parse(hosted.version) as VersionRange;
+  DependencyBuilder buildHosted(HostedPackageDependency hosted) {
+    final version =
+        sm.VersionConstraint.parse(hosted.version) as sm.VersionRange;
     final constrainedVersion =
-        version.max ?? version.min ?? VersionConstraint.any;
+        version.max ?? version.min ?? sm.VersionConstraint.any;
     if (hosted.url.isEmpty || isPubDev(hosted.url)) {
-      return PubHostedDependency(
+      return PubHostedDependencyBuilder(
           name: hosted.name, version: constrainedVersion.toString());
     } else {
-      return HostedDependency(
+      return HostedDependencyBuilder(
           name: hosted.package,
           hosted: hosted.url,
           version: version.toString());
@@ -123,8 +126,8 @@ class LockCommand extends Command {
   }
 
   // map path
-  Dependency buildPath(PathPackageDependency path) =>
-      PathDependency(name: path.package, path: path.path);
+  DependencyBuilder buildPath(PathPackageDependency path) =>
+      PathDependencyBuilder(name: path.package, path: path.path);
 
   @override
   String usage() => 'lock [<project path>]';

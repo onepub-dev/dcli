@@ -143,15 +143,14 @@ packages:
       path: "../dcli"
       relative: true
     source: path
-    version: "3.1.0"
+    version: "4.0.0-alpha.1"
   dcli_core:
     dependency: "direct main"
     description:
-      name: dcli_core
-      sha256: "5efb82a2e451ddc9992746974621da9bc7b0caa9bd141f1e2238bbc18feb99e3"
-      url: "https://pub.dev"
-    source: hosted
-    version: "3.1.0"
+      path: "../dcli_core"
+      relative: true
+    source: path
+    version: "4.0.0-alpha-1"
   dcli_terminal:
     dependency: transitive
     description:
@@ -404,10 +403,10 @@ packages:
     dependency: transitive
     description:
       name: pubspec_manager
-      sha256: "98d0de0ef1f68944b0e26d8408fb2dccb72c6d1346414bbee4584ae1437c96f4"
+      sha256: c8ff74f2de8e3732d48934c9121195497e28b66a10883493e1990b0c7a306c14
       url: "https://pub.dev"
     source: hosted
-    version: "1.0.0-alpha.6"
+    version: "1.0.0-alpha.11"
   quiver:
     dependency: transitive
     description:
@@ -430,7 +429,7 @@ packages:
       path: "../../settings_yaml"
       relative: true
     source: path
-    version: "8.0.0"
+    version: "8.0.0-alpha.2"
   shelf:
     dependency: transitive
     description:
