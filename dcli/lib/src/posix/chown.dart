@@ -59,7 +59,10 @@ class _ChOwn extends core.DCliFunction {
     final passwd = posix.getpwnam(user);
     final pgroup = posix.getgrnam(group);
     if (isDirectory(path) && recursive) {
-      find('*', includeHidden: true, workingDirectory: path)
+      find('*',
+              includeHidden: true,
+              types: [Find.directory, Find.file, Find.link],
+              workingDirectory: path)
           .forEach((file) => posix.chown(path, passwd.uid, pgroup.gid));
     } else {
       posix.chown(path, passwd.uid, pgroup.gid);
