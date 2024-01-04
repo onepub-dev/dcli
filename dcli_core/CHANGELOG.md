@@ -1,3 +1,6 @@
+# 3.2.4
+- Fixed a bug in chown. The doco says it will recursively change all permissions. However it was only changing the permission on files. We now change the permission on directories and links as well as files.
+
 # 3.2.3
 - added verbose logging to process helper.
 - unit tests for process_helper_test
