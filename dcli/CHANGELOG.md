@@ -1,3 +1,6 @@
+# 3.2.5
+- changed moveDir to fail back to copy/delete when ever the rename fails as it looks like there may be additional failure paths that we don't currently deal with.
+
 # 3.2.4
 - Fixed a bug in chown. The doco says it will recursively change all permissions. However it was only changing the permission on files. We now change the permission on directories and links as well as files.
 
