@@ -44,7 +44,8 @@ void main() {
 
   final result = 'ls /fred'.start(
 
-      /// stop the start command from throwing if 'ls' returns non-zero exit code
+      /// stop the start command from throwing if 'ls'
+      /// returns non-zero exit code
       nothrow: true,
       progress: Progress((line) {
         // do nothing, so stdout is suppressed
@@ -59,5 +60,4 @@ void main() {
       printerr("The path passed to `ls` doesn't exist");
     }
   }
-  
 }
