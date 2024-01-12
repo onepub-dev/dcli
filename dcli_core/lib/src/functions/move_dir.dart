@@ -53,24 +53,17 @@ class _MoveDir extends DCliFunction {
 
     try {
       await Directory(from).rename(to);
-    } on FileSystemException catch (e) {
-      if (e.osError != null && e.osError!.errorCode == 18) {
-        /// Invalid cross-device link
-        /// We can't move files across a partition so
-        /// do a copy/delete.
-        verbose(
-          () =>
-              'moveDir to is on a separate device so falling back to copy/delete: ${truepath(from)} -> ${truepath(to)}',
-        );
+    } on FileSystemException catch (_) {
+      /// Most likley an Invalid cross-device move.
+      /// We can't move files across a partition so
+      /// do a copy/delete.
+      verbose(
+        () =>
+            'rename failed so falling back to copy/delete: ${truepath(from)} -> ${truepath(to)}',
+      );
 
-        await copyTree(from, to, includeHidden: true);
-        await delete(from);
-      } else {
-        throw MoveDirException(
-          'The Move of ${truepath(from)} to ${truepath(to)} failed.'
-          ' Error $e',
-        );
-      }
+      await copyTree(from, to, includeHidden: true);
+      await delete(from);
     }
     // ignore: avoid_catches_without_on_clauses
     catch (e) {
