@@ -1,2 +1,5 @@
 dcli_core: ../dcli_core
+dcli_input: ../dcli_input
+dcli_terminal: ../dcli_terminal
+dcli_sdk: ../dcli_sdk
 dcli: .
