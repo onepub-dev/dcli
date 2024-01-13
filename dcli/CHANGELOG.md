@@ -1,3 +1,6 @@
+# 3.2.8
+- fixes to the build process.
+
 # 3.2.7
 - release of 3.2.6 Fixed a cast bug in build_templates
 
