@@ -1,3 +1,6 @@
+# 3.2.7
+- release of 3.2.6 Fixed a cast bug in build_templates
+
 # 3.2.5
 - changed moveDir to fail back to copy/delete when ever the rename fails as it looks like there may be additional failure paths that we don't currently deal with.
 
