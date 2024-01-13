@@ -50,23 +50,18 @@ class _Move extends DCliFunction {
     }
     try {
       await File(from).rename(dest);
-    } on FileSystemException catch (e) {
-      if (e.osError != null && e.osError!.errorCode == 18) {
-        /// Invalid cross-device link
-        /// We can't move files across a partition so
-        /// do a copy/delete.
-        await copy(from, to, overwrite: overwrite);
-        await delete(from);
-      } else {
-        await _improveError(e, from, to);
-      }
+    } on FileSystemException catch (_) {
+      /// Invalid cross-device link
+      /// We can't move files across a partition so
+      /// do a copy/delete.
+      await copy(from, to, overwrite: overwrite);
+      await delete(from);
     }
 
     /// ignore: avoid_catches_without_on_clauses
     catch (e) {
       await _improveError(e, from, to);
     }
-    return Future.value();
   }
 }
 
