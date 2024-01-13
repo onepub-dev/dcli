@@ -1,3 +1,6 @@
+# 3.3.0
+- upgraded to latest version of dependencies.
+
 # 3.2.8
 - fixes to the build process.
 
