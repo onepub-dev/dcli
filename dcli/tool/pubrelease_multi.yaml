@@ -1,4 +1,7 @@
+dcli_common: ../dcli_common
 dcli_core: ../dcli_core
+dcli_test: ../dcli_test
+dcli_unit_tester: ../dcli_unit_tester
 dcli_input: ../dcli_input
 dcli_terminal: ../dcli_terminal
 dcli_sdk: ../dcli_sdk

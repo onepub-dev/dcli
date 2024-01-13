@@ -1,4 +1,4 @@
-// ignore_for_file: unnecessary_lambdas
+// ignore_for_file: unnecessary_lambdas, unreachable_from_main
 
 import 'package:dcli/dcli.dart';
 

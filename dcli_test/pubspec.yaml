@@ -9,6 +9,7 @@ environment:
 # Add regular dependencies here.
 dependencies:
   dcli: ^4.0.0
+  dcli_common: ^1.0.0
   dcli_core: ^4.0.0
   file: ^7.0.0
   meta: ^1.10.0

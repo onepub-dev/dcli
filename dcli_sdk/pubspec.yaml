@@ -8,6 +8,7 @@ environment:
   sdk: '>=3.0.0 <4.0.0'
 dependencies: 
   dcli: ^4.0.1-alpha.3
+  dcli_common: ^1.0.0
   dcli_core: ^4.0.1-alpha.3
   meta: ^1.10.0
   path: ^1.8.3

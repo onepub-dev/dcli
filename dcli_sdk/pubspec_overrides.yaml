@@ -7,5 +7,9 @@ dependency_overrides:
   dcli_test:
     path: ../dcli_test
 
+  dcli_common:
+    path: ../dcli_common
+
+
   settings_yaml:
     path: ../../settings_yaml

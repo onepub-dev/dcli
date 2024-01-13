@@ -1,7 +1,7 @@
 import 'dart:io' as io;
 
 import 'package:dcli/dcli.dart';
-import 'package:dcli_test/dcli_test.dart';
+import 'package:dcli_common/dcli_common.dart';
 import 'package:scope/scope.dart';
 
 /// Use this method rather than dart:io.exit()

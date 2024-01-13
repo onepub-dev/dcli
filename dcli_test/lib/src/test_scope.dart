@@ -5,8 +5,8 @@
  */
 
 import 'package:dcli/dcli.dart';
+import 'package:dcli_common/dcli_common.dart';
 import 'package:dcli_core/dcli_core.dart' as core;
-import 'package:dcli_test/dcli_test.dart';
 import 'package:path/path.dart';
 import 'package:scope/scope.dart';
 
