@@ -103,8 +103,8 @@ class LockCommand extends Command {
       );
 
   // map git
-  GitDependencyBuilder buildGit(GitPackageDependency git) =>
-      GitDependencyBuilder(
+  DependencyGitBuilder buildGit(GitPackageDependency git) =>
+      DependencyGitBuilder(
           name: git.package, url: git.url, ref: git.ref, path: git.path);
 
   // map hosted
@@ -114,10 +114,10 @@ class LockCommand extends Command {
     final constrainedVersion =
         version.max ?? version.min ?? sm.VersionConstraint.any;
     if (hosted.url.isEmpty || isPubDev(hosted.url)) {
-      return PubHostedDependencyBuilder(
+      return DependencyPubHostedBuilder(
           name: hosted.name, version: constrainedVersion.toString());
     } else {
-      return HostedDependencyBuilder(
+      return DependencyAltHostedBuilder(
           name: hosted.package,
           hosted: hosted.url,
           version: version.toString());
@@ -126,7 +126,7 @@ class LockCommand extends Command {
 
   // map path
   DependencyBuilder buildPath(PathPackageDependency path) =>
-      PathDependencyBuilder(name: path.package, path: path.path);
+      DependencyPathBuilder(name: path.package, path: path.path);
 
   @override
   String usage() => 'lock [<project path>]';
