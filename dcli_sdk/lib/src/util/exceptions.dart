@@ -45,7 +45,6 @@ class InvalidScript extends CommandLineException {
   InvalidScript(super.message);
 }
 
-
 /// Thrown when an invalid command  is passed.
 class UnknownCommand extends CommandLineException {
   ///

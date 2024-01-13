@@ -5,7 +5,6 @@
  * Written by Brett Sutton <bsutton@onepub.dev>, Jan 2022
  */
 
-
 import 'package:dcli_sdk/src/script/entry_point.dart';
 
 void main(List<String> arguments) async {

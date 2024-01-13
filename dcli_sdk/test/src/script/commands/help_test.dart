@@ -11,7 +11,6 @@ import 'package:dcli_sdk/src/script/entry_point.dart';
 import 'package:dcli_test/dcli_test.dart';
 import 'package:test/test.dart';
 
-
 void main() {
   group('Show Help', () {
     test('Help', () async {
