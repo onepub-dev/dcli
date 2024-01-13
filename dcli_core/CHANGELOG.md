@@ -1,3 +1,6 @@
+# 3.3.1
+- Fixed the move command (last update we did moveDir but forgot move) so that it will fall back to copy/delete on any rename failures.
+
 # 3.3.0
 - upgraded to latest version of dependencies.
 
