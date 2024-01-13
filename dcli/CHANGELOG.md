@@ -1,3 +1,7 @@
+# 3.3.1
+- Fixed the move function as well. It now also falls back to copy/delete on any error.
+- added new projects to the replease process.
+
 # 3.3.0
 - upgraded to latest version of dependencies.
 
