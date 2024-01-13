@@ -26,3 +26,4 @@ dcli/test/test_script/general/bin/*.exe
 dcli/test/privileged_test
 dcli/test/privileged_test
 dcli_unit_tester/bin/dcli_unit_tester
+dcli/tool/post_release_hook/.settings_yaml
