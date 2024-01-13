@@ -111,14 +111,14 @@ packages:
       path: "../../../dcli"
       relative: true
     source: path
-    version: "3.2.0"
+    version: "3.2.8"
   dcli_core:
     dependency: "direct main"
     description:
       path: "../../../dcli_core"
       relative: true
     source: path
-    version: "3.2.0"
+    version: "3.2.8"
   dcli_terminal:
     dependency: transitive
     description:
@@ -283,10 +283,10 @@ packages:
     dependency: transitive
     description:
       name: posix
-      sha256: b9951567834165152e5e78c42f3f91d7f94616a498ff0c172680eda07b65c9a6
+      sha256: a0117dc2167805aa9125b82eee515cc891819bac2f538c83646d355b16f58b9a
       url: "https://pub.dev"
     source: hosted
-    version: "6.0.0"
+    version: "6.0.1"
   pub_semver:
     dependency: transitive
     description:
@@ -307,10 +307,10 @@ packages:
     dependency: transitive
     description:
       name: pubspec_manager
-      sha256: c8ff74f2de8e3732d48934c9121195497e28b66a10883493e1990b0c7a306c14
+      sha256: "5211e3ed5699495d9c846020033ab47046929e0666c76f0af0b6af6a4982a3e0"
       url: "https://pub.dev"
     source: hosted
-    version: "1.0.0-alpha.11"
+    version: "1.0.0-alpha.12"
   scope:
     dependency: transitive
     description:

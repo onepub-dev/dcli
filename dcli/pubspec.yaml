@@ -19,7 +19,7 @@ dependencies:
   dcli_core: ^3.2.8
   equatable: ^2.0.0
   ffi: ^2.0.0
-  file: ^6.0.0
+  file: ^7.0.0
   glob: ^2.0.0
   ini: ^2.1.0
   logging: ^1.0.2
@@ -31,7 +31,7 @@ dependencies:
   pubspec_lock: ^3.0.1
   pubspec_manager: ^1.0.0-alpha.12
   scope: ^4.1.0
-  settings_yaml: ^7.0.0
+  settings_yaml: ^8.0.0
   stack_trace: ^1.10.0
   system_info2: ^4.0.0
   uuid: ^4.1.0
@@ -43,8 +43,8 @@ dev_dependencies:
   lint_hard: ^4.0.0
   mocktail: ^1.0.0
   test: ^1.0.0
-  test_api: ^0.6.0
-  test_core: ^0.5.2
+  test_api: ^0.7.0
+  test_core: ^0.6.0
 executables: 
   dcli: 
   dcli_complete: 
