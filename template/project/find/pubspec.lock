@@ -119,14 +119,14 @@ packages:
       path: "../../../dcli"
       relative: true
     source: path
-    version: "4.0.0-alpha.1"
+    version: "4.0.1-alpha.2"
   dcli_core:
     dependency: "direct main"
     description:
       path: "../../../dcli_core"
       relative: true
     source: path
-    version: "4.0.0-alpha-1"
+    version: "4.0.1-alpha.2"
   dcli_terminal:
     dependency: transitive
     description:
@@ -349,7 +349,7 @@ packages:
       path: "../../../../settings_yaml"
       relative: true
     source: path
-    version: "8.0.0-alpha.2"
+    version: "8.0.0-alpha.3"
   simple_logger:
     dependency: transitive
     description:
