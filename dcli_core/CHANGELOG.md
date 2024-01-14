@@ -1,3 +1,8 @@
+# 3.3.2
+- spelling
+- Fixed the move command (last update we did moveDir but forgot move) so that it will fall back to copy/delete on any rename failures.
+- upgraded to latest version of pubspec_manager as it has needed bug fixes.
+
 # 3.3.1
 - Fixed the move command (last update we did moveDir but forgot move) so that it will fall back to copy/delete on any rename failures.
 
