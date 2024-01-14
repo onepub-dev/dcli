@@ -1,13 +1,13 @@
 name: console_simple
 version: 0.0.1
 description: A simple command-line application created by dcli
-environment: 
+environment:
   sdk: '>=3.0.0 <4.0.0'
-  flutter: 
-dependencies: 
+  flutter:
+dependencies:
   args: ^2.4.2
-  dcli: 3.3.1
-  dcli_core: 3.3.1
+  dcli: 3.3.2
+  dcli_core: 3.3.2
 
-dev_dependencies: 
+dev_dependencies:
   lint_hard: ^4.0.0
