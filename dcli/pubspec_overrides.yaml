@@ -3,4 +3,5 @@ dependency_overrides:
     path: ../dcli_core
   dcli_test:
     path: ../dcli_test
-
+  dcli_common:
+    path: ../dcli_common

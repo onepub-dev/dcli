@@ -15,8 +15,32 @@ class DockerShell with ShellMixin, PosixShell {
   /// Attached to a bash shell with the given pid.
   DockerShell.withPid(this.pid);
 
+
+  static bool? _inDocker;
+
   /// Returns true if we are running in a docker shell
-  static final bool inDocker = exists('/.dockerenv');
+  static bool get inDocker {
+    if (_inDocker == null) {
+      /// Buildx no longer creates the /.dockerenv so we need
+      /// to check cgroups.
+      const pathToCgroup = '/proc/1/cgroup';
+
+      final lines = read(pathToCgroup).toList();
+      for (final line in lines) {
+        if (line.contains(':docker:')) {
+          _inDocker = true;
+          break;
+        }
+      }
+      if (_inDocker == false) {
+        /// At some point we should remove the ./dockerenv test
+        /// but I'm uncerain if the cgroup method works on older containers.
+        _inDocker = exists('/.dockerenv');
+      }
+    }
+
+    return _inDocker!;
+  }
 
   /// Name of the shell
   static const String shellName = 'docker';
