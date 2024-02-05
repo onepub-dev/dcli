@@ -35,7 +35,7 @@ class DockerShell with ShellMixin, PosixShell {
       }
       if (_inDocker == false) {
         /// At some point we should remove the ./dockerenv test
-        /// but I'm uncerain if the cgroup method works on older containers.
+        /// but I'm uncertain if the cgroup method works on older containers.
         _inDocker = exists('/.dockerenv');
       }
     }
