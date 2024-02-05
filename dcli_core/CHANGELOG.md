@@ -1,3 +1,6 @@
+# 3.3.4
+- Fixed a null check in the new inDocker method.
+
 # 3.3.3
 - updated the DockerShell to use /proc/1/cgroup to determine if we are in a docker container as the test for .dockerenv no longer works.
 
