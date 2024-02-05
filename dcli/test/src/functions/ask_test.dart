@@ -141,4 +141,40 @@ void main() {
 
     expect(validator.validate('9'), equals('9'));
   });
+
+  test('ask.url - default protocols', () {
+    final validator = Ask.url();
+
+    expect('https://onepub.dev', validator.validate('https://onepub.dev'));
+
+    expect(
+      () => validator.validate('http://onepub.dev'),
+      throwsA(
+        isA<AskValidatorException>().having(
+          (e) => e.message,
+          'message',
+          equals(red('Invalid URL.')),
+        ),
+      ),
+    );
+  });
+
+  test('ask.url - custom protocols', () {
+    final validator = Ask.url(protocols: ['https', 'http', 'abc']);
+
+    expect('https://onepub.dev', validator.validate('https://onepub.dev'));
+    expect('http://onepub.dev', validator.validate('http://onepub.dev'));
+    expect('abc://onepub.dev', validator.validate('abc://onepub.dev'));
+
+    expect(
+      () => validator.validate('def://onepub.dev'),
+      throwsA(
+        isA<AskValidatorException>().having(
+          (e) => e.message,
+          'message',
+          equals(red('Invalid URL.')),
+        ),
+      ),
+    );
+  });
 }
