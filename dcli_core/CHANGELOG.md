@@ -1,3 +1,6 @@
+# 3.3.3
+- updated the DockerShell to use /proc/1/cgroup to determine if we are in a docker container as the test for .dockerenv no longer works.
+
 # 3.3.2
 - spelling
 - Fixed the move command (last update we did moveDir but forgot move) so that it will fall back to copy/delete on any rename failures.
