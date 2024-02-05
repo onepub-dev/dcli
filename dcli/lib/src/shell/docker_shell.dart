@@ -20,6 +20,8 @@ class DockerShell with ShellMixin, PosixShell {
   /// Returns true if we are running in a docker shell
   static bool get inDocker {
     if (_inDocker == null) {
+      _inDocker = false;
+
       /// Buildx no longer creates the /.dockerenv so we need
       /// to check cgroups.
       const pathToCgroup = '/proc/1/cgroup';
