@@ -1,3 +1,6 @@
+# 3.3.5
+- Added support ot the Ask function to validate urls.
+
 # 3.3.4
 - Fixed a null check in the new inDocker method.
 
