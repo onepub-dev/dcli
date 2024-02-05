@@ -328,6 +328,12 @@ class Ask extends core.DCliFunction {
   /// validates that the input is a fully qualified domian name.
   static const AskValidator fqdn = _AskFQDN();
 
+  /// Validates that the input is a valid url.
+  /// You may pass in a list of acceptable protocols.
+  /// By default only 'https' is allowed.
+  static AskValidator url({List<String> protocols = const ['https']}) =>
+      _AskURL(protocols: protocols);
+
   /// validates that the input is a date.
   static const AskValidator date = _AskDate();
 
@@ -409,6 +415,21 @@ class _AskFQDN extends AskValidator {
 
     if (!isFQDN(finalLine)) {
       throw AskValidatorException(red('Invalid FQDN.'));
+    }
+    return finalLine;
+  }
+}
+
+class _AskURL extends AskValidator {
+  const _AskURL({this.protocols = const ['https']});
+
+  final List<String> protocols;
+  @override
+  String validate(String line) {
+    final finalLine = line.trim().toLowerCase();
+
+    if (!isURL(finalLine, protocols: protocols)) {
+      throw AskValidatorException(red('Invalid URL.'));
     }
     return finalLine;
   }
