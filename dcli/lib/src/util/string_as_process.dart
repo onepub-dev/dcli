@@ -555,10 +555,10 @@ extension StringAsProcess on String {
   }
 
   /// Experimental - DO NOT USE
-  Sink<List<int>> get sink {
+  Future<Sink<List<int>>> get sink async {
     final lhsRunnable = RunnableProcess.fromCommandLine(this)
       ..start(waitForStart: false);
-    return lhsRunnable.sink;
+    return await lhsRunnable.sink;
   }
 
   /// Experimental - DO NOT USE

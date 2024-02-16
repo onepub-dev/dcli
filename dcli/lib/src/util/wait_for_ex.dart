@@ -6,47 +6,9 @@
 
 // ignore_for_file: deprecated_member_use
 
-import 'dart:async';
-import 'dart:cli' as cli;
-
 import 'package:dcli_core/dcli_core.dart';
 import 'package:path/path.dart';
 import 'package:stack_trace/stack_trace.dart';
-
-/// Changes a async call into a synchronous call.
-///
-/// ```dart
-/// waitForEx(someAsyncFunction());
-/// ```
-///
-/// Wraps the standard cli waitFor
-/// but rethrows any exceptions with a repaired stacktrace.
-///
-/// Exceptions would normally have a microtask
-/// stack which is useless. The repaired stack replaces the exceptions stack
-/// with a full stack.
-// T waitForEx<T>(Future<T> future) =>
-//     Chain.capture(() => cli.waitFor<T>(future), onError: (e, st) {
-//       print('hi');
-//       Error.throwWithStackTrace(e, st);
-//     });
-
-T waitForEx<T>(Future<T> wrapped) {
-  final stackTrace = Trace.current();
-  late T value;
-  try {
-    value = cli.waitFor<T>(wrapped);
-  }
-  // ignore: avoid_catching_errors
-  on AsyncError catch (e) {
-    Error.throwWithStackTrace(e.error, _merge(stackTrace, e.stackTrace));
-    // ignore: avoid_catches_without_on_clauses
-  } catch (e, st) {
-    Error.throwWithStackTrace(e, _merge(stackTrace, st));
-  }
-
-  return value;
-}
 
 /// merges two stack traces. Used when handling futures and you want
 /// combine a futures stack exception with the original calls stack

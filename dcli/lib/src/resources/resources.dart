@@ -447,8 +447,8 @@ $line
 
 class _Resource {
   _Resource(this.pathToSource, String pathToGeneratedLibrary, this.className,
-      {required this.pathToMount})
-      : checksum = calculateHash(pathToSource).hexEncode() {
+      {required this.pathToMount}) {
+    calculateHash(pathToSource).then((e) => checksum = e.hexEncode());
     this.pathToGeneratedLibrary = relative(pathToGeneratedLibrary,
         from: join(Resources.projectRoot, 'lib'));
   }
@@ -477,7 +477,7 @@ class _Resource {
   /// be updated on the target system.
   /// Use calculateHash(pathToResource).hexEncode()
   /// to compare the checksum
-  final String checksum;
+  late String checksum;
 }
 
 /// Thrown when an error occurs trying to pack or unpack a resource file

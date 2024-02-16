@@ -8,11 +8,13 @@ import 'dart:convert';
 
 import 'package:dcli/dcli.dart';
 
-void main(List<String> args) {
+Future<void> main(List<String> args) async {
   final ls = 'ls'.process;
   final head = 'head'.process;
   final headStream = head.stream;
   // stdout.addStream(head.stream);
+
+  final sink = await head.sink;
 
   ls.stream
       .transform(utf8.decoder)
@@ -22,13 +24,13 @@ void main(List<String> args) {
         return '1: line';
       })
       .transform(utf8.encoder)
-      .listen((line) => head.sink.add(line), onDone: () {});
+      .listen((line) => sink.add(line), onDone: () {});
 
   headStream
       .transform(utf8.decoder)
       .transform(const LineSplitter())
       .listen(print, onDone: () {
-    head.sink.close();
+    sink.close();
   });
 
   print('post ils');

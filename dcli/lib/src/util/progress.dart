@@ -11,7 +11,6 @@ import 'package:async/async.dart';
 import 'package:collection/collection.dart';
 
 import '../../dcli.dart';
-import 'wait_for_ex.dart';
 
 /// central class that provides progress information about a running
 /// process.
@@ -183,7 +182,8 @@ class Progress {
   ///
   /// processes both streams until they complete
   ///
-  void _processUntilComplete(LineAction stdout, {LineAction stderr = devNull}) {
+  Future<void> _processUntilComplete(LineAction stdout,
+      {LineAction stderr = devNull}) async {
     /// We can get wired from one of the constructors
     /// or from here.
     if (!_wired) {
@@ -192,7 +192,7 @@ class Progress {
 
     // Wait for both streams to complete
     // ignore: discarded_futures
-    waitForEx(Future.wait([_stdoutCompleter.future, _stderrCompleter.future]));
+    await Future.wait([_stdoutCompleter.future, _stderrCompleter.future]);
   }
 
   ///

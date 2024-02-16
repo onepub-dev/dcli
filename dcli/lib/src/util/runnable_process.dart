@@ -16,7 +16,6 @@ import '../../dcli.dart';
 import '../process/process/settings.dart';
 import 'capture.dart';
 import 'parse_cli_command.dart';
-import 'wait_for_ex.dart';
 
 /// [printerr] provides the equivalent functionality to the
 /// standard Dart print function but instead writes
@@ -86,16 +85,16 @@ class RunnableProcess {
   String get cmdLine => '${_parsed.cmd} ${_parsed.args.join(' ')}';
 
   /// Experiemental - DO NOT USE
-  Stream<List<int>> get stream {
+  Stream<List<int>> get stream async* {
     // wait until the process has started
-    final process = waitForEx<Process>(_fProcess);
-    return process.stdout;
+    final process = await _fProcess;
+    yield* process.stdout;
   }
 
   /// Experiemental - DO NOT USE
-  Sink<List<int>> get sink {
+  Future<Sink<List<int>>> get sink async {
     // wait until the process has started
-    final process = waitForEx<Process>(_fProcess);
+    final process = await _fProcess;
     return process.stdin;
   }
 
@@ -330,7 +329,7 @@ class RunnableProcess {
     }
   }
 
-  void _waitForStart() {
+  Future<void> _waitForStart() async {
     final complete = Completer<Process>();
 
     unawaited(_fProcess
@@ -349,7 +348,7 @@ class RunnableProcess {
       }
       complete.completeError(e);
     }));
-    waitForEx<Process>(complete.future);
+    await complete.future;
   }
 
   /// Waits for the process to exit
@@ -358,10 +357,10 @@ class RunnableProcess {
   /// The main use is when using start(terminal:true).
   /// We don't have access to any IO so we just
   /// have to wait for things to finish.
-  int? _waitForExit(Progress progress, {required bool nothrow}) {
+  Future<int?> _waitForExit(Progress progress, {required bool nothrow}) async {
     final exited = Completer<int>();
-    unawaited(_fProcess.then((process) {
-      final exitCode = waitForEx<int>(process.exitCode);
+    unawaited(_fProcess.then((process) async {
+      final exitCode = await process.exitCode;
       progress.exitCode = exitCode;
 
       if (exitCode != 0 && nothrow == false) {
@@ -380,7 +379,7 @@ class RunnableProcess {
         exited.complete(exitCode);
       }
     }));
-    return waitForEx<int>(exited.future);
+    return await exited.future;
   }
 
   ///
@@ -428,7 +427,7 @@ class RunnableProcess {
       _wireStreams(process, progress);
 
       // trap the process finishing
-      process.exitCode.then((exitCode) {
+      process.exitCode.then((exitCode) async {
         // CONSIDER: do we pass the exitCode to ForEach or just throw?
         // If the start failed we don't want to rethrow
         // as the exception will be thrown async and it will
@@ -449,7 +448,7 @@ class RunnableProcess {
             ..onError(error)
             ..close();
         } else {
-          waitForEx<void>(_streamsFlushed);
+          await _streamsFlushed;
           progress.close();
         }
       });
@@ -460,7 +459,8 @@ class RunnableProcess {
   // If a LineAction exists we call
   // line action each time the process emmits a line.
   /// The [nothrow] argument is EXPERIMENTAL
-  void processUntilExit(Progress? progress, {required bool nothrow}) {
+  Future<void> processUntilExit(Progress? progress,
+      {required bool nothrow}) async {
     final exited = Completer<bool>();
 
     final progress0 = progress ?? Progress.devNull();
@@ -509,7 +509,7 @@ class RunnableProcess {
 
     try {
       // wait for the process to finish.
-      waitForEx<bool>(exited.future);
+      await exited.future;
     }
     // ignore: avoid_catches_without_on_clauses
     catch (e) {
@@ -520,10 +520,10 @@ class RunnableProcess {
   ///
   /// processes both streams until they complete.
   ///
-  void _waitForStreams() {
+  Future<void> _waitForStreams() async {
     // Wait for both streams to complete
     // ignore: discarded_futures
-    waitForEx(Future.wait([_stdoutCompleter.future, _stderrCompleter.future]));
+    await Future.wait([_stdoutCompleter.future, _stderrCompleter.future]);
   }
 
   final _stdoutCompleter = Completer<bool>();
