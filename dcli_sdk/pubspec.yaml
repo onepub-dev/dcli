@@ -17,7 +17,7 @@ dependencies:
   pubspec_manager: ^1.0.0-alpha.6
   scope: ^4.1.0
   stack_trace: ^1.11.1
-  strings: ^2.0.3
+  strings: ^3.0.0
   win32: ^4.0.0
  
 dev_dependencies:

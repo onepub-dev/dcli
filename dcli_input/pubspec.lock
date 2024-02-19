@@ -113,21 +113,29 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "3.0.0"
+  dcli_common:
+    dependency: transitive
+    description:
+      name: dcli_common
+      sha256: "88641536387592398a5ca4f791383d0d6d1db43c715ee01dc1e58d1965863216"
+      url: "https://pub.dev"
+    source: hosted
+    version: "4.0.1-alpha.6"
   dcli_core:
     dependency: "direct main"
     description:
       name: dcli_core
-      sha256: fb90c130cbdd8bcf991c268b79f5c98dd4503173cfa09d9beabae606ed8477e0
+      sha256: "5b4b32b5a29acbf97adf6bebf559581f5429025fbe683fdf4f00b5c1ea224f21"
       url: "https://pub.dev"
     source: hosted
-    version: "4.0.1-alpha.3"
+    version: "4.0.1-alpha.6"
   dcli_terminal:
     dependency: "direct main"
     description:
       path: "../dcli_terminal"
       relative: true
     source: path
-    version: "4.0.1-alpha.3"
+    version: "4.0.1-alpha.6"
   ffi:
     dependency: transitive
     description:
@@ -228,10 +236,10 @@ packages:
     dependency: "direct main"
     description:
       name: meta
-      sha256: "3c74dbf8763d36539f114c799d8a2d87343b5067e9d796ca22b5eb8437090ee3"
+      sha256: "7687075e408b093f36e6bbf6c91878cc0d4cd10f409506f7bc996f68220b9136"
       url: "https://pub.dev"
     source: hosted
-    version: "1.9.1"
+    version: "1.12.0"
   mime:
     dependency: transitive
     description:
@@ -260,10 +268,10 @@ packages:
     dependency: transitive
     description:
       name: path
-      sha256: "8829d8a55c13fc0e37127c29fedf290c102f4e40ae94ada574091fe0ff96c917"
+      sha256: "087ce49c3f0dc39180befefc60fdb4acd8f8620e5682fe2476afd0b3688bb4af"
       url: "https://pub.dev"
     source: hosted
-    version: "1.8.3"
+    version: "1.9.0"
   pool:
     dependency: transitive
     description:
@@ -481,4 +489,4 @@ packages:
     source: hosted
     version: "3.1.2"
 sdks:
-  dart: ">=3.0.0 <4.0.0"
+  dart: ">=3.2.4 <4.0.0"
