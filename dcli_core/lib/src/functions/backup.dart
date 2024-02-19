@@ -236,7 +236,6 @@ Future<R> withFileProtectionAsync<R>(
   return result;
 }
 
-
 Future<void> _restoreFile(Paths paths) async {
   await withTempFileAsync<void>(
     (dotBak) async {
