@@ -1,16 +1,16 @@
 name: dcli_common
 description: Common code used by multiple dcli packages.
-version: 4.0.1-alpha.4
+version: 4.0.1-alpha.5
 repository: https://github.com/onepub-dev/dcli
 
-environment: 
+environment:
   sdk: ^3.2.4
 
-dependencies: 
+dependencies:
   meta: ^1.12.0
   path: ^1.9.0
   scope: ^4.1.0
 
-dev_dependencies: 
+dev_dependencies:
   lint_hard: ^4.0.0
   test: ^1.24.0
