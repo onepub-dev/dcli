@@ -1,7 +1,6 @@
 name: dcli_test
-description: A sample command-line application.
+description: Test code used by dcli - not for general use.
 version: 4.0.1-alpha.6
-# repository: https://github.com/my_org/my_repo
 
 environment:
   sdk: ^3.1.3
