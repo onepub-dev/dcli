@@ -4,7 +4,7 @@ version: 4.0.1-alpha.7
 repository: https://github.com/onepub-dev/dcli
 
 environment:
-  sdk: ^3.2.4
+    sdk: '>=3.0.0 <4.0.0'
 
 dependencies:
   meta: ^1.12.0
