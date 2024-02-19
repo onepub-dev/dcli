@@ -1,3 +1,6 @@
+# 4.0.1-alpha.6
+- failed released - so did it again
+
 # 4.0.1-alpha.5
 - upgraded to latest version of pubspec_manager.
 - removed conflict for Platform definition.
