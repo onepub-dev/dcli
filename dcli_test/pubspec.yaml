@@ -1,6 +1,7 @@
 name: dcli_test
 description: Test code used by dcli - not for general use.
 version: 4.0.1-alpha.6
+repository: https://github.com/onepub-dev/dcli/tree/master/dcli_test
 
 environment:
   sdk: ^3.1.3
