@@ -7,7 +7,7 @@ library;
  * Written by Brett Sutton <bsutton@onepub.dev>, Jan 2022
  */
 
-import 'package:dcli/dcli.dart' ;
+import 'package:dcli/dcli.dart';
 import 'package:dcli_core/dcli_core.dart' as core;
 import 'package:dcli_sdk/src/templates.dart';
 import 'package:dcli_test/dcli_test.dart';
