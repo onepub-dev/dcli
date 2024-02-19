@@ -22,18 +22,18 @@ void main() {
     const envVar2 = 'AAABBBCCCDDD';
     const envVar3 = 'AAABBBCCCDDDEEE';
     expect(env.exists(envVar), false);
-    await withEnvironment(environment: {envVar: 'one', envVar2: 'two'},
+    await withEnvironmentAsync(environment: {envVar: 'one', envVar2: 'two'},
         () async {
       expect(env.exists(envVar), true);
       expect(env[envVar], 'one');
 
-      await withEnvironment(environment: {envVar: 'one-one'}, () async {
+      await withEnvironmentAsync(environment: {envVar: 'one-one'}, () async {
         expect(env.exists(envVar), true);
         expect(env[envVar], 'one-one');
 
         expect(env[envVar2], 'two');
 
-        await withEnvironment(
+        await withEnvironmentAsync(
             environment: {envVar3: 'three', envVar2: 'two-two'}, () async {
           expect(env.exists(envVar), true);
           expect(env[envVar], 'one-one');

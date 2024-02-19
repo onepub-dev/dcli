@@ -392,12 +392,12 @@ class Env extends DCliFunction {
 /// returns.
 /// This is particularly useful for unit tests and running
 /// a process that requires specific environment variables.
-Future<R> withEnvironment<R>(Future<R> Function() callback,
+Future<R> withEnvironmentAsync<R>(Future<R> Function() callback,
     {required Map<String, String> environment}) async {
   final existing = Env()._envVars;
   return (Scope()
         ..value(Env.scopeKey, Env.forScope(existing)..addAll(environment)))
-      .run(() => callback());
+      .run(() async => callback());
 }
 
 /// Base class for all Environment variable related exceptions.

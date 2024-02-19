@@ -4,8 +4,7 @@
  * Written by Brett Sutton <bsutton@onepub.dev>, Jan 2022
  */
 
-import 'package:meta/meta.dart';
-import 'package:path/path.dart' as p;
+import 'package:dcli_common/dcli_common.dart';
 import 'package:path/path.dart';
 
 import '../../dcli_core.dart';
@@ -17,7 +16,7 @@ import '../../dcli_core.dart';
 ///
 /// Be cautious that you don't nest backups of the same file
 /// in your code as we always use the same backup target.
-/// Instead use [withFileProtection].
+/// Instead use [withFileProtectionAsync].
 ///
 /// We also renamed the backup to '<filename>.bak' to ensure
 /// the backupfile doesn't interfere with dev tools
@@ -27,7 +26,7 @@ import '../../dcli_core.dart';
 /// is thrown unless you pass the [ignoreMissing] flag.
 ///
 /// See: [restoreFile]
-///   [withFileProtection]
+///   [withFileProtectionAsync]
 ///
 void backupFile(String pathToFile, {bool ignoreMissing = false}) {
   if (!exists(pathToFile)) {
@@ -53,7 +52,7 @@ void backupFile(String pathToFile, {bool ignoreMissing = false}) {
 /// from the .bak/<filename>.bak file created when
 /// you called [backupFile].
 ///
-/// Consider using [withFileProtection] for a more robust solution.
+/// Consider using [withFileProtectionAsync] for a more robust solution.
 ///
 /// When the last .bak file is restored, the .bak directory
 /// will be deleted. If you don't restore all files (your app crashes)
@@ -101,8 +100,8 @@ void restoreFile(String pathToFile, {bool ignoreMissing = false}) {
 ///
 
 ///
-/// [withFileProtection] is safe to use in a nested fashion as each call
-/// to [withFileProtection] creates its own separate backup area.
+/// [withFileProtectionAsync] is safe to use in a nested fashion as each call
+/// to [withFileProtectionAsync] creates its own separate backup area.
 ///
 /// If the VM aborts during execution of the [action] you will find
 /// the backed up files in the system temp directory under a directory named
@@ -129,11 +128,11 @@ void restoreFile(String pathToFile, {bool ignoreMissing = false}) {
 // ignore: flutter_style_todos
 /// TODO: make this work for other than current drive under Windows
 ///
-R withFileProtection<R>(
+Future<R> withFileProtectionAsync<R>(
   List<String> protected,
-  R Function() action, {
+  Future<R> Function() action, {
   String? workingDirectory,
-}) {
+}) async {
   // removed glob support for the moment.
   // This is because if one of the protected entries is missing
   // then we are assuming its a glob.
@@ -146,14 +145,14 @@ R withFileProtection<R>(
   // If the entry is a glob pattern then it is applied recusively.
 
   final workingDirectory0 = workingDirectory ?? pwd;
-  final result = withTempDir(
-    (backupDir) {
+  final result = await withTempDirAsync(
+    (backupDir) async {
       verbose(() => 'withFileProtection: backing up to $backupDir');
 
       /// backup the protected files
       /// to a backupDir
       for (final path in protected) {
-        final paths = _determinePaths(
+        final paths = determinePaths(
           path: path,
           workingDirectory: workingDirectory0,
           backupDir: backupDir,
@@ -203,11 +202,11 @@ R withFileProtection<R>(
         //   }
         // }
       }
-      final result = action();
+      final result = await action();
 
       /// restore the protected entities
       for (final path in protected) {
-        final paths = _determinePaths(
+        final paths = determinePaths(
           path: path,
           workingDirectory: workingDirectory0,
           backupDir: backupDir,
@@ -220,7 +219,7 @@ R withFileProtection<R>(
           }
 
           if (isFile(paths.backupPath)) {
-            _restoreFile(paths);
+            await _restoreFile(paths);
           }
 
           if (isDirectory(paths.backupPath)) {
@@ -237,9 +236,10 @@ R withFileProtection<R>(
   return result;
 }
 
-void _restoreFile(_Paths paths) {
-  withTempFile<void>(
-    (dotBak) {
+
+Future<void> _restoreFile(Paths paths) async {
+  await withTempFileAsync<void>(
+    (dotBak) async {
       try {
         if (exists(paths.sourcePath)) {
           move(paths.sourcePath, dotBak);
@@ -271,160 +271,6 @@ void _restoreFile(_Paths paths) {
   );
 }
 
-void _restoreDirectory(_Paths paths) {
-  /// For directories we just recreate them if necessary.
-  /// This allows us to restore empty directories.
-  if (exists(paths.sourcePath)) {
-    deleteDir(paths.sourcePath);
-  }
-  createDir(paths.sourcePath, recursive: true);
-
-  /// The find command will return all of the nested files so
-  /// we don't need to restore them when we see the directory.
-  moveTree(paths.backupPath, paths.sourcePath, includeHidden: true);
-}
-
-void _deleteEntity(String path) {
-  if (isFile(path)) {
-    delete(path);
-  } else if (isDirectory(path)) {
-    deleteDir(path);
-  } else {
-    verbose(() => 'Path is of unsuported type');
-  }
-}
-
-/// Determine the paths to the source and backup directories
-///
-/// [path] is the relative or absolute path to the
-/// file that we are going to backup. If [path] is
-/// relative then it is relative to [workingDirectory].
-/// [backupDir] is the temporary directory that we
-/// are going to backup [path] to.
-///
-/// We use the following directory structure for the backup
-/// relative/<path to [path]>
-/// absolute/<path to [path]>
-///
-/// On Windows to accomodate drive letters we need a slightly
-/// different directory structure
-/// relative/<path to [path]>
-/// absolute/<XDrive>/<path to [path]>
-///
-/// Where 'X' is the drive letter that [path] is located on.
-///
-_Paths _determinePaths({
-  required String path,
-  required String workingDirectory,
-  required String backupDir,
-}) {
-  late final String sourcePath;
-  late final String backupPath;
-
-  /// we use two different directories for relative and absolute
-  /// paths otherwise we can't differentiate when it comes time
-  /// to restore.
-  if (isRelative(path)) {
-    backupPath = truepath(backupDir, 'relative', path);
-    sourcePath = join(workingDirectory, path);
-  } else {
-    sourcePath = truepath(path);
-    final translatedPath =
-        translateAbsolutePath(path, workingDirectory: workingDirectory);
-    backupPath = join(backupDir, 'absolute', _stripRootPrefix(translatedPath));
-  }
-
-  return _Paths(sourcePath, backupPath);
-}
-
-class _Paths {
-  _Paths(this.sourcePath, this.backupPath);
-
-  String sourcePath;
-  String backupPath;
-}
-
-/// Removes the root prefix (/ or \) from an absolute path
-/// If there is no root prefix the original [absolutePath]
-/// is returned untouched.
-/// If the [absolutePath] only contains the root prefix
-/// then a blank string is returned
-///
-///  /hellow -> hellow
-///  hellow -> hellow
-///  / ->
-///
-String? _stripRootPrefix(String absolutePath) {
-  if (absolutePath.startsWith(r'\') || absolutePath.startsWith('/')) {
-    if (absolutePath.length > 1) {
-      return absolutePath.substring(1);
-    } else {
-      // the path only contained the root prefix and nothing else.
-      return '';
-    }
-  }
-  return absolutePath;
-}
-
-/// Windows, an absolute path starts with `\\`, or a drive letter followed by
-/// `:/` or `:\`.
-/// This method will strip the prefix so the path start with a \ or /
-/// and the prepend the drive letter so that it becomes a valid
-/// path. If the [absolutePath] doesn't contain a drive letter
-/// then we take the drive letter from the [workingDirectory].
-/// If this is a linux absolute path it is returned unchanged.
-///
-/// C:/abc -> /CDrive/abc
-/// C:\abc -> /CDrive\abc
-/// \\\abc -> \abc
-/// \\abc -> abc
-///
-/// The [context] is only used for unit testing so
-/// we can fake the platform separator.
-@visibleForTesting
-String translateAbsolutePath(
-  String absolutePath, {
-  String? workingDirectory,
-  p.Context? context,
-}) {
-  final windowsStyle = context != null && context.style == Style.windows;
-  if (!windowsStyle && !Settings().isWindows) {
-    return absolutePath;
-  }
-
-  context ??= p.context;
-
-  // ignore: parameter_assignments
-  workingDirectory ??= pwd;
-
-  final parts = context.split(absolutePath);
-  if (parts[0].contains(':')) {
-    final index = parts[0].indexOf(':');
-
-    final drive = parts[0][index - 1].toUpperCase();
-    return context.joinAll(['\\${drive}Drive', ...parts.sublist(1)]);
-  }
-
-  if (parts[0].startsWith(r'\\')) {
-    final uncparts = parts[0].split(r'\\');
-    return context.joinAll([r'\UNC', ...uncparts.sublist(1)]);
-  }
-
-  if (absolutePath.startsWith(r'\') || absolutePath.startsWith('/')) {
-    String drive;
-    if (workingDirectory.contains(':')) {
-      drive = workingDirectory[0].toUpperCase();
-    } else {
-      drive = pwd[0].toUpperCase();
-    }
-    return context.joinAll(['\\${drive}Drive', ...parts.sublist(1)]);
-  }
-
-  /// probably not an absolute path
-  /// so just pass back what we were handed.
-  return absolutePath;
-}
-
 String _backupFilePath(String pathToFile) {
   final sourcePath = dirname(pathToFile);
   final destPath = join(sourcePath, '.bak');
@@ -447,4 +293,27 @@ class BackupFileException extends DCliException {
   /// Creates a [BackupFileException] with the given
   /// message.
   BackupFileException(super.message);
+}
+
+void _restoreDirectory(Paths paths) {
+  /// For directories we just recreate them if necessary.
+  /// This allows us to restore empty directories.
+  if (exists(paths.sourcePath)) {
+    deleteDir(paths.sourcePath);
+  }
+  createDir(paths.sourcePath, recursive: true);
+
+  /// The find command will return all of the nested files so
+  /// we don't need to restore them when we see the directory.
+  moveTree(paths.backupPath, paths.sourcePath, includeHidden: true);
+}
+
+void _deleteEntity(String path) {
+  if (isFile(path)) {
+    delete(path);
+  } else if (isDirectory(path)) {
+    deleteDir(path);
+  } else {
+    verbose(() => 'Path is of unsuported type');
+  }
 }

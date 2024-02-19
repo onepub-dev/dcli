@@ -4,7 +4,9 @@
  * Written by Brett Sutton <bsutton@onepub.dev>, Jan 2022
  */
 
+import 'package:dcli_common/dcli_common.dart';
 import 'package:dcli_core/dcli_core.dart' as core;
+import 'package:path/path.dart';
 
 import '../../dcli.dart';
 
@@ -63,7 +65,8 @@ void restoreFile(String pathToFile, {bool ignoreMissing = false}) =>
 /// into a unique system temp directory and then moved back once the
 /// [action] has completed.
 ///
-
+/// NOTE: DO NOT use this with an async [action]. Instead use
+/// dcli_core.withFileProtectionAsync.
 ///
 /// [withFileProtection] is safe to use in a nested fashion as each call
 /// to [withFileProtection] creates its own separate backup area.
@@ -93,13 +96,167 @@ void restoreFile(String pathToFile, {bool ignoreMissing = false}) =>
 // ignore: flutter_style_todos
 /// TODO: make this work for other than current drive under Windows
 ///
-void withFileProtection(
+R withFileProtection<R>(
   List<String> protected,
-  void Function() action, {
+  R Function() action, {
   String? workingDirectory,
-}) =>
-    core.withFileProtection(
-      protected,
-      action,
-      workingDirectory: workingDirectory,
-    );
+}) {
+  // removed glob support for the moment.
+  // This is because if one of the protected entries is missing
+  // then we are assuming its a glob.
+  // We should probably change to accepting a Pattern
+  // and the have the user pass an actual Glob.
+  // Problem with this is that find uses a subset of Glob.
+  // so for the moment, no glob support
+  // a glob pattern as supported by the [find] command.
+  // We only support searching for files by the glob pattern (not directories).
+  // If the entry is a glob pattern then it is applied recusively.
+
+  final workingDirectory0 = workingDirectory ?? pwd;
+  final result = withTempDir(
+    (backupDir) {
+      verbose(() => 'withFileProtection: backing up to $backupDir');
+
+      /// backup the protected files
+      /// to a backupDir
+      for (final path in protected) {
+        final paths = determinePaths(
+          path: path,
+          workingDirectory: workingDirectory0,
+          backupDir: backupDir,
+        );
+
+        if (!exists(paths.sourcePath)) {
+          /// the file/directory doesn't exist.
+          /// During the restore process this path will be deleted
+          /// so that once again they don't exist.
+          continue;
+        }
+
+        if (isFile(paths.sourcePath)) {
+          if (!exists(dirname(paths.backupPath))) {
+            createDir(dirname(paths.backupPath), recursive: true);
+          }
+
+          /// the entity is a simple file.
+          copy(paths.sourcePath, paths.backupPath);
+        } else if (isDirectory(paths.sourcePath)) {
+          /// the entity is a directory so copy the whole tree
+          /// recursively.
+          if (!exists(paths.backupPath)) {
+            createDir(paths.backupPath, recursive: true);
+          }
+          copyTree(paths.sourcePath, paths.backupPath, includeHidden: true);
+        } else {
+          throw BackupFileException(
+            'Unsupported entity type for ${paths.sourcePath}. '
+            'Only files and directories are supported',
+          );
+        }
+        // else {
+        //   /// Must be a glob.
+        //   for (final file in find(paths.source, includeHidden: true)
+        //        .toList()) {
+        //     // we need to determine the paths for each [file]
+        //     // as the can have a different relative path as we
+        //     // do a recursive search.
+        //     final paths = _determinePaths(
+        //         path: file, sourceDir: sourceDir, backupDir: backupDir);
+
+        //     if (!exists(dirname(paths.target))) {
+        //       createDir(dirname(paths.target), recursive: true);
+        //     }
+        //     copy(paths.source, paths.target);
+        //   }
+        // }
+      }
+      final result = action();
+
+      /// restore the protected entities
+      for (final path in protected) {
+        final paths = determinePaths(
+          path: path,
+          workingDirectory: workingDirectory0,
+          backupDir: backupDir,
+        );
+        {
+          if (!exists(paths.backupPath)) {
+            /// If the protected entity didn't exist before we started
+            /// the make certain it doesn't exist now.
+            _deleteEntity(paths.sourcePath);
+          }
+
+          if (isFile(paths.backupPath)) {
+            _restoreFile(paths);
+          }
+
+          if (isDirectory(paths.backupPath)) {
+            _restoreDirectory(paths);
+          }
+        }
+      }
+
+      return result;
+    },
+    keep: true,
+  );
+
+  return result;
+}
+
+void _deleteEntity(String path) {
+  if (isFile(path)) {
+    delete(path);
+  } else if (isDirectory(path)) {
+    deleteDir(path);
+  } else {
+    verbose(() => 'Path is of unsuported type');
+  }
+}
+
+void _restoreFile(Paths paths) {
+  withTempFile<void>(
+    (dotBak) {
+      try {
+        if (exists(paths.sourcePath)) {
+          move(paths.sourcePath, dotBak);
+        }
+
+        // ignore: flutter_style_todos
+        /// TODO: consider only restoring the file if its last modified
+        /// time has changed.
+        move(paths.backupPath, paths.sourcePath);
+        if (exists(dotBak)) {
+          delete(dotBak);
+        }
+        // ignore: avoid_catches_without_on_clauses
+      } catch (e) {
+        /// The restore failed so if the dotBak file
+        /// exists lets at least restore that.
+        if (exists(dotBak)) {
+          /// this should never happen as if we have the dotBak
+          /// file then the originalFile should not exists.
+          /// but just in case.
+          if (exists(paths.sourcePath)) {
+            delete(paths.sourcePath);
+          }
+          move(dotBak, paths.sourcePath);
+        }
+      }
+    },
+    create: false,
+  );
+}
+
+void _restoreDirectory(Paths paths) {
+  /// For directories we just recreate them if necessary.
+  /// This allows us to restore empty directories.
+  if (exists(paths.sourcePath)) {
+    deleteDir(paths.sourcePath);
+  }
+  createDir(paths.sourcePath, recursive: true);
+
+  /// The find command will return all of the nested files so
+  /// we don't need to restore them when we see the directory.
+  moveTree(paths.backupPath, paths.sourcePath, includeHidden: true);
+}

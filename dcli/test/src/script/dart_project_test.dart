@@ -34,14 +34,14 @@ void main() {
       //    await TestFileSystem().withinZone((fs) async {
 //        InstallCommand().initTemplates();
 
-      await core.withTempDir((tempDir) async {
+      await core.withTempDirAsync((tempDir) async {
         const projectName = 'full_test';
         final pathToProject = join(tempDir, projectName);
 
         const mainScriptName = '$projectName.dart';
         final scriptPath = join(pathToProject, 'bin', mainScriptName);
 
-        await withEnvironment(() async {
+        await core.withEnvironmentAsync(() async {
           DartProject.create(pathTo: pathToProject, templateName: 'full');
         }, environment: {
           overrideDCliPathKey: DartProject.self.pathToProjectRoot

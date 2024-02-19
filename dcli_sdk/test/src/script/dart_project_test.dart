@@ -8,6 +8,7 @@ library;
  */
 
 import 'package:dcli/dcli.dart';
+import 'package:dcli_core/dcli_core.dart' as core;
 import 'package:dcli_sdk/src/templates.dart';
 import 'package:dcli_test/dcli_test.dart';
 import 'package:path/path.dart' hide equals;
@@ -25,7 +26,7 @@ void main() {
         const mainScriptName = '$projectName.dart';
         final scriptPath = join(pathToProject, 'bin', mainScriptName);
 
-        await withEnvironment(() async {
+        await core.withEnvironmentAsync(() async {
           'dcli create --template=full $projectName'
               .start(workingDirectory: pathToProject);
         }, environment: {

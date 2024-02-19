@@ -35,6 +35,10 @@ String createTempFile({String? suffix}) =>
 
 /// Creates a temp file and then calls [action].
 ///
+///
+/// NOTE: DO NOT use this with an async [action]. Instead
+/// use dcli_core.withTempFileAsync.
+///
 /// Once [action] completes the temporary file will be deleted.
 ///
 /// The [action]s return value [R] is returned from the [withTempFile]

@@ -41,7 +41,7 @@ String createDir(String path, {bool recursive = false}) =>
 /// Creates a temp directory and then calls [action].
 /// Once action completes the temporary directory will be deleted.
 ///
-/// The actions return value [R] is returned from the [withTempDir]
+/// The actions return value [R] is returned from the [withTempDirAsync]
 /// function.
 ///
 /// If you pass [keep] = true then the temp directory won't be deleted.
@@ -52,13 +52,13 @@ String createDir(String path, {bool recursive = false}) =>
 /// and sometimes you want it created.
 /// If you pass in [pathToTempDir] it will NOT be deleted regardless
 /// of the value of [keep].
-R withTempDir<R>(R Function(String tempDir) action,
-    {bool keep = false, String? pathToTempDir}) {
+Future<R> withTempDirAsync<R>(Future<R> Function(String tempDir) action,
+    {bool keep = false, String? pathToTempDir}) async {
   final dir = pathToTempDir ?? createTempDir();
 
   R result;
   try {
-    result = action(dir);
+    result = await action(dir);
   } finally {
     if (!keep && pathToTempDir == null) {
       deleteDir(dir);

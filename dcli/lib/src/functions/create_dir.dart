@@ -40,6 +40,10 @@ String createDir(String path, {bool recursive = false}) =>
 /// Creates a temp directory and then calls [action].
 /// Once action completes the temporary directory will be deleted.
 ///
+/// NOTE: DO NOT call this with an async [action]. If you do
+/// the temporary directory will be deleted whilst the action is running.
+/// If you have an async action then use core.withTempDirAsync.
+///
 /// The actions return value [R] is returned from the [withTempDir]
 /// function.
 ///
@@ -52,8 +56,19 @@ String createDir(String path, {bool recursive = false}) =>
 /// If you pass in [pathToTempDir] it will NOT be deleted regardless
 /// of the value of [keep].
 R withTempDir<R>(R Function(String tempDir) action,
-        {bool keep = false, String? pathToTempDir}) =>
-    core.withTempDir<R>((x) => action(x), keep: keep);
+    {bool keep = false, String? pathToTempDir}) {
+  final dir = pathToTempDir ?? createTempDir();
+
+  R result;
+  try {
+    result = action(dir);
+  } finally {
+    if (!keep && pathToTempDir == null) {
+      deleteDir(dir);
+    }
+  }
+  return result;
+}
 
 /// Creates a temporary directory under the system temp folder.
 /// The temporary directory name is formed from a uuid.

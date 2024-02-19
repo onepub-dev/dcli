@@ -11,7 +11,7 @@ import 'package:test/test.dart';
 
 void main() {
   test('line file ...', () async {
-    await withTempFile((file) async {
+    await withTempFileAsync((file) async {
       final buffer = <String>[];
 
       final src = File(file).openSync(mode: FileMode.write);

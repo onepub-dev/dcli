@@ -61,7 +61,7 @@ void main() {
       });
     });
 
-    await withTempFile((pathToLarge) async {
+    await withTempFileAsync((pathToLarge) async {
       await _createLargeFile(pathToLarge);
       final getCompleter = Completer<bool>();
 

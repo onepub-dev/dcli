@@ -29,9 +29,8 @@ export 'package:dcli_core/dcli_core.dart'
         pwd,
         rootPath,
         // RestoreFileException,
-        translateAbsolutePath,
         truepath,
-        withEnvironment
+        withEnvironmentAsync
     // CatException;
     ;
 export 'package:dcli_core/src/util/dev_null.dart';

@@ -9,12 +9,13 @@ export 'src/functions/cat.dart';
 export 'src/functions/copy.dart'; //  show copy, CopyException;
 export 'src/functions/copy_tree.dart' show CopyTreeException, copyTree;
 export 'src/functions/create_dir.dart'
-    show CreateDirException, createDir, createTempDir, withTempDir;
+    show CreateDirException, createDir, createTempDir, withTempDirAsync;
+export 'src/functions/create_dir.dart';
 export 'src/functions/dcli_function.dart';
 export 'src/functions/delete.dart' show DeleteException, delete;
 export 'src/functions/delete_dir.dart' show DeleteDirException, deleteDir;
 export 'src/functions/env.dart'
-    show Env, HOME, PATH, env, envs, isOnPATH, withEnvironment;
+    show Env, HOME, PATH, env, envs, isOnPATH, withEnvironmentAsync;
 export 'src/functions/find.dart';
 export 'src/functions/head.dart';
 export 'src/functions/is.dart';

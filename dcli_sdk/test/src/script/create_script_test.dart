@@ -25,7 +25,7 @@ void main() {
         const scriptName = 'extra.dart';
         final scriptPath = join(scriptDir, 'bin', scriptName);
 
-        await withEnvironment(() async {
+        await withEnvironmentAsync(() async {
           'dcli -v create $scriptDir'.run;
 
           'dcli -v create $scriptPath'.run;
@@ -45,7 +45,7 @@ void main() {
         const scriptName = 'extra.dart';
         final scriptPath = join(scriptDir, 'bin', scriptName);
 
-        await withEnvironment(() async {
+        await withEnvironmentAsync(() async {
           'dcli create $scriptDir'.run;
 
           'dcli create --template=cmd_args $scriptPath'.run;

@@ -7,7 +7,8 @@ library;
  * Written by Brett Sutton <bsutton@onepub.dev>, Jan 2022
  */
 
-import 'package:dcli/dcli.dart';
+import 'package:dcli/dcli.dart' ;
+import 'package:dcli_core/dcli_core.dart' as core;
 import 'package:dcli_sdk/src/templates.dart';
 import 'package:dcli_test/dcli_test.dart';
 import 'package:path/path.dart' as p;
@@ -24,7 +25,7 @@ void main() {
           _installTemplates();
           final pathToTemplate = join(fs, 'test');
 
-          await withEnvironment(() async {
+          await core.withEnvironmentAsync(() async {
             DartProject.create(pathTo: pathToTemplate, templateName: 'simple')
                 .warmup();
           }, environment: {
@@ -44,7 +45,7 @@ void main() {
             final pathToScript = truepath(fs, 'test', 'bin', scriptName);
             final pathToTemplate = join(fs, 'test');
 
-            await withEnvironment(() async {
+            await core.withEnvironmentAsync(() async {
               DartProject.create(pathTo: pathToTemplate, templateName: 'simple')
                   .warmup();
             }, environment: {

@@ -5,6 +5,7 @@
  */
 
 import 'package:dcli/dcli.dart';
+import 'package:dcli_core/dcli_core.dart' as core;
 import 'package:dcli_test/src/test_scope.dart';
 import 'package:path/path.dart' hide equals;
 import 'package:pub_semver/pub_semver.dart';
@@ -34,7 +35,7 @@ void main() {
     'PubCache - from ENV',
     () async {
       await withTestScope((outerTempDir) async {
-        await withEnvironment(() async {
+        await core.withEnvironmentAsync(() async {
           /// create a pub-cache using the test scope's HOME
           final scope = Scope()..value(PubCache.scopeKey, PubCache.forScope());
           await scope.run(() async {
@@ -60,7 +61,7 @@ void main() {
 
   test('PubCache - primaryVersion', () async {
     await withTestScope((tempDir) async {
-      await withEnvironment(() async {
+      await core.withEnvironmentAsync(() async {
         /// create a pub-cache using the test scope's HOME
         final scope = Scope()..value(PubCache.scopeKey, PubCache.forScope());
         await scope.run(() async {
@@ -99,7 +100,7 @@ void main() {
 
   test('PubCache - findVersion', () async {
     await withTestScope((tempDir) async {
-      await withEnvironment(() async {
+      await core.withEnvironmentAsync(() async {
         /// create a pub-cache using the test scope's HOME
         final scope = Scope()..value(PubCache.scopeKey, PubCache.forScope());
         await scope.run(() async {

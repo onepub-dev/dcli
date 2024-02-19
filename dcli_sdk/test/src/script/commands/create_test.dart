@@ -16,7 +16,7 @@ import 'package:test/test.dart';
 
 void main() {
   test('create no args', () async {
-    await core.withTempDir((dir) async {
+    await core.withTempDirAsync((dir) async {
       await capture(() async {
         /// no args
         expect(
@@ -29,7 +29,7 @@ void main() {
     });
   });
   test('create project', () async {
-    await core.withTempDir((dir) async {
+    await core.withTempDirAsync((dir) async {
       final pathToProject = join(dir, 'simple_project');
 
       await capture(() async {
@@ -46,7 +46,7 @@ void main() {
     });
   });
   test('create non-existant directory', () async {
-    await core.withTempDir((dir) async {
+    await core.withTempDirAsync((dir) async {
       final pathToSpawnScript = join(dir, 'bin/spawn.dart');
 
       await capture(() async {

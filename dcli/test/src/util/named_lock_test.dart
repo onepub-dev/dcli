@@ -41,9 +41,9 @@ void main() {
   test(
     'withLock',
     () async {
-      await core.withTempDir(
+      await core.withTempDirAsync(
         (fs) async {
-          await core.withTempFile((logFile) async {
+          await core.withTempFileAsync((logFile) async {
             print('logfile: $logFile');
             logFile.truncate();
 

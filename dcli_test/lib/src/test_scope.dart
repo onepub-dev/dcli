@@ -27,8 +27,8 @@ Future<void> withTestScope(Future<void> Function(String testDir) callback,
   // final originalHome = HOME;
 
   await UnitTestController.withUnitTest(() async {
-    await core.withTempDir((testDir) async {
-      await core.withEnvironment(() async {
+    await core.withTempDirAsync((testDir) async {
+      await core.withEnvironmentAsync(() async {
         final scope = Scope()
           // ignore: invalid_use_of_visible_for_testing_member
           ..value(installFromSourceKey, true)

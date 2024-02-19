@@ -147,7 +147,7 @@ int fileLength(String pathToFile) => File(pathToFile).lengthSync();
 ///
 /// Once [action] completes the temporary file will be deleted.
 ///
-/// The [action]s return value [R] is returned from the [withTempFile]
+/// The [action]s return value [R] is returned from the [withTempFileAsync]
 /// function.
 ///
 /// If [create] is true (default true) then the temp file will be
@@ -161,13 +161,13 @@ int fileLength(String pathToFile) => File(pathToFile).lengthSync();
 /// The temp file name will be <uuid>.tmp
 /// unless you provide a [suffix] in which
 /// case the file name will be <uuid>.<suffix>
-R withTempFile<R>(
-  R Function(String tempFile) action, {
+Future<R> withTempFileAsync<R>(
+  Future<R> Function(String tempFile) action, {
   String? suffix,
   String? pathToTempDir,
   bool create = true,
   bool keep = false,
-}) {
+}) async {
   final tmp = createTempFilename(suffix: suffix, pathToTempDir: pathToTempDir);
   if (create) {
     touch(tmp, create: true);
@@ -175,7 +175,7 @@ R withTempFile<R>(
 
   R result;
   try {
-    result = action(tmp);
+    result = await action(tmp);
   } finally {
     if (exists(tmp) && !keep) {
       delete(tmp);
