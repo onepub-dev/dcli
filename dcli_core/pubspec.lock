@@ -85,10 +85,10 @@ packages:
     dependency: "direct main"
     description:
       name: dcli_common
-      sha256: "88641536387592398a5ca4f791383d0d6d1db43c715ee01dc1e58d1965863216"
+      sha256: e6fd92c1df97f5c30e7d46e7d0d9c42306770b6a9f05c1d0b425c7cbb70f511f
       url: "https://pub.dev"
     source: hosted
-    version: "4.0.1-alpha.6"
+    version: "4.0.1-alpha.7"
   ffi:
     dependency: "direct main"
     description:

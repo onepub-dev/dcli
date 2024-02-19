@@ -1,3 +1,6 @@
+# 4.0.1-alpha.7
+- upgrade settings_yaml version.
+
 # 4.0.1-alpha.6
 - failed released - so did it again
 
