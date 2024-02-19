@@ -19,7 +19,6 @@ import 'package:dcli_test/dcli_test.dart';
 import 'package:path/path.dart' hide equals;
 import 'package:test/test.dart';
 
-
 void main() {
   test(
     'runnable process Start - forEach',

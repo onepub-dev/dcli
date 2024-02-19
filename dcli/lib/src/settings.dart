@@ -64,8 +64,6 @@ class Settings {
   /// The DCli version you are running
   String? version;
 
-
-
   String? _dcliPath;
 
   /// The name of the dcli settings directory.
@@ -116,7 +114,6 @@ class Settings {
   /// Path to the directory where users can store their own custom templates
   String get pathToTemplateScriptCustom =>
       p.join(pathToDCli, templateDir, 'script', 'custom');
-
 
   /// returns true if the -v (verbose) flag was set on the
   /// dcli command line.

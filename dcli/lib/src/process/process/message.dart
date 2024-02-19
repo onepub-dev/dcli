@@ -38,7 +38,6 @@ class Message {
   static final int _msgStderrCode = msgStderr.codeUnitAt(0);
 
   BytesBuilder builder = BytesBuilder();
-  
 
   Uint8List get message => builder.takeBytes();
 }
