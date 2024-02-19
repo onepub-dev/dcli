@@ -15,6 +15,6 @@ void main(List<String> args) {
   print('''
 The 'dcli' command has been moved to the dcli_sdk package.
 Please run:
-dart pub global activate dcli_sdk
+dart pub global activate dcli_sdk --overwrite
 ''');
 }

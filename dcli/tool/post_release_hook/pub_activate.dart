@@ -12,5 +12,5 @@ import 'package:dcli/src/version/version.g.dart';
 void main(List<String> args) {
   /// we pass the version so that we can activate pre-relase version
   /// (e.g. -beta.1) which the activate command will usually ignore.
-  'dart pub global activate dcli $packageVersion'.run;
+  'dart pub global activate dcli_sdk $packageVersion'.run;
 }
