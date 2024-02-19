@@ -6,7 +6,7 @@
 
 library dart_project;
 
-import 'dart:io';
+import 'dart:io' as io;
 
 import 'package:meta/meta.dart';
 import 'package:path/path.dart';
@@ -110,14 +110,14 @@ class DartProject {
   ///
   // ignore: prefer_constructors_over_static_methods
   static DartProject get self {
-    if (Platform.packageConfig != null) {
+    if (io.Platform.packageConfig != null) {
       /// When running as a unit test we can't use DartScript.self
       /// as it returns the the test runner.
       /// The packageConfig is available if passed (which unit tests do)
       /// and when passed is probably the most relable means of
       /// determining the project directory.
       return _current ??=
-          DartProject.fromPath(dirname(Platform.packageConfig!));
+          DartProject.fromPath(dirname(io.Platform.packageConfig!));
     }
     final script = DartScript.self;
     var startFrom = '.';
@@ -244,7 +244,7 @@ class DartProject {
             // by running another copy of dcli.
             print('DCli warmup started in the background.');
             '${DCliPaths().dcliName} '
-                    '-v=${join(Directory.systemTemp.path, 'dcli.warmup.log')}'
+                    '''-v=${join(io.Directory.systemTemp.path, 'dcli.warmup.log')}'''
                     ' warmup $pathToProjectRoot'
                 .start(
               detached: true,

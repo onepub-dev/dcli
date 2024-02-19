@@ -4,7 +4,7 @@
  * Written by Brett Sutton <bsutton@onepub.dev>, Jan 2022
  */
 
-import 'dart:io';
+import 'dart:io' as io;
 import 'dart:math';
 
 import 'package:meta/meta.dart';
@@ -38,19 +38,19 @@ class DartScript {
   // static String? __pathToCurrentScript;
 
   DartScript._self() {
-    final script = Platform.script;
+    final script = io.Platform.script;
 
     String pathToScript;
 
     if (inUnitTest) {
       pathToScript = _unitTestPath ?? '';
     } else if (script.isScheme('file')) {
-      pathToScript = Platform.script.toFilePath();
+      pathToScript = io.Platform.script.toFilePath();
 
       pathToScript = stripDartVersionSuffix(pathToScript);
 
       if (_isCompiled && !_isPubGlobalActivated(pathToScript)) {
-        pathToScript = Platform.resolvedExecutable;
+        pathToScript = io.Platform.resolvedExecutable;
       }
     } else {
       /// when running in a unit test we can end up with a 'data' scheme
@@ -160,8 +160,8 @@ class DartScript {
   bool get isCompiled => _isCompiled;
 
   static bool get _isCompiled =>
-      p.extension(Platform.script.toFilePath()) != '.dart' &&
-      !_isPubGlobalActivated(Platform.script.toFilePath());
+      p.extension(io.Platform.script.toFilePath()) != '.dart' &&
+      !_isPubGlobalActivated(io.Platform.script.toFilePath());
 
   String? _unitTestPath;
 
