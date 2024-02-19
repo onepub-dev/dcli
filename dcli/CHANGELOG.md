@@ -1,3 +1,5 @@
+# 4.0.1-alpha.6
+
 # 4.0.0
 - BREAKING - removed the PubSpec class. We now recommend that you use the
 package pubspec_manager which provide similar (better) functionality
