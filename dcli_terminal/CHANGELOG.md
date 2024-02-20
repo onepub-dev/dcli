@@ -1,3 +1,7 @@
+# 4.0.1-alpha.8
+- fixed the sdk range for dcli_common
+- switch to activating dcli_sdk instead of dcli.
+
 # 4.0.1-alpha.7
 - upgrade settings_yaml version.
 
