@@ -13,7 +13,7 @@ import 'mailbox.dart';
 import 'message.dart';
 import 'native_calls.dart';
 import 'process_channel.dart';
-import 'settings.dart';
+import 'process_settings.dart';
 
 /// Call a process synchronously
 class ProcessSync {

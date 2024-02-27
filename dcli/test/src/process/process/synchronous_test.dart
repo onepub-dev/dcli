@@ -1,4 +1,4 @@
-import 'package:dcli/src/process/process/settings.dart';
+import 'package:dcli/src/process/process/process_settings.dart';
 import 'package:dcli/src/process/process/synchronous.dart';
 import 'package:test/test.dart';
 
