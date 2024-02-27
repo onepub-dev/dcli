@@ -1,3 +1,6 @@
+# 3.3.6
+- update the pubspec_manager package to the latest version.
+
 # 3.3.5
 - Added support ot the Ask function to validate urls.
 
