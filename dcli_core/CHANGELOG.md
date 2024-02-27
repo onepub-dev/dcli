@@ -1,3 +1,6 @@
+# 3.3.6
+- upgraded to latest version of pubspec_manager to avoid conflict with the Platform class.
+
 # 3.3.5
 - Added support ot the Ask function to validate urls.
 
