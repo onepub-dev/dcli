@@ -13,7 +13,7 @@ import 'package:path/path.dart';
 import 'package:stack_trace/stack_trace.dart';
 
 import '../../dcli.dart';
-import '../process/process/settings.dart';
+import '../process/process/process_settings.dart';
 import 'capture.dart';
 import 'parse_cli_command.dart';
 import 'wait_for_ex.dart';
@@ -289,8 +289,13 @@ class RunnableProcess {
     /// we add 'sudo' in front of the command.
     if (privileged && !Settings().isWindows) {
       if (!Shell.current.isPrivilegedUser) {
-        _parsed.args.insert(0, _parsed.cmd);
-        _parsed.cmd = 'sudo';
+        if (which('sudo').found) {
+          _parsed.args.insert(0, _parsed.cmd);
+          _parsed.cmd = 'sudo';
+        } else {
+          verbose(() =>
+              "privileged was requested but  sudo doesn't exist on the path");
+        }
       }
     }
 

@@ -63,7 +63,7 @@ class Remote {
   ///
   /// The commands are chained into a single command line with the
   /// bash command delimiter ';'
-  /// betwen each command.
+  /// between each command.
   ///
   /// If you set [sudo] to true then each command is run under sudo.
   /// If you set [password] then the password is passed to the sudo command.

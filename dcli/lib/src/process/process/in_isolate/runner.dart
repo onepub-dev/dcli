@@ -7,7 +7,7 @@ import 'package:dcli_core/dcli_core.dart';
 import '../../../util/ansi_color.dart';
 import '../../../util/parse_cli_command.dart';
 import '../../../util/runnable_process.dart';
-import '../settings.dart';
+import '../process_settings.dart';
 
 class ProcessRunner {
   ProcessRunner(this.settings) {
@@ -65,8 +65,15 @@ class ProcessRunner {
     /// we add 'sudo' in front of the command.
     if (settings.privileged && !Settings().isWindows) {
       if (!settings.isPriviledgedUser) {
-        _parsed.args.insert(0, _parsed.cmd);
-        _parsed.cmd = 'sudo';
+        /// if sudo doesn't exist, no point appending it.
+        /// Can happen in a docker container.
+        if (which('sudo').found) {
+          _parsed.args.insert(0, _parsed.cmd);
+          _parsed.cmd = 'sudo';
+        } else {
+          verbose(() =>
+              "privileged was requested but  sudo doesn't exist on the path");
+        }
       }
     }
 
