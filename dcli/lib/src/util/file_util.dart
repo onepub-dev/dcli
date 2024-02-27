@@ -8,8 +8,6 @@ import 'package:crypto/crypto.dart';
 import 'package:dcli_core/dcli_core.dart' as core;
 import 'package:file/file.dart';
 
-import 'wait_for_ex.dart';
-
 ///
 ///
 /// Returns a FileStat instance describing the
@@ -37,7 +35,7 @@ int fileLength(String pathToFile) => core.fileLength(pathToFile);
 /// Throws [NotAFileException] if path is
 /// not a file.
 // ignore: discarded_futures
-Digest calculateHash(String path) => waitForEx(core.calculateHash(path));
+Digest calculateHash(String path) => core.calculateHash(path);
 
 /// Thrown when a file doesn't exist
 class FileNotFoundException extends core.DCliException {

@@ -381,11 +381,15 @@ class Env extends DCliFunction {
   String _toEncodable(Object? object) => object.toString();
 }
 
-/// Creates a environment that is contained to the scope
+/// Injects environment variables into the scope
 /// of the [callback] method.
 ///
-/// The [environment] map is merged with the current [env] and
+/// The passed [environment] map is merged with the current [env] and
 /// injected into the [callback]'s scope.
+///
+/// Note: code that access [Platform.environment] directly
+/// will not see the environment variables injected via
+/// this method. You must use the dcli [env] variable.
 ///
 /// Any changes to [env] within the scope of the callback
 /// are only visible inside that scope and revert once [callback]
@@ -398,6 +402,19 @@ Future<R> withEnvironmentAsync<R>(Future<R> Function() callback,
   return (Scope()
         ..value(Env.scopeKey, Env.forScope(existing)..addAll(environment)))
       .run(() async => callback());
+}
+
+/// Injects environment variables into the scope
+/// of the [callback] method.
+/// You must [withEnvironmentAsync] if the callback is async.
+///
+/// See [withEnvironmentAsync] for general details
+R withEnvironment<R>(R Function() callback,
+    {required Map<String, String> environment}) {
+  final existing = Env()._envVars;
+  return (Scope()
+        ..value(Env.scopeKey, Env.forScope(existing)..addAll(environment)))
+      .runSync(() => callback());
 }
 
 /// Base class for all Environment variable related exceptions.

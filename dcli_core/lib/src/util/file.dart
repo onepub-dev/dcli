@@ -184,34 +184,33 @@ Future<R> withTempFileAsync<R>(
   return result;
 }
 
-/// Calculates the sha256 hash of a file's
-/// content.
-///
-/// This is likely to be an expensive operation
-/// if the file is large.
-///
-/// You can use this method to check if a file
-/// has changes since the last time you took
-/// the file's hash.
-///
-/// Throws [FileNotFoundException] if [path]
-/// doesn't exist.
-/// Throws [NotAFileException] if path is
-/// not a file.
-Future<Digest> calculateHash(String path) async {
+Digest calculateHash(String path) {
   if (!exists(path)) {
     throw FileNotFoundException(path);
   }
+  final file = File(path);
+  var digest = Digest([0]);
 
-  if (!isFile(path)) {
-    throw NotAFileException(path);
+  if (file.lengthSync() == 0) {
+    return digest;
   }
-  final input = File(path);
 
+  const blockSize = 8192; // Set the desired block size (e.g., 8 KB)
   const hasher = sha256;
-  final digest = await hasher.bind(input.openRead()).first;
 
-  verbose(() => 'calculateHash($path) = $digest');
+  final randomAccessFile = file.openSync();
+  final chunk = List.filled(blockSize, 0);
+  int bytesRead;
+
+  while ((bytesRead = randomAccessFile.readIntoSync(chunk)) > 0) {
+    digest = md5.convert([...digest.bytes, ...chunk.sublist(0, bytesRead)]);
+  }
+
+  randomAccessFile.closeSync();
+
+  final digestAsString = hasher.toString();
+  verbose(() => 'calculateHash($path) = $digestAsString');
+
   return digest;
 }
 

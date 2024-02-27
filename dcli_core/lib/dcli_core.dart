@@ -15,7 +15,15 @@ export 'src/functions/dcli_function.dart';
 export 'src/functions/delete.dart' show DeleteException, delete;
 export 'src/functions/delete_dir.dart' show DeleteDirException, deleteDir;
 export 'src/functions/env.dart'
-    show Env, HOME, PATH, env, envs, isOnPATH, withEnvironmentAsync;
+    show
+        Env,
+        HOME,
+        PATH,
+        env,
+        envs,
+        isOnPATH,
+        withEnvironment,
+        withEnvironmentAsync;
 export 'src/functions/find.dart';
 export 'src/functions/head.dart';
 export 'src/functions/is.dart';

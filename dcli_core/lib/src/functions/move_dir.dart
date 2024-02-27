@@ -28,13 +28,13 @@ import '../../dcli_core.dart';
 ///   the [from] path isn't a directory
 ///   the [to] path already exists.
 ///
-Future<void> moveDir(String from, String to) async => _MoveDir().moveDir(
+void moveDir(String from, String to) => _MoveDir().moveDir(
       from,
       to,
     );
 
 class _MoveDir extends DCliFunction {
-  Future<void> moveDir(String from, String to) async {
+  void moveDir(String from, String to) {
     if (!exists(from)) {
       throw MoveDirException(
         'The [from] path ${truepath(from)} does not exists.',

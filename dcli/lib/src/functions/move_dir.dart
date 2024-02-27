@@ -5,10 +5,7 @@
  */
 
 import 'package:dcli_core/dcli_core.dart' as core;
-
 import 'package:dcli_core/dcli_core.dart' show MoveDirException;
-
-import '../util/wait_for_ex.dart';
 
 export 'package:dcli_core/dcli_core.dart' show MoveDirException;
 
@@ -33,4 +30,4 @@ export 'package:dcli_core/dcli_core.dart' show MoveDirException;
 ///   the [to] path already exists.
 ///
 // ignore: discarded_futures
-void moveDir(String from, String to) => waitForEx(core.moveDir(from, to));
+void moveDir(String from, String to) => core.moveDir(from, to);
