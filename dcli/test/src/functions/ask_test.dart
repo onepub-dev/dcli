@@ -9,7 +9,7 @@ library;
 
 import 'package:dcli/src/functions/ask.dart';
 import 'package:dcli/src/settings.dart';
-import 'package:dcli/src/util/ansi_color.dart';
+import 'package:dcli_terminal/dcli_terminal.dart';
 import 'package:test/test.dart';
 
 void main() {
