@@ -71,7 +71,7 @@ void main() {
         print(event);
 
         /// run slow process
-        await calculateHash(pathToLarge);
+        calculateHash(pathToLarge);
         sub.resume();
       }, onDone: () {
         print('get done');

@@ -11,7 +11,6 @@ import 'package:dcli_core/dcli_core.dart' as core;
 import '../functions/run.dart' as cmd;
 import 'file_sync.dart';
 import 'parser.dart';
-import 'pipe.dart';
 import 'progress.dart';
 import 'runnable_process.dart';
 
@@ -505,15 +504,16 @@ extension StringAsProcess on String {
   /// ``` dart
   /// 'tail /var/log/syslog' | 'head -n 5' | 'tail -n 2'.forEach((line) => print(line));
   /// ```
-  Pipe operator |(String rhs) {
-    final rhsRunnable = RunnableProcess.fromCommandLine(rhs)
-      ..start(waitForStart: false);
+  // TODO: restore
+  //Pipe operator |(String rhs) {
+  //   final rhsRunnable = RunnableProcess.fromCommandLine(rhs)
+  //     ..pipe(rhsRunnable.);
 
-    final lhsRunnable = RunnableProcess.fromCommandLine(this)
-      ..start(waitForStart: false);
+  //   final lhsRunnable = RunnableProcess.fromCommandLine(this)
+  //     ..start(paused: true);
 
-    return Pipe(lhsRunnable, rhsRunnable);
-  }
+  //   return Pipe(lhsRunnable, rhsRunnable);
+  // }
 
   // // /// Experimental - DO NOT USE
   // // Stream<String> get stream {
@@ -533,16 +533,16 @@ extension StringAsProcess on String {
   // }
   /// Experimental - allows you to get a stream of the output written by the
   /// called process.
-  Stream<String> stream({
+  Future<Stream<String>> stream({
     bool runInShell = false,
     String? workingDirectory,
     bool nothrow = false,
     bool includeStderr = true,
     bool extensionSearch = true,
-  }) {
+  }) async {
     final progress = Progress.stream(includeStderr: includeStderr);
 
-    cmd.startStreaming(
+    await cmd.startStreaming(
       this,
       runInShell: runInShell,
       progress: progress,

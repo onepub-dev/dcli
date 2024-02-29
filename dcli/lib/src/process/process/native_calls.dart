@@ -6,7 +6,7 @@ import 'dart:typed_data';
 
 import 'package:ffi/ffi.dart';
 
-import 'synchronous.dart';
+import 'process_sync.dart';
 
 /// Internal class used to make calls to native dart methods
 /// We cache the native call sites to improve performance.

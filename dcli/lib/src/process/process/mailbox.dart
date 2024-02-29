@@ -8,6 +8,7 @@ import 'dart:typed_data';
 import 'package:dcli_core/dcli_core.dart';
 import 'package:ffi/ffi.dart';
 
+import 'message.dart';
 //
 // POSIX threading primitives
 //
@@ -160,7 +161,9 @@ class Mailbox {
 
   static final _emptyResponse = Uint8List(0);
 
-  Uint8List takeOne() => lock(_mailbox.mutex, () {
+  /// Takes one [MessageResponse] from the mailbox.
+  /// This method will not return until a message arrives.
+  Uint8List takeOneMessage() => lock(_mailbox.mutex, () {
         // Wait for request to arrive.
         while (_mailbox.ref.state != stateResponse) {
           pthread_cond_wait(_mailbox.condResponse, _mailbox.mutex);

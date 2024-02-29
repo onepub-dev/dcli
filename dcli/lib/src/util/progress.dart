@@ -21,7 +21,7 @@ class Progress {
   /// to stdout and stderr. It usually easier to use one of the
   /// pre-package [Progress] constructors such as [Progress.print].
   Progress(
-    LineAction stdout, {
+    this.stdout, {
     LineAction stderr = devNull,
     bool captureStdin = false,
     bool captureStderr = false,
@@ -126,6 +126,8 @@ class Progress {
     /// obtain the stream directly
   }
 
+  LineAction stdout = devNull;
+
   bool _closed = false;
 
   /// The exist code of the completed process.
@@ -163,6 +165,11 @@ class Progress {
   /// adds the [line] to the stdout controller
   void addToStdout(String line) {
     if (!_closed) {
+      _lines.add(line);
+
+      /// We are writing directly to stdout action rather than
+      /// going via a stream.
+      stdout(line);
       _stdoutController.sink.add(line);
     } else {
       verbose(() => 'addToStdout called after stream closed: line=$line');

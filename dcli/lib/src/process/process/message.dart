@@ -26,16 +26,16 @@ class Message {
   }
   // The process has exited. The second byte will contain
   // the exit code.
-  static const String msgExit = '0';
-  static final int _msgExitCode = msgExit.codeUnitAt(0);
+  static const int msgExit = 0;
+  static const int _msgExitCode = msgExit;
   // The process has written to stdout. The data
   // written is contained from the second byte
-  static const String msgStdout = '1';
-  static final int _msgStdoutCode = msgStdout.codeUnitAt(0);
+  static const int msgStdout = 1;
+  static const int _msgStdoutCode = msgStdout;
   // The process has written to stderr. The data
   // written is contained from the second byte
-  static const String msgStderr = '2';
-  static final int _msgStderrCode = msgStderr.codeUnitAt(0);
+  static const int msgStderr = 2;
+  static const int _msgStderrCode = msgStderr;
 
   BytesBuilder builder = BytesBuilder();
 
@@ -44,27 +44,28 @@ class Message {
 
 /// Handle messages sent back from the isolate.
 class MessageResponse {
-  MessageResponse.fromLine(this.line) {
-    messageCode = line[0];
+  MessageResponse.fromData(this.data) {
+    messageCode = data[0];
   }
-  final String line;
-  late final String messageCode;
+  final List<int> data;
+  late final int messageCode;
 
-  void onStdout(void Function(String line) action) {
+  void onStdout(void Function(List<int> data) action) {
     if (messageCode == Message.msgStdout) {
-      action(line.substring(1));
+      action(data.sublist(1));
     }
   }
 
-  void onStderr(void Function(String line) action) {
+  void onStderr(void Function(List<int> data) action) {
     if (messageCode == Message.msgStderr) {
-      action(line.substring(1));
+      action(data.sublist(1));
     }
   }
 
   void onExit(void Function(int exitCode) action) {
-    if (messageCode == Message.msgStderr) {
-      action(line[1].codeUnitAt(0));
+    if (messageCode == Message.msgExit) {
+      print('processing exitCode');
+      action(data[1]);
     }
   }
 }

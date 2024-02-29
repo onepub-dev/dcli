@@ -1,3 +1,7 @@
+# 4.0.1-alpha.9
+- moved formatting and ansi otutput to the dcli_terminal package.
+- updated validator package.
+
 # 4.0.1-alpha.8
 - fixed the sdk range for dcli_common
 - switch to activating dcli_sdk instead of dcli.

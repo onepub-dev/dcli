@@ -280,7 +280,7 @@ Progress start(
 ///
 /// Current [privileged] is only supported under Linux.
 ///
-Progress startStreaming(
+Future<Progress> startStreaming(
   String commandLine, {
   Progress? progress,
   bool runInShell = false,
@@ -288,7 +288,7 @@ Progress startStreaming(
   bool privileged = false,
   String? workingDirectory,
   bool extensionSearch = true,
-}) {
+}) async {
   workingDirectory ??= pwd;
   final runnable = RunnableProcess.fromCommandLine(
     commandLine,

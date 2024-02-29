@@ -2,30 +2,67 @@
 
 // ignore_for_file: constant_identifier_names
 
+import 'dart:async';
 import 'dart:convert';
 import 'dart:isolate';
 import 'dart:typed_data';
 
 import 'mailbox.dart';
 import 'message.dart';
-import 'synchronous.dart';
+import 'process_sync.dart';
 
 /// Send and Receive data to/from a process
 /// running in an isolate using a pair of mailboxes.
 class ProcessChannel {
   ProcessChannel()
-      : response = Mailbox(),
+      : pipeMode = false,
+        response = Mailbox(),
+        send = Mailbox();
+
+  /// Configures the channel to:
+  ///  * forward data from the passed [stdin] to the process running in the isolate.
+  ///  * write data from the process's stdout to [stdout]
+  /// stderr is still sent to the [stderrLines] - I don't like
+  /// this.
+  ProcessChannel.pipe(Stream<List<int>> stdin, Sink<List<int>> stdout)
+      : pipeMode = true,
+        response = Mailbox(),
         send = Mailbox() {
-    splitter =
-        const LineSplitter().startChunkedConversion(_CallbackSink((line) {
-      MessageResponse.fromLine(line)
-        ..onStdout(stdoutLines.add)
-        ..onStderr(stdoutLines.add)
+    /// send data from stdin to the
+    /// isolates so it can pass
+    /// it to the process.
+    stdin.listen(writeToStdin);
+
+    _CallbackSink((line) {
+      MessageResponse.fromData(line)
+        ..onStdout(stdout.add)
+        ..onStderr(stderrLines.add)
         ..onExit((exitCode) => _exitCode = exitCode);
-    }));
-    decoder = const Utf8Decoder().startChunkedConversion(splitter);
+    });
+    // decoder = const Utf8Decoder().startChunkedConversion(splitter);
   }
 
+  void _recieveFromIsolate(List<int> data) {
+    //   splitter =
+    // const LineSplitter().startChunkedConversion(_CallbackSink((line)
+
+    // _CallbackSink((data) {
+    MessageResponse.fromData(data)
+      ..onStdout((data) {
+        print('recieved stdout from isolate: ${utf8.decode(data)}');
+        stdoutLines.add(data);
+        stdoutController.sink.add(data);
+      })
+      ..onStderr((data) {
+        stderrLines.add(data);
+        stderrController.sink.add(data);
+      })
+      ..onExit((exitCode) => _exitCode = exitCode);
+    // });
+    // decoder = const Utf8Decoder().startChunkedConversion(splitter);
+  }
+
+  bool pipeMode;
   // Used when sending a request to to the isolate
   // to send use more data.
   static const int WAKEUP = 1;
@@ -44,9 +81,10 @@ class ProcessChannel {
   late final StringConversionSink splitter;
   late final ByteConversionSink decoder;
 
-  final List<String> stdoutLines = <String>[];
-  final List<String> stderrLines = <String>[];
-
+// TODO: this probably need to be int arrays so
+// we can handly binary data.
+  final List<List<int>> stdoutLines = <List<int>>[];
+  final List<List<int>> stderrLines = <List<int>>[];
   int get sendAddress => send.rawAddress;
   int get responseAddress => response.rawAddress;
 
@@ -55,27 +93,60 @@ class ProcessChannel {
 
   bool get isRunning => _exitCode == null;
 
-  String readStdout() => readLine(stdoutLines);
+  List<int>? readStdout() => _readLine(stdoutLines);
 
-  String readStderr() => readLine(stderrLines);
+  List<int>? readStderr() => _readLine(stderrLines);
 
-  String readLine(List<String> lines) {
+  final stdoutController = StreamController<List<int>>();
+
+  void listenStdout(void Function(List<int>) callback) {
+    stdoutController.stream.listen((data) {
+      print('forwarding data to stdout listener');
+      callback(data);
+    });
+  }
+
+  final stderrController = StreamController<List<int>>();
+
+  void listenStderr(void Function(List<int>) callback) {
+    stderrController.stream.listen(callback);
+  }
+
+  /// reads a line from the process.
+  /// If the process has exited and no more lines
+  /// are available then return null.
+  List<int>? _readLine(List<List<int>> lines) {
     while (true) {
       if (lines.isNotEmpty) {
         return lines.removeAt(0);
       }
       // No lines remaining so fetch more from the mailbox.
+      if (_exitCode != null) {
+        return null;
+      }
       _fetch();
     }
   }
 
+  /// Will wait for the process to exit and return the exit
+  /// code.
+  int get waitForExitCode {
+    while (_exitCode == null) {
+      _fetch();
+    }
+    return _exitCode!;
+  }
+
+  /// Stream stdin to [sink]
+  void streamStdin(Sink<String> sink) {}
+
   /// Write [data] to the processes stdin.
-  void write(String data) {
+  void writeToStdin(List<int> data) {
     sendPort.send(data);
 
     /// check the data has been sent to the spawned process
     /// before we return
-    final response = send.takeOne();
+    final response = send.takeOneMessage();
     if (response.isEmpty || response[0] != RECEIVED) {
       throw ProcessSyncException(
           'Expecting a write confirmation: got $response');
@@ -86,8 +157,9 @@ class ProcessChannel {
     Uint8List bytes;
 
     /// drain the mailbox
-    bytes = response.takeOne();
-    decoder.add(bytes);
+    bytes = response.takeOneMessage();
+    _recieveFromIsolate(bytes);
+    // decoder.add(bytes);
 
     /// Tell the isolate that we are ready to recieve the next
     /// message
@@ -96,13 +168,13 @@ class ProcessChannel {
 }
 
 /// Process messages coming from the isolate
-class _CallbackSink implements Sink<String> {
+class _CallbackSink implements Sink<List<int>> {
   _CallbackSink(this.cb);
 
-  final void Function(String line) cb;
+  final void Function(List<int> data) cb;
 
   @override
-  void add(String data) {
+  void add(List<int> data) {
     cb(data);
   }
 

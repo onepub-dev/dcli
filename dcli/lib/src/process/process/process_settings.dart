@@ -6,17 +6,17 @@ import '../../shell/shell.dart';
 import '../environment.dart';
 
 class ProcessSettings {
-  ProcessSettings(
-    this.command, {
-    this.args = const <String>[],
-    String? workingDirectory,
-    this.runInShell = false,
-    this.detached = false,
-    this.waitForStart = true,
-    this.terminal = false,
-    this.privileged = false,
-    this.extensionSearch = true,
-  }) : environment = ProcessEnvironment() {
+  ProcessSettings(this.command,
+      {this.args = const <String>[],
+      String? workingDirectory,
+      this.runInShell = false,
+      this.detached = false,
+      this.waitForStart = true,
+      this.terminal = false,
+      this.privileged = false,
+      this.extensionSearch = true,
+      ProcessEnvironment? environment})
+      : environment = environment ?? ProcessEnvironment() {
     this.workingDirectory = workingDirectory ??= pwd;
 
     /// If privileged has been requested we pass

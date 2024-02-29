@@ -3,8 +3,8 @@
 import 'dart:io';
 
 import 'package:dcli_core/dcli_core.dart';
+import 'package:dcli_terminal/dcli_terminal.dart';
 
-import '../../../util/ansi_color.dart';
 import '../../../util/parse_cli_command.dart';
 import '../../../util/runnable_process.dart';
 import '../process_settings.dart';

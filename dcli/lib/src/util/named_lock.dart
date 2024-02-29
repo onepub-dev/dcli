@@ -222,7 +222,7 @@ class NamedLock {
     String? isolateString;
 
     try {
-      isolateString = Service.getIsolateID(Isolate.current);
+      isolateString = Service.getIsolateId(Isolate.current);
       // ignore: avoid_catches_without_on_clauses
     } catch (_) {
       /// hack until google fixes nndb problem with getIsolateID

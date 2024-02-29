@@ -123,7 +123,8 @@ void main() {
     );
 
     // lets do some pipeing and see the 3-5 lines
-    ('head  -5 $restingPlace' | 'tail -n 3').forEach(print);
+    // TODO: restore
+    // ('head  -5 $restingPlace' | 'tail -n 3').forEach(print);
 
     // but the world doesn't deserve our work
     // so burn it all to hell.

@@ -8,8 +8,8 @@ import 'dart:io';
 
 import 'package:path/path.dart';
 
-import '../../dcli.dart';
 import '../../dcli.dart' as d;
+import '../../dcli.dart';
 
 /// FileSort provides the ability to sort files
 /// based on their columns.
@@ -133,7 +133,7 @@ class FileSort {
   void _sortList(List<_Line> list) {
     list.sort((lhs, rhs) {
       final lhsColumns = lhs.line!.split(_fieldDelimiter!);
-      final rhsColumns = rhs.line!.split(_fieldDelimiter!);
+      final rhsColumns = rhs.line!.split(_fieldDelimiter);
 
       if (_maxColumn! > lhsColumns.length) {
         throw InvalidArgumentException(

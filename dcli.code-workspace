@@ -8,6 +8,18 @@
 		},
 		{
 			"path": "template"
+		},
+		{
+			"path": "dcli_terminal"
+		},
+		{
+			"path": "dcli_sdk"
+		},
+		{
+			"path": "dcli_input"
+		},
+		{
+			"path": "dcli_common"
 		}
 	]
 }

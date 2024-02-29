@@ -7,9 +7,8 @@
 import 'dart:async';
 
 import 'package:dcli/dcli.dart';
+import 'package:dcli_core/dcli_core.dart' as core;
 import 'package:test/test.dart';
-
-import '../../../issues/waitfor.dart';
 
 void main() {
   test('start with progress', () {
@@ -46,7 +45,7 @@ void main() {
   });
 
   test('stream', () async {
-    await withTempFile((file) async {
+    await core.withTempFileAsync((file) async {
       file
         ..write('Line 1/5')
         ..append('Line 2/5')
@@ -54,7 +53,7 @@ void main() {
         ..append('Line 4/5')
         ..append('Line 5/5');
 
-      final stream = 'tail $file'.stream(runInShell: true);
+      final stream = await 'tail $file'.stream(runInShell: true);
 
       final done = Completer<void>();
       stream.listen((event) {
@@ -69,7 +68,7 @@ void main() {
   test('tail -f', () async {
     Settings().setVerbose(enabled: false);
 
-    withTempFile((file) {
+    await core.withTempFileAsync((file) async {
       file
         ..write('Line 1/5')
         ..append('Line 2/5')
@@ -77,7 +76,11 @@ void main() {
         ..append('Line 4/5')
         ..append('Line 5/5');
 
-      final stream = 'tail -f $file'.stream();
+      print(file);
+
+    /// the stream shouldn't wait for exit as we want to 
+    /// process the data after setting the stream up.
+      final stream = await 'tail -f $file'.stream();
 
       final done = Completer<void>();
       var linesRead = 0;
@@ -105,7 +108,7 @@ void main() {
         file.append('Line $i');
       }
 
-      waitForEx<void>(done.future);
+      await done.future;
       print('done');
       expect(linesRead, equals(15));
     });
@@ -119,7 +122,7 @@ void main() {
         ..append('Line 3/5')
         ..append('Line 4/5')
         ..append('Line 5/5');
-      final stream = 'tail -n 100 $file'.stream();
+      final stream = await 'tail -n 100 $file'.stream();
 
       final done = Completer<void>();
       stream.listen((event) {
