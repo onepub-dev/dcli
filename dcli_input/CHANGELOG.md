@@ -1,6 +1,8 @@
+# 4.0.1-alpha.10
+- update the validators package to 5.x
+
 # 4.0.1-alpha.9
 - moved formatting and ansi otutput to the dcli_terminal package.
-- updated validator package.
 
 # 4.0.1-alpha.8
 - fixed the sdk range for dcli_common
