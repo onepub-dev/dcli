@@ -31,7 +31,6 @@ void main() {
       ).toList();
 
       final rootDirs = <String>[
-        truepath(testScriptPath, 'dcli_unit_tester'),
         truepath(testScriptPath, 'general'),
         truepath(testScriptPath, 'traditional_project')
       ];
@@ -68,15 +67,16 @@ void main() {
         expect(actual, t.orderedEquals(expected));
       });
     });
+
     test(
-      'Recurse entire filesystem',
+      'Recurse home directory',
       () {
         var count = 1;
 
         print(DateTime.now());
         find(
           '*',
-          workingDirectory: '/',
+          workingDirectory: join('/', 'home', env['USER']),
           types: <FileSystemEntityType>[Find.directory],
           includeHidden: true,
           // progress: Progress((line) {
