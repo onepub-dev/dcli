@@ -1,3 +1,7 @@
+- The sleep function is now fully syncronous and blocks all async code from running.
+ This is a BREAKING change as the previous version of sleep allowed async
+ code to keep running. Use sleepAsync to allow async code to run. Note:
+ code in other isolates is unaffected by calls to sleep.
 # 4.0.1-alpha.8
 - fixed the sdk range for dcli_common
 - switch to activating dcli_sdk instead of dcli.
