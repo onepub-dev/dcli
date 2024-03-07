@@ -15,6 +15,7 @@ import '../../dcli.dart';
 import '../process/environment.dart';
 import '../process/process/process_settings.dart';
 import '../process/process/process_sync.dart';
+import '../progress/progress_impl.dart';
 import 'capture.dart';
 import 'parse_cli_command.dart';
 
@@ -203,7 +204,7 @@ class RunnableProcess {
         // so no point waiting.
       }
     } finally {
-      progress.close();
+      (progress as ProgressImpl).close();
     }
     return progress;
   }
@@ -240,7 +241,7 @@ class RunnableProcess {
         // so no point waiting.
       }
     } finally {
-      progress.close();
+      (progress as ProgressImpl).close();
     }
     return progress;
   }
@@ -378,7 +379,7 @@ class RunnableProcess {
   int? _waitForExit(ProcessSync processSync, Progress progress,
       {required bool nothrow}) {
     final exitCode = processSync.waitForExitCode;
-    progress.exitCode = exitCode;
+    (progress as ProgressImpl).exitCode = exitCode;
 
     if (exitCode != 0 && nothrow == false) {
       throw RunException.withArgs(
@@ -480,24 +481,37 @@ class RunnableProcess {
     // _wireStreams(processSync!, progress0);
 
     List<int>? data;
+
+    /// this section and the next appears to be duplicates
+    /// moving data to the progress stream.
+    /// The problem is how do we know the progress stream
+    /// has been emptied?
+    /// - we could put a counter on it and wait for it to
+    /// match the number of rows we added.
+    /// How do we wait. If we do it synchronously then the data
+    /// on the other side of the stream can't be processed.
+    /// It feels like at some point we need to be async when dealing with
+    /// streams.
+    /// For none streams we can synchronous.
+    ///
+    /// Review the pump - if it pulled data then iot might work.
     while ((data = processSync!.readStdout()) != null) {
-      progress0.addToStdout(utf8.decode(data!));
+      (progress0 as ProgressImpl).addToStdout(utf8.decode(data!));
     }
 
-    processSync!
-        .listenStdout((data) => progress0.addToStdout(utf8.decode(data)));
-    processSync!
-        .listenStderr((data) => progress0.addToStderr(utf8.decode(data)));
+    processSync!.listenStdout(
+        (data) => (progress0 as ProgressImpl).addToStdout(utf8.decode(data)));
+    processSync!.listenStderr(
+        (data) => (progress0 as ProgressImpl).addToStderr(utf8.decode(data)));
 
     // Wait for the process to finish
     final exitCode = processSync!.waitForExitCode;
 
-    // waitFor(Future.delayed(Duration(seconds: 10)));
     // CONSIDER: do we pass the exitCode to ForEach or just throw?
     // If the start failed we don't want to rethrow
     // as the exception will be thrown async and it will
     // escape as an unhandled exception and stop the whole script
-    progress0.exitCode = exitCode;
+    (progress0 as ProgressImpl).exitCode = exitCode;
 
     /// the process may have exited but the streams are likely to still
     /// contain data.
@@ -535,10 +549,10 @@ class RunnableProcess {
     /// handle stdout stream
     process
       ..listenStdout((data) {
-        progress.addToStdout(utf8.decode(data));
+        (progress as ProgressImpl).addToStdout(utf8.decode(data));
       })
       ..listenStderr((data) {
-        progress.addToStderr(utf8.decode(data));
+        (progress as ProgressImpl).addToStderr(utf8.decode(data));
       });
 
     // // handle stderr stream

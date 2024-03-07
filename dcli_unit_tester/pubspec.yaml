@@ -8,6 +8,7 @@ dependencies:
   args: ^2.3.0
   dcli: ^4.0.1-alpha.8
   dcli_core: ^4.0.1-alpha.8
+  dcli_terminal: ^4.0.1-alpha.9
   path: ^1.8.0
 dev_dependencies:
   lint_hard: ^4.0.0

@@ -26,7 +26,8 @@ class PipeSync {
 
   /// fetch the exit code of the process.
   /// If the process has not yet exited then null will be returned.
-  /// TODO: we have two processes here so what exit code do we return?
+  /// TODO: we have two processes here so what
+  /// exit code do we return?
   int? get exitCode => _rhsChannel.exitCode;
 
   /// Run the two given process as defined by [lhsSettings] and [rhsSettings]
@@ -38,7 +39,8 @@ class PipeSync {
   void run(ProcessSettings lhsSettings, ProcessSettings rhsSettings) {
     final lhsController = StreamController<List<int>>();
 
-    /// TODO(bsutton): channel for stderr - maybe see the about comment about bash
+    /// TODO(bsutton): channel for stderr - maybe see the about
+    ///  comment about bash
     final _lhsChannel = ProcessChannel.pipe(io.stdin, lhsController.sink);
     final _rhsChannel = ProcessChannel.pipe(lhsController.stream, io.stdout);
 

@@ -9,9 +9,9 @@ import 'dart:async';
 import 'package:dcli_core/dcli_core.dart' as core;
 
 import '../functions/run.dart' as cmd;
+import '../progress/progress.dart';
 import 'file_sync.dart';
 import 'parser.dart';
-import 'progress.dart';
 import 'runnable_process.dart';
 
 ///

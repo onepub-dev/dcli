@@ -53,7 +53,7 @@ void main() {
             });
 
             final progress = DartScript.fromFile(pathToScript).start();
-            expect(progress.exitCode! == 0, isTrue);
+            expect(progress.exitCode == 0, isTrue);
             expect(exists(pathToScript), isTrue);
           });
         });

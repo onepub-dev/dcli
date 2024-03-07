@@ -1,4 +1,6 @@
 #! /usr/bin/env dcli
+// ignore_for_file: dangling_library_doc_comments
+
 /* Copyright (C) S. Brett Sutton - All Rights Reserved
  * Unauthorized copying of this file, via any medium is strictly prohibited
  * Proprietary and confidential

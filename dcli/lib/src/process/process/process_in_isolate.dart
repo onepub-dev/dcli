@@ -1,3 +1,5 @@
+// ignore_for_file: unnecessary_lambdas
+
 import 'dart:async';
 import 'dart:convert';
 import 'dart:ffi';
@@ -13,13 +15,13 @@ import 'process_settings.dart';
 import 'process_sync.dart';
 
 void startIsolate(ProcessSettings settings, ProcessChannel channel) {
-  print('starting isolate');
+  // print('starting isolate');
   _startIsolate(settings, channel);
-  print('isolate started - getting send channel');
+  // print('isolate started - getting send channel');
 
   /// The isolate is up and we are ready to recieve
   channel.sendPort = _connectSendPort(channel);
-  print('got send channel');
+  // print('got send channel');
 }
 
 SendPort _connectSendPort(ProcessChannel channel) {
@@ -32,14 +34,14 @@ SendPort _connectSendPort(ProcessChannel channel) {
 /// Starts an isolate that spawns the command.
 void _startIsolate(ProcessSettings processSettings, ProcessChannel channel) {
   unawaited(Isolate.spawn((mailboxAddrs) async {
-    print('isoalte has started');
+    // print('isoalte has started');
 
     /// This code runs in the isolate.
     final sendMailbox = Mailbox.fromAddress(mailboxAddrs[0]);
     final responseMailbox = Mailbox.fromAddress(mailboxAddrs[1]);
 
     final runner = ProcessRunner(processSettings);
-    print('starting process ${processSettings.command} in isolate');
+    // print('starting process ${processSettings.command} in isolate');
     await runner.start();
 
     final process = runner.process;
@@ -81,11 +83,11 @@ void _startIsolate(ProcessSettings processSettings, ProcessChannel channel) {
     /// it back to the parent isolate
     stdoutSub = process!.stdout.listen((data) {
       stdoutSub.pause();
-      print('writting to stdout: ${utf8.decode(data)}');
+      // print('writting to stdout: ${utf8.decode(data)}');
       responseMailbox.respond(Message.stdout(data as Uint8List).message);
     }, onDone: () {
       stdoutStreamDone.complete();
-      print('marking stdout in isolate done');
+      // print('marking stdout in isolate done');
     });
 
     /// used to wait for the stderr stream to finish streaming
@@ -98,21 +100,21 @@ void _startIsolate(ProcessSettings processSettings, ProcessChannel channel) {
       responseMailbox.respond(Message.stderr(data as Uint8List).message);
     }, onDone: () {
       stderrStreamDone.complete();
-      print('marking stderr in isolate done');
+      // print('marking stderr in isolate done');
     });
 
-    print('waiting in isolate for process to exit');
+    // print('waiting in isolate for process to exit');
 
     /// wait for the process to exit and all stream finish been written to.
     await Future.wait<void>([process.exitCode]);
-    print('process has exited');
+    // print('process has exited');
 
     await Future.wait<void>([stdoutStreamDone.future, stderrStreamDone.future]);
 
     /// Wait for the process to shutdown and send the exitCode to
     /// the parent isolate
     final exitCode = await process.exitCode;
-    print('process has exited with exitCode: $exitCode');
+    // print('process has exited with exitCode: $exitCode');
     responseMailbox.respond(Message.exit(exitCode).message);
 
     await stdoutSub.cancel();

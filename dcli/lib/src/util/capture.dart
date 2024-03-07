@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import '../../dcli.dart';
+import '../progress/progress_impl.dart';
 
 /// callback used when overloadin [printerr] in a DCliZone.
 typedef CaptureZonePrintErr = void Function(String?);
@@ -25,7 +26,7 @@ Future<Progress> capture<R>(Future<R> Function() action,
   final zoneValues = <String, CaptureZonePrintErr>{
     'printerr': (line) {
       if (line != null) {
-        progress!.addToStderr(line);
+        (progress! as ProgressImpl).addToStderr(line);
       }
     }
   };
@@ -44,7 +45,8 @@ Future<Progress> capture<R>(Future<R> Function() action,
     },
     zoneValues: zoneValues,
     zoneSpecification: ZoneSpecification(
-      print: (self, parent, zone, line) => progress!.addToStdout(line),
+      print: (self, parent, zone, line) =>
+          (progress! as ProgressImpl).addToStdout(line),
     ),
   );
 
@@ -76,7 +78,7 @@ Future<void> _flush(Progress progress) async {
   /// give the event queue a chance to run.
   await Future.value(1);
   // scheduleMicrotask(() {});
-  progress.close();
+  (progress as ProgressImpl).close();
   // scheduleMicrotask(() {});
   await Future.value(1);
 }

@@ -9,6 +9,7 @@ import 'dart:io';
 import 'package:dcli_core/dcli_core.dart' as core;
 
 import '../../dcli.dart';
+import '../progress/progress_impl.dart';
 
 /// Reads lines from the file at [path].
 /// ```dart
@@ -33,12 +34,13 @@ class _Read extends core.DCliFunction {
       throw ReadException('The file at ${truepath(path)} does not exists');
     }
 
-    progress ??= Progress.devNull();
+    progress ??= Progress.capture();
+
     core.LineFile(path).readAll((line) {
-      progress!.addToStdout(line);
+      (progress! as ProgressImpl).addToStdout(line);
       return true;
     });
-    progress.close();
+    (progress as ProgressImpl).close();
 
     return progress;
   }
@@ -46,18 +48,18 @@ class _Read extends core.DCliFunction {
   Progress _readStdin({Progress? progress}) {
     verbose(() => 'readStdin');
 
+    final progressImpl = (progress ?? Progress.devNull()) as ProgressImpl;
     try {
-      progress ??= Progress.devNull();
       String? line;
 
       while ((line = stdin.readLineSync()) != null) {
-        progress.addToStdout(line!);
+        progressImpl.addToStdout(line!);
       }
     } finally {
-      progress!.close();
+      progressImpl.close();
     }
 
-    return progress;
+    return progressImpl as Progress;
   }
 }
 

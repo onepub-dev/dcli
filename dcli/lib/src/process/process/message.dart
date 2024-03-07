@@ -64,7 +64,7 @@ class MessageResponse {
 
   void onExit(void Function(int exitCode) action) {
     if (messageCode == Message.msgExit) {
-      print('processing exitCode');
+      // print('processing exitCode');
       action(data[1]);
     }
   }

@@ -10,6 +10,7 @@ dependencies:
   dcli: ^4.0.1-alpha.8
   dcli_common: ^4.0.1-alpha.8
   dcli_core: ^4.0.1-alpha.8
+  dcli_terminal: ^4.0.1-alpha.8
   meta: ^1.10.0
   path: ^1.8.3
   pub_semver: ^2.1.4

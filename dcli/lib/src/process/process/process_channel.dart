@@ -20,7 +20,8 @@ class ProcessChannel {
         send = Mailbox();
 
   /// Configures the channel to:
-  ///  * forward data from the passed [stdin] to the process running in the isolate.
+  ///  * forward data from the passed [stdin] to the process
+  ///     running in the isolate.
   ///  * write data from the process's stdout to [stdout]
   /// stderr is still sent to the [stderrLines] - I don't like
   /// this.
@@ -49,7 +50,7 @@ class ProcessChannel {
     // _CallbackSink((data) {
     MessageResponse.fromData(data)
       ..onStdout((data) {
-        print('recieved stdout from isolate: ${utf8.decode(data)}');
+        // print('recieved stdout from isolate: ${utf8.decode(data)}');
         stdoutLines.add(data);
         stdoutController.sink.add(data);
       })
@@ -101,7 +102,7 @@ class ProcessChannel {
 
   void listenStdout(void Function(List<int>) callback) {
     stdoutController.stream.listen((data) {
-      print('forwarding data to stdout listener');
+      // print('forwarding data to stdout listener');
       callback(data);
     });
   }

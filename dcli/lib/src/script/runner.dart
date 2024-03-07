@@ -32,7 +32,7 @@ class ScriptRunner {
 
     final progress = startFromArgs(_sdk.pathToDartExe!, vmArgs,
         terminal: true, nothrow: true);
-    return progress.exitCode!;
+    return progress.exitCode;
   }
 
   /// Run the script.

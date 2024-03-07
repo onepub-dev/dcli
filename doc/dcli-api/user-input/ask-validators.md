@@ -225,7 +225,7 @@ class AskAsync extends AskValidator {
   String validate(String line) {
     line = line.trim();
     
-    if (waitForEx(checkInput(line)) == false)
+    if (checkInput(line) == false)
     {
       throw AskValidatorException(red("The entered line wasn't valid"));
     }

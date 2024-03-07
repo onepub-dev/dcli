@@ -64,7 +64,7 @@ class TestFileSystem {
     _testRoot = join(rootPath, 'tmp', 'dcli');
     uniquePath = const Uuid().v4();
 
-    final isolateID = Service.getIsolateID(Isolate.current);
+    final isolateID = Service.getIsolateId(Isolate.current);
     print(
       red(
             '${'+' * 20}'
@@ -143,7 +143,7 @@ class TestFileSystem {
 
       // rebuildPath();
 
-      final isolateID = Service.getIsolateID(Isolate.current);
+      final isolateID = Service.getIsolateId(Isolate.current);
       print(green('Using TestFileSystem $fsRoot for Isolate: $isolateID'));
 
       initFS();

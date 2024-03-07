@@ -159,13 +159,12 @@ packages:
     source: path
     version: "4.0.1-alpha.9"
   dcli_terminal:
-    dependency: transitive
+    dependency: "direct main"
     description:
-      name: dcli_terminal
-      sha256: "4d68792b83da509206028b6c028353fbb5fb41cd75a694affd86e2f2016f6897"
-      url: "https://pub.dev"
-    source: hosted
-    version: "0.2.0"
+      path: "../dcli_terminal"
+      relative: true
+    source: path
+    version: "4.0.1-alpha.9"
   dcli_test:
     dependency: "direct dev"
     description:
