@@ -62,7 +62,7 @@ abstract class Progress {
   factory Progress.stream({bool includeStderr = false}) =>
       ProgressStreamImpl(includeStderr: includeStderr);
 
-  int get exitCode;
+  int? get exitCode;
 
   List<String> get lines;
 

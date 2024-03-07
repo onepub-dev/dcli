@@ -5,7 +5,7 @@
  */
 
 abstract class ProgressImpl {
-  set exitCode(int exitCode) {}
+  int? exitCode;
 
   /// adds the [line] to the stdout controller
   void addToStdout(String line);

@@ -1,8 +1,8 @@
 import '../../dcli.dart';
 
 mixin ProgressMixin implements Progress {
-  @override
-  int get exitCode => throw UnimplementedError();
+  // @override
+  // int get exitCode => throw UnimplementedError();
 
   /// Returns the first line from the command or
   /// null if no lines where returned
@@ -20,9 +20,7 @@ mixin ProgressMixin implements Progress {
   Stream<String> get stream => throw UnimplementedError();
 
   @override
-  List<String> toList() {
-    throw UnimplementedError();
-  }
+  List<String> toList() => lines;
 
   @override
   String toParagraph() => lines.join('\n');
