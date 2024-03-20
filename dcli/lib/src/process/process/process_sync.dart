@@ -20,7 +20,7 @@ class ProcessSync {
 
   void listenStdout(void Function(List<int>) callback) {
     _channel.listenStdout((data) {
-      print('processSync recieved data from channel');
+      // print('processSync recieved data from channel');
       callback(data);
     });
   }
@@ -53,8 +53,7 @@ class ProcessSync {
 
   /// Start the process but redirect stdout and stderr to
   /// [stdout] and [stderr] respectively.
-  void pipe(ProcessSettings settings, Stream<List<int>> stdin,
-      Sink<List<int>> stdout) {
+  void pipe(ProcessSettings settings, Stream<List<int>> stdin, Sink<List<int>> stdout) {
     _channel = ProcessChannel.pipe(stdin, stdout);
 
     startIsolate(settings, _channel);
