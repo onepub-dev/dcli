@@ -7,9 +7,12 @@ import 'dart:convert';
 import 'dart:isolate';
 import 'dart:typed_data';
 
-import 'mailbox.dart';
+import 'package:native_synchronization/mailbox.dart';
+
 import 'message.dart';
-import 'process_sync.dart';
+// import 'mailbox.dart';
+import 'pipe_sync.dart';
+// import 'process_sync.dart';
 
 /// Send and Receive data to/from a process
 /// running in an isolate using a pair of mailboxes.
@@ -82,12 +85,12 @@ class ProcessChannel {
   late final StringConversionSink splitter;
   late final ByteConversionSink decoder;
 
-// TODO: this probably need to be int arrays so
+// TODO DONE?: this probably need to be int arrays so
 // we can handly binary data.
   final List<List<int>> stdoutLines = <List<int>>[];
   final List<List<int>> stderrLines = <List<int>>[];
-  int get sendAddress => send.rawAddress;
-  int get responseAddress => response.rawAddress;
+  // int get sendAddress => send.rawAddress;
+  // int get responseAddress => response.rawAddress;
 
   int? _exitCode;
   int? get exitCode => _exitCode;
@@ -147,10 +150,9 @@ class ProcessChannel {
 
     /// check the data has been sent to the spawned process
     /// before we return
-    final response = send.takeOneMessage();
+    final response = send.take();
     if (response.isEmpty || response[0] != RECEIVED) {
-      throw ProcessSyncException(
-          'Expecting a write confirmation: got $response');
+      throw ProcessSyncException('Expecting a write confirmation: got $response');
     }
   }
 
@@ -158,7 +160,7 @@ class ProcessChannel {
     Uint8List bytes;
 
     /// drain the mailbox
-    bytes = response.takeOneMessage();
+    bytes = response.take();
     _recieveFromIsolate(bytes);
     // decoder.add(bytes);
 
