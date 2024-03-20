@@ -426,7 +426,8 @@ class RunnableProcess {
   //     (Object e) {
   //       // forget broken pipe after rhs terminates before lhs
   //     },
-  //     test: (e) => e is SocketException && e.osError!.message == 'Broken pipe',
+  //     test: (e) => e is SocketException
+  //        && e.osError!.message == 'Broken pipe',
   //   );
   // }
 
@@ -538,8 +539,10 @@ class RunnableProcess {
   void _waitForStreams() {
     // Wait for both streams to complete
     // ignore: discarded_futures
-    // TODO: restore - how do we ensure the output from streams has been processed.
-    // waitForEx(Future.wait([_stdoutCompleter.future, _stderrCompleter.future]));
+    // TODO: restore - how do we ensure the output
+    //  from streams has been processed.
+    // waitForEx(Future.wait([_stdoutCompleter.future,
+    //    _stderrCompleter.future]));
   }
 
   final _stdoutCompleter = Completer<bool>();
