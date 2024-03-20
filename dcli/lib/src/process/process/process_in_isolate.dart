@@ -6,13 +6,17 @@ import 'dart:ffi';
 import 'dart:isolate';
 import 'dart:typed_data';
 
+import 'package:native_synchronization/mailbox.dart';
+import 'package:native_synchronization/sendable.dart';
+
 import 'in_isolate/runner.dart';
-import 'mailbox.dart';
+// import 'mailbox.dart';
 import 'message.dart';
 import 'native_calls.dart';
 import 'process_channel.dart';
 import 'process_settings.dart';
 import 'process_sync.dart';
+// import 'process_sync.dart';
 
 void startIsolate(ProcessSettings settings, ProcessChannel channel) {
   // print('starting isolate');
@@ -27,18 +31,19 @@ void startIsolate(ProcessSettings settings, ProcessChannel channel) {
 SendPort _connectSendPort(ProcessChannel channel) {
   /// take the initial message which contains
   /// the channels sendPort id.
-  final msg = channel.send.takeOneMessage();
+  final msg = channel.send.take();
+
   return NativeCalls.connectToPort(msg);
 }
 
 /// Starts an isolate that spawns the command.
 void _startIsolate(ProcessSettings processSettings, ProcessChannel channel) {
-  unawaited(Isolate.spawn((mailboxAddrs) async {
+  unawaited(Isolate.spawn<List<Sendable<Mailbox>>>((mailboxes) async {
     // print('isoalte has started');
 
     /// This code runs in the isolate.
-    final sendMailbox = Mailbox.fromAddress(mailboxAddrs[0]);
-    final responseMailbox = Mailbox.fromAddress(mailboxAddrs[1]);
+    final sendMailbox = mailboxes.first.materialize();
+    final responseMailbox = mailboxes.last.materialize();
 
     final runner = ProcessRunner(processSettings);
     // print('starting process ${processSettings.command} in isolate');
@@ -65,7 +70,7 @@ void _startIsolate(ProcessSettings processSettings, ProcessChannel channel) {
 
           /// The tell the sender that we got their data and
           /// sent it to stdin
-          sendMailbox.respond(Uint8List.fromList([ProcessChannel.RECEIVED]));
+          sendMailbox.put(Uint8List.fromList([ProcessChannel.RECEIVED]));
         } else {
           throw ProcessSyncException('Wrong message: $message');
         }
@@ -74,7 +79,7 @@ void _startIsolate(ProcessSettings processSettings, ProcessChannel channel) {
     /// Tell the primary isolate what our native port address is
     /// so it can send stuff to use sychronously.
     final msg = Int64List(1)..[0] = port.sendPort.nativePort;
-    sendMailbox.respond(msg.buffer.asUint8List());
+    sendMailbox.put(msg.buffer.asUint8List());
 
     /// used to wait for the stdout stream to finish streaming
     final stdoutStreamDone = Completer<void>();
@@ -84,7 +89,7 @@ void _startIsolate(ProcessSettings processSettings, ProcessChannel channel) {
     stdoutSub = process!.stdout.listen((data) {
       stdoutSub.pause();
       // print('writting to stdout: ${utf8.decode(data)}');
-      responseMailbox.respond(Message.stdout(data as Uint8List).message);
+      responseMailbox.put(Message.stdout(data as Uint8List).message);
     }, onDone: () {
       stdoutStreamDone.complete();
       // print('marking stdout in isolate done');
@@ -97,7 +102,7 @@ void _startIsolate(ProcessSettings processSettings, ProcessChannel channel) {
     /// it back to the parent isolate
     stderrSub = process.stderr.listen((data) {
       stderrSub.pause();
-      responseMailbox.respond(Message.stderr(data as Uint8List).message);
+      responseMailbox.put(Message.stderr(data as Uint8List).message);
     }, onDone: () {
       stderrStreamDone.complete();
       // print('marking stderr in isolate done');
@@ -115,14 +120,15 @@ void _startIsolate(ProcessSettings processSettings, ProcessChannel channel) {
     /// the parent isolate
     final exitCode = await process.exitCode;
     // print('process has exited with exitCode: $exitCode');
-    responseMailbox.respond(Message.exit(exitCode).message);
+    responseMailbox.put(Message.exit(exitCode).message);
 
     await stdoutSub.cancel();
     await stderrSub.cancel();
   },
       // pass list of mailbox addresses into the isolate entry point.
-      [
-        channel.sendAddress,
-        channel.responseAddress,
-      ]));
+      List<Sendable<Mailbox>>.from([
+        channel.send.asSendable,
+        channel.response.asSendable,
+      ]),
+      debugName: 'ProcessInIsolate'));
 }

@@ -30,7 +30,7 @@ class PipeSync {
   /// exit code do we return?
   int? get exitCode => _rhsChannel.exitCode;
 
-  /// Run the two given process as defined by [lhsSettings] and [rhsSettings]
+  /// Run the two given process as defined by [lhsSettings] (left-hand-side settings) and [rhsSettings] (right-hand-side settings).
   /// piping the input from the [lhsSettings] process into the [rhsSettings]
   /// process.
   ///
