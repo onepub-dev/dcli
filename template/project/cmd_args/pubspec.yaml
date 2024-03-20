@@ -1,5 +1,6 @@
 name: scriptname
 version: 0.0.1
+description: test of command arg passing.
 
 environment:
   flutter:

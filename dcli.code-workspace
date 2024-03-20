@@ -20,6 +20,12 @@
 		},
 		{
 			"path": "dcli_common"
+		},
+		{
+			"path": "dcli_test"
+		},
+		{
+			"path": "dcli_unit_tester"
 		}
 	]
 }

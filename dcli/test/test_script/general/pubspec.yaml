@@ -1,4 +1,5 @@
 name: general
+description: used for testing.
 version: 1.0.0
 publish_to: none
 
@@ -18,8 +19,13 @@ dev_dependencies:
 dependency_overrides: 
   dcli: 
     path: ../../..
+  dcli_common: 
+    path: ../../../../dcli_common
   dcli_core: 
     path: ../../../../dcli_core
+  dcli_terminal: 
+    path: ../../../../dcli_terminal
+
 
 
 executables: 

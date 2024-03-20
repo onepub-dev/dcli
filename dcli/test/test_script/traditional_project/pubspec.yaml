@@ -1,4 +1,6 @@
 name: traditional_project
+description: a simple cli project used by the test framework.
+version: 1.0.0
 
 environment: 
   sdk: '>=3.0.0 <4.0.0'
@@ -15,8 +17,12 @@ dev_dependencies:
 dependency_overrides: 
   dcli: 
     path: ../../..
+  dcli_common: 
+    path: ../../../../dcli_common
   dcli_core: 
     path: ../../../../dcli_core
+  dcli_terminal: 
+    path: ../../../../dcli_terminal
 
 
 executables: 

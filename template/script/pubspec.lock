@@ -111,30 +111,28 @@ packages:
       path: "../../dcli"
       relative: true
     source: path
-    version: "4.0.1-alpha.8"
+    version: "4.0.1-alpha.10"
   dcli_common:
-    dependency: transitive
+    dependency: "direct overridden"
     description:
-      name: dcli_common
-      sha256: "19691ee49c3223c689c9d7405280bee057263aebc0abfa600082b51efc47cdbc"
-      url: "https://pub.dev"
-    source: hosted
-    version: "4.0.1-alpha.8"
+      path: "../../dcli_common"
+      relative: true
+    source: path
+    version: "4.0.1-alpha.10"
   dcli_core:
     dependency: "direct overridden"
     description:
       path: "../../dcli_core"
       relative: true
     source: path
-    version: "4.0.1-alpha.9"
+    version: "4.0.1-alpha.10"
   dcli_terminal:
-    dependency: transitive
+    dependency: "direct overridden"
     description:
-      name: dcli_terminal
-      sha256: "4d68792b83da509206028b6c028353fbb5fb41cd75a694affd86e2f2016f6897"
-      url: "https://pub.dev"
-    source: hosted
-    version: "0.2.0"
+      path: "../../dcli_terminal"
+      relative: true
+    source: path
+    version: "4.0.1-alpha.10"
   equatable:
     dependency: transitive
     description:
@@ -271,6 +269,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "1.0.4"
+  native_synchronization:
+    dependency: transitive
+    description:
+      name: native_synchronization
+      sha256: ff200fe0a64d733ff7d4dde2005271c297db81007604c8cd21037959858133ab
+      url: "https://pub.dev"
+    source: hosted
+    version: "0.2.0"
   path:
     dependency: transitive
     description:
