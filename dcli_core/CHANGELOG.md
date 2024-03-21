@@ -1,3 +1,9 @@
+# 4.0.1-alpha.10
+- merged #234 from tsavo-at-pieces which provides windows support for 
+synchronous process calls. Big thanks for the work on this Tsavo!!!
+- migrated away from custom implementation of mailboxes to the native_synchronization package. Big thanks to @mraleph for his massive contributions and trial conversion of dcli to dart 3.x which most of my
+work is based off.
+ 
 # 4.0.1-alpha.9
 - added method withEnvironment - this may be problematic as it easy to 
 use with an async callback which will end in tears.
