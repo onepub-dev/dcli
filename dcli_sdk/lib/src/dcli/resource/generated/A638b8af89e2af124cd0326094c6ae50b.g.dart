@@ -25,12 +25,11 @@ class A638b8af89e2af124cd0326094c6ae50b extends PackedResource {
   /// this checksum
   @override
   String get checksum =>
-      '521d169ab12bc5584275ad0e775110119529eb2061bc6cd82643a302ecc817f7';
+      '2da796b9905441548a92190337d1d3c2';
 
   /// <package>/resources relative path to the original resource.
   @override
-  String get originalPath =>
-      'template/project/full/lib/src/settings/app_settings.dart';
+  String get originalPath => 'template/project/full/lib/src/settings/app_settings.dart';
 
   @override
   String get content => '''

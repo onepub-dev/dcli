@@ -25,7 +25,7 @@ class Ae8c7d2afadf6214f4ed3a346edc098b9 extends PackedResource {
   /// this checksum
   @override
   String get checksum =>
-      'd717f5989b74d194eecb3d2d9162087c4486e74b6f9e8b88077eca6fb61455be';
+      'a0550e904b66af4191376722d99cbb60';
 
   /// <package>/resources relative path to the original resource.
   @override
