@@ -40,9 +40,9 @@ void printerr(String? line) {
 ///
 class RunnableProcess {
   RunnableProcess._internal(this._parsed, this.workingDirectory) {
-    _streamsFlushed =
-        // ignore: discarded_futures
-        Future.wait<void>([_stdoutFlushed.future, _stderrFlushed.future]);
+    // _streamsFlushed =
+    // ignore: discarded_futures
+    Future.wait<void>([_stdoutFlushed.future, _stderrFlushed.future]);
   }
 
   /// Spawns a process to run the command contained in [cmdLine] along with
@@ -84,7 +84,7 @@ class RunnableProcess {
   /// for stdout and stderr to be flushed.
   final Completer<void> _stdoutFlushed = Completer<void>();
   final Completer<void> _stderrFlushed = Completer<void>();
-  late Future<List<void>> _streamsFlushed;
+  // late Future<List<void>> _streamsFlushed;
 
   /// returns the original command line that started this process.
   String get cmdLine => '${_parsed.cmd} ${_parsed.args.join(' ')}';
@@ -545,8 +545,8 @@ class RunnableProcess {
     //    _stderrCompleter.future]));
   }
 
-  final _stdoutCompleter = Completer<bool>();
-  final _stderrCompleter = Completer<bool>();
+  // final _stdoutCompleter = Completer<bool>();
+  // final _stderrCompleter = Completer<bool>();
 
   void _wireStreams(ProcessSync process, Progress progress) {
     /// handle stdout stream

@@ -103,28 +103,28 @@ packages:
       path: "../../../dcli"
       relative: true
     source: path
-    version: "4.0.1-alpha.10"
+    version: "4.0.1-alpha.11"
   dcli_common:
     dependency: "direct overridden"
     description:
       path: "../../../dcli_common"
       relative: true
     source: path
-    version: "4.0.1-alpha.10"
+    version: "4.0.1-alpha.11"
   dcli_core:
     dependency: "direct overridden"
     description:
       path: "../../../dcli_core"
       relative: true
     source: path
-    version: "4.0.1-alpha.10"
+    version: "4.0.1-alpha.11"
   dcli_terminal:
     dependency: "direct overridden"
     description:
       path: "../../../dcli_terminal"
       relative: true
     source: path
-    version: "4.0.1-alpha.10"
+    version: "4.0.1-alpha.11"
   equatable:
     dependency: transitive
     description:

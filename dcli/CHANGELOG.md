@@ -1,7 +1,13 @@
+# 4.0.1-alpha.11
+- merged #234 from tsavo-at-pieces which provides windows support for 
+synchronous process calls. Big thanks for the work on this Tsavo!!!
+- migrated away from custom implementation of mailboxes to the native_synchronization package. Big thanks to @mraleph for his massive contributions and trial conversion of dcli to dart 3.x which most of my
+work is based off.
 - The sleep function is now fully syncronous and blocks all async code from running.
  This is a BREAKING change as the previous version of sleep allowed async
  code to keep running. Use sleepAsync to allow async code to run. Note:
  code in other isolates is unaffected by calls to sleep.
+
 # 4.0.1-alpha.8
 - fixed the sdk range for dcli_common
 - switch to activating dcli_sdk instead of dcli.
