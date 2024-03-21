@@ -1,6 +1,5 @@
 name: full
 version: 0.0.1
-publish_to: https://beta.onepub.dev/api/jbbxpsdavu/
 description: A sample command-line application that installs and runs mailhog
 environment:
   flutter:

@@ -1,6 +1,5 @@
 name: dcli_common
 version: 4.0.1-alpha.10
-publish_to: https://onepub.dev/api/jbbxpsdavu/
 description: Common code used by multiple dcli packages.
 repository: https://github.com/onepub-dev/dcli
 environment:
