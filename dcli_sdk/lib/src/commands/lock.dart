@@ -77,7 +77,7 @@ class LockCommand extends Command {
 
       /// we exclude dev dependencies.
       if (!pubspec.devDependencies.exists(name)) {
-        pubspec.dependencies.append(package.iswitch(
+        pubspec.dependencies.add(package.iswitch(
             // we should never see an sdk dep
             sdk: (sdk) => throw DCliException(
                 'Unexpected sdk version in package dependency'),
@@ -104,8 +104,8 @@ class LockCommand extends Command {
       );
 
   // map git
-  DependencyGitBuilder buildGit(GitPackageDependency git) =>
-      DependencyGitBuilder(
+  DependencyBuilderGit buildGit(GitPackageDependency git) =>
+      DependencyBuilderGit(
           name: git.package, url: git.url, ref: git.ref, path: git.path);
 
   // map hosted
@@ -115,19 +115,19 @@ class LockCommand extends Command {
     final constrainedVersion =
         version.max ?? version.min ?? sm.VersionConstraint.any;
     if (hosted.url.isEmpty || isPubDev(hosted.url)) {
-      return DependencyPubHostedBuilder(
-          name: hosted.name, version: constrainedVersion.toString());
+      return DependencyBuilderPubHosted(
+          name: hosted.name, versionConstraint: constrainedVersion.toString());
     } else {
-      return DependencyAltHostedBuilder(
+      return DependencyBuilderAltHosted(
           name: hosted.package,
-          hosted: hosted.url,
-          version: version.toString());
+          hostedUrl: hosted.url,
+          versionConstraint: version.toString());
     }
   }
 
   // map path
   DependencyBuilder buildPath(PathPackageDependency path) =>
-      DependencyPathBuilder(name: path.package, path: path.path);
+      DependencyBuilderPath(name: path.package, path: path.path);
 
   @override
   String usage() => 'lock [<project path>]';

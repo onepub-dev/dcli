@@ -152,7 +152,8 @@ class ProcessChannel {
     /// before we return
     final response = send.take();
     if (response.isEmpty || response[0] != RECEIVED) {
-      throw ProcessSyncException('Expecting a write confirmation: got $response');
+      throw ProcessSyncException(
+          'Expecting a write confirmation: got $response');
     }
   }
 

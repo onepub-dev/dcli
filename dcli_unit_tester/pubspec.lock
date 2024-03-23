@@ -305,10 +305,10 @@ packages:
     dependency: transitive
     description:
       name: pubspec_manager
-      sha256: "44df429f8991a13b72f2f84d1bbc6c96e12e965b66d43d5711a6070deee9875f"
+      sha256: "19a1da8398b7168f51299334d9644829c6796e338d6a3ff094a511493198a4e9"
       url: "https://pub.dev"
     source: hosted
-    version: "1.0.0-beta.1"
+    version: "0.9.1"
   scope:
     dependency: transitive
     description:

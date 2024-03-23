@@ -186,7 +186,7 @@ class DartProject {
 
     print('');
     _colprint('Dependencies', '');
-    for (final dependency in pubSpec.dependencies) {
+    for (final dependency in pubSpec.dependencies.list) {
       _colprint(dependency.name, dependency.toString());
     }
   }
