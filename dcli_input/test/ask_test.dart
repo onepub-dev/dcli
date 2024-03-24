@@ -1,3 +1,5 @@
+// ignore_for_file: unused_result
+
 @Timeout(Duration(seconds: 600))
 library;
 
