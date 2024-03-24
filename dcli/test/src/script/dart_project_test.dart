@@ -41,10 +41,20 @@ void main() {
         const mainScriptName = '$projectName.dart';
         final scriptPath = join(pathToProject, 'bin', mainScriptName);
 
+        final templatePath = join(
+            DartProject.self.pathToProjectRoot, '..', Settings.templateDir);
         await core.withEnvironmentAsync(() async {
+          final testTemplateDir =
+              join(tempDir, '.dcli', Settings.templateDir, 'project', 'full');
+          createDir(testTemplateDir, recursive: true);
+
+          /// copy the dev templates into the temp template path
+          /// so we are always running with a current version of the templates.
+          copyTree(join(templatePath, 'project', 'full'), testTemplateDir);
           DartProject.create(pathTo: pathToProject, templateName: 'full');
         }, environment: {
-          overrideDCliPathKey: DartProject.self.pathToProjectRoot
+          overrideDCliPathKey: DartProject.self.pathToProjectRoot,
+          'HOME': tempDir
         });
 
         expect(exists(scriptPath), isTrue);
