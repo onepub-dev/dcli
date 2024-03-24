@@ -32,15 +32,24 @@ void main() {
   );
 
   test('toList', () {
-    expect(
-      find('*', workingDirectory: HOME, recursive: false).toList().length,
-      isNot(equals(0)),
-    );
+    withTempDir((tempDir) {
+      touch(join(tempDir, 'one.txt'), create: true);
+      touch(join(tempDir, 'two.txt'), create: true);
+      expect(
+        find('*', workingDirectory: tempDir, recursive: false).toList().length,
+        equals(2),
+      );
+    });
   });
 
   test('forEach', () {
-    final list = <String>[];
-    find('*', workingDirectory: HOME, recursive: false).forEach(list.add);
-    expect(list.length, isNot(equals(0)));
+    withTempDir((tempDir) {
+      touch(join(tempDir, 'one.txt'), create: true);
+      touch(join(tempDir, 'two.txt'), create: true);
+
+      final list = <String>[];
+      find('*', workingDirectory: tempDir, recursive: false).forEach(list.add);
+      expect(list.length, isNot(equals(0)));
+    });
   });
 }
