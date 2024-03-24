@@ -276,7 +276,7 @@ void main() {
       });
     });
 
-    test('translateAbsolutePath', () async {
+    test('translateAbsolutePath-linux', () async {
       await withTestScope((tempDir) async {
         final linuxContext = Context(style: Style.posix);
         expect(
@@ -314,7 +314,7 @@ void main() {
       }, overridePlatformOS: core.DCliPlatformOS.linux);
     });
 
-    test('translateAbsolutePath', () async {
+    test('translateAbsolutePath-windows', () async {
       await withTestScope((tempDir) async {
         final windowsContext = Context(style: Style.windows);
         expect(
