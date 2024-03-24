@@ -28,7 +28,8 @@ void main() {
     }, progress: Progress.capture());
 
     final lines = progress.lines;
-    expect(lines.length, equals(8));
+    expect(lines.length, equals(9));
     expect(lines.first, equals('Hello1'));
+    expect(lines.last, equals('Hello4'));
   });
 }
