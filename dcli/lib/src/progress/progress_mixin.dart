@@ -23,5 +23,5 @@ mixin ProgressMixin implements Progress {
   List<String> toList() => lines;
 
   @override
-  String toParagraph() => lines.join('\n');
+  String toParagraph() => lines.join(eol);
 }
