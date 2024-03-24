@@ -72,21 +72,21 @@ void main() {
     // , equals('Publish the current package to pub.dev.'));
   });
 
-  test('isPubGetRequried', () async {
-    test('Run dart script', () {
-      final projectRoot = DartProject.fromPath('.').pathToProjectRoot;
-      final hellow = join(
-        projectRoot,
-        'test',
-        'test_script',
-        'general',
-        'bin',
-        'hello_world.dart',
-      );
-      DartSdk().run(args: [hellow]);
-      print('done 1');
-    });
+  test('Run dart script', () {
+    final projectRoot = DartProject.fromPath('.').pathToProjectRoot;
+    final hellow = join(
+      projectRoot,
+      'test',
+      'test_script',
+      'general',
+      'bin',
+      'hello_world.dart',
+    );
+    DartSdk().run(args: [hellow]);
+    print('done 1');
+  });
 
+  test('isPubGetRequried', () async {
     await withTempDir((tmpDir) async {
       final pubspec = join(tmpDir, 'pubspec.yaml');
       final lock = join(tmpDir, 'pubspec.lock');
