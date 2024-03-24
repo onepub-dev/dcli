@@ -38,7 +38,7 @@ void main(List<String> args) {
     showUsage(parser);
     exit(1);
   }
-c
+
   final prompt = parsed['prompt'] as String;
 
   var valid = false;
