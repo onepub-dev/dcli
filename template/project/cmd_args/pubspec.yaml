@@ -3,7 +3,6 @@ version: 0.0.1
 description: test of command arg passing.
 
 environment:
-  flutter:
   sdk: '>=3.0.0 <4.0.0'
 
 dependencies:

@@ -26,11 +26,13 @@ class DockerShell with ShellMixin, PosixShell {
       /// to check cgroups.
       const pathToCgroup = '/proc/1/cgroup';
 
-      final lines = read(pathToCgroup).toList();
-      for (final line in lines) {
-        if (line.contains(':docker:')) {
-          _inDocker = true;
-          break;
+      if (exists(pathToCgroup)) {
+        final lines = read(pathToCgroup).toList();
+        for (final line in lines) {
+          if (line.contains(':docker:')) {
+            _inDocker = true;
+            break;
+          }
         }
       }
       if (_inDocker == false) {

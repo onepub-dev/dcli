@@ -2,7 +2,6 @@ name: console_simple
 version: 0.0.1
 description: A simple command-line application created by dcli
 environment:
-  flutter:
   sdk: '>=3.0.0 <4.0.0'
 
 dependencies:
