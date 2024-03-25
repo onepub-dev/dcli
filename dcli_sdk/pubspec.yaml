@@ -15,7 +15,7 @@ dependencies:
   path: ^1.8.3
   pub_semver: ^2.1.4
   pubspec_lock: ^3.0.2
-  pubspec_manager: ^0.9.1
+  pubspec_manager: ^1.0.0
   scope: ^4.1.0
   stack_trace: ^1.11.1
   strings: ^3.0.0
