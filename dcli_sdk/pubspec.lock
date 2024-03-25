@@ -418,7 +418,7 @@ packages:
       path: "../../settings_yaml"
       relative: true
     source: path
-    version: "8.1.0-alpha.1"
+    version: "8.1.0-alpha.2"
   shelf:
     dependency: transitive
     description:
