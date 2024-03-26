@@ -64,10 +64,16 @@ void main() {
         exeName += '.exe';
       }
       chmod(pathToTestScript, permission: '740');
+
+      /// make certain the dcli_unit_tester script is in a ready to run
+      /// state.
       DartScript.fromFile(pathToTestScript).runPubGet();
+      print(orange('pub get complete'));
       final result = 'dart $pathToTestScript --script'
           .start(progress: Progress.capture(), nothrow: true)
           .toList();
+      print(orange('result'));
+      print(result);
       expect(result.length, equals(13));
       var line = 0;
       expect(result[line++], equals('basename, dcli_unit_tester'));
