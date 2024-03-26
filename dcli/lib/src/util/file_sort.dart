@@ -149,7 +149,7 @@ class FileSort {
   void _sortList(List<_Line> list) {
     list.sort((lhs, rhs) {
       final lhsColumns = lhs.line!.split(_fieldDelimiter!);
-      final rhsColumns = rhs.line!.split(_fieldDelimiter);
+      final rhsColumns = rhs.line!.split(_fieldDelimiter!);
 
       if (_maxColumn! > lhsColumns.length) {
         throw InvalidCommandArgumentException(
