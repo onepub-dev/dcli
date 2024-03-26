@@ -10,8 +10,8 @@ import 'dart:io';
 
 import 'package:path/path.dart';
 
-import '../../dcli.dart';
 import '../../dcli.dart' as d;
+import '../../dcli.dart';
 import '../script/command_line_runner.dart';
 
 /// FileSort provides the ability to sort files
@@ -149,7 +149,7 @@ class FileSort {
   void _sortList(List<_Line> list) {
     list.sort((lhs, rhs) {
       final lhsColumns = lhs.line!.split(_fieldDelimiter!);
-      final rhsColumns = rhs.line!.split(_fieldDelimiter!);
+      final rhsColumns = rhs.line!.split(_fieldDelimiter);
 
       if (_maxColumn! > lhsColumns.length) {
         throw InvalidCommandArgumentException(

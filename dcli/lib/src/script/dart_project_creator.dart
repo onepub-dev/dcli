@@ -96,7 +96,7 @@ void _fixPubspec(String projectName, PubSpec pubSpec, String pathToPubSpec) {
     final dcli = current['dcli'];
 
     if (dcli is DependencyVersioned) {
-      (dcli! as DependencyVersioned).version = packageVersion;
+      (dcli! as DependencyVersioned).versionConstraint = packageVersion;
     }
   }
 
@@ -104,12 +104,12 @@ void _fixPubspec(String projectName, PubSpec pubSpec, String pathToPubSpec) {
     final dcliCore = current['dcli_core'];
 
     if (dcliCore is DependencyVersioned) {
-      (dcliCore! as DependencyVersioned).version = packageVersion;
+      (dcliCore! as DependencyVersioned).versionConstraint = packageVersion;
     }
   }
 
   pubSpec
-    ..name.value = _replaceInvalidCharactersForName(projectName)
+    ..name.set(_replaceInvalidCharactersForName(projectName))
     ..saveTo(pathToPubSpec);
 }
 

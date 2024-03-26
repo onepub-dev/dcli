@@ -253,7 +253,7 @@ Run:
       final pubspec =
           PubSpec.loadFromPath(join(pathToTempPackage, 'pubspec.yaml'));
 
-      for (final exe in pubspec.executables) {
+      for (final exe in pubspec.executables.list) {
         final pathToOutput =
             join(pathToTempPackage, dirname(exe.scriptPath), exe.name);
         print(green('Compiling ${exe.name}...'));

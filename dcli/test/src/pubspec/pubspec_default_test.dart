@@ -50,8 +50,10 @@ dependencies:
         PubSpec.loadFromString(basic).saveTo(pubSpecScriptPath);
 
         final dependencies = <DependencyBuilder>[
-          DependencyPubHostedBuilder(name: 'collection', version: '^1.14.12'),
-          DependencyPubHostedBuilder(name: 'file_utils', version: '^0.1.3')
+          DependencyBuilderPubHosted(
+              name: 'collection', versionConstraint: '^1.14.12'),
+          DependencyBuilderPubHosted(
+              name: 'file_utils', versionConstraint: '^0.1.3')
         ];
         runTest(fs, null, main, dependencies);
       });
@@ -68,11 +70,13 @@ dependencies:
         PubSpec.loadFromString(overrides).saveTo(scriptPath);
 
         final dependencies = <DependencyBuilder>[
-          DependencyPubHostedBuilder(name: 'dcli', version: '^2.0.0'),
-          DependencyPubHostedBuilder(name: 'args', version: '^2.0.1'),
-          DependencyPubHostedBuilder(name: 'path', version: '^2.0.2'),
-          DependencyPubHostedBuilder(name: 'collection', version: '^1.14.12'),
-          DependencyPubHostedBuilder(name: 'file_utils', version: '^0.1.3')
+          DependencyBuilderPubHosted(name: 'dcli', versionConstraint: '^2.0.0'),
+          DependencyBuilderPubHosted(name: 'args', versionConstraint: '^2.0.1'),
+          DependencyBuilderPubHosted(name: 'path', versionConstraint: '^2.0.2'),
+          DependencyBuilderPubHosted(
+              name: 'collection', versionConstraint: '^1.14.12'),
+          DependencyBuilderPubHosted(
+              name: 'file_utils', versionConstraint: '^0.1.3')
         ];
         runTest(fs, null, main, dependencies);
       });
@@ -88,11 +92,13 @@ dependencies:
         PubSpec.loadFromString(overrides).saveTo(scriptPath);
 
         final dependencies = <DependencyBuilder>[
-          DependencyPubHostedBuilder(name: 'dcli', version: '^2.0.0'),
-          DependencyPubHostedBuilder(name: 'args', version: '^2.0.1'),
-          DependencyPubHostedBuilder(name: 'path', version: '^2.0.2'),
-          DependencyPubHostedBuilder(name: 'collection', version: '^1.14.12'),
-          DependencyPubHostedBuilder(name: 'file_utils', version: '^0.1.3')
+          DependencyBuilderPubHosted(name: 'dcli', versionConstraint: '^2.0.0'),
+          DependencyBuilderPubHosted(name: 'args', versionConstraint: '^2.0.1'),
+          DependencyBuilderPubHosted(name: 'path', versionConstraint: '^2.0.2'),
+          DependencyBuilderPubHosted(
+              name: 'collection', versionConstraint: '^1.14.12'),
+          DependencyBuilderPubHosted(
+              name: 'file_utils', versionConstraint: '^0.1.3')
         ];
         runTest(fs, null, main, dependencies);
       });
