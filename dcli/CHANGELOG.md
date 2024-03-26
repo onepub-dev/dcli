@@ -1,3 +1,6 @@
+# 3.4.0
+- upgraded to pubspec_manager 1.0.0
+
 # 3.3.6
 - update the pubspec_manager package to the latest version.
 
