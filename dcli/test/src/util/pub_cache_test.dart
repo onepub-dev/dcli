@@ -141,7 +141,8 @@ void main() {
       PubCache().globalDeactivate('general');
     }
     expect(PubCache().isGloballyActivatedFromSource('general'), isFalse);
-    PubCache().globalActivateFromSource(join('test', 'test_script', 'general'));
+    PubCache().globalActivateFromSource(
+        join('..', 'dcli_unit_tester', 'test', 'test_script', 'general'));
     expect(PubCache().isGloballyActivatedFromSource('general'), isTrue);
 
     /// cleanup

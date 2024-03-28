@@ -76,6 +76,8 @@ void main() {
     final projectRoot = DartProject.fromPath('.').pathToProjectRoot;
     final hellow = join(
       projectRoot,
+      '..',
+      'dcli_unit_tester',
       'test',
       'test_script',
       'general',

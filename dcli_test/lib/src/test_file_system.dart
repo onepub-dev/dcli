@@ -313,7 +313,8 @@ class TestFileSystem {
     }
 
     copyTree(
-      join(DartProject.self.pathToProjectRoot, 'test', 'test_script'),
+      join(DartProject.self.pathToProjectRoot, '..', 'dcli_unit_tester', 'test',
+          'test_script'),
       testScriptPath,
     );
 

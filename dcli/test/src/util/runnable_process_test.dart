@@ -88,6 +88,8 @@ void main() {
     final progress = DartSdk().run(
       args: [
         join(
+          '..',
+          'dcli_unit_tester',
           'test',
           'test_script',
           'general',
