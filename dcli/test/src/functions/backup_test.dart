@@ -7,6 +7,8 @@ library;
  * Written by Brett Sutton <bsutton@onepub.dev>, Jan 2022
  */
 
+import 'dart:io';
+
 import 'package:dcli/dcli.dart';
 import 'package:dcli_common/dcli_common.dart';
 import 'package:dcli_core/dcli_core.dart' as core;
@@ -312,7 +314,7 @@ void main() {
           equals('/abc'),
         );
       }, overridePlatformOS: core.DCliPlatformOS.linux);
-    });
+    }, skip: !Platform.isLinux);
 
     test('translateAbsolutePath-windows', () async {
       await withTestScope((tempDir) async {
