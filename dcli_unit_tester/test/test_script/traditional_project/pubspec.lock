@@ -100,7 +100,7 @@ packages:
   dcli:
     dependency: "direct main"
     description:
-      path: "../../.."
+      path: "../../../../dcli"
       relative: true
     source: path
     version: "4.0.1-alpha.13"

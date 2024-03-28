@@ -16,7 +16,7 @@ dev_dependencies:
 
 dependency_overrides: 
   dcli: 
-    path: ../../..
+    path: ../../../../dcli
   dcli_common: 
     path: ../../../../dcli_common
   dcli_core: 
