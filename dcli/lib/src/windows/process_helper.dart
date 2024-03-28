@@ -78,7 +78,7 @@ List<ProcessDetails> getWindowsProcesses() {
 
       /// extrat the pids.
       for (var i = 0; i < cProcesses; i++) {
-        final pid = pProcesses.elementAt(i).value;
+        final pid = (pProcesses + i).value;
         if (pid != 0) {
           processes.add(ProcessDetails(pid, getWindowsProcessName(pid), '0K'));
         }
