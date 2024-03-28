@@ -207,7 +207,7 @@ void main() {
     expect(exists(temp), isFalse);
   });
 
-  group('error handling', () async {
+  group('error handling', ()  {
     test('host not found', () async {
       withTempFile((file) {
         const url =
