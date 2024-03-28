@@ -9,7 +9,7 @@ RUN touch /home/.profile
 RUN apt -y update && apt -y upgrade && apt -y install vim procps coreutils wget
 
 
-RUN dart pub global activate dcli 
+RUN dart pub global activate dcli_sdk 
 RUN dcli install
 
 RUN dart pub global activate dswitch

@@ -39,7 +39,7 @@ class LinuxDCliInstaller {
     // // as root must have its own copy of .pub-cache otherwise
     // // if it updates .pub-cache of a user the user won't be able
     // // to use pub-get any more.
-    // '/usr/lib/dart/bin/pub global activate dcli'.run;
+    // '/usr/lib/dart/bin/pub global activate dcli)sdk'.run;
 
     return installedDart;
   }
