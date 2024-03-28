@@ -313,7 +313,7 @@ class _Fetch extends core.DCliFunction {
 
     /// prep the save file.
     final saveFile = File(fetchUrl.saveToPath);
-    final raf = await saveFile.open(mode: FileMode.append);
+    final raf = saveFile.openSync(mode: FileMode.append);
     await raf.truncate(0);
 
     late StreamSubscription<List<int>> subscription;
@@ -344,8 +344,9 @@ class _Fetch extends core.DCliFunction {
       },
       onDone: () async {
         /// down load is complete
-        raf.flushSync();
-        await raf.close();
+        raf
+          ..flushSync()
+          ..closeSync();
         await subscription.cancel();
         client.close();
         _sendProgressEvent(
