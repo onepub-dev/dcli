@@ -35,9 +35,9 @@ Future<void> main(List<String> args) async {
   }
 
   final projectRoot = DartProject.fromPath(pwd).pathToProjectRoot;
-  if (!PubCache().isGloballyActivatedFromSource('dcli')) {
+  if (!PubCache().isGloballyActivatedFromSource('dcli_sdk')) {
     print(
-      'Activating dcli from source so we are testing against latest version',
+      'Activating dcli_sdk from source so we are testing against latest version',
     );
 
     // ignore: discarded_futures
