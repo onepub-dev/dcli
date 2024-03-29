@@ -40,7 +40,7 @@ class PipeSync {
   void run(ProcessSettings lhsSettings, ProcessSettings rhsSettings) {
     final lhsController = StreamController<List<int>>();
 
-    /// TODO(bsutton): channel for stderr - maybe see the about
+    // TODO(bsutton): channel for stderr - maybe see the about
     ///  comment about bash
     final _lhsChannel = ProcessChannel.pipe(io.stdin, lhsController.sink);
     final _rhsChannel = ProcessChannel.pipe(lhsController.stream, io.stdout);
