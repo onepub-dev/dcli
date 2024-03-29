@@ -33,12 +33,11 @@ class _Head extends DCliFunction {
     }
 
     try {
-      const count = 0;
       return withOpenLineFile(path, (file) {
         final result = <String>[];
         file.readAll((line) {
           result.add(line);
-          return result.length < count;
+          return result.length < lines;
         });
         return result;
       });

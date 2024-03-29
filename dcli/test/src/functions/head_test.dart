@@ -27,7 +27,6 @@ void main() {
             for (var i = 0; i < 10; i++) {
               file.append('Line $i is here');
             }
-            file.close();
           });
 
           final lines = head(testFile, 5).toList();
