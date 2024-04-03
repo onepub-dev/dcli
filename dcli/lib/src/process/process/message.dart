@@ -1,28 +1,57 @@
 // @dart=3.0
 
+import 'dart:ffi';
 import 'dart:io';
+import 'dart:isolate';
 import 'dart:typed_data';
+
+import 'process_channel.dart';
 
 /// Used to send data back from the isolate over the
 /// recieve channel. The first byte is used to
 /// indicate the type of message.
 class Message {
+  /// Used to send the native send port back to the
+  /// spawner, so they can send us data.
+  /// Spawnee -> Spawner
+  Message.port(SendPort sendPort) {
+    final port = Int64List(1)..[0] = sendPort.nativePort;
+
+    builder.add(port.buffer.asUint8List());
+  }
+
+  /// Send data that the process wrote to stdout
+  /// back to the spawner.
+  /// Spawnee -> Spawner
   Message.stdout(Uint8List data) {
     builder
       ..addByte(_msgStdoutCode)
       ..add(data);
   }
 
+  /// Send data that the process wrote to stderr
+  /// back to the spawner.
+  /// Spawnee -> Spawner
   Message.stderr(Uint8List data) {
     builder
       ..addByte(_msgStderrCode)
       ..add(data);
   }
 
+  /// When the process exists send the exitCode
+  /// back to the spawener.
+  /// Spawnee -> Spawner
   Message.exit(int exitCode) {
     builder
       ..addByte(_msgExitCode)
       ..addByte(exitCode);
+  }
+
+  /// Used by the spawner to acknowledge
+  /// that it recieved a message.
+  /// Spawner -> spawnee
+  Message.received() {
+    builder.add(Uint8List.fromList([ProcessChannel.RECEIVED]));
   }
   // The process has exited. The second byte will contain
   // the exit code.
@@ -39,10 +68,11 @@ class Message {
 
   BytesBuilder builder = BytesBuilder();
 
-  Uint8List get message => builder.takeBytes();
+  Uint8List get content => builder.takeBytes();
 }
 
-/// Handle messages sent back from the isolate.
+/// Handle messages sent back from the spawned isolate.
+/// 
 class MessageResponse {
   MessageResponse.fromData(this.data) {
     messageCode = data[0];

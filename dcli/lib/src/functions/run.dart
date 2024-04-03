@@ -252,7 +252,7 @@ Progress start(
     workingDirectory: workingDirectory,
   );
 
-  return runnable.run(
+  return runnable. run(
     progress: progress,
     runInShell: runInShell,
     detached: detached,

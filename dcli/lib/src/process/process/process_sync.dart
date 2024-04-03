@@ -2,6 +2,7 @@
 
 import 'dart:async';
 import 'dart:io';
+import 'dart:isolate';
 
 import 'package:dcli_core/dcli_core.dart';
 
@@ -20,13 +21,16 @@ class ProcessSync {
 
   void listenStdout(void Function(List<int>) callback) {
     _channel.listenStdout((data) {
-      // print('processSync recieved data from channel');
+      print('processSync recieved data from stdout channel');
       callback(data);
     });
   }
 
   void listenStderr(void Function(List<int>) callback) {
-    _channel.listenStderr((data) => callback(data));
+    _channel.listenStderr((data) {
+      print('processSync recieved data from stderr channel');
+      callback(data);
+    });
   }
 
   /// Read a line from stderr
@@ -45,10 +49,11 @@ class ProcessSync {
   int get waitForExitCode => _channel.waitForExitCode;
 
   /// Run the given process as defined by [settings].
-  void run(ProcessSettings settings) {
+  Future<Isolate> run(ProcessSettings settings) {
+    print('starting isolate');
     _channel = ProcessChannel();
 
-    startIsolate(settings, _channel);
+    return startIsolate(settings, _channel);
   }
 
   /// Start the process but redirect stdout and stderr to

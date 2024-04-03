@@ -17,7 +17,7 @@ RUN touch /$HOME/.profile
 # Add the entire dcli project so we can run from the local filesystem
 COPY . /dcli
 
-RUN pub global activate --source path /dcli 
+RUN pub global activate --source path /dcli_sdk 
 RUN dcli install
 
 CMD []

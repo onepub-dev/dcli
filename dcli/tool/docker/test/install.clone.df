@@ -7,7 +7,7 @@ ENV PATH="$PATH":"/home/.pub-cache/bin"
 
 RUN git clone https://github.com/bsutton/dcli.git
 
-RUN pub global activate --source path /dcli 
+RUN pub global activate --source path /dcli_sdk 
 
 CMD []
 

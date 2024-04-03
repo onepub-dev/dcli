@@ -7,6 +7,7 @@
 import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
+import 'dart:isolate';
 
 import 'package:dcli_core/dcli_core.dart' as core;
 import 'package:path/path.dart';
@@ -185,24 +186,33 @@ class RunnableProcess {
     progress ??= Progress.print();
 
     try {
-      start(
+      final spawning = start(
         runInShell: runInShell,
         detached: detached,
         terminal: terminal,
         privileged: privileged,
         extensionSearch: extensionSearch,
       );
-      if (terminal == true) {
-        /// we can't process io as the terminal
-        // has inherited the IO so we dont' see it.
-        _waitForExit(processSync!, progress, nothrow: nothrow);
-      } else {
+      // if (terminal == true) {
+      //   /// we can't process io as the terminal
+      //   // has inherited the IO so we dont' see it.
+      //   _waitForExit(processSync!, progress, nothrow: nothrow);
+      // } else {
+
+      // ignore: discarded_futures, cascade_invocations
+      spawning.then((_) {
+        print('spawn completed - waithing for process exit');
+
+        /// whether we have a terminal or not we use the same
+        /// process to read any io that comes back until
+        /// we see an exit code.
         if (detached == false) {
           processUntilExit(progress, nothrow: nothrow);
         }
-        // else we are detached and won't see the child exit
-        // so no point waiting.
-      }
+      });
+      // else we are detached and won't see the child exit
+      // so no point waiting.
+      // }
     } finally {
       (progress as ProgressImpl).close();
     }
@@ -267,7 +277,7 @@ class RunnableProcess {
   ///
   /// If you pass [detached] = true then the process is spawned
   /// but we don't wait for it to complete nor is any io available.
-  void start({
+  Future<Isolate> start({
     bool runInShell = false,
     bool detached = false,
     bool waitForStart = true,
@@ -338,7 +348,8 @@ class RunnableProcess {
         environment: ProcessEnvironment());
 
     // run the process until completion.
-    processSync = ProcessSync()..run(processSettings);
+    processSync = ProcessSync();
+    return processSync!.run(processSettings);
 
     // // we wait for the process to start.
     // // if the start fails we get a clean exception

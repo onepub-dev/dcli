@@ -397,7 +397,7 @@ dependency_overrides:
   }
 
   bool isDCliRunningFromSource() =>
-      PubCache().isGloballyActivatedFromSource('dcli');
+      PubCache().isGloballyActivatedFromSource('dcli_sdk');
 }
 
 class TestFileSystemException extends DCliException {

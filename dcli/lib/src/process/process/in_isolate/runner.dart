@@ -49,11 +49,14 @@ class ProcessRunner {
       'You cannot enable terminal and detached at the same time.',
     );
 
-    var mode =
+    final mode =
         settings.detached ? ProcessStartMode.detached : ProcessStartMode.normal;
-    if (settings.terminal) {
-      mode = ProcessStartMode.inheritStdio;
-    }
+
+    // can't use inheritedStdio when we run in an isolate
+    // this will need to be somehow managed from the primary isolate.
+    // if (settings.terminal) {
+    //   mode = ProcessStartMode.inheritStdio;
+    // }
 
     if (Settings().isWindows && settings.extensionSearch) {
       _parsed.cmd =
@@ -97,6 +100,7 @@ class ProcessRunner {
     }
 
     try {
+      print('about to start process');
       process = await Process.start(
         _parsed.cmd,
         _parsed.args,
@@ -105,7 +109,9 @@ class ProcessRunner {
         mode: mode,
         environment: settings.environment.envVars,
       );
+      print('runner has started process');
     } on ProcessException catch (e) {
+      print('exception launching process: $e');
       if (e.errorCode == 2) {
         final ep = e;
         throw RunException.withArgs(

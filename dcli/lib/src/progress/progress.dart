@@ -72,6 +72,11 @@ abstract class Progress {
   /// null if no lines where generated
   String? get firstLine;
 
+// TODO: use this code to turn int list into strings
+// when user calls toList.
+// late final splitter =
+//       const LineSplitter().startChunkedConversion(_CallbackSink(lines.add));
+//   late final decoder = const Utf8Decoder().startChunkedConversion(splitter);
   List<String> toList();
 
   void forEach(void Function(String line) print);

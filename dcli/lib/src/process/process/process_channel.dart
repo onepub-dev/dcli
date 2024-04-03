@@ -77,7 +77,7 @@ class ProcessChannel {
   /// one protocol
   static const int RECEIVED = 1;
 
-  /// Port used to send data to the isolate.
+  /// Port used to send data to the spawned isolate.
   late final SendPort sendPort;
   late final Mailbox send;
   final Mailbox response;
@@ -85,8 +85,6 @@ class ProcessChannel {
   late final StringConversionSink splitter;
   late final ByteConversionSink decoder;
 
-// TODO DONE?: this probably need to be int arrays so
-// we can handly binary data.
   final List<List<int>> stdoutLines = <List<int>>[];
   final List<List<int>> stderrLines = <List<int>>[];
   // int get sendAddress => send.rawAddress;
@@ -105,7 +103,7 @@ class ProcessChannel {
 
   void listenStdout(void Function(List<int>) callback) {
     stdoutController.stream.listen((data) {
-      // print('forwarding data to stdout listener');
+      print('forwarding data to stdout listener');
       callback(data);
     });
   }
@@ -128,7 +126,7 @@ class ProcessChannel {
       if (_exitCode != null) {
         return null;
       }
-      _fetch();
+      _take();
     }
   }
 
@@ -136,7 +134,7 @@ class ProcessChannel {
   /// code.
   int get waitForExitCode {
     while (_exitCode == null) {
-      _fetch();
+      _take();
     }
     return _exitCode!;
   }
@@ -157,11 +155,15 @@ class ProcessChannel {
     }
   }
 
-  void _fetch() {
+  /// fetch data from the mailbox which contains data
+  /// output by the process running in the spawned isolate.
+  void _take() {
     Uint8List bytes;
 
     /// drain the mailbox
+    print('taking data from spawned isolates mailbox');
     bytes = response.take();
+    print('took data from spawned isolates mailbox');
     _recieveFromIsolate(bytes);
     // decoder.add(bytes);
 
