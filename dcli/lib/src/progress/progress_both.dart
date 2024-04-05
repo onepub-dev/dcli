@@ -6,6 +6,7 @@
 
 import '../../dcli.dart';
 import 'progress_impl.dart';
+import 'progress_line_splitter.dart';
 import 'progress_mixin.dart';
 
 /// Prints stderr, suppresses all other output.
@@ -30,22 +31,35 @@ class ProgressBothImpl extends ProgressImpl
   final bool captureStdout;
   final bool captureStderr;
 
-  @override
-  final lines = <String>[];
+  final _capturedData = <int>[];
+
+  List<String>? _lines;
 
   @override
-  void addToStdout(String line) {
-    _stdout(line);
+  List<String> get lines => _lines ?? ProgressLineSplitter(_capturedData).lines;
+
+  @override
+  void addToStdout(List<int> data) {
+    for (final line in ProgressLineSplitter(data).lines) {
+      _stdout(line);
+      // CONSIDER: we could immediately cache these lines
+      // but then we are storing them twice (_capturedData) and _lines.
+      // for the moment I've gone with a smaller memory overhead
+      // and higher cpu utlisation.
+    }
+
     if (captureStdout) {
-      lines.add(line);
+      _capturedData.addAll(data);
     }
   }
 
   @override
-  void addToStderr(String line) {
-    _stderr(line);
+  void addToStderr(List<int> data) {
+    for (final line in ProgressLineSplitter(data).lines) {
+      _stderr(line);
+    }
     if (captureStderr) {
-      lines.add(line);
+      _capturedData.addAll(data);
     }
   }
 
@@ -61,4 +75,45 @@ class ProgressBothImpl extends ProgressImpl
 abstract class ProgressBoth implements Progress {
   @override
   List<String> get lines;
+}
+
+class _ProgressiveLineSplitter {
+  final lines = <String>[];
+
+  final currentLine = StringBuffer();
+  void addData(List<int> intList) {
+    var lastWasCR = false;
+
+    for (final value in intList) {
+      if (lastWasCR) {
+        if (value == '\n'.codeUnitAt(0)) {
+          // If last was CR and current is LF, terminate the line
+          lines.add(currentLine.toString());
+          currentLine.clear();
+        } else {
+          // If last was CR but current is not LF, add a new line
+          lines.add(currentLine.toString());
+          currentLine
+            ..clear()
+            ..writeCharCode(value);
+        }
+        lastWasCR = false;
+      } else {
+        if (value == '\r'.codeUnitAt(0)) {
+          lastWasCR = true;
+        } else if (value == '\n'.codeUnitAt(0)) {
+          // If current is LF, terminate the line
+          lines.add(currentLine.toString());
+          currentLine.clear();
+        } else {
+          // Otherwise, append the character
+          currentLine.writeCharCode(value);
+        }
+      }
+    }
+
+    if (currentLine.isNotEmpty) {
+      lines.add(currentLine.toString());
+    }
+  }
 }

@@ -19,6 +19,12 @@ class RunException extends DCliException {
     Trace? stackTrace,
   }) : super(reason, stackTrace);
 
+  RunException.fromJson(Map<String, dynamic> json)
+      : cmdLine = json['cmdLine'] as String,
+        exitCode = json['exitCode'] as int,
+        reason = json['reason'] as String,
+        super(json['reason'] as String, json['stackTrace'] as Trace);
+
   ///
   RunException.withArgs(
     String? cmd,
@@ -28,6 +34,17 @@ class RunException extends DCliException {
     Trace? stackTrace,
   })  : cmdLine = '$cmd ${args.join(' ')}',
         super(reason, stackTrace);
+
+  ///
+  RunException.fromException(
+    Object exception,
+    String? cmd,
+    List<String?> args, {
+    Trace? stackTrace,
+  })  : cmdLine = '$cmd ${args.join(' ')}',
+        reason = exception.toString(),
+        exitCode = -1,
+        super(exception.toString(), stackTrace);
 
   /// The command line that was being run.
   String cmdLine;
@@ -43,4 +60,11 @@ class RunException extends DCliException {
 $cmdLine 
 exit: $exitCode
 reason: $reason''';
+
+  Map<String, dynamic> toJson() => {
+        'cmdLine': cmdLine,
+        'exitCode': exitCode,
+        'reason': reason,
+        'stackTrace': stackTrace,
+      };
 }

@@ -121,7 +121,7 @@ class _Is extends DCliFunction {
 
     verbose(
       () =>
-          'exists: found: $exists ${truepath(path)} followLinks: $followLinks',
+          'exists(${truepath(path)}) found: $exists followLinks: $followLinks',
     );
 
     return exists;
@@ -140,7 +140,7 @@ class _Is extends DCliFunction {
 
     verbose(
       () =>
-          'exists: found: $exists ${truepath(path)} followLinks: $followLinks',
+          'exists(${truepath(path)}) found: $exists followLinks: $followLinks',
     );
 
     return exists;
@@ -156,8 +156,10 @@ class _Is extends DCliFunction {
   /// empty directory.
   /// For large directories this operation can be expensive.
   bool isEmpty(String pathToDirectory) {
-    verbose(() => 'isEmpty: ${truepath(pathToDirectory)}');
+    final empty =
+        Directory(pathToDirectory).listSync(followLinks: false).isEmpty;
+    verbose(() => 'isEmpty(${truepath(pathToDirectory)}) : $empty');
 
-    return Directory(pathToDirectory).listSync(followLinks: false).isEmpty;
+    return empty;
   }
 }

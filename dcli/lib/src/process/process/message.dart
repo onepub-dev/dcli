@@ -5,7 +5,32 @@ import 'dart:io';
 import 'dart:isolate';
 import 'dart:typed_data';
 
-import 'process_channel.dart';
+import '../../../dcli.dart';
+import 'process_in_isolate2.dart';
+
+enum MessageType {
+  /// pass the isolates send port
+  sendPort,
+
+  /// the processes exit code
+  exitCode,
+
+  /// An acknowledgement that we recieved a message.
+  ack,
+
+  /// data which the process wrote to stdout.
+  stdout,
+
+  /// data which the process wrote to stderr
+  stderr,
+
+  /// data that the primary isolate received from
+  /// stdin
+  stdin,
+
+  /// An exception thrown by the isolate.
+  exception
+}
 
 /// Used to send data back from the isolate over the
 /// recieve channel. The first byte is used to
@@ -17,7 +42,17 @@ class Message {
   Message.port(SendPort sendPort) {
     final port = Int64List(1)..[0] = sendPort.nativePort;
 
-    builder.add(port.buffer.asUint8List());
+    builder
+      ..addByte(MessageType.sendPort.index)
+      ..add(port.buffer.asUint8List());
+  }
+
+  /// Send data to the isolate that came from
+  /// the primary isolates stdin.
+  Message.stdin(Uint8List data) {
+    builder
+      ..addByte(MessageType.stdin.index)
+      ..add(data);
   }
 
   /// Send data that the process wrote to stdout
@@ -25,7 +60,7 @@ class Message {
   /// Spawnee -> Spawner
   Message.stdout(Uint8List data) {
     builder
-      ..addByte(_msgStdoutCode)
+      ..addByte(MessageType.stdout.index)
       ..add(data);
   }
 
@@ -34,7 +69,7 @@ class Message {
   /// Spawnee -> Spawner
   Message.stderr(Uint8List data) {
     builder
-      ..addByte(_msgStderrCode)
+      ..addByte(MessageType.stderr.index)
       ..add(data);
   }
 
@@ -43,59 +78,78 @@ class Message {
   /// Spawnee -> Spawner
   Message.exit(int exitCode) {
     builder
-      ..addByte(_msgExitCode)
+      ..addByte(MessageType.exitCode.index)
       ..addByte(exitCode);
   }
 
-  /// Used by the spawner to acknowledge
-  /// that it recieved a message.
-  /// Spawner -> spawnee
-  Message.received() {
-    builder.add(Uint8List.fromList([ProcessChannel.RECEIVED]));
+  /// Used to acknowlede that a message has been recieved.
+  Message.ack() {
+    builder.addByte(MessageType.ack.index);
   }
-  // The process has exited. The second byte will contain
-  // the exit code.
-  static const int msgExit = 0;
-  static const int _msgExitCode = msgExit;
-  // The process has written to stdout. The data
-  // written is contained from the second byte
-  static const int msgStdout = 1;
-  static const int _msgStdoutCode = msgStdout;
-  // The process has written to stderr. The data
-  // written is contained from the second byte
-  static const int msgStderr = 2;
-  static const int _msgStderrCode = msgStderr;
+
+  /// Allows us to pass a RunException to the primary isolate.
+  Message.runException(RunException e) {
+    final data = e.toJson();
+    builder
+      ..addByte(MessageType.exception.index)
+      ..add(data.toString().codeUnits);
+  }
 
   BytesBuilder builder = BytesBuilder();
 
-  Uint8List get content => builder.takeBytes();
+  Uint8List? _content;
+
+  Uint8List get content => _content ??= builder.takeBytes();
+
+  MessageType get type => MessageType.values[content[0]];
+
+  List<int> get payload => content.sublist(1);
+
+  @override
+  String toString() => 'length: ${builder.length}';
 }
 
 /// Handle messages sent back from the spawned isolate.
-/// 
+///
 class MessageResponse {
-  MessageResponse.fromData(this.data) {
-    messageCode = data[0];
+  MessageResponse.fromData(List<int> data) {
+    messageType = MessageType.values[data[0]];
+    if (data.length > 1) {
+      payload = data.sublist(1);
+    } else {
+      payload = [];
+    }
+    _logMessage('Recieved', this);
   }
-  final List<int> data;
-  late final int messageCode;
+  late final List<int> payload;
+  late final MessageType messageType;
 
-  void onStdout(void Function(List<int> data) action) {
-    if (messageCode == Message.msgStdout) {
-      action(data.sublist(1));
+  void onStdout(void Function(List<int> payload) action) {
+    if (messageType == MessageType.stdout) {
+      _logMessage('dispatching to stdout', this);
+      action(payload);
     }
   }
 
-  void onStderr(void Function(List<int> data) action) {
-    if (messageCode == Message.msgStderr) {
-      action(data.sublist(1));
+  void onStderr(void Function(List<int> payload) action) {
+    if (messageType == MessageType.stderr) {
+      action(payload);
     }
   }
 
   void onExit(void Function(int exitCode) action) {
-    if (messageCode == Message.msgExit) {
-      // print('processing exitCode');
-      action(data[1]);
+    if (messageType == MessageType.exitCode) {
+      action(payload[0]);
     }
+  }
+
+  @override
+  String toString() =>
+      'type: $messageType, payload: (len: ${payload.length}) $payload]';
+}
+
+void _logMessage(String prefix, MessageResponse message) {
+  if (debugIsolate) {
+    print('message_reponse: $prefix $message');
   }
 }

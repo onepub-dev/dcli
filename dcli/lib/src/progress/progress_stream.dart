@@ -5,6 +5,7 @@
  */
 
 import 'dart:async';
+import 'dart:convert';
 
 import '../../dcli.dart';
 import 'progress_impl.dart';
@@ -19,7 +20,7 @@ class ProgressStreamImpl extends ProgressImpl
   /// stderr is also captured and will be available
   /// in [lines] once the process completes.
   ProgressStreamImpl({bool includeStderr = false})
-      : _controller = StreamController<String>(),
+      : _controller = StreamController<List<int>>(),
         _includeStderr = includeStderr {
     sink = _controller.sink;
   }
@@ -29,32 +30,40 @@ class ProgressStreamImpl extends ProgressImpl
   final lines = <String>[];
 
   // final controller = StreamController<String>();
-  final StreamController<String> _controller;
+  final StreamController<List<int>> _controller;
 
-  late final Sink<String> sink;
+  late final Sink<List<int>> sink;
 
   @override
-  Stream<String> get stream => _controller.stream;
+  Stream<List<int>> get stream => _controller.stream;
 
-  void _addToStream(String line) {
+  void _addToStream(List<int> line) {
     sink.add(line);
   }
 
+// _LineSplitter  splitter = _LineSplitter();
+  //     const LineSplitter().startChunkedConversion(_CallbackSink(lines.add));
+  // late final decoder = const Utf8Decoder().startChunkedConversion(splitter);
+
   @override
-  void forEach(LineAction action) {
-    _controller.stream.listen((line) => action(line));
+  Future<void> forEach(LineAction action) async {
+    final transformed = _controller.stream
+        .map(String.fromCharCodes)
+        .transform(const LineSplitter());
+
+    await transformed.forEach((line) => action(line));
   }
 
   @override
-  void addToStderr(String line) {
+  void addToStderr(List<int> data) {
     if (_includeStderr) {
-      _addToStream(line);
+      _addToStream(data);
     }
   }
 
   @override
-  void addToStdout(String line) {
-    _addToStream(line);
+  void addToStdout(List<int> data) {
+    _addToStream(data);
   }
 
   @override

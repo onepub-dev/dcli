@@ -12,6 +12,7 @@ import 'package:native_synchronization/mailbox.dart';
 import 'message.dart';
 // import 'mailbox.dart';
 import 'pipe_sync.dart';
+import 'process_in_isolate2.dart';
 // import 'process_sync.dart';
 
 /// Send and Receive data to/from a process
@@ -19,8 +20,8 @@ import 'pipe_sync.dart';
 class ProcessChannel {
   ProcessChannel()
       : pipeMode = false,
-        response = Mailbox(),
-        send = Mailbox();
+        mailboxToPrimaryIsolate = Mailbox(),
+        mailboxFromPrimaryIsolate = Mailbox();
 
   /// Configures the channel to:
   ///  * forward data from the passed [stdin] to the process
@@ -30,8 +31,8 @@ class ProcessChannel {
   /// this.
   ProcessChannel.pipe(Stream<List<int>> stdin, Sink<List<int>> stdout)
       : pipeMode = true,
-        response = Mailbox(),
-        send = Mailbox() {
+        mailboxToPrimaryIsolate = Mailbox(),
+        mailboxFromPrimaryIsolate = Mailbox() {
     /// send data from stdin to the
     /// isolates so it can pass
     /// it to the process.
@@ -46,16 +47,14 @@ class ProcessChannel {
     // decoder = const Utf8Decoder().startChunkedConversion(splitter);
   }
 
-  void _recieveFromIsolate(List<int> data) {
-    //   splitter =
-    // const LineSplitter().startChunkedConversion(_CallbackSink((line)
-
-    // _CallbackSink((data) {
+  void _processMessageFromIsolate(List<int> data) {
     MessageResponse.fromData(data)
       ..onStdout((data) {
-        // print('recieved stdout from isolate: ${utf8.decode(data)}');
+        _logChannel('recieved stdout from isolate: ${utf8.decode(data)}');
         stdoutLines.add(data);
         stdoutController.sink.add(data);
+
+        // TODOhow does this data get to the progress because currently it isn't
       })
       ..onStderr((data) {
         stderrLines.add(data);
@@ -67,20 +66,11 @@ class ProcessChannel {
   }
 
   bool pipeMode;
-  // Used when sending a request to to the isolate
-  // to send use more data.
-  static const int WAKEUP = 1;
-
-  /// Used by the isolate to confirm it
-  /// received the data and to honour
-  /// the mailboxes required send one/recieve
-  /// one protocol
-  static const int RECEIVED = 1;
 
   /// Port used to send data to the spawned isolate.
   late final SendPort sendPort;
-  late final Mailbox send;
-  final Mailbox response;
+  late final Mailbox mailboxFromPrimaryIsolate;
+  final Mailbox mailboxToPrimaryIsolate;
 
   late final StringConversionSink splitter;
   late final ByteConversionSink decoder;
@@ -103,7 +93,7 @@ class ProcessChannel {
 
   void listenStdout(void Function(List<int>) callback) {
     stdoutController.stream.listen((data) {
-      print('forwarding data to stdout listener');
+      _logChannel('forwarding data to stdout listener length: ${data.length}');
       callback(data);
     });
   }
@@ -126,7 +116,7 @@ class ProcessChannel {
       if (_exitCode != null) {
         return null;
       }
-      _take();
+      _takeFromIsolate();
     }
   }
 
@@ -134,7 +124,7 @@ class ProcessChannel {
   /// code.
   int get waitForExitCode {
     while (_exitCode == null) {
-      _take();
+      _takeFromIsolate();
     }
     return _exitCode!;
   }
@@ -144,32 +134,34 @@ class ProcessChannel {
 
   /// Write [data] to the processes stdin.
   void writeToStdin(List<int> data) {
+    // TODO: why are we using the sendPort rather than just he mailboxes.
     sendPort.send(data);
 
     /// check the data has been sent to the spawned process
     /// before we return
-    final response = send.take();
-    if (response.isEmpty || response[0] != RECEIVED) {
+    final response = MessageResponse.fromData(mailboxFromPrimaryIsolate.take());
+
+    if (response.messageType != MessageType.ack) {
       throw ProcessSyncException(
           'Expecting a write confirmation: got $response');
     }
   }
 
-  /// fetch data from the mailbox which contains data
-  /// output by the process running in the spawned isolate.
-  void _take() {
+  /// fetch data from spawned isolate
+  void _takeFromIsolate() {
     Uint8List bytes;
 
     /// drain the mailbox
-    print('taking data from spawned isolates mailbox');
-    bytes = response.take();
-    print('took data from spawned isolates mailbox');
-    _recieveFromIsolate(bytes);
+    _logChannel('taking data from spawned isolates mailbox');
+    bytes = mailboxToPrimaryIsolate.take();
+    _logChannel(
+        'took data from spawned isolates mailbox: Size: ${bytes.length}');
+    _processMessageFromIsolate(bytes);
     // decoder.add(bytes);
 
     /// Tell the isolate that we are ready to recieve the next
     /// message
-    sendPort.send(WAKEUP);
+    // sendPort.send(WAKEUP);
   }
 }
 
@@ -186,4 +178,10 @@ class _CallbackSink implements Sink<List<int>> {
 
   @override
   void close() {}
+}
+
+void _logChannel(String message) {
+  if (debugIsolate) {
+    print('channel: $message');
+  }
 }

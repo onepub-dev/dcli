@@ -24,8 +24,10 @@ void main() {
         // make certain our test script will run
         '${DCliPaths().dcliName} -v warmup  ${dirname(script)}'.run;
 
+        print('calling toList');
+
         // run a script that prints to stdout and prove that toList captures it.
-        final results = '${DCliPaths().dcliName} $script'.toList();
+        final results = '${DartSdk().pathToDartExe} $script'.toList();
 
         final expected = <String>['Hello World'];
 

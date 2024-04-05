@@ -5,6 +5,7 @@
  */
 
 import 'dart:async';
+import 'dart:convert';
 
 import 'package:dcli_core/dcli_core.dart' as core;
 
@@ -551,7 +552,9 @@ extension StringAsProcess on String {
       extensionSearch: extensionSearch,
     );
 
-    return progress.stream;
+    return progress.stream
+        .map(String.fromCharCodes)
+        .transform(const LineSplitter());
   }
 
   /// Experimental - DO NOT USE

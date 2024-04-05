@@ -112,18 +112,18 @@ class TestFileSystem {
   /// Run the passed callback [action] within the scope
   /// of the [TestFileSystem].
   Future<void> withinZone(
-    void Function(TestFileSystem fs) action,
+    Future<void> Function(TestFileSystem fs) action,
   ) async {
     final stack = Trace.current(1);
 
     await withTestScope((testDir) async {
-      _runUnderLock(stack, action);
+      await _runUnderLock(stack, action);
     }, pathToTestDir: fsRoot);
   }
 
   Future<void> _runUnderLock(
     Trace stack,
-    void Function(TestFileSystem fs) action,
+    Future<void> Function(TestFileSystem fs) action,
   ) async {
     final frame = stack.frames[0];
 
@@ -150,16 +150,14 @@ class TestFileSystem {
 
       if (!dcliActivated) {
         print(blue('Globally activating DCli into test file system'));
-        // ignore: discarded_futures
-        final activate = capture(() async {
+        await capture(() async {
           PubCache().globalActivateFromSource(
               join(DartProject.self.pathToProjectRoot, '..', 'dcli_sdk'));
         }, progress: Progress.printStdErr());
-        await activate;
         dcliActivated = true;
       }
 
-      action(this);
+      await action(this);
     }
     // ignore: avoid_catches_without_on_clauses
     catch (e, st) {

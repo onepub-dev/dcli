@@ -100,7 +100,7 @@ class ProcessRunner {
     }
 
     try {
-      print('about to start process');
+      _logRunner('about to start process');
       process = await Process.start(
         _parsed.cmd,
         _parsed.args,
@@ -109,9 +109,9 @@ class ProcessRunner {
         mode: mode,
         environment: settings.environment.envVars,
       );
-      print('runner has started process');
+      _logRunner('runner has started process');
     } on ProcessException catch (e) {
-      print('exception launching process: $e');
+      _logRunner('exception launching process: $e');
       if (e.errorCode == 2) {
         final ep = e;
         throw RunException.withArgs(
@@ -155,4 +155,8 @@ class ProcessRunner {
   //   }));
   //   return waitForEx<int>(exited.future);
   // }
+}
+
+void _logRunner(String message) {
+  // _logRunner(message);
 }

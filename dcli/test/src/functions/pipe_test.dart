@@ -64,7 +64,7 @@ void main() {
 
     t.group('Piping with run ', () async {
       // final lines = <String>[];
-      await TestFileSystem().withinZone((fs) {
+      await TestFileSystem().withinZone((fs) async {
         t.test('run on string', () {
           final linesFile = join(fs.fsRoot, TestFileSystem.testLinesFile);
           createLineFile(linesFile, 10);

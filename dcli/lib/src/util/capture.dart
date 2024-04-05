@@ -3,8 +3,8 @@ import 'dart:async';
 import '../../dcli.dart';
 import '../progress/progress_impl.dart';
 
-/// callback used when overloadin [printerr] in a DCliZone.
-typedef CaptureZonePrintErr = void Function(String?);
+/// callback used when overloading [printerr] in a DCliZone.
+typedef CaptureZonePrintErr = void Function(String);
 
 /// This class is highly experimental - use at your own risk.
 /// It is designed to capture any output to print or printerr
@@ -20,14 +20,12 @@ const String capturePrinterrKey = 'printerr';
 /// output is surpressed.
 Future<Progress> capture<R>(Future<R> Function() action,
     {Progress? progress}) async {
-  progress ??= Progress.devNull();
+  final progressImpl = (progress ?? Progress.devNull()) as ProgressImpl;
 
   /// overload printerr so we can trap it.
   final zoneValues = <String, CaptureZonePrintErr>{
     'printerr': (line) {
-      if (line != null) {
-        (progress! as ProgressImpl).addToStderr(line);
-      }
+      progressImpl.addToStderr(line.codeUnits);
     }
   };
 
@@ -46,16 +44,16 @@ Future<Progress> capture<R>(Future<R> Function() action,
     zoneValues: zoneValues,
     zoneSpecification: ZoneSpecification(
       print: (self, parent, zone, line) =>
-          (progress! as ProgressImpl).addToStdout(line),
+          progressImpl.addToStdout(line.codeUnits),
     ),
   );
 
   await zoneCompleter.future;
 
   // give the stream listeners a chance to flush.
-  await _flush(progress);
+  await _flush(progressImpl);
 
-  return progress;
+  return progressImpl as Progress;
 }
 
 Future<void> _body<R>(
@@ -74,11 +72,11 @@ Future<void> _body<R>(
 // saves importing pedantic.
 void _unawaited(Future<void>? future) {}
 
-Future<void> _flush(Progress progress) async {
+Future<void> _flush(ProgressImpl progress) async {
   /// give the event queue a chance to run.
   await Future.value(1);
   // scheduleMicrotask(() {});
-  (progress as ProgressImpl).close();
+  progress.close();
   // scheduleMicrotask(() {});
   await Future.value(1);
 }

@@ -8,6 +8,7 @@ import 'dart:async';
 
 import '../../dcli.dart';
 import 'progress_impl.dart';
+import 'progress_line_splitter.dart';
 import 'progress_mixin.dart';
 
 /// Prints stderr, suppresses all other output.
@@ -26,14 +27,20 @@ class ProgressStdErrImpl extends ProgressImpl
 
   final bool _capture;
 
-  @override
-  final lines = <String>[];
+  final _capturedData = <int>[];
+
+  List<String>? _lines;
 
   @override
-  void addToStderr(String line) {
-    print(line);
+  List<String> get lines => _lines ?? ProgressLineSplitter(_capturedData).lines;
+
+  @override
+  void addToStderr(List<int> data) {
+    for (final line in ProgressLineSplitter(data).lines) {
+      print(line);
+    }
     if (_capture) {
-      lines.add(line);
+      _capturedData.addAll(data);
     }
   }
 
@@ -52,11 +59,10 @@ class ProgressStdErrImpl extends ProgressImpl
   }
 
   @override
-  void addToStdout(String line) {
+  void addToStdout(List<int> data) {
     /// just dump the data the ground as we act as dev null
     /// for stdout.
   }
-
 
   @override
   void close() {

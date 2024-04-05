@@ -1,14 +1,6 @@
 @Timeout(Duration(minutes: 5))
 library;
 
-/* Copyright (C) S. Brett Sutton - All Rights Reserved
- * Unauthorized copying of this file, via any medium is strictly prohibited
- * Proprietary and confidential
- * Written by Brett Sutton <bsutton@onepub.dev>, Jan 2022
- */
-
-import 'dart:async';
-
 import 'package:dcli/dcli.dart';
 import 'package:dcli_test/dcli_test.dart';
 import 'package:path/path.dart';
@@ -17,8 +9,8 @@ import 'package:test/test.dart';
 
 void main() {
   t.group('String as Process', () {
-    unawaited(TestFileSystem().withinZone((fs) async { 
-      t.test('Basic .run', () async {
+    t.test('Basic .run', () async {
+      await TestFileSystem().withinZone((fs) async {
         await withTestScope((tmpDir) async {
           final testFile = join(fs.fsRoot, 'test.text');
 
@@ -30,8 +22,10 @@ void main() {
           t.expect(exists(testFile), t.equals(true));
         });
       });
+    });
 
-      t.test('print stdout', () async {
+    t.test('print stdout', () async {
+      await TestFileSystem().withinZone((fs) async {
         await withTestScope((tmpDir) async {
           final scriptPath = truepath(join(fs.testScriptPath, 'general/bin'));
           final script = truepath(scriptPath, 'print_to_stdout.dart');
@@ -43,8 +37,10 @@ void main() {
           t.expect(results, t.equals(expected));
         });
       });
+    });
 
-      t.test('print stderr', () async {
+    t.test('print stderr', () async {
+      await TestFileSystem().withinZone((fs) async {
         await withTestScope((tmpDir) async {
           final scriptPath = truepath(join(fs.testScriptPath, 'general/bin'));
           final script = truepath(scriptPath, 'print_to_stderr.dart');
@@ -56,8 +52,10 @@ void main() {
           t.expect(results, t.equals(expected));
         });
       });
+    });
 
-      t.test('print stdout and stderr', () async {
+    t.test('print stdout and stderr', () async {
+      await TestFileSystem().withinZone((fs) async {
         await withTestScope((tmpDir) async {
           final scriptPath = truepath(join(fs.testScriptPath, 'general/bin'));
 
@@ -75,8 +73,10 @@ void main() {
           t.expect(results, t.equals(expected));
         });
       });
+    });
 
-      t.test('print stdout and stderr with error', () async {
+    t.test('print stdout and stderr with error', () async {
+      await TestFileSystem().withinZone((fs) async {
         await withTestScope((tmpDir) async {
           final scriptPath = truepath(join(fs.testScriptPath, 'general/bin'));
 
@@ -95,7 +95,7 @@ void main() {
           t.expect(results, t.containsAll(expected));
         });
       });
-    }));
+    });
   });
 }
 

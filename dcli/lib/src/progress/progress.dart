@@ -66,7 +66,7 @@ abstract class Progress {
 
   List<String> get lines;
 
-  Stream<String> get stream;
+  Stream<List<int>> get stream;
 
   /// Returns the first line from the command or
   /// null if no lines where generated

@@ -7,11 +7,11 @@
 abstract class ProgressImpl {
   int? exitCode;
 
-  /// adds the [line] to the stdout controller
-  void addToStdout(String line);
+  /// adds the [data] to the stdout controller
+  void addToStdout(List<int> data);
 
-  /// adds the [line] to the stderr controller
-  void addToStderr(String line);
+  /// adds the [data] to the stderr controller
+  void addToStderr(List<int> data);
 
   // for progresses that need to be cleaned up such
   // as streams - I think.

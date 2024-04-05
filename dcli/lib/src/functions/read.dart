@@ -37,7 +37,7 @@ class _Read extends core.DCliFunction {
     progress ??= Progress.capture();
 
     core.LineFile(path).readAll((line) {
-      (progress! as ProgressImpl).addToStdout(line);
+      (progress! as ProgressImpl).addToStdout(line.codeUnits);
       return true;
     });
     (progress as ProgressImpl).close();
@@ -53,7 +53,7 @@ class _Read extends core.DCliFunction {
       String? line;
 
       while ((line = stdin.readLineSync()) != null) {
-        progressImpl.addToStdout(line!);
+        progressImpl.addToStdout(line!.codeUnits);
       }
     } finally {
       progressImpl.close();

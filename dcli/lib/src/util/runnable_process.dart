@@ -5,15 +5,14 @@
  */
 
 import 'dart:async';
-import 'dart:convert';
 import 'dart:io';
-import 'dart:isolate';
 
 import 'package:dcli_core/dcli_core.dart' as core;
 import 'package:path/path.dart';
 
 import '../../dcli.dart';
 import '../process/environment.dart';
+import '../process/process/process_in_isolate2.dart';
 import '../process/process/process_settings.dart';
 import '../process/process/process_sync.dart';
 import '../progress/progress_impl.dart';
@@ -31,10 +30,12 @@ import 'parse_cli_command.dart';
 void printerr(String? line) {
   /// Co-operate with runDCliZone
   final overloaded = Zone.current[capturePrinterrKey] as CaptureZonePrintErr?;
-  if (overloaded != null) {
-    overloaded(line);
-  } else {
-    stderr.writeln(line);
+  if (line != null) {
+    if (overloaded != null) {
+      overloaded(line);
+    } else {
+      stderr.writeln(line);
+    }
   }
 }
 
@@ -186,7 +187,7 @@ class RunnableProcess {
     progress ??= Progress.print();
 
     try {
-      final spawning = start(
+      start(
         runInShell: runInShell,
         detached: detached,
         terminal: terminal,
@@ -200,16 +201,15 @@ class RunnableProcess {
       // } else {
 
       // ignore: discarded_futures, cascade_invocations
-      spawning.then((_) {
-        print('spawn completed - waithing for process exit');
 
-        /// whether we have a terminal or not we use the same
-        /// process to read any io that comes back until
-        /// we see an exit code.
-        if (detached == false) {
-          processUntilExit(progress, nothrow: nothrow);
-        }
-      });
+      _logProcess('spawn completed - waithing for process exit');
+
+      /// whether we have a terminal or not we use the same
+      /// process to read any io that comes back until
+      /// we see an exit code.
+      if (detached == false) {
+        processUntilExit(progress, nothrow: nothrow);
+      }
       // else we are detached and won't see the child exit
       // so no point waiting.
       // }
@@ -277,7 +277,7 @@ class RunnableProcess {
   ///
   /// If you pass [detached] = true then the process is spawned
   /// but we don't wait for it to complete nor is any io available.
-  Future<Isolate> start({
+  void start({
     bool runInShell = false,
     bool detached = false,
     bool waitForStart = true,
@@ -349,7 +349,7 @@ class RunnableProcess {
 
     // run the process until completion.
     processSync = ProcessSync();
-    return processSync!.run(processSettings);
+    processSync!.run(processSettings);
 
     // // we wait for the process to start.
     // // if the start fails we get a clean exception
@@ -488,11 +488,9 @@ class RunnableProcess {
   void processUntilExit(Progress? progress, {required bool nothrow}) {
     final exited = Completer<bool>();
 
-    final progress0 = progress ?? Progress.devNull();
+    final progress0 = (progress ?? Progress.devNull()) as ProgressImpl;
 
     // _wireStreams(processSync!, progress0);
-
-    List<int>? data;
 
     /// this section and the next appears to be duplicates
     /// moving data to the progress stream.
@@ -507,14 +505,12 @@ class RunnableProcess {
     /// For none streams we can synchronous.
     ///
     /// Review the pump - if it pulled data then iot might work.
-    while ((data = processSync!.readStdout()) != null) {
-      (progress0 as ProgressImpl).addToStdout(utf8.decode(data!));
-    }
+    // while ((data = processSync!.readStdout()) != null) {
+    //   progress0.addToStdout(data!);
+    // }
 
-    processSync!.listenStdout(
-        (data) => (progress0 as ProgressImpl).addToStdout(utf8.decode(data)));
-    processSync!.listenStderr(
-        (data) => (progress0 as ProgressImpl).addToStderr(utf8.decode(data)));
+    processSync!.listenStdout(progress0.addToStdout);
+    processSync!.listenStderr(progress0.addToStderr);
 
     // Wait for the process to finish
     final exitCode = processSync!.waitForExitCode;
@@ -523,7 +519,7 @@ class RunnableProcess {
     // If the start failed we don't want to rethrow
     // as the exception will be thrown async and it will
     // escape as an unhandled exception and stop the whole script
-    (progress0 as ProgressImpl).exitCode = exitCode;
+    progress0.exitCode = exitCode;
 
     /// the process may have exited but the streams are likely to still
     /// contain data.
@@ -563,10 +559,10 @@ class RunnableProcess {
     /// handle stdout stream
     process
       ..listenStdout((data) {
-        (progress as ProgressImpl).addToStdout(utf8.decode(data));
+        (progress as ProgressImpl).addToStdout(data);
       })
       ..listenStderr((data) {
-        (progress as ProgressImpl).addToStderr(utf8.decode(data));
+        (progress as ProgressImpl).addToStderr(data);
       });
 
     // // handle stderr stream
@@ -610,4 +606,10 @@ String findExtension(String basename, String workingDirectory) {
     }
   }
   return basename;
+}
+
+void _logProcess(String message) {
+  if (debugIsolate) {
+    print('process: $message');
+  }
 }
