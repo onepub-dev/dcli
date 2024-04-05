@@ -100,34 +100,30 @@ packages:
   dcli:
     dependency: "direct main"
     description:
-      name: dcli
-      sha256: "5a1a8451f7622fdda2761da5503838a8492dfcb890456c69178ac7c1dc1c0425"
-      url: "https://pub.dev"
-    source: hosted
-    version: "4.0.1-alpha.13"
+      path: "../dcli"
+      relative: true
+    source: path
+    version: "4.0.1-beta.1"
   dcli_common:
-    dependency: transitive
+    dependency: "direct overridden"
     description:
-      name: dcli_common
-      sha256: e0eb9a0a4b7efe26fd842271c42006d3c229dd4be064ce0bbcecdd49d4a63fd2
-      url: "https://pub.dev"
-    source: hosted
+      path: "../dcli_common"
+      relative: true
+    source: path
     version: "4.0.1-alpha.11"
   dcli_core:
     dependency: "direct main"
     description:
-      name: dcli_core
-      sha256: "3c06cfaa565c8e8dbea7b6096b1b317e39c4a8c2b9ea19236a241dc2e9b426e7"
-      url: "https://pub.dev"
-    source: hosted
+      path: "../dcli_core"
+      relative: true
+    source: path
     version: "4.0.1-alpha.11"
   dcli_terminal:
     dependency: "direct main"
     description:
-      name: dcli_terminal
-      sha256: "74716e25a604bf8bbd988311c821806561b4ae44ad10399bc119c9c0475f735a"
-      url: "https://pub.dev"
-    source: hosted
+      path: "../dcli_terminal"
+      relative: true
+    source: path
     version: "4.0.1-alpha.11"
   equatable:
     dependency: transitive
@@ -442,4 +438,4 @@ packages:
     source: hosted
     version: "3.1.2"
 sdks:
-  dart: ">=3.2.0 <4.0.0"
+  dart: ">=3.0.0 <4.0.0"
