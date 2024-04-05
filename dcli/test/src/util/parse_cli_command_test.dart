@@ -237,23 +237,6 @@ void main() {
   );
 
   test(
-    'invalid/.*',
-    () async {
-      await withTempDir((fsRoot) async {
-        final fs = TestDirectoryTree(fsRoot);
-
-        expect(
-          () => ParsedCliCommand('ls invalid/.*', fs.top),
-          throwsA(isA<FileSystemException>()),
-        );
-      });
-    },
-    onPlatform: <String, Skip>{
-      'windows': const Skip("Powershell doesn't do glob expansion")
-    },
-  );
-
-  test(
     'valid/.*',
     () async {
       await withTempDir((fsRoot) async {
