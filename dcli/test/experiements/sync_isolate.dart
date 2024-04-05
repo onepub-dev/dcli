@@ -15,6 +15,11 @@ void main() {
   test4();
 }
 
+/// test interaction between spawned app and the console
+void test5() {
+  'dcli_unit_tester'
+
+}
 void test4() {
   final mailboxToPrimaryIsolate = Mailbox();
   final mailboxFromPrimaryIsolate = Mailbox();

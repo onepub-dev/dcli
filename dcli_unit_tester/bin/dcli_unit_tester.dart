@@ -15,6 +15,9 @@ import 'package:dcli/dcli.dart';
 /// is correct in a number of environments.
 void main(List<String> args) {
   final parser = ArgParser()
+    ..addFlag('ask',
+        abbr: 'a',
+        help: 'Ask the user for input and prints the value to stdout')
     ..addFlag('platform',
         abbr: 'p',
         help: 'Dumps the output from each of the Platform properties')
@@ -41,6 +44,8 @@ void main(List<String> args) {
     dumpPlatform();
   } else if (parsed['script'] as bool) {
     dumpScript();
+  } else if (parsed['ask'] as bool) {
+    print(ask('enter a value:'));
   } else {
     print(DartScript.self.pathToScript);
   }

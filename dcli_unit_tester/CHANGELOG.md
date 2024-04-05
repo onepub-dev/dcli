@@ -1,3 +1,6 @@
+# 4.0.1-beta.2
+- add new ask option
+
 # 4.0.1-beta.1
 ## Breaking
 - fetch/fetchMulti are now async.
