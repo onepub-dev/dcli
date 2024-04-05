@@ -110,7 +110,8 @@ class ProcessChannel {
 
 //   void listenStdout(void Function(List<int>) callback) {
 //     stdoutController.stream.listen((data) {
-//       _logChannel('forwarding data to stdout listener length: ${data.length}');
+//       _logChannel(
+//    'forwarding data to stdout listener length: ${data.length}');
 //       callback(data);
 //     });
 //   }
@@ -156,7 +157,8 @@ class ProcessChannel {
 
 //     /// check the data has been sent to the spawned process
 //     /// before we return
-//     final response = MessageResponse.fromData(mailboxFromPrimaryIsolate.take());
+//     final response = MessageResponse
+// .fromData(mailboxFromPrimaryIsolate.take());
 
 //     if (response.messageType != MessageType.ack) {
 //       throw ProcessSyncException(

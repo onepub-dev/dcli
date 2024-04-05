@@ -1,6 +1,6 @@
 name: dcli_test
 description: Test code used by dcli - not for general use.
-version: 4.0.1-alpha.11
+version: 4.0.1-beta.1
 repository: https://github.com/onepub-dev/dcli/tree/master/dcli_test
 
 environment:
@@ -8,11 +8,11 @@ environment:
 
 # Add regular dependencies here.
 dependencies:
-  dcli: ^4.0.1-alpha.11
-  dcli_common: ^4.0.1-alpha.11
-  dcli_core: ^4.0.1-alpha.11
+  dcli: ^4.0.1-beta.1
+  dcli_common: ^4.0.1-beta.1
+  dcli_core: ^4.0.1-beta.1
   file: ^7.0.0
-  meta: ^1.10.0
+  meta: ">=1.11.0 <2.0.0"
   path: ^1.8.3
   scope: ^4.1.0
   stack_trace: ^1.11.1

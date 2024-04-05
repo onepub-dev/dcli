@@ -5,7 +5,6 @@ import 'dart:typed_data';
 
 import 'package:dcli/dcli.dart';
 import 'package:dcli/src/process/process/message.dart';
-import 'package:dcli/src/process/process/process_channel.dart';
 import 'package:dcli/src/process/process/process_in_isolate2.dart';
 import 'package:dcli/src/process/process/process_settings.dart';
 import 'package:native_synchronization/mailbox.dart';
@@ -17,8 +16,6 @@ void main() {
 }
 
 void test4() {
-  final channel = ProcessChannel();
-
   final mailboxToPrimaryIsolate = Mailbox();
   final mailboxFromPrimaryIsolate = Mailbox();
 

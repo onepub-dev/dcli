@@ -476,7 +476,8 @@ class RunnableProcess {
   ///
   /// When the process exits it closes the [progress] streams.
   ///
-  // Future<void> processStream(Progress progress, {required bool nothrow}) async {
+  // Future<void> processStream(Progress progress, {required bool nothrow})
+  //async {
   //   _wireStreams(processSync!, progress);
 
   // trap the process finishing

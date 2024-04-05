@@ -19,7 +19,8 @@ String getWindowsProcessName(int processID) {
 
   // Get a handle to the process.
   final hProcess = OpenProcess(
-    PROCESS_QUERY_INFORMATION | PROCESS_VM_READ,
+    PROCESS_ACCESS_RIGHTS.PROCESS_QUERY_INFORMATION |
+        PROCESS_ACCESS_RIGHTS.PROCESS_VM_READ,
     FALSE,
     processID,
   );

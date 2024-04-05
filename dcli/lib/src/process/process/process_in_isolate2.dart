@@ -15,7 +15,6 @@ import 'in_isolate/runner.dart';
 import 'mailbox_extension.dart';
 import 'message.dart';
 import 'process_settings.dart';
-import 'process_sync.dart';
 // import 'process_sync.dart';
 
 const debugIsolate = false;
@@ -151,7 +150,7 @@ Future<Isolate> _startIsolate(ProcessSettings processSettings,
         await mailboxToPrimaryIsolate.postMessage(Message.runException(
             RunException.fromException(
                 e, processSettings.command, processSettings.args,
-                stackTrace: st as Trace)));
+                stackTrace: Trace.from(st))));
       }
       _logIsolate('Isolate is exiting');
     },

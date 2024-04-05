@@ -85,46 +85,46 @@ packages:
     dependency: transitive
     description:
       name: csv
-      sha256: "016b31a51a913744a0a1655c74ff13c9379e1200e246a03d96c81c5d9ed297b5"
+      sha256: c6aa2679b2a18cb57652920f674488d89712efaf4d3fdf2e537215b35fc19d6c
       url: "https://pub.dev"
     source: hosted
-    version: "5.0.2"
+    version: "6.0.0"
   dart_console2:
     dependency: transitive
     description:
       name: dart_console2
-      sha256: "300833ffdd8c465d454cb5007c7f29d28ac8246af5abd922f8c490e1e87c894f"
+      sha256: ebf9e27edbb6ae6895236d50bd603900ca1350df11a56c5833f6be864768b5ef
       url: "https://pub.dev"
     source: hosted
-    version: "3.0.0"
+    version: "3.1.0"
   dcli:
     dependency: "direct main"
     description:
       path: "../../../dcli"
       relative: true
     source: path
-    version: "4.0.1-alpha.13"
+    version: "4.0.1-beta.1"
   dcli_common:
     dependency: "direct overridden"
     description:
       path: "../../../dcli_common"
       relative: true
     source: path
-    version: "4.0.1-alpha.11"
+    version: "4.0.1-beta.1"
   dcli_core:
     dependency: "direct overridden"
     description:
       path: "../../../dcli_core"
       relative: true
     source: path
-    version: "4.0.1-alpha.11"
+    version: "4.0.1-beta.1"
   dcli_terminal:
     dependency: "direct overridden"
     description:
       path: "../../../dcli_terminal"
       relative: true
     source: path
-    version: "4.0.1-alpha.11"
+    version: "4.0.1-beta.1"
   equatable:
     dependency: transitive
     description:
