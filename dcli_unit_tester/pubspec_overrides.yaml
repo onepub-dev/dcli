@@ -1,9 +1,9 @@
-# dependency_overrides: 
-#   dcli: 
-#     path: ../dcli
-#   dcli_common: 
-#     path: ../dcli_common
-#   dcli_core: 
-#     path: ../dcli_core
-#   dcli_terminal: 
-#     path: ../dcli_terminal
+dependency_overrides: 
+  dcli: 
+    path: ../dcli
+  dcli_common: 
+    path: ../dcli_common
+  dcli_core: 
+    path: ../dcli_core
+  dcli_terminal: 
+    path: ../dcli_terminal
