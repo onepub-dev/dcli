@@ -11,6 +11,7 @@ import 'dart:io';
 
 import 'package:dcli/dcli.dart';
 import 'package:dcli/src/util/parser.dart';
+import 'package:dcli_core/dcli_core.dart' as core;
 import 'package:path/path.dart' hide equals;
 import 'package:test/test.dart';
 
@@ -21,10 +22,10 @@ void main() {
     // Don't know how to test this as it writes directly to stdout.
     // Need some way to hook Stdout
     test('Fetch One', () async {
-      await withTempDir((testRoot) async {
-        withTempFile(
-          (sampleAac) {
-            fetch(url: '$baseURl/sample.aac', saveToPath: sampleAac);
+      await core.withTempDirAsync((testRoot) async {
+        await core.withTempFileAsync(
+          (sampleAac) async {
+            await fetch(url: '$baseURl/sample.aac', saveToPath: sampleAac);
             expect(fileLength(sampleAac), equals(14951));
             delete(sampleAac);
           },
@@ -39,11 +40,11 @@ void main() {
       });
     });
 
-    test('Fetch One with Progress', () async {
-      await withTempDir((testRoot) async {
-        withTempFile(
-          (sampleAac) {
-            fetch(
+    test('Fetch One with Progress - acc', () async {
+      await core.withTempDirAsync((testRoot) async {
+        await core.withTempFileAsync(
+          (sampleAac) async {
+            await fetch(
               url: '$baseURl/sample.aac',
               saveToPath: sampleAac,
               fetchProgress: (progress) async {
@@ -52,37 +53,38 @@ void main() {
             );
             expect(fileLength(sampleAac), equals(14951));
             delete(sampleAac);
-
-            withTempFile(
-              (sampleWav) {
-                fetch(
-                  url: '$baseURl/sample.wav',
-                  saveToPath: sampleWav,
-                  fetchProgress: (progress) async {
-                    Terminal().overwriteLine('${progress.progress * 100} %');
-                  },
-                );
-                expect(fileLength(sampleWav), equals(212948));
-                delete(sampleWav);
-              },
-              create: false,
-            );
           },
           create: false,
         );
       });
     });
+    test('Fetch One with Progress -wav', () async {
+      await core.withTempFileAsync(
+        (sampleWav) async {
+          await fetch(
+            url: '$baseURl/sample.wav',
+            saveToPath: sampleWav,
+            fetchProgress: (progress) async {
+              Terminal().overwriteLine('${progress.progress * 100} %');
+            },
+          );
+          expect(fileLength(sampleWav), equals(212948));
+          delete(sampleWav);
+        },
+        create: false,
+      );
+    });
 
     test('Fetch with Headers', () async {
-      await withTempDir((testRoot) async {
-        withTempFile(
-          (result) {
+      await core.withTempDirAsync((testRoot) async {
+        await core.withTempFileAsync(
+          (result) async {
             final headers = {'Head1': 'value1', 'Head2': 'value2'};
 
             /// httpbin echos the headers we pass.
             /// However it capitalises the first letter of the header key.
             /// So we preempt it by sending them capitialised.
-            fetch(
+            await fetch(
                 url: 'https://httpbin.org/post',
                 saveToPath: result,
                 method: FetchMethod.post,
@@ -111,21 +113,24 @@ void main() {
 
   group('Fetch Multi', () {
     test('Fetch  ', () async {
-      await withTempDir((testRoot) async {
-        withTempFile(
-          (sampleAac) {
-            withTempFile(
-              (sampleWav) {
-                fetchMultiple(
-                  urls: [
-                    FetchUrl(
-                      url: '$baseURl/sample.aac',
-                      saveToPath: sampleAac,
-                      progress: showProgress,
-                    ),
-                    FetchUrl(url: '$baseURl/sample.wav', saveToPath: sampleWav),
-                  ],
-                );
+      await core.withTempDirAsync((testRoot) async {
+        await core.withTempFileAsync(
+          (sampleAac) async {
+            await core.withTempFileAsync(
+              (sampleWav) async {
+                await capture(() async {
+                  await fetchMultiple(
+                    urls: [
+                      FetchUrl(
+                        url: '$baseURl/sample.aac',
+                        saveToPath: sampleAac,
+                        progress: showProgress,
+                      ),
+                      FetchUrl(
+                          url: '$baseURl/sample.wav', saveToPath: sampleWav),
+                    ],
+                  );
+                });
                 expect(fileLength(sampleAac), equals(14951));
                 expect(fileLength(sampleWav), equals(212948));
 
@@ -141,12 +146,12 @@ void main() {
     });
 
     test('Fetch With Progress ', () async {
-      await withTempDir((testRoot) async {
-        withTempFile(
-          (sampleAac) {
-            withTempFile(
-              (sampleWav) {
-                fetchMultiple(
+      await core.withTempDirAsync((testRoot) async {
+        await core.withTempFileAsync(
+          (sampleAac) async {
+            await core.withTempFileAsync(
+              (sampleWav) async {
+                await fetchMultiple(
                   urls: [
                     FetchUrl(
                       url: '$baseURl/sample.aac',
@@ -173,7 +178,7 @@ void main() {
   });
 
   test('Fetch - shutdown bug', () async {
-    await withTempFile(
+    await core.withTempFileAsync(
       (sampleAac) async {
         await fetch(
           url: '$baseURl/sample.aac',
@@ -188,9 +193,9 @@ void main() {
       create: false,
     );
 
-    final temp = withTempFile(
-      (sampleWav) {
-        fetch(
+    final temp = await core.withTempFileAsync(
+      (sampleWav) async {
+        await fetch(
           url: '$baseURl/sample.wav',
           saveToPath: sampleWav,
           fetchProgress: (progress) async {
@@ -207,9 +212,9 @@ void main() {
     expect(exists(temp), isFalse);
   });
 
-  group('error handling', ()  {
+  group('error handling', () {
     test('host not found', () async {
-      withTempFile((file) {
+      await core.withTempFileAsync((file) async {
         const url =
             'http://test.comeing.com.au/long/123456789012345678901234567890';
 
@@ -234,11 +239,11 @@ void main() {
     });
 
     test('404', () async {
-      await withTempFile((file) async {
+      await core.withTempFileAsync((file) async {
         const url = 'https://www.noojee.com.au/notfound';
 
         expect(
-          () => fetch(url: url, saveToPath: file),
+          () async => fetch(url: url, saveToPath: file),
           throwsA(
             predicate<FetchException>(
               (e) => e.message.contains('Not Found') && e.errorCode == 404,
@@ -277,10 +282,10 @@ void main() {
     });
 
     test('Progress showBytes', () async {
-      await withTempDir((testRoot) async {
-        withTempFile(
-          (sampleAac) {
-            fetch(
+      await core.withTempDirAsync((testRoot) async {
+        await core.withTempFileAsync(
+          (sampleAac) async {
+            await fetch(
                 url: '$baseURl/sample.aac',
                 saveToPath: sampleAac,
                 fetchProgress: FetchProgress.showBytes);
@@ -313,7 +318,7 @@ void main() {
     //     '  "url": "https://httpbin.org/post"\r\n'
     //     '}'
     test('send string', () async {
-      await withTempFile((file) async {
+      await core.withTempFileAsync((file) async {
         const content = 'Hellow World';
         await fetch(
             url: 'https://httpbin.org/post',
@@ -330,8 +335,8 @@ void main() {
     });
 
     test('send file', () async {
-      await withTempFile((pathToData) async {
-        await withTempFile((file) async {
+      await core.withTempFileAsync((pathToData) async {
+        await core.withTempFileAsync((file) async {
           const content = 'Hellow World2';
           pathToData.write(content);
 
@@ -352,8 +357,8 @@ void main() {
     });
 
     test('send stream', () async {
-      await withTempFile((pathToData) async {
-        await withTempFile((file) async {
+      await core.withTempFileAsync((pathToData) async {
+        await core.withTempFileAsync((file) async {
           const content = 'Hellow World2';
           pathToData.write(content);
 
@@ -374,8 +379,8 @@ void main() {
     });
 
     test('send bytes', () async {
-      await withTempFile((pathToData) async {
-        await withTempFile((file) async {
+      await core.withTempFileAsync((pathToData) async {
+        await core.withTempFileAsync((file) async {
           const bytes = <int>[0, 1, 2, 3, 4, 5];
 
           await fetch(
@@ -396,8 +401,8 @@ void main() {
 
     /// you can't use data with get.
     test('bad data', () async {
-      await withTempFile((pathToData) async {
-        await withTempFile((file) async {
+      await core.withTempFileAsync((pathToData) async {
+        await core.withTempFileAsync((file) async {
           const content = 'Hellow World2';
           pathToData.write(content);
 
@@ -415,7 +420,7 @@ void main() {
     });
 
     test('custom headers', () async {
-      await withTempFile((file) async {
+      await core.withTempFileAsync((file) async {
         await fetch(
             url: 'https://httpbin.org/get',
             headers: {'X-Test-Header1': 'Value1', 'X-Test-Header2': 'Value2'},

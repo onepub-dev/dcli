@@ -11,6 +11,7 @@ import 'package:dcli_core/dcli_core.dart' as core;
 
 import '../functions/run.dart' as cmd;
 import '../progress/progress.dart';
+import '../progress/progress_impl.dart';
 import 'file_sync.dart';
 import 'parser.dart';
 import 'runnable_process.dart';
@@ -560,14 +561,16 @@ extension StringAsProcess on String {
   /// Experimental - DO NOT USE
   Sink<List<int>> get sink {
     final lhsRunnable = RunnableProcess.fromCommandLine(this)
-      ..start(waitForStart: false);
+      ..start(
+          waitForStart: false, progress: Progress.devNull() as ProgressImpl);
     return lhsRunnable.sink;
   }
 
   /// Experimental - DO NOT USE
   RunnableProcess get process {
     final process = RunnableProcess.fromCommandLine(this)
-      ..start(waitForStart: false);
+      ..start(
+          waitForStart: false, progress: Progress.devNull() as ProgressImpl);
 
     return process;
   } // Treat the [this]  as the name of a file and

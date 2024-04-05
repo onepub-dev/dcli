@@ -46,7 +46,8 @@ void main() {
 
         // run a script that uses '.run' and capture its output to prove
         // that .run works.
-        final results = '${DCliPaths().dcliName} $script'.toList(nothrow: true);
+        final results =
+            '${DartSdk().pathToDartExe} $script'.toList(nothrow: true);
 
         final expected = <String>['Hello World - Error'];
 
@@ -65,7 +66,8 @@ void main() {
 
         // run a script that uses '.run' and capture its output to prove
         // that .run works.
-        final results = '${DCliPaths().dcliName} $script'.toList(nothrow: true);
+        final results =
+            '${DartSdk().pathToDartExe} $script'.toList(nothrow: true);
 
         final expected = <String>[
           'Hello World - StdOut',
@@ -88,7 +90,8 @@ void main() {
 
         // run a script that uses '.run' and capture its output to prove
         // that .run works.
-        final results = '${DCliPaths().dcliName} $script'.toList(nothrow: true);
+        final results =
+            '${DartSdk().pathToDartExe} $script'.toList(nothrow: true);
 
         final expected = <String>[
           'Hello World - StdOut',

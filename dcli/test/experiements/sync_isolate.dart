@@ -19,11 +19,15 @@ void main() {
 void test4() {
   final channel = ProcessChannel();
 
-  startIsolate2(ProcessSettings('which', args: ['which']), channel);
+  final mailboxToPrimaryIsolate = Mailbox();
+  final mailboxFromPrimaryIsolate = Mailbox();
+
+  startIsolate2(ProcessSettings('which', args: ['which']),
+      mailboxFromPrimaryIsolate, mailboxToPrimaryIsolate);
 
   MessageResponse response;
   do {
-    response = MessageResponse.fromData(channel.mailboxToPrimaryIsolate.take())
+    response = MessageResponse.fromData(mailboxToPrimaryIsolate.take())
       ..onStdout((data) {
         print(green('primary:  ${String.fromCharCodes(data)}'));
       })

@@ -16,3 +16,7 @@ class InstallException extends DCliException {
   /// Thrown if an error is encountered during an install
   InstallException(super.message);
 }
+
+class ProcessSyncException extends DCliException {
+  ProcessSyncException(super.message);
+}

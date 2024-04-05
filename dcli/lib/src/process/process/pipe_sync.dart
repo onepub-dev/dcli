@@ -1,12 +1,8 @@
 // @dart=3.0
 
-import 'dart:async';
-import 'dart:io' as io;
-
 import 'package:dcli_core/dcli_core.dart';
 
 import 'process_channel.dart';
-import 'process_in_isolate.dart';
 import 'process_settings.dart';
 
 /// Call a process synchronously
@@ -38,15 +34,15 @@ class PipeSync {
   /// bash pipes don't normally pipe stderr so for the
   /// moment neither will we.
   void run(ProcessSettings lhsSettings, ProcessSettings rhsSettings) {
-    final lhsController = StreamController<List<int>>();
+    // final lhsController = StreamController<List<int>>();
 
-    // TODO(bsutton): channel for stderr - maybe see the about
-    ///  comment about bash
-    final _lhsChannel = ProcessChannel.pipe(io.stdin, lhsController.sink);
-    final _rhsChannel = ProcessChannel.pipe(lhsController.stream, io.stdout);
+    // // `TODO`(bsutton): channel for stderr - maybe see the about
+    // ///  comment about bash
+    // final _lhsChannel = ProcessChannel.pipe(io.stdin, lhsController.sink);
+    // final _rhsChannel = ProcessChannel.pipe(lhsController.stream, io.stdout);
 
-    startIsolate(lhsSettings, _lhsChannel);
-    startIsolate(rhsSettings, _rhsChannel);
+    // startIsolate2(lhsSettings, _lhsChannel);
+    // startIsolate2(rhsSettings, _rhsChannel);
   }
 
   /// Start the process but redirect stdout and stderr to

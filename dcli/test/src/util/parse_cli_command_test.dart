@@ -1,14 +1,6 @@
 @Timeout(Duration(seconds: 600))
 library;
 
-/* Copyright (C) S. Brett Sutton - All Rights Reserved
- * Unauthorized copying of this file, via any medium is strictly prohibited
- * Proprietary and confidential
- * Written by Brett Sutton <bsutton@onepub.dev>, Jan 2022
- */
-
-import 'dart:io';
-
 import 'package:dcli/dcli.dart';
 import 'package:dcli/src/util/parse_cli_command.dart';
 import 'package:dcli_core/dcli_core.dart' as core;
@@ -308,19 +300,10 @@ void main() {
     await withTempDir((fsRoot) async {
       final fs = TestDirectoryTree(fsRoot);
 
-      if (core.Settings().isWindows) {
-        final parsed = ParsedCliCommand('ls /git/dcli/*', fs.top);
+      final parsed = ParsedCliCommand('ls /git/dcli/*', fs.top);
 
-        /// on windows we don't expand wild cards so there is no
-        /// validation of the path.
-        expect(parsed.cmd, equals('ls'));
-        expect(parsed.args, equals(['/git/dcli/*']));
-      } else {
-        expect(
-          () => ParsedCliCommand('ls /git/dcli/*', fs.top),
-          throwsA(isA<FileSystemException>()),
-        );
-      }
+      expect(parsed.cmd, equals('ls'));
+      expect(parsed.args, equals(['/git/dcli/*']));
     });
   });
 

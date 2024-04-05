@@ -15,6 +15,7 @@ import 'package:system_info2/system_info2.dart';
 
 import '../../dcli.dart';
 import '../../posix.dart' as posix;
+import '../progress/progress_impl.dart';
 import '../util/enum_helper.dart';
 import '../util/runnable_process.dart';
 
@@ -177,7 +178,7 @@ class DartSdk {
     }
 
     process
-      ..start(extensionSearch: false)
+      ..start(extensionSearch: false, progress: progress! as ProgressImpl)
       ..processUntilExit(progress, nothrow: false);
   }
 

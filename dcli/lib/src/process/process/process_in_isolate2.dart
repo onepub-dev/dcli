@@ -14,16 +14,17 @@ import '../../../dcli.dart';
 import 'in_isolate/runner.dart';
 import 'mailbox_extension.dart';
 import 'message.dart';
-import 'process_channel.dart';
 import 'process_settings.dart';
 import 'process_sync.dart';
 // import 'process_sync.dart';
 
-const debugIsolate = true;
+const debugIsolate = false;
 
-void startIsolate2(ProcessSettings settings, ProcessChannel channel) {
+void startIsolate2(ProcessSettings settings, Mailbox mailboxFromPrimaryIsolate,
+    Mailbox mailboxToPrimaryIsolate) {
   _logPrimary('starting isolate');
-  unawaited(_startIsolate(settings, channel));
+  unawaited(_startIsolate(
+      settings, mailboxFromPrimaryIsolate, mailboxToPrimaryIsolate));
 
   _logPrimary('waiting for isolate to spawn');
   // final message =
@@ -35,8 +36,8 @@ void startIsolate2(ProcessSettings settings, ProcessChannel channel) {
 }
 
 /// Starts an isolate that spawns the command.
-Future<Isolate> _startIsolate(
-        ProcessSettings processSettings, ProcessChannel channel) =>
+Future<Isolate> _startIsolate(ProcessSettings processSettings,
+        Mailbox mailboxFromPrimaryIsolate, Mailbox mailboxToPrimaryIsolate) =>
     Isolate.spawn<List<Sendable<Mailbox>>>((mailboxes) async {
       // await mailboxToPrimaryIsolate.postMessage(Message.exit(1));
       final mailboxFromPrimaryIsolate = mailboxes.first.materialize();
@@ -156,8 +157,8 @@ Future<Isolate> _startIsolate(
     },
         // pass list of mailbox addresses into the isolate entry point.
         List<Sendable<Mailbox>>.from([
-          channel.mailboxFromPrimaryIsolate.asSendable,
-          channel.mailboxToPrimaryIsolate.asSendable,
+          mailboxFromPrimaryIsolate.asSendable,
+          mailboxToPrimaryIsolate.asSendable,
         ]),
         debugName: 'ProcessInIsolate');
 

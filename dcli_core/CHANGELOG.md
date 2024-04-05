@@ -1,3 +1,7 @@
+# 4.0.1-beta.1
+
+## Breaking
+- fetch is now async.
 # 4.0.1-alpha.13
 - upgraded to pubspec_manager 1.0.0 - no actual code changes but
  we are now on the stable release of pubspec_manager so one less issue to
