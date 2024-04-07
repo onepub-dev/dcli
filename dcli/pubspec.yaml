@@ -15,7 +15,7 @@ dependencies:
   convert: ^3.0.1
   crypto: ^3.0.0
   csv: ^6.0.0
-  dart_console2: ^3.1.0
+  dart_console: ^3.1.0
   dcli_common: ^4.0.1-beta.1
   dcli_core: ^4.0.1-beta.1
   dcli_terminal: ^4.0.1-beta.1
