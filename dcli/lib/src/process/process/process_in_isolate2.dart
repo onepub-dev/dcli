@@ -2,6 +2,7 @@
 
 import 'dart:async';
 import 'dart:convert';
+import 'dart:io';
 import 'dart:isolate';
 import 'dart:typed_data';
 
@@ -53,14 +54,13 @@ Future<Isolate> _startIsolate(ProcessSettings processSettings,
 
         final runner = ProcessRunner(processSettings);
         _logIsolate('starting process ${processSettings.command} in isolate');
+
+        /// Start the process
         await runner.start();
 
-        final process = runner.process;
+        final process = runner.process!;
 
         _logIsolate('process launched');
-
-        late StreamSubscription<List<int>> stdoutSub;
-        late StreamSubscription<List<int>> stderrSub;
 
         _logIsolate('listen to recieve port');
         // ignore: cancel_subscriptions
@@ -72,7 +72,7 @@ Future<Isolate> _startIsolate(ProcessSettings processSettings,
               if (message is String) {
                 message = utf8.encode(message);
               }
-              process!.stdin.add(message as List<int>);
+              process.stdin.add(message as List<int>);
               await process.stdin.flush();
 
               // /// The tell the sender that we got their data and
@@ -95,17 +95,8 @@ Future<Isolate> _startIsolate(ProcessSettings processSettings,
 
         /// subscribe to data the process writes to stdout and send
         /// it back to the parent isolate
-        stdoutSub = process!.stdout.listen((data) {
-          stdoutSub.pause();
-          _logIsolate('writing to stdout: ${utf8.decode(data)}');
-          mailboxToPrimaryIsolate
-              .postMessage(Message.stdout(data as Uint8List));
-          _logIsolate('write to stdout: success');
-          stdoutSub.resume();
-        }, onDone: () {
-          _logIsolate('marking stdout stream completed');
-          stdoutStreamDone.complete();
-        });
+        final stdoutSub = _sendStdoutToPrimary(
+            process, mailboxToPrimaryIsolate, stdoutStreamDone);
 
         _logIsolate('listen of stdout completed');
 
@@ -114,16 +105,8 @@ Future<Isolate> _startIsolate(ProcessSettings processSettings,
 
         /// subscribe to data the proccess writes to stderr and send
         /// it back to the parent isolate
-        stderrSub = process.stderr.listen((data) {
-          stderrSub.pause();
-          _logIsolate('writing to stderr');
-          final message = Message.stderr(data as Uint8List);
-          mailboxToPrimaryIsolate.postMessage(message);
-          stderrSub.resume();
-        }, onDone: () {
-          _logIsolate('marking stderr stream completed');
-          stderrStreamDone.complete();
-        });
+        final stderrSub = _sendStderrToPrimary(
+            process, mailboxToPrimaryIsolate, stderrStreamDone);
 
         _logIsolate('waiting in isolate for process to exit');
 
@@ -151,7 +134,7 @@ Future<Isolate> _startIsolate(ProcessSettings processSettings,
             RunException.fromException(
                 e, processSettings.command, processSettings.args,
                 stackTrace: Trace.from(st))));
-      }
+      } 
       _logIsolate('Isolate is exiting');
     },
         // pass list of mailbox addresses into the isolate entry point.
@@ -160,6 +143,44 @@ Future<Isolate> _startIsolate(ProcessSettings processSettings,
           mailboxToPrimaryIsolate.asSendable,
         ]),
         debugName: 'ProcessInIsolate');
+
+StreamSubscription<List<int>> _sendStderrToPrimary(Process process,
+    Mailbox mailboxToPrimaryIsolate, Completer<void> stderrStreamDone) {
+  late StreamSubscription<List<int>> stderrSub;
+
+  // ignore: join_return_with_assignment
+  stderrSub = process.stderr.listen((data) async {
+    stderrSub.pause();
+    _logIsolate('writing to stderr');
+    final message = Message.stderr(data as Uint8List);
+    await mailboxToPrimaryIsolate.postMessage(message);
+    stderrSub.resume();
+  }, onDone: () {
+    _logIsolate('marking stderr stream completed');
+    stderrStreamDone.complete();
+  });
+
+  return stderrSub;
+}
+
+StreamSubscription<List<int>> _sendStdoutToPrimary(Process process,
+    Mailbox mailboxToPrimaryIsolate, Completer<void> stdoutStreamDone) {
+  late StreamSubscription<List<int>> stdoutSub;
+
+  // ignore: join_return_with_assignment
+  stdoutSub = process.stdout.listen((data) async {
+    stdoutSub.pause();
+    _logIsolate('writing to stdout: ${utf8.decode(data)}');
+    await mailboxToPrimaryIsolate
+        .postMessage(Message.stdout(data as Uint8List));
+    _logIsolate('write to stdout: success');
+    stdoutSub.resume();
+  }, onDone: () {
+    _logIsolate('marking stdout stream completed');
+    stdoutStreamDone.complete();
+  });
+  return stdoutSub;
+}
 
 void _logPrimary(String message) {
   if (debugIsolate) {
