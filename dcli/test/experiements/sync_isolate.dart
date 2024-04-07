@@ -1,3 +1,5 @@
+// ignore_for_file: unreachable_from_main
+
 import 'dart:async';
 import 'dart:io' as io;
 import 'dart:isolate';
@@ -12,14 +14,14 @@ import 'package:native_synchronization/sendable.dart';
 
 void main() {
   print('starting');
-  test4();
+  test5();
 }
 
 /// test interaction between spawned app and the console
 void test5() {
-  'dcli_unit_tester'
-
+  'dcli_unit_tester --ask'.start(terminal: true);
 }
+
 void test4() {
   final mailboxToPrimaryIsolate = Mailbox();
   final mailboxFromPrimaryIsolate = Mailbox();
