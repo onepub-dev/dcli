@@ -6,9 +6,9 @@ environment:
   sdk: '>=3.0.0 <4.0.0'
 dependencies:
   args: ^2.3.0
-  dcli: ^4.0.1-beta.1
-  dcli_core: ^4.0.1-beta.1
-  dcli_terminal: ^4.0.1-beta.1
+  dcli: ^4.0.1-beta.2
+  dcli_core: ^4.0.1-beta.2
+  dcli_terminal: ^4.0.1-beta.2
   path: ^1.8.0
 dev_dependencies:
   lint_hard: ^4.0.0

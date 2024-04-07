@@ -1,3 +1,13 @@
+# 4.0.1-beta.2
+- upgraded to the latest version of dart_console.
+- migrated back to dart_console as I'm now the maintainer.
+- down graded max win32 version to 5.3 to avoid deprecation notices.
+- renabled support for terminal mode on the start command. Still needs more testing.
+- minor code refactor.
+- Reverted the use of win32  to constansts deprecated from 5.4.0 to improve our compatability window.
+
+
+
 # 4.0.1-beta.1
 ## Breaking
 - fetch/fetchMulti are now async.
