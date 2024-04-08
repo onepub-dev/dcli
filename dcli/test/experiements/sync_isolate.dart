@@ -7,6 +7,7 @@ import 'dart:typed_data';
 
 import 'package:dcli/dcli.dart';
 import 'package:dcli/src/process/process/message.dart';
+import 'package:dcli/src/process/process/message_response.dart';
 import 'package:dcli/src/process/process/process_in_isolate2.dart';
 import 'package:dcli/src/process/process/process_settings.dart';
 import 'package:native_synchronization/mailbox.dart';
@@ -20,6 +21,7 @@ void main() {
 /// test interaction between spawned app and the console
 void test5() {
   'dcli_unit_tester --ask'.start(terminal: true);
+  print('do something after');
 }
 
 void test4() {

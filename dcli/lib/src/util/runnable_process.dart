@@ -14,6 +14,7 @@ import 'package:path/path.dart';
 import '../../dcli.dart';
 import '../process/environment.dart';
 import '../process/process/message.dart';
+import '../process/process/message_response.dart';
 import '../process/process/process_in_isolate2.dart';
 import '../process/process/process_settings.dart';
 import '../progress/progress_impl.dart';
@@ -375,7 +376,9 @@ class RunnableProcess {
         })
         ..onStderr((payload) {
           progress.addToStderr(payload);
-        });
+        })
+        ..onException((exception) =>
+            Error.throwWithStackTrace(exception, exception.stackTrace));
     } while (response.messageType != MessageType.exitCode);
 
     response.onExit((exitCode) => progress.exitCode = exitCode);

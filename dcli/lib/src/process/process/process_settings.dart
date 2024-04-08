@@ -43,4 +43,8 @@ class ProcessSettings {
   bool extensionSearch = true;
 
   bool isPriviledgedUser = false;
+
+  /// If we are running with mode terminal or detached then
+  /// we don't have access to the stdio streams.
+  bool get hasStdio => !(terminal | detached);
 }

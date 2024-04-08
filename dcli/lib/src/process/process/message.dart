@@ -6,7 +6,6 @@ import 'dart:isolate';
 import 'dart:typed_data';
 
 import '../../../dcli.dart';
-import 'process_in_isolate2.dart';
 
 enum MessageType {
   /// pass the isolates send port
@@ -89,10 +88,10 @@ class Message {
 
   /// Allows us to pass a RunException to the primary isolate.
   Message.runException(RunException e) {
-    final data = e.toJson();
+    final data = e.toJsonString();
     builder
       ..addByte(MessageType.exception.index)
-      ..add(data.toString().codeUnits);
+      ..add(data.codeUnits);
   }
 
   BytesBuilder builder = BytesBuilder();
@@ -107,49 +106,4 @@ class Message {
 
   @override
   String toString() => 'length: ${builder.length}';
-}
-
-/// Handle messages sent back from the spawned isolate.
-///
-class MessageResponse {
-  MessageResponse.fromData(List<int> data) {
-    messageType = MessageType.values[data[0]];
-    if (data.length > 1) {
-      payload = data.sublist(1);
-    } else {
-      payload = [];
-    }
-    _logMessage('Recieved', this);
-  }
-  late final List<int> payload;
-  late final MessageType messageType;
-
-  void onStdout(void Function(List<int> payload) action) {
-    if (messageType == MessageType.stdout) {
-      _logMessage('dispatching to stdout', this);
-      action(payload);
-    }
-  }
-
-  void onStderr(void Function(List<int> payload) action) {
-    if (messageType == MessageType.stderr) {
-      action(payload);
-    }
-  }
-
-  void onExit(void Function(int exitCode) action) {
-    if (messageType == MessageType.exitCode) {
-      action(payload[0]);
-    }
-  }
-
-  @override
-  String toString() =>
-      'type: $messageType, payload: (len: ${payload.length}) $payload]';
-}
-
-void _logMessage(String prefix, MessageResponse message) {
-  if (debugIsolate) {
-    print('message_reponse: $prefix $message');
-  }
 }

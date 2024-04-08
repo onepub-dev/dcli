@@ -92,37 +92,45 @@ Future<Isolate> _startIsolate(ProcessSettings processSettings,
 
         /// used to wait for the stdout stream to finish streaming
         final stdoutStreamDone = Completer<void>();
-
-        /// subscribe to data the process writes to stdout and send
-        /// it back to the parent isolate
-        final stdoutSub = _sendStdoutToPrimary(
-            process, mailboxToPrimaryIsolate, stdoutStreamDone);
-
-        _logIsolate('listen of stdout completed');
-
-        /// used to wait for the stderr stream to finish streaming
         final stderrStreamDone = Completer<void>();
 
-        /// subscribe to data the proccess writes to stderr and send
-        /// it back to the parent isolate
-        final stderrSub = _sendStderrToPrimary(
-            process, mailboxToPrimaryIsolate, stderrStreamDone);
+        late StreamSubscription<List<int>> stdoutSub;
+        late StreamSubscription<List<int>> stderrSub;
 
-        _logIsolate('waiting in isolate for process to exit');
+        if (!processSettings.hasStdio) {
+          /// subscribe to data the process writes to stdout and send
+          /// it back to the parent isolate
+          stdoutSub = _sendStdoutToPrimary(
+              process, mailboxToPrimaryIsolate, stdoutStreamDone);
+
+          _logIsolate('listen of stdout completed');
+
+          /// used to wait for the stderr stream to finish streaming
+
+          /// subscribe to data the proccess writes to stderr and send
+          /// it back to the parent isolate
+          stderrSub = _sendStderrToPrimary(
+              process, mailboxToPrimaryIsolate, stderrStreamDone);
+
+          _logIsolate('waiting in isolate for process to exit');
+        }
 
         /// wait for the process to exit and all stream finish been written to.
         final exitCode = await process.exitCode;
         _logIsolate('process has exited with exitCode: $exitCode');
 
-        await Future.wait<void>(
-            [stdoutStreamDone.future, stderrStreamDone.future]);
+        if (!processSettings.hasStdio) {
+          await Future.wait<void>(
+              [stdoutStreamDone.future, stderrStreamDone.future]);
 
-        _logIsolate('streams are done');
-
+          _logIsolate('streams are done');
+        }
         await mailboxToPrimaryIsolate.postMessage(Message.exit(exitCode));
 
-        await stdoutSub.cancel();
-        await stderrSub.cancel();
+        if (!processSettings.hasStdio) {
+          await stdoutSub.cancel();
+          await stderrSub.cancel();
+        }
       } on RunException catch (e, _) {
         print('exeception throw');
         _logIsolate('Exception caught: $e');
@@ -134,7 +142,7 @@ Future<Isolate> _startIsolate(ProcessSettings processSettings,
             RunException.fromException(
                 e, processSettings.command, processSettings.args,
                 stackTrace: Trace.from(st))));
-      } 
+      }
       _logIsolate('Isolate is exiting');
     },
         // pass list of mailbox addresses into the isolate entry point.

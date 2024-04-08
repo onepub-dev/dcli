@@ -4,6 +4,8 @@
  * Written by Brett Sutton <bsutton@onepub.dev>, Jan 2022
  */
 
+import 'dart:convert';
+
 import 'package:stack_trace/stack_trace.dart';
 
 import 'dcli_exception.dart';
@@ -24,6 +26,18 @@ class RunException extends DCliException {
         exitCode = json['exitCode'] as int,
         reason = json['reason'] as String,
         super(json['reason'] as String, json['stackTrace'] as Trace);
+
+  factory RunException.fromJsonString(String jsonString) {
+    final jsonMap = jsonDecode(jsonString) as Map<String, dynamic>;
+    return RunException(
+      jsonMap['cmdLine'] as String,
+      jsonMap['exitCode'] as int,
+      jsonMap['reason'] as String,
+      stackTrace: jsonMap['stackTrace'] != null
+          ? Trace.parse(jsonMap['stackTrace'] as String)
+          : null,
+    );
+  }
 
   ///
   RunException.withArgs(
@@ -61,10 +75,23 @@ $cmdLine
 exit: $exitCode
 reason: $reason''';
 
-  Map<String, dynamic> toJson() => {
+  Map<String, dynamic> toJsonMap() => {
         'cmdLine': cmdLine,
         'exitCode': exitCode,
         'reason': reason,
         'stackTrace': stackTrace,
       };
+
+  @override
+  String toJsonString() {
+    final jsonMap = <String, dynamic>{
+      'cmdLine': cmdLine,
+      'exitCode': exitCode,
+      'reason': reason,
+      'stackTrace': stackTrace.toString(),
+    };
+    final json = jsonEncode(jsonMap);
+    print(json);
+    return json;
+  }
 }
