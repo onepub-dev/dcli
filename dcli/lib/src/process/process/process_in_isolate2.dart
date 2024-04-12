@@ -97,7 +97,7 @@ Future<Isolate> _startIsolate(ProcessSettings processSettings,
         late StreamSubscription<List<int>> stdoutSub;
         late StreamSubscription<List<int>> stderrSub;
 
-        if (!processSettings.hasStdio) {
+        if (processSettings.hasStdio) {
           /// subscribe to data the process writes to stdout and send
           /// it back to the parent isolate
           stdoutSub = _sendStdoutToPrimary(
@@ -119,7 +119,7 @@ Future<Isolate> _startIsolate(ProcessSettings processSettings,
         final exitCode = await process.exitCode;
         _logIsolate('process has exited with exitCode: $exitCode');
 
-        if (!processSettings.hasStdio) {
+        if (processSettings.hasStdio) {
           await Future.wait<void>(
               [stdoutStreamDone.future, stderrStreamDone.future]);
 
@@ -127,7 +127,7 @@ Future<Isolate> _startIsolate(ProcessSettings processSettings,
         }
         await mailboxToPrimaryIsolate.postMessage(Message.exit(exitCode));
 
-        if (!processSettings.hasStdio) {
+        if (processSettings.hasStdio) {
           await stdoutSub.cancel();
           await stderrSub.cancel();
         }
