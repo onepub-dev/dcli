@@ -18,7 +18,7 @@ import 'message.dart';
 import 'process_settings.dart';
 // import 'process_sync.dart';
 
-const debugIsolate = false;
+const debugIsolate = true;
 
 void startIsolate2(ProcessSettings settings, Mailbox mailboxFromPrimaryIsolate,
     Mailbox mailboxToPrimaryIsolate) {

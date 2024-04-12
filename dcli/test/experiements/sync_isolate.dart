@@ -15,7 +15,12 @@ import 'package:native_synchronization/sendable.dart';
 
 void main() {
   print('starting');
-  test5();
+  test6();
+  print('finished');
+}
+
+void test6() {
+  DartSdk().runPubGet('.', progress: Progress.devNull());
 }
 
 /// test interaction between spawned app and the console
