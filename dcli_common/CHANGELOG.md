@@ -1,7 +1,18 @@
+# 4.0.1-beta.3
+- added back in the missing nothrow arg to start method.
+- Fixed running of detached processes. We were trying to get the exit code which would never work.
+- Added some missing async statements when using named locks. Fixed a bug in dart_project when running in a unit test. It was getting the platformComfig which was a uri of the form file:// but then trying to process it as a simple path.
+- moved message_response to its own file. Added a processor for exceptions as we were dumping exceptions generated in the isolate on the ground. Fixed a bug when we call start in with mode terminal. We were still trying to attach to the stdio stream when the don't actually exist. The same goes for detached. added json encoding to DCliException and RunException so we can pass them over the isolate boundary via a mailbox.
+- changed namedLock to async until tsavoc has a chance to merge in his sync version.  We may need a sync and async version to
+ allow for async callbacks.
+ - still no action on async validation methods for 'ask'.
+
+Most unit tests are now working and most of the common process execution paths appear to be working.
+
 # 4.0.1-beta.2
 - upgraded to the latest version of dart_console.
 - migrated back to dart_console as I'm now the maintainer.
-- down graded max win32 version to 5.3 to avoid deprecation notices.
+- downgraded max win32 version to 5.3 to avoid deprecation notices.
 - renabled support for terminal mode on the start command. Still needs more testing.
 - minor code refactor.
 - Reverted the use of win32  to constansts deprecated from 5.4.0 to improve our compatability window.
