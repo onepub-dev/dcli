@@ -103,7 +103,7 @@ class NamedLock {
   ///
   /// Throws a [DCliException] if the NamedLock times out.
   Future<void> withLock(
-    void Function() action, {
+    Future<void> Function() action, {
     String? waiting,
   }) async {
     final callingStackTrace = Trace.current();
@@ -118,7 +118,7 @@ class NamedLock {
           lockHeld = true;
           incLockCount;
 
-          action();
+          await action();
         }
       } finally {
         if (lockHeld) {

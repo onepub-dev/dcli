@@ -35,11 +35,11 @@ class WarmupCommand extends Command {
       targetPath = arguments[0];
     }
 
-    _prepareProject(targetPath);
+    await _prepareProject(targetPath);
     return 0;
   }
 
-  void _prepareProject(String targetPath) {
+  Future<void> _prepareProject(String targetPath) async {
     if (!exists(targetPath)) {
       throw InvalidCommandArgumentException(
           'The project path $targetPath does not exists.');
@@ -55,7 +55,7 @@ class WarmupCommand extends Command {
     print(orange('Preparing ${project.pathToProjectRoot} ...'));
     print('');
 
-    project.warmup();
+    await project.warmup();
   }
 
   @override

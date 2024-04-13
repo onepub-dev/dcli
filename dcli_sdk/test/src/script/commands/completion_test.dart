@@ -12,6 +12,7 @@ library;
  */
 
 import 'package:dcli/dcli.dart';
+import 'package:dcli_core/dcli_core.dart' as core;
 import 'package:dcli_sdk/src/util/completion.dart';
 import 'package:dcli_test/dcli_test.dart';
 import 'package:path/path.dart';
@@ -21,7 +22,7 @@ void main() {
   group('completion ...', () {
     List<String> paths;
     test('empty word', () async {
-      withTempDir((fsRoot) async {
+      await core.withTempDirAsync((fsRoot) async {
         TestDirectoryTree(fsRoot);
         final root = join(fsRoot, 'top');
 
@@ -41,7 +42,7 @@ void main() {
     });
 
     test('single match', () async {
-      withTempDir((fsRoot) async {
+      await core.withTempDirAsync((fsRoot) async {
         TestDirectoryTree(fsRoot);
         final root = join(fsRoot, 'top');
 
@@ -56,7 +57,7 @@ void main() {
     });
 
     test('directory with trailing slash', () async {
-      withTempDir((fsRoot) async {
+      await core.withTempDirAsync((fsRoot) async {
         TestDirectoryTree(fsRoot);
         final root = join(fsRoot, 'top');
 
@@ -80,8 +81,8 @@ void main() {
     /// doc
     /// docker
     /// match word: doc which then return doc/
-    test('two matching directories', () {
-      withTempDir((fsRoot) async {
+    test('two matching directories', () async {
+      await core.withTempDirAsync((fsRoot) async {
         TestDirectoryTree(fsRoot);
         final root = join(fsRoot, 'top');
 
@@ -102,7 +103,7 @@ void main() {
     });
 
     test('directory as word', () async {
-      withTempDir((fsRoot) async {
+      await core.withTempDirAsync((fsRoot) async {
         TestDirectoryTree(fsRoot);
         final root = join(fsRoot, 'top');
 
@@ -117,7 +118,7 @@ void main() {
     });
 
     test('invalid directory', () async {
-      withTempDir((fsRoot) async {
+      await core.withTempDirAsync((fsRoot) async {
         TestDirectoryTree(fsRoot);
         final root = join(fsRoot, 'top');
 
@@ -127,7 +128,7 @@ void main() {
     });
 
     test('directory and letter', () async {
-      withTempDir((fsRoot) async {
+      await core.withTempDirAsync((fsRoot) async {
         TestDirectoryTree(fsRoot);
         final root = join(fsRoot, 'top');
 

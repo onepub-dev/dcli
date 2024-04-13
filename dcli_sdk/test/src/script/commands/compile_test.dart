@@ -6,6 +6,6 @@ import 'package:test/test.dart';
 
 void main() {
   test('compile package ', () async {
-    CompileCommand().compilePackage('dcli_unit_tester');
+    await CompileCommand().compilePackage('dcli_unit_tester');
   });
 }

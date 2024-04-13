@@ -37,11 +37,11 @@ class CleanCommand extends Command {
       targetPath = arguments[0];
     }
 
-    _cleanProject(targetPath);
+    await _cleanProject(targetPath);
     return 0;
   }
 
-  void _cleanProject(String targetPath) {
+  Future<void> _cleanProject(String targetPath) async {
     if (!exists(targetPath)) {
       throw InvalidCommandArgumentException(
           'The project path $targetPath does not exists.');
@@ -57,7 +57,7 @@ class CleanCommand extends Command {
     print(orange('Cleaning ${project.pathToProjectRoot} ...'));
     print('');
 
-    project.clean();
+    await project.clean();
   }
 
   @override

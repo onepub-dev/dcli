@@ -146,7 +146,7 @@ class TestFileSystem {
       final isolateID = Service.getIsolateId(Isolate.current);
       print(green('Using TestFileSystem $fsRoot for Isolate: $isolateID'));
 
-      initFS();
+      await initFS();
 
       if (!dcliActivated) {
         print(blue('Globally activating DCli into test file system'));
@@ -174,7 +174,7 @@ class TestFileSystem {
     }
   }
 
-  void initFS() {
+  Future<void> initFS() async {
     if (!initialised) {
       initialised = true;
 
@@ -185,10 +185,10 @@ class TestFileSystem {
       /// the tests scripts the paths to pub-cache keep getting
       /// broken.
       // copyPubCache(originalHome, HOME);
-      copyTestScripts();
+      await copyTestScripts();
       testDirectoryTree = TestDirectoryTree(fsRoot);
 
-      installCrossPlatformTestScripts();
+      await installCrossPlatformTestScripts();
     }
   }
 
@@ -299,7 +299,7 @@ class TestFileSystem {
   }
 
   //
-  void copyTestScripts() {
+  Future<void> copyTestScripts() async {
     print('Copying test_script into TestFileSystem... ');
 
     final verbose = Settings().isVerbose;
@@ -316,7 +316,7 @@ class TestFileSystem {
       testScriptPath,
     );
 
-    _patchRelativeDependenciesAndWarmup(testScriptPath);
+    await _patchRelativeDependenciesAndWarmup(testScriptPath);
 
     Settings().setVerbose(enabled: verbose);
   }
@@ -343,7 +343,8 @@ dependency_overrides:
 
       // ignore: discarded_futures
       await capture(() async {
-        DartProject.fromPath(dirname(pathToPubspec)).warmup(upgrade: true);
+        await DartProject.fromPath(dirname(pathToPubspec))
+            .warmup(upgrade: true);
       }, progress: Progress.printStdErr());
     });
   }
@@ -377,7 +378,7 @@ dependency_overrides:
 
       // ignore: discarded_futures
       await capture(() async {
-        DartProject.fromPath('pathToTools').warmup();
+        await DartProject.fromPath('pathToTools').warmup();
       }, progress: Progress.printStdErr());
 
       await NamedLock(suffix: 'compile').withLock(() async {

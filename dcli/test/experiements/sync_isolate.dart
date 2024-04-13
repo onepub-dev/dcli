@@ -15,8 +15,12 @@ import 'package:native_synchronization/sendable.dart';
 
 void main() {
   print('starting');
-  test6();
+  firstline();
   print('finished');
+}
+
+void firstline() {
+  'getent passwd bsutton'.firstLine!.split(':');
 }
 
 void test6() {

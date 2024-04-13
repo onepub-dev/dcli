@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:dcli/dcli.dart';
+import 'package:dcli_core/dcli_core.dart' as core;
 import 'package:path/path.dart';
 import 'package:pubspec_manager/pubspec_manager.dart';
 
@@ -59,16 +60,16 @@ class CompileCommand extends Command {
     final scriptList = subarguments.sublist(scriptIndex);
 
     if (flagSet.isSet(PackageFlag())) {
-      _compilePackage(scriptList);
+      await _compilePackage(scriptList);
     } else {
-      compileScripts(scriptList);
+      await compileScripts(scriptList);
     }
 
     return exitCode;
   }
 
   ///
-  int compileScript(String scriptPath) {
+  Future<int> compileScript(String scriptPath) async {
     var exitCode = 0;
 
     print('');
@@ -105,7 +106,7 @@ class CompileCommand extends Command {
       final project = DartProject.fromPath(script.pathToScriptDirectory);
 
       if (buildRequired) {
-        project.warmup();
+        await project.warmup();
       }
 
       var install = flagSet.isSet(InstallFlag());
@@ -158,7 +159,7 @@ compile [--nowarmup] [--install] [--overwrite] [<script path.dart>, <script path
   @override
   List<Flag> flags() => _compileFlags;
 
-  void compileScripts(List<String> scriptList) {
+  Future<void> compileScripts(List<String> scriptList) async {
     var scriptList0 = scriptList;
     if (scriptList0.isEmpty) {
       scriptList0 = find('*.dart', recursive: false).toList();
@@ -174,7 +175,7 @@ compile [--nowarmup] [--install] [--overwrite] [<script path.dart>, <script path
       //   IncrementalCompiler(scriptList.first).watch();
       // } else {
       for (final scriptPath in scriptList0) {
-        exitCode = compileScript(scriptPath);
+        exitCode = await compileScript(scriptPath);
         if (exitCode != 0) {
           break;
         }
@@ -185,7 +186,7 @@ compile [--nowarmup] [--install] [--overwrite] [<script path.dart>, <script path
 
   /// Compiles a globally activted taking the package name
   /// and optionally the version from [scriptList].
-  void _compilePackage(List<String> scriptList) {
+  Future<void> _compilePackage(List<String> scriptList) async {
     // we are compiling a globally activated package
     // we must be passed the package name and optionally a version
     if (scriptList.length != 1 && scriptList.length != 2) {
@@ -200,11 +201,11 @@ compile [--nowarmup] [--install] [--overwrite] [<script path.dart>, <script path
       versionString = scriptList[1];
     }
 
-    compilePackage(packageName, version: versionString);
+    await compilePackage(packageName, version: versionString);
   }
 
   /// Compiles a globally activted
-  void compilePackage(String packageName, {String? version})  {
+  Future<void> compilePackage(String packageName, {String? version}) async {
     if (packageName.contains(separator)) {
       throw InvalidCommandArgumentException(
           'The package must not include a path.');
@@ -239,7 +240,7 @@ Run:
       pathToPackage = pathTo;
     }
 
-     withTempDir((pathToTempPackage)  {
+    await core.withTempDirAsync((pathToTempPackage) async {
       /// we copy the package to a temp area so we don't
       /// contaminate the cache. Don't know if this is actually
       /// a problem..
@@ -249,7 +250,7 @@ Run:
           /// dart allows a user to publish the override even though it should
           /// never be published and breaks build from cache if it exists.
           filter: (file) => basename(file) != 'pubspec_overrides.yaml');
-      DartProject.fromPath(pathToTempPackage).warmup();
+      await DartProject.fromPath(pathToTempPackage).warmup();
 
       final pubspec = PubSpec.load(directory: pathToTempPackage);
 
