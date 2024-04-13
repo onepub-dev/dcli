@@ -17,7 +17,7 @@ import 'package:stack_trace/stack_trace.dart';
 import 'package:test/test.dart';
 import 'package:uuid/uuid.dart';
 
-import 'test_scope.dart';
+import '../dcli_test.dart';
 
 class TestFileSystem {
   /// The TestFileSystem allows you to run
@@ -380,15 +380,14 @@ dependency_overrides:
         createDir(Settings().pathToDCliBin, recursive: true);
       }
 
-      // ignore: discarded_futures
       await capture(() async {
-        await DartProject.fromPath('pathToTools').warmup();
+        await DartProject.fromPath(pathToTools).warmup();
       }, progress: Progress.printStdErr());
 
       await NamedLock(suffix: 'compile').withLock(() async {
         for (final command in required) {
-          final script =
-              DartScript.fromFile('test/test_script/general/bin/$command.dart');
+          final script = DartScript.fromFile(join(pathToPackageUnitTester,
+              'test', 'test_script', 'general', 'bin', '$command.dart'));
           if (!exists(join(pathToTools, script.pathToExe))) {
             /// compile and install the command into the tool path
             script.compile();
