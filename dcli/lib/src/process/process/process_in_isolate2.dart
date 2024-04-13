@@ -115,9 +115,14 @@ Future<Isolate> _startIsolate(ProcessSettings processSettings,
           _logIsolate('waiting in isolate for process to exit');
         }
 
-        /// wait for the process to exit and all stream finish been written to.
-        final exitCode = await process.exitCode;
-        _logIsolate('process has exited with exitCode: $exitCode');
+        if (!processSettings.detached) {
+          /// wait for the process to exit and all stream finish been written to.
+          final exitCode = await process.exitCode;
+          _logIsolate('process has exited with exitCode: $exitCode');
+        } else {
+          _logIsolate(
+              "We run a detached process so we can't get the exit code");
+        }
 
         if (processSettings.hasStdio) {
           await Future.wait<void>(
@@ -125,7 +130,18 @@ Future<Isolate> _startIsolate(ProcessSettings processSettings,
 
           _logIsolate('streams are done - sending exit code');
         }
-        await mailboxToPrimaryIsolate.postMessage(Message.exit(exitCode));
+
+        if (!processSettings.detached) {
+          await mailboxToPrimaryIsolate.postMessage(Message.exit(exitCode));
+        } else {
+          /// as we are detached we can't get an exit code so we
+          /// send a bogus 0 - all good - exit code.
+          /// Not certain if this is the write action but
+          /// the primary isolate will wait for ever unless we send this.
+          /// The primary isolate does know its a detached process
+          /// so it can still do something 'interesting'.
+          await mailboxToPrimaryIsolate.postMessage(Message.exit(0));
+        }
 
         if (processSettings.hasStdio) {
           await stdoutSub.cancel();
