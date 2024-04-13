@@ -234,42 +234,6 @@ class RunnableProcess {
     return progress;
   }
 
-  Progress runV2({
-    required bool terminal,
-    Progress? progress,
-    bool runInShell = false,
-    bool detached = false,
-    bool privileged = false,
-    bool nothrow = false,
-    bool extensionSearch = true,
-  }) {
-    progress ??= Progress.print();
-
-    try {
-      ProcessSettings(
-        cmdLine,
-        runInShell: runInShell,
-        detached: detached,
-        terminal: terminal,
-        privileged: privileged,
-        extensionSearch: extensionSearch,
-      );
-      if (terminal == true) {
-        /// we can't process io as the terminal
-        // has inherited the IO so we dont' see it.
-        // _waitForExit(processSync!, progress, nothrow: nothrow);
-      } else {
-        if (detached == false) {
-          processUntilExit(progress, nothrow: nothrow);
-        }
-        // else we are detached and won't see the child exit
-        // so no point waiting.
-      }
-    } finally {
-      (progress as ProgressImpl).close();
-    }
-    return progress;
-  }
 
   /// Starts a process  provides additional options to [run].
   ///
