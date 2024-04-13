@@ -1,3 +1,5 @@
+# 4.0.1-beta.4
+
 # 4.0.1-beta.2
 - upgraded to the latest version of dart_console.
 - migrated back to dart_console as I'm now the maintainer.
