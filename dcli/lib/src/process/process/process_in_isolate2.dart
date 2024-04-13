@@ -18,7 +18,7 @@ import 'message.dart';
 import 'process_settings.dart';
 // import 'process_sync.dart';
 
-const debugIsolate = true;
+const debugIsolate = false;
 
 void startIsolate2(ProcessSettings settings, Mailbox mailboxFromPrimaryIsolate,
     Mailbox mailboxToPrimaryIsolate) {
@@ -123,7 +123,7 @@ Future<Isolate> _startIsolate(ProcessSettings processSettings,
           await Future.wait<void>(
               [stdoutStreamDone.future, stderrStreamDone.future]);
 
-          _logIsolate('streams are done');
+          _logIsolate('streams are done - sending exit code');
         }
         await mailboxToPrimaryIsolate.postMessage(Message.exit(exitCode));
 
@@ -132,7 +132,6 @@ Future<Isolate> _startIsolate(ProcessSettings processSettings,
           await stderrSub.cancel();
         }
       } on RunException catch (e, _) {
-        print('exeception throw');
         _logIsolate('Exception caught: $e');
         await mailboxToPrimaryIsolate.postMessage(Message.runException(e));
       }
@@ -202,6 +201,6 @@ void _logPrimary(String message) {
 
 void _logIsolate(String message) {
   if (debugIsolate) {
-    print('isolate: $message');
+    print('isolate: $message XX');
   }
 }
