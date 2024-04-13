@@ -152,6 +152,8 @@ Future<Isolate> _startIsolate(ProcessSettings processSettings,
         ]),
         debugName: 'ProcessInIsolate');
 
+/// Setup listeners for stderr to send the data back to the primary
+/// isolate via a mailbox.
 StreamSubscription<List<int>> _sendStderrToPrimary(Process process,
     Mailbox mailboxToPrimaryIsolate, Completer<void> stderrStreamDone) {
   late StreamSubscription<List<int>> stderrSub;
@@ -171,6 +173,8 @@ StreamSubscription<List<int>> _sendStderrToPrimary(Process process,
   return stderrSub;
 }
 
+/// Setup listeners for stdout to send the data back to the primary
+/// isolate via a mailbox.
 StreamSubscription<List<int>> _sendStdoutToPrimary(Process process,
     Mailbox mailboxToPrimaryIsolate, Completer<void> stdoutStreamDone) {
   late StreamSubscription<List<int>> stdoutSub;
