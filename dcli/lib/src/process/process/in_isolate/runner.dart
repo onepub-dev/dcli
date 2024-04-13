@@ -120,6 +120,9 @@ class ProcessRunner {
           ep.errorCode,
           'Could not find ${ep.executable} on the path.',
         );
+      } else {
+        throw RunException.withArgs(
+            e.executable, e.arguments, e.errorCode, e.message);
       }
     }
   }
