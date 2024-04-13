@@ -103,14 +103,14 @@ class NamedLock {
   ///
   /// Throws a [DCliException] if the NamedLock times out.
   Future<void> withLock(
-    void Function() action, {
+    Future<void> Function() action, {
     String? waiting,
   }) async {
     final callingStackTrace = Trace.current();
     var lockHeld = false;
     return runZonedGuarded(() async {
       try {
-        verbose(() => 'lockcount = $_lockCountForName');
+        verbose(() => 'withLock called for $_lockFilePath');
 
         _createLockPath();
 
@@ -118,7 +118,7 @@ class NamedLock {
           lockHeld = true;
           incLockCount;
 
-          action();
+          await action();
         }
       } finally {
         if (lockHeld) {
@@ -127,8 +127,8 @@ class NamedLock {
         // just in case an async exception can be thrown
         // I'm uncertain if this is a reality.
         lockHeld = false;
+        verbose(() => 'withLock completed for $_lockFilePath');
       }
-      return;
     }, (e, st) async {
       if (lockHeld) {
         await _releaseLock();
@@ -163,9 +163,9 @@ class NamedLock {
       if (_lockCountForName == 0) {
         verbose(() => 'Releasing lock: $_lockFilePath');
 
-        await _withHardLock(fn: () => delete(_lockFilePath));
+        await _withHardLock(fn: () async => delete(_lockFilePath));
 
-        verbose(() => 'Releasing lock: $_lockFilePath');
+        verbose(() => 'Released lock: $_lockFilePath');
       }
     }
   }
@@ -253,7 +253,7 @@ class NamedLock {
   /// take a lock and delete the orphaned lock.
   Future<bool> _takeLock(String? waiting) async {
     var taken = false;
-    verbose(() => '_takeLock called');
+    verbose(() => '_takeLock called for: $_lockFilePath');
 
     var finalwaiting = waiting;
 
@@ -273,11 +273,11 @@ class NamedLock {
     /// where the lock owner can't get the hardlock as
     /// all of the contenders constantly have it locked.
     while (!taken && waitCount > 0) {
-      verbose(() => 'entering withHardLock $waitCount');
+      verbose(() => 'entering withHardLock $waitCount for $_lockFilePath');
 
       if (!_validLockFileExists) {
         await _withHardLock(
-          fn: () {
+          fn: () async {
             // check for other lock files
             final locks = find(
               '*.$suffix',
@@ -341,6 +341,8 @@ class NamedLock {
         );
       }
     }
+
+    verbose(() => 'lock Taken for: $_lockFilePath');
 
     return taken;
   }
@@ -407,7 +409,7 @@ class NamedLock {
       ProcessHelper().isRunning(lockOwnerPid);
 
   Future<void> _withHardLock({
-    required void Function() fn,
+    required Future<void> Function() fn,
   }) async {
     ServerSocket? socket;
 
@@ -417,7 +419,7 @@ class NamedLock {
       socket = await _bindSocket();
 
       verbose(() => blue('Hardlock taken'));
-      fn();
+      await fn();
     } finally {
       if (socket != null) {
         await socket.close();

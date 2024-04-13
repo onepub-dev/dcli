@@ -9,12 +9,12 @@
 import 'dart:io';
 
 import 'package:dcli/dcli.dart';
-import 'package:dcli_sdk/src/script/command_line_runner.dart';
 import 'package:stack_trace/stack_trace.dart';
 
 import '../commands/commands.dart';
 import '../commands/help.dart';
 import '../util/exceptions.dart';
+import 'command_line_runner.dart';
 
 /// the 'main' for running commands.
 class EntryPoint {
@@ -44,7 +44,7 @@ class EntryPoint {
 
       verbose(() => 'Exiting with code $exitCode');
 
-      stderr.flush();
+      await stderr.flush();
 
       return exitCode;
     } on CommandLineException catch (e) {

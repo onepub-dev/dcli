@@ -120,7 +120,7 @@ class InstallCommand extends Command {
     }
     _qprint('');
 
-    initTemplates((line) => _qprint(line));
+    initTemplates(_qprint);
 
     // create the bin directory
     final binPath = Settings().pathToDCliBin;

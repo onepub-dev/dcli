@@ -34,7 +34,7 @@ void main() {
 
             // Now install over existing
             try {
-              Shell.current.install();
+              await Shell.current.install();
             } on DCliException catch (e) {
               print(e);
             }
@@ -63,7 +63,7 @@ void main() {
   );
 
   test('initTemplates', () {
-    initTemplates((line) => print(line));
+    initTemplates(print);
   });
 }
 

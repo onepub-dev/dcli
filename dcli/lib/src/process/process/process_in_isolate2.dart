@@ -18,7 +18,12 @@ import 'message.dart';
 import 'process_settings.dart';
 // import 'process_sync.dart';
 
-const debugIsolate = true;
+/// Setting this to try will cause the isolate to dump lots
+/// of output to stdout. This causes problems with the
+/// some process on the primary isolate side, but often it is the
+/// only way to debug the process in isolate code as the
+/// debugger hangs.
+const debugIsolate = false;
 
 void startIsolate2(ProcessSettings settings, Mailbox mailboxFromPrimaryIsolate,
     Mailbox mailboxToPrimaryIsolate) {
@@ -97,7 +102,7 @@ Future<Isolate> _startIsolate(ProcessSettings processSettings,
         late StreamSubscription<List<int>> stdoutSub;
         late StreamSubscription<List<int>> stderrSub;
 
-        if (!processSettings.hasStdio) {
+        if (processSettings.hasStdio) {
           /// subscribe to data the process writes to stdout and send
           /// it back to the parent isolate
           stdoutSub = _sendStdoutToPrimary(
@@ -115,24 +120,41 @@ Future<Isolate> _startIsolate(ProcessSettings processSettings,
           _logIsolate('waiting in isolate for process to exit');
         }
 
-        /// wait for the process to exit and all stream finish been written to.
-        final exitCode = await process.exitCode;
-        _logIsolate('process has exited with exitCode: $exitCode');
+        var exitCode = 0;
+        if (!processSettings.detached) {
+          /// wait for the process to exit and all stream
+          /// finish been written to.
+          exitCode = await process.exitCode;
+          _logIsolate('process has exited with exitCode: $exitCode');
+        } else {
+          _logIsolate(
+              "We run a detached process so we can't get the exit code");
+        }
 
-        if (!processSettings.hasStdio) {
+        if (processSettings.hasStdio) {
           await Future.wait<void>(
               [stdoutStreamDone.future, stderrStreamDone.future]);
 
-          _logIsolate('streams are done');
+          _logIsolate('streams are done - sending exit code');
         }
-        await mailboxToPrimaryIsolate.postMessage(Message.exit(exitCode));
 
-        if (!processSettings.hasStdio) {
+        if (!processSettings.detached) {
+          await mailboxToPrimaryIsolate.postMessage(Message.exit(exitCode));
+        } else {
+          /// as we are detached we can't get an exit code so we
+          /// send a bogus 0 - all good - exit code.
+          /// Not certain if this is the write action but
+          /// the primary isolate will wait for ever unless we send this.
+          /// The primary isolate does know its a detached process
+          /// so it can still do something 'interesting'.
+          await mailboxToPrimaryIsolate.postMessage(Message.exit(0));
+        }
+
+        if (processSettings.hasStdio) {
           await stdoutSub.cancel();
           await stderrSub.cancel();
         }
       } on RunException catch (e, _) {
-        print('exeception throw');
         _logIsolate('Exception caught: $e');
         await mailboxToPrimaryIsolate.postMessage(Message.runException(e));
       }
@@ -152,6 +174,8 @@ Future<Isolate> _startIsolate(ProcessSettings processSettings,
         ]),
         debugName: 'ProcessInIsolate');
 
+/// Setup listeners for stderr to send the data back to the primary
+/// isolate via a mailbox.
 StreamSubscription<List<int>> _sendStderrToPrimary(Process process,
     Mailbox mailboxToPrimaryIsolate, Completer<void> stderrStreamDone) {
   late StreamSubscription<List<int>> stderrSub;
@@ -171,6 +195,8 @@ StreamSubscription<List<int>> _sendStderrToPrimary(Process process,
   return stderrSub;
 }
 
+/// Setup listeners for stdout to send the data back to the primary
+/// isolate via a mailbox.
 StreamSubscription<List<int>> _sendStdoutToPrimary(Process process,
     Mailbox mailboxToPrimaryIsolate, Completer<void> stdoutStreamDone) {
   late StreamSubscription<List<int>> stdoutSub;
@@ -198,6 +224,6 @@ void _logPrimary(String message) {
 
 void _logIsolate(String message) {
   if (debugIsolate) {
-    print('isolate: $message');
+    print('isolate: $message XX');
   }
 }

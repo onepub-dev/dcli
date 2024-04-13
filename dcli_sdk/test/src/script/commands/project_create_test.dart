@@ -26,7 +26,8 @@ void main() {
           final pathToTemplate = join(fs, 'test');
 
           await core.withEnvironmentAsync(() async {
-            DartProject.create(pathTo: pathToTemplate, templateName: 'simple')
+            await DartProject.create(
+                    pathTo: pathToTemplate, templateName: 'simple')
                 .warmup();
           }, environment: {
             'DCLI_OVERRIDE_PATH': DartProject.self.pathToProjectRoot
@@ -46,7 +47,8 @@ void main() {
             final pathToTemplate = join(fs, 'test');
 
             await core.withEnvironmentAsync(() async {
-              DartProject.create(pathTo: pathToTemplate, templateName: 'simple')
+              await DartProject.create(
+                      pathTo: pathToTemplate, templateName: 'simple')
                   .warmup();
             }, environment: {
               'DCLI_OVERRIDE_PATH': DartProject.self.pathToProjectRoot
@@ -65,7 +67,7 @@ void main() {
 }
 
 void _installTemplates() {
-  initTemplates((line) => print(line));
+  initTemplates(print);
 }
 
 void checkProjectStructure(String rootPath, String scriptName) {

@@ -34,6 +34,8 @@ void main() {
       //    await TestFileSystem().withinZone((fs) async {
 //        InstallCommand().initTemplates();
 
+      final dcliRoot = dirname(DartProject.self.pathToProjectRoot);
+
       await core.withTempDirAsync((tempDir) async {
         const projectName = 'full_test';
         final pathToProject = join(tempDir, projectName);
@@ -41,8 +43,7 @@ void main() {
         const mainScriptName = '$projectName.dart';
         final scriptPath = join(pathToProject, 'bin', mainScriptName);
 
-        final templatePath = join(
-            DartProject.self.pathToProjectRoot, '..', Settings.templateDir);
+        final templatePath = join(dcliRoot, Settings.templateDir);
         await core.withEnvironmentAsync(() async {
           final testTemplateDir =
               join(tempDir, '.dcli', Settings.templateDir, 'project', 'full');
@@ -69,5 +70,20 @@ void main() {
       });
     });
     // });
+  });
+
+  test('findProject', () async {
+    await core.withTempDirAsync((tempDir) async {
+      final pathToTools = join(tempDir, '.dart_tools');
+      createDir(pathToTools);
+
+      join(tempDir, 'pubspec.yaml').write('''
+name: test
+''');
+
+      /// start search from sub-directory of actual project.
+      /// It should return the actual project path.
+      expect(DartProject.findProject(pathToTools)!.pathToProjectRoot, tempDir);
+    });
   });
 }

@@ -17,7 +17,7 @@ import 'package:stack_trace/stack_trace.dart';
 import 'package:test/test.dart';
 import 'package:uuid/uuid.dart';
 
-import 'test_scope.dart';
+import '../dcli_test.dart';
 
 class TestFileSystem {
   /// The TestFileSystem allows you to run
@@ -146,7 +146,7 @@ class TestFileSystem {
       final isolateID = Service.getIsolateId(Isolate.current);
       print(green('Using TestFileSystem $fsRoot for Isolate: $isolateID'));
 
-      initFS();
+      await initFS();
 
       if (!dcliActivated) {
         print(blue('Globally activating DCli into test file system'));
@@ -174,7 +174,7 @@ class TestFileSystem {
     }
   }
 
-  void initFS() {
+  Future<void> initFS() async {
     if (!initialised) {
       initialised = true;
 
@@ -185,10 +185,10 @@ class TestFileSystem {
       /// the tests scripts the paths to pub-cache keep getting
       /// broken.
       // copyPubCache(originalHome, HOME);
-      copyTestScripts();
+      await copyTestScripts();
       testDirectoryTree = TestDirectoryTree(fsRoot);
 
-      installCrossPlatformTestScripts();
+      await installCrossPlatformTestScripts();
     }
   }
 
@@ -299,7 +299,7 @@ class TestFileSystem {
   }
 
   //
-  void copyTestScripts() {
+  Future<void> copyTestScripts() async {
     print('Copying test_script into TestFileSystem... ');
 
     final verbose = Settings().isVerbose;
@@ -316,7 +316,7 @@ class TestFileSystem {
       testScriptPath,
     );
 
-    _patchRelativeDependenciesAndWarmup(testScriptPath);
+    await _patchRelativeDependenciesAndWarmup(testScriptPath);
 
     Settings().setVerbose(enabled: verbose);
   }
@@ -328,22 +328,27 @@ class TestFileSystem {
     find('pubspec.yaml', workingDirectory: testScriptPath)
         .forEach((pathToPubspec) async {
       final dcliProject = DartProject.fromPath('.');
-      final dcliCoreProject = DartProject.fromPath(join('..', 'dcli_core'));
 
-      final pathToDCli = join(dcliProject.pathToProjectRoot);
-      final pathToCore = join(dcliCoreProject.pathToProjectRoot);
+      final pathToDCliRoot = dirname(dcliProject.pathToProjectRoot);
 
       join(dirname(pathToPubspec), 'pubspec_overrides.yaml').write('''
 dependency_overrides: 
   dcli: 
-    path: $pathToDCli
+    path: ${join(pathToDCliRoot, 'dcli')}
+  dcli_common: 
+    path: ${join(pathToDCliRoot, 'dcli_common')}
   dcli_core: 
-    path: $pathToCore
+    path: ${join(pathToDCliRoot, 'dcli_core')}
+  dcli_input: 
+    path: ${join(pathToDCliRoot, 'dcli_input')}
+  dcli_terminal: 
+    path: ${join(pathToDCliRoot, 'dcli_terminal')}  
         ''');
 
       // ignore: discarded_futures
       await capture(() async {
-        DartProject.fromPath(dirname(pathToPubspec)).warmup(upgrade: true);
+        await DartProject.fromPath(dirname(pathToPubspec))
+            .warmup(upgrade: true);
       }, progress: Progress.printStdErr());
     });
   }
@@ -375,15 +380,14 @@ dependency_overrides:
         createDir(Settings().pathToDCliBin, recursive: true);
       }
 
-      // ignore: discarded_futures
       await capture(() async {
-        DartProject.fromPath('pathToTools').warmup();
+        await DartProject.fromPath(pathToTools).warmup();
       }, progress: Progress.printStdErr());
 
       await NamedLock(suffix: 'compile').withLock(() async {
         for (final command in required) {
-          final script =
-              DartScript.fromFile('test/test_script/general/bin/$command.dart');
+          final script = DartScript.fromFile(join(pathToPackageUnitTester,
+              'test', 'test_script', 'general', 'bin', '$command.dart'));
           if (!exists(join(pathToTools, script.pathToExe))) {
             /// compile and install the command into the tool path
             script.compile();

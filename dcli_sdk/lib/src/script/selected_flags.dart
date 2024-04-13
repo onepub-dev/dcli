@@ -1,13 +1,10 @@
 import 'flags.dart';
 
 class SelectedFlags {
-  static SelectedFlags _self = SelectedFlags._();
-
-  factory SelectedFlags() {
-    return _self;
-  }
+  factory SelectedFlags() => _self;
 
   SelectedFlags._();
+  static final SelectedFlags _self = SelectedFlags._();
   final _selectedFlags = <String, Flag>{};
 
   /// the list of global flags selected via the cli when dcli

@@ -19,7 +19,7 @@ void main() {
       await TestFileSystem().withinZone((fs) async {
         /// make certain you have run 'dcli pack' before running this
         /// test if any templates have changed.
-        initTemplates((line) => print(line));
+        initTemplates(print);
         final scriptDir = join(fs.unitTestWorkingDir, 'traditional');
 
         const scriptName = 'extra.dart';

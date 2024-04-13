@@ -8,6 +8,7 @@ import 'dart:io';
 
 import 'package:dcli/dcli.dart';
 import 'package:dcli/posix.dart';
+import 'package:dcli_test/dcli_test.dart';
 import 'package:path/path.dart' as p;
 import 'package:path/path.dart' hide equals;
 import 'package:test/test.dart';
@@ -45,9 +46,8 @@ void main() {
   });
 
   group('pathToScript', () {
-    const packageName = 'dcli_unit_tester';
-    final pathToTestScript = truepath(DartProject.self.pathToProjectRoot, '..',
-        packageName, 'bin', 'dcli_unit_tester.dart');
+    final pathToTestScript =
+        truepath(pathToPackageUnitTester, 'bin', 'dcli_unit_tester.dart');
 
     test('within unit test', () {
       // within a unit test
@@ -56,9 +56,6 @@ void main() {
     });
 
     test('jit script', () {
-      final dcliProjectRoot = DartProject.self.pathToProjectRoot;
-      final projectRoot = truepath(dcliProjectRoot, '..', 'dcli_unit_tester');
-
       var exeName = 'dcli_unit_tester';
       if (Platform.isWindows) {
         exeName += '.exe';
@@ -85,24 +82,25 @@ void main() {
       expect(
           result[line++],
           equals('pathToExe, '
-              '${join(projectRoot, 'bin', exeName)}'));
+              '${join(pathToPackageUnitTester, 'bin', exeName)}'));
       expect(
           result[line++],
           equals('pathToInstalledExe, '
               '${join(HOME, '.dcli', 'bin', exeName)}'));
-      expect(result[line++], equals('pathToProjectRoot, $projectRoot'));
+      expect(result[line++],
+          equals('pathToProjectRoot, $pathToPackageUnitTester'));
       expect(
           result[line++],
           equals('pathToPubSpec, '
-              '${join(projectRoot, 'pubspec.yaml')}'));
+              '${join(pathToPackageUnitTester, 'pubspec.yaml')}'));
       expect(
           result[line++],
           equals('pathToScript, '
-              '${join(projectRoot, 'bin', 'dcli_unit_tester.dart')}'));
+              '''${join(pathToPackageUnitTester, 'bin', 'dcli_unit_tester.dart')}'''));
       expect(
           result[line++],
           equals('pathToScriptDirectory, '
-              '${join(projectRoot, 'bin')}'));
+              '${join(pathToPackageUnitTester, 'bin')}'));
       expect(result[line++], equals('scriptName, dcli_unit_tester.dart'));
     });
 
@@ -136,6 +134,8 @@ void main() {
     });
 
     test('globally activated script', () {
+      const packageName = 'dcli_unit_tester';
+
       /// Make certain its not on the PATH as a compiled exe already
       final script = which(packageName);
       if (script.found) {
@@ -146,38 +146,36 @@ void main() {
       final result =
           '$packageName --script'.start(progress: Progress.capture()).toList();
 
-      final dcliProjectRoot = DartProject.self.pathToProjectRoot;
-      final projectRoot = join(dcliProjectRoot, '..', 'dcli_unit_tester');
-
       expect(result.length, equals(13));
       var line = 0;
       expect(result[line++], equals('basename, dcli_unit_tester'));
       expect(result[line++], equals('exeName, dcli_unit_tester'));
       expect(result[line++], equals('isCompiled, false'));
-      expect(result[line++], equals('isInstalled, true'));
-      expect(result[line++], equals('isPubGlobalActivated, false'));
-      expect(result[line++], equals('isReadyToRun, true'));
+      expect(result[line++], equals('isInstalled, false'));
+      expect(result[line++], equals('isPubGlobalActivated, true'));
+      expect(result[line++], equals('isReadyToRun, false'));
       expect(
           result[line++],
           equals('pathToExe, '
-              '${join(projectRoot, 'bin', 'dcli_unit_tester')}'));
+              '${join(pathToPackageUnitTester, 'bin', 'dcli_unit_tester')}'));
       expect(
           result[line++],
           equals('pathToInstalledExe, '
               '${join(HOME, '.dcli', 'bin', 'dcli_unit_tester')}'));
-      expect(result[line++], equals('pathToProjectRoot, $projectRoot'));
+      expect(result[line++],
+          equals('pathToProjectRoot, $pathToPackageUnitTester'));
       expect(
           result[line++],
           equals('pathToPubSpec, '
-              '${join(projectRoot, 'pubspec.yaml')}'));
+              '${join(pathToPackageUnitTester, 'pubspec.yaml')}'));
       expect(
           result[line++],
           equals('pathToScript, '
-              '${join(projectRoot, 'bin', 'dcli_unit_tester.dart')}'));
+              '''${join(pathToPackageUnitTester, 'bin', 'dcli_unit_tester.dart')}'''));
       expect(
           result[line++],
           equals('pathToScriptDirectory, '
-              '${join(projectRoot, 'bin')}'));
+              '${join(pathToPackageUnitTester, 'bin')}'));
       expect(result[line++], equals('scriptName, dcli_unit_tester.dart'));
       expect(result.length, equals(1));
     });

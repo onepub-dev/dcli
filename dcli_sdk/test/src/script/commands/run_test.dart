@@ -16,7 +16,7 @@ import 'package:test/test.dart';
 void main() {
   test('Create and run a script', () async {
     await TestFileSystem().withinZone((fs) async {
-      initTemplates((line) => print(line));
+      initTemplates(print);
       final projectPath = truepath(fs.tmpScriptPath, 'run_test');
 
       DartProject.create(pathTo: projectPath, templateName: 'simple');

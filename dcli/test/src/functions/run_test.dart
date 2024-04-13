@@ -25,6 +25,7 @@ void main() {
     });
 
     t.test('print stdout', () async {
+      Settings().setVerbose(enabled: true);
       await TestFileSystem().withinZone((fs) async {
         await withTestScope((tmpDir) async {
           final scriptPath = truepath(join(fs.testScriptPath, 'general/bin'));
@@ -94,6 +95,22 @@ void main() {
 
           t.expect(results, t.containsAll(expected));
         });
+      });
+    });
+
+    t.test('Missing exectuable', () async {
+      // Settings().setVerbose(enabled: true);
+      await withTestScope((tmpDir) async {
+        final pathToBadScript = join(
+            rootPath, 'bad', 'path', 'to', 'non', 'existant', 'script.dart');
+        t.expect(() {
+          pathToBadScript.toList(nothrow: true);
+        },
+            // throwsA(isA<RunException>()))
+            throwsA(predicate((e) =>
+                e is RunException &&
+                e.exitCode == 2 &&
+                e.reason == 'Could not find $pathToBadScript on the path.')));
       });
     });
   });

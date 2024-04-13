@@ -128,7 +128,7 @@ Future<void> writeToLog(String data) async {
   final parts = data.split(';');
   final message = parts[0];
   final log = parts[1];
-  await NamedLock(suffix: 'test.lock').withLock(() {
+  await NamedLock(suffix: 'test.lock').withLock(() async {
     var count = 0;
     for (var i = 0; i < 4; i++) {
       final l = '$message + ${count++}';
@@ -148,7 +148,7 @@ final _lockFailedPath = join(_lockCheckPath, 'lock_failed');
 Future<void> worker(int instance) async {
   Settings().setVerbose(enabled: false);
   print('starting worker instance $instance ${DateTime.now()}');
-  await NamedLock(suffix: 'gshared-compile').withLock(() {
+  await NamedLock(suffix: 'gshared-compile').withLock(() async {
     print('acquired lock worker $instance  ${DateTime.now()}');
     final inLockPath = join(_lockCheckPath, 'inlock');
 
