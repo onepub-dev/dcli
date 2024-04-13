@@ -328,17 +328,21 @@ class TestFileSystem {
     find('pubspec.yaml', workingDirectory: testScriptPath)
         .forEach((pathToPubspec) async {
       final dcliProject = DartProject.fromPath('.');
-      final dcliCoreProject = DartProject.fromPath(join('..', 'dcli_core'));
 
-      final pathToDCli = join(dcliProject.pathToProjectRoot);
-      final pathToCore = join(dcliCoreProject.pathToProjectRoot);
+      final pathToDCliRoot = dirname(dcliProject.pathToProjectRoot);
 
       join(dirname(pathToPubspec), 'pubspec_overrides.yaml').write('''
 dependency_overrides: 
   dcli: 
-    path: $pathToDCli
+    path: ${join(pathToDCliRoot, 'dcli')}
+  dcli_common: 
+    path: ${join(pathToDCliRoot, 'dcli_common')}
   dcli_core: 
-    path: $pathToCore
+    path: ${join(pathToDCliRoot, 'dcli_core')}
+  dcli_input: 
+    path: ${join(pathToDCliRoot, 'dcli_input')}
+  dcli_terminal: 
+    path: ${join(pathToDCliRoot, 'dcli_terminal')}  
         ''');
 
       // ignore: discarded_futures

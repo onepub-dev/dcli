@@ -163,7 +163,7 @@ class NamedLock {
       if (_lockCountForName == 0) {
         verbose(() => 'Releasing lock: $_lockFilePath');
 
-        await _withHardLock(fn: () => delete(_lockFilePath));
+        await _withHardLock(fn: () async => delete(_lockFilePath));
 
         verbose(() => 'Releasing lock: $_lockFilePath');
       }
@@ -277,7 +277,7 @@ class NamedLock {
 
       if (!_validLockFileExists) {
         await _withHardLock(
-          fn: () {
+          fn: () async {
             // check for other lock files
             final locks = find(
               '*.$suffix',
@@ -407,7 +407,7 @@ class NamedLock {
       ProcessHelper().isRunning(lockOwnerPid);
 
   Future<void> _withHardLock({
-    required void Function() fn,
+    required Future<void> Function() fn,
   }) async {
     ServerSocket? socket;
 
@@ -417,7 +417,7 @@ class NamedLock {
       socket = await _bindSocket();
 
       verbose(() => blue('Hardlock taken'));
-      fn();
+      await fn();
     } finally {
       if (socket != null) {
         await socket.close();
