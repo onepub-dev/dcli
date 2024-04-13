@@ -213,7 +213,7 @@ compile [--nowarmup] [--install] [--overwrite] [<script path.dart>, <script path
     if (!PubCache().isInstalled(packageName) &&
         !PubCache().isGloballyActivated(packageName)) {
       throw InvalidCommandArgumentException('''
-To compile the package $packageName it must first be installed. 
+To compile the package $packageName it must first be installed.
 Run:
   dart pub global activate $packageName
   ''');
