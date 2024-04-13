@@ -1,4 +1,4 @@
-# 4.0.1-beta.3
+# 4.0.1-beta.4
 - added back in the missing nothrow arg to start method.
 - Fixed running of detached processes. We were trying to get the exit code which would never work.
 - Added some missing async statements when using named locks. Fixed a bug in dart_project when running in a unit test. It was getting the platformComfig which was a uri of the form file:// but then trying to process it as a simple path.
@@ -8,6 +8,9 @@
  - still no action on async validation methods for 'ask'.
 
 Most unit tests are now working and most of the common process execution paths appear to be working.
+
+# 4.0.1-beta.3
+- failed release
 
 # 4.0.1-beta.2
 - upgraded to the latest version of dart_console.
