@@ -74,17 +74,35 @@ void addUnitTestOverrides(String pathToProject) {
   /// we need to add pubspec overrides so that the
   /// newly created project will from the dev source
   /// for dcli and dcli_core rather than looking to pub.dev.
-  final pathToDCli = DartProject.self.pathToProjectRoot;
-  final pathToDCliCore = join(pathToDCli, '..', 'dcli_core');
+  final pathToDCliRoot = _pathToDCliGitRoot();
 
   join(pathToProject, 'pubspec_overrides.yaml').write('''
-  dependency_overrides:
-    dcli:
-      path: $pathToDCli
-    dcli_core:
-      path: $pathToDCliCore
-  
-  ''');
+dependency_overrides: 
+  dcli: 
+    path: ${join(pathToDCliRoot, 'dcli')}
+  dcli_common: 
+    path: ${join(pathToDCliRoot, 'dcli_common')}
+  dcli_core: 
+    path: ${join(pathToDCliRoot, 'dcli_core')}
+  dcli_input: 
+    path: ${join(pathToDCliRoot, 'dcli_input')}
+  dcli_terminal: 
+    path: ${join(pathToDCliRoot, 'dcli_terminal')}  
+''');
+}
+
+String _pathToDCliGitRoot() {
+  var dcliGitRoot = DartProject.self.pathToProjectRoot;
+  // If [dcliGitRoot] contains a pubspec.yaml then it
+  // isn't the project root.
+
+  while (DartProject.findProject(dcliGitRoot) != null) {
+    // search up the tree until we find a directory that
+    // doesn't have a pubspec.yaml in a parent dire.
+    dcliGitRoot = dirname(dcliGitRoot);
+  }
+
+  return dcliGitRoot;
 }
 
 /// update the templates dcli version to match the dcli version
