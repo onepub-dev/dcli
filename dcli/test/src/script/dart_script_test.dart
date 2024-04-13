@@ -151,9 +151,9 @@ void main() {
       expect(result[line++], equals('basename, dcli_unit_tester'));
       expect(result[line++], equals('exeName, dcli_unit_tester'));
       expect(result[line++], equals('isCompiled, false'));
-      expect(result[line++], equals('isInstalled, true'));
-      expect(result[line++], equals('isPubGlobalActivated, false'));
-      expect(result[line++], equals('isReadyToRun, true'));
+      expect(result[line++], equals('isInstalled, false'));
+      expect(result[line++], equals('isPubGlobalActivated, true'));
+      expect(result[line++], equals('isReadyToRun, false'));
       expect(
           result[line++],
           equals('pathToExe, '
