@@ -18,6 +18,11 @@ import 'message.dart';
 import 'process_settings.dart';
 // import 'process_sync.dart';
 
+/// Setting this to try will cause the isolate to dump lots
+/// of output to stdout. This causes problems with the
+/// some process on the primary isolate side, but often it is the
+/// only way to debug the process in isolate code as the
+/// debugger hangs.
 const debugIsolate = false;
 
 void startIsolate2(ProcessSettings settings, Mailbox mailboxFromPrimaryIsolate,
@@ -115,9 +120,10 @@ Future<Isolate> _startIsolate(ProcessSettings processSettings,
           _logIsolate('waiting in isolate for process to exit');
         }
 
+        var exitCode = 0;
         if (!processSettings.detached) {
           /// wait for the process to exit and all stream finish been written to.
-          final exitCode = await process.exitCode;
+          exitCode = await process.exitCode;
           _logIsolate('process has exited with exitCode: $exitCode');
         } else {
           _logIsolate(
