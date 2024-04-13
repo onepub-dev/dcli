@@ -110,7 +110,7 @@ class NamedLock {
     var lockHeld = false;
     return runZonedGuarded(() async {
       try {
-        verbose(() => 'lockcount = $_lockCountForName');
+        verbose(() => 'withLock called for $_lockFilePath');
 
         _createLockPath();
 
@@ -127,8 +127,8 @@ class NamedLock {
         // just in case an async exception can be thrown
         // I'm uncertain if this is a reality.
         lockHeld = false;
+        verbose(() => 'withLock completed for $_lockFilePath');
       }
-      return;
     }, (e, st) async {
       if (lockHeld) {
         await _releaseLock();
@@ -165,7 +165,7 @@ class NamedLock {
 
         await _withHardLock(fn: () async => delete(_lockFilePath));
 
-        verbose(() => 'Releasing lock: $_lockFilePath');
+        verbose(() => 'Released lock: $_lockFilePath');
       }
     }
   }
@@ -253,7 +253,7 @@ class NamedLock {
   /// take a lock and delete the orphaned lock.
   Future<bool> _takeLock(String? waiting) async {
     var taken = false;
-    verbose(() => '_takeLock called');
+    verbose(() => '_takeLock called for: $_lockFilePath');
 
     var finalwaiting = waiting;
 
@@ -273,7 +273,7 @@ class NamedLock {
     /// where the lock owner can't get the hardlock as
     /// all of the contenders constantly have it locked.
     while (!taken && waitCount > 0) {
-      verbose(() => 'entering withHardLock $waitCount');
+      verbose(() => 'entering withHardLock $waitCount for $_lockFilePath');
 
       if (!_validLockFileExists) {
         await _withHardLock(
@@ -341,6 +341,8 @@ class NamedLock {
         );
       }
     }
+
+    verbose(() => 'lock Taken for: $_lockFilePath');
 
     return taken;
   }
