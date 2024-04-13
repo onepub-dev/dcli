@@ -122,7 +122,8 @@ Future<Isolate> _startIsolate(ProcessSettings processSettings,
 
         var exitCode = 0;
         if (!processSettings.detached) {
-          /// wait for the process to exit and all stream finish been written to.
+          /// wait for the process to exit and all stream
+          /// finish been written to.
           exitCode = await process.exitCode;
           _logIsolate('process has exited with exitCode: $exitCode');
         } else {

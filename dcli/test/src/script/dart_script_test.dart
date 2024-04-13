@@ -96,7 +96,7 @@ void main() {
       expect(
           result[line++],
           equals('pathToScript, '
-              '${join(pathToPackageUnitTester, 'bin', 'dcli_unit_tester.dart')}'));
+              '''${join(pathToPackageUnitTester, 'bin', 'dcli_unit_tester.dart')}'''));
       expect(
           result[line++],
           equals('pathToScriptDirectory, '
@@ -171,7 +171,7 @@ void main() {
       expect(
           result[line++],
           equals('pathToScript, '
-              '${join(pathToPackageUnitTester, 'bin', 'dcli_unit_tester.dart')}'));
+              '''${join(pathToPackageUnitTester, 'bin', 'dcli_unit_tester.dart')}'''));
       expect(
           result[line++],
           equals('pathToScriptDirectory, '
