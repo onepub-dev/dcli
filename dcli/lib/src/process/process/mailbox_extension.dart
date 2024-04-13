@@ -9,9 +9,9 @@ extension MailBoxMessage on Mailbox {
     while (tryPut) {
       try {
         tryPut = false;
-        _logMessage('attempting to put message in mailbox $message');
+        // _logMessage('attempting to put message in mailbox $message');
         put(message.content);
-        _logMessage('attempting to put message in mailbox - success');
+        // _logMessage('attempting to put message in mailbox - success');
         // ignore: avoid_catching_errors
       } on StateError catch (e) {
         if (e.message == 'Mailbox is full') {
