@@ -195,6 +195,7 @@ class RunnableProcess {
         terminal: terminal,
         privileged: privileged,
         extensionSearch: extensionSearch,
+        nothrow: nothrow,
         progress: progress as ProgressImpl,
       );
       // if (terminal == true) {
@@ -293,6 +294,7 @@ class RunnableProcess {
   /// but we don't wait for it to complete nor is any io available.
   void start({
     required ProgressImpl progress,
+    bool nothrow = false,
     bool runInShell = false,
     bool detached = false,
     bool waitForStart = true,
@@ -381,7 +383,21 @@ class RunnableProcess {
             Error.throwWithStackTrace(exception, exception.stackTrace));
     } while (response.messageType != MessageType.exitCode);
 
-    response.onExit((exitCode) => progress.exitCode = exitCode);
+    response.onExit((exitCode) {
+      if (exitCode != 0 && nothrow == false) {
+        throw RunException.withArgs(
+          _parsed.cmd,
+          _parsed.args,
+          exitCode,
+          'The command '
+          '${red('[${_parsed.cmd}] with args [${_parsed.args.join(', ')}]')} '
+          'failed with exitCode: $exitCode '
+          'workingDirectory: $workingDirectory',
+        );
+      } else {
+        progress.exitCode = exitCode;
+      }
+    });
 
     // // we wait for the process to start.
     // // if the start fails we get a clean exception
