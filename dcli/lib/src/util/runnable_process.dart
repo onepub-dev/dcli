@@ -234,7 +234,6 @@ class RunnableProcess {
     return progress;
   }
 
-
   /// Starts a process  provides additional options to [run].
   ///
   /// This is an internal function and should not be exposed.
@@ -362,61 +361,7 @@ class RunnableProcess {
         progress.exitCode = exitCode;
       }
     });
-
-    // // we wait for the process to start.
-    // // if the start fails we get a clean exception
-    // // by waiting here.
-    // if (waitForStart) {
-    //   _waitForStart();
-    // }
   }
-
-  // void _waitForStart() {
-  //   final complete = Completer<Process>();
-
-  //   unawaited(_fProcess
-  //       .then(complete.complete)
-  //       //ignore: avoid_types_on_closure_parameters
-  //       .catchError((Object e, StackTrace s) {
-  //     // 2 - No such file or directory
-  //     if (e is ProcessException && e.errorCode == 2) {
-  //       final ep = e;
-  //       e = RunException.withArgs(
-  //         ep.executable,
-  //         ep.arguments,
-  //         ep.errorCode,
-  //         'Could not find ${ep.executable} on the path.',
-  //       );
-  //     }
-  //     complete.completeError(e);
-  //   }));
-  //   waitForEx<Process>(complete.future);
-  // }
-
-  /// Waits for the process to exit
-  /// We use this method when we can't or don't
-  /// want to process IO.
-  /// The main use is when using start(terminal:true).
-  /// We don't have access to any IO so we just
-  /// have to wait for things to finish.
-  // int? _waitForExit(ProcessSync processSync, Progress progress,
-  //     {required bool nothrow}) {
-  //   final exitCode = processSync.waitForExitCode;
-  //   (progress as ProgressImpl).exitCode = exitCode;
-
-  //   if (exitCode != 0 && nothrow == false) {
-  //     throw RunException.withArgs(
-  //       _parsed.cmd,
-  //       _parsed.args,
-  //       exitCode,
-  //       'The command '
-  //       '${red('[${_parsed.cmd}] with args [${_parsed.args.join(', ')}]')} '
-  //       'failed with exitCode: $exitCode '
-  //       'workingDirectory: $workingDirectory',
-  //     );
-  //   }
-  //   return exitCode;
-  // }
 
   /// TODO: does this work now we have moved to mailboxes?
   // void pipeTo(RunnableProcess stdin) {
@@ -492,102 +437,6 @@ class RunnableProcess {
   //   // await _streamsFlushed;
   //   progress.close();
   // }
-  // }
-
-  // Monitors the process until it exists.
-  // If a LineAction exists we call
-  // line action each time the process emmits a line.
-  /// The [nothrow] argument is EXPERIMENTAL
-  void processUntilExit(Progress? progress, {required bool nothrow}) {
-    final exited = Completer<bool>();
-
-    final progress0 = (progress ?? Progress.devNull()) as ProgressImpl;
-
-    // _wireStreams(processSync!, progress0);
-
-    /// this section and the next appears to be duplicates
-    /// moving data to the progress stream.
-    /// The problem is how do we know the progress stream
-    /// has been emptied?
-    /// - we could put a counter on it and wait for it to
-    /// match the number of rows we added.
-    /// How do we wait. If we do it synchronously then the data
-    /// on the other side of the stream can't be processed.
-    /// It feels like at some point we need to be async when dealing with
-    /// streams.
-    /// For none streams we can synchronous.
-    ///
-    /// Review the pump - if it pulled data then iot might work.
-    // while ((data = processSync!.readStdout()) != null) {
-    //   progress0.addToStdout(data!);
-    // }
-
-    // processSync!.listenStdout(progress0.addToStdout);
-    // processSync!.listenStderr(progress0.addToStderr);
-
-    // // Wait for the process to finish
-    // final exitCode = processSync!.waitForExitCode;
-
-    // CONSIDER: do we pass the exitCode to ForEach or just throw?
-    // If the start failed we don't want to rethrow
-    // as the exception will be thrown async and it will
-    // escape as an unhandled exception and stop the whole script
-    progress0.exitCode = exitCode;
-
-    /// the process may have exited but the streams are likely to still
-    /// contain data.
-    _waitForStreams();
-    if (exitCode != 0 && nothrow == false) {
-      exited.completeError(
-        RunException.withArgs(
-          _parsed.cmd,
-          _parsed.args,
-          exitCode,
-          'The command '
-          // ignore: lines_longer_than_80_chars
-          '${red('[${_parsed.cmd}] with args [${_parsed.args.join(', ')}]')}'
-          ' failed with exitCode: $exitCode '
-          'workingDirectory: $workingDirectory',
-        ),
-      );
-    }
-  }
-
-  ///
-  /// processes both streams until they complete.
-  ///
-  void _waitForStreams() {
-    // Wait for both streams to complete
-    // ignore: discarded_futures
-    // TODO: restore - how do we ensure the output
-    //  from streams has been processed.
-    // waitForEx(Future.wait([_stdoutCompleter.future,
-    //    _stderrCompleter.future]));
-  }
-
-  // final _stdoutCompleter = Completer<bool>();
-  // final _stderrCompleter = Completer<bool>();
-
-  // void _wireStreams(ProcessSync process, Progress progress) {
-  //   /// handle stdout stream
-  //   process
-  //     ..listenStdout((data) {
-  //       (progress as ProgressImpl).addToStdout(data);
-  //     })
-  //     ..listenStderr((data) {
-  //       (progress as ProgressImpl).addToStderr(data);
-  //     });
-
-  //   // // handle stderr stream
-  //   // process.stderr
-  //   //     .transform(utf8.decoder)
-  //   //     .transform(const LineSplitter())
-  //   //     .listen((line) {
-  //   //   progress.addToStderr(line);
-  //   // }).onDone(() {
-  //   //   _stderrFlushed.complete();
-  //   //   _stderrCompleter.complete(true);
-  //   // });
   // }
 }
 
