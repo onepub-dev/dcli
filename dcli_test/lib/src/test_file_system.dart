@@ -138,11 +138,6 @@ class TestFileSystem {
       env['HOME'] = fsRoot;
       home = fsRoot;
 
-      /// Force PubCache path to point at the new file system.
-      // PubCache().pathTo = join(fsRoot, PubCache().cacheDir);
-
-      // rebuildPath();
-
       final isolateID = Service.getIsolateId(Isolate.current);
       print(green('Using TestFileSystem $fsRoot for Isolate: $isolateID'));
 
@@ -311,8 +306,7 @@ class TestFileSystem {
     }
 
     copyTree(
-      join(DartProject.self.pathToProjectRoot, '..', 'dcli_unit_tester', 'test',
-          'test_script'),
+      join(pathToPackageUnitTester, 'test', 'test_script'),
       testScriptPath,
     );
 
