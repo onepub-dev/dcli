@@ -234,43 +234,6 @@ class RunnableProcess {
     return progress;
   }
 
-  Progress runV2({
-    required bool terminal,
-    Progress? progress,
-    bool runInShell = false,
-    bool detached = false,
-    bool privileged = false,
-    bool nothrow = false,
-    bool extensionSearch = true,
-  }) {
-    progress ??= Progress.print();
-
-    try {
-      ProcessSettings(
-        cmdLine,
-        runInShell: runInShell,
-        detached: detached,
-        terminal: terminal,
-        privileged: privileged,
-        extensionSearch: extensionSearch,
-      );
-      if (terminal == true) {
-        /// we can't process io as the terminal
-        // has inherited the IO so we dont' see it.
-        // _waitForExit(processSync!, progress, nothrow: nothrow);
-      } else {
-        if (detached == false) {
-          processUntilExit(progress, nothrow: nothrow);
-        }
-        // else we are detached and won't see the child exit
-        // so no point waiting.
-      }
-    } finally {
-      (progress as ProgressImpl).close();
-    }
-    return progress;
-  }
-
   /// Starts a process  provides additional options to [run].
   ///
   /// This is an internal function and should not be exposed.
@@ -297,7 +260,6 @@ class RunnableProcess {
     bool nothrow = false,
     bool runInShell = false,
     bool detached = false,
-    bool waitForStart = true,
     bool terminal = false,
     bool privileged = false,
     bool extensionSearch = true,
@@ -358,7 +320,6 @@ class RunnableProcess {
         workingDirectory: workdir,
         runInShell: runInShell,
         detached: detached,
-        waitForStart: waitForStart,
         terminal: terminal,
         privileged: privileged,
         extensionSearch: extensionSearch,
@@ -398,97 +359,42 @@ class RunnableProcess {
         progress.exitCode = exitCode;
       }
     });
-
-    // // we wait for the process to start.
-    // // if the start fails we get a clean exception
-    // // by waiting here.
-    // if (waitForStart) {
-    //   _waitForStart();
-    // }
   }
 
-  // void _waitForStart() {
-  //   final complete = Completer<Process>();
-
-  //   unawaited(_fProcess
-  //       .then(complete.complete)
-  //       //ignore: avoid_types_on_closure_parameters
-  //       .catchError((Object e, StackTrace s) {
-  //     // 2 - No such file or directory
-  //     if (e is ProcessException && e.errorCode == 2) {
-  //       final ep = e;
-  //       e = RunException.withArgs(
-  //         ep.executable,
-  //         ep.arguments,
-  //         ep.errorCode,
-  //         'Could not find ${ep.executable} on the path.',
-  //       );
-  //     }
-  //     complete.completeError(e);
-  //   }));
-  //   waitForEx<Process>(complete.future);
-  // }
-
-  /// Waits for the process to exit
-  /// We use this method when we can't or don't
-  /// want to process IO.
-  /// The main use is when using start(terminal:true).
-  /// We don't have access to any IO so we just
-  /// have to wait for things to finish.
-  // int? _waitForExit(ProcessSync processSync, Progress progress,
-  //     {required bool nothrow}) {
-  //   final exitCode = processSync.waitForExitCode;
-  //   (progress as ProgressImpl).exitCode = exitCode;
-
-  //   if (exitCode != 0 && nothrow == false) {
-  //     throw RunException.withArgs(
-  //       _parsed.cmd,
-  //       _parsed.args,
-  //       exitCode,
-  //       'The command '
-  //       '${red('[${_parsed.cmd}] with args [${_parsed.args.join(', ')}]')} '
-  //       'failed with exitCode: $exitCode '
-  //       'workingDirectory: $workingDirectory',
-  //     );
-  //   }
-  //   return exitCode;
-  // }
-
   /// TODO: does this work now we have moved to mailboxes?
-  // void pipeTo(RunnableProcess stdin) {
-  //   // fProcess.then((stdoutProcess) {
-  //   //   stdin.fProcess.then<void>(
-  //   //       (stdInProcess) => stdoutProcess.stdout.pipe(stdInProcess.stdin));
+  void pipeTo(RunnableProcess stdin) {
+    // fProcess.then((stdoutProcess) {
+    //   stdin.fProcess.then<void>(
+    //       (stdInProcess) => stdoutProcess.stdout.pipe(stdInProcess.stdin));
 
-  //   // });
+    // });
 
-  //   /// this code was unawaited so pipeTo is probably not going to
-  //   /// work without a re-write
-  //   final lhsProcess = processSync;
-  //   final rhsProcess = stdin.processSync;
-  //   // lhs.stdout -> rhs.stdin
-  //   lhsProcess.stdout.listen(rhsProcess!.stdin.add);
-  //   // lhs.stderr -> rhs.stdin
-  //   lhsProcess.stderr
-  //       .listen(rhsProcess.stdin.add)
-  //       .onDone(rhsProcess.stdin.close);
+    /// this code was unawaited so pipeTo is probably not going to
+    /// work without a re-write
+    final lhsProcess = processSync;
+    final rhsProcess = stdin.processSync;
+    // lhs.stdout -> rhs.stdin
+    lhsProcess.stdout.listen(rhsProcess!.stdin.add);
+    // lhs.stderr -> rhs.stdin
+    lhsProcess.stderr
+        .listen(rhsProcess.stdin.add)
+        .onDone(rhsProcess.stdin.close);
 
-  //   // wire rhs to the console, but thats not our job.
-  //   // rhsProcess.stdout.listen(stdout.add);
-  //   // rhsProcess.stderr.listen(stderr.add);
+    // wire rhs to the console, but thats not our job.
+    // rhsProcess.stdout.listen(stdout.add);
+    // rhsProcess.stderr.listen(stderr.add);
 
-  //   // If the rhs process shutsdown before the lhs
-  //   // process we will get a broken pipe. We
-  //   // can safely ignore broken pipe errors (I think :).
-  //   rhsProcess.stdin.done.catchError(
-  //     //ignore: avoid_types_on_closure_parameters
-  //     (Object e) {
-  //       // forget broken pipe after rhs terminates before lhs
-  //     },
-  //     test: (e) => e is SocketException
-  //        && e.osError!.message == 'Broken pipe',
-  //   );
-  // }
+    // If the rhs process shutsdown before the lhs
+    // process we will get a broken pipe. We
+    // can safely ignore broken pipe errors (I think :).
+    rhsProcess.stdin.done.catchError(
+      //ignore: avoid_types_on_closure_parameters
+      (Object e) {
+        // forget broken pipe after rhs terminates before lhs
+      },
+      test: (e) => e is SocketException && e.osError!.message == 'Broken pipe',
+    );
+  }
 
   /// Unlike [processUntilExit] this method wires the streams and then returns
   /// immediately.
