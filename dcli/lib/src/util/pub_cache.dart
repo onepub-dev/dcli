@@ -171,8 +171,13 @@ class PubCache {
       join(pathToDartLang, '$packageName-$version');
 
   /// Returns true if the package is installed in pub-cache
-  bool isInstalled(String packageName) =>
-      findPrimaryVersion(packageName) != null;
+  bool isInstalled(String packageName) {
+    try {
+      return findPrimaryVersion(packageName) != null;
+    } on core.FindException {
+      return false;
+    }
+  }
 
   /// Finds and returns the latest (non-pre-release) version installed into pub
   /// cache for the given package.
@@ -286,7 +291,7 @@ class PubCache {
 
     /// run pub global list to see if dcli is run from a local path.
     final line = DartSdk()
-        .runPub(args: ['global', 'list'], progress: Progress.capture())
+        . runPub(args: ['global', 'list'], progress: Progress.capture())
         .lines
         .firstWhere((line) => line.startsWith(packageName),
             orElse: () => notFound);

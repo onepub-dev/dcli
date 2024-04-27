@@ -177,9 +177,7 @@ class DartSdk {
       );
     }
 
-    process
-      ..start(extensionSearch: false, progress: progress! as ProgressImpl)
-      ..processUntilExit(progress, nothrow: false);
+    process.start(extensionSearch: false, progress: progress! as ProgressImpl);
   }
 
   /// returns the relative path to the packges configuration file.

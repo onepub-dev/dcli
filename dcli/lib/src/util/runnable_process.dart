@@ -28,16 +28,16 @@ import 'parse_cli_command.dart';
 /// CLI applications should, by convention, write error messages
 /// out to stderr and expected output to stdout.
 ///
-/// [line] the line to write to stderr.
-void printerr(String? line) {
+/// Calls toString on [object] and writes it to stderr.
+void printerr(Object? object) {
+  final line = '$object';
+
   /// Co-operate with runDCliZone
   final overloaded = Zone.current[capturePrinterrKey] as CaptureZonePrintErr?;
-  if (line != null) {
-    if (overloaded != null) {
-      overloaded(line);
-    } else {
-      stderr.writeln(line);
-    }
+  if (overloaded != null) {
+    overloaded(line);
+  } else {
+    stderr.writeln(line);
   }
 }
 
@@ -434,102 +434,6 @@ class RunnableProcess {
   //   // await _streamsFlushed;
   //   progress.close();
   // }
-  // }
-
-  // Monitors the process until it exists.
-  // If a LineAction exists we call
-  // line action each time the process emmits a line.
-  /// The [nothrow] argument is EXPERIMENTAL
-  void processUntilExit(Progress? progress, {required bool nothrow}) {
-    final exited = Completer<bool>();
-
-    final progress0 = (progress ?? Progress.devNull()) as ProgressImpl;
-
-    // _wireStreams(processSync!, progress0);
-
-    /// this section and the next appears to be duplicates
-    /// moving data to the progress stream.
-    /// The problem is how do we know the progress stream
-    /// has been emptied?
-    /// - we could put a counter on it and wait for it to
-    /// match the number of rows we added.
-    /// How do we wait. If we do it synchronously then the data
-    /// on the other side of the stream can't be processed.
-    /// It feels like at some point we need to be async when dealing with
-    /// streams.
-    /// For none streams we can synchronous.
-    ///
-    /// Review the pump - if it pulled data then iot might work.
-    // while ((data = processSync!.readStdout()) != null) {
-    //   progress0.addToStdout(data!);
-    // }
-
-    // processSync!.listenStdout(progress0.addToStdout);
-    // processSync!.listenStderr(progress0.addToStderr);
-
-    // // Wait for the process to finish
-    // final exitCode = processSync!.waitForExitCode;
-
-    // CONSIDER: do we pass the exitCode to ForEach or just throw?
-    // If the start failed we don't want to rethrow
-    // as the exception will be thrown async and it will
-    // escape as an unhandled exception and stop the whole script
-    progress0.exitCode = exitCode;
-
-    /// the process may have exited but the streams are likely to still
-    /// contain data.
-    _waitForStreams();
-    if (exitCode != 0 && nothrow == false) {
-      exited.completeError(
-        RunException.withArgs(
-          _parsed.cmd,
-          _parsed.args,
-          exitCode,
-          'The command '
-          // ignore: lines_longer_than_80_chars
-          '${red('[${_parsed.cmd}] with args [${_parsed.args.join(', ')}]')}'
-          ' failed with exitCode: $exitCode '
-          'workingDirectory: $workingDirectory',
-        ),
-      );
-    }
-  }
-
-  ///
-  /// processes both streams until they complete.
-  ///
-  void _waitForStreams() {
-    // Wait for both streams to complete
-    // ignore: discarded_futures
-    // TODO: restore - how do we ensure the output
-    //  from streams has been processed.
-    // waitForEx(Future.wait([_stdoutCompleter.future,
-    //    _stderrCompleter.future]));
-  }
-
-  // final _stdoutCompleter = Completer<bool>();
-  // final _stderrCompleter = Completer<bool>();
-
-  // void _wireStreams(ProcessSync process, Progress progress) {
-  //   /// handle stdout stream
-  //   process
-  //     ..listenStdout((data) {
-  //       (progress as ProgressImpl).addToStdout(data);
-  //     })
-  //     ..listenStderr((data) {
-  //       (progress as ProgressImpl).addToStderr(data);
-  //     });
-
-  //   // // handle stderr stream
-  //   // process.stderr
-  //   //     .transform(utf8.decoder)
-  //   //     .transform(const LineSplitter())
-  //   //     .listen((line) {
-  //   //   progress.addToStderr(line);
-  //   // }).onDone(() {
-  //   //   _stderrFlushed.complete();
-  //   //   _stderrCompleter.complete(true);
-  //   // });
   // }
 }
 

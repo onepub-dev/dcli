@@ -16,8 +16,8 @@ const String capturePrinterrKey = 'printerr';
 
 /// Run code in a zone which traps calls to [print] and [printerr]
 /// redirecting them to the passed progress.
-/// If no [progress] is passed then then both print and printerr
-/// output is surpressed.
+/// If no [progress] is passed then the output from print and printerr
+/// is surpressed.
 Future<Progress> capture<R>(Future<R> Function() action,
     {Progress? progress}) async {
   final progressImpl = (progress ?? Progress.devNull()) as ProgressImpl;

@@ -3,10 +3,11 @@ version: 0.0.1
 description: A sample command-line application that installs and runs mailhog
 environment:
   sdk: '>=3.0.0 <4.0.0'
+  flutter:
 dependencies:
   args: ^2.3.1
-  dcli: 4.0.1-alpha.11
-  dcli_core: 4.0.1-alpha.11
+  dcli: 4.0.1-beta.3
+  dcli_core: 4.0.1-beta.3
   http: ^0.13.4
   path: ^1.8.1
   settings_yaml: ^8.1.0-alpha.2

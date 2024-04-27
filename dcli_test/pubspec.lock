@@ -135,28 +135,28 @@ packages:
       path: "../dcli"
       relative: true
     source: path
-    version: "4.0.1-beta.3"
+    version: "4.0.1-beta.4"
   dcli_common:
     dependency: "direct main"
     description:
       path: "../dcli_common"
       relative: true
     source: path
-    version: "4.0.1-beta.3"
+    version: "4.0.1-beta.4"
   dcli_core:
     dependency: "direct main"
     description:
       path: "../dcli_core"
       relative: true
     source: path
-    version: "4.0.1-beta.3"
+    version: "4.0.1-beta.4"
   dcli_terminal:
     dependency: "direct overridden"
     description:
       path: "../dcli_terminal"
       relative: true
     source: path
-    version: "4.0.1-beta.3"
+    version: "4.0.1-beta.4"
   equatable:
     dependency: transitive
     description:
@@ -411,7 +411,7 @@ packages:
       path: "../../settings_yaml"
       relative: true
     source: path
-    version: "8.1.0-beta.1"
+    version: "8.1.0-alpha.2"
   shelf:
     dependency: transitive
     description:

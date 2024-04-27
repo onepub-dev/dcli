@@ -45,7 +45,7 @@ Future<Isolate> _startIsolate(ProcessSettings processSettings,
         Mailbox mailboxFromPrimaryIsolate, Mailbox mailboxToPrimaryIsolate) =>
     Isolate.spawn<List<Sendable<Mailbox>>>((mailboxes) async {
       // await mailboxToPrimaryIsolate.postMessage(Message.exit(1));
-      final mailboxFromPrimaryIsolate = mailboxes.first.materialize();
+      // final mailboxFromPrimaryIsolate = mailboxes.first.materialize();
       final mailboxToPrimaryIsolate = mailboxes.last.materialize();
 
       try {

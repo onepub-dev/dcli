@@ -117,7 +117,7 @@ class DartProject {
       /// and when passed is probably the most relable means of
       /// determining the project directory.
       return _current ??= DartProject.fromPath(
-          dirname(Uri.parse(io.Platform.packageConfig!).path));
+          dirname(dirname(Uri.parse(io.Platform.packageConfig!).path)));
     }
     final script = DartScript.self;
     var startFrom = '.';
