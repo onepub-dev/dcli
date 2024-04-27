@@ -362,39 +362,39 @@ class RunnableProcess {
   }
 
   /// TODO: does this work now we have moved to mailboxes?
-  void pipeTo(RunnableProcess stdin) {
-    // fProcess.then((stdoutProcess) {
-    //   stdin.fProcess.then<void>(
-    //       (stdInProcess) => stdoutProcess.stdout.pipe(stdInProcess.stdin));
+  // void pipeTo(RunnableProcess stdin) {
+  //   // fProcess.then((stdoutProcess) {
+  //   //   stdin.fProcess.then<void>(
+  //   //       (stdInProcess) => stdoutProcess.stdout.pipe(stdInProcess.stdin));
 
-    // });
+  //   // });
 
-    /// this code was unawaited so pipeTo is probably not going to
-    /// work without a re-write
-    final lhsProcess = processSync;
-    final rhsProcess = stdin.processSync;
-    // lhs.stdout -> rhs.stdin
-    lhsProcess.stdout.listen(rhsProcess!.stdin.add);
-    // lhs.stderr -> rhs.stdin
-    lhsProcess.stderr
-        .listen(rhsProcess.stdin.add)
-        .onDone(rhsProcess.stdin.close);
+  //   /// this code was unawaited so pipeTo is probably not going to
+  //   /// work without a re-write
+  //   final lhsProcess = processSync;
+  //   final rhsProcess = stdin.processSync;
+  //   // lhs.stdout -> rhs.stdin
+  //   lhsProcess.stdout.listen(rhsProcess!.stdin.add);
+  //   // lhs.stderr -> rhs.stdin
+  //   lhsProcess.stderr
+  //       .listen(rhsProcess.stdin.add)
+  //       .onDone(rhsProcess.stdin.close);
 
-    // wire rhs to the console, but thats not our job.
-    // rhsProcess.stdout.listen(stdout.add);
-    // rhsProcess.stderr.listen(stderr.add);
+  //   // wire rhs to the console, but thats not our job.
+  //   // rhsProcess.stdout.listen(stdout.add);
+  //   // rhsProcess.stderr.listen(stderr.add);
 
-    // If the rhs process shutsdown before the lhs
-    // process we will get a broken pipe. We
-    // can safely ignore broken pipe errors (I think :).
-    rhsProcess.stdin.done.catchError(
-      //ignore: avoid_types_on_closure_parameters
-      (Object e) {
-        // forget broken pipe after rhs terminates before lhs
-      },
-      test: (e) => e is SocketException && e.osError!.message == 'Broken pipe',
-    );
-  }
+  //   // If the rhs process shutsdown before the lhs
+  //   // process we will get a broken pipe. We
+  //   // can safely ignore broken pipe errors (I think :).
+  //   rhsProcess.stdin.done.catchError(
+  //     //ignore: avoid_types_on_closure_parameters
+  //     (Object e) {
+  //       // forget broken pipe after rhs terminates before lhs
+  //     },
+  //     test: (e) => e is SocketException && e.osError!.message == 'Broken pipe',
+  //   );
+  // }
 
   /// Unlike [processUntilExit] this method wires the streams and then returns
   /// immediately.
