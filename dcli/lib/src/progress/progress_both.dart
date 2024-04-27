@@ -77,7 +77,7 @@ abstract class ProgressBoth implements Progress {
   List<String> get lines;
 }
 
-class _ProgressiveLineSplitter {
+class ProgressiveLineSplitter {
   final lines = <String>[];
 
   final currentLine = StringBuffer();
