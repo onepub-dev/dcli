@@ -523,22 +523,22 @@ extension StringAsProcess on String {
         .transform(const LineSplitter());
   }
 
-  /// Experimental - DO NOT USE
-  Sink<List<int>> get sink {
-    final lhsRunnable = RunnableProcess.fromCommandLine(this)
-      ..start(
-          waitForStart: false, progress: Progress.devNull() as ProgressImpl);
-    return lhsRunnable.sink;
-  }
+  // /// Experimental - DO NOT USE
+  // Sink<List<int>> get sink {
+  //   final lhsRunnable = RunnableProcess.fromCommandLine(this)
+  //     ..start(
+  //         waitForStart: false, progress: Progress.devNull() as ProgressImpl);
+  //   return lhsRunnable.sink;
+  // }
 
-  /// Experimental - DO NOT USE
-  RunnableProcess get process {
-    final process = RunnableProcess.fromCommandLine(this)
-      ..start(
-          waitForStart: false, progress: Progress.devNull() as ProgressImpl);
+  // /// Experimental - DO NOT USE
+  // RunnableProcess get process {
+  //   final process = RunnableProcess.fromCommandLine(this)
+  //     ..start(
+  //         waitForStart: false, progress: Progress.devNull() as ProgressImpl);
 
-    return process;
-  } // Treat the [this]  as the name of a file and
+  //   return process;
+  // } // Treat the [this]  as the name of a file and
 
   /// Truncates and Writes [line] to the file terminated by [newline].
   /// If [newline] is null or isn't passed then the platform
