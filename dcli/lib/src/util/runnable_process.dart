@@ -28,16 +28,16 @@ import 'parse_cli_command.dart';
 /// CLI applications should, by convention, write error messages
 /// out to stderr and expected output to stdout.
 ///
-/// [line] the line to write to stderr.
-void printerr(String? line) {
+/// Calls toString on [object] and writes it to stderr.
+void printerr(Object? object) {
+  final line = '$object';
+
   /// Co-operate with runDCliZone
   final overloaded = Zone.current[capturePrinterrKey] as CaptureZonePrintErr?;
-  if (line != null) {
-    if (overloaded != null) {
-      overloaded(line);
-    } else {
-      stderr.writeln(line);
-    }
+  if (overloaded != null) {
+    overloaded(line);
+  } else {
+    stderr.writeln(line);
   }
 }
 
