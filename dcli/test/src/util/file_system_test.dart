@@ -10,7 +10,8 @@ library;
 import 'dart:io';
 
 import 'package:dcli/dcli.dart';
-import 'package:path/path.dart';
+import 'package:dcli/src/util/file_system.dart';
+import 'package:path/path.dart' hide equals;
 import 'package:test/test.dart';
 
 void main() {
@@ -44,4 +45,8 @@ void main() {
     },
     skip: true,
   );
+
+  test('available space', () {
+    expect(availableSpace('.'), isNot(equals(0)));
+  });
 }
