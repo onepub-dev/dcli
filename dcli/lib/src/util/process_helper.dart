@@ -151,19 +151,27 @@ class ProcessHelper {
         continue;
       }
 
-      // we have to deal with files that contain spaces in their name.
-      final exe = parts.sublist(0, parts.length - 3).join(' ');
-      final parentPid = int.tryParse(parts[parts.length - 2]) ?? -1;
-      final processPid = int.tryParse(parts[parts.length - 1]) ?? -1;
+      final r = parseWMICLine(process);
 
       final parent = _WindowsParentProcess(
-        path: exe,
-        parentPid: parentPid,
-        processPid: processPid,
+        path: r.exe,
+        parentPid: r.parentPid,
+        processPid: r.processPid,
       );
       parents.add(parent);
     }
     return parents;
+  }
+
+  @visibleForTesting
+ static ({String exe, int parentPid, int processPid}) parseWMICLine(String process) {
+    final parts = process.split(' ');
+    // we have to deal with files that contain spaces in their name.
+    final exe = parts.sublist(0, parts.length - 2).join(' ');
+    final parentPid = int.tryParse(parts[parts.length - 2]) ?? -1;
+    final processPid = int.tryParse(parts[parts.length - 1]) ?? -1;
+
+    return (exe: exe, parentPid: parentPid, processPid: processPid);
   }
 
   bool _windowsIsrunning(int? lpid) {
