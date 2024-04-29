@@ -127,8 +127,8 @@ void regSetString(
   final pValue = TEXT(value);
 
   try {
-    _regSetValue(hkey, subKey, valueName, pValue.cast(), (value.length + 1) * 2,
-        REG_SZ,
+    _regSetValue(
+        hkey, subKey, valueName, pValue.cast(), (value.length + 1) * 2, REG_SZ,
         accessRights: accessRights);
   } finally {
     calloc.free(pValue);
@@ -196,8 +196,8 @@ void regSetDWORD(
   final pValue = calloc<Uint32>()..value = value;
 
   try {
-    _regSetValue(hkey, subKey, valueName, pValue.cast(), sizeOf<Uint32>(),
-        REG_DWORD,
+    _regSetValue(
+        hkey, subKey, valueName, pValue.cast(), sizeOf<Uint32>(), REG_DWORD,
         accessRights: accessRights);
   } finally {
     calloc.free(pValue);
@@ -241,8 +241,7 @@ void regDeleteKey(
   final pSubKey = TEXT(subKey);
 
   try {
-    final result =
-        RegDeleteKeyEx(hkey, pSubKey, KEY_WOW64_64KEY, 0);
+    final result = RegDeleteKeyEx(hkey, pSubKey, KEY_WOW64_64KEY, 0);
     if (result != ERROR_SUCCESS) {
       throw WindowsException(HRESULT_FROM_WIN32(result));
     }
@@ -290,12 +289,10 @@ String regGetExpandString(
 }) {
   late final String value;
 
-  var flags = REG_SZ;
+  var flags = RRF_RT_REG_EXPAND_SZ | RRF_RT_REG_SZ;
 
   if (expand == false) {
-    // flags = RRF_NOEXPAND;
-    flags =
-        RRF_RT_REG_EXPAND_SZ | RRF_NOEXPAND;
+    flags |= RRF_NOEXPAND;
   }
 
   final pResult = _regGetValue(
@@ -548,8 +545,7 @@ bool regKeyExists(
   final pSubKey = TEXT(subKey);
 
   try {
-    final result =
-        RegOpenKeyEx(hkey, pSubKey, 0, KEY_QUERY_VALUE, pOpenKey);
+    final result = RegOpenKeyEx(hkey, pSubKey, 0, KEY_QUERY_VALUE, pOpenKey);
     if (result == ERROR_SUCCESS) {
       exists = true;
       RegCloseKey(pOpenKey.value);
