@@ -392,7 +392,8 @@ class RunnableProcess {
   //     (Object e) {
   //       // forget broken pipe after rhs terminates before lhs
   //     },
-  //     test: (e) => e is SocketException && e.osError!.message == 'Broken pipe',
+  //     test: (e) => e is SocketException && e.osError!.message
+  //          == 'Broken pipe',
   //   );
   // }
 

@@ -11,7 +11,7 @@ import 'package:dcli_core/dcli_core.dart' as core;
 
 import '../functions/run.dart' as cmd;
 import '../progress/progress.dart';
-import '../progress/progress_impl.dart';
+// import '../progress/progress_impl.dart';
 import 'file_sync.dart';
 import 'parser.dart';
 import 'runnable_process.dart';
