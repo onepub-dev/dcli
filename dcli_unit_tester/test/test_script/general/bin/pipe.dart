@@ -4,32 +4,32 @@
  * Written by Brett Sutton <bsutton@onepub.dev>, Jan 2022
  */
 
-import 'dart:convert';
+// import 'dart:convert';
 
-import 'package:dcli/dcli.dart';
+// import 'package:dcli/dcli.dart';
 
 void main(List<String> args) {
-  final ls = 'ls'.process;
-  final head = 'head'.process;
-  final headStream = head.stream;
-  // stdout.addStream(head.stream);
+  // final ls = 'ls'.process;
+  // final head = 'head'.process;
+  // final headStream = head.stream;
+  // // stdout.addStream(head.stream);
 
-  ls.stream
-      .transform(utf8.decoder)
-      .transform(const LineSplitter())
-      .map((line) {
-        print(line);
-        return '1: line';
-      })
-      .transform(utf8.encoder)
-      .listen((line) => head.sink.add(line), onDone: () {});
+  // ls.stream
+  //     .transform(utf8.decoder)
+  //     .transform(const LineSplitter())
+  //     .map((line) {
+  //       print(line);
+  //       return '1: line';
+  //     })
+  //     .transform(utf8.encoder)
+  //     .listen((line) => head.sink.add(line), onDone: () {});
 
-  headStream
-      .transform(utf8.decoder)
-      .transform(const LineSplitter())
-      .listen(print, onDone: () {
-    head.sink.close();
-  });
+  // headStream
+  //     .transform(utf8.decoder)
+  //     .transform(const LineSplitter())
+  //     .listen(print, onDone: () {
+  //   head.sink.close();
+  // });
 
   print('post ils');
 }
