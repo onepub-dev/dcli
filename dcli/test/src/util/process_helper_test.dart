@@ -80,4 +80,23 @@ void main() {
 
   //   });
   // });
+
+  test('line splitter', () {
+    const process = r'C:\windows\system32\svchost.exe 1104 2128';
+
+    var r = ProcessHelper.parseWMICLine(process);
+
+    expect(r.exe, equals(r'C:\windows\system32\svchost.exe'));
+    expect(r.parentPid, equals(1104));
+    expect(r.processPid, equals(2128));
+
+    /// process with space in its name.
+    const process2 = r'C:\windows\system32\svchost name.exe 1104 2128';
+
+    r = ProcessHelper.parseWMICLine(process2);
+
+    expect(r.exe, equals(r'C:\windows\system32\svchost name.exe'));
+    expect(r.parentPid, equals(1104));
+    expect(r.processPid, equals(2128));
+  });
 }
