@@ -76,3 +76,44 @@ abstract class ProgressBoth implements Progress {
   @override
   List<String> get lines;
 }
+
+class ProgressiveLineSplitter {
+  final lines = <String>[];
+
+  final currentLine = StringBuffer();
+  void addData(List<int> intList) {
+    var lastWasCR = false;
+
+    for (final value in intList) {
+      if (lastWasCR) {
+        if (value == '\n'.codeUnitAt(0)) {
+          // If last was CR and current is LF, terminate the line
+          lines.add(currentLine.toString());
+          currentLine.clear();
+        } else {
+          // If last was CR but current is not LF, add a new line
+          lines.add(currentLine.toString());
+          currentLine
+            ..clear()
+            ..writeCharCode(value);
+        }
+        lastWasCR = false;
+      } else {
+        if (value == '\r'.codeUnitAt(0)) {
+          lastWasCR = true;
+        } else if (value == '\n'.codeUnitAt(0)) {
+          // If current is LF, terminate the line
+          lines.add(currentLine.toString());
+          currentLine.clear();
+        } else {
+          // Otherwise, append the character
+          currentLine.writeCharCode(value);
+        }
+      }
+    }
+
+    if (currentLine.isNotEmpty) {
+      lines.add(currentLine.toString());
+    }
+  }
+}

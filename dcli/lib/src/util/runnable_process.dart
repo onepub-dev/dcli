@@ -260,7 +260,6 @@ class RunnableProcess {
     bool nothrow = false,
     bool runInShell = false,
     bool detached = false,
-    bool waitForStart = true,
     bool terminal = false,
     bool privileged = false,
     bool extensionSearch = true,
@@ -321,7 +320,6 @@ class RunnableProcess {
         workingDirectory: workdir,
         runInShell: runInShell,
         detached: detached,
-        waitForStart: waitForStart,
         terminal: terminal,
         privileged: privileged,
         extensionSearch: extensionSearch,
@@ -394,8 +392,7 @@ class RunnableProcess {
   //     (Object e) {
   //       // forget broken pipe after rhs terminates before lhs
   //     },
-  //     test: (e) => e is SocketException
-  //        && e.osError!.message == 'Broken pipe',
+  //     test: (e) => e is SocketException && e.osError!.message == 'Broken pipe',
   //   );
   // }
 

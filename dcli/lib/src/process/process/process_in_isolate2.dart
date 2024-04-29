@@ -73,6 +73,13 @@ Future<Isolate> _startIsolate(ProcessSettings processSettings,
           ..listen((message) async {
             _logIsolate(' recieved message');
             if (message is List<int> || message is String) {
+              // TODO: I don't think this is actually being used.
+              // As the isolate runs in the same process it still has
+              // direct access to stdin so we don't need to pass stdin
+              // across the isolate barrier.
+              // The only question is if we have scnenarios where we want
+              // to artifically send stdin across this maybing in a piping
+              // scenario?
               // We received bytes from the primary isolate to write into stdin.
               if (message is String) {
                 message = utf8.encode(message);
