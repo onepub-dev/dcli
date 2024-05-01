@@ -390,6 +390,24 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "1.0.0"
+  runtime_named_locks:
+    dependency: transitive
+    description:
+      path: "."
+      ref: aot_monorepo_compat
+      resolved-ref: "3acd49b3fc0821e114abdd0e5461ccbb567faf89"
+      url: "https://github.com/open-runtime/named_locks"
+    source: git
+    version: "0.0.1"
+  runtime_native_semaphores:
+    dependency: transitive
+    description:
+      path: "."
+      ref: aot_monorepo_compat
+      resolved-ref: "6856ec500dbfbd19d7360bf8abd2f227916888d2"
+      url: "https://github.com/open-runtime/native_semaphores"
+    source: git
+    version: "0.0.5"
   scope:
     dependency: "direct main"
     description:

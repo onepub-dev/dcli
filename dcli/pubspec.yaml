@@ -41,6 +41,10 @@ dependencies:
   validators2: ^5.0.0
   win32: ">=4.1.4 <5.4.0"
   yaml: ^3.0.0
+  runtime_named_locks:
+    git:
+      url: https://github.com/open-runtime/named_locks
+      ref: aot_monorepo_compat
 dev_dependencies:
   dcli_test: any
   hex: ^0.2.0

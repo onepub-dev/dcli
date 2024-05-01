@@ -57,12 +57,11 @@ Future<void> main(List<String> args) async {
   // ignore: discarded_futures
   await capture(() async {
     // warm up the dcli project
-    await DartProject.self.warmup();
+    DartProject.self.warmup();
   }, progress: Progress.printStdErr());
 
   /// warm up all test packages.
-  for (final pubspec
-      in find('pubspec.yaml', workingDirectory: projectRoot).toList()) {
+  for (final pubspec in find('pubspec.yaml', workingDirectory: projectRoot).toList()) {
     if (DartSdk().isPubGetRequired(dirname(pubspec))) {
       print('Running pub get in ${dirname(pubspec)}');
       await capture(() async {
