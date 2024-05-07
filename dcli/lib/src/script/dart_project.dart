@@ -231,7 +231,7 @@ class DartProject {
   void warmup({bool background = false, bool upgrade = false}) {
     runtime.NamedLock.guard(
       name: _lockName,
-      execution: runtime.ExecutionCall<void>(
+      execution: runtime.ExecutionCall<void, PubGetException>(
         callable: () {
           try {
             if (background) {
@@ -279,7 +279,7 @@ class DartProject {
   void clean() {
     runtime.NamedLock.guard(
       name: _lockName,
-      execution: runtime.ExecutionCall<void>(
+      execution: runtime.ExecutionCall<void, PubGetException>(
         callable: () {
           try {
             find(
@@ -369,7 +369,7 @@ class DartProject {
   void _pubget() {
     runtime.NamedLock.guard(
       name: _lockName,
-      execution: runtime.ExecutionCall<void>(callable: () {
+      execution: runtime.ExecutionCall<void, PubGetException>(callable: () {
         final pubGet = PubGet(this);
         if (Shell.current.isSudo) {
           /// bugger we just screwed the cache permissions so lets fix them.
@@ -388,19 +388,20 @@ class DartProject {
   ///
   /// This is normally done when the project cache is first
   /// created and when a script's pubspec changes.
-  _pubupgrade() {
+  void _pubupgrade() {
     // Refactor with named lock guard
     runtime.NamedLock.guard(
-        name: _lockName,
-        execution: runtime.ExecutionCall<void>(callable: () {
-          final pubUpgrade = PubUpgrade(this);
-          if (Shell.current.isSudo) {
-            /// bugger we just screwed the cache permissions so lets fix them.
-            'chmod -R ${env['USER']}:${env['USER']} ${PubCache().pathTo}'.run;
-            throw DartProjectException('You must compile your script before running it under sudo');
-          }
-          pubUpgrade.run(compileExecutables: false);
-        }));
+      name: _lockName,
+      execution: runtime.ExecutionCall<void, PubGetException>(callable: () {
+        final pubUpgrade = PubUpgrade(this);
+        if (Shell.current.isSudo) {
+          /// bugger we just screwed the cache permissions so lets fix them.
+          'chmod -R ${env['USER']}:${env['USER']} ${PubCache().pathTo}'.run;
+          throw DartProjectException('You must compile your script before running it under sudo');
+        }
+        pubUpgrade.run(compileExecutables: false);
+      }),
+    );
   }
 
   // TODO(bsutton): this is still risky as pub get does a test to see if
