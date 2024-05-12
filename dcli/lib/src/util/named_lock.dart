@@ -40,7 +40,7 @@ class NamedLock {
     // TODO perhaps we keep this in tact and end up doing a hash on it to create the name?
     String? lockPath,
     String description = '',
-    String name = 'dcli.lock.name',
+    String name = 'dcli.lck',
     Duration timeout = const Duration(seconds: 30),
   })  : _timeout = timeout,
         _description = description, _nameWithSuffix = [name, suffix].join('.');
