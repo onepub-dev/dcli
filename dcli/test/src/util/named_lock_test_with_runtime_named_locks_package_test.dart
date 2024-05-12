@@ -21,10 +21,6 @@ import 'package:runtime_named_locks/runtime_named_locks.dart';
 import 'package:test/test.dart';
 
 void main() {
-  test('lock path', () {
-    final lockPath = join(rootPath, Directory.systemTemp.path, 'dcli', 'locks');
-    print(lockPath);
-  });
 
   test('unsafe exception catch', () async {
     final execution = ExecutionCall<void, DCliException>(

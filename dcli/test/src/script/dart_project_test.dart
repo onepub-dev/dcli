@@ -7,6 +7,8 @@ library;
  * Written by Brett Sutton <bsutton@onepub.dev>, Jan 2022
  */
 
+import 'dart:io';
+
 import 'package:dcli/dcli.dart';
 import 'package:dcli_core/dcli_core.dart' as core;
 import 'package:path/path.dart' hide equals;
@@ -33,8 +35,9 @@ void main() {
     test('Create project full with --template', () async {
       //    await TestFileSystem().withinZone((fs) async {
 //        InstallCommand().initTemplates();
+    print(Directory.current.parent.path);
 
-      final dcliRoot = dirname(DartProject.self.pathToProjectRoot);
+      final dcliRoot = Directory.current.parent.path;
 
       await core.withTempDirAsync((tempDir) async {
         const projectName = 'full_test';
