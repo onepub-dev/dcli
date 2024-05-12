@@ -34,22 +34,27 @@ jobs:
 
       - name: Run Specific Dart Project Test - dcli/test/src/script/dart_project_test.test
         run: |
+          cd dcli
           dart test /test/src/script/dart_project_test.dart
 
       - name: Run Specific [OLD] NamedLocks Test - dcli/test/src/util/named_locks_test.test
         run: |
+          cd dcli
           dart test /test/src/util/named_locks_test.dart
 
       - name: Run Specific [NEW] NamedLocks Test - dcli/test/src/util/named_lock_test_with_runtime_named_locks_package_test.dart
         run: |
+          cd dcli
           dart test /test/src/util/named_lock_test_with_runtime_named_locks_package_test.dart
 
       - name: Run Tests in test/src/script/commands
         run: |
+          cd dcli
           dart test /test/src/script/commands
 
       - name: Run All Tests
         run: |
+          cd dcli
           dart test .
       
           
