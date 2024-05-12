@@ -1,8 +1,8 @@
 name: Release executables for Windows
 
 on:
-  push:
-   
+  workflow_dispatch:
+
 jobs:
   build:
 

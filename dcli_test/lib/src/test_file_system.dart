@@ -341,7 +341,7 @@ dependency_overrides:
 
       // ignore: discarded_futures
       await capture(() async {
-        await DartProject.fromPath(dirname(pathToPubspec))
+        DartProject.fromPath(dirname(pathToPubspec))
             .warmup(upgrade: true);
       }, progress: Progress.printStdErr());
     });
@@ -375,7 +375,7 @@ dependency_overrides:
       }
 
       await capture(() async {
-        await DartProject.fromPath(pathToTools).warmup();
+        DartProject.fromPath(pathToTools).warmup();
       }, progress: Progress.printStdErr());
 
       await NamedLock(suffix: 'compile').withLock(() async {

@@ -185,10 +185,10 @@ packages:
     dependency: "direct main"
     description:
       name: http
-      sha256: "5895291c13fa8a3bd82e76d5627f69e0d85ca6a30dcac95c4ea19a5d555879c2"
+      sha256: "761a297c042deedc1ffbb156d6e2af13886bb305c2a343a4d972504cd67dd938"
       url: "https://pub.dev"
     source: hosted
-    version: "0.13.6"
+    version: "1.2.1"
   http_parser:
     dependency: transitive
     description:
@@ -309,6 +309,22 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "1.0.0"
+  runtime_named_locks:
+    dependency: transitive
+    description:
+      name: runtime_named_locks
+      sha256: cf03fc169dedd516a031be2ac95ef8c4d3446c22819ec92c6756e3fd926a059c
+      url: "https://pub.dev"
+    source: hosted
+    version: "1.0.0-beta.3"
+  runtime_native_semaphores:
+    dependency: transitive
+    description:
+      name: runtime_native_semaphores
+      sha256: "6703b07c01a2856bb5dc8d12e4e94e05cfcfcc35eddfb705a1de62140a5cdd14"
+      url: "https://pub.dev"
+    source: hosted
+    version: "1.0.0-beta.4"
   scope:
     dependency: transitive
     description:
@@ -320,10 +336,11 @@ packages:
   settings_yaml:
     dependency: "direct main"
     description:
-      path: "../../../../settings_yaml"
-      relative: true
-    source: path
-    version: "8.1.0-beta.1"
+      name: settings_yaml
+      sha256: abfd2a6a2c48883154ffe11ddd4f72ce43cc2d7f030ae060f7237fb3b2bddbf7
+      url: "https://pub.dev"
+    source: hosted
+    version: "8.1.0-alpha.2"
   source_span:
     dependency: transitive
     description:
@@ -420,6 +437,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "5.0.0"
+  web:
+    dependency: transitive
+    description:
+      name: web
+      sha256: "97da13628db363c635202ad97068d47c5b8aa555808e7a9411963c533b449b27"
+      url: "https://pub.dev"
+    source: hosted
+    version: "0.5.1"
   win32:
     dependency: transitive
     description:
@@ -438,4 +463,3 @@ packages:
     version: "3.1.2"
 sdks:
   dart: ">=3.3.0 <4.0.0"
-  flutter: any

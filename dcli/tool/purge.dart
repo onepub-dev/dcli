@@ -16,6 +16,6 @@ import 'package:dcli/dcli.dart';
 /// For details on installing dcli.
 ///
 
-void main(List<String> args) async {
-  await DartProject.fromPath('.').clean();
+void main(List<String> args) {
+  DartProject.fromPath('.').clean();
 }
