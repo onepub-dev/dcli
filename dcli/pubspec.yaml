@@ -41,7 +41,7 @@ dependencies:
   validators2: ^5.0.0
   win32: ">=4.1.4 <5.4.0"
   yaml: ^3.0.0
-  runtime_named_locks: ^1.0.0-beta.3
+  runtime_named_locks: ^1.0.0-beta.6
 
 dev_dependencies:
   dcli_test: any
