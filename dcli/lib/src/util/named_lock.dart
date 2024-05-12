@@ -48,9 +48,14 @@ class NamedLock {
   })  : _timeout = timeout,
         _description = description, _name = name;
 
-  /// The name of the lock which in-turn is used to create
-  /// a native named semaphore under the hood.
+  /// The name of the lock which is used to create the a native named semaphore under the hood.
   final String _name;
+
+  /// The tcp socket  port we use to implement
+  /// a hard lock. A port can only be opened once
+  /// so its the perfect way to create a lock that works
+  /// across processes and isolates.
+  final int port = 9003;
 
   /// Path to the directory where the lock files are stored.
   late String _lockPath;
