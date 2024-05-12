@@ -132,37 +132,42 @@ packages:
   dcli:
     dependency: "direct main"
     description:
-      path: "../dcli"
-      relative: true
-    source: path
+      name: dcli
+      sha256: c076448cee6fe563e1964ade9d4653d855e69d204547791fff0d0fe96c7bd75a
+      url: "https://pub.dev"
+    source: hosted
     version: "4.0.1-beta.4"
   dcli_common:
     dependency: "direct main"
     description:
-      path: "../dcli_common"
-      relative: true
-    source: path
+      name: dcli_common
+      sha256: c8af0ed248e67b7293cc7ca24a11cc6f3762009ce2a4d0d03c1368e6b0f15fb9
+      url: "https://pub.dev"
+    source: hosted
     version: "4.0.1-beta.4"
   dcli_core:
     dependency: "direct main"
     description:
-      path: "../dcli_core"
-      relative: true
-    source: path
+      name: dcli_core
+      sha256: "915b6d7aa9cc039de4be263ecbdac0d372286059f5dba02a8b171748afb4883c"
+      url: "https://pub.dev"
+    source: hosted
     version: "4.0.1-beta.4"
   dcli_terminal:
     dependency: "direct main"
     description:
-      path: "../dcli_terminal"
-      relative: true
-    source: path
+      name: dcli_terminal
+      sha256: "5449d06b49966796237c5953abc8763dfbc3c29d180ba41f8e182d76c8379840"
+      url: "https://pub.dev"
+    source: hosted
     version: "4.0.1-beta.4"
   dcli_test:
     dependency: "direct dev"
     description:
-      path: "../dcli_test"
-      relative: true
-    source: path
+      name: dcli_test
+      sha256: "8d41cedcfe39f6a9bedbc1a0e215fa082b52508beb8a79b38efcd484ff988c59"
+      url: "https://pub.dev"
+    source: hosted
     version: "4.0.1-beta.4"
   equatable:
     dependency: transitive
@@ -413,12 +418,13 @@ packages:
     source: hosted
     version: "4.1.0"
   settings_yaml:
-    dependency: "direct overridden"
+    dependency: transitive
     description:
-      path: "../../settings_yaml"
-      relative: true
-    source: path
-    version: "8.1.0-beta.1"
+      name: settings_yaml
+      sha256: abfd2a6a2c48883154ffe11ddd4f72ce43cc2d7f030ae060f7237fb3b2bddbf7
+      url: "https://pub.dev"
+    source: hosted
+    version: "8.1.0-alpha.2"
   shelf:
     dependency: transitive
     description:

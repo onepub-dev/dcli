@@ -1,0 +1,24 @@
+dependency_overrides:
+  dcli:
+    git:
+      url: https://github.com/open-runtime/dcli.git
+      path: dcli
+  dcli_common:
+    git:
+      url: https://github.com/open-runtime/dcli.git
+      path: dcli_common
+  dcli_core:
+    git:
+      url: https://github.com/open-runtime/dcli.git
+      path: dcli_core
+  dcli_test:
+    git:
+      url: https://github.com/open-runtime/dcli.git
+      path: dcli_test
+  dcli_terminal:
+    git:
+      url: https://github.com/open-runtime/dcli.git
+      path: dcli_terminal
+  settings_yaml:
+    git:
+      url: https://github.com/open-runtime/settings_yaml.git
