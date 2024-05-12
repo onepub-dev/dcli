@@ -1,6 +1,8 @@
 name: tool/run_unit_tests.dart
 
-on: [push]
+on:
+  push:
+  workflow_dispatch:
 
 jobs:
   test:

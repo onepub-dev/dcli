@@ -12,9 +12,9 @@ import 'package:meta/meta.dart';
 import 'package:path/path.dart';
 import 'package:pubspec_manager/pubspec_manager.dart';
 // Here simply to avoid conflicts with the old NamedLocks
-import 'package:runtime_named_locks/runtime_named_locks.dart' as runtime;
+import 'package:runtime_named_locks/runtime_named_locks.dart';
 
-import '../../dcli.dart';
+import '../../dcli.dart' hide NamedLock;
 import '../../posix.dart';
 import '../version/version.g.dart';
 import 'pub_get.dart';
@@ -210,13 +210,8 @@ class DartProject {
     return null;
   }
 
-  // NamedLock? __lock;
-  static const _lockName = 'dcli.script.lock.a1';
+  static const _lockName = 'dcli.script.dart.project.lock';
 
-  // NamedLock get _lock =>
-  //     __lock ??= NamedLock(suffix: _lockName, lockPath: pathToProjectRoot);
-
-  ///
   /// Prepare the project so it can be run.
   /// This essentially means that we run pub get
   /// however if the project hasn't been initialised
@@ -229,9 +224,9 @@ class DartProject {
   /// pub get.
   ///
   void warmup({bool background = false, bool upgrade = false}) {
-    runtime.NamedLock.guard(
+    NamedLock.guard(
       name: _lockName,
-      execution: runtime.ExecutionCall<void, PubGetException>(
+      execution: ExecutionCall<void, PubGetException>(
         callable: () {
           try {
             if (background) {
@@ -259,12 +254,8 @@ class DartProject {
           }
         },
       ),
+      waiting: 'Waiting for warmup to complete...',
     );
-
-    // await _lock.withLock(
-    //   () async {},
-    //   waiting: 'Waiting for warmup to complete...',
-    // );
   }
 
   /// Removes any of the dart build artifacts so you have a clean directory.
@@ -277,9 +268,9 @@ class DartProject {
   ///
   /// Any exes for scripts in the directory.
   void clean() {
-    runtime.NamedLock.guard(
+    NamedLock.guard(
       name: _lockName,
-      execution: runtime.ExecutionCall<void, PubGetException>(
+      execution: ExecutionCall<void, PubGetException>(
         callable: () {
           try {
             find(
@@ -311,37 +302,8 @@ class DartProject {
           }
         },
       ),
+      waiting: 'Waiting for clean to complete...',
     );
-
-    // await _lock.withLock(
-    //   () async {
-    //     find(
-    //       '.packages',
-    //       types: [Find.file],
-    //       workingDirectory: pathToProjectRoot,
-    //     ).forEach(delete);
-    //
-    //     /// we cant delete directories whilst recusively scanning them.
-    //     final toBeDeleted = <String>[];
-    //     find(
-    //       '.dart_tool',
-    //       types: [Find.directory],
-    //       workingDirectory: pathToProjectRoot,
-    //     ).forEach(toBeDeleted.add);
-    //
-    //     _deleteDirs(toBeDeleted);
-    //
-    //     find('pubspec.lock', workingDirectory: pathToProjectRoot).forEach(delete);
-    //
-    //     find('*.dart', workingDirectory: pathToProjectRoot).forEach((scriptPath) {
-    //       final script = DartScript.fromFile(scriptPath);
-    //       if (exists(script.pathToExe)) {
-    //         delete(script.pathToExe);
-    //       }
-    //     });
-    //   },
-    //   waiting: 'Waiting for clean to complete...',
-    // );
   }
 
   /// Compiles all dart scripts in the project.
@@ -367,9 +329,9 @@ class DartProject {
   /// This is normally done when the project cache is first
   /// created and when a script's pubspec changes.
   void _pubget() {
-    runtime.NamedLock.guard(
+    NamedLock.guard(
       name: _lockName,
-      execution: runtime.ExecutionCall<void, PubGetException>(callable: () {
+      execution: ExecutionCall<void, PubGetException>(callable: () {
         final pubGet = PubGet(this);
         if (Shell.current.isSudo) {
           /// bugger we just screwed the cache permissions so lets fix them.
@@ -390,9 +352,9 @@ class DartProject {
   /// created and when a script's pubspec changes.
   void _pubupgrade() {
     // Refactor with named lock guard
-    runtime.NamedLock.guard(
+    NamedLock.guard(
       name: _lockName,
-      execution: runtime.ExecutionCall<void, PubGetException>(callable: () {
+      execution: ExecutionCall<void, PubGetException>(callable: () {
         final pubUpgrade = PubUpgrade(this);
         if (Shell.current.isSudo) {
           /// bugger we just screwed the cache permissions so lets fix them.
