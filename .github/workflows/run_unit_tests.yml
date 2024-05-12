@@ -38,7 +38,7 @@ jobs:
           cd dcli
           dart test test/src/script/dart_project_test.dart
 
-      - name: Run Specific [OLD] NamedLocks Test - dcli/test/src/util/named_locks_test.test
+      - name: Run Specific [OLD] NamedLocks Test - dcli/test/src/util/named_lock_test.test
         run: |
           echo $(pwd)
           cd dcli
