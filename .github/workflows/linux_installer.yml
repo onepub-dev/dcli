@@ -1,7 +1,6 @@
 name: Release executables for Linux
 
 on:
-  push:
   workflow_dispatch:
 #    tags:
 #      - '*'
