@@ -1,4 +1,4 @@
-name: tool/run_unit_tests.dart
+name: tool/run_specific_unit_tests.dart
 
 on:
   push:
