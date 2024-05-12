@@ -119,7 +119,7 @@ FutureOr<void> writeToLog(String data) {
   final parts = data.split(';');
   final message = parts[0];
   final log = parts[1];
-  NamedLock(suffix: 'test.lock').withLock(()  {
+  NamedLock(suffix: 'test').withLock(()  {
     var count = 0;
     for (var i = 0; i < 4; i++) {
       final l = '$message + ${count++}';

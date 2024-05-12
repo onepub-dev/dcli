@@ -88,17 +88,18 @@ class NamedLock {
             timeout: _timeout,
         );
 
-        if(_execution.error.isSet) {
-          print('Error: ${_execution.error.get}');
+        if(_execution.successful.isSet && _execution.successful.get!) {
           await _execution.completer.future;
+          await _execution.returned;
+        } else if(_execution.error.isSet) {
           await _execution.error.get?.rethrow_();
         }
 
       } on DCliException catch(e) {
-        print('Exception caught $e : $e');
+        verbose(() => 'Exception caught for $_nameWithSuffix...  $e : $e');
         throw e..stackTrace = callingStackTrace;
       } on Exception catch (e) {
-        print('Exception caught $e : $e');
+        verbose(() => 'Exception caught for $_nameWithSuffix... $e : $e');
         throw DCliException.from(e, callingStackTrace);
       } finally {
         verbose(() => 'withLock completed for $_nameWithSuffix');
