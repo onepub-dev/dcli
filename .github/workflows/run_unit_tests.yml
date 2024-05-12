@@ -25,21 +25,22 @@ jobs:
           cd ../dcli
           dart pub get
           cd ..
+          
 
       - name: Activate DCLI from Source
         run: |
           cd dcli
           dart pub global activate -spath .
 
-      - name: Run Specific Dart Project Test - test/src/script/dart_project_test.test
+      - name: Run Specific Dart Project Test - dcli/test/src/script/dart_project_test.test
         run: |
           dart test /test/src/script/dart_project_test.dart
 
-      - name: Run Specific [OLD] NamedLocks Test - test/src/util/named_locks_test.test
+      - name: Run Specific [OLD] NamedLocks Test - dcli/test/src/util/named_locks_test.test
         run: |
           dart test /test/src/util/named_locks_test.dart
 
-      - name: Run Specific [NEW] NamedLocks Test - test/src/util/named_lock_test_with_runtime_named_locks_package_test.dart
+      - name: Run Specific [NEW] NamedLocks Test - dcli/test/src/util/named_lock_test_with_runtime_named_locks_package_test.dart
         run: |
           dart test /test/src/util/named_lock_test_with_runtime_named_locks_package_test.dart
 
