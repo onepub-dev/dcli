@@ -16,40 +16,15 @@ import '../../dcli.dart';
 
 /// A [NamedLock] can be used to control access to a resource
 /// across processes and isolates.
-///
-/// A [NamedLock] uses a combination of a UDP socket and a files
-/// to provide a locking mechanism that is guarenteed to work across
-/// isolates in the same process as well as between processes.
-///
-/// If you only need locking 'within' an isolate that you should
-/// avoid using [NamedLock] as it is a realitively slow locking
-/// mechanism as it creates a file to represent a lock.
-///
-/// To ensure that [NamedLock]s hold across processes and isolates
-/// we use a two part locking mechanism.
-/// The first part is a TCP socket (on port 9003) that we
-/// refer to as a hard lock.  The same hard lock is used for all
-/// [NamedLock]s and as such is a potential bottle neck. To limit
-/// this bottle neck we hold the hard lock for as short a period as possible.
-/// The hard lock is only used to create and delete the file based lock.
-/// As soon as a file based lock transition completes,
-///  the hard lock is released.
-///
-/// On linux a traditional file lock will not block isolates
-/// in the same process from locking the same file hence we need to use
-/// a NamedLock between isolates as well as processes.
 class NamedLock {
-  /// [lockPath] is the path of the directory used
-  /// to store the lock file.
-  /// If no lockPath is given then [Directory.systemTemp]/dcli/locks is used
-  /// to store locks.
+  /// !!DEPRECATED!! [lockPath] was the path of the directory used
+  /// to store the lock file. This is no longer used.
   /// All code that shares the lock MUST use the
-  /// same [lockPath]. It is recommended that you
-  /// pass an absolute path to ensure that the
-  /// same path is used.
-  /// The [suffix] is used as the suffix of the lockfile name.
+  /// same [suffix].
+  /// The [suffix] is used as the suffix of the named semaphore name.
   /// The suffix allows multiple locks to share a single
-  /// lockPath.
+  /// semaphore name.
+  ///
   /// The [description], if passed, is used in error messages
   /// to describe the lock.
   /// The [timeout] defines how long we will wait for
@@ -68,18 +43,14 @@ class NamedLock {
     required this.suffix,
     String? lockPath,
     String description = '',
+    String name = 'dcli.named.semaphore.lock',
     Duration timeout = const Duration(seconds: 30),
   })  : _timeout = timeout,
-        _description = description {
-    _lockPath =
-        lockPath ?? join(rootPath, Directory.systemTemp.path, 'dcli', 'locks');
-  }
+        _description = description, _name = name;
 
-  /// The tcp socket  port we use to implement
-  /// a hard lock. A port can only be opened once
-  /// so its the perfect way to create a lock that works
-  /// across processes and isolates.
-  final int port = 9003;
+  /// The name of the lock which in-turn is used to create
+  /// a native named semaphore under the hood.
+  final String _name;
 
   /// Path to the directory where the lock files are stored.
   late String _lockPath;
