@@ -9,7 +9,8 @@ jobs:
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:
-        os: [ubuntu-latest, macos-latest, windows-latest]
+        # macos-latest is arm64 and macos-13 is x86_64 details here: https://docs.github.com/en/actions/using-github-hosted-runners/about-github-hosted-runners/about-github-hosted-runners#standard-github-hosted-runners-for-public-repositories
+        os: [ubuntu-latest, windows-latest, macos-latest, macos-13]
         sdk: [stable, beta, dev, 2.16.0, 2.17.0]
 
     steps:
@@ -24,10 +25,30 @@ jobs:
           dart pub get
           cd ..
 
-      - name: run unit tests
+      - name: Activate DCLI from Source
         run: |
           cd dcli
           dart pub global activate -spath .
-          dart test
+
+      - name: Run Specific Dart Project Test - test/src/script/dart_project_test.test
+        run: |
+          dart test /test/src/script/dart_project_test.dart
+
+      - name: Run Specific [OLD] NamedLocks Test - test/src/util/named_locks_test.test
+        run: |
+          dart test /test/src/util/named_locks_test.dart
+
+      - name: Run Specific [NEW] NamedLocks Test - test/src/util/named_lock_test_with_runtime_named_locks_package_test.dart
+        run: |
+          dart test /test/src/util/named_lock_test_with_runtime_named_locks_package_test.dart
+
+      - name: Run Tests in test/src/script/commands
+        run: |
+          dart test /test/src/script/commands
+
+      - name: Run All Tests
+        run: |
+          dart test .
+      
           
           
