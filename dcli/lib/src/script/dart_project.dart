@@ -316,9 +316,18 @@ class DartProject {
   /// [overwrite] defaults to false.
   ///
   void compile({bool install = false, bool overwrite = false}) {
-    find('*.dart', workingDirectory: pathToProjectRoot).forEach(
-      (file) => DartScript.fromFile(file).compile(install: install, overwrite: overwrite),
+    NamedLock.guard(
+      name: _lockName,
+      execution: ExecutionCall<void, PubGetException>(
+        callable: () {
+          find('*.dart', workingDirectory: pathToProjectRoot).forEach(
+                (file) => DartScript.fromFile(file).compile(install: install, overwrite: overwrite));
+          }
+      ),
+      waiting: 'Waiting for compile to complete...',
     );
+
+
   }
 
   /// Causes a pub get to be run against the project.

@@ -35,13 +35,11 @@ jobs:
 
       - name: Run Specific [OLD] NamedLocks Test - dcli/test/src/util/named_lock_test.test
         run: |
-          echo $(pwd)
           cd dcli
           dart test test/src/util/named_lock_test.dart
 
       - name: Run Specific [NEW] NamedLocks Test - dcli/test/src/util/named_lock_test_with_runtime_named_locks_package_test.dart
         run: |
-          echo $(pwd)
           cd dcli
           dart test test/src/util/named_lock_test_with_runtime_named_locks_package_test.dart
 

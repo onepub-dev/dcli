@@ -35,7 +35,6 @@ jobs:
 
       - name: Run All Tests
         run: |
-          echo $(pwd)
           cd dcli
           dart test .
       
