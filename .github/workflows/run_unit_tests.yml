@@ -32,12 +32,6 @@ jobs:
           cd dcli
           dart pub global activate -spath .
 
-      - name: Run Specific Dart Project Test - dcli/test/src/script/dart_project_test.test
-        run: |
-          echo $(pwd)
-          cd dcli
-          dart test test/src/script/dart_project_test.dart
-
       - name: Run Specific [OLD] NamedLocks Test - dcli/test/src/util/named_lock_test.test
         run: |
           echo $(pwd)
@@ -55,6 +49,12 @@ jobs:
           echo $(pwd)
           cd dcli
           dart test test/src/script/commands
+
+      - name: Run Specific Dart Project Test - dcli/test/src/script/dart_project_test.test
+        run: |
+          echo $(pwd)
+          cd dcli
+          dart test test/src/script/dart_project_test.dart
 
       - name: Run All Tests
         run: |
