@@ -1,3 +1,18 @@
+# 4.0.0
+- Rewrote large chunks of the code to remove dependency on waitFor which is now deprecated.
+- Split the code based up into 5 small packages to make it easier for users to uses 
+  just specific APIs without including the entire DCLI code base.
+- fetch/fetchMulti are now async.
+- Refactored NamedLock.withLock
+- Update Full Template to not require flutter
+- Remove awaits from DartProject.warmup()
+- The | Pipe operator has been deprecated - look out for the up coming release of HalfPipe for a replacement.
+- fixed a bug in the windows wmic line parser.
+- fixed regGetExpandedString as it appears that we were passing the wrong flags for the data we were trying to get back.
+- removed sink and process as we are replacing these with halfpipe.
+- removed pipeTo as we are moving to use halfpipe.
+- updated printerr to take an Object? as does print as it makes it more flexible.
+
 # 4.0.1-beta.4
 - added back in the missing nothrow arg to start method.
 - Fixed running of detached processes. We were trying to get the exit code which would never work.
@@ -23,7 +38,6 @@ Most unit tests are now working and most of the common process execution paths a
 # 4.0.1-beta.1
 ## Breaking
 - fetch/fetchMulti are now async.
-
 
 Still a chunk more to do but the core 'good' paths seem to be mostly working when running processes.
 Optimistically this will get most people over the hump whilst we clean up the few remaining problems.
