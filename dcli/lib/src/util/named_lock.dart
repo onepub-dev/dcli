@@ -40,6 +40,7 @@ class NamedLock {
     required this.suffix,
     // TODOperhaps we keep this in tact and end up doing a hash
     // on it to create the name?
+    // ignore: avoid_unused_constructor_parameters
     String? lockPath,
     String description = '',
     String name = 'dcli.lck',
@@ -57,6 +58,7 @@ class NamedLock {
 
   /// The description of the lock for error messages.
   /// TODO @tsavo-at-pieces - layer this into named locks package
+  // ignore: unused_field
   final String _description;
 
   /// The duration to wait for a lock before timing out.
