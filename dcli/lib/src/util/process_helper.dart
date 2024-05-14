@@ -164,7 +164,8 @@ class ProcessHelper {
   }
 
   @visibleForTesting
- static ({String exe, int parentPid, int processPid}) parseWMICLine(String process) {
+  static ({String exe, int parentPid, int processPid}) parseWMICLine(
+      String process) {
     final parts = process.split(' ');
     // we have to deal with files that contain spaces in their name.
     final exe = parts.sublist(0, parts.length - 2).join(' ');

@@ -1,5 +1,5 @@
 name: dcli_common
-version: 4.0.1-beta.4
+version: 4.0.0
 description: Common code used by multiple dcli packages.
 repository: https://github.com/onepub-dev/dcli
 environment:

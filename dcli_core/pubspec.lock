@@ -135,21 +135,21 @@ packages:
       path: "../dcli"
       relative: true
     source: path
-    version: "4.0.1-beta.4"
+    version: "4.0.0"
   dcli_common:
     dependency: "direct main"
     description:
       path: "../dcli_common"
       relative: true
     source: path
-    version: "4.0.1-beta.4"
+    version: "4.0.0"
   dcli_terminal:
     dependency: "direct overridden"
     description:
       path: "../dcli_terminal"
       relative: true
     source: path
-    version: "4.0.1-beta.4"
+    version: "4.0.0"
   equatable:
     dependency: transitive
     description:
@@ -306,10 +306,10 @@ packages:
     dependency: "direct main"
     description:
       name: meta
-      sha256: "25dfcaf170a0190f47ca6355bdd4552cb8924b430512ff0cafb8db9bd41fe33b"
+      sha256: bdb68674043280c3428e9ec998512fb681678676b3c54e773629ffe74419f8c7
       url: "https://pub.dev"
     source: hosted
-    version: "1.14.0"
+    version: "1.15.0"
   mime:
     dependency: transitive
     description:
@@ -393,21 +393,19 @@ packages:
   runtime_named_locks:
     dependency: transitive
     description:
-      path: "."
-      ref: aot_monorepo_compat
-      resolved-ref: "3acd49b3fc0821e114abdd0e5461ccbb567faf89"
-      url: "https://github.com/open-runtime/named_locks"
-    source: git
-    version: "0.0.1"
+      name: runtime_named_locks
+      sha256: "5fe859c1ddeeb595f6528596157191b628d85ba3137f0da327d92153604f2f6b"
+      url: "https://pub.dev"
+    source: hosted
+    version: "1.0.0-beta.6"
   runtime_native_semaphores:
     dependency: transitive
     description:
-      path: "."
-      ref: aot_monorepo_compat
-      resolved-ref: "6856ec500dbfbd19d7360bf8abd2f227916888d2"
-      url: "https://github.com/open-runtime/native_semaphores"
-    source: git
-    version: "0.0.5"
+      name: runtime_native_semaphores
+      sha256: bd5895d87f97543be6c9a5199b8a10483b9d6871327fe508ec89dbc2437c9220
+      url: "https://pub.dev"
+    source: hosted
+    version: "1.0.0-beta.6"
   scope:
     dependency: "direct main"
     description:

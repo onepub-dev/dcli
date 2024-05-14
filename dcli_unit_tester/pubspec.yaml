@@ -1,14 +1,14 @@
 name: dcli_unit_tester
-version: 4.0.1-beta.4
+version: 4.0.0
 description: This project allows dcli to unit test functions that behave differently when installed via 'dart pub global activate'. It serves no other useful purpose so do not install!
 repository: https://github.com/noojee/dcli
 environment:
   sdk: '>=3.0.0 <4.0.0'
 dependencies:
   args: ^2.3.0
-  dcli: ^4.0.1-beta.4
-  dcli_core: ^4.0.1-beta.4
-  dcli_terminal: ^4.0.1-beta.4
+  dcli: ^4.0.0
+  dcli_core: ^4.0.0
+  dcli_terminal: ^4.0.0
   path: ^1.8.0
 dev_dependencies:
   lint_hard: ^4.0.0

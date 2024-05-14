@@ -61,7 +61,8 @@ Future<void> main(List<String> args) async {
   }, progress: Progress.printStdErr());
 
   /// warm up all test packages.
-  for (final pubspec in find('pubspec.yaml', workingDirectory: projectRoot).toList()) {
+  for (final pubspec
+      in find('pubspec.yaml', workingDirectory: projectRoot).toList()) {
     if (DartSdk().isPubGetRequired(dirname(pubspec))) {
       print('Running pub get in ${dirname(pubspec)}');
       await capture(() async {

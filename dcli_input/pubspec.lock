@@ -119,21 +119,21 @@ packages:
       path: "../dcli_common"
       relative: true
     source: path
-    version: "4.0.1-beta.4"
+    version: "4.0.0"
   dcli_core:
     dependency: "direct main"
     description:
       path: "../dcli_core"
       relative: true
     source: path
-    version: "4.0.1-beta.4"
+    version: "4.0.0"
   dcli_terminal:
     dependency: "direct main"
     description:
       path: "../dcli_terminal"
       relative: true
     source: path
-    version: "4.0.1-beta.4"
+    version: "4.0.0"
   ffi:
     dependency: transitive
     description:

@@ -133,24 +133,24 @@ class RunnableProcess {
   ///
   /// Current [privileged] is only supported under Linux.
   ///
-  Future<Progress> runStreaming({
-    Progress? progress,
-    bool runInShell = false,
-    bool privileged = false,
-    bool nothrow = false,
-    bool extensionSearch = true,
-  }) async {
-    progress ??= Progress.devNull();
+  // Future<Progress> runStreaming({
+  //   Progress? progress,
+  //   bool runInShell = false,
+  //   bool privileged = false,
+  //   bool nothrow = false,
+  //   bool extensionSearch = true,
+  // }) async {
+  //   progress ??= Progress.devNull();
 
-    // start(
-    //   runInShell: runInShell,
-    //   privileged: privileged,
-    //   extensionSearch: extensionSearch,
-    // );
-    // await processStream(progress, nothrow: nothrow);
+  //   // start(
+  //   //   runInShell: runInShell,
+  //   //   privileged: privileged,
+  //   //   extensionSearch: extensionSearch,
+  //   // );
+  //   // await processStream(progress, nothrow: nothrow);
 
-    return progress;
-  }
+  //   return progress;
+  // }
 
   /// runs the process.
   ///

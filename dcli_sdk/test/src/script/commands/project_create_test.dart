@@ -26,7 +26,7 @@ void main() {
           final pathToTemplate = join(fs, 'test');
 
           await core.withEnvironmentAsync(() async {
-            await DartProject.create(
+             DartProject.create(
                     pathTo: pathToTemplate, templateName: 'simple')
                 .warmup();
           }, environment: {
@@ -47,7 +47,7 @@ void main() {
             final pathToTemplate = join(fs, 'test');
 
             await core.withEnvironmentAsync(() async {
-              await DartProject.create(
+               DartProject.create(
                       pathTo: pathToTemplate, templateName: 'simple')
                   .warmup();
             }, environment: {

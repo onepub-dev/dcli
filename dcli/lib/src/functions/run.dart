@@ -252,7 +252,7 @@ Progress start(
     workingDirectory: workingDirectory,
   );
 
-  return runnable. run(
+  return runnable.run(
     progress: progress,
     runInShell: runInShell,
     detached: detached,
@@ -280,26 +280,26 @@ Progress start(
 ///
 /// Current [privileged] is only supported under Linux.
 ///
-Future<Progress> startStreaming(
-  String commandLine, {
-  Progress? progress,
-  bool runInShell = false,
-  bool nothrow = false,
-  bool privileged = false,
-  String? workingDirectory,
-  bool extensionSearch = true,
-}) async {
-  workingDirectory ??= pwd;
-  final runnable = RunnableProcess.fromCommandLine(
-    commandLine,
-    workingDirectory: workingDirectory,
-  );
+// Future<Progress> startStreaming(
+//   String commandLine, {
+//   Progress? progress,
+//   bool runInShell = false,
+//   bool nothrow = false,
+//   bool privileged = false,
+//   String? workingDirectory,
+//   bool extensionSearch = true,
+// }) async {
+//   workingDirectory ??= pwd;
+//   final runnable = RunnableProcess.fromCommandLine(
+//     commandLine,
+//     workingDirectory: workingDirectory,
+//   );
 
-  return runnable.runStreaming(
-    progress: progress,
-    runInShell: runInShell,
-    privileged: privileged,
-    nothrow: nothrow,
-    extensionSearch: extensionSearch,
-  );
-}
+//   return runnable.runStreaming(
+//     progress: progress,
+//     runInShell: runInShell,
+//     privileged: privileged,
+//     nothrow: nothrow,
+//     extensionSearch: extensionSearch,
+//   );
+// }

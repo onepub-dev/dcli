@@ -4,9 +4,6 @@
  * Written by Brett Sutton <bsutton@onepub.dev>, Jan 2022
  */
 
-import 'dart:async';
-import 'dart:convert';
-
 import 'package:dcli_core/dcli_core.dart' as core;
 
 import '../functions/run.dart' as cmd;
@@ -500,28 +497,28 @@ extension StringAsProcess on String {
   // }
   /// Experimental - allows you to get a stream of the output written by the
   /// called process.
-  Future<Stream<String>> stream({
-    bool runInShell = false,
-    String? workingDirectory,
-    bool nothrow = false,
-    bool includeStderr = true,
-    bool extensionSearch = true,
-  }) async {
-    final progress = Progress.stream(includeStderr: includeStderr);
+  // Future<Stream<String>> stream({
+  //   bool runInShell = false,
+  //   String? workingDirectory,
+  //   bool nothrow = false,
+  //   bool includeStderr = true,
+  //   bool extensionSearch = true,
+  // }) async {
+  //   final progress = Progress.stream(includeStderr: includeStderr);
 
-    await cmd.startStreaming(
-      this,
-      runInShell: runInShell,
-      progress: progress,
-      workingDirectory: workingDirectory,
-      nothrow: nothrow,
-      extensionSearch: extensionSearch,
-    );
+  //   await cmd.startStreaming(
+  //     this,
+  //     runInShell: runInShell,
+  //     progress: progress,
+  //     workingDirectory: workingDirectory,
+  //     nothrow: nothrow,
+  //     extensionSearch: extensionSearch,
+  //   );
 
-    return progress.stream
-        .map(String.fromCharCodes)
-        .transform(const LineSplitter());
-  }
+  //   return progress.stream
+  //       .map(String.fromCharCodes)
+  //       .transform(const LineSplitter());
+  // }
 
   // /// Experimental - DO NOT USE
   // Sink<List<int>> get sink {

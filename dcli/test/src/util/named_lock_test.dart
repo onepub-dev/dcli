@@ -10,7 +10,6 @@ library;
  */
 
 import 'dart:async';
-import 'dart:io';
 import 'dart:isolate';
 
 import 'package:async/async.dart';
@@ -20,12 +19,11 @@ import 'package:path/path.dart' hide equals;
 import 'package:test/test.dart';
 
 void main() {
-
   test('exception catch', () async {
-
     expect(
-       NamedLock(suffix: 'exception').withLock(() => throw DCliException('fake exception')),
-       throwsA(isA<DCliException>()),
+      NamedLock(suffix: 'exception')
+          .withLock(() => throw DCliException('fake exception')),
+      throwsA(isA<DCliException>()),
     );
   });
 
@@ -119,7 +117,7 @@ FutureOr<void> writeToLog(String data) {
   final parts = data.split(';');
   final message = parts[0];
   final log = parts[1];
-  NamedLock(suffix: 'test').withLock(()  {
+  NamedLock(suffix: 'test').withLock(() {
     var count = 0;
     for (var i = 0; i < 4; i++) {
       final l = '$message + ${count++}';

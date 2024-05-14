@@ -106,7 +106,7 @@ class CompileCommand extends Command {
       final project = DartProject.fromPath(script.pathToScriptDirectory);
 
       if (buildRequired) {
-        await project.warmup();
+         project.warmup();
       }
 
       var install = flagSet.isSet(InstallFlag());
@@ -250,7 +250,7 @@ Run:
           /// dart allows a user to publish the override even though it should
           /// never be published and breaks build from cache if it exists.
           filter: (file) => basename(file) != 'pubspec_overrides.yaml');
-      await DartProject.fromPath(pathToTempPackage).warmup();
+       DartProject.fromPath(pathToTempPackage).warmup();
 
       final pubspec = PubSpec.load(directory: pathToTempPackage);
 

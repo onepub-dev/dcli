@@ -4,7 +4,8 @@
  * Written by Brett Sutton <bsutton@onepub.dev>, Jan 2022
  */
 
-import 'dart:async' show Future, FutureOr, runZonedGuarded;
+import 'dart:async' show FutureOr;
+
 import 'package:runtime_named_locks/runtime_named_locks.dart' as runtime;
 import 'package:stack_trace/stack_trace.dart' show Trace;
 
@@ -37,13 +38,15 @@ class NamedLock {
   /// ```
   NamedLock({
     required this.suffix,
-    // TODO perhaps we keep this in tact and end up doing a hash on it to create the name?
+    // TODOperhaps we keep this in tact and end up doing a hash
+    // on it to create the name?
     String? lockPath,
     String description = '',
     String name = 'dcli.lck',
     Duration timeout = const Duration(seconds: 30),
   })  : _timeout = timeout,
-        _description = description, _nameWithSuffix = [name, suffix].join('.');
+        _description = description,
+        _nameWithSuffix = [name, suffix].join('.');
 
   /// The name of the lock which is used to create the a
   /// native named semaphore under the hood.
@@ -55,7 +58,6 @@ class NamedLock {
   /// The description of the lock for error messages.
   /// TODO @tsavo-at-pieces - layer this into named locks package
   final String _description;
-
 
   /// The duration to wait for a lock before timing out.
   final Duration _timeout;
@@ -77,35 +79,33 @@ class NamedLock {
       safe: true,
     );
 
-      try {
-        verbose(() => 'withLock called for $_nameWithSuffix');
+    try {
+      verbose(() => 'withLock called for $_nameWithSuffix');
 
-        // Note that guarded here is the same insance as execution above
-        final _execution = runtime.NamedLock.guard<FutureOr<void>, DCliException>(
-            name: _nameWithSuffix,
-            execution: execution,
-            waiting: waiting,
-            timeout: _timeout,
-        );
+      // Note that guarded here is the same insance as execution above
+      final _execution = runtime.NamedLock.guard<FutureOr<void>, DCliException>(
+        name: _nameWithSuffix,
+        execution: execution,
+        waiting: waiting,
+        timeout: _timeout,
+      );
 
-        if(_execution.successful.isSet && _execution.successful.get!) {
-          await _execution.completer.future;
-          await _execution.returned;
-        } else if(_execution.error.isSet) {
-          await _execution.error.get?.rethrow_();
-        }
-
-      } on DCliException catch(e) {
-        verbose(() => 'Exception caught for $_nameWithSuffix...  $e : $e');
-        throw e..stackTrace = callingStackTrace;
-      } on Exception catch (e) {
-        verbose(() => 'Exception caught for $_nameWithSuffix... $e : $e');
-        throw DCliException.from(e, callingStackTrace);
-      } finally {
-        verbose(() => 'withLock completed for $_nameWithSuffix');
+      if (_execution.successful.isSet && _execution.successful.get!) {
+        await _execution.completer.future;
+        await _execution.returned;
+      } else if (_execution.error.isSet) {
+        await _execution.error.get?.rethrow_();
       }
+    } on DCliException catch (e) {
+      verbose(() => 'Exception caught for $_nameWithSuffix...  $e : $e');
+      throw e..stackTrace = callingStackTrace;
+    } on Exception catch (e) {
+      verbose(() => 'Exception caught for $_nameWithSuffix... $e : $e');
+      throw DCliException.from(e, callingStackTrace);
+    } finally {
+      verbose(() => 'withLock completed for $_nameWithSuffix');
+    }
   }
-
 }
 
 class LockException extends DCliException {

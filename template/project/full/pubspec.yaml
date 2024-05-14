@@ -2,12 +2,13 @@ name: full
 version: 0.0.1
 description: A sample command-line application that installs and runs mailhog
 environment:
-  sdk: '>=3.2.0 <4.0.0'
+  sdk: '>=3.0.0 <4.0.0'
+  flutter:
 
 dependencies:
   args: ^2.5.0
-  dcli: 4.0.1-beta.3
-  dcli_core: 4.0.1-beta.3
+  dcli: 4.0.1-beta.4
+  dcli_core: 4.0.1-beta.4
   http: ^1.2.1
   path: ^1.9.0
   settings_yaml: ^8.0.1

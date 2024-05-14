@@ -1,13 +1,13 @@
 name: dcli_input
-version: 4.0.1-beta.4
+version: 4.0.0
 homepage: https://dcli.onepub.dev
 description: Provides a collection of user input/output functions for the DCli  Dart Console SDK, but is also intended for direct use when you just need to add user input to your console app without the full DCli set of features.\n
 repository: https://github.com/onepub-dev/dcli
 environment:
   sdk: '>=3.0.0 <4.0.0'
 dependencies:
-  dcli_core: ^4.0.1-beta.4
-  dcli_terminal: ^4.0.1-beta.4
+  dcli_core: ^4.0.0
+  dcli_terminal: ^4.0.0
   meta: ">=1.11.0 <2.0.0"
   validators2: ^5.0.0
 dev_dependencies:

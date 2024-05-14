@@ -1,3 +1,56 @@
+# 4.0.0
+- Merge pull request #246 from tsavo-at-pieces/master
+- Added NamedLock.guard to dcli compile commmand
+- Update run_specific_unit_tests.yml
+- Dedicated workflow for Specific Isolated Testing
+- Fail Fast -> False
+- Put failing tests at the end
+- Bump NamedLocks Package
+- Tests Passing
+- Reduce Default Lock Name Length
+- Refactored NamedLock.withLock
+- Update named_lock.dart
+- Update to unit_testing_path in CI/CD
+- Update run_unit_tests.yml
+- Update Full Template to not require flutter
+- Update run_unit_tests.yml
+- Update run_unit_tests.yml
+- Update run_unit_tests.yml
+- Update run_unit_tests.yml
+- Remove awaits from DartProject.warmup() in dart_test
+- Updating Unit Testing in CI
+- Isolate Specific Tests
+- Updated dart_project.dart
+- Testing Named Locks
+- Update runtime_named_lock usage
+- Initial NamedLocks Sandbox (Unix Only)
+- Merge branch 'master' of github.com:onepub-dev/dcli
+- updated deps.
+- remove pipe tests as we are deprecating it.
+- added test for availableSpace
+- lint cleanups
+- fixed a bug in the windows wmic line parser.
+- Merge branch 'master' of https://github.com/onepub-dev/dcli
+- fixed regGetExpandedString as it appears that we were passing the wrong flags for the data we were trying to get back.
+- removed sink and process as we are replacing these with halfpipe.
+- removed pipeTo as we are moving to use halfpipe.
+- Merge branch 'master' of github.com:onepub-dev/dcli
+- commented out the Pipe class. We are going to replace it with halfpipe.
+- Made the ProgressiveLineSplitter public.
+- removed waitForStart as its no longer being used.
+- add todo re-unused code
+- Fixed a bug in DartSdk that was causing it to hang as it was unnecessarily calling processUntilExit.
+- updated printerr to take an Object? as does print as it makes it more flexible.
+- Fixed a bug in dart_project which resulted in an incorrect path to the project when running in a unit test.
+- updated test script beta.4
+- fixed the compile test as it wasn't correctly matching the exception.
+- removed unused code
+- removed redundant code
+- corrected the path to the dcli_unit_tester package.
+- added catch block into isInstalled so that it would throw if an invalid package name was installed. instead it just returns false.
+- grammer
+- removed unused method runv2
+
 # 4.0.1-beta.4
 - added back in the missing nothrow arg to start method.
 - Fixed running of detached processes. We were trying to get the exit code which would never work.

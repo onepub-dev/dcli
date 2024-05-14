@@ -17,7 +17,7 @@ void main() {
     test('warmup ', () async {
       await TestFileSystem().withinZone((fs) async {
         final projectPath = join(fs.fsRoot, 'test_script/general');
-        final project = DartProject.fromPath(projectPath)
+        DartProject.fromPath(projectPath)
           ..clean()
           ..warmup();
 

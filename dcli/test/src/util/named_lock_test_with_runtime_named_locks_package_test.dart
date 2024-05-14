@@ -10,7 +10,6 @@ library;
  */
 
 import 'dart:async';
-import 'dart:io';
 import 'dart:isolate';
 
 import 'package:async/async.dart';
@@ -21,14 +20,13 @@ import 'package:runtime_named_locks/runtime_named_locks.dart';
 import 'package:test/test.dart';
 
 void main() {
-
   test('unsafe exception catch', () async {
     final execution = ExecutionCall<void, DCliException>(
       callable: () => throw DCliException('fake exception'),
     );
 
     expect(
-          () => NamedLock.guard<void, DCliException>(
+      () => NamedLock.guard<void, DCliException>(
         name: 'unsafe.exception.lock',
         execution: execution,
       ),
@@ -50,16 +48,16 @@ void main() {
     expect(guarded.successful.get, false);
     expect(guarded.error.get?.anticipated.get, isA<DCliException>());
     expect(
-          () => guarded.error.get?.rethrow_(),
+      () => guarded.error.get?.rethrow_(),
       throwsA(isA<DCliException>()),
     );
   });
 
   test(
     'File Operations with NamedLock.guard',
-        () async {
+    () async {
       await core.withTempDirAsync(
-            (fs) async {
+        (fs) async {
           await core.withTempFileAsync((logFile) async {
             print('logfile: $logFile');
             logFile.truncate();
@@ -102,7 +100,7 @@ void main() {
 
   test(
     'Thrash Test',
-        () async {
+    () async {
       Settings().setVerbose(enabled: false);
       if (exists(_lockCheckPath)) {
         deleteDir(_lockCheckPath);
@@ -132,7 +130,8 @@ void main() {
 }
 
 Future<ReceivePort> spawn(String message, String logFile) async {
-  final back = await Isolate.spawn(writeToLog, '$message;$logFile', paused: true);
+  final back =
+      await Isolate.spawn(writeToLog, '$message;$logFile', paused: true);
   final port = ReceivePort();
   back
     ..addOnExitListener(port.sendPort)
