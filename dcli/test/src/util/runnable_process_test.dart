@@ -10,7 +10,6 @@ library;
  */
 
 import 'dart:async';
-import 'dart:cli';
 import 'dart:convert';
 import 'dart:io';
 
@@ -76,7 +75,7 @@ void main() {
         });
       });
 
-      waitFor<void>(Future.delayed(const Duration(seconds: 10)));
+      await Future.delayed(const Duration(seconds: 10), () {});
 
       /// test in current form can't actually test for shutdown.
       /// needs to spawn another process then check the outcome.
