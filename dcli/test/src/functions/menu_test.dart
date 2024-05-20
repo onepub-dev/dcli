@@ -18,7 +18,6 @@ void main() {
 
       var result = menu(
         'How old are you',
-        defaultOption: null,
         options: options,
       );
       print('result: $result');
