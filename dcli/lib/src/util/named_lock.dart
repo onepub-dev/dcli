@@ -14,37 +14,28 @@ import '../../dcli.dart' show DCliException, verbose;
 /// A [NamedLock] can be used to control access to a resource
 /// across processes and isolates.
 class NamedLock {
-  /// !!DEPRECATED!! [lockPath] was the path of the directory used
-  /// to store the lock file. This is no longer used.
-  ///
   /// All code that shares the lock MUST use the
-  /// same [suffix].
-  /// The [suffix] is used as the suffix of the named semaphore name.
-  /// The suffix allows multiple locks to share a single
-  /// semaphore name.
+  /// same [name] and [suffix].
   ///
   /// The [description], if passed, is used in error messages
   /// to describe the lock.
+  ///
   /// The [timeout] defines how long we will wait for
   /// a lock to become available. The default [timeout] is
-  /// infinite (null).
+  /// 1 day.
   ///
   /// ```dart
-  /// NamedLock(name: 'update-catalog', suffix: my-script).withLock(() {
+  /// NamedLock(name: 'update-catalog').withLock(() {
   ///   if (!exists('catalog'))
   ///     createDir('catalog');
   ///   updateCatalog();
   /// });
   /// ```
   NamedLock({
-    required this.suffix,
-    // TODOperhaps we keep this in tact and end up doing a hash
-    // on it to create the name?
-    // ignore: avoid_unused_constructor_parameters
-    String? lockPath,
+    required this.name,
     String description = '',
-    String name = 'dcli.lck',
-    Duration timeout = const Duration(seconds: 30),
+    String suffix = 'dcli.lck',
+    Duration timeout = const Duration(days: 1),
   })  : _timeout = timeout,
         _description = description,
         _nameWithSuffix = [name, suffix].join('.');
@@ -54,7 +45,7 @@ class NamedLock {
   final String _nameWithSuffix;
 
   /// The name of the lock.
-  final String suffix;
+  final String name;
 
   /// The description of the lock for error messages.
   /// TODO @tsavo-at-pieces - layer this into named locks package

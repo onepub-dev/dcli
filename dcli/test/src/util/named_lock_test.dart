@@ -21,7 +21,7 @@ import 'package:test/test.dart';
 void main() {
   test('exception catch', () async {
     expect(
-      NamedLock(suffix: 'exception')
+      NamedLock(name: 'exception')
           .withLock(() => throw DCliException('fake exception')),
       throwsA(isA<DCliException>()),
     );
@@ -117,7 +117,7 @@ FutureOr<void> writeToLog(String data) {
   final parts = data.split(';');
   final message = parts[0];
   final log = parts[1];
-  NamedLock(suffix: 'test').withLock(() {
+  NamedLock(name: 'test').withLock(() {
     var count = 0;
     for (var i = 0; i < 4; i++) {
       final l = '$message + ${count++}';
@@ -137,7 +137,7 @@ final _lockFailedPath = join(_lockCheckPath, 'lock_failed');
 FutureOr<void> worker(int instance) {
   Settings().setVerbose(enabled: false);
   print('starting worker instance $instance ${DateTime.now()}');
-  NamedLock(suffix: 'gshared-compile').withLock(() {
+  NamedLock(name: 'gshared-compile').withLock(() {
     print('acquired lock worker $instance  ${DateTime.now()}');
     final inLockPath = join(_lockCheckPath, 'inlock');
 
