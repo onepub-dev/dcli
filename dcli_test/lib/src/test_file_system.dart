@@ -341,8 +341,7 @@ dependency_overrides:
 
       // ignore: discarded_futures
       await capture(() async {
-        DartProject.fromPath(dirname(pathToPubspec))
-            .warmup(upgrade: true);
+        DartProject.fromPath(dirname(pathToPubspec)).warmup(upgrade: true);
       }, progress: Progress.printStdErr());
     });
   }
@@ -378,7 +377,7 @@ dependency_overrides:
         DartProject.fromPath(pathToTools).warmup();
       }, progress: Progress.printStdErr());
 
-      await NamedLock(suffix: 'compile').withLock(() async {
+      await NamedLock(name: 'compile').withLock(() async {
         for (final command in required) {
           final script = DartScript.fromFile(join(pathToPackageUnitTester,
               'test', 'test_script', 'general', 'bin', '$command.dart'));

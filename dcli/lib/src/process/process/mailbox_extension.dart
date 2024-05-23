@@ -1,7 +1,7 @@
 import 'package:native_synchronization/mailbox.dart';
 
 import 'message.dart';
-import 'process_in_isolate2.dart';
+import 'process_in_isolate.dart';
 
 extension MailBoxMessage on Mailbox {
   Future<void> postMessage(Message message) async {

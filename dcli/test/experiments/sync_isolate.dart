@@ -8,7 +8,7 @@ import 'dart:typed_data';
 import 'package:dcli/dcli.dart';
 import 'package:dcli/src/process/process/message.dart';
 import 'package:dcli/src/process/process/message_response.dart';
-import 'package:dcli/src/process/process/process_in_isolate2.dart';
+import 'package:dcli/src/process/process/process_in_isolate.dart';
 import 'package:dcli/src/process/process/process_settings.dart';
 import 'package:native_synchronization/mailbox.dart';
 import 'package:native_synchronization/sendable.dart';
@@ -37,7 +37,7 @@ void test4() {
   final mailboxToPrimaryIsolate = Mailbox();
   final mailboxFromPrimaryIsolate = Mailbox();
 
-  startIsolate2(ProcessSettings('which', args: ['which']),
+  startIsolate(ProcessSettings('which', args: ['which']),
       mailboxFromPrimaryIsolate, mailboxToPrimaryIsolate);
 
   MessageResponse response;

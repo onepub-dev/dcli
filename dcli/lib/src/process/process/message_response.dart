@@ -3,7 +3,7 @@
 import 'package:dcli_core/dcli_core.dart';
 
 import 'message.dart';
-import 'process_in_isolate2.dart';
+import 'process_in_isolate.dart';
 
 /// Handle messages sent back from the spawned isolate.
 ///

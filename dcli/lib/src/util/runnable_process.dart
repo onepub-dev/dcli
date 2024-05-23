@@ -15,7 +15,7 @@ import '../../dcli.dart';
 import '../process/environment.dart';
 import '../process/process/message.dart';
 import '../process/process/message_response.dart';
-import '../process/process/process_in_isolate2.dart';
+import '../process/process/process_in_isolate.dart';
 import '../process/process/process_settings.dart';
 import '../progress/progress_impl.dart';
 import 'capture.dart';
@@ -328,7 +328,7 @@ class RunnableProcess {
     late final mailboxFromPrimaryIsolate = Mailbox();
     final mailboxToPrimaryIsolate = Mailbox();
 
-    startIsolate2(
+    startIsolate(
         processSettings, mailboxFromPrimaryIsolate, mailboxToPrimaryIsolate);
 
     MessageResponse response;
