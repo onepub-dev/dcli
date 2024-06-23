@@ -1,3 +1,6 @@
+import 'package:dcli/dcli.dart';
+import 'package:test/test.dart';
+
 void main() {
   // test('synchronous ...', () async {
   //   final p = ProcessSync()..run(ProcessSettings('cat'));
@@ -8,4 +11,15 @@ void main() {
   //     print('from cat: $line');
   //   }
   // });
+
+  test('onepub - exitCode', () {
+    withTempFile((tokenFile) {
+      final progress = Progress.capture();
+      expect(
+          '''onepub export --user opcicd@cicd.jbbxpsdavu.onepub.dev --file $tokenFile'''
+              .start(nothrow: true, progress: progress)
+              .exitCode,
+          equals(0));
+    });
+  });
 }
