@@ -198,15 +198,8 @@ class RunnableProcess {
         nothrow: nothrow,
         progress: progress as ProgressImpl,
       );
-      // if (terminal == true) {
-      //   /// we can't process io as the terminal
-      //   // has inherited the IO so we dont' see it.
-      //   _waitForExit(processSync!, progress, nothrow: nothrow);
-      // } else {
 
-      // ignore: discarded_futures, cascade_invocations
-
-      _logProcess('spawn completed - waithing for process exit');
+      _logProcess('spawn completed - waiting for process exit');
 
       /// whether we have a terminal or not we use the same
       /// process to read any io that comes back until
@@ -231,6 +224,7 @@ class RunnableProcess {
     } finally {
       (progress as ProgressImpl).close();
     }
+    _logProcess('process completed');
     return progress;
   }
 

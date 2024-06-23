@@ -23,7 +23,7 @@ import 'process_settings.dart';
 /// some process on the primary isolate side, but often it is the
 /// only way to debug the process in isolate code as the
 /// debugger hangs.
-const debugIsolate = true;
+const debugIsolate = false;
 
 void startIsolate(ProcessSettings settings, Mailbox mailboxFromPrimaryIsolate,
     Mailbox mailboxToPrimaryIsolate) {
@@ -32,30 +32,22 @@ void startIsolate(ProcessSettings settings, Mailbox mailboxFromPrimaryIsolate,
       settings, mailboxFromPrimaryIsolate, mailboxToPrimaryIsolate));
 
   _logPrimary('waiting for isolate to spawn');
-  // final message =
-  //     MessageResponse.fromData(channel.mailboxToPrimaryIsolate.take());
-  // if (message.messageCode != Message.msgAck) {
-  //   printerr('Expected ACK on isolate start');
-  // }
-  // _logPrimary('recived ack that isolate started');
 }
 
 /// Starts an isolate that spawns the command.
 Future<Isolate> _startIsolate(ProcessSettings processSettings,
         Mailbox mailboxFromPrimaryIsolate, Mailbox mailboxToPrimaryIsolate) =>
     Isolate.spawn<List<Sendable<Mailbox>>>((mailboxes) async {
-      // await mailboxToPrimaryIsolate.postMessage(Message.exit(1));
-      // final mailboxFromPrimaryIsolate = mailboxes.first.materialize();
+
+      /// We are now running in the isolate.
+      _logIsolate('started');
       final mailboxToPrimaryIsolate = mailboxes.last.materialize();
+      _logIsolate('mailboxes materialized');
 
       try {
-        /// We are now running in the isolate.
-        _logIsolate('started');
-        // `TODO`: this causes output to stdout which probably isn't desirable.
+        // ONLY enable this setting when doing debugging as it
+        // causes output to stdout which isn't desirable.
         Settings().setVerbose(enabled: false);
-
-        await mailboxToPrimaryIsolate.postMessage(Message.ack());
-        _logIsolate('sent ack');
 
         final runner = ProcessRunner(processSettings);
         _logIsolate('starting process ${processSettings.command} in isolate');
@@ -117,9 +109,7 @@ Future<Isolate> _startIsolate(ProcessSettings processSettings,
 
           _logIsolate('listen of stdout completed');
 
-          /// used to wait for the stderr stream to finish streaming
-
-          /// subscribe to data the proccess writes to stderr and send
+          /// subscribe to data the process writes to stderr and send
           /// it back to the parent isolate
           stderrSub = _sendStderrToPrimary(
               process, mailboxToPrimaryIsolate, stderrStreamDone);
@@ -130,7 +120,7 @@ Future<Isolate> _startIsolate(ProcessSettings processSettings,
         var exitCode = 0;
         if (!processSettings.detached) {
           /// wait for the process to exit and all stream
-          /// finish been written to.
+          /// finish being written to.
           exitCode = await process.exitCode;
           _logIsolate('process has exited with exitCode: $exitCode');
         } else {
