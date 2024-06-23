@@ -1,3 +1,11 @@
+# 4.0.2
+- removed overridden dep.
+- Added a sync test for exitCode.
+- temporary cleanup of the withLock methods until we get a real fix for the runtime lock package.
+- update version.
+- turned off debugging, cleaned old code.
+- removed old startIsolate and renamed startIsoalte2 to startIsolate.
+
 # 4.0.0
 - Merge pull request #246 from tsavo-at-pieces/master
 - Added NamedLock.guard to dcli compile commmand
