@@ -1,3 +1,12 @@
+# 4.0.2
+- updated change log for 4.0.2
+- removed overridden dep.
+- Added a sync test for exitCode.
+- temporary cleanup of the withLock methods until we get a real fix for the runtime lock package.
+- update version.
+- turned off debugging, cleaned old code.
+- removed old startIsolate and renamed startIsoalte2 to startIsolate.
+
 # 4.0.0
 - Rewrote large chunks of the code to remove dependency on waitFor which is now deprecated.
 - Split the code based up into 5 small packages to make it easier for users to uses 
