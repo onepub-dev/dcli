@@ -135,7 +135,7 @@ packages:
       path: "../dcli"
       relative: true
     source: path
-    version: "4.0.0"
+    version: "4.0.1"
   dcli_common:
     dependency: "direct main"
     description:
@@ -434,7 +434,7 @@ packages:
       path: "../../settings_yaml"
       relative: true
     source: path
-    version: "8.1.0-beta.1"
+    version: "8.1.0"
   shelf:
     dependency: transitive
     description:
