@@ -1,3 +1,11 @@
+# 4.0.2
+- removed overridden dep.
+- Added a sync test for exitCode.
+- temporary cleanup of the withLock methods until we get a real fix for the runtime lock package.
+- update version.
+- turned off debugging, cleaned old code.
+- removed old startIsolate and renamed startIsoalte2 to startIsolate.
+
 # 4.0.1-beta.4
 - added back in the missing nothrow arg to start method.
 - Fixed running of detached processes. We were trying to get the exit code which would never work.
