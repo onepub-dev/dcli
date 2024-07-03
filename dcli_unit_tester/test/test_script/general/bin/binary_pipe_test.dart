@@ -27,7 +27,7 @@ Future<void> main() async {
 
   // await pipeTo2(dart, head);
 
-  // TODO: restore
+  // TODO(bsutton): restore
   // 'dart --version'.run;
   // ('dart --version' | 'cat').run;
 

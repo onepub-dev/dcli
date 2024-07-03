@@ -10,7 +10,7 @@ import 'package:path/path.dart';
 
 import '../../dcli_core.dart';
 
-/// TODO: restore after 2.16 is released.
+// TODO(bsutton): investigate if we need to restore the [LimitedStreamController]
 // typedef FindController<T> = LimitedStreamController<T>;
 typedef ProgressCallback = bool Function(FindItem item);
 
@@ -84,7 +84,7 @@ typedef ProgressCallback = bool Function(FindItem item);
 /// If the [progress] doesn't output [stdout] then you will get no results
 /// back.
 ///
-///TODO(bsutton): consider having find return a Stream and eliminate passing
+// TODO(bsutton): consider having find return a Stream and eliminate passing
 /// a controller in.
 void find(
   String pattern, {

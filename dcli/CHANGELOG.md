@@ -1,3 +1,8 @@
+# 4.0.3
+- added missing await.
+- Merge pull request #248 from sstasi95/master
+- fix ProgressMixin.firstLine throwing if there are no lines
+
 # 4.0.2
 - removed overridden dep.
 - Added a sync test for exitCode.
