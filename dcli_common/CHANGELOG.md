@@ -1,3 +1,6 @@
+# 4.0.3
+- fix ProgressMixin.firstLine throwing if there are no lines - contributed by @sstasi95
+
 # 4.0.2
 - updated change log for 4.0.2
 - removed overridden dep.
