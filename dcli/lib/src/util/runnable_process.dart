@@ -95,7 +95,7 @@ class RunnableProcess {
 
   /// Experiemental - DO NOT USE
   Stream<List<int>> get stream {
-    // TODO: re-implent streams.
+    // TODO(bsutton): re-implent streams.
     throw ProcessException(_parsed.cmd, _parsed.args, 'Not supported');
     // wait until the process has started
     // final process = waitForEx<Process>(_fProcess);
@@ -104,7 +104,7 @@ class RunnableProcess {
 
   /// Experiemental - DO NOT USE
   Sink<List<int>> get sink {
-    // TODO: re-implent streams.
+    // TODO(bsutton): re-implent streams.
     throw ProcessException(_parsed.cmd, _parsed.args, 'Not supported');
     // wait until the process has started
     // final process = waitForEx<Process>(_fProcess);
@@ -355,7 +355,7 @@ class RunnableProcess {
     });
   }
 
-  /// TODO: does this work now we have moved to mailboxes?
+  /// TODO(bsutton): does this work now we have moved to mailboxes?
   // void pipeTo(RunnableProcess stdin) {
   //   // fProcess.then((stdoutProcess) {
   //   //   stdin.fProcess.then<void>(

@@ -103,7 +103,7 @@ class ProcessHelper {
     String? line;
     try {
       // ignore: flutter_style_todos
-      /// TODO: find a way to get the parent of a given pid
+      /// TODO(bsutton): find a way to get the parent of a given pid
       /// not the current pid.
       /// The following will work on SOME linux platforms.
       /// https://gist.github.com/fclairamb/a16a4237c46440bdb172

@@ -22,7 +22,7 @@ class PipeSync {
 
   /// fetch the exit code of the process.
   /// If the process has not yet exited then null will be returned.
-  /// TODO: we have two processes here so what
+  /// TODO(bsutton): we have two processes here so what
   /// exit code do we return?
   int? get exitCode => _rhsChannel.exitCode;
 

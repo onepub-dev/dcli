@@ -93,8 +93,7 @@ void restoreFile(String pathToFile, {bool ignoreMissing = false}) =>
 /// where you need to ensure the filesystem is restore to its
 /// prior state after the dry-run completes.
 ///
-// ignore: flutter_style_todos
-/// TODO: make this work for other than current drive under Windows
+// TODO(bsutton): make this work for other than current drive under Windows
 ///
 R withFileProtection<R>(
   List<String> protected,
@@ -223,7 +222,7 @@ void _restoreFile(Paths paths) {
         }
 
         // ignore: flutter_style_todos
-        /// TODO: consider only restoring the file if its last modified
+        /// TODO(bsutton): consider only restoring the file if its last modified
         /// time has changed.
         move(paths.backupPath, paths.sourcePath);
         if (exists(dotBak)) {

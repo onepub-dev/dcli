@@ -468,7 +468,7 @@ extension StringAsProcess on String {
   /// ``` dart
   /// 'tail /var/log/syslog' | 'head -n 5' | 'tail -n 2'.forEach((line) => print(line));
   /// ```
-  // TODO: restore
+  // TODO(bsutton): restore
   //Pipe operator |(String rhs) {
   //   final rhsRunnable = RunnableProcess.fromCommandLine(rhs)
   //     ..pipe(rhsRunnable.);

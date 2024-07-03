@@ -33,7 +33,7 @@ void main() {
         final linesFile = join(fs.fsRoot, TestFileSystem.testLinesFile);
         createLineFile(linesFile, 10);
 
-        // TODO: restore
+        // TODO(bsutton): restore
         // lines.clear();
         // ('tail -n 100 $linesFile' | 'head -n 5').forEach(lines.add);
 
@@ -44,7 +44,7 @@ void main() {
         final linesFile = join(fs.fsRoot, TestFileSystem.testLinesFile);
         createLineFile(linesFile, 10);
 
-        // TODO: restore
+        // TODO(bsutton): restore
         // lines.clear();
         // ('tail $linesFile' | 'head -n 5' | 'tail -n 2').forEach(lines.add);
         // t.expect(lines.length, t.equals(2));
@@ -54,7 +54,7 @@ void main() {
         final linesFile = join(fs.fsRoot, TestFileSystem.testLinesFile);
         createLineFile(linesFile, 10);
 
-// TODO: restore
+// TODO(bsutton): restore
         // lines.clear();
         // ('tail $linesFile' | 'head -n 5' | 'head -n 3' | 'tail -n 2')
         //     .forEach(lines.add);
@@ -77,7 +77,7 @@ void main() {
           final linesFile = join(fs.fsRoot, TestFileSystem.testLinesFile);
           createLineFile(linesFile, 10);
 
-// TODO: restore
+// TODO(bsutton): restore
           // lines.clear();
           // ('tail -n 100 $linesFile' | 'head -n 5').run;
 
@@ -88,7 +88,7 @@ void main() {
           final linesFile = join(fs.fsRoot, TestFileSystem.testLinesFile);
           createLineFile(linesFile, 10);
 
-// TODO: restore
+// TODO(bsutton): restore
           // lines.clear();
           // ('tail $linesFile' | 'head -n 5' | 'tail -n 2').run;
           //t.expect(lines.length, t.equals(2));
@@ -98,7 +98,7 @@ void main() {
           final linesFile = join(fs.fsRoot, TestFileSystem.testLinesFile);
           createLineFile(linesFile, 10);
 
-// TODO: restore
+// TODO(bsutton): restore
           // lines.clear();
           // ('tail $linesFile' | 'head -n 5' | 'head -n 3' | 'tail -n 2').run;
           //t.expect(lines.length, t.equals(2));

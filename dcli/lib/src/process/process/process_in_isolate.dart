@@ -65,7 +65,7 @@ Future<Isolate> _startIsolate(ProcessSettings processSettings,
           ..listen((message) async {
             _logIsolate(' recieved message');
             if (message is List<int> || message is String) {
-              // TODO: I don't think this is actually being used.
+              // TODO(bsutton): I don't think this is actually being used.
               // As the isolate runs in the same process it still has
               // direct access to stdin so we don't need to pass stdin
               // across the isolate barrier.
