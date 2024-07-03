@@ -377,7 +377,7 @@ dependency_overrides:
         DartProject.fromPath(pathToTools).warmup();
       }, progress: Progress.printStdErr());
 
-      await NamedLock(name: 'compile').withLock(() async {
+      await await NamedLock(name: 'compile').withLock(() async {
         for (final command in required) {
           final script = DartScript.fromFile(join(pathToPackageUnitTester,
               'test', 'test_script', 'general', 'bin', '$command.dart'));
