@@ -5,9 +5,9 @@ mixin ProgressMixin implements Progress {
   // int get exitCode => throw UnimplementedError();
 
   /// Returns the first line from the command or
-  /// null if no lines where returned
+  /// null if no lines were returned
   @override
-  String? get firstLine => lines.first;
+  String? get firstLine => lines.firstOrNull;
 
   @override
   void forEach(void Function(String line) action) {
