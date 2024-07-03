@@ -10,7 +10,8 @@ import 'package:path/path.dart';
 
 import '../../dcli_core.dart';
 
-// TODO(bsutton): investigate if we need to restore the [LimitedStreamController]
+// TODO(bsutton): investigate if we need to restore the 
+// [LimitedStreamController]
 // typedef FindController<T> = LimitedStreamController<T>;
 typedef ProgressCallback = bool Function(FindItem item);
 
