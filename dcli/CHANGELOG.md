@@ -1,3 +1,6 @@
+# 4.0.4
+- opened the win32 compatible version range. This resulted in a number of deprecated warnings which we have suppressed. This should be ok until we need to support win32 6.x and helps HMB to work with the latest file_picker pacakge.
+
 # 4.0.3
 - added missing await.
 - Merge pull request #248 from sstasi95/master
