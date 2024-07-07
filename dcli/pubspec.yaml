@@ -40,7 +40,7 @@ dependencies:
   system_info2: ^4.0.0
   uuid: ^4.1.0
   validators2: ^5.0.0
-  win32: ">=4.1.4 <5.4.0"
+  win32: ">=4.1.4 <6.0.0"
   yaml: ^3.0.0
 
 dev_dependencies:
