@@ -12,5 +12,6 @@ Place each file in the resource directory.
 
 Run `dcli pack`.
 
-For details on unpacking resources see the [Asset/Resource](../dcli-api/assets.md) section.
+You can also pack resources external to your project by creating a tool/dcli/pack.yaml.
 
+For further details on packing and unpacking resources see the [Asset/Resource](../dcli-api/assets.md) section.
