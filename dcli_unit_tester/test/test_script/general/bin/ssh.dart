@@ -115,14 +115,14 @@ void main(List<String> args) {
   touch('dcli.txt', create: true);
   Remote().scp(from: ['dcli.txt'], toHost: fqdn, to: '/tmp');
 
-  //  "ssh -t bsutton@auditord.noojee.com.au '/home/bsutton/git/auditor/backup.sh nowString.sql'"
+  //  "ssh -t bsutton@auditord.onepub.dev '/home/bsutton/git/auditor/backup.sh nowString.sql'"
   final now = DateTime.now();
   Remote().exec(
-      host: 'bsutton@auditord.noojee.com.au',
+      host: 'bsutton@auditord.onepub.com.au',
       command: '/home/bsutton/git/auditor/backup.sh $now.sql');
 
   Remote().scp(
-      fromHost: 'auditord.noojee.com.au',
+      fromHost: 'auditord.onepub.dev',
       from: ['/home/bsutton/git/auditor/$now.sql'],
       to: '.');
 

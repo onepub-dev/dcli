@@ -111,7 +111,7 @@ Pack all files under the '${relative(Resources().resourceRoot)}' directory or
       desc += '''
       
 To include resources located outside of you package directory create tool/pack.yaml.
-https://dcli.noojee.dev/dcli-api/assets#external-resources
+https://dcli.onepub.dev/dcli-api/assets#external-resources
 ''';
     }
     return desc;

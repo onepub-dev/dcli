@@ -180,9 +180,9 @@ mixin WindowsMixin {
 
     regCreateKey(HKEY_CURRENT_USER, progIdPath);
 
-    regSetString(HKEY_CURRENT_USER, progIdPath, 'noojee.dcli', '');
+    regSetString(HKEY_CURRENT_USER, progIdPath, 'onepub.dcli', '');
 
-    const commandPath = r'Software\Classes\noojee.dcli\shell\open\command';
+    const commandPath = r'Software\Classes\onepub.dcli\shell\open\command';
     if (regKeyExists(HKEY_CURRENT_USER, commandPath)) {
       regDeleteKey(HKEY_CURRENT_USER, commandPath);
     }
@@ -210,7 +210,7 @@ mixin WindowsMixin {
   /// ```
   /// https://docs.microsoft.com/en-us/windows/win32/shell/fa-file-types
   void addFileAssociationv2() {
-    // create a ProgID for dcli 'noojee.dcli'
+    // create a ProgID for dcli 'onepub.dcli'
     regSetString(HKEY_CLASSES_ROOT, '.dart', defaultRegistryValueName, 'dcli');
 
     // When you create or change a file association, it is important to notify
@@ -221,19 +221,19 @@ mixin WindowsMixin {
     // computer\hkey_classes_root\.dart\OpenWithProgids => default (not set),
     // VSCode.dart
 
-    // create a ProgID for dcli 'noojee.dcli'
-    regSetString(HKEY_CURRENT_USER, r'\Software\Classes\noojee.dcli',
+    // create a ProgID for dcli 'onepub.dcli'
+    regSetString(HKEY_CURRENT_USER, r'\Software\Classes\onepub.dcli',
         defaultRegistryValueName, 'dcli');
 
     // associate the .dart extension with dcli's prog id
     regSetString(HKEY_CURRENT_USER, r'\Software\Classes\.dart',
-        defaultRegistryValueName, 'noojee.dcli');
+        defaultRegistryValueName, 'onepub.dcli');
 
     // regSetString(HKEY_CLASSES_ROOT, r'.dart\OpenWithProgids', 'dcli.bat', '');
 
     // computer\hkey_current_user\software\classes\.dart -> default (not set)
     regSetString(HKEY_CURRENT_USER, r'SOFTWARE\Classes\.dart\OpenWithProgids',
-        'noojee.dcli.dart', '');
+        'onepub.dcli.dart', '');
 
 // computer\hkey_current_user\software\classes\.dart -> default (not set)
     regSetString(HKEY_LOCAL_MACHINE, r'SOFTWARE\Classes\.dart',

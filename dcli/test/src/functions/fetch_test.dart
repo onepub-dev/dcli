@@ -16,7 +16,7 @@ import 'package:path/path.dart' hide equals;
 import 'package:test/test.dart';
 
 String baseURl =
-    'https://github.com/noojee/dcli/raw/master/dcli/test/src/functions/fetch_downloads';
+    'https://github.com/onepub/dcli/raw/master/dcli/test/src/functions/fetch_downloads';
 void main() {
   group('Fetch Single', () {
     // Don't know how to test this as it writes directly to stdout.
@@ -240,7 +240,7 @@ void main() {
 
     test('404', () async {
       await core.withTempFileAsync((file) async {
-        const url = 'https://www.noojee.com.au/notfound';
+        const url = 'https://www.onepub.com.au/notfound';
 
         expect(
           () async => fetch(url: url, saveToPath: file),

@@ -97,7 +97,7 @@ class Format {
   /// components of the string and replacing them with '...'
   ///
   /// Example:
-  /// var long = 'http://www.noojee.com.au/some/long/url';
+  /// var long = 'http://www.onepub.dev/some/long/url';
   /// print(limitString(long, width: 20))
   /// > http://...ong/url
   String limitString(String display, {int width = 40}) {

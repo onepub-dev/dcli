@@ -90,6 +90,7 @@ class Resources {
     print(green('Pack complete'));
   }
 
+  /// Packs the set of files located under [resourceRoot]
   List<_Resource> _packResources(List<String> pathToResources) {
     final resources = <_Resource>[];
 

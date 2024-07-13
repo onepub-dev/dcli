@@ -33,7 +33,7 @@ void main() {
     if (regKeyExists(HKEY_CURRENT_USER, progIds)) {
       regDeleteKey(HKEY_CURRENT_USER, progIds);
     }
-    const command = r'Software\Classes\noojee.dcli\shell\open\command';
+    const command = r'Software\Classes\onepub.dcli\shell\open\command';
 
     if (regKeyExists(HKEY_CURRENT_USER, command)) {
       regDeleteKey(HKEY_CURRENT_USER, command);
