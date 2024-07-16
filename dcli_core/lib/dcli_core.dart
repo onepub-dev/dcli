@@ -25,6 +25,7 @@ export 'src/functions/env.dart'
         withEnvironment,
         withEnvironmentAsync;
 export 'src/functions/find.dart';
+export 'src/functions/find_async.dart';
 export 'src/functions/head.dart';
 export 'src/functions/is.dart';
 export 'src/functions/move.dart' show MoveException, move;

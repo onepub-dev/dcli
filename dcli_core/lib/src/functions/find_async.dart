@@ -4,22 +4,17 @@
  * Written by Brett Sutton <bsutton@onepub.dev>, Jan 2022
  */
 
+import 'dart:async';
 import 'dart:io';
 
 import 'package:path/path.dart';
 
 import '../../dcli_core.dart';
 
-// TODO(bsutton): investigate if we need to restore the
-// [LimitedStreamController]
-// typedef FindController<T> = LimitedStreamController<T>;
-typedef ProgressCallback = bool Function(FindItem item);
-
 ///
 /// Returns the list of files in the current and child
-/// directories that match the passed glob pattern.
-///
-/// Each file is returned as an absolute path.
+/// directories that match the passed glob pattern as a Stream
+/// of absolute paths.
 ///
 /// You can obtain a relative path by calling:
 /// ```dart
@@ -30,13 +25,13 @@ typedef ProgressCallback = bool Function(FindItem item);
 /// See the below notes for details.
 ///
 /// ```dart
-/// find('*.jpg', recursive:true).forEach((file) => print(file));
+/// await for (final file in find('*.jpg', recursive:true))
+///    print(file);
 ///
-/// List<String> results = find('[a-z]*.jpg', caseSensitive:true).toList();
+/// List<String> results = findAsync('[a-z]*.jpg', caseSensitive:true).toList();
 ///
-/// find('*.jpg'
-///   , types:[Find.directory, Find.file])
-///     .forEach((file) => print(file));
+/// await for (final file in find('*.jpg', types:[Find.directory, Find.file])
+///      print(file);
 /// ```
 ///
 /// Valid patterns are:
@@ -79,67 +74,66 @@ typedef ProgressCallback = bool Function(FindItem item);
 /// [types] the list of types to search file. Defaults to [Find.file].
 ///   See [Find.file], [Find.directory], [Find.link].
 ///
-/// Passing a [progress] will allow you to process the results as the are
-/// produced rather than having to wait for the call to find to complete.
-/// The passed progress is also returned.
-/// If the [progress] doesn't output [stdout] then you will get no results
-/// back.
-///
-// TODO(bsutton): consider having find return a Stream and eliminate passing
-/// a controller in.
-void find(
+Stream<String> findAsync(
   String pattern, {
-  required ProgressCallback progress,
   bool caseSensitive = false,
   bool recursive = true,
   bool includeHidden = false,
   String workingDirectory = '.',
   List<FileSystemEntityType> types = const [Find.file],
-}) =>
-    Find()._find(
-      pattern,
-      caseSensitive: caseSensitive,
-      recursive: recursive,
-      includeHidden: includeHidden,
-      workingDirectory: workingDirectory,
-      progress: progress,
-      types: types,
-    );
+}) async* {
+  // We us a [LimitedStreamController] as a slow reader
+  // can cause an out of memory exception if we keep pumping
+  // more files into the stream.
+  // ignore: close_sinks
+  final controller = LimitedStreamController<String>(100);
+  await FindAsync()._findAsync(
+    pattern,
+    caseSensitive: caseSensitive,
+    recursive: recursive,
+    includeHidden: includeHidden,
+    workingDirectory: workingDirectory,
+    controller: controller,
+    types: types,
+  );
 
-/// Implementation for the [_find] function.
-class Find extends DCliFunction {
+  yield* controller.stream;
+}
+
+/// Implementation for the [_findAsync] function.
+class FindAsync extends DCliFunction {
   final bool _closed = false;
 
-  /// Find matching files an call [progress] for each one.
-  void _find(
+  /// Find matching files and return them as a stream
+  Future<void> _findAsync(
     String pattern, {
-    required ProgressCallback progress,
+    required LimitedStreamController<String> controller,
     bool caseSensitive = false,
     bool recursive = true,
     String workingDirectory = '.',
     List<FileSystemEntityType> types = const [Find.file],
     bool includeHidden = false,
-  }) {
+  }) async {
     final config = FindConfig.build(
         pattern: pattern,
         workingDirectory: workingDirectory,
         includeHidden: includeHidden,
         caseSensitive: caseSensitive);
 
-    _innerFind(
+    await _innerFindAsync(
       config: config,
       recursive: recursive,
-      progress: progress,
+      controller: controller,
       types: types,
     );
   }
 
-  void _innerFind({
+  Future<void> _innerFindAsync({
     required FindConfig config,
-    required ProgressCallback progress,
+    required LimitedStreamController<String> controller,
     bool recursive = true,
     List<FileSystemEntityType> types = const [Find.file],
-  }) {
+  }) async {
     verbose(
       () => 'find: pwd: $pwd '
           'workingDirectory: ${truepath(config.workingDirectory)} '
@@ -151,14 +145,13 @@ class Find extends DCliFunction {
         List<FileSystemEntity?>.filled(100, null, growable: true);
     final childDirectories =
         List<FileSystemEntity?>.filled(100, null, growable: true);
-    if (!_processDirectory(
-      config.workingDirectory,
+
+    if (!await _processDirectory(
+      config,
       config.workingDirectory,
       recursive,
       types,
-      config.matcher,
-      config.includeHidden,
-      progress,
+      controller,
       childDirectories,
     )) {
       return;
@@ -170,14 +163,12 @@ class Find extends DCliFunction {
           break;
         }
         // print('calling _processDirectory ${count++}');
-        if (!_processDirectory(
-          config.workingDirectory,
+        if (!await _processDirectory(
+          config,
           directory.path,
           recursive,
           types,
-          config.matcher,
-          config.includeHidden,
-          progress,
+          controller,
           singleDirectory,
         )) {
           break;
@@ -187,45 +178,41 @@ class Find extends DCliFunction {
       }
       _copyInto(childDirectories, nextLevel);
     }
+    unawaited(controller.close());
   }
 
-  bool _processDirectory(
-    String workingDirectory,
+  Future<bool> _processDirectory(
+    FindConfig config,
     String currentDirectory,
     bool recursive,
     List<FileSystemEntityType> types,
-    PatternMatcher matcher,
-    bool includeHidden,
-    ProgressCallback progress,
+    LimitedStreamController<String> controller,
     List<FileSystemEntity?> nextLevel,
-  ) {
+  ) async {
     // print('process Directory ${dircount++}');
-    final list = Directory(currentDirectory).listSync(followLinks: false);
 
     var nextLevelIndex = 0;
 
-    for (final entity in list) {
+    await for (final entity
+        in Directory(currentDirectory).list(followLinks: false)) {
       try {
         late final FileSystemEntityType type;
         type = FileSystemEntity.typeSync(entity.path, followLinks: false);
 
         if (types.contains(type) &&
-            matcher.match(entity.path) &&
+            config.matcher.match(entity.path) &&
             _allowed(
-              workingDirectory,
+              config.workingDirectory,
               entity,
-              includeHidden: includeHidden,
+              includeHidden: config.includeHidden,
             )) {
           if (_closed) {
             return false;
           }
 
-          /// If the controller has been paused or hasn't yet been
-          /// listened to then we don't want to add files to
-          /// it otherwise we may run out of memory.
-          if (!progress(FindItem(entity.path, type))) {
-            return false;
-          }
+          // TODO(bsutton): do we need to wait if the controller is
+          /// paused?
+          controller.asyncAdd(entity.path);
         }
 
         /// If we are recursing then we need to add any directories
@@ -375,183 +362,4 @@ class Find extends DCliFunction {
 
     return error;
   }
-}
-
-class PatternMatcher {
-  PatternMatcher(
-    this.pattern, {
-    required this.workingDirectory,
-    required this.caseSensitive,
-  }) {
-    regEx = buildRegEx();
-
-    final patternParts = split(dirname(pattern));
-    var count = patternParts.length;
-    if (patternParts.length == 1 && patternParts[0] == '.') {
-      count = 0;
-    }
-    directoryParts = count;
-  }
-
-  String pattern;
-  String workingDirectory;
-  late RegExp regEx;
-  bool caseSensitive;
-
-  /// the no. of directories in the pattern
-  late final int directoryParts;
-
-  bool match(String path) {
-    final matchPart = _extractMatchPart(path);
-    //  print('path: $path, matchPart: $matchPart pattern: $pattern');
-    return regEx.stringMatch(matchPart) == matchPart;
-  }
-
-  RegExp buildRegEx() {
-    var regEx = '';
-
-    for (var i = 0; i < pattern.length; i++) {
-      final char = pattern[i];
-
-      switch (char) {
-        case '[':
-          regEx += '[';
-          break;
-        case ']':
-          regEx += ']';
-          break;
-        case '*':
-          regEx += '.*';
-          break;
-        case '?':
-          regEx += '.';
-          break;
-        case '-':
-          regEx += '-';
-          break;
-        case '!':
-          regEx += '^';
-          break;
-        case '.':
-          regEx += r'\.';
-          break;
-        case r'\':
-          regEx += r'\\';
-          break;
-        default:
-          regEx += char;
-          break;
-      }
-    }
-    return RegExp(regEx, caseSensitive: caseSensitive);
-  }
-
-  /// A pattern may contain a relative path in which case
-  /// we need to match [path] with the same no. of directories
-  /// as is contained in the pattern.
-  ///
-  /// This method extracts the components of a absolute [path]
-  /// that must be used when doing the pattern match.
-  String _extractMatchPart(String path) {
-    if (directoryParts == 0) {
-      return basename(path);
-    }
-
-    final pathParts = split(dirname(relative(path, from: workingDirectory)));
-
-    var partsCount = pathParts.length;
-    if (pathParts.length == 1 && pathParts[0] == '.') {
-      partsCount = 0;
-    }
-
-    /// If the path doesn't have enough parts then just
-    /// return the path relative to the workingDirectory.
-    if (partsCount < directoryParts) {
-      return relative(path, from: workingDirectory);
-    }
-
-    /// return just the required parts.
-    return joinAll(
-      [...pathParts.sublist(partsCount - directoryParts), basename(path)],
-    );
-  }
-}
-
-//typedef FindProgress = Future<void> Function(String path);
-//typedef FindProgress = Sink<FindItem>();
-
-/// Holds details of a file system entity returned by the
-/// [find] function.
-class FindItem {
-  /// [pathTo] is the path to the file system entity
-  /// [type] is the type of file system entity.
-  FindItem(this.pathTo, this.type);
-
-  ///  the path to the file system entity
-  String pathTo;
-
-  /// type of file system entity
-  FileSystemEntityType type;
-}
-
-/// Thrown when the [find] function encouters an error.
-class FindException extends DCliFunctionException {
-  /// Thrown when the [move] function encouters an error.
-  FindException(super.reason);
-}
-
-class FindConfig {
-  factory FindConfig.build(
-      {required String pattern,
-      required String workingDirectory,
-      required bool includeHidden,
-      required bool caseSensitive}) {
-    /// strip any path components out of the pattern
-    /// and add them to the working directory.
-    /// If there is no dirname component we get '.'
-    final directoryPart = dirname(pattern);
-    if (directoryPart != '.') {
-      workingDirectory = join(workingDirectory, directoryPart);
-    }
-    pattern = basename(pattern);
-
-    if (!exists(workingDirectory)) {
-      throw FindException(
-        'The path ${truepath(workingDirectory)} does not exists',
-      );
-    }
-
-    final matcher = PatternMatcher(
-      pattern,
-      caseSensitive: caseSensitive,
-      workingDirectory: workingDirectory,
-    );
-    if (workingDirectory == '.') {
-      workingDirectory = pwd;
-    } else {
-      workingDirectory = truepath(workingDirectory);
-    }
-
-    if (basename(pattern).startsWith('.')) {
-      includeHidden = true;
-    }
-
-    return FindConfig._(
-        workingDirectory: workingDirectory,
-        pattern: pattern,
-        includeHidden: includeHidden,
-        caseSensitive: caseSensitive,
-        matcher: matcher);
-  }
-  FindConfig._(
-      {required this.workingDirectory,
-      required this.pattern,
-      required this.includeHidden,
-      required this.caseSensitive,
-      required this.matcher});
-  String workingDirectory;
-  String pattern;
-  bool includeHidden;
-  bool caseSensitive;
-  PatternMatcher matcher;
 }
