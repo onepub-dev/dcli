@@ -1,3 +1,6 @@
+# 4.0.5
+- and found and fixed additional null check exceptions.
+
 # 4.0.4
 - Fixed a null check operator in the find function.
 
