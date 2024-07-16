@@ -403,7 +403,7 @@ class Find extends DCliFunction {
     var error = false;
     error = e is FileSystemException &&
         !Platform.isWindows &&
-        e.osError!.errorCode == 5;
+        e.osError?.errorCode == 5;
 
     if (error) {
       verbose(() => 'General IO Error(5) accessing: ${e.path}');
