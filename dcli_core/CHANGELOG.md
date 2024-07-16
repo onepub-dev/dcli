@@ -1,3 +1,6 @@
+# 4.0.6
+- Added findAsync to the public api.
+
 # 4.0.5
 - and found and fixed additional null check exceptions.
 
