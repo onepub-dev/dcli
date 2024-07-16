@@ -74,7 +74,7 @@ import '../../dcli_core.dart';
 /// [types] the list of types to search file. Defaults to [Find.file].
 ///   See [Find.file], [Find.directory], [Find.link].
 ///
-Stream<String> findAsync(
+Stream<FindItem> findAsync(
   String pattern, {
   bool caseSensitive = false,
   bool recursive = true,
@@ -86,7 +86,7 @@ Stream<String> findAsync(
   // can cause an out of memory exception if we keep pumping
   // more files into the stream.
   // ignore: close_sinks
-  final controller = LimitedStreamController<String>(100);
+  final controller = LimitedStreamController<FindItem>(100);
   await FindAsync()._findAsync(
     pattern,
     caseSensitive: caseSensitive,
@@ -107,7 +107,7 @@ class FindAsync extends DCliFunction {
   /// Find matching files and return them as a stream
   Future<void> _findAsync(
     String pattern, {
-    required LimitedStreamController<String> controller,
+    required LimitedStreamController<FindItem> controller,
     bool caseSensitive = false,
     bool recursive = true,
     String workingDirectory = '.',
@@ -130,7 +130,7 @@ class FindAsync extends DCliFunction {
 
   Future<void> _innerFindAsync({
     required FindConfig config,
-    required LimitedStreamController<String> controller,
+    required LimitedStreamController<FindItem> controller,
     bool recursive = true,
     List<FileSystemEntityType> types = const [Find.file],
   }) async {
@@ -186,7 +186,7 @@ class FindAsync extends DCliFunction {
     String currentDirectory,
     bool recursive,
     List<FileSystemEntityType> types,
-    LimitedStreamController<String> controller,
+    LimitedStreamController<FindItem> controller,
     List<FileSystemEntity?> nextLevel,
   ) async {
     // print('process Directory ${dircount++}');
@@ -212,7 +212,7 @@ class FindAsync extends DCliFunction {
 
           // TODO(bsutton): do we need to wait if the controller is
           /// paused?
-          await controller.asyncAdd(entity.path);
+          await controller.asyncAdd(FindItem(entity.path, type));
         }
 
         /// If we are recursing then we need to add any directories

@@ -492,6 +492,9 @@ class FindItem {
 
   /// type of file system entity
   FileSystemEntityType type;
+
+  @override
+  String toString() => pathTo;
 }
 
 /// Thrown when the [find] function encouters an error.
