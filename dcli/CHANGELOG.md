@@ -1,3 +1,6 @@
+# 4.0.5
+- change the #! bang to use dart rather than dcli. In the early days dcli had to read a script and set up the pubspec but we no longer support this mode and calling through dcli just slows start time on scripts. So we are moving to launching via dart directly.
+
 # 4.0.4
 - opened the win32 compatible version range. This resulted in a number of deprecated warnings which we have suppressed. This should be ok until we need to support win32 6.x and helps HMB to work with the latest file_picker pacakge.
 
