@@ -1,3 +1,6 @@
+# 4.0.7
+- change the stream type to Stream<FindItem> for the findAsync method to match how find returns files.
+
 # 4.0.6
 - Added findAsync to the public api.
 
