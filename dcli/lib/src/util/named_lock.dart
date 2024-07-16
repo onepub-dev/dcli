@@ -46,8 +46,9 @@ class NamedLock {
   /// The name of the lock.
   final String name;
 
+  // TODO(tsavo-at-pieces): - layer this into named locks package
   /// The description of the lock for error messages.
-  /// TODO @tsavo-at-pieces - layer this into named locks package
+  // ignore: flutter_style_todos
   // ignore: unused_field
   final String _description;
 

@@ -355,7 +355,7 @@ class RunnableProcess {
     });
   }
 
-  /// TODO(bsutton): does this work now we have moved to mailboxes?
+  // TODO(bsutton): does this work now we have moved to mailboxes?
   // void pipeTo(RunnableProcess stdin) {
   //   // fProcess.then((stdoutProcess) {
   //   //   stdin.fProcess.then<void>(

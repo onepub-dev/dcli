@@ -20,9 +20,9 @@ class PipeSync {
 
   void write(List<int> data) => _lhsChannel.writeToStdin(data);
 
+  // TODO(bsutton): we have two processes here so what
   /// fetch the exit code of the process.
   /// If the process has not yet exited then null will be returned.
-  /// TODO(bsutton): we have two processes here so what
   /// exit code do we return?
   int? get exitCode => _rhsChannel.exitCode;
 
