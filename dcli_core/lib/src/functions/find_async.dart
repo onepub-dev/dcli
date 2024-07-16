@@ -212,7 +212,7 @@ class FindAsync extends DCliFunction {
 
           // TODO(bsutton): do we need to wait if the controller is
           /// paused?
-          controller.asyncAdd(entity.path);
+          await controller.asyncAdd(entity.path);
         }
 
         /// If we are recursing then we need to add any directories
