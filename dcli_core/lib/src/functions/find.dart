@@ -280,19 +280,19 @@ class Find extends DCliFunction {
           /// can mean a corrupt disk, problems with virtualisation
           /// I've seen this when gdrive.
         } else if (e is FileSystemException &&
-            e.osError!.errorCode == _accessDenied) {
+            e.osError?.errorCode == _accessDenied) {
           /// check for and ignore permission denied.
           verbose(() => 'Permission denied: ${e.path}');
-        } else if (e is FileSystemException && e.osError!.errorCode == 40) {
+        } else if (e is FileSystemException && e.osError?.errorCode == 40) {
           /// ignore recursive symbolic link problems.
           verbose(() => 'Too many levels of symbolic links: ${e.path}');
-        } else if (e is FileSystemException && e.osError!.errorCode == 22) {
+        } else if (e is FileSystemException && e.osError?.errorCode == 22) {
           /// Invalid argument - not really certain what this means but we get
           /// it when processing a .steam folder that includes a windows
           /// emulator.
           verbose(() => 'Invalid argument: ${e.path}');
         } else if (e is FileSystemException &&
-            e.osError!.errorCode == _directoryNotFound) {
+            e.osError?.errorCode == _directoryNotFound) {
           /// The directory may have been deleted between us finding it and
           /// processing it.
           verbose(
