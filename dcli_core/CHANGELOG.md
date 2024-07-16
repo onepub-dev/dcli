@@ -1,3 +1,6 @@
+# 4.0.4
+- Fixed a null check operator in the find function.
+
 # 4.0.3
 - fix ProgressMixin.firstLine throwing if there are no lines - contributed by @sstasi95
 
