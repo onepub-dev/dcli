@@ -219,11 +219,9 @@ externals:
 
 ### path
 
-The path is a path to an resource which lives outside the projects 'resource' folder.
+The path is an absolute path or path relative to your dart project's root directory.
 
-This is normally used for resources that live outside the projects directory structure but can also specifiy a file/directory that lives within the project but outside the 'resource' folder.
-
-The path may be relative to the project root or an absolute path.
+This is normally used for resources that live outside the projects directory structure but can also specify a file/directory that lives within the project but outside the 'resource' folder.
 
 The path can be a file or a directory.
 
@@ -274,6 +272,10 @@ The mount is a virtual path and can be any path you wish provided that it does N
 **A mount is always a relative path.**
 
 To unpack external resources you use the mount as the key into the ResourceRegistry.
+
+## Ignored files
+
+By default the pack command ignores any hidden files (those beginning with a '.'). To include a hidden file or directory add an explit path statement to that file or directory.
 
 ## Limits
 
