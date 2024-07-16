@@ -1,4 +1,4 @@
-#! /usr/bin/env dcli
+#! /usr/bin/env dart
 
 @Timeout(Duration(minutes: 10))
 library;

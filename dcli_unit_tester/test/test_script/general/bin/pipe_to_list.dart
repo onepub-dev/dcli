@@ -1,4 +1,4 @@
-#! /usr/bin/env dcli
+#! /usr/bin/env dart
 // ignore_for_file: dangling_library_doc_comments
 
 /* Copyright (C) S. Brett Sutton - All Rights Reserved
