@@ -17,9 +17,9 @@ void main() {
     test('warmup ', () async {
       await TestFileSystem().withinZone((fs) async {
         final projectPath = join(fs.fsRoot, 'test_script/general');
-        DartProject.fromPath(projectPath)
-          ..clean()
-          ..warmup();
+        final project = DartProject.fromPath(projectPath);
+        await project.clean();
+        await project.warmup();
 
         expect(exists(join(projectPath, '.dart_tool')), equals(true));
         expect(exists(join(projectPath, 'pubspec.lock')), equals(true));

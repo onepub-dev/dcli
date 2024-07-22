@@ -57,7 +57,7 @@ class CleanCommand extends Command {
     print(orange('Cleaning ${project.pathToProjectRoot} ...'));
     print('');
 
-     project.clean();
+    await project.clean();
   }
 
   @override

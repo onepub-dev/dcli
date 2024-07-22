@@ -507,7 +507,7 @@ extension StringAsProcess on String {
 /// Allows you to chain multiple processes by piping the output
 /// of the left hand process to the input of the right hand process.
 ///
-/// DCli performs Glob expansion on command arguments. See [run] for details.
+/// DCli performs Glob expansion on command arguments. See run for details.
 ///
 /// The following command calls:
 ///  - tail on syslog

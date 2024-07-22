@@ -11,11 +11,10 @@ import 'dart:io' as io;
 import 'package:meta/meta.dart';
 import 'package:path/path.dart';
 import 'package:pubspec_manager/pubspec_manager.dart';
-// Here simply to avoid conflicts with the old NamedLocks
-import 'package:runtime_named_locks/runtime_named_locks.dart';
 
 import '../../dcli.dart' hide NamedLock;
 import '../../posix.dart';
+import '../util/named_lock.dart';
 import '../version/version.g.dart';
 import 'pub_get.dart';
 import 'pub_upgrade.dart';
@@ -232,38 +231,36 @@ class DartProject {
   /// If [upgrade] is true then a pub upgrade is ran rather than
   /// pub get.
   ///
-  void warmup({bool background = false, bool upgrade = false}) {
-    NamedLock.guard(
+  Future<void> warmup({bool background = false, bool upgrade = false}) async {
+    await NamedLock(
       name: _lockName,
-      execution: ExecutionCall<void, PubGetException>(
-        callable: () {
-          try {
-            if (background) {
-              // we run the clean in the background
-              // by running another copy of dcli.
-              print('DCli warmup started in the background.');
-              '${DCliPaths().dcliName} '
-                      '''-v=${join(io.Directory.systemTemp.path, 'dcli.warmup.log')}'''
-                      ' warmup $pathToProjectRoot'
-                  .start(
-                detached: true,
-                runInShell: true,
-                extensionSearch: false,
-              );
+    ).withLockAsync(
+      () async {
+        try {
+          if (background) {
+            // we run the clean in the background
+            // by running another copy of dcli.
+            print('DCli warmup started in the background.');
+            '${DCliPaths().dcliName} '
+                    '''-v=${join(io.Directory.systemTemp.path, 'dcli.warmup.log')}'''
+                    ' warmup $pathToProjectRoot'
+                .start(
+              detached: true,
+              runInShell: true,
+              extensionSearch: false,
+            );
+          } else {
+            // print(orange('Running pub get...'));
+            if (upgrade) {
+              await _pubupgrade();
             } else {
-              // print(orange('Running pub get...'));
-              if (upgrade) {
-                _pubupgrade();
-              } else {
-                _pubget();
-              }
+              await _pubget();
             }
-          } on PubGetException {
-            print(
-                red("\ndcli warmup failed due to the 'pub get' call failing."));
           }
-        },
-      ),
+        } on PubGetException {
+          print(red("\ndcli warmup failed due to the 'pub get' call failing."));
+        }
+      },
       waiting: 'Waiting for warmup to complete...',
     );
   }
@@ -277,44 +274,40 @@ class DartProject {
   /// .dart_tools
   ///
   /// Any exes for scripts in the directory.
-  void clean() {
-    NamedLock.guard(
-      name: _lockName,
-      execution: ExecutionCall<void, PubGetException>(
-        callable: () {
-          try {
-            find(
-              '.packages',
-              types: [Find.file],
-              workingDirectory: pathToProjectRoot,
-            ).forEach(delete);
+  Future<void> clean() async {
+    await NamedLock(name: _lockName).withLockAsync(
+      () async {
+        try {
+          find(
+            '.packages',
+            types: [Find.file],
+            workingDirectory: pathToProjectRoot,
+          ).forEach(delete);
 
-            /// we cant delete directories whilst recusively scanning them.
-            final toBeDeleted = <String>[];
-            find(
-              '.dart_tool',
-              types: [Find.directory],
-              workingDirectory: pathToProjectRoot,
-            ).forEach(toBeDeleted.add);
+          /// we cant delete directories whilst recusively scanning them.
+          final toBeDeleted = <String>[];
+          find(
+            '.dart_tool',
+            types: [Find.directory],
+            workingDirectory: pathToProjectRoot,
+          ).forEach(toBeDeleted.add);
 
-            _deleteDirs(toBeDeleted);
+          _deleteDirs(toBeDeleted);
 
-            find('pubspec.lock', workingDirectory: pathToProjectRoot)
-                .forEach(delete);
+          find('pubspec.lock', workingDirectory: pathToProjectRoot)
+              .forEach(delete);
 
-            find('*.dart', workingDirectory: pathToProjectRoot)
-                .forEach((scriptPath) {
-              final script = DartScript.fromFile(scriptPath);
-              if (exists(script.pathToExe)) {
-                delete(script.pathToExe);
-              }
-            });
-          } on PubGetException {
-            print(
-                red("\ndcli clean failed due to the 'pub get' call failing."));
-          }
-        },
-      ),
+          find('*.dart', workingDirectory: pathToProjectRoot)
+              .forEach((scriptPath) {
+            final script = DartScript.fromFile(scriptPath);
+            if (exists(script.pathToExe)) {
+              delete(script.pathToExe);
+            }
+          });
+        } on PubGetException {
+          print(red("\ndcli clean failed due to the 'pub get' call failing."));
+        }
+      },
       waiting: 'Waiting for clean to complete...',
     );
   }
@@ -328,14 +321,15 @@ class DartProject {
   /// compiled script even if one of the same name exists in `/.dcli/bin
   /// [overwrite] defaults to false.
   ///
-  void compile({bool install = false, bool overwrite = false}) {
-    NamedLock.guard(
+  Future<void> compile({bool install = false, bool overwrite = false}) async {
+    await NamedLock(
       name: _lockName,
-      execution: ExecutionCall<void, PubGetException>(callable: () {
+    ).withLockAsync(
+      () async {
         find('*.dart', workingDirectory: pathToProjectRoot).forEach((file) =>
             DartScript.fromFile(file)
                 .compile(install: install, overwrite: overwrite));
-      }),
+      },
       waiting: 'Waiting for compile to complete...',
     );
   }
@@ -347,20 +341,17 @@ class DartProject {
   ///
   /// This is normally done when the project cache is first
   /// created and when a script's pubspec changes.
-  void _pubget() {
-    NamedLock.guard(
-      name: _lockName,
-      execution: ExecutionCall<void, PubGetException>(callable: () {
-        final pubGet = PubGet(this);
-        if (Shell.current.isSudo) {
-          /// bugger we just screwed the cache permissions so lets fix them.
-          'chmod -R ${env['USER']}:${env['USER']} ${PubCache().pathTo}'.run;
-          throw DartProjectException(
-              'You must compile your script before running it under sudo');
-        }
-        pubGet.run(compileExecutables: false);
-      }),
-    );
+  Future<void> _pubget() async {
+    await NamedLock(name: _lockName).withLockAsync(() async {
+      final pubGet = PubGet(this);
+      if (Shell.current.isSudo) {
+        /// bugger we just screwed the cache permissions so lets fix them.
+        'chmod -R ${env['USER']}:${env['USER']} ${PubCache().pathTo}'.run;
+        throw DartProjectException(
+            'You must compile your script before running it under sudo');
+      }
+      pubGet.run(compileExecutables: false);
+    });
   }
 
   /// Causes a pub upgrade to be run against the project.
@@ -370,11 +361,12 @@ class DartProject {
   ///
   /// This is normally done when the project cache is first
   /// created and when a script's pubspec changes.
-  void _pubupgrade() {
+  Future<void> _pubupgrade() async {
     // Refactor with named lock guard
-    NamedLock.guard(
+    await NamedLock(
       name: _lockName,
-      execution: ExecutionCall<void, PubGetException>(callable: () {
+    ).withLockAsync(
+      () async {
         final pubUpgrade = PubUpgrade(this);
         if (Shell.current.isSudo) {
           /// bugger we just screwed the cache permissions so lets fix them.
@@ -383,7 +375,7 @@ class DartProject {
               'You must compile your script before running it under sudo');
         }
         pubUpgrade.run(compileExecutables: false);
-      }),
+      },
     );
   }
 
