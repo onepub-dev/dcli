@@ -16,7 +16,7 @@ import 'package:path/path.dart' hide equals;
 import 'package:test/test.dart';
 
 String baseURl =
-    'https://github.com/onepub/dcli/raw/master/dcli/test/src/functions/fetch_downloads';
+    'https://github.com/onepub-dev/dcli/raw/master/dcli/test/src/functions/fetch_downloads';
 void main() {
   group('Fetch Single', () {
     // Don't know how to test this as it writes directly to stdout.
@@ -230,8 +230,8 @@ void main() {
                       e.errorCode == 11001) ||
 
                   ///linux
-                  (e.message.contains('Name or service not known') &&
-                      e.errorCode == -2),
+                  (e.message.contains('Failed host lookup') &&
+                      e.errorCode == -5),
             ),
           ),
         );
@@ -240,7 +240,7 @@ void main() {
 
     test('404', () async {
       await core.withTempFileAsync((file) async {
-        const url = 'https://www.onepub.com.au/notfound';
+        const url = 'https://github.com/xx234la43adre';
 
         expect(
           () async => fetch(url: url, saveToPath: file),
