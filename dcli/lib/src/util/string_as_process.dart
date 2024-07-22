@@ -450,93 +450,6 @@ extension StringAsProcess on String {
     return lastLine;
   }
 
-  /// The classic bash style pipe operator.
-  /// Allows you to chain multiple processes by piping the output
-  /// of the left hand process to the input of the right hand process.
-  ///
-  /// DCli performs Glob expansion on command arguments. See [run] for details.
-  ///
-  /// The following command calls:
-  ///  - tail on syslog
-  ///  - we pipe the result to head
-  ///  - head returns the top 5 lines
-  ///  - we pipe the 5 lines to tail
-  ///  - tail returns the last 2 of those 5 line
-  ///  - We are then back in dart world with the forEach where we
-  /// print the 2 lines.
-  ///
-  /// ``` dart
-  /// 'tail /var/log/syslog' | 'head -n 5' | 'tail -n 2'.forEach((line) => print(line));
-  /// ```
-  // TODO(bsutton): restore
-  //Pipe operator |(String rhs) {
-  //   final rhsRunnable = RunnableProcess.fromCommandLine(rhs)
-  //     ..pipe(rhsRunnable.);
-
-  //   final lhsRunnable = RunnableProcess.fromCommandLine(this)
-  //     ..start(paused: true);
-
-  //   return Pipe(lhsRunnable, rhsRunnable);
-  // }
-
-  // // /// Experimental - DO NOT USE
-  // // Stream<String> get stream {
-  // //   var lhsRunnable = RunnableProcess.fromCommandLine(this);
-  // //   lhsRunnable.start(waitForStart: false);
-  // //   return lhsRunnable.stream;
-  // // }
-  // Stream<String> stream({
-  //   bool runInShell = false,
-  //   bool nothrow = false,
-  //   String workingDirectory,
-  // }) {
-  //   var runnable = RunnableProcess.fromCommandLine(this,
-  //       workingDirectory: workingDirectory);
-  //   runnable.run(runInShell: runInShell, nothrow: nothrow, terminal: false);
-  //   return runnable.stream.transform(utf8.decoder);
-  // }
-  /// Experimental - allows you to get a stream of the output written by the
-  /// called process.
-  // Future<Stream<String>> stream({
-  //   bool runInShell = false,
-  //   String? workingDirectory,
-  //   bool nothrow = false,
-  //   bool includeStderr = true,
-  //   bool extensionSearch = true,
-  // }) async {
-  //   final progress = Progress.stream(includeStderr: includeStderr);
-
-  //   await cmd.startStreaming(
-  //     this,
-  //     runInShell: runInShell,
-  //     progress: progress,
-  //     workingDirectory: workingDirectory,
-  //     nothrow: nothrow,
-  //     extensionSearch: extensionSearch,
-  //   );
-
-  //   return progress.stream
-  //       .map(String.fromCharCodes)
-  //       .transform(const LineSplitter());
-  // }
-
-  // /// Experimental - DO NOT USE
-  // Sink<List<int>> get sink {
-  //   final lhsRunnable = RunnableProcess.fromCommandLine(this)
-  //     ..start(
-  //         waitForStart: false, progress: Progress.devNull() as ProgressImpl);
-  //   return lhsRunnable.sink;
-  // }
-
-  // /// Experimental - DO NOT USE
-  // RunnableProcess get process {
-  //   final process = RunnableProcess.fromCommandLine(this)
-  //     ..start(
-  //         waitForStart: false, progress: Progress.devNull() as ProgressImpl);
-
-  //   return process;
-  // } // Treat the [this]  as the name of a file and
-
   /// Truncates and Writes [line] to the file terminated by [newline].
   /// If [newline] is null or isn't passed then the platform
   /// end of line characters are appended as defined by
@@ -589,5 +502,92 @@ extension StringAsProcess on String {
     });
   }
 }
+
+/// The classic bash style pipe operator.
+/// Allows you to chain multiple processes by piping the output
+/// of the left hand process to the input of the right hand process.
+///
+/// DCli performs Glob expansion on command arguments. See [run] for details.
+///
+/// The following command calls:
+///  - tail on syslog
+///  - we pipe the result to head
+///  - head returns the top 5 lines
+///  - we pipe the 5 lines to tail
+///  - tail returns the last 2 of those 5 line
+///  - We are then back in dart world with the forEach where we
+/// print the 2 lines.
+///
+/// ``` dart
+/// 'tail /var/log/syslog' | 'head -n 5' | 'tail -n 2'.forEach((line) => print(line));
+/// ```
+// TODO(bsutton): restore
+//Pipe operator |(String rhs) {
+//   final rhsRunnable = RunnableProcess.fromCommandLine(rhs)
+//     ..pipe(rhsRunnable.);
+
+//   final lhsRunnable = RunnableProcess.fromCommandLine(this)
+//     ..start(paused: true);
+
+//   return Pipe(lhsRunnable, rhsRunnable);
+// }
+
+// // /// Experimental - DO NOT USE
+// // Stream<String> get stream {
+// //   var lhsRunnable = RunnableProcess.fromCommandLine(this);
+// //   lhsRunnable.start(waitForStart: false);
+// //   return lhsRunnable.stream;
+// // }
+// Stream<String> stream({
+//   bool runInShell = false,
+//   bool nothrow = false,
+//   String workingDirectory,
+// }) {
+//   var runnable = RunnableProcess.fromCommandLine(this,
+//       workingDirectory: workingDirectory);
+//   runnable.run(runInShell: runInShell, nothrow: nothrow, terminal: false);
+//   return runnable.stream.transform(utf8.decoder);
+// }
+/// Experimental - allows you to get a stream of the output written by the
+/// called process.
+// Future<Stream<String>> stream({
+//   bool runInShell = false,
+//   String? workingDirectory,
+//   bool nothrow = false,
+//   bool includeStderr = true,
+//   bool extensionSearch = true,
+// }) async {
+//   final progress = Progress.stream(includeStderr: includeStderr);
+
+//   await cmd.startStreaming(
+//     this,
+//     runInShell: runInShell,
+//     progress: progress,
+//     workingDirectory: workingDirectory,
+//     nothrow: nothrow,
+//     extensionSearch: extensionSearch,
+//   );
+
+//   return progress.stream
+//       .map(String.fromCharCodes)
+//       .transform(const LineSplitter());
+// }
+
+// /// Experimental - DO NOT USE
+// Sink<List<int>> get sink {
+//   final lhsRunnable = RunnableProcess.fromCommandLine(this)
+//     ..start(
+//         waitForStart: false, progress: Progress.devNull() as ProgressImpl);
+//   return lhsRunnable.sink;
+// }
+
+// /// Experimental - DO NOT USE
+// RunnableProcess get process {
+//   final process = RunnableProcess.fromCommandLine(this)
+//     ..start(
+//         waitForStart: false, progress: Progress.devNull() as ProgressImpl);
+
+//   return process;
+// } // Treat the [this]  as the name of a file and
 
 void _noOpAction(String line) {}
