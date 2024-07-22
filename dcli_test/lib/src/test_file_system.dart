@@ -50,7 +50,7 @@ class TestFileSystem {
   factory TestFileSystem({bool useCommonPath = true}) {
     TestFileSystem? use;
     if (useCommonPath) {
-      print(orange('Re-using common TestFileSystem'));
+      print(blue('Re-using common TestFileSystem'));
 
       use = common;
     } else {
@@ -128,7 +128,7 @@ class TestFileSystem {
     final frame = stack.frames[0];
 
     print(
-      red(
+      green(
         '${'*' * 40} Starting test '
         '${frame.library}:${frame.line} ${'*' * 80}',
       ),
