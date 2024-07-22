@@ -66,7 +66,7 @@ class TestFileSystem {
 
     final isolateID = Service.getIsolateId(Isolate.current);
     print(
-      red(
+      blue(
             '${'+' * 20}'
             '${'Creating TestFileSystem $fsRoot for isolate $isolateID'}',
           ) +

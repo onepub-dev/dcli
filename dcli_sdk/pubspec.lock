@@ -135,7 +135,7 @@ packages:
       path: "../dcli"
       relative: true
     source: path
-    version: "4.0.3"
+    version: "4.0.5"
   dcli_common:
     dependency: "direct main"
     description:
@@ -149,7 +149,7 @@ packages:
       path: "../dcli_core"
       relative: true
     source: path
-    version: "4.0.3"
+    version: "4.0.7"
   dcli_terminal:
     dependency: "direct main"
     description:
