@@ -111,39 +111,26 @@ class NamedLock {
     Future<void> Function() fn, {
     String? waiting,
   }) async {
-    final callingStackTrace = Trace.current();
     var lockHeld = false;
-    await runZonedGuarded(() async {
-      try {
-        verbose(() => 'lockcount = $_lockCountForName');
+    try {
+      verbose(() => 'lockcount = $_lockCountForName');
 
-        _createLockPath();
+      _createLockPath();
 
-        if (_lockCountForName > 0 || (await _takeLock(waiting))) {
-          lockHeld = true;
-          incLockCount;
+      if (_lockCountForName > 0 || (await _takeLock(waiting))) {
+        lockHeld = true;
+        incLockCount;
 
-          await fn();
-        }
-      } finally {
-        if (lockHeld) {
-          await _releaseLock();
-        }
-        // just in case an async exception can be thrown
-        // I'm uncertain if this is a reality.
-        lockHeld = false;
+        await fn();
       }
-    }, (e, st) async {
+    } finally {
       if (lockHeld) {
         await _releaseLock();
       }
-      verbose(() => 'Exception throw $e : $e');
-      if (e is DCliException) {
-        throw e..stackTrace = callingStackTrace;
-      } else {
-        throw DCliException.from(e, callingStackTrace);
-      }
-    });
+      // just in case an async exception can be thrown
+      // I'm uncertain if this is a reality.
+      lockHeld = false;
+    }
   }
 
   void _createLockPath() {
