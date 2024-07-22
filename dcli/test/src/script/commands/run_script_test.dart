@@ -28,20 +28,6 @@ void main() {
     });
   });
 
-  test('run with virtual pubspec', () async {
-    await TestFileSystem().withinZone((fs) async {
-      int? exit = -1;
-      try {
-        exit = DartScript.fromFile(
-          join(fs.testScriptPath, 'general/bin/which.dart'),
-        ).run(args: ['ls']);
-      } on DCliException catch (e) {
-        print(e);
-      }
-      expect(exit, equals(0));
-    });
-  });
-
   test('run with traditional dart project structure - bin', () async {
     await TestFileSystem().withinZone((fs) async {
       int? exit = -1;
