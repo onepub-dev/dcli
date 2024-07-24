@@ -76,6 +76,8 @@ class ProcessHelper {
   }
 
   /// returns true if the given [pid] is still running.
+  /// Throws an [UnsupportedError] if the OS is not supported.
+  /// On Linux this means the 'ps' command isn't available.
   bool isRunning(int? pid) {
     if (Settings().isWindows) {
       return _windowsIsrunning(pid);
@@ -187,21 +189,17 @@ class ProcessHelper {
   bool _linuxisRunning(int? lpid) {
     var isRunning = false;
 
-    String? line;
-
-    try {
-      /// https://stackoverflow.com/questions/9152979/check-if-process-exists-given-its-pid
-      // if (isPosixSupported) {
-      //   kill(0);
-      // }
-      line = 'ps -q $lpid -o comm='.firstLine;
-      verbose(() => 'ps: $line');
-      if (line != null) {
-        isRunning = true;
-      }
-    } on RunException {
-      // ps not supported on current OS
-      // we have to assume the process is running
+    /// https://stackoverflow.com/questions/9152979/check-if-process-exists-given-its-pid
+    // if (isPosixSupported) {
+    //   kill(0);
+    // }
+    final progress = 'ps -q $lpid -o comm='.start(nothrow: true);
+    final exitCode = progress.exitCode;
+    if (exitCode == 0 || exitCode == 1) {
+      isRunning = (progress.exitCode == 0);
+    } else {
+      throw UnsupportedError(
+          "The 'ps' command is not supported on this platform");
     }
 
     return isRunning;

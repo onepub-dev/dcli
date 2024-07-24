@@ -18,7 +18,7 @@ extension MailBoxMessage on Mailbox {
           _logMessage('mailbox is full sleeping for a bit');
           tryPut = true;
 
-          /// yeild and give the mailbox read a chance to empty
+          /// yeild and give the mailbox reader a chance to empty
           /// the mailbox.
           await Future.delayed(const Duration(seconds: 3), () {});
           _logMessage('woke from mailbox little put sleep.');
