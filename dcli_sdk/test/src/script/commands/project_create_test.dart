@@ -41,7 +41,7 @@ void main() {
     test('Run hello world', () async {
       await capture(() async {
         await TestFileSystem.common.withinZone((fs) async {
-          await withTempDir((fs) async {
+          await withTempDirAsync((fs) async {
             _installTemplates();
             final pathToScript = truepath(fs, 'test', 'bin', scriptName);
             final pathToTemplate = join(fs, 'test');

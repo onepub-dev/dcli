@@ -6,8 +6,7 @@
 
 import 'dart:io';
 
-import 'package:dcli_core/dcli_core.dart' as core;
-
+import '../../dcli.dart';
 import '../settings.dart';
 import 'cd.dart';
 import 'push.dart';
@@ -45,14 +44,14 @@ import 'push.dart';
 ///
 /// See:
 ///  * [push]
-///  * [core.pwd]
+///  * [pwd]
 ///  * [cd]
 ///
 @Deprecated('Use join')
 void pop() => _Pop().pop();
 
 @Deprecated('Use join')
-class _Pop extends core.DCliFunction {
+class _Pop extends DCliFunction {
   ///
   /// Change the working directory back
   /// to its location before push was called.
@@ -68,7 +67,7 @@ class _Pop extends core.DCliFunction {
     }
     final path = InternalSettings().pop().path;
 
-    verbose(() => 'pop:  new -> ${core.truepath(path)}');
+    verbose(() => 'pop:  new -> ${truepath(path)}');
 
     try {
       Directory.current = path;
@@ -76,7 +75,7 @@ class _Pop extends core.DCliFunction {
     // ignore: avoid_catches_without_on_clauses
     catch (e) {
       throw PopException(
-        'An error occured popping to ${core.truepath(path)}. Error $e',
+        'An error occured popping to ${truepath(path)}. Error $e',
       );
     }
   }
@@ -84,7 +83,7 @@ class _Pop extends core.DCliFunction {
 
 // ignore: deprecated_member_use_from_same_package
 /// Thrown when the [pop] function encouters an error.
-class PopException extends core.DCliFunctionException {
+class PopException extends DCliFunctionException {
   // ignore: deprecated_member_use_from_same_package
   /// Thrown when the [pop] function encouters an error.
   PopException(super.reason);

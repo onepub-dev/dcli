@@ -475,7 +475,7 @@ void main() {
     });
 
     test('FetchData.fromFile - not a file', () async {
-      await withTempDir((tmpDir) async {
+      await withTempDirAsync((tmpDir) async {
         expect(
             () => FetchData.fromFile(tmpDir),
             throwsA(predicate<FetchException>(

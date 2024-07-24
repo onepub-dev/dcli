@@ -15,7 +15,7 @@ import 'package:test/test.dart';
 
 void main() {
   t.test('Try everything', () async {
-    await withTempDir((fsRoot) async {
+    await withTempDirAsync((fsRoot) async {
       TestFileSystem.buildDirectoryTree(fsRoot);
       const shellPath = 'shell';
       final mainPath = join(shellPath, 'main');

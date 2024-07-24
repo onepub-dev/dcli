@@ -4,39 +4,6 @@
  * Written by Brett Sutton <bsutton@onepub.dev>, Jan 2022
  */
 
-import 'package:dcli_core/dcli_core.dart' as core;
-
-import '../../dcli.dart';
-
-export 'package:dcli_core/dcli_core.dart' show CreateDirException;
-
-/// Creates a directory as described by [path].
-/// Path may be a single path segment (e.g. bin)
-/// or a full or partial tree (e.g. /usr/bin)
-///
-/// ```dart
-/// createDir("/tmp/fred/tools", recursive: true);
-/// ```
-///
-/// If [recursive] is true then any parent
-/// paths that don't exist will be created.
-///
-/// If [recursive] is false then any parent paths
-/// don't exist then a [CreateDirException] will be thrown.
-///
-/// If the [path] already exists an exception is thrown.
-///
-/// As a convenience [createDir] returns the same path
-/// that it was passed.
-///
-/// ```dart
-///  var path = createDir('/tmp/new_home');
-/// ```
-///
-
-String createDir(String path, {bool recursive = false}) =>
-    core.createDir(path, recursive: recursive);
-
 /// Creates a temp directory and then calls [action].
 /// Once action completes the temporary directory will be deleted.
 ///
@@ -55,24 +22,9 @@ String createDir(String path, {bool recursive = false}) =>
 /// and sometimes you want it created.
 /// If you pass in [pathToTempDir] it will NOT be deleted regardless
 /// of the value of [keep].
+@Deprecated('Use core.withTempDirAsync as this method is considered unsafe')
 R withTempDir<R>(R Function(String tempDir) action,
     {bool keep = false, String? pathToTempDir}) {
-  final dir = pathToTempDir ?? createTempDir();
-
-  R result;
-  try {
-    result = action(dir);
-  } finally {
-    if (!keep && pathToTempDir == null) {
-      deleteDir(dir);
-    }
-  }
-  return result;
+  throw UnsupportedError(
+      'withTempDir is deprecated. Use core.withTempDirAsync');
 }
-
-/// Creates a temporary directory under the system temp folder.
-/// The temporary directory name is formed from a uuid.
-/// It is your responsiblity to delete the directory once you have
-/// finsihed with it.
-// ignore: discarded_futures
-String createTempDir() => core.createTempDir();

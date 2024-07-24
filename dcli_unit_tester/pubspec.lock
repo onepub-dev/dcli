@@ -293,22 +293,6 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "1.0.0"
-  runtime_named_locks:
-    dependency: transitive
-    description:
-      name: runtime_named_locks
-      sha256: "5fe859c1ddeeb595f6528596157191b628d85ba3137f0da327d92153604f2f6b"
-      url: "https://pub.dev"
-    source: hosted
-    version: "1.0.0-beta.6"
-  runtime_native_semaphores:
-    dependency: transitive
-    description:
-      name: runtime_native_semaphores
-      sha256: bd5895d87f97543be6c9a5199b8a10483b9d6871327fe508ec89dbc2437c9220
-      url: "https://pub.dev"
-    source: hosted
-    version: "1.0.0-beta.6"
   scope:
     dependency: transitive
     description:

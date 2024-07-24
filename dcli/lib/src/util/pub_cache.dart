@@ -170,6 +170,9 @@ class PubCache {
   String pathToPackage(String packageName, String version) =>
       join(pathToDartLang, '$packageName-$version');
 
+  String pathToGlobalPackage(String packageName) =>
+      join(pathTo, 'global_packages', packageName);
+
   /// Returns true if the package is installed in pub-cache
   bool isInstalled(String packageName) {
     try {
@@ -291,7 +294,7 @@ class PubCache {
 
     /// run pub global list to see if dcli is run from a local path.
     final line = DartSdk()
-        . runPub(args: ['global', 'list'], progress: Progress.capture())
+        .runPub(args: ['global', 'list'], progress: Progress.capture())
         .lines
         .firstWhere((line) => line.startsWith(packageName),
             orElse: () => notFound);

@@ -12,10 +12,7 @@ import 'package:scope/scope.dart';
 
 final commonTestPubCache = join(rootPath, 'tmp', '.dcli', '.pub-cache');
 
-/// Key containing the path to the original HOME.
-/// final originalHomeKey = ScopeKey<String>();
-
-/// Sets up a test scope providing unique
+/// Sets up a test scope providing a unique
 /// Environment
 /// Platform OS
 /// Settings initialised with the provided environment and OS
@@ -24,7 +21,6 @@ Future<void> withTestScope(Future<void> Function(String testDir) callback,
     {Map<String, String> environment = const <String, String>{},
     String? pathToTestDir,
     core.DCliPlatformOS? overridePlatformOS}) async {
-  // final originalHome = HOME;
 
   await UnitTestController.withUnitTest(() async {
     await core.withTempDirAsync((testDir) async {
@@ -41,7 +37,6 @@ Future<void> withTestScope(Future<void> Function(String testDir) callback,
           final innerScope = Scope()
             ..value(Settings.scopeKey, Settings.forScope())
             ..value(PubCache.scopeKey, PubCache.forScope());
-          // ..value(originalHomeKey, originalHome)
           await innerScope.run(() async {
             await callback(testDir);
           });

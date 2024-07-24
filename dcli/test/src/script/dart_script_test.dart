@@ -154,30 +154,41 @@ void main() {
       expect(result[line++], equals('isInstalled, false'));
       expect(result[line++], equals('isPubGlobalActivated, true'));
       expect(result[line++], equals('isReadyToRun, false'));
+
+      final pathToGlobalPackage = PubCache().pathToGlobalPackage(packageName);
+
       expect(
           result[line++],
           equals('pathToExe, '
-              '${join(pathToPackageUnitTester, 'bin', 'dcli_unit_tester')}'));
+              '${join(pathToGlobalPackage, 'bin', 'dcli_unit_tester')}'));
       expect(
           result[line++],
           equals('pathToInstalledExe, '
               '${join(HOME, '.dcli', 'bin', 'dcli_unit_tester')}'));
-      expect(result[line++],
-          equals('pathToProjectRoot, $pathToPackageUnitTester'));
+      expect(
+          result[line++],
+          equals('pathToProjectRoot, '
+              '${join(pathToGlobalPackage, "bin")}'));
+      //  /home/bsutton/.pub-cache/global_packages/dcli_unit_tester/bin
       expect(
           result[line++],
           equals('pathToPubSpec, '
-              '${join(pathToPackageUnitTester, 'pubspec.yaml')}'));
+              '${join(pathToGlobalPackage, 'bin', 'pubspec.yaml')}'));
+
+      //  /home/bsutton/.pub-cache/global_packages/dcli_unit_tester/bin/pubspec.yaml
       expect(
           result[line++],
           equals('pathToScript, '
-              '''${join(pathToPackageUnitTester, 'bin', 'dcli_unit_tester.dart')}'''));
+              '''${join(pathToGlobalPackage, 'bin', 'dcli_unit_tester.dart')}'''));
+      //  /home/bsutton/.pub-cache/global_packages/dcli_unit_tester/bin/dcli_unit_tester.dart
       expect(
           result[line++],
           equals('pathToScriptDirectory, '
-              '${join(pathToPackageUnitTester, 'bin')}'));
+              '''${join(pathToGlobalPackage, 'bin')}'''));
+
+      //  /home/bsutton/.pub-cache/global_packages/dcli_unit_tester/bin
       expect(result[line++], equals('scriptName, dcli_unit_tester.dart'));
-      expect(result.length, equals(1));
+      expect(result.length, equals(13));
     });
   });
 }

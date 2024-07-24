@@ -15,7 +15,7 @@ import 'package:test/test.dart';
 void main() {
   t.group('Directory Creation', () {
     t.test('createDir', () async {
-      await withTempDir((testRoot) async {
+      await withTempDirAsync((testRoot) async {
         final testDirectory = join(testRoot, 'test');
         createDir(testDirectory, recursive: true);
 
@@ -25,7 +25,7 @@ void main() {
     });
 
     t.test('createDir with recursive', () async {
-      await withTempDir((testRoot) async {
+      await withTempDirAsync((testRoot) async {
         final testPath = join(testRoot, 'tmp_test/longer/and/longer');
         createDir(testPath, recursive: true);
 
@@ -35,7 +35,7 @@ void main() {
     });
 
     t.test('deleteDir', () async {
-      await withTempDir((testRoot) async {
+      await withTempDirAsync((testRoot) async {
         final testPath = join(testRoot, 'tmp_test/longer/and/longer');
         createDir(testPath, recursive: true);
         deleteDir(testPath);
@@ -47,7 +47,7 @@ void main() {
     });
 
     t.test('Delete Dir recursive', () async {
-      await withTempDir((testRoot) async {
+      await withTempDirAsync((testRoot) async {
         final testDirectory = join(testRoot, 'tmp_test');
         createDir(testDirectory);
         deleteDir(testDirectory);
@@ -56,7 +56,7 @@ void main() {
     });
 
     t.test('deleteDir failure', () async {
-      await withTempDir((testRoot) async {
+      await withTempDirAsync((testRoot) async {
         final testDirectory = join(testRoot, 'tmp_test');
         t.expect(
           () => deleteDir(testDirectory),
@@ -66,7 +66,7 @@ void main() {
     });
 
     t.test('createDir createPath failure', () async {
-      await withTempDir((testRoot) async {
+      await withTempDirAsync((testRoot) async {
         final testPath = join(testRoot, 'tmp_test/longer/and/longer');
         t.expect(
           () => createDir(testPath),
@@ -81,7 +81,7 @@ void main() {
     });
 
     t.test('withTempDir', () async {
-      final dir = await withTempDir((tempDir) async {
+      final dir = await withTempDirAsync((tempDir) async {
         expect(exists(tempDir), isTrue);
         touch(join(tempDir, 'test.txt'), create: true);
         createDir(join(tempDir, 'test2'));
@@ -93,7 +93,7 @@ void main() {
     });
 
     t.test('withTempDir - keep', () async {
-      final dir = await withTempDir(
+      final dir = await withTempDirAsync(
         (tempDir) async {
           expect(exists(tempDir), isTrue);
 

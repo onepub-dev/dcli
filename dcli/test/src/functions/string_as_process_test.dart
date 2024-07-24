@@ -13,7 +13,7 @@ import 'package:test/test.dart';
 void main() {
   t.group('StringAsProcess', () {
     t.test('Check .run executes', () async {
-      await withTempDir((fs) async {
+      await withTempDirAsync((fs) async {
         final testFile = join(fs, 'test.text');
 
         'touch $testFile'.run;
@@ -22,7 +22,7 @@ void main() {
     });
 
     t.test('Check .start executes - attached, not in shell', () async {
-      await withTempDir((fs) async {
+      await withTempDirAsync((fs) async {
         final testFile = join(fs, 'test.text');
 
         'touch $testFile'.start();
@@ -31,7 +31,7 @@ void main() {
     });
 
     t.test('Check .start executes - attached,  in shell', () async {
-      await withTempDir((fs) async {
+      await withTempDirAsync((fs) async {
         final testFile = join(fs, 'test.text');
 
         'touch $testFile'.start(runInShell: true);
@@ -49,7 +49,7 @@ void main() {
     });
 
     t.test('Check .start executes - detached, not in shell', () async {
-      await withTempDir((fs) async {
+      await withTempDirAsync((fs) async {
         final testFile = join(fs, 'test.text');
 
         'touch $testFile'.start(detached: true);
@@ -68,7 +68,7 @@ void main() {
     });
 
     t.test('Check .start executes - detached,  in shell', () async {
-      await withTempDir((fs) async {
+      await withTempDirAsync((fs) async {
         final testFile = join(fs, 'test.text');
 
         'touch $testFile'.start(detached: true, runInShell: true);
@@ -87,7 +87,7 @@ void main() {
     });
 
     t.test('forEach', () async {
-      await withTempDir((fs) async {
+      await withTempDirAsync((fs) async {
         final lines = <String?>[];
 
         final linesFile = setup(fs);
@@ -103,7 +103,7 @@ void main() {
     });
 
     t.test('toList', () async {
-      await withTempDir((fs) async {
+      await withTempDirAsync((fs) async {
         final path = join(fs, 'log/syslog');
 
         createDir(dirname(path), recursive: true);
@@ -146,7 +146,7 @@ void main() {
     });
 
     t.test('toList - skipLines', () async {
-      await withTempDir((root) async {
+      await withTempDirAsync((root) async {
         final path = join(rootPath, 'tmp', 'log', 'syslog');
 
         if (exists(path)) {
@@ -183,7 +183,7 @@ void main() {
   });
 
   t.test('firstLine', () async {
-    await withTempDir((root) async {
+    await withTempDirAsync((root) async {
       final file = setup(root);
       t.expect('cat $file'.firstLine, 'Line 0');
     });
@@ -194,7 +194,7 @@ void main() {
   });
 
   t.test('lastLine', () async {
-    await withTempDir((fs) async {
+    await withTempDirAsync((fs) async {
       final file = setup(fs);
       t.expect('cat $file'.lastLine, 'Line 9');
     });

@@ -29,7 +29,7 @@ void main() {
   );
 
   test('Install Dart Sdk', () async {
-    await withTempDir((tempPath) async {
+    await withTempDirAsync((tempPath) async {
       final defaultPath = join(tempPath, 'dart-sdk');
       final installPath = await DartSdk().installFromArchive(defaultPath);
       setPathToDartSdk(installPath);
@@ -89,7 +89,7 @@ void main() {
   });
 
   test('isPubGetRequried', () async {
-    await withTempDir((tmpDir) async {
+    await withTempDirAsync((tmpDir) async {
       final pubspec = join(tmpDir, 'pubspec.yaml');
       final lock = join(tmpDir, 'pubspec.lock');
       final config = join(tmpDir, '.dart_tool', 'package_config.json');

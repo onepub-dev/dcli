@@ -4,89 +4,10 @@
  * Written by Brett Sutton <bsutton@onepub.dev>, Jan 2022
  */
 
-import 'dart:io';
-
 import 'package:dcli_core/dcli_core.dart' as core;
 import 'package:posix/posix.dart' as posix;
 
 import '../../dcli.dart';
-
-///
-/// Returns true if the given [path] points to a file.
-/// If [path] is a link the link will be followed and
-/// we report on the resolved path.
-///
-/// ```dart
-/// isFile("~/fred.jpg");
-/// ```
-bool isFile(String path) => core.isFile(path);
-
-/// Returns true if the given [path] is a directory.
-///
-/// If [path] is a link the link will be followed and
-/// we report on the resolved path.
-/// ```dart
-/// isDirectory("/tmp");
-///
-/// ```
-bool isDirectory(String path) => core.isDirectory(path);
-
-/// Returns true if the given [path] is a symlink
-///
-/// // ```dart
-/// isLink("~/fred.jpg");
-/// ```
-bool isLink(String path) => core.isLink(path);
-
-/// Returns true if the given path exists.
-/// It may be a file, directory or link.
-///
-/// If [followLinks] is true (the default) then [exists]
-/// follows any links and returns true/false based on
-/// whether the resolved path exists.
-///
-/// If [followLinks] is false then [exists] will return
-/// true if [path] exist.
-///
-/// ```dart
-/// if (exists("/fred.txt"))
-/// ```
-///
-/// Throws [ArgumentError] if [path] is null or an empty string.
-///
-/// See:
-///  * [isLink]
-///  * [isDirectory]
-///  * [isFile]
-bool exists(String path, {bool followLinks = true}) =>
-    core.exists(path, followLinks: followLinks);
-
-/// Returns the datetime the path was last modified
-///
-/// [path[ can be either a file or a directory.
-///
-/// Throws a [DCliException] with a nested
-/// [FileSystemException] if the file does not
-/// exist or the operation fails.
-DateTime lastModified(String path) => core.lastModified(path);
-
-/// Sets the last modified datetime on the given the path.
-///
-/// [path] can be either a file or a directory.
-///
-/// Throws a [DCliException] with a nested
-/// [FileSystemException] if the file does not
-/// exist or the operation fails.
-
-void setLastModifed(String path, DateTime lastModified) =>
-    core.setLastModifed(path, lastModified);
-
-/// Returns true if the passed [pathToDirectory] is an
-/// empty directory.
-/// For large directories this operation can be expensive.
-bool isEmpty(String pathToDirectory) =>
-    // ignore: discarded_futures
-    core.isEmpty(pathToDirectory);
 
 /// checks if the passed [path] (a file or directory) is
 /// writable by the user that owns this process

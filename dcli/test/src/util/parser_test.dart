@@ -8,7 +8,7 @@ library;
  */
 
 import 'package:dcli/dcli.dart';
-import 'package:dcli_test/dcli_test.dart';
+import 'package:dcli_test/src/test_directory_tree.dart';
 import 'package:path/path.dart';
 import 'package:test/test.dart';
 
@@ -16,7 +16,7 @@ void main() {
   test(
     'Parser',
     () async {
-      await withTempDir((fsRoot) async {
+      await withTempDirAsync((fsRoot) async {
         TestDirectoryTree(fsRoot);
 
         final jsonFile = join(fsRoot, 'sample.json')

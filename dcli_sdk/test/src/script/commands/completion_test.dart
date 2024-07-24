@@ -14,7 +14,7 @@ library;
 import 'package:dcli/dcli.dart';
 import 'package:dcli_core/dcli_core.dart' as core;
 import 'package:dcli_sdk/src/util/completion.dart';
-import 'package:dcli_test/dcli_test.dart';
+import 'package:dcli_test/src/test_directory_tree.dart';
 import 'package:path/path.dart';
 import 'package:test/test.dart';
 

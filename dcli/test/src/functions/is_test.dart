@@ -14,7 +14,7 @@ void main() {
   group(
     'iswritable',
     () async {
-      await withTempDir((fsRoot) async {
+      await withTempDirAsync((fsRoot) async {
         TestFileSystem.buildDirectoryTree(fsRoot);
 // owner, group, world, read, write execute
 
@@ -144,7 +144,7 @@ void main() {
 
   group('isEmpty', () {
     test('isEmpty - good', () async {
-      await withTempDir((root) async {
+      await withTempDirAsync((root) async {
         final root = createTempDir();
 
         expect(isEmpty(root), isTrue);
@@ -164,13 +164,13 @@ void main() {
     });
 
     test('isDirectory', () async {
-      await withTempDir((dir) async {
+      await withTempDirAsync((dir) async {
         expect(isDirectory(dir), isTrue);
       });
     });
 
     test('isLink', () async {
-      await withTempDir((dir) async {
+      await withTempDirAsync((dir) async {
         expect(isDirectory(dir), isTrue);
 
         withTempFile((file) {

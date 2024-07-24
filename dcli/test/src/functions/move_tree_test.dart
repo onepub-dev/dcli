@@ -9,6 +9,7 @@ library;
 
 import 'package:dcli/dcli.dart';
 import 'package:dcli_test/dcli_test.dart';
+import 'package:dcli_test/src/test_directory_tree.dart';
 import 'package:path/path.dart';
 import 'package:test/test.dart' as t;
 import 'package:test/test.dart';
@@ -16,7 +17,7 @@ import 'package:test/test.dart';
 void main() {
   t.group('moveTree', () {
     t.test('empty target ', () async {
-      await withTempDir((fsRoot) async {
+      await withTempDirAsync((fsRoot) async {
         TestFileSystem.buildDirectoryTree(fsRoot);
         final from = join(fsRoot, 'top');
         final to = join(fsRoot, 'new_top');
@@ -43,7 +44,7 @@ void main() {
     });
 
     t.test('empty target - overwrite', () async {
-      await withTempDir((fsRoot) async {
+      await withTempDirAsync((fsRoot) async {
         TestFileSystem.buildDirectoryTree(fsRoot);
         final from = join(fsRoot, 'top');
         final to = join(fsRoot, 'new_top');
@@ -68,7 +69,7 @@ void main() {
     });
 
     t.test('empty target - filter *.txt', () async {
-      await withTempDir((fsRoot) async {
+      await withTempDirAsync((fsRoot) async {
         TestFileSystem.buildDirectoryTree(fsRoot);
         final from = join(fsRoot, 'top');
         final to = join(fsRoot, 'new_top');
@@ -92,7 +93,7 @@ void main() {
     });
 
     t.test('empty target - recursive - filter *.txt', () async {
-      await withTempDir((fsRoot) async {
+      await withTempDirAsync((fsRoot) async {
         TestFileSystem.buildDirectoryTree(fsRoot);
         final from = join(fsRoot, 'top');
         final to = join(fsRoot, 'new_top');
@@ -114,7 +115,7 @@ void main() {
     });
 
     t.test('empty target - recursive ', () async {
-      await withTempDir((fsRoot) async {
+      await withTempDirAsync((fsRoot) async {
         TestFileSystem.buildDirectoryTree(fsRoot);
         final from = join(fsRoot, 'top');
         final to = join(fsRoot, 'new_top');
@@ -136,7 +137,7 @@ void main() {
     });
 
     t.test('empty target - recursive- overwrite', () async {
-      await withTempDir((fsRoot) async {
+      await withTempDirAsync((fsRoot) async {
         TestDirectoryTree(fsRoot);
         final from = join(fsRoot, 'top');
         final to = join(fsRoot, 'new_top');

@@ -16,7 +16,7 @@ import 'package:test/test.dart';
 void main() {
   t.group('moveDir', () {
     t.test('empty to ', () async {
-      await withTempDir((fsRoot) async {
+      await withTempDirAsync((fsRoot) async {
         TestFileSystem.buildDirectoryTree(fsRoot);
         final from = join(fsRoot, 'top');
         final to = join(fsRoot, 'new_top');
@@ -30,7 +30,7 @@ void main() {
     });
 
     t.test('existing to ', () async {
-      await withTempDir((fsRoot) async {
+      await withTempDirAsync((fsRoot) async {
         TestFileSystem.buildDirectoryTree(fsRoot);
         final from = join(fsRoot, 'top');
         final to = join(fsRoot, 'new_top');
@@ -55,7 +55,7 @@ void main() {
     });
 
     t.test('from not a directory ', () async {
-      await withTempDir((fsRoot) async {
+      await withTempDirAsync((fsRoot) async {
         TestFileSystem.buildDirectoryTree(fsRoot);
         final from = join(fsRoot, 'top', 'file');
         final to = join(fsRoot, 'new_top');
@@ -79,7 +79,7 @@ void main() {
     });
 
     t.test('from does not exist ', () async {
-      await withTempDir((fsRoot) async {
+      await withTempDirAsync((fsRoot) async {
         TestFileSystem.buildDirectoryTree(fsRoot);
         final from = join(fsRoot, 'random');
         final to = join(fsRoot, 'new_top');

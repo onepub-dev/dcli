@@ -31,8 +31,8 @@ void main() {
     skip: true,
   );
 
-  test('toList', () {
-    withTempDir((tempDir) {
+  test('toList', () async {
+    await withTempDirAsync((tempDir) async {
       touch(join(tempDir, 'one.txt'), create: true);
       touch(join(tempDir, 'two.txt'), create: true);
       expect(
@@ -42,8 +42,8 @@ void main() {
     });
   });
 
-  test('forEach', () {
-    withTempDir((tempDir) {
+  test('forEach', () async {
+    await withTempDirAsync((tempDir) async {
       touch(join(tempDir, 'one.txt'), create: true);
       touch(join(tempDir, 'two.txt'), create: true);
 

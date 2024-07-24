@@ -46,7 +46,7 @@ void main() {
         print('post-descalation euid: ${geteuid()}');
         print('post-descalation user egid: ${getegid()}');
 
-        await withTempDir((testRoot) async {
+        await withTempDirAsync((testRoot) async {
           final testFile = join(testRoot, 'test.txt');
           touch(testFile, create: true);
           'ls -la $testFile'.run;

@@ -11,7 +11,7 @@ import 'dart:io';
 
 import 'package:dcli/dcli.dart';
 import 'package:dcli_core/dcli_core.dart' as core;
-import 'package:dcli_test/dcli_test.dart';
+import 'package:dcli_test/src/test_directory_tree.dart';
 import 'package:path/path.dart';
 import 'package:test/test.dart' as t;
 import 'package:test/test.dart';
@@ -39,8 +39,8 @@ void main() {
       expect(foundDirs, t.unorderedEquals(rootDirs));
     });
 
-    test('Large directory tree', () {
-      withTempDir((root) {
+    test('Large directory tree', () async {
+      await withTempDirAsync((root) async {
         var expected = <String>[];
         for (var i = 0; i < 110; i++) {
           final path = join(root, '$i');
@@ -130,8 +130,8 @@ void main() {
   });
 
   t.group('Find', () {
-    t.test('Search for *.txt files in top directory ', () {
-      withTempDir((fsRoot) {
+    t.test('Search for *.txt files in top directory ', () async {
+      await withTempDirAsync((fsRoot) async {
         final paths = TestDirectoryTree(fsRoot);
         final found =
             find('*.txt', workingDirectory: paths.top, recursive: false)
@@ -145,8 +145,8 @@ void main() {
       });
     });
 
-    t.test('Search recursive for *.jpg ', () {
-      withTempDir((fsRoot) {
+    t.test('Search recursive for *.jpg ', () async {
+      await withTempDirAsync((fsRoot) async {
         final paths = TestDirectoryTree(fsRoot);
         final found = find('*.jpg', workingDirectory: paths.top).toList();
 
@@ -174,8 +174,8 @@ void main() {
       });
     });
 
-    t.test('Search recursive for *.txt ', () {
-      withTempDir((fsRoot) {
+    t.test('Search recursive for *.txt ', () async {
+      await withTempDirAsync((fsRoot) async {
         final paths = TestDirectoryTree(fsRoot);
         final found = find('*.txt', workingDirectory: paths.top).toList()
           ..sort();
@@ -191,8 +191,8 @@ void main() {
       });
     });
 
-    t.test('ignore hidden files *.txt  ', () {
-      withTempDir((fsRoot) {
+    t.test('ignore hidden files *.txt  ', () async {
+      await withTempDirAsync((fsRoot) async {
         final paths = TestDirectoryTree(fsRoot);
         final found = find('*.txt', workingDirectory: paths.top).toList()
           ..sort();
@@ -208,8 +208,8 @@ void main() {
       });
     });
 
-    t.test('find hidden files *.txt  ', () {
-      withTempDir((fsRoot) {
+    t.test('find hidden files *.txt  ', () async {
+      await withTempDirAsync((fsRoot) async {
         final paths = TestDirectoryTree(fsRoot);
         final found =
             find('*.txt', workingDirectory: paths.top, includeHidden: true)
@@ -233,7 +233,7 @@ void main() {
     });
 
     t.test('non-recursive find', () async {
-      withTempDir((tmp) {
+      await withTempDirAsync((tmp) async {
         final paths = <String>[
           truepath(tmp, '.thidden' 'fred.txt'),
           truepath(tmp, 'top', 'one.txt'),
@@ -263,7 +263,7 @@ void main() {
     });
 
     t.test('non-recursive find with path in pattern', () async {
-      withTempDir((tmp) {
+      await withTempDirAsync((tmp) async {
         final paths = <String>[
           truepath(tmp, 'middle', 'three.txt'),
           truepath(tmp, 'middle', 'four.txt'),
@@ -289,7 +289,7 @@ void main() {
     });
 
     t.test('recursive find with path in pattern', () async {
-      withTempDir((tmp) {
+      await withTempDirAsync((tmp) async {
         final paths = <String>[
           truepath(tmp, 'middle', 'three.txt'),
           truepath(tmp, 'middle', 'four.txt'),
@@ -314,7 +314,7 @@ void main() {
     });
 
     t.test('recursive find with absolute path in pattern', () async {
-      withTempDir((tmp) {
+      await withTempDirAsync((tmp) async {
         final paths = <String>[
           truepath(tmp, 'middle', 'three.txt'),
           truepath(tmp, 'middle', 'four.txt'),

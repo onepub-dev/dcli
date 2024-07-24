@@ -7,6 +7,7 @@
 import 'dart:io';
 
 import 'package:dcli_core/dcli_core.dart' as core;
+import 'package:dcli_core/dcli_core.dart';
 import 'package:logging/logging.dart';
 import 'package:path/path.dart' as p;
 import 'package:path/path.dart';
@@ -158,26 +159,6 @@ class Settings {
   // ignore: avoid_setters_without_getters
   static set mock(Settings mockSettings) {
     _self = mockSettings;
-  }
-}
-
-///
-/// If [Settings.isVerbose] is true then
-/// this method will call [callback] to
-/// get a String which will be logged to the
-/// console or the log file set via the verbose command line
-/// option.
-///
-/// This method is more efficient than calling [Settings.verbose]
-/// as it will only build the string if verbose is enabled.
-///
-/// ```dart
-/// verbose(() => 'Log the users name $user');
-///
-void verbose(String Function() callback) {
-  if (Settings().isVerbose) {
-    final frame = Trace.current().frames[1];
-    core.Settings().verbose(callback(), frame: frame);
   }
 }
 

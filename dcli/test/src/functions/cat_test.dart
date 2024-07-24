@@ -20,7 +20,7 @@ void main() {
     // Don't know how to test this as it writes directly to stdout.
     // Need some way to hook Stdout
     t.test('Cat good ', () async {
-      await withTempDir((testRoot) async {
+      await withTempDirAsync((testRoot) async {
         print('PWD $pwd');
         testFile = join(testRoot, 'lines.txt');
         createLineFile(testFile, 10);
@@ -32,7 +32,7 @@ void main() {
     });
 
     t.test('cat non-existing ', () async {
-      await withTempDir((testRoot) async {
+      await withTempDirAsync((testRoot) async {
         t.expect(() => cat('bad file.text'), t.throwsA(isA<CatException>()));
       });
     });

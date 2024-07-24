@@ -12,25 +12,37 @@ export 'package:dcli_core/dcli_core.dart'
         // TouchException,
         // Which,
         CancelableLineAction,
+        CreateDirException,
         DCliException,
-        // HeadException,
+        DCliFunction,
+        DCliFunctionException,
         Env,
         FindItem,
+        // HeadException,
         HOME,
         LineAction,
         PATH,
         PlatformEx,
         RunException,
         StackList,
+        createDir,
+        createTempDir,
         env,
         envs,
+        exists,
+        isDirectory,
+        isEmpty,
+        isFile,
+        isLink,
         isOnPATH,
         privatePath,
         pwd,
         rootPath,
         // RestoreFileException,
         truepath,
-        withEnvironmentAsync
+        verbose,
+        withEnvironmentAsync,
+        withTempDirAsync
     // CatException;
     ;
 export 'package:dcli_core/src/util/dev_null.dart';
@@ -43,8 +55,8 @@ export 'src/functions/cat.dart' show CatException, cat;
 export 'src/functions/confirm.dart';
 export 'src/functions/copy.dart' show CopyException, copy;
 export 'src/functions/copy_tree.dart' show copyTree;
-export 'src/functions/create_dir.dart'
-    show CreateDirException, createDir, createTempDir, withTempDir;
+// ignore: deprecated_member_use_from_same_package
+export 'src/functions/create_dir.dart' show withTempDir;
 export 'src/functions/delete.dart' show DeleteException, delete;
 export 'src/functions/delete_dir.dart' show DeleteDirException, deleteDir;
 export 'src/functions/echo.dart' show echo;
@@ -81,7 +93,7 @@ export 'src/resources/resources.dart' show ResourceException, Resources;
 export 'src/script/dart_project.dart';
 export 'src/script/dart_script.dart' show DartScript;
 export 'src/script/dart_sdk.dart' show DartSdk;
-export 'src/settings.dart' show Settings, verbose;
+export 'src/settings.dart' show Settings;
 export 'src/shell/shell.dart';
 export 'src/shell/shell_detection.dart';
 export 'src/shell/unknown_shell.dart';

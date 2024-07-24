@@ -4,7 +4,7 @@ library;
 import 'package:dcli/dcli.dart';
 import 'package:dcli/src/util/parse_cli_command.dart';
 import 'package:dcli_core/dcli_core.dart' as core;
-import 'package:dcli_test/dcli_test.dart';
+import 'package:dcli_test/src/test_directory_tree.dart';
 import 'package:path/path.dart' hide equals;
 import 'package:test/test.dart';
 
@@ -190,7 +190,7 @@ void main() {
   test(
     'linux/macos',
     () async {
-      await withTempDir((fsRoot) async {
+      await withTempDirAsync((fsRoot) async {
         final fs = TestDirectoryTree(fsRoot);
         final parsed = ParsedCliCommand('ls *.jpg *.png', fs.top);
 
@@ -214,7 +214,7 @@ void main() {
   test(
     '.*',
     () async {
-      await withTempDir((fsRoot) async {
+      await withTempDirAsync((fsRoot) async {
         final fs = TestDirectoryTree(fsRoot);
         final parsed = ParsedCliCommand('ls .*', fs.top);
 
@@ -231,7 +231,7 @@ void main() {
   test(
     'valid/.*',
     () async {
-      await withTempDir((fsRoot) async {
+      await withTempDirAsync((fsRoot) async {
         final fs = TestDirectoryTree(fsRoot);
 
         final parsed = ParsedCliCommand('ls middle/.*', fs.top);
@@ -252,7 +252,7 @@ void main() {
   test(
     'alternate working directory',
     () async {
-      await withTempDir((fsRoot) async {
+      await withTempDirAsync((fsRoot) async {
         final fs = TestDirectoryTree(fsRoot);
 
         final parsed = ParsedCliCommand('ls *.txt *.jpg', fs.middle);
@@ -275,7 +275,7 @@ void main() {
   );
 
   test('valid non-local path', () async {
-    await withTempDir((fsRoot) async {
+    await withTempDirAsync((fsRoot) async {
       final fs = TestDirectoryTree(fsRoot);
 
       final parsed = ParsedCliCommand('ls middle/*.txt', fs.top);
@@ -297,7 +297,7 @@ void main() {
   });
 
   test('invalid absolute path/*', () async {
-    await withTempDir((fsRoot) async {
+    await withTempDirAsync((fsRoot) async {
       final fs = TestDirectoryTree(fsRoot);
 
       final parsed = ParsedCliCommand('ls /git/dcli/*', fs.top);
@@ -308,7 +308,7 @@ void main() {
   });
 
   test('valid absolute path/*', () async {
-    await withTempDir((fsRoot) async {
+    await withTempDirAsync((fsRoot) async {
       final fs = TestDirectoryTree(fsRoot);
 
       final parsed = ParsedCliCommand('ls ${join(fs.top, '*.txt')}', fs.middle);
@@ -331,7 +331,7 @@ void main() {
   test(
     'windows',
     () async {
-      await withTempDir((fsRoot) async {
+      await withTempDirAsync((fsRoot) async {
         final fs = TestDirectoryTree(fsRoot);
 
         final parsed = ParsedCliCommand('ls *.jpg *.png', fs.top);

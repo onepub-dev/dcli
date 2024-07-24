@@ -16,7 +16,7 @@ import 'package:test/test.dart';
 void main() {
   t.group('copyTree', () {
     t.test('empty target ', () async {
-      await withTempDir((testRoot) async {
+      await withTempDirAsync((testRoot) async {
         TestFileSystem.buildDirectoryTree(testRoot);
         final from = join(testRoot, 'top');
         final to = join(testRoot, 'new_top');
@@ -39,7 +39,7 @@ void main() {
     });
 
     t.test('empty target - overwrite', () async {
-      await withTempDir((fsRoot) async {
+      await withTempDirAsync((fsRoot) async {
         TestFileSystem.buildDirectoryTree(fsRoot);
         final from = join(fsRoot, 'top');
         final to = join(fsRoot, 'new_top');
@@ -63,7 +63,7 @@ void main() {
     });
 
     t.test('empty target - filter *.txt', () async {
-      await withTempDir((fsRoot) async {
+      await withTempDirAsync((fsRoot) async {
         TestFileSystem.buildDirectoryTree(fsRoot);
         final from = join(fsRoot, 'top');
         final to = join(fsRoot, 'new_top');
@@ -86,7 +86,7 @@ void main() {
     });
 
     t.test('empty target - recursive - filter *.txt', () async {
-      await withTempDir((fsRoot) async {
+      await withTempDirAsync((fsRoot) async {
         TestFileSystem.buildDirectoryTree(fsRoot);
         final from = join(fsRoot, 'top');
         final to = join(fsRoot, 'new_top');
@@ -107,7 +107,7 @@ void main() {
     });
 
     t.test('empty target - recursive ', () async {
-      await withTempDir((fsRoot) async {
+      await withTempDirAsync((fsRoot) async {
         TestFileSystem.buildDirectoryTree(fsRoot);
         final from = join(fsRoot, 'top');
         final to = join(fsRoot, 'new_top');
@@ -128,7 +128,7 @@ void main() {
     });
 
     t.test('empty target - recursive- overwrite', () async {
-      await withTempDir((fsRoot) async {
+      await withTempDirAsync((fsRoot) async {
         TestFileSystem.buildDirectoryTree(fsRoot);
         final from = join(fsRoot, 'top');
         final to = join(fsRoot, 'new_top');

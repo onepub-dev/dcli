@@ -18,7 +18,7 @@ void main() {
   test(
     'MemoryFileSystem',
     () async {
-      await withTempDir((fs) async {
+      await withTempDirAsync((fs) async {
         // final fs = MemoryFileSystem();
 
         // fs.directory('/tmp').createSync();

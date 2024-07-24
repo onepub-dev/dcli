@@ -55,6 +55,14 @@ void backupFile(String pathToFile, {bool ignoreMissing = false}) =>
 void restoreFile(String pathToFile, {bool ignoreMissing = false}) =>
     core.restoreFile(pathToFile, ignoreMissing: ignoreMissing);
 
+R withFileProtection<R>(
+  List<String> protected,
+  R Function() action, {
+  String? workingDirectory,
+}) {
+  throw UnsupportedError('Use withFileProtectionAsync');
+}
+
 /// EXPERIMENTAL - use with caution and the api may change.
 ///
 /// Allows you to nominate a list of files to be backed up
@@ -95,11 +103,11 @@ void restoreFile(String pathToFile, {bool ignoreMissing = false}) =>
 ///
 // TODO(bsutton): make this work for other than current drive under Windows
 ///
-R withFileProtection<R>(
+Future<R> withFileProtectionAsync<R>(
   List<String> protected,
-  R Function() action, {
+  Future<R> Function() action, {
   String? workingDirectory,
-}) {
+}) async {
   // removed glob support for the moment.
   // This is because if one of the protected entries is missing
   // then we are assuming its a glob.
@@ -112,8 +120,8 @@ R withFileProtection<R>(
   // If the entry is a glob pattern then it is applied recusively.
 
   final workingDirectory0 = workingDirectory ?? pwd;
-  final result = withTempDir(
-    (backupDir) {
+  final result = await withTempDirAsync(
+    (backupDir) async {
       verbose(() => 'withFileProtection: backing up to $backupDir');
 
       /// backup the protected files
@@ -169,7 +177,7 @@ R withFileProtection<R>(
         //   }
         // }
       }
-      final result = action();
+      final result = await action();
 
       /// restore the protected entities
       for (final path in protected) {

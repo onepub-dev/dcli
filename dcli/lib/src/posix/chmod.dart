@@ -6,7 +6,6 @@
 
 import 'dart:io';
 
-import 'package:dcli_core/dcli_core.dart' hide exists;
 import 'package:posix/posix.dart' as posix;
 
 import '../../dcli.dart';

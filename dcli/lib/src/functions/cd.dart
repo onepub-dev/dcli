@@ -6,10 +6,8 @@
 
 import 'dart:io';
 
-import 'package:dcli_core/dcli_core.dart' as core;
+import 'package:dcli_core/dcli_core.dart';
 import 'package:path/path.dart';
-import '../settings.dart';
-import 'is.dart';
 
 /// Change Directories to the relative or absolute path.
 ///
@@ -33,7 +31,7 @@ void cd(String path) => CD().cd(path);
 
 /// Class that implements the [cd] function.
 @Deprecated('Use join')
-class CD extends core.DCliFunction {
+class CD extends DCliFunction {
   /// implements the [cd] (change dir) function.
   void cd(String path) {
     verbose(() => 'cd $path -> ${canonicalize(path)}');
@@ -47,7 +45,7 @@ class CD extends core.DCliFunction {
 
 // ignore: deprecated_member_use_from_same_package
 /// Throw when the [cd] function encounters an error.
-class CDException extends core.DCliFunctionException {
+class CDException extends DCliFunctionException {
   // ignore: deprecated_member_use_from_same_package
   /// Throw when the [cd] function encounters an error.
   CDException(super.reason);
