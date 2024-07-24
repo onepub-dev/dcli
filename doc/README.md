@@ -60,7 +60,7 @@ DCli is based on Dart which is a modern programming language that has a set of f
 import 'dart:io';
 import 'package:dcli/dcli.dart';
 
-void main() {
+void main() async {
   var name = ask('name:', required: true, validator: Ask.alpha);
   print('Hello $name');
   
@@ -68,7 +68,7 @@ void main() {
   find('*').forEach(print);
   
   print('let me copy your files to a temp directory');
-  withTempDir((pathToTempDir) {
+  await withTempDirAsync((pathToTempDir) async {
       moveTree(pwd, pathToTempDir);
   });
 }
