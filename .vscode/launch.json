@@ -11,6 +11,14 @@
             "type": "dart"
         },
         {
+            "name": "dcli warmup",
+            "program": "bin/dcli.dart",
+            "cwd": "dcli_sdk",
+            "request": "launch",
+            "type": "dart",
+            "args": ["-v", "warmup"]
+        },
+        {
             "name": "dcli_core",
             "cwd": "dcli_core",
             "request": "launch",
