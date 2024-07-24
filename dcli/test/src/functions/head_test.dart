@@ -14,7 +14,7 @@ void main() {
     'Head',
     () {
       t.test('head 5', () async {
-        await withTempDir((fsRoot) async {
+        await withTempDirAsync((fsRoot) async {
           TestFileSystem.buildDirectoryTree(fsRoot);
           final testFile = join(fsRoot, 'lines.txt');
           if (exists(testFile)) {

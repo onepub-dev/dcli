@@ -15,7 +15,7 @@ import 'package:test/test.dart';
 void main() {
   test('resource ...', () async {
     final progress = await capture(() async {
-      await withTempDir((tempDir) async {
+      await withTempDirAsync((tempDir) async {
         Scope()
           ..value(Resources.scopeKeyProjectRoot, tempDir)
           ..runSync(() {
@@ -28,7 +28,7 @@ void main() {
   });
 
   test('resource no exclude', () async {
-    await withTempDir((tempDir) async {
+    await withTempDirAsync((tempDir) async {
       Scope()
         ..value(Resources.scopeKeyProjectRoot, tempDir)
         ..runSync(() {
