@@ -262,16 +262,19 @@ class NamedLock {
 
     /// If a valid lock file exists we don't even try to take
     /// a hard lock.
-    /// This is to avoid a pseuod race condition under heavy load
+    /// This is to avoid a pseudp race condition under heavy load
     /// where the lock owner can't get the hardlock as
     /// all of the contenders constantly have it locked.
     while (!taken && waitCount > 0) {
-      verbose(() => 'entering withHardLock $waitCount');
-
       if (!_validLockFileExists) {
+        verbose(() => 'entering withHardLock waitCount: $waitCount');
+
+        /// Take a hard lock and attempt to create a lock file.
         await _withHardLock(
           fn: () async {
-            // check for other lock files
+            // check for a lock files again as one may have
+            // been created between checking for their existance
+            // and the hard lock been taken.
             final locks = find(
               '*.$name',
               workingDirectory: _lockPath,
@@ -309,6 +312,8 @@ class NamedLock {
             }
           },
         );
+      } else {
+        verbose(() => 'existing lock file exist so waiting');
       }
 
       /// sleep for 100ms and then we will try again.
@@ -399,6 +404,7 @@ class NamedLock {
   bool _isOwnerLive(int lockOwnerPid) =>
       ProcessHelper().isRunning(lockOwnerPid);
 
+  /// Call [fn] with a hard lock held.
   Future<void> _withHardLock({
     required Future<void> Function() fn,
   }) async {
@@ -409,14 +415,16 @@ class NamedLock {
       // ignore: discarded_futures
       socket = await _bindSocket();
       if (socket != null) {
-        verbose(() => blue('Hardlock taken'));
+        verbose(() => blue('''
+Hardlock taken for $name in ${Service.getIsolateId(Isolate.current)}'''));
         await fn();
       }
     } finally {
       if (socket != null) {
         // ignore: discarded_futures
         await socket.close();
-        verbose(() => blue('Hardlock released'));
+        verbose(() => blue('''
+Hardlock released  for $name in ${Service.getIsolateId(Isolate.current)}'''));
       }
     }
   }

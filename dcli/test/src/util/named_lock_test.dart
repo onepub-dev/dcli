@@ -19,89 +19,106 @@ import 'package:path/path.dart' hide equals;
 import 'package:test/test.dart';
 
 void main() {
-  test('exception catch', () async {
-    expect(
-      NamedLock(name: 'exception')
-          .withLockAsync(() async => throw DCliException('fake exception')),
-      throwsA(isA<DCliException>()),
+  group('NamedLock', () {
+    test('callback', () async {
+      var called = false;
+      await NamedLock(name: 'exception')
+          .withLockAsync(() async => called = true);
+      expect(called, isTrue);
+    });
+
+    test('run process', () async {
+      String? line;
+      await NamedLock(name: 'exception').withLockAsync(() async {
+        line = 'ps -q 1 -o comm='.firstLine;
+      });
+      expect(line, isNotNull);
+    });
+
+    test('exception catch', () async {
+      expect(
+        NamedLock(name: 'exception')
+            .withLockAsync(() async => throw DCliException('fake exception')),
+        throwsA(isA<DCliException>()),
+      );
+    });
+
+    test(
+      'withLock',
+      () async {
+        Settings().setVerbose(enabled: true);
+        await core.withTempDirAsync(
+          (fs) async {
+            await core.withTempFileAsync((logFile) async {
+              print('logfile: $logFile');
+              logFile.truncate();
+
+              final portBack = await spawn('background', logFile);
+              final portMid = await spawn('middle', logFile);
+              final portFore = await spawn('foreground', logFile);
+
+              await portBack.first;
+              await portMid.first;
+              await portFore.first;
+
+              print('readling logfile');
+
+              final actual = read(logFile).toList();
+
+              expect(
+                actual,
+                unorderedEquals(<String>[
+                  'background + 0',
+                  'background + 1',
+                  'background + 2',
+                  'background + 3',
+                  'middle + 0',
+                  'middle + 1',
+                  'middle + 2',
+                  'middle + 3',
+                  'foreground + 0',
+                  'foreground + 1',
+                  'foreground + 2',
+                  'foreground + 3',
+                ]),
+              );
+            });
+          },
+          keep: true,
+        );
+      },
+      skip: false,
+    );
+
+    test(
+      'Thrash test',
+      () async {
+        Settings().setVerbose(enabled: true);
+        if (exists(_lockCheckPath)) {
+          deleteDir(_lockCheckPath);
+        }
+
+        createDir(_lockCheckPath, recursive: true);
+
+        final group = FutureGroup<dynamic>();
+
+        final workers = <Worker>[];
+        for (var i = 0; i < 10; i++) {
+          print('spawning worker $i');
+          final workerIsolate = Isolate.spawn(worker, i, paused: true);
+          final iWorker = Worker(await workerIsolate);
+          workers.add(iWorker);
+          group.add(iWorker.waitForExit());
+        }
+        group.close();
+
+        await group.future;
+
+        expect(exists(_lockFailedPath), equals(false));
+      },
+      timeout: const Timeout(Duration(minutes: 30)),
     );
   });
-
-  test(
-    'withLock',
-    () async {
-      Settings().setVerbose(enabled: true);
-      await core.withTempDirAsync(
-        (fs) async {
-          await core.withTempFileAsync((logFile) async {
-            print('logfile: $logFile');
-            logFile.truncate();
-
-            final portBack = await spawn('background', logFile);
-            final portMid = await spawn('middle', logFile);
-            final portFore = await spawn('foreground', logFile);
-
-            await portBack.first;
-            await portMid.first;
-            await portFore.first;
-
-            print('readling logfile');
-
-            final actual = read(logFile).toList();
-
-            expect(
-              actual,
-              unorderedEquals(<String>[
-                'background + 0',
-                'background + 1',
-                'background + 2',
-                'background + 3',
-                'middle + 0',
-                'middle + 1',
-                'middle + 2',
-                'middle + 3',
-                'foreground + 0',
-                'foreground + 1',
-                'foreground + 2',
-                'foreground + 3',
-              ]),
-            );
-          });
-        },
-        keep: true,
-      );
-    },
-    skip: false,
-  );
-
-  test(
-    'Thrash test',
-    () async {
-      Settings().setVerbose(enabled: true);
-      if (exists(_lockCheckPath)) {
-        deleteDir(_lockCheckPath);
-      }
-
-      createDir(_lockCheckPath, recursive: true);
-
-      final group = FutureGroup<dynamic>();
-
-      final workers = <Worker>[];
-      for (var i = 0; i < 10; i++) {
-        print('spawning worker $i');
-        final workerIsolate = Isolate.spawn(worker, i, paused: true);
-        final iWorker = Worker(await workerIsolate);
-        workers.add(iWorker);
-        group.add(iWorker.waitForExit());
-      }
-      group.close();
-
-      await group.future;
-
-      expect(exists(_lockFailedPath), equals(false));
-    },
-    timeout: const Timeout(Duration(minutes: 30)),
-  );
 }
 
 Future<ReceivePort> spawn(String message, String logFile) async {
