@@ -13,44 +13,41 @@ import 'package:dcli/src/process/process/process_in_isolate.dart';
 import 'package:dcli/src/process/process/process_settings.dart';
 import 'package:native_synchronization/mailbox.dart';
 import 'package:native_synchronization/sendable.dart';
+import 'package:test/test.dart';
 
 void main() {
-  print('starting');
-  firstline();
-  print('finished');
+  test('isolate test', firstline);
+
+  test('pub get', () {
+    DartSdk().runPubGet('.', progress: Progress.devNull());
+  });
+
+  /// test interaction between spawned app and the console
+  test('unit_tester', () {
+    'dcli_unit_tester --ask'.start(terminal: true);
+  });
 }
 
 void firstline() {
   'getent passwd bsutton'.firstLine!.split(':');
 }
 
-void test6() {
-  DartSdk().runPubGet('.', progress: Progress.devNull());
-}
-
-/// test interaction between spawned app and the console
-void test5() {
-  'dcli_unit_tester --ask'.start(terminal: true);
-  print('do something after');
-}
-
 void test4() {
-  final isolateController = IsolateChannel(
+  final isolateChannel = IsolateChannel(
     process: ProcessSettings('which', args: ['which']),
   );
 
-  startIsolate(isolateController);
+  startIsolate(isolateChannel);
 
   MessageResponse response;
   do {
-    response =
-        MessageResponse.fromData(isolateController.toPrimaryIsolate.take())
-          ..onStdout((data) {
-            print(green('primary:  ${String.fromCharCodes(data)}'));
-          })
-          ..onStderr((data) {
-            printerr(red('primary: ${String.fromCharCodes(data)}'));
-          });
+    response = MessageResponse.fromData(isolateChannel.toPrimaryIsolate.take())
+      ..onStdout((data) {
+        print(green('primary:  ${String.fromCharCodes(data)}'));
+      })
+      ..onStderr((data) {
+        printerr(red('primary: ${String.fromCharCodes(data)}'));
+      });
   } while (response.messageType != MessageType.exitCode);
   print(orange('primary: received exit message'));
 }
