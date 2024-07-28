@@ -195,8 +195,20 @@ class TestFileSystem {
       await copyTestScripts();
       testDirectoryTree = TestDirectoryTree(fsRoot);
 
+      copyPubTokens();
+
       await installCrossPlatformTestScripts();
     }
+  }
+
+  /// Copy the pub.dev pub-tokens so that we can use onepub within
+  /// the test file system.
+  void copyPubTokens() {
+    final pathToDartConfig = join('.config', 'dart');
+    final originalDartConfig = join(originalHome, pathToDartConfig);
+    final testFSDartConfig = join(HOME, pathToDartConfig);
+    createDir(testFSDartConfig, recursive: true);
+    copyTree(originalDartConfig, testFSDartConfig);
   }
 
   // ignore: prefer_constructors_over_static_methods
