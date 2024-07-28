@@ -23,11 +23,15 @@ void main(List<String> args) {
         help: 'Dumps the output from each of the Platform properties')
     ..addFlag('verbose',
         abbr: 'v', help: 'Outputs additional logging information')
+    ..addFlag('none', abbr: 'n', help: 'No Output')
     ..addFlag(
       'script',
       abbr: 's',
       help: 'Dumps the output from each of the Script properties',
-    );
+    )
+    ..addOption('stderr', abbr: 'e', help: "Dumps 'n' lines to stderr output")
+    ..addOption('stdout', abbr: 'o', help: "Dumps 'n' lines to stdout output")
+    ..addOption('exit', abbr: 'x', help: 'returns with the passed exit code');
 
   ArgResults parsed;
   try {
@@ -46,8 +50,28 @@ void main(List<String> args) {
     dumpScript();
   } else if (parsed['ask'] as bool) {
     print(ask('enter a value:'));
+  } else if (parsed['none'] as bool) {
+    // no op
+  } else if (parsed['none'] as bool) {
+    // no op
   } else {
     print(DartScript.self.pathToScript);
+  }
+
+  if (parsed.wasParsed('stderr')) {
+    final lines = int.parse(parsed['stderr'] as String);
+    for (var i = 0; i < lines; i++) {
+      printerr('stderr line $i');
+    }
+  }
+  if (parsed.wasParsed('stdout')) {
+    final lines = int.parse(parsed['stdout'] as String);
+    for (var i = 0; i < lines; i++) {
+      print('stdout line $i');
+    }
+  }
+  if (parsed.wasParsed('exit')) {
+    exit(int.parse(parsed['exit'] as String));
   }
 }
 
