@@ -31,7 +31,7 @@ class PubGet {
       DartSdk().runPubGet(
         _project.pathToProjectRoot,
         compileExecutables: compileExecutables,
-        progress: Progress(result._processLine, stderr: _println),
+        progress: Progress(result._processLine, stderr: _printerr),
       );
 
       return result;
@@ -41,9 +41,9 @@ class PubGet {
     }
   }
 
-  void _println(String? line) {
+  void _printerr(String? line) {
     verbose(() => 'pub get: $line');
-    print(line);
+    printerr(line);
   }
 }
 
