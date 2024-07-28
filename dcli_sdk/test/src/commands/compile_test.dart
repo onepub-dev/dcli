@@ -11,8 +11,7 @@ void main() {
         () => CompileCommand().compilePackage('git/dcli_scripts'),
         throwsA(predicate((e) =>
             e is InvalidCommandArgumentException &&
-            e.message
-                .contains('To compile the package git/dcli_scripts it must'))));
+            e.message.contains('The package must not include a path.'))));
   });
 
   test('compile ', () async {
