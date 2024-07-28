@@ -23,6 +23,11 @@ class IsolateChannel {
   ReceivePort errorPort = ReceivePort();
   ReceivePort exitPort = ReceivePort();
 
+  void close() {
+    errorPort.close();
+    exitPort.close();
+  }
+
   IsolateChannelSendable asSendable() => IsolateChannelSendable(
       process: process,
       toPrimaryIsolate: toPrimaryIsolate.asSendable,
