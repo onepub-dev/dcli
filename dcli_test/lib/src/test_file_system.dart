@@ -342,8 +342,10 @@ class TestFileSystem {
   /// dependency to dcli after we move them to the test file system.
   Future<void> _patchRelativeDependenciesAndWarmup(
       String testScriptPath) async {
-    find('pubspec.yaml', workingDirectory: testScriptPath)
-        .forEach((pathToPubspec) async {
+    final projects =
+        find('pubspec.yaml', workingDirectory: testScriptPath).toList();
+
+    for (final pathToPubspec in projects) {
       final dcliProject = DartProject.fromPath('.');
 
       final pathToDCliRoot = dirname(dcliProject.pathToProjectRoot);
@@ -363,11 +365,10 @@ dependency_overrides:
         ''');
 
       // ignore: discarded_futures
-      await capture(() async {
-        await DartProject.fromPath(dirname(pathToPubspec))
-            .warmup(upgrade: true);
-      }, progress: Progress.printStdErr());
-    });
+      // await capture(() async {
+      await DartProject.fromPath(dirname(pathToPubspec)).warmup(upgrade: true);
+      // }, progress: Progress.printStdErr());
+    }
   }
 
   static String pathToTools = join(rootPath, 'tmp', 'dcli', 'tool');
@@ -389,23 +390,31 @@ dependency_overrides:
     if (!exists(join(pathToTools, 'head')) ||
         !exists(join(pathToTools, 'tail')) ||
         !exists(join(pathToTools, 'ls')) ||
-        !exists(join(pathToTools, 'touch'))) {
-      final required = ['head', 'tail', 'ls', 'touch'];
+        !exists(join(pathToTools, 'touch')) ||
+        !exists(join(pathToTools, 'run_child'))) {
+      final required = ['head', 'tail', 'ls', 'touch', 'run_child'];
 
       // may not exists on the first pass through.
       if (!exists(Settings().pathToDCliBin)) {
         createDir(Settings().pathToDCliBin, recursive: true);
       }
 
+      final pathToToolProject =
+          join(pathToPackageUnitTester, 'test', 'test_script', 'general');
+      final toolProject = DartProject.fromPath(pathToToolProject);
+
       await capture(() async {
-        await DartProject.fromPath(pathToTools).warmup();
+        if (!toolProject.isReadyToRun) {
+          await toolProject.warmup();
+        }
       }, progress: Progress.printStdErr());
 
+      print(blue('compiling cross platform tools'));
       await NamedLock(name: 'compile').withLockAsync(() async {
         for (final command in required) {
-          final script = DartScript.fromFile(join(pathToPackageUnitTester,
-              'test', 'test_script', 'general', 'bin', '$command.dart'));
-          if (!exists(join(pathToTools, script.pathToExe))) {
+          final script = DartScript.fromFile(
+              join(pathToToolProject, 'bin', '$command.dart'));
+          if (!exists(join(pathToTools, '$command.dart'))) {
             /// compile and install the command into the tool path
             script.compile();
             copy(script.pathToExe, pathToTools);
