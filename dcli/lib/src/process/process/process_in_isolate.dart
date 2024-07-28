@@ -12,7 +12,8 @@ import 'package:stack_trace/stack_trace.dart';
 
 // import 'mailbox.dart';
 import '../../../dcli.dart';
-import 'in_isolate/runner.dart';
+import '../../util/runnable_process.dart';
+import 'in_isolate/process_runner.dart';
 import 'isolate_channel.dart';
 import 'mailbox_extension.dart';
 import 'message.dart';
@@ -24,31 +25,33 @@ import 'process_settings.dart';
 /// some process on the primary isolate side, but often it is the
 /// only way to debug the process in isolate code as the
 /// debugger hangs.
-const debugIsolate = false;
+const debugIsolate = true;
 
 void startIsolate(IsolateChannel channel) {
-  _logPrimary(() => 'starting isolate');
+  processLogger(() => 'starting isolate');
   unawaited(_startIsolate(channel));
 
-  _logPrimary(() => 'waiting for isolate to spawn');
+  processLogger(() => 'waiting for isolate to spawn');
 }
 
 /// Starts an isolate that spawns the command.
 Future<void> _startIsolate(IsolateChannel channel) {
+  processLogger(() => 'getting sendable');
   final sendable = channel.asSendable();
+  processLogger(() => 'calling spawn');
   return Isolate.spawn<IsolateChannelSendable>(
     _body,
     sendable,
     onError: sendable.errorPort,
-    debugName: 'ProcessInIsolate',
+    debugName:
+        'ProcessInIsolate - ${channel.process.command} ${channel.process.args}',
   );
 }
 
 Future<void> _body(IsolateChannelSendable channel) async {
-  Settings().setVerbose(enabled: debugIsolate);
-  print(red('running'));
+  isolateLogger(() => 'body entered');
 
-  verbose(() => green(
+  isolateLogger(() => green(
       '''process running: ${channel.process.command} ${channel.process.args}'''));
 
   /// We are now running in the isolate.
@@ -203,7 +206,8 @@ StreamSubscription<List<int>> _sendStdoutToPrimary(Process process,
   // ignore: join_return_with_assignment
   stdoutSub = process.stdout.listen((data) async {
     stdoutSub.pause();
-    isolateLogger(() => 'posting data to primaries stdout: ${utf8.decode(data)}');
+    isolateLogger(
+        () => 'posting data to primaries stdout: ${utf8.decode(data)}');
     await mailboxToPrimaryIsolate
         .postMessage(Message.stdout(data as Uint8List));
     stdoutSub.resume();
@@ -214,16 +218,10 @@ StreamSubscription<List<int>> _sendStdoutToPrimary(Process process,
   return stdoutSub;
 }
 
-void _logPrimary(String Function() message) {
-  if (debugIsolate) {
-    print('primary: ${message()}');
-  }
-}
-
 String? _isolateID;
 void isolateLogger(String Function() message) {
-  _isolateID ??= Service.getIsolateId(Isolate.current);
   if (debugIsolate) {
+    _isolateID ??= Service.getIsolateId(Isolate.current);
     print('isolate($_isolateID): ${message()}');
   }
 }

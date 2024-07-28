@@ -46,5 +46,5 @@ class MessageResponse {
 
   @override
   String toString() => '''
-type: $messageType, payload: (len: ${payload.length}) ${String.fromCharCodes(payload)}''';
+type: $messageType, payload: (len: ${payload.length}) ${(messageType == MessageType.exitCode) ? payload[0] : String.fromCharCodes(payload)}''';
 }
