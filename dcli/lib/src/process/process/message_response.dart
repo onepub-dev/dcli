@@ -2,8 +2,8 @@
 
 import 'package:dcli_core/dcli_core.dart';
 
+import '../../util/runnable_process.dart';
 import 'message.dart';
-import 'process_in_isolate.dart';
 
 /// Handle messages sent back from the spawned isolate.
 ///
@@ -15,14 +15,13 @@ class MessageResponse {
     } else {
       payload = [];
     }
-    _logMessageReponse('Recieved', this);
+    processLogger(() => 'Recieved Message $this');
   }
   late final List<int> payload;
   late final MessageType messageType;
 
   void onStdout(void Function(List<int> payload) action) {
     if (messageType == MessageType.stdout) {
-      _logMessageReponse('dispatching to stdout', this);
       action(payload);
     }
   }
@@ -46,12 +45,6 @@ class MessageResponse {
   }
 
   @override
-  String toString() =>
-      'type: $messageType, payload: (len: ${payload.length}) $payload]';
-}
-
-void _logMessageReponse(String prefix, MessageResponse message) {
-  if (debugIsolate) {
-    print('message_reponse: $prefix $message');
-  }
+  String toString() => '''
+type: $messageType, payload: (len: ${payload.length}) ${String.fromCharCodes(payload)}''';
 }

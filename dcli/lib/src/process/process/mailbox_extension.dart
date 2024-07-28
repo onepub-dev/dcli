@@ -15,23 +15,17 @@ extension MailBoxMessage on Mailbox {
         // ignore: avoid_catching_errors
       } on StateError catch (e) {
         if (e.message == 'Mailbox is full') {
-          _logMessage('mailbox is full sleeping for a bit');
+          isolateLogger(() => 'mailbox is full sleeping for a bit');
           tryPut = true;
 
           /// yeild and give the mailbox reader a chance to empty
           /// the mailbox.
           await Future.delayed(const Duration(seconds: 3), () {});
-          _logMessage('woke from mailbox little put sleep.');
+          isolateLogger(() => 'Mailbox: postMessage, retrying after sleep.');
         } else {
-          _logMessage('StateError on postMesage $e');
+          isolateLogger(() => 'StateError on postMesage $e');
         }
       }
     }
-  }
-}
-
-void _logMessage(String message) {
-  if (debugIsolate) {
-    print('postMessage: $message');
   }
 }

@@ -84,8 +84,8 @@ class ProcessRunner {
       final cmdLine = "${_parsed.cmd} ${_parsed.args.join(' ')}";
       verbose(() => 'Process.start: cmdLine ${green(cmdLine)}');
       verbose(
-        () => 'Process.start: runInShell: $settings.runInShell '
-            'workingDir: $settings.workingDirectory mode: $mode '
+        () => 'Process.start: runInShell: ${settings.runInShell} '
+            'workingDir: ${settings.workingDirectory} mode: $mode '
             'cmd: ${_parsed.cmd} args: ${_parsed.args.join(', ')}',
       );
     }
