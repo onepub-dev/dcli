@@ -5,14 +5,16 @@
  */
 
 import 'dart:async';
+import 'dart:developer';
 import 'dart:io';
+import 'dart:isolate';
 
 import 'package:dcli_core/dcli_core.dart' as core;
-import 'package:native_synchronization/mailbox.dart';
 import 'package:path/path.dart';
 
 import '../../dcli.dart';
 import '../process/environment.dart';
+import '../process/process/isolate_channel.dart';
 import '../process/process/message.dart';
 import '../process/process/message_response.dart';
 import '../process/process/process_in_isolate.dart';
@@ -199,7 +201,7 @@ class RunnableProcess {
         progress: progress as ProgressImpl,
       );
 
-      _logProcess('spawn completed - waiting for process exit');
+      processLogger(() => 'spawn completed - waiting for process exit');
 
       /// whether we have a terminal or not we use the same
       /// process to read any io that comes back until
@@ -224,7 +226,7 @@ class RunnableProcess {
     } finally {
       (progress as ProgressImpl).close();
     }
-    _logProcess('process completed');
+    processLogger(() => 'process completed');
     return progress;
   }
 
@@ -319,26 +321,45 @@ class RunnableProcess {
         extensionSearch: extensionSearch,
         environment: ProcessEnvironment());
 
-    late final mailboxFromPrimaryIsolate = Mailbox();
-    final mailboxToPrimaryIsolate = Mailbox();
+    final channel = IsolateChannel(process: processSettings);
 
-    startIsolate(
-        processSettings, mailboxFromPrimaryIsolate, mailboxToPrimaryIsolate);
+    startIsolate(channel);
 
-    MessageResponse response;
+    channel.errorPort.listen((error) {
+      processLogger(() => red('ErrorPort: $error'));
+    });
+    channel.exitPort.listen((error) {
+      processLogger(() => red('ExitPort: $error'));
+    });
+
+    // ignore: discarded_futures
+    MessageResponse? response;
     do {
-      response = MessageResponse.fromData(mailboxToPrimaryIsolate.take())
-        ..onStdout((payload) {
-          progress.addToStdout(payload);
-        })
-        ..onStderr((payload) {
-          progress.addToStderr(payload);
-        })
-        ..onException((exception) =>
-            Error.throwWithStackTrace(exception, exception.stackTrace));
-    } while (response.messageType != MessageType.exitCode);
+      processLogger(() => 'Primary calling Mailbox.take()');
+      try {
+        final messageData =
+            channel.toPrimaryIsolate.take(timeout: const Duration(seconds: 10));
+        processLogger(() => 'take returned with data');
+        response = MessageResponse.fromData(messageData)
+          ..onStdout((payload) {
+            progress.addToStdout(payload);
+          })
+          ..onStderr((payload) {
+            progress.addToStderr(payload);
+          })
+          ..onException((exception) =>
+              Error.throwWithStackTrace(exception, exception.stackTrace));
+      } on TimeoutException catch (e) {
+        // ignore: avoid_print
+        processLogger(() => 
+            'Timeout waiting for response from isolate: ${e.message}');
+        Future.delayed(Duration.zero, () {});
+      }
+    } while (response?.messageType != MessageType.exitCode);
 
-    response.onExit((exitCode) {
+    processLogger(() => 'Exit code recived by primary isolate');
+
+    response?.onExit((exitCode) {
       if (exitCode != 0 && nothrow == false) {
         throw RunException.withArgs(
           _parsed.cmd,
@@ -353,6 +374,9 @@ class RunnableProcess {
         progress.exitCode = exitCode;
       }
     });
+
+    channel.errorPort.close();
+    channel.exitPort.close();
   }
 
   // TODO(bsutton): does this work now we have moved to mailboxes?
@@ -462,8 +486,10 @@ String findExtension(String basename, String workingDirectory) {
   return basename;
 }
 
-void _logProcess(String message) {
+String? _isolateID;
+void processLogger(String Function() message) {
+  _isolateID ??= Service.getIsolateId(Isolate.current);
   if (debugIsolate) {
-    print('process: $message');
+    print('process($_isolateID): ${message()}');
   }
 }
