@@ -31,7 +31,9 @@ void main(List<String> args) {
     )
     ..addOption('stderr', abbr: 'e', help: "Dumps 'n' lines to stderr output")
     ..addOption('stdout', abbr: 'o', help: "Dumps 'n' lines to stdout output")
-    ..addOption('exit', abbr: 'x', help: 'returns with the passed exit code');
+    ..addOption('exit', abbr: 'x', help: 'returns with the passed exit code')
+    ..addOption('sleep',
+        abbr: 'l', help: "Sleep for 'n' seconds before returning");
 
   ArgResults parsed;
   try {
@@ -69,6 +71,9 @@ void main(List<String> args) {
     for (var i = 0; i < lines; i++) {
       print('stdout line $i');
     }
+  }
+  if (parsed.wasParsed('sleep')) {
+    sleep(int.parse(parsed['sleep'] as String));
   }
   if (parsed.wasParsed('exit')) {
     exit(int.parse(parsed['exit'] as String));
