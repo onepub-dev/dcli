@@ -20,7 +20,7 @@ export 'package:dcli_core/dcli_core.dart'
 ///
 /// Be cautious that you don't nest backups of the same file
 /// in your code as we always use the same backup target.
-/// Instead use [withFileProtection].
+/// Instead use [withFileProtectionAsync].
 ///
 /// We also renamed the backup to '<filename>.bak' to ensure
 /// the backupfile doesn't interfere with dev tools
@@ -31,7 +31,7 @@ export 'package:dcli_core/dcli_core.dart'
 ///
 /// See:
 ///  * [restoreFile]
-///  * [withFileProtection]
+///  * [withFileProtectionAsync]
 ///
 void backupFile(String pathToFile, {bool ignoreMissing = false}) =>
     // ignore: discarded_futures
@@ -43,7 +43,7 @@ void backupFile(String pathToFile, {bool ignoreMissing = false}) =>
 /// from the .bak/<filename>.bak file created when
 /// you called [backupFile].
 ///
-/// Consider using [withFileProtection] for a more robust solution.
+/// Consider using [withFileProtectionAsync] for a more robust solution.
 ///
 /// When the last .bak file is restored, the .bak directory
 /// will be deleted. If you don't restore all files (your app crashes)
@@ -55,6 +55,7 @@ void backupFile(String pathToFile, {bool ignoreMissing = false}) =>
 void restoreFile(String pathToFile, {bool ignoreMissing = false}) =>
     core.restoreFile(pathToFile, ignoreMissing: ignoreMissing);
 
+@Deprecated('Use withFileProtectionAsync')
 R withFileProtection<R>(
   List<String> protected,
   R Function() action, {
@@ -76,8 +77,8 @@ R withFileProtection<R>(
 /// NOTE: DO NOT use this with an async [action]. Instead use
 /// dcli_core.withFileProtectionAsync.
 ///
-/// [withFileProtection] is safe to use in a nested fashion as each call
-/// to [withFileProtection] creates its own separate backup area.
+/// [withFileProtectionAsync] is safe to use in a nested fashion as each call
+/// to [withFileProtectionAsync] creates its own separate backup area.
 ///
 /// If the VM aborts during execution of the [action] you will find
 /// the backed up files in the system temp directory under a directory named

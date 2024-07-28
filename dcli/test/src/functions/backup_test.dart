@@ -117,7 +117,7 @@ void main() {
       await withTempDirAsync((tempDir) async {
         final tree = TestDirectoryTree(tempDir);
 
-        withFileProtection([tree.bottomFiveTxt], () {
+        await withFileProtectionAsync([tree.bottomFiveTxt], () async {
           delete(tree.bottomFiveTxt);
         });
         expect(exists(tree.bottomFiveTxt), isTrue);
@@ -130,7 +130,7 @@ void main() {
 
         final pre = calculateHash(tree.bottomFiveTxt);
 
-        withFileProtection([tree.bottomFiveTxt], () {
+        await withFileProtectionAsync([tree.bottomFiveTxt], () async {
           final pre = calculateHash(tree.bottomFiveTxt);
           tree.bottomFiveTxt.append('some dummy data');
           final post = calculateHash(tree.bottomFiveTxt);
@@ -142,11 +142,11 @@ void main() {
       });
     });
 
-    test('single file relative path that we delete', () {
+    test('single file relative path that we delete', () async {
       final localDir = join(pwd, '.testing');
       final tree = TestDirectoryTree(localDir);
 
-      withFileProtection([relative(tree.bottomFiveTxt)], () {
+      await withFileProtectionAsync([relative(tree.bottomFiveTxt)], () async {
         delete(tree.bottomFiveTxt);
       });
       expect(exists(tree.bottomFiveTxt), isTrue);
@@ -154,13 +154,13 @@ void main() {
       deleteDir(localDir);
     });
 
-    test('single file relative path that we modify', () {
+    test('single file relative path that we modify', () async {
       final localDir = join(pwd, '.testing');
       final tree = TestDirectoryTree(localDir);
 
       final pre = calculateHash(tree.bottomFiveTxt);
 
-      withFileProtection([relative(tree.bottomFiveTxt)], () {
+      await withFileProtectionAsync([relative(tree.bottomFiveTxt)], () async {
         final pre = calculateHash(tree.bottomFiveTxt);
         tree.bottomFiveTxt.append('some dummy data');
         final post = calculateHash(tree.bottomFiveTxt);
@@ -175,7 +175,8 @@ void main() {
       await withTempDirAsync((tempDir) async {
         final tree = TestDirectoryTree(tempDir);
 
-        withFileProtection([tree.bottomFiveTxt, tree.bottomSixTxt], () {
+        await withFileProtectionAsync([tree.bottomFiveTxt, tree.bottomSixTxt],
+            () async {
           delete(tree.bottomFiveTxt);
           delete(tree.bottomSixTxt);
         });
@@ -184,12 +185,13 @@ void main() {
       });
     });
 
-    test('multiple files relative path that we delete', () {
+    test('multiple files relative path that we delete', () async {
       final localDir = join(pwd, '.testing');
       final tree = TestDirectoryTree(localDir);
 
-      withFileProtection(
-          [relative(tree.bottomFiveTxt), relative(tree.bottomSixTxt)], () {
+      await withFileProtectionAsync(
+          [relative(tree.bottomFiveTxt), relative(tree.bottomSixTxt)],
+          () async {
         delete(tree.bottomFiveTxt);
         delete(tree.bottomSixTxt);
       });
@@ -201,7 +203,7 @@ void main() {
       await withTempDirAsync((tempDir) async {
         final tree = TestDirectoryTree(tempDir);
 
-        withFileProtection([tree.top], () {
+        await withFileProtectionAsync([tree.top], () async {
           deleteDir(tree.top);
         });
         expect(exists(tree.top), isTrue);
@@ -216,11 +218,11 @@ void main() {
       });
     });
 
-    test('directory relative path that we delete', () {
+    test('directory relative path that we delete', () async {
       final localDir = join(pwd, '.testing');
       final tree = TestDirectoryTree(localDir);
 
-      withFileProtection([tree.top], () {
+      await withFileProtectionAsync([tree.top], () async {
         deleteDir(tree.top);
       });
       expect(exists(tree.top), isTrue);
@@ -238,7 +240,7 @@ void main() {
     //   withTempDirAsync((tempDir) {
     //     final tree = TestDirectoryTree(tempDir);
 
-    //     withFileProtection(['*.txt'], () {
+    //     withFileProtectionAsync(['*.txt'], () {
     //       delete(tree.topDotTwoTxt);
     //       delete(tree.middleFourTxt);
     //       delete(tree.middleDotFourTxt);
@@ -258,7 +260,7 @@ void main() {
 
         delete(tree.bottomFiveTxt);
 
-        withFileProtection([tree.bottomFiveTxt], () {
+        await withFileProtectionAsync([tree.bottomFiveTxt], () async {
           touch(tree.bottomFiveTxt, create: true);
         });
         expect(exists(tree.bottomFiveTxt), isFalse);
@@ -271,7 +273,7 @@ void main() {
 
         deleteDir(tree.bottom);
 
-        withFileProtection([tree.bottom], () {
+        await withFileProtectionAsync([tree.bottom], () async {
           createDir(tree.bottom, recursive: true);
           touch(tree.bottomFiveTxt, create: true);
         });
