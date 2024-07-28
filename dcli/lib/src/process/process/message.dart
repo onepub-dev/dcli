@@ -1,15 +1,13 @@
 // @dart=3.0
 
-import 'dart:ffi';
 import 'dart:io';
-import 'dart:isolate';
 import 'dart:typed_data';
 
 import '../../../dcli.dart';
 
 enum MessageType {
   /// pass the isolates send port
-  sendPort,
+  // sendPort,
 
   /// the processes exit code
   exitCode,
@@ -38,13 +36,13 @@ class Message {
   /// Used to send the native send port back to the
   /// spawner, so they can send us data.
   /// Spawnee -> Spawner
-  Message.port(SendPort sendPort) {
-    final port = Int64List(1)..[0] = sendPort.nativePort;
+  // Message.port(SendPort sendPort) {
+  //   final port = Int64List(1)..[0] = sendPort.nativePort;
 
-    builder
-      ..addByte(MessageType.sendPort.index)
-      ..add(port.buffer.asUint8List());
-  }
+  //   builder
+  //     ..addByte(MessageType.sendPort.index)
+  //     ..add(port.buffer.asUint8List());
+  // }
 
   /// Send data to the isolate that came from
   /// the primary isolates stdin.
