@@ -15,13 +15,16 @@ import 'package:dcli/dcli.dart';
 void main(List<String> args) {
   final script = args[0];
 
+  var exitCode = 0;
+
   if (Platform.isWindows) {
     if (script.endsWith('.dart')) {
-      'dart $script'.run;
+      exitCode = 'dart $script'.start(nothrow: true).exitCode!;
     } else {
-      script.run;
+      exitCode = script.start(nothrow: true).exitCode!;
     }
   } else {
-    script.run;
+    exitCode = script.start(nothrow: true).exitCode!;
   }
+  exit(exitCode);
 }
