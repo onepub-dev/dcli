@@ -33,3 +33,8 @@ dcli/tool/post_release_hook/.settings_yaml
 .idea/modules.xml
 .idea/vcs.xml
 *.xml
+dcli_unit_tester/test/test_script/general/bin/head
+dcli_unit_tester/test/test_script/general/bin/ls
+dcli_unit_tester/test/test_script/general/bin/run_child
+dcli_unit_tester/test/test_script/general/bin/tail
+dcli_unit_tester/test/test_script/general/bin/touch
