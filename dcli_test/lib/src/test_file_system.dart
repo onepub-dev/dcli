@@ -371,7 +371,7 @@ dependency_overrides:
     }
   }
 
-  static String pathToTools = join(rootPath, 'tmp', 'dcli', 'tool');
+  static String pathToTools = join(rootPath, 'tmp', 'dcli_tools');
   static String pathToToolPubspec = join(pathToTools, 'pubspec.yaml');
 
   /// We install the cross platform tools into a tool directory
@@ -387,41 +387,51 @@ dependency_overrides:
       createDir(pathToTools, recursive: true);
     }
 
-    if (!exists(join(pathToTools, 'head')) ||
-        !exists(join(pathToTools, 'tail')) ||
-        !exists(join(pathToTools, 'ls')) ||
-        !exists(join(pathToTools, 'touch')) ||
-        !exists(join(pathToTools, 'run_child'))) {
-      final required = ['head', 'tail', 'ls', 'touch', 'run_child'];
+    final tools = ['head', 'tail', 'ls', 'touch', 'run_child'];
 
-      // may not exists on the first pass through.
-      if (!exists(Settings().pathToDCliBin)) {
-        createDir(Settings().pathToDCliBin, recursive: true);
+    // may not exists on the first pass through.
+    if (!exists(pathToTools)) {
+      createDir(pathToTools, recursive: true);
+    }
+
+    final pathToToolProject =
+        join(pathToPackageUnitTester, 'test', 'test_script', 'general');
+
+    final toolProject = DartProject.fromPath(pathToToolProject);
+
+    await capture(() async {
+      if (!toolProject.isReadyToRun) {
+        await toolProject.warmup();
       }
+    }, progress: Progress.printStdErr());
 
-      final pathToToolProject =
-          join(pathToPackageUnitTester, 'test', 'test_script', 'general');
-      final toolProject = DartProject.fromPath(pathToToolProject);
-
-      await capture(() async {
-        if (!toolProject.isReadyToRun) {
-          await toolProject.warmup();
-        }
-      }, progress: Progress.printStdErr());
-
-      print(blue('compiling cross platform tools'));
-      await NamedLock(name: 'compile').withLockAsync(() async {
-        for (final command in required) {
-          final script = DartScript.fromFile(
-              join(pathToToolProject, 'bin', '$command.dart'));
+    print(blue('compiling cross platform tools'));
+    await NamedLock(name: 'compile').withLockAsync(() async {
+      for (final command in tools) {
+        final pathToTool = join(pathToTools, command);
+        final pathToToolSource =
+            join(pathToToolProject, 'bin', '$command.dart');
+        if (!_compileRequired(pathToTool, pathToToolSource)) {
+          final script = DartScript.fromFile(pathToToolSource);
           if (!exists(join(pathToTools, '$command.dart'))) {
             /// compile and install the command into the tool path
             script.compile();
             copy(script.pathToExe, pathToTools);
           }
         }
-      });
+      }
+    });
+  }
+
+  bool _compileRequired(String pathToTool, String pathToToolSource) {
+    if (!exists(pathToTool)) {
+      return true;
     }
+
+    /// If the source has been modified since the tool was compiled
+    /// This isn't a perfect test as the tool may rely on some other
+    /// library that has been modified.
+    return stat(pathToTool).modified.isBefore(stat(pathToToolSource).modified);
   }
 
   bool isDCliRunningFromSource() =>
