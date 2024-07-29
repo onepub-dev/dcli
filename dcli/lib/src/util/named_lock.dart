@@ -14,6 +14,7 @@ import 'package:path/path.dart';
 import 'package:stack_trace/stack_trace.dart';
 
 import '../../dcli.dart';
+import 'isolate_id.dart';
 
 /// A [NamedLock] can be used to control access to a resource
 /// across processes and isolates.
@@ -193,7 +194,7 @@ class NamedLock {
     // lock file is in the directory above the project
     // as during preparing we delete the project directory.
 
-    final isolate = _isolateID;
+    final isolate = isolateID;
 
     return join(_lockPath, '.$pid.$isolate.$name');
   }
@@ -211,27 +212,8 @@ class NamedLock {
     return _LockFileParts(pid, isolateId);
   }
 
-  int get _isolateID {
-    String? isolateString;
 
-    try {
-      isolateString = Service.getIsolateId(Isolate.current);
-      // ignore: avoid_catches_without_on_clauses
-    } catch (_) {
-      /// hack until google fixes nndb problem with getIsolateID
-      /// https://github.com/dart-lang/sdk/issues/45347
-    }
-    int? isolateId;
-    if (isolateString != null) {
-      isolateString = isolateString.replaceAll('/', '_');
-      isolateString = isolateString.replaceAll(r'\', '_');
-      if (isolateString.contains('_')) {
-        /// just the numeric value.
-        isolateId = int.tryParse(isolateString.split('_')[1]);
-      }
-    }
-    return isolateId ??= Isolate.current.hashCode;
-  }
+  
 
   /// Attempts to take a project lock.
   /// We wait for upto 30 seconds for an existing lock to
@@ -298,7 +280,6 @@ class NamedLock {
             }
 
             if (taken) {
-              final isolateID = _isolateID;
               Settings().verbose(
                 'Taking lock ${basename(_lockFilePath)} for $isolateID',
               );
@@ -372,7 +353,7 @@ class NamedLock {
   }
 
   bool _isSelf(int lockPid, int lockIsolateId) =>
-      lockIsolateId == _isolateID && lockPid == pid;
+      lockIsolateId == isolateID && lockPid == pid;
 
   int _clearStaleLocks(List<String> locks, int lockFiles) {
     var lockFiles0 = lockFiles;
@@ -421,7 +402,6 @@ Hardlock taken for $name in ${Service.getIsolateId(Isolate.current)}'''));
       }
     } finally {
       if (socket != null) {
-        // ignore: discarded_futures
         await socket.close();
         verbose(() => blue('''
 Hardlock released  for $name in ${Service.getIsolateId(Isolate.current)}'''));
