@@ -9,6 +9,7 @@ library;
 
 import 'package:dcli/dcli.dart';
 import 'package:dcli_core/dcli_core.dart' as core;
+import 'package:dcli_test/dcli_test.dart';
 import 'package:path/path.dart' hide equals;
 import 'package:pubspec_manager/pubspec_manager.dart';
 import 'package:test/test.dart';
@@ -31,45 +32,45 @@ void main() {
 
   group('Create Project ', () {
     test('Create project full with --template', () async {
-      //    await TestFileSystem().withinZone((fs) async {
-//        InstallCommand().initTemplates();
+      await TestFileSystem().withinZone((fs) async {
+        // InstallCommand().initTemplates();
 
-      final dcliRoot = dirname(DartProject.self.pathToProjectRoot);
+        final dcliRoot = dirname(DartProject.self.pathToProjectRoot);
 
-      await core.withTempDirAsync((tempDir) async {
-        const projectName = 'full_test';
-        final pathToProject = join(tempDir, projectName);
+        await core.withTempDirAsync((tempDir) async {
+          const projectName = 'full_test';
+          final pathToProject = join(tempDir, projectName);
 
-        const mainScriptName = '$projectName.dart';
-        final scriptPath = join(pathToProject, 'bin', mainScriptName);
+          const mainScriptName = '$projectName.dart';
+          final scriptPath = join(pathToProject, 'bin', mainScriptName);
 
-        final templatePath = join(dcliRoot, Settings.templateDir);
-        await core.withEnvironmentAsync(() async {
-          final testTemplateDir =
-              join(tempDir, '.dcli', Settings.templateDir, 'project', 'full');
-          createDir(testTemplateDir, recursive: true);
+          final templatePath = join(dcliRoot, Settings.templateDir);
+          await core.withEnvironmentAsync(() async {
+            final testTemplateDir =
+                join(tempDir, '.dcli', Settings.templateDir, 'project', 'full');
+            createDir(testTemplateDir, recursive: true);
 
-          /// copy the dev templates into the temp template path
-          /// so we are always running with a current version of the templates.
-          copyTree(join(templatePath, 'project', 'full'), testTemplateDir);
-          DartProject.create(pathTo: pathToProject, templateName: 'full');
-        }, environment: {
-          overrideDCliPathKey: DartProject.self.pathToProjectRoot,
-          'HOME': tempDir
+            /// copy the dev templates into the temp template path
+            /// so we are always running with a current version of the templates.
+            copyTree(join(templatePath, 'project', 'full'), testTemplateDir);
+            DartProject.create(pathTo: pathToProject, templateName: 'full');
+          }, environment: {
+            overrideDCliPathKey: DartProject.self.pathToProjectRoot,
+            'HOME': tempDir
+          });
+
+          expect(exists(scriptPath), isTrue);
+          final project = DartProject.fromPath(pathToProject);
+          expect(project.hasPubSpec, isTrue);
+          final pubspec = PubSpec.loadFromPath(project.pathToPubSpec);
+          final executables = pubspec.executables;
+          final mainScriptKey = basenameWithoutExtension(mainScriptName);
+          expect(executables.exists(mainScriptKey), isTrue);
+          expect(executables[mainScriptKey]!.scriptPath,
+              equals(join('bin', '$mainScriptKey.dart')));
         });
-
-        expect(exists(scriptPath), isTrue);
-        final project = DartProject.fromPath(pathToProject);
-        expect(project.hasPubSpec, isTrue);
-        final pubspec = PubSpec.loadFromPath(project.pathToPubSpec);
-        final executables = pubspec.executables;
-        final mainScriptKey = basenameWithoutExtension(mainScriptName);
-        expect(executables.exists(mainScriptKey), isTrue);
-        expect(executables[mainScriptKey]!.scriptPath,
-            equals(join('bin', '$mainScriptKey.dart')));
       });
     });
-    // });
   });
 
   test('findProject', () async {
