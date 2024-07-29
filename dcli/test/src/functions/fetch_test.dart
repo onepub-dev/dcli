@@ -221,18 +221,18 @@ void main() {
         expect(
           () async => fetch(url: url, saveToPath: file),
           throwsA(
-            predicate<FetchException>(
-              (e) =>
+            predicate<FetchException>((e) =>
 
-                  /// we get different errors on windows and linux
-                  /// windows
-                  (e.message.contains('No such host is known.') &&
-                      e.errorCode == 11001) ||
+                /// we get different errors on windows and linux
+                /// windows
+                (e.message.contains('No such host is known.') &&
+                    e.errorCode == 11001) ||
 
-                  ///linux
-                  (e.message.contains('Failed host lookup') &&
-                      e.errorCode == -5),
-            ),
+                ///linux
+                (e.message.contains('Failed host lookup') &&
+                    e.errorCode == -5) ||
+                (e.message.contains('Name or service not known') &&
+                    e.errorCode == -2)),
           ),
         );
       }, create: false);
