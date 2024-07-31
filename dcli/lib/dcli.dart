@@ -20,9 +20,9 @@ export 'package:dcli_core/dcli_core.dart'
         DCliFunctionException,
         DeleteDirException,
         Env,
-        // HeadException,
         FindItem,
         HOME,
+        // HeadException,
         LineAction,
         PATH,
         PlatformEx,
@@ -33,6 +33,8 @@ export 'package:dcli_core/dcli_core.dart'
         copyTree,
         createDir,
         createTempDir,
+        createTempFile,
+        createTempFilename,
         deleteDir,
         env,
         envs,
@@ -50,7 +52,8 @@ export 'package:dcli_core/dcli_core.dart'
         truepath,
         verbose,
         withEnvironmentAsync,
-        withTempDirAsync
+        withTempDirAsync,
+        withTempFileAsync
     // CatException;
     ;
 export 'package:dcli_core/src/util/dev_null.dart';

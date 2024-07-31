@@ -32,7 +32,7 @@ void main() {
           create: false,
         );
 
-        // withTempFile((sampleWav) {
+        // await withTempFileAsync ((sampleWav) {
         //   fetch(url: '$baseURl/sample.wav', saveToPath: sampleWav);
         //   expect(FileSync(sampleWav).length, equals(212948));
         //   delete(sampleWav);
@@ -102,7 +102,7 @@ void main() {
           create: false,
         );
 
-        // withTempFile((sampleWav) {
+        // await withTempFileAsync ((sampleWav) {
         //   fetch(url: '$baseURl/sample.wav', saveToPath: sampleWav);
         //   expect(FileSync(sampleWav).length, equals(212948));
         //   delete(sampleWav);
@@ -441,26 +441,26 @@ void main() {
 
   group('FetchData', () {
     group('mime-type', () {
-      test('by extension - png', () {
-        withTempFile((pathToData) {
+      test('by extension - png', () async {
+        await withTempFileAsync ((pathToData) async {
           expect(FetchData.fromFile(pathToData).mimeType, 'image/png');
         }, suffix: 'png');
       });
-      test('explicity', () {
-        withTempFile((pathToData) {
+      test('explicity', () async{
+        await withTempFileAsync ((pathToData) async{
           expect(
               FetchData.fromFile(pathToData, mimeType: 'alphabet/soup')
                   .mimeType,
               'alphabet/soup');
         }, suffix: 'png');
       });
-      test('by extension - csv', () {
-        withTempFile((pathToData) {
+      test('by extension - csv', () async{
+        await withTempFileAsync ((pathToData) async{
           expect(FetchData.fromFile(pathToData).mimeType, 'text/csv');
         }, suffix: 'csv');
       });
-      test('default', () {
-        withTempFile((pathToData) {
+      test('default', () async{
+        await withTempFileAsync ((pathToData) async{
           expect(FetchData.fromFile(pathToData).mimeType, 'text/plain');
         });
       });

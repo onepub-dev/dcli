@@ -9,7 +9,7 @@ import 'package:test/test.dart';
 
 void main() {
   test('replace ...', () async {
-    withTempFile((temp) {
+    await withTempFileAsync((temp) async{
       temp
         ..write('abc123')
         ..append('def246');

@@ -12,8 +12,8 @@ void main() {
   //   }
   // });
 
-  test('onepub - exitCode', () {
-    withTempFile((tokenFile) {
+  test('onepub - exitCode', () async{
+    await withTempFileAsync ((tokenFile) async{
       final progress = Progress.capture();
       expect(
           '''onepub export --user opcicd@cicd.jbbxpsdavu.onepub.dev --file $tokenFile'''

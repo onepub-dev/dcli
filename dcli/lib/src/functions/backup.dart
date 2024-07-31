@@ -195,7 +195,7 @@ Future<R> withFileProtectionAsync<R>(
           }
 
           if (isFile(paths.backupPath)) {
-            _restoreFile(paths);
+            await _restoreFile(paths);
           }
 
           if (isDirectory(paths.backupPath)) {
@@ -222,9 +222,9 @@ void _deleteEntity(String path) {
   }
 }
 
-void _restoreFile(Paths paths) {
-  withTempFile<void>(
-    (dotBak) {
+Future<void> _restoreFile(Paths paths) async {
+  await withTempFileAsync<void>(
+    (dotBak) async {
       try {
         if (exists(paths.sourcePath)) {
           move(paths.sourcePath, dotBak);

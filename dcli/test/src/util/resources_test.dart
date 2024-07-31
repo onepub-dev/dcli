@@ -50,7 +50,7 @@ externals:
   //   final jpegResource = ResourceRegistry.resources[filename];
   //   expect(jpegResource, isNotNull);
 
-  //   withTempFile((file) {
+  //   await withTempFileAsync ((file) {
   //     final root = Resources().resourceRoot;
   //     final pathTo = join(root, filename);
   //     final originalHash = calculateHash(pathTo);

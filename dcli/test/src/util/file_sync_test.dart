@@ -28,7 +28,7 @@ void main() {
     });
 
     test('withTempFile', () async {
-      final file = withTempFile((tempFile) {
+      final file = await withTempFileAsync((tempFile) async {
         expect(exists(tempFile), isTrue);
         expect(tempFile.startsWith(Directory.systemTemp.path), isTrue);
         return tempFile;
@@ -37,7 +37,7 @@ void main() {
     });
 
     test('withTempFile - int', () async {
-      final count = withTempFile((tempFile) {
+      final count = await withTempFileAsync((tempFile) async {
         expect(exists(tempFile), isTrue);
         expect(tempFile.startsWith(Directory.systemTemp.path), isTrue);
         return 5;
@@ -46,10 +46,8 @@ void main() {
     });
 
     test('withTempFile - suffix', () async {
-      final count = withTempFile(
-        (
-          tempFile,
-        ) {
+      final count = await withTempFileAsync(
+        (tempFile) async {
           expect(exists(tempFile), isTrue);
           expect(tempFile.startsWith(Directory.systemTemp.path), isTrue);
           expect(extension(tempFile), equals('.dodo'));
@@ -61,10 +59,8 @@ void main() {
     });
 
     test('withTempFile - keep', () async {
-      final tempFile = withTempFile(
-        (
-          tempFile,
-        ) {
+      final tempFile = await withTempFileAsync(
+        (tempFile)async {
           expect(exists(tempFile), isTrue);
           return tempFile;
         },
@@ -80,7 +76,7 @@ void main() {
       await withTempDirAsync((dir) async {
         expect(isDirectory(dir), isTrue);
 
-        withTempFile((file) {
+        await withTempFileAsync((file) async {
           file.write('Hello World');
           expect(exists(file), isTrue);
           final pathToLink = join(dir, 'link');
@@ -97,7 +93,7 @@ void main() {
       await withTempDirAsync((dir) async {
         expect(isDirectory(dir), isTrue);
 
-        withTempFile((file) {
+        await withTempFileAsync((file) async {
           file.write('Hello World');
           expect(exists(file), isTrue);
           final pathToLink = join(dir, 'link');
@@ -118,7 +114,7 @@ void main() {
       await withTempDirAsync((dir) async {
         expect(isDirectory(dir), isTrue);
 
-        withTempFile((file) {
+        await withTempFileAsync((file) async {
           file.write('Hello World');
           expect(exists(file), isTrue);
           final pathToLink = join(dir, 'link');

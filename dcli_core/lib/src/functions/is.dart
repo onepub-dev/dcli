@@ -111,7 +111,7 @@ class _Is extends DCliFunction {
   /// checks if the given [path] exists.
   ///
   /// Throws [ArgumentError] if [path] is an empty string.
-  bool exists(String path, {required bool followLinks}) {
+  bool exists(String path, {bool followLinks = true}) {
     if (path.isEmpty) {
       throw ArgumentError('path must not be empty.');
     }

@@ -22,7 +22,7 @@ void main() {
   });
 
   test('stream - using start', () async {
-    await withTempFile((file) async {
+    await withTempFileAsync((file) async {
       file
         ..write('Line 1/5')
         ..append('Line 2/5')
@@ -120,7 +120,7 @@ void main() {
   // });
 
   // test('tail -n 100', () async {
-  //   await withTempFile((file) async {
+  //   await await withTempFileAsync ((file) async {
   //     file
   //       ..write('Line 1/5')
   //       ..append('Line 2/5')
@@ -139,8 +139,8 @@ void main() {
   //   });
   // });
 
-  test('append only', () {
-    withTempFile((file) {
+  test('append only', () async {
+    await withTempFileAsync((file) async {
       file
         ..append('Line 1/5')
         ..append('Line 2/5')

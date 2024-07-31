@@ -10,7 +10,7 @@ import 'package:test/test.dart';
 
 void main() {
   test('chown ...', () async {
-    withTempFile((test) {
+    await withTempFileAsync((test) async {
       final user = Shell.current.loggedInUser;
 
       chown(test, group: user, user: user);

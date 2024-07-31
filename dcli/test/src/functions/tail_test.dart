@@ -9,7 +9,7 @@ import 'package:test/test.dart';
 
 void main() {
   test('tail with more than required', () async {
-    withTempFile((tmp) {
+    await withTempFileAsync((tmp) async {
       for (var i = 0; i < 20; i++) {
         tmp.append('line $i');
       }
@@ -18,7 +18,7 @@ void main() {
   });
 
   test('tail with less than required', () async {
-    withTempFile((tmp) {
+    await withTempFileAsync((tmp) async {
       for (var i = 0; i < 20; i++) {
         tmp.append('line $i');
       }
@@ -30,7 +30,7 @@ void main() {
   });
 
   test('tail with godlocks zone', () async {
-    withTempFile((tmp) {
+    await withTempFileAsync((tmp) async {
       for (var i = 0; i < 20; i++) {
         tmp.append('line $i');
       }
@@ -42,7 +42,7 @@ void main() {
   });
 
   test('tail with none', () async {
-    withTempFile((tmp) {
+    await withTempFileAsync((tmp) async {
       touch(tmp);
 
       final list = tail(tmp, 20).toList();

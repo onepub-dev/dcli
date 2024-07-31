@@ -8,8 +8,8 @@ import 'package:dcli/dcli.dart';
 import 'package:test/test.dart';
 
 void main() {
-  test('toList', () {
-    withTempFile((file) {
+  test('toList', () async{
+    await withTempFileAsync ((file) async{
       file
         ..append('Line 1/5')
         ..append('Line 2/5')
@@ -20,8 +20,8 @@ void main() {
     });
   });
 
-  test('lines', () {
-    withTempFile((file) {
+  test('lines', () async{
+    await withTempFileAsync ((file) async{
       file
         ..append('Line 1/5')
         ..append('Line 2/5')
@@ -32,8 +32,8 @@ void main() {
     });
   });
 
-  test('firstLine', () {
-    withTempFile((file) {
+  test('firstLine', () async{
+    await withTempFileAsync ((file) async{
       file
         ..append('Line 1/5')
         ..append('Line 2/5')
@@ -44,8 +44,8 @@ void main() {
     });
   });
 
-  test('toParagraph', () {
-    withTempFile((file) {
+  test('toParagraph', () async{
+    await withTempFileAsync ((file) async{
       file
         ..append('Line 1/5')
         ..append('Line 2/5')
@@ -64,8 +64,8 @@ Line 5/5'''
     });
   });
 
-  test('forEach', () {
-    withTempFile((file) {
+  test('forEach', () async{
+    await withTempFileAsync ((file) async{
       file
         ..append('Line 1/5')
         ..append('Line 2/5')

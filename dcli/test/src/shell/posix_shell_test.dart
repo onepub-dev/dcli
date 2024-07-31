@@ -14,13 +14,13 @@ void main() {
     final shell = Shell.current;
     // expect(shell.isPrivilegedUser, true);
 
-    withTempFile((tmpGroup) {
+    await withTempFileAsync ((tmpGroup) async{
       // final group = name(tmpGroup);
       try {
         //'groupadd -g 21234 $group'.run;
 
         // use a temp file name as a temp user name
-        withTempFile((tmpUsername) {
+        await withTempFileAsync ((tmpUsername) async{
           // final username = name(tmpUsername);
 
           try {
