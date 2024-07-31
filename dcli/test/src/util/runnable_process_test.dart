@@ -51,8 +51,7 @@ void main() {
 
     stderr
       ..writeln('Print to stderr using "stderr.writeln"')
-      ..write('Print to stderr using "stderr.write"')
-      ..write('\n');
+      ..writeln('Print to stderr using "stderr.write"');
     printerr('Print to stderr using "printerr"');
   });
 
