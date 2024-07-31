@@ -24,7 +24,7 @@ class ProcessChannel {
 // import 'dart:isolate';
 // import 'dart:typed_data';
 
-// import 'package:native_synchronization/mailbox.dart';
+// import 'package:native_synchronization_temp/mailbox.dart';
 
 // import 'message.dart';
 // // import 'mailbox.dart';

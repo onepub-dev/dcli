@@ -261,14 +261,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "1.0.5"
-  native_synchronization:
+  native_synchronization_temp:
     dependency: transitive
     description:
-      name: native_synchronization
-      sha256: "5cac297bff2b120f969b28a1d8ea14e566424f7686fa029a47b78c9accd3d4f1"
-      url: "https://onepub.dev/api/jbbxpsdavu/"
+      name: native_synchronization_temp
+      sha256: "95ccdee4c0ab7440e7d86ef76af63013cc0c379485d5e0339a7b59de6e58091e"
+      url: "https://pub.dev"
     source: hosted
-    version: "0.3.0"
+    version: "0.4.0"
   path:
     dependency: "direct main"
     description:
