@@ -68,7 +68,6 @@ class ProgressStreamImpl extends ProgressImpl
 
   @override
   void close() {
-    print('closing sink');
     sink.close();
   }
 }

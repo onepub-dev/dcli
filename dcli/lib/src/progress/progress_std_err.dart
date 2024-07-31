@@ -7,8 +7,8 @@
 import 'dart:async';
 
 import '../../dcli.dart';
+import 'progress_both.dart';
 import 'progress_impl.dart';
-import 'progress_line_splitter.dart';
 import 'progress_mixin.dart';
 
 /// Prints stderr, suppresses all other output.
@@ -23,25 +23,27 @@ class ProgressStdErrImpl extends ProgressImpl
       : _capture = capture,
         _controller = StreamController<String>() {
     sink = _controller.sink;
+
+    _stderrSplitter.onLine((line) {
+      print(line);
+      if (_capture) {
+        _capturedLines.add(line);
+      }
+    });
   }
+
+  final _stderrSplitter = ProgressiveLineSplitter();
 
   final bool _capture;
 
-  final _capturedData = <int>[];
-
-  List<String>? _lines;
+  final _capturedLines = <String>[];
 
   @override
-  List<String> get lines => _lines ?? ProgressLineSplitter(_capturedData).lines;
+  List<String> get lines => _capturedLines;
 
   @override
   void addToStderr(List<int> data) {
-    for (final line in ProgressLineSplitter(data).lines) {
-      print(line);
-    }
-    if (_capture) {
-      _capturedData.addAll(data);
-    }
+    _stderrSplitter.addData(data);
   }
 
   // final controller = StreamController<String>();
@@ -66,7 +68,7 @@ class ProgressStdErrImpl extends ProgressImpl
 
   @override
   void close() {
-    // NOOP
+    _stderrSplitter.close();
   }
 }
 

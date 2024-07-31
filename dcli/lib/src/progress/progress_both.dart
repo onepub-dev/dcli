@@ -6,7 +6,6 @@
 
 import '../../dcli.dart';
 import 'progress_impl.dart';
-import 'progress_line_splitter.dart';
 import 'progress_mixin.dart';
 
 /// Prints stderr, suppresses all other output.
@@ -24,43 +23,43 @@ class ProgressBothImpl extends ProgressImpl
       {LineAction stderr = devNull,
       this.captureStdout = false,
       this.captureStderr = false})
-      : _stderr = stderr;
+      : _stderr = stderr {
+    _stdoutSplitter.onLine((line) {
+      _stdout(line);
+      if (captureStdout) {
+        _capturedLines.add(line);
+      }
+    });
+
+    _stderrSplitter.onLine((line) {
+      _stderr(line);
+      if (captureStderr) {
+        _capturedLines.add(line);
+      }
+    });
+  }
 
   final LineAction _stdout;
   final LineAction _stderr;
   final bool captureStdout;
   final bool captureStderr;
 
-  final _capturedData = <int>[];
+  final _stdoutSplitter = ProgressiveLineSplitter();
+  final _stderrSplitter = ProgressiveLineSplitter();
 
-  List<String>? _lines;
+  final _capturedLines = <String>[];
 
   @override
-  List<String> get lines => _lines ?? ProgressLineSplitter(_capturedData).lines;
+  List<String> get lines => _capturedLines;
 
   @override
   void addToStdout(List<int> data) {
-    for (final line in ProgressLineSplitter(data).lines) {
-      _stdout(line);
-      // CONSIDER: we could immediately cache these lines
-      // but then we are storing them twice (_capturedData) and _lines.
-      // for the moment I've gone with a smaller memory overhead
-      // and higher cpu utlisation.
-    }
-
-    if (captureStdout) {
-      _capturedData.addAll(data);
-    }
+    _stdoutSplitter.addData(data);
   }
 
   @override
   void addToStderr(List<int> data) {
-    for (final line in ProgressLineSplitter(data).lines) {
-      _stderr(line);
-    }
-    if (captureStderr) {
-      _capturedData.addAll(data);
-    }
+    _stderrSplitter.addData(data);
   }
 
   @override
@@ -68,7 +67,8 @@ class ProgressBothImpl extends ProgressImpl
 
   @override
   void close() {
-    // NOOP
+    _stdoutSplitter.close();
+    _stderrSplitter.close();
   }
 }
 
@@ -78,7 +78,7 @@ abstract class ProgressBoth implements Progress {
 }
 
 class ProgressiveLineSplitter {
-  final lines = <String>[];
+  void Function(String line)? action;
 
   final currentLine = StringBuffer();
   void addData(List<int> intList) {
@@ -88,11 +88,11 @@ class ProgressiveLineSplitter {
       if (lastWasCR) {
         if (value == '\n'.codeUnitAt(0)) {
           // If last was CR and current is LF, terminate the line
-          lines.add(currentLine.toString());
+          action?.call(currentLine.toString());
           currentLine.clear();
         } else {
           // If last was CR but current is not LF, add a new line
-          lines.add(currentLine.toString());
+          action?.call(currentLine.toString());
           currentLine
             ..clear()
             ..writeCharCode(value);
@@ -103,7 +103,7 @@ class ProgressiveLineSplitter {
           lastWasCR = true;
         } else if (value == '\n'.codeUnitAt(0)) {
           // If current is LF, terminate the line
-          lines.add(currentLine.toString());
+          action?.call(currentLine.toString());
           currentLine.clear();
         } else {
           // Otherwise, append the character
@@ -111,9 +111,16 @@ class ProgressiveLineSplitter {
         }
       }
     }
+  }
 
+  void close() {
     if (currentLine.isNotEmpty) {
-      lines.add(currentLine.toString());
+      action?.call(currentLine.toString());
     }
+  }
+
+  // ignore: use_setters_to_change_properties
+  void onLine(void Function(String line) action) {
+    this.action = action;
   }
 }

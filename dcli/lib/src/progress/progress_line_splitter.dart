@@ -4,14 +4,17 @@
  * Written by Brett Sutton <bsutton@onepub.dev>, Jan 2022
  */
 
-class ProgressLineSplitter {
-  ProgressLineSplitter(List<int> intList) {
+class ProgressLineSplitterBad {
+  ProgressLineSplitterBad(List<int> intList) {
+    final lineFeed = '\n'.codeUnitAt(0);
+    final carriageReturn = '\r'.codeUnitAt(0);
+
     final currentLine = StringBuffer();
     var lastWasCR = false;
 
     for (final value in intList) {
       if (lastWasCR) {
-        if (value == '\n'.codeUnitAt(0)) {
+        if (value == lineFeed) {
           // If last was CR and current is LF, terminate the line
           lines.add(currentLine.toString());
           currentLine.clear();
@@ -24,9 +27,9 @@ class ProgressLineSplitter {
         }
         lastWasCR = false;
       } else {
-        if (value == '\r'.codeUnitAt(0)) {
+        if (value == carriageReturn) {
           lastWasCR = true;
-        } else if (value == '\n'.codeUnitAt(0)) {
+        } else if (value == lineFeed) {
           // If current is LF, terminate the line
           lines.add(currentLine.toString());
           currentLine.clear();
