@@ -24,14 +24,18 @@ void main() {
       });
     });
 
+    t.test('no output', () async {
+      // pid should not exist.
+      ' ps -q 218139512 -o comm='.start(nothrow: true);
+    });
+
     t.test('print stdout', () async {
-      Settings().setVerbose(enabled: true);
       await TestFileSystem().withinZone((fs) async {
         await withTestScope((tmpDir) async {
           final scriptPath = truepath(join(fs.testScriptPath, 'general/bin'));
           final script = truepath(scriptPath, 'print_to_stdout.dart');
 
-          final results = runChild(script, fs);
+          final results = runChild(script);
 
           final expected = <String>['Hello World'];
 
@@ -46,7 +50,7 @@ void main() {
           final scriptPath = truepath(join(fs.testScriptPath, 'general/bin'));
           final script = truepath(scriptPath, 'print_to_stderr.dart');
 
-          final results = runChild(script, fs);
+          final results = runChild(script);
 
           final expected = <String>['Hello World - Error'];
 
@@ -54,7 +58,6 @@ void main() {
         });
       });
     });
-
     t.test('print stdout and stderr', () async {
       await TestFileSystem().withinZone((fs) async {
         await withTestScope((tmpDir) async {
@@ -64,7 +67,7 @@ void main() {
             createDir(scriptPath, recursive: true);
           }
           final script = truepath(scriptPath, 'print_to_both.dart');
-          final results = runChild(script, fs);
+          final results = runChild(script);
 
           final expected = <String>[
             'Hello World - StdOut',
@@ -86,7 +89,7 @@ void main() {
           }
           final script = truepath(scriptPath, 'print_to_both_with_error.dart');
 
-          final results = runChild(script, fs);
+          final results = runChild(script);
 
           final expected = <String>[
             'Hello World - StdOut',
@@ -99,14 +102,12 @@ void main() {
     });
 
     t.test('Missing exectuable', () async {
-      // Settings().setVerbose(enabled: true);
       await withTestScope((tmpDir) async {
         final pathToBadScript = join(
             rootPath, 'bad', 'path', 'to', 'non', 'existant', 'script.dart');
         t.expect(() {
           pathToBadScript.toList(nothrow: true);
         },
-            // throwsA(isA<RunException>()))
             throwsA(predicate((e) =>
                 e is RunException &&
                 e.exitCode == 2 &&
@@ -116,19 +117,21 @@ void main() {
   });
 }
 
-List<String?> runChild(String childScript, TestFileSystem fs) {
-  /// The run_child.script file will use .run to run [script].
-  final runChildScript =
-      truepath(join(fs.testScriptPath, 'general/bin', 'run_child.dart'));
+List<String?> runChild(String pathToChildScript) {
+  /// The run_child script will be used .start(nothrow) the [pathToChildScript].
+
+  final childScript = DartScript.fromFile(pathToChildScript);
+  if (!childScript.isReadyToRun) {
+    childScript.runPubGet();
+  }
 
   // make certain our test script will run
-  '${DCliPaths().dcliName} -v warmup ${dirname(childScript)}'.run;
-  '${DCliPaths().dcliName} -v warmup ${dirname(runChildScript)}'.run;
-
+  '${DCliPaths().dcliName} -v warmup ${dirname(pathToChildScript)}'.run;
   // run a script that uses '.run' and capture its output to prove
   // that .run works.
-  final results = '${DCliPaths().dcliName} $runChildScript $childScript'
-      .toList(nothrow: true);
+  final results =
+      '''${join(TestFileSystem.pathToTools, 'run_child')} "$pathToChildScript"'''
+          .toList(nothrow: true);
 
   return results;
 }
