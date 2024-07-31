@@ -8,16 +8,16 @@ library;
  */
 
 import 'package:dcli/dcli.dart';
-import 'package:dcli_test/dcli_test.dart';
 import 'package:path/path.dart' hide equals;
 import 'package:test/test.dart';
 
 void main() {
   group('warmup using DCli', () {
     test('warmup ', () async {
-      await TestFileSystem().withinZone((fs) async {
-        final projectPath = join(fs.fsRoot, 'test_script/general');
-        final project = DartProject.fromPath(projectPath);
+      await withTempDirAsync((tempDir) async {
+        final projectPath = join(tempDir, 'general');
+        final project =
+            DartProject.create(pathTo: projectPath, templateName: 'simple');
         await project.clean();
         await project.warmup();
 
