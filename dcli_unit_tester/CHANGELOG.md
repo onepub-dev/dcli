@@ -1,3 +1,7 @@
+# 4.0.5
+- change the dependency to native_sychronisation_temp until the offical 
+package is released.
+
 # 4.0.4
 - Added additional command line options.
 

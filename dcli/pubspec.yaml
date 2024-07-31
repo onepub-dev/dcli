@@ -27,9 +27,7 @@ dependencies:
   logging: ^1.0.2
   meta: ">=1.11.0 <2.0.0"
   mime: ^1.0.1
-  native_synchronization:
-    hosted: https://onepub.dev/api/jbbxpsdavu/
-    version: ^0.3.0
+  native_synchronization_temp:
   path: ^1.8.0
   posix: ^6.0.1
   pub_semver: ^2.0.0
