@@ -80,3 +80,30 @@ Future<void> _flush(ProgressImpl progress) async {
   // scheduleMicrotask(() {});
   await Future.value(1);
 }
+
+
+
+// Future<Progress> capture<R>(Future<R> Function() action,
+//     {Progress? progress}) async {
+//   final progressImpl = (progress ?? Progress.devNull()) as ProgressImpl;
+
+//   /// overload printerr so we can trap it.
+//   final zoneValues = <String, CaptureZonePrintErr>{
+//     'printerr': (line) {
+//       progressImpl.addToStderr('$line\n'.codeUnits);
+//     }
+//   };
+
+//   await runZonedGuarded(
+//     () async => _body(action),
+//     (e, st) {
+//       if (e is Error) {
+//         progressImpl.addToStderr(e.toString().codeUnits);
+//       }
+//     },
+//     zoneValues: zoneValues,
+//     zoneSpecification: ZoneSpecification(
+//       print: (self, parent, zone, line) =>
+//           progressImpl.addToStdout('$line\n'.codeUnits),
+//     ),
+//   );

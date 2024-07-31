@@ -418,7 +418,7 @@ dependency_overrides:
           if (!exists(join(pathToTools, '$command.dart'))) {
             /// compile and install the command into the tool path
             script.compile();
-            copy(script.pathToExe, pathToTools);
+            copy(script.pathToExe, pathToTools, overwrite: true);
           }
         }
       }

@@ -246,13 +246,12 @@ packages:
     source: hosted
     version: "1.0.5"
   native_synchronization:
-    dependency: transitive
+    dependency: "direct overridden"
     description:
-      name: native_synchronization
-      sha256: ff200fe0a64d733ff7d4dde2005271c297db81007604c8cd21037959858133ab
-      url: "https://pub.dev"
-    source: hosted
-    version: "0.2.0"
+      path: "../../native_synchronization"
+      relative: true
+    source: path
+    version: "0.3.0"
   path:
     dependency: "direct main"
     description:

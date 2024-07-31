@@ -329,10 +329,10 @@ packages:
     dependency: transitive
     description:
       name: native_synchronization
-      sha256: ff200fe0a64d733ff7d4dde2005271c297db81007604c8cd21037959858133ab
-      url: "https://pub.dev"
+      sha256: "5cac297bff2b120f969b28a1d8ea14e566424f7686fa029a47b78c9accd3d4f1"
+      url: "https://onepub.dev/api/jbbxpsdavu/"
     source: hosted
-    version: "0.2.0"
+    version: "0.3.0"
   node_preamble:
     dependency: transitive
     description:

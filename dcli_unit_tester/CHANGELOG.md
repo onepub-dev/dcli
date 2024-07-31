@@ -1,3 +1,6 @@
+# 4.0.4
+- Added additional command line options.
+
 # 4.0.3
 - fix ProgressMixin.firstLine throwing if there are no lines - contributed by @sstasi95
 

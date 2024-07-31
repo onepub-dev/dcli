@@ -13,6 +13,10 @@ dependency_overrides:
   dcli_terminal:
     path: ../dcli_terminal
 
+  # native_synchronization:
+  #   path: ../../native_synchronization
+
+
 
   settings_yaml:
     path: ../../settings_yaml

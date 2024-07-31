@@ -16,7 +16,8 @@
             "cwd": "dcli_sdk",
             "request": "launch",
             "type": "dart",
-            "args": ["-v", "warmup"]
+            "args": ["-v", "warmup"],
+            "console": "terminal"
         },
         {
             "name": "dcli_core",

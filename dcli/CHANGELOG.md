@@ -1,3 +1,27 @@
+# 5.0.0
+- Breaking
+-- Removed a number of the withXX sync functions in favour of withXXAsync
+as the sync versions were dangerous as it was too easy to make async 
+calls within the callback and then the withXXX method would return
+before the callback completed.
+
+We have left stub methods for the old withXXX form that are marked as deprecated and will throw an UnsupportedError if you call them.
+
+-- withTempDir replaced by withTempDirAsync
+-- withFileProtection replaced by withFileProtectionAsync
+
+
+- Removed a number of redundant methods from the dcli package that
+were just pass throughs to the dcli_core package.  As the dcli barrel
+file now exports the dcli_core functions for these methods there should 
+be no noticiable difference in the API.
+
+- Added new method PubCache::pathToGlobalPackage
+
+- Fixed a bug in NamedLock which was causing a dead lock if the an existing
+lock file was found but the owning process was no longer runnimg.
+
+
 # 4.0.5
 - change the #! bang to use dart rather than dcli. In the early days dcli had to read a script and set up the pubspec but we no longer support this mode and calling through dcli just slows start time on scripts. So we are moving to launching via dart directly.
 
