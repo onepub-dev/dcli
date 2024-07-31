@@ -38,3 +38,4 @@ dcli_unit_tester/test/test_script/general/bin/ls
 dcli_unit_tester/test/test_script/general/bin/run_child
 dcli_unit_tester/test/test_script/general/bin/tail
 dcli_unit_tester/test/test_script/general/bin/touch
+dcli_sdk/lib/src/dcli/resource/generated/*.g.dart
