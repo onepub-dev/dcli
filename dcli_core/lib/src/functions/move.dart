@@ -28,40 +28,36 @@ import '../../dcli_core.dart';
 ///
 /// If the move fails for any reason a [MoveException] is thrown.
 ///
-void move(String from, String to, {bool overwrite = false}) =>
-    _Move().move(from, to, overwrite: overwrite);
 
-class _Move extends DCliFunction {
-  void move(String from, String to, {bool overwrite = false}) {
-    verbose(() =>
-        'move ${truepath(from)} -> ${truepath(to)} overwrite: $overwrite');
+void move(String from, String to, {bool overwrite = false}) {
+  verbose(
+      () => 'move ${truepath(from)} -> ${truepath(to)} overwrite: $overwrite');
 
-    var dest = to;
+  var dest = to;
 
-    if (isDirectory(to)) {
-      dest = p.join(to, p.basename(from));
-    }
+  if (isDirectory(to)) {
+    dest = p.join(to, p.basename(from));
+  }
 
-    if (!overwrite && exists(dest)) {
-      throw MoveException(
-        'The [to] path ${truepath(dest)} already exists.'
-        ' Use overwrite:true ',
-      );
-    }
-    try {
-      File(from).renameSync(dest);
-    } on FileSystemException catch (_) {
-      /// Invalid cross-device link
-      /// We can't move files across a partition so
-      /// do a copy/delete.
-      copy(from, to, overwrite: overwrite);
-      delete(from);
-    }
+  if (!overwrite && exists(dest)) {
+    throw MoveException(
+      'The [to] path ${truepath(dest)} already exists.'
+      ' Use overwrite:true ',
+    );
+  }
+  try {
+    File(from).renameSync(dest);
+  } on FileSystemException catch (_) {
+    /// Invalid cross-device link
+    /// We can't move files across a partition so
+    /// do a copy/delete.
+    copy(from, to, overwrite: overwrite);
+    delete(from);
+  }
 
-    /// ignore: avoid_catches_without_on_clauses
-    catch (e) {
-      _improveError(e, from, to);
-    }
+  /// ignore: avoid_catches_without_on_clauses
+  catch (e) {
+    _improveError(e, from, to);
   }
 }
 

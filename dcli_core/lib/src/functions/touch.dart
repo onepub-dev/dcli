@@ -28,46 +28,42 @@ import '../../dcli_core.dart';
 ///
 /// As a convenience the touch function returns the [path] variable
 /// that was passed in.
-String touch(String path, {bool create = false}) =>
-    _Touch().touch(path, create: create);
 
-class _Touch extends DCliFunction {
-  String touch(String path, {bool create = false}) {
-    final absolutePath = truepath(path);
+String touch(String path, {bool create = false}) {
+  final absolutePath = truepath(path);
 
-    verbose(() => 'touch: $absolutePath create: $create');
+  verbose(() => 'touch: $absolutePath create: $create');
 
-    if (!exists(p.dirname(absolutePath))) {
-      throw TouchException(
-        'The directory tree above $absolutePath does not exist. '
-        'Create the tree and try again.',
-      );
-    }
-    if (create == false && !exists(absolutePath)) {
-      throw TouchException(
-        'The file $absolutePath does not exist. '
-        'Did you mean to use touch(path, create: true) ?',
-      );
-    }
-
-    try {
-      final file = File(absolutePath);
-
-      if (file.existsSync()) {
-        final now = DateTime.now();
-        file
-          ..setLastAccessedSync(now)
-          ..setLastModifiedSync(now);
-      } else {
-        if (create) {
-          file.createSync();
-        }
-      }
-    } on FileSystemException catch (e) {
-      throw TouchException('Unable to touch file $absolutePath: ${e.message}');
-    }
-    return path;
+  if (!exists(p.dirname(absolutePath))) {
+    throw TouchException(
+      'The directory tree above $absolutePath does not exist. '
+      'Create the tree and try again.',
+    );
   }
+  if (create == false && !exists(absolutePath)) {
+    throw TouchException(
+      'The file $absolutePath does not exist. '
+      'Did you mean to use touch(path, create: true) ?',
+    );
+  }
+
+  try {
+    final file = File(absolutePath);
+
+    if (file.existsSync()) {
+      final now = DateTime.now();
+      file
+        ..setLastAccessedSync(now)
+        ..setLastModifiedSync(now);
+    } else {
+      if (create) {
+        file.createSync();
+      }
+    }
+  } on FileSystemException catch (e) {
+    throw TouchException('Unable to touch file $absolutePath: ${e.message}');
+  }
+  return path;
 }
 
 /// thrown when the [touch] function encounters an exception

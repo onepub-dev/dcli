@@ -25,6 +25,7 @@ export 'package:dcli_core/dcli_core.dart'
         LineAction,
         MoveDirException,
         MoveException,
+        MoveTreeException,
         // HeadException,
         PATH,
         PlatformEx,
@@ -48,6 +49,7 @@ export 'package:dcli_core/dcli_core.dart'
         isOnPATH,
         move,
         moveDir,
+        moveTree,
         privatePath,
         pwd,
         // RestoreFileException,
@@ -87,8 +89,6 @@ export 'src/functions/find.dart' show Find, find;
 export 'src/functions/head.dart' show head;
 export 'src/functions/is.dart';
 export 'src/functions/menu.dart' show menu;
-export 'src/functions/move_dir.dart' show MoveDirException, moveDir;
-export 'src/functions/move_tree.dart' show MoveTreeException, moveTree;
 export 'src/functions/read.dart' show ReadException, read, readStdin;
 export 'src/functions/replace.dart' show replace;
 export 'src/functions/run.dart' show run, start, startFromArgs;
