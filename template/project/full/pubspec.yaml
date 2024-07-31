@@ -11,7 +11,7 @@ dependencies:
   dcli_core: 4.0.3
   http: ^1.2.1
   path: ^1.9.0
-  settings_yaml: ^8.0.1
+  settings_yaml: ^8.2.0
 dev_dependencies:
   lint_hard: ^4.0.0
 executables:
