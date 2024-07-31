@@ -1,3 +1,34 @@
+# 5.0.0
+- Breaking
+-- Removed a number of the withXX sync functions in favour of withXXAsync
+as the sync versions were dangerous as it was too easy to make async 
+calls within the callback and then the withXXX method would return
+before the callback completed.
+
+We have left stub methods for the old withXXX form that are marked as deprecated and will throw an UnsupportedError if you call them.
+
+-- withTempDir replaced by withTempDirAsync
+-- withTempFile replaced by withTempFileAsync
+-- withFileProtection replaced by withFileProtectionAsync
+
+
+- Removed a number of redundant methods from the dcli package that
+were just pass throughs to the dcli_core package.  As the dcli barrel
+file now exports the dcli_core functions for these methods there should 
+be no noticiable difference in the API.
+
+- Added new method PubCache::pathToGlobalPackage
+
+- Fixed a bug in NamedLock which was causing a dead lock if the an existing
+lock file was found but the owning process was no longer runnimg.
+- upgraded to settings_yaml 8.2.0
+- removed the DCLIFunction wrapper for a number of functions as it serves no purpose. 
+- removed move_tree as it was just a wrapper for dcli_core method of the same name.
+- moved the move and moveDir wrapper functions and exposed the dcli_core versions.
+- replaced all occurances of withTempFile with withTempFileAsync
+- move to using native_sychronisation_temp until the official release.
+
+
 # 4.0.3
 - fix ProgressMixin.firstLine throwing if there are no lines - contributed by @sstasi95
 
