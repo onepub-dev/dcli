@@ -12,21 +12,28 @@ export 'package:dcli_core/dcli_core.dart'
         // TouchException,
         // Which,
         CancelableLineAction,
+        CatException,
+        CopyException,
         CreateDirException,
         DCliException,
         DCliFunction,
         DCliFunctionException,
+        DeleteDirException,
         Env,
-        FindItem,
         // HeadException,
+        FindItem,
         HOME,
         LineAction,
         PATH,
         PlatformEx,
         RunException,
         StackList,
+        cat,
+        copy,
+        copyTree,
         createDir,
         createTempDir,
+        deleteDir,
         env,
         envs,
         exists,
@@ -37,8 +44,9 @@ export 'package:dcli_core/dcli_core.dart'
         isOnPATH,
         privatePath,
         pwd,
-        rootPath,
         // RestoreFileException,
+        rootPath,
+        touch,
         truepath,
         verbose,
         withEnvironmentAsync,
@@ -51,14 +59,10 @@ export 'package:dcli_terminal/dcli_terminal.dart';
 
 export 'src/functions/ask.dart';
 export 'src/functions/backup.dart';
-export 'src/functions/cat.dart' show CatException, cat;
 export 'src/functions/confirm.dart';
-export 'src/functions/copy.dart' show CopyException, copy;
-export 'src/functions/copy_tree.dart' show copyTree;
 // ignore: deprecated_member_use_from_same_package
 export 'src/functions/create_dir.dart' show withTempDir;
 export 'src/functions/delete.dart' show DeleteException, delete;
-export 'src/functions/delete_dir.dart' show DeleteDirException, deleteDir;
 export 'src/functions/echo.dart' show echo;
 export 'src/functions/fetch.dart'
     show
@@ -84,7 +88,6 @@ export 'src/functions/replace.dart' show replace;
 export 'src/functions/run.dart' show run, start, startFromArgs;
 export 'src/functions/sleep.dart' show Interval, sleep;
 export 'src/functions/tail.dart' show tail;
-export 'src/functions/touch.dart' show touch;
 export 'src/functions/which.dart' show which;
 export 'src/installers/installer.dart' show installFromSourceKey;
 export 'src/progress/progress.dart' show Progress;
