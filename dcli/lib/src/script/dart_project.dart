@@ -275,8 +275,6 @@ class DartProject {
   ///
   /// Any exes for scripts in the directory.
   Future<void> clean() async {
-    Settings().setVerbose(enabled: true);
-
     print('Cleaning project: $pathToProjectRoot');
     await NamedLock(name: _lockName).withLockAsync(
       () async {
