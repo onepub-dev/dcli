@@ -13,7 +13,7 @@ void main() {
   test(
     'isPrivligedUser',
     () {
-      Settings().setVerbose(enabled: true);
+      // Settings().setVerbose(enabled: true);
       expect(Shell.current.isPrivilegedUser, isTrue);
       Shell.current.releasePrivileges();
       expect(Shell.current.isPrivilegedUser, isFalse);

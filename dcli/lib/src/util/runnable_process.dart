@@ -338,8 +338,9 @@ class RunnableProcess {
       processLogger(() => 'Primary calling Mailbox.take()');
       try {
         final messageData =
-            channel.toPrimaryIsolate.take(timeout: const Duration(seconds: 10));
-        processLogger(() => 'take returned with data');
+            channel.toPrimaryIsolate.take(timeout: const Duration(seconds: 2));
+        processLogger(
+            () => 'take returned with data: len(${messageData.length - 1})');
         response = MessageResponse.fromData(messageData)
           ..onStdout((payload) {
             progress.addToStdout(payload);
@@ -351,9 +352,12 @@ class RunnableProcess {
               Error.throwWithStackTrace(exception, exception.stackTrace));
       } on TimeoutException catch (e) {
         // ignore: avoid_print
-        processLogger(() => 
-            'Timeout waiting for response from isolate: ${e.message}');
-        Future.delayed(Duration.zero, () {});
+        processLogger(
+            () => 'Timeout waiting for response from isolate: ${e.message}');
+
+        /// Paired with take(timeout:), this seems to help reduce stalls
+        /// when the isolate is starting up.
+        Future.delayed(const Duration(seconds: 3), () {});
       }
     } while (response?.messageType != MessageType.exitCode);
 
@@ -378,82 +382,6 @@ class RunnableProcess {
     channel.errorPort.close();
     channel.exitPort.close();
   }
-
-  // TODO(bsutton): does this work now we have moved to mailboxes?
-  // void pipeTo(RunnableProcess stdin) {
-  //   // fProcess.then((stdoutProcess) {
-  //   //   stdin.fProcess.then<void>(
-  //   //       (stdInProcess) => stdoutProcess.stdout.pipe(stdInProcess.stdin));
-
-  //   // });
-
-  //   /// this code was unawaited so pipeTo is probably not going to
-  //   /// work without a re-write
-  //   final lhsProcess = processSync;
-  //   final rhsProcess = stdin.processSync;
-  //   // lhs.stdout -> rhs.stdin
-  //   lhsProcess.stdout.listen(rhsProcess!.stdin.add);
-  //   // lhs.stderr -> rhs.stdin
-  //   lhsProcess.stderr
-  //       .listen(rhsProcess.stdin.add)
-  //       .onDone(rhsProcess.stdin.close);
-
-  //   // wire rhs to the console, but thats not our job.
-  //   // rhsProcess.stdout.listen(stdout.add);
-  //   // rhsProcess.stderr.listen(stderr.add);
-
-  //   // If the rhs process shutsdown before the lhs
-  //   // process we will get a broken pipe. We
-  //   // can safely ignore broken pipe errors (I think :).
-  //   rhsProcess.stdin.done.catchError(
-  //     //ignore: avoid_types_on_closure_parameters
-  //     (Object e) {
-  //       // forget broken pipe after rhs terminates before lhs
-  //     },
-  //     test: (e) => e is SocketException && e.osError!.message
-  //          == 'Broken pipe',
-  //   );
-  // }
-
-  /// Unlike [processUntilExit] this method wires the streams and then returns
-  /// immediately.
-  ///
-  /// When the process exits it closes the [progress] streams.
-  ///
-  // Future<void> processStream(Progress progress, {required bool nothrow})
-  //async {
-  //   _wireStreams(processSync!, progress);
-
-  // trap the process finishing
-
-  // this makes no sense as we want the process to run whilst
-  // we process its output so waiting for exit stops us doing that.
-  // final exitCode = processSync!.waitForExitCode;
-  // CONSIDER: do we pass the exitCode to ForEach or just throw?
-  // If the start failed we don't want to rethrow
-  // as the exception will be thrown async and it will
-  // escape as an unhandled exception and stop the whole script
-  // progress.exitCode = exitCode;
-  // if (exitCode != 0 && nothrow == false) {
-  //   final error = RunException.withArgs(
-  //     _parsed.cmd,
-  //     _parsed.args,
-  //     exitCode,
-  //     'The command '
-  //     // ignore: lines_longer_than_80_chars
-  //     '${red('[${_parsed.cmd}] with args [${_parsed.args.join(', ')}]')}'
-  //     ' failed with exitCode: $exitCode '
-  //     'workingDirectory: $workingDirectory',
-  //   );
-  //   progress
-  //     ..onError(error)
-  //     ..close();
-  // } else {
-  //   /// don't think this is neccessary as we are using
-  //   // await _streamsFlushed;
-  //   progress.close();
-  // }
-  // }
 }
 
 String searchForCommandExtension(String cmd, String? workingDirectory) {
@@ -488,8 +416,8 @@ String findExtension(String basename, String workingDirectory) {
 
 String? _isolateID;
 void processLogger(String Function() message) {
-  _isolateID ??= Service.getIsolateId(Isolate.current);
   if (debugIsolate) {
+    _isolateID ??= Service.getIsolateId(Isolate.current);
     print('process($_isolateID): ${message()}');
   }
 }

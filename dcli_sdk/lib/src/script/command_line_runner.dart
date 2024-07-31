@@ -107,7 +107,6 @@ class CommandLineRunner {
 
   void _configVerbose(Flag flag) {
     verbose(() => 'Setting flag: ${flag.name}');
-    Settings().setVerbose(enabled: true);
     verbose(() => 'DCli Version: ${Settings().version}');
     final verboseFlag = flag as VerboseFlag;
     if (verboseFlag.hasOption) {

@@ -46,7 +46,6 @@ void main() {
     test(
       'withLock',
       () async {
-        Settings().setVerbose(enabled: true);
         await core.withTempDirAsync(
           (fs) async {
             await core.withTempFileAsync((logFile) async {
@@ -93,7 +92,6 @@ void main() {
     test(
       'Thrash test',
       () async {
-        Settings().setVerbose(enabled: true);
         if (exists(_lockCheckPath)) {
           deleteDir(_lockCheckPath);
         }
@@ -132,7 +130,6 @@ Future<ReceivePort> spawn(String message, String logFile) async {
 }
 
 FutureOr<void> writeToLog(String data) async {
-  Settings().setVerbose(enabled: true);
   final parts = data.split(';');
   final message = parts[0];
   final log = parts[1];
@@ -154,7 +151,6 @@ final _lockFailedPath = join(_lockCheckPath, 'lock_failed');
 
 /// must be a global function as we us it to spawn an isolate
 Future<void> worker(int instance) async {
-  Settings().setVerbose(enabled: true);
   print('starting worker instance $instance ${DateTime.now()}');
   await NamedLock(name: 'gshared-compile').withLockAsync(() async {
     print('acquired lock worker $instance  ${DateTime.now()}');

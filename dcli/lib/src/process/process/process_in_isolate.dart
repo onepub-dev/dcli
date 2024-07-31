@@ -25,7 +25,7 @@ import 'process_settings.dart';
 /// some process on the primary isolate side, but often it is the
 /// only way to debug the process in isolate code as the
 /// debugger hangs.
-const debugIsolate = true;
+const debugIsolate = false;
 
 void startIsolate(IsolateChannel channel) {
   processLogger(() => 'starting isolate');
@@ -185,7 +185,7 @@ StreamSubscription<List<int>> _sendStderrToPrimary(Process process,
   // ignore: join_return_with_assignment
   stderrSub = process.stderr.listen((data) async {
     stderrSub.pause();
-    isolateLogger(() => 'writing to stderr');
+    isolateLogger(() => 'recieved from called processes stderr:$data');
     final message = Message.stderr(data as Uint8List);
     await mailboxToPrimaryIsolate.postMessage(message);
     stderrSub.resume();

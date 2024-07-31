@@ -51,7 +51,8 @@ void main() {
             createDir(testTemplateDir, recursive: true);
 
             /// copy the dev templates into the temp template path
-            /// so we are always running with a current version of the templates.
+            /// so we are always running with a current version
+            /// of the templates.
             copyTree(join(templatePath, 'project', 'full'), testTemplateDir);
             DartProject.create(pathTo: pathToProject, templateName: 'full');
           }, environment: {
