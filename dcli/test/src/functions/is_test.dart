@@ -13,13 +13,11 @@ import 'package:test/test.dart' hide isEmpty;
 void main() {
   group(
     'iswritable',
-    () async {
-      await withTempDirAsync((fsRoot) async {
-        TestFileSystem.buildDirectoryTree(fsRoot);
-// owner, group, world, read, write execute
-
-        test('owner', () async{
-          await withTempFileAsync ((one)async{
+    () {
+      test('owner', () async {
+        await withTempDirAsync((fsRoot) async {
+          TestFileSystem.buildDirectoryTree(fsRoot);
+          await withTempFileAsync((one) async {
             touch(one, create: true);
             'chmod 200 $one'.run;
             expect(isWritable(one), equals(true));
@@ -29,9 +27,12 @@ void main() {
             expect(isExecutable(one), equals(false));
           });
         });
+      });
 
-        test('group', ()async {
-          await withTempFileAsync ((one)async {
+      test('group', () async {
+        await withTempDirAsync((fsRoot) async {
+          TestFileSystem.buildDirectoryTree(fsRoot);
+          await withTempFileAsync((one) async {
             touch(one, create: true);
             'chmod 020 $one'.run;
             expect(isWritable(one), equals(true));
@@ -41,9 +42,12 @@ void main() {
             expect(isExecutable(one), equals(false));
           });
         });
+      });
 
-        test('world', ()async {
-          await withTempFileAsync ((one) async{
+      test('world', () async {
+        await withTempDirAsync((fsRoot) async {
+          TestFileSystem.buildDirectoryTree(fsRoot);
+          await withTempFileAsync((one) async {
             touch(one, create: true);
             'chmod 002 $one'.run;
             expect(isWritable(one), equals(true));
@@ -61,8 +65,8 @@ void main() {
   group(
     'isReadable',
     () {
-      test('owner', ()async {
-        await withTempFileAsync ((one) async{
+      test('owner', () async {
+        await withTempFileAsync((one) async {
           touch(one, create: true);
           'chmod 400 $one'.run;
           expect(isReadable(one), equals(true));
@@ -73,8 +77,8 @@ void main() {
         });
       });
 
-      test('group', () async{
-        await withTempFileAsync ((one)async {
+      test('group', () async {
+        await withTempFileAsync((one) async {
           touch(one, create: true);
           'chmod 040 $one'.run;
           expect(isReadable(one), equals(true));
@@ -85,8 +89,8 @@ void main() {
         });
       });
 
-      test('world', () async{
-        await withTempFileAsync ((one) async{
+      test('world', () async {
+        await withTempFileAsync((one) async {
           touch(one, create: true);
           'chmod 004 $one'.run;
           expect(isReadable(one), equals(true));
@@ -103,8 +107,8 @@ void main() {
   group(
     'isExecutable',
     () {
-      test('owner', () async{
-        await withTempFileAsync ((one) async{
+      test('owner', () async {
+        await withTempFileAsync((one) async {
           touch(one, create: true);
           'chmod 100 $one'.run;
           expect(isExecutable(one), equals(true));
@@ -115,8 +119,8 @@ void main() {
         });
       });
 
-      test('group', () async{
-        await withTempFileAsync ((one) async{
+      test('group', () async {
+        await withTempFileAsync((one) async {
           touch(one, create: true);
           'chmod 010 $one'.run;
           expect(isExecutable(one), equals(true));
@@ -127,8 +131,8 @@ void main() {
         });
       });
 
-      test('world', () async{
-        await withTempFileAsync ((one) async{
+      test('world', () async {
+        await withTempFileAsync((one) async {
           touch(one, create: true);
           'chmod 001 $one'.run;
           expect(isExecutable(one), equals(true));
@@ -157,8 +161,8 @@ void main() {
   });
 
   group('isFileType', () {
-    test('isFile', () async{
-      await withTempFileAsync ((file) async{
+    test('isFile', () async {
+      await withTempFileAsync((file) async {
         expect(isFile(file), isTrue);
       });
     });
@@ -173,7 +177,7 @@ void main() {
       await withTempDirAsync((dir) async {
         expect(isDirectory(dir), isTrue);
 
-        await withTempFileAsync ((file)async {
+        await withTempFileAsync((file) async {
           file.write('Hello World');
           expect(exists(file), isTrue);
           final pathToLink = join(dir, 'link');
