@@ -207,8 +207,10 @@ class TestFileSystem {
     final pathToDartConfig = join('.config', 'dart');
     final originalDartConfig = join(originalHome, pathToDartConfig);
     final testFSDartConfig = join(HOME, pathToDartConfig);
-    createDir(testFSDartConfig, recursive: true);
-    copyTree(originalDartConfig, testFSDartConfig);
+    if (!exists(testFSDartConfig)) {
+      createDir(testFSDartConfig, recursive: true);
+    }
+    copyTree(originalDartConfig, testFSDartConfig, overwrite: true);
   }
 
   // ignore: prefer_constructors_over_static_methods
@@ -411,7 +413,7 @@ dependency_overrides:
         final pathToTool = join(pathToTools, command);
         final pathToToolSource =
             join(pathToToolProject, 'bin', '$command.dart');
-        if (!_compileRequired(pathToTool, pathToToolSource)) {
+        if (_compileRequired(pathToTool, pathToToolSource)) {
           final script = DartScript.fromFile(pathToToolSource);
           if (!exists(join(pathToTools, '$command.dart'))) {
             /// compile and install the command into the tool path
