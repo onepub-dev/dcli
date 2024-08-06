@@ -163,7 +163,7 @@ class Menu {
 class _MenuRange extends AskValidator {
   const _MenuRange(this.limit);
   @override
-  String validate(String line) {
+  String validate(String line, String? customErrorMessage) {
     final finalline = line.trim();
     final value = num.tryParse(finalline);
     if (value == null) {

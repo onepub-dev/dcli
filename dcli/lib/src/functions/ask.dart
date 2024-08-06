@@ -102,14 +102,15 @@ typedef CustomAskPrompt = String Function(
 ///
 ///```
 String ask(
-  String prompt, {
-  bool toLower = false,
-  bool hidden = false,
-  bool required = true,
-  String? defaultValue,
-  CustomAskPrompt customPrompt = Ask.defaultPrompt,
-  AskValidator validator = Ask.dontCare,
-}) =>
+    String prompt, {
+      bool toLower = false,
+      bool hidden = false,
+      bool required = true,
+      String? defaultValue,
+      CustomAskPrompt customPrompt = Ask.defaultPrompt,
+      AskValidator validator = Ask.dontCare,
+      String? customErrorMessage,
+    }) =>
     Ask()._ask(
       prompt,
       toLower: toLower,
@@ -118,6 +119,7 @@ String ask(
       defaultValue: defaultValue,
       customPrompt: customPrompt,
       validator: validator,
+      customErrorMessage: customErrorMessage,
     );
 
 // ignore: avoid_clas
@@ -131,17 +133,18 @@ class Ask extends core.DCliFunction {
   /// Reads user input from stdin and returns it as a string.
   /// [prompt]
   String _ask(
-    String prompt, {
-    required bool hidden,
-    required bool required,
-    required AskValidator validator,
-    required CustomAskPrompt customPrompt,
-    bool toLower = false,
-    String? defaultValue,
-  }) {
+      String prompt, {
+        required bool hidden,
+        required bool required,
+        required AskValidator validator,
+        required CustomAskPrompt customPrompt,
+        bool toLower = false,
+        String? defaultValue,
+        String? customErrorMessage,
+      }) {
     ArgumentError.checkNotNull(prompt);
     core.verbose(
-      () => 'ask:  $prompt toLower: $toLower hidden: $hidden '
+          () => 'ask:  $prompt toLower: $toLower hidden: $hidden '
           'required: $required '
           'defaultValue: ${hidden ? '******' : defaultValue}',
     );
@@ -172,10 +175,10 @@ class Ask extends core.DCliFunction {
 
       try {
         if (required) {
-          const _AskRequired().validate(line);
+          const _AskRequired().validate(line,customErrorMessage);
         }
         verbose(() => 'ask: pre validation "$line"');
-        line = validator.validate(line);
+        line = validator.validate(line, customErrorMessage);
         verbose(() => 'ask: post validation "$line"');
         valid = true;
       } on AskValidatorException catch (e) {
@@ -313,9 +316,9 @@ class Ask extends core.DCliFunction {
   /// list of available inputs.
   /// By default [caseSensitive] matches are off.
   static AskValidator inList(
-    List<Object> validItems, {
-    bool caseSensitive = false,
-  }) =>
+      List<Object> validItems, {
+        bool caseSensitive = false,
+      }) =>
       _AskValidatorList(validItems, caseSensitive: caseSensitive);
 
   /// The user must enter a non-empty string.
@@ -369,14 +372,14 @@ abstract class AskValidator {
   /// The validate method is called when the user hits the enter key.
   /// If the validation succeeds the validated line is returned.
   @visibleForTesting
-  String validate(String line);
+  String validate(String line,String? customErrorMessage);
 }
 
 /// The default validator that considers any input as valid
 class _AskDontCare extends AskValidator {
   const _AskDontCare();
   @override
-  String validate(String line) => line;
+  String validate(String line,String? customErrorMessage) => line;
 }
 
 /// The user must enter a non-empty string.
@@ -385,7 +388,7 @@ class _AskDontCare extends AskValidator {
 class _AskRequired extends AskValidator {
   const _AskRequired();
   @override
-  String validate(String line) {
+  String validate(String line, String? customErrorMessage) {
     final finalLine = line.trim();
     if (finalLine.isEmpty) {
       throw AskValidatorException(red('You must enter a value.'));
@@ -397,11 +400,11 @@ class _AskRequired extends AskValidator {
 class _AskEmail extends AskValidator {
   const _AskEmail();
   @override
-  String validate(String line) {
+  String validate(String line, String? customErrorMessage) {
     final finalLine = line.trim();
 
     if (!isEmail(finalLine)) {
-      throw AskValidatorException(red('Invalid email address.'));
+      throw AskValidatorException(red(customErrorMessage ?? 'Invalid email address.'));
     }
     return finalLine;
   }
@@ -410,11 +413,11 @@ class _AskEmail extends AskValidator {
 class _AskFQDN extends AskValidator {
   const _AskFQDN();
   @override
-  String validate(String line) {
+  String validate(String line, String? customErrorMessage) {
     final finalLine = line.trim().toLowerCase();
 
     if (!isFQDN(finalLine)) {
-      throw AskValidatorException(red('Invalid FQDN.'));
+      throw AskValidatorException(red(customErrorMessage ?? 'Invalid FQDN.'));
     }
     return finalLine;
   }
@@ -425,11 +428,11 @@ class _AskURL extends AskValidator {
 
   final List<String> protocols;
   @override
-  String validate(String line) {
+  String validate(String line, String? customErrorMessage) {
     final finalLine = line.trim().toLowerCase();
 
     if (!isURL(finalLine, protocols: protocols)) {
-      throw AskValidatorException(red('Invalid URL.'));
+      throw AskValidatorException(red(customErrorMessage ?? 'Invalid URL.'));
     }
     return finalLine;
   }
@@ -453,11 +456,11 @@ class _AskRegExp extends AskValidator {
   late final String _error;
 
   @override
-  String validate(String line) {
+  String validate(String line, String? customErrorMessage) {
     final finalLine = line.trim();
 
     if (!_regexp.hasMatch(finalLine)) {
-      throw AskValidatorException(red(_error));
+      throw AskValidatorException(red(customErrorMessage ?? _error));
     }
     return finalLine;
   }
@@ -466,11 +469,11 @@ class _AskRegExp extends AskValidator {
 class _AskDate extends AskValidator {
   const _AskDate();
   @override
-  String validate(String line) {
+  String validate(String line, String? customErrorMessage) {
     final finalLine = line.trim();
 
     if (!isDate(finalLine)) {
-      throw AskValidatorException(red('Invalid date.'));
+      throw AskValidatorException(red(customErrorMessage ?? 'Invalid date.'));
     }
     return finalLine;
   }
@@ -479,12 +482,12 @@ class _AskDate extends AskValidator {
 class _AskInteger extends AskValidator {
   const _AskInteger();
   @override
-  String validate(String line) {
+  String validate(String line, String? customErrorMessage) {
     final finalLine = line.trim();
     verbose(() => 'AskInteger: $finalLine');
 
     if (!isInt(finalLine)) {
-      throw AskValidatorException(red('Invalid integer.'));
+      throw AskValidatorException(red(customErrorMessage ?? 'Invalid integer.'));
     }
     return finalLine;
   }
@@ -493,11 +496,11 @@ class _AskInteger extends AskValidator {
 class _AskDecimal extends AskValidator {
   const _AskDecimal();
   @override
-  String validate(String line) {
+  String validate(String line, String? customErrorMessage) {
     final finalline = line.trim();
 
     if (!isFloat(finalline)) {
-      throw AskValidatorException(red('Invalid decimal number.'));
+      throw AskValidatorException(red(customErrorMessage ?? 'Invalid decimal number.'));
     }
     return finalline;
   }
@@ -506,11 +509,11 @@ class _AskDecimal extends AskValidator {
 class _AskAlpha extends AskValidator {
   const _AskAlpha();
   @override
-  String validate(String line) {
+  String validate(String line, String? customErrorMessage) {
     final finalline = line.trim();
 
     if (!isAlpha(finalline)) {
-      throw AskValidatorException(red('Alphabetical characters only.'));
+      throw AskValidatorException(red(customErrorMessage ?? 'Alphabetical characters only.'));
     }
     return finalline;
   }
@@ -519,11 +522,11 @@ class _AskAlpha extends AskValidator {
 class _AskAlphaNumeric extends AskValidator {
   const _AskAlphaNumeric();
   @override
-  String validate(String line) {
+  String validate(String line, String? customErrorMessage) {
     final finalline = line.trim();
 
     if (!isAlphanumeric(finalline)) {
-      throw AskValidatorException(red('Alphanumerical characters only.'));
+      throw AskValidatorException(red(customErrorMessage ?? 'Alphanumerical characters only.'));
     }
     return finalline;
   }
@@ -553,11 +556,11 @@ class AskValidatorIPAddress extends AskValidator {
   final int version;
 
   @override
-  String validate(String line) {
+  String validate(String line, String? customErrorMessage) {
     assert(
-      version == either || version == ipv4 || version == ipv6,
-      'The version nmust be AskValidatorIPAddress.either or '
-      'AskValidatorIPAddress.ipv4 or AskValidatorIPAddress.ipv6',
+    version == either || version == ipv4 || version == ipv6,
+    'The version nmust be AskValidatorIPAddress.either or '
+        'AskValidatorIPAddress.ipv4 or AskValidatorIPAddress.ipv6',
     );
 
     final finalline = line.trim();
@@ -573,7 +576,7 @@ class AskValidatorIPAddress extends AskValidator {
     }
 
     if (!isIP(finalline, version: validatorsVersion)) {
-      throw AskValidatorException(red('Invalid IP Address.'));
+      throw AskValidatorException(red(customErrorMessage ?? 'Invalid IP Address.'));
     }
     return finalline;
   }
@@ -586,13 +589,13 @@ class _AskValidatorMaxLength extends AskValidator {
   /// than [maxLength].
   const _AskValidatorMaxLength(this.maxLength);
   @override
-  String validate(String line) {
+  String validate(String line, String? customErrorMessage) {
     final finalline = line.trim();
 
     if (finalline.length > maxLength) {
       throw AskValidatorException(
         red(
-          'You have exceeded the maximum length of $maxLength characters.',
+          customErrorMessage ?? 'You have exceeded the maximum length of $maxLength characters.',
         ),
       );
     }
@@ -610,12 +613,12 @@ class _AskValidatorMinLength extends AskValidator {
   /// than [minLength].
   const _AskValidatorMinLength(this.minLength);
   @override
-  String validate(String line) {
+  String validate(String line, String? customErrorMessage) {
     final finalline = line.trim();
 
     if (finalline.length < minLength) {
       throw AskValidatorException(
-        red('You must enter at least $minLength characters.'),
+        red(customErrorMessage ?? 'You must enter at least $minLength characters.'),
       );
     }
     return finalline;
@@ -640,10 +643,10 @@ class _AskValidatorLength extends AskValidator {
   late _AskValidatorAll _validator;
 
   @override
-  String validate(String line) {
+  String validate(String line, String? customErrorMessage) {
     final finalline = line.trim();
 
-    return _validator.validate(finalline);
+    return _validator.validate(finalline, customErrorMessage);
   }
 }
 
@@ -654,23 +657,23 @@ class _AskValidatorValueRange extends AskValidator {
   final num maxValue;
 
   @override
-  String validate(String line) {
+  String validate(String line, String? customErrorMessage) {
     final finalline = line.trim();
 
     final value = num.tryParse(finalline);
     if (value == null) {
-      throw AskValidatorException(red('Must be a number.'));
+      throw AskValidatorException(customErrorMessage ?? red('Must be a number.'));
     }
 
     if (value < minValue) {
       throw AskValidatorException(
-        red('The number must be greater than or equal to $minValue.'),
+        red(customErrorMessage ?? 'The number must be greater than or equal to $minValue.'),
       );
     }
 
     if (value > maxValue) {
       throw AskValidatorException(
-        red('The number must be less than or equal to $maxValue.'),
+        red(customErrorMessage ?? 'The number must be less than or equal to $maxValue.'),
       );
     }
 
@@ -706,11 +709,11 @@ class _AskValidatorAll extends AskValidator {
   final List<AskValidator> _validators;
 
   @override
-  String validate(String line) {
+  String validate(String line, String? customErrorMessage) {
     var finalline = line.trim();
 
     for (final validator in _validators) {
-      finalline = validator.validate(finalline);
+      finalline = validator.validate(finalline, customErrorMessage);
     }
     return finalline;
   }
@@ -747,7 +750,7 @@ class _AskValidatorAny extends AskValidator {
   final List<AskValidator> _validators;
 
   @override
-  String validate(String line) {
+  String validate(String line, String? customErrorMessage) {
     var finalline = line.trim();
 
     AskValidatorException? firstFailure;
@@ -756,7 +759,7 @@ class _AskValidatorAny extends AskValidator {
 
     for (final validator in _validators) {
       try {
-        finalline = validator.validate(finalline);
+        finalline = validator.validate(finalline, customErrorMessage);
         onePassed = true;
       } on AskValidatorException catch (e) {
         firstFailure ??= e;
@@ -786,7 +789,7 @@ class _AskValidatorList extends AskValidator {
   final bool caseSensitive;
 
   @override
-  String validate(String line) {
+  String validate(String line, String? customErrorMessage) {
     var finalline = line.trim();
 
     if (caseSensitive) {
@@ -806,7 +809,7 @@ class _AskValidatorList extends AskValidator {
     }
     if (!found) {
       throw AskValidatorException(
-        red('The valid responses are ${validItems.join(' | ')}.'),
+        red(customErrorMessage ?? 'The valid responses are ${validItems.join(' | ')}.'),
       );
     }
 
