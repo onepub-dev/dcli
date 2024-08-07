@@ -58,7 +58,7 @@ void main() {
       final validator = Ask.regExp(r'^[a-zA-Z0-9_\-]+');
 
       expect(
-        () => validator.validate('!',null),
+        () => validator.validate('!'),
         throwsA(
           predicate<AskValidatorException>(
             (e) => e.message == red(r'Input does not match: ^[a-zA-Z0-9_\-]+'),
@@ -66,7 +66,7 @@ void main() {
         ),
       );
 
-      expect(validator.validate('_',null), '_');
+      expect(validator.validate('_'), '_');
     },
     skip: false,
   );
@@ -78,7 +78,7 @@ void main() {
       Ask.inList(['localhost'])
     ]);
 
-    expect('localhost', validator.validate('localhost',null));
+    expect('localhost', validator.validate('localhost'));
   });
 
   test('ask.any - throws', () {
@@ -89,7 +89,7 @@ void main() {
     ]);
 
     expect(
-      () => validator.validate('abc',null),
+      () => validator.validate('abc'),
       throwsA(
         predicate<AskValidatorException>(
           (e) => e.message == red('Invalid FQDN.'),
@@ -106,10 +106,10 @@ void main() {
     ]);
 
     expect(
-          () => validator.validate('abc','Invalid domain!'),
+      () => validator.validate('abc', customErrorMessage: 'Invalid domain!'),
       throwsA(
         predicate<AskValidatorException>(
-              (e) => e.message == red('Invalid domain!'),
+          (e) => e.message == red('Invalid domain!'),
         ),
       ),
     );
@@ -122,7 +122,7 @@ void main() {
       Ask.inList(['11', '12', '13'])
     ]);
 
-    expect('11', validator.validate('11',null));
+    expect('11', validator.validate('11'));
   });
 
   test('ask.all - failure', () {
@@ -133,7 +133,7 @@ void main() {
     ]);
 
     expect(
-      () => validator.validate('9',null),
+      () => validator.validate('9'),
       throwsA(
         isA<AskValidatorException>().having(
           (e) => e.message,
@@ -152,10 +152,10 @@ void main() {
     ]);
 
     expect(
-          () => validator.validate('9','Number must be >= 10'),
+      () => validator.validate('9', customErrorMessage: 'Number must be >= 10'),
       throwsA(
         isA<AskValidatorException>().having(
-              (e) => e.message,
+          (e) => e.message,
           'message',
           equals(red('Number must be >= 10')),
         ),
@@ -167,7 +167,7 @@ void main() {
     const validator = Ask.integer;
 
     expect(
-      () => validator.validate('a',null),
+      () => validator.validate('a'),
       throwsA(
         predicate<AskValidatorException>(
           (e) => e.message == red('Invalid integer.'),
@@ -175,21 +175,22 @@ void main() {
       ),
     );
 
-    expect(validator.validate('9',null), equals('9'));
+    expect(validator.validate('9'), equals('9'));
   });
 
   test('ask.integer - failure', () {
     const validator = Ask.integer;
 
     expect(
-          () => validator.validate('a','You must enter integer value!'),
+      () => validator.validate('a',
+          customErrorMessage: 'You must enter integer value!'),
       throwsA(
         predicate<AskValidatorException>(
-              (e) => e.message == red('You must enter integer value!'),
+          (e) => e.message == red('You must enter integer value!'),
         ),
       ),
     );
 
-    expect(validator.validate('9',null), equals('9'));
+    expect(validator.validate('9'), equals('9'));
   });
 }
