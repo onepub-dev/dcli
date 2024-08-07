@@ -4,7 +4,6 @@ description: test of command arg passing.
 
 environment:
   sdk: '>=3.0.0 <4.0.0'
-  flutter:
 
 dependencies:
   args: ^2.0.0

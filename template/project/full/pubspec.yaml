@@ -3,7 +3,6 @@ version: 0.0.1
 description: A sample command-line application that installs and runs mailhog
 environment:
   sdk: '>=3.0.0 <4.0.0'
-  flutter:
 
 dependencies:
   args: ^2.5.0
