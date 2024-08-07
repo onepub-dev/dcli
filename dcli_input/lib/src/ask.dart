@@ -90,6 +90,11 @@ typedef CustomAskPrompt = String Function(
 /// You can color code the error using any of the dcli
 /// color functions.  By default all input is considered valid.
 ///
+/// The [customErrorMessage] allows you to provide a custom error message
+/// to be displayed instead of the default one when the input is invalid.
+/// This can be useful if you want to provide specific guidance or instructions
+/// to the user regarding the expected input format or constraints.
+///
 ///```dart
 ///   var subject = ask( 'Subject');
 ///   subject = ask( 'Subject', required: true);
@@ -111,6 +116,7 @@ Future<String> ask(
   String? defaultValue,
   CustomAskPrompt customPrompt = Ask.defaultPrompt,
   AskValidator validator = Ask.dontCare,
+  String? customErrorMessage,
 }) async =>
     Ask()._ask(
       prompt,
@@ -120,6 +126,7 @@ Future<String> ask(
       defaultValue: defaultValue,
       customPrompt: customPrompt,
       validator: validator,
+      customErrorMessage: customErrorMessage,
     );
 
 // ignore: avoid_clas
@@ -140,6 +147,7 @@ class Ask extends core.DCliFunction {
     required CustomAskPrompt customPrompt,
     bool toLower = false,
     String? defaultValue,
+    String? customErrorMessage,
   }) async {
     ArgumentError.checkNotNull(prompt);
     core.verbose(
@@ -174,10 +182,12 @@ class Ask extends core.DCliFunction {
 
       try {
         if (required) {
-          await const _AskRequired().validate(line);
+          await const _AskRequired()
+              .validate(line, customErrorMessage: customErrorMessage);
         }
         verbose(() => 'ask: pre validation "$line"');
-        line = await validator.validate(line);
+        line = await validator.validate(line,
+            customErrorMessage: customErrorMessage);
         verbose(() => 'ask: post validation "$line"');
         valid = true;
       } on AskValidatorException catch (e) {
@@ -213,11 +223,8 @@ class Ask extends core.DCliFunction {
               value.removeLast();
             }
           } else {
+            // apparently flush isn't need - despite the doc.
             stdout.write('*');
-            // we must wait for flush as only one flush can
-            // be outstanding at a time.
-            // ignore: discarded_futures
-            await stdout.flush();
             value.add(char);
           }
         }
@@ -363,6 +370,7 @@ class AskValidatorException extends DCliException {
 
 /// Base class for all [AskValidator]s.
 /// You can add your own by extending this class.
+// ignore: one_member_abstracts
 abstract class AskValidator {
   /// allows us to make validators consts.
   const AskValidator();
@@ -374,14 +382,15 @@ abstract class AskValidator {
   /// The validate method is called when the user hits the enter key.
   /// If the validation succeeds the validated line is returned.
   @visibleForTesting
-  Future<String> validate(String line);
+  Future<String> validate(String line, {String? customErrorMessage});
 }
 
 /// The default validator that considers any input as valid
 class _AskDontCare extends AskValidator {
   const _AskDontCare();
   @override
-  Future<String> validate(String line) async => line;
+  Future<String> validate(String line, {String? customErrorMessage}) async =>
+      line;
 }
 
 /// The user must enter a non-empty string.
@@ -390,10 +399,11 @@ class _AskDontCare extends AskValidator {
 class _AskRequired extends AskValidator {
   const _AskRequired();
   @override
-  Future<String> validate(String line) async {
+  Future<String> validate(String line, {String? customErrorMessage}) async {
     final finalLine = line.trim();
     if (finalLine.isEmpty) {
-      throw AskValidatorException(red('You must enter a value.'));
+      throw AskValidatorException(
+          red(customErrorMessage ?? 'You must enter a value.'));
     }
     return finalLine;
   }
@@ -402,11 +412,12 @@ class _AskRequired extends AskValidator {
 class _AskEmail extends AskValidator {
   const _AskEmail();
   @override
-  Future<String> validate(String line) async {
+  Future<String> validate(String line, {String? customErrorMessage}) async {
     final finalLine = line.trim();
 
     if (!isEmail(finalLine)) {
-      throw AskValidatorException(red('Invalid email address.'));
+      throw AskValidatorException(
+          red(customErrorMessage ?? 'Invalid email address.'));
     }
     return finalLine;
   }
@@ -414,12 +425,13 @@ class _AskEmail extends AskValidator {
 
 class _AskFQDN extends AskValidator {
   const _AskFQDN();
+
   @override
-  Future<String> validate(String line) async {
+  Future<String> validate(String line, {String? customErrorMessage}) async {
     final finalLine = line.trim().toLowerCase();
 
     if (!isFQDN(finalLine)) {
-      throw AskValidatorException(red('Invalid FQDN.'));
+      throw AskValidatorException(red(customErrorMessage ?? 'Invalid FQDN.'));
     }
     return finalLine;
   }
@@ -429,12 +441,13 @@ class _AskURL extends AskValidator {
   const _AskURL({this.protocols = const ['https']});
 
   final List<String> protocols;
+
   @override
-  Future<String> validate(String line) async {
+  Future<String> validate(String line, {String? customErrorMessage}) async {
     final finalLine = line.trim().toLowerCase();
 
     if (!isURL(finalLine, protocols: protocols)) {
-      throw AskValidatorException(red('Invalid URL.'));
+      throw AskValidatorException(red(customErrorMessage ?? 'Invalid URL.'));
     }
     return finalLine;
   }
@@ -458,11 +471,11 @@ class _AskRegExp extends AskValidator {
   late final String _error;
 
   @override
-  Future<String> validate(String line) async {
+  Future<String> validate(String line, {String? customErrorMessage}) async {
     final finalLine = line.trim();
 
     if (!_regexp.hasMatch(finalLine)) {
-      throw AskValidatorException(red(_error));
+      throw AskValidatorException(red(customErrorMessage ?? _error));
     }
     return finalLine;
   }
@@ -471,11 +484,11 @@ class _AskRegExp extends AskValidator {
 class _AskDate extends AskValidator {
   const _AskDate();
   @override
-  Future<String> validate(String line) async {
+  Future<String> validate(String line, {String? customErrorMessage}) async {
     final finalLine = line.trim();
 
     if (!isDate(finalLine)) {
-      throw AskValidatorException(red('Invalid date.'));
+      throw AskValidatorException(red(customErrorMessage ?? 'Invalid date.'));
     }
     return finalLine;
   }
@@ -484,12 +497,13 @@ class _AskDate extends AskValidator {
 class _AskInteger extends AskValidator {
   const _AskInteger();
   @override
-  Future<String> validate(String line) async {
+  Future<String> validate(String line, {String? customErrorMessage}) async {
     final finalLine = line.trim();
     verbose(() => 'AskInteger: $finalLine');
 
     if (!isInt(finalLine)) {
-      throw AskValidatorException(red('Invalid integer.'));
+      throw AskValidatorException(
+          red(customErrorMessage ?? 'Invalid integer.'));
     }
     return finalLine;
   }
@@ -498,11 +512,12 @@ class _AskInteger extends AskValidator {
 class _AskDecimal extends AskValidator {
   const _AskDecimal();
   @override
-  Future<String> validate(String line) async {
+  Future<String> validate(String line, {String? customErrorMessage}) async {
     final finalline = line.trim();
 
     if (!isFloat(finalline)) {
-      throw AskValidatorException(red('Invalid decimal number.'));
+      throw AskValidatorException(
+          red(customErrorMessage ?? 'Invalid decimal number.'));
     }
     return finalline;
   }
@@ -511,11 +526,12 @@ class _AskDecimal extends AskValidator {
 class _AskAlpha extends AskValidator {
   const _AskAlpha();
   @override
-  Future<String> validate(String line) async {
+  Future<String> validate(String line, {String? customErrorMessage}) async {
     final finalline = line.trim();
 
     if (!isAlpha(finalline)) {
-      throw AskValidatorException(red('Alphabetical characters only.'));
+      throw AskValidatorException(
+          red(customErrorMessage ?? 'Alphabetical characters only.'));
     }
     return finalline;
   }
@@ -524,11 +540,12 @@ class _AskAlpha extends AskValidator {
 class _AskAlphaNumeric extends AskValidator {
   const _AskAlphaNumeric();
   @override
-  Future<String> validate(String line) async {
+  Future<String> validate(String line, {String? customErrorMessage}) async {
     final finalline = line.trim();
 
     if (!isAlphanumeric(finalline)) {
-      throw AskValidatorException(red('Alphanumerical characters only.'));
+      throw AskValidatorException(
+          red(customErrorMessage ?? 'Alphanumerical characters only.'));
     }
     return finalline;
   }
@@ -558,10 +575,10 @@ class AskValidatorIPAddress extends AskValidator {
   final int version;
 
   @override
-  Future<String> validate(String line) async {
+  Future<String> validate(String line, {String? customErrorMessage}) async {
     assert(
       version == either || version == ipv4 || version == ipv6,
-      'The version nmust be AskValidatorIPAddress.either or '
+      'The version must be AskValidatorIPAddress.either or '
       'AskValidatorIPAddress.ipv4 or AskValidatorIPAddress.ipv6',
     );
 
@@ -578,7 +595,8 @@ class AskValidatorIPAddress extends AskValidator {
     }
 
     if (!isIP(finalline, version: validatorsVersion)) {
-      throw AskValidatorException(red('Invalid IP Address.'));
+      throw AskValidatorException(
+          red(customErrorMessage ?? 'Invalid IP Address.'));
     }
     return finalline;
   }
@@ -591,13 +609,14 @@ class _AskValidatorMaxLength extends AskValidator {
   /// than [maxLength].
   const _AskValidatorMaxLength(this.maxLength);
   @override
-  Future<String> validate(String line) async {
+  Future<String> validate(String line, {String? customErrorMessage}) async {
     final finalline = line.trim();
 
     if (finalline.length > maxLength) {
       throw AskValidatorException(
         red(
-          'You have exceeded the maximum length of $maxLength characters.',
+          customErrorMessage ??
+              'You have exceeded the maximum length of $maxLength characters.',
         ),
       );
     }
@@ -615,12 +634,13 @@ class _AskValidatorMinLength extends AskValidator {
   /// than [minLength].
   const _AskValidatorMinLength(this.minLength);
   @override
-  Future<String> validate(String line) async {
+  Future<String> validate(String line, {String? customErrorMessage}) async {
     final finalline = line.trim();
 
     if (finalline.length < minLength) {
       throw AskValidatorException(
-        red('You must enter at least $minLength characters.'),
+        red(customErrorMessage ??
+            'You must enter at least $minLength characters.'),
       );
     }
     return finalline;
@@ -642,13 +662,15 @@ class _AskValidatorLength extends AskValidator {
       _AskValidatorMaxLength(maxLength),
     ]);
   }
+
   late _AskValidatorAll _validator;
 
   @override
-  Future<String> validate(String line) async {
+  Future<String> validate(String line, {String? customErrorMessage}) async {
     final finalline = line.trim();
 
-    return _validator.validate(finalline);
+    return _validator.validate(finalline,
+        customErrorMessage: customErrorMessage);
   }
 }
 
@@ -659,23 +681,26 @@ class _AskValidatorValueRange extends AskValidator {
   final num maxValue;
 
   @override
-  Future<String> validate(String line) async {
+  Future<String> validate(String line, {String? customErrorMessage}) async {
     final finalline = line.trim();
 
     final value = num.tryParse(finalline);
     if (value == null) {
-      throw AskValidatorException(red('Must be a number.'));
+      throw AskValidatorException(
+          red(customErrorMessage ?? 'Must be a number.'));
     }
 
     if (value < minValue) {
       throw AskValidatorException(
-        red('The number must be greater than or equal to $minValue.'),
+        red(customErrorMessage ??
+            'The number must be greater than or equal to $minValue.'),
       );
     }
 
     if (value > maxValue) {
       throw AskValidatorException(
-        red('The number must be less than or equal to $maxValue.'),
+        red(customErrorMessage ??
+            'The number must be less than or equal to $maxValue.'),
       );
     }
 
@@ -708,14 +733,16 @@ class _AskValidatorAll extends AskValidator {
   /// that has been processed  by all validators that appear earlier
   /// in the list.
   _AskValidatorAll(this._validators);
+
   final List<AskValidator> _validators;
 
   @override
-  Future<String> validate(String line) async {
+  Future<String> validate(String line, {String? customErrorMessage}) async {
     var finalline = line.trim();
 
     for (final validator in _validators) {
-      finalline = await validator.validate(finalline);
+      finalline = await validator.validate(finalline,
+          customErrorMessage: customErrorMessage);
     }
     return finalline;
   }
@@ -752,7 +779,7 @@ class _AskValidatorAny extends AskValidator {
   final List<AskValidator> _validators;
 
   @override
-  Future<String> validate(String line) async {
+  Future<String> validate(String line, {String? customErrorMessage}) async {
     var finalline = line.trim();
 
     AskValidatorException? firstFailure;
@@ -761,7 +788,8 @@ class _AskValidatorAny extends AskValidator {
 
     for (final validator in _validators) {
       try {
-        finalline = await validator.validate(finalline);
+        finalline = await validator.validate(finalline,
+            customErrorMessage: customErrorMessage);
         onePassed = true;
       } on AskValidatorException catch (e) {
         firstFailure ??= e;
@@ -791,7 +819,7 @@ class _AskValidatorList extends AskValidator {
   final bool caseSensitive;
 
   @override
-  Future<String> validate(String line) async {
+  Future<String> validate(String line, {String? customErrorMessage}) async {
     var finalline = line.trim();
 
     if (caseSensitive) {
@@ -811,7 +839,8 @@ class _AskValidatorList extends AskValidator {
     }
     if (!found) {
       throw AskValidatorException(
-        red('The valid responses are ${validItems.join(' | ')}.'),
+        red(customErrorMessage ??
+            'The valid responses are ${validItems.join(' | ')}.'),
       );
     }
 
