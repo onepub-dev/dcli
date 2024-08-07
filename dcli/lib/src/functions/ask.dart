@@ -220,7 +220,7 @@ class Ask extends core.DCliFunction {
               value.removeLast();
             }
           } else {
-            // apparently flush isn't need - dispite the doc.
+            // apparently flush isn't need - despite the doc.
             stdout.write('*');
             value.add(char);
           }
