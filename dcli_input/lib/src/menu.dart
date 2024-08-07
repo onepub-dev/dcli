@@ -165,12 +165,12 @@ class Menu {
 class _MenuRange extends AskValidator {
   const _MenuRange(this.limit);
   @override
-  Future<String> validate(String line) async {
+  Future<String> validate(String line, {String? customErrorMessage}) async {
     final finalline = line.trim();
     final value = num.tryParse(finalline);
     if (value == null) {
       throw AskValidatorException(
-        red('Value must be an integer from 1 to $limit'),
+        red(customErrorMessage ?? 'Value must be an integer from 1 to $limit'),
       );
     }
 
