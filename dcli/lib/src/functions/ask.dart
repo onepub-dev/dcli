@@ -367,6 +367,7 @@ class AskValidatorException extends DCliException {
 
 /// Base class for all [AskValidator]s.
 /// You can add your own by extending this class.
+// ignore: one_member_abstracts
 abstract class AskValidator {
   /// allows us to make validators consts.
   const AskValidator();
