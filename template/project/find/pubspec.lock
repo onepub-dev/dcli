@@ -103,28 +103,28 @@ packages:
       path: "../../../dcli"
       relative: true
     source: path
-    version: "4.0.5"
+    version: "5.0.0"
   dcli_common:
     dependency: "direct overridden"
     description:
       path: "../../../dcli_common"
       relative: true
     source: path
-    version: "4.0.3"
+    version: "5.0.0"
   dcli_core:
     dependency: "direct main"
     description:
       path: "../../../dcli_core"
       relative: true
     source: path
-    version: "4.0.7"
+    version: "5.0.0"
   dcli_terminal:
     dependency: "direct overridden"
     description:
       path: "../../../dcli_terminal"
       relative: true
     source: path
-    version: "4.0.3"
+    version: "5.0.0"
   equatable:
     dependency: transitive
     description:
@@ -307,7 +307,7 @@ packages:
       path: "../../../../settings_yaml"
       relative: true
     source: path
-    version: "8.1.0"
+    version: "8.2.0"
   source_span:
     dependency: transitive
     description:
@@ -392,10 +392,10 @@ packages:
     dependency: transitive
     description:
       name: uuid
-      sha256: "814e9e88f21a176ae1359149021870e87f7cddaf633ab678a5d2b0bff7fd1ba8"
+      sha256: "83d37c7ad7aaf9aa8e275490669535c8080377cfa7a7004c24dfac53afffaa90"
       url: "https://pub.dev"
     source: hosted
-    version: "4.4.0"
+    version: "4.4.2"
   validators2:
     dependency: transitive
     description:
@@ -422,4 +422,3 @@ packages:
     version: "3.1.2"
 sdks:
   dart: ">=3.3.0 <4.0.0"
-  flutter: any
