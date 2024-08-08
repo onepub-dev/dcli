@@ -1,3 +1,15 @@
+# 6.0.0
+- Breaking
+The AskValidator now takes an additional argument 'customErrorMessage'. This will only affect
+users that have built custom ask validators.
+change `String validate(String line) ` to `String validate(String line, {String? customErrorMessage})`
+  and then return the customErrorMessage rather than you usual error message if the customErrorMessage is not null.
+  When outputing an error from you validator you should use `customErrorMessage??'my original error'`
+Thanks to Emad Beltaje for the contribution!
+
+- Upgraded to win32 v5 to fix an issue with a deprecated api for dart 3.5.
+
+
 # 5.0.0
 - Breaking
 -- Removed a number of the withXX sync functions in favour of withXXAsync
