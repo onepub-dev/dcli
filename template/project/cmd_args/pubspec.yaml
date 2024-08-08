@@ -8,7 +8,7 @@ environment:
 
 dependencies:
   args: ^2.0.0
-  dcli: 5.0.0
+  dcli: 6.0.0
 
 dev_dependencies:
   lint_hard: ^4.0.0
