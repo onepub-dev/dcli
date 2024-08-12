@@ -1,3 +1,6 @@
+# 6.0.1
+- fixed a bug in chown. If the path was a directlry and recursive was true then we wouldn't change the permissions of the directory itself only its children. We now change the permissions for the directory as well as any children.
+
 # 6.0.0
 - Breaking
 The AskValidator now takes an additional argument 'customErrorMessage'. This will only affect
