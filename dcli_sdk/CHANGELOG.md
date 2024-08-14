@@ -1,3 +1,6 @@
+# 6.0.2
+- upgraded to native_synchronise_temp 0.5.0 to resolve https://github.com/onepub-dev/dcli/issues/252
+
 # 6.0.0
 - Breaking
 The AskValidator now takes an additional argument 'customErrorMessage'. This will only affect
