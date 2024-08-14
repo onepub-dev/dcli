@@ -1,3 +1,6 @@
+# 6.0.2
+- upgraded to native_synchronise_temp 0.5.0 to resolve https://github.com/onepub-dev/dcli/issues/252
+
 # 6.0.1
 - fixed a bug in chown. If the path was a directlry and recursive was true then we wouldn't change the permissions of the directory itself only its children. We now change the permissions for the directory as well as any children.
 
