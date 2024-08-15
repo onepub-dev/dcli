@@ -16,14 +16,14 @@ dependencies:
   pub_semver: ^2.1.4
   pubspec_lock: ^3.0.2
   pubspec_manager: ^1.0.0
-  scope: ^4.1.0
+  scope: ^5.0.0
   stack_trace: ^1.11.1
   strings: ^3.0.0
   win32: ^5.0.0
  
 dev_dependencies:
   dcli_test:
-  lint_hard: ^4.0.0
+  lint_hard: ^5.0.0
   test: ^1.24.7
 executables:
   dcli:

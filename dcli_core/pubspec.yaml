@@ -16,11 +16,11 @@ dependencies:
   logging: ^1.0.2
   meta: ">=1.11.0 <2.0.0"
   path: ^1.8.0
-  scope: ^4.0.0
+  scope: ^5.0.0
   stack_trace: ^1.10.0
   uuid: ^4.1.0
 dev_dependencies:
-  lint_hard: ^4.0.0
+  lint_hard: ^5.0.0
   synchronized: ^3.1.0
   test: ^1.24.7
 platforms:

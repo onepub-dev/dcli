@@ -103,7 +103,7 @@ packages:
       path: "../dcli"
       relative: true
     source: path
-    version: "6.0.0"
+    version: "6.0.2"
   dcli_common:
     dependency: "direct overridden"
     description:
@@ -249,10 +249,10 @@ packages:
     dependency: transitive
     description:
       name: native_synchronization_temp
-      sha256: "95ccdee4c0ab7440e7d86ef76af63013cc0c379485d5e0339a7b59de6e58091e"
+      sha256: f5224a11c2bbd437f0dea50da97f1bbe6fcad3e9a76340150edc903af810b2bf
       url: "https://pub.dev"
     source: hosted
-    version: "0.4.0"
+    version: "0.5.0"
   path:
     dependency: "direct main"
     description:
@@ -297,10 +297,10 @@ packages:
     dependency: transitive
     description:
       name: scope
-      sha256: "9930a3822bd33d1884a642d1cd79e6baf56d17288b3e0c54ae7c00cb559ef614"
+      sha256: "0b056e5b64ca16a2db9e1eb35cf7fd05a9e99a6b15140f82bfa651d081e4819b"
       url: "https://pub.dev"
     source: hosted
-    version: "4.1.1"
+    version: "5.1.0"
   settings_yaml:
     dependency: transitive
     description:

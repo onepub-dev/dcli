@@ -5,10 +5,10 @@ packages:
     dependency: transitive
     description:
       name: archive
-      sha256: "0763b45fa9294197a2885c8567927e2830ade852e5c896fd4ab7e0e348d0f373"
+      sha256: cb6a278ef2dbb298455e1a713bda08524a175630ec643a242c399c932a0a1f7d
       url: "https://pub.dev"
     source: hosted
-    version: "3.5.0"
+    version: "3.6.1"
   args:
     dependency: "direct main"
     description:
@@ -103,28 +103,28 @@ packages:
       path: "../../../dcli"
       relative: true
     source: path
-    version: "5.0.0"
+    version: "6.0.2"
   dcli_common:
     dependency: "direct overridden"
     description:
       path: "../../../dcli_common"
       relative: true
     source: path
-    version: "5.0.0"
+    version: "6.0.0"
   dcli_core:
     dependency: "direct overridden"
     description:
       path: "../../../dcli_core"
       relative: true
     source: path
-    version: "5.0.0"
+    version: "6.0.0"
   dcli_terminal:
     dependency: "direct overridden"
     description:
       path: "../../../dcli_terminal"
       relative: true
     source: path
-    version: "5.0.0"
+    version: "6.0.0"
   equatable:
     dependency: transitive
     description:
@@ -249,10 +249,10 @@ packages:
     dependency: transitive
     description:
       name: native_synchronization_temp
-      sha256: "95ccdee4c0ab7440e7d86ef76af63013cc0c379485d5e0339a7b59de6e58091e"
+      sha256: f5224a11c2bbd437f0dea50da97f1bbe6fcad3e9a76340150edc903af810b2bf
       url: "https://pub.dev"
     source: hosted
-    version: "0.4.0"
+    version: "0.5.0"
   path:
     dependency: transitive
     description:
@@ -297,10 +297,10 @@ packages:
     dependency: transitive
     description:
       name: scope
-      sha256: "80cf1cb727791fdaaa4131817974a6084815ed59b9ab02ef352c3a1badea488b"
+      sha256: "0b056e5b64ca16a2db9e1eb35cf7fd05a9e99a6b15140f82bfa651d081e4819b"
       url: "https://pub.dev"
     source: hosted
-    version: "4.1.0"
+    version: "5.1.0"
   settings_yaml:
     dependency: "direct overridden"
     description:
@@ -422,3 +422,4 @@ packages:
     version: "3.1.2"
 sdks:
   dart: ">=3.3.0 <4.0.0"
+  flutter: any
