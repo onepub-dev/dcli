@@ -103,28 +103,28 @@ packages:
       path: "../../../../dcli"
       relative: true
     source: path
-    version: "6.0.2"
+    version: "6.0.3"
   dcli_common:
     dependency: "direct overridden"
     description:
       path: "../../../../dcli_common"
       relative: true
     source: path
-    version: "6.0.0"
+    version: "6.0.3"
   dcli_core:
     dependency: "direct main"
     description:
       path: "../../../../dcli_core"
       relative: true
     source: path
-    version: "6.0.0"
+    version: "6.0.3"
   dcli_terminal:
     dependency: "direct overridden"
     description:
       path: "../../../../dcli_terminal"
       relative: true
     source: path
-    version: "6.0.0"
+    version: "6.0.3"
   equatable:
     dependency: transitive
     description:
