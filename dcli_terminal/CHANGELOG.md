@@ -1,3 +1,6 @@
+# 6.0.3
+- upgraded to archive 3.6.1 to overcome dart 3.5 compatibility issue. upgraded all packaages to scope 5.x upgraded all packages to lint_hard 5.x
+
 # 6.0.0
 - Breaking
 The AskValidator now takes an additional argument 'customErrorMessage'. This will only affect
