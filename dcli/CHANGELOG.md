@@ -1,3 +1,9 @@
+# 6.0.4
+- fixed a bug in all of the 'process' runners caused by a changed to the 
+native_synchronize package which now can be in a closed state. 
+This confused our mailbox logic which could result in the exit code
+never being posted resulting the process isolate never shutting down.
+
 # 6.0.3
 - upgraded to archive 3.6.1 to overcome dart 3.5 compatibility issue. upgraded all packaages to scope 5.x upgraded all packages to lint_hard 5.x
 

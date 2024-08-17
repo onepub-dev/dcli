@@ -335,10 +335,10 @@ packages:
     dependency: transitive
     description:
       name: native_synchronization_temp
-      sha256: f5224a11c2bbd437f0dea50da97f1bbe6fcad3e9a76340150edc903af810b2bf
+      sha256: "5f5f15add4eeb6c7dcf9172314232657c6b1d002a45cca0ba46d955497645d5a"
       url: "https://pub.dev"
     source: hosted
-    version: "0.5.0"
+    version: "0.6.0"
   node_preamble:
     dependency: transitive
     description:

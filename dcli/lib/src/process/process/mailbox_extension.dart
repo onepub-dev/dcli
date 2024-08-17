@@ -14,7 +14,7 @@ extension MailBoxMessage on Mailbox {
         // _logMessage('attempting to put message in mailbox - success');
         // ignore: avoid_catching_errors
       } on StateError catch (e) {
-        if (e.message == 'Mailbox is full') {
+        if (!isFull()) {
           isolateLogger(() => 'mailbox is full sleeping for a bit');
           tryPut = true;
 
