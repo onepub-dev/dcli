@@ -69,5 +69,5 @@ class _ChMod extends DCliFunction {
 /// Thrown if the [chmod] function encounters an error.
 class ChModException extends DCliFunctionException {
   /// Thrown if the [chmod] function encounters an error.
-  ChModException(super.reason, [super.stacktrace]);
+  ChModException(super.message, [super.stacktrace]);
 }

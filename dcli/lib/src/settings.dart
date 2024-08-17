@@ -40,7 +40,7 @@ class Settings {
     version = packageVersion;
   }
 
-  static ScopeKey<Settings> scopeKey = ScopeKey<Settings>();
+  static ScopeKey<Settings> scopeKey = const ScopeKey<Settings>();
 
   static Settings? _self;
 

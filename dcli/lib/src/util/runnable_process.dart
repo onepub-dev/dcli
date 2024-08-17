@@ -206,8 +206,8 @@ class RunnableProcess {
       /// whether we have a terminal or not we use the same
       /// process to read any io that comes back until
       /// we see an exit code.
-      if (detached == false) {
-        if (exitCode != 0 && nothrow == false) {
+      if (!detached) {
+        if (exitCode != 0 && !nothrow) {
           throw RunException.withArgs(
             _parsed.cmd,
             _parsed.args,
@@ -264,7 +264,7 @@ class RunnableProcess {
     workdir ??= Directory.current.path;
 
     assert(
-      !(terminal == true && detached == true),
+      !(terminal && detached),
       'You cannot enable terminal and detached at the same time.',
     );
 
@@ -364,7 +364,7 @@ class RunnableProcess {
     processLogger(() => 'Exit code recived by primary isolate');
 
     response?.onExit((exitCode) {
-      if (exitCode != 0 && nothrow == false) {
+      if (exitCode != 0 && !nothrow) {
         throw RunException.withArgs(
           _parsed.cmd,
           _parsed.args,

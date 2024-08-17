@@ -293,7 +293,7 @@ String regGetExpandString(
 
   var flags = RRF_RT_REG_EXPAND_SZ | RRF_RT_REG_SZ;
 
-  if (expand == false) {
+  if (!expand) {
     flags |= RRF_NOEXPAND;
   }
 

@@ -46,5 +46,5 @@ class TailProgress extends InternalProgress {
 /// thrown when the [tail] function encounters an exception
 class TailException extends core.DCliFunctionException {
   /// thrown when the [tail] function encounters an exception
-  TailException(super.reason);
+  TailException(super.message);
 }

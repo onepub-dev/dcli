@@ -64,7 +64,7 @@ class PubCache {
     _pubCacheBinPath = truepath(join(_pubCachePath, 'bin'));
   }
 
-  static ScopeKey<PubCache> scopeKey = ScopeKey<PubCache>();
+  static ScopeKey<PubCache> scopeKey = const ScopeKey<PubCache>();
 
   /// Method taken from the pub_cache package.
   /// We can't use the pub_cache version as it directly

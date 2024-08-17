@@ -327,7 +327,6 @@ class ProcessHelper {
           switch (key) {
             case 'Name':
               name = value;
-              break;
             case 'VmSize':
               final args = value.split(' ');
               if (args.length == 2) {

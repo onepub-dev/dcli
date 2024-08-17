@@ -77,7 +77,7 @@ class Confirm {
     if (defaultValue == null) {
       finalPrompt += ' (y/n):';
     } else {
-      if (defaultValue == true) {
+      if (defaultValue) {
         finalPrompt += ' (Y/n):';
       } else {
         finalPrompt += ' (y/N):';

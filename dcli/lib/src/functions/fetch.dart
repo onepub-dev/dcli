@@ -189,18 +189,14 @@ class FetchData {
     switch (_type) {
       case _FetchDataType.string:
         request.write(_string);
-        break;
       case _FetchDataType.path:
         final file = File(_pathToDataFile!);
         final stream = file.openRead();
         await request.addStream(stream);
-        break;
       case _FetchDataType.bytes:
         request.add(_bytes!);
-        break;
       case _FetchDataType.stream:
         await request.addStream(_stream!);
-        break;
     }
   }
 }
@@ -653,7 +649,6 @@ class FetchProgress {
     switch (progress.status) {
       case FetchStatus.initialising:
         update = _ProgressByteUpdate(0, '$status      ?/?      $url');
-        break;
 
       case FetchStatus.connected:
       case FetchStatus.connecting:
@@ -661,18 +656,15 @@ class FetchProgress {
       case FetchStatus.response:
       case FetchStatus.error:
         update = _ProgressByteUpdate(0, '$status      ?/?      $url');
-        break;
       case FetchStatus.downloading:
         if (progress.prior?.status == FetchStatus.downloading) {
           update = _ProgressByteUpdate(14, '$downloaded/$total');
         } else {
           update = _ProgressByteUpdate(0, '$status $downloaded/$total');
         }
-        break;
       case FetchStatus.complete:
         update =
             _ProgressByteUpdate(0, '$status $downloaded/$total', newline: true);
-        break;
     }
 
     return update;
@@ -724,8 +716,8 @@ class FetchException extends core.DCliException {
   FetchException(super.message) : errorCode = OSError.noErrorCode;
 
   /// Create an exception from a SocketException
-  FetchException.fromException(SocketException super.e)
-      : errorCode = e.osError?.errorCode,
+  FetchException.fromException(SocketException super.cause)
+      : errorCode = cause.osError?.errorCode,
         super.fromException();
 
   /// Create a FetchException as the result of a

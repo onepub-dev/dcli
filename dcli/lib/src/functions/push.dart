@@ -69,5 +69,5 @@ class _Push extends core.DCliFunction {
 class PushException extends core.DCliFunctionException {
   // ignore: deprecated_member_use_from_same_package
   /// Thrown when the [push] function encouters an error.
-  PushException(super.reason);
+  PushException(super.message);
 }

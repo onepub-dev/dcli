@@ -86,5 +86,5 @@ class _Pop extends DCliFunction {
 class PopException extends DCliFunctionException {
   // ignore: deprecated_member_use_from_same_package
   /// Thrown when the [pop] function encouters an error.
-  PopException(super.reason);
+  PopException(super.message);
 }

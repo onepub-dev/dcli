@@ -295,7 +295,7 @@ uid:  $uid''');
 
   void reorder(
       bool Function() condition, void Function() one, void Function() two) {
-    if (condition() == true) {
+    if (condition()) {
       one();
       two();
     } else {

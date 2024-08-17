@@ -25,7 +25,7 @@ void main() {
     }
   });
 
-  if (killed == false) {
+  if (!killed) {
     print('tomcat process not found.');
   }
 }

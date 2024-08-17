@@ -72,5 +72,5 @@ class _ChOwn extends core.DCliFunction {
 /// Thrown if the [chown] function encounters an error.
 class ChOwnException extends core.DCliFunctionException {
   /// Thrown if the [chown] function encounters an error.
-  ChOwnException(super.reason, [super.stacktrace]);
+  ChOwnException(super.message, [super.stacktrace]);
 }

@@ -94,7 +94,7 @@ T menu<T>(
   }
 
   var displayList = options;
-  if (fromStart == false) {
+  if (!fromStart) {
     // get the last [limit] options
     displayList = options.sublist(min(options.length, options.length - limit));
   }

@@ -48,5 +48,5 @@ class CD extends DCliFunction {
 class CDException extends DCliFunctionException {
   // ignore: deprecated_member_use_from_same_package
   /// Throw when the [cd] function encounters an error.
-  CDException(super.reason);
+  CDException(super.message);
 }

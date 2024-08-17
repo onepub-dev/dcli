@@ -101,7 +101,6 @@ class ParsedCliCommand {
           currentState = _ParseFrame(_ParseState.inWord, i);
 
           currentWord += char;
-          break;
 
         /// if we are in escape mode.
         case _ParseState.escaped:
@@ -114,7 +113,6 @@ class ParsedCliCommand {
             currentState = _ParseFrame(_ParseState.inWord, i);
           }
           currentWord += char;
-          break;
 
         case _ParseState.inWord:
 
@@ -156,7 +154,6 @@ class ParsedCliCommand {
           } else {
             currentWord += char;
           }
-          break;
 
         /// we are in a quote so just suck in
         /// characters until we see a matching quote.
@@ -214,7 +211,6 @@ class ParsedCliCommand {
           }
 
           currentWord += char;
-          break;
 
         /// we are in a quote so just suck in
         /// characters until we see a matching quote.
@@ -246,7 +242,6 @@ class ParsedCliCommand {
             currentState = _ParseFrame.forQuote(stateStack, i, char);
           }
           currentWord += char;
-          break;
       }
     }
 

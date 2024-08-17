@@ -32,10 +32,8 @@ void evaluate(String command) {
   switch (parts[0]) {
     case 'ls':
       ls(parts.sublist(1));
-      break;
     case 'cd':
       Directory.current = join(pwd, parts[1]);
-      break;
     default:
       if (which(parts[0]).found) {
         command.run;

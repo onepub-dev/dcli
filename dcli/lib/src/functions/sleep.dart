@@ -72,16 +72,12 @@ class _Sleep extends core.DCliFunction {
     switch (interval) {
       case Interval.hours:
         duration0 = Duration(hours: duration);
-        break;
       case Interval.seconds:
         duration0 = Duration(seconds: duration);
-        break;
       case Interval.milliseconds:
         duration0 = Duration(milliseconds: duration);
-        break;
       case Interval.minutes:
         duration0 = Duration(minutes: duration);
-        break;
     }
 
     io.sleep(duration0);
@@ -94,16 +90,12 @@ class _Sleep extends core.DCliFunction {
     switch (interval) {
       case Interval.hours:
         duration0 = Duration(hours: duration);
-        break;
       case Interval.seconds:
         duration0 = Duration(seconds: duration);
-        break;
       case Interval.milliseconds:
         duration0 = Duration(milliseconds: duration);
-        break;
       case Interval.minutes:
         duration0 = Duration(minutes: duration);
-        break;
     }
 
     Future.delayed(duration0, () {});

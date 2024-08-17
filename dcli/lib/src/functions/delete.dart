@@ -40,7 +40,7 @@ class _Delete extends DCliFunction {
       }
     }
 
-    if (remove == true) {
+    if (remove) {
       core.delete(path);
     }
   }

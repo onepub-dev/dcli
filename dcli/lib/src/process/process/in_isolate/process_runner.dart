@@ -45,7 +45,7 @@ class ProcessRunner {
   /// but we don't wait for it to complete nor is any io available.
   Future<void> start() async {
     assert(
-      !(settings.terminal == true && settings.detached == true),
+      !(settings.terminal && settings.detached),
       'You cannot enable terminal and detached at the same time.',
     );
 
