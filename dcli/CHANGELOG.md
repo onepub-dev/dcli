@@ -1,3 +1,6 @@
+# 6.0.5
+- attempt two at fixing the process runner bug.
+
 # 6.0.4
 - fixed a bug in all of the 'process' runners caused by a changed to the 
 native_synchronize package which now can be in a closed state. 
