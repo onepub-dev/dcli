@@ -75,5 +75,5 @@ class _Tail extends DCliFunction {
 /// thrown when the [tail] function encounters an exception
 class TailException extends DCliFunctionException {
   /// thrown when the [tail] function encounters an exception
-  TailException(super.reason);
+  TailException(super.message);
 }

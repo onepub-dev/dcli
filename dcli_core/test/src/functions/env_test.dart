@@ -9,12 +9,12 @@ import 'package:test/test.dart';
 
 void main() {
   test('env ...', () async {
-    expect(Env().exists('PATH') == true, isTrue);
-    expect(Env().exists('FREDWASHERE') == true, isFalse);
+    expect(Env().exists('PATH'), isTrue);
+    expect(Env().exists('FREDWASHERE'), isFalse);
     env['AAAA'] = null;
-    expect(Env().exists('AAAA') == true, isFalse);
+    expect(Env().exists('AAAA'), isFalse);
     env['AAAA'] = '';
-    expect(Env().exists('AAAA') == true, isTrue);
+    expect(Env().exists('AAAA'), isTrue);
   });
 
   test('env nested withEnvironment', () async {

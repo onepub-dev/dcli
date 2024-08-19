@@ -42,7 +42,7 @@ void copy(String from, String to, {bool overwrite = false}) {
   verbose(() =>
       'copy ${truepath(from)} -> ${truepath(finalto)} overwrite: $overwrite');
 
-  if (overwrite == false && exists(finalto, followLinks: false)) {
+  if (!overwrite && exists(finalto, followLinks: false)) {
     throw CopyException(
       'The target file ${truepath(finalto)} already exists.',
     );
@@ -88,5 +88,5 @@ void copy(String from, String to, {bool overwrite = false}) {
 /// Throw when the [copy] function encounters an error.
 class CopyException extends DCliFunctionException {
   /// Throw when the [copy] function encounters an error.
-  CopyException(super.reason);
+  CopyException(super.message);
 }

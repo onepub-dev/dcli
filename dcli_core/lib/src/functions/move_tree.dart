@@ -156,5 +156,5 @@ class _MoveTree extends DCliFunction {
 /// Thrown when the [moveTree] function encouters an error.
 class MoveTreeException extends DCliFunctionException {
   /// Thrown when the [moveTree] function encouters an error.
-  MoveTreeException(super.reason);
+  MoveTreeException(super.message);
 }

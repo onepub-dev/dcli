@@ -154,5 +154,5 @@ class _CopyTree extends DCliFunction {
 /// Throw when the [copy] function encounters an error.
 class CopyTreeException extends DCliFunctionException {
   /// Throw when the [copy] function encounters an error.
-  CopyTreeException(super.reason);
+  CopyTreeException(super.message);
 }

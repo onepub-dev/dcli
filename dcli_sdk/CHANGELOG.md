@@ -1,3 +1,7 @@
+# 6.0.5
+- updated the min constraint to dcli 6.0.5 as I think on systems with an older
+version of dcli dcli_sdk was being linked to the older version.
+
 # 6.0.3
 - upgraded to archive 3.6.1 to overcome dart 3.5 compatibility issue. upgraded all packaages to scope 5.x upgraded all packages to lint_hard 5.x
 - lint fix.

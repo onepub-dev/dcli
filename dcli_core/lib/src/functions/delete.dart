@@ -47,5 +47,5 @@ class _Delete extends DCliFunction {
 /// Thrown when the [delete] function encounters an error
 class DeleteException extends DCliFunctionException {
   /// Thrown when the [delete] function encounters an error
-  DeleteException(super.reason);
+  DeleteException(super.message);
 }

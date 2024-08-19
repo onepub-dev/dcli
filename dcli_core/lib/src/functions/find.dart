@@ -416,28 +416,20 @@ class PatternMatcher {
       switch (char) {
         case '[':
           regEx += '[';
-          break;
         case ']':
           regEx += ']';
-          break;
         case '*':
           regEx += '.*';
-          break;
         case '?':
           regEx += '.';
-          break;
         case '-':
           regEx += '-';
-          break;
         case '!':
           regEx += '^';
-          break;
         case '.':
           regEx += r'\.';
-          break;
         case r'\':
           regEx += r'\\';
-          break;
         default:
           regEx += char;
           break;
@@ -500,7 +492,7 @@ class FindItem {
 /// Thrown when the [find] function encouters an error.
 class FindException extends DCliFunctionException {
   /// Thrown when the [move] function encouters an error.
-  FindException(super.reason);
+  FindException(super.message);
 }
 
 class FindConfig {

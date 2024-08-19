@@ -82,5 +82,5 @@ void _improveError(Object e, String from, String to) {
 /// Thrown when the [move] function encouters an error.
 class MoveException extends DCliFunctionException {
   /// Thrown when the [move] function encouters an error.
-  MoveException(super.reason);
+  MoveException(super.message);
 }
