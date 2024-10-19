@@ -1,3 +1,8 @@
+# 6.1.0
+- upgraded to archive 3.6.1 to overcome dart 3.5 compatibility issue. 
+- upgraded all packaages to scope 5.x 
+- upgraded to native_syncronization_temp 0.7.1 to fix macos and windows compatiability issues.
+
 # 6.0.5
 - updated the min constraint to dcli 6.0.5 as I think on systems with an older
 version of dcli dcli_sdk was being linked to the older version.
