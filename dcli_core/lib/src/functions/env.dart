@@ -105,7 +105,7 @@ class Env extends DCliFunction {
     }
   }
 
-  static ScopeKey<Env> scopeKey = ScopeKey<Env>();
+  static ScopeKey<Env> scopeKey = const ScopeKey<Env>();
   static Env? _self = Env._internal();
 
   late Map<String, String> _envVars;
