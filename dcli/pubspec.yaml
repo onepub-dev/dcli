@@ -26,8 +26,8 @@ dependencies:
   ini: ^2.1.0
   logging: ^1.0.2
   meta: ">=1.11.0 <2.0.0"
-  mime: ^1.0.1
-  native_synchronization_temp: ^0.6.0
+  mime: ^2.0.0
+  native_synchronization_temp: ^0.7.0
   path: ^1.8.0
   posix: ^6.0.1
   pub_semver: ^2.0.0
