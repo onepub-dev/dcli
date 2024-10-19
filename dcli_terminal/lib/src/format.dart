@@ -71,14 +71,11 @@ class Format {
       switch (alignment) {
         case TableAlignment.left:
           row += col.padRight(width);
-          break;
         case TableAlignment.right:
           row += col.padLeft(width);
-          break;
         case TableAlignment.middle:
           final padding = width = colwidth;
           row += col.padLeft(padding);
-          break;
       }
 
       i++;

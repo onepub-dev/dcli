@@ -1,5 +1,5 @@
 name: dcli_terminal
-version: 6.0.3
+version: 6.1.0
 homepage: https://dcli.onepub.dev
 description: Provides Terminal/Ansi functions used by DCli the Dart Console SDK but is also intended to be used directly.
 repository: https://github.com/onepub-dev/dcli
@@ -8,5 +8,5 @@ environment:
 dependencies:
   dart_console: ^4.0.0
 dev_dependencies:
-  lint_hard: ^4.0.0
+  lint_hard: ^5.0.0
   test: ^1.23.1

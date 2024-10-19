@@ -1,3 +1,9 @@
+# 6.1.0
+- upgraded to archive 3.6.1 to overcome dart 3.5 compatibility issue. 
+- upgraded all packaages to scope 5.x 
+- upgraded to native_syncronization_temp 0.7.1 to fix macos and windows compatiability issues.
+
+
 # 6.0.3
 - upgraded to archive 3.6.1 to overcome dart 3.5 compatibility issue. upgraded all packaages to scope 5.x upgraded all packages to lint_hard 5.x
 

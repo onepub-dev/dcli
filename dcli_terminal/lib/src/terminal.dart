@@ -70,13 +70,10 @@ class Terminal {
 
       case TerminalClearMode.all:
         _console.clearScreen();
-        break;
       case TerminalClearMode.fromCursor:
         write('${Ansi.esc}0Jm');
-        break;
       case TerminalClearMode.toCursor:
         write('${Ansi.esc}1Jm');
-        break;
     }
   }
 
@@ -120,13 +117,10 @@ class Terminal {
       // case AnsiClearMode.scrollback:
       case TerminalClearMode.all:
         _console.eraseLine();
-        break;
       case TerminalClearMode.fromCursor:
         _console.eraseCursorToEnd();
-        break;
       case TerminalClearMode.toCursor:
         write('${Ansi.esc}1K');
-        break;
     }
   }
 

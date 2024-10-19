@@ -45,10 +45,10 @@ packages:
     dependency: transitive
     description:
       name: circular_buffer
-      sha256: "2889afcfc97aa0d9a4930ae5fdf206aea7d0ac88a3649acec9130565cd8f45d8"
+      sha256: b3a315fef3fee7fe58879643fc8ce21c7c2449d01c1a8a396dc9e24687f335c4
       url: "https://pub.dev"
     source: hosted
-    version: "0.11.0"
+    version: "0.12.0"
   clock:
     dependency: transitive
     description:
@@ -110,21 +110,21 @@ packages:
       path: "../../../../dcli_common"
       relative: true
     source: path
-    version: "6.0.3"
+    version: "6.1.0"
   dcli_core:
     dependency: "direct main"
     description:
       path: "../../../../dcli_core"
       relative: true
     source: path
-    version: "6.0.3"
+    version: "6.1.0"
   dcli_terminal:
     dependency: "direct overridden"
     description:
       path: "../../../../dcli_terminal"
       relative: true
     source: path
-    version: "6.0.3"
+    version: "6.1.0"
   equatable:
     dependency: transitive
     description:

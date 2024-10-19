@@ -1,16 +1,16 @@
 name: dcli_unit_tester
-version: 6.0.3
+version: 6.1.0
 description: This project allows dcli to unit test functions that behave differently when installed via 'dart pub global activate'. It serves no other useful purpose so do not install!
 repository: https://github.com/onepub/dcli
 environment:
   sdk: '>=3.0.0 <4.0.0'
 dependencies:
   args: ^2.3.0
-  dcli: ^6.0.3
-  dcli_core: ^6.0.3
-  dcli_terminal: ^6.0.3
+  dcli: ^6.1.0
+  dcli_core: ^6.1.0
+  dcli_terminal: ^6.1.0
   path: ^1.8.0
 dev_dependencies:
-  lint_hard: ^4.0.0
+  lint_hard: ^5.0.0
 executables:
   dcli_unit_tester:

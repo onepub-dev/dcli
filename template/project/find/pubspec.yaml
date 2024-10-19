@@ -6,8 +6,8 @@ environment:
   flutter:
 dependencies:
   args: ^2.3.1
-  dcli: 6.0.5
-  dcli_core: 6.0.5
+  dcli: 6.1.0
+  dcli_core: 6.1.0
   path: ^1.0.0
 dev_dependencies:
-  lint_hard: ^4.0.0
+  lint_hard: ^5.0.0
