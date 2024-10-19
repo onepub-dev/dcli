@@ -117,8 +117,8 @@ class DartProject {
       /// The packageConfig is available if passed (which unit tests do)
       /// and when passed is probably the most relable means of
       /// determining the project directory.
-      return _current ??= DartProject.fromPath(
-          dirname(dirname(Uri.parse(io.Platform.packageConfig!).path)));
+      return _current ??= DartProject.fromPath(dirname(dirname(
+          joinAll(Uri.parse(io.Platform.packageConfig!).pathSegments))));
     }
     final script = DartScript.self;
     var startFrom = '.';
