@@ -57,9 +57,8 @@ void main() {
       final validator = Ask.regExp(r'^[a-zA-Z0-9_\-]+');
 
       await check(validator.validate('!')).throws<AskValidatorException>(
-        it()
-          ..has(
-              (e) => e.message, red(r'Input does not match: ^[a-zA-Z0-9_\-]+')),
+        (it) => it.has(
+            (e) => e.message, red(r'Input does not match: ^[a-zA-Z0-9_\-]+')),
       );
 
       check(await validator.validate('_')).equals('_');
@@ -85,7 +84,7 @@ void main() {
     ]);
 
     await check(validator.validate('abc')).throws<AskValidatorException>(
-        it()..has((e) => e.message, red('Invalid FQDN.')));
+        (it) => it.has((e) => e.message, red('Invalid FQDN.')));
   });
 
   test('ask.all - success', () async {
@@ -105,16 +104,16 @@ void main() {
       Ask.inList(['11', '12', '13'])
     ]);
 
-    await check(validator.validate('9')).throws<AskValidatorException>(it()
-      ..has((e) => e.message,
-          red('The number must be greater than or equal to 10.')));
+    await check(validator.validate('9')).throws<AskValidatorException>((it) =>
+        it.has((e) => e.message,
+            red('The number must be greater than or equal to 10.')));
   });
 
   test('ask.integer - failure', () async {
     const validator = Ask.integer;
 
     await check(validator.validate('a')).throws<AskValidatorException>(
-        it()..has((e) => e.message, red('Invalid integer.')));
+        (it) => it.has((e) => e.message, red('Invalid integer.')));
 
     check(await validator.validate('9')).equals('9');
   });
@@ -128,7 +127,7 @@ void main() {
 
     await check(validator.validate('http://onepub.dev'))
         .throws<AskValidatorException>(
-            it()..has((e) => e.message, red('Invalid URL.')));
+            (it) => it.has((e) => e.message, red('Invalid URL.')));
   });
 
   test('ask.url - custom protocols', () async {
@@ -143,6 +142,6 @@ void main() {
 
     await check(validator.validate('def://onepub.dev'))
         .throws<AskValidatorException>(
-            it()..has((e) => e.message, red('Invalid URL.')));
+            (it) => it.has((e) => e.message, red('Invalid URL.')));
   });
 }

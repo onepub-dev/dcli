@@ -166,7 +166,7 @@ class Ask extends core.DCliFunction {
     do {
       await echo('$finalPrompt ');
 
-      if (hidden == true && stdin.hasTerminal) {
+      if (hidden && stdin.hasTerminal) {
         line = await _readHidden();
       } else {
         line = stdin.readLineSync(encoding: Encoding.getByName('utf-8')!) ?? '';
@@ -176,7 +176,7 @@ class Ask extends core.DCliFunction {
         line = defaultValue;
       }
 
-      if (toLower == true) {
+      if (toLower) {
         line = line.toLowerCase();
       }
 
@@ -588,10 +588,8 @@ class AskValidatorIPAddress extends AskValidator {
     switch (version) {
       case ipv4:
         validatorsVersion = IPVersion.ipV4;
-        break;
       case ipv6:
         validatorsVersion = IPVersion.ipV6;
-        break;
     }
 
     if (!isIP(finalline, version: validatorsVersion)) {

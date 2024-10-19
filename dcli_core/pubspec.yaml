@@ -8,7 +8,7 @@ environment:
   sdk: '>=3.0.0 <4.0.0'
 dependencies:
   async: ^2.5.0
-  circular_buffer: ^0.11.0
+  circular_buffer: ^0.12.0
   collection: ^1.15.0
   crypto: ^3.0.1
   dcli_common: ^6.0.3
