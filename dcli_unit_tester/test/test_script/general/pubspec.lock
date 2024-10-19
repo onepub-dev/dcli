@@ -103,7 +103,7 @@ packages:
       path: "../../../../dcli"
       relative: true
     source: path
-    version: "6.0.3"
+    version: "6.0.5"
   dcli_common:
     dependency: "direct overridden"
     description:
@@ -241,18 +241,18 @@ packages:
     dependency: transitive
     description:
       name: mime
-      sha256: "2e123074287cc9fd6c09de8336dae606d1ddb88d9ac47358826db698c176a1f2"
+      sha256: "41a20518f0cb1256669420fdba0cd90d21561e560ac240f26ef8322e45bb7ed6"
       url: "https://pub.dev"
     source: hosted
-    version: "1.0.5"
+    version: "2.0.0"
   native_synchronization_temp:
     dependency: transitive
     description:
       name: native_synchronization_temp
-      sha256: "5f5f15add4eeb6c7dcf9172314232657c6b1d002a45cca0ba46d955497645d5a"
+      sha256: "4836ec07cd13b9ce08627ba26c04c471035e381bdba51cb7ed8491ea46790167"
       url: "https://pub.dev"
     source: hosted
-    version: "0.6.0"
+    version: "0.7.0"
   path:
     dependency: "direct main"
     description:

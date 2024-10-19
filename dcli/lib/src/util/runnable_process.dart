@@ -337,6 +337,8 @@ class RunnableProcess {
     do {
       processLogger(() => 'Primary calling Mailbox.take()');
       try {
+        processLogger(() => 'calling Mailbox:take ');
+
         final messageData =
             channel.toPrimaryIsolate.take(timeout: const Duration(seconds: 2));
         processLogger(
