@@ -211,6 +211,17 @@ class UnknownShell with ShellMixin {
   }
 
   @override
+  Future<void> withPrivilegesAsync(RunPrivilegedAsync action,
+      {bool allowUnprivileged = false}) async {
+    verbose(() => 'withPrivileges called on UnknownShell. '
+        'action called with no privilege changes.');
+
+    restorePrivileges();
+    await action();
+    releasePrivileges();
+  }
+
+  @override
   bool get isPrivilegedProcess => throw UnimplementedError();
 
   @override

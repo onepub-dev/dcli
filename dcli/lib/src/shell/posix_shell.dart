@@ -156,6 +156,30 @@ mixin PosixShell {
     }
   }
 
+  /// Identical to [withPrivileges] except the [action] is async
+  Future<void> withPrivilegesAsync(RunPrivilegedAsync action,
+      {bool allowUnprivileged = false}) async {
+    final startedPriviledged = Shell.current.isPrivilegedProcess;
+    if (!allowUnprivileged && !startedPriviledged) {
+      throw ShellException(
+        'You can only use withPrivileges when running as a privileged user.',
+      );
+    }
+    final isprivileged = geteuid() == 0;
+
+    if (!isprivileged && startedPriviledged) {
+      restorePrivileges();
+    }
+
+    await action();
+
+    /// If the code was originally running privileged then
+    /// we leave it as it was.
+    if (!isprivileged && startedPriviledged) {
+      releasePrivileges();
+    }
+  }
+
   /// Returns true if we are currently running under sudo.
   bool get isSudo => !Settings().isWindows && env['SUDO_USER'] != null;
 

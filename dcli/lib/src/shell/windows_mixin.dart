@@ -112,7 +112,8 @@ mixin WindowsMixin {
     /// NO OP under windows as its not possible and not needed.
   }
 
-  /// Run [action] with root UID and gid
+  /// Run [action] throwing if the process isn't running as a
+  /// Windows Administrator
   void withPrivileges(RunPrivileged action, {bool allowUnprivileged = false}) {
     if (!allowUnprivileged && !Shell.current.isPrivilegedUser) {
       throw ShellException(
@@ -120,6 +121,17 @@ mixin WindowsMixin {
       );
     }
     action();
+  }
+
+  /// identical to [withPrivileges] except [action] is async.
+  Future<void> withPrivilegesAsync(RunPrivilegedAsync action,
+      {bool allowUnprivileged = false}) async {
+    if (!allowUnprivileged && !Shell.current.isPrivilegedUser) {
+      throw ShellException(
+        'You can only use withPrivileges when running as a privileged user.',
+      );
+    }
+    await action();
   }
 
   /// On Windows this is always false.

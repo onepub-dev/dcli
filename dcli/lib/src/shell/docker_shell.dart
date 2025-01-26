@@ -79,6 +79,12 @@ class DockerShell with ShellMixin, PosixShell {
   }
 
   @override
+  Future<void> withPrivilegesAsync(RunPrivilegedAsync action,
+      {bool allowUnprivileged = false}) async {
+    await action();
+  }
+
+  @override
   String get installInstructions => '''
 Run: 
 dcli install''';

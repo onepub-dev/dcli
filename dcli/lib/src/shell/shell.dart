@@ -206,6 +206,11 @@ abstract class Shell {
   ///  * [releasePrivileges]
   void withPrivileges(RunPrivileged action, {bool allowUnprivileged = false});
 
+  /// Identical to [withPrivileges] but allows you to run an
+  /// async action.
+  Future<void> withPrivilegesAsync(RunPrivilegedAsync action,
+      {bool allowUnprivileged = false});
+
   /// Returns a message informing the user that they need to run
   /// as a priviledged user to run an app.
   String privilegesRequiredMessage(String appname);
@@ -239,6 +244,7 @@ abstract class Shell {
 
 /// Typedef for the withPrivileges function.
 typedef RunPrivileged = void Function();
+typedef RunPrivilegedAsync = Future<void> Function();
 
 /// Thrown when an exception occurs in the Shell detection and support methods.
 class ShellException extends DCliException {
