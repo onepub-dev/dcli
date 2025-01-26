@@ -1,3 +1,6 @@
+# 6.1.2
+- 6.1.1. released failed so here we are again.
+
 # 6.1.0
 - upgraded to archive 3.6.1 to overcome dart 3.5 compatibility issue. 
 - upgraded all packaages to scope 5.x 
