@@ -1,3 +1,6 @@
+# 6.1.2
+- 6.1.1. released failed so here we are again.
+
 # 6.1.1
 - Added new method withPrivilegesAsync
 - forced native_synchronisation to 0.7.1
