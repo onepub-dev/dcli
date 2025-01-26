@@ -45,10 +45,10 @@ packages:
     dependency: transitive
     description:
       name: circular_buffer
-      sha256: "2889afcfc97aa0d9a4930ae5fdf206aea7d0ac88a3649acec9130565cd8f45d8"
+      sha256: b3a315fef3fee7fe58879643fc8ce21c7c2449d01c1a8a396dc9e24687f335c4
       url: "https://pub.dev"
     source: hosted
-    version: "0.11.0"
+    version: "0.12.0"
   clock:
     dependency: transitive
     description:
@@ -103,28 +103,28 @@ packages:
       path: "../../../../dcli"
       relative: true
     source: path
-    version: "6.0.5"
+    version: "6.1.0"
   dcli_common:
     dependency: "direct overridden"
     description:
       path: "../../../../dcli_common"
       relative: true
     source: path
-    version: "6.0.3"
+    version: "6.1.0"
   dcli_core:
     dependency: "direct main"
     description:
       path: "../../../../dcli_core"
       relative: true
     source: path
-    version: "6.0.3"
+    version: "6.1.0"
   dcli_terminal:
     dependency: "direct overridden"
     description:
       path: "../../../../dcli_terminal"
       relative: true
     source: path
-    version: "6.0.3"
+    version: "6.1.0"
   equatable:
     dependency: transitive
     description:
@@ -241,18 +241,18 @@ packages:
     dependency: transitive
     description:
       name: mime
-      sha256: "2e123074287cc9fd6c09de8336dae606d1ddb88d9ac47358826db698c176a1f2"
+      sha256: "41a20518f0cb1256669420fdba0cd90d21561e560ac240f26ef8322e45bb7ed6"
       url: "https://pub.dev"
     source: hosted
-    version: "1.0.5"
+    version: "2.0.0"
   native_synchronization_temp:
     dependency: transitive
     description:
       name: native_synchronization_temp
-      sha256: "5f5f15add4eeb6c7dcf9172314232657c6b1d002a45cca0ba46d955497645d5a"
+      sha256: f9ad36a5054c606db10e3dc0c9c352e6d0d56d08621af5c470abf9fa41da40fa
       url: "https://pub.dev"
     source: hosted
-    version: "0.6.0"
+    version: "0.7.1"
   path:
     dependency: "direct main"
     description:

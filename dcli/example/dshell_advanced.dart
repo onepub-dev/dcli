@@ -40,7 +40,6 @@ void evaluate(String command) {
       } else {
         print(red('Unknown command: ${parts[0]}'));
       }
-      break;
   }
 }
 

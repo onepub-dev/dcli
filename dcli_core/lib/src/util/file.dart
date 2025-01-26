@@ -44,7 +44,7 @@ Future<R> withOpenFile<R>(
 ///
 /// To check if your script is running as an administrator use:
 ///
-/// [Shell.current.isPrivileged]
+/// Shell.current.isPrivileged from the dcli package.
 ///
 void symlink(
   String existingPath,
@@ -65,7 +65,7 @@ void symlink(
 ///
 /// To check if your script is running as an administrator use:
 ///
-/// [Shell.current.isPrivileged]
+/// Shell.current.isPrivileged from the dcli package.
 ///
 void deleteSymlink(String linkPath) {
   verbose(() => 'deleteSymlink linkPath: $linkPath');

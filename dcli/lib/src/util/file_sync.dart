@@ -1,3 +1,5 @@
+// ignore_for_file: comment_references
+
 /* Copyright (C) S. Brett Sutton - All Rights Reserved
  * Unauthorized copying of this file, via any medium is strictly prohibited
  * Proprietary and confidential
@@ -222,7 +224,7 @@ R withOpenFile<R>(
 ///
 /// To check if your script is running as an administrator use:
 ///
-/// [Shell.current.isPrivileged]
+/// [Shell.current.isPrivilegedUser]
 ///
 /// See:
 ///  * [deleteSymlink]
@@ -246,7 +248,7 @@ void symlink(
 ///
 /// To check if your script is running as an administrator use:
 ///
-/// [Shell.current.isPrivileged]
+/// [Shell.current.isPrivilegedUser]
 ///
 void deleteSymlink(String linkPath) {
   verbose(() => 'deleteSymlink linkPath: $linkPath');
