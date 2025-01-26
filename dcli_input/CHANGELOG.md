@@ -1,3 +1,8 @@
+# 6.1.1
+- Added new method withPrivilegesAsync
+- forced native_synchronisation to 0.7.1
+- Fixed bug on windows which resulted in the projectRootPath being /C:/
+
 # 6.1.0
 - upgraded to archive 3.6.1 to overcome dart 3.5 compatibility issue. 
 - upgraded all packaages to scope 5.x 
