@@ -1,4 +1,4 @@
-0# 7.0.0
+# 7.0.0
 - BREAKING: copyTree now copies empty directories and symlinks. To get the original behaviour pass in 'includeEmpty: false' and 'includeLinks: false'.
 - deprecated symlink in favour of createSymLink
 
