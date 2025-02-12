@@ -181,7 +181,7 @@ void main() {
           file.write('Hello World');
           expect(exists(file), isTrue);
           final pathToLink = join(dir, 'link');
-          symlink(file, pathToLink);
+          createSymLink(targetPath: file, linkPath: pathToLink);
           expect(exists(pathToLink), isTrue);
           expect(isLink(pathToLink), isTrue);
         }, pathToTempDir: dir);

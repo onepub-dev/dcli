@@ -169,7 +169,7 @@ void main() {
       copyTree(pathToTestFiles, testDir);
       final pathToTestMd = join(testDir, 'target.md');
       final pathToLink = join(testDir, 'link_to_target.md');
-      symlink(pathToTestMd, pathToLink);
+      createSymLink(targetPath: pathToTestMd, linkPath: pathToLink);
 
       final pathToCopyOfLink = join(testDir, 'copy_of_link.md');
       if (exists(pathToCopyOfLink)) {

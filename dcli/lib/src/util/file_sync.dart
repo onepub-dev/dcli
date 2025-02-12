@@ -229,12 +229,38 @@ R withOpenFile<R>(
 /// See:
 ///  * [deleteSymlink]
 ///  * [resolveSymLink]
+@Deprecated('Use createSymLink - will be removed in the next release')
 void symlink(
   String existingPath,
   String linkPath,
 ) {
   verbose(() => 'symlink existingPath: $existingPath linkPath $linkPath');
   Link(linkPath).createSync(existingPath);
+}
+
+///
+/// Creates a link at [linkPath] which points to an
+/// existing file or directory at [targetPath]
+///
+/// On Windows you need to be in developer mode or running as an Administrator
+/// to create a symlink.
+///
+/// To enable developer mode see:
+/// https://dcli.onepub.dev/getting-started/installing-on-windows
+///
+/// To check if your script is running as an administrator use:
+///
+/// [Shell.current.isPrivilegedUser]
+///
+/// See:
+///  * [deleteSymlink]
+///  * [resolveSymLink]
+void createSymLink({
+  required String targetPath,
+  required String linkPath,
+}) {
+  verbose(() => 'createLink targetPath: $targetPath linkPath $linkPath');
+  Link(linkPath).createSync(targetPath);
 }
 
 ///
@@ -250,6 +276,9 @@ void symlink(
 ///
 /// [Shell.current.isPrivilegedUser]
 ///
+/// See:
+///  * [createSymLink]
+///  * [resolveSymLink]
 void deleteSymlink(String linkPath) {
   verbose(() => 'deleteSymlink linkPath: $linkPath');
   Link(linkPath).deleteSync();
@@ -267,6 +296,9 @@ void deleteSymlink(String linkPath) {
 /// ```
 ///
 /// throws a FileSystemException if the target path does not exist.
+/// See:
+///  * [deleteSymlink]
+///  * [createSymLink]
 String resolveSymLink(String pathToLink) {
   final normalised = canonicalize(pathToLink);
 
