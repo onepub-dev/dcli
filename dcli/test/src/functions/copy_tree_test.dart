@@ -276,8 +276,6 @@ void main() {
       });
     });
 
-    // ─── NEW TEST: Copy a symlinked directory (mimicking GNU cp) ──────────────
-
     t.test('copy symlinked directory mimics GNU cp behaviour', () async {
       await withTempDirAsync((fsRoot) async {
         // Set up the source directory structure.
@@ -319,8 +317,8 @@ void main() {
         t.expect(
           isLink(destLinkedDir),
           isFalse,
-          reason:
-              'The linked directory should be dereferenced (not a symlink) in the copy',
+          reason: '''
+The linked directory should be dereferenced (not a symlink) in the copy''',
         );
 
         // Verify that the file inside the original real directory is present.

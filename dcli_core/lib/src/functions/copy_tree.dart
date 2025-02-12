@@ -193,7 +193,8 @@ includeHidden: $includeHidden, includeEmpty: $includeEmpty, includeLinks: $inclu
         // For links to files, let them fall through to file-copying code.
       }
 
-      // If the item is a directory (and not a symlink to a directory), handle empty dirs.
+      // If the item is a directory (and not a symlink to a directory),
+      // handle empty dirs.
       if (isDirectory(file)) {
         if (includeEmpty && !exists(target)) {
           createDir(target, recursive: true);
