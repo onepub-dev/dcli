@@ -103,28 +103,28 @@ packages:
       path: "../../dcli"
       relative: true
     source: path
-    version: "6.1.0"
+    version: "6.1.2"
   dcli_common:
     dependency: "direct overridden"
     description:
       path: "../../dcli_common"
       relative: true
     source: path
-    version: "6.1.0"
+    version: "6.1.2"
   dcli_core:
     dependency: "direct overridden"
     description:
       path: "../../dcli_core"
       relative: true
     source: path
-    version: "6.1.0"
+    version: "6.1.2"
   dcli_terminal:
     dependency: "direct overridden"
     description:
       path: "../../dcli_terminal"
       relative: true
     source: path
-    version: "6.1.0"
+    version: "6.1.2"
   equatable:
     dependency: transitive
     description:
@@ -307,7 +307,7 @@ packages:
       path: "../../../settings_yaml"
       relative: true
     source: path
-    version: "8.2.0"
+    version: "8.2.1"
   source_span:
     dependency: transitive
     description:
