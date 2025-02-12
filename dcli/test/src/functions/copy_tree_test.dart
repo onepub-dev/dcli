@@ -258,7 +258,7 @@ void main() {
         // Copy the tree with includeLinks set to true.
         copyTree(from, to);
 
-        // The symbolic link should be present in the destination.
+        // The symbolic link should be processed.
         final destLinkPath = join(to, 'link_to_file.txt');
         t.expect(
           exists(destLinkPath),
@@ -266,12 +266,69 @@ void main() {
           reason: 'Symbolic link should be copied when includeLinks is true',
         );
 
-        /// if we are copying a symlink then we copy the file rather than
-        /// the symlink as this mimicks gnu 'cp'.
+        /// Mimic GNU cp behavior: a linked file is copied by dereferencing
+        /// it, so the destination file is a regular file rather than a symlink.
         t.expect(
           isFile(destLinkPath),
           isTrue,
-          reason: 'Copied item should be a symbolic link',
+          reason: 'Copied symlink should be dereferenced to a regular file',
+        );
+      });
+    });
+
+    // ─── NEW TEST: Copy a symlinked directory (mimicking GNU cp) ──────────────
+
+    t.test('copy symlinked directory mimics GNU cp behaviour', () async {
+      await withTempDirAsync((fsRoot) async {
+        // Set up the source directory structure.
+        final top = join(fsRoot, 'top');
+        createDir(top);
+
+        // Create a real directory with a file inside.
+        final realDir = join(top, 'realDir');
+        createDir(realDir);
+        final fileInRealDir = join(realDir, 'example.txt');
+        touch(fileInRealDir, create: true);
+
+        // Create a symlink in 'top' that points to 'realDir'.
+        final linkedDir = join(top, 'linkedDir');
+        if (!exists(linkedDir)) {
+          createSymLink(targetPath: realDir, linkPath: linkedDir);
+        }
+
+        // Set up the destination directory.
+        final newTop = join(fsRoot, 'new_top');
+        createDir(newTop);
+
+        // Copy the tree from 'top' to 'new_top'.
+        copyTree(top, newTop);
+
+        // In the destination, 'linkedDir' should now be a real directory,
+        // not a symlink, with the contents of the original 'realDir'.
+        final destLinkedDir = join(newTop, 'linkedDir');
+        t.expect(
+          exists(destLinkedDir),
+          isTrue,
+          reason: 'Linked directory should be copied to the destination',
+        );
+        t.expect(
+          isDirectory(destLinkedDir),
+          isTrue,
+          reason: 'The copied linked directory should be a directory',
+        );
+        t.expect(
+          isLink(destLinkedDir),
+          isFalse,
+          reason:
+              'The linked directory should be dereferenced (not a symlink) in the copy',
+        );
+
+        // Verify that the file inside the original real directory is present.
+        final destFile = join(destLinkedDir, 'example.txt');
+        t.expect(
+          exists(destFile),
+          isTrue,
+          reason: 'File inside the linked directory should be copied',
         );
       });
     });

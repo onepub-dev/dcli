@@ -132,6 +132,7 @@ includeHidden: $includeHidden, includeEmpty: $includeEmpty, includeLinks: $inclu
             to,
             includeLinks: includeLinks,
             includeEmpty: includeEmpty,
+            includeHidden: includeHidden,
             overwrite: overwrite,
             recursive: recursive,
           );
@@ -162,12 +163,37 @@ includeHidden: $includeHidden, includeEmpty: $includeEmpty, includeLinks: $inclu
     required bool recursive,
     required bool includeEmpty,
     required bool includeLinks,
+    required bool includeHidden,
   }) {
     if (filter(file)) {
       final target = join(to, relative(file, from: from));
 
-      // If the item is a directory, ensure the target directory is created.
-      // This covers empty directories.
+      // If the item is a symbolic link, check its target.
+      if (isLink(file)) {
+        // If includeLinks is false, skip processing the link.
+        if (!includeLinks) return;
+
+        // If the link points to a directory, we want to mimic GNU cp:
+        // dereference the link by creating the target directory and
+        // recursively copying its contents.
+        if (isDirectory(file)) {
+          createDir(target, recursive: true);
+          copyTree(
+            file,
+            target,
+            overwrite: overwrite,
+            includeHidden: includeHidden,
+            includeEmpty: includeEmpty,
+            includeLinks: includeLinks,
+            recursive: recursive,
+            filter: filter,
+          );
+          return;
+        }
+        // For links to files, let them fall through to file-copying code.
+      }
+
+      // If the item is a directory (and not a symlink to a directory), handle empty dirs.
       if (isDirectory(file)) {
         if (includeEmpty && !exists(target)) {
           createDir(target, recursive: true);
@@ -175,12 +201,7 @@ includeHidden: $includeHidden, includeEmpty: $includeEmpty, includeLinks: $inclu
         return;
       }
 
-      // If the item is a link and includeLinks is false, skip it.
-      if (isLink(file) && !includeLinks) {
-        return;
-      }
-
-      // For files (and links, if allowed), ensure the parent directory exists.
+      // For files (or links to files), ensure the parent directory exists.
       if (recursive && !exists(dirname(target))) {
         createDir(dirname(target), recursive: true);
       }
@@ -191,6 +212,7 @@ includeHidden: $includeHidden, includeEmpty: $includeEmpty, includeLinks: $inclu
         );
       }
 
+      // Copy the file (or the dereferenced file from a symlink).
       copy(file, target, overwrite: overwrite);
     }
   }
