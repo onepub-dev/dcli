@@ -112,7 +112,7 @@ mixin PosixShell {
       nonPriviledgedUser
         ..setIf(() => UserEnvironment.preSudo(pathToHome: loggedInUsersHome))
         ..runIf((user) {
-          verbose(() => 'release - builer');
+          verbose(() => 'release - builder');
           initgroups(user.username);
           user.build();
         });
@@ -317,6 +317,8 @@ uid:  $uid''');
     env['SHELL'] = pathToShell;
   }
 
+  /// If [condition] is true then we call [one] then [two].
+  /// If [condition] is false then we call [two] then [one].
   void reorder(
       bool Function() condition, void Function() one, void Function() two) {
     if (condition()) {
@@ -348,22 +350,26 @@ String _whoami() {
   return user!;
 }
 
+/// Makes [T] immutable by not allowing any methods
+/// to change its value.
 class Immutable<T> {
   Immutable();
 
-  T? wrapped;
+  T? _wrapped;
+
+  T? get wrapped => _wrapped;
 
   // stores [wrapped] if [setIf] hasn't already been called
   void setIf(T Function() wrapped) {
-    this.wrapped ??= wrapped();
+    this._wrapped ??= wrapped();
   }
 
   /// Runs [action] if [setIf] has been called
   void runIf(void Function(T wrapped) action) {
     final stack = Trace.current();
     verbose(() => 'runIf $stack');
-    if (wrapped != null) {
-      action(wrapped as T);
+    if (_wrapped != null) {
+      action(_wrapped as T);
     }
   }
 }
