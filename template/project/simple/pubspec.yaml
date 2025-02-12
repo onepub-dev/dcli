@@ -6,7 +6,7 @@ environment:
   flutter:
 
 dependencies:
-  dcli: 6.1.0
+  dcli: 6.1.2
 
 dev_dependencies:
   lint_hard: ^5.0.0
