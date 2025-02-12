@@ -234,12 +234,18 @@ class TestFileSystem {
 
   /// Used by third parties to build a populated and
   /// well know diretory tree for testing.
-  static void buildDirectoryTree(String root) {
+  static void buildDirectoryTree(String root,
+      {bool includedEmptyDir = false}) {
     final top = join(root, 'top');
     final thidden = join(top, '.hidden');
     final middle = join(top, 'middle');
     final bottom = join(middle, 'bottom');
     final hidden = join(middle, '.hidden');
+
+    if (includedEmptyDir) {
+      final empty = join(root, 'empty');
+      createDir(empty);
+    }
 
     populateFileSystem(top, thidden, middle, bottom, hidden);
   }

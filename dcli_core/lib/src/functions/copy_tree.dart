@@ -15,7 +15,7 @@ import '../../dcli_core.dart';
 /// The [to] path must exist.
 ///
 /// If any copied file already exists in the [to] path then
-/// an exeption is throw and a parital copyTree may occur.
+/// an exception is thrown and a partial copyTree may occur.
 ///
 /// You can force the copyTree to overwrite files in the [to]
 /// directory by setting [overwrite] to true (defaults to false).
@@ -28,6 +28,7 @@ import '../../dcli_core.dart';
 /// ```dart
 /// copyTree("/tmp/", "/tmp/new_dir", overwrite:true);
 /// ```
+///
 /// By default hidden files are ignored. To allow hidden files to
 /// be processed set [includeHidden] to true.
 ///
@@ -36,24 +37,23 @@ import '../../dcli_core.dart';
 /// the [includeHidden] state.
 ///
 /// ```dart
-/// copyTree("/tmp/", "/tmp/new_dir", overwrite:true, includeHidden:true
-///   , filter: (file) => extension(file) == 'dart');
+/// copyTree("/tmp/", "/tmp/new_dir", overwrite:true, includeHidden:true,
+///   filter: (file) => extension(file) == '.dart');
 /// ```
 ///
 /// The [filter] method can also be used to report progress as it
 /// is called just before we copy a file.
 ///
 /// ```dart
-/// copyTree("/tmp/", "/tmp/new_dir", overwrite:true
-///   , filter: (file) {
-///   var include = extension(file) == 'dart';
-///   if (include) {
-///     print('copying: $file');
-///   }
-///   return include;
-/// });
+/// copyTree("/tmp/", "/tmp/new_dir", overwrite:true,
+///   filter: (file) {
+///     var include = extension(file) == '.dart';
+///     if (include) {
+///       print('copying: $file');
+///     }
+///     return include;
+///   });
 /// ```
-///
 ///
 /// The default for [overwrite] is false.
 ///
@@ -63,6 +63,8 @@ void copyTree(
   String to, {
   bool overwrite = false,
   bool includeHidden = false,
+  bool includeEmpty = true,
+  bool includeLinks = true,
   bool recursive = true,
   bool Function(String file) filter = _allowAll,
 }) =>
@@ -71,6 +73,8 @@ void copyTree(
       to,
       overwrite: overwrite,
       includeHidden: includeHidden,
+      includeEmpty: includeEmpty,
+      includeLinks: includeLinks,
       filter: filter,
       recursive: recursive,
     );
@@ -82,12 +86,15 @@ class _CopyTree extends DCliFunction {
     String from,
     String to, {
     bool overwrite = false,
+    bool includeEmpty = true,
+    bool includeLinks = true,
     bool Function(String file) filter = _allowAll,
     bool includeHidden = false,
     bool recursive = true,
   }) {
-    verbose(() => 'copyTree: from: $from, to: $to, overwrite: $overwrite '
-        'includeHidden: $includeHidden recursive: $recursive ');
+    verbose(() => '''
+copyTree: from: $from, to: $to, overwrite: $overwrite, 
+includeHidden: $includeHidden, includeEmpty: $includeEmpty, includeLinks: $includeLinks, recursive: $recursive''');
     if (!isDirectory(from)) {
       throw CopyTreeException(
         'The [from] path ${truepath(from)} must be a directory.',
@@ -106,36 +113,74 @@ class _CopyTree extends DCliFunction {
     }
 
     try {
-      find('*',
-          workingDirectory: from,
-          includeHidden: includeHidden,
-          recursive: recursive, progress: (item) {
-        _process(item.pathTo, filter, from, to,
-            overwrite: overwrite, recursive: recursive);
-        return true;
-      });
+      // Determine which types to find based on the includeLinks flag.
+      final typesToFind = includeLinks
+          ? [Find.file, Find.directory, Find.link]
+          : [Find.file, Find.directory];
+
+      find(
+        '*',
+        workingDirectory: from,
+        includeHidden: includeHidden,
+        types: typesToFind,
+        recursive: recursive,
+        progress: (item) {
+          _process(
+            item.pathTo,
+            filter,
+            from,
+            to,
+            includeLinks: includeLinks,
+            includeEmpty: includeEmpty,
+            overwrite: overwrite,
+            recursive: recursive,
+          );
+          return true;
+        },
+      );
       verbose(
         () => 'copyTree copied: ${truepath(from)} -> ${truepath(to)}, '
             'includeHidden: $includeHidden, recursive: $recursive, '
-            'overwrite: $overwrite',
+            'overwrite: $overwrite, includeLinks: $includeLinks',
       );
     }
     // ignore: avoid_catches_without_on_clauses
     catch (e) {
       throw CopyTreeException(
-        'An error occured copying directory'
-        ' ${truepath(from)} to ${truepath(to)}. '
-        'Error: $e',
+        'An error occurred copying directory '
+        '${truepath(from)} to ${truepath(to)}. Error: $e',
       );
     }
   }
 
   void _process(
-      String file, bool Function(String file) filter, String from, String to,
-      {required bool overwrite, required bool recursive}) {
+    String file,
+    bool Function(String file) filter,
+    String from,
+    String to, {
+    required bool overwrite,
+    required bool recursive,
+    required bool includeEmpty,
+    required bool includeLinks,
+  }) {
     if (filter(file)) {
       final target = join(to, relative(file, from: from));
 
+      // If the item is a directory, ensure the target directory is created.
+      // This covers empty directories.
+      if (isDirectory(file)) {
+        if (includeEmpty && !exists(target)) {
+          createDir(target, recursive: true);
+        }
+        return;
+      }
+
+      // If the item is a link and includeLinks is false, skip it.
+      if (isLink(file) && !includeLinks) {
+        return;
+      }
+
+      // For files (and links, if allowed), ensure the parent directory exists.
       if (recursive && !exists(dirname(target))) {
         createDir(dirname(target), recursive: true);
       }
@@ -151,8 +196,8 @@ class _CopyTree extends DCliFunction {
   }
 }
 
-/// Throw when the [copy] function encounters an error.
+/// Thrown when the [copyTree] function encounters an error.
 class CopyTreeException extends DCliFunctionException {
-  /// Throw when the [copy] function encounters an error.
+  /// Creates an instance of [CopyTreeException] with [message].
   CopyTreeException(super.message);
 }

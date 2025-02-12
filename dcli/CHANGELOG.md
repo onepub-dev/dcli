@@ -1,3 +1,12 @@
+# 7.0.0
+BREAKING - copyTree now copies empty directories and links.
+ To revert to the original behaviour pass in 'includeEmpty: false' and 
+'includeLinks: false'.
+
+- deprectaed symlink in favour of createSymLink as it is more consistent
+with the other symLink methods and more consisten with the usage of createXXX
+in other APIs.
+
 # 6.1.2
 - Added new method withPrivilegesAsync
 - forced native_synchronisation to 0.7.1

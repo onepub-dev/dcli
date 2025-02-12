@@ -148,9 +148,138 @@ void main() {
         t.expect(actual, unorderedEquals(expected));
       });
     });
+
+    t.test('empty subdir - copy empty subdirectories', () async {
+      await withTempDirAsync((fsRoot) async {
+        TestFileSystem.buildDirectoryTree(fsRoot, includedEmptyDir: true);
+        final from = join(fsRoot, 'top');
+        final to = join(fsRoot, 'new_top');
+
+        if (exists(to)) {
+          deleteDir(to);
+        }
+
+        var expected = find('*', workingDirectory: from).toList();
+        expected = subname(expected, 'top', 'new_top');
+        createDir(to);
+        copyTree(from, to);
+
+        final actual = find('*', workingDirectory: to).toList();
+
+        t.expect(actual, unorderedEquals(expected));
+      });
+    });
+
+    t.test('do not copy empty directories when includeEmpty is false',
+        () async {
+      await withTempDirAsync((fsRoot) async {
+        // Build a directory tree that includes an empty directory.
+        TestFileSystem.buildDirectoryTree(fsRoot, includedEmptyDir: true);
+        final from = join(fsRoot, 'top');
+        final to = join(fsRoot, 'new_top');
+
+        if (exists(to)) {
+          deleteDir(to);
+        }
+        createDir(to);
+
+        // Copy the tree with includeEmpty set to false.
+        copyTree(from, to, includeEmpty: false);
+
+        // The empty directory "empty" should NOT be present in the destination.
+        final destEmptyDir = join(to, 'empty');
+        t.expect(
+          exists(destEmptyDir),
+          isFalse,
+          reason:
+              'Empty directory should not be copied when includeEmpty is false',
+        );
+      });
+    });
+
+    t.test('do not copy symbolic links when includeLinks is false', () async {
+      await withTempDirAsync((fsRoot) async {
+        final from = join(fsRoot, 'top');
+        final to = join(fsRoot, 'new_top');
+
+        // Create the source directory and a file.
+        createDir(from, recursive: true);
+        final filePath = join(from, 'file.txt');
+        touch(filePath, create: true);
+
+        // Create a symbolic link in the source directory.
+        final linkPath = join(from, 'link_to_file.txt');
+        if (!exists(linkPath)) {
+          createSymLink(targetPath: filePath, linkPath: linkPath);
+        }
+
+        createDir(to);
+
+        // Copy the tree with includeLinks set to false.
+        copyTree(from, to, includeLinks: false);
+
+        // The symbolic link should NOT be present in the destination.
+        final destLinkPath = join(to, 'link_to_file.txt');
+        t.expect(
+          exists(destLinkPath),
+          isFalse,
+          reason:
+              'Symbolic link should not be copied when includeLinks is false',
+        );
+
+        // Verify that the regular file was copied.
+        final destFilePath = join(to, 'file.txt');
+        t.expect(
+          exists(destFilePath),
+          isTrue,
+          reason: 'Regular file should be copied',
+        );
+      });
+    });
+
+    t.test('copy symbolic links when includeLinks is true', () async {
+      await withTempDirAsync((fsRoot) async {
+        final from = join(fsRoot, 'top');
+        final to = join(fsRoot, 'new_top');
+
+        // Create the source directory and a file.
+        createDir(from, recursive: true);
+        final filePath = join(from, 'file.txt');
+        touch(filePath, create: true);
+
+        // Create a symbolic link in the source directory.
+        final linkPath = join(from, 'link_to_file.txt');
+        if (!exists(linkPath)) {
+          createSymLink(targetPath: filePath, linkPath: linkPath);
+        }
+
+        createDir(to);
+
+        // Copy the tree with includeLinks set to true.
+        copyTree(from, to);
+
+        // The symbolic link should be present in the destination.
+        final destLinkPath = join(to, 'link_to_file.txt');
+        t.expect(
+          exists(destLinkPath),
+          isTrue,
+          reason: 'Symbolic link should be copied when includeLinks is true',
+        );
+
+        /// if we are copying a symlink then we copy the file rather than
+        /// the symlink as this mimicks gnu 'cp'.
+        t.expect(
+          isFile(destLinkPath),
+          isTrue,
+          reason: 'Copied item should be a symbolic link',
+        );
+      });
+    });
   });
 }
 
+/// Helper function that replaces occurrences of [from] with [replace]
+/// in each path in [expected].
 List<String> subname(List<String?> expected, String from, String replace) {
   final result = <String>[];
 
