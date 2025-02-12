@@ -1,5 +1,5 @@
 name: dcli_common
-version: 6.1.2
+version: 7.0.0
 description: Common code used by multiple dcli packages.
 repository: https://github.com/onepub-dev/dcli
 environment:
