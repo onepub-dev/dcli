@@ -169,7 +169,7 @@ class Ask extends core.DCliFunction {
       if (hidden && stdin.hasTerminal) {
         line = await _readHidden();
       } else {
-        y
+        line = stdin.readLineSync(encoding: Encoding.getByName('utf-8')!) ?? '';
       }
 
       if (line.isEmpty && defaultValue != null) {
