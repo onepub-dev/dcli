@@ -1,3 +1,6 @@
+# UNRELEASED
+Add support for `archive` v4.
+
 # 7.0.0
 BREAKING - copyTree now copies empty directories and links.
  To revert to the original behaviour pass in 'includeEmpty: false' and 
