@@ -1,5 +1,7 @@
-# UNRELEASED
-Add support for `archive` v4.
+# 7.0.1
+- Merge pull request #255 from davidmartos96/archive_v4 - thanks for the patch
+- Support archive v4
+
 
 # 7.0.0
 BREAKING - copyTree now copies empty directories and links.
