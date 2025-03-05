@@ -13,6 +13,7 @@ import 'package:pubspec_manager/pubspec_manager.dart';
 void main(List<String> args) async {
   print('Updating templates');
   await prepareTemplates();
+  print('Packing templates');
   Resources().pack();
 }
 
