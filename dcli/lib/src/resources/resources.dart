@@ -124,7 +124,6 @@ class Resources {
     try {
       /// write the header
       to.writeStringSync('''
-// ignore: prefer_relative_imports
 import 'package:dcli/dcli.dart';
 
 /// GENERATED -- GENERATED
@@ -177,11 +176,9 @@ class $className extends PackedResource {
   void _writeRegistry(List<_Resource> resources) {
     final registryFile = File(pathToRegistry).openSync(mode: FileMode.write);
     try {
-      // import 'package:dcli/src/dcli/resources/generated/Bbcded.g.dart';
       /// Write the imports
       ///
       registryFile.writeStringSync('''
-// ignore: prefer_relative_imports
 import 'package:dcli/dcli.dart';
 ''');
 
@@ -308,7 +305,7 @@ $line
   void _writePath(RandomAccessFile to, String pathToMount) {
     to.writeStringSync('''
 
-  /// <package>/resources relative path to the original resource.
+  /// `<package>/resources` relative path to the original resource.
   @override
   String get originalPath => '${pathToMount.replaceAll(r'\', '/')}';
 ''');

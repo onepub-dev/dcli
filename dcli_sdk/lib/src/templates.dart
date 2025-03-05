@@ -1,7 +1,8 @@
 import 'package:dcli/dcli.dart';
 import 'package:path/path.dart';
 
-import 'resource/generated/resource_registry.g.dart';
+import 'dcli/resource/generated/resource_registry.g.dart';
+
 
 /// Checks if the template directory exists in ~/.dcli and if not creates
 /// the directory and copies the default scripts in.

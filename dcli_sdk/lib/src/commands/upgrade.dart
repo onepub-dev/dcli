@@ -37,6 +37,8 @@ class UpgradeCommand extends Command {
     // now activate dcli.
     // ignore: invalid_use_of_visible_for_testing_member
     if (Scope.hasScopeKey(installFromSourceKey) &&
+        // the scopes are used to aid with testing hence the
+        // need to access a test method.
         // ignore: invalid_use_of_visible_for_testing_member
         Scope.use(installFromSourceKey)) {
       // If we are called from a unit test we do it from source

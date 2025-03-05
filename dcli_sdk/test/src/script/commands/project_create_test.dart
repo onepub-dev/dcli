@@ -104,8 +104,6 @@ void checkProjectStructure(String rootPath, String scriptName) {
   expect(
     files,
     unorderedEquals(<String>[
-      // ignore: lines_longer_than_80_chars
-      '.packages', // when dart 2.10 is released this will no longer be created.
       'README.md',
       'pubspec.yaml',
       'analysis_options.yaml',

@@ -4,8 +4,6 @@
  * Written by Brett Sutton <bsutton@onepub.dev>, Jan 2022
  */
 
-// ignore_for_file: deprecated_member_use
-
 import 'dart:io';
 
 import 'package:dcli/dcli.dart';
@@ -56,9 +54,7 @@ class EntryPoint {
       printerr(red(e.toString()));
       print('');
       return 1;
-    }
-    // ignore: avoid_catches_without_on_clauses
-    catch (e, stackTrace) {
+    } catch (e, stackTrace) {
       final impl = Trace.from(stackTrace);
       printerr('${e.runtimeType}: $e ');
       printerr('Stacktrace: ${impl.terse}');

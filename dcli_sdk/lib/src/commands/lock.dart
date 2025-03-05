@@ -66,7 +66,6 @@ class LockCommand extends Command {
     print(orange('Locking $pathToProjectRoot ...'));
     print('');
 
-    // ignore: discarded_futures
     final pubspec = PubSpec.load(directory: pathToProjectRoot);
 
     final file = File(join(pathToProjectRoot, 'pubspec.lock'));
@@ -90,7 +89,6 @@ class LockCommand extends Command {
     // excluded dev dependencies
     //  pubspec = pubspec.copy(dependencies: dependencies);
 
-    // ignore: discarded_futures
     pubspec.save();
 
     print('Updated ${pubspec.dependencies.length} packages');

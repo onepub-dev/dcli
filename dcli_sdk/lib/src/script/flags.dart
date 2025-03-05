@@ -88,10 +88,12 @@ abstract class Flag {
   String usage() => '--$_name | -$abbreviation';
 
   @override
+  // we only depend on immutable fields.
   //ignore: avoid_equals_and_hash_code_on_mutable_classes
   bool operator ==(covariant Flag other) => other.name == _name;
 
   @override
+  // we only depend on immutable fields.
   //ignore: avoid_equals_and_hash_code_on_mutable_classes
   int get hashCode => name.hashCode;
 

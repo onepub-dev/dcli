@@ -18,7 +18,6 @@ import 'upgrade.dart';
 import 'version.dart';
 import 'warmup.dart';
 
-// ignore: avoid_classes_with_only_static_members
 //// List of supported commands.
 class Commands {
   /// List of supported comands
@@ -88,7 +87,7 @@ abstract class Command {
   /// provide command line completion to bash
   /// Each command should return of list of arguments
   /// suitable for the command.
-  /// e.g. dcli warmup <word> should return
+  /// e.g. dcli warmup `<word>` should return
   /// a list of dcli scripts in the current directory
   /// that match the word prefix.
   List<String> completion(String word);

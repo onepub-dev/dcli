@@ -17,7 +17,7 @@ import 'commands.dart';
 /// Each file that it finds is base64 encoded
 /// and placed into dart library under:
 ///
-/// ```
+/// ```dart
 /// <project root>/lib/src/dcli/resource
 /// ```
 ///
@@ -37,7 +37,7 @@ import 'commands.dart';
 /// ```
 ///
 /// You can also add in file external to your project by creating
-/// <your project>/tool/dcli/pack.yaml
+/// `<your project>/tool/dcli/pack.yaml`
 /// The pack.yaml declares a number of external directories to be packed
 /// and how they are to be mounted under the resource directory.
 ///

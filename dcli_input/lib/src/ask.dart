@@ -176,6 +176,8 @@ class Ask extends core.DCliFunction {
         line = defaultValue;
       }
 
+      
+
       if (toLower) {
         line = line.toLowerCase();
       }
