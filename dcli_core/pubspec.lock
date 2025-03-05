@@ -140,21 +140,21 @@ packages:
       path: "../dcli"
       relative: true
     source: path
-    version: "7.0.1"
+    version: "7.0.2"
   dcli_common:
     dependency: "direct main"
     description:
       path: "../dcli_common"
       relative: true
     source: path
-    version: "7.0.1"
+    version: "7.0.2"
   dcli_terminal:
     dependency: "direct overridden"
     description:
       path: "../dcli_terminal"
       relative: true
     source: path
-    version: "7.0.1"
+    version: "7.0.2"
   equatable:
     dependency: transitive
     description:
