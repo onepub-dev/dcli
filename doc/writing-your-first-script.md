@@ -101,7 +101,7 @@ name: hello_world
 description: My first app that does bugger all.
 
 dependencies:
-  dcli: ^1.34.0
+  dcli: ^7.0.0  # update the version no. to the latest; https://pub.dev/packages/dcli
 ```
 
 {% hint style="info" %}
