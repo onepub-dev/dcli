@@ -115,26 +115,59 @@ class Format {
   /// returns the the number of [bytes] in a human readable
   /// form. e.g. 1e+5 3.000T, 10.00G, 100.0M, 20.00K, 10B
   ///
+  /// When [pad] is true
   /// Except for absurdly large no. (> 10^20)
   /// the return is guarenteed to be 6 characters long.
-  /// For no. < 1000K we right pad the no. with spaces.
+  /// For no. < 9999 we right pad the no. with spaces.
+  /// 
+  /// When [pad] is false
+  /// Except for absurdly large no. (> 10^20)
+  /// the return is guarenteed to be 6 or less characters long.
   String bytesAsReadable(int bytes, {bool pad = true}) {
-    String human;
+    const units = ['B', 'K', 'M', 'G', 'T'];
+    var value = bytes.toDouble();
+    var unitIndex = 0;
 
-    if (bytes < 1000) {
-      human = _fiveDigits(bytes, 0, 'B', pad: pad);
-    } else if (bytes < 1000000) {
-      human = _fiveDigits(bytes, 3, 'K', pad: pad);
-    } else if (bytes < 1000000000) {
-      human = _fiveDigits(bytes, 6, 'M', pad: pad);
-    } else if (bytes < 1000000000000) {
-      human = _fiveDigits(bytes, 9, 'G', pad: pad);
-    } else if (bytes < 1000000000000000) {
-      human = _fiveDigits(bytes, 12, 'T', pad: pad);
-    } else {
-      human = bytes.toStringAsExponential(0);
+    // Keep dividing by 1024 to discover which units we need
+    // to use. If we run out of units then we are using
+    // scientific notation.
+    while (value >= 1024 && unitIndex < units.length - 1) {
+      value /= 1024;
+      unitIndex++;
     }
-    return human;
+
+
+    // If we reached 'T' and still ≥1024, do scientific:
+    if (unitIndex == units.length - 1 && value >= 1024) {
+      return bytes.toStringAsExponential(0);
+    }
+
+    String numberPart;
+    if (unitIndex == 0) {
+      // Bytes: no decimal, pad left to width 5 if requested
+      numberPart = value.toInt().toString();
+      if (pad) {
+        numberPart = numberPart.padLeft(5);
+      }
+    } else {
+      // KB+ : determine how many decimals to fit in 5 chars
+      final intLen = value.floor().toString().length;
+      var decimals = 5 - intLen - 1; // space for decimal point
+      if (decimals < 0) {
+        decimals = 0;
+      }
+
+      numberPart = value.toStringAsFixed(decimals);
+
+      // Trim or pad to exactly 5 chars
+      if (numberPart.length > 5) {
+        numberPart = numberPart.substring(0, 5);
+      } else if (pad) {
+        numberPart = numberPart.padLeft(5);
+      }
+    }
+
+    return '$numberPart${units[unitIndex]}';
   }
 
   String _fiveDigits(int bytes, int exponent, String letter,
