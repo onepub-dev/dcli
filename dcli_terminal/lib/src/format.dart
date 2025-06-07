@@ -4,8 +4,6 @@
  * Written by Brett Sutton <bsutton@onepub.dev>, Jan 2022
  */
 
-import 'dart:math';
-
 /// provides a random collection of formatters
 /// EXPERIMENTAL
 ///
@@ -119,7 +117,7 @@ class Format {
   /// Except for absurdly large no. (> 10^20)
   /// the return is guarenteed to be 6 characters long.
   /// For no. < 9999 we right pad the no. with spaces.
-  /// 
+  ///
   /// When [pad] is false
   /// Except for absurdly large no. (> 10^20)
   /// the return is guarenteed to be 6 or less characters long.
@@ -135,7 +133,6 @@ class Format {
       value /= 1024;
       unitIndex++;
     }
-
 
     // If we reached 'T' and still ≥1024, do scientific:
     if (unitIndex == units.length - 1 && value >= 1024) {
@@ -168,32 +165,6 @@ class Format {
     }
 
     return '$numberPart${units[unitIndex]}';
-  }
-
-  String _fiveDigits(int bytes, int exponent, String letter,
-      {bool pad = true}) {
-    final num result;
-    String human;
-    if (bytes < 1000) {
-      // less than 1K we display integers only
-      result = bytes ~/ pow(10, exponent);
-      human = '$result'.padLeft(pad ? 5 : 0);
-    } else {
-      // greater than 1K we display decimals
-      result = bytes / pow(10, exponent);
-      human = '$result';
-
-      if (human.length > 5) {
-        human = human.substring(0, 5);
-      } else {
-        /// add trailing zeros to maintain a fixed width of 5 chars.
-        if (pad) {
-          human = human.padRight(5, '0');
-        }
-      }
-    }
-
-    return '$human$letter';
   }
 
   // ///

@@ -1,3 +1,6 @@
+# 7.0.3
+- Fixed a bug in Format.bytesAsReadable where it was dividing by 1000 rather than 1024 when calcualating the units to use (K,M,G...).
+
 # 7.0.2
 - updated to code to conform to the lates lint_hard lints. Work on the 'pack' command to ensure it generates code that conforms with the latest lint rules.
 - changed the ask call to readlineSync to use the newer utf8 global var.
