@@ -92,7 +92,7 @@ export 'src/functions/menu.dart' show menu;
 export 'src/functions/read.dart' show ReadException, read, readStdin;
 export 'src/functions/replace.dart' show replace;
 export 'src/functions/run.dart' show run, start, startFromArgs;
-export 'src/functions/sleep.dart' show Interval, sleep;
+export 'src/functions/sleep.dart' show Interval, sleep, sleepAsync;
 export 'src/functions/tail.dart' show tail;
 export 'src/functions/which.dart' show which;
 export 'src/installers/installer.dart' show installFromSourceKey;
