@@ -40,8 +40,8 @@ Future<void> pipeTo2(Future<Process> lhs, Future<Process> rhs) async {
   final rhsProcess = await rhs;
   lhsProcess.stdout.listen(rhsProcess.stdin.add);
   //..onError()
-  lhsProcess.stderr.listen(rhsProcess.stdin.add).onDone(() {
-    rhsProcess.stdin.close();
+  lhsProcess.stderr.listen(rhsProcess.stdin.add).onDone(() async {
+    await rhsProcess.stdin.close();
   });
 
   rhsProcess.stdout.listen(stdout.add);

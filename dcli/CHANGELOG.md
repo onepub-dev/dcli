@@ -1,3 +1,5 @@
+# 7.0.4
+- exposed the sleepAsync function.
 # 7.0.3
 - broken buid - generated files were missing.
 
