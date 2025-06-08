@@ -1,3 +1,6 @@
+# 7.0.5
+- fixed missing await in sleepAsync causing it to return immediately.
+
 # 7.0.4
 - exposed the sleepAsync function.
 # 7.0.3
