@@ -98,6 +98,6 @@ class _Sleep extends core.DCliFunction {
         duration0 = Duration(minutes: duration);
     }
 
-    Future.delayed(duration0, () {});
+    await Future.delayed(duration0, () {});
   }
 }
