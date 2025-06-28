@@ -1,7 +1,8 @@
-/* Copyright (C) S. Brett Sutton - All Rights Reserved
- * Unauthorized copying of this file, via any medium is strictly prohibited
- * Proprietary and confidential
- * Written by Brett Sutton <bsutton@onepub.dev>, Jan 2022
+/*
+ * Copyright (c) 2025 S. Brett Sutton 2022+
+ *
+ * This software is licensed under the MIT License.
+ * SPDX-License-Identifier: MIT
  */
 
 import 'dart:async';
