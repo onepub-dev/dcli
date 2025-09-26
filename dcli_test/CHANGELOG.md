@@ -1,3 +1,5 @@
+# 7.1.0
+
 # 7.0.2
 - updated to code to conform to the lates lint_hard lints. Work on the 'pack' command to ensure it generates code that conforms with the latest lint rules.
 - changed the ask call to readlineSync to use the newer utf8 global var.
