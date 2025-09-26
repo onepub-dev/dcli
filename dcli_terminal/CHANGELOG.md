@@ -1,3 +1,5 @@
+# 7.1.0
+
 # 7.0.3
 - Fixed a bug in Format.bytesAsReadable where it was dividing by 1000 rather than 1024 when calcualating the units to use (K,M,G...).
 
