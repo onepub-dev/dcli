@@ -1,3 +1,8 @@
+# 7.1.0
+- upgraded to pubspec_manager 2.x, minor lint fixes.
+- moved license to top level so github shows the license info.
+- updated copy right message is source files to reflect MIT license.
+
 # 7.0.2
 - updated to code to conform to the lates lint_hard lints. Work on the 'pack' command to ensure it generates code that conforms with the latest lint rules.
 - changed the ask call to readlineSync to use the newer utf8 global var.
