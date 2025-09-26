@@ -7,8 +7,8 @@ environment:
 
 dependencies:
   args: ^2.5.0
-  dcli: 7.0.2
-  dcli_core: 7.0.2
+  dcli: 7.0.5
+  dcli_core: 7.0.5
   http: ^1.2.1
   path: ^1.9.0
   settings_yaml: ^8.2.0

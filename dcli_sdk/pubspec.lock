@@ -135,35 +135,35 @@ packages:
       path: "../dcli"
       relative: true
     source: path
-    version: "7.0.5"
+    version: "7.1.0"
   dcli_common:
     dependency: "direct main"
     description:
       path: "../dcli_common"
       relative: true
     source: path
-    version: "7.0.2"
+    version: "7.1.0"
   dcli_core:
     dependency: "direct main"
     description:
       path: "../dcli_core"
       relative: true
     source: path
-    version: "7.0.3"
+    version: "7.1.0"
   dcli_terminal:
     dependency: "direct main"
     description:
       path: "../dcli_terminal"
       relative: true
     source: path
-    version: "7.0.3"
+    version: "7.1.0"
   dcli_test:
     dependency: "direct dev"
     description:
       path: "../dcli_test"
       relative: true
     source: path
-    version: "7.0.2"
+    version: "7.1.0"
   equatable:
     dependency: transitive
     description:
