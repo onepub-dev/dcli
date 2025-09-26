@@ -135,7 +135,7 @@ packages:
       path: "../dcli"
       relative: true
     source: path
-    version: "7.0.2"
+    version: "7.0.5"
   dcli_common:
     dependency: "direct main"
     description:
@@ -149,14 +149,14 @@ packages:
       path: "../dcli_core"
       relative: true
     source: path
-    version: "7.0.2"
+    version: "7.0.3"
   dcli_terminal:
     dependency: "direct main"
     description:
       path: "../dcli_terminal"
       relative: true
     source: path
-    version: "7.0.2"
+    version: "7.0.3"
   dcli_test:
     dependency: "direct dev"
     description:
@@ -392,10 +392,10 @@ packages:
     dependency: "direct main"
     description:
       name: pubspec_manager
-      sha256: "7d3e74f0f673fdc441002d45a66dcb37d26dcea99ae730c4fd6671c42423149c"
+      sha256: a31ab6eb222c70ff4a8bcbfdfe4d11675487baed0e25ac2597dc2e6f67e50b84
       url: "https://pub.dev"
     source: hosted
-    version: "1.0.1"
+    version: "2.0.1"
   scope:
     dependency: "direct main"
     description:
@@ -410,7 +410,7 @@ packages:
       path: "../../settings_yaml"
       relative: true
     source: path
-    version: "8.2.1"
+    version: "8.3.1"
   shelf:
     dependency: transitive
     description:

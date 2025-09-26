@@ -362,7 +362,7 @@ class Immutable<T> {
 
   // stores [wrapped] if [setIf] hasn't already been called
   void setIf(T Function() wrapped) {
-    this._wrapped ??= wrapped();
+    _wrapped ??= wrapped();
   }
 
   /// Runs [action] if [setIf] has been called

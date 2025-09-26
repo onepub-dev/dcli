@@ -103,7 +103,7 @@ packages:
       path: "../dcli"
       relative: true
     source: path
-    version: "7.0.2"
+    version: "7.0.5"
   dcli_common:
     dependency: "direct overridden"
     description:
@@ -117,14 +117,14 @@ packages:
       path: "../dcli_core"
       relative: true
     source: path
-    version: "7.0.2"
+    version: "7.0.3"
   dcli_terminal:
     dependency: "direct main"
     description:
       path: "../dcli_terminal"
       relative: true
     source: path
-    version: "7.0.2"
+    version: "7.0.3"
   equatable:
     dependency: transitive
     description:
@@ -289,10 +289,10 @@ packages:
     dependency: transitive
     description:
       name: pubspec_manager
-      sha256: b2674161f3f69ed07bc164dc4172afc190d56f060a293a8eb6fa691e5ddf9b5c
+      sha256: a31ab6eb222c70ff4a8bcbfdfe4d11675487baed0e25ac2597dc2e6f67e50b84
       url: "https://pub.dev"
     source: hosted
-    version: "1.0.0"
+    version: "2.0.1"
   scope:
     dependency: transitive
     description:

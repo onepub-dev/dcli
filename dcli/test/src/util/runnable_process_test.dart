@@ -61,7 +61,7 @@ void main() {
       await Process.start(
         'tail',
         ['-f', '/var/log/syslog'],
-      ).then((process) {
+      ).then((process) async {
         process.stdout
             .transform(utf8.decoder)
             .transform(const LineSplitter())
@@ -69,7 +69,7 @@ void main() {
           print('stdout: $line');
         });
 
-        process.exitCode.then((exitCode) {
+        await process.exitCode.then((exitCode) {
           print('tail exited with $exitCode');
         });
       });
