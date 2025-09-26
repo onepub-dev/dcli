@@ -1,3 +1,6 @@
+# 7.1.0
+- upgraded to pubspec_manager 2.x
+
 # 7.0.5
 - fixed missing await in sleepAsync causing it to return immediately.
 
