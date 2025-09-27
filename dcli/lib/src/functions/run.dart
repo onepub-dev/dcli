@@ -106,7 +106,6 @@ int? run(
       .run(
         progress: Progress.print(),
         runInShell: runInShell,
-        terminal: false,
         privileged: privileged,
         nothrow: nothrow,
         extensionSearch: extensionSearch,
