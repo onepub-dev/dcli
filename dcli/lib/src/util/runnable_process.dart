@@ -178,9 +178,12 @@ class RunnableProcess {
   ///
   /// If you pass [detached] = true then the process is spawned but we
   /// don't wait for it to complete nor is any io available.
+  ///
+  /// if [nothrow] is false and the command returns a non zero exit code
+  /// then a [RunException] is thrown.
   Progress run({
-    required bool terminal,
     Progress? progress,
+    bool terminal = false,
     bool runInShell = false,
     bool detached = false,
     bool privileged = false,
@@ -200,20 +203,18 @@ class RunnableProcess {
         progress: progress as ProgressImpl,
       );
 
-      processLogger(() => 'spawn completed - waiting for process exit');
-
       /// whether we have a terminal or not we use the same
       /// process to read any io that comes back until
       /// we see an exit code.
       if (!detached) {
-        if (exitCode != 0 && !nothrow) {
+        if (progress.exitCode != 0 && !nothrow) {
           throw RunException.withArgs(
             _parsed.cmd,
             _parsed.args,
-            exitCode,
+            progress.exitCode,
             'The command '
             '${red('[${_parsed.cmd}] with args [${_parsed.args.join(', ')}]')}'
-            ' failed with exitCode: $exitCode '
+            ' failed with exitCode: $progress.exitCode '
             'workingDirectory: $workingDirectory',
           );
         }

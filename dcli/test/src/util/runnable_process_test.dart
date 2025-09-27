@@ -1,4 +1,3 @@
-
 @Timeout(Duration(minutes: 5))
 library;
 
@@ -13,6 +12,7 @@ import 'dart:convert';
 import 'dart:io';
 
 import 'package:dcli/dcli.dart' hide sleep;
+import 'package:dcli/src/util/runnable_process.dart';
 import 'package:dcli_test/dcli_test.dart';
 import 'package:path/path.dart' hide equals;
 import 'package:test/test.dart';
@@ -101,5 +101,62 @@ void main() {
     final paragraph = progress.toParagraph();
     expect(paragraph.contains('Hello World - StdOut'), isTrue);
     expect(paragraph.contains('Hello World - StdErr'), isTrue);
+  });
+
+  test('Exit Code of called process', () {
+    var process = RunnableProcess.fromCommandArgs(
+      join(
+        '..',
+        'dcli_unit_tester',
+        'test',
+        'test_script',
+        'general',
+        'bin',
+        'dcli_exit_test.dart',
+      ),
+      [
+        '25',
+      ],
+    ).run(nothrow: true);
+    expect(process.exitCode, equals(25));
+
+    process = RunnableProcess.fromCommandArgs(
+      join(
+        '..',
+        'dcli_unit_tester',
+        'test',
+        'test_script',
+        'general',
+        'bin',
+        'dcli_exit_test.dart',
+      ),
+      [
+        '0',
+      ],
+    ).run(nothrow: true);
+    expect(process.exitCode, equals(0));
+
+    /// check we throw on a non zero exit code
+    var hasThrown = false;
+    try {
+      RunnableProcess.fromCommandArgs(
+        join(
+          '..',
+          'dcli_unit_tester',
+          'test',
+          'test_script',
+          'general',
+          'bin',
+          'dcli_exit_test.dart',
+        ),
+        [
+          '25',
+        ],
+      ).run();
+    } catch (e) {
+      expect(e, isA<RunException>());
+      hasThrown = true;
+    }
+    expect(hasThrown, isTrue);
   });
 }
