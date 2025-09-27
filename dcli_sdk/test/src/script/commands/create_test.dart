@@ -19,8 +19,8 @@ void main() {
     await core.withTempDirAsync((dir) async {
       await capture(() async {
         /// no args
-        expect(
-            () => CreateCommand()..run([], []),
+        await expectLater(
+            () async => CreateCommand().run([], []),
             throwsA(predicate((e) =>
                 e is InvalidArgumentException &&
                 e.message
@@ -37,8 +37,8 @@ void main() {
         await CreateCommand().run([VerboseFlag()], [pathToProject]);
         expect(exists(pathToProject), isTrue);
 
-        expect(
-            () => CreateCommand()..run([], [pathToProject]),
+        await expectLater(
+            () => CreateCommand().run([], [pathToProject]),
             throwsA(predicate((e) =>
                 e is InvalidArgumentException &&
                 e.message.endsWith('already exists.'))));
@@ -51,30 +51,30 @@ void main() {
 
       await capture(() async {
         /// now args
-        expect(
-            () => CreateCommand()..run([], []),
+        await expectLater(
+            () => CreateCommand().run([], []),
             throwsA(predicate((e) =>
                 e is InvalidArgumentException &&
                 e.message
                     .startsWith('The create command takes one argument'))));
 
         ///
-        expect(
-            () => CreateCommand()..run([], [pathToSpawnScript]),
+        await expectLater(
+            () => CreateCommand().run([], [pathToSpawnScript]),
             throwsA(predicate((e) =>
                 e is InvalidArgumentException &&
                 e.message.startsWith('The script directory'))));
 
-        expect(
-            () => CreateCommand()..run([], [pathToSpawnScript]),
+        await expectLater(
+            () => CreateCommand().run([], [pathToSpawnScript]),
             throwsA(predicate((e) =>
                 e is InvalidArgumentException &&
                 e.message.endsWith('already exists.'))));
 
         createDir(dirname(pathToSpawnScript), recursive: true);
         touch(pathToSpawnScript, create: true);
-        expect(
-            () => CreateCommand()..run([], [pathToSpawnScript]),
+        await expectLater(
+            () => CreateCommand().run([], [pathToSpawnScript]),
             throwsA(predicate((e) =>
                 e is InvalidArgumentException &&
                 e.message.endsWith('already exists.'))));
