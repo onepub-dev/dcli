@@ -23,7 +23,7 @@ export 'package:dcli_core/dcli_core.dart'
 /// in your code as we always use the same backup target.
 /// Instead use [withFileProtectionAsync].
 ///
-/// We also renamed the backup to '<filename>.bak' to ensure
+/// We also renamed the backup to `<filename>.bak` to ensure
 /// the backupfile doesn't interfere with dev tools
 /// (e.g. we don't want an extra pubspec.yaml hanging about)
 ///
@@ -41,7 +41,7 @@ void backupFile(String pathToFile, {bool ignoreMissing = false}) =>
 /// Designed to work with [backupFile] to restore
 /// a file from backup.
 /// The existing file is deleted and restored
-/// from the .bak/<filename>.bak file created when
+/// from the `.bak/<filename>.bak` file created when
 /// you called [backupFile].
 ///
 /// Consider using [withFileProtectionAsync] for a more robust solution.
