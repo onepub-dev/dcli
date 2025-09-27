@@ -1,3 +1,11 @@
+# 7.1.1
+- check package analyses correctly when down graded.
+  - upgraded to scope 5.1 to access const ctors for keys. 
+  - Removed usage of deprecated const from win32.
+- fixed async test calls.
+- escaped html doco.
+- for some reason we had an ignore on the example files.
+
 # 7.1.0
 - upgraded to pubspec_manager 2.x
 
