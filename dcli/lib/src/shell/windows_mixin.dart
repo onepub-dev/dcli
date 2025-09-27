@@ -158,7 +158,10 @@ mixin WindowsMixin {
               1) {
             if (GetTokenInformation(
                   phToken.value,
-                  TokenElevation,
+                  // The 5.x version of win32 has this as a deprecated member
+                  // but early 5.x versions don't have the replacement.
+                  // ignore: deprecated_member_use
+                  TOKEN_INFORMATION_CLASS.TokenElevation,
                   pElevation,
                   sizeOf<_TokenElevation>(),
                   pReturnedSize,
