@@ -33,7 +33,7 @@ dependencies:
   pub_semver: ^2.0.0
   pubspec_lock: ^3.0.1
   pubspec_manager: ^2.0.0
-  scope: ^5.0.0
+  scope: ^5.1.0
   settings_yaml: ^8.2.0
   stack_trace: ^1.10.0
   system_info2: ^4.0.0

@@ -152,7 +152,7 @@ mixin WindowsMixin {
             (pElevation) {
           if (OpenProcessToken(
                 GetCurrentProcess(),
-                TOKEN_ACCESS_MASK.TOKEN_QUERY,
+                TOKEN_QUERY,
                 phToken.cast(),
               ) ==
               1) {
