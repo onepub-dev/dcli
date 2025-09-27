@@ -40,6 +40,28 @@ import 'isolate_id.dart';
 /// On linux a traditional file lock will not block isolates
 /// in the same process from locking the same file hence we need
 class NamedLock {
+  /// The tcp socket  port we use to implement
+  /// a hard lock. A port can only be opened once
+  /// so its the perfect way to create a lock that works
+  /// across processes and isolates.
+  final port = 9003;
+
+  late String _lockPath;
+
+  /// The name of the lock.
+  final String name;
+
+  final String _description;
+
+  /// We use this to allow a lock to be-reentrant within an isolate.
+  /// A non-zero value means we have the lock.
+  /// We maintain a lock count per
+  /// lock suffix to allow each suffix lock to be re-entrant.
+  static final Map<String, int> _lockCounts = {};
+
+  /// The duration to wait for a lock before timing out.
+  final Duration _timeout;
+
   /// [lockPath] is the path of the directory used
   /// to store the lock file.
   /// If no lockPath is given then [Directory.systemTemp]/dcli/locks is used
@@ -75,26 +97,6 @@ class NamedLock {
     _lockPath =
         lockPath ?? join(rootPath, Directory.systemTemp.path, 'dcli', 'locks');
   }
-
-  /// The tcp socket  port we use to implement
-  /// a hard lock. A port can only be opened once
-  /// so its the perfect way to create a lock that works
-  /// across processes and isolates.
-  final int port = 9003;
-  late String _lockPath;
-
-  /// The name of the lock.
-  final String name;
-  final String _description;
-
-  /// We use this to allow a lock to be-reentrant within an isolate.
-  /// A non-zero value means we have the lock.
-  /// We maintain a lock count per
-  /// lock suffix to allow each suffix lock to be re-entrant.
-  static final Map<String, int> _lockCounts = {};
-
-  /// The duration to wait for a lock before timing out.
-  final Duration _timeout;
 
   @Deprecated('Used withLockAsync')
   Future<void> withLock(
@@ -213,16 +215,13 @@ class NamedLock {
     return _LockFileParts(pid, isolateId);
   }
 
-
-  
-
   /// Attempts to take a project lock.
   /// We wait for upto 30 seconds for an existing lock to
   /// be released and then give up.
   ///
   /// We create the lock file in the virtual project directory
   /// in the form:
-  /// <pid>.warmup.lock
+  /// `<pid>.warmup.lock`
   ///
   /// If we find an existing lock file we check if the process
   /// that owns it is still running. If it isn't we
@@ -287,8 +286,7 @@ class NamedLock {
 
               verbose(
                 () => 'Lock Source: '
-                    // ignore: lines_longer_than_80_chars
-                    '${Trace.current().frames.length > 1 ? Trace.current().frames[min(Trace.current().frames.length - 1, 8)] : 'Unknown'}',
+                    '''${Trace.current().frames.length > 1 ? Trace.current().frames[min(Trace.current().frames.length - 1, 8)] : 'Unknown'}''',
               );
               touch(_lockFilePath, create: true);
             }
@@ -394,7 +392,6 @@ class NamedLock {
 
     try {
       verbose(() => 'attempt bindSocket');
-      // ignore: discarded_futures
       socket = await _bindSocket();
       if (socket != null) {
         verbose(() => blue('''
@@ -426,10 +423,11 @@ Hardlock released  for $name in ${Service.getIsolateId(Isolate.current)}'''));
 }
 
 class _LockFileParts {
-  _LockFileParts(this.pid, this.isolateId);
-
   int pid;
+
   int isolateId;
+
+  _LockFileParts(this.pid, this.isolateId);
 }
 
 ///

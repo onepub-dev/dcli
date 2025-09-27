@@ -23,7 +23,7 @@ typedef CustomMenuPrompt = String Function(
 /// var color = menu( 'Please select a color', options: colors);
 /// ```
 /// Results in:
-///```
+///```text
 /// 1) Red
 /// 2) Green
 /// Please select a color:
@@ -83,7 +83,6 @@ T menu<T>(
     );
   }
   limit ??= options.length;
-  // ignore: parameter_assignments
   limit = min(options.length, limit);
   format ??= _noFormat;
 
@@ -147,7 +146,6 @@ T menu<T>(
   return options[index - 1];
 }
 
-// ignore: avoid_classes_with_only_static_members
 class Menu {
   static String defaultPrompt<T>(String prompt, T? defaultValue) {
     var result = prompt;
@@ -162,7 +160,10 @@ class Menu {
 }
 
 class _MenuRange extends AskValidator {
+  final int limit;
+
   const _MenuRange(this.limit);
+
   @override
   String validate(String line, {String? customErrorMessage}) {
     final finalline = line.trim();
@@ -179,6 +180,4 @@ class _MenuRange extends AskValidator {
 
     return finalline;
   }
-
-  final int limit;
 }

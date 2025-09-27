@@ -34,7 +34,7 @@ class Settings {
   static StreamSubscription<LogRecord>? listener;
 
   /// Turns on verbose logging.
-  Future<void> setVerbose({required bool enabled}) async {
+  void setVerbose({required bool enabled}) {
     _verboseEnabled = enabled;
 
     // ignore: flutter_style_todos
@@ -50,7 +50,7 @@ class Settings {
     } else {
       logger.level = Level.OFF;
       if (listener != null) {
-        await listener!.cancel();
+        unawaited(listener!.cancel());
         listener = null;
       }
     }

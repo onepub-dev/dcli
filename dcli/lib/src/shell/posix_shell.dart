@@ -240,6 +240,20 @@ sudo env PATH="$PATH" dcli install
 }
 
 class UserEnvironment {
+  late final String username;
+
+  /// we cache the real uid and gid
+  /// when we release privileges so we can restore them.
+  late final int gid;
+
+  late final int uid;
+
+  /// The path to the original privileged users home dir.
+  late final String pathToHome;
+
+  // path to the active shell e.g. /bin/bash
+  late final String? pathToShell;
+
   // Save the details of the current user environment
   UserEnvironment.save() {
     username = _whoami();
@@ -266,19 +280,6 @@ class UserEnvironment {
 
     pathToShell = env['SHELL'];
   }
-
-  late final String username;
-
-  /// we cache the real uid and gid
-  /// when we release privileges so we can restore them.
-  late final int gid;
-  late final int uid;
-
-  /// The path to the original privileged users home dir.
-  late final String pathToHome;
-
-  // path to the active shell e.g. /bin/bash
-  late final String? pathToShell;
 
   /// Build the user environment
   void build() {
@@ -354,9 +355,9 @@ String _whoami() {
 /// Makes [T] immutable by not allowing any methods
 /// to change its value.
 class Immutable<T> {
-  Immutable();
-
   T? _wrapped;
+
+  Immutable();
 
   T? get wrapped => _wrapped;
 

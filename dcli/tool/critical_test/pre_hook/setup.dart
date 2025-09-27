@@ -40,7 +40,6 @@ Future<void> main(List<String> args) async {
       '''Activating dcli_sdk from source so we are testing against latest version''',
     );
 
-    // ignore: discarded_futures
     await capture(() async {
       /// globally activate dcli from source.
       PubCache().globalActivateFromSource(projectRoot);
@@ -48,13 +47,11 @@ Future<void> main(List<String> args) async {
   }
 
   if (!PubCache().isGloballyActivated('dcli_unit_tester')) {
-    // ignore: discarded_futures
     await capture(() async {
       PubCache().globalActivate('dcli_unit_tester');
     }, progress: Progress.printStdErr());
   }
 
-  // ignore: discarded_futures
   await capture(() async {
     // warm up the dcli project
     await DartProject.self.warmup();

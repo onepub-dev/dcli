@@ -27,6 +27,7 @@ class MacOSDCliInstaller {
     // now activate dcli.
     // ignore: invalid_use_of_visible_for_testing_member
     if (Scope.hasScopeKey(installFromSourceKey) &&
+        // If we get called in a unit test
         // ignore: invalid_use_of_visible_for_testing_member
         Scope.use(installFromSourceKey)) {
       // If we are called from a unit test we do it from source

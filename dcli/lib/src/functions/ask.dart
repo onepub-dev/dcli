@@ -17,6 +17,7 @@ import '../../dcli.dart';
 typedef CustomAskPrompt = String Function(
     String prompt,
     String? defaultValue,
+    // this is a callback and this style is more readable
     // ignore: avoid_positional_boolean_parameters
     bool hidden);
 
@@ -128,12 +129,11 @@ String ask(
       customErrorMessage: customErrorMessage,
     );
 
-// ignore: avoid_clas
 /// Class for [ask] and related code.
 class Ask extends core.DCliFunction {
-  static const int _backspace = 127;
-  static const int _space = 32;
-  static const int _ = 8;
+  static const _backspace = 127;
+  static const _space = 32;
+  static const _ = 8;
 
   ///
   /// Reads user input from stdin and returns it as a string.
@@ -242,6 +242,7 @@ class Ask extends core.DCliFunction {
   static String defaultPrompt(
       String prompt,
       String? defaultValue,
+      // this is a callback and this style is more readable
       // ignore: avoid_positional_boolean_parameters
       bool hidden) {
     var result = prompt;
@@ -438,9 +439,9 @@ class _AskFQDN extends AskValidator {
 }
 
 class _AskURL extends AskValidator {
-  const _AskURL({this.protocols = const ['https']});
-
   final List<String> protocols;
+
+  const _AskURL({this.protocols = const ['https']});
 
   @override
   String validate(String line, {String? customErrorMessage}) {
@@ -459,16 +460,18 @@ class _AskURL extends AskValidator {
 /// ```
 ///
 class _AskRegExp extends AskValidator {
+  final String regexp;
+
+  late final RegExp _regexp;
+
+  late final String _error;
+
   /// Creates a regular expression based validator.
   /// You can customise the error message by providing a value for [error].
   _AskRegExp(this.regexp, {String? error}) {
     _regexp = RegExp(regexp);
     _error = error ?? 'Input does not match: $regexp';
   }
-
-  final String regexp;
-  late final RegExp _regexp;
-  late final String _error;
 
   @override
   String validate(String line, {String? customErrorMessage}) {
@@ -561,23 +564,23 @@ class _AskAlphaNumeric extends AskValidator {
 /// Pass a [version] to limit the input to one or the
 /// other. If passed [version] must be [ipv4] or [ipv6].
 class AskValidatorIPAddress extends AskValidator {
+  /// The ip address may be either [ipv4] or [ipv6].
+  static const either = 0;
+
+  /// The ip address must be an ipv4 address.
+  static const ipv4 = 4;
+
+  /// The ip address must be an ipv6 address.
+  static const ipv6 = 6;
+
+  /// IP version (on 4 and 6 are valid versions.)
+  final int version;
+
   /// Validates that input is a IP address
   /// By default both v4 and v6 addresses are valid
   /// Pass a [version] to limit the input to one or the
   /// other. If passed [version] must be 4 or 6.
   const AskValidatorIPAddress({this.version = either});
-
-  /// The ip address may be either [ipv4] or [ipv6].
-  static const int either = 0;
-
-  /// The ip address must be an ipv4 address.
-  static const int ipv4 = 4;
-
-  /// The ip address must be an ipv6 address.
-  static const int ipv6 = 6;
-
-  /// IP version (on 4 and 6 are valid versions.)
-  final int version;
 
   @override
   String validate(String line, {String? customErrorMessage}) {
@@ -608,6 +611,9 @@ class AskValidatorIPAddress extends AskValidator {
 /// Validates that the entered line is no longer
 /// than [maxLength].
 class _AskValidatorMaxLength extends AskValidator {
+  /// the maximum allows length for the entered string.
+  final int maxLength;
+
   /// Validates that the entered line is no longer
   /// than [maxLength].
   const _AskValidatorMaxLength(this.maxLength);
@@ -626,14 +632,14 @@ class _AskValidatorMaxLength extends AskValidator {
     }
     return finalline;
   }
-
-  /// the maximum allows length for the entered string.
-  final int maxLength;
 }
 
 /// Validates that the entered line is not less
 /// than [minLength].
 class _AskValidatorMinLength extends AskValidator {
+  /// the minimum allows length of the string.
+  final int minLength;
+
   /// Validates that the entered line is not less
   /// than [minLength].
   const _AskValidatorMinLength(this.minLength);
@@ -650,15 +656,14 @@ class _AskValidatorMinLength extends AskValidator {
     }
     return finalline;
   }
-
-  /// the minimum allows length of the string.
-  final int minLength;
 }
 
 /// Validates that the length of the entered text
 // ignore: comment_references
 /// as at least [minLength] but no more than [maxLength].
 class _AskValidatorLength extends AskValidator {
+  late _AskValidatorAll _validator;
+
   /// Validates that the length of the entered text
   /// as at least [minLength] but no more than [maxLength].
   _AskValidatorLength(int minLength, int maxLength) {
@@ -667,8 +672,6 @@ class _AskValidatorLength extends AskValidator {
       _AskValidatorMaxLength(maxLength),
     ]);
   }
-
-  late _AskValidatorAll _validator;
 
   @override
   String validate(String line, {String? customErrorMessage}) {
@@ -680,10 +683,11 @@ class _AskValidatorLength extends AskValidator {
 }
 
 class _AskValidatorValueRange extends AskValidator {
-  const _AskValidatorValueRange(this.minValue, this.maxValue);
-
   final num minValue;
+
   final num maxValue;
+
+  const _AskValidatorValueRange(this.minValue, this.maxValue);
 
   @override
   String validate(String line, {String? customErrorMessage}) {
@@ -725,6 +729,8 @@ class _AskValidatorValueRange extends AskValidator {
 /// a validators will be operating on a version of the input
 /// that has been processed  by all validators that appear earlier in the list.
 class _AskValidatorAll extends AskValidator {
+  final List<AskValidator> _validators;
+
   /// Takes an array of validators. The input is considered valid only if
   /// everyone of the validators pass.
   ///
@@ -738,8 +744,6 @@ class _AskValidatorAll extends AskValidator {
   /// that has been processed  by all validators that appear earlier
   /// in the list.
   _AskValidatorAll(this._validators);
-
-  final List<AskValidator> _validators;
 
   @override
   String validate(String line, {String? customErrorMessage}) {
@@ -765,6 +769,8 @@ class _AskValidatorAll extends AskValidator {
 /// a validators will be operating on a version of the input
 /// that has been processed  by all validators that appear earlier in the list.
 class _AskValidatorAny extends AskValidator {
+  final List<AskValidator> _validators;
+
   /// Takes an array of validators. The input is considered valid if any one
   /// of the validators returns true.
   /// The validators are processed in order from left to right.
@@ -780,8 +786,6 @@ class _AskValidatorAny extends AskValidator {
   ///
   /// Validators that fail don't get an opportunity to modify the input.
   _AskValidatorAny(this._validators);
-
-  final List<AskValidator> _validators;
 
   @override
   String validate(String line, {String? customErrorMessage}) {
@@ -812,16 +816,17 @@ class _AskValidatorAny extends AskValidator {
 /// If the validator fails it prints out the
 /// list of available inputs.
 class _AskValidatorList extends AskValidator {
+  /// The list of allowed values.
+  final List<Object> validItems;
+
+  final bool caseSensitive;
+
   /// Checks that the input matches one of the
   /// provided [validItems].
   /// If the validator fails it prints out the
   /// list of available inputs.
   /// By default [caseSensitive] matches are off.
   _AskValidatorList(this.validItems, {this.caseSensitive = false});
-
-  /// The list of allowed values.
-  final List<Object> validItems;
-  final bool caseSensitive;
 
   @override
   String validate(String line, {String? customErrorMessage}) {

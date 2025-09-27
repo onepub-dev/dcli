@@ -6,6 +6,8 @@
  */
 
 class ProgressLineSplitterBad {
+  final lines = <String>[];
+
   ProgressLineSplitterBad(List<int> intList) {
     final lineFeed = '\n'.codeUnitAt(0);
     final carriageReturn = '\r'.codeUnitAt(0);
@@ -45,5 +47,4 @@ class ProgressLineSplitterBad {
       lines.add(currentLine.toString());
     }
   }
-  final lines = <String>[];
 }

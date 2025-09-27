@@ -129,9 +129,7 @@ void main() {
     // but the world doesn't deserve our work
     // so burn it all to hell.
     delete(restingPlace);
-  }
-  // ignore: avoid_catches_without_on_clauses
-  catch (e) {
+  } catch (e) {
     // All errors are thrown as exceptions.
     print('An error occured: $e)}');
   }

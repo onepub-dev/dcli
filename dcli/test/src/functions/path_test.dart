@@ -13,7 +13,7 @@ import 'package:dcli/dcli.dart';
 import 'package:path/path.dart';
 import 'package:test/test.dart' as t;
 
-String _testDir = 'path_test';
+var _testDir = 'path_test';
 void main() {
   t.group('Directory Path manipulation testing', () {
     t.test('absolute', () async {
@@ -65,6 +65,16 @@ void main() {
 }
 
 class Paths {
+  String? home;
+
+  String? pathTestDir;
+
+  String? testExtension;
+
+  String? testBaseName;
+
+  String? testFile;
+
   Paths(String fsRoot) {
     home = HOME;
     pathTestDir = join(fsRoot, _testDir, 'pathTestDir');
@@ -72,12 +82,6 @@ class Paths {
     testBaseName = 'fred';
     testFile = '$testBaseName$testExtension';
   }
-
-  String? home;
-  String? pathTestDir;
-  String? testExtension;
-  String? testBaseName;
-  String? testFile;
 }
 
 Paths setup(String fs) => Paths(fs);

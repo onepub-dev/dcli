@@ -6,6 +6,27 @@ import '../../shell/shell.dart';
 import '../environment.dart';
 
 class ProcessSettings {
+  final String command;
+
+  final List<String> args;
+
+  late final String workingDirectory;
+
+  // environment variables
+  ProcessEnvironment environment;
+
+  var runInShell = false;
+
+  var detached = false;
+
+  var terminal = false;
+
+  var privileged = false;
+
+  var extensionSearch = true;
+
+  var isPriviledgedUser = false;
+
   ProcessSettings(this.command,
       {this.args = const <String>[],
       String? workingDirectory,
@@ -26,21 +47,6 @@ class ProcessSettings {
       isPriviledgedUser = Shell.current.isPrivilegedUser;
     }
   }
-
-  final String command;
-  final List<String> args;
-  late final String workingDirectory;
-
-  // environment variables
-  ProcessEnvironment environment;
-
-  bool runInShell = false;
-  bool detached = false;
-  bool terminal = false;
-  bool privileged = false;
-  bool extensionSearch = true;
-
-  bool isPriviledgedUser = false;
 
   /// If we are running with mode terminal or detached then
   /// we don't have access to the stdio streams.

@@ -20,12 +20,12 @@ enum LogLevel {
 
 ////
 class StdLog {
+  static final _self = StdLog._internal();
+
   /// Factory Constructor.
   factory StdLog() => _self;
 
   StdLog._internal();
-
-  static final _self = StdLog._internal();
 
   /// Logs a message to stdout.
   static void stdout(String message, {LogLevel level = LogLevel.normal}) {

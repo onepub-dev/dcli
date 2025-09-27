@@ -11,7 +11,7 @@ import 'package:test/test.dart';
 void main() {
   test(
     'terminal ...',
-    () async {
+    ()  {
       print('Hello World');
 
       print('should be on line 1');

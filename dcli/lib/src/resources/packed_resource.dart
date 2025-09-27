@@ -46,13 +46,11 @@ abstract class PackedResource {
       createDir(dirname(normalized), recursive: true);
     }
 
-    // ignore: discarded_futures
     final file = File(normalized).openSync(mode: FileMode.write);
 
     try {
       for (final line in content.split('\n')) {
         if (line.trim().isNotEmpty) {
-          // ignore: discarded_futures
           file.writeFromSync(base64.decode(line));
         }
       }

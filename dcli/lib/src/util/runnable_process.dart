@@ -46,6 +46,20 @@ void printerr(Object? object) {
 
 ///
 class RunnableProcess {
+  /// The running process.
+  // ProcessSync? processSync;
+
+  /// The directory the process is running in.
+  final String? workingDirectory;
+
+  final ParsedCliCommand _parsed;
+
+  /// Used when the process is exiting to ensure that we wait
+  /// for stdout and stderr to be flushed.
+  final _stdoutFlushed = Completer<void>();
+
+  final _stderrFlushed = Completer<void>();
+
   RunnableProcess._internal(this._parsed, this.workingDirectory) {
     // _streamsFlushed =
     // ignore: discarded_futures
@@ -76,22 +90,6 @@ class RunnableProcess {
           ParsedCliCommand.fromParsed(command, args, workingDirectory),
           workingDirectory,
         );
-
-  // late Future<Process> _fProcess;
-
-  /// The running process.
-  // ProcessSync? processSync;
-
-  /// The directory the process is running in.
-  final String? workingDirectory;
-
-  final ParsedCliCommand _parsed;
-
-  /// Used when the process is exiting to ensure that we wait
-  /// for stdout and stderr to be flushed.
-  final Completer<void> _stdoutFlushed = Completer<void>();
-  final Completer<void> _stderrFlushed = Completer<void>();
-  // late Future<List<void>> _streamsFlushed;
 
   /// returns the original command line that started this process.
   String get cmdLine => '${_parsed.cmd} ${_parsed.args.join(' ')}';
@@ -214,7 +212,6 @@ class RunnableProcess {
             _parsed.args,
             exitCode,
             'The command '
-            // ignore: lines_longer_than_80_chars
             '${red('[${_parsed.cmd}] with args [${_parsed.args.join(', ')}]')}'
             ' failed with exitCode: $exitCode '
             'workingDirectory: $workingDirectory',
@@ -333,7 +330,6 @@ class RunnableProcess {
       processLogger(() => red('ExitPort: $error'));
     });
 
-    // ignore: discarded_futures
     MessageResponse? response;
     do {
       processLogger(() => 'Primary calling Mailbox.take()');
@@ -354,7 +350,6 @@ class RunnableProcess {
           ..onException((exception) =>
               Error.throwWithStackTrace(exception, exception.stackTrace));
       } on TimeoutException catch (e) {
-        // ignore: avoid_print
         processLogger(
             () => 'Timeout waiting for response from isolate: ${e.message}');
 

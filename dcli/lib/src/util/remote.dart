@@ -11,11 +11,63 @@ import '../../dcli.dart';
 /// Provides remote access methods for posix based systems.
 ///
 class Remote {
+  static final _self = Remote._internal();
+
+  static const _sshErrors = <int, String>{
+    0: 'Operation was successful',
+    1: 'Generic error, usually because invalid command line '
+        'options or malformed configuration',
+    2: 'Connection failed',
+    65: 'Host not allowed to connect',
+    66: 'General error in ssh protocol',
+    67: 'Key exchange failed',
+    68: 'Reserved',
+    69: 'MAC error',
+    70: 'Compression error',
+    71: 'Service not available',
+    72: 'Protocol version not supported',
+    73: 'Host key not verifiable',
+    74: 'Connection failed',
+    75: 'Disconnected by application',
+    76: 'Too many connections',
+    77: 'Authentication cancelled by user',
+    78: 'No more authentication methods available',
+    79: 'Invalid user name'
+  };
+
+  static const _scpErrors = <int, String>{
+    0: 'Operation was successful',
+    1: 'General error in file copy',
+    2: 'Destination is not directory, but it should be',
+    3: 'Maximum symlink level exceeded',
+    4: 'Connecting to host failed.',
+    5: 'Connection broken',
+    6: 'File does not exist',
+    7: 'No permission to access file.',
+    8: 'General error in sftp protocol',
+    9: 'File transfer protocol mismatch',
+    10: 'No file matches a given criteria',
+    65: 'Host not allowed to connect',
+    66: 'General error in ssh protocol',
+    67: 'Key exchange failed',
+    68: 'Reserved',
+    69: 'MAC error',
+    70: 'Compression error',
+    71: 'Service not available',
+    72: 'Protocol version not supported',
+    73: 'Host key not verifiable',
+    74: 'Connection failed',
+    75: 'Disconnected by application',
+    76: 'Too many connections',
+    77: 'Authentication cancelled by user',
+    78: 'No more authentication methods available',
+    79: 'Invalid user name'
+  };
+
   /// Factory constructor.
   factory Remote() => _self;
 
   Remote._internal();
-  static final _self = Remote._internal();
 
   /// EXPERIMENTAL
   ///
@@ -225,57 +277,6 @@ class Remote {
       );
     }
   }
-
-  static const Map<int, String> _sshErrors = <int, String>{
-    0: 'Operation was successful',
-    1: 'Generic error, usually because invalid command line '
-        'options or malformed configuration',
-    2: 'Connection failed',
-    65: 'Host not allowed to connect',
-    66: 'General error in ssh protocol',
-    67: 'Key exchange failed',
-    68: 'Reserved',
-    69: 'MAC error',
-    70: 'Compression error',
-    71: 'Service not available',
-    72: 'Protocol version not supported',
-    73: 'Host key not verifiable',
-    74: 'Connection failed',
-    75: 'Disconnected by application',
-    76: 'Too many connections',
-    77: 'Authentication cancelled by user',
-    78: 'No more authentication methods available',
-    79: 'Invalid user name'
-  };
-
-  static const Map<int, String> _scpErrors = <int, String>{
-    0: 'Operation was successful',
-    1: 'General error in file copy',
-    2: 'Destination is not directory, but it should be',
-    3: 'Maximum symlink level exceeded',
-    4: 'Connecting to host failed.',
-    5: 'Connection broken',
-    6: 'File does not exist',
-    7: 'No permission to access file.',
-    8: 'General error in sftp protocol',
-    9: 'File transfer protocol mismatch',
-    10: 'No file matches a given criteria',
-    65: 'Host not allowed to connect',
-    66: 'General error in ssh protocol',
-    67: 'Key exchange failed',
-    68: 'Reserved',
-    69: 'MAC error',
-    70: 'Compression error',
-    71: 'Service not available',
-    72: 'Protocol version not supported',
-    73: 'Host key not verifiable',
-    74: 'Connection failed',
-    75: 'Disconnected by application',
-    76: 'Too many connections',
-    77: 'Authentication cancelled by user',
-    78: 'No more authentication methods available',
-    79: 'Invalid user name'
-  };
 }
 
 ///

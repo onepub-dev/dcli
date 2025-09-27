@@ -15,14 +15,14 @@ import 'shell_mixin.dart';
 /// when dcli needs to interact with the Bash shell.
 
 class BashShell with ShellMixin, PosixShell {
-  /// Attached to a bash shell with the given pid.
-  BashShell.withPid(this.pid);
-
   /// Name of the shell
-  static const String shellName = 'bash';
+  static const shellName = 'bash';
 
   @override
   final int? pid;
+
+  /// Attached to a bash shell with the given pid.
+  BashShell.withPid(this.pid);
 
   @override
   bool get isCompletionSupported => true;
@@ -66,9 +66,7 @@ class BashShell with ShellMixin, PosixShell {
   /// already on the path.
   @override
   bool appendToPATH(String path) {
-    // ignore: flutter_style_todos
-    /// TODO(bsutton): check if there is already an export
-    /// for dcli path.
+    // TODO(bsutton): check if there is already an export for dcli path.
     if (!isOnPATH(path)) {
       final export = 'export PATH=\$PATH:$path';
       _updatePATH(export);

@@ -101,8 +101,6 @@ void main() {
       const command =
           'mkdir -p  /tmp/etc/openvpn; sudo cp -R /etc/openvpn/* /tmp/etc/openvpn';
 
-      // ignore: unnecessary_statements
-
       final cmdArgs = <String>[]
         ..clear()
         ..add('-t')

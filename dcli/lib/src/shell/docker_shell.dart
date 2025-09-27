@@ -13,10 +13,16 @@ import 'shell_mixin.dart';
 /// i.e. the one and only process running docker.
 /// There may not even be a shell present in the image.
 class DockerShell with ShellMixin, PosixShell {
+  static bool? _inDocker;
+
+  /// Name of the shell
+  static const shellName = 'docker';
+
+  @override
+  final int? pid;
+
   /// Attached to a bash shell with the given pid.
   DockerShell.withPid(this.pid);
-
-  static bool? _inDocker;
 
   /// Returns true if we are running in a docker shell
   static bool get inDocker {
@@ -45,9 +51,6 @@ class DockerShell with ShellMixin, PosixShell {
 
     return _inDocker!;
   }
-
-  /// Name of the shell
-  static const String shellName = 'docker';
 
   /// only user in docker is root.
   @override
@@ -89,9 +92,6 @@ class DockerShell with ShellMixin, PosixShell {
   String get installInstructions => '''
 Run: 
 dcli install''';
-
-  @override
-  final int? pid;
 
   @override
   bool get isCompletionSupported => false;

@@ -6,6 +6,6 @@
  */
 
 /// barrel file for docker specific functions.
-library docker;
+library;
 
 export 'src/shell/docker_shell.dart';

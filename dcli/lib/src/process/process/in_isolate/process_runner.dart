@@ -1,3 +1,4 @@
+// we have a number that are useful.
 // ignore_for_file: comment_references
 
 import 'dart:io';
@@ -10,6 +11,12 @@ import '../../../util/runnable_process.dart';
 import '../process_settings.dart';
 
 class ProcessRunner {
+  final ProcessSettings settings;
+
+  late final ParsedCliCommand _parsed;
+
+  Process? process;
+
   ProcessRunner(this.settings) {
     _parsed = ParsedCliCommand.fromParsed(
       settings.command,
@@ -17,10 +24,6 @@ class ProcessRunner {
       settings.workingDirectory,
     );
   }
-  final ProcessSettings settings;
-  late final ParsedCliCommand _parsed;
-
-  Process? process;
 
   /// Starts a process  provides additional options to [run].
   ///

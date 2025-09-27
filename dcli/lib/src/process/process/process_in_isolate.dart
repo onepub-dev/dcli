@@ -1,5 +1,3 @@
-// ignore_for_file: unnecessary_lambdas, cascade_invocations
-
 import 'dart:async';
 import 'dart:convert';
 import 'dart:developer';
@@ -122,9 +120,7 @@ Future<void> _body(IsolateChannelSendable channel) async {
   } on RunException catch (e, _) {
     isolateLogger(() => 'Exception caught: $e');
     await mailboxToPrimaryIsolate.postMessage(Message.runException(e));
-  }
-  // ignore: avoid_catches_without_on_clauses
-  catch (e, st) {
+  } catch (e, st) {
     await mailboxToPrimaryIsolate.postMessage(Message.runException(
         RunException.fromException(
             e, channel.process.command, channel.process.args,
@@ -182,6 +178,7 @@ StreamSubscription<List<int>> _sendStderrToPrimary(Process process,
     Mailbox mailboxToPrimaryIsolate, Completer<void> stderrStreamDone) {
   late StreamSubscription<List<int>> stderrSub;
 
+  // the return is used in the body
   // ignore: join_return_with_assignment
   stderrSub = process.stderr.listen((data) async {
     stderrSub.pause();
@@ -203,6 +200,7 @@ StreamSubscription<List<int>> _sendStdoutToPrimary(Process process,
     Mailbox mailboxToPrimaryIsolate, Completer<void> stdoutStreamDone) {
   late StreamSubscription<List<int>> stdoutSub;
 
+  // the return is used in the body
   // ignore: join_return_with_assignment
   stdoutSub = process.stdout.listen((data) async {
     stdoutSub.pause();

@@ -9,7 +9,7 @@ import 'package:dcli_terminal/dcli_terminal.dart';
 import 'package:test/test.dart';
 
 void main() {
-  test('format humanReadable', () async {
+  test('format humanReadable', ()  {
     expect(Format().bytesAsReadable(1), '    1B');
     expect(Format().bytesAsReadable(11), '   11B');
     expect(Format().bytesAsReadable(121), '  121B');

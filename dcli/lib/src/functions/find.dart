@@ -41,7 +41,7 @@ export 'package:dcli_core/dcli_core.dart' show Find;
 /// ```
 ///
 /// Valid patterns are:
-/// ```
+/// ```text
 ///
 /// [*] - matches any number of any characters including none.
 ///
@@ -113,16 +113,6 @@ FindProgress find(
 
 ///
 class FindProgress extends InternalProgress {
-  ///
-  FindProgress(
-    this.pattern, {
-    required this.caseSensitive,
-    required this.recursion,
-    required this.includeHidden,
-    required this.workingDirectory,
-    required this.types,
-  });
-
   /// The glob pattern we are searching for matches on
   String pattern;
 
@@ -140,6 +130,16 @@ class FindProgress extends InternalProgress {
 
   /// The list of file system entity types to search file.
   List<FileSystemEntityType> types;
+
+  ///
+  FindProgress(
+    this.pattern, {
+    required this.caseSensitive,
+    required this.recursion,
+    required this.includeHidden,
+    required this.workingDirectory,
+    required this.types,
+  });
 
   /// If you need to perform async operations you should use
   ///  [core.find].

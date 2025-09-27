@@ -7,7 +7,7 @@ import 'package:test/test.dart';
 
 void main() {
   test('settings ...', () async {
-    await Settings().setVerbose(enabled: true);
+    Settings().setVerbose(enabled: true);
     late var logged = Completer<bool>();
 
     final lines = <String>[];

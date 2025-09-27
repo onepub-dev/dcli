@@ -10,17 +10,17 @@ import '../pubspec/dependency.dart';
 
 ///
 /// runs and retrives the results of calling
-/// ```
+/// ```bash
 /// pub get
 /// ```
 /// For the given [DartProject]
 ///
 
 class PubGet {
+  final DartProject _project;
+
   ///
   PubGet(this._project);
-
-  final DartProject _project;
 
   /// Runs the pub get command against
   /// the project working dir.
@@ -51,11 +51,12 @@ class PubGet {
 /// results from running pub get.
 /// we parse lines of interest.
 class PubGetResult {
+  final _added = <DependencyLine>[];
+
+  final _removed = <DependencyLine>[];
+
   ///
   PubGetResult();
-
-  final List<DependencyLine> _added = <DependencyLine>[];
-  final List<DependencyLine> _removed = <DependencyLine>[];
 
   void _processLine(String line) {
     print(line);
@@ -84,9 +85,9 @@ class PubGetResult {
 ///
 
 class PubGetException extends DCliException {
-  ///
-  PubGetException(this.exitCode) : super('dart pub get failed');
-
   /// the pub get exit code.
   final int? exitCode;
+
+  ///
+  PubGetException(this.exitCode) : super('dart pub get failed');
 }

@@ -30,9 +30,8 @@ void main() {
       /// This string
       /// '^[[32;1m1^[[0m:^[[38;5;208;1m0^[[0m:^[[31;1m0^[[0m:^[[34;1m0^[[0m test/bad_test.dart: Loading.';
       /// becomes
-      const test2 =
-          // ignore: lines_longer_than_80_chars
-          '1b5b33323b316d311b5b306d3a1b5b33383b353b3230383b316d301b5b306d3a1b5b33313b316d301b5b306d3a1b5b33343b316d301b5b306d20746573742f6261645f746573742e646172743a20546573747320636f6d706c657465642e';
+      const test2 = '''
+1b5b33323b316d311b5b306d3a1b5b33383b353b3230383b316d301b5b306d3a1b5b33313b316d301b5b306d3a1b5b33343b316d301b5b306d20746573742f6261645f746573742e646172743a20546573747320636f6d706c657465642e''';
 
       final ansi = String.fromCharCodes(HEX.decode(test2));
 

@@ -34,7 +34,6 @@ void main() {
         ..value(Resources.scopeKeyProjectRoot, tempDir)
         ..runSync(() {
           createDir(dirname(Resources.pathToPackYaml), recursive: true);
-          // ignore: cascade_invocations
           Resources.pathToPackYaml.write('''
 externals:
   - external:

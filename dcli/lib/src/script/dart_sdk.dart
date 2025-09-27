@@ -23,10 +23,6 @@ import '../util/runnable_process.dart';
 /// The [DartSdk] provides access to a number of the dart sdk tools
 /// as well as details on the active sdk instance.
 class DartSdk {
-  ///
-  factory DartSdk() => _self ??= DartSdk._internal();
-
-  DartSdk._internal();
   static DartSdk? _self;
 
   /// Path of Dart SDK
@@ -34,14 +30,24 @@ class DartSdk {
 
   Version? _version;
 
-  /// The path to the dart 'bin' directory.
-  String get pathToSdk => _sdkPath ??= _detect();
-
   // Path the dart executable obtained by scanning the PATH
   late final String? _pathToDartExe = _determineDartPath();
 
   // Path the pub executable obtained by scanning the PATH
   late final String? _pathToPubExe = _determinePubPath();
+
+  // @Deprecated('Use pathToDartExe and dart compile')
+  late final String? _pathToDartNativeExe = which(dart2NativeExeName).path;
+
+  var _progressSuppressor = 0;
+
+  ///
+  factory DartSdk() => _self ??= DartSdk._internal();
+
+  DartSdk._internal();
+
+  /// The path to the dart 'bin' directory.
+  String get pathToSdk => _sdkPath ??= _detect();
 
   /// platform specific name of the 'dart' executable
   static String get dartExeName {
@@ -81,9 +87,6 @@ class DartSdk {
   /// file path to the 'pub' command.
   /// Returns null if the path cannot be found.
   String? get pathToPubExe => _pathToPubExe;
-
-  // @Deprecated('Use pathToDartExe and dart compile')
-  late final String? _pathToDartNativeExe = which(dart2NativeExeName).path;
 
   /// file path to the 'dart2native' command.
   String? get pathToDartToNativeExe => _pathToDartNativeExe;
@@ -308,7 +311,6 @@ class DartSdk {
     // other wise it is treated as relative to pathToProject
     final docPath = join(pathToProject, pathToDoc);
 
-    // ignore: parameter_assignments
     args = ['--output-dir', docPath, ...args];
 
     if (useDartDocCommand) {
@@ -596,7 +598,7 @@ class DartSdk {
     print('');
   }
 
-  int _progressSuppressor = 0;
+  // may use thisin the future.
   // ignore: unused_element
   Future<void> _showProgress(FetchProgress progress) async {
     final term = Terminal();
@@ -729,7 +731,7 @@ class DartSdk {
 }
 
 /// Exception throw if we can't find the dart sdk.
-final Exception dartSdkNotFound = Exception('Dart SDK not found!');
+final dartSdkNotFound = Exception('Dart SDK not found!');
 
 /// This method is ONLY for use by the installer so that we can
 /// set the path during the install when it won't be detectable

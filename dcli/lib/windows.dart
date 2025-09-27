@@ -6,7 +6,7 @@
  */
 
 /// barrel file for windows specific functions.
-library windows;
+library;
 
 export 'src/platform/windows/registry.dart';
 export 'src/shell/cmd_shell.dart';

@@ -1,3 +1,4 @@
+// notes for possible future implementation
 // ignore_for_file: dangling_library_doc_comments
 /// After a process is spawned via mailbox/isolate
 /// the data is retrieved via this pump.

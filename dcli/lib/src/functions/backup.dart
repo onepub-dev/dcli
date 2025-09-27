@@ -35,7 +35,6 @@ export 'package:dcli_core/dcli_core.dart'
 ///  * [withFileProtectionAsync]
 ///
 void backupFile(String pathToFile, {bool ignoreMissing = false}) =>
-    // ignore: discarded_futures
     core.backupFile(pathToFile, ignoreMissing: ignoreMissing);
 
 /// Designed to work with [backupFile] to restore
@@ -231,14 +230,12 @@ Future<void> _restoreFile(Paths paths) async {
           move(paths.sourcePath, dotBak);
         }
 
-        // ignore: flutter_style_todos
-        /// TODO(bsutton): consider only restoring the file if its last modified
-        /// time has changed.
+        // TODO(bsutton): consider only restoring the file if its last modified
+        // time has changed.
         move(paths.backupPath, paths.sourcePath);
         if (exists(dotBak)) {
           delete(dotBak);
         }
-        // ignore: avoid_catches_without_on_clauses
       } catch (e) {
         /// The restore failed so if the dotBak file
         /// exists lets at least restore that.

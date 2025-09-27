@@ -8,6 +8,10 @@ import 'message.dart';
 /// Handle messages sent back from the spawned isolate.
 ///
 class MessageResponse {
+  late final List<int> payload;
+
+  late final MessageType messageType;
+
   MessageResponse.fromData(List<int> data) {
     messageType = MessageType.values[data[0]];
     if (data.length > 1) {
@@ -17,8 +21,6 @@ class MessageResponse {
     }
     processLogger(() => 'Recieved Message $this');
   }
-  late final List<int> payload;
-  late final MessageType messageType;
 
   void onStdout(void Function(List<int> payload) action) {
     if (messageType == MessageType.stdout) {

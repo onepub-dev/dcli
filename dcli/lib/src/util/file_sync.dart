@@ -1,3 +1,4 @@
+// these are still useful.
 // ignore_for_file: comment_references
 
 /* Copyright (C) S. Brett Sutton - All Rights Reserved
@@ -23,6 +24,10 @@ import '../../dcli.dart';
 /// Note: the api to this class is considered EXPERIMENTAL
 /// and is subject to change.
 class FileSync {
+  late File _file;
+
+  late RandomAccessFile _raf;
+
   /// Opens a file for synchronous IO.
   ///
   /// If you instantiate FileSync you MUST call [close].
@@ -34,17 +39,14 @@ class FileSync {
     _open(fileMode);
   }
 
-  late File _file;
-  late RandomAccessFile _raf;
-
   /// Generates a temporary filename in the system temp directory
   /// that is guaranteed to be unique.
   ///
   /// This method does not create the file.
   ///
-  /// The temp file name will be <uuid>.tmp
+  /// The temp file name will be `<uuid>.tmp`
   /// unless you provide a [suffix] in which
-  /// case the file name will be <uuid>.<suffix>
+  /// case the file name will be `<uuid>.<suffix>`
   @Deprecated('Use createTempFilename')
   static String tempFile({String? suffix}) =>
       createTempFilename(suffix: suffix);

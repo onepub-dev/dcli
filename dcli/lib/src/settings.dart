@@ -22,6 +22,32 @@ import 'version/version.g.dart';
 /// flags passed on the command line to DCli.
 ///
 class Settings {
+  static var scopeKey = const ScopeKey<Settings>();
+
+  static Settings? _self;
+
+  /// The directory name of the DCli templates.
+  static const templateDir = 'template';
+
+  final _settings = InternalSettings();
+
+  /// The name of the DCli app. This will
+  /// always be 'dcli'.
+  static const dcliAppName = 'dcli';
+
+  /// The DCli version you are running
+  String? version;
+
+  String? _dcliPath;
+
+  /// The name of the dcli settings directory.
+  /// This is .dcli.
+  var dcliDir = '.dcli';
+
+  String? _dcliBinPath;
+
+  String? _scriptPath;
+
   /// Returns a singleton providing
   /// access to DCli settings.
   factory Settings() {
@@ -40,15 +66,6 @@ class Settings {
     version = packageVersion;
   }
 
-  static ScopeKey<Settings> scopeKey = const ScopeKey<Settings>();
-
-  static Settings? _self;
-
-  /// The directory name of the DCli templates.
-  static const templateDir = 'template';
-
-  final InternalSettings _settings = InternalSettings();
-
   /// True if you are running on a Mac.
   bool get isMacOS => core.Settings().isMacOS;
 
@@ -57,23 +74,6 @@ class Settings {
 
   /// True if you are running on a Window system.
   bool get isWindows => core.Settings().isWindows;
-
-  /// The name of the DCli app. This will
-  /// always be 'dcli'.
-  static const String dcliAppName = 'dcli';
-
-  /// The DCli version you are running
-  String? version;
-
-  String? _dcliPath;
-
-  /// The name of the dcli settings directory.
-  /// This is .dcli.
-  String dcliDir = '.dcli';
-
-  String? _dcliBinPath;
-
-  String? _scriptPath;
 
   /// The absolute path to the dcli script which
   /// is currently running.
@@ -126,7 +126,6 @@ class Settings {
 
   /// Turns on verbose logging.
   void setVerbose({required bool enabled}) {
-    // ignore: discarded_futures
     core.Settings().setVerbose(enabled: enabled);
   }
 
@@ -167,14 +166,14 @@ class Settings {
 /// control the behaviour of the package.
 ///
 class InternalSettings {
+  static final _self = InternalSettings._internal();
+
+  final _directoryStack = core.StackList<Directory>();
+
   ///
   factory InternalSettings() => _self;
 
   InternalSettings._internal();
-
-  static final InternalSettings _self = InternalSettings._internal();
-
-  final _directoryStack = core.StackList<Directory>();
 
   bool get _isStackEmpty => _directoryStack.isEmpty;
 

@@ -1,7 +1,7 @@
 class CallbackStringSync implements Sink<String> {
-  CallbackStringSync(this.callback);
-
   final void Function(String) callback;
+
+  CallbackStringSync(this.callback);
 
   @override
   void add(String data) {

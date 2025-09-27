@@ -103,7 +103,7 @@ packages:
       path: "../dcli"
       relative: true
     source: path
-    version: "7.1.0"
+    version: "7.1.1"
   dcli_common:
     dependency: "direct overridden"
     description:

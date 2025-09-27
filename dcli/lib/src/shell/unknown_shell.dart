@@ -23,17 +23,17 @@ import 'shell_mixin.dart';
 /// This may simply be the parent process of the
 /// dart app so not a shell at all.
 class UnknownShell with ShellMixin {
-  /// Attached to the Unknown shell with the given pid.
-  UnknownShell.withPid(this.pid, {this.processName});
-
   /// The name of the shell process.
   final String? processName;
 
   /// Name of the shell
-  static const String shellName = 'Unknown';
+  static const shellName = 'Unknown';
 
   @override
   final int? pid;
+
+  /// Attached to the Unknown shell with the given pid.
+  UnknownShell.withPid(this.pid, {this.processName});
 
   /// Returns true if this shell supports
   /// modifying the shell's PATH
@@ -80,10 +80,7 @@ class UnknownShell with ShellMixin {
           join(macOSPathPath, 'dcli${const Uuid().v4()}').write(path);
         }
         success = true;
-      }
-      // ignore: avoid_catches_without_on_clauses
-      catch (e) {
-        // ignore write permission problems.
+      } catch (e) {
         printerr(
           red(
             "Unable to add $path to path as we couldn't write "
@@ -117,9 +114,7 @@ class UnknownShell with ShellMixin {
           }
         }
       }
-      // ignore: avoid_catches_without_on_clauses
       catch (e) {
-        // ignore write permission problems.
         printerr(
           red(
             "Unable to add dcli/bin to path as we couldn't write to $profile",
@@ -152,10 +147,12 @@ class UnknownShell with ShellMixin {
   bool get hasStartScript => true;
 
   @override
+  // good enough
   // ignore: only_throw_errors
   String get startScriptName => throw UnimplementedError;
 
   @override
+  // good enough
   // ignore: only_throw_errors
   String get pathToStartScript => throw UnimplementedError;
 
@@ -163,8 +160,7 @@ class UnknownShell with ShellMixin {
   bool get isPrivilegedUser => false;
 
   @override
-  String? get loggedInUser =>
-      'root'; // handles running in Docker with no shell.
+  String? get loggedInUser => 'root';
 
   @override
   String privilegesRequiredMessage(String app) =>

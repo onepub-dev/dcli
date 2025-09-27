@@ -16,6 +16,17 @@ import 'progress_mixin.dart';
 class ProgressStdErrImpl extends ProgressImpl
     with ProgressMixin
     implements ProgressStdErr {
+  final _stderrSplitter = ProgressiveLineSplitter();
+
+  final bool _capture;
+
+  final _capturedLines = <String>[];
+
+  // final controller = StreamController<String>();
+  final StreamController<String> _controller;
+
+  late final Sink<String> sink;
+
   /// Use this progress to only output data sent to stderr.
   /// If [capture] is true (defaults to false) the output to
   /// stderr is also captured and will be available
@@ -33,12 +44,6 @@ class ProgressStdErrImpl extends ProgressImpl
     });
   }
 
-  final _stderrSplitter = ProgressiveLineSplitter();
-
-  final bool _capture;
-
-  final _capturedLines = <String>[];
-
   @override
   List<String> get lines => _capturedLines;
 
@@ -46,11 +51,6 @@ class ProgressStdErrImpl extends ProgressImpl
   void addToStderr(List<int> data) {
     _stderrSplitter.addData(data);
   }
-
-  // final controller = StreamController<String>();
-  final StreamController<String> _controller;
-
-  late final Sink<String> sink;
 
   void addToStream(String line) {
     sink.add(line);

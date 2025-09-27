@@ -59,6 +59,7 @@ class _Pop extends DCliFunction {
   ///
   /// Note: change the directory changes the directory
   /// for all isolates.
+  // TODO(bsutton): to be removed in 8.x
   void pop() {
     if (Settings().isStackEmpty) {
       throw PopException(
@@ -72,9 +73,7 @@ class _Pop extends DCliFunction {
 
     try {
       Directory.current = path;
-    }
-    // ignore: avoid_catches_without_on_clauses
-    catch (e) {
+    } catch (e) {
       throw PopException(
         'An error occured popping to ${truepath(path)}. Error $e',
       );
@@ -82,9 +81,11 @@ class _Pop extends DCliFunction {
   }
 }
 
+// to be removed in 8.x
 // ignore: deprecated_member_use_from_same_package
 /// Thrown when the [pop] function encouters an error.
 class PopException extends DCliFunctionException {
+  // to be removed in 8.x
   // ignore: deprecated_member_use_from_same_package
   /// Thrown when the [pop] function encouters an error.
   PopException(super.message);

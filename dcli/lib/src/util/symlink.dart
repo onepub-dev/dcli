@@ -1,3 +1,4 @@
+// they are useful
 // ignore_for_file: comment_references
 
 /* Copyright (C) S. Brett Sutton - All Rights Reserved
@@ -56,6 +57,4 @@ void deleteSymlink(String linkPath) => core.deleteSymlink(linkPath);
 /// ```
 ///
 /// throws a FileSystemException if the target path does not exist.
-String resolveSymLink(String pathToLink) =>
-    // ignore: discarded_futures
-    core.resolveSymLink(pathToLink);
+String resolveSymLink(String pathToLink) => core.resolveSymLink(pathToLink);

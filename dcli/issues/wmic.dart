@@ -21,7 +21,6 @@ void main(List<String> args) {
     print('offset: ${e.offset}');
     print('source: ${e.source}');
     print(st);
-    // ignore: avoid_catches_without_on_clauses
   } catch (e, st) {
     print(e);
     print(st);

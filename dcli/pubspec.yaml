@@ -45,7 +45,7 @@ dependencies:
 dev_dependencies:
   dcli_test: any
   hex: ^0.2.0
-  lint_hard: ^5.0.0
+  lint_hard: ^6.2.1
   mocktail: ^1.0.0
   test: ^1.0.0
   test_api: ^0.7.0

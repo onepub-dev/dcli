@@ -18,7 +18,7 @@ import 'package:path/path.dart' hide equals;
 import 'package:test/test.dart';
 
 void main() {
-  test('backup/restore good path', () async {
+  test('backup/restore good path', () {
     final root = createTempDir();
     const filename = 'test.txt';
     final file = join(root, filename);
@@ -50,7 +50,7 @@ void main() {
     expect(exists(backupDir), isFalse);
   });
 
-  test('restore missing backup', () async {
+  test('restore missing backup', () {
     final root = createTempDir();
     const filename = 'test.txt';
     final file = join(root, filename);
@@ -68,7 +68,7 @@ void main() {
     expect(() => restoreFile(file), throwsA(isA<RestoreFileException>()));
   });
 
-  test('backup missing file', () async {
+  test('backup missing file', () {
     final root = createTempDir();
     const filename = 'test.txt';
     final file = join(root, filename);
@@ -81,7 +81,7 @@ void main() {
     expect(() => backupFile(file), throwsA(isA<BackupFileException>()));
   });
 
-  test('Existing .bak directory', () async {
+  test('Existing .bak directory', () {
     final root = createTempDir();
     const filename = 'test.txt';
     final file = join(root, filename);

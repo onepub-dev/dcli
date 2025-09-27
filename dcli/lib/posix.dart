@@ -6,7 +6,7 @@
  */
 
 /// barrel file for posix specific functions.
-library posix;
+library;
 
 export 'src/posix/chmod.dart' show ChModException, chmod;
 export 'src/posix/chown.dart' show ChOwnException, chown;

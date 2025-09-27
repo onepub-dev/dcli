@@ -14,7 +14,7 @@ import 'package:path/path.dart';
 
 /// dsort
 ///
-///```
+///```bash
 /// dsort --field-delimiter=<FD> --linedelimiter=<LD> --key=<columns>
 ///   --output output <file>
 ///
@@ -36,10 +36,10 @@ import 'package:path/path.dart';
 ///
 ///
 
-const String fieldDelimiterOption = 'field-delimiter';
-const String lineDelimiterOption = 'line-delimiter';
-const String sortkeyOption = 'sortkey';
-const String outputOption = 'output';
+const fieldDelimiterOption = 'field-delimiter';
+const lineDelimiterOption = 'line-delimiter';
+const sortkeyOption = 'sortkey';
+const outputOption = 'output';
 
 void main(List<String> args) {
   dsort(args);
@@ -58,22 +58,18 @@ void dsort(List<String> args) {
       fieldDelimiterOption,
       abbr: 'f',
       defaultsTo: ',',
-      //ignore: avoid_types_on_closure_parameters
-      callback: (String? value) => fieldDelimiter = value!,
+      callback: (value) => fieldDelimiter = value!,
     )
     ..addOption(
       lineDelimiterOption,
       abbr: 'l',
       defaultsTo: '\n',
-      //ignore: avoid_types_on_closure_parameters
-      callback: (String? value) => lineDelimiter = value!,
+      callback: (value) => lineDelimiter = value!,
     )
     ..addMultiOption(
       sortkeyOption,
       abbr: 's',
-      //ignore: avoid_types_on_closure_parameters
-      callback: (List<String> values) =>
-          columns.addAll(FileSort.expandColumns(values)),
+      callback: (values) => columns.addAll(FileSort.expandColumns(values)),
     )
     ..addOption(outputOption, abbr: 'o');
 

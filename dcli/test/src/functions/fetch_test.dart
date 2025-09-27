@@ -15,7 +15,7 @@ import 'package:dcli_core/dcli_core.dart' as core;
 import 'package:path/path.dart' hide equals;
 import 'package:test/test.dart';
 
-String baseURl =
+var baseURl =
     'https://github.com/onepub-dev/dcli/raw/master/dcli/test/src/functions/fetch_downloads';
 void main() {
   group('Fetch Single', () {
@@ -47,7 +47,7 @@ void main() {
             await fetch(
               url: '$baseURl/sample.aac',
               saveToPath: sampleAac,
-              fetchProgress: (progress) async {
+              fetchProgress: (progress) {
                 Terminal().overwriteLine('${progress.progress * 100} %');
               },
             );
@@ -64,7 +64,7 @@ void main() {
           await fetch(
             url: '$baseURl/sample.wav',
             saveToPath: sampleWav,
-            fetchProgress: (progress) async {
+            fetchProgress: (progress) {
               Terminal().overwriteLine('${progress.progress * 100} %');
             },
           );
@@ -183,7 +183,7 @@ void main() {
         await fetch(
           url: '$baseURl/sample.aac',
           saveToPath: sampleAac,
-          fetchProgress: (progress) async {
+          fetchProgress: (progress) {
             Terminal().overwriteLine('${progress.progress * 100} %');
           },
         );
@@ -198,7 +198,7 @@ void main() {
         await fetch(
           url: '$baseURl/sample.wav',
           saveToPath: sampleWav,
-          fetchProgress: (progress) async {
+          fetchProgress: (progress) {
             Terminal().overwriteLine('${progress.progress * 100} %');
           },
         );
@@ -219,7 +219,7 @@ void main() {
             'http://test.comeing.com.au/long/123456789012345678901234567890';
 
         expect(
-          () async => fetch(url: url, saveToPath: file),
+          () => fetch(url: url, saveToPath: file),
           throwsA(
             predicate<FetchException>((e) =>
 
@@ -243,7 +243,7 @@ void main() {
         const url = 'https://github.com/xx234la43adre';
 
         expect(
-          () async => fetch(url: url, saveToPath: file),
+          ()  => fetch(url: url, saveToPath: file),
           throwsA(
             predicate<FetchException>(
               (e) => e.message.contains('Not Found') && e.errorCode == 404,
@@ -407,7 +407,7 @@ void main() {
           pathToData.write(content);
 
           expect(
-              () async => fetch(
+              ()  => fetch(
                   url: 'https://httpbin.org/get',
                   data: FetchData.fromFile(pathToData),
                   saveToPath: file),
@@ -442,25 +442,25 @@ void main() {
   group('FetchData', () {
     group('mime-type', () {
       test('by extension - png', () async {
-        await withTempFileAsync ((pathToData) async {
+        await withTempFileAsync((pathToData) async {
           expect(FetchData.fromFile(pathToData).mimeType, 'image/png');
         }, suffix: 'png');
       });
-      test('explicity', () async{
-        await withTempFileAsync ((pathToData) async{
+      test('explicity', () async {
+        await withTempFileAsync((pathToData) async {
           expect(
               FetchData.fromFile(pathToData, mimeType: 'alphabet/soup')
                   .mimeType,
               'alphabet/soup');
         }, suffix: 'png');
       });
-      test('by extension - csv', () async{
-        await withTempFileAsync ((pathToData) async{
+      test('by extension - csv', () async {
+        await withTempFileAsync((pathToData) async {
           expect(FetchData.fromFile(pathToData).mimeType, 'text/csv');
         }, suffix: 'csv');
       });
-      test('default', () async{
-        await withTempFileAsync ((pathToData) async{
+      test('default', () async {
+        await withTempFileAsync((pathToData) async {
           expect(FetchData.fromFile(pathToData).mimeType, 'text/plain');
         });
       });

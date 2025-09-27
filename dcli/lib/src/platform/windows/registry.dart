@@ -1,5 +1,3 @@
-// ignore_for_file: deprecated_member_use
-
 /* Copyright (C) S. Brett Sutton - All Rights Reserved
  * Unauthorized copying of this file, via any medium is strictly prohibited
  * Proprietary and confidential
@@ -374,13 +372,15 @@ void regSetExpandString(
 // }
 
 class _RegResults {
-  _RegResults(this.pResult, this.size, this.type);
   Pointer<Uint8> pResult;
+
   int size;
 
   /// The type of data returned.
   /// e.g. REG_SZ
   int type;
+
+  _RegResults(this.pResult, this.size, this.type);
 
   void free() => calloc.free(pResult);
 
@@ -447,7 +447,6 @@ _RegResults _regGetValue(
       ..free(pResultSize)
       ..free(pType);
   }
-  // ignore: avoid_dynamic_calls
   return _RegResults(pResult, pResultSize.value, type);
 }
 
@@ -473,7 +472,6 @@ void _regSetValue(
     _withRegKey(hkey, subKey, accessRights, (hkey, pSubKey) {
       final result =
           RegSetValueEx(hkey, pName, 0, type, pValue.cast(), valueSize);
-      // ignore: invariant_booleans
       if (result != ERROR_SUCCESS) {
         throw WindowsException(HRESULT_FROM_WIN32(result));
       }

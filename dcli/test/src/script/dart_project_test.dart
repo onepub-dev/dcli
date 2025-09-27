@@ -15,7 +15,7 @@ import 'package:pubspec_manager/pubspec_manager.dart';
 import 'package:test/test.dart';
 
 void main() {
-  test('dart project directories', () async {
+  test('dart project directories', ()  {
     expect(DartProject.fromPath(pwd).pathToProjectRoot, equals(truepath('.')));
     expect(
       DartProject.fromPath(pwd).pathToPubSpec,

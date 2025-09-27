@@ -12,7 +12,7 @@ typedef CaptureZonePrintErr = void Function(String);
 /// Key to the overloading [printerr] function.
 
 /// Key to the overloading [printerr] function.
-const String capturePrinterrKey = 'printerr';
+const capturePrinterrKey = 'printerr';
 
 /// Run code in a zone which traps calls to [print] and [printerr]
 /// redirecting them to the passed progress.
@@ -62,7 +62,6 @@ Future<void> _body<R>(
   try {
     r = await body();
     zoneCompleter.complete(r);
-    // ignore: avoid_catches_without_on_clauses
   } catch (_, __) {
     zoneCompleter.complete(null);
     rethrow;
@@ -80,8 +79,6 @@ Future<void> _flush(ProgressImpl progress) async {
   // scheduleMicrotask(() {});
   await Future.value(1);
 }
-
-
 
 // Future<Progress> capture<R>(Future<R> Function() action,
 //     {Progress? progress}) async {

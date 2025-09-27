@@ -6,11 +6,21 @@
  */
 
 import '../functions/which.dart';
-
 import '../settings.dart';
 
 /// platform specific names of the dcli commands.
 class DCliPaths {
+  static DCliPaths? _self;
+
+  /// platform specific name of the dcli command
+  late final String dcliName;
+
+  /// platform specific name of the dcli install command
+  late final String dcliInstallName;
+
+  /// platform specific name of the dcli auto complete command
+  late final String dcliCompleteName;
+
   ///
   factory DCliPaths() => _self ??= DCliPaths._internal();
 
@@ -25,17 +35,6 @@ class DCliPaths {
       dcliCompleteName = 'dcli_complete';
     }
   }
-
-  static DCliPaths? _self;
-
-  /// platform specific name of the dcli command
-  late final String dcliName;
-
-  /// platform specific name of the dcli install command
-  late final String dcliInstallName;
-
-  /// platform specific name of the dcli auto complete command
-  late final String dcliCompleteName;
 
   /// Returns the path to the DCli executable.
   /// Returns null if DCli is not on the path.

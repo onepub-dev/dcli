@@ -6,14 +6,12 @@
  */
 
 /// See http://dartbug.com/22036
-library has_permission;
+library;
 
 import 'dart:io';
 
-// ignore: unused_field
 enum FilePermission { read, write, execute, setUid, setGid, sticky }
 
-// ignore: unused_field
 enum FilePermissionRole { world, group, user }
 
 /// Checks if the given file or directory at [path]

@@ -16,7 +16,7 @@ import 'package:test/test.dart';
 import 'package:win32/win32.dart';
 
 void main() {
-  test('loggedInUsersHome ...', () async {
+  test('loggedInUsersHome ...', ()  {
     final drive = env['HOMEDRIVE'];
     final path = env['HOMEPATH'];
     final home = '$drive$path';

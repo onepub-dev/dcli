@@ -35,7 +35,7 @@ void main() {
       expect(line, isNotNull);
     });
 
-    test('exception catch', () async {
+    test('exception catch', () {
       expect(
         NamedLock(name: 'exception')
             .withLockAsync(() async => throw DCliException('fake exception')),
@@ -129,7 +129,7 @@ Future<ReceivePort> spawn(String message, String logFile) async {
   return port;
 }
 
-FutureOr<void> writeToLog(String data) async {
+Future<void> writeToLog(String data) async {
   final parts = data.split(';');
   final message = parts[0];
   final log = parts[1];
@@ -175,13 +175,15 @@ Future<void> worker(int instance) async {
 }
 
 class Worker {
+  Isolate isolate;
+
+  ReceivePort exitPort;
+
   Worker(this.isolate) : exitPort = ReceivePort() {
     isolate
       ..addOnExitListener(exitPort.sendPort)
       ..resume(isolate.pauseCapability!);
   }
 
-  Future<dynamic> waitForExit() async => exitPort.first;
-  Isolate isolate;
-  ReceivePort exitPort;
+  Future<dynamic> waitForExit() => exitPort.first;
 }

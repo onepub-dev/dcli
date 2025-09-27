@@ -15,12 +15,12 @@ import 'package:yaml/yaml.dart';
 /// Provides parsers for a number of common file formats.
 ///
 class Parser {
+  final List<String?> _lines;
+
   /// Creates a Parser with a set of lines that will be interpreted
   /// as a selected file type.
   /// The parser may only be used once.
   Parser(this._lines);
-
-  final List<String?> _lines;
 
   ///
   /// Interprets the read lines as JSON strings and builds

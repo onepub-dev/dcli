@@ -13,6 +13,20 @@ import 'progress_mixin.dart';
 class ProgressBothImpl extends ProgressImpl
     with ProgressMixin
     implements ProgressBoth {
+  final LineAction _stdout;
+
+  final LineAction _stderr;
+
+  final bool captureStdout;
+
+  final bool captureStderr;
+
+  final _stdoutSplitter = ProgressiveLineSplitter();
+
+  final _stderrSplitter = ProgressiveLineSplitter();
+
+  final _capturedLines = <String>[];
+
   /// Creates a Progress that allows you to individually control
   /// each aspect of how the [Progress] prints and captures output
   /// to stdout and stderr. It usually easier to use one of the
@@ -39,16 +53,6 @@ class ProgressBothImpl extends ProgressImpl
       }
     });
   }
-
-  final LineAction _stdout;
-  final LineAction _stderr;
-  final bool captureStdout;
-  final bool captureStderr;
-
-  final _stdoutSplitter = ProgressiveLineSplitter();
-  final _stderrSplitter = ProgressiveLineSplitter();
-
-  final _capturedLines = <String>[];
 
   @override
   List<String> get lines => _capturedLines;
@@ -120,6 +124,7 @@ class ProgressiveLineSplitter {
     }
   }
 
+  // would break backwards compatibility
   // ignore: use_setters_to_change_properties
   void onLine(void Function(String line) action) {
     this.action = action;

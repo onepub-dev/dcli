@@ -2,7 +2,6 @@ import 'package:collection/collection.dart';
 
 import '../../dcli.dart';
 
-// ignore: avoid_classes_with_only_static_members
 class MacOSUtils {
   /// Attempts to retrive the logged in user's home directory.
   /// If we can't find it we return /Users/${user}

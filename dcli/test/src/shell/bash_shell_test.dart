@@ -13,7 +13,7 @@ import 'package:dcli/posix.dart';
 import 'package:test/test.dart';
 
 void main() {
-  test('bash shell loggedInUser', () async {
+  test('bash shell loggedInUser', ()  {
     expect(Shell.current.loggedInUser, env['USER']);
   });
 

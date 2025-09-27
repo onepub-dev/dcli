@@ -7,10 +7,11 @@ import 'process_settings.dart';
 
 /// Call a process synchronously
 class PipeSync {
-  PipeSync();
-
   late final ProcessChannel _lhsChannel;
+
   late final ProcessChannel _rhsChannel;
+
+  PipeSync();
 
   /// Read a line from stdout
   List<int>? readStdout() => _rhsChannel.readStdout();

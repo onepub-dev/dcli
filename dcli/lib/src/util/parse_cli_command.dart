@@ -18,6 +18,15 @@ import 'enum_helper.dart';
 /// into the dart Process.start method as a application name and a series
 /// of arguments.
 class ParsedCliCommand {
+  /// The commdand that we parsed from the command line
+  late String cmd;
+
+  /// The args that we parsed from the command line
+  var args = <String>[];
+
+  /// The escape character use for command lines
+  static const escapeCharacter = '^';
+
   ///
   ParsedCliCommand(String command, String? workingDirectory) {
     workingDirectory ??= pwd;
@@ -51,15 +60,6 @@ class ParsedCliCommand {
     final qargs = _QArg.translate(rawArgs);
     args = _expandGlobs(qargs, workingDirectory);
   }
-
-  /// The commdand that we parsed from the command line
-  late String cmd;
-
-  /// The args that we parsed from the command line
-  List<String> args = <String>[];
-
-  /// The escape character use for command lines
-  static const escapeCharacter = '^';
 
   /// parses the given command breaking them done into words
   List<_QArg> _parse(String commandLine) {
@@ -217,7 +217,6 @@ class ParsedCliCommand {
         /// characters until we see a matching quote.
         case _ParseState.nestedQuote:
 
-          // ignore: invariant_booleans
           if (char == currentState.matchingQuote) {
             // We have a matching closing quote
             currentState = stateStack.pop();
@@ -303,16 +302,6 @@ enum _ParseState {
 }
 
 class _ParseFrame {
-  /// Create a [_ParseFrame]
-  _ParseFrame(this.state, this.offset);
-
-  /// Create a [_ParseFrame] when we enter the [_ParseState.inQuote] state.
-  _ParseFrame.forQuote(
-      StackList<_ParseFrame> stack, this.offset, this.matchingQuote)
-      : state = isQuoteActive(stack)
-            ? _ParseState.nestedQuote
-            : _ParseState.inQuote;
-
   /// The state held by this Frame.
   _ParseState state;
 
@@ -323,6 +312,16 @@ class _ParseFrame {
   /// The character offset from the start of the command line
   /// that caused us to enter this state.
   int offset;
+
+  /// Create a [_ParseFrame]
+  _ParseFrame(this.state, this.offset);
+
+  /// Create a [_ParseFrame] when we enter the [_ParseState.inQuote] state.
+  _ParseFrame.forQuote(
+      StackList<_ParseFrame> stack, this.offset, this.matchingQuote)
+      : state = isQuoteActive(stack)
+            ? _ParseState.nestedQuote
+            : _ParseState.inQuote;
 
   @override
   String toString() =>
@@ -343,6 +342,10 @@ class _ParseFrame {
 // TODO(bsutton): consider replacing with code from the dart sdk:
 /// https://github.com/dart-lang/io/blob/master/lib/src/shell_words.dart
 class _QArg {
+  bool? wasQuoted;
+
+  late String arg;
+
   _QArg(String iarg) {
     wasQuoted = false;
     arg = iarg.trim();
@@ -360,9 +363,6 @@ class _QArg {
   }
 
   _QArg.fromParsed(this.arg, {required this.wasQuoted});
-
-  bool? wasQuoted;
-  late String arg;
 
   /// We only do glob expansion if the arg contains at least one of
   /// *, [, ?

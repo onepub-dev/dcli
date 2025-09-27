@@ -5,7 +5,7 @@
  * SPDX-License-Identifier: MIT
  */
 
-part of dart_project;
+part of 'dart_project.dart';
 
 /// Used for unit testing.
 /// When this environment variable exists the [DartProject.create] method
@@ -13,7 +13,7 @@ part of dart_project;
 /// with overrides for dcli and dcli_core which point
 /// to our dev source tree.
 @visibleForTesting
-const String overrideDCliPathKey = 'DCLI_OVERRIDE_PATH';
+const overrideDCliPathKey = 'DCLI_OVERRIDE_PATH';
 
 void _createProject(String pathToProject, String templateName) {
   verbose(() => '_createProject $pathToProject from $templateName');

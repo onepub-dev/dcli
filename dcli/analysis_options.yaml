@@ -1,4 +1,9 @@
 include: package:lint_hard/all.yaml
+
+analyzer:
+  errors:
+    avoid_classes_with_only_static_members: ignore
+    avoid_catches_without_on_clauses: ignore
     
 linter:
   rules:

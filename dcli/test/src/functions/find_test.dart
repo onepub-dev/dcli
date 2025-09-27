@@ -18,7 +18,7 @@ import 'package:test/test.dart';
 
 void main() {
   t.group('Find', () {
-    t.test('manualRecursion', () async {
+    t.test('manualRecursion', ()  {
       final testScriptPath = truepath(DartProject.self.pathToProjectRoot, '..',
           'dcli_unit_tester', 'test', 'test_script');
 

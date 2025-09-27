@@ -5,7 +5,7 @@
  * SPDX-License-Identifier: MIT
  */
 
-library dart_project;
+library;
 
 import 'dart:io' as io;
 
@@ -30,6 +30,14 @@ import 'pub_upgrade.dart';
 part 'dart_project_creator.dart';
 
 class DartProject {
+  late String _pathToProjectRoot;
+
+  String? _pathToPubSpec;
+
+  static DartProject? _current;
+
+  static const _lockName = 'dcli.script.dart.project.lock';
+
   /// Create a dart project on the file system at
   /// [pathTo] from the template named [templateName].
   factory DartProject.create(
@@ -61,11 +69,6 @@ class DartProject {
         _findProject(pathToSearchFrom, search: search) ?? pathToSearchFrom;
     verbose(() => 'DartProject.fromPath: $pathToProjectRoot');
   }
-
-  late String _pathToProjectRoot;
-  String? _pathToPubSpec;
-
-  static DartProject? _current;
 
   /// If you
   @Deprecated('Use DartProject.self')
@@ -218,8 +221,6 @@ class DartProject {
 
     return null;
   }
-
-  static const _lockName = 'dcli.script.dart.project.lock';
 
   /// Prepare the project so it can be run.
   /// This essentially means that we run pub get

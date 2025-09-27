@@ -14,14 +14,14 @@ import 'shell_mixin.dart';
 /// Provides a number of helper functions
 /// when dcli needs to interact with the Zsh shell.
 class ZshShell with ShellMixin, PosixShell {
-  /// Attached to the Zsh shell with the given pid.
-  ZshShell.withPid(this.pid);
-
   /// Name of the shell
-  static const String shellName = 'zsh';
+  static const shellName = 'zsh';
 
   @override
   final int? pid;
+
+  /// Attached to the Zsh shell with the given pid.
+  ZshShell.withPid(this.pid);
 
   @override
   bool get isCompletionSupported => false;

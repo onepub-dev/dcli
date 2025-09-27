@@ -395,7 +395,7 @@ extension StringAsProcess on String {
   /// DCli performs Glob expansion on command arguments. See [run] for details.
   ///
   /// e.g.
-  /// ```
+  /// ```dart
   /// 'tail -n 10 /var/log/syslog'.firstLine;
   /// ```
   ///
@@ -426,7 +426,7 @@ extension StringAsProcess on String {
   /// DCli performs Glob expansion on command arguments. See [run] for details.
   ///
   /// e.g.
-  /// ```
+  /// ```dart
   /// 'tail -n 10 /var/log/syslog'.lastLine;
   /// ```
   ///

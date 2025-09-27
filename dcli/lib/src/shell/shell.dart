@@ -29,7 +29,7 @@ abstract class Shell {
   String get startScriptName;
 
   /// Returns the path to the shell's start script or config file
-  /// e.g /home/<user>/.bashrc
+  /// e.g `/home/<user>/.bashrc`
   String? get pathToStartScript;
 
   /// Returns true if the shells name matches

@@ -15,7 +15,7 @@ import 'package:path/path.dart' hide equals;
 import 'package:test/test.dart';
 
 void main() {
-  test('dart script ...', () async {
+  test('dart script ...', ()  {
     expect(
       DartScript.stripDartVersionSuffix('pub_release.dart-2.13.0'),
       equals('pub_release.dart'),

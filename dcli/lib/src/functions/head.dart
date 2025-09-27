@@ -29,9 +29,11 @@ HeadProgress head(String path, int lines) =>
 /// Used to access output from the head command.
 ///
 class HeadProgress extends InternalProgress {
-  HeadProgress._internal(this._path, this._lines);
   final String _path;
+
   final int _lines;
+
+  HeadProgress._internal(this._path, this._lines);
 
   /// Read lines from the head of the file.
   @override

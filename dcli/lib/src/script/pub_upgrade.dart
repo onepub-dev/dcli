@@ -10,17 +10,17 @@ import '../pubspec/dependency.dart';
 
 ///
 /// runs and retrives the results of calling
-/// ```
+/// ```bash
 /// pub upgrade
 /// ```
 /// For the given [DartProject]
 ///
 
 class PubUpgrade {
+  final DartProject _project;
+
   ///
   PubUpgrade(this._project);
-
-  final DartProject _project;
 
   /// Runs the pub get command against
   /// the project working dir.
@@ -51,11 +51,12 @@ class PubUpgrade {
 /// results from running pub get.
 /// we parse lines of interest.
 class PubUpgradeResult {
+  final _added = <DependencyLine>[];
+
+  final _removed = <DependencyLine>[];
+
   ///
   PubUpgradeResult();
-
-  final List<DependencyLine> _added = <DependencyLine>[];
-  final List<DependencyLine> _removed = <DependencyLine>[];
 
   void _processLine(String line) {
     print(line);
@@ -84,9 +85,9 @@ class PubUpgradeResult {
 ///
 
 class PubUpgradeException extends DCliException {
-  ///
-  PubUpgradeException(this.exitCode) : super('dart pub upgrade failed');
-
   /// the pub get exit code.
   final int? exitCode;
+
+  ///
+  PubUpgradeException(this.exitCode) : super('dart pub upgrade failed');
 }

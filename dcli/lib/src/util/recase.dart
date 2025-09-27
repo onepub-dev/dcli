@@ -5,7 +5,6 @@
  * SPDX-License-Identifier: MIT
  */
 
-// ignore: avoid_classes_with_only_static_members
 /// provides methods to change the case of a sentence or word.
 class ReCase {
   /// The first letter of each word in the sentence is set to

@@ -70,6 +70,7 @@ export 'package:dcli_terminal/dcli_terminal.dart';
 export 'src/functions/ask.dart';
 export 'src/functions/backup.dart';
 export 'src/functions/confirm.dart';
+// TODO(bsutton): to be removed in 8.x
 // ignore: deprecated_member_use_from_same_package
 export 'src/functions/create_dir.dart' show withTempDir;
 export 'src/functions/delete.dart' show DeleteException, delete;

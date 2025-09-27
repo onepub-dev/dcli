@@ -31,12 +31,7 @@ import 'shell_mixin.dart';
 ///
 /// This class is considered EXPERIMENTAL and is likely to change.
 class ShellDetection {
-  /// obtain a singleton instance of Shell.
-  factory ShellDetection() => _shell;
-
-  ShellDetection._internal();
-
-  static final ShellDetection _shell = ShellDetection._internal();
+  static final _shell = ShellDetection._internal();
 
   final _shells = <String, Shell Function(int? pid)>{
     AshShell.shellName: AshShell.withPid,
@@ -49,6 +44,11 @@ class ShellDetection {
     FishShell.shellName: FishShell.withPid,
     DockerShell.shellName: DockerShell.withPid,
   };
+
+  /// obtain a singleton instance of Shell.
+  factory ShellDetection() => _shell;
+
+  ShellDetection._internal();
 
   /// Attempts to identify the shell that
   /// DCli was run under.

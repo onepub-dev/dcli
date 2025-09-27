@@ -28,6 +28,7 @@ import 'package:path/path.dart';
 /// See:
 ///  * [join] in prefrence to cd/push/pop
 @Deprecated('Use join')
+// TODO(bsutton): to be removed in 8.x
 void cd(String path) => CD().cd(path);
 
 /// Class that implements the [cd] function.
@@ -44,9 +45,11 @@ class CD extends DCliFunction {
   }
 }
 
+// to be removed in 8.x
 // ignore: deprecated_member_use_from_same_package
 /// Throw when the [cd] function encounters an error.
 class CDException extends DCliFunctionException {
+  // to be removed in 8.x
   // ignore: deprecated_member_use_from_same_package
   /// Throw when the [cd] function encounters an error.
   CDException(super.message);

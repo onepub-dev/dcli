@@ -1,5 +1,3 @@
-// ignore_for_file: deprecated_member_use
-
 /* Copyright (C) S. Brett Sutton - All Rights Reserved
  * Unauthorized copying of this file, via any medium is strictly prohibited
  * Proprietary and confidential
@@ -21,8 +19,7 @@ String getWindowsProcessName(int processID) {
 
   // Get a handle to the process.
   final hProcess = OpenProcess(
-    PROCESS_QUERY_INFORMATION |
-        PROCESS_VM_READ,
+    PROCESS_QUERY_INFORMATION | PROCESS_VM_READ,
     FALSE,
     processID,
   );

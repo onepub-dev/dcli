@@ -5,20 +5,19 @@
  * SPDX-License-Identifier: MIT
  */
 
-// ignore_for_file: deprecated_member_use
-
 import '../../dcli.dart';
 
 /// Runs a Dart dscript
 class ScriptRunner {
-  ///
-  ScriptRunner(this._sdk, this.script, this._scriptArguments);
-
   final DartSdk _sdk;
+
   final List<String> _scriptArguments;
 
   /// The script this runner exists for.
   final DartScript script;
+
+  ///
+  ScriptRunner(this._sdk, this.script, this._scriptArguments);
 
   /// Run the script
   int run() {

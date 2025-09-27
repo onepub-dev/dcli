@@ -25,6 +25,23 @@ import 'runner.dart';
 ///
 ///
 class DartScript {
+  /// Name of the dart script
+  late final String _scriptName;
+
+  /// Path to the dart script loaded.
+  late final String _pathToScript;
+
+  /// The directory where the dart script file lives
+  /// stored as an absolute path.
+  late final String _scriptDirectory;
+
+  String? _unitTestPath;
+
+  /// The current script that is running.
+  static DartScript? _current;
+
+  DartProject? _project;
+
   factory DartScript.createScript(
       {required DartProject project,
       required String scriptName,
@@ -113,16 +130,6 @@ class DartScript {
   // ignore: prefer_constructors_over_static_methods
   static DartScript get self => _current ??= DartScript._self();
 
-  /// Name of the dart script
-  late final String _scriptName;
-
-  /// Path to the dart script loaded.
-  late final String _pathToScript;
-
-  /// The directory where the dart script file lives
-  /// stored as an absolute path.
-  late final String _scriptDirectory;
-
   /// Absolute path to 'this' script including the script name
   ///
   /// If this is a .dart file then its current location.
@@ -164,8 +171,6 @@ class DartScript {
       p.extension(io.Platform.script.toFilePath()) != '.dart' &&
       !_isPubGlobalActivated(io.Platform.script.toFilePath());
 
-  String? _unitTestPath;
-
   /// Returns true if we are running in a unit test.
   /// We do this by inspecting the stack looking for the test_api package
   /// so this method has very limited use and is intended for
@@ -199,9 +204,6 @@ class DartScript {
   static bool _isPubGlobalActivated(String pathToScript) =>
       pathToScript.startsWith(PubCache().pathTo);
 
-  /// The current script that is running.
-  static DartScript? _current;
-
   ///
   @Deprecated('Use DartScript.self or DartScript.fromPath()')
   static DartScript get current => self;
@@ -220,8 +222,6 @@ class DartScript {
   /// If the script is compiled or installed by pub global activate
   /// then this will be the location of the script file.
   String get pathToProjectRoot => project.pathToProjectRoot;
-
-  DartProject? _project;
 
   /// the project for this scrtipt.
   DartProject get project =>
@@ -376,11 +376,9 @@ class DartScript {
   }
 }
 
-// ignore: avoid_classes_with_only_static_members
-///
 class PithyGreetings {
   ///
-  static List<String> greeting = [
+  static var greeting = <String>[
     'Hello World',
     'Helwo vorld',
     'Build and Ben flower pot men. Weeeeeeeed.',

@@ -33,6 +33,23 @@ import '../../dcli.dart';
 
 ///
 class FileSort {
+  final String _inputPath;
+
+  final String _outputPath;
+
+  final List<Column> _columns;
+
+  final String? _fieldDelimiter;
+
+  final String? _lineDelimiter;
+
+  ///
+  final bool? verbose;
+
+  int? _maxColumn = -1;
+
+  static const _mergeSize = 1000;
+
   /// Sort the file at [inputPath] and save the results to [outputPath]
   /// [_inputPath] is the path to the file to be sorted
   /// [_outputPath] is the path to write the sorted file to.
@@ -61,24 +78,12 @@ class FileSort {
     }
   }
 
-  final String _inputPath;
-  final String _outputPath;
-  final List<Column> _columns;
-  final String? _fieldDelimiter;
-  final String? _lineDelimiter;
-
-  ///
-  final bool? verbose;
-  int? _maxColumn = -1;
-
   ///
   /// call this method to start the sort.
   void sort() {
-    // ignore: discarded_futures
     _sort();
   }
 
-  static const _mergeSize = 1000;
   void _sort() {
     var instance = 0;
     var lineCount = _mergeSize;
@@ -327,16 +332,18 @@ class FileSort {
 }
 
 class _Line {
+  FileSync? source;
+
+  late String sourcePath;
+
+  String? line;
+
   _Line(this.source) {
     sourcePath = source!.path;
     line = source!.readLine();
   }
 
   _Line.fromString(this.sourcePath, this.line);
-
-  FileSync? source;
-  late String sourcePath;
-  String? line;
 
   bool readNext() {
     line = source!.readLine();
@@ -411,16 +418,7 @@ class NumericSort implements ColumnComparator {
 ///
 class MonthSort implements ColumnComparator {
   ///
-  const MonthSort();
-  @override
-  int compareTo(Column column, String? lhs, String? rhs) {
-    final mLhs = toMonthNo(lhs!)!;
-    final mRhs = toMonthNo(rhs!)!;
-    return mLhs.compareTo(mRhs);
-  }
-
-  ///
-  static const Map<String, int> months = {
+  static const months = <String, int>{
     'jan': 1,
     'feb': 2,
     'mar': 3,
@@ -434,6 +432,16 @@ class MonthSort implements ColumnComparator {
     'nov': 11,
     'dec': 12,
   };
+
+  ///
+  const MonthSort();
+
+  @override
+  int compareTo(Column column, String? lhs, String? rhs) {
+    final mLhs = toMonthNo(lhs!)!;
+    final mRhs = toMonthNo(rhs!)!;
+    return mLhs.compareTo(mRhs);
+  }
 
   /// the month no. (base 1) derived
   /// from the monthName.
@@ -462,6 +470,27 @@ abstract class ColumnComparator {
 /// Defined a column to sort by for the FileSort
 /// class.
 class Column {
+  static const _typeMap = {
+    's': CaseInsensitiveSort(),
+    'S': CaseSensitiveSort(),
+    'n': NumericSort(),
+    'm': MonthSort(),
+  };
+
+  static const _directionMap = {
+    'a': SortDirection.ascending,
+    'd': SortDirection.descending
+  };
+
+  /// [ordinal] is the column index using base 1
+  /// An ordinal of 0 means that we are treating the entire
+  /// line as a single column.
+  int? ordinal;
+
+  ColumnComparator? _comparator;
+
+  SortDirection? _sortDirection;
+
   /// [ordinal] the (base 1) index of the column.
   /// The [_comparator] we will used to compare
   /// to lines when sorting.
@@ -470,7 +499,7 @@ class Column {
 
   /// A column string is formed as:
   ///
-  /// ```
+  /// ```text
   /// [ordinal]<type><direction>
   ///
   /// [ordinal] - the column no. base 1
@@ -521,28 +550,10 @@ class Column {
     }
   }
 
-  static const _typeMap = {
-    's': CaseInsensitiveSort(),
-    'S': CaseSensitiveSort(),
-    'n': NumericSort(),
-    'm': MonthSort(),
-  };
-  static const _directionMap = {
-    'a': SortDirection.ascending,
-    'd': SortDirection.descending
-  };
-
   @override
   String toString() =>
       'ordinal: $ordinal, comparator: ${_comparator.runtimeType}, '
       ' sortDirection: $_sortDirection';
-
-  /// [ordinal] is the column index using base 1
-  /// An ordinal of 0 means that we are treating the entire
-  /// line as a single column.
-  int? ordinal;
-  ColumnComparator? _comparator;
-  SortDirection? _sortDirection;
 
   int _countDigits(String column) {
     var digits = 0;

@@ -11,7 +11,7 @@ import 'package:path/path.dart' hide equals;
 import 'package:test/test.dart';
 
 void main() {
-  test('truepath ...', () async {
+  test('truepath ...', ()  {
     expect(truepath(join(rootPath, 'tmp')), equals(absolute(rootPath, 'tmp')));
     expect(
       truepath(join(rootPath, 'tmp', '..', 'tmp')),

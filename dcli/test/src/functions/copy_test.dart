@@ -10,7 +10,7 @@ import 'package:path/path.dart' hide equals;
 import 'package:test/test.dart';
 
 void main() {
-  test('copy filename to filename the good path', () async {
+  test('copy filename to filename the good path', ()  {
     final root = createTempDir();
 
     const fromFilename = 'text.txt';
@@ -31,7 +31,7 @@ void main() {
     expect(fromContent, equals(toContent));
   });
 
-  test('copy filename to directory -  the good path', () async {
+  test('copy filename to directory -  the good path', ()  {
     final root = createTempDir();
 
     const fromFilename = 'text.txt';
@@ -53,7 +53,7 @@ void main() {
     expect(fromContent, equals(toContent));
   });
 
-  test("copy filename -  from doesn't exist", () async {
+  test("copy filename -  from doesn't exist", ()  {
     final root = createTempDir();
 
     const fromFilename = 'text.txt';
@@ -74,7 +74,7 @@ void main() {
     );
   });
 
-  test('copy filename -  to already exists', () async {
+  test('copy filename -  to already exists', ()  {
     final root = createTempDir();
 
     const fromFilename = 'text.txt';
@@ -97,7 +97,7 @@ void main() {
     );
   });
 
-  test('copy with overwrite', () async {
+  test('copy with overwrite', ()  {
     final root = createTempDir();
 
     const fromFilename = 'text.txt';
@@ -123,7 +123,7 @@ void main() {
     expect(fromContent, equals(toContent));
   });
 
-  test("copy to filename -  to directory doesn't exist", () async {
+  test("copy to filename -  to directory doesn't exist", ()  {
     final root = createTempDir();
 
     const fromFilename = 'text.txt';
@@ -143,7 +143,7 @@ void main() {
     );
   });
 
-  test("copy to directory -  to directory doesn't exist", () async {
+  test("copy to directory -  to directory doesn't exist", ()  {
     final root = createTempDir();
 
     const fromFilename = 'text.txt';

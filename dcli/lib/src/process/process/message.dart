@@ -32,6 +32,10 @@ enum MessageType {
 /// recieve channel. The first byte is used to
 /// indicate the type of message.
 class Message {
+  var builder = BytesBuilder();
+
+  Uint8List? _content;
+
   /// Used to send the native send port back to the
   /// spawner, so they can send us data.
   /// Spawnee -> Spawner
@@ -90,10 +94,6 @@ class Message {
       ..addByte(MessageType.exception.index)
       ..add(data.codeUnits);
   }
-
-  BytesBuilder builder = BytesBuilder();
-
-  Uint8List? _content;
 
   Uint8List get content => _content ??= builder.takeBytes();
 

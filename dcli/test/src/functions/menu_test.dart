@@ -39,6 +39,7 @@ void main() {
 
       try {
         menu('How old are you', defaultOption: 9, options: numoptions);
+        // just for the unit test.
         // ignore: avoid_catching_errors
       } on ArgumentError catch (e) {
         print('Expected Argument error $e');

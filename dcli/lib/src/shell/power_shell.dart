@@ -10,14 +10,14 @@ import 'windows_mixin.dart';
 
 /// Windows Power Shell
 class PowerShell with WindowsMixin, ShellMixin {
-  /// Attached to the Powershell shell with the given pid.
-  PowerShell.withPid(this.pid);
-
   /// Name of the shell
-  static const String shellName = 'powershell.exe';
+  static const shellName = 'powershell.exe';
 
   @override
   final int? pid;
+
+  /// Attached to the Powershell shell with the given pid.
+  PowerShell.withPid(this.pid);
 
   @override
   bool addToPATH(String path) => true;
@@ -51,10 +51,12 @@ class PowerShell with WindowsMixin, ShellMixin {
   bool get hasStartScript => false;
 
   @override
+  // good enough
   // ignore: only_throw_errors
   String get startScriptName => throw UnimplementedError;
 
   @override
+  // good enough
   // ignore: only_throw_errors
   String get pathToStartScript => throw UnimplementedError;
 }

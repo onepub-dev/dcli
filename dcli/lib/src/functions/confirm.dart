@@ -9,6 +9,7 @@ import '../../dcli.dart';
 
 typedef CustomConfirmPrompt = String Function(
     String prompt,
+    // this is a callback and this style is more readable
     // ignore: avoid_positional_boolean_parameters
     bool? defaultValue);
 
@@ -69,8 +70,8 @@ bool confirm(String prompt,
   return result;
 }
 
-// ignore: avoid_classes_with_only_static_members
 class Confirm {
+  // this is a callback and this style is more readable
   // ignore: avoid_positional_boolean_parameters
   static String defaultPrompt(String prompt, bool? defaultValue) {
     var finalPrompt = prompt;

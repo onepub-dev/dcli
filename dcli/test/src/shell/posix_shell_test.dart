@@ -71,7 +71,7 @@ void main() {
     }, create: false);
   }, tags: ['privileged']);
 
-  test('release env ...', () async {
+  test('release env ...', ()  {
     final shell = Shell.current;
 
     expect(shell.isPrivilegedUser, isTrue);

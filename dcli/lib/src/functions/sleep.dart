@@ -62,8 +62,7 @@ enum Interval {
 ///
 /// See: [sleep]
 ///
-Future<void> sleepAsync(int duration,
-        {Interval interval = Interval.seconds}) async =>
+Future<void> sleepAsync(int duration, {Interval interval = Interval.seconds}) =>
     _Sleep().sleepAsync(duration, interval: interval);
 
 class _Sleep extends core.DCliFunction {

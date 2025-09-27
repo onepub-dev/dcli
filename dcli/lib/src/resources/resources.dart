@@ -329,6 +329,7 @@ $line
 
     var index = 0;
     for (final external in externals) {
+      // json
       // ignore: avoid_dynamic_calls
       var path = external['path'] as String? ?? '';
 
@@ -339,6 +340,7 @@ $line
       // convert to absolute path.
       path = truepath(path);
 
+      // json
       // ignore: avoid_dynamic_calls
       final mount = external['mount'] as String? ?? '';
 
@@ -445,13 +447,6 @@ $line
 }
 
 class _Resource {
-  _Resource(this.pathToSource, String pathToGeneratedLibrary, this.className,
-      {required this.pathToMount})
-      : checksum = calculateHash(pathToSource).hexEncode() {
-    this.pathToGeneratedLibrary = relative(pathToGeneratedLibrary,
-        from: join(Resources.projectRoot, 'lib'));
-  }
-
   /// Path to the original file we are packing.
   final String pathToSource;
 
@@ -477,6 +472,13 @@ class _Resource {
   /// Use calculateHash(pathToResource).hexEncode()
   /// to compare the checksum
   final String checksum;
+
+  _Resource(this.pathToSource, String pathToGeneratedLibrary, this.className,
+      {required this.pathToMount})
+      : checksum = calculateHash(pathToSource).hexEncode() {
+    this.pathToGeneratedLibrary = relative(pathToGeneratedLibrary,
+        from: join(Resources.projectRoot, 'lib'));
+  }
 }
 
 /// Thrown when an error occurs trying to pack or unpack a resource file

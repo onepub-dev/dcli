@@ -111,7 +111,7 @@ Future<void> fetch({
 /// must complete before
 /// [fetchMultiple] will return.
 ///
-Future<void> fetchMultiple({required List<FetchUrl> urls}) async =>
+Future<void> fetchMultiple({required List<FetchUrl> urls}) =>
     _Fetch().fetchMultiple(urls: urls);
 
 /// Http Methods used when calling [fetch]
@@ -128,6 +128,18 @@ enum _FetchDataType { string, path, bytes, stream }
 /// Used with the [fetch] function to send data for
 /// the likes of a POST command.
 class FetchData {
+  final _FetchDataType _type;
+
+  final String _mimeType;
+
+  String? _string;
+
+  String? _pathToDataFile;
+
+  List<int>? _bytes;
+
+  Stream<List<int>>? _stream;
+
   /// Use a String as the source of the [FetchData]
   /// The [mimeType] defaults to text/plain.
   FetchData.fromString(String string, {String mimeType = 'text/plain'})
@@ -175,16 +187,8 @@ class FetchData {
         _type = _FetchDataType.stream,
         _mimeType = mimeType;
 
-  final _FetchDataType _type;
-  final String _mimeType;
-
   /// Returns the mime type of the data.
   String get mimeType => _mimeType;
-
-  String? _string;
-  String? _pathToDataFile;
-  List<int>? _bytes;
-  Stream<List<int>>? _stream;
 
   Future<void> _write(HttpClientRequest request) async {
     switch (_type) {
@@ -230,7 +234,6 @@ class _Fetch extends core.DCliFunction {
     final futures = <Future<void>>[];
 
     for (final url in urls) {
-      // ignore: discarded_futures
       futures.add(download(url, verboseProgress: verboseProgress));
     }
 
@@ -355,6 +358,7 @@ class _Fetch extends core.DCliFunction {
 
         completer.complete();
       },
+      // only way I could get this to work.
       // ignore: avoid_types_on_closure_parameters
       onError: (Object e, StackTrace st) async {
         // something went wrong.
@@ -441,22 +445,6 @@ enum FetchStatus {
 /// Used to describe a url that is being downloaded including
 /// the location where it is going to be stored.
 class FetchUrl {
-  /// ctor.
-  FetchUrl(
-      {required this.url,
-      required this.saveToPath,
-      Map<String, String>? headers,
-      this.method = FetchMethod.get,
-      this.progress = _devNull,
-      this.data}) {
-    this.headers = headers ?? <String, String>{};
-
-    if (data != null && method != FetchMethod.post) {
-      throw FetchException('FetchData is not supported for the FetchMethod:'
-          '${EnumHelper().getName(method)}');
-    }
-  }
-
   /// the URL of the resource being downloaded
   final String url;
 
@@ -478,11 +466,61 @@ class FetchUrl {
   /// such as [FetchMethod.post] this holds the data
   /// that is to be sent.
   FetchData? data;
+
+  /// ctor.
+  FetchUrl(
+      {required this.url,
+      required this.saveToPath,
+      Map<String, String>? headers,
+      this.method = FetchMethod.get,
+      this.progress = _devNull,
+      this.data}) {
+    this.headers = headers ?? <String, String>{};
+
+    if (data != null && method != FetchMethod.post) {
+      throw FetchException('FetchData is not supported for the FetchMethod:'
+          '${EnumHelper().getName(method)}');
+    }
+  }
 }
 
 /// Passed to the [progress] method to indicate the current progress of
 /// a download.
 class FetchProgress {
+  /// When the [FetchStatus.headers] event is sent
+  /// this will contain the headers. At all
+  /// other times it will be null.
+  final Map<String, List<String>>? headers;
+
+  /// When the [FetchStatus.response] event is recieved
+  /// this value will containe the response code.
+  final int? responseCode;
+
+  /// The current status of the downloader.
+  final FetchStatus status;
+
+  /// Details of the url that is being fetched
+  final FetchUrl fetch;
+
+  /// The length (in bytes) of the file being downloaded.
+  /// This isn't set until we get the initial response.
+  /// In some cases it still won't be set if the remote server
+  /// doesn't respond with a length.
+  final int length;
+
+  /// The number of bytes downloaded so far.
+  final int downloaded;
+
+  /// a value from 0.0 to 1.0 indicating the percentage progress.
+  /// You are guarneteed to get a final progress event with a value of 1.0
+  final double progress;
+
+  /// The prior [FetchProgress].
+  /// This is provided so you can compare the start between the existing
+  /// and prior state which may be useful when outputting progress
+  /// messages.
+  FetchProgress? prior;
+
   @visibleForTesting
 
   /// Fetch is preparing to connect
@@ -578,43 +616,9 @@ class FetchProgress {
     prior?.prior = null;
   }
 
-  /// When the [FetchStatus.headers] event is sent
-  /// this will contain the headers. At all
-  /// other times it will be null.
-  final Map<String, List<String>>? headers;
-
-  /// When the [FetchStatus.response] event is recieved
-  /// this value will containe the response code.
-  final int? responseCode;
-
-  /// The current status of the downloader.
-  final FetchStatus status;
-
-  /// Details of the url that is being fetched
-  final FetchUrl fetch;
-
-  /// The length (in bytes) of the file being downloaded.
-  /// This isn't set until we get the initial response.
-  /// In some cases it still won't be set if the remote server
-  /// doesn't respond with a length.
-  final int length;
-
-  /// The number of bytes downloaded so far.
-  final int downloaded;
-
-  /// a value from 0.0 to 1.0 indicating the percentage progress.
-  /// You are guarneteed to get a final progress event with a value of 1.0
-  final double progress;
-
-  /// The prior [FetchProgress].
-  /// This is provided so you can compare the start between the existing
-  /// and prior state which may be useful when outputting progress
-  /// messages.
-  FetchProgress? prior;
-
   /// Shows the progress by replacing the console existing line with the
   /// message:
-  /// <Status> XX/YY <url>
+  /// `<Status> XX/YY <url>`
   ///
   /// Where XX is the bytes downloaded and YY is the total bytes to download.
   ///
@@ -639,6 +643,7 @@ class FetchProgress {
 
   /// Formatter for [showBytes]
   @visibleForTesting
+  // this is for testing.
   // ignore: library_private_types_in_public_api
   static _ProgressByteUpdate formatByteLine(FetchProgress progress) {
     _ProgressByteUpdate update;
@@ -705,14 +710,21 @@ class FetchProgress {
 }
 
 class _ProgressByteUpdate {
-  _ProgressByteUpdate(this.offset, this.value, {this.newline = false});
   int offset;
+
   String value;
+
   bool newline;
+
+  _ProgressByteUpdate(this.offset, this.value, {this.newline = false});
 }
 
 /// Throw when an error occurs fetching a resource.
 class FetchException extends core.DCliException {
+  /// If this [FetchException] occured due to an [OSError] then
+  /// this contains the underlying error.
+  int? errorCode;
+
   /// ctor
   FetchException(super.message) : errorCode = OSError.noErrorCode;
 
@@ -725,8 +737,4 @@ class FetchException extends core.DCliException {
   /// HTTP error.
   FetchException.fromHttpError(this.errorCode, String reasonPhrase)
       : super(reasonPhrase);
-
-  /// If this [FetchException] occured due to an [OSError] then
-  /// this contains the underlying error.
-  int? errorCode;
 }

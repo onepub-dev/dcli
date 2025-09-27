@@ -14,6 +14,12 @@ import 'progress_mixin.dart';
 class ProgressStdOutImpl extends ProgressImpl
     with ProgressMixin
     implements ProgressStdOut {
+  final _stdoutSplitter = ProgressiveLineSplitter();
+
+  final bool _capture;
+
+  final _capturedLines = <String>[];
+
   /// Use this progress to only output data sent to stderr.
   /// If [capture] is true (defaults to false) the output to
   /// stderr is also captured and will be available
@@ -26,12 +32,6 @@ class ProgressStdOutImpl extends ProgressImpl
       }
     });
   }
-
-  final _stdoutSplitter = ProgressiveLineSplitter();
-
-  final bool _capture;
-
-  final _capturedLines = <String>[];
 
   @override
   List<String> get lines => _capturedLines;

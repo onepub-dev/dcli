@@ -34,7 +34,7 @@ mixin WindowsMixin {
   }
 
   /// Called to install the windows specific dart/dcli components.
-  Future<bool> install({bool installDart = true, bool activate = true}) async =>
+  Future<bool> install({bool installDart = true, bool activate = true}) =>
       WindowsDCliInstaller().install(installDart: installDart);
 
   ///
@@ -158,7 +158,7 @@ mixin WindowsMixin {
               1) {
             if (GetTokenInformation(
                   phToken.value,
-                  TOKEN_INFORMATION_CLASS.TokenElevation,
+                  TokenElevation,
                   pElevation,
                   sizeOf<_TokenElevation>(),
                   pReturnedSize,

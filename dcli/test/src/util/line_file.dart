@@ -13,6 +13,12 @@ import 'package:dcli_core/src/util/platform.dart';
 /// Provide s collection of methods to make it easy
 /// to read/write a file line by line.
 class LineFile {
+  final FileMode _fileMode;
+
+  late final File _file;
+
+  late final RandomAccessFile _raf = _open(_fileMode);
+
   /// If you instantiate FileSync you MUST call [close].
   ///
   /// We rececommend that you use withOpenFile in prefernce to directly
@@ -21,10 +27,6 @@ class LineFile {
       : _fileMode = fileMode {
     _file = File(path);
   }
-
-  final FileMode _fileMode;
-  late final File _file;
-  late final RandomAccessFile _raf = _open(_fileMode);
 
   RandomAccessFile _open(FileMode fileMode) => _file.openSync(mode: fileMode);
 
@@ -171,9 +173,9 @@ class _StopIteration implements Exception {
 }
 
 class CallbackStringSync implements Sink<String> {
-  CallbackStringSync(this.callback);
-
   final void Function(String) callback;
+
+  CallbackStringSync(this.callback);
 
   @override
   void add(String data) {

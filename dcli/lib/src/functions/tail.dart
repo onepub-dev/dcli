@@ -28,14 +28,14 @@ TailProgress tail(String path, int lines) =>
 /// methods on the [TailProgress] to start the tail
 /// running.
 class TailProgress extends InternalProgress {
-  TailProgress._internal(this.pathTo, this.lines);
-
   /// Path to the file we will tail.
   String pathTo;
 
   /// The no. of lines at the end of the file that we
   /// will return.
   int lines;
+
+  TailProgress._internal(this.pathTo, this.lines);
 
   /// Read lines from the head of the file.
   @override

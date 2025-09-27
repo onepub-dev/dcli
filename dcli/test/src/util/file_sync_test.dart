@@ -13,7 +13,7 @@ import 'package:test/test.dart';
 
 void main() {
   group('FileSync', () {
-    test('createTempFilename', () async {
+    test('createTempFilename', ()  {
       final file = createTempFilename();
       expect(exists(file), isFalse);
       expect(file.startsWith(Directory.systemTemp.path), isTrue);
@@ -21,7 +21,7 @@ void main() {
       expect(exists(file), isTrue);
       delete(file);
     });
-    test('createTempFile', () async {
+    test('createTempFile', ()  {
       final file = createTempFile();
       expect(exists(file), isTrue);
       expect(file.startsWith(Directory.systemTemp.path), isTrue);

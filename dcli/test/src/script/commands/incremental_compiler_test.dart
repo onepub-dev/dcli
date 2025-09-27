@@ -11,7 +11,7 @@ import 'package:test/test.dart';
 // import '../../compiler/incremental_compiler.dart';
 
 void main() {
-  test('incremental compile ...', () async {
+  test('incremental compile ...', ()  {
     // final compiler =
     //     IncrementalCompiler(join('..', 'dcli_unit_tester'
     //, 'test', 'test_script', 'back.dart'));

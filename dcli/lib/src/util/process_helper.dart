@@ -7,7 +7,6 @@
 
 import 'dart:io';
 
-import 'package:csv/csv.dart';
 import 'package:dcli_core/dcli_core.dart' as core;
 import 'package:meta/meta.dart';
 import 'package:path/path.dart';
@@ -22,12 +21,12 @@ import '../windows/process_helper.dart';
 /// This class is likely to change/replaced.
 @visibleForTesting
 class ProcessHelper {
+  static final _self = ProcessHelper._internal();
+
   ///
   factory ProcessHelper() => _self;
 
   ProcessHelper._internal();
-
-  static final ProcessHelper _self = ProcessHelper._internal();
 
   /// returns the name of the process for the given pid.
   String? getProcessName(int pid) {
@@ -105,11 +104,10 @@ class ProcessHelper {
   int _linuxGetParentPID(int? childPid) {
     String? line;
     try {
-      // ignore: flutter_style_todos
-      /// TODO(bsutton): find a way to get the parent of a given pid
-      /// not the current pid.
-      /// The following will work on SOME linux platforms.
-      /// https://gist.github.com/fclairamb/a16a4237c46440bdb172
+      // TODO(bsutton): find a way to get the parent of a given pid
+      // not the current pid.
+      // The following will work on SOME linux platforms.
+      // https://gist.github.com/fclairamb/a16a4237c46440bdb172
       if (isPosixSupported) {
         line = '${getppid()}';
       } else {
@@ -206,19 +204,6 @@ class ProcessHelper {
     return isRunning;
   }
 
-  // /// completely untested as I don't have a windows box.
-  // String? _getWindowsProcessName(int? lpid) {
-  //   String? pidName;
-  //   for (final details in _getWindowsProcessesOld()) {
-  //     if (lpid == details.pid) {
-  //       pidName = details.name;
-  //       break;
-  //     }
-  //   }
-  //   verbose(() => '_getWindowsProcessName $lpid $pidName');
-  //   return pidName;
-  // }
-
   /// Returns a list of running processes.
   ///
   /// Currently this is only supported on Windows and Linux.
@@ -251,39 +236,6 @@ class ProcessHelper {
       }
     }
     return matching;
-  }
-
-  // ignore: unused_element
-  List<ProcessDetails> _getWindowsProcessesOld() {
-    final pids = <ProcessDetails>[];
-
-    // example:
-    // "wininit.exe","584","Services","0","5,248 K"
-    final tasks = 'tasklist /fo csv /nh'.toParagraph();
-
-    final lines = const CsvToListConverter(shouldParseNumbers: false)
-        .convert<String>(tasks);
-    for (final line in lines) {
-      //verbose(() => 'tasklist: $line');
-
-      // verbose(() => '${details.processName} ${details.pid}');
-
-      final memparts = line[4].split(' ');
-
-      final details = ProcessDetails(
-        int.tryParse(line[1]) ?? 0,
-        line[0],
-        memparts[0],
-      );
-      // details.memory can contain 'N/A' in which case their is no units.
-      if (memparts.length == 2) {
-        details.memoryUnits = memparts[1];
-      }
-
-      pids.add(details);
-    }
-
-    return pids;
   }
 
   List<ProcessDetails> _getLinuxProcesses() {
@@ -341,8 +293,6 @@ class ProcessHelper {
 
         verbose(() => 'found process ${process.name} with pid: ${process.pid}');
         return process;
-
-        // ignore: avoid_catches_without_on_clauses
       } catch (e) {
         /// no op. The process may have stopped
       }
@@ -379,12 +329,6 @@ class ProcessHelper {
 /// these details the process may no longer be running.
 @immutable
 class ProcessDetails {
-  /// Create a ProcessDetails object that represents
-  /// a running process.
-  ProcessDetails(this.pid, this.name, String memory) {
-    _memory = int.tryParse(memory) ?? 0;
-  }
-
   /// The process id (pid) of this process
   final int pid;
 
@@ -396,6 +340,12 @@ class ProcessDetails {
 
   /// The units the [memory] is defined in the process is currently consuming
   late final String? memoryUnits;
+
+  /// Create a ProcessDetails object that represents
+  /// a running process.
+  ProcessDetails(this.pid, this.name, String memory) {
+    _memory = int.tryParse(memory) ?? 0;
+  }
 
   /// Get the virtual memory used by the processes.
   /// May return zero if we are unable to determine the memory used.
@@ -412,12 +362,15 @@ class ProcessDetails {
 }
 
 class _WindowsParentProcess {
+  String path;
+
+  int parentPid;
+
+  int processPid;
+
   _WindowsParentProcess({
     required this.path,
     required this.parentPid,
     required this.processPid,
   });
-  String path;
-  int parentPid;
-  int processPid;
 }
