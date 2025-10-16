@@ -332,54 +332,58 @@ class RunnableProcess {
     });
 
     MessageResponse? response;
-    do {
-      processLogger(() => 'Primary calling Mailbox.take()');
-      try {
-        processLogger(() => 'calling Mailbox:take ');
+    try {
+      do {
+        processLogger(() => 'Primary calling Mailbox.take()');
+        try {
+          processLogger(() => 'calling Mailbox:take ');
 
-        final messageData =
-            channel.toPrimaryIsolate.take(timeout: const Duration(seconds: 2));
-        processLogger(
-            () => 'take returned with data: len(${messageData.length - 1})');
-        response = MessageResponse.fromData(messageData)
-          ..onStdout((payload) {
-            progress.addToStdout(payload);
-          })
-          ..onStderr((payload) {
-            progress.addToStderr(payload);
-          })
-          ..onException((exception) =>
-              Error.throwWithStackTrace(exception, exception.stackTrace));
-      } on TimeoutException catch (e) {
-        processLogger(
-            () => 'Timeout waiting for response from isolate: ${e.message}');
+          final messageData = channel.toPrimaryIsolate
+              .take(timeout: const Duration(seconds: 2));
+          processLogger(
+              () => 'take returned with data: len(${messageData.length - 1})');
+          response = MessageResponse.fromData(messageData)
+            ..onStdout((payload) {
+              progress.addToStdout(payload);
+            })
+            ..onStderr((payload) {
+              progress.addToStderr(payload);
+            })
+            ..onException((exception) =>
+                Error.throwWithStackTrace(exception, exception.stackTrace));
+        } on TimeoutException catch (e) {
+          processLogger(
+              () => 'Timeout waiting for response from isolate: ${e.message}');
 
-        /// Paired with take(timeout:), this seems to help reduce stalls
-        /// when the isolate is starting up.
-        Future.delayed(const Duration(seconds: 3), () {});
-      }
-    } while (response?.messageType != MessageType.exitCode);
+          /// Paired with take(timeout:), this seems to help reduce stalls
+          /// when the isolate is starting up.
+          Future.delayed(const Duration(seconds: 3), () {});
+        }
+      } while (response?.messageType != MessageType.exitCode);
 
-    processLogger(() => 'Exit code recived by primary isolate');
+      processLogger(() => 'Exit code recived by primary isolate');
 
-    response?.onExit((exitCode) {
-      if (exitCode != 0 && !nothrow) {
-        throw RunException.withArgs(
-          _parsed.cmd,
-          _parsed.args,
-          exitCode,
-          'The command '
-          '${red('[${_parsed.cmd}] with args [${_parsed.args.join(', ')}]')} '
-          'failed with exitCode: $exitCode '
-          'workingDirectory: $workingDirectory',
-        );
-      } else {
-        progress.exitCode = exitCode;
-      }
-    });
-
-    channel.errorPort.close();
-    channel.exitPort.close();
+      response?.onExit((exitCode) {
+        if (exitCode != 0 && !nothrow) {
+          throw RunException.withArgs(
+            _parsed.cmd,
+            _parsed.args,
+            exitCode,
+            'The command '
+            '${red('[${_parsed.cmd}] with args [${_parsed.args.join(', ')}]')} '
+            'failed with exitCode: $exitCode '
+            'workingDirectory: $workingDirectory',
+          );
+        } else {
+          progress.exitCode = exitCode;
+        }
+      });
+    } finally {
+      /// guarentee we close the ports even if we get an exception
+      /// above.
+      channel.errorPort.close();
+      channel.exitPort.close();
+    }
   }
 }
 
