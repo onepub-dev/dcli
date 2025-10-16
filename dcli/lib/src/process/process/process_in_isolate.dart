@@ -58,12 +58,8 @@ Future<void> _body(IsolateChannelSendable channel) async {
   isolateLogger(() => 'mailboxes materialized');
   ReceivePort? port;
 
+  late final Process process;
   try {
-    final process = await _run(channel.process);
-
-    isolateLogger(() => 'listen to recieve port');
-    port = _handleStdin(process);
-
     /// used to wait for the stdout stream to finish streaming
     final stdoutStreamDone = Completer<void>();
     final stderrStreamDone = Completer<void>();
@@ -71,37 +67,48 @@ Future<void> _body(IsolateChannelSendable channel) async {
     late StreamSubscription<List<int>> stdoutSub;
     late StreamSubscription<List<int>> stderrSub;
 
-    if (channel.process.hasStdio) {
-      /// subscribe to data the process writes to stdout and send
-      /// it back to the parent isolate
-      stdoutSub = _sendStdoutToPrimary(
-          process, mailboxToPrimaryIsolate, stdoutStreamDone);
+    try {
+      process = await _run(channel.process);
 
-      isolateLogger(() => 'listen of stdout completed');
+      isolateLogger(() => 'listen to recieve port');
+      port = _handleStdin(process);
 
-      /// subscribe to data the process writes to stderr and send
-      /// it back to the parent isolate
-      stderrSub = _sendStderrToPrimary(
-          process, mailboxToPrimaryIsolate, stderrStreamDone);
+      if (channel.process.hasStdio) {
+        /// subscribe to data the process writes to stdout and send
+        /// it back to the parent isolate
+        stdoutSub = _sendStdoutToPrimary(
+            process, mailboxToPrimaryIsolate, stdoutStreamDone);
 
-      isolateLogger(() => 'waiting in isolate for process to exit');
-    }
+        isolateLogger(() => 'listen of stdout completed');
 
-    var exitCode = 0;
-    if (!channel.process.detached) {
-      /// wait for the process to exit and all stream
-      /// finish being written to.
-      exitCode = await process.exitCode;
-      isolateLogger(() => 'process has exited with exitCode: $exitCode');
-    } else {
-      /// as we are detached we can't get an exit code so we
-      /// send a bogus 0 - all good - exit code.
-      /// Not certain if this is the right action but
-      /// the primary isolate will wait for ever unless we send this.
-      /// The primary isolate does know its a detached process
-      /// so it can still do something 'interesting'.
-      isolateLogger(
-          () => "We run a detached process so we can't get the exit code");
+        /// subscribe to data the process writes to stderr and send
+        /// it back to the parent isolate
+        stderrSub = _sendStderrToPrimary(
+            process, mailboxToPrimaryIsolate, stderrStreamDone);
+
+        isolateLogger(() => 'waiting in isolate for process to exit');
+      }
+    } finally {
+      /// we need to guarentee we always read the exit code
+      /// otherwise we get a zombie (defuct) child process.
+      /// This is particularly problematic in a container as it
+      /// has no init process to reap zombies.
+      var exitCode = 0;
+      if (!channel.process.detached) {
+        /// wait for the process to exit and all stream
+        /// finish being written to.
+        exitCode = await process.exitCode;
+        isolateLogger(() => 'process has exited with exitCode: $exitCode');
+      } else {
+        /// as we are detached we can't get an exit code so we
+        /// send a bogus 0 - all good - exit code.
+        /// Not certain if this is the right action but
+        /// the primary isolate will wait for ever unless we send this.
+        /// The primary isolate does know its a detached process
+        /// so it can still do something 'interesting'.
+        isolateLogger(
+            () => "We run a detached process so we can't get the exit code");
+      }
     }
 
     if (channel.process.hasStdio) {
