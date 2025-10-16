@@ -1,3 +1,11 @@
+# 7.2.0
+- Fixes #260 - thanks to @passy for the suggested fix.
+- moved exitCode read into a finally block to guarentee that we read the exit code as we have seen child processes go into a defunct state due the parent not reading the exit code.
+- terminal is no longer a required arg, it sets to false by default.
+- reverted the use of TokenEvaluation from win32 as not all 5.x version of win32 have the replacement TokenEvaluation.
+- Fixed a bug in the RunnableProcess.run method which was failing to throw a RunException if the exit code was  non-zero and nothrow was false.
+- upgraded to lint_hard 6.x
+
 # 7.1.0
 
 # 7.0.2
