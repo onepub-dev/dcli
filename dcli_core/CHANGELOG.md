@@ -1,3 +1,8 @@
+# 8.0.0
+- retracted 7.2 as it had a breaking api change (setVerbose is no sync).
+- This is a re-release of 7.2 with the correct version number reflecting
+that breaking change.
+
 # 7.2.0
 - Fixes #260 - thanks to @passy for the suggested fix.
 - moved exitCode read into a finally block to guarentee that we read the exit code as we have seen child processes go into a defunct state due the parent not reading the exit code.
