@@ -172,7 +172,9 @@ includeHidden: $includeHidden, includeEmpty: $includeEmpty, includeLinks: $inclu
       // If the item is a symbolic link, check its target.
       if (isLink(file)) {
         // If includeLinks is false, skip processing the link.
-        if (!includeLinks) return;
+        if (!includeLinks) {
+          return;
+        }
 
         // If the link points to a directory, we want to mimic GNU cp:
         // dereference the link by creating the target directory and
