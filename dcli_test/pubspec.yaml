@@ -1,6 +1,6 @@
 name: dcli_test
 description: Test code used by dcli - not for general use.
-version: 7.2.0
+version: 8.0.0
 repository: https://github.com/onepub-dev/dcli/tree/master/dcli_test
 
 environment:
@@ -8,9 +8,9 @@ environment:
 
 # Add regular dependencies here.
 dependencies:
-  dcli: ^7.2.0
-  dcli_common: ^7.2.0
-  dcli_core: ^7.2.0
+  dcli: ^8.0.0
+  dcli_common: ^8.0.0
+  dcli_core: ^8.0.0
   file: ^7.0.0
   meta: ">=1.11.0 <2.0.0"
   path: ^1.8.3
