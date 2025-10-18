@@ -1,3 +1,6 @@
+# 8.1.0
+- upgraded to pubspec_manager 3.x
+
 # 7.2.0
 - Fixes #260 - thanks to @passy for the suggested fix.
 - moved exitCode read into a finally block to guarentee that we read the exit code as we have seen child processes go into a defunct state due the parent not reading the exit code.

@@ -298,7 +298,12 @@ Wrote restore file: ${relative(restorePath, from: pathToProjectRoot)}'''));
     if (needsPubGet) {
       print(orange(
           'pubspec.lock is missing or stale. Running `dart pub get`...'));
-      DartSdk().runPubGet(projectRoot);
+      final progress = Progress.print();
+      DartSdk().runPubGet(projectRoot, progress: progress);
+
+      if (progress.exitCode != 0) {
+        throw ExitWithMessageException('`dart pub get` failed. Aborting lock.');
+      }
 
       // Optional: sanity check the lock now exists.
       if (!File(lockPath).existsSync()) {

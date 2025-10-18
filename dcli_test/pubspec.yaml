@@ -1,6 +1,6 @@
 name: dcli_test
 description: Test code used by dcli - not for general use.
-version: 8.0.0
+version: 8.1.0
 repository: https://github.com/onepub-dev/dcli/tree/master/dcli_test
 
 environment:
