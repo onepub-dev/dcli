@@ -58,7 +58,7 @@ Future<void> _body(IsolateChannelSendable channel) async {
   isolateLogger(() => 'mailboxes materialized');
   ReceivePort? port;
 
-  late final Process process;
+  Process? process;
   var exitCode = 0;
   try {
     /// used to wait for the stdout stream to finish streaming
@@ -94,11 +94,15 @@ Future<void> _body(IsolateChannelSendable channel) async {
       /// otherwise we get a zombie (defuct) child process.
       /// This is particularly problematic in a container as it
       /// has no init process to reap zombies.
-      
+
       if (!channel.process.detached) {
         /// wait for the process to exit and all stream
         /// finish being written to.
-        exitCode = await process.exitCode;
+        /// [process] can be null if the call to _run throws
+        /// in which case we are in the middle of an exception
+        /// chain so this exit code will never be used as
+        /// the exception will be sent to the primary isolate.
+        exitCode = await process?.exitCode ?? -1;
         isolateLogger(() => 'process has exited with exitCode: $exitCode');
       } else {
         /// as we are detached we can't get an exit code so we
