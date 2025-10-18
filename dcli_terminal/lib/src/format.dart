@@ -122,44 +122,52 @@ class Format {
   /// When [pad] is false
   /// Except for absurdly large no. (> 10^20)
   /// the return is guarenteed to be 6 or less characters long.
+  /// Returns [bytes] in a human-readable SI form (base 1000).
+  /// Examples: 3.000T, 10.00G, 100.0M, 20.00K, 10B
+  ///
+  /// With [pad] true (default), the numeric part is left-padded to width 5,
+  /// so the whole string is 6 chars incl. the unit (except when using
+  /// scientific notation for very large values).
   String bytesAsReadable(int bytes, {bool pad = true}) {
+    // Switch to scientific notation from 1e15 (i.e., 1000^5).
+    if (bytes >= 1000000000000000) {
+      return bytes.toStringAsExponential(0);
+    }
+
     const units = ['B', 'K', 'M', 'G', 'T'];
     var value = bytes.toDouble();
     var unitIndex = 0;
 
-    // Keep dividing by 1024 to discover which units we need
-    // to use. If we run out of units then we are using
-    // scientific notation.
-    while (value >= 1024 && unitIndex < units.length - 1) {
-      value /= 1024;
+    // SI (decimal) steps of 1000.
+    while (value >= 1000 && unitIndex < units.length - 1) {
+      value /= 1000;
       unitIndex++;
-    }
-
-    // If we reached 'T' and still ≥1024, do scientific:
-    if (unitIndex == units.length - 1 && value >= 1024) {
-      return bytes.toStringAsExponential(0);
     }
 
     String numberPart;
     if (unitIndex == 0) {
-      // Bytes: no decimal, pad left to width 5 if requested
+      // Bytes: integer, pad to width 5 if requested.
       numberPart = value.toInt().toString();
       if (pad) {
         numberPart = numberPart.padLeft(5);
       }
     } else {
-      // KB+ : determine how many decimals to fit in 5 chars
+      // For K and above, choose decimals so numeric part is exactly 5 chars.
       final intLen = value.floor().toString().length;
-      var decimals = 5 - intLen - 1; // space for decimal point
+      var decimals = 5 - intLen - 1; // reserve 1 for '.'
       if (decimals < 0) {
         decimals = 0;
       }
 
       numberPart = value.toStringAsFixed(decimals);
 
-      // Trim or pad to exactly 5 chars
+      // Ensure exactly 5 chars for the numeric field.
       if (numberPart.length > 5) {
         numberPart = numberPart.substring(0, 5);
+        // Avoid trailing '.' if trimming lands on it.
+        if (numberPart.endsWith('.')) {
+          numberPart = numberPart.substring(0, 4);
+        }
       } else if (pad) {
         numberPart = numberPart.padLeft(5);
       }
