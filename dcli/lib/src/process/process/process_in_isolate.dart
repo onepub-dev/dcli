@@ -1,7 +1,7 @@
 import 'dart:async';
 import 'dart:convert';
 import 'dart:developer';
-import 'dart:io';
+import 'dart:io' hide exitCode;
 import 'dart:isolate';
 import 'dart:typed_data';
 
@@ -59,6 +59,7 @@ Future<void> _body(IsolateChannelSendable channel) async {
   ReceivePort? port;
 
   late final Process process;
+  var exitCode = 0;
   try {
     /// used to wait for the stdout stream to finish streaming
     final stdoutStreamDone = Completer<void>();
@@ -93,7 +94,7 @@ Future<void> _body(IsolateChannelSendable channel) async {
       /// otherwise we get a zombie (defuct) child process.
       /// This is particularly problematic in a container as it
       /// has no init process to reap zombies.
-      var exitCode = 0;
+      
       if (!channel.process.detached) {
         /// wait for the process to exit and all stream
         /// finish being written to.
