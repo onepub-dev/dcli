@@ -19,7 +19,7 @@ import 'run.dart';
 class DoctorCommand extends Command {
   ///
   DoctorCommand() : super(_commandName);
-  static const String _commandName = 'doctor';
+  static const _commandName = 'doctor';
 
   @override
   Future<int> run(List<Flag> selectedFlags, List<String> subarguments) async {

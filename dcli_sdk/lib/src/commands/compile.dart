@@ -16,7 +16,7 @@ import 'run.dart';
 class CompileCommand extends Command {
   ///
   CompileCommand() : super(_commandName);
-  static const String _commandName = 'compile';
+  static const _commandName = 'compile';
 
   final _compileFlags = [
     NoWarmupFlag(),
@@ -27,7 +27,7 @@ class CompileCommand extends Command {
   ];
 
   /// holds the set of flags passed to the compile command.
-  Flags flagSet = Flags();
+  var flagSet = Flags();
 
   @override
   Future<int> run(List<Flag> selectedFlags, List<String> subarguments) async {
@@ -106,7 +106,7 @@ class CompileCommand extends Command {
       final project = DartProject.fromPath(script.pathToScriptDirectory);
 
       if (buildRequired) {
-         await project.warmup();
+        await project.warmup();
       }
 
       var install = flagSet.isSet(InstallFlag());
@@ -250,7 +250,7 @@ Run:
           /// dart allows a user to publish the override even though it should
           /// never be published and breaks build from cache if it exists.
           filter: (file) => basename(file) != 'pubspec_overrides.yaml');
-       await DartProject.fromPath(pathToTempPackage).warmup();
+      await DartProject.fromPath(pathToTempPackage).warmup();
 
       final pubspec = PubSpec.load(directory: pathToTempPackage);
 

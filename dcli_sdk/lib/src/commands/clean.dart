@@ -20,7 +20,7 @@ class CleanCommand extends Command {
   ///
   CleanCommand() : super(_commandName);
 
-  static const String _commandName = 'clean';
+  static const _commandName = 'clean';
 
   /// [arguments] contains path to clean
   @override
