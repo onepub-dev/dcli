@@ -1,3 +1,7 @@
+# 8.1.0
+- upgraded to lint_hard 6 and applied fixes.
+- Improvements to the dcli lock command, it now creates a restore file with a list of the original deps. It no longer locks transient dependencies - ths may be a bad idea but currently the pub lish command enforces a max of 100 direct dependencies so locking transient dependencies is an issue (as they need to be brought into the pubspec.yaml). Implemented the dcli 'unlock' command which restores the pubspec.yaml to its original state.
+
 # 8.0.0
 - retracted 7.2 as it had a breaking api change (setVerbose is no sync).
 - This is a re-release of 7.2 with the correct version number reflecting
