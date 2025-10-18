@@ -17,6 +17,8 @@ import 'command_line_runner.dart';
 
 /// the 'main' for running commands.
 class EntryPoint {
+  static EntryPoint? _self;
+
   ///
   factory EntryPoint() => _self ??= EntryPoint._internal();
 
@@ -24,15 +26,13 @@ class EntryPoint {
     _self = this;
   }
 
-  static EntryPoint? _self;
-
   ///
   static void init() {
     EntryPoint._internal();
   }
 
   /// process the command line
-  Future<int> process(List<String> arguments) async =>
+  Future<int> process(List<String> arguments) =>
       _parseCmdLine(arguments, Commands.applicationCommands);
 
   Future<int> _parseCmdLine(
@@ -55,13 +55,11 @@ class EntryPoint {
       printerr(red(e.toString()));
       print('');
       return 1;
-    } 
-     on ExitWithMessageException catch (e) {
+    } on ExitWithMessageException catch (e) {
       printerr(red(e.toString()));
       print('');
       return 1;
-    } 
-    catch (e, stackTrace) {
+    } catch (e, stackTrace) {
       final impl = Trace.from(stackTrace);
       printerr('${e.runtimeType}: $e ');
       printerr('Stacktrace: ${impl.terse}');

@@ -70,10 +70,10 @@ import 'commands.dart';
 /// ```
 
 class PackCommand extends Command {
+  static const _commandName = 'pack';
+
   ///
   PackCommand() : super(_commandName);
-
-  static const String _commandName = 'pack';
 
   /// [arguments] contains path to clean
   @override

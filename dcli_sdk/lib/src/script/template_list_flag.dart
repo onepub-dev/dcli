@@ -2,14 +2,15 @@ import 'flags.dart';
 
 /// Prints a list of the templates and exists
 class TemplateListFlag extends Flag {
+  static const flagName = 'list';
+
+  static final _self = TemplateListFlag._internal();
+
   ///
   factory TemplateListFlag() => _self;
 
   ///
   TemplateListFlag._internal() : super(flagName);
-
-  static const flagName = 'list';
-  static final _self = TemplateListFlag._internal();
 
   @override
   String get option => '';

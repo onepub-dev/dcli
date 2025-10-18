@@ -6,7 +6,7 @@ import 'package:path/path.dart' hide equals;
 import 'package:test/test.dart';
 
 void main() {
-  test('compile invalid package name', () async {
+  test('compile invalid package name', () {
     expect(
         () => CompileCommand().compilePackage('git/dcli_scripts'),
         throwsA(predicate((e) =>

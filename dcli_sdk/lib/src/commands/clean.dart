@@ -17,10 +17,10 @@ import 'commands.dart';
 /// including pubspec.lock, .packages, .dart_tools and
 /// any compiled exes.
 class CleanCommand extends Command {
+  static const _commandName = 'clean';
+
   ///
   CleanCommand() : super(_commandName);
-
-  static const _commandName = 'clean';
 
   /// [arguments] contains path to clean
   @override

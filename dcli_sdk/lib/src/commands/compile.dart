@@ -14,8 +14,6 @@ import 'run.dart';
 
 /// implementation for the compile command.
 class CompileCommand extends Command {
-  ///
-  CompileCommand() : super(_commandName);
   static const _commandName = 'compile';
 
   final _compileFlags = [
@@ -28,6 +26,9 @@ class CompileCommand extends Command {
 
   /// holds the set of flags passed to the compile command.
   var flagSet = Flags();
+
+  ///
+  CompileCommand() : super(_commandName);
 
   @override
   Future<int> run(List<Flag> selectedFlags, List<String> subarguments) async {
@@ -272,9 +273,10 @@ Run:
 
 ///
 class NoWarmupFlag extends Flag {
+  static const _flagName = 'nowarmup';
+
   ///
   NoWarmupFlag() : super(_flagName);
-  static const _flagName = 'nowarmup';
 
   @override
   String get abbreviation => 'nw';
@@ -287,10 +289,10 @@ class NoWarmupFlag extends Flag {
 
 ///
 class InstallFlag extends Flag {
+  static const _flagName = 'install';
+
   ///
   InstallFlag() : super(_flagName);
-
-  static const _flagName = 'install';
 
   @override
   String get abbreviation => 'i';
@@ -303,9 +305,10 @@ class InstallFlag extends Flag {
 
 ///
 class OverWriteFlag extends Flag {
+  static const _flagName = 'overwrite';
+
   ///
   OverWriteFlag() : super(_flagName);
-  static const _flagName = 'overwrite';
 
   @override
   String get abbreviation => 'o';
@@ -318,9 +321,10 @@ class OverWriteFlag extends Flag {
 
 ///
 class PackageFlag extends Flag {
+  static const _flagName = 'package';
+
   ///
   PackageFlag() : super(_flagName);
-  static const _flagName = 'package';
 
   @override
   String get abbreviation => 'p';
@@ -336,9 +340,10 @@ class PackageFlag extends Flag {
 /// watch the package for file changes and do
 /// incremental compile on the selected scripts.
 class WatchFlag extends Flag {
+  static const _flagName = 'watch';
+
   ///
   WatchFlag() : super(_flagName);
-  static const _flagName = 'watch';
 
   @override
   String get abbreviation => 'w';

@@ -28,7 +28,7 @@ Future<void> prepareTemplates() async {
   final environment = pubspec.environment;
 
   find('pubspec.yaml', workingDirectory: pathToTemplates)
-      .forEach((pathToTemplate) async {
+      .forEach((pathToTemplate) {
     print(pathToTemplate);
     final pubspec = PubSpec.loadFromPath(pathToTemplate);
     final dependencies = pubspec.dependencies;

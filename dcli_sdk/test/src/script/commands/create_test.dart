@@ -20,7 +20,7 @@ void main() {
       await capture(() async {
         /// no args
         await expectLater(
-            () async => CreateCommand().run([], []),
+            () => CreateCommand().run([], []),
             throwsA(predicate((e) =>
                 e is InvalidArgumentException &&
                 e.message

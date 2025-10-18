@@ -17,6 +17,16 @@ import 'selected_flags.dart';
 
 /// Runs a dcli script.
 class CommandLineRunner {
+  static CommandLineRunner? _self;
+
+  /// the list of flags set on the command line.
+  static List<Flag> globalFlags = [VerboseFlag(), HelpFlag()];
+
+  // Tracks the set of flags the users set on the command line.
+  final _flagsSet = Flags();
+
+  Map<String, Command> _availableCommands;
+
   ///
   factory CommandLineRunner() {
     if (_self == null) {
@@ -26,15 +36,6 @@ class CommandLineRunner {
   }
 
   CommandLineRunner._internal(this._availableCommands);
-
-  static CommandLineRunner? _self;
-
-  /// the list of flags set on the command line.
-  static List<Flag> globalFlags = [VerboseFlag(), HelpFlag()];
-
-  // Tracks the set of flags the users set on the command line.
-  final Flags _flagsSet = Flags();
-  Map<String, Command> _availableCommands;
 
   /// initialises the [CommandLineRunner]
   static void init(List<Command> availableCommands) {

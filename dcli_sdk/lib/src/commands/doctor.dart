@@ -17,9 +17,10 @@ import 'run.dart';
 
 /// implementst the 'doctor' command
 class DoctorCommand extends Command {
+  static const _commandName = 'doctor';
+
   ///
   DoctorCommand() : super(_commandName);
-  static const _commandName = 'doctor';
 
   @override
   Future<int> run(List<Flag> selectedFlags, List<String> subarguments) async {
@@ -251,6 +252,10 @@ Running 'dcli doctor' provides diagnostic information on your install
 }
 
 class _Owner {
+  String? user;
+
+  String? group;
+
   _Owner(String path) {
     if (Settings().isWindows) {
       user = 'Unknown';
@@ -267,9 +272,6 @@ class _Owner {
       group = parts[3];
     }
   }
-
-  String? user;
-  String? group;
 
   @override
   String toString() => '$user:$group';

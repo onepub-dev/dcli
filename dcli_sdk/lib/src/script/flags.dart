@@ -70,9 +70,10 @@ class Flags {
 
 /// base class for command line flags (--name, -v ...)
 abstract class Flag {
+  final String _name;
+
   ///
   const Flag(this._name);
-  final String _name;
 
   /// name of the flag
   String get name => _name;
@@ -125,16 +126,17 @@ abstract class Flag {
 
 ///
 class VerboseFlag extends Flag {
+  static const _flagName = 'verbose';
+
+  static final _self = VerboseFlag._internal();
+
+  String? _option;
+
   ///
   factory VerboseFlag() => _self;
 
   ///
   VerboseFlag._internal() : super(_flagName);
-
-  static const _flagName = 'verbose';
-  static final _self = VerboseFlag._internal();
-
-  String? _option;
 
   @override
   // Path to the logfile to write verbose log messages to.
@@ -176,16 +178,17 @@ class VerboseFlag extends Flag {
 }
 
 class HelpFlag extends Flag {
+  static const _flagName = 'help';
+
+  static final _self = HelpFlag._internal();
+
+  String? _option;
+
   ///
   factory HelpFlag() => _self;
 
   ///
   HelpFlag._internal() : super(_flagName);
-
-  static const _flagName = 'help';
-  static final _self = HelpFlag._internal();
-
-  String? _option;
 
   @override
   // Path to the logfile to write verbose log messages to.

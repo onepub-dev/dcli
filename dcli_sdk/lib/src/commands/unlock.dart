@@ -27,8 +27,9 @@ import 'commands.dart';
 ///  - pubspec.lock-restore.json
 ///  - pubspec.lock-restore.yaml
 class UnlockCommand extends Command {
+  static const _commandName = 'unlock';
+
   UnlockCommand() : super(_commandName);
-  static const String _commandName = 'unlock';
 
   @override
   Future<int> run(List<Flag> selectedFlags, List<String> arguments) async {
@@ -177,21 +178,21 @@ Expected one of:
     final text = File(yamlPath).readAsStringSync();
     final doc = yaml.loadYaml(text);
 
-    dynamic _toPlain(dynamic v) {
+    dynamic toPlain(dynamic v) {
       if (v is yaml.YamlMap) {
         final m = <String, dynamic>{};
         for (final key in v.keys) {
-          m[key.toString()] = _toPlain(v[key]);
+          m[key.toString()] = toPlain(v[key]);
         }
         return m;
       } else if (v is yaml.YamlList) {
-        return v.map(_toPlain).toList();
+        return v.map(toPlain).toList();
       } else {
         return v;
       }
     }
 
-    final plain = _toPlain(doc);
+    final plain = toPlain(doc);
     if (plain is! Map<String, dynamic>) {
       throw ExitWithMessageException(
         'Failed to parse $yamlPath: root is not a map.',

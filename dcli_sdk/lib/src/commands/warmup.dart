@@ -16,9 +16,10 @@ import 'commands.dart';
 /// which does any work necessary to prepare a project
 /// to be run. Essentially this equates to doing a pub get.
 class WarmupCommand extends Command {
+  static const _commandName = 'warmup';
+
   ///
   WarmupCommand() : super(_commandName);
-  static const String _commandName = 'warmup';
 
   /// [arguments] contains path to prepare
   @override

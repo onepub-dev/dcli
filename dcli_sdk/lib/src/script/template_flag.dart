@@ -6,20 +6,22 @@ import 'flags.dart';
 /// Allows a user to select which template to use when
 /// creating a project.
 class TemplateFlag extends Flag {
-  ///
-  factory TemplateFlag() => _self;
-
-  ///
-  TemplateFlag._internal() : super(flagName);
-
   static const defaultTemplateName = 'simple';
+
   static const flagName = 'template';
+
   static final _self = TemplateFlag._internal();
 
   static final String defaultTemplatePath =
       join(Settings().pathToTemplateProject, defaultTemplateName);
 
   String? _templateName;
+
+  ///
+  factory TemplateFlag() => _self;
+
+  ///
+  TemplateFlag._internal() : super(flagName);
 
   @override
   // Returns the templateName

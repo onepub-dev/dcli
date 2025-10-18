@@ -15,10 +15,10 @@ import 'commands.dart';
 
 /// Runs a dart script.
 class RunCommand extends Command {
+  static const _commandName = 'run';
+
   ///
   RunCommand() : super(_commandName);
-
-  static const String _commandName = 'run';
 
   ///
   ///

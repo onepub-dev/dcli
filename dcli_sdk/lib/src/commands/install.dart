@@ -18,8 +18,6 @@ import 'commands.dart';
 
 ///
 class InstallCommand extends Command {
-  /// ctor.
-  InstallCommand() : super(_commandName);
   static const _commandName = 'install';
 
   final _installFlags = const [
@@ -29,17 +27,20 @@ class InstallCommand extends Command {
   ];
 
   /// holds the set of flags passed to the compile command.
-  Flags flagSet = Flags();
+  var flagSet = Flags();
 
   /// set by the [_QuietFlag].
   /// if [_quiet] is true only errors are displayed during the install.
-  bool _quiet = false;
+  var _quiet = false;
 
   /// set by the [_NoDartFlag].
   /// If [_installDart] is false then we won't attempt to install dart.
-  bool _installDart = true;
+  var _installDart = true;
 
-  bool _requirePrivileges = false;
+  var _requirePrivileges = false;
+
+  /// ctor.
+  InstallCommand() : super(_commandName);
 
   @override
   Future<int> run(List<Flag> selectedFlags, List<String> subarguments) async {
@@ -272,9 +273,9 @@ class InstallCommand extends Command {
 }
 
 class _NoDartFlag extends Flag {
-  const _NoDartFlag() : super(_flagName);
-
   static const _flagName = 'nodart';
+
+  const _NoDartFlag() : super(_flagName);
 
   @override
   String get abbreviation => 'nd';
@@ -286,8 +287,9 @@ class _NoDartFlag extends Flag {
 }
 
 class _QuietFlag extends Flag {
-  const _QuietFlag() : super(_flagName);
   static const _flagName = 'quiet';
+
+  const _QuietFlag() : super(_flagName);
 
   @override
   String get abbreviation => 'q';
@@ -298,8 +300,9 @@ class _QuietFlag extends Flag {
 }
 
 class _NoPrivilegesFlag extends Flag {
-  const _NoPrivilegesFlag() : super(_flagName);
   static const _flagName = 'noprivileges';
+
+  const _NoPrivilegesFlag() : super(_flagName);
 
   @override
   String get abbreviation => 'np';

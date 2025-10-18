@@ -16,17 +16,18 @@ import 'commands.dart';
 
 /// implementation of the 'create' command
 class CreateCommand extends Command {
-  ///
-  CreateCommand() : super(_commandName);
   static const _commandName = 'create';
 
   final _createFlags = [
     TemplateFlag(),
     TemplateListFlag()
-  ]; // ForegroundFlag(),
+  ];
 
   /// holds the set of flags passed to the compile command.
   var flagSet = Flags();
+
+  ///
+  CreateCommand() : super(_commandName);
 
   @override
   Future<int> run(List<Flag> selectedFlags, List<String> subarguments) async {
@@ -203,10 +204,10 @@ class CreateCommand extends Command {
 
 ///
 class ForegroundFlag extends Flag {
+  static const _flagName = 'foreground';
+
   ///
   ForegroundFlag() : super(_flagName);
-
-  static const _flagName = 'foreground';
 
   @override
   String get abbreviation => 'fg';

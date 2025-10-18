@@ -15,10 +15,10 @@ import 'commands.dart';
 
 ///
 class HelpCommand extends Command {
+  static const _commandName = 'help';
+
   ///
   HelpCommand() : super(_commandName);
-
-  static const String _commandName = 'help';
 
   @override
   Future<int> run(List<Flag> selectedFlags, List<String> subarguments) async {

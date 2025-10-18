@@ -28,6 +28,7 @@ void dcliExit(int exitCode) {
 /// exists outside the normal set of exceptions so
 /// we don't want it being caught like a [DCliException].
 class ExitException implements Exception {
-  ExitException(this.exitCode);
   int exitCode;
+
+  ExitException(this.exitCode);
 }

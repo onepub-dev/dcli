@@ -26,8 +26,9 @@ import 'commands.dart';
 /// Also writes `pubspec.lock-restore.yaml` capturing the original version
 /// constraints and source info so an `unlock` command can restore ranges.
 class LockCommand extends Command {
+  static const _commandName = 'lock';
+
   LockCommand() : super(_commandName);
-  static const String _commandName = 'lock';
 
   @override
   Future<int> run(List<Flag> selectedFlags, List<String> arguments) async {
