@@ -1,3 +1,11 @@
+# 8.1.1
+- exitCode was not being set for non-zero results due to the dart:io package having its own global exitCode setter.
+- process was late when we need to set it to null explicitly causing issues when
+ an exception was thrown due to the executable being not found.
+- fixed format for 1000B not being formatted correctly as 1.000K.
+- moved process related tests into the process folder.
+- moved synchronous_test into the correct folder.
+
 # 8.1.0
 - upgraded to pubspec_manager 3.x
 

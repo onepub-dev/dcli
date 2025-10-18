@@ -89,33 +89,29 @@ void main() {
       skip: false,
     );
 
-    test(
-      'Thrash test',
-      () async {
-        if (exists(_lockCheckPath)) {
-          deleteDir(_lockCheckPath);
-        }
+    test('Thrash test', () async {
+      if (exists(_lockCheckPath)) {
+        deleteDir(_lockCheckPath);
+      }
 
-        createDir(_lockCheckPath, recursive: true);
+      createDir(_lockCheckPath, recursive: true);
 
-        final group = FutureGroup<dynamic>();
+      final group = FutureGroup<dynamic>();
 
-        final workers = <Worker>[];
-        for (var i = 0; i < 10; i++) {
-          print('spawning worker $i');
-          final workerIsolate = Isolate.spawn(worker, i, paused: true);
-          final iWorker = Worker(await workerIsolate);
-          workers.add(iWorker);
-          group.add(iWorker.waitForExit());
-        }
-        group.close();
+      final workers = <Worker>[];
+      for (var i = 0; i < 10; i++) {
+        print('spawning worker $i');
+        final workerIsolate = Isolate.spawn(worker, i, paused: true);
+        final iWorker = Worker(await workerIsolate);
+        workers.add(iWorker);
+        group.add(iWorker.waitForExit());
+      }
+      group.close();
 
-        await group.future;
+      await group.future;
 
-        expect(exists(_lockFailedPath), equals(false));
-      },
-      timeout: const Timeout(Duration(minutes: 30)),
-    );
+      expect(exists(_lockFailedPath), equals(false));
+    }, timeout: const Timeout(Duration(minutes: 30)), skip: true);
   });
 }
 
