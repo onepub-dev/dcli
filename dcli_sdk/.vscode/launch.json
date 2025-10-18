@@ -1,0 +1,28 @@
+{
+    // Use IntelliSense to learn about possible attributes.
+    // Hover to view descriptions of existing attributes.
+    // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "name": "lock",
+            "program": "/home/bsutton/git/dcli/dcli_sdk/bin/dcli.dart",
+            "args": [
+                "lock"
+            ],
+            "request": "launch",
+            "type": "dart",
+            "cwd": "/home/bsutton/git/minion"
+        },
+        {
+            "name": "unlock",
+            "program": "/home/bsutton/git/dcli/dcli_sdk/bin/dcli.dart",
+            "args": [
+                "unlock"
+            ],
+            "request": "launch",
+            "type": "dart",
+            "cwd": "/home/bsutton/git/minion"
+        }
+    ]
+}

@@ -55,7 +55,13 @@ class EntryPoint {
       printerr(red(e.toString()));
       print('');
       return 1;
-    } catch (e, stackTrace) {
+    } 
+     on ExitWithMessageException catch (e) {
+      printerr(red(e.toString()));
+      print('');
+      return 1;
+    } 
+    catch (e, stackTrace) {
       final impl = Trace.from(stackTrace);
       printerr('${e.runtimeType}: $e ');
       printerr('Stacktrace: ${impl.terse}');

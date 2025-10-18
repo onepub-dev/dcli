@@ -74,3 +74,8 @@ class DCliNotInstalledException extends CommandLineException {
   ///
   DCliNotInstalledException(super.message);
 }
+
+class ExitWithMessageException extends DCliException {
+  ///
+  ExitWithMessageException(super.message);
+}

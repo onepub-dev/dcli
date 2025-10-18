@@ -15,6 +15,7 @@ import 'install.dart';
 import 'lock.dart';
 import 'pack.dart';
 import 'run.dart';
+import 'unlock.dart';
 import 'upgrade.dart';
 import 'version.dart';
 import 'warmup.dart';
@@ -31,6 +32,7 @@ class Commands {
         LockCommand(),
         PackCommand(),
         RunCommand(),
+        UnlockCommand(),
         UpgradeCommand(),
         VersionCommand(),
         WarmupCommand(),

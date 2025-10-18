@@ -1,3 +1,6 @@
+# 8.1.0
+- upgraded to pubspec_manager 3.x
+
 # 8.0.0
 - retracted 7.2 as it had a breaking api change (setVerbose is no sync).
 - This is a re-release of 7.2 with the correct version number reflecting
