@@ -1,30 +1,36 @@
-import 'package:native_synchronization_temp/mailbox.dart';
+import 'package:native_synchronization_temp/native_synchronization.dart';
 
 import 'message.dart';
 import 'process_in_isolate.dart';
 
 extension MailBoxMessage on Mailbox {
   Future<void> postMessage(Message message) async {
-    var tryPut = true;
-    while (tryPut) {
-      try {
-        tryPut = false;
-        // _logMessage('attempting to put message in mailbox $message');
-        put(message.content);
-        // _logMessage('attempting to put message in mailbox - success');
-        // ignore: avoid_catching_errors
-      } on StateError catch (e) {
-        if (isFull()) {
-          isolateLogger(() => 'mailbox is full sleeping for a bit');
-          tryPut = true;
+    var delay = const Duration(milliseconds: 1);
+    var lastLog = DateTime.fromMillisecondsSinceEpoch(0); // track last log time
+    const logInterval = Duration(seconds: 10);
 
-          /// yeild and give the mailbox reader a chance to empty
-          /// the mailbox.
-          await Future.delayed(const Duration(seconds: 3), () {});
-          isolateLogger(() => 'Mailbox: postMessage, retrying after sleep.');
-        } else {
-          isolateLogger(() => 'StateError on postMesage $e');
+    for (;;) {
+      try {
+        put(message.content);
+        return;
+      } on MailBoxFullException {
+        // log first event and then at most once every 10 s
+        final now = DateTime.now();
+        if (now.difference(lastLog) >= logInterval) {
+          isolateLogger(() => 'Mailbox is full; backing off');
+          lastLog = now;
         }
+
+        // exponential back-off with small jitter
+        await Future.delayed(
+          delay + Duration(microseconds: DateTime.now().microsecond % 500),
+          () {},
+        );
+        final nextMs = (delay.inMilliseconds * 2).clamp(1, 8); // 1→2→4→8 ms
+        delay = Duration(milliseconds: nextMs);
+      } on MailBoxClosedException catch (e) {
+        isolateLogger(() => 'MailBoxClosedException on postMessage $e');
+        rethrow;
       }
     }
   }
