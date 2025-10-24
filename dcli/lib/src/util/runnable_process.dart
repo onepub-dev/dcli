@@ -381,8 +381,7 @@ class RunnableProcess {
     } finally {
       /// guarentee we close the ports even if we get an exception
       /// above.
-      channel.errorPort.close();
-      channel.exitPort.close();
+      channel.close();
     }
   }
 }

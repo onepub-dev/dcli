@@ -120,9 +120,11 @@ Future<void> _body(IsolateChannelSendable channel) async {
       await Future.wait<void>(
           [stdoutStreamDone.future, stderrStreamDone.future]);
 
-      isolateLogger(() => 'streams are done - sending exit code');
+      isolateLogger(() => 'stdout and stderr streams completed');
     }
 
+    isolateLogger(
+        () => 'sending exit message to primary isolate: exitCode $exitCode');
     await mailboxToPrimaryIsolate.postMessage(Message.exit(exitCode));
 
     if (channel.process.hasStdio) {

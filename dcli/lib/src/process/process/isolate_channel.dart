@@ -27,6 +27,7 @@ class IsolateChannel {
   void close() {
     errorPort.close();
     exitPort.close();
+    toPrimaryIsolate.close();
   }
 
   IsolateChannelSendable asSendable() => IsolateChannelSendable(
