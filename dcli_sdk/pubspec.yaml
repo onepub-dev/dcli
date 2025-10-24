@@ -36,3 +36,4 @@ platforms:
   linux:
   macos:
   windows:
+publish_to: https://onepub.dev/api/jbbxpsdavu/

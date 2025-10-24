@@ -1,3 +1,10 @@
+# 8.2.0
+8.2.0 Fixes a major bug which could randomly cause a hang when running a process (.run, .start etc) due to a race condition.
+All users should upgrade to 8.2.0
+
+- Fixed a race condition. postMessage would attempt a put which would throw an full exception, by the time we did an isFull check (because the exception didn't tell us which state the mailbox was in, the message was read by the other isolate and the mailbox was no longer full so we incorrectly assumed that the mailbox was closed and discared the put attempt. This would result in the exit code not being sent to the primary isolate causing a hang. We have now change the mailbox to throw a full or closed exception explicilty removing the need for the isFull call and therefore eliminating the race condition.
+- After the process completes ae are now expliitly closing the mailbox. We previously relied on the finalizer, this is probablly not necessary but makes the process more explit. logging improvements. The IsolateChannel now has a close method that closes all ports.
+
 # 8.1.1
 - exitCode was not being set for non-zero results due to the dart:io package having its own global exitCode setter.
 - process was late when we need to set it to null explicitly causing issues when

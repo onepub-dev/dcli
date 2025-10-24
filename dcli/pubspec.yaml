@@ -1,5 +1,5 @@
 name: dcli
-version: 8.1.1
+version: 8.2.0
 homepage: https://dcli.onepub.dev
 documentation: https://dcli.onepub.dev
 description: Dart console SDK - write console (cli) apps/scripts using dart.
@@ -56,3 +56,4 @@ platforms:
   linux:
   macos:
   windows:
+publish_to: https://onepub.dev/api/jbbxpsdavu/
