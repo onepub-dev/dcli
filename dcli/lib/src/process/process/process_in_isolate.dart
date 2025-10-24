@@ -5,7 +5,7 @@ import 'dart:io' hide exitCode;
 import 'dart:isolate';
 import 'dart:typed_data';
 
-import 'package:native_synchronization_temp/mailbox.dart';
+import 'package:native_synchronization_temp/native_synchronization.dart';
 import 'package:stack_trace/stack_trace.dart';
 
 // import 'mailbox.dart';

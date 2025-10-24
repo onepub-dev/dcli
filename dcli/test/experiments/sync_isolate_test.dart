@@ -15,8 +15,7 @@ import 'package:dcli/src/process/process/process_in_isolate.dart';
 import 'package:dcli/src/process/process/process_settings.dart';
 import 'package:dcli/src/util/isolate_id.dart';
 import 'package:dcli_test/dcli_test.dart';
-import 'package:native_synchronization_temp/mailbox.dart';
-import 'package:native_synchronization_temp/sendable.dart';
+import 'package:native_synchronization_temp/native_synchronization.dart';
 import 'package:path/path.dart';
 import 'package:test/test.dart';
 

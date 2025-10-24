@@ -1,7 +1,7 @@
 import 'dart:isolate';
 
-import 'package:native_synchronization_temp/mailbox.dart';
-import 'package:native_synchronization_temp/sendable.dart';
+
+import 'package:native_synchronization_temp/native_synchronization.dart';
 
 import 'process_settings.dart';
 
