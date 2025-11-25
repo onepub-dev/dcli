@@ -39,3 +39,4 @@ dcli_unit_tester/test/test_script/general/bin/run_child
 dcli_unit_tester/test/test_script/general/bin/tail
 dcli_unit_tester/test/test_script/general/bin/touch
 dcli/custom_lint.log
+dcli_input/logs/analyzer.txt
