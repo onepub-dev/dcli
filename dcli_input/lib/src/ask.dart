@@ -133,9 +133,9 @@ Future<String> ask(
 // ignore: avoid_clas
 /// Class for [ask] and related code.
 class Ask extends core.DCliFunction {
-  static const int _backspace = 127;
+  static const int _delete = 127;
   static const int _space = 32;
-  static const int _ = 8;
+  static const int _backpace = 8;
 
   ///
   /// Reads user input from stdin and returns it as a string.
@@ -213,16 +213,16 @@ class Ask extends core.DCliFunction {
       do {
         char = stdin.readByteSync();
         if (char != 10 && char != 13) {
-          if (char == _backspace) {
+          if (char == _delete) {
             if (value.isNotEmpty) {
               // move back a character,
               // print a space an move back again.
               // required to clear the current character
               // move back one space.
               stdout
-                ..writeCharCode(_)
+                ..writeCharCode(_backpace)
                 ..writeCharCode(_space)
-                ..writeCharCode(_);
+                ..writeCharCode(_backpace);
               value.removeLast();
             }
           } else {
