@@ -9,6 +9,7 @@ import 'progress.dart';
 import 'progress_impl.dart';
 import 'progress_mixin.dart';
 
+/// Creates a Progress that discards all output.
 class ProgressDevNullImpl extends ProgressImpl
     with ProgressMixin
     implements ProgressDevNull {

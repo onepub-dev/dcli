@@ -10,7 +10,7 @@ import 'progress_both.dart';
 import 'progress_impl.dart';
 import 'progress_mixin.dart';
 
-/// Prints stderr, suppresses all other output.
+/// Prints stdout, suppresses all other output.
 class ProgressStdOutImpl extends ProgressImpl
     with ProgressMixin
     implements ProgressStdOut {
@@ -20,9 +20,9 @@ class ProgressStdOutImpl extends ProgressImpl
 
   final _capturedLines = <String>[];
 
-  /// Use this progress to only output data sent to stderr.
+  /// Use this progress to only output data sent to stdout.
   /// If [capture] is true (defaults to false) the output to
-  /// stderr is also captured and will be available
+  /// stdout is also captured and will be available
   /// in [lines] once the process completes.
   ProgressStdOutImpl({bool capture = false}) : _capture = capture {
     _stdoutSplitter.onLine((line) {

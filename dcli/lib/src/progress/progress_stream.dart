@@ -12,7 +12,8 @@ import '../../dcli.dart';
 import 'progress_impl.dart';
 import 'progress_mixin.dart';
 
-/// Prints stderr, suppresses all other output.
+/// Creates a Progress that streams stdout data and optionally
+/// stderr (in a single stream).
 class ProgressStreamImpl extends ProgressImpl
     with ProgressMixin
     implements ProgressStdErr {
@@ -26,10 +27,6 @@ class ProgressStreamImpl extends ProgressImpl
 
   late final Sink<List<int>> sink;
 
-  /// Use this progress to only output data sent to stderr.
-  /// If [capture] is true (defaults to false) the output to
-  /// stderr is also captured and will be available
-  /// in [lines] once the process completes.
   ProgressStreamImpl({bool includeStderr = false})
       : _controller = StreamController<List<int>>(),
         _includeStderr = includeStderr {

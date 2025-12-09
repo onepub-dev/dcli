@@ -9,7 +9,13 @@ import '../../dcli.dart';
 import 'progress_impl.dart';
 import 'progress_mixin.dart';
 
-/// Prints stderr, suppresses all other output.
+/// Creates a Progress that allows you to individually control
+/// each aspect of how the [Progress] prints and captures output
+/// to stdout and stderr. It usually easier to use one of the
+/// pre-package [Progress] constructors such as [Progress.print].
+/// If you pass true to either capture argument then all
+/// captured lines are written to a single [lines] array
+/// in the order they are captured.
 class ProgressBothImpl extends ProgressImpl
     with ProgressMixin
     implements ProgressBoth {

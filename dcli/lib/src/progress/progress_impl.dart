@@ -5,6 +5,7 @@
  * SPDX-License-Identifier: MIT
  */
 
+/// The base implementation for all Progress implementations.
 abstract class ProgressImpl {
   int? exitCode;
 

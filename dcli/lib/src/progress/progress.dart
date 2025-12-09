@@ -15,6 +15,13 @@ import 'progress_stream.dart';
 /// central class that provides progress information about a running
 /// process.
 abstract class Progress {
+  /// Creates a Progress that allows you to individually control what
+  /// output is sent to each of the [LineAction]s and what is captured
+  /// to the [lines] array.
+  /// You must provide a stdout [LineAction] but  stderr are sent to [devNull]
+  /// unless you pass a [stderr] [LineAction]
+  /// By default no output is captured to the [lines] array unless you
+  /// set [captureStdout] or [captureStderr] to true.
   factory Progress(LineAction stdout,
           {LineAction stderr = devNull,
           bool captureStdout = false,
@@ -30,6 +37,12 @@ abstract class Progress {
   /// in [lines] once the process completes.
   factory Progress.print({bool capture = false}) => ProgressBothImpl(print,
       stderr: print, captureStdout: capture, captureStderr: capture);
+
+  /// redirect both stdout and stderr to the same [LineAction]
+  /// Note: to capture stderr you must pass 'throws: false' to 
+  /// the start process method.
+  factory Progress.both(LineAction both) =>
+      ProgressBothImpl(both, stderr: both);
 
   /// Captures the output of the called process to a list which
   /// can be obtained by calling [Progress.lines] once
