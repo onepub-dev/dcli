@@ -1,3 +1,7 @@
+# 8.2.1
+- corrected documentation for Progresses. Added a new progress 'both' which allows you to output both stdout and stderr via a single LineAction.
+- corrected the names of delete and backspace.
+
 # 8.2.0
 8.2.0 Fixes a major bug which could randomly cause a hang when running a process (.run, .start etc) due to a race condition.
 All users should upgrade to 8.2.0
