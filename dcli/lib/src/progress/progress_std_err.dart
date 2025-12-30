@@ -6,6 +6,7 @@
  */
 
 import 'dart:async';
+import 'dart:convert';
 
 import '../../dcli.dart';
 import 'progress_both.dart';
@@ -16,7 +17,7 @@ import 'progress_mixin.dart';
 class ProgressStdErrImpl extends ProgressImpl
     with ProgressMixin
     implements ProgressStdErr {
-  final _stderrSplitter = ProgressiveLineSplitter();
+  late final ProgressiveLineSplitter _stderrSplitter;
 
   final bool _capture;
 
@@ -31,9 +32,11 @@ class ProgressStdErrImpl extends ProgressImpl
   /// If [capture] is true (defaults to false) the output to
   /// stderr is also captured and will be available
   /// in [lines] once the process completes.
-  ProgressStdErrImpl({bool capture = false})
+  ProgressStdErrImpl({bool capture = false, Encoding encoding = utf8})
       : _capture = capture,
-        _controller = StreamController<String>() {
+        _controller = StreamController<String>(),
+        super(encoding: encoding) {
+    _stderrSplitter = ProgressiveLineSplitter(encoding: encoding);
     sink = _controller.sink;
 
     _stderrSplitter.onLine((line) {

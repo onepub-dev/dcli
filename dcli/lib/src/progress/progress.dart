@@ -5,6 +5,8 @@
  * SPDX-License-Identifier: MIT
  */
 
+import 'dart:convert';
+
 import '../../dcli.dart';
 import 'progress_both.dart';
 import 'progress_dev_null.dart';
@@ -25,24 +27,30 @@ abstract class Progress {
   factory Progress(LineAction stdout,
           {LineAction stderr = devNull,
           bool captureStdout = false,
-          bool captureStderr = false}) =>
+          bool captureStderr = false,
+          Encoding encoding = utf8}) =>
       ProgressBothImpl(stdout,
           stderr: stderr,
           captureStdout: captureStdout,
-          captureStderr: captureStderr);
+          captureStderr: captureStderr,
+          encoding: encoding);
 
   /// Use this progress to print both stdout and stderr.
   /// If [capture] is true (defaults to false) the output to
   /// stdout and stderr is also captured and will be available
   /// in [lines] once the process completes.
-  factory Progress.print({bool capture = false}) => ProgressBothImpl(print,
-      stderr: print, captureStdout: capture, captureStderr: capture);
+  factory Progress.print({bool capture = false, Encoding encoding = utf8}) =>
+      ProgressBothImpl(print,
+          stderr: print,
+          captureStdout: capture,
+          captureStderr: capture,
+          encoding: encoding);
 
   /// redirect both stdout and stderr to the same [LineAction]
-  /// Note: to capture stderr you must pass 'throws: false' to 
+  /// Note: to capture stderr you must pass 'throws: false' to
   /// the start process method.
-  factory Progress.both(LineAction both) =>
-      ProgressBothImpl(both, stderr: both);
+  factory Progress.both(LineAction both, {Encoding encoding = utf8}) =>
+      ProgressBothImpl(both, stderr: both, encoding: encoding);
 
   /// Captures the output of the called process to a list which
   /// can be obtained by calling [Progress.lines] once
@@ -51,9 +59,13 @@ abstract class Progress {
   /// Set [captureStdout] to false to suppress capturing of stdout.
   /// Set [captureStderr] to false to suppress capturing of stderr.
   factory Progress.capture(
-          {bool captureStdout = true, bool captureStderr = true}) =>
+          {bool captureStdout = true,
+          bool captureStderr = true,
+          Encoding encoding = utf8}) =>
       ProgressBothImpl(devNull,
-          captureStdout: captureStdout, captureStderr: captureStderr);
+          captureStdout: captureStdout,
+          captureStderr: captureStderr,
+          encoding: encoding);
 
   /// Use this progress to have both stdout and stderr output
   /// suppressed.
@@ -63,18 +75,21 @@ abstract class Progress {
   /// If [capture] is true (defaults to false) the output to
   /// stderr is also captured and will be available
   /// in [lines] once the process completes.
-  factory Progress.printStdErr({bool capture = false}) =>
-      ProgressStdErrImpl(capture: capture);
+  factory Progress.printStdErr(
+          {bool capture = false, Encoding encoding = utf8}) =>
+      ProgressStdErrImpl(capture: capture, encoding: encoding);
 
   /// Use this progress to only output data sent to stdout.
   /// If [capture] is true (defaults to false) the output to
   /// stdout is also captured and will be available
   /// in [lines] once the process completes.
-  factory Progress.printStdOut({bool capture = false}) =>
-      ProgressStdOutImpl(capture: capture);
+  factory Progress.printStdOut(
+          {bool capture = false, Encoding encoding = utf8}) =>
+      ProgressStdOutImpl(capture: capture, encoding: encoding);
 
-  factory Progress.stream({bool includeStderr = false}) =>
-      ProgressStreamImpl(includeStderr: includeStderr);
+  factory Progress.stream(
+          {bool includeStderr = false, Encoding encoding = utf8}) =>
+      ProgressStreamImpl(includeStderr: includeStderr, encoding: encoding);
 
   int? get exitCode;
 

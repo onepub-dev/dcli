@@ -27,7 +27,7 @@ class ProgressStreamImpl extends ProgressImpl
 
   late final Sink<List<int>> sink;
 
-  ProgressStreamImpl({bool includeStderr = false})
+  ProgressStreamImpl({bool includeStderr = false, super.encoding = utf8})
       : _controller = StreamController<List<int>>(),
         _includeStderr = includeStderr {
     sink = _controller.sink;
@@ -42,8 +42,8 @@ class ProgressStreamImpl extends ProgressImpl
 
   @override
   Future<void> forEach(LineAction action) async {
-    final transformed = _controller.stream
-        .map(String.fromCharCodes)
+    final transformed = encoding.decoder
+        .bind(_controller.stream)
         .transform(const LineSplitter());
 
     await transformed.forEach((line) => action(line));

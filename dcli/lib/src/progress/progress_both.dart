@@ -5,6 +5,8 @@
  * SPDX-License-Identifier: MIT
  */
 
+import 'dart:convert';
+
 import '../../dcli.dart';
 import 'progress_impl.dart';
 import 'progress_mixin.dart';
@@ -27,9 +29,9 @@ class ProgressBothImpl extends ProgressImpl
 
   final bool captureStderr;
 
-  final _stdoutSplitter = ProgressiveLineSplitter();
+  late final ProgressiveLineSplitter _stdoutSplitter;
 
-  final _stderrSplitter = ProgressiveLineSplitter();
+  late final ProgressiveLineSplitter _stderrSplitter;
 
   final _capturedLines = <String>[];
 
@@ -43,8 +45,13 @@ class ProgressBothImpl extends ProgressImpl
   ProgressBothImpl(this._stdout,
       {LineAction stderr = devNull,
       this.captureStdout = false,
-      this.captureStderr = false})
-      : _stderr = stderr {
+      this.captureStderr = false,
+      Encoding encoding = utf8})
+      : _stderr = stderr,
+        super(encoding: encoding) {
+    _stdoutSplitter = ProgressiveLineSplitter(encoding: encoding);
+    _stderrSplitter = ProgressiveLineSplitter(encoding: encoding);
+
     _stdoutSplitter.onLine((line) {
       _stdout(line);
       if (captureStdout) {
@@ -89,50 +96,43 @@ abstract class ProgressBoth implements Progress {
 }
 
 class ProgressiveLineSplitter {
-  void Function(String line)? action;
+  late final _ProgressLineSink _lineSink;
 
-  final currentLine = StringBuffer();
+  late final Sink<String> _lineSplitterSink;
+
+  late final Sink<List<int>> _byteSink;
+
+  ProgressiveLineSplitter({Encoding encoding = utf8}) {
+    _lineSink = _ProgressLineSink();
+    _lineSplitterSink = const LineSplitter().startChunkedConversion(_lineSink);
+    _byteSink = encoding.decoder.startChunkedConversion(_lineSplitterSink);
+  }
+
   void addData(List<int> intList) {
-    var lastWasCR = false;
-
-    for (final value in intList) {
-      if (lastWasCR) {
-        if (value == '\n'.codeUnitAt(0)) {
-          // If last was CR and current is LF, terminate the line
-          action?.call(currentLine.toString());
-          currentLine.clear();
-        } else {
-          // If last was CR but current is not LF, add a new line
-          action?.call(currentLine.toString());
-          currentLine
-            ..clear()
-            ..writeCharCode(value);
-        }
-        lastWasCR = false;
-      } else {
-        if (value == '\r'.codeUnitAt(0)) {
-          lastWasCR = true;
-        } else if (value == '\n'.codeUnitAt(0)) {
-          // If current is LF, terminate the line
-          action?.call(currentLine.toString());
-          currentLine.clear();
-        } else {
-          // Otherwise, append the character
-          currentLine.writeCharCode(value);
-        }
-      }
-    }
+    _byteSink.add(intList);
   }
 
   void close() {
-    if (currentLine.isNotEmpty) {
-      action?.call(currentLine.toString());
-    }
+    _byteSink.close();
+    _lineSink.close();
+    _lineSplitterSink.close();
   }
 
   // would break backwards compatibility
   // ignore: use_setters_to_change_properties
   void onLine(void Function(String line) action) {
-    this.action = action;
+    _lineSink.action = action;
   }
+}
+
+class _ProgressLineSink implements Sink<String> {
+  void Function(String line)? action;
+
+  @override
+  void add(String data) {
+    action?.call(data);
+  }
+
+  @override
+  void close() {}
 }

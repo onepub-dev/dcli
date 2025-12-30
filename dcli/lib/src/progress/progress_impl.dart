@@ -5,9 +5,14 @@
  * SPDX-License-Identifier: MIT
  */
 
+import 'dart:convert';
+
 /// The base implementation for all Progress implementations.
 abstract class ProgressImpl {
+  final Encoding encoding;
   int? exitCode;
+
+  ProgressImpl({this.encoding = utf8});
 
   /// adds the [data] to the stdout controller
   void addToStdout(List<int> data);

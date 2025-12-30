@@ -5,6 +5,8 @@
  * SPDX-License-Identifier: MIT
  */
 
+import 'dart:convert';
+
 import 'progress.dart';
 import 'progress_both.dart';
 import 'progress_impl.dart';
@@ -14,7 +16,7 @@ import 'progress_mixin.dart';
 class ProgressStdOutImpl extends ProgressImpl
     with ProgressMixin
     implements ProgressStdOut {
-  final _stdoutSplitter = ProgressiveLineSplitter();
+  late final ProgressiveLineSplitter _stdoutSplitter;
 
   final bool _capture;
 
@@ -24,7 +26,10 @@ class ProgressStdOutImpl extends ProgressImpl
   /// If [capture] is true (defaults to false) the output to
   /// stdout is also captured and will be available
   /// in [lines] once the process completes.
-  ProgressStdOutImpl({bool capture = false}) : _capture = capture {
+  ProgressStdOutImpl({bool capture = false, Encoding encoding = utf8})
+      : _capture = capture,
+        super(encoding: encoding) {
+    _stdoutSplitter = ProgressiveLineSplitter(encoding: encoding);
     _stdoutSplitter.onLine((line) {
       print(line);
       if (_capture) {

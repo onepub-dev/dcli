@@ -25,7 +25,7 @@ Future<Progress> capture<R>(Future<R> Function() action,
   /// overload printerr so we can trap it.
   final zoneValues = <String, CaptureZonePrintErr>{
     'printerr': (line) {
-      progressImpl.addToStderr('$line\n'.codeUnits);
+      progressImpl.addToStderr(progressImpl.encoding.encode('$line\n'));
     }
   };
 
@@ -43,8 +43,8 @@ Future<Progress> capture<R>(Future<R> Function() action,
     },
     zoneValues: zoneValues,
     zoneSpecification: ZoneSpecification(
-      print: (self, parent, zone, line) =>
-          progressImpl.addToStdout('$line\n'.codeUnits),
+      print: (self, parent, zone, line) => progressImpl
+          .addToStdout(progressImpl.encoding.encode('$line\n')),
     ),
   );
 
