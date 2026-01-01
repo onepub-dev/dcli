@@ -9,7 +9,6 @@ library;
 
 import 'dart:io';
 
-import 'package:dcli/dcli.dart';
 import 'package:dcli/src/util/process_helper.dart';
 import 'package:test/test.dart';
 
@@ -29,6 +28,11 @@ void main() {
   });
 
   test('Get running processes', () {
+    if (Platform.isMacOS) {
+      expect(() => ProcessHelper().getProcesses(), throwsUnsupportedError);
+      return;
+    }
+
     final processes = ProcessHelper().getProcesses();
 
     /// the list should container our details.
@@ -37,20 +41,36 @@ void main() {
 
   group('getProcessByName', () {
     test('process exists', () {
-      final exeName = DartSdk.dartExeName;
+      if (Platform.isMacOS) {
+        expect(() => ProcessHelper().getProcessesByName('anything'),
+            throwsUnsupportedError);
+        return;
+      }
 
-      /// as we are in a dart unit test dart should be running.
-      final darts = ProcessHelper().getProcessesByName(exeName);
-      expect(darts.isNotEmpty, isTrue);
-      for (final process in darts) {
+      final exeName = ProcessHelper().getProcessName(pid);
+      expect(exeName, isNotNull);
+      expect(exeName, isNot(equals('unknown')));
+
+      /// as we are in a dart unit test our process should be running.
+      final processes = ProcessHelper().getProcessesByName(exeName!);
+      expect(processes.isNotEmpty, isTrue);
+      for (final process in processes) {
         expect(process.name, equals(exeName));
       }
     });
 
     test('unknown process', () {
+      if (Platform.isMacOS) {
+        expect(
+            () => ProcessHelper().getProcessesByName('a;ljfasahaoi8w3dvaadk'),
+            throwsUnsupportedError);
+        return;
+      }
+
       /// try do find a process that isn't running.
-      final darts = ProcessHelper().getProcessesByName('a;ljfasahaoi8w3dvaadk');
-      expect(darts.isEmpty, isTrue);
+      final processes =
+          ProcessHelper().getProcessesByName('a;ljfasahaoi8w3dvaadk');
+      expect(processes.isEmpty, isTrue);
     });
   });
 

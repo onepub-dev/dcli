@@ -5,6 +5,8 @@
  * SPDX-License-Identifier: MIT
  */
 
+import 'dart:convert';
+
 import '../../dcli.dart';
 
 ///
@@ -82,6 +84,8 @@ class Remote {
   /// The optional [progress] allows you to control how the output
   /// of the command is printed to the console. By default
   /// all output is supressed.
+  /// If you don't pass [progress], the default Progress uses [encoding].
+  /// If you pass [progress], [encoding] is ignored.
   ///
   /// ```dart
   ///  // run mkdir on the remote host using sudo
@@ -101,6 +105,7 @@ class Remote {
     bool sudo = false,
     String? password,
     Progress? progress,
+    Encoding encoding = utf8,
   }) {
     execList(
       host: host,
@@ -109,6 +114,7 @@ class Remote {
       sudo: sudo,
       password: password,
       progress: progress,
+      encoding: encoding,
     );
   }
 
@@ -120,6 +126,8 @@ class Remote {
   ///
   /// If you set [sudo] to true then each command is run under sudo.
   /// If you set [password] then the password is passed to the sudo command.
+  /// If you don't pass [progress], the default Progress uses [encoding].
+  /// If you pass [progress], [encoding] is ignored.
   ///
   /// ```dart
   ///   Remote.exec(
@@ -137,6 +145,7 @@ class Remote {
     bool sudo = false,
     String? password,
     Progress? progress,
+    Encoding encoding = utf8,
   }) {
     final cmdArgs = <String>[];
 
@@ -172,7 +181,7 @@ class Remote {
 
     cmdArgs.add('"$cmdLine"');
 
-    progress ??= Progress.devNull();
+    progress ??= Progress.devNull(encoding: encoding);
 
     try {
       startFromArgs('ssh', cmdArgs, progress: progress);
@@ -202,6 +211,8 @@ class Remote {
   ///   You may only specify [toUser] if [toHost] is passed.
   /// Set [recursive] to true to do a recursive copy from the
   /// [from] path. [recursive] defaults to false.
+  /// If you don't pass [progress], the default Progress uses [encoding].
+  /// If you pass [progress], [encoding] is ignored.
   /// EXPERIMENTAL
   void scp({
     required List<String> from,
@@ -212,6 +223,7 @@ class Remote {
     String? toUser,
     bool recursive = false,
     Progress? progress,
+    Encoding encoding = utf8,
   }) {
     // toUser is only valid if toHost is given
     if (toUser != null && toHost == null) {
@@ -263,7 +275,7 @@ class Remote {
 
     cmdArgs.add(toArg);
 
-    progress ??= Progress.devNull();
+    progress ??= Progress.devNull(encoding: encoding);
 
     try {
       startFromArgs('scp', cmdArgs, progress: progress, terminal: true);

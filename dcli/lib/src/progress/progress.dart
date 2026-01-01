@@ -24,6 +24,7 @@ abstract class Progress {
   /// unless you pass a [stderr] [LineAction]
   /// By default no output is captured to the [lines] array unless you
   /// set [captureStdout] or [captureStderr] to true.
+  /// Use [encoding] to control how output bytes are decoded into strings.
   factory Progress(LineAction stdout,
           {LineAction stderr = devNull,
           bool captureStdout = false,
@@ -39,6 +40,7 @@ abstract class Progress {
   /// If [capture] is true (defaults to false) the output to
   /// stdout and stderr is also captured and will be available
   /// in [lines] once the process completes.
+  /// Use [encoding] to control how output bytes are decoded into strings.
   factory Progress.print({bool capture = false, Encoding encoding = utf8}) =>
       ProgressBothImpl(print,
           stderr: print,
@@ -47,8 +49,9 @@ abstract class Progress {
           encoding: encoding);
 
   /// redirect both stdout and stderr to the same [LineAction]
-  /// Note: to capture stderr you must pass 'throws: false' to
+  /// Note: to capture stderr you must pass 'throws: false' to 
   /// the start process method.
+  /// Use [encoding] to control how output bytes are decoded into strings.
   factory Progress.both(LineAction both, {Encoding encoding = utf8}) =>
       ProgressBothImpl(both, stderr: both, encoding: encoding);
 
@@ -58,6 +61,7 @@ abstract class Progress {
   /// By default both stdout and stderr are captured.
   /// Set [captureStdout] to false to suppress capturing of stdout.
   /// Set [captureStderr] to false to suppress capturing of stderr.
+  /// Use [encoding] to control how output bytes are decoded into strings.
   factory Progress.capture(
           {bool captureStdout = true,
           bool captureStderr = true,
@@ -69,12 +73,15 @@ abstract class Progress {
 
   /// Use this progress to have both stdout and stderr output
   /// suppressed.
-  factory Progress.devNull() => ProgressDevNullImpl();
+  /// Use [encoding] to control how output bytes are decoded into strings.
+  factory Progress.devNull({Encoding encoding = utf8}) =>
+      ProgressDevNullImpl(encoding: encoding);
 
   /// Use this progress to only output data sent to stderr.
   /// If [capture] is true (defaults to false) the output to
   /// stderr is also captured and will be available
   /// in [lines] once the process completes.
+  /// Use [encoding] to control how output bytes are decoded into strings.
   factory Progress.printStdErr(
           {bool capture = false, Encoding encoding = utf8}) =>
       ProgressStdErrImpl(capture: capture, encoding: encoding);
@@ -83,6 +90,7 @@ abstract class Progress {
   /// If [capture] is true (defaults to false) the output to
   /// stdout is also captured and will be available
   /// in [lines] once the process completes.
+  /// Use [encoding] to control how output bytes are decoded into strings.
   factory Progress.printStdOut(
           {bool capture = false, Encoding encoding = utf8}) =>
       ProgressStdOutImpl(capture: capture, encoding: encoding);

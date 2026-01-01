@@ -5,6 +5,8 @@
  * SPDX-License-Identifier: MIT
  */
 
+import 'dart:convert';
+
 import 'package:dcli_core/dcli_core.dart' as core;
 
 import '../functions/run.dart' as cmd;
@@ -121,6 +123,9 @@ extension StringAsProcess on String {
   /// Use [workingDirectory] to specify the directory the process should
   /// be run from.
   ///
+  /// Use [encoding] to control how output is decoded by the default Progress.
+  /// If you supply a custom [Progress], [encoding] is ignored.
+  ///
   /// If you need to run a command with escalated privileged then set the
   /// [privileged]
   /// argument to true. On Linux this equates to using the sudo command.
@@ -161,10 +166,12 @@ extension StringAsProcess on String {
     bool privileged = false,
     String? workingDirectory,
     bool extensionSearch = true,
+    Encoding encoding = utf8,
   }) =>
       cmd.start(
         this,
-        progress: progress ?? Progress(print, stderr: printerr),
+        progress:
+            progress ?? Progress(print, stderr: printerr, encoding: encoding),
         runInShell: runInShell,
         detached: detached,
         terminal: terminal,
@@ -181,6 +188,9 @@ extension StringAsProcess on String {
   ///
   /// Output from the command can be captured by
   /// providing handlers for stdout and stderr.
+  ///
+  /// Use [encoding] to control how output is decoded before it is passed to
+  /// stdout and stderr handlers.
   ///
   /// ```dart
   /// // Capture output to stdout and print it.
@@ -215,10 +225,11 @@ extension StringAsProcess on String {
     core.LineAction stderr = _noOpAction,
     bool runInShell = false,
     bool extensionSearch = true,
+    Encoding encoding = utf8,
   }) =>
       cmd.start(
         this,
-        progress: Progress(stdout, stderr: stderr),
+        progress: Progress(stdout, stderr: stderr, encoding: encoding),
         runInShell: runInShell,
         extensionSearch: extensionSearch,
       );
@@ -232,6 +243,8 @@ extension StringAsProcess on String {
   /// The [skipLines] argument tells [toList] to not return the first
   /// [skipLines] lines. This is useful if a command outputs a heading
   /// and you want to skip over the heading.
+  ///
+  /// Use [encoding] to control how output is decoded into strings.
   ///
   /// If [runInShell] is true (defaults to false) then the command will
   /// be run in a shell. This may be required if you are trying to run
@@ -274,11 +287,12 @@ extension StringAsProcess on String {
     bool nothrow = false,
     String? workingDirectory,
     bool extensionSearch = true,
+    Encoding encoding = utf8,
   }) {
     final progress = cmd.start(
       this,
       runInShell: runInShell,
-      progress: Progress.capture(),
+      progress: Progress.capture(encoding: encoding),
       nothrow: nothrow,
       workingDirectory: workingDirectory,
       extensionSearch: extensionSearch,
@@ -299,6 +313,8 @@ extension StringAsProcess on String {
   /// The [skipLines] argument tells [toParagraph] to not return the first
   /// [skipLines] lines. This is useful if a command outputs a heading
   /// and you want to skip over the heading.
+  ///
+  /// Use [encoding] to control how output is decoded into strings.
   ///
   /// If [runInShell] is true (defaults to false) then the command will
   /// be run in a shell. This may be required if you are trying to run
@@ -339,6 +355,7 @@ extension StringAsProcess on String {
     bool nothrow = false,
     String? workingDirectory,
     bool extensionSearch = true,
+    Encoding encoding = utf8,
   }) =>
       toList(
         runInShell: runInShell,
@@ -346,6 +363,7 @@ extension StringAsProcess on String {
         nothrow: nothrow,
         workingDirectory: workingDirectory,
         extensionSearch: extensionSearch,
+        encoding: encoding,
       ).join(core.eol);
 
   /// [parser] runs the contents of this String as a cli command line
@@ -380,9 +398,11 @@ extension StringAsProcess on String {
   ///     [firstLine] - returns just the first line written to stdout or stderr.
   ///     [lastLine] - returns just the last line written to stdout or stderr.
   ///     [toList] -  returns a lines written to stdout and stderr as a list.
+  ///
+  /// Use [encoding] to control how output is decoded into strings.
 
-  Parser parser({bool runInShell = false}) {
-    final lines = toList(runInShell: runInShell);
+  Parser parser({bool runInShell = false, Encoding encoding = utf8}) {
+    final lines = toList(runInShell: runInShell, encoding: encoding);
 
     return Parser(lines);
   }

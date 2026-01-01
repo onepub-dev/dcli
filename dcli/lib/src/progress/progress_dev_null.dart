@@ -13,6 +13,8 @@ import 'progress_mixin.dart';
 class ProgressDevNullImpl extends ProgressImpl
     with ProgressMixin
     implements ProgressDevNull {
+  ProgressDevNullImpl({super.encoding});
+
   @override
   void addToStderr(List<int> data) {
     /// just dump the data the ground as this is dev null

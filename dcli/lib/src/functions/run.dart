@@ -5,6 +5,8 @@
  * SPDX-License-Identifier: MIT
  */
 
+import 'dart:convert';
+
 import '../../dcli.dart';
 import '../util/runnable_process.dart';
 
@@ -27,6 +29,9 @@ import '../util/runnable_process.dart';
 /// If you pass a [workingDirectory] the command will run in the
 /// given [workingDirectory]. If the [workingDirectory] is not specified
 /// then the command will be run in the current working directory.
+///
+/// Use [encoding] to control how output is decoded by the default Progress.
+/// If you supply a custom [Progress], [encoding] is ignored.
 ///
 /// Use the [runInShell] argument if you need your command to be spawned
 /// within a shell (e.g. bash). This may be necessary if you need to access
@@ -94,6 +99,7 @@ int? run(
   bool privileged = false,
   String? workingDirectory,
   bool extensionSearch = true,
+  Encoding encoding = utf8,
 }) {
   workingDirectory ??= pwd;
 
@@ -104,7 +110,7 @@ int? run(
 
   return runnable
       .run(
-        progress: Progress.print(),
+        progress: Progress.print(encoding: encoding),
         runInShell: runInShell,
         privileged: privileged,
         nothrow: nothrow,
@@ -136,6 +142,8 @@ int? run(
 /// the console.
 ///
 /// Pass in a [progress] to capture or suppress stdout and stderr.
+/// If you don't pass [progress], the default Progress uses [encoding].
+/// If you pass [progress], [encoding] is ignored.
 ///
 ///
 /// The [privileged] argument attempts to escalate the priviledge that
@@ -168,8 +176,9 @@ Progress startFromArgs(
   bool nothrow = false,
   String? workingDirectory,
   bool extensionSearch = true,
+  Encoding encoding = utf8,
 }) {
-  progress ??= Progress.print();
+  progress ??= Progress.print(encoding: encoding);
   workingDirectory ??= pwd;
   final runnable = RunnableProcess.fromCommandArgs(
     command,
@@ -200,6 +209,8 @@ Progress startFromArgs(
 /// You may pass in a [progress] which allows you to process
 /// output as it is generated. If you pass in a [progress] the same
 /// [progress] is returned from the [start] method.
+/// If you don't pass [progress], the default Progress uses [encoding].
+/// If you pass [progress], [encoding] is ignored.
 ///
 /// If you don't passing in a [progress] then a default [progress] is created
 /// which suppresses output from both stdout and stderr.
@@ -245,8 +256,10 @@ Progress start(
   bool privileged = false,
   String? workingDirectory,
   bool extensionSearch = true,
+  Encoding encoding = utf8,
 }) {
   workingDirectory ??= pwd;
+  progress ??= Progress.print(encoding: encoding);
   final runnable = RunnableProcess.fromCommandLine(
     commandLine,
     workingDirectory: workingDirectory,

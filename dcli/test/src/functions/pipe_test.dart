@@ -1,14 +1,6 @@
 @t.Timeout(Duration(seconds: 600))
 library;
 
-/* Copyright (C) S. Brett Sutton - All Rights Reserved
- * Unauthorized copying of this file, via any medium is strictly prohibited
- * Proprietary and confidential
- * Written by Brett Sutton <bsutton@onepub.dev>, Jan 2022
- */
-
-import 'dart:async';
-
 import 'package:dcli/dcli.dart';
 import 'package:dcli_test/dcli_test.dart';
 import 'package:path/path.dart';
@@ -20,16 +12,18 @@ void main() {
   t.group('Piping with ForEach ', () {
     final lines = <String?>[];
 
-    unawaited(TestFileSystem().withinZone((fs) async {
-      t.test('For Each on string', () {
+    t.test('For Each on string', () async {
+      await TestFileSystem().withinZone((fs) async {
         final linesFile = join(fs.fsRoot, TestFileSystem.testLinesFile);
         createLineFile(linesFile, 10);
 
         'tail -n 100 $linesFile'.forEach(lines.add);
         t.expect(lines.length, t.equals(10));
       });
+    });
 
-      t.test('forEach Single Pipe', () {
+    t.test('forEach Single Pipe', () async {
+      await TestFileSystem().withinZone((fs) async {
         final linesFile = join(fs.fsRoot, TestFileSystem.testLinesFile);
         createLineFile(linesFile, 10);
 
@@ -39,8 +33,10 @@ void main() {
 
         // t.expect(lines.length, t.equals(5));
       });
+    });
 
-      t.test('forEach Double Pipe', () {
+    t.test('forEach Double Pipe', () async {
+      await TestFileSystem().withinZone((fs) async {
         final linesFile = join(fs.fsRoot, TestFileSystem.testLinesFile);
         createLineFile(linesFile, 10);
 
@@ -49,8 +45,10 @@ void main() {
         // ('tail $linesFile' | 'head -n 5' | 'tail -n 2').forEach(lines.add);
         // t.expect(lines.length, t.equals(2));
       });
+    });
 
-      t.test('forEach Triple Pipe', () {
+    t.test('forEach Triple Pipe', () async {
+      await TestFileSystem().withinZone((fs) async {
         final linesFile = join(fs.fsRoot, TestFileSystem.testLinesFile);
         createLineFile(linesFile, 10);
 
@@ -60,49 +58,56 @@ void main() {
         //     .forEach(lines.add);
         // t.expect(lines.length, t.equals(2));
       });
-    }));
+    });
+  });
 
-    t.group('Piping with run ', () async {
-      // final lines = <String>[];
+  t.group('Piping with run ', () {
+    // final lines = <String>[];
+
+    t.test('run on string', () async {
       await TestFileSystem().withinZone((fs) async {
-        t.test('run on string', () {
-          final linesFile = join(fs.fsRoot, TestFileSystem.testLinesFile);
-          createLineFile(linesFile, 10);
+        final linesFile = join(fs.fsRoot, TestFileSystem.testLinesFile);
+        createLineFile(linesFile, 10);
 
-          'tail -n 100 $linesFile'.run;
-          //t.expect(lines.length, t.equals(10));
-        });
+        'tail -n 100 $linesFile'.run;
+        //t.expect(lines.length, t.equals(10));
+      });
+    });
 
-        t.test('run Single Pipe', () {
-          final linesFile = join(fs.fsRoot, TestFileSystem.testLinesFile);
-          createLineFile(linesFile, 10);
-
-// TODO(bsutton): restore
-          // lines.clear();
-          // ('tail -n 100 $linesFile' | 'head -n 5').run;
-
-          //t.expect(lines.length, t.equals(5));
-        });
-
-        t.test('run Double Pipe', () {
-          final linesFile = join(fs.fsRoot, TestFileSystem.testLinesFile);
-          createLineFile(linesFile, 10);
+    t.test('run Single Pipe', () async {
+      await TestFileSystem().withinZone((fs) async {
+        final linesFile = join(fs.fsRoot, TestFileSystem.testLinesFile);
+        createLineFile(linesFile, 10);
+      });
 
 // TODO(bsutton): restore
-          // lines.clear();
-          // ('tail $linesFile' | 'head -n 5' | 'tail -n 2').run;
-          //t.expect(lines.length, t.equals(2));
-        });
+      // lines.clear();
+      // ('tail -n 100 $linesFile' | 'head -n 5').run;
 
-        t.test('run Triple Pipe', () {
-          final linesFile = join(fs.fsRoot, TestFileSystem.testLinesFile);
-          createLineFile(linesFile, 10);
+      //t.expect(lines.length, t.equals(5));
+    });
+
+    t.test('run Double Pipe', () async {
+      await TestFileSystem().withinZone((fs) async {
+        final linesFile = join(fs.fsRoot, TestFileSystem.testLinesFile);
+        createLineFile(linesFile, 10);
 
 // TODO(bsutton): restore
-          // lines.clear();
-          // ('tail $linesFile' | 'head -n 5' | 'head -n 3' | 'tail -n 2').run;
-          //t.expect(lines.length, t.equals(2));
-        });
+        // lines.clear();
+        // ('tail $linesFile' | 'head -n 5' | 'tail -n 2').run;
+        //t.expect(lines.length, t.equals(2));
+      });
+    });
+
+    t.test('run Triple Pipe', () async {
+      await TestFileSystem().withinZone((fs) async {
+        final linesFile = join(fs.fsRoot, TestFileSystem.testLinesFile);
+        createLineFile(linesFile, 10);
+
+// TODO(bsutton): restore
+        // lines.clear();
+        // ('tail $linesFile' | 'head -n 5' | 'head -n 3' | 'tail -n 2').run;
+        //t.expect(lines.length, t.equals(2));
       });
     });
   });
