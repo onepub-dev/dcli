@@ -1,3 +1,11 @@
+# 8.3.0
+  - DCLi functions which execute process have assumed that data is ascii which is incorrect as most cli system utilise utf-8.
+  This updates changes the default encoding to utf-8 and provides the ability to select the encoding.
+  These changes should be backward compatible whilst fixing the output of programs that output mulit-byte utf-8 data.
+  Functions like `start()` now take an 'encoding' parameter which is used if no Progress is passed to the method. If you pass in 
+  a Progress then the encoding of that Progress is used.
+  - Added encoding-aware Progress classes.
+
 # 8.1.0
 - upgraded to lint_hard 6 and applied fixes.
 - Improvements to the dcli lock command, it now creates a restore file with a list of the original deps. It no longer locks transient dependencies - ths may be a bad idea but currently the pub lish command enforces a max of 100 direct dependencies so locking transient dependencies is an issue (as they need to be brought into the pubspec.yaml). Implemented the dcli 'unlock' command which restores the pubspec.yaml to its original state.
