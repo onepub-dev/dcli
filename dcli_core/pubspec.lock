@@ -135,21 +135,21 @@ packages:
       path: "../dcli"
       relative: true
     source: path
-    version: "8.2.1"
+    version: "8.3.0"
   dcli_common:
     dependency: "direct main"
     description:
       path: "../dcli_common"
       relative: true
     source: path
-    version: "8.0.0"
+    version: "8.3.0"
   dcli_terminal:
     dependency: "direct overridden"
     description:
       path: "../dcli_terminal"
       relative: true
     source: path
-    version: "8.0.0"
+    version: "8.3.0"
   equatable:
     dependency: transitive
     description:
