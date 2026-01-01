@@ -411,6 +411,8 @@ extension StringAsProcess on String {
   /// returns the first line written to stdout or stderr as
   /// a [String].
   /// Returns null if no lines are returned.
+  /// Assumes that the data is utf-8 encoded. Use [toList] if you need to
+  /// control the encoding.
   ///
   /// DCli performs Glob expansion on command arguments. See [run] for details.
   ///
@@ -442,6 +444,9 @@ extension StringAsProcess on String {
   /// [lastLine] runs the contents of this String as a cli process and
   /// returns the last line written to stdout or stderr as
   /// a [String].
+  ///
+  /// Assumes that the data is utf-8 encoded. Use [toList] if you need to
+  /// control the encoding.
   ///
   /// DCli performs Glob expansion on command arguments. See [run] for details.
   ///
