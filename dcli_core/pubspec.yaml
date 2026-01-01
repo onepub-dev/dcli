@@ -1,5 +1,5 @@
 name: dcli_core
-version: 8.0.0
+version: 8.3.0
 homepage: https://dcli.onepub.dev
 documentation: https://dcli.onepub.dev
 description: A collection of functions that allow you to interact with the file system and OS environment
@@ -13,7 +13,7 @@ dependencies:
   circular_buffer: ^0.12.0
   collection: ^1.15.0
   crypto: ^3.0.1
-  dcli_common: ^8.0.0
+  dcli_common: ^8.3.0
   ffi: ^2.1.0
   logging: ^1.0.2
   meta: ">=1.11.0 <2.0.0"
