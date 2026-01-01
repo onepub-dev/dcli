@@ -59,8 +59,12 @@ mixin PosixShell {
     }
     final response = 'sudo -nv'.toList(nothrow: true);
 
-    return response.isNotEmpty &&
-        response.first == 'sudo: a password is required';
+    if (response.isEmpty) {
+      return false;
+    }
+    final first = response.first;
+    return first == 'sudo: a password is required' ||
+        first == 'sudo-rs: interactive authentication is required';
   }
 
   /// True if the processes real uid is root.
