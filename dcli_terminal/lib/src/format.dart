@@ -122,15 +122,16 @@ class Format {
   /// When [pad] is false
   /// Except for absurdly large no. (> 10^20)
   /// the return is guarenteed to be 6 or less characters long.
-  /// Returns [bytes] in a human-readable SI form (base 1000).
+  /// Returns [bytes] in a human-readable binary form (base 1024).
   /// Examples: 3.000T, 10.00G, 100.0M, 20.00K, 10B
   ///
   /// With [pad] true (default), the numeric part is left-padded to width 5,
   /// so the whole string is 6 chars incl. the unit (except when using
   /// scientific notation for very large values).
   String bytesAsReadable(int bytes, {bool pad = true}) {
-    // Switch to scientific notation from 1e15 (i.e., 1000^5).
-    if (bytes >= 1000000000000000) {
+    // Switch to scientific notation from 1 PiB (i.e., 1024^5).
+    const petaBytes = 1125899906842624;
+    if (bytes >= petaBytes) {
       return bytes.toStringAsExponential(0);
     }
 
@@ -138,9 +139,9 @@ class Format {
     var value = bytes.toDouble();
     var unitIndex = 0;
 
-    // SI (decimal) steps of 1000.
-    while (value >= 1000 && unitIndex < units.length - 1) {
-      value /= 1000;
+    // Binary (1024) steps.
+    while (value >= 1024 && unitIndex < units.length - 1) {
+      value /= 1024;
       unitIndex++;
     }
 
