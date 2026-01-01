@@ -1,3 +1,11 @@
+# 8.3.0
+  - DCLi functions which execute process have assumed that data is ascii which is incorrect as most cli system utilise utf-8.
+  This updates changes the default encoding to utf-8 and provides the ability to select the encoding.
+  These changes should be backward compatible whilst fixing the output of programs that output mulit-byte utf-8 data.
+  Functions like `start()` now take an 'encoding' parameter which is used if no Progress is passed to the method. If you pass in 
+  a Progress then the encoding of that Progress is used.
+  - Added encoding-aware Progress classes.
+
 # 8.1.0
 - upgraded to pubspec_manager 3.x
 
