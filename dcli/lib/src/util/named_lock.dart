@@ -280,8 +280,8 @@ class NamedLock {
             }
 
             if (taken) {
-              Settings().verbose(
-                'Taking lock ${basename(_lockFilePath)} for $isolateID',
+              verbose(
+                () => 'Taking lock ${basename(_lockFilePath)} for $isolateID',
               );
 
               verbose(
