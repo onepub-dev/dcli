@@ -258,6 +258,7 @@ class DartScript {
   /// If [workingDirectory] is not passed then the current working directory is
   /// used. The [workingDirectory] should contain the pubspec.yaml that is used
   /// to compile the script.
+  /// Throws [InvalidArgumentException].
   void compile({
     bool install = false,
     bool overwrite = false,

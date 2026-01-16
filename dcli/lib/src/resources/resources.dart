@@ -312,6 +312,7 @@ $line
 ''');
   }
 
+  /// Throws [ResourceException].
   List<_Resource> _packExternalResources() {
     final resources = <_Resource>[];
 
@@ -416,6 +417,7 @@ $line
     return resources;
   }
 
+  /// Throws [ResourceException].
   void _checkForDuplicates(List<_Resource> packedResources) {
     final paths = <String>{};
     for (final resource in packedResources) {

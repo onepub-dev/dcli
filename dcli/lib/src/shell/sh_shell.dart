@@ -24,6 +24,7 @@ class ShShell with ShellMixin, PosixShell {
   @override
   bool get isCompletionSupported => false;
 
+  /// Throws [Type].
   @override
   bool get isCompletionInstalled {
     // good enough
@@ -31,6 +32,7 @@ class ShShell with ShellMixin, PosixShell {
     throw UnimplementedError;
   }
 
+  /// Throws [Type].
   @override
   void installTabCompletion({bool quiet = false}) {
     // good enough
@@ -44,6 +46,7 @@ class ShShell with ShellMixin, PosixShell {
   @override
   bool get hasStartScript => false;
 
+  /// Throws [Type].
   @override
   String get startScriptName {
     // good enough
@@ -51,6 +54,7 @@ class ShShell with ShellMixin, PosixShell {
     throw UnimplementedError;
   }
 
+  /// Throws [Type].
   @override
   String get pathToStartScript {
     // good enough
@@ -63,14 +67,17 @@ class ShShell with ShellMixin, PosixShell {
   @override
   bool get canModifyPath => false;
 
+  /// Throws [UnsupportedError].
   @override
   @Deprecated('Use appendToPATH')
   bool addToPATH(String path) => throw UnsupportedError('Not supported in sh');
 
+  /// Throws [UnsupportedError].
   @override
   bool appendToPATH(String path) =>
       throw UnsupportedError('Not supported in sh');
 
+  /// Throws [UnsupportedError].
   @override
   bool prependToPATH(String path) =>
       throw UnsupportedError('Not supported in sh');

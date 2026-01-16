@@ -46,6 +46,7 @@ class ProcessRunner {
   ///
   /// If you pass [detached] = true then the process is spawned
   /// but we don't wait for it to complete nor is any io available.
+  /// Throws [RunException].
   Future<void> start() async {
     assert(
       !(settings.terminal && settings.detached),

@@ -24,6 +24,7 @@ class PubGet {
 
   /// Runs the pub get command against
   /// the project working dir.
+  /// Throws [PubGetException].
   PubGetResult run({bool compileExecutables = true}) {
     final result = PubGetResult();
     try {

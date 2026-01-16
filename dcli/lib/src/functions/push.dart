@@ -40,6 +40,7 @@ void push(String path) => _Push().push(path);
 class _Push extends core.DCliFunction {
   /// Push the pwd onto the stack and change the
   /// current directory to [path].
+  /// Throws [PushException].
   void push(String path) {
     verbose(() => 'push: path: $path new -> ${core.truepath(path)}');
 

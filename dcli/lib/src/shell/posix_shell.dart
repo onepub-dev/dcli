@@ -139,6 +139,7 @@ mixin PosixShell {
   }
 
   /// Run [action] with root UID and gid
+  /// Throws [ShellException].
   void withPrivileges(RunPrivileged action, {bool allowUnprivileged = false}) {
     final startedPriviledged = Shell.current.isPrivilegedProcess;
     if (!allowUnprivileged && !startedPriviledged) {
@@ -162,6 +163,7 @@ mixin PosixShell {
   }
 
   /// Identical to [withPrivileges] except the [action] is async
+  /// Throws [ShellException].
   Future<void> withPrivilegesAsync(RunPrivilegedAsync action,
       {bool allowUnprivileged = false}) async {
     final startedPriviledged = Shell.current.isPrivilegedProcess;

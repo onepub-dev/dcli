@@ -185,6 +185,7 @@ class ProcessHelper {
     return false;
   }
 
+  /// Throws [UnsupportedError].
   bool _linuxisRunning(int? lpid) {
     var isRunning = false;
 
@@ -207,6 +208,7 @@ class ProcessHelper {
   /// Returns a list of running processes.
   ///
   /// Currently this is only supported on Windows and Linux.
+  /// Throws [UnsupportedError].
   List<ProcessDetails> getProcesses() {
     if (core.Settings().isWindows) {
       return getWindowsProcesses();

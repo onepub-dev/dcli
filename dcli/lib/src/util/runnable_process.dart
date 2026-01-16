@@ -95,6 +95,7 @@ class RunnableProcess {
   String get cmdLine => '${_parsed.cmd} ${_parsed.args.join(' ')}';
 
   /// Experiemental - DO NOT USE
+  /// Throws [ProcessException].
   Stream<List<int>> get stream {
     // TODO(bsutton): re-implent streams.
     throw ProcessException(_parsed.cmd, _parsed.args, 'Not supported');
@@ -104,6 +105,7 @@ class RunnableProcess {
   }
 
   /// Experiemental - DO NOT USE
+  /// Throws [ProcessException].
   Sink<List<int>> get sink {
     // TODO(bsutton): re-implent streams.
     throw ProcessException(_parsed.cmd, _parsed.args, 'Not supported');
@@ -250,6 +252,7 @@ class RunnableProcess {
   ///
   /// If you pass [detached] = true then the process is spawned
   /// but we don't wait for it to complete nor is any io available.
+  /// Throws [RunException].
   void start({
     required ProgressImpl progress,
     bool nothrow = false,

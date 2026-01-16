@@ -85,6 +85,7 @@ abstract class Shell {
   /// install it.
   /// If [quiet] is true then suppress any console output except
   /// for errors.
+  /// Throws [UnimplementedError].
   void installTabCompletion({bool quiet = true}) => throw UnimplementedError();
 
   /// Returns the username of the logged in user.

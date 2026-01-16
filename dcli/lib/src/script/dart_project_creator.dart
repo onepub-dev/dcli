@@ -15,6 +15,7 @@ part of 'dart_project.dart';
 @visibleForTesting
 const overrideDCliPathKey = 'DCLI_OVERRIDE_PATH';
 
+/// Throws [InvalidProjectTemplateException]
 void _createProject(String pathToProject, String templateName) {
   verbose(() => '_createProject $pathToProject from $templateName');
 
@@ -204,6 +205,7 @@ void _printCreating(String projectName, String pathToTemplate) {
 }
 
 /// Returns `true` if [projectName] is valid Dart variable identifier.
+/// Throws [InvalidArgumentException].
 void _validateProjectName(String projectName) {
   // Contains only valid characters and starts with a non-numeric character.
   final regExp = RegExp(r'^[A-Za-z_$][A-Za-z0-9_$]*');
@@ -233,6 +235,7 @@ void _applyTransforms(
   });
 }
 
+/// Throws [DartProjectException]
 String _resolveTemplatePath(String templateName) {
   String? pathToTemplate;
   var found = false;

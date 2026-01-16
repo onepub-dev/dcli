@@ -106,6 +106,7 @@ class DartSdk {
       getVersion().compareTo(Version.parse('2.16.0')) < 0;
 
   /// Returns the DartSdk's version
+  /// Throws [DCliException].
   Version getVersion() {
     if (_version == null) {
       final platform = Platform.version;
@@ -138,6 +139,7 @@ class DartSdk {
   /// If [workingDirectory] is not passed then the current working directory is
   /// used. The [workingDirectory] should contain the pubspec.yaml that is used
   /// to compile the script.
+  /// Throws [DCliException].
   void runDartCompiler(
     DartScript script, {
     required String pathToExe,
@@ -196,6 +198,7 @@ class DartSdk {
   }
 
   /// Run the dart exe with arguments.
+  /// Throws [DCliException].
   Progress run({
     required List<String> args,
     String? workingDirectory,
@@ -234,6 +237,7 @@ class DartSdk {
   /// If [nothrow] == true (defaults to false) then if the
   /// call to pub get fails an exit code will be returned in the
   /// [Progress] rather than throwing an exception.
+  /// Throws [DCliException].
   Progress runPub({
     required List<String> args,
     String? workingDirectory,
@@ -295,6 +299,7 @@ class DartSdk {
   /// If [nothrow] == true (defaults to false) then if the
   /// call to pub get fails an exit code will be returned in the
   /// [Progress] rather than throwing an exception.
+  /// Throws [DCliException].
   Progress runDartDoc({
     String? pathToProject,
     String? pathToDoc,
@@ -402,6 +407,7 @@ class DartSdk {
   }
 
   /// Attempts to detect the location of the dart sdk.
+  /// Throws [Exception].
   static String _detect() {
     final whichExe = which(dartExeName);
 
@@ -436,6 +442,7 @@ class DartSdk {
   /// install path and can modifiy it if desired.
   ///
   /// returns the directory where the dartSdk was installed.
+  /// Throws [InstallException].
   Future<String> installFromArchive(String defaultDartSdkPath,
       {bool askUser = true}) async {
     // verbose(() => 'Architecture: ${SysInfo.kernelArchitecture}');
@@ -524,6 +531,7 @@ class DartSdk {
   /// Converts the kernel architecture into one of the architecture names use
   /// by:
   /// https://dart.dev/tools/sdk/archive
+  /// Throws [OSError].
   String resolveArchitecture() {
     if (Platform.isMacOS) {
       return 'x64';

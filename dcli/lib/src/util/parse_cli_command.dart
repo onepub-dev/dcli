@@ -28,6 +28,7 @@ class ParsedCliCommand {
   static const escapeCharacter = '^';
 
   ///
+  /// Throws [RunException].
   ParsedCliCommand(String command, String? workingDirectory) {
     workingDirectory ??= pwd;
     if (!exists(workingDirectory)) {
@@ -43,6 +44,7 @@ class ParsedCliCommand {
 
   /// when passed individual args we respect any quotes that are
   /// passed as they have been put there with intent.
+  /// Throws [RunException].
   ParsedCliCommand.fromParsed(
     this.cmd,
     List<String> rawArgs,
@@ -62,6 +64,7 @@ class ParsedCliCommand {
   }
 
   /// parses the given command breaking them done into words
+  /// Throws [InvalidArgumentException].
   List<_QArg> _parse(String commandLine) {
     final parts = <_QArg>[];
 

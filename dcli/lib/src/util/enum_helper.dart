@@ -39,6 +39,7 @@ class EnumHelper {
   }
 
   /// returns a enum based on its name.
+  /// Throws [Exception].
   T getEnum<T>(String enumName, List<T> values) {
     final cleanedName = ReCase().titleCase(enumName);
     for (var i = 0; i < values.length; i++) {

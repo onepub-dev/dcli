@@ -97,6 +97,7 @@ dcli install''';
   bool get isCompletionSupported => false;
 
   // no shell so no tab completion
+  /// Throws [UnsupportedError].
   @override
   void installTabCompletion({bool quiet = false}) =>
       throw UnsupportedError('Not supported in docker');
@@ -112,12 +113,14 @@ dcli install''';
 
   /// Appends the given path to the bash path if it isn't
   /// already on the path.
+  /// Throws [UnsupportedError].
   @override
   bool appendToPATH(String path) =>
       throw UnsupportedError('Not supported in docker');
 
   /// Prepends the given path to the bash path if it isn't
   /// already on the path.
+  /// Throws [UnsupportedError].
   @override
   bool prependToPATH(String path) =>
       throw UnsupportedError('Not supported in docker');
@@ -133,10 +136,12 @@ dcli install''';
   @override
   bool get hasStartScript => false;
 
+  /// Throws [UnsupportedError].
   @override
   String get startScriptName =>
       throw UnsupportedError('Not supported in docker');
 
+  /// Throws [UnsupportedError].
   @override
   String get pathToStartScript =>
       throw UnsupportedError('Not supported in docker');

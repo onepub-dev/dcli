@@ -41,6 +41,7 @@ class MacOSDCliInstaller {
     return installedDart;
   }
 
+  /// Throws [InstallException].
   bool _installDart() {
     // first check that dart isn't already installed
     if (DartSdk().pathToDartExe != null) {

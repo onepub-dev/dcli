@@ -344,6 +344,7 @@ class DartProject {
   ///
   /// This is normally done when the project cache is first
   /// created and when a script's pubspec changes.
+  /// Throws [DartProjectException].
   Future<void> _pubget() async {
     await NamedLock(name: _lockName).withLockAsync(() async {
       final pubGet = PubGet(this);
@@ -364,6 +365,7 @@ class DartProject {
   ///
   /// This is normally done when the project cache is first
   /// created and when a script's pubspec changes.
+  /// Throws [DartProjectException].
   Future<void> _pubupgrade() async {
     // Refactor with named lock guard
     await NamedLock(

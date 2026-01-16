@@ -136,6 +136,7 @@ class FileSort {
   }
 
   /// Performs an insitu sort of the passed list.
+  /// Throws [InvalidArgumentException].
   void _sortList(List<_Line> list) {
     list.sort((lhs, rhs) {
       final lhsColumns = lhs.line!.split(_fieldDelimiter!);
@@ -218,6 +219,7 @@ class FileSort {
   /// Expands an list of columns defined as per [Column.parse]
   /// into a list of [Column]s.
   ///
+  /// Throws [InvalidArgumentException].
   static List<Column> expandColumns(List<String> values) {
     final columns = <Column>[];
 
@@ -393,6 +395,7 @@ class CaseSensitiveSort implements ColumnComparator {
 class NumericSort implements ColumnComparator {
   ///
   const NumericSort();
+  /// Throws [FormatException].
   @override
   int compareTo(Column column, String? lhs, String? rhs) {
     final numLhs = num.tryParse(lhs!);
@@ -447,6 +450,7 @@ class MonthSort implements ColumnComparator {
   /// from the monthName.
   /// checks are case insensitive and only the first three
   /// characters are considered.
+  /// Throws [InvalidArgumentException].
   int? toMonthNo(String monthName) {
     var finalmonthName = monthName.trim();
     if (finalmonthName.length < 3) {
@@ -515,6 +519,7 @@ class Column {
   /// d - descending
   /// ```
   ///
+  /// Throws [InvalidArgumentException].
   Column.parse(String column, {bool ordinalOnly = false}) {
     final digits = _countDigits(column);
 
