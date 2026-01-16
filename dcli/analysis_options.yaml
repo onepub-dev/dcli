@@ -5,6 +5,13 @@ analyzer:
     avoid_classes_with_only_static_members: ignore
     avoid_catches_without_on_clauses: ignore
     
+plugins:
+  lint_hard:
+    path: ../../lint_hard
+    diagnostics:
+      document_thrown_exceptions: true
+      fields_first_constructors_next: true
+        
 linter:
   rules:
     avoid_print : false 

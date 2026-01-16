@@ -18,6 +18,7 @@ import 'package:dcli_core/dcli_core.dart' as core;
 import 'package:path/path.dart' hide equals;
 import 'package:test/test.dart';
 
+/// Throws [DCliException].
 void main() {
   group('NamedLock', () {
     test('callback', () async {
@@ -146,6 +147,7 @@ const _lockCheckPath = '/tmp/lockcheck';
 final _lockFailedPath = join(_lockCheckPath, 'lock_failed');
 
 /// must be a global function as we us it to spawn an isolate
+/// Throws [DCliException].
 Future<void> worker(int instance) async {
   print('starting worker instance $instance ${DateTime.now()}');
   await NamedLock(name: 'gshared-compile').withLockAsync(() async {

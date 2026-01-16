@@ -68,6 +68,7 @@ typedef CustomMenuPrompt = String Function(
 /// displayed and the [defaultOption] will be returned.
 /// If there is no [defaultOption] then the first [options] will be returned.
 ///
+/// Throws [ArgumentError].
 T menu<T>(
   String prompt, {
   required List<T> options,
@@ -164,6 +165,7 @@ class _MenuRange extends AskValidator {
 
   const _MenuRange(this.limit);
 
+  /// Throws [AskValidatorException].
   @override
   String validate(String line, {String? customErrorMessage}) {
     final finalline = line.trim();

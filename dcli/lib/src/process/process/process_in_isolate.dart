@@ -167,6 +167,7 @@ Future<Process> _run(ProcessSettings processSettings) async {
 // The only question is if we have scnenarios where we want
 // to artifically send stdin across this maybe in a piping
 // scenario?
+/// Throws [ProcessSyncException].
 ReceivePort _handleStdin(Process process) => ReceivePort()
   ..listen((message) async {
     isolateLogger(() => ' recieved message');

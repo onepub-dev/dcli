@@ -55,6 +55,7 @@ void backupFile(String pathToFile, {bool ignoreMissing = false}) =>
 void restoreFile(String pathToFile, {bool ignoreMissing = false}) =>
     core.restoreFile(pathToFile, ignoreMissing: ignoreMissing);
 
+/// Throws [UnsupportedError].
 @Deprecated('Use withFileProtectionAsync')
 R withFileProtection<R>(
   List<String> protected,
@@ -104,6 +105,7 @@ R withFileProtection<R>(
 ///
 // TODO(bsutton): make this work for other than current drive under Windows
 ///
+/// Throws [BackupFileException].
 Future<R> withFileProtectionAsync<R>(
   List<String> protected,
   Future<R> Function() action, {

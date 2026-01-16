@@ -98,6 +98,7 @@ class NamedLock {
         lockPath ?? join(rootPath, Directory.systemTemp.path, 'dcli', 'locks');
   }
 
+  /// Throws [UnsupportedError].
   @Deprecated('Used withLockAsync')
   Future<void> withLock(
     void Function() fn, {
@@ -226,6 +227,7 @@ class NamedLock {
   /// If we find an existing lock file we check if the process
   /// that owns it is still running. If it isn't we
   /// take a lock and delete the orphaned lock.
+  /// Throws [LockException].
   Future<bool> _takeLock(String? waiting) async {
     var taken = false;
     verbose(() => '_takeLock called');

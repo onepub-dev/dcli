@@ -138,6 +138,7 @@ class Remote {
   ///     progress: Progress.print());
   /// ```
   ///
+  /// Throws [RunException].
   void execList({
     required String host,
     required List<String?> commands,
@@ -214,6 +215,8 @@ class Remote {
   /// If you don't pass [progress], the default Progress uses [encoding].
   /// If you pass [progress], [encoding] is ignored.
   /// EXPERIMENTAL
+  /// Throws [RunException].
+  /// Throws [ScpException].
   void scp({
     required List<String> from,
     required String to,

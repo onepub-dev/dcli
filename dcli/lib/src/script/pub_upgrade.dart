@@ -24,6 +24,7 @@ class PubUpgrade {
 
   /// Runs the pub get command against
   /// the project working dir.
+  /// Throws [PubUpgradeException].
   PubUpgradeResult run({bool compileExecutables = true}) {
     final result = PubUpgradeResult();
     try {

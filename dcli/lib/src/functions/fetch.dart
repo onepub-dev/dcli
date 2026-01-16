@@ -245,6 +245,7 @@ class _Fetch extends core.DCliFunction {
     }
   }
 
+  /// Throws [FetchException].
   Future<void> download(FetchUrl fetchUrl,
       {required bool verboseProgress}) async {
     // announce we are starting.
@@ -389,6 +390,7 @@ class _Fetch extends core.DCliFunction {
     return headers;
   }
 
+  /// Throws [FetchException].
   Future<HttpClientRequest> startCall(
       HttpClient client, FetchUrl fetchUrl) async {
     final uri = Uri.parse(fetchUrl.url);
@@ -468,6 +470,7 @@ class FetchUrl {
   FetchData? data;
 
   /// ctor.
+  /// Throws [FetchException].
   FetchUrl(
       {required this.url,
       required this.saveToPath,

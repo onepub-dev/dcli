@@ -37,6 +37,7 @@ const _executeBitMask = 0x1;
 
 /// Checks if the user permission to act on the [path] (a file or directory)
 /// for the given permission bit mask. (read, write or execute)
+/// Throws [UnsupportedError].
 bool _checkPermission(String path, int permissionBitMask) {
   core.verbose(
     () => '_checkPermission: ${truepath(path)} '
@@ -110,6 +111,7 @@ bool _checkPermission(String path, int permissionBitMask) {
 
 /// Returns true if the owner of this process
 /// is a member of [group].
+/// Throws [UnsupportedError].
 bool isMemberOfGroup(String group) {
   core.verbose(() => 'isMemberOfGroup: $group');
 

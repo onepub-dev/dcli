@@ -10,6 +10,7 @@ import '../../util/exceptions.dart';
 /// Internal class used to make calls to native dart methods
 /// We cache the native call sites to improve performance.
 class NativeCalls {
+  /// Throws [ProcessSyncException].
   static SendPort connectToPort(Uint8List msg) {
     if (msg.length != 8) {
       throw ProcessSyncException('Wrong message: $msg');

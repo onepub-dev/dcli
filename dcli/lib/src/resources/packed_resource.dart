@@ -37,6 +37,7 @@ abstract class PackedResource {
 
   /// Unpacks a resource saving it
   /// to the file at [pathTo].
+  /// Throws [ResourceException].
   void unpack(String pathTo) {
     if (exists(pathTo) && !isFile(pathTo)) {
       throw ResourceException('The unpack target $pathTo must be a file');

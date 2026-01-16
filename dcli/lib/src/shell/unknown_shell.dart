@@ -125,6 +125,7 @@ class UnknownShell with ShellMixin {
     return success;
   }
 
+  /// Throws [UnimplementedError].
   @override
   void installTabCompletion({bool quiet = false}) => throw UnimplementedError();
 
@@ -146,11 +147,13 @@ class UnknownShell with ShellMixin {
   @override
   bool get hasStartScript => true;
 
+  /// Throws [Type].
   @override
   // good enough
   // ignore: only_throw_errors
   String get startScriptName => throw UnimplementedError;
 
+  /// Throws [Type].
   @override
   // good enough
   // ignore: only_throw_errors
@@ -166,6 +169,7 @@ class UnknownShell with ShellMixin {
   String privilegesRequiredMessage(String app) =>
       'You need to be a privileged user to run $app';
 
+  /// Throws [UnsupportedError].
   @override
   Future<bool> install({bool installDart = false, bool activate = true}) async {
     if (core.Settings().isLinux) {
@@ -182,6 +186,7 @@ class UnknownShell with ShellMixin {
   @override
   String? checkInstallPreconditions() => null;
 
+  /// Throws [UnimplementedError].
   @override
   bool get isSudo => throw UnimplementedError();
 
@@ -218,9 +223,11 @@ class UnknownShell with ShellMixin {
     releasePrivileges();
   }
 
+  /// Throws [UnimplementedError].
   @override
   bool get isPrivilegedProcess => throw UnimplementedError();
 
+  /// Throws [UnimplementedError].
   @override
   bool get isPrivilegedPasswordRequired => throw UnimplementedError();
 

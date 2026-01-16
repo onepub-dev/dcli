@@ -59,6 +59,7 @@ class _Pop extends DCliFunction {
   ///
   /// Note: change the directory changes the directory
   /// for all isolates.
+  /// Throws [PopException].
   // TODO(bsutton): to be removed in 8.x
   void pop() {
     if (Settings().isStackEmpty) {

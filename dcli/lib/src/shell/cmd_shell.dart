@@ -50,11 +50,13 @@ class CmdShell with WindowsMixin, ShellMixin {
   @override
   bool get hasStartScript => false;
 
+  /// Throws [Type].
   @override
   // good enough
   // ignore: only_throw_errors
   String get startScriptName => throw UnimplementedError;
 
+  /// Throws [Type].
   @override
   // good enough
   // ignore: only_throw_errors
