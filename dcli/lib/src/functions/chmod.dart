@@ -44,7 +44,7 @@ void chmod(String path, {required String permission}) =>
 class _ChMod extends DCliFunction {
 // this.user, this.group, this.other, this.path
 
-  /// Throws [ChModException].
+  /// Throws [ChModException] fithe [path] doesn't exist.
   void _chmod(String path, String permission) {
     if (!exists(path)) {
       throw ChModException('The file at ${truepath(path)} does not exists');

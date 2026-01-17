@@ -58,7 +58,7 @@ bool exists(String path, {bool followLinks = true}) =>
 
 /// Returns the datetime the path was last modified
 ///
-/// [path[ can be either a file or a directory.
+/// [path] can be either a file or a directory.
 ///
 /// Throws a [DCliException] with a nested
 /// [FileSystemException] if the file does not
