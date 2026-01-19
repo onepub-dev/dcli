@@ -14,24 +14,24 @@ void main() {
     expect(Format().bytesAsReadable(11), '   11B');
     expect(Format().bytesAsReadable(121), '  121B');
 
-    expect(Format().bytesAsReadable(1000), '1.000K');
-    expect(Format().bytesAsReadable(1234), '1.234K');
-    expect(Format().bytesAsReadable(11000), '11.00K');
-    expect(Format().bytesAsReadable(121000), '121.0K');
+    expect(Format().bytesAsReadable(1000), ' 1000B');
+    expect(Format().bytesAsReadable(1234), '1.205K');
+    expect(Format().bytesAsReadable(11000), '10.74K');
+    expect(Format().bytesAsReadable(121000), '118.2K');
 
-    expect(Format().bytesAsReadable(1000000), '1.000M');
-    expect(Format().bytesAsReadable(11000000), '11.00M');
-    expect(Format().bytesAsReadable(121000000), '121.0M');
+    expect(Format().bytesAsReadable(1000000), '976.6K');
+    expect(Format().bytesAsReadable(11000000), '10.49M');
+    expect(Format().bytesAsReadable(121000000), '115.4M');
 
-    expect(Format().bytesAsReadable(1000000000), '1.000G');
-    expect(Format().bytesAsReadable(11000000000), '11.00G');
-    expect(Format().bytesAsReadable(121000000000), '121.0G');
+    expect(Format().bytesAsReadable(1000000000), '953.7M');
+    expect(Format().bytesAsReadable(11000000000), '10.24G');
+    expect(Format().bytesAsReadable(121000000000), '112.7G');
 
-    expect(Format().bytesAsReadable(1000000000000), '1.000T');
-    expect(Format().bytesAsReadable(11000000000000), '11.00T');
-    expect(Format().bytesAsReadable(121000000000000), '121.0T');
+    expect(Format().bytesAsReadable(1000000000000), '931.3G');
+    expect(Format().bytesAsReadable(11000000000000), '10.00T');
+    expect(Format().bytesAsReadable(121000000000000), '110.0T');
 
-    expect(Format().bytesAsReadable(1000000000000000), '1e+15');
+    expect(Format().bytesAsReadable(1000000000000000), '909.5T');
     expect(Format().bytesAsReadable(11000000000000000), '1e+16');
     expect(Format().bytesAsReadable(121000000000000000), '1e+17');
   });
