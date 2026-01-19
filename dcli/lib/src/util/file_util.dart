@@ -14,11 +14,9 @@ import 'package:file/file.dart';
 /// Returns a FileStat instance describing the
 /// file or directory located by [path].
 ///
-// ignore: discarded_futures
 FileStat stat(String path) => core.stat(path);
 
 /// Returns the length of the file at [pathToFile] in bytes.
-// ignore: discarded_futures
 int fileLength(String pathToFile) => core.fileLength(pathToFile);
 
 /// Calculates the sha256 hash of a file's
@@ -35,7 +33,6 @@ int fileLength(String pathToFile) => core.fileLength(pathToFile);
 /// doesn't exist.
 /// Throws [NotAFileException] if path is
 /// not a file.
-// ignore: discarded_futures
 Digest calculateHash(String path) => core.calculateHash(path);
 
 /// Thrown when a file doesn't exist

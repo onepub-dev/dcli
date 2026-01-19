@@ -395,6 +395,7 @@ class CaseSensitiveSort implements ColumnComparator {
 class NumericSort implements ColumnComparator {
   ///
   const NumericSort();
+
   /// Throws [FormatException].
   @override
   int compareTo(Column column, String? lhs, String? rhs) {
@@ -474,14 +475,14 @@ abstract class ColumnComparator {
 /// Defined a column to sort by for the FileSort
 /// class.
 class Column {
-  static const _typeMap = {
+  static const Map<String, ColumnComparator> _typeMap = {
     's': CaseInsensitiveSort(),
     'S': CaseSensitiveSort(),
     'n': NumericSort(),
     'm': MonthSort(),
   };
 
-  static const _directionMap = {
+  static const Map<String, SortDirection> _directionMap = {
     'a': SortDirection.ascending,
     'd': SortDirection.descending
   };

@@ -29,6 +29,7 @@ import '../../dcli_core.dart';
 /// See: [restoreFile]
 ///   [withFileProtectionAsync]
 ///
+/// @Throwing(ArgumentError)
 void backupFile(String pathToFile, {bool ignoreMissing = false}) {
   if (!exists(pathToFile)) {
     throw BackupFileException(
@@ -62,6 +63,7 @@ void backupFile(String pathToFile, {bool ignoreMissing = false}) {
 /// If the backup file doesn't exists this function throws
 /// a [RestoreFileException] unless you pass the [ignoreMissing]
 /// flag.
+/// @Throwing(ArgumentError)
 void restoreFile(String pathToFile, {bool ignoreMissing = false}) {
   final pathToBackupFile = _backupFilePath(pathToFile);
 
@@ -129,6 +131,7 @@ void restoreFile(String pathToFile, {bool ignoreMissing = false}) {
 // ignore: flutter_style_todos
 /// TODO(bsutton): make this work for other than current drive under Windows
 ///
+/// @Throwing(BackupFileException)
 Future<R> withFileProtectionAsync<R>(
   List<String> protected,
   Future<R> Function() action, {
@@ -271,6 +274,7 @@ Future<void> _restoreFile(Paths paths) async {
   );
 }
 
+/// @Throwing(ArgumentError)
 String _backupFilePath(String pathToFile) {
   final sourcePath = dirname(pathToFile);
   final destPath = join(sourcePath, '.bak');

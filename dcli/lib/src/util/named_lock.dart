@@ -157,7 +157,6 @@ class NamedLock {
 
       /// decLockCount changes the value of _locakCountForName
       /// but the static analyser can't see this.
-      // ignore: invariant_booleans
       if (_lockCountForName == 0) {
         verbose(() => 'Releasing lock: $_lockFilePath');
 

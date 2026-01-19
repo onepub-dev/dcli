@@ -42,7 +42,6 @@ void symlink(
 ///
 /// [Shell.current.isPrivileged]
 ///
-// ignore: discarded_futures
 void deleteSymlink(String linkPath) => core.deleteSymlink(linkPath);
 
 ///

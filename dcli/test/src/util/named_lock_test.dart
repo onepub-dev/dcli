@@ -144,7 +144,7 @@ Future<void> writeToLog(String data) async {
 }
 
 const _lockCheckPath = '/tmp/lockcheck';
-final _lockFailedPath = join(_lockCheckPath, 'lock_failed');
+final String _lockFailedPath = join(_lockCheckPath, 'lock_failed');
 
 /// must be a global function as we us it to spawn an isolate
 /// Throws [DCliException].

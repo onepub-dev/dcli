@@ -245,7 +245,6 @@ class _Fetch extends core.DCliFunction {
     }
   }
 
-  /// Throws [FetchException].
   Future<void> download(FetchUrl fetchUrl,
       {required bool verboseProgress}) async {
     // announce we are starting.
@@ -360,7 +359,6 @@ class _Fetch extends core.DCliFunction {
         completer.complete();
       },
       // only way I could get this to work.
-      // ignore: avoid_types_on_closure_parameters
       onError: (Object e, StackTrace st) async {
         // something went wrong.
         _sendProgressEvent(

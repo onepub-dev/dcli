@@ -124,7 +124,6 @@ class ParsedCliCommand {
           /// If it is inside a quote then we would be inQuote mode.
           // added ignore as lint has a bug for conditional in a
           // switch statement #27
-          // ignore: invariant_booleans
           if (char == ' ') {
             // a non-escape/non-quoted space means a new part.
             currentState = stateStack.pop();
@@ -142,7 +141,6 @@ class ParsedCliCommand {
           /// be treated as a normal char.
           // added ignore as lint has a bug for conditional in a
           // switch statement #27
-          // ignore: invariant_booleans
           if (char == escapeCharacter) {
             stateStack.push(currentState);
             currentState = _ParseFrame(_ParseState.escaped, i);
@@ -201,7 +199,6 @@ class ParsedCliCommand {
           /// be treated as a normal char.
           // added ignore as lint has a bug for conditional in a
           // switch statement #27
-          // ignore: invariant_booleans
           if (char == escapeCharacter) {
             stateStack.push(currentState);
             currentState = _ParseFrame(_ParseState.escaped, i);
@@ -219,7 +216,6 @@ class ParsedCliCommand {
         /// we are in a quote so just suck in
         /// characters until we see a matching quote.
         case _ParseState.nestedQuote:
-
           if (char == currentState.matchingQuote) {
             // We have a matching closing quote
             currentState = stateStack.pop();
@@ -232,7 +228,6 @@ class ParsedCliCommand {
           /// be treated as a normal char.
           // added ignore as lint has a bug for conditional in a
           // switch statement #27
-          // ignore: invariant_booleans
           if (char == escapeCharacter) {
             stateStack.push(currentState);
             currentState = _ParseFrame(_ParseState.escaped, i);

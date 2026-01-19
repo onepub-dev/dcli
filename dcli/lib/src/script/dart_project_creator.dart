@@ -44,7 +44,6 @@ void _createProject(String pathToProject, String templateName) {
   _fixPubspec(projectName, project.pubSpec, project.pathToPubSpec);
 
   /// rename main.dart from the template to <projectname>.dart
-  // ignore: discarded_futures
   final projectScript = _renameMain(project, projectName);
 
   if (!Settings().isWindows) {

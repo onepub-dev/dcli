@@ -54,7 +54,8 @@ class Resources {
   late final String generatedRoot = join(projectRoot, _generatedRoot);
 
   // path to the locatio of the pack.yaml file.
-  static final pathToPackYaml = join(projectRoot, 'tool', 'dcli', 'pack.yaml');
+  static final String pathToPackYaml =
+      join(projectRoot, 'tool', 'dcli', 'pack.yaml');
 
   /// Inject this scope key to overload the projectRoot for unit testing.
   static final scopeKeyProjectRoot =

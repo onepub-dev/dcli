@@ -1,3 +1,6 @@
+// backwards compatiblity issue.
+// ignore_for_file: constant_identifier_names
+
 /*
  * Copyright (c) 2025 S. Brett Sutton 2022+
  *
@@ -6,15 +9,14 @@
  */
 
 import 'dart:ffi';
+
 import 'package:ffi/ffi.dart';
 import 'package:win32/win32.dart';
 
 // required for backwards compatibility
-// ignore: public_member_api_docs,constant_identifier_names
 const HWND_BROADCAST = 0xffff;
 
 // required for backwards compatibility`
-// ignore: public_member_api_docs,constant_identifier_names
 const SMTO_ABORTIFHUNG = 0x0002;
 
 /// Send a message to all top level windows that an environment variable

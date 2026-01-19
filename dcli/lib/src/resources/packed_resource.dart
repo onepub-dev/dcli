@@ -13,7 +13,6 @@ import 'package:path/path.dart';
 import '../../dcli.dart';
 
 /// Base class used by all [PackedResource]s.
-// ignore: one_member_abstracts
 abstract class PackedResource {
   /// Create a [PackedResource] with
   /// the given b64encoded content.
