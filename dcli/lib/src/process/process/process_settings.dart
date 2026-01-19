@@ -27,6 +27,8 @@ class ProcessSettings {
 
   var isPriviledgedUser = false;
 
+  var includeParentEnvironment = true;
+
   ProcessSettings(this.command,
       {this.args = const <String>[],
       String? workingDirectory,
@@ -35,6 +37,7 @@ class ProcessSettings {
       this.terminal = false,
       this.privileged = false,
       this.extensionSearch = true,
+      this.includeParentEnvironment = true,
       ProcessEnvironment? environment})
       : environment = environment ?? ProcessEnvironment() {
     this.workingDirectory = workingDirectory ??= pwd;

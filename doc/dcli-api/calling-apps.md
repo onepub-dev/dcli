@@ -124,6 +124,11 @@ var results = 'wc "fred nurk.text"'.toList(skipLines: 1)
 
 Use the start function when you need more control over how the application executes.
 
+#### includeParentEnvironment
+
+By default child processes inherit the parent environment. Set `includeParentEnvironment: false`
+to prevent that and only pass variables explicitly set via `env['...']` (or none if you cleared them).
+
 #### workingDirectory
 
 One of the most commonly use options is the 'workingDirectory'.
@@ -292,6 +297,5 @@ used to process quote (") characters:
         remove the last quote character on the command line, preserving
         any text after the last quote character.
 ```
-
 
 

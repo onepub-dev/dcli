@@ -191,6 +191,7 @@ class RunnableProcess {
     bool privileged = false,
     bool nothrow = false,
     bool extensionSearch = true,
+    bool includeParentEnvironment = true,
   }) {
     progress ??= Progress.print();
 
@@ -203,6 +204,7 @@ class RunnableProcess {
         extensionSearch: extensionSearch,
         nothrow: nothrow,
         progress: progress as ProgressImpl,
+        includeParentEnvironment: includeParentEnvironment,
       );
 
       /// whether we have a terminal or not we use the same
@@ -261,6 +263,7 @@ class RunnableProcess {
     bool terminal = false,
     bool privileged = false,
     bool extensionSearch = true,
+    bool includeParentEnvironment = true,
   }) {
     var workdir = workingDirectory;
     workdir ??= Directory.current.path;
@@ -321,6 +324,7 @@ class RunnableProcess {
         terminal: terminal,
         privileged: privileged,
         extensionSearch: extensionSearch,
+        includeParentEnvironment: includeParentEnvironment,
         environment: ProcessEnvironment());
 
     final channel = IsolateChannel(process: processSettings);

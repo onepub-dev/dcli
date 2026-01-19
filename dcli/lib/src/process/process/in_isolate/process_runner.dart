@@ -112,6 +112,7 @@ class ProcessRunner {
         workingDirectory: settings.workingDirectory,
         mode: mode,
         environment: settings.environment.envVars,
+        includeParentEnvironment: settings.includeParentEnvironment,
       );
       _logRunner('runner has started process');
     } on ProcessException catch (e) {

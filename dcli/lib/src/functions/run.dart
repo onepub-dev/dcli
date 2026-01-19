@@ -145,6 +145,9 @@ int? run(
 /// If you don't pass [progress], the default Progress uses [encoding].
 /// If you pass [progress], [encoding] is ignored.
 ///
+/// Use [includeParentEnvironment] to control whether the child process
+/// inherits the current process environment.
+///
 ///
 /// The [privileged] argument attempts to escalate the priviledge that
 ///  the command is run with.
@@ -176,6 +179,7 @@ Progress startFromArgs(
   bool nothrow = false,
   String? workingDirectory,
   bool extensionSearch = true,
+  bool includeParentEnvironment = true,
   Encoding encoding = utf8,
 }) {
   progress ??= Progress.print(encoding: encoding);
@@ -194,6 +198,7 @@ Progress startFromArgs(
     privileged: privileged,
     nothrow: nothrow,
     extensionSearch: extensionSearch,
+    includeParentEnvironment: includeParentEnvironment,
   );
 }
 
@@ -243,6 +248,9 @@ Progress startFromArgs(
 /// if [runInShell] is set to true (default is false) then command will
 /// be run in a shell (e.g. bash).
 ///
+/// Use [includeParentEnvironment] to control whether the child process
+/// inherits the current process environment.
+///
 /// If you pass [detached] = true then the process is spawned but we don't wait
 /// for it to complete nor is any io available.
 ///
@@ -256,6 +264,7 @@ Progress start(
   bool privileged = false,
   String? workingDirectory,
   bool extensionSearch = true,
+  bool includeParentEnvironment = true,
   Encoding encoding = utf8,
 }) {
   workingDirectory ??= pwd;
@@ -273,6 +282,7 @@ Progress start(
     privileged: privileged,
     nothrow: nothrow,
     extensionSearch: extensionSearch,
+    includeParentEnvironment: includeParentEnvironment,
   );
 }
 

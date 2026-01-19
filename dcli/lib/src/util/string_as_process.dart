@@ -123,6 +123,9 @@ extension StringAsProcess on String {
   /// Use [workingDirectory] to specify the directory the process should
   /// be run from.
   ///
+  /// Use [includeParentEnvironment] to control whether the child process
+  /// inherits the current process environment.
+  ///
   /// Use [encoding] to control how output is decoded by the default Progress.
   /// If you supply a custom [Progress], [encoding] is ignored.
   ///
@@ -166,6 +169,7 @@ extension StringAsProcess on String {
     bool privileged = false,
     String? workingDirectory,
     bool extensionSearch = true,
+    bool includeParentEnvironment = true,
     Encoding encoding = utf8,
   }) =>
       cmd.start(
@@ -179,6 +183,7 @@ extension StringAsProcess on String {
         privileged: privileged,
         workingDirectory: workingDirectory,
         extensionSearch: extensionSearch,
+        includeParentEnvironment: includeParentEnvironment,
       );
 
   /// forEach runs the contents of this String as a command line

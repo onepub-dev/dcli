@@ -21,9 +21,13 @@ void main() {
 
       DartProject.create(pathTo: projectPath, templateName: 'simple');
 
-      final exitCode =
-          DartScript.fromFile(join(projectPath, 'bin', 'run_test.dart')).run();
-      expect(exitCode, equals(0));
+      final progress = DartScript.fromFile(
+        join(projectPath, 'bin', 'run_test.dart'),
+      ).start(
+        terminal: false,
+        nothrow: true,
+      );
+      expect(progress.exitCode, equals(0));
     });
   });
   test('Run hello world', () async {
