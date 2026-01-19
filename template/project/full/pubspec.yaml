@@ -13,6 +13,6 @@ dependencies:
   path: ^1.9.0
   settings_yaml: ^8.2.0
 dev_dependencies:
-  lint_hard: ^5.0.0
+  lint_hard: ^7.0.1
 executables:
   full:

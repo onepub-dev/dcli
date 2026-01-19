@@ -11,4 +11,4 @@ dependencies:
   dcli: 8.3.0
 
 dev_dependencies:
-  lint_hard: ^5.0.0
+  lint_hard: ^7.0.1

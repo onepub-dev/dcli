@@ -275,9 +275,16 @@ class PubCache {
 
   /// Run dart pub global activate for a package located in [path]
   /// relative to the current directory.
-  void globalActivateFromSource(String path) {
+  void globalActivateFromSource(String path, {bool overwrite = false}) {
     DartSdk().runPub(
-      args: ['global', 'activate', '--source', 'path', path],
+      args: [
+        'global',
+        'activate',
+        if (overwrite) '--overwrite',
+        '--source',
+        'path',
+        path
+      ],
       progress: Progress.printStdErr(),
     );
   }

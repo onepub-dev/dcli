@@ -24,6 +24,7 @@ dependencies:
   file: ^7.0.0
   glob: ^2.0.0
   ini: ^2.1.0
+  lint_hard: ^7.0.1
   logging: ^1.0.2
   meta: ">=1.11.0 <2.0.0"
   mime: ^2.0.0
@@ -41,11 +42,9 @@ dependencies:
   validators2: ^5.0.0
   win32: ^5.0.0
   yaml: ^3.0.0
-
 dev_dependencies:
   dcli_test: any
   hex: ^0.2.0
-  lint_hard: ^7.0.0
   mocktail: ^1.0.0
   test: ^1.0.0
   test_api: ^0.7.0

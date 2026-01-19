@@ -8,5 +8,5 @@ environment:
 dependencies:
   dart_console: ^4.0.0
 dev_dependencies:
-  lint_hard: ^5.0.0
+  lint_hard: ^7.0.1
   test: ^1.23.1

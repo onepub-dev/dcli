@@ -16,14 +16,6 @@ void main() {
   test(
     'isPrivileged',
     () async {
-      if (!Shell.current.isPrivilegedUser) {
-        printerr(red('You must run this script with sudo.'));
-        printerr(
-          orange(
-            'To run this script with sudo you will first need to compile it.',
-          ),
-        );
-      }
 
       try {
         expect(Shell.current.isPrivilegedUser, isTrue);
@@ -81,7 +73,7 @@ void main() {
       }
     },
     tags: ['privileged'],
-    skip: core.Settings().isWindows,
+    skip: core.Settings().isWindows || !Shell.current.isPrivilegedUser,
   );
 
   test('withPriviliges - allowUnpriviliged', () {
@@ -104,7 +96,7 @@ void main() {
       expect((Shell.current as PosixShell).loggedInUsersHome, home);
     },
     tags: ['privileged'],
-    skip: core.Settings().isWindows,
+    skip: core.Settings().isWindows || !Shell.current.isPrivilegedUser,
   );
 
   test(
@@ -117,6 +109,6 @@ void main() {
       );
     },
     tags: ['privileged'],
-    skip: core.Settings().isWindows,
+    skip: core.Settings().isWindows || !Shell.current.isPrivilegedUser,
   );
 }

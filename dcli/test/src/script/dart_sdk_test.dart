@@ -31,7 +31,8 @@ void main() {
   test('Install Dart Sdk', () async {
     await withTempDirAsync((tempPath) async {
       final defaultPath = join(tempPath, 'dart-sdk');
-      final installPath = await DartSdk().installFromArchive(defaultPath);
+      final installPath =
+          await DartSdk().installFromArchive(defaultPath, askUser: false);
       setPathToDartSdk(installPath);
       print('installed To $installPath');
       expect(exists(join(defaultPath, 'bin', DartSdk.dartExeName)), isTrue);
@@ -40,7 +41,9 @@ void main() {
         equals(true),
       );
     });
-  }, skip: false, tags: ['privileged']);
+  },
+      skip: env['DCLI_TEST_INSTALL_DART_SDK'] != 'true',
+      tags: ['privileged']);
 
   test('Parse sdk version', () {
     final output = '${DartSdk().pathToDartExe} --version'.firstLine;

@@ -21,7 +21,7 @@ void main() {
       Shell.current.restorePrivileges();
       expect(Shell.current.isPrivilegedUser, isTrue);
     },
-    skip: false,
+    skip: !Shell.current.isPrivilegedUser,
     tags: [
       'privileged',
     ],
@@ -41,7 +41,7 @@ void main() {
       expect(Shell.current.isPrivilegedUser, isTrue);
       expect(geteuid(), equals(0));
     },
-    skip: false,
+    skip: !Shell.current.isPrivilegedUser,
     tags: [
       'privileged',
     ],

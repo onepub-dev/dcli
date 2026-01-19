@@ -16,5 +16,5 @@ void main() {
 
       chown(test, group: user, user: user);
     });
-  }, tags: ['privileged']);
+  }, tags: ['privileged'], skip: Settings().isWindows || !Shell.current.isPrivilegedUser);
 }

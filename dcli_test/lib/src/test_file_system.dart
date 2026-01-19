@@ -149,6 +149,8 @@ class TestFileSystem {
     try {
       env['HOME'] = fsRoot;
       home = fsRoot;
+        Env().prependToPATH(PubCache().pathToBin);
+      Env().prependToPATH(join(fsRoot, '.dcli', 'bin'));
 
       final isolateID = Service.getIsolateId(Isolate.current);
       print(green('Using TestFileSystem $fsRoot for Isolate: $isolateID'));

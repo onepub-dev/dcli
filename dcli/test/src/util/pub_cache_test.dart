@@ -143,7 +143,8 @@ void main() {
     }
     expect(PubCache().isGloballyActivatedFromSource('general'), isFalse);
     PubCache().globalActivateFromSource(
-        join('..', 'dcli_unit_tester', 'test', 'test_script', 'general'));
+        join('..', 'dcli_unit_tester', 'test', 'test_script', 'general'),
+        overwrite: true);
     expect(PubCache().isGloballyActivatedFromSource('general'), isTrue);
 
     /// cleanup

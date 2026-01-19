@@ -15,13 +15,13 @@ void main() {
     final shell = Shell.current;
     // expect(shell.isPrivilegedUser, true);
 
-    await withTempFileAsync ((tmpGroup) async{
+    await withTempFileAsync((tmpGroup) async {
       // final group = name(tmpGroup);
       try {
         //'groupadd -g 21234 $group'.run;
 
         // use a temp file name as a temp user name
-        await withTempFileAsync ((tmpUsername) async{
+        await withTempFileAsync((tmpUsername) async {
           // final username = name(tmpUsername);
 
           try {
@@ -69,9 +69,11 @@ void main() {
         //'groupdel $group'.run;
       }
     }, create: false);
-  }, tags: ['privileged']);
+  },
+      tags: ['privileged'],
+      skip: Settings().isWindows || !Shell.current.isPrivilegedUser);
 
-  test('release env ...', ()  {
+  test('release env ...', () {
     final shell = Shell.current;
 
     expect(shell.isPrivilegedUser, isTrue);
@@ -107,5 +109,7 @@ void main() {
       print(currentGroups);
       expect(sudoGroups, orderedEquals(currentGroups));
     });
-  }, tags: ['privileged']);
+  },
+      tags: ['privileged'],
+      skip: Settings().isWindows || !Shell.current.isPrivilegedUser);
 }

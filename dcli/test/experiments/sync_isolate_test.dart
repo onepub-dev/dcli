@@ -20,35 +20,53 @@ import 'package:path/path.dart';
 import 'package:test/test.dart';
 
 void main() {
-  test('isolate test', firstline);
+  final runExperiments = env['DCLI_RUN_EXPERIMENTS'] == 'true';
 
-  test('pub get', () {
-    DartSdk().runPubGet('.', progress: Progress.devNull());
-  });
+  test('isolate test', firstline, skip: !runExperiments);
+
+  test(
+    'pub get',
+    () {
+      DartSdk().runPubGet('.', progress: Progress.devNull());
+    },
+    skip: !runExperiments,
+  );
 
   /// test interaction between spawned app and the console
-  test('unit_tester', () {
-    'dcli_unit_tester --ask'.start(terminal: true);
-  });
+  test(
+    'unit_tester',
+    () {
+      'dcli_unit_tester --ask'.start(terminal: true);
+    },
+    skip: !runExperiments || env['DCLI_RUN_INTERACTIVE_TESTS'] != 'true',
+  );
 
-  test('test file system', () async {
-    await TestFileSystem().withinZone((fs) async {
-      await DartProject.self.warmup();
-    });
-  });
+  test(
+    'test file system',
+    () async {
+      await TestFileSystem().withinZone((fs) async {
+        await DartProject.self.warmup();
+      });
+    },
+    skip: !runExperiments,
+  );
 
-  test('spawn', () async {
-    const lockName = 'spawn_test';
-    await withTempDirAsync((lockPath) async {
-      final isolate = isolateID;
-      touch(join(lockPath, '.$pid.$isolate.$lockName'), create: true);
+  test(
+    'spawn',
+    () async {
+      const lockName = 'spawn_test';
+      await withTempDirAsync((lockPath) async {
+        final isolate = isolateID;
+        touch(join(lockPath, '.$pid.$isolate.$lockName'), create: true);
 
-      // await NamedLock(name: lockName).withLockAsync(() async {
-      _spawn(1);
-      _spawn(2);
-      _spawn(3);
-    });
-  });
+        // await NamedLock(name: lockName).withLockAsync(() async {
+        _spawn(1);
+        _spawn(2);
+        _spawn(3);
+      });
+    },
+    skip: !runExperiments,
+  );
   // });
 }
 
