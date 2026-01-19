@@ -1,3 +1,6 @@
+$ 8.4.0
+  - Added `includeParentEnvironment` to `start()` and `startFromArgs()` so child process inheritance can be controlled.
+  
 # 8.3.0
   - DCLi functions which execute process have assumed that data is ascii which is incorrect as most cli system utilise utf-8.
   This updates changes the default encoding to utf-8 and provides the ability to select the encoding.
@@ -1739,5 +1742,4 @@ Pubspec - Added support for fetching a list of executables.
 Renamed dshell to dcli to better reflect its functionality and improve its discoverability on the pub.dev store.
 
 Also took the opportunity to change the version no. to 0.x to reflect the fact that the api is still in flux.
-
 

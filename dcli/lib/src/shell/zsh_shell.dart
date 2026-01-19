@@ -29,7 +29,8 @@ class ZshShell with ShellMixin, PosixShell {
   @override
   bool get isCompletionInstalled => false;
 
-  /// Throws [UnimplementedError].
+    /// Throws [UnimplementedError].
+  /// @Throwing(UnimplementedError)
   @override
   void installTabCompletion({bool quiet = false}) {
     throw UnimplementedError();
@@ -50,6 +51,7 @@ class ZshShell with ShellMixin, PosixShell {
   @override
   String get startScriptName => '.zshrc';
 
+        /// @Throwing(ArgumentError)
   @override
   String get pathToStartScript => join(HOME, startScriptName);
 
@@ -58,17 +60,20 @@ class ZshShell with ShellMixin, PosixShell {
   @override
   bool get canModifyPath => false;
 
-  /// Throws [UnsupportedError].
+    /// Throws [UnsupportedError].
+  /// @Throwing(UnsupportedError)
   @override
   @Deprecated('Use appendToPATH')
   bool addToPATH(String path) => throw UnsupportedError('Not supported in zsh');
 
-  /// Throws [UnsupportedError].
+    /// Throws [UnsupportedError].
+  /// @Throwing(UnsupportedError)
   @override
   bool appendToPATH(String path) =>
       throw UnsupportedError('Not supported in zsh');
 
-  /// Throws [UnsupportedError].
+    /// Throws [UnsupportedError].
+  /// @Throwing(UnsupportedError)
   @override
   bool prependToPATH(String path) =>
       throw UnsupportedError('Not supported in zsh');

@@ -46,6 +46,7 @@ Future<void> _startIsolate(IsolateChannel channel) {
   );
 }
 
+/// @Throwing(FormatException)
 Future<void> _body(IsolateChannelSendable channel) async {
   isolateLogger(() => 'body entered');
 
@@ -168,6 +169,7 @@ Future<Process> _run(ProcessSettings processSettings) async {
 // to artifically send stdin across this maybe in a piping
 // scenario?
 /// Throws [ProcessSyncException].
+/// @Throwing(ProcessSyncException)
 ReceivePort _handleStdin(Process process) => ReceivePort()
   ..listen((message) async {
     isolateLogger(() => ' recieved message');

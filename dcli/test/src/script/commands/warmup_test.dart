@@ -11,6 +11,9 @@ import 'package:dcli/dcli.dart';
 import 'package:path/path.dart' hide equals;
 import 'package:test/test.dart';
 
+/// @Throwing(ArgumentError)
+/// @Throwing(CreateDirException)
+/// @Throwing(DeleteDirException)
 void main() {
   group('warmup using DCli', () {
     test('warmup ', () async {

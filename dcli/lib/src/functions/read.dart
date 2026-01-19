@@ -21,6 +21,8 @@ import '../progress/progress_impl.dart';
 ///
 /// If the file does not exists then a ReadException is thrown.
 ///
+/// @Throwing(ArgumentError)
+/// @Throwing(ReadException)
 Progress read(String path, {String delim = '\n'}) =>
     _Read().read(path, delim: delim);
 
@@ -28,7 +30,9 @@ Progress read(String path, {String delim = '\n'}) =>
 Progress readStdin() => _Read()._readStdin();
 
 class _Read extends core.DCliFunction {
-  /// Throws [ReadException].
+        /// Throws [ReadException].
+    /// @Throwing(ArgumentError)
+    /// @Throwing(ReadException)
   Progress read(String path, {String delim = '\n', Progress? progress}) {
     verbose(() => 'read: ${truepath(path)}, delim: $delim');
 

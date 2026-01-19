@@ -32,6 +32,11 @@ import '../../dcli.dart';
 /// be impossible to loose your file. If replace does crash you may
 /// have to delete [path].tmp or [path].bak but this is highly unlikely.
 ///
+/// @Throwing(ArgumentError)
+/// @Throwing(CopyException)
+/// @Throwing(DeleteException)
+/// @Throwing(MoveException)
+/// @Throwing(core.TouchException)
 int replace(
   String path,
   Pattern existing,
@@ -41,6 +46,11 @@ int replace(
     _Replace().replace(path, existing, replacement, all: all);
 
 class _Replace extends core.DCliFunction {
+        /// @Throwing(ArgumentError)
+    /// @Throwing(CopyException)
+    /// @Throwing(DeleteException)
+    /// @Throwing(MoveException)
+    /// @Throwing(core.TouchException)
   int replace(
     String path,
     Pattern existing,

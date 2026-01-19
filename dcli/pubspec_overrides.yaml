@@ -8,12 +8,12 @@ dependency_overrides:
   dcli_terminal:
     path: ../dcli_terminal
 
-  document_throws:
-    path: ../../lint_hard/document_throws
-  document_throws_annotation:
-    path: ../../lint_hard/document_throws_annotation
+  # document_throws:
+  #   path: ../../lint_hard/document_throws
+  # document_throws_annotation:
+  #   path: ../../lint_hard/document_throws_annotation
 
-  lint_hard:
-    path: ../../lint_hard/lint_hard
+  # lint_hard:
+  #   path: ../../lint_hard/lint_hard
 
 

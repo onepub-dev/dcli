@@ -13,6 +13,13 @@ import 'package:path/path.dart';
 import 'package:test/test.dart' as t;
 import 'package:test/test.dart';
 
+/// @Throwing(ArgumentError)
+/// @Throwing(CopyTreeException)
+/// @Throwing(CreateDirException)
+/// @Throwing(DeleteDirException)
+/// @Throwing(DeleteException)
+/// @Throwing(MoveDirException)
+/// @Throwing(TouchException)
 void main() {
   t.group('moveDir', () {
     t.test('empty to ', () async {

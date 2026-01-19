@@ -9,6 +9,8 @@ import 'package:dcli_terminal/dcli_terminal.dart';
 import 'package:hex/hex.dart';
 import 'package:test/test.dart';
 
+/// @Throwing(ArgumentError)
+/// @Throwing(InvalidType)
 void main() {
   group('ansi', () {
     test('strip', () {

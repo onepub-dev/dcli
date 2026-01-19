@@ -13,6 +13,12 @@ import 'package:pub_semver/pub_semver.dart';
 import 'package:scope/scope.dart';
 import 'package:test/test.dart';
 
+/// @Throwing(ArgumentError)
+/// @Throwing(CircularDependencyException)
+/// @Throwing(CreateDirException)
+/// @Throwing(DuplicateDependencyException)
+/// @Throwing(FormatException)
+/// @Throwing(MissingDependencyException)
 void main() {
   test(
     'PubCache',

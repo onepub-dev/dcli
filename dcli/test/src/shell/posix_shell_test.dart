@@ -10,6 +10,10 @@ import 'package:dcli/dcli.dart';
 import 'package:posix/posix.dart';
 import 'package:test/test.dart';
 
+/// @Throwing(ArgumentError)
+/// @Throwing(DeleteException)
+/// @Throwing(PosixException)
+/// @Throwing(TouchException)
 void main() {
   test('posix shell ...', () async {
     final shell = Shell.current;

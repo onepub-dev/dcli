@@ -14,6 +14,9 @@ import 'package:dcli/src/util/file_system.dart';
 import 'package:path/path.dart' hide equals;
 import 'package:test/test.dart';
 
+/// @Throwing(ArgumentError)
+/// @Throwing(CreateDirException)
+/// @Throwing(DeleteDirException)
 void main() {
   test(
     'MemoryFileSystem',

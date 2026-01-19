@@ -8,6 +8,13 @@
 import 'package:dcli/dcli.dart';
 import 'package:test/test.dart';
 
+/// @Throwing(ArgumentError)
+/// @Throwing(CopyException)
+/// @Throwing(CreateDirException)
+/// @Throwing(DeleteDirException)
+/// @Throwing(DeleteException)
+/// @Throwing(MoveException)
+/// @Throwing(TouchException)
 void main() {
   test('move ...', () async {
     await withTempDirAsync((dir) async {

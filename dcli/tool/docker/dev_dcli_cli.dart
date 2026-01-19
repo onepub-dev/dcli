@@ -15,6 +15,8 @@ import 'package:path/path.dart';
 ///
 /// If you are looking to work on scripts that simply use
 /// dcli then use dcli_cli.df
+/// @Throwing(ArgParserException)
+/// @Throwing(ArgumentError)
 
 void main(List<String> args) {
   final parser = ArgParser()..addFlag('runOnly', abbr: 'r');

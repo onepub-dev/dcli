@@ -106,9 +106,12 @@ mixin PosixShell {
   late final Immutable<UserEnvironment> priviledgedUser = Immutable();
   late final Immutable<UserEnvironment> nonPriviledgedUser = Immutable();
 
-  /// revert uid and gid to original user's id's
-  /// You should note that your PATH will still be
-  /// the SUDO PATH not your original user's PATH.
+        /// revert uid and gid to original user's id's
+    /// You should note that your PATH will still be
+    /// the SUDO PATH not your original user's PATH.
+    /// @Throwing(ArgumentError)
+    /// @Throwing(FormatException)
+    /// @Throwing(PosixException)
   void releasePrivileges() {
     verbose(() => 'releasePrivileges called');
     if (Shell.current.isPrivilegedUser) {
@@ -124,11 +127,14 @@ mixin PosixShell {
     }
   }
 
-  /// If a prior call to [releasePrivileges] has
-  /// been made then this command will restore
-  /// those privileges
-  /// If releasePrivileges hasn't been called then
-  /// this method does nothing.
+        /// If a prior call to [releasePrivileges] has
+    /// been made then this command will restore
+    /// those privileges
+    /// If releasePrivileges hasn't been called then
+    /// this method does nothing.
+    /// @Throwing(ArgumentError)
+    /// @Throwing(FormatException)
+    /// @Throwing(PosixException)
   void restorePrivileges() {
     verbose(() => 'restorePrivileges called');
     priviledgedUser.runIf((user) {
@@ -138,8 +144,12 @@ mixin PosixShell {
     });
   }
 
-  /// Run [action] with root UID and gid
-  /// Throws [ShellException].
+        /// Run [action] with root UID and gid
+    /// Throws [ShellException].
+    /// @Throwing(ArgumentError)
+    /// @Throwing(FormatException)
+    /// @Throwing(PosixException)
+    /// @Throwing(ShellException)
   void withPrivileges(RunPrivileged action, {bool allowUnprivileged = false}) {
     final startedPriviledged = Shell.current.isPrivilegedProcess;
     if (!allowUnprivileged && !startedPriviledged) {
@@ -162,8 +172,12 @@ mixin PosixShell {
     }
   }
 
-  /// Identical to [withPrivileges] except the [action] is async
-  /// Throws [ShellException].
+        /// Identical to [withPrivileges] except the [action] is async
+    /// Throws [ShellException].
+    /// @Throwing(ArgumentError)
+    /// @Throwing(FormatException)
+    /// @Throwing(PosixException)
+    /// @Throwing(ShellException)
   Future<void> withPrivilegesAsync(RunPrivilegedAsync action,
       {bool allowUnprivileged = false}) async {
     final startedPriviledged = Shell.current.isPrivilegedProcess;
@@ -228,9 +242,10 @@ Run:
 sudo env PATH="$PATH" dcli install
 ''';
 
-  /// Symlink so dcli works under sudo.
-  /// We use the location of dart exe and add dcli symlink
-  /// to the same location.
+        /// Symlink so dcli works under sudo.
+    /// We use the location of dart exe and add dcli symlink
+    /// to the same location.
+    /// @Throwing(ArgumentError)
   // ignore: unused_element
   void _symlinkDCli(String dcliPath) {
     if (!core.Settings().isWindows) {
@@ -287,7 +302,8 @@ class UserEnvironment {
     pathToShell = env['SHELL'];
   }
 
-  /// Build the user environment
+        /// Build the user environment
+    /// @Throwing(PosixException)
   void build() {
     // // [initgroups] can only be called when we are root
     // // so depending on which direction we are moving the
@@ -372,7 +388,9 @@ class Immutable<T> {
     _wrapped ??= wrapped();
   }
 
-  /// Runs [action] if [setIf] has been called
+        /// Runs [action] if [setIf] has been called
+    /// @Throwing(ArgumentError)
+    /// @Throwing(FormatException)
   void runIf(void Function(T wrapped) action) {
     final stack = Trace.current();
     verbose(() => 'runIf $stack');

@@ -11,6 +11,8 @@ import 'package:dcli/dcli.dart';
 ///
 /// runs the unit tests using Dockerfile.local which pulls the code
 /// from the local files system at ..
+/// @Throwing(ArgParserException)
+/// @Throwing(ArgumentError)
 
 void main(List<String> args) {
   final parser = ArgParser()..addFlag('runOnly', abbr: 'r');

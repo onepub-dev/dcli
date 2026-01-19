@@ -44,7 +44,8 @@ class FishShell with ShellMixin, PosixShell {
   @override
   bool get isCompletionInstalled => false;
 
-  /// Throws [UnimplementedError].
+    /// Throws [UnimplementedError].
+  /// @Throwing(UnimplementedError)
   @override
   void installTabCompletion({bool quiet = false}) {
     throw UnimplementedError();
@@ -55,18 +56,21 @@ class FishShell with ShellMixin, PosixShell {
   @override
   bool get canModifyPath => false;
 
-  /// Throws [UnsupportedError].
+    /// Throws [UnsupportedError].
+  /// @Throwing(UnsupportedError)
   @override
   @Deprecated('Use appendToPATH')
   bool addToPATH(String path) =>
       throw UnsupportedError('Not supported in fish');
 
-  /// Throws [UnsupportedError].
+    /// Throws [UnsupportedError].
+  /// @Throwing(UnsupportedError)
   @override
   bool appendToPATH(String path) =>
       throw UnsupportedError('Not supported in fish');
 
-  /// Throws [UnsupportedError].
+    /// Throws [UnsupportedError].
+  /// @Throwing(UnsupportedError)
   @override
   bool prependToPATH(String path) =>
       throw UnsupportedError('Not supported in fish');

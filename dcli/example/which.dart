@@ -12,6 +12,8 @@ import 'package:dcli/dcli.dart';
 import 'package:path/path.dart';
 
 /// which appname
+/// @Throwing(ArgParserException)
+/// @Throwing(ArgumentError)
 void main(List<String> args) {
   final parser = ArgParser()..addFlag('verbose', abbr: 'v', negatable: false);
 

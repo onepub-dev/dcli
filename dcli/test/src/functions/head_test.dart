@@ -10,6 +10,9 @@ import 'package:dcli_test/dcli_test.dart';
 import 'package:path/path.dart';
 import 'package:test/test.dart' as t;
 
+/// @Throwing(ArgumentError)
+/// @Throwing(CreateDirException)
+/// @Throwing(DeleteDirException)
 void main() {
   t.group(
     'Head',

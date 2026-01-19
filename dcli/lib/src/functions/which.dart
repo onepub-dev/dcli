@@ -61,6 +61,7 @@ import '../../dcli.dart';
 /// command search. In particular dart commands such as 'pub' will be 'pub'
 /// on Linux and 'pub.bat' on Windows. Using `which('pub')` will find `pub` on
 /// linux and `pub.bat` on Windows.
+/// @Throwing(ArgumentError)
 core.Which which(
   String appname, {
   bool first = true,

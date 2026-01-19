@@ -11,9 +11,15 @@ import 'package:dcli/dcli.dart';
 import 'package:path/path.dart' hide equals;
 import 'package:test/test.dart';
 
+/// @Throwing(ArgumentError)
+/// @Throwing(CreateDirException)
+/// @Throwing(DeleteDirException)
+/// @Throwing(DeleteException)
+/// @Throwing(RangeError)
+/// @Throwing(TouchException)
 void main() {
   group('FileSync', () {
-    test('createTempFilename', ()  {
+    test('createTempFilename', () {
       final file = createTempFilename();
       expect(exists(file), isFalse);
       expect(file.startsWith(Directory.systemTemp.path), isTrue);
@@ -21,7 +27,7 @@ void main() {
       expect(exists(file), isTrue);
       delete(file);
     });
-    test('createTempFile', ()  {
+    test('createTempFile', () {
       final file = createTempFile();
       expect(exists(file), isTrue);
       expect(file.startsWith(Directory.systemTemp.path), isTrue);
@@ -61,7 +67,7 @@ void main() {
 
     test('withTempFile - keep', () async {
       final tempFile = await withTempFileAsync(
-        (tempFile)async {
+        (tempFile) async {
           expect(exists(tempFile), isTrue);
           return tempFile;
         },

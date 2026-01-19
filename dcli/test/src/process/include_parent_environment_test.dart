@@ -9,6 +9,7 @@ import 'package:dcli_test/dcli_test.dart';
 import 'package:path/path.dart' hide equals;
 import 'package:test/test.dart';
 
+/// @Throwing(ArgumentError)
 void main() {
   for (final mode in ['startFromArgs', 'start']) {
     test('includeParentEnvironment false prevents env leak ($mode)', () async {

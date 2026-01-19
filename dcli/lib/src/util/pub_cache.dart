@@ -34,6 +34,8 @@ class PubCache {
   late String _pubCacheBinPath;
 
   ///
+  /// @Throwing(ArgumentError)
+  /// @Throwing(MissingDependencyException)
   factory PubCache() {
     if (Scope.hasScopeKey(scopeKey)) {
       return Scope.use(scopeKey);
@@ -57,8 +59,10 @@ class PubCache {
   ///   'PUB_CACHE': join(outerTempDir, 'test_cache', '.pub-cache')
   /// });
   ///
+  /// @Throwing(ArgumentError)
   factory PubCache.forScope() => PubCache._internal();
 
+  /// @Throwing(ArgumentError)
   PubCache._internal() {
     _pubCachePath = _getSystemCacheLocation();
     _pubCacheDir = basename(_pubCachePath);
@@ -85,6 +89,7 @@ class PubCache {
   /// We can't use the pub_cache version as it directly
   /// gets Platform.environment so any changes we make
   /// are not visible.
+  /// @Throwing(ArgumentError)
   String _getSystemCacheLocation() {
     if (envs.containsKey('PUB_CACHE')) {
       return envs['PUB_CACHE']!;
@@ -134,6 +139,7 @@ class PubCache {
   ///
   /// This will only affect this script and any child processes spawned from
   /// this script.
+  /// @Throwing(ArgumentError)
   set pathTo(String pathToPubCache) {
     env[envVarPubCache] = pathToPubCache;
     _pubCachePath = pathToPubCache;
@@ -163,19 +169,24 @@ class PubCache {
 
   /// Path to the PubCache's hosted/pub.dartlang.org directory
   /// where all of the downloaded packages from pub.dev live.
+  /// @Throwing(ArgumentError)
   String get pathToDartLang => join(_pubCachePath, 'hosted', 'pub.dev');
 
   /// Returns the path to the package in .pub-cache for the dart
   /// project named [packageName] for the version [version].
   /// e.g.
   /// ~/.pub-cache/hosted/pub.dartlang.org/dswitch-4.0.1
+  /// @Throwing(ArgumentError)
   String pathToPackage(String packageName, String version) =>
       join(pathToDartLang, '$packageName-$version');
 
+  /// @Throwing(ArgumentError)
   String pathToGlobalPackage(String packageName) =>
       join(pathTo, 'global_packages', packageName);
 
   /// Returns true if the package is installed in pub-cache
+  /// @Throwing(ArgumentError)
+  /// @Throwing(FormatException)
   bool isInstalled(String packageName) {
     try {
       return findPrimaryVersion(packageName) != null;
@@ -191,6 +202,8 @@ class PubCache {
   /// version may be returned if one exists.
   ///
   /// If no versions are installed then null is returned.
+  /// @Throwing(ArgumentError)
+  /// @Throwing(FormatException)
   Version? findPrimaryVersion(String packageName) {
     if (!exists(pathToDartLang)) {
       return null;
@@ -223,6 +236,7 @@ class PubCache {
   /// Searches for [requestedVersion] of [packageName] in pub-cache
   /// and returns the fully qualified path to that version.
   /// If the version is not found then null is returned;
+  /// @Throwing(ArgumentError)
   String? findVersion(String packageName, String requestedVersion) {
     if (!exists(pathToDartLang)) {
       return null;

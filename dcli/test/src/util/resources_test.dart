@@ -12,6 +12,12 @@ import 'package:scope/scope.dart';
 import 'package:test/test.dart';
 
 /// const filename = 'PXL_20211104_224740653.jpg';
+/// @Throwing(ArgumentError)
+/// @Throwing(CircularDependencyException)
+/// @Throwing(CreateDirException)
+/// @Throwing(DeleteDirException)
+/// @Throwing(DuplicateDependencyException)
+/// @Throwing(MissingDependencyException)
 
 void main() {
   test('resource ...', () async {

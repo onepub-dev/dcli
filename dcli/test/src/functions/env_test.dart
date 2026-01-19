@@ -9,6 +9,9 @@ import 'package:dcli_core/dcli_core.dart';
 import 'package:scope/scope.dart';
 import 'package:test/test.dart' as t;
 
+/// @Throwing(CircularDependencyException)
+/// @Throwing(DuplicateDependencyException)
+/// @Throwing(MissingDependencyException)
 void main() {
   t.group('Environment', () {
     t.test('PATH', () {

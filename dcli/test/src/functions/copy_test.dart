@@ -9,6 +9,12 @@ import 'package:dcli/dcli.dart';
 import 'package:path/path.dart' hide equals;
 import 'package:test/test.dart';
 
+/// @Throwing(ArgumentError)
+/// @Throwing(CopyException)
+/// @Throwing(CopyTreeException)
+/// @Throwing(CreateDirException)
+/// @Throwing(DeleteDirException)
+/// @Throwing(TouchException)
 void main() {
   test('copy filename to filename the good path', ()  {
     final root = createTempDir();

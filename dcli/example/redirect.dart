@@ -4,6 +4,8 @@
 import 'package:dcli/dcli.dart';
 
 /// redirect stdout to a log file
+/// @Throwing(ArgumentError)
+/// @Throwing(CatException)
 void main1() {
   const pathToLog = 'log.txt';
   print('running ls');
@@ -14,6 +16,8 @@ void main1() {
 }
 
 /// redirect stderr to a log file whilst print stdout to the console
+/// @Throwing(ArgumentError)
+/// @Throwing(CatException)
 void main2() {
   const pathToLog = 'log.txt';
   print('running ls');
@@ -25,6 +29,8 @@ void main2() {
 
 /// redirect stderr to a log file whilst print stdout to the console
 /// without using tearoffs.
+/// @Throwing(ArgumentError)
+/// @Throwing(CatException)
 void main3() {
   const pathToLog = 'log.txt';
   print('running ls');

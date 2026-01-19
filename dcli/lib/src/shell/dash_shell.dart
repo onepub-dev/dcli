@@ -30,7 +30,8 @@ class DashShell with ShellMixin, PosixShell {
   @override
   String get name => shellName;
 
-  /// Throws [UnimplementedError].
+    /// Throws [UnimplementedError].
+  /// @Throwing(UnimplementedError)
   @override
   void installTabCompletion({bool quiet = false}) {
     throw UnimplementedError();
@@ -41,18 +42,21 @@ class DashShell with ShellMixin, PosixShell {
   @override
   bool get canModifyPath => false;
 
-  /// Throws [UnsupportedError].
+    /// Throws [UnsupportedError].
+  /// @Throwing(UnsupportedError)
   @override
   @Deprecated('Use appendToPATH')
   bool addToPATH(String path) =>
       throw UnsupportedError('Not supported in dash');
 
-  /// Throws [UnsupportedError].
+    /// Throws [UnsupportedError].
+  /// @Throwing(UnsupportedError)
   @override
   bool appendToPATH(String path) =>
       throw UnsupportedError('Not supported in dash');
 
-  /// Throws [UnsupportedError].
+    /// Throws [UnsupportedError].
+  /// @Throwing(UnsupportedError)
   @override
   bool prependToPATH(String path) =>
       throw UnsupportedError('Not supported in dash');

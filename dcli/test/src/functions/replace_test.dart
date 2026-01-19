@@ -8,6 +8,9 @@
 import 'package:dcli/dcli.dart';
 import 'package:test/test.dart';
 
+/// @Throwing(ArgumentError)
+/// @Throwing(DeleteException)
+/// @Throwing(TouchException)
 void main() {
   test('replace ...', () async {
     await withTempFileAsync((temp) async{

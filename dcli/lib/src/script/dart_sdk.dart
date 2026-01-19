@@ -47,6 +47,8 @@ class DartSdk {
   DartSdk._internal();
 
   /// The path to the dart 'bin' directory.
+  /// @Throwing(ArgumentError)
+  /// @Throwing(Exception)
   String get pathToSdk => _sdkPath ??= _detect();
 
   /// platform specific name of the 'dart' executable
@@ -92,21 +94,33 @@ class DartSdk {
   String? get pathToDartToNativeExe => _pathToDartNativeExe;
 
   ///
+  /// @Throwing(ArgumentError)
+  /// @Throwing(core.DCliException)
   int get versionMajor => getVersion().major;
 
   ///
+  /// @Throwing(ArgumentError)
+  /// @Throwing(core.DCliException)
   int get versionMinor => getVersion().minor;
 
   /// From 2.10 onwards we use the dart compile option rather than dart2native.
+  /// @Throwing(ArgumentError)
+  /// @Throwing(core.DCliException)
+  /// @Throwing(FormatException)
   bool get useDartCommand =>
       getVersion().compareTo(Version.parse('2.10.0')) >= 0;
 
   // from 2.16 onward the doc command was migrated into dart.
+  /// @Throwing(ArgumentError)
+  /// @Throwing(core.DCliException)
+  /// @Throwing(FormatException)
   bool get useDartDocCommand =>
       getVersion().compareTo(Version.parse('2.16.0')) < 0;
 
   /// Returns the DartSdk's version
   /// Throws [DCliException].
+  /// @Throwing(ArgumentError)
+  /// @Throwing(core.DCliException)
   Version getVersion() {
     if (_version == null) {
       final platform = Platform.version;
@@ -130,6 +144,8 @@ class DartSdk {
   }
 
   /// Returns the DartSdk's version
+  /// @Throwing(ArgumentError)
+  /// @Throwing(core.DCliException)
   String get version => getVersion().toString();
 
   /// Run the 'dart compiler' command.
@@ -140,6 +156,7 @@ class DartSdk {
   /// used. The [workingDirectory] should contain the pubspec.yaml that is used
   /// to compile the script.
   /// Throws [DCliException].
+  /// @Throwing(core.DCliException)
   void runDartCompiler(
     DartScript script, {
     required String pathToExe,
@@ -189,6 +206,7 @@ class DartSdk {
   /// returns the relative path to the packges configuration file.
   /// For versions of dart prior to 2.10 this returns '.packages'
   /// For versions of dart from 2.10 it returns .dart_tools/package_config.json
+  /// @Throwing(ArgumentError)
   String get pathToPackageConfig {
     if (DartSdk().versionMajor >= 2 && DartSdk().versionMinor >= 10) {
       return join('.dart_tool', 'package_config.json');
@@ -199,6 +217,7 @@ class DartSdk {
 
   /// Run the dart exe with arguments.
   /// Throws [DCliException].
+  /// @Throwing(core.DCliException)
   Progress run({
     required List<String> args,
     String? workingDirectory,
@@ -238,6 +257,7 @@ class DartSdk {
   /// call to pub get fails an exit code will be returned in the
   /// [Progress] rather than throwing an exception.
   /// Throws [DCliException].
+  /// @Throwing(core.DCliException)
   Progress runPub({
     required List<String> args,
     String? workingDirectory,
@@ -300,6 +320,8 @@ class DartSdk {
   /// call to pub get fails an exit code will be returned in the
   /// [Progress] rather than throwing an exception.
   /// Throws [DCliException].
+  /// @Throwing(ArgumentError)
+  /// @Throwing(core.DCliException)
   Progress runDartDoc({
     String? pathToProject,
     String? pathToDoc,
@@ -360,6 +382,8 @@ class DartSdk {
   ///  pubspec.lock
   /// .dart_tool/package_config.json
   ///
+  /// @Throwing(ArgumentError)
+  /// @Throwing(PubspecNotFoundException)
   bool isPubGetRequired(String workingDirectory) {
     if (!exists(join(workingDirectory, 'pubspec.yaml'))) {
       throw PubspecNotFoundException(workingDirectory);
@@ -381,6 +405,7 @@ class DartSdk {
   }
 
   /// runs 'dart pub get'
+  /// @Throwing(core.DCliException)
   void runPubGet(
     String? workingDirectory, {
     Progress? progress,
@@ -394,6 +419,7 @@ class DartSdk {
   }
 
   /// runs 'dart pub upgrade'
+  /// @Throwing(core.DCliException)
   void runPubUpgrade(
     String? workingDirectory, {
     Progress? progress,
@@ -408,6 +434,8 @@ class DartSdk {
 
   /// Attempts to detect the location of the dart sdk.
   /// Throws [Exception].
+  /// @Throwing(ArgumentError)
+  /// @Throwing(Exception)
   static String _detect() {
     final whichExe = which(dartExeName);
 
@@ -443,6 +471,12 @@ class DartSdk {
   ///
   /// returns the directory where the dartSdk was installed.
   /// Throws [InstallException].
+  /// @Throwing(ArgumentError)
+  /// @Throwing(CreateDirException)
+  /// @Throwing(DeleteDirException)
+  /// @Throwing(InstallException)
+  /// @Throwing(MoveTreeException)
+  /// @Throwing(OSError)
   Future<String> installFromArchive(String defaultDartSdkPath,
       {bool askUser = true}) async {
     // verbose(() => 'Architecture: ${SysInfo.kernelArchitecture}');
@@ -499,6 +533,7 @@ class DartSdk {
   }
 
   /// Fetchs the list of available dart versions from
+  /// @Throwing(OSError)
   // List<String> fetchVersions() {}
   Future<String> _fetchDartSdk() async {
     final architechture = resolveArchitecture();
@@ -532,6 +567,7 @@ class DartSdk {
   /// by:
   /// https://dart.dev/tools/sdk/archive
   /// Throws [OSError].
+  /// @Throwing(OSError)
   String resolveArchitecture() {
     if (Platform.isMacOS) {
       return 'x64';
@@ -582,6 +618,8 @@ class DartSdk {
     return finaldartToolDir;
   }
 
+  /// @Throwing(ArgumentError)
+  /// @Throwing(CreateDirException)
   void _extractDartSdk(String zipRelease, String dartToolDir) {
     print('Extracting dart sdk..');
     // Read the Zip file from disk.
@@ -633,6 +671,7 @@ class DartSdk {
   }
 
   /// Run dart pub global activate on the given [package].
+  /// @Throwing(core.DCliException)
   @Deprecated('Use PubCache().globalActivate')
   void globalActivate(String package) {
     runPub(
@@ -662,6 +701,7 @@ class DartSdk {
   void isPackageGlobalActivateFromPath(String path) =>
       PubCache().isGloballyActivatedFromSource(path);
 
+  /// @Throwing(ArgumentError)
   String? _determineDartPath() {
     var path = which('dart').path;
 
@@ -704,6 +744,7 @@ class DartSdk {
   // as dart may not be on the path
   // So lets go find it
   // CONSIDER a way of identifying where dart has been installed to.
+  /// @Throwing(ArgumentError)
   String? _determinePubPath() {
     var pubPath = which(pubExeName).path;
 

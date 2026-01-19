@@ -40,6 +40,20 @@ class DartProject {
 
   /// Create a dart project on the file system at
   /// [pathTo] from the template named [templateName].
+  /// @Throwing(ArgumentError)
+  /// @Throwing(CopyException)
+  /// @Throwing(CopyTreeException)
+  /// @Throwing(CreateDirException)
+  /// @Throwing(DartProjectException)
+  /// @Throwing(DeleteException)
+  /// @Throwing(DuplicateKeyException)
+  /// @Throwing(InvalidArgumentException)
+  /// @Throwing(InvalidProjectTemplateException)
+  /// @Throwing(MoveException)
+  /// @Throwing(NotFoundException)
+  /// @Throwing(PubSpecException)
+  /// @Throwing(RangeError)
+  /// @Throwing(VersionException)
   factory DartProject.create(
       {required String pathTo, required String templateName}) {
     _createProject(pathTo, templateName);
@@ -64,6 +78,7 @@ class DartProject {
   /// [findProject].
   /// Set [search] to false if you don't want to search up the
   /// directory tree for a pubspec.yaml.
+  /// @Throwing(ArgumentError)
   DartProject.fromPath(String pathToSearchFrom, {bool search = true}) {
     _pathToProjectRoot =
         _findProject(pathToSearchFrom, search: search) ?? pathToSearchFrom;
@@ -78,6 +93,7 @@ class DartProject {
   ///
   /// If [search] is true then it will search from [pathToSearchFrom]
   /// up the tree.
+  /// @Throwing(ArgumentError)
   static DartProject? findProject(String pathToSearchFrom,
       {bool search = true}) {
     final path = _findProject(pathToSearchFrom, search: search);
@@ -85,6 +101,7 @@ class DartProject {
     return path == null ? null : DartProject.fromPath(path);
   }
 
+  /// @Throwing(ArgumentError)
   static String? _findProject(String pathToSearchFrom, {bool search = true}) {
     String? pathToProjectRoot;
     if (search) {
@@ -113,6 +130,7 @@ class DartProject {
   /// If you are looking to load the project from a directory
   /// then use [DartProject.fromPath()]
   ///
+  /// @Throwing(ArgumentError)
   // ignore: prefer_constructors_over_static_methods
   static DartProject get self {
     if (io.Platform.packageConfig != null) {
@@ -135,6 +153,10 @@ class DartProject {
   ///
   /// reads and returns the project's virtual pubspec
   /// and returns it.
+  /// @Throwing(DuplicateKeyException)
+  /// @Throwing(NotFoundException)
+  /// @Throwing(PubSpecException)
+  /// @Throwing(VersionException)
   PubSpec get pubSpec => PubSpec.loadFromPath(pathToPubSpec);
 
   /// Absolute path to the project's root diretory.
@@ -166,14 +188,17 @@ class DartProject {
   String get pathToToolDir => truepath(_pathToProjectRoot, 'tool');
 
   /// Absolute pathto the project's analysis_options.yaml
+  /// @Throwing(ArgumentError)
   String get pathToAnalysisOptions =>
       _pathToPubSpec ??= join(_pathToProjectRoot, 'analysis_options.yaml');
 
   /// Absolute pathto the project's pubspec.yaml
+  /// @Throwing(ArgumentError)
   String get pathToPubSpec =>
       _pathToPubSpec ??= join(_pathToProjectRoot, 'pubspec.yaml');
 
   /// Absolute pathto the project's pubspec.lock
+  /// @Throwing(ArgumentError)
   String get pathToPubSpecLock =>
       _pathToPubSpec ??= join(_pathToProjectRoot, 'pubspec.lock');
 
@@ -206,6 +231,7 @@ class DartProject {
   /// Searches up the directory tree from [pathToSearchFrom]
   /// for a dart package by looking for a pubspec.yaml.
   /// If no pubspec.yaml if found we return null.
+  /// @Throwing(ArgumentError)
   static String? _findProjectRoot(String pathToSearchFrom) {
     var current = truepath(pathToSearchFrom);
 
@@ -233,6 +259,8 @@ class DartProject {
   /// If [upgrade] is true then a pub upgrade is ran rather than
   /// pub get.
   ///
+  /// @Throwing(ArgumentError)
+  /// @Throwing(DartProjectException)
   Future<void> warmup({bool background = false, bool upgrade = false}) async {
     await NamedLock(
       name: _lockName,
@@ -276,6 +304,8 @@ class DartProject {
   /// .dart_tools
   ///
   /// Any exes for scripts in the directory.
+  /// @Throwing(ArgumentError)
+  /// @Throwing(DeleteDirException)
   Future<void> clean() async {
     print('Cleaning project: $pathToProjectRoot');
     await NamedLock(name: _lockName).withLockAsync(
@@ -345,6 +375,7 @@ class DartProject {
   /// This is normally done when the project cache is first
   /// created and when a script's pubspec changes.
   /// Throws [DartProjectException].
+  /// @Throwing(DartProjectException)
   Future<void> _pubget() async {
     await NamedLock(name: _lockName).withLockAsync(() async {
       final pubGet = PubGet(this);
@@ -366,6 +397,7 @@ class DartProject {
   /// This is normally done when the project cache is first
   /// created and when a script's pubspec changes.
   /// Throws [DartProjectException].
+  /// @Throwing(DartProjectException)
   Future<void> _pubupgrade() async {
     // Refactor with named lock guard
     await NamedLock(
@@ -407,12 +439,16 @@ class DartProject {
   bool get isFlutterProject => pubSpec.dependencies.exists('flutter');
 
   /// Returns true if the project contains a pubspec.yaml.
+  /// @Throwing(ArgumentError)
   bool get hasPubSpec => exists(join(pathToProjectRoot, 'pubspec.yaml'));
 
   /// Returns true if the project has an 'analysis_options.yaml' file.
+  /// @Throwing(ArgumentError)
   bool get hasAnalysisOptions =>
       exists(join(pathToProjectRoot, 'analysis_options.yaml'));
 
+  /// @Throwing(ArgumentError)
+  /// @Throwing(DeleteDirException)
   void _deleteDirs(List<String> toBeDeleted) {
     for (final dir in toBeDeleted) {
       if (exists(dir)) {

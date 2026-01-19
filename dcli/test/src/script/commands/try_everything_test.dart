@@ -13,6 +13,13 @@ import 'package:path/path.dart';
 import 'package:test/test.dart' as t;
 import 'package:test/test.dart';
 
+/// @Throwing(ArgumentError)
+/// @Throwing(CopyException)
+/// @Throwing(CreateDirException)
+/// @Throwing(DeleteDirException)
+/// @Throwing(DeleteException)
+/// @Throwing(MoveException)
+/// @Throwing(TouchException)
 void main() {
   t.test('Try everything', () async {
     await withTempDirAsync((fsRoot) async {

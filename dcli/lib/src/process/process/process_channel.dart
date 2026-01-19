@@ -1,21 +1,26 @@
 import 'dart:async';
 
 class ProcessChannel {
-  /// Throws [UnimplementedError].
+    /// Throws [UnimplementedError].
+  /// @Throwing(UnimplementedError)
   int get exitCode => throw UnimplementedError();
 
-  /// Throws [UnimplementedError].
+    /// Throws [UnimplementedError].
+  /// @Throwing(UnimplementedError)
   static ProcessChannel pipe(
           Stream<List<int>> stdin, StreamSink<List<int>> sink) =>
       throw UnimplementedError();
 
-  /// Throws [UnimplementedError].
+    /// Throws [UnimplementedError].
+  /// @Throwing(UnimplementedError)
   List<int> readStdout() => throw UnimplementedError();
 
-  /// Throws [UnimplementedError].
+    /// Throws [UnimplementedError].
+  /// @Throwing(UnimplementedError)
   List<int> readStderr() => throw UnimplementedError();
 
-  /// Throws [UnimplementedError].
+    /// Throws [UnimplementedError].
+  /// @Throwing(UnimplementedError)
   void writeToStdin(List<int> data) => throw UnimplementedError();
 }
 

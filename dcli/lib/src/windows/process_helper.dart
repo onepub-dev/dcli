@@ -14,6 +14,7 @@ import '../util/process_helper.dart';
 
 /// Gets the process name for the given [processID] on
 /// a Windows system.
+/// @Throwing(UnsupportedError)
 String getWindowsProcessName(int processID) {
   var name = '<unknown>';
 
@@ -59,6 +60,7 @@ String getWindowsProcessName(int processID) {
 
 /// Returns the list of running processes on a Windows system.
 /// This method has a hard coded limit of 2048 processes.
+/// @Throwing(UnsupportedError)
 List<ProcessDetails> getWindowsProcesses() {
   final processes = <ProcessDetails>[];
   // Get the list of process identifiers.

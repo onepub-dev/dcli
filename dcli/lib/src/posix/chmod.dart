@@ -39,6 +39,9 @@ import '../../dcli.dart';
 ///
 /// On Windows a call to this method is a noop.
 ///
+/// @Throwing(ArgumentError)
+/// @Throwing(ChModException)
+/// @Throwing(posix.PosixException)
 void chmod(String path, {required String permission}) =>
     _ChMod()._chmod(path, permission);
 
@@ -46,7 +49,10 @@ void chmod(String path, {required String permission}) =>
 class _ChMod extends DCliFunction {
 // this.user, this.group, this.other, this.path
 
-  /// Throws [ChModException].
+        /// Throws [ChModException].
+    /// @Throwing(ArgumentError)
+    /// @Throwing(ChModException)
+    /// @Throwing(posix.PosixException)
   void _chmod(String path, String permission) {
     if (!exists(path)) {
       throw ChModException('The file at ${truepath(path)} does not exists');

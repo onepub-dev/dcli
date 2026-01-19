@@ -31,6 +31,9 @@ import '../../dcli.dart';
 /// If you pass [recursive] and [path] is a file then [recursive]
 /// will be ignored.
 ///
+/// @Throwing(ArgumentError)
+/// @Throwing(ChOwnException)
+/// @Throwing(posix.PosixException)
 void chown(String path, {String? user, String? group, bool recursive = true}) =>
     _ChOwn()._chown(path, user: user, group: group, recursive: recursive);
 
@@ -38,7 +41,10 @@ void chown(String path, {String? user, String? group, bool recursive = true}) =>
 class _ChOwn extends core.DCliFunction {
 // this.user, this.group, this.other, this.path
 
-  /// Throws [ChOwnException].
+        /// Throws [ChOwnException].
+    /// @Throwing(ArgumentError)
+    /// @Throwing(ChOwnException)
+    /// @Throwing(posix.PosixException)
   void _chown(
     String path, {
     String? user,

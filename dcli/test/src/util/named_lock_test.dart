@@ -19,6 +19,12 @@ import 'package:path/path.dart' hide equals;
 import 'package:test/test.dart';
 
 /// Throws [DCliException].
+/// @Throwing(ArgumentError)
+/// @Throwing(CreateDirException)
+/// @Throwing(core.DCliException)
+/// @Throwing(DeleteDirException)
+/// @Throwing(DeleteException)
+/// @Throwing(core.TouchException)
 void main() {
   group('NamedLock', () {
     test('callback', () async {
@@ -148,6 +154,9 @@ final String _lockFailedPath = join(_lockCheckPath, 'lock_failed');
 
 /// must be a global function as we us it to spawn an isolate
 /// Throws [DCliException].
+/// @Throwing(ArgumentError)
+/// @Throwing(core.DCliException)
+/// @Throwing(core.TouchException)
 Future<void> worker(int instance) async {
   print('starting worker instance $instance ${DateTime.now()}');
   await NamedLock(name: 'gshared-compile').withLockAsync(() async {

@@ -8,6 +8,7 @@ import 'package:test/test.dart' as t;
 
 import '../util/test_utils.dart';
 
+/// @Throwing(ArgumentError)
 void main() {
   t.group('Piping with ForEach ', () {
     final lines = <String?>[];

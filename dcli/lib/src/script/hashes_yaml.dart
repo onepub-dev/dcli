@@ -20,7 +20,8 @@ class HashesYaml {
   // ignore: unused_field
   late final MyYaml _hashes;
 
-  ///
+        ///
+    /// @Throwing(ArgumentError)
   HashesYaml(String scriptCachePath) {
     final cachePathDirectory = Directory(scriptCachePath);
 

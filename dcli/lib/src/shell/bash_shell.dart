@@ -29,6 +29,8 @@ class BashShell with ShellMixin, PosixShell {
 
   // adds bash cli completion for dcli
   // by adding a 'complete' command to ~/.bashrc
+        /// @Throwing(ArgumentError)
+    /// @Throwing(TouchException)
   @override
   void installTabCompletion({bool quiet = false}) {
     if (!isCompletionInstalled) {
@@ -58,12 +60,14 @@ class BashShell with ShellMixin, PosixShell {
   @override
   bool get canModifyPath => true;
 
+        /// @Throwing(ArgumentError)
   @override
   @Deprecated('Use appendToPATH')
   bool addToPATH(String path) => appendToPATH(path);
 
-  /// Appends the given path to the bash path if it isn't
-  /// already on the path.
+        /// Appends the given path to the bash path if it isn't
+    /// already on the path.
+    /// @Throwing(ArgumentError)
   @override
   bool appendToPATH(String path) {
     // TODO(bsutton): check if there is already an export for dcli path.
@@ -74,8 +78,9 @@ class BashShell with ShellMixin, PosixShell {
     return true;
   }
 
-  /// Prepends the given path to the bash path if it isn't
-  /// already on the path.
+        /// Prepends the given path to the bash path if it isn't
+    /// already on the path.
+    /// @Throwing(ArgumentError)
   @override
   bool prependToPATH(String path) {
     if (!isOnPATH(path)) {
@@ -85,6 +90,7 @@ class BashShell with ShellMixin, PosixShell {
     return true;
   }
 
+        /// @Throwing(ArgumentError)
   void _updatePATH(String export) {
     final rcPath = pathToStartScript;
 
@@ -95,8 +101,9 @@ class BashShell with ShellMixin, PosixShell {
     }
   }
 
-  /// Returns true if the dcil_complete has
-  /// been installed as a bash auto completer
+        /// Returns true if the dcil_complete has
+    /// been installed as a bash auto completer
+    /// @Throwing(ArgumentError)
   @override
   bool get isCompletionInstalled {
     var completeInstalled = false;
@@ -122,6 +129,7 @@ class BashShell with ShellMixin, PosixShell {
   @override
   String get startScriptName => '.bashrc';
 
+        /// @Throwing(ArgumentError)
   @override
   String get pathToStartScript => join(HOME, startScriptName);
 

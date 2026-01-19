@@ -23,7 +23,7 @@ typedef CustomMenuPrompt = String Function(
 /// var color = menu( 'Please select a color', options: colors);
 /// ```
 /// Results in:
-///```text
+/// ```text
 /// 1) Red
 /// 2) Green
 /// Please select a color:
@@ -69,6 +69,7 @@ typedef CustomMenuPrompt = String Function(
 /// If there is no [defaultOption] then the first [options] will be returned.
 ///
 /// Throws [ArgumentError] if the list of options is empty.
+/// @Throwing(ArgumentError)
 T menu<T>(
   String prompt, {
   required List<T> options,
@@ -165,7 +166,8 @@ class _MenuRange extends AskValidator {
 
   const _MenuRange(this.limit);
 
-  /// Throws [AskValidatorException].
+    /// Throws [AskValidatorException].
+  /// @Throwing(AskValidatorException)
   @override
   String validate(String line, {String? customErrorMessage}) {
     final finalline = line.trim();

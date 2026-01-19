@@ -12,6 +12,10 @@ import 'package:path/path.dart';
 import 'package:posix/posix.dart';
 import 'package:test/test.dart';
 
+/// @Throwing(ArgumentError)
+/// @Throwing(CreateDirException)
+/// @Throwing(DeleteDirException)
+/// @Throwing(core.TouchException)
 void main() {
   test(
     'isPrivileged',

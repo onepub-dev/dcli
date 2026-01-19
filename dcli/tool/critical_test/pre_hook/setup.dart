@@ -17,6 +17,8 @@ import 'package:path/path.dart';
 /// Given we are actively modifying the file system this is a bad idea.
 /// So this script forces the test to run serially via the -j1 option.
 ///
+/// @Throwing(ArgumentError)
+/// @Throwing(DeleteDirException)
 Future<void> main(List<String> args) async {
   if (core.Settings().isWindows && !Shell.current.isPrivilegedUser) {
     printerr(

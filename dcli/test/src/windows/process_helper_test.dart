@@ -13,6 +13,7 @@ import 'package:dcli_core/dcli_core.dart' as core;
 import 'package:path/path.dart' as p;
 import 'package:test/test.dart';
 
+/// @Throwing(ArgumentError)
 void main() {
   test(
     'process helper ...',

@@ -13,6 +13,7 @@ import 'package:path/path.dart';
 /// A toy REPL shell to replace your bash command line in just 50 lines of dart.
 ///
 /// This work in progress will show how to implement a pipe command.
+/// @Throwing(ArgumentError)
 void main(List<String> args) {
   // Loop, asking for user input and evaluating it
   for (;;) {
@@ -24,6 +25,7 @@ void main(List<String> args) {
 }
 
 // Evaluate the users input
+/// @Throwing(ArgumentError)
 void evaluate(String command) {
   // if (command.contains('|')) {
   //   buildPipe(command);

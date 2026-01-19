@@ -13,6 +13,8 @@ import 'package:dcli_test/dcli_test.dart';
 import 'package:path/path.dart' hide equals;
 import 'package:test/test.dart';
 
+/// @Throwing(ArgumentError)
+/// @Throwing(TouchException)
 void main() {
   test('Run dcli_complete c', () async {
     await TestFileSystem().withinZone((fs) async {

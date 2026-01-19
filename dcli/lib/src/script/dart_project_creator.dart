@@ -16,6 +16,20 @@ part of 'dart_project.dart';
 const overrideDCliPathKey = 'DCLI_OVERRIDE_PATH';
 
 /// Throws [InvalidProjectTemplateException]
+/// @Throwing(ArgumentError)
+/// @Throwing(CopyException)
+/// @Throwing(CopyTreeException)
+/// @Throwing(CreateDirException)
+/// @Throwing(DartProjectException)
+/// @Throwing(DeleteException)
+/// @Throwing(DuplicateKeyException)
+/// @Throwing(InvalidArgumentException)
+/// @Throwing(InvalidProjectTemplateException)
+/// @Throwing(MoveException)
+/// @Throwing(NotFoundException)
+/// @Throwing(PubSpecException)
+/// @Throwing(RangeError)
+/// @Throwing(VersionException)
 void _createProject(String pathToProject, String templateName) {
   verbose(() => '_createProject $pathToProject from $templateName');
 
@@ -70,6 +84,7 @@ void _createProject(String pathToProject, String templateName) {
   _printCreated(projectName, project);
 }
 
+/// @Throwing(ArgumentError)
 void addUnitTestOverrides(String pathToProject) {
   /// we are running in a unit test so
   /// we need to add pubspec overrides so that the
@@ -92,6 +107,7 @@ dependency_overrides:
 ''');
 }
 
+/// @Throwing(ArgumentError)
 String _pathToDCliGitRoot() {
   var dcliGitRoot = DartProject.self.pathToProjectRoot;
   // If [dcliGitRoot] contains a pubspec.yaml then it
@@ -108,6 +124,7 @@ String _pathToDCliGitRoot() {
 
 /// update the templates dcli version to match the dcli version
 /// the user is running.
+/// @Throwing(PubSpecException)
 void _fixPubspec(String projectName, PubSpec pubSpec, String pathToPubSpec) {
   final current = pubSpec.dependencies;
 
@@ -133,6 +150,14 @@ void _fixPubspec(String projectName, PubSpec pubSpec, String pathToPubSpec) {
 }
 
 /// Returns the name of the main project script.
+/// @Throwing(ArgumentError)
+/// @Throwing(CopyException)
+/// @Throwing(DeleteException)
+/// @Throwing(DuplicateKeyException)
+/// @Throwing(MoveException)
+/// @Throwing(NotFoundException)
+/// @Throwing(PubSpecException)
+/// @Throwing(VersionException)
 String _renameMain(DartProject project, String projectName) {
   /// rename main.dart from the template to <projectname>.dart
   final mainScript = join(project.pathToBinDir, 'main.dart');
@@ -176,6 +201,9 @@ String _renameMain(DartProject project, String projectName) {
   return projectScript;
 }
 
+/// @Throwing(ArgumentError)
+/// @Throwing(CopyTreeException)
+/// @Throwing(RangeError)
 void _createFromTemplate(String pathToTemplate, String pathToProject,
     String projectName, String templateName) {
   copyTree(pathToTemplate, pathToProject, includeHidden: true);
@@ -205,6 +233,7 @@ void _printCreating(String projectName, String pathToTemplate) {
 
 /// Returns `true` if [projectName] is valid Dart variable identifier.
 /// Throws [InvalidArgumentException].
+/// @Throwing(InvalidArgumentException)
 void _validateProjectName(String projectName) {
   // Contains only valid characters and starts with a non-numeric character.
   final regExp = RegExp(r'^[A-Za-z_$][A-Za-z0-9_$]*');
@@ -215,6 +244,7 @@ void _validateProjectName(String projectName) {
   }
 }
 
+/// @Throwing(RangeError)
 void _applyTransforms(
     {required String projectName,
     required String pathToProject,
@@ -235,6 +265,8 @@ void _applyTransforms(
 }
 
 /// Throws [DartProjectException]
+/// @Throwing(ArgumentError)
+/// @Throwing(DartProjectException)
 String _resolveTemplatePath(String templateName) {
   String? pathToTemplate;
   var found = false;

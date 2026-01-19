@@ -14,17 +14,23 @@ import 'package:yaml/yaml.dart' as y;
 class MyYaml {
   late y.YamlDocument _document;
 
-  /// read yaml from string
+        /// read yaml from string
+    /// @Throwing(StateError)
+    /// @Throwing(y.YamlException)
   MyYaml.fromString(String content) {
     _document = _load(content);
   }
 
-  /// reads yaml from file.
+        /// reads yaml from file.
+    /// @Throwing(StateError)
+    /// @Throwing(y.YamlException)
   MyYaml.fromFile(String path) {
     final contents = File(path).readAsStringSync();
     _document = _load(contents);
   }
 
+        /// @Throwing(StateError)
+    /// @Throwing(y.YamlException)
   y.YamlDocument _load(String content) => y.loadYamlDocument(content);
 
   /// returns the raw content of the yaml file.

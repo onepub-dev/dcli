@@ -24,7 +24,8 @@ class DockerShell with ShellMixin, PosixShell {
   /// Attached to a bash shell with the given pid.
   DockerShell.withPid(this.pid);
 
-  /// Returns true if we are running in a docker shell
+        /// Returns true if we are running in a docker shell
+    /// @Throwing(ArgumentError)
   static bool get inDocker {
     if (_inDocker == null) {
       _inDocker = false;
@@ -97,7 +98,8 @@ dcli install''';
   bool get isCompletionSupported => false;
 
   // no shell so no tab completion
-  /// Throws [UnsupportedError].
+    /// Throws [UnsupportedError].
+  /// @Throwing(UnsupportedError)
   @override
   void installTabCompletion({bool quiet = false}) =>
       throw UnsupportedError('Not supported in docker');
@@ -107,20 +109,23 @@ dcli install''';
   @override
   bool get canModifyPath => false;
 
+        /// @Throwing(UnsupportedError)
   @override
   @Deprecated('Use appendToPATH')
   bool addToPATH(String path) => appendToPATH(path);
 
-  /// Appends the given path to the bash path if it isn't
+    /// Appends the given path to the bash path if it isn't
   /// already on the path.
   /// Throws [UnsupportedError].
+  /// @Throwing(UnsupportedError)
   @override
   bool appendToPATH(String path) =>
       throw UnsupportedError('Not supported in docker');
 
-  /// Prepends the given path to the bash path if it isn't
+    /// Prepends the given path to the bash path if it isn't
   /// already on the path.
   /// Throws [UnsupportedError].
+  /// @Throwing(UnsupportedError)
   @override
   bool prependToPATH(String path) =>
       throw UnsupportedError('Not supported in docker');
@@ -136,12 +141,14 @@ dcli install''';
   @override
   bool get hasStartScript => false;
 
-  /// Throws [UnsupportedError].
+    /// Throws [UnsupportedError].
+  /// @Throwing(UnsupportedError)
   @override
   String get startScriptName =>
       throw UnsupportedError('Not supported in docker');
 
-  /// Throws [UnsupportedError].
+    /// Throws [UnsupportedError].
+  /// @Throwing(UnsupportedError)
   @override
   String get pathToStartScript =>
       throw UnsupportedError('Not supported in docker');

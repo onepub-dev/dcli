@@ -9,6 +9,9 @@ import 'package:dcli/dcli.dart';
 import 'package:path/path.dart';
 import 'package:test/test.dart' as t;
 
+/// @Throwing(ArgumentError)
+/// @Throwing(CreateDirException)
+/// @Throwing(DeleteDirException)
 void main() {
   t.group('FileSync', () {
     t.test('Append', () async {

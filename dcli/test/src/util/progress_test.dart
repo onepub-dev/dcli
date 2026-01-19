@@ -12,6 +12,10 @@ import 'package:dcli_test/dcli_test.dart';
 import 'package:path/path.dart' hide equals;
 import 'package:test/test.dart';
 
+/// @Throwing(ArgumentError)
+/// @Throwing(CreateDirException)
+/// @Throwing(DeleteDirException)
+/// @Throwing(TouchException)
 void main() {
 // This is intended to demonstrate that we ouput data as it flows in
   // I'm not certain how to actually test that so for the

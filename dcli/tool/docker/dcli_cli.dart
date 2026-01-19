@@ -21,6 +21,8 @@ import 'package:pubspec_manager/pubspec_manager.dart';
 /// with dcli.
 ///
 /// If you are looking to work on dcli itself then use dev_dcli_cli.dart
+/// @Throwing(ArgumentError)
+/// @Throwing(UnimplementedError)
 
 Future<void> main(List<String> args) async {
   Settings().setVerbose(enabled: false);
@@ -55,6 +57,10 @@ class RunCommand extends Command<void> {
   @override
   String get name => 'run';
 
+        /// @Throwing(DuplicateKeyException)
+    /// @Throwing(NotFoundException)
+    /// @Throwing(PubSpecException)
+    /// @Throwing(VersionException)
   @override
   void run() {
     /// The volume will only be created if it doesn't already exist.
@@ -76,6 +82,11 @@ class BuildCommand extends Command<void> {
   @override
   String get name => 'build';
 
+        /// @Throwing(ArgumentError)
+    /// @Throwing(DuplicateKeyException)
+    /// @Throwing(NotFoundException)
+    /// @Throwing(PubSpecException)
+    /// @Throwing(VersionException)
   @override
   void run() {
     final pubspec = PubSpec.loadFromPath(DartProject.self.pathToPubSpec);
@@ -95,6 +106,7 @@ class BuildCommand extends Command<void> {
 }
 
 class PushCommand extends Command<void> {
+        /// @Throwing(ArgumentError)
   PushCommand() {
     argParser.addOption(
       'version',
@@ -107,6 +119,10 @@ class PushCommand extends Command<void> {
   @override
   String get name => 'push';
 
+        /// @Throwing(DuplicateKeyException)
+    /// @Throwing(NotFoundException)
+    /// @Throwing(PubSpecException)
+    /// @Throwing(VersionException)
   @override
   void run() {
     // if (!argResults.wasParsed('version')) {

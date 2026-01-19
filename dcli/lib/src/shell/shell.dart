@@ -81,11 +81,12 @@ abstract class Shell {
   /// if the script is running under sudo.
   bool get isSudo => false;
 
-  /// If the shell supports tab completion then
+    /// If the shell supports tab completion then
   /// install it.
   /// If [quiet] is true then suppress any console output except
   /// for errors.
   /// Throws [UnimplementedError].
+  /// @Throwing(UnimplementedError)
   void installTabCompletion({bool quiet = true}) => throw UnimplementedError();
 
   /// Returns the username of the logged in user.

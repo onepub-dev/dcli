@@ -10,6 +10,7 @@ import 'package:dcli_core/dcli_core.dart' as core;
 import 'package:path/path.dart' hide equals;
 import 'package:test/test.dart';
 
+/// @Throwing(ArgumentError)
 void main() {
   test('truepath ...', ()  {
     expect(truepath(join(rootPath, 'tmp')), equals(absolute(rootPath, 'tmp')));

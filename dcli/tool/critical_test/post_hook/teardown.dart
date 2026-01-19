@@ -13,6 +13,8 @@ import 'package:dcli/dcli.dart';
 /// Given we are actively modifying the file system this is a bad idea.
 /// So this script forces the test to run serially via the -j1 option.
 ///
+/// @Throwing(ArgumentError)
+/// @Throwing(DeleteDirException)
 void main(List<String> args) {
   print(orange('Cleaning test artifacts'));
 

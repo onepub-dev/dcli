@@ -34,6 +34,11 @@ export 'package:dcli_core/dcli_core.dart'
 ///  * [restoreFile]
 ///  * [withFileProtectionAsync]
 ///
+/// @Throwing(ArgumentError)
+/// @Throwing(BackupFileException)
+/// @Throwing(CopyException)
+/// @Throwing(CreateDirException)
+/// @Throwing(DeleteException)
 void backupFile(String pathToFile, {bool ignoreMissing = false}) =>
     core.backupFile(pathToFile, ignoreMissing: ignoreMissing);
 
@@ -52,10 +57,17 @@ void backupFile(String pathToFile, {bool ignoreMissing = false}) =>
 /// If the backup file doesn't exists this function throws
 /// a [RestoreFileException] unless you pass the [ignoreMissing]
 /// flag.
+/// @Throwing(ArgumentError)
+/// @Throwing(CopyException)
+/// @Throwing(DeleteDirException)
+/// @Throwing(DeleteException)
+/// @Throwing(MoveException)
+/// @Throwing(RestoreFileException)
 void restoreFile(String pathToFile, {bool ignoreMissing = false}) =>
     core.restoreFile(pathToFile, ignoreMissing: ignoreMissing);
 
 /// Throws [UnsupportedError].
+/// @Throwing(UnsupportedError)
 @Deprecated('Use withFileProtectionAsync')
 R withFileProtection<R>(
   List<String> protected,
@@ -103,9 +115,18 @@ R withFileProtection<R>(
 /// where you need to ensure the filesystem is restore to its
 /// prior state after the dry-run completes.
 ///
-// TODO(bsutton): make this work for other than current drive under Windows
 ///
 /// Throws [BackupFileException].
+/// @Throwing(ArgumentError)
+/// @Throwing(core.BackupFileException)
+/// @Throwing(CopyException)
+/// @Throwing(core.CopyTreeException)
+/// @Throwing(CreateDirException)
+/// @Throwing(DeleteDirException)
+/// @Throwing(DeleteException)
+/// @Throwing(MoveException)
+/// @Throwing(MoveTreeException)
+/// @Throwing(core.TouchException)
 Future<R> withFileProtectionAsync<R>(
   List<String> protected,
   Future<R> Function() action, {
@@ -214,6 +235,8 @@ Future<R> withFileProtectionAsync<R>(
   return result;
 }
 
+/// @Throwing(ArgumentError)
+/// @Throwing(DeleteDirException)
 void _deleteEntity(String path) {
   if (isFile(path)) {
     delete(path);
@@ -224,6 +247,11 @@ void _deleteEntity(String path) {
   }
 }
 
+/// @Throwing(ArgumentError)
+/// @Throwing(CopyException)
+/// @Throwing(DeleteException)
+/// @Throwing(MoveException)
+/// @Throwing(core.TouchException)
 Future<void> _restoreFile(Paths paths) async {
   await withTempFileAsync<void>(
     (dotBak) async {
@@ -256,6 +284,10 @@ Future<void> _restoreFile(Paths paths) async {
   );
 }
 
+/// @Throwing(ArgumentError)
+/// @Throwing(CreateDirException)
+/// @Throwing(DeleteDirException)
+/// @Throwing(MoveTreeException)
 void _restoreDirectory(Paths paths) {
   /// For directories we just recreate them if necessary.
   /// This allows us to restore empty directories.

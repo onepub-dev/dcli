@@ -50,13 +50,15 @@ class PowerShell with WindowsMixin, ShellMixin {
   @override
   bool get hasStartScript => false;
 
-  /// Throws [Type].
+    /// Throws [Type].
+  /// @Throwing(Type)
   @override
   // good enough
   // ignore: only_throw_errors
   String get startScriptName => throw UnimplementedError;
 
-  /// Throws [Type].
+    /// Throws [Type].
+  /// @Throwing(Type)
   @override
   // good enough
   // ignore: only_throw_errors

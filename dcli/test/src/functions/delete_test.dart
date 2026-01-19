@@ -12,6 +12,10 @@ import 'package:path/path.dart';
 import 'package:test/test.dart' as t;
 import 'package:test/test.dart';
 
+/// @Throwing(ArgumentError)
+/// @Throwing(CreateDirException)
+/// @Throwing(DeleteDirException)
+/// @Throwing(TouchException)
 void main() {
   t.group('Delete', () {
     t.test('delete ', () async {

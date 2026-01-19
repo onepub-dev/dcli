@@ -25,10 +25,14 @@ export 'package:dcli_core/dcli_core.dart' show DeleteException;
 /// The default value for [ask] is false.
 ///
 /// If the [path] is a directory a DeleteException is thrown.
+/// @Throwing(ArgumentError)
+/// @Throwing(DeleteException)
 void delete(String path, {bool ask = false}) =>
     _Delete().delete(path, ask: ask);
 
 class _Delete extends DCliFunction {
+        /// @Throwing(ArgumentError)
+    /// @Throwing(DeleteException)
   void delete(String path, {required bool ask}) {
     var remove = true;
     if (ask) {

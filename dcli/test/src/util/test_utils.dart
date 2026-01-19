@@ -9,6 +9,8 @@ import 'package:dcli/dcli.dart';
 import 'package:path/path.dart';
 
 // Creates text file with the given no. of lines.
+/// @Throwing(ArgumentError)
+/// @Throwing(CreateDirException)
 void createLineFile(String testFile, int lines) {
   if (exists(testFile)) {
     delete(testFile);

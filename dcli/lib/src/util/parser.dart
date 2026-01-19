@@ -43,6 +43,8 @@ class Parser {
   ///
   /// In future versions, maps will instead be HashMaps with a custom equality
   /// operation.
+  /// @Throwing(StateError)
+  /// @Throwing(YamlException)
   dynamic yamlDecode() => loadYaml(_lines.join('\n'));
 
   /// Interprets the read lines as a csv file.
@@ -51,11 +53,14 @@ class Parser {
   /// of columns.
   ///
   /// See: https://pub.dev/packages/csv
+  /// @Throwing(ArgumentError)
+  /// @Throwing(InvalidCsvException)
   List<List<dynamic>> csvDecode() =>
       CsvToListConverter(eol: eol, shouldParseNumbers: false)
           .convert<String>(_lines.join('\n'));
 
   /// Interprets the read lines as an ini file.
   /// See https://pub.dev/packages/ini
+  /// @Throwing(Exception)
   Config iniDecode() => Config.fromStrings(_lines as List<String>);
 }

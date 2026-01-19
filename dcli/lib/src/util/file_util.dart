@@ -33,6 +33,8 @@ int fileLength(String pathToFile) => core.fileLength(pathToFile);
 /// doesn't exist.
 /// Throws [NotAFileException] if path is
 /// not a file.
+/// @Throwing(ArgumentError)
+/// @Throwing(core.FileNotFoundException)
 Digest calculateHash(String path) => core.calculateHash(path);
 
 /// Thrown when a file doesn't exist

@@ -10,6 +10,9 @@ import 'dart:async';
 import 'package:dcli/dcli.dart';
 import 'package:test/test.dart';
 
+/// @Throwing(ArgumentError)
+/// @Throwing(DeleteException)
+/// @Throwing(TouchException)
 void main() {
   test('start with progress', () {
     final result = <String?>[];

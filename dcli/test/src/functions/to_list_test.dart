@@ -13,6 +13,7 @@ import 'package:path/path.dart';
 import 'package:test/test.dart' as t;
 import 'package:test/test.dart';
 
+/// @Throwing(ArgumentError)
 void main() {
   t.group('toList', () {
     t.test('Check .toList captures stdout', () async {

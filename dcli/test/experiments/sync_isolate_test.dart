@@ -19,6 +19,11 @@ import 'package:native_synchronization_temp/native_synchronization.dart';
 import 'package:path/path.dart';
 import 'package:test/test.dart';
 
+/// @Throwing(ArgumentError)
+/// @Throwing(CreateDirException)
+/// @Throwing(DeleteDirException)
+/// @Throwing(MailBoxClosedException)
+/// @Throwing(TouchException)
 void main() {
   final runExperiments = env['DCLI_RUN_EXPERIMENTS'] == 'true';
 
@@ -70,6 +75,7 @@ void main() {
   // });
 }
 
+/// @Throwing(MailBoxClosedException)
 void _spawn(int index) {
   // await NamedLock(name: lockName).withLockAsync(() async {
   final isolateChannel = IsolateChannel(
@@ -105,12 +111,14 @@ void test1() {
   io.sleep(const Duration(seconds: 10));
 }
 
+/// @Throwing(MailBoxClosedException)
 void test2() {
   final mailbox = Mailbox();
   unawaited(Isolate.spawn(_run, 'hellow'));
   mailbox.take();
 }
 
+/// @Throwing(MailBoxClosedException)
 void test3() {
   final mailbox = Mailbox();
   unawaited(Isolate.spawn(_put, mailbox.asSendable));
@@ -119,6 +127,8 @@ void test3() {
   print('response ${String.fromCharCodes(response)}');
 }
 
+/// @Throwing(MailBoxClosedException)
+/// @Throwing(MailBoxFullException)
 void _put(Sendable<Mailbox> mailbox) {
   print('isolate running');
   mailbox.materialize().put(Uint8List.fromList('Hello back to you'.codeUnits));

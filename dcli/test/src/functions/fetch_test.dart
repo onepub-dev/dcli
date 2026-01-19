@@ -17,6 +17,11 @@ import 'package:test/test.dart';
 
 var baseURl =
     'https://github.com/onepub-dev/dcli/raw/master/dcli/test/src/functions/fetch_downloads';
+/// @Throwing(ArgumentError)
+/// @Throwing(CreateDirException)
+/// @Throwing(DeleteDirException)
+/// @Throwing(DeleteException)
+/// @Throwing(core.TouchException)
 void main() {
   group('Fetch Single', () {
     // Don't know how to test this as it writes directly to stdout.

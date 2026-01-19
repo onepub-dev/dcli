@@ -48,18 +48,20 @@ import 'push.dart';
 ///  * [pwd]
 ///  * [cd]
 ///
+/// @Throwing(PopException)
 @Deprecated('Use join')
 void pop() => _Pop().pop();
 
 @Deprecated('Use join')
 class _Pop extends DCliFunction {
-  ///
+    ///
   /// Change the working directory back
   /// to its location before push was called.
   ///
   /// Note: change the directory changes the directory
   /// for all isolates.
   /// Throws [PopException].
+  /// @Throwing(PopException)
   // TODO(bsutton): to be removed in 8.x
   void pop() {
     if (Settings().isStackEmpty) {

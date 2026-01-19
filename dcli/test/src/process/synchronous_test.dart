@@ -1,6 +1,9 @@
 import 'package:dcli/dcli.dart';
 import 'package:test/test.dart';
 
+/// @Throwing(ArgumentError)
+/// @Throwing(DeleteException)
+/// @Throwing(TouchException)
 void main() {
   // test('synchronous ...', () async {
   //   final p = ProcessSync()..run(ProcessSettings('cat'));

@@ -1,6 +1,8 @@
 import 'package:dcli/dcli.dart';
 import 'package:test/test.dart';
 
+/// @Throwing(ArgumentError)
+/// @Throwing(InvalidType)
 void main() {
   test('capture ...', () async {
     final myprogress = Progress.capture();

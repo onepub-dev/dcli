@@ -8,6 +8,9 @@
 import 'package:dcli/dcli.dart';
 import 'package:path/path.dart';
 
+/// @Throwing(ArgumentError)
+/// @Throwing(CreateDirException)
+/// @Throwing(TouchException)
 void main() {
   echo('Hello World');
   echo('Where are we: $pwd?');

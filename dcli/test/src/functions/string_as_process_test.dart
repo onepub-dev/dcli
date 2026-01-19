@@ -11,6 +11,10 @@ import 'package:path/path.dart';
 import 'package:test/test.dart' as t;
 import 'package:test/test.dart';
 
+/// @Throwing(ArgumentError)
+/// @Throwing(CreateDirException)
+/// @Throwing(DeleteDirException)
+/// @Throwing(TouchException)
 void main() {
   t.group('StringAsProcess', () {
     t.test('Check .run executes', () async {
@@ -202,6 +206,7 @@ void main() {
   });
 }
 
+/// @Throwing(ArgumentError)
 String setup(String fsRoot) {
   final linesFile = join(fsRoot, TestFileSystem.testLinesFile);
 

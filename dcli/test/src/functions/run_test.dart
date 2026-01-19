@@ -7,6 +7,8 @@ import 'package:path/path.dart';
 import 'package:test/test.dart' as t;
 import 'package:test/test.dart';
 
+/// @Throwing(ArgumentError)
+/// @Throwing(CreateDirException)
 void main() {
   t.group('String as Process', () {
     t.test('Basic .run', () async {
@@ -117,6 +119,7 @@ void main() {
   });
 }
 
+/// @Throwing(ArgumentError)
 List<String?> runChild(String pathToChildScript) {
   /// The run_child script will be used .start(nothrow) the [pathToChildScript].
 

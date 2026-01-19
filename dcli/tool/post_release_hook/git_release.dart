@@ -9,6 +9,8 @@ import 'package:dcli/dcli.dart';
 import 'package:path/path.dart';
 import 'package:settings_yaml/settings_yaml.dart';
 
+/// @Throwing(ArgumentError)
+/// @Throwing(SettingsYamlException)
 void main(List<String> args) {
   final project = DartProject.self;
 

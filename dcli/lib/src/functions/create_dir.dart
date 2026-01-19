@@ -24,6 +24,7 @@
 /// If you pass in [pathToTempDir] it will NOT be deleted regardless
 /// of the value of [keep].
 /// Throws [UnsupportedError] as method is deprecated.
+/// @Throwing(UnsupportedError)
 @Deprecated('Use core.withTempDirAsync as this method is considered unsafe')
 R withTempDir<R>(R Function(String tempDir) action,
     {bool keep = false, String? pathToTempDir}) {

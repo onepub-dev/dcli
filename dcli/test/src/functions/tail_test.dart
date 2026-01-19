@@ -8,6 +8,9 @@
 import 'package:dcli/dcli.dart';
 import 'package:test/test.dart';
 
+/// @Throwing(ArgumentError)
+/// @Throwing(DeleteException)
+/// @Throwing(TouchException)
 void main() {
   test('tail with more than required', () async {
     await withTempFileAsync((tmp) async {

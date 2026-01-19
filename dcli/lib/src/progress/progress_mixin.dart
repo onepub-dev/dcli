@@ -16,7 +16,8 @@ mixin ProgressMixin implements Progress {
     }
   }
 
-  /// Throws [UnimplementedError].
+    /// Throws [UnimplementedError].
+  /// @Throwing(UnimplementedError)
   @override
   Stream<List<int>> get stream => throw UnimplementedError();
 

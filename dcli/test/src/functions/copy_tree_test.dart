@@ -13,6 +13,12 @@ import 'package:path/path.dart';
 import 'package:test/test.dart' as t;
 import 'package:test/test.dart';
 
+/// @Throwing(ArgumentError)
+/// @Throwing(CopyTreeException)
+/// @Throwing(CreateDirException)
+/// @Throwing(DeleteDirException)
+/// @Throwing(RangeError)
+/// @Throwing(TouchException)
 void main() {
   t.group('copyTree', () {
     t.test('empty target ', () async {

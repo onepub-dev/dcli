@@ -41,10 +41,14 @@ const lineDelimiterOption = 'line-delimiter';
 const sortkeyOption = 'sortkey';
 const outputOption = 'output';
 
+/// @Throwing(ArgParserException)
+/// @Throwing(ArgumentError)
 void main(List<String> args) {
   dsort(args);
 }
 
+/// @Throwing(ArgParserException)
+/// @Throwing(ArgumentError)
 void dsort(List<String> args) {
   final columns = <Column>[];
   late String fieldDelimiter;

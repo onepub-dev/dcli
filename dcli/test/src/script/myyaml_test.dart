@@ -12,6 +12,8 @@ import 'package:dcli/src/script/my_yaml.dart';
 import 'package:dcli_test/dcli_test.dart';
 import 'package:test/test.dart';
 
+/// @Throwing(ArgumentError)
+/// @Throwing(InvalidType)
 void main() {
   test('Project Name', () async {
     await TestFileSystem().withinZone((fs) async {

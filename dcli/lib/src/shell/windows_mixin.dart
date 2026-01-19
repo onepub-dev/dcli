@@ -113,9 +113,10 @@ mixin WindowsMixin {
     /// NO OP under windows as its not possible and not needed.
   }
 
-  /// Run [action] throwing if the process isn't running as a
+    /// Run [action] throwing if the process isn't running as a
   /// Windows Administrator
   /// Throws [ShellException].
+  /// @Throwing(ShellException)
   void withPrivileges(RunPrivileged action, {bool allowUnprivileged = false}) {
     if (!allowUnprivileged && !Shell.current.isPrivilegedUser) {
       throw ShellException(
@@ -125,8 +126,9 @@ mixin WindowsMixin {
     action();
   }
 
-  /// identical to [withPrivileges] except [action] is async.
+    /// identical to [withPrivileges] except [action] is async.
   /// Throws [ShellException].
+  /// @Throwing(ShellException)
   Future<void> withPrivilegesAsync(RunPrivilegedAsync action,
       {bool allowUnprivileged = false}) async {
     if (!allowUnprivileged && !Shell.current.isPrivilegedUser) {

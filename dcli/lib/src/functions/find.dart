@@ -141,15 +141,19 @@ class FindProgress extends InternalProgress {
     required this.types,
   });
 
-  /// If you need to perform async operations you should use
-  ///  [core.find].
+        /// If you need to perform async operations you should use
+    ///  [core.find].
+    /// @Throwing(ArgumentError)
+    /// @Throwing(core.FindException)
   @override
   void forEach(LineAction action) => _forEach((line) {
         action(line);
         return true;
       });
 
-  /// Internal method so we can cancel the stream.
+        /// Internal method so we can cancel the stream.
+    /// @Throwing(ArgumentError)
+    /// @Throwing(core.FindException)
   void _forEach(CancelableLineAction action) {
     core.find(
       pattern,
@@ -162,8 +166,10 @@ class FindProgress extends InternalProgress {
     );
   }
 
-  /// Returns the first line from the command or
-  /// null if no lines where returned
+        /// Returns the first line from the command or
+    /// null if no lines where returned
+    /// @Throwing(ArgumentError)
+    /// @Throwing(core.FindException)
   String? get firstLine {
     String? first;
     _forEach((line) {

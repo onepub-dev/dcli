@@ -20,6 +20,7 @@ void _appendIfAbsent(String newPath) {
   }
 }
 
+/// @Throwing(ArgumentError)
 void main() {
   test(
     'setPath',

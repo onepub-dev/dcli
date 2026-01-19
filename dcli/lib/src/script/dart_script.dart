@@ -42,6 +42,7 @@ class DartScript {
 
   DartProject? _project;
 
+  /// @Throwing(ArgumentError)
   factory DartScript.createScript(
       {required DartProject project,
       required String scriptName,
@@ -167,6 +168,7 @@ class DartScript {
   /// True if the script is compiled.
   bool get isCompiled => _isCompiled;
 
+  /// @Throwing(RangeError)
   static bool get _isCompiled =>
       p.extension(io.Platform.script.toFilePath()) != '.dart' &&
       !_isPubGlobalActivated(io.Platform.script.toFilePath());
@@ -175,6 +177,8 @@ class DartScript {
   /// We do this by inspecting the stack looking for the test_api package
   /// so this method has very limited use and is intended for
   /// internal dcli testing.
+  /// @Throwing(ArgumentError)
+  /// @Throwing(FormatException)
   @visibleForTesting
   bool get inUnitTest {
     Frame? scriptFrame;
@@ -195,6 +199,7 @@ class DartScript {
   }
 
   /// Checks if the Script has been compiled and installed into the ~/.dcli/bin path
+  /// @Throwing(ArgumentError)
   bool get isInstalled => exists(pathToInstalledExe);
 
   /// True if the script has been installed via 'dart pub global active'
@@ -259,6 +264,11 @@ class DartScript {
   /// used. The [workingDirectory] should contain the pubspec.yaml that is used
   /// to compile the script.
   /// Throws [InvalidArgumentException].
+  /// @Throwing(ArgumentError)
+  /// @Throwing(CopyException)
+  /// @Throwing(DeleteException)
+  /// @Throwing(InvalidArgumentException)
+  /// @Throwing(MoveException)
   void compile({
     bool install = false,
     bool overwrite = false,
@@ -346,10 +356,12 @@ class DartScript {
 
   /// Returns the path to the executable if it was to be compiled into
   /// its local directory (the default action of compile).
+  /// @Throwing(ArgumentError)
   String get pathToExe => join(pathToScriptDirectory, exeName);
 
   /// Returns the path that the script would be installed to if
   /// compiled with dcli with the --install switch.
+  /// @Throwing(ArgumentError)
   String get pathToInstalledExe => join(Settings().pathToDCliBin, exeName);
 
   /// internal method do not use.

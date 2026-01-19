@@ -12,6 +12,7 @@ import 'package:path/path.dart';
 
 /// Start up a dart script in debug/profile mode
 ///
+/// @Throwing(RangeError)
 void main(List<String> args) {
   if (args.isEmpty) {
     printerr(red('You must pass in a dart script and optional args to run.'));

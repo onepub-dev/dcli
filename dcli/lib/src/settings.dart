@@ -50,6 +50,7 @@ class Settings {
 
   /// Returns a singleton providing
   /// access to DCli settings.
+  /// @Throwing(MissingDependencyException)
   factory Settings() {
     if (Scope.hasScopeKey(scopeKey)) {
       return Scope.use(scopeKey);
@@ -86,6 +87,7 @@ class Settings {
   /// The directory where we store all of dcli's
   /// configuration files.
   /// This will normally be ~/.dcli
+  /// @Throwing(ArgumentError)
   String get pathToDCli => _dcliPath ??= truepath(p.join(HOME, dcliDir));
 
   /// When you run dcli compile -i `<script>` the compiled exe
@@ -94,25 +96,31 @@ class Settings {
   /// The dcliBinPath is added to the OS's path
   /// allowing the installed scripts to be run from anywhere.
   /// This will normally be ~/.dcli/bin
+  /// @Throwing(ArgumentError)
   String get pathToDCliBin =>
       _dcliBinPath ??= truepath(p.join(HOME, dcliDir, 'bin'));
 
   /// path to the dcli template directory.
+  /// @Throwing(ArgumentError)
   @Deprecated('Use pathToTemplateScript or pathToTemplateProject')
   String get pathToTemplate => p.join(pathToDCli, templateDir);
 
   /// path to the dcli template directory.
+  /// @Throwing(ArgumentError)
   String get pathToTemplateProject =>
       p.join(pathToDCli, templateDir, 'project');
 
   /// Path to the directory where users can store their own custom templates
+  /// @Throwing(ArgumentError)
   String get pathToTemplateProjectCustom =>
       p.join(pathToDCli, templateDir, 'project', 'custom');
 
   /// path to the dcli template directory.
+  /// @Throwing(ArgumentError)
   String get pathToTemplateScript => p.join(pathToDCli, templateDir, 'script');
 
   /// Path to the directory where users can store their own custom templates
+  /// @Throwing(ArgumentError)
   String get pathToTemplateScriptCustom =>
       p.join(pathToDCli, templateDir, 'script', 'custom');
 
@@ -122,6 +130,7 @@ class Settings {
   /// dcli -v clean
   bool get isVerbose => core.Settings().isVerbose;
 
+  /// @Throwing(ArgumentError)
   Logger get logger => Logger('dcli');
 
   /// Turns on verbose logging.
@@ -131,6 +140,8 @@ class Settings {
 
   /// Logs a message to the console if the verbose
   /// settings are on.
+  /// @Throwing(ArgumentError)
+  /// @Throwing(FormatException)
   void verbose(String? string) {
     final frame = Trace.current().frames[1];
     core.Settings().verbose(string, frame: frame);
@@ -138,10 +149,12 @@ class Settings {
 
   /// we consider dcli installed if the ~/.dcli directory
   /// exists.
+  /// @Throwing(ArgumentError)
   bool get isInstalled => exists(installCompletedIndicator);
 
   /// returns the path to the file that we use to indicated
   /// that the install completed succesfully.
+  /// @Throwing(ArgumentError)
   String get installCompletedIndicator => join(pathToDCli, 'install_completed');
 
   /// Returns true if the directory stack

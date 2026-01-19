@@ -35,7 +35,9 @@ class HeadProgress extends InternalProgress {
 
   HeadProgress._internal(this._path, this._lines);
 
-  /// Read lines from the head of the file.
+        /// Read lines from the head of the file.
+    /// @Throwing(ArgumentError)
+    /// @Throwing(core.HeadException)
   @override
   void forEach(LineAction action) {
     core.head(_path, _lines).forEach(action);

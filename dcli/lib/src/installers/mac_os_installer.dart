@@ -16,7 +16,10 @@ import '../version/version.g.dart';
 ///
 
 class MacOSDCliInstaller {
-  /// returns true if it needed to install dart.
+        /// returns true if it needed to install dart.
+    /// @Throwing(ArgumentError)
+    /// @Throwing(InstallException)
+    /// @Throwing(MissingDependencyException)
   bool install({required bool installDart}) {
     var installedDart = false;
 
@@ -41,7 +44,8 @@ class MacOSDCliInstaller {
     return installedDart;
   }
 
-  /// Throws [InstallException].
+    /// Throws [InstallException].
+  /// @Throwing(InstallException)
   bool _installDart() {
     // first check that dart isn't already installed
     if (DartSdk().pathToDartExe != null) {

@@ -11,6 +11,8 @@ import 'package:dcli/src/shell/cmd_shell.dart';
 import 'package:dcli_core/dcli_core.dart' as core;
 import 'package:test/test.dart';
 
+/// @Throwing(ArgumentError)
+/// @Throwing(InvalidType)
 void main() {
   test('Detect Shell', () {
     final shell = Shell.current;

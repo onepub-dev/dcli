@@ -27,6 +27,8 @@ import 'package:path/path.dart';
 ///
 /// See:
 ///  * [join] in prefrence to cd/push/pop
+/// @Throwing(ArgumentError)
+/// @Throwing(CDException)
 @Deprecated('Use join')
 // TODO(bsutton): to be removed in 8.x
 void cd(String path) => CD().cd(path);
@@ -34,8 +36,10 @@ void cd(String path) => CD().cd(path);
 /// Class that implements the [cd] function.
 @Deprecated('Use join')
 class CD extends DCliFunction {
-  /// implements the [cd] (change dir) function.
-  /// Throws [CDException] if the path does not exist.
+        /// implements the [cd] (change dir) function.
+    /// Throws [CDException] if the path does not exist.
+    /// @Throwing(ArgumentError)
+    /// @Throwing(CDException)
   void cd(String path) {
     verbose(() => 'cd $path -> ${canonicalize(path)}');
 

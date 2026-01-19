@@ -14,6 +14,10 @@ import 'package:path/path.dart';
 import 'package:test/test.dart' as t;
 
 var _testDir = 'path_test';
+/// @Throwing(ArgumentError)
+/// @Throwing(CreateDirException)
+/// @Throwing(DeleteDirException)
+/// @Throwing(RangeError)
 void main() {
   t.group('Directory Path manipulation testing', () {
     t.test('absolute', () async {
@@ -75,6 +79,7 @@ class Paths {
 
   String? testFile;
 
+        /// @Throwing(ArgumentError)
   Paths(String fsRoot) {
     home = HOME;
     pathTestDir = join(fsRoot, _testDir, 'pathTestDir');
@@ -84,4 +89,5 @@ class Paths {
   }
 }
 
+/// @Throwing(ArgumentError)
 Paths setup(String fs) => Paths(fs);

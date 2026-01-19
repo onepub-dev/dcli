@@ -21,6 +21,11 @@ import '../../posix.dart';
 /// The [templateName] must be the name of a template file in the ~/.dcli/template/script directory.
 ///
 /// Throws [ScriptExistsException].
+/// @Throwing(ArgumentError)
+/// @Throwing(CopyException)
+/// @Throwing(DartProjectException)
+/// @Throwing(InvalidTemplateException)
+/// @Throwing(ScriptExistsException)
 DartScript scriptCreator(
     {required DartProject project,
     required String scriptName,
@@ -63,6 +68,9 @@ DartScript scriptCreator(
 }
 
 /// Throws [InvalidTemplateException].
+/// @Throwing(ArgumentError)
+/// @Throwing(CopyException)
+/// @Throwing(InvalidTemplateException)
 void _createFromTemplate(String pathToTemplate, String pathToScript,
     String templateName, String pathToProjectRoot, String scriptName) {
   final mainScript = join(pathToTemplate, 'main.dart');
@@ -80,6 +88,7 @@ void _createFromTemplate(String pathToTemplate, String pathToScript,
   }
 }
 
+/// @Throwing(ArgumentError)
 void _printCreated(String scriptName, DartProject project) {
   final runPath = scriptName.contains(Platform.pathSeparator)
       ? scriptName
@@ -105,6 +114,8 @@ void _printCreating(
 }
 
 /// Throws [DartProjectException].
+/// @Throwing(ArgumentError)
+/// @Throwing(DartProjectException)
 String _resolveTemplatePath(String templateName) {
   String? pathToTemplate;
   var found = false;

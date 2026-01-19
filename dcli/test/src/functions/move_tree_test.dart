@@ -14,6 +14,11 @@ import 'package:path/path.dart';
 import 'package:test/test.dart' as t;
 import 'package:test/test.dart';
 
+/// @Throwing(ArgumentError)
+/// @Throwing(CreateDirException)
+/// @Throwing(DeleteDirException)
+/// @Throwing(MoveTreeException)
+/// @Throwing(RangeError)
 void main() {
   t.group('moveTree', () {
     t.test('empty target ', () async {
@@ -162,6 +167,7 @@ void main() {
 }
 
 /// checks that the given list of files no longer exists.
+/// @Throwing(ArgumentError)
 bool hasMoved(List<String> files) {
   var moved = true;
   for (final file in files) {

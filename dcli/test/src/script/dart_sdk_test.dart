@@ -12,6 +12,10 @@ import 'package:dcli/src/script/dart_sdk.dart';
 import 'package:path/path.dart' hide equals;
 import 'package:test/test.dart';
 
+/// @Throwing(ArgumentError)
+/// @Throwing(CreateDirException)
+/// @Throwing(DeleteDirException)
+/// @Throwing(TouchException)
 void main() {
   test(
     'Detect Dart SDK',

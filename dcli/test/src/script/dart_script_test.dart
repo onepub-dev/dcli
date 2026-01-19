@@ -14,6 +14,8 @@ import 'package:path/path.dart' as p;
 import 'package:path/path.dart' hide equals;
 import 'package:test/test.dart';
 
+/// @Throwing(ArgumentError)
+/// @Throwing(RangeError)
 void main() {
   test('dart script ...', ()  {
     expect(

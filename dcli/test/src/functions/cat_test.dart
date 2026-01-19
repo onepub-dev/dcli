@@ -15,6 +15,10 @@ import 'package:test/test.dart';
 import '../util/test_utils.dart';
 
 late String testFile;
+/// @Throwing(ArgumentError)
+/// @Throwing(CatException)
+/// @Throwing(CreateDirException)
+/// @Throwing(DeleteDirException)
 void main() {
   t.group('Cat', () {
     // Don't know how to test this as it writes directly to stdout.

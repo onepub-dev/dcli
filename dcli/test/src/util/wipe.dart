@@ -8,6 +8,8 @@
 import 'package:dcli/dcli.dart';
 
 /// Wipes the entire HOME/.dcli directory tree.
+/// @Throwing(ArgumentError)
+/// @Throwing(DeleteDirException)
 void wipe() {
   final dcliPath = Settings().pathToDCli;
   if (exists(dcliPath)) {

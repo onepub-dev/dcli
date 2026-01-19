@@ -9,6 +9,9 @@ import 'package:dcli/dcli.dart';
 import 'package:dcli/posix.dart';
 import 'package:test/test.dart';
 
+/// @Throwing(ArgumentError)
+/// @Throwing(DeleteException)
+/// @Throwing(TouchException)
 void main() {
   test('chown ...', () async {
     await withTempFileAsync((test) async {
@@ -16,5 +19,7 @@ void main() {
 
       chown(test, group: user, user: user);
     });
-  }, tags: ['privileged'], skip: Settings().isWindows || !Shell.current.isPrivilegedUser);
+  },
+      tags: ['privileged'],
+      skip: Settings().isWindows || !Shell.current.isPrivilegedUser);
 }

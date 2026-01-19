@@ -32,15 +32,19 @@ import 'pop.dart';
 ///  * [cd]
 ///  * [pop]
 ///  * [pwd]
+/// @Throwing(ArgumentError)
+/// @Throwing(PushException)
 @Deprecated('Use join')
 // TODO(bsutton): to be removed in 8.x
 void push(String path) => _Push().push(path);
 
 @Deprecated('Use join')
 class _Push extends core.DCliFunction {
-  /// Push the pwd onto the stack and change the
-  /// current directory to [path].
-  /// Throws [PushException].
+        /// Push the pwd onto the stack and change the
+    /// current directory to [path].
+    /// Throws [PushException].
+    /// @Throwing(ArgumentError)
+    /// @Throwing(PushException)
   void push(String path) {
     verbose(() => 'push: path: $path new -> ${core.truepath(path)}');
 

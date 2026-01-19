@@ -31,6 +31,7 @@
 /// NOTE: [action] must NOT be async.
 /// @ see core.withTempFile if you meed to use an async action.
 /// Throws [UnimplementedError].
+/// @Throwing(UnimplementedError)
 @Deprecated('Use dcli_core.withTempFileAsync instead')
 R withTempFile<R>(
   R Function(String tempFile) action, {

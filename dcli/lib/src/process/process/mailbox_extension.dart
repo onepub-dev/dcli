@@ -4,6 +4,7 @@ import 'message.dart';
 import 'process_in_isolate.dart';
 
 extension MailBoxMessage on Mailbox {
+        /// @Throwing(MailBoxClosedException)
   Future<void> postMessage(Message message) async {
     var delay = const Duration(milliseconds: 1);
     var lastLog = DateTime.fromMillisecondsSinceEpoch(0); // track last log time

@@ -301,6 +301,7 @@ void deleteSymlink(String linkPath) {
 /// See:
 ///  * [deleteSymlink]
 ///  * [createSymLink]
+/// @Throwing(ArgumentError)
 String resolveSymLink(String pathToLink) {
   final normalised = canonicalize(pathToLink);
 

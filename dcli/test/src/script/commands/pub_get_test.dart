@@ -13,6 +13,7 @@ import 'package:dcli_test/dcli_test.dart';
 import 'package:path/path.dart';
 import 'package:test/test.dart';
 
+/// @Throwing(ArgumentError)
 void main() {
   group('Pub Get', () {
     test('Do it', () async {

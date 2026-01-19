@@ -14,6 +14,14 @@ import 'package:path/path.dart' hide equals;
 import 'package:pubspec_manager/pubspec_manager.dart';
 import 'package:test/test.dart';
 
+/// @Throwing(ArgumentError)
+/// @Throwing(core.CopyTreeException)
+/// @Throwing(CreateDirException)
+/// @Throwing(DeleteDirException)
+/// @Throwing(DuplicateKeyException)
+/// @Throwing(NotFoundException)
+/// @Throwing(PubSpecException)
+/// @Throwing(VersionException)
 void main() {
   test('dart project directories', ()  {
     expect(DartProject.fromPath(pwd).pathToProjectRoot, equals(truepath('.')));

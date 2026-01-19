@@ -21,10 +21,12 @@ const hrFileNotFound = -2147024894;
 const defaultRegistryValueName = '';
 
 /// Collection of Windows specific registry functions.
-
 /// Appends [newPath] to the Windows PATH environment variable.
 ///
 /// A [WindowsException] is thrown if the call falls.
+/// @Throwing(ArgumentError)
+/// @Throwing(UnsupportedError)
+/// @Throwing(WindowsException)
 void regAppendToPath(String newPath) {
   final paths = _getPaths();
   if (!_isOnUserPath(newPath, paths)) {
@@ -37,11 +39,15 @@ void regAppendToPath(String newPath) {
 /// path.
 ///
 /// Note: this does not check the system path.
+/// @Throwing(ArgumentError)
+/// @Throwing(UnsupportedError)
+/// @Throwing(WindowsException)
 bool regIsOnUserPath(String path) {
   final paths = _getPaths();
   return _isOnUserPath(path, paths);
 }
 
+/// @Throwing(ArgumentError)
 bool _isOnUserPath(String path, List<String> userPaths) {
   final canonicalPath = canonicalize(path);
   return userPaths.map(canonicalize).contains(canonicalPath);
@@ -50,6 +56,9 @@ bool _isOnUserPath(String path, List<String> userPaths) {
 /// Prepend [newPath] to the Windows PATH environment variable.
 ///
 /// A [WindowsException] is thrown if the call falls.
+/// @Throwing(ArgumentError)
+/// @Throwing(UnsupportedError)
+/// @Throwing(WindowsException)
 void regPrependToPath(String newPath) {
   final paths = _getPaths();
 
@@ -59,6 +68,8 @@ void regPrependToPath(String newPath) {
   }
 }
 
+/// @Throwing(UnsupportedError)
+/// @Throwing(WindowsException)
 List<String> _getPaths() {
   final paths = regGetExpandString(
     HKEY_CURRENT_USER,
@@ -69,6 +80,7 @@ List<String> _getPaths() {
   return paths;
 }
 
+/// @Throwing(WindowsException)
 void _replacePath(List<String> paths) {
   regSetExpandString(
     HKEY_CURRENT_USER,
@@ -86,6 +98,8 @@ void _replacePath(List<String> paths) {
 /// If [expand] is set to true (the default) then any embedded
 /// enironment variables are expanded out.
 /// A [WindowsException] is thrown the call falls.
+/// @Throwing(UnsupportedError)
+/// @Throwing(WindowsException)
 List<String> regGetUserPath({bool expand = true}) =>
     regGetExpandString(HKEY_CURRENT_USER, 'Environment', 'Path', expand: expand)
         .split(';');
@@ -98,6 +112,7 @@ List<String> regGetUserPath({bool expand = true}) =>
 /// you can destroy your Windows PATH which will stop lots
 ///  of things (everything?) from working.
 /// A [WindowsException] is thrown the call falls.
+/// @Throwing(WindowsException)
 void regReplacePath(List<String> newPaths) {
   // const char * what = "Environment";
   // DWORD rv;
@@ -117,6 +132,7 @@ void regReplacePath(List<String> newPaths) {
 /// Sets a Windows registry key to a string value of type REG_SZ.
 ///
 /// A [WindowsException] is thrown the call falls.
+/// @Throwing(WindowsException)
 void regSetString(
   int hkey,
   String subKey,
@@ -139,6 +155,7 @@ void regSetString(
 ///
 /// No value is set.
 /// A [WindowsException] is thrown the call falls.
+/// @Throwing(WindowsException)
 void regSetNone(
   int hkey,
   String subKey,
@@ -165,6 +182,8 @@ void regSetNone(
 /// https://docs.microsoft.com/en-us/windows/win32/sysinfo/registry-key-security-and-access-rights
 ///
 /// throws [WindowsException] if the get failes
+/// @Throwing(UnsupportedError)
+/// @Throwing(WindowsException)
 String regGetString(
   int hkey,
   String subKey,
@@ -186,6 +205,7 @@ String regGetString(
 /// Sets a Windows registry key to a string value of type REG_SZ.
 ///
 /// A [WindowsException] is thrown the call falls.
+/// @Throwing(WindowsException)
 void regSetDWORD(
   int hkey,
   String subKey,
@@ -207,6 +227,7 @@ void regSetDWORD(
 /// Reads a DWORD from the registry.
 ///
 /// A [WindowsException] is thrown the call falls.
+/// @Throwing(WindowsException)
 int regGetDWORD(
   int hkey,
   String subKey,
@@ -234,6 +255,7 @@ int regGetDWORD(
 ///
 /// [subKey] maybe be a path such as Microsoft/Windows
 /// A [WindowsException] is thrown if the delete fails.
+/// @Throwing(WindowsException)
 void regDeleteKey(
   int hkey,
   String subKey,
@@ -255,6 +277,7 @@ void regDeleteKey(
 /// [subKey] maybe be a path such as Microsoft/Windows
 /// [valueName] is the name of the value stored under [subKey]
 /// A [WindowsException] is thrown if the delete fails.
+/// @Throwing(WindowsException)
 void regDeleteValue(
   int hkey,
   String subKey,
@@ -280,6 +303,8 @@ void regDeleteValue(
 /// If [expand] is true then any environment variables in the value
 /// are expanded. If [expand] is false then the value is returned un-expanded.
 /// A [WindowsException] is thrown the call falls.
+/// @Throwing(UnsupportedError)
+/// @Throwing(WindowsException)
 String regGetExpandString(
   int hkey,
   String subKey,
@@ -314,6 +339,7 @@ String regGetExpandString(
 /// Registry. The [value] is set to type REG_EXPAND_SZ.
 ///
 /// A [WindowsException] is thrown the call falls.
+/// @Throwing(WindowsException)
 void regSetExpandString(
   int hkey,
   String subKey,
@@ -387,6 +413,7 @@ class _RegResults {
   List<String> unpackStringArray() =>
       pResult.cast<Utf16>().unpackStringArray(size);
 
+        /// @Throwing(UnsupportedError)
   String toDartString() => pResult.cast<Utf16>().toDartString();
 
   int toDWORD() => pResult.cast<Uint32>().value;
@@ -395,6 +422,7 @@ class _RegResults {
 /// You must free the returned value using calloc.free
 ///
 /// A [WindowsException] is thrown the call falls.
+/// @Throwing(WindowsException)
 _RegResults _regGetValue(
   int hkey,
   String subKey,
@@ -457,6 +485,7 @@ _RegResults _regGetValue(
 ///   such as REG_SZ.
 /// [valueSize] is the size of pValue in bytes.
 /// A [WindowsException] is thrown the call falls.
+/// @Throwing(WindowsException)
 void _regSetValue(
   int hkey,
   String subKey,
@@ -496,6 +525,7 @@ void _regSetValue(
 /// https://docs.microsoft.com/en-us/windows/win32/sysinfo/registry-key-security-and-access-rights
 ///
 /// A [WindowsException] is thrown the call falls.
+/// @Throwing(WindowsException)
 R _withRegKey<R>(
   int hkey,
   String subKey,
@@ -561,6 +591,7 @@ bool regKeyExists(
 /// Creates a registry key.
 ///
 /// Throws a [WindowsException] if the key cannot be created.
+/// @Throwing(WindowsException)
 void regCreateKey(
   int hKey,
   String subKey,

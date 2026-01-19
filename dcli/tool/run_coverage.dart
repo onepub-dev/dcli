@@ -16,6 +16,8 @@ import 'package:path/path.dart';
 ///
 /// For details on installing dcli.
 ///
+/// @Throwing(ArgumentError)
+/// @Throwing(CreateDirException)
 
 void main() {
   final projectRoot = findProjectRoot();
@@ -35,6 +37,7 @@ void main() {
 }
 
 /// Find the directory that has a pubspec.yaml
+/// @Throwing(ArgumentError)
 String findProjectRoot() {
   var root = pwd;
 

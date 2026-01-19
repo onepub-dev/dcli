@@ -12,6 +12,8 @@ import '../../dcli.dart';
 
 /// checks if the passed [path] (a file or directory) is
 /// writable by the user that owns this process
+/// @Throwing(posix.StatException)
+/// @Throwing(UnsupportedError)
 bool isWritable(String path) {
   core.verbose(() => 'isWritable: ${truepath(path)}');
   return _checkPermission(path, _writeBitMask);
@@ -19,6 +21,8 @@ bool isWritable(String path) {
 
 /// checks if the passed [path] (a file or directory) is
 /// readable by the user that owns this process
+/// @Throwing(posix.StatException)
+/// @Throwing(UnsupportedError)
 bool isReadable(String path) {
   core.verbose(() => 'isReadable: ${truepath(path)}');
   return _checkPermission(path, _readBitMask);
@@ -26,6 +30,8 @@ bool isReadable(String path) {
 
 /// checks if the passed [path] (a file or directory) is
 /// executable by the user that owns this process
+/// @Throwing(posix.StatException)
+/// @Throwing(UnsupportedError)
 bool isExecutable(String path) {
   core.verbose(() => 'isExecutable: ${truepath(path)}');
   return Settings().isWindows || _checkPermission(path, _executeBitMask);
@@ -38,6 +44,8 @@ const _executeBitMask = 0x1;
 /// Checks if the user permission to act on the [path] (a file or directory)
 /// for the given permission bit mask. (read, write or execute)
 /// Throws [UnsupportedError].
+/// @Throwing(posix.StatException)
+/// @Throwing(UnsupportedError)
 bool _checkPermission(String path, int permissionBitMask) {
   core.verbose(
     () => '_checkPermission: ${truepath(path)} '
@@ -112,6 +120,7 @@ bool _checkPermission(String path, int permissionBitMask) {
 /// Returns true if the owner of this process
 /// is a member of [group].
 /// Throws [UnsupportedError].
+/// @Throwing(UnsupportedError)
 bool isMemberOfGroup(String group) {
   core.verbose(() => 'isMemberOfGroup: $group');
 

@@ -12,6 +12,8 @@ import '../../dcli.dart';
 /// Returns the amount of space (in bytes) available on the disk
 /// that [path] exists on.
 /// Throws [FileSystemException].
+/// @Throwing(ArgumentError)
+/// @Throwing(FileSystemException)
 int availableSpace(String path) {
   if (!exists(path)) {
     throw FileSystemException(
