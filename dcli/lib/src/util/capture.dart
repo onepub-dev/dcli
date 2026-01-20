@@ -43,8 +43,8 @@ Future<Progress> capture<R>(Future<R> Function() action,
     },
     zoneValues: zoneValues,
     zoneSpecification: ZoneSpecification(
-      print: (self, parent, zone, line) => progressImpl
-          .addToStdout(progressImpl.encoding.encode('$line\n')),
+      print: (self, parent, zone, line) =>
+          progressImpl.addToStdout(progressImpl.encoding.encode('$line\n')),
     ),
   );
 

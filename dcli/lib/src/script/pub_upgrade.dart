@@ -22,7 +22,7 @@ class PubUpgrade {
   ///
   PubUpgrade(this._project);
 
-    /// Runs the pub get command against
+  /// Runs the pub get command against
   /// the project working dir.
   /// Throws [PubUpgradeException].
   /// @Throwing(PubUpgradeException)

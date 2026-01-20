@@ -13,7 +13,7 @@ import 'package:test/test.dart';
 /// @Throwing(TouchException)
 void main() {
   test('replace ...', () async {
-    await withTempFileAsync((temp) async{
+    await withTempFileAsync((temp) async {
       temp
         ..write('abc123')
         ..append('def246');

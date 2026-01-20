@@ -166,7 +166,7 @@ class _MenuRange extends AskValidator {
 
   const _MenuRange(this.limit);
 
-    /// Throws [AskValidatorException].
+  /// Throws [AskValidatorException].
   /// @Throwing(AskValidatorException)
   @override
   String validate(String line, {String? customErrorMessage}) {

@@ -14,6 +14,7 @@ import 'package:path/path.dart';
 import 'package:test/test.dart' as t;
 
 var _testDir = 'path_test';
+
 /// @Throwing(ArgumentError)
 /// @Throwing(CreateDirException)
 /// @Throwing(DeleteDirException)
@@ -79,7 +80,7 @@ class Paths {
 
   String? testFile;
 
-        /// @Throwing(ArgumentError)
+  /// @Throwing(ArgumentError)
   Paths(String fsRoot) {
     home = HOME;
     pathTestDir = join(fsRoot, _testDir, 'pathTestDir');

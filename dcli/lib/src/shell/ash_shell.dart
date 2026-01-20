@@ -29,7 +29,7 @@ class AshShell with ShellMixin, PosixShell {
 
   // adds bash cli completion for dcli
   // by adding a 'complete' command to ~/.bashrc
-    /// Throws [UnimplementedError].
+  /// Throws [UnimplementedError].
   /// @Throwing(UnimplementedError)
   @override
   void installTabCompletion({bool? quiet = false}) {
@@ -44,19 +44,19 @@ class AshShell with ShellMixin, PosixShell {
   @override
   bool get canModifyPath => false;
 
-    /// Throws [UnsupportedError].
+  /// Throws [UnsupportedError].
   /// @Throwing(UnsupportedError)
   @override
   @Deprecated('Use appendToPATH')
   bool addToPATH(String path) => throw UnsupportedError('Not supported in ash');
 
-    /// Throws [UnsupportedError].
+  /// Throws [UnsupportedError].
   /// @Throwing(UnsupportedError)
   @override
   bool appendToPATH(String path) =>
       throw UnsupportedError('Not supported in ash');
 
-    /// Throws [UnsupportedError].
+  /// Throws [UnsupportedError].
   /// @Throwing(UnsupportedError)
   @override
   bool prependToPATH(String path) =>
@@ -71,7 +71,7 @@ class AshShell with ShellMixin, PosixShell {
   @override
   String get startScriptName => '.ashrc';
 
-        /// @Throwing(ArgumentError)
+  /// @Throwing(ArgumentError)
   @override
   String get pathToStartScript => join(HOME, startScriptName);
 

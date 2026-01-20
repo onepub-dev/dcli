@@ -38,7 +38,7 @@ class EnumHelper {
     return ReCase().titleCase(name.substring(period + 1));
   }
 
-    /// returns a enum based on its name.
+  /// returns a enum based on its name.
   /// Throws [Exception].
   /// @Throwing(Exception)
   T getEnum<T>(String enumName, List<T> values) {

@@ -94,7 +94,7 @@ class RunnableProcess {
   /// returns the original command line that started this process.
   String get cmdLine => '${_parsed.cmd} ${_parsed.args.join(' ')}';
 
-    /// Experiemental - DO NOT USE
+  /// Experiemental - DO NOT USE
   /// Throws [ProcessException].
   /// @Throwing(ProcessException)
   Stream<List<int>> get stream {
@@ -105,7 +105,7 @@ class RunnableProcess {
     // return process.stdout;
   }
 
-    /// Experiemental - DO NOT USE
+  /// Experiemental - DO NOT USE
   /// Throws [ProcessException].
   /// @Throwing(ProcessException)
   Sink<List<int>> get sink {
@@ -116,60 +116,60 @@ class RunnableProcess {
     // return process.stdin;
   }
 
-        /// runs the process and returns as soon as the process
-    /// has started.
-    ///
-    /// This method is used to stream apps output when
-    /// using [Progress.stream].
-    ///
-    /// The [privileged] argument attempts to escalate the priviledge
-    /// that the command is run
-    /// at.
-    /// If the script is already running in a priviledge environment
-    /// this switch will have no
-    /// affect.
-    /// Running a command with the [privileged] switch may cause the
-    /// OS to prompt the user
-    /// for a password.
-    ///
-    /// For Linux passing the [privileged] argument will cause the
-    /// command to be prefix
-    /// vai the `sudo` command.
-    ///
-    /// Current [privileged] is only supported under Linux.
-    ///
-    /// runs the process.
-    ///
-    /// Any output from the command (stderr and stdout) is displayed
-    ///  on the console.
-    ///
-    /// Pass an appropriate [progress] if you want to print either of these.
-    ///
-    /// The [privileged] argument attempts to escalate the priviledge
-    /// that the command is run
-    /// at.
-    /// If the script is already running in a priviledge environment
-    /// this switch will have no
-    /// affect.
-    /// Running a command with the [privileged] switch may cause the
-    /// OS to prompt the user
-    /// for a password.
-    ///
-    /// For Linux passing the [privileged] argument will cause the
-    /// command to be prefix
-    /// vai the `sudo` command.
-    ///
-    /// Current [privileged] is only supported under Linux.
-    ///
-    /// If you pass [detached] = true then the process is spawned but we
-    /// don't wait for it to complete nor is any io available.
-    ///
-    /// if [nothrow] is false and the command returns a non zero exit code
-    /// then a [RunException] is thrown.
-    /// @Throwing(ArgumentError)
-    /// @Throwing(MailBoxClosedException)
-    /// @Throwing(RangeError)
-    /// @Throwing(core.RunException)
+  /// runs the process and returns as soon as the process
+  /// has started.
+  ///
+  /// This method is used to stream apps output when
+  /// using [Progress.stream].
+  ///
+  /// The [privileged] argument attempts to escalate the priviledge
+  /// that the command is run
+  /// at.
+  /// If the script is already running in a priviledge environment
+  /// this switch will have no
+  /// affect.
+  /// Running a command with the [privileged] switch may cause the
+  /// OS to prompt the user
+  /// for a password.
+  ///
+  /// For Linux passing the [privileged] argument will cause the
+  /// command to be prefix
+  /// vai the `sudo` command.
+  ///
+  /// Current [privileged] is only supported under Linux.
+  ///
+  /// runs the process.
+  ///
+  /// Any output from the command (stderr and stdout) is displayed
+  ///  on the console.
+  ///
+  /// Pass an appropriate [progress] if you want to print either of these.
+  ///
+  /// The [privileged] argument attempts to escalate the priviledge
+  /// that the command is run
+  /// at.
+  /// If the script is already running in a priviledge environment
+  /// this switch will have no
+  /// affect.
+  /// Running a command with the [privileged] switch may cause the
+  /// OS to prompt the user
+  /// for a password.
+  ///
+  /// For Linux passing the [privileged] argument will cause the
+  /// command to be prefix
+  /// vai the `sudo` command.
+  ///
+  /// Current [privileged] is only supported under Linux.
+  ///
+  /// If you pass [detached] = true then the process is spawned but we
+  /// don't wait for it to complete nor is any io available.
+  ///
+  /// if [nothrow] is false and the command returns a non zero exit code
+  /// then a [RunException] is thrown.
+  /// @Throwing(ArgumentError)
+  /// @Throwing(MailBoxClosedException)
+  /// @Throwing(RangeError)
+  /// @Throwing(core.RunException)
   Progress run({
     Progress? progress,
     bool terminal = false,
@@ -220,32 +220,32 @@ class RunnableProcess {
     return progress;
   }
 
-        /// Starts a process  provides additional options to [run].
-    ///
-    /// This is an internal function and should not be exposed.
-    /// It requires addition logic to read stdout/stderr or
-    /// the running command can end up suspended.
-    ///
-    /// The [privileged] argument attempts to escalate the priviledge
-    /// that the command is run with.
-    /// If the script is already running in a priviledge environment
-    /// this switch will have no affect.
-    ///
-    /// Running a command with the [privileged] switch may cause the
-    /// OS to prompt the user for a password.
-    ///
-    /// For Linux passing the [privileged] argument will cause the
-    ///  command to be prefix vai the `sudo` command.
-    ///
-    /// The [privileged] option is ignored under Windows.
-    ///
-    /// If you pass [detached] = true then the process is spawned
-    /// but we don't wait for it to complete nor is any io available.
-    /// Throws [RunException].
-    /// @Throwing(ArgumentError)
-    /// @Throwing(MailBoxClosedException)
-    /// @Throwing(RangeError)
-    /// @Throwing(core.RunException)
+  /// Starts a process  provides additional options to [run].
+  ///
+  /// This is an internal function and should not be exposed.
+  /// It requires addition logic to read stdout/stderr or
+  /// the running command can end up suspended.
+  ///
+  /// The [privileged] argument attempts to escalate the priviledge
+  /// that the command is run with.
+  /// If the script is already running in a priviledge environment
+  /// this switch will have no affect.
+  ///
+  /// Running a command with the [privileged] switch may cause the
+  /// OS to prompt the user for a password.
+  ///
+  /// For Linux passing the [privileged] argument will cause the
+  ///  command to be prefix vai the `sudo` command.
+  ///
+  /// The [privileged] option is ignored under Windows.
+  ///
+  /// If you pass [detached] = true then the process is spawned
+  /// but we don't wait for it to complete nor is any io available.
+  /// Throws [RunException].
+  /// @Throwing(ArgumentError)
+  /// @Throwing(MailBoxClosedException)
+  /// @Throwing(RangeError)
+  /// @Throwing(core.RunException)
   void start({
     required ProgressImpl progress,
     bool nothrow = false,

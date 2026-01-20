@@ -36,10 +36,10 @@ void cd(String path) => CD().cd(path);
 /// Class that implements the [cd] function.
 @Deprecated('Use join')
 class CD extends DCliFunction {
-        /// implements the [cd] (change dir) function.
-    /// Throws [CDException] if the path does not exist.
-    /// @Throwing(ArgumentError)
-    /// @Throwing(CDException)
+  /// implements the [cd] (change dir) function.
+  /// Throws [CDException] if the path does not exist.
+  /// @Throwing(ArgumentError)
+  /// @Throwing(CDException)
   void cd(String path) {
     verbose(() => 'cd $path -> ${canonicalize(path)}');
 

@@ -113,7 +113,7 @@ mixin WindowsMixin {
     /// NO OP under windows as its not possible and not needed.
   }
 
-    /// Run [action] throwing if the process isn't running as a
+  /// Run [action] throwing if the process isn't running as a
   /// Windows Administrator
   /// Throws [ShellException].
   /// @Throwing(ShellException)
@@ -126,7 +126,7 @@ mixin WindowsMixin {
     action();
   }
 
-    /// identical to [withPrivileges] except [action] is async.
+  /// identical to [withPrivileges] except [action] is async.
   /// Throws [ShellException].
   /// @Throwing(ShellException)
   Future<void> withPrivilegesAsync(RunPrivilegedAsync action,

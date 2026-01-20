@@ -23,7 +23,7 @@ import 'package:test/test.dart';
 /// @Throwing(PubSpecException)
 /// @Throwing(VersionException)
 void main() {
-  test('dart project directories', ()  {
+  test('dart project directories', () {
     expect(DartProject.fromPath(pwd).pathToProjectRoot, equals(truepath('.')));
     expect(
       DartProject.fromPath(pwd).pathToPubSpec,

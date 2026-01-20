@@ -22,7 +22,7 @@ import 'package:test/test.dart';
 /// @Throwing(core.TouchException)
 void main() {
   t.group('Find', () {
-    t.test('manualRecursion', ()  {
+    t.test('manualRecursion', () {
       final testScriptPath = truepath(DartProject.self.pathToProjectRoot, '..',
           'dcli_unit_tester', 'test', 'test_script');
 

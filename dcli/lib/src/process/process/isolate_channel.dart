@@ -1,6 +1,5 @@
 import 'dart:isolate';
 
-
 import 'package:native_synchronization_temp/native_synchronization.dart';
 
 import 'process_settings.dart';

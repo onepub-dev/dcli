@@ -46,11 +46,11 @@ int replace(
     _Replace().replace(path, existing, replacement, all: all);
 
 class _Replace extends core.DCliFunction {
-        /// @Throwing(ArgumentError)
-    /// @Throwing(CopyException)
-    /// @Throwing(DeleteException)
-    /// @Throwing(MoveException)
-    /// @Throwing(core.TouchException)
+  /// @Throwing(ArgumentError)
+  /// @Throwing(CopyException)
+  /// @Throwing(DeleteException)
+  /// @Throwing(MoveException)
+  /// @Throwing(core.TouchException)
   int replace(
     String path,
     Pattern existing,

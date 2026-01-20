@@ -16,9 +16,9 @@ import '../version/version.g.dart';
 ///
 
 class LinuxDCliInstaller {
-        /// returns true if it needed to install dart.
-    /// @Throwing(ArgumentError)
-    /// @Throwing(MissingDependencyException)
+  /// returns true if it needed to install dart.
+  /// @Throwing(ArgumentError)
+  /// @Throwing(MissingDependencyException)
   Future<bool> install({required bool installDart}) async {
     var installedDart = false;
 
@@ -48,7 +48,7 @@ class LinuxDCliInstaller {
     return installedDart;
   }
 
-        /// @Throwing(ArgumentError)
+  /// @Throwing(ArgumentError)
   Future<bool> _installDart() async {
     var installedDart = false;
     // first check that dart isn't already installed

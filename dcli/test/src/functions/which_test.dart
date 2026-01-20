@@ -15,7 +15,7 @@ import 'package:test/test.dart';
 void main() {
   test(
     'which ...',
-    ()  {
+    () {
       expect(which('ls').path, equals('/usr/bin/ls'));
       expect(which('ls').found, equals(true));
       expect(which('ls').notfound, equals(false));
@@ -26,7 +26,7 @@ void main() {
 
   test(
     'which ...',
-    ()  {
+    () {
       expect(which('regedit.exe').path,
           equalsIgnoringCase(r'C:\Windows\regedit.exe'));
       expect(which('regedit.exe').found, equals(true));

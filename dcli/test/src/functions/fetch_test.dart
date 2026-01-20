@@ -17,6 +17,7 @@ import 'package:test/test.dart';
 
 var baseURl =
     'https://github.com/onepub-dev/dcli/raw/master/dcli/test/src/functions/fetch_downloads';
+
 /// @Throwing(ArgumentError)
 /// @Throwing(CreateDirException)
 /// @Throwing(DeleteDirException)
@@ -248,7 +249,7 @@ void main() {
         const url = 'https://github.com/xx234la43adre';
 
         expect(
-          ()  => fetch(url: url, saveToPath: file),
+          () => fetch(url: url, saveToPath: file),
           throwsA(
             predicate<FetchException>(
               (e) => e.message.contains('Not Found') && e.errorCode == 404,
@@ -412,7 +413,7 @@ void main() {
           pathToData.write(content);
 
           expect(
-              ()  => fetch(
+              () => fetch(
                   url: 'https://httpbin.org/get',
                   data: FetchData.fromFile(pathToData),
                   saveToPath: file),

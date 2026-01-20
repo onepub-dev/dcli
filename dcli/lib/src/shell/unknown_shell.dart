@@ -44,7 +44,7 @@ class UnknownShell with ShellMixin {
   @Deprecated('Use appendToPATH')
   bool addToPATH(String path) => false;
 
-        /// @Throwing(ArgumentError)
+  /// @Throwing(ArgumentError)
   @override
   bool appendToPATH(String path) {
     if (Settings().isMacOS) {
@@ -56,7 +56,7 @@ class UnknownShell with ShellMixin {
     }
   }
 
-        /// @Throwing(ArgumentError)
+  /// @Throwing(ArgumentError)
   @override
   bool prependToPATH(String path) {
     if (Settings().isMacOS) {
@@ -68,8 +68,8 @@ class UnknownShell with ShellMixin {
     }
   }
 
-        ///
-    /// @Throwing(ArgumentError)
+  ///
+  /// @Throwing(ArgumentError)
   bool appendPathToMacOsPathd(String path) {
     var success = false;
     if (!isOnPATH(path)) {
@@ -95,19 +95,19 @@ class UnknownShell with ShellMixin {
     return success;
   }
 
-        /// @Throwing(ArgumentError)
+  /// @Throwing(ArgumentError)
   bool _appendToLinuxPath(String newPath) {
     final export = 'export PATH=\$PATH:$newPath';
     return _updateLinuxPath(newPath, export);
   }
 
-        /// @Throwing(ArgumentError)
+  /// @Throwing(ArgumentError)
   bool _prependToLinuxPath(String newPath) {
     final export = 'export PATH=\$PATH:$newPath';
     return _updateLinuxPath(newPath, export);
   }
 
-        /// @Throwing(ArgumentError)
+  /// @Throwing(ArgumentError)
   bool _updateLinuxPath(String path, String export) {
     var success = false;
     if (!isOnPATH(path)) {
@@ -119,8 +119,7 @@ class UnknownShell with ShellMixin {
             success = true;
           }
         }
-      }
-      catch (e) {
+      } catch (e) {
         printerr(
           red(
             "Unable to add dcli/bin to path as we couldn't write to $profile",
@@ -131,7 +130,7 @@ class UnknownShell with ShellMixin {
     return success;
   }
 
-    /// Throws [UnimplementedError].
+  /// Throws [UnimplementedError].
   /// @Throwing(UnimplementedError)
   @override
   void installTabCompletion({bool quiet = false}) => throw UnimplementedError();
@@ -154,14 +153,14 @@ class UnknownShell with ShellMixin {
   @override
   bool get hasStartScript => true;
 
-    /// Throws [Type].
+  /// Throws [Type].
   /// @Throwing(Type)
   @override
   // good enough
   // ignore: only_throw_errors
   String get startScriptName => throw UnimplementedError;
 
-    /// Throws [Type].
+  /// Throws [Type].
   /// @Throwing(Type)
   @override
   // good enough
@@ -178,7 +177,7 @@ class UnknownShell with ShellMixin {
   String privilegesRequiredMessage(String app) =>
       'You need to be a privileged user to run $app';
 
-    /// Throws [UnsupportedError].
+  /// Throws [UnsupportedError].
   /// @Throwing(UnsupportedError)
   @override
   Future<bool> install({bool installDart = false, bool activate = true}) async {
@@ -196,7 +195,7 @@ class UnknownShell with ShellMixin {
   @override
   String? checkInstallPreconditions() => null;
 
-    /// Throws [UnimplementedError].
+  /// Throws [UnimplementedError].
   /// @Throwing(UnimplementedError)
   @override
   bool get isSudo => throw UnimplementedError();
@@ -234,12 +233,12 @@ class UnknownShell with ShellMixin {
     releasePrivileges();
   }
 
-    /// Throws [UnimplementedError].
+  /// Throws [UnimplementedError].
   /// @Throwing(UnimplementedError)
   @override
   bool get isPrivilegedProcess => throw UnimplementedError();
 
-    /// Throws [UnimplementedError].
+  /// Throws [UnimplementedError].
   /// @Throwing(UnimplementedError)
   @override
   bool get isPrivilegedPasswordRequired => throw UnimplementedError();

@@ -12,7 +12,7 @@ import 'package:test/test.dart';
 
 /// @Throwing(ArgumentError)
 void main() {
-  test('truepath ...', ()  {
+  test('truepath ...', () {
     expect(truepath(join(rootPath, 'tmp')), equals(absolute(rootPath, 'tmp')));
     expect(
       truepath(join(rootPath, 'tmp', '..', 'tmp')),

@@ -45,9 +45,7 @@ void main() {
         equals(true),
       );
     });
-  },
-      skip: env['DCLI_TEST_INSTALL_DART_SDK'] != 'true',
-      tags: ['privileged']);
+  }, skip: env['DCLI_TEST_INSTALL_DART_SDK'] != 'true', tags: ['privileged']);
 
   test('Parse sdk version', () {
     final output = '${DartSdk().pathToDartExe} --version'.firstLine;

@@ -5,8 +5,8 @@ import 'package:test/test.dart';
 /// @Throwing(DeleteException)
 /// @Throwing(TouchException)
 void main() {
-  test('simple run', () async{
-    await withTempFileAsync ((testFile) async{
+  test('simple run', () async {
+    await withTempFileAsync((testFile) async {
       'touch $testFile'.run;
     });
   });

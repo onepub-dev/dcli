@@ -41,10 +41,10 @@ void chown(String path, {String? user, String? group, bool recursive = true}) =>
 class _ChOwn extends core.DCliFunction {
 // this.user, this.group, this.other, this.path
 
-        /// Throws [ChOwnException].
-    /// @Throwing(ArgumentError)
-    /// @Throwing(ChOwnException)
-    /// @Throwing(posix.PosixException)
+  /// Throws [ChOwnException].
+  /// @Throwing(ArgumentError)
+  /// @Throwing(ChOwnException)
+  /// @Throwing(posix.PosixException)
   void _chown(
     String path, {
     String? user,

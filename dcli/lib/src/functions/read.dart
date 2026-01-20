@@ -30,9 +30,9 @@ Progress read(String path, {String delim = '\n'}) =>
 Progress readStdin() => _Read()._readStdin();
 
 class _Read extends core.DCliFunction {
-        /// Throws [ReadException].
-    /// @Throwing(ArgumentError)
-    /// @Throwing(ReadException)
+  /// Throws [ReadException].
+  /// @Throwing(ArgumentError)
+  /// @Throwing(ReadException)
   Progress read(String path, {String delim = '\n', Progress? progress}) {
     verbose(() => 'read: ${truepath(path)}, delim: $delim');
 

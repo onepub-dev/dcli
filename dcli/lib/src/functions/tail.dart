@@ -37,9 +37,9 @@ class TailProgress extends InternalProgress {
 
   TailProgress._internal(this.pathTo, this.lines);
 
-        /// Read lines from the head of the file.
-    /// @Throwing(ArgumentError)
-    /// @Throwing(core.TailException)
+  /// Read lines from the head of the file.
+  /// @Throwing(ArgumentError)
+  /// @Throwing(core.TailException)
   @override
   void forEach(LineAction action) {
     core.tail(pathTo, lines).forEach(action);

@@ -153,17 +153,17 @@ class FetchData {
         _type = _FetchDataType.string,
         _mimeType = mimeType;
 
-        /// Read the [FetchData] from a file where
-    /// [pathToData] is the path to the file
-    /// containing the data to send.
-    /// [pathToData] may be relative or absolute.
-    /// If the mimeType isn't passed then we use the file
-    /// extension to determine the [mimeType] if that fails
-    /// we revert to text/plain.
-    /// throws [FetchException] if the file at [pathToData]
-    /// does not exist or it is not a file.
-    /// @Throwing(ArgumentError)
-    /// @Throwing(FetchException)
+  /// Read the [FetchData] from a file where
+  /// [pathToData] is the path to the file
+  /// containing the data to send.
+  /// [pathToData] may be relative or absolute.
+  /// If the mimeType isn't passed then we use the file
+  /// extension to determine the [mimeType] if that fails
+  /// we revert to text/plain.
+  /// throws [FetchException] if the file at [pathToData]
+  /// does not exist or it is not a file.
+  /// @Throwing(ArgumentError)
+  /// @Throwing(FetchException)
   FetchData.fromFile(String pathToData, {String? mimeType})
       : _pathToDataFile = pathToData,
         _type = _FetchDataType.path,
@@ -215,9 +215,9 @@ class FetchData {
 }
 
 class _Fetch extends core.DCliFunction {
-        /// @Throwing(ArgumentError)
-    /// @Throwing(FetchException)
-    /// @Throwing(core.TouchException)
+  /// @Throwing(ArgumentError)
+  /// @Throwing(FetchException)
+  /// @Throwing(core.TouchException)
   Future<void> fetch(
       {required String url,
       required String saveToPath,
@@ -238,9 +238,9 @@ class _Fetch extends core.DCliFunction {
     );
   }
 
-        /// @Throwing(ArgumentError)
-    /// @Throwing(FetchException)
-    /// @Throwing(core.TouchException)
+  /// @Throwing(ArgumentError)
+  /// @Throwing(FetchException)
+  /// @Throwing(core.TouchException)
   Future<void> fetchMultiple({
     required List<FetchUrl> urls,
     bool verboseProgress = false,
@@ -259,9 +259,9 @@ class _Fetch extends core.DCliFunction {
     }
   }
 
-        /// @Throwing(ArgumentError)
-    /// @Throwing(FetchException)
-    /// @Throwing(core.TouchException)
+  /// @Throwing(ArgumentError)
+  /// @Throwing(FetchException)
+  /// @Throwing(core.TouchException)
   Future<void> download(FetchUrl fetchUrl,
       {required bool verboseProgress}) async {
     // announce we are starting.
@@ -405,7 +405,7 @@ class _Fetch extends core.DCliFunction {
     return headers;
   }
 
-    /// Throws [FetchException].
+  /// Throws [FetchException].
   /// @Throwing(FetchException)
   Future<HttpClientRequest> startCall(
       HttpClient client, FetchUrl fetchUrl) async {
@@ -485,7 +485,7 @@ class FetchUrl {
   /// that is to be sent.
   FetchData? data;
 
-    /// ctor.
+  /// ctor.
   /// Throws [FetchException].
   /// @Throwing(FetchException)
   FetchUrl(

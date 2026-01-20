@@ -27,12 +27,12 @@ class ParsedCliCommand {
   /// The escape character use for command lines
   static const escapeCharacter = '^';
 
-        ///
-    /// Throws [RunException].
-    /// @Throwing(ArgumentError)
-    /// @Throwing(InvalidArgumentException)
-    /// @Throwing(PathException)
-    /// @Throwing(RunException)
+  ///
+  /// Throws [RunException].
+  /// @Throwing(ArgumentError)
+  /// @Throwing(InvalidArgumentException)
+  /// @Throwing(PathException)
+  /// @Throwing(RunException)
   ParsedCliCommand(String command, String? workingDirectory) {
     workingDirectory ??= pwd;
     if (!exists(workingDirectory)) {
@@ -46,12 +46,12 @@ class ParsedCliCommand {
     args = _expandGlobs(qargs, workingDirectory);
   }
 
-        /// when passed individual args we respect any quotes that are
-    /// passed as they have been put there with intent.
-    /// Throws [RunException].
-    /// @Throwing(ArgumentError)
-    /// @Throwing(PathException)
-    /// @Throwing(RunException)
+  /// when passed individual args we respect any quotes that are
+  /// passed as they have been put there with intent.
+  /// Throws [RunException].
+  /// @Throwing(ArgumentError)
+  /// @Throwing(PathException)
+  /// @Throwing(RunException)
   ParsedCliCommand.fromParsed(
     this.cmd,
     List<String> rawArgs,
@@ -70,7 +70,7 @@ class ParsedCliCommand {
     args = _expandGlobs(qargs, workingDirectory);
   }
 
-    /// parses the given command breaking them done into words
+  /// parses the given command breaking them done into words
   /// Throws [InvalidArgumentException].
   /// @Throwing(InvalidArgumentException)
   List<_QArg> _parse(String commandLine) {
@@ -267,15 +267,15 @@ class ParsedCliCommand {
     }
   }
 
-        ///
-    /// to emulate bash and support what most cli apps support we expand
-    /// globs.
-    /// Any argument that contains *, ? or [ will
-    /// be expanded.
-    /// See https://github.com/onepub-dev/dcli/issues/56
-    ///
-    /// @Throwing(ArgumentError)
-    /// @Throwing(PathException)
+  ///
+  /// to emulate bash and support what most cli apps support we expand
+  /// globs.
+  /// Any argument that contains *, ? or [ will
+  /// be expanded.
+  /// See https://github.com/onepub-dev/dcli/issues/56
+  ///
+  /// @Throwing(ArgumentError)
+  /// @Throwing(PathException)
   List<String> _expandGlobs(List<_QArg> qargs, String? workingDirectory) {
     final expanded = <String>[];
 
@@ -390,8 +390,8 @@ class _QArg {
     return qargs;
   }
 
-        /// @Throwing(ArgumentError)
-    /// @Throwing(PathException)
+  /// @Throwing(ArgumentError)
+  /// @Throwing(PathException)
   Iterable<String> expandGlob(String? workingDirectory) {
     final expanded = <String>[];
     if (arg.contains('~')) {
@@ -413,8 +413,8 @@ class _QArg {
     return expanded;
   }
 
-        /// @Throwing(ArgumentError)
-    /// @Throwing(PathException)
+  /// @Throwing(ArgumentError)
+  /// @Throwing(PathException)
   Iterable<String?> _expandGlob(String workingDirectory) {
     final glob = Glob(arg);
 
@@ -442,8 +442,8 @@ class _QArg {
 
   // check if the entity is a hidden file (.xxx) or
   // if lives in a hidden directory.
-        /// @Throwing(ArgumentError)
-    /// @Throwing(PathException)
+  /// @Throwing(ArgumentError)
+  /// @Throwing(PathException)
   bool isHidden(String workingDirectory, FileSystemEntity entity) {
     final relativePath =
         truepath(relative(entity.path, from: workingDirectory));

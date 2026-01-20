@@ -75,10 +75,10 @@ class ProcessHelper {
     }
   }
 
-        /// returns true if the given [pid] is still running.
-    /// Throws an [UnsupportedError] if the OS is not supported.
-    /// On Linux this means the 'ps' command isn't available.
-    /// @Throwing(UnsupportedError)
+  /// returns true if the given [pid] is still running.
+  /// Throws an [UnsupportedError] if the OS is not supported.
+  /// On Linux this means the 'ps' command isn't available.
+  /// @Throwing(UnsupportedError)
   bool isRunning(int? pid) {
     if (Settings().isWindows) {
       return _windowsIsrunning(pid);
@@ -87,11 +87,11 @@ class ProcessHelper {
     }
   }
 
-        /// Returns true a the process with the given [name]
-    /// is currently running.
-    ///
-    /// @Throwing(ArgumentError)
-    /// @Throwing(UnsupportedError)
+  /// Returns true a the process with the given [name]
+  /// is currently running.
+  ///
+  /// @Throwing(ArgumentError)
+  /// @Throwing(UnsupportedError)
   bool isProcessRunning(String name) {
     for (final pd in getProcesses()) {
       if (pd.name == name) {
@@ -188,7 +188,7 @@ class ProcessHelper {
     return false;
   }
 
-    /// Throws [UnsupportedError].
+  /// Throws [UnsupportedError].
   /// @Throwing(UnsupportedError)
   bool _linuxisRunning(int? lpid) {
     var isRunning = false;
@@ -209,12 +209,12 @@ class ProcessHelper {
     return isRunning;
   }
 
-        /// Returns a list of running processes.
-    ///
-    /// Currently this is only supported on Windows and Linux.
-    /// Throws [UnsupportedError].
-    /// @Throwing(ArgumentError)
-    /// @Throwing(UnsupportedError)
+  /// Returns a list of running processes.
+  ///
+  /// Currently this is only supported on Windows and Linux.
+  /// Throws [UnsupportedError].
+  /// @Throwing(ArgumentError)
+  /// @Throwing(UnsupportedError)
   List<ProcessDetails> getProcesses() {
     if (core.Settings().isWindows) {
       return getWindowsProcesses();
@@ -227,16 +227,16 @@ class ProcessHelper {
     throw UnsupportedError('Not supported on ${Platform.operatingSystem}');
   }
 
-        /// Returns the list of [ProcessDetails] with [name].
-    /// It is quite common for there to be multiple processes
-    /// with the same name running.
-    /// If there are no processes with the given [name] then
-    /// an empty list is returned.
-    /// Remember that a process may shutdown at any moment so
-    /// just because this method returns a process does not
-    /// mean that the process is still running.
-    /// @Throwing(ArgumentError)
-    /// @Throwing(UnsupportedError)
+  /// Returns the list of [ProcessDetails] with [name].
+  /// It is quite common for there to be multiple processes
+  /// with the same name running.
+  /// If there are no processes with the given [name] then
+  /// an empty list is returned.
+  /// Remember that a process may shutdown at any moment so
+  /// just because this method returns a process does not
+  /// mean that the process is still running.
+  /// @Throwing(ArgumentError)
+  /// @Throwing(UnsupportedError)
   List<ProcessDetails> getProcessesByName(String name) {
     final processes = getProcesses();
     final matching = <ProcessDetails>[];
@@ -248,7 +248,7 @@ class ProcessHelper {
     return matching;
   }
 
-        /// @Throwing(ArgumentError)
+  /// @Throwing(ArgumentError)
   List<ProcessDetails> _getLinuxProcesses() {
     final entries = find(
       '[0-9]*',
@@ -272,7 +272,7 @@ class ProcessHelper {
     return processes;
   }
 
-        /// @Throwing(ArgumentError)
+  /// @Throwing(ArgumentError)
   ProcessDetails? _extractProcessFromStatus(String path, String spid) {
     final pathToStatus = join(path, 'status');
 

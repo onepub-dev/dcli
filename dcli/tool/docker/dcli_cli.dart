@@ -57,10 +57,10 @@ class RunCommand extends Command<void> {
   @override
   String get name => 'run';
 
-        /// @Throwing(DuplicateKeyException)
-    /// @Throwing(NotFoundException)
-    /// @Throwing(PubSpecException)
-    /// @Throwing(VersionException)
+  /// @Throwing(DuplicateKeyException)
+  /// @Throwing(NotFoundException)
+  /// @Throwing(PubSpecException)
+  /// @Throwing(VersionException)
   @override
   void run() {
     /// The volume will only be created if it doesn't already exist.
@@ -82,11 +82,11 @@ class BuildCommand extends Command<void> {
   @override
   String get name => 'build';
 
-        /// @Throwing(ArgumentError)
-    /// @Throwing(DuplicateKeyException)
-    /// @Throwing(NotFoundException)
-    /// @Throwing(PubSpecException)
-    /// @Throwing(VersionException)
+  /// @Throwing(ArgumentError)
+  /// @Throwing(DuplicateKeyException)
+  /// @Throwing(NotFoundException)
+  /// @Throwing(PubSpecException)
+  /// @Throwing(VersionException)
   @override
   void run() {
     final pubspec = PubSpec.loadFromPath(DartProject.self.pathToPubSpec);
@@ -106,7 +106,7 @@ class BuildCommand extends Command<void> {
 }
 
 class PushCommand extends Command<void> {
-        /// @Throwing(ArgumentError)
+  /// @Throwing(ArgumentError)
   PushCommand() {
     argParser.addOption(
       'version',
@@ -119,10 +119,10 @@ class PushCommand extends Command<void> {
   @override
   String get name => 'push';
 
-        /// @Throwing(DuplicateKeyException)
-    /// @Throwing(NotFoundException)
-    /// @Throwing(PubSpecException)
-    /// @Throwing(VersionException)
+  /// @Throwing(DuplicateKeyException)
+  /// @Throwing(NotFoundException)
+  /// @Throwing(PubSpecException)
+  /// @Throwing(VersionException)
   @override
   void run() {
     // if (!argResults.wasParsed('version')) {

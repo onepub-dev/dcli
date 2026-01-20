@@ -94,8 +94,7 @@ class Utf16LeDecoder extends Converter<List<int>, String> {
   String convert(List<int> input) => _decode(input, null).$1;
 
   @override
-  ChunkedConversionSink<List<int>> startChunkedConversion(
-          Sink<String> sink) =>
+  ChunkedConversionSink<List<int>> startChunkedConversion(Sink<String> sink) =>
       _Utf16LeDecoderSink(StringConversionSink.from(sink));
 
   static (String, int?) _decode(List<int> input, int? pending) {

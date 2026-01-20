@@ -49,7 +49,7 @@ abstract class Progress {
           encoding: encoding);
 
   /// redirect both stdout and stderr to the same [LineAction]
-  /// Note: to capture stderr you must pass 'throws: false' to 
+  /// Note: to capture stderr you must pass 'throws: false' to
   /// the start process method.
   /// Use [encoding] to control how output bytes are decoded into strings.
   factory Progress.both(LineAction both, {Encoding encoding = utf8}) =>

@@ -8,7 +8,7 @@ import 'dart:io';
 ///   dart replace_copyright_header.dart [directory]
 /// ```
 ///
-/// If no directory is provided, the script runs in the current 
+/// If no directory is provided, the script runs in the current
 /// working directory.
 
 void main(List<String> args) {

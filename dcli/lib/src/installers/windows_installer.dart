@@ -18,9 +18,9 @@ import '../version/version.g.dart';
 ///
 
 class WindowsDCliInstaller {
-        /// returns true if it needed to install dart.
-    /// @Throwing(ArgumentError)
-    /// @Throwing(MissingDependencyException)
+  /// returns true if it needed to install dart.
+  /// @Throwing(ArgumentError)
+  /// @Throwing(MissingDependencyException)
   Future<bool> install({bool installDart = true}) async {
     var installedDart = false;
 
@@ -52,7 +52,7 @@ class WindowsDCliInstaller {
     return installedDart;
   }
 
-        /// @Throwing(ArgumentError)
+  /// @Throwing(ArgumentError)
   Future<bool> _installDart() async {
     var installedDart = false;
 

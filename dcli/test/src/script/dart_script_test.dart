@@ -17,7 +17,7 @@ import 'package:test/test.dart';
 /// @Throwing(ArgumentError)
 /// @Throwing(RangeError)
 void main() {
-  test('dart script ...', ()  {
+  test('dart script ...', () {
     expect(
       DartScript.stripDartVersionSuffix('pub_release.dart-2.13.0'),
       equals('pub_release.dart'),

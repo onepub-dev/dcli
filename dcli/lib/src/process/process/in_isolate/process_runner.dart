@@ -25,30 +25,30 @@ class ProcessRunner {
     );
   }
 
-        /// Starts a process  provides additional options to [run].
-    ///
-    /// This is an internal function and should not be exposed.
-    /// It requires addition logic to read stdout/stderr or
-    /// the running command can end up suspended.
-    ///
-    /// The [settings.privileged] argument attempts to escalate the priviledge
-    /// that the command is run with.
-    /// If the script is already running in a priviledge environment
-    /// this switch will have no affect.
-    ///
-    /// Running a command with the [privileged] switch may cause the
-    /// OS to prompt the user for a password.
-    ///
-    /// For Linux passing the [privileged] argument will cause the
-    ///  command to be prefix vai the `sudo` command.
-    ///
-    /// The [privileged] option is ignored under Windows.
-    ///
-    /// If you pass [detached] = true then the process is spawned
-    /// but we don't wait for it to complete nor is any io available.
-    /// Throws [RunException].
-    /// @Throwing(ArgumentError)
-    /// @Throwing(RunException)
+  /// Starts a process  provides additional options to [run].
+  ///
+  /// This is an internal function and should not be exposed.
+  /// It requires addition logic to read stdout/stderr or
+  /// the running command can end up suspended.
+  ///
+  /// The [settings.privileged] argument attempts to escalate the priviledge
+  /// that the command is run with.
+  /// If the script is already running in a priviledge environment
+  /// this switch will have no affect.
+  ///
+  /// Running a command with the [privileged] switch may cause the
+  /// OS to prompt the user for a password.
+  ///
+  /// For Linux passing the [privileged] argument will cause the
+  ///  command to be prefix vai the `sudo` command.
+  ///
+  /// The [privileged] option is ignored under Windows.
+  ///
+  /// If you pass [detached] = true then the process is spawned
+  /// but we don't wait for it to complete nor is any io available.
+  /// Throws [RunException].
+  /// @Throwing(ArgumentError)
+  /// @Throwing(RunException)
   Future<void> start() async {
     assert(
       !(settings.terminal && settings.detached),

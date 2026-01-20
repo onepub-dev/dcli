@@ -1,4 +1,3 @@
-
 import 'dart:ffi';
 import 'dart:isolate';
 import 'dart:typed_data';
@@ -10,7 +9,7 @@ import '../../util/exceptions.dart';
 /// Internal class used to make calls to native dart methods
 /// We cache the native call sites to improve performance.
 class NativeCalls {
-    /// Throws [ProcessSyncException].
+  /// Throws [ProcessSyncException].
   /// @Throwing(ProcessSyncException)
   static SendPort connectToPort(Uint8List msg) {
     if (msg.length != 8) {
@@ -24,9 +23,9 @@ class NativeCalls {
   // cache a pointer to the native connectToPort method.
   static final Object Function(int) _connectToPort = _initNativeConnectToPort();
 
-        /// Don't really know why but we go and find the
-    /// native dart method to connect to a port.
-    /// @Throwing(UnsupportedError)
+  /// Don't really know why but we go and find the
+  /// native dart method to connect to a port.
+  /// @Throwing(UnsupportedError)
   static Object Function(int) _initNativeConnectToPort() {
     final functions =
         NativeApi.initializeApiDLData.cast<_DartApi>().ref.functions;

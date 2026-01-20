@@ -61,24 +61,24 @@ class Resources {
   static final scopeKeyProjectRoot =
       ScopeKey<String>.withDefault(DartProject.self.pathToProjectRoot);
 
-        /// @Throwing(MissingDependencyException)
+  /// @Throwing(MissingDependencyException)
   static String get projectRoot => Scope.use(scopeKeyProjectRoot);
 
-        /// Packs the set of files located under [resourceRoot]
-    /// Each resources is packed into a separate dart library
-    /// and placed in the [generatedRoot] directory.
-    ///
-    /// A registry file will be generated in generated/resource_registry.g.dart
-    /// which you can include to unpack the files onto the
-    /// production system.
-    ///
-    /// @Throwing(ArgumentError)
-    /// @Throwing(CreateDirException)
-    /// @Throwing(DeleteDirException)
-    /// @Throwing(PathException)
-    /// @Throwing(PathNotFoundException)
-    /// @Throwing(ResourceException)
-    /// @Throwing(SettingsYamlException)
+  /// Packs the set of files located under [resourceRoot]
+  /// Each resources is packed into a separate dart library
+  /// and placed in the [generatedRoot] directory.
+  ///
+  /// A registry file will be generated in generated/resource_registry.g.dart
+  /// which you can include to unpack the files onto the
+  /// production system.
+  ///
+  /// @Throwing(ArgumentError)
+  /// @Throwing(CreateDirException)
+  /// @Throwing(DeleteDirException)
+  /// @Throwing(PathException)
+  /// @Throwing(PathNotFoundException)
+  /// @Throwing(ResourceException)
+  /// @Throwing(SettingsYamlException)
   void pack() {
     /// clear out an old generated files
     /// as we use UUIDs if we didn't do this the
@@ -100,12 +100,12 @@ class Resources {
     print(green('Pack complete'));
   }
 
-        /// Packs the set of files located under [resourceRoot]
-    /// @Throwing(ArgumentError)
-    /// @Throwing(PathException)
-    /// @Throwing(PathNotFoundException)
-    /// @Throwing(ResourceException)
-    /// @Throwing(SettingsYamlException)
+  /// Packs the set of files located under [resourceRoot]
+  /// @Throwing(ArgumentError)
+  /// @Throwing(PathException)
+  /// @Throwing(PathNotFoundException)
+  /// @Throwing(ResourceException)
+  /// @Throwing(SettingsYamlException)
   List<_Resource> _packResources(List<String> pathToResources) {
     final resources = <_Resource>[];
 
@@ -127,9 +127,9 @@ class Resources {
     return resources;
   }
 
-        /// Encode and write the resource into a dart library.
-    /// @Throwing(ArgumentError)
-    /// @Throwing(PathException)
+  /// Encode and write the resource into a dart library.
+  /// @Throwing(ArgumentError)
+  /// @Throwing(PathException)
   _Resource _packResource(
       String pathToResource, String pathToGeneratedLibrary, String className,
       {String? mount}) {
@@ -328,12 +328,12 @@ $line
 ''');
   }
 
-        /// Throws [ResourceException].
-    /// @Throwing(ArgumentError)
-    /// @Throwing(PathException)
-    /// @Throwing(PathNotFoundException)
-    /// @Throwing(ResourceException)
-    /// @Throwing(SettingsYamlException)
+  /// Throws [ResourceException].
+  /// @Throwing(ArgumentError)
+  /// @Throwing(PathException)
+  /// @Throwing(PathNotFoundException)
+  /// @Throwing(ResourceException)
+  /// @Throwing(SettingsYamlException)
   List<_Resource> _packExternalResources() {
     final resources = <_Resource>[];
 
@@ -385,8 +385,8 @@ $line
     return resources;
   }
 
-        /// @Throwing(ArgumentError)
-    /// @Throwing(PathException)
+  /// @Throwing(ArgumentError)
+  /// @Throwing(PathException)
   List<_Resource> _packExternalResource(
       String path, String mount, List<String> excludes) {
     final resources = <_Resource>[];
@@ -412,8 +412,8 @@ $line
     return exclude;
   }
 
-        /// @Throwing(ArgumentError)
-    /// @Throwing(PathException)
+  /// @Throwing(ArgumentError)
+  /// @Throwing(PathException)
   _Resource _packExternalFile(String path, String mount) {
     final className = _generateClassName(path);
 
@@ -425,8 +425,8 @@ $line
     return resource;
   }
 
-        /// @Throwing(ArgumentError)
-    /// @Throwing(PathException)
+  /// @Throwing(ArgumentError)
+  /// @Throwing(PathException)
   Iterable<_Resource> _packExternalDirectory(
       String path, String mount, List<String> excludes) {
     final resources = <_Resource>[];
@@ -444,7 +444,7 @@ $line
     return resources;
   }
 
-    /// Throws [ResourceException].
+  /// Throws [ResourceException].
   /// @Throwing(ResourceException)
   void _checkForDuplicates(List<_Resource> packedResources) {
     final paths = <String>{};
@@ -457,8 +457,8 @@ $line
     }
   }
 
-        /// @Throwing(PathNotFoundException)
-    /// @Throwing(SettingsYamlException)
+  /// @Throwing(PathNotFoundException)
+  /// @Throwing(SettingsYamlException)
   List<String> getExcludedPaths(SettingsYaml yaml, String path, int index) {
     final yamlPathToExluded = 'externals.external[$index].exclude';
 
@@ -505,8 +505,8 @@ class _Resource {
   /// to compare the checksum
   final String checksum;
 
-        /// @Throwing(ArgumentError)
-    /// @Throwing(PathException)
+  /// @Throwing(ArgumentError)
+  /// @Throwing(PathException)
   _Resource(this.pathToSource, String pathToGeneratedLibrary, this.className,
       {required this.pathToMount})
       : checksum = calculateHash(pathToSource).hexEncode() {

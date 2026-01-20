@@ -20,7 +20,6 @@ void main() {
   test(
     'isPrivileged',
     () async {
-
       try {
         expect(Shell.current.isPrivilegedUser, isTrue);
         print('isPriviliged: ${Shell.current.isPrivilegedUser}');
@@ -94,7 +93,7 @@ void main() {
 
   test(
     'loggedInUsersHome ...',
-    ()  {
+    () {
       final home = join(rootPath, 'home', env['SUDO_USER']);
       print('sudo logged in user home =$home');
       expect((Shell.current as PosixShell).loggedInUsersHome, home);
@@ -105,7 +104,7 @@ void main() {
 
   test(
     'pub-cache path ...',
-    ()  {
+    () {
       print(orange('pub-cache path =${PubCache().pathTo}'));
       expect(
         PubCache().pathTo,

@@ -1,4 +1,5 @@
 #! /usr/bin/env dart
+
 import 'package:dcli/dcli.dart';
 
 void main() {

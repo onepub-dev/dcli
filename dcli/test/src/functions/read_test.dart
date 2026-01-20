@@ -12,8 +12,8 @@ import 'package:test/test.dart';
 /// @Throwing(DeleteException)
 /// @Throwing(TouchException)
 void main() {
-  test('toList', () async{
-    await withTempFileAsync ((file) async{
+  test('toList', () async {
+    await withTempFileAsync((file) async {
       file
         ..append('Line 1/5')
         ..append('Line 2/5')
@@ -24,8 +24,8 @@ void main() {
     });
   });
 
-  test('lines', () async{
-    await withTempFileAsync ((file) async{
+  test('lines', () async {
+    await withTempFileAsync((file) async {
       file
         ..append('Line 1/5')
         ..append('Line 2/5')
@@ -36,8 +36,8 @@ void main() {
     });
   });
 
-  test('firstLine', () async{
-    await withTempFileAsync ((file) async{
+  test('firstLine', () async {
+    await withTempFileAsync((file) async {
       file
         ..append('Line 1/5')
         ..append('Line 2/5')
@@ -48,8 +48,8 @@ void main() {
     });
   });
 
-  test('toParagraph', () async{
-    await withTempFileAsync ((file) async{
+  test('toParagraph', () async {
+    await withTempFileAsync((file) async {
       file
         ..append('Line 1/5')
         ..append('Line 2/5')
@@ -68,8 +68,8 @@ Line 5/5'''
     });
   });
 
-  test('forEach', () async{
-    await withTempFileAsync ((file) async{
+  test('forEach', () async {
+    await withTempFileAsync((file) async {
       file
         ..append('Line 1/5')
         ..append('Line 2/5')

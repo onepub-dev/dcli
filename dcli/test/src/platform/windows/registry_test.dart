@@ -18,7 +18,7 @@ import 'package:win32/win32.dart';
 
 /// @Throwing(ArgumentError)
 void main() {
-  test('windows mixin ...', ()  {
+  test('windows mixin ...', () {
     regSetString(HKEY_CURRENT_USER, 'Environment', 'PATH_TEST', 'HI');
 
     final paths = regGetString(HKEY_CURRENT_USER, 'Environment', 'PATH_TEST');

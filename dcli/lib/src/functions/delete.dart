@@ -31,8 +31,8 @@ void delete(String path, {bool ask = false}) =>
     _Delete().delete(path, ask: ask);
 
 class _Delete extends DCliFunction {
-        /// @Throwing(ArgumentError)
-    /// @Throwing(DeleteException)
+  /// @Throwing(ArgumentError)
+  /// @Throwing(DeleteException)
   void delete(String path, {required bool ask}) {
     var remove = true;
     if (ask) {

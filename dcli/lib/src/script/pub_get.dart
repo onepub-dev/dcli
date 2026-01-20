@@ -22,7 +22,7 @@ class PubGet {
   ///
   PubGet(this._project);
 
-    /// Runs the pub get command against
+  /// Runs the pub get command against
   /// the project working dir.
   /// Throws [PubGetException].
   /// @Throwing(PubGetException)

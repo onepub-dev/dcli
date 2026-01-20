@@ -413,7 +413,7 @@ class _RegResults {
   List<String> unpackStringArray() =>
       pResult.cast<Utf16>().unpackStringArray(size);
 
-        /// @Throwing(UnsupportedError)
+  /// @Throwing(UnsupportedError)
   String toDartString() => pResult.cast<Utf16>().toDartString();
 
   int toDWORD() => pResult.cast<Uint32>().value;

@@ -62,32 +62,32 @@ class NamedLock {
   /// The duration to wait for a lock before timing out.
   final Duration _timeout;
 
-        /// [lockPath] is the path of the directory used
-    /// to store the lock file.
-    /// If no lockPath is given then [Directory.systemTemp]/dcli/locks is used
-    /// to store locks.
-    /// All code that shares the lock MUST use the
-    /// same [lockPath]. It is recommended that you
-    /// pass an absolute path to ensure that the
-    /// same path is used.
-    /// The [name] is used as the suffix of the lockfile.
-    /// The suffix allows multiple locks to share a single
-    /// lockPath.
-    /// The [description], if passed, is used in error messages
-    /// to describe the lock.
-    /// The [timeout] defines how long we will wait for
-    /// a lock to become available. The default [timeout] is
-    /// infinite (null).
-    ///
-    /// ```dart
-    /// NamedLock(name: 'update-catalog').withLock(() {
-    ///   if (!exists('catalog'))
-    ///     createDir('catalog');
-    ///   updateCatalog();
-    /// });
-    /// ```
-    ///
-    /// @Throwing(ArgumentError)
+  /// [lockPath] is the path of the directory used
+  /// to store the lock file.
+  /// If no lockPath is given then [Directory.systemTemp]/dcli/locks is used
+  /// to store locks.
+  /// All code that shares the lock MUST use the
+  /// same [lockPath]. It is recommended that you
+  /// pass an absolute path to ensure that the
+  /// same path is used.
+  /// The [name] is used as the suffix of the lockfile.
+  /// The suffix allows multiple locks to share a single
+  /// lockPath.
+  /// The [description], if passed, is used in error messages
+  /// to describe the lock.
+  /// The [timeout] defines how long we will wait for
+  /// a lock to become available. The default [timeout] is
+  /// infinite (null).
+  ///
+  /// ```dart
+  /// NamedLock(name: 'update-catalog').withLock(() {
+  ///   if (!exists('catalog'))
+  ///     createDir('catalog');
+  ///   updateCatalog();
+  /// });
+  /// ```
+  ///
+  /// @Throwing(ArgumentError)
   NamedLock({
     required this.name,
     String? lockPath,
@@ -99,7 +99,7 @@ class NamedLock {
         lockPath ?? join(rootPath, Directory.systemTemp.path, 'dcli', 'locks');
   }
 
-    /// Throws [UnsupportedError].
+  /// Throws [UnsupportedError].
   /// @Throwing(UnsupportedError)
   @Deprecated('Used withLockAsync')
   Future<void> withLock(
@@ -108,16 +108,16 @@ class NamedLock {
   }) =>
       throw UnsupportedError('Use withLockAsync');
 
-        /// creates a lock file and then calls [fn]
-    /// once [fn] returns the lock is released.
-    /// If [waiting] is passed it will be used to write
-    /// a log message to the console.
-    ///
-    /// Throws a [DCliException] if the NamedLock times out.
-    /// @Throwing(ArgumentError)
-    /// @Throwing(FormatException)
-    /// @Throwing(LockException)
-    /// @Throwing(TouchException)
+  /// creates a lock file and then calls [fn]
+  /// once [fn] returns the lock is released.
+  /// If [waiting] is passed it will be used to write
+  /// a log message to the console.
+  ///
+  /// Throws a [DCliException] if the NamedLock times out.
+  /// @Throwing(ArgumentError)
+  /// @Throwing(FormatException)
+  /// @Throwing(LockException)
+  /// @Throwing(TouchException)
   Future<void> withLockAsync(
     Future<void> Function() fn, {
     String? waiting,
@@ -144,7 +144,7 @@ class NamedLock {
     }
   }
 
-        /// @Throwing(ArgumentError)
+  /// @Throwing(ArgumentError)
   void _createLockPath() {
     if (!exists(_lockPath)) {
       try {
@@ -200,7 +200,7 @@ class NamedLock {
     return lockCount;
   }
 
-        /// @Throwing(ArgumentError)
+  /// @Throwing(ArgumentError)
   String get _lockFilePath {
     // lock file is in the directory above the project
     // as during preparing we delete the project directory.
@@ -223,22 +223,22 @@ class NamedLock {
     return _LockFileParts(pid, isolateId);
   }
 
-        /// Attempts to take a project lock.
-    /// We wait for upto 30 seconds for an existing lock to
-    /// be released and then give up.
-    ///
-    /// We create the lock file in the virtual project directory
-    /// in the form:
-    /// `<pid>.warmup.lock`
-    ///
-    /// If we find an existing lock file we check if the process
-    /// that owns it is still running. If it isn't we
-    /// take a lock and delete the orphaned lock.
-    /// Throws [LockException].
-    /// @Throwing(ArgumentError)
-    /// @Throwing(FormatException)
-    /// @Throwing(LockException)
-    /// @Throwing(TouchException)
+  /// Attempts to take a project lock.
+  /// We wait for upto 30 seconds for an existing lock to
+  /// be released and then give up.
+  ///
+  /// We create the lock file in the virtual project directory
+  /// in the form:
+  /// `<pid>.warmup.lock`
+  ///
+  /// If we find an existing lock file we check if the process
+  /// that owns it is still running. If it isn't we
+  /// take a lock and delete the orphaned lock.
+  /// Throws [LockException].
+  /// @Throwing(ArgumentError)
+  /// @Throwing(FormatException)
+  /// @Throwing(LockException)
+  /// @Throwing(TouchException)
   Future<bool> _takeLock(String? waiting) async {
     var taken = false;
     verbose(() => '_takeLock called');
@@ -367,7 +367,7 @@ class NamedLock {
   bool _isSelf(int lockPid, int lockIsolateId) =>
       lockIsolateId == isolateID && lockPid == pid;
 
-        /// @Throwing(ArgumentError)
+  /// @Throwing(ArgumentError)
   int _clearStaleLocks(List<String> locks, int lockFiles) {
     var lockFiles0 = lockFiles;
     for (final lock in locks) {

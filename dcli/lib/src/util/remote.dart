@@ -71,34 +71,34 @@ class Remote {
 
   Remote._internal();
 
-        /// EXPERIMENTAL
-    ///
-    /// executes command on a remote host over an ssh tunnel
-    /// [host] is the remote host to execute the command on.
-    /// If [sudo] is true then the command will be run with sudo.
-    /// If you specify [sudo] as true then you MAY also pass in the
-    /// sudo [password] for your account on the remote host.
-    /// [password] is the current user's password on the remote host.
-    ///   The user's account on the remote host must be in the sudoers file.
-    /// The [command] to execute on the remote host.
-    /// The optional [progress] allows you to control how the output
-    /// of the command is printed to the console. By default
-    /// all output is supressed.
-    /// If you don't pass [progress], the default Progress uses [encoding].
-    /// If you pass [progress], [encoding] is ignored.
-    ///
-    /// ```dart
-    ///  // run mkdir on the remote host using sudo
-    ///  Remote.exec(
-    ///     host: fqdn,
-    ///     command: "mkdir -p /tmp/etc/openvpn",
-    ///     sudo: true,
-    ///     password: password,
-    ///     progress: Progress.print());
-    /// ```
-    ///
-    ///  EXPERIMENTAL
-    /// @Throwing(RunException)
+  /// EXPERIMENTAL
+  ///
+  /// executes command on a remote host over an ssh tunnel
+  /// [host] is the remote host to execute the command on.
+  /// If [sudo] is true then the command will be run with sudo.
+  /// If you specify [sudo] as true then you MAY also pass in the
+  /// sudo [password] for your account on the remote host.
+  /// [password] is the current user's password on the remote host.
+  ///   The user's account on the remote host must be in the sudoers file.
+  /// The [command] to execute on the remote host.
+  /// The optional [progress] allows you to control how the output
+  /// of the command is printed to the console. By default
+  /// all output is supressed.
+  /// If you don't pass [progress], the default Progress uses [encoding].
+  /// If you pass [progress], [encoding] is ignored.
+  ///
+  /// ```dart
+  ///  // run mkdir on the remote host using sudo
+  ///  Remote.exec(
+  ///     host: fqdn,
+  ///     command: "mkdir -p /tmp/etc/openvpn",
+  ///     sudo: true,
+  ///     password: password,
+  ///     progress: Progress.print());
+  /// ```
+  ///
+  ///  EXPERIMENTAL
+  /// @Throwing(RunException)
   void exec({
     required String host,
     required String command,
@@ -119,7 +119,7 @@ class Remote {
     );
   }
 
-    /// [execList] runs multiple commands in a single request to the host.
+  /// [execList] runs multiple commands in a single request to the host.
   ///
   /// The commands are chained into a single command line with the
   /// bash command delimiter ';'
@@ -199,7 +199,7 @@ class Remote {
     }
   }
 
-    /// Run scp (secure copy) to copy files between remote hosts.
+  /// Run scp (secure copy) to copy files between remote hosts.
   ///
   /// [from] the from path
   /// [fromHost] the host the [from] path exists on. If [fromHost] isn't

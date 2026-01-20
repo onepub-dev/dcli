@@ -61,8 +61,8 @@ class TestPaths {
 
   factory TestPaths() => _self;
 
-        /// @Throwing(ArgumentError)
-    /// @Throwing(CreateDirException)
+  /// @Throwing(ArgumentError)
+  /// @Throwing(CreateDirException)
   TestPaths._internal() {
     testRoot = join(rootPath, 'tmp', 'dcli');
     // each unit test process has its own directory.
@@ -118,8 +118,8 @@ Something went wrong, the dcli path or HOME for unit tests is NOT pointing to /t
     installDCli();
   }
 
-        /// @Throwing(ArgumentError)
-    /// @Throwing(CreateDirException)
+  /// @Throwing(ArgumentError)
+  /// @Throwing(CreateDirException)
   void recreateDir(String path) {
     // if (exists(path)) {
     //   deleteDir(path, recursive: true);
@@ -129,8 +129,8 @@ Something went wrong, the dcli path or HOME for unit tests is NOT pointing to /t
     }
   }
 
-        /// @Throwing(ArgumentError)
-    /// @Throwing(CreateDirException)
+  /// @Throwing(ArgumentError)
+  /// @Throwing(CreateDirException)
   void installDCli() {
     'dart pub global activate --source path .'.run;
 

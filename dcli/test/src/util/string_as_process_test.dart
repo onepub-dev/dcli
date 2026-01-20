@@ -47,7 +47,7 @@ void main() {
     });
   });
 
-  test('firstLine', ()  {
+  test('firstLine', () {
     /// pid: 1 should be systemd
     final line = 'ps -q 1 -o comm='.firstLine;
     expect(line, isNotNull);

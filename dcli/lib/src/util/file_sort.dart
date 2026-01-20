@@ -78,24 +78,24 @@ class FileSort {
     }
   }
 
-        ///
-    /// call this method to start the sort.
-    /// @Throwing(ArgumentError)
-    /// @Throwing(CopyException)
-    /// @Throwing(DeleteDirException)
-    /// @Throwing(DeleteException)
-    /// @Throwing(InvalidArgumentException)
-    /// @Throwing(MoveException)
+  ///
+  /// call this method to start the sort.
+  /// @Throwing(ArgumentError)
+  /// @Throwing(CopyException)
+  /// @Throwing(DeleteDirException)
+  /// @Throwing(DeleteException)
+  /// @Throwing(InvalidArgumentException)
+  /// @Throwing(MoveException)
   void sort() {
     _sort();
   }
 
-        /// @Throwing(ArgumentError)
-    /// @Throwing(CopyException)
-    /// @Throwing(DeleteDirException)
-    /// @Throwing(DeleteException)
-    /// @Throwing(InvalidArgumentException)
-    /// @Throwing(MoveException)
+  /// @Throwing(ArgumentError)
+  /// @Throwing(CopyException)
+  /// @Throwing(DeleteDirException)
+  /// @Throwing(DeleteException)
+  /// @Throwing(InvalidArgumentException)
+  /// @Throwing(MoveException)
   void _sort() {
     var instance = 0;
     var lineCount = _mergeSize;
@@ -133,10 +133,10 @@ class FileSort {
     }
   }
 
-        /// @Throwing(ArgumentError)
-    /// @Throwing(CopyException)
-    /// @Throwing(DeleteException)
-    /// @Throwing(MoveException)
+  /// @Throwing(ArgumentError)
+  /// @Throwing(CopyException)
+  /// @Throwing(DeleteException)
+  /// @Throwing(MoveException)
   void _replaceFileWithSortedList(List<_Line> sorted) {
     if (_inputPath == _outputPath) {
       final backup = '$_inputPath.bak';
@@ -151,7 +151,7 @@ class FileSort {
     }
   }
 
-    /// Performs an insitu sort of the passed list.
+  /// Performs an insitu sort of the passed list.
   /// Throws [InvalidArgumentException].
   /// @Throwing(InvalidArgumentException)
   void _sortList(List<_Line> list) {
@@ -200,8 +200,8 @@ class FileSort {
     });
   }
 
-        /// @Throwing(ArgumentError)
-    /// @Throwing(InvalidArgumentException)
+  /// @Throwing(ArgumentError)
+  /// @Throwing(InvalidArgumentException)
   void _savePhase(
     Directory phaseDirectory,
     int phase,
@@ -235,11 +235,11 @@ class FileSort {
     });
   }
 
-        /// Expands an list of columns defined as per [Column.parse]
-    /// into a list of [Column]s.
-    ///
-    /// Throws [InvalidArgumentException].
-    /// @Throwing(InvalidArgumentException)
+  /// Expands an list of columns defined as per [Column.parse]
+  /// into a list of [Column]s.
+  ///
+  /// Throws [InvalidArgumentException].
+  /// @Throwing(InvalidArgumentException)
   static List<Column> expandColumns(List<String> values) {
     final columns = <Column>[];
 
@@ -284,26 +284,26 @@ class FileSort {
     return columns;
   }
 
-        /// Performs a merge sort
-    /// We open every file in the phase directory
-    /// and then read the first line from each file.
-    /// We then sort the list of the first lines.
-    /// We write the first line from the resulting sort
-    /// to the merge file noting what file the line
-    /// was read from.
-    /// We then read another line from the noted file
-    /// repeat the sort and the write.
-    /// if noted file is empty when then write
-    /// the first line from the sorted list
-    /// and write that line.
-    /// Rinse and repeat until all files are drained
-    /// and the list is empty.
-    /// @Throwing(ArgumentError)
-    /// @Throwing(CopyException)
-    /// @Throwing(DeleteDirException)
-    /// @Throwing(DeleteException)
-    /// @Throwing(InvalidArgumentException)
-    /// @Throwing(MoveException)
+  /// Performs a merge sort
+  /// We open every file in the phase directory
+  /// and then read the first line from each file.
+  /// We then sort the list of the first lines.
+  /// We write the first line from the resulting sort
+  /// to the merge file noting what file the line
+  /// was read from.
+  /// We then read another line from the noted file
+  /// repeat the sort and the write.
+  /// if noted file is empty when then write
+  /// the first line from the sorted list
+  /// and write that line.
+  /// Rinse and repeat until all files are drained
+  /// and the list is empty.
+  /// @Throwing(ArgumentError)
+  /// @Throwing(CopyException)
+  /// @Throwing(DeleteDirException)
+  /// @Throwing(DeleteException)
+  /// @Throwing(InvalidArgumentException)
+  /// @Throwing(MoveException)
   void _mergeSort(Directory phaseDirectory) {
     final lines = <_Line>[];
     final files = d.find('*', workingDirectory: phaseDirectory.path).toList();
@@ -422,7 +422,7 @@ class NumericSort implements ColumnComparator {
   ///
   const NumericSort();
 
-    /// Throws [FormatException].
+  /// Throws [FormatException].
   /// @Throwing(FormatException)
   @override
   int compareTo(Column column, String? lhs, String? rhs) {
@@ -467,7 +467,7 @@ class MonthSort implements ColumnComparator {
   ///
   const MonthSort();
 
-        /// @Throwing(InvalidArgumentException)
+  /// @Throwing(InvalidArgumentException)
   @override
   int compareTo(Column column, String? lhs, String? rhs) {
     final mLhs = toMonthNo(lhs!)!;
@@ -475,7 +475,7 @@ class MonthSort implements ColumnComparator {
     return mLhs.compareTo(mRhs);
   }
 
-    /// the month no. (base 1) derived
+  /// the month no. (base 1) derived
   /// from the monthName.
   /// checks are case insensitive and only the first three
   /// characters are considered.
@@ -531,7 +531,7 @@ class Column {
   /// The [_sortDirection] is either ascending or decending.
   Column(this.ordinal, this._comparator, this._sortDirection);
 
-    /// A column string is formed as:
+  /// A column string is formed as:
   ///
   /// ```text
   /// [ordinal]<type><direction>

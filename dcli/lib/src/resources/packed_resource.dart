@@ -34,12 +34,12 @@ abstract class PackedResource {
   /// packages resource directory.
   String get originalPath;
 
-        /// Unpacks a resource saving it
-    /// to the file at [pathTo].
-    /// Throws [ResourceException].
-    /// @Throwing(ArgumentError)
-    /// @Throwing(CreateDirException)
-    /// @Throwing(ResourceException)
+  /// Unpacks a resource saving it
+  /// to the file at [pathTo].
+  /// Throws [ResourceException].
+  /// @Throwing(ArgumentError)
+  /// @Throwing(CreateDirException)
+  /// @Throwing(ResourceException)
   void unpack(String pathTo) {
     if (exists(pathTo) && !isFile(pathTo)) {
       throw ResourceException('The unpack target $pathTo must be a file');

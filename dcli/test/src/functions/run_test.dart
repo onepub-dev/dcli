@@ -26,7 +26,7 @@ void main() {
       });
     });
 
-    t.test('no output', ()  {
+    t.test('no output', () {
       // pid should not exist.
       ' ps -q 218139512 -o comm='.start(nothrow: true);
     });

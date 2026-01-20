@@ -40,11 +40,11 @@ void push(String path) => _Push().push(path);
 
 @Deprecated('Use join')
 class _Push extends core.DCliFunction {
-        /// Push the pwd onto the stack and change the
-    /// current directory to [path].
-    /// Throws [PushException].
-    /// @Throwing(ArgumentError)
-    /// @Throwing(PushException)
+  /// Push the pwd onto the stack and change the
+  /// current directory to [path].
+  /// Throws [PushException].
+  /// @Throwing(ArgumentError)
+  /// @Throwing(PushException)
   void push(String path) {
     verbose(() => 'push: path: $path new -> ${core.truepath(path)}');
 
@@ -61,8 +61,7 @@ class _Push extends core.DCliFunction {
 
     try {
       Directory.current = path;
-    }
-    catch (e) {
+    } catch (e) {
       throw PushException(
         'An error occured pushing to ${core.truepath(path)}. Error $e',
       );
