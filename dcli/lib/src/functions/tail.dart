@@ -17,8 +17,7 @@ import 'internal_progress.dart';
 /// tail('/var/log/syslog', 10).forEach((line) => print(line));
 /// ```
 ///
-/// Throws a [TailException] exception if [path] is not a file.
-///
+/// @Throwing(TailException, reason: 'if path is not a file.')
 TailProgress tail(String path, int lines) =>
     TailProgress._internal(path, lines);
 

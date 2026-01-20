@@ -285,7 +285,7 @@ extension StringAsProcess on String {
   ///     [parser] - returns a parser with the captured output ready
   /// to be interpreted
   ///                as one of several file types.
-
+  /// @Throwing(RunException, reason: 'if the command returns a non-zero exit code when nothrow is false.')
   List<String> toList({
     bool runInShell = false,
     int skipLines = 0,

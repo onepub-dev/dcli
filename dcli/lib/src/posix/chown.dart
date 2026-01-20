@@ -17,7 +17,7 @@ import '../../dcli.dart';
 /// On Windows this command has no effect.
 ///
 /// [path] is the path to the file or directory that we are changing the
-/// ownership of. If [path] does not exists then a [ChOwnException] is thrown.
+/// ownership of. 
 /// [path] may be absolute (preferred) or relative.
 ///
 /// [user] is the posix user that will own the file/directory. If no [user] is specified
@@ -32,7 +32,7 @@ import '../../dcli.dart';
 /// will be ignored.
 ///
 /// @Throwing(ArgumentError)
-/// @Throwing(ChOwnException)
+/// @Throwing(ChOwnException, reason: 'if the file/directory at [path] does not exist.')
 /// @Throwing(posix.PosixException)
 void chown(String path, {String? user, String? group, bool recursive = true}) =>
     _ChOwn()._chown(path, user: user, group: group, recursive: recursive);

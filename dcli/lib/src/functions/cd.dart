@@ -12,8 +12,6 @@ import 'package:path/path.dart';
 
 /// Change Directories to the relative or absolute path.
 ///
-/// If [path] does not exists an exception is thrown
-///
 /// ```dart
 /// cd("/tmp");
 /// ```
@@ -39,7 +37,7 @@ class CD extends DCliFunction {
   /// implements the [cd] (change dir) function.
   /// Throws [CDException] if the path does not exist.
   /// @Throwing(ArgumentError)
-  /// @Throwing(CDException)
+  /// @Throwing(CDException, reason: 'if the path does not exist.')
   void cd(String path) {
     verbose(() => 'cd $path -> ${canonicalize(path)}');
 

@@ -113,7 +113,7 @@ class NamedLock {
   /// If [waiting] is passed it will be used to write
   /// a log message to the console.
   ///
-  /// Throws a [DCliException] if the NamedLock times out.
+  /// @Throwing(DCliException, reason: 'if the NamedLock times out.')
   /// @Throwing(ArgumentError)
   /// @Throwing(FormatException)
   /// @Throwing(LockException)

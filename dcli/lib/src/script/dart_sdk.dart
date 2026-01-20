@@ -256,8 +256,7 @@ class DartSdk {
   /// If [nothrow] == true (defaults to false) then if the
   /// call to pub get fails an exit code will be returned in the
   /// [Progress] rather than throwing an exception.
-  /// Throws [DCliException].
-  /// @Throwing(core.DCliException)
+  /// @Throwing(core.DCliException, reason: 'if the dart exe cannot be found.')
   Progress runPub({
     required List<String> args,
     String? workingDirectory,

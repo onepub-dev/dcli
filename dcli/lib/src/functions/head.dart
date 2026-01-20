@@ -21,8 +21,6 @@ import 'internal_progress.dart';
 /// head('/var/log/syslog', 10).forEach((line) => print(line));
 /// ```
 ///
-/// Throws a [core.HeadException] exception if [path] is not a file.
-///
 HeadProgress head(String path, int lines) =>
     HeadProgress._internal(path, lines);
 
@@ -37,7 +35,7 @@ class HeadProgress extends InternalProgress {
 
   /// Read lines from the head of the file.
   /// @Throwing(ArgumentError)
-  /// @Throwing(core.HeadException)
+  /// @Throwing(core.HeadException, reason: 'if path is not a file.')
   @override
   void forEach(LineAction action) {
     core.head(_path, _lines).forEach(action);

@@ -160,10 +160,8 @@ class FetchData {
   /// If the mimeType isn't passed then we use the file
   /// extension to determine the [mimeType] if that fails
   /// we revert to text/plain.
-  /// throws [FetchException] if the file at [pathToData]
-  /// does not exist or it is not a file.
   /// @Throwing(ArgumentError)
-  /// @Throwing(FetchException)
+  /// @Throwing(FetchException, reason: 'if the file at [pathToData] does not exist or is not a file.')
   FetchData.fromFile(String pathToData, {String? mimeType})
       : _pathToDataFile = pathToData,
         _type = _FetchDataType.path,

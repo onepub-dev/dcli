@@ -12,6 +12,7 @@ import 'package:test/test.dart' as t;
 /// @Throwing(CircularDependencyException)
 /// @Throwing(DuplicateDependencyException)
 /// @Throwing(MissingDependencyException)
+/// @Throwing(ArgumentError)
 void main() {
   t.group('Environment', () {
     t.test('PATH', () {

@@ -33,12 +33,10 @@ import '../../dcli.dart';
 /// ```dart
 /// chmod('/path/to/exe', permission: '100');
 /// ```
-/// If [path] doesn't exist a ChModException] is thrown.
-///
 /// On Windows a call to this method is a noop.
 ///
 /// @Throwing(ArgumentError)
-/// @Throwing(ChModException)
+/// @Throwing(ChModException, reason: 'if the [path] does not exist.')
 /// @Throwing(posix.PosixException)
 void chmod(String path, {required String permission}) =>
     _ChMod()._chmod(path, permission);

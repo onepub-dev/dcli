@@ -29,12 +29,9 @@ int fileLength(String pathToFile) => core.fileLength(pathToFile);
 /// has changes since the last time you took
 /// the file's hash.
 ///
-/// Throws [FileNotFoundException] if [path]
-/// doesn't exist.
-/// Throws [NotAFileException] if path is
-/// not a file.
+/// @Throwing(NotAFileException, reason: 'if path is not a file.')
 /// @Throwing(ArgumentError)
-/// @Throwing(core.FileNotFoundException)
+/// @Throwing(core.FileNotFoundException, reason: 'if the file at [path] does not exist.')
 Digest calculateHash(String path) => core.calculateHash(path);
 
 /// Thrown when a file doesn't exist

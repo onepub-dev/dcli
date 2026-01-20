@@ -115,7 +115,6 @@ mixin WindowsMixin {
 
   /// Run [action] throwing if the process isn't running as a
   /// Windows Administrator
-  /// Throws [ShellException].
   /// @Throwing(ShellException)
   void withPrivileges(RunPrivileged action, {bool allowUnprivileged = false}) {
     if (!allowUnprivileged && !Shell.current.isPrivilegedUser) {

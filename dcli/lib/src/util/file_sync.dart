@@ -146,7 +146,7 @@ class FileSync {
   /// If [end] is omitted, it defaults to [buffer].length.
   /// Otherwise [end] must be no less than [start] and no
   /// greater than [buffer].length.
-  /// Throws a [FileSystemException] if the operation fails.
+  /// @Throwing(FileSystemException, reason: "if the operation fails.")
   void writeFromSync(List<int> buffer, [int start = 0, int? end]) {
     _raf.writeFromSync(buffer, start, end);
   }
@@ -164,7 +164,7 @@ class FileSync {
   /// Returns the number of bytes read. This maybe be less than end - start
   ///  if the file doesn't have that many bytes to read.
   ///
-  /// Throws a [FileSystemException] if the operation fails.
+  /// @Throwing(FileSystemException, reason: "if the operation fails.")
   int readIntoSync(List<int> buffer, [int start = 0, int? end]) =>
       _raf.readIntoSync(buffer, start, end);
 
