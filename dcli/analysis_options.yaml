@@ -1,12 +1,18 @@
 include: package:lint_hard/all.yaml
 
 analyzer:
+  plugins:
+    - lint_hard
+    # - document_throws
   errors:
     avoid_classes_with_only_static_members: ignore
     avoid_catches_without_on_clauses: ignore
 
 plugins:
   lint_hard:
+#     path: ../../lint_hard/document_throws
+#   # lint_hard:
+#   #   path: ../../lint_hard/lint_hard
 
 linter:
   rules:

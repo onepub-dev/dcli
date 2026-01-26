@@ -23,7 +23,9 @@ export 'package:dcli_core/dcli_core.dart' show DeleteException;
 /// The default value for [ask] is false.
 ///
 /// @Throwing(ArgumentError)
-/// @Throwing(DeleteException, reason: 'if the file at [path] does not exist or if [path] is a directory.')
+/// @Throwing(DeleteException,
+///   reason:
+///     'if the file at [path] does not exist or if [path] is a directory.')
 void delete(String path, {bool ask = false}) =>
     _Delete().delete(path, ask: ask);
 

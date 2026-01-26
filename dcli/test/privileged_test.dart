@@ -10,7 +10,6 @@ import 'package:posix/posix.dart';
 import 'package:test/test.dart';
 
 /// @Throwing(ArgumentError)
-/// @Throwing(InvalidType)
 void main() {
   /// This test need to be run under sudo
   test(

@@ -16,7 +16,6 @@ import 'package:test/test.dart';
 import 'package:win32/win32.dart';
 
 /// @Throwing(ArgumentError)
-/// @Throwing(InvalidType)
 void main() {
   test('loggedInUsersHome ...', () {
     final drive = env['HOMEDRIVE'];

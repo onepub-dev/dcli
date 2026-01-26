@@ -13,7 +13,6 @@ import 'package:dcli/src/util/process_helper.dart';
 import 'package:test/test.dart';
 
 /// @Throwing(ArgumentError)
-/// @Throwing(InvalidType)
 void main() {
   test('ProcessHelper', () {
     expect(ProcessHelper().getProcessName(pid), isNot(equals('unknown')));

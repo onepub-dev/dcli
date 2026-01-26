@@ -13,7 +13,6 @@ import 'package:dcli/posix.dart';
 import 'package:test/test.dart';
 
 /// @Throwing(ArgumentError)
-/// @Throwing(InvalidType)
 void main() {
   test('bash shell loggedInUser', () {
     expect(Shell.current.loggedInUser, env['USER']);

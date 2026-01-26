@@ -10,7 +10,6 @@ import 'package:hex/hex.dart';
 import 'package:test/test.dart';
 
 /// @Throwing(ArgumentError)
-/// @Throwing(InvalidType)
 void main() {
   group('ansi', () {
     test('strip', () {
