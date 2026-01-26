@@ -12,7 +12,6 @@ import 'package:collection/collection.dart';
 import 'package:path/path.dart';
 import 'package:scope/scope.dart';
 
-// ignore: unused_import
 import '../settings.dart';
 import '../util/dcli_exception.dart';
 import '../util/truepath.dart';
@@ -54,7 +53,7 @@ Map<String, String> get envs => Env()._envVars;
 ///
 /// Any child process spawned will inherit these changes.
 /// e.g.
-/// ```
+/// ```dart
 ///   /// Set the environment variable 'XXX' to 'A Value'
 ///   env['XXX'] = 'A Value';
 ///
@@ -106,7 +105,7 @@ class Env extends DCliFunction {
     }
   }
 
-  static ScopeKey<Env> scopeKey = const ScopeKey<Env>();
+  static var scopeKey = const ScopeKey<Env>();
   static Env? _self = Env._internal();
 
   late Map<String, String> _envVars;
@@ -369,7 +368,7 @@ class Env extends DCliFunction {
   /// encoded in the json string.
   ///
   /// If you choose not to use [toJson] to create the json
-  /// then [json ] must be in form of an json encoded Map<String,String>.
+  /// then [json ] must be in form of an json encoded `Map<String,String>`.
   void fromJson(String json) {
     _envVars.clear();
     env.addAll(
@@ -398,11 +397,11 @@ class Env extends DCliFunction {
 /// This is particularly useful for unit tests and running
 /// a process that requires specific environment variables.
 Future<R> withEnvironmentAsync<R>(Future<R> Function() callback,
-    {required Map<String, String> environment}) async {
+    {required Map<String, String> environment}) {
   final existing = Env()._envVars;
   return (Scope()
         ..value(Env.scopeKey, Env.forScope(existing)..addAll(environment)))
-      .run(() async => callback());
+      .run(() => callback());
 }
 
 /// Injects environment variables into the scope

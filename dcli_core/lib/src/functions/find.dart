@@ -41,7 +41,7 @@ typedef ProgressCallback = bool Function(FindItem item);
 /// ```
 ///
 /// Valid patterns are:
-/// ```
+/// ```none
 ///
 /// [*] - matches any number of any characters including none.
 ///
@@ -109,7 +109,7 @@ void find(
 
 /// Implementation for the [_find] function.
 class Find extends DCliFunction {
-  final bool _closed = false;
+  final _closed = false;
 
   /// Find matching files an call [progress] for each one.
   void _find(
@@ -239,7 +239,6 @@ class Find extends DCliFunction {
           }
           nextLevelIndex++;
         }
-        // ignore: avoid_catches_without_on_clauses
       } catch (e) {
         if (_isGeneralIOError(e)) {
           /// can mean a corrupt disk, problems with virtualisation
@@ -265,7 +264,6 @@ class Find extends DCliFunction {
                 ' ${e.path}',
           );
         } else {
-          // ignore: only_throw_errors
           rethrow;
         }
       }
@@ -354,15 +352,15 @@ class Find extends DCliFunction {
 
   /// pass as a value to the find types argument
   /// to select files to be found
-  static const file = FileSystemEntityType.file;
+  static const FileSystemEntityType file = FileSystemEntityType.file;
 
   /// pass as a value to the final types argument
   /// to select directories to be found
-  static const directory = FileSystemEntityType.directory;
+  static const FileSystemEntityType directory = FileSystemEntityType.directory;
 
   /// pass as a value to the final types argument
   /// to select links to be found
-  static const link = FileSystemEntityType.link;
+  static const FileSystemEntityType link = FileSystemEntityType.link;
 
   bool _isGeneralIOError(Object e) {
     var error = false;

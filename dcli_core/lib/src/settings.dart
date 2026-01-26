@@ -22,7 +22,7 @@ class Settings {
   final logger = Logger('dcli');
   static Settings? _self;
 
-  bool _verboseEnabled = false;
+  var _verboseEnabled = false;
 
   /// returns true if the -v (verbose) flag was set on the
   /// dcli command line.
@@ -30,28 +30,26 @@ class Settings {
   /// dcli -v clean
   bool get isVerbose => _verboseEnabled;
 
-  // ignore: cancel_subscriptions
-  static StreamSubscription<LogRecord>? listener;
+  static StreamSubscription<LogRecord>? _listener;
 
   /// Turns on verbose logging.
   void setVerbose({required bool enabled}) {
     _verboseEnabled = enabled;
 
-    // ignore: flutter_style_todos
-    /// TODO(bsutton): this affects everyones logging so
+    // TODO(bsutton): this affects everyones logging so
     /// I'm uncertain if this is a problem.
     hierarchicalLoggingEnabled = true;
 
     if (enabled) {
       logger.level = Level.INFO;
-      listener ??= logger.onRecord.listen((record) {
+      _listener ??= logger.onRecord.listen((record) {
         print('${record.level.name}: ${record.time}: ${record.message}');
       });
     } else {
       logger.level = Level.OFF;
-      if (listener != null) {
-        unawaited(listener!.cancel());
-        listener = null;
+      if (_listener != null) {
+        unawaited(_listener!.cancel());
+        _listener = null;
       }
     }
   }

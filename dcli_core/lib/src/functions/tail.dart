@@ -54,9 +54,7 @@ class _Tail extends DCliFunction {
           return true;
         });
       });
-    }
-    // ignore: avoid_catches_without_on_clauses
-    catch (e) {
+    } catch (e) {
       throw TailException(
         'An error occured reading ${truepath(path)}. Error: $e',
       );

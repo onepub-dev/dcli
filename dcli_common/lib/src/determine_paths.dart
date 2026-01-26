@@ -12,13 +12,13 @@ import 'package:path/path.dart';
 /// are going to backup [path] to.
 ///
 /// We use the following directory structure for the backup
-/// relative/<path to [path]>
-/// absolute/<path to [path]>
+/// `relative/<path to [path]>`
+/// `absolute/<path to [path]>`
 ///
 /// On Windows to accomodate drive letters we need a slightly
 /// different directory structure
-/// relative/<path to [path]>
-/// absolute/<XDrive>/<path to [path]>
+/// `relative/<path to [path]>`
+/// `absolute/<XDrive>/<path to [path]>`
 ///
 /// Where 'X' is the drive letter that [path] is located on.
 ///
@@ -102,7 +102,6 @@ String translateAbsolutePath(
 
   context ??= p.context;
 
-  // ignore: parameter_assignments
   workingDirectory ??= Directory.current.path;
 
   final parts = context.split(absolutePath);

@@ -146,7 +146,6 @@ includeHidden: $includeHidden, includeEmpty: $includeEmpty, includeLinks: $inclu
             'overwrite: $overwrite, includeLinks: $includeLinks',
       );
     }
-    // ignore: avoid_catches_without_on_clauses
     catch (e) {
       throw CopyTreeException(
         'An error occurred copying directory '

@@ -11,7 +11,7 @@ import 'package:test/test.dart';
 void main() {
   test('head ...', () async {
     await withTempFileAsync((pathToFile) async {
-      await withOpenLineFile(pathToFile, (file) async {
+      await withOpenLineFile(pathToFile, (file) {
         for (var i = 0; i < 100; i++) {
           file.write('Line No. $i');
         }

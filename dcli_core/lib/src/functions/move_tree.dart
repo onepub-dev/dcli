@@ -116,7 +116,6 @@ class _MoveTree extends DCliFunction {
         return true;
       });
     }
-    // ignore: avoid_catches_without_on_clauses
     catch (e) {
       throw MoveTreeException(
         'An error occured moving directory ${truepath(from)} '

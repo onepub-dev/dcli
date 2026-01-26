@@ -102,8 +102,8 @@ class Format {
     }
     final elipses = width <= 2 ? 1 : 3;
     final partLength = (width - elipses) ~/ 2;
-    // ignore: lines_longer_than_80_chars
-    return '${display.substring(0, partLength)}${'.' * elipses}${display.substring(display.length - partLength)}';
+    return '''
+${display.substring(0, partLength)}${'.' * elipses}${display.substring(display.length - partLength)}''';
   }
 
   /// returns a double as a percentage to the given [precision]

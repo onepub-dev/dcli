@@ -24,7 +24,6 @@ void main() {
       final progress = DartScript.fromFile(
         join(projectPath, 'bin', 'run_test.dart'),
       ).start(
-        terminal: false,
         nothrow: true,
       );
       expect(progress.exitCode, equals(0));

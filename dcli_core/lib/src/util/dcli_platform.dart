@@ -30,7 +30,7 @@ class DCliPlatform {
 
   DCliPlatform._internal({this.overriddenPlatform});
 
-  static ScopeKey<DCliPlatform> scopeKey = const ScopeKey<DCliPlatform>();
+  static var scopeKey = const ScopeKey<DCliPlatform>();
 
   static DCliPlatform? _self;
 

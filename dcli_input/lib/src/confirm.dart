@@ -11,6 +11,7 @@ import 'ask.dart';
 
 typedef CustomConfirmPrompt = String Function(
     String prompt,
+    // syntax on callbacks is ugly
     // ignore: avoid_positional_boolean_parameters
     bool? defaultValue);
 
@@ -71,8 +72,8 @@ Future<bool> confirm(String prompt,
   return result;
 }
 
-// ignore: avoid_classes_with_only_static_members
 class Confirm {
+  // syntax on callbacks is ugly
   // ignore: avoid_positional_boolean_parameters
   static String defaultPrompt(String prompt, bool? defaultValue) {
     var finalPrompt = prompt;

@@ -17,8 +17,7 @@ void main() {
     final controller = LimitedStreamController<int>(5);
     final done = Completer<bool>();
 
-    Future<void>.delayed(
-        const Duration(seconds: 10), () async => controller.close());
+    Future<void>.delayed(const Duration(seconds: 10), controller.close);
 
     try {
       for (var i = 0; i < 5; i++) {
@@ -32,7 +31,6 @@ void main() {
         done.complete(true);
       });
       await done.future;
-      // ignore: avoid_catches_without_on_clauses
     } catch (e) {
       print(e);
     } finally {
@@ -67,7 +65,7 @@ void main() {
       final getCompleter = Completer<bool>();
 
       late final StreamSubscription<String> sub;
-      sub = controller.stream.listen((event) async {
+      sub = controller.stream.listen((event) {
         sub.pause();
         print(event);
 

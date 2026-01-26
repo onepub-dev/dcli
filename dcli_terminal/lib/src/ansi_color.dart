@@ -12,14 +12,14 @@ import 'ansi.dart';
 /// Use this to control the color of text when printing to the
 /// console.
 ///
-/// ```
+/// ```dart
 /// print(red('a dark message'));
 /// ```
 /// The [text] to wrap.
 /// By default the color is [bold] however you can turn off bold
 /// by setting the [bold] argment to false:
 ///
-/// ```
+/// ```dart
 /// print(red('a dark message', bold: false));
 /// ```
 ///
@@ -42,14 +42,14 @@ String red(
 /// Use this to control the color of text when printing to the
 /// console.
 ///
-/// ```
+/// ```dart
 /// print(black('a dark message'));
 /// ```
 /// The [text] to wrap.
 /// By default the color is [bold] however you can turn off bold
 /// by setting the [bold] argment to false:
 ///
-/// ```
+/// ```dart
 /// print(black('a dark message', bold: false));
 /// ```
 ///
@@ -72,14 +72,14 @@ String black(
 /// Use this to control the color of text when printing to the
 /// console.
 ///
-/// ```
+/// ```dart
 /// print(green('a dark message'));
 /// ```
 /// The [text] to wrap.
 /// By default the color is [bold] however you can turn off bold
 /// by setting the [bold] argment to false:
 ///
-/// ```
+/// ```dart
 /// print(green('a dark message', bold: false));
 /// ```
 ///
@@ -102,14 +102,14 @@ String green(
 /// Use this to control the color of text when printing to the
 /// console.
 ///
-/// ```
+/// ```dart
 /// print(blue('a dark message'));
 /// ```
 /// The [text] to wrap.
 /// By default the color is [bold] however you can turn off bold
 /// by setting the [bold] argment to false:
 ///
-/// ```
+/// ```dart
 /// print(blue('a dark message', bold: false));
 /// ```
 ///
@@ -132,14 +132,14 @@ String blue(
 /// Use this to control the color of text when printing to the
 /// console.
 ///
-/// ```
+/// ```dart
 /// print(yellow('a dark message'));
 /// ```
 /// The [text] to wrap.
 /// By default the color is [bold] however you can turn off bold
 /// by setting the [bold] argment to false:
 ///
-/// ```
+/// ```dart
 /// print(yellow('a dark message', bold: false));
 /// ```
 ///
@@ -162,14 +162,14 @@ String yellow(
 /// Use this to control the color of text when printing to the
 /// console.
 ///
-/// ```
+/// ```dart
 /// print(magenta('a dark message'));
 /// ```
 /// The [text] to wrap.
 /// By default the color is [bold] however you can turn off bold
 /// by setting the [bold] argment to false:
 ///
-/// ```
+/// ```dart
 /// print(magenta('a dark message', bold: false));
 /// ```
 ///
@@ -193,14 +193,14 @@ String magenta(
 /// Use this to control the color of text when printing to the
 /// console.
 ///
-/// ```
+/// ```dart
 /// print(cyan('a dark message'));
 /// ```
 /// The [text] to wrap.
 /// By default the color is [bold] however you can turn off bold
 /// by setting the [bold] argment to false:
 ///
-/// ```
+/// ```dart
 /// print(cyan('a dark message', bold: false));
 /// ```
 ///
@@ -224,14 +224,14 @@ String cyan(
 /// Use this to control the color of text when printing to the
 /// console.
 ///
-/// ```
+/// ```dart
 /// print(white('a dark message'));
 /// ```
 /// The [text] to wrap.
 /// By default the color is [bold] however you can turn off bold
 /// by setting the [bold] argment to false:
 ///
-/// ```
+/// ```dart
 /// print(white('a dark message', bold: false));
 /// ```
 ///
@@ -255,14 +255,14 @@ String white(
 /// Use this to control the color of text when printing to the
 /// console.
 ///
-/// ```
+/// ```dart
 /// print(orange('a dark message'));
 /// ```
 /// The [text] to wrap.
 /// By default the color is [bold] however you can turn off bold
 /// by setting the [bold] argment to false:
 ///
-/// ```
+/// ```dart
 /// print(orange('a dark message', bold: false));
 /// ```
 ///
@@ -286,14 +286,14 @@ String orange(
 /// Use this to control the color of text when printing to the
 /// console.
 ///
-/// ```
+/// ```dart
 /// print(grey('a dark message'));
 /// ```
 /// The [text] to wrap.
 /// By default the color is [bold] however you can turn off bold
 /// by setting the [bold] argment to false:
 ///
-/// ```
+/// ```dart
 /// print(grey('a dark message', bold: false));
 /// ```
 ///
@@ -414,80 +414,80 @@ class AnsiColor {
   /// Resets
 
   /// Reset fg and bg colors
-  static const String _resetCode = '0';
+  static const _resetCode = '0';
 
   /// Defaults the terminal's fg color without altering the bg.
-  static const String _fgResetCode = '39';
+  static const _fgResetCode = '39';
 
   /// Defaults the terminal's bg color without altering the fg.
-  static const String _bgResetCode = '49';
+  static const _bgResetCode = '49';
 
   // emit this code followed by a color code to set the fg color
-  static const String _fgColorCode = '38;5;';
+  static const _fgColorCode = '38;5;';
 
 // emit this code followed by a color code to set the fg color
-  static const String _backgroundCode = '48;5;';
+  static const _backgroundCode = '48;5;';
 
   /// code for black
-  static const int codeBlack = 30;
+  static const codeBlack = 30;
 
   /// code for  red
-  static const int codeRed = 31;
+  static const codeRed = 31;
 
   /// code for green
-  static const int codeGreen = 32;
+  static const codeGreen = 32;
 
   /// code for yellow
-  static const int codeYellow = 33;
+  static const codeYellow = 33;
 
   /// code for  blue
-  static const int codeBlue = 34;
+  static const codeBlue = 34;
 
   /// code for magenta
-  static const int codeMagenta = 35;
+  static const codeMagenta = 35;
 
   /// code for cyan
-  static const int codeCyan = 36;
+  static const codeCyan = 36;
 
   /// code for white
-  static const int codeWhite = 37;
+  static const codeWhite = 37;
 
   /// code for orange
-  static const int codeOrange = 208;
+  static const codeOrange = 208;
 
   /// code for grey
-  static const int codeGrey = 232;
+  static const codeGrey = 232;
 
   /// Colors
   /// black
-  static const AnsiColor black = AnsiColor(codeBlack);
+  static const black = AnsiColor(codeBlack);
 
   /// red
-  static const AnsiColor red = AnsiColor(codeRed);
+  static const red = AnsiColor(codeRed);
 
   /// green
-  static const AnsiColor green = AnsiColor(codeGreen);
+  static const green = AnsiColor(codeGreen);
 
   /// yellow
-  static const AnsiColor yellow = AnsiColor(codeYellow);
+  static const yellow = AnsiColor(codeYellow);
 
   /// blue
-  static const AnsiColor blue = AnsiColor(codeBlue);
+  static const blue = AnsiColor(codeBlue);
 
   /// magenta
-  static const AnsiColor magenta = AnsiColor(codeMagenta);
+  static const magenta = AnsiColor(codeMagenta);
 
   /// cyan
-  static const AnsiColor cyan = AnsiColor(codeCyan);
+  static const cyan = AnsiColor(codeCyan);
 
   /// white
-  static const AnsiColor white = AnsiColor(codeWhite);
+  static const white = AnsiColor(codeWhite);
 
   /// orange
-  static const AnsiColor orange = AnsiColor(codeOrange);
+  static const orange = AnsiColor(codeOrange);
 
   /// passing this as the background color will cause
   /// the background code to be suppressed resulting
   /// in the default background color.
-  static const AnsiColor none = AnsiColor(-1, bold: false);
+  static const none = AnsiColor(-1, bold: false);
 }

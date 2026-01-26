@@ -9,7 +9,7 @@ import 'package:dcli_core/dcli_core.dart';
 import 'package:test/test.dart';
 
 void main() {
-  test('find stream', () async {
+  test('find stream', () {
     var count = 0;
     find(
       '*',

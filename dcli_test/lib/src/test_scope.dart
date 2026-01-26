@@ -11,7 +11,7 @@ import 'package:dcli_core/dcli_core.dart' as core;
 import 'package:path/path.dart';
 import 'package:scope/scope.dart';
 
-final commonTestPubCache = join(rootPath, 'tmp', '.dcli', '.pub-cache');
+final String commonTestPubCache = join(rootPath, 'tmp', '.dcli', '.pub-cache');
 
 /// Sets up a test scope providing a unique
 /// Environment
@@ -22,11 +22,11 @@ Future<void> withTestScope(Future<void> Function(String testDir) callback,
     {Map<String, String> environment = const <String, String>{},
     String? pathToTestDir,
     core.DCliPlatformOS? overridePlatformOS}) async {
-
   await UnitTestController.withUnitTest(() async {
     await core.withTempDirAsync((testDir) async {
       await core.withEnvironmentAsync(() async {
         final scope = Scope()
+          // This variable is use to help wehen testing dcli.
           // ignore: invalid_use_of_visible_for_testing_member
           ..value(installFromSourceKey, true)
           ..value(

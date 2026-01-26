@@ -52,7 +52,6 @@ class _DeleteDir extends DCliFunction {
     try {
       Directory(path).deleteSync(recursive: recursive);
     }
-    // ignore: avoid_catches_without_on_clauses
     catch (e) {
       throw DeleteDirException(
         'Unable to delete the directory ${truepath(path)}. Error: $e',

@@ -41,8 +41,7 @@ class Terminal {
   /// Factory ctor to get a Terminal
   factory Terminal() => _self;
 
-  // ignore: flutter_style_todos
-  /// TODO(bsutton): if we don't have a terminal or ansi isn't supported
+  // TODO(bsutton): if we don't have a terminal or ansi isn't supported
   /// we need to suppress any ansi codes being output.
 
   Terminal._internal();
@@ -157,7 +156,6 @@ class Terminal {
 
   /// moves the cursor to the given column
   /// 0 is the first column
-  // ignore: avoid_setters_without_getters
   set column(int column) {
     _console.cursorPosition = Coordinate(row, column);
   }
@@ -197,6 +195,7 @@ class Terminal {
     if (hasTerminal && Ansi.isSupported) {
       try {
         return _console.cursorPosition;
+        // so we can handle stdin closes gracefully
         // ignore: avoid_catching_errors
       } on RangeError catch (_) {
         // if stdin is closed (seems to be within docker)

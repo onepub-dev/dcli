@@ -6,7 +6,6 @@
  */
 
 import 'dart:async';
-
 import 'dart:math';
 
 /// A [AsyncCircularBuffer] with a fixed capacity supporting
@@ -73,7 +72,7 @@ class AsyncCircularBuffer<T>
   /// all elements read.
   final _done = Completer<bool>();
 
-  int _start = 0;
+  var _start = 0;
   int _end;
   int _count;
 

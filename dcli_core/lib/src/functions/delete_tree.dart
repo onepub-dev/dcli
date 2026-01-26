@@ -82,7 +82,6 @@ class _DeleteTree extends DCliFunction {
         return true;
       });
     }
-    // ignore: avoid_catches_without_on_clauses
     catch (e) {
       throw DeleteTreeException(
         'An error occured deleting directory ${truepath(path)}. '

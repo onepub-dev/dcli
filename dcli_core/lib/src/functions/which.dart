@@ -81,7 +81,7 @@ Which which(
 class Which {
   String? _path;
   final _paths = <String>[];
-  bool _found = false;
+  var _found = false;
 
   /// The progress used to accumualte the results
   /// If verbose was passed this will contain all

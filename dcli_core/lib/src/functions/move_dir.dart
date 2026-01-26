@@ -66,7 +66,6 @@ class _MoveDir extends DCliFunction {
       copyTree(from, to, includeHidden: true);
       delete(from);
     }
-    // ignore: avoid_catches_without_on_clauses
     catch (e) {
       throw MoveDirException(
         'The Move of ${truepath(from)} to ${truepath(to)} failed. Error $e',

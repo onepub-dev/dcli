@@ -59,7 +59,6 @@ void copy(String from, String to, {bool overwrite = false}) {
       File(from).copySync(finalto);
     }
   }
-  // ignore: avoid_catches_without_on_clauses
   catch (e) {
     /// lets try and improve the message.
     /// We do these checks only on failure

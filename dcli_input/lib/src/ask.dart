@@ -19,6 +19,7 @@ import 'echo.dart';
 typedef CustomAskPrompt = String Function(
     String prompt,
     String? defaultValue,
+    // syntax on callbacks is ugly
     // ignore: avoid_positional_boolean_parameters
     bool hidden);
 
@@ -118,7 +119,7 @@ Future<String> ask(
   CustomAskPrompt customPrompt = Ask.defaultPrompt,
   AskValidator validator = Ask.dontCare,
   String? customErrorMessage,
-}) async =>
+}) =>
     Ask()._ask(
       prompt,
       toLower: toLower,
@@ -130,12 +131,11 @@ Future<String> ask(
       customErrorMessage: customErrorMessage,
     );
 
-// ignore: avoid_clas
 /// Class for [ask] and related code.
 class Ask extends core.DCliFunction {
-  static const int _delete = 127;
-  static const int _space = 32;
-  static const int _backpace = 8;
+  static const _delete = 127;
+  static const _space = 32;
+  static const _backpace = 8;
 
   ///
   /// Reads user input from stdin and returns it as a string.
@@ -176,8 +176,6 @@ class Ask extends core.DCliFunction {
       if (line.isEmpty && defaultValue != null) {
         line = defaultValue;
       }
-
-      
 
       if (toLower) {
         line = line.toLowerCase();
@@ -247,6 +245,7 @@ class Ask extends core.DCliFunction {
   static String defaultPrompt(
       String prompt,
       String? defaultValue,
+      // syntax on callbacks is ugly
       // ignore: avoid_positional_boolean_parameters
       bool hidden) {
     var result = prompt;
@@ -566,13 +565,13 @@ class AskValidatorIPAddress extends AskValidator {
   const AskValidatorIPAddress({this.version = either});
 
   /// The ip address may be either [ipv4] or [ipv6].
-  static const int either = 0;
+  static const either = 0;
 
   /// The ip address must be an ipv4 address.
-  static const int ipv4 = 4;
+  static const ipv4 = 4;
 
   /// The ip address must be an ipv6 address.
-  static const int ipv6 = 6;
+  static const ipv6 = 6;
 
   /// IP version (on 4 and 6 are valid versions.)
   final int version;
@@ -667,7 +666,7 @@ class _AskValidatorLength extends AskValidator {
   late _AskValidatorAll _validator;
 
   @override
-  Future<String> validate(String line, {String? customErrorMessage}) async {
+  Future<String> validate(String line, {String? customErrorMessage})  {
     final finalline = line.trim();
 
     return _validator.validate(finalline,

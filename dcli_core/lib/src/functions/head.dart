@@ -43,7 +43,6 @@ class _Head extends DCliFunction {
         return result;
       });
     }
-    // ignore: avoid_catches_without_on_clauses
     catch (e) {
       throw HeadException(
         'An error occured reading ${truepath(path)}. Error: $e',

@@ -9,7 +9,7 @@ import 'package:dcli_core/dcli_core.dart';
 import 'package:test/test.dart';
 
 void main() {
-  test('env ...', () async {
+  test('env ...', () {
     expect(Env().exists('PATH'), isTrue);
     expect(Env().exists('FREDWASHERE'), isFalse);
     env['AAAA'] = null;

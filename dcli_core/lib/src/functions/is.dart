@@ -30,7 +30,7 @@ bool isDirectory(String path) => _Is().isDirectory(path);
 
 /// Returns true if the given [path] is a symlink
 ///
-/// // ```dart
+/// ```dart
 /// isLink("~/fred.jpg");
 /// ```
 bool isLink(String path) => _Is().isLink(path);

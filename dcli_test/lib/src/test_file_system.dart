@@ -97,15 +97,15 @@ class TestFileSystem {
   /// directory under .dcli which we used to store compiled
   /// tests scripts that we need to add to the TestFileSystems
   /// path.
-  static const String testLinesFile = 'lines.txt';
+  static const testLinesFile = 'lines.txt';
 
   String? home;
 
   String get fsRoot => join(TestFileSystem._testRoot, uniquePath);
 
-  bool initialised = false;
+  var initialised = false;
 
-  bool dcliActivated = false;
+  var dcliActivated = false;
 
   /// The location of any temp scripts
   /// that need to be created during testing.
@@ -114,8 +114,7 @@ class TestFileSystem {
   /// The location of the test_script directory
   late String testScriptPath;
 
-  static TestFileSystem common =
-      TestFileSystem._internal(includeProjectTemplates: true);
+  static var common = TestFileSystem._internal(includeProjectTemplates: true);
 
   String tempFile({String? suffix}) => createTempFilename(suffix: suffix);
 
@@ -149,7 +148,7 @@ class TestFileSystem {
     try {
       env['HOME'] = fsRoot;
       home = fsRoot;
-        Env().prependToPATH(PubCache().pathToBin);
+      Env().prependToPATH(PubCache().pathToBin);
       Env().prependToPATH(join(fsRoot, '.dcli', 'bin'));
 
       final isolateID = Service.getIsolateId(Isolate.current);
@@ -167,9 +166,7 @@ class TestFileSystem {
       }
 
       await action(this);
-    }
-    // ignore: avoid_catches_without_on_clauses
-    catch (e, st) {
+    } catch (e, st) {
       verbose(e.toString);
       st.toString();
       rethrow;
@@ -215,8 +212,7 @@ class TestFileSystem {
     copyTree(originalDartConfig, testFSDartConfig, overwrite: true);
   }
 
-  // ignore: prefer_constructors_over_static_methods
-  static TestFileSystem setup() {
+  factory TestFileSystem.setup() {
     final paths = TestFileSystem();
 
     return paths;
@@ -236,8 +232,7 @@ class TestFileSystem {
 
   /// Used by third parties to build a populated and
   /// well know diretory tree for testing.
-  static void buildDirectoryTree(String root,
-      {bool includedEmptyDir = false}) {
+  static void buildDirectoryTree(String root, {bool includedEmptyDir = false}) {
     final top = join(root, 'top');
     final thidden = join(top, '.hidden');
     final middle = join(top, 'middle');
@@ -374,7 +369,6 @@ dependency_overrides:
     path: ${join(pathToDCliRoot, 'dcli_terminal')}  
         ''');
 
-      // ignore: discarded_futures
       // await capture(() async {
       await DartProject.fromPath(dirname(pathToPubspec)).warmup(upgrade: true);
       // }, progress: Progress.printStdErr());

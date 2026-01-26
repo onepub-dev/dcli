@@ -36,7 +36,7 @@ import '../../dcli_core.dart';
 /// ```
 ///
 /// Valid patterns are:
-/// ```
+/// ```none
 ///
 /// [*] - matches any number of any characters including none.
 ///
@@ -103,7 +103,7 @@ Stream<FindItem> findAsync(
 
 /// Implementation for the [_findAsync] function.
 class FindAsync extends DCliFunction {
-  final bool _closed = false;
+  final _closed = false;
 
   /// Find matching files and return them as a stream
   Future<void> _findAsync(
@@ -226,7 +226,6 @@ class FindAsync extends DCliFunction {
           }
           nextLevelIndex++;
         }
-        // ignore: avoid_catches_without_on_clauses
       } catch (e) {
         if (_isGeneralIOError(e)) {
           /// can mean a corrupt disk, problems with virtualisation
@@ -252,7 +251,6 @@ class FindAsync extends DCliFunction {
                 ' ${e.path}',
           );
         } else {
-          // ignore: only_throw_errors
           rethrow;
         }
       }
@@ -341,15 +339,15 @@ class FindAsync extends DCliFunction {
 
   /// pass as a value to the find types argument
   /// to select files to be found
-  static const file = FileSystemEntityType.file;
+  static const FileSystemEntityType file = FileSystemEntityType.file;
 
   /// pass as a value to the final types argument
   /// to select directories to be found
-  static const directory = FileSystemEntityType.directory;
+  static const FileSystemEntityType directory = FileSystemEntityType.directory;
 
   /// pass as a value to the final types argument
   /// to select links to be found
-  static const link = FileSystemEntityType.link;
+  static const FileSystemEntityType link = FileSystemEntityType.link;
 
   bool _isGeneralIOError(Object e) {
     var error = false;

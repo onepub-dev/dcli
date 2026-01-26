@@ -4,26 +4,26 @@ import 'package:path/path.dart';
 /// Absolute paths to each of the packages so we can reference them
 /// during testing.
 
-final pathToPackageDCli =
+final String pathToPackageDCli =
     join(dirname(DartProject.self.pathToProjectRoot), 'dcli');
 
-final pathToPackageCommon =
+final String pathToPackageCommon =
     join(dirname(DartProject.self.pathToProjectRoot), 'dcli_common');
 
-final pathToPackageCore =
+final String pathToPackageCore =
     join(dirname(DartProject.self.pathToProjectRoot), 'dcli_core');
 
-final pathToPackageInput =
+final String pathToPackageInput =
     join(dirname(DartProject.self.pathToProjectRoot), 'dcli_input');
 
-final pathToPackageSdk =
+final String pathToPackageSdk =
     join(dirname(DartProject.self.pathToProjectRoot), 'dcli_sdk');
 
-final pathToPackageTerminal =
+final String pathToPackageTerminal =
     join(dirname(DartProject.self.pathToProjectRoot), 'dcli_terminal');
 
-final pathToPackageTest =
+final String pathToPackageTest =
     join(dirname(DartProject.self.pathToProjectRoot), 'dcli_test');
 
-final pathToPackageUnitTester =
+final String pathToPackageUnitTester =
     join(dirname(DartProject.self.pathToProjectRoot), 'dcli_unit_tester');

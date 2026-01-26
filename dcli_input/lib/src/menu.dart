@@ -25,7 +25,7 @@ typedef CustomMenuPrompt = String Function(
 /// var color = menu( 'Please select a color', options: colors);
 /// ```
 /// Results in:
-///```
+///```non`
 /// 1) Red
 /// 2) Green
 /// Please select a color:
@@ -85,7 +85,6 @@ Future<T> menu<T>(
     );
   }
   limit ??= options.length;
-  // ignore: parameter_assignments
   limit = min(options.length, limit);
   format ??= _noFormat;
 
@@ -149,7 +148,6 @@ Future<T> menu<T>(
   return options[index - 1];
 }
 
-// ignore: avoid_classes_with_only_static_members
 class Menu {
   static String defaultPrompt<T>(String prompt, T? defaultValue) {
     var result = prompt;

@@ -89,7 +89,6 @@ class _CreateDir extends DCliFunction {
 
       Directory(path).createSync(recursive: recursive);
     }
-    // ignore: avoid_catches_without_on_clauses
     catch (e) {
       throw CreateDirException(
         'Unable to create the directory ${truepath(path)}. Error: $e',

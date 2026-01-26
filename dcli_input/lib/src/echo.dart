@@ -18,7 +18,7 @@ import 'package:dcli_core/dcli_core.dart';
 /// If [newline] is false then a newline will not be output.
 ///
 /// [newline] defaults to false.
-Future<void> echo(String text, {bool newline = false}) async =>
+Future<void> echo(String text, {bool newline = false}) =>
     _Echo().echo(text, newline: newline);
 
 class _Echo extends DCliFunction {
@@ -28,7 +28,6 @@ class _Echo extends DCliFunction {
     } else {
       stdout.write(text);
     }
-    // ignore: discarded_futures
     await stdout.flush();
   }
 }

@@ -1,2 +1,5 @@
+analyzer:
+  errors:
+    avoid_classes_with_only_static_members: ignore
 include: package:lint_hard/all.yaml
 

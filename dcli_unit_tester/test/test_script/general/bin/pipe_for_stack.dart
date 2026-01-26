@@ -27,7 +27,7 @@ Future<void> main() async {
   //await head.stdout.transform(streamTransformer).pipe(stdout);
 }
 
-Future<Process> start(String command, List<String> args) async {
+Future<Process> start(String command, List<String> args) {
   final process = Process.start(
     command,
     args,

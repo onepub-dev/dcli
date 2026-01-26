@@ -19,6 +19,7 @@ void main() {
   print("password: ${ask('password:', hidden: true)}");
 }
 
+// for experimental use only
 // ignore: unreachable_from_main
 String readHidden() {
   final line = <int>[];

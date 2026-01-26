@@ -5,8 +5,6 @@
  * Written by Brett Sutton <bsutton@onepub.dev>, Jan 2022
  */
 
-// ignore_for_file: deprecated_member_use
-
 import 'dart:async';
 import 'dart:io';
 
@@ -34,6 +32,7 @@ Future<void> main() async {
   //Future.wait([dart.])
 }
 
+// for later use.
 // ignore: unreachable_from_main
 Future<void> pipeTo2(Future<Process> lhs, Future<Process> rhs) async {
   final lhsProcess = await lhs;
@@ -47,13 +46,12 @@ Future<void> pipeTo2(Future<Process> lhs, Future<Process> rhs) async {
   rhsProcess.stdout.listen(stdout.add);
   rhsProcess.stderr.listen(stderr.add);
 
-  await rhsProcess.stdin.done
-      //ignore: avoid_types_on_closure_parameters
-      .catchError((Object e) {
+  await rhsProcess.stdin.done.catchError((Object e) {
     // forget broken pipe after rhs terminates before lhs
   }, test: (e) => e is SocketException && e.osError!.message == 'Broken pipe');
 }
 
+// for later use.
 // ignore: unreachable_from_main
 Future<void> pipeTo(Future<Process> lhs, Future<Process> rhs) async {
   final complete = Completer<void>();
@@ -63,8 +61,7 @@ Future<void> pipeTo(Future<Process> lhs, Future<Process> rhs) async {
   // output to the rhs process.
   // ignore: discarded_futures
   await lhs.then((lhsProcess) {
-    // ignore: discarded_futures
-    rhs.then<void>((rhsProcess) {
+    unawaited(rhs.then<void>((rhsProcess) {
       // write stdout from lhs to stdin of rhs
       lhsProcess.stdout.listen((datum) {
         print('listen');
@@ -74,7 +71,6 @@ Future<void> pipeTo(Future<Process> lhs, Future<Process> rhs) async {
         print('done');
         complete.complete();
       }, // stdoutCompleter.complete(true),
-          //ignore: avoid_types_on_closure_parameters
           onError: (Object e, StackTrace s) =>
               print('onError $e'), // stdoutCompleter.completeError(e),
           cancelOnError: true);
@@ -90,28 +86,26 @@ Future<void> pipeTo(Future<Process> lhs, Future<Process> rhs) async {
           complete.complete();
         }
       }, // stdoutCompleter.complete(true),
-          //ignore: avoid_types_on_closure_parameters
           onError: (Object e, StackTrace s) =>
               print('onError $e'), // stdoutCompleter.completeError(e),
           cancelOnError: true);
 
-      // ignore: discarded_futures
-      lhsProcess.exitCode.then((exitCode) {
+      unawaited(lhsProcess.exitCode.then((exitCode) {
         print('lhs exitCode=$exitCode');
-      });
+      }));
 
-      // ignore: discarded_futures
-      rhsProcess.exitCode.then((exitCode) {
+      unawaited(rhsProcess.exitCode.then((exitCode) {
         print('rhs exitCode=$exitCode');
-      });
-    });
+      }));
+    }));
   });
 
   await complete.future;
 }
 
+// for later use.
 // ignore: unreachable_from_main
-Future<Process> start(String command, List<String> args) async {
+Future<Process> start(String command, List<String> args) {
   final process = Process.start(
     command,
     args,
