@@ -1,0 +1,2 @@
+  exclude-tags: [privileged]
+  hooks: true
