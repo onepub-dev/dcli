@@ -165,6 +165,22 @@ packages:
       relative: true
     source: path
     version: "8.4.0"
+  document_throws:
+    dependency: transitive
+    description:
+      name: document_throws
+      sha256: f98363e2d787eb4b0edbd8fc25a0527661d4943645f4aa96cee5b451ed8de4ab
+      url: "https://pub.dev"
+    source: hosted
+    version: "0.2.1"
+  document_throws_annotation:
+    dependency: transitive
+    description:
+      name: document_throws_annotation
+      sha256: "0041a7a75f6ba1381a700b172f953aecf6968d89ab52c7b11bc41bfe6d6d8aeb"
+      url: "https://pub.dev"
+    source: hosted
+    version: "0.1.0"
   equatable:
     dependency: transitive
     description:
@@ -249,10 +265,10 @@ packages:
     dependency: "direct dev"
     description:
       name: lint_hard
-      sha256: "920de53027116b7facbdb1c1423ea6a991ec260e450beedef1b824678c04a0e3"
+      sha256: "6b5c688ca3227c6312190c11c7dc0f92af9f32d3e02cf97d3814c2de016a14aa"
       url: "https://pub.dev"
     source: hosted
-    version: "7.0.1"
+    version: "7.1.1"
   logging:
     dependency: transitive
     description:
