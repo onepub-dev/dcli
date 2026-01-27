@@ -1,7 +1,15 @@
-dependency_overrides: 
-  dcli: 
-    path: ../dcli
-  dcli_common: 
-    path: ../dcli_common
-  dcli_terminal: 
-    path: ../dcli_terminal
+dependency_overrides:
+  dcli_common:
+    path: /home/bsutton/git/dcli/dcli_common
+  dcli_test:
+    path: /home/bsutton/git/dcli/dcli_test
+  dcli_unit_tester:
+    path: /home/bsutton/git/dcli/dcli_unit_tester
+  dcli_input:
+    path: /home/bsutton/git/dcli/dcli_input
+  dcli_terminal:
+    path: /home/bsutton/git/dcli/dcli_terminal
+  dcli_sdk:
+    path: /home/bsutton/git/dcli/dcli_sdk
+  dcli:
+    path: /home/bsutton/git/dcli/dcli
