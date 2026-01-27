@@ -171,34 +171,44 @@ packages:
   dcli_common:
     dependency: "direct main"
     description:
-      name: dcli_common
-      sha256: b95e33acc16692cf3f6b2c1d443604a30917b22b6afee224761b63d7eaa7ced0
-      url: "https://pub.dev"
-    source: hosted
+      path: "/home/bsutton/git/dcli/dcli_common"
+      relative: false
+    source: path
     version: "8.4.1"
   dcli_core:
     dependency: "direct main"
     description:
-      name: dcli_core
-      sha256: "9dbec97f5a0a65cdc1050a82a6a67c188925bb1695a6a64e9061210ef382a5d4"
-      url: "https://pub.dev"
-    source: hosted
+      path: "/home/bsutton/git/dcli/dcli_core"
+      relative: false
+    source: path
+    version: "8.4.1"
+  dcli_input:
+    dependency: "direct overridden"
+    description:
+      path: "/home/bsutton/git/dcli/dcli_input"
+      relative: false
+    source: path
     version: "8.4.1"
   dcli_terminal:
     dependency: "direct main"
     description:
-      name: dcli_terminal
-      sha256: a88a0b10af4f21b2d878bb685145f716e5dbca6c624b049c4e6f9dd332ed7e3c
-      url: "https://pub.dev"
-    source: hosted
+      path: "/home/bsutton/git/dcli/dcli_terminal"
+      relative: false
+    source: path
     version: "8.4.1"
   dcli_test:
     dependency: "direct dev"
     description:
-      name: dcli_test
-      sha256: "333b34c7e38fd9a5023f37ee47ae521768c12868ffa1bc0796718968238de733"
-      url: "https://pub.dev"
-    source: hosted
+      path: "/home/bsutton/git/dcli/dcli_test"
+      relative: false
+    source: path
+    version: "8.4.1"
+  dcli_unit_tester:
+    dependency: "direct overridden"
+    description:
+      path: "/home/bsutton/git/dcli/dcli_unit_tester"
+      relative: false
+    source: path
     version: "8.4.1"
   document_throws:
     dependency: transitive
