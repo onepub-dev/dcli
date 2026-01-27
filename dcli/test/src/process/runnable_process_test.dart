@@ -113,7 +113,7 @@ void main() {
         'test_script',
         'general',
         'bin',
-        'dcli_exit_test.dart',
+        'dcli_exit_code.dart',
       ),
       [
         '25',
@@ -129,7 +129,7 @@ void main() {
         'test_script',
         'general',
         'bin',
-        'dcli_exit_test.dart',
+        'dcli_exit_code.dart',
       ),
       [
         '0',
@@ -148,7 +148,7 @@ void main() {
           'test_script',
           'general',
           'bin',
-          'dcli_exit_test.dart',
+          'dcli_exit_code.dart',
         ),
         [
           '25',
