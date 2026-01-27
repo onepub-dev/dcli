@@ -67,7 +67,15 @@ void main() {
 
       /// make certain the dcli_unit_tester script is in a ready to run
       /// state.
-      DartScript.fromFile(pathToTestScript).runPubGet();
+      final testScript = DartScript.fromFile(pathToTestScript);
+      testScript.runPubGet();
+      // NOTE: In CI we sometimes see isReadyToRun=false right after pub get,
+      // likely due to timestamp ordering on pubspec.yaml vs lock/package_config.
+      // Not fully understood, but touching these files fixes the failure.
+      final projectRoot = testScript.pathToProjectRoot;
+      touch(join(projectRoot, 'pubspec.lock'), create: true);
+      touch(join(projectRoot, '.dart_tool', 'package_config.json'),
+          create: true);
       print(orange('pub get complete'));
       final result = 'dart $pathToTestScript --script'
           .start(progress: Progress.capture(), nothrow: true)
