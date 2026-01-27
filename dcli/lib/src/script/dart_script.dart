@@ -16,7 +16,7 @@ import 'package:stack_trace/stack_trace.dart';
 
 import '../../dcli.dart';
 import 'dart_script_creator.dart';
-import 'runner.dart';
+import 'script_runner.dart';
 
 /// Used to manage a DCli script.
 ///

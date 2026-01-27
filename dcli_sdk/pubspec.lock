@@ -164,10 +164,9 @@ packages:
   dcli:
     dependency: "direct main"
     description:
-      name: dcli
-      sha256: c0d203401587e2c88f1adb2b1308d28bc0f6143c8abbf3c5aaf9e2f6870bb772
-      url: "https://pub.dev"
-    source: hosted
+      path: "../dcli"
+      relative: true
+    source: path
     version: "8.4.0"
   dcli_common:
     dependency: "direct main"

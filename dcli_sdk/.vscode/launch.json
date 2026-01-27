@@ -23,6 +23,16 @@
             "request": "launch",
             "type": "dart",
             "cwd": "/home/bsutton/git/minion"
-        }
+        },
+        {
+            "name": "run startup",
+            "program": "/home/bsutton/git/dcli/dcli_sdk/bin/dcli.dart",
+            "args": [
+                "-v",
+                "/home/bsutton/git/issues/startup/bin/startup.dart"
+            ],
+            "request": "launch",
+            "type": "dart",
+        },
     ]
 }

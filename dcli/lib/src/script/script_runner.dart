@@ -23,7 +23,11 @@ class ScriptRunner {
   int run() {
     // Prepare VM arguments
     final vmArgs = <String>[
-      '--enable-asserts',
+      'run',
+      //    Enable faster startup times by using a resident frontend compiler
+      // for compilation.
+      '--resident',
+      // '--enable-asserts',
       script.pathToScript,
       ..._scriptArguments
     ];

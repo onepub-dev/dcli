@@ -111,8 +111,7 @@ class CommandLineRunner {
   }
 
   void _configVerbose(Flag flag) {
-    verbose(() => 'Setting flag: ${flag.name}');
-    verbose(() => 'DCli Version: ${Settings().version}');
+    Settings().setVerbose(enabled: true);
     final verboseFlag = flag as VerboseFlag;
     if (verboseFlag.hasOption) {
       core.Settings().captureLogOutput().listen((record) {
@@ -120,5 +119,7 @@ class CommandLineRunner {
             .append('${record.level.name}: ${record.time}: ${record.message}');
       });
     }
+    verbose(() => 'Setting flag: ${flag.name}');
+    verbose(() => 'DCli Version: ${Settings().version}');
   }
 }
