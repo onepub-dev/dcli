@@ -42,9 +42,7 @@ Future<void> prepareTemplates() async {
       (dependencies['dcli_core']! as DependencyPubHosted).versionConstraint =
           packageVersion;
     }
-    pubspec
-      ..environment.sdk = environment.sdk
-      ..environment.flutter = environment.flutter
-      ..save();
+    pubspec.environment.sdk = environment.sdk;
+    pubspec.save();
   });
 }
