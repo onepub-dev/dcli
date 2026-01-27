@@ -10,6 +10,7 @@ dependencies:
   dcli_core: ^8.4.0
   dcli_terminal: ^8.4.0
   path: ^1.8.0
+  strings: ^4.0.1
 dev_dependencies:
   lint_hard: ^7.0.1
 executables:

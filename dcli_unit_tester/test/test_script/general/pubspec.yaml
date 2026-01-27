@@ -7,14 +7,14 @@ environment:
 
 dependencies:
   args: ^2.3.1
-  dcli: ^3.0.0
-  dcli_core: ^3.0.0
+  dcli: ^8.4.0
+  dcli_core: ^8.4.0
   path: ^1.8.0
   strings: ^4.0.1
   
 
 dev_dependencies:
-  lint_hard: ^7.0.1
+  lint_hard: ^7.1.1
 
 dependency_overrides: 
   dcli: 
