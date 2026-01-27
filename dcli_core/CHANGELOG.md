@@ -1,3 +1,9 @@
+# 8.4.1
+- Change the script runner to use the --resident flag to improve startup times for dart scripts (from 5sec down to 1).  
+- Fixed a bug where the -v flag wasn't actually enabling verbose logging.
+- moved flag class into its own file, verbose and help as well.
+
+
 # 8.4.0
 - no using the  document_throws package to document all exceptions.
 - document all exceptions.
