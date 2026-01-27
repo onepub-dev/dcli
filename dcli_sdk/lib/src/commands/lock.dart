@@ -13,7 +13,7 @@ import 'package:pub_semver/pub_semver.dart' as sm;
 import 'package:pubspec_lock/pubspec_lock.dart';
 import 'package:pubspec_manager/pubspec_manager.dart';
 
-import '../script/flags.dart';
+import '../script/flag.dart';
 import '../util/completion.dart';
 import '../util/exceptions.dart';
 import 'commands.dart';

@@ -1,7 +1,7 @@
 import 'package:dcli/dcli.dart';
 import 'package:path/path.dart';
 
-import 'flags.dart';
+import 'flag.dart';
 
 /// Allows a user to select which template to use when
 /// creating a project.

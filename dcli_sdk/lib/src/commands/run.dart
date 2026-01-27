@@ -7,7 +7,7 @@
 
 import 'package:dcli/dcli.dart';
 
-import '../script/flags.dart';
+import '../script/flag.dart';
 import '../util/completion.dart';
 import '../util/exceptions.dart';
 import '../util/exit.dart';

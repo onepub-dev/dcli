@@ -8,6 +8,7 @@
 import 'package:dcli/dcli.dart';
 import 'package:path/path.dart';
 
+import '../script/flag.dart';
 import '../script/flags.dart';
 import '../script/template_flag.dart';
 import '../script/template_list_flag.dart';

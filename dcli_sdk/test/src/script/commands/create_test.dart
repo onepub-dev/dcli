@@ -10,7 +10,7 @@ library;
 import 'package:dcli/dcli.dart';
 import 'package:dcli_core/dcli_core.dart' as core;
 import 'package:dcli_sdk/src/commands/create.dart';
-import 'package:dcli_sdk/src/script/flags.dart';
+import 'package:dcli_sdk/src/script/verbose_flag.dart';
 import 'package:path/path.dart';
 import 'package:test/test.dart';
 

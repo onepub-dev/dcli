@@ -1,4 +1,4 @@
-import 'flags.dart';
+import 'flag.dart';
 
 /// Prints a list of the templates and exists
 class TemplateListFlag extends Flag {

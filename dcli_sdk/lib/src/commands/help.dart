@@ -8,7 +8,7 @@
 import 'package:dcli/dcli.dart';
 
 import '../script/command_line_runner.dart';
-import '../script/flags.dart';
+import '../script/flag.dart';
 import '../util/exceptions.dart';
 import '../version/version.g.dart';
 import 'commands.dart';

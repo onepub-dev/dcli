@@ -5,7 +5,7 @@
  * SPDX-License-Identifier: MIT
  */
 
-import '../script/flags.dart';
+import '../script/flag.dart';
 import 'clean.dart';
 import 'compile.dart';
 import 'create.dart';

@@ -1,4 +1,4 @@
-import 'flags.dart';
+import 'flag.dart';
 
 class SelectedFlags {
   static final _self = SelectedFlags._();

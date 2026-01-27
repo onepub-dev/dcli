@@ -5,6 +5,7 @@ import 'package:dcli_core/dcli_core.dart' as core;
 import 'package:path/path.dart';
 import 'package:pubspec_manager/pubspec_manager.dart';
 
+import '../script/flag.dart';
 import '../script/flags.dart';
 import '../util/completion.dart';
 import '../util/exceptions.dart';

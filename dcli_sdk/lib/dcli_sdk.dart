@@ -1,1 +1,1 @@
-export 'src/script/flags.dart' show Flag;
+export 'src/script/flag.dart' show Flag;

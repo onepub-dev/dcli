@@ -12,8 +12,11 @@ import '../commands/commands.dart';
 import '../commands/help.dart';
 import '../commands/run.dart';
 import '../util/exceptions.dart';
+import 'flag.dart';
 import 'flags.dart';
+import 'help_flag.dart';
 import 'selected_flags.dart';
+import 'verbose_flag.dart';
 
 /// Runs a dcli script.
 class CommandLineRunner {

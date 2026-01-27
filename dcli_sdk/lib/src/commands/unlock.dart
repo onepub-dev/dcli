@@ -15,7 +15,7 @@ import 'package:pubspec_manager/pubspec_manager.dart';
 // and the _maybeLoadYamlRestore() method below.
 import 'package:yaml/yaml.dart' as yaml;
 
-import '../script/flags.dart';
+import '../script/flag.dart';
 import '../util/completion.dart';
 import '../util/exceptions.dart';
 import 'commands.dart';
