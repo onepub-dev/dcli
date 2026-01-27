@@ -398,7 +398,7 @@ packages:
     source: hosted
     version: "1.4.1"
   strings:
-    dependency: transitive
+    dependency: "direct main"
     description:
       name: strings
       sha256: "8eccabcaad5f3b2d02b2bf8ca31ce1466fac7339229fd0472d63790f8c18095f"
