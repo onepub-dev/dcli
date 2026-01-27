@@ -1,3 +1,11 @@
+# 8.4.0
+- no using the  document_throws package to document all exceptions.
+- document all exceptions.
+- cleaned up  some of the hand documented exceptions to fully utilise the @Throwing lints.
+- fixed formatting.
+- Added option includeParentEnvironment to start methods to resolve https://github.com/onepub-dev/dcli/issues/263.
+
+
 $ 8.4.0
   - Added `includeParentEnvironment` to `start()` and `startFromArgs()` so child process inheritance can be controlled.
   
