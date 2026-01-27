@@ -59,7 +59,6 @@ Future<void> pipeTo(Future<Process> lhs, Future<Process> rhs) async {
   // wait for the lhs process to
   // start and then start piping its
   // output to the rhs process.
-  // ignore: discarded_futures
   await lhs.then((lhsProcess) {
     unawaited(rhs.then<void>((rhsProcess) {
       // write stdout from lhs to stdin of rhs
