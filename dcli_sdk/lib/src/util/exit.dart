@@ -11,7 +11,6 @@ import 'package:scope/scope.dart';
 void dcliExit(int exitCode) {
   // The unitTestKey is intentionally breach as it is used
   // to avoid unit test being shutdown be a call to io.exit.
-  // ignore: invalid_use_of_visible_for_testing_member
   if (Scope.use(UnitTestController.unitTestingKey)) {
     // If we allow the call to io.exit to proceed
     // then the unit test framework would shutdown.

@@ -16,7 +16,7 @@ import 'run.dart';
 class CompileCommand extends Command {
   static const _commandName = 'compile';
 
-  final _compileFlags = [
+  final List<Flag> _compileFlags = [
     NoWarmupFlag(),
     InstallFlag(),
     OverWriteFlag(),

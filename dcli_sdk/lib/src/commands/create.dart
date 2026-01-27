@@ -18,10 +18,7 @@ import 'commands.dart';
 class CreateCommand extends Command {
   static const _commandName = 'create';
 
-  final _createFlags = [
-    TemplateFlag(),
-    TemplateListFlag()
-  ];
+  final List<Flag> _createFlags = [TemplateFlag(), TemplateListFlag()];
 
   /// holds the set of flags passed to the compile command.
   var flagSet = Flags();

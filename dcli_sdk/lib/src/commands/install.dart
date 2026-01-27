@@ -20,7 +20,7 @@ import 'commands.dart';
 class InstallCommand extends Command {
   static const _commandName = 'install';
 
-  final _installFlags = const [
+  final List<Flag> _installFlags = const [
     _NoDartFlag(),
     _QuietFlag(),
     _NoPrivilegesFlag()
