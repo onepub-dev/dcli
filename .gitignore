@@ -41,3 +41,4 @@ dcli_unit_tester/test/test_script/general/bin/touch
 dcli/custom_lint.log
 **/analyzer.txt
 **/custom_lint.log
+template/project/full/pubspec.yaml
