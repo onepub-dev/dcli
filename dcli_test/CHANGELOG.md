@@ -1,3 +1,10 @@
+# 8.4.0
+- no using the  document_throws package to document all exceptions.
+- document all exceptions.
+- cleaned up  some of the hand documented exceptions to fully utilise the @Throwing lints.
+- fixed formatting.
+- Added option includeParentEnvironment to start methods to resolve https://github.com/onepub-dev/dcli/issues/263.
+
 # 8.3.0
   - DCLi functions which execute process have assumed that data is ascii which is incorrect as most cli system utilise utf-8.
   This updates changes the default encoding to utf-8 and provides the ability to select the encoding.
