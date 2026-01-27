@@ -164,43 +164,68 @@ packages:
   dcli:
     dependency: "direct main"
     description:
-      name: dcli
-      sha256: e0db69280b78819ff04352645768c6cd766593dd258e3d9373a24128cc53e901
-      url: "https://pub.dev"
-    source: hosted
-    version: "8.3.0"
+      path: "/home/bsutton/git/dcli/dcli"
+      relative: false
+    source: path
+    version: "8.4.0"
   dcli_common:
     dependency: "direct main"
     description:
-      name: dcli_common
-      sha256: "5011db274ac3ea61e5f62dc7d8054c171521af9190e0fe93b934f14940c0eda0"
-      url: "https://pub.dev"
-    source: hosted
-    version: "8.3.0"
+      path: "/home/bsutton/git/dcli/dcli_common"
+      relative: false
+    source: path
+    version: "8.4.0"
   dcli_core:
     dependency: "direct main"
     description:
-      name: dcli_core
-      sha256: "13fd7bd5efd82cf53fc748a8dd7236be40254a2aa1440d2a2cecfd92a7e91df2"
-      url: "https://pub.dev"
-    source: hosted
-    version: "8.3.0"
+      path: "/home/bsutton/git/dcli/dcli_core"
+      relative: false
+    source: path
+    version: "8.4.0"
+  dcli_input:
+    dependency: "direct overridden"
+    description:
+      path: "/home/bsutton/git/dcli/dcli_input"
+      relative: false
+    source: path
+    version: "8.4.0"
   dcli_terminal:
     dependency: "direct main"
     description:
-      name: dcli_terminal
-      sha256: cf74c59be53ef2bd259a4c4246889b56ae2000ddbcfca912cda82e6bd058d5e5
-      url: "https://pub.dev"
-    source: hosted
-    version: "8.3.0"
+      path: "/home/bsutton/git/dcli/dcli_terminal"
+      relative: false
+    source: path
+    version: "8.4.0"
   dcli_test:
     dependency: "direct dev"
     description:
-      name: dcli_test
-      sha256: a87416de76bbfca0defe7888430cb5a482a5ff62aeb79dedd44ec661ec78067c
+      path: "/home/bsutton/git/dcli/dcli_test"
+      relative: false
+    source: path
+    version: "8.4.0"
+  dcli_unit_tester:
+    dependency: "direct overridden"
+    description:
+      path: "/home/bsutton/git/dcli/dcli_unit_tester"
+      relative: false
+    source: path
+    version: "8.4.0"
+  document_throws:
+    dependency: transitive
+    description:
+      name: document_throws
+      sha256: f98363e2d787eb4b0edbd8fc25a0527661d4943645f4aa96cee5b451ed8de4ab
       url: "https://pub.dev"
     source: hosted
-    version: "8.1.0"
+    version: "0.2.1"
+  document_throws_annotation:
+    dependency: transitive
+    description:
+      name: document_throws_annotation
+      sha256: "0041a7a75f6ba1381a700b172f953aecf6968d89ab52c7b11bc41bfe6d6d8aeb"
+      url: "https://pub.dev"
+    source: hosted
+    version: "0.1.0"
   equatable:
     dependency: transitive
     description:
@@ -317,10 +342,10 @@ packages:
     dependency: "direct dev"
     description:
       name: lint_hard
-      sha256: "920de53027116b7facbdb1c1423ea6a991ec260e450beedef1b824678c04a0e3"
+      sha256: "6b5c688ca3227c6312190c11c7dc0f92af9f32d3e02cf97d3814c2de016a14aa"
       url: "https://pub.dev"
     source: hosted
-    version: "7.0.1"
+    version: "7.1.1"
   logging:
     dependency: transitive
     description:
@@ -541,10 +566,10 @@ packages:
     dependency: "direct main"
     description:
       name: strings
-      sha256: "482f1511d2cd8ab9f2c4cc148e6837be8a00c03b9a8eaedbc981a84d9c6305d8"
+      sha256: "8eccabcaad5f3b2d02b2bf8ca31ce1466fac7339229fd0472d63790f8c18095f"
       url: "https://pub.dev"
     source: hosted
-    version: "3.2.0"
+    version: "4.0.1"
   sum_types:
     dependency: transitive
     description:
