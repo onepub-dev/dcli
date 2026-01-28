@@ -3,6 +3,7 @@ import 'dart:math';
 import 'package:dcli_terminal/src/format.dart';
 import 'package:test/test.dart';
 
+/// @Throwing(ArgumentError)
 void main() {
   group('bytesAsReadable', () {
     test('bytes < 1 KB use “B” and pad left', () {
