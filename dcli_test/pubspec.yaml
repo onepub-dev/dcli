@@ -21,4 +21,4 @@ dependencies:
   # path: ^1.8.0
 
 dev_dependencies:
-  lint_hard: ^7.0.1
+  lint_hard: ^7.1.2
