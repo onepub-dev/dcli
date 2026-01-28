@@ -1,3 +1,16 @@
+# 8.4.2
+- preping the 8.4.2 release.
+- removed the publish_to which was pushing it to onepub.
+- excluded logs.
+- unused.
+- restored overrides paths to relative
+- Fixed a bug in read that was mixing codecs.
+- updated templates to use latest version of dcli.
+- templates changed to use dcli rather than dart for #!
+- reverted the test scripts using #! dcli as it affects the output that the tests rely on.
+- replaced #! dart with dcli to take advantage of the faster startup.
+
+
 # 8.4.1
 - Change the script runner to use the --resident flag to improve startup times for dart scripts (from 5sec down to 1).  
 - Fixed a bug where the -v flag wasn't actually enabling verbose logging.
