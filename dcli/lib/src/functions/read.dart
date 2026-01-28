@@ -5,6 +5,7 @@
  * SPDX-License-Identifier: MIT
  */
 
+import 'dart:convert';
 import 'dart:io';
 
 import 'package:dcli_core/dcli_core.dart' as core;
@@ -43,7 +44,7 @@ class _Read extends core.DCliFunction {
     progress ??= Progress.capture();
 
     core.LineFile(path).readAll((line) {
-      (progress! as ProgressImpl).addToStdout([...'$line\n'.codeUnits]);
+      (progress! as ProgressImpl).addToStdout(utf8.encode('$line\n'));
       return true;
     });
     (progress as ProgressImpl).close();

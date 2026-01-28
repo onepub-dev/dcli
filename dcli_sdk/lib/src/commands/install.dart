@@ -160,7 +160,21 @@ class InstallCommand extends Command {
     _qprint('');
 
     if (shell.isCompletionSupported) {
-      if (!shell.isCompletionInstalled) {
+      var completionInstalled = false;
+      var completionCheckFailed = false;
+      try {
+        completionInstalled = shell.isCompletionInstalled;
+      } on FormatException catch (e) {
+        completionCheckFailed = true;
+        _qprint(
+          orange(
+            'Skipping shell completion install: unable to read shell config '
+            'file as UTF-8. (${e.message})',
+          ),
+        );
+      }
+
+      if (!completionInstalled && !completionCheckFailed) {
         shell.installTabCompletion();
       }
     }

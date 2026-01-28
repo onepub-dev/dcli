@@ -90,4 +90,18 @@ Line 5/5'''
               .replaceAll('\n', eol)));
     });
   });
+
+  test('handles utf8 content', () async {
+    await withTempFileAsync((file) async {
+      file
+        ..append('Line 1 “smart quotes”')
+        ..append('Line 2 – en dash')
+        ..append('Line 3 ✓');
+      final lines = read(file).toList();
+      expect(lines.length, equals(3));
+      expect(lines[0], equals('Line 1 “smart quotes”'));
+      expect(lines[1], equals('Line 2 – en dash'));
+      expect(lines[2], equals('Line 3 ✓'));
+    });
+  });
 }
