@@ -12,6 +12,11 @@ import 'package:settings_yaml/settings_yaml.dart';
 /// @Throwing(ArgumentError)
 /// @Throwing(SettingsYamlException)
 void main(List<String> args) {
+  if (args.contains('--dry-run') || args.contains('-n')) {
+    print('post_release_hook: dry-run detected, skipping GitHub release.');
+    return;
+  }
+
   final project = DartProject.self;
 
   final pathToSettings = join(
