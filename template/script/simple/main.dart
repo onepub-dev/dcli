@@ -1,4 +1,4 @@
-#! /usr/bin/env dart
+#! /usr/bin/env dcli
 
 // ignore: unused_import
 import 'package:dcli/dcli.dart';
