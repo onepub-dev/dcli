@@ -110,6 +110,8 @@ typedef CustomAskPrompt = String Function(
 ///     , Ask.inList(['red', 'green', 'blue']));
 ///
 ///```
+/// @Throwing(ArgumentError)
+/// @Throwing(FileSystemException)
 Future<String> ask(
   String prompt, {
   bool toLower = false,
@@ -140,6 +142,8 @@ class Ask extends core.DCliFunction {
   ///
   /// Reads user input from stdin and returns it as a string.
   /// [prompt]
+  /// @Throwing(ArgumentError)
+  /// @Throwing(FileSystemException)
   Future<String> _ask(
     String prompt, {
     required bool hidden,
@@ -400,6 +404,7 @@ class _AskDontCare extends AskValidator {
 ///
 class _AskRequired extends AskValidator {
   const _AskRequired();
+  /// @Throwing(AskValidatorException)
   @override
   Future<String> validate(String line, {String? customErrorMessage}) async {
     final finalLine = line.trim();
@@ -413,6 +418,7 @@ class _AskRequired extends AskValidator {
 
 class _AskEmail extends AskValidator {
   const _AskEmail();
+  /// @Throwing(AskValidatorException)
   @override
   Future<String> validate(String line, {String? customErrorMessage}) async {
     final finalLine = line.trim();
@@ -428,6 +434,7 @@ class _AskEmail extends AskValidator {
 class _AskFQDN extends AskValidator {
   const _AskFQDN();
 
+  /// @Throwing(AskValidatorException)
   @override
   Future<String> validate(String line, {String? customErrorMessage}) async {
     final finalLine = line.trim().toLowerCase();
@@ -444,6 +451,7 @@ class _AskURL extends AskValidator {
 
   final List<String> protocols;
 
+  /// @Throwing(AskValidatorException)
   @override
   Future<String> validate(String line, {String? customErrorMessage}) async {
     final finalLine = line.trim().toLowerCase();
@@ -472,6 +480,7 @@ class _AskRegExp extends AskValidator {
   late final RegExp _regexp;
   late final String _error;
 
+  /// @Throwing(AskValidatorException)
   @override
   Future<String> validate(String line, {String? customErrorMessage}) async {
     final finalLine = line.trim();
@@ -485,6 +494,7 @@ class _AskRegExp extends AskValidator {
 
 class _AskDate extends AskValidator {
   const _AskDate();
+  /// @Throwing(AskValidatorException)
   @override
   Future<String> validate(String line, {String? customErrorMessage}) async {
     final finalLine = line.trim();
@@ -498,6 +508,7 @@ class _AskDate extends AskValidator {
 
 class _AskInteger extends AskValidator {
   const _AskInteger();
+  /// @Throwing(AskValidatorException)
   @override
   Future<String> validate(String line, {String? customErrorMessage}) async {
     final finalLine = line.trim();
@@ -513,6 +524,7 @@ class _AskInteger extends AskValidator {
 
 class _AskDecimal extends AskValidator {
   const _AskDecimal();
+  /// @Throwing(AskValidatorException)
   @override
   Future<String> validate(String line, {String? customErrorMessage}) async {
     final finalline = line.trim();
@@ -527,6 +539,7 @@ class _AskDecimal extends AskValidator {
 
 class _AskAlpha extends AskValidator {
   const _AskAlpha();
+  /// @Throwing(AskValidatorException)
   @override
   Future<String> validate(String line, {String? customErrorMessage}) async {
     final finalline = line.trim();
@@ -541,6 +554,7 @@ class _AskAlpha extends AskValidator {
 
 class _AskAlphaNumeric extends AskValidator {
   const _AskAlphaNumeric();
+  /// @Throwing(AskValidatorException)
   @override
   Future<String> validate(String line, {String? customErrorMessage}) async {
     final finalline = line.trim();
@@ -576,6 +590,7 @@ class AskValidatorIPAddress extends AskValidator {
   /// IP version (on 4 and 6 are valid versions.)
   final int version;
 
+  /// @Throwing(AskValidatorException)
   @override
   Future<String> validate(String line, {String? customErrorMessage}) async {
     assert(
@@ -608,6 +623,7 @@ class _AskValidatorMaxLength extends AskValidator {
   /// Validates that the entered line is no longer
   /// than [maxLength].
   const _AskValidatorMaxLength(this.maxLength);
+  /// @Throwing(AskValidatorException)
   @override
   Future<String> validate(String line, {String? customErrorMessage}) async {
     final finalline = line.trim();
@@ -633,6 +649,7 @@ class _AskValidatorMinLength extends AskValidator {
   /// Validates that the entered line is not less
   /// than [minLength].
   const _AskValidatorMinLength(this.minLength);
+  /// @Throwing(AskValidatorException)
   @override
   Future<String> validate(String line, {String? customErrorMessage}) async {
     final finalline = line.trim();
@@ -680,6 +697,7 @@ class _AskValidatorValueRange extends AskValidator {
   final num minValue;
   final num maxValue;
 
+  /// @Throwing(AskValidatorException)
   @override
   Future<String> validate(String line, {String? customErrorMessage}) async {
     final finalline = line.trim();
@@ -778,6 +796,7 @@ class _AskValidatorAny extends AskValidator {
 
   final List<AskValidator> _validators;
 
+  /// @Throwing(AskValidatorException)
   @override
   Future<String> validate(String line, {String? customErrorMessage}) async {
     var finalline = line.trim();
@@ -818,6 +837,7 @@ class _AskValidatorList extends AskValidator {
   final List<Object> validItems;
   final bool caseSensitive;
 
+  /// @Throwing(AskValidatorException)
   @override
   Future<String> validate(String line, {String? customErrorMessage}) async {
     var finalline = line.trim();

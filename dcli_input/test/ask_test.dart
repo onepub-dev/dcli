@@ -12,6 +12,7 @@ import 'package:dcli_input/src/ask.dart';
 import 'package:dcli_terminal/dcli_terminal.dart';
 import 'package:test/scaffolding.dart';
 
+/// @Throwing(UnimplementedError)
 void main() {
   test('ask.custom prompt', () async {
     // expect("AAAHow old ar you:5", () {

@@ -70,6 +70,7 @@ typedef CustomMenuPrompt = String Function(
 /// displayed and the [defaultOption] will be returned.
 /// If there is no [defaultOption] then the first [options] will be returned.
 ///
+/// @Throwing(ArgumentError)
 Future<T> menu<T>(
   String prompt, {
   required List<T> options,
@@ -163,6 +164,7 @@ class Menu {
 
 class _MenuRange extends AskValidator {
   const _MenuRange(this.limit);
+  /// @Throwing(AskValidatorException)
   @override
   Future<String> validate(String line, {String? customErrorMessage}) async {
     final finalline = line.trim();
