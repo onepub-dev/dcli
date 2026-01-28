@@ -5,7 +5,7 @@ environment:
   sdk: '>=3.0.0 <4.0.0'
 
 dependencies:
-  dcli: 8.4.1
+  dcli: 8.4.2
 
 dev_dependencies:
   lint_hard: ^7.1.2
