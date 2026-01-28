@@ -1,4 +1,4 @@
-#! /usr/bin/env dart
+#! /usr/bin/env dcli
 
 // ignore: prefer_relative_imports
 import 'package:dcli/dcli.dart';

@@ -1,4 +1,4 @@
-#! /usr/bin/env dart
+#! /usr/bin/env dcli
 
 import 'package:args/command_runner.dart';
 import 'package:full/src/args/usage.dart';

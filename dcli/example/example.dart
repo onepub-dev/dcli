@@ -1,4 +1,4 @@
-#! /usr/bin/env dart
+#! /usr/bin/env dcli
 
 import 'package:dcli/dcli.dart';
 import 'package:path/path.dart';
