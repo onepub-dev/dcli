@@ -150,7 +150,11 @@ void main() {
       /// Make certain its not on the PATH as a compiled exe already
       final script = which(packageName);
       if (script.found) {
-        delete(script.path!);
+        // remove any existing installed version.
+        // there could be multiple paths where the script exists.
+        for (final path in script.paths) {
+          delete(path);
+        }
       }
       PubCache().globalActivate(packageName);
 
