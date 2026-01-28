@@ -83,6 +83,7 @@ void moveTree(
 bool _allowAll(String file) => true;
 
 class _MoveTree extends DCliFunction {
+  /// @Throwing(MoveTreeException)
   void moveTree(
     String from,
     String to, {
@@ -124,6 +125,9 @@ class _MoveTree extends DCliFunction {
     }
   }
 
+  /// @Throwing(ArgumentError)
+  /// @Throwing(MoveTreeException)
+  /// @Throwing(PathException)
   void _process(String pathToFile, bool Function(String file) filter, String to,
       String from,
       {required bool overwrite}) {

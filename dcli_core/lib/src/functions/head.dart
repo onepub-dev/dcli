@@ -19,6 +19,7 @@ import '../../dcli_core.dart';
 List<String> head(String path, int lines) => _Head().head(path, lines);
 
 class _Head extends DCliFunction {
+  /// @Throwing(HeadException)
   List<String> head(
     String path,
     int lines,

@@ -53,6 +53,8 @@ String createDir(String path, {bool recursive = false}) =>
 /// and sometimes you want it created.
 /// If you pass in [pathToTempDir] it will NOT be deleted regardless
 /// of the value of [keep].
+/// @Throwing(ArgumentError)
+/// @Throwing(CreateDirException)
 Future<R> withTempDirAsync<R>(Future<R> Function(String tempDir) action,
     {bool keep = false, String? pathToTempDir}) async {
   final dir = pathToTempDir ?? createTempDir();
@@ -73,12 +75,15 @@ Future<R> withTempDirAsync<R>(Future<R> Function(String tempDir) action,
 /// The temporary directory name is formed from a uuid.
 /// It is your responsiblity to delete the directory once you have
 /// finsihed with it.
+/// @Throwing(ArgumentError)
+/// @Throwing(CreateDirException)
 String createTempDir() => _CreateDir().createDir(
       join(Directory.systemTemp.path, '.dclitmp', const Uuid().v4()),
       recursive: true,
     );
 
 class _CreateDir extends DCliFunction {
+  /// @Throwing(CreateDirException)
   String createDir(String path, {required bool recursive}) {
     verbose(() => 'createDir:  ${truepath(path)} recursive: $recursive');
 

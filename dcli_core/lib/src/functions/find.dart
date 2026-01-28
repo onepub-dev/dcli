@@ -88,6 +88,11 @@ typedef ProgressCallback = bool Function(FindItem item);
 ///
 // TODO(bsutton): consider having find return a Stream and eliminate passing
 /// a controller in.
+/// @Throwing(ArgumentError)
+/// @Throwing(FileSystemException)
+/// @Throwing(FindException)
+/// @Throwing(PathException)
+/// @Throwing(RangeError)
 void find(
   String pattern, {
   required ProgressCallback progress,
@@ -112,6 +117,11 @@ class Find extends DCliFunction {
   final _closed = false;
 
   /// Find matching files an call [progress] for each one.
+  /// @Throwing(ArgumentError)
+  /// @Throwing(FileSystemException)
+  /// @Throwing(FindException)
+  /// @Throwing(PathException)
+  /// @Throwing(RangeError)
   void _find(
     String pattern, {
     required ProgressCallback progress,
@@ -135,6 +145,10 @@ class Find extends DCliFunction {
     );
   }
 
+  /// @Throwing(ArgumentError)
+  /// @Throwing(FileSystemException)
+  /// @Throwing(PathException)
+  /// @Throwing(RangeError)
   void _innerFind({
     required FindConfig config,
     required ProgressCallback progress,
@@ -190,6 +204,10 @@ class Find extends DCliFunction {
     }
   }
 
+  /// @Throwing(ArgumentError)
+  /// @Throwing(FileSystemException)
+  /// @Throwing(PathException)
+  /// @Throwing(RangeError)
   bool _processDirectory(
     String workingDirectory,
     String currentDirectory,
@@ -276,6 +294,8 @@ class Find extends DCliFunction {
 
   /// Checks if a hidden file is allowed.
   /// Non-hidden files are always allowed.
+  /// @Throwing(ArgumentError)
+  /// @Throwing(PathException)
   bool _allowed(
     String workingDirectory,
     FileSystemEntity entity, {
@@ -285,6 +305,8 @@ class Find extends DCliFunction {
 
   // check if the entity is a hidden file (.xxx) or
   // if lives in a hidden directory.
+  /// @Throwing(ArgumentError)
+  /// @Throwing(PathException)
   bool _isHidden(String workingDirectory, FileSystemEntity entity) {
     final relativePath = relative(entity.path, from: workingDirectory);
 
@@ -400,6 +422,8 @@ class PatternMatcher {
   /// the no. of directories in the pattern
   late final int directoryParts;
 
+  /// @Throwing(ArgumentError)
+  /// @Throwing(PathException)
   bool match(String path) {
     final matchPart = _extractMatchPart(path);
     //  print('path: $path, matchPart: $matchPart pattern: $pattern');
@@ -442,6 +466,8 @@ class PatternMatcher {
   ///
   /// This method extracts the components of a absolute [path]
   /// that must be used when doing the pattern match.
+  /// @Throwing(ArgumentError)
+  /// @Throwing(PathException)
   String _extractMatchPart(String path) {
     if (directoryParts == 0) {
       return basename(path);
@@ -494,6 +520,8 @@ class FindException extends DCliFunctionException {
 }
 
 class FindConfig {
+  /// @Throwing(ArgumentError)
+  /// @Throwing(FindException)
   factory FindConfig.build(
       {required String pattern,
       required String workingDirectory,

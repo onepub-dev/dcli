@@ -34,6 +34,7 @@ import '../../dcli_core.dart';
 /// The default for [overwrite] is false.
 ///
 /// If an error occurs a [CopyException] is thrown.
+/// @Throwing(ArgumentError)
 
 void copy(String from, String to, {bool overwrite = false}) {
   var finalto = to;

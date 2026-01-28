@@ -85,6 +85,8 @@ void deleteSymlink(String linkPath) {
 /// ```
 ///
 /// throws a FileSystemException if the target path does not exist.
+/// @Throwing(ArgumentError)
+/// @Throwing(FileSystemException)
 String resolveSymLink(String pathToLink) {
   final normalised = canonicalize(pathToLink);
 
@@ -104,6 +106,7 @@ String resolveSymLink(String pathToLink) {
 /// Returns a FileStat instance describing the
 /// file or directory located by [path].
 ///
+/// @Throwing(ArgumentError)
 FileStat stat(String path) => File(path).statSync();
 
 /// Generates a temporary filename in [pathToTempDir]
@@ -116,6 +119,7 @@ FileStat stat(String path) => File(path).statSync();
 /// The temp file name will be `<uuid>.tmp`
 /// unless you provide a [suffix] in which
 /// case the file name will be `<uuid>.<suffix>`
+/// @Throwing(ArgumentError)
 String createTempFilename({String? suffix, String? pathToTempDir}) {
   var finalsuffix = suffix ?? 'tmp';
 
@@ -135,6 +139,7 @@ String createTempFilename({String? suffix, String? pathToTempDir}) {
 /// The temp file name will be `<uuid>.tmp`
 /// unless you provide a [suffix] in which
 /// case the file name will be `<uuid>.<suffix>`
+/// @Throwing(ArgumentError)
 String createTempFile({String? suffix}) {
   final filename = createTempFilename(suffix: suffix);
   touch(filename, create: true);
@@ -162,6 +167,7 @@ int fileLength(String pathToFile) => File(pathToFile).lengthSync();
 /// The temp file name will be `<uuid>.tmp`
 /// unless you provide a [suffix] in which
 /// case the file name will be `<uuid>.<suffix>`
+/// @Throwing(ArgumentError)
 Future<R> withTempFileAsync<R>(
   Future<R> Function(String tempFile) action, {
   String? suffix,
@@ -185,6 +191,7 @@ Future<R> withTempFileAsync<R>(
   return result;
 }
 
+/// @Throwing(FileNotFoundException)
 Digest calculateHash(String path) {
   if (!exists(path)) {
     throw FileNotFoundException(path);

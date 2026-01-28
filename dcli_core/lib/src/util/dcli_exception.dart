@@ -17,6 +17,7 @@ class DCliException implements Exception {
         stackTrace = stackTrace ?? Trace.current(2);
 
   // Factory method to create DCliException from a JSON string
+  /// @Throwing(FormatException)
   factory DCliException.fromJson(String jsonStr) {
     final jsonMap = jsonDecode(jsonStr) as Map<String, dynamic>;
 
@@ -67,5 +68,7 @@ class DCliException implements Exception {
       };
 
   // Method to convert DCliException to a JSON string
+  /// @Throwing(JsonCyclicError)
+  /// @Throwing(JsonUnsupportedObjectError)
   String toJsonString() => jsonEncode(toJson());
 }

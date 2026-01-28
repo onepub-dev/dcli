@@ -83,6 +83,7 @@ void copyTree(
 bool _allowAll(String file) => true;
 
 class _CopyTree extends DCliFunction {
+  /// @Throwing(CopyTreeException)
   void copyTree(
     String from,
     String to, {
@@ -154,6 +155,9 @@ includeHidden: $includeHidden, includeEmpty: $includeEmpty, includeLinks: $inclu
     }
   }
 
+  /// @Throwing(ArgumentError)
+  /// @Throwing(CopyTreeException)
+  /// @Throwing(PathException)
   void _process(
     String file,
     bool Function(String file) filter,

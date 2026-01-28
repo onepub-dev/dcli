@@ -36,6 +36,7 @@ void deleteDir(String path, {bool recursive = true}) =>
     _DeleteDir().deleteDir(path, recursive: recursive);
 
 class _DeleteDir extends DCliFunction {
+  /// @Throwing(DeleteDirException)
   void deleteDir(String path, {required bool recursive}) {
     verbose(() => 'deleteDir:  ${truepath(path)} recursive: $recursive');
 

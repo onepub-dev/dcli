@@ -11,6 +11,7 @@ import 'package:dcli_core/src/util/async_circular_buffer.dart';
 import 'package:synchronized/synchronized.dart';
 import 'package:test/test.dart';
 
+/// @Throwing(ArgumentError)
 void main() {
   test('async circular buffer fill and empty', () async {
     final buf = AsyncCircularBuffer<String>(5);
@@ -151,6 +152,7 @@ void main() {
   });
 }
 
+/// @Throwing(ArgumentError)
 Future<void> empty(AsyncCircularBuffer<String> buf, int count,
     [void Function(String e)? callback]) async {
   for (var i = 0; i < count; i++) {

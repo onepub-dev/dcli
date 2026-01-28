@@ -19,9 +19,11 @@ import '../../dcli_core.dart';
 /// ```
 ///
 /// If the [path] is a directory a DeleteException is thrown.
+/// @Throwing(DeleteException)
 void delete(String path) => _Delete().delete(path);
 
 class _Delete extends DCliFunction {
+  /// @Throwing(DeleteException)
   void delete(String path) {
     verbose(() => 'delete:  ${truepath(path)}');
 

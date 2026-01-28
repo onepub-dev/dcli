@@ -35,6 +35,7 @@ void moveDir(String from, String to) => _MoveDir().moveDir(
     );
 
 class _MoveDir extends DCliFunction {
+  /// @Throwing(MoveDirException)
   void moveDir(String from, String to) {
     if (!exists(from)) {
       throw MoveDirException(

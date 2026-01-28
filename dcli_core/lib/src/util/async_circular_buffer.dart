@@ -81,6 +81,7 @@ class AsyncCircularBuffer<T>
   Future<bool> get isDone => _done.future;
 
   /// The [AsyncCircularBuffer] is `reset`
+  /// @Throwing(BadStateException)
   void reset() {
     if (_closed.isCompleted) {
       throw BadStateException('Buffer has been closed');
@@ -159,6 +160,7 @@ class AsyncCircularBuffer<T>
   /// If the buffer is closed and empty then returns null.
   /// If the buffer is empty [get] waits until a new
   /// element arrives before returning.
+  /// @Throwing(UnderflowException)
   Future<T> get() async {
     if (_isEmpty) {
       if (_closed.isCompleted) {
@@ -219,6 +221,7 @@ class AsyncCircularBuffer<T>
   bool get _isNotEmpty => _count > 0;
 
   /// Access element at [index]
+  /// @Throwing(RangeError)
   T operator [](int index) {
     if (index >= 0 && index < _count) {
       return _buf[(_start + index) % _buf.length]!;
@@ -227,6 +230,7 @@ class AsyncCircularBuffer<T>
   }
 
   /// Assign an element at [index]
+  /// @Throwing(RangeError)
   void operator []=(int index, T value) {
     if (index >= 0 && index < _count) {
       _buf[(_start + index) % _buf.length] = value;
@@ -249,6 +253,7 @@ class AsyncCircularBuffer<T>
   }
 
   /// The `length` mutation is forbidden
+  /// @Throwing(UnsupportedError)
   set length(int newLength) {
     throw UnsupportedError('Cannot resize immutable CircularBuffer.');
   }
@@ -267,6 +272,7 @@ class AsyncCircularBuffer<T>
   }
 
   /// empties the buffer, discarding all elements.
+  /// @Throwing(UnderflowException)
   Future<void> drain() async {
     while (_isNotEmpty) {
       await get();

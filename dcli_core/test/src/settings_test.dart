@@ -5,6 +5,7 @@ import 'package:logging/logging.dart';
 import 'package:path/path.dart' hide equals;
 import 'package:test/test.dart';
 
+/// @Throwing(ArgumentError)
 void main() {
   test('settings ...', () async {
     Settings().setVerbose(enabled: true);

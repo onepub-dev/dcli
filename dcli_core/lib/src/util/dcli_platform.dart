@@ -15,6 +15,7 @@ import 'package:scope/scope.dart';
 class DCliPlatform {
   /// Returns a singleton providing
   /// access to DCli settings.
+  /// @Throwing(MissingDependencyException)
   factory DCliPlatform() {
     if (Scope.hasScopeKey(scopeKey)) {
       return Scope.use(scopeKey);

@@ -75,6 +75,10 @@ import '../../dcli_core.dart';
 /// [types] the list of types to search file. Defaults to [Find.file].
 ///   See [Find.file], [Find.directory], [Find.link].
 ///
+/// @Throwing(ArgumentError)
+/// @Throwing(FileSystemException)
+/// @Throwing(PathException)
+/// @Throwing(RangeError)
 Stream<FindItem> findAsync(
   String pattern, {
   bool caseSensitive = false,
@@ -106,6 +110,10 @@ class FindAsync extends DCliFunction {
   final _closed = false;
 
   /// Find matching files and return them as a stream
+  /// @Throwing(ArgumentError)
+  /// @Throwing(FileSystemException)
+  /// @Throwing(PathException)
+  /// @Throwing(RangeError)
   Future<void> _findAsync(
     String pattern, {
     required LimitedStreamController<FindItem> controller,
@@ -129,6 +137,10 @@ class FindAsync extends DCliFunction {
     );
   }
 
+  /// @Throwing(ArgumentError)
+  /// @Throwing(FileSystemException)
+  /// @Throwing(PathException)
+  /// @Throwing(RangeError)
   Future<void> _innerFindAsync({
     required FindConfig config,
     required LimitedStreamController<FindItem> controller,
@@ -182,6 +194,10 @@ class FindAsync extends DCliFunction {
     unawaited(controller.close());
   }
 
+  /// @Throwing(ArgumentError)
+  /// @Throwing(FileSystemException)
+  /// @Throwing(PathException)
+  /// @Throwing(RangeError)
   Future<bool> _processDirectory(
     FindConfig config,
     String currentDirectory,
@@ -263,6 +279,8 @@ class FindAsync extends DCliFunction {
 
   /// Checks if a hidden file is allowed.
   /// Non-hidden files are always allowed.
+  /// @Throwing(ArgumentError)
+  /// @Throwing(PathException)
   bool _allowed(
     String workingDirectory,
     FileSystemEntity entity, {
@@ -272,6 +290,8 @@ class FindAsync extends DCliFunction {
 
   // check if the entity is a hidden file (.xxx) or
   // if lives in a hidden directory.
+  /// @Throwing(ArgumentError)
+  /// @Throwing(PathException)
   bool _isHidden(String workingDirectory, FileSystemEntity entity) {
     final relativePath = relative(entity.path, from: workingDirectory);
 

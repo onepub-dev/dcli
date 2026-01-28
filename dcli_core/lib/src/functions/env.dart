@@ -18,22 +18,27 @@ import '../util/truepath.dart';
 import 'dcli_function.dart';
 
 /// Provides access to shell environment variables.
+/// @Throwing(MissingDependencyException)
 Env get env => Env();
 
 /// Tests if the given [path] is contained
 /// in the OS's PATH environment variable.
 /// An canonicalized match of [path] is made against
 /// each path on the OS's path.
+/// @Throwing(ArgumentError)
+/// @Throwing(MissingDependencyException)
 bool isOnPATH(String path) => Env().isOnPATH(path);
 
 /// Returns the list of directory paths that are contained
 /// in the OS's PATH environment variable.
 /// They are returned in the same order that they appear within
 /// the PATH environment variable (as order is important.)
+/// @Throwing(MissingDependencyException)
 //ignore: non_constant_identifier_names
 List<String> get PATH => Env()._path;
 
 /// returns the path to the OS specific HOME directory
+/// @Throwing(MissingDependencyException)
 //ignore: non_constant_identifier_names
 String get HOME => Env().HOME;
 
@@ -43,6 +48,7 @@ String get HOME => Env().HOME;
 ///
 /// See [env[]]
 ///     [env[]=]
+/// @Throwing(MissingDependencyException)
 Map<String, String> get envs => Env()._envVars;
 
 ///
@@ -73,6 +79,7 @@ class Env extends DCliFunction {
   /// Implementation class for the functions [env[]] and [env[]=].
   /// Returns a singleton unless we are running in a [Scope]
   /// and a [scopeKey] for [Env] has been placed into the scope.
+  /// @Throwing(MissingDependencyException)
   factory Env() {
     if (Scope.hasScopeKey(scopeKey)) {
       return Scope.use(scopeKey);
@@ -184,6 +191,7 @@ class Env extends DCliFunction {
   ///
   /// See: [prependToPATH]
   ///   [removeFromPATH]
+  /// @Throwing(ArgumentError)
   void appendToPATH(String newPath) {
     if (!isOnPATH(newPath)) {
       final path = PATH..add(newPath);
@@ -205,6 +213,7 @@ class Env extends DCliFunction {
   ///
   /// See: [appendToPATH]
   ///   [removeFromPATH]
+  /// @Throwing(ArgumentError)
   void prependToPATH(String newPath) {
     if (!isOnPATH(newPath)) {
       final path = PATH..insert(0, newPath);
@@ -237,12 +246,14 @@ class Env extends DCliFunction {
   ///
   /// Changing the PATH affects the current script
   /// and any children that it spawns.
+  /// @Throwing(ArgumentError)
   @Deprecated('Use appendToPATH')
   void addToPATHIfAbsent(String newPath) => appendToPATH(newPath);
 
   ///
   /// Gets the path to the user's home directory
   /// using the enviornment var appropriate for the user's OS.
+  /// @Throwing(DCliException)
   //ignore: non_constant_identifier_names
   String get HOME {
     String? home;
@@ -271,6 +282,7 @@ class Env extends DCliFunction {
 
   /// returns true if the given [checkPath] is in the list
   /// of paths defined in the environment variable [PATH].
+  /// @Throwing(ArgumentError)
   bool isOnPATH(String checkPath) {
     final canon = canonicalize(truepath(checkPath));
     var found = false;
@@ -357,6 +369,8 @@ class Env extends DCliFunction {
   ///   Certbot().scheduleRenews();
   /// }
   /// ```
+  /// @Throwing(JsonCyclicError)
+  /// @Throwing(JsonUnsupportedObjectError)
   String toJson() {
     final envMap = <String, String>{}..addEntries(env.entries.toSet());
     return JsonEncoder(_toEncodable).convert(envMap);
@@ -396,6 +410,9 @@ class Env extends DCliFunction {
 /// returns.
 /// This is particularly useful for unit tests and running
 /// a process that requires specific environment variables.
+/// @Throwing(CircularDependencyException)
+/// @Throwing(DuplicateDependencyException)
+/// @Throwing(MissingDependencyException)
 Future<R> withEnvironmentAsync<R>(Future<R> Function() callback,
     {required Map<String, String> environment}) {
   final existing = Env()._envVars;
@@ -409,6 +426,9 @@ Future<R> withEnvironmentAsync<R>(Future<R> Function() callback,
 /// You must [withEnvironmentAsync] if the callback is async.
 ///
 /// See [withEnvironmentAsync] for general details
+/// @Throwing(CircularDependencyException)
+/// @Throwing(DuplicateDependencyException)
+/// @Throwing(MissingDependencyException)
 R withEnvironment<R>(R Function() callback,
     {required Map<String, String> environment}) {
   final existing = Env()._envVars;

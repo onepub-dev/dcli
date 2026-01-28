@@ -39,6 +39,7 @@ class LimitedStreamController<T> implements StreamController<T> {
   @override
   bool get isPaused => _streamController.isPaused;
 
+  /// @Throwing(UnsupportedError)
   @Deprecated('Use asyncAdd')
   @override
   void add(T event) {
@@ -79,6 +80,7 @@ class LimitedStreamController<T> implements StreamController<T> {
     _streamController.addError(error, stackTrace);
   }
 
+  /// @Throwing(UnsupportedError)
   @override
   Future<bool> addStream(Stream<T> source, {bool? cancelOnError = true}) {
     throw UnsupportedError('Use asyncAdd');
@@ -90,6 +92,7 @@ class LimitedStreamController<T> implements StreamController<T> {
   @override
   Future<dynamic> get done => _streamController.done;
 
+  /// @Throwing(UnsupportedError)
   @override
   StreamSink<T> get sink => throw UnsupportedError('Use asyncAdd');
 

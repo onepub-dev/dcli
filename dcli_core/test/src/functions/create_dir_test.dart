@@ -11,6 +11,7 @@ import 'package:dcli_core/dcli_core.dart';
 
 import 'package:test/test.dart';
 
+/// @Throwing(ArgumentError)
 void main() {
   test('withTempDir - check action is awaited.', () async {
     final c = Completer<bool>();

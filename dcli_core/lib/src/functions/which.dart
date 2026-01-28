@@ -61,6 +61,8 @@ import '../../dcli_core.dart';
 /// command search. For example the dart  will be 'dart'
 /// on Linux and 'dart.bat' on Windows. Using `which('dart')` will find `dart`
 ///  on linux and `dart.bat` on Windows.
+/// @Throwing(ArgumentError)
+/// @Throwing(RangeError)
 Which which(
   String appname, {
   bool first = true,
@@ -130,6 +132,8 @@ class WhichSearch {
 class _Which extends DCliFunction {
   ///
   /// Searches the path for the given appname.
+  /// @Throwing(ArgumentError)
+  /// @Throwing(RangeError)
   Which which(
     String appname, {
     required bool extensionSearch,
@@ -166,6 +170,8 @@ class _Which extends DCliFunction {
   /// have an extension then we check each appname.extension variant
   /// to see if it exists. We first check if just an file of [appname] with
   /// no extension exits.
+  /// @Throwing(ArgumentError)
+  /// @Throwing(RangeError)
   String? _appExists(
     String pathTo,
     String appname, {

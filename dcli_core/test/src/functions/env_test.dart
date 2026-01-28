@@ -8,6 +8,7 @@
 import 'package:dcli_core/dcli_core.dart';
 import 'package:test/test.dart';
 
+/// @Throwing(ArgumentError)
 void main() {
   test('env ...', () {
     expect(Env().exists('PATH'), isTrue);

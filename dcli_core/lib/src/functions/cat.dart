@@ -15,12 +15,14 @@ import '../../dcli_core.dart';
 ///
 /// If the file does not exists then a CatException is thrown.
 ///
+/// @Throwing(CatException)
 void cat(String path, {LineAction stdout = print}) =>
     Cat().cat(path, stdout: stdout);
 
 /// Class for the [cat] function.
 class Cat extends DCliFunction {
   /// implementation for the [cat] function.
+  /// @Throwing(CatException)
   void cat(String path, {LineAction stdout = print}) {
     verbose(() => 'cat:  ${truepath(path)}');
 

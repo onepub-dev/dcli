@@ -25,6 +25,7 @@ import 'is.dart';
 List<String> tail(String path, int lines) => _Tail().tail(path, lines);
 
 class _Tail extends DCliFunction {
+  /// @Throwing(TailException)
   List<String> tail(
     String path,
     int lines,

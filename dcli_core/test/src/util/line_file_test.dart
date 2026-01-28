@@ -10,6 +10,7 @@ import 'dart:io';
 import 'package:dcli_core/dcli_core.dart';
 import 'package:test/test.dart';
 
+/// @Throwing(ArgumentError)
 void main() {
   test('line file ...', () async {
     await withTempFileAsync((file) async {

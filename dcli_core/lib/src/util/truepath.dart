@@ -20,6 +20,7 @@ import '../functions/pwd.dart';
 /// [truepath] then goes on to create an absolute path which
 /// is then normalize to remove any segments (.. or .).
 ///
+/// @Throwing(ArgumentError)
 String truepath(
   String part1, [
   String? part2,
@@ -32,6 +33,7 @@ String truepath(
     normalize(absolute(join(part1, part2, part3, part4, part5, part6, part7)));
 
 /// Removes the users home directory from a path replacing it with ~
+/// @Throwing(ArgumentError)
 String privatePath(
   String part1, [
   String? part2,

@@ -19,6 +19,9 @@ import '../../dcli_core.dart';
 /// ```dart
 /// isFile("~/fred.jpg");
 /// ```
+/// @Throwing(ArgumentError)
+/// @Throwing(FileSystemException)
+/// @Throwing(RangeError)
 bool isFile(String path) => _Is().isFile(path);
 
 /// Returns true if the given [path] is a directory.
@@ -26,6 +29,9 @@ bool isFile(String path) => _Is().isFile(path);
 /// isDirectory("/tmp");
 ///
 /// ```
+/// @Throwing(ArgumentError)
+/// @Throwing(FileSystemException)
+/// @Throwing(RangeError)
 bool isDirectory(String path) => _Is().isDirectory(path);
 
 /// Returns true if the given [path] is a symlink
@@ -33,6 +39,9 @@ bool isDirectory(String path) => _Is().isDirectory(path);
 /// ```dart
 /// isLink("~/fred.jpg");
 /// ```
+/// @Throwing(ArgumentError)
+/// @Throwing(FileSystemException)
+/// @Throwing(RangeError)
 bool isLink(String path) => _Is().isLink(path);
 
 /// Returns true if the given path exists.
@@ -53,6 +62,8 @@ bool isLink(String path) => _Is().isLink(path);
 /// See [isLink]
 ///     [isDirectory]
 ///     [isFile]
+/// @Throwing(FileSystemException)
+/// @Throwing(RangeError)
 bool exists(String path, {bool followLinks = true}) =>
     _Is().exists(path, followLinks: followLinks);
 
@@ -63,6 +74,8 @@ bool exists(String path, {bool followLinks = true}) =>
 /// Throws a [DCliException] with a nested
 /// [FileSystemException] if the file does not
 /// exist or the operation fails.
+/// @Throwing(ArgumentError)
+/// @Throwing(FormatException)
 DateTime lastModified(String path) {
   try {
     return File(path).lastModifiedSync();
@@ -78,6 +91,8 @@ DateTime lastModified(String path) {
 /// Throws a [DCliException] with a nested
 /// [FileSystemException] if the file does not
 /// exist or the operation fails.
+/// @Throwing(ArgumentError)
+/// @Throwing(FormatException)
 
 void setLastModifed(String path, DateTime lastModified) {
   try {
@@ -93,17 +108,26 @@ void setLastModifed(String path, DateTime lastModified) {
 bool isEmpty(String pathToDirectory) => _Is().isEmpty(pathToDirectory);
 
 class _Is extends DCliFunction {
+  /// @Throwing(ArgumentError)
+  /// @Throwing(FileSystemException)
+  /// @Throwing(RangeError)
   bool isFile(String path) {
     final fromType = FileSystemEntity.typeSync(path);
     return fromType == FileSystemEntityType.file;
   }
 
   /// true if the given path is a directory.
+  /// @Throwing(ArgumentError)
+  /// @Throwing(FileSystemException)
+  /// @Throwing(RangeError)
   bool isDirectory(String path) {
     final fromType = FileSystemEntity.typeSync(path);
     return fromType == FileSystemEntityType.directory;
   }
 
+  /// @Throwing(ArgumentError)
+  /// @Throwing(FileSystemException)
+  /// @Throwing(RangeError)
   bool isLink(String path) {
     final fromType = FileSystemEntity.typeSync(path, followLinks: false);
     return fromType == FileSystemEntityType.link;
@@ -112,6 +136,8 @@ class _Is extends DCliFunction {
   /// checks if the given [path] exists.
   ///
   /// Throws [ArgumentError] if [path] is an empty string.
+  /// @Throwing(FileSystemException)
+  /// @Throwing(RangeError)
   bool exists(String path, {bool followLinks = true}) {
     if (path.isEmpty) {
       throw ArgumentError('path must not be empty.');
@@ -131,6 +157,8 @@ class _Is extends DCliFunction {
   /// checks if the given [path] exists.
   ///
   /// Throws [ArgumentError] if [path] is an empty string.
+  /// @Throwing(FileSystemException)
+  /// @Throwing(RangeError)
   bool existsSync(String path, {required bool followLinks}) {
     if (path.isEmpty) {
       throw ArgumentError('path must not be empty.');

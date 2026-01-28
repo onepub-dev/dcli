@@ -56,6 +56,8 @@ class Settings {
 
   /// Logs a message to the console if the verbose
   /// settings are on.
+  /// @Throwing(ArgumentError)
+  /// @Throwing(FormatException)
   void verbose(String? message, {Frame? frame}) {
     final Frame calledBy;
     if (frame == null) {
@@ -100,6 +102,8 @@ class Settings {
 /// ```dart
 /// verbose(() => 'Log the users name $user');
 ///
+/// @Throwing(ArgumentError)
+/// @Throwing(FormatException)
 void verbose(String Function() callback) {
   if (Settings().isVerbose) {
     Settings().verbose(callback(), frame: Trace.current().frames[1]);

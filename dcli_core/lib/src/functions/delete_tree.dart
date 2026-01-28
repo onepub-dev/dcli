@@ -57,6 +57,7 @@ void deleteTree(
 bool _deleteAll(FileSystemEntityType type, String file) => true;
 
 class _DeleteTree extends DCliFunction {
+  /// @Throwing(DeleteTreeException)
   void deleteTree(
     String path, {
     bool Function(FileSystemEntityType type, String file) filter = _deleteAll,

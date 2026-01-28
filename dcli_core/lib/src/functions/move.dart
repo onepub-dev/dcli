@@ -29,6 +29,7 @@ import '../../dcli_core.dart';
 ///
 /// If the move fails for any reason a [MoveException] is thrown.
 ///
+/// @Throwing(ArgumentError)
 
 void move(String from, String to, {bool overwrite = false}) {
   verbose(
@@ -60,6 +61,7 @@ void move(String from, String to, {bool overwrite = false}) {
 }
 
 /// We try to improve the OS error message, because its crap.
+/// @Throwing(MoveException)
 void _improveError(Object e, String from, String to) {
   if (!exists(from)) {
     throw MoveException(

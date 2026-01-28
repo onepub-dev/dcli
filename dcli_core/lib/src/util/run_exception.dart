@@ -28,6 +28,7 @@ class RunException extends DCliException {
         reason = json['reason'] as String,
         super(json['reason'] as String, json['stackTrace'] as Trace);
 
+  /// @Throwing(FormatException)
   factory RunException.fromJsonString(String jsonString) {
     final jsonMap = jsonDecode(jsonString) as Map<String, dynamic>;
     return RunException(
@@ -83,6 +84,8 @@ reason: $reason''';
         'stackTrace': stackTrace,
       };
 
+  /// @Throwing(JsonCyclicError)
+  /// @Throwing(JsonUnsupportedObjectError)
   @override
   String toJsonString() {
     final jsonMap = <String, dynamic>{
