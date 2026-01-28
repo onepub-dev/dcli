@@ -175,11 +175,39 @@ packages:
       relative: true
     source: path
     version: "8.4.2"
+  dcli_input:
+    dependency: "direct overridden"
+    description:
+      path: "/home/bsutton/git/dcli/dcli_input"
+      relative: false
+    source: path
+    version: "8.4.2"
+  dcli_sdk:
+    dependency: "direct overridden"
+    description:
+      path: "/home/bsutton/git/dcli/dcli_sdk"
+      relative: false
+    source: path
+    version: "8.4.2"
   dcli_terminal:
     dependency: "direct overridden"
     description:
       path: "../dcli_terminal"
       relative: true
+    source: path
+    version: "8.4.2"
+  dcli_test:
+    dependency: "direct overridden"
+    description:
+      path: "/home/bsutton/git/dcli/dcli_test"
+      relative: false
+    source: path
+    version: "8.4.2"
+  dcli_unit_tester:
+    dependency: "direct overridden"
+    description:
+      path: "/home/bsutton/git/dcli/dcli_unit_tester"
+      relative: false
     source: path
     version: "8.4.2"
   document_throws:
