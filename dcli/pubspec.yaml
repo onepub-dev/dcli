@@ -1,5 +1,5 @@
 name: dcli
-version: 8.4.1
+version: 8.4.2
 homepage: https://dcli.onepub.dev
 documentation: https://dcli.onepub.dev
 description: Dart console SDK - write console (cli) apps/scripts using dart.
@@ -16,9 +16,9 @@ dependencies:
   crypto: ^3.0.0
   csv: ^6.0.0
   dart_console: ^4.0.0
-  dcli_common: ^8.4.1
-  dcli_core: ^8.4.1
-  dcli_terminal: ^8.4.1
+  dcli_common: ^8.4.2
+  dcli_core: ^8.4.2
+  dcli_terminal: ^8.4.2
   equatable: ^2.0.0
   ffi: ^2.0.0
   file: ^7.0.0
@@ -45,7 +45,7 @@ dev_dependencies:
   dcli_test: any
   # document_throws: ^0.1.0
   hex: ^0.2.0
-  lint_hard: ^7.1.1
+  lint_hard: ^7.1.2
   mocktail: ^1.0.0
   test: ^1.0.0
   test_api: ^0.7.0
