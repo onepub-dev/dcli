@@ -314,10 +314,10 @@ packages:
     dependency: "direct dev"
     description:
       name: lint_hard
-      sha256: "6b5c688ca3227c6312190c11c7dc0f92af9f32d3e02cf97d3814c2de016a14aa"
+      sha256: "4bcf8ef81d50b960bb4b902c0be347f3f2417894546a6cdc8e608f10eb3378fe"
       url: "https://pub.dev"
     source: hosted
-    version: "7.1.1"
+    version: "7.1.2"
   logging:
     dependency: "direct main"
     description:
@@ -695,4 +695,4 @@ packages:
     source: hosted
     version: "2.2.3"
 sdks:
-  dart: ">=3.9.0 <4.0.0"
+  dart: ">=3.10.0 <4.0.0"
