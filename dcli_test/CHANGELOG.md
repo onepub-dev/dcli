@@ -1,3 +1,10 @@
+# 8.4.2
+- Fixed a bug in read that was mixing codecs.
+- replaced #! dart with dcli to take advantage of the faster startup.
+- updated templates to use latest version of dcli.
+- templates changed to use dcli rather than dart for #!
+
+
 # 8.4.1
 - Change the script runner to use the --resident flag to improve startup times for dart scripts (from 5sec down to 1).  
 - Fixed a bug where the -v flag wasn't actually enabling verbose logging.
