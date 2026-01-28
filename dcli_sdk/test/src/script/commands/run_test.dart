@@ -27,7 +27,11 @@ void main() {
       initTemplates(print);
       final projectPath = truepath(fs.tmpScriptPath, 'run_test');
 
-      DartProject.create(pathTo: projectPath, templateName: 'simple');
+      await withEnvironmentAsync(() async {
+        DartProject.create(pathTo: projectPath, templateName: 'simple');
+      }, environment: {
+        overrideDCliPathKey: DartProject.self.pathToProjectRoot
+      });
 
       final progress = DartScript.fromFile(
         join(projectPath, 'bin', 'run_test.dart'),
