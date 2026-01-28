@@ -43,3 +43,4 @@ dcli/custom_lint.log
 **/custom_lint.log
 template/project/full/pubspec.yaml
 .mcp_logs/mcp_command_server.log
+dcli_sdk/.mcp_logs/mcp_command_server.log
