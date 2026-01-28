@@ -1,9 +1,13 @@
+# 8.4.2
+- Fixed a bug in the  read where it was mixing codecs.
+- Change all occurances of #! /usr/bin/env dart with #! /usr/bin/env dcli to 
+take advantage of the the faster startup time due to its use of the --resident flag.
+
+
 # 8.4.1
 - Change the script runner to use the --resident flag to improve startup times for dart scripts (from 5sec down to 1).  
 - Fixed a bug where the -v flag wasn't actually enabling verbose logging.
 - moved flag class into its own file, verbose and help as well.
-
-
 
 
 # 8.4.0
