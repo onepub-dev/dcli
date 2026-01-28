@@ -22,6 +22,7 @@ import 'package:path/path.dart';
 ///
 /// Where 'X' is the drive letter that [path] is located on.
 ///
+/// @Throwing(ArgumentError)
 Paths determinePaths({
   required String path,
   required String workingDirectory,
