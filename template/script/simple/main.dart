@@ -1,5 +1,6 @@
 #! /usr/bin/env dcli
 
+// Here to help the user get started with dcli.
 // ignore: unused_import
 import 'package:dcli/dcli.dart';
 

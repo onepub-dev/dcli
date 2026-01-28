@@ -26,7 +26,6 @@ void main(List<String> args) async {
   try {
     // parse the cli options passed and run the selected command.
     await runner.run(args);
-    // ignore: avoid_catches_without_on_clauses
   } catch (e) {
     showException(runner, e);
   }

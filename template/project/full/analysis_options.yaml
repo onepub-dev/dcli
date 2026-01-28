@@ -1,4 +1,7 @@
 
+analyzer:
+  errors:
+    avoid_catches_without_on_clauses: ignore
 include: package:lint_hard/all.yaml
 
 linter:

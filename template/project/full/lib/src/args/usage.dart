@@ -1,5 +1,3 @@
-// ignore_for_file: avoid_classes_with_only_static_members
-
 import 'package:args/command_runner.dart';
 import 'package:dcli/dcli.dart';
 
@@ -28,7 +26,6 @@ void showException<T>(CommandRunner<T> runner, Object e) {
       showUsage(runner);
     }
   } else {
-    // ignore: avoid_catches_without_on_clauses
     printerr(red('Error: $e'));
     showUsage(runner);
   }

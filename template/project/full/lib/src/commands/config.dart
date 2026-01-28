@@ -78,9 +78,9 @@ class ConfigArgs extends GlobalArgs {
       : super(globalResults) {
     final settings = AppSettings();
 
-    var _smtpPort = settings.smtpPort;
-    var _httpPort = settings.httpPort;
-    var _ask = true;
+    var lsmtpPort = settings.smtpPort;
+    var lhttpPort = settings.httpPort;
+    var lask = true;
 
     if (results!.rest.isNotEmpty) {
       throw ExitException(
@@ -91,7 +91,7 @@ class ConfigArgs extends GlobalArgs {
     }
     // smtp port
     if (results.wasParsed(ConfigCommand.smtpPortOption)) {
-      _ask = false;
+      lask = false;
       final port =
           int.tryParse(results[ConfigCommand.smtpPortOption] as String);
       if (port == null) {
@@ -99,12 +99,12 @@ class ConfigArgs extends GlobalArgs {
             1, 'Invalid integer passed for ${ConfigCommand.smtpPortOption}',
             showUsage: false);
       }
-      _smtpPort = port;
+      lsmtpPort = port;
     }
 
     // http port
     if (results.wasParsed(ConfigCommand.httpPortOption)) {
-      _ask = false;
+      lask = false;
       final port =
           int.tryParse(results[ConfigCommand.httpPortOption] as String);
       if (port == null) {
@@ -112,13 +112,13 @@ class ConfigArgs extends GlobalArgs {
             1, 'Invalid integer passed for ${ConfigCommand.httpPortOption}',
             showUsage: false);
       }
-      _httpPort = port;
+      lhttpPort = port;
     }
 
-    smtpPort = _smtpPort;
-    httpPort = _httpPort;
+    smtpPort = lsmtpPort;
+    httpPort = lhttpPort;
 
-    ask = _ask;
+    ask = lask;
   }
 
   late final int smtpPort;

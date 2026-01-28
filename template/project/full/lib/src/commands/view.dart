@@ -54,12 +54,12 @@ class ViewArgs extends GlobalArgs {
           showUsage: true);
     }
 
-    var _browser = rest[0];
+    var lbrowser = rest[0];
 
-    if (_browser == 'chrome') {
-      _browser = 'google-chrome';
+    if (lbrowser == 'chrome') {
+      lbrowser = 'google-chrome';
     }
-    browser = _browser;
+    browser = lbrowser;
   }
 
   late final String browser;
