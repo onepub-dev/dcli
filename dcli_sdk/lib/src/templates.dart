@@ -6,6 +6,10 @@ import 'dcli/resource/generated/resource_registry.g.dart';
 
 /// Checks if the template directory exists in ~/.dcli and if not creates
 /// the directory and copies the default scripts in.
+/// @Throwing(ArgumentError)
+/// @Throwing(CreateDirException)
+/// @Throwing(DeleteDirException)
+/// @Throwing(ResourceException)
 void initTemplates(void Function(String) progress) {
   initProjectTemplates(progress);
   initScriptTemplates(progress);
@@ -17,6 +21,9 @@ void initTemplates(void Function(String) progress) {
   }
 }
 
+/// @Throwing(ArgumentError)
+/// @Throwing(CreateDirException)
+/// @Throwing(DeleteDirException)
 void initProjectTemplates(void Function(String) progress) {
   if (!exists(Settings().pathToTemplateProjectCustom)) {
     createDir(Settings().pathToTemplateProjectCustom, recursive: true);
@@ -58,6 +65,9 @@ void initProjectTemplates(void Function(String) progress) {
   }
 }
 
+/// @Throwing(ArgumentError)
+/// @Throwing(CreateDirException)
+/// @Throwing(DeleteDirException)
 void initScriptTemplates(void Function(String) progress) {
   if (!exists(Settings().pathToTemplateScriptCustom)) {
     createDir(Settings().pathToTemplateScriptCustom, recursive: true);

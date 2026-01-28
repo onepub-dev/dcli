@@ -27,6 +27,19 @@ class CreateCommand extends Command {
   ///
   CreateCommand() : super(_commandName);
 
+  /// @Throwing(ChModException)
+  /// @Throwing(DCliException)
+  /// @Throwing(DartProjectException)
+  /// @Throwing(DuplicateOptionsException)
+  /// @Throwing(InvalidArgumentException)
+  /// @Throwing(InvalidCommandArgumentException)
+  /// @Throwing(InvalidProjectTemplateException)
+  /// @Throwing(InvalidTemplateException)
+  /// @Throwing(RangeError)
+  /// @Throwing(ReadException)
+  /// @Throwing(RunException)
+  /// @Throwing(ScriptExistsException)
+  /// @Throwing(UnknownFlag)
   @override
   Future<int> run(List<Flag> selectedFlags, List<String> subarguments) async {
     var scriptIndex = 0;
@@ -104,6 +117,8 @@ class CreateCommand extends Command {
   /// dart file or a directory if the user wants to create an
   /// entire project.
   /// `<script.dart>` | `<project path>`
+  /// @Throwing(InvalidCommandArgumentException)
+  /// @Throwing(RangeError)
   String _retrieveTarget(List<String> arguments) {
     if (arguments.length != 1) {
       throw InvalidCommandArgumentException(

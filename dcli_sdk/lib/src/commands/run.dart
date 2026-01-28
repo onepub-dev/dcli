@@ -24,6 +24,9 @@ class RunCommand extends Command {
   ///
   /// [arguments] - the arguments passed directly to the run command.
   /// Returns the called processes exitcode;
+  /// @Throwing(InvalidCommandArgumentException)
+  /// @Throwing(InvalidScript)
+  /// @Throwing(RunException)
   @override
   Future<int> run(List<Flag> selectedFlags, List<String> arguments) async {
     if (arguments.isEmpty) {
@@ -80,6 +83,8 @@ Runs the given script. This command is provided for the sake of symmetry.
   List<Flag> flags() => [];
 
   /// validate that the passed arguments points to a valid script
+  /// @Throwing(InvalidCommandArgumentException)
+  /// @Throwing(InvalidScript)
   static void validateScriptPath(String scriptPath) {
     if (!scriptPath.endsWith('.dart')) {
       throw InvalidCommandArgumentException(

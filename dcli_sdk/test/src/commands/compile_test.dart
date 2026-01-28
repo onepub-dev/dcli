@@ -5,6 +5,10 @@ import 'package:dcli_test/dcli_test.dart';
 import 'package:path/path.dart' hide equals;
 import 'package:test/test.dart';
 
+/// @Throwing(ArgumentError)
+/// @Throwing(InvalidArgumentException)
+/// @Throwing(ReadException)
+/// @Throwing(RunException)
 void main() {
   test('compile invalid package name', () {
     expect(
@@ -21,6 +25,10 @@ void main() {
   });
 }
 
+/// @Throwing(ArgumentError)
+/// @Throwing(InvalidArgumentException)
+/// @Throwing(ReadException)
+/// @Throwing(RunException)
 Future<void> compile(String pathToScript) async {
   await TestFileSystem().withinZone((fs) async {
     final pathToSript = join(fs.testScriptPath, 'general/bin/hello_world.dart');

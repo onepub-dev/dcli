@@ -76,6 +76,7 @@ class PackCommand extends Command {
   PackCommand() : super(_commandName);
 
   /// [arguments] contains path to clean
+  /// @Throwing(InvalidCommandArgumentException)
   @override
   Future<int> run(List<Flag> selectedFlags, List<String> arguments) async {
     if (!exists(Resources().resourceRoot) &&
@@ -103,6 +104,8 @@ class PackCommand extends Command {
   @override
   String usage() => '''pack''';
 
+  /// @Throwing(ArgumentError)
+  /// @Throwing(PathException)
   @override
   String description({bool extended = false}) {
     var desc = '''

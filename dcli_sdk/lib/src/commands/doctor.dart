@@ -22,6 +22,8 @@ class DoctorCommand extends Command {
   ///
   DoctorCommand() : super(_commandName);
 
+  /// @Throwing(DCliException)
+  /// @Throwing(InvalidCommandArgumentException)
   @override
   Future<int> run(List<Flag> selectedFlags, List<String> subarguments) async {
     var showScriptDetails = false;
@@ -77,6 +79,7 @@ class DoctorCommand extends Command {
     which('dart').paths.forEach((line) => _colprint(['', line]));
   }
 
+  /// @Throwing(DCliException)
   void _printPermissions() {
     print('permissions');
     _showPermissions('HOME', HOME);
@@ -213,6 +216,7 @@ Running 'dcli doctor' provides diagnostic information on your install
   @override
   List<String> completion(String word) => completionExpandScripts(word);
 
+  /// @Throwing(DCliException)
   void _showPermissions(String label, String path) {
     var finallabel = label;
     if (exists(path)) {
@@ -256,6 +260,7 @@ class _Owner {
 
   String? group;
 
+  /// @Throwing(DCliException)
   _Owner(String path) {
     if (Settings().isWindows) {
       user = 'Unknown';

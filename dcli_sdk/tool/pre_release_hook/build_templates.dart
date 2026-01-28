@@ -10,6 +10,12 @@ import 'package:dcli/src/version/version.g.dart';
 import 'package:path/path.dart';
 import 'package:pubspec_manager/pubspec_manager.dart';
 
+/// @Throwing(ArgumentError)
+/// @Throwing(DuplicateKeyException)
+/// @Throwing(NotFoundException)
+/// @Throwing(PubSpecException)
+/// @Throwing(ResourceException)
+/// @Throwing(VersionException)
 void main(List<String> args) async {
   print('Updating templates');
   await prepareTemplates();
@@ -20,6 +26,11 @@ void main(List<String> args) async {
 /// Update each of the project templates (used by dcli create)
 /// to reference the latest version of dcli
 /// and update the sdk constraints.
+/// @Throwing(ArgumentError)
+/// @Throwing(DuplicateKeyException)
+/// @Throwing(NotFoundException)
+/// @Throwing(PubSpecException)
+/// @Throwing(VersionException)
 Future<void> prepareTemplates() async {
   final dcliProject = DartProject.self;
   final pathToTemplates = join(dcliProject.pathToProjectRoot, '..', 'template');

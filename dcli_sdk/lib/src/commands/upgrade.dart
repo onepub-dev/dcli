@@ -25,6 +25,11 @@ class UpgradeCommand extends Command {
 
   /// The upgrade command takes no arguments.
   /// current directory are upgradeed.
+  /// @Throwing(ArgumentError)
+  /// @Throwing(DCliException)
+  /// @Throwing(InvalidCommandArgumentException)
+  /// @Throwing(MissingDependencyException)
+  /// @Throwing(RunException)
   @override
   Future<int> run(List<Flag> selectedFlags, List<String> arguments) async {
     if (arguments.isNotEmpty) {

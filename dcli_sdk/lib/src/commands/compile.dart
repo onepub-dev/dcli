@@ -31,6 +31,24 @@ class CompileCommand extends Command {
   ///
   CompileCommand() : super(_commandName);
 
+  /// @Throwing(ArgumentError)
+  /// @Throwing(core.CopyTreeException)
+  /// @Throwing(DCliException)
+  /// @Throwing(DCliNotInstalledException)
+  /// @Throwing(DartProjectException)
+  /// @Throwing(DuplicateKeyException)
+  /// @Throwing(DuplicateOptionsException)
+  /// @Throwing(InvalidArgumentException)
+  /// @Throwing(InvalidCommandArgumentException)
+  /// @Throwing(LockException)
+  /// @Throwing(NotFoundException)
+  /// @Throwing(PubSpecException)
+  /// @Throwing(PubUpgradeException)
+  /// @Throwing(ReadException)
+  /// @Throwing(RunException)
+  /// @Throwing(UnknownFlag)
+  /// @Throwing(UnsupportedError)
+  /// @Throwing(VersionException)
   @override
   Future<int> run(List<Flag> selectedFlags, List<String> subarguments) async {
     const exitCode = 0;
@@ -71,6 +89,13 @@ class CompileCommand extends Command {
   }
 
   ///
+  /// @Throwing(DCliException)
+  /// @Throwing(DartProjectException)
+  /// @Throwing(InvalidArgumentException)
+  /// @Throwing(LockException)
+  /// @Throwing(PubUpgradeException)
+  /// @Throwing(ReadException)
+  /// @Throwing(UnsupportedError)
   Future<int> compileScript(String scriptPath) async {
     var exitCode = 0;
 
@@ -161,6 +186,14 @@ compile [--nowarmup] [--install] [--overwrite] [<script path.dart>, <script path
   @override
   List<Flag> flags() => _compileFlags;
 
+  /// @Throwing(DCliException)
+  /// @Throwing(DartProjectException)
+  /// @Throwing(InvalidArgumentException)
+  /// @Throwing(InvalidCommandArgumentException)
+  /// @Throwing(LockException)
+  /// @Throwing(PubUpgradeException)
+  /// @Throwing(ReadException)
+  /// @Throwing(UnsupportedError)
   Future<void> compileScripts(List<String> scriptList) async {
     var scriptList0 = scriptList;
     if (scriptList0.isEmpty) {
@@ -188,6 +221,20 @@ compile [--nowarmup] [--install] [--overwrite] [<script path.dart>, <script path
 
   /// Compiles a globally activted taking the package name
   /// and optionally the version from [scriptList].
+  /// @Throwing(ArgumentError)
+  /// @Throwing(core.CopyTreeException)
+  /// @Throwing(DCliException)
+  /// @Throwing(DCliNotInstalledException)
+  /// @Throwing(DartProjectException)
+  /// @Throwing(DuplicateKeyException)
+  /// @Throwing(InvalidCommandArgumentException)
+  /// @Throwing(LockException)
+  /// @Throwing(NotFoundException)
+  /// @Throwing(PubSpecException)
+  /// @Throwing(PubUpgradeException)
+  /// @Throwing(RunException)
+  /// @Throwing(UnsupportedError)
+  /// @Throwing(VersionException)
   Future<void> _compilePackage(List<String> scriptList) async {
     // we are compiling a globally activated package
     // we must be passed the package name and optionally a version
@@ -207,6 +254,20 @@ compile [--nowarmup] [--install] [--overwrite] [<script path.dart>, <script path
   }
 
   /// Compiles a globally activted
+  /// @Throwing(ArgumentError)
+  /// @Throwing(core.CopyTreeException)
+  /// @Throwing(DCliException)
+  /// @Throwing(DCliNotInstalledException)
+  /// @Throwing(DartProjectException)
+  /// @Throwing(DuplicateKeyException)
+  /// @Throwing(InvalidCommandArgumentException)
+  /// @Throwing(LockException)
+  /// @Throwing(NotFoundException)
+  /// @Throwing(PubSpecException)
+  /// @Throwing(PubUpgradeException)
+  /// @Throwing(RunException)
+  /// @Throwing(UnsupportedError)
+  /// @Throwing(VersionException)
   Future<void> compilePackage(String packageName, {String? version}) async {
     if (packageName.contains(separator)) {
       throw InvalidCommandArgumentException(

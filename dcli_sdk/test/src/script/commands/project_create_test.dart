@@ -15,6 +15,18 @@ import 'package:path/path.dart' as p;
 import 'package:path/path.dart' hide equals;
 import 'package:test/test.dart';
 
+/// @Throwing(ArgumentError)
+/// @Throwing(ChModException)
+/// @Throwing(DCliException)
+/// @Throwing(DartProjectException)
+/// @Throwing(InvalidArgumentException)
+/// @Throwing(InvalidProjectTemplateException)
+/// @Throwing(LockException)
+/// @Throwing(PathException)
+/// @Throwing(PubUpgradeException)
+/// @Throwing(ReadException)
+/// @Throwing(RunException)
+/// @Throwing(UnsupportedError)
 void main() {
   const scriptName = 'test.dart';
 
@@ -70,6 +82,8 @@ void _installTemplates() {
   initTemplates(print);
 }
 
+/// @Throwing(ArgumentError)
+/// @Throwing(PathException)
 void checkProjectStructure(String rootPath, String scriptName) {
   final scriptPath = join(rootPath, 'bin', scriptName);
   expect(exists(scriptPath), equals(true));

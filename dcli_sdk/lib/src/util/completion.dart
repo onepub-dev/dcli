@@ -14,6 +14,8 @@ import 'package:path/path.dart';
 ///
 /// If [extension] is passed then only files that
 /// end with [extension] are returned (plus directories)
+/// @Throwing(ArgumentError)
+/// @Throwing(PathException)
 List<String> completionExpandScripts(
   String word, {
   String workingDirectory = '.',

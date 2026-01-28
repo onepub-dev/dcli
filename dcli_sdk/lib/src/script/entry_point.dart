@@ -32,9 +32,11 @@ class EntryPoint {
   }
 
   /// process the command line
+  /// @Throwing(FormatException)
   Future<int> process(List<String> arguments) =>
       _parseCmdLine(arguments, Commands.applicationCommands);
 
+  /// @Throwing(FormatException)
   Future<int> _parseCmdLine(
       List<String> arguments, List<Command> availableCommands) async {
     try {

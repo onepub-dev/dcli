@@ -13,6 +13,14 @@ import 'package:dcli_test/dcli_test.dart';
 import 'package:path/path.dart' hide equals;
 import 'package:test/test.dart';
 
+/// @Throwing(ArgumentError)
+/// @Throwing(ChModException)
+/// @Throwing(DCliException)
+/// @Throwing(DartProjectException)
+/// @Throwing(InvalidArgumentException)
+/// @Throwing(InvalidProjectTemplateException)
+/// @Throwing(ReadException)
+/// @Throwing(RunException)
 void main() {
   test('Create and run a script', () async {
     await TestFileSystem().withinZone((fs) async {

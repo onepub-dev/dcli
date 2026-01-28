@@ -8,6 +8,9 @@ import 'package:scope/scope.dart';
 /// as it is unit test friendly in that it
 /// will throw an [ExitException] to avoid
 /// shutting the entire unit test framework down.
+/// @Throwing(ExitException)
+/// @Throwing(MissingDependencyException)
+/// @Throwing(UnsupportedError)
 void dcliExit(int exitCode) {
   // The unitTestKey is intentionally breach as it is used
   // to avoid unit test being shutdown be a call to io.exit.

@@ -31,6 +31,7 @@ class CommandLineRunner {
   Map<String, Command> _availableCommands;
 
   ///
+  /// @Throwing(Exception)
   factory CommandLineRunner() {
     if (_self == null) {
       throw Exception('The CommandLineRunner has not been intialised');
@@ -46,6 +47,9 @@ class CommandLineRunner {
   }
 
   /// Process the command line arguments to run the command.
+  /// @Throwing(DuplicateOptionsException)
+  /// @Throwing(InvalidCommandArgumentException)
+  /// @Throwing(UnknownFlag)
   Future<int> process(List<String> arguments) async {
     int? exitCode;
 

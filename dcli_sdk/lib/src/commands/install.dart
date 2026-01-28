@@ -43,6 +43,13 @@ class InstallCommand extends Command {
   /// ctor.
   InstallCommand() : super(_commandName);
 
+  /// @Throwing(ArgumentError)
+  /// @Throwing(CreateDirException)
+  /// @Throwing(DuplicateOptionsException)
+  /// @Throwing(InvalidCommandArgumentException)
+  /// @Throwing(core.TouchException)
+  /// @Throwing(UnimplementedError)
+  /// @Throwing(UnknownFlag)
   @override
   Future<int> run(List<Flag> selectedFlags, List<String> subarguments) async {
     var scriptIndex = 0;
@@ -243,6 +250,9 @@ class InstallCommand extends Command {
   /// Symlink so dcli works under sudo.
   /// We use the location of dart exe and add dcli symlink
   /// to the same location.
+  /// @Throwing(ArgumentError)
+  /// @Throwing(RunException)
+  /// @Throwing(UnsupportedError)
   void symlinkDCli(Shell shell, String dcliPath) {
     if (!core.Settings().isWindows) {
       final linkPath = join(dirname(DartSdk().pathToDartExe!), 'dcli');

@@ -18,6 +18,7 @@ class Flags {
   /// Find the flag that matches the name part of [flagSwitch].
   ///
   /// e.g --flagname=value
+  /// @Throwing(InvalidFlagOptionException)
   Flag? findFlag(String flagSwitch, List<Flag> flags) {
     Flag? found;
     var foundOption = false;

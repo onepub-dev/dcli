@@ -30,6 +30,18 @@ class LockCommand extends Command {
 
   LockCommand() : super(_commandName);
 
+  /// @Throwing(ArgumentError)
+  /// @Throwing(DCliException)
+  /// @Throwing(DependencyNotFound)
+  /// @Throwing(DuplicateKeyException)
+  /// @Throwing(ExitWithMessageException)
+  /// @Throwing(InvalidCommandArgumentException)
+  /// @Throwing(NotFoundException)
+  /// @Throwing(PathException)
+  /// @Throwing(PubSpecException)
+  /// @Throwing(RunException)
+  /// @Throwing(StateError)
+  /// @Throwing(VersionException)
   @override
   Future<int> run(List<Flag> selectedFlags, List<String> arguments) async {
     String targetPath;
@@ -49,6 +61,18 @@ class LockCommand extends Command {
     return 0;
   }
 
+  /// @Throwing(ArgumentError)
+  /// @Throwing(DCliException)
+  /// @Throwing(DependencyNotFound)
+  /// @Throwing(DuplicateKeyException)
+  /// @Throwing(ExitWithMessageException)
+  /// @Throwing(InvalidCommandArgumentException)
+  /// @Throwing(NotFoundException)
+  /// @Throwing(PathException)
+  /// @Throwing(PubSpecException)
+  /// @Throwing(RunException)
+  /// @Throwing(StateError)
+  /// @Throwing(VersionException)
   Future<void> _lock(String targetPath) async {
     if (!exists(targetPath)) {
       throw InvalidCommandArgumentException(
@@ -126,6 +150,7 @@ pubspec.lock not found in $pathToProjectRoot. Run `dart pub get` first.''');
     print('Locked $updatedCount direct package(s).');
   }
 
+  /// @Throwing(StateError)
   String packageName(PackageDependency dep) => dep.iswitch(
         sdk: (d) => d.package,
         hosted: (d) => d.package,
@@ -143,6 +168,9 @@ pubspec.lock not found in $pathToProjectRoot. Run `dart pub get` first.''');
       );
 
   // map hosted (pin to the exact resolved version from pubspec.lock)
+  /// @Throwing(ArgumentError)
+  /// @Throwing(FormatException)
+  /// @Throwing(UnsupportedError)
   DependencyBuilder buildHosted(HostedPackageDependency hosted) {
     final versionRange =
         sm.VersionConstraint.parse(hosted.version) as sm.VersionRange;
@@ -167,6 +195,8 @@ pubspec.lock not found in $pathToProjectRoot. Run `dart pub get` first.''');
   DependencyBuilder buildPath(PathPackageDependency path) =>
       DependencyBuilderPath(name: path.package, path: path.path);
 
+  /// @Throwing(ArgumentError)
+  /// @Throwing(PathException)
   void _createRestoreFile(
       {required String pathToProjectRoot,
       required PubSpec pubspec,
@@ -245,6 +275,8 @@ pubspec.lock not found in $pathToProjectRoot. Run `dart pub get` first.''');
 Wrote restore file: ${relative(restorePath, from: pathToProjectRoot)}'''));
   }
 
+  /// @Throwing(ExitWithMessageException)
+  /// @Throwing(StateError)
   void _assertNoLocalPathsInLock(PubspecLock lock) {
     final offenders = <String>[];
 
@@ -271,6 +303,10 @@ Wrote restore file: ${relative(restorePath, from: pathToProjectRoot)}'''));
     }
   }
 
+  /// @Throwing(ArgumentError)
+  /// @Throwing(DCliException)
+  /// @Throwing(ExitWithMessageException)
+  /// @Throwing(RunException)
   void _ensureFreshLock(String projectRoot) {
     final pubspecPath = join(projectRoot, 'pubspec.yaml');
     final overridesPath = join(projectRoot, 'pubspec_overrides.yaml');

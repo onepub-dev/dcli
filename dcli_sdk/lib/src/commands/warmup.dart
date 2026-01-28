@@ -22,6 +22,13 @@ class WarmupCommand extends Command {
   WarmupCommand() : super(_commandName);
 
   /// [arguments] contains path to prepare
+  /// @Throwing(DCliException)
+  /// @Throwing(DartProjectException)
+  /// @Throwing(InvalidCommandArgumentException)
+  /// @Throwing(LockException)
+  /// @Throwing(PubUpgradeException)
+  /// @Throwing(RunException)
+  /// @Throwing(UnsupportedError)
   @override
   Future<int> run(List<Flag> selectedFlags, List<String> arguments) async {
     String targetPath;
@@ -41,6 +48,13 @@ class WarmupCommand extends Command {
     return 0;
   }
 
+  /// @Throwing(DCliException)
+  /// @Throwing(DartProjectException)
+  /// @Throwing(InvalidCommandArgumentException)
+  /// @Throwing(LockException)
+  /// @Throwing(PubUpgradeException)
+  /// @Throwing(RunException)
+  /// @Throwing(UnsupportedError)
   Future<void> _prepareProject(String targetPath) async {
     if (!exists(targetPath)) {
       throw InvalidCommandArgumentException(

@@ -23,6 +23,10 @@ class CleanCommand extends Command {
   CleanCommand() : super(_commandName);
 
   /// [arguments] contains path to clean
+  /// @Throwing(InvalidCommandArgumentException)
+  /// @Throwing(LockException)
+  /// @Throwing(RunException)
+  /// @Throwing(UnsupportedError)
   @override
   Future<int> run(List<Flag> selectedFlags, List<String> arguments) async {
     String targetPath;
@@ -42,6 +46,10 @@ class CleanCommand extends Command {
     return 0;
   }
 
+  /// @Throwing(InvalidCommandArgumentException)
+  /// @Throwing(LockException)
+  /// @Throwing(RunException)
+  /// @Throwing(UnsupportedError)
   Future<void> _cleanProject(String targetPath) async {
     if (!exists(targetPath)) {
       throw InvalidCommandArgumentException(

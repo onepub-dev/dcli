@@ -13,6 +13,8 @@ import 'package:dcli_test/dcli_test.dart';
 import 'package:path/path.dart' hide equals;
 import 'package:test/test.dart';
 
+/// @Throwing(ArgumentError)
+/// @Throwing(ReadException)
 void main() {
   group(
     'Install DCli',
@@ -68,6 +70,7 @@ void main() {
   });
 }
 
+/// @Throwing(ArgumentError)
 void checkInstallStructure(String home) {
   expect(exists(truepath(home, '.dcli')), equals(true));
   expect(
@@ -82,6 +85,7 @@ void checkInstallStructure(String home) {
   checkScriptStructure(home);
 }
 
+/// @Throwing(ArgumentError)
 void checkScriptStructure(String home) {
   expect(exists(truepath(home, '.dcli', 'template', 'script')), equals(true));
   expect(exists(truepath(home, '.dcli', 'template', 'script', 'custom')),
@@ -98,6 +102,7 @@ void checkScriptStructure(String home) {
       equals(true));
 }
 
+/// @Throwing(ArgumentError)
 void checkProjectStructure(String home, String projectName) {
   final projectPath =
       truepath(home, '.dcli', 'template', 'project', projectName);

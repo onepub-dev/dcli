@@ -35,6 +35,9 @@ class VerboseFlag extends Flag {
   @override
   bool get isOptionSupported => true;
 
+  /// @Throwing(ArgumentError)
+  /// @Throwing(InvalidFlagOptionException)
+  /// @Throwing(TouchException)
   @override
   set option(String? value) {
     // check that the value contains a path and that

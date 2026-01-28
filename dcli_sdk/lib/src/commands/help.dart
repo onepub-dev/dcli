@@ -20,6 +20,7 @@ class HelpCommand extends Command {
   ///
   HelpCommand() : super(_commandName);
 
+  /// @Throwing(InvalidCommandArgumentException)
   @override
   Future<int> run(List<Flag> selectedFlags, List<String> subarguments) async {
     if (subarguments.isNotEmpty) {

@@ -21,6 +21,9 @@ class VersionCommand extends Command {
   ///
   VersionCommand() : super(_commandName);
 
+  /// @Throwing(ArgumentError)
+  /// @Throwing(FileSystemException)
+  /// @Throwing(InvalidCommandArgumentException)
   @override
   Future<int> run(List<Flag> selectedFlags, List<String> subarguments) async {
     if (subarguments.isNotEmpty) {

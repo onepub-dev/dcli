@@ -12,6 +12,7 @@ import 'package:dcli_sdk/src/script/entry_point.dart';
 import 'package:dcli_test/dcli_test.dart';
 import 'package:test/test.dart';
 
+/// @Throwing(ArgumentError)
 void main() {
   test('dcli doctor', () async {
     await TestFileSystem().withinZone((fs) async {

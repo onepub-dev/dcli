@@ -14,6 +14,9 @@ import 'package:dcli_sdk/src/script/verbose_flag.dart';
 import 'package:path/path.dart';
 import 'package:test/test.dart';
 
+/// @Throwing(ArgumentError)
+/// @Throwing(CreateDirException)
+/// @Throwing(core.TouchException)
 void main() {
   test('create no args', () async {
     await core.withTempDirAsync((dir) async {

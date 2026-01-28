@@ -18,6 +18,9 @@ import 'package:dcli_test/src/test_directory_tree.dart';
 import 'package:path/path.dart';
 import 'package:test/test.dart';
 
+/// @Throwing(ArgumentError)
+/// @Throwing(CreateDirException)
+/// @Throwing(DeleteDirException)
 void main() {
   group('completion ...', () {
     List<String> paths;

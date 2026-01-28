@@ -31,6 +31,17 @@ class UnlockCommand extends Command {
 
   UnlockCommand() : super(_commandName);
 
+  /// @Throwing(ArgumentError)
+  /// @Throwing(DependencyNotFound)
+  /// @Throwing(DuplicateKeyException)
+  /// @Throwing(ExitWithMessageException)
+  /// @Throwing(InvalidCommandArgumentException)
+  /// @Throwing(NotFoundException)
+  /// @Throwing(PathException)
+  /// @Throwing(PubSpecException)
+  /// @Throwing(StateError)
+  /// @Throwing(VersionException)
+  /// @Throwing(yaml.YamlException)
   @override
   Future<int> run(List<Flag> selectedFlags, List<String> arguments) async {
     String targetPath;
@@ -50,6 +61,17 @@ class UnlockCommand extends Command {
     return 0;
   }
 
+  /// @Throwing(ArgumentError)
+  /// @Throwing(DependencyNotFound)
+  /// @Throwing(DuplicateKeyException)
+  /// @Throwing(ExitWithMessageException)
+  /// @Throwing(InvalidCommandArgumentException)
+  /// @Throwing(NotFoundException)
+  /// @Throwing(PathException)
+  /// @Throwing(PubSpecException)
+  /// @Throwing(StateError)
+  /// @Throwing(VersionException)
+  /// @Throwing(yaml.YamlException)
   Future<void> _unlock(String targetPath) async {
     if (!exists(targetPath)) {
       throw InvalidCommandArgumentException(
@@ -145,6 +167,11 @@ Warning: ${missingInPubspec.length} entr${missingInPubspec.length == 1 ? 'y' : '
 
   /// Loads the restore content into a `Map<String, dynamic>`.
   /// Prefers JSON; falls back to YAML.
+  /// @Throwing(ArgumentError)
+  /// @Throwing(ExitWithMessageException)
+  /// @Throwing(PathException)
+  /// @Throwing(StateError)
+  /// @Throwing(yaml.YamlException)
   Map<String, dynamic> _loadRestoreMap(String projectRoot) {
     final jsonPath = join(projectRoot, 'pubspec.lock-restore.json');
     final yamlPath = join(projectRoot, 'pubspec.lock-restore.yaml');
@@ -174,6 +201,9 @@ Expected one of:
   • ${relative(yamlPath, from: projectRoot)}''');
   }
 
+  /// @Throwing(ExitWithMessageException)
+  /// @Throwing(StateError)
+  /// @Throwing(yaml.YamlException)
   Map<String, dynamic> _maybeLoadYamlRestore(String yamlPath) {
     final text = File(yamlPath).readAsStringSync();
     final doc = yaml.loadYaml(text);
