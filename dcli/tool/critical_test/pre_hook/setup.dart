@@ -19,6 +19,7 @@ import 'package:path/path.dart';
 ///
 /// @Throwing(ArgumentError)
 /// @Throwing(DeleteDirException)
+/// @Throwing(UnsupportedError)
 Future<void> main(List<String> args) async {
   if (core.Settings().isWindows && !Shell.current.isPrivilegedUser) {
     printerr(

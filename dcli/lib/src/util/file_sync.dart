@@ -119,6 +119,8 @@ class FileSync {
 
   /// This is just a wrapper for the method File.resolveSymbolicLinksSync.
   /// Returns the path the symbolic link links to.
+  /// @Throwing(ArgumentError)
+  /// @Throwing(FileSystemException)
   String resolveSymLink() => _file.resolveSymbolicLinksSync();
 
   /// Truncates the file to zero bytes and
@@ -302,6 +304,7 @@ void deleteSymlink(String linkPath) {
 ///  * [deleteSymlink]
 ///  * [createSymLink]
 /// @Throwing(ArgumentError)
+/// @Throwing(FileSystemException)
 String resolveSymLink(String pathToLink) {
   final normalised = canonicalize(pathToLink);
 

@@ -40,6 +40,8 @@ abstract class PackedResource {
   /// @Throwing(ArgumentError)
   /// @Throwing(CreateDirException)
   /// @Throwing(ResourceException)
+  /// @Throwing(FormatException)
+  /// @Throwing(RangeError)
   void unpack(String pathTo) {
     if (exists(pathTo) && !isFile(pathTo)) {
       throw ResourceException('The unpack target $pathTo must be a file');

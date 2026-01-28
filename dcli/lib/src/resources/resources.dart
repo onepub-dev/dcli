@@ -79,6 +79,7 @@ class Resources {
   /// @Throwing(PathNotFoundException)
   /// @Throwing(ResourceException)
   /// @Throwing(SettingsYamlException)
+  /// @Throwing(RangeError)
   void pack() {
     /// clear out an old generated files
     /// as we use UUIDs if we didn't do this the
@@ -106,6 +107,7 @@ class Resources {
   /// @Throwing(PathNotFoundException)
   /// @Throwing(ResourceException)
   /// @Throwing(SettingsYamlException)
+  /// @Throwing(RangeError)
   List<_Resource> _packResources(List<String> pathToResources) {
     final resources = <_Resource>[];
 
@@ -187,6 +189,7 @@ class $className extends PackedResource {
   /// them so we have a bootstrapping problem.
   /// We prefix the md5 hash with the letter 'A' so that it can
   /// be used as a valid class name.
+  /// @Throwing(RangeError)
   String _generateClassName(String pathToResource) =>
       'A${md5.convert(utf8.encode(pathToResource))}';
 
@@ -334,6 +337,7 @@ $line
   /// @Throwing(PathNotFoundException)
   /// @Throwing(ResourceException)
   /// @Throwing(SettingsYamlException)
+  /// @Throwing(RangeError)
   List<_Resource> _packExternalResources() {
     final resources = <_Resource>[];
 
@@ -387,6 +391,7 @@ $line
 
   /// @Throwing(ArgumentError)
   /// @Throwing(PathException)
+  /// @Throwing(RangeError)
   List<_Resource> _packExternalResource(
       String path, String mount, List<String> excludes) {
     final resources = <_Resource>[];
@@ -414,6 +419,7 @@ $line
 
   /// @Throwing(ArgumentError)
   /// @Throwing(PathException)
+  /// @Throwing(RangeError)
   _Resource _packExternalFile(String path, String mount) {
     final className = _generateClassName(path);
 
@@ -427,6 +433,7 @@ $line
 
   /// @Throwing(ArgumentError)
   /// @Throwing(PathException)
+  /// @Throwing(RangeError)
   Iterable<_Resource> _packExternalDirectory(
       String path, String mount, List<String> excludes) {
     final resources = <_Resource>[];

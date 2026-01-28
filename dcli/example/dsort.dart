@@ -43,12 +43,14 @@ const outputOption = 'output';
 
 /// @Throwing(ArgParserException)
 /// @Throwing(ArgumentError)
+/// @Throwing(UnsupportedError)
 void main(List<String> args) {
   dsort(args);
 }
 
 /// @Throwing(ArgParserException)
 /// @Throwing(ArgumentError)
+/// @Throwing(UnsupportedError)
 void dsort(List<String> args) {
   final columns = <Column>[];
   late String fieldDelimiter;
@@ -127,6 +129,7 @@ void dsort(List<String> args) {
   ).sort();
 }
 
+/// @Throwing(UnsupportedError)
 void usageError(String error) {
   print(red(error));
   print('');

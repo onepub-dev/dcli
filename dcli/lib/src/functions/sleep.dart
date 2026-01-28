@@ -29,6 +29,8 @@ import '../../dcli.dart';
 ///
 /// See: [sleepAsync]
 ///
+/// @Throwing(ArgumentError)
+/// @Throwing(UnsupportedError)
 void sleep(int duration, {Interval interval = Interval.seconds}) =>
     _Sleep().sleep(duration, interval: interval);
 
@@ -66,6 +68,8 @@ Future<void> sleepAsync(int duration, {Interval interval = Interval.seconds}) =>
     _Sleep().sleepAsync(duration, interval: interval);
 
 class _Sleep extends core.DCliFunction {
+  /// @Throwing(ArgumentError)
+  /// @Throwing(UnsupportedError)
   void sleep(int duration, {Interval interval = Interval.seconds}) {
     verbose(() => 'sleep: duration: $duration interval: $interval');
     late Duration duration0;

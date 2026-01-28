@@ -15,6 +15,7 @@ import 'package:test/test.dart';
 /// @Throwing(ArgumentError)
 /// @Throwing(CreateDirException)
 /// @Throwing(DeleteDirException)
+/// @Throwing(core.CopyTreeException)
 void main() {
   group('warmup using DCli', () {
     test('warmup ', () async {

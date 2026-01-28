@@ -106,6 +106,8 @@ void _run(String arg) {
   print('Hello from isolate: $arg');
 }
 
+/// @Throwing(ArgumentError)
+/// @Throwing(UnsupportedError)
 void test1() {
   unawaited(Isolate.spawn(_run, 'hellow'));
   io.sleep(const Duration(seconds: 10));

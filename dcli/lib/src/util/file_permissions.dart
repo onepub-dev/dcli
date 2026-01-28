@@ -20,6 +20,7 @@ enum FilePermissionRole { world, group, user }
 /// [role] defaults to world.
 ///
 /// If the path doesn't exist then false is returned.
+/// @Throwing(ArgumentError)
 bool hasPermission(
   String path,
   FilePermission permission, {

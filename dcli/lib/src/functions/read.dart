@@ -24,16 +24,19 @@ import '../progress/progress_impl.dart';
 ///
 /// @Throwing(ArgumentError)
 /// @Throwing(ReadException)
+/// @Throwing(RangeError)
 Progress read(String path, {String delim = '\n'}) =>
     _Read().read(path, delim: delim);
 
 /// Read lines from stdin
+/// @Throwing(FileSystemException)
 Progress readStdin() => _Read()._readStdin();
 
 class _Read extends core.DCliFunction {
   /// Throws [ReadException].
   /// @Throwing(ArgumentError)
   /// @Throwing(ReadException)
+  /// @Throwing(RangeError)
   Progress read(String path, {String delim = '\n', Progress? progress}) {
     verbose(() => 'read: ${truepath(path)}, delim: $delim');
 
@@ -52,6 +55,7 @@ class _Read extends core.DCliFunction {
     return progress;
   }
 
+  /// @Throwing(FileSystemException)
   Progress _readStdin({Progress? progress}) {
     verbose(() => 'readStdin');
 

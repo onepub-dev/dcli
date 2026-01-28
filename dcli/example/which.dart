@@ -14,6 +14,7 @@ import 'package:path/path.dart';
 /// which appname
 /// @Throwing(ArgParserException)
 /// @Throwing(ArgumentError)
+/// @Throwing(UnsupportedError)
 void main(List<String> args) {
   final parser = ArgParser()..addFlag('verbose', abbr: 'v', negatable: false);
 

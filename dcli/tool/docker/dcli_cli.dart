@@ -23,6 +23,7 @@ import 'package:pubspec_manager/pubspec_manager.dart';
 /// If you are looking to work on dcli itself then use dev_dcli_cli.dart
 /// @Throwing(ArgumentError)
 /// @Throwing(UnimplementedError)
+/// @Throwing(UnsupportedError)
 
 Future<void> main(List<String> args) async {
   Settings().setVerbose(enabled: false);
@@ -42,6 +43,7 @@ Future<void> main(List<String> args) async {
   }
 }
 
+/// @Throwing(UnsupportedError)
 void showUsage(ArgParser parser) {
   print(parser.usage);
   exit(1);

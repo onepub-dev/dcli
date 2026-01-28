@@ -12,6 +12,7 @@ import 'package:path/path.dart';
 
 /// A toy REPL shell to replace your bash command line in just 50 lines of dart.
 /// @Throwing(ArgumentError)
+/// @Throwing(UnsupportedError)
 void main(List<String> args) {
   // Loop, asking for user input and evaluating it
   for (;;) {
@@ -24,6 +25,7 @@ void main(List<String> args) {
 
 // Evaluate the users input
 /// @Throwing(ArgumentError)
+/// @Throwing(UnsupportedError)
 void evaluate(String command) {
   final parts = command.split(' ');
   switch (parts[0]) {

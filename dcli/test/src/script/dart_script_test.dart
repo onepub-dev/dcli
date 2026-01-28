@@ -16,6 +16,7 @@ import 'package:test/test.dart';
 
 /// @Throwing(ArgumentError)
 /// @Throwing(RangeError)
+/// @Throwing(TouchException)
 void main() {
   test('dart script ...', () {
     expect(

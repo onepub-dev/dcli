@@ -54,6 +54,10 @@ class DartScript {
   }
 
   /// Path to the currently runnng script
+  /// @Throwing(ArgumentError)
+  /// @Throwing(FormatException)
+  /// @Throwing(RangeError)
+  /// @Throwing(String)
   // static String? __pathToCurrentScript;
 
   DartScript._self() {
@@ -128,6 +132,10 @@ class DartScript {
   /// use [DartScript.fromFile];
   // ignore: flutter_style_todos
   /// TODO(bsutton): for v2 change this to a ctor to aid with unit testing.
+  /// @Throwing(ArgumentError)
+  /// @Throwing(FormatException)
+  /// @Throwing(RangeError)
+  /// @Throwing(String)
   // ignore: prefer_constructors_over_static_methods
   static DartScript get self => _current ??= DartScript._self();
 

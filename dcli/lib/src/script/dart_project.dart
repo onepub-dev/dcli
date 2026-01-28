@@ -131,6 +131,9 @@ class DartProject {
   /// then use [DartProject.fromPath()]
   ///
   /// @Throwing(ArgumentError)
+  /// @Throwing(FormatException)
+  /// @Throwing(RangeError)
+  /// @Throwing(String)
   // ignore: prefer_constructors_over_static_methods
   static DartProject get self {
     if (io.Platform.packageConfig != null) {

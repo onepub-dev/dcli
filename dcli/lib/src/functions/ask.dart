@@ -108,6 +108,8 @@ typedef CustomAskPrompt = String Function(
 ///     , Ask.inList(['red', 'green', 'blue']));
 ///
 ///```
+/// @Throwing(ArgumentError)
+/// @Throwing(FileSystemException)
 String ask(
   String prompt, {
   bool toLower = false,
@@ -138,6 +140,8 @@ class Ask extends core.DCliFunction {
   ///
   /// Reads user input from stdin and returns it as a string.
   /// [prompt]
+  /// @Throwing(ArgumentError)
+  /// @Throwing(FileSystemException)
   String _ask(
     String prompt, {
     required bool hidden,

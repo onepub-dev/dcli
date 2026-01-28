@@ -170,6 +170,7 @@ Future<Process> _run(ProcessSettings processSettings) async {
 // scenario?
 /// Throws [ProcessSyncException].
 /// @Throwing(ProcessSyncException)
+/// @Throwing(RangeError)
 ReceivePort _handleStdin(Process process) => ReceivePort()
   ..listen((message) async {
     isolateLogger(() => ' recieved message');

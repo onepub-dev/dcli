@@ -170,6 +170,7 @@ class RunnableProcess {
   /// @Throwing(MailBoxClosedException)
   /// @Throwing(RangeError)
   /// @Throwing(core.RunException)
+  /// @Throwing(NotNullableError)
   Progress run({
     Progress? progress,
     bool terminal = false,
@@ -246,6 +247,7 @@ class RunnableProcess {
   /// @Throwing(MailBoxClosedException)
   /// @Throwing(RangeError)
   /// @Throwing(core.RunException)
+  /// @Throwing(NotNullableError)
   void start({
     required ProgressImpl progress,
     bool nothrow = false,

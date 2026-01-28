@@ -49,6 +49,7 @@ class DartSdk {
   /// The path to the dart 'bin' directory.
   /// @Throwing(ArgumentError)
   /// @Throwing(Exception)
+  /// @Throwing(FileSystemException)
   String get pathToSdk => _sdkPath ??= _detect();
 
   /// platform specific name of the 'dart' executable
@@ -435,6 +436,7 @@ class DartSdk {
   /// Throws [Exception].
   /// @Throwing(ArgumentError)
   /// @Throwing(Exception)
+  /// @Throwing(FileSystemException)
   static String _detect() {
     final whichExe = which(dartExeName);
 

@@ -6,6 +6,7 @@ import 'package:dcli/src/progress/progress_impl.dart';
 import 'package:test/test.dart';
 
 /// @Throwing(ArgumentError)
+/// @Throwing(RangeError)
 void main() {
   test('Progress.capture decodes UTF-8 across chunk boundaries', () {
     final progress = Progress.capture();

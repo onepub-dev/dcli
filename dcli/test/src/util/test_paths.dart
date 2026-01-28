@@ -63,6 +63,7 @@ class TestPaths {
 
   /// @Throwing(ArgumentError)
   /// @Throwing(CreateDirException)
+  /// @Throwing(UnsupportedError)
   TestPaths._internal() {
     testRoot = join(rootPath, 'tmp', 'dcli');
     // each unit test process has its own directory.

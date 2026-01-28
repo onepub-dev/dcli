@@ -20,6 +20,8 @@ class EnumHelper {
   EnumHelper._init();
 
   /// returns an enum based on its index.
+  /// @Throwing(IndexError)
+  /// @Throwing(RangeError)
   T getByIndex<T>(List<T> values, int index) => values.elementAt(index - 1);
 
   /// returns the index of a enum value.

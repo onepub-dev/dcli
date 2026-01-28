@@ -65,6 +65,9 @@ void _devNull(FetchProgress _) {}
 /// @Throwing(ArgumentError)
 /// @Throwing(FetchException)
 /// @Throwing(core.TouchException)
+/// @Throwing(FormatException)
+/// @Throwing(RangeError)
+/// @Throwing(String)
 Future<void> fetch({
   required String url,
   required String saveToPath,
@@ -117,6 +120,9 @@ Future<void> fetch({
 /// @Throwing(ArgumentError)
 /// @Throwing(FetchException)
 /// @Throwing(core.TouchException)
+/// @Throwing(FormatException)
+/// @Throwing(RangeError)
+/// @Throwing(String)
 Future<void> fetchMultiple({required List<FetchUrl> urls}) =>
     _Fetch().fetchMultiple(urls: urls);
 
@@ -218,6 +224,9 @@ class _Fetch extends core.DCliFunction {
   /// @Throwing(ArgumentError)
   /// @Throwing(FetchException)
   /// @Throwing(core.TouchException)
+  /// @Throwing(FormatException)
+  /// @Throwing(RangeError)
+  /// @Throwing(String)
   Future<void> fetch(
       {required String url,
       required String saveToPath,
@@ -241,6 +250,9 @@ class _Fetch extends core.DCliFunction {
   /// @Throwing(ArgumentError)
   /// @Throwing(FetchException)
   /// @Throwing(core.TouchException)
+  /// @Throwing(FormatException)
+  /// @Throwing(RangeError)
+  /// @Throwing(String)
   Future<void> fetchMultiple({
     required List<FetchUrl> urls,
     bool verboseProgress = false,
@@ -262,6 +274,9 @@ class _Fetch extends core.DCliFunction {
   /// @Throwing(ArgumentError)
   /// @Throwing(FetchException)
   /// @Throwing(core.TouchException)
+  /// @Throwing(FormatException)
+  /// @Throwing(RangeError)
+  /// @Throwing(String)
   Future<void> download(FetchUrl fetchUrl,
       {required bool verboseProgress}) async {
     // announce we are starting.
@@ -407,6 +422,10 @@ class _Fetch extends core.DCliFunction {
 
   /// Throws [FetchException].
   /// @Throwing(FetchException)
+  /// @Throwing(ArgumentError)
+  /// @Throwing(FormatException)
+  /// @Throwing(RangeError)
+  /// @Throwing(String)
   Future<HttpClientRequest> startCall(
       HttpClient client, FetchUrl fetchUrl) async {
     final uri = Uri.parse(fetchUrl.url);

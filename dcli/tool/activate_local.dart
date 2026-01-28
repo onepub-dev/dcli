@@ -12,6 +12,7 @@ import 'package:dcli/dcli.dart';
 /// globally activates dcli from a local path rather than a public package.
 ///
 ///
+/// @Throwing(UnsupportedError)
 void main(List<String> args) {
   print('hi');
   if (!Shell.current.isPrivilegedUser) {
