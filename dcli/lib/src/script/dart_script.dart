@@ -217,10 +217,6 @@ class DartScript {
   static bool _isPubGlobalActivated(String pathToScript) =>
       pathToScript.startsWith(PubCache().pathTo);
 
-  ///
-  @Deprecated('Use DartScript.self or DartScript.fromPath()')
-  static DartScript get current => self;
-
   /// Strips the root prefix of a path so we can use
   /// it as part of the virtual projects path.
   /// For linux this just removes any leading /

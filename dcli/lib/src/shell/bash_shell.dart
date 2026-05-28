@@ -60,11 +60,6 @@ class BashShell with ShellMixin, PosixShell {
   @override
   bool get canModifyPath => true;
 
-  /// @Throwing(ArgumentError)
-  @override
-  @Deprecated('Use appendToPATH')
-  bool addToPATH(String path) => appendToPATH(path);
-
   /// Appends the given path to the bash path if it isn't
   /// already on the path.
   /// @Throwing(ArgumentError)

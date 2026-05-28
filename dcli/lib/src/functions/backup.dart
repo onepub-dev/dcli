@@ -66,17 +66,6 @@ void backupFile(String pathToFile, {bool ignoreMissing = false}) =>
 void restoreFile(String pathToFile, {bool ignoreMissing = false}) =>
     core.restoreFile(pathToFile, ignoreMissing: ignoreMissing);
 
-/// Throws [UnsupportedError].
-/// @Throwing(UnsupportedError)
-@Deprecated('Use withFileProtectionAsync')
-R withFileProtection<R>(
-  List<String> protected,
-  R Function() action, {
-  String? workingDirectory,
-}) {
-  throw UnsupportedError('Use withFileProtectionAsync');
-}
-
 /// EXPERIMENTAL - use with caution and the api may change.
 ///
 /// Allows you to nominate a list of files to be backed up

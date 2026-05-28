@@ -109,11 +109,6 @@ dcli install''';
   @override
   bool get canModifyPath => false;
 
-  /// @Throwing(UnsupportedError)
-  @override
-  @Deprecated('Use appendToPATH')
-  bool addToPATH(String path) => appendToPATH(path);
-
   /// Appends the given path to the bash path if it isn't
   /// already on the path.
   /// Throws [UnsupportedError].

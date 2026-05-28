@@ -5,8 +5,6 @@
  * SPDX-License-Identifier: MIT
  */
 
-import 'dart:io';
-
 import 'package:dcli_core/dcli_core.dart' as core;
 import 'package:logging/logging.dart';
 import 'package:path/path.dart' as p;
@@ -14,7 +12,6 @@ import 'package:path/path.dart';
 import 'package:scope/scope.dart';
 import 'package:stack_trace/stack_trace.dart';
 
-import '../dcli.dart';
 import 'version/version.g.dart';
 
 /// Holds all of the global settings for DCli
@@ -28,8 +25,6 @@ class Settings {
 
   /// The directory name of the DCli templates.
   static const templateDir = 'template';
-
-  final _settings = InternalSettings();
 
   /// The name of the DCli app. This will
   /// always be 'dcli'.
@@ -45,8 +40,6 @@ class Settings {
   var dcliDir = '.dcli';
 
   String? _dcliBinPath;
-
-  String? _scriptPath;
 
   /// Returns a singleton providing
   /// access to DCli settings.
@@ -76,19 +69,12 @@ class Settings {
   /// True if you are running on a Window system.
   bool get isWindows => core.Settings().isWindows;
 
-  /// The absolute path to the dcli script which
-  /// is currently running.
-  @Deprecated('Use Script.current.pathToScript')
-  String get pathToScript {
-    _scriptPath ??= DartScript.current.pathToScript;
-    return _scriptPath!;
-  }
-
   /// The directory where we store all of dcli's
   /// configuration files.
   /// This will normally be ~/.dcli
   /// @Throwing(ArgumentError)
-  String get pathToDCli => _dcliPath ??= truepath(p.join(HOME, dcliDir));
+  String get pathToDCli =>
+      _dcliPath ??= core.truepath(p.join(core.HOME, dcliDir));
 
   /// When you run dcli compile -i `<script>` the compiled exe
   /// is moved to this path.
@@ -98,12 +84,7 @@ class Settings {
   /// This will normally be ~/.dcli/bin
   /// @Throwing(ArgumentError)
   String get pathToDCliBin =>
-      _dcliBinPath ??= truepath(p.join(HOME, dcliDir, 'bin'));
-
-  /// path to the dcli template directory.
-  /// @Throwing(ArgumentError)
-  @Deprecated('Use pathToTemplateScript or pathToTemplateProject')
-  String get pathToTemplate => p.join(pathToDCli, templateDir);
+      _dcliBinPath ??= core.truepath(p.join(core.HOME, dcliDir, 'bin'));
 
   /// path to the dcli template directory.
   /// @Throwing(ArgumentError)
@@ -150,21 +131,12 @@ class Settings {
   /// we consider dcli installed if the ~/.dcli directory
   /// exists.
   /// @Throwing(ArgumentError)
-  bool get isInstalled => exists(installCompletedIndicator);
+  bool get isInstalled => core.exists(installCompletedIndicator);
 
   /// returns the path to the file that we use to indicated
   /// that the install completed succesfully.
   /// @Throwing(ArgumentError)
   String get installCompletedIndicator => join(pathToDCli, 'install_completed');
-
-  /// Returns true if the directory stack
-  /// maintained by push and pop has
-  /// is currently empty.
-  /// ```dart
-  /// Settings().isStackEmpty
-  /// ```
-  @Deprecated('use join')
-  bool get isStackEmpty => _settings._isStackEmpty;
 
   /// Used for unit testing dcli.
   /// Please look away.
@@ -172,29 +144,4 @@ class Settings {
   static set mock(Settings mockSettings) {
     _self = mockSettings;
   }
-}
-
-///
-/// Internal class that Stores a number of global settings used to
-/// control the behaviour of the package.
-///
-class InternalSettings {
-  static final _self = InternalSettings._internal();
-
-  final _directoryStack = core.StackList<Directory>();
-
-  ///
-  factory InternalSettings() => _self;
-
-  InternalSettings._internal();
-
-  bool get _isStackEmpty => _directoryStack.isEmpty;
-
-  /// Internal methods used to maintain the directory stack
-  /// DO NOT use this method directly instead use the [push] command.
-  void push(Directory current) => _directoryStack.push(current);
-
-  /// Internal methods used to maintain the directory stack
-  /// DO NOT use this method directly instead use the [pop] command.
-  Directory pop() => _directoryStack.pop();
 }

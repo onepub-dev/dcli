@@ -61,8 +61,8 @@ export 'package:dcli_core/dcli_core.dart'
         withEnvironmentAsync,
         withTempDirAsync,
         withTempFileAsync
-    // CatException;
-    ;
+// CatException;
+;
 export 'package:dcli_core/src/util/dev_null.dart';
 export 'package:dcli_core/src/util/platform.dart';
 export 'package:dcli_terminal/dcli_terminal.dart';
@@ -70,9 +70,6 @@ export 'package:dcli_terminal/dcli_terminal.dart';
 export 'src/functions/ask.dart';
 export 'src/functions/backup.dart';
 export 'src/functions/confirm.dart';
-// TODO(bsutton): to be removed in 8.x
-// ignore: deprecated_member_use_from_same_package
-export 'src/functions/create_dir.dart' show withTempDir;
 export 'src/functions/delete.dart' show DeleteException, delete;
 export 'src/functions/echo.dart' show echo;
 export 'src/functions/fetch.dart'
@@ -122,4 +119,3 @@ export 'src/util/pub_cache.dart';
 export 'src/util/remote.dart' show Remote;
 export 'src/util/runnable_process.dart' show printerr;
 export 'src/util/string_as_process.dart';
-export 'src/util/temp_file.dart';

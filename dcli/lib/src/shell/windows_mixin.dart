@@ -55,11 +55,6 @@ mixin WindowsMixin {
   /// modifying the shell's PATH
   bool get canModifyPath => true;
 
-  /// Adds a path to the start script
-  /// returns true if adding the path was successful
-  @Deprecated('Use appendToPATH')
-  bool addToPATH(String path) => appendToPATH(path);
-
   /// Appends [path] to the end of the PATH
   /// by updating the Windows Registry.
   /// We update the user's PATH (HKEY_CURRENT_USER) rather

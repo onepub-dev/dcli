@@ -90,7 +90,6 @@ Stream<FindItem> findAsync(
   // We us a [LimitedStreamController] as a slow reader
   // can cause an out of memory exception if we keep pumping
   // more files into the stream.
-  // ignore: close_sinks
   final controller = LimitedStreamController<FindItem>(100);
   await FindAsync()._findAsync(
     pattern,

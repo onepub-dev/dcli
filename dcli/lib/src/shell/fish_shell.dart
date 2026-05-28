@@ -59,13 +59,6 @@ class FishShell with ShellMixin, PosixShell {
   /// Throws [UnsupportedError].
   /// @Throwing(UnsupportedError)
   @override
-  @Deprecated('Use appendToPATH')
-  bool addToPATH(String path) =>
-      throw UnsupportedError('Not supported in fish');
-
-  /// Throws [UnsupportedError].
-  /// @Throwing(UnsupportedError)
-  @override
   bool appendToPATH(String path) =>
       throw UnsupportedError('Not supported in fish');
 

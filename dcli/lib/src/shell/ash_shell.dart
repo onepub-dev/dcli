@@ -47,12 +47,6 @@ class AshShell with ShellMixin, PosixShell {
   /// Throws [UnsupportedError].
   /// @Throwing(UnsupportedError)
   @override
-  @Deprecated('Use appendToPATH')
-  bool addToPATH(String path) => throw UnsupportedError('Not supported in ash');
-
-  /// Throws [UnsupportedError].
-  /// @Throwing(UnsupportedError)
-  @override
   bool appendToPATH(String path) =>
       throw UnsupportedError('Not supported in ash');
 

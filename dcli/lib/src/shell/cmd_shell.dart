@@ -20,9 +20,6 @@ class CmdShell with WindowsMixin, ShellMixin {
   CmdShell.withPid(this.pid);
 
   @override
-  bool addToPATH(String path) => true;
-
-  @override
   void addFileAssocation(String dcliPath) {
     super.addFileAssociation(dcliPath);
   }

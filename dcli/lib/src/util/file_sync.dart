@@ -39,18 +39,6 @@ class FileSync {
     _open(fileMode);
   }
 
-  /// Generates a temporary filename in the system temp directory
-  /// that is guaranteed to be unique.
-  ///
-  /// This method does not create the file.
-  ///
-  /// The temp file name will be `<uuid>.tmp`
-  /// unless you provide a [suffix] in which
-  /// case the file name will be `<uuid>.<suffix>`
-  @Deprecated('Use createTempFilename')
-  static String tempFile({String? suffix}) =>
-      createTempFilename(suffix: suffix);
-
   /// The path to this file.
   String get path => _file.path;
 
@@ -214,32 +202,6 @@ R withOpenFile<R>(
     file.close();
   }
   return result;
-}
-
-///
-/// Creates a link at [linkPath] which points to an
-/// existing file or directory at [existingPath]
-///
-/// On Windows you need to be in developer mode or running as an Administrator
-/// to create a symlink.
-///
-/// To enable developer mode see:
-/// https://dcli.onepub.dev/getting-started/installing-on-windows
-///
-/// To check if your script is running as an administrator use:
-///
-/// [Shell.current.isPrivilegedUser]
-///
-/// See:
-///  * [deleteSymlink]
-///  * [resolveSymLink]
-@Deprecated('Use createSymLink - will be removed in the next release')
-void symlink(
-  String existingPath,
-  String linkPath,
-) {
-  verbose(() => 'symlink existingPath: $existingPath linkPath $linkPath');
-  Link(linkPath).createSync(existingPath);
 }
 
 ///

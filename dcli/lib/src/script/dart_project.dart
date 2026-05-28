@@ -88,10 +88,6 @@ class DartProject {
     verbose(() => 'DartProject.fromPath: $pathToProjectRoot');
   }
 
-  /// If you
-  @Deprecated('Use DartProject.self')
-  static DartProject get current => self;
-
   /// Looks for a pubspec.yaml and if found returns a [DartProject].
   ///
   /// If [search] is true then it will search from [pathToSearchFrom]

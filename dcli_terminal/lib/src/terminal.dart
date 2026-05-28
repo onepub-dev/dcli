@@ -133,12 +133,6 @@ class Terminal {
     }
   }
 
-  /// Moves the cursor to the start of previous line.
-  @Deprecated('Use [cursorUp]')
-  static void previousLine() {
-    Terminal().cursorUp();
-  }
-
   /// Moves the cursor up one row
   void cursorUp() => _console.cursorUp();
 
@@ -229,7 +223,4 @@ class Terminal {
   /// of the screen (0,0)
   void home() => _console.resetCursorPosition();
 
-  /// Returns the current console height in rows.
-  @Deprecated('Use rows')
-  int get lines => rows;
 }

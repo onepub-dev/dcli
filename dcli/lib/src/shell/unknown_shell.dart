@@ -40,10 +40,6 @@ class UnknownShell with ShellMixin {
   @override
   bool get canModifyPath => true;
 
-  @override
-  @Deprecated('Use appendToPATH')
-  bool addToPATH(String path) => false;
-
   /// @Throwing(ArgumentError)
   @override
   bool appendToPATH(String path) {

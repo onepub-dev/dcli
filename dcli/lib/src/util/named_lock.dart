@@ -99,15 +99,6 @@ class NamedLock {
         lockPath ?? join(rootPath, Directory.systemTemp.path, 'dcli', 'locks');
   }
 
-  /// Throws [UnsupportedError].
-  /// @Throwing(UnsupportedError)
-  @Deprecated('Used withLockAsync')
-  Future<void> withLock(
-    void Function() fn, {
-    String? waiting,
-  }) =>
-      throw UnsupportedError('Use withLockAsync');
-
   /// creates a lock file and then calls [fn]
   /// once [fn] returns the lock is released.
   /// If [waiting] is passed it will be used to write

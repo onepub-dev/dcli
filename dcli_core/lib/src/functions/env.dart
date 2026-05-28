@@ -236,20 +236,6 @@ class Env extends DCliFunction {
     _setEnv('PATH', path.join(delimiterForPATH));
   }
 
-  /// Adds [newPath] to the PATH environment variable
-  /// if it is not already present.
-  ///
-  /// The [newPath] will be added to the end of the PATH list.
-  ///
-  /// Changing the PATH has no affect on the parent
-  /// process (shell) that launched this script.
-  ///
-  /// Changing the PATH affects the current script
-  /// and any children that it spawns.
-  /// @Throwing(ArgumentError)
-  @Deprecated('Use appendToPATH')
-  void addToPATHIfAbsent(String newPath) => appendToPATH(newPath);
-
   ///
   /// Gets the path to the user's home directory
   /// using the enviornment var appropriate for the user's OS.

@@ -20,9 +20,6 @@ class PowerShell with WindowsMixin, ShellMixin {
   PowerShell.withPid(this.pid);
 
   @override
-  bool addToPATH(String path) => true;
-
-  @override
   void installTabCompletion({bool quiet = false}) {
     // not supported.
   }

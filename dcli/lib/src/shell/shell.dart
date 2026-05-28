@@ -41,11 +41,6 @@ abstract class Shell {
   /// modifying the shell's PATH
   bool get canModifyPath;
 
-  /// Adds a path to the start script
-  /// returns true if adding the path was successful
-  @Deprecated('Use appendToPATH')
-  bool addToPATH(String path) => appendToPATH(path);
-
   /// Appends [path] to the end of the PATH
   /// in a persistent manner.
   /// Note: this doesn't update current scripts
