@@ -1,3 +1,9 @@
+# 9.0.0
+- Removed deprecated public APIs and deprecated entry-point libraries.
+- Raised Dart SDK lower bounds where required by dependency upgrades.
+- Upgraded win32 to 6.0.1 and dart_console to 5.x.
+- Removed the dcli_common publish_to override so packages publish to pub.dev.
+
 # 8.4.2
 - preping the 8.4.2 release.
 - removed the publish_to which was pushing it to onepub.
@@ -267,5 +273,4 @@ work is based off.
 # 4.0.1-alpha.3
 - Fixed the move function as well. It now also falls back to copy/delete on any error.
 - added new projects to the replease process.
-
 

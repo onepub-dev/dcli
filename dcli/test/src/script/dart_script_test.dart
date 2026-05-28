@@ -50,19 +50,28 @@ void main() {
   });
 
   group('pathToScript', () {
-    final pathToTestScript =
-        truepath(pathToPackageUnitTester, 'bin', 'dcli_unit_tester.dart');
+    final pathToTestScript = truepath(
+      pathToPackageUnitTester,
+      'bin',
+      'dcli_unit_tester.dart',
+    );
 
     test('within unit test', () {
       // within a unit test
-      expect(DartScript.self.pathToScript,
-          truepath('test', 'src', 'script', 'dart_script_test.dart'));
+      expect(
+        DartScript.self.pathToScript,
+        truepath('test', 'src', 'script', 'dart_script_test.dart'),
+      );
     });
 
     test('jit script', () {
       var exeName = 'dcli_unit_tester';
       if (Platform.isWindows) {
         exeName += '.exe';
+      }
+      final installedExe = join(HOME, '.dcli', 'bin', exeName);
+      if (exists(installedExe)) {
+        delete(installedExe);
       }
       chmod(pathToTestScript, permission: '740');
 
@@ -74,8 +83,10 @@ void main() {
       // Not fully understood, but touching these files fixes the failure.
       final projectRoot = testScript.pathToProjectRoot;
       touch(join(projectRoot, 'pubspec.lock'), create: true);
-      touch(join(projectRoot, '.dart_tool', 'package_config.json'),
-          create: true);
+      touch(
+        join(projectRoot, '.dart_tool', 'package_config.json'),
+        create: true,
+      );
       print(orange('pub get complete'));
       final result = 'dart $pathToTestScript --script'
           .start(progress: Progress.capture(), nothrow: true)
@@ -91,27 +102,44 @@ void main() {
       expect(result[line++], equals('isPubGlobalActivated, false'));
       expect(result[line++], equals('isReadyToRun, true'));
       expect(
-          result[line++],
-          equals('pathToExe, '
-              '${join(pathToPackageUnitTester, 'bin', exeName)}'));
+        result[line++],
+        equals(
+          'pathToExe, '
+          '${join(pathToPackageUnitTester, 'bin', exeName)}',
+        ),
+      );
       expect(
-          result[line++],
-          equals('pathToInstalledExe, '
-              '${join(HOME, '.dcli', 'bin', exeName)}'));
-      expect(result[line++],
-          equals('pathToProjectRoot, $pathToPackageUnitTester'));
+        result[line++],
+        equals(
+          'pathToInstalledExe, '
+          '$installedExe',
+        ),
+      );
       expect(
-          result[line++],
-          equals('pathToPubSpec, '
-              '${join(pathToPackageUnitTester, 'pubspec.yaml')}'));
+        result[line++],
+        equals('pathToProjectRoot, $pathToPackageUnitTester'),
+      );
       expect(
-          result[line++],
-          equals('pathToScript, '
-              '''${join(pathToPackageUnitTester, 'bin', 'dcli_unit_tester.dart')}'''));
+        result[line++],
+        equals(
+          'pathToPubSpec, '
+          '${join(pathToPackageUnitTester, 'pubspec.yaml')}',
+        ),
+      );
       expect(
-          result[line++],
-          equals('pathToScriptDirectory, '
-              '${join(pathToPackageUnitTester, 'bin')}'));
+        result[line++],
+        equals(
+          'pathToScript, '
+          '''${join(pathToPackageUnitTester, 'bin', 'dcli_unit_tester.dart')}''',
+        ),
+      );
+      expect(
+        result[line++],
+        equals(
+          'pathToScriptDirectory, '
+          '${join(pathToPackageUnitTester, 'bin')}',
+        ),
+      );
       expect(result[line++], equals('scriptName, dcli_unit_tester.dart'));
     });
 
@@ -120,15 +148,19 @@ void main() {
         ..runPubGet()
         ..compile(workingDirectory: dirname(pathToTestScript));
 
-      final pathToCompiledScript = join(dirname(pathToTestScript),
-          basenameWithoutExtension(pathToTestScript));
+      final pathToCompiledScript = join(
+        dirname(pathToTestScript),
+        basenameWithoutExtension(pathToTestScript),
+      );
 
       /// check that the path and script name are what we expect.
       expect(dirname(pathToCompiledScript), equals(dirname(script.pathToExe)));
       // on windows we add .exe as the extension so compare compiled script
       // name sans the extension.
-      expect(basenameWithoutExtension(pathToCompiledScript),
-          equals(basenameWithoutExtension(script.exeName)));
+      expect(
+        basenameWithoutExtension(pathToCompiledScript),
+        equals(basenameWithoutExtension(script.exeName)),
+      );
 
       if (Platform.isWindows) {
         expect('.exe', equals(extension(script.exeName)));
@@ -137,8 +169,9 @@ void main() {
       expect(exists(script.pathToExe), isTrue);
 
       // run compiled script
-      final result =
-          script.pathToExe.start(progress: Progress.capture()).toList();
+      final result = script.pathToExe
+          .start(progress: Progress.capture())
+          .toList();
 
       expect(result.length, equals(1));
       expect(result[0], equals(script.pathToExe));
@@ -158,8 +191,9 @@ void main() {
       }
       PubCache().globalActivate(packageName);
 
-      final result =
-          '$packageName --script'.start(progress: Progress.capture()).toList();
+      final result = '$packageName --script'
+          .start(progress: Progress.capture())
+          .toList();
 
       expect(result.length, equals(13));
       var line = 0;
@@ -173,33 +207,51 @@ void main() {
       final pathToGlobalPackage = PubCache().pathToGlobalPackage(packageName);
 
       expect(
-          result[line++],
-          equals('pathToExe, '
-              '${join(pathToGlobalPackage, 'bin', 'dcli_unit_tester')}'));
+        result[line++],
+        equals(
+          'pathToExe, '
+          '${join(pathToGlobalPackage, 'bin', 'dcli_unit_tester')}',
+        ),
+      );
       expect(
-          result[line++],
-          equals('pathToInstalledExe, '
-              '${join(HOME, '.dcli', 'bin', 'dcli_unit_tester')}'));
+        result[line++],
+        equals(
+          'pathToInstalledExe, '
+          '${join(HOME, '.dcli', 'bin', 'dcli_unit_tester')}',
+        ),
+      );
       expect(
-          result[line++],
-          equals('pathToProjectRoot, '
-              '${join(pathToGlobalPackage, "bin")}'));
+        result[line++],
+        equals(
+          'pathToProjectRoot, '
+          '${join(pathToGlobalPackage, "bin")}',
+        ),
+      );
       //  /home/bsutton/.pub-cache/global_packages/dcli_unit_tester/bin
       expect(
-          result[line++],
-          equals('pathToPubSpec, '
-              '${join(pathToGlobalPackage, 'bin', 'pubspec.yaml')}'));
+        result[line++],
+        equals(
+          'pathToPubSpec, '
+          '${join(pathToGlobalPackage, 'bin', 'pubspec.yaml')}',
+        ),
+      );
 
       //  /home/bsutton/.pub-cache/global_packages/dcli_unit_tester/bin/pubspec.yaml
       expect(
-          result[line++],
-          equals('pathToScript, '
-              '''${join(pathToGlobalPackage, 'bin', 'dcli_unit_tester.dart')}'''));
+        result[line++],
+        equals(
+          'pathToScript, '
+          '''${join(pathToGlobalPackage, 'bin', 'dcli_unit_tester.dart')}''',
+        ),
+      );
       //  /home/bsutton/.pub-cache/global_packages/dcli_unit_tester/bin/dcli_unit_tester.dart
       expect(
-          result[line++],
-          equals('pathToScriptDirectory, '
-              '''${join(pathToGlobalPackage, 'bin')}'''));
+        result[line++],
+        equals(
+          'pathToScriptDirectory, '
+          '''${join(pathToGlobalPackage, 'bin')}''',
+        ),
+      );
 
       //  /home/bsutton/.pub-cache/global_packages/dcli_unit_tester/bin
       expect(result[line++], equals('scriptName, dcli_unit_tester.dart'));

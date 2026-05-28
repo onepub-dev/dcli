@@ -1,3 +1,9 @@
+# 9.0.0
+- Removed deprecated public APIs and deprecated entry-point libraries.
+- Raised Dart SDK lower bounds where required by dependency upgrades.
+- Upgraded win32 to 6.0.1 and dart_console to 5.x.
+- Removed the dcli_common publish_to override so packages publish to pub.dev.
+
 # 8.4.2
 - Fixed a bug in the  read where it was mixing codecs.
 - Change all occurances of #! /usr/bin/env dart with #! /usr/bin/env dcli to 
@@ -1762,4 +1768,3 @@ Pubspec - Added support for fetching a list of executables.
 Renamed dshell to dcli to better reflect its functionality and improve its discoverability on the pub.dev store.
 
 Also took the opportunity to change the version no. to 0.x to reflect the fact that the api is still in flux.
-
