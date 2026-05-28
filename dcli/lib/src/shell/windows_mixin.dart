@@ -149,32 +149,29 @@ mixin WindowsMixin {
   bool get isPrivilegedUser {
     var isElevated = false;
 
-    withMemory<void, Uint32>(sizeOf<Uint32>(), (phToken) {
+    withMemory<void, Pointer>(sizeOf<IntPtr>(), (phToken) {
       withMemory<void, Uint32>(sizeOf<Uint32>(), (pReturnedSize) {
         withMemory<void, _TokenElevation>(sizeOf<_TokenElevation>(),
             (pElevation) {
           if (OpenProcessToken(
-                GetCurrentProcess(),
-                TOKEN_QUERY,
-                phToken.cast(),
-              ) ==
-              1) {
+            GetCurrentProcess(),
+            TOKEN_QUERY,
+            phToken,
+          ).value) {
+            final token = HANDLE(phToken.value);
             if (GetTokenInformation(
-                  phToken.value,
-                  // The 5.x version of win32 has this as a deprecated member
-                  // but early 5.x versions don't have the replacement.
-                  // ignore: deprecated_member_use
-                  TOKEN_INFORMATION_CLASS.TokenElevation,
-                  pElevation,
-                  sizeOf<_TokenElevation>(),
-                  pReturnedSize,
-                ) ==
-                1) {
+              token,
+              TokenElevation,
+              pElevation,
+              sizeOf<_TokenElevation>(),
+              pReturnedSize,
+            ).value) {
               isElevated = pElevation.ref.tokenIsElevated != 0;
             }
           }
-          if (phToken.value != 0) {
-            CloseHandle(phToken.value);
+          final token = HANDLE(phToken.value);
+          if (token.isValid) {
+            token.close();
           }
         });
       });

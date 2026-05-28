@@ -117,10 +117,10 @@ packages:
     dependency: "direct main"
     description:
       name: dart_console
-      sha256: "03c23e1f9cc3ac02b608f834808003e6510a5b292a0449f43dfac1c78bd8ee85"
+      sha256: "04be1f840a86342a781c9d92bf5df427932466680bbb9efa5b16e285f07b68d4"
       url: "https://pub.dev"
     source: hosted
-    version: "4.1.2"
+    version: "5.0.0"
   dart_style:
     dependency: transitive
     description:
@@ -153,6 +153,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "2.1.5"
+  ffi_leak_tracker:
+    dependency: transitive
+    description:
+      name: ffi_leak_tracker
+      sha256: "4093d4ef9ca06ffe2786e73bfb25e22aa92112b9bb4ec941f11e3e6b61489a97"
+      url: "https://pub.dev"
+    source: hosted
+    version: "0.1.2"
   file:
     dependency: transitive
     description:
@@ -461,10 +469,10 @@ packages:
     dependency: transitive
     description:
       name: win32
-      sha256: d7cb55e04cd34096cd3a79b3330245f54cb96a370a1c27adb3c84b917de8b08e
+      sha256: ba6f4bba816c8d7e3c1580e170f3786d216951cc6b94babc3b814c08d2cb2738
       url: "https://pub.dev"
     source: hosted
-    version: "5.15.0"
+    version: "6.3.0"
   yaml:
     dependency: transitive
     description:

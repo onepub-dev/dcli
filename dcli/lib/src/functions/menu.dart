@@ -11,8 +11,8 @@ import '../../dcli.dart';
 
 String _noFormat<T>(T option) => option.toString();
 
-typedef CustomMenuPrompt = String Function(
-    String prompt, String? defaultOption);
+typedef CustomMenuPrompt =
+    String Function(String prompt, String? defaultOption);
 
 /// Displays a menu with each of the provided [options], prompts
 /// the user to select an option and returns the selected option.
@@ -134,10 +134,12 @@ T menu<T>(
 
   // loop until the user enters a valid selection.
   while (!valid) {
-    final selected = ask(prompt,
-        defaultValue: defaultAsString,
-        validator: _MenuRange(limit),
-        customPrompt: (_, __, ___) => customPrompt(prompt, defaultAsString));
+    final selected = ask(
+      prompt,
+      defaultValue: defaultAsString,
+      validator: _MenuRange(limit),
+      customPrompt: (_, _, _) => customPrompt(prompt, defaultAsString),
+    );
     if (selected.isEmpty) {
       continue;
     }

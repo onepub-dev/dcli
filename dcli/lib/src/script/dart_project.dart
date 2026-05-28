@@ -37,6 +37,7 @@ class DartProject {
   static DartProject? _current;
 
   static const _lockName = 'dcli.script.dart.project.lock';
+  static const _lockTimeout = Duration(minutes: 10);
 
   /// Create a dart project on the file system at
   /// [pathTo] from the template named [templateName].
@@ -54,8 +55,10 @@ class DartProject {
   /// @Throwing(PubSpecException)
   /// @Throwing(RangeError)
   /// @Throwing(VersionException)
-  factory DartProject.create(
-      {required String pathTo, required String templateName}) {
+  factory DartProject.create({
+    required String pathTo,
+    required String templateName,
+  }) {
     _createProject(pathTo, templateName);
     return DartProject.fromPath(pathTo, search: false);
   }
@@ -94,8 +97,10 @@ class DartProject {
   /// If [search] is true then it will search from [pathToSearchFrom]
   /// up the tree.
   /// @Throwing(ArgumentError)
-  static DartProject? findProject(String pathToSearchFrom,
-      {bool search = true}) {
+  static DartProject? findProject(
+    String pathToSearchFrom, {
+    bool search = true,
+  }) {
     final path = _findProject(pathToSearchFrom, search: search);
 
     return path == null ? null : DartProject.fromPath(path);
@@ -142,8 +147,11 @@ class DartProject {
       /// The packageConfig is available if passed (which unit tests do)
       /// and when passed is probably the most relable means of
       /// determining the project directory.
-      return _current ??= DartProject.fromPath(dirname(dirname(
-          joinAll(Uri.parse(io.Platform.packageConfig!).pathSegments))));
+      return _current ??= DartProject.fromPath(
+        dirname(
+          dirname(joinAll(Uri.parse(io.Platform.packageConfig!).pathSegments)),
+        ),
+      );
     }
     final script = DartScript.self;
     var startFrom = '.';
@@ -267,35 +275,29 @@ class DartProject {
   Future<void> warmup({bool background = false, bool upgrade = false}) async {
     await NamedLock(
       name: _lockName,
-    ).withLockAsync(
-      () async {
-        try {
-          if (background) {
-            // we run the clean in the background
-            // by running another copy of dcli.
-            print('DCli warmup started in the background.');
-            '${DCliPaths().dcliName} '
-                    '''-v=${join(io.Directory.systemTemp.path, 'dcli.warmup.log')}'''
-                    ' warmup $pathToProjectRoot'
-                .start(
-              detached: true,
-              runInShell: true,
-              extensionSearch: false,
-            );
+      timeout: _lockTimeout,
+    ).withLockAsync(() async {
+      try {
+        if (background) {
+          // we run the clean in the background
+          // by running another copy of dcli.
+          print('DCli warmup started in the background.');
+          '${DCliPaths().dcliName} '
+                  '''-v=${join(io.Directory.systemTemp.path, 'dcli.warmup.log')}'''
+                  ' warmup $pathToProjectRoot'
+              .start(detached: true, runInShell: true, extensionSearch: false);
+        } else {
+          // print(orange('Running pub get...'));
+          if (upgrade) {
+            await _pubupgrade();
           } else {
-            // print(orange('Running pub get...'));
-            if (upgrade) {
-              await _pubupgrade();
-            } else {
-              await _pubget();
-            }
+            await _pubget();
           }
-        } on PubGetException {
-          print(red("\ndcli warmup failed due to the 'pub get' call failing."));
         }
-      },
-      waiting: 'Waiting for warmup to complete...',
-    );
+      } on PubGetException {
+        print(red("\ndcli warmup failed due to the 'pub get' call failing."));
+      }
+    }, waiting: 'Waiting for warmup to complete...');
   }
 
   /// Removes any of the dart build artifacts so you have a clean directory.
@@ -311,7 +313,7 @@ class DartProject {
   /// @Throwing(DeleteDirException)
   Future<void> clean() async {
     print('Cleaning project: $pathToProjectRoot');
-    await NamedLock(name: _lockName).withLockAsync(
+    await NamedLock(name: _lockName, timeout: _lockTimeout).withLockAsync(
       () async {
         try {
           find(
@@ -330,11 +332,14 @@ class DartProject {
 
           _deleteDirs(toBeDeleted);
 
-          find('pubspec.lock', workingDirectory: pathToProjectRoot)
-              .forEach(delete);
+          find(
+            'pubspec.lock',
+            workingDirectory: pathToProjectRoot,
+          ).forEach(delete);
 
-          find('*.dart', workingDirectory: pathToProjectRoot)
-              .forEach((scriptPath) {
+          find('*.dart', workingDirectory: pathToProjectRoot).forEach((
+            scriptPath,
+          ) {
             final script = DartScript.fromFile(scriptPath);
             if (exists(script.pathToExe)) {
               delete(script.pathToExe);
@@ -358,13 +363,13 @@ class DartProject {
   /// [overwrite] defaults to false.
   ///
   Future<void> compile({bool install = false, bool overwrite = false}) async {
-    await NamedLock(
-      name: _lockName,
-    ).withLockAsync(
+    await NamedLock(name: _lockName, timeout: _lockTimeout).withLockAsync(
       () async {
-        find('*.dart', workingDirectory: pathToProjectRoot).forEach((file) =>
-            DartScript.fromFile(file)
-                .compile(install: install, overwrite: overwrite));
+        find('*.dart', workingDirectory: pathToProjectRoot).forEach(
+          (file) => DartScript.fromFile(
+            file,
+          ).compile(install: install, overwrite: overwrite),
+        );
       },
       waiting: 'Waiting for compile to complete...',
     );
@@ -380,16 +385,19 @@ class DartProject {
   /// Throws [DartProjectException].
   /// @Throwing(DartProjectException)
   Future<void> _pubget() async {
-    await NamedLock(name: _lockName).withLockAsync(() async {
-      final pubGet = PubGet(this);
-      if (Shell.current.isSudo) {
-        /// bugger we just screwed the cache permissions so lets fix them.
-        'chmod -R ${env['USER']}:${env['USER']} ${PubCache().pathTo}'.run;
-        throw DartProjectException(
-            'You must compile your script before running it under sudo');
-      }
-      pubGet.run(compileExecutables: false);
-    });
+    await NamedLock(name: _lockName, timeout: _lockTimeout).withLockAsync(
+      () async {
+        final pubGet = PubGet(this);
+        if (Shell.current.isSudo) {
+          /// bugger we just screwed the cache permissions so lets fix them.
+          'chmod -R ${env['USER']}:${env['USER']} ${PubCache().pathTo}'.run;
+          throw DartProjectException(
+            'You must compile your script before running it under sudo',
+          );
+        }
+        pubGet.run(compileExecutables: false);
+      },
+    );
   }
 
   /// Causes a pub upgrade to be run against the project.
@@ -403,16 +411,15 @@ class DartProject {
   /// @Throwing(DartProjectException)
   Future<void> _pubupgrade() async {
     // Refactor with named lock guard
-    await NamedLock(
-      name: _lockName,
-    ).withLockAsync(
+    await NamedLock(name: _lockName, timeout: _lockTimeout).withLockAsync(
       () async {
         final pubUpgrade = PubUpgrade(this);
         if (Shell.current.isSudo) {
           /// bugger we just screwed the cache permissions so lets fix them.
           'chmod -R ${env['USER']}:${env['USER']} ${PubCache().pathTo}'.run;
           throw DartProjectException(
-              'You must compile your script before running it under sudo');
+            'You must compile your script before running it under sudo',
+          );
         }
         pubUpgrade.run(compileExecutables: false);
       },
@@ -460,50 +467,50 @@ class DartProject {
     }
   }
 
-// /// Prepares the project by creating a pubspec.yaml and
-// /// the analysis_options.yaml file.
-// void initFiles() {
-//   if (!hasPubSpec) {
-//     _createPubspecFromTemplate(
-//         pathToProjectRoot: pathToProjectRoot, pathToPubSpec:
-// pathToPubSpec);
-//   }
+  // /// Prepares the project by creating a pubspec.yaml and
+  // /// the analysis_options.yaml file.
+  // void initFiles() {
+  //   if (!hasPubSpec) {
+  //     _createPubspecFromTemplate(
+  //         pathToProjectRoot: pathToProjectRoot, pathToPubSpec:
+  // pathToPubSpec);
+  //   }
 
-//   if (!hasAnalysisOptions) {
-//     /// add pedantic to the project
-//     _createAnalysisOptionsFromTemplate(
-//         pathToProjectRoot: pathToProjectRoot, pathToPubSpec:
-// pathToPubSpec);
-//   }
-// }
+  //   if (!hasAnalysisOptions) {
+  //     /// add pedantic to the project
+  //     _createAnalysisOptionsFromTemplate(
+  //         pathToProjectRoot: pathToProjectRoot, pathToPubSpec:
+  // pathToPubSpec);
+  //   }
+  // }
 
-//   /// Creates a project located at [pathToProject] from the
-//passed [templatePath].
-//   /// When the user runs 'dcli create <project>'
-//   void _createFromTemplate({
-//     required String templatePath,
-//     required String pathToProject,
-//   }) {
-//     verbose(() => '_createFromTemplate $templatePath $pathToProject');
-//     if (!exists(templatePath)) {
-//       throw TemplateNotFoundException(templatePath);
-//     }
-//     copy(templatePath, pathToProject);
+  //   /// Creates a project located at [pathToProject] from the
+  //passed [templatePath].
+  //   /// When the user runs 'dcli create <project>'
+  //   void _createFromTemplate({
+  //     required String templatePath,
+  //     required String pathToProject,
+  //   }) {
+  //     verbose(() => '_createFromTemplate $templatePath $pathToProject');
+  //     if (!exists(templatePath)) {
+  //       throw TemplateNotFoundException(templatePath);
+  //     }
+  //     copy(templatePath, pathToProject);
 
-//     replace(pathToProject, 'scriptname', basename(pathToProject));
+  //     replace(pathToProject, 'scriptname', basename(pathToProject));
 
-//     if (!hasPubSpec) {
-//       _createPubspecFromTemplate(
-//           pathToProjectRoot: pathToProjectRoot,
-// pathToPubSpec: pathToPubSpec);
-//     }
-//     if (!hasAnalysisOptions) {
-//       _createAnalysisOptionsFromTemplate(
-//           pathToProjectRoot: pathToProjectRoot,
-// pathToPubSpec: pathToPubSpec);
-//     }
-//   }
-// }
+  //     if (!hasPubSpec) {
+  //       _createPubspecFromTemplate(
+  //           pathToProjectRoot: pathToProjectRoot,
+  // pathToPubSpec: pathToPubSpec);
+  //     }
+  //     if (!hasAnalysisOptions) {
+  //       _createAnalysisOptionsFromTemplate(
+  //           pathToProjectRoot: pathToProjectRoot,
+  // pathToPubSpec: pathToPubSpec);
+  //     }
+  //   }
+  // }
 }
 
 /// Exception for issues with DartProjects.
@@ -516,5 +523,5 @@ class DartProjectException extends DCliException {
 class TemplateNotFoundException extends DCliException {
   /// The requested DCli template does not exists.
   TemplateNotFoundException(String pathTo)
-      : super('The template $pathTo does not exist.');
+    : super('The template $pathTo does not exist.');
 }

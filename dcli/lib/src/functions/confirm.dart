@@ -7,11 +7,13 @@
 
 import '../../dcli.dart';
 
-typedef CustomConfirmPrompt = String Function(
-    String prompt,
-    // this is a callback and this style is more readable
-    // ignore: avoid_positional_boolean_parameters
-    bool? defaultValue);
+typedef CustomConfirmPrompt =
+    String Function(
+      String prompt,
+      // this is a callback and this style is more readable
+      // ignore: avoid_positional_boolean_parameters
+      bool? defaultValue,
+    );
 
 /// [confirm] is a specialized version of ask that returns true or
 /// false based on the value entered.
@@ -32,9 +34,11 @@ typedef CustomConfirmPrompt = String Function(
 /// If the script is not attached to a terminal [Terminal().hasTerminal]
 /// then confirm returns immediately with the [defaultValue].
 /// If there is no [defaultValue] then true is returned.
-bool confirm(String prompt,
-    {bool? defaultValue,
-    CustomConfirmPrompt customPrompt = Confirm.defaultPrompt}) {
+bool confirm(
+  String prompt, {
+  bool? defaultValue,
+  CustomConfirmPrompt customPrompt = Confirm.defaultPrompt,
+}) {
   var result = false;
   var matched = false;
 
@@ -47,7 +51,7 @@ bool confirm(String prompt,
       prompt,
       toLower: true,
       required: false,
-      customPrompt: (_, __, ___) => customPrompt(prompt, defaultValue),
+      customPrompt: (_, _, _) => customPrompt(prompt, defaultValue),
     );
     var lower = entered.trim().toLowerCase();
 

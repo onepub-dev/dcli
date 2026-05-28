@@ -260,8 +260,11 @@ class PubCache {
       final packageVersion = fullPackageName.substring(firstHyphen + 1);
 
       if (packageVersion.compareTo(requestedVersion) == 0) {
-        verbose(() => 'Found  version $packageVersion for $packageName '
-            'at $pathToPackage');
+        verbose(
+          () =>
+              'Found  version $packageVersion for $packageName '
+              'at $pathToPackage',
+        );
         return pathToPackage;
       }
     }
@@ -273,15 +276,18 @@ class PubCache {
   /// we activate the latest version from  the packages stable channel.
   /// The [verbose] option is for debugging activation problems
   /// and does a full dump to console of the dart pub log.
-  void globalActivate(String packageName,
-      {String? version, bool verbose = false}) {
+  void globalActivate(
+    String packageName, {
+    String? version,
+    bool verbose = false,
+  }) {
     DartSdk().runPub(
       args: [
         'global',
         'activate',
         if (verbose) '--verbose',
         packageName,
-        if (version != null) version,
+        ?version,
       ],
       progress: Progress.printStdErr(),
     );
@@ -297,7 +303,7 @@ class PubCache {
         if (overwrite) '--overwrite',
         '--source',
         'path',
-        path
+        path,
       ],
       progress: Progress.printStdErr(),
     );
@@ -319,8 +325,10 @@ class PubCache {
     final line = DartSdk()
         .runPub(args: ['global', 'list'], progress: Progress.capture())
         .lines
-        .firstWhere((line) => line.startsWith(packageName),
-            orElse: () => notFound);
+        .firstWhere(
+          (line) => line.startsWith(packageName),
+          orElse: () => notFound,
+        );
 
     return line.contains(packageName);
   }
@@ -334,10 +342,13 @@ class PubCache {
   bool isGloballyActivatedFromSource(String packageName) {
     /// run pub global list to see if dcli is run from a local path.
     final lines = DartSdk()
-        .runPub(args: ['global', 'list'], progress: Progress.capture()).lines;
+        .runPub(args: ['global', 'list'], progress: Progress.capture())
+        .lines;
 
-    final line = lines.firstWhere((line) => line.startsWith(packageName),
-        orElse: () => packageName);
+    final line = lines.firstWhere(
+      (line) => line.startsWith(packageName),
+      orElse: () => packageName,
+    );
 
     return line.contains('at path');
   }

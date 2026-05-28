@@ -21,27 +21,26 @@ String getWindowsProcessName(int processID) {
   // Get a handle to the process.
   final hProcess = OpenProcess(
     PROCESS_QUERY_INFORMATION | PROCESS_VM_READ,
-    FALSE,
+    false,
     processID,
-  );
+  ).value;
   try {
     // Get the process name.
-    if (NULL != hProcess) {
-      withMemory<void, Uint32>(sizeOf<Uint32>(), (phMod) {
+    if (hProcess.isValid) {
+      withMemory<void, Pointer>(sizeOf<IntPtr>(), (phMod) {
         withMemory<void, Uint32>(sizeOf<Uint32>(), (pcbNeeded) {
           if (EnumProcessModules(
-                hProcess,
-                phMod.cast(),
-                sizeOf<Uint32>(),
-                pcbNeeded,
-              ) ==
-              1) {
+            hProcess,
+            phMod,
+            sizeOf<IntPtr>(),
+            pcbNeeded,
+          ).value) {
             withMemory<void, Utf16>(MAX_PATH * sizeOf<Uint16>(),
                 (pszProcessName) {
               GetModuleBaseName(
                 hProcess,
-                phMod.value,
-                pszProcessName,
+                HMODULE(phMod.value),
+                PWSTR(pszProcessName),
                 MAX_PATH,
               );
 
@@ -53,7 +52,9 @@ String getWindowsProcessName(int processID) {
     }
   } finally {
     // Release the handle to the process.
-    CloseHandle(hProcess);
+    if (hProcess.isValid) {
+      hProcess.close();
+    }
   }
   return name;
 }
@@ -67,16 +68,15 @@ List<ProcessDetails> getWindowsProcesses() {
 
   withMemory<void, Uint32>(sizeOf<Uint32>() * 2048, (pProcesses) {
     withMemory<void, Uint32>(sizeOf<Uint32>(), (pReturned) {
-      if (EnumProcesses(
-            pProcesses.cast(),
-            sizeOf<Uint32>() * 2048,
-            pReturned.cast(),
-          ) ==
-          0) {
+      if (!EnumProcesses(
+        pProcesses.cast(),
+        sizeOf<Uint32>() * 2048,
+        pReturned.cast(),
+      ).value) {
         return;
       }
       // Calculate how many process identifiers were returned.
-      final cProcesses = pReturned.value / sizeOf<Uint32>();
+      final cProcesses = pReturned.value ~/ sizeOf<Uint32>();
 
       /// extrat the pids.
       for (var i = 0; i < cProcesses; i++) {

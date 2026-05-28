@@ -134,13 +134,13 @@ void regReplacePath(List<String> newPaths) {
 /// A [WindowsException] is thrown the call falls.
 /// @Throwing(WindowsException)
 void regSetString(
-  int hkey,
+  HKEY hkey,
   String subKey,
   String valueName,
   String value, {
-  int accessRights = KEY_SET_VALUE,
+  REG_SAM_FLAGS accessRights = KEY_SET_VALUE,
 }) {
-  final pValue = TEXT(value);
+  final pValue = value.toNativeUtf16();
 
   try {
     _regSetValue(
@@ -157,12 +157,12 @@ void regSetString(
 /// A [WindowsException] is thrown the call falls.
 /// @Throwing(WindowsException)
 void regSetNone(
-  int hkey,
+  HKEY hkey,
   String subKey,
   String valueName, {
-  int accessRights = KEY_SET_VALUE,
+  REG_SAM_FLAGS accessRights = KEY_SET_VALUE,
 }) {
-  _regSetValue(hkey, subKey, valueName, nullptr, 0, REG_NONE,
+  _regSetValue(hkey, subKey, valueName, nullptr.cast(), 0, REG_NONE,
       accessRights: accessRights);
 }
 
@@ -185,10 +185,10 @@ void regSetNone(
 /// @Throwing(UnsupportedError)
 /// @Throwing(WindowsException)
 String regGetString(
-  int hkey,
+  HKEY hkey,
   String subKey,
   String valueName, {
-  int accessRights = KEY_QUERY_VALUE,
+  REG_SAM_FLAGS accessRights = KEY_QUERY_VALUE,
 }) {
   late final String value;
 
@@ -207,11 +207,11 @@ String regGetString(
 /// A [WindowsException] is thrown the call falls.
 /// @Throwing(WindowsException)
 void regSetDWORD(
-  int hkey,
+  HKEY hkey,
   String subKey,
   String valueName,
   int value, {
-  int accessRights = KEY_SET_VALUE,
+  REG_SAM_FLAGS accessRights = KEY_SET_VALUE,
 }) {
   final pValue = calloc<Uint32>()..value = value;
 
@@ -229,10 +229,10 @@ void regSetDWORD(
 /// A [WindowsException] is thrown the call falls.
 /// @Throwing(WindowsException)
 int regGetDWORD(
-  int hkey,
+  HKEY hkey,
   String subKey,
   String valueName, {
-  int accessRights = KEY_QUERY_VALUE,
+  REG_SAM_FLAGS accessRights = KEY_QUERY_VALUE,
 }) {
   late final int value;
 
@@ -257,13 +257,13 @@ int regGetDWORD(
 /// A [WindowsException] is thrown if the delete fails.
 /// @Throwing(WindowsException)
 void regDeleteKey(
-  int hkey,
+  HKEY hkey,
   String subKey,
 ) {
-  final pSubKey = TEXT(subKey);
+  final pSubKey = subKey.toNativeUtf16();
 
   try {
-    final result = RegDeleteKeyEx(hkey, pSubKey, KEY_WOW64_64KEY, 0);
+    final result = RegDeleteKeyEx(hkey, PCWSTR(pSubKey), KEY_WOW64_64KEY);
     if (result != ERROR_SUCCESS) {
       throw WindowsException(HRESULT_FROM_WIN32(result));
     }
@@ -279,15 +279,15 @@ void regDeleteKey(
 /// A [WindowsException] is thrown if the delete fails.
 /// @Throwing(WindowsException)
 void regDeleteValue(
-  int hkey,
+  HKEY hkey,
   String subKey,
   String valueName,
 ) {
-  final pName = TEXT(valueName);
+  final pName = valueName.toNativeUtf16();
   try {
     _withRegKey(hkey, subKey, KEY_WRITE, (hkey, pSubKey) {
       // var sub = TEXT(path)
-      final result = RegDeleteValue(hkey, pName);
+      final result = RegDeleteValue(hkey, PCWSTR(pName));
       if (result != ERROR_SUCCESS) {
         throw WindowsException(HRESULT_FROM_WIN32(result));
       }
@@ -306,10 +306,10 @@ void regDeleteValue(
 /// @Throwing(UnsupportedError)
 /// @Throwing(WindowsException)
 String regGetExpandString(
-  int hkey,
+  HKEY hkey,
   String subKey,
   String valueName, {
-  int accessRights = KEY_QUERY_VALUE,
+  REG_SAM_FLAGS accessRights = KEY_QUERY_VALUE,
   bool expand = true,
 }) {
   late final String value;
@@ -341,13 +341,13 @@ String regGetExpandString(
 /// A [WindowsException] is thrown the call falls.
 /// @Throwing(WindowsException)
 void regSetExpandString(
-  int hkey,
+  HKEY hkey,
   String subKey,
   String valueName,
   String value, {
-  int accessRights = KEY_SET_VALUE,
+  REG_SAM_FLAGS accessRights = KEY_SET_VALUE,
 }) {
-  final pValue = TEXT(value);
+  final pValue = value.toNativeUtf16();
   try {
     _regSetValue(hkey, subKey, valueName, pValue.cast(), (value.length + 1) * 2,
         REG_EXPAND_SZ,
@@ -410,8 +410,22 @@ class _RegResults {
 
   void free() => calloc.free(pResult);
 
-  List<String> unpackStringArray() =>
-      pResult.cast<Utf16>().unpackStringArray(size);
+  List<String> unpackStringArray() {
+    final codeUnits = pResult.cast<Uint16>().asTypedList(size ~/ 2);
+    final values = <String>[];
+    var start = 0;
+
+    for (var i = 0; i < codeUnits.length; i++) {
+      if (codeUnits[i] == 0) {
+        if (i == start) {
+          break;
+        }
+        values.add(String.fromCharCodes(codeUnits.sublist(start, i)));
+        start = i + 1;
+      }
+    }
+    return values;
+  }
 
   /// @Throwing(UnsupportedError)
   String toDartString() => pResult.cast<Utf16>().toDartString();
@@ -424,14 +438,14 @@ class _RegResults {
 /// A [WindowsException] is thrown the call falls.
 /// @Throwing(WindowsException)
 _RegResults _regGetValue(
-  int hkey,
+  HKEY hkey,
   String subKey,
   String valueName, {
-  int flags = RRF_RT_REG_SZ,
-  int accessRights = KEY_QUERY_VALUE,
+  REG_ROUTINE_FLAGS flags = RRF_RT_REG_SZ,
+  REG_SAM_FLAGS accessRights = KEY_QUERY_VALUE,
 }) {
   late final Pointer<Uint8> pResult;
-  final pName = TEXT(valueName);
+  final pName = valueName.toNativeUtf16();
   // and somewhere to store the size of the result.
   final pResultSize = calloc<Uint32>();
 
@@ -443,8 +457,8 @@ _RegResults _regGetValue(
       // get the buffer size required.
       var result = RegGetValue(
         hkey,
-        nullptr,
-        pName,
+        null,
+        PCWSTR(pName),
         RRF_RT_ANY,
         pType,
         nullptr,
@@ -458,8 +472,8 @@ _RegResults _regGetValue(
       pResult = calloc<Uint8>(pResultSize.value);
       result = RegGetValue(
         hkey,
-        nullptr,
-        pName,
+        null,
+        PCWSTR(pName),
         flags,
         nullptr,
         pResult,
@@ -487,20 +501,20 @@ _RegResults _regGetValue(
 /// A [WindowsException] is thrown the call falls.
 /// @Throwing(WindowsException)
 void _regSetValue(
-  int hkey,
+  HKEY hkey,
   String subKey,
   String valueName,
   Pointer<Uint8> pValue,
   int valueSize,
-  int type, {
-  int accessRights = KEY_SET_VALUE,
+  REG_VALUE_TYPE type, {
+  REG_SAM_FLAGS accessRights = KEY_SET_VALUE,
 }) {
-  final pName = TEXT(valueName);
+  final pName = valueName.toNativeUtf16();
 
   try {
     _withRegKey(hkey, subKey, accessRights, (hkey, pSubKey) {
       final result =
-          RegSetValueEx(hkey, pName, 0, type, pValue.cast(), valueSize);
+          RegSetValueEx(hkey, PCWSTR(pName), type, pValue, valueSize);
       if (result != ERROR_SUCCESS) {
         throw WindowsException(HRESULT_FROM_WIN32(result));
       }
@@ -527,22 +541,24 @@ void _regSetValue(
 /// A [WindowsException] is thrown the call falls.
 /// @Throwing(WindowsException)
 R _withRegKey<R>(
-  int hkey,
+  HKEY hkey,
   String subKey,
-  int accessRights,
-  R Function(int hkey, Pointer<Utf16> pSubKey) action,
+  REG_SAM_FLAGS accessRights,
+  R Function(HKEY hkey, PCWSTR pSubKey) action,
 ) {
   R actionResult;
-  final pOpenKey = calloc<IntPtr>();
-  final pSubKey = TEXT(subKey);
+  final pOpenKey = calloc<Pointer>();
+  final pSubKey = subKey.toNativeUtf16();
 
   try {
-    final result = RegOpenKeyEx(hkey, pSubKey, 0, accessRights, pOpenKey);
+    final result =
+        RegOpenKeyEx(hkey, PCWSTR(pSubKey), 0, accessRights, pOpenKey);
     if (result == ERROR_SUCCESS) {
+      final openKey = HKEY(pOpenKey.value);
       try {
-        actionResult = action(pOpenKey.value, pSubKey);
+        actionResult = action(openKey, PCWSTR(pSubKey));
       } finally {
-        RegCloseKey(pOpenKey.value);
+        openKey.close();
       }
     } else {
       throw WindowsException(HRESULT_FROM_WIN32(result));
@@ -567,18 +583,19 @@ R _withRegKey<R>(
 ///
 /// A [WindowsException] is thrown the call falls.
 bool regKeyExists(
-  int hkey,
+  HKEY hkey,
   String subKey,
 ) {
   var exists = false;
-  final pOpenKey = calloc<IntPtr>();
-  final pSubKey = TEXT(subKey);
+  final pOpenKey = calloc<Pointer>();
+  final pSubKey = subKey.toNativeUtf16();
 
   try {
-    final result = RegOpenKeyEx(hkey, pSubKey, 0, KEY_QUERY_VALUE, pOpenKey);
+    final result =
+        RegOpenKeyEx(hkey, PCWSTR(pSubKey), 0, KEY_QUERY_VALUE, pOpenKey);
     if (result == ERROR_SUCCESS) {
       exists = true;
-      RegCloseKey(pOpenKey.value);
+      HKEY(pOpenKey.value).close();
     }
   } finally {
     calloc
@@ -593,27 +610,26 @@ bool regKeyExists(
 /// Throws a [WindowsException] if the key cannot be created.
 /// @Throwing(WindowsException)
 void regCreateKey(
-  int hKey,
+  HKEY hKey,
   String subKey,
 ) {
-  final pOpenKey = calloc<IntPtr>();
-  final pSubKey = TEXT(subKey);
+  final pOpenKey = calloc<Pointer>();
+  final pSubKey = subKey.toNativeUtf16();
   try {
     final result = RegCreateKeyEx(
         hKey,
-        pSubKey,
-        0,
-        nullptr,
-        0,
+        PCWSTR(pSubKey),
+        null,
+        REG_OPTION_NON_VOLATILE,
         KEY_QUERY_VALUE,
-        nullptr, // not inheritable
+        null, // not inheritable
         pOpenKey,
         nullptr);
 
     if (result != ERROR_SUCCESS) {
       throw WindowsException(HRESULT_FROM_WIN32(result));
     }
-    RegCloseKey(pOpenKey.value);
+    HKEY(pOpenKey.value).close();
   } finally {
     calloc
       ..free(pOpenKey)

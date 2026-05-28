@@ -409,8 +409,15 @@ dependency_overrides:
       }
     }, progress: Progress.printStdErr());
 
+    if (!tools.any(_compileRequiredForCommand)) {
+      return;
+    }
+
     print(blue('compiling cross platform tools'));
-    await NamedLock(name: 'compile').withLockAsync(() async {
+    await NamedLock(
+      name: 'compile',
+      timeout: const Duration(minutes: 10),
+    ).withLockAsync(() async {
       for (final command in tools) {
         final pathToTool = join(pathToTools, command);
         final pathToToolSource =
@@ -425,6 +432,15 @@ dependency_overrides:
         }
       }
     });
+  }
+
+  bool _compileRequiredForCommand(String command) {
+    final pathToToolProject =
+        join(pathToPackageUnitTester, 'test', 'test_script', 'general');
+    final pathToTool = join(pathToTools, command);
+    final pathToToolSource = join(pathToToolProject, 'bin', '$command.dart');
+
+    return _compileRequired(pathToTool, pathToToolSource);
   }
 
   bool _compileRequired(String pathToTool, String pathToToolSource) {

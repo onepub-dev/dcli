@@ -98,10 +98,7 @@ class Utf16LeDecoder extends Converter<List<int>, String> {
       _Utf16LeDecoderSink(StringConversionSink.from(sink));
 
   static (String, int?) _decode(List<int> input, int? pending) {
-    final bytes = <int>[
-      if (pending != null) pending,
-      ...input,
-    ];
+    final bytes = <int>[?pending, ...input];
     final codeUnits = <int>[];
     var i = 0;
     for (; i + 1 < bytes.length; i += 2) {

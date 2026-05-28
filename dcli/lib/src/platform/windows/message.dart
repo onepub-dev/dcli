@@ -16,21 +16,18 @@ import 'package:win32/win32.dart';
 // required for backwards compatibility
 const HWND_BROADCAST = 0xffff;
 
-// required for backwards compatibility`
-const SMTO_ABORTIFHUNG = 0x0002;
-
 /// Send a message to all top level windows that an environment variable
 /// has changed.
 void broadcastEnvironmentChange() {
-  final what = TEXT('Environment');
+  final what = 'Environment'.toNativeUtf16();
 
   final pResult = calloc<Int32>();
   try {
     SendMessageTimeout(
-      HWND_BROADCAST,
+      HWND(Pointer.fromAddress(HWND_BROADCAST)),
       WM_SETTINGCHANGE,
-      0,
-      what.address,
+      const WPARAM(0),
+      LPARAM(what.address),
       SMTO_ABORTIFHUNG,
       5000,
       pResult.cast(),

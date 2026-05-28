@@ -18,15 +18,17 @@ const capturePrinterrKey = 'printerr';
 /// redirecting them to the passed progress.
 /// If no [progress] is passed then the output from print and printerr
 /// is surpressed.
-Future<Progress> capture<R>(Future<R> Function() action,
-    {Progress? progress}) async {
+Future<Progress> capture<R>(
+  Future<R> Function() action, {
+  Progress? progress,
+}) async {
   final progressImpl = (progress ?? Progress.devNull()) as ProgressImpl;
 
   /// overload printerr so we can trap it.
   final zoneValues = <String, CaptureZonePrintErr>{
     'printerr': (line) {
       progressImpl.addToStderr(progressImpl.encoding.encode('$line\n'));
-    }
+    },
   };
 
   final zoneCompleter = Completer<R>();
@@ -57,12 +59,14 @@ Future<Progress> capture<R>(Future<R> Function() action,
 }
 
 Future<void> _body<R>(
-    Future<R> Function() body, Completer<R> zoneCompleter) async {
+  Future<R> Function() body,
+  Completer<R> zoneCompleter,
+) async {
   R r;
   try {
     r = await body();
     zoneCompleter.complete(r);
-  } catch (_, __) {
+  } catch (_) {
     zoneCompleter.complete(null);
     rethrow;
   }

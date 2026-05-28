@@ -62,9 +62,11 @@ mixin PosixShell {
     if (response.isEmpty) {
       return false;
     }
-    final first = response.first;
-    return first == 'sudo: a password is required' ||
-        first == 'sudo-rs: interactive authentication is required';
+    return response.any(
+      (line) =>
+          line.contains('a password is required') ||
+          line.contains('interactive authentication is required'),
+    );
   }
 
   /// True if the processes real uid is root.
@@ -178,8 +180,10 @@ mixin PosixShell {
   /// @Throwing(FormatException)
   /// @Throwing(PosixException)
   /// @Throwing(ShellException)
-  Future<void> withPrivilegesAsync(RunPrivilegedAsync action,
-      {bool allowUnprivileged = false}) async {
+  Future<void> withPrivilegesAsync(
+    RunPrivilegedAsync action, {
+    bool allowUnprivileged = false,
+  }) async {
     final startedPriviledged = Shell.current.isPrivilegedProcess;
     if (!allowUnprivileged && !startedPriviledged) {
       throw ShellException(
@@ -321,7 +325,9 @@ class UserEnvironment {
     // This fits nicely with our principle that when a user
     // calls [releasePrivileges] the script should fully
     // appear to not have been run as sudo.
-    verbose(() => '''
+    verbose(
+      () =>
+          '''
 Building user enviroment
 username: $username
 HOME: $pathToHome
@@ -329,7 +335,8 @@ USER: $username
 LOGNAME: $username
 SHELL: ${env['SHELL']}
 gid:  $gid
-uid:  $uid''');
+uid:  $uid''',
+    );
 
     // reorder(() => uid == 0, () => setuid(uid), () => setgid(gid));
 
@@ -344,7 +351,10 @@ uid:  $uid''');
   /// If [condition] is true then we call [one] then [two].
   /// If [condition] is false then we call [two] then [one].
   void reorder(
-      bool Function() condition, void Function() one, void Function() two) {
+    bool Function() condition,
+    void Function() one,
+    void Function() two,
+  ) {
     if (condition()) {
       one();
       two();

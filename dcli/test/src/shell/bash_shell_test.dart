@@ -8,6 +8,8 @@
 @TestOn('posix')
 library;
 
+import 'dart:io';
+
 import 'package:dcli/dcli.dart';
 import 'package:dcli/posix.dart';
 import 'package:test/test.dart';
@@ -25,7 +27,14 @@ void main() {
     /// Force dcli to see the bash shell.
     env['SHELL'] = BashShell.shellName;
 
-    expect(Shell.current.isPrivilegedPasswordRequired, true);
+    final sudoResult = Process.runSync('sudo', ['-nv']);
+    final sudoOutput = '${sudoResult.stdout}${sudoResult.stderr}';
+    final expected =
+        sudoResult.exitCode != 0 &&
+        (sudoOutput.contains('a password is required') ||
+            sudoOutput.contains('interactive authentication is required'));
+
+    expect(Shell.current.isPrivilegedPasswordRequired, expected);
   });
 
   // don't know how to automat this test as we need the sudo password.
