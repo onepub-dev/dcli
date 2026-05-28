@@ -1,3 +1,14 @@
+# 9.0.0
+- Upgrade win32 and dart_console dependencies
+- updated deps
+- Released 8.4.2.
+- Released 8.4.2.
+- Released 8.4.2.
+- Released 8.4.2.
+- Released 8.4.2.
+- Released 8.4.2.
+- Released 8.4.2.
+
 # 8.4.2
 - preping the 8.4.2 release.
 - removed the publish_to which was pushing it to onepub.
