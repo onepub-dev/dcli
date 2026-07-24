@@ -416,10 +416,10 @@ packages:
     dependency: transitive
     description:
       name: posix
-      sha256: "6323a5b0fa688b6a010df4905a56b00181479e6d10534cecfecede2aa55add61"
+      sha256: bebff4a1df009c2331c08ffb3a3b9e8f26733b4a0de34b23dbb07b1b8af21979
       url: "https://pub.dev"
     source: hosted
-    version: "6.0.3"
+    version: "6.5.1"
   pub_semver:
     dependency: "direct main"
     description:

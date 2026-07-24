@@ -10,6 +10,7 @@ library;
  */
 
 import 'dart:async';
+import 'dart:io';
 import 'dart:isolate';
 
 import 'package:async/async.dart';
@@ -32,6 +33,50 @@ void main() {
       await NamedLock(name: 'exception')
           .withLockAsync(() async => called = true);
       expect(called, isTrue);
+    });
+
+    test('lock file is visible', () async {
+      await core.withTempDirAsync((lockPath) async {
+        String? lockFile;
+        String? lockContents;
+
+        await NamedLock(name: 'visible-lock', lockPath: lockPath).withLockAsync(
+          () async {
+            lockFile = find(
+              '*.visible-lock',
+              workingDirectory: lockPath,
+              recursive: false,
+            ).toList().single;
+            lockContents = File(lockFile!).readAsStringSync();
+          },
+        );
+
+        expect(
+          basename(lockFile!),
+          matches(RegExp(r'^pid\.\d+\.isolate\.\d+\.name\.visible-lock$')),
+        );
+        expect(lockContents, startsWith('process-start-identity:'));
+      });
+    });
+
+    test('stale lock from a reused pid is cleared', () async {
+      await core.withTempDirAsync((lockPath) async {
+        final staleLock = join(
+          lockPath,
+          'pid.$pid.isolate.0.name.reused-pid',
+        );
+        File(staleLock).writeAsStringSync(
+          'process-start-identity:not-the-current-process',
+        );
+
+        var called = false;
+        await NamedLock(
+          name: 'reused-pid',
+          lockPath: lockPath,
+        ).withLockAsync(() async => called = true);
+
+        expect(called, isTrue);
+      });
     });
 
     test('run process', () async {

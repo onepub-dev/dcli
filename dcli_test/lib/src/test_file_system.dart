@@ -401,17 +401,16 @@ dependency_overrides:
     final pathToToolProject =
         join(pathToPackageUnitTester, 'test', 'test_script', 'general');
 
-    final toolProject = DartProject.fromPath(pathToToolProject);
-
-    await capture(() async {
-      if (!toolProject.isReadyToRun) {
-        await toolProject.warmup();
-      }
-    }, progress: Progress.printStdErr());
-
     if (!tools.any(_compileRequiredForCommand)) {
       return;
     }
+
+    final toolProject = DartProject.fromPath(pathToToolProject);
+
+    await capture(
+      toolProject.warmup,
+      progress: Progress.printStdErr(),
+    );
 
     print(blue('compiling cross platform tools'));
     await NamedLock(

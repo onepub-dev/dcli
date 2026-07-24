@@ -40,6 +40,8 @@ import 'isolate_id.dart';
 /// On linux a traditional file lock will not block isolates
 /// in the same process from locking the same file hence we need
 class NamedLock {
+  static const _processStartIdentityPrefix = 'process-start-identity:';
+
   /// The tcp socket  port we use to implement
   /// a hard lock. A port can only be opened once
   /// so its the perfect way to create a lock that works
@@ -197,18 +199,31 @@ class NamedLock {
 
     final isolate = isolateID;
 
-    return join(_lockPath, '.$pid.$isolate.$name');
+    return join(_lockPath, 'pid.$pid.isolate.$isolate.name.$name');
   }
 
   _LockFileParts? _lockFileParts(String lockfilePath) {
     final parts = basename(lockfilePath).split('.');
-    // it can't actually be one of our lock files
-    if (parts.length < 3) {
+
+    if (parts.length >= 6 &&
+        parts[0] == 'pid' &&
+        parts[2] == 'isolate' &&
+        parts[4] == 'name') {
+      final pid = int.tryParse(parts[1]) ?? 0;
+      final isolateId = int.tryParse(parts[3]) ?? 0;
+
+      return _LockFileParts(pid, isolateId);
+    }
+
+    // Older versions created hidden lock files with a leading dot.
+    final offset = parts.first.isEmpty ? 1 : 0;
+    // It can't actually be one of our legacy lock files.
+    if (parts.length < offset + 3) {
       return null;
     }
 
-    final pid = int.tryParse(parts[1]) ?? 0;
-    final isolateId = int.tryParse(parts[2]) ?? 0;
+    final pid = int.tryParse(parts[offset]) ?? 0;
+    final isolateId = int.tryParse(parts[offset + 1]) ?? 0;
 
     return _LockFileParts(pid, isolateId);
   }
@@ -219,7 +234,10 @@ class NamedLock {
   ///
   /// We create the lock file in the virtual project directory
   /// in the form:
-  /// `<pid>.warmup.lock`
+  /// `pid.<pid>.isolate.<isolate>.name.<name>`
+  ///
+  /// The file contains the process start identity so a recycled PID is not
+  /// mistaken for the process that originally created the lock.
   ///
   /// If we find an existing lock file we check if the process
   /// that owns it is still running. If it isn't we
@@ -291,7 +309,7 @@ class NamedLock {
                 () => 'Lock Source: '
                     '''${Trace.current().frames.length > 1 ? Trace.current().frames[min(Trace.current().frames.length - 1, 8)] : 'Unknown'}''',
               );
-              touch(_lockFilePath, create: true);
+              _createLockFile();
             }
           },
         );
@@ -347,7 +365,7 @@ class NamedLock {
         continue;
       }
 
-      if (_isOwnerLive(lockFileParts.pid)) {
+      if (_isOwnerLive(lock, lockFileParts.pid)) {
         return true;
       }
     }
@@ -372,7 +390,7 @@ class NamedLock {
         continue;
       }
 
-      if (!_isOwnerLive(lockFileParts.pid)) {
+      if (!_isOwnerLive(lock, lockFileParts.pid)) {
         // If the foreign lock file was left orphaned
         // then we delete it.
         if (exists(lock)) {
@@ -385,8 +403,44 @@ class NamedLock {
     return lockFiles0;
   }
 
-  bool _isOwnerLive(int lockOwnerPid) =>
-      ProcessHelper().isRunning(lockOwnerPid);
+  void _createLockFile() {
+    final identity = ProcessHelper().getProcessStartIdentity(pid);
+    if (identity == null) {
+      touch(_lockFilePath, create: true);
+      return;
+    }
+
+    File(_lockFilePath).writeAsStringSync(
+      '$_processStartIdentityPrefix$identity',
+      flush: true,
+    );
+  }
+
+  bool _isOwnerLive(String lockFile, int lockOwnerPid) {
+    final processHelper = ProcessHelper();
+    String lockContents;
+    try {
+      lockContents = File(lockFile).readAsStringSync().trim();
+    } on FileSystemException {
+      // The owner released the lock after it was discovered.
+      return false;
+    }
+    if (!lockContents.startsWith(_processStartIdentityPrefix)) {
+      // Legacy lock files contain no process start identity.
+      return processHelper.isRunning(lockOwnerPid);
+    }
+
+    final lockIdentity =
+        lockContents.substring(_processStartIdentityPrefix.length);
+    final currentIdentity =
+        processHelper.getProcessStartIdentity(lockOwnerPid);
+
+    // If the OS won't expose the identity, fall back to a liveness probe and
+    // conservatively retain a lock owned by a running process.
+    return currentIdentity == null
+        ? processHelper.isRunning(lockOwnerPid)
+        : currentIdentity == lockIdentity;
+  }
 
   /// Call [fn] with a hard lock held.
   Future<void> _withHardLock({

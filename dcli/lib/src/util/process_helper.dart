@@ -13,6 +13,7 @@ import 'package:path/path.dart';
 import 'package:posix/posix.dart' hide read;
 
 import '../../dcli.dart';
+import '../posix/process_helper.dart';
 import '../windows/process_helper.dart';
 
 ///
@@ -77,14 +78,31 @@ class ProcessHelper {
 
   /// returns true if the given [pid] is still running.
   /// Throws an [UnsupportedError] if the OS is not supported.
-  /// On Linux this means the 'ps' command isn't available.
-  /// @Throwing(UnsupportedError)
+  /// @Throwing(PosixException)
   bool isRunning(int? pid) {
     if (Settings().isWindows) {
       return _windowsIsrunning(pid);
     } else {
-      return _linuxisRunning(pid);
+      return _posixIsRunning(pid);
     }
+  }
+
+  /// Returns an identity for the process instance associated with [pid].
+  ///
+  /// Unlike a PID, this value changes when the operating system reuses a PID.
+  /// Returns null if the process does not exist or its identity cannot be read.
+  String? getProcessStartIdentity(int pid) {
+    if (Settings().isWindows) {
+      return getWindowsProcessStartIdentity(pid);
+    }
+    if (Settings().isLinux) {
+      return _linuxProcessStartIdentity(pid);
+    }
+    if (Settings().isMacOS) {
+      return getMacOSProcessStartIdentity(pid);
+    }
+
+    return null;
   }
 
   /// Returns true a the process with the given [name]
@@ -188,25 +206,35 @@ class ProcessHelper {
     return false;
   }
 
-  /// Throws [UnsupportedError].
-  /// @Throwing(UnsupportedError)
-  bool _linuxisRunning(int? lpid) {
-    var isRunning = false;
-
-    /// https://stackoverflow.com/questions/9152979/check-if-process-exists-given-its-pid
-    // if (isPosixSupported) {
-    //   kill(0);
-    // }
-    final progress = 'ps -q $lpid -o comm='.start(nothrow: true);
-    final exitCode = progress.exitCode;
-    if (exitCode == 0 || exitCode == 1) {
-      isRunning = (progress.exitCode == 0);
-    } else {
-      throw UnsupportedError(
-          "The 'ps' command is not supported on this platform");
+  /// @Throwing(PosixException)
+  bool _posixIsRunning(int? processId) {
+    if (processId == null) {
+      return false;
     }
+    return isPosixProcessRunning(processId);
+  }
 
-    return isRunning;
+  String? _linuxProcessStartIdentity(int pid) {
+    try {
+      final stat = File('/proc/$pid/stat').readAsStringSync();
+      final commandEnd = stat.lastIndexOf(')');
+      if (commandEnd == -1) {
+        return null;
+      }
+
+      // Fields following the command start at field 3. Process start time is
+      // field 22, expressed in clock ticks since boot.
+      final fields =
+          stat.substring(commandEnd + 1).trim().split(RegExp(r'\s+'));
+      if (fields.length <= 19) {
+        return null;
+      }
+
+      return 'linux:${fields[19]}';
+    } on FileSystemException {
+      // The process exited, or its details aren't accessible.
+      return null;
+    }
   }
 
   /// Returns a list of running processes.

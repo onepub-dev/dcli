@@ -9,6 +9,7 @@ library;
 
 import 'dart:io';
 
+import 'package:dcli/dcli.dart' show Progress, capture;
 import 'package:dcli/src/util/process_helper.dart';
 import 'package:test/test.dart';
 
@@ -24,8 +25,23 @@ void main() {
     expect(parent, isNot(equals(pid)));
   });
 
-  test('ProcessHelper - isRunning', () {
-    expect(ProcessHelper().isRunning(pid), equals(true));
+  test('ProcessHelper - isRunning', () async {
+    final progress = await capture(
+      () async => expect(ProcessHelper().isRunning(pid), equals(true)),
+      progress: Progress.capture(),
+    );
+
+    expect(progress.lines, isEmpty);
+  });
+
+  test('ProcessHelper - process start identity', () {
+    final helper = ProcessHelper();
+    final identity = helper.getProcessStartIdentity(pid);
+
+    expect(identity, isNotNull);
+    expect(helper.getProcessStartIdentity(pid), identity);
+    expect(helper.isRunning(2147483647), isFalse);
+    expect(helper.getProcessStartIdentity(2147483647), isNull);
   });
 
   test('Get running processes', () {

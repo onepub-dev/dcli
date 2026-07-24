@@ -59,6 +59,41 @@ String getWindowsProcessName(int processID) {
   return name;
 }
 
+/// Returns an identity derived from the creation time of [processID].
+///
+/// The identity changes when Windows reuses a process ID.
+String? getWindowsProcessStartIdentity(int processID) {
+  final hProcess = OpenProcess(
+    PROCESS_QUERY_LIMITED_INFORMATION,
+    false,
+    processID,
+  ).value;
+  if (!hProcess.isValid) {
+    return null;
+  }
+
+  final times = calloc<FILETIME>(4);
+  try {
+    final result = GetProcessTimes(
+      hProcess,
+      times,
+      times + 1,
+      times + 2,
+      times + 3,
+    );
+    if (!result.value) {
+      return null;
+    }
+
+    final creationTime =
+        (times.ref.dwHighDateTime << 32) | times.ref.dwLowDateTime;
+    return 'windows:$creationTime';
+  } finally {
+    calloc.free(times);
+    hProcess.close();
+  }
+}
+
 /// Returns the list of running processes on a Windows system.
 /// This method has a hard coded limit of 2048 processes.
 /// @Throwing(UnsupportedError)

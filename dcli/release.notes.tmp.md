@@ -1,3 +1,5 @@
+# 9.0.1
+
 # 9.0.0
 - Updated `NamedLock` files to use the visible
   `pid.<pid>.isolate.<isolate>.name.<name>` filename format.
