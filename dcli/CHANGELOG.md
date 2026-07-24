@@ -1,10 +1,13 @@
+# 9.0.1
+- updated to using posix 6.5.1 so we can use its 'kill' command.
+
 # 9.0.0
 - Updated `NamedLock` files to use the visible
   `pid.<pid>.isolate.<isolate>.name.<name>` filename format.
 - Added cross-platform process start identities to `NamedLock` files so stale
   locks are detected when an operating system or container reuses a PID.
-- Replaced `ps` process checks with native process APIs: `kill(pid, 0)` via
-  `posix` 6.5.1 and `proc_pidinfo` for macOS process start identities.
+- Replaced `ps` process checks with native process APIs: `kill(pid, 0)` and
+ `proc_pidinfo` for macOS process start identities.
 - Removed deprecated public APIs and deprecated entry-point libraries.
 - Raised Dart SDK lower bounds where required by dependency upgrades.
 - Upgraded win32 to 6.0.1 and dart_console to 5.x.
