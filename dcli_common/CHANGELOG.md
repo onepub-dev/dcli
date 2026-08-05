@@ -1,3 +1,6 @@
+# 9.0.2
+- added the observe() method to NamedLock so you can see if a lock is being held and by who.
+
 # 9.0.0
 - Removed deprecated public APIs and deprecated entry-point libraries.
 - Raised Dart SDK lower bounds where required by dependency upgrades.

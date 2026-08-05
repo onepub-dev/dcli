@@ -16,9 +16,9 @@ dependencies:
   crypto: ^3.0.0
   csv: ^8.0.0
   dart_console: ^5.0.0
-  dcli_common: ^9.0.0
-  dcli_core: ^9.0.0
-  dcli_terminal: ^9.0.0
+  dcli_common: ^9.0.2
+  dcli_core: ^9.0.2
+  dcli_terminal: ^9.0.2
   equatable: ^2.0.0
   ffi: ^2.0.0
   file: ^7.0.0
