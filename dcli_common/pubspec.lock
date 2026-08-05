@@ -167,7 +167,7 @@ packages:
       path: "/home/bsutton/git/dcli/dcli"
       relative: false
     source: path
-    version: "9.0.0"
+    version: "9.0.1"
   dcli_core:
     dependency: "direct overridden"
     description:
@@ -430,10 +430,10 @@ packages:
     dependency: transitive
     description:
       name: posix
-      sha256: "185ef7606574f789b40f289c233efa52e96dead518aed988e040a10737febb07"
+      sha256: bc1bad54ad2b735816e31f8d4600cfde6c7839975085ddfbca48b6c9f7c4044e
       url: "https://pub.dev"
     source: hosted
-    version: "6.5.0"
+    version: "6.5.2"
   pub_semver:
     dependency: transitive
     description:

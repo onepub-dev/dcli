@@ -1,3 +1,7 @@
+# 9.0.2
+- Added `NamedLock.observe()` for read-only diagnostic and monitoring snapshots
+  without acquiring or otherwise affecting the observed lock.
+
 # 9.0.1
 - updated to using posix 6.5.1 so we can use its 'kill' command.
 

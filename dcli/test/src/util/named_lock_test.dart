@@ -30,8 +30,9 @@ void main() {
   group('NamedLock', () {
     test('callback', () async {
       var called = false;
-      await NamedLock(name: 'exception')
-          .withLockAsync(() async => called = true);
+      await NamedLock(
+        name: 'exception',
+      ).withLockAsync(() async => called = true);
       expect(called, isTrue);
     });
 
@@ -47,7 +48,7 @@ void main() {
               workingDirectory: lockPath,
               recursive: false,
             ).toList().single;
-            lockContents = File(lockFile!).readAsStringSync();
+            lockContents = read(lockFile!).toParagraph();
           },
         );
 
@@ -59,15 +60,56 @@ void main() {
       });
     });
 
-    test('stale lock from a reused pid is cleared', () async {
+    test('observe reports a live owner without acquiring the lock', () async {
+      await core.withTempDirAsync((lockPath) async {
+        final lock = NamedLock(name: 'observed-lock', lockPath: lockPath);
+
+        expect(lock.observe().isHeld, isFalse);
+
+        await lock.withLockAsync(() async {
+          final beforeObservation = DateTime.now();
+          final observation = lock.observe();
+
+          expect(observation.isHeld, isTrue);
+          expect(observation.name, 'observed-lock');
+          expect(observation.ownerPid, pid);
+          expect(observation.ownerIsolateId, isNotNull);
+          expect(observation.acquiredAt, isNotNull);
+          expect(
+            observation.acquiredAt!.isAfter(
+              beforeObservation.subtract(const Duration(seconds: 1)),
+            ),
+            isTrue,
+          );
+        });
+
+        expect(lock.observe().isHeld, isFalse);
+      });
+    });
+
+    test('observe ignores a stale lock from a reused pid', () async {
       await core.withTempDirAsync((lockPath) async {
         final staleLock = join(
           lockPath,
+          'pid.$pid.isolate.0.name.observed-stale-lock',
+        )..write('process-start-identity:not-the-current-process', newline: '');
+
+        final observation = NamedLock(
+          name: 'observed-stale-lock',
+          lockPath: lockPath,
+        ).observe();
+
+        expect(observation.isHeld, isFalse);
+        expect(exists(staleLock), isTrue);
+      });
+    });
+
+    test('stale lock from a reused pid is cleared', () async {
+      await core.withTempDirAsync((lockPath) async {
+        join(
+          lockPath,
           'pid.$pid.isolate.0.name.reused-pid',
-        );
-        File(staleLock).writeAsStringSync(
-          'process-start-identity:not-the-current-process',
-        );
+        ).write('process-start-identity:not-the-current-process', newline: '');
 
         var called = false;
         await NamedLock(
@@ -89,87 +131,89 @@ void main() {
 
     test('exception catch', () {
       expect(
-        NamedLock(name: 'exception')
-            .withLockAsync(() async => throw DCliException('fake exception')),
+        NamedLock(
+          name: 'exception',
+        ).withLockAsync(() async => throw DCliException('fake exception')),
         throwsA(isA<DCliException>()),
       );
     });
 
+    test('withLock', () async {
+      await core.withTempDirAsync((fs) async {
+        await core.withTempFileAsync((logFile) async {
+          print('logfile: $logFile');
+          logFile.truncate();
+
+          final portBack = await spawn('background', logFile);
+          final portMid = await spawn('middle', logFile);
+          final portFore = await spawn('foreground', logFile);
+
+          await portBack.first;
+          await portMid.first;
+          await portFore.first;
+
+          print('readling logfile');
+
+          final actual = read(logFile).toList();
+
+          expect(
+            actual,
+            unorderedEquals(<String>[
+              'background + 0',
+              'background + 1',
+              'background + 2',
+              'background + 3',
+              'middle + 0',
+              'middle + 1',
+              'middle + 2',
+              'middle + 3',
+              'foreground + 0',
+              'foreground + 1',
+              'foreground + 2',
+              'foreground + 3',
+            ]),
+          );
+        });
+      }, keep: true);
+    }, skip: false);
+
     test(
-      'withLock',
+      'Thrash test',
       () async {
-        await core.withTempDirAsync(
-          (fs) async {
-            await core.withTempFileAsync((logFile) async {
-              print('logfile: $logFile');
-              logFile.truncate();
+        if (exists(_lockCheckPath)) {
+          deleteDir(_lockCheckPath);
+        }
 
-              final portBack = await spawn('background', logFile);
-              final portMid = await spawn('middle', logFile);
-              final portFore = await spawn('foreground', logFile);
+        createDir(_lockCheckPath, recursive: true);
 
-              await portBack.first;
-              await portMid.first;
-              await portFore.first;
+        final group = FutureGroup<dynamic>();
 
-              print('readling logfile');
+        final workers = <Worker>[];
+        for (var i = 0; i < 10; i++) {
+          print('spawning worker $i');
+          final workerIsolate = Isolate.spawn(worker, i, paused: true);
+          final iWorker = Worker(await workerIsolate);
+          workers.add(iWorker);
+          group.add(iWorker.waitForExit());
+        }
+        group.close();
 
-              final actual = read(logFile).toList();
+        await group.future;
 
-              expect(
-                actual,
-                unorderedEquals(<String>[
-                  'background + 0',
-                  'background + 1',
-                  'background + 2',
-                  'background + 3',
-                  'middle + 0',
-                  'middle + 1',
-                  'middle + 2',
-                  'middle + 3',
-                  'foreground + 0',
-                  'foreground + 1',
-                  'foreground + 2',
-                  'foreground + 3',
-                ]),
-              );
-            });
-          },
-          keep: true,
-        );
+        expect(exists(_lockFailedPath), equals(false));
       },
-      skip: false,
+      timeout: const Timeout(Duration(minutes: 30)),
+      skip: true,
     );
-
-    test('Thrash test', () async {
-      if (exists(_lockCheckPath)) {
-        deleteDir(_lockCheckPath);
-      }
-
-      createDir(_lockCheckPath, recursive: true);
-
-      final group = FutureGroup<dynamic>();
-
-      final workers = <Worker>[];
-      for (var i = 0; i < 10; i++) {
-        print('spawning worker $i');
-        final workerIsolate = Isolate.spawn(worker, i, paused: true);
-        final iWorker = Worker(await workerIsolate);
-        workers.add(iWorker);
-        group.add(iWorker.waitForExit());
-      }
-      group.close();
-
-      await group.future;
-
-      expect(exists(_lockFailedPath), equals(false));
-    }, timeout: const Timeout(Duration(minutes: 30)), skip: true);
   });
 }
 
 Future<ReceivePort> spawn(String message, String logFile) async {
-  final back =
-      await Isolate.spawn(writeToLog, '$message;$logFile', paused: true);
+  final back = await Isolate.spawn(
+    writeToLog,
+    '$message;$logFile',
+    paused: true,
+  );
   final port = ReceivePort();
   back
     ..addOnExitListener(port.sendPort)

@@ -95,8 +95,8 @@ class NamedLock {
     String? lockPath,
     String description = '',
     Duration timeout = const Duration(seconds: 30),
-  })  : _timeout = timeout,
-        _description = description {
+  }) : _timeout = timeout,
+       _description = description {
     _lockPath =
         lockPath ?? join(rootPath, Directory.systemTemp.path, 'dcli', 'locks');
   }
@@ -134,6 +134,48 @@ class NamedLock {
       // I'm uncertain if this is a reality.
       lockHeld = false;
     }
+  }
+
+  /// Returns a point-in-time observation of this lock.
+  ///
+  /// Observation does not acquire the lock and cannot prevent another process
+  /// from acquiring or releasing it. Do not use this method to coordinate
+  /// access to a resource; use [withLockAsync] for that purpose.
+  ///
+  /// A lock is reported as held only when its owner PID and process-start
+  /// identity identify a currently running process. Orphaned and malformed
+  /// lock files are ignored but are not deleted by this read-only operation.
+  NamedLockObservation observe() {
+    if (!exists(_lockPath)) {
+      return NamedLockObservation.notHeld(name: name);
+    }
+
+    final locks = find(
+      '*.$name',
+      workingDirectory: _lockPath,
+      includeHidden: true,
+      recursive: false,
+    ).toList();
+
+    for (final lock in locks) {
+      final parts = _lockFileParts(lock);
+      if (parts == null || !_isOwnerLive(lock, parts.pid)) {
+        continue;
+      }
+
+      final lockStat = stat(lock);
+      if (lockStat.type == FileSystemEntityType.notFound) {
+        continue;
+      }
+      return NamedLockObservation.held(
+        name: name,
+        ownerPid: parts.pid,
+        ownerIsolateId: parts.isolateId,
+        acquiredAt: lockStat.modified,
+      );
+    }
+
+    return NamedLockObservation.notHeld(name: name);
   }
 
   /// @Throwing(ArgumentError)
@@ -306,7 +348,8 @@ class NamedLock {
               );
 
               verbose(
-                () => 'Lock Source: '
+                () =>
+                    'Lock Source: '
                     '''${Trace.current().frames.length > 1 ? Trace.current().frames[min(Trace.current().frames.length - 1, 8)] : 'Unknown'}''',
               );
               _createLockFile();
@@ -410,17 +453,17 @@ class NamedLock {
       return;
     }
 
-    File(_lockFilePath).writeAsStringSync(
-      '$_processStartIdentityPrefix$identity',
-      flush: true,
-    );
+    _lockFilePath.write('$_processStartIdentityPrefix$identity', newline: '');
   }
 
   bool _isOwnerLive(String lockFile, int lockOwnerPid) {
     final processHelper = ProcessHelper();
     String lockContents;
     try {
-      lockContents = File(lockFile).readAsStringSync().trim();
+      lockContents = read(lockFile).toParagraph().trim();
+    } on ReadException {
+      // The owner released the lock after it was discovered.
+      return false;
     } on FileSystemException {
       // The owner released the lock after it was discovered.
       return false;
@@ -430,10 +473,10 @@ class NamedLock {
       return processHelper.isRunning(lockOwnerPid);
     }
 
-    final lockIdentity =
-        lockContents.substring(_processStartIdentityPrefix.length);
-    final currentIdentity =
-        processHelper.getProcessStartIdentity(lockOwnerPid);
+    final lockIdentity = lockContents.substring(
+      _processStartIdentityPrefix.length,
+    );
+    final currentIdentity = processHelper.getProcessStartIdentity(lockOwnerPid);
 
     // If the OS won't expose the identity, fall back to a liveness probe and
     // conservatively retain a lock owned by a running process.
@@ -443,24 +486,26 @@ class NamedLock {
   }
 
   /// Call [fn] with a hard lock held.
-  Future<void> _withHardLock({
-    required Future<void> Function() fn,
-  }) async {
+  Future<void> _withHardLock({required Future<void> Function() fn}) async {
     ServerSocket? socket;
 
     try {
       verbose(() => 'attempt bindSocket');
       socket = await _bindSocket();
       if (socket != null) {
-        verbose(() => blue('''
-Hardlock taken for $name in ${Service.getIsolateId(Isolate.current)}'''));
+        verbose(
+          () => blue('''
+Hardlock taken for $name in ${Service.getIsolateId(Isolate.current)}'''),
+        );
         await fn();
       }
     } finally {
       if (socket != null) {
         await socket.close();
-        verbose(() => blue('''
-Hardlock released  for $name in ${Service.getIsolateId(Isolate.current)}'''));
+        verbose(
+          () => blue('''
+Hardlock released  for $name in ${Service.getIsolateId(Isolate.current)}'''),
+        );
       }
     }
   }
@@ -468,10 +513,7 @@ Hardlock released  for $name in ${Service.getIsolateId(Isolate.current)}'''));
   Future<ServerSocket?> _bindSocket() async {
     ServerSocket? socket;
     try {
-      socket = await ServerSocket.bind(
-        '127.0.0.1',
-        port,
-      );
+      socket = await ServerSocket.bind('127.0.0.1', port);
     } on SocketException catch (e) {
       /// no op. We expect this if the hardlock is already held.
       verbose(e.toString);
@@ -486,6 +528,44 @@ class _LockFileParts {
   int isolateId;
 
   _LockFileParts(this.pid, this.isolateId);
+}
+
+/// A read-only, point-in-time observation of a [NamedLock].
+///
+/// The observed state may change immediately after [NamedLock.observe]
+/// returns. It is suitable for diagnostics and monitoring, not coordination.
+class NamedLockObservation {
+  /// The name of the observed lock.
+  final String name;
+
+  /// Whether the lock had a live owner when it was observed.
+  final bool isHeld;
+
+  /// The process that owned the lock when it was observed.
+  final int? ownerPid;
+
+  /// The isolate that owned the lock when it was observed.
+  final int? ownerIsolateId;
+
+  /// The approximate time at which the lock was acquired.
+  ///
+  /// This is derived from the lock file's modification time.
+  final DateTime? acquiredAt;
+
+  /// Creates an observation of a lock held by a live owner.
+  const NamedLockObservation.held({
+    required this.name,
+    required int this.ownerPid,
+    required int this.ownerIsolateId,
+    required DateTime this.acquiredAt,
+  }) : isHeld = true;
+
+  /// Creates an observation of a lock without a live owner.
+  const NamedLockObservation.notHeld({required this.name})
+    : isHeld = false,
+      ownerPid = null,
+      ownerIsolateId = null,
+      acquiredAt = null;
 }
 
 ///

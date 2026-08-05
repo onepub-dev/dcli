@@ -167,14 +167,14 @@ packages:
       path: "/home/bsutton/git/dcli/dcli"
       relative: false
     source: path
-    version: "9.0.0"
+    version: "9.0.2"
   dcli_common:
     dependency: "direct overridden"
     description:
       path: "/home/bsutton/git/dcli/dcli_common"
       relative: false
     source: path
-    version: "9.0.0"
+    version: "9.0.1"
   dcli_core:
     dependency: "direct main"
     description:

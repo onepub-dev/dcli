@@ -167,14 +167,14 @@ packages:
       path: "../dcli"
       relative: true
     source: path
-    version: "9.0.0"
+    version: "9.0.2"
   dcli_common:
     dependency: "direct main"
     description:
       path: "../dcli_common"
       relative: true
     source: path
-    version: "9.0.0"
+    version: "9.0.1"
   dcli_core:
     dependency: "direct main"
     description:

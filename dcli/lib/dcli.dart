@@ -113,7 +113,8 @@ export 'src/util/exceptions.dart';
 export 'src/util/file_sort.dart' show Column, FileSort, SortDirection;
 export 'src/util/file_sync.dart';
 export 'src/util/file_util.dart';
-export 'src/util/named_lock.dart' show LockException, NamedLock;
+export 'src/util/named_lock.dart'
+    show LockException, NamedLock, NamedLockObservation;
 export 'src/util/process_helper.dart' show ProcessDetails, ProcessHelper;
 export 'src/util/pub_cache.dart';
 export 'src/util/remote.dart' show Remote;
