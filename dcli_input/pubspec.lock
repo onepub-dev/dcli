@@ -175,49 +175,49 @@ packages:
       path: "/home/bsutton/git/dcli/dcli"
       relative: false
     source: path
-    version: "9.0.0"
+    version: "9.0.2"
   dcli_common:
     dependency: "direct overridden"
     description:
       path: "/home/bsutton/git/dcli/dcli_common"
       relative: false
     source: path
-    version: "9.0.0"
+    version: "9.0.2"
   dcli_core:
     dependency: "direct main"
     description:
       path: "/home/bsutton/git/dcli/dcli_core"
       relative: false
     source: path
-    version: "9.0.0"
+    version: "9.0.2"
   dcli_sdk:
     dependency: "direct overridden"
     description:
       path: "/home/bsutton/git/dcli/dcli_sdk"
       relative: false
     source: path
-    version: "9.0.0"
+    version: "9.0.2"
   dcli_terminal:
     dependency: "direct main"
     description:
       path: "/home/bsutton/git/dcli/dcli_terminal"
       relative: false
     source: path
-    version: "9.0.0"
+    version: "9.0.2"
   dcli_test:
     dependency: "direct overridden"
     description:
       path: "/home/bsutton/git/dcli/dcli_test"
       relative: false
     source: path
-    version: "9.0.0"
+    version: "9.0.2"
   dcli_unit_tester:
     dependency: "direct overridden"
     description:
       path: "/home/bsutton/git/dcli/dcli_unit_tester"
       relative: false
     source: path
-    version: "9.0.0"
+    version: "9.0.2"
   document_throws:
     dependency: transitive
     description:
@@ -438,10 +438,10 @@ packages:
     dependency: transitive
     description:
       name: posix
-      sha256: "185ef7606574f789b40f289c233efa52e96dead518aed988e040a10737febb07"
+      sha256: bc1bad54ad2b735816e31f8d4600cfde6c7839975085ddfbca48b6c9f7c4044e
       url: "https://pub.dev"
     source: hosted
-    version: "6.5.0"
+    version: "6.5.2"
   pub_semver:
     dependency: transitive
     description:
