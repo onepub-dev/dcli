@@ -182,13 +182,6 @@ packages:
       relative: false
     source: path
     version: "9.0.2"
-  dcli_input:
-    dependency: "direct overridden"
-    description:
-      path: "/home/bsutton/git/dcli/dcli_input"
-      relative: false
-    source: path
-    version: "9.0.2"
   dcli_terminal:
     dependency: "direct main"
     description:
@@ -200,13 +193,6 @@ packages:
     dependency: "direct dev"
     description:
       path: "/home/bsutton/git/dcli/dcli_test"
-      relative: false
-    source: path
-    version: "9.0.2"
-  dcli_unit_tester:
-    dependency: "direct overridden"
-    description:
-      path: "/home/bsutton/git/dcli/dcli_unit_tester"
       relative: false
     source: path
     version: "9.0.2"

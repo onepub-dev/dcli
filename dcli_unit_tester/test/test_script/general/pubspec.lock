@@ -150,21 +150,21 @@ packages:
       path: "../../../../dcli_common"
       relative: true
     source: path
-    version: "9.0.1"
+    version: "9.0.2"
   dcli_core:
     dependency: "direct main"
     description:
       path: "../../../../dcli_core"
       relative: true
     source: path
-    version: "9.0.0"
+    version: "9.0.2"
   dcli_terminal:
     dependency: "direct overridden"
     description:
       path: "../../../../dcli_terminal"
       relative: true
     source: path
-    version: "9.0.0"
+    version: "9.0.2"
   document_throws:
     dependency: transitive
     description:
