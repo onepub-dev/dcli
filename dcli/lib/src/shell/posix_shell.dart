@@ -279,6 +279,12 @@ class UserEnvironment {
   // path to the active shell e.g. /bin/bash
   late final String? pathToShell;
 
+  /// The per-user runtime directory used by session services on Linux.
+  late final String? pathToXdgRuntimeDirectory;
+
+  /// The address of the user's D-Bus session.
+  late final String? dbusSessionBusAddress;
+
   // Save the details of the current user environment
   UserEnvironment.save() {
     username = _whoami();
@@ -286,6 +292,8 @@ class UserEnvironment {
     uid = getuid();
     pathToHome = HOME;
     pathToShell = env['SHELL'];
+    pathToXdgRuntimeDirectory = env['XDG_RUNTIME_DIR'];
+    dbusSessionBusAddress = env['DBUS_SESSION_BUS_ADDRESS'];
   }
 
   /// Creates a [UserEnvironment] from the SUDO env args
@@ -304,6 +312,31 @@ class UserEnvironment {
     username = env['SUDO_USER'] ?? env['USER'] ?? '';
 
     pathToShell = env['SHELL'];
+
+    final inheritedRuntimeDirectory = env['XDG_RUNTIME_DIR'];
+    final standardRuntimeDirectory = '/run/user/$uid';
+    if (Platform.isLinux &&
+        (inheritedRuntimeDirectory == null ||
+            inheritedRuntimeDirectory.isEmpty ||
+            (inheritedRuntimeDirectory.startsWith('/run/user/') &&
+                inheritedRuntimeDirectory != standardRuntimeDirectory))) {
+      pathToXdgRuntimeDirectory = standardRuntimeDirectory;
+    } else {
+      pathToXdgRuntimeDirectory = inheritedRuntimeDirectory;
+    }
+
+    final inheritedSessionBus = env['DBUS_SESSION_BUS_ADDRESS'];
+    if (Platform.isLinux &&
+        (inheritedSessionBus == null ||
+            inheritedSessionBus.isEmpty ||
+            (inheritedSessionBus.contains('path=/run/user/') &&
+                !inheritedSessionBus.contains(
+                  'path=$standardRuntimeDirectory/',
+                )))) {
+      dbusSessionBusAddress = 'unix:path=$pathToXdgRuntimeDirectory/bus';
+    } else {
+      dbusSessionBusAddress = inheritedSessionBus;
+    }
   }
 
   /// Build the user environment
@@ -334,6 +367,8 @@ HOME: $pathToHome
 USER: $username
 LOGNAME: $username
 SHELL: ${env['SHELL']}
+XDG_RUNTIME_DIR: $pathToXdgRuntimeDirectory
+DBUS_SESSION_BUS_ADDRESS: $dbusSessionBusAddress
 gid:  $gid
 uid:  $uid''',
     );
@@ -346,6 +381,10 @@ uid:  $uid''',
     env['USER'] = username;
     env['LOGNAME'] = username;
     env['SHELL'] = pathToShell;
+    if (Platform.isLinux) {
+      env['XDG_RUNTIME_DIR'] = pathToXdgRuntimeDirectory;
+      env['DBUS_SESSION_BUS_ADDRESS'] = dbusSessionBusAddress;
+    }
   }
 
   /// If [condition] is true then we call [one] then [two].

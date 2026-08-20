@@ -147,6 +147,12 @@ abstract class Shell {
   /// privileges so any files that are created/modified get the original
   /// user's uid/gid.
   ///
+  /// The user environment is also restored in dcli's [env] map and for child
+  /// processes. On Linux this includes the XDG runtime directory and D-Bus
+  /// session address used by per-user desktop and credential services. Native
+  /// libraries should be given these values explicitly; this method does not
+  /// mutate libc's process environment.
+  ///
   /// You should use this method in conjuctions with [withPrivileges]
   /// so that only specific parts of your code run with privileges.
   ///
@@ -206,8 +212,10 @@ abstract class Shell {
 
   /// Identical to [withPrivileges] but allows you to run an
   /// async action.
-  Future<void> withPrivilegesAsync(RunPrivilegedAsync action,
-      {bool allowUnprivileged = false});
+  Future<void> withPrivilegesAsync(
+    RunPrivilegedAsync action, {
+    bool allowUnprivileged = false,
+  });
 
   /// Returns a message informing the user that they need to run
   /// as a priviledged user to run an app.
