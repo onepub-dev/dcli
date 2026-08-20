@@ -43,7 +43,7 @@ void chmod(String path, {required String permission}) =>
 
 /// Implementatio for [chmod] function.
 class _ChMod extends DCliFunction {
-// this.user, this.group, this.other, this.path
+  // this.user, this.group, this.other, this.path
 
   /// Throws [ChModException] fithe [path] doesn't exist.
   /// @Throwing(ArgumentError)
@@ -64,7 +64,7 @@ class _ChMod extends DCliFunction {
 
   //  String chmod({int user, int group, int other, this.path}) {}
 
-/*  String buildPermission(int permission) {
+  /*  String buildPermission(int permission) {
     bool read = ((permission & 4) >> 2) == 1;
     bool write = ((permission & 2) >> 1) == 1;
     bool execute = ((permission & 1)) == 1;
@@ -75,5 +75,5 @@ class _ChMod extends DCliFunction {
 /// Thrown if the [chmod] function encounters an error.
 class ChModException extends DCliFunctionException {
   /// Thrown if the [chmod] function encounters an error.
-  ChModException(super.message, [super.stacktrace]);
+  ChModException(super.message, [super.stackTrace]);
 }

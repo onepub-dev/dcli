@@ -40,5 +40,5 @@ class Cat extends DCliFunction {
 /// Thrown if the [cat] function encouters an error.
 class CatException extends DCliFunctionException {
   /// Thrown if the [cat] function encouters an error.
-  CatException(super.message, [super.stacktrace]);
+  CatException(super.message, [super.stackTrace]);
 }

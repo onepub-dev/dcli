@@ -10,7 +10,7 @@ environment:
   sdk: '>=3.0.0 <4.0.0'
 dependencies:
   async: ^2.5.0
-  circular_buffer: ^0.12.0
+  circular_buffer: ^0.13.0
   collection: ^1.15.0
   crypto: ^3.0.1
   dcli_common: ^9.0.2
@@ -22,7 +22,7 @@ dependencies:
   stack_trace: ^1.10.0
   uuid: ^4.1.0
 dev_dependencies:
-  lint_hard: ^7.1.2
+  lint_hard: ^8.0.1
   synchronized: ^3.1.0
   test: ^1.24.7
 platforms:

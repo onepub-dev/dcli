@@ -9,7 +9,7 @@ analyzer:
     avoid_catches_without_on_clauses: ignore
 
 plugins:
-  lint_hard:
+  # lint_hard:
 #     path: ../../lint_hard/document_throws
 #   # lint_hard:
 #   #   path: ../../lint_hard/lint_hard

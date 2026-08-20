@@ -17,7 +17,7 @@ import '../../dcli.dart';
 /// On Windows this command has no effect.
 ///
 /// [path] is the path to the file or directory that we are changing the
-/// ownership of. 
+/// ownership of.
 /// [path] may be absolute (preferred) or relative.
 ///
 /// [user] is the posix user that will own the file/directory. If no [user] is specified
@@ -39,7 +39,7 @@ void chown(String path, {String? user, String? group, bool recursive = true}) =>
 
 /// Implementatio for [chown] function.
 class _ChOwn extends core.DCliFunction {
-// this.user, this.group, this.other, this.path
+  // this.user, this.group, this.other, this.path
 
   /// Throws [ChOwnException].
   /// @Throwing(ArgumentError)
@@ -68,11 +68,12 @@ class _ChOwn extends core.DCliFunction {
     final pgroup = posix.getgrnam(group);
     posix.chown(path, passwd.uid, pgroup.gid);
     if (isDirectory(path) && recursive) {
-      find('*',
-              includeHidden: true,
-              types: [Find.directory, Find.file, Find.link],
-              workingDirectory: path)
-          .forEach((file) => posix.chown(path, passwd.uid, pgroup.gid));
+      find(
+        '*',
+        includeHidden: true,
+        types: [Find.directory, Find.file, Find.link],
+        workingDirectory: path,
+      ).forEach((file) => posix.chown(path, passwd.uid, pgroup.gid));
     }
   }
 }
@@ -80,5 +81,5 @@ class _ChOwn extends core.DCliFunction {
 /// Thrown if the [chown] function encounters an error.
 class ChOwnException extends core.DCliFunctionException {
   /// Thrown if the [chown] function encounters an error.
-  ChOwnException(super.message, [super.stacktrace]);
+  ChOwnException(super.message, [super.stackTrace]);
 }

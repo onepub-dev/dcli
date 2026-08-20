@@ -240,8 +240,9 @@ compile [--nowarmup] [--install] [--overwrite] [<script path.dart>, <script path
     // we must be passed the package name and optionally a version
     if (scriptList.length != 1 && scriptList.length != 2) {
       throw InvalidCommandArgumentException(
-          'The "--package" flag must be followed by '
-          'the name of the package and optionally a version');
+        'The "--package" flag must be followed by '
+        'the name of the package and optionally a version',
+      );
     }
 
     final packageName = scriptList[0];
@@ -271,7 +272,8 @@ compile [--nowarmup] [--install] [--overwrite] [<script path.dart>, <script path
   Future<void> compilePackage(String packageName, {String? version}) async {
     if (packageName.contains(separator)) {
       throw InvalidCommandArgumentException(
-          'The package must not include a path.');
+        'The package must not include a path.',
+      );
     }
     if (!PubCache().isInstalled(packageName) &&
         !PubCache().isGloballyActivated(packageName)) {
@@ -284,7 +286,8 @@ Run:
 
     if (!exists(Settings().pathToDCli)) {
       throw DCliNotInstalledException(
-          "You must first install DCli by running 'dcli install'");
+        "You must first install DCli by running 'dcli install'",
+      );
     }
 
     late final String pathToPackage;
@@ -292,13 +295,16 @@ Run:
     /// Find all the the exectuables the package exposes
     if (version == null) {
       late final version = PubCache().findPrimaryVersion(packageName);
-      pathToPackage =
-          PubCache().pathToPackage(packageName, version?.toString() ?? '');
+      pathToPackage = PubCache().pathToPackage(
+        packageName,
+        version?.toString() ?? '',
+      );
     } else {
       final pathTo = PubCache().findVersion(packageName, version);
       if (pathTo == null) {
         throw InvalidCommandArgumentException(
-            'The requested version $version does not exist');
+          'The requested version $version does not exist',
+        );
       }
       pathToPackage = pathTo;
     }
@@ -308,18 +314,24 @@ Run:
       /// contaminate the cache. Don't know if this is actually
       /// a problem..
       print('Creating temp copy of package $packageName ${version ?? ""}');
-      copyTree(pathToPackage, pathToTempPackage,
+      copyTree(
+        pathToPackage,
+        pathToTempPackage,
 
-          /// dart allows a user to publish the override even though it should
-          /// never be published and breaks build from cache if it exists.
-          filter: (file) => basename(file) != 'pubspec_overrides.yaml');
+        /// dart allows a user to publish the override even though it should
+        /// never be published and breaks build from cache if it exists.
+        filter: (file) => basename(file) != 'pubspec_overrides.yaml',
+      );
       await DartProject.fromPath(pathToTempPackage).warmup();
 
       final pubspec = PubSpec.load(directory: pathToTempPackage);
 
       for (final exe in pubspec.executables.list) {
-        final pathToOutput =
-            join(pathToTempPackage, dirname(exe.scriptPath), exe.name);
+        final pathToOutput = join(
+          pathToTempPackage,
+          dirname(exe.scriptPath),
+          exe.name,
+        );
         print(green('Compiling ${exe.name}...'));
         DartSdk().runDartCompiler(
           DartScript.fromFile(join(pathToTempPackage, exe.scriptPath)),
@@ -360,7 +372,8 @@ class InstallFlag extends Flag {
   String get abbreviation => 'i';
 
   @override
-  String description() => '''
+  String description() =>
+      '''
       Installs the compiled script into your path '''
       '${Settings().pathToDCliBin}';
 }
@@ -392,7 +405,8 @@ class PackageFlag extends Flag {
   String get abbreviation => 'p';
 
   @override
-  String description() => '''
+  String description() =>
+      '''
       Compile a globally installed dart package and adds it to your path '${Settings().pathToDCliBin}'.
       If a version isn't passed then we compile the most recent stable version.
       Run 'dart pub global activate <package name>' 

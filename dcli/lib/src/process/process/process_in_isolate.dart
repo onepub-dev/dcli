@@ -16,6 +16,7 @@ import 'isolate_channel.dart';
 import 'mailbox_extension.dart';
 import 'message.dart';
 import 'process_settings.dart';
+
 // import 'process_sync.dart';
 
 /// Setting this to try will cause the isolate to dump lots
@@ -50,8 +51,11 @@ Future<void> _startIsolate(IsolateChannel channel) {
 Future<void> _body(IsolateChannelSendable channel) async {
   isolateLogger(() => 'body entered');
 
-  isolateLogger(() => green(
-      '''process running: ${channel.process.command} ${channel.process.args}'''));
+  isolateLogger(
+    () => green(
+      '''process running: ${channel.process.command} ${channel.process.args}''',
+    ),
+  );
 
   /// We are now running in the isolate.
   isolateLogger(() => 'started');
@@ -79,14 +83,20 @@ Future<void> _body(IsolateChannelSendable channel) async {
         /// subscribe to data the process writes to stdout and send
         /// it back to the parent isolate
         stdoutSub = _sendStdoutToPrimary(
-            process, mailboxToPrimaryIsolate, stdoutStreamDone);
+          process,
+          mailboxToPrimaryIsolate,
+          stdoutStreamDone,
+        );
 
         isolateLogger(() => 'listen of stdout completed');
 
         /// subscribe to data the process writes to stderr and send
         /// it back to the parent isolate
         stderrSub = _sendStderrToPrimary(
-            process, mailboxToPrimaryIsolate, stderrStreamDone);
+          process,
+          mailboxToPrimaryIsolate,
+          stderrStreamDone,
+        );
 
         isolateLogger(() => 'waiting in isolate for process to exit');
       }
@@ -113,33 +123,43 @@ Future<void> _body(IsolateChannelSendable channel) async {
         /// The primary isolate does know its a detached process
         /// so it can still do something 'interesting'.
         isolateLogger(
-            () => "We run a detached process so we can't get the exit code");
+          () => "We run a detached process so we can't get the exit code",
+        );
       }
     }
 
     if (channel.process.hasStdio) {
-      await Future.wait<void>(
-          [stdoutStreamDone.future, stderrStreamDone.future]);
+      await Future.wait<void>([
+        stdoutStreamDone.future,
+        stderrStreamDone.future,
+      ]);
 
       isolateLogger(() => 'stdout and stderr streams completed');
     }
 
     isolateLogger(
-        () => 'sending exit message to primary isolate: exitCode $exitCode');
+      () => 'sending exit message to primary isolate: exitCode $exitCode',
+    );
     await mailboxToPrimaryIsolate.postMessage(Message.exit(exitCode));
 
     if (channel.process.hasStdio) {
       await stdoutSub.cancel();
       await stderrSub.cancel();
     }
-  } on RunException catch (e, _) {
+  } on RunException catch (e) {
     isolateLogger(() => 'Exception caught: $e');
     await mailboxToPrimaryIsolate.postMessage(Message.runException(e));
   } catch (e, st) {
-    await mailboxToPrimaryIsolate.postMessage(Message.runException(
+    await mailboxToPrimaryIsolate.postMessage(
+      Message.runException(
         RunException.fromException(
-            e, channel.process.command, channel.process.args,
-            stackTrace: Trace.from(st))));
+          e,
+          channel.process.command,
+          channel.process.args,
+          stackTrace: Trace.from(st),
+        ),
+      ),
+    );
   }
 
   /// If _run throws then this port won't have been initialised.
@@ -156,8 +176,9 @@ Future<Process> _run(ProcessSettings processSettings) async {
 
   final process = runner.process!;
 
-  isolateLogger(() =>
-      'process launched ${processSettings.command} ${processSettings.args}');
+  isolateLogger(
+    () => 'process launched ${processSettings.command} ${processSettings.args}',
+  );
   return process;
 }
 
@@ -171,66 +192,80 @@ Future<Process> _run(ProcessSettings processSettings) async {
 /// Throws [ProcessSyncException].
 /// @Throwing(ProcessSyncException)
 /// @Throwing(RangeError)
-ReceivePort _handleStdin(Process process) => ReceivePort()
-  ..listen((message) async {
-    isolateLogger(() => ' recieved message');
-    if (message is List<int> || message is String) {
-      // We received bytes from the primary isolate to write into stdin.
-      if (message is String) {
-        message = utf8.encode(message);
-      }
-      process.stdin.add(message as List<int>);
-      await process.stdin.flush();
+ReceivePort _handleStdin(Process process) =>
+    ReceivePort()..listen((message) async {
+      isolateLogger(() => ' recieved message');
+      if (message is List<int> || message is String) {
+        // We received bytes from the primary isolate to write into stdin.
+        if (message is String) {
+          message = utf8.encode(message);
+        }
+        process.stdin.add(message as List<int>);
+        await process.stdin.flush();
 
-      // /// The tell the sender that we got their data and
-      // /// sent it to stdin
-      // await mailboxToPrimaryIsolate.postMessage(Message.ack());
-    } else {
-      throw ProcessSyncException('Wrong message: $message');
-    }
-  });
+        // /// The tell the sender that we got their data and
+        // /// sent it to stdin
+        // await mailboxToPrimaryIsolate.postMessage(Message.ack());
+      } else {
+        throw ProcessSyncException('Wrong message: $message');
+      }
+    });
 
 /// Setup listeners for stderr to send the data back to the primary
 /// isolate via a mailbox.
-StreamSubscription<List<int>> _sendStderrToPrimary(Process process,
-    Mailbox mailboxToPrimaryIsolate, Completer<void> stderrStreamDone) {
+StreamSubscription<List<int>> _sendStderrToPrimary(
+  Process process,
+  Mailbox mailboxToPrimaryIsolate,
+  Completer<void> stderrStreamDone,
+) {
   late StreamSubscription<List<int>> stderrSub;
 
   // the return is used in the body
   // ignore: join_return_with_assignment
-  stderrSub = process.stderr.listen((data) async {
-    stderrSub.pause();
-    isolateLogger(() => 'recieved from called processes stderr:$data');
-    final message = Message.stderr(data as Uint8List);
-    await mailboxToPrimaryIsolate.postMessage(message);
-    stderrSub.resume();
-  }, onDone: () {
-    isolateLogger(() => 'marking stderr stream completed');
-    stderrStreamDone.complete();
-  });
+  stderrSub = process.stderr.listen(
+    (data) async {
+      stderrSub.pause();
+      isolateLogger(() => 'recieved from called processes stderr:$data');
+      final message = Message.stderr(data as Uint8List);
+      await mailboxToPrimaryIsolate.postMessage(message);
+      stderrSub.resume();
+    },
+    onDone: () {
+      isolateLogger(() => 'marking stderr stream completed');
+      stderrStreamDone.complete();
+    },
+  );
 
   return stderrSub;
 }
 
 /// Setup listeners for stdout to send the data back to the primary
 /// isolate via a mailbox.
-StreamSubscription<List<int>> _sendStdoutToPrimary(Process process,
-    Mailbox mailboxToPrimaryIsolate, Completer<void> stdoutStreamDone) {
+StreamSubscription<List<int>> _sendStdoutToPrimary(
+  Process process,
+  Mailbox mailboxToPrimaryIsolate,
+  Completer<void> stdoutStreamDone,
+) {
   late StreamSubscription<List<int>> stdoutSub;
 
   // the return is used in the body
   // ignore: join_return_with_assignment
-  stdoutSub = process.stdout.listen((data) async {
-    stdoutSub.pause();
-    isolateLogger(
-        () => 'posting data to primaries stdout: ${utf8.decode(data)}');
-    await mailboxToPrimaryIsolate
-        .postMessage(Message.stdout(data as Uint8List));
-    stdoutSub.resume();
-  }, onDone: () {
-    isolateLogger(() => 'marking stdout stream completed');
-    stdoutStreamDone.complete();
-  });
+  stdoutSub = process.stdout.listen(
+    (data) async {
+      stdoutSub.pause();
+      isolateLogger(
+        () => 'posting data to primaries stdout: ${utf8.decode(data)}',
+      );
+      await mailboxToPrimaryIsolate.postMessage(
+        Message.stdout(data as Uint8List),
+      );
+      stdoutSub.resume();
+    },
+    onDone: () {
+      isolateLogger(() => 'marking stdout stream completed');
+      stdoutStreamDone.complete();
+    },
+  );
   return stdoutSub;
 }
 
