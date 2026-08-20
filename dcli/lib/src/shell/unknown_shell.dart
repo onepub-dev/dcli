@@ -178,9 +178,9 @@ class UnknownShell with ShellMixin {
   @override
   Future<bool> install({bool installDart = false, bool activate = true}) async {
     if (core.Settings().isLinux) {
-      return LinuxDCliInstaller().install(installDart: installDart);
+      return await LinuxDCliInstaller().install(installDart: installDart);
     } else if (Settings().isWindows) {
-      return WindowsDCliInstaller().install(installDart: installDart);
+      return await WindowsDCliInstaller().install(installDart: installDart);
     } else if (core.Settings().isMacOS) {
       return MacOSDCliInstaller().install(installDart: installDart);
     } else {
@@ -210,8 +210,11 @@ class UnknownShell with ShellMixin {
 
   @override
   void withPrivileges(RunPrivileged action, {bool allowUnprivileged = false}) {
-    verbose(() => 'withPrivileges called on UnknownShell. '
-        'action called with no privilege changes.');
+    verbose(
+      () =>
+          'withPrivileges called on UnknownShell. '
+          'action called with no privilege changes.',
+    );
 
     restorePrivileges();
     action();
@@ -219,10 +222,15 @@ class UnknownShell with ShellMixin {
   }
 
   @override
-  Future<void> withPrivilegesAsync(RunPrivilegedAsync action,
-      {bool allowUnprivileged = false}) async {
-    verbose(() => 'withPrivileges called on UnknownShell. '
-        'action called with no privilege changes.');
+  Future<void> withPrivilegesAsync(
+    RunPrivilegedAsync action, {
+    bool allowUnprivileged = false,
+  }) async {
+    verbose(
+      () =>
+          'withPrivileges called on UnknownShell. '
+          'action called with no privilege changes.',
+    );
 
     restorePrivileges();
     await action();

@@ -408,7 +408,7 @@ class _Fetch extends core.DCliFunction {
       cancelOnError: true,
     );
 
-    return completer.future;
+    return await completer.future;
   }
 
   Map<String, List<String>> extractHeaders(
