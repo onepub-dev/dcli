@@ -1,5 +1,5 @@
 # 10.0.0
-- BREAKING: change the case of stacktrace to stackTrace to confirm with 
+- BREAKING: change the case of stacktrace to stackTrace to conform with 
 parent exceptions in a number of DCliException dervied classes.
 - upgraded lint_hard and circular buffer deps. 
 
