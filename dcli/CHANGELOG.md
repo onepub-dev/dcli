@@ -1,3 +1,12 @@
+# 10.0.0
+- BREAKING: change the case of stacktrace to stackTrace to confirm with 
+parent exceptions in a number of DCliException dervied classes.
+- upgraded lint_hard and circular buffer deps. 
+
+ - we now restore the XDG_RUNTIME_DIR and DBUS_SESSION_BUS_ADDRESS env vars on linux when releasing sudo priviledges.
+   This is to help give tooling access to the linux credential store.
+ - 
+
 # 9.0.2
 - Added `NamedLock.observe()` for read-only diagnostic and monitoring snapshots
   without acquiring or otherwise affecting the observed lock.
