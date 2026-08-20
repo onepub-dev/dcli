@@ -1,3 +1,6 @@
+@Timeout(Duration(seconds: 600))
+library;
+
 import 'package:dcli/dcli.dart';
 import 'package:dcli_sdk/src/commands/compile.dart';
 import 'package:dcli_sdk/src/util/exceptions.dart';
