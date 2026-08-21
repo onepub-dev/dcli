@@ -167,49 +167,49 @@ packages:
       path: "/home/bsutton/git/dcli/dcli"
       relative: false
     source: path
-    version: "9.0.2"
+    version: "10.0.0"
   dcli_core:
     dependency: "direct overridden"
     description:
       path: "/home/bsutton/git/dcli/dcli_core"
       relative: false
     source: path
-    version: "9.0.2"
+    version: "10.0.0"
   dcli_input:
     dependency: "direct overridden"
     description:
       path: "/home/bsutton/git/dcli/dcli_input"
       relative: false
     source: path
-    version: "9.0.2"
+    version: "10.0.0"
   dcli_sdk:
     dependency: "direct overridden"
     description:
       path: "/home/bsutton/git/dcli/dcli_sdk"
       relative: false
     source: path
-    version: "9.0.2"
+    version: "10.0.0"
   dcli_terminal:
     dependency: "direct overridden"
     description:
       path: "/home/bsutton/git/dcli/dcli_terminal"
       relative: false
     source: path
-    version: "9.0.2"
+    version: "10.0.0"
   dcli_test:
     dependency: "direct overridden"
     description:
       path: "/home/bsutton/git/dcli/dcli_test"
       relative: false
     source: path
-    version: "9.0.2"
+    version: "10.0.0"
   dcli_unit_tester:
     dependency: "direct overridden"
     description:
       path: "/home/bsutton/git/dcli/dcli_unit_tester"
       relative: false
     source: path
-    version: "9.0.2"
+    version: "10.0.0"
   document_throws:
     dependency: transitive
     description:

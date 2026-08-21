@@ -1,3 +1,10 @@
+# 10.0.0
+- fixed completion test.
+- fixed a time out in the compile test.
+- fixed lints after upgrade lint_hard.
+- we now restore the XDG_RUNTIME_DIR and DBUS_SESSION_BUS_ADDRESS env vars on linux when releasing sudo priviledges.
+- Upraded dependencies: lint_hard, cixrcular_buffer. Modifed stacktrace to stackTrace in dcli exception dervived exceptions for consistency.
+
 # 9.0.2
 - added the observe() method to NamedLock so you can see if a lock is being held and by who.
 
