@@ -28,11 +28,9 @@ void main() {
         progress: Progress(results.add),
       );
 
-      // if warmup hasn't been run then we have the results of a
-      //  pub get in the the output.
       final expected = ['clean', 'compile', 'create'];
 
-      expect(results, equals(expected));
+      expect(_completionOutput(results, expected.length), equals(expected));
     });
   });
 
@@ -48,11 +46,9 @@ void main() {
         progress: Progress(results.add),
       );
 
-      // if warmup hasn't been run then we have the results of a
-      //  pub get in the the output.
       final expected = ['clean'];
 
-      expect(results, equals(expected));
+      expect(_completionOutput(results, expected.length), equals(expected));
     });
   });
 
@@ -78,11 +74,12 @@ void main() {
           rethrow;
         }
 
-        // if warmup hasn't been run then we have the results of
-        // a pub get in the the output.
         final expected = ['_test_a.dart', '_test_ab.dart'];
 
-        expect(results, unorderedEquals(expected));
+        expect(
+          _completionOutput(results, expected.length),
+          unorderedEquals(expected),
+        );
 
         delete(join(fs.fsRoot, '_test_a.dart'));
         delete(join(fs.fsRoot, '_test_ab.dart'));
@@ -106,14 +103,26 @@ void main() {
           progress: Progress(results.add),
         );
 
-        // if warmup hasn't been run then we have the results of
-        // a pub get in the the output.
         final expected = ['_test_a.dart', '_test_ab.dart'];
 
-        expect(results, unorderedEquals(expected));
+        expect(
+          _completionOutput(results, expected.length),
+          unorderedEquals(expected),
+        );
 
         delete(join(fs.fsRoot, '_test_ab.dart'));
       });
     });
   });
+}
+
+/// A source-activated pub executable may run dependency resolution before
+/// invoking the executable. Pub writes that status to stdout, followed by the
+/// executable's output, so completion candidates are the trailing lines.
+List<String?> _completionOutput(List<String?> output, int candidateCount) {
+  if (output.length <= candidateCount) {
+    return output;
+  }
+
+  return output.sublist(output.length - candidateCount);
 }
