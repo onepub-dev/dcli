@@ -32,7 +32,7 @@ dependencies:
   posix: ^6.5.1
   pub_semver: ^2.0.0
   pubspec_lock: ^3.0.1
-  pubspec_manager: ^3.0.0
+  pubspec_manager: ^4.0.0
   scope: ^5.1.0
   settings_yaml: ^8.2.0
   stack_trace: ^1.10.0

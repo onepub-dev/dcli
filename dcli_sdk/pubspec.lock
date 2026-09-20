@@ -440,10 +440,10 @@ packages:
     dependency: "direct main"
     description:
       name: pubspec_manager
-      sha256: "48b0ac5a3bf791d2faceb1f00977c396d77e57878b544d21aad0c3d38986ec79"
+      sha256: b12a50a6d345df07c31292b108b6033593757026a179a527fa1716a72ed77566
       url: "https://pub.dev"
     source: hosted
-    version: "3.2.1"
+    version: "4.0.1"
   scope:
     dependency: "direct main"
     description:
