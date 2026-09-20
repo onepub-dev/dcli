@@ -1,3 +1,7 @@
+# 10.1.0
+- Upgrade pubspec_manager to 4.0.0
+- Add GitHub Actions workflow to publish DCli
+
 # 10.0.0
 - fixed completion test.
 - fixed a time out in the compile test.
