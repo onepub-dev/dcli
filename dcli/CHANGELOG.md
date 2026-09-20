@@ -1,3 +1,8 @@
+# 10.1.0
+- Upgrade pubspec_manager to 4.0.0
+- Add GitHub Actions workflow to publish DCli
+
+
 # 10.0.0
 - BREAKING: change the case of stacktrace to stackTrace to conform with 
 parent exceptions in a number of DCliException dervied classes.
