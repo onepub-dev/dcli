@@ -1,0 +1,14 @@
+name: Publish DCli to OnePub.
+on: workflow_dispatch
+permissions:
+  contents: read
+  id-token: write
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: dart-lang/setup-dart@v1
+      - run: dart pub global activate onepub '^6.4.0'
+      - run: onepub login oidc --publish-only
+      - run: dart pub publish --force
