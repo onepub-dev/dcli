@@ -1,3 +1,14 @@
+# 10.3.0
+- Add packed compilation and chunked resources
+- Released 10.2.0.
+- Released 10.2.0.
+- Released 10.2.0.
+- Released 10.2.0.
+- Released 10.2.0.
+- Released 10.2.0.
+- Released 10.2.0.
+
+
 # 10.2.0
 - Add native library bundling to dcli compile
 - Released 10.1.0.
