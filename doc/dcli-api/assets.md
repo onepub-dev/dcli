@@ -6,15 +6,11 @@ DCli provides a set of asset management tools and an api to work around this lim
 
 DCli refers to assets as 'resources' to differentiate them from flutter assets.
 
-{% hint style="info" %}
-If you use resources in a package that will be publish to pub.dev, remember there is a 10MB limit on the entire dart package.
-{% endhint %}
+DCli packages resources into generated Dart libraries and provides an API to unpack them at runtime.
 
-DCli does this by packaging a resource into a .dart library and then providing an api that allows you to unpack the resources at runtime.
+The `dcli pack` command splits each file into parts of at most 256 KiB, gzip-compresses each part independently, and Base64-encodes the compressed data. Each part has its own generated class. Packing and extraction process one part at a time.
 
-The `dcli pack` command, base64 encodes each file and writes them as a multi-line string into a dart library under src/dcli/resource. The name of the dart library is randomly generated.
-
-The pack command also creates a register of the packed libraries in src/dcli/resource/generated/resource\_registry.g.dart.
+The command also creates `lib/src/dcli/resource/generated/resource_registry.g.dart`, which maps resource paths to their parent classes.
 
 DCli expects all resources to located within your dart project under:
 
@@ -40,53 +36,19 @@ The 'pack' command will scan the '\<project root>/resource' directory and all su
 
 Each library name is generated using a md5 hash prefixed with the letter 'A' to make a valid class name. The library name is of the form A\<md5hash>.g.dart
 
-So the following resources:
+For example, a resource's generated files might be:
 
-```
-<project root>/resource
-                    /images/photo.png
-                    /data/zips/installer.zip
-```
-
-Will result in to:
-
-```
-<project root>/lib/src/dcli/resource/generated
-                            /resource_registry.g.dart
-                            /A21302b1b380201578fc8ce748f5d9ac8.g.dart
-                            /A49bc9b7e40a7f3042a5bbb3e476b4dc4.g.dart
+```text
+lib/src/dcli/resource/generated/
+  resource_registry.g.dart
+  A21302b1b380201578fc8ce748f5d9ac8.g.dart
+  A21302b1b380201578fc8ce748f5d9ac8Part0.g.dart
+  A21302b1b380201578fc8ce748f5d9ac8Part1.g.dart
 ```
 
-The contents of each resource is base64 encoded into a multi-line string. So the photo.png.dart file will something look like:
+The parent class exposes `checksum`, `originalPath`, and an ordered `parts` iterable. Each part extends `PackedResourcePart` and supplies its uncompressed `length` and compressed Base64 `content`. The registry and `unpack()` API stay the same; your application does not need to refer to individual part classes.
 
-````dart
-class A21302b1b380201578fc8ce748f5d9ac8 extends PackedResource {
-  /// PackedResource - local_batman.yaml
-  const A21302b1b380201578fc8ce748f5d9ac8();
-
-  /// A hash of the resource (pre packed) calculated by
-  /// [calculateHash].
-  /// This hash can be used to check if the resource needs to
-  /// be updated on the target system.
-  /// Use :
-  /// ```dart
-  ///   calculateHash(pathToResource).hexEncode() == packResource.checksum
-  /// ```
-  /// to compare the checksum of the local file with
-  /// this checksum
-  @override
-  String get checksum =>
-      '14189a469cf7f78af8cd8d4e03815ea72412cea6cbe94779a8db9f736e147300';
-
-  /// <package>/resource relative path to the original resource.
-  @override
-  String get originalPath => 'lphoto.png';
-
-  @override
-  String get content => '''
-bG9nUGF0aDogL3Zhci9sb2cvYmF0bWFuLmxvZwoKZW1haWxfc2VydmVyX2hvc3Q6IGxvY2FsaG9zdApl
-bWFpbF9zZXJ2ZXJfcG9ydDogMjUKZW1haW
-````
+Existing generated resources using a single Base64 `content` string still unpack with the updated library. Newly generated resources require a DCli version supporting `PackedResourcePart`. Use `unpack()` for either format; the parent `content` getter is unsupported for multipart resources.
 
 ## Resource Registry
 
@@ -279,11 +241,11 @@ By default the pack command ignores any hidden files (those beginning with a '.'
 
 ## Limits
 
-If you plan on publishing your project to pub.dev be aware that pub.dev has a maximum package size of 10MB.
+Compression happens before Base64 encoding. Compressible resources can become substantially smaller, while already-compressed or random data can grow due to Base64 and generated-source overhead.
 
-The base64 encoding process increases the file size by about 33%.
+Packing and extraction use bounded chunks, but generated source size and compiler memory still grow with the data. Check the size limits of your package host before publishing large resources.
 
-For apps that you deploy locally the limits are not documented but are probably constrained by your systems memory - so fairly large.
+`dcli compile --packed` embeds the compiled application and native libraries; it does not regenerate resources. Run `dcli pack` first whenever resource files change, regardless of the compile mode you choose.
 
 ## Automating packing of resources
 

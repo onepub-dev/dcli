@@ -1,3 +1,17 @@
+# 10.3.0
+
+- Add `dcli compile --packed` to distribute the compiled application and native
+  libraries as one compressed, self-extracting executable. Keep the existing
+  hidden bundle mode by default. Cache extraction is serialized, verifies files,
+  and repairs missing or corrupted contents.
+- Split `dcli pack` resources across independently gzip-compressed 256 KiB part
+  classes. Packing and extraction process parts serially with bounded buffers.
+  Existing generated resources remain readable; new resources require the
+  updated library and use `unpack()` rather than the legacy `content` getter.
+- Make the pack command select the working project when invoked from source.
+- Report final launcher, executable, bundle, and library paths after compilation
+  and installation, suppressing temporary compiler output paths.
+
 # 10.2.0
 
 - Detect native build hooks during compilation and bundle native libraries with

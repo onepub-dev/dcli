@@ -96,7 +96,7 @@ export 'src/functions/tail.dart' show tail;
 export 'src/functions/which.dart' show which;
 export 'src/installers/installer.dart' show installFromSourceKey;
 export 'src/progress/progress.dart' show Progress;
-export 'src/resources/packed_resource.dart' show PackedResource;
+export 'src/resources/packed_resource.dart' show PackedResource, PackedResourcePart;
 export 'src/resources/resources.dart' show ResourceException, Resources;
 export 'src/script/compiled_executable.dart';
 export 'src/script/dart_project.dart';

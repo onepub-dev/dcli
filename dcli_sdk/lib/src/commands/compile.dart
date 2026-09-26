@@ -22,6 +22,7 @@ class CompileCommand extends Command {
     InstallFlag(),
     OverWriteFlag(),
     PackageFlag(),
+    PackedFlag(),
     //WatchFlag()
   ];
 
@@ -157,7 +158,11 @@ class CompileCommand extends Command {
         }
       }
 
-      script.compile(install: install, overwrite: overwrite);
+      script.compile(
+        install: install,
+        overwrite: overwrite,
+        packed: flagSet.isSet(PackedFlag()),
+      );
     } on RunException catch (e) {
       exitCode = e.exitCode ?? -1;
     }
@@ -166,15 +171,15 @@ class CompileCommand extends Command {
 
   @override
   String description({bool extended = false}) => '''
-Compiles the given list of scripts using dart's native compiler or a a
-globally activated package.
-   Only required if you want super fast execution.
-   If no scripts are passed then all scripts in the current directory are compiled.''';
+Compile scripts or a globally activated package into native executables.
+   Native libraries use a hidden bundle by default; --packed embeds the bundle
+   in one self-extracting executable.
+   If no scripts are passed, compile all scripts in the current directory.''';
 
   @override
   String usage() {
     const description = '''
-compile [--nowarmup] [--install] [--overwrite] [<script path.dart>, <script path.dart>,...] | --package <globally activate package name>''';
+compile [--nowarmup] [--install] [--overwrite] [--packed] [<script path.dart>, <script path.dart>,...] | --package <globally activate package name>''';
 
     return description;
   }
@@ -333,15 +338,23 @@ Run:
           exe.name,
         );
         print(green('Compiling ${exe.name}...'));
-        DartSdk().runDartCompiler(
-          DartScript.fromFile(join(pathToTempPackage, exe.scriptPath)),
-          pathToExe: pathToOutput,
-          progress: Progress(print, stderr: print),
-          workingDirectory: pathToTempPackage,
-        ).install(
-          join(Settings().pathToDCliBin, basename(pathToOutput)),
-          overwrite: true,
-        );
+        DartSdk()
+            .runDartCompiler(
+              DartScript.fromFile(join(pathToTempPackage, exe.scriptPath)),
+              pathToExe: pathToOutput,
+              packed: flagSet.isSet(PackedFlag()),
+              progress: Progress((line) {
+                if (!line.startsWith('Generated: ')) {
+                  print(line);
+                }
+              }, stderr: print),
+              workingDirectory: pathToTempPackage,
+            )
+            .install(
+              join(Settings().pathToDCliBin, basename(pathToOutput)),
+              overwrite: true,
+            )
+            .report();
       }
     });
   }
@@ -431,4 +444,19 @@ class WatchFlag extends Flag {
       Experimental
       Places the compiler into increment compilation mode. 
      dcli will watch for changes in the script and project automatically re-compiling.''';
+}
+
+/// Packs the compiled application and native libraries into one executable.
+class PackedFlag extends Flag {
+  /// Enables compressed, self-extracting executable output.
+  PackedFlag() : super('packed');
+
+  @override
+  String get abbreviation => 'pk';
+
+  @override
+  String description() =>
+      'Embed the compiled application and native libraries in one executable. '
+      'Extracts to a private cache when run. '
+      'Run dcli pack separately to regenerate project resources.';
 }

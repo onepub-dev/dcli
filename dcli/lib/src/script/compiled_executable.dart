@@ -7,7 +7,11 @@ import '../../dcli.dart';
 /// A compiled executable, optionally backed by a hidden application bundle.
 class CompiledExecutable {
   /// Creates a compilation result.
-  CompiledExecutable(this.pathToExe, {this.hasBundle = false});
+  CompiledExecutable(
+    this.pathToExe, {
+    this.hasBundle = false,
+    this.isPacked = false,
+  });
 
   /// The public executable (a native launcher when [hasBundle] is true).
   final String pathToExe;
@@ -15,8 +19,39 @@ class CompiledExecutable {
   /// Whether the executable needs a hidden bundle beside it.
   final bool hasBundle;
 
+  /// Whether this executable contains a compressed bundle extracted at runtime.
+  final bool isPacked;
+
   /// The bundle beside this executable, or null for standalone executables.
   String? get pathToBundle => hasBundle ? bundlePath(pathToExe) : null;
+
+  /// Reports the final locations of the executable and every bundled file.
+  void report({LineAction output = print}) {
+    output('Outputs:');
+    final label = hasBundle
+        ? 'Launcher'
+        : isPacked
+        ? 'Packed executable'
+        : 'Executable';
+    output('  $label: ${absolute(pathToExe)}');
+    if (!hasBundle) {
+      return;
+    }
+    final bundle = absolute(pathToBundle!);
+    output('  Bundle: $bundle');
+    final files =
+        Directory(bundle).listSync(recursive: true).whereType<File>().toList()
+          ..sort((a, b) => a.path.compareTo(b.path));
+    for (final file in files) {
+      final directory = split(relative(file.path, from: bundle)).first;
+      final label = switch (directory) {
+        'bin' => 'Executable',
+        'lib' => 'Library',
+        _ => 'Asset',
+      };
+      output('  $label: ${file.path}');
+    }
+  }
 
   /// The hidden bundle location for an executable.
   static String bundlePath(String executable) {
@@ -31,9 +66,9 @@ class CompiledExecutable {
   ///
   /// The bundle follows the destination's name, so installation may rename the
   /// launcher. Each application owns its libraries, avoiding name collisions.
-  void install(String destination, {bool overwrite = false}) {
+  CompiledExecutable install(String destination, {bool overwrite = false}) {
     if (equals(absolute(pathToExe), absolute(destination))) {
-      return;
+      return this;
     }
     if (Directory(destination).existsSync()) {
       throw InvalidArgumentException(
@@ -51,7 +86,7 @@ class CompiledExecutable {
     }
     if (!hasBundle) {
       move(pathToExe, destination, overwrite: overwrite);
-      return;
+      return CompiledExecutable(destination, isPacked: isPacked);
     }
 
     // Stage on the destination filesystem before replacing an installed app.
@@ -94,5 +129,6 @@ class CompiledExecutable {
         staging.deleteSync(recursive: true);
       }
     }
+    return CompiledExecutable(destination, hasBundle: true);
   }
 }

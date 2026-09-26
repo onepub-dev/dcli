@@ -358,13 +358,17 @@ class DartProject {
   /// compiled script even if one of the same name exists in `/.dcli/bin
   /// [overwrite] defaults to false.
   ///
-  Future<void> compile({bool install = false, bool overwrite = false}) async {
+  Future<void> compile({
+    bool install = false,
+    bool overwrite = false,
+    bool packed = false,
+  }) async {
     await NamedLock(name: _lockName, timeout: _lockTimeout).withLockAsync(
       () async {
         find('*.dart', workingDirectory: pathToProjectRoot).forEach(
           (file) => DartScript.fromFile(
             file,
-          ).compile(install: install, overwrite: overwrite),
+          ).compile(install: install, overwrite: overwrite, packed: packed),
         );
       },
       waiting: 'Waiting for compile to complete...',

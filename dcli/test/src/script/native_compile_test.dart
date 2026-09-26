@@ -55,7 +55,17 @@ environment:
       expect(pub.exitCode, 0, reason: '${pub.stdout}\n${pub.stderr}');
       final script = DartScript.fromFile(p.join(project, 'tool.dart'));
       expect(DartSdk().hasBuildHooks(script), isFalse);
-      script.compile(workingDirectory: project);
+      final compileOutput = await capture(() async {
+        script.compile(workingDirectory: project);
+      }, progress: Progress.capture());
+      expect(
+        compileOutput.lines,
+        contains('  Executable: ${script.pathToExe}'),
+      );
+      expect(
+        compileOutput.lines.any((line) => line.startsWith('Generated: ')),
+        isFalse,
+      );
       final result = await Process.run(
         script.pathToExe,
         [],
@@ -85,7 +95,25 @@ environment:
       throwsA(isA<InvalidArgumentException>()),
     );
     expect(File(destination).readAsStringSync(), 'old launcher');
-    compiled.install(destination, overwrite: true);
+    final installed = compiled.install(destination, overwrite: true);
+    final reported = <String>[];
+    installed.report(output: reported.add);
+    expect(reported, contains('  Launcher: $destination'));
+    expect(
+      reported,
+      contains(
+        '  Executable: '
+        '${p.join(temporary.path, 'target/.renamed.bundle/bin/tool')}',
+      ),
+    );
+    expect(
+      reported,
+      contains(
+        '  Library: '
+        '${p.join(temporary.path, 'target/.renamed.bundle/lib/native.so')}',
+      ),
+    );
+    expect(reported.join('\n'), isNot(contains('source/')));
     expect(File(destination).readAsStringSync(), 'launcher');
     expect(File(compiled.pathToExe).existsSync(), isFalse);
     expect(Directory(compiled.pathToBundle!).existsSync(), isFalse);
@@ -191,12 +219,16 @@ void main(List<String> args) async {
         }
       }
       final arguments = ['', 'two words', '"quotes"', r'$literal', 'héllo'];
+      final cache = Directory(p.join(temporary.path, 'cache'));
       Future<void> verifyLauncher(String executable) async {
         final process = await Process.start(
           executable,
           arguments,
           workingDirectory: temporary.path,
-          environment: {'DCLI_LAUNCHER_TEST': 'inherited'},
+          environment: {
+            'DCLI_LAUNCHER_TEST': 'inherited',
+            'DCLI_BUNDLE_CACHE': cache.path,
+          },
         );
         final stdout = process.stdout.transform(utf8.decoder).join();
         final stderr = process.stderr.transform(utf8.decoder).join();
@@ -237,6 +269,60 @@ void main(List<String> args) async {
       expect(obsolete.existsSync(), isFalse);
       await verifyLauncher(script.pathToExe);
 
+      // Packed mode uses the same native application and no adjacent bundle.
+      final packed = p.join(temporary.path, 'packed-tool');
+      final packedResult = DartSdk().runDartCompiler(
+        script,
+        pathToExe: packed,
+        workingDirectory: project,
+        packed: true,
+      );
+      expect(packedResult.isPacked, isTrue);
+      expect(packedResult.hasBundle, isFalse);
+      expect(
+        Directory(CompiledExecutable.bundlePath(packed)).existsSync(),
+        isFalse,
+      );
+      await verifyLauncher(packed);
+      final marker =
+          cache
+              .listSync(recursive: true)
+              .whereType<File>()
+              .singleWhere((file) => p.basename(file.path) == '.complete')
+            ..setLastModifiedSync(DateTime(2000));
+      await verifyLauncher(packed);
+      expect(
+        marker.lastModifiedSync(),
+        DateTime(2000),
+        reason: 'A warm start must reuse the extracted bundle.',
+      );
+      final cachedLibrary = Directory(
+        p.join(marker.parent.path, 'lib'),
+      ).listSync().whereType<File>().single..deleteSync();
+      await verifyLauncher(packed);
+      expect(
+        cachedLibrary.existsSync(),
+        isTrue,
+        reason: 'An incomplete cache entry must be repaired.',
+      );
+
+      // Same-size corruption must be detected before the application runs.
+      final damagedBytes = cachedLibrary.readAsBytesSync();
+      final originalLength = damagedBytes.length;
+      damagedBytes[0] = 0;
+      cachedLibrary.writeAsBytesSync(damagedBytes);
+      expect(cachedLibrary.lengthSync(), originalLength);
+      await verifyLauncher(packed);
+      expect(cachedLibrary.readAsBytesSync().first, isNot(0));
+
+      cache.deleteSync(recursive: true);
+      await Future.wait([verifyLauncher(packed), verifyLauncher(packed)]);
+      expect(
+        cache.listSync().whereType<Directory>().length,
+        1,
+        reason: 'Concurrent extraction publishes one complete cache entry.',
+      );
+
       // A failed rebuild must leave the previous executable usable.
       write('project/tool.dart', 'this is not valid Dart');
       expect(
@@ -254,6 +340,7 @@ void main(List<String> args) async {
       compiled.install(installed);
       Directory(project).deleteSync(recursive: true);
       await verifyLauncher(installed);
+      await verifyLauncher(packed);
       final installedBundle = CompiledExecutable.bundlePath(installed);
       Directory(installedBundle).renameSync('$installedBundle.missing');
       final missing = await Process.run(installed, []);

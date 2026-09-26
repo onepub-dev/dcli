@@ -21,6 +21,7 @@ import '../progress/progress_impl.dart';
 import '../util/enum_helper.dart';
 import '../util/runnable_process.dart';
 import 'native_launcher.dart';
+import 'packed_bundle_builder.dart';
 
 /// The [DartSdk] provides access to a number of the dart sdk tools
 /// as well as details on the active sdk instance.
@@ -166,6 +167,7 @@ class DartSdk {
     required String pathToExe,
     Progress? progress,
     String? workingDirectory,
+    bool packed = false,
   }) {
     final runArgs = <String>[];
 
@@ -173,8 +175,14 @@ class DartSdk {
     pathToExe = normalize(join(absolute(workingDirectory), pathToExe));
     progress ??= Progress.print();
 
-    if (hasBuildHooks(script)) {
-      return _buildWithAssets(script, pathToExe, progress, workingDirectory);
+    if (packed || hasBuildHooks(script)) {
+      return _buildWithAssets(
+        script,
+        pathToExe,
+        progress,
+        workingDirectory,
+        packed: packed,
+      );
     }
 
     RunnableProcess process;
@@ -247,8 +255,9 @@ class DartSdk {
     DartScript script,
     String pathToExe,
     Progress progress,
-    String workingDirectory,
-  ) {
+    String workingDirectory, {
+    bool packed = false,
+  }) {
     final staging = Directory.systemTemp.createTempSync('dcli-compile-');
     try {
       RunnableProcess.fromCommandArgs(dartExeName, [
@@ -262,15 +271,41 @@ class DartSdk {
       );
 
       final bundle = join(staging.path, 'output', 'bundle');
+      if (packed) {
+        final sources = join(staging.path, 'packed');
+        final launcher = PackedBundleBuilder.generate(
+          bundle,
+          sources,
+          script.exeName,
+        );
+        final output = join(staging.path, 'packed-executable');
+        RunnableProcess.fromCommandArgs(dartExeName, [
+          'compile',
+          'exe',
+          launcher,
+          '--packages=${join(sources, 'package_config.json')}',
+          '--output=$output',
+        ], workingDirectory: sources).start(
+          extensionSearch: false,
+          progress: progress as ProgressImpl,
+        );
+        CompiledExecutable(
+          output,
+          isPacked: true,
+        ).install(pathToExe, overwrite: true);
+        return CompiledExecutable(pathToExe, isPacked: true);
+      }
       final libraryDirectory = Directory(join(bundle, 'lib'));
-      final hasLibraries = libraryDirectory.existsSync() &&
+      final hasLibraries =
+          libraryDirectory.existsSync() &&
           libraryDirectory
               .listSync(recursive: true)
               .whereType<File>()
               .isNotEmpty;
       if (!hasLibraries) {
-        CompiledExecutable(join(bundle, 'bin', script.exeName))
-            .install(pathToExe, overwrite: true);
+        CompiledExecutable(
+          join(bundle, 'bin', script.exeName),
+        ).install(pathToExe, overwrite: true);
         return CompiledExecutable(pathToExe);
       }
 
@@ -292,8 +327,10 @@ class DartSdk {
         extensionSearch: false,
         progress: progress as ProgressImpl,
       );
-      CompiledExecutable(launcher, hasBundle: true)
-          .install(pathToExe, overwrite: true);
+      CompiledExecutable(
+        launcher,
+        hasBundle: true,
+      ).install(pathToExe, overwrite: true);
       return CompiledExecutable(pathToExe, hasBundle: true);
     } finally {
       staging.deleteSync(recursive: true);
@@ -440,7 +477,8 @@ class DartSdk {
       final w = which('dartdoc');
       if (w.notfound) {
         throw DCliException(
-            "Unable to run 'dartdoc' as the exe is not on your path");
+          "Unable to run 'dartdoc' as the exe is not on your path",
+        );
       }
       startFromArgs(
         w.path!,
@@ -574,8 +612,10 @@ class DartSdk {
   /// @Throwing(InstallException)
   /// @Throwing(MoveTreeException)
   /// @Throwing(OSError)
-  Future<String> installFromArchive(String defaultDartSdkPath,
-      {bool askUser = true}) async {
+  Future<String> installFromArchive(
+    String defaultDartSdkPath, {
+    bool askUser = true,
+  }) async {
     // verbose(() => 'Architecture: ${SysInfo.kernelArchitecture}');
     final zipRelease = await _fetchDartSdk();
 
@@ -600,7 +640,8 @@ class DartSdk {
           deleteDir(installDir);
         } else {
           throw InstallException(
-              'Install Directory $installDir already exists.');
+            'Install Directory $installDir already exists.',
+          );
         }
       }
     });
@@ -617,8 +658,11 @@ class DartSdk {
 
     if (core.Settings().isLinux || core.Settings().isMacOS) {
       /// make execs executable.
-      find('*', workingDirectory: join(installDir, 'bin'), recursive: false)
-          .forEach((file) => posix.chmod(file, permission: '500'));
+      find(
+        '*',
+        workingDirectory: join(installDir, 'bin'),
+        recursive: false,
+      ).forEach((file) => posix.chmod(file, permission: '500'));
     }
 
     // The normal dart detection process won't work here
@@ -691,7 +735,8 @@ class DartSdk {
         return 'x64';
       }
       throw OSError(
-          '${SysInfo.rawKernelArchitecture} is not a supported architecture.');
+        '${SysInfo.rawKernelArchitecture} is not a supported architecture.',
+      );
     }
   }
 
@@ -860,5 +905,5 @@ void setPathToDartSdk(String dartSdkPath) {
 class PubspecNotFoundException extends DCliException {
   /// Throw if pubspec.yaml was not found in [workingDirectory]
   PubspecNotFoundException(String workingDirectory)
-      : super('pubspec.yaml not found in $workingDirectory');
+    : super('pubspec.yaml not found in $workingDirectory');
 }

@@ -1,33 +1,29 @@
 import 'dart:convert';
 
 /// Generates a dependency-free Dart launcher to compile to a native executable.
-String nativeLauncherSource(String executableName) => _source.replaceFirst(
-  '__ENTRYPOINT__',
-  // JSON strings are Dart strings too, except that Dart interpolates dollars.
-  jsonEncode(executableName).replaceAll(r'$', r'\$'),
-);
+String nativeLauncherSource(
+  String executableName, {
+  String imports = '',
+  String? preparationSource,
+}) => _source
+    .replaceFirst('__IMPORTS__', imports)
+    .replaceFirst('__PREPARATION__', preparationSource ?? _bundlePreparation)
+    .replaceFirst(
+      '__ENTRYPOINT__',
+      // Escape dollars because Dart interpolates them in string literals.
+      jsonEncode(executableName).replaceAll(r'$', r'\$'),
+    );
 
 const _source = r'''
 import 'dart:convert';
 import 'dart:ffi';
 import 'dart:io';
+__IMPORTS__
 
 const entrypoint = __ENTRYPOINT__;
 
 Future<void> main(List<String> args) async {
-  final launcher = File(Platform.resolvedExecutable);
-  var name = launcher.uri.pathSegments.last;
-  if (Platform.isWindows && name.toLowerCase().endsWith('.exe')) {
-    name = name.substring(0, name.length - 4);
-  }
-  final executable = File.fromUri(launcher.parent.uri.resolveUri(
-    Uri(pathSegments: ['.$name.bundle', 'bin', entrypoint]),
-  )).path;
-  if (!File(executable).existsSync()) {
-    stderr.writeln('Missing application bundle: $executable');
-    stderr.writeln('Keep the launcher and .$name.bundle directory together.');
-    exit(127);
-  }
+  final executable = await prepareExecutable();
   if (Platform.isWindows) {
     try {
       final process = await Process.start(executable, args,
@@ -78,5 +74,26 @@ Future<void> main(List<String> args) async {
       free(allocation);
     }
   }
+}
+
+__PREPARATION__
+''';
+
+const _bundlePreparation = r'''
+Future<String> prepareExecutable() async {
+  final launcher = File(Platform.resolvedExecutable);
+  var name = launcher.uri.pathSegments.last;
+  if (Platform.isWindows && name.toLowerCase().endsWith('.exe')) {
+    name = name.substring(0, name.length - 4);
+  }
+  final executable = File.fromUri(launcher.parent.uri.resolveUri(
+    Uri(pathSegments: ['.$name.bundle', 'bin', entrypoint]),
+  )).path;
+  if (!File(executable).existsSync()) {
+    stderr.writeln('Missing application bundle: $executable');
+    stderr.writeln('Keep the launcher and .$name.bundle directory together.');
+    exit(127);
+  }
+  return executable;
 }
 ''';

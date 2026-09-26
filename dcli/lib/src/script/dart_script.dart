@@ -279,6 +279,7 @@ class DartScript {
   void compile({
     bool install = false,
     bool overwrite = false,
+    bool packed = false,
     String? workingDirectory,
   }) {
     verbose(
@@ -297,15 +298,22 @@ class DartScript {
 
     final compiled = DartSdk().runDartCompiler(
       this,
+      packed: packed,
       pathToExe: pathToExe,
-      progress: Progress(print, stderr: print),
+      progress: Progress((line) {
+        if (!line.startsWith('Generated: ')) {
+          print(line);
+        }
+      }, stderr: print),
       workingDirectory: workingDirectory,
     );
 
     if (install) {
       print('');
       print(orange('Installing $pathToExe into $pathToInstalledExe'));
-      compiled.install(pathToInstalledExe, overwrite: true);
+      compiled.install(pathToInstalledExe, overwrite: true).report();
+    } else {
+      compiled.report();
     }
   }
 

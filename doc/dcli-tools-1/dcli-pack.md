@@ -1,17 +1,26 @@
 # DCli Pack
 
-The dcli pack command allows you to pack resources (images, config files etc) into your cli app.
+`dcli pack` embeds resources such as images, templates, configuration files, and binaries in generated Dart classes that your application can unpack at runtime.
 
-Whilst flutter allows you to include assets in a dart executable no such feature exists for dart cli apps. The dcli pack command is designed to fill that void.
+Place resources in the `resource/` directory at your project root, then run:
 
-A resource is just a file that you want to ship with your package.
+```bash
+dcli pack
+```
 
-To pack a resource in you cli app create a 'resource' directory in the root of your project package.
+You can include external resources through `tool/dcli/pack.yaml`. The command writes a registry and resource classes under `lib/src/dcli/resource/generated/`. Re-running it regenerates that directory and removes obsolete part classes.
 
-Place each file in the resource directory.
+Each resource has a parent class and separate part classes containing at most 256 KiB of original data each. Parts are gzip-compressed independently and then Base64-encoded. Packing and `PackedResource.unpack()` process the parts serially, avoiding a whole-file compression or extraction buffer. An empty resource has no parts and unpacks to an empty file.
 
-Run `dcli pack`.
+Use the generated registry and `unpack()` as before; applications do not need to manage the parts themselves. Existing generated Base64 resources remain supported by the updated DCli library. Newly generated compressed classes require a DCli library with `PackedResourcePart` support. The legacy `content` getter is not available on these multipart resources; use `unpack()`.
 
-You can also pack resources external to your project by creating a tool/dcli/pack.yaml.
+Compression reduces generated source size for compressible data. Already-compressed data can grow, and compiling the generated source can still require substantial memory even though packing and extraction use bounded chunks.
 
-For further details on packing and unpacking resources see the [Asset/Resource](../dcli-api/assets.md) section.
+`dcli pack` generates resources for your source code to use. [`dcli compile --packed`](dcli-compile.md#pack-an-application-into-one-executable) packages the compiled application and its native libraries into one self-extracting executable. It does not run `dcli pack` automatically. Use both commands when you need both steps:
+
+```bash
+dcli pack
+dcli compile --packed bin/tool.dart
+```
+
+See [Assets/Resources](../dcli-api/assets.md) for registry access, unpacking, and external resource configuration.

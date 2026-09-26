@@ -7,8 +7,6 @@
 
 import 'dart:convert';
 import 'dart:io';
-import 'dart:math' as math;
-import 'dart:typed_data';
 
 import 'package:crypto/crypto.dart';
 import 'package:path/path.dart';
@@ -16,6 +14,7 @@ import 'package:scope/scope.dart';
 import 'package:settings_yaml/settings_yaml.dart';
 
 import '../../dcli.dart';
+import 'resource_packer.dart';
 
 /// Packages a file as a dart library so it can be expanded
 /// during the install process.
@@ -37,12 +36,19 @@ class Resources {
   static final String _resourceRoot = join('resource');
 
   /// relative path to generated root.
-  static final String _generatedRoot =
-      join('lib', 'src', 'dcli', 'resource', 'generated');
+  static final String _generatedRoot = join(
+    'lib',
+    'src',
+    'dcli',
+    'resource',
+    'generated',
+  );
 
   /// relative path to registry
-  static final String _pathToRegistry =
-      join(_generatedRoot, 'resource_registry.g.dart');
+  static final String _pathToRegistry = join(
+    _generatedRoot,
+    'resource_registry.g.dart',
+  );
 
   /// Path to the registry library
   late final String pathToRegistry = join(projectRoot, _pathToRegistry);
@@ -54,19 +60,20 @@ class Resources {
   late final String generatedRoot = join(projectRoot, _generatedRoot);
 
   // path to the locatio of the pack.yaml file.
-  static final String pathToPackYaml =
+  static String get pathToPackYaml =>
       join(projectRoot, 'tool', 'dcli', 'pack.yaml');
 
   /// Inject this scope key to overload the projectRoot for unit testing.
-  static final scopeKeyProjectRoot =
-      ScopeKey<String>.withDefault(DartProject.self.pathToProjectRoot);
+  static final scopeKeyProjectRoot = ScopeKey<String>.withDefault(
+    DartProject.self.pathToProjectRoot,
+  );
 
   /// @Throwing(MissingDependencyException)
   static String get projectRoot => Scope.use(scopeKeyProjectRoot);
 
   /// Packs the set of files located under [resourceRoot]
-  /// Each resources is packed into a separate dart library
-  /// and placed in the [generatedRoot] directory.
+  /// Each resource has a registry entry and independently gzip-compressed
+  /// 256 KiB parts in separate classes under [generatedRoot].
   ///
   /// A registry file will be generated in generated/resource_registry.g.dart
   /// which you can include to unpack the files onto the
@@ -80,7 +87,7 @@ class Resources {
   /// @Throwing(ResourceException)
   /// @Throwing(SettingsYamlException)
   /// @Throwing(RangeError)
-  void pack() {
+  void pack({bool includeHidden = false}) {
     /// clear out an old generated files
     /// as we use UUIDs if we didn't do this the
     /// directory would keep growing.
@@ -91,7 +98,11 @@ class Resources {
     var resources = <String>[];
 
     if (exists(resourceRoot)) {
-      resources = find('*', workingDirectory: resourceRoot).toList();
+      resources = find(
+        '*',
+        workingDirectory: resourceRoot,
+        includeHidden: includeHidden,
+      ).toList();
     }
 
     final packedResources = _packResources(resources);
@@ -120,8 +131,11 @@ class Resources {
       final pathToGeneratedLibrary = join(generatedRoot, '$className.g.dart');
       print(' - packing: $pathToResouce into $pathToGeneratedLibrary');
 
-      final resource =
-          _packResource(pathToResouce, pathToGeneratedLibrary, className);
+      final resource = _packResource(
+        pathToResouce,
+        pathToGeneratedLibrary,
+        className,
+      );
       resources.add(resource);
     }
 
@@ -133,45 +147,25 @@ class Resources {
   /// @Throwing(ArgumentError)
   /// @Throwing(PathException)
   _Resource _packResource(
-      String pathToResource, String pathToGeneratedLibrary, String className,
-      {String? mount}) {
+    String pathToResource,
+    String pathToGeneratedLibrary,
+    String className, {
+    String? mount,
+  }) {
     mount ??= relative(pathToResource, from: resourceRoot);
     final resource = _Resource(
-        pathToResource, pathToGeneratedLibrary, className,
-        pathToMount: mount);
-    final to = File(pathToGeneratedLibrary).openSync(mode: FileMode.write);
-    try {
-      /// write the header
-      to.writeStringSync('''
-import 'package:dcli/dcli.dart';
-
-/// GENERATED -- GENERATED
-///
-/// DO NOT MODIFIY
-///
-/// This script is generated via [Resource.pack()].
-///
-/// GENERATED - GENERATED
-
-class $className extends PackedResource {
-  /// PackedResource - ${relative(pathToResource, from: 'resource')}
-  const $className();
-''');
-
-      _writeChecksum(to, resource.checksum);
-      _writePath(to, resource.pathToMount);
-      _writeContent(to, pathToResource);
-
-      /// close the class
-      to
-        ..writeStringSync('''
-
-}
-''')
-        ..flushSync();
-    } finally {
-      to.closeSync();
-    }
+      pathToResource,
+      pathToGeneratedLibrary,
+      className,
+      pathToMount: mount,
+    );
+    ResourcePacker.packFile(
+      source: pathToResource,
+      destination: pathToGeneratedLibrary,
+      className: className,
+      originalPath: mount.replaceAll(r'\', '/'),
+      checksum: resource.checksum,
+    );
 
     return resource;
   }
@@ -203,15 +197,15 @@ import 'package:dcli/dcli.dart';
 ''');
 
       /// sort the resources so the imports are sorted.
-      for (final resource in resources
-        ..sort((a, b) => a.className.compareTo(b.className))) {
+      for (final resource
+          in resources..sort((a, b) => a.className.compareTo(b.className))) {
         registryFile.writeStringSync(
-            "import '${basename(resource.pathToGeneratedLibrary)}';\n");
+          "import '${basename(resource.pathToGeneratedLibrary)}';\n",
+        );
       }
 
       {
-        registryFile.writeStringSync(
-          '''
+        registryFile.writeStringSync('''
 
 /// GENERATED -- GENERATED
 ///
@@ -231,8 +225,7 @@ class ResourceRegistry {
   ///     .unpack(join(HOME, '.mysettings', 'rules.yaml'));
   /// ```
   static const resources = <String, PackedResource>{
-''',
-        );
+''');
       }
 
       /// Write each resource into the map
@@ -255,81 +248,9 @@ $line
     }
   }
 
-  String _buildMapping(_Resource resource) {
-    final oneline = "    '${resource.pathToMount.replaceAll(r'\', '/')}':"
-        ' ${resource.className}(),';
-
-    String line;
-    if (oneline.length <= 80) {
-      line = oneline;
-    } else {
-      line = '''
-    '${resource.pathToMount.replaceAll(r'\', '/')}':
-        ${resource.className}(),''';
-    }
-    return line;
-  }
-
-  void _writeContent(RandomAccessFile to, String pathToResource) {
-    to.writeStringSync(
-      '''
-
-  @override
-  String get content => \'''
-''',
-    );
-
-    /// Write the content
-    final reader = File(pathToResource).openSync();
-
-    while (true) {
-      final data = reader.readSync(16 * 1024);
-      if (data.isEmpty) {
-        break;
-      }
-
-      for (var i = 0; i < data.length; i += 60) {
-        final chunk =
-            Uint8List.view(data.buffer, i, math.min(data.length - i, 60));
-        to
-          ..writeStringSync(base64.encode(chunk))
-          ..writeStringSync('\n');
-      }
-    }
-
-    /// Close the base64 encoded content string
-    to.writeStringSync('''
-  \'\'\';''');
-  }
-
-  void _writeChecksum(RandomAccessFile to, String checksum) {
-    // write the checksum
-    to.writeStringSync('''
-
-  /// A hash of the resource (pre packed) calculated by
-  /// [calculateHash].
-  /// This hash can be used to check if the resource needs to
-  /// be updated on the target system.
-  /// Use :
-  /// ```dart
-  ///   calculateHash(pathToResource).hexEncode() == packResource.checksum
-  /// ```
-  /// to compare the checksum of the local file with
-  /// this checksum
-  @override
-  String get checksum =>
-      '$checksum';
-''');
-  }
-
-  void _writePath(RandomAccessFile to, String pathToMount) {
-    to.writeStringSync('''
-
-  /// `<package>/resources` relative path to the original resource.
-  @override
-  String get originalPath => '${pathToMount.replaceAll(r'\', '/')}';
-''');
-  }
+  String _buildMapping(_Resource resource) =>
+      '    ${dartString(resource.pathToMount.replaceAll(r"\", "/"))}: '
+      '${resource.className}(),';
 
   /// Throws [ResourceException].
   /// @Throwing(ArgumentError)
@@ -360,8 +281,10 @@ $line
       var path = external['path'] as String? ?? '';
 
       if (path.isEmpty) {
-        throw ResourceException('external entry in $pathToPackYaml '
-            'is missing a "path" key.');
+        throw ResourceException(
+          'external entry in $pathToPackYaml '
+          'is missing a "path" key.',
+        );
       }
       // convert to absolute path.
       path = truepath(path);
@@ -371,8 +294,10 @@ $line
       final mount = external['mount'] as String? ?? '';
 
       if (mount.isEmpty) {
-        throw ResourceException('external entry in $pathToPackYaml '
-            'is missing a "mount" key.');
+        throw ResourceException(
+          'external entry in $pathToPackYaml '
+          'is missing a "mount" key.',
+        );
       }
 
       // list of files/directories to exclude
@@ -380,8 +305,10 @@ $line
       final excludes = getExcludedPaths(yaml, path, index);
 
       if (!exists(path)) {
-        throw ResourceException('The path ${truepath(path)} in '
-            '$pathToPackYaml does not exist.');
+        throw ResourceException(
+          'The path ${truepath(path)} in '
+          '$pathToPackYaml does not exist.',
+        );
       }
       resources.addAll(_packExternalResource(path, mount, excludes));
       index++;
@@ -393,7 +320,10 @@ $line
   /// @Throwing(PathException)
   /// @Throwing(RangeError)
   List<_Resource> _packExternalResource(
-      String path, String mount, List<String> excludes) {
+    String path,
+    String mount,
+    List<String> excludes,
+  ) {
     final resources = <_Resource>[];
 
     if (isExcluded(path, excludes)) {
@@ -426,8 +356,12 @@ $line
     final pathToGeneratedLibrary = join(generatedRoot, '$className.g.dart');
     print(' - packing: $path into $pathToGeneratedLibrary');
 
-    final resource =
-        _packResource(path, pathToGeneratedLibrary, className, mount: mount);
+    final resource = _packResource(
+      path,
+      pathToGeneratedLibrary,
+      className,
+      mount: mount,
+    );
     return resource;
   }
 
@@ -435,7 +369,10 @@ $line
   /// @Throwing(PathException)
   /// @Throwing(RangeError)
   Iterable<_Resource> _packExternalDirectory(
-      String path, String mount, List<String> excludes) {
+    String path,
+    String mount,
+    List<String> excludes,
+  ) {
     final resources = <_Resource>[];
 
     find('*', workingDirectory: path).forEach((entity) {
@@ -458,7 +395,8 @@ $line
     for (final resource in packedResources) {
       if (paths.contains(resource.pathToMount)) {
         throw ResourceException(
-            'Duplicate resource at mount point: ${resource.pathToMount}');
+          'Duplicate resource at mount point: ${resource.pathToMount}',
+        );
       }
       paths.add(resource.pathToMount);
     }
@@ -514,11 +452,16 @@ class _Resource {
 
   /// @Throwing(ArgumentError)
   /// @Throwing(PathException)
-  _Resource(this.pathToSource, String pathToGeneratedLibrary, this.className,
-      {required this.pathToMount})
-      : checksum = calculateHash(pathToSource).hexEncode() {
-    this.pathToGeneratedLibrary = relative(pathToGeneratedLibrary,
-        from: join(Resources.projectRoot, 'lib'));
+  _Resource(
+    this.pathToSource,
+    String pathToGeneratedLibrary,
+    this.className, {
+    required this.pathToMount,
+  }) : checksum = calculateHash(pathToSource).hexEncode() {
+    this.pathToGeneratedLibrary = relative(
+      pathToGeneratedLibrary,
+      from: join(Resources.projectRoot, 'lib'),
+    );
   }
 }
 

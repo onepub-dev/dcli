@@ -7,7 +7,7 @@ repository: https://github.com/onepub-dev/dcli
 environment:
   sdk: '>=3.10.0 <4.0.0'
 dependencies:
-  dcli: ^10.2.0
+  dcli: ^10.3.0
   dcli_common: ^10.2.0
   dcli_core: ^10.2.0
   dcli_terminal: ^10.2.0

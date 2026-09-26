@@ -3,8 +3,8 @@
 The `dcli compile` command compiles Dart scripts into native applications and optionally installs them into your PATH. The resulting application can run on a compatible operating system and architecture without Dart or DCli installed.
 
 ```text
-dcli compile [--nowarmup] [--install] [--overwrite] [<script.dart> ...]
-dcli compile --package <package-name> [<version>]
+dcli compile [--nowarmup] [--install] [--overwrite] [--packed] [<script.dart> ...]
+dcli compile [--packed] --package <package-name> [<version>]
 ```
 
 Specify one or more scripts to compile them individually. If you omit the scripts, DCli compiles all `.dart` files in the current directory.
@@ -57,6 +57,48 @@ On Windows the launcher is `tool.exe`, the bundle is named `.tool.bundle`, and t
 The launcher passes through arguments, standard input, standard output, standard error, the working directory, environment, and exit status. On Linux and macOS it replaces itself with the bundled application, preserving the process ID and signal behavior.
 
 Automatic bundling covers native assets supplied by build hooks. Libraries loaded manually, for example with `DynamicLibrary.open`, still need to be deployed according to the package's instructions, and any required system libraries must be available on the destination machine.
+
+## Pack an application into one executable
+
+Use `--packed` to embed the compiled application and its hook-provided native libraries in one executable:
+
+```bash
+dcli compile --packed bin/tool.dart
+./bin/tool
+```
+
+The output is `bin/tool` (`bin/tool.exe` on Windows). You can copy or rename this file without an adjacent bundle. Default compilation still uses the bundle layout described above. Packed mode also works with `--install` and `--package`.
+
+On first launch, the executable extracts its contents into a private cache. Each file is processed serially in independently gzip-compressed chunks of at most 256 KiB before compression. Later launches verify and reuse the extracted files; missing or corrupted files are extracted again. Concurrent launches share a lock so they do not extract the same bundle simultaneously.
+
+| Platform | Default cache root |
+| --- | --- |
+| Linux | `$XDG_CACHE_HOME/dcli/bundles`, or `$HOME/.cache/dcli/bundles` |
+| macOS | `$HOME/Library/Caches/dcli/bundles` |
+| Windows | `%LOCALAPPDATA%/dcli/bundles` |
+
+Each version has a content-derived cache key. The extracted layout is `<cache>/<key>/bin/tool` and `<cache>/<key>/lib/...`, preserving Dart's library lookup layout inside the cache. Set `DCLI_BUNDLE_CACHE` to change the cache root, or `DCLI_BUNDLE_VERBOSE=1` to print extraction and reuse diagnostics to stderr. The cache must be writable and allow executable files. Old versions are retained; you can remove them when the corresponding applications are no longer running.
+
+Packed mode trades an extra compilation step, first-launch extraction, and a disk cache for distributing one file. Chunking bounds the compression and decoding buffers; compiler memory and the resident embedded data can still grow with the application's size. Already-compressed data may grow slightly.
+
+### How this relates to dcli pack
+
+[`dcli pack`](dcli-pack.md) generates Dart classes for application resources such as images and templates. `dcli compile --packed` embeds the **compiled application and its native bundle**. It does not regenerate your resource classes or scan `resource/` or `tool/dcli/pack.yaml` automatically.
+
+If your application uses resources, generate them first and reference the generated registry from your application:
+
+```bash
+dcli pack
+dcli compile --packed bin/tool.dart
+```
+
+Resources referenced by your code are already part of the compiled application and travel with it in either compile mode. Packing unused resource files does not automatically make your application use them.
+
+## Output locations
+
+After compilation, DCli prints the final executable path. Bundle mode also prints the launcher, bundle directory, and every bundled executable, library, and other asset. Temporary compiler output paths are suppressed.
+
+Without `--install`, outputs are beside the source script. With `--install` or `--package`, the reported paths are under `~/.dcli/bin`. Packed mode reports the packed executable; its extraction cache is created at runtime on the receiving machine.
 
 ## Install a compiled script
 
@@ -134,3 +176,7 @@ Allow replacement of an existing installed executable and its bundle without pro
 ### --package | -p
 
 Compile a globally activated package and install its applications into `~/.dcli/bin`. This mode installs automatically; `--install` is not required.
+
+### --packed | -pk
+
+Embed the compiled application and its native bundle in a compressed, self-extracting executable. Keep the normal bundle mode by omitting this flag. Run `dcli pack` separately when application resources need regenerating.
