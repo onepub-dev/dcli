@@ -338,8 +338,10 @@ Run:
           pathToExe: pathToOutput,
           progress: Progress(print, stderr: print),
           workingDirectory: pathToTempPackage,
+        ).install(
+          join(Settings().pathToDCliBin, basename(pathToOutput)),
+          overwrite: true,
         );
-        move(pathToOutput, Settings().pathToDCliBin, overwrite: true);
       }
     });
   }

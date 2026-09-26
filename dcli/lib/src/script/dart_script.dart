@@ -257,6 +257,9 @@ class DartScript {
   /// Compiles this script and optionally installs it to ~/.dcli/bin
   ///
   /// The resulting executable is compiled into the script's directory.
+  /// Packages with build hooks are built with `dart build cli`. Their bundled
+  /// executable and libraries live in a hidden `.name.bundle/` directory beside
+  /// a native launcher. Installation moves the launcher and bundle together.
   ///
   /// If [install] is true (default = false) then the resulting executable will be moved into ~/.dcli/bin.
   ///
@@ -292,7 +295,7 @@ class DartScript {
       );
     }
 
-    DartSdk().runDartCompiler(
+    final compiled = DartSdk().runDartCompiler(
       this,
       pathToExe: pathToExe,
       progress: Progress(print, stderr: print),
@@ -302,7 +305,7 @@ class DartScript {
     if (install) {
       print('');
       print(orange('Installing $pathToExe into $pathToInstalledExe'));
-      move(pathToExe, pathToInstalledExe, overwrite: true);
+      compiled.install(pathToInstalledExe, overwrite: true);
     }
   }
 

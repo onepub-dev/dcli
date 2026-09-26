@@ -1,64 +1,105 @@
 # DCli Compile
 
-The compile command will compile your DCli script(s) into a native executable and optionally install it into your PATH.
+The `dcli compile` command compiles Dart scripts into native applications and optionally installs them into your PATH. The resulting application can run on a compatible operating system and architecture without Dart or DCli installed.
 
-The resulting native application can be copied to any binary compatible OS and run without requiring Dart or DCli to be installed.
+```text
+dcli compile [--nowarmup] [--install] [--overwrite] [<script.dart> ...]
+dcli compile --package <package-name> [<version>]
+```
 
-Dart compiled applications are also super fast.
+Specify one or more scripts to compile them individually. If you omit the scripts, DCli compiles all `.dart` files in the current directory.
 
-Usage: `dcli compile [-nc, -i, -o] [<script path.dart>, <script path.dart>,...]`
+## Compile and run a script
 
-Example:
+The executable is created beside the Dart script.
 
 {% tabs %}
-{% tab title="Linux" %}
+{% tab title="Linux / macOS" %}
 ```bash
-dcli compile hello_world.dart
-
-./hello_world
-```
-{% endtab %}
-
-{% tab title="OSx" %}
-```
-dcli compile hello_world.dart
-
-./hello_world
+dcli compile tool.dart
+./tool
 ```
 {% endtab %}
 
 {% tab title="Windows" %}
-```
-dcli compile hello_world.dart
-
-hello_world.exe
+```powershell
+dcli compile tool.dart
+.\tool.exe
 ```
 {% endtab %}
 {% endtabs %}
 
-You may specify one or more scripts and DCli will compile each of them.
+Scripts without bundled native libraries produce a standalone executable.
 
-If you don't specify any scripts then DCli will compile all scripts in the current directory.
+## Native libraries
 
-If you use the --install option the compiled exe will be added to your path.
+DCli detects build hooks in the script's resolved packages and uses `dart build cli` to build the application and its native assets. No extra compile flag is needed. The dependencies' hooks may require additional build tools, such as a C compiler.
 
-{% hint style="info" %}
-DCli copies the executable into \~/.dcli/bin which is added to your path when you run dcli install.
-{% endhint %}
+When the build produces bundled native libraries, DCli creates a native executable launcher beside the script and places the application in a hidden `.tool.bundle/` directory:
 
-{% tabs %}
-{% tab title="Linux" %}
+```text
+project/
+  tool.dart
+  tool
+  .tool.bundle/
+    bin/
+      tool
+    lib/
+      libnative.so
+```
+
+Run `./tool` as usual. It is an executable binary, not a shell script, and does not require Dart at runtime. The launcher finds its bundle relative to its own location, so it also works when called from another directory.
+
+Dart's required `bin/` and `lib/` layout stays inside the bundle. Even when the script is `project/tool.dart`, DCli keeps the output inside `project/`; it does not create a `lib/` directory above the project. Each application's libraries are kept in its own bundle.
+
+On Windows the launcher is `tool.exe`, the bundle is named `.tool.bundle`, and the application inside `bin/` also has an `.exe` extension. Native library names and extensions depend on the package and platform. The dot prefix makes the bundle hidden on Linux and macOS; it does not set the Windows hidden attribute.
+
+The launcher passes through arguments, standard input, standard output, standard error, the working directory, environment, and exit status. On Linux and macOS it replaces itself with the bundled application, preserving the process ID and signal behavior.
+
+Automatic bundling covers native assets supplied by build hooks. Libraries loaded manually, for example with `DynamicLibrary.open`, still need to be deployed according to the package's instructions, and any required system libraries must be available on the destination machine.
+
+## Install a compiled script
+
+Use `--install` to move the compiled application into `~/.dcli/bin`, which `dcli install` adds to your PATH:
+
 ```bash
-dcli compile --install hello_world.dart
-
-hello_world
+dcli compile --install tool.dart
+tool
 ```
-{% endtab %}
-{% endtabs %}
+
+For an application with bundled native libraries, both parts are installed together:
+
+```text
+~/.dcli/bin/
+  tool
+  .tool.bundle/
+    bin/tool
+    lib/libnative.so
+```
+
+Use `--overwrite` to replace an existing installed application without an overwrite prompt:
+
+```bash
+dcli compile --install --overwrite tool.dart
+```
+
+For applications with native libraries, replacement includes the complete private bundle, removing obsolete files from the previous bundle.
+
+## Distribute a compiled application
+
+Copy a standalone executable to a compatible machine and run it directly. For an application with native libraries, copy **both the launcher and its hidden bundle**, keeping them beside each other:
+
+```bash
+tar -czf tool.tar.gz tool .tool.bundle
+```
+
+Include the hidden directory explicitly: a shell wildcard such as `*` normally omits it. Preserve executable permissions when copying or unpacking the application. The receiving machine does not need Dart or DCli.
+
+If you rename `tool` to `mytool`, also rename `.tool.bundle` to `.mytool.bundle`. Leave the executable name inside the bundle unchanged. On Windows, rename `tool.exe` to `mytool.exe` and use `.mytool.bundle` for the directory.
 
 ## Compile a package
 
-DCli can also compile a globally activated package.
+DCli can compile a globally activated package and install the executables listed in its `pubspec.yaml`:
 
 ```bash
 dart pub global activate critical_test
@@ -66,34 +107,30 @@ dcli compile --package critical_test
 critical_test
 ```
 
-The compiled package will be automatically copied into the \~/.dcli/bin directory which is on your PATH.
+The compiled applications are installed into `~/.dcli/bin`. Applications with bundled native libraries get a native launcher and their own hidden bundle there, just like scripts compiled with `--install`.
 
-Compiling a globally activated package has a number of uses:
+You can pass an optional package version after the package name. That version must be available in your pub cache.
 
-* faster startup time
-* you are able to copy the resulting executable to any binary compatible machine and run it without installing Dart
-* If you switch Dart versions then the executable will still run even if the package isn't compatible with the installed Dart version. This can be useful if you need to run an old version of dart but want access to the latest version of a Dart CLI package.
-
-When compiling a package DCli will create an executable for each of the scripts listed in the packages pubspec.yaml `executables` section.
+Compiling a globally activated package provides faster startup and lets you distribute the application without installing Dart. It also allows the compiled application to keep running independently of later changes to your installed Dart SDK.
 
 {% hint style="info" %}
-Ensure that \~/.dcli/bin is on your PATH and is before \~/.pub-cache or the globally activate version will run rather than you compiled version.
+Ensure `~/.dcli/bin` appears before `~/.pub-cache/bin` in your PATH so the compiled application is selected before the globally activated version.
 {% endhint %}
 
-## Flags:
+## Flags
 
-### --noprepare | -nc :
+### --nowarmup | -nw
 
-stop DCli from running prepare before doing a compile. Use this option if you know that you script's dependencies haven't changed since the last compile resulting in a faster compile.
+Skip the normal warmup before compilation when the script is already ready to run. Use this when its dependencies have not changed. DCli still warms up a script that is not ready to run. Native build hooks still run when needed to build the application.
 
-### --install | -i :
+### --install | -i
 
-install the compiled script into the \~/.dcli/bin directory which is on your path. -
+Move the compiled executable into `~/.dcli/bin`. If the application has a hidden bundle, move it alongside the launcher.
 
-### --overwrite | -o :
+### --overwrite | -o
 
-if the target script has already been compiled and installed, you must specify the -o flag to allow DCli to overwrite it.
+Allow replacement of an existing installed executable and its bundle without prompting. This flag is normally used with `--install`.
 
 ### --package | -p
 
-compiles a globally activated package and installs it into the !/.dcli/bin directory.
+Compile a globally activated package and install its applications into `~/.dcli/bin`. This mode installs automatically; `--install` is not required.

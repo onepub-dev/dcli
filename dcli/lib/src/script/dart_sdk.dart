@@ -5,6 +5,7 @@
  * SPDX-License-Identifier: MIT
  */
 
+import 'dart:convert';
 import 'dart:io';
 
 import 'package:archive/archive.dart';
@@ -19,6 +20,7 @@ import '../../posix.dart' as posix;
 import '../progress/progress_impl.dart';
 import '../util/enum_helper.dart';
 import '../util/runnable_process.dart';
+import 'native_launcher.dart';
 
 /// The [DartSdk] provides access to a number of the dart sdk tools
 /// as well as details on the active sdk instance.
@@ -155,9 +157,11 @@ class DartSdk {
   /// If [workingDirectory] is not passed then the current working directory is
   /// used. The [workingDirectory] should contain the pubspec.yaml that is used
   /// to compile the script.
+  /// Returns the executable and its bundled libraries. Use
+  /// [CompiledExecutable.install] to relocate them together.
   /// Throws [DCliException].
   /// @Throwing(core.DCliException)
-  void runDartCompiler(
+  CompiledExecutable runDartCompiler(
     DartScript script, {
     required String pathToExe,
     Progress? progress,
@@ -166,6 +170,12 @@ class DartSdk {
     final runArgs = <String>[];
 
     workingDirectory ??= script.pathToScriptDirectory;
+    pathToExe = normalize(join(absolute(workingDirectory), pathToExe));
+    progress ??= Progress.print();
+
+    if (hasBuildHooks(script)) {
+      return _buildWithAssets(script, pathToExe, progress, workingDirectory);
+    }
 
     RunnableProcess process;
     if (useDartCommand) {
@@ -178,7 +188,7 @@ class DartSdk {
       process = RunnableProcess.fromCommandArgs(
         dartExeName,
         runArgs,
-        workingDirectory: script.pathToScriptDirectory,
+        workingDirectory: workingDirectory,
       );
     } else {
       if (pathToDartToNativeExe == null) {
@@ -200,7 +210,94 @@ class DartSdk {
       );
     }
 
-    process.start(extensionSearch: false, progress: progress! as ProgressImpl);
+    process.start(extensionSearch: false, progress: progress as ProgressImpl);
+    return CompiledExecutable(pathToExe);
+  }
+
+  /// Whether the script's resolved packages contain build hooks.
+  ///
+  /// Package roots are resolved against package_config.json, including relative
+  /// path dependencies and dependencies inherited from a pub workspace.
+  bool hasBuildHooks(DartScript script) {
+    var directory = Directory(script.pathToScriptDirectory);
+    while (true) {
+      final config = File(
+        join(directory.path, '.dart_tool', 'package_config.json'),
+      );
+      if (config.existsSync()) {
+        final json =
+            jsonDecode(config.readAsStringSync()) as Map<String, dynamic>;
+        final packages = json['packages'] as List<dynamic>;
+        return packages.cast<Map<String, dynamic>>().any((package) {
+          final root = Uri.directory(
+            config.uri.resolve(package['rootUri'] as String).toFilePath(),
+          );
+          return File.fromUri(root.resolve('hook/build.dart')).existsSync();
+        });
+      }
+      final parent = directory.parent;
+      if (parent.path == directory.path) {
+        return false;
+      }
+      directory = parent;
+    }
+  }
+
+  CompiledExecutable _buildWithAssets(
+    DartScript script,
+    String pathToExe,
+    Progress progress,
+    String workingDirectory,
+  ) {
+    final staging = Directory.systemTemp.createTempSync('dcli-compile-');
+    try {
+      RunnableProcess.fromCommandArgs(dartExeName, [
+        'build',
+        'cli',
+        '--target=${script.pathToScript}',
+        '--output=${join(staging.path, 'output')}',
+      ], workingDirectory: workingDirectory).start(
+        extensionSearch: false,
+        progress: progress as ProgressImpl,
+      );
+
+      final bundle = join(staging.path, 'output', 'bundle');
+      final libraryDirectory = Directory(join(bundle, 'lib'));
+      final hasLibraries = libraryDirectory.existsSync() &&
+          libraryDirectory
+              .listSync(recursive: true)
+              .whereType<File>()
+              .isNotEmpty;
+      if (!hasLibraries) {
+        CompiledExecutable(join(bundle, 'bin', script.exeName))
+            .install(pathToExe, overwrite: true);
+        return CompiledExecutable(pathToExe);
+      }
+
+      final publish = Directory(join(staging.path, 'publish'))..createSync();
+      final launcher = join(publish.path, basename(pathToExe));
+      Directory(bundle).renameSync(CompiledExecutable.bundlePath(launcher));
+      final source = File(join(staging.path, 'launcher.dart'))
+        ..writeAsStringSync(nativeLauncherSource(script.exeName));
+      // Compile outside the user's package without running its hooks again.
+      final packages = File(join(staging.path, 'package_config.json'))
+        ..writeAsStringSync('{"configVersion":2,"packages":[]}');
+      RunnableProcess.fromCommandArgs(dartExeName, [
+        'compile',
+        'exe',
+        source.path,
+        '--packages=${packages.path}',
+        '--output=$launcher',
+      ], workingDirectory: staging.path).start(
+        extensionSearch: false,
+        progress: progress as ProgressImpl,
+      );
+      CompiledExecutable(launcher, hasBundle: true)
+          .install(pathToExe, overwrite: true);
+      return CompiledExecutable(pathToExe, hasBundle: true);
+    } finally {
+      staging.deleteSync(recursive: true);
+    }
   }
 
   /// returns the relative path to the packges configuration file.

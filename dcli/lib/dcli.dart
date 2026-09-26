@@ -98,6 +98,7 @@ export 'src/installers/installer.dart' show installFromSourceKey;
 export 'src/progress/progress.dart' show Progress;
 export 'src/resources/packed_resource.dart' show PackedResource;
 export 'src/resources/resources.dart' show ResourceException, Resources;
+export 'src/script/compiled_executable.dart';
 export 'src/script/dart_project.dart';
 export 'src/script/dart_script.dart' show DartScript;
 export 'src/script/dart_sdk.dart' show DartSdk;

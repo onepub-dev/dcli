@@ -1,3 +1,14 @@
+# 10.2.0
+
+- Detect native build hooks during compilation and bundle native libraries with
+  the application. Scripts with bundled libraries now produce a native launcher
+  beside the script and a hidden `.name.bundle/` directory containing the actual
+  executable and libraries. Run the launcher as usual; no parent `lib/` directory
+  is created.
+- Move the launcher and its private bundle together when installing compiled
+  scripts or globally activated packages. Keep both together when distributing
+  an application; scripts without bundled libraries remain standalone executables.
+
 # 10.1.0
 - Upgrade pubspec_manager to 4.0.0
 - Add GitHub Actions workflow to publish DCli

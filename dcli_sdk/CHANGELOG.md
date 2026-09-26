@@ -1,3 +1,13 @@
+# 10.2.0
+
+- `dcli compile` now detects native build hooks and packages native libraries in
+  a hidden `.name.bundle/` directory beside a native executable launcher. Run
+  `./name` as usual, including for scripts in the project root; no parent `lib/`
+  directory is created.
+- `--install` and `--package` install the launcher and its private bundle together.
+  Distribute both parts together. Scripts without bundled native libraries
+  continue to produce standalone executables.
+
 # 10.1.0
 - Upgrade pubspec_manager to 4.0.0
 - Add GitHub Actions workflow to publish DCli
@@ -290,4 +300,3 @@ work is based off.
 # 4.0.1-alpha.3
 - Fixed the move function as well. It now also falls back to copy/delete on any error.
 - added new projects to the replease process.
-
