@@ -1,3 +1,14 @@
+# 10.2.0
+- Add native library bundling to dcli compile
+- Released 10.1.0.
+- Released 10.1.0.
+- Released 10.1.0.
+- Released 10.1.0.
+- Released 10.1.0.
+- Released 10.1.0.
+- Released 10.1.0.
+
+
 # 10.1.0
 - Upgrade pubspec_manager to 4.0.0
 - Add GitHub Actions workflow to publish DCli
