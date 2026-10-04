@@ -338,8 +338,14 @@ class RunnableProcess {
         try {
           processLogger(() => 'calling Mailbox:take ');
 
-          final messageData = channel.toPrimaryIsolate
-              .take(timeout: const Duration(seconds: 2));
+          // The Windows backend's timed mutex/CV path can fail during an
+          // ordinary timeout (or wait without owning its SRW lock). The
+          // untimed path acquires the lock before waiting. These timeouts only
+          // trigger another read; they do not enforce a process deadline.
+          final messageData = Platform.isWindows
+              ? channel.toPrimaryIsolate.take()
+              : channel.toPrimaryIsolate
+                  .take(timeout: const Duration(seconds: 2));
           processLogger(
               () => 'take returned with data: len(${messageData.length - 1})');
           response = MessageResponse.fromData(messageData)
