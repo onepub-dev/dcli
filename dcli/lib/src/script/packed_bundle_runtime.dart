@@ -67,15 +67,13 @@ String _cacheRoot() {
   final env = Platform.environment;
   final override = env['DCLI_BUNDLE_CACHE'];
   if (override != null && override.isNotEmpty) return Directory(override).absolute.path;
-  if (Platform.isWindows) {
-    final local = env['LOCALAPPDATA'];
-    if (local == null) throw StateError('LOCALAPPDATA is unset');
-    return _join(local, 'dcli', 'bundles');
+  final home = Platform.isWindows
+      ? env['USERPROFILE'] ?? env['HOME']
+      : env['HOME'];
+  if (home == null || home.isEmpty) {
+    throw StateError('Unable to determine the user home directory');
   }
-  final home = env['HOME'];
-  if (home == null) throw StateError('HOME is unset');
-  if (Platform.isMacOS) return _join(home, 'Library', 'Caches', 'dcli', 'bundles');
-  return _join(env['XDG_CACHE_HOME'] ?? _join(home, '.cache'), 'dcli', 'bundles');
+  return _join(home, '.dcli', 'cache', 'bundles');
 }
 
 void _log(String message) {

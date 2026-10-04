@@ -220,14 +220,20 @@ void main(List<String> args) async {
       }
       final arguments = ['', 'two words', '"quotes"', r'$literal', 'héllo'];
       final cache = Directory(p.join(temporary.path, 'cache'));
-      Future<void> verifyLauncher(String executable) async {
+      Future<void> verifyLauncher(
+        String executable, {
+        bool useDefaultCache = false,
+      }) async {
         final process = await Process.start(
           executable,
           arguments,
           workingDirectory: temporary.path,
           environment: {
             'DCLI_LAUNCHER_TEST': 'inherited',
-            'DCLI_BUNDLE_CACHE': cache.path,
+            'HOME': temporary.path,
+            'USERPROFILE': temporary.path,
+            'DCLI_BUNDLE_CACHE': useDefaultCache ? '' : cache.path,
+            'DCLI_BUNDLE_VERBOSE': '1',
           },
         );
         final stdout = process.stdout.transform(utf8.decoder).join();
@@ -282,6 +288,17 @@ void main(List<String> args) async {
       expect(
         Directory(CompiledExecutable.bundlePath(packed)).existsSync(),
         isFalse,
+      );
+      await verifyLauncher(packed, useDefaultCache: true);
+      final defaultCache = Directory(
+        p.join(temporary.path, '.dcli', 'cache', 'bundles'),
+      );
+      expect(
+        defaultCache
+            .listSync(recursive: true)
+            .whereType<File>()
+            .any((file) => p.basename(file.path) == '.complete'),
+        isTrue,
       );
       await verifyLauncher(packed);
       final marker =

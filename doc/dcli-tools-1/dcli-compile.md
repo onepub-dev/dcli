@@ -73,9 +73,8 @@ On first launch, the executable extracts its contents into a private cache. Each
 
 | Platform | Default cache root |
 | --- | --- |
-| Linux | `$XDG_CACHE_HOME/dcli/bundles`, or `$HOME/.cache/dcli/bundles` |
-| macOS | `$HOME/Library/Caches/dcli/bundles` |
-| Windows | `%LOCALAPPDATA%/dcli/bundles` |
+| Linux and macOS | `$HOME/.dcli/cache/bundles` |
+| Windows | `%USERPROFILE%\.dcli\cache\bundles` |
 
 Each version has a content-derived cache key. The extracted layout is `<cache>/<key>/bin/tool` and `<cache>/<key>/lib/...`, preserving Dart's library lookup layout inside the cache. Set `DCLI_BUNDLE_CACHE` to change the cache root, or `DCLI_BUNDLE_VERBOSE=1` to print extraction and reuse diagnostics to stderr. The cache must be writable and allow executable files. Old versions are retained; you can remove them when the corresponding applications are no longer running.
 
