@@ -128,8 +128,9 @@ List<String?> runChild(String pathToChildScript) {
     childScript.runPubGet();
   }
 
-  // make certain our test script will run
-  '${DCliPaths().dcliName} -v warmup ${dirname(pathToChildScript)}'.run;
+  // Fixture initialization warms the project, and runPubGet above handles a
+  // missing package configuration. Launch the child directly so these process
+  // tests do not also resolve and bootstrap the globally activated DCli CLI.
   // run a script that uses '.run' and capture its output to prove
   // that .run works.
   final results =
