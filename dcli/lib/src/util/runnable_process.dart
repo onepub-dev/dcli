@@ -405,7 +405,7 @@ String searchForCommandExtension(String cmd, String? workingDirectory) {
   // we only search the cmd's directory
   if (dirname(cmd) != '.') {
     final resolvedPath = join(workingDirectory ?? '.', dirname(cmd));
-    return findExtension(basename(cmd), resolvedPath);
+    return join(dirname(cmd), findExtension(basename(cmd), resolvedPath));
   }
 
   // just the cmd so run which with searchExtension.

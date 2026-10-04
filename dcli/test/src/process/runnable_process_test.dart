@@ -19,6 +19,31 @@ import 'package:test/test.dart';
 
 /// @Throwing(ArgumentError)
 void main() {
+  test('extension search preserves explicit executable paths', () async {
+    await withTestScope((temporary) async {
+      env['PATHEXT'] = '.EXE;.BAT';
+      final toolDirectory = join(temporary, 'tools with spaces');
+      Directory(toolDirectory).createSync();
+      File(join(toolDirectory, 'run_child.EXE')).writeAsStringSync('');
+
+      expect(
+        searchForCommandExtension(join(toolDirectory, 'run_child'), null),
+        join(toolDirectory, 'run_child.EXE'),
+      );
+      expect(
+        searchForCommandExtension(
+          join('tools with spaces', 'run_child'),
+          temporary,
+        ),
+        join('tools with spaces', 'run_child.EXE'),
+      );
+      expect(
+        searchForCommandExtension(join(toolDirectory, 'missing'), null),
+        join(toolDirectory, 'missing'),
+      );
+    });
+  });
+
   test('runnable process Start - forEach', () async {
     await TestFileSystem().withinZone((fs) async {
       final path = join(fs.fsRoot, 'top');
