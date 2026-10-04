@@ -222,23 +222,15 @@ void main() {
     test('host not found', () async {
       await core.withTempFileAsync((file) async {
         const url =
-            'http://test.comeing.com.au/long/123456789012345678901234567890';
+            'http://dcli-test.invalid/long/123456789012345678901234567890';
 
         expect(
           () => fetch(url: url, saveToPath: file),
           throwsA(
             predicate<FetchException>((e) =>
-
-                /// we get different errors on windows and linux
-                /// windows
-                (e.message.contains('No such host is known.') &&
-                    e.errorCode == 11001) ||
-
-                ///linux
-                (e.message.contains('Failed host lookup') &&
-                    e.errorCode == -5) ||
-                (e.message.contains('Name or service not known') &&
-                    e.errorCode == -2)),
+                e.message.contains('Failed host lookup') &&
+                // DNS lookup error codes differ between supported platforms.
+                [-5, -2, 8, 11001].contains(e.errorCode)),
           ),
         );
       }, create: false);
@@ -263,11 +255,11 @@ void main() {
   group('progress', () {
     test('showBytes', () {
       const url =
-          'http://test.comeing.com.au/long/123456789012345678901234567890';
+          'http://dcli-test.invalid/long/123456789012345678901234567890';
 
       final fetchUrl = FetchUrl(url: url, saveToPath: '/tmp/me');
 
-      const constrained = 'http://test.comein...345678901234567890';
+      const constrained = 'http://dcli-test.i...345678901234567890';
       final initializing = FetchProgress.initialising(fetchUrl);
       final downloading =
           FetchProgress.downloading(fetchUrl, 100, 100, prior: initializing);

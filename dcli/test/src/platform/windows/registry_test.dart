@@ -27,13 +27,14 @@ void main() {
   });
 
   test('set/get dword', () {
-    regSetDWORD(HKEY_CURRENT_USER, 'DCLITestArea', 'count', 5);
-
-    final value = regGetDWORD(HKEY_CURRENT_USER, 'DCLITestArea', 'count');
-
-    expect(value, equals(5));
-
-    regDeleteValue(HKEY_CURRENT_USER, 'DCLITestArea', 'count');
+    final key = 'DCLITestArea-$pid';
+    regCreateKey(HKEY_CURRENT_USER, key);
+    try {
+      regSetDWORD(HKEY_CURRENT_USER, key, 'count', 5);
+      expect(regGetDWORD(HKEY_CURRENT_USER, key, 'count'), equals(5));
+    } finally {
+      regDeleteKey(HKEY_CURRENT_USER, key);
+    }
   });
 
   test(

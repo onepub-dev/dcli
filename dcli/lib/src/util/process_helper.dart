@@ -5,6 +5,7 @@
  * SPDX-License-Identifier: MIT
  */
 
+import 'dart:convert';
 import 'dart:io';
 
 import 'package:dcli_core/dcli_core.dart' as core;
@@ -47,7 +48,7 @@ class ProcessHelper {
     var processName = 'unknown';
 
     try {
-      line = 'ps -q $lpid -o comm='.firstLine;
+      line = 'ps -p $lpid -o comm='.firstLine;
       verbose(() => 'ps: $line');
     } on RunException catch (e) {
       /// the pid is no longer running
@@ -156,38 +157,51 @@ class ProcessHelper {
   }
 
   List<_WindowsParentProcess> _windowsParentProcessList() {
-    final parents = <_WindowsParentProcess>[];
-
-    final processes =
-        'wmic process get processid,parentprocessid,executablepath'
-            .toList(skipLines: 1);
-
-    for (var process in processes) {
-      // verbose(() => 'wmic: $process');
-      process = process.trim();
-      process = process.replaceAll(RegExp(r'\s+'), ' ');
-
-      final parts = process.split(' ');
-      if (parts.length < 3) {
-        // a lot of the lines have blank process ames
-        continue;
-      }
-
-      final r = parseWMICLine(process);
-
-      final parent = _WindowsParentProcess(
-        path: r.exe,
-        parentPid: r.parentPid,
-        processPid: r.processPid,
+    // WMIC is no longer installed on current Windows versions. CIM remains
+    // available through the inbox Windows PowerShell executable.
+    final powershell = join(
+      Platform.environment['SystemRoot'] ?? r'C:\Windows',
+      'System32',
+      'WindowsPowerShell',
+      'v1.0',
+      'powershell.exe',
+    );
+    final result = Process.runSync(powershell, [
+      '-NoLogo',
+      '-NoProfile',
+      '-NonInteractive',
+      '-Command',
+      'Get-CimInstance Win32_Process | '
+          'Select-Object ProcessId, ParentProcessId | ConvertTo-Json -Compress',
+    ]);
+    if (result.exitCode != 0) {
+      throw ProcessException(
+        powershell,
+        const [],
+        '${result.stderr}',
+        result.exitCode,
       );
-      parents.add(parent);
     }
+    final decoded = jsonDecode('${result.stdout}');
+    final entries = decoded is List ? decoded : [decoded];
+    final parents = <_WindowsParentProcess>[];
+    for (final entry in entries.cast<Map<String, dynamic>>()) {
+      parents.add(
+        _WindowsParentProcess(
+          path: '',
+          parentPid: entry['ParentProcessId'] as int,
+          processPid: entry['ProcessId'] as int,
+        ),
+      );
+    }
+
     return parents;
   }
 
   @visibleForTesting
   static ({String exe, int parentPid, int processPid}) parseWMICLine(
-      String process) {
+    String process,
+  ) {
     final parts = process.split(' ');
     // we have to deal with files that contain spaces in their name.
     final exe = parts.sublist(0, parts.length - 2).join(' ');
@@ -224,8 +238,10 @@ class ProcessHelper {
 
       // Fields following the command start at field 3. Process start time is
       // field 22, expressed in clock ticks since boot.
-      final fields =
-          stat.substring(commandEnd + 1).trim().split(RegExp(r'\s+'));
+      final fields = stat
+          .substring(commandEnd + 1)
+          .trim()
+          .split(RegExp(r'\s+'));
       if (fields.length <= 19) {
         return null;
       }

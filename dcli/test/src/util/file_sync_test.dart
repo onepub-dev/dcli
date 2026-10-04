@@ -53,15 +53,12 @@ void main() {
     });
 
     test('withTempFile - suffix', () async {
-      final count = await withTempFileAsync(
-        (tempFile) async {
-          expect(exists(tempFile), isTrue);
-          expect(tempFile.startsWith(Directory.systemTemp.path), isTrue);
-          expect(extension(tempFile), equals('.dodo'));
-          return 5;
-        },
-        suffix: 'dodo',
-      );
+      final count = await withTempFileAsync((tempFile) async {
+        expect(exists(tempFile), isTrue);
+        expect(tempFile.startsWith(Directory.systemTemp.path), isTrue);
+        expect(extension(tempFile), equals('.dodo'));
+        return 5;
+      }, suffix: 'dodo');
       expect(count, equals(5));
     });
 
@@ -91,7 +88,10 @@ void main() {
           expect(exists(pathToLink), isTrue);
           expect(isLink(pathToLink), isTrue);
 
-          expect(resolveSymLink(pathToLink), equals(canonicalize(file)));
+          expect(
+            resolveSymLink(pathToLink),
+            equals(canonicalize(File(file).resolveSymbolicLinksSync())),
+          );
         }, pathToTempDir: dir);
       });
     });
@@ -111,8 +111,10 @@ void main() {
           delete(file);
 
           /// target is misisng so should throw an exception.
-          expect(() => resolveSymLink(pathToLink),
-              throwsA(isA<FileSystemException>()));
+          expect(
+            () => resolveSymLink(pathToLink),
+            throwsA(isA<FileSystemException>()),
+          );
         }, pathToTempDir: dir);
       });
     });

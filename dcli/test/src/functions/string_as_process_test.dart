@@ -126,11 +126,10 @@ void main() {
 
     t.test('toList - nothrow', () {
       final result = 'ls *.fasdafefe'.toList(nothrow: true);
+      t.expect(result, hasLength(1));
       t.expect(
-        result,
-        t.equals(
-          ["ls: cannot access '*.fasdafefe': No such file or directory"],
-        ),
+        result.single,
+        allOf(contains('*.fasdafefe'), contains('No such file or directory')),
       );
     });
 
@@ -176,14 +175,11 @@ void main() {
 
   t.test('forEach using runInShell', () {
     var found = false;
-    'echo run test'.forEach(
-      (line) {
-        if (line.contains('run test')) {
-          found = true;
-        }
-      },
-      runInShell: true,
-    );
+    'echo run test'.forEach((line) {
+      if (line.contains('run test')) {
+        found = true;
+      }
+    }, runInShell: true);
     t.expect(found, t.equals(true));
   });
 

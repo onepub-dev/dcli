@@ -6,9 +6,7 @@
  */
 
 import 'package:dcli/dcli.dart';
-import 'package:dcli/posix.dart';
-import 'package:dcli/src/shell/cmd_shell.dart';
-import 'package:dcli_core/dcli_core.dart' as core;
+import 'package:path/path.dart';
 import 'package:test/test.dart';
 
 /// @Throwing(ArgumentError)
@@ -17,18 +15,11 @@ void main() {
     final shell = Shell.current;
     print(shell.name);
 
-    String? expected;
-    if (Settings().isWindows) {
-      expected = CmdShell.shellName;
-    } else if (core.Settings().isLinux) {
-      expected = BashShell.shellName;
-    } else if (core.Settings().isMacOS) {
-      expected = ZshShell.shellName;
+    if (!Settings().isWindows && env['SHELL'] != null) {
+      expect(shell.name, basename(env['SHELL']!).toLowerCase());
+    } else {
+      expect(shell.name, isNotEmpty);
+      expect(shell.matchByName(shell.name), isTrue);
     }
-
-    /// This can fail if you run from the vscode  terminal rather than a
-    /// standard terminal  as under a vscode terminal it will return the
-    ///  sh shell on linux rather than bash.
-    expect(shell.name, equals(expected));
   });
 }

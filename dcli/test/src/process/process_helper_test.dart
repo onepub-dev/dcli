@@ -25,6 +25,30 @@ void main() {
     expect(parent, isNot(equals(pid)));
   });
 
+  test('ProcessHelper - child parent pid', () async {
+    final temporary = Directory.systemTemp.createTempSync(
+      'dcli child process ',
+    );
+    final script = File('${temporary.path}/wait.dart')
+      ..writeAsStringSync('''
+import 'dart:async';
+void main() {
+  print('ready');
+  Timer(const Duration(minutes: 1), () {});
+}
+''');
+    Process? child;
+    try {
+      child = await Process.start(Platform.resolvedExecutable, [script.path]);
+      await child.stdout.first;
+      expect(ProcessHelper().getParentPID(child.pid), pid);
+    } finally {
+      child?.kill();
+      if (child != null) await child.exitCode;
+      temporary.deleteSync(recursive: true);
+    }
+  }, skip: !Platform.isWindows);
+
   test('ProcessHelper - isRunning', () async {
     final progress = await capture(
       () async => expect(ProcessHelper().isRunning(pid), equals(true)),
@@ -59,8 +83,10 @@ void main() {
   group('getProcessByName', () {
     test('process exists', () {
       if (Platform.isMacOS) {
-        expect(() => ProcessHelper().getProcessesByName('anything'),
-            throwsUnsupportedError);
+        expect(
+          () => ProcessHelper().getProcessesByName('anything'),
+          throwsUnsupportedError,
+        );
         return;
       }
 
@@ -79,26 +105,32 @@ void main() {
     test('unknown process', () {
       if (Platform.isMacOS) {
         expect(
-            () => ProcessHelper().getProcessesByName('a;ljfasahaoi8w3dvaadk'),
-            throwsUnsupportedError);
+          () => ProcessHelper().getProcessesByName('a;ljfasahaoi8w3dvaadk'),
+          throwsUnsupportedError,
+        );
         return;
       }
 
       /// try do find a process that isn't running.
-      final processes =
-          ProcessHelper().getProcessesByName('a;ljfasahaoi8w3dvaadk');
+      final processes = ProcessHelper().getProcessesByName(
+        'a;ljfasahaoi8w3dvaadk',
+      );
       expect(processes.isEmpty, isTrue);
     });
   });
 
   test('parse status line', () {
-    expect(parseProcessLine('Name:	dart:ihserver.d'),
-        equals(('Name', 'dart:ihserver.d')));
+    expect(
+      parseProcessLine('Name:	dart:ihserver.d'),
+      equals(('Name', 'dart:ihserver.d')),
+    );
 
     expect(parseProcessLine('Umask:	0022'), equals(('Umask', '0022')));
 
-    expect(parseProcessLine('State:	S (sleeping)'),
-        equals(('State', 'S (sleeping)')));
+    expect(
+      parseProcessLine('State:	S (sleeping)'),
+      equals(('State', 'S (sleeping)')),
+    );
 
     expect(parseProcessLine('Empty:'), equals(('Empty', '')));
 
@@ -106,8 +138,10 @@ void main() {
 
     expect(parseProcessLine('NoColon'), equals(('NoColon', '')));
 
-    expect(parseProcessLine('VmSize:	 1012072 kB'),
-        equals(('VmSize', '1012072 kB')));
+    expect(
+      parseProcessLine('VmSize:	 1012072 kB'),
+      equals(('VmSize', '1012072 kB')),
+    );
   });
 
   // test('ProcessHelper', () {

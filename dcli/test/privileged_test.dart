@@ -5,6 +5,9 @@
  * SPDX-License-Identifier: MIT
  */
 
+@TestOn('posix')
+library;
+
 import 'package:dcli/dcli.dart';
 import 'package:posix/posix.dart';
 import 'package:test/test.dart';

@@ -10,13 +10,12 @@ library;
 
 import 'package:dcli/dcli.dart';
 import 'package:dcli/posix.dart';
-import 'package:path/path.dart';
 import 'package:test/test.dart';
 
 /// @Throwing(ArgumentError)
 void main() {
   test('loggedInUsersHome ...', () {
-    final home = join(rootPath, 'home', env['USER']);
+    final home = env['HOME'];
     expect((Shell.current as PosixShell).loggedInUsersHome, home);
   });
 }

@@ -409,11 +409,9 @@ String _whoami() {
   if (isPosixSupported) {
     try {
       user = getlogin();
-    } on PosixException catch (e) {
-      if (e.code == ENXIO) {
-        // no controlling terminal so we must be root.
-        user = 'root';
-      }
+    } on PosixException {
+      // CI jobs and services may have no controlling terminal. Resolve the
+      // effective user with whoami below rather than assuming they are root.
     }
   }
 

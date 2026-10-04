@@ -124,9 +124,9 @@ void main() {
     test('run process', () async {
       String? line;
       await NamedLock(name: 'exception').withLockAsync(() async {
-        line = 'ps -q 1 -o comm='.firstLine;
+        line = '"${Platform.resolvedExecutable}" --version'.firstLine;
       });
-      expect(line, isNotNull);
+      expect(line, startsWith('Dart SDK version:'));
     });
 
     test('exception catch', () {

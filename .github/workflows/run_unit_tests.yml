@@ -27,10 +27,13 @@ jobs:
           dart pub get
           cd ..
 
-      - name: Activate DCLI from Source
+      - name: Activate DCLI SDK from Source
         run: |
-          cd dcli
-          dart pub global activate -spath .
+          cd dcli_sdk
+          dart pub global activate --source path .
+          cd ../dcli_unit_tester
+          dart pub global activate --source path .
+          dcli install --no-dart --no-privileges
 
 
       - name: Run All Tests

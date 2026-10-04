@@ -13,6 +13,23 @@ import 'package:test/test.dart';
 /// @Throwing(DeleteDirException)
 void main() {
   group('ParseCLICommand', () {
+    test('preserves tildes inside arguments and Windows short paths', () {
+      final parsed = ParsedCliCommand(
+        r'command C:\Users\RUNNER~1\Temp\file.txt file~backup ~other',
+        pwd,
+      );
+      expect(parsed.args, [
+        r'C:\Users\RUNNER~1\Temp\file.txt',
+        'file~backup',
+        '~other',
+      ]);
+    });
+
+    test('expands a leading home directory marker', () {
+      final parsed = ParsedCliCommand('command ~ ~/file', pwd);
+      expect(parsed.args, [HOME, '$HOME/file']);
+    });
+
     test('empty string', () {
       const test = '';
 
@@ -118,7 +135,7 @@ void main() {
         equals([
           '-t',
           'bilby.clouddialer.com.au',
-          'echo abc123 | sudo -S  $command'
+          'echo abc123 | sudo -S  $command',
         ]),
       );
     });
@@ -132,10 +149,7 @@ void main() {
 
       expect(
         parsed.args,
-        equals([
-          'onepub:"OnePub.dev Logo – reversed FA.png"',
-          '.',
-        ]),
+        equals(['onepub:"OnePub.dev Logo – reversed FA.png"', '.']),
       );
     });
 
@@ -148,10 +162,7 @@ void main() {
 
       expect(
         parsed.args,
-        equals([
-          'onepub:"OnePub.dev Logo – reversed FA.png"',
-          '.',
-        ]),
+        equals(['onepub:"OnePub.dev Logo – reversed FA.png"', '.']),
       );
     });
 
@@ -162,7 +173,8 @@ void main() {
       from = from.replaceAll('"', '^"');
       to = to.replaceAll('"', '^"');
 
-      final command = 'gcloud compute scp --zone=us-west1-b '
+      final command =
+          'gcloud compute scp --zone=us-west1-b '
           '--project=onepub-dev "$from" "$to"';
 
       final parsed = ParsedCliCommand(command, pwd);
@@ -184,7 +196,7 @@ void main() {
 
   group('Glob expansion', () {
     test('No expansion', () {
-// var cmd = 'docker run   --network host   dcli:docker_dev_cli   -it --volume $HOME:/me --entrypoint /bin/bash';
+      // var cmd = 'docker run   --network host   dcli:docker_dev_cli   -it --volume $HOME:/me --entrypoint /bin/bash';
     });
   });
 
@@ -199,16 +211,12 @@ void main() {
 
         expect(
           parsed.args,
-          unorderedEquals(<String>[
-            'fred.jpg',
-            'one.jpg',
-            'fred.png',
-          ]),
+          unorderedEquals(<String>['fred.jpg', 'one.jpg', 'fred.png']),
         );
       });
     },
     onPlatform: <String, Skip>{
-      'windows': const Skip("Powershell doesn't do glob expansion")
+      'windows': const Skip("Powershell doesn't do glob expansion"),
     },
   );
 
@@ -225,7 +233,7 @@ void main() {
       });
     },
     onPlatform: <String, Skip>{
-      'windows': const Skip("Powershell doesn't do glob expansion")
+      'windows': const Skip("Powershell doesn't do glob expansion"),
     },
   );
 
@@ -246,7 +254,7 @@ void main() {
       });
     },
     onPlatform: <String, Skip>{
-      'windows': const Skip("Powershell doesn't do glob expansion")
+      'windows': const Skip("Powershell doesn't do glob expansion"),
     },
   );
 
@@ -262,11 +270,7 @@ void main() {
 
         expect(
           parsed.args,
-          unorderedEquals(<String>[
-            'three.txt',
-            'four.txt',
-            'two.jpg',
-          ]),
+          unorderedEquals(<String>['three.txt', 'four.txt', 'two.jpg']),
         );
       });
     },
@@ -288,10 +292,7 @@ void main() {
       } else {
         expect(
           parsed.args,
-          unorderedEquals(<String>[
-            'middle/three.txt',
-            'middle/four.txt',
-          ]),
+          unorderedEquals(<String>['middle/three.txt', 'middle/four.txt']),
         );
       }
     });
@@ -321,9 +322,10 @@ void main() {
       } else {
         expect(
           parsed.args,
-          unorderedEquals(
-            <String>[join(fs.top, 'one.txt'), join(fs.top, 'two.txt')],
-          ),
+          unorderedEquals(<String>[
+            join(fs.top, 'one.txt'),
+            join(fs.top, 'two.txt'),
+          ]),
         );
       }
     });

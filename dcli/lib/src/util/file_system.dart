@@ -21,37 +21,20 @@ int availableSpace(String path) {
     );
   }
 
-  final lines = 'df -h "$path"'.toList();
+  // POSIX output fixes the block size and layout on both GNU and BSD df.
+  final lines = 'df -Pk "$path"'.toList();
   if (lines.length != 2) {
     throw FileSystemException(
-      "An error occured retrieving the device path: ${lines.join('\n')}",
+      "An error occurred retrieving the device path: ${lines.join('\n')}",
     );
   }
 
   final line = lines[1];
-  final parts = line.split(RegExp(r'\s+'));
-
-  if (parts.length != 6) {
+  final parts = line.trim().split(RegExp(r'\s+'));
+  final blocks = parts.length >= 6 ? int.tryParse(parts[3]) : null;
+  if (blocks == null) {
     throw FileSystemException('An error parsing line: $line');
   }
 
-  final factors = {'G': 1000000000, 'M': 1000000, 'K': 1000, 'B': 1};
-
-  final havailable = parts[3];
-
-  if (havailable == '0') {
-    return 0;
-  }
-
-  final factoryLetter = havailable.substring(havailable.length - 1);
-  final hsize = havailable.substring(0, havailable.length - 1);
-
-  final factor = factors[factoryLetter];
-  if (factor == null) {
-    throw FileSystemException(
-      "Unrecognized size factor '$factoryLetter' in $havailable",
-    );
-  }
-
-  return int.tryParse(hsize)! * factor;
+  return blocks * 1024;
 }

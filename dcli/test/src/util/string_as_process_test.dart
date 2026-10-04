@@ -6,6 +6,7 @@
  */
 
 import 'dart:async';
+import 'dart:io';
 
 import 'package:dcli/dcli.dart';
 import 'package:test/test.dart';
@@ -38,9 +39,11 @@ void main() {
       'tail $file'.start(progress: progress, runInShell: true);
 
       final done = Completer<void>();
-      progress.stream.listen((event) {
-        print('stream: $event');
-      }).onDone(done.complete);
+      progress.stream
+          .listen((event) {
+            print('stream: $event');
+          })
+          .onDone(done.complete);
 
       await done.future;
       print('done');
@@ -48,9 +51,8 @@ void main() {
   });
 
   test('firstLine', () {
-    /// pid: 1 should be systemd
-    final line = 'ps -q 1 -o comm='.firstLine;
-    expect(line, isNotNull);
+    final line = '"${Platform.resolvedExecutable}" --version'.firstLine;
+    expect(line, startsWith('Dart SDK version:'));
   });
 
   // test('stream', () async {

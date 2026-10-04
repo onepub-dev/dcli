@@ -20,37 +20,34 @@ import 'package:test/test.dart';
 /// @Throwing(FormatException)
 /// @Throwing(MissingDependencyException)
 void main() {
-  test(
-    'PubCache',
-    () {
-      if (Settings().isWindows) {
-        expect(
-          PubCache().pathToBin,
-          equals(join(env['LocalAppData']!, 'Pub', 'Cache', 'bin')),
-        );
-      } else {
-        expect(
-          PubCache().pathToBin,
-          equals(join(env['HOME']!, '.pub-cache', 'bin')),
-        );
-      }
-    },
-    skip: false,
-  );
+  test('PubCache', () {
+    if (env['PUB_CACHE'] != null) {
+      expect(PubCache().pathToBin, equals(join(env['PUB_CACHE']!, 'bin')));
+    } else if (Settings().isWindows) {
+      expect(
+        PubCache().pathToBin,
+        equals(join(env['LocalAppData']!, 'Pub', 'Cache', 'bin')),
+      );
+    } else {
+      expect(
+        PubCache().pathToBin,
+        equals(join(env['HOME']!, '.pub-cache', 'bin')),
+      );
+    }
+  }, skip: false);
 
-  test(
-    'PubCache - from ENV',
-    () async {
-      await withTestScope((outerTempDir) async {
-        await core.withEnvironmentAsync(() async {
+  test('PubCache - from ENV', () async {
+    await withTestScope((outerTempDir) async {
+      await core.withEnvironmentAsync(
+        () async {
           /// create a pub-cache using the test scope's HOME
           final scope = Scope()..value(PubCache.scopeKey, PubCache.forScope());
           await scope.run(() async {
             if (Settings().isWindows) {
               expect(
-                  PubCache().pathToBin,
-                  equals(
-                      join(outerTempDir, 'test_cache', '.pub-cache', 'bin')));
+                PubCache().pathToBin,
+                equals(join(outerTempDir, 'test_cache', '.pub-cache', 'bin')),
+              );
             } else {
               expect(
                 PubCache().pathToBin,
@@ -58,13 +55,13 @@ void main() {
               );
             }
           });
-        }, environment: {
-          'PUB_CACHE': join(outerTempDir, 'test_cache', '.pub-cache')
-        });
-      });
-    },
-    skip: false,
-  );
+        },
+        environment: {
+          'PUB_CACHE': join(outerTempDir, 'test_cache', '.pub-cache'),
+        },
+      );
+    });
+  }, skip: false);
 
   test('PubCache - primaryVersion', () async {
     await withTestScope((tempDir) async {
@@ -149,8 +146,9 @@ void main() {
     }
     expect(PubCache().isGloballyActivatedFromSource('general'), isFalse);
     PubCache().globalActivateFromSource(
-        join('..', 'dcli_unit_tester', 'test', 'test_script', 'general'),
-        overwrite: true);
+      join('..', 'dcli_unit_tester', 'test', 'test_script', 'general'),
+      overwrite: true,
+    );
     expect(PubCache().isGloballyActivatedFromSource('general'), isTrue);
 
     /// cleanup

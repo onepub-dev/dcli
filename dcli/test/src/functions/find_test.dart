@@ -343,8 +343,18 @@ void main() {
     });
   });
 
-  test('do not follow links', () {
-    expect(isLink('/usr/bin/X11'), isTrue);
-    find('*', workingDirectory: '/usr/bin').forEach(print);
+  test('do not follow links', () async {
+    await withTempDirAsync((root) async {
+      final target = join(root, 'target');
+      final search = join(root, 'search');
+      createDir(target);
+      createDir(search);
+      touch(join(target, 'outside.txt'), create: true);
+      final link = join(search, 'linked');
+      createSymLink(targetPath: target, linkPath: link);
+
+      expect(isLink(link), isTrue);
+      expect(find('*', workingDirectory: search).toList(), t.equals(<String>[]));
+    });
   }, skip: core.Settings().isWindows);
 }

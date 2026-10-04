@@ -103,14 +103,14 @@ environment:
       reported,
       contains(
         '  Executable: '
-        '${p.join(temporary.path, 'target/.renamed.bundle/bin/tool')}',
+        '${p.join(temporary.path, 'target', '.renamed.bundle', 'bin', 'tool')}',
       ),
     );
     expect(
       reported,
       contains(
         '  Library: '
-        '${p.join(temporary.path, 'target/.renamed.bundle/lib/native.so')}',
+        '${p.join(temporary.path, 'target', '.renamed.bundle', 'lib', 'native.so')}',
       ),
     );
     expect(reported.join('\n'), isNot(contains('source/')));
@@ -244,7 +244,7 @@ void main(List<String> args) async {
         final output = jsonDecode(await stdout) as Map<String, dynamic>;
         expect(output['answer'], 42);
         expect(output['args'], arguments);
-        expect(output['cwd'], temporary.path);
+        expect(output['cwd'], temporary.resolveSymbolicLinksSync());
         expect(output['environment'], 'inherited');
         expect(output['stdin'], 'piped input');
         expect(output['pid'], process.pid);

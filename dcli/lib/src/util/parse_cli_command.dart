@@ -306,7 +306,7 @@ enum _ParseState {
   inWord,
 
   /// The next character is to be treated litterally
-  escaped
+  escaped,
 }
 
 class _ParseFrame {
@@ -326,10 +326,12 @@ class _ParseFrame {
 
   /// Create a [_ParseFrame] when we enter the [_ParseState.inQuote] state.
   _ParseFrame.forQuote(
-      StackList<_ParseFrame> stack, this.offset, this.matchingQuote)
-      : state = isQuoteActive(stack)
-            ? _ParseState.nestedQuote
-            : _ParseState.inQuote;
+    StackList<_ParseFrame> stack,
+    this.offset,
+    this.matchingQuote,
+  ) : state = isQuoteActive(stack)
+          ? _ParseState.nestedQuote
+          : _ParseState.inQuote;
 
   @override
   String toString() =>
@@ -394,8 +396,10 @@ class _QArg {
   /// @Throwing(PathException)
   Iterable<String> expandGlob(String? workingDirectory) {
     final expanded = <String>[];
-    if (arg.contains('~')) {
-      arg = arg.replaceAll('~', HOME);
+    if (arg == '~' ||
+        arg.startsWith('~/') ||
+        (Settings().isWindows && arg.startsWith('~\\'))) {
+      arg = '$HOME${arg.substring(1)}';
     }
     if (needsExpansion) {
       final files = _expandGlob(workingDirectory!);
@@ -445,8 +449,9 @@ class _QArg {
   /// @Throwing(ArgumentError)
   /// @Throwing(PathException)
   bool isHidden(String workingDirectory, FileSystemEntity entity) {
-    final relativePath =
-        truepath(relative(entity.path, from: workingDirectory));
+    final relativePath = truepath(
+      relative(entity.path, from: workingDirectory),
+    );
 
     final parts = relativePath.split(separator);
 
