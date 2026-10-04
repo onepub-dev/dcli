@@ -34,7 +34,7 @@ jobs:
           dart pub global activate --source path .
           cd ../dcli_unit_tester
           dart pub global activate --source path .
-          dcli install --no-dart --no-privileges
+          dcli install --nodart --noprivileges
 
       - name: Run Specific [OLD] NamedLocks Test - dcli/test/src/util/named_lock_test.test
         run: |
