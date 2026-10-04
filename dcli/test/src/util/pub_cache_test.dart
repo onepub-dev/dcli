@@ -22,7 +22,10 @@ import 'package:test/test.dart';
 void main() {
   test('PubCache', () {
     if (env['PUB_CACHE'] != null) {
-      expect(PubCache().pathToBin, equals(join(env['PUB_CACHE']!, 'bin')));
+      expect(
+        PubCache().pathToBin,
+        equals(normalize(join(env['PUB_CACHE']!, 'bin'))),
+      );
     } else if (Settings().isWindows) {
       expect(
         PubCache().pathToBin,

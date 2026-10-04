@@ -43,12 +43,16 @@ class DartScript {
   DartProject? _project;
 
   /// @Throwing(ArgumentError)
-  factory DartScript.createScript(
-      {required DartProject project,
-      required String scriptName,
-      required String templateName}) {
+  factory DartScript.createScript({
+    required DartProject project,
+    required String scriptName,
+    required String templateName,
+  }) {
     scriptCreator(
-        project: project, scriptName: scriptName, templateName: templateName);
+      project: project,
+      scriptName: scriptName,
+      templateName: templateName,
+    );
 
     return DartScript.fromFile(join(project.pathToProjectRoot, scriptName));
   }
@@ -112,14 +116,12 @@ class DartScript {
   /// ```
   ///
   DartScript.fromFile(String scriptPathTo, {DartProject? project})
-      : this._internal(scriptPathTo, project: project);
+    : this._internal(scriptPathTo, project: project);
 
-  DartScript._internal(
-    String pathToScript, {
-    DartProject? project,
-  })  : _pathToScript = truepath(pathToScript),
-        _scriptDirectory = dirname(truepath(pathToScript)),
-        _project = project {
+  DartScript._internal(String pathToScript, {DartProject? project})
+    : _pathToScript = truepath(pathToScript),
+      _scriptDirectory = dirname(truepath(pathToScript)),
+      _project = project {
     {
       verbose(() => '_pathToScript: $_pathToScript');
       _scriptName = p.basename(truepath(pathToScript));
@@ -215,7 +217,7 @@ class DartScript {
   bool get isPubGlobalActivated => _isPubGlobalActivated(_pathToScript);
 
   static bool _isPubGlobalActivated(String pathToScript) =>
-      pathToScript.startsWith(PubCache().pathTo);
+      p.isWithin(PubCache().pathTo, pathToScript);
 
   /// Strips the root prefix of a path so we can use
   /// it as part of the virtual projects path.
@@ -283,7 +285,8 @@ class DartScript {
     String? workingDirectory,
   }) {
     verbose(
-      () => '\nCompiling with pubspec.yaml:\n'
+      () =>
+          '\nCompiling with pubspec.yaml:\n'
           '${read(pathToPubSpec).toParagraph()}\n',
     );
 
@@ -353,14 +356,15 @@ class DartScript {
     final runner = ScriptRunner(sdk, this, args);
 
     return runner.start(
-        progress: progress,
-        runInShell: runInShell,
-        detached: detached,
-        terminal: terminal,
-        privileged: privileged,
-        nothrow: nothrow,
-        workingDirectory: workingDirectory,
-        extensionSearch: extensionSearch);
+      progress: progress,
+      runInShell: runInShell,
+      detached: detached,
+      terminal: terminal,
+      privileged: privileged,
+      nothrow: nothrow,
+      workingDirectory: workingDirectory,
+      extensionSearch: extensionSearch,
+    );
   }
 
   /// Returns the platform dependant name of the compiled script's exe name.
@@ -415,7 +419,7 @@ class PithyGreetings {
     'Hurry up, says Mr Blackboard',
     "Damned if you do, Damned if you don't, so just get the hell on with it.",
     'Yep, this is all of it.',
-    "I don't like your curtains"
+    "I don't like your curtains",
   ];
 
   /// returns a random pithy greeting.

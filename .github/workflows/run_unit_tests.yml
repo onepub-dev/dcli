@@ -19,6 +19,13 @@ jobs:
       - uses: actions/checkout@v4.1.4
       - uses: dart-lang/setup-dart@v1.6.4
 
+      - name: Normalize Pub cache path
+        if: runner.os == 'Windows'
+        shell: pwsh
+        run: |
+          $env:PUB_CACHE = [System.IO.Path]::GetFullPath($env:PUB_CACHE)
+          "PUB_CACHE=$env:PUB_CACHE" >> $env:GITHUB_ENV
+
       - name: Install dependencies
         run: |
           cd dcli_core

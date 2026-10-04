@@ -39,6 +39,8 @@ class ShellDetection {
     DashShell.shellName: DashShell.withPid,
     BashShell.shellName: BashShell.withPid,
     PowerShell.shellName: PowerShell.withPid,
+    // PowerShell 7 uses pwsh.exe rather than Windows PowerShell's name.
+    'pwsh.exe': PowerShell.withPid,
     ShShell.shellName: ShShell.withPid,
     ZshShell.shellName: ZshShell.withPid,
     FishShell.shellName: FishShell.withPid,
@@ -95,8 +97,9 @@ class ShellDetection {
         verbose(() => 'found: $possiblePid $processName');
         shell = _shellByName(processName, possiblePid);
       } else {
-        Settings()
-            .verbose('possiblePID: $possiblePid Unable to obtain process name');
+        Settings().verbose(
+          'possiblePID: $possiblePid Unable to obtain process name',
+        );
         shell = UnknownShell.withPid(possiblePid, processName: 'unknown');
       }
 

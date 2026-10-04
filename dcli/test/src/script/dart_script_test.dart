@@ -18,6 +18,20 @@ import 'package:test/test.dart';
 /// @Throwing(RangeError)
 /// @Throwing(TouchException)
 void main() {
+  test('pub cache membership compares path components', () {
+    final cache = PubCache().pathTo;
+    final inside = DartScript.fromFile(
+      normalize(
+        join(cache, 'hosted', 'pub.dev', 'fixture', 'bin', 'tool.dart'),
+      ),
+    );
+    final outside = DartScript.fromFile(
+      join('${cache}_other', 'bin', 'tool.dart'),
+    );
+    expect(inside.isPubGlobalActivated, isTrue);
+    expect(outside.isPubGlobalActivated, isFalse);
+  });
+
   test('dart script ...', () {
     expect(
       DartScript.stripDartVersionSuffix('pub_release.dart-2.13.0'),
@@ -179,6 +193,9 @@ void main() {
 
     test('globally activated script', () {
       const packageName = 'dcli_unit_tester';
+      final executableName = Platform.isWindows
+          ? '$packageName.exe'
+          : packageName;
 
       /// Make certain its not on the PATH as a compiled exe already
       final script = which(packageName);
@@ -198,7 +215,7 @@ void main() {
       expect(result.length, equals(13));
       var line = 0;
       expect(result[line++], equals('basename, dcli_unit_tester'));
-      expect(result[line++], equals('exeName, dcli_unit_tester'));
+      expect(result[line++], equals('exeName, $executableName'));
       expect(result[line++], equals('isCompiled, false'));
       expect(result[line++], equals('isInstalled, false'));
       expect(result[line++], equals('isPubGlobalActivated, true'));
@@ -210,14 +227,14 @@ void main() {
         result[line++],
         equals(
           'pathToExe, '
-          '${join(pathToGlobalPackage, 'bin', 'dcli_unit_tester')}',
+          '${join(pathToGlobalPackage, 'bin', executableName)}',
         ),
       );
       expect(
         result[line++],
         equals(
           'pathToInstalledExe, '
-          '${join(HOME, '.dcli', 'bin', 'dcli_unit_tester')}',
+          '${join(Settings().pathToDCliBin, executableName)}',
         ),
       );
       expect(

@@ -105,6 +105,8 @@ class TestFileSystem {
 
   var initialised = false;
 
+  Future<void>? _initialization;
+
   var dcliActivated = false;
 
   /// The location of any temp scripts
@@ -181,22 +183,37 @@ class TestFileSystem {
   }
 
   Future<void> initFS() async {
-    if (!initialised) {
-      /// If we copy pub-cache we also need to
-      /// copy the testscripts as when the .dart_tools
-      /// is created it includes absolute paths to the pub-cache.
-      /// If we are creating/destroying pub-caches and sharing
-      /// the tests scripts the paths to pub-cache keep getting
-      /// broken.
-      // copyPubCache(originalHome, HOME);
-      await copyTestScripts();
-      testDirectoryTree = TestDirectoryTree(fsRoot);
-
-      copyPubTokens();
-
-      await installCrossPlatformTestScripts();
-      initialised = true;
+    if (initialised) return;
+    final initialization = _initialization;
+    if (initialization != null) {
+      await initialization;
+      return;
     }
+
+    final future = _initializeFS();
+    _initialization = future;
+    try {
+      await future;
+      initialised = true;
+    } finally {
+      _initialization = null;
+    }
+  }
+
+  Future<void> _initializeFS() async {
+    /// If we copy pub-cache we also need to
+    /// copy the testscripts as when the .dart_tools
+    /// is created it includes absolute paths to the pub-cache.
+    /// If we are creating/destroying pub-caches and sharing
+    /// the tests scripts the paths to pub-cache keep getting
+    /// broken.
+    // copyPubCache(originalHome, HOME);
+    await copyTestScripts();
+    testDirectoryTree = TestDirectoryTree(fsRoot);
+
+    copyPubTokens();
+
+    await installCrossPlatformTestScripts();
   }
 
   /// Copy the pub.dev pub-tokens so that we can use onepub within
@@ -339,6 +356,7 @@ class TestFileSystem {
     copyTree(
       join(pathToPackageUnitTester, 'test', 'test_script'),
       testScriptPath,
+      overwrite: true,
     );
 
     Settings().setVerbose(enabled: verbose);
