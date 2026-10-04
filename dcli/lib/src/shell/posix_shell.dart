@@ -405,20 +405,17 @@ uid:  $uid''',
 }
 
 String _whoami() {
-  String? user;
+  // getlogin() identifies the login session, which can still belong to root
+  // after a CI runner or service switches to an unprivileged account.
   if (isPosixSupported) {
     try {
-      user = getlogin();
+      return getUserNameByUID(geteuid());
     } on PosixException {
-      // CI jobs and services may have no controlling terminal. Resolve the
-      // effective user with whoami below rather than assuming they are root.
+      // Fall back to the platform command if the user database lookup fails.
     }
   }
 
-  /// fall back to whoami if nothing else works.
-  user ??= 'whoami'.firstLine;
-  verbose(() => 'whoami: $user');
-  return user!;
+  return 'whoami'.firstLine!.trim();
 }
 
 /// Makes [T] immutable by not allowing any methods

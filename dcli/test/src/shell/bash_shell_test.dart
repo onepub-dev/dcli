@@ -17,7 +17,11 @@ import 'package:test/test.dart';
 /// @Throwing(ArgumentError)
 void main() {
   test('bash shell loggedInUser', () {
-    expect(Shell.current.loggedInUser, env['USER']);
+    final effectiveUser = 'whoami'.firstLine!.trim();
+    final expected = effectiveUser == 'root'
+        ? env['SUDO_USER'] ?? effectiveUser
+        : effectiveUser;
+    expect(Shell.current.loggedInUser, expected);
   });
 
   test('isPrivilegedPasswordRequired', () {

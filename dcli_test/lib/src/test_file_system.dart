@@ -182,8 +182,6 @@ class TestFileSystem {
 
   Future<void> initFS() async {
     if (!initialised) {
-      initialised = true;
-
       /// If we copy pub-cache we also need to
       /// copy the testscripts as when the .dart_tools
       /// is created it includes absolute paths to the pub-cache.
@@ -197,6 +195,7 @@ class TestFileSystem {
       copyPubTokens();
 
       await installCrossPlatformTestScripts();
+      initialised = true;
     }
   }
 
@@ -206,6 +205,9 @@ class TestFileSystem {
     final pathToDartConfig = join('.config', 'dart');
     final originalDartConfig = join(originalHome, pathToDartConfig);
     final testFSDartConfig = join(HOME, pathToDartConfig);
+    if (!Directory(originalDartConfig).existsSync()) {
+      return;
+    }
     if (!exists(testFSDartConfig)) {
       createDir(testFSDartConfig, recursive: true);
     }
