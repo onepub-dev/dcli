@@ -411,58 +411,44 @@ dependency_overrides:
       createDir(pathToTools, recursive: true);
     }
 
-    final tools = ['head', 'tail', 'ls', 'touch', 'run_child'];
-
-    // may not exists on the first pass through.
-    if (!exists(pathToTools)) {
-      createDir(pathToTools, recursive: true);
-    }
-
     final pathToToolProject =
         join(pathToPackageUnitTester, 'test', 'test_script', 'general');
+    final tools = ['head', 'tail', 'ls', 'touch', 'run_child']
+        .map((command) => DartScript.fromFile(
+            join(pathToToolProject, 'bin', '$command.dart')))
+        .toList();
 
-    if (!tools.any(_compileRequiredForCommand)) {
+    if (!tools.any(_compileRequired)) {
       return;
     }
 
-    final toolProject = DartProject.fromPath(pathToToolProject);
-
-    await capture(
-      toolProject.warmup,
-      progress: Progress.printStdErr(),
-    );
-
-    print(blue('compiling cross platform tools'));
     await NamedLock(
       name: 'compile',
       timeout: const Duration(minutes: 10),
     ).withLockAsync(() async {
-      for (final command in tools) {
-        final pathToTool = join(pathToTools, command);
-        final pathToToolSource =
-            join(pathToToolProject, 'bin', '$command.dart');
-        if (_compileRequired(pathToTool, pathToToolSource)) {
-          final script = DartScript.fromFile(pathToToolSource);
-          if (!exists(join(pathToTools, '$command.dart'))) {
-            /// compile and install the command into the tool path
-            script.compile();
-            copy(script.pathToExe, pathToTools, overwrite: true);
-          }
+      // Another test isolate may have installed the tools while we waited.
+      if (!tools.any(_compileRequired)) {
+        return;
+      }
+
+      final toolProject = DartProject.fromPath(pathToToolProject);
+      await capture(toolProject.warmup, progress: Progress.printStdErr());
+
+      print(blue('compiling cross platform tools'));
+      for (final script in tools) {
+        if (_compileRequired(script)) {
+          script.compile();
+          copy(script.pathToExe, pathToTools, overwrite: true);
         }
       }
     });
   }
 
-  bool _compileRequiredForCommand(String command) {
-    final pathToToolProject =
-        join(pathToPackageUnitTester, 'test', 'test_script', 'general');
-    final pathToTool = join(pathToTools, command);
-    final pathToToolSource = join(pathToToolProject, 'bin', '$command.dart');
-
-    return _compileRequired(pathToTool, pathToToolSource);
-  }
-
-  bool _compileRequired(String pathToTool, String pathToToolSource) {
+  bool _compileRequired(DartScript script) {
+    // Use the same platform-specific name as compilation and installation.
+    // Checking an extensionless path on Windows always reports a cache miss
+    // and can overwrite an .exe that another test is currently running.
+    final pathToTool = join(pathToTools, script.exeName);
     if (!exists(pathToTool)) {
       return true;
     }
@@ -470,7 +456,9 @@ dependency_overrides:
     /// If the source has been modified since the tool was compiled
     /// This isn't a perfect test as the tool may rely on some other
     /// library that has been modified.
-    return stat(pathToTool).modified.isBefore(stat(pathToToolSource).modified);
+    return stat(pathToTool)
+        .modified
+        .isBefore(stat(script.pathToScript).modified);
   }
 
   bool isDCliRunningFromSource() =>
