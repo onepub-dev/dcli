@@ -2,6 +2,7 @@
 
 - Upgrade direct dependencies, including `equatable` 3, and raise the minimum
   Dart SDK to 3.10.1.
+- Preserve a source-activated SDK when running `dcli install` on Linux and macOS.
 
 # 10.3.0
 

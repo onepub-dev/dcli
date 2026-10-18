@@ -34,8 +34,9 @@ class LinuxDCliInstaller {
         Scope.use(installFromSourceKey)) {
       // If we are called from a unit test we do it from source
       PubCache().globalActivateFromSource(
-          join(DartProject.self.pathToProjectRoot, '..', 'dcli_sdk'));
-    } else {
+        join(DartProject.self.pathToProjectRoot, '..', 'dcli_sdk'),
+      );
+    } else if (!PubCache().isGloballyActivatedFromSource('dcli_sdk')) {
       /// activate from pub.dev
       PubCache().globalActivate('dcli_sdk', version: packageVersion);
     }
@@ -79,8 +80,10 @@ class LinuxDCliInstaller {
         }
       }
 
-      final dartInstallDir =
-          await DartSdk().installFromArchive('/usr/lib/dart', askUser: false);
+      final dartInstallDir = await DartSdk().installFromArchive(
+        '/usr/lib/dart',
+        askUser: false,
+      );
       print('Installed Dart to: $dartInstallDir');
 
       if (pathUpdated) {
@@ -92,7 +95,8 @@ class LinuxDCliInstaller {
       // dart is already installed.
 
       verbose(
-        () => "Found dart at: ${which('dart').path ?? "<not found>"} "
+        () =>
+            "Found dart at: ${which('dart').path ?? "<not found>"} "
             'and as such will not install dart.',
       );
     }

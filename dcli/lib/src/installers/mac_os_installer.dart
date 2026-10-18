@@ -35,8 +35,9 @@ class MacOSDCliInstaller {
         Scope.use(installFromSourceKey)) {
       // If we are called from a unit test we do it from source
       PubCache().globalActivateFromSource(
-          join(DartProject.self.pathToProjectRoot, '..', 'dcli_sdk'));
-    } else {
+        join(DartProject.self.pathToProjectRoot, '..', 'dcli_sdk'),
+      );
+    } else if (!PubCache().isGloballyActivatedFromSource('dcli_sdk')) {
       /// activate from pub.dev
       PubCache().globalActivate('dcli_sdk', version: packageVersion);
     }
@@ -51,7 +52,8 @@ class MacOSDCliInstaller {
     if (DartSdk().pathToDartExe != null) {
       // nothing to do, dart is already installed.
       verbose(
-        () => "Found dart at: ${which('dart').path} and "
+        () =>
+            "Found dart at: ${which('dart').path} and "
             'as such will not install dart.',
       );
       return false;
