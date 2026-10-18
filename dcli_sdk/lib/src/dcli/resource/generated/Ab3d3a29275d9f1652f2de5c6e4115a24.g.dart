@@ -4,7 +4,7 @@ import 'Ab3d3a29275d9f1652f2de5c6e4115a24Part0.g.dart';
 class Ab3d3a29275d9f1652f2de5c6e4115a24 extends PackedResource {
   const Ab3d3a29275d9f1652f2de5c6e4115a24();
   @override
-  String get checksum => "03469bf5833b861c65cab82a28f0ad63";
+  String get checksum => "20434726d1f009130a63e1b103e0fb04";
   @override
   String get originalPath => "template/script/pubspec.yaml";
   @override

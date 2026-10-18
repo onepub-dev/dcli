@@ -1,3 +1,8 @@
+# 10.4.0
+
+- Upgrade dependencies, rebuild the test executable, and raise the minimum
+  Dart SDK to 3.10.1.
+
 # 10.3.0
 - Add packed compilation and chunked resources
 - Released 10.2.0.

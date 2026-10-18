@@ -1,3 +1,8 @@
+# 10.4.0
+
+- Upgrade dependencies and raise the minimum Dart SDK to 3.10.1.
+- Repack project templates for DCli 10.4.0 and rebuild the command executables.
+
 # 10.3.0
 
 - Add `dcli compile --packed` to distribute the compiled application and native

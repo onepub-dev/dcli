@@ -1,3 +1,7 @@
+# 10.4.0
+
+- Upgrade dependencies and raise the minimum Dart SDK to 3.5.0.
+
 # 10.3.0
 - Add packed compilation and chunked resources
 - Released 10.2.0.

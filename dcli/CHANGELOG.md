@@ -1,3 +1,8 @@
+# 10.4.0
+
+- Upgrade direct dependencies, including `equatable` 3, and raise the minimum
+  Dart SDK to 3.10.1.
+
 # 10.3.0
 
 - Add `dcli compile --packed` to distribute the compiled application and native

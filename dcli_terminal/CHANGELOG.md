@@ -1,3 +1,7 @@
+# 10.4.0
+
+- Upgrade to `dart_console` 5.1.0 and refresh development dependencies.
+
 # 10.3.0
 - Add packed compilation and chunked resources
 - Released 10.2.0.
