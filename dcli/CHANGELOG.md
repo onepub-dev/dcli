@@ -1,3 +1,10 @@
+# 10.4.1
+
+- Keep PATH tests local to scoped fixtures instead of permanently changing the
+  Windows registry. Exercise registry PATH operations with in-memory storage.
+- Isolate registry value tests in disposable keys and make the Developer Mode
+  test read-only.
+
 # 10.4.0
 
 - Upgrade direct dependencies, including `equatable` 3, and raise the minimum
