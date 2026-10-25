@@ -6,6 +6,9 @@
  */
 
 import 'dart:convert';
+import 'dart:io';
+
+import 'package:meta/meta.dart';
 
 import '../../dcli.dart';
 
@@ -17,7 +20,8 @@ class Remote {
 
   static const _sshErrors = <int, String>{
     0: 'Operation was successful',
-    1: 'Generic error, usually because invalid command line '
+    1:
+        'Generic error, usually because invalid command line '
         'options or malformed configuration',
     2: 'Connection failed',
     65: 'Host not allowed to connect',
@@ -34,7 +38,7 @@ class Remote {
     76: 'Too many connections',
     77: 'Authentication cancelled by user',
     78: 'No more authentication methods available',
-    79: 'Invalid user name'
+    79: 'Invalid user name',
   };
 
   static const _scpErrors = <int, String>{
@@ -63,7 +67,7 @@ class Remote {
     76: 'Too many connections',
     77: 'Authentication cancelled by user',
     78: 'No more authentication methods available',
-    79: 'Invalid user name'
+    79: 'Invalid user name',
   };
 
   /// Factory constructor.
@@ -160,20 +164,13 @@ class Remote {
     // disable psuedo terminal
     cmdArgs
       ..add('-T')
+      ..add('--')
       ..add(host);
 
     final cmdLine = StringBuffer();
     for (var command in commands) {
-      if (sudo) {
-        // -S accept echoed password{
-        // -k clear the sudo cached password so it expects a password
-
-        // We quote the [command] to stop glob expansion on the local system.
-        if (password != null) {
-          command = "echo $password | sudo -Skp '' $command";
-        } else {
-          command = 'sudo $command';
-        }
+      if (sudo && password == null) {
+        command = 'sudo $command';
       }
       if (cmdLine.isNotEmpty) {
         // bash command delimiter.
@@ -187,7 +184,19 @@ class Remote {
     progress ??= Progress.devNull(encoding: encoding);
 
     try {
-      startFromArgs('ssh', cmdArgs, progress: progress);
+      if (sudo && password != null) {
+        _runWithPassword(
+          host: host,
+          // One sudo process authenticates once. The child closes the SSH
+          // input before any caller-supplied command can read it, including
+          // when sudo does not request a password (NOPASSWD policy).
+          command: buildPasswordedCommand(cmdLine.toString()),
+          password: password,
+          progress: progress,
+        );
+      } else {
+        startFromArgs('ssh', cmdArgs, progress: progress);
+      }
     } on RunException catch (e) {
       final error = _sshErrors[e.exitCode!];
       throw RunException(
@@ -198,6 +207,55 @@ class Remote {
       );
     }
   }
+
+  /// Keep credentials out of the ssh argument list and command diagnostics.
+  void _runWithPassword({
+    required String host,
+    required String command,
+    required String password,
+    required Progress progress,
+  }) {
+    if (Platform.isWindows) {
+      throw UnsupportedError(
+        'Password-based remote sudo is only supported on POSIX systems.',
+      );
+    }
+    if (password.contains('\n') || password.contains('\r')) {
+      throw ArgumentError.value(
+        password.length,
+        'password',
+        'Remote sudo passwords cannot contain line breaks',
+      );
+    }
+
+    final privateDir = Directory.systemTemp.createTempSync('dcli-remote-');
+    try {
+      final input = File('${privateDir.path}/stdin')
+        ..createSync(exclusive: true)
+        ..writeAsStringSync(
+          '$password\n',
+        );
+      final launcher = File('${privateDir.path}/launch')
+        ..createSync(exclusive: true)
+        ..writeAsStringSync(
+          'exec ssh -T -- '
+          '${_shellQuote(host)} ${_shellQuote(command)} '
+          '< ${_shellQuote(input.path)}\n',
+        );
+      startFromArgs('sh', [launcher.path], progress: progress);
+    } finally {
+      privateDir.deleteSync(recursive: true);
+    }
+  }
+
+  static String _shellQuote(String value) =>
+      "'${value.replaceAll("'", "'\\''")}'";
+
+  /// Build one sudo invocation whose child cannot read the password stream.
+  @visibleForTesting
+  static String buildPasswordedCommand(String commands) =>
+      "sudo -Skp '' sh -c "
+      '${_shellQuote('exec 0</dev/null; $commands')}';
 
   /// Run scp (secure copy) to copy files between remote hosts.
   ///
@@ -247,6 +305,7 @@ class Remote {
     if (recursive) {
       cmdArgs.add('-r');
     }
+    cmdArgs.add('--');
 
     // build fromArg user@host:/path
     var fromArg = '';

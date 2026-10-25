@@ -118,6 +118,23 @@ void main() {
   });
 
   group('Fetch Multi', () {
+    test('propagates a failed download', () async {
+      final temp = Directory.systemTemp.createTempSync('dcli-fetch-');
+      try {
+        final existing = File(join(temp.path, 'existing'))
+          ..writeAsStringSync('keep');
+        await expectLater(
+          fetchMultiple(urls: [
+            FetchUrl(url: 'https://example.invalid/file', saveToPath: existing.path)
+          ]),
+          throwsA(isA<FetchException>()),
+        );
+        expect(existing.readAsStringSync(), 'keep');
+      } finally {
+        temp.deleteSync(recursive: true);
+      }
+    });
+
     test('Fetch  ', () async {
       await core.withTempDirAsync((testRoot) async {
         await core.withTempFileAsync(

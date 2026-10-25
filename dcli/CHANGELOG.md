@@ -1,3 +1,11 @@
+# 10.4.2
+
+- Reject unsafe paths and symlinks while extracting Dart SDK archives.
+- Propagate failures from multi-file downloads.
+- Keep remote sudo passwords out of process arguments and reject SSH/SCP option injection through host or path arguments.
+- Redact answers from verbose logs when `ask(hidden: true)` is used.
+- Preserve the published `dcli_core` version constraint when creating projects.
+
 # 10.4.1
 
 - Keep PATH tests local to scoped fixtures instead of permanently changing the

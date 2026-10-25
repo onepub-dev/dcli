@@ -1,3 +1,7 @@
+# 10.4.2
+
+- Require the patched `dcli` release and keep installer activation versions aligned.
+
 # 10.4.0
 
 - Upgrade dependencies and raise the minimum Dart SDK to 3.10.1.

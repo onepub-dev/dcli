@@ -263,12 +263,8 @@ class _Fetch extends core.DCliFunction {
       futures.add(download(url, verboseProgress: verboseProgress));
     }
 
-    try {
-      /// wait for all downloads to complete.
-      await Future.wait(futures);
-    } on core.DCliException catch (e, st) {
-      print(st);
-    }
+    /// Wait for all downloads and propagate any failed request to the caller.
+    await Future.wait(futures);
   }
 
   /// @Throwing(ArgumentError)

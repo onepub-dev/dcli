@@ -190,16 +190,16 @@ class Ask extends core.DCliFunction {
           await const _AskRequired()
               .validate(line, customErrorMessage: customErrorMessage);
         }
-        verbose(() => 'ask: pre validation "$line"');
+        verbose(() => 'ask: pre validation "${hidden ? '******' : line}"');
         line = await validator.validate(line,
             customErrorMessage: customErrorMessage);
-        verbose(() => 'ask: post validation "$line"');
+        verbose(() => 'ask: post validation "${hidden ? '******' : line}"');
         valid = true;
       } on AskValidatorException catch (e) {
         print(e.message);
       }
 
-      verbose(() => 'ask: result $line');
+      verbose(() => 'ask: result ${hidden ? '******' : line}');
     } while (!valid);
 
     return line;
@@ -512,8 +512,6 @@ class _AskInteger extends AskValidator {
   @override
   Future<String> validate(String line, {String? customErrorMessage}) async {
     final finalLine = line.trim();
-    verbose(() => 'AskInteger: $finalLine');
-
     if (!isInt(finalLine)) {
       throw AskValidatorException(
           red(customErrorMessage ?? 'Invalid integer.'));

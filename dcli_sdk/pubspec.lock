@@ -175,7 +175,7 @@ packages:
       path: "../dcli"
       relative: true
     source: path
-    version: "10.4.0"
+    version: "10.4.2"
   dcli_common:
     dependency: "direct main"
     description:

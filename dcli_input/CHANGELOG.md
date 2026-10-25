@@ -1,3 +1,7 @@
+# 10.4.1
+
+- Redact answers from verbose logs when `ask(hidden: true)` is used.
+
 # 10.4.0
 
 - Upgrade dependencies and raise the minimum Dart SDK to 3.10.0.
