@@ -1,3 +1,8 @@
+# 10.4.3
+
+- Check filesystem permissions and group membership through native POSIX APIs
+  instead of running `groups`, `stat`, or user-detection helpers from PATH.
+
 # 10.4.2
 
 - Reject unsafe paths and symlinks while extracting Dart SDK archives.

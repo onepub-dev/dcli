@@ -172,37 +172,42 @@ packages:
   dcli:
     dependency: "direct main"
     description:
-      path: "../dcli"
-      relative: true
-    source: path
-    version: "10.4.2"
+      name: dcli
+      sha256: b6505901e5b72ec3fe98fa0237a1c70846e7010e9c2de0eded3ae432d59c7298
+      url: "https://pub.dev"
+    source: hosted
+    version: "10.4.3"
   dcli_common:
     dependency: "direct main"
     description:
-      path: "../dcli_common"
-      relative: true
-    source: path
+      name: dcli_common
+      sha256: fa5cef72db1b022a46968f7f11003d3a3829637fa4954554a59c13d51242b742
+      url: "https://pub.dev"
+    source: hosted
     version: "10.4.0"
   dcli_core:
     dependency: "direct main"
     description:
-      path: "../dcli_core"
-      relative: true
-    source: path
+      name: dcli_core
+      sha256: "9739cb2f85df836f52c310f04a8669ce1aed2e82d6fc508735bbbb72b227d439"
+      url: "https://pub.dev"
+    source: hosted
     version: "10.4.0"
   dcli_terminal:
     dependency: "direct main"
     description:
-      path: "../dcli_terminal"
-      relative: true
-    source: path
+      name: dcli_terminal
+      sha256: "405054d77243e8f34e3abe80032f4039ca1bb6148bbddad29d087728b82c423d"
+      url: "https://pub.dev"
+    source: hosted
     version: "10.4.0"
   dcli_test:
     dependency: "direct dev"
     description:
-      path: "../dcli_test"
-      relative: true
-    source: path
+      name: dcli_test
+      sha256: "2ac9f84f4e4977faddcb54d1795574a3aa4e88cb79c1c90b5f3e4a9d9fe2ff0b"
+      url: "https://pub.dev"
+    source: hosted
     version: "10.4.0"
   document_throws:
     dependency: transitive

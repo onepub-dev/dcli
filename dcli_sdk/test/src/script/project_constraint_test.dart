@@ -24,7 +24,7 @@ void main() {
       expect(
         (result.dependencies['dcli']! as DependencyVersioned)
             .versionConstraint,
-        '10.4.2',
+        '10.4.3',
       );
       expect(
         (result.dependencies['dcli_core']! as DependencyVersioned)

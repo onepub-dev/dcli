@@ -49,10 +49,7 @@ Future<void> prepareTemplates() async {
           packageVersion;
     }
 
-    if (dependencies.exists('dcli_core')) {
-      (dependencies['dcli_core']! as DependencyPubHosted).versionConstraint =
-          packageVersion;
-    }
+    // dcli_core is released independently. Preserve its published constraint.
     pubspec.environment.sdk = environment.sdk;
     pubspec.save();
   });
