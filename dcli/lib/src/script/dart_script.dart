@@ -272,16 +272,19 @@ class DartScript {
   /// If [workingDirectory] is not passed then the current working directory is
   /// used. The [workingDirectory] should contain the pubspec.yaml that is used
   /// to compile the script.
+  /// Returns the compiled executable at its final location. Set [report] to
+  /// false when the caller will install it elsewhere before reporting outputs.
   /// Throws [InvalidArgumentException].
   /// @Throwing(ArgumentError)
   /// @Throwing(CopyException)
   /// @Throwing(DeleteException)
   /// @Throwing(InvalidArgumentException)
   /// @Throwing(MoveException)
-  void compile({
+  CompiledExecutable compile({
     bool install = false,
     bool overwrite = false,
     bool packed = false,
+    bool report = true,
     String? workingDirectory,
   }) {
     verbose(
@@ -314,9 +317,16 @@ class DartScript {
     if (install) {
       print('');
       print(orange('Installing $pathToExe into $pathToInstalledExe'));
-      compiled.install(pathToInstalledExe, overwrite: true).report();
+      final installed = compiled.install(pathToInstalledExe, overwrite: true);
+      if (report) {
+        installed.report();
+      }
+      return installed;
     } else {
-      compiled.report();
+      if (report) {
+        compiled.report();
+      }
+      return compiled;
     }
   }
 

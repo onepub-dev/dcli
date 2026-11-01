@@ -12,6 +12,7 @@ import '../util/exceptions.dart';
 import '../util/exit.dart';
 import 'commands.dart';
 import 'run.dart';
+import 'system_install.dart';
 
 /// implementation for the compile command.
 class CompileCommand extends Command {
@@ -20,6 +21,7 @@ class CompileCommand extends Command {
   final List<Flag> _compileFlags = [
     NoWarmupFlag(),
     InstallFlag(),
+    SystemFlag(),
     OverWriteFlag(),
     PackageFlag(),
     PackedFlag(),
@@ -80,6 +82,23 @@ class CompileCommand extends Command {
 
     final scriptList = subarguments.sublist(scriptIndex);
 
+    if (flagSet.isSet(SystemFlag())) {
+      if (Platform.isWindows) {
+        if (!Shell.current.isPrivilegedUser) {
+          throw InvalidCommandArgumentException(
+            'Run dcli from an Administrator terminal to use --system.',
+          );
+        }
+      } else if (!Shell.current.isPrivilegedProcess) {
+        throw InvalidCommandArgumentException(
+          'Run dcli with sudo to use --system.',
+        );
+      } else {
+        // Do the warmup and compilation as the invoking user.
+        Shell.current.releasePrivileges();
+      }
+    }
+
     if (flagSet.isSet(PackageFlag())) {
       await _compilePackage(scriptList);
     } else {
@@ -107,7 +126,8 @@ class CompileCommand extends Command {
     RunCommand.validateScriptPath(scriptPath);
     final script = DartScript.fromFile(scriptPath);
 
-    final preparationAllowed = !Shell.current.isSudo;
+    final preparationAllowed =
+        !Shell.current.isSudo || flagSet.isSet(SystemFlag());
 
     if (!preparationAllowed) {
       /// we are running sudo, so we can't init a script
@@ -137,12 +157,16 @@ class CompileCommand extends Command {
         await project.warmup();
       }
 
-      var install = flagSet.isSet(InstallFlag());
+      var install = flagSet.isSet(InstallFlag()) || flagSet.isSet(SystemFlag());
       var overwrite = flagSet.isSet(OverWriteFlag());
+      final systemInstall = flagSet.isSet(SystemFlag());
+      final installPath = systemInstall
+          ? join(systemInstallDirectory(), script.exeName)
+          : script.pathToInstalledExe;
 
       /// if an exe was produced and the --install flag was set.
       /// If no exe then the compile failed.
-      if (install && script.isInstalled) {
+      if (install && exists(installPath, followLinks: false)) {
         if (!overwrite) {
           overwrite = confirm('Overwrite the existing exe?');
           if (!overwrite) {
@@ -150,7 +174,7 @@ class CompileCommand extends Command {
 
             print(
               red(
-                'The target file ${script.pathToInstalledExe} already exists. '
+                'The target file $installPath already exists. '
                 'Use the --overwrite flag to overwrite it.',
               ),
             );
@@ -158,11 +182,23 @@ class CompileCommand extends Command {
         }
       }
 
-      script.compile(
-        install: install,
-        overwrite: overwrite,
-        packed: flagSet.isSet(PackedFlag()),
-      );
+      if (systemInstall) {
+        final compiled = script.compile(
+          packed: flagSet.isSet(PackedFlag()),
+          report: false,
+        );
+        if (install) {
+          installForAllUsers(compiled, overwrite: overwrite).report();
+        } else {
+          compiled.report();
+        }
+      } else {
+        script.compile(
+          install: install,
+          overwrite: overwrite,
+          packed: flagSet.isSet(PackedFlag()),
+        );
+      }
     } on RunException catch (e) {
       exitCode = e.exitCode ?? -1;
     }
@@ -179,7 +215,7 @@ Compile scripts or a globally activated package into native executables.
   @override
   String usage() {
     const description = '''
-compile [--nowarmup] [--install] [--overwrite] [--packed] [<script path.dart>, <script path.dart>,...] | --package <globally activate package name>''';
+compile [--nowarmup] [--install | --system] [--overwrite] [--packed] [<script path.dart>, <script path.dart>,...] | --package <globally activate package name>''';
 
     return description;
   }
@@ -338,23 +374,30 @@ Run:
           exe.name,
         );
         print(green('Compiling ${exe.name}...'));
-        DartSdk()
-            .runDartCompiler(
-              DartScript.fromFile(join(pathToTempPackage, exe.scriptPath)),
-              pathToExe: pathToOutput,
-              packed: flagSet.isSet(PackedFlag()),
-              progress: Progress((line) {
-                if (!line.startsWith('Generated: ')) {
-                  print(line);
-                }
-              }, stderr: print),
-              workingDirectory: pathToTempPackage,
-            )
-            .install(
-              join(Settings().pathToDCliBin, basename(pathToOutput)),
-              overwrite: true,
-            )
-            .report();
+        final compiled = DartSdk().runDartCompiler(
+          DartScript.fromFile(join(pathToTempPackage, exe.scriptPath)),
+          pathToExe: pathToOutput,
+          packed: flagSet.isSet(PackedFlag()),
+          progress: Progress((line) {
+            if (!line.startsWith('Generated: ')) {
+              print(line);
+            }
+          }, stderr: print),
+          workingDirectory: pathToTempPackage,
+        );
+        if (flagSet.isSet(SystemFlag())) {
+          installForAllUsers(
+            compiled,
+            overwrite: flagSet.isSet(OverWriteFlag()),
+          ).report();
+        } else {
+          compiled
+              .install(
+                join(Settings().pathToDCliBin, basename(pathToOutput)),
+                overwrite: true,
+              )
+              .report();
+        }
       }
     });
   }
@@ -391,6 +434,20 @@ class InstallFlag extends Flag {
       '''
       Installs the compiled script into your path '''
       '${Settings().pathToDCliBin}';
+}
+
+/// Installs the compiled command for all users of this machine.
+class SystemFlag extends Flag {
+  ///
+  SystemFlag() : super('system');
+
+  @override
+  String get abbreviation => 's';
+
+  @override
+  String description() =>
+      'Install for all users in ${systemInstallDirectory()}. '
+      'Requires sudo on Linux/macOS or Administrator on Windows.';
 }
 
 ///

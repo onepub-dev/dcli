@@ -3,8 +3,8 @@
 The `dcli compile` command compiles Dart scripts into native applications and optionally installs them into your PATH. The resulting application can run on a compatible operating system and architecture without Dart or DCli installed.
 
 ```text
-dcli compile [--nowarmup] [--install] [--overwrite] [--packed] [<script.dart> ...]
-dcli compile [--packed] --package <package-name> [<version>]
+dcli compile [--nowarmup] [--install | --system] [--overwrite] [--packed] [<script.dart> ...]
+dcli compile [--packed] [--system] --package <package-name> [<version>]
 ```
 
 Specify one or more scripts to compile them individually. If you omit the scripts, DCli compiles all `.dart` files in the current directory.
@@ -97,7 +97,7 @@ Resources referenced by your code are already part of the compiled application a
 
 After compilation, DCli prints the final executable path. Bundle mode also prints the launcher, bundle directory, and every bundled executable, library, and other asset. Temporary compiler output paths are suppressed.
 
-Without `--install`, outputs are beside the source script. With `--install` or `--package`, the reported paths are under `~/.dcli/bin`. Packed mode reports the packed executable; its extraction cache is created at runtime on the receiving machine.
+Without `--install`, outputs are beside the source script. With `--install` or `--package`, the reported paths are under `~/.dcli/bin`. With `--system`, they are under the system directory described below. Packed mode reports the packed executable; its extraction cache is created at runtime on the receiving machine.
 
 ## Install a compiled script
 
@@ -125,6 +125,32 @@ dcli compile --install --overwrite tool.dart
 ```
 
 For applications with native libraries, replacement includes the complete private bundle, removing obsolete files from the previous bundle.
+
+## Install a compiled script for all users
+
+Use `--system` from an elevated terminal to install a compiled command into a machine-wide directory. DCli compiles as the invoking user, then uses the elevated privileges to install the executable and any native bundle.
+
+{% tabs %}
+{% tab title="Linux / macOS" %}
+```bash
+sudo dcli compile --system tool.dart
+```
+
+The command is installed in `/usr/local/bin`.
+{% endtab %}
+
+{% tab title="Windows" %}
+Open an Administrator terminal and run:
+
+```powershell
+dcli compile --system tool.dart
+```
+
+The command is installed in `%ProgramFiles%\DCli\bin`. DCli adds this directory to the machine PATH; open a new terminal before running the command by name.
+{% endtab %}
+{% endtabs %}
+
+Use `--overwrite` to replace an existing system command without a prompt. `--system` also works with `--package` and `--packed`.
 
 ## Distribute a compiled application
 
@@ -168,9 +194,13 @@ Skip the normal warmup before compilation when the script is already ready to ru
 
 Move the compiled executable into `~/.dcli/bin`. If the application has a hidden bundle, move it alongside the launcher.
 
+### --system | -s
+
+Install the compiled executable and any bundle for all users. Requires `sudo` on Linux and macOS or an Administrator terminal on Windows. See [Install a compiled script for all users](#install-a-compiled-script-for-all-users).
+
 ### --overwrite | -o
 
-Allow replacement of an existing installed executable and its bundle without prompting. This flag is normally used with `--install`.
+Allow replacement of an existing installed executable and its bundle without prompting. Use with `--install` or `--system`.
 
 ### --package | -p
 
