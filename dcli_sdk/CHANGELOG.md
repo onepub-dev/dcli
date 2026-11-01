@@ -1,3 +1,7 @@
+# 10.4.7
+
+- Ship the failed-warmup compile fix with matching generated version metadata.
+
 # 10.4.6
 
 - Return a nonzero exit code when compile warmup fails, without reporting or installing an executable.
