@@ -1,3 +1,7 @@
+# 10.4.4
+
+- Return the final executable from `DartScript.compile` so callers can install it elsewhere.
+
 # 10.4.3
 
 - Check filesystem permissions and group membership through native POSIX APIs

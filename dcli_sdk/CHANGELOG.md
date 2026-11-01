@@ -1,3 +1,8 @@
+# 10.4.4
+
+- Add `dcli compile --system` to install compiled scripts or package executables for every user.
+- Compile as the invoking user, then install executables and native bundles with elevated privileges.
+
 # 10.4.3
 
 - Include DCLI 10.4.3's native permission checks in the command executables.
