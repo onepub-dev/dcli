@@ -1,3 +1,7 @@
+# 10.4.7
+
+- Correct the generated package version bundled with the 10.4.6 warmup fix.
+
 # 10.4.6
 
 - Stop compilation when project warmup fails instead of continuing with an invalid dependency graph.
