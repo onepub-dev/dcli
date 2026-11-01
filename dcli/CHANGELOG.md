@@ -1,3 +1,23 @@
+# 10.4.3
+
+- Check filesystem permissions and group membership through native POSIX APIs
+  instead of running `groups`, `stat`, or user-detection helpers from PATH.
+
+# 10.4.2
+
+- Reject unsafe paths and symlinks while extracting Dart SDK archives.
+- Propagate failures from multi-file downloads.
+- Keep remote sudo passwords out of process arguments and reject SSH/SCP option injection through host or path arguments.
+- Redact answers from verbose logs when `ask(hidden: true)` is used.
+- Preserve the published `dcli_core` version constraint when creating projects.
+
+# 10.4.1
+
+- Keep PATH tests local to scoped fixtures instead of permanently changing the
+  Windows registry. Exercise registry PATH operations with in-memory storage.
+- Isolate registry value tests in disposable keys and make the Developer Mode
+  test read-only.
+
 # 10.4.0
 
 - Upgrade direct dependencies, including `equatable` 3, and raise the minimum

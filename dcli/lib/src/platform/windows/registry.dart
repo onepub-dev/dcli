@@ -7,11 +7,10 @@
 import 'dart:ffi';
 
 import 'package:ffi/ffi.dart';
-import 'package:path/path.dart';
 import 'package:win32/win32.dart';
 
-import '../../../dcli.dart';
 import 'message.dart';
+import 'registry_path.dart';
 
 /// The system cannot find the file specified.
 const hrFileNotFound = -2147024894;
@@ -27,70 +26,25 @@ const defaultRegistryValueName = '';
 /// @Throwing(ArgumentError)
 /// @Throwing(UnsupportedError)
 /// @Throwing(WindowsException)
-void regAppendToPath(String newPath) {
-  final paths = _getPaths();
-  if (!_isOnUserPath(newPath, paths)) {
-    paths.add(newPath);
-    _replacePath(paths);
-  }
-}
+void regAppendToPath(String newPath) => _userPath.append(newPath);
 
-/// Returns true if the given [path] is on the user's
-/// path.
-///
-/// Note: this does not check the system path.
-/// @Throwing(ArgumentError)
-/// @Throwing(UnsupportedError)
-/// @Throwing(WindowsException)
-bool regIsOnUserPath(String path) {
-  final paths = _getPaths();
-  return _isOnUserPath(path, paths);
-}
+/// Returns whether [path] is on the user PATH (not the system PATH).
+bool regIsOnUserPath(String path) => _userPath.contains(path);
 
-/// @Throwing(ArgumentError)
-bool _isOnUserPath(String path, List<String> userPaths) {
-  final canonicalPath = canonicalize(path);
-  return userPaths.map(canonicalize).contains(canonicalPath);
-}
+/// Prepends [newPath] to the Windows user PATH if it is absent.
+void regPrependToPath(String newPath) => _userPath.prepend(newPath);
 
-/// Prepend [newPath] to the Windows PATH environment variable.
-///
-/// A [WindowsException] is thrown if the call falls.
-/// @Throwing(ArgumentError)
-/// @Throwing(UnsupportedError)
-/// @Throwing(WindowsException)
-void regPrependToPath(String newPath) {
-  final paths = _getPaths();
-
-  if (!_isOnUserPath(newPath, paths)) {
-    paths.insert(0, newPath);
-    _replacePath(paths);
-  }
-}
-
-/// @Throwing(UnsupportedError)
-/// @Throwing(WindowsException)
-List<String> _getPaths() {
-  final paths = regGetExpandString(
+final _userPath = RegistryPath(
+  read: () => regGetExpandString(
     HKEY_CURRENT_USER,
     'Environment',
     'Path',
     expand: false,
-  ).split(Env().delimiterForPATH);
-  return paths;
-}
-
-/// @Throwing(WindowsException)
-void _replacePath(List<String> paths) {
-  regSetExpandString(
-    HKEY_CURRENT_USER,
-    'Environment',
-    'Path',
-    paths.join(Env().delimiterForPATH),
-  );
-
-  broadcastEnvironmentChange();
-}
+  ),
+  write: (value) =>
+      regSetExpandString(HKEY_CURRENT_USER, 'Environment', 'Path', value),
+  notify: broadcastEnvironmentChange,
+);
 
 /// Gets the User's Path (as opposed to the system path)
 /// as a list.
@@ -100,9 +54,12 @@ void _replacePath(List<String> paths) {
 /// A [WindowsException] is thrown the call falls.
 /// @Throwing(UnsupportedError)
 /// @Throwing(WindowsException)
-List<String> regGetUserPath({bool expand = true}) =>
-    regGetExpandString(HKEY_CURRENT_USER, 'Environment', 'Path', expand: expand)
-        .split(';');
+List<String> regGetUserPath({bool expand = true}) => regGetExpandString(
+  HKEY_CURRENT_USER,
+  'Environment',
+  'Path',
+  expand: expand,
+).split(';');
 
 // TODO(bsutton): impement notification so desktop apps
 // update their environment.
@@ -113,21 +70,7 @@ List<String> regGetUserPath({bool expand = true}) =>
 ///  of things (everything?) from working.
 /// A [WindowsException] is thrown the call falls.
 /// @Throwing(WindowsException)
-void regReplacePath(List<String> newPaths) {
-  // const char * what = "Environment";
-  // DWORD rv;
-  // SendMessageTimeout( HWND_BROADCAST, WM_SETTINGCHANGE, 0,
-  // 						(LPARAM) what, SMTO_ABORTIFHUNG, 5000, & rv );
-
-  regSetExpandString(
-    HKEY_CURRENT_USER,
-    'Environment',
-    'Path',
-    newPaths.join(Env().delimiterForPATH),
-  );
-
-  broadcastEnvironmentChange();
-}
+void regReplacePath(List<String> newPaths) => _userPath.replace(newPaths);
 
 /// Sets a Windows registry key to a string value of type REG_SZ.
 ///
@@ -144,8 +87,14 @@ void regSetString(
 
   try {
     _regSetValue(
-        hkey, subKey, valueName, pValue.cast(), (value.length + 1) * 2, REG_SZ,
-        accessRights: accessRights);
+      hkey,
+      subKey,
+      valueName,
+      pValue.cast(),
+      (value.length + 1) * 2,
+      REG_SZ,
+      accessRights: accessRights,
+    );
   } finally {
     calloc.free(pValue);
   }
@@ -162,8 +111,15 @@ void regSetNone(
   String valueName, {
   REG_SAM_FLAGS accessRights = KEY_SET_VALUE,
 }) {
-  _regSetValue(hkey, subKey, valueName, nullptr.cast(), 0, REG_NONE,
-      accessRights: accessRights);
+  _regSetValue(
+    hkey,
+    subKey,
+    valueName,
+    nullptr.cast(),
+    0,
+    REG_NONE,
+    accessRights: accessRights,
+  );
 }
 
 /// Gets a Windows registry value o0f type REG_SZ
@@ -192,8 +148,12 @@ String regGetString(
 }) {
   late final String value;
 
-  final pResult =
-      _regGetValue(hkey, subKey, valueName, accessRights: accessRights);
+  final pResult = _regGetValue(
+    hkey,
+    subKey,
+    valueName,
+    accessRights: accessRights,
+  );
   try {
     value = pResult.toDartString();
   } finally {
@@ -217,8 +177,14 @@ void regSetDWORD(
 
   try {
     _regSetValue(
-        hkey, subKey, valueName, pValue.cast(), sizeOf<Uint32>(), REG_DWORD,
-        accessRights: accessRights);
+      hkey,
+      subKey,
+      valueName,
+      pValue.cast(),
+      sizeOf<Uint32>(),
+      REG_DWORD,
+      accessRights: accessRights,
+    );
   } finally {
     calloc.free(pValue);
   }
@@ -256,10 +222,7 @@ int regGetDWORD(
 /// [subKey] maybe be a path such as Microsoft/Windows
 /// A [WindowsException] is thrown if the delete fails.
 /// @Throwing(WindowsException)
-void regDeleteKey(
-  HKEY hkey,
-  String subKey,
-) {
+void regDeleteKey(HKEY hkey, String subKey) {
   final pSubKey = subKey.toNativeUtf16();
 
   try {
@@ -278,11 +241,7 @@ void regDeleteKey(
 /// [valueName] is the name of the value stored under [subKey]
 /// A [WindowsException] is thrown if the delete fails.
 /// @Throwing(WindowsException)
-void regDeleteValue(
-  HKEY hkey,
-  String subKey,
-  String valueName,
-) {
+void regDeleteValue(HKEY hkey, String subKey, String valueName) {
   final pName = valueName.toNativeUtf16();
   try {
     _withRegKey(hkey, subKey, KEY_WRITE, (hkey, pSubKey) {
@@ -349,9 +308,15 @@ void regSetExpandString(
 }) {
   final pValue = value.toNativeUtf16();
   try {
-    _regSetValue(hkey, subKey, valueName, pValue.cast(), (value.length + 1) * 2,
-        REG_EXPAND_SZ,
-        accessRights: accessRights);
+    _regSetValue(
+      hkey,
+      subKey,
+      valueName,
+      pValue.cast(),
+      (value.length + 1) * 2,
+      REG_EXPAND_SZ,
+      accessRights: accessRights,
+    );
   } finally {
     calloc.free(pValue);
   }
@@ -513,8 +478,13 @@ void _regSetValue(
 
   try {
     _withRegKey(hkey, subKey, accessRights, (hkey, pSubKey) {
-      final result =
-          RegSetValueEx(hkey, PCWSTR(pName), type, pValue, valueSize);
+      final result = RegSetValueEx(
+        hkey,
+        PCWSTR(pName),
+        type,
+        pValue,
+        valueSize,
+      );
       if (result != ERROR_SUCCESS) {
         throw WindowsException(HRESULT_FROM_WIN32(result));
       }
@@ -551,8 +521,13 @@ R _withRegKey<R>(
   final pSubKey = subKey.toNativeUtf16();
 
   try {
-    final result =
-        RegOpenKeyEx(hkey, PCWSTR(pSubKey), 0, accessRights, pOpenKey);
+    final result = RegOpenKeyEx(
+      hkey,
+      PCWSTR(pSubKey),
+      0,
+      accessRights,
+      pOpenKey,
+    );
     if (result == ERROR_SUCCESS) {
       final openKey = HKEY(pOpenKey.value);
       try {
@@ -582,17 +557,19 @@ R _withRegKey<R>(
 /// This is typically something like 'Environment'.
 ///
 /// A [WindowsException] is thrown the call falls.
-bool regKeyExists(
-  HKEY hkey,
-  String subKey,
-) {
+bool regKeyExists(HKEY hkey, String subKey) {
   var exists = false;
   final pOpenKey = calloc<Pointer>();
   final pSubKey = subKey.toNativeUtf16();
 
   try {
-    final result =
-        RegOpenKeyEx(hkey, PCWSTR(pSubKey), 0, KEY_QUERY_VALUE, pOpenKey);
+    final result = RegOpenKeyEx(
+      hkey,
+      PCWSTR(pSubKey),
+      0,
+      KEY_QUERY_VALUE,
+      pOpenKey,
+    );
     if (result == ERROR_SUCCESS) {
       exists = true;
       HKEY(pOpenKey.value).close();
@@ -609,22 +586,20 @@ bool regKeyExists(
 ///
 /// Throws a [WindowsException] if the key cannot be created.
 /// @Throwing(WindowsException)
-void regCreateKey(
-  HKEY hKey,
-  String subKey,
-) {
+void regCreateKey(HKEY hKey, String subKey) {
   final pOpenKey = calloc<Pointer>();
   final pSubKey = subKey.toNativeUtf16();
   try {
     final result = RegCreateKeyEx(
-        hKey,
-        PCWSTR(pSubKey),
-        null,
-        REG_OPTION_NON_VOLATILE,
-        KEY_QUERY_VALUE,
-        null, // not inheritable
-        pOpenKey,
-        nullptr);
+      hKey,
+      PCWSTR(pSubKey),
+      null,
+      REG_OPTION_NON_VOLATILE,
+      KEY_QUERY_VALUE,
+      null, // not inheritable
+      pOpenKey,
+      nullptr,
+    );
 
     if (result != ERROR_SUCCESS) {
       throw WindowsException(HRESULT_FROM_WIN32(result));

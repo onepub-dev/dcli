@@ -9,6 +9,7 @@ import 'package:dcli/dcli.dart';
 import 'package:dcli_core/dcli_core.dart' as core;
 import 'package:dcli_test/dcli_test.dart';
 import 'package:path/path.dart' hide equals;
+import 'package:posix/posix.dart' as posix;
 import 'package:test/test.dart' hide isEmpty;
 
 /// @Throwing(ArgumentError)
@@ -35,13 +36,13 @@ void main() {
         });
       });
 
-      test('group', () async {
+      test('group bits do not grant access to the owner', () async {
         await withTempDirAsync((fsRoot) async {
           TestFileSystem.buildDirectoryTree(fsRoot);
           await withTempFileAsync((one) async {
             touch(one, create: true);
             'chmod 020 $one'.run;
-            expect(isWritable(one), equals(true));
+            expect(isWritable(one), equals(false));
             'chmod 000 $one'.run;
             expect(isWritable(one), equals(false));
             expect(isReadable(one), equals(false));
@@ -50,13 +51,13 @@ void main() {
         });
       });
 
-      test('world', () async {
+      test('other bits do not grant access to the owner', () async {
         await withTempDirAsync((fsRoot) async {
           TestFileSystem.buildDirectoryTree(fsRoot);
           await withTempFileAsync((one) async {
             touch(one, create: true);
             'chmod 002 $one'.run;
-            expect(isWritable(one), equals(true));
+            expect(isWritable(one), equals(false));
             'chmod 000 $one'.run;
             expect(isWritable(one), equals(false));
             expect(isReadable(one), equals(false));
@@ -65,7 +66,7 @@ void main() {
         });
       });
     },
-    skip: core.Settings().isWindows,
+    skip: core.Settings().isWindows || posix.geteuid() == 0,
   );
 
   group(
@@ -83,11 +84,11 @@ void main() {
         });
       });
 
-      test('group', () async {
+      test('group bits do not grant access to the owner', () async {
         await withTempFileAsync((one) async {
           touch(one, create: true);
           'chmod 040 $one'.run;
-          expect(isReadable(one), equals(true));
+          expect(isReadable(one), equals(false));
           'chmod 000 $one'.run;
           expect(isReadable(one), equals(false));
           expect(isWritable(one), equals(false));
@@ -95,11 +96,11 @@ void main() {
         });
       });
 
-      test('world', () async {
+      test('other bits do not grant access to the owner', () async {
         await withTempFileAsync((one) async {
           touch(one, create: true);
           'chmod 004 $one'.run;
-          expect(isReadable(one), equals(true));
+          expect(isReadable(one), equals(false));
           'chmod 000 $one'.run;
           expect(isReadable(one), equals(false));
           expect(isWritable(one), equals(false));
@@ -107,7 +108,7 @@ void main() {
         });
       });
     },
-    skip: core.Settings().isWindows,
+    skip: core.Settings().isWindows || posix.geteuid() == 0,
   );
 
   group(
@@ -125,11 +126,11 @@ void main() {
         });
       });
 
-      test('group', () async {
+      test('group bits do not grant access to the owner', () async {
         await withTempFileAsync((one) async {
           touch(one, create: true);
           'chmod 010 $one'.run;
-          expect(isExecutable(one), equals(true));
+          expect(isExecutable(one), equals(false));
           'chmod 000 $one'.run;
           expect(isExecutable(one), equals(false));
           expect(isWritable(one), equals(false));
@@ -137,11 +138,11 @@ void main() {
         });
       });
 
-      test('world', () async {
+      test('other bits do not grant access to the owner', () async {
         await withTempFileAsync((one) async {
           touch(one, create: true);
           'chmod 001 $one'.run;
-          expect(isExecutable(one), equals(true));
+          expect(isExecutable(one), equals(false));
           'chmod 000 $one'.run;
           expect(isExecutable(one), equals(false));
           expect(isWritable(one), equals(false));
@@ -149,7 +150,7 @@ void main() {
         });
       });
     },
-    skip: core.Settings().isWindows,
+    skip: core.Settings().isWindows || posix.geteuid() == 0,
   );
 
   group('isEmpty', () {

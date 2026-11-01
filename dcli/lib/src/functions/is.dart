@@ -5,7 +5,11 @@
  * SPDX-License-Identifier: MIT
  */
 
+import 'dart:ffi';
+import 'dart:io';
+
 import 'package:dcli_core/dcli_core.dart' as core;
+import 'package:ffi/ffi.dart';
 import 'package:posix/posix.dart' as posix;
 
 import '../../dcli.dart';
@@ -41,6 +45,18 @@ const _readBitMask = 0x4;
 const _writeBitMask = 0x2;
 const _executeBitMask = 0x1;
 
+// macOS faccessat uses the effective identity with AT_EACCESS. Linux glibc
+// before faccessat2 can silently use the real identity for that flag, so the
+// Linux branch below calls euidaccess instead.
+const _macAtFdcwd = -2;
+const _macAtEaccess = 0x10;
+
+final int Function(Pointer<Utf8>, int) _euidaccess = DynamicLibrary.process()
+    .lookupFunction<
+      Int32 Function(Pointer<Utf8>, Int32),
+      int Function(Pointer<Utf8>, int)
+    >('euidaccess');
+
 /// Checks if the user permission to act on the [path] (a file or directory)
 /// for the given permission bit mask. (read, write or execute)
 /// Throws [UnsupportedError].
@@ -48,7 +64,8 @@ const _executeBitMask = 0x1;
 /// @Throwing(UnsupportedError)
 bool _checkPermission(String path, int permissionBitMask) {
   core.verbose(
-    () => '_checkPermission: ${truepath(path)} '
+    () =>
+        '_checkPermission: ${truepath(path)} '
         'permissionBitMask: $permissionBitMask',
   );
 
@@ -58,63 +75,28 @@ bool _checkPermission(String path, int permissionBitMask) {
     );
   }
 
-  final user = Shell.current.loggedInUser;
+  // Keep the previous missing-path exception. Dart's stat works on Linux
+  // ARM64, where the posix package's __xstat version is not supported.
+  if (FileStat.statSync(path).type == FileSystemEntityType.notFound) {
+    throw posix.StatException('No such file or directory $path', 2);
+  }
 
-  int permissions;
-  String groupName;
-  String ownerName;
-  bool other;
-  bool group;
-  bool owner;
+  if (Platform.isMacOS) {
+    return posix.faccessat(
+          _macAtFdcwd,
+          path,
+          permissionBitMask,
+          _macAtEaccess,
+        ) ==
+        0;
+  }
 
+  final nativePath = path.toNativeUtf8();
   try {
-    final stat0 = posix.stat(path);
-    groupName = posix.getgrgid(stat0.gid).name;
-    ownerName = posix.getUserNameByUID(stat0.uid);
-    final mode = stat0.mode;
-    if (permissionBitMask == _writeBitMask) {
-      other = mode.isOtherWritable;
-      group = mode.isGroupWritable;
-      owner = mode.isOwnerWritable;
-    } else if (permissionBitMask == _readBitMask) {
-      other = mode.isOtherReadable;
-      group = mode.isGroupReadable;
-      owner = mode.isOwnerReadable;
-    } else if (permissionBitMask == _executeBitMask) {
-      other = mode.isOtherExecutable;
-      group = mode.isGroupExecutable;
-      owner = mode.isOwnerExecutable;
-    } else {
-      throw posix.PosixException('Unexpected bitMask', -1);
-    }
-  } on posix.PosixException catch (_) {
-    //e.g 755 tomcat bsutton
-    final stat = 'stat -L -c "%a %G %U" "$path"'.firstLine!;
-    final parts = stat.split(' ');
-    permissions = int.parse(parts[0], radix: 8);
-    groupName = parts[1];
-    ownerName = parts[2];
-    //  if (( ($PERM & 0002) != 0 )); then
-    other = (permissions & permissionBitMask) != 0;
-    group = (permissions & (permissionBitMask << 3)) != 0;
-    owner = (permissions & (permissionBitMask << 6)) != 0;
+    return _euidaccess(nativePath, permissionBitMask) == 0;
+  } finally {
+    malloc.free(nativePath);
   }
-
-  var access = false;
-  if (other) {
-    // Everyone has write access
-    access = true;
-  } else if (group) {
-    // Some groups have write access
-    if (isMemberOfGroup(groupName)) {
-      access = true;
-    }
-  } else if (owner) {
-    if (user == ownerName) {
-      access = true;
-    }
-  }
-  return access;
 }
 
 /// Returns true if the owner of this process
@@ -129,9 +111,10 @@ bool isMemberOfGroup(String group) {
       'isMemberOfGroup is not Not currently supported on windows',
     );
   }
-  // get the list of groups this user belongs to.
-  final groups = 'groups'.firstLine!.split(' ');
-
-  // is the user a member of the file's group.
-  return groups.contains(group);
+  try {
+    final gid = posix.getgrnam(group).gid;
+    return gid == posix.getegid() || posix.getgroups().contains(gid);
+  } on posix.PosixException {
+    return false;
+  }
 }

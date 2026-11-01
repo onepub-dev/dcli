@@ -8,7 +8,6 @@
 import 'dart:convert';
 import 'dart:io';
 
-import 'package:archive/archive.dart';
 import 'package:dcli_core/dcli_core.dart' as core;
 import 'package:meta/meta.dart';
 import 'package:path/path.dart';
@@ -22,6 +21,7 @@ import '../util/enum_helper.dart';
 import '../util/runnable_process.dart';
 import 'native_launcher.dart';
 import 'packed_bundle_builder.dart';
+import 'sdk_archive_extractor.dart';
 
 /// The [DartSdk] provides access to a number of the dart sdk tools
 /// as well as details on the active sdk instance.
@@ -647,7 +647,7 @@ class DartSdk {
     });
 
     // Read the Zip file from disk.
-    _extractDartSdk(zipRelease, installDir);
+    extractDartSdkArchive(zipRelease, installDir);
     delete(zipRelease);
 
     /// the archive creates a root of 'dart-sdk' we need to move
@@ -758,32 +758,6 @@ class DartSdk {
     }
 
     return finaldartToolDir;
-  }
-
-  /// @Throwing(ArgumentError)
-  /// @Throwing(CreateDirException)
-  void _extractDartSdk(String zipRelease, String dartToolDir) {
-    print('Extracting dart sdk..');
-    // Read the Zip file from disk.
-    final bytes = File(zipRelease).readAsBytesSync();
-
-    // Decode the Zip file
-    final archive = ZipDecoder().decodeBytes(bytes);
-
-    for (final file in archive) {
-      final filename = file.name;
-      final path = join(dartToolDir, filename);
-      if (file.isFile) {
-        final data = file.content as List<int>;
-        File(path)
-          ..createSync(recursive: true)
-          ..writeAsBytesSync(data);
-        echo('.');
-      } else {
-        createDir(path, recursive: true);
-      }
-    }
-    print('');
   }
 
   // may use thisin the future.

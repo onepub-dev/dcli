@@ -55,7 +55,7 @@ void _createProject(String pathToProject, String templateName) {
         'is not valid as it does not contain a pubspec.yaml');
   }
 
-  _fixPubspec(projectName, project.pubSpec, project.pathToPubSpec);
+  fixTemplatePubspec(projectName, project.pubSpec, project.pathToPubSpec);
 
   /// rename main.dart from the template to <projectname>.dart
   final projectScript = _renameMain(project, projectName);
@@ -125,7 +125,9 @@ String _pathToDCliGitRoot() {
 /// update the templates dcli version to match the dcli version
 /// the user is running.
 /// @Throwing(PubSpecException)
-void _fixPubspec(String projectName, PubSpec pubSpec, String pathToPubSpec) {
+@visibleForTesting
+void fixTemplatePubspec(
+    String projectName, PubSpec pubSpec, String pathToPubSpec) {
   final current = pubSpec.dependencies;
 
   if (current.exists('dcli')) {
@@ -133,14 +135,6 @@ void _fixPubspec(String projectName, PubSpec pubSpec, String pathToPubSpec) {
 
     if (dcli is DependencyVersioned) {
       (dcli! as DependencyVersioned).versionConstraint = packageVersion;
-    }
-  }
-
-  if (current.exists('dcli_core')) {
-    final dcliCore = current['dcli_core'];
-
-    if (dcliCore is DependencyVersioned) {
-      (dcliCore! as DependencyVersioned).versionConstraint = packageVersion;
     }
   }
 

@@ -8,12 +8,31 @@ library;
  */
 
 import 'package:checks/checks.dart';
+import 'package:dcli_core/dcli_core.dart' as core;
 import 'package:dcli_input/src/ask.dart';
 import 'package:dcli_terminal/dcli_terminal.dart';
-import 'package:test/scaffolding.dart';
+import 'package:test/test.dart';
 
 /// @Throwing(UnimplementedError)
 void main() {
+  test('integer validator does not log a hidden answer', () async {
+    final settings = core.Settings();
+    final wasVerbose = settings.isVerbose;
+    final messages = <String>[];
+    final subscription = settings.captureLogOutput().listen(
+          (record) => messages.add(record.message),
+        );
+    try {
+      settings.setVerbose(enabled: true);
+      expect(await Ask.integer.validate('8675309'), '8675309');
+      await Future<void>.delayed(Duration.zero);
+      expect(messages.join('\n'), isNot(contains('8675309')));
+    } finally {
+      settings.setVerbose(enabled: wasVerbose);
+      await subscription.cancel();
+    }
+  });
+
   test('ask.custom prompt', () async {
     // expect("AAAHow old ar you:5", () {
     await ask(

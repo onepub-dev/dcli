@@ -1,75 +1,60 @@
-/*
- * Copyright (c) 2025 S. Brett Sutton 2022+
- *
- * This software is licensed under the MIT License.
- * SPDX-License-Identifier: MIT
- */
+import 'dart:io';
 
 import 'package:dcli/dcli.dart';
-import 'package:dcli/windows.dart';
 import 'package:dcli_core/dcli_core.dart' as core;
-import 'package:path/path.dart';
+import 'package:scope/scope.dart';
 import 'package:test/test.dart';
-import 'package:win32/win32.dart';
 
-void _appendIfAbsent(String newPath) {
-  final path = regGetExpandString(HKEY_CURRENT_USER, 'Environment', 'Path');
-
-  if (!path.contains(newPath)) {
-    regAppendToPath(newPath);
-  }
-}
-
-/// @Throwing(ArgumentError)
 void main() {
-  test(
-    'setPath',
-    () {
-      const dartToolDir = r'C:\tools\dart-sdk';
+  for (final platform in [
+    core.DCliPlatformOS.windows,
+    core.DCliPlatformOS.linux,
+  ]) {
+    test('appendToPATH is local and idempotent on $platform', () async {
+      final original = PATH;
+      final processPath = Platform.environment['PATH'];
+      final scope = Scope()
+        ..value(
+          core.DCliPlatform.scopeKey,
+          core.DCliPlatform.forScope(overriddenPlatform: platform),
+        );
+      await scope.run(() async {
+        core.withEnvironment(() {
+          final windows = platform == core.DCliPlatformOS.windows;
+          final paths = windows
+              ? [
+                  r'C:\tools\dart-sdk\bin',
+                  r'C:\fixture\pub-cache\bin',
+                  r'C:\fixture\dcli\bin',
+                ]
+              : [
+                  '/tools/dart-sdk/bin',
+                  '/fixture/pub-cache/bin',
+                  '/fixture/dcli/bin',
+                ];
+          final delimiter = windows ? ';' : ':';
+          for (final path in paths) {
+            Env().appendToPATH(path);
+            Env().appendToPATH(path);
+          }
+          expect(PATH, ['fixture', ...paths]);
+          expect(core.env['PATH'], ['fixture', ...paths].join(delimiter));
+        }, environment: {'PATH': 'fixture'});
+      });
+      expect(PATH, original);
+      expect(Platform.environment['PATH'], processPath);
+    });
+  }
 
-      /// add the dartsdk path to the windows path.
-      Env().appendToPATH(join(dartToolDir, 'bin'));
-      Env().appendToPATH(PubCache().pathToBin);
-      Env().appendToPATH(Settings().pathToDCliBin);
-
-      print(PATH);
-      // update the windows registry so the change sticks.
-      _appendIfAbsent(join(dartToolDir, 'bin'));
-      _appendIfAbsent(PubCache().pathToBin);
-      _appendIfAbsent(Settings().pathToDCliBin);
-
-      // 'setx PATH "${PATH.join(Env().delimiterForPATH)}"'.run;
-    },
-    skip: !core.Settings().isWindows,
-  );
-
-  test(
-    'PutIfAbsent',
-    () {
-      const dartToolDir = r'C:\tools\dart-sdk';
-
-      /// add the dartsdk path to the windows path.
-      Env().appendToPATH(join(dartToolDir, 'bin'));
-      Env().appendToPATH(PubCache().pathToBin);
-      Env().appendToPATH(Settings().pathToDCliBin);
-
-      print(PATH);
-    },
-    skip: !core.Settings().isWindows,
-  );
-
-  test(
-    'PutIfAbsent',
-    () {
-      const dartToolDir = '/tools/dart-sdk';
-
-      /// add the dartsdk path to the windows path.
-      Env().appendToPATH(join(dartToolDir, 'bin'));
-      Env().appendToPATH(PubCache().pathToBin);
-      Env().appendToPATH(Settings().pathToDCliBin);
-
-      print(PATH);
-    },
-    skip: !core.Settings().isLinux,
-  );
+  test('PATH scope is restored when a test operation throws', () {
+    final original = PATH;
+    expect(
+      () => core.withEnvironment(() {
+        Env().appendToPATH('/fixture/throwing-test');
+        throw StateError('simulated assertion failure');
+      }, environment: {'PATH': 'fixture'}),
+      throwsStateError,
+    );
+    expect(PATH, original);
+  });
 }

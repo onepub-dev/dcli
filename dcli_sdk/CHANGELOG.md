@@ -1,3 +1,11 @@
+# 10.4.3
+
+- Include DCLI 10.4.3's native permission checks in the command executables.
+
+# 10.4.2
+
+- Require the patched `dcli` release and keep installer activation versions aligned.
+
 # 10.4.0
 
 - Upgrade dependencies and raise the minimum Dart SDK to 3.10.1.
