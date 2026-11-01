@@ -173,10 +173,10 @@ packages:
     dependency: "direct main"
     description:
       name: dcli
-      sha256: "a33884e351b782722dba9c57182bdaf5e8c474a4025ed78c5976a914cc8dd60e"
+      sha256: e18ef1e869c2b42327d543ed0a368d4fab5755f2f7e04a07d66393f893e9b887
       url: "https://pub.dev"
     source: hosted
-    version: "10.4.5"
+    version: "10.4.7"
   dcli_common:
     dependency: "direct main"
     description:
