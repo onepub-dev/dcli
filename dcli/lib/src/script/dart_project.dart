@@ -388,9 +388,7 @@ class DartProject {
     await NamedLock(name: _lockName, timeout: _lockTimeout).withLockAsync(
       () async {
         final pubGet = PubGet(this);
-        if (Shell.current.isSudo) {
-          /// bugger we just screwed the cache permissions so lets fix them.
-          'chmod -R ${env['USER']}:${env['USER']} ${PubCache().pathTo}'.run;
+        if (Shell.current.isSudo && Shell.current.isPrivilegedUser) {
           throw DartProjectException(
             'You must compile your script before running it under sudo',
           );
@@ -414,9 +412,7 @@ class DartProject {
     await NamedLock(name: _lockName, timeout: _lockTimeout).withLockAsync(
       () async {
         final pubUpgrade = PubUpgrade(this);
-        if (Shell.current.isSudo) {
-          /// bugger we just screwed the cache permissions so lets fix them.
-          'chmod -R ${env['USER']}:${env['USER']} ${PubCache().pathTo}'.run;
+        if (Shell.current.isSudo && Shell.current.isPrivilegedUser) {
           throw DartProjectException(
             'You must compile your script before running it under sudo',
           );

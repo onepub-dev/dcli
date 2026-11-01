@@ -128,15 +128,15 @@ For applications with native libraries, replacement includes the complete privat
 
 ## Install a compiled script for all users
 
-Use `--system` from an elevated terminal to install a compiled command into a machine-wide directory. DCli compiles as the invoking user, then uses the elevated privileges to install the executable and any native bundle.
+Use `--system` to install a compiled command into a machine-wide directory. DCli compiles as your user, then prompts for sudo to install the executable and any native bundle on Linux and macOS.
 
 {% tabs %}
 {% tab title="Linux / macOS" %}
 ```bash
-sudo dcli compile --system tool.dart
+dcli compile --system tool.dart
 ```
 
-The command is installed in `/usr/local/bin`.
+The command is installed in `/usr/local/bin`. Run `dcli` normally; the privileged installation uses a compiled helper, so Dart and Flutter do not run under sudo.
 {% endtab %}
 
 {% tab title="Windows" %}
@@ -196,7 +196,7 @@ Move the compiled executable into `~/.dcli/bin`. If the application has a hidden
 
 ### --system | -s
 
-Install the compiled executable and any bundle for all users. Requires `sudo` on Linux and macOS or an Administrator terminal on Windows. See [Install a compiled script for all users](#install-a-compiled-script-for-all-users).
+Install the compiled executable and any bundle for all users. Prompts for sudo on Linux and macOS; requires an Administrator terminal on Windows. See [Install a compiled script for all users](#install-a-compiled-script-for-all-users).
 
 ### --overwrite | -o
 

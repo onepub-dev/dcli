@@ -85,7 +85,7 @@ name: brett
 Hello brett
 ```
 
-To install a compiled command for every user, run `dcli compile --system hello.dart` from an elevated terminal (`sudo` on Linux and macOS, Administrator on Windows). This installs to `/usr/local/bin` on Linux and macOS, or `%ProgramFiles%\DCli\bin` on Windows. On Windows, dcli adds that directory to the machine PATH; open a new terminal to use the command.
+To install a compiled command for every user, run `dcli compile --system hello.dart` normally on Linux or macOS (DCli prompts for sudo only for the installation), or from an Administrator terminal on Windows. This installs to `/usr/local/bin` on Linux and macOS, or `%ProgramFiles%\DCli\bin` on Windows. On Windows, dcli adds that directory to the machine PATH; open a new terminal to use the command.
 
 You can use your favourite editor to create DCli scripts. Vi or VIM work fine but Visual Code is recommended.
 

@@ -1,3 +1,8 @@
+# 10.4.5
+
+- Run `dcli compile --system` as the normal user and elevate only a compiled installer, avoiding Dart and Flutter startup under sudo.
+- Document the normal-user command and test that the installer compiles.
+
 # 10.4.4
 
 - Add `dcli compile --system` to install compiled scripts or package executables for every user.

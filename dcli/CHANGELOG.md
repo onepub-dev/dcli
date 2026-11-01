@@ -1,3 +1,7 @@
+# 10.4.5
+
+- Allow a sudo-launched `dcli compile --system` to warm up after dropping root privileges, and remove an invalid cache permission command.
+
 # 10.4.4
 
 - Return the final executable from `DartScript.compile` so callers can install it elsewhere.

@@ -1,8 +1,11 @@
 import 'dart:io';
+import 'dart:isolate';
 
 import 'package:dcli/dcli.dart';
 import 'package:dcli/posix.dart' show chmod;
 import 'package:path/path.dart';
+
+import '../version/version.g.dart';
 
 /// The location used for commands available to every user of this machine.
 String systemInstallDirectory({String? operatingSystem, String? programFiles}) {
@@ -27,10 +30,10 @@ String systemInstallDirectory({String? operatingSystem, String? programFiles}) {
 
 /// Installs a compiled executable and its optional bundle with administrator
 /// ownership. Compilation must happen before this privileged operation.
-CompiledExecutable installForAllUsers(
+Future<CompiledExecutable> installForAllUsers(
   CompiledExecutable compiled, {
   required bool overwrite,
-}) {
+}) async {
   if (Platform.isWindows) {
     if (!Shell.current.isPrivilegedUser) {
       throw StateError('Run dcli from an Administrator terminal for --system.');
@@ -41,7 +44,7 @@ CompiledExecutable installForAllUsers(
     return installed;
   }
   if (!Shell.current.isPrivilegedProcess) {
-    throw StateError('Run dcli with sudo to use --system.');
+    return await _installWithSudo(compiled, overwrite: overwrite);
   }
 
   late CompiledExecutable installed;
@@ -54,6 +57,59 @@ CompiledExecutable installForAllUsers(
   }
   _removeCompiledOutput(compiled);
   return installed;
+}
+
+Future<CompiledExecutable> _installWithSudo(
+  CompiledExecutable compiled, {
+  required bool overwrite,
+}) async {
+  final packageUri = await Isolate.resolvePackageUri(
+    Uri.parse('package:dcli_sdk/dcli_sdk.dart'),
+  );
+  final adjacentHelper = join(
+    dirname(DartScript.self.pathToScript),
+    'dcli_system_install.dart',
+  );
+  final packageRoot = File(adjacentHelper).existsSync()
+      ? dirname(dirname(adjacentHelper))
+      : packageUri == null
+          ? PubCache().pathToPackage('dcli_sdk', packageVersion)
+          : dirname(dirname(packageUri.toFilePath()));
+  final packageConfig = join(packageRoot, '.dart_tool', 'package_config.json');
+  final buildDirectory = File(packageConfig).existsSync()
+      ? packageRoot
+      : PubCache().pathToGlobalPackage('dcli_sdk');
+  final helperScript = join(packageRoot, 'bin', 'dcli_system_install.dart');
+  if (!File(helperScript).existsSync()) {
+    throw StateError('Unable to find the system installation helper.');
+  }
+
+  final staging = Directory.systemTemp.createTempSync('dcli-system-helper-');
+  try {
+    final helper = DartSdk().runDartCompiler(
+      DartScript.fromFile(helperScript),
+      pathToExe: join(staging.path, 'dcli_system_install'),
+      workingDirectory: buildDirectory,
+    );
+    final process = await Process.start('sudo', [
+      helper.pathToExe,
+      compiled.pathToExe,
+      if (compiled.hasBundle) 'bundle' else 'single',
+      if (compiled.isPacked) 'packed' else 'unpacked',
+      if (overwrite) 'overwrite' else 'keep',
+    ], mode: ProcessStartMode.inheritStdio);
+    final exitCode = await process.exitCode;
+    if (exitCode != 0) {
+      throw StateError('System installation failed (exit code $exitCode).');
+    }
+    return CompiledExecutable(
+      join(systemInstallDirectory(), basename(compiled.pathToExe)),
+      hasBundle: compiled.hasBundle,
+      isPacked: compiled.isPacked,
+    );
+  } finally {
+    staging.deleteSync(recursive: true);
+  }
 }
 
 CompiledExecutable _install(

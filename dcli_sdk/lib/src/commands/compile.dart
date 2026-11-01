@@ -89,11 +89,7 @@ class CompileCommand extends Command {
             'Run dcli from an Administrator terminal to use --system.',
           );
         }
-      } else if (!Shell.current.isPrivilegedProcess) {
-        throw InvalidCommandArgumentException(
-          'Run dcli with sudo to use --system.',
-        );
-      } else {
+      } else if (Shell.current.isPrivilegedUser) {
         // Do the warmup and compilation as the invoking user.
         Shell.current.releasePrivileges();
       }
@@ -188,7 +184,7 @@ class CompileCommand extends Command {
           report: false,
         );
         if (install) {
-          installForAllUsers(compiled, overwrite: overwrite).report();
+          (await installForAllUsers(compiled, overwrite: overwrite)).report();
         } else {
           compiled.report();
         }
@@ -386,10 +382,10 @@ Run:
           workingDirectory: pathToTempPackage,
         );
         if (flagSet.isSet(SystemFlag())) {
-          installForAllUsers(
+          (await installForAllUsers(
             compiled,
             overwrite: flagSet.isSet(OverWriteFlag()),
-          ).report();
+          )).report();
         } else {
           compiled
               .install(
@@ -447,7 +443,7 @@ class SystemFlag extends Flag {
   @override
   String description() =>
       'Install for all users in ${systemInstallDirectory()}. '
-      'Requires sudo on Linux/macOS or Administrator on Windows.';
+      'Prompts for sudo on Linux/macOS; requires Administrator on Windows.';
 }
 
 ///
