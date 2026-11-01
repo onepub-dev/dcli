@@ -54,8 +54,6 @@ class CompileCommand extends Command {
   /// @Throwing(VersionException)
   @override
   Future<int> run(List<Flag> selectedFlags, List<String> subarguments) async {
-    const exitCode = 0;
-
     var scriptIndex = 0;
 
     // check for any flags
@@ -95,13 +93,15 @@ class CompileCommand extends Command {
       }
     }
 
-    if (flagSet.isSet(PackageFlag())) {
-      await _compilePackage(scriptList);
-    } else {
-      await compileScripts(scriptList);
+    try {
+      if (flagSet.isSet(PackageFlag())) {
+        await _compilePackage(scriptList);
+        return 0;
+      }
+      return await compileScripts(scriptList);
+    } on PubGetException catch (e) {
+      return e.exitCode == null || e.exitCode == 0 ? 1 : e.exitCode!;
     }
-
-    return exitCode;
   }
 
   ///
@@ -231,7 +231,7 @@ compile [--nowarmup] [--install | --system] [--overwrite] [--packed] [<script pa
   /// @Throwing(PubUpgradeException)
   /// @Throwing(ReadException)
   /// @Throwing(UnsupportedError)
-  Future<void> compileScripts(List<String> scriptList) async {
+  Future<int> compileScripts(List<String> scriptList) async {
     var scriptList0 = scriptList;
     if (scriptList0.isEmpty) {
       scriptList0 = find('*.dart', recursive: false).toList();
@@ -247,13 +247,14 @@ compile [--nowarmup] [--install | --system] [--overwrite] [--packed] [<script pa
       //   IncrementalCompiler(scriptList.first).watch();
       // } else {
       for (final scriptPath in scriptList0) {
-        exitCode = await compileScript(scriptPath);
-        if (exitCode != 0) {
-          break;
+        final result = await compileScript(scriptPath);
+        if (result != 0) {
+          return result;
         }
         //}
       }
     }
+    return 0;
   }
 
   /// Compiles a globally activted taking the package name

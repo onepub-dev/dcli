@@ -102,6 +102,7 @@ export 'src/script/compiled_executable.dart';
 export 'src/script/dart_project.dart';
 export 'src/script/dart_script.dart' show DartScript;
 export 'src/script/dart_sdk.dart' show DartSdk;
+export 'src/script/pub_get.dart' show PubGetException;
 export 'src/settings.dart' show Settings;
 export 'src/shell/shell.dart';
 export 'src/shell/shell_detection.dart';

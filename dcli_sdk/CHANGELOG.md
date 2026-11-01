@@ -1,3 +1,7 @@
+# 10.4.6
+
+- Return a nonzero exit code when compile warmup fails, without reporting or installing an executable.
+
 # 10.4.5
 
 - Run `dcli compile --system` as the normal user and elevate only a compiled installer, avoiding Dart and Flutter startup under sudo.

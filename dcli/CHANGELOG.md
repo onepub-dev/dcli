@@ -1,3 +1,7 @@
+# 10.4.6
+
+- Stop compilation when project warmup fails instead of continuing with an invalid dependency graph.
+
 # 10.4.5
 
 - Allow a sudo-launched `dcli compile --system` to warm up after dropping root privileges, and remove an invalid cache permission command.

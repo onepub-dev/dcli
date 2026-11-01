@@ -292,6 +292,7 @@ class DartProject {
         }
       } on PubGetException {
         print(red("\ndcli warmup failed due to the 'pub get' call failing."));
+        rethrow;
       }
     }, waiting: 'Waiting for warmup to complete...');
   }
