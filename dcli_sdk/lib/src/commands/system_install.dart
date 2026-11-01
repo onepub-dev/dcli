@@ -38,7 +38,11 @@ Future<CompiledExecutable> installForAllUsers(
     if (!Shell.current.isPrivilegedUser) {
       throw StateError('Run dcli from an Administrator terminal for --system.');
     }
-    final installed = _install(compiled, overwrite: overwrite);
+    final installed = installCompiledExecutable(
+      compiled,
+      overwrite: overwrite,
+      destinationDirectory: systemInstallDirectory(),
+    );
     _addWindowsMachinePath(systemInstallDirectory());
     _removeCompiledOutput(compiled);
     return installed;
@@ -50,7 +54,11 @@ Future<CompiledExecutable> installForAllUsers(
   late CompiledExecutable installed;
   try {
     Shell.current.withPrivileges(() {
-      installed = _install(compiled, overwrite: overwrite);
+      installed = installCompiledExecutable(
+        compiled,
+        overwrite: overwrite,
+        destinationDirectory: systemInstallDirectory(),
+      );
     });
   } finally {
     Shell.current.releasePrivileges();
@@ -112,11 +120,14 @@ Future<CompiledExecutable> _installWithSudo(
   }
 }
 
-CompiledExecutable _install(
+/// Copies an executable and its bundle into [destinationDirectory].
+/// The caller must ensure that the directory is an authorised destination.
+CompiledExecutable installCompiledExecutable(
   CompiledExecutable compiled, {
   required bool overwrite,
+  required String destinationDirectory,
 }) {
-  final bin = Directory(systemInstallDirectory())..createSync(recursive: true);
+  final bin = Directory(destinationDirectory)..createSync(recursive: true);
   final destination = join(bin.path, basename(compiled.pathToExe));
   final staging = bin.createTempSync('.dcli-system-');
   try {

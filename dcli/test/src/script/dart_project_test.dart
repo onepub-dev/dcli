@@ -96,4 +96,28 @@ name: test
       expect(DartProject.findProject(pathToTools)!.pathToProjectRoot, tempDir);
     });
   });
+
+  for (final upgrade in [false, true]) {
+    test('warmup runs after sudo privileges are dropped (upgrade: $upgrade)',
+        () async {
+      await core.withTempDirAsync((tempDir) async {
+        join(tempDir, 'pubspec.yaml').write('''
+name: dropped_sudo_warmup
+environment:
+  sdk: '>=3.10.1 <4.0.0'
+''');
+
+        await core.withEnvironmentAsync(() async {
+          expect(Shell.current.isSudo, isTrue);
+          expect(Shell.current.isPrivilegedUser, isFalse);
+          await DartProject.fromPath(tempDir).warmup(upgrade: upgrade);
+        }, environment: {'SUDO_USER': 'testuser'});
+
+        expect(
+          exists(join(tempDir, '.dart_tool', 'package_config.json')),
+          isTrue,
+        );
+      });
+    });
+  }
 }
